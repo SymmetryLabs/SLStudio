@@ -46,8 +46,6 @@ public class MidiParameterController {
         if (ccMappings.containsKey(controller.getCC())) {
             LXParameter parameter = ccMappings.get(controller.getCC());
             parameter.setValue(controller.getValue() / 127.);
-        } else {
-            System.out.println("Unmapped CC: " + controller.getCC());
         }
     }
     
