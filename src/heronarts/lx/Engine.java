@@ -22,12 +22,12 @@ import heronarts.lx.transition.LXTransition;
 import java.lang.System;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 class Engine {
 
-    private final ArrayList<LXModulator> modulators = new ArrayList<LXModulator>();
-    private final ArrayList<LXEffect> effects = new ArrayList<LXEffect>();
+    private final List<LXModulator> modulators = new ArrayList<LXModulator>();
+    private final List<LXEffect> effects = new ArrayList<LXEffect>();
     
     private final HeronLX lx;
     
@@ -61,6 +61,10 @@ class Engine {
         this.modulators.remove(m);
     }
     
+    final public List<LXEffect> getEffects() {
+        return this.effects;
+    }
+    
     final public LXEffect addEffect(LXEffect fx) {
         this.effects.add(fx);
         return fx;
@@ -75,6 +79,10 @@ class Engine {
         this.patterns = patterns;
         this.activePatternIndex = this.nextPatternIndex = 0;
         this.getActivePattern().willBecomeActive();
+    }
+    
+    final public LXPattern[] getPatterns() {
+        return this.patterns;
     }
     
     final protected LXPattern getActivePattern() {

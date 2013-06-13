@@ -28,6 +28,7 @@ import heronarts.lx.transition.LXTransition;
 
 import java.awt.event.KeyEvent;
 import java.net.SocketException;
+import java.util.List;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -132,10 +133,11 @@ public class HeronLX {
     
     private final class Flags {
         public boolean showFramerate = false;
+        public boolean keyboardTempo = false;
     }
     
     private final Flags flags = new Flags();
-    
+        
     /**
      * Creates a HeronLX instance. This instance will run patterns
      * for a grid of the specified size.
@@ -168,13 +170,22 @@ public class HeronLX {
         this.touch = new Touch.NullTouch();
         this.tempo = new Tempo();
         
-        this.addEffect(this.desaturation = new DesaturationEffect(this));
-        this.addEffect(this.flash = new FlashEffect(this));
-        
+        this.desaturation = new DesaturationEffect(this);
+        this.flash = new FlashEffect(this);
+                
         applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
         applet.registerDraw(this);
         applet.registerSize(this);
         applet.registerKeyEvent(this);
+    }
+    
+    public void enableBasicEffects() {
+        this.addEffect(this.desaturation);
+        this.addEffect(this.flash);
+    }
+    
+    public void enableKeyboardTempo() {
+        this.flags.keyboardTempo = true;
     }
     
     public void dispose() {
@@ -321,6 +332,15 @@ public class HeronLX {
     }
     
     /**
+     * The effects chain
+     * 
+     * @return The full effects chain
+     */
+    public List<LXEffect> getEffects() {
+        return this.engine.getEffects();
+    }
+    
+    /**
      * Add multiple effects to the chain
      * 
      * @param effects
@@ -370,7 +390,6 @@ public class HeronLX {
     public void removeModulator(LXModulator modulator) {
         this.engine.removeModulator(modulator);
     }
-    
     
     public void flash() {
         this.flash.trigger();
@@ -533,6 +552,15 @@ public class HeronLX {
     public void setPatterns(LXPattern[] patterns) {
         this.engine.setPatterns(patterns);
     }
+    
+    /**
+     * Gets the current set of patterns
+     * 
+     * @return The pattern set
+     */
+    public LXPattern[] getPatterns() {
+        return this.engine.getPatterns();
+    }
 
     public void draw() {
         if (this.client != null) {
@@ -570,17 +598,21 @@ public class HeronLX {
     public void keyEvent(KeyEvent e) {
         if (e.getID() == KeyEvent.KEY_RELEASED) {
             switch (e.getKeyCode()) {
-            case KeyEvent.VK_LEFT:
+            case KeyEvent.VK_UP:
                 this.engine.goPrev();
                 break;
-            case KeyEvent.VK_RIGHT:
+            case KeyEvent.VK_DOWN:
                 this.engine.goNext();
                 break;
-            case KeyEvent.VK_UP:
-                this.tempo.setBpm(this.tempo.bpm() + .1);
+            case KeyEvent.VK_LEFT:
+                if (this.flags.keyboardTempo) {
+                    this.tempo.setBpm(this.tempo.bpm() - .1);
+                }
                 break;
-            case KeyEvent.VK_DOWN:
-                this.tempo.setBpm(this.tempo.bpm() - .1);
+            case KeyEvent.VK_RIGHT:
+                if (this.flags.keyboardTempo) {
+                    this.tempo.setBpm(this.tempo.bpm() + .1);
+                }
                 break;
             }
             
@@ -596,7 +628,9 @@ public class HeronLX {
                 this.flags.showFramerate = !this.flags.showFramerate;
                 break;
             case ' ':
-                this.tempo.tap();
+                if (this.flags.keyboardTempo) {
+                    this.tempo.tap();
+                }
                 break;
             case 's':
             case 'S':
