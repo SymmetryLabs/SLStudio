@@ -344,6 +344,14 @@ public class HeronLX {
     }
     
     /**
+     * Sets the speed of the entire system. Default is 1.0, any modification will mutate de
+     * deltaMs values system-wide.
+     */
+    public void setSpeed(double speed) {
+        this.engine.setSpeed(speed);
+    }
+    
+    /**
      * The effects chain
      * 
      * @return The full effects chain

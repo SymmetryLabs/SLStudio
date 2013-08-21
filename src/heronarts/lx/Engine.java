@@ -37,6 +37,7 @@ class Engine {
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
     private long lastMillis;
+    private double speed = 1;
     
     private LXTransition transition = null;
     private long transitionMillis = 0;
@@ -54,6 +55,10 @@ class Engine {
         this.lastMillis = this.transitionMillis = System.currentTimeMillis();
     }
 
+    void setSpeed(double speed) {
+        this.speed = speed;
+    }
+    
     /**
      * Pause the engine from running
      * 
@@ -194,6 +199,9 @@ class Engine {
         if (this.paused) {
             return;
         }
+        
+        // Mutate by speed
+        deltaMs = (int) (deltaMs * this.speed);
         
         // Run modulators
         for (LXModulator m : this.modulators) {
