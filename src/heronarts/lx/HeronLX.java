@@ -80,6 +80,16 @@ public class HeronLX {
     public final double midheight;
     
     /**
+     * Midpoint on width, immutable.
+     */
+    public final float midwf;
+    
+    /**
+     * Midpoint on height, immutable.
+     */
+    public final float midhf;
+    
+    /**
      * The total number of pixels in the grid, immutable.
      */
     public final int total;
@@ -152,6 +162,8 @@ public class HeronLX {
         this.height = height;
         this.midwidth = (width-1)/2.;
         this.midheight = (height-1)/2.;
+        this.midwf = (width-1)/2.f;
+        this.midhf = (height-1)/2.f;
         this.total = width * height;
         this.kinet = null;
         this.client = null;
@@ -389,6 +401,23 @@ public class HeronLX {
      */
     public void removeModulator(LXModulator modulator) {
         this.engine.removeModulator(modulator);
+    }
+    
+    /**
+     * Pause the engine from running
+     * 
+     * @param paused Whether to pause the engine to pause
+     */
+    public void setPaused(boolean paused) {
+        this.engine.setPaused(paused);
+    }
+    
+    public boolean isPaused() {
+        return this.engine.isPaused();
+    }
+    
+    public void togglePaused() {
+        setPaused(!this.engine.isPaused());
     }
     
     public void flash() {

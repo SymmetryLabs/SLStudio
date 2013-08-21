@@ -31,6 +31,8 @@ class Engine {
     
     private final HeronLX lx;
     
+    private boolean paused = false;
+    
     private LXPattern[] patterns;
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
@@ -50,6 +52,19 @@ class Engine {
         };
         this.colors = new int[lx.total];
         this.lastMillis = this.transitionMillis = System.currentTimeMillis();
+    }
+
+    /**
+     * Pause the engine from running
+     * 
+     * @param paused Whether to pause the engine to pause
+     */
+    public void setPaused(boolean paused) {
+        this.paused = paused;
+    }
+    
+    public boolean isPaused() {
+        return this.paused;
     }
     
     final public LXModulator addModulator(LXModulator m) {
@@ -115,8 +130,11 @@ class Engine {
         this.nextPatternIndex = this.activePatternIndex;
         do {
             this.nextPatternIndex = (this.nextPatternIndex + 1) % this.patterns.length;
-        } while (!this.getNextPattern().isEligible());
-        this.startTransition();
+        } while ((this.nextPatternIndex != this.activePatternIndex) &&
+                 !this.getNextPattern().isEligible());
+        if (this.nextPatternIndex != this.activePatternIndex) {
+            this.startTransition();
+        }
     }
     
     final public void goIndex(int i) {
@@ -172,6 +190,10 @@ class Engine {
         long nowMillis = System.currentTimeMillis();
         int deltaMs = (int) (nowMillis - this.lastMillis);
         this.lastMillis = nowMillis;
+        
+        if (this.paused) {
+            return;
+        }
         
         // Run modulators
         for (LXModulator m : this.modulators) {
