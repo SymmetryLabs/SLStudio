@@ -97,9 +97,7 @@ public class HeronLX {
     private final Engine engine;
     private final Simulation simulation;
     private Kinet kinet;
-    private final int[] kinetColors;
     private ClientListener client;
-    private double brightness;
     
     /**
      * Whether drawing is enabled
@@ -175,10 +173,7 @@ public class HeronLX {
         
         this.baseHue = null;
         this.cycleBaseHue(30000);
-        
-        this.brightness = 1.;
-        this.kinetColors = new int[this.total];
-        
+                
         this.touch = new Touch.NullTouch();
         this.tempo = new Tempo();
         
@@ -275,6 +270,15 @@ public class HeronLX {
         return this.touch;
     }
     
+    /**
+     * The active kinet output.
+     * 
+     * @return The kinet object
+     */
+    public Kinet kinet() {
+        return this.kinet;
+    }
+    
     public final AudioInput audioInput() {
         if (audioInput == null) {
             // Lazily instantiated on-demand
@@ -333,16 +337,7 @@ public class HeronLX {
     public int column(int i) {
         return i % this.width;
     }
-    
-    /**
-     * Sets brightness factor of the KiNET output, does NOT impact screen simulation
-     *  
-     * @param brightness Value from 0-100 scale
-     */
-    public void setBrightness(double brightness) {
-        this.brightness = LXUtils.constrain(brightness/100., 0, 1);
-    }
-    
+        
     /**
      * Sets the speed of the entire system. Default is 1.0, any modification will mutate de
      * deltaMs values system-wide.
@@ -561,7 +556,7 @@ public class HeronLX {
             throw new RuntimeException("Array provided to setKinetNodes is the wrong length, must equal length of HeronLX, use null for non-mapped output nodes.");
         } else {
             try {
-                this.kinet = new Kinet(kinetNodes);
+                this.kinet = new Kinet(this, kinetNodes);
             } catch (SocketException sx) {
                 this.kinet = null;
                 throw new RuntimeException("Could not create UDP socket for Kinet", sx);
@@ -606,19 +601,7 @@ public class HeronLX {
         this.engine.run();
         int[] colors = this.engine.getColors();
         if (this.kinet != null) {
-            if (this.brightness < 1.) {
-                float factor = (float) (this.brightness * this.brightness);
-                for (int i = 0; i < colors.length; ++i) {
-                    this.kinetColors[i] = this.applet.color(
-                            this.applet.hue(colors[i]),
-                            this.applet.saturation(colors[i]),
-                            this.applet.brightness(colors[i]) * factor
-                            );
-                }
-                this.kinet.sendThrottledColors(kinetColors);
-            } else {
-                this.kinet.sendThrottledColors(colors);
-            }
+            this.kinet.sendThrottledColors(colors);
         }
         if (this.drawSimulation) {
             this.simulation.draw(colors);

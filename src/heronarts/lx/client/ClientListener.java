@@ -86,9 +86,11 @@ public class ClientListener {
                     lx.setBaseHue(Integer.parseInt(parts[1]));
                 }
             } else if (command.equals("setBrightness")) {
+                double bVal = Double.parseDouble(parts[1]);
                 for (HeronLX lx : this.listeners) {
-                    double bVal = Double.parseDouble(parts[1]);
-                    lx.setBrightness(bVal);
+                    if (lx.kinet() != null) {
+                        lx.kinet().setBrightness(bVal);
+                    }
                 }
             } else if (command.equals("goPrev")) {
                 for (HeronLX lx : this.listeners){
