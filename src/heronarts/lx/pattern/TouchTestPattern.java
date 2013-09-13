@@ -31,9 +31,9 @@ public class TouchTestPattern extends LXPattern {
         double touchY = (this.lx.height-1) * this.lx.touch().getY();
         
         if (this.lx.touch().isActive()) {
-            this.brightness.setEndVal(100).trigger();
+            this.brightness.setEndValue(100).trigger();
         } else {
-            this.brightness.setEndVal(20).trigger();
+            this.brightness.setEndValue(20).trigger();
         }
         
         for (int i = 0; i < this.lx.total; ++i) {

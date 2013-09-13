@@ -16,46 +16,20 @@ package heronarts.lx.modulator;
 /**
  * Simple square wave LFO. Not damped. Oscillates between a low and high value.
  */
-public class SquareLFO extends LXModulator {
-    private double lowVal;
-    private double hiVal;
+public class SquareLFO extends RangeModulator {
 
-    private boolean high;
-    private double thresholdMs;
-    private double elapsedMs;
-
-    public SquareLFO(double lowVal, double hiVal, double durationMs) {
-        this.value = this.lowVal = lowVal;
-        this.hiVal = hiVal;
-        this.setDuration(durationMs);
+    public SquareLFO(double startValue, double endValue, double periodMs) {
+        super(startValue, endValue, periodMs);
     }
 
-    public LXModulator trigger() {
-        this.high = false;
-        return this.start();
+    @Override
+    protected double computeNormalizedValue(int deltaMs) {
+        return (getBasis() < 0.5) ? 0 : 1;
+    }
+    
+    @Override
+    protected double computeBasisFromNormalizedValue(double normalizedValue) {
+        return (normalizedValue == 0) ? 0 : 0.5;
     }
 
-    protected void computeRun(int deltaMs) {
-        this.elapsedMs += deltaMs;
-        if (this.elapsedMs >= this.thresholdMs) {
-            this.high = !this.high;
-            while (this.elapsedMs >= this.thresholdMs) {
-                this.elapsedMs -= this.thresholdMs;
-            }
-        }
-    }
-
-    public SquareLFO setDuration(double durationMs) {
-        this.thresholdMs = durationMs / 2;
-        return this;
-    }
-
-    public double getValue() {
-        return this.high ? this.hiVal : this.lowVal;
-    }
-
-    public LXModulator setValue(double value) {
-        this.high = (value == this.hiVal);
-        return this;
-    }
 }

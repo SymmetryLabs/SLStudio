@@ -13,6 +13,8 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.LXParameter;
+
 import java.lang.Math;
 
 /**
@@ -21,19 +23,73 @@ import java.lang.Math;
  * continuously, others may halt after they reach a certain value.
  */
 public abstract class LXModulator {
-    protected boolean running = false;
-    protected double value;
-
-    private LXModulator durationModulator = null;
     
-    public static double HALF_PI = Math.PI / 2.;
-    public static double TWO_PI = Math.PI * 2.;
+    /**
+     * Whether this modulator runs continuously looping.
+     */
+    protected boolean looping = true;
+    
+    /**
+     * Whether this modulator is currently running.
+     */
+    private boolean isRunning = false;
+    
+    /**
+     * Whether the modulator finished on this cycle.
+     */
+    private boolean finished = false;
+
+    /**
+     * The basis is a value that moves from 0 to 1.
+     */
+    private double basis = 0;
+    
+    /**
+     * The current computed value of this modulator.
+     */
+    private double value = 0;
+    
+    /**
+     * The number of milliseconds in the period of this modulator.
+     */
+    protected double periodMs = 0;
+
+    /**
+     * Another modulator which automatically modifies the period of this one.
+     */
+    private LXModulator periodModulator = null;
+    
+    /**
+     * A parameter to modulate the period
+     */
+    private LXParameter periodParameter = null;
+    
+    private double minPeriodMs = 0;
+    private double maxPeriodMs = 0;
+    
+    public static final double HALF_PI = Math.PI / 2.;
+    
+    public static final double TWO_PI = Math.PI * 2.;
+    
+    /**
+     * Utility default constructor
+     */
+    protected LXModulator() {}
+    
+    /**
+     * Utility constructor with period
+     * 
+     * @param periodMs Oscillation period, in ms
+     */
+    protected LXModulator(double periodMs) {
+        this.periodMs = periodMs;
+    }
     
     /**
      * Sets the Modulator in motion
      */
-    public LXModulator start() {
-        this.running = true;
+    public final LXModulator start() {
+        this.isRunning = true;
         return this;
     }
 
@@ -42,30 +98,40 @@ public abstract class LXModulator {
      * A subsequent call to start() should result in the Modulator continuing as
      * it was running before.
      */
-    public LXModulator stop() {
-        this.running = false;
+    public final LXModulator stop() {
+        this.isRunning = false;
         return this;
     }
 
     /**
      * Indicates whether this modulator is running.
      */
-    public boolean isRunning() {
-        return this.running;
+    public final boolean isRunning() {
+        return this.isRunning;
     }
 
     /**
      * Invoking the trigger() method restarts a modulator from its initial
      * value, and should also start the modulator if it is not already running.
      */
-    abstract public LXModulator trigger();
+    public final LXModulator trigger() {
+        this.setBasis(0);
+        this.start();
+        this.onTrigger();
+        return this;
+    }
+    
+    /**
+     * Optional subclass method when trigger happens.
+     */
+    protected /* abstract */ void onTrigger() {}
 
     /**
      * Retrieves the current value of the modulator in full precision
      * 
      * @return Current value of the modulator
      */
-    public double getValue() {
+    public final double getValue() {
         return this.value;
     }
 
@@ -80,31 +146,118 @@ public abstract class LXModulator {
     }
     
     /**
+     * Accessor for the current basis
+     * 
+     * @return The basis of the modulator
+     */
+    public final double getBasis() {
+        return this.basis;
+    }
+    
+    /**
      * Set the modulator to a certain value in its cycle.
+     * 
      * @param value The value to apply
      * @return This modulator, for method chaining
      */
     public LXModulator setValue(double value) {
         this.value = value;
+        this.basis = this.computeBasis();
         return this;
+    }
+    
+    /**
+     * Set the modulator to a certain basis position in its cycle.
+     *  
+     * @param basis
+     * @return
+     */
+    public final LXModulator setBasis(double basis) {
+        if (basis < 0) {
+            basis = 0;
+        } else if (basis > 1) {
+            basis = 1;
+        }
+        this.basis = basis;
+        this.value = this.computeValue(0);
+        return this;
+    }
+    
+    protected final void updateBasis() {
+        this.basis = computeBasis(); 
     }
 
     /**
-     * Modify the duration of this modulator
+     * @deprecated Use setPeriod
+     */
+    @Deprecated public final LXModulator setDuration(double durationMs) {
+        return this.setPeriod(durationMs);
+    }
+
+    /**
+     * @deprecated Use modulatePeriodBy
+     */
+    @Deprecated public final LXModulator modulateDurationBy(LXModulator durationModulator) {
+        return this.modulatePeriodBy(durationModulator);
+    }
+    
+    /**
+     * Modify the period of this modulator
      * 
-     * @param durationMs New duration, in milliseconds
+     * @param periodMs New period, in milliseconds
      * @return Modulator, for method chaining;
      */
-    abstract public LXModulator setDuration(double durationMs);
+    public final LXModulator setPeriod(double periodMs) {
+        this.periodMs = periodMs;
+        return this;
+    }
+    
+    /**
+     * @return The period of this modulator
+     */
+    public final double getPeriod() {
+        return this.periodMs;
+    }
+    
+    /**
+     * @return The period of this modulator as a floating point
+     */
+    public final float getPeriodf() {
+        return (float)this.getPeriod();
+    }
+    
+    /**
+     * @deprecated Use getPeriod()
+     */
+    @Deprecated public final double getDuration() {
+        return this.getPeriod();
+    }
     
     /**
      * Sets another modulator to modulate the speed of this modulator
      * 
-     * @param durationModulator Another modulator, which will update the duration
+     * @param periodModulator Another modulator, which will update the period
      * @return This modulator, for method chaining
      */
-    final public LXModulator modulateDurationBy(LXModulator durationModulator) {
-        this.durationModulator = durationModulator;
+    final public LXModulator modulatePeriodBy(LXModulator periodModulator) {
+        this.periodParameter = null;
+        this.periodModulator = periodModulator;
+        return this;
+    }
+    
+    /**
+     * Sets a parameter to tell this modulator what period to run at.
+     * 
+     * @param periodParameter The parameter to listen to
+     * @param minPeriodMs The shortest period in ms
+     * @param maxPerioMs The longest period in ms
+     * @return This modulator, for chaining
+     */
+    final public LXModulator modulatePeriodBy(LXParameter periodParameter, double minPeriod, double maxPeriod) {
+        this.periodModulator = null;
+        this.periodParameter = periodParameter;
+        this.minPeriodMs = minPeriodMs;
+        this.maxPeriodMs = maxPeriodMs;
         return this;
     }
     
@@ -115,13 +268,39 @@ public abstract class LXModulator {
      * @param deltaMs Milliseconds to advance by
      */
     public final void run(int deltaMs) {
-        if (!this.running) {
+        this.finished = false;
+        if (!this.isRunning) {
             return;
         }
-        if (this.durationModulator != null) {
-            this.setDuration(this.durationModulator.getValue());
+        if (this.periodModulator != null) {
+            this.setPeriod(this.periodModulator.getValue());
         }
-        this.computeRun(deltaMs);
+        if (this.periodParameter != null) {
+            this.setPeriod(this.minPeriodMs + (this.maxPeriodMs-this.minPeriodMs)*this.periodParameter.getValue());
+        }
+        this.basis += deltaMs / this.periodMs;
+        if (this.basis >= 1.) {
+            if (this.looping) {
+                if (this.basis > 1) {
+                    this.basis = this.basis - Math.floor(this.basis);
+                }
+            } else {
+                this.basis = 1.;
+                this.finished = true;
+                this.isRunning = false;
+            }
+        }
+        this.value = this.computeValue(deltaMs);
+    }
+    
+    /**
+     * For envelope modulators, which are not looping, this returns true if
+     * they finished on this frame.
+     * 
+     * @return true if the modulator just finished its operation on this frame
+     */
+    public final boolean finished() {
+        return this.finished;
     }
     
     /**
@@ -130,5 +309,12 @@ public abstract class LXModulator {
      * 
      * @param deltaMs Number of milliseconds to advance by
      */
-    abstract protected void computeRun(int deltaMs);
+    abstract protected double computeValue(int deltaMs);
+    
+    /**
+     * Implementation method to compute the appropriate basis for a modulator given
+     * its current value.
+     */
+    abstract protected double computeBasis();
+
 }

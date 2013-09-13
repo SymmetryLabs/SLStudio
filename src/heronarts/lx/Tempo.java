@@ -73,7 +73,7 @@ public class Tempo {
      * @return Current tempo
      */
     public double bpm() {
-        return 60000. / this.click.getDuration();
+        return 60000. / this.click.getPeriod();
     }
     
     /**
@@ -101,9 +101,9 @@ public class Tempo {
      * @param bpm Number of beats per minute
      */
     public void setBpm(double bpm) {
-        double duration = 60000. / bpm;
-        this.click.setDuration(duration);
-        this.ramp.setDuration(duration);
+        double period = 60000. / bpm;
+        this.click.setPeriod(period);
+        this.ramp.setPeriod(period);
     }
 
     /**
@@ -130,9 +130,9 @@ public class Tempo {
         this.lastTap = now;
         ++this.tapCount;
         if (this.tapCount > 3) {
-            double duration = (this.lastTap - this.firstTap) / (double) (this.tapCount - 1);
-            this.click.setDuration(duration);
-            this.ramp.setDuration(duration);
+            double period = (this.lastTap - this.firstTap) / (double) (this.tapCount - 1);
+            this.click.setPeriod(period);
+            this.ramp.setPeriod(period);
             this.trigger();
         } else {
             this.trigger();

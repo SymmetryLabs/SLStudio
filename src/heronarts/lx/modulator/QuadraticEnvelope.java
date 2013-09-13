@@ -13,7 +13,7 @@
 
 package heronarts.lx.modulator;
 
-public class QuadraticEnvelope extends LXModulator {
+public class QuadraticEnvelope extends RangeModulator {
 
     public enum Ease {
         IN,
@@ -21,16 +21,11 @@ public class QuadraticEnvelope extends LXModulator {
         BOTH
     };
 
-    private Ease ease;
-    private double startVal;
-    private double endVal;
-    final LinearEnvelope basis;
+    private Ease ease = Ease.IN;
     
-    public QuadraticEnvelope(double startVal, double endVal, double duration) {
-        this.ease = Ease.IN;
-        this.startVal = startVal;
-        this.endVal = endVal;
-        this.basis = new LinearEnvelope(0, 1, duration);
+    public QuadraticEnvelope(double startValue, double endValue, double periodMs) {
+        super(startValue, endValue, periodMs);
+        this.looping = false;
     }
     
     public QuadraticEnvelope setEase(Ease ease) {
@@ -38,65 +33,42 @@ public class QuadraticEnvelope extends LXModulator {
         return this;
     }
     
-    public QuadraticEnvelope start() {
-        super.start();
-        this.basis.start();
-        return this;
-    }
-    
-    public QuadraticEnvelope stop() {
-        super.stop();
-        this.basis.stop();
-        return this;
-    }
-    
-    public QuadraticEnvelope trigger() {
-        this.basis.trigger();
-        this.start();
-        return this;
-    }
-
-    public QuadraticEnvelope setRange(double startVal, double endVal, double durationMs) {
-        this.setRange(startVal, endVal);
-        this.basis.setDuration(durationMs);
-        return this;
-    }
-    
-    public QuadraticEnvelope setRange(double startVal, double endVal) {
-        this.startVal = startVal;
-        this.endVal = endVal;
-        return this;
-    }
-    
-    public LXModulator setDuration(double durationMs) {
-        this.basis.setDuration(durationMs);
-        return this;
-    }
-
-    protected void computeRun(int deltaMs) {
-        this.basis.run(deltaMs);
-        this.running = this.basis.isRunning();
-        double bv = this.basis.getValue();
+    @Override
+    protected double computeNormalizedValue(int deltaMs) {
+        final double bv = getBasis();
         switch (this.ease) {
         case IN:
-            this.value = this.computeQuad(bv*bv, this.startVal, this.endVal);
-            break;
+            return bv*bv;
         case OUT:
-            this.value = this.computeQuad(1 - (1-bv)*(1-bv), this.startVal, this.endVal);
-            break;
+            return 1 - (1-bv)*(1-bv);
         case BOTH:
             if (bv < 0.5) {
-                this.value = this.computeQuad((bv*2)*(bv*2), this.startVal, (this.startVal + this.endVal) / 2.);
+                return (bv*2)*(bv*2) / 2.;
             } else {
-                bv = (bv-0.5) * 2.;
-                this.value = this.computeQuad(1 - (1-bv)*(1-bv), (this.startVal + this.endVal) / 2., this.endVal);
+                final double biv = 1 - (bv-0.5) * 2.;
+                return 0.5 + (1-biv*biv) / 2.;
             }
-            break;
         }
+        return 0;
     }
-    
-    private double computeQuad(double coeff, double startVal, double endVal) {
-        return startVal + coeff * (endVal - startVal);
+            
+    @Override
+    protected double computeBasisFromNormalizedValue(double normalizedValue) {
+        switch (this.ease) {
+        case IN:
+            return Math.sqrt(normalizedValue);
+        case OUT:
+            return 1 - Math.sqrt(1 - normalizedValue);
+        case BOTH:
+            if (normalizedValue < 0.5) {
+                normalizedValue = normalizedValue*2;
+                return Math.sqrt(normalizedValue) / 2.;
+            } else {
+                normalizedValue = (normalizedValue-0.5)*2;
+                return 0.5 + (1 - Math.sqrt(1 - normalizedValue)) / 2.;
+            }
+        }
+        return 0;
     }
         
 }
