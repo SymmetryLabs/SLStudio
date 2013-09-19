@@ -35,7 +35,14 @@ public class Engine {
     public interface Listener {
         public void patternWillChange(Deck deck, LXPattern pattern, LXPattern nextPattern);
         public void patternDidChange(Deck deck, LXPattern pattern);
-    }        
+        public void blendTransitionDidChange(Deck deck, LXTransition blendTransition);
+    }
+    
+    public abstract static class AbstractListener implements Listener {
+        public void patternWillChange(Deck deck, LXPattern pattern, LXPattern nextPattern) {}
+        public void patternDidChange(Deck deck, LXPattern pattern) {}
+        public void blendTransitionDidChange(Deck deck, LXTransition blendTransition) {}
+    }
     
     public class Deck {
         private LXPattern[] patterns;
@@ -77,6 +84,12 @@ public class Engine {
                 listener.patternDidChange(this, pattern);
             }
         }
+
+        protected final void notifyBlendTransitionDidChange(LXTransition transition) {
+            for (Listener listener : listeners) {
+                listener.blendTransitionDidChange(this, transition);
+            }
+        }
         
         final public BasicParameter getCrossfader() {
             return this.crossfader;
@@ -91,7 +104,10 @@ public class Engine {
         }
         
         final public Deck setBlendTransition(LXTransition transition) {
-            this.blendTransition = transition;
+            if (this.blendTransition != transition) {
+                this.blendTransition = transition;
+                notifyBlendTransitionDidChange(transition);
+            }
             return this;
         }
         
