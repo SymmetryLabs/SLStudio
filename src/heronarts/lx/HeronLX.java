@@ -95,7 +95,11 @@ public class HeronLX {
      */
     public final int total;
 
-    private final Engine engine;
+    /**
+     * The pattern engine.
+     */
+    public final Engine engine;
+    
     private final Simulation simulation;
     private Kinet kinet;
     private ClientListener client;
@@ -146,37 +150,6 @@ public class HeronLX {
     }
     
     private final Flags flags = new Flags();
-    
-    /**
-     * Listener interface for objects which want to be notified when the
-     * internal engine state is modified
-     */
-    public interface Listener {
-        public void patternWillChange(LXPattern pattern, LXPattern nextPattern);
-        public void patternDidChange(LXPattern pattern);
-    }
-
-    public final void addListener(Listener listener) {
-        listeners.add(listener);
-    }
-    
-    public final void removeListener(Listener listener) {
-        listeners.remove(listener);
-    }
-    
-    protected final void notifyPatternWillChange(LXPattern pattern, LXPattern nextPattern) {
-        for (Listener listener : listeners) {
-            listener.patternWillChange(pattern, nextPattern);
-        }    
-    }
-    
-    protected final void notifyPatternDidChange(LXPattern pattern) {
-        for (Listener listener : listeners) {
-            listener.patternDidChange(pattern);
-        }
-    }
-    
-    private final List<Listener> listeners = new ArrayList<Listener>();
     
     /**
      * Creates a HeronLX instance. This instance will run patterns
