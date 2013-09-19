@@ -26,5 +26,5 @@ public class SolidColorPattern extends LXPattern {
         }
     }
     
-    public void run(int deltaMs) {}
+    public void run(double deltaMs) {}
 }

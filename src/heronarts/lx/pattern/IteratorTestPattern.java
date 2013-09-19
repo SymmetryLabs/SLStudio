@@ -29,7 +29,7 @@ public class IteratorTestPattern extends LXPattern {
         this.addModulator(this.index = new SawLFO(0, lx.total, lx.total * 100)).trigger();
     }
 
-    public void run(int deltaMs) {
+    public void run(double deltaMs) {
         int active = (int) Math.floor(this.index.getValue()); 
         for (int i = 0; i < colors.length; ++i) {
             this.colors[i] = (i == active) ? 0xFFFFFFFF : 0xFF000000;

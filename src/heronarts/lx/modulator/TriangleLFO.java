@@ -26,7 +26,7 @@ public class TriangleLFO extends RangeModulator {
     }
 
     @Override
-    protected double computeNormalizedValue(int deltaMs) {
+    protected double computeNormalizedValue(double deltaMs) {
         double bv = getBasis();
         if (bv < 0.5) {
             return 2.*bv;

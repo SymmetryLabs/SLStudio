@@ -130,7 +130,7 @@ public abstract class LXPattern extends LXParameterized {
         return this.colors;
     }
 
-    final public void go(int deltaMs) {
+    final public void go(double deltaMs) {
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
@@ -142,7 +142,7 @@ public abstract class LXPattern extends LXParameterized {
      * 
      * @param deltaMs Number of milliseconds elapsed since last invocation
      */
-    abstract protected void run(int deltaMs);
+    abstract protected void run(double deltaMs);
 
     final public void willBecomeActive() {
         this.onActive();

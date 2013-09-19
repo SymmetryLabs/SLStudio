@@ -42,7 +42,7 @@ public class PixelFontTestPattern extends LXPattern {
                         this.image.width * 250)).trigger();
     }
 
-    public void run(int deltaMs) {    
+    public void run(double deltaMs) {    
         for (int i = 0; i < this.colors.length; ++i) {
             double col = this.lx.column(i) + this.pMod.getValue();
             int floor = (int) Math.floor(col);

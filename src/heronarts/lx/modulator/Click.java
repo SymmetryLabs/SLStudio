@@ -42,7 +42,7 @@ public class Click extends LXModulator {
     }    
     
     @Override
-    protected double computeValue(int deltaMs) {
+    protected double computeValue(double deltaMs) {
         this.elapsedMs += deltaMs;
         if (this.elapsedMs >= this.periodMs) {
             this.elapsedMs = this.elapsedMs % this.periodMs;

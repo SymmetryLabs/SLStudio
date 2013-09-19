@@ -216,7 +216,7 @@ public class Engine {
             notifyPatternDidChange(getActivePattern());        
         }
         
-        private void run(long nowMillis, int deltaMs) {
+        private void run(long nowMillis, double deltaMs) {
             // Run active pattern
             this.getActivePattern().go(deltaMs);
             
@@ -380,7 +380,7 @@ public class Engine {
     public void run() {
         // Compute elapsed time
         long nowMillis = System.currentTimeMillis();
-        int deltaMs = (int) (nowMillis - this.lastMillis);
+        double deltaMs = nowMillis - this.lastMillis;
         this.lastMillis = nowMillis;
         
         if (this.paused) {
@@ -388,7 +388,7 @@ public class Engine {
         }
         
         // Mutate by speed
-        deltaMs = (int) (deltaMs * this.speed);
+        deltaMs *= this.speed;
         
         // Run modulators
         for (LXModulator m : this.modulators) {

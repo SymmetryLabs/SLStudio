@@ -267,7 +267,7 @@ public abstract class LXModulator {
      *
      * @param deltaMs Milliseconds to advance by
      */
-    public final void run(int deltaMs) {
+    public final void run(double deltaMs) {
         this.finished = false;
         if (!this.isRunning) {
             return;
@@ -309,7 +309,7 @@ public abstract class LXModulator {
      * 
      * @param deltaMs Number of milliseconds to advance by
      */
-    abstract protected double computeValue(int deltaMs);
+    abstract protected double computeValue(double deltaMs);
     
     /**
      * Implementation method to compute the appropriate basis for a modulator given

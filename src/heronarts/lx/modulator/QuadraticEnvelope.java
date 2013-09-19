@@ -34,7 +34,7 @@ public class QuadraticEnvelope extends RangeModulator {
     }
     
     @Override
-    protected double computeNormalizedValue(int deltaMs) {
+    protected double computeNormalizedValue(double deltaMs) {
         final double bv = getBasis();
         switch (this.ease) {
         case IN:

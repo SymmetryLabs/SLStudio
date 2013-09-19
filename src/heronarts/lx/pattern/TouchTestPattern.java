@@ -26,7 +26,7 @@ public class TouchTestPattern extends LXPattern {
         this.addModulator(this.brightness = new LinearEnvelope(0, 0, 100));
     }
     
-    public void run(int deltaMs) {
+    public void run(double deltaMs) {
         double touchX = (this.lx.width-1) * this.lx.touch().getX();
         double touchY = (this.lx.height-1) * this.lx.touch().getY();
         

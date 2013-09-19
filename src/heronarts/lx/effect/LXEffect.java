@@ -108,7 +108,7 @@ public abstract class LXEffect extends LXParameterized {
      * @param colors Array of this frame's colors
      * @param deltaMs Milliseconds since last frame 
      */
-    public final void apply(int[] colors, int deltaMs) {
+    public final void apply(int[] colors, double deltaMs) {
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }

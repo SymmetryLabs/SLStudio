@@ -56,7 +56,7 @@ public class Accelerator extends LXModulator {
     }
     
     @Override
-    protected double computeValue(int deltaMs) {
+    protected double computeValue(double deltaMs) {
         this.velocity += this.acceleration * deltaMs / 1000.0;
         return this.getValue() + this.velocity * deltaMs / 1000.0;
     }

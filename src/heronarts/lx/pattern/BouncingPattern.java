@@ -51,7 +51,7 @@ public class BouncingPattern extends LXPattern {
         this.transition = new WipeTransition(lx, WipeTransition.Direction.RIGHT);
     }
 
-    protected void run(int deltaMs) {
+    protected void run(double deltaMs) {
         for (int i = 0; i < this.NUM_BOUNCERS; ++i) {
             this.mags[i] = this.magLFO[i].getValue();
             this.accum[i] += deltaMs / this.speeds[i];

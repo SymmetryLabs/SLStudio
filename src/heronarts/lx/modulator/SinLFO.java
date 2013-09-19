@@ -25,7 +25,7 @@ public class SinLFO extends RangeModulator {
     }
     
     @Override
-    protected double computeNormalizedValue(int deltaMs) {
+    protected double computeNormalizedValue(double deltaMs) {
         return (1 + Math.sin(getBasis() * TWO_PI - HALF_PI)) / 2.;
     }
     

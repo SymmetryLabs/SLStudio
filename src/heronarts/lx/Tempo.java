@@ -139,7 +139,7 @@ public class Tempo {
         }
     }
     
-    void run(int deltaMs) {
+    void run(double deltaMs) {
         this.click.run(deltaMs);
         if (this.beat()) {
             this.ramp.trigger();

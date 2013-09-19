@@ -37,7 +37,7 @@ public class VideoCapturePattern extends LXPattern {
         this.capture = null;
     }
     
-    public void run(int deltaMs) {
+    public void run(double deltaMs) {
         if (this.capture.available()) {
             this.capture.read();
         }

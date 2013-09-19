@@ -23,7 +23,7 @@ public class SquareLFO extends RangeModulator {
     }
 
     @Override
-    protected double computeNormalizedValue(int deltaMs) {
+    protected double computeNormalizedValue(double deltaMs) {
         return (getBasis() < 0.5) ? 0 : 1;
     }
     

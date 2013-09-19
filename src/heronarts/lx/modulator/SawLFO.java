@@ -29,7 +29,7 @@ public class SawLFO extends RangeModulator {
     }
 
     @Override
-    protected final double computeNormalizedValue(int deltaMs) {
+    protected final double computeNormalizedValue(double deltaMs) {
         return getBasis();
     }
     

@@ -20,14 +20,16 @@ public abstract class LXListenableParameter extends LXParameter {
 
     private final Set<Listener> listeners = new HashSet<Listener>();
     
-    public final void addListener(Listener listener) {
+    public final LXListenableParameter addListener(Listener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
+        return this;
     }
     
-    public final void removeListener(Listener listener) {
+    public final LXListenableParameter removeListener(Listener listener) {
         listeners.remove(listener);
+        return this;
     }
 
     @Override

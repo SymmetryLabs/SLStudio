@@ -19,23 +19,23 @@ import processing.core.PGraphics;
 
 public abstract class LXGraphicsPattern extends LXPattern {
 
-    private final PGraphics g;
+    private final PGraphics pg;
     
     protected LXGraphicsPattern(HeronLX lx) {
         super(lx);
-        this.g = lx.applet.createGraphics(lx.width, lx.height, PConstants.P2D);
+        this.pg = lx.applet.createGraphics(lx.width, lx.height, PConstants.P2D);
     }
     
-    final protected void run(int deltaMs) {
-        this.g.beginDraw();
-        this.run(deltaMs, this.g);
-        this.g.endDraw();
-        this.g.loadPixels();
+    final protected void run(double deltaMs) {
+        this.pg.beginDraw();
+        this.run(deltaMs, this.pg);
+        this.pg.endDraw();
+        this.pg.loadPixels();
         for (int i = 0; i < this.lx.total; ++i) {
-            this.colors[i] = this.g.pixels[i];
+            this.colors[i] = this.pg.pixels[i];
         }
     }
     
-    abstract protected void run(int deltaMs, PGraphics g);
+    abstract protected void run(double deltaMs, PGraphics pg);
 
 }

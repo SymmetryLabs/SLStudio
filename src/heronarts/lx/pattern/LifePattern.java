@@ -137,7 +137,7 @@ public class LifePattern extends LXPattern{
         }
     }
 
-    public void run(int deltaMs) {
+    public void run(double deltaMs) {
         if (this.lx.tempo.beat()) {
             if ((this.spawnCounter > 0) && (--this.spawnCounter == 0)) {
                 this.spawn();

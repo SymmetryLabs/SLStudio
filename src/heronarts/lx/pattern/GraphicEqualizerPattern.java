@@ -38,7 +38,7 @@ public class GraphicEqualizerPattern extends LXPattern {
         this.transition = new WipeTransition(lx, WipeTransition.Direction.UP);
     }
     
-    public void run(int deltaMs) {
+    public void run(double deltaMs) {
         this.fft.forward(this.lx.audioInput().mix);
         int avgSize = this.fft.avgSize();
         for (int i = 0; i < avgSize; ++i) {

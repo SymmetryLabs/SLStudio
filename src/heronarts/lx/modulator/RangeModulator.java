@@ -128,7 +128,7 @@ public abstract class RangeModulator extends LXModulator implements LXParameter.
     }    
     
     @Override
-    protected final double computeValue(int deltaMs) {
+    protected final double computeValue(double deltaMs) {
         if (this.startValue == this.endValue) {
             return this.startValue;
         }
@@ -150,7 +150,7 @@ public abstract class RangeModulator extends LXModulator implements LXParameter.
      * 
      * @param deltaMs
      */
-    protected abstract double computeNormalizedValue(int deltaMs);
+    protected abstract double computeNormalizedValue(double deltaMs);
     
     /**
      * Subclasses determine the basis based on a normalized value from 0 to 1.

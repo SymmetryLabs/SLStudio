@@ -20,7 +20,7 @@ public class BaseHuePattern extends LXPattern {
         super(lx);
     }
     
-    public void run(int deltaMs) {
+    public void run(double deltaMs) {
         for (int i = 0; i < this.colors.length; ++i) {
             this.colors[i] = this.lx.colord(this.lx.getBaseHue(), 100, 100);
         }
