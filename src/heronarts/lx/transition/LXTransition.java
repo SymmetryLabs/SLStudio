@@ -124,6 +124,7 @@ public abstract class LXTransition extends LXParameterized {
     private double ease(double value) {
         switch (this.ease) {
         case NONE:
+            break;
         case IN:
             value = this.easeIn(value);
             break;
