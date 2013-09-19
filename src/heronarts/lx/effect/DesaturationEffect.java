@@ -41,11 +41,11 @@ public class DesaturationEffect extends LXEffect {
     }    
     
     public void onEnable() {
-        this.desaturation.setEndValue(amount.getValue() * 100.).setPeriod(getAttackTime()).start();
+        this.desaturation.setRangeFromHereTo(amount.getValue() * 100., getAttackTime()).start();
     }
     
     public void onDisable() {
-        this.desaturation.setEndValue(0).setPeriod(getDecayTime()).start();
+        this.desaturation.setRangeFromHereTo(0, getDecayTime()).start();
     }
     
     protected void doApply(int[] colors) {

@@ -127,7 +127,7 @@ class Engine {
         }
         this.startTransition();
     }
-
+    
     final public void goNext() {
         if (this.transition != null) {
             return;
@@ -141,6 +141,15 @@ class Engine {
             this.startTransition();
         }
     }
+
+    final public void goPattern(LXPattern pattern) {
+        for (int i = 0; i < this.patterns.length; ++i) {
+            if (this.patterns[i] == pattern) {
+                this.goIndex(i);
+                return;
+            }
+        }
+    }    
     
     final public void goIndex(int i) {
         if (this.transition != null) {
@@ -158,6 +167,7 @@ class Engine {
             return;
         }
         this.getNextPattern().willBecomeActive();
+        this.lx.notifyPatternWillChange(this.getActivePattern(), this.getNextPattern());
         this.transition = this.getNextPattern().getTransition();
         if (this.transition == null) {
             this.finishTransition();
@@ -168,10 +178,11 @@ class Engine {
     }
     
     private void finishTransition() {
-        this.getActivePattern().didResignActive();
+        this.getActivePattern().didResignActive();        
         this.activePatternIndex = this.nextPatternIndex;
         this.transition = null;
         this.transitionMillis = System.currentTimeMillis();
+        this.lx.notifyPatternDidChange(this.getActivePattern());        
     }
     
     protected void disableAutoTransition() {
