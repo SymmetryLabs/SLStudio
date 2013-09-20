@@ -645,7 +645,7 @@ public class HeronLX {
                 break;
             }
             
-            switch (e.getKeyChar()) {
+            switch (Character.toLowerCase(e.getKeyChar())) {
             case '[':
                 this.engine.goPrev();
                 break;
@@ -653,8 +653,7 @@ public class HeronLX {
                 this.engine.goNext();
                 break;
             case 'f':
-            case 'F':
-                this.flags.showFramerate = !this.flags.showFramerate;
+                this.flags.showFramerate = false;
                 break;
             case ' ':
                 if (this.flags.keyboardTempo) {
@@ -662,7 +661,6 @@ public class HeronLX {
                 }
                 break;
             case 's':
-            case 'S':
                 this.desaturation.disable();
                 break;
             case '/':
@@ -671,8 +669,10 @@ public class HeronLX {
             }
         } else if (e.getID() == KeyEvent.KEY_PRESSED) {
             switch (e.getKeyChar()) {
+            case 'f':
+                this.flags.showFramerate = true;
+                break;
             case 's':
-            case 'S':
                 this.desaturation.enable();
                 break;
             case '/':
