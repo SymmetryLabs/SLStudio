@@ -14,8 +14,8 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.HeronLX;
+import heronarts.lx.LXComponent;
 import heronarts.lx.control.BasicParameter;
-import heronarts.lx.control.LXParameterized;
 
 /**
  * An object interface to blend two patterns together. All
@@ -23,7 +23,7 @@ import heronarts.lx.control.LXParameterized;
  * colors based upon a source pattern and a destination
  * pattern. Transitions also support easing.
  */
-public abstract class LXTransition extends LXParameterized {
+public abstract class LXTransition extends LXComponent {
     
     /**
      * Constants for easing that should be applied to the transition.

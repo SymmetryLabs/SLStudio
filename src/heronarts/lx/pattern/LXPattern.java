@@ -14,21 +14,21 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.HeronLX;
-import heronarts.lx.control.LXParameterized;
+import heronarts.lx.LXComponent;
+import heronarts.lx.LXLayer;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.transition.LXTransition;
 
 import java.util.ArrayList;
-
+import java.util.List;
 
 import processing.core.PConstants;
 
-public abstract class LXPattern extends LXParameterized {
+public abstract class LXPattern extends LXComponent {
 
-    final protected HeronLX lx;
-    final protected int[] colors;
-    final private ArrayList<LXModulator> modulators;
-    protected LXTransition transition;
+    protected final HeronLX lx;
+    protected final int[] colors;
+    protected LXTransition transition = null;
     protected int intervalBegin = -1;
     protected int intervalEnd = -1;
     private boolean eligible = true;
@@ -36,21 +36,19 @@ public abstract class LXPattern extends LXParameterized {
     protected LXPattern(HeronLX lx) {
         this.lx = lx;
         this.colors = new int[lx.total];
-        this.modulators = new ArrayList<LXModulator>();
-        this.transition = null;
     }
     
-    final public LXPattern runDuringInterval(int begin, int end) {
+    public LXPattern runDuringInterval(int begin, int end) {
         this.intervalBegin = begin;
         this.intervalEnd = end;
         return this;
     }
     
-    final public boolean hasInterval() {
+    public final boolean hasInterval() {
         return (this.intervalBegin >= 0) && (this.intervalEnd >= 0);
     }
     
-    final public boolean isInInterval() {
+    public final boolean isInInterval() {
         if (!this.hasInterval()) {
             return false;
         }
@@ -65,76 +63,73 @@ public abstract class LXPattern extends LXParameterized {
         }
     }
     
-    final public LXPattern setEligible(boolean eligible) {
+    public final LXPattern setEligible(boolean eligible) {
         this.eligible = eligible;
         return this;
     }
     
-    final public LXPattern toggleEligible() {
+    public final LXPattern toggleEligible() {
         this.setEligible(!this.eligible);
         return this;
     }
     
-    final public boolean isEligible() {
+    public final boolean isEligible() {
         return
             this.eligible &&
             (!this.hasInterval() || this.isInInterval());
     }
     
-    final public LXPattern setTransition(LXTransition transition) {
+    public final LXPattern setTransition(LXTransition transition) {
         this.transition = transition;
         return this;
     }
     
-    final public LXTransition getTransition() {
+    public final LXTransition getTransition() {
         return transition;
     }
     
-    final protected int addColor(int i, int c) {
+    protected final int addColor(int i, int c) {
         return this.colors[i] = this.lx.applet.blendColor(this.colors[i], c, PConstants.ADD);
     }
     
-    final protected int setColor(int i, int c) {
+    protected final int setColor(int i, int c) {
         return this.colors[i] = c;
     }
     
-    final protected int addColor(int x, int y, int c) {
+    protected final int addColor(int x, int y, int c) {
         return this.addColor(x + y * this.lx.width, c);
     }
     
-    final protected int setColor(int x, int y, int c) {
+    protected final int setColor(int x, int y, int c) {
         return this.colors[x + y * this.lx.width] = c;
     }
 
-    final protected int getColor(int x, int y) {
+    protected final int getColor(int x, int y) {
         return this.colors[x + y * this.lx.width];
     }
-
-
-    final protected LXModulator addModulator(LXModulator m) {
-        this.modulators.add(m);
-        return m;
-    }
-
-    final protected void setColors(int c) {
+        
+    protected final void setColors(int c) {
         for (int i = 0; i < colors.length; ++i) {
             this.colors[i] = c;
         }
     }
 
-    final protected void clearColors() {
+    protected final void clearColors() {
         this.setColors(0);
     }
 
-    final public int[] getColors() {
+    public final int[] getColors() {
         return this.colors;
     }
 
-    final public void go(double deltaMs) {
+    public final void go(double deltaMs) {
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
         this.run(deltaMs);
+        for (LXLayer layer : this.layers) {
+            layer.run(deltaMs, this.colors);
+        }
     }
     
     /**
@@ -144,11 +139,11 @@ public abstract class LXPattern extends LXParameterized {
      */
     abstract protected void run(double deltaMs);
 
-    final public void willBecomeActive() {
+    public final void willBecomeActive() {
         this.onActive();
     }
     
-    final public void didResignActive() {
+    public final void didResignActive() {
         this.onInactive();
     }
     

@@ -26,6 +26,7 @@ import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 
+import java.awt.Color;
 import java.awt.event.KeyEvent;
 import java.net.SocketException;
 import java.util.ArrayList;
@@ -189,6 +190,106 @@ public class HeronLX {
         applet.registerDraw(this);
         applet.registerSize(this);
         applet.registerKeyEvent(this);
+    }
+    
+    /**
+     * Scales the brightness of an array of colors by some factor
+     * 
+     * @param rgbs Array of color values
+     * @param s Factor by which to scale brightness
+     * @return Array of new color values
+     */
+    public static int[] scaleBrightness(int[] rgbs, float s) {
+        int[] result = new int[rgbs.length];
+        scaleBrightness(rgbs, s, result);
+        return result;
+    }
+    
+    /**
+     * Scales the brightness of an array of colors by some factor
+     * 
+     * @param rgbs Array of color values
+     * @param s Factor by which to scale brightness
+     * @param result Array to write results into, if null, input array is modified
+     */
+    public static void scaleBrightness(int[] rgbs, float s, int[] result) {
+        int r, g, b, rgb;
+        float[] hsb = new float[3];
+        if (result == null) {
+            result = rgbs;
+        }
+        for (int i = 0; i < rgbs.length; ++i) {
+            rgb = rgbs[i];
+            r = (rgb >> 16) & 0xff;
+            g = (rgb >> 8) & 0xff;
+            b = rgb & 0xff;        
+            Color.RGBtoHSB(r, g, b, hsb);
+            result[i] = Color.HSBtoRGB(hsb[0], hsb[1], Math.min(1, hsb[2] * s));
+        }
+     }
+    
+    /**
+     * Scales the brightness of a color by a factor
+     * 
+     * @param rgb Color value
+     * @param s Factory by which to scale brightness
+     * @return New color
+     */
+    public static int scaleBrightness(int rgb, float s) {
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = rgb & 0xff;        
+        float[] hsb = Color.RGBtoHSB(r, g, b, null);
+        return Color.HSBtoRGB(hsb[0], hsb[1], Math.min(1, hsb[2] * s));
+    }
+    
+    public static float[] RGBtoHSB(int rgb, float[] hsb) {
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = rgb & 0xff;        
+        return Color.RGBtoHSB(r, g, b, hsb);
+    }
+    
+    /**
+     * Thread-safe accessor for the hue of a color
+     * 
+     * @param rgb
+     * @return Hue value from 0-360
+     */
+    public static float h(int rgb) {
+        return 360.f * Color.RGBtoHSB((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, null)[0];
+    }
+    
+    /**
+     * Thread-safe accessor for the saturation of a color
+     * 
+     * @param rgb
+     * @return Saturation value from 0-100
+     */
+    public static float s(int rgb) {
+        return 100.f * Color.RGBtoHSB((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, null)[1];
+    }
+    
+    /**
+     * Thread-safe accessor for the brightness of a color
+     * 
+     * @param rgb
+     * @return Brightness from 0-100
+     */
+    public static float b(int rgb) {
+        return 100.f * Color.RGBtoHSB((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, null)[2];
+    }
+    
+    /**
+     * Thread-safe function to create color from HSB
+     * 
+     * @param h Hue from 0-360
+     * @param s Saturation from 0-100
+     * @param b Brightness from 
+     * @return rgb color value
+     */
+    public static int hsb(float h, float s, float b) {
+        return Color.HSBtoRGB(h/360.f, s/100.f, b/100.f);
     }
     
     public void enableBasicEffects() {

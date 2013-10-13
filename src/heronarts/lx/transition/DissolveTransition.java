@@ -21,6 +21,7 @@ import processing.core.PConstants;
 public class DissolveTransition extends LXTransition {
     
     private final int lerpMode;
+    private final int[] sb1, sb2;
     
     public DissolveTransition(HeronLX lx) {
         this(lx, PConstants.RGB);
@@ -29,23 +30,15 @@ public class DissolveTransition extends LXTransition {
     public DissolveTransition(HeronLX lx, int lerpMode) {
         super(lx);
         this.lerpMode = lerpMode;
+        this.sb1 = new int[lx.total];
+        this.sb2 = new int[lx.total];
     }
 
     protected void computeBlend(int[] c1, int[] c2, double progress) {
+        lx.scaleBrightness(c1, (float) (1-progress), this.sb1);
+        lx.scaleBrightness(c2, (float) progress, this.sb2);
         for (int i = 0; i < this.colors.length; ++i) {
-            this.colors[i] = PGraphics.blendColor(
-                this.lx.applet.color(
-                    this.lx.applet.hue(c1[i]),
-                    this.lx.applet.saturation(c1[i]),
-                    (float) (this.lx.applet.brightness(c1[i]) * (1-progress))
-                ),
-                this.lx.applet.color(
-                    this.lx.applet.hue(c2[i]),
-                    this.lx.applet.saturation(c2[i]),
-                        (float) (this.lx.applet.brightness(c2[i]) * progress)
-                ),
-                PConstants.ADD
-            );
+            this.colors[i] = PGraphics.blendColor(this.sb1[i], this.sb2[i], PConstants.ADD);
         }
     }
 

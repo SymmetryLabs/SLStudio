@@ -14,7 +14,8 @@
 package heronarts.lx.effect;
 
 import heronarts.lx.HeronLX;
-import heronarts.lx.control.LXParameterized;
+import heronarts.lx.LXComponent;
+import heronarts.lx.LXLayer;
 import heronarts.lx.modulator.LXModulator;
 
 import java.util.ArrayList;
@@ -25,14 +26,12 @@ import java.util.ArrayList;
  * operate on a single frame. Only the current frame is provided at
  * runtime.
  */
-public abstract class LXEffect extends LXParameterized {
+public abstract class LXEffect extends LXComponent {
     
     protected final HeronLX lx;
     private final boolean momentary;
     protected boolean enabled = false;
 
-    protected final ArrayList<LXModulator> modulators = new ArrayList<LXModulator>();
-    
     protected LXEffect(HeronLX lx) {
         this(lx, false);
     }
@@ -41,12 +40,7 @@ public abstract class LXEffect extends LXParameterized {
         this.lx = lx;
         this.momentary = momentary;
     }
-    
-    protected final LXModulator addModulator(LXModulator m) {
-        this.modulators.add(m);
-        return m;
-    }
-    
+
     public final boolean isEnabled() {
         return this.enabled;
     }
@@ -113,6 +107,9 @@ public abstract class LXEffect extends LXParameterized {
             m.run(deltaMs);
         }
         this.doApply(colors);
+        for (LXLayer layer : this.layers) {
+            layer.run(deltaMs, colors);
+        }
     }
     
     protected abstract void doApply(int[] colors);
