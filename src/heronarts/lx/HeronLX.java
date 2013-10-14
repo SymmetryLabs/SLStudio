@@ -101,6 +101,16 @@ public class HeronLX {
      */
     public final Engine engine;
     
+    /**
+     * Internal buffer for colors, owned by Processing animation thread.
+     */
+    private final int[] buffer;
+    
+    /**
+     * The current frame's colors, either from the engine or the buffer. 
+     */
+    private int[] colors;
+    
     private final Simulation simulation;
     private Kinet kinet;
     private ClientListener client;
@@ -176,6 +186,8 @@ public class HeronLX {
         
         this.engine = new Engine(this);
         this.simulation = new Simulation(this);
+        this.buffer = new int[this.total];
+        this.colors = this.engine.getColors();
         
         this.baseHue = null;
         this.cycleBaseHue(30000);
@@ -337,7 +349,7 @@ public class HeronLX {
      * @return Array of the current color values
      */
     public final int[] getColors() {
-        return this.engine.getColors();
+        return this.colors;
     }
     
     /**
@@ -708,13 +720,17 @@ public class HeronLX {
         if (this.client != null) {
             this.client.listen();
         }
-        this.engine.run();
-        int[] colors = this.engine.getColors();
+        if (this.engine.isThreaded()) {
+            this.engine.copyColors(this.colors = this.buffer);
+        } else {
+            this.engine.run();
+            this.colors = this.engine.getColors();
+        }
         if (this.kinet != null) {
-            this.kinet.sendThrottledColors(colors);
+            this.kinet.sendThrottledColors(this.colors);
         }
         if (this.drawSimulation) {
-            this.simulation.draw(colors);
+            this.simulation.draw(this.colors);
         }
         if (this.flags.showFramerate) {
             System.out.println("Framerate: " + this.applet.frameRate);

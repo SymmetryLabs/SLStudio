@@ -53,7 +53,7 @@ public class Engine {
         private int autoTransitionThreshold = 0;
         
         private LXTransition blendTransition = new DissolveTransition(lx);
-        private BasicParameter crossfader = new BasicParameter("BLND", 0);
+        private final BasicParameter crossfader = new BasicParameter("BLND", 0);
         
         private LXTransition transition = null;
         private long transitionMillis = 0;
@@ -66,44 +66,54 @@ public class Engine {
         }
         
         public final void addListener(Listener listener) {
-            listeners.add(listener);
+            synchronized(listeners) {
+                listeners.add(listener);
+            }
         }
         
         public final void removeListener(Listener listener) {
-            listeners.remove(listener);
+            synchronized(listeners) {
+                listeners.remove(listener);
+            }
         }
         
         protected final void notifyPatternWillChange(LXPattern pattern, LXPattern nextPattern) {
-            for (Listener listener : listeners) {
-                listener.patternWillChange(this, pattern, nextPattern);
-            }    
+            synchronized(listeners) {
+                for (Listener listener : listeners) {
+                    listener.patternWillChange(this, pattern, nextPattern);
+                }
+            }
         }
         
         protected final void notifyPatternDidChange(LXPattern pattern) {
-            for (Listener listener : listeners) {
-                listener.patternDidChange(this, pattern);
+            synchronized(listeners) {
+                for (Listener listener : listeners) {
+                    listener.patternDidChange(this, pattern);
+                }
             }
         }
 
         protected final void notifyBlendTransitionDidChange(LXTransition transition) {
-            for (Listener listener : listeners) {
-                listener.blendTransitionDidChange(this, transition);
+            synchronized(listeners) {
+                for (Listener listener : listeners) {
+                    listener.blendTransitionDidChange(this, transition);
+                }
             }
         }
         
-        final public BasicParameter getCrossfader() {
+        public final BasicParameter getCrossfader() {
             return this.crossfader;
         }
         
-        final public LXPattern[] getPatterns() {
+        public synchronized final LXPattern[] getPatterns() {
             return this.patterns;
         }
         
-        final public LXTransition getBlendTransition() {
+        public synchronized final LXTransition getBlendTransition() {
             return this.blendTransition;
         }
         
-        final public Deck setBlendTransition(LXTransition transition) {
+        public synchronized final Deck setBlendTransition(LXTransition transition) {
             if (this.blendTransition != transition) {
                 this.blendTransition = transition;
                 notifyBlendTransitionDidChange(transition);
@@ -111,7 +121,7 @@ public class Engine {
             return this;
         }
         
-        final public Deck setPatterns(LXPattern[] patterns) {
+        public synchronized final Deck setPatterns(LXPattern[] patterns) {
             this.getActivePattern().didResignActive();        
             this.patterns = patterns;
             this.activePatternIndex = this.nextPatternIndex = 0;
@@ -119,19 +129,19 @@ public class Engine {
             return this;
         }
 
-        final public LXPattern getActivePattern() {
+        public synchronized final LXPattern getActivePattern() {
             return this.patterns[this.activePatternIndex];
         }
 
-        final public LXPattern getNextPattern() {
+        public synchronized final LXPattern getNextPattern() {
             return this.patterns[this.nextPatternIndex];
         }
         
-        final protected LXTransition getActiveTransition() {
+        protected synchronized final LXTransition getActiveTransition() {
             return this.transition;
         }
 
-        final public void goPrev() {
+        public synchronized final void goPrev() {
             if (this.transition != null) {
                 return;
             }
@@ -142,7 +152,7 @@ public class Engine {
             this.startTransition();
         }
         
-        final public void goNext() {
+        public synchronized final void goNext() {
             if (this.transition != null) {
                 return;
             }
@@ -156,7 +166,7 @@ public class Engine {
             }
         }
 
-        final public void goPattern(LXPattern pattern) {
+        public synchronized final void goPattern(LXPattern pattern) {
             for (int i = 0; i < this.patterns.length; ++i) {
                 if (this.patterns[i] == pattern) {
                     this.goIndex(i);
@@ -165,7 +175,7 @@ public class Engine {
             }
         }    
         
-        final public void goIndex(int i) {
+        public synchronized final void goIndex(int i) {
             if (this.transition != null) {
                 return;
             }
@@ -176,11 +186,11 @@ public class Engine {
             this.startTransition();
         }
         
-        protected void disableAutoTransition() {
+        protected synchronized void disableAutoTransition() {
             this.autoTransitionEnabled = false;
         }
         
-        protected void enableAutoTransition(int autoTransitionThreshold) {
+        protected synchronized void enableAutoTransition(int autoTransitionThreshold) {
             this.autoTransitionEnabled = true;
             this.autoTransitionThreshold = autoTransitionThreshold;
             if (this.transition == null) {
@@ -188,12 +198,12 @@ public class Engine {
             }
         }
         
-        protected boolean isAutoTransitionEnabled() {
+        protected synchronized boolean isAutoTransitionEnabled() {
             return this.autoTransitionEnabled;
         }
 
             
-        private void startTransition() {
+        private synchronized void startTransition() {
             if (getActivePattern() == getNextPattern()) {
                 return;
             }
@@ -208,7 +218,7 @@ public class Engine {
             }
         }
         
-        private void finishTransition() {
+        private synchronized void finishTransition() {
             getActivePattern().didResignActive();        
             this.activePatternIndex = this.nextPatternIndex;
             this.transition = null;
@@ -216,7 +226,7 @@ public class Engine {
             notifyPatternDidChange(getActivePattern());        
         }
         
-        private void run(long nowMillis, double deltaMs) {
+        private synchronized void run(long nowMillis, double deltaMs) {
             // Run active pattern
             this.getActivePattern().go(deltaMs);
             
@@ -242,7 +252,7 @@ public class Engine {
             }
         }
         
-        public int[] getColors() {
+        public synchronized int[] getColors() {
             return (this.transition != null) ? this.transition.getColors() : this.getActivePattern().getColors();
         }
     }
@@ -252,10 +262,15 @@ public class Engine {
     private final List<Deck> decks = new ArrayList<Deck>();
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();        
-    
+        
     private final int[] black;
     private final int[] colors;
+    private final int[] buffer;
     private long lastMillis;
+        
+    private boolean isThreaded = false;
+    private Thread engineThread = null;
+    
     private double speed = 1;
     private boolean paused = false;
     
@@ -263,8 +278,9 @@ public class Engine {
         this.lx = lx;
         this.black = new int[lx.total];
         this.colors = new int[lx.total];
+        this.buffer = new int[lx.total];
         for (int i = 0; i < lx.total; ++i) {
-            this.black[i] = this.colors[i] = 0;
+            this.black[i] = this.colors[i] = this.buffer[i] = 0xFF000000;
         }
         Deck deck = new Deck(new LXPattern[] {
             new IteratorTestPattern(lx)
@@ -273,8 +289,69 @@ public class Engine {
         this.decks.add(deck);
         this.lastMillis = System.currentTimeMillis();
     }
+    
+    /**
+     * Whether the engine is threaded. Should only be called from Processing
+     * animation thread.
+     * 
+     * @return Whether the engine is threaded
+     */
+    public synchronized boolean isThreaded() {
+        return this.isThreaded;
+    }
+    
+    /**
+     * Sets the engine to threaded or non-threaded mode. Should only be called
+     * from the Processing animation thread.
+     * 
+     * @param threaded Whether engine should run on its own thread
+     */
+    public synchronized void setThreaded(boolean threaded) {
+        if (threaded == this.isThreaded) {
+            return;
+        }
+        this.isThreaded = threaded;
+        if (!threaded) {
+            engineThread.interrupt();
+            try {
+                engineThread.join();
+            } catch (InterruptedException ix) {}
+            engineThread = null;
+        } else {
+            engineThread = new Thread("HeronLX Engine Thread") {
+                public void run() {
+                    System.out.println("HeronLX Engine Thread started.");
+                    final int minMillisPerFrame = 15;
+                    while (!isInterrupted()) {
+                        long frameStart = System.currentTimeMillis();
+                        Engine.this.run();
+                        synchronized(buffer) {
+                            // Copy the frame into a thread-safe buffer
+                            for (int i = 0; i < colors.length; ++i) {
+                                buffer[i] = colors[i];
+                            }
+                        }
+                        long frameMillis = System.currentTimeMillis() - frameStart;
+                        if (frameMillis < minMillisPerFrame) {
+                            try {
+                                sleep(minMillisPerFrame - frameMillis);
+                            } catch (InterruptedException ix) {
+                                break;
+                            }
+                        }
+                    }
+                    System.out.println("HeronLX Engine Thread finished.");
+                }
+            };
+            // Copy the current frame to avoid a black frame
+            for (int i = 0; i < colors.length; ++i) {
+                buffer[i] = colors[i];
+            }
+            engineThread.start();
+        }
+    }
 
-    void setSpeed(double speed) {
+    synchronized void setSpeed(double speed) {
         this.speed = speed;
     }
     
@@ -283,85 +360,85 @@ public class Engine {
      * 
      * @param paused Whether to pause the engine to pause
      */
-    public void setPaused(boolean paused) {
+    public synchronized void setPaused(boolean paused) {
         this.paused = paused;
     }
     
-    public boolean isPaused() {
+    public synchronized boolean isPaused() {
         return this.paused;
     }
     
-    final public LXModulator addModulator(LXModulator m) {
+    public synchronized LXModulator addModulator(LXModulator m) {
         this.modulators.add(m);
         return m;
     }
     
-    final public void removeModulator(LXModulator m) {
+    public synchronized void removeModulator(LXModulator m) {
         this.modulators.remove(m);
     }
     
-    final public List<LXEffect> getEffects() {
+    public synchronized List<LXEffect> getEffects() {
         return this.effects;
     }
     
-    final public LXEffect addEffect(LXEffect fx) {
+    public synchronized LXEffect addEffect(LXEffect fx) {
         this.effects.add(fx);
         return fx;
     }
 
-    final public void removeEffect(LXEffect fx) {
+    public synchronized void removeEffect(LXEffect fx) {
         this.effects.remove(fx);
     }
     
-    final public List<Deck> getDecks() {
+    public synchronized List<Deck> getDecks() {
         return this.decks;
     }
     
-    final public Deck getDefaultDeck() {
+    public synchronized Deck getDefaultDeck() {
         return this.decks.get(0);
     }
     
-    final public Deck getDeck(int deckIndex) {
+    public synchronized Deck getDeck(int deckIndex) {
         return this.decks.get(deckIndex);
     }
     
-    final public void addDeck(LXPattern[] patterns) {
+    public synchronized void addDeck(LXPattern[] patterns) {
         this.decks.add(new Deck(patterns));
     }
         
-    final public void setPatterns(LXPattern[] patterns) {
+    public void setPatterns(LXPattern[] patterns) {
         this.getDefaultDeck().setPatterns(patterns);
     }
         
-    final public LXPattern[] getPatterns() {
+    public LXPattern[] getPatterns() {
         return this.getDefaultDeck().getPatterns();
     }
     
-    final protected LXPattern getActivePattern() {
+    protected LXPattern getActivePattern() {
         return this.getDefaultDeck().getActivePattern();
     }
     
-    final protected LXPattern getNextPattern() {
+    protected LXPattern getNextPattern() {
         return this.getDefaultDeck().getNextPattern();
     }
 
-    final protected LXTransition getActiveTransition() {
+    protected LXTransition getActiveTransition() {
         return this.getDefaultDeck().getActiveTransition();
     }
     
-    final public void goPrev() {
+    public void goPrev() {
         this.getDefaultDeck().goPrev();
     }
 
-    final public void goNext() {
+    public final void goNext() {
         this.getDefaultDeck().goNext();
     }
     
-    final public void goPattern(LXPattern pattern) {
+    public void goPattern(LXPattern pattern) {
         this.getDefaultDeck().goPattern(pattern);
     }
     
-    final public void goIndex(int index) {
+    public void goIndex(int index) {
         this.getDefaultDeck().goIndex(index);
     }
     
@@ -377,7 +454,7 @@ public class Engine {
         return getDefaultDeck().isAutoTransitionEnabled();
     }
 
-    public void run() {
+    public synchronized void run() {
         // Compute elapsed time
         long nowMillis = System.currentTimeMillis();
         double deltaMs = nowMillis - this.lastMillis;
@@ -422,8 +499,16 @@ public class Engine {
             fx.apply(this.colors, deltaMs);
         }
     }
-
-    public int[] getColors() {
+    
+    void copyColors(int[] copy) {
+        synchronized(this.buffer) {
+            for (int i = 0; i < copy.length; ++i) {
+                copy[i] = this.buffer[i]; 
+            }
+        }
+    }
+    
+    int[] getColors() {
         return this.colors;
     }
 }
