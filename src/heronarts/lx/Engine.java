@@ -262,10 +262,32 @@ public class Engine {
     private final List<Deck> decks = new ArrayList<Deck>();
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();        
+    
+    class DoubleBuffer {
         
+        final int[] buffer1;
+        final int[] buffer2;
+        int[] render;
+        int[] copy;
+        
+        DoubleBuffer() {
+            render = buffer1 = new int[lx.total];
+            copy = buffer2 = new int[lx.total];
+            for (int i = 0; i < lx.total; ++i) {
+                buffer1[i] = buffer2[i] = 0xff000000;
+            }
+        }
+        
+        void flip() {
+            int[] tmp = render;
+            render = copy;
+            copy = tmp;
+        }
+    }
+    
+    private final DoubleBuffer buffer;
     private final int[] black;
-    private final int[] colors;
-    private final int[] buffer;
+    
     private long lastMillis;
         
     private boolean isThreaded = false;
@@ -277,11 +299,10 @@ public class Engine {
     Engine(HeronLX lx) {
         this.lx = lx;
         this.black = new int[lx.total];
-        this.colors = new int[lx.total];
-        this.buffer = new int[lx.total];
-        for (int i = 0; i < lx.total; ++i) {
-            this.black[i] = this.colors[i] = this.buffer[i] = 0xFF000000;
+        for (int i = 0; i < black.length; ++i) {
+            this.black[i] = 0xff000000;
         }
+        this.buffer = new DoubleBuffer();
         Deck deck = new Deck(new LXPattern[] {
             new IteratorTestPattern(lx)
         });
@@ -318,6 +339,10 @@ public class Engine {
             } catch (InterruptedException ix) {}
             engineThread = null;
         } else {
+            // Copy the current frame to avoid a black frame
+            for (int i = 0; i < buffer.render.length; ++i) {
+                buffer.copy[i] = buffer.render[i];
+            }
             engineThread = new Thread("HeronLX Engine Thread") {
                 public void run() {
                     System.out.println("HeronLX Engine Thread started.");
@@ -326,10 +351,7 @@ public class Engine {
                         long frameStart = System.currentTimeMillis();
                         Engine.this.run();
                         synchronized(buffer) {
-                            // Copy the frame into a thread-safe buffer
-                            for (int i = 0; i < colors.length; ++i) {
-                                buffer[i] = colors[i];
-                            }
+                            buffer.flip();
                         }
                         long frameMillis = System.currentTimeMillis() - frameStart;
                         if (frameMillis < minMillisPerFrame) {
@@ -343,10 +365,6 @@ public class Engine {
                     System.out.println("HeronLX Engine Thread finished.");
                 }
             };
-            // Copy the current frame to avoid a black frame
-            for (int i = 0; i < colors.length; ++i) {
-                buffer[i] = colors[i];
-            }
             engineThread.start();
         }
     }
@@ -476,7 +494,7 @@ public class Engine {
         this.lx.tempo.run(deltaMs);
         
         // Run and blend all of our decks
-        int[] bufferColors = black;
+        int[] bufferColors = this.black;
         for (Deck deck : this.decks) {
             deck.run(nowMillis, deltaMs);
             if (deck.crossfader.getValue() >= 1) {
@@ -489,26 +507,26 @@ public class Engine {
             }
         }
         
-        // Copy colors into our own memory
-        for (int i = 0; i < this.colors.length; ++i) {
-            this.colors[i] = bufferColors[i];
+        // Copy colors into our own rendering buffer
+        for (int i = 0; i < bufferColors.length; ++i) {
+            this.buffer.render[i] = bufferColors[i];
         }
                 
         // Apply effects
         for (LXEffect fx : this.effects) {
-            fx.apply(this.colors, deltaMs);
+            fx.apply(this.buffer.render, deltaMs);
         }
     }
     
     void copyColors(int[] copy) {
         synchronized(this.buffer) {
-            for (int i = 0; i < copy.length; ++i) {
-                copy[i] = this.buffer[i]; 
+            for (int i = 0; i < this.buffer.copy.length; ++i) {
+                copy[i] = this.buffer.copy[i]; 
             }
         }
     }
     
-    int[] getColors() {
-        return this.colors;
+    int[] renderColors() {
+        return this.buffer.render;
     }
 }

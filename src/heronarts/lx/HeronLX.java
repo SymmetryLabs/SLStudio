@@ -187,7 +187,7 @@ public class HeronLX {
         this.engine = new Engine(this);
         this.simulation = new Simulation(this);
         this.buffer = new int[this.total];
-        this.colors = this.engine.getColors();
+        this.colors = this.engine.renderColors();
         
         this.baseHue = null;
         this.cycleBaseHue(30000);
@@ -724,7 +724,7 @@ public class HeronLX {
             this.engine.copyColors(this.colors = this.buffer);
         } else {
             this.engine.run();
-            this.colors = this.engine.getColors();
+            this.colors = this.engine.renderColors();
         }
         if (this.kinet != null) {
             this.kinet.sendThrottledColors(this.colors);
