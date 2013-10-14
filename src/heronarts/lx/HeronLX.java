@@ -258,9 +258,9 @@ public class HeronLX {
     public static float[] RGBtoHSB(int rgb, float[] hsb) {
         int r = (rgb >> 16) & 0xff;
         int g = (rgb >> 8) & 0xff;
-        int b = rgb & 0xff;        
+        int b = rgb & 0xff;             
         return Color.RGBtoHSB(r, g, b, hsb);
-    }
+    }    
     
     /**
      * Thread-safe accessor for the hue of a color
@@ -269,7 +269,27 @@ public class HeronLX {
      * @return Hue value from 0-360
      */
     public static float h(int rgb) {
-        return 360.f * Color.RGBtoHSB((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, null)[0];
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = rgb & 0xff;
+        int max = (r > g) ? r : g;
+        if (b > max) max = b;
+        int min = (r < g) ? r : g;
+        if (b < min) min = b;
+        if (max == 0) return 0;
+        float range = max - min;
+        float h;
+        float rc = (max-r)/range;
+        float gc = (max-g)/range;
+        float bc = (max-b)/range;
+        if (r == max) h = bc - gc;
+        else if (g == max) h = 2.f + rc - bc;
+        else h = 4.f + gc - rc;
+        h /= 6.f;
+        if (h < 0) {
+            h += 1.f;
+        }
+        return 360.f*h;
     }
     
     /**
@@ -279,7 +299,14 @@ public class HeronLX {
      * @return Saturation value from 0-100
      */
     public static float s(int rgb) {
-        return 100.f * Color.RGBtoHSB((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, null)[1];
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = rgb & 0xff;
+        int max = (r > g) ? r : g;
+        if (b > max) max = b;
+        int min = (r < g) ? r : g;
+        if (b < min) min = b;
+        return (max == 0) ? 0 : (max-min) * 100.f / (float) max;
     }
     
     /**
@@ -289,7 +316,12 @@ public class HeronLX {
      * @return Brightness from 0-100
      */
     public static float b(int rgb) {
-        return 100.f * Color.RGBtoHSB((rgb >> 16) & 0xff, (rgb >> 8) & 0xff, rgb & 0xff, null)[2];
+        int r = (rgb >> 16) & 0xff;
+        int g = (rgb >> 8) & 0xff;
+        int b = rgb & 0xff;
+        int max = (r > g) ? r : g;
+        if (b > max) max = b;
+        return 100.f * max / 255.f;
     }
     
     /**
