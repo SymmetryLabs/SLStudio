@@ -49,32 +49,35 @@ public abstract class LXEffect extends LXComponent {
         return this.momentary;
     }
     
-    public final void toggle() {
+    public final LXEffect toggle() {
         if (this.enabled) {
             this.disable();
         } else {
             this.enable();
         }
+        return this;
     }
     
     /**
      * Enables the effect.
      */
-    public final void enable() {
+    public final LXEffect enable() {
         if (!this.enabled) {
             this.enabled = true;
             this.onEnable();
         }
+        return this;
     }
     
     /**
      * Disables the effect.
      */
-    public final void disable() {
+    public final LXEffect disable() {
         if (this.enabled) {
             this.enabled = false;
             this.onDisable();
         }
+        return this;
     }
     
     /**
