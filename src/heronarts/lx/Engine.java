@@ -220,10 +220,10 @@ public class Engine {
         
         private synchronized void finishTransition() {
             getActivePattern().didResignActive();        
+            this.activePatternIndex = this.nextPatternIndex;
             if (this.transition != null) {
                 getNextPattern().onTransitionEnd();
             }
-            this.activePatternIndex = this.nextPatternIndex;
             this.transition = null;
             this.transitionMillis = System.currentTimeMillis();
             notifyPatternDidChange(getActivePattern());        
