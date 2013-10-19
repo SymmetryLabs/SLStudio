@@ -152,6 +152,8 @@ public abstract class LXPattern extends LXComponent {
     /* abstract */ protected void onInactive() {}
     
     /* abstract */ public void onTransitionStart() {}
+    
+    /* abstract */ public void onTransitionEnd() {}
 
     /* abstract */ public void onKnob(int num, int value) {}
 
