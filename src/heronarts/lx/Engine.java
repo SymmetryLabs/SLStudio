@@ -222,11 +222,11 @@ public class Engine {
             getActivePattern().didResignActive();        
             this.activePatternIndex = this.nextPatternIndex;
             if (this.transition != null) {
-                getNextPattern().onTransitionEnd();
+                getActivePattern().onTransitionEnd();
             }
             this.transition = null;
             this.transitionMillis = System.currentTimeMillis();
-            notifyPatternDidChange(getActivePattern());        
+            notifyPatternDidChange(getActivePattern());
         }
         
         private synchronized void run(long nowMillis, double deltaMs) {
