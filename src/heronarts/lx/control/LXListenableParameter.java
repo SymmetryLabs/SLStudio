@@ -33,13 +33,14 @@ public abstract class LXListenableParameter extends LXParameter {
     }
 
     @Override
-    public final void setValue(double value) {
+    public final LXParameter setValue(double value) {
         if (value != getValue()) {
             updateValue(value);
             for (Listener l : listeners) {
                 l.onParameterChanged(this);
             }
         }
+        return this;
     }
     
     protected abstract void updateValue(double value);

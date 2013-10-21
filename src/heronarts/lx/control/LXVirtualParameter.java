@@ -31,11 +31,21 @@ public abstract class LXVirtualParameter extends LXParameter {
     protected abstract LXParameter getRealParameter();
     
     @Override
-    public final void setValue(double value) {
+    public final LXParameter reset() {
+        LXParameter p = getRealParameter();
+        if (p != null) {
+            p.reset();
+        }
+        return this;
+    }
+    
+    @Override
+    public final LXParameter setValue(double value) {
         LXParameter p = getRealParameter();
         if (p != null) {
             p.setValue(value);
         }
+        return this;
     }
 
     @Override

@@ -99,7 +99,7 @@ public class HeronLX {
     /**
      * The pattern engine.
      */
-    public final Engine engine;
+    public final LXEngine engine;
     
     /**
      * Internal buffer for colors, owned by Processing animation thread.
@@ -184,7 +184,7 @@ public class HeronLX {
         
         this.drawSimulation = true;
         
-        this.engine = new Engine(this);
+        this.engine = new LXEngine(this);
         this.simulation = new Simulation(this);
         this.buffer = new int[this.total];
         this.colors = this.engine.renderColors();

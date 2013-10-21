@@ -15,13 +15,11 @@ package heronarts.lx.control;
 
 /**
  * Simple parameter class with a double value.
- * 
- * @author mcslee
  */
 public class BasicParameter extends LXListenableParameter {
 
     private final String label;
-    private double value;
+    private double value, defaultValue;
     
     public BasicParameter(String label) {
         this(null, label);
@@ -37,12 +35,18 @@ public class BasicParameter extends LXListenableParameter {
     
     public BasicParameter(Listener listener, String label, double value) {
         this.label = label;
-        this.value = value;
+        this.value = this.defaultValue = value;
         if (listener != null) {
             this.addListener(listener);
         }
     }
-        
+    
+    @Override
+    public LXParameter reset() {
+        setValue(this.defaultValue);
+        return this;
+    }
+    
     @Override
     protected void updateValue(double value) {
         this.value = value;
