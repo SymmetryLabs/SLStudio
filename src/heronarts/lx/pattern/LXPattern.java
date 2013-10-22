@@ -15,6 +15,7 @@ package heronarts.lx.pattern;
 
 import heronarts.lx.HeronLX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.LXDeck;
 import heronarts.lx.LXLayer;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.transition.LXTransition;
@@ -27,6 +28,8 @@ import processing.core.PConstants;
 public abstract class LXPattern extends LXComponent {
 
     protected final HeronLX lx;
+    private LXDeck deck = null;
+    
     protected final int[] colors;
     protected LXTransition transition = null;
     protected int intervalBegin = -1;
@@ -36,6 +39,18 @@ public abstract class LXPattern extends LXComponent {
     protected LXPattern(HeronLX lx) {
         this.lx = lx;
         this.colors = new int[lx.total];
+    }
+    
+    public LXDeck getDeck() {
+        return this.deck;
+    }
+    
+    public LXPattern setDeck(LXDeck deck) {
+        if (this.deck != null) {
+            throw new RuntimeException("LXPattern instance can only be added to LXDeck once.");
+        }
+        this.deck = deck;
+        return this;
     }
     
     public LXPattern runDuringInterval(int begin, int end) {

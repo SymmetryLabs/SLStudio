@@ -48,6 +48,8 @@ public class LXDeck {
     }
     
     private final HeronLX lx;
+    public final int index;
+    
     
     private LXPattern[] patterns;
     private int activePatternIndex = 0;
@@ -64,8 +66,9 @@ public class LXDeck {
 
     private final List<Listener> listeners = new ArrayList<Listener>();
     
-    LXDeck(HeronLX lx, LXPattern[] patterns) {
+    LXDeck(HeronLX lx, int index, LXPattern[] patterns) {
         this.lx = lx;
+        this.index = index;
         this.patterns = patterns;
         this.faderTransition = new DissolveTransition(lx);  
         this.transitionMillis = System.currentTimeMillis();

@@ -72,7 +72,7 @@ public class LXEngine {
             this.black[i] = 0xff000000;
         }
         this.buffer = new DoubleBuffer();
-        LXDeck deck = new LXDeck(lx, new LXPattern[] {
+        LXDeck deck = new LXDeck(lx, 0, new LXPattern[] {
             new IteratorTestPattern(lx)
         });
         deck.getFader().setValue(1);
@@ -190,7 +190,7 @@ public class LXEngine {
     }
     
     public synchronized void addDeck(LXPattern[] patterns) {
-        this.decks.add(new LXDeck(lx, patterns));
+        this.decks.add(new LXDeck(lx, this.decks.size(), patterns));
     }
         
     public void setPatterns(LXPattern[] patterns) {
