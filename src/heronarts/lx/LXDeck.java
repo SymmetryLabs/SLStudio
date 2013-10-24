@@ -69,9 +69,9 @@ public class LXDeck {
     LXDeck(HeronLX lx, int index, LXPattern[] patterns) {
         this.lx = lx;
         this.index = index;
-        this.patterns = patterns;
         this.faderTransition = new DissolveTransition(lx);  
         this.transitionMillis = System.currentTimeMillis();
+        _updatePatterns(patterns);
     }
     
     public final void addListener(Listener listener) {
@@ -132,10 +132,19 @@ public class LXDeck {
     
     public synchronized final LXDeck setPatterns(LXPattern[] patterns) {
         this.getActivePattern().didResignActive();        
-        this.patterns = patterns;
+        _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
         this.getActivePattern().willBecomeActive();
         return this;
+    }
+    
+    private void _updatePatterns(LXPattern[] patterns) {
+        for (LXPattern p : patterns) {
+            if (p.getDeck() != this) {
+                p.setDeck(this);
+            }
+        }
+        this.patterns = patterns;
     }
 
     public synchronized final LXPattern getActivePattern() {
