@@ -24,33 +24,64 @@ import java.lang.System;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * The engine is the core class that runs the internal animations. An
+ * engine is comprised of top-level modulators, then a number of decks,
+ * each of which has a set of patterns that it may transition between.
+ * These decks are blended together, and effects are then applied.
+ * 
+ * <pre>
+ *   -----------------------------
+ *  | Engine                      |
+ *  |  -------------------------  |
+ *  | | Modulators              | |
+ *  |  -------------------------  |
+ *  |  --------    --------       |
+ *  | | Deck 0 |  | Deck 1 |  ... |
+ *  |  --------    --------       |
+ *  |  -------------------------  |
+ *  | | Effects                 | |
+ *  |  -------------------------  |
+ *   -----------------------------
+ * </pre>
+ *  
+ *  The result of all this generates a display buffer of node values.
+ */
 public class LXEngine {
         
     private final HeronLX lx;
     
-    private final List<LXDeck> decks = new ArrayList<LXDeck>();
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
+    private final List<LXDeck> decks = new ArrayList<LXDeck>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();        
     
-    class DoubleBuffer {
+    /**
+     * Utility class for a threaded engine to do buffer-flipping. One buffer
+     * is actively being worked on, while another copy is held for shuffling
+     * off to another thread.
+     */
+    private class DoubleBuffer {
         
-        final int[] buffer1;
-        final int[] buffer2;
-        int[] render;
-        int[] copy;
+        // Concrete buffer instances, these are real memory
+        private final int[] buffer1;        
+        private final int[] buffer2;
         
-        DoubleBuffer() {
-            render = buffer1 = new int[lx.total];
-            copy = buffer2 = new int[lx.total];
+        // References, these flip between pointing to buffer1 and buffer 2
+        private int[] render;
+        private int[] copy;
+        
+        private DoubleBuffer() {
+            this.render = this.buffer1 = new int[lx.total];
+            this.copy = this.buffer2 = new int[lx.total];
             for (int i = 0; i < lx.total; ++i) {
-                buffer1[i] = buffer2[i] = 0xff000000;
+                this.buffer1[i] = this.buffer2[i] = 0xff000000;
             }
         }
         
-        void flip() {
-            int[] tmp = render;
-            render = copy;
-            copy = tmp;
+        private void flip() {
+            int[] tmp = this.render;
+            this.render = this.copy;
+            this.copy = tmp;
         }
     }
     
@@ -96,9 +127,9 @@ public class LXEngine {
      * 
      * @param threaded Whether engine should run on its own thread
      */
-    public synchronized void setThreaded(boolean threaded) {
+    public synchronized LXEngine setThreaded(boolean threaded) {
         if (threaded == this.isThreaded) {
-            return;
+            return this;
         }
         this.isThreaded = threaded;
         if (!threaded) {
@@ -136,10 +167,12 @@ public class LXEngine {
             };
             engineThread.start();
         }
+        return this;
     }
 
-    synchronized void setSpeed(double speed) {
+    public synchronized LXEngine setSpeed(double speed) {
         this.speed = speed;
+        return this;
     }
     
     /**
@@ -251,16 +284,16 @@ public class LXEngine {
             return;
         }
         
-        // Mutate by speed
+        // Run tempo, always using real-time
+        this.lx.tempo.run(deltaMs);
+        
+        // Mutate by speed for everything else
         deltaMs *= this.speed;
         
         // Run modulators
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
-        
-        // Run tempo
-        this.lx.tempo.run(deltaMs);
         
         // Run and blend all of our decks
         int[] bufferColors = this.black;
@@ -281,13 +314,20 @@ public class LXEngine {
             this.buffer.render[i] = bufferColors[i];
         }
                 
-        // Apply effects
+        // Apply effects in our rendering buffer
         for (LXEffect fx : this.effects) {
-            fx.apply(this.buffer.render, deltaMs);
+            fx.run(deltaMs, this.buffer.render);
         }
     }
     
-    void copyColors(int[] copy) {
+    /**
+     * This should be used when in threaded mode. It synchronizes on the
+     * double-buffer and duplicates the internal copy buffer into the provided
+     * buffer.
+     * 
+     * @param copy Buffer to copy into
+     */
+    void copyBuffer(int[] copy) {
         synchronized(this.buffer) {
             for (int i = 0; i < this.buffer.copy.length; ++i) {
                 copy[i] = this.buffer.copy[i]; 
@@ -295,7 +335,13 @@ public class LXEngine {
         }
     }
     
-    int[] renderColors() {
+    /**
+     * This is used when not in threaded mode. It provides direct access to
+     * the engine's render buffer.
+     * 
+     * @return The internal render buffer
+     */
+    int[] renderBuffer() {
         return this.buffer.render;
     }
 }

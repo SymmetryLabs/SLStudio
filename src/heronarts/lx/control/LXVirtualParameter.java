@@ -19,7 +19,8 @@ package heronarts.lx.control;
  * to forward to varies based on some other contextual action or UI, for
  * instance a virtual knob that maps to whatever pattern is currently active.
  * 
- * @author mcslee
+ * This type of parameter is not listenable, since the underlying parameter
+ * is dynamic.
  */
 public abstract class LXVirtualParameter extends LXParameter {
 

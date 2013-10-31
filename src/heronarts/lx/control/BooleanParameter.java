@@ -5,26 +5,16 @@ package heronarts.lx.control;
  */
 public class BooleanParameter extends LXListenableParameter {
 
-    private final String label;
-    private boolean on, defaultOn;
-
     public BooleanParameter(String label) {
         this(label, false);
     }
     
     public BooleanParameter(String label, boolean on) {
-        this.label = label;
-        this.on = this.defaultOn = on;
+        super(label, on ? 1. : 0.);
     }
-    
-    @Override
-    public LXParameter reset() {
-        setOn(this.defaultOn);
-        return this;
-    }
-    
+        
     public boolean isOn() {
-        return this.on;
+        return this.getValue() > 0.;
     }
     
     public BooleanParameter setOn(boolean on) {
@@ -33,18 +23,8 @@ public class BooleanParameter extends LXListenableParameter {
     }
     
     @Override
-    protected void updateValue(double value) {
-        this.on = (value > 0);
-    }
-
-    @Override
-    public double getValue() {
-        return this.on ? 1. : 0.;
-    }
-
-    @Override
-    public String getLabel() {
-        return this.label;
+    protected double updateValue(double value) {
+        return (value > 0) ? 1. : 0.;
     }
 
 }

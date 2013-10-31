@@ -13,12 +13,22 @@
 
 package heronarts.lx.control;
 
+/**
+ * This class provides a common interface for system components to have parameters
+ * that can modify their operation. Any LXComponent can have parameters, such as
+ * a pattern, effect, or transition.
+ */
 public abstract class LXParameter {
 
     /**
      * A listener interface to be notified of changes to the parameter value.
      */
     public interface Listener {
+        /**
+         * Invoked when the value of a parameter is changed.
+         * 
+         * @param parameter The parameter that has changed its value
+         */
         public void onParameterChanged(LXParameter parameter);
     }
 

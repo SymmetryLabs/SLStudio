@@ -23,14 +23,14 @@ import java.util.List;
 
 /**
  * A deck is a single component of the engine that has a set of patterns
- * from which it plays and rotates. It also has a fader to control the degree
- * to which this deck is blended with previous decks.
+ * from which it plays and rotates. It also has a fader to control how this deck
+ * is blended with the decks before it.
  */
 public class LXDeck {
     
     /**
      * Listener interface for objects which want to be notified when the
-     * internal engine state is modified
+     * internal deck state is modified.
      */
     public interface Listener {
         public void patternWillChange(LXDeck deck, LXPattern pattern, LXPattern nextPattern);
@@ -48,8 +48,11 @@ public class LXDeck {
     }
     
     private final HeronLX lx;
-    public final int index;
     
+    /**
+     * The index of this deck in the engine.
+     */
+    public final int index;
     
     private LXPattern[] patterns;
     private int activePatternIndex = 0;
@@ -86,7 +89,7 @@ public class LXDeck {
         }
     }
     
-    protected final void notifyPatternWillChange(LXPattern pattern, LXPattern nextPattern) {
+    private final void notifyPatternWillChange(LXPattern pattern, LXPattern nextPattern) {
         synchronized(listeners) {
             for (Listener listener : listeners) {
                 listener.patternWillChange(this, pattern, nextPattern);
@@ -94,7 +97,7 @@ public class LXDeck {
         }
     }
     
-    protected final void notifyPatternDidChange(LXPattern pattern) {
+    private final void notifyPatternDidChange(LXPattern pattern) {
         synchronized(listeners) {
             for (Listener listener : listeners) {
                 listener.patternDidChange(this, pattern);
@@ -102,7 +105,7 @@ public class LXDeck {
         }
     }
 
-    protected final void notifyFaderTransitionDidChange(LXTransition transition) {
+    private final void notifyFaderTransitionDidChange(LXTransition transition) {
         synchronized(listeners) {
             for (Listener listener : listeners) {
                 listener.faderTransitionDidChange(this, transition);
@@ -159,20 +162,21 @@ public class LXDeck {
         return this.transition;
     }
 
-    public synchronized final void goPrev() {
+    public synchronized final LXDeck goPrev() {
         if (this.transition != null) {
-            return;
+            return this;
         }
         this.nextPatternIndex = this.activePatternIndex - 1;
         if (this.nextPatternIndex < 0) {
             this.nextPatternIndex = this.patterns.length - 1;
         }
         this.startTransition();
+        return this;
     }
     
-    public synchronized final void goNext() {
+    public synchronized final LXDeck goNext() {
         if (this.transition != null) {
-            return;
+            return this;
         }
         this.nextPatternIndex = this.activePatternIndex;
         do {
@@ -182,38 +186,42 @@ public class LXDeck {
         if (this.nextPatternIndex != this.activePatternIndex) {
             this.startTransition();
         }
+        return this;
     }
 
-    public synchronized final void goPattern(LXPattern pattern) {
+    public synchronized final LXDeck goPattern(LXPattern pattern) {
         for (int i = 0; i < this.patterns.length; ++i) {
             if (this.patterns[i] == pattern) {
-                this.goIndex(i);
-                return;
+                return this.goIndex(i);
             }
         }
+        return this;
     }    
     
-    public synchronized final void goIndex(int i) {
+    public synchronized final LXDeck goIndex(int i) {
         if (this.transition != null) {
-            return;
+            return this;
         }
         if (i < 0 || i >= this.patterns.length) {
-            return;
+            return this;
         }
         this.nextPatternIndex = i;
         this.startTransition();
+        return this;
     }
     
-    protected synchronized void disableAutoTransition() {
+    protected synchronized LXDeck disableAutoTransition() {
         this.autoTransitionEnabled = false;
+        return this;
     }
     
-    protected synchronized void enableAutoTransition(int autoTransitionThreshold) {
+    protected synchronized LXDeck enableAutoTransition(int autoTransitionThreshold) {
         this.autoTransitionEnabled = true;
         this.autoTransitionThreshold = autoTransitionThreshold;
         if (this.transition == null) {
             this.transitionMillis = System.currentTimeMillis(); 
         }
+        return this;
     }
     
     protected synchronized boolean isAutoTransitionEnabled() {

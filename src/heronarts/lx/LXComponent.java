@@ -20,7 +20,12 @@ import heronarts.lx.control.LXListenableParameter;
 import heronarts.lx.control.LXParameter;
 import heronarts.lx.modulator.LXModulator;
 
-public class LXComponent implements LXParameter.Listener {
+/**
+ * Base class for system components that run in the engine, which have common
+ * attributes, such as parameters, modulators, and layers. For instance, patterns,
+ * transitions, and effects are all LXComponents. 
+ */
+public abstract class LXComponent implements LXParameter.Listener {
 
     protected final List<LXParameter> parameters = new ArrayList<LXParameter>();
     protected final List<LXModulator> modulators = new ArrayList<LXModulator>();
@@ -58,6 +63,10 @@ public class LXComponent implements LXParameter.Listener {
         return this.parameters;
     }
     
+    /**
+     * Subclasses are free to override this, but in case they don't care
+     * a default implementation is provided.
+     */
     public /* abstract */ void onParameterChanged(LXParameter parameter) {}
 
 }

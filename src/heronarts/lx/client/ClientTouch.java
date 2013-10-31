@@ -15,9 +15,15 @@ package heronarts.lx.client;
 
 import heronarts.lx.Touch;
 
+/**
+ * Concrete class for a touchscreen interface from a client. Methods to
+ * update the touch state are package-level access, so client implementations
+ * may modify them.
+ */
 public class ClientTouch implements Touch {
-    private double x = -1;
-    private double y = -1;
+    
+    private double x = NO_TOUCH;
+    private double y = NO_TOUCH;
     private boolean isActive = false;
     
     void setX(double x) {

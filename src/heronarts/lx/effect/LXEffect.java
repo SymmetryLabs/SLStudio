@@ -26,7 +26,7 @@ import java.util.ArrayList;
  * operate on a single frame. Only the current frame is provided at
  * runtime.
  */
-public abstract class LXEffect extends LXComponent {
+public abstract class LXEffect extends LXLayer {
     
     protected final HeronLX lx;
     private final boolean momentary;
@@ -81,11 +81,9 @@ public abstract class LXEffect extends LXComponent {
     }
     
     /**
-     * This is for momentary effects, which don't work on a normal
-     * enabled/disabled model. They are triggered by a single event,
-     * not for instance by pushing and then releasing a button.
-     * 
-     * If the effect is already active, this just disables it.
+     * This is to trigger special one-shot effects. If the effect is enabled,
+     * then it is disabled. Otherwise, it's enabled state is never changed and
+     * it simply has its onTrigger method invoked. 
      */
     public final void trigger() {
         if (this.enabled) {
@@ -98,14 +96,14 @@ public abstract class LXEffect extends LXComponent {
     protected /* abstract */ void onEnable() {}
     protected /* abstract */ void onDisable() {}
     protected /* abstract */ void onTrigger() {}
-    
+        
     /**
      * Applies this effect to the current frame
      * 
-     * @param colors Array of this frame's colors
-     * @param deltaMs Milliseconds since last frame 
+     * @param deltaMs Milliseconds since last frame
+     * @param colors Array of this frame's colors 
      */
-    public final void apply(int[] colors, double deltaMs) {
+    public final void run(double deltaMs, int[] colors) {
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
@@ -115,5 +113,11 @@ public abstract class LXEffect extends LXComponent {
         }
     }
     
+    /**
+     * Implementation of the effect. Subclasses need to override this
+     * to implement their functionality.
+     * 
+     * @param colors
+     */
     protected abstract void doApply(int[] colors);
 }

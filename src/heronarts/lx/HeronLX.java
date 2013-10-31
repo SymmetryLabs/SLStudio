@@ -13,7 +13,7 @@
 
 package heronarts.lx;
 
-import heronarts.lx.client.ClientListener;
+import heronarts.lx.client.UDPClient;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.effect.LXEffect;
@@ -27,7 +27,7 @@ import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 
 import java.awt.Color;
-import java.awt.event.KeyEvent;
+import java.lang.reflect.Method;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.List;
@@ -41,7 +41,28 @@ import ddf.minim.AudioInput;
 
 /**
  * Core controller for a HeronLX instance. Each instance drives a
- * grid of nodes with a fixed width and height.
+ * grid of nodes with a fixed width and height. The nodes are indexed
+ * using typical computer graphics coordinates, with the x-axis going
+ * from left to right, y-axis from top to bottom.
+ * 
+ * <pre>
+ *    x
+ *  y 0 1 2 .
+ *    1 . . .
+ *    2 . . .
+ *    . . . .
+ * </pre>
+ *    
+ *  Note that the grid layout is just a helper. The node buffer is
+ *  actually a 1-d array and can be used to represent any type of layout.
+ *  The library just provides helpful accessors for grid layouts.
+ *  
+ *  The instance manages rotation amongst a set of patterns. There may
+ *  be multiple decks, each with its own list of patterns. These decks
+ *  are then blended together.
+ *  
+ *  The color-space used is HSB, with H ranging from 0-360, S from 0-100,
+ *  and B from 0-100.
  */
 public class HeronLX {
     
@@ -72,25 +93,15 @@ public class HeronLX {
     public final int height;
     
     /**
-     * The midpoint of the x-space, immutable.
+     * The midpoint of the x-space.
      */
-    public final double midwidth;
+    public final float cx;
     
     /**
-     * This midpoint of the y-space, immutable.
+     * This midpoint of the y-space.
      */
-    public final double midheight;
-    
-    /**
-     * Midpoint on width, immutable.
-     */
-    public final float midwf;
-    
-    /**
-     * Midpoint on height, immutable.
-     */
-    public final float midhf;
-    
+    public final float cy;
+        
     /**
      * The total number of pixels in the grid, immutable.
      */
@@ -107,18 +118,30 @@ public class HeronLX {
     private final int[] buffer;
     
     /**
-     * The current frame's colors, either from the engine or the buffer. 
+     * The current frame's colors, either from the engine or the buffer. Note that
+     * this is a reference to an array. 
      */
     private int[] colors;
     
+    /**
+     * The simulation UI renderer.
+     */
     private final Simulation simulation;
+    
+    /**
+     * KiNET output driver.
+     */
     private Kinet kinet;
-    private ClientListener client;
+    
+    /**
+     * Client listener.
+     */
+    private UDPClient client;
     
     /**
      * Whether drawing is enabled
      */
-    private boolean drawSimulation;
+    private boolean simulationEnabled;
     
     /**
      * The global tempo object. 
@@ -161,6 +184,17 @@ public class HeronLX {
     }
     
     private final Flags flags = new Flags();
+
+    /**
+     * Creates a HeronLX instance. This instance will run patterns
+     * for a grid of the specified size.
+     * 
+     * @param applet
+     * @param total
+     */
+    public HeronLX(PApplet applet, int total) {
+        this(applet, total, 1);
+    }
     
     /**
      * Creates a HeronLX instance. This instance will run patterns
@@ -174,20 +208,18 @@ public class HeronLX {
         this.applet = applet;
         this.width = width;
         this.height = height;
-        this.midwidth = (width-1)/2.;
-        this.midheight = (height-1)/2.;
-        this.midwf = (width-1)/2.f;
-        this.midhf = (height-1)/2.f;
+        this.cx = (width-1)/2.f;
+        this.cy = (height-1)/2.f;
         this.total = width * height;
         this.kinet = null;
         this.client = null;
         
-        this.drawSimulation = true;
+        this.simulationEnabled = true;
         
         this.engine = new LXEngine(this);
         this.simulation = new Simulation(this);
         this.buffer = new int[this.total];
-        this.colors = this.engine.renderColors();
+        this.colors = this.engine.renderBuffer();
         
         this.baseHue = null;
         this.cycleBaseHue(30000);
@@ -199,9 +231,34 @@ public class HeronLX {
         this.flash = new FlashEffect(this);
                 
         applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
-        applet.registerDraw(this);
-        applet.registerSize(this);
-        applet.registerKeyEvent(this);
+        
+        try {
+            // Processing 2.x detection
+            Method m = applet.getClass().getMethod("registerMethod", String.class, Object.class);
+            System.out.println("HeronLX detected Processing 2.x");
+            m.invoke(applet, "draw", this);
+            m.invoke(applet, "dispose", this);
+            m.invoke(applet, "keyEvent", new KeyEvent2x());
+        } catch (Exception x) {
+            // Processing 1.x compatibility
+            System.out.println("HeronLX detected Processing 1.x");
+            applet.registerDraw(this);
+            applet.registerKeyEvent(new KeyEvent1x());
+        }
+    }
+    
+    /**
+     * Invoked by the processing engine on applet shutdown.
+     */
+    public void dispose() {
+        if (this.audioInput != null) {
+            this.audioInput.close();
+            this.audioInput = null;
+        }
+        if (this.minim != null) {
+            this.minim.stop();
+            this.minim = null;
+        }
     }
     
     /**
@@ -255,6 +312,14 @@ public class HeronLX {
         return Color.HSBtoRGB(hsb[0], hsb[1], Math.min(1, hsb[2] * s));
     }
     
+    /**
+     * Utility function to invoke Color.RGBtoHSB without requiring the
+     * caller to manually unpack bytes from an integer color.
+     * 
+     * @param rgb ARGB integer color
+     * @param hsb Array into which results should be placed
+     * @return Array of hsb values, or null if hsb parameter was provided
+     */
     public static float[] RGBtoHSB(int rgb, float[] hsb) {
         int r = (rgb >> 16) & 0xff;
         int g = (rgb >> 8) & 0xff;
@@ -323,6 +388,30 @@ public class HeronLX {
         if (b > max) max = b;
         return 100.f * max / 255.f;
     }
+
+    /**
+     * Utility to create a color from double values
+     * 
+     * @param h Hue
+     * @param s Saturation
+     * @param b Brightness
+     * @return Color value
+     */
+    public static final int colord(double h, double s, double b) {
+        return hsb((float)h, (float)s, (float)b);
+    }
+
+    /**
+     * Utility to create a color from double values
+     * 
+     * @param h Hue
+     * @param s Saturation
+     * @param b Brightness
+     * @return Color value
+     */
+    public static final int hsb(double h, double s, double b) {
+        return hsb((float)h, (float)s, (float)b);
+    }
     
     /**
      * Thread-safe function to create color from HSB
@@ -336,36 +425,27 @@ public class HeronLX {
         return Color.HSBtoRGB(h/360.f, s/100.f, b/100.f);
     }
     
-    public void enableBasicEffects() {
+    /**
+     * Adds basic flash and desaturation effects to the engine, triggerable
+     * by the keyboard. The 's' key triggers desaturation, and the '/' key
+     * triggers a flash
+     */
+    public HeronLX enableBasicEffects() {
         this.addEffect(this.desaturation);
         this.addEffect(this.flash);
-    }
-    
-    public void enableKeyboardTempo() {
-        this.flags.keyboardTempo = true;
-    }
-    
-    public void dispose() {
-        if (this.audioInput != null) {
-            this.audioInput.close();
-        }
-        if (this.minim != null) {
-            this.minim.stop();
-        }
+        return this;
     }
     
     /**
-     * Utility to create a color from double values
-     * 
-     * @param h Hue
-     * @param s Saturation
-     * @param b Brightness
-     * @return Color value
+     * Enables the tempo to be controlled by the keyboard arrow keys. Left
+     * and right arrows change the tempo by .1 BPM, and the space-bar taps
+     * the tempo.
      */
-    public final int colord(double h, double s, double b) {
-        return this.applet.color((float)h, (float)s, (float)b);
+    public HeronLX enableKeyboardTempo() {
+        this.flags.keyboardTempo = true;
+        return this;
     }
-    
+        
     /**
      * Utility logging function
      * 
@@ -385,7 +465,7 @@ public class HeronLX {
     }
     
     /**
-     * Return the currently active transition
+     * Return the currently active transition on the main deck
      * 
      * @return A transition if one is active
      */
@@ -394,7 +474,7 @@ public class HeronLX {
     }
     
     /**
-     * Returns the current pattern
+     * Returns the current pattern on the main deck
      * 
      * @return Currently active pattern
      */
@@ -403,7 +483,7 @@ public class HeronLX {
     }
     
     /**
-     * Returns the pattern being transitioned to
+     * Returns the pattern being transitioned to on the main deck
      * 
      * @return Next pattern
      */
@@ -449,36 +529,6 @@ public class HeronLX {
     }
     
     /**
-     * Utility function to return the position of an index in x coordinate
-     * space from 0 to 1.
-     * 
-     * @param i
-     * @return Position of this node in x space, from 0 to 1
-     */
-    public double xpos(int i) {
-        return (i % this.width) / (float) (this.width - 1);
-    }
-    
-    public float xposf(int i) {
-        return (float)this.xpos(i);
-    }
-
-    /**
-     * Utility function to return the position of an index in y coordinate
-     * space from 0 to 1.
-     * 
-     * @param i
-     * @return Position of this node in y space, from 0 to 1
-     */
-    public double ypos(int i) {
-        return (i / this.width) / (float) (this.height - 1);
-    }
-    
-    public float yposf(int i) {
-        return (float)this.ypos(i);
-    }
-    
-    /**
      * Utility function to return the column of a given index
      *  
      * @param i Index into colors array
@@ -487,13 +537,78 @@ public class HeronLX {
     public int column(int i) {
         return i % this.width;
     }
+
+    /**
+     * Utility function to get the x-coordinate of a pixel
+     * 
+     * @param i Node index
+     * @return x coordinate
+     */
+    public int x(int i) {
+        return i % this.width;
+    }
+        
+    /**
+     * Utility function to return the position of an index in x coordinate
+     * space normalized from 0 to 1.
+     * 
+     * @param i
+     * @return Position of this node in x space, from 0 to 1
+     */
+    public double xn(int i) {
+        return (i % this.width) / (double) (this.width - 1);
+    }
+    
+    /**
+     * Utility function to return the position of an index in x coordinate
+     * space normalized from 0 to 1, as a floating point.
+     * 
+     * @param i
+     * @return Position of this node in x space, from 0 to 1
+     */
+    public float xnf(int i) {
+        return (float)this.xn(i);
+    }
+
+    /**
+     * Utility function to get the y-coordinate of a pixel
+     * 
+     * @param i Node index
+     * @return y coordinate
+     */
+    public int y(int i) {
+        return i / this.width;
+    }
+    
+    /**
+     * Utility function to return the position of an index in y coordinate
+     * space normalized from 0 to 1.
+     * 
+     * @param i
+     * @return Position of this node in y space, from 0 to 1
+     */
+    public double yn(int i) {
+        return (i / this.width) / (double) (this.height - 1);
+    }
+    
+    /**
+     * Utility function to return the position of an index in y coordinate
+     * space normalized from 0 to 1, as a floating point.
+     * 
+     * @param i
+     * @return Position of this node in y space, from 0 to 1
+     */
+    public float ynf(int i) {
+        return (float)this.yn(i);
+    }
         
     /**
      * Sets the speed of the entire system. Default is 1.0, any modification will mutate de
      * deltaMs values system-wide.
      */
-    public void setSpeed(double speed) {
+    public HeronLX setSpeed(double speed) {
         this.engine.setSpeed(speed);
+        return this;
     }
     
     /**
@@ -510,10 +625,11 @@ public class HeronLX {
      * 
      * @param effects
      */
-    public void addEffects(LXEffect[] effects) {
+    public HeronLX addEffects(LXEffect[] effects) {
         for (LXEffect effect : effects) {
             addEffect(effect);
         }
+        return this;
     }
     
     /**
@@ -522,9 +638,9 @@ public class HeronLX {
      * @param effect
      * @return Effect added
      */
-    public LXEffect addEffect(LXEffect effect) {
+    public HeronLX addEffect(LXEffect effect) {
         this.engine.addEffect(effect);
-        return effect;
+        return this;
     }
     
     /**
@@ -532,8 +648,9 @@ public class HeronLX {
      * 
      * @param effect
      */
-    public void removeEffect(LXEffect effect) {
+    public HeronLX removeEffect(LXEffect effect) {
         this.engine.removeEffect(effect);
+        return this;
     }
     
     /**
@@ -542,9 +659,9 @@ public class HeronLX {
      * @param modulator
      * @return Modulator added
      */
-    public LXModulator addModulator(LXModulator modulator) {
+    public HeronLX addModulator(LXModulator modulator) {
         this.engine.addModulator(modulator);
-        return modulator;
+        return this;
     }
     
     /**
@@ -552,8 +669,9 @@ public class HeronLX {
      * 
      * @param modulator
      */
-    public void removeModulator(LXModulator modulator) {
+    public HeronLX removeModulator(LXModulator modulator) {
         this.engine.removeModulator(modulator);
+        return this;
     }
     
     /**
@@ -561,36 +679,71 @@ public class HeronLX {
      * 
      * @param paused Whether to pause the engine to pause
      */
-    public void setPaused(boolean paused) {
+    public HeronLX setPaused(boolean paused) {
         this.engine.setPaused(paused);
+        return this;
     }
     
+    /**
+     * Whether the engine is currently running.
+     * 
+     * @return State of the engine
+     */
     public boolean isPaused() {
         return this.engine.isPaused();
     }
     
-    public void togglePaused() {
-        setPaused(!this.engine.isPaused());
+    /**
+     * Toggles the running state of the engine.
+     */
+    public HeronLX togglePaused() {
+        return setPaused(!this.engine.isPaused());
     }
     
-    public void flash() {
+    /**
+     * Triggers the global flash effect.
+     */
+    public HeronLX flash() {
         this.flash.trigger();
+        return this;
     }
     
-    public void goPrev() {
+    /**
+     * Sets the main deck to the previous pattern.
+     */
+    public HeronLX goPrev() {
         this.engine.goPrev();
+        return this;
     }
     
-    public void goNext() {
+    /**
+     * Sets the main deck to the next pattern.
+     */
+    public HeronLX goNext() {
         this.engine.goNext();
+        return this;
     }
     
-    public void goPattern(LXPattern pattern) {
+    /**
+     * Sets the main deck to a given pattern instance.
+     * 
+     * @param pattern The pattern instance to run
+     * @return This, for method chaining
+     */
+    public HeronLX goPattern(LXPattern pattern) {
         this.engine.goPattern(pattern);
+        return this;
     }
     
-    public void goIndex(int i) {
+    /**
+     * Sets the main deck to a pattern of the given index
+     * 
+     * @param i Index of the pattern to run
+     * @return This, for method chaining
+     */
+    public HeronLX goIndex(int i) {
         this.engine.goIndex(i);
+        return this;
     }
 
     /**
@@ -605,6 +758,11 @@ public class HeronLX {
         return (this.baseHue.getValue() + 360) % 360;
     }
     
+    /**
+     * Gets the base hue as a float
+     * 
+     * @return The global base hue
+     */
     public float getBaseHuef() {
         return (float)this.getBaseHue();
     }
@@ -614,9 +772,10 @@ public class HeronLX {
      * 
      * @param hue Fixed value to set hue to, 0-360
      */
-    public void setBaseHue(double hue) {
+    public HeronLX setBaseHue(double hue) {
         this.engine.removeModulator(this.baseHue);
         this.engine.addModulator(this.baseHue = new LinearEnvelope(this.getBaseHue(), hue, 50).trigger());
+        return this;
     }
     
     /**
@@ -624,10 +783,11 @@ public class HeronLX {
      * 
      * @param duration Number of milliseconds for hue cycle 
      */
-    public void cycleBaseHue(double duration) {
+    public HeronLX cycleBaseHue(double duration) {
         double currentHue = this.getBaseHue();
         this.engine.removeModulator(this.baseHue);
         this.engine.addModulator(this.baseHue = new SawLFO(0, 360, duration).setValue(currentHue).start());
+        return this;
     }
     
     /**
@@ -637,17 +797,19 @@ public class HeronLX {
      * @param highHue High hue value
      * @param duration Milliseconds for hue oscillation
      */
-    public void oscillateBaseHue(double lowHue, double highHue, double duration) {
+    public HeronLX oscillateBaseHue(double lowHue, double highHue, double duration) {
         double value = this.getBaseHue();
         this.engine.removeModulator(this.baseHue);
         this.engine.addModulator(this.baseHue = new TriangleLFO(lowHue, highHue, duration).setValue(value).trigger());
+        return this;
     }
 
     /**
      * Stops patterns from automatically rotating
      */
-    public void disableAutoTransition() {
+    public HeronLX disableAutoTransition() {
         this.engine.disableAutoTransition();
+        return this;
     }
     
     /**
@@ -655,8 +817,9 @@ public class HeronLX {
      * 
      * @param autoTransitionThreshold Number of milliseconds after which to rotate pattern
      */
-    public void enableAutoTransition(int autoTransitionThreshold) {
+    public HeronLX enableAutoTransition(int autoTransitionThreshold) {
         this.engine.enableAutoTransition(autoTransitionThreshold);
+        return this;
     }
     
     /**
@@ -673,8 +836,9 @@ public class HeronLX {
      * 
      * @param s Whether to automatically draw a simulation
      */
-    public void enableSimulation(boolean s) {
-        this.drawSimulation = s;
+    public HeronLX setSimulationEnabled(boolean s) {
+        this.simulationEnabled = s;
+        return this;
     }
     
     /**
@@ -685,17 +849,19 @@ public class HeronLX {
      * @param w Width of simulation in pixels
      * @param h Height of simulation in pixels
      */
-    public void setSimulationBounds(int x, int y, int w, int h) {
+    public HeronLX setSimulationBounds(int x, int y, int w, int h) {
         this.simulation.setBounds(x, y, w, h);
+        return this;
     }
     
     /**
      * Listens for UDP packets from HeronLX clients.
      */
-    public void enableClientListener() {
-        this.client = ClientListener.getInstance();
+    public HeronLX enableUDPClient() {
+        this.client = UDPClient.getInstance();
         this.client.addListener(this);
-        this.touch = this.client.touch();
+        this.touch = this.client.getTouch();
+        return this;
     }
     
     /**
@@ -703,7 +869,7 @@ public class HeronLX {
      * 
      * @param kinetNodes Array of KinetNode objects, must have length equal to width * height
      */
-    public void setKinetNodes(KinetNode[] kinetNodes) {
+    public HeronLX setKinetNodes(KinetNode[] kinetNodes) {
         if (kinetNodes == null) {
             this.kinet = null;
         } else if (kinetNodes.length != this.total) {
@@ -716,6 +882,7 @@ public class HeronLX {
                 throw new RuntimeException("Could not create UDP socket for Kinet", sx);
             }
         }
+        return this;
     }
     
     /**
@@ -723,11 +890,12 @@ public class HeronLX {
      * 
      * @param kinet Kinet instance with total size equal to width * height
      */
-    public void setKinet(Kinet kinet) {
+    public HeronLX setKinet(Kinet kinet) {
         if (kinet != null && (kinet.size() != this.total)) {
             throw new RuntimeException("Kinet provided to setKinet is the wrong size, must equal length of HeronLX, use null for non-mapped output nodes.");            
         }
         this.kinet = kinet;
+        return this;
     }
 
     /**
@@ -735,12 +903,13 @@ public class HeronLX {
      * 
      * @param patterns
      */
-    public void setPatterns(LXPattern[] patterns) {
+    public HeronLX setPatterns(LXPattern[] patterns) {
         this.engine.setPatterns(patterns);
+        return this;
     }
     
     /**
-     * Gets the current set of patterns
+     * Gets the current set of patterns on the main deck.
      * 
      * @return The pattern set
      */
@@ -748,20 +917,29 @@ public class HeronLX {
         return this.engine.getPatterns();
     }
 
+    /**
+     * Core function invoked by the processing engine on each iteration of the
+     * run cycle.
+     */
     public void draw() {
         if (this.client != null) {
-            this.client.listen();
+            this.client.receive();
         }
         if (this.engine.isThreaded()) {
-            this.engine.copyColors(this.colors = this.buffer);
+            // If the engine is threaded, it is running itself. We just need
+            // to copy its current color buffer into our own in a thread-safe
+            // manner.
+            this.engine.copyBuffer(this.colors = this.buffer);
         } else {
+            // If the engine is not threaded, then we run it ourselves, and
+            // we can just use its color buffer, as there is no thread contention.
             this.engine.run();
-            this.colors = this.engine.renderColors();
+            this.colors = this.engine.renderBuffer();
         }
         if (this.kinet != null) {
             this.kinet.sendThrottledColors(this.colors);
         }
-        if (this.drawSimulation) {
+        if (this.simulationEnabled) {
             this.simulation.draw(this.colors);
         }
         if (this.flags.showFramerate) {
@@ -769,64 +947,68 @@ public class HeronLX {
         }
     }
     
-    public void size(int width, int height) {
-        this.simulation.setBounds(0, 0, width, height);
+    public class KeyEvent2x {
+        public void keyEvent(processing.event.KeyEvent e) {
+            // TODO(mcslee): update for processing 2.0
+        }
     }
     
-    public void keyEvent(KeyEvent e) {
-        if (e.getID() == KeyEvent.KEY_RELEASED) {
-            switch (e.getKeyCode()) {
-            case KeyEvent.VK_UP:
-                this.engine.goPrev();
-                break;
-            case KeyEvent.VK_DOWN:
-                this.engine.goNext();
-                break;
-            case KeyEvent.VK_LEFT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() - .1);
+    public class KeyEvent1x {
+        public void keyEvent(java.awt.event.KeyEvent e) {
+            if (e.getID() == java.awt.event.KeyEvent.KEY_RELEASED) {
+                switch (e.getKeyCode()) {
+                case java.awt.event.KeyEvent.VK_UP:
+                    engine.goPrev();
+                    break;
+                case java.awt.event.KeyEvent.VK_DOWN:
+                    engine.goNext();
+                    break;
+                case java.awt.event.KeyEvent.VK_LEFT:
+                    if (flags.keyboardTempo) {
+                        tempo.setBpm(tempo.bpm() - .1);
+                    }
+                    break;
+                case java.awt.event.KeyEvent.VK_RIGHT:
+                    if (flags.keyboardTempo) {
+                        tempo.setBpm(tempo.bpm() + .1);
+                    }
+                    break;
                 }
-                break;
-            case KeyEvent.VK_RIGHT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() + .1);
+                
+                switch (Character.toLowerCase(e.getKeyChar())) {
+                case '[':
+                    engine.goPrev();
+                    break;
+                case ']':
+                    engine.goNext();
+                    break;
+                case 'f':
+                    flags.showFramerate = false;
+                    break;
+                case ' ':
+                    if (flags.keyboardTempo) {
+                        tempo.tap();
+                    }
+                    break;
+                case 's':
+                    desaturation.disable();
+                    break;
+                case '/':
+                    flash.disable();
+                    break;
                 }
-                break;
-            }
-            
-            switch (Character.toLowerCase(e.getKeyChar())) {
-            case '[':
-                this.engine.goPrev();
-                break;
-            case ']':
-                this.engine.goNext();
-                break;
-            case 'f':
-                this.flags.showFramerate = false;
-                break;
-            case ' ':
-                if (this.flags.keyboardTempo) {
-                    this.tempo.tap();
+            } else if (e.getID() == java.awt.event.KeyEvent.KEY_PRESSED) {
+                switch (e.getKeyChar()) {
+                case 'f':
+                    flags.showFramerate = true;
+                    break;
+                case 's':
+                    desaturation.enable();
+                    break;
+                case '/':
+                    flash.enable();
+                    break;
                 }
-                break;
-            case 's':
-                this.desaturation.disable();
-                break;
-            case '/':
-                this.flash.disable();
-                break;
-            }
-        } else if (e.getID() == KeyEvent.KEY_PRESSED) {
-            switch (e.getKeyChar()) {
-            case 'f':
-                this.flags.showFramerate = true;
-                break;
-            case 's':
-                this.desaturation.enable();
-                break;
-            case '/':
-                this.flash.enable();
-                break;
             }
         }
     }
