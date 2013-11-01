@@ -13,21 +13,51 @@
 
 package heronarts.lx.modulator;
 
+/**
+ * A quadratic envelope moves from one value to another along a quadratic curve. 
+ */
 public class QuadraticEnvelope extends RangeModulator {
 
+    /**
+     * Different modes of quadratic easing.
+     */
     public enum Ease {
+        /**
+         * The quadratic curve accelerates towards the final value
+         */
         IN,
+        
+        /**
+         * The quadratic curve decelerates towards the final value
+         */
         OUT,
+        
+        /**
+         * The curve slops on both the start and end values
+         */
         BOTH
     };
 
     private Ease ease = Ease.IN;
     
+    /**
+     * Constructs a new envelope
+     * 
+     * @param startValue Initial value
+     * @param endValue Ending value
+     * @param periodMs Period, in milliseconds
+     */
     public QuadraticEnvelope(double startValue, double endValue, double periodMs) {
         super(startValue, endValue, periodMs);
         this.looping = false;
     }
     
+    /**
+     * Sets the easing type
+     * 
+     * @param ease easing type
+     * @return this
+     */
     public QuadraticEnvelope setEase(Ease ease) {
         this.ease = ease;
         return this;

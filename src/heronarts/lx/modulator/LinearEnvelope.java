@@ -21,6 +21,11 @@ import java.lang.Math;
  */
 public class LinearEnvelope extends SawLFO {
 
+    /**
+     * @param startValue Initial value
+     * @param endValue End value
+     * @param periodMs Period, in milliseconds
+     */
     public LinearEnvelope(double startValue, double endValue, double periodMs) {
         super(startValue, endValue, periodMs);
         this.looping = false;
@@ -41,6 +46,5 @@ public class LinearEnvelope extends SawLFO {
         setRangeFromHereTo(endValue, periodMs);
         return this;
     }    
-
     
 }

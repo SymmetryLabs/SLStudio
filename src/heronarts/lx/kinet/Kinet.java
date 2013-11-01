@@ -22,6 +22,23 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.HashSet;
 
+/**
+ * This class represents an output network of KiNET nodes. Typically this is
+ * constructed via creating one or more ports, i.e.:
+ * <pre>
+ * KinetPort port = new KinetPort("10.1.1.1", 1);
+ * KinetNode[] nodes = new KinetNode[lx.total];
+ * for (int i = 0; i < lx.total; ++i) {
+ *     nodes[i] = new KinetNode(port, i); 
+ * }
+ * Kinet kinet = new Kinet(nodes);
+ * </pre>
+ * 
+ * The above would map pixels in order to a single output port in order. Typically
+ * nodes are not wired in the same fixed order, so logic is used to map the
+ * node indices from their logical representation (in the HeronLX model) to their
+ * physical wiring.
+ */
 public class Kinet {
 
     /**
@@ -32,8 +49,8 @@ public class Kinet {
     
     private final HeronLX lx; 
     
-    final private KinetNode[] outputNodes;
-    final private ArrayList<KinetPort> outputPorts;
+    private final KinetNode[] outputNodes;
+    private final ArrayList<KinetPort> outputPorts;
 
     private final int[] kinetColors;    
     private double brightness;
@@ -44,6 +61,14 @@ public class Kinet {
     
     private DatagramSocket socket;
 
+    /**
+     * Constructs a new output network.
+     * 
+     * @param lx HeronLX instance
+     * @param outputNodes Array of nodes to output to, must be lx.total in
+     *                       length, unused nodes may be null
+     * @throws SocketException If the UDP socket can't be constructed
+     */
     public Kinet(HeronLX lx, KinetNode[] outputNodes) throws SocketException {
         this.lx = lx;
         this.outputNodes = outputNodes;
@@ -62,46 +87,78 @@ public class Kinet {
         this.lastFrameMillis = 0;
     }
     
-    final public int size() {
+    /**
+     * The size of the network.
+     * 
+     * @return The number of nodes in the network
+     */
+    public final int size() {
         return this.outputNodes.length;
     }
     
-    final public Kinet setFramerate(double frameRate) {
+    /**
+     * Sets the maximum framerate of the network.
+     * 
+     * @param frameRate Maximum framerate
+     * @return this
+     */
+    public final Kinet setFramerate(double frameRate) {
         this.sendThrottleMillis = (long) (1000. / frameRate);
         return this;
     }
 
     /**
-     * Sets brightness factor of the KiNET output
+     * Sets brightness factor of the KiNET output.
      *  
      * @param brightness Value from 0-100 scale
+     * @return this
      */
-    public void setBrightness(double brightness) {
+    public Kinet setBrightness(double brightness) {
         this.brightness = LXUtils.constrain(brightness/100., 0, 1);
+        return this;
     }
     
     /**
-     * Sets level of gamma correction. 
+     * Sets level of gamma correction. The correction is polynomial. Brightness
+     * values are computed from 0-1, the gamma value given is the exponent to
+     * which the value is taken.
      * 
      * @param gamma 2 is quadratic, 3 cubic, etc.
+     * @return this
      */
-    public void setGammaCorrection(int gamma) {
+    public Kinet setGammaCorrection(int gamma) {
         if (gamma < 1) {
             this.gamma = 1;
         } else {
             this.gamma = gamma;
         }
+        return this;
     }
     
-    final public void sendThrottledColors(int[] colors) {
+    /**
+     * Sends an array of pixels out to this network, respecting the specified
+     * framerate. If the last frame was sent too recently, these colors will be
+     * ignored.
+     * 
+     * @param colors Array of color values
+     * @return this
+     */
+    public final Kinet sendThrottledColors(int[] colors) {
         long now = System.currentTimeMillis();
         if (now - this.lastFrameMillis > this.sendThrottleMillis) {
             this.lastFrameMillis = now;
             this.sendColors(colors);
         }
+        return this;
     }
     
-    final public void sendColors(int[] colors) {
+    /**
+     * Sends pixels to the network, ignoring framerate.
+     * 
+     * @param colors Array of color values
+     * @return this
+     */
+    public final Kinet sendColors(int[] colors) {
         int[] sendColors = colors;
         if (this.brightness < 1. || this.gamma > 1) {
             float factor = (float) (this.brightness * this.brightness);
@@ -120,7 +177,6 @@ public class Kinet {
             sendColors = this.kinetColors;
         }
         
-        
         for (int i = 0; i < sendColors.length; ++i) {
             KinetNode node = this.outputNodes[i];
             if (node != null) {
@@ -132,9 +188,10 @@ public class Kinet {
             }
         }
         this.sendPackets();
+        return this;
     }
 
-    final private void sendPackets() {
+    private final void sendPackets() {
         try {
             for (KinetPort port : this.outputPorts) {
                 port.send(this.socket);

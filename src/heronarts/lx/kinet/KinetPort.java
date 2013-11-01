@@ -20,23 +20,36 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Represents a color kinetics output port, which is an IP address of a power
+ * Represents a KiNET output port, which is an IP address of a power
  * supply and the port number on that PSU to send data on along with a buffer
- * of data on that port.
+ * of data.
  */
 public class KinetPort {
-    final static private int DEFAULT_DATA_LEN = 512;
-    final static private int HEADER_LEN = 24;
-    final static private int KINET_PORT = 6038; 
+    private final static int DEFAULT_DATA_LEN = 512;
+    private final static int HEADER_LEN = 24;
+    private final static int KINET_PORT = 6038; 
     
-    final private byte portNumber;
-    final private InetAddress ipAddress;
-    final private byte[] dataBuffer;
+    private final byte portNumber;
+    private final InetAddress ipAddress;
+    private final byte[] dataBuffer;
 
+    /**
+     * Constructs a new port
+     * 
+     * @param ip IP address of the supply
+     * @param port Port number
+     */
     public KinetPort(String ip, int port) {
         this(ip, port, DEFAULT_DATA_LEN);
     }
     
+    /**
+     * Constructs a new port with a custom data length
+     * 
+     * @param ip IP address of the supply
+     * @param port Port number
+     * @param dataLen Length of the pixel data buffer
+     */
     public KinetPort(String ip, int port, int dataLen) {
         this.portNumber = (byte) port;
         this.dataBuffer = new byte[HEADER_LEN + dataLen];
@@ -76,13 +89,31 @@ public class KinetPort {
         }
     }
 
-    public void setNode(int nodeIndex, byte r, byte g, byte b) {
+    /**
+     * Sets the color values for a particular node on this string 
+     * 
+     * @param nodeIndex Index of node on this port
+     * @param r Red value
+     * @param g Green value
+     * @param b Blue value
+     * @return this
+     */
+    public KinetPort setNode(int nodeIndex, byte r, byte g, byte b) {
         this.dataBuffer[HEADER_LEN + 3 * nodeIndex] = r;
         this.dataBuffer[HEADER_LEN + 3 * nodeIndex + 1] = g;
         this.dataBuffer[HEADER_LEN + 3 * nodeIndex + 2] = b;
+        return this;
     }
     
-    public void send(DatagramSocket socket) throws IOException {
+    /**
+     * Sends this port's data on the network
+     * 
+     * @param socket Socket to send the data on
+     * @throws IOException If a networking error occurs
+     * @return this
+     */
+    public KinetPort send(DatagramSocket socket) throws IOException {
         socket.send(new DatagramPacket(this.dataBuffer, this.dataBuffer.length, this.ipAddress, KINET_PORT));
+        return this;
     }
 }

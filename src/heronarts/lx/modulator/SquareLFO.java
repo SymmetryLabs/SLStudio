@@ -18,6 +18,13 @@ package heronarts.lx.modulator;
  */
 public class SquareLFO extends RangeModulator {
 
+    /**
+     * Constructs a SquareLFO
+     * 
+     * @param startValue Initial value
+     * @param endValue Final value
+     * @param periodMs Period, in milliseconds
+     */
     public SquareLFO(double startValue, double endValue, double periodMs) {
         super(startValue, endValue, periodMs);
     }

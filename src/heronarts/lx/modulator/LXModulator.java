@@ -65,10 +65,17 @@ public abstract class LXModulator {
     private LXParameter periodParameter = null;
     
     private double minPeriodMs = 0;
+    
     private double maxPeriodMs = 0;
     
+    /**
+     * Quick helper to get half of PI.
+     */
     public static final double HALF_PI = Math.PI / 2.;
     
+    /**
+     * Quick helper to get two times PI.
+     */
     public static final double TWO_PI = Math.PI * 2.;
     
     /**

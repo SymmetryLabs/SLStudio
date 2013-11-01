@@ -20,6 +20,13 @@ import heronarts.lx.LXUtils;
  */
 public class SinLFO extends RangeModulator {
 
+    /**
+     * Constructs a SinLFO
+     * 
+     * @param startValue Initial value
+     * @param endValue Final value
+     * @param periodMs Period, in milliseconds
+     */
     public SinLFO(double startValue, double endValue, double periodMs) {
         super(startValue, endValue, periodMs);
     }

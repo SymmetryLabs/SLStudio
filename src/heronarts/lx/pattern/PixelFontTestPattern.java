@@ -35,7 +35,7 @@ public class PixelFontTestPattern extends LXPattern {
     
     public PixelFontTestPattern(HeronLX lx, String s) {
         super(lx);
-        this.image = (new PixelFont(lx)).getImage(s);
+        this.image = (new PixelFont(lx)).drawString(s);
         this.addModulator(this.hMod.trigger());
         this.addModulator(
                 this.pMod.setRange(-lx.width, this.image.width,

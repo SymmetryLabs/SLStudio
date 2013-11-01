@@ -13,10 +13,28 @@
 
 package heronarts.lx.kinet;
 
+/**
+ * Class to represent a single KiNET node. Each node belongs on a port, and has
+ * an index into that port's output buffer.
+ */
 public class KinetNode {
-    final public KinetPort outputPort;
-    final public int nodeIndex;
     
+    /**
+     * The port that this node outputs on.
+     */
+    public final KinetPort outputPort;
+    
+    /**
+     * The index of this node on that port.
+     */
+    public final int nodeIndex;
+    
+    /**
+     * Constructs a new node
+     * 
+     * @param outputPort Output port
+     * @param nodeIndex Index of node on port
+     */
     public KinetNode(KinetPort outputPort, int nodeIndex) {
         if (outputPort == null) {
             throw new NullPointerException();

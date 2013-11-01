@@ -21,6 +21,13 @@ import heronarts.lx.LXUtils;
  */
 public class TriangleLFO extends RangeModulator {
 
+    /**
+     * Constructs a TriangleLFO
+     * 
+     * @param startValue Initial value
+     * @param endValue Final value
+     * @param periodMs Period, in milliseconds
+     */
     public TriangleLFO(double startValue, double endValue, double periodMs) {
         super(startValue, endValue, periodMs);
     }
