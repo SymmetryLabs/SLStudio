@@ -40,11 +40,13 @@ public class DesaturationEffect extends LXEffect {
         return this.decay.getValue() * 1000.;
     }    
     
-    public void onEnable() {
+    @Override
+    protected void onEnable() {
         this.desaturation.setRangeFromHereTo(amount.getValue() * 100., getAttackTime()).start();
     }
     
-    public void onDisable() {
+    @Override
+    protected void onDisable() {
         this.desaturation.setRangeFromHereTo(0, getDecayTime()).start();
     }
     

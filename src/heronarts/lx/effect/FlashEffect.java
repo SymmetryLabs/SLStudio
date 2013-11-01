@@ -46,16 +46,19 @@ public class FlashEffect extends LXEffect {
     private double getDecayTime() {
         return this.decay.getValue() * 3000.;
     }
-            
-    public void onEnable() {
+    
+    @Override
+    protected void onEnable() {
         this.flash.setRange(this.flash.getValue(), this.intensity.getValue(), getAttackTime()).trigger();
     }
     
-    public void onDisable() {
+    @Override
+    protected void onDisable() {
         this.flash.setRange(this.flash.getValue(), 0, getDecayTime()).trigger();
     }
     
-    public void onTrigger() {
+    @Override
+    protected void onTrigger() {
         this.flash.setRange(this.intensity.getValue(), 0, getDecayTime()).trigger();
     }
     
