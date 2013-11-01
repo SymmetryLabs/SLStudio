@@ -238,12 +238,20 @@ public class HeronLX {
             System.out.println("HeronLX detected Processing 2.x");
             m.invoke(applet, "draw", this);
             m.invoke(applet, "dispose", this);
-            m.invoke(applet, "keyEvent", new KeyEvent2x());
+            m.invoke(applet, "keyEvent", new Object() {
+                public void keyEvent(processing.event.KeyEvent e) {
+                    keyEvent2x(e);
+                }
+            });
         } catch (Exception x) {
             // Processing 1.x compatibility
             System.out.println("HeronLX detected Processing 1.x");
             applet.registerDraw(this);
-            applet.registerKeyEvent(new KeyEvent1x());
+            applet.registerKeyEvent(new Object() {
+                public void keyEvent(java.awt.event.KeyEvent e) {
+                    keyEvent1x(e);
+                }
+            });
         }
     }
     
@@ -947,68 +955,64 @@ public class HeronLX {
         }
     }
     
-    public class KeyEvent2x {
-        public void keyEvent(processing.event.KeyEvent e) {
-            // TODO(mcslee): update for processing 2.0
-        }
+    private void keyEvent2x(processing.event.KeyEvent e) {
+        // TODO(mcslee): update for processing 2.0
     }
     
-    public class KeyEvent1x {
-        public void keyEvent(java.awt.event.KeyEvent e) {
-            if (e.getID() == java.awt.event.KeyEvent.KEY_RELEASED) {
-                switch (e.getKeyCode()) {
-                case java.awt.event.KeyEvent.VK_UP:
-                    engine.goPrev();
-                    break;
-                case java.awt.event.KeyEvent.VK_DOWN:
-                    engine.goNext();
-                    break;
-                case java.awt.event.KeyEvent.VK_LEFT:
-                    if (flags.keyboardTempo) {
-                        tempo.setBpm(tempo.bpm() - .1);
-                    }
-                    break;
-                case java.awt.event.KeyEvent.VK_RIGHT:
-                    if (flags.keyboardTempo) {
-                        tempo.setBpm(tempo.bpm() + .1);
-                    }
-                    break;
+    private void keyEvent1x(java.awt.event.KeyEvent e) {
+        if (e.getID() == java.awt.event.KeyEvent.KEY_RELEASED) {
+            switch (e.getKeyCode()) {
+            case java.awt.event.KeyEvent.VK_UP:
+                engine.goPrev();
+                break;
+            case java.awt.event.KeyEvent.VK_DOWN:
+                engine.goNext();
+                break;
+            case java.awt.event.KeyEvent.VK_LEFT:
+                if (flags.keyboardTempo) {
+                    tempo.setBpm(tempo.bpm() - .1);
                 }
-                
-                switch (Character.toLowerCase(e.getKeyChar())) {
-                case '[':
-                    engine.goPrev();
-                    break;
-                case ']':
-                    engine.goNext();
-                    break;
-                case 'f':
-                    flags.showFramerate = false;
-                    break;
-                case ' ':
-                    if (flags.keyboardTempo) {
-                        tempo.tap();
-                    }
-                    break;
-                case 's':
-                    desaturation.disable();
-                    break;
-                case '/':
-                    flash.disable();
-                    break;
+                break;
+            case java.awt.event.KeyEvent.VK_RIGHT:
+                if (flags.keyboardTempo) {
+                    tempo.setBpm(tempo.bpm() + .1);
                 }
-            } else if (e.getID() == java.awt.event.KeyEvent.KEY_PRESSED) {
-                switch (e.getKeyChar()) {
-                case 'f':
-                    flags.showFramerate = true;
-                    break;
-                case 's':
-                    desaturation.enable();
-                    break;
-                case '/':
-                    flash.enable();
-                    break;
+                break;
+            }
+            
+            switch (Character.toLowerCase(e.getKeyChar())) {
+            case '[':
+                engine.goPrev();
+                break;
+            case ']':
+                engine.goNext();
+                break;
+            case 'f':
+                flags.showFramerate = false;
+                break;
+            case ' ':
+                if (flags.keyboardTempo) {
+                    tempo.tap();
                 }
+                break;
+            case 's':
+                desaturation.disable();
+                break;
+            case '/':
+                flash.disable();
+                break;
+            }
+        } else if (e.getID() == java.awt.event.KeyEvent.KEY_PRESSED) {
+            switch (e.getKeyChar()) {
+            case 'f':
+                flags.showFramerate = true;
+                break;
+            case 's':
+                desaturation.enable();
+                break;
+            case '/':
+                flash.enable();
+                break;
             }
         }
     }
