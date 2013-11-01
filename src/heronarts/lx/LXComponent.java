@@ -31,6 +31,8 @@ public abstract class LXComponent implements LXParameter.Listener {
     protected final List<LXModulator> modulators = new ArrayList<LXModulator>();
     protected final List<LXLayer> layers = new ArrayList<LXLayer>();
     
+    protected LXComponent() {}
+    
     protected final LXModulator addModulator(LXModulator modulator) {
         this.modulators.add(modulator);
         return modulator;
@@ -49,6 +51,10 @@ public abstract class LXComponent implements LXParameter.Listener {
             addParameter(p);
         }
         return layer;
+    }
+    
+    public final List<LXLayer> getLayers() {
+        return this.layers;
     }
     
     protected final LXParameter addParameter(LXParameter parameter) {
