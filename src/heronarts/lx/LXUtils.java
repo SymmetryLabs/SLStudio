@@ -16,6 +16,9 @@ package heronarts.lx;
 import java.lang.Math;
 
 public class LXUtils {
+    
+    private LXUtils() {}
+    
     public static double constrain(double value, double min, double max) {
         return value < min ? min : (value > max ? max : value);
     }
