@@ -50,14 +50,15 @@ public class DesaturationEffect extends LXEffect {
         this.desaturation.setRangeFromHereTo(0, getDecayTime()).start();
     }
     
-    protected void doApply(int[] colors) {
+    @Override
+    protected void apply(int[] colors) {
         double value = this.desaturation.getValue();
         if (value > 0) {
             for (int i = 0; i < colors.length; ++i) {
                 colors[i] = this.lx.colord(
-                        this.lx.applet.hue(colors[i]),
-                        Math.max(0, this.lx.applet.saturation(colors[i]) - value),
-                        this.lx.applet.brightness(colors[i])
+                        this.lx.h(colors[i]),
+                        Math.max(0, this.lx.s(colors[i]) - value),
+                        this.lx.b(colors[i])
                         );
                 
             }

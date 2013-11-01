@@ -143,6 +143,9 @@ public abstract class LXPattern extends LXComponent {
         }
         this.run(deltaMs);
         for (LXLayer layer : this.layers) {
+            for (LXModulator m : layer.getModulators()) {
+                m.run(deltaMs);
+            }
             layer.run(deltaMs, this.colors);
         }
     }

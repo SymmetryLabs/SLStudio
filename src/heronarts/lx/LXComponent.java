@@ -44,12 +44,6 @@ public abstract class LXComponent implements LXParameter.Listener {
     
     protected final LXLayer addLayer(LXLayer layer) {
         this.layers.add(layer);
-        for (LXModulator m : layer.getModulators()) {
-            addModulator(m);
-        }
-        for (LXParameter p : layer.getParameters()) {
-            addParameter(p);
-        }
         return layer;
     }
     

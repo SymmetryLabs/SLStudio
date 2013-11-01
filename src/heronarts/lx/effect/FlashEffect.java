@@ -62,7 +62,8 @@ public class FlashEffect extends LXEffect {
         this.flash.setRange(this.intensity.getValue(), 0, getDecayTime()).trigger();
     }
     
-    protected void doApply(int[] colors) {
+    @Override
+    protected void apply(int[] colors) {
         float flashValue = this.flash.getValuef();
         double satValue = this.sat.getValue() * 100.;
         double hueValue = this.lx.getBaseHue();

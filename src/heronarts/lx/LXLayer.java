@@ -21,6 +21,12 @@ package heronarts.lx;
  */
 public abstract class LXLayer extends LXComponent {
     
+    /**
+     * Run this layer.
+     * 
+     * @param deltaMs Milliseconds elapsed since last frame
+     * @param colors Pixel buffer
+     */
     public abstract void run(double deltaMs, int[] colors);
     
 }

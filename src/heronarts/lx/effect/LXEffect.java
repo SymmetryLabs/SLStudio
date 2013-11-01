@@ -41,14 +41,25 @@ public abstract class LXEffect extends LXLayer {
         this.momentary = momentary;
     }
 
+    /**
+     * @return whether the effect is currently enabled
+     */
     public final boolean isEnabled() {
         return this.enabled;
     }
     
+    /**
+     * @return Whether this is a momentary effect or not
+     */
     public final boolean isMomentary() {
         return this.momentary;
     }
     
+    /**
+     * Toggles the effect.
+     * 
+     * @return this
+     */
     public final LXEffect toggle() {
         if (this.enabled) {
             this.disable();
@@ -60,6 +71,8 @@ public abstract class LXEffect extends LXLayer {
     
     /**
      * Enables the effect.
+     * 
+     * @return this
      */
     public final LXEffect enable() {
         if (!this.enabled) {
@@ -107,7 +120,7 @@ public abstract class LXEffect extends LXLayer {
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
-        this.doApply(colors);
+        this.apply(colors);
         for (LXLayer layer : this.layers) {
             layer.run(deltaMs, colors);
         }
@@ -119,5 +132,5 @@ public abstract class LXEffect extends LXLayer {
      * 
      * @param colors
      */
-    protected abstract void doApply(int[] colors);
+    protected abstract void apply(int[] colors);
 }
