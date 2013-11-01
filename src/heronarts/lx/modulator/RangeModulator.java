@@ -21,7 +21,7 @@ import heronarts.lx.control.LXParameter;
  * minimum and a maximum. Includes a set of common methods to change the bounds
  * while the modulator is running. 
  */
-public abstract class RangeModulator extends LXModulator implements LXParameter.Listener {
+public abstract class RangeModulator extends LXModulator {
 
     private LXListenableParameter startValueParameter = null;
     private double minStartValue = 0;
@@ -33,6 +33,16 @@ public abstract class RangeModulator extends LXModulator implements LXParameter.
     
     protected double startValue;
     protected double endValue;
+    
+    private final LXParameter.Listener parameterListener = new LXParameter.Listener() {
+        public void onParameterChanged(LXParameter parameter) {
+            if (parameter == startValueParameter) {
+                setStartValue(minStartValue + (maxStartValue - minStartValue) * parameter.getValue());
+            } else if (parameter == endValueParameter) {
+                setEndValue(minEndValue + (maxEndValue - minEndValue) * parameter.getValue());
+            }
+        }
+    };
     
     protected RangeModulator(double startValue, double endValue, double periodMs) {
         super(periodMs);
@@ -135,13 +145,13 @@ public abstract class RangeModulator extends LXModulator implements LXParameter.
      */
     public RangeModulator modulateStartValueBy(LXListenableParameter startValueParameter, double minStartValue, double maxStartValue) {
         if (this.startValueParameter != null) {
-            this.startValueParameter.removeListener(this); 
+            this.startValueParameter.removeListener(this.parameterListener); 
         }
         this.startValueParameter = startValueParameter;
         this.minStartValue = minStartValue;
         this.maxStartValue = maxStartValue;
         if (this.startValueParameter != null) {
-            this.startValueParameter.addListener(this);
+            this.startValueParameter.addListener(this.parameterListener);
         }
         return this;
     }
@@ -158,23 +168,15 @@ public abstract class RangeModulator extends LXModulator implements LXParameter.
      */
     public RangeModulator modulateEndValueBy(LXListenableParameter endValueParameter, double minEndValue, double maxEndValue) {
         if (this.endValueParameter != null) {
-            this.endValueParameter.removeListener(this);
+            this.endValueParameter.removeListener(this.parameterListener);
         }
         this.endValueParameter = endValueParameter;
         this.minEndValue = minEndValue;
         this.maxEndValue = maxEndValue;
         if (this.endValueParameter != null) {
-            this.endValueParameter.addListener(this);
+            this.endValueParameter.addListener(this.parameterListener);
         }
         return this;
-    }
-    
-    public void onParameterChanged(LXParameter parameter) {
-        if (parameter == this.startValueParameter) {
-            this.setStartValue(this.minStartValue + (this.maxStartValue - this.minStartValue) * parameter.getValue());
-        } else if (parameter == this.endValueParameter) {
-            this.setEndValue(this.minEndValue + (this.maxEndValue - this.minEndValue) * parameter.getValue());
-        }
     }
     
     @Override
