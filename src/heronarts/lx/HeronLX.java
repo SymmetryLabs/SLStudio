@@ -238,20 +238,24 @@ public class HeronLX {
             System.out.println("HeronLX detected Processing 2.x");
             m.invoke(applet, "draw", this);
             m.invoke(applet, "dispose", this);
-            m.invoke(applet, "keyEvent", new Object() {
-                public void keyEvent(processing.event.KeyEvent e) {
-                    keyEvent2x(e);
-                }
-            });
+            m.invoke(applet, "keyEvent", new KeyEvent2x());
         } catch (Exception x) {
             // Processing 1.x compatibility
             System.out.println("HeronLX detected Processing 1.x");
             applet.registerDraw(this);
-            applet.registerKeyEvent(new Object() {
-                public void keyEvent(java.awt.event.KeyEvent e) {
-                    keyEvent1x(e);
-                }
-            });
+            applet.registerKeyEvent(new KeyEvent1x());
+        }
+    }
+    
+    public final class KeyEvent1x {
+        public void keyEvent(java.awt.event.KeyEvent e) {
+            keyEvent1x(e);
+        }
+    }
+    
+    public final class KeyEvent2x {
+        public void keyEvent(processing.event.KeyEvent e) {
+            keyEvent2x(e);
         }
     }
     
