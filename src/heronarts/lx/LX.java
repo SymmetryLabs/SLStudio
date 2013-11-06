@@ -19,6 +19,9 @@ import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.kinet.Kinet;
 import heronarts.lx.kinet.KinetNode;
+import heronarts.lx.model.Grid;
+import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.modulator.SawLFO;
@@ -101,7 +104,12 @@ public class LX {
      * This midpoint of the y-space.
      */
     public final float cy;
-        
+    
+    /**
+     * The pixel model.
+     */
+    public final LXModel model;
+    
     /**
      * The total number of pixels in the grid, immutable.
      */
@@ -213,22 +221,42 @@ public class LX {
      * @param width
      * @param height
      */
-    public LX(PApplet applet, int width, int height) {    
+    public LX(PApplet applet, int width, int height) {
+        this(applet, new LXModel(new Grid(width, height)));
+    }
+    
+    /**
+     * Constructs an LX instance with the given pixel model
+     * 
+     * @param applet
+     * @param model Pixel model
+     */
+    public LX(PApplet applet, LXModel model) {
         this.applet = applet;
-        this.width = width;
-        this.height = height;
-        this.cx = (width-1)/2.f;
-        this.cy = (height-1)/2.f;
-        this.total = width * height;
+        this.model = model;
+        this.total = model.points.size();
+        
+        this.cx = model.cx;
+        this.cy = model.cy;
+        
+        LXFixture fixture = model.fixtures.get(0);
+        if (fixture instanceof Grid) {
+            Grid grid = (Grid) fixture;
+            this.width = grid.width;
+            this.height = grid.height;
+        } else {
+            this.width = this.height = 0;
+        }
+        
         this.kinet = null;
         this.client = null;
         
-        this.simulationEnabled = true;
-        
         this.engine = new LXEngine(this);
-        this.simulation = new Simulation(this);
         this.buffer = new int[this.total];
         this.colors = this.engine.renderBuffer();
+        
+        this.simulationEnabled = false;
+        this.simulation = new Simulation(this);
         
         this.baseHue = null;
         this.cycleBaseHue(30000);
