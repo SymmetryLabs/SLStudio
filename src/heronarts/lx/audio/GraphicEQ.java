@@ -46,13 +46,34 @@ public class GraphicEQ extends DecibelMeter {
     }
     
     /**
+     * Default graphic equalizer with 2 bands per octave
+     * 
+     * @param label Label
+     * @param source Audio source
+     */
+    public GraphicEQ(String label, AudioSource source) {
+        this(label, source, 2);
+    }
+    
+    /**
      * Makes a graphic equalizer with a default slope of 4.5 dB/octave
      * 
      * @param source Audio source to listen to
      * @param bandsPerOctave Number of bands per octave
      */
     public GraphicEQ(AudioSource source, int bandsPerOctave) {
-        super(source.mix);
+        this("GEQ", source, bandsPerOctave);
+    }
+    
+    /**
+     * Makes a graphic equalizer with a default slope of 4.5 dB/octave
+     * 
+     * @param label Label
+     * @param source Audio source to listen to
+     * @param bandsPerOctave Number of bands per octave
+     */
+    public GraphicEQ(String label, AudioSource source, int bandsPerOctave) {
+        super(label, source.mix);
         addParameter(this.slope);
         this.fft = new FFT(this.timeSize = source.bufferSize(), source.sampleRate());
         this.fft.window(FFT.HAMMING);

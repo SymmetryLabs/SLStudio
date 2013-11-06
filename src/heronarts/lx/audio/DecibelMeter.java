@@ -58,6 +58,17 @@ public class DecibelMeter extends LXModulator {
      * @param buffer Audio buffer to meter
      */
     public DecibelMeter(AudioBuffer buffer) {
+        this("DBM", buffer);
+    }
+    
+    /**
+     * Default constructor, creates a meter with unity gain and 72dB dynamic range
+     * 
+     * @param label Label
+     * @param buffer Audio buffer to meter
+     */
+    public DecibelMeter(String label, AudioBuffer buffer) {
+        super(label);
         this.buffer = buffer;
         addParameter(this.gain = new BasicParameter("GAIN", 0, -36, 36));
         addParameter(this.range = new BasicParameter("RANGE", 72, 6, 96));

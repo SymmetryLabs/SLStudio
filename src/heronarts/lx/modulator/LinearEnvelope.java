@@ -21,11 +21,20 @@ import java.lang.Math;
  */
 public class LinearEnvelope extends SawLFO {
 
+    private final static String DEFAULT_LABEL = "LENV";
+    
     /**
      * @param startValue Start value, same as end value, no duration
      */
     public LinearEnvelope(double startValue) {
-        this(startValue, startValue, 0);
+        this(DEFAULT_LABEL, startValue, startValue, 0);
+    }
+    
+    /**
+     * @param startValue Start value, same as end value, no duration
+     */
+    public LinearEnvelope(String label, double startValue) {
+        this(label, startValue, startValue, 0);
     }
     
     /**
@@ -34,7 +43,17 @@ public class LinearEnvelope extends SawLFO {
      * @param periodMs Period, in milliseconds
      */
     public LinearEnvelope(double startValue, double endValue, double periodMs) {
-        super(startValue, endValue, periodMs);
+        this(DEFAULT_LABEL, startValue, endValue, periodMs);
+    }
+    
+    /**
+     * @param label Label
+     * @param startValue Initial value
+     * @param endValue End value
+     * @param periodMs Period, in milliseconds
+     */
+    public LinearEnvelope(String label, double startValue, double endValue, double periodMs) {
+        super(label, startValue, endValue, periodMs);
         setLooping(false);
     }
     

@@ -44,8 +44,8 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
         }
     };
     
-    protected LXRangeModulator(double startValue, double endValue, double periodMs) {
-        super(periodMs);
+    protected LXRangeModulator(String label, double startValue, double endValue, double periodMs) {
+        super(label, periodMs);
         this.startValue = startValue;
         this.endValue = endValue;
         updateValue(startValue);

@@ -26,9 +26,22 @@ public class SquareLFO extends LXRangeModulator {
      * @param periodMs Period, in milliseconds
      */
     public SquareLFO(double startValue, double endValue, double periodMs) {
-        super(startValue, endValue, periodMs);
+        this("SQUARE", startValue, endValue, periodMs);
     }
 
+    /**
+     * Constructs a SquareLFO
+     * 
+     * @param label Label
+     * @param startValue Initial value
+     * @param endValue Final value
+     * @param periodMs Period, in milliseconds
+     */
+    public SquareLFO(String label, double startValue, double endValue, double periodMs) {
+        super(label, startValue, endValue, periodMs);
+    }
+
+    
     @Override
     protected double computeNormalizedValue(double deltaMs) {
         return (getBasis() < 0.5) ? 0 : 1;

@@ -21,7 +21,7 @@ import java.util.Set;
  * to deterministically know when the value has changed. This means that all
  * modifications *must* come through setValue(). 
  */
-public abstract class LXListenableParameter extends LXParameter {
+public abstract class LXListenableParameter implements LXParameter {
 
     private final String label;
     
@@ -58,18 +58,21 @@ public abstract class LXListenableParameter extends LXParameter {
         return this;
     }
     
-    @Override
     public final LXParameter reset() {
         return setValue(this.defaultValue);
     }
     
-    @Override
+    /**
+     * Resets the value of the parameter, giving it a new default. Future calls
+     * to reset() with no parameter will use this value.
+     * 
+     * @param value New default value
+     */
     public final LXParameter reset(double value) {
         this.defaultValue = value;
         return setValue(this.defaultValue);
     }
 
-    @Override
     public final LXParameter setValue(double value) {
         if (this.value != value) {
             this.value = updateValue(value);
@@ -80,12 +83,14 @@ public abstract class LXListenableParameter extends LXParameter {
         return this;
     }
     
-    @Override
     public final double getValue() {
         return this.value;
     }
     
-    @Override
+    public final float getValuef() {
+        return (float) getValue();
+    }
+    
     public String getLabel() {
         return this.label;
     }

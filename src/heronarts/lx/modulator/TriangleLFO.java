@@ -29,9 +29,22 @@ public class TriangleLFO extends LXRangeModulator {
      * @param periodMs Period, in milliseconds
      */
     public TriangleLFO(double startValue, double endValue, double periodMs) {
-        super(startValue, endValue, periodMs);
+        this("TRI", startValue, endValue, periodMs);
     }
 
+    /**
+     * Constructs a TriangleLFO
+     * 
+     * @param label Label
+     * @param startValue Initial value
+     * @param endValue Final value
+     * @param periodMs Period, in milliseconds
+     */
+    public TriangleLFO(String label, double startValue, double endValue, double periodMs) {
+        super(label, startValue, endValue, periodMs);
+    }
+
+    
     @Override
     protected double computeNormalizedValue(double deltaMs) {
         double bv = getBasis();

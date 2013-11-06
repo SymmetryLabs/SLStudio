@@ -48,7 +48,19 @@ public class QuadraticEnvelope extends LXRangeModulator {
      * @param periodMs Period, in milliseconds
      */
     public QuadraticEnvelope(double startValue, double endValue, double periodMs) {
-        super(startValue, endValue, periodMs);
+        this("QENV", startValue, endValue, periodMs);
+    }
+    
+    /**
+     * Constructs a new envelope
+     * 
+     * @param label Label
+     * @param startValue Initial value
+     * @param endValue Ending value
+     * @param periodMs Period, in milliseconds
+     */
+    public QuadraticEnvelope(String label, double startValue, double endValue, double periodMs) {
+        super(label, startValue, endValue, periodMs);
         setLooping(false);
     }
     

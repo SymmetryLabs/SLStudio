@@ -31,9 +31,22 @@ public class SawLFO extends LXRangeModulator {
      * @param periodMs Period, in milliseconds
      */
     public SawLFO(double startValue, double endValue, double periodMs) {
-        super(startValue, endValue, periodMs);
+        this("SAW", startValue, endValue, periodMs);
     }
 
+    /**
+     * Constructs a Saw LFO
+     *
+     * @param label Label
+     * @param startValue Initial value
+     * @param endValue Final value
+     * @param periodMs Period, in milliseconds
+     */
+    public SawLFO(String label, double startValue, double endValue, double periodMs) {
+        super(label, startValue, endValue, periodMs);
+    }
+
+    
     @Override
     protected final double computeNormalizedValue(double deltaMs) {
         return getBasis();

@@ -22,7 +22,11 @@ public class Click extends LXPeriodicModulator {
     private double elapsedMs = 0;
     
     public Click(double periodMs) {
-        super(periodMs);
+        this("CLICK", periodMs);
+    }
+    
+    public Click(String label, double periodMs) {
+        super(label, periodMs);
     }
 
     /**

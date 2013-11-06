@@ -23,7 +23,7 @@ import java.lang.Math;
  * time, such as an envelope or a low frequency oscillator. Some modulators run
  * continuously, others may halt after they reach a certain value.
  */
-public abstract class LXModulator extends LXParameterized {
+public abstract class LXModulator extends LXParameterized implements LXParameter {
     
     /**
      * Whether this modulator is currently running.
@@ -34,6 +34,8 @@ public abstract class LXModulator extends LXParameterized {
      * The current computed value of this modulator.
      */
     private double value = 0;
+    
+    private final String label;
     
     /**
      * Quick helper to get half of PI.
@@ -47,9 +49,17 @@ public abstract class LXModulator extends LXParameterized {
     
     /**
      * Utility default constructor
+     * 
+     * @param label Label
      */
-    protected LXModulator() {}
-            
+    protected LXModulator(String label) {
+        this.label = label;
+    }
+    
+    public final String getLabel() {
+        return this.label;
+    }
+    
     /**
      * Sets the Modulator in motion
      */
@@ -80,15 +90,26 @@ public abstract class LXModulator extends LXParameterized {
      * value, and should also start the modulator if it is not already running.
      */
     public final LXModulator trigger() {
+        this.reset();
         this.start();
-        this.onTrigger();
         return this;
     }
     
     /**
-     * Optional subclass method when trigger happens.
+     * Resets the modulator to its default condition and stops it.
+     * 
+     * @return this, for method chaining
      */
-    protected /* abstract */ void onTrigger() {}
+    public LXParameter reset() {
+        this.stop();
+        this.onReset();
+        return this;
+    }
+    
+    /**
+     * Optional subclass method when reset happens.
+     */
+    protected /* abstract */ void onReset() {}
 
     /**
      * Retrieves the current value of the modulator in full precision

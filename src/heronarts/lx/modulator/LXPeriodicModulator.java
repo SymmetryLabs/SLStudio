@@ -54,9 +54,11 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * Utility constructor with period
      * 
+     * @param label Label
      * @param periodMs Oscillation period, in milliseconds
      */
-    protected LXPeriodicModulator(double periodMs) {
+    protected LXPeriodicModulator(String label, double periodMs) {
+        super(label);
         this.periodMs = periodMs;
     }
     
@@ -75,7 +77,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
     
     @Override
-    protected void onTrigger() {
+    protected void onReset() {
         this.setBasis(0);
     }
     

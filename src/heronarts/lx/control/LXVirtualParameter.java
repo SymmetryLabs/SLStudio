@@ -22,7 +22,7 @@ package heronarts.lx.control;
  * This type of parameter is not listenable, since the underlying parameter
  * is dynamic.
  */
-public abstract class LXVirtualParameter extends LXParameter {
+public abstract class LXVirtualParameter implements LXParameter {
 
     /**
      * The parameter to operate on.
@@ -31,7 +31,6 @@ public abstract class LXVirtualParameter extends LXParameter {
      */
     protected abstract LXParameter getRealParameter();
     
-    @Override
     public final LXParameter reset() {
         LXParameter p = getRealParameter();
         if (p != null) {
@@ -40,16 +39,6 @@ public abstract class LXVirtualParameter extends LXParameter {
         return this;
     }
     
-    @Override
-    public final LXParameter reset(double value) {
-        LXParameter p = getRealParameter();
-        if (p != null) {
-            p.reset(value);
-        }
-        return this;
-    }
-    
-    @Override
     public final LXParameter setValue(double value) {
         LXParameter p = getRealParameter();
         if (p != null) {
@@ -58,7 +47,6 @@ public abstract class LXVirtualParameter extends LXParameter {
         return this;
     }
 
-    @Override
     public double getValue() {
         LXParameter p = getRealParameter();
         if (p != null) {
@@ -67,7 +55,10 @@ public abstract class LXVirtualParameter extends LXParameter {
         return 0;
     }
     
-    @Override
+    public float getValuef() {
+        return (float) getValue();
+    }
+    
     public String getLabel() {
         LXParameter p = getRealParameter();
         if (p != null) {

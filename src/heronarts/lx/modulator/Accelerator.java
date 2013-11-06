@@ -33,12 +33,26 @@ public class Accelerator extends LXModulator {
      * @param acceleration Acceleration
      */
     public Accelerator(double initValue, double initVelocity, double acceleration) {
+        this("ACCELERATOR", initValue, initVelocity, acceleration);
+    }
+
+    /**
+     * Create an accelerator
+     * 
+     * @param label Label
+     * @param initValue Initial value
+     * @param initVelocity Initial velocity
+     * @param acceleration Acceleration
+     */
+    public Accelerator(String label, double initValue, double initVelocity, double acceleration) {
+        super(label);
         setValue(this.initValue = initValue);
         setSpeed(initVelocity, acceleration);
     }
 
+    
     @Override
-    protected void onTrigger() {
+    protected void onReset() {
         this.velocity = this.initVelocity;
         setValue(this.initValue);
     }

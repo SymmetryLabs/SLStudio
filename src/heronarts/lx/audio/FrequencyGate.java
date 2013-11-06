@@ -48,7 +48,27 @@ public class FrequencyGate extends LXModulator {
     
     private double lastValue = 0;
     
+    /**
+     * Constructs a gate that monitors a specified frequency band 
+     * 
+     * @param eq Equalizer to monitor
+     * @param minHz Minimum frequency band
+     * @param maxHz Maximum frequency band
+     */
     public FrequencyGate(GraphicEQ eq, int minHz, int maxHz) {
+        this("FQG", eq, minHz, maxHz);
+    }
+    
+    /**
+     * Constructs a gate that monitors a specified frequency band 
+     * 
+     * @param label Label
+     * @param eq Equalizer to monitor
+     * @param minHz Minimum frequency band
+     * @param maxHz Maximum frequency band
+     */
+    public FrequencyGate(String label, GraphicEQ eq, int minHz, int maxHz) {
+        super(label);
         this.eq = eq;
         int _minBand = -1, _avgBands = 0;
         for (int i = 0; i < eq.numBands; ++i) {
