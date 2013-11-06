@@ -16,8 +16,7 @@ package heronarts.lx;
 import java.util.ArrayList;
 import java.util.List;
 
-import heronarts.lx.control.LXListenableParameter;
-import heronarts.lx.control.LXParameter;
+import heronarts.lx.control.LXParameterized;
 import heronarts.lx.modulator.LXModulator;
 
 /**
@@ -25,9 +24,8 @@ import heronarts.lx.modulator.LXModulator;
  * attributes, such as parameters, modulators, and layers. For instance, patterns,
  * transitions, and effects are all LXComponents. 
  */
-public abstract class LXComponent implements LXParameter.Listener {
+public abstract class LXComponent extends LXParameterized {
 
-    protected final List<LXParameter> parameters = new ArrayList<LXParameter>();
     protected final List<LXModulator> modulators = new ArrayList<LXModulator>();
     protected final List<LXLayer> layers = new ArrayList<LXLayer>();
     
@@ -50,23 +48,5 @@ public abstract class LXComponent implements LXParameter.Listener {
     public final List<LXLayer> getLayers() {
         return this.layers;
     }
-    
-    protected final LXParameter addParameter(LXParameter parameter) {
-        this.parameters.add(parameter);
-        if (parameter instanceof LXListenableParameter) {
-            ((LXListenableParameter)parameter).addListener(this);
-        }
-        return parameter;
-    }
-    
-    public final List<LXParameter> getParameters() {
-        return this.parameters;
-    }
-    
-    /**
-     * Subclasses are free to override this, but in case they don't care
-     * a default implementation is provided.
-     */
-    public /* abstract */ void onParameterChanged(LXParameter parameter) {}
 
 }

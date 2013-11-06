@@ -13,7 +13,7 @@
 
 package heronarts.lx.effect;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXLayer;
 import heronarts.lx.modulator.LXModulator;
@@ -28,15 +28,15 @@ import java.util.ArrayList;
  */
 public abstract class LXEffect extends LXLayer {
     
-    protected final HeronLX lx;
+    protected final LX lx;
     private final boolean momentary;
     protected boolean enabled = false;
 
-    protected LXEffect(HeronLX lx) {
+    protected LXEffect(LX lx) {
         this(lx, false);
     }
     
-    protected LXEffect(HeronLX lx, boolean momentary) {
+    protected LXEffect(LX lx, boolean momentary) {
         this.lx = lx;
         this.momentary = momentary;
     }

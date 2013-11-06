@@ -13,7 +13,7 @@
 
 package heronarts.lx.pattern;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.modulator.SawLFO;
 
 /**
@@ -24,7 +24,7 @@ public class IteratorTestPattern extends LXPattern {
 
     final private SawLFO index;
 
-    public IteratorTestPattern(HeronLX lx) {
+    public IteratorTestPattern(LX lx) {
         super(lx);
         this.addModulator(this.index = new SawLFO(0, lx.total, lx.total * 100)).trigger();
     }

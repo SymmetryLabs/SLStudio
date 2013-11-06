@@ -14,7 +14,7 @@
 package heronarts.lx.pattern;
 
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
@@ -43,7 +43,7 @@ public class LifePattern extends LXPattern{
 
     private final HashMap<String,Integer> stateCount = new HashMap<String,Integer>();
         
-    public LifePattern(HeronLX lx) {
+    public LifePattern(LX lx) {
         super(lx);
         this.state = new CellState[lx.total];
         this.newState = new CellState[lx.total];

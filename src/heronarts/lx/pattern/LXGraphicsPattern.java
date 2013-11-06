@@ -12,7 +12,7 @@
  */
 
 package heronarts.lx.pattern;
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -21,7 +21,7 @@ public abstract class LXGraphicsPattern extends LXPattern {
 
     private final PGraphics pg;
     
-    protected LXGraphicsPattern(HeronLX lx) {
+    protected LXGraphicsPattern(LX lx) {
         super(lx);
         this.pg = lx.applet.createGraphics(lx.width, lx.height, PConstants.P2D);
     }

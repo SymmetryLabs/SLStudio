@@ -16,7 +16,7 @@ package heronarts.lx.modulator;
 /**
  * A quadratic envelope moves from one value to another along a quadratic curve. 
  */
-public class QuadraticEnvelope extends RangeModulator {
+public class QuadraticEnvelope extends LXRangeModulator {
 
     /**
      * Different modes of quadratic easing.
@@ -49,7 +49,7 @@ public class QuadraticEnvelope extends RangeModulator {
      */
     public QuadraticEnvelope(double startValue, double endValue, double periodMs) {
         super(startValue, endValue, periodMs);
-        this.looping = false;
+        setLooping(false);
     }
     
     /**

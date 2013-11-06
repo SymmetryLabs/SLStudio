@@ -13,7 +13,7 @@
 
 package heronarts.lx.pattern;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.LinearEnvelope;
 
@@ -21,7 +21,7 @@ import heronarts.lx.modulator.LinearEnvelope;
 public class TouchTestPattern extends LXPattern {
     private final LinearEnvelope brightness;
     
-    public TouchTestPattern(HeronLX lx) {
+    public TouchTestPattern(LX lx) {
         super(lx);
         this.addModulator(this.brightness = new LinearEnvelope(0, 0, 100));
     }

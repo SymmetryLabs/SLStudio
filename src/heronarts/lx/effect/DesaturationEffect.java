@@ -13,7 +13,7 @@
 
 package heronarts.lx.effect;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.control.BasicParameter;
 import heronarts.lx.modulator.LinearEnvelope;
 
@@ -24,7 +24,7 @@ public class DesaturationEffect extends LXEffect {
     private final BasicParameter decay;
     private final BasicParameter amount;
     
-    public DesaturationEffect(HeronLX lx) {
+    public DesaturationEffect(LX lx) {
         super(lx);
         this.addModulator(this.desaturation = new LinearEnvelope(0, 0, 100));
         this.addParameter(this.attack = new BasicParameter("ATTACK", 0.1));

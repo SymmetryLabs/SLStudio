@@ -100,9 +100,4 @@ public class Accelerator extends LXModulator {
         return this.getValue() + this.velocity * deltaMs / 1000.0;
     }
     
-    @Override
-    protected double computeBasis() {
-        // This is undefined/irrelevant for an Accelerator
-        return 0;
-    }
 }

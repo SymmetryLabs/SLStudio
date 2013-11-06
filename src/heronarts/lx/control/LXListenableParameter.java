@@ -62,6 +62,12 @@ public abstract class LXListenableParameter extends LXParameter {
     public final LXParameter reset() {
         return setValue(this.defaultValue);
     }
+    
+    @Override
+    public final LXParameter reset(double value) {
+        this.defaultValue = value;
+        return setValue(this.defaultValue);
+    }
 
     @Override
     public final LXParameter setValue(double value) {

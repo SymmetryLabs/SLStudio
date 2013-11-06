@@ -17,7 +17,7 @@ package heronarts.lx.modulator;
  * A click is a simple modulator that fires a value of 1 every time its period
  * has passed. Otherwise it always returns 0.
  */
-public class Click extends LXModulator {
+public class Click extends LXPeriodicModulator {
     
     private double elapsedMs = 0;
     

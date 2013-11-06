@@ -15,7 +15,7 @@ package heronarts.lx.pattern;
 
 
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.transition.WipeTransition;
@@ -33,7 +33,7 @@ public class BouncingPattern extends LXPattern {
 
     private final TriangleLFO[] magLFO;
 
-    public BouncingPattern(HeronLX lx) {
+    public BouncingPattern(LX lx) {
         super(lx);
         this.NUM_BOUNCERS = lx.width / 2;
         this.mags = new double[this.NUM_BOUNCERS];

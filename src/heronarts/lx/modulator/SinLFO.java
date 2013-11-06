@@ -18,7 +18,7 @@ import heronarts.lx.LXUtils;
 /**
  * A classic sinusoidal oscillator.
  */
-public class SinLFO extends RangeModulator {
+public class SinLFO extends LXRangeModulator {
 
     /**
      * Constructs a SinLFO

@@ -13,7 +13,7 @@
 
 package heronarts.lx.transition;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 import processing.core.PApplet;
 import processing.core.PConstants;
@@ -30,11 +30,11 @@ public class WipeTransition extends LXTransition {
     private final Direction direction;
     private double depth;
     
-    public WipeTransition(HeronLX lx) {
+    public WipeTransition(LX lx) {
         this(lx, Direction.RIGHT);
     }
     
-    public WipeTransition(HeronLX lx, Direction direction) {
+    public WipeTransition(LX lx, Direction direction) {
         super(lx);
         this.direction = direction;
         this.depth = 5.;

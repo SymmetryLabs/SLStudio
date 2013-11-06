@@ -13,7 +13,7 @@
 
 package heronarts.lx.pattern;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.font.PixelFont;
 import heronarts.lx.modulator.SawLFO;
 
@@ -29,11 +29,11 @@ public class PixelFontTestPattern extends LXPattern {
     final private SawLFO pMod = new SawLFO(0, 0, 10000);
     final private PImage image;
     
-    public PixelFontTestPattern(HeronLX lx) {
+    public PixelFontTestPattern(LX lx) {
         this(lx, "The quick brown fox jumped over the lazy dog.");
     }
     
-    public PixelFontTestPattern(HeronLX lx, String s) {
+    public PixelFontTestPattern(LX lx, String s) {
         super(lx);
         this.image = (new PixelFont(lx)).drawString(s);
         this.addModulator(this.hMod.trigger());

@@ -39,6 +39,14 @@ public abstract class LXParameter {
     public abstract LXParameter reset();
     
     /**
+     * Resets the value of the parameter, giving it a new default. Future calls
+     * to reset() with no parameter will use this value.
+     * 
+     * @param value New default value
+     */
+    public abstract LXParameter reset(double value);
+    
+    /**
      * Sets the value of the parameter.
      * 
      * @param value The value

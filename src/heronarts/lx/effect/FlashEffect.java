@@ -13,7 +13,7 @@
 
 package heronarts.lx.effect;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.control.BasicParameter;
 import heronarts.lx.modulator.LinearEnvelope;
@@ -30,7 +30,7 @@ public class FlashEffect extends LXEffect {
     private final BasicParameter intensity;
     private final BasicParameter sat;
     
-    public FlashEffect(HeronLX lx) {
+    public FlashEffect(LX lx) {
         super(lx, true);
         this.addModulator(this.flash = new LinearEnvelope(0, 0, 0));
         this.addParameter(this.attack = new BasicParameter("ATTACK", 0.1));

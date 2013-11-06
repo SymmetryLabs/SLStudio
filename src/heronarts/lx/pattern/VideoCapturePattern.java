@@ -13,7 +13,7 @@
 
 package heronarts.lx.pattern;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.transition.IrisTransition;
 
 import processing.video.Capture;
@@ -22,7 +22,7 @@ public class VideoCapturePattern extends LXPattern {
     
     private Capture capture;
     
-    public VideoCapturePattern(HeronLX lx) {
+    public VideoCapturePattern(LX lx) {
         super(lx);
         this.capture = null;
         this.transition = new IrisTransition(lx);

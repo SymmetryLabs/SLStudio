@@ -17,7 +17,7 @@ package heronarts.lx.transition;
 import processing.core.PApplet;
 import processing.core.PConstants;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 import java.lang.Math;
 
@@ -67,7 +67,7 @@ public class IrisTransition extends LXTransition {
      * 
      * @param lx
      */
-    public IrisTransition(HeronLX lx) {
+    public IrisTransition(LX lx) {
         this(lx, Shape.RADIAL);
     }
     
@@ -77,7 +77,7 @@ public class IrisTransition extends LXTransition {
      * @param lx
      * @param shape Shape of the transition
      */
-    public IrisTransition(HeronLX lx, Shape shape) {
+    public IrisTransition(LX lx, Shape shape) {
         this(lx, shape, Direction.OUTWARD);
     }
     
@@ -87,7 +87,7 @@ public class IrisTransition extends LXTransition {
      * @param lx
      * @param direction Direction of the transition
      */
-    public IrisTransition(HeronLX lx, Direction direction) {
+    public IrisTransition(LX lx, Direction direction) {
         this(lx, Shape.RADIAL, direction);
     }
     
@@ -98,7 +98,7 @@ public class IrisTransition extends LXTransition {
      * @param shape Shape of the transition
      * @param direction Direction of the transition
      */
-    public IrisTransition(HeronLX lx, Shape shape, Direction direction) {
+    public IrisTransition(LX lx, Shape shape, Direction direction) {
         super(lx);
         this.shape = shape;
         this.direction = direction;

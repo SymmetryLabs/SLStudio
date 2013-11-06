@@ -19,7 +19,7 @@ import java.lang.Math;
 
 class Simulation implements PConstants {
 
-    final private HeronLX lx;
+    final private LX lx;
     
     private int x;
     private int y;
@@ -29,7 +29,7 @@ class Simulation implements PConstants {
     private double xSpacing;
     private double ySpacing;
     
-    Simulation(HeronLX lx) {
+    Simulation(LX lx) {
         this.lx = lx;
         this.setBounds(0, 0, lx.applet.width, lx.applet.height);
     }

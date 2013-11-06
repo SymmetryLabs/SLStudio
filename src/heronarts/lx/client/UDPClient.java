@@ -13,7 +13,7 @@
 
 package heronarts.lx.client;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 import java.io.IOException;
 import java.net.InetSocketAddress;
@@ -29,7 +29,7 @@ public class UDPClient {
     private static final String PROTOCOL_TERMINATOR = ";";
     private static final String PROTOCOL_DELIMITER = ",";
 
-    private final HashSet<HeronLX> listeners;
+    private final HashSet<LX> listeners;
     
     private final DatagramChannel channel;
     private final ByteBuffer buffer;
@@ -51,7 +51,7 @@ public class UDPClient {
     private UDPClient(String ip, int port) {
         this.buffer = ByteBuffer.allocate(MAX_PACKET_LEN);
         this.touch = new ClientTouch();
-        this.listeners = new HashSet<HeronLX>();
+        this.listeners = new HashSet<LX>();
         try {
             this.channel = DatagramChannel.open();
             if (ip != null) {
@@ -65,11 +65,11 @@ public class UDPClient {
         }
     }
 
-    public void addListener(HeronLX lx) {
+    public void addListener(LX lx) {
         this.listeners.add(lx);
     }
     
-    public void removeListener(HeronLX lx) {
+    public void removeListener(LX lx) {
         this.listeners.remove(lx);
     }
     
@@ -81,26 +81,26 @@ public class UDPClient {
         try {
             String command = parts[0];
             if (command.equals("setBaseHue")) {
-                for (HeronLX lx : this.listeners) {
+                for (LX lx : this.listeners) {
                     lx.setBaseHue(Integer.parseInt(parts[1]));
                 }
             } else if (command.equals("setBrightness")) {
                 double bVal = Double.parseDouble(parts[1]);
-                for (HeronLX lx : this.listeners) {
+                for (LX lx : this.listeners) {
                     if (lx.kinet() != null) {
                         lx.kinet().setBrightness(bVal);
                     }
                 }
             } else if (command.equals("goPrev")) {
-                for (HeronLX lx : this.listeners){
+                for (LX lx : this.listeners){
                     lx.goPrev();
                 }
             } else if (command.equals("goNext")) {
-                for (HeronLX lx : this.listeners) {
+                for (LX lx : this.listeners) {
                     lx.goNext();
                 }
             } else if (command.equals("flash")) {
-                for (HeronLX lx : this.listeners) {
+                for (LX lx : this.listeners) {
                     lx.flash();
                 }
             } else if (command.equals("touchBegan")) {

@@ -14,13 +14,13 @@
 package heronarts.lx.transition;
 
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 import java.lang.Math;
 
 public class FadeTransition extends LXTransition {
     
-    public FadeTransition(HeronLX lx) {
+    public FadeTransition(LX lx) {
         super(lx);
     }
     

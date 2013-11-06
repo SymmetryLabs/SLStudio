@@ -13,7 +13,7 @@
 
 package heronarts.lx.pattern;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXDeck;
 import heronarts.lx.LXLayer;
@@ -27,7 +27,7 @@ import processing.core.PConstants;
 
 public abstract class LXPattern extends LXComponent {
 
-    protected final HeronLX lx;
+    protected final LX lx;
     private LXDeck deck = null;
     
     protected final int[] colors;
@@ -36,7 +36,7 @@ public abstract class LXPattern extends LXComponent {
     protected int intervalEnd = -1;
     private boolean eligible = true;
     
-    protected LXPattern(HeronLX lx) {
+    protected LXPattern(LX lx) {
         this.lx = lx;
         this.colors = new int[lx.total];
     }

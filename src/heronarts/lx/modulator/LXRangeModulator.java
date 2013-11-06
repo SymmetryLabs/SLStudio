@@ -21,7 +21,7 @@ import heronarts.lx.control.LXParameter;
  * minimum and a maximum. Includes a set of common methods to change the bounds
  * while the modulator is running. 
  */
-public abstract class RangeModulator extends LXModulator {
+public abstract class LXRangeModulator extends LXPeriodicModulator {
 
     private LXListenableParameter startValueParameter = null;
     private double minStartValue = 0;
@@ -44,10 +44,11 @@ public abstract class RangeModulator extends LXModulator {
         }
     };
     
-    protected RangeModulator(double startValue, double endValue, double periodMs) {
+    protected LXRangeModulator(double startValue, double endValue, double periodMs) {
         super(periodMs);
         this.startValue = startValue;
         this.endValue = endValue;
+        updateValue(startValue);
     }
     
     /**
@@ -58,7 +59,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param periodMs New period, in milliseconds
      * @return this
      */
-    public final RangeModulator setRange(double startValue, double endValue, double periodMs) {
+    public final LXRangeModulator setRange(double startValue, double endValue, double periodMs) {
         this.setPeriod(periodMs);
         this.startValue = startValue;
         this.endValue = endValue;
@@ -73,7 +74,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param endValue New end value
      * @return this
      */
-    public final RangeModulator setRange(double startValue, double endValue) {
+    public final LXRangeModulator setRange(double startValue, double endValue) {
         return setRange(startValue, endValue, getPeriod());
     }
     
@@ -83,7 +84,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param startValue New start value
      * @return this
      */
-    public final RangeModulator setStartValue(double startValue) {
+    public final LXRangeModulator setStartValue(double startValue) {
         return setRange(startValue, this.endValue);
     }
     
@@ -93,7 +94,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param endValue New final value
      * @return this
      */
-    public final RangeModulator setEndValue(double endValue) {
+    public final LXRangeModulator setEndValue(double endValue) {
         return setRange(this.startValue, endValue);
     }
     
@@ -104,7 +105,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param endValue New end value
      * @return this
      */
-    public final RangeModulator setRangeFromHereTo(double endValue) {
+    public final LXRangeModulator setRangeFromHereTo(double endValue) {
         return setRange(getValue(), endValue);
     }
     
@@ -117,7 +118,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param periodMs New period, in milliseconds
      * @return this
      */
-    public final RangeModulator setRangeFromHereTo(double endValue, double periodMs) {
+    public final LXRangeModulator setRangeFromHereTo(double endValue, double periodMs) {
         return setRange(getValue(), endValue, periodMs);
     }
 
@@ -143,7 +144,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param maxStartValue The high start value
      * @return this
      */
-    public RangeModulator modulateStartValueBy(LXListenableParameter startValueParameter, double minStartValue, double maxStartValue) {
+    public LXRangeModulator modulateStartValueBy(LXListenableParameter startValueParameter, double minStartValue, double maxStartValue) {
         if (this.startValueParameter != null) {
             this.startValueParameter.removeListener(this.parameterListener); 
         }
@@ -166,7 +167,7 @@ public abstract class RangeModulator extends LXModulator {
      * @param maxEndValue The high end value
      * @return this
      */
-    public RangeModulator modulateEndValueBy(LXListenableParameter endValueParameter, double minEndValue, double maxEndValue) {
+    public LXRangeModulator modulateEndValueBy(LXListenableParameter endValueParameter, double minEndValue, double maxEndValue) {
         if (this.endValueParameter != null) {
             this.endValueParameter.removeListener(this.parameterListener);
         }

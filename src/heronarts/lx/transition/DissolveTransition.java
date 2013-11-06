@@ -13,7 +13,7 @@
 
 package heronarts.lx.transition;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import processing.core.PGraphics;
 import processing.core.PConstants;
 
@@ -23,11 +23,11 @@ public class DissolveTransition extends LXTransition {
     private final int lerpMode;
     private final int[] sb1, sb2;
     
-    public DissolveTransition(HeronLX lx) {
+    public DissolveTransition(LX lx) {
         this(lx, PConstants.RGB);
     }
     
-    public DissolveTransition(HeronLX lx, int lerpMode) {
+    public DissolveTransition(LX lx, int lerpMode) {
         super(lx);
         this.lerpMode = lerpMode;
         this.sb1 = new int[lx.total];

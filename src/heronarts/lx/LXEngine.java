@@ -49,7 +49,7 @@ import java.util.List;
  */
 public class LXEngine {
         
-    private final HeronLX lx;
+    private final LX lx;
     
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
     private final List<LXDeck> decks = new ArrayList<LXDeck>();
@@ -96,7 +96,7 @@ public class LXEngine {
     private double speed = 1;
     private boolean paused = false;
     
-    LXEngine(HeronLX lx) {
+    LXEngine(LX lx) {
         this.lx = lx;
         this.black = new int[lx.total];
         for (int i = 0; i < black.length; ++i) {
@@ -143,9 +143,9 @@ public class LXEngine {
             for (int i = 0; i < buffer.render.length; ++i) {
                 buffer.copy[i] = buffer.render[i];
             }
-            engineThread = new Thread("HeronLX Engine Thread") {
+            engineThread = new Thread("LX Engine Thread") {
                 public void run() {
-                    System.out.println("HeronLX Engine Thread started.");
+                    System.out.println("LX Engine Thread started.");
                     final int minMillisPerFrame = 15;
                     while (!isInterrupted()) {
                         long frameStart = System.currentTimeMillis();
@@ -162,7 +162,7 @@ public class LXEngine {
                             }
                         }
                     }
-                    System.out.println("HeronLX Engine Thread finished.");
+                    System.out.println("LX Engine Thread finished.");
                 }
             };
             engineThread.start();

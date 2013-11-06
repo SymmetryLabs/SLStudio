@@ -41,6 +41,15 @@ public abstract class LXVirtualParameter extends LXParameter {
     }
     
     @Override
+    public final LXParameter reset(double value) {
+        LXParameter p = getRealParameter();
+        if (p != null) {
+            p.reset(value);
+        }
+        return this;
+    }
+    
+    @Override
     public final LXParameter setValue(double value) {
         LXParameter p = getRealParameter();
         if (p != null) {

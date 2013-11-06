@@ -13,7 +13,7 @@
 
 package heronarts.lx.pattern;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.transition.WipeTransition;
@@ -26,7 +26,7 @@ public class GraphicEqualizerPattern extends LXPattern {
     private final FFT fft; 
     private final LinearEnvelope[] bandVals;
     
-    public GraphicEqualizerPattern(HeronLX lx) {
+    public GraphicEqualizerPattern(LX lx) {
         super(lx);
         this.fft = new FFT(lx.audioInput().bufferSize(), lx.audioInput().sampleRate());
         this.fft.window(FFT.HAMMING);

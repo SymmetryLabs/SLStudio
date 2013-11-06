@@ -47,7 +47,7 @@ public class LXDeck {
         public void faderTransitionDidChange(LXDeck deck, LXTransition faderTransition) {}
     }
     
-    private final HeronLX lx;
+    private final LX lx;
     
     /**
      * The index of this deck in the engine.
@@ -69,7 +69,7 @@ public class LXDeck {
 
     private final List<Listener> listeners = new ArrayList<Listener>();
     
-    LXDeck(HeronLX lx, int index, LXPattern[] patterns) {
+    LXDeck(LX lx, int index, LXPattern[] patterns) {
         this.lx = lx;
         this.index = index;
         this.faderTransition = new DissolveTransition(lx);  

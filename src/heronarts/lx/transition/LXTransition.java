@@ -13,7 +13,7 @@
 
 package heronarts.lx.transition;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.control.BasicParameter;
 
@@ -52,7 +52,7 @@ public abstract class LXTransition extends LXComponent {
     
     final private static double DEFAULT_DURATION = 1000;
     
-    final protected HeronLX lx; 
+    final protected LX lx; 
     final protected int[] colors;
     
     private BasicParameter duration;
@@ -63,7 +63,7 @@ public abstract class LXTransition extends LXComponent {
      * 
      * @param lx
      */
-    protected LXTransition(HeronLX lx) {
+    protected LXTransition(LX lx) {
         this.lx = lx;
         this.colors = new int[lx.total];
         this.duration = new BasicParameter("DURATION", 0);

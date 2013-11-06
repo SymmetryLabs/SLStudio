@@ -13,10 +13,10 @@
 
 package heronarts.lx.pattern;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 public class BaseHuePattern extends LXPattern {
-    public BaseHuePattern(HeronLX lx) {
+    public BaseHuePattern(LX lx) {
         super(lx);
     }
     

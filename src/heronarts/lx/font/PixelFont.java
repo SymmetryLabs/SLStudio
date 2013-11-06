@@ -13,7 +13,7 @@
 
 package heronarts.lx.font;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 import processing.core.PConstants;
 import processing.core.PImage;
@@ -40,9 +40,9 @@ public class PixelFont {
     /**
      * Constructs an instance of the font.
      * 
-     * @param lx HeronLX
+     * @param lx LX
      */
-    public PixelFont(HeronLX lx) {
+    public PixelFont(LX lx) {
         this.alphabet = lx.applet.loadImage("PixelFont.png");
         this.alphabet.loadPixels();
     }

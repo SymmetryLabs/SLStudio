@@ -13,7 +13,7 @@
 
 package heronarts.lx.kinet;
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 
 import java.io.IOException;
@@ -36,7 +36,7 @@ import java.util.HashSet;
  * 
  * The above would map pixels in order to a single output port in order. Typically
  * nodes are not wired in the same fixed order, so logic is used to map the
- * node indices from their logical representation (in the HeronLX model) to their
+ * node indices from their logical representation (in the LX model) to their
  * physical wiring.
  */
 public class Kinet {
@@ -47,7 +47,7 @@ public class Kinet {
      */
     private static final int DEFAULT_FRAMERATE = 24;
     
-    private final HeronLX lx; 
+    private final LX lx; 
     
     private final KinetNode[] outputNodes;
     private final ArrayList<KinetPort> outputPorts;
@@ -64,12 +64,12 @@ public class Kinet {
     /**
      * Constructs a new output network.
      * 
-     * @param lx HeronLX instance
+     * @param lx LX instance
      * @param outputNodes Array of nodes to output to, must be lx.total in
      *                       length, unused nodes may be null
      * @throws SocketException If the UDP socket can't be constructed
      */
-    public Kinet(HeronLX lx, KinetNode[] outputNodes) throws SocketException {
+    public Kinet(LX lx, KinetNode[] outputNodes) throws SocketException {
         this.lx = lx;
         this.outputNodes = outputNodes;
         this.outputPorts = new ArrayList<KinetPort>();

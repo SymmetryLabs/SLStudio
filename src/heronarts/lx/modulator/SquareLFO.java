@@ -16,7 +16,7 @@ package heronarts.lx.modulator;
 /**
  * Simple square wave LFO. Not damped. Oscillates between a low and high value.
  */
-public class SquareLFO extends RangeModulator {
+public class SquareLFO extends LXRangeModulator {
 
     /**
      * Constructs a SquareLFO

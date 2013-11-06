@@ -19,7 +19,7 @@ import heronarts.lx.LXUtils;
  * A triangular LFO is a simple linear modulator that oscillates between a low
  * and hi value over a specified time period.
  */
-public class TriangleLFO extends RangeModulator {
+public class TriangleLFO extends LXRangeModulator {
 
     /**
      * Constructs a TriangleLFO

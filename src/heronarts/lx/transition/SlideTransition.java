@@ -14,7 +14,7 @@
 package heronarts.lx.transition;
 
 
-import heronarts.lx.HeronLX;
+import heronarts.lx.LX;
 
 import java.lang.Math;
 
@@ -31,11 +31,11 @@ public class SlideTransition extends LXTransition {
     
     private final Direction direction;
     
-    public SlideTransition(HeronLX lx) {
+    public SlideTransition(LX lx) {
         this(lx, Direction.RIGHT);
     }
         
-    public SlideTransition(HeronLX lx, Direction direction) {
+    public SlideTransition(LX lx, Direction direction) {
         super(lx);
         this.direction = direction;
     }
