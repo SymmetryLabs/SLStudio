@@ -13,8 +13,17 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.FixedParameter;
 import heronarts.lx.control.LXParameter;
 
+/**
+ * An LXPeriodicModulator is a modulator that moves through a cycle in a given
+ * amount of time. It may then repeat the cycle, or perform it once. The values
+ * are computed based upon a position in the cycle, internally referred to as
+ * a basis, which moves from 0 to 1. This can be thought of as equivalent to an
+ * angle moving from 0 to two times pi. The period itself is a parameter which
+ * may be a modulator or otherwise.
+ */
 public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
@@ -35,22 +44,8 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * The number of milliseconds in the period of this modulator.
      */
-    protected double periodMs = 0;
-
-    /**
-     * Another modulator which automatically modifies the period of this one.
-     */
-    private LXModulator periodModulator = null;
-    
-    /**
-     * A parameter to modulate the period
-     */
-    private LXParameter periodParameter = null;
-    
-    private double minPeriodMs = 0;
-    
-    private double maxPeriodMs = 0;
-    
+    private LXParameter period;
+        
     /**
      * Utility constructor with period
      * 
@@ -58,10 +53,27 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @param periodMs Oscillation period, in milliseconds
      */
     protected LXPeriodicModulator(String label, double periodMs) {
-        super(label);
-        this.periodMs = periodMs;
+        this(label, new FixedParameter(periodMs));
     }
     
+    /**
+     * Utility constructor with period
+     * 
+     * @param label Label
+     * @param period Parameter for period
+     */
+    protected LXPeriodicModulator(String label, LXParameter period) {
+        super(label);
+        this.period = period;
+    }
+    
+    /**
+     * Sets whether the modulator should loop after it completes a cycle or halt
+     * at the end position.
+     * 
+     * @param looping Whether to loop
+     * @return this, for method chaining
+     */
     protected LXPeriodicModulator setLooping(boolean looping) {
         this.looping = looping;
         return this;
@@ -136,7 +148,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @return Modulator, for method chaining;
      */
     public final LXPeriodicModulator setPeriod(double periodMs) {
-        this.periodMs = periodMs;
+        this.period = new FixedParameter(periodMs);
         return this;
     }
     
@@ -144,7 +156,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @return The period of this modulator
      */
     public final double getPeriod() {
-        return this.periodMs;
+        return this.period.getValue();
     }
     
     /**
@@ -158,7 +170,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @deprecated Use getPeriod()
      */
     @Deprecated public final double getDuration() {
-        return this.getPeriod();
+        return getPeriod();
     }
 
     /**
@@ -168,37 +180,14 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @return This modulator, for method chaining
      */
     final public LXPeriodicModulator modulatePeriodBy(LXModulator periodModulator) {
-        this.periodParameter = null;
-        this.periodModulator = periodModulator;
+        this.period = periodModulator;
         return this;
     }
-    
-    /**
-     * Sets a parameter to tell this modulator what period to run at.
-     * 
-     * @param periodParameter The parameter to listen to
-     * @param minPeriodMs The shortest period in ms
-     * @param maxPerioMs The longest period in ms
-     * @return This modulator, for chaining
-     */
-    final public LXPeriodicModulator modulatePeriodBy(LXParameter periodParameter, double minPeriod, double maxPeriod) {
-        this.periodModulator = null;
-        this.periodParameter = periodParameter;
-        this.minPeriodMs = minPeriodMs;
-        this.maxPeriodMs = maxPeriodMs;
-        return this;
-    }
-    
+        
     @Override
     protected void onRun(double deltaMs) {
         this.finished = false;
-        if (this.periodModulator != null) {
-            this.setPeriod(this.periodModulator.getValue());
-        }
-        if (this.periodParameter != null) {
-            this.setPeriod(this.minPeriodMs + (this.maxPeriodMs-this.minPeriodMs)*this.periodParameter.getValue());
-        }
-        this.basis += deltaMs / this.periodMs;
+        this.basis += deltaMs / this.period.getValue();
         if (this.basis >= 1.) {
             if (this.looping) {
                 if (this.basis > 1) {

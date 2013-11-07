@@ -19,7 +19,9 @@ import heronarts.lx.control.LXParameter;
 /**
  * Utility subclass for modulators which oscillate in a range of values between a
  * minimum and a maximum. Includes a set of common methods to change the bounds
- * while the modulator is running. 
+ * while the modulator is running, keeping values within bounds. All scaling is
+ * done by this class, subclasses can just work in a normalized space between
+ * 0 and 1.
  */
 public abstract class LXRangeModulator extends LXPeriodicModulator {
 

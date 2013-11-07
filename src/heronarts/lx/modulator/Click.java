@@ -71,9 +71,10 @@ public class Click extends LXPeriodicModulator {
     
     @Override
     protected double computeValue(double deltaMs) {
+        double periodMs = getPeriod();
         this.elapsedMs += deltaMs;
-        if (this.elapsedMs >= this.periodMs) {
-            this.elapsedMs = this.elapsedMs % this.periodMs;
+        if (this.elapsedMs >= periodMs) {
+            this.elapsedMs = this.elapsedMs % periodMs;
             return 1;
         }
         return 0;
@@ -81,7 +82,8 @@ public class Click extends LXPeriodicModulator {
     
     @Override
     protected double computeBasis() {
-        // The basis is irrelevant and untracked for this modulator
+        // The basis is indeterminate for this modulator, it can only be
+        // specifically known when the value is 1.
         return getValue() < 1 ? 0 : 1;
     }
 }

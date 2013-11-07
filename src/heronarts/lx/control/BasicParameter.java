@@ -54,9 +54,10 @@ public class BasicParameter extends LXListenableParameter {
     }
         
     /**
+     * Basic parameter with label and value
      * 
-     * @param label
-     * @param value
+     * @param label Label
+     * @param value value
      */
     public BasicParameter(String label, double value) {
         this(label, value, 1);
@@ -71,7 +72,7 @@ public class BasicParameter extends LXListenableParameter {
     }
     
     public BasicParameter(String label, double value, double min, double max, Scaling scaling) {
-        super(label, value);
+        super(label, (value < min) ? min : ((value > max) ? max : value));
         this.range = new Range(min, max, scaling);
     }
     
