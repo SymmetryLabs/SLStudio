@@ -143,12 +143,14 @@ public abstract class LXModulator extends LXParameterized implements LXParameter
     
     /**
      * Helper for subclasses to update value in situations where it needs
-     * to be recomputed.
+     * to be recomputed. This cannot be overriden, and subclasses may assume
+     * that it ONLY updates the internal value without triggering any other
+     * recomputations.
      * 
      * @param value
      * @return this, for method chaining
      */
-    protected LXModulator updateValue(double value) {
+    protected final LXModulator updateValue(double value) {
         this.value = value;
         return this;
     }

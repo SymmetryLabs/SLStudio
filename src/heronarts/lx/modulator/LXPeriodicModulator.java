@@ -125,7 +125,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
 
     /**
-     * @deprecated Use modulatePeriodBy
+     * @deprecated Use setPeriod
      */
     @Deprecated public final LXPeriodicModulator modulateDurationBy(LXModulator durationModulator) {
         return this.setPeriod(durationModulator);
