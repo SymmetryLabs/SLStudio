@@ -13,6 +13,9 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.FixedParameter;
+import heronarts.lx.control.LXParameter;
+
 /**
  * A quadratic envelope moves from one value to another along a quadratic curve. 
  */
@@ -40,28 +43,68 @@ public class QuadraticEnvelope extends LXRangeModulator {
 
     private Ease ease = Ease.IN;
     
-    /**
-     * Constructs a new envelope
-     * 
-     * @param startValue Initial value
-     * @param endValue Ending value
-     * @param periodMs Period, in milliseconds
-     */
     public QuadraticEnvelope(double startValue, double endValue, double periodMs) {
+        this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+
+    public QuadraticEnvelope(FixedParameter startValue, double endValue, double periodMs) {
+        this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+    
+    public QuadraticEnvelope(double startValue, FixedParameter endValue, double periodMs) {
+        this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+    
+    public QuadraticEnvelope(double startValue, double endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+    
+    public QuadraticEnvelope(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public QuadraticEnvelope(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(startValue, new FixedParameter(endValue), periodMs);
+    }
+
+    public QuadraticEnvelope(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public QuadraticEnvelope(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
         this("QENV", startValue, endValue, periodMs);
     }
     
-    /**
-     * Constructs a new envelope
-     * 
-     * @param label Label
-     * @param startValue Initial value
-     * @param endValue Ending value
-     * @param periodMs Period, in milliseconds
-     */
     public QuadraticEnvelope(String label, double startValue, double endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+
+    public QuadraticEnvelope(String label, FixedParameter startValue, double endValue, double periodMs) {
+        this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+    
+    public QuadraticEnvelope(String label, double startValue, FixedParameter endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+
+    public QuadraticEnvelope(String label, double startValue, double endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+
+    public QuadraticEnvelope(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(label, startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public QuadraticEnvelope(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(label, startValue, new FixedParameter(endValue), periodMs);
+    }
+    
+    public QuadraticEnvelope(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public QuadraticEnvelope(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
         super(label, startValue, endValue, periodMs);
-        setLooping(false);
     }
     
     /**

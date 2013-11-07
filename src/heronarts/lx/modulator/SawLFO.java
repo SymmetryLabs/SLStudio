@@ -14,6 +14,8 @@
 package heronarts.lx.modulator;
 
 import heronarts.lx.LXUtils;
+import heronarts.lx.control.FixedParameter;
+import heronarts.lx.control.LXParameter;
 
 import java.lang.Math;
 
@@ -23,26 +25,67 @@ import java.lang.Math;
  */
 public class SawLFO extends LXRangeModulator {
 
-    /**
-     * Constructs a Saw LFO
-     * 
-     * @param startValue Initial value
-     * @param endValue Final value
-     * @param periodMs Period, in milliseconds
-     */
     public SawLFO(double startValue, double endValue, double periodMs) {
-        this("SAW", startValue, endValue, periodMs);
+        this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    /**
-     * Constructs a Saw LFO
-     *
-     * @param label Label
-     * @param startValue Initial value
-     * @param endValue Final value
-     * @param periodMs Period, in milliseconds
-     */
+    public SawLFO(FixedParameter startValue, double endValue, double periodMs) {
+        this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+    
+    public SawLFO(double startValue, FixedParameter endValue, double periodMs) {
+        this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+    
+    public SawLFO(double startValue, double endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+    
+    public SawLFO(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public SawLFO(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(startValue, new FixedParameter(endValue), periodMs);
+    }
+
+    public SawLFO(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public SawLFO(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this("SAW", startValue, endValue, periodMs);
+    }
+    
     public SawLFO(String label, double startValue, double endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+
+    public SawLFO(String label, FixedParameter startValue, double endValue, double periodMs) {
+        this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+    
+    public SawLFO(String label, double startValue, FixedParameter endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+
+    public SawLFO(String label, double startValue, double endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+
+    public SawLFO(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(label, startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public SawLFO(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(label, startValue, new FixedParameter(endValue), periodMs);
+    }
+    
+    public SawLFO(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public SawLFO(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
         super(label, startValue, endValue, periodMs);
     }
 

@@ -45,16 +45,6 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * The number of milliseconds in the period of this modulator.
      */
     private LXParameter period;
-        
-    /**
-     * Utility constructor with period
-     * 
-     * @param label Label
-     * @param periodMs Oscillation period, in milliseconds
-     */
-    protected LXPeriodicModulator(String label, double periodMs) {
-        this(label, new FixedParameter(periodMs));
-    }
     
     /**
      * Utility constructor with period
@@ -138,7 +128,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @deprecated Use modulatePeriodBy
      */
     @Deprecated public final LXPeriodicModulator modulateDurationBy(LXModulator durationModulator) {
-        return this.modulatePeriodBy(durationModulator);
+        return this.setPeriod(durationModulator);
     }
     
     /**
@@ -174,13 +164,13 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
 
     /**
-     * Sets another modulator to modulate the speed of this modulator
+     * Sets a parameter to the period of this modulator
      * 
-     * @param periodModulator Another modulator, which will update the period
+     * @param period Parameter for period value
      * @return This modulator, for method chaining
      */
-    final public LXPeriodicModulator modulatePeriodBy(LXModulator periodModulator) {
-        this.period = periodModulator;
+    final public LXPeriodicModulator setPeriod(LXParameter period) {
+        this.period = period;
         return this;
     }
         

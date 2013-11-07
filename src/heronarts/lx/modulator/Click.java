@@ -13,6 +13,9 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.FixedParameter;
+import heronarts.lx.control.LXParameter;
+
 /**
  * A click is a simple modulator that fires a value of 1 every time its period
  * has passed. Otherwise it always returns 0.
@@ -22,10 +25,18 @@ public class Click extends LXPeriodicModulator {
     private double elapsedMs = 0;
     
     public Click(double periodMs) {
+        this(new FixedParameter(periodMs));
+    }
+    
+    public Click(LXParameter periodMs) {
         this("CLICK", periodMs);
     }
     
     public Click(String label, double periodMs) {
+        this(label, new FixedParameter(periodMs));
+    }
+    
+    public Click(String label, LXParameter periodMs) {
         super(label, periodMs);
     }
 

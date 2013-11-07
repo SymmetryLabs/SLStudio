@@ -13,6 +13,7 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.FixedParameter;
 import heronarts.lx.control.LXListenableParameter;
 import heronarts.lx.control.LXParameter;
 
@@ -24,33 +25,15 @@ import heronarts.lx.control.LXParameter;
  * 0 and 1.
  */
 public abstract class LXRangeModulator extends LXPeriodicModulator {
+    
+    private LXParameter startValue;
+    private LXParameter endValue;
 
-    private LXListenableParameter startValueParameter = null;
-    private double minStartValue = 0;
-    private double maxStartValue = 0;
-    
-    private LXListenableParameter endValueParameter = null;
-    private double minEndValue = 0;
-    private double maxEndValue = 0;
-    
-    protected double startValue;
-    protected double endValue;
-    
-    private final LXParameter.Listener parameterListener = new LXParameter.Listener() {
-        public void onParameterChanged(LXParameter parameter) {
-            if (parameter == startValueParameter) {
-                setStartValue(minStartValue + (maxStartValue - minStartValue) * parameter.getValue());
-            } else if (parameter == endValueParameter) {
-                setEndValue(minEndValue + (maxEndValue - minEndValue) * parameter.getValue());
-            }
-        }
-    };
-    
-    protected LXRangeModulator(String label, double startValue, double endValue, double periodMs) {
+    protected LXRangeModulator(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, periodMs);
         this.startValue = startValue;
         this.endValue = endValue;
-        updateValue(startValue);
+        updateValue(startValue.getValue());
     }
     
     /**
@@ -63,8 +46,8 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
      */
     public final LXRangeModulator setRange(double startValue, double endValue, double periodMs) {
         this.setPeriod(periodMs);
-        this.startValue = startValue;
-        this.endValue = endValue;
+        this.startValue = new FixedParameter(startValue);
+        this.endValue = new FixedParameter(endValue);
         checkValueBounds();
         return this;
     }
@@ -77,7 +60,10 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
      * @return this
      */
     public final LXRangeModulator setRange(double startValue, double endValue) {
-        return setRange(startValue, endValue, getPeriod());
+        this.startValue = new FixedParameter(startValue);
+        this.endValue = new FixedParameter(endValue);
+        checkValueBounds();
+        return this;
     }
     
     /**
@@ -87,7 +73,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
      * @return this
      */
     public final LXRangeModulator setStartValue(double startValue) {
-        return setRange(startValue, this.endValue);
+        return setStartValue(new FixedParameter(startValue));
     }
     
     /**
@@ -97,7 +83,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
      * @return this
      */
     public final LXRangeModulator setEndValue(double endValue) {
-        return setRange(this.startValue, endValue);
+        return setEndValue(new FixedParameter(endValue));
     }
     
     /**
@@ -124,9 +110,17 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
         return setRange(getValue(), endValue, periodMs);
     }
 
+    /**
+     * After an update to the start or end value, this method is invoked to confirm
+     * that the current value is still in bounds. If it is not, it is pulled to the
+     * nearest boundary. If it is in bounds, we update the basis so that there is
+     * not a discontinuous "jump" on the next cycle.
+     */
     private void checkValueBounds() {
-        double min = Math.min(this.startValue, this.endValue);
-        double max = Math.max(this.startValue, this.endValue);        
+        double sv = this.startValue.getValue();
+        double ev = this.endValue.getValue();
+        double min = Math.min(sv, ev);
+        double max = Math.max(sv, ev);    
         if (getValue() < min) {
             this.setValue(min);
         } else if (getValue() > max) {
@@ -137,55 +131,35 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
     }
     
     /**
-     * Assigns a parameter to modulate the start value of this modulator. The
-     * parameter should have a value between 0 and 1, which will be used to
-     * interpolate the start value. 
+     * Assigns a parameter to modulate the start value of this modulator.
      * 
-     * @param startValueParameter A listenable parameter to modify the start value
-     * @param minStartValue The low start value
-     * @param maxStartValue The high start value
+     * @param startValue A parameter to modify the start value
      * @return this
      */
-    public LXRangeModulator modulateStartValueBy(LXListenableParameter startValueParameter, double minStartValue, double maxStartValue) {
-        if (this.startValueParameter != null) {
-            this.startValueParameter.removeListener(this.parameterListener); 
-        }
-        this.startValueParameter = startValueParameter;
-        this.minStartValue = minStartValue;
-        this.maxStartValue = maxStartValue;
-        if (this.startValueParameter != null) {
-            this.startValueParameter.addListener(this.parameterListener);
-        }
+    public LXRangeModulator setStartValue(LXParameter startValue) {
+        this.startValue = startValue;
+        checkValueBounds();
         return this;
     }
     
     /**
-     * Assigns a parameter to modulate the end value of this modulator. The
-     * parameter should have a value between 0 and 1, which will be used to
-     * interpolate the end value. 
+     * Assigns a parameter to modulate the end value of this modulator.
      * 
-     * @param endValueParameter A listenable parameter to modify the end value
-     * @param minEndValue The low end value
-     * @param maxEndValue The high end value
+     * @param endValue A parameter to modify the start value
      * @return this
      */
-    public LXRangeModulator modulateEndValueBy(LXListenableParameter endValueParameter, double minEndValue, double maxEndValue) {
-        if (this.endValueParameter != null) {
-            this.endValueParameter.removeListener(this.parameterListener);
-        }
-        this.endValueParameter = endValueParameter;
-        this.minEndValue = minEndValue;
-        this.maxEndValue = maxEndValue;
-        if (this.endValueParameter != null) {
-            this.endValueParameter.addListener(this.parameterListener);
-        }
+    public LXRangeModulator setEndValue(LXParameter endValue) {
+        this.endValue = endValue;
+        checkValueBounds();
         return this;
     }
     
     @Override
     public LXModulator setValue(double value) {
-        double min = Math.min(this.startValue, this.endValue);
-        double max = Math.max(this.startValue, this.endValue);        
+        double sv = this.startValue.getValue();
+        double ev = this.endValue.getValue();
+        double min = Math.min(sv, ev);
+        double max = Math.max(sv, ev);    
         if (value < min) {
             super.setValue(min);
         } else if (value > max) {
@@ -198,18 +172,22 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
     
     @Override
     protected final double computeValue(double deltaMs) {
-        if (this.startValue == this.endValue) {
-            return this.startValue;
+        double sv = this.startValue.getValue();
+        double ev = this.endValue.getValue();
+        if (sv == ev) {
+            return sv;
         }
-        return this.startValue + this.computeNormalizedValue(deltaMs) * (this.endValue - this.startValue);
+        return sv + this.computeNormalizedValue(deltaMs) * (ev - sv);
     }
 
     @Override
     protected final double computeBasis() {
-        if (this.startValue == this.endValue) {
+        double sv = this.startValue.getValue();
+        double ev = this.endValue.getValue();
+        if (sv == ev) {
             return 0;
         }
-        double normalizedValue = (getValue() - this.startValue) / (this.endValue - this.startValue);
+        double normalizedValue = (getValue() - sv) / (ev - sv);
         return computeBasisFromNormalizedValue(normalizedValue);
     }
     

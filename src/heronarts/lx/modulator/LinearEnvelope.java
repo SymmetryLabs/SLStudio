@@ -13,6 +13,9 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.FixedParameter;
+import heronarts.lx.control.LXParameter;
+
 import java.lang.Math;
 
 /**
@@ -21,40 +24,72 @@ import java.lang.Math;
  */
 public class LinearEnvelope extends SawLFO {
 
-    private final static String DEFAULT_LABEL = "LENV";
-    
-    /**
-     * @param startValue Start value, same as end value, no duration
-     */
     public LinearEnvelope(double startValue) {
-        this(DEFAULT_LABEL, startValue, startValue, 0);
+        this(startValue, startValue, 0);
     }
     
-    /**
-     * @param startValue Start value, same as end value, no duration
-     */
-    public LinearEnvelope(String label, double startValue) {
-        this(label, startValue, startValue, 0);
-    }
-    
-    /**
-     * @param startValue Initial value
-     * @param endValue End value
-     * @param periodMs Period, in milliseconds
-     */
     public LinearEnvelope(double startValue, double endValue, double periodMs) {
-        this(DEFAULT_LABEL, startValue, endValue, periodMs);
+        this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+
+    public LinearEnvelope(FixedParameter startValue, double endValue, double periodMs) {
+        this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    /**
-     * @param label Label
-     * @param startValue Initial value
-     * @param endValue End value
-     * @param periodMs Period, in milliseconds
-     */
+    public LinearEnvelope(double startValue, FixedParameter endValue, double periodMs) {
+        this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+    
+    public LinearEnvelope(double startValue, double endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+    
+    public LinearEnvelope(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public LinearEnvelope(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(startValue, new FixedParameter(endValue), periodMs);
+    }
+
+    public LinearEnvelope(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public LinearEnvelope(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this("LENV", startValue, endValue, periodMs);
+    }
+    
     public LinearEnvelope(String label, double startValue, double endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+
+    public LinearEnvelope(String label, FixedParameter startValue, double endValue, double periodMs) {
+        this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+    
+    public LinearEnvelope(String label, double startValue, FixedParameter endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+
+    public LinearEnvelope(String label, double startValue, double endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+
+    public LinearEnvelope(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(label, startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public LinearEnvelope(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(label, startValue, new FixedParameter(endValue), periodMs);
+    }
+    
+    public LinearEnvelope(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public LinearEnvelope(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
         super(label, startValue, endValue, periodMs);
-        setLooping(false);
     }
     
     /**

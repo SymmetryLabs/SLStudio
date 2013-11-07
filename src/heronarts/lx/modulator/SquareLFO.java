@@ -13,31 +13,75 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.FixedParameter;
+import heronarts.lx.control.LXParameter;
+
 /**
  * Simple square wave LFO. Not damped. Oscillates between a low and high value.
  */
 public class SquareLFO extends LXRangeModulator {
 
-    /**
-     * Constructs a SquareLFO
-     * 
-     * @param startValue Initial value
-     * @param endValue Final value
-     * @param periodMs Period, in milliseconds
-     */
     public SquareLFO(double startValue, double endValue, double periodMs) {
-        this("SQUARE", startValue, endValue, periodMs);
+        this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    /**
-     * Constructs a SquareLFO
-     * 
-     * @param label Label
-     * @param startValue Initial value
-     * @param endValue Final value
-     * @param periodMs Period, in milliseconds
-     */
+    public SquareLFO(FixedParameter startValue, double endValue, double periodMs) {
+        this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+    
+    public SquareLFO(double startValue, FixedParameter endValue, double periodMs) {
+        this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+    
+    public SquareLFO(double startValue, double endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+    
+    public SquareLFO(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public SquareLFO(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(startValue, new FixedParameter(endValue), periodMs);
+    }
+
+    public SquareLFO(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public SquareLFO(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this("SQUARE", startValue, endValue, periodMs);
+    }
+    
     public SquareLFO(String label, double startValue, double endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+
+    public SquareLFO(String label, FixedParameter startValue, double endValue, double periodMs) {
+        this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
+    }
+    
+    public SquareLFO(String label, double startValue, FixedParameter endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
+    }
+
+    public SquareLFO(String label, double startValue, double endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
+    }
+
+    public SquareLFO(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+        this(label, startValue, endValue, new FixedParameter(periodMs));
+    }
+    
+    public SquareLFO(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+        this(label, startValue, new FixedParameter(endValue), periodMs);
+    }
+    
+    public SquareLFO(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+        this(label, new FixedParameter(startValue), endValue, periodMs);
+    }
+    
+    public SquareLFO(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
         super(label, startValue, endValue, periodMs);
     }
 

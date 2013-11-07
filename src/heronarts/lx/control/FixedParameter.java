@@ -19,12 +19,6 @@ package heronarts.lx.control;
  * that expect to use LXParameters.
  */
 public class FixedParameter implements LXParameter {
-
-    class FixedParameterException extends RuntimeException {
-        FixedParameterException() {
-            super("Cannot call setValue() on a FixedParameter");
-        }
-    }
     
     private final double value;
     
@@ -39,7 +33,7 @@ public class FixedParameter implements LXParameter {
 
     @Override
     public LXParameter setValue(double value) {
-        throw new RuntimeException("Cannot setValue on a FixedParameter");
+        throw new RuntimeException("Cannot invoke setValue on a FixedParameter");
     }
 
     @Override
