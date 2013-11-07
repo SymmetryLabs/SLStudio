@@ -105,6 +105,7 @@ public class QuadraticEnvelope extends LXRangeModulator {
     
     public QuadraticEnvelope(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
         super(label, startValue, endValue, periodMs);
+        setLooping(false);
     }
     
     /**

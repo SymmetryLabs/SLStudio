@@ -90,6 +90,7 @@ public class LinearEnvelope extends SawLFO {
     
     public LinearEnvelope(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
         super(label, startValue, endValue, periodMs);
+        setLooping(false);
     }
     
     /**

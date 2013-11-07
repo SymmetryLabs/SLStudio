@@ -5,7 +5,7 @@ import ddf.minim.*;
 
 void setup() {
   size(400, 200);
-  HeronLX lx = new HeronLX(this, 20, 1);
+  LX lx = new LX(this, 20, 1);
   lx.setPatterns(new LXPattern[] {
     new AcceleratorTest(lx),
     new ClickTest(lx),
@@ -16,6 +16,7 @@ void setup() {
     new SquareLFOTest(lx),
     new TriangleLFOTest(lx),
   });
+  lx.setSimulationEnabled(true);
 }
 
 void draw() {}
@@ -23,12 +24,12 @@ void draw() {}
 class AcceleratorTest extends LXPattern {
   Accelerator a = new Accelerator(lx.total/2, 5, -5);
   
-  AcceleratorTest(HeronLX lx) {
+  AcceleratorTest(LX lx) {
     super(lx);
     addModulator(a.trigger());
   }
   
-  public void run(int deltaMs) {
+  public void run(double deltaMs) {
     if (a.getValue() < 0) {
       a.trigger();
     }
@@ -45,12 +46,12 @@ class AcceleratorTest extends LXPattern {
 class ClickTest extends LXPattern {
   Click click = new Click(1000);
   
-  ClickTest(HeronLX lx) {
+  ClickTest(LX lx) {
     super(lx);
     addModulator(click.trigger());
   }
   
-  public void run(int deltaMs) {
+  public void run(double deltaMs) {
     for (int i = 0; i < colors.length; ++i) {
       colors[i] = color(
         lx.getBaseHuef(),
@@ -62,16 +63,16 @@ class ClickTest extends LXPattern {
 }
 
 abstract class EnvelopeTest extends LXPattern {
-  RangeModulator env;
-  Click click = new Click(2000);
+  LXRangeModulator env;
+  Click click = new Click(2500);
   
-  EnvelopeTest(HeronLX lx, RangeModulator rm) {
+  EnvelopeTest(LX lx, LXRangeModulator rm) {
     super(lx);
     addModulator(env = rm).trigger();
     addModulator(click.trigger());
   }
   
-  public void run(int deltaMs) {
+  public void run(double deltaMs) {
     if (click.click()) {
       env.setRangeFromHereTo(random(0, lx.total)).start();
     }
@@ -87,27 +88,27 @@ abstract class EnvelopeTest extends LXPattern {
 
 class LinearEnvelopeTest extends EnvelopeTest {
   
-  LinearEnvelopeTest(HeronLX lx) {
+  LinearEnvelopeTest(LX lx) {
     super(lx, new LinearEnvelope(0, lx.total, 1000));
   }
 }
 
 class QuadraticEnvelopeTest extends EnvelopeTest {
   
-  QuadraticEnvelopeTest(HeronLX lx) {
+  QuadraticEnvelopeTest(LX lx) {
     super(lx, new QuadraticEnvelope(0, lx.total, 1000).setEase(QuadraticEnvelope.Ease.BOTH));
   }
 }
 
 abstract class OscillatorTest extends LXPattern {
-  RangeModulator env;
+  LXRangeModulator env;
   
-  OscillatorTest(HeronLX lx, RangeModulator rm) {
+  OscillatorTest(LX lx, LXRangeModulator rm) {
     super(lx);
     addModulator(env = rm).trigger();
   }
   
-  public void run(int deltaMs) {
+  public void run(double deltaMs) {
     for (int i = 0; i < colors.length; ++i) {
       colors[i] = color(
         lx.getBaseHuef(),
@@ -119,25 +120,25 @@ abstract class OscillatorTest extends LXPattern {
 }
 
 class SawLFOTest extends OscillatorTest {
-  SawLFOTest(HeronLX lx) {
+  SawLFOTest(LX lx) {
     super(lx, new SawLFO(0, lx.total, 1000));
   }
 }
 
 class SinLFOTest extends OscillatorTest {
-  SinLFOTest(HeronLX lx) {
+  SinLFOTest(LX lx) {
     super(lx, new SinLFO(0, lx.total, 1000));
   }
 }
 
 class SquareLFOTest extends OscillatorTest {
-  SquareLFOTest(HeronLX lx) {
+  SquareLFOTest(LX lx) {
     super(lx, new SquareLFO(0, lx.total, 1000));
   }
 }
 
 class TriangleLFOTest extends OscillatorTest {
-  TriangleLFOTest(HeronLX lx) {
+  TriangleLFOTest(LX lx) {
     super(lx, new TriangleLFO(0, lx.total, 1000));
   }
 }

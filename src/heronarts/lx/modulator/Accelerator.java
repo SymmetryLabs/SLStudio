@@ -13,9 +13,13 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.control.FixedParameter;
+import heronarts.lx.control.LXParameter;
+
 /**
  * An accelerator is a free-running modulator that changes its value based
- * on velocity and acceleration.
+ * on velocity and acceleration, measured in units/second and units/second^2,
+ * respectively.
  */
 public class Accelerator extends LXModulator {
     
@@ -23,28 +27,22 @@ public class Accelerator extends LXModulator {
     private double initVelocity;
     
     private double velocity;
-    private double acceleration;
+    
+    private LXParameter acceleration;
 
-    /**
-     * Create an accelerator
-     * 
-     * @param initValue Initial value
-     * @param initVelocity Initial velocity
-     * @param acceleration Acceleration
-     */
     public Accelerator(double initValue, double initVelocity, double acceleration) {
-        this("ACCELERATOR", initValue, initVelocity, acceleration);
+        this(initValue, initVelocity, new FixedParameter(acceleration));
     }
-
-    /**
-     * Create an accelerator
-     * 
-     * @param label Label
-     * @param initValue Initial value
-     * @param initVelocity Initial velocity
-     * @param acceleration Acceleration
-     */
+    
+    public Accelerator(double initValue, double initVelocity, LXParameter acceleration) {
+        this("ACCEL", initValue, initVelocity, acceleration);
+    }
+    
     public Accelerator(String label, double initValue, double initVelocity, double acceleration) {
+        this(label, initValue, initVelocity, new FixedParameter(acceleration));
+    }
+    
+    public Accelerator(String label, double initValue, double initVelocity, LXParameter acceleration) {
         super(label);
         setValue(this.initValue = initValue);
         setSpeed(initVelocity, acceleration);
@@ -72,6 +70,24 @@ public class Accelerator extends LXModulator {
     }
     
     /**
+     * @return The current acceleration
+     */
+    public double getAcceleration() {
+        return this.acceleration.getValue();
+    }
+    
+    /**
+     * @return The current acceleration, as a float
+     */
+    public float getAccelerationf() {
+        return (float)this.getAcceleration();
+    }
+    
+    public Accelerator setSpeed(double initVelocity, double acceleration) {
+        return setSpeed(initVelocity, new FixedParameter(acceleration));
+    }
+    
+    /**
      * Sets both the velocity and acceleration of the modulator. Updates the
      * default values so that a future call to trigger() will reset to this
      * velocity.
@@ -80,7 +96,7 @@ public class Accelerator extends LXModulator {
      * @param acceleration Acceleration
      * @return this
      */
-    public Accelerator setSpeed(double initVelocity, double acceleration) {
+    public Accelerator setSpeed(double initVelocity, LXParameter acceleration) {
         this.velocity = this.initVelocity = initVelocity;
         this.acceleration = acceleration;
         return this;
@@ -97,21 +113,28 @@ public class Accelerator extends LXModulator {
         return this;
     }
     
+    public Accelerator setAcceleration(double acceleration) {
+        return setAcceleration(new FixedParameter(acceleration));
+    }
+    
     /**
      * Updates the acceleration.
      * 
      * @param acceleration New acceleration
      * @return this
      */
-    public Accelerator setAcceleration(double acceleration) {
+    public Accelerator setAcceleration(LXParameter acceleration) {
         this.acceleration = acceleration;
         return this;
     }
     
     @Override
     protected double computeValue(double deltaMs) {
-        this.velocity += this.acceleration * deltaMs / 1000.0;
-        return this.getValue() + this.velocity * deltaMs / 1000.0;
+        double a = getAcceleration();
+        double dt = deltaMs / 1000.;
+        // v(t) = v(0) + a*t
+        this.velocity += a*dt;
+        // s(t) = s(0) + v*t + (1/2)a*t^2
+        return this.getValue() + this.velocity * dt + 0.5 * a * dt * dt;
     }
-    
 }
