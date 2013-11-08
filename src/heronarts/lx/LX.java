@@ -191,6 +191,8 @@ public class LX {
         public boolean keyboardTempo = false;
     }
     
+    private long drawNanos;
+    
     private final Flags flags = new Flags();
 
     /**
@@ -308,6 +310,15 @@ public class LX {
             this.minim.stop();
             this.minim = null;
         }
+    }
+    
+    /**
+     * The number of nanoseconds the last frame to to render.
+     * 
+     * @return Number of nanoseconds the last frame took
+     */
+    public long drawNanos() {
+        return this.drawNanos;
     }
     
     /**
@@ -971,6 +982,7 @@ public class LX {
      * run cycle.
      */
     public void draw() {
+        long drawStart = System.nanoTime();
         if (this.client != null) {
             this.client.receive();
         }
@@ -994,6 +1006,7 @@ public class LX {
         if (this.flags.showFramerate) {
             System.out.println("Framerate: " + this.applet.frameRate);
         }
+        drawNanos = System.nanoTime() - drawStart;
     }
     
     private void keyEvent2x(processing.event.KeyEvent e) {
