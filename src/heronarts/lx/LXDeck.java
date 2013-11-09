@@ -47,6 +47,12 @@ public class LXDeck {
         public void faderTransitionDidChange(LXDeck deck, LXTransition faderTransition) {}
     }
     
+    public class Timer {
+        public long runNanos = 0;
+    }
+    
+    public final Timer timer = new Timer();
+    
     private final LX lx;
     
     /**
@@ -66,7 +72,7 @@ public class LXDeck {
     
     private LXTransition transition = null;
     private long transitionMillis = 0;
-
+    
     private final List<Listener> listeners = new ArrayList<Listener>();
     
     LXDeck(LX lx, int index, LXPattern[] patterns) {
@@ -112,7 +118,7 @@ public class LXDeck {
             }
         }
     }
-    
+        
     public final BasicParameter getFader() {
         return this.fader;
     }
@@ -256,6 +262,8 @@ public class LXDeck {
     }
     
     synchronized void run(long nowMillis, double deltaMs) {
+        long runStart = System.nanoTime();
+        
         // Run active pattern
         this.getActivePattern().go(deltaMs);
         
@@ -279,6 +287,8 @@ public class LXDeck {
                 this.goNext();
             }
         }
+        
+        this.timer.runNanos = System.nanoTime() - runStart;
     }
 
     public synchronized int[] getColors() {

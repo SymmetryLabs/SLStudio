@@ -32,6 +32,12 @@ public abstract class LXEffect extends LXLayer {
     private final boolean momentary;
     protected boolean enabled = false;
 
+    public class Timer {
+        public long runNanos = 0;
+    }
+    
+    public final Timer timer = new Timer();
+    
     protected LXEffect(LX lx) {
         this(lx, false);
     }
@@ -117,6 +123,7 @@ public abstract class LXEffect extends LXLayer {
      * @param colors Array of this frame's colors 
      */
     public final void run(double deltaMs, int[] colors) {
+        long runStart = System.nanoTime();
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
@@ -124,6 +131,7 @@ public abstract class LXEffect extends LXLayer {
         for (LXLayer layer : this.layers) {
             layer.run(deltaMs, colors);
         }
+        this.timer.runNanos = System.nanoTime() - runStart;
     }
     
     /**

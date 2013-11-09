@@ -191,7 +191,15 @@ public class LX {
         public boolean keyboardTempo = false;
     }
     
-    private long drawNanos;
+    public class Timer {        
+        public long drawNanos = 0;
+        public long clientNanos = 0;
+        public long engineNanos = 0;
+        public long simulationNanos = 0;
+        public long kinetNanos = 0;
+    }
+    
+    public final Timer timer = new Timer();
     
     private final Flags flags = new Flags();
 
@@ -310,15 +318,6 @@ public class LX {
             this.minim.stop();
             this.minim = null;
         }
-    }
-    
-    /**
-     * The number of nanoseconds the last frame to to render.
-     * 
-     * @return Number of nanoseconds the last frame took
-     */
-    public long drawNanos() {
-        return this.drawNanos;
     }
     
     /**
@@ -983,9 +982,15 @@ public class LX {
      */
     public void draw() {
         long drawStart = System.nanoTime();
+        
+        this.timer.clientNanos = 0;
         if (this.client != null) {
+            long clientStart = System.nanoTime();
             this.client.receive();
+            this.timer.clientNanos = System.nanoTime() - clientStart;
         }
+        
+        long engineStart = System.nanoTime();
         if (this.engine.isThreaded()) {
             // If the engine is threaded, it is running itself. We just need
             // to copy its current color buffer into our own in a thread-safe
@@ -997,16 +1002,27 @@ public class LX {
             this.engine.run();
             this.colors = this.engine.renderBuffer();
         }
+        this.timer.engineNanos = System.nanoTime() - engineStart;
+        
+        this.timer.kinetNanos = 0;
         if (this.kinet != null) {
+            long kinetStart = System.nanoTime();
             this.kinet.sendThrottledColors(this.colors);
+            this.timer.kinetNanos = System.nanoTime() - kinetStart;
         }
+        
+        this.timer.simulationNanos = 0;
         if (this.simulationEnabled) {
+            long simulationStart = System.nanoTime();
             this.simulation.draw(this.colors);
+            this.timer.simulationNanos = System.nanoTime() - simulationStart;
         }
+                
         if (this.flags.showFramerate) {
             System.out.println("Framerate: " + this.applet.frameRate);
         }
-        drawNanos = System.nanoTime() - drawStart;
+        
+        this.timer.drawNanos = System.nanoTime() - drawStart;
     }
     
     private void keyEvent2x(processing.event.KeyEvent e) {

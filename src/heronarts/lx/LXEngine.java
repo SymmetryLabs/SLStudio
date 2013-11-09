@@ -55,6 +55,15 @@ public class LXEngine {
     private final List<LXDeck> decks = new ArrayList<LXDeck>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();        
     
+    public class Timer {
+        public long runNanos = 0;
+        public long deckNanos = 0;
+        public long copyNanos = 0;
+        public long fxNanos = 0;
+    }
+    
+    public final Timer timer = new Timer();
+    
     /**
      * Utility class for a threaded engine to do buffer-flipping. One buffer
      * is actively being worked on, while another copy is held for shuffling
@@ -275,12 +284,18 @@ public class LXEngine {
     }
 
     public synchronized void run() {
+        long runStart = System.nanoTime();
+        
         // Compute elapsed time
         long nowMillis = System.currentTimeMillis();
         double deltaMs = nowMillis - this.lastMillis;
         this.lastMillis = nowMillis;
         
         if (this.paused) {
+            this.timer.deckNanos = 0;
+            this.timer.copyNanos = 0;
+            this.timer.fxNanos = 0;
+            this.timer.runNanos = System.nanoTime() - runStart;
             return;
         }
         
@@ -296,28 +311,39 @@ public class LXEngine {
         }
         
         // Run and blend all of our decks
+        long deckStart = System.nanoTime();
         int[] bufferColors = this.black;
         for (LXDeck deck : this.decks) {
             deck.run(nowMillis, deltaMs);
-            if (deck.getFader().getValue() >= 1) {
-                // Fully crossfaded, just use this deck
+            deck.getFaderTransition().timer.blendNanos = 0;
+            if (deck.getFader().getValue() == 0) {
+                // No blending on this deck, leave colors as they were
+            } else if (deck.getFader().getValue() >= 1) {
+                // Fully faded in, just use this deck
                 bufferColors = deck.getColors();
             } else {
-                // Apply the crossfader to this deck
+                // Apply the fader to this deck
                 deck.faderTransition.blend(bufferColors, deck.getColors(), deck.fader.getValue());
                 bufferColors = deck.faderTransition.getColors();
             }
         }
+        this.timer.deckNanos = System.nanoTime() - deckStart;
         
         // Copy colors into our own rendering buffer
+        long copyStart = System.nanoTime();
         for (int i = 0; i < bufferColors.length; ++i) {
             this.buffer.render[i] = bufferColors[i];
         }
+        this.timer.copyNanos = System.nanoTime() - copyStart;
                 
         // Apply effects in our rendering buffer
+        long fxStart = System.nanoTime();
         for (LXEffect fx : this.effects) {
             fx.run(deltaMs, this.buffer.render);
         }
+        this.timer.fxNanos = System.nanoTime() - fxStart;
+        
+        this.timer.runNanos = System.nanoTime() - runStart;
     }
     
     /**

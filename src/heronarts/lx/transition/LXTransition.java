@@ -50,10 +50,16 @@ public abstract class LXTransition extends LXComponent {
         INOUT
     }
     
-    final private static double DEFAULT_DURATION = 1000;
+    public class Timer {
+        public long blendNanos = 0;
+    }
     
-    final protected LX lx; 
-    final protected int[] colors;
+    private final static double DEFAULT_DURATION = 1000;
+    
+    public final Timer timer = new Timer();
+    
+    protected final LX lx; 
+    protected final int[] colors;
     
     private BasicParameter duration;
     private Ease ease;
@@ -151,7 +157,9 @@ public abstract class LXTransition extends LXComponent {
      * @param progress Progress of blend, from 0 to 1
      */
     public final void blend(int[] c1, int[] c2, double progress) {
+        long blendStart = System.nanoTime(); 
         this.computeBlend(c1, c2, this.ease(progress));
+        this.timer.blendNanos = System.nanoTime() - blendStart;
     }
     
     /**

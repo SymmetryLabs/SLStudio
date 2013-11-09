@@ -35,6 +35,11 @@ public abstract class LXPattern extends LXComponent {
     protected int intervalBegin = -1;
     protected int intervalEnd = -1;
     private boolean eligible = true;
+    private final Timer timer = new Timer();
+    
+    public class Timer {
+        public long goNanos = 0;
+    }
     
     protected LXPattern(LX lx) {
         this.lx = lx;
@@ -138,6 +143,7 @@ public abstract class LXPattern extends LXComponent {
     }
 
     public final void go(double deltaMs) {
+        long goStart = System.nanoTime();
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
@@ -148,6 +154,7 @@ public abstract class LXPattern extends LXComponent {
             }
             layer.run(deltaMs, this.colors);
         }
+        this.timer.goNanos = System.nanoTime() - goStart;
     }
     
     /**
