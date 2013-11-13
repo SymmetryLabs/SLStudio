@@ -25,31 +25,31 @@ public class SquareLFO extends LXRangeModulator {
         this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public SquareLFO(FixedParameter startValue, double endValue, double periodMs) {
+    public SquareLFO(LXParameter startValue, double endValue, double periodMs) {
         this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public SquareLFO(double startValue, FixedParameter endValue, double periodMs) {
+    public SquareLFO(double startValue, LXParameter endValue, double periodMs) {
         this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
     
-    public SquareLFO(double startValue, double endValue, FixedParameter periodMs) {
+    public SquareLFO(double startValue, double endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
     
-    public SquareLFO(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public SquareLFO(LXParameter startValue, LXParameter endValue, double periodMs) {
         this(startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public SquareLFO(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public SquareLFO(LXParameter startValue, double endValue, LXParameter periodMs) {
         this(startValue, new FixedParameter(endValue), periodMs);
     }
 
-    public SquareLFO(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SquareLFO(double startValue, LXParameter endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public SquareLFO(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SquareLFO(LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         this("SQUARE", startValue, endValue, periodMs);
     }
     
@@ -57,31 +57,31 @@ public class SquareLFO extends LXRangeModulator {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public SquareLFO(String label, FixedParameter startValue, double endValue, double periodMs) {
+    public SquareLFO(String label, LXParameter startValue, double endValue, double periodMs) {
         this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public SquareLFO(String label, double startValue, FixedParameter endValue, double periodMs) {
+    public SquareLFO(String label, double startValue, LXParameter endValue, double periodMs) {
         this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
 
-    public SquareLFO(String label, double startValue, double endValue, FixedParameter periodMs) {
+    public SquareLFO(String label, double startValue, double endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
 
-    public SquareLFO(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public SquareLFO(String label, LXParameter startValue, LXParameter endValue, double periodMs) {
         this(label, startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public SquareLFO(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public SquareLFO(String label, LXParameter startValue, double endValue, LXParameter periodMs) {
         this(label, startValue, new FixedParameter(endValue), periodMs);
     }
     
-    public SquareLFO(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SquareLFO(String label, double startValue, LXParameter endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public SquareLFO(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SquareLFO(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, startValue, endValue, periodMs);
     }
 

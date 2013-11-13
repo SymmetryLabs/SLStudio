@@ -29,31 +29,31 @@ public class SawLFO extends LXRangeModulator {
         this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public SawLFO(FixedParameter startValue, double endValue, double periodMs) {
+    public SawLFO(LXParameter startValue, double endValue, double periodMs) {
         this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public SawLFO(double startValue, FixedParameter endValue, double periodMs) {
+    public SawLFO(double startValue, LXParameter endValue, double periodMs) {
         this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
     
-    public SawLFO(double startValue, double endValue, FixedParameter periodMs) {
+    public SawLFO(double startValue, double endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
     
-    public SawLFO(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public SawLFO(LXParameter startValue, LXParameter endValue, double periodMs) {
         this(startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public SawLFO(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public SawLFO(LXParameter startValue, double endValue, LXParameter periodMs) {
         this(startValue, new FixedParameter(endValue), periodMs);
     }
 
-    public SawLFO(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SawLFO(double startValue, LXParameter endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public SawLFO(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SawLFO(LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         this("SAW", startValue, endValue, periodMs);
     }
     
@@ -61,31 +61,31 @@ public class SawLFO extends LXRangeModulator {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public SawLFO(String label, FixedParameter startValue, double endValue, double periodMs) {
+    public SawLFO(String label, LXParameter startValue, double endValue, double periodMs) {
         this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public SawLFO(String label, double startValue, FixedParameter endValue, double periodMs) {
+    public SawLFO(String label, double startValue, LXParameter endValue, double periodMs) {
         this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
 
-    public SawLFO(String label, double startValue, double endValue, FixedParameter periodMs) {
+    public SawLFO(String label, double startValue, double endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
 
-    public SawLFO(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public SawLFO(String label, LXParameter startValue, LXParameter endValue, double periodMs) {
         this(label, startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public SawLFO(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public SawLFO(String label, LXParameter startValue, double endValue, LXParameter periodMs) {
         this(label, startValue, new FixedParameter(endValue), periodMs);
     }
     
-    public SawLFO(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SawLFO(String label, double startValue, LXParameter endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public SawLFO(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SawLFO(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, startValue, endValue, periodMs);
     }
 

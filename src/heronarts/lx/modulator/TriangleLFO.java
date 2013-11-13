@@ -28,31 +28,31 @@ public class TriangleLFO extends LXRangeModulator {
         this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public TriangleLFO(FixedParameter startValue, double endValue, double periodMs) {
+    public TriangleLFO(LXParameter startValue, double endValue, double periodMs) {
         this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public TriangleLFO(double startValue, FixedParameter endValue, double periodMs) {
+    public TriangleLFO(double startValue, LXParameter endValue, double periodMs) {
         this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
     
-    public TriangleLFO(double startValue, double endValue, FixedParameter periodMs) {
+    public TriangleLFO(double startValue, double endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
     
-    public TriangleLFO(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public TriangleLFO(LXParameter startValue, LXParameter endValue, double periodMs) {
         this(startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public TriangleLFO(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public TriangleLFO(LXParameter startValue, double endValue, LXParameter periodMs) {
         this(startValue, new FixedParameter(endValue), periodMs);
     }
 
-    public TriangleLFO(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public TriangleLFO(double startValue, LXParameter endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public TriangleLFO(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public TriangleLFO(LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         this("TRI", startValue, endValue, periodMs);
     }
     
@@ -60,31 +60,31 @@ public class TriangleLFO extends LXRangeModulator {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public TriangleLFO(String label, FixedParameter startValue, double endValue, double periodMs) {
+    public TriangleLFO(String label, LXParameter startValue, double endValue, double periodMs) {
         this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public TriangleLFO(String label, double startValue, FixedParameter endValue, double periodMs) {
+    public TriangleLFO(String label, double startValue, LXParameter endValue, double periodMs) {
         this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
 
-    public TriangleLFO(String label, double startValue, double endValue, FixedParameter periodMs) {
+    public TriangleLFO(String label, double startValue, double endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
 
-    public TriangleLFO(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public TriangleLFO(String label, LXParameter startValue, LXParameter endValue, double periodMs) {
         this(label, startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public TriangleLFO(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public TriangleLFO(String label, LXParameter startValue, double endValue, LXParameter periodMs) {
         this(label, startValue, new FixedParameter(endValue), periodMs);
     }
     
-    public TriangleLFO(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public TriangleLFO(String label, double startValue, LXParameter endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public TriangleLFO(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public TriangleLFO(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, startValue, endValue, periodMs);
     }
     

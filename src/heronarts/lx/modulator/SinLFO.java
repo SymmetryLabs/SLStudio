@@ -26,31 +26,31 @@ public class SinLFO extends LXRangeModulator {
         this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public SinLFO(FixedParameter startValue, double endValue, double periodMs) {
+    public SinLFO(LXParameter startValue, double endValue, double periodMs) {
         this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public SinLFO(double startValue, FixedParameter endValue, double periodMs) {
+    public SinLFO(double startValue, LXParameter endValue, double periodMs) {
         this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
     
-    public SinLFO(double startValue, double endValue, FixedParameter periodMs) {
+    public SinLFO(double startValue, double endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
     
-    public SinLFO(FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public SinLFO(LXParameter startValue, LXParameter endValue, double periodMs) {
         this(startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public SinLFO(FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public SinLFO(LXParameter startValue, double endValue, LXParameter periodMs) {
         this(startValue, new FixedParameter(endValue), periodMs);
     }
 
-    public SinLFO(double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SinLFO(double startValue, LXParameter endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public SinLFO(FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SinLFO(LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         this("SIN", startValue, endValue, periodMs);
     }
     
@@ -58,31 +58,31 @@ public class SinLFO extends LXRangeModulator {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public SinLFO(String label, FixedParameter startValue, double endValue, double periodMs) {
+    public SinLFO(String label, LXParameter startValue, double endValue, double periodMs) {
         this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
     
-    public SinLFO(String label, double startValue, FixedParameter endValue, double periodMs) {
+    public SinLFO(String label, double startValue, LXParameter endValue, double periodMs) {
         this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
 
-    public SinLFO(String label, double startValue, double endValue, FixedParameter periodMs) {
+    public SinLFO(String label, double startValue, double endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
 
-    public SinLFO(String label, FixedParameter startValue, FixedParameter endValue, double periodMs) {
+    public SinLFO(String label, LXParameter startValue, LXParameter endValue, double periodMs) {
         this(label, startValue, endValue, new FixedParameter(periodMs));
     }
     
-    public SinLFO(String label, FixedParameter startValue, double endValue, FixedParameter periodMs) {
+    public SinLFO(String label, LXParameter startValue, double endValue, LXParameter periodMs) {
         this(label, startValue, new FixedParameter(endValue), periodMs);
     }
     
-    public SinLFO(String label, double startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SinLFO(String label, double startValue, LXParameter endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), endValue, periodMs);
     }
     
-    public SinLFO(String label, FixedParameter startValue, FixedParameter endValue, FixedParameter periodMs) {
+    public SinLFO(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, startValue, endValue, periodMs);
     }
     
