@@ -15,8 +15,8 @@ package heronarts.lx.modulator;
 
 import heronarts.lx.LXUtils;
 
-import heronarts.lx.control.FixedParameter;
-import heronarts.lx.control.LXParameter;
+import heronarts.lx.parameter.FixedParameter;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * A triangular LFO is a simple linear modulator that oscillates between a low

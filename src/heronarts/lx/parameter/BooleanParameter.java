@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.control;
+package heronarts.lx.parameter;
 
 /**
  * A simple parameter that has a binary value of off or on

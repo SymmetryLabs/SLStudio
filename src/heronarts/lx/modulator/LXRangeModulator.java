@@ -13,9 +13,10 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.control.FixedParameter;
-import heronarts.lx.control.LXListenableParameter;
-import heronarts.lx.control.LXParameter;
+import heronarts.lx.parameter.FixedParameter;
+import heronarts.lx.parameter.LXListenableParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * Utility subclass for modulators which oscillate in a range of values between a
@@ -24,7 +25,7 @@ import heronarts.lx.control.LXParameter;
  * done by this class, subclasses can just work in a normalized space between
  * 0 and 1.
  */
-public abstract class LXRangeModulator extends LXPeriodicModulator {
+public abstract class LXRangeModulator extends LXPeriodicModulator implements LXNormalizedParameter {
     
     private LXParameter startValue;
     private LXParameter endValue;
@@ -155,7 +156,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
     }
     
     @Override
-    public LXModulator setValue(double value) {
+    public LXRangeModulator setValue(double value) {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
         double min = Math.min(sv, ev);
@@ -168,7 +169,29 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
             super.setValue(value);
         }
         return this;
-    }    
+    }
+    
+    public final LXRangeModulator setNormalized(double normalized) {
+        double sv = this.startValue.getValue();
+        double ev = this.endValue.getValue();
+        if (sv == ev) {
+            return setValue(sv);
+        }
+        return setValue(sv + (ev-sv) * normalized);
+    }
+    
+    public final double getNormalized() {
+        double sv = this.startValue.getValue();
+        double ev = this.endValue.getValue();
+        if (sv == ev) {
+            return sv;
+        }
+        return (getValue() - sv) / (ev - sv);
+    }
+    
+    public final float getNormalizedf() {
+        return (float) getNormalized();
+    }
     
     @Override
     protected final double computeValue(double deltaMs) {
@@ -187,8 +210,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator {
         if (sv == ev) {
             return 0;
         }
-        double normalizedValue = (getValue() - sv) / (ev - sv);
-        return computeBasisFromNormalizedValue(normalizedValue);
+        return computeBasisFromNormalizedValue(getNormalized());
     }
     
     /**

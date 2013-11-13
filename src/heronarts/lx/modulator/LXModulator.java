@@ -13,8 +13,8 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.control.LXParameter;
-import heronarts.lx.control.LXParameterized;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterized;
 
 import java.lang.Math;
 

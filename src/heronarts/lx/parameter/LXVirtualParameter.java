@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.control;
+package heronarts.lx.parameter;
 
 /**
  * A virtual parameter is one that wraps or forwards to another real

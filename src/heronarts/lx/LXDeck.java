@@ -13,7 +13,7 @@
 
 package heronarts.lx;
 
-import heronarts.lx.control.BasicParameter;
+import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.DissolveTransition;
 import heronarts.lx.transition.LXTransition;

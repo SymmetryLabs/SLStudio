@@ -15,7 +15,7 @@ package heronarts.lx.audio;
 
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.control.BasicParameter;
+import heronarts.lx.parameter.BasicParameter;
 
 import ddf.minim.AudioBuffer;
 

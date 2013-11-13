@@ -13,8 +13,8 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.control.FixedParameter;
-import heronarts.lx.control.LXParameter;
+import heronarts.lx.parameter.FixedParameter;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * A click is a simple modulator that fires a value of 1 every time its period

@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.control;
+package heronarts.lx.parameter;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -27,7 +27,7 @@ public abstract class LXListenableParameter implements LXParameter {
     
     private double defaultValue, value;
     
-    private final Set<Listener> listeners = new HashSet<Listener>();
+    private final Set<LXParameterListener> listeners = new HashSet<LXParameterListener>();
     
     protected LXListenableParameter() {
         this(null, 0);
@@ -46,14 +46,14 @@ public abstract class LXListenableParameter implements LXParameter {
         setValue(this.defaultValue = this.value = value);
     }
     
-    public final LXListenableParameter addListener(Listener listener) {
+    public final LXListenableParameter addListener(LXParameterListener listener) {
         if (listener != null) {
             listeners.add(listener);
         }
         return this;
     }
     
-    public final LXListenableParameter removeListener(Listener listener) {
+    public final LXListenableParameter removeListener(LXParameterListener listener) {
         listeners.remove(listener);
         return this;
     }
@@ -76,7 +76,7 @@ public abstract class LXListenableParameter implements LXParameter {
     public final LXParameter setValue(double value) {
         if (this.value != value) {
             this.value = updateValue(value);
-            for (Listener l : listeners) {
+            for (LXParameterListener l : listeners) {
                 l.onParameterChanged(this);
             }
         }

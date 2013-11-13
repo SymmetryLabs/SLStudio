@@ -13,8 +13,8 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.control.FixedParameter;
-import heronarts.lx.control.LXParameter;
+import heronarts.lx.parameter.FixedParameter;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * An LXPeriodicModulator is a modulator that moves through a cycle in a given

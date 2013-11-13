@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.control;
+package heronarts.lx.parameter;
 
 import java.util.Map;
 import java.util.HashMap;

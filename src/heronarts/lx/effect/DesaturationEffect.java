@@ -14,8 +14,8 @@
 package heronarts.lx.effect;
 
 import heronarts.lx.LX;
-import heronarts.lx.control.BasicParameter;
 import heronarts.lx.modulator.LinearEnvelope;
+import heronarts.lx.parameter.BasicParameter;
 
 public class DesaturationEffect extends LXEffect {
 

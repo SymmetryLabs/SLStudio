@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.control;
+package heronarts.lx.parameter;
 
 /**
  * This class provides a common interface for system components to have parameters
@@ -19,18 +19,6 @@ package heronarts.lx.control;
  * a pattern, effect, or transition.
  */
 public interface LXParameter {
-
-    /**
-     * A listener interface to be notified of changes to the parameter value.
-     */
-    public interface Listener {
-        /**
-         * Invoked when the value of a parameter is changed.
-         * 
-         * @param parameter The parameter that has changed its value
-         */
-        public void onParameterChanged(LXParameter parameter);
-    }
 
     /**
      * A method to reset the value of the parameter, if a default is available.

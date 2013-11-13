@@ -16,8 +16,8 @@ package heronarts.lx;
 import java.util.ArrayList;
 import java.util.List;
 
-import heronarts.lx.control.LXParameterized;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.parameter.LXParameterized;
 
 /**
  * Base class for system components that run in the engine, which have common

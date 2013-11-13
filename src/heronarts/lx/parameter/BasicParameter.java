@@ -11,14 +11,14 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.control;
+package heronarts.lx.parameter;
 
 import java.lang.Math;
 
 /**
  * Simple parameter class with a double value.
  */
-public class BasicParameter extends LXListenableParameter {
+public class BasicParameter extends LXListenableNormalizedParameter {
     
     public enum Scaling {
         LINEAR,

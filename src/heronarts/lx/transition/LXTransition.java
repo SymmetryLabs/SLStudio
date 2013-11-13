@@ -15,7 +15,7 @@ package heronarts.lx.transition;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
-import heronarts.lx.control.BasicParameter;
+import heronarts.lx.parameter.BasicParameter;
 
 /**
  * An object interface to blend two patterns together. All

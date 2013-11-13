@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.control;
+package heronarts.lx.parameter;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,7 +19,7 @@ import java.util.List;
 /**
  * Utility base class for objects that have parameters.
  */
-public abstract class LXParameterized implements LXParameter.Listener {
+public abstract class LXParameterized implements LXParameterListener {
     
     protected final List<LXParameter> parameters = new ArrayList<LXParameter>();
     
