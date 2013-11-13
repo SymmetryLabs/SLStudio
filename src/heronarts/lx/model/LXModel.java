@@ -14,9 +14,17 @@
 package heronarts.lx.model;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * An LXModel is a representation of a set of points in 3-d space. Each LXPoint
+ * corresponds to a single point. Models are comprised of Fixtures. An LXFixture
+ * specifies a set of points, the Model object takes some number of these and wraps
+ * them up with a few useful additional fields, such as the center position of all
+ * points and the min/max/range on each axis.
+ */
 public class LXModel implements LXFixture {
 
     /**
@@ -90,6 +98,22 @@ public class LXModel implements LXFixture {
     public final float zRange;
     
     /**
+     * Constructs a null model with no points
+     */
+    public LXModel() {
+        this(new LXFixture[] {});
+    }
+
+    /**
+     * Constructs a model from a list of points
+     * 
+     * @param points Points
+     */
+    public LXModel(List<LXPoint> points) {
+        this(new BasicFixture(points));
+    }
+    
+    /**
      * Constructs a model with one fixture
      * 
      * @param fixture Fixture
@@ -97,15 +121,15 @@ public class LXModel implements LXFixture {
     public LXModel(LXFixture fixture) {
         this(new LXFixture[] { fixture });
     }
-    
+        
     /**
      * Constructs a model with the given fixtures
      * 
      * @param fixtures Fixtures
      */
     public LXModel(LXFixture[] fixtures) {
-        List<LXPoint> _points = new ArrayList<LXPoint>();
         List<LXFixture> _fixtures = new ArrayList<LXFixture>();
+        List<LXPoint> _points = new ArrayList<LXPoint>();
         for (LXFixture fixture : fixtures) {
             _fixtures.add(fixture);
             for (LXPoint point : fixture.getPoints()) {
@@ -117,28 +141,30 @@ public class LXModel implements LXFixture {
         this.fixtures = Collections.unmodifiableList(_fixtures);
         
         float ax = 0, ay = 0, az = 0;
-        float _xMin = Float.MAX_VALUE;
-        float _xMax = Float.MIN_VALUE;
-        float _yMin = Float.MAX_VALUE;
-        float _yMax = Float.MIN_VALUE;
-        float _zMin = Float.MAX_VALUE;
-        float _zMax = Float.MIN_VALUE;
+        float _xMin = 0, _xMax = 0, _yMin = 0, _yMax = 0, _zMin = 0, _zMax = 0;
         
+        boolean firstPoint = true;
         for (LXPoint p : this.points) {
             ax += p.x;
-            _xMin = Math.min(_xMin, p.x);
-            _xMax = Math.max(_xMax, p.x);
             ay += p.y;
-            _yMin = Math.min(_yMin, p.x);
-            _yMax = Math.max(_yMax, p.x);
             az += p.z;
-            _zMin = Math.min(_zMin, p.x);
-            _zMax = Math.max(_zMax, p.x);
-            
+            if (firstPoint) {
+                _xMin = _xMax = p.x;
+                _yMin = _yMax = p.y;
+                _zMin = _zMax = p.z;
+            } else {
+                if (p.x < _xMin) _xMin = p.x;
+                if (p.x > _xMax) _xMax = p.x;
+                if (p.y < _yMin) _yMin = p.y;
+                if (p.y > _yMax) _yMax = p.y;
+                if (p.z < _zMin) _zMin = p.z;
+                if (p.z > _zMax) _zMax = p.z;
+            }
+            firstPoint = false;
         }
-        this.cx = ax / this.points.size();
-        this.cy = ay / this.points.size();
-        this.cz = az / this.points.size();
+        this.cx = ax / Math.max(1, this.points.size());
+        this.cy = ay / Math.max(1, this.points.size());
+        this.cz = az / Math.max(1, this.points.size());
         this.xMin = _xMin;
         this.xMax = _xMax;
         this.xRange = _xMax - _xMin;
@@ -148,12 +174,22 @@ public class LXModel implements LXFixture {
         this.zMin = _zMin;
         this.zMax = _zMax;
         this.zRange = _zMax - _zMin;
-        
-        LXPoint.counter = 0;
     }
     
     public List<LXPoint> getPoints() {
         return this.points;
+    }
+    
+    private final static class BasicFixture implements LXFixture {
+        private final List<LXPoint> points;
+        
+        private BasicFixture(List<LXPoint> points) {
+            this.points = points;
+        }
+        
+        public List<LXPoint> getPoints() {
+            return this.points;
+        }
     }
     
 }

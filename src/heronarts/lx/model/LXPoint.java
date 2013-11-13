@@ -63,5 +63,16 @@ public class LXPoint {
         this.z = z;
         this.index = counter++;
     }
+    
+    /**
+     * Construct a point in 3-d space
+     *  
+     * @param x
+     * @param y
+     * @param z
+     */
+    public LXPoint(double x, double y, double z) {
+        this((float) x, (float) y, (float) z);
+    }
 
 }
