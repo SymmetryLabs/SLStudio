@@ -13,6 +13,8 @@
 
 package heronarts.lx.model;
 
+import java.lang.Math;
+
 /**
  * A point is a node with an immutable position in space and a location in  
  */
@@ -34,6 +36,16 @@ public class LXPoint {
      * z coordinate of this point
      */
     public final float z;
+    
+    /**
+     * radius of this point from origin in the x-y plane
+     */
+    public final float r;
+    
+    /**
+     * angle of this point about the origin in the x-y plane
+     */
+    public final float theta;
     
     /**
      * Index of this point in the colors array
@@ -61,6 +73,8 @@ public class LXPoint {
         this.x = x;
         this.y = y;
         this.z = z;
+        this.r = (float) Math.sqrt(x*x + y*y);
+        this.theta = (float) ((Math.PI*2 + Math.atan2(y, x)) % (Math.PI*2));
         this.index = counter++;
     }
     
