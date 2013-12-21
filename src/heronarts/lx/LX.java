@@ -28,6 +28,7 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
+import heronarts.lx.ui.UI;
 
 import java.awt.Color;
 import java.lang.reflect.Method;
@@ -121,6 +122,11 @@ public class LX {
     public final LXEngine engine;
     
     /**
+     * The UI container.
+     */
+    public final UI ui;
+    
+    /**
      * Internal buffer for colors, owned by Processing animation thread.
      */
     private final int[] buffer;
@@ -196,6 +202,7 @@ public class LX {
         public long clientNanos = 0;
         public long engineNanos = 0;
         public long simulationNanos = 0;
+        public long uiNanos = 0;
         public long kinetNanos = 0;
     }
     
@@ -276,18 +283,20 @@ public class LX {
         
         this.desaturation = new DesaturationEffect(this);
         this.flash = new FlashEffect(this);
-                
+        
         applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
+
+        this.ui = new UI(applet);
         
         try {
-            // Processing 2.x detection
+            // Processing 2.x
             Method m = applet.getClass().getMethod("registerMethod", String.class, Object.class);
             System.out.println("LX detected Processing 2.x");
             m.invoke(applet, "draw", this);
             m.invoke(applet, "dispose", this);
             m.invoke(applet, "keyEvent", new KeyEvent2x());
         } catch (Exception x) {
-            // Processing 1.x compatibility
+            // Processing 1.x
             System.out.println("LX detected Processing 1.x");
             applet.registerDraw(this);
             applet.registerKeyEvent(new KeyEvent1x());
@@ -1011,12 +1020,17 @@ public class LX {
             this.timer.kinetNanos = System.nanoTime() - kinetStart;
         }
         
+        // TODO(mcslee): remove this and convert simulation into a UIObject
         this.timer.simulationNanos = 0;
         if (this.simulationEnabled) {
             long simulationStart = System.nanoTime();
             this.simulation.draw(this.colors);
             this.timer.simulationNanos = System.nanoTime() - simulationStart;
         }
+        
+        long uiStart = System.nanoTime();
+        this.ui.draw();
+        this.timer.uiNanos = System.nanoTime() - uiStart;
                 
         if (this.flags.showFramerate) {
             System.out.println("Framerate: " + this.applet.frameRate);

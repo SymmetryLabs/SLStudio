@@ -15,11 +15,22 @@ package heronarts.lx;
 
 import java.lang.Math;
 
+/**
+ * Helper class of useful utilities, many just mirror Processing built-ins but
+ * reduce the awkwardness of calling through applet in the library code.
+ */
 public class LXUtils {
     
+    /**
+     * Only used statically, need not be instantiated.
+     */
     private LXUtils() {}
     
     public static double constrain(double value, double min, double max) {
+        return value < min ? min : (value > max ? max : value);
+    }
+    
+    public static float constrainf(float value, float min, float max) {
         return value < min ? min : (value > max ? max : value);
     }
     
@@ -31,7 +42,7 @@ public class LXUtils {
         return min + Math.random() * (max-min);
     }
     
-        public static double distance(double x1, double y1, double x2, double y2) {
+    public static double distance(double x1, double y1, double x2, double y2) {
         return Math.sqrt((x1-x2)*(x1-x2) + (y1-y2)*(y1-y2));
     }
     
