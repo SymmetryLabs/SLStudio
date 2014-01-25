@@ -33,20 +33,31 @@ public class FrequencyGate extends LXModulator {
     public final BasicParameter threshold = new BasicParameter("THRSH", 0.8);
     
     /**
+     * The floor at which the trigger releases. Once triggered, the signal
+     * must fall below this amount before a new trigger may occur. This value is
+     * specified as a fraction of the threshold. So, a value of 0.75 means the signal
+     * must fall to 75% of the threshold value.
+     */
+    public final BasicParameter floor = new BasicParameter("FLOOR", 0.75);
+    
+    /**
      * The time the trigger takes to falloff from 1 to 0 after triggered, in milliseconds
      */
     public final BasicParameter falloff = new BasicParameter("FALLOFF", 200, 0, 1600);
     
     private final GraphicEQ eq;
     
+    private double level = 0;
+    
     private final LinearEnvelope signal = new LinearEnvelope(0); 
     
     private boolean peak = false;
     
-    private final int minBand;
-    private final int avgBands;
+    private boolean waitingForFloor = false;
     
-    private double lastValue = 0;
+    private final int minBand;
+    
+    private final int avgBands;
     
     /**
      * Constructs a gate that monitors a specified frequency band 
@@ -81,8 +92,8 @@ public class FrequencyGate extends LXModulator {
                 break;
             }
         }
-        minBand = _minBand;
-        avgBands = _avgBands;
+        this.minBand = _minBand;
+        this.avgBands = _avgBands;
     }
     
     /**
@@ -93,16 +104,39 @@ public class FrequencyGate extends LXModulator {
         return this.peak;
     }
     
+    /**
+     * Gets the level of the frequency range being monitored.
+     * 
+     * @return Level of range from 0-1
+     */
+    public double getLevel() {
+        return this.level;
+    }
+    
+    /**
+     * Gets the level of the frequency range being monitored.
+     * 
+     * @return Level of range from 0-1
+     */
+    public float getLevelf() {
+        return (float) getLevel();
+    }
+    
     protected double computeValue(double deltaMs) {
         double thresholdValue = this.threshold.getValue();
-        double thisValue = eq.getAverage(minBand, avgBands);
-        this.peak = (this.lastValue < thresholdValue) && (thisValue > thresholdValue);
+        double floorValue = thresholdValue * this.floor.getValue();
+        this.level = this.eq.getAverage(minBand, avgBands);
+        if (this.waitingForFloor) {
+            if (this.level < floorValue) {
+                this.waitingForFloor = false;
+            }
+        }
+        this.peak = !this.waitingForFloor && (this.level > thresholdValue);
         if (this.peak) {
+            this.waitingForFloor = true;
             this.signal.setRange(1, 0, this.falloff.getValue()).trigger();
         }
-        this.lastValue = thisValue;
         this.signal.run(deltaMs);
-        
         return signal.getValue();
     }
 }

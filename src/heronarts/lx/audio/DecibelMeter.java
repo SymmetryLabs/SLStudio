@@ -70,7 +70,7 @@ public class DecibelMeter extends LXModulator {
     public DecibelMeter(String label, AudioBuffer buffer) {
         super(label);
         this.buffer = buffer;
-        addParameter(this.gain = new BasicParameter("GAIN", 0, -36, 36));
+        addParameter(this.gain = new BasicParameter("GAIN", 0, -48, 48));
         addParameter(this.range = new BasicParameter("RANGE", 72, 6, 96));
         addParameter(this.attack = new BasicParameter("ATTACK", 30, 0, 500));
         addParameter(this.release = new BasicParameter("RELEASE", 100, 0, 1600));

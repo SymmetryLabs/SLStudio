@@ -172,7 +172,7 @@ public class GraphicEQ extends DecibelMeter {
      * @param avgBands How many bands to average
      * @return Average value of all these bands as a float
      */
-    public double getAveragef(int minBand, int avgBands) {
+    public float getAveragef(int minBand, int avgBands) {
         return (float) getAverage(minBand, avgBands);
     }
 
