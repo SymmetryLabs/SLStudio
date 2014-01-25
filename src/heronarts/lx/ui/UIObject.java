@@ -280,22 +280,10 @@ public abstract class UIObject {
      * @param dy relative change in y-position since last invocation
      */
     protected void onMouseDragged(float mx, float my, float dx, float dy) {}
-    
-    /**
-     * Invoked when the mouse is moved inside this object.
-     * 
-     * @param mx x-position in this object's coordinate space
-     * @param my y-position in this object's coordinate space
-     * @param dx relative change in x-position since last invocation
-     * @param dy relative change in y-position since last invocation
-     */
-    protected void onMouseMoved(float mx, float my, float dx, float dy) {
         
-    }
-    
     /**
      * Invoked when the mouse wheel is scrolled inside this object.
-     * 
+     *
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      * @param dx relative change in mouse wheel position

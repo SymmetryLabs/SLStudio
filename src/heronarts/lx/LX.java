@@ -295,12 +295,20 @@ public class LX {
             m.invoke(applet, "draw", this);
             m.invoke(applet, "dispose", this);
             m.invoke(applet, "keyEvent", new KeyEvent2x());
+            m.invoke(applet, "mouseEvent", new MouseEvent2x());
         } catch (Exception x) {
             // Processing 1.x
             System.out.println("LX detected Processing 1.x");
             applet.registerDraw(this);
             applet.registerKeyEvent(new KeyEvent1x());
+            applet.registerMouseEvent(new MouseEvent1x());
         }
+        
+        applet.addMouseWheelListener(new java.awt.event.MouseWheelListener() { 
+            public void mouseWheelMoved(java.awt.event.MouseWheelEvent mwe) { 
+                ui.mouseWheel(mwe.getX(), mwe.getY(), mwe.getWheelRotation());
+            }
+        });
     }
     
     public final class KeyEvent1x {
@@ -312,6 +320,18 @@ public class LX {
     public final class KeyEvent2x {
         public void keyEvent(processing.event.KeyEvent e) {
             keyEvent2x(e);
+        }
+    }
+    
+    public final class MouseEvent1x {
+        public void mouseEvent(java.awt.event.MouseEvent e) {
+            mouseEvent1x(e);
+        }
+    }
+    
+    public final class MouseEvent2x {
+        public void mouseEvent(processing.event.MouseEvent e) {
+            mouseEvent2x(e);
         }
     }
     
@@ -1098,6 +1118,24 @@ public class LX {
                 flash.enable();
                 break;
             }
+        }
+    }
+    
+    private void mouseEvent2x(processing.event.MouseEvent e) {
+        // TODO(mcslee): update for processing 2.0
+    }
+    
+    private void mouseEvent1x(java.awt.event.MouseEvent e) {
+        switch (e.getID()) {
+        case java.awt.event.MouseEvent.MOUSE_PRESSED:
+            ui.mousePressed(e.getX(), e.getY());
+            break;
+        case java.awt.event.MouseEvent.MOUSE_RELEASED:
+            ui.mouseReleased(e.getX(), e.getY());
+            break;
+        case java.awt.event.MouseEvent.MOUSE_DRAGGED:
+            ui.mouseDragged(e.getX(), e.getY());
+            break;
         }
     }
     
