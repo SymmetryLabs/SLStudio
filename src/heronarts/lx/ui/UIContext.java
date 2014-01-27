@@ -64,13 +64,13 @@ public class UIContext extends UIContainer {
         this.pg.smooth();
     }
 
-    final void draw(UI ui) {
+    final void draw() {
         if (!this.visible) {
             return;
         }
         if (this.needsRedraw || this.childNeedsRedraw) {
             this.pg.beginDraw();
-            this.draw(this.pg);
+            this.draw(this.ui, this.pg);
             this.pg.endDraw();
         }
         ui.applet.image(this.pg, this.x, this.y);

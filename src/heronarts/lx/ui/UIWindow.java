@@ -70,7 +70,7 @@ public class UIWindow extends UIContext {
         return this;
     }
     
-    protected void onDraw(PGraphics pg) {
+    protected void onDraw(UI ui, PGraphics pg) {
         // Draw a background under the whole window
         pg.noStroke();
         pg.fill(0xff444444);

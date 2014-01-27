@@ -222,15 +222,16 @@ public abstract class UIObject {
     /**
      * Draws this object to the graphics context.
      * 
-     * @param pg Graphics context
+     * @param ui UI
+     * @param pg graphics buffer
      */
-    final void draw(PGraphics pg) {
+    final void draw(UI ui, PGraphics pg) {
         if (!this.visible) {
             return;
         }
         if (this.needsRedraw) {
             this.needsRedraw = false;
-            onDraw(pg);
+            onDraw(ui, pg);
         }
         if (this.childNeedsRedraw) {
             this.childNeedsRedraw = false;
@@ -238,7 +239,7 @@ public abstract class UIObject {
                 if (this.needsRedraw || child.needsRedraw || child.childNeedsRedraw) {
                     pg.pushMatrix();
                     pg.translate(child.x, child.y);
-                    child.draw(pg);
+                    child.draw(ui, pg);
                     pg.popMatrix();
                 }
             }
@@ -249,9 +250,10 @@ public abstract class UIObject {
      * Invoked whenever this object needs to draw itself. Subclasses should override
      * to implement their drawing functionality.
      * 
-     * @param pg Graphics context to draw into
+     * @param ui UI
+     * @param pg PGraphics context
      */
-    protected void onDraw(PGraphics pg) {}
+    protected void onDraw(UI ui, PGraphics pg) {}
     
     /**
      * Invoked when the mouse is pressed within the bounds of this object.

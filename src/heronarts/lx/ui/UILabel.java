@@ -41,7 +41,7 @@ public class UILabel extends UIObject {
         super(x, y, w, h);
     }
 
-    protected void onDraw(PGraphics pg) {
+    protected void onDraw(UI ui, PGraphics pg) {
         pg.textAlign(PConstants.LEFT, PConstants.TOP);
         pg.textFont(this.font);
         pg.fill(this.color);

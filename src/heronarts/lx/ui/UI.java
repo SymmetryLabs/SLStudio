@@ -45,6 +45,41 @@ public class UI {
      */
     private PFont titleFont;
     
+    /**
+     * Default text color
+     */
+    private int textColor = 0xff999999;
+
+    /**
+     * Default background color
+     */
+    private int backgroundColor = 0xff444444;
+    
+    /**
+     * Default selected highlight color
+     */
+    private int highlightColor = 0xff669966;
+    
+    /**
+     * Default active highlight color
+     */
+    private int activeColor = 0xff666699;
+    
+    /**
+     * White color
+     */
+    public final int WHITE = 0xffffffff;
+    
+    /**
+     * Black color
+     */
+    public final int BLACK = 0xff000000;
+    
+    /**
+     * Creates a new UI instance
+     * 
+     * @param applet The PApplet
+     */
     public UI(PApplet applet) {
         this.applet = applet;
         this.itemFont = applet.createFont("Lucida Grande", 11);
@@ -126,11 +161,91 @@ public class UI {
     }
     
     /**
+     * Gets the default text color
+     * 
+     * @return default text color
+     */
+    public int getTextColor() {
+        return this.textColor;
+    }
+    
+    /**
+     * Sets the default text color for UI
+     * 
+     * @param color Color
+     * @return this UI
+     */
+    public UI setTextColor(int color) {
+        this.textColor = color;
+        return this;
+    }
+    
+    /**
+     * Gets background color
+     * 
+     * @return backgroundc olor
+     */
+    public int getBackgroundColor() {
+        return this.backgroundColor;
+    }
+    
+    /**
+     * Sets default background color
+     * 
+     * @param color color
+     * @return this UI
+     */
+    public UI setBackgroundColor(int color) {
+        this.backgroundColor = color;
+        return this;
+    }
+    
+    /**
+     * Gets highlight color
+     * 
+     * @return Highlight color
+     */
+    public int getHighlightColor() {
+        return this.highlightColor;
+    }
+    
+    /**
+     * Sets highlight color
+     * 
+     * @param color
+     * @return this UI
+     */
+    public UI setHighlightColor(int color) {
+        this.highlightColor = color;
+        return this;
+    }
+    
+    /**
+     * Get active color
+     * 
+     * @return Active color
+     */
+    public int getActiveColor() {
+        return this.activeColor;
+    }
+    
+    /**
+     * Set active color
+     * 
+     * @param color Color
+     * @return this UI
+     */
+    public UI setActiveColor(int color) {
+        this.activeColor = color;
+        return this;
+    }
+    
+    /**
      * Draws the UI
      */
     public final void draw() {
         for (UIContext context : this.contexts) {
-            context.draw(this);
+            context.draw();
         }
     }
     

@@ -1,0 +1,80 @@
+/**
+ * ##library.name##
+ * ##library.sentence##
+ * ##library.url##
+ *
+ * Copyright ##copyright## ##author##
+ * All Rights Reserved
+ * 
+ * @author      ##author##
+ * @modified    ##date##
+ * @version     ##library.prettyVersion## (##library.version##)
+ */
+
+package heronarts.lx.ui;
+
+import heronarts.lx.LXUtils;
+
+import processing.core.PConstants;
+import processing.core.PGraphics;
+
+public class UIIntegerBox extends UIObject {
+
+    private int minValue = 0;
+    private int maxValue = PConstants.MAX_INT;
+    private int value = 0;
+
+    UIIntegerBox(float x, float y, float w, float h) {
+        super(x, y, w, h);
+    }
+
+    public UIIntegerBox setRange(int minValue, int maxValue) {
+        this.minValue = minValue;
+        this.maxValue = maxValue;
+        setValue(LXUtils.constrain(this.value, minValue, maxValue));
+        return this;
+    }
+
+    protected void onDraw(UI ui, PGraphics pg) {
+        pg.stroke(0xff666666);
+        pg.fill(0xff222222);
+        pg.rect(0, 0, this.width, this.height);
+        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
+        pg.textFont(ui.getItemFont());
+        pg.fill(ui.getTextColor());
+        pg.text("" + this.value, this.width / 2, this.height / 2);
+    }
+
+    protected void onValueChange(int value) {
+    }
+
+    float dAccum = 0;
+
+    protected void onMousePressed(float mx, float my) {
+        this.dAccum = 0;
+    }
+
+    protected void onMouseDragged(float mx, float my, float dx, float dy) {
+        this.dAccum -= dy;
+        int offset = (int) (this.dAccum / 5);
+        this.dAccum = this.dAccum - (offset * 5);
+        setValue(this.value + offset);
+    }
+
+    public int getValue() {
+        return this.value;
+    }
+
+    public UIIntegerBox setValue(int value) {
+        if (this.value != value) {
+            int range = (this.maxValue - this.minValue + 1);
+            while (value < this.minValue) {
+                value += range;
+            }
+            this.value = this.minValue + (value - this.minValue) % range;
+            this.onValueChange(this.value);
+            redraw();
+        }
+        return this;
+    }
+}
