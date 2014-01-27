@@ -11,10 +11,12 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.ui;
+package heronarts.lx.ui.component;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
+import heronarts.lx.ui.UI;
+import heronarts.lx.ui.UIObject;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -11,8 +11,10 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.ui;
+package heronarts.lx.ui.component;
 
+import heronarts.lx.ui.UI;
+import heronarts.lx.ui.UIObject;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 

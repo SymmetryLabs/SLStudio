@@ -11,11 +11,12 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.ui;
+package heronarts.lx.ui.component;
 
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.ui.UIObject;
 
 import processing.core.PGraphics;
 

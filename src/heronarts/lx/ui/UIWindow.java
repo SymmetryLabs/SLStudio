@@ -14,6 +14,7 @@
 package heronarts.lx.ui;
 
 import heronarts.lx.LXUtils;
+import heronarts.lx.ui.component.UILabel;
 
 import processing.core.PGraphics;
 
@@ -73,7 +74,7 @@ public class UIWindow extends UIContext {
     protected void onDraw(UI ui, PGraphics pg) {
         // Draw a background under the whole window
         pg.noStroke();
-        pg.fill(0xff444444);
+        pg.fill(ui.getBackgroundColor());
         pg.stroke(0xff292929);
         pg.rect(0, 0, this.width-1, this.height-1);
     }
