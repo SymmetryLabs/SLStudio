@@ -146,6 +146,24 @@ public abstract class UIObject {
         redraw();
         return this;
     }
+    
+    /**
+     * Width
+     * 
+     * @return width
+     */
+    public final float getWidth() {
+        return this.width;
+    }
+    
+    /**
+     * Height 
+     * 
+     * @return height
+     */
+    public final float getHeight() {
+        return this.height;
+    }
 
     /**
      * Whether a given point, in the container's coordinate space, is within

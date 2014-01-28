@@ -31,9 +31,14 @@ public class UI {
     final PApplet applet;
     
     /**
-     * All the contexts in this UI
+     * All the layers in this UI
      */
-    private final List<UIContext> contexts = new ArrayList<UIContext>();
+    private final List<UILayer> layers = new ArrayList<UILayer>();
+    
+    /**
+     * Layer that focus is on
+     */
+    private UILayer focusLayer = null;
     
     /**
      * Default item font in this UI
@@ -89,11 +94,11 @@ public class UI {
     /**
      * Add a context to this UI
      * 
-     * @param context UI context
+     * @param layer UI layer
      * @return this UI
      */
-    public UI addContext(UIContext context) {
-        this.contexts.add(context);
+    public UI addLayer(UILayer layer) {
+        this.layers.add(layer);
         return this;
     }
     
@@ -103,20 +108,20 @@ public class UI {
      * @param context UI context
      * @return this UI
      */
-    public UI removeContext(UIContext context) {
-        this.contexts.remove(context);
+    public UI removeLayer(UILayer layer) {
+        this.layers.remove(layer);
         return this;
     }
     
     /**
-     * Brings a context to the top of the UI stack
+     * Brings a layer to the top of the UI stack
      * 
-     * @param context UI context
+     * @param layer UI layer
      * @return this UI
      */
-    public UI bringToTop(UIContext context) {
-        removeContext(context);
-        addContext(context);
+    public UI bringToTop(UILayer layer) {
+        removeLayer(layer);
+        addLayer(layer);
         return this;
     }
     
@@ -244,32 +249,56 @@ public class UI {
      * Draws the UI
      */
     public final void draw() {
-        for (UIContext context : this.contexts) {
-            context.draw();
+        for (UILayer layer : this.layers) {
+            layer.draw();
         }
     }
     
     public final void mousePressed(int x, int y) {
-        for (UIContext context : this.contexts) {
-            context.mousePressed(x, y);
+        this.focusLayer = null;
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            UILayer layer = this.layers.get(i);
+            if (layer.mousePressed(x, y)) {
+                this.focusLayer = layer;
+                break;
+            }
         }
     }
     
     public final void mouseReleased(int x, int y) {
-        for (UIContext context : this.contexts) {
-            context.mouseReleased(x, y);
+        if (this.focusLayer != null) {
+            this.focusLayer.mouseReleased(x, y);
+            this.focusLayer = null;
         }
     }
     
     public final void mouseDragged(int x, int y) {
-        for (UIContext context : this.contexts) {
-            context.mouseDragged(x, y);
+        if (this.focusLayer != null) {
+            this.focusLayer.mouseDragged(x, y);
         }
     }
     
     public final void mouseWheel(int x, int y, int rotation) {
-        for (UIContext context : this.contexts) {
-            context.mouseWheel(x, y, rotation);
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            UILayer layer = this.layers.get(i);
+            if (layer.mouseWheel(x, y, rotation)) {
+                break;
+            }
         }
+    }
+    
+    public static String uiClassName(Object o, String suffix) {
+        String s = o.getClass().getName();
+        int li;
+        if ((li = s.lastIndexOf(".")) > 0) {
+            s = s.substring(li + 1);
+        }
+        if ((li = s.indexOf("$")) != -1) {
+            s = s.substring(li + 1);
+        }
+        if ((suffix != null) && ((li = s.indexOf(suffix)) != -1)) {
+            s = s.substring(0, li);
+        }
+        return s;
     }
 }

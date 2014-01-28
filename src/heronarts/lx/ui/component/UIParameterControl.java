@@ -20,41 +20,42 @@ import heronarts.lx.ui.UIObject;
 
 import processing.core.PGraphics;
 
-public abstract class UIParameterControl extends UIObject implements LXParameterListener {
-      
+public abstract class UIParameterControl extends UIObject implements
+        LXParameterListener {
+
     protected LXListenableNormalizedParameter parameter = null;
-        
-      protected UIParameterControl(float x, float y, float w, float h) {
+
+    protected UIParameterControl(float x, float y, float w, float h) {
         super(x, y, w, h);
-      }
-      
-      public void onParameterChanged(LXParameter parameter) {
+    }
+
+    public void onParameterChanged(LXParameter parameter) {
         redraw();
-      }
-      
-      protected double getNormalized() {
+    }
+
+    protected double getNormalized() {
         if (this.parameter != null) {
             return this.parameter.getNormalized();
         }
         return 0;
-      }
-      
-      protected UIParameterControl setNormalized(double normalized) {
+    }
+
+    protected UIParameterControl setNormalized(double normalized) {
         if (this.parameter != null) {
             this.parameter.setNormalized(normalized);
         }
         return this;
-      }
-      
-      public UIParameterControl setParameter(LXListenableNormalizedParameter parameter) {
+    }
+
+    public UIParameterControl setParameter(LXListenableNormalizedParameter parameter) {
         if (this.parameter != null) {
             this.parameter.removeListener(this);
         }
         this.parameter = parameter;
         if (this.parameter != null) {
-          this.parameter.addListener(this);
+            this.parameter.addListener(this);
         }
         redraw();
         return this;
-      }
     }
+}

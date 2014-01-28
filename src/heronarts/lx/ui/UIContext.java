@@ -21,7 +21,7 @@ import processing.core.PConstants;
  * across frames and is only redrawn as necessary. It is simply bitmapped onto the
  * UI that is a part of.
  */
-public class UIContext extends UIContainer {
+public class UIContext extends UIContainer implements UILayer {
         
     /**
      * The UI that this belongs to.
@@ -64,7 +64,7 @@ public class UIContext extends UIContainer {
         this.pg.smooth();
     }
 
-    final void draw() {
+    public final void draw() {
         if (!this.visible) {
             return;
         }
@@ -73,10 +73,10 @@ public class UIContext extends UIContainer {
             this.draw(this.ui, this.pg);
             this.pg.endDraw();
         }
-        ui.applet.image(this.pg, this.x, this.y);
+        this.ui.applet.image(this.pg, this.x, this.y);
     }
 
-    boolean mousePressed(float mx, float my) {
+    public final boolean mousePressed(float mx, float my) {
         if (!this.visible) {
             return false;
         }
@@ -90,7 +90,7 @@ public class UIContext extends UIContainer {
         return false;
     }
 
-    boolean mouseReleased(float mx, float my) {
+    public final boolean mouseReleased(float mx, float my) {
         if (!this.visible) {
             return false;
         }
@@ -99,7 +99,7 @@ public class UIContext extends UIContainer {
         return true;
     }
 
-    boolean mouseDragged(float mx, float my) {
+    public final boolean mouseDragged(float mx, float my) {
         if (!this.visible) {
             return false;
         }
@@ -114,7 +114,7 @@ public class UIContext extends UIContainer {
         return false;
     }
 
-    boolean mouseWheel(float mx, float my, float delta) {
+    public final boolean mouseWheel(float mx, float my, float delta) {
         if (!this.visible) {
             return false;
         }

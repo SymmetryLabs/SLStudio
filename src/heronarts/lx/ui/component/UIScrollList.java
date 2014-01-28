@@ -27,7 +27,7 @@ import processing.core.PGraphics;
 
 public class UIScrollList extends UIObject {
 
-    public static interface ScrollItem {
+    public static interface Item {
         public boolean isSelected();
 
         public boolean isPending();
@@ -39,7 +39,7 @@ public class UIScrollList extends UIObject {
         public void onMouseReleased();
     }
 
-    public static abstract class AbstractScrollItem implements ScrollItem {
+    public static abstract class AbstractItem implements Item {
         public boolean isPending() {
             return false;
         }
@@ -54,7 +54,7 @@ public class UIScrollList extends UIObject {
         }
     }
 
-    private List<ScrollItem> items = new ArrayList<ScrollItem>();
+    private List<Item> items = new ArrayList<Item>();
 
     private int itemHeight = 20;
     private int scrollOffset = 0;
@@ -75,7 +75,7 @@ public class UIScrollList extends UIObject {
             if (i + this.scrollOffset >= this.items.size()) {
                 break;
             }
-            ScrollItem item = this.items.get(i + this.scrollOffset);
+            Item item = this.items.get(i + this.scrollOffset);
             int itemColor;
             int labelColor = ui.WHITE;
             if (item.isSelected()) {
@@ -111,7 +111,7 @@ public class UIScrollList extends UIObject {
     }
 
     private boolean scrolling = false;
-    private ScrollItem pressedItem = null;
+    private Item pressedItem = null;
 
     public void onMousePressed(float mx, float my) {
         this.pressedItem = null;
@@ -174,7 +174,7 @@ public class UIScrollList extends UIObject {
         redraw();
     }
 
-    public UIScrollList setItems(List<ScrollItem> items) {
+    public UIScrollList setItems(List<Item> items) {
         this.items = items;
         this.numVisibleItems = (int) (this.height / this.itemHeight);
         this.hasScroll = this.items.size() > this.numVisibleItems;
