@@ -13,6 +13,7 @@
 
 package heronarts.lx.ui.control;
 
+import heronarts.lx.LX;
 import heronarts.lx.LXDeck;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -31,7 +32,26 @@ public class UIPatternDeck extends UIWindow {
 
     private final static int NUM_KNOBS = 12;
     private final static int KNOBS_PER_ROW = 4;
+    
+    private final static int DEFAULT_WIDTH = 140;
+    private final static int DEFAULT_HEIGHT = 324;
 
+    public UIPatternDeck(UI ui, LX lx, float x, float y) {
+        this(ui, lx, "PATTERN", x, y);
+    }
+    
+    public UIPatternDeck(UI ui, LX lx, String label, float x, float y) {
+        this(ui, lx.engine.getDeck(0), label, x, y);
+    }
+    
+    public UIPatternDeck(UI ui, LXDeck deck, float x, float y) {
+        this(ui, deck, "PATTERN", x, y);
+    }
+    
+    public UIPatternDeck(UI ui, LXDeck deck, String label, float x, float y) {
+        this(ui, deck, label, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
+    }
+    
     public UIPatternDeck(UI ui, LXDeck deck, String label, float x, float y, float w, float h) {
         super(ui, label, x, y, w, h);
         this.deck = deck;

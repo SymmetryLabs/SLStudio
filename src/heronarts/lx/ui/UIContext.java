@@ -22,11 +22,11 @@ import processing.core.PConstants;
  * UI that is a part of.
  */
 public class UIContext extends UIContainer implements UILayer {
-        
+
     /**
-     * The UI that this belongs to.
+     * UI instance
      */
-    protected final UI ui;
+    private final UI ui;
     
     /**
      * Graphics context for this container.
@@ -63,7 +63,7 @@ public class UIContext extends UIContainer implements UILayer {
         this.pg = ui.applet.createGraphics((int)this.width, (int)this.height, PConstants.JAVA2D);
         this.pg.smooth();
     }
-
+    
     public final void draw() {
         if (!this.visible) {
             return;

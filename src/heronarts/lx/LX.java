@@ -72,6 +72,8 @@ public class LX {
     
     public final static String VERSION = "##library.prettyVersion##";
 
+    public static boolean isProcessing2X = false;
+    
     /**
      * Returns the version of the library.
      * 
@@ -292,6 +294,7 @@ public class LX {
             // Processing 2.x
             Method m = applet.getClass().getMethod("registerMethod", String.class, Object.class);
             System.out.println("LX detected Processing 2.x");
+            isProcessing2X = true;
             m.invoke(applet, "draw", this);
             m.invoke(applet, "dispose", this);
             m.invoke(applet, "keyEvent", new KeyEvent2x());
