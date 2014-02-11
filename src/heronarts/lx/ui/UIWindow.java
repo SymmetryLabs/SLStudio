@@ -24,7 +24,7 @@ import processing.core.PGraphics;
  */
 public class UIWindow extends UIContext {
 
-    protected final static int TITLE_LABEL_HEIGHT = 24;
+    public final static int TITLE_LABEL_HEIGHT = 24;
     
     private final static int TITLE_OFFSET_X = 6;
     private final static int TITLE_OFFSET_Y = 8;

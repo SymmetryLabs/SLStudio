@@ -28,7 +28,7 @@ public class UIKnob extends UIParameterControl {
     private final int knobLabelHeight = 14;
     
     private boolean showValue = false;
-
+    
     public UIKnob(float x, float y) {
         this(x, y, 0, 0);
         setSize(this.knobSize, this.knobSize + this.knobLabelHeight);
@@ -38,7 +38,7 @@ public class UIKnob extends UIParameterControl {
         super(x, y, w, h);
     }
 
-    protected void onDraw(UI ui, PGraphics pg) {    
+    protected void onDraw(UI ui, PGraphics pg) {
         float knobValue = (float) getNormalized();
         
         pg.ellipseMode(PConstants.CENTER);
@@ -57,7 +57,7 @@ public class UIKnob extends UIParameterControl {
 
         // Light ring indicating value
         pg.fill(ui.getHighlightColor());
-        pg.arc(arcCenter, arcCenter, this.knobSize, this.knobSize, arcStart, arcStart + knobValue*arcRange);
+        pg.arc(arcCenter, arcCenter, this.knobSize, this.knobSize, arcStart, arcStart + knobValue * arcRange);
         
         // Center circle of knob
         pg.fill(0xff333333);
@@ -84,8 +84,11 @@ public class UIKnob extends UIParameterControl {
 
     private long lastMousePress = 0;
 
+    private double dragValue;
+    
     public void onMousePressed(float mx, float my) {
         super.onMousePressed(mx, my);
+        this.dragValue = getNormalized();
         long now = System.currentTimeMillis();
         if (now - lastMousePress < DOUBLE_CLICK_THRESHOLD) {
             if (this.parameter != null) {
@@ -105,7 +108,7 @@ public class UIKnob extends UIParameterControl {
     }
 
     public void onMouseDragged(float mx, float my, float dx, float dy) {
-        double normalized = LXUtils.constrain(getNormalized() - dy / 100., 0, 1);
-        setNormalized(normalized);
+        this.dragValue = LXUtils.constrain(this.dragValue - dy / 100., 0, 1);
+        setNormalized(this.dragValue);
     }
 }

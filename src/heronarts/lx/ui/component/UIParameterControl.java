@@ -20,11 +20,10 @@ import heronarts.lx.ui.UIObject;
 
 import processing.core.PGraphics;
 
-public abstract class UIParameterControl extends UIObject implements
-        LXParameterListener {
+public abstract class UIParameterControl extends UIObject implements LXParameterListener {
 
     protected LXListenableNormalizedParameter parameter = null;
-
+    
     protected UIParameterControl(float x, float y, float w, float h) {
         super(x, y, w, h);
     }

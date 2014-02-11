@@ -68,7 +68,7 @@ public class UI {
     /**
      * Default active highlight color
      */
-    private int activeColor = 0xff666699;
+    private int selectionColor = 0xff666699;
     
     /**
      * White color
@@ -228,10 +228,10 @@ public class UI {
     /**
      * Get active color
      * 
-     * @return Active color
+     * @return Selection color
      */
-    public int getActiveColor() {
-        return this.activeColor;
+    public int getSelectionColor() {
+        return this.selectionColor;
     }
     
     /**
@@ -240,8 +240,8 @@ public class UI {
      * @param color Color
      * @return this UI
      */
-    public UI setActiveColor(int color) {
-        this.activeColor = color;
+    public UI setSelectionColor(int color) {
+        this.selectionColor = color;
         return this;
     }
     

@@ -16,7 +16,7 @@ package heronarts.lx.parameter;
 /**
  * A simple parameter that has a binary value of off or on
  */
-public class BooleanParameter extends LXListenableParameter {
+public class BooleanParameter extends LXListenableNormalizedParameter {
 
     public BooleanParameter(String label) {
         this(label, false);
@@ -38,6 +38,19 @@ public class BooleanParameter extends LXListenableParameter {
     @Override
     protected double updateValue(double value) {
         return (value > 0) ? 1. : 0.;
+    }
+    
+    public double getNormalized() {
+        return (getValue() > 0) ? 1. : 0.;
+    }
+    
+    public float getNormalizedf() {
+        return (float) getNormalized();
+    }
+    
+    public BooleanParameter setNormalized(double normalized) {
+        setOn(normalized >= 0.5);
+        return this;
     }
 
 }

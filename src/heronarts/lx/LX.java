@@ -17,8 +17,6 @@ import heronarts.lx.client.UDPClient;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.effect.LXEffect;
-import heronarts.lx.kinet.Kinet;
-import heronarts.lx.kinet.KinetNode;
 import heronarts.lx.model.Grid;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXModel;
@@ -26,6 +24,9 @@ import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
+import heronarts.lx.output.LXOutput;
+import heronarts.lx.output.Kinet;
+import heronarts.lx.output.KinetNode;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 import heronarts.lx.ui.UI;
@@ -143,6 +144,11 @@ public class LX {
      * The simulation UI renderer.
      */
     private final Simulation simulation;
+    
+    /**
+     * Output drivers.
+     */
+    private final List<LXOutput> outputs = new ArrayList<LXOutput>();
     
     /**
      * KiNET output driver.
@@ -952,6 +958,28 @@ public class LX {
         this.client = UDPClient.getInstance();
         this.client.addListener(this);
         this.touch = this.client.getTouch();
+        return this;
+    }
+    
+    /**
+     * Adds an output driver
+     * 
+     * @param output
+     * @return this
+     */
+    public LX addOutput(LXOutput output) {
+        this.outputs.add(output);
+        return this;
+    }
+    
+    /**
+     * Removes an output driver
+     * 
+     * @param output
+     * @return this
+     */
+    public LX removeOutput(LXOutput output) {
+        this.outputs.remove(output);
         return this;
     }
     

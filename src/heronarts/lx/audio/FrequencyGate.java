@@ -16,6 +16,7 @@ package heronarts.lx.audio;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 
 import ddf.minim.AudioSource;
 
@@ -43,9 +44,13 @@ public class FrequencyGate extends LXModulator {
     /**
      * The time the trigger takes to falloff from 1 to 0 after triggered, in milliseconds
      */
-    public final BasicParameter falloff = new BasicParameter("FALLOFF", 200, 0, 1600);
+    public final BasicParameter release = new BasicParameter("RELEASE", 200, 0, 1600);
     
-    private final GraphicEQ eq;
+    public final DiscreteParameter minBand;
+    
+    public final DiscreteParameter avgBands;
+    
+    public final GraphicEQ eq;
     
     private double level = 0;
     
@@ -54,10 +59,16 @@ public class FrequencyGate extends LXModulator {
     private boolean peak = false;
     
     private boolean waitingForFloor = false;
-    
-    private final int minBand;
-    
-    private final int avgBands;
+
+    /**
+     * Constructs a gate that monitors a specified frequency band 
+     */
+    public FrequencyGate(String label, GraphicEQ eq) {
+        super(label);
+        this.eq = eq;
+        this.minBand = new DiscreteParameter("BAND", eq.numBands);
+        this.avgBands = new DiscreteParameter("WIDTH", 1, eq.numBands);
+    }
     
     /**
      * Constructs a gate that monitors a specified frequency band 
@@ -67,9 +78,10 @@ public class FrequencyGate extends LXModulator {
      * @param maxHz Maximum frequency band
      */
     public FrequencyGate(GraphicEQ eq, int minHz, int maxHz) {
-        this("FQG", eq, minHz, maxHz);
+        this("FQG", eq);
+        setRange(minHz, maxHz);
     }
-    
+        
     /**
      * Constructs a gate that monitors a specified frequency band 
      * 
@@ -79,11 +91,21 @@ public class FrequencyGate extends LXModulator {
      * @param maxHz Maximum frequency band
      */
     public FrequencyGate(String label, GraphicEQ eq, int minHz, int maxHz) {
-        super(label);
-        this.eq = eq;
+        this(label, eq);
+        setRange(minHz, maxHz);
+    }
+    
+    /**
+     * Sets range of frequencies to look at
+     * 
+     * @param minHz Minimum frequency
+     * @param maxHz Maximum frequency
+     * @return this
+     */
+    public FrequencyGate setRange(int minHz, int maxHz) {
         int _minBand = -1, _avgBands = 0;
-        for (int i = 0; i < eq.numBands; ++i) {
-            float centerFreq = eq.fft.getAverageCenterFrequency(i);
+        for (int i = 0; i < this.eq.numBands; ++i) {
+            float centerFreq = this.eq.fft.getAverageCenterFrequency(i);
             if ((_minBand < 0) && (centerFreq > minHz)) {
                 _minBand = i;
             }
@@ -92,8 +114,22 @@ public class FrequencyGate extends LXModulator {
                 break;
             }
         }
-        this.minBand = _minBand;
-        this.avgBands = _avgBands;
+        this.minBand.setValue(_minBand);
+        this.avgBands.setValue(_avgBands);
+        return this;
+    }
+    
+    /**
+     * Set the bands to look at
+     * 
+     * @param minBand First band index
+     * @param numBands Number of bands to average
+     * @return this
+     */
+    public FrequencyGate setBands(int minBand, int numBands) {
+        this.minBand.setValue(minBand);
+        this.avgBands.setValue(numBands);
+        return this;
     }
     
     /**
@@ -125,7 +161,7 @@ public class FrequencyGate extends LXModulator {
     protected double computeValue(double deltaMs) {
         double thresholdValue = this.threshold.getValue();
         double floorValue = thresholdValue * this.floor.getValue();
-        this.level = this.eq.getAverage(minBand, avgBands);
+        this.level = this.eq.getAverage(minBand.getValuei(), avgBands.getValuei());
         if (this.waitingForFloor) {
             if (this.level < floorValue) {
                 this.waitingForFloor = false;
@@ -134,7 +170,7 @@ public class FrequencyGate extends LXModulator {
         this.peak = !this.waitingForFloor && (this.level > thresholdValue);
         if (this.peak) {
             this.waitingForFloor = true;
-            this.signal.setRange(1, 0, this.falloff.getValue()).trigger();
+            this.signal.setRange(1, 0, this.release.getValue()).trigger();
         }
         this.signal.run(deltaMs);
         return signal.getValue();

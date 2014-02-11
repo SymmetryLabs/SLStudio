@@ -81,7 +81,7 @@ public class UIScrollList extends UIObject {
             if (item.isSelected()) {
                 itemColor = ui.getHighlightColor();
             } else if (item.isPending()) {
-                itemColor = ui.getActiveColor();
+                itemColor = ui.getSelectionColor();
             } else {
                 labelColor = ui.BLACK;
                 itemColor = 0xff707070;

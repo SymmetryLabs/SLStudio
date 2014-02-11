@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.kinet;
+package heronarts.lx.output;
 
 /**
  * Class to represent a single KiNET node. Each node belongs on a port, and has

@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.kinet;
+package heronarts.lx.output;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;

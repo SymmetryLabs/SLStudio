@@ -99,7 +99,7 @@ public class UIToggleSet extends UIObject {
         for (int i = 0; i < this.options.length; ++i) {
             boolean isActive = this.options[i].equals(this.value);
             if (isActive) {
-                pg.fill(ui.getActiveColor());
+                pg.fill(ui.getHighlightColor());
                 pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 1, this.height - 1);
             }
             pg.fill(isActive ? ui.WHITE : ui.getTextColor());
