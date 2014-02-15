@@ -67,7 +67,7 @@ public class FrequencyGate extends LXModulator {
         super(label);
         this.eq = eq;
         this.minBand = new DiscreteParameter("BAND", eq.numBands);
-        this.avgBands = new DiscreteParameter("WIDTH", 1, eq.numBands);
+        this.avgBands = new DiscreteParameter("WIDTH", 1, eq.numBands + 1);
     }
     
     /**

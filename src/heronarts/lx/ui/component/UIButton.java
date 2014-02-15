@@ -13,6 +13,9 @@
 
 package heronarts.lx.ui.component;
 
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIObject;
 import processing.core.PConstants;
@@ -27,9 +30,29 @@ public class UIButton extends UIObject {
     protected int activeColor = 0xff669966;
     protected int labelColor = 0xff999999;
     protected String label = "";
+    
+    private BooleanParameter parameter = null;
 
+    private final LXParameterListener parameterListener = new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+            setActive(parameter.isOn());
+        }
+    };
+    
     public UIButton(float x, float y, float w, float h) {
         super(x, y, w, h);
+    }
+    
+    public UIButton setParameter(BooleanParameter parameter) {
+        if (this.parameter != null) {
+            this.parameter.removeListener(this.parameterListener);
+        }
+        this.parameter = parameter;
+        if (parameter != null) {
+            parameter.addListener(this.parameterListener);
+            setActive(parameter.isOn());
+        }
+        return this;
     }
 
     public UIButton setMomentary(boolean momentary) {
@@ -65,6 +88,9 @@ public class UIButton extends UIObject {
 
     public UIButton setActive(boolean active) {
         if (this.active != active) {
+            if (this.parameter != null) {
+                this.parameter.setOn(active);
+            }
             onToggle(this.active = active);
             redraw();
         }

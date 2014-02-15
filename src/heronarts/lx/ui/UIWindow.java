@@ -26,8 +26,7 @@ public class UIWindow extends UIContext {
 
     public final static int TITLE_LABEL_HEIGHT = 24;
     
-    private final static int TITLE_OFFSET_X = 6;
-    private final static int TITLE_OFFSET_Y = 8;
+    private final static int TITLE_PADDING = 6;
     
     /**
      * The label object
@@ -46,7 +45,7 @@ public class UIWindow extends UIContext {
      */
     public UIWindow(final UI ui, String title, float x, float y, float w, float h) {
         super(ui, x, y, w, h);
-        this.label = new UILabel(TITLE_OFFSET_X, TITLE_OFFSET_Y, w-TITLE_OFFSET_X, TITLE_LABEL_HEIGHT-TITLE_OFFSET_Y) {
+        this.label = new UILabel(0, 0, w, TITLE_LABEL_HEIGHT) {
             
             protected void onMousePressed(float mx, float my) {
                 ui.bringToTop(UIWindow.this);
@@ -57,7 +56,7 @@ public class UIWindow extends UIContext {
                 parent.y = LXUtils.constrainf(parent.y + dy, 0, ui.applet.height - this.height);
             }
             
-        }.setLabel(title).setFont(ui.getTitleFont());
+        }.setLabel(title).setPadding(TITLE_PADDING).setFont(ui.getTitleFont());
         this.label.addToContainer(this);
     }
 

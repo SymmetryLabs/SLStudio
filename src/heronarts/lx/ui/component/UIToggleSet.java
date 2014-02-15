@@ -91,11 +91,12 @@ public class UIToggleSet extends UIObject {
         for (int b : this.boundaries) {
             pg.line(b, 1, b, this.height - 1);
         }
+        
         pg.noStroke();
-        pg.textAlign(PConstants.CENTER);
+        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.textFont(ui.getItemFont());
         int leftBoundary = 0;
-
+        
         for (int i = 0; i < this.options.length; ++i) {
             boolean isActive = this.options[i].equals(this.value);
             if (isActive) {
@@ -103,7 +104,7 @@ public class UIToggleSet extends UIObject {
                 pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 1, this.height - 1);
             }
             pg.fill(isActive ? ui.WHITE : ui.getTextColor());
-            pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f, this.height - 6);
+            pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f, (int) ((this.height / 2) - 2));
             leftBoundary = this.boundaries[i];
         }
     }

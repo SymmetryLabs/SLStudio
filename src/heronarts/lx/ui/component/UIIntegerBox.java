@@ -14,6 +14,9 @@
 package heronarts.lx.ui.component;
 
 import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIObject;
 
@@ -25,9 +28,30 @@ public class UIIntegerBox extends UIObject {
     private int minValue = 0;
     private int maxValue = PConstants.MAX_INT;
     private int value = 0;
+    private DiscreteParameter parameter = null;
 
-    UIIntegerBox(float x, float y, float w, float h) {
+    private final LXParameterListener parameterListener = new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+            setValue(parameter.getValuei());
+        }
+    };
+    
+    public UIIntegerBox(float x, float y, float w, float h) {
         super(x, y, w, h);
+    }
+    
+    public UIIntegerBox setParameter(final DiscreteParameter parameter) {
+        if (this.parameter != null) {
+            this.parameter.removeListener(this.parameterListener);
+        }
+        this.parameter = parameter;
+        if (parameter != null) {
+            this.minValue = parameter.minValue;
+            this.maxValue = parameter.maxValue;
+            this.value = parameter.getValuei();
+            this.parameter.addListener(this.parameterListener);
+        }
+        return this;
     }
 
     public UIIntegerBox setRange(int minValue, int maxValue) {
@@ -74,6 +98,9 @@ public class UIIntegerBox extends UIObject {
                 value += range;
             }
             this.value = this.minValue + (value - this.minValue) % range;
+            if (this.parameter != null) {
+                this.parameter.setValue(this.value);
+            }
             this.onValueChange(this.value);
             redraw();
         }

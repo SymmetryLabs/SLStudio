@@ -212,6 +212,7 @@ public class LX {
         public long simulationNanos = 0;
         public long uiNanos = 0;
         public long kinetNanos = 0;
+        public long outputNanos = 0;
     }
     
     public final Timer timer = new Timer();
@@ -1071,6 +1072,12 @@ public class LX {
             this.timer.kinetNanos = System.nanoTime() - kinetStart;
         }
         
+        long outputStart = System.nanoTime(); 
+        for (LXOutput output : this.outputs) {
+            output.send(this.colors);
+        }
+        this.timer.outputNanos = System.nanoTime() - outputStart;
+        
         // TODO(mcslee): remove this and convert simulation into a UIObject
         this.timer.simulationNanos = 0;
         if (this.simulationEnabled) {
@@ -1082,11 +1089,11 @@ public class LX {
         long uiStart = System.nanoTime();
         this.ui.draw();
         this.timer.uiNanos = System.nanoTime() - uiStart;
-                
+        
         if (this.flags.showFramerate) {
             System.out.println("Framerate: " + this.applet.frameRate);
         }
-        
+
         this.timer.drawNanos = System.nanoTime() - drawStart;
     }
     

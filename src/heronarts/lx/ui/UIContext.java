@@ -119,7 +119,7 @@ public class UIContext extends UIContainer implements UILayer {
             return false;
         }
         if (contains(mx, my)) {
-            onMouseWheel(mx, my, delta);
+            onMouseWheel(mx - this.x, my - this.y, delta);
             return true;
         }
         return false;

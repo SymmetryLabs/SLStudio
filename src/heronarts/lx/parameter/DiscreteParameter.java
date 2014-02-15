@@ -20,9 +20,11 @@ import java.lang.Math;
  */
 public class DiscreteParameter extends LXListenableNormalizedParameter {
 
-    private final int min;
+    public final int minValue;
     
-    private final int range;
+    public final int maxValue;
+    
+    public final int range;
     
     /**
      * Parameter with values from [0, range-1], 0 by default
@@ -43,13 +45,14 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
      */
     public DiscreteParameter(String label, int min, int max) {
         super(label, min);
-        this.min = min;
+        this.minValue = min;
+        this.maxValue = max - 1;
         this.range = max-min;
     }
             
     @Override
     protected double updateValue(double value) {
-        return this.min + ((int)(value - this.min) % this.range);
+        return this.minValue + ((int)(value - this.minValue) % this.range);
     }
     
     public int getValuei() {
@@ -57,7 +60,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     }
     
     public double getNormalized() {
-        return (getValue() - this.min) / (this.range-1);
+        return (getValue() - this.minValue) / (this.range-1);
     }
     
     public float getNormalizedf() {
@@ -69,7 +72,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
         if (value == this.range) {
             --value;
         }
-        setValue(this.min + value);
+        setValue(this.minValue + value);
         return this;
     }
 

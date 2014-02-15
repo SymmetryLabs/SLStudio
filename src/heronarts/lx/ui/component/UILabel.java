@@ -29,6 +29,16 @@ public class UILabel extends UIObject {
      */
     private PFont font;
     
+    private int horizontalAlignment = PConstants.LEFT;
+    
+    private int verticalAlignment = PConstants.TOP;
+    
+    private boolean hasBackground = false;
+    
+    private int backgroundColor = 0xFF000000;
+    
+    private int padding = 0;
+    
     /**
      * Label color
      */
@@ -43,11 +53,48 @@ public class UILabel extends UIObject {
         super(x, y, w, h);
     }
 
+    public UILabel setPadding(int padding) {
+        this.padding = padding;
+        return this;
+    }
+    
+    public UILabel setBackground(int backgroundColor) {
+        this.hasBackground = true;
+        this.backgroundColor = backgroundColor;
+        return this;
+    }
+    
+    public UILabel setAlignment(int horizontalAlignment) {
+        setAlignment(horizontalAlignment, PConstants.BASELINE);
+        return this;
+    }
+    
+    public UILabel setAlignment(int horizontalAlignment, int verticalAlignment) {
+        this.horizontalAlignment = horizontalAlignment;
+        this.verticalAlignment = verticalAlignment;
+        return this;
+    }
+    
     protected void onDraw(UI ui, PGraphics pg) {
-        pg.textAlign(PConstants.LEFT, PConstants.TOP);
+        if (this.hasBackground) {
+            pg.noStroke();
+            pg.fill(this.backgroundColor);
+            pg.rect(0, 0, this.width, this.height);
+        }
         pg.textFont(this.font);
         pg.fill(this.color);
-        pg.text(this.label, 0, 0);
+        float tx = this.padding, ty = this.padding;
+        switch (this.horizontalAlignment) {
+        case PConstants.CENTER: tx = this.width / 2; break;
+        case PConstants.RIGHT: tx = this.width - this.padding; break;
+        }
+        switch (this.verticalAlignment) {
+        case PConstants.BASELINE: ty = this.height - this.padding; break;
+        case PConstants.BOTTOM: ty = this.height - this.padding; break;
+        case PConstants.CENTER: ty = this.height/ 2; break;
+        }
+        pg.textAlign(this.horizontalAlignment, this.verticalAlignment);
+        pg.text(this.label, tx, ty);
     }
 
     public UILabel setFont(PFont font) {

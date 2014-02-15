@@ -21,7 +21,9 @@ import processing.core.PGraphics;
 
 public class UIKnob extends UIParameterControl {
       
-    private int knobSize = 28;
+    public final static int DEFAULT_SIZE = 28;
+    
+    private int knobSize = DEFAULT_SIZE;
     
     private final float knobIndent = .4f;
     
