@@ -17,6 +17,8 @@ import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXDeck;
 import heronarts.lx.LXLayer;
+import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.transition.LXTransition;
 
@@ -131,6 +133,12 @@ public abstract class LXPattern extends LXComponent {
     protected final void setColors(int c) {
         for (int i = 0; i < colors.length; ++i) {
             this.colors[i] = c;
+        }
+    }
+    
+    protected final void setColor(LXFixture f, int c) {
+        for (LXPoint p : f.getPoints()) {
+            this.colors[p.index] = c;
         }
     }
 
