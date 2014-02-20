@@ -216,7 +216,7 @@ ${line}
 				verbose="false" 
 				stylesheetfile="resources/stylesheet.css" 
 				doctitle="Javadocs: ${project.name}" 
-				public="true" version="false" 
+				version="false" 
 				windowtitle="Javadocs: ${project.name}">
  			
  			<link href="${javadoc.java.href}" />
