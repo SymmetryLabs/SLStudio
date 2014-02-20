@@ -335,35 +335,19 @@ public abstract class LXPattern extends LXComponent {
      * @param deltaMs Number of milliseconds elapsed since last invocation
      */
     protected abstract void run(double deltaMs);
-
-    /**
-     * Invoked by the engine when pattern will become active. May not be
-     * overridden. Use onActive() instead.
-     */
-    public final void willBecomeActive() {
-        this.onActive();
-    }
-    
-    /**
-     * Invoked by the engine when pattern is no longer active. May not be
-     * overridden. Use onInactive() instead.
-     */
-    public final void didResignActive() {
-        this.onInactive();
-    }
     
     /**
      * Subclasses may override this method. It will be invoked when the pattern is
      * about to become active. Patterns may take care of any initialization needed
      * or reset parameters if desired.
      */
-    protected /* abstract */ void onActive() {}
+    public /* abstract */ void onActive() {}
     
     /**
      * Subclasses may override this method. It will be invoked when the pattern is
      * no longer active. Resources may be freed if desired.
      */
-    protected /* abstract */ void onInactive() {}
+    public /* abstract */ void onInactive() {}
     
     /**
      * Subclasses may override this method. It will be invoked if a transition into

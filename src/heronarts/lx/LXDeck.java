@@ -140,10 +140,10 @@ public class LXDeck {
     }
     
     public synchronized final LXDeck setPatterns(LXPattern[] patterns) {
-        this.getActivePattern().didResignActive();        
+        this.getActivePattern().onInactive();        
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
-        this.getActivePattern().willBecomeActive();
+        this.getActivePattern().onActive();
         return this;
     }
     
@@ -239,7 +239,7 @@ public class LXDeck {
         if (getActivePattern() == getNextPattern()) {
             return;
         }
-        getNextPattern().willBecomeActive();
+        getNextPattern().onActive();
         notifyPatternWillChange(getActivePattern(), getNextPattern());
         this.transition = getNextPattern().getTransition();
         if (this.transition == null) {
@@ -251,7 +251,7 @@ public class LXDeck {
     }
     
     private synchronized void finishTransition() {
-        getActivePattern().didResignActive();        
+        getActivePattern().onInactive();        
         this.activePatternIndex = this.nextPatternIndex;
         if (this.transition != null) {
             getActivePattern().onTransitionEnd();

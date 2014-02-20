@@ -28,11 +28,11 @@ public class VideoCapturePattern extends LXPattern {
         this.transition = new IrisTransition(lx);
     }
 
-    protected void onActive() {
+    public void onActive() {
         this.capture = new Capture(lx.applet, lx.width, lx.height);
     }
     
-    protected void onInactive() {
+    public void onInactive() {
         this.capture.dispose();
         this.capture = null;
     }
