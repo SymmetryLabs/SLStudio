@@ -143,6 +143,7 @@ public class LXDeck {
         this.getActivePattern().onInactive();        
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
+        this.transition = null;
         this.getActivePattern().onActive();
         return this;
     }
@@ -282,8 +283,7 @@ public class LXDeck {
             }
         } else {
             if (this.autoTransitionEnabled &&
-                (nowMillis - this.transitionMillis > this.autoTransitionThreshold) &&
-                !this.getActivePattern().isInInterval()) {
+                (nowMillis - this.transitionMillis > this.autoTransitionThreshold)) {
                 this.goNext();
             }
         }

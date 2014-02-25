@@ -603,7 +603,7 @@ public class LX {
      * 
      * @return The kinet object
      */
-    public Kinet kinet() {
+    @Deprecated public Kinet kinet() {
         return this.kinet;
     }
     
@@ -989,7 +989,7 @@ public class LX {
      * 
      * @param kinetNodes Array of KinetNode objects, must have length equal to width * height
      */
-    public LX setKinetNodes(KinetNode[] kinetNodes) {
+    @Deprecated public LX setKinetNodes(KinetNode[] kinetNodes) {
         if (kinetNodes == null) {
             this.kinet = null;
         } else if (kinetNodes.length != this.total) {
@@ -1010,7 +1010,7 @@ public class LX {
      * 
      * @param kinet Kinet instance with total size equal to width * height
      */
-    public LX setKinet(Kinet kinet) {
+    @Deprecated public LX setKinet(Kinet kinet) {
         if (kinet != null && (kinet.size() != this.total)) {
             throw new RuntimeException("Kinet provided to setKinet is the wrong size, must equal length of LX, use null for non-mapped output nodes.");            
         }

@@ -54,7 +54,24 @@ public class LXDatagramOutput extends LXOutput {
         return this;
     }
 
+    /**
+     * Subclasses may override. Invoked before datagrams are sent.
+     * 
+     * @param colors
+     */
+    protected /* abstract */ void beforeSend(int[] colors) {}
+    
+    /**
+     * Subclasses may override. Invoked after datagrams are sent.
+     * @param colors
+     */
+    protected /* abstract */ void afterSend(int[] colors) {}
+    
+    /**
+     * Core method which sends the datagrams.
+     */
     protected final void onSend(int[] colors) {
+        beforeSend(colors);
         for (LXDatagram datagram : this.datagrams) {
             datagram.onSend(colors);
             try {
@@ -63,5 +80,6 @@ public class LXDatagramOutput extends LXOutput {
                 iox.printStackTrace();
             }
         }
+        afterSend(colors);
     }
 }

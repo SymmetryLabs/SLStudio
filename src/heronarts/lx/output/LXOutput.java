@@ -51,7 +51,7 @@ public abstract class LXOutput {
     /**
      * Framerate throttle
      */
-    public final DiscreteParameter framesPerSecond = new DiscreteParameter("FPS", 91);
+    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 0, 90);
     
     /**
      * Gamma correction level
@@ -105,7 +105,7 @@ public abstract class LXOutput {
             return this;
         }
         long now = System.currentTimeMillis();
-        int fps = this.framesPerSecond.getValuei();
+        double fps = this.framesPerSecond.getValue();
         if ((fps == 0) ||
             ((now - this.lastFrameMillis) > (1000. / fps))) {
             int gamma = this.gammaCorrection.getValuei();

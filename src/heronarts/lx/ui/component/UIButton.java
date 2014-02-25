@@ -89,7 +89,7 @@ public class UIButton extends UIObject {
     public UIButton setActive(boolean active) {
         if (this.active != active) {
             if (this.parameter != null) {
-                this.parameter.setOn(active);
+                this.parameter.setValue(active);
             }
             onToggle(this.active = active);
             redraw();

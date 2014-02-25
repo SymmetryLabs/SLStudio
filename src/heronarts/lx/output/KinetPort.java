@@ -24,7 +24,7 @@ import java.net.UnknownHostException;
  * supply and the port number on that PSU to send data on along with a buffer
  * of data.
  */
-public class KinetPort {
+@Deprecated public class KinetPort {
     private final static int DEFAULT_DATA_LEN = 512;
     private final static int HEADER_LEN = 24;
     private final static int KINET_PORT = 6038; 

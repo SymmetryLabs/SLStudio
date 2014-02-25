@@ -81,7 +81,7 @@ public class UILabel extends UIObject {
             pg.fill(this.backgroundColor);
             pg.rect(0, 0, this.width, this.height);
         }
-        pg.textFont(this.font);
+        pg.textFont((this.font == null) ? ui.getTitleFont() : this.font);
         pg.fill(this.color);
         float tx = this.padding, ty = this.padding;
         switch (this.horizontalAlignment) {

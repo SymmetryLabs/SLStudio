@@ -39,7 +39,7 @@ import java.util.HashSet;
  * node indices from their logical representation (in the LX model) to their
  * physical wiring.
  */
-public class Kinet {
+@Deprecated public class Kinet {
 
     /**
      * In practice this is as hard as some Color Kinetics PSUs can be pushed

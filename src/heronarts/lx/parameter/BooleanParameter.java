@@ -27,11 +27,20 @@ public class BooleanParameter extends LXListenableNormalizedParameter {
     }
         
     public boolean isOn() {
-        return this.getValue() > 0.;
+        return getValueb();
     }
     
-    public BooleanParameter setOn(boolean on) {
-        setValue(on ? 1. : 0.);
+    public boolean getValueb() {
+        return this.getValue() > 0.;
+    }
+            
+    public BooleanParameter setValue(boolean value) {
+        setValue(value ? 1. : 0.);
+        return this;
+    }
+    
+    public BooleanParameter toggle() {
+        setValue(!isOn());
         return this;
     }
     
@@ -49,7 +58,7 @@ public class BooleanParameter extends LXListenableNormalizedParameter {
     }
     
     public BooleanParameter setNormalized(double normalized) {
-        setOn(normalized >= 0.5);
+        setValue(normalized >= 0.5);
         return this;
     }
 
