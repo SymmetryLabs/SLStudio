@@ -17,6 +17,9 @@ import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXLayer;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 
 import java.util.ArrayList;
 
@@ -29,8 +32,9 @@ import java.util.ArrayList;
 public abstract class LXEffect extends LXLayer {
     
     protected final LX lx;
-    private final boolean momentary;
-    protected boolean enabled = false;
+    private final boolean isMomentary;
+    
+    public final BooleanParameter enabled = new BooleanParameter("ENABLED", false);
 
     public class Timer {
         public long runNanos = 0;
@@ -42,23 +46,32 @@ public abstract class LXEffect extends LXLayer {
         this(lx, false);
     }
     
-    protected LXEffect(LX lx, boolean momentary) {
+    protected LXEffect(LX lx, boolean isMomentary) {
         this.lx = lx;
-        this.momentary = momentary;
+        this.isMomentary = isMomentary;
+        this.enabled.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) {
+                if (LXEffect.this.enabled.isOn()) {
+                    onEnable();
+                } else {
+                    onDisable();
+                }
+            }
+        });
     }
 
     /**
      * @return whether the effect is currently enabled
      */
     public final boolean isEnabled() {
-        return this.enabled;
+        return this.enabled.isOn();
     }
     
     /**
      * @return Whether this is a momentary effect or not
      */
     public final boolean isMomentary() {
-        return this.momentary;
+        return this.isMomentary;
     }
     
     /**
@@ -67,11 +80,7 @@ public abstract class LXEffect extends LXLayer {
      * @return this
      */
     public final LXEffect toggle() {
-        if (this.enabled) {
-            this.disable();
-        } else {
-            this.enable();
-        }
+        this.enabled.toggle();
         return this;
     }
     
@@ -81,10 +90,7 @@ public abstract class LXEffect extends LXLayer {
      * @return this
      */
     public final LXEffect enable() {
-        if (!this.enabled) {
-            this.enabled = true;
-            this.onEnable();
-        }
+        this.enabled.setValue(true);
         return this;
     }
     
@@ -92,10 +98,7 @@ public abstract class LXEffect extends LXLayer {
      * Disables the effect.
      */
     public final LXEffect disable() {
-        if (this.enabled) {
-            this.enabled = false;
-            this.onDisable();
-        }
+        this.enabled.setValue(false);
         return this;
     }
     
@@ -105,7 +108,7 @@ public abstract class LXEffect extends LXLayer {
      * it simply has its onTrigger method invoked. 
      */
     public final void trigger() {
-        if (this.enabled) {
+        if (this.enabled.isOn()) {
             this.disable();
         } else {
             this.onTrigger();
