@@ -13,6 +13,7 @@
 
 package heronarts.lx.parameter;
 
+import java.lang.IllegalArgumentException;
 import java.lang.Math;
 
 /**
@@ -47,11 +48,17 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
         super(label, min);
         this.minValue = min;
         this.maxValue = max - 1;
+        if (this.maxValue < this.minValue) {
+            throw new IllegalArgumentException("DiscreteParameter must have range of at least 1");
+        }
         this.range = max-min;
     }
             
     @Override
     protected double updateValue(double value) {
+        if (value < this.minValue) {
+            return this.maxValue + 1 - ((int)(this.minValue - value) % this.range);
+        }
         return this.minValue + ((int)(value - this.minValue) % this.range);
     }
     
