@@ -47,6 +47,26 @@ public abstract class LXDatagram {
     }
     
     /**
+     * Helper for subclasses to copy a list of points into the data buffer in
+     * RGB byte order at a specified offset.
+     * 
+     * @param colors List of color values
+     * @param point Indices List of point indices
+     * @param offset Offset in buffer to write
+     * @return this
+     */
+    protected LXDatagram copyPoints(int[] colors, int[] pointIndices, int offset) {
+        int i = offset;
+        for (int index : pointIndices) {
+            int color = (index >= 0) ? colors[index] : 0;
+            this.buffer[i++] = (byte) ((color >> 16) & 0xff);
+            this.buffer[i++] = (byte) ((color >> 8) & 0xff);
+            this.buffer[i++] = (byte) (color & 0xff);
+        }
+        return this;
+    }
+    
+    /**
      * Invoked by engine to send this packet when new color data is available.
      * The LXDatagram should update the packet object accordingly to contain
      * the appropriate buffer.

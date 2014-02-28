@@ -78,12 +78,6 @@ public class KinetDatagram extends LXDatagram {
     }
     
     public void onSend(int[] colors) {
-        int i = HEADER_LENGTH;
-        for (int index : this.pointIndices) {
-            int c = (index < 0) ? 0 : colors[index];
-            this.buffer[i++] = (byte) ((c >> 16) & 0xff);
-            this.buffer[i++] = (byte) ((c >> 8) & 0xff);
-            this.buffer[i++] = (byte) (c  & 0xff);
-        }
+        copyPoints(colors, this.pointIndices, HEADER_LENGTH);
     }
 }
