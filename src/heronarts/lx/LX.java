@@ -312,13 +312,13 @@ public class LX {
             applet.registerDraw(this);
             applet.registerKeyEvent(new KeyEvent1x());
             applet.registerMouseEvent(new MouseEvent1x());
+            applet.addMouseWheelListener(new java.awt.event.MouseWheelListener() { 
+                public void mouseWheelMoved(java.awt.event.MouseWheelEvent mwe) { 
+                    ui.mouseWheel(mwe.getX(), mwe.getY(), mwe.getWheelRotation());
+                }
+            });
         }
         
-        applet.addMouseWheelListener(new java.awt.event.MouseWheelListener() { 
-            public void mouseWheelMoved(java.awt.event.MouseWheelEvent mwe) { 
-                ui.mouseWheel(mwe.getX(), mwe.getY(), mwe.getWheelRotation());
-            }
-        });
     }
     
     public final class KeyEvent1x {
@@ -1096,14 +1096,54 @@ public class LX {
 
         this.timer.drawNanos = System.nanoTime() - drawStart;
     }
-    
-    private void keyEvent2x(processing.event.KeyEvent e) {
-        // TODO(mcslee): update for processing 2.0
+
+    private static enum KeyEventType {
+        PRESSED,
+        RELEASED,
+        TYPED
+    };
+
+    private void keyEvent1x(java.awt.event.KeyEvent e) {
+        KeyEventType type;
+        switch (e.getID()) {
+        case java.awt.event.KeyEvent.KEY_PRESSED:
+            type = KeyEventType.PRESSED;
+            break;
+        case java.awt.event.KeyEvent.KEY_RELEASED:
+            type = KeyEventType.RELEASED;
+            break;
+        case java.awt.event.KeyEvent.KEY_TYPED:
+            type = KeyEventType.TYPED;
+            break;
+        default:
+            // Unknown event type, not handled
+            return;
+        }
+        keyEvent(type, e.getKeyChar(), e.getKeyCode());
     }
     
-    private void keyEvent1x(java.awt.event.KeyEvent e) {
-        if (e.getID() == java.awt.event.KeyEvent.KEY_RELEASED) {
-            switch (e.getKeyCode()) {
+    private void keyEvent2x(processing.event.KeyEvent e) {
+        KeyEventType type;
+        switch (e.getAction()) {
+        case processing.event.KeyEvent.PRESS:
+            type = KeyEventType.PRESSED;
+            break;
+        case processing.event.KeyEvent.RELEASE:
+            type = KeyEventType.RELEASED;
+            break;
+        case processing.event.KeyEvent.TYPE:
+            type = KeyEventType.TYPED;
+            break;
+        default:
+            // Not handled, unknown action
+            return;
+        }
+        keyEvent(type, e.getKey(), e.getKeyCode());
+    }
+        
+    private void keyEvent(KeyEventType type, char keyChar, int keyCode) {
+        if (type == KeyEventType.RELEASED) {
+            switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
                 engine.goPrev();
                 break;
@@ -1122,7 +1162,7 @@ public class LX {
                 break;
             }
             
-            switch (Character.toLowerCase(e.getKeyChar())) {
+            switch (Character.toLowerCase(keyChar)) {
             case '[':
                 engine.goPrev();
                 break;
@@ -1144,8 +1184,8 @@ public class LX {
                 flash.disable();
                 break;
             }
-        } else if (e.getID() == java.awt.event.KeyEvent.KEY_PRESSED) {
-            switch (e.getKeyChar()) {
+        } else if (type == KeyEventType.PRESSED) {
+            switch (keyChar) {
             case 'f':
                 flags.showFramerate = true;
                 break;
@@ -1159,20 +1199,63 @@ public class LX {
         }
     }
     
-    private void mouseEvent2x(processing.event.MouseEvent e) {
-        // TODO(mcslee): update for processing 2.0
-    }
-    
+    private static enum MouseEventType {
+        PRESSED,
+        RELEASED,
+        CLICKED,
+        DRAGGED,
+        MOVED,
+    };
+
     private void mouseEvent1x(java.awt.event.MouseEvent e) {
+        MouseEventType type;
         switch (e.getID()) {
         case java.awt.event.MouseEvent.MOUSE_PRESSED:
-            ui.mousePressed(e.getX(), e.getY());
+            type = MouseEventType.PRESSED;
             break;
         case java.awt.event.MouseEvent.MOUSE_RELEASED:
-            ui.mouseReleased(e.getX(), e.getY());
+            type = MouseEventType.RELEASED;
             break;
         case java.awt.event.MouseEvent.MOUSE_DRAGGED:
-            ui.mouseDragged(e.getX(), e.getY());
+            type = MouseEventType.DRAGGED;
+            break;
+        default:
+            return;
+        }
+        mouseEvent(type, e.getX(), e.getY());
+    }
+    
+    private void mouseEvent2x(processing.event.MouseEvent e) {
+        MouseEventType type;
+        switch (e.getAction()) {
+        case processing.event.MouseEvent.WHEEL:
+            ui.mouseWheel(e.getX(), e.getY(), e.getCount());
+            return;
+        case processing.event.MouseEvent.PRESS:
+            type = MouseEventType.PRESSED;
+            break;
+        case processing.event.MouseEvent.RELEASE:
+            type = MouseEventType.RELEASED;
+            break;
+        case processing.event.MouseEvent.DRAG:
+            type = MouseEventType.DRAGGED;
+            break;
+        default:
+            return;
+        }
+        mouseEvent(type, e.getX(), e.getY());
+    }
+
+    private void mouseEvent(MouseEventType type, int x, int y) {
+        switch (type) {
+        case PRESSED:
+            ui.mousePressed(x, y);
+            break;
+        case RELEASED:
+            ui.mouseReleased(x, y);
+            break;
+        case DRAGGED:
+            ui.mouseDragged(x, y);
             break;
         }
     }
