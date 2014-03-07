@@ -144,12 +144,7 @@ public class LX {
      * The simulation UI renderer.
      */
     private final Simulation simulation;
-    
-    /**
-     * Output drivers.
-     */
-    private final List<LXOutput> outputs = new ArrayList<LXOutput>();
-    
+        
     /**
      * KiNET output driver.
      */
@@ -212,7 +207,6 @@ public class LX {
         public long simulationNanos = 0;
         public long uiNanos = 0;
         public long kinetNanos = 0;
-        public long outputNanos = 0;
     }
     
     public final Timer timer = new Timer();
@@ -969,7 +963,7 @@ public class LX {
      * @return this
      */
     public LX addOutput(LXOutput output) {
-        this.outputs.add(output);
+        this.engine.addOutput(output);
         return this;
     }
     
@@ -980,7 +974,7 @@ public class LX {
      * @return this
      */
     public LX removeOutput(LXOutput output) {
-        this.outputs.remove(output);
+        this.engine.removeOutput(output);
         return this;
     }
     
@@ -1072,12 +1066,6 @@ public class LX {
             this.timer.kinetNanos = System.nanoTime() - kinetStart;
         }
         
-        long outputStart = System.nanoTime(); 
-        for (LXOutput output : this.outputs) {
-            output.send(this.colors);
-        }
-        this.timer.outputNanos = System.nanoTime() - outputStart;
-        
         // TODO(mcslee): remove this and convert simulation into a UIObject
         this.timer.simulationNanos = 0;
         if (this.simulationEnabled) {
@@ -1091,7 +1079,13 @@ public class LX {
         this.timer.uiNanos = System.nanoTime() - uiStart;
         
         if (this.flags.showFramerate) {
-            System.out.println("Framerate: " + this.applet.frameRate);
+            if (this.engine.isThreaded()) {
+                System.out.println(
+                  "Engine: " + this.engine.frameRate + " " +
+                  "Render: " + this.applet.frameRate);
+            } else {
+                System.out.println("Framerate: " + this.applet.frameRate);
+            }
         }
 
         this.timer.drawNanos = System.nanoTime() - drawStart;

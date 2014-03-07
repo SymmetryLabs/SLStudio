@@ -15,6 +15,8 @@ package heronarts.lx;
 
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.output.LXOutput;
+import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
@@ -53,13 +55,19 @@ public class LXEngine {
     
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
     private final List<LXDeck> decks = new ArrayList<LXDeck>();
-    private final List<LXEffect> effects = new ArrayList<LXEffect>();        
+    private final List<LXEffect> effects = new ArrayList<LXEffect>();
+    private final List<LXOutput> outputs = new ArrayList<LXOutput>();
+    
+    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 60, 0, 300); 
+    
+    float frameRate = 0;
     
     public class Timer {
         public long runNanos = 0;
         public long deckNanos = 0;
         public long copyNanos = 0;
         public long fxNanos = 0;
+        public long outputNanos = 0;
     }
     
     public final Timer timer = new Timer();
@@ -121,6 +129,15 @@ public class LXEngine {
     }
     
     /**
+     * Gets the active frame rate of the engine when in threaded mode
+     * 
+     * @return How many FPS the engine is running
+     */
+    public float frameRate() {
+        return this.isThreaded ? this.frameRate : 0;
+    }
+    
+    /**
      * Whether the engine is threaded. Should only be called from Processing
      * animation thread.
      * 
@@ -142,20 +159,19 @@ public class LXEngine {
         }
         this.isThreaded = threaded;
         if (!threaded) {
-            engineThread.interrupt();
+            this.engineThread.interrupt();
             try {
-                engineThread.join();
+                this.engineThread.join();
             } catch (InterruptedException ix) {}
-            engineThread = null;
+            this.engineThread = null;
         } else {
             // Copy the current frame to avoid a black frame
-            for (int i = 0; i < buffer.render.length; ++i) {
-                buffer.copy[i] = buffer.render[i];
+            for (int i = 0; i < this.buffer.render.length; ++i) {
+                this.buffer.copy[i] = this.buffer.render[i];
             }
-            engineThread = new Thread("LX Engine Thread") {
+            this.engineThread = new Thread("LX Engine Thread") {
                 public void run() {
                     System.out.println("LX Engine Thread started.");
-                    final int minMillisPerFrame = 15;
                     while (!isInterrupted()) {
                         long frameStart = System.currentTimeMillis();
                         LXEngine.this.run();
@@ -163,18 +179,24 @@ public class LXEngine {
                             buffer.flip();
                         }
                         long frameMillis = System.currentTimeMillis() - frameStart;
-                        if (frameMillis < minMillisPerFrame) {
-                            try {
-                                sleep(minMillisPerFrame - frameMillis);
-                            } catch (InterruptedException ix) {
-                                break;
+                        frameRate = 1000.f / frameMillis;
+                        float targetFPS = framesPerSecond.getValuef();
+                        if (targetFPS > 0) {
+                            long minMillisPerFrame = (long) (1000. / targetFPS);
+                            if (frameMillis < minMillisPerFrame) {
+                                frameRate = targetFPS;
+                                try {
+                                    sleep(minMillisPerFrame - frameMillis);
+                                } catch (InterruptedException ix) {
+                                    break;
+                                }
                             }
                         }
                     }
                     System.out.println("LX Engine Thread finished.");
                 }
             };
-            engineThread.start();
+            this.engineThread.start();
         }
         return this;
     }
@@ -189,34 +211,59 @@ public class LXEngine {
      * 
      * @param paused Whether to pause the engine to pause
      */
-    public synchronized void setPaused(boolean paused) {
+    public synchronized LXEngine setPaused(boolean paused) {
         this.paused = paused;
+        return this;
     }
     
     public synchronized boolean isPaused() {
         return this.paused;
     }
     
-    public synchronized LXModulator addModulator(LXModulator m) {
+    public synchronized LXEngine addModulator(LXModulator m) {
         this.modulators.add(m);
-        return m;
+        return this;
     }
     
-    public synchronized void removeModulator(LXModulator m) {
+    public synchronized LXEngine removeModulator(LXModulator m) {
         this.modulators.remove(m);
+        return this;
     }
     
     public synchronized List<LXEffect> getEffects() {
         return this.effects;
     }
     
-    public synchronized LXEffect addEffect(LXEffect fx) {
+    public synchronized LXEngine addEffect(LXEffect fx) {
         this.effects.add(fx);
-        return fx;
+        return this;
     }
 
-    public synchronized void removeEffect(LXEffect fx) {
+    public synchronized LXEngine removeEffect(LXEffect fx) {
         this.effects.remove(fx);
+        return this;
+    }
+    
+    /**
+     * Adds an output driver
+     * 
+     * @param output
+     * @return this
+     */
+    public synchronized LXEngine addOutput(LXOutput output) {
+        this.outputs.add(output);
+        return this;
+    }
+    
+    /**
+     * Removes an output driver
+     * 
+     * @param output
+     * @return this
+     */
+    public synchronized LXEngine removeOutput(LXOutput output) {
+        this.outputs.remove(output);
+        return this;
     }
     
     public synchronized List<LXDeck> getDecks() {
@@ -342,7 +389,14 @@ public class LXEngine {
             fx.run(deltaMs, this.buffer.render);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
-        
+
+        // Send to outputs
+        long outputStart = System.nanoTime(); 
+        for (LXOutput output : this.outputs) {
+            output.send(this.buffer.render);
+        }
+        this.timer.outputNanos = System.nanoTime() - outputStart;
+
         this.timer.runNanos = System.nanoTime() - runStart;
     }
     

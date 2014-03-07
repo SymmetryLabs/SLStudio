@@ -51,7 +51,7 @@ public abstract class LXOutput {
     /**
      * Framerate throttle
      */
-    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 0, 90);
+    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 0, 300);
     
     /**
      * Gamma correction level
