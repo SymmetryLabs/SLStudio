@@ -32,7 +32,7 @@ public abstract class LXOutput {
     private final LX lx; 
     
     private final List<LXOutput> children = new ArrayList<LXOutput>();
-    
+        
     /**
      * Buffer with colors for this output, gamma-corrected 
      */
@@ -47,6 +47,15 @@ public abstract class LXOutput {
      * Whether the output is enabled.
      */
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
+    
+    /**
+     * Sending mode, 0 = normal, 1 = all white, 2 = all off
+     */
+    public final DiscreteParameter mode = new DiscreteParameter("MODE", 3);
+    
+    public final static int MODE_NORMAL = 0;
+    public final static int MODE_WHITE = 1;
+    public final static int MODE_OFF = 2;
     
     /**
      * Framerate throttle
@@ -68,9 +77,19 @@ public abstract class LXOutput {
      */
     private long lastFrameMillis = 0;
     
+    private final int[] allWhite;
+    
+    private final int[] allOff;
+    
     protected LXOutput(LX lx) {
         this.lx = lx;
         this.outputColors = new int[lx.total];
+        this.allWhite = new int[lx.total];
+        this.allOff = new int[lx.total];
+        for (int i = 0; i < lx.total; ++i) {
+            this.allWhite[i] = 0xffffffff;
+            this.allOff[i] = 0xff000000;
+        }
     }
     
     /**
@@ -108,13 +127,25 @@ public abstract class LXOutput {
         double fps = this.framesPerSecond.getValue();
         if ((fps == 0) ||
             ((now - this.lastFrameMillis) > (1000. / fps))) {
+            int[] colorsToSend;
+            switch (this.mode.getValuei()) {
+            case MODE_WHITE:
+                colorsToSend = this.allWhite;
+                break;
+            case MODE_OFF:
+                colorsToSend = this.allOff;
+                break;
+            default:
+            case MODE_NORMAL:
+                colorsToSend = colors;
+                break;
+            }
             int gamma = this.gammaCorrection.getValuei();
-            double brt = this.brightness.getValuef();
-            int[] colorsToSend = colors; 
+            double brt = this.brightness.getValuef(); 
             if (gamma > 0 || brt < 1) {
                 int r, g, b, rgb;
-                for (int i = 0; i < colors.length; ++i) {
-                    rgb = colors[i];
+                for (int i = 0; i < colorsToSend.length; ++i) {
+                    rgb = colorsToSend[i];
                     r = (rgb >> 16) & 0xff;
                     g = (rgb >> 8) & 0xff;
                     b = rgb & 0xff;        

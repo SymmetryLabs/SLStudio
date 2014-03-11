@@ -62,6 +62,16 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
         return this.minValue + ((int)(value - this.minValue) % this.range);
     }
     
+    public DiscreteParameter increment() {
+        this.setValue(getValuei() + 1);
+        return this;
+    }
+    
+    public DiscreteParameter decrement() {
+        this.setValue(getValuei() - 1);
+        return this;
+    }
+    
     public int getValuei() {
         return (int) getValue();
     }

@@ -73,11 +73,13 @@ public class LXDatagramOutput extends LXOutput {
     protected final void onSend(int[] colors) {
         beforeSend(colors);
         for (LXDatagram datagram : this.datagrams) {
-            datagram.onSend(colors);
-            try {
-                this.socket.send(datagram.packet);
-            } catch (IOException iox) {
-                iox.printStackTrace();
+            if (datagram.enabled.isOn()) {
+                datagram.onSend(colors);
+                try {
+                    this.socket.send(datagram.packet);
+                } catch (IOException iox) {
+                    iox.printStackTrace();
+                }
             }
         }
         afterSend(colors);

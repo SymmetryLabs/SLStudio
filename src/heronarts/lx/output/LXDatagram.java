@@ -13,6 +13,8 @@
 
 package heronarts.lx.output;
 
+import heronarts.lx.parameter.BooleanParameter;
+
 import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
@@ -22,6 +24,11 @@ public abstract class LXDatagram {
     protected final byte[] buffer;
     
     final DatagramPacket packet;
+    
+    /**
+     * Whether this datagram is active
+     */
+    public final BooleanParameter enabled = new BooleanParameter("ON", true);
     
     protected LXDatagram(int bufferSize) {
         this.buffer = new byte[bufferSize];
