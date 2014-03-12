@@ -31,6 +31,10 @@ public class UIKnob extends UIParameterControl {
     
     private boolean showValue = false;
     
+    public UIKnob() {
+        this(0, 0);
+    }
+    
     public UIKnob(float x, float y) {
         this(x, y, 0, 0);
         setSize(this.knobSize, this.knobSize + this.knobLabelHeight);

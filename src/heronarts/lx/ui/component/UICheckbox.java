@@ -21,6 +21,10 @@ public class UICheckbox extends UIButton {
 
     private boolean firstDraw = true;
 
+    public UICheckbox() {
+        this(0, 0, 0, 0);
+    }
+    
     public UICheckbox(float x, float y, float w, float h) {
         super(x, y, w, h);
         setMomentary(false);

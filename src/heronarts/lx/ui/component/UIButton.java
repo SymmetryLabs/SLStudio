@@ -39,6 +39,10 @@ public class UIButton extends UIObject {
         }
     };
     
+    public UIButton() {
+        this(0, 0, 0, 0);
+    }
+    
     public UIButton(float x, float y, float w, float h) {
         super(x, y, w, h);
     }

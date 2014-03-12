@@ -36,6 +36,10 @@ public class UIIntegerBox extends UIObject {
         }
     };
     
+    public UIIntegerBox() {
+        this(0, 0, 0, 0);
+    }
+    
     public UIIntegerBox(float x, float y, float w, float h) {
         super(x, y, w, h);
     }

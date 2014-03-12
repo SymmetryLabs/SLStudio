@@ -64,6 +64,10 @@ public class UIScrollList extends UIObject {
     private float scrollYStart;
     private float scrollYHeight;
 
+    public UIScrollList() {
+        this(0, 0, 0, 0);
+    }
+    
     public UIScrollList(float x, float y, float w, float h) {
         super(x, y, w, h);
     }

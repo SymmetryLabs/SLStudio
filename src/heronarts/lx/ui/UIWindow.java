@@ -27,7 +27,7 @@ public class UIWindow extends UIContext {
     public final static int TITLE_LABEL_HEIGHT = 24;
     
     private final static int TITLE_PADDING = 6;
-    
+        
     /**
      * The label object
      */

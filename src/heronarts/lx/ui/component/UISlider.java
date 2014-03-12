@@ -23,6 +23,10 @@ public class UISlider extends UIParameterControl {
 
     private static final float HANDLE_WIDTH = 12;
 
+    public UISlider() {
+        this(0, 0, 0, 0);
+    }
+    
     public UISlider(float x, float y, float w, float h) {
         super(x, y, w, h);
     }

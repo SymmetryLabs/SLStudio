@@ -28,6 +28,10 @@ public class UIToggleSet extends UIObject {
 
     private boolean evenSpacing = false;
 
+    public UIToggleSet() {
+        this(0, 0, 0, 0);
+    }
+    
     public UIToggleSet(float x, float y, float w, float h) {
         super(x, y, w, h);
     }
