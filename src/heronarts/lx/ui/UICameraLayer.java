@@ -45,7 +45,7 @@ public class UICameraLayer implements UILayer {
     
     // Radius bounds
     private float minRadius = 0, maxRadius = Float.MAX_VALUE;
-    
+        
     public UICameraLayer(UI ui) {
         this.ui = ui;
         computeEye();
@@ -148,13 +148,27 @@ public class UICameraLayer implements UILayer {
         this.ui.applet.camera(this.ex, this.ey, this.ez, this.cx, this.cy, this.cz, 0, -1, 0);
         
         // Draw all the components in the scene
+        this.beforeDraw();        
         for (UICameraComponent component : this.components) {
-            component.draw(this.ui);
+            if (component.isVisible()) {
+                component.draw(this.ui);
+            }
         }
-        
+        this.afterDraw();
+    
         // Reset the camera
         this.ui.applet.camera();
     }
+    
+    /**
+     * Subclasses may override, useful to turn on lighting, etc.
+     */
+    protected void beforeDraw() {}
+    
+    /**
+     * Subclasses may override, useful to turn off lighting, etc.
+     */
+    protected void afterDraw() {}
         
     public boolean mousePressed(float mx, float my) {
         this.px = mx;

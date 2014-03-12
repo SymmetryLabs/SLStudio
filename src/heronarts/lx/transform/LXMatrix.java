@@ -18,6 +18,13 @@ package heronarts.lx.transform;
  */
 public class LXMatrix {
     
+    public enum RotationMode {
+        RIGHT_HANDED,
+        LEFT_HANDED
+    };
+    
+    private final RotationMode rotationMode;
+    
     public float
         m11=1, m12=0, m13=0, m14=0,
         m21=0, m22=1, m23=0, m24=0,
@@ -27,7 +34,18 @@ public class LXMatrix {
     /**
      * Makes a new identity matrix.
      */
-    public LXMatrix() {}
+    public LXMatrix() {
+        this(RotationMode.RIGHT_HANDED);
+    }
+    
+    /**
+     * Makes a new matrix with the given rotation mode
+     * 
+     * @param rotationMode Rotation mode
+     */
+    public LXMatrix(RotationMode rotationMode) {
+        this.rotationMode = rotationMode; 
+    }
     
     /**
      * Copies the existing matrix
@@ -39,6 +57,7 @@ public class LXMatrix {
         m21 = m.m21; m22 = m.m22; m23 = m.m23; m24 = m.m24;
         m31 = m.m31; m32 = m.m32; m33 = m.m33; m34 = m.m34;
         m41 = m.m41; m42 = m.m42; m43 = m.m43; m44 = m.m44;
+        this.rotationMode = m.rotationMode;
     }
     
     /**
@@ -95,9 +114,12 @@ public class LXMatrix {
     }
     
     public LXMatrix rotateX(float rx) {
+        if (this.rotationMode == RotationMode.RIGHT_HANDED) {
+            rx = -rx;
+        }
         LXMatrix m = new LXMatrix();
-        m.m22 = (float) Math.cos(-rx);
-        m.m23 = (float) -Math.sin(-rx);
+        m.m22 = (float) Math.cos(rx);
+        m.m23 = (float) -Math.sin(rx);
         m.m32 = -m.m23;
         m.m33 = m.m22;
         multiply(m);
@@ -105,6 +127,9 @@ public class LXMatrix {
     }
     
     public LXMatrix rotateY(float ry) {
+        if (this.rotationMode == RotationMode.LEFT_HANDED) {
+            ry = -ry;
+        }
         LXMatrix m = new LXMatrix();
         m.m11 = (float) Math.cos(ry);
         m.m13 = (float) -Math.sin(ry);
@@ -115,9 +140,12 @@ public class LXMatrix {
     }
     
     public LXMatrix rotateZ(float rz) {
+        if (this.rotationMode == RotationMode.RIGHT_HANDED) {
+            rz = -rz;
+        }
         LXMatrix m = new LXMatrix();
-        m.m11 = (float) Math.cos(-rz);
-        m.m12 = (float) -Math.sin(-rz);
+        m.m11 = (float) Math.cos(rz);
+        m.m12 = (float) -Math.sin(rz);
         m.m21 = -m.m12;
         m.m22 = m.m11;
         multiply(m);

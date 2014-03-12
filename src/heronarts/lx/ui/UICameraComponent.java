@@ -23,11 +23,22 @@ public abstract class UICameraComponent {
 
     private final List<UICameraComponent> children = new ArrayList<UICameraComponent>();
     
+    boolean visible = true;
+    
     final void draw(UI ui) {
         onDraw(ui);
         for (UICameraComponent child : this.children) {
             child.draw(ui);
         }
+    }
+    
+    public boolean isVisible() {
+        return this.visible;
+    }
+    
+    public UICameraComponent setVisible(boolean visible) {
+        this.visible = visible;
+        return this;
     }
     
     /**

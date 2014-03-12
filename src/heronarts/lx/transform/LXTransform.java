@@ -24,14 +24,21 @@ import java.util.Stack;
  */
 public class LXTransform {
     
+    private final LXMatrix.RotationMode rotationMode;
+    
     private final Stack<LXMatrix> matrices;
     
     /**
      * Constructs a new transform
      */
     public LXTransform() {
+        this(LXMatrix.RotationMode.RIGHT_HANDED);
+    }
+    
+    public LXTransform(LXMatrix.RotationMode rotationMode) {
+        this.rotationMode = rotationMode; 
         this.matrices = new Stack<LXMatrix>();
-        this.matrices.push(new LXMatrix());
+        this.matrices.push(new LXMatrix(rotationMode));        
     }
         
     public LXMatrix getMatrix() {
