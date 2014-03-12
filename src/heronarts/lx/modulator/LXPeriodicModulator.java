@@ -84,12 +84,22 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
     
     /**
+     * Sets the basis to a random position
+     * 
+     * @return this
+     */
+    public final LXPeriodicModulator randomBasis() {
+        setBasis(Math.random());
+        return this;
+    }
+    
+    /**
      * Set the modulator to a certain basis position in its cycle.
      *  
      * @param basis
      * @return
      */
-    public final LXModulator setBasis(double basis) {
+    public final LXPeriodicModulator setBasis(double basis) {
         if (basis < 0) {
             basis = 0;
         } else if (basis > 1) {

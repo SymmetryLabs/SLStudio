@@ -86,6 +86,18 @@ public class UICameraLayer implements UILayer {
     }
     
     /**
+     * Set the theta angle of viewing
+     * 
+     * @param theta Angle about the y axis
+     * @return this
+     */
+    public UICameraLayer setTheta(float theta) {
+        this.theta = theta;
+        computeEye();
+        return this;
+    }
+    
+    /**
      * Sets bounds on the radius
      * @param minRadius
      * @param maxRadius
