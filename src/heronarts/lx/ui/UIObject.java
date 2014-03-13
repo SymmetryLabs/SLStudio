@@ -220,6 +220,24 @@ public abstract class UIObject {
     }
 
     /**
+     * Whether this object has a background
+     * 
+     * @return true or false
+     */
+    public boolean hasBackground() {
+        return this.hasBackground;
+    }
+    
+    /**
+     * The background color, if there is a background
+     * 
+     * @return color
+     */
+    public int getBackgroundColor() {
+        return this.backgroundColor;
+    }
+    
+    /**
      * Sets whether the object has a background
      * 
      * @param hasBackground true or false
@@ -246,6 +264,33 @@ public abstract class UIObject {
             redraw();
         }
         return this;
+    }
+    
+    /**
+     * Whether this object has a border
+     * 
+     * @return true or false
+     */
+    public boolean hasBorder() {
+        return this.hasBorder;
+    }
+    
+    /**
+     * Current border color
+     * 
+     * @return color
+     */
+    public int getBorderColor() {
+        return this.borderColor;
+    }
+    
+    /**
+     * The weight of the border
+     * 
+     * @return weight
+     */
+    public int getBorderWeight() {
+        return this.borderWeight;
     }
     
     /**
@@ -369,7 +414,7 @@ public abstract class UIObject {
     }
     
     /**
-     * Invoked whenever this object needs to draw itself. Subclasses should override
+     * Invoked whenever this object needs to draw itself - subclasses should override
      * to implement their drawing functionality.
      * 
      * @param ui UI
@@ -378,7 +423,8 @@ public abstract class UIObject {
     protected void onDraw(UI ui, PGraphics pg) {}
     
     /**
-     * Invoked when the mouse is pressed within the bounds of this object.
+     * Invoked when the mouse is pressed within the bounds of this object - subclasses
+     * should override.
      * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
@@ -387,7 +433,7 @@ public abstract class UIObject {
     
     /**
      * Invoked when the mouse is released in this object, or after being initially
-     * pressed inside this object.
+     * pressed inside this object - subclasses should override.
      * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
@@ -396,7 +442,7 @@ public abstract class UIObject {
     
     /**
      * Invoked when the mouse is dragged in this object, or after being initially
-     * pressed inside this object.
+     * pressed inside this object - subclasses should override.
      * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
@@ -406,7 +452,8 @@ public abstract class UIObject {
     protected void onMouseDragged(float mx, float my, float dx, float dy) {}
         
     /**
-     * Invoked when the mouse wheel is scrolled inside this object.
+     * Invoked when the mouse wheel is scrolled inside this object - subclasses should
+     * override.
      *
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
