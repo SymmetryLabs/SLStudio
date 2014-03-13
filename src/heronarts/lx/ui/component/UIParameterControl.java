@@ -13,6 +13,8 @@
 
 package heronarts.lx.ui.component;
 
+import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -57,4 +59,21 @@ public abstract class UIParameterControl extends UIObject implements LXParameter
         redraw();
         return this;
     }
+    
+    public void onKeyPressed(char keyChar, int keyCode) {
+        if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+            if (this.parameter instanceof DiscreteParameter) {
+                ((DiscreteParameter) this.parameter).decrement();
+            } else {
+                setNormalized(LXUtils.constrain(getNormalized() - .01, 0, 1));
+            }
+        } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+            if (this.parameter instanceof DiscreteParameter) {
+                ((DiscreteParameter) this.parameter).increment();
+            } else {
+                setNormalized(LXUtils.constrain(getNormalized() + .01, 0, 1));
+            }
+        }
+    }
+
 }

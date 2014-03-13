@@ -135,4 +135,19 @@ public class UIContext extends UIContainer implements UILayer {
         }
         return false;
     }
+    
+    public final boolean keyPressed(char keyChar, int keyCode) {
+        this.onKeyPressed(keyChar, keyCode);
+        return true;
+    }
+    
+    public final boolean keyReleased(char keyChar, int keyCode) {
+        this.onKeyReleased(keyChar, keyCode);
+        return true;
+    }
+    
+    public final boolean keyTyped(char keyChar, int keyCode) {
+        this.onKeyTyped(keyChar, keyCode);
+        return true;
+    }
 }

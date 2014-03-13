@@ -216,5 +216,26 @@ public class UICameraLayer implements UILayer {
         setRadius(this.radius + delta);
         return true;
     }
+    
+    public boolean keyPressed(char keyChar, int keyCode) {
+        if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+            this.theta -= .05;
+            computeEye();
+            return true;
+        } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+            this.theta += .05;
+            computeEye();
+            return true;
+        }
+        return false;
+    }
+    
+    public boolean keyReleased(char keyChar, int keyCode) {
+        return false;
+    }
+    
+    public boolean keyTyped(char keyChar, int keyCode) {
+        return false;
+    }
 
 }

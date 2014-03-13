@@ -20,4 +20,7 @@ public interface UILayer {
     public boolean mouseClicked(float mx, float my);
     public boolean mouseDragged(float mx, float my);
     public boolean mouseWheel(float mx, float my, float delta);
+    public boolean keyPressed(char keyChar, int keyCode);
+    public boolean keyReleased(char keyChar, int keyCode);
+    public boolean keyTyped(char keyChar, int keyCode);
 }

@@ -41,6 +41,11 @@ public class UI {
     private UILayer pressedLayer = null;
     
     /**
+     * Layer that has focus
+     */
+    private UILayer focusedLayer = null;
+    
+    /**
      * Default item font in this UI
      */
     private PFont itemFont;
@@ -260,6 +265,7 @@ public class UI {
             UILayer layer = this.layers.get(i);
             if (layer.mousePressed(x, y)) {
                 this.pressedLayer = layer;
+                this.focusedLayer = layer;
                 break;
             }
         }
@@ -293,6 +299,24 @@ public class UI {
             if (layer.mouseWheel(x, y, rotation)) {
                 break;
             }
+        }
+    }
+    
+    public final void keyPressed(char keyChar, int keyCode) {
+        if (this.focusedLayer != null) {
+            this.focusedLayer.keyPressed(keyChar, keyCode);
+        }
+    }
+    
+    public final void keyReleased(char keyChar, int keyCode) {
+        if (this.focusedLayer != null) {
+            this.focusedLayer.keyReleased(keyChar, keyCode);
+        }
+    }
+    
+    public final void keyTyped(char keyChar, int keyCode) {
+        if (this.focusedLayer != null) {
+            this.focusedLayer.keyTyped(keyChar, keyCode);
         }
     }
     

@@ -25,6 +25,11 @@ public class UIContainer extends UIObject {
      * Which child mouse events are pressed to, if any.
      */
     private UIObject pressedChild = null;
+    
+    /**
+     * Which child has focus.
+     */
+    private UIObject focusedChild = null;
 
     /**
      * Constructs an empty UIContainer with no size.
@@ -55,6 +60,7 @@ public class UIContainer extends UIObject {
             if (child.contains(mx, my)) {
                 child.onMousePressed(mx - child.x, my - child.y);
                 this.pressedChild = child;
+                this.focusedChild = child;
                 break;
             }
         }
@@ -90,6 +96,24 @@ public class UIContainer extends UIObject {
                 child.onMouseWheel(mx - child.x, mx - child.y, delta);
                 break;
             }
+        }
+    }
+    
+    protected void onKeyPressed(char keyChar, int keyCode) {
+        if (this.focusedChild != null) {
+            this.focusedChild.onKeyPressed(keyChar, keyCode);
+        }
+    }
+    
+    protected void onKeyReleased(char keyChar, int keyCode) {
+        if (this.focusedChild != null) {
+            this.focusedChild.onKeyReleased(keyChar, keyCode);
+        }
+    }
+    
+    protected void onKeyTyped(char keyChar, int keyCode) {
+        if (this.focusedChild != null) {
+            this.focusedChild.onKeyTyped(keyChar, keyCode);
         }
     }
 

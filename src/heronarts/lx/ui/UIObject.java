@@ -467,5 +467,32 @@ public abstract class UIObject {
      * @param my y-position in this object's coordinate space
      * @param dx relative change in mouse wheel position
      */
-    protected void onMouseWheel(float mx, float my, float dx) {}  
+    protected void onMouseWheel(float mx, float my, float dx) {}
+    
+    /**
+     * Invoked when key is pressed and this object has focus - subclasses should
+     * override.
+     * 
+     * @param keyChar
+     * @param keyCode
+     */
+    protected void onKeyPressed(char keyChar, int keyCode) {}
+    
+    /**
+     * Invoked when key is released and this object has focus - subclasses should
+     * override.
+     * 
+     * @param keyChar
+     * @param keyCode
+     */
+    protected void onKeyReleased(char keyChar, int keyCode) {}
+    
+    /**
+     * Invoked when key is typed and this object has focus - subclasses should
+     * override.
+     * 
+     * @param keyChar
+     * @param keyCode
+     */
+    protected void onKeyTyped(char keyChar, int keyCode) {}
 }

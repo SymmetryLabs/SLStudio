@@ -1137,6 +1137,7 @@ public class LX {
         
     private void keyEvent(KeyEventType type, char keyChar, int keyCode) {
         if (type == KeyEventType.RELEASED) {
+            this.ui.keyReleased(keyChar, keyCode);
             switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
                 engine.goPrev();
@@ -1179,6 +1180,7 @@ public class LX {
                 break;
             }
         } else if (type == KeyEventType.PRESSED) {
+            this.ui.keyPressed(keyChar, keyCode);
             switch (keyChar) {
             case 'f':
                 flags.showFramerate = true;
@@ -1190,6 +1192,8 @@ public class LX {
                 flash.enable();
                 break;
             }
+        } else if (type == KeyEventType.TYPED) {
+            this.ui.keyTyped(keyChar, keyCode);
         }
     }
     
@@ -1226,7 +1230,7 @@ public class LX {
         MouseEventType type;
         switch (e.getAction()) {
         case processing.event.MouseEvent.WHEEL:
-            ui.mouseWheel(e.getX(), e.getY(), e.getCount());
+            this.ui.mouseWheel(e.getX(), e.getY(), e.getCount());
             return;
         case processing.event.MouseEvent.PRESS:
             type = MouseEventType.PRESSED;
@@ -1249,16 +1253,16 @@ public class LX {
     private void mouseEvent(MouseEventType type, int x, int y) {
         switch (type) {
         case PRESSED:
-            ui.mousePressed(x, y);
+            this.ui.mousePressed(x, y);
             break;
         case RELEASED:
-            ui.mouseReleased(x, y);
+            this.ui.mouseReleased(x, y);
             break;
         case CLICKED:
-            ui.mouseClicked(x, y);
+            this.ui.mouseClicked(x, y);
             break;
         case DRAGGED:
-            ui.mouseDragged(x, y);
+            this.ui.mouseDragged(x, y);
             break;
         }
     }
