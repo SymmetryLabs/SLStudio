@@ -182,21 +182,21 @@ public class UICameraLayer implements UILayer {
      */
     protected void afterDraw() {}
         
-    public boolean mousePressed(float mx, float my) {
+    public final boolean mousePressed(float mx, float my) {
         this.px = mx;
         this.py = my;
         return true;
     }
     
-    public boolean mouseReleased(float mx, float my) {
+    public final boolean mouseReleased(float mx, float my) {
         return true;
     }
     
-    public boolean mouseClicked(float mx, float my) {
+    public final boolean mouseClicked(float mx, float my) {
         return false;
     }
     
-    public boolean mouseDragged(float mx, float my) {
+    public final boolean mouseDragged(float mx, float my) {
         float dx = mx - this.px;
         float dy = my - this.py;
         this.px = mx;
@@ -212,12 +212,12 @@ public class UICameraLayer implements UILayer {
         return true;
     }
     
-    public boolean mouseWheel(float mx, float my, float delta) {
+    public final boolean mouseWheel(float mx, float my, float delta) {
         setRadius(this.radius + delta);
         return true;
     }
     
-    public boolean keyPressed(char keyChar, int keyCode) {
+    public final boolean keyPressed(char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
             this.theta -= .05;
             computeEye();
@@ -230,11 +230,11 @@ public class UICameraLayer implements UILayer {
         return false;
     }
     
-    public boolean keyReleased(char keyChar, int keyCode) {
+    public final boolean keyReleased(char keyChar, int keyCode) {
         return false;
     }
     
-    public boolean keyTyped(char keyChar, int keyCode) {
+    public final boolean keyTyped(char keyChar, int keyCode) {
         return false;
     }
 
