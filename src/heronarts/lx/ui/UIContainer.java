@@ -22,9 +22,9 @@ package heronarts.lx.ui;
 public class UIContainer extends UIObject {
 
     /**
-     * Which child mouse events are focused to, if any.
+     * Which child mouse events are pressed to, if any.
      */
-    private UIObject focusedChild = null;
+    private UIObject pressedChild = null;
 
     /**
      * Constructs an empty UIContainer with no size.
@@ -54,22 +54,32 @@ public class UIContainer extends UIObject {
             UIObject child = this.children.get(i);
             if (child.contains(mx, my)) {
                 child.onMousePressed(mx - child.x, my - child.y);
-                this.focusedChild = child;
+                this.pressedChild = child;
+                break;
+            }
+        }
+    }
+    
+    protected void onMouseClicked(float mx, float my) {
+        for (int i = this.children.size() - 1; i >= 0; --i) {
+            UIObject child = this.children.get(i);
+            if (child.contains(mx, my)) {
+                child.onMouseClicked(mx - child.x, my - child.y);
                 break;
             }
         }
     }
 
     protected void onMouseReleased(float mx, float my) {
-        if (this.focusedChild != null) {
-            this.focusedChild.onMouseReleased(mx - this.focusedChild.x, my - this.focusedChild.y);
+        if (this.pressedChild != null) {
+            this.pressedChild.onMouseReleased(mx - this.pressedChild.x, my - this.pressedChild.y);
         }
-        this.focusedChild = null;
+        this.pressedChild = null;
     }
 
     protected void onMouseDragged(float mx, float my, float dx, float dy) {
-        if (this.focusedChild != null) {
-            this.focusedChild.onMouseDragged(mx - this.focusedChild.x, my - this.focusedChild.y, dx, dy);
+        if (this.pressedChild != null) {
+            this.pressedChild.onMouseDragged(mx - this.pressedChild.x, my - this.pressedChild.y, dx, dy);
         }
     }
 

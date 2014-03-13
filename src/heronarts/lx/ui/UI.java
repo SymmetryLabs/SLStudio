@@ -36,9 +36,9 @@ public class UI {
     private final List<UILayer> layers = new ArrayList<UILayer>();
     
     /**
-     * Layer that focus is on
+     * Layer that was pressed on
      */
-    private UILayer focusLayer = null;
+    private UILayer pressedLayer = null;
     
     /**
      * Default item font in this UI
@@ -255,26 +255,35 @@ public class UI {
     }
     
     public final void mousePressed(int x, int y) {
-        this.focusLayer = null;
+        this.pressedLayer = null;
         for (int i = this.layers.size() - 1; i >= 0; --i) {
             UILayer layer = this.layers.get(i);
             if (layer.mousePressed(x, y)) {
-                this.focusLayer = layer;
+                this.pressedLayer = layer;
                 break;
             }
         }
     }
     
     public final void mouseReleased(int x, int y) {
-        if (this.focusLayer != null) {
-            this.focusLayer.mouseReleased(x, y);
-            this.focusLayer = null;
+        if (this.pressedLayer != null) {
+            this.pressedLayer.mouseReleased(x, y);
+            this.pressedLayer = null;
+        }
+    }
+    
+    public final void mouseClicked(int x, int y) {
+        for (int i = this.layers.size() - 1; i >= 0; --i) {
+            UILayer layer = this.layers.get(i);
+            if (layer.mouseClicked(x, y)) {
+                break;
+            }
         }
     }
     
     public final void mouseDragged(int x, int y) {
-        if (this.focusLayer != null) {
-            this.focusLayer.mouseDragged(x, y);
+        if (this.pressedLayer != null) {
+            this.pressedLayer.mouseDragged(x, y);
         }
     }
     

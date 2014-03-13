@@ -1210,6 +1210,9 @@ public class LX {
         case java.awt.event.MouseEvent.MOUSE_RELEASED:
             type = MouseEventType.RELEASED;
             break;
+        case java.awt.event.MouseEvent.MOUSE_CLICKED:
+            type = MouseEventType.CLICKED;
+            break;
         case java.awt.event.MouseEvent.MOUSE_DRAGGED:
             type = MouseEventType.DRAGGED;
             break;
@@ -1231,6 +1234,9 @@ public class LX {
         case processing.event.MouseEvent.RELEASE:
             type = MouseEventType.RELEASED;
             break;
+        case processing.event.MouseEvent.CLICK:
+            type = MouseEventType.CLICKED;
+            break;
         case processing.event.MouseEvent.DRAG:
             type = MouseEventType.DRAGGED;
             break;
@@ -1247,6 +1253,9 @@ public class LX {
             break;
         case RELEASED:
             ui.mouseReleased(x, y);
+            break;
+        case CLICKED:
+            ui.mouseClicked(x, y);
             break;
         case DRAGGED:
             ui.mouseDragged(x, y);

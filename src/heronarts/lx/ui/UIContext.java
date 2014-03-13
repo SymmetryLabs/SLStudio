@@ -98,7 +98,18 @@ public class UIContext extends UIContainer implements UILayer {
         onMouseReleased(mx - this.x, my - this.y);
         return true;
     }
-
+    
+    public final boolean mouseClicked(float mx, float my) {
+        if (!this.visible) {
+            return false;
+        }
+        if (contains(mx, my)) {
+            onMouseClicked(mx - this.x, my - this.y);
+            return true;
+        }
+        return false;
+    }
+    
     public final boolean mouseDragged(float mx, float my) {
         if (!this.visible) {
             return false;

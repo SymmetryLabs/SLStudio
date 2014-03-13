@@ -192,6 +192,10 @@ public class UICameraLayer implements UILayer {
         return true;
     }
     
+    public boolean mouseClicked(float mx, float my) {
+        return false;
+    }
+    
     public boolean mouseDragged(float mx, float my) {
         float dx = mx - this.px;
         float dy = my - this.py;

@@ -441,6 +441,14 @@ public abstract class UIObject {
     protected void onMouseReleased(float mx, float my) {}
     
     /**
+     * Invoked when the mouse is clicked in this object - subclasses should override.
+     * 
+     * @param mx x-position in this object's coordinate space
+     * @param my y-position in this object's coordinate space
+     */
+    protected void onMouseClicked(float mx, float my) {}
+    
+    /**
      * Invoked when the mouse is dragged in this object, or after being initially
      * pressed inside this object - subclasses should override.
      * 
