@@ -16,6 +16,8 @@ package heronarts.lx.transition;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.FixedParameter;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * An object interface to blend two patterns together. All
@@ -61,7 +63,8 @@ public abstract class LXTransition extends LXComponent {
     protected final LX lx; 
     protected final int[] colors;
     
-    private BasicParameter duration;
+    private LXParameter duration;
+    
     private Ease ease;
     
     /**
@@ -93,8 +96,18 @@ public abstract class LXTransition extends LXComponent {
      * @return The number of milliseconds this transition lasts for
      */
     final public double getDuration() {
-        double durVal = duration.getValue();
-        return 100. + (durVal*durVal) * 9900.;
+        return this.duration.getValue();
+    }
+    
+    /**
+     * Sets the duration to the value of a parameter
+     * 
+     * @param duration
+     * @return this
+     */
+    public LXTransition setDuration(LXParameter duration) {
+        this.duration = duration;
+        return this;
     }
     
     /**
@@ -104,7 +117,7 @@ public abstract class LXTransition extends LXComponent {
      * @return This transition, for method chaining
      */
     public LXTransition setDuration(double duration) {
-        this.duration.setValue(Math.sqrt((duration-100)/9900.));
+        this.duration = new FixedParameter(duration);
         return this;
     }
     
