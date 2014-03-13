@@ -68,7 +68,6 @@ public class UIIntegerBox extends UIObject {
     }
 
     protected void onDraw(UI ui, PGraphics pg) {
-        pg.rect(0, 0, this.width, this.height);
         pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.textFont(ui.getItemFont());
         pg.fill(ui.getTextColor());

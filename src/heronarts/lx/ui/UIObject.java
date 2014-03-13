@@ -397,7 +397,9 @@ public abstract class UIObject {
 
     private void drawBackgroundBorder(UI ui, PGraphics pg) {
         if (this.hasBackground || this.hasBorder) {
+            int border = 0;
             if (this.hasBorder) {
+                border = this.borderWeight;
                 pg.strokeWeight(this.borderWeight);
                 pg.stroke(this.borderColor);
             } else {
@@ -408,7 +410,9 @@ public abstract class UIObject {
             } else {
                 pg.noFill();
             }
-            pg.rect(0, 0, this.width, this.height);
+            pg.rect(border/2, border/2, this.width-border, this.height-border);
+            
+            // Reset stroke weight
             pg.strokeWeight(1);
         }
     }

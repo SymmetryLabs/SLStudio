@@ -45,6 +45,8 @@ public class UIWindow extends UIContext {
      */
     public UIWindow(final UI ui, String title, float x, float y, float w, float h) {
         super(ui, x, y, w, h);
+        setBackgroundColor(ui.getBackgroundColor());
+        setBorderColor(0xff292929);
         this.label = new UILabel(0, 0, w, TITLE_LABEL_HEIGHT) {
             
             protected void onMousePressed(float mx, float my) {
@@ -69,13 +71,5 @@ public class UIWindow extends UIContext {
     public UIWindow setTitle(String title) {
         this.label.setLabel(title);
         return this;
-    }
-    
-    protected void onDraw(UI ui, PGraphics pg) {
-        // Draw a background under the whole window
-        pg.noStroke();
-        pg.fill(ui.getBackgroundColor());
-        pg.stroke(0xff292929);
-        pg.rect(0, 0, this.width-1, this.height-1);
     }
 }
