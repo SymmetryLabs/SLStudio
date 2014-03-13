@@ -247,6 +247,11 @@ public class LXDeck {
             finishTransition();
         } else {
             getNextPattern().onTransitionStart();
+            this.transition.blend(
+                this.getActivePattern().getColors(),
+                this.getNextPattern().getColors(),
+                0
+            );
             this.transitionMillis = System.currentTimeMillis();
         }
     }
@@ -276,10 +281,10 @@ public class LXDeck {
             } else {
                 this.getNextPattern().go(deltaMs);
                 this.transition.blend(
-                        this.getActivePattern().getColors(),
-                        this.getNextPattern().getColors(),
-                        (double) transitionMs / this.transition.getDuration()
-                        );
+                    this.getActivePattern().getColors(),
+                    this.getNextPattern().getColors(),
+                    (double) transitionMs / this.transition.getDuration()
+                );
             }
         } else {
             if (this.autoTransitionEnabled &&
