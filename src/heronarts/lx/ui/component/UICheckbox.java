@@ -31,9 +31,6 @@ public class UICheckbox extends UIButton {
     }
 
     public void onDraw(UI ui, PGraphics pg) {
-        pg.stroke(this.borderColor);
-        pg.fill(this.active ? this.activeColor : this.inactiveColor);
-        pg.rect(0, 0, this.height, this.height);
         if (this.firstDraw) {
             pg.fill(this.labelColor);
             pg.textFont(ui.getItemFont());

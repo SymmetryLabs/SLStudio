@@ -25,10 +25,11 @@ public class UIButton extends UIObject {
 
     protected boolean active = false;
     protected boolean isMomentary = false;
-    protected int borderColor = 0xff666666;
+    
     protected int inactiveColor = 0xff222222;
-    protected int activeColor = 0xff669966;
+    protected int activeColor = 0xff669966;    
     protected int labelColor = 0xff999999;
+    
     protected String label = "";
     
     private BooleanParameter parameter = null;
@@ -45,6 +46,8 @@ public class UIButton extends UIObject {
     
     public UIButton(float x, float y, float w, float h) {
         super(x, y, w, h);
+        setBorderColor(0xff666666);
+        setBackgroundColor(this.inactiveColor);
     }
     
     public UIButton setParameter(BooleanParameter parameter) {
@@ -65,9 +68,6 @@ public class UIButton extends UIObject {
     }
 
     protected void onDraw(UI ui, PGraphics pg) {
-        pg.stroke(this.borderColor);
-        pg.fill(this.active ? this.activeColor : this.inactiveColor);
-        pg.rect(0, 0, this.width, this.height);
         if ((this.label != null) && (this.label.length() > 0)) {
             pg.fill(this.active ? 0xffffffff : this.labelColor);
             pg.textFont(ui.getItemFont());
@@ -95,6 +95,7 @@ public class UIButton extends UIObject {
             if (this.parameter != null) {
                 this.parameter.setValue(active);
             }
+            setBackgroundColor(active ? this.activeColor : this.inactiveColor);
             onToggle(this.active = active);
             redraw();
         }
@@ -108,19 +109,11 @@ public class UIButton extends UIObject {
     protected void onToggle(boolean active) {
     }
 
-    public UIButton setBorderColor(int borderColor) {
-        if (this.borderColor != borderColor) {
-            this.borderColor = borderColor;
-            redraw();
-        }
-        return this;
-    }
-
     public UIButton setActiveColor(int activeColor) {
         if (this.activeColor != activeColor) {
             this.activeColor = activeColor;
-            if (active) {
-                redraw();
+            if (this.active) {
+                setBackgroundColor(activeColor);
             }
         }
         return this;
@@ -130,7 +123,7 @@ public class UIButton extends UIObject {
         if (this.inactiveColor != inactiveColor) {
             this.inactiveColor = inactiveColor;
             if (!this.active) {
-                redraw();
+                setBackgroundColor(inactiveColor);
             }
         }
         return this;

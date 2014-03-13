@@ -32,15 +32,7 @@ public class UILabel extends UIObject {
     private int horizontalAlignment = PConstants.LEFT;
     
     private int verticalAlignment = PConstants.TOP;
-    
-    private boolean hasBackground = false;
-    
-    private int backgroundColor = 0xFF000000;
-    
-    private boolean hasBorder = false;
-    
-    private int borderColor = 0xFF000000;
-    
+        
     private int padding = 0;
     
     /**
@@ -65,29 +57,7 @@ public class UILabel extends UIObject {
         this.padding = padding;
         return this;
     }
-    
-    public UILabel setBackground(boolean hasBackground) {
-        this.hasBackground = hasBackground;
-        return this;
-    }
-    
-    public UILabel setBackground(int backgroundColor) {
-        this.hasBackground = true;
-        this.backgroundColor = backgroundColor;
-        return this;
-    }
-    
-    public UILabel setBorder(boolean hasBorder) {
-        this.hasBorder = hasBorder;
-        return this;
-    }
-    
-    public UILabel setBorder(int borderColor) {
-        this.hasBorder = true;
-        this.borderColor = borderColor;
-        return this;
-    }
-    
+        
     public UILabel setAlignment(int horizontalAlignment) {
         setAlignment(horizontalAlignment, PConstants.BASELINE);
         return this;
@@ -100,19 +70,6 @@ public class UILabel extends UIObject {
     }
     
     protected void onDraw(UI ui, PGraphics pg) {
-        if (this.hasBackground || this.hasBorder) {
-            if (this.hasBorder) {
-                pg.stroke(this.borderColor);
-            } else {
-                pg.noStroke();
-            }
-            if (this.hasBackground) {
-                pg.fill(this.backgroundColor);
-            } else {
-                pg.noFill();
-            }
-            pg.rect(0, 0, this.width, this.height);
-        }
         pg.textFont((this.font == null) ? ui.getTitleFont() : this.font);
         pg.fill(this.color);
         float tx = this.padding, ty = this.padding;

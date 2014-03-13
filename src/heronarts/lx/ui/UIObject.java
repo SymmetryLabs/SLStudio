@@ -13,6 +13,8 @@
 
 package heronarts.lx.ui;
 
+import heronarts.lx.ui.component.UILabel;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -74,6 +76,16 @@ public abstract class UIObject {
      */
     protected boolean visible = true;
 
+    private boolean hasBackground = false;
+    
+    private int backgroundColor = 0xFF000000;
+    
+    private boolean hasBorder = false;
+    
+    private int borderColor = 0xFF000000;
+    
+    private int borderWeight = 1;
+    
     /**
      * Constructs a UIObject with no size.
      */
@@ -208,6 +220,79 @@ public abstract class UIObject {
     }
 
     /**
+     * Sets whether the object has a background
+     * 
+     * @param hasBackground true or false
+     * @return this
+     */
+    public UIObject setBackground(boolean hasBackground) {
+        if (this.hasBackground != hasBackground) {
+            this.hasBackground = hasBackground;
+            redraw();
+        }
+        return this;
+    }
+    
+    /**
+     * Sets a background color
+     * 
+     * @param backgroundColor color
+     * @return this
+     */    
+    public UIObject setBackgroundColor(int backgroundColor) {
+        if (!this.hasBackground || (this.backgroundColor != backgroundColor)) {
+            this.hasBackground = true;
+            this.backgroundColor = backgroundColor;
+            redraw();
+        }
+        return this;
+    }
+    
+    /**
+     * Sets whether there is a border
+     * 
+     * @param hasBorder true or false
+     * @return this
+     */
+    public UIObject setBorder(boolean hasBorder) {
+        if (this.hasBorder != hasBorder) {
+            this.hasBorder = hasBorder;
+            redraw();
+        }
+        return this;
+    }
+    
+    /**
+     * Sets the color of the border
+     * 
+     * @param borderColor color
+     * @return this
+     */
+    public UIObject setBorderColor(int borderColor) {
+        if (!this.hasBorder || (this.borderColor != borderColor)) {
+            this.hasBorder = true;
+            this.borderColor = borderColor;
+            redraw();
+        }
+        return this;
+    }
+
+    /**
+     * Sets the weight of the border
+     * 
+     * @param borderWeight weight
+     * @return this
+     */
+    public UIObject setBorderWeight(int borderWeight) {
+        if (!this.hasBorder || (this.borderWeight != borderWeight)) {
+            this.hasBorder = true;
+            this.borderWeight = borderWeight;
+            redraw();
+        }
+        return this;
+    }
+    
+    /**
      * Redraws this object.
      * 
      * @return this object
@@ -249,6 +334,7 @@ public abstract class UIObject {
         }
         if (this.needsRedraw) {
             this.needsRedraw = false;
+            drawBackgroundBorder(ui, pg);
             onDraw(ui, pg);
         }
         if (this.childNeedsRedraw) {
@@ -264,6 +350,24 @@ public abstract class UIObject {
         }
     }
 
+    private void drawBackgroundBorder(UI ui, PGraphics pg) {
+        if (this.hasBackground || this.hasBorder) {
+            if (this.hasBorder) {
+                pg.strokeWeight(this.borderWeight);
+                pg.stroke(this.borderColor);
+            } else {
+                pg.noStroke();
+            }
+            if (this.hasBackground) {
+                pg.fill(this.backgroundColor);
+            } else {
+                pg.noFill();
+            }
+            pg.rect(0, 0, this.width, this.height);
+            pg.strokeWeight(1);
+        }
+    }
+    
     /**
      * Invoked whenever this object needs to draw itself. Subclasses should override
      * to implement their drawing functionality.

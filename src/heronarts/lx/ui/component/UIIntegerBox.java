@@ -42,6 +42,8 @@ public class UIIntegerBox extends UIObject {
     
     public UIIntegerBox(float x, float y, float w, float h) {
         super(x, y, w, h);
+        setBorderColor(0xff666666);
+        setBackgroundColor(0xff222222);
     }
     
     public UIIntegerBox setParameter(final DiscreteParameter parameter) {
@@ -66,8 +68,6 @@ public class UIIntegerBox extends UIObject {
     }
 
     protected void onDraw(UI ui, PGraphics pg) {
-        pg.stroke(0xff666666);
-        pg.fill(0xff222222);
         pg.rect(0, 0, this.width, this.height);
         pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.textFont(ui.getItemFont());
