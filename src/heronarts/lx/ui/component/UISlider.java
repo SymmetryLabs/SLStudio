@@ -29,12 +29,12 @@ public class UISlider extends UIParameterControl {
     
     public UISlider(float x, float y, float w, float h) {
         super(x, y, w, h);
+        setBackgroundColor(0xff333333);
+        setBorderColor(0xff666666);
     }
 
     protected void onDraw(UI ui, PGraphics pg) {
         pg.noStroke();
-        pg.fill(0xff333333);
-        pg.rect(0, 0, this.width, this.height);
         pg.fill(0xff222222);
         pg.rect(4, this.height / 2 - 2, this.width - 8, 4);
         pg.fill(0xff666666);

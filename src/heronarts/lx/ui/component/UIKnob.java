@@ -58,7 +58,8 @@ public class UIKnob extends UIParameterControl {
         float arcStart = PConstants.HALF_PI + this.knobIndent;
         float arcRange = (PConstants.TWO_PI-2*this.knobIndent);
         
-        pg.fill(0xff222222);    
+        pg.fill(0xff222222);
+        pg.stroke(0xff494949);
         pg.arc(arcCenter, arcCenter, this.knobSize, this.knobSize, arcStart, arcStart + arcRange);
 
         // Light ring indicating value
@@ -66,6 +67,7 @@ public class UIKnob extends UIParameterControl {
         pg.arc(arcCenter, arcCenter, this.knobSize, this.knobSize, arcStart, arcStart + knobValue * arcRange);
         
         // Center circle of knob
+        pg.noStroke();
         pg.fill(0xff333333);
         pg.ellipse(arcCenter, arcCenter, arcCenter, arcCenter);
 
@@ -80,6 +82,7 @@ public class UIKnob extends UIParameterControl {
         } else if (knobLabel.length() > 4) {
           knobLabel = knobLabel.substring(0, 4);
         }
+        pg.noStroke();
         pg.fill(ui.BLACK);
         pg.rect(0, this.knobSize + 2, this.knobSize, this.knobLabelHeight - 2);
         pg.fill(ui.getTextColor());
