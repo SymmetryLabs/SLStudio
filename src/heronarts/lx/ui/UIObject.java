@@ -14,7 +14,6 @@
 package heronarts.lx.ui;
 
 import heronarts.lx.LXKeyEvent;
-import heronarts.lx.ui.component.UILabel;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -21,6 +21,10 @@ import java.net.UnknownHostException;
 
 public abstract class LXDatagram {
 
+    long sendAfter = 0;
+    
+    int failureCount = 0;
+    
     /**
      * Various orderings for RGB buffer data
      */
