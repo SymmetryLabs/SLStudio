@@ -13,6 +13,8 @@
 
 package heronarts.lx.ui;
 
+import heronarts.lx.LXKeyEvent;
+
 /**
  * This is a UIObject that may contain other UIObjects. Mouse and drawing events
  * are automatically delegated appropriately. The onDraw method of the container
@@ -99,21 +101,21 @@ public class UIContainer extends UIObject {
         }
     }
     
-    protected void onKeyPressed(char keyChar, int keyCode) {
+    protected void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedChild != null) {
-            this.focusedChild.onKeyPressed(keyChar, keyCode);
+            this.focusedChild.onKeyPressed(keyEvent, keyChar, keyCode);
         }
     }
     
-    protected void onKeyReleased(char keyChar, int keyCode) {
+    protected void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedChild != null) {
-            this.focusedChild.onKeyReleased(keyChar, keyCode);
+            this.focusedChild.onKeyReleased(keyEvent, keyChar, keyCode);
         }
     }
     
-    protected void onKeyTyped(char keyChar, int keyCode) {
+    protected void onKeyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedChild != null) {
-            this.focusedChild.onKeyTyped(keyChar, keyCode);
+            this.focusedChild.onKeyTyped(keyEvent, keyChar, keyCode);
         }
     }
 

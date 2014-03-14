@@ -317,13 +317,21 @@ public class LX {
     
     public final class KeyEvent1x {
         public void keyEvent(java.awt.event.KeyEvent e) {
-            keyEvent1x(e);
+            try {
+                LX.this.keyEvent(new LXKeyEvent(e));
+            } catch (LXKeyEvent.UnsupportedActionException uax) {
+                // No problem
+            }
         }
     }
     
     public final class KeyEvent2x {
         public void keyEvent(processing.event.KeyEvent e) {
-            keyEvent2x(e);
+            try {
+                LX.this.keyEvent(new LXKeyEvent(e));
+            } catch (LXKeyEvent.UnsupportedActionException uax) {
+                // No problem
+            }
         }
     }
     
@@ -1090,54 +1098,13 @@ public class LX {
 
         this.timer.drawNanos = System.nanoTime() - drawStart;
     }
-
-    private static enum KeyEventType {
-        PRESSED,
-        RELEASED,
-        TYPED
-    };
-
-    private void keyEvent1x(java.awt.event.KeyEvent e) {
-        KeyEventType type;
-        switch (e.getID()) {
-        case java.awt.event.KeyEvent.KEY_PRESSED:
-            type = KeyEventType.PRESSED;
-            break;
-        case java.awt.event.KeyEvent.KEY_RELEASED:
-            type = KeyEventType.RELEASED;
-            break;
-        case java.awt.event.KeyEvent.KEY_TYPED:
-            type = KeyEventType.TYPED;
-            break;
-        default:
-            // Unknown event type, not handled
-            return;
-        }
-        keyEvent(type, e.getKeyChar(), e.getKeyCode());
-    }
     
-    private void keyEvent2x(processing.event.KeyEvent e) {
-        KeyEventType type;
-        switch (e.getAction()) {
-        case processing.event.KeyEvent.PRESS:
-            type = KeyEventType.PRESSED;
-            break;
-        case processing.event.KeyEvent.RELEASE:
-            type = KeyEventType.RELEASED;
-            break;
-        case processing.event.KeyEvent.TYPE:
-            type = KeyEventType.TYPED;
-            break;
-        default:
-            // Not handled, unknown action
-            return;
-        }
-        keyEvent(type, e.getKey(), e.getKeyCode());
-    }
-        
-    private void keyEvent(KeyEventType type, char keyChar, int keyCode) {
-        if (type == KeyEventType.RELEASED) {
-            this.ui.keyReleased(keyChar, keyCode);
+    private void keyEvent(LXKeyEvent keyEvent) {
+        char keyChar = keyEvent.getKeyChar();
+        int keyCode = keyEvent.getKeyCode();
+        LXKeyEvent.Action action = keyEvent.getAction(); 
+        if (action == LXKeyEvent.Action.RELEASED) {
+            this.ui.keyReleased(keyEvent, keyChar, keyCode);
             switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
                 engine.goPrev();
@@ -1179,8 +1146,8 @@ public class LX {
                 flash.disable();
                 break;
             }
-        } else if (type == KeyEventType.PRESSED) {
-            this.ui.keyPressed(keyChar, keyCode);
+        } else if (action == LXKeyEvent.Action.PRESSED) {
+            this.ui.keyPressed(keyEvent, keyChar, keyCode);
             switch (keyChar) {
             case 'f':
                 flags.showFramerate = true;
@@ -1192,8 +1159,8 @@ public class LX {
                 flash.enable();
                 break;
             }
-        } else if (type == KeyEventType.TYPED) {
-            this.ui.keyTyped(keyChar, keyCode);
+        } else if (action == LXKeyEvent.Action.TYPED) {
+            this.ui.keyTyped(keyEvent, keyChar, keyCode);
         }
     }
     

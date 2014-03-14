@@ -13,12 +13,14 @@
 
 package heronarts.lx.ui;
 
-import java.util.ArrayList;
-import java.util.List;
+import heronarts.lx.LXKeyEvent;
 
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PGraphics;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Top-level container for all overlay UI elements. 
@@ -302,21 +304,21 @@ public class UI {
         }
     }
     
-    public final void keyPressed(char keyChar, int keyCode) {
+    public final void keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedLayer != null) {
-            this.focusedLayer.keyPressed(keyChar, keyCode);
+            this.focusedLayer.keyPressed(keyEvent, keyChar, keyCode);
         }
     }
     
-    public final void keyReleased(char keyChar, int keyCode) {
+    public final void keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedLayer != null) {
-            this.focusedLayer.keyReleased(keyChar, keyCode);
+            this.focusedLayer.keyReleased(keyEvent, keyChar, keyCode);
         }
     }
     
-    public final void keyTyped(char keyChar, int keyCode) {
+    public final void keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedLayer != null) {
-            this.focusedLayer.keyTyped(keyChar, keyCode);
+            this.focusedLayer.keyTyped(keyEvent, keyChar, keyCode);
         }
     }
     

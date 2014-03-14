@@ -13,6 +13,7 @@
 
 package heronarts.lx.ui;
 
+import heronarts.lx.LXKeyEvent;
 import heronarts.lx.ui.component.UILabel;
 
 import java.util.ArrayList;
@@ -480,7 +481,7 @@ public abstract class UIObject {
      * @param keyChar
      * @param keyCode
      */
-    protected void onKeyPressed(char keyChar, int keyCode) {}
+    protected void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
     
     /**
      * Invoked when key is released and this object has focus - subclasses should
@@ -489,7 +490,7 @@ public abstract class UIObject {
      * @param keyChar
      * @param keyCode
      */
-    protected void onKeyReleased(char keyChar, int keyCode) {}
+    protected void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
     
     /**
      * Invoked when key is typed and this object has focus - subclasses should
@@ -498,5 +499,5 @@ public abstract class UIObject {
      * @param keyChar
      * @param keyCode
      */
-    protected void onKeyTyped(char keyChar, int keyCode) {}
+    protected void onKeyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
 }

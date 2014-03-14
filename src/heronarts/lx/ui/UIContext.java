@@ -13,6 +13,8 @@
 
 package heronarts.lx.ui;
 
+import heronarts.lx.LXKeyEvent;
+
 import processing.core.PGraphics;
 import processing.core.PConstants;
 
@@ -136,18 +138,18 @@ public class UIContext extends UIContainer implements UILayer {
         return false;
     }
     
-    public final boolean keyPressed(char keyChar, int keyCode) {
-        this.onKeyPressed(keyChar, keyCode);
+    public final boolean keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        this.onKeyPressed(keyEvent, keyChar, keyCode);
         return true;
     }
     
-    public final boolean keyReleased(char keyChar, int keyCode) {
-        this.onKeyReleased(keyChar, keyCode);
+    public final boolean keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        this.onKeyReleased(keyEvent, keyChar, keyCode);
         return true;
     }
     
-    public final boolean keyTyped(char keyChar, int keyCode) {
-        this.onKeyTyped(keyChar, keyCode);
+    public final boolean keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        this.onKeyTyped(keyEvent, keyChar, keyCode);
         return true;
     }
 }

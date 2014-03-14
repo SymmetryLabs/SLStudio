@@ -13,6 +13,7 @@
 
 package heronarts.lx.ui;
 
+import heronarts.lx.LXKeyEvent;
 import heronarts.lx.LXUtils;
 
 import processing.core.PConstants;
@@ -217,24 +218,25 @@ public class UICameraLayer implements UILayer {
         return true;
     }
     
-    public final boolean keyPressed(char keyChar, int keyCode) {
+    public final boolean keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        float amount = keyEvent.isShiftDown() ? .2f : .02f;
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
-            this.theta -= .05;
+            this.theta -= amount;
             computeEye();
             return true;
         } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-            this.theta += .05;
+            this.theta += amount;
             computeEye();
             return true;
         }
         return false;
     }
     
-    public final boolean keyReleased(char keyChar, int keyCode) {
+    public final boolean keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         return false;
     }
     
-    public final boolean keyTyped(char keyChar, int keyCode) {
+    public final boolean keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         return false;
     }
 

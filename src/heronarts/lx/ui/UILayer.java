@@ -13,6 +13,8 @@
 
 package heronarts.lx.ui;
 
+import heronarts.lx.LXKeyEvent;
+
 public interface UILayer {
     public void draw();
     public boolean mousePressed(float mx, float my);
@@ -20,7 +22,7 @@ public interface UILayer {
     public boolean mouseClicked(float mx, float my);
     public boolean mouseDragged(float mx, float my);
     public boolean mouseWheel(float mx, float my, float delta);
-    public boolean keyPressed(char keyChar, int keyCode);
-    public boolean keyReleased(char keyChar, int keyCode);
-    public boolean keyTyped(char keyChar, int keyCode);
+    public boolean keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode);
+    public boolean keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode);
+    public boolean keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode);
 }
