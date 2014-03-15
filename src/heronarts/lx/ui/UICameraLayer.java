@@ -32,6 +32,8 @@ public class UICameraLayer implements UILayer {
     
     private final List<UICameraComponent> components = new ArrayList<UICameraComponent>(); 
     
+    private boolean visible = true;
+    
     // Center of the scene
     private float cx = 0, cy = 0, cz = 0;
     
@@ -156,7 +158,20 @@ public class UICameraLayer implements UILayer {
         this.ey = this.cy + this.radius * sinphi;
     }
     
+    public boolean isVisible() {
+        return this.visible;
+    }
+    
+    public UICameraLayer setVisible(boolean visible) {
+        this.visible = visible;
+        return this;
+    }
+    
     public final void draw() {
+        if (!this.visible) {
+            return;
+        }
+        
         // Set the camera view
         this.ui.applet.camera(this.ex, this.ey, this.ez, this.cx, this.cy, this.cz, 0, -1, 0);
         
