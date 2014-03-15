@@ -1107,56 +1107,60 @@ public class LX {
             this.ui.keyReleased(keyEvent, keyChar, keyCode);
             switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
-                engine.goPrev();
+                if (keyEvent.isMetaDown()) {
+                    this.engine.goPrev();
+                }
                 break;
             case java.awt.event.KeyEvent.VK_DOWN:
-                engine.goNext();
+                if (keyEvent.isMetaDown()) {
+                    this.engine.goNext();
+                }
                 break;
             case java.awt.event.KeyEvent.VK_LEFT:
-                if (flags.keyboardTempo) {
-                    tempo.setBpm(tempo.bpm() - .1);
+                if (this.flags.keyboardTempo) {
+                    this.tempo.setBpm(this.tempo.bpm() - .1);
                 }
                 break;
             case java.awt.event.KeyEvent.VK_RIGHT:
-                if (flags.keyboardTempo) {
-                    tempo.setBpm(tempo.bpm() + .1);
+                if (this.flags.keyboardTempo) {
+                    this.tempo.setBpm(this.tempo.bpm() + .1);
                 }
                 break;
             }
             
             switch (Character.toLowerCase(keyChar)) {
             case '[':
-                engine.goPrev();
+                this.engine.goPrev();
                 break;
             case ']':
-                engine.goNext();
+                this.engine.goNext();
                 break;
             case 'f':
-                flags.showFramerate = false;
+                this.flags.showFramerate = false;
                 break;
             case ' ':
-                if (flags.keyboardTempo) {
-                    tempo.tap();
+                if (this.flags.keyboardTempo) {
+                    this.tempo.tap();
                 }
                 break;
             case 's':
-                desaturation.disable();
+                this.desaturation.disable();
                 break;
             case '/':
-                flash.disable();
+                this.flash.disable();
                 break;
             }
         } else if (action == LXKeyEvent.Action.PRESSED) {
             this.ui.keyPressed(keyEvent, keyChar, keyCode);
             switch (keyChar) {
             case 'f':
-                flags.showFramerate = true;
+                this.flags.showFramerate = true;
                 break;
             case 's':
-                desaturation.enable();
+                this.desaturation.enable();
                 break;
             case '/':
-                flash.enable();
+                this.flash.enable();
                 break;
             }
         } else if (action == LXKeyEvent.Action.TYPED) {

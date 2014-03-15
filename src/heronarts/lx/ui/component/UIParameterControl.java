@@ -65,16 +65,20 @@ public abstract class UIParameterControl extends UIObject implements LXParameter
         if (this.parameter instanceof DiscreteParameter) {
             DiscreteParameter dp = (DiscreteParameter)this.parameter; 
             int times = keyEvent.isShiftDown() ? Math.max(1, dp.range/10) : 1;
-            if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT) ||
+                (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
                 dp.setValue(dp.getValuei() - times);
-            } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT) ||
+                       (keyCode == java.awt.event.KeyEvent.VK_UP)) {
                 dp.setValue(dp.getValuei() + times);
             }
         } else {
             float amount = keyEvent.isShiftDown() ? .05f : .01f;
-            if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT) ||
+                    (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
                 setNormalized(LXUtils.constrain(getNormalized() - amount, 0, 1));
-            } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT) ||
+                       (keyCode == java.awt.event.KeyEvent.VK_UP)) {
                 setNormalized(LXUtils.constrain(getNormalized() + amount, 0, 1));
             }
         }
