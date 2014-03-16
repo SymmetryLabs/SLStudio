@@ -522,7 +522,7 @@ public class LX {
      * @return rgb color value
      */
     public static int hsb(float h, float s, float b) {
-        return Color.HSBtoRGB(h/360.f, s/100.f, b/100.f);
+        return Color.HSBtoRGB((h % 360)/360.f, s/100.f, b/100.f);
     }
     
     /**

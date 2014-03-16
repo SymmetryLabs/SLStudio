@@ -26,6 +26,11 @@ public class LXVector extends PVector {
     private static final long serialVersionUID = 1L;
     
     /**
+     * Helper to retrieve the point this corresponds to
+     */
+    public final LXPoint point;
+    
+    /**
      * Index of the LXPoint this corresponds to
      */
     public final int index;
@@ -37,6 +42,7 @@ public class LXVector extends PVector {
      */
     public LXVector(LXPoint point) {
         super(point.x, point.y, point.z);
+        this.point = point;
         this.index = point.index;
     }
 }
