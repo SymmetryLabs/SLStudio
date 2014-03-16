@@ -89,18 +89,17 @@ public class TriangleLFO extends LXRangeModulator {
     }
     
     @Override
-    protected double computeNormalizedValue(double deltaMs) {
-        double bv = getBasis();
-        if (bv < 0.5) {
-            return 2.*bv;
+    protected double computeNormalizedValue(double deltaMs, double basis) {
+        if (basis < 0.5) {
+            return 2.*basis;
         } else {
-            return 1. - 2.*(bv - 0.5);
+            return 1. - 2.*(basis - 0.5);
         }
     }
     
     @Override
-    protected double computeBasisFromNormalizedValue(double normalizedValue) {
-        if (getBasis() < 0.5) {
+    protected double computeNormalizedBasis(double basis, double normalizedValue) {
+        if (basis < 0.5) {
             return normalizedValue / 2.;
         } else {
             return 1 - (normalizedValue / 2.);

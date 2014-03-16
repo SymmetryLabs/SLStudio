@@ -87,12 +87,12 @@ public class SquareLFO extends LXRangeModulator {
 
     
     @Override
-    protected double computeNormalizedValue(double deltaMs) {
-        return (getBasis() < 0.5) ? 0 : 1;
+    protected double computeNormalizedValue(double deltaMs, double basis) {
+        return (basis < 0.5) ? 0 : 1;
     }
     
     @Override
-    protected double computeBasisFromNormalizedValue(double normalizedValue) {
+    protected double computeNormalizedBasis(double basis, double normalizedValue) {
         return (normalizedValue == 0) ? 0 : 0.5;
     }
 

@@ -49,7 +49,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
         this.setPeriod(periodMs);
         this.startValue = new FixedParameter(startValue);
         this.endValue = new FixedParameter(endValue);
-        checkValueBounds();
+        onRangeChanged();
         return this;
     }
     
@@ -63,7 +63,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
     public final LXRangeModulator setRange(double startValue, double endValue) {
         this.startValue = new FixedParameter(startValue);
         this.endValue = new FixedParameter(endValue);
-        checkValueBounds();
+        onRangeChanged();
         return this;
     }
     
@@ -117,17 +117,18 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
      * nearest boundary. If it is in bounds, we update the basis so that there is
      * not a discontinuous "jump" on the next cycle.
      */
-    private void checkValueBounds() {
+    private void onRangeChanged() {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
         double min = Math.min(sv, ev);
-        double max = Math.max(sv, ev);    
-        if (getValue() < min) {
+        double max = Math.max(sv, ev);
+        double value = getValue();
+        if (value < min) {
             this.setValue(min);
-        } else if (getValue() > max) {
+        } else if (value > max) {
             this.setValue(max);
         } else {
-            this.updateBasis();
+            this.updateBasis(value);
         }
     }
     
@@ -139,7 +140,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
      */
     public LXRangeModulator setStartValue(LXParameter startValue) {
         this.startValue = startValue;
-        checkValueBounds();
+        onRangeChanged();
         return this;
     }
     
@@ -151,42 +152,43 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
      */
     public LXRangeModulator setEndValue(LXParameter endValue) {
         this.endValue = endValue;
-        checkValueBounds();
+        onRangeChanged();
         return this;
     }
     
     @Override
-    public LXRangeModulator setValue(double value) {
+    public void onSetValue(double value) {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
         double min = Math.min(sv, ev);
         double max = Math.max(sv, ev);    
         if (value < min) {
-            super.setValue(min);
+            updateValue(min);
+            updateBasis(min);
         } else if (value > max) {
-            super.setValue(max);
-        } else {
-            super.setValue(value);
+            updateValue(max);
+            updateBasis(max);
         }
-        return this;
     }
     
     public final LXRangeModulator setNormalized(double normalized) {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
-        if (sv == ev) {
-            return setValue(sv);
-        }
-        return setValue(sv + (ev-sv) * normalized);
+        setValue(sv + (ev-sv) * normalized);
+        return this;
     }
     
-    public final double getNormalized() {
+    private final double getNormalized(double value) {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
         if (sv == ev) {
             return sv;
         }
-        return (getValue() - sv) / (ev - sv);
+        return (value - sv) / (ev - sv);
+    }
+    
+    public final double getNormalized() {
+        return getNormalized(getValue());
     }
     
     public final float getNormalizedf() {
@@ -194,23 +196,23 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
     }
     
     @Override
-    protected final double computeValue(double deltaMs) {
+    protected final double computeValue(double deltaMs, double basis) {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
         if (sv == ev) {
             return sv;
         }
-        return sv + this.computeNormalizedValue(deltaMs) * (ev - sv);
+        return sv + this.computeNormalizedValue(deltaMs, basis) * (ev - sv);
     }
 
     @Override
-    protected final double computeBasis() {
+    protected final double computeBasis(double basis, double value) {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
         if (sv == ev) {
             return 0;
         }
-        return computeBasisFromNormalizedValue(getNormalized());
+        return computeNormalizedBasis(basis, getNormalized(value));
     }
     
     /**
@@ -219,13 +221,13 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
      * 
      * @param deltaMs
      */
-    protected abstract double computeNormalizedValue(double deltaMs);
+    protected abstract double computeNormalizedValue(double deltaMs, double basis);
     
     /**
      * Subclasses determine the basis based on a normalized value from 0 to 1.
      * 
      * @param normalizedValue A normalize value from 0 to 1
      */
-    protected abstract double computeBasisFromNormalizedValue(double normalizedValue);    
+    protected abstract double computeNormalizedBasis(double basis, double normalizedValue);    
     
 }

@@ -13,6 +13,7 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -25,11 +26,11 @@ import heronarts.lx.parameter.LXParameter;
  * may be a modulator or otherwise.
  */
 public abstract class LXPeriodicModulator extends LXModulator {
-
+    
     /**
      * Whether this modulator runs continuously looping.
      */
-    private boolean looping = true;
+    public final BooleanParameter looping;
     
     /**
      * Whether the modulator finished on this cycle.
@@ -54,6 +55,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      */
     protected LXPeriodicModulator(String label, LXParameter period) {
         super(label);
+        this.looping = new BooleanParameter("LOOP-" + label, true);
         this.period = period;
     }
     
@@ -65,7 +67,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @return this, for method chaining
      */
     protected LXPeriodicModulator setLooping(boolean looping) {
-        this.looping = looping;
+        this.looping.setValue(looping);
         return this;
     }
     
@@ -76,6 +78,15 @@ public abstract class LXPeriodicModulator extends LXModulator {
      */
     public final double getBasis() {
         return this.basis;
+    }
+    
+    /**
+     * Accessor for basis as a float
+     * 
+     * @return basis as float
+     */
+    public final float getBasisf() {
+        return (float) getBasis();
     }
     
     @Override
@@ -117,14 +128,15 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * @return This modulator, for method chaining
      */
     @Override
-    public LXModulator setValue(double value) {
-        super.setValue(value);
-        this.updateBasis();
-        return this;
+    public void onSetValue(double value) {
+        this.updateBasis(value);
     }
     
-    protected void updateBasis() {
-        this.basis = computeBasis();
+    /**
+     * Updates the basis of the modulator based on present values.
+     */
+    protected final void updateBasis(double value) {
+        this.basis = computeBasis(this.basis, value);
     }
 
     /**
@@ -184,14 +196,13 @@ public abstract class LXPeriodicModulator extends LXModulator {
         return this;
     }
         
-    @Override
-    protected void onRun(double deltaMs) {
+    protected final double computeValue(double deltaMs) {
         this.finished = false;
         this.basis += deltaMs / this.period.getValue();
         if (this.basis >= 1.) {
-            if (this.looping) {
+            if (this.looping.isOn()) {
                 if (this.basis > 1) {
-                    this.basis = this.basis - Math.floor(this.basis);
+                    this.basis = this.basis % 1;
                 }
             } else {
                 this.basis = 1.;
@@ -199,6 +210,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
                 this.stop();
             }
         }
+        return computeValue(deltaMs, this.basis);
     }
 
     /**
@@ -212,9 +224,21 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
 
     /**
-     * Implementation method to compute the appropriate basis for a modulator given
-     * its current value.
+     * Implementation method to compute the value of a modulator given its
+     * basis.
+     * 
+     * @param basis
+     * @return value
      */
-    abstract protected double computeBasis();
+    abstract protected double computeValue(double deltaMs, double basis);
+    
+    /**
+     * Implementation method to compute the appropriate basis for a modulator given
+     * its current basis and value.
+     * 
+     * @param value
+     * @return basis
+     */
+    abstract protected double computeBasis(double basis, double value);
 
 }

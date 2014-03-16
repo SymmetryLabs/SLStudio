@@ -91,12 +91,12 @@ public class SawLFO extends LXRangeModulator {
 
     
     @Override
-    protected final double computeNormalizedValue(double deltaMs) {
-        return getBasis();
+    protected final double computeNormalizedValue(double deltaMs, double basis) {
+        return basis;
     }
     
     @Override
-    protected final double computeBasisFromNormalizedValue(double normalizedValue) {
+    protected final double computeNormalizedBasis(double basis, double normalizedValue) {
         return normalizedValue;
     }
 }

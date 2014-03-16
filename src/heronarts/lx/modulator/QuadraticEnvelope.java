@@ -120,18 +120,17 @@ public class QuadraticEnvelope extends LXRangeModulator {
     }
     
     @Override
-    protected double computeNormalizedValue(double deltaMs) {
-        final double bv = getBasis();
+    protected double computeNormalizedValue(double deltaMs, double basis) {
         switch (this.ease) {
         case IN:
-            return bv*bv;
+            return basis*basis;
         case OUT:
-            return 1 - (1-bv)*(1-bv);
+            return 1 - (1-basis)*(1-basis);
         case BOTH:
-            if (bv < 0.5) {
-                return (bv*2)*(bv*2) / 2.;
+            if (basis < 0.5) {
+                return (basis*2)*(basis*2) / 2.;
             } else {
-                final double biv = 1 - (bv-0.5) * 2.;
+                final double biv = 1 - (basis-0.5) * 2.;
                 return 0.5 + (1-biv*biv) / 2.;
             }
         }
@@ -139,7 +138,7 @@ public class QuadraticEnvelope extends LXRangeModulator {
     }
             
     @Override
-    protected double computeBasisFromNormalizedValue(double normalizedValue) {
+    protected double computeNormalizedBasis(double basis, double normalizedValue) {
         switch (this.ease) {
         case IN:
             return Math.sqrt(normalizedValue);

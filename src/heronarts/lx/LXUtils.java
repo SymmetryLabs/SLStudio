@@ -74,8 +74,8 @@ public class LXUtils {
     }
     
     public static double wrapdist(double v1, double v2, double mod) {
-        v1 = v1 % mod;
-        v2 = v2 % mod;
+        v1 = (v1 >= 0) ? (v1 % mod) : (mod + (v1 % mod));
+        v2 = (v2 >= 0) ? (v2 % mod) : (mod + (v2 % mod));
         if (v1 < v2) {
             return Math.min(v2 - v1, v1 + mod - v2); 
         } else {

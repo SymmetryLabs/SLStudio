@@ -16,24 +16,25 @@ package heronarts.lx.modulator;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class Damper extends LXModulator {
+public class DampedParameter extends LXModulator {
     
     private final LXParameter parameter;
     
-    private final LXParameter maxVelocity;
-        
-    public Damper(LXParameter parameter) {
-        this(parameter, 1);
+    private LXParameter velocity;
+    
+    public DampedParameter(LXParameter parameter, double velocity) {
+        this(parameter, new FixedParameter(velocity));
     }
     
-    public Damper(LXParameter parameter, double maxVelocity) {
-        this(parameter, new FixedParameter(maxVelocity));
+    public DampedParameter(LXParameter parameter, LXParameter velocity) {
+        this("DAMPED-" + parameter.getLabel(), parameter, velocity);
     }
     
-    public Damper(LXParameter parameter, LXParameter maxVelocity) {
-        super("DAMP-" + parameter.getLabel());
+    public DampedParameter(String label, LXParameter parameter, LXParameter velocity) {
+        super(label);
         this.parameter = parameter;
-        this.maxVelocity = maxVelocity;
+        this.velocity = velocity;
+        updateValue(parameter.getValue());
     }
     
     protected double computeValue(double deltaMs) {
@@ -42,7 +43,7 @@ public class Damper extends LXModulator {
         if (value == target) {
             return value;
         }
-        double range = this.maxVelocity.getValue() * deltaMs / 1000.;
+        double range = this.velocity.getValue() * deltaMs / 1000.;
         if (target > value) {
             return Math.min(value + range, target);
         } else {

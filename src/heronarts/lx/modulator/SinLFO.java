@@ -87,15 +87,15 @@ public class SinLFO extends LXRangeModulator {
     }
     
     @Override
-    protected double computeNormalizedValue(double deltaMs) {
-        return (1 + Math.sin(getBasis() * TWO_PI - HALF_PI)) / 2.;
+    protected double computeNormalizedValue(double deltaMs, double basis) {
+        return (1 + Math.sin(basis * TWO_PI - HALF_PI)) / 2.;
     }
     
     @Override
-    protected double computeBasisFromNormalizedValue(double normalizedValue) {
+    protected double computeNormalizedBasis(double basis, double normalizedValue) {
         double sinValue = -1 + 2. * normalizedValue;
         double angle = Math.asin(sinValue);
-        if (getBasis() > 0.5) {
+        if (basis > 0.5) {
             angle = Math.PI - angle;
         }
         return (angle + HALF_PI) / TWO_PI;

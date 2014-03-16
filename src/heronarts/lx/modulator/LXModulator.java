@@ -90,9 +90,7 @@ public abstract class LXModulator extends LXParameterized implements LXParameter
      * value, and should also start the modulator if it is not already running.
      */
     public final LXModulator trigger() {
-        this.reset();
-        this.start();
-        return this;
+        return this.reset().start();
     }
     
     /**
@@ -100,7 +98,7 @@ public abstract class LXModulator extends LXParameterized implements LXParameter
      * 
      * @return this, for method chaining
      */
-    public LXParameter reset() {
+    public final LXModulator reset() {
         this.stop();
         this.onReset();
         return this;
@@ -136,10 +134,18 @@ public abstract class LXModulator extends LXParameterized implements LXParameter
      * @param value The value to apply
      * @return This modulator, for method chaining
      */
-    public LXModulator setValue(double value) {
+    public final LXModulator setValue(double value) {
         this.value = value;
+        this.onSetValue(value);
         return this;
     }
+    
+    /**
+     * Subclasses may override when actions are necessary on value change.
+     * 
+     * @param value New value
+     */
+    protected /* abstract */ void onSetValue(double value) {}
     
     /**
      * Helper for subclasses to update value in situations where it needs
@@ -165,16 +171,8 @@ public abstract class LXModulator extends LXParameterized implements LXParameter
         if (!this.isRunning) {
             return;
         }
-        this.onRun(deltaMs);
         this.value = this.computeValue(deltaMs);
     }
-    
-    /**
-     * Subclasses are notified when the modulator is running.
-     * 
-     * @param deltaMs Milliseconds passed since last invocation
-     */
-    protected /*abstract*/ void onRun(double deltaMs) {}
     
     /**
      * Implementation method to advance the modulator's internal state. Subclasses
