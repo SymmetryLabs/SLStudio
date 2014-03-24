@@ -86,7 +86,7 @@ public class UIContext extends UIContainer implements UILayer {
             this.dragging = true;
             this.px = mx;
             this.py = my;
-            onMousePressed(mx - this.x, my - this.y);
+            _mousePressed(mx - this.x, my - this.y);
             return true;
         }
         return false;
@@ -97,7 +97,7 @@ public class UIContext extends UIContainer implements UILayer {
             return false;
         }
         this.dragging = false;
-        onMouseReleased(mx - this.x, my - this.y);
+        _mouseReleased(mx - this.x, my - this.y);
         return true;
     }
     
@@ -106,7 +106,7 @@ public class UIContext extends UIContainer implements UILayer {
             return false;
         }
         if (contains(mx, my)) {
-            onMouseClicked(mx - this.x, my - this.y);
+            _mouseClicked(mx - this.x, my - this.y);
             return true;
         }
         return false;
@@ -119,7 +119,7 @@ public class UIContext extends UIContainer implements UILayer {
         if (this.dragging) {
             float dx = mx - this.px;
             float dy = my - this.py;
-            onMouseDragged(mx - this.x, my - this.y, dx, dy);
+            _mouseDragged(mx - this.x, my - this.y, dx, dy);
             this.px = mx;
             this.py = my;
             return true;
@@ -132,24 +132,24 @@ public class UIContext extends UIContainer implements UILayer {
             return false;
         }
         if (contains(mx, my)) {
-            onMouseWheel(mx - this.x, my - this.y, delta);
+            _mouseWheel(mx - this.x, my - this.y, delta);
             return true;
         }
         return false;
     }
     
     public final boolean keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
-        this.onKeyPressed(keyEvent, keyChar, keyCode);
+        _keyPressed(keyEvent, keyChar, keyCode);
         return true;
     }
     
     public final boolean keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
-        this.onKeyReleased(keyEvent, keyChar, keyCode);
+        _keyReleased(keyEvent, keyChar, keyCode);
         return true;
     }
     
     public final boolean keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
-        this.onKeyTyped(keyEvent, keyChar, keyCode);
+        _keyTyped(keyEvent, keyChar, keyCode);
         return true;
     }
 }

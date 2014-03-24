@@ -76,6 +76,17 @@ public abstract class UIObject {
      */
     protected boolean visible = true;
 
+    /**
+     * Which child mouse events are pressed to, if any.
+     */
+    private UIObject pressedChild = null;
+    
+    /**
+     * Which child has focus.
+     */
+    private UIObject focusedChild = null;
+
+    
     private boolean hasBackground = false;
     
     private int backgroundColor = 0xFF000000;
@@ -415,6 +426,77 @@ public abstract class UIObject {
             // Reset stroke weight
             pg.strokeWeight(1);
         }
+    }
+    
+    void _mousePressed(float mx, float my) {
+        for (int i = this.children.size() - 1; i >= 0; --i) {
+            UIObject child = this.children.get(i);
+            if (child.visible && child.contains(mx, my)) {
+                child._mousePressed(mx - child.x, my - child.y);
+                this.pressedChild = child;
+                this.focusedChild = child;
+                break;
+            }
+        }
+        onMousePressed(mx, my);
+    }
+    
+    void _mouseClicked(float mx, float my) {
+        for (int i = this.children.size() - 1; i >= 0; --i) {
+            UIObject child = this.children.get(i);
+            if (child.visible && child.contains(mx, my)) {
+                child._mouseClicked(mx - child.x, my - child.y);
+                break;
+            }
+        }
+        onMouseClicked(mx, my);
+    }
+
+    void _mouseReleased(float mx, float my) {
+        if (this.pressedChild != null) {
+            this.pressedChild._mouseReleased(mx - this.pressedChild.x, my - this.pressedChild.y);
+            this.pressedChild = null;
+        }
+        onMouseReleased(mx, my);
+    }
+
+    void _mouseDragged(float mx, float my, float dx, float dy) {
+        if (this.pressedChild != null) {
+            this.pressedChild._mouseDragged(mx - this.pressedChild.x, my - this.pressedChild.y, dx, dy);
+        }
+        onMouseDragged(mx, my, dx, dy);
+    }
+
+    void _mouseWheel(float mx, float my, float delta) {
+        for (int i = this.children.size() - 1; i >= 0; --i) {
+            UIObject child = this.children.get(i);
+            if (child.visible && child.contains(mx, my)) {
+                child._mouseWheel(mx - child.x, mx - child.y, delta);
+                break;
+            }
+        }
+        onMouseWheel(mx, my, delta);
+    }
+    
+    void _keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if (this.focusedChild != null) {
+            this.focusedChild._keyPressed(keyEvent, keyChar, keyCode);
+        }
+        onKeyPressed(keyEvent, keyChar, keyCode);
+    }
+    
+    void _keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if (this.focusedChild != null) {
+            this.focusedChild._keyReleased(keyEvent, keyChar, keyCode);
+        }
+        onKeyReleased(keyEvent, keyChar, keyCode);
+    }
+    
+    void _keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if (this.focusedChild != null) {
+            this.focusedChild._keyTyped(keyEvent, keyChar, keyCode);
+        }
+        onKeyTyped(keyEvent, keyChar, keyCode);
     }
     
     /**
