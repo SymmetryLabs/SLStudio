@@ -23,7 +23,8 @@ import java.util.Iterator;
 
 /**
  * Class to compute projections of an entire model. These are applied cheaply by
- * using direct manipulation rather than matrix multiplication.
+ * using direct manipulation rather than matrix multiplication. No push or pop is
+ * available.
  */
 public class LXProjection implements Iterable<LXVector> {
 
@@ -198,5 +199,35 @@ public class LXProjection implements Iterable<LXVector> {
         }
 
         return this;
+    }
+    
+    /**
+     * Rotate about the x-axis
+     * 
+     * @param angle Angle in radians
+     * @return this
+     */
+    public LXProjection rotateX(float angle) {
+        return rotate(angle, 1, 0, 0);
+    }
+    
+    /**
+     * Rotate about the x-axis
+     * 
+     * @param angle Angle in radians
+     * @return this
+     */
+    public LXProjection rotateY(float angle) {
+        return rotate(angle, 0, 1, 0);
+    }
+    
+    /**
+     * Rotate about the x-axis
+     * 
+     * @param angle Angle in radians
+     * @return this
+     */
+    public LXProjection rotateZ(float angle) {
+        return rotate(angle, 0, 0, 1);
     }
 }
