@@ -17,7 +17,7 @@ import heronarts.lx.client.UDPClient;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.effect.LXEffect;
-import heronarts.lx.model.Grid;
+import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.modulator.LXModulator;
@@ -219,7 +219,7 @@ public class LX {
      * @param applet
      */
     public LX(PApplet applet) {
-        this(applet, 0);
+        this(applet, null);
     }
     
     /**
@@ -242,7 +242,7 @@ public class LX {
      * @param height
      */
     public LX(PApplet applet, int width, int height) {
-        this(applet, new LXModel(new Grid(width, height)));
+        this(applet, new GridModel(width, height));
     }
     
     /**
@@ -254,18 +254,21 @@ public class LX {
     public LX(PApplet applet, LXModel model) {
         this.applet = applet;
         this.model = model;
-        this.total = model.points.size();
         
-        this.cx = model.cx;
-        this.cy = model.cy;
-        
-        LXFixture fixture = model.fixtures.get(0);
-        if (fixture instanceof Grid) {
-            Grid grid = (Grid) fixture;
-            this.width = grid.width;
-            this.height = grid.height;
+        if (model == null) {
+            this.total = this.width = this.height = 0;
+            this.cx = this.cy = 0;
         } else {
-            this.width = this.height = 0;
+            this.total = model.points.size();
+            this.cx = model.cx;
+            this.cy = model.cy;
+            if (model instanceof GridModel) {
+                GridModel grid = (GridModel) model;
+                this.width = grid.width;
+                this.height = grid.height;
+            } else {
+                this.width = this.height = 0;
+            }
         }
         
         this.kinet = null;
