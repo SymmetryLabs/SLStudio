@@ -104,6 +104,15 @@ public abstract class LXDatagram {
     }
     
     /**
+     * Gets the address this datagram sends to
+     * 
+     * @return Destination address
+     */
+    public InetAddress getAddress() {
+        return this.packet.getAddress();
+    }
+    
+    /**
      * Sets the destination port number to send this datagram on
      * 
      * @param port Port number
