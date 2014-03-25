@@ -62,20 +62,28 @@ public class UIContext extends UIContainer implements UILayer {
     public UIContext(UI ui, float x, float y, float w, float h) {
         super(x, y, w, h);
         this.ui = ui;
-        this.pg = ui.applet.createGraphics((int)this.width, (int)this.height, PConstants.JAVA2D);
+        this.pg = this.ui.applet.createGraphics((int)this.width, (int)this.height, PConstants.JAVA2D);
         this.pg.smooth();
     }
     
+    protected void onResize() {
+        this.pg.setSize((int) this.width, (int) this.height);
+    }
+    
     public final void draw() {
+        draw(this.ui, this.ui.applet.g);
+    }
+    
+    void draw(UI ui, PGraphics pg) {
         if (!this.visible) {
             return;
         }
         if (this.needsRedraw || this.childNeedsRedraw) {
             this.pg.beginDraw();
-            this.draw(this.ui, this.pg);
+            super.draw(ui, this.pg);
             this.pg.endDraw();
         }
-        this.ui.applet.image(this.pg, this.x, this.y);
+        pg.image(this.pg, this.x, this.y);
     }
 
     public final boolean mousePressed(float mx, float my) {

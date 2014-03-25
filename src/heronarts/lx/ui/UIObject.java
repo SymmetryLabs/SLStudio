@@ -86,6 +86,15 @@ public abstract class UIObject {
      */
     private UIObject focusedChild = null;
 
+    /**
+     * Subclasses may use to offset children
+     */
+    float scrollX = 0;
+    
+    /**
+     * Subclasses may use to offset children 
+     */
+    float scrollY = 0;
     
     private boolean hasBackground = false;
     
@@ -150,9 +159,11 @@ public abstract class UIObject {
      * @return this object
      */
     public final UIObject setPosition(float x, float y) {
-        this.x = x;
-        this.y = y;
-        redraw();
+        if ((this.x != x) || (this.y != y)) {
+            this.x = x;
+            this.y = y;
+            redraw();
+        }
         return this;
     }
 
@@ -164,9 +175,12 @@ public abstract class UIObject {
      * @return this object
      */
     public final UIObject setSize(float width, float height) {
-        this.width = width;
-        this.height = height;
-        redraw();
+        if ((this.width != width) || (this.height != height)) {
+            this.width = width;
+            this.height = height;
+            onResize();
+            redraw();
+        }
         return this;
     }
     
@@ -384,43 +398,47 @@ public abstract class UIObject {
      * @param ui UI
      * @param pg graphics buffer
      */
-    final void draw(UI ui, PGraphics pg) {
+    void draw(UI ui, PGraphics pg) {
         if (!this.visible) {
             return;
         }
+        boolean needsBorder = this.needsRedraw || this.childNeedsRedraw; 
         if (this.needsRedraw) {
             this.needsRedraw = false;
-            drawBackgroundBorder(ui, pg);
+            drawBackground(ui, pg);
             onDraw(ui, pg);
         }
         if (this.childNeedsRedraw) {
             this.childNeedsRedraw = false;
+            pg.translate(this.scrollX, this.scrollY);
             for (UIObject child : children) {
                 if (this.needsRedraw || child.needsRedraw || child.childNeedsRedraw) {
-                    pg.pushMatrix();
                     pg.translate(child.x, child.y);
                     child.draw(ui, pg);
-                    pg.popMatrix();
+                    pg.translate(-child.x, -child.y);
                 }
             }
+            pg.translate(-this.scrollX, -this.scrollY);
+        }
+        if (needsBorder) {
+            drawBorder(ui, pg);
         }
     }
 
-    private void drawBackgroundBorder(UI ui, PGraphics pg) {
-        if (this.hasBackground || this.hasBorder) {
-            int border = 0;
-            if (this.hasBorder) {
-                border = this.borderWeight;
-                pg.strokeWeight(this.borderWeight);
-                pg.stroke(this.borderColor);
-            } else {
-                pg.noStroke();
-            }
-            if (this.hasBackground) {
-                pg.fill(this.backgroundColor);
-            } else {
-                pg.noFill();
-            }
+    private void drawBackground(UI ui, PGraphics pg) {
+        if (this.hasBackground) {
+            pg.noStroke();
+            pg.fill(this.backgroundColor);
+            pg.rect(0, 0, width, height);
+        }
+    }
+    
+    private void drawBorder(UI ui, PGraphics pg) {
+        if (this.hasBorder) {
+            int border = this.borderWeight;
+            pg.strokeWeight(border);
+            pg.stroke(this.borderColor);
+            pg.noFill();
             pg.rect(border/2, border/2, this.width-border, this.height-border);
             
             // Reset stroke weight
@@ -507,6 +525,11 @@ public abstract class UIObject {
      * @param pg PGraphics context
      */
     protected void onDraw(UI ui, PGraphics pg) {}
+    
+    /**
+     * Invoked whenever this object is resized.
+     */
+    protected void onResize() {}
     
     /**
      * Invoked when the mouse is pressed within the bounds of this object - subclasses
