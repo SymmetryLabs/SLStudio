@@ -198,7 +198,12 @@ public abstract class LXPeriodicModulator extends LXModulator {
         
     protected final double computeValue(double deltaMs) {
         this.finished = false;
-        this.basis += deltaMs / this.period.getValue();
+        double periodv = this.period.getValue();
+        if (periodv == 0) {
+            this.basis = 1;
+        } else {
+            this.basis += deltaMs / this.period.getValue();
+        }
         if (this.basis >= 1.) {
             if (this.looping.isOn()) {
                 if (this.basis > 1) {

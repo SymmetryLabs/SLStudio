@@ -33,18 +33,18 @@ public class FlashEffect extends LXEffect {
     public FlashEffect(LX lx) {
         super(lx, true);
         this.addModulator(this.flash = new LinearEnvelope(0, 0, 0));
-        this.addParameter(this.attack = new BasicParameter("ATTACK", 0.1));
-        this.addParameter(this.decay = new BasicParameter("DECAY", 0.5));
+        this.addParameter(this.attack = new BasicParameter("ATTACK", 100, 1000));
+        this.addParameter(this.decay = new BasicParameter("DECAY", 1500, 3000));
         this.addParameter(this.intensity = new BasicParameter("INTENSITY", 1));
         this.addParameter(this.sat = new BasicParameter("SAT", 0));
     }
     
     private double getAttackTime() {
-        return this.attack.getValue() * 1000.;
+        return this.attack.getValue();
     }
     
     private double getDecayTime() {
-        return this.decay.getValue() * 3000.;
+        return this.decay.getValue();
     }
     
     @Override
