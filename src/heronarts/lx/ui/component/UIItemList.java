@@ -141,9 +141,9 @@ public class UIItemList extends UIObject implements UIFocus {
         if (this.focusIndex != index) {
             this.focusIndex = index;
             if (this.focusIndex < this.scrollOffset) {
-                this.scrollOffset = this.focusIndex;
+                setScrollOffset(this.focusIndex);
             } else if (this.focusIndex >= (this.scrollOffset + this.numVisibleItems)) {
-                this.scrollOffset = this.focusIndex - this.numVisibleItems + 1;
+                setScrollOffset(this.focusIndex - this.numVisibleItems + 1);
             }
             redraw();
         }
