@@ -37,6 +37,10 @@ public class UI {
      */
     private final List<UILayer> layers = new ArrayList<UILayer>();
     
+    private final List<UIObject> focusables = new ArrayList<UIObject>();
+    
+    private int focusIndex = -1;
+    
     /**
      * Layer that was pressed on
      */
@@ -66,6 +70,11 @@ public class UI {
      * Default background color
      */
     private int backgroundColor = 0xff444444;
+    
+    /**
+     * Default focus color
+     */
+    private int focusColor = 0xff669966;
     
     /**
      * Default selected highlight color
@@ -106,7 +115,69 @@ public class UI {
      */
     public UI addLayer(UILayer layer) {
         this.layers.add(layer);
+        if (layer instanceof UIObject) {
+            addFocusables((UIObject) layer);
+        }
         return this;
+    }
+    
+    private void addFocusables(UIObject o) {
+        if (o instanceof UIFocus) {
+            this.focusables.add(o);
+        }
+        for (UIObject child : o.children) {
+            addFocusables(child);
+        }
+    }
+    
+    private void removeFocusables(UIObject o) {
+        if (o instanceof UIFocus) {
+            this.focusables.remove(o);
+        }
+        for (UIObject child : o.children) {
+            removeFocusables(child);
+        }
+    }
+    
+    void willFocus(UILayer layer, UIObject object) {
+        if (this.focusedLayer != layer) {
+            if (this.focusedLayer instanceof UIContext) {
+                ((UIObject)this.focusedLayer)._blur();
+            }
+            this.focusedLayer = layer;
+        }
+        if (object != null) {
+            int index = this.focusables.indexOf(object);
+            if (index >= 0) {
+                this.focusIndex = index;
+            }
+        }
+    }
+    
+    void didBlur(UILayer layer) {
+        if (this.focusedLayer != layer) {
+            throw new IllegalStateException("Tried to blur non-focused layer");
+        }
+        this.focusedLayer = null;
+    }
+    
+    private void focusNext() {
+        int fsz = this.focusables.size();
+        if (fsz > 0) {
+            this.focusIndex = (this.focusIndex + 1) % fsz;
+            this.focusables.get(this.focusIndex).focus();
+        }
+    }
+    
+    private void focusPrevious() {
+        int fsz = this.focusables.size();
+        if (fsz > 0) {
+            --this.focusIndex;
+            if (this.focusIndex < 0) {
+                this.focusIndex = (fsz + (this.focusIndex % fsz)) % fsz;
+            }
+            this.focusables.get(this.focusIndex).focus();
+        }
     }
     
     /**
@@ -116,7 +187,13 @@ public class UI {
      * @return this UI
      */
     public UI removeLayer(UILayer layer) {
+        if (layer instanceof UIContext) {
+            ((UIObject) layer)._blur();
+        }
         this.layers.remove(layer);
+        if (layer instanceof UIObject) {
+            removeFocusables((UIObject) layer);
+        }
         return this;
     }
     
@@ -127,8 +204,8 @@ public class UI {
      * @return this UI
      */
     public UI bringToTop(UILayer layer) {
-        removeLayer(layer);
-        addLayer(layer);
+        this.layers.remove(layer);
+        this.layers.add(layer);
         return this;
     }
     
@@ -195,7 +272,7 @@ public class UI {
     /**
      * Gets background color
      * 
-     * @return backgroundc olor
+     * @return background color
      */
     public int getBackgroundColor() {
         return this.backgroundColor;
@@ -229,6 +306,26 @@ public class UI {
      */
     public UI setHighlightColor(int color) {
         this.highlightColor = color;
+        return this;
+    }
+    
+    /**
+     * Gets focus color
+     * 
+     * @return focus color
+     */
+    public int getFocusColor() {
+        return this.focusColor;
+    }
+    
+    /**
+     * Sets highlight color
+     * 
+     * @param color
+     * @return this UI
+     */
+    public UI setFocusColor(int color) {
+        this.focusColor = color;
         return this;
     }
     
@@ -267,7 +364,6 @@ public class UI {
             UILayer layer = this.layers.get(i);
             if (layer.mousePressed(x, y)) {
                 this.pressedLayer = layer;
-                this.focusedLayer = layer;
                 break;
             }
         }
@@ -305,6 +401,13 @@ public class UI {
     }
     
     public final void keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if (keyCode == java.awt.event.KeyEvent.VK_TAB) {
+            if (keyEvent.isShiftDown()) {
+                focusPrevious();
+            } else {
+                focusNext();
+            }
+        }
         if (this.focusedLayer != null) {
             this.focusedLayer.keyPressed(keyEvent, keyChar, keyCode);
         }

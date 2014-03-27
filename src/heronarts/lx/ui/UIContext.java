@@ -28,7 +28,7 @@ public class UIContext extends UIContainer implements UILayer {
     /**
      * UI instance
      */
-    private final UI ui;
+    protected final UI ui;
     
     /**
      * Graphics context for this container.
@@ -85,7 +85,21 @@ public class UIContext extends UIContainer implements UILayer {
         }
         pg.image(this.pg, this.x, this.y);
     }
-
+    
+    void _focus(UIObject focus) {
+        this.ui.willFocus(this, focus);
+        if (!this.hasFocus()) {
+            super._focus(focus);
+        }
+    }
+    
+    void _blur() {
+        if (this.hasFocus()) {
+            super._blur();
+            this.ui.didBlur(this);
+        }
+    }
+    
     public final boolean mousePressed(float mx, float my) {
         if (!this.visible) {
             return false;

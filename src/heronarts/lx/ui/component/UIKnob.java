@@ -15,11 +15,12 @@ package heronarts.lx.ui.component;
 
 import heronarts.lx.LXUtils;
 import heronarts.lx.ui.UI;
+import heronarts.lx.ui.UIFocus;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class UIKnob extends UIParameterControl {
+public class UIKnob extends UIParameterControl implements UIFocus {
       
     public final static int DEFAULT_SIZE = 28;
     
@@ -48,11 +49,11 @@ public class UIKnob extends UIParameterControl {
         float knobValue = (float) getNormalized();
         
         pg.ellipseMode(PConstants.CENTER);
+        
         pg.noStroke();
-
         pg.fill(ui.getBackgroundColor());
         pg.rect(0, 0, this.knobSize, this.knobSize);
-
+        
         // Full outer dark ring
         int arcCenter = this.knobSize / 2;
         float arcStart = PConstants.HALF_PI + this.knobIndent;
@@ -96,7 +97,6 @@ public class UIKnob extends UIParameterControl {
     private double dragValue;
     
     public void onMousePressed(float mx, float my) {
-        super.onMousePressed(mx, my);
         this.dragValue = getNormalized();
         long now = System.currentTimeMillis();
         if (now - lastMousePress < DOUBLE_CLICK_THRESHOLD) {
@@ -110,7 +110,7 @@ public class UIKnob extends UIParameterControl {
         this.showValue = true;
         redraw();
     }
-
+    
     public void onMouseReleased(float mx, float my) {
         this.showValue = false;
         redraw();

@@ -15,11 +15,12 @@ package heronarts.lx.ui.component;
 
 import heronarts.lx.LXUtils;
 import heronarts.lx.ui.UI;
+import heronarts.lx.ui.UIFocus;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class UISlider extends UIParameterControl {
+public class UISlider extends UIParameterControl implements UIFocus {
 
     private static final float HANDLE_WIDTH = 12;
 

@@ -26,7 +26,7 @@ import java.util.List;
  * This is a layer that contains a 3d scene with a camera. Mouse movements control
  * the camera, and the scene can contain components.
  */
-public class UICameraLayer implements UILayer {
+public class UICameraLayer implements UILayer, UIFocus {
     
     private final UI ui;
     
@@ -197,8 +197,15 @@ public class UICameraLayer implements UILayer {
      * Subclasses may override, useful to turn off lighting, etc.
      */
     protected void afterDraw() {}
-        
+    
+    private long lastMousePress = 0;
+    
     public final boolean mousePressed(float mx, float my) {
+        long now = System.currentTimeMillis();
+        if (now - this.lastMousePress < UIObject.DOUBLE_CLICK_THRESHOLD) {
+            this.ui.willFocus(this, null);
+        }
+        this.lastMousePress = now;
         this.px = mx;
         this.py = my;
         return true;

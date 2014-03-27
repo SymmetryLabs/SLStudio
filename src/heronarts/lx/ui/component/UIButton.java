@@ -13,15 +13,17 @@
 
 package heronarts.lx.ui.component;
 
+import heronarts.lx.LXKeyEvent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
+import heronarts.lx.ui.UIFocus;
 import heronarts.lx.ui.UIObject;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class UIButton extends UIObject {
+public class UIButton extends UIObject implements UIFocus {
 
     protected boolean active = false;
     protected boolean isMomentary = false;
@@ -85,6 +87,20 @@ public class UIButton extends UIObject {
             setActive(false);
         }
     }
+    
+    public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            setActive(this.isMomentary ? true : !this.active);
+        }
+    }
+
+    public void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            if (this.isMomentary) {
+                setActive(false);
+            }
+        }
+    }
 
     public boolean isActive() {
         return this.active;
@@ -143,9 +159,5 @@ public class UIButton extends UIObject {
             redraw();
         }
         return this;
-    }
-
-    public void onMousePressed() {
-        setActive(!this.active);
     }
 }

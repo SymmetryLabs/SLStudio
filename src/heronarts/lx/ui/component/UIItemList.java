@@ -14,9 +14,11 @@
 package heronarts.lx.ui.component;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXKeyEvent;
 import heronarts.lx.LXUtils;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIObject;
+import heronarts.lx.ui.UIFocus;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -25,9 +27,13 @@ import processing.core.PConstants;
 import processing.core.PFont;
 import processing.core.PGraphics;
 
-public class UIScrollList extends UIObject {
+/**
+ * UI for a list of state items 
+ */
+public class UIItemList extends UIObject implements UIFocus {
 
     public static interface Item {
+        
         public boolean isSelected();
 
         public boolean isPending();
@@ -43,18 +49,14 @@ public class UIScrollList extends UIObject {
         public boolean isPending() {
             return false;
         }
-
-        public void select() {
-        }
-
-        public void onMousePressed() {
-        }
-
-        public void onMouseReleased() {
-        }
+        public void select() {}
+        public void onMousePressed() {}
+        public void onMouseReleased() {}
     }
 
     private List<Item> items = new ArrayList<Item>();
+    
+    private int focusIndex = 0;
 
     private int itemHeight = 20;
     private int scrollOffset = 0;
@@ -64,11 +66,11 @@ public class UIScrollList extends UIObject {
     private float scrollYStart;
     private float scrollYHeight;
 
-    public UIScrollList() {
+    public UIItemList() {
         this(0, 0, 0, 0);
     }
     
-    public UIScrollList(float x, float y, float w, float h) {
+    public UIItemList(float x, float y, float w, float h) {
         super(x, y, w, h);
     }
 
@@ -79,7 +81,8 @@ public class UIScrollList extends UIObject {
             if (i + this.scrollOffset >= this.items.size()) {
                 break;
             }
-            Item item = this.items.get(i + this.scrollOffset);
+            int itemIndex = i + this.scrollOffset;
+            Item item = this.items.get(itemIndex);
             int itemColor;
             int labelColor = ui.WHITE;
             if (item.isSelected()) {
@@ -100,6 +103,12 @@ public class UIScrollList extends UIObject {
             pg.textFont(ui.getItemFont());
             pg.textAlign(PConstants.LEFT, PConstants.TOP);
             pg.text(item.getLabel(), 6, yp + 4);
+            
+            if (itemIndex == this.focusIndex) {
+                pg.stroke(ui.getFocusColor());
+                pg.noFill();
+                pg.rect(0, yp, this.width-1, this.itemHeight-1);
+            }
 
             yp += this.itemHeight;
             even = !even;
@@ -116,19 +125,50 @@ public class UIScrollList extends UIObject {
 
     private boolean scrolling = false;
     private Item pressedItem = null;
-
+    private Item keyedItem = null;
+    
+    public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        int index = this.focusIndex;
+        if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+            index = Math.max(0, index-1);
+        } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+            index = Math.min(index + 1, this.items.size()-1);
+        } else if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            this.keyedItem = this.items.get(this.focusIndex);
+            this.keyedItem.onMousePressed();
+            redraw();
+        }
+        if (this.focusIndex != index) {
+            this.focusIndex = index;
+            if (this.focusIndex < this.scrollOffset) {
+                this.scrollOffset = this.focusIndex;
+            } else if (this.focusIndex >= (this.scrollOffset + this.numVisibleItems)) {
+                this.scrollOffset = this.focusIndex - this.numVisibleItems + 1;
+            }
+            redraw();
+        }
+    }
+    
+    public void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            if (this.keyedItem != null) {
+                this.keyedItem.onMouseReleased();
+                redraw();
+            }
+        }
+    }
+    
     public void onMousePressed(float mx, float my) {
         this.pressedItem = null;
         if (this.hasScroll && mx >= this.width - 12) {
-            if (my >= this.scrollYStart
-                    && my < (this.scrollYStart + this.scrollYHeight)) {
+            if ((my >= this.scrollYStart) && (my < (this.scrollYStart + this.scrollYHeight))) {
                 this.scrolling = true;
                 this.dAccum = 0;
             }
         } else {
             int index = (int) my / this.itemHeight;
             if (this.scrollOffset + index < this.items.size()) {
-                this.pressedItem = this.items.get(this.scrollOffset + index);
+                this.pressedItem = this.items.get(this.focusIndex = this.scrollOffset + index);
                 this.pressedItem.onMousePressed();
                 redraw();
             }
@@ -178,10 +218,11 @@ public class UIScrollList extends UIObject {
         redraw();
     }
 
-    public UIScrollList setItems(List<Item> items) {
+    public UIItemList setItems(List<Item> items) {
         this.items = items;
         this.numVisibleItems = (int) (this.height / this.itemHeight);
         this.hasScroll = this.items.size() > this.numVisibleItems;
+        this.focusIndex = 0;
         setScrollOffset(0);
         redraw();
         return this;

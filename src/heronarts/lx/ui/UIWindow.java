@@ -47,19 +47,44 @@ public class UIWindow extends UIContext {
         super(ui, x, y, w, h);
         setBackgroundColor(ui.getBackgroundColor());
         setBorderColor(0xff292929);
-        this.label = new UILabel(0, 0, w, TITLE_LABEL_HEIGHT) {
-            
-            protected void onMousePressed(float mx, float my) {
-                ui.bringToTop(UIWindow.this);
-            }
-            
-            protected void onMouseDragged(float mx, float my, float dx, float dy) {
-                parent.x = LXUtils.constrainf(parent.x + dx, 0, ui.applet.width - this.width);
-                parent.y = LXUtils.constrainf(parent.y + dy, 0, ui.applet.height - this.height);
-            }
-            
-        }.setLabel(title).setPadding(TITLE_PADDING).setFont(ui.getTitleFont());
+        this.label = new UILabel(0, 0, w, TITLE_LABEL_HEIGHT)
+            .setLabel(title)
+            .setPadding(TITLE_PADDING)
+            .setColor(ui.getTextColor())
+            .setFont(ui.getTitleFont());
         this.label.addToContainer(this);
+    }
+
+    private boolean movingWindow = false;
+    
+//    protected void onDraw(UI ui, PGraphics pg) {
+//        if (hasFocus()) {
+//            pg.noStroke();
+//            pg.fill(ui.getFocusColor());
+//            pg.rect(0, 0, this.width, TITLE_LABEL_HEIGHT-4);
+//        }
+//    }
+    
+    protected void onFocus() {
+        this.label.setColor(ui.getFocusColor());
+    }
+    
+    protected void onBlur() {
+        this.label.setColor(ui.getTextColor());
+    }
+    
+    protected void onMousePressed(float mx, float my) {
+        this.movingWindow = (my < TITLE_LABEL_HEIGHT);
+        this.ui.bringToTop(this);
+        _focus(this);
+    }
+    
+    protected void onMouseDragged(float mx, float my, float dx, float dy) {
+        if (this.movingWindow) {
+            float newX = LXUtils.constrainf(this.x + dx, 0, this.ui.applet.width - this.width);
+            float newY = LXUtils.constrainf(this.y + dy, 0, this.ui.applet.height - this.height);
+            setPosition(newX, newY);
+        }
     }
 
     /**

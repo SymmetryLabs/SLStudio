@@ -1105,31 +1105,9 @@ public class LX {
     private void keyEvent(LXKeyEvent keyEvent) {
         char keyChar = keyEvent.getKeyChar();
         int keyCode = keyEvent.getKeyCode();
-        LXKeyEvent.Action action = keyEvent.getAction(); 
+        LXKeyEvent.Action action = keyEvent.getAction();
         if (action == LXKeyEvent.Action.RELEASED) {
             this.ui.keyReleased(keyEvent, keyChar, keyCode);
-            switch (keyCode) {
-            case java.awt.event.KeyEvent.VK_UP:
-                if (keyEvent.isMetaDown()) {
-                    this.engine.goPrev();
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_DOWN:
-                if (keyEvent.isMetaDown()) {
-                    this.engine.goNext();
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_LEFT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() - .1);
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_RIGHT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() + .1);
-                }
-                break;
-            }
             
             switch (Character.toLowerCase(keyChar)) {
             case '[':
@@ -1155,6 +1133,28 @@ public class LX {
             }
         } else if (action == LXKeyEvent.Action.PRESSED) {
             this.ui.keyPressed(keyEvent, keyChar, keyCode);
+            switch (keyCode) {
+            case java.awt.event.KeyEvent.VK_UP:
+                if (keyEvent.isMetaDown()) {
+                    this.engine.goPrev();
+                }
+                break;
+            case java.awt.event.KeyEvent.VK_DOWN:
+                if (keyEvent.isMetaDown()) {
+                    this.engine.goNext();
+                }
+                break;
+            case java.awt.event.KeyEvent.VK_LEFT:
+                if (this.flags.keyboardTempo) {
+                    this.tempo.setBpm(this.tempo.bpm() - .1);
+                }
+                break;
+            case java.awt.event.KeyEvent.VK_RIGHT:
+                if (this.flags.keyboardTempo) {
+                    this.tempo.setBpm(this.tempo.bpm() + .1);
+                }
+                break;
+            }
             switch (keyChar) {
             case 'f':
                 this.flags.showFramerate = true;

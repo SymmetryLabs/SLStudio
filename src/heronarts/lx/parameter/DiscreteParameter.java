@@ -57,7 +57,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     @Override
     protected double updateValue(double value) {
         if (value < this.minValue) {
-            return this.maxValue + 1 - ((int)(this.minValue - value) % this.range);
+            return this.minValue + (this.range - ((int)(this.minValue - value) % this.range)) % this.range;
         }
         return this.minValue + ((int)(value - this.minValue) % this.range);
     }

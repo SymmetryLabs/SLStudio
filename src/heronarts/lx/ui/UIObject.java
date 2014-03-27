@@ -34,17 +34,17 @@ public abstract class UIObject {
     /**
      * Children of this object, latest elements are drawn on top.
      */
-    protected final List<UIObject> children = new ArrayList<UIObject>();  
+    final List<UIObject> children = new ArrayList<UIObject>();  
     
     /**
      * Internal state, true if this object needs to be redrawn.
      */
-    protected boolean needsRedraw = true;
+    boolean needsRedraw = true;
     
     /**
      * Internal state, true if a child of this object needs to be redrawn.
      */
-    protected boolean childNeedsRedraw = true;
+    boolean childNeedsRedraw = true;
 
     /**
      * Position of the object, relative to parent, top left corner
@@ -86,6 +86,11 @@ public abstract class UIObject {
      */
     private UIObject focusedChild = null;
 
+    /**
+     * If this object has focus.
+     */
+    private boolean hasFocus = false;
+    
     /**
      * Subclasses may use to offset children
      */
@@ -238,6 +243,7 @@ public abstract class UIObject {
      */
     public final UIObject removeFromContainer() {
         if (this.parent != null) {
+            this._blur();
             this.parent.children.remove(this);
             this.parent = null;
         }
@@ -444,6 +450,89 @@ public abstract class UIObject {
             // Reset stroke weight
             pg.strokeWeight(1);
         }
+        if ((this instanceof UIFocus) && this.hasFocus) {
+            int focusSize = (int) Math.min(8, Math.min(this.width, this.height)/8);
+            pg.stroke(ui.getFocusColor());
+            pg.noFill();
+            // Top left
+            pg.line(0, 0, focusSize, 0);
+            pg.line(0, 0, 0, focusSize);
+            // Top right
+            pg.line(this.width-focusSize-1, 0, this.width-1, 0);
+            pg.line(this.width-1, 0, this.width-1, focusSize);
+            // Bottom right
+            pg.line(this.width-focusSize-1, this.height-1, this.width-1, this.height-1);
+            pg.line(this.width-1, this.height-1, this.width-1, this.height - 1 - focusSize);
+            // Bottom left
+            pg.line(0, this.height-1, focusSize, this.height-1);
+            pg.line(0, this.height-1, 0, this.height-1-focusSize);
+        }
+    }
+    
+    /**
+     * Whether this object has focus
+     */
+    public boolean hasFocus() {
+        return this.hasFocus;
+    }
+    
+    /**
+     * Focuses this UIObject
+     * 
+     * @return this
+     */
+    public UIObject focus() {
+        if (!(this instanceof UIFocus)) {
+            throw new UnsupportedOperationException(getClass().getName() + " does not implement UIFocus");
+        }
+        if (this.focusedChild != null) {
+            this.focusedChild._blur();
+        }
+        _focus(this);
+        return this;
+    }
+    
+    void _focus(UIObject object) {
+        if (this.parent != null) {
+            UIObject parentsFocusedChild = ((UIObject)this.parent).focusedChild; 
+            if ((parentsFocusedChild != null) && (parentsFocusedChild != this)) { 
+                parentsFocusedChild._blur();
+            }
+            this.parent._focus(object);
+            ((UIObject)this.parent).focusedChild = this;
+        }
+        if (!this.hasFocus) {
+            this.hasFocus = true;
+            onFocus();
+            redraw();
+        }
+    }
+    
+    /**
+     * Takes focus away from this UIObject
+     * 
+     * @return this
+     */
+    public UIObject blur() {
+        if (!(this instanceof UIFocus)) {
+            throw new UnsupportedOperationException(getClass().getName() + " does not implement UIFocus");
+        }
+        _blur();
+        return this;
+    }
+    
+    void _blur() {
+        if (this.hasFocus) {
+            if (this.focusedChild != null) {
+                this.focusedChild._blur();
+            }
+            this.hasFocus = false;
+            onBlur();
+            redraw();
+            if (this.parent != null) {
+                ((UIObject)this.parent).focusedChild = null;
+            }
+        }
     }
     
     void _mousePressed(float mx, float my) {
@@ -452,9 +541,11 @@ public abstract class UIObject {
             if (child.visible && child.contains(mx, my)) {
                 child._mousePressed(mx - child.x, my - child.y);
                 this.pressedChild = child;
-                this.focusedChild = child;
                 break;
             }
+        }
+        if (this instanceof UIFocus) {
+            focus();
         }
         onMousePressed(mx, my);
     }
@@ -530,6 +621,16 @@ public abstract class UIObject {
      * Invoked whenever this object is resized.
      */
     protected void onResize() {}
+    
+    /**
+     * Invoked when this object is focused
+     */
+    protected void onFocus() {}
+    
+    /**
+     * Invoked when this object loses focus
+     */
+    protected void onBlur() {}
     
     /**
      * Invoked when the mouse is pressed within the bounds of this object - subclasses

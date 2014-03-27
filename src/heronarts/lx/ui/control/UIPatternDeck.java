@@ -21,7 +21,7 @@ import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIWindow;
 import heronarts.lx.ui.component.UIKnob;
-import heronarts.lx.ui.component.UIScrollList;
+import heronarts.lx.ui.component.UIItemList;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -57,11 +57,11 @@ public class UIPatternDeck extends UIWindow {
         this.deck = deck;
         int yp = TITLE_LABEL_HEIGHT;
 
-        List<UIScrollList.Item> items = new ArrayList<UIScrollList.Item>();
+        List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (LXPattern p : deck.getPatterns()) {
             items.add(new PatternScrollItem(p));
         }
-        final UIScrollList patternList = new UIScrollList(1, yp, w - 2, 140).setItems(items);
+        final UIItemList patternList = new UIItemList(1, yp, w - 2, 140).setItems(items);
         patternList.addToContainer(this);
         yp += patternList.getHeight() + 10;
 
@@ -99,7 +99,7 @@ public class UIPatternDeck extends UIWindow {
         lxListener.patternDidChange(deck, deck.getActivePattern());
     }
 
-    private class PatternScrollItem extends UIScrollList.AbstractItem {
+    private class PatternScrollItem extends UIItemList.AbstractItem {
 
         private LXPattern pattern;
 
