@@ -363,16 +363,22 @@ public class LXEngine {
         for (LXDeck deck : this.decks) {
             deck.run(nowMillis, deltaMs);
             deck.getFaderTransition().timer.blendNanos = 0;
-            if (deck.getFader().getValue() == 0) {
-                // No blending on this deck, leave colors as they were
-            } else if (deck.getFader().getValue() >= 1) {
-                // Fully faded in, just use this deck
-                bufferColors = deck.getColors();
-            } else {
-                // Apply the fader to this deck
-                deck.faderTransition.blend(bufferColors, deck.getColors(), deck.fader.getValue());
-                bufferColors = deck.faderTransition.getColors();
-            }
+            
+            // This optimization assumed that all transitions do
+            // nothing at 0 and completely take over at 1. That's
+            // not always the case. Leaving this here for reference.
+            
+//            if (deck.getFader().getValue() == 0) {
+//                // No blending on this deck, leave colors as they were
+//            } else if (deck.getFader().getValue() >= 1) {
+//                // Fully faded in, just use this deck
+//                bufferColors = deck.getColors();
+//            } else {
+
+            // Apply the fader to this deck
+            deck.faderTransition.blend(bufferColors, deck.getColors(), deck.fader.getValue());
+            bufferColors = deck.faderTransition.getColors();
+                
         }
         this.timer.deckNanos = System.nanoTime() - deckStart;
         

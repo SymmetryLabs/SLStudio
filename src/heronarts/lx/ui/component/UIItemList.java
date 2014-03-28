@@ -49,7 +49,6 @@ public class UIItemList extends UIObject implements UIFocus {
         public boolean isPending() {
             return false;
         }
-        public void select() {}
         public void onMousePressed() {}
         public void onMouseReleased() {}
     }
@@ -72,6 +71,32 @@ public class UIItemList extends UIObject implements UIFocus {
     
     public UIItemList(float x, float y, float w, float h) {
         super(x, y, w, h);
+    }
+    
+    public int getFocusIndex() {
+        return this.focusIndex;
+    }
+    
+    public UIItemList setFocusIndex(int focusIndex) {
+        focusIndex = LXUtils.constrain(focusIndex, 0, this.items.size()-1);
+        if (this.focusIndex != focusIndex) {
+            this.focusIndex = focusIndex;
+            if (this.focusIndex < this.scrollOffset) {
+                setScrollOffset(this.focusIndex);
+            } else if (this.focusIndex >= (this.scrollOffset + this.numVisibleItems)) {
+                setScrollOffset(this.focusIndex - this.numVisibleItems + 1);
+            }
+            redraw();
+        }
+        return this;
+    }
+    
+    public UIItemList select() {
+        this.keyedItem = this.items.get(this.focusIndex);
+        this.keyedItem.onMousePressed();
+        this.keyedItem.onMouseReleased();
+        redraw();
+        return this;
     }
 
     protected void onDraw(UI ui, PGraphics pg) {
@@ -134,19 +159,9 @@ public class UIItemList extends UIObject implements UIFocus {
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
             index = Math.min(index + 1, this.items.size()-1);
         } else if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
-            this.keyedItem = this.items.get(this.focusIndex);
-            this.keyedItem.onMousePressed();
-            redraw();
+            select();
         }
-        if (this.focusIndex != index) {
-            this.focusIndex = index;
-            if (this.focusIndex < this.scrollOffset) {
-                setScrollOffset(this.focusIndex);
-            } else if (this.focusIndex >= (this.scrollOffset + this.numVisibleItems)) {
-                setScrollOffset(this.focusIndex - this.numVisibleItems + 1);
-            }
-            redraw();
-        }
+        setFocusIndex(index);
     }
     
     public void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {

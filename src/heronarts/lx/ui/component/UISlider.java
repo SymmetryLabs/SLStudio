@@ -22,6 +22,13 @@ import processing.core.PGraphics;
 
 public class UISlider extends UIParameterControl implements UIFocus {
 
+    public enum Direction {
+        HORIZONTAL,
+        VERTICAL
+    };
+    
+    private final Direction direction;
+    
     private static final float HANDLE_WIDTH = 12;
 
     public UISlider() {
@@ -29,7 +36,12 @@ public class UISlider extends UIParameterControl implements UIFocus {
     }
     
     public UISlider(float x, float y, float w, float h) {
+        this(Direction.HORIZONTAL, x, y, w, h);
+    }
+        
+    public UISlider(Direction direction, float x, float y, float w, float h) {
         super(x, y, w, h);
+        this.direction = direction;
         setBackgroundColor(0xff333333);
         setBorderColor(0xff666666);
     }
@@ -37,31 +49,55 @@ public class UISlider extends UIParameterControl implements UIFocus {
     protected void onDraw(UI ui, PGraphics pg) {
         pg.noStroke();
         pg.fill(0xff222222);
-        pg.rect(4, this.height / 2 - 2, this.width - 8, 4);
-        pg.fill(0xff666666);
-        pg.stroke(0xff222222);
-        pg.rect((int) (4 + getNormalized() * (this.width - 8 - HANDLE_WIDTH)), 4, HANDLE_WIDTH, this.height - 8);
+        switch (this.direction) {
+        case HORIZONTAL:
+            pg.rect(4, this.height / 2 - 2, this.width - 8, 4);
+            pg.fill(0xff666666);
+            pg.stroke(0xff222222);
+            pg.rect((int) (4 + getNormalized() * (this.width - 8 - HANDLE_WIDTH)), 4, HANDLE_WIDTH, this.height - 8);
+            break;
+        case VERTICAL:
+            pg.rect(this.width / 2 - 2, 4, 4, this.height - 8);
+            pg.fill(0xff666666);
+            pg.stroke(0xff222222);
+            pg.rect(4, (int) (4 + (1-getNormalized()) * (this.height - 8 - HANDLE_WIDTH)), this.width-8, HANDLE_WIDTH);
+            break;
+        }
     }
 
     private boolean editing = false;
     private long lastClick = 0;
     private float doubleClickMode = 0;
-    private float doubleClickX = 0;
+    private float doubleClickP = 0;
 
     protected void onMousePressed(float mx, float my) {
         long now = System.currentTimeMillis();
-        double handleLeft = 4 + getNormalized() * (this.width - 8 - HANDLE_WIDTH);
-        if ((mx >= handleLeft) && (mx < handleLeft + HANDLE_WIDTH)) {
+        float mp, dim;
+        double handleEdge;
+        switch (this.direction) {
+        case VERTICAL:
+            handleEdge = 4 + (1-getNormalized()) * (this.height - 8 - HANDLE_WIDTH);
+            mp = my;
+            dim = this.height;
+            break;
+        default:
+        case HORIZONTAL:
+            handleEdge = 4 + getNormalized() * (this.width - 8 - HANDLE_WIDTH);
+            mp = mx;
+            dim = this.width;
+            break;
+        }
+        if ((mp >= handleEdge) && (mp < handleEdge + HANDLE_WIDTH)) {
             this.editing = true;
         } else {
             if ((now - this.lastClick) < DOUBLE_CLICK_THRESHOLD
-                    && Math.abs(mx - this.doubleClickX) < 3) {
+                    && Math.abs(mp - this.doubleClickP) < 3) {
                 setNormalized(this.doubleClickMode);
             }
-            this.doubleClickX = mx;
-            if (mx < this.width * .25) {
+            this.doubleClickP = mp;
+            if (mp < dim * .25) {
                 this.doubleClickMode = 0;
-            } else if (mx > this.width * .75) {
+            } else if (mp > dim * .75) {
                 this.doubleClickMode = 1;
             } else {
                 this.doubleClickMode = 0.5f;
@@ -76,7 +112,21 @@ public class UISlider extends UIParameterControl implements UIFocus {
 
     protected void onMouseDragged(float mx, float my, float dx, float dy) {
         if (this.editing) {
-            setNormalized(LXUtils.constrain((mx - HANDLE_WIDTH / 2. - 4) / (this.width - 8 - HANDLE_WIDTH), 0, 1));
+            float mp, dim;
+            switch (this.direction) {
+            case VERTICAL:
+                mp = my;
+                dim = this.height;
+                setNormalized(1 - LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4) / (dim - 8 - HANDLE_WIDTH), 0, 1));
+                break;
+            default:
+            case HORIZONTAL:
+                mp = mx;
+                dim = this.width;
+                setNormalized(LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4) / (dim - 8 - HANDLE_WIDTH), 0, 1));
+                break;
+            }
+            
         }
     }
 }
