@@ -307,6 +307,19 @@ public abstract class LXPattern extends LXComponent {
     public final int[] getColors() {
         return this.colors;
     }
+    
+    /**
+     * Copies the color buffer into an external buffer. This
+     * is useful when the engine is in threaded mode and you
+     * want to grab a particular pattern's colors for display.
+     * 
+     * @param copy buffer to copy colors into
+     */
+    public final synchronized void copyBuffer(int[] copy) {
+        for (int i = 0; i < this.colors.length; ++i) {
+            copy[i] = this.colors[i];
+        }
+    }
 
     /**
      * Invoked by the engine when the pattern is running.
@@ -318,6 +331,17 @@ public abstract class LXPattern extends LXComponent {
         for (LXModulator m : this.modulators) {
             m.run(deltaMs);
         }
+        if (this.lx.engine.isThreaded()) {
+            synchronized(this) {
+                criticalGo(deltaMs);
+            }
+        } else {
+            criticalGo(deltaMs);
+        }
+        this.timer.goNanos = System.nanoTime() - goStart;
+    }
+    
+    private final void criticalGo(double deltaMs) {
         this.run(deltaMs);
         for (LXLayer layer : this.layers) {
             for (LXModulator m : layer.getModulators()) {
@@ -325,7 +349,6 @@ public abstract class LXPattern extends LXComponent {
             }
             layer.run(deltaMs, this.colors);
         }
-        this.timer.goNanos = System.nanoTime() - goStart;
     }
     
     /**
