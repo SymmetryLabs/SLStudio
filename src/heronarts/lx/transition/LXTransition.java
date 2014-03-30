@@ -15,6 +15,7 @@ package heronarts.lx.transition;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -168,9 +169,13 @@ public abstract class LXTransition extends LXComponent {
      * @param c1 Colors being blended from
      * @param c2 Colors being blended to
      * @param progress Progress of blend, from 0 to 1
+     * @param deltaMs Milliseconds since last frame
      */
-    public final void blend(int[] c1, int[] c2, double progress) {
-        long blendStart = System.nanoTime(); 
+    public final void blend(int[] c1, int[] c2, double progress, double deltaMs) {
+        long blendStart = System.nanoTime();
+        for (LXModulator modulator : this.modulators) {
+            modulator.run(deltaMs);
+        }
         this.computeBlend(c1, c2, this.ease(progress));
         this.timer.blendNanos = System.nanoTime() - blendStart;
     }

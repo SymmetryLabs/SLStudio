@@ -21,11 +21,11 @@ import java.lang.Math;
  */
 public class DiscreteParameter extends LXListenableNormalizedParameter {
 
-    public final int minValue;
+    private int minValue;
     
-    public final int maxValue;
+    private int maxValue;
     
-    public final int range;
+    private int range;
     
     /**
      * Parameter with values from [0, range-1], 0 by default
@@ -46,12 +46,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
      */
     public DiscreteParameter(String label, int min, int max) {
         super(label, min);
-        this.minValue = min;
-        this.maxValue = max - 1;
-        if (this.maxValue < this.minValue) {
-            throw new IllegalArgumentException("DiscreteParameter must have range of at least 1");
-        }
-        this.range = max-min;
+        setRange(min, max);
     }
             
     @Override
@@ -60,6 +55,46 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
             return this.minValue + (this.range - ((int)(this.minValue - value) % this.range)) % this.range;
         }
         return this.minValue + ((int)(value - this.minValue) % this.range);
+    }
+    
+    public int getMinValue() {
+        return this.minValue;
+    }
+    
+    public int getMaxValue() {
+        return this.maxValue;
+    }
+    
+    public int getRange() {
+        return this.range;
+    }
+    
+    /**
+     * Sets the range from [minValue, maxValue-1] inclusive
+     * 
+     * @param minValue Minimum value
+     * @param maxValue Maximum value, exclusive
+     * @return this
+     */
+    public DiscreteParameter setRange(int minValue, int maxValue) {
+        this.minValue = minValue;
+        this.maxValue = maxValue - 1;
+        if (this.maxValue < this.minValue) {
+            throw new IllegalArgumentException("DiscreteParameter must have range of at least 1");
+        }
+        this.range = maxValue-minValue;
+        setValue(updateValue(this.getValue()));
+        return this;
+    }
+    
+    /**
+     * Sets range from [0, range-1] inclusive
+     * 
+     * @param range Number of discrete values
+     * @return this
+     */
+    public DiscreteParameter setRange(int range) {
+        return setRange(0, range);
     }
     
     public DiscreteParameter increment() {

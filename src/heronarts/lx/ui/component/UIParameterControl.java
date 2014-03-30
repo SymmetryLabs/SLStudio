@@ -64,7 +64,7 @@ public abstract class UIParameterControl extends UIObject implements LXParameter
     public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.parameter instanceof DiscreteParameter) {
             DiscreteParameter dp = (DiscreteParameter)this.parameter; 
-            int times = keyEvent.isShiftDown() ? Math.max(1, dp.range/10) : 1;
+            int times = keyEvent.isShiftDown() ? Math.max(1, dp.getRange()/10) : 1;
             if ((keyCode == java.awt.event.KeyEvent.VK_LEFT) ||
                 (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
                 dp.setValue(dp.getValuei() - times);

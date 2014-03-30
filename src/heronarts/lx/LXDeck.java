@@ -140,11 +140,11 @@ public class LXDeck {
     }
     
     public synchronized final LXDeck setPatterns(LXPattern[] patterns) {
-        this.getActivePattern().onInactive();        
+        getActivePattern().onInactive();        
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
         this.transition = null;
-        this.getActivePattern().onActive();
+        getActivePattern().onActive();
         return this;
     }
     
@@ -157,10 +157,18 @@ public class LXDeck {
         this.patterns = patterns;
     }
 
+    public synchronized final int getActivePatternIndex() {
+        return this.activePatternIndex;
+    }
+    
     public synchronized final LXPattern getActivePattern() {
         return this.patterns[this.activePatternIndex];
     }
 
+    public synchronized final int getNextPatternIndex() {
+        return this.nextPatternIndex;
+    }
+    
     public synchronized final LXPattern getNextPattern() {
         return this.patterns[this.nextPatternIndex];
     }
@@ -177,7 +185,7 @@ public class LXDeck {
         if (this.nextPatternIndex < 0) {
             this.nextPatternIndex = this.patterns.length - 1;
         }
-        this.startTransition();
+        startTransition();
         return this;
     }
     
@@ -189,9 +197,9 @@ public class LXDeck {
         do {
             this.nextPatternIndex = (this.nextPatternIndex + 1) % this.patterns.length;
         } while ((this.nextPatternIndex != this.activePatternIndex) &&
-                 !this.getNextPattern().isEligible());
+                 !getNextPattern().isEligible());
         if (this.nextPatternIndex != this.activePatternIndex) {
-            this.startTransition();
+            startTransition();
         }
         return this;
     }
@@ -199,7 +207,7 @@ public class LXDeck {
     public synchronized final LXDeck goPattern(LXPattern pattern) {
         for (int i = 0; i < this.patterns.length; ++i) {
             if (this.patterns[i] == pattern) {
-                return this.goIndex(i);
+                return goIndex(i);
             }
         }
         return this;
@@ -213,7 +221,7 @@ public class LXDeck {
             return this;
         }
         this.nextPatternIndex = i;
-        this.startTransition();
+        startTransition();
         return this;
     }
     
@@ -248,8 +256,9 @@ public class LXDeck {
         } else {
             getNextPattern().onTransitionStart();
             this.transition.blend(
-                this.getActivePattern().getColors(),
-                this.getNextPattern().getColors(),
+                getActivePattern().getColors(),
+                getNextPattern().getColors(),
+                0,
                 0
             );
             this.transitionMillis = System.currentTimeMillis();
@@ -271,31 +280,39 @@ public class LXDeck {
         long runStart = System.nanoTime();
         
         // Run active pattern
-        this.getActivePattern().go(deltaMs);
+        getActivePattern().go(deltaMs);
         
         // Run transition if applicable
         if (this.transition != null) {
             int transitionMs = (int) (nowMillis - this.transitionMillis);
             if (transitionMs >= this.transition.getDuration()) {
-                this.finishTransition();
+                finishTransition();
             } else {
-                this.getNextPattern().go(deltaMs);
+                getNextPattern().go(deltaMs);
                 this.transition.blend(
-                    this.getActivePattern().getColors(),
-                    this.getNextPattern().getColors(),
-                    (double) transitionMs / this.transition.getDuration()
+                    getActivePattern().getColors(),
+                    getNextPattern().getColors(),
+                    (double) transitionMs / this.transition.getDuration(),
+                    deltaMs
                 );
             }
         } else {
             if (this.autoTransitionEnabled &&
                 (nowMillis - this.transitionMillis > this.autoTransitionThreshold)) {
-                this.goNext();
+                goNext();
             }
         }
         
         this.timer.runNanos = System.nanoTime() - runStart;
     }
 
+    public synchronized void copyBuffer(int[] buffer) {
+        int[] colors = getColors();
+        for (int i = 0; i < colors.length; ++i) {
+            buffer[i] = colors[i];
+        }
+    }
+    
     public synchronized int[] getColors() {
         return (this.transition != null) ? this.transition.getColors() : this.getActivePattern().getColors();
     }

@@ -376,7 +376,7 @@ public class LXEngine {
 //            } else {
 
             // Apply the fader to this deck
-            deck.faderTransition.blend(bufferColors, deck.getColors(), deck.fader.getValue());
+            deck.faderTransition.blend(bufferColors, deck.getColors(), deck.fader.getValue(), deltaMs);
             bufferColors = deck.faderTransition.getColors();
                 
         }

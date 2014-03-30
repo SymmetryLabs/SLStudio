@@ -52,8 +52,8 @@ public class UIIntegerBox extends UIObject {
         }
         this.parameter = parameter;
         if (parameter != null) {
-            this.minValue = parameter.minValue;
-            this.maxValue = parameter.maxValue;
+            this.minValue = parameter.getMinValue();
+            this.maxValue = parameter.getMaxValue();
             this.value = parameter.getValuei();
             this.parameter.addListener(this.parameterListener);
         }

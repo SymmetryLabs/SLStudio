@@ -44,11 +44,13 @@ public class DampedParameter extends LXModulator {
             return value;
         }
         double range = this.velocity.getValue() * deltaMs / 1000.;
+        double after;
         if (target > value) {
-            return Math.min(value + range, target);
+            after = Math.min(value + range, target);
         } else {
-            return Math.max(value - range, target);
+            after = Math.max(value - range, target);
         }
+        return after;
     }
 
 }

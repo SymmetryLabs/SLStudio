@@ -52,9 +52,12 @@ public class UILabel extends UIObject {
     public UILabel(float x, float y, float w, float h) {
         super(x, y, w, h);
     }
-
+    
     public UILabel setPadding(int padding) {
-        this.padding = padding;
+        if (this.padding != padding) {
+            this.padding = padding;
+            redraw();
+        }
         return this;
     }
         
@@ -64,8 +67,12 @@ public class UILabel extends UIObject {
     }
     
     public UILabel setAlignment(int horizontalAlignment, int verticalAlignment) {
-        this.horizontalAlignment = horizontalAlignment;
-        this.verticalAlignment = verticalAlignment;
+        if ((this.horizontalAlignment != horizontalAlignment) ||
+            (this.verticalAlignment != verticalAlignment)) {
+            this.horizontalAlignment = horizontalAlignment;
+            this.verticalAlignment = verticalAlignment;
+            redraw();
+        }
         return this;
     }
     
@@ -87,20 +94,26 @@ public class UILabel extends UIObject {
     }
 
     public UILabel setFont(PFont font) {
-        this.font = font;
-        redraw();
+        if (this.font != font) {
+            this.font = font;
+            redraw();
+        }
         return this;
     }
 
     public UILabel setColor(int color) {
-        this.color = color;
-        redraw();
+        if (this.color != color) {
+            this.color = color;
+            redraw();
+        }
         return this;
     }
 
     public UILabel setLabel(String label) {
-        this.label = label;
-        redraw();
+        if (this.label != label) {
+            this.label = label;
+            redraw();
+        }
         return this;
     }
 }

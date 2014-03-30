@@ -13,12 +13,15 @@
 
 package heronarts.lx.ui.component;
 
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIObject;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class UIToggleSet extends UIObject {
+public class UIToggleSet extends UIObject implements LXParameterListener {
 
     private String[] options = null;
 
@@ -27,6 +30,8 @@ public class UIToggleSet extends UIObject {
     private String value = null;
 
     private boolean evenSpacing = false;
+    
+    private DiscreteParameter parameter = null;
 
     public UIToggleSet() {
         this(0, 0, 0, 0);
@@ -37,12 +42,34 @@ public class UIToggleSet extends UIObject {
     }
 
     public UIToggleSet setOptions(String[] options) {
-        this.options = options;
-        this.value = options[0];
-        this.boundaries = new int[options.length];
-        computeBoundaries();
-        redraw();
+        if (this.options != options) {
+            this.options = options;
+            this.value = options[0];
+            this.boundaries = new int[options.length];
+            computeBoundaries();
+            redraw();
+        }
         return this;
+    }
+    
+    public UIToggleSet setParameter(DiscreteParameter parameter) {
+        if (this.parameter != parameter) {
+            if (this.parameter != null) {
+                this.parameter.removeListener(this);
+            }
+            this.parameter = parameter;
+            if (this.parameter != null) {
+                this.parameter.addListener(this);
+                setValue(this.options[this.parameter.getValuei()]);
+            }
+        }
+        return this;
+    }
+    
+    public void onParameterChanged(LXParameter parameter) {
+        if (parameter == this.parameter) {
+            setValue(this.options[this.parameter.getValuei()]);
+        }
     }
 
     private void computeBoundaries() {
@@ -81,9 +108,23 @@ public class UIToggleSet extends UIObject {
 
     public UIToggleSet setValue(String option) {
         if (this.value != option) {
-            this.value = option;
-            onToggle(this.value);
-            redraw();
+            for (int i = 0; i < this.options.length; ++i) {
+                if (option == this.options[i]) {
+                    this.value = option;
+                    if (this.parameter != null) {
+                        this.parameter.setValue(i);
+                    }
+                    onToggle(this.value);
+                    redraw();
+                    return this;
+                }
+            }
+            String optStr = "{";
+            for (String str : this.options) {
+                optStr += str + ",";
+            }
+            optStr = optStr.substring(0, optStr.length() - 1) + "}";
+            throw new IllegalArgumentException("Not a valid option in UIToggleSet: " + option + " " + optStr);
         }
         return this;
     }
