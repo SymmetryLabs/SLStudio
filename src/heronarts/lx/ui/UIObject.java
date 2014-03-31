@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -15,10 +15,10 @@ package heronarts.lx.ui;
 
 import heronarts.lx.LXKeyEvent;
 
+import processing.core.PGraphics;
+
 import java.util.ArrayList;
 import java.util.List;
-
-import processing.core.PGraphics;
 
 /**
  * Object in a UI hierarchy. UIObjects all have coordinate in an x-y space that uses
@@ -34,13 +34,13 @@ public abstract class UIObject {
     /**
      * Children of this object, latest elements are drawn on top.
      */
-    final List<UIObject> children = new ArrayList<UIObject>();  
-    
+    final List<UIObject> children = new ArrayList<UIObject>();
+
     /**
      * Internal state, true if this object needs to be redrawn.
      */
     boolean needsRedraw = true;
-    
+
     /**
      * Internal state, true if a child of this object needs to be redrawn.
      */
@@ -50,22 +50,22 @@ public abstract class UIObject {
      * Position of the object, relative to parent, top left corner
      */
     protected float x;
-    
+
     /**
      * Position of the object, relative to parent, top left corner
      */
     protected float y;
-    
+
     /**
      * Width of the object
      */
     protected float width;
-    
+
     /**
      * Height of the object
      */
     protected float height;
-    
+
     /**
      * Parent object.
      */
@@ -80,7 +80,7 @@ public abstract class UIObject {
      * Which child mouse events are pressed to, if any.
      */
     private UIObject pressedChild = null;
-    
+
     /**
      * Which child has focus.
      */
@@ -90,27 +90,27 @@ public abstract class UIObject {
      * If this object has focus.
      */
     private boolean hasFocus = false;
-    
+
     /**
      * Subclasses may use to offset children
      */
     float scrollX = 0;
-    
+
     /**
-     * Subclasses may use to offset children 
+     * Subclasses may use to offset children
      */
     float scrollY = 0;
-    
+
     private boolean hasBackground = false;
-    
+
     private int backgroundColor = 0xFF000000;
-    
+
     private boolean hasBorder = false;
-    
+
     private int borderColor = 0xFF000000;
-    
+
     private int borderWeight = 1;
-    
+
     /**
      * Constructs a UIObject with no size.
      */
@@ -120,7 +120,7 @@ public abstract class UIObject {
 
     /**
      * Constructs a UIObject
-     * 
+     *
      * @param x x-position
      * @param y y-position
      * @param w width
@@ -135,7 +135,7 @@ public abstract class UIObject {
 
     /**
      * Whether this object is visible.
-     * 
+     *
      * @return True if this object is being displayed
      */
     public boolean isVisible() {
@@ -144,7 +144,7 @@ public abstract class UIObject {
 
     /**
      * Set whether this object should be displayed
-     * 
+     *
      * @param visible Whether to display this object
      * @return this object
      */
@@ -158,7 +158,7 @@ public abstract class UIObject {
 
     /**
      * Sets the position of this object, relative to its parent
-     * 
+     *
      * @param x x-position, relative to parent's coordinate space
      * @param y y-position, relative to parent's coordinate space
      * @return this object
@@ -174,7 +174,7 @@ public abstract class UIObject {
 
     /**
      * Sets the size of this object.
-     * 
+     *
      * @param width Width of object
      * @param height Height of object
      * @return this object
@@ -188,19 +188,37 @@ public abstract class UIObject {
         }
         return this;
     }
-    
+
+      /**
+     * X position
+     *
+     * @return x position
+     */
+    public final float getX() {
+        return this.x;
+    }
+
+    /**
+     * Y position
+     *
+     * @return y position
+     */
+    public final float getY() {
+        return this.y;
+    }
+
     /**
      * Width
-     * 
+     *
      * @return width
      */
     public final float getWidth() {
         return this.width;
     }
-    
+
     /**
-     * Height 
-     * 
+     * Height
+     *
      * @return height
      */
     public final float getHeight() {
@@ -210,7 +228,7 @@ public abstract class UIObject {
     /**
      * Whether a given point, in the container's coordinate space, is within
      * this object.
-     * 
+     *
      * @param x x-coordinate, in parent's coordinate space
      * @param y y-coordinate, in parent's coordinate space
      * @return true if the point is inside this object's bounds
@@ -220,10 +238,10 @@ public abstract class UIObject {
                 (x >= this.x && x < (this.x + this.width)) &&
                 (y >= this.y && y < (this.y + this.height));
     }
-    
+
     /**
      * Places this object inside a container.
-     * 
+     *
      * @param container The object in which to place this
      * @return this object
      */
@@ -238,7 +256,7 @@ public abstract class UIObject {
 
     /**
      * Removes this object from a container that it is in.
-     * 
+     *
      * @return this object
      */
     public final UIObject removeFromContainer() {
@@ -252,25 +270,25 @@ public abstract class UIObject {
 
     /**
      * Whether this object has a background
-     * 
+     *
      * @return true or false
      */
     public boolean hasBackground() {
         return this.hasBackground;
     }
-    
+
     /**
      * The background color, if there is a background
-     * 
+     *
      * @return color
      */
     public int getBackgroundColor() {
         return this.backgroundColor;
     }
-    
+
     /**
      * Sets whether the object has a background
-     * 
+     *
      * @param hasBackground true or false
      * @return this
      */
@@ -281,13 +299,13 @@ public abstract class UIObject {
         }
         return this;
     }
-    
+
     /**
      * Sets a background color
-     * 
+     *
      * @param backgroundColor color
      * @return this
-     */    
+     */
     public UIObject setBackgroundColor(int backgroundColor) {
         if (!this.hasBackground || (this.backgroundColor != backgroundColor)) {
             this.hasBackground = true;
@@ -296,37 +314,37 @@ public abstract class UIObject {
         }
         return this;
     }
-    
+
     /**
      * Whether this object has a border
-     * 
+     *
      * @return true or false
      */
     public boolean hasBorder() {
         return this.hasBorder;
     }
-    
+
     /**
      * Current border color
-     * 
+     *
      * @return color
      */
     public int getBorderColor() {
         return this.borderColor;
     }
-    
+
     /**
      * The weight of the border
-     * 
+     *
      * @return weight
      */
     public int getBorderWeight() {
         return this.borderWeight;
     }
-    
+
     /**
      * Sets whether there is a border
-     * 
+     *
      * @param hasBorder true or false
      * @return this
      */
@@ -337,10 +355,10 @@ public abstract class UIObject {
         }
         return this;
     }
-    
+
     /**
      * Sets the color of the border
-     * 
+     *
      * @param borderColor color
      * @return this
      */
@@ -355,7 +373,7 @@ public abstract class UIObject {
 
     /**
      * Sets the weight of the border
-     * 
+     *
      * @param borderWeight weight
      * @return this
      */
@@ -367,16 +385,16 @@ public abstract class UIObject {
         }
         return this;
     }
-    
+
     /**
      * Redraws this object.
-     * 
+     *
      * @return this object
      */
     public final UIObject redraw() {
         // Mark object and children as needing redraw
         _redraw();
-        
+
         // Mark parent containers as needing a child redrawn
         UIObject p = this.parent;
         while (p != null) {
@@ -395,12 +413,12 @@ public abstract class UIObject {
         for (UIObject child : this.children) {
             this.childNeedsRedraw = true;
             child._redraw();
-        }    
+        }
     }
 
     /**
      * Draws this object to the graphics context.
-     * 
+     *
      * @param ui UI
      * @param pg graphics buffer
      */
@@ -408,7 +426,7 @@ public abstract class UIObject {
         if (!this.visible) {
             return;
         }
-        boolean needsBorder = this.needsRedraw || this.childNeedsRedraw; 
+        boolean needsBorder = this.needsRedraw || this.childNeedsRedraw;
         if (this.needsRedraw) {
             this.needsRedraw = false;
             drawBackground(ui, pg);
@@ -438,7 +456,7 @@ public abstract class UIObject {
             pg.rect(0, 0, width, height);
         }
     }
-    
+
     private void drawBorder(UI ui, PGraphics pg) {
         if (this.hasBorder) {
             int border = this.borderWeight;
@@ -446,7 +464,7 @@ public abstract class UIObject {
             pg.stroke(this.borderColor);
             pg.noFill();
             pg.rect(border/2, border/2, this.width-border, this.height-border);
-            
+
             // Reset stroke weight
             pg.strokeWeight(1);
         }
@@ -468,17 +486,17 @@ public abstract class UIObject {
             pg.line(0, this.height-1, 0, this.height-1-focusSize);
         }
     }
-    
+
     /**
      * Whether this object has focus
      */
     public boolean hasFocus() {
         return this.hasFocus;
     }
-    
+
     /**
      * Focuses this UIObject
-     * 
+     *
      * @return this
      */
     public UIObject focus() {
@@ -491,11 +509,11 @@ public abstract class UIObject {
         _focus(this);
         return this;
     }
-    
+
     void _focus(UIObject object) {
         if (this.parent != null) {
-            UIObject parentsFocusedChild = ((UIObject)this.parent).focusedChild; 
-            if ((parentsFocusedChild != null) && (parentsFocusedChild != this)) { 
+            UIObject parentsFocusedChild = ((UIObject)this.parent).focusedChild;
+            if ((parentsFocusedChild != null) && (parentsFocusedChild != this)) {
                 parentsFocusedChild._blur();
             }
             this.parent._focus(object);
@@ -507,10 +525,10 @@ public abstract class UIObject {
             redraw();
         }
     }
-    
+
     /**
      * Takes focus away from this UIObject
-     * 
+     *
      * @return this
      */
     public UIObject blur() {
@@ -520,7 +538,7 @@ public abstract class UIObject {
         _blur();
         return this;
     }
-    
+
     void _blur() {
         if (this.hasFocus) {
             if (this.focusedChild != null) {
@@ -534,7 +552,7 @@ public abstract class UIObject {
             }
         }
     }
-    
+
     void _mousePressed(float mx, float my) {
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
@@ -549,7 +567,7 @@ public abstract class UIObject {
         }
         onMousePressed(mx, my);
     }
-    
+
     void _mouseClicked(float mx, float my) {
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
@@ -586,89 +604,89 @@ public abstract class UIObject {
         }
         onMouseWheel(mx, my, delta);
     }
-    
+
     void _keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedChild != null) {
             this.focusedChild._keyPressed(keyEvent, keyChar, keyCode);
         }
         onKeyPressed(keyEvent, keyChar, keyCode);
     }
-    
+
     void _keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedChild != null) {
             this.focusedChild._keyReleased(keyEvent, keyChar, keyCode);
         }
         onKeyReleased(keyEvent, keyChar, keyCode);
     }
-    
+
     void _keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedChild != null) {
             this.focusedChild._keyTyped(keyEvent, keyChar, keyCode);
         }
         onKeyTyped(keyEvent, keyChar, keyCode);
     }
-    
+
     /**
      * Invoked whenever this object needs to draw itself - subclasses should override
      * to implement their drawing functionality.
-     * 
+     *
      * @param ui UI
      * @param pg PGraphics context
      */
     protected void onDraw(UI ui, PGraphics pg) {}
-    
+
     /**
      * Invoked whenever this object is resized.
      */
     protected void onResize() {}
-    
+
     /**
      * Invoked when this object is focused
      */
     protected void onFocus() {}
-    
+
     /**
      * Invoked when this object loses focus
      */
     protected void onBlur() {}
-    
+
     /**
      * Invoked when the mouse is pressed within the bounds of this object - subclasses
      * should override.
-     * 
+     *
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      */
     protected void onMousePressed(float mx, float my) {}
-    
+
     /**
      * Invoked when the mouse is released in this object, or after being initially
      * pressed inside this object - subclasses should override.
-     * 
+     *
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      */
     protected void onMouseReleased(float mx, float my) {}
-    
+
     /**
      * Invoked when the mouse is clicked in this object - subclasses should override.
-     * 
+     *
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      */
     protected void onMouseClicked(float mx, float my) {}
-    
+
     /**
      * Invoked when the mouse is dragged in this object, or after being initially
      * pressed inside this object - subclasses should override.
-     * 
+     *
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      * @param dx relative change in x-position since last invocation
      * @param dy relative change in y-position since last invocation
      */
     protected void onMouseDragged(float mx, float my, float dx, float dy) {}
-        
+
     /**
      * Invoked when the mouse wheel is scrolled inside this object - subclasses should
      * override.
@@ -678,29 +696,29 @@ public abstract class UIObject {
      * @param dx relative change in mouse wheel position
      */
     protected void onMouseWheel(float mx, float my, float dx) {}
-    
+
     /**
      * Invoked when key is pressed and this object has focus - subclasses should
      * override.
-     * 
+     *
      * @param keyChar
      * @param keyCode
      */
     protected void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
-    
+
     /**
      * Invoked when key is released and this object has focus - subclasses should
      * override.
-     * 
+     *
      * @param keyChar
      * @param keyCode
      */
     protected void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
-    
+
     /**
      * Invoked when key is typed and this object has focus - subclasses should
      * override.
-     * 
+     *
      * @param keyChar
      * @param keyCode
      */
