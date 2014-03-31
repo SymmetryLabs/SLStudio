@@ -20,34 +20,36 @@ import java.util.List;
  * Utility base class for objects that have parameters.
  */
 public abstract class LXParameterized implements LXParameterListener {
-    
+
     protected final List<LXParameter> parameters = new ArrayList<LXParameter>();
-    
-    protected LXParameterized() {} 
-    
+
+    protected LXParameterized() {
+    }
+
     protected final LXParameterized addParameter(LXParameter parameter) {
         this.parameters.add(parameter);
         if (parameter instanceof LXListenableParameter) {
-            ((LXListenableParameter)parameter).addListener(this);
+            ((LXListenableParameter) parameter).addListener(this);
         }
         return this;
     }
-    
+
     protected final LXParameterized addParameters(List<LXParameter> parameters) {
         for (LXParameter parameter : parameters) {
             addParameter(parameter);
         }
         return this;
     }
-    
+
     public final List<LXParameter> getParameters() {
         return this.parameters;
     }
-    
+
     /**
-     * Subclasses are free to override this, but in case they don't care
-     * a default implementation is provided.
+     * Subclasses are free to override this, but in case they don't care a default
+     * implementation is provided.
      */
-    public /* abstract */ void onParameterChanged(LXParameter parameter) {}
+    public/* abstract */void onParameterChanged(LXParameter parameter) {
+    }
 
 }

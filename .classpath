@@ -2,8 +2,9 @@
 <classpath>
 	<classpathentry kind="src" path="src"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
-	<classpathentry kind="lib" path="/Users/mslee/Documents/workspace/libs/core.jar"/>
-	<classpathentry kind="lib" path="/Users/mslee/Documents/workspace/libs/video.jar"/>
-	<classpathentry kind="lib" path="/Users/mslee/Documents/workspace/libs/minim.jar"/>
+	<classpathentry kind="lib" path="classpath/core.jar"/>
+	<classpathentry kind="lib" path="classpath/video.jar"/>
+	<classpathentry kind="lib" path="classpath/minim.jar"/>
+	<classpathentry kind="lib" path="lib/rwmidi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -14,27 +14,26 @@
 package heronarts.lx.transform;
 
 import heronarts.lx.model.LXPoint;
-
 import processing.core.PVector;
 
 /**
- * A mutable version of an LXPoint, which has had a transformation applied
- * to it, and may have other transformations applied to it. 
+ * A mutable version of an LXPoint, which has had a transformation applied to
+ * it, and may have other transformations applied to it.
  */
 public class LXVector extends PVector {
 
     private static final long serialVersionUID = 1L;
-    
+
     /**
      * Helper to retrieve the point this corresponds to
      */
     public final LXPoint point;
-    
+
     /**
      * Index of the LXPoint this corresponds to
      */
     public final int index;
-    
+
     /**
      * Construct a mutable vector based on an LXPoint
      * 

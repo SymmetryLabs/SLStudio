@@ -14,14 +14,13 @@
 package heronarts.lx.ui;
 
 import heronarts.lx.LXKeyEvent;
-
-import processing.core.PGraphics;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 
 /**
- * A UIContext is a container that owns a graphics buffer. This buffer is persistent
- * across frames and is only redrawn as necessary. It is simply bitmapped onto the
- * UI that is a part of.
+ * A UIContext is a container that owns a graphics buffer. This buffer is
+ * persistent across frames and is only redrawn as necessary. It is simply
+ * bitmapped onto the UI that is a part of.
  */
 public class UIContext extends UIContainer implements UILayer {
 
@@ -29,27 +28,27 @@ public class UIContext extends UIContainer implements UILayer {
      * UI instance
      */
     protected final UI ui;
-    
+
     /**
      * Graphics context for this container.
      */
     private final PGraphics pg;
-    
+
     /**
      * Previous mouse x position
      */
     private float px;
-    
+
     /**
      * Previous mouse y position
      */
     private float py;
-    
+
     /**
      * Whether this context is currently taking mouse drag events.
      */
     private boolean dragging = false;
-    
+
     /**
      * Constructs a new UIContext
      * 
@@ -62,18 +61,19 @@ public class UIContext extends UIContainer implements UILayer {
     public UIContext(UI ui, float x, float y, float w, float h) {
         super(x, y, w, h);
         this.ui = ui;
-        this.pg = this.ui.applet.createGraphics((int)this.width, (int)this.height, PConstants.JAVA2D);
+        this.pg = this.ui.applet.createGraphics((int) this.width,
+                (int) this.height, PConstants.JAVA2D);
         this.pg.smooth();
     }
-    
+
     protected void onResize() {
         this.pg.setSize((int) this.width, (int) this.height);
     }
-    
+
     public final void draw() {
         draw(this.ui, this.ui.applet.g);
     }
-    
+
     void draw(UI ui, PGraphics pg) {
         if (!this.visible) {
             return;
@@ -85,21 +85,21 @@ public class UIContext extends UIContainer implements UILayer {
         }
         pg.image(this.pg, this.x, this.y);
     }
-    
+
     void _focus(UIObject focus) {
         this.ui.willFocus(this, focus);
         if (!this.hasFocus()) {
             super._focus(focus);
         }
     }
-    
+
     void _blur() {
         if (this.hasFocus()) {
             super._blur();
             this.ui.didBlur(this);
         }
     }
-    
+
     public final boolean mousePressed(float mx, float my) {
         if (!this.visible) {
             return false;
@@ -122,7 +122,7 @@ public class UIContext extends UIContainer implements UILayer {
         _mouseReleased(mx - this.x, my - this.y);
         return true;
     }
-    
+
     public final boolean mouseClicked(float mx, float my) {
         if (!this.visible) {
             return false;
@@ -133,7 +133,7 @@ public class UIContext extends UIContainer implements UILayer {
         }
         return false;
     }
-    
+
     public final boolean mouseDragged(float mx, float my) {
         if (!this.visible) {
             return false;
@@ -159,17 +159,18 @@ public class UIContext extends UIContainer implements UILayer {
         }
         return false;
     }
-    
+
     public final boolean keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         _keyPressed(keyEvent, keyChar, keyCode);
         return true;
     }
-    
-    public final boolean keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+
+    public final boolean keyReleased(LXKeyEvent keyEvent, char keyChar,
+            int keyCode) {
         _keyReleased(keyEvent, keyChar, keyCode);
         return true;
     }
-    
+
     public final boolean keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         _keyTyped(keyEvent, keyChar, keyCode);
         return true;

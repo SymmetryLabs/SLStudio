@@ -17,7 +17,7 @@ package heronarts.lx.parameter;
  * A listener interface to be notified of changes to the parameter value.
  */
 public interface LXParameterListener {
-    
+
     /**
      * Invoked when the value of a parameter is changed.
      * 

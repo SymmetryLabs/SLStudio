@@ -16,29 +16,26 @@ package heronarts.lx.ui.component;
 import heronarts.lx.LXUtils;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIFocus;
-
-import processing.core.PConstants;
 import processing.core.PGraphics;
 
 public class UISlider extends UIParameterControl implements UIFocus {
 
     public enum Direction {
-        HORIZONTAL,
-        VERTICAL
+        HORIZONTAL, VERTICAL
     };
-    
+
     private final Direction direction;
-    
+
     private static final float HANDLE_WIDTH = 12;
 
     public UISlider() {
         this(0, 0, 0, 0);
     }
-    
+
     public UISlider(float x, float y, float w, float h) {
         this(Direction.HORIZONTAL, x, y, w, h);
     }
-        
+
     public UISlider(Direction direction, float x, float y, float w, float h) {
         super(x, y, w, h);
         this.direction = direction;
@@ -54,13 +51,15 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.rect(4, this.height / 2 - 2, this.width - 8, 4);
             pg.fill(0xff666666);
             pg.stroke(0xff222222);
-            pg.rect((int) (4 + getNormalized() * (this.width - 8 - HANDLE_WIDTH)), 4, HANDLE_WIDTH, this.height - 8);
+            pg.rect((int) (4 + getNormalized() * (this.width - 8 - HANDLE_WIDTH)), 4,
+                    HANDLE_WIDTH, this.height - 8);
             break;
         case VERTICAL:
             pg.rect(this.width / 2 - 2, 4, 4, this.height - 8);
             pg.fill(0xff666666);
             pg.stroke(0xff222222);
-            pg.rect(4, (int) (4 + (1-getNormalized()) * (this.height - 8 - HANDLE_WIDTH)), this.width-8, HANDLE_WIDTH);
+            pg.rect(4, (int) (4 + (1 - getNormalized())
+                    * (this.height - 8 - HANDLE_WIDTH)), this.width - 8, HANDLE_WIDTH);
             break;
         }
     }
@@ -76,7 +75,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
         double handleEdge;
         switch (this.direction) {
         case VERTICAL:
-            handleEdge = 4 + (1-getNormalized()) * (this.height - 8 - HANDLE_WIDTH);
+            handleEdge = 4 + (1 - getNormalized()) * (this.height - 8 - HANDLE_WIDTH);
             mp = my;
             dim = this.height;
             break;
@@ -117,16 +116,18 @@ public class UISlider extends UIParameterControl implements UIFocus {
             case VERTICAL:
                 mp = my;
                 dim = this.height;
-                setNormalized(1 - LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4) / (dim - 8 - HANDLE_WIDTH), 0, 1));
+                setNormalized(1 - LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
+                        / (dim - 8 - HANDLE_WIDTH), 0, 1));
                 break;
             default:
             case HORIZONTAL:
                 mp = mx;
                 dim = this.width;
-                setNormalized(LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4) / (dim - 8 - HANDLE_WIDTH), 0, 1));
+                setNormalized(LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
+                        / (dim - 8 - HANDLE_WIDTH), 0, 1));
                 break;
             }
-            
+
         }
     }
 }

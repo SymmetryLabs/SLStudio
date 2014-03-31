@@ -14,8 +14,8 @@
 package heronarts.lx.ui.component;
 
 import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIObject;
 import processing.core.PConstants;
@@ -30,13 +30,13 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
     private String value = null;
 
     private boolean evenSpacing = false;
-    
+
     private DiscreteParameter parameter = null;
 
     public UIToggleSet() {
         this(0, 0, 0, 0);
     }
-    
+
     public UIToggleSet(float x, float y, float w, float h) {
         super(x, y, w, h);
     }
@@ -51,7 +51,7 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
         }
         return this;
     }
-    
+
     public UIToggleSet setParameter(DiscreteParameter parameter) {
         if (this.parameter != parameter) {
             if (this.parameter != null) {
@@ -65,7 +65,7 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
         }
         return this;
     }
-    
+
     public void onParameterChanged(LXParameter parameter) {
         if (parameter == this.parameter) {
             setValue(this.options[this.parameter.getValuei()]);
@@ -124,7 +124,8 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
                 optStr += str + ",";
             }
             optStr = optStr.substring(0, optStr.length() - 1) + "}";
-            throw new IllegalArgumentException("Not a valid option in UIToggleSet: " + option + " " + optStr);
+            throw new IllegalArgumentException("Not a valid option in UIToggleSet: "
+                    + option + " " + optStr);
         }
         return this;
     }
@@ -136,20 +137,22 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
         for (int b : this.boundaries) {
             pg.line(b, 1, b, this.height - 1);
         }
-        
+
         pg.noStroke();
         pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.textFont(ui.getItemFont());
         int leftBoundary = 0;
-        
+
         for (int i = 0; i < this.options.length; ++i) {
             boolean isActive = this.options[i].equals(this.value);
             if (isActive) {
                 pg.fill(ui.getHighlightColor());
-                pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 1, this.height - 1);
+                pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 1,
+                        this.height - 1);
             }
             pg.fill(isActive ? ui.WHITE : ui.getTextColor());
-            pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f, (int) ((this.height / 2) - 2));
+            pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f,
+                    (int) ((this.height / 2) - 2));
             leftBoundary = this.boundaries[i];
         }
     }

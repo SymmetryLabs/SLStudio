@@ -21,27 +21,27 @@ import heronarts.lx.parameter.LXParameter;
  * has passed. Otherwise it always returns 0.
  */
 public class Click extends LXPeriodicModulator {
-    
+
     private double elapsedMs = 0;
-    
+
     public Click(double periodMs) {
         this(new FixedParameter(periodMs));
     }
-    
+
     public Click(LXParameter periodMs) {
         this("CLICK", periodMs);
     }
-    
+
     public Click(String label, double periodMs) {
         this(label, new FixedParameter(periodMs));
     }
-    
+
     public Click(String label, LXParameter periodMs) {
         super(label, periodMs);
     }
 
     /**
-     * Stops the modulator and sets it back to its initial state. 
+     * Stops the modulator and sets it back to its initial state.
      * 
      * @return this
      */
@@ -53,10 +53,10 @@ public class Click extends LXPeriodicModulator {
     }
 
     /**
-     * Sets the value of the click to 1, so that code querying it in this frame
-     * of execution sees it as active. On the next iteration of the runloop it
-     * will be off again.
-     *  
+     * Sets the value of the click to 1, so that code querying it in this frame of
+     * execution sees it as active. On the next iteration of the runloop it will
+     * be off again.
+     * 
      * @return this
      */
     public LXModulator fire() {
@@ -66,8 +66,9 @@ public class Click extends LXPeriodicModulator {
     }
 
     /**
-     * Helper to conditionalize logic based on the click. Typical use is to
-     * query as follows:
+     * Helper to conditionalize logic based on the click. Typical use is to query
+     * as follows:
+     * 
      * <pre>
      * if (clickInstance.click()) {
      *   // perform periodic operation
@@ -78,8 +79,8 @@ public class Click extends LXPeriodicModulator {
      */
     public boolean click() {
         return this.getValue() == 1;
-    }    
-    
+    }
+
     @Override
     protected double computeValue(double deltaMs, double basis) {
         double periodMs = getPeriod();
@@ -90,7 +91,7 @@ public class Click extends LXPeriodicModulator {
         }
         return 0;
     }
-    
+
     @Override
     protected double computeBasis(double basis, double value) {
         // The basis is indeterminate for this modulator, it can only be

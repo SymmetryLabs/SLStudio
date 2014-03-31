@@ -15,13 +15,12 @@ package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.transition.IrisTransition;
-
 import processing.video.Capture;
 
 public class VideoCapturePattern extends LXPattern {
-    
+
     private Capture capture;
-    
+
     public VideoCapturePattern(LX lx) {
         super(lx);
         this.capture = null;
@@ -31,12 +30,12 @@ public class VideoCapturePattern extends LXPattern {
     public void onActive() {
         this.capture = new Capture(lx.applet, lx.width, lx.height);
     }
-    
+
     public void onInactive() {
         this.capture.dispose();
         this.capture = null;
     }
-    
+
     public void run(double deltaMs) {
         if (this.capture.available()) {
             this.capture.read();

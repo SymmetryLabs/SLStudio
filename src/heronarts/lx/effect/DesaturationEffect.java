@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -23,7 +23,7 @@ public class DesaturationEffect extends LXEffect {
     private final BasicParameter attack;
     private final BasicParameter decay;
     private final BasicParameter amount;
-    
+
     public DesaturationEffect(LX lx) {
         super(lx);
         this.addModulator(this.desaturation = new LinearEnvelope(0, 0, 100));
@@ -35,32 +35,30 @@ public class DesaturationEffect extends LXEffect {
     private double getAttackTime() {
         return this.attack.getValue() * 1000.;
     }
-    
+
     private double getDecayTime() {
         return this.decay.getValue() * 1000.;
-    }    
-    
+    }
+
     @Override
     protected void onEnable() {
-        this.desaturation.setRangeFromHereTo(amount.getValue() * 100., getAttackTime()).start();
+        this.desaturation.setRangeFromHereTo(amount.getValue() * 100.,
+                getAttackTime()).start();
     }
-    
+
     @Override
     protected void onDisable() {
         this.desaturation.setRangeFromHereTo(0, getDecayTime()).start();
     }
-    
+
     @Override
     protected void apply(int[] colors) {
         double value = this.desaturation.getValue();
         if (value > 0) {
             for (int i = 0; i < colors.length; ++i) {
-                colors[i] = this.lx.colord(
-                        this.lx.h(colors[i]),
-                        Math.max(0, this.lx.s(colors[i]) - value),
-                        this.lx.b(colors[i])
-                        );
-                
+                colors[i] = LX.hsb(LX.h(colors[i]),
+                        Math.max(0, LX.s(colors[i]) - value), LX.b(colors[i]));
+
             }
         }
     }

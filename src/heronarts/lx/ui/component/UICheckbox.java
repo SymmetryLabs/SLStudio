@@ -24,7 +24,7 @@ public class UICheckbox extends UIButton {
     public UICheckbox() {
         this(0, 0, 0, 0);
     }
-    
+
     public UICheckbox(float x, float y, float w, float h) {
         super(x, y, w, h);
         setMomentary(false);

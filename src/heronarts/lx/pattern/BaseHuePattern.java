@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -19,10 +19,11 @@ public class BaseHuePattern extends LXPattern {
     public BaseHuePattern(LX lx) {
         super(lx);
     }
-    
+
+    @Override
     public void run(double deltaMs) {
         for (int i = 0; i < this.colors.length; ++i) {
-            this.colors[i] = this.lx.colord(this.lx.getBaseHue(), 100, 100);
+            this.colors[i] = LX.hsb(this.lx.getBaseHue(), 100, 100);
         }
     }
 }

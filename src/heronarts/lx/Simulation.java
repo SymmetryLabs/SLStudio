@@ -15,12 +15,11 @@ package heronarts.lx;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import java.lang.Math;
 
 class Simulation implements PConstants {
 
     final private LX lx;
-    
+
     private int x;
     private int y;
     private int w;
@@ -28,7 +27,7 @@ class Simulation implements PConstants {
     private int pixelSize;
     private double xSpacing;
     private double ySpacing;
-    
+
     Simulation(LX lx) {
         this.lx = lx;
         this.setBounds(0, 0, lx.applet.width, lx.applet.height);
@@ -41,7 +40,8 @@ class Simulation implements PConstants {
         this.h = height;
         this.xSpacing = width / (double) lx.width;
         this.ySpacing = height / (double) lx.height;
-        this.pixelSize = (int) Math.max(2, Math.min(this.xSpacing, this.ySpacing) / 3.);
+        this.pixelSize = (int) Math.max(2,
+                Math.min(this.xSpacing, this.ySpacing) / 3.);
     }
 
     protected void draw(int[] colors) {
@@ -52,8 +52,10 @@ class Simulation implements PConstants {
         g.ellipseMode(CENTER);
         for (int i = 0; i < this.lx.width; ++i) {
             for (int j = 0; j < this.lx.height; ++j) {
-                g.fill(colors[i + j*this.lx.width]);
-                g.ellipse((int) (this.x + (i+0.5)*this.xSpacing), (int) (this.y + (j+0.5)*this.ySpacing), this.pixelSize, this.pixelSize);
+                g.fill(colors[i + j * this.lx.width]);
+                g.ellipse((int) (this.x + (i + 0.5) * this.xSpacing),
+                        (int) (this.y + (j + 0.5) * this.ySpacing), this.pixelSize,
+                        this.pixelSize);
             }
         }
     }

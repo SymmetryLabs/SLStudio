@@ -14,28 +14,27 @@
 package heronarts.lx.font;
 
 import heronarts.lx.LX;
-
 import processing.core.PConstants;
 import processing.core.PImage;
 
 /**
- * This is simple, tiny 5-pixel bitmap font helpful for drawing basic text 
- * to low-resolution LED displays. The characters are blitted in a bitmap.
+ * This is simple, tiny 5-pixel bitmap font helpful for drawing basic text to
+ * low-resolution LED displays. The characters are blitted in a bitmap.
  * 
- * Only upper-case alphabetical characters are supported, and extremely
- * basic punctuation. Non-supported characters are skipped.
+ * Only upper-case alphabetical characters are supported, and extremely basic
+ * punctuation. Non-supported characters are skipped.
  */
 public class PixelFont {
 
     private final static char NULL_CHAR = 0;
     private final static int INVALID_CHAR = -1;
-    
+
     private final PImage alphabet;
 
     private final int[] offsets = {
-     // A  B  C   D   E   F   G   H   I   J   K   L   M   N   O   P   Q   R   S   T   U   V    W    X    Y    Z    .    :    -    ,    '         <END>
-        0, 5, 10, 15, 20, 25, 30, 35, 40, 42, 46, 51, 56, 62, 68, 73, 78, 83, 88, 93, 99, 104, 110, 116, 122, 128, 134, 136, 138, 142, 144, 146, 149
-    };
+            // A B C D E F G H I J K L M N O P Q R S T U V W X Y Z . : - , ' <END>
+            0, 5, 10, 15, 20, 25, 30, 35, 40, 42, 46, 51, 56, 62, 68, 73, 78, 83, 88,
+            93, 99, 104, 110, 116, 122, 128, 134, 136, 138, 142, 144, 146, 149 };
 
     /**
      * Constructs an instance of the font.
@@ -105,7 +104,7 @@ public class PixelFont {
         if (index == INVALID_CHAR) {
             return INVALID_CHAR;
         }
-        return this.offsets[index+1] - this.offsets[index] - 1;
+        return this.offsets[index + 1] - this.offsets[index] - 1;
     }
 
     /**
@@ -117,7 +116,7 @@ public class PixelFont {
      * @return a new PImage instance with the string
      */
     public PImage drawString(String s) {
-        int width=0,height=5;
+        int width = 0, height = 5;
         char[] chars = s.toCharArray();
         for (int i = 0; i < chars.length; ++i) {
             if (this.isValidCharacter(chars[i])) {
@@ -130,13 +129,13 @@ public class PixelFont {
 
         PImage image = new PImage(width, height, PConstants.RGB);
         image.loadPixels();
-        
+
         int xPos = 0;
         for (int i = 0; i < chars.length; ++i) {
             if (this.isValidCharacter(chars[i])) {
                 if (i > 0) {
                     for (int y = 0; y < image.height; ++y) {
-                        image.pixels[xPos + y*image.width] = 0;
+                        image.pixels[xPos + y * image.width] = 0;
                     }
                     ++xPos;
                 }
@@ -144,13 +143,14 @@ public class PixelFont {
                 int characterWidth = this.characterWidth(chars[i]);
                 for (int j = 0; j < characterWidth; ++j) {
                     for (int y = 0; y < image.height; ++y) {
-                        image.pixels[xPos + j + y*image.width] = this.alphabet.pixels[offset + j + y*this.alphabet.width];
+                        image.pixels[xPos + j + y * image.width] = this.alphabet.pixels[offset
+                                + j + y * this.alphabet.width];
                     }
                 }
                 xPos += characterWidth;
             }
         }
-        
+
         image.updatePixels();
         return image;
     }

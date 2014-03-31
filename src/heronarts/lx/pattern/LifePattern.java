@@ -5,14 +5,13 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
 package heronarts.lx.pattern;
-
 
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
@@ -22,33 +21,31 @@ import heronarts.lx.transition.IrisTransition;
 
 import java.util.HashMap;
 
-public class LifePattern extends LXPattern{
+public class LifePattern extends LXPattern {
 
     private enum CellState {
-        DEAD,
-        BIRTHING,
-        ALIVE,
-        DYING
+        DEAD, BIRTHING, ALIVE, DYING
     };
 
     private final SawLFO sPos;
     private final SinLFO hCenter;
-    
+
     private CellState[] state;
     private CellState[] newState;
     private int spawnCounter = 0;
 
-    private float tX = 0;
-    private float tY = 0;
+    private final HashMap<String, Integer> stateCount = new HashMap<String, Integer>();
 
-    private final HashMap<String,Integer> stateCount = new HashMap<String,Integer>();
-        
     public LifePattern(LX lx) {
         super(lx);
         this.state = new CellState[lx.total];
         this.newState = new CellState[lx.total];
-        this.addModulator(this.hCenter = new SinLFO(lx.width*.25, lx.width*.75, lx.width*1000)).trigger();
-        this.addModulator(this.sPos = new SawLFO(-Math.max(lx.height, lx.width), lx.height + lx.width, lx.width * 300)).trigger();
+        this.addModulator(
+                this.hCenter = new SinLFO(lx.width * .25, lx.width * .75,
+                        lx.width * 1000)).trigger();
+        this.addModulator(
+                this.sPos = new SawLFO(-Math.max(lx.height, lx.width), lx.height
+                        + lx.width, lx.width * 300)).trigger();
         this.spawn();
         this.setTransition(new IrisTransition(lx));
     }
@@ -70,22 +67,17 @@ public class LifePattern extends LXPattern{
 
     private void spawn() {
         for (int i = 0; i < this.state.length; ++i) {
-            this.state[i] = (LXUtils.random(0, 100) > 70) ? CellState.BIRTHING : CellState.DEAD;
+            this.state[i] = (LXUtils.random(0, 100) > 70) ? CellState.BIRTHING
+                    : CellState.DEAD;
         }
     }
 
     private int neighborsAlive(int i) {
         int x = i % this.lx.width;
         int y = i / this.lx.width;
-        return
-                isAlive(x-1, y-1) +
-                isAlive(x,   y-1) +
-                isAlive(x+1, y-1) +
-                isAlive(x-1, y) +
-                isAlive(x+1, y) +
-                isAlive(x-1, y+1) +
-                isAlive(x,   y+1) +
-                isAlive(x+1, y+1);
+        return isAlive(x - 1, y - 1) + isAlive(x, y - 1) + isAlive(x + 1, y - 1)
+                + isAlive(x - 1, y) + isAlive(x + 1, y) + isAlive(x - 1, y + 1)
+                + isAlive(x, y + 1) + isAlive(x + 1, y + 1);
     }
 
     private int isAlive(int x, int y) {
@@ -107,13 +99,14 @@ public class LifePattern extends LXPattern{
         for (int i = 0; i < state.length; ++i) {
             int nA = neighborsAlive(i);
             switch (state[i]) {
-            case DEAD:          
+            case DEAD:
             case DYING:
                 this.newState[i] = (nA == 3) ? CellState.BIRTHING : CellState.DEAD;
                 break;
             case ALIVE:
             case BIRTHING:
-                this.newState[i] = (nA == 2 || nA == 3) ? CellState.ALIVE : CellState.DYING;
+                this.newState[i] = (nA == 2 || nA == 3) ? CellState.ALIVE
+                        : CellState.DYING;
                 break;
             }
         }
@@ -133,10 +126,11 @@ public class LifePattern extends LXPattern{
             this.stateCount.clear();
             this.respawn();
         } else {
-            this.stateCount.put(stateSerial, count+1);
+            this.stateCount.put(stateSerial, count + 1);
         }
     }
 
+    @Override
     public void run(double deltaMs) {
         if (this.lx.tempo.beat()) {
             if ((this.spawnCounter > 0) && (--this.spawnCounter == 0)) {
@@ -161,10 +155,13 @@ public class LifePattern extends LXPattern{
                 b = 100 - this.lx.tempo.ramp() * 100;
                 break;
             }
-            this.colors[i] = this.lx.colord(
-                    (this.lx.getBaseHue() + lx.row(i) * 2. + Math.abs(lx.column(i) - this.hCenter.getValue()) * 0.4) % 360,
-                    Math.min(100, 30. + Math.abs(i/this.lx.width - this.sPos.getValue() + i % this.lx.width) * 10.),
-                    b);
+            this.colors[i] = LX.hsbd(
+                    (this.lx.getBaseHue() + lx.row(i) * 2. + Math.abs(lx.column(i)
+                            - this.hCenter.getValue()) * 0.4) % 360,
+                    Math.min(
+                            100,
+                            30. + Math.abs(i / this.lx.width - this.sPos.getValue() + i
+                                    % this.lx.width) * 10.), b);
         }
     }
 }

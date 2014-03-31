@@ -17,26 +17,27 @@ import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
 
 public class DampedParameter extends LXModulator {
-    
+
     private final LXParameter parameter;
-    
+
     private LXParameter velocity;
-    
+
     public DampedParameter(LXParameter parameter, double velocity) {
         this(parameter, new FixedParameter(velocity));
     }
-    
+
     public DampedParameter(LXParameter parameter, LXParameter velocity) {
         this("DAMPED-" + parameter.getLabel(), parameter, velocity);
     }
-    
-    public DampedParameter(String label, LXParameter parameter, LXParameter velocity) {
+
+    public DampedParameter(String label, LXParameter parameter,
+            LXParameter velocity) {
         super(label);
         this.parameter = parameter;
         this.velocity = velocity;
         updateValue(parameter.getValue());
     }
-    
+
     protected double computeValue(double deltaMs) {
         double value = getValue();
         double target = this.parameter.getValue();

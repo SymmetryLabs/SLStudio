@@ -20,8 +20,8 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIWindow;
-import heronarts.lx.ui.component.UIKnob;
 import heronarts.lx.ui.component.UIItemList;
+import heronarts.lx.ui.component.UIKnob;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,27 +32,28 @@ public class UIPatternDeck extends UIWindow {
 
     private final static int NUM_KNOBS = 12;
     private final static int KNOBS_PER_ROW = 4;
-    
+
     public final static int DEFAULT_WIDTH = 140;
     public final static int DEFAULT_HEIGHT = 324;
 
     public UIPatternDeck(UI ui, LX lx, float x, float y) {
         this(ui, lx, "PATTERN", x, y);
     }
-    
+
     public UIPatternDeck(UI ui, LX lx, String label, float x, float y) {
         this(ui, lx.engine.getDeck(0), label, x, y);
     }
-    
+
     public UIPatternDeck(UI ui, LXDeck deck, float x, float y) {
         this(ui, deck, "PATTERN", x, y);
     }
-    
+
     public UIPatternDeck(UI ui, LXDeck deck, String label, float x, float y) {
         this(ui, deck, label, x, y, DEFAULT_WIDTH, DEFAULT_HEIGHT);
     }
-    
-    public UIPatternDeck(UI ui, LXDeck deck, String label, float x, float y, float w, float h) {
+
+    public UIPatternDeck(UI ui, LXDeck deck, String label, float x, float y,
+            float w, float h) {
         super(ui, label, x, y, w, h);
         this.deck = deck;
         int yp = TITLE_LABEL_HEIGHT;
@@ -61,7 +62,8 @@ public class UIPatternDeck extends UIWindow {
         for (LXPattern p : deck.getPatterns()) {
             items.add(new PatternScrollItem(p));
         }
-        final UIItemList patternList = new UIItemList(1, yp, w - 2, 140).setItems(items);
+        final UIItemList patternList = new UIItemList(1, yp, w - 2, 140)
+                .setItems(items);
         patternList.addToContainer(this);
         yp += patternList.getHeight() + 10;
 
@@ -86,7 +88,8 @@ public class UIPatternDeck extends UIWindow {
                         break;
                     }
                     if (parameter instanceof LXListenableNormalizedParameter) {
-                        knobs[pi++].setParameter((LXListenableNormalizedParameter)parameter);
+                        knobs[pi++]
+                                .setParameter((LXListenableNormalizedParameter) parameter);
                     }
                 }
                 while (pi < knobs.length) {

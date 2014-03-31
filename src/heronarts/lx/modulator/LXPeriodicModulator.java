@@ -20,33 +20,33 @@ import heronarts.lx.parameter.LXParameter;
 /**
  * An LXPeriodicModulator is a modulator that moves through a cycle in a given
  * amount of time. It may then repeat the cycle, or perform it once. The values
- * are computed based upon a position in the cycle, internally referred to as
- * a basis, which moves from 0 to 1. This can be thought of as equivalent to an
+ * are computed based upon a position in the cycle, internally referred to as a
+ * basis, which moves from 0 to 1. This can be thought of as equivalent to an
  * angle moving from 0 to two times pi. The period itself is a parameter which
  * may be a modulator or otherwise.
  */
 public abstract class LXPeriodicModulator extends LXModulator {
-    
+
     /**
      * Whether this modulator runs continuously looping.
      */
     public final BooleanParameter looping;
-    
+
     /**
      * Whether the modulator finished on this cycle.
      */
-    private boolean finished = false;    
-    
+    private boolean finished = false;
+
     /**
      * The basis is a value that moves from 0 to 1 through the period
      */
     private double basis = 0;
-    
+
     /**
      * The number of milliseconds in the period of this modulator.
      */
     private LXParameter period;
-    
+
     /**
      * Utility constructor with period
      * 
@@ -58,7 +58,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
         this.looping = new BooleanParameter("LOOP-" + label, true);
         this.period = period;
     }
-    
+
     /**
      * Sets whether the modulator should loop after it completes a cycle or halt
      * at the end position.
@@ -70,7 +70,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
         this.looping.setValue(looping);
         return this;
     }
-    
+
     /**
      * Accessor for the current basis
      * 
@@ -79,7 +79,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     public final double getBasis() {
         return this.basis;
     }
-    
+
     /**
      * Accessor for basis as a float
      * 
@@ -88,12 +88,12 @@ public abstract class LXPeriodicModulator extends LXModulator {
     public final float getBasisf() {
         return (float) getBasis();
     }
-    
+
     @Override
     protected void onReset() {
         this.setBasis(0);
     }
-    
+
     /**
      * Sets the basis to a random position
      * 
@@ -103,10 +103,10 @@ public abstract class LXPeriodicModulator extends LXModulator {
         setBasis(Math.random());
         return this;
     }
-    
+
     /**
      * Set the modulator to a certain basis position in its cycle.
-     *  
+     * 
      * @param basis
      * @return
      */
@@ -131,7 +131,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     public void onSetValue(double value) {
         this.updateBasis(value);
     }
-    
+
     /**
      * Updates the basis of the modulator based on present values.
      */
@@ -142,17 +142,20 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * @deprecated Use setPeriod
      */
-    @Deprecated public final LXPeriodicModulator setDuration(double durationMs) {
+    @Deprecated
+    public final LXPeriodicModulator setDuration(double durationMs) {
         return this.setPeriod(durationMs);
     }
 
     /**
      * @deprecated Use setPeriod
      */
-    @Deprecated public final LXPeriodicModulator modulateDurationBy(LXModulator durationModulator) {
+    @Deprecated
+    public final LXPeriodicModulator modulateDurationBy(
+            LXModulator durationModulator) {
         return this.setPeriod(durationModulator);
     }
-    
+
     /**
      * Modify the period of this modulator
      * 
@@ -163,25 +166,26 @@ public abstract class LXPeriodicModulator extends LXModulator {
         this.period = new FixedParameter(periodMs);
         return this;
     }
-    
+
     /**
      * @return The period of this modulator
      */
     public final double getPeriod() {
         return this.period.getValue();
     }
-    
+
     /**
      * @return The period of this modulator as a floating point
      */
     public final float getPeriodf() {
-        return (float)this.getPeriod();
+        return (float) this.getPeriod();
     }
-    
+
     /**
      * @deprecated Use getPeriod()
      */
-    @Deprecated public final double getDuration() {
+    @Deprecated
+    public final double getDuration() {
         return getPeriod();
     }
 
@@ -195,7 +199,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
         this.period = period;
         return this;
     }
-        
+
     protected final double computeValue(double deltaMs) {
         this.finished = false;
         double periodv = this.period.getValue();
@@ -219,8 +223,8 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
 
     /**
-     * For envelope modulators, which are not looping, this returns true if
-     * they finished on this frame.
+     * For envelope modulators, which are not looping, this returns true if they
+     * finished on this frame.
      * 
      * @return true if the modulator just finished its operation on this frame
      */
@@ -229,17 +233,16 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
 
     /**
-     * Implementation method to compute the value of a modulator given its
-     * basis.
+     * Implementation method to compute the value of a modulator given its basis.
      * 
      * @param basis
      * @return value
      */
     abstract protected double computeValue(double deltaMs, double basis);
-    
+
     /**
-     * Implementation method to compute the appropriate basis for a modulator given
-     * its current basis and value.
+     * Implementation method to compute the appropriate basis for a modulator
+     * given its current basis and value.
      * 
      * @param value
      * @return basis

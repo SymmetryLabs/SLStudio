@@ -19,7 +19,6 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
 import heronarts.lx.ui.UIObject;
-
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -35,17 +34,17 @@ public class UIIntegerBox extends UIObject {
             setValue(parameter.getValuei());
         }
     };
-    
+
     public UIIntegerBox() {
         this(0, 0, 0, 0);
     }
-    
+
     public UIIntegerBox(float x, float y, float w, float h) {
         super(x, y, w, h);
         setBorderColor(0xff666666);
         setBackgroundColor(0xff222222);
     }
-    
+
     public UIIntegerBox setParameter(final DiscreteParameter parameter) {
         if (this.parameter != null) {
             this.parameter.removeListener(this.parameterListener);

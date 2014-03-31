@@ -15,17 +15,17 @@ package heronarts.lx.parameter;
 
 /**
  * A FixedParameter is an immutable parameter. It will throw a RuntimeException
- * if setValue() is attempted. Useful for anonymous placeholder values in places 
+ * if setValue() is attempted. Useful for anonymous placeholder values in places
  * that expect to use LXParameters.
  */
 public class FixedParameter implements LXParameter {
-    
+
     private final double value;
-    
+
     public FixedParameter(double value) {
         this.value = value;
     }
-        
+
     @Override
     public LXParameter reset() {
         return this;

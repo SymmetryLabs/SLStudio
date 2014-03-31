@@ -13,55 +13,55 @@
 
 package heronarts.lx.audio;
 
-import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import ddf.minim.AudioSource;
-
 /**
  * A frequency gate monitors a Graphic EQ for a particular frequency range and
- * triggers when that range passes a certain threshold. 
+ * triggers when that range passes a certain threshold.
  */
 public class FrequencyGate extends LXModulator {
-    
+
     /**
      * The gate level at which the trigger is engaged. When the signal crosses
-     * this threshold, the gate fires. Value is in the normalized space from
-     * 0 to 1.
+     * this threshold, the gate fires. Value is in the normalized space from 0 to
+     * 1.
      */
     public final BasicParameter threshold = new BasicParameter("THRSH", 0.8);
-    
+
     /**
-     * The floor at which the trigger releases. Once triggered, the signal
-     * must fall below this amount before a new trigger may occur. This value is
-     * specified as a fraction of the threshold. So, a value of 0.75 means the signal
-     * must fall to 75% of the threshold value.
+     * The floor at which the trigger releases. Once triggered, the signal must
+     * fall below this amount before a new trigger may occur. This value is
+     * specified as a fraction of the threshold. So, a value of 0.75 means the
+     * signal must fall to 75% of the threshold value.
      */
     public final BasicParameter floor = new BasicParameter("FLOOR", 0.75);
-    
+
     /**
-     * The time the trigger takes to falloff from 1 to 0 after triggered, in milliseconds
+     * The time the trigger takes to falloff from 1 to 0 after triggered, in
+     * milliseconds
      */
-    public final BasicParameter release = new BasicParameter("RELEASE", 200, 0, 1600);
-    
+    public final BasicParameter release = new BasicParameter("RELEASE", 200, 0,
+            1600);
+
     public final DiscreteParameter minBand;
-    
+
     public final DiscreteParameter avgBands;
-    
+
     public final GraphicEQ eq;
-    
+
     private double level = 0;
-    
-    private final LinearEnvelope signal = new LinearEnvelope(0); 
-    
+
+    private final LinearEnvelope signal = new LinearEnvelope(0);
+
     private boolean peak = false;
-    
+
     private boolean waitingForFloor = false;
 
     /**
-     * Constructs a gate that monitors a specified frequency band 
+     * Constructs a gate that monitors a specified frequency band
      */
     public FrequencyGate(String label, GraphicEQ eq) {
         super(label);
@@ -69,9 +69,9 @@ public class FrequencyGate extends LXModulator {
         this.minBand = new DiscreteParameter("BAND", eq.numBands);
         this.avgBands = new DiscreteParameter("WIDTH", 1, eq.numBands + 1);
     }
-    
+
     /**
-     * Constructs a gate that monitors a specified frequency band 
+     * Constructs a gate that monitors a specified frequency band
      * 
      * @param eq Equalizer to monitor
      * @param minHz Minimum frequency band
@@ -81,9 +81,9 @@ public class FrequencyGate extends LXModulator {
         this("FQG", eq);
         setRange(minHz, maxHz);
     }
-        
+
     /**
-     * Constructs a gate that monitors a specified frequency band 
+     * Constructs a gate that monitors a specified frequency band
      * 
      * @param label Label
      * @param eq Equalizer to monitor
@@ -94,7 +94,7 @@ public class FrequencyGate extends LXModulator {
         this(label, eq);
         setRange(minHz, maxHz);
     }
-    
+
     /**
      * Sets range of frequencies to look at
      * 
@@ -118,7 +118,7 @@ public class FrequencyGate extends LXModulator {
         this.avgBands.setValue(_avgBands);
         return this;
     }
-    
+
     /**
      * Set the bands to look at
      * 
@@ -131,7 +131,7 @@ public class FrequencyGate extends LXModulator {
         this.avgBands.setValue(numBands);
         return this;
     }
-    
+
     /**
      * 
      * @return true if this is the frame in which the gate was peaked
@@ -139,7 +139,7 @@ public class FrequencyGate extends LXModulator {
     public boolean peak() {
         return this.peak;
     }
-    
+
     /**
      * Gets the level of the frequency range being monitored.
      * 
@@ -148,7 +148,7 @@ public class FrequencyGate extends LXModulator {
     public double getLevel() {
         return this.level;
     }
-    
+
     /**
      * Gets the level of the frequency range being monitored.
      * 
@@ -157,7 +157,7 @@ public class FrequencyGate extends LXModulator {
     public float getLevelf() {
         return (float) getLevel();
     }
-    
+
     protected double computeValue(double deltaMs) {
         double thresholdValue = this.threshold.getValue();
         double floorValue = thresholdValue * this.floor.getValue();

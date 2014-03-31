@@ -14,9 +14,9 @@
 package heronarts.lx.output;
 
 /**
- * Streaming ACN, also referred to as E1.31, is a standardized protocol
- * for streaming DMX data over ACN protocol. It's a fairly simple UDP-based
- * wrapper on 512 bytes of data with a 16-bit universe number. 
+ * Streaming ACN, also referred to as E1.31, is a standardized protocol for
+ * streaming DMX data over ACN protocol. It's a fairly simple UDP-based wrapper
+ * on 512 bytes of data with a 16-bit universe number.
  * 
  * See: http://tsp.plasa.org/tsp/documents/docs/E1-31_2009.pdf
  */
@@ -25,7 +25,7 @@ public class StreamingACNDatagram extends LXDatagram {
     private final static int DMX_DATA_POSITION = 126;
 
     private final static int SEQUENCE_NUMBER_POSITION = 111;
-    
+
     private final static int UNIVERSE_NUMBER_POSITION = 113;
 
     private final static int DEFAULT_PORT = 5568;
@@ -50,10 +50,10 @@ public class StreamingACNDatagram extends LXDatagram {
     public StreamingACNDatagram(int[] pointIndices) {
         this(1, pointIndices);
     }
-    
+
     /**
      * Constructs a datagram, sends the list of point indices on the given
-     * universe number. 
+     * universe number.
      * 
      * @param universeNumber Universe
      * @param pointIndices List of point indices to encode in packet
@@ -165,7 +165,7 @@ public class StreamingACNDatagram extends LXDatagram {
         // DMX Start
         this.buffer[125] = 0x00;
     }
-    
+
     /**
      * Sets the universe for this datagram
      * 
@@ -175,10 +175,10 @@ public class StreamingACNDatagram extends LXDatagram {
     public StreamingACNDatagram setUniverseNumber(int universeNumber) {
         this.universeNumber = (universeNumber &= 0x0000ffff);
         this.buffer[UNIVERSE_NUMBER_POSITION] = (byte) ((universeNumber >> 8) & 0xff);
-        this.buffer[UNIVERSE_NUMBER_POSITION+1] = (byte) (universeNumber & 0xff);
+        this.buffer[UNIVERSE_NUMBER_POSITION + 1] = (byte) (universeNumber & 0xff);
         return this;
     }
-    
+
     /**
      * Universe number for datagram.
      * 
@@ -191,6 +191,6 @@ public class StreamingACNDatagram extends LXDatagram {
     public void onSend(int[] colors) {
         ++this.sequenceNumber;
         this.buffer[SEQUENCE_NUMBER_POSITION] = this.sequenceNumber;
-        copyPoints(colors, this.pointIndices, DMX_DATA_POSITION); 
+        copyPoints(colors, this.pointIndices, DMX_DATA_POSITION);
     }
 }

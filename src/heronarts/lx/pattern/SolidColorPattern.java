@@ -17,7 +17,7 @@ import heronarts.lx.LX;
 
 public class SolidColorPattern extends LXPattern {
     final int color;
-    
+
     public SolidColorPattern(LX lx, int color) {
         super(lx);
         this.color = color;
@@ -25,6 +25,7 @@ public class SolidColorPattern extends LXPattern {
             this.colors[i] = color;
         }
     }
-    
-    public void run(double deltaMs) {}
+
+    public void run(double deltaMs) {
+    }
 }

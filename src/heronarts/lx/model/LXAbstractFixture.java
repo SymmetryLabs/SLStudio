@@ -18,9 +18,10 @@ import java.util.List;
 
 public abstract class LXAbstractFixture implements LXFixture {
     protected final List<LXPoint> points = new ArrayList<LXPoint>();
-    
-    protected LXAbstractFixture() {}
-    
+
+    protected LXAbstractFixture() {
+    }
+
     public List<LXPoint> getPoints() {
         return this.points;
     }

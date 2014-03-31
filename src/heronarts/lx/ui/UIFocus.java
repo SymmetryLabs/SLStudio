@@ -17,4 +17,5 @@ package heronarts.lx.ui;
  * This is a marker interface. UIObjects which can receive focus events should
  * implement this interface.
  */
-public interface UIFocus {}
+public interface UIFocus {
+}

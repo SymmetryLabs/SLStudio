@@ -17,12 +17,12 @@ import heronarts.lx.modulator.Click;
 import heronarts.lx.modulator.LinearEnvelope;
 
 /**
- * Class to represent a musical tempo at which patterns are operating.
- * This can be updated in real-time via invoking the tap() method.
+ * Class to represent a musical tempo at which patterns are operating. This can
+ * be updated in real-time via invoking the tap() method.
  * 
- * Quarter-note "beats" are indicated by the return value of the beat()
- * method, and ramp() returns a double value indicating the current
- * 4/4 phase from 0 to 1.
+ * Quarter-note "beats" are indicated by the return value of the beat() method,
+ * and ramp() returns a double value indicating the current 4/4 phase from 0 to
+ * 1.
  */
 public class Tempo {
 
@@ -39,8 +39,8 @@ public class Tempo {
     }
 
     /**
-     * Method to indicate when we are on-beat, assuming quarter-notes
-     * being given one beat.
+     * Method to indicate when we are on-beat, assuming quarter-notes being given
+     * one beat.
      * 
      * @return true if we are on a quarter-note beat
      */
@@ -49,24 +49,24 @@ public class Tempo {
     }
 
     /**
-     * Indicates phase of the current beat. On the beat the value will
-     * be 0, then ramp up to 1 before the next beat triggers.
+     * Indicates phase of the current beat. On the beat the value will be 0, then
+     * ramp up to 1 before the next beat triggers.
      * 
      * @return value from 0-1 indicating phase of beat
      */
     public double ramp() {
         return this.ramp.getValue();
     }
-    
+
     /**
      * Indicates beat phase in floating point
      * 
      * @return value from 0-1 indicating phase of beat
      */
     public float rampf() {
-        return (float)this.ramp();
+        return (float) this.ramp();
     }
-    
+
     /**
      * Returns the current tempo in Beats Per Minute
      * 
@@ -75,16 +75,15 @@ public class Tempo {
     public double bpm() {
         return 60000. / this.click.getPeriod();
     }
-    
+
     /**
      * Returns the tempo in floating point
      * 
      * @return Current tempo in float
      */
     public float bpmf() {
-        return (float)this.bpm();
+        return (float) this.bpm();
     }
-    
 
     /**
      * Adjusts the tempo by the given amount
@@ -94,7 +93,7 @@ public class Tempo {
     public void adjustBpm(double deltaMs) {
         this.setBpm(this.bpm() + deltaMs);
     }
-    
+
     /**
      * Sets the BPM to the given value
      * 
@@ -118,8 +117,8 @@ public class Tempo {
      * Adjusts the tempo in realtime by tapping. Whenever tap() is invoked the
      * time between previous taps is averaged to compute a new tempo. At least
      * three taps are required to compute a tempo. Otherwise, tapping just
-     * re-triggers the beat. It is better to use the trigger() method directly
-     * if this is all that is desired.
+     * re-triggers the beat. It is better to use the trigger() method directly if
+     * this is all that is desired.
      */
     public void tap() {
         long now = System.currentTimeMillis();
@@ -130,7 +129,8 @@ public class Tempo {
         this.lastTap = now;
         ++this.tapCount;
         if (this.tapCount > 3) {
-            double period = (this.lastTap - this.firstTap) / (double) (this.tapCount - 1);
+            double period = (this.lastTap - this.firstTap)
+                    / (double) (this.tapCount - 1);
             this.click.setPeriod(period);
             this.ramp.setPeriod(period);
             this.trigger();
@@ -138,7 +138,7 @@ public class Tempo {
             this.trigger();
         }
     }
-    
+
     void run(double deltaMs) {
         this.click.run(deltaMs);
         if (this.beat()) {

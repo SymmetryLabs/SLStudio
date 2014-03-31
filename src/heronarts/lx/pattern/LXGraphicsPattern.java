@@ -12,20 +12,20 @@
  */
 
 package heronarts.lx.pattern;
-import heronarts.lx.LX;
 
+import heronarts.lx.LX;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
 public abstract class LXGraphicsPattern extends LXPattern {
 
     private final PGraphics pg;
-    
+
     protected LXGraphicsPattern(LX lx) {
         super(lx);
         this.pg = lx.applet.createGraphics(lx.width, lx.height, PConstants.P2D);
     }
-    
+
     final protected void run(double deltaMs) {
         this.pg.beginDraw();
         this.run(deltaMs, this.pg);
@@ -35,7 +35,7 @@ public abstract class LXGraphicsPattern extends LXPattern {
             this.colors[i] = this.pg.pixels[i];
         }
     }
-    
+
     abstract protected void run(double deltaMs, PGraphics pg);
 
 }

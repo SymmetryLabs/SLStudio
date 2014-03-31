@@ -24,7 +24,8 @@ public class UIContainer extends UIObject {
     /**
      * Constructs an empty UIContainer with no size.
      */
-    public UIContainer() {}
+    public UIContainer() {
+    }
 
     /**
      * Constructs an empty container with a size.
@@ -40,7 +41,7 @@ public class UIContainer extends UIObject {
 
     /**
      * Constructs a container with a set of children.
-     *  
+     * 
      * @param children Child objects
      */
     public UIContainer(UIObject[] children) {

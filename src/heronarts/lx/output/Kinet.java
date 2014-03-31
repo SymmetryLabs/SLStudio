@@ -25,48 +25,50 @@ import java.util.HashSet;
 /**
  * This class represents an output network of KiNET nodes. Typically this is
  * constructed via creating one or more ports, i.e.:
+ * 
  * <pre>
- * KinetPort port = new KinetPort("10.1.1.1", 1);
+ * KinetPort port = new KinetPort(&quot;10.1.1.1&quot;, 1);
  * KinetNode[] nodes = new KinetNode[lx.total];
- * for (int i = 0; i < lx.total; ++i) {
- *     nodes[i] = new KinetNode(port, i); 
+ * for (int i = 0; i &lt; lx.total; ++i) {
+ *   nodes[i] = new KinetNode(port, i);
  * }
  * Kinet kinet = new Kinet(nodes);
  * </pre>
  * 
- * The above would map pixels in order to a single output port in order. Typically
- * nodes are not wired in the same fixed order, so logic is used to map the
- * node indices from their logical representation (in the LX model) to their
- * physical wiring.
+ * The above would map pixels in order to a single output port in order.
+ * Typically nodes are not wired in the same fixed order, so logic is used to
+ * map the node indices from their logical representation (in the LX model) to
+ * their physical wiring.
  */
-@Deprecated public class Kinet {
+@Deprecated
+public class Kinet {
 
     /**
      * In practice this is as hard as some Color Kinetics PSUs can be pushed
      * before they start dropping frames.
      */
     private static final int DEFAULT_FRAMERATE = 24;
-    
-    private final LX lx; 
-    
+
+    private final LX lx;
+
     private final KinetNode[] outputNodes;
     private final ArrayList<KinetPort> outputPorts;
 
-    private final int[] kinetColors;    
+    private final int[] kinetColors;
     private double brightness;
     private int gamma;
-    
+
     private long sendThrottleMillis;
     private long lastFrameMillis;
-    
+
     private DatagramSocket socket;
 
     /**
      * Constructs a new output network.
      * 
      * @param lx LX instance
-     * @param outputNodes Array of nodes to output to, must be lx.total in
-     *                       length, unused nodes may be null
+     * @param outputNodes Array of nodes to output to, must be lx.total in length,
+     *          unused nodes may be null
      * @throws SocketException If the UDP socket can't be constructed
      */
     public Kinet(LX lx, KinetNode[] outputNodes) throws SocketException {
@@ -82,11 +84,11 @@ import java.util.HashSet;
         }
         this.socket = new DatagramSocket();
         this.brightness = 1.;
-        this.kinetColors = new int[lx.total];        
+        this.kinetColors = new int[lx.total];
         this.setFramerate(DEFAULT_FRAMERATE);
         this.lastFrameMillis = 0;
     }
-    
+
     /**
      * The size of the network.
      * 
@@ -95,7 +97,7 @@ import java.util.HashSet;
     public final int size() {
         return this.outputNodes.length;
     }
-    
+
     /**
      * Sets the maximum framerate of the network.
      * 
@@ -109,15 +111,15 @@ import java.util.HashSet;
 
     /**
      * Sets brightness factor of the KiNET output.
-     *  
+     * 
      * @param brightness Value from 0-100 scale
      * @return this
      */
     public Kinet setBrightness(double brightness) {
-        this.brightness = LXUtils.constrain(brightness/100., 0, 1);
+        this.brightness = LXUtils.constrain(brightness / 100., 0, 1);
         return this;
     }
-    
+
     /**
      * Sets level of gamma correction. The correction is polynomial. Brightness
      * values are computed from 0-1, the gamma value given is the exponent to
@@ -134,7 +136,7 @@ import java.util.HashSet;
         }
         return this;
     }
-    
+
     /**
      * Sends an array of pixels out to this network, respecting the specified
      * framerate. If the last frame was sent too recently, these colors will be
@@ -151,7 +153,7 @@ import java.util.HashSet;
         }
         return this;
     }
-    
+
     /**
      * Sends pixels to the network, ignoring framerate.
      * 
@@ -170,13 +172,11 @@ import java.util.HashSet;
                 }
                 this.kinetColors[i] = this.lx.applet.color(
                         this.lx.applet.hue(colors[i]),
-                        this.lx.applet.saturation(colors[i]),
-                        bNew * 100.f * factor
-                        );
+                        this.lx.applet.saturation(colors[i]), bNew * 100.f * factor);
             }
             sendColors = this.kinetColors;
         }
-        
+
         for (int i = 0; i < sendColors.length; ++i) {
             KinetNode node = this.outputNodes[i];
             if (node != null) {

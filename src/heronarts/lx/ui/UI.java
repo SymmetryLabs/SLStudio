@@ -15,52 +15,51 @@ package heronarts.lx.ui;
 
 import heronarts.lx.LXKeyEvent;
 
-import processing.core.PApplet;
-import processing.core.PFont;
-import processing.core.PGraphics;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import processing.core.PApplet;
+import processing.core.PFont;
+
 /**
- * Top-level container for all overlay UI elements. 
+ * Top-level container for all overlay UI elements.
  */
 public class UI {
-    
+
     /**
      * PApplet that this UI belongs to
      */
     final PApplet applet;
-    
+
     /**
      * All the layers in this UI
      */
     private final List<UILayer> layers = new ArrayList<UILayer>();
-    
+
     private final List<UIObject> focusables = new ArrayList<UIObject>();
-    
+
     private int focusIndex = -1;
-    
+
     /**
      * Layer that was pressed on
      */
     private UILayer pressedLayer = null;
-    
+
     /**
      * Layer that has focus
      */
     private UILayer focusedLayer = null;
-    
+
     /**
      * Default item font in this UI
      */
     private PFont itemFont;
-    
+
     /**
      * Default title font in this UI
      */
     private PFont titleFont;
-    
+
     /**
      * Default text color
      */
@@ -70,32 +69,32 @@ public class UI {
      * Default background color
      */
     private int backgroundColor = 0xff444444;
-    
+
     /**
      * Default focus color
      */
     private int focusColor = 0xff669966;
-    
+
     /**
      * Default selected highlight color
      */
     private int highlightColor = 0xff669966;
-    
+
     /**
      * Default active highlight color
      */
     private int selectionColor = 0xff666699;
-    
+
     /**
      * White color
      */
     public final int WHITE = 0xffffffff;
-    
+
     /**
      * Black color
      */
     public final int BLACK = 0xff000000;
-    
+
     /**
      * Creates a new UI instance
      * 
@@ -106,7 +105,7 @@ public class UI {
         this.itemFont = applet.createFont("Lucida Grande", 11);
         this.titleFont = applet.createFont("Myriad Pro", 10);
     }
-    
+
     /**
      * Add a context to this UI
      * 
@@ -120,7 +119,7 @@ public class UI {
         }
         return this;
     }
-    
+
     private void addFocusables(UIObject o) {
         if (o instanceof UIFocus) {
             this.focusables.add(o);
@@ -129,7 +128,7 @@ public class UI {
             addFocusables(child);
         }
     }
-    
+
     private void removeFocusables(UIObject o) {
         if (o instanceof UIFocus) {
             this.focusables.remove(o);
@@ -138,11 +137,11 @@ public class UI {
             removeFocusables(child);
         }
     }
-    
+
     void willFocus(UILayer layer, UIObject object) {
         if (this.focusedLayer != layer) {
             if (this.focusedLayer instanceof UIContext) {
-                ((UIObject)this.focusedLayer)._blur();
+                ((UIObject) this.focusedLayer)._blur();
             }
             this.focusedLayer = layer;
         }
@@ -153,14 +152,14 @@ public class UI {
             }
         }
     }
-    
+
     void didBlur(UILayer layer) {
         if (this.focusedLayer != layer) {
             throw new IllegalStateException("Tried to blur non-focused layer");
         }
         this.focusedLayer = null;
     }
-    
+
     private void focusNext() {
         int fsz = this.focusables.size();
         if (fsz > 0) {
@@ -168,7 +167,7 @@ public class UI {
             this.focusables.get(this.focusIndex).focus();
         }
     }
-    
+
     private void focusPrevious() {
         int fsz = this.focusables.size();
         if (fsz > 0) {
@@ -179,7 +178,7 @@ public class UI {
             this.focusables.get(this.focusIndex).focus();
         }
     }
-    
+
     /**
      * Remove a context from thsi UI
      * 
@@ -196,7 +195,7 @@ public class UI {
         }
         return this;
     }
-    
+
     /**
      * Brings a layer to the top of the UI stack
      * 
@@ -208,7 +207,7 @@ public class UI {
         this.layers.add(layer);
         return this;
     }
-    
+
     /**
      * Gets the default item font for this UI
      * 
@@ -217,7 +216,7 @@ public class UI {
     public PFont getItemFont() {
         return this.itemFont;
     }
-    
+
     /**
      * Sets the default item font for this UI
      * 
@@ -228,7 +227,7 @@ public class UI {
         this.itemFont = font;
         return this;
     }
-    
+
     /**
      * Gets the default title font for this UI
      * 
@@ -237,7 +236,7 @@ public class UI {
     public PFont getTitleFont() {
         return this.titleFont;
     }
-    
+
     /**
      * Sets the default title font for this UI
      * 
@@ -248,7 +247,7 @@ public class UI {
         this.titleFont = font;
         return this;
     }
-    
+
     /**
      * Gets the default text color
      * 
@@ -257,7 +256,7 @@ public class UI {
     public int getTextColor() {
         return this.textColor;
     }
-    
+
     /**
      * Sets the default text color for UI
      * 
@@ -268,7 +267,7 @@ public class UI {
         this.textColor = color;
         return this;
     }
-    
+
     /**
      * Gets background color
      * 
@@ -277,7 +276,7 @@ public class UI {
     public int getBackgroundColor() {
         return this.backgroundColor;
     }
-    
+
     /**
      * Sets default background color
      * 
@@ -288,7 +287,7 @@ public class UI {
         this.backgroundColor = color;
         return this;
     }
-    
+
     /**
      * Gets highlight color
      * 
@@ -297,7 +296,7 @@ public class UI {
     public int getHighlightColor() {
         return this.highlightColor;
     }
-    
+
     /**
      * Sets highlight color
      * 
@@ -308,7 +307,7 @@ public class UI {
         this.highlightColor = color;
         return this;
     }
-    
+
     /**
      * Gets focus color
      * 
@@ -317,7 +316,7 @@ public class UI {
     public int getFocusColor() {
         return this.focusColor;
     }
-    
+
     /**
      * Sets highlight color
      * 
@@ -328,7 +327,7 @@ public class UI {
         this.focusColor = color;
         return this;
     }
-    
+
     /**
      * Get active color
      * 
@@ -337,7 +336,7 @@ public class UI {
     public int getSelectionColor() {
         return this.selectionColor;
     }
-    
+
     /**
      * Set active color
      * 
@@ -348,7 +347,7 @@ public class UI {
         this.selectionColor = color;
         return this;
     }
-    
+
     /**
      * Draws the UI
      */
@@ -357,7 +356,7 @@ public class UI {
             layer.draw();
         }
     }
-    
+
     public final void mousePressed(int x, int y) {
         this.pressedLayer = null;
         for (int i = this.layers.size() - 1; i >= 0; --i) {
@@ -368,14 +367,14 @@ public class UI {
             }
         }
     }
-    
+
     public final void mouseReleased(int x, int y) {
         if (this.pressedLayer != null) {
             this.pressedLayer.mouseReleased(x, y);
             this.pressedLayer = null;
         }
     }
-    
+
     public final void mouseClicked(int x, int y) {
         for (int i = this.layers.size() - 1; i >= 0; --i) {
             UILayer layer = this.layers.get(i);
@@ -384,13 +383,13 @@ public class UI {
             }
         }
     }
-    
+
     public final void mouseDragged(int x, int y) {
         if (this.pressedLayer != null) {
             this.pressedLayer.mouseDragged(x, y);
         }
     }
-    
+
     public final void mouseWheel(int x, int y, int rotation) {
         for (int i = this.layers.size() - 1; i >= 0; --i) {
             UILayer layer = this.layers.get(i);
@@ -399,7 +398,7 @@ public class UI {
             }
         }
     }
-    
+
     public final void keyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_TAB) {
             if (keyEvent.isShiftDown()) {
@@ -412,19 +411,19 @@ public class UI {
             this.focusedLayer.keyPressed(keyEvent, keyChar, keyCode);
         }
     }
-    
+
     public final void keyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedLayer != null) {
             this.focusedLayer.keyReleased(keyEvent, keyChar, keyCode);
         }
     }
-    
+
     public final void keyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.focusedLayer != null) {
             this.focusedLayer.keyTyped(keyEvent, keyChar, keyCode);
         }
     }
-    
+
     public static String uiClassName(Object o, String suffix) {
         String s = o.getClass().getName();
         int li;

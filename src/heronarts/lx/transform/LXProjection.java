@@ -13,29 +13,27 @@
 
 package heronarts.lx.transform;
 
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXModel;
-
-import java.lang.Math;
+import heronarts.lx.model.LXPoint;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
 /**
  * Class to compute projections of an entire model. These are applied cheaply by
- * using direct manipulation rather than matrix multiplication. No push or pop is
- * available.
+ * using direct manipulation rather than matrix multiplication. No push or pop
+ * is available.
  */
 public class LXProjection implements Iterable<LXVector> {
 
     private final LXVector[] vectors;
-    
+
     private final LXModel model;
-    
+
     public Iterator<LXVector> iterator() {
         return Arrays.asList(this.vectors).iterator();
     }
-    
+
     /**
      * Constructs a projection view of the given model
      * 
@@ -99,10 +97,10 @@ public class LXProjection implements Iterable<LXVector> {
         }
         return this;
     }
-    
+
     /**
      * Centers the projection, by translating it such that the origin (0, 0, 0)
-     * becomes the center of the model 
+     * becomes the center of the model
      * 
      * @return this, for method chaning
      */
@@ -119,7 +117,8 @@ public class LXProjection implements Iterable<LXVector> {
      * @return this, for method chaining
      */
     public LXProjection translateCenter(float tx, float ty, float tz) {
-        return translate(-this.model.cx + tx, -this.model.cy + ty, -this.model.cz + tz);
+        return translate(-this.model.cx + tx, -this.model.cy + ty, -this.model.cz
+                + tz);
     }
 
     /**
@@ -133,7 +132,7 @@ public class LXProjection implements Iterable<LXVector> {
         }
         return this;
     }
-    
+
     /**
      * Reflects the projection about the y-axis
      * 
@@ -145,7 +144,7 @@ public class LXProjection implements Iterable<LXVector> {
         }
         return this;
     }
-    
+
     /**
      * Reflects the projection about the z-axis
      * 
@@ -157,7 +156,7 @@ public class LXProjection implements Iterable<LXVector> {
         }
         return this;
     }
-    
+
     /**
      * Rotates the projection about a vector
      * 
@@ -168,7 +167,7 @@ public class LXProjection implements Iterable<LXVector> {
      * @return this, for method chaining
      */
     public LXProjection rotate(float angle, float l, float m, float n) {
-        float ss = l*l + m*m + n*n;
+        float ss = l * l + m * m + n * n;
         if (ss != 1) {
             float sr = (float) Math.sqrt(ss);
             l /= sr;
@@ -178,21 +177,21 @@ public class LXProjection implements Iterable<LXVector> {
 
         float sinv = (float) Math.sin(angle);
         float cosv = (float) Math.cos(angle);
-        float a1 = l*l*(1-cosv) + cosv;
-        float a2 = l*m*(1-cosv) - n*sinv;
-        float a3 = l*n*(1-cosv) + m*sinv;
-        float b1 = l*m*(1-cosv) + n*sinv;
-        float b2 = m*m*(1-cosv) + cosv;
-        float b3 = m*n*(1-cosv) - l*sinv;
-        float c1 = l*n*(1-cosv) - m*sinv;
-        float c2 = m*n*(1-cosv) + l*sinv;
-        float c3 = n*n*(1-cosv) + cosv;
+        float a1 = l * l * (1 - cosv) + cosv;
+        float a2 = l * m * (1 - cosv) - n * sinv;
+        float a3 = l * n * (1 - cosv) + m * sinv;
+        float b1 = l * m * (1 - cosv) + n * sinv;
+        float b2 = m * m * (1 - cosv) + cosv;
+        float b3 = m * n * (1 - cosv) - l * sinv;
+        float c1 = l * n * (1 - cosv) - m * sinv;
+        float c2 = m * n * (1 - cosv) + l * sinv;
+        float c3 = n * n * (1 - cosv) + cosv;
         float xp, yp, zp;
 
         for (LXVector v : this.vectors) {
-            xp = v.x*a1 + v.y*a2 + v.z*a3;
-            yp = v.x*b1 + v.y*b2 + v.z*b3;
-            zp = v.x*c1 + v.y*c2 + v.z*c3;
+            xp = v.x * a1 + v.y * a2 + v.z * a3;
+            yp = v.x * b1 + v.y * b2 + v.z * b3;
+            zp = v.x * c1 + v.y * c2 + v.z * c3;
             v.x = xp;
             v.y = yp;
             v.z = zp;
@@ -200,7 +199,7 @@ public class LXProjection implements Iterable<LXVector> {
 
         return this;
     }
-    
+
     /**
      * Rotate about the x-axis
      * 
@@ -210,7 +209,7 @@ public class LXProjection implements Iterable<LXVector> {
     public LXProjection rotateX(float angle) {
         return rotate(angle, 1, 0, 0);
     }
-    
+
     /**
      * Rotate about the x-axis
      * 
@@ -220,7 +219,7 @@ public class LXProjection implements Iterable<LXVector> {
     public LXProjection rotateY(float angle) {
         return rotate(angle, 0, 1, 0);
     }
-    
+
     /**
      * Rotate about the x-axis
      * 

@@ -15,17 +15,17 @@ package heronarts.lx.ui;
 
 import heronarts.lx.LXKeyEvent;
 
-import processing.core.PGraphics;
-
 import java.util.ArrayList;
 import java.util.List;
 
+import processing.core.PGraphics;
+
 /**
- * Object in a UI hierarchy. UIObjects all have coordinate in an x-y space that uses
- * standard graphics coordinate system of (0,0) representing the top-left corner.
- * Increasing x-values move to the right, y-values move down. Object positions use
- * x, y to refer to the origin of the object at the top left corner, with width
- * and height forming a bounding rectangle.
+ * Object in a UI hierarchy. UIObjects all have coordinate in an x-y space that
+ * uses standard graphics coordinate system of (0,0) representing the top-left
+ * corner. Increasing x-values move to the right, y-values move down. Object
+ * positions use x, y to refer to the origin of the object at the top left
+ * corner, with width and height forming a bounding rectangle.
  */
 public abstract class UIObject {
 
@@ -120,7 +120,7 @@ public abstract class UIObject {
 
     /**
      * Constructs a UIObject
-     *
+     * 
      * @param x x-position
      * @param y y-position
      * @param w width
@@ -135,7 +135,7 @@ public abstract class UIObject {
 
     /**
      * Whether this object is visible.
-     *
+     * 
      * @return True if this object is being displayed
      */
     public boolean isVisible() {
@@ -144,7 +144,7 @@ public abstract class UIObject {
 
     /**
      * Set whether this object should be displayed
-     *
+     * 
      * @param visible Whether to display this object
      * @return this object
      */
@@ -158,7 +158,7 @@ public abstract class UIObject {
 
     /**
      * Sets the position of this object, relative to its parent
-     *
+     * 
      * @param x x-position, relative to parent's coordinate space
      * @param y y-position, relative to parent's coordinate space
      * @return this object
@@ -174,7 +174,7 @@ public abstract class UIObject {
 
     /**
      * Sets the size of this object.
-     *
+     * 
      * @param width Width of object
      * @param height Height of object
      * @return this object
@@ -189,9 +189,9 @@ public abstract class UIObject {
         return this;
     }
 
-      /**
+    /**
      * X position
-     *
+     * 
      * @return x position
      */
     public final float getX() {
@@ -200,7 +200,7 @@ public abstract class UIObject {
 
     /**
      * Y position
-     *
+     * 
      * @return y position
      */
     public final float getY() {
@@ -209,7 +209,7 @@ public abstract class UIObject {
 
     /**
      * Width
-     *
+     * 
      * @return width
      */
     public final float getWidth() {
@@ -218,7 +218,7 @@ public abstract class UIObject {
 
     /**
      * Height
-     *
+     * 
      * @return height
      */
     public final float getHeight() {
@@ -226,22 +226,21 @@ public abstract class UIObject {
     }
 
     /**
-     * Whether a given point, in the container's coordinate space, is within
-     * this object.
-     *
+     * Whether a given point, in the container's coordinate space, is within this
+     * object.
+     * 
      * @param x x-coordinate, in parent's coordinate space
      * @param y y-coordinate, in parent's coordinate space
      * @return true if the point is inside this object's bounds
      */
     public final boolean contains(float x, float y) {
-        return
-                (x >= this.x && x < (this.x + this.width)) &&
-                (y >= this.y && y < (this.y + this.height));
+        return (x >= this.x && x < (this.x + this.width))
+                && (y >= this.y && y < (this.y + this.height));
     }
 
     /**
      * Places this object inside a container.
-     *
+     * 
      * @param container The object in which to place this
      * @return this object
      */
@@ -256,7 +255,7 @@ public abstract class UIObject {
 
     /**
      * Removes this object from a container that it is in.
-     *
+     * 
      * @return this object
      */
     public final UIObject removeFromContainer() {
@@ -270,7 +269,7 @@ public abstract class UIObject {
 
     /**
      * Whether this object has a background
-     *
+     * 
      * @return true or false
      */
     public boolean hasBackground() {
@@ -279,7 +278,7 @@ public abstract class UIObject {
 
     /**
      * The background color, if there is a background
-     *
+     * 
      * @return color
      */
     public int getBackgroundColor() {
@@ -288,7 +287,7 @@ public abstract class UIObject {
 
     /**
      * Sets whether the object has a background
-     *
+     * 
      * @param hasBackground true or false
      * @return this
      */
@@ -302,7 +301,7 @@ public abstract class UIObject {
 
     /**
      * Sets a background color
-     *
+     * 
      * @param backgroundColor color
      * @return this
      */
@@ -317,7 +316,7 @@ public abstract class UIObject {
 
     /**
      * Whether this object has a border
-     *
+     * 
      * @return true or false
      */
     public boolean hasBorder() {
@@ -326,7 +325,7 @@ public abstract class UIObject {
 
     /**
      * Current border color
-     *
+     * 
      * @return color
      */
     public int getBorderColor() {
@@ -335,7 +334,7 @@ public abstract class UIObject {
 
     /**
      * The weight of the border
-     *
+     * 
      * @return weight
      */
     public int getBorderWeight() {
@@ -344,7 +343,7 @@ public abstract class UIObject {
 
     /**
      * Sets whether there is a border
-     *
+     * 
      * @param hasBorder true or false
      * @return this
      */
@@ -358,7 +357,7 @@ public abstract class UIObject {
 
     /**
      * Sets the color of the border
-     *
+     * 
      * @param borderColor color
      * @return this
      */
@@ -373,7 +372,7 @@ public abstract class UIObject {
 
     /**
      * Sets the weight of the border
-     *
+     * 
      * @param borderWeight weight
      * @return this
      */
@@ -388,7 +387,7 @@ public abstract class UIObject {
 
     /**
      * Redraws this object.
-     *
+     * 
      * @return this object
      */
     public final UIObject redraw() {
@@ -405,8 +404,8 @@ public abstract class UIObject {
     }
 
     /**
-     * Internal helper. Marks this object and all of its children as needing to
-     * be redrawn.
+     * Internal helper. Marks this object and all of its children as needing to be
+     * redrawn.
      */
     private final void _redraw() {
         this.needsRedraw = true;
@@ -418,7 +417,7 @@ public abstract class UIObject {
 
     /**
      * Draws this object to the graphics context.
-     *
+     * 
      * @param ui UI
      * @param pg graphics buffer
      */
@@ -463,27 +462,29 @@ public abstract class UIObject {
             pg.strokeWeight(border);
             pg.stroke(this.borderColor);
             pg.noFill();
-            pg.rect(border/2, border/2, this.width-border, this.height-border);
+            pg.rect(border / 2, border / 2, this.width - border, this.height - border);
 
             // Reset stroke weight
             pg.strokeWeight(1);
         }
         if ((this instanceof UIFocus) && this.hasFocus) {
-            int focusSize = (int) Math.min(8, Math.min(this.width, this.height)/8);
+            int focusSize = (int) Math.min(8, Math.min(this.width, this.height) / 8);
             pg.stroke(ui.getFocusColor());
             pg.noFill();
             // Top left
             pg.line(0, 0, focusSize, 0);
             pg.line(0, 0, 0, focusSize);
             // Top right
-            pg.line(this.width-focusSize-1, 0, this.width-1, 0);
-            pg.line(this.width-1, 0, this.width-1, focusSize);
+            pg.line(this.width - focusSize - 1, 0, this.width - 1, 0);
+            pg.line(this.width - 1, 0, this.width - 1, focusSize);
             // Bottom right
-            pg.line(this.width-focusSize-1, this.height-1, this.width-1, this.height-1);
-            pg.line(this.width-1, this.height-1, this.width-1, this.height - 1 - focusSize);
+            pg.line(this.width - focusSize - 1, this.height - 1, this.width - 1,
+                    this.height - 1);
+            pg.line(this.width - 1, this.height - 1, this.width - 1, this.height - 1
+                    - focusSize);
             // Bottom left
-            pg.line(0, this.height-1, focusSize, this.height-1);
-            pg.line(0, this.height-1, 0, this.height-1-focusSize);
+            pg.line(0, this.height - 1, focusSize, this.height - 1);
+            pg.line(0, this.height - 1, 0, this.height - 1 - focusSize);
         }
     }
 
@@ -496,12 +497,13 @@ public abstract class UIObject {
 
     /**
      * Focuses this UIObject
-     *
+     * 
      * @return this
      */
     public UIObject focus() {
         if (!(this instanceof UIFocus)) {
-            throw new UnsupportedOperationException(getClass().getName() + " does not implement UIFocus");
+            throw new UnsupportedOperationException(getClass().getName()
+                    + " does not implement UIFocus");
         }
         if (this.focusedChild != null) {
             this.focusedChild._blur();
@@ -512,12 +514,12 @@ public abstract class UIObject {
 
     void _focus(UIObject object) {
         if (this.parent != null) {
-            UIObject parentsFocusedChild = ((UIObject)this.parent).focusedChild;
+            UIObject parentsFocusedChild = ((UIObject) this.parent).focusedChild;
             if ((parentsFocusedChild != null) && (parentsFocusedChild != this)) {
                 parentsFocusedChild._blur();
             }
             this.parent._focus(object);
-            ((UIObject)this.parent).focusedChild = this;
+            ((UIObject) this.parent).focusedChild = this;
         }
         if (!this.hasFocus) {
             this.hasFocus = true;
@@ -528,12 +530,13 @@ public abstract class UIObject {
 
     /**
      * Takes focus away from this UIObject
-     *
+     * 
      * @return this
      */
     public UIObject blur() {
         if (!(this instanceof UIFocus)) {
-            throw new UnsupportedOperationException(getClass().getName() + " does not implement UIFocus");
+            throw new UnsupportedOperationException(getClass().getName()
+                    + " does not implement UIFocus");
         }
         _blur();
         return this;
@@ -548,7 +551,7 @@ public abstract class UIObject {
             onBlur();
             redraw();
             if (this.parent != null) {
-                ((UIObject)this.parent).focusedChild = null;
+                ((UIObject) this.parent).focusedChild = null;
             }
         }
     }
@@ -581,7 +584,8 @@ public abstract class UIObject {
 
     void _mouseReleased(float mx, float my) {
         if (this.pressedChild != null) {
-            this.pressedChild._mouseReleased(mx - this.pressedChild.x, my - this.pressedChild.y);
+            this.pressedChild._mouseReleased(mx - this.pressedChild.x, my
+                    - this.pressedChild.y);
             this.pressedChild = null;
         }
         onMouseReleased(mx, my);
@@ -589,7 +593,8 @@ public abstract class UIObject {
 
     void _mouseDragged(float mx, float my, float dx, float dy) {
         if (this.pressedChild != null) {
-            this.pressedChild._mouseDragged(mx - this.pressedChild.x, my - this.pressedChild.y, dx, dy);
+            this.pressedChild._mouseDragged(mx - this.pressedChild.x, my
+                    - this.pressedChild.y, dx, dy);
         }
         onMouseDragged(mx, my, dx, dy);
     }
@@ -627,100 +632,113 @@ public abstract class UIObject {
     }
 
     /**
-     * Invoked whenever this object needs to draw itself - subclasses should override
-     * to implement their drawing functionality.
-     *
+     * Invoked whenever this object needs to draw itself - subclasses should
+     * override to implement their drawing functionality.
+     * 
      * @param ui UI
      * @param pg PGraphics context
      */
-    protected void onDraw(UI ui, PGraphics pg) {}
+    protected void onDraw(UI ui, PGraphics pg) {
+    }
 
     /**
      * Invoked whenever this object is resized.
      */
-    protected void onResize() {}
+    protected void onResize() {
+    }
 
     /**
      * Invoked when this object is focused
      */
-    protected void onFocus() {}
+    protected void onFocus() {
+    }
 
     /**
      * Invoked when this object loses focus
      */
-    protected void onBlur() {}
+    protected void onBlur() {
+    }
 
     /**
-     * Invoked when the mouse is pressed within the bounds of this object - subclasses
-     * should override.
-     *
+     * Invoked when the mouse is pressed within the bounds of this object -
+     * subclasses should override.
+     * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      */
-    protected void onMousePressed(float mx, float my) {}
+    protected void onMousePressed(float mx, float my) {
+    }
 
     /**
      * Invoked when the mouse is released in this object, or after being initially
      * pressed inside this object - subclasses should override.
-     *
+     * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      */
-    protected void onMouseReleased(float mx, float my) {}
+    protected void onMouseReleased(float mx, float my) {
+    }
 
     /**
-     * Invoked when the mouse is clicked in this object - subclasses should override.
-     *
+     * Invoked when the mouse is clicked in this object - subclasses should
+     * override.
+     * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      */
-    protected void onMouseClicked(float mx, float my) {}
+    protected void onMouseClicked(float mx, float my) {
+    }
 
     /**
      * Invoked when the mouse is dragged in this object, or after being initially
      * pressed inside this object - subclasses should override.
-     *
+     * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      * @param dx relative change in x-position since last invocation
      * @param dy relative change in y-position since last invocation
      */
-    protected void onMouseDragged(float mx, float my, float dx, float dy) {}
+    protected void onMouseDragged(float mx, float my, float dx, float dy) {
+    }
 
     /**
-     * Invoked when the mouse wheel is scrolled inside this object - subclasses should
-     * override.
-     *
+     * Invoked when the mouse wheel is scrolled inside this object - subclasses
+     * should override.
+     * 
      * @param mx x-position in this object's coordinate space
      * @param my y-position in this object's coordinate space
      * @param dx relative change in mouse wheel position
      */
-    protected void onMouseWheel(float mx, float my, float dx) {}
+    protected void onMouseWheel(float mx, float my, float dx) {
+    }
 
     /**
      * Invoked when key is pressed and this object has focus - subclasses should
      * override.
-     *
+     * 
      * @param keyChar
      * @param keyCode
      */
-    protected void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
+    protected void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+    }
 
     /**
      * Invoked when key is released and this object has focus - subclasses should
      * override.
-     *
+     * 
      * @param keyChar
      * @param keyCode
      */
-    protected void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
+    protected void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+    }
 
     /**
      * Invoked when key is typed and this object has focus - subclasses should
      * override.
-     *
+     * 
      * @param keyChar
      * @param keyCode
      */
-    protected void onKeyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {}
+    protected void onKeyTyped(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+    }
 }

@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -14,48 +14,48 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-
+import processing.core.PApplet;
 import processing.core.PConstants;
 
 public class BlendTransition extends LXTransition {
 
     public enum Mode {
-        FULL,
-        HALF
+        FULL, HALF
     };
-    
+
     private final Mode mode;
-    
+
     private final int blendType;
 
     public BlendTransition(LX lx, int blendType) {
         this(lx, blendType, Mode.FULL);
     }
-    
+
     public BlendTransition(LX lx, int blendType, Mode mode) {
         super(lx);
         this.mode = mode;
         this.blendType = blendType;
     }
 
+    @Override
     protected void computeBlend(int[] c1, int[] c2, double progress) {
         if (this.mode == Mode.HALF) {
             progress /= 2.;
         }
         if (progress == 0.5) {
             for (int i = 0; i < c1.length; ++i) {
-                this.colors[i] = this.lx.applet.blendColor(c1[i], c2[i], this.blendType);
+                this.colors[i] = PApplet.blendColor(c1[i], c2[i], this.blendType);
             }
         } else if (progress < 0.5) {
             for (int i = 0; i < c1.length; ++i) {
-                this.colors[i] = this.lx.applet.lerpColor(c1[i],
-                        this.lx.applet.blendColor(c1[i], c2[i], this.blendType),
+                this.colors[i] = PApplet.lerpColor(c1[i],
+                        PApplet.blendColor(c1[i], c2[i], this.blendType),
                         (float) (2. * progress), PConstants.RGB);
             }
         } else {
             for (int i = 0; i < c1.length; ++i) {
-                this.colors[i] = this.lx.applet.lerpColor(c2[i],
-                        this.lx.applet.blendColor(c1[i], c2[i], this.blendType),
+                this.colors[i] = PApplet.lerpColor(c2[i],
+                        PApplet.blendColor(c1[i], c2[i], this.blendType),
                         (float) (2. * (1. - progress)), PConstants.RGB);
             }
         }

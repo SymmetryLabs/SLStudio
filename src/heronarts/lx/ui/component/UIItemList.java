@@ -20,23 +20,22 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
-import heronarts.lx.ui.UIObject;
 import heronarts.lx.ui.UIFocus;
+import heronarts.lx.ui.UIObject;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PConstants;
-import processing.core.PFont;
 import processing.core.PGraphics;
 
 /**
- * UI for a list of state items 
+ * UI for a list of state items
  */
 public class UIItemList extends UIObject implements UIFocus {
 
     public static interface Item {
-        
+
         public boolean isSelected();
 
         public boolean isPending();
@@ -52,15 +51,20 @@ public class UIItemList extends UIObject implements UIFocus {
         public boolean isPending() {
             return false;
         }
-        public void onMousePressed() {}
-        public void onMouseReleased() {}
+
+        public void onMousePressed() {
+        }
+
+        public void onMouseReleased() {
+        }
     }
 
     private List<Item> items = new ArrayList<Item>();
-    
-    public final DiscreteParameter focusIndex = new DiscreteParameter("FOCUS", 1);    
-    public final DiscreteParameter scrollOffset = new DiscreteParameter("OFFSET", 1); 
-    
+
+    public final DiscreteParameter focusIndex = new DiscreteParameter("FOCUS", 1);
+    public final DiscreteParameter scrollOffset = new DiscreteParameter("OFFSET",
+            1);
+
     private int itemHeight = 20;
     private int numVisibleItems = 0;
 
@@ -71,7 +75,7 @@ public class UIItemList extends UIObject implements UIFocus {
     public UIItemList() {
         this(0, 0, 0, 0);
     }
-    
+
     public UIItemList(float x, float y, float w, float h) {
         super(x, y, w, h);
         this.focusIndex.addListener(new LXParameterListener() {
@@ -85,16 +89,16 @@ public class UIItemList extends UIObject implements UIFocus {
             }
         });
     }
-    
+
     public int getFocusIndex() {
         return this.focusIndex.getValuei();
     }
-    
+
     public UIItemList setFocusIndex(int focusIndex) {
         this.focusIndex.setValue(focusIndex);
         return this;
     }
-    
+
     private void onFocusIndexChanged() {
         int fi = this.focusIndex.getValuei();
         int so = this.scrollOffset.getValuei();
@@ -105,7 +109,7 @@ public class UIItemList extends UIObject implements UIFocus {
         }
         redraw();
     }
-    
+
     public UIItemList select() {
         this.keyedItem = this.items.get(getFocusIndex());
         this.keyedItem.onMousePressed();
@@ -145,11 +149,11 @@ public class UIItemList extends UIObject implements UIFocus {
             pg.textFont(ui.getItemFont());
             pg.textAlign(PConstants.LEFT, PConstants.TOP);
             pg.text(item.getLabel(), 6, yp + 4);
-            
+
             if (itemIndex == fi) {
                 pg.stroke(ui.getFocusColor());
                 pg.noFill();
-                pg.rect(0, yp, this.width-1, this.itemHeight-1);
+                pg.rect(0, yp, this.width - 1, this.itemHeight - 1);
             }
 
             yp += this.itemHeight;
@@ -168,19 +172,20 @@ public class UIItemList extends UIObject implements UIFocus {
     private boolean scrolling = false;
     private Item pressedItem = null;
     private Item keyedItem = null;
-    
+
     public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         int index = getFocusIndex();
         if (keyCode == java.awt.event.KeyEvent.VK_UP) {
-            index = Math.max(0, index-1);
+            index = Math.max(0, index - 1);
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
-            index = Math.min(index + 1, this.items.size()-1);
-        } else if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            index = Math.min(index + 1, this.items.size() - 1);
+        } else if ((keyChar == ' ')
+                || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             select();
         }
         setFocusIndex(index);
     }
-    
+
     public void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.keyedItem != null) {
@@ -189,11 +194,12 @@ public class UIItemList extends UIObject implements UIFocus {
             }
         }
     }
-    
+
     public void onMousePressed(float mx, float my) {
         this.pressedItem = null;
         if (this.hasScroll && mx >= this.width - 12) {
-            if ((my >= this.scrollYStart) && (my < (this.scrollYStart + this.scrollYHeight))) {
+            if ((my >= this.scrollYStart)
+                    && (my < (this.scrollYStart + this.scrollYHeight))) {
                 this.scrolling = true;
                 this.dAccum = 0;
             }
@@ -244,23 +250,25 @@ public class UIItemList extends UIObject implements UIFocus {
     public int getScrollOffset() {
         return this.scrollOffset.getValuei();
     }
-    
+
     public UIItemList setScrollOffset(int offset) {
-        this.scrollOffset.setValue(LXUtils.constrain(offset, 0, this.items.size() - this.numVisibleItems));
+        this.scrollOffset.setValue(LXUtils.constrain(offset, 0, this.items.size()
+                - this.numVisibleItems));
         return this;
     }
-    
+
     private void moveScrollOffset(int delta) {
         setScrollOffset(getScrollOffset() + delta);
     }
-    
+
     private void onScrollOffsetChanged() {
         int so = this.scrollOffset.getValuei();
         this.scrollYStart = Math.round(so * this.height / this.items.size());
-        this.scrollYHeight = Math.round(this.numVisibleItems * this.height / this.items.size());
+        this.scrollYHeight = Math.round(this.numVisibleItems * this.height
+                / this.items.size());
         int fi = this.focusIndex.getValuei();
         if ((fi < so) || (fi > so + this.numVisibleItems - 1)) {
-            setFocusIndex(so);    
+            setFocusIndex(so);
         }
         redraw();
     }
@@ -275,4 +283,3 @@ public class UIItemList extends UIObject implements UIFocus {
         return this;
     }
 }
-    

@@ -20,15 +20,15 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 
 /**
- * Represents a KiNET output port, which is an IP address of a power
- * supply and the port number on that PSU to send data on along with a buffer
- * of data.
+ * Represents a KiNET output port, which is an IP address of a power supply and
+ * the port number on that PSU to send data on along with a buffer of data.
  */
-@Deprecated public class KinetPort {
+@Deprecated
+public class KinetPort {
     private final static int DEFAULT_DATA_LEN = 512;
     private final static int HEADER_LEN = 24;
-    private final static int KINET_PORT = 6038; 
-    
+    private final static int KINET_PORT = 6038;
+
     private final byte portNumber;
     private final InetAddress ipAddress;
     private final byte[] dataBuffer;
@@ -42,7 +42,7 @@ import java.net.UnknownHostException;
     public KinetPort(String ip, int port) {
         this(ip, port, DEFAULT_DATA_LEN);
     }
-    
+
     /**
      * Constructs a new port with a custom data length
      * 
@@ -71,12 +71,12 @@ import java.net.UnknownHostException;
         this.dataBuffer[15] = (byte) 0xff;
         this.dataBuffer[16] = portNumber;
         this.dataBuffer[17] = (byte) 0x00; // Sometimes a checksum? 0x00 works
-                                            // fine.
+        // fine.
         this.dataBuffer[18] = (byte) 0x00;
         this.dataBuffer[19] = (byte) 0x00;
         this.dataBuffer[20] = (byte) 0x00;
         this.dataBuffer[21] = (byte) 0x02; // Total # of ports on controller
-                                            // (irrelevant?)
+        // (irrelevant?)
         this.dataBuffer[22] = (byte) 0x00;
         this.dataBuffer[23] = (byte) 0x00;
         for (int i = 0; i < dataLen; ++i) {
@@ -85,12 +85,13 @@ import java.net.UnknownHostException;
         try {
             this.ipAddress = InetAddress.getByName(ip);
         } catch (UnknownHostException uhx) {
-            throw new RuntimeException("KinetPort could not determine IP address for " + ip, uhx);
+            throw new RuntimeException(
+                    "KinetPort could not determine IP address for " + ip, uhx);
         }
     }
 
     /**
-     * Sets the color values for a particular node on this string 
+     * Sets the color values for a particular node on this string
      * 
      * @param nodeIndex Index of node on this port
      * @param r Red value
@@ -104,7 +105,7 @@ import java.net.UnknownHostException;
         this.dataBuffer[HEADER_LEN + 3 * nodeIndex + 2] = b;
         return this;
     }
-    
+
     /**
      * Sends this port's data on the network
      * 
@@ -113,7 +114,8 @@ import java.net.UnknownHostException;
      * @return this
      */
     public KinetPort send(DatagramSocket socket) throws IOException {
-        socket.send(new DatagramPacket(this.dataBuffer, this.dataBuffer.length, this.ipAddress, KINET_PORT));
+        socket.send(new DatagramPacket(this.dataBuffer, this.dataBuffer.length,
+                this.ipAddress, KINET_PORT));
         return this;
     }
 }

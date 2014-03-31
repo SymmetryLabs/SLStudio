@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -16,14 +16,15 @@ package heronarts.lx.effect;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BasicParameter;
 
+import processing.core.PApplet;
 import processing.core.PConstants;
 
 public class BlurEffect extends LXEffect {
-    
+
     public final BasicParameter amount = new BasicParameter("BLUR", 0);
-    
+
     private final int[] blurBuffer = new int[this.lx.total];
-    
+
     public BlurEffect(LX lx) {
         super(lx);
         for (int i = 0; i < blurBuffer.length; ++i) {
@@ -31,14 +32,17 @@ public class BlurEffect extends LXEffect {
         }
         addParameter(this.amount);
     }
-    
+
+    @Override
     public void apply(int[] colors) {
         float blurf = this.amount.getValuef();
         if (blurf > 0) {
-            blurf = 1 - (1-blurf)*(1-blurf)*(1-blurf);
+            blurf = 1 - (1 - blurf) * (1 - blurf) * (1 - blurf);
             for (int i = 0; i < colors.length; ++i) {
-                int blend = this.lx.applet.blendColor(colors[i], this.blurBuffer[i], PConstants.SCREEN);
-                this.blurBuffer[i] = colors[i] = this.lx.applet.lerpColor(colors[i], blend, blurf, PConstants.RGB);
+                int blend = PApplet.blendColor(colors[i], this.blurBuffer[i],
+                        PConstants.SCREEN);
+                this.blurBuffer[i] = colors[i] = PApplet.lerpColor(colors[i], blend,
+                        blurf, PConstants.RGB);
             }
         }
     }

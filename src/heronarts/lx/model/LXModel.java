@@ -14,16 +14,15 @@
 package heronarts.lx.model;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 /**
  * An LXModel is a representation of a set of points in 3-d space. Each LXPoint
  * corresponds to a single point. Models are comprised of Fixtures. An LXFixture
- * specifies a set of points, the Model object takes some number of these and wraps
- * them up with a few useful additional fields, such as the center position of all
- * points and the min/max/range on each axis.
+ * specifies a set of points, the Model object takes some number of these and
+ * wraps them up with a few useful additional fields, such as the center
+ * position of all points and the min/max/range on each axis.
  */
 public class LXModel implements LXFixture {
 
@@ -31,87 +30,87 @@ public class LXModel implements LXFixture {
      * An immutable list of all the points in this model
      */
     public final List<LXPoint> points;
-    
+
     /**
      * An immutable list of all the fixtures in this model
      */
     public final List<LXFixture> fixtures;
-    
+
     /**
      * Center of the model in x space
      */
     public final float cx;
-    
+
     /**
      * Center of the model in y space
      */
     public final float cy;
-    
+
     /**
      * Center of the model in z space
      */
     public final float cz;
-    
+
     /**
      * Average x point
      */
     public final float ax;
-    
+
     /**
      * Average y point
      */
     public final float ay;
-    
+
     /**
      * Average z points
      */
     public final float az;
-    
+
     /**
      * Minimum x value
      */
     public final float xMin;
-    
+
     /**
      * Maximum x value
      */
     public final float xMax;
-    
+
     /**
      * Range of x values
      */
     public final float xRange;
-    
+
     /**
      * Minimum y value
      */
     public final float yMin;
-    
+
     /**
      * Maximum y value
      */
     public final float yMax;
-    
+
     /**
      * Range of y values
      */
     public final float yRange;
-    
+
     /**
      * Minimum z value
      */
     public final float zMin;
-    
+
     /**
      * Maximum z value
      */
     public final float zMax;
-    
+
     /**
      * Range of z values
      */
     public final float zRange;
-    
+
     /**
      * Constructs a null model with no points
      */
@@ -127,7 +126,7 @@ public class LXModel implements LXFixture {
     public LXModel(List<LXPoint> points) {
         this(new BasicFixture(points));
     }
-    
+
     /**
      * Constructs a model with one fixture
      * 
@@ -136,7 +135,7 @@ public class LXModel implements LXFixture {
     public LXModel(LXFixture fixture) {
         this(new LXFixture[] { fixture });
     }
-        
+
     /**
      * Constructs a model with the given fixtures
      * 
@@ -151,13 +150,13 @@ public class LXModel implements LXFixture {
                 _points.add(point);
             }
         }
-        
+
         this.points = Collections.unmodifiableList(_points);
         this.fixtures = Collections.unmodifiableList(_fixtures);
-        
+
         float _ax = 0, _ay = 0, _az = 0;
         float _xMin = 0, _xMax = 0, _yMin = 0, _yMax = 0, _zMin = 0, _zMax = 0;
-        
+
         boolean firstPoint = true;
         for (LXPoint p : this.points) {
             _ax += p.x;
@@ -168,12 +167,18 @@ public class LXModel implements LXFixture {
                 _yMin = _yMax = p.y;
                 _zMin = _zMax = p.z;
             } else {
-                if (p.x < _xMin) _xMin = p.x;
-                if (p.x > _xMax) _xMax = p.x;
-                if (p.y < _yMin) _yMin = p.y;
-                if (p.y > _yMax) _yMax = p.y;
-                if (p.z < _zMin) _zMin = p.z;
-                if (p.z > _zMax) _zMax = p.z;
+                if (p.x < _xMin)
+                    _xMin = p.x;
+                if (p.x > _xMax)
+                    _xMax = p.x;
+                if (p.y < _yMin)
+                    _yMin = p.y;
+                if (p.y > _yMax)
+                    _yMax = p.y;
+                if (p.z < _zMin)
+                    _zMin = p.z;
+                if (p.z > _zMax)
+                    _zMax = p.z;
             }
             firstPoint = false;
         }
@@ -193,21 +198,21 @@ public class LXModel implements LXFixture {
         this.cy = yMin + yRange / 2.f;
         this.cz = zMin + zRange / 2.f;
     }
-    
+
     public List<LXPoint> getPoints() {
         return this.points;
     }
-    
+
     private final static class BasicFixture implements LXFixture {
         private final List<LXPoint> points;
-        
+
         private BasicFixture(List<LXPoint> points) {
             this.points = points;
         }
-        
+
         public List<LXPoint> getPoints() {
             return this.points;
         }
     }
-    
+
 }

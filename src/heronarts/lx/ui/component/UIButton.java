@@ -27,13 +27,13 @@ public class UIButton extends UIObject implements UIFocus {
 
     protected boolean active = false;
     protected boolean isMomentary = false;
-    
+
     protected int inactiveColor = 0xff222222;
-    protected int activeColor = 0xff669966;    
+    protected int activeColor = 0xff669966;
     protected int labelColor = 0xff999999;
-    
+
     protected String label = "";
-    
+
     private BooleanParameter parameter = null;
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
@@ -41,17 +41,17 @@ public class UIButton extends UIObject implements UIFocus {
             setActive(parameter.isOn());
         }
     };
-    
+
     public UIButton() {
         this(0, 0, 0, 0);
     }
-    
+
     public UIButton(float x, float y, float w, float h) {
         super(x, y, w, h);
         setBorderColor(0xff666666);
         setBackgroundColor(this.inactiveColor);
     }
-    
+
     public UIButton setParameter(BooleanParameter parameter) {
         if (this.parameter != null) {
             this.parameter.removeListener(this.parameterListener);
@@ -87,7 +87,7 @@ public class UIButton extends UIObject implements UIFocus {
             setActive(false);
         }
     }
-    
+
     public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             setActive(this.isMomentary ? true : !this.active);
