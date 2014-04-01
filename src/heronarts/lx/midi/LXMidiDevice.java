@@ -15,6 +15,7 @@ package heronarts.lx.midi;
 
 import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -42,6 +43,8 @@ public class LXMidiDevice {
     private final static int OFF = -1;
     public final static int DIRECT = 1;
     public final static int TOGGLE = 2;
+    private final static int DISCRETE = 3;
+    private final static int DISCRETE_OFF = 4;
 
     // TODO(mcslee): implement LXModulator controls
     // public final static int START = 3;
@@ -92,14 +95,21 @@ public class LXMidiDevice {
         private final int number;
         private final int mode;
         private final int value;
+        private final int secondary;
 
         private NoteBinding(LXParameter parameter, int channel, int number,
                 int mode, int value) {
+            this(parameter, channel, number, mode, value, 0);
+        }
+
+        private NoteBinding(LXParameter parameter, int channel, int number,
+                int mode, int value, int secondary) {
             super(parameter);
             this.channel = channel;
             this.number = number;
             this.mode = mode;
             this.value = value;
+            this.secondary = secondary;
 
             assertChannel(channel);
             assertValue(number);
@@ -107,10 +117,18 @@ public class LXMidiDevice {
             switch (this.mode) {
             case OFF:
             case DIRECT:
+                break;
             case TOGGLE:
                 if (!(parameter instanceof LXNormalizedParameter)) {
                     throw new IllegalArgumentException(
                             "TOGGLE mode requires LXNormalizedParameter");
+                }
+                break;
+            case DISCRETE:
+            case DISCRETE_OFF:
+                if (!(parameter instanceof DiscreteParameter)) {
+                    throw new IllegalArgumentException(
+                            "DISCRETE mode requires DiscreteParameter");
                 }
                 break;
             default:
@@ -140,7 +158,6 @@ public class LXMidiDevice {
                 }
                 break;
 
-            // Toggle mode for BooleanParameter
             case TOGGLE:
                 LXNormalizedParameter normalized = (LXNormalizedParameter) this.parameter;
                 if (this.parameter instanceof BooleanParameter) {
@@ -151,6 +168,16 @@ public class LXMidiDevice {
                     } else {
                         normalized.setNormalized(1);
                     }
+                }
+                break;
+
+            case DISCRETE:
+            case DISCRETE_OFF:
+                DiscreteParameter discreteParameter = (DiscreteParameter) this.parameter;
+                if ((this.mode == DISCRETE_OFF) && (this.value == discreteParameter.getValuei())) {
+                    discreteParameter.setValue(this.secondary);
+                } else {
+                    discreteParameter.setValue(this.value);
                 }
                 break;
             }
@@ -177,21 +204,37 @@ public class LXMidiDevice {
                     parameterValue = MIDI_MAX
                             * ((LXNormalizedParameter) this.parameter).getNormalized();
                 }
-                if (parameterValue == 0) {
-                    if (this.mode == TOGGLE || this.mode == OFF) {
+                switch (this.mode) {
+                case OFF:
+                    if (parameterValue == 0) {
                         output.sendNoteOff(this.channel, this.number, 0);
                     }
-                } else {
-                    int velocity;
-                    switch (this.value) {
-                    case NOTE_VELOCITY:
-                        velocity = (int) LXUtils.constrain(parameterValue, 0, MIDI_MAX);
-                        break;
-                    default:
-                        velocity = LXUtils.constrain(this.value, 0, MIDI_MAX);
-                        break;
+                    break;
+                case TOGGLE:
+                case DIRECT:
+                    if (parameterValue == 0) {
+                        if (this.mode == TOGGLE) {
+                            output.sendNoteOff(this.channel, this.number, 0);
+                        }
+                    } else {
+                        if (this.value == NOTE_VELOCITY) {
+                            output.sendNoteOn(this.channel, this.number,
+                                    (int) LXUtils.constrain(parameterValue, 0, MIDI_MAX));
+                        } else {
+                            output.sendNoteOn(this.channel, this.number, this.value);
+                        }
                     }
-                    output.sendNoteOn(this.channel, this.number, velocity);
+                    break;
+
+                case DISCRETE:
+                case DISCRETE_OFF:
+                    DiscreteParameter discreteParameter = (DiscreteParameter) this.parameter;
+                    if (discreteParameter.getValuei() == this.value) {
+                        output.sendNoteOn(this.channel, this.number, MIDI_MAX);
+                    } else {
+                        output.sendNoteOff(this.channel, this.number, 0);
+                    }
+                    break;
                 }
             }
         }
@@ -340,15 +383,20 @@ public class LXMidiDevice {
 
     public LXMidiDevice bindNoteOn(LXParameter parameter, int channel,
             int number, int mode, int value) {
+        return bindNoteOn(parameter, channel, number, mode, value, 0);
+    }
+
+    private LXMidiDevice bindNoteOn(LXParameter parameter, int channel,
+            int number, int mode, int value, int secondary) {
         if (channel == ANY_CHANNEL) {
             for (int i = 0; i < MIDI_CHANNELS; ++i) {
-                bindNoteOn(parameter, i, number, mode, value);
+                bindNoteOn(parameter, i, number, mode, value, secondary);
             }
         } else {
             unbindNoteOn(channel, number);
             int i = index(channel, number);
             this.noteOnBindings[i] = new NoteBinding(parameter, channel, number,
-                    mode, value);
+                    mode, value, secondary);
         }
         return this;
     }
@@ -390,6 +438,42 @@ public class LXMidiDevice {
             int i = index(channel, cc);
             this.controllerBindings[i] = new ControllerBinding(parameter, channel,
                     cc, value);
+        }
+        return this;
+    }
+
+    public LXMidiDevice bindNotes(DiscreteParameter parameter, int channel,
+            int[] notes) {
+        for (int i = 0; i < notes.length; ++i) {
+            bindNoteOn(parameter, channel, notes[i], DISCRETE,
+                    parameter.getMinValue() + i);
+        }
+        return this;
+    }
+
+    public LXMidiDevice bindNotes(DiscreteParameter parameter, int channel,
+            int[] notes, int offValue) {
+        for (int i = 0; i < notes.length; ++i) {
+            bindNoteOn(parameter, channel, notes[i], DISCRETE_OFF,
+                    parameter.getMinValue() + i, offValue);
+        }
+        return this;
+    }
+
+    public LXMidiDevice bindNotes(DiscreteParameter parameter, int[] channels,
+            int note) {
+        for (int i = 0; i < channels.length; ++i) {
+            bindNoteOn(parameter, channels[i], note, DISCRETE,
+                    parameter.getMinValue() + i);
+        }
+        return this;
+    }
+
+    public LXMidiDevice bindNotes(DiscreteParameter parameter, int[] channels,
+            int note, int offValue) {
+        for (int i = 0; i < channels.length; ++i) {
+            bindNoteOn(parameter, channels[i], note, DISCRETE_OFF,
+                    parameter.getMinValue() + i, offValue);
         }
         return this;
     }

@@ -100,6 +100,12 @@ public class APC40 extends LXMidiDevice {
     public final static int LED_MODE_VOLUME = 2;
     public final static int LED_MODE_PAN = 3;
 
+    // APC Modes
+
+    public final static byte GENERIC = 0x40;
+    public final static byte MODE_ABLETON = 0x41;
+    public final static byte MODE_ALTERNATE_ABLETON = 0x42;
+
     private final static int NUM_TRACK_CONTROL_KNOBS = 8;
     private final static int NUM_DEVICE_CONTROL_KNOBS = 8;
 
@@ -109,6 +115,24 @@ public class APC40 extends LXMidiDevice {
 
     public APC40(MidiInputDevice input, MidiOutputDevice output) {
         super(input, output);
+    }
+
+    public APC40 setMode(byte mode) {
+        byte[] apcModeSysex = new byte[] { (byte) 0xf0, // sysex start
+                (byte) 0x47, // manufacturers id
+                (byte) 0x00, // device id
+                (byte) 0x73, // product model id
+                (byte) 0x60, // message
+                (byte) 0x00, // bytes MSB
+                (byte) 0x04, // bytes LSB
+                mode,
+                (byte) 0x08, // version maj
+                (byte) 0x01, // version min
+                (byte) 0x01, // version bugfix
+                (byte) 0xf7, // sysex end
+        };
+        sendSysex(apcModeSysex);
+        return this;
     }
 
     private LXDeck deviceControlDeck = null;
