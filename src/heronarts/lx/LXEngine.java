@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -17,6 +17,7 @@ import heronarts.lx.effect.LXEffect;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
@@ -29,7 +30,7 @@ import java.util.List;
  * comprised of top-level modulators, then a number of decks, each of which has
  * a set of patterns that it may transition between. These decks are blended
  * together, and effects are then applied.
- * 
+ *
  * <pre>
  *   -----------------------------
  *  | Engine                      |
@@ -44,7 +45,7 @@ import java.util.List;
  *  |  -------------------------  |
  *   -----------------------------
  * </pre>
- * 
+ *
  * The result of all this generates a display buffer of node values.
  */
 public class LXEngine {
@@ -55,6 +56,8 @@ public class LXEngine {
     private final List<LXDeck> decks = new ArrayList<LXDeck>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
     private final List<LXOutput> outputs = new ArrayList<LXOutput>();
+
+    public final DiscreteParameter focusedDeck = new DiscreteParameter("DECK", 1);
 
     public final BasicParameter framesPerSecond = new BasicParameter("FPS", 60,
             0, 300);
@@ -119,16 +122,14 @@ public class LXEngine {
             this.black[i] = 0xff000000;
         }
         this.buffer = new DoubleBuffer();
-        LXDeck deck = new LXDeck(lx, 0, new LXPattern[] { new IteratorTestPattern(
-                lx) });
-        deck.getFader().setValue(1);
-        this.decks.add(deck);
+        addDeck(new LXPattern[] { new IteratorTestPattern(lx) });
+        decks.get(0).getFader().setValue(1);
         this.lastMillis = System.currentTimeMillis();
     }
 
     /**
      * Gets the active frame rate of the engine when in threaded mode
-     * 
+     *
      * @return How many FPS the engine is running
      */
     public float frameRate() {
@@ -138,7 +139,7 @@ public class LXEngine {
     /**
      * Whether the engine is threaded. Should only be called from Processing
      * animation thread.
-     * 
+     *
      * @return Whether the engine is threaded
      */
     public synchronized boolean isThreaded() {
@@ -148,7 +149,7 @@ public class LXEngine {
     /**
      * Sets the engine to threaded or non-threaded mode. Should only be called
      * from the Processing animation thread.
-     * 
+     *
      * @param threaded Whether engine should run on its own thread
      */
     public synchronized LXEngine setThreaded(boolean threaded) {
@@ -169,6 +170,7 @@ public class LXEngine {
                 this.buffer.copy[i] = this.buffer.render[i];
             }
             this.engineThread = new Thread("LX Engine Thread") {
+                @Override
                 public void run() {
                     System.out.println("LX Engine Thread started.");
                     while (!isInterrupted()) {
@@ -207,7 +209,7 @@ public class LXEngine {
 
     /**
      * Pause the engine from running
-     * 
+     *
      * @param paused Whether to pause the engine to pause
      */
     public synchronized LXEngine setPaused(boolean paused) {
@@ -245,7 +247,7 @@ public class LXEngine {
 
     /**
      * Adds an output driver
-     * 
+     *
      * @param output
      * @return this
      */
@@ -256,7 +258,7 @@ public class LXEngine {
 
     /**
      * Removes an output driver
-     * 
+     *
      * @param output
      * @return this
      */
@@ -277,8 +279,13 @@ public class LXEngine {
         return this.decks.get(deckIndex);
     }
 
+    public LXDeck getFocusedDeck() {
+        return getDeck(focusedDeck.getValuei());
+    }
+
     public synchronized void addDeck(LXPattern[] patterns) {
         this.decks.add(new LXDeck(lx, this.decks.size(), patterns));
+        this.focusedDeck.setRange(this.decks.size());
     }
 
     public void setPatterns(LXPattern[] patterns) {
@@ -410,7 +417,7 @@ public class LXEngine {
      * This should be used when in threaded mode. It synchronizes on the
      * double-buffer and duplicates the internal copy buffer into the provided
      * buffer.
-     * 
+     *
      * @param copy Buffer to copy into
      */
     void copyBuffer(int[] copy) {
@@ -424,7 +431,7 @@ public class LXEngine {
     /**
      * This is used when not in threaded mode. It provides direct access to the
      * engine's render buffer.
-     * 
+     *
      * @return The internal render buffer
      */
     int[] renderBuffer() {
