@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -13,16 +13,18 @@
 
 package heronarts.lx.ui.component;
 
+import heronarts.lx.LXKeyEvent;
 import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
+import heronarts.lx.ui.UIFocus;
 import heronarts.lx.ui.UIObject;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class UIIntegerBox extends UIObject {
+public class UIIntegerBox extends UIObject implements UIFocus {
 
     private int minValue = 0;
     private int maxValue = PConstants.MAX_INT;
@@ -66,29 +68,6 @@ public class UIIntegerBox extends UIObject {
         return this;
     }
 
-    protected void onDraw(UI ui, PGraphics pg) {
-        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
-        pg.textFont(ui.getItemFont());
-        pg.fill(ui.getTextColor());
-        pg.text("" + this.value, this.width / 2, this.height / 2);
-    }
-
-    protected void onValueChange(int value) {
-    }
-
-    float dAccum = 0;
-
-    protected void onMousePressed(float mx, float my) {
-        this.dAccum = 0;
-    }
-
-    protected void onMouseDragged(float mx, float my, float dx, float dy) {
-        this.dAccum -= dy;
-        int offset = (int) (this.dAccum / 5);
-        this.dAccum = this.dAccum - (offset * 5);
-        setValue(this.value + offset);
-    }
-
     public int getValue() {
         return this.value;
     }
@@ -107,5 +86,48 @@ public class UIIntegerBox extends UIObject {
             redraw();
         }
         return this;
+    }
+
+    @Override
+    protected void onDraw(UI ui, PGraphics pg) {
+        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
+        pg.textFont(ui.getItemFont());
+        pg.fill(ui.getTextColor());
+        pg.text("" + this.value, this.width / 2, this.height / 2);
+    }
+
+    protected void onValueChange(int value) {
+    }
+
+    float dAccum = 0;
+
+    @Override
+    protected void onMousePressed(float mx, float my) {
+        this.dAccum = 0;
+    }
+
+    @Override
+    protected void onMouseDragged(float mx, float my, float dx, float dy) {
+        this.dAccum -= dy;
+        int offset = (int) (this.dAccum / 5);
+        this.dAccum = this.dAccum - (offset * 5);
+        setValue(this.value + offset);
+    }
+
+    @Override
+    public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        int times = 1;
+        if (this.parameter != null) {
+            if (keyEvent.isShiftDown()) {
+                times = Math.max(1, this.parameter.getRange() / 10);
+            }
+        }
+        if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
+                || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
+            setValue(getValue() - times);
+        } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
+                || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
+            setValue(getValue() + times);
+        }
     }
 }

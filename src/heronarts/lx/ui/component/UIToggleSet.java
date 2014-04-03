@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -13,21 +13,25 @@
 
 package heronarts.lx.ui.component;
 
+import heronarts.lx.LXKeyEvent;
+import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.ui.UI;
+import heronarts.lx.ui.UIFocus;
 import heronarts.lx.ui.UIObject;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class UIToggleSet extends UIObject implements LXParameterListener {
+public class UIToggleSet extends UIObject implements UIFocus,
+        LXParameterListener {
 
     private String[] options = null;
 
     private int[] boundaries = null;
 
-    private String value = null;
+    private int value = -1;
 
     private boolean evenSpacing = false;
 
@@ -41,10 +45,15 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
         super(x, y, w, h);
     }
 
+    @Override
+    protected void onResize() {
+        computeBoundaries();
+    }
+
     public UIToggleSet setOptions(String[] options) {
         if (this.options != options) {
             this.options = options;
-            this.value = options[0];
+            this.value = 0;
             this.boundaries = new int[options.length];
             computeBoundaries();
             redraw();
@@ -102,34 +111,48 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
         return this;
     }
 
-    public String getValue() {
+    public int getValueIndex() {
         return this.value;
     }
 
-    public UIToggleSet setValue(String option) {
-        if (this.value != option) {
-            for (int i = 0; i < this.options.length; ++i) {
-                if (option == this.options[i]) {
-                    this.value = option;
-                    if (this.parameter != null) {
-                        this.parameter.setValue(i);
-                    }
-                    onToggle(this.value);
-                    redraw();
-                    return this;
-                }
+    public String getValue() {
+        return this.options[this.value];
+    }
+
+    public UIToggleSet setValue(String value) {
+        for (int i = 0; i < this.options.length; ++i) {
+            if (this.options[i] == value) {
+                return setValue(i);
             }
-            String optStr = "{";
-            for (String str : this.options) {
-                optStr += str + ",";
+        }
+
+        // That string doesn't exist
+        String optStr = "{";
+        for (String str : this.options) {
+            optStr += str + ",";
+        }
+        optStr = optStr.substring(0, optStr.length() - 1) + "}";
+        throw new IllegalArgumentException("Not a valid option in UIToggleSet: "
+                + value + " " + optStr);
+    }
+
+    public UIToggleSet setValue(int value) {
+        if (this.value != value) {
+            if (value < 0 || value >= this.options.length) {
+                throw new IllegalArgumentException("Invalid index to setValue(): "
+                        + value);
             }
-            optStr = optStr.substring(0, optStr.length() - 1) + "}";
-            throw new IllegalArgumentException("Not a valid option in UIToggleSet: "
-                    + option + " " + optStr);
+            this.value = value;
+            if (this.parameter != null) {
+                this.parameter.setValue(value);
+            }
+            onToggle(getValue());
+            redraw();
         }
         return this;
     }
 
+    @Override
     public void onDraw(UI ui, PGraphics pg) {
         pg.stroke(0xff666666);
         pg.fill(0xff222222);
@@ -144,7 +167,7 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
         int leftBoundary = 0;
 
         for (int i = 0; i < this.options.length; ++i) {
-            boolean isActive = this.options[i].equals(this.value);
+            boolean isActive = (i == this.value);
             if (isActive) {
                 pg.fill(ui.getHighlightColor());
                 pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 1,
@@ -157,16 +180,28 @@ public class UIToggleSet extends UIObject implements LXParameterListener {
         }
     }
 
+    protected void onToggle(String option) {
+    }
+
+    @Override
     public void onMousePressed(float mx, float my) {
         for (int i = 0; i < this.boundaries.length; ++i) {
             if (mx < this.boundaries[i]) {
-                setValue(this.options[i]);
+                setValue(i);
                 break;
             }
         }
     }
 
-    protected void onToggle(String option) {
+    @Override
+    public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
+                || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
+            setValue(LXUtils.constrain(this.value - 1, 0, this.options.length - 1));
+        } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
+                || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
+            setValue(LXUtils.constrain(this.value + 1, 0, this.options.length - 1));
+        }
     }
 
 }

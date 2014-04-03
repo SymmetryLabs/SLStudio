@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -26,7 +26,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
 
     /**
      * Parameter with values from [0, range-1], 0 by default
-     * 
+     *
      * @param label Name of parameter
      * @param range range of values
      */
@@ -36,7 +36,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
 
     /**
      * Parameter with values from [min, max-1], min by default
-     * 
+     *
      * @param label
      * @param range
      * @param value
@@ -70,7 +70,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
 
     /**
      * Sets the range from [minValue, maxValue-1] inclusive
-     * 
+     *
      * @param minValue Minimum value
      * @param maxValue Maximum value, exclusive
      * @return this
@@ -78,7 +78,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     public DiscreteParameter setRange(int minValue, int maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue - 1;
-        if (this.maxValue < this.minValue) {
+        if (this.maxValue < this.minValue - 1) {
             throw new IllegalArgumentException(
                     "DiscreteParameter must have range of at least 1");
         }
@@ -89,7 +89,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
 
     /**
      * Sets range from [0, range-1] inclusive
-     * 
+     *
      * @param range Number of discrete values
      * @return this
      */

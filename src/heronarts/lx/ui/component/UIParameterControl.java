@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -48,6 +48,10 @@ public abstract class UIParameterControl extends UIObject implements
         return this;
     }
 
+    public LXParameter getParameter() {
+        return this.parameter;
+    }
+
     public UIParameterControl setParameter(
             LXListenableNormalizedParameter parameter) {
         if (this.parameter != null) {
@@ -61,6 +65,7 @@ public abstract class UIParameterControl extends UIObject implements
         return this;
     }
 
+    @Override
     public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if (this.parameter instanceof DiscreteParameter) {
             DiscreteParameter dp = (DiscreteParameter) this.parameter;

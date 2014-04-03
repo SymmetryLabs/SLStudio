@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -29,7 +29,7 @@ public class UIContainer extends UIObject {
 
     /**
      * Constructs an empty container with a size.
-     * 
+     *
      * @param x x-position
      * @param y y-position
      * @param w width
@@ -41,13 +41,23 @@ public class UIContainer extends UIObject {
 
     /**
      * Constructs a container with a set of children.
-     * 
+     *
      * @param children Child objects
      */
     public UIContainer(UIObject[] children) {
         for (UIObject child : children) {
             child.addToContainer(this);
         }
+    }
+
+    /**
+     * Gets a child of this container
+     *
+     * @param index index of child
+     * @return object
+     */
+    public UIObject getChild(int index) {
+        return this.children.get(index);
     }
 
 }

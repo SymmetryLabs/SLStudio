@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -55,7 +55,7 @@ public class UICameraLayer implements UILayer, UIFocus {
 
     /**
      * Adds a component to the layer
-     * 
+     *
      * @param component
      * @return this
      */
@@ -66,7 +66,7 @@ public class UICameraLayer implements UILayer, UIFocus {
 
     /**
      * Removes a component from the layer
-     * 
+     *
      * @param component
      * @return this
      */
@@ -77,7 +77,7 @@ public class UICameraLayer implements UILayer, UIFocus {
 
     /**
      * Set radius of the camera
-     * 
+     *
      * @param r radius
      * @return this
      */
@@ -89,7 +89,7 @@ public class UICameraLayer implements UILayer, UIFocus {
 
     /**
      * Set the theta angle of viewing
-     * 
+     *
      * @param theta Angle about the y axis
      * @return this
      */
@@ -100,8 +100,20 @@ public class UICameraLayer implements UILayer, UIFocus {
     }
 
     /**
+     * Set the phi angle of viewing
+     *
+     * @param theta Angle about the y axis
+     * @return this
+     */
+    public UICameraLayer setPhi(float phi) {
+        this.phi = phi;
+        computeEye();
+        return this;
+    }
+
+    /**
      * Sets bounds on the radius
-     * 
+     *
      * @param minRadius
      * @param maxRadius
      * @return this
@@ -115,7 +127,7 @@ public class UICameraLayer implements UILayer, UIFocus {
 
     /**
      * Set minimum radius
-     * 
+     *
      * @param minRadius
      * @return this
      */
@@ -125,7 +137,7 @@ public class UICameraLayer implements UILayer, UIFocus {
 
     /**
      * Set maximum radius
-     * 
+     *
      * @param maxRadius
      * @return this
      */
@@ -135,7 +147,7 @@ public class UICameraLayer implements UILayer, UIFocus {
 
     /**
      * Sets the center of the scene
-     * 
+     *
      * @param x
      * @param y
      * @param z

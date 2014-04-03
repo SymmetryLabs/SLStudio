@@ -27,6 +27,10 @@ import rwmidi.MidiInputDevice;
 import rwmidi.MidiOutput;
 import rwmidi.MidiOutputDevice;
 import rwmidi.Note;
+import rwmidi.RWMidi;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class LXMidiDevice {
 
@@ -310,6 +314,70 @@ public class LXMidiDevice {
         }
     }
 
+    public static MidiInputDevice getInputDevice(String substring) {
+        return getInputDevice(new String[] { substring });
+    }
+
+    public static MidiInputDevice getInputDevice(String[] substrings) {
+        for (MidiInputDevice inputDevice : RWMidi.getInputDevices()) {
+            for (String substring : substrings) {
+                if (inputDevice.getName().contains(substring)) {
+                    return inputDevice;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static List<MidiInputDevice> getInputDevices(String substring) {
+        return getInputDevices(new String[] { substring });
+    }
+
+    public static List<MidiInputDevice> getInputDevices(String[] substrings) {
+        List<MidiInputDevice> devices = new ArrayList<MidiInputDevice>();
+        for (MidiInputDevice inputDevice : RWMidi.getInputDevices()) {
+            for (String substring : substrings) {
+                if (inputDevice.getName().contains(substring)) {
+                    devices.add(inputDevice);
+                }
+            }
+        }
+        return devices;
+    }
+
+    public static MidiOutputDevice getOutputDevice(String substring) {
+        return getOutputDevice(new String[] { substring });
+    }
+
+    public static MidiOutputDevice getOutputDevice(String[] substrings) {
+        for (MidiOutputDevice outputDevice : RWMidi.getOutputDevices()) {
+            for (String substring : substrings) {
+                if (outputDevice.getName().contains(substring)) {
+                    return outputDevice;
+                }
+            }
+        }
+        return null;
+    }
+
+    public static List<MidiOutputDevice> getOutputDevices(String substring) {
+        return getOutputDevices(new String[] { substring });
+    }
+
+    public static List<MidiOutputDevice> getOutputDevices(String[] substrings) {
+        List<MidiOutputDevice> devices = new ArrayList<MidiOutputDevice>();
+        for (MidiOutputDevice outputDevice : RWMidi.getOutputDevices()) {
+            for (String substring : substrings) {
+                if (outputDevice.getName().contains(substring)) {
+                    devices.add(outputDevice);
+                }
+            }
+        }
+        return devices;
+    }
+
+    private boolean logEvents = false;
+
     private final NoteBinding[] noteOnBindings;
     private final NoteBinding[] noteOffBindings;
     private final ControllerBinding[] controllerBindings;
@@ -581,7 +649,16 @@ public class LXMidiDevice {
         return this;
     }
 
+    public final LXMidiDevice logEvents(boolean logEvents) {
+        this.logEvents = logEvents;
+        return this;
+    }
+
     public final void noteOnReceived(Note note) {
+        if (this.logEvents) {
+            System.out.println(this.input.getName() + ":noteOn:" + note.getChannel()
+                    + ":" + note.getPitch() + ":" + note.getVelocity());
+        }
         int index = index(note.getChannel(), note.getPitch());
         if (this.noteOnBindings[index] != null) {
             this.noteOnBindings[index].noteOnReceived(note);
@@ -590,6 +667,10 @@ public class LXMidiDevice {
     }
 
     public final void noteOffReceived(Note note) {
+        if (this.logEvents) {
+            System.out.println(this.input.getName() + ":noteOff:" + note.getChannel()
+                    + ":" + note.getPitch() + ":" + note.getVelocity());
+        }
         int index = index(note.getChannel(), note.getPitch());
         if (this.noteOffBindings[index] != null) {
             this.noteOffBindings[index].noteOffReceived(note);
@@ -598,6 +679,11 @@ public class LXMidiDevice {
     }
 
     public final void controllerChangeReceived(Controller controller) {
+        if (this.logEvents) {
+            System.out.println(this.input.getName() + ":controllerChange:"
+                    + controller.getChannel() + ":" + controller.getCC() + ":"
+                    + controller.getValue());
+        }
         int index = index(controller.getChannel(), controller.getCC());
         if (this.controllerBindings[index] != null) {
             this.controllerBindings[index].controllerChangeReceived(controller);

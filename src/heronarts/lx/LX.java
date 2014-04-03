@@ -611,12 +611,16 @@ public class LX {
     }
 
     public final AudioInput audioInput() {
-        if (audioInput == null) {
+        return audioInput(44100);
+    }
+
+    public final AudioInput audioInput(int sampleRate) {
+        if (this.audioInput == null) {
             // Lazily instantiated on-demand
             this.minim = new Minim(this.applet);
-            this.audioInput = minim.getLineIn(Minim.STEREO, 1024);
+            this.audioInput = minim.getLineIn(Minim.STEREO, 1024, sampleRate);
         }
-        return audioInput;
+        return this.audioInput;
     }
 
     /**

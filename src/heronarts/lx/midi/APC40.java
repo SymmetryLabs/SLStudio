@@ -109,6 +109,25 @@ public class APC40 extends LXMidiDevice {
     private final static int NUM_TRACK_CONTROL_KNOBS = 8;
     private final static int NUM_DEVICE_CONTROL_KNOBS = 8;
 
+    public final static String DEVICE_NAME = "APC40";
+
+    public static MidiInputDevice getInputDevice() {
+        return LXMidiDevice.getInputDevice(DEVICE_NAME);
+    }
+
+    public static MidiOutputDevice getOutputDevice() {
+        return LXMidiDevice.getOutputDevice(DEVICE_NAME);
+    }
+
+    public static APC40 getAPC40() {
+        MidiInputDevice inputDevice = getInputDevice();
+        MidiOutputDevice outputDevice = getOutputDevice();
+        if (inputDevice != null) {
+            return new APC40(inputDevice, outputDevice);
+        }
+        return null;
+    }
+
     public APC40(MidiInputDevice input) {
         this(input, null);
     }

@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -118,6 +118,7 @@ public class UIItemList extends UIObject implements UIFocus {
         return this;
     }
 
+    @Override
     protected void onDraw(UI ui, PGraphics pg) {
         int yp = 0;
         boolean even = true;
@@ -173,6 +174,7 @@ public class UIItemList extends UIObject implements UIFocus {
     private Item pressedItem = null;
     private Item keyedItem = null;
 
+    @Override
     public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         int index = getFocusIndex();
         if (keyCode == java.awt.event.KeyEvent.VK_UP) {
@@ -186,6 +188,7 @@ public class UIItemList extends UIObject implements UIFocus {
         setFocusIndex(index);
     }
 
+    @Override
     public void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.keyedItem != null) {
@@ -195,6 +198,7 @@ public class UIItemList extends UIObject implements UIFocus {
         }
     }
 
+    @Override
     public void onMousePressed(float mx, float my) {
         this.pressedItem = null;
         if (this.hasScroll && mx >= this.width - 12) {
@@ -214,6 +218,7 @@ public class UIItemList extends UIObject implements UIFocus {
         }
     }
 
+    @Override
     public void onMouseReleased(float mx, float my) {
         this.scrolling = false;
         if (this.pressedItem != null) {
@@ -224,6 +229,7 @@ public class UIItemList extends UIObject implements UIFocus {
 
     private float dAccum = 0;
 
+    @Override
     public void onMouseDragged(float mx, float my, float dx, float dy) {
         if (this.scrolling) {
             this.dAccum += dy;
@@ -238,6 +244,7 @@ public class UIItemList extends UIObject implements UIFocus {
 
     private float wAccum = 0;
 
+    @Override
     public void onMouseWheel(float mx, float my, float delta) {
         this.wAccum += delta;
         int offset = (int) (this.wAccum / 5);
@@ -278,7 +285,8 @@ public class UIItemList extends UIObject implements UIFocus {
         this.numVisibleItems = (int) (this.height / this.itemHeight);
         this.hasScroll = this.items.size() > this.numVisibleItems;
         this.focusIndex.setRange(0, this.items.size());
-        this.scrollOffset.setRange(0, this.items.size() - this.numVisibleItems + 1);
+        this.scrollOffset.setRange(0,
+                Math.max(0, this.items.size() - this.numVisibleItems) + 1);
         redraw();
         return this;
     }
