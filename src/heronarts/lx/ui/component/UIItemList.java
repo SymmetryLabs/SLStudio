@@ -124,6 +124,7 @@ public class UIItemList extends UIObject implements UIFocus {
         boolean even = true;
         int so = getScrollOffset();
         int fi = getFocusIndex();
+        pg.strokeWeight(1);
         for (int i = 0; i < this.numVisibleItems; ++i) {
             if (i + so >= this.items.size()) {
                 break;
@@ -152,7 +153,7 @@ public class UIItemList extends UIObject implements UIFocus {
             pg.text(item.getLabel(), 6, yp + 4);
 
             if (itemIndex == fi) {
-                pg.stroke(ui.getFocusColor());
+                pg.stroke(item.isSelected() ? 0xff999999 : ui.getFocusColor());
                 pg.noFill();
                 pg.rect(0, yp, this.width - 1, this.itemHeight - 1);
             }
@@ -287,6 +288,7 @@ public class UIItemList extends UIObject implements UIFocus {
         this.focusIndex.setRange(0, this.items.size());
         this.scrollOffset.setRange(0,
                 Math.max(0, this.items.size() - this.numVisibleItems) + 1);
+        onScrollOffsetChanged();
         redraw();
         return this;
     }

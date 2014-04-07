@@ -22,6 +22,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.transition.LXTransition;
 import processing.core.PApplet;
+import processing.core.PImage;
 import processing.core.PConstants;
 
 /**
@@ -211,6 +212,27 @@ public abstract class LXPattern extends LXComponent {
     }
 
     /**
+     * Blend the color at index i with its existing value
+     *
+     * @param i Index
+     * @param c New color
+     * @param blendMode blending mode
+     *
+     * @return this
+     */
+    protected final LXPattern blendColor(int i, int c, int blendMode) {
+        this.colors[i] = PImage.blendColor(this.colors[i], c, blendMode);
+        return this;
+    }
+
+    protected final LXPattern blendColor(LXFixture f, int c, int blendMode) {
+        for (LXPoint p : f.getPoints()) {
+            this.colors[p.index] = PImage.blendColor(this.colors[p.index], c, blendMode);
+        }
+        return this;
+    }
+
+    /**
      * Adds to the color of point i, using blendColor with ADD
      *
      * @param i Point index
@@ -218,8 +240,7 @@ public abstract class LXPattern extends LXComponent {
      * @return this
      */
     protected final LXPattern addColor(int i, int c) {
-        this.colors[i] = PApplet.blendColor(this.colors[i], c, PConstants.ADD);
-        return this;
+        return blendColor(i, c, PConstants.ADD);
     }
 
     /**
@@ -231,8 +252,18 @@ public abstract class LXPattern extends LXComponent {
      * @return this
      */
     protected final LXPattern addColor(int x, int y, int c) {
-        this.addColor(x + y * this.lx.width, c);
-        return this;
+        return addColor(x + y * this.lx.width, c);
+    }
+
+    /**
+     * Adds the color to the fixture
+     *
+     * @param f Fixture
+     * @param c New color
+     * @return this
+     */
+    protected final LXPattern addColor(LXFixture f, int c) {
+        return blendColor(f, c, PConstants.ADD);
     }
 
     /**

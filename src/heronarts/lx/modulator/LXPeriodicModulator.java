@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -49,7 +49,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Utility constructor with period
-     * 
+     *
      * @param label Label
      * @param period Parameter for period
      */
@@ -62,18 +62,18 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * Sets whether the modulator should loop after it completes a cycle or halt
      * at the end position.
-     * 
+     *
      * @param looping Whether to loop
      * @return this, for method chaining
      */
-    protected LXPeriodicModulator setLooping(boolean looping) {
+    public LXPeriodicModulator setLooping(boolean looping) {
         this.looping.setValue(looping);
         return this;
     }
 
     /**
      * Accessor for the current basis
-     * 
+     *
      * @return The basis of the modulator
      */
     public final double getBasis() {
@@ -82,7 +82,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Accessor for basis as a float
-     * 
+     *
      * @return basis as float
      */
     public final float getBasisf() {
@@ -96,7 +96,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Sets the basis to a random position
-     * 
+     *
      * @return this
      */
     public final LXPeriodicModulator randomBasis() {
@@ -106,7 +106,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Set the modulator to a certain basis position in its cycle.
-     * 
+     *
      * @param basis
      * @return
      */
@@ -123,7 +123,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Set the modulator to a certain value in its cycle.
-     * 
+     *
      * @param value The value to apply
      * @return This modulator, for method chaining
      */
@@ -158,7 +158,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Modify the period of this modulator
-     * 
+     *
      * @param periodMs New period, in milliseconds
      * @return Modulator, for method chaining;
      */
@@ -191,7 +191,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Sets a parameter to the period of this modulator
-     * 
+     *
      * @param period Parameter for period value
      * @return This modulator, for method chaining
      */
@@ -200,6 +200,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
         return this;
     }
 
+    @Override
     protected final double computeValue(double deltaMs) {
         this.finished = false;
         double periodv = this.period.getValue();
@@ -225,7 +226,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * For envelope modulators, which are not looping, this returns true if they
      * finished on this frame.
-     * 
+     *
      * @return true if the modulator just finished its operation on this frame
      */
     public final boolean finished() {
@@ -234,7 +235,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Implementation method to compute the value of a modulator given its basis.
-     * 
+     *
      * @param basis
      * @return value
      */
@@ -243,7 +244,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * Implementation method to compute the appropriate basis for a modulator
      * given its current basis and value.
-     * 
+     *
      * @param value
      * @return basis
      */

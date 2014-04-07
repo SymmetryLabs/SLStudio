@@ -20,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PConstants;
+import processing.core.PVector;
 
 /**
  * This is a layer that contains a 3d scene with a camera. Mouse movements
@@ -32,6 +33,10 @@ public class UICameraLayer implements UILayer, UIFocus {
     private final List<UICameraComponent> components = new ArrayList<UICameraComponent>();
 
     private boolean visible = true;
+
+    private final PVector center = new PVector();
+
+    private final PVector eye = new PVector();
 
     // Center of the scene
     private float cx = 0, cy = 0, cz = 0;
@@ -159,6 +164,16 @@ public class UICameraLayer implements UILayer, UIFocus {
         this.cz = z;
         computeEye();
         return this;
+    }
+
+    public PVector getCenter() {
+        this.center.set(this.cx, this.cy, this.cz);
+        return this.center;
+    }
+
+    public PVector getEye() {
+        this.eye.set(this.ex, this.ey, this.ez);
+        return this.eye;
     }
 
     private void computeEye() {

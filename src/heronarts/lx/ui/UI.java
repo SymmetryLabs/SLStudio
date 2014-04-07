@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -25,6 +25,8 @@ import processing.core.PFont;
  * Top-level container for all overlay UI elements.
  */
 public class UI {
+
+    private static UI instance = null;
 
     /**
      * PApplet that this UI belongs to
@@ -97,18 +99,23 @@ public class UI {
 
     /**
      * Creates a new UI instance
-     * 
+     *
      * @param applet The PApplet
      */
     public UI(PApplet applet) {
         this.applet = applet;
         this.itemFont = applet.createFont("Lucida Grande", 11);
         this.titleFont = applet.createFont("Myriad Pro", 10);
+        UI.instance = this;
+    }
+
+    public static UI get() {
+        return UI.instance;
     }
 
     /**
      * Add a context to this UI
-     * 
+     *
      * @param layer UI layer
      * @return this UI
      */
@@ -181,7 +188,7 @@ public class UI {
 
     /**
      * Remove a context from thsi UI
-     * 
+     *
      * @param context UI context
      * @return this UI
      */
@@ -198,7 +205,7 @@ public class UI {
 
     /**
      * Brings a layer to the top of the UI stack
-     * 
+     *
      * @param layer UI layer
      * @return this UI
      */
@@ -210,7 +217,7 @@ public class UI {
 
     /**
      * Gets the default item font for this UI
-     * 
+     *
      * @return The default item font for this UI
      */
     public PFont getItemFont() {
@@ -219,7 +226,7 @@ public class UI {
 
     /**
      * Sets the default item font for this UI
-     * 
+     *
      * @param font Font to use
      * @return this UI
      */
@@ -230,7 +237,7 @@ public class UI {
 
     /**
      * Gets the default title font for this UI
-     * 
+     *
      * @return default title font for this UI
      */
     public PFont getTitleFont() {
@@ -239,7 +246,7 @@ public class UI {
 
     /**
      * Sets the default title font for this UI
-     * 
+     *
      * @param font Default title font
      * @return this UI
      */
@@ -250,7 +257,7 @@ public class UI {
 
     /**
      * Gets the default text color
-     * 
+     *
      * @return default text color
      */
     public int getTextColor() {
@@ -259,7 +266,7 @@ public class UI {
 
     /**
      * Sets the default text color for UI
-     * 
+     *
      * @param color Color
      * @return this UI
      */
@@ -270,7 +277,7 @@ public class UI {
 
     /**
      * Gets background color
-     * 
+     *
      * @return background color
      */
     public int getBackgroundColor() {
@@ -279,7 +286,7 @@ public class UI {
 
     /**
      * Sets default background color
-     * 
+     *
      * @param color color
      * @return this UI
      */
@@ -290,7 +297,7 @@ public class UI {
 
     /**
      * Gets highlight color
-     * 
+     *
      * @return Highlight color
      */
     public int getHighlightColor() {
@@ -299,7 +306,7 @@ public class UI {
 
     /**
      * Sets highlight color
-     * 
+     *
      * @param color
      * @return this UI
      */
@@ -310,7 +317,7 @@ public class UI {
 
     /**
      * Gets focus color
-     * 
+     *
      * @return focus color
      */
     public int getFocusColor() {
@@ -319,7 +326,7 @@ public class UI {
 
     /**
      * Sets highlight color
-     * 
+     *
      * @param color
      * @return this UI
      */
@@ -330,7 +337,7 @@ public class UI {
 
     /**
      * Get active color
-     * 
+     *
      * @return Selection color
      */
     public int getSelectionColor() {
@@ -339,7 +346,7 @@ public class UI {
 
     /**
      * Set active color
-     * 
+     *
      * @param color Color
      * @return this UI
      */

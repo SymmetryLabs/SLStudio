@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -43,6 +43,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
         setBorderColor(0xff666666);
     }
 
+    @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.noStroke();
         pg.fill(0xff222222);
@@ -69,15 +70,18 @@ public class UISlider extends UIParameterControl implements UIFocus {
     private float doubleClickMode = 0;
     private float doubleClickP = 0;
 
+    @Override
     protected void onMousePressed(float mx, float my) {
         long now = System.currentTimeMillis();
         float mp, dim;
         double handleEdge;
+        boolean isVertical = false;
         switch (this.direction) {
         case VERTICAL:
             handleEdge = 4 + (1 - getNormalized()) * (this.height - 8 - HANDLE_WIDTH);
             mp = my;
             dim = this.height;
+            isVertical = true;
             break;
         default:
         case HORIZONTAL:
@@ -95,9 +99,9 @@ public class UISlider extends UIParameterControl implements UIFocus {
             }
             this.doubleClickP = mp;
             if (mp < dim * .25) {
-                this.doubleClickMode = 0;
+                this.doubleClickMode = isVertical ? 1 : 0;
             } else if (mp > dim * .75) {
-                this.doubleClickMode = 1;
+                this.doubleClickMode = isVertical ? 0 : 1;
             } else {
                 this.doubleClickMode = 0.5f;
             }
@@ -105,10 +109,12 @@ public class UISlider extends UIParameterControl implements UIFocus {
         this.lastClick = now;
     }
 
+    @Override
     protected void onMouseReleased(float mx, float my) {
         this.editing = false;
     }
 
+    @Override
     protected void onMouseDragged(float mx, float my, float dx, float dy) {
         if (this.editing) {
             float mp, dim;

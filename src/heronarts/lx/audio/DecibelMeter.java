@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -17,6 +17,7 @@ import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BasicParameter;
 import ddf.minim.AudioBuffer;
+import ddf.minim.AudioSource;
 
 /**
  * A DecibelMeter is a modulator that returns the level of an audio signal. Gain
@@ -53,7 +54,16 @@ public class DecibelMeter extends LXModulator {
 
     /**
      * Default constructor, creates a meter with unity gain and 72dB dynamic range
-     * 
+     *
+     * @param source Audio source to meter
+     */
+    public DecibelMeter(AudioSource source) {
+        this(source.mix);
+    }
+
+    /**
+     * Default constructor, creates a meter with unity gain and 72dB dynamic range
+     *
      * @param buffer Audio buffer to meter
      */
     public DecibelMeter(AudioBuffer buffer) {
@@ -62,7 +72,7 @@ public class DecibelMeter extends LXModulator {
 
     /**
      * Default constructor, creates a meter with unity gain and 72dB dynamic range
-     * 
+     *
      * @param label Label
      * @param buffer Audio buffer to meter
      */

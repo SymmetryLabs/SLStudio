@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -29,7 +29,7 @@ public class UIButton extends UIObject implements UIFocus {
     protected boolean isMomentary = false;
 
     protected int inactiveColor = 0xff222222;
-    protected int activeColor = 0xff669966;
+    protected int activeColor = UI.get().getHighlightColor();
     protected int labelColor = 0xff999999;
 
     protected String label = "";
@@ -52,6 +52,10 @@ public class UIButton extends UIObject implements UIFocus {
         setBackgroundColor(this.inactiveColor);
     }
 
+    public BooleanParameter getParameter() {
+        return this.parameter;
+    }
+
     public UIButton setParameter(BooleanParameter parameter) {
         if (this.parameter != null) {
             this.parameter.removeListener(this.parameterListener);
@@ -69,6 +73,7 @@ public class UIButton extends UIObject implements UIFocus {
         return this;
     }
 
+    @Override
     protected void onDraw(UI ui, PGraphics pg) {
         if ((this.label != null) && (this.label.length() > 0)) {
             pg.fill(this.active ? 0xffffffff : this.labelColor);
@@ -78,22 +83,26 @@ public class UIButton extends UIObject implements UIFocus {
         }
     }
 
+    @Override
     protected void onMousePressed(float mx, float my) {
         setActive(this.isMomentary ? true : !this.active);
     }
 
+    @Override
     protected void onMouseReleased(float mx, float my) {
         if (this.isMomentary) {
             setActive(false);
         }
     }
 
+    @Override
     public void onKeyPressed(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             setActive(this.isMomentary ? true : !this.active);
         }
     }
 
+    @Override
     public void onKeyReleased(LXKeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.isMomentary) {

@@ -26,6 +26,7 @@ import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.output.Kinet;
 import heronarts.lx.output.KinetNode;
 import heronarts.lx.output.LXOutput;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 import heronarts.lx.ui.UI;
@@ -180,7 +181,9 @@ public class LX {
     /**
      * Global modulator for shared base hue.
      */
-    private LXModulator baseHue;
+    private LXParameter baseHue;
+
+    private boolean baseHueIsInternalModulator = false;
 
     /**
      * Global flash effect.
@@ -872,15 +875,33 @@ public class LX {
         return (float) this.getBaseHue();
     }
 
+    private void clearBaseHue() {
+        if (this.baseHueIsInternalModulator) {
+            this.engine.removeModulator((LXModulator) this.baseHue);
+            this.baseHueIsInternalModulator = false;
+        }
+    }
+
+    private void internalBaseHue(LXModulator modulator) {
+        clearBaseHue();
+        this.engine.addModulator(modulator);
+        this.baseHue = modulator;
+        this.baseHueIsInternalModulator = true;
+    }
+
+    public LX setBaseHue(LXParameter parameter) {
+        clearBaseHue();
+        this.baseHue = parameter;
+        return this;
+    }
+
     /**
      * Sets the base hue to a fixed value
      *
      * @param hue Fixed value to set hue to, 0-360
      */
     public LX setBaseHue(double hue) {
-        this.engine.removeModulator(this.baseHue);
-        this.engine.addModulator(this.baseHue = new LinearEnvelope(this
-                .getBaseHue(), hue, 50).trigger());
+        internalBaseHue(new LinearEnvelope(this.getBaseHue(), hue, 50).start());
         return this;
     }
 
@@ -890,10 +911,7 @@ public class LX {
      * @param duration Number of milliseconds for hue cycle
      */
     public LX cycleBaseHue(double duration) {
-        double currentHue = this.getBaseHue();
-        this.engine.removeModulator(this.baseHue);
-        this.engine.addModulator(this.baseHue = new SawLFO(0, 360, duration)
-                .setValue(currentHue).start());
+        internalBaseHue(new SawLFO(0, 360, duration).setValue(getBaseHue()).start());
         return this;
     }
 
@@ -905,10 +923,8 @@ public class LX {
      * @param duration Milliseconds for hue oscillation
      */
     public LX oscillateBaseHue(double lowHue, double highHue, double duration) {
-        double value = this.getBaseHue();
-        this.engine.removeModulator(this.baseHue);
-        this.engine.addModulator(this.baseHue = new TriangleLFO(lowHue, highHue,
-                duration).setValue(value).trigger());
+        internalBaseHue(new TriangleLFO(lowHue, highHue, duration).setValue(
+                getBaseHue()).trigger());
         return this;
     }
 

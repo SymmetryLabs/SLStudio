@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -46,13 +46,18 @@ public class LXPoint {
     public final float theta;
 
     /**
+     * angle of this point about the origin in the x-z plane
+     */
+    public final float ztheta;
+
+    /**
      * Index of this point in the colors array
      */
     public final int index;
 
     /**
      * Construct a point in 2-d space, z-val is 0
-     * 
+     *
      * @param x
      * @param y
      */
@@ -62,7 +67,7 @@ public class LXPoint {
 
     /**
      * Construct a point in 3-d space
-     * 
+     *
      * @param x
      * @param y
      * @param z
@@ -73,12 +78,13 @@ public class LXPoint {
         this.z = z;
         this.r = (float) Math.sqrt(x * x + y * y);
         this.theta = (float) ((Math.PI * 2 + Math.atan2(y, x)) % (Math.PI * 2));
+        this.ztheta = (float) ((Math.PI * 2 + Math.atan2(z, x)) % (Math.PI * 2));
         this.index = counter++;
     }
 
     /**
      * Construct a point in 3-d space
-     * 
+     *
      * @param x
      * @param y
      * @param z

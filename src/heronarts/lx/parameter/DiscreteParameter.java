@@ -42,7 +42,11 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
      * @param value
      */
     public DiscreteParameter(String label, int min, int max) {
-        super(label, min);
+        this(label, min, min, max);
+    }
+
+    public DiscreteParameter(String label, int value, int min, int max) {
+        super(label, value);
         setRange(min, max);
     }
 
