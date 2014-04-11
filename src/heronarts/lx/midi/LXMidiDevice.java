@@ -21,18 +21,7 @@ import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import rwmidi.Controller;
-import rwmidi.MidiInput;
-import rwmidi.MidiInputDevice;
-import rwmidi.MidiOutput;
-import rwmidi.MidiOutputDevice;
-import rwmidi.Note;
-import rwmidi.RWMidi;
-
-import java.util.ArrayList;
-import java.util.List;
-
-public class LXMidiDevice {
+public class LXMidiDevice implements LXMidiListener {
 
     private final static int MIDI_RANGE = 128;
     private final static int MIDI_CHANNELS = 16;
@@ -144,7 +133,7 @@ public class LXMidiDevice {
             }
         }
 
-        private void noteOnReceived(Note note) {
+        private void noteOnReceived(LXMidiNote note) {
             switch (this.mode) {
             case DIRECT:
                 switch (this.value) {
@@ -187,7 +176,7 @@ public class LXMidiDevice {
             }
         }
 
-        private void noteOffReceived(Note note) {
+        private void noteOffReceived(LXMidiNote note) {
             switch (this.mode) {
             case OFF:
                 if (this.parameter instanceof BooleanParameter) {
@@ -264,7 +253,7 @@ public class LXMidiDevice {
             }
         }
 
-        private void controllerChangeReceived(Controller controller) {
+        private void controlChangeReceived(LXMidiControlChange controller) {
             int controllerValue = controller.getValue();
             if (controllerValue == 0) {
                 if (this.parameter instanceof LXNormalizedParameter) {
@@ -297,7 +286,7 @@ public class LXMidiDevice {
                     parameterValue = MIDI_MAX * normalized;
                 }
                 if (parameterValue == 0) {
-                    output.sendController(this.channel, this.cc, 0);
+                    output.sendControlChange(this.channel, this.cc, 0);
                 } else {
                     int sendValue;
                     switch (this.value) {
@@ -308,72 +297,10 @@ public class LXMidiDevice {
                         sendValue = LXUtils.constrain(this.value, 0, MIDI_MAX);
                         break;
                     }
-                    output.sendController(this.channel, this.cc, sendValue);
+                    output.sendControlChange(this.channel, this.cc, sendValue);
                 }
             }
         }
-    }
-
-    public static MidiInputDevice getInputDevice(String substring) {
-        return getInputDevice(new String[] { substring });
-    }
-
-    public static MidiInputDevice getInputDevice(String[] substrings) {
-        for (MidiInputDevice inputDevice : RWMidi.getInputDevices()) {
-            for (String substring : substrings) {
-                if (inputDevice.getName().contains(substring)) {
-                    return inputDevice;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static List<MidiInputDevice> getInputDevices(String substring) {
-        return getInputDevices(new String[] { substring });
-    }
-
-    public static List<MidiInputDevice> getInputDevices(String[] substrings) {
-        List<MidiInputDevice> devices = new ArrayList<MidiInputDevice>();
-        for (MidiInputDevice inputDevice : RWMidi.getInputDevices()) {
-            for (String substring : substrings) {
-                if (inputDevice.getName().contains(substring)) {
-                    devices.add(inputDevice);
-                }
-            }
-        }
-        return devices;
-    }
-
-    public static MidiOutputDevice getOutputDevice(String substring) {
-        return getOutputDevice(new String[] { substring });
-    }
-
-    public static MidiOutputDevice getOutputDevice(String[] substrings) {
-        for (MidiOutputDevice outputDevice : RWMidi.getOutputDevices()) {
-            for (String substring : substrings) {
-                if (outputDevice.getName().contains(substring)) {
-                    return outputDevice;
-                }
-            }
-        }
-        return null;
-    }
-
-    public static List<MidiOutputDevice> getOutputDevices(String substring) {
-        return getOutputDevices(new String[] { substring });
-    }
-
-    public static List<MidiOutputDevice> getOutputDevices(String[] substrings) {
-        List<MidiOutputDevice> devices = new ArrayList<MidiOutputDevice>();
-        for (MidiOutputDevice outputDevice : RWMidi.getOutputDevices()) {
-            for (String substring : substrings) {
-                if (outputDevice.getName().contains(substring)) {
-                    devices.add(outputDevice);
-                }
-            }
-        }
-        return devices;
     }
 
     private boolean logEvents = false;
@@ -382,20 +309,23 @@ public class LXMidiDevice {
     private final NoteBinding[] noteOffBindings;
     private final ControllerBinding[] controllerBindings;
 
-    private final MidiInput input;
-    private final MidiOutput output;
+    private final LXMidiInput input;
+    private final LXMidiOutput output;
 
-    public LXMidiDevice(MidiInputDevice input) {
+    public LXMidiDevice(LXMidiInput input) {
         this(input, null);
     }
 
-    public LXMidiDevice(MidiOutputDevice output) {
+    public LXMidiDevice(LXMidiOutput output) {
         this(null, output);
     }
 
-    public LXMidiDevice(MidiInputDevice input, MidiOutputDevice output) {
-        this.input = (input != null) ? input.createInput(this) : null;
-        this.output = (output != null) ? output.createOutput() : null;
+    public LXMidiDevice(LXMidiInput input, LXMidiOutput output) {
+        this.input = input;
+        this.output = output;
+        if (this.input != null) {
+            this.input.addListener(this);
+        }
         this.noteOnBindings = new NoteBinding[NUM_BINDINGS];
         this.noteOffBindings = new NoteBinding[NUM_BINDINGS];
         this.controllerBindings = new ControllerBinding[NUM_BINDINGS];
@@ -406,11 +336,11 @@ public class LXMidiDevice {
         }
     }
 
-    public MidiInput getInput() {
+    public LXMidiInput getInput() {
         return this.input;
     }
 
-    public MidiOutput getOutput() {
+    public LXMidiOutput getOutput() {
         return this.output;
     }
 
@@ -637,7 +567,7 @@ public class LXMidiDevice {
 
     public LXMidiDevice sendController(int channel, int cc, int value) {
         if (this.output != null) {
-            this.output.sendController(channel, cc, value);
+            this.output.sendControlChange(channel, cc, value);
         }
         return this;
     }
@@ -654,7 +584,7 @@ public class LXMidiDevice {
         return this;
     }
 
-    public final void noteOnReceived(Note note) {
+    public final void noteOnReceived(LXMidiNote note) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":noteOn:" + note.getChannel()
                     + ":" + note.getPitch() + ":" + note.getVelocity());
@@ -666,7 +596,7 @@ public class LXMidiDevice {
         noteOn(note);
     }
 
-    public final void noteOffReceived(Note note) {
+    public final void noteOffReceived(LXMidiNote note) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":noteOff:" + note.getChannel()
                     + ":" + note.getPitch() + ":" + note.getVelocity());
@@ -678,7 +608,7 @@ public class LXMidiDevice {
         noteOff(note);
     }
 
-    public final void controllerChangeReceived(Controller controller) {
+    public final void controlChangeReceived(LXMidiControlChange controller) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":controllerChange:"
                     + controller.getChannel() + ":" + controller.getCC() + ":"
@@ -686,18 +616,18 @@ public class LXMidiDevice {
         }
         int index = index(controller.getChannel(), controller.getCC());
         if (this.controllerBindings[index] != null) {
-            this.controllerBindings[index].controllerChangeReceived(controller);
+            this.controllerBindings[index].controlChangeReceived(controller);
         }
-        controllerChange(controller);
+        controlChange(controller);
     }
 
-    protected void noteOn(Note note) {
+    protected void noteOn(LXMidiNote note) {
     }
 
-    protected void noteOff(Note note) {
+    protected void noteOff(LXMidiNote note) {
     }
 
-    protected void controllerChange(Controller controller) {
+    protected void controlChange(LXMidiControlChange controlChange) {
     }
 
 }

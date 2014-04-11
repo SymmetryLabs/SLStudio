@@ -14,6 +14,7 @@
 package heronarts.lx;
 
 import heronarts.lx.effect.LXEffect;
+import heronarts.lx.midi.LXMidiSystem;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BasicParameter;
@@ -52,6 +53,8 @@ public class LXEngine {
 
     private final LX lx;
 
+    public final LXMidiSystem midiSystem = new LXMidiSystem();
+
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
     private final List<LXDeck> decks = new ArrayList<LXDeck>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
@@ -69,6 +72,7 @@ public class LXEngine {
         public long deckNanos = 0;
         public long copyNanos = 0;
         public long fxNanos = 0;
+        public long midiNanos = 0;
         public long outputNanos = 0;
     }
 
@@ -144,6 +148,20 @@ public class LXEngine {
      */
     public synchronized boolean isThreaded() {
         return this.isThreaded;
+    }
+
+    /**
+     * Starts the engine thread.
+     */
+    public void start() {
+        setThreaded(true);
+    }
+
+    /**
+     * Stops the engine thread.
+     */
+    public void stop() {
+        setThreaded(false);
     }
 
     /**
@@ -283,9 +301,11 @@ public class LXEngine {
         return getDeck(focusedDeck.getValuei());
     }
 
-    public synchronized void addDeck(LXPattern[] patterns) {
-        this.decks.add(new LXDeck(lx, this.decks.size(), patterns));
+    public synchronized LXDeck addDeck(LXPattern[] patterns) {
+        LXDeck deck = new LXDeck(lx, this.decks.size(), patterns);
+        this.decks.add(deck);
         this.focusedDeck.setRange(this.decks.size());
+        return deck;
     }
 
     public void setPatterns(LXPattern[] patterns) {
@@ -382,9 +402,9 @@ public class LXEngine {
             // } else {
 
             // Apply the fader to this deck
-            deck.faderTransition.blend(bufferColors, deck.getColors(),
-                    deck.fader.getValue(), deltaMs);
-            bufferColors = deck.faderTransition.getColors();
+            deck.getFaderTransition().blend(bufferColors, deck.getColors(),
+                    deck.getFader().getValue(), deltaMs);
+            bufferColors = deck.getFaderTransition().getColors();
 
         }
         this.timer.deckNanos = System.nanoTime() - deckStart;
@@ -403,6 +423,11 @@ public class LXEngine {
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
 
+        // Process MIDI events
+        long midiStart = System.nanoTime();
+        this.midiSystem.dispatch();
+        this.timer.midiNanos = System.nanoTime() - midiStart;
+
         // Send to outputs
         long outputStart = System.nanoTime();
         for (LXOutput output : this.outputs) {
@@ -420,7 +445,7 @@ public class LXEngine {
      *
      * @param copy Buffer to copy into
      */
-    void copyBuffer(int[] copy) {
+    public void copyBuffer(int[] copy) {
         synchronized (this.buffer) {
             for (int i = 0; i < this.buffer.copy.length; ++i) {
                 copy[i] = this.buffer.copy[i];

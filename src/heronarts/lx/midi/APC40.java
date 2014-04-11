@@ -13,14 +13,13 @@
 
 package heronarts.lx.midi;
 
+import heronarts.lx.LX;
 import heronarts.lx.LXDeck;
 import heronarts.lx.LXEngine;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import rwmidi.MidiInputDevice;
-import rwmidi.MidiOutputDevice;
 
 /**
  * Note and CC constants for all the APC40 controls
@@ -106,33 +105,33 @@ public class APC40 extends LXMidiDevice {
     public final static byte MODE_ABLETON = 0x41;
     public final static byte MODE_ALTERNATE_ABLETON = 0x42;
 
-    private final static int NUM_TRACK_CONTROL_KNOBS = 8;
-    private final static int NUM_DEVICE_CONTROL_KNOBS = 8;
+    public final static int NUM_TRACK_CONTROL_KNOBS = 8;
+    public final static int NUM_DEVICE_CONTROL_KNOBS = 8;
 
     public final static String DEVICE_NAME = "APC40";
 
-    public static MidiInputDevice getInputDevice() {
-        return LXMidiDevice.getInputDevice(DEVICE_NAME);
+    public static LXMidiInput matchInput(LX lx) {
+        return LXMidiSystem.matchInput(lx, DEVICE_NAME);
     }
 
-    public static MidiOutputDevice getOutputDevice() {
-        return LXMidiDevice.getOutputDevice(DEVICE_NAME);
+    public static LXMidiOutput matchOutput(LX lx) {
+        return LXMidiSystem.matchOutput(lx, DEVICE_NAME);
     }
 
-    public static APC40 getAPC40() {
-        MidiInputDevice inputDevice = getInputDevice();
-        MidiOutputDevice outputDevice = getOutputDevice();
-        if (inputDevice != null) {
-            return new APC40(inputDevice, outputDevice);
+    public static APC40 getAPC40(LX lx) {
+        LXMidiInput input = LXMidiSystem.matchInput(lx, DEVICE_NAME);
+        LXMidiOutput output = LXMidiSystem.matchOutput(lx, DEVICE_NAME);
+        if (input != null) {
+            return new APC40(input, output);
         }
         return null;
     }
 
-    public APC40(MidiInputDevice input) {
+    public APC40(LXMidiInput input) {
         this(input, null);
     }
 
-    public APC40(MidiInputDevice input, MidiOutputDevice output) {
+    public APC40(LXMidiInput input, LXMidiOutput output) {
         super(input, output);
     }
 

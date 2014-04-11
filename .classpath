@@ -5,6 +5,5 @@
 	<classpathentry kind="lib" path="classpath/core.jar"/>
 	<classpathentry kind="lib" path="classpath/video.jar"/>
 	<classpathentry kind="lib" path="classpath/minim.jar"/>
-	<classpathentry kind="lib" path="lib/rwmidi.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

@@ -210,7 +210,7 @@ ${line}
 	<target name="generate.javadoc" if="is.normal">
 	  	<!-- create the java reference of the library -->
 		<javadoc bottom="Processing library ${project.name} by ${author.name}. ${library.copyright}" 
-				classpath="{project.lib}/rwmidi.jar;${classpath.local.location}/minim.jar;${classpath.local.location}/video.jar;${classpath.local.location}/core.jar;{project.bin}" 
+				classpath="${classpath.local.location}/minim.jar;${classpath.local.location}/video.jar;${classpath.local.location}/core.jar;{project.bin}" 
 				destdir="${project.tmp}/${project.name}/reference" 
 				verbose="false" 
 				stylesheetfile="resources/stylesheet.css" 
