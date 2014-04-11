@@ -345,7 +345,7 @@ public class LXMidiDevice implements LXMidiListener {
     }
 
     public LXMidiDevice bindNote(LXParameter parameter, int number) {
-        return bindNote(parameter, number, NOTE_VELOCITY);
+        return bindNote(parameter, ANY_CHANNEL, number);
     }
 
     public LXMidiDevice bindNote(LXParameter parameter, int channel, int number) {
@@ -367,7 +367,7 @@ public class LXMidiDevice implements LXMidiListener {
     }
 
     public LXMidiDevice bindNoteOn(LXParameter parameter, int number) {
-        return bindNoteOn(parameter, number, NOTE_VELOCITY);
+        return bindNoteOn(parameter, ANY_CHANNEL, number);
     }
 
     public LXMidiDevice bindNoteOn(LXParameter parameter, int channel, int number) {
