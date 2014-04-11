@@ -139,11 +139,6 @@ public class LX {
     private int[] colors;
 
     /**
-     * The simulation UI renderer.
-     */
-    private final Simulation simulation;
-
-    /**
      * KiNET output driver.
      */
     private Kinet kinet;
@@ -152,11 +147,6 @@ public class LX {
      * Client listener.
      */
     private UDPClient client;
-
-    /**
-     * Whether drawing is enabled
-     */
-    private boolean simulationEnabled;
 
     /**
      * The global tempo object.
@@ -204,7 +194,6 @@ public class LX {
         public long drawNanos = 0;
         public long clientNanos = 0;
         public long engineNanos = 0;
-        public long simulationNanos = 0;
         public long uiNanos = 0;
         public long kinetNanos = 0;
     }
@@ -278,9 +267,6 @@ public class LX {
         this.buffer = new int[this.total];
         this.colors = this.engine.renderBuffer();
 
-        this.simulationEnabled = false;
-        this.simulation = new Simulation(this);
-
         this.baseHue = null;
         this.cycleBaseHue(30000);
 
@@ -290,9 +276,16 @@ public class LX {
         this.desaturation = new DesaturationEffect(this);
         this.flash = new FlashEffect(this);
 
-        applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
+        if (applet != null) {
+            this.ui = new UI(applet);
+            initProcessing(applet);
+        } else {
+            this.ui = null;
+        }
+    }
 
-        this.ui = new UI(applet);
+    private void initProcessing(PApplet applet) {
+        applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
 
         try {
             // Processing 2.x
@@ -957,29 +950,6 @@ public class LX {
     }
 
     /**
-     * Enable the simulation renderer
-     *
-     * @param s Whether to automatically draw a simulation
-     */
-    public LX setSimulationEnabled(boolean s) {
-        this.simulationEnabled = s;
-        return this;
-    }
-
-    /**
-     * Sets the size of the drawn simulation in the Processing window
-     *
-     * @param x Top left x coordinate
-     * @param y Top left y coordinate
-     * @param w Width of simulation in pixels
-     * @param h Height of simulation in pixels
-     */
-    public LX setSimulationBounds(int x, int y, int w, int h) {
-        this.simulation.setBounds(x, y, w, h);
-        return this;
-    }
-
-    /**
      * Listens for UDP packets from LX clients.
      */
     public LX enableUDPClient() {
@@ -1102,14 +1072,6 @@ public class LX {
             long kinetStart = System.nanoTime();
             this.kinet.sendThrottledColors(this.colors);
             this.timer.kinetNanos = System.nanoTime() - kinetStart;
-        }
-
-        // TODO(mcslee): remove this and convert simulation into a UIObject
-        this.timer.simulationNanos = 0;
-        if (this.simulationEnabled) {
-            long simulationStart = System.nanoTime();
-            this.simulation.draw(this.colors);
-            this.timer.simulationNanos = System.nanoTime() - simulationStart;
         }
 
         long uiStart = System.nanoTime();
