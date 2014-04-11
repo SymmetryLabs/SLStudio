@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -13,8 +13,11 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterized;
+import heronarts.lx.parameter.LXParameterListener;
+
 
 /**
  * A Modulator is an abstraction for a variable with a value that varies over
@@ -27,7 +30,7 @@ public abstract class LXModulator extends LXParameterized implements
     /**
      * Whether this modulator is currently running.
      */
-    private boolean isRunning = false;
+    public final BooleanParameter isRunning = new BooleanParameter("RUN", false);
 
     /**
      * The current computed value of this modulator.
@@ -48,11 +51,20 @@ public abstract class LXModulator extends LXParameterized implements
 
     /**
      * Utility default constructor
-     * 
+     *
      * @param label Label
      */
     protected LXModulator(String label) {
         this.label = label;
+        this.isRunning.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) {
+                if (isRunning.isOn()) {
+                    onStart();
+                } else {
+                    onStop();
+                }
+            }
+        });
     }
 
     public final String getLabel() {
@@ -63,7 +75,7 @@ public abstract class LXModulator extends LXParameterized implements
      * Sets the Modulator in motion
      */
     public final LXModulator start() {
-        this.isRunning = true;
+        this.isRunning.setValue(true);
         return this;
     }
 
@@ -73,7 +85,7 @@ public abstract class LXModulator extends LXParameterized implements
      * was running before.
      */
     public final LXModulator stop() {
-        this.isRunning = false;
+        this.isRunning.setValue(false);
         return this;
     }
 
@@ -81,7 +93,7 @@ public abstract class LXModulator extends LXParameterized implements
      * Indicates whether this modulator is running.
      */
     public final boolean isRunning() {
-        return this.isRunning;
+        return this.isRunning.isOn();
     }
 
     /**
@@ -94,13 +106,27 @@ public abstract class LXModulator extends LXParameterized implements
 
     /**
      * Resets the modulator to its default condition and stops it.
-     * 
+     *
      * @return this, for method chaining
      */
     public final LXModulator reset() {
         this.stop();
         this.onReset();
         return this;
+    }
+
+    /**
+     * Optional subclass method when start happens.
+     */
+    protected/* abstract */void onStart() {
+
+    }
+
+    /**
+     * Optional subclass method when stop happens.
+     */
+    protected/* abstract */void onStop() {
+
     }
 
     /**
@@ -111,7 +137,7 @@ public abstract class LXModulator extends LXParameterized implements
 
     /**
      * Retrieves the current value of the modulator in full precision
-     * 
+     *
      * @return Current value of the modulator
      */
     public final double getValue() {
@@ -121,7 +147,7 @@ public abstract class LXModulator extends LXParameterized implements
     /**
      * Retrieves the current value of the modulator in floating point precision,
      * useful when working directly with processing graphics libraries
-     * 
+     *
      * @return Current value of the modulator, cast to float
      */
     public final float getValuef() {
@@ -130,7 +156,7 @@ public abstract class LXModulator extends LXParameterized implements
 
     /**
      * Set the modulator to a certain value in its cycle.
-     * 
+     *
      * @param value The value to apply
      * @return This modulator, for method chaining
      */
@@ -142,7 +168,7 @@ public abstract class LXModulator extends LXParameterized implements
 
     /**
      * Subclasses may override when actions are necessary on value change.
-     * 
+     *
      * @param value New value
      */
     protected/* abstract */void onSetValue(double value) {
@@ -153,7 +179,7 @@ public abstract class LXModulator extends LXParameterized implements
      * recomputed. This cannot be overriden, and subclasses may assume that it
      * ONLY updates the internal value without triggering any other
      * recomputations.
-     * 
+     *
      * @param value
      * @return this, for method chaining
      */
@@ -165,20 +191,19 @@ public abstract class LXModulator extends LXParameterized implements
     /**
      * Applies updates to the modulator for the specified number of milliseconds.
      * This method is invoked by the core engine.
-     * 
+     *
      * @param deltaMs Milliseconds to advance by
      */
     public final void run(double deltaMs) {
-        if (!this.isRunning) {
-            return;
+        if (this.isRunning.isOn()) {
+            this.value = this.computeValue(deltaMs);
         }
-        this.value = this.computeValue(deltaMs);
     }
 
     /**
      * Implementation method to advance the modulator's internal state. Subclasses
      * must provide and update value appropriately.
-     * 
+     *
      * @param deltaMs Number of milliseconds to advance by
      */
     protected abstract double computeValue(double deltaMs);

@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -43,6 +43,11 @@ public abstract class LXComponent extends LXParameterized {
 
     protected final LXLayer addLayer(LXLayer layer) {
         this.layers.add(layer);
+        return layer;
+    }
+
+    protected final LXLayer removeLayer(LXLayer layer) {
+        this.layers.remove(layer);
         return layer;
     }
 

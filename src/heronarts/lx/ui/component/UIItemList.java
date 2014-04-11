@@ -247,6 +247,9 @@ public class UIItemList extends UIObject implements UIFocus {
 
     @Override
     public void onMouseWheel(float mx, float my, float delta) {
+        if (!hasFocus()) {
+            focus();
+        }
         this.wAccum += delta;
         int offset = (int) (this.wAccum / 5);
         if (offset != 0) {

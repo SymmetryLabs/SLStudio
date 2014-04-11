@@ -29,8 +29,6 @@ import java.util.List;
  */
 public abstract class LXOutput {
 
-    private final LX lx;
-
     private final List<LXOutput> children = new ArrayList<LXOutput>();
 
     /**
@@ -95,7 +93,6 @@ public abstract class LXOutput {
     private final int[] allOff;
 
     protected LXOutput(LX lx) {
-        this.lx = lx;
         this.outputColors = new int[lx.total];
         this.allWhite = new int[lx.total];
         this.allOff = new int[lx.total];

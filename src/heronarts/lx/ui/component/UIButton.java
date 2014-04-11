@@ -32,7 +32,8 @@ public class UIButton extends UIObject implements UIFocus {
     protected int activeColor = UI.get().getHighlightColor();
     protected int labelColor = 0xff999999;
 
-    protected String label = "";
+    private String activeLabel = "";
+    private String inactiveLabel = "";
 
     private BooleanParameter parameter = null;
 
@@ -75,7 +76,8 @@ public class UIButton extends UIObject implements UIFocus {
 
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
-        if ((this.label != null) && (this.label.length() > 0)) {
+        String label = this.active ? this.activeLabel : this.inactiveLabel;
+        if ((label != null) && (label.length() > 0)) {
             pg.fill(this.active ? 0xffffffff : this.labelColor);
             pg.textFont(ui.getItemFont());
             pg.textAlign(PConstants.CENTER);
@@ -163,9 +165,27 @@ public class UIButton extends UIObject implements UIFocus {
     }
 
     public UIButton setLabel(String label) {
-        if (!this.label.equals(label)) {
-            this.label = label;
-            redraw();
+        setActiveLabel(label);
+        setInactiveLabel(label);
+        return this;
+    }
+
+    public UIButton setActiveLabel(String activeLabel) {
+        if (!this.activeLabel.equals(activeLabel)) {
+            this.activeLabel = activeLabel;
+            if (this.active) {
+                redraw();
+            }
+        }
+        return this;
+    }
+
+    public UIButton setInactiveLabel(String inactiveLabel) {
+        if (!this.inactiveLabel.equals(inactiveLabel)) {
+            this.inactiveLabel = inactiveLabel;
+            if (!this.active) {
+                redraw();
+            }
         }
         return this;
     }

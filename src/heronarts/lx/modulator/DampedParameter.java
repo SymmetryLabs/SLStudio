@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -13,6 +13,7 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -21,6 +22,11 @@ public class DampedParameter extends LXModulator {
     private final LXParameter parameter;
 
     private LXParameter velocity;
+
+    public DampedParameter(String label, double velocity) {
+        this(new BasicParameter(label, 0, Double.MIN_VALUE, Double.MAX_VALUE),
+                velocity);
+    }
 
     public DampedParameter(LXParameter parameter, double velocity) {
         this(parameter, new FixedParameter(velocity));
@@ -38,6 +44,7 @@ public class DampedParameter extends LXModulator {
         updateValue(parameter.getValue());
     }
 
+    @Override
     protected double computeValue(double deltaMs) {
         double value = getValue();
         double target = this.parameter.getValue();
@@ -52,6 +59,10 @@ public class DampedParameter extends LXModulator {
             after = Math.max(value - range, target);
         }
         return after;
+    }
+
+    public LXParameter getParameter() {
+        return this.parameter;
     }
 
 }

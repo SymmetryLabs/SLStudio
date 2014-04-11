@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -64,8 +64,6 @@ public class LXDeck {
 
     public final Timer timer = new Timer();
 
-    private final LX lx;
-
     /**
      * The index of this deck in the engine.
      */
@@ -78,8 +76,8 @@ public class LXDeck {
     private boolean autoTransitionEnabled = false;
     private int autoTransitionThreshold = 0;
 
-    LXTransition faderTransition = null;
-    final BasicParameter fader = new BasicParameter("FADER", 0);
+    private LXTransition faderTransition = null;
+    private final BasicParameter fader = new BasicParameter("FADER", 0);
 
     private LXTransition transition = null;
     private long transitionMillis = 0;
@@ -87,7 +85,6 @@ public class LXDeck {
     private final List<Listener> listeners = new ArrayList<Listener>();
 
     LXDeck(LX lx, int index, LXPattern[] patterns) {
-        this.lx = lx;
         this.index = index;
         this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();
@@ -299,7 +296,7 @@ public class LXDeck {
                 getNextPattern().go(deltaMs);
                 this.transition.blend(getActivePattern().getColors(), getNextPattern()
                         .getColors(),
-                        (double) transitionMs / this.transition.getDuration(), deltaMs);
+                        transitionMs / this.transition.getDuration(), deltaMs);
             }
         } else {
             if (this.autoTransitionEnabled
