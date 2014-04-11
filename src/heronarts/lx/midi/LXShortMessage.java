@@ -19,8 +19,13 @@ abstract class LXShortMessage extends ShortMessage {
 
     private LXMidiInput input = null;
 
-    LXShortMessage(ShortMessage message) {
+    LXShortMessage(ShortMessage message, int command) {
         super(message.getMessage());
+        if (getCommand() != command) {
+            throw new IllegalArgumentException(
+                    "LXShortMessage constructed with command " + command
+                            + " but has actual command " + getCommand());
+        }
     }
 
     LXShortMessage setInput(LXMidiInput input) {

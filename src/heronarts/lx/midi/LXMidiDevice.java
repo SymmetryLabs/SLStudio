@@ -23,6 +23,10 @@ import heronarts.lx.parameter.LXParameterListener;
 
 public class LXMidiDevice implements LXMidiListener {
 
+    public enum TakeoverMode {
+        TAKEOVER, PICKUP
+    };
+
     private final static int MIDI_RANGE = 128;
     private final static int MIDI_CHANNELS = 16;
     private final static int NUM_BINDINGS = MIDI_RANGE * MIDI_CHANNELS;
@@ -133,7 +137,7 @@ public class LXMidiDevice implements LXMidiListener {
             }
         }
 
-        private void noteOnReceived(LXMidiNote note) {
+        private void noteOnReceived(LXMidiNoteOn note) {
             switch (this.mode) {
             case DIRECT:
                 switch (this.value) {
@@ -176,7 +180,7 @@ public class LXMidiDevice implements LXMidiListener {
             }
         }
 
-        private void noteOffReceived(LXMidiNote note) {
+        private void noteOffReceived(LXMidiNoteOff note) {
             switch (this.mode) {
             case OFF:
                 if (this.parameter instanceof BooleanParameter) {
@@ -238,12 +242,18 @@ public class LXMidiDevice implements LXMidiListener {
         private final int cc;
         private final int value;
 
+        private TakeoverMode takeoverMode;
+        private boolean isDirty = true;
+        private double pickupDirection = 0;
+        private double lastValueSet = 0;
+
         private ControllerBinding(LXParameter parameter, int channel, int cc,
-                int value) {
+                int value, TakeoverMode takeoverMode) {
             super(parameter);
             this.channel = channel;
             this.cc = cc;
             this.value = value;
+            this.takeoverMode = takeoverMode;
 
             assertChannel(channel);
             assertValue(cc);
@@ -253,8 +263,53 @@ public class LXMidiDevice implements LXMidiListener {
             }
         }
 
+        private double valueDelta(int controllerValue, double normalizedValue) {
+            if (this.parameter instanceof LXNormalizedParameter) {
+                return normalizedValue
+                        - ((LXNormalizedParameter) this.parameter).getNormalized();
+            } else {
+                return controllerValue - this.parameter.getValue();
+            }
+        }
+
         private void controlChangeReceived(LXMidiControlChange controller) {
             int controllerValue = controller.getValue();
+            double normalizedValue = controllerValue / (double) MIDI_MAX;
+
+            if (this.takeoverMode == TakeoverMode.PICKUP) {
+                double currentDelta = valueDelta(controllerValue, normalizedValue);
+
+                // We are waiting for a pickup
+                if (this.isDirty) {
+                    if (this.pickupDirection == 0) {
+                        // Initial state, where we didn't know the controller value yet
+                        if (Math.abs(currentDelta) < 0.04) {
+                            // If it was close, benefit of the doubt
+                            this.isDirty = false;
+                        } else {
+                            // Otherwise, set the pickup direction
+                            this.pickupDirection = currentDelta;
+                        }
+                    }
+                    if ((currentDelta == 0)
+                            || ((currentDelta > 0) != (this.pickupDirection > 0))) {
+                        // We picked it up!
+                        this.isDirty = false;
+                    }
+                } else {
+                    if (this.parameter.getValue() != this.lastValueSet) {
+                        // Uh oh, this parameter isn't what we just set it to
+                        this.pickupDirection = currentDelta;
+                        this.isDirty = true;
+                    }
+                }
+
+                // Are we still dirty? Don't update...
+                if (this.isDirty) {
+                    return;
+                }
+            }
+
             if (controllerValue == 0) {
                 if (this.parameter instanceof LXNormalizedParameter) {
                     ((LXNormalizedParameter) this.parameter).setNormalized(0);
@@ -266,7 +321,7 @@ public class LXMidiDevice implements LXMidiListener {
                 case CC_VALUE:
                     if (this.parameter instanceof LXNormalizedParameter) {
                         ((LXNormalizedParameter) this.parameter)
-                                .setNormalized(controllerValue / (double) MIDI_MAX);
+                                .setNormalized(normalizedValue);
                     } else {
                         this.parameter.setValue(controllerValue);
                     }
@@ -276,6 +331,9 @@ public class LXMidiDevice implements LXMidiListener {
                     break;
                 }
             }
+
+            // Remember what we last set to
+            this.lastValueSet = this.parameter.getValue();
         }
 
         public void onParameterChanged(LXParameter parameter) {
@@ -421,12 +479,27 @@ public class LXMidiDevice implements LXMidiListener {
         return bindController(parameter, ANY_CHANNEL, cc);
     }
 
+    public LXMidiDevice bindController(LXParameter parameter, int cc,
+            TakeoverMode takeoverMode) {
+        return bindController(parameter, ANY_CHANNEL, cc, takeoverMode);
+    }
+
     public LXMidiDevice bindController(LXParameter parameter, int channel, int cc) {
         return bindController(parameter, channel, cc, CC_VALUE);
     }
 
     public LXMidiDevice bindController(LXParameter parameter, int channel,
+            int cc, TakeoverMode takeoverMode) {
+        return bindController(parameter, channel, cc, CC_VALUE, takeoverMode);
+    }
+
+    public LXMidiDevice bindController(LXParameter parameter, int channel,
             int cc, int value) {
+        return bindController(parameter, channel, cc, value, TakeoverMode.TAKEOVER);
+    }
+
+    public LXMidiDevice bindController(LXParameter parameter, int channel,
+            int cc, int value, TakeoverMode takeoverMode) {
         if (channel == ANY_CHANNEL) {
             for (int i = 0; i < MIDI_CHANNELS; ++i) {
                 bindController(parameter, i, cc, value);
@@ -435,7 +508,7 @@ public class LXMidiDevice implements LXMidiListener {
             unbindController(channel, cc);
             int i = index(channel, cc);
             this.controllerBindings[i] = new ControllerBinding(parameter, channel,
-                    cc, value);
+                    cc, value, takeoverMode);
         }
         return this;
     }
@@ -584,7 +657,7 @@ public class LXMidiDevice implements LXMidiListener {
         return this;
     }
 
-    public final void noteOnReceived(LXMidiNote note) {
+    public final void noteOnReceived(LXMidiNoteOn note) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":noteOn:" + note.getChannel()
                     + ":" + note.getPitch() + ":" + note.getVelocity());
@@ -596,7 +669,7 @@ public class LXMidiDevice implements LXMidiListener {
         noteOn(note);
     }
 
-    public final void noteOffReceived(LXMidiNote note) {
+    public final void noteOffReceived(LXMidiNoteOff note) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":noteOff:" + note.getChannel()
                     + ":" + note.getPitch() + ":" + note.getVelocity());
@@ -621,10 +694,10 @@ public class LXMidiDevice implements LXMidiListener {
         controlChange(controller);
     }
 
-    protected void noteOn(LXMidiNote note) {
+    protected void noteOn(LXMidiNoteOn note) {
     }
 
-    protected void noteOff(LXMidiNote note) {
+    protected void noteOff(LXMidiNoteOff note) {
     }
 
     protected void controlChange(LXMidiControlChange controlChange) {

@@ -77,12 +77,12 @@ public class LXMidiInput {
                 ShortMessage sm = (ShortMessage) message;
                 switch (sm.getCommand()) {
                 case ShortMessage.NOTE_ON:
-                    midiSystem
-                            .queueMessage(new LXMidiNote(sm).setInput(LXMidiInput.this));
+                    midiSystem.queueMessage(new LXMidiNoteOn(sm)
+                            .setInput(LXMidiInput.this));
                     break;
                 case ShortMessage.NOTE_OFF:
-                    midiSystem
-                            .queueMessage(new LXMidiNote(sm).setInput(LXMidiInput.this));
+                    midiSystem.queueMessage(new LXMidiNoteOff(sm)
+                            .setInput(LXMidiInput.this));
                     break;
                 case ShortMessage.CONTROL_CHANGE:
                     midiSystem.queueMessage(new LXMidiControlChange(sm)
@@ -97,10 +97,10 @@ public class LXMidiInput {
         for (LXMidiListener listener : this.listeners) {
             switch (message.getCommand()) {
             case ShortMessage.NOTE_ON:
-                listener.noteOnReceived((LXMidiNote) message);
+                listener.noteOnReceived((LXMidiNoteOn) message);
                 break;
             case ShortMessage.NOTE_OFF:
-                listener.noteOffReceived((LXMidiNote) message);
+                listener.noteOffReceived((LXMidiNoteOff) message);
                 break;
             case ShortMessage.CONTROL_CHANGE:
                 listener.controlChangeReceived((LXMidiControlChange) message);

@@ -15,16 +15,17 @@ package heronarts.lx.midi;
 
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiControlChange extends LXShortMessage {
-    LXMidiControlChange(ShortMessage message) {
-        super(message, ShortMessage.CONTROL_CHANGE);
+public class LXMidiNoteOn extends LXShortMessage {
+
+    LXMidiNoteOn(ShortMessage message) {
+        super(message, ShortMessage.NOTE_ON);
     }
 
-    public int getCC() {
+    public int getPitch() {
         return getData1();
     }
 
-    public int getValue() {
+    public int getVelocity() {
         return getData2();
     }
 }

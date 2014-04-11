@@ -15,18 +15,10 @@ package heronarts.lx.midi;
 
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiNote extends LXShortMessage {
+public class LXMidiNoteOff extends LXShortMessage {
 
-    LXMidiNote(ShortMessage message) {
-        super(message);
-    }
-
-    public boolean isNoteOn() {
-        return getCommand() == ShortMessage.NOTE_ON;
-    }
-
-    public boolean isNoteOff() {
-        return getCommand() == ShortMessage.NOTE_OFF;
+    LXMidiNoteOff(ShortMessage message) {
+        super(message, ShortMessage.NOTE_OFF);
     }
 
     public int getPitch() {
