@@ -274,6 +274,7 @@ public class LX {
         }
     }
 
+    @SuppressWarnings("deprecation")
     private void initProcessing(PApplet applet) {
         applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
 
