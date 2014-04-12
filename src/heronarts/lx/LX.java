@@ -23,8 +23,6 @@ import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
-import heronarts.lx.output.Kinet;
-import heronarts.lx.output.KinetNode;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.LXPattern;
@@ -33,7 +31,6 @@ import heronarts.lx.ui.UI;
 
 import java.awt.Color;
 import java.lang.reflect.Method;
-import java.net.SocketException;
 import java.util.List;
 
 import processing.core.PApplet;
@@ -139,11 +136,6 @@ public class LX {
     private int[] colors;
 
     /**
-     * KiNET output driver.
-     */
-    private Kinet kinet;
-
-    /**
      * Client listener.
      */
     private UDPClient client;
@@ -195,7 +187,6 @@ public class LX {
         public long clientNanos = 0;
         public long engineNanos = 0;
         public long uiNanos = 0;
-        public long kinetNanos = 0;
     }
 
     public final Timer timer = new Timer();
@@ -260,7 +251,6 @@ public class LX {
             }
         }
 
-        this.kinet = null;
         this.client = null;
 
         this.engine = new LXEngine(this);
@@ -594,16 +584,6 @@ public class LX {
      */
     public Touch touch() {
         return this.touch;
-    }
-
-    /**
-     * The active kinet output.
-     *
-     * @return The kinet object
-     */
-    @Deprecated
-    public Kinet kinet() {
-        return this.kinet;
     }
 
     public final AudioInput audioInput() {
@@ -982,45 +962,6 @@ public class LX {
     }
 
     /**
-     * Specifies an array of kinet nodes to send output to.
-     *
-     * @param kinetNodes Array of KinetNode objects, must have length equal to
-     *          width * height
-     */
-    @Deprecated
-    public LX setKinetNodes(KinetNode[] kinetNodes) {
-        if (kinetNodes == null) {
-            this.kinet = null;
-        } else if (kinetNodes.length != this.total) {
-            throw new RuntimeException(
-                    "Array provided to setKinetNodes is the wrong length, must equal length of LX, use null for non-mapped output nodes.");
-        } else {
-            try {
-                this.kinet = new Kinet(this, kinetNodes);
-            } catch (SocketException sx) {
-                this.kinet = null;
-                throw new RuntimeException("Could not create UDP socket for Kinet", sx);
-            }
-        }
-        return this;
-    }
-
-    /**
-     * Specifies a Kinet object to run lighting output
-     *
-     * @param kinet Kinet instance with total size equal to width * height
-     */
-    @Deprecated
-    public LX setKinet(Kinet kinet) {
-        if (kinet != null && (kinet.size() != this.total)) {
-            throw new RuntimeException(
-                    "Kinet provided to setKinet is the wrong size, must equal length of LX, use null for non-mapped output nodes.");
-        }
-        this.kinet = kinet;
-        return this;
-    }
-
-    /**
      * Specifies the set of patterns to be run.
      *
      * @param patterns
@@ -1066,13 +1007,6 @@ public class LX {
             this.colors = this.engine.renderBuffer();
         }
         this.timer.engineNanos = System.nanoTime() - engineStart;
-
-        this.timer.kinetNanos = 0;
-        if (this.kinet != null) {
-            long kinetStart = System.nanoTime();
-            this.kinet.sendThrottledColors(this.colors);
-            this.timer.kinetNanos = System.nanoTime() - kinetStart;
-        }
 
         long uiStart = System.nanoTime();
         this.ui.draw();
