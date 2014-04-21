@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -25,4 +25,17 @@ public abstract class LXAbstractFixture implements LXFixture {
     public List<LXPoint> getPoints() {
         return this.points;
     }
+
+    public LXAbstractFixture addPoint(LXPoint point) {
+        this.points.add(point);
+        return this;
+    }
+
+    public LXAbstractFixture addPoints(LXFixture fixture) {
+        for (LXPoint point : fixture.getPoints()) {
+            this.points.add(point);
+        }
+        return this;
+    }
+
 }
