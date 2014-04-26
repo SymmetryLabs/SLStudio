@@ -14,7 +14,7 @@
 package heronarts.lx.modulator;
 
 import heronarts.lx.LXComponent;
-import heronarts.lx.LXDeck;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.parameter.BooleanParameter;
@@ -32,7 +32,7 @@ public class LXAutomationRecorder extends LXModulator implements
     public final BooleanParameter armRecord = new BooleanParameter("ARM", false);
     public final BooleanParameter looping = new BooleanParameter("LOOP", false);
 
-    private final List<LXDeck> decks = new ArrayList<LXDeck>();
+    private final List<LXChannel> channels = new ArrayList<LXChannel>();
 
     private int cursor = 0;
     private double elapsedMillis = 0;
@@ -49,17 +49,17 @@ public class LXAutomationRecorder extends LXModulator implements
     }
 
     private class PatternAutomationEvent extends LXAutomationEvent {
-        final LXDeck deck;
+        final LXChannel channel;
         final LXPattern pattern;
 
-        private PatternAutomationEvent(LXDeck deck, LXPattern pattern) {
-            this.deck = deck;
+        private PatternAutomationEvent(LXChannel channel, LXPattern pattern) {
+            this.channel = channel;
             this.pattern = pattern;
         }
 
         @Override
         void play() {
-            this.deck.goPattern(this.pattern);
+            this.channel.goPattern(this.pattern);
         }
     }
 
@@ -95,28 +95,28 @@ public class LXAutomationRecorder extends LXModulator implements
 
     public LXAutomationRecorder(LXEngine engine) {
         super("AUTOMATION");
-        for (LXDeck deck : engine.getDecks()) {
-            registerDeck(deck);
+        for (LXChannel channel : engine.getChannels()) {
+            registerChannel(channel);
         }
         for (LXEffect effect : engine.getEffects()) {
             registerComponent(effect);
         }
     }
 
-    public LXAutomationRecorder registerDeck(LXDeck deck) {
-        this.decks.add(deck);
-        deck.addListener(new LXDeck.AbstractListener() {
+    public LXAutomationRecorder registerChannel(LXChannel channel) {
+        this.channels.add(channel);
+        channel.addListener(new LXChannel.AbstractListener() {
             @Override
-            public void patternWillChange(LXDeck deck, LXPattern pattern,
+            public void patternWillChange(LXChannel channel, LXPattern pattern,
                     LXPattern nextPattern) {
                 if (armRecord.isOn()) {
-                    events.add(new PatternAutomationEvent(deck, nextPattern));
+                    events.add(new PatternAutomationEvent(channel, nextPattern));
                 }
             }
         });
-        registerParameter(deck.getFader());
-        registerComponent(deck.getFaderTransition());
-        for (LXPattern pattern : deck.getPatterns()) {
+        registerParameter(channel.getFader());
+        registerComponent(channel.getFaderTransition());
+        for (LXPattern pattern : channel.getPatterns()) {
             registerComponent(pattern);
         }
         return this;
@@ -144,9 +144,8 @@ public class LXAutomationRecorder extends LXModulator implements
             for (LXParameter parameter : getParameters()) {
                 this.events.add(new ParameterAutomationEvent(parameter));
             }
-            for (LXDeck deck : this.decks) {
-                this.events.add(new PatternAutomationEvent(deck, deck
-                        .getActivePattern()));
+            for (LXChannel channel : this.channels) {
+                this.events.add(new PatternAutomationEvent(channel, channel.getActivePattern()));
             }
         }
     }

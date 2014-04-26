@@ -15,7 +15,7 @@ package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
-import heronarts.lx.LXDeck;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXLayer;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
@@ -42,9 +42,9 @@ public abstract class LXPattern extends LXComponent {
     protected final int[] colors;
 
     /**
-     * Reference to the deck this pattern belongs to.
+     * Reference to the channel this pattern belongs to.
      */
-    private LXDeck deck = null;
+    private LXChannel channel = null;
 
     /**
      * Transition used when this pattern becomes active.
@@ -69,28 +69,28 @@ public abstract class LXPattern extends LXComponent {
     }
 
     /**
-     * Gets the deck that this pattern is loaded in. May be null if the pattern is
-     * not yet loaded onto any deck.
+     * Gets the channel that this pattern is loaded in. May be null if the pattern is
+     * not yet loaded onto any channel.
      *
-     * @return Deck pattern is loaded onto
+     * @return Channel pattern is loaded onto
      */
-    public final LXDeck getDeck() {
-        return this.deck;
+    public final LXChannel getChannel() {
+        return this.channel;
     }
 
     /**
-     * Called by the engine when pattern is loaded onto a deck. This may only be
+     * Called by the engine when pattern is loaded onto a channel. This may only be
      * called once, by the engine. Do not call directly.
      *
-     * @param deck Deck pattern is loaded onto
+     * @param channel Channel pattern is loaded onto
      * @return this
      */
-    public final LXPattern setDeck(LXDeck deck) {
-        if (this.deck != null) {
+    public final LXPattern setChannel(LXChannel channel) {
+        if (this.channel != null) {
             throw new RuntimeException(
-                    "LXPattern instance can only be added to LXDeck once.");
+                    "LXPattern instance can only be added to LXChannel once.");
         }
-        this.deck = deck;
+        this.channel = channel;
         return this;
     }
 

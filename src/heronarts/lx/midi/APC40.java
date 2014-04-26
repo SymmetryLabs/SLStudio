@@ -14,7 +14,7 @@
 package heronarts.lx.midi;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXDeck;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
@@ -153,34 +153,34 @@ public class APC40 extends LXMidiDevice {
         return this;
     }
 
-    private LXDeck deviceControlDeck = null;
+    private LXChannel deviceControlChannel = null;
 
-    private final LXDeck.AbstractListener deviceControlListener = new LXDeck.AbstractListener() {
+    private final LXChannel.AbstractListener deviceControlListener = new LXChannel.AbstractListener() {
         @Override
-        public void patternDidChange(LXDeck deck, LXPattern pattern) {
+        public void patternDidChange(LXChannel channel, LXPattern pattern) {
             bindDeviceControlKnobs(pattern);
         }
     };
 
     public APC40 bindDeviceControlKnobs(final LXEngine engine) {
-        engine.focusedDeck.addListener(new LXParameterListener() {
+        engine.focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
-                bindDeviceControlKnobs(engine.getFocusedDeck());
+                bindDeviceControlKnobs(engine.getFocusedChannel());
             }
         });
-        bindDeviceControlKnobs(engine.getFocusedDeck());
+        bindDeviceControlKnobs(engine.getFocusedChannel());
         return this;
     }
 
-    public APC40 bindDeviceControlKnobs(LXDeck deck) {
-        if (this.deviceControlDeck != deck) {
-            if (this.deviceControlDeck != null) {
-                this.deviceControlDeck.removeListener(this.deviceControlListener);
+    public APC40 bindDeviceControlKnobs(LXChannel channel) {
+        if (this.deviceControlChannel != channel) {
+            if (this.deviceControlChannel != null) {
+                this.deviceControlChannel.removeListener(this.deviceControlListener);
             }
-            this.deviceControlDeck = deck;
-            this.deviceControlDeck.addListener(this.deviceControlListener);
+            this.deviceControlChannel = channel;
+            this.deviceControlChannel.addListener(this.deviceControlListener);
         }
-        bindDeviceControlKnobs(deck.getActivePattern());
+        bindDeviceControlKnobs(channel.getActivePattern());
         return this;
     }
 

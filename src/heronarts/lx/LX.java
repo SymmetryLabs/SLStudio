@@ -58,7 +58,7 @@ import ddf.minim.Minim;
  * provides helpful accessors for grid layouts.
  *
  * The instance manages rotation amongst a set of patterns. There may be
- * multiple decks, each with its own list of patterns. These decks are then
+ * multiple channels, each with its own list of patterns. These channels are then
  * blended together.
  *
  * The color-space used is HSB, with H ranging from 0-360, S from 0-100, and B
@@ -552,7 +552,7 @@ public class LX {
     }
 
     /**
-     * Return the currently active transition on the main deck
+     * Return the currently active transition on the main channel
      *
      * @return A transition if one is active
      */
@@ -561,7 +561,7 @@ public class LX {
     }
 
     /**
-     * Returns the current pattern on the main deck
+     * Returns the current pattern on the main channel
      *
      * @return Currently active pattern
      */
@@ -570,7 +570,7 @@ public class LX {
     }
 
     /**
-     * Returns the pattern being transitioned to on the main deck
+     * Returns the pattern being transitioned to on the main channel
      *
      * @return Next pattern
      */
@@ -791,7 +791,7 @@ public class LX {
     }
 
     /**
-     * Sets the main deck to the previous pattern.
+     * Sets the main channel to the previous pattern.
      */
     public LX goPrev() {
         this.engine.goPrev();
@@ -799,7 +799,7 @@ public class LX {
     }
 
     /**
-     * Sets the main deck to the next pattern.
+     * Sets the main channel to the next pattern.
      */
     public LX goNext() {
         this.engine.goNext();
@@ -807,7 +807,7 @@ public class LX {
     }
 
     /**
-     * Sets the main deck to a given pattern instance.
+     * Sets the main channel to a given pattern instance.
      *
      * @param pattern The pattern instance to run
      * @return This, for method chaining
@@ -818,7 +818,7 @@ public class LX {
     }
 
     /**
-     * Sets the main deck to a pattern of the given index
+     * Sets the main channel to a pattern of the given index
      *
      * @param i Index of the pattern to run
      * @return This, for method chaining
@@ -973,7 +973,7 @@ public class LX {
     }
 
     /**
-     * Gets the current set of patterns on the main deck.
+     * Gets the current set of patterns on the main channel.
      *
      * @return The pattern set
      */

@@ -28,9 +28,9 @@ import java.util.List;
 
 /**
  * The engine is the core class that runs the internal animations. An engine is
- * comprised of top-level modulators, then a number of decks, each of which has
- * a set of patterns that it may transition between. These decks are blended
- * together, and effects are then applied.
+ * comprised of top-level modulators, then a number of channels, each of which
+ * has a set of patterns that it may transition between. These channels are
+ * blended together, and effects are then applied.
  *
  * <pre>
  *   -----------------------------
@@ -39,7 +39,7 @@ import java.util.List;
  *  | | Modulators              | |
  *  |  -------------------------  |
  *  |  --------    --------       |
- *  | | Deck 0 |  | Deck 1 |  ... |
+ *  | | Chnl 0 |  | Chnl 1 |  ... |
  *  |  --------    --------       |
  *  |  -------------------------  |
  *  | | Effects                 | |
@@ -56,20 +56,19 @@ public class LXEngine {
     public final LXMidiSystem midiSystem = new LXMidiSystem();
 
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
-    private final List<LXDeck> decks = new ArrayList<LXDeck>();
+    private final List<LXChannel> channels = new ArrayList<LXChannel>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
     private final List<LXOutput> outputs = new ArrayList<LXOutput>();
 
-    public final DiscreteParameter focusedDeck = new DiscreteParameter("DECK", 1);
+    public final DiscreteParameter focusedChannel = new DiscreteParameter("CHANNEL", 1);
 
-    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 60,
-            0, 300);
+    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 60, 0, 300);
 
     float frameRate = 0;
 
     public class Timer {
         public long runNanos = 0;
-        public long deckNanos = 0;
+        public long channelNanos = 0;
         public long copyNanos = 0;
         public long fxNanos = 0;
         public long midiNanos = 0;
@@ -126,8 +125,8 @@ public class LXEngine {
             this.black[i] = 0xff000000;
         }
         this.buffer = new DoubleBuffer();
-        addDeck(new LXPattern[] { new IteratorTestPattern(lx) });
-        decks.get(0).getFader().setValue(1);
+        addChannel(new LXPattern[] { new IteratorTestPattern(lx) });
+        channels.get(0).getFader().setValue(1);
         this.lastMillis = System.currentTimeMillis();
     }
 
@@ -285,75 +284,75 @@ public class LXEngine {
         return this;
     }
 
-    public synchronized List<LXDeck> getDecks() {
-        return this.decks;
+    public synchronized List<LXChannel> getChannels() {
+        return this.channels;
     }
 
-    public synchronized LXDeck getDefaultDeck() {
-        return this.decks.get(0);
+    public synchronized LXChannel getDefaultChannel() {
+        return this.channels.get(0);
     }
 
-    public synchronized LXDeck getDeck(int deckIndex) {
-        return this.decks.get(deckIndex);
+    public synchronized LXChannel getChannel(int channelIndex) {
+        return this.channels.get(channelIndex);
     }
 
-    public LXDeck getFocusedDeck() {
-        return getDeck(focusedDeck.getValuei());
+    public LXChannel getFocusedChannel() {
+        return getChannel(focusedChannel.getValuei());
     }
 
-    public synchronized LXDeck addDeck(LXPattern[] patterns) {
-        LXDeck deck = new LXDeck(lx, this.decks.size(), patterns);
-        this.decks.add(deck);
-        this.focusedDeck.setRange(this.decks.size());
-        return deck;
+    public synchronized LXChannel addChannel(LXPattern[] patterns) {
+        LXChannel channel = new LXChannel(lx, this.channels.size(), patterns);
+        this.channels.add(channel);
+        this.focusedChannel.setRange(this.channels.size());
+        return channel;
     }
 
     public void setPatterns(LXPattern[] patterns) {
-        this.getDefaultDeck().setPatterns(patterns);
+        this.getDefaultChannel().setPatterns(patterns);
     }
 
     public LXPattern[] getPatterns() {
-        return this.getDefaultDeck().getPatterns();
+        return this.getDefaultChannel().getPatterns();
     }
 
     protected LXPattern getActivePattern() {
-        return this.getDefaultDeck().getActivePattern();
+        return this.getDefaultChannel().getActivePattern();
     }
 
     protected LXPattern getNextPattern() {
-        return this.getDefaultDeck().getNextPattern();
+        return this.getDefaultChannel().getNextPattern();
     }
 
     protected LXTransition getActiveTransition() {
-        return this.getDefaultDeck().getActiveTransition();
+        return this.getDefaultChannel().getActiveTransition();
     }
 
     public void goPrev() {
-        this.getDefaultDeck().goPrev();
+        this.getDefaultChannel().goPrev();
     }
 
     public final void goNext() {
-        this.getDefaultDeck().goNext();
+        this.getDefaultChannel().goNext();
     }
 
     public void goPattern(LXPattern pattern) {
-        this.getDefaultDeck().goPattern(pattern);
+        this.getDefaultChannel().goPattern(pattern);
     }
 
     public void goIndex(int index) {
-        this.getDefaultDeck().goIndex(index);
+        this.getDefaultChannel().goIndex(index);
     }
 
     protected void disableAutoTransition() {
-        getDefaultDeck().disableAutoTransition();
+        getDefaultChannel().disableAutoTransition();
     }
 
     protected void enableAutoTransition(int autoTransitionThreshold) {
-        getDefaultDeck().enableAutoTransition(autoTransitionThreshold);
+        getDefaultChannel().enableAutoTransition(autoTransitionThreshold);
     }
 
     protected boolean isAutoTransitionEnabled() {
-        return getDefaultDeck().isAutoTransitionEnabled();
+        return getDefaultChannel().isAutoTransitionEnabled();
     }
 
     public synchronized void run() {
@@ -365,7 +364,7 @@ public class LXEngine {
         this.lastMillis = nowMillis;
 
         if (this.paused) {
-            this.timer.deckNanos = 0;
+            this.timer.channelNanos = 0;
             this.timer.copyNanos = 0;
             this.timer.fxNanos = 0;
             this.timer.runNanos = System.nanoTime() - runStart;
@@ -383,31 +382,31 @@ public class LXEngine {
             m.run(deltaMs);
         }
 
-        // Run and blend all of our decks
-        long deckStart = System.nanoTime();
+        // Run and blend all of our channels
+        long channelStart = System.nanoTime();
         int[] bufferColors = this.black;
-        for (LXDeck deck : this.decks) {
-            deck.run(nowMillis, deltaMs);
-            deck.getFaderTransition().timer.blendNanos = 0;
+        for (LXChannel channel : this.channels) {
+            channel.run(nowMillis, deltaMs);
+            channel.getFaderTransition().timer.blendNanos = 0;
 
             // This optimization assumed that all transitions do
             // nothing at 0 and completely take over at 1. That's
             // not always the case. Leaving this here for reference.
 
-            // if (deck.getFader().getValue() == 0) {
-            // // No blending on this deck, leave colors as they were
-            // } else if (deck.getFader().getValue() >= 1) {
-            // // Fully faded in, just use this deck
-            // bufferColors = deck.getColors();
+            // if (channel.getFader().getValue() == 0) {
+            // // No blending on this channel, leave colors as they were
+            // } else if (channel.getFader().getValue() >= 1) {
+            // // Fully faded in, just use this channel
+            // bufferColors = channel.getColors();
             // } else {
 
-            // Apply the fader to this deck
-            deck.getFaderTransition().blend(bufferColors, deck.getColors(),
-                    deck.getFader().getValue(), deltaMs);
-            bufferColors = deck.getFaderTransition().getColors();
+            // Apply the fader to this channel
+            channel.getFaderTransition().blend(bufferColors, channel.getColors(),
+                    channel.getFader().getValue(), deltaMs);
+            bufferColors = channel.getFaderTransition().getColors();
 
         }
-        this.timer.deckNanos = System.nanoTime() - deckStart;
+        this.timer.channelNanos = System.nanoTime() - channelStart;
 
         // Copy colors into our own rendering buffer
         long copyStart = System.nanoTime();

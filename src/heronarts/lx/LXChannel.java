@@ -22,23 +22,23 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * A deck is a single component of the engine that has a set of patterns from
- * which it plays and rotates. It also has a fader to control how this deck is
- * blended with the decks before it.
+ * A channel is a single component of the engine that has a set of patterns from
+ * which it plays and rotates. It also has a fader to control how this channel
+ * is blended with the channels before it.
  */
-public class LXDeck {
+public class LXChannel {
 
     /**
      * Listener interface for objects which want to be notified when the internal
-     * deck state is modified.
+     * channel state is modified.
      */
     public interface Listener {
-        public void patternWillChange(LXDeck deck, LXPattern pattern,
+        public void patternWillChange(LXChannel channel, LXPattern pattern,
                 LXPattern nextPattern);
 
-        public void patternDidChange(LXDeck deck, LXPattern pattern);
+        public void patternDidChange(LXChannel channel, LXPattern pattern);
 
-        public void faderTransitionDidChange(LXDeck deck,
+        public void faderTransitionDidChange(LXChannel channel,
                 LXTransition faderTransition);
     }
 
@@ -46,14 +46,14 @@ public class LXDeck {
      * Utility class to extend in cases where only some methods need overriding.
      */
     public abstract static class AbstractListener implements Listener {
-        public void patternWillChange(LXDeck deck, LXPattern pattern,
+        public void patternWillChange(LXChannel channel, LXPattern pattern,
                 LXPattern nextPattern) {
         }
 
-        public void patternDidChange(LXDeck deck, LXPattern pattern) {
+        public void patternDidChange(LXChannel channel, LXPattern pattern) {
         }
 
-        public void faderTransitionDidChange(LXDeck deck,
+        public void faderTransitionDidChange(LXChannel channel,
                 LXTransition faderTransition) {
         }
     }
@@ -65,7 +65,7 @@ public class LXDeck {
     public final Timer timer = new Timer();
 
     /**
-     * The index of this deck in the engine.
+     * The index of this channel in the engine.
      */
     public final int index;
 
@@ -84,7 +84,7 @@ public class LXDeck {
 
     private final List<Listener> listeners = new ArrayList<Listener>();
 
-    LXDeck(LX lx, int index, LXPattern[] patterns) {
+    LXChannel(LX lx, int index, LXPattern[] patterns) {
         this.index = index;
         this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();
@@ -140,7 +140,7 @@ public class LXDeck {
         return this.faderTransition;
     }
 
-    public synchronized final LXDeck setFaderTransition(LXTransition transition) {
+    public synchronized final LXChannel setFaderTransition(LXTransition transition) {
         if (this.faderTransition != transition) {
             this.faderTransition = transition;
             notifyFaderTransitionDidChange(transition);
@@ -148,7 +148,7 @@ public class LXDeck {
         return this;
     }
 
-    public synchronized final LXDeck setPatterns(LXPattern[] patterns) {
+    public synchronized final LXChannel setPatterns(LXPattern[] patterns) {
         getActivePattern().onInactive();
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
@@ -159,8 +159,8 @@ public class LXDeck {
 
     private void _updatePatterns(LXPattern[] patterns) {
         for (LXPattern p : patterns) {
-            if (p.getDeck() != this) {
-                p.setDeck(this);
+            if (p.getChannel() != this) {
+                p.setChannel(this);
             }
         }
         this.patterns = patterns;
@@ -186,7 +186,7 @@ public class LXDeck {
         return this.transition;
     }
 
-    public synchronized final LXDeck goPrev() {
+    public synchronized final LXChannel goPrev() {
         if (this.transition != null) {
             return this;
         }
@@ -198,7 +198,7 @@ public class LXDeck {
         return this;
     }
 
-    public synchronized final LXDeck goNext() {
+    public synchronized final LXChannel goNext() {
         if (this.transition != null) {
             return this;
         }
@@ -214,7 +214,7 @@ public class LXDeck {
         return this;
     }
 
-    public synchronized final LXDeck goPattern(LXPattern pattern) {
+    public synchronized final LXChannel goPattern(LXPattern pattern) {
         for (int i = 0; i < this.patterns.length; ++i) {
             if (this.patterns[i] == pattern) {
                 return goIndex(i);
@@ -223,7 +223,7 @@ public class LXDeck {
         return this;
     }
 
-    public synchronized final LXDeck goIndex(int i) {
+    public synchronized final LXChannel goIndex(int i) {
         if (this.transition != null) {
             return this;
         }
@@ -235,12 +235,12 @@ public class LXDeck {
         return this;
     }
 
-    protected synchronized LXDeck disableAutoTransition() {
+    protected synchronized LXChannel disableAutoTransition() {
         this.autoTransitionEnabled = false;
         return this;
     }
 
-    protected synchronized LXDeck enableAutoTransition(int autoTransitionThreshold) {
+    protected synchronized LXChannel enableAutoTransition(int autoTransitionThreshold) {
         this.autoTransitionEnabled = true;
         this.autoTransitionThreshold = autoTransitionThreshold;
         if (this.transition == null) {
