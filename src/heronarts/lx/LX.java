@@ -977,7 +977,7 @@ public class LX {
      *
      * @return The pattern set
      */
-    public LXPattern[] getPatterns() {
+    public List<LXPattern> getPatterns() {
         return this.engine.getPatterns();
     }
 

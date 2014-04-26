@@ -19,6 +19,7 @@ import heronarts.lx.transition.DissolveTransition;
 import heronarts.lx.transition.LXTransition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -33,26 +34,41 @@ public class LXChannel {
      * channel state is modified.
      */
     public interface Listener {
-        public void patternWillChange(LXChannel channel, LXPattern pattern,
-                LXPattern nextPattern);
+
+        public void patternAdded(LXChannel channel, LXPattern pattern);
+
+        public void patternRemoved(LXChannel channel, LXPattern pattern);
+
+        public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern);
 
         public void patternDidChange(LXChannel channel, LXPattern pattern);
 
-        public void faderTransitionDidChange(LXChannel channel,
-                LXTransition faderTransition);
+        public void faderTransitionDidChange(LXChannel channel, LXTransition faderTransition);
     }
 
     /**
      * Utility class to extend in cases where only some methods need overriding.
      */
     public abstract static class AbstractListener implements Listener {
+
+        @Override
+        public void patternAdded(LXChannel channel, LXPattern pattern) {
+        }
+
+        @Override
+        public void patternRemoved(LXChannel channel, LXPattern pattern) {
+        }
+
+        @Override
         public void patternWillChange(LXChannel channel, LXPattern pattern,
                 LXPattern nextPattern) {
         }
 
+        @Override
         public void patternDidChange(LXChannel channel, LXPattern pattern) {
         }
 
+        @Override
         public void faderTransitionDidChange(LXChannel channel,
                 LXTransition faderTransition) {
         }
@@ -69,7 +85,9 @@ public class LXChannel {
      */
     public final int index;
 
-    private LXPattern[] patterns;
+    private final List<LXPattern> patterns = new ArrayList<LXPattern>();
+    private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
+
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
 
@@ -91,49 +109,20 @@ public class LXChannel {
         _updatePatterns(patterns);
     }
 
-    public final void addListener(Listener listener) {
-        synchronized (listeners) {
-            listeners.add(listener);
-        }
+    public synchronized final void addListener(Listener listener) {
+        this.listeners.add(listener);
     }
 
-    public final void removeListener(Listener listener) {
-        synchronized (listeners) {
-            listeners.remove(listener);
-        }
-    }
-
-    private final void notifyPatternWillChange(LXPattern pattern,
-            LXPattern nextPattern) {
-        synchronized (listeners) {
-            for (Listener listener : listeners) {
-                listener.patternWillChange(this, pattern, nextPattern);
-            }
-        }
-    }
-
-    private final void notifyPatternDidChange(LXPattern pattern) {
-        synchronized (listeners) {
-            for (Listener listener : listeners) {
-                listener.patternDidChange(this, pattern);
-            }
-        }
-    }
-
-    private final void notifyFaderTransitionDidChange(LXTransition transition) {
-        synchronized (listeners) {
-            for (Listener listener : listeners) {
-                listener.faderTransitionDidChange(this, transition);
-            }
-        }
+    public synchronized final void removeListener(Listener listener) {
+        this.listeners.remove(listener);
     }
 
     public final BasicParameter getFader() {
         return this.fader;
     }
 
-    public synchronized final LXPattern[] getPatterns() {
-        return this.patterns;
+    public synchronized final List<LXPattern> getPatterns() {
+        return this.unmodifiablePatterns;
     }
 
     public synchronized final LXTransition getFaderTransition() {
@@ -143,7 +132,9 @@ public class LXChannel {
     public synchronized final LXChannel setFaderTransition(LXTransition transition) {
         if (this.faderTransition != transition) {
             this.faderTransition = transition;
-            notifyFaderTransitionDidChange(transition);
+            for (Listener listener : this.listeners) {
+                listener.faderTransitionDidChange(this, this.faderTransition);
+            }
         }
         return this;
     }
@@ -157,13 +148,31 @@ public class LXChannel {
         return this;
     }
 
-    private void _updatePatterns(LXPattern[] patterns) {
-        for (LXPattern p : patterns) {
-            if (p.getChannel() != this) {
-                p.setChannel(this);
+    public synchronized final LXChannel addPattern(LXPattern pattern) {
+        if (pattern.getChannel() != this) {
+            pattern.setChannel(this);
+        }
+        this.patterns.add(pattern);
+        for (Listener listener : this.listeners) {
+            listener.patternAdded(this, pattern);
+        }
+        return this;
+    }
+
+    public synchronized final LXChannel removePattern(LXPattern pattern) {
+        if (this.patterns.remove(pattern)) {
+            for (Listener listener : this.listeners) {
+                listener.patternRemoved(this, pattern);
             }
         }
-        this.patterns = patterns;
+        return this;
+    }
+
+    private void _updatePatterns(LXPattern[] patterns) {
+        this.patterns.clear();
+        for (LXPattern pattern : patterns) {
+            addPattern(pattern);
+        }
     }
 
     public synchronized final int getActivePatternIndex() {
@@ -171,7 +180,7 @@ public class LXChannel {
     }
 
     public synchronized final LXPattern getActivePattern() {
-        return this.patterns[this.activePatternIndex];
+        return this.patterns.get(this.activePatternIndex);
     }
 
     public synchronized final int getNextPatternIndex() {
@@ -179,7 +188,7 @@ public class LXChannel {
     }
 
     public synchronized final LXPattern getNextPattern() {
-        return this.patterns[this.nextPatternIndex];
+        return this.patterns.get(this.nextPatternIndex);
     }
 
     protected synchronized final LXTransition getActiveTransition() {
@@ -192,7 +201,7 @@ public class LXChannel {
         }
         this.nextPatternIndex = this.activePatternIndex - 1;
         if (this.nextPatternIndex < 0) {
-            this.nextPatternIndex = this.patterns.length - 1;
+            this.nextPatternIndex = this.patterns.size() - 1;
         }
         startTransition();
         return this;
@@ -205,7 +214,7 @@ public class LXChannel {
         this.nextPatternIndex = this.activePatternIndex;
         do {
             this.nextPatternIndex = (this.nextPatternIndex + 1)
-                    % this.patterns.length;
+                    % this.patterns.size();
         } while ((this.nextPatternIndex != this.activePatternIndex)
                 && !getNextPattern().isEligible());
         if (this.nextPatternIndex != this.activePatternIndex) {
@@ -215,10 +224,12 @@ public class LXChannel {
     }
 
     public synchronized final LXChannel goPattern(LXPattern pattern) {
-        for (int i = 0; i < this.patterns.length; ++i) {
-            if (this.patterns[i] == pattern) {
-                return goIndex(i);
+        int pi = 0;
+        for (LXPattern p : this.patterns) {
+            if (p == pattern) {
+                return goIndex(pi);
             }
+            ++pi;
         }
         return this;
     }
@@ -227,7 +238,7 @@ public class LXChannel {
         if (this.transition != null) {
             return this;
         }
-        if (i < 0 || i >= this.patterns.length) {
+        if (i < 0 || i >= this.patterns.size()) {
             return this;
         }
         this.nextPatternIndex = i;
@@ -254,18 +265,21 @@ public class LXChannel {
     }
 
     private synchronized void startTransition() {
-        if (getActivePattern() == getNextPattern()) {
+        LXPattern activePattern = getActivePattern();
+        LXPattern nextPattern = getNextPattern();
+        if (activePattern == nextPattern) {
             return;
         }
-        getNextPattern().onActive();
-        notifyPatternWillChange(getActivePattern(), getNextPattern());
-        this.transition = getNextPattern().getTransition();
+        nextPattern.onActive();
+        for (Listener listener : this.listeners) {
+            listener.patternWillChange(this, activePattern, nextPattern);
+        }
+        this.transition = nextPattern.getTransition();
         if (this.transition == null) {
             finishTransition();
         } else {
-            getNextPattern().onTransitionStart();
-            this.transition.blend(getActivePattern().getColors(), getNextPattern()
-                    .getColors(), 0, 0);
+            nextPattern.onTransitionStart();
+            this.transition.blend(activePattern.getColors(), nextPattern.getColors(), 0, 0);
             this.transitionMillis = System.currentTimeMillis();
         }
     }
@@ -273,12 +287,15 @@ public class LXChannel {
     private synchronized void finishTransition() {
         getActivePattern().onInactive();
         this.activePatternIndex = this.nextPatternIndex;
+        LXPattern activePattern = getActivePattern();
         if (this.transition != null) {
-            getActivePattern().onTransitionEnd();
+            activePattern.onTransitionEnd();
         }
         this.transition = null;
         this.transitionMillis = System.currentTimeMillis();
-        notifyPatternDidChange(getActivePattern());
+        for (Listener listener : listeners) {
+            listener.patternDidChange(this, activePattern);
+        }
     }
 
     synchronized void run(long nowMillis, double deltaMs) {

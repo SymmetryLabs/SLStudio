@@ -55,10 +55,13 @@ public class LXEngine {
 
     public final LXMidiSystem midiSystem = new LXMidiSystem();
 
+    private Dispatch inputDispatch = null;
+
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
     private final List<LXOutput> outputs = new ArrayList<LXOutput>();
+    private final List<Listener> listeners = new ArrayList<Listener>();
 
     public final DiscreteParameter focusedChannel = new DiscreteParameter("CHANNEL", 1);
 
@@ -66,11 +69,31 @@ public class LXEngine {
 
     float frameRate = 0;
 
+    public interface Dispatch {
+        public void dispatch();
+    }
+
+    public interface Listener {
+        public void channelAdded(LXEngine engine, LXChannel channel);
+        public void channelRemoved(LXEngine engine, LXChannel channel);
+    }
+
+    public final synchronized LXEngine addListener(Listener listener) {
+        this.listeners.add(listener);
+        return this;
+    }
+
+    public final synchronized LXEngine removeListener(Listener listener) {
+        this.listeners.remove(listener);
+        return this;
+    }
+
     public class Timer {
         public long runNanos = 0;
         public long channelNanos = 0;
         public long copyNanos = 0;
         public long fxNanos = 0;
+        public long inputNanos = 0;
         public long midiNanos = 0;
         public long outputNanos = 0;
     }
@@ -128,6 +151,11 @@ public class LXEngine {
         addChannel(new LXPattern[] { new IteratorTestPattern(lx) });
         channels.get(0).getFader().setValue(1);
         this.lastMillis = System.currentTimeMillis();
+    }
+
+    public LXEngine setInputDispatch(Dispatch inputDispatch) {
+        this.inputDispatch = inputDispatch;
+        return this;
     }
 
     /**
@@ -248,7 +276,7 @@ public class LXEngine {
         return this;
     }
 
-    public synchronized List<LXEffect> getEffects() {
+    public List<LXEffect> getEffects() {
         return this.effects;
     }
 
@@ -284,7 +312,7 @@ public class LXEngine {
         return this;
     }
 
-    public synchronized List<LXChannel> getChannels() {
+    public List<LXChannel> getChannels() {
         return this.channels;
     }
 
@@ -304,14 +332,26 @@ public class LXEngine {
         LXChannel channel = new LXChannel(lx, this.channels.size(), patterns);
         this.channels.add(channel);
         this.focusedChannel.setRange(this.channels.size());
+        for (Listener listener : this.listeners) {
+            listener.channelAdded(this, channel);
+        }
         return channel;
+    }
+
+    public synchronized void removeChannel(LXChannel channel) {
+        if (this.channels.remove(channel)) {
+            this.focusedChannel.setRange(this.channels.size());
+            for (Listener listener : this.listeners) {
+                listener.channelRemoved(this, channel);
+            }
+        }
     }
 
     public void setPatterns(LXPattern[] patterns) {
         this.getDefaultChannel().setPatterns(patterns);
     }
 
-    public LXPattern[] getPatterns() {
+    public List<LXPattern> getPatterns() {
         return this.getDefaultChannel().getPatterns();
     }
 
@@ -421,6 +461,15 @@ public class LXEngine {
             fx.run(deltaMs, this.buffer.render);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
+
+        // Process UI input events
+        if (this.inputDispatch == null) {
+            this.timer.inputNanos = 0;
+        } else {
+            long inputStart = System.nanoTime();
+            this.inputDispatch.dispatch();
+            this.timer.inputNanos = System.nanoTime() - inputStart;
+        }
 
         // Process MIDI events
         long midiStart = System.nanoTime();
