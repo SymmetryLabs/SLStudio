@@ -88,6 +88,18 @@ public class LXMidiInput {
                     midiSystem.queueMessage(new LXMidiControlChange(sm)
                             .setInput(LXMidiInput.this));
                     break;
+                case ShortMessage.PROGRAM_CHANGE:
+                    midiSystem.queueMessage(new LXMidiProgramChange(sm)
+                            .setInput(LXMidiInput.this));
+                    break;
+                case ShortMessage.PITCH_BEND:
+                    midiSystem.queueMessage(new LXMidiPitchBend(sm)
+                            .setInput(LXMidiInput.this));
+                    break;
+                case ShortMessage.CHANNEL_PRESSURE:
+                    midiSystem.queueMessage(new LXMidiAftertouch(sm)
+                            .setInput(LXMidiInput.this));
+                    break;
                 }
             }
         }
@@ -104,6 +116,15 @@ public class LXMidiInput {
                 break;
             case ShortMessage.CONTROL_CHANGE:
                 listener.controlChangeReceived((LXMidiControlChange) message);
+                break;
+            case ShortMessage.PROGRAM_CHANGE:
+                listener.programChangeReceived((LXMidiProgramChange) message);
+                break;
+            case ShortMessage.PITCH_BEND:
+                listener.pitchBendReceived((LXMidiPitchBend) message);
+                break;
+            case ShortMessage.CHANNEL_PRESSURE:
+                listener.aftertouchReceived((LXMidiAftertouch) message);
                 break;
             }
         }

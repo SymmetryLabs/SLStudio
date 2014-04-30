@@ -21,6 +21,7 @@ import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.pattern.LXPattern;
+import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.transition.LXTransition;
 
 import java.util.ArrayList;
@@ -328,6 +329,10 @@ public class LXEngine {
         return getChannel(focusedChannel.getValuei());
     }
 
+    public LXChannel addChannel() {
+        return addChannel(new LXPattern[] { new SolidColorPattern(lx, 0xff000000) });
+    }
+
     public synchronized LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = new LXChannel(lx, this.channels.size(), patterns);
         this.channels.add(channel);
@@ -340,6 +345,10 @@ public class LXEngine {
 
     public synchronized void removeChannel(LXChannel channel) {
         if (this.channels.remove(channel)) {
+            int i = 0;
+            for (LXChannel c : this.channels) {
+                c.setIndex(i++);
+            }
             this.focusedChannel.setRange(this.channels.size());
             for (Listener listener : this.listeners) {
                 listener.channelRemoved(this, channel);
@@ -426,24 +435,30 @@ public class LXEngine {
         long channelStart = System.nanoTime();
         int[] bufferColors = this.black;
         for (LXChannel channel : this.channels) {
-            channel.run(nowMillis, deltaMs);
-            channel.getFaderTransition().timer.blendNanos = 0;
+            if (channel.enabled.isOn()) {
+                channel.run(nowMillis, deltaMs);
+                channel.getFaderTransition().timer.blendNanos = 0;
 
-            // This optimization assumed that all transitions do
-            // nothing at 0 and completely take over at 1. That's
-            // not always the case. Leaving this here for reference.
+                // This optimization assumed that all transitions do
+                // nothing at 0 and completely take over at 1. That's
+                // not always the case. Leaving this here for reference.
 
-            // if (channel.getFader().getValue() == 0) {
-            // // No blending on this channel, leave colors as they were
-            // } else if (channel.getFader().getValue() >= 1) {
-            // // Fully faded in, just use this channel
-            // bufferColors = channel.getColors();
-            // } else {
+                // if (channel.getFader().getValue() == 0) {
+                // // No blending on this channel, leave colors as they were
+                // } else if (channel.getFader().getValue() >= 1) {
+                // // Fully faded in, just use this channel
+                // bufferColors = channel.getColors();
+                // } else {
 
-            // Apply the fader to this channel
-            channel.getFaderTransition().blend(bufferColors, channel.getColors(),
-                    channel.getFader().getValue(), deltaMs);
-            bufferColors = channel.getFaderTransition().getColors();
+                // Apply the fader to this channel
+                channel.getFaderTransition().blend(
+                    bufferColors,
+                    channel.getColors(),
+                    channel.getFader().getValue(),
+                    deltaMs
+                );
+                bufferColors = channel.getFaderTransition().getColors();
+            }
 
         }
         this.timer.channelNanos = System.nanoTime() - channelStart;

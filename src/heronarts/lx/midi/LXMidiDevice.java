@@ -657,6 +657,7 @@ public class LXMidiDevice implements LXMidiListener {
         return this;
     }
 
+    @Override
     public final void noteOnReceived(LXMidiNoteOn note) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":noteOn:" + note.getChannel()
@@ -669,6 +670,7 @@ public class LXMidiDevice implements LXMidiListener {
         noteOn(note);
     }
 
+    @Override
     public final void noteOffReceived(LXMidiNoteOff note) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":noteOff:" + note.getChannel()
@@ -681,6 +683,7 @@ public class LXMidiDevice implements LXMidiListener {
         noteOff(note);
     }
 
+    @Override
     public final void controlChangeReceived(LXMidiControlChange controller) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":controllerChange:"
@@ -694,6 +697,35 @@ public class LXMidiDevice implements LXMidiListener {
         controlChange(controller);
     }
 
+    @Override
+    public final void programChangeReceived(LXMidiProgramChange programChange) {
+        if (this.logEvents) {
+            System.out.println(this.input.getName() + ":programChange:"
+                    + programChange.getChannel() + ":" + programChange.getProgram());
+        }
+        programChange(programChange);
+    }
+
+
+    @Override
+    public final void pitchBendReceived(LXMidiPitchBend pitchBend) {
+        if (this.logEvents) {
+            System.out.println(this.input.getName() + ":pitchBend:"
+                    + pitchBend.getChannel() + ":" + pitchBend.getPitchBend());
+        }
+        pitchBend(pitchBend);
+    }
+
+    @Override
+    public final void aftertouchReceived(LXMidiAftertouch aftertouch) {
+        if (this.logEvents) {
+            System.out.println(this.input.getName() + ":aftertouch:"
+                    + aftertouch.getChannel() + ":" + aftertouch.getAftertouch());
+        }
+        aftertouch(aftertouch);
+    }
+
+
     protected void noteOn(LXMidiNoteOn note) {
     }
 
@@ -701,6 +733,15 @@ public class LXMidiDevice implements LXMidiListener {
     }
 
     protected void controlChange(LXMidiControlChange controlChange) {
+    }
+
+    protected void programChange(LXMidiProgramChange programChange) {
+    }
+
+    protected void pitchBend(LXMidiPitchBend pitchBend) {
+    }
+
+    protected void aftertouch(LXMidiAftertouch aftertouch) {
     }
 
 }

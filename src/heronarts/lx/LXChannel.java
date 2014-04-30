@@ -14,6 +14,7 @@
 package heronarts.lx;
 
 import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.DissolveTransition;
 import heronarts.lx.transition.LXTransition;
@@ -83,7 +84,11 @@ public class LXChannel {
     /**
      * The index of this channel in the engine.
      */
-    public final int index;
+    private int index;
+
+    public final BooleanParameter enabled = new BooleanParameter("ON", true);
+
+    public final BooleanParameter midiEnabled = new BooleanParameter("MIDI", false);
 
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
@@ -115,6 +120,15 @@ public class LXChannel {
 
     public synchronized final void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    final LXChannel setIndex(int index) {
+        this.index = index;
+        return this;
+    }
+
+    public final int getIndex() {
+        return this.index;
     }
 
     public final BasicParameter getFader() {

@@ -17,6 +17,13 @@ import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXLayer;
+import heronarts.lx.midi.LXMidiAftertouch;
+import heronarts.lx.midi.LXMidiControlChange;
+import heronarts.lx.midi.LXMidiListener;
+import heronarts.lx.midi.LXMidiNoteOff;
+import heronarts.lx.midi.LXMidiNoteOn;
+import heronarts.lx.midi.LXMidiPitchBend;
+import heronarts.lx.midi.LXMidiProgramChange;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LXModulator;
@@ -29,7 +36,7 @@ import processing.core.PConstants;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points. It is
  */
-public abstract class LXPattern extends LXComponent {
+public abstract class LXPattern extends LXComponent implements LXMidiListener {
 
     /**
      * Reference to the LX instance
@@ -66,6 +73,15 @@ public abstract class LXPattern extends LXComponent {
     protected LXPattern(LX lx) {
         this.lx = lx;
         this.colors = new int[lx.total];
+    }
+
+    /**
+     * Gets the name of this pattern
+     *
+     * @return Name of this pattern
+     */
+    public String getName() {
+        return getClass().getSimpleName();
     }
 
     /**
@@ -416,6 +432,48 @@ public abstract class LXPattern extends LXComponent {
      * into this pattern is complete.
      */
     public/* abstract */void onTransitionEnd() {
+    }
+
+    /**
+     * Subclasses may override to handle midi note on events
+     */
+    @Override
+    public void noteOnReceived(LXMidiNoteOn note) {
+    }
+
+    /**
+     * Subclasses may override to handle midi note off events
+     */
+    @Override
+    public void noteOffReceived(LXMidiNoteOff note) {
+    }
+
+    /**
+     * Subclasses may override to handle midi CC events
+     */
+    @Override
+    public void controlChangeReceived(LXMidiControlChange cc) {
+    }
+
+    /**
+     * Subclasses may override to handle midi program change events
+     */
+    @Override
+    public void programChangeReceived(LXMidiProgramChange programChange) {
+    }
+
+    /**
+     * Subclasses may override to handle midi pitch bend events
+     */
+    @Override
+    public void pitchBendReceived(LXMidiPitchBend pitchBend) {
+    }
+
+    /**
+     * Subclasses may override to handle midi aftertouch events
+     */
+    @Override
+    public void aftertouchReceived(LXMidiAftertouch aftertouch) {
     }
 
 }
