@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -44,6 +44,7 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         super(x, y, w, h);
     }
 
+    @Override
     protected void onDraw(UI ui, PGraphics pg) {
         float knobValue = (float) getNormalized();
 
@@ -98,6 +99,7 @@ public class UIKnob extends UIParameterControl implements UIFocus {
 
     private double dragValue;
 
+    @Override
     public void onMousePressed(float mx, float my) {
         this.dragValue = getNormalized();
         long now = System.currentTimeMillis();
@@ -113,11 +115,13 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         redraw();
     }
 
+    @Override
     public void onMouseReleased(float mx, float my) {
         this.showValue = false;
         redraw();
     }
 
+    @Override
     public void onMouseDragged(float mx, float my, float dx, float dy) {
         this.dragValue = LXUtils.constrain(this.dragValue - dy / 100., 0, 1);
         setNormalized(this.dragValue);

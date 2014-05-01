@@ -19,12 +19,6 @@ import processing.core.PConstants;
 
 public class BlendTransition extends LXTransition {
 
-    public enum Mode {
-        FULL, HALF
-    };
-
-    private final Mode mode;
-
     private final int blendType;
 
     public BlendTransition(LX lx, int blendType) {
@@ -33,15 +27,12 @@ public class BlendTransition extends LXTransition {
 
     public BlendTransition(LX lx, int blendType, Mode mode) {
         super(lx);
-        this.mode = mode;
         this.blendType = blendType;
+        setMode(mode);
     }
 
     @Override
     protected void computeBlend(int[] c1, int[] c2, double progress) {
-        if (this.mode == Mode.HALF) {
-            progress /= 2.;
-        }
         if (progress == 0.5) {
             for (int i = 0; i < c1.length; ++i) {
                 this.colors[i] = PApplet.blendColor(c1[i], c2[i], this.blendType);

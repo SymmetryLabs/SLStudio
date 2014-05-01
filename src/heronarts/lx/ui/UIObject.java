@@ -613,7 +613,7 @@ public abstract class UIObject {
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
             if (child.visible && child.contains(mx, my)) {
-                child._mouseWheel(mx - child.x, mx - child.y, delta);
+                child._mouseWheel(mx - child.x, my - child.y, delta);
                 break;
             }
         }

@@ -87,8 +87,8 @@ public class LXChannel {
     private int index;
 
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
-
     public final BooleanParameter midiEnabled = new BooleanParameter("MIDI", false);
+    public final BooleanParameter autoTransitionEnabled = new BooleanParameter("AUTO", false);
 
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
@@ -96,8 +96,7 @@ public class LXChannel {
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
 
-    private boolean autoTransitionEnabled = false;
-    private int autoTransitionThreshold = 0;
+    private int autoTransitionThreshold = 60000;
 
     private LXTransition faderTransition = null;
     private final BasicParameter fader = new BasicParameter("FADER", 0);
@@ -260,22 +259,28 @@ public class LXChannel {
         return this;
     }
 
-    protected synchronized LXChannel disableAutoTransition() {
-        this.autoTransitionEnabled = false;
+    public synchronized LXChannel disableAutoTransition() {
+        this.autoTransitionEnabled.setValue(false);
         return this;
     }
 
-    protected synchronized LXChannel enableAutoTransition(int autoTransitionThreshold) {
-        this.autoTransitionEnabled = true;
+    public synchronized LXChannel enableAutoTransition(int autoTransitionThreshold) {
         this.autoTransitionThreshold = autoTransitionThreshold;
-        if (this.transition == null) {
-            this.transitionMillis = System.currentTimeMillis();
+        if (!this.autoTransitionEnabled.isOn()) {
+            this.autoTransitionEnabled.setValue(true);
+            if (this.transition == null) {
+                this.transitionMillis = System.currentTimeMillis();
+            }
         }
         return this;
     }
 
-    protected synchronized boolean isAutoTransitionEnabled() {
-        return this.autoTransitionEnabled;
+    public synchronized int getAutoTransitionThreshold() {
+        return this.autoTransitionThreshold;
+    }
+
+    public synchronized boolean isAutoTransitionEnabled() {
+        return this.autoTransitionEnabled.isOn();
     }
 
     private synchronized void startTransition() {
@@ -330,7 +335,7 @@ public class LXChannel {
                         transitionMs / this.transition.getDuration(), deltaMs);
             }
         } else {
-            if (this.autoTransitionEnabled
+            if (this.autoTransitionEnabled.isOn()
                     && (nowMillis - this.transitionMillis > this.autoTransitionThreshold)) {
                 goNext();
             }

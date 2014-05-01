@@ -81,7 +81,12 @@ public abstract class LXPattern extends LXComponent implements LXMidiListener {
      * @return Name of this pattern
      */
     public String getName() {
-        return getClass().getSimpleName();
+        String simple = getClass().getSimpleName();
+        int index = simple.indexOf("Pattern");
+        if (index >= 0) {
+            simple = simple.substring(0, index);
+        }
+        return simple;
     }
 
     /**
