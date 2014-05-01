@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -29,7 +29,7 @@ public class FrequencyGate extends LXModulator {
      * this threshold, the gate fires. Value is in the normalized space from 0 to
      * 1.
      */
-    public final BasicParameter threshold = new BasicParameter("THRSH", 0.8);
+    public final BasicParameter threshold = new BasicParameter("Threshold", 0.8);
 
     /**
      * The floor at which the trigger releases. Once triggered, the signal must
@@ -37,13 +37,13 @@ public class FrequencyGate extends LXModulator {
      * specified as a fraction of the threshold. So, a value of 0.75 means the
      * signal must fall to 75% of the threshold value.
      */
-    public final BasicParameter floor = new BasicParameter("FLOOR", 0.75);
+    public final BasicParameter floor = new BasicParameter("Floor", 0.75);
 
     /**
      * The time the trigger takes to falloff from 1 to 0 after triggered, in
      * milliseconds
      */
-    public final BasicParameter release = new BasicParameter("RELEASE", 200, 0,
+    public final BasicParameter release = new BasicParameter("Release", 200, 0,
             1600);
 
     public final DiscreteParameter minBand;
@@ -66,13 +66,13 @@ public class FrequencyGate extends LXModulator {
     public FrequencyGate(String label, GraphicEQ eq) {
         super(label);
         this.eq = eq;
-        this.minBand = new DiscreteParameter("BAND", eq.numBands);
-        this.avgBands = new DiscreteParameter("WIDTH", 1, eq.numBands + 1);
+        this.minBand = new DiscreteParameter("Band", eq.numBands);
+        this.avgBands = new DiscreteParameter("Width", 1, eq.numBands + 1);
     }
 
     /**
      * Constructs a gate that monitors a specified frequency band
-     * 
+     *
      * @param eq Equalizer to monitor
      * @param minHz Minimum frequency band
      * @param maxHz Maximum frequency band
@@ -84,7 +84,7 @@ public class FrequencyGate extends LXModulator {
 
     /**
      * Constructs a gate that monitors a specified frequency band
-     * 
+     *
      * @param label Label
      * @param eq Equalizer to monitor
      * @param minHz Minimum frequency band
@@ -97,7 +97,7 @@ public class FrequencyGate extends LXModulator {
 
     /**
      * Sets range of frequencies to look at
-     * 
+     *
      * @param minHz Minimum frequency
      * @param maxHz Maximum frequency
      * @return this
@@ -121,7 +121,7 @@ public class FrequencyGate extends LXModulator {
 
     /**
      * Set the bands to look at
-     * 
+     *
      * @param minBand First band index
      * @param numBands Number of bands to average
      * @return this
@@ -133,7 +133,7 @@ public class FrequencyGate extends LXModulator {
     }
 
     /**
-     * 
+     *
      * @return true if this is the frame in which the gate was peaked
      */
     public boolean peak() {
@@ -142,7 +142,7 @@ public class FrequencyGate extends LXModulator {
 
     /**
      * Gets the level of the frequency range being monitored.
-     * 
+     *
      * @return Level of range from 0-1
      */
     public double getLevel() {
@@ -151,13 +151,14 @@ public class FrequencyGate extends LXModulator {
 
     /**
      * Gets the level of the frequency range being monitored.
-     * 
+     *
      * @return Level of range from 0-1
      */
     public float getLevelf() {
         return (float) getLevel();
     }
 
+    @Override
     protected double computeValue(double deltaMs) {
         double thresholdValue = this.threshold.getValue();
         double floorValue = thresholdValue * this.floor.getValue();

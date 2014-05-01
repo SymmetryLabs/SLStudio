@@ -13,6 +13,8 @@
 
 package heronarts.lx;
 
+import heronarts.lx.audio.FrequencyGate;
+import heronarts.lx.audio.GraphicEQ;
 import heronarts.lx.client.UDPClient;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
@@ -30,6 +32,7 @@ import heronarts.lx.transition.LXTransition;
 import heronarts.lx.ui.UI;
 
 import java.awt.Color;
+import java.io.InputStream;
 import java.lang.reflect.Method;
 import java.util.List;
 
@@ -159,6 +162,8 @@ public class LX {
      * The global audio input.
      */
     private AudioInput audioInput;
+
+    private FrequencyGate beatDetect = null;
 
     /**
      * Global modulator for shared base hue.
@@ -593,11 +598,37 @@ public class LX {
 
     public final AudioInput audioInput(int sampleRate) {
         if (this.audioInput == null) {
-            // Lazily instantiated on-demand
-            this.minim = new Minim(this.applet);
+            this.minim = new Minim(this.applet != null ? this.applet : this);
             this.audioInput = minim.getLineIn(Minim.STEREO, 1024, sampleRate);
         }
         return this.audioInput;
+    }
+
+    public String sketchPath(String fileName) {
+        return fileName;
+    }
+
+    public InputStream createInput(String fileName) {
+        return null;
+    }
+
+    public final FrequencyGate beatDetect() {
+        if (this.beatDetect == null) {
+            GraphicEQ eq = new GraphicEQ(audioInput(), 4);
+            eq.attack.setValue(10);
+            eq.release.setValue(250);
+            eq.range.setValue(14);
+            eq.gain.setValue(16);
+
+            this.beatDetect = new FrequencyGate("BEAT", eq).setBands(1, 4);
+            this.beatDetect.floor.setValue(0.9);
+            this.beatDetect.threshold.setValue(0.75);
+            this.beatDetect.release.setValue(480);
+
+            addModulator(eq.start());
+            addModulator(this.beatDetect.start());
+        }
+        return this.beatDetect;
     }
 
     /**

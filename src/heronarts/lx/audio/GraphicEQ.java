@@ -9,7 +9,7 @@ import ddf.minim.analysis.FFT;
  * A graphic equalizer splits the signal into frequency bands and computes
  * envelopes for each of the bands independently. It can also give the overall
  * level, just like a normal decibel meter.
- * 
+ *
  * Since energy is not typically evenly distributed through the spectrum, a
  * slope can be applied to the equalizer to even out the levels, typically
  * something like 4.5 dB/octave is used, though this varies by recording.
@@ -19,7 +19,7 @@ public class GraphicEQ extends DecibelMeter {
     /**
      * dB/octave slope applied to the equalizer
      */
-    public final BasicParameter slope = new BasicParameter("SLOPE", 4.5, -3, 12);
+    public final BasicParameter slope = new BasicParameter("Slope", 4.5, -3, 12);
 
     /**
      * Number of bands in the equalizer
@@ -36,7 +36,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Default graphic equalizer with 2 bands per octave
-     * 
+     *
      * @param source Audio source
      */
     public GraphicEQ(AudioSource source) {
@@ -45,7 +45,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Default graphic equalizer with 2 bands per octave
-     * 
+     *
      * @param label Label
      * @param source Audio source
      */
@@ -55,7 +55,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Makes a graphic equalizer with a default slope of 4.5 dB/octave
-     * 
+     *
      * @param source Audio source to listen to
      * @param bandsPerOctave Number of bands per octave
      */
@@ -65,7 +65,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Makes a graphic equalizer with a default slope of 4.5 dB/octave
-     * 
+     *
      * @param label Label
      * @param source Audio source to listen to
      * @param bandsPerOctave Number of bands per octave
@@ -129,7 +129,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Gets the squared value of the i-th band
-     * 
+     *
      * @param i Frequency band
      * @return Squared normalized value
      */
@@ -140,7 +140,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Gets the squared value of the i-th band
-     * 
+     *
      * @param i Frequency band
      * @return Squared normalized value as a float
      */
@@ -150,7 +150,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Averages the value of a set of bands
-     * 
+     *
      * @param minBand The first band to start at
      * @param avgBands How many bands to average
      * @return Average value of all these bands
@@ -168,7 +168,7 @@ public class GraphicEQ extends DecibelMeter {
 
     /**
      * Averages the value of a set of bands
-     * 
+     *
      * @param minBand The first band to start at
      * @param avgBands How many bands to average
      * @return Average value of all these bands as a float
