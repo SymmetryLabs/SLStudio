@@ -18,8 +18,6 @@ import heronarts.lx.LX;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.concurrent.ConcurrentLinkedQueue;
-
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -136,15 +134,23 @@ public class LXMidiSystem {
         }
     }
 
-    private final ConcurrentLinkedQueue<LXShortMessage> eventQueue = new ConcurrentLinkedQueue<LXShortMessage>();
+    private final List<LXShortMessage> midiThreadEventQueue =
+        Collections.synchronizedList(new ArrayList<LXShortMessage>());
+
+    private final List<LXShortMessage> localThreadEventQueue =
+        new ArrayList<LXShortMessage>();
 
     void queueMessage(LXShortMessage message) {
-        this.eventQueue.add(message);
+        this.midiThreadEventQueue.add(message);
     }
 
     public void dispatch() {
-        LXShortMessage message;
-        while ((message = this.eventQueue.poll()) != null) {
+        this.localThreadEventQueue.clear();
+        synchronized (this.midiThreadEventQueue) {
+            this.localThreadEventQueue.addAll(this.midiThreadEventQueue);
+            this.midiThreadEventQueue.clear();
+        }
+        for (LXShortMessage message : this.localThreadEventQueue) {
             message.getInput().dispatch(message);
         }
     }

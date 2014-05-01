@@ -72,34 +72,32 @@ public class LXMidiInput {
         }
 
         @Override
-        public void send(MidiMessage message, long timeStamp) {
-            if (message instanceof ShortMessage) {
-                ShortMessage sm = (ShortMessage) message;
+        public void send(MidiMessage midiMessage, long timeStamp) {
+            if (midiMessage instanceof ShortMessage) {
+                ShortMessage sm = (ShortMessage) midiMessage;
+                LXShortMessage message = null;
                 switch (sm.getCommand()) {
                 case ShortMessage.NOTE_ON:
-                    midiSystem.queueMessage(new LXMidiNoteOn(sm)
-                            .setInput(LXMidiInput.this));
+                    message = new LXMidiNoteOn(sm);
                     break;
                 case ShortMessage.NOTE_OFF:
-                    midiSystem.queueMessage(new LXMidiNoteOff(sm)
-                            .setInput(LXMidiInput.this));
+                    message = new LXMidiNoteOff(sm);
                     break;
                 case ShortMessage.CONTROL_CHANGE:
-                    midiSystem.queueMessage(new LXMidiControlChange(sm)
-                            .setInput(LXMidiInput.this));
+                    message = new LXMidiControlChange(sm);
                     break;
                 case ShortMessage.PROGRAM_CHANGE:
-                    midiSystem.queueMessage(new LXMidiProgramChange(sm)
-                            .setInput(LXMidiInput.this));
+                    message = new LXMidiProgramChange(sm);
                     break;
                 case ShortMessage.PITCH_BEND:
-                    midiSystem.queueMessage(new LXMidiPitchBend(sm)
-                            .setInput(LXMidiInput.this));
+                    message = new LXMidiPitchBend(sm);
                     break;
                 case ShortMessage.CHANNEL_PRESSURE:
-                    midiSystem.queueMessage(new LXMidiAftertouch(sm)
-                            .setInput(LXMidiInput.this));
+                    message = new LXMidiAftertouch(sm);
                     break;
+                }
+                if (message != null) {
+                    midiSystem.queueMessage(message.setInput(LXMidiInput.this));
                 }
             }
         }
