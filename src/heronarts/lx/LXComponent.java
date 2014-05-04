@@ -13,46 +13,43 @@
 
 package heronarts.lx;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.LXParameterized;
 
-import java.util.ArrayList;
-import java.util.List;
+class LXComponent extends LXParameterized implements LXLoopTask {
 
-/**
- * Base class for system components that run in the engine, which have common
- * attributes, such as parameters, modulators, and layers. For instance,
- * patterns, transitions, and effects are all LXComponents.
- */
-public abstract class LXComponent extends LXParameterized {
+    private final List<LXModulator> modulators = new ArrayList<LXModulator>();
+    private final List<LXModulator> unmodifiableModulators = Collections.unmodifiableList(this.modulators);
 
-    protected final List<LXModulator> modulators = new ArrayList<LXModulator>();
-    protected final List<LXLayer> layers = new ArrayList<LXLayer>();
-
-    protected LXComponent() {
+    public final class Timer {
+        public long loopNanos;
     }
+
+    public final Timer timer = new Timer();
 
     protected final LXModulator addModulator(LXModulator modulator) {
         this.modulators.add(modulator);
         return modulator;
     }
 
+    protected final LXComponent removeModulator(LXModulator modulator) {
+        this.modulators.remove(modulator);
+        return this;
+    }
+
     public final List<LXModulator> getModulators() {
-        return this.modulators;
+        return this.unmodifiableModulators;
     }
 
-    protected final LXLayer addLayer(LXLayer layer) {
-        this.layers.add(layer);
-        return layer;
-    }
-
-    protected final LXLayer removeLayer(LXLayer layer) {
-        this.layers.remove(layer);
-        return layer;
-    }
-
-    public final List<LXLayer> getLayers() {
-        return this.layers;
+    @Override
+    public void loop(double deltaMs) {
+        for (LXModulator modulator : this.modulators) {
+            modulator.loop(deltaMs);
+        }
     }
 
 }

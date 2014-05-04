@@ -52,7 +52,7 @@ public class DesaturationEffect extends LXEffect {
     }
 
     @Override
-    protected void apply(int[] colors) {
+    protected void run(double deltaMs) {
         double value = this.desaturation.getValue();
         if (value > 0) {
             for (int i = 0; i < colors.length; ++i) {

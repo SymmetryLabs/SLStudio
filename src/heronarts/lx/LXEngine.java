@@ -25,6 +25,7 @@ import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.transition.LXTransition;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -58,11 +59,14 @@ public class LXEngine {
 
     private Dispatch inputDispatch = null;
 
-    private final List<LXModulator> modulators = new ArrayList<LXModulator>();
+    private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
     private final List<LXOutput> outputs = new ArrayList<LXOutput>();
     private final List<Listener> listeners = new ArrayList<Listener>();
+
+    private final List<LXChannel> unmodifiableChannels = Collections.unmodifiableList(this.channels);
+    private final List<LXEffect> unmodifiableEffects = Collections.unmodifiableList(this.effects);
 
     public final DiscreteParameter focusedChannel = new DiscreteParameter("CHANNEL", 1);
 
@@ -106,7 +110,7 @@ public class LXEngine {
      * actively being worked on, while another copy is held for shuffling off to
      * another thread.
      */
-    private class DoubleBuffer {
+    private class DoubleBuffer implements LXBuffer {
 
         // Concrete buffer instances, these are real memory
         private final int[] buffer1;
@@ -129,17 +133,25 @@ public class LXEngine {
             this.render = this.copy;
             this.copy = tmp;
         }
+
+        @Override
+        public int[] getArray() {
+            return this.render;
+        }
     }
 
     private final DoubleBuffer buffer;
+
     private final int[] black;
 
+    long nowMillis = 0;
     private long lastMillis;
 
     private boolean isThreaded = false;
     private Thread engineThread = null;
 
-    private double speed = 1;
+    public final BasicParameter speed = new BasicParameter("SPEED", 1, 0, 2);
+
     private boolean paused = false;
 
     LXEngine(LX lx) {
@@ -149,6 +161,7 @@ public class LXEngine {
             this.black[i] = 0xff000000;
         }
         this.buffer = new DoubleBuffer();
+
         addChannel(new LXPattern[] { new IteratorTestPattern(lx) });
         channels.get(0).getFader().setValue(1);
         this.lastMillis = System.currentTimeMillis();
@@ -248,8 +261,8 @@ public class LXEngine {
         return this;
     }
 
-    public synchronized LXEngine setSpeed(double speed) {
-        this.speed = speed;
+    public LXEngine setSpeed(double speed) {
+        this.speed.setValue(speed);
         return this;
     }
 
@@ -267,18 +280,26 @@ public class LXEngine {
         return this.paused;
     }
 
-    public synchronized LXEngine addModulator(LXModulator m) {
-        this.modulators.add(m);
+    public LXEngine addModulator(LXModulator modulator) {
+        return addLoopTask(modulator);
+    }
+
+    public LXEngine removeModulator(LXModulator modulator) {
+        return removeLoopTask(modulator);
+    }
+
+    public synchronized LXEngine addLoopTask(LXLoopTask loopTask) {
+        this.loopTasks.add(loopTask);
         return this;
     }
 
-    public synchronized LXEngine removeModulator(LXModulator m) {
-        this.modulators.remove(m);
+    public synchronized LXEngine removeLoopTask(LXLoopTask loopTask) {
+        this.loopTasks.remove(loopTask);
         return this;
     }
 
-    public List<LXEffect> getEffects() {
-        return this.effects;
+    public synchronized List<LXEffect> getEffects() {
+        return this.unmodifiableEffects;
     }
 
     public synchronized LXEngine addEffect(LXEffect fx) {
@@ -314,7 +335,7 @@ public class LXEngine {
     }
 
     public List<LXChannel> getChannels() {
-        return this.channels;
+        return this.unmodifiableChannels;
     }
 
     public synchronized LXChannel getDefaultChannel() {
@@ -408,9 +429,9 @@ public class LXEngine {
         long runStart = System.nanoTime();
 
         // Compute elapsed time
-        long nowMillis = System.currentTimeMillis();
-        double deltaMs = nowMillis - this.lastMillis;
-        this.lastMillis = nowMillis;
+        this.nowMillis = System.currentTimeMillis();
+        double deltaMs = this.nowMillis - this.lastMillis;
+        this.lastMillis = this.nowMillis;
 
         if (this.paused) {
             this.timer.channelNanos = 0;
@@ -421,14 +442,14 @@ public class LXEngine {
         }
 
         // Run tempo, always using real-time
-        this.lx.tempo.run(deltaMs);
+        this.lx.tempo.loop(deltaMs);
 
         // Mutate by speed for everything else
-        deltaMs *= this.speed;
+        deltaMs *= this.speed.getValue();
 
-        // Run modulators
-        for (LXModulator m : this.modulators) {
-            m.run(deltaMs);
+        // Run loop tasks
+        for (LXLoopTask loopTask : this.loopTasks) {
+            loopTask.loop(deltaMs);
         }
 
         // Run and blend all of our channels
@@ -436,7 +457,7 @@ public class LXEngine {
         int[] bufferColors = this.black;
         for (LXChannel channel : this.channels) {
             if (channel.enabled.isOn()) {
-                channel.run(nowMillis, deltaMs);
+                channel.loop(deltaMs);
                 channel.getFaderTransition().timer.blendNanos = 0;
 
                 // This optimization assumed that all transitions do
@@ -451,11 +472,11 @@ public class LXEngine {
                 // } else {
 
                 // Apply the fader to this channel
+                channel.getFaderTransition().loop(deltaMs);
                 channel.getFaderTransition().blend(
                     bufferColors,
                     channel.getColors(),
-                    channel.getFader().getValue(),
-                    deltaMs
+                    channel.getFader().getValue()
                 );
                 bufferColors = channel.getFaderTransition().getColors();
             }
@@ -473,7 +494,8 @@ public class LXEngine {
         // Apply effects in our rendering buffer
         long fxStart = System.nanoTime();
         for (LXEffect fx : this.effects) {
-            fx.run(deltaMs, this.buffer.render);
+            ((LXLayerComponent) fx).setBuffer(this.buffer);
+            fx.loop(deltaMs);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
 

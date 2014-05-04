@@ -14,9 +14,8 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXComponent;
+import heronarts.lx.LXBufferComponent;
 import heronarts.lx.LXChannel;
-import heronarts.lx.LXLayer;
 import heronarts.lx.midi.LXMidiAftertouch;
 import heronarts.lx.midi.LXMidiControlChange;
 import heronarts.lx.midi.LXMidiListener;
@@ -26,7 +25,6 @@ import heronarts.lx.midi.LXMidiPitchBend;
 import heronarts.lx.midi.LXMidiProgramChange;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.transition.LXTransition;
 import processing.core.PApplet;
 import processing.core.PImage;
@@ -36,17 +34,7 @@ import processing.core.PConstants;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points. It is
  */
-public abstract class LXPattern extends LXComponent implements LXMidiListener {
-
-    /**
-     * Reference to the LX instance
-     */
-    protected final LX lx;
-
-    /**
-     * Buffer of point colors for this pattern
-     */
-    protected final int[] colors;
+public abstract class LXPattern extends LXBufferComponent implements LXMidiListener {
 
     /**
      * Reference to the channel this pattern belongs to.
@@ -67,12 +55,11 @@ public abstract class LXPattern extends LXComponent implements LXMidiListener {
     public final Timer timer = new Timer();
 
     public class Timer {
-        public long goNanos = 0;
+        public long runNanos = 0;
     }
 
     protected LXPattern(LX lx) {
-        this.lx = lx;
-        this.colors = new int[lx.total];
+        super(lx);
     }
 
     /**
@@ -348,56 +335,11 @@ public abstract class LXPattern extends LXComponent implements LXMidiListener {
         return this;
     }
 
-    /**
-     * Gets the color buffer
-     *
-     * @return color buffer for this pattern
-     */
-    public final int[] getColors() {
-        return this.colors;
-    }
-
-    /**
-     * Copies the color buffer into an external buffer. This is useful when the
-     * engine is in threaded mode and you want to grab a particular pattern's
-     * colors for display.
-     *
-     * @param copy buffer to copy colors into
-     */
-    public final synchronized void copyBuffer(int[] copy) {
-        for (int i = 0; i < this.colors.length; ++i) {
-            copy[i] = this.colors[i];
-        }
-    }
-
-    /**
-     * Invoked by the engine when the pattern is running.
-     *
-     * @param deltaMs
-     */
-    public final void go(double deltaMs) {
-        long goStart = System.nanoTime();
-        for (LXModulator m : this.modulators) {
-            m.run(deltaMs);
-        }
-        if (this.lx.engine.isThreaded()) {
-            synchronized (this) {
-                criticalGo(deltaMs);
-            }
-        } else {
-            criticalGo(deltaMs);
-        }
-        this.timer.goNanos = System.nanoTime() - goStart;
-    }
-
-    private final void criticalGo(double deltaMs) {
+    @Override
+    protected final void onLoop(double deltaMs) {
+        long runStart = System.nanoTime();
         this.run(deltaMs);
-        for (LXLayer layer : this.layers) {
-            for (LXModulator m : layer.getModulators()) {
-                m.run(deltaMs);
-            }
-            layer.run(deltaMs, this.colors);
-        }
+        this.timer.runNanos = System.nanoTime() - runStart;
     }
 
     /**

@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -35,6 +35,11 @@ public class LXModel implements LXFixture {
      * An immutable list of all the fixtures in this model
      */
     public final List<LXFixture> fixtures;
+
+    /**
+     * Number of points in the model
+     */
+    public final int size;
 
     /**
      * Center of the model in x space
@@ -120,7 +125,7 @@ public class LXModel implements LXFixture {
 
     /**
      * Constructs a model from a list of points
-     * 
+     *
      * @param points Points
      */
     public LXModel(List<LXPoint> points) {
@@ -129,7 +134,7 @@ public class LXModel implements LXFixture {
 
     /**
      * Constructs a model with one fixture
-     * 
+     *
      * @param fixture Fixture
      */
     public LXModel(LXFixture fixture) {
@@ -138,7 +143,7 @@ public class LXModel implements LXFixture {
 
     /**
      * Constructs a model with the given fixtures
-     * 
+     *
      * @param fixtures Fixtures
      */
     public LXModel(LXFixture[] fixtures) {
@@ -151,6 +156,7 @@ public class LXModel implements LXFixture {
             }
         }
 
+        this.size = _points.size();
         this.points = Collections.unmodifiableList(_points);
         this.fixtures = Collections.unmodifiableList(_fixtures);
 

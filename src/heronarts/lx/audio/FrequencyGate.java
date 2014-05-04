@@ -173,7 +173,7 @@ public class FrequencyGate extends LXModulator {
             this.waitingForFloor = true;
             this.signal.setRange(1, 0, this.release.getValue()).trigger();
         }
-        this.signal.run(deltaMs);
+        this.signal.loop(deltaMs);
         return signal.getValue();
     }
 }

@@ -142,7 +142,7 @@ public class DecibelMeter extends LXModulator {
         if (dbLevel > env.getValue()) {
             env.setRangeFromHereTo(dbLevel, attack.getValue()).trigger();
         }
-        env.run(deltaMs);
+        env.loop(deltaMs);
         if (!env.isRunning() && env.getValue() > minLevel) {
             env.setRangeFromHereTo(minLevel, release.getValue()).trigger();
         }

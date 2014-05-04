@@ -13,6 +13,7 @@
 
 package heronarts.lx;
 
+import heronarts.lx.effect.LXEffect;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
@@ -28,13 +29,17 @@ import java.util.List;
  * which it plays and rotates. It also has a fader to control how this channel
  * is blended with the channels before it.
  */
-public class LXChannel {
+public class LXChannel implements LXLoopTask {
 
     /**
      * Listener interface for objects which want to be notified when the internal
      * channel state is modified.
      */
     public interface Listener {
+
+        public void effectAdded(LXChannel channel, LXEffect effect);
+
+        public void effectRemoved(LXChannel channel, LXEffect effect);
 
         public void patternAdded(LXChannel channel, LXPattern pattern);
 
@@ -51,6 +56,14 @@ public class LXChannel {
      * Utility class to extend in cases where only some methods need overriding.
      */
     public abstract static class AbstractListener implements Listener {
+
+        @Override
+        public void effectAdded(LXChannel channel, LXEffect effect) {
+        }
+
+        @Override
+        public void effectRemoved(LXChannel channel, LXEffect effect) {
+        }
 
         @Override
         public void patternAdded(LXChannel channel, LXPattern pattern) {
@@ -86,12 +99,20 @@ public class LXChannel {
      */
     private int index;
 
+    private final LX lx;
+
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
     public final BooleanParameter midiEnabled = new BooleanParameter("MIDI", false);
     public final BooleanParameter autoTransitionEnabled = new BooleanParameter("AUTO", false);
 
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
+
+    private final List<LXEffect> effects = new ArrayList<LXEffect>();
+    private final List<LXEffect> unmodifiableEffects = Collections.unmodifiableList(effects);
+
+    private final ModelBuffer buffer;
+    private int[] colors;
 
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
@@ -107,7 +128,9 @@ public class LXChannel {
     private final List<Listener> listeners = new ArrayList<Listener>();
 
     LXChannel(LX lx, int index, LXPattern[] patterns) {
+        this.lx = lx;
         this.index = index;
+        this.buffer = new ModelBuffer(lx);
         this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();
         _updatePatterns(patterns);
@@ -121,21 +144,17 @@ public class LXChannel {
         this.listeners.remove(listener);
     }
 
-    final LXChannel setIndex(int index) {
+    final synchronized LXChannel setIndex(int index) {
         this.index = index;
         return this;
     }
 
-    public final int getIndex() {
+    public synchronized final int getIndex() {
         return this.index;
     }
 
     public final BasicParameter getFader() {
         return this.fader;
-    }
-
-    public synchronized final List<LXPattern> getPatterns() {
-        return this.unmodifiablePatterns;
     }
 
     public synchronized final LXTransition getFaderTransition() {
@@ -150,6 +169,30 @@ public class LXChannel {
             }
         }
         return this;
+    }
+
+    public synchronized final LXChannel addEffect(LXEffect effect) {
+        this.effects.add(effect);
+        for (Listener listener : this.listeners) {
+            listener.effectAdded(this, effect);
+        }
+        return this;
+    }
+
+    public synchronized final LXChannel removeEffect(LXEffect effect) {
+        this.effects.remove(effect);
+        for (Listener listener : this.listeners) {
+            listener.effectRemoved(this, effect);
+        }
+        return this;
+    }
+
+    public synchronized final List<LXEffect> getEffects() {
+        return this.unmodifiableEffects;
+    }
+
+    public synchronized final List<LXPattern> getPatterns() {
+        return this.unmodifiablePatterns;
     }
 
     public synchronized final LXChannel setPatterns(LXPattern[] patterns) {
@@ -298,7 +341,7 @@ public class LXChannel {
             finishTransition();
         } else {
             nextPattern.onTransitionStart();
-            this.transition.blend(activePattern.getColors(), nextPattern.getColors(), 0, 0);
+            this.transition.blend(activePattern.getColors(), nextPattern.getColors(), 0);
             this.transitionMillis = System.currentTimeMillis();
         }
     }
@@ -317,42 +360,63 @@ public class LXChannel {
         }
     }
 
-    synchronized void run(long nowMillis, double deltaMs) {
+    @Override
+    public synchronized void loop(double deltaMs) {
         long runStart = System.nanoTime();
 
         // Run active pattern
-        getActivePattern().go(deltaMs);
+        LXPattern activePattern = getActivePattern();
+        activePattern.loop(deltaMs);
+        int[] colors = activePattern.getColors();
 
         // Run transition if applicable
         if (this.transition != null) {
-            int transitionMs = (int) (nowMillis - this.transitionMillis);
+            int transitionMs = (int) (this.lx.engine.nowMillis - this.transitionMillis);
             if (transitionMs >= this.transition.getDuration()) {
                 finishTransition();
             } else {
-                getNextPattern().go(deltaMs);
-                this.transition.blend(getActivePattern().getColors(), getNextPattern()
-                        .getColors(),
-                        transitionMs / this.transition.getDuration(), deltaMs);
+                getNextPattern().loop(deltaMs);
+                this.transition.loop(deltaMs);
+                this.transition.blend(
+                    getActivePattern().getColors(),
+                    getNextPattern().getColors(),
+                    transitionMs / this.transition.getDuration()
+                );
             }
         } else {
-            if (this.autoTransitionEnabled.isOn()
-                    && (nowMillis - this.transitionMillis > this.autoTransitionThreshold)) {
+            if (this.autoTransitionEnabled.isOn() &&
+                    (this.lx.engine.nowMillis - this.transitionMillis > this.autoTransitionThreshold)) {
                 goNext();
             }
         }
+        if (this.transition != null) {
+            colors = this.transition.getColors();
+        }
+
+        if (this.effects.size() > 0) {
+            int[] array = this.buffer.getArray();
+            for (int i = 0; i < colors.length; ++i) {
+                array[i] = colors[i];
+            }
+            colors = array;
+            for (LXEffect effect : this.effects) {
+                ((LXLayerComponent)effect).setBuffer(this.buffer);
+                effect.loop(deltaMs);
+            }
+        }
+        this.colors = colors;
 
         this.timer.runNanos = System.nanoTime() - runStart;
     }
 
-    public synchronized void copyBuffer(int[] buffer) {
-        int[] colors = getColors();
-        for (int i = 0; i < colors.length; ++i) {
-            buffer[i] = colors[i];
+    public synchronized int[] getColors() {
+        return this.colors;
+    }
+
+    public synchronized void copyColors(int[] copy) {
+        for (int i = 0; i < this.colors.length; ++i) {
+            copy[i] = this.colors[i];
         }
     }
 
-    public synchronized int[] getColors() {
-        return (this.transition != null) ? this.transition.getColors() : this
-                .getActivePattern().getColors();
-    }
 }

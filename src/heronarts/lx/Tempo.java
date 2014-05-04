@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -13,18 +13,29 @@
 
 package heronarts.lx;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heronarts.lx.modulator.Click;
 import heronarts.lx.modulator.LinearEnvelope;
 
 /**
  * Class to represent a musical tempo at which patterns are operating. This can
  * be updated in real-time via invoking the tap() method.
- * 
+ *
  * Quarter-note "beats" are indicated by the return value of the beat() method,
  * and ramp() returns a double value indicating the current 4/4 phase from 0 to
  * 1.
  */
-public class Tempo {
+public class Tempo extends LXComponent {
+
+    public interface Listener {
+        public void onBeat(Tempo tempo);
+        public void onHalf(Tempo tempo);
+        public void onMeasure(Tempo tempo);
+    }
+
+    private final List<Listener> listeners = new ArrayList<Listener>();
 
     private final Click click = new Click(500);
     private final LinearEnvelope ramp = new LinearEnvelope(0, 1, 500);
@@ -33,15 +44,27 @@ public class Tempo {
     private long lastTap = 0;
     private int tapCount = 0;
 
+    private int beatCount = 0;
+
     public Tempo() {
         this.click.start();
         this.ramp.start();
     }
 
+    public Tempo addListener(Listener listener) {
+        this.listeners.add(listener);
+        return this;
+    }
+
+    public Tempo removeListener(Listener listener) {
+        this.listeners.remove(listener);
+        return this;
+    }
+
     /**
      * Method to indicate when we are on-beat, assuming quarter-notes being given
      * one beat.
-     * 
+     *
      * @return true if we are on a quarter-note beat
      */
     public boolean beat() {
@@ -49,9 +72,27 @@ public class Tempo {
     }
 
     /**
+     * Method to indicate when we are on-beat, for half a measure.
+     *
+     * @return true if we are on a half-note beat
+     */
+    public boolean half() {
+        return beat() && (beatCount % 2 == 0);
+    }
+
+    /**
+     * Method to indicate the start of a measure.
+     *
+     * @return true if we are on a measure-beat
+     */
+    public boolean measure() {
+        return beat() && (beatCount % 4 == 0);
+    }
+
+    /**
      * Indicates phase of the current beat. On the beat the value will be 0, then
      * ramp up to 1 before the next beat triggers.
-     * 
+     *
      * @return value from 0-1 indicating phase of beat
      */
     public double ramp() {
@@ -60,7 +101,7 @@ public class Tempo {
 
     /**
      * Indicates beat phase in floating point
-     * 
+     *
      * @return value from 0-1 indicating phase of beat
      */
     public float rampf() {
@@ -69,7 +110,7 @@ public class Tempo {
 
     /**
      * Returns the current tempo in Beats Per Minute
-     * 
+     *
      * @return Current tempo
      */
     public double bpm() {
@@ -78,7 +119,7 @@ public class Tempo {
 
     /**
      * Returns the tempo in floating point
-     * 
+     *
      * @return Current tempo in float
      */
     public float bpmf() {
@@ -87,7 +128,7 @@ public class Tempo {
 
     /**
      * Adjusts the tempo by the given amount
-     * 
+     *
      * @param deltaMs Number of milliseconds to nudge beat by
      */
     public void adjustBpm(double deltaMs) {
@@ -96,7 +137,7 @@ public class Tempo {
 
     /**
      * Sets the BPM to the given value
-     * 
+     *
      * @param bpm Number of beats per minute
      */
     public void setBpm(double bpm) {
@@ -109,6 +150,7 @@ public class Tempo {
      * Re-triggers the metronome, so that it immediately beats.
      */
     public void trigger() {
+        this.beatCount = 0;
         this.click.fire();
         this.ramp.trigger();
     }
@@ -133,17 +175,17 @@ public class Tempo {
                     / (double) (this.tapCount - 1);
             this.click.setPeriod(period);
             this.ramp.setPeriod(period);
-            this.trigger();
-        } else {
-            this.trigger();
         }
+
+        this.trigger();
     }
 
-    void run(double deltaMs) {
-        this.click.run(deltaMs);
-        if (this.beat()) {
+    @Override
+    public void loop(double deltaMs) {
+        super.loop(deltaMs);
+        if (beat()) {
             this.ramp.trigger();
+            ++this.beatCount;
         }
-        this.ramp.run(deltaMs);
     }
 }

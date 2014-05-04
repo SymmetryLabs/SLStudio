@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -14,8 +14,8 @@
 package heronarts.lx.effect;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXLayer;
-import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.LXLayerComponent;
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -25,9 +25,8 @@ import heronarts.lx.parameter.LXParameterListener;
  * may be stateless or stateful, though typically they operate on a single
  * frame. Only the current frame is provided at runtime.
  */
-public abstract class LXEffect extends LXLayer {
+public abstract class LXEffect extends LXLayerComponent implements LXLoopTask {
 
-    protected final LX lx;
     private final boolean isMomentary;
 
     public final BooleanParameter enabled = new BooleanParameter("ENABLED", false);
@@ -43,7 +42,7 @@ public abstract class LXEffect extends LXLayer {
     }
 
     protected LXEffect(LX lx, boolean isMomentary) {
-        this.lx = lx;
+        super(lx);
         this.isMomentary = isMomentary;
         this.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
@@ -72,7 +71,7 @@ public abstract class LXEffect extends LXLayer {
 
     /**
      * Toggles the effect.
-     * 
+     *
      * @return this
      */
     public final LXEffect toggle() {
@@ -82,7 +81,7 @@ public abstract class LXEffect extends LXLayer {
 
     /**
      * Enables the effect.
-     * 
+     *
      * @return this
      */
     public final LXEffect enable() {
@@ -122,27 +121,22 @@ public abstract class LXEffect extends LXLayer {
 
     /**
      * Applies this effect to the current frame
-     * 
+     *
      * @param deltaMs Milliseconds since last frame
      * @param colors Array of this frame's colors
      */
-    public final void run(double deltaMs, int[] colors) {
+    @Override
+    public final void onLoop(double deltaMs) {
         long runStart = System.nanoTime();
-        for (LXModulator m : this.modulators) {
-            m.run(deltaMs);
-        }
-        this.apply(colors);
-        for (LXLayer layer : this.layers) {
-            layer.run(deltaMs, colors);
-        }
+        run(deltaMs);
         this.timer.runNanos = System.nanoTime() - runStart;
     }
 
     /**
      * Implementation of the effect. Subclasses need to override this to implement
      * their functionality.
-     * 
+     *
      * @param colors
      */
-    protected abstract void apply(int[] colors);
+    protected abstract void run(double deltaMs);
 }

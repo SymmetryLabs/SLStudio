@@ -34,6 +34,7 @@ import heronarts.lx.ui.UI;
 import java.awt.Color;
 import java.io.InputStream;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.List;
 
 import processing.core.PApplet;
@@ -86,6 +87,15 @@ public class LX {
      * A reference to the applet context.
      */
     public final PApplet applet;
+
+    /**
+     * Listener for top-level events
+     */
+    public interface Listener {
+        public void modelChanged(LX lx, LXModel model);
+    }
+
+    private final List<Listener> listeners = new ArrayList<Listener>();
 
     /**
      * The width of the grid, immutable.
@@ -277,6 +287,16 @@ public class LX {
         } else {
             this.ui = null;
         }
+    }
+
+    public LX addListener(Listener listener) {
+        this.listeners.add(listener);
+        return this;
+    }
+
+    public LX removeListener(Listener listener) {
+        this.listeners.add(listener);
+        return this;
     }
 
     @SuppressWarnings("deprecation")

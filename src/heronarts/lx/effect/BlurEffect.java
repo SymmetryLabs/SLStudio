@@ -15,7 +15,6 @@ package heronarts.lx.effect;
 
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BasicParameter;
-
 import processing.core.PApplet;
 import processing.core.PConstants;
 
@@ -34,7 +33,7 @@ public class BlurEffect extends LXEffect {
     }
 
     @Override
-    public void apply(int[] colors) {
+    public void run(double deltaMs) {
         float blurf = this.amount.getValuef();
         if (blurf > 0) {
             blurf = 1 - (1 - blurf) * (1 - blurf) * (1 - blurf);

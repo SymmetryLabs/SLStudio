@@ -13,11 +13,11 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterized;
 import heronarts.lx.parameter.LXParameterListener;
-
 
 /**
  * A Modulator is an abstraction for a variable with a value that varies over
@@ -25,7 +25,7 @@ import heronarts.lx.parameter.LXParameterListener;
  * continuously, others may halt after they reach a certain value.
  */
 public abstract class LXModulator extends LXParameterized implements
-        LXParameter {
+        LXParameter, LXLoopTask {
 
     /**
      * Whether this modulator is currently running.
@@ -194,7 +194,7 @@ public abstract class LXModulator extends LXParameterized implements
      *
      * @param deltaMs Milliseconds to advance by
      */
-    public final void run(double deltaMs) {
+    public final void loop(double deltaMs) {
         if (this.isRunning.isOn()) {
             this.value = this.computeValue(deltaMs);
         }

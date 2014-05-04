@@ -13,7 +13,7 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.LXComponent;
+import heronarts.lx.LXLayerComponent;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.effect.LXEffect;
@@ -122,7 +122,7 @@ public class LXAutomationRecorder extends LXModulator implements
         return this;
     }
 
-    public LXAutomationRecorder registerComponent(LXComponent component) {
+    public LXAutomationRecorder registerComponent(LXLayerComponent component) {
         for (LXParameter parameter : component.getParameters()) {
             if (parameter instanceof LXListenableParameter) {
                 registerParameter((LXListenableParameter) parameter);
