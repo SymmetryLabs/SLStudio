@@ -20,7 +20,7 @@ import java.util.List;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.LXParameterized;
 
-class LXComponent extends LXParameterized implements LXLoopTask {
+public class LXComponent extends LXParameterized implements LXLoopTask {
 
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
     private final List<LXModulator> unmodifiableModulators = Collections.unmodifiableList(this.modulators);
