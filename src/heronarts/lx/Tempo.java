@@ -47,8 +47,8 @@ public class Tempo extends LXComponent {
     private int beatCount = 0;
 
     public Tempo() {
-        this.click.start();
-        this.ramp.start();
+        addModulator(this.click.start());
+        addModulator(this.ramp.start());
     }
 
     public Tempo addListener(Listener listener) {
@@ -77,7 +77,7 @@ public class Tempo extends LXComponent {
      * @return true if we are on a half-note beat
      */
     public boolean half() {
-        return beat() && (beatCount % 2 == 0);
+        return beat() && (this.beatCount % 2 == 0);
     }
 
     /**
@@ -86,7 +86,7 @@ public class Tempo extends LXComponent {
      * @return true if we are on a measure-beat
      */
     public boolean measure() {
-        return beat() && (beatCount % 4 == 0);
+        return beat() && (this.beatCount % 4 == 0);
     }
 
     /**
