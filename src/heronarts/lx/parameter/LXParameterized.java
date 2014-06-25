@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -43,6 +43,15 @@ public abstract class LXParameterized implements LXParameterListener {
 
     public final List<LXParameter> getParameters() {
         return this.parameters;
+    }
+
+    public final LXParameter getParameter(String label) {
+        for (LXParameter parameter : this.parameters) {
+            if (parameter.getLabel().equals(label)) {
+                return parameter;
+            }
+        }
+        return null;
     }
 
     /**

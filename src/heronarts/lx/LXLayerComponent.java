@@ -74,6 +74,7 @@ public abstract class LXLayerComponent extends LXComponent implements LXLoopTask
         super.loop(deltaMs);
         onLoop(deltaMs);
         for (LXLayer layer : this.layers) {
+            layer.setBuffer(this.buffer);
             layer.loop(deltaMs);
         }
         this.timer.loopNanos = System.nanoTime() - loopStart;

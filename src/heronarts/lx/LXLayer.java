@@ -21,6 +21,10 @@ package heronarts.lx;
  */
 public abstract class LXLayer extends LXLayerComponent {
 
+    protected LXLayer(LX lx) {
+        super(lx);
+    }
+
     protected LXLayer(LX lx, LXBufferComponent buffer) {
         super(lx, buffer);
     }
