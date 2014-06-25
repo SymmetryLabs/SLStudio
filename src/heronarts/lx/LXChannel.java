@@ -195,6 +195,15 @@ public class LXChannel implements LXLoopTask {
         return this.unmodifiablePatterns;
     }
 
+    public synchronized final LXPattern getPattern(String className) {
+        for (LXPattern pattern : this.unmodifiablePatterns) {
+            if (pattern.getClass().getName().equals(className)) {
+                return pattern;
+            }
+        }
+        return null;
+    }
+
     public synchronized final LXChannel setPatterns(LXPattern[] patterns) {
         getActivePattern().onInactive();
         _updatePatterns(patterns);
