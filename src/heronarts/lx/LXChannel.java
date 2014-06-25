@@ -376,7 +376,6 @@ public class LXChannel implements LXLoopTask {
         // Run active pattern
         LXPattern activePattern = getActivePattern();
         activePattern.loop(deltaMs);
-        int[] colors = activePattern.getColors();
 
         // Run transition if applicable
         if (this.transition != null) {
@@ -398,9 +397,8 @@ public class LXChannel implements LXLoopTask {
                 goNext();
             }
         }
-        if (this.transition != null) {
-            colors = this.transition.getColors();
-        }
+
+        int[] colors = (this.transition != null) ? this.transition.getColors() : getActivePattern().getColors();
 
         if (this.effects.size() > 0) {
             int[] array = this.buffer.getArray();
@@ -413,6 +411,7 @@ public class LXChannel implements LXLoopTask {
                 effect.loop(deltaMs);
             }
         }
+
         this.colors = colors;
 
         this.timer.runNanos = System.nanoTime() - runStart;
