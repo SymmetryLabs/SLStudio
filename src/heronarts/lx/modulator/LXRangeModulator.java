@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -40,7 +40,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
 
     /**
      * Updates the range of the modulator.
-     * 
+     *
      * @param startValue New start value
      * @param endValue New final value
      * @param periodMs New period, in milliseconds
@@ -57,7 +57,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
 
     /**
      * Sets the range of the modulator, maintaining the period.
-     * 
+     *
      * @param startValue New start value
      * @param endValue New end value
      * @return this
@@ -71,7 +71,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
 
     /**
      * Updates the initial value
-     * 
+     *
      * @param startValue New start value
      * @return this
      */
@@ -81,7 +81,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
 
     /**
      * Updates the final value
-     * 
+     *
      * @param endValue New final value
      * @return this
      */
@@ -92,7 +92,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
     /**
      * Updates the range to proceed from the current value to a new end value.
      * Future oscillations will use the current value as the starting value.
-     * 
+     *
      * @param endValue New end value
      * @return this
      */
@@ -104,7 +104,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
      * Updates the range to proceed from the current value to a new end value with
      * a new period. Future oscillations will use the current value as the
      * starting value.
-     * 
+     *
      * @param endValue New end value
      * @param periodMs New period, in milliseconds
      * @return this
@@ -137,7 +137,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
 
     /**
      * Assigns a parameter to modulate the start value of this modulator.
-     * 
+     *
      * @param startValue A parameter to modify the start value
      * @return this
      */
@@ -149,7 +149,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
 
     /**
      * Assigns a parameter to modulate the end value of this modulator.
-     * 
+     *
      * @param endValue A parameter to modify the start value
      * @return this
      */
@@ -171,6 +171,8 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
         } else if (value > max) {
             updateValue(max);
             updateBasis(max);
+        } else {
+            updateBasis(value);
         }
     }
 
@@ -221,14 +223,14 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
     /**
      * Subclasses implement this which returns their value from a 0-1 scale. This
      * class automatically takes care of scaling to the startValue/endValue range.
-     * 
+     *
      * @param deltaMs
      */
     protected abstract double computeNormalizedValue(double deltaMs, double basis);
 
     /**
      * Subclasses determine the basis based on a normalized value from 0 to 1.
-     * 
+     *
      * @param normalizedValue A normalize value from 0 to 1
      */
     protected abstract double computeNormalizedBasis(double basis,
