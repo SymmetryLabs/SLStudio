@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -33,7 +33,7 @@ public class UIWindow extends UIContext {
 
     /**
      * Constructs a window object
-     * 
+     *
      * @param ui UI to place in
      * @param title Title for this window
      * @param x
@@ -53,28 +53,24 @@ public class UIWindow extends UIContext {
 
     private boolean movingWindow = false;
 
-    // protected void onDraw(UI ui, PGraphics pg) {
-    // if (hasFocus()) {
-    // pg.noStroke();
-    // pg.fill(ui.getFocusColor());
-    // pg.rect(0, 0, this.width, TITLE_LABEL_HEIGHT-4);
-    // }
-    // }
-
+    @Override
     protected void onFocus() {
         this.label.setColor(ui.getFocusColor());
     }
 
+    @Override
     protected void onBlur() {
         this.label.setColor(ui.getTextColor());
     }
 
+    @Override
     protected void onMousePressed(float mx, float my) {
         this.movingWindow = (my < TITLE_LABEL_HEIGHT);
         this.ui.bringToTop(this);
         _focus(this);
     }
 
+    @Override
     protected void onMouseDragged(float mx, float my, float dx, float dy) {
         if (this.movingWindow) {
             float newX = LXUtils.constrainf(this.x + dx, 0, this.ui.applet.width
@@ -87,7 +83,7 @@ public class UIWindow extends UIContext {
 
     /**
      * Set the title of the window.
-     * 
+     *
      * @param title Title of the window
      * @return this window
      */

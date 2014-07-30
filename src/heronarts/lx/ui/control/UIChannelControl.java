@@ -65,7 +65,7 @@ public class UIChannelControl extends UIWindow {
         final UIItemList patternList =
             new UIItemList(1, yp, w - 2, 140)
             .setItems(items);
-        patternList.addToContainer(this);
+        patternList.setBackgroundColor(ui.getBackgroundColor()).addToContainer(this);
         yp += patternList.getHeight() + 10;
 
         final UIKnob[] knobs = new UIKnob[NUM_KNOBS];
