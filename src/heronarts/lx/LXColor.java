@@ -20,6 +20,9 @@ import java.awt.Color;
  */
 public class LXColor {
 
+    /**
+     * Color blending modes
+     */
     public enum Blend {
         LERP,
         ADD,
@@ -251,10 +254,14 @@ public class LXColor {
         return Color.RGBtoHSB(r, g, b, hsb);
     }
 
-    public static int blend(int c1, int c2) {
-        return blend(c1, c2, Blend.LERP);
-    }
-
+    /**
+     * Blends the two colors using specified blend based on the alpha channel of c2
+     *
+     * @param c1 First color
+     * @param c2 Second color to be blended
+     * @param blendMode Type of blending
+     * @return Blended color
+     */
     public static int blend(int c1, int c2, Blend blendMode) {
         switch (blendMode) {
         case ADD:
@@ -275,18 +282,49 @@ public class LXColor {
         throw new RuntimeException("Unimplemented blend mode: " + blendMode);
     }
 
+    /**
+     * Interpolates each of the RGB channels between c1 and c2
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @return Interpolated color based on alpha of c2
+     */
     public static int lerp(int c1, int c2) {
         return lerp(c1, c2, (c2 & ALPHA_MASK) >>> ALPHA_SHIFT);
     }
 
+    /**
+     * Interpolates each of the RGB channels between c1 and c2 and specified amount
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @param amount Float from 0-1 for amount of interpolation
+     * @return Interpolated color
+     */
     public static int lerp(int c1, int c2, float amount) {
         return lerp(c1, c2, (int) (amount * 0xff));
     }
 
+    /**
+     * Interpolates each of the RGB channels between c1 and c2 and specified amount
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @param amount Double from 0-1 for amount of interpolation
+     * @return Interpolated color
+     */
     public static int lerp(int c1, int c2, double amount) {
         return lerp(c1, c2, (int) (amount * 0xff));
     }
 
+    /**
+     * Interpolates each of the RGB channels between c1 and c2 and specified alpha
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @param alpha Single byte (0-255) alpha channel
+     * @return Interpolated color
+     */
     public static int lerp(int c1, int c2, int alpha) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -297,6 +335,13 @@ public class LXColor {
             lerp(c1, c2, alpha, BLUE_MASK);
     }
 
+    /**
+     * Adds the specified colors
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @return Summed RGB channels with 255 clip
+     */
     public static int add(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -307,6 +352,13 @@ public class LXColor {
             min(BLUE_MASK, (c1 & BLUE_MASK) + (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
+    /**
+     * Subtracts the specified colors
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @return Color that is [c1 - c2] per RGB with 0-clip
+     */
     public static int subtract(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -317,6 +369,13 @@ public class LXColor {
             max(0, (c1 & BLUE_MASK) - (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
+    /**
+     * Multiplies the specified colors
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @return RGB channels multiplied with 255 clip
+     */
     public static int multiply(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -328,11 +387,18 @@ public class LXColor {
         int c2b = c2 & BLUE_MASK;
         return
             (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
-            lerp(c1, (c1r * c2r) << 8, c2a, RED_MASK) |
-            lerp(c1, (c1g * c2g), c2a, GREEN_MASK) |
-            lerp(c1, (c1b * c2b) >> 8, c2a, BLUE_MASK);
+            lerp(c1, (c1r * (c2r+1)) << 8, c2a, RED_MASK) |
+            lerp(c1, (c1g * (c2g+1)), c2a, GREEN_MASK) |
+            lerp(c1, (c1b * (c2b+1)) >> 8, c2a, BLUE_MASK);
     }
 
+    /**
+     * Inverse multiplies the specified colors
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @return RGB channels multiplied as 255 - [255-c1]*[255-c2] with clip
+     */
     public static int screen(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -344,11 +410,18 @@ public class LXColor {
         int c2b = c2 & BLUE_MASK;
         return
             (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
-            lerp(c1, RED_MASK - ((0xff - c1r) * (0xff - c2r) << 8), c2a, RED_MASK) |
-            lerp(c1, GREEN_MASK - ((0xff - c1g) * (0xff - c2g)), c2a, GREEN_MASK) |
-            lerp(c1, BLUE_MASK - (((0xff - c1b) * (0xff - c2b)) >> 8), c2a, BLUE_MASK);
+            lerp(c1, RED_MASK - ((0xff - c1r) * (0xff - c2r + 1) << 8), c2a, RED_MASK) |
+            lerp(c1, GREEN_MASK - ((0xff - c1g) * (0xff - c2g + 1)), c2a, GREEN_MASK) |
+            lerp(c1, BLUE_MASK - (((0xff - c1b) * (0xff - c2b + 1)) >> 8), c2a, BLUE_MASK);
     }
 
+    /**
+     * Returns the lightest color by RGB channel
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @return Lightest of each RGB channel
+     */
     public static int lightest(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -359,6 +432,13 @@ public class LXColor {
             max(c1 & BLUE_MASK, (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
+    /**
+     * Returns the darkest color by RGB channel
+     *
+     * @param c1 First color
+     * @param c2 Second color
+     * @return Darkest of each RGB channel
+     */
     public static int darkest(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
