@@ -14,11 +14,9 @@
 package heronarts.lx.effect;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXColor;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BasicParameter;
-
-import processing.core.PApplet;
-import processing.core.PConstants;
 
 public class FlashEffect extends LXEffect {
 
@@ -68,8 +66,7 @@ public class FlashEffect extends LXEffect {
         double hueValue = this.lx.getBaseHue();
         if (flashValue > 0) {
             for (int i = 0; i < this.lx.total; ++i) {
-                colors[i] = PApplet.lerpColor(colors[i],
-                        LX.hsb(hueValue, satValue, 100.), flashValue, PConstants.RGB);
+                this.colors[i] = LXColor.lerp(this.colors[i], LXColor.hsb(hueValue, satValue, 100.), flashValue);
             }
         }
     }

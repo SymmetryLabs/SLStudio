@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -14,8 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import processing.core.PApplet;
-import processing.core.PConstants;
+import heronarts.lx.LXColor;
 
 /**
  * An IrisTransition moves between content by opening or closing a window to the
@@ -59,7 +58,7 @@ public class IrisTransition extends LXTransition {
 
     /**
      * Constructs a new default outward radial transition
-     * 
+     *
      * @param lx
      */
     public IrisTransition(LX lx) {
@@ -68,7 +67,7 @@ public class IrisTransition extends LXTransition {
 
     /**
      * Constructs an OUTWARD transition of the given shape
-     * 
+     *
      * @param lx
      * @param shape Shape of the transition
      */
@@ -78,7 +77,7 @@ public class IrisTransition extends LXTransition {
 
     /**
      * Constructs a RADIAL transition with specified direction
-     * 
+     *
      * @param lx
      * @param direction Direction of the transition
      */
@@ -88,7 +87,7 @@ public class IrisTransition extends LXTransition {
 
     /**
      * Constructs a transition with specified shape and direction
-     * 
+     *
      * @param lx
      * @param shape Shape of the transition
      * @param direction Direction of the transition
@@ -102,7 +101,7 @@ public class IrisTransition extends LXTransition {
 
     /**
      * Sets the depth of the transition
-     * 
+     *
      * @param depth Number of pixels across which the transition smears
      * @return This transition, for method chaining
      */
@@ -111,6 +110,7 @@ public class IrisTransition extends LXTransition {
         return this;
     }
 
+    @Override
     protected void computeBlend(int[] c1, int[] c2, double progress) {
         double distanceSign = 1;
         double distanceProgress = progress;
@@ -136,8 +136,7 @@ public class IrisTransition extends LXTransition {
                 } else if (blendDistance >= 1.) {
                     this.colors[i] = c2[i];
                 } else {
-                    this.colors[i] = PApplet.lerpColor(c1[i], c2[i],
-                            (float) ((blendDistance + 1.) / 2.), PConstants.RGB);
+                    this.colors[i] = LXColor.lerp(c1[i], c2[i], (blendDistance + 1.) / 2.);
                 }
             }
             break;
@@ -166,8 +165,7 @@ public class IrisTransition extends LXTransition {
                     } else if (blendDistance >= 1.) {
                         this.colors[i] = c2[i];
                     } else {
-                        this.colors[i] = PApplet.lerpColor(c1[i], c2[i],
-                                (float) ((blendDistance + 1.) / 2.), PConstants.RGB);
+                        this.colors[i] = LXColor.lerp(c1[i], c2[i], (blendDistance + 1.) / 2.);
                     }
                 }
             }

@@ -15,8 +15,6 @@ package heronarts.lx.transform;
 
 import java.util.Stack;
 
-import processing.core.PVector;
-
 /**
  * A transform is a matrix stack, quite similar to the OpenGL implementation.
  * This class can be used to push a point around in 3-d space. The matrix itself
@@ -54,9 +52,9 @@ public class LXTransform {
      *
      * @return Vector of current position
      */
-    public PVector vector() {
+    public LXVector vector() {
         LXMatrix m = getMatrix();
-        return new PVector(m.m14, m.m24, m.m34);
+        return new LXVector(m.m14, m.m24, m.m34);
     }
 
     /**

@@ -14,8 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import processing.core.PApplet;
-import processing.core.PConstants;
+import heronarts.lx.LXColor;
 
 public class DissolveTransition extends LXTransition {
 
@@ -29,11 +28,10 @@ public class DissolveTransition extends LXTransition {
 
     @Override
     protected void computeBlend(int[] c1, int[] c2, double progress) {
-        LX.scaleBrightness(c1, (float) (1 - progress), this.sb1);
-        LX.scaleBrightness(c2, (float) progress, this.sb2);
+        LXColor.scaleBrightness(c1, (float) (1 - progress), this.sb1);
+        LXColor.scaleBrightness(c2, (float) progress, this.sb2);
         for (int i = 0; i < this.colors.length; ++i) {
-            this.colors[i] = PApplet.blendColor(this.sb1[i], this.sb2[i],
-                    PConstants.ADD);
+            this.colors[i] = LXColor.add(this.sb1[i], this.sb2[i]);
         }
     }
 

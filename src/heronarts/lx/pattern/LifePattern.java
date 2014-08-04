@@ -14,6 +14,7 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXColor;
 import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
@@ -155,7 +156,7 @@ public class LifePattern extends LXPattern {
                 b = 100 - this.lx.tempo.ramp() * 100;
                 break;
             }
-            this.colors[i] = LX.hsbd(
+            this.colors[i] = LXColor.hsb(
                     (this.lx.getBaseHue() + lx.row(i) * 2. + Math.abs(lx.column(i)
                             - this.hCenter.getValue()) * 0.4) % 360,
                     Math.min(

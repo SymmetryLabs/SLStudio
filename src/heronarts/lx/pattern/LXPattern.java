@@ -16,6 +16,8 @@ package heronarts.lx.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXBufferComponent;
 import heronarts.lx.LXChannel;
+import heronarts.lx.LXColor;
+import heronarts.lx.LXTime;
 import heronarts.lx.midi.LXMidiAftertouch;
 import heronarts.lx.midi.LXMidiControlChange;
 import heronarts.lx.midi.LXMidiListener;
@@ -26,9 +28,6 @@ import heronarts.lx.midi.LXMidiProgramChange;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transition.LXTransition;
-import processing.core.PApplet;
-import processing.core.PImage;
-import processing.core.PConstants;
 
 /**
  * A pattern is the core object that the animation engine uses to generate
@@ -67,6 +66,7 @@ public abstract class LXPattern extends LXBufferComponent implements LXMidiListe
      *
      * @return Name of this pattern
      */
+    @Override
     public String getName() {
         String simple = getClass().getSimpleName();
         int index = simple.indexOf("Pattern");
@@ -145,7 +145,7 @@ public abstract class LXPattern extends LXBufferComponent implements LXMidiListe
         if (!this.hasInterval()) {
             return false;
         }
-        int now = PApplet.hour() * 60 + PApplet.minute();
+        int now = LXTime.hour() * 60 + LXTime.minute();
         if (this.intervalBegin < this.intervalEnd) {
             // Normal daytime interval
             return (now >= this.intervalBegin) && (now < this.intervalEnd);
@@ -228,14 +228,14 @@ public abstract class LXPattern extends LXBufferComponent implements LXMidiListe
      *
      * @return this
      */
-    protected final LXPattern blendColor(int i, int c, int blendMode) {
-        this.colors[i] = PImage.blendColor(this.colors[i], c, blendMode);
+    protected final LXPattern blendColor(int i, int c, LXColor.Blend blendMode) {
+        this.colors[i] = LXColor.blend(this.colors[i], c, blendMode);
         return this;
     }
 
-    protected final LXPattern blendColor(LXFixture f, int c, int blendMode) {
+    protected final LXPattern blendColor(LXFixture f, int c, LXColor.Blend blendMode) {
         for (LXPoint p : f.getPoints()) {
-            this.colors[p.index] = PImage.blendColor(this.colors[p.index], c, blendMode);
+            this.colors[p.index] = LXColor.blend(this.colors[p.index], c, blendMode);
         }
         return this;
     }
@@ -248,7 +248,8 @@ public abstract class LXPattern extends LXBufferComponent implements LXMidiListe
      * @return this
      */
     protected final LXPattern addColor(int i, int c) {
-        return blendColor(i, c, PConstants.ADD);
+        this.colors[i] = LXColor.add(i, c);
+        return this;
     }
 
     /**
@@ -271,7 +272,10 @@ public abstract class LXPattern extends LXBufferComponent implements LXMidiListe
      * @return this
      */
     protected final LXPattern addColor(LXFixture f, int c) {
-        return blendColor(f, c, PConstants.ADD);
+        for (LXPoint p : f.getPoints()) {
+            this.colors[p.index] = LXColor.add(this.colors[p.index], c);
+        }
+        return this;
     }
 
     /**

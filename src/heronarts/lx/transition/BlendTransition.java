@@ -14,20 +14,19 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import processing.core.PApplet;
-import processing.core.PConstants;
+import heronarts.lx.LXColor;
 
 public class BlendTransition extends LXTransition {
 
-    private final int blendType;
+    private final LXColor.Blend blendMode;
 
-    public BlendTransition(LX lx, int blendType) {
-        this(lx, blendType, Mode.FULL);
+    public BlendTransition(LX lx, LXColor.Blend blendMode) {
+        this(lx, blendMode, Mode.FULL);
     }
 
-    public BlendTransition(LX lx, int blendType, Mode mode) {
+    public BlendTransition(LX lx, LXColor.Blend blendMode, Mode mode) {
         super(lx);
-        this.blendType = blendType;
+        this.blendMode = blendMode;
         setMode(mode);
     }
 
@@ -35,19 +34,22 @@ public class BlendTransition extends LXTransition {
     protected void computeBlend(int[] c1, int[] c2, double progress) {
         if (progress == 0.5) {
             for (int i = 0; i < c1.length; ++i) {
-                this.colors[i] = PApplet.blendColor(c1[i], c2[i], this.blendType);
+                this.colors[i] = LXColor.blend(c1[i], c2[i], this.blendMode);
             }
         } else if (progress < 0.5) {
             for (int i = 0; i < c1.length; ++i) {
-                this.colors[i] = PApplet.lerpColor(c1[i],
-                        PApplet.blendColor(c1[i], c2[i], this.blendType),
-                        (float) (2. * progress), PConstants.RGB);
+                this.colors[i] = LXColor.lerp(c1[i],
+                    LXColor.blend(c1[i], c2[i], this.blendMode),
+                    2. * progress
+                );
             }
         } else {
             for (int i = 0; i < c1.length; ++i) {
-                this.colors[i] = PApplet.lerpColor(c2[i],
-                        PApplet.blendColor(c1[i], c2[i], this.blendType),
-                        (float) (2. * (1. - progress)), PConstants.RGB);
+                this.colors[i] = LXColor.lerp(
+                    c2[i],
+                    LXColor.blend(c1[i], c2[i], this.blendMode),
+                    2. * (1. - progress)
+                );
             }
         }
     }

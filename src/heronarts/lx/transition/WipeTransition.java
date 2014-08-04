@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -14,8 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import processing.core.PApplet;
-import processing.core.PConstants;
+import heronarts.lx.LXColor;
 
 public class WipeTransition extends LXTransition {
 
@@ -41,6 +40,7 @@ public class WipeTransition extends LXTransition {
         return this;
     }
 
+    @Override
     @SuppressWarnings("fallthrough")
     protected void computeBlend(int[] c1, int[] c2, double progress) {
         double blendPosition = 0;
@@ -70,12 +70,12 @@ public class WipeTransition extends LXTransition {
             case LEFT:
                 distanceSign = -1;
             case RIGHT:
-                nodePosition = (double) this.lx.column(i);
+                nodePosition = this.lx.column(i);
                 break;
             case UP:
                 distanceSign = -1;
             case DOWN:
-                nodePosition = (double) this.lx.row(i);
+                nodePosition = this.lx.row(i);
                 break;
             }
             double distance = (blendPosition - nodePosition) / (this.depth / 2.)
@@ -85,8 +85,7 @@ public class WipeTransition extends LXTransition {
             } else if (distance >= 1.) {
                 this.colors[i] = c2[i];
             } else {
-                this.colors[i] = PApplet.lerpColor(c1[i], c2[i],
-                        (float) ((distance + 1.) / 2.), PConstants.RGB);
+                this.colors[i] = LXColor.lerp(c1[i], c2[i], (distance + 1.) / 2.);
             }
         }
     }

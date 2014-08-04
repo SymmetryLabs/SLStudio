@@ -14,6 +14,7 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXColor;
 import heronarts.lx.LXUtils;
 import heronarts.lx.audio.GraphicEQ;
 import heronarts.lx.transition.WipeTransition;
@@ -37,7 +38,7 @@ public class GraphicEqualizerPattern extends LXPattern {
                 double jscaled = (this.lx.height - 1 - j)
                         / (double) (this.lx.height - 1);
                 double b = LXUtils.constrain(400. * (value - jscaled), 0, 100);
-                this.setColor(i, j, LX.hsb(this.lx.getBaseHue(), 100., b));
+                this.setColor(i, j, LXColor.hsb(this.lx.getBaseHue(), 100., b));
             }
         }
     }

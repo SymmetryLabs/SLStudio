@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -14,8 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import processing.core.PApplet;
-import processing.core.PConstants;
+import heronarts.lx.LXColor;
 
 public class SlideTransition extends LXTransition {
     public enum Direction {
@@ -51,6 +50,7 @@ public class SlideTransition extends LXTransition {
         return source[col + this.lx.width * row];
     }
 
+    @Override
     protected void computeBlend(int[] c1, int[] c2, double progress) {
         double blendPosition = 0;
         switch (this.direction) {
@@ -76,17 +76,21 @@ public class SlideTransition extends LXTransition {
             case RIGHT:
                 p1 = (int) Math.floor(col + blendPosition);
                 p2 = (int) Math.ceil(col + blendPosition);
-                this.colors[i] = PApplet.lerpColor(this.getColor(c1, c2, row, p1),
-                        this.getColor(c1, c2, row, p2), (float) (col + blendPosition - p1),
-                        PConstants.RGB);
+                this.colors[i] = LXColor.lerp(
+                    this.getColor(c1, c2, row, p1),
+                    this.getColor(c1, c2, row, p2),
+                    col + blendPosition - p1
+                );
                 break;
             case DOWN:
             case UP:
                 p1 = (int) Math.floor(row + blendPosition);
                 p2 = (int) Math.ceil(row + blendPosition);
-                this.colors[i] = PApplet.lerpColor(this.getColor(c1, c2, p1, col),
-                        this.getColor(c1, c2, p2, col), (float) (row + blendPosition - p1),
-                        PConstants.RGB);
+                this.colors[i] = LXColor.lerp(
+                    this.getColor(c1, c2, p1, col),
+                    this.getColor(c1, c2, p2, col),
+                    row + blendPosition - p1
+                );
                 break;
             }
         }

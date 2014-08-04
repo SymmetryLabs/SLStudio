@@ -14,6 +14,7 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXColor;
 import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.transition.WipeTransition;
@@ -59,7 +60,7 @@ public class BouncingPattern extends LXPattern {
                     setColor(
                             this.BOUNCER_WIDTH * i + x,
                             lx.height - 1 - j,
-                            LX.hsb(h, 100., Math.max(0, 100 - 40 * (Math.abs(v - j)))));
+                            LXColor.hsb(h, 100., Math.max(0, 100 - 40 * (Math.abs(v - j)))));
                 }
             }
         }

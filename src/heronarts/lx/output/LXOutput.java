@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -14,6 +14,7 @@
 package heronarts.lx.output;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXColor;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -104,7 +105,7 @@ public abstract class LXOutput {
 
     /**
      * Adds a child to this output, sent after color-correction
-     * 
+     *
      * @param child
      * @return
      */
@@ -115,7 +116,7 @@ public abstract class LXOutput {
 
     /**
      * Removes a child
-     * 
+     *
      * @param child
      * @return
      */
@@ -126,7 +127,7 @@ public abstract class LXOutput {
 
     /**
      * Sends data to this output, after applying throttle and color correction
-     * 
+     *
      * @param colors
      */
     public final LXOutput send(int[] colors) {
@@ -139,7 +140,7 @@ public abstract class LXOutput {
             int[] colorsToSend;
             switch (this.mode.getValuei()) {
             case MODE_WHITE:
-                int white = LX.hsb(0, 0, 100 * this.brightness.getValuef());
+                int white = LXColor.hsb(0, 0, 100 * this.brightness.getValuef());
                 for (int i = 0; i < this.allWhite.length; ++i) {
                     this.allWhite[i] = white;
                 }
@@ -188,7 +189,7 @@ public abstract class LXOutput {
 
     /**
      * Subclasses implement this to send the data.
-     * 
+     *
      * @param colors
      */
     protected abstract void onSend(int[] colors);

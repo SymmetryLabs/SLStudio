@@ -14,6 +14,7 @@
 package heronarts.lx.effect;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXColor;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BasicParameter;
 
@@ -56,8 +57,8 @@ public class DesaturationEffect extends LXEffect {
         double value = this.desaturation.getValue();
         if (value > 0) {
             for (int i = 0; i < colors.length; ++i) {
-                colors[i] = LX.hsb(LX.h(colors[i]),
-                        Math.max(0, LX.s(colors[i]) - value), LX.b(colors[i]));
+                colors[i] = LXColor.hsb(LXColor.h(colors[i]),
+                        Math.max(0, LXColor.s(colors[i]) - value), LXColor.b(colors[i]));
 
             }
         }

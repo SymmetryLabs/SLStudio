@@ -14,6 +14,7 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXColor;
 
 public class BaseHuePattern extends LXPattern {
     public BaseHuePattern(LX lx) {
@@ -23,7 +24,7 @@ public class BaseHuePattern extends LXPattern {
     @Override
     public void run(double deltaMs) {
         for (int i = 0; i < this.colors.length; ++i) {
-            this.colors[i] = LX.hsb(this.lx.getBaseHue(), 100, 100);
+            this.colors[i] = LXColor.hsb(this.lx.getBaseHue(), 100, 100);
         }
     }
 }

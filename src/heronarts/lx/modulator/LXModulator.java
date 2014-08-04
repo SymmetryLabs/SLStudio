@@ -145,8 +145,7 @@ public abstract class LXModulator extends LXParameterized implements
     }
 
     /**
-     * Retrieves the current value of the modulator in floating point precision,
-     * useful when working directly with processing graphics libraries
+     * Retrieves the current value of the modulator in floating point precision.
      *
      * @return Current value of the modulator, cast to float
      */

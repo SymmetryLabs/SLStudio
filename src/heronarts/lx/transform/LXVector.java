@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -14,15 +14,18 @@
 package heronarts.lx.transform;
 
 import heronarts.lx.model.LXPoint;
-import processing.core.PVector;
 
 /**
  * A mutable version of an LXPoint, which has had a transformation applied to
  * it, and may have other transformations applied to it.
  */
-public class LXVector extends PVector {
+public class LXVector {
 
-    private static final long serialVersionUID = 1L;
+    public float x;
+
+    public float y;
+
+    public float z;
 
     /**
      * Helper to retrieve the point this corresponds to
@@ -36,12 +39,22 @@ public class LXVector extends PVector {
 
     /**
      * Construct a mutable vector based on an LXPoint
-     * 
+     *
      * @param point Point with index reference
      */
     public LXVector(LXPoint point) {
-        super(point.x, point.y, point.z);
+        this.x = point.x;
+        this.y = point.y;
+        this.z = point.z;
         this.point = point;
         this.index = point.index;
+    }
+
+    public LXVector(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.point = null;
+        this.index = -1;
     }
 }

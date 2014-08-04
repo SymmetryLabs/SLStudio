@@ -72,7 +72,7 @@ public class LXEngine {
 
     public final BasicParameter framesPerSecond = new BasicParameter("FPS", 60, 0, 300);
 
-    float frameRate = 0;
+    private float frameRate = 0;
 
     public interface Dispatch {
         public void dispatch();
@@ -544,7 +544,7 @@ public class LXEngine {
      *
      * @return The internal render buffer
      */
-    int[] renderBuffer() {
+    public int[] renderBuffer() {
         return this.buffer.render;
     }
 }

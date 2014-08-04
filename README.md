@@ -1,7 +1,7 @@
 LX
 ==
 
-LX is a Processing library for LED lighting engines with modular UI and control.
+LX is a library for LED lighting engines with modular UI and control.
 
 Source code is available as a reference. Note that this software is not under an open source license. Redistribution, use or modification without permission are violations of copyright.
 

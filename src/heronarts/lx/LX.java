@@ -15,9 +15,6 @@ package heronarts.lx;
 
 import heronarts.lx.audio.FrequencyGate;
 import heronarts.lx.audio.GraphicEQ;
-import heronarts.lx.client.UDPClient;
-import heronarts.lx.effect.DesaturationEffect;
-import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
@@ -29,17 +26,11 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
-import heronarts.lx.ui.UI;
 
-import java.awt.Color;
 import java.io.InputStream;
-import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
-import processing.core.PApplet;
-import processing.core.PConstants;
-import processing.core.PGraphics;
 import ddf.minim.AudioInput;
 import ddf.minim.Minim;
 
@@ -69,24 +60,6 @@ import ddf.minim.Minim;
  * from 0-100.
  */
 public class LX {
-
-    public final static String VERSION = "##library.prettyVersion##";
-
-    public static boolean isProcessing2X = false;
-
-    /**
-     * Returns the version of the library.
-     *
-     * @return String
-     */
-    public static String version() {
-        return VERSION;
-    }
-
-    /**
-     * A reference to the applet context.
-     */
-    public final PApplet applet;
 
     /**
      * Listener for top-level events
@@ -133,35 +106,14 @@ public class LX {
     public final LXEngine engine;
 
     /**
-     * The UI container.
-     */
-    public final UI ui;
-
-    /**
-     * Internal buffer for colors, owned by Processing animation thread.
-     */
-    private final int[] buffer;
-
-    /**
-     * The current frame's colors, either from the engine or the buffer. Note that
-     * this is a reference to an array.
-     */
-    private int[] colors;
-
-    /**
-     * Client listener.
-     */
-    private UDPClient client;
-
-    /**
      * The global tempo object.
      */
     public final Tempo tempo;
 
     /**
-     * The global touch object.
+     * Callback for Minim implementation
      */
-    private Touch touch;
+    private Object minimCallback = this;
 
     /**
      * Minim instance to provide audio input.
@@ -183,71 +135,39 @@ public class LX {
     private boolean baseHueIsInternalModulator = false;
 
     /**
-     * Global flash effect.
-     */
-    private final FlashEffect flash;
-
-    /**
-     * Global desaturation effect.
-     */
-    private final DesaturationEffect desaturation;
-
-    private final class Flags {
-        public boolean showFramerate = false;
-        public boolean keyboardTempo = false;
-    }
-
-    public class Timer {
-        public long drawNanos = 0;
-        public long clientNanos = 0;
-        public long engineNanos = 0;
-        public long uiNanos = 0;
-    }
-
-    public final Timer timer = new Timer();
-
-    private final Flags flags = new Flags();
-
-    /**
      * Creates an LX instance with no nodes.
-     *
-     * @param applet
      */
-    public LX(PApplet applet) {
-        this(applet, null);
+    protected LX() {
+        this(null);
     }
 
     /**
      * Creates an LX instance. This instance will run patterns for a grid of the
      * specified size.
      *
-     * @param applet
      * @param total
      */
-    public LX(PApplet applet, int total) {
-        this(applet, total, 1);
+    protected LX(int total) {
+        this(total, 1);
     }
 
     /**
      * Creates a LX instance. This instance will run patterns for a grid of the
      * specified size.
      *
-     * @param applet
      * @param width
      * @param height
      */
-    public LX(PApplet applet, int width, int height) {
-        this(applet, new GridModel(width, height));
+    protected LX(int width, int height) {
+        this(new GridModel(width, height));
     }
 
     /**
      * Constructs an LX instance with the given pixel model
      *
-     * @param applet
      * @param model Pixel model
      */
-    public LX(PApplet applet, LXModel model) {
-        this.applet = applet;
+    protected LX(LXModel model) {
         this.model = model;
 
         if (model == null) {
@@ -266,27 +186,13 @@ public class LX {
             }
         }
 
-        this.client = null;
-
         this.engine = new LXEngine(this);
-        this.buffer = new int[this.total];
-        this.colors = this.engine.renderBuffer();
 
         this.baseHue = null;
         this.cycleBaseHue(30000);
 
-        this.touch = new Touch.NullTouch();
         this.tempo = new Tempo();
 
-        this.desaturation = new DesaturationEffect(this);
-        this.flash = new FlashEffect(this);
-
-        if (applet != null) {
-            this.ui = new UI(applet);
-            initProcessing(applet);
-        } else {
-            this.ui = null;
-        }
     }
 
     public LX addListener(Listener listener) {
@@ -299,69 +205,13 @@ public class LX {
         return this;
     }
 
-    @SuppressWarnings("deprecation")
-    private void initProcessing(PApplet applet) {
-        applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
-
-        try {
-            // Processing 2.x
-            Method m = applet.getClass().getMethod("registerMethod", String.class,
-                    Object.class);
-            System.out.println("LX detected Processing 2.x");
-            isProcessing2X = true;
-            m.invoke(applet, "draw", this);
-            m.invoke(applet, "dispose", this);
-            m.invoke(applet, "keyEvent", new KeyEvent2x());
-            m.invoke(applet, "mouseEvent", new MouseEvent2x());
-        } catch (Exception x) {
-            // Processing 1.x
-            System.out.println("LX detected Processing 1.x");
-            applet.registerDraw(this);
-            applet.registerKeyEvent(new KeyEvent1x());
-            applet.registerMouseEvent(new MouseEvent1x());
-            applet.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
-                public void mouseWheelMoved(java.awt.event.MouseWheelEvent mwe) {
-                    ui.mouseWheel(mwe.getX(), mwe.getY(), mwe.getWheelRotation());
-                }
-            });
-        }
-
-    }
-
-    public final class KeyEvent1x {
-        public void keyEvent(java.awt.event.KeyEvent e) {
-            try {
-                LX.this.keyEvent(new LXKeyEvent(e));
-            } catch (LXKeyEvent.UnsupportedActionException uax) {
-                // No problem
-            }
-        }
-    }
-
-    public final class KeyEvent2x {
-        public void keyEvent(processing.event.KeyEvent e) {
-            try {
-                LX.this.keyEvent(new LXKeyEvent(e));
-            } catch (LXKeyEvent.UnsupportedActionException uax) {
-                // No problem
-            }
-        }
-    }
-
-    public final class MouseEvent1x {
-        public void mouseEvent(java.awt.event.MouseEvent e) {
-            mouseEvent1x(e);
-        }
-    }
-
-    public final class MouseEvent2x {
-        public void mouseEvent(processing.event.MouseEvent e) {
-            mouseEvent2x(e);
-        }
+    protected LX setMinimCallback(Object callback) {
+        this.minimCallback = callback;
+        return this;
     }
 
     /**
-     * Invoked by the processing engine on applet shutdown.
+     * Shut down resources of the LX instance.
      */
     public void dispose() {
         if (this.audioInput != null) {
@@ -372,208 +222,6 @@ public class LX {
             this.minim.stop();
             this.minim = null;
         }
-    }
-
-    /**
-     * Scales the brightness of an array of colors by some factor
-     *
-     * @param rgbs Array of color values
-     * @param s Factor by which to scale brightness
-     * @return Array of new color values
-     */
-    public static int[] scaleBrightness(int[] rgbs, float s) {
-        int[] result = new int[rgbs.length];
-        scaleBrightness(rgbs, s, result);
-        return result;
-    }
-
-    /**
-     * Scales the brightness of an array of colors by some factor
-     *
-     * @param rgbs Array of color values
-     * @param s Factor by which to scale brightness
-     * @param result Array to write results into, if null, input array is modified
-     */
-    public static void scaleBrightness(int[] rgbs, float s, int[] result) {
-        int r, g, b, rgb;
-        float[] hsb = new float[3];
-        if (result == null) {
-            result = rgbs;
-        }
-        for (int i = 0; i < rgbs.length; ++i) {
-            rgb = rgbs[i];
-            r = (rgb >> 16) & 0xff;
-            g = (rgb >> 8) & 0xff;
-            b = rgb & 0xff;
-            Color.RGBtoHSB(r, g, b, hsb);
-            result[i] = Color.HSBtoRGB(hsb[0], hsb[1], Math.min(1, hsb[2] * s));
-        }
-    }
-
-    /**
-     * Scales the brightness of a color by a factor
-     *
-     * @param rgb Color value
-     * @param s Factory by which to scale brightness
-     * @return New color
-     */
-    public static int scaleBrightness(int rgb, float s) {
-        int r = (rgb >> 16) & 0xff;
-        int g = (rgb >> 8) & 0xff;
-        int b = rgb & 0xff;
-        float[] hsb = Color.RGBtoHSB(r, g, b, null);
-        return Color.HSBtoRGB(hsb[0], hsb[1], Math.min(1, hsb[2] * s));
-    }
-
-    /**
-     * Utility function to invoke Color.RGBtoHSB without requiring the caller to
-     * manually unpack bytes from an integer color.
-     *
-     * @param rgb ARGB integer color
-     * @param hsb Array into which results should be placed
-     * @return Array of hsb values, or null if hsb parameter was provided
-     */
-    public static float[] RGBtoHSB(int rgb, float[] hsb) {
-        int r = (rgb >> 16) & 0xff;
-        int g = (rgb >> 8) & 0xff;
-        int b = rgb & 0xff;
-        return Color.RGBtoHSB(r, g, b, hsb);
-    }
-
-    /**
-     * Thread-safe accessor for the hue of a color
-     *
-     * @param rgb
-     * @return Hue value from 0-360
-     */
-    public static float h(int rgb) {
-        int r = (rgb >> 16) & 0xff;
-        int g = (rgb >> 8) & 0xff;
-        int b = rgb & 0xff;
-        int max = (r > g) ? r : g;
-        if (b > max)
-            max = b;
-        int min = (r < g) ? r : g;
-        if (b < min)
-            min = b;
-        if (max == 0)
-            return 0;
-        float range = max - min;
-        float h;
-        float rc = (max - r) / range;
-        float gc = (max - g) / range;
-        float bc = (max - b) / range;
-        if (r == max)
-            h = bc - gc;
-        else if (g == max)
-            h = 2.f + rc - bc;
-        else
-            h = 4.f + gc - rc;
-        h /= 6.f;
-        if (h < 0) {
-            h += 1.f;
-        }
-        return 360.f * h;
-    }
-
-    /**
-     * Thread-safe accessor for the saturation of a color
-     *
-     * @param rgb
-     * @return Saturation value from 0-100
-     */
-    public static float s(int rgb) {
-        int r = (rgb >> 16) & 0xff;
-        int g = (rgb >> 8) & 0xff;
-        int b = rgb & 0xff;
-        int max = (r > g) ? r : g;
-        if (b > max)
-            max = b;
-        int min = (r < g) ? r : g;
-        if (b < min)
-            min = b;
-        return (max == 0) ? 0 : (max - min) * 100.f / max;
-    }
-
-    /**
-     * Thread-safe accessor for the brightness of a color
-     *
-     * @param rgb
-     * @return Brightness from 0-100
-     */
-    public static float b(int rgb) {
-        int r = (rgb >> 16) & 0xff;
-        int g = (rgb >> 8) & 0xff;
-        int b = rgb & 0xff;
-        int max = (r > g) ? r : g;
-        if (b > max)
-            max = b;
-        return 100.f * max / 255.f;
-    }
-
-    /**
-     * Utility to create a color from double values
-     *
-     * @param h Hue
-     * @param s Saturation
-     * @param b Brightness
-     * @return Color value
-     */
-    public static final int hsbd(double h, double s, double b) {
-        return hsb((float) h, (float) s, (float) b);
-    }
-
-    /**
-     * Utility to create a color from double values
-     *
-     * @param h Hue
-     * @param s Saturation
-     * @param b Brightness
-     * @return Color value
-     */
-    public static final int hsb(double h, double s, double b) {
-        return hsb((float) h, (float) s, (float) b);
-    }
-
-    /**
-     * Thread-safe function to create color from HSB
-     *
-     * @param h Hue from 0-360
-     * @param s Saturation from 0-100
-     * @param b Brightness from
-     * @return rgb color value
-     */
-    public static int hsb(float h, float s, float b) {
-        return Color.HSBtoRGB((h % 360) / 360.f, s / 100.f, b / 100.f);
-    }
-
-    /**
-     * Adds basic flash and desaturation effects to the engine, triggerable by the
-     * keyboard. The 's' key triggers desaturation, and the '/' key triggers a
-     * flash
-     */
-    public LX enableBasicEffects() {
-        this.addEffect(this.desaturation);
-        this.addEffect(this.flash);
-        return this;
-    }
-
-    /**
-     * Enables the tempo to be controlled by the keyboard arrow keys. Left and
-     * right arrows change the tempo by .1 BPM, and the space-bar taps the tempo.
-     */
-    public LX enableKeyboardTempo() {
-        this.flags.keyboardTempo = true;
-        return this;
-    }
-
-    /**
-     * Returns the current color values
-     *
-     * @return Array of the current color values
-     */
-    public final int[] getColors() {
-        return this.colors;
     }
 
     /**
@@ -603,32 +251,25 @@ public class LX {
         return this.engine.getNextPattern();
     }
 
-    /**
-     * Utility method to access the touch object.
-     *
-     * @return The touch object
-     */
-    public Touch touch() {
-        return this.touch;
-    }
-
     public final AudioInput audioInput() {
         return audioInput(44100);
     }
 
     public final AudioInput audioInput(int sampleRate) {
         if (this.audioInput == null) {
-            this.minim = new Minim(this.applet != null ? this.applet : this);
-            this.audioInput = minim.getLineIn(Minim.STEREO, 1024, sampleRate);
+            this.minim = new Minim(this.minimCallback);
+            this.audioInput = this.minim.getLineIn(Minim.STEREO, 1024, sampleRate);
         }
         return this.audioInput;
     }
 
     public String sketchPath(String fileName) {
+        // For Minim compatibility
         return fileName;
     }
 
     public InputStream createInput(String fileName) {
+        // Audio input not yet supported in LX
         return null;
     }
 
@@ -736,8 +377,20 @@ public class LX {
     }
 
     /**
+     * Shorthand for LXColor.hsb()
+     *
+     * @param h Hue 0-360
+     * @param s Saturation 0-100
+     * @param b Brightness 0-100
+     * @return Color
+     */
+    public static int hsb(float h, float s, float b) {
+        return LXColor.hsb(h, s, b);
+    }
+
+    /**
      * Sets the speed of the entire system. Default is 1.0, any modification will
-     * mutate de deltaMs values system-wide.
+     * mutate deltaMs values system-wide.
      */
     public LX setSpeed(double speed) {
         this.engine.setSpeed(speed);
@@ -831,14 +484,6 @@ public class LX {
      */
     public LX togglePaused() {
         return setPaused(!this.engine.isPaused());
-    }
-
-    /**
-     * Triggers the global flash effect.
-     */
-    public LX flash() {
-        this.flash.trigger();
-        return this;
     }
 
     /**
@@ -982,16 +627,6 @@ public class LX {
     }
 
     /**
-     * Listens for UDP packets from LX clients.
-     */
-    public LX enableUDPClient() {
-        this.client = UDPClient.getInstance();
-        this.client.addListener(this);
-        this.touch = this.client.getTouch();
-        return this;
-    }
-
-    /**
      * Adds an output driver
      *
      * @param output
@@ -1032,190 +667,5 @@ public class LX {
         return this.engine.getPatterns();
     }
 
-    /**
-     * Core function invoked by the processing engine on each iteration of the run
-     * cycle.
-     */
-    public void draw() {
-        long drawStart = System.nanoTime();
 
-        this.timer.clientNanos = 0;
-        if (this.client != null) {
-            long clientStart = System.nanoTime();
-            this.client.receive();
-            this.timer.clientNanos = System.nanoTime() - clientStart;
-        }
-
-        long engineStart = System.nanoTime();
-        if (this.engine.isThreaded()) {
-            // If the engine is threaded, it is running itself. We just need
-            // to copy its current color buffer into our own in a thread-safe
-            // manner.
-            this.engine.copyBuffer(this.colors = this.buffer);
-        } else {
-            // If the engine is not threaded, then we run it ourselves, and
-            // we can just use its color buffer, as there is no thread contention.
-            this.engine.run();
-            this.colors = this.engine.renderBuffer();
-        }
-        this.timer.engineNanos = System.nanoTime() - engineStart;
-
-        long uiStart = System.nanoTime();
-        this.ui.draw();
-        this.timer.uiNanos = System.nanoTime() - uiStart;
-
-        if (this.flags.showFramerate) {
-            if (this.engine.isThreaded()) {
-                System.out.println("Engine: " + this.engine.frameRate + " "
-                        + "Render: " + this.applet.frameRate);
-            } else {
-                System.out.println("Framerate: " + this.applet.frameRate);
-            }
-        }
-
-        this.timer.drawNanos = System.nanoTime() - drawStart;
-    }
-
-    private void keyEvent(LXKeyEvent keyEvent) {
-        char keyChar = keyEvent.getKeyChar();
-        int keyCode = keyEvent.getKeyCode();
-        LXKeyEvent.Action action = keyEvent.getAction();
-        if (action == LXKeyEvent.Action.RELEASED) {
-            this.ui.keyReleased(keyEvent, keyChar, keyCode);
-
-            switch (Character.toLowerCase(keyChar)) {
-            case '[':
-                this.engine.goPrev();
-                break;
-            case ']':
-                this.engine.goNext();
-                break;
-            case 'f':
-                this.flags.showFramerate = false;
-                break;
-            case ' ':
-                if (this.flags.keyboardTempo) {
-                    this.tempo.tap();
-                }
-                break;
-            case 's':
-                this.desaturation.disable();
-                break;
-            case '/':
-                this.flash.disable();
-                break;
-            }
-        } else if (action == LXKeyEvent.Action.PRESSED) {
-            this.ui.keyPressed(keyEvent, keyChar, keyCode);
-            switch (keyCode) {
-            case java.awt.event.KeyEvent.VK_UP:
-                if (keyEvent.isMetaDown()) {
-                    this.engine.goPrev();
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_DOWN:
-                if (keyEvent.isMetaDown()) {
-                    this.engine.goNext();
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_LEFT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() - .1);
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_RIGHT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() + .1);
-                }
-                break;
-            }
-            switch (keyChar) {
-            case 'f':
-                this.flags.showFramerate = true;
-                break;
-            case 's':
-                this.desaturation.enable();
-                break;
-            case '/':
-                this.flash.enable();
-                break;
-            }
-        } else if (action == LXKeyEvent.Action.TYPED) {
-            this.ui.keyTyped(keyEvent, keyChar, keyCode);
-        }
-    }
-
-    private static enum MouseEventType {
-        PRESSED, RELEASED, CLICKED, DRAGGED, MOVED,
-    };
-
-    private void mouseEvent1x(java.awt.event.MouseEvent e) {
-        MouseEventType type;
-        switch (e.getID()) {
-        case java.awt.event.MouseEvent.MOUSE_PRESSED:
-            type = MouseEventType.PRESSED;
-            break;
-        case java.awt.event.MouseEvent.MOUSE_RELEASED:
-            type = MouseEventType.RELEASED;
-            break;
-        case java.awt.event.MouseEvent.MOUSE_CLICKED:
-            type = MouseEventType.CLICKED;
-            break;
-        case java.awt.event.MouseEvent.MOUSE_DRAGGED:
-            type = MouseEventType.DRAGGED;
-            break;
-        default:
-            return;
-        }
-        mouseEvent(type, e.getX(), e.getY());
-    }
-
-    private void mouseEvent2x(processing.event.MouseEvent e) {
-        MouseEventType type;
-        switch (e.getAction()) {
-        case processing.event.MouseEvent.WHEEL:
-            this.ui.mouseWheel(e.getX(), e.getY(), e.getCount());
-            return;
-        case processing.event.MouseEvent.PRESS:
-            type = MouseEventType.PRESSED;
-            break;
-        case processing.event.MouseEvent.RELEASE:
-            type = MouseEventType.RELEASED;
-            break;
-        case processing.event.MouseEvent.CLICK:
-            type = MouseEventType.CLICKED;
-            break;
-        case processing.event.MouseEvent.DRAG:
-            type = MouseEventType.DRAGGED;
-            break;
-        default:
-            return;
-        }
-        mouseEvent(type, e.getX(), e.getY());
-    }
-
-    private void mouseEvent(MouseEventType type, int x, int y) {
-        switch (type) {
-        case PRESSED:
-            this.ui.mousePressed(x, y);
-            break;
-        case RELEASED:
-            this.ui.mouseReleased(x, y);
-            break;
-        case CLICKED:
-            this.ui.mouseClicked(x, y);
-            break;
-        case DRAGGED:
-            this.ui.mouseDragged(x, y);
-            break;
-        case MOVED:
-            break;
-        default:
-            break;
-        }
-    }
-
-    public final PGraphics getGraphics() {
-        return this.applet.g;
-    }
 }

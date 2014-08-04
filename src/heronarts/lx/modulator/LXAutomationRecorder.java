@@ -28,8 +28,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import processing.data.JSONArray;
-import processing.data.JSONObject;
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 
 /**
  * An automation recorder contains meta-data about all the controls on the
@@ -84,15 +85,15 @@ public class LXAutomationRecorder extends LXModulator implements
             this.millis = elapsedMillis;
         }
 
-        public final JSONObject toJSON() {
-            JSONObject jsonObj = new JSONObject();
-            jsonObj.setString(KEY_EVENT, this.eventType);
-            jsonObj.setFloat(KEY_MILLIS, (float) this.millis);
+        public final JsonObject toJson() {
+            JsonObject jsonObj = new JsonObject();
+            jsonObj.addProperty(KEY_EVENT, this.eventType);
+            jsonObj.addProperty(KEY_MILLIS, (float) this.millis);
             toJSON(jsonObj);
             return jsonObj;
         }
 
-        protected abstract void toJSON(JSONObject jsonObj);
+        protected abstract void toJSON(JsonObject jsonObj);
 
         abstract void play();
     }
@@ -114,9 +115,9 @@ public class LXAutomationRecorder extends LXModulator implements
         }
 
         @Override
-        protected void toJSON(JSONObject jsonObj) {
-            jsonObj.setInt(KEY_CHANNEL, this.channel.getIndex());
-            jsonObj.setString(KEY_PATTERN, this.pattern.getClass().getName());
+        protected void toJSON(JsonObject jsonObj) {
+            jsonObj.addProperty(KEY_CHANNEL, this.channel.getIndex());
+            jsonObj.addProperty(KEY_PATTERN, this.pattern.getClass().getName());
         }
     }
 
@@ -141,9 +142,9 @@ public class LXAutomationRecorder extends LXModulator implements
         }
 
         @Override
-        protected void toJSON(JSONObject jsonObj) {
-            jsonObj.setString(KEY_PARAMETER, parameterToPath.get(this.parameter));
-            jsonObj.setFloat(KEY_VALUE, (float) this.value);
+        protected void toJSON(JsonObject jsonObj) {
+            jsonObj.addProperty(KEY_PARAMETER, parameterToPath.get(this.parameter));
+            jsonObj.addProperty(KEY_VALUE, (float) this.value);
         }
     }
 
@@ -164,7 +165,8 @@ public class LXAutomationRecorder extends LXModulator implements
         }
 
         @Override
-        protected void toJSON(JSONObject jsonObj) {
+        protected void toJSON(JsonObject jsonObj) {
+            // Nothing extra needed
         }
     }
 
@@ -265,31 +267,31 @@ public class LXAutomationRecorder extends LXModulator implements
         }
     }
 
-    public final JSONArray toJSON() {
-        JSONArray jsonArr = new JSONArray();
+    public final JsonArray toJSON() {
+        JsonArray jsonArr = new JsonArray();
         for (LXAutomationEvent event : this.events) {
-            jsonArr.append(event.toJSON());
+            jsonArr.add(event.toJson());
         }
         return jsonArr;
     }
 
-    public final void loadJSON(JSONArray jsonArr) {
+    public final void loadJSON(JsonArray jsonArr) {
         this.events.clear();
-        for (int i = 0; i < jsonArr.size(); ++i) {
-            JSONObject obj = jsonArr.getJSONObject(i);
+        for (JsonElement element : jsonArr) {
+            JsonObject obj = element.getAsJsonObject();
             LXAutomationEvent event = null;
-            String eventType = obj.getString(KEY_EVENT);
+            String eventType = obj.get(KEY_EVENT).getAsString();
             if (eventType.equals(EVENT_PARAMETER)) {
-                String parameterPath = obj.getString(KEY_PARAMETER);
+                String parameterPath = obj.get(KEY_PARAMETER).getAsString();
                 LXParameter parameter = pathToParameter.get(parameterPath);
                 if (parameter != null) {
-                    event = new ParameterAutomationEvent(parameter, obj.getFloat(KEY_VALUE));
+                    event = new ParameterAutomationEvent(parameter, obj.get(KEY_VALUE).getAsFloat());
                 } else {
                     System.out.println("Unknown parameter: " + parameterPath);
                 }
             } else if (eventType.equals(EVENT_PATTERN)) {
-                int channelIndex = obj.getInt(KEY_CHANNEL);
-                String patternClassName = obj.getString(KEY_PATTERN);
+                int channelIndex = obj.get(KEY_CHANNEL).getAsInt();
+                String patternClassName = obj.get(KEY_PATTERN).getAsString();
                 LXChannel channel = this.engine.getChannel(channelIndex);
                 LXPattern pattern = channel.getPattern(patternClassName);
                 event = new PatternAutomationEvent(channel, pattern);
@@ -297,7 +299,7 @@ public class LXAutomationRecorder extends LXModulator implements
                 event = new FinishAutomationEvent();
             }
             if (event != null) {
-                event.millis = obj.getFloat(KEY_MILLIS);
+                event.millis = obj.get(KEY_MILLIS).getAsFloat();
                 this.events.add(event);
             }
         }
