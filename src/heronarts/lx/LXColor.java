@@ -180,9 +180,9 @@ public class LXColor {
      * @return rgb color value
      */
     public static int hsba(float h, float s, float b, float a) {
-        int c = hsb(h, s, b);
-        c |= max(0xff, (int) (a * 0xff)) << ALPHA_SHIFT;
-        return c;
+        return
+            (max(0xff, (int) (a * 0xff)) << ALPHA_SHIFT) |
+            (hsb(h, s, b) & 0x00ffffff);
     }
 
     /**
@@ -288,65 +288,85 @@ public class LXColor {
     }
 
     public static int lerp(int c1, int c2, int alpha) {
-        int a2 = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
         return
-            (min(0xff, a2 + (c1 & ALPHA_MASK) >>> ALPHA_SHIFT) << ALPHA_SHIFT) |
+            (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
             lerp(c1, c2, alpha, RED_MASK) |
             lerp(c1, c2, alpha, GREEN_MASK) |
             lerp(c1, c2, alpha, BLUE_MASK);
     }
 
     public static int add(int c1, int c2) {
-        int a2 = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
         return
-            (min(0xff, a2 + (c1 & ALPHA_MASK) >>> ALPHA_SHIFT) << ALPHA_SHIFT) |
-            (min(RED_MASK, (c1 & RED_MASK) + ((c2 & RED_MASK) * (a2 + 1)) >>> 8) & RED_MASK) |
-            (min(GREEN_MASK, (c1 & GREEN_MASK) + ((c2 & GREEN_MASK) * (a2 + 1)) >>> 8) & GREEN_MASK) |
-            min(BLUE_MASK, (c1 & BLUE_MASK) + ((c2 & BLUE_MASK) * (a2 + 1)) >>> 8);
+            (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
+            (min(RED_MASK, (c1 & RED_MASK) + (((c2 & RED_MASK) * (c2a + 1)) >>> 8)) & RED_MASK) |
+            (min(GREEN_MASK, (c1 & GREEN_MASK) + (((c2 & GREEN_MASK) * (c2a + 1)) >>> 8)) & GREEN_MASK) |
+            min(BLUE_MASK, (c1 & BLUE_MASK) + (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
     public static int subtract(int c1, int c2) {
-        int a2 = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
         return
-            (min(0xff, a2 + (c1 & ALPHA_MASK) >>> ALPHA_SHIFT) << ALPHA_SHIFT) |
-            (max(GREEN_MASK, (c1 & RED_MASK) - ((c2 & RED_MASK) * (a2 + 1)) >>> 8) & RED_MASK) |
-            (max(BLUE_MASK, (c1 & GREEN_MASK) - ((c2 & GREEN_MASK) * (a2 + 1)) >>> 8) & GREEN_MASK) |
-            max(0, (c1 & BLUE_MASK) - ((c2 & BLUE_MASK) * (a2 + 1)) >>> 8);
+            (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
+            (max(GREEN_MASK, (c1 & RED_MASK) - (((c2 & RED_MASK) * (c2a + 1)) >>> 8)) & RED_MASK) |
+            (max(BLUE_MASK, (c1 & GREEN_MASK) - (((c2 & GREEN_MASK) * (c2a + 1)) >>> 8)) & GREEN_MASK) |
+            max(0, (c1 & BLUE_MASK) - (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
     public static int multiply(int c1, int c2) {
-        int a2 = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1r = (c1 & RED_MASK) >> RED_SHIFT;
+        int c2r = (c2 & RED_MASK) >> RED_SHIFT;
+        int c1g = (c1 & GREEN_MASK) >> GREEN_SHIFT;
+        int c2g = (c2 & GREEN_MASK) >> GREEN_SHIFT;
+        int c1b = c1 & BLUE_MASK;
+        int c2b = c2 & BLUE_MASK;
         return
-            (min(0xff, a2 + (c1 & ALPHA_MASK) >>> ALPHA_SHIFT) << ALPHA_SHIFT) |
-            lerp(c1, ((c1 & RED_MASK) * (c2 & RED_MASK)) >>> 8, a2, RED_MASK) |
-            lerp(c1, ((c1 & GREEN_MASK) * (c2 & GREEN_MASK)) >>> 8, a2, GREEN_MASK) |
-            lerp(c1, ((c1 & BLUE_MASK) * (c2 & BLUE_MASK)) >>> 8, a2, BLUE_MASK);
+            (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
+            lerp(c1, (c1r * c2r) << 8, c2a, RED_MASK) |
+            lerp(c1, (c1g * c2g), c2a, GREEN_MASK) |
+            lerp(c1, (c1b * c2b) >> 8, c2a, BLUE_MASK);
     }
 
     public static int screen(int c1, int c2) {
-        int a2 = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1r = (c1 & RED_MASK) >> RED_SHIFT;
+        int c2r = (c2 & RED_MASK) >> RED_SHIFT;
+        int c1g = (c1 & GREEN_MASK) >> GREEN_SHIFT;
+        int c2g = (c2 & GREEN_MASK) >> GREEN_SHIFT;
+        int c1b = c1 & BLUE_MASK;
+        int c2b = c2 & BLUE_MASK;
         return
-            (min(0xff, a2 + (c1 & ALPHA_MASK) >>> ALPHA_SHIFT) << ALPHA_SHIFT) |
-            lerp(c1, RED_MASK - ((RED_MASK - (c1 & RED_MASK)) * (RED_MASK - (c2 & RED_MASK))) >>> 8, a2, RED_MASK) |
-            lerp(c1, GREEN_MASK - ((GREEN_MASK - (c1 & GREEN_MASK)) * (GREEN_MASK - (c2 & GREEN_MASK))) >>> 8, a2, GREEN_MASK) |
-            lerp(c1, BLUE_MASK - ((BLUE_MASK - (c1 & BLUE_MASK)) * (BLUE_MASK - (c2 & BLUE_MASK))) >>> 8, a2, BLUE_MASK);
+            (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
+            lerp(c1, RED_MASK - ((0xff - c1r) * (0xff - c2r) << 8), c2a, RED_MASK) |
+            lerp(c1, GREEN_MASK - ((0xff - c1g) * (0xff - c2g)), c2a, GREEN_MASK) |
+            lerp(c1, BLUE_MASK - (((0xff - c1b) * (0xff - c2b)) >> 8), c2a, BLUE_MASK);
     }
+
     public static int lightest(int c1, int c2) {
-        int a2 = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
         return
-            (min(0xff, a2 + (c1 & ALPHA_MASK) >>> ALPHA_SHIFT) << ALPHA_SHIFT) |
-            (max(c1 & RED_MASK, ((c2 & RED_MASK) * (a2 + 1)) >>> 8) & RED_MASK) |
-            (max(c1 & GREEN_MASK, ((c2 & GREEN_MASK) * (a2 + 1)) >>> 8) & GREEN_MASK) |
-            max(c1 & BLUE_MASK, ((c2 & BLUE_MASK) * (a2 + 1)) >>> 8);
+            (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
+            (max(c1 & RED_MASK, (((c2 & RED_MASK) * (c2a + 1)) >>> 8)) & RED_MASK) |
+            (max(c1 & GREEN_MASK, (((c2 & GREEN_MASK) * (c2a + 1)) >>> 8)) & GREEN_MASK) |
+            max(c1 & BLUE_MASK, (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
     public static int darkest(int c1, int c2) {
-        int a2 = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
+        int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
         return
-            (min(0xff, a2 + (c1 & ALPHA_MASK) >>> ALPHA_SHIFT) << ALPHA_SHIFT) |
-            lerp(c1, min(c1 & RED_MASK, c2 & RED_MASK), a2, RED_MASK) |
-            lerp(c1, min(c1 & GREEN_MASK, c2 & GREEN_MASK), a2, GREEN_MASK) |
-            lerp(c1, min(c1 & BLUE_MASK, c2 & BLUE_MASK), a2, BLUE_MASK);
+            (min(0xff, c1a + c2a) << ALPHA_SHIFT) |
+            lerp(c1, min(c1 & RED_MASK, c2 & RED_MASK), c2a, RED_MASK) |
+            lerp(c1, min(c1 & GREEN_MASK, c2 & GREEN_MASK), c2a, GREEN_MASK) |
+            lerp(c1, min(c1 & BLUE_MASK, c2 & BLUE_MASK), c2a, BLUE_MASK);
     }
 
     private static int min(int a, int b) {
@@ -358,7 +378,8 @@ public class LXColor {
     }
 
     private static int lerp(int a, int b, int alpha, int mask) {
-        return ((a & mask) + (((alpha+1) * ((b & mask) - (a & mask))) >>> 8)) & mask;
+        int am = a & mask, bm = b & mask;
+        return (am + (((alpha+1)*(bm-am)) >>> 8)) & mask;
     }
 
 }

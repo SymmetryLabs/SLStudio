@@ -89,11 +89,11 @@ public class LXAutomationRecorder extends LXModulator implements
             JsonObject jsonObj = new JsonObject();
             jsonObj.addProperty(KEY_EVENT, this.eventType);
             jsonObj.addProperty(KEY_MILLIS, (float) this.millis);
-            toJSON(jsonObj);
+            toJson(jsonObj);
             return jsonObj;
         }
 
-        protected abstract void toJSON(JsonObject jsonObj);
+        protected abstract void toJson(JsonObject jsonObj);
 
         abstract void play();
     }
@@ -115,7 +115,7 @@ public class LXAutomationRecorder extends LXModulator implements
         }
 
         @Override
-        protected void toJSON(JsonObject jsonObj) {
+        protected void toJson(JsonObject jsonObj) {
             jsonObj.addProperty(KEY_CHANNEL, this.channel.getIndex());
             jsonObj.addProperty(KEY_PATTERN, this.pattern.getClass().getName());
         }
@@ -142,7 +142,7 @@ public class LXAutomationRecorder extends LXModulator implements
         }
 
         @Override
-        protected void toJSON(JsonObject jsonObj) {
+        protected void toJson(JsonObject jsonObj) {
             jsonObj.addProperty(KEY_PARAMETER, parameterToPath.get(this.parameter));
             jsonObj.addProperty(KEY_VALUE, (float) this.value);
         }
@@ -165,7 +165,7 @@ public class LXAutomationRecorder extends LXModulator implements
         }
 
         @Override
-        protected void toJSON(JsonObject jsonObj) {
+        protected void toJson(JsonObject jsonObj) {
             // Nothing extra needed
         }
     }
@@ -267,7 +267,7 @@ public class LXAutomationRecorder extends LXModulator implements
         }
     }
 
-    public final JsonArray toJSON() {
+    public final JsonArray toJson() {
         JsonArray jsonArr = new JsonArray();
         for (LXAutomationEvent event : this.events) {
             jsonArr.add(event.toJson());
@@ -275,7 +275,7 @@ public class LXAutomationRecorder extends LXModulator implements
         return jsonArr;
     }
 
-    public final void loadJSON(JsonArray jsonArr) {
+    public final void loadJson(JsonArray jsonArr) {
         this.events.clear();
         for (JsonElement element : jsonArr) {
             JsonObject obj = element.getAsJsonObject();

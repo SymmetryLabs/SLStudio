@@ -37,13 +37,12 @@ public class BlurEffect extends LXEffect {
         if (blurf > 0) {
             blurf = 1 - (1 - blurf) * (1 - blurf) * (1 - blurf);
             for (int i = 0; i < this.colors.length; ++i) {
-                int blend = LXColor.screen(colors[i], this.blurBuffer[i]);
-                this.colors[i] = LXColor.lerp(colors[i], blend, blurf);
+                int blend = LXColor.screen(this.colors[i], this.blurBuffer[i]);
+                this.colors[i] = LXColor.lerp(this.colors[i], blend, blurf);
             }
-        } else {
-            for (int i = 0; i < this.colors.length; ++i) {
-                this.blurBuffer[i] = this.colors[i];
-            }
+        }
+        for (int i = 0; i < this.colors.length; ++i) {
+            this.blurBuffer[i] = this.colors[i];
         }
     }
 }
