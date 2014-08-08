@@ -19,13 +19,13 @@ package heronarts.lx;
  * effect is an example of a layer, or patterns may compose themselves from
  * multiple layers.
  */
-public abstract class LXLayer extends LXLayerComponent {
+public abstract class LXLayer extends LXLayeredComponent {
 
     protected LXLayer(LX lx) {
         super(lx);
     }
 
-    protected LXLayer(LX lx, LXBufferComponent buffer) {
+    protected LXLayer(LX lx, LXBufferedComponent buffer) {
         super(lx, buffer);
     }
 

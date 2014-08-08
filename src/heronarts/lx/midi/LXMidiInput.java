@@ -27,22 +27,23 @@ public class LXMidiInput {
 
     private final MidiDevice device;
 
-    private final LXMidiSystem midiSystem;
+    private final LXMidiEngine midiEngine;
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
 
+    private boolean isEngineInput = false;
+
     public LXMidiInput(LX lx, MidiDevice device) throws MidiUnavailableException {
-        this(lx.engine.midiSystem, device);
+        this(lx.engine.midiEngine, device);
     }
 
-    public LXMidiInput(LXMidiSystem midiSystem, MidiDevice device)
+    public LXMidiInput(LXMidiEngine midiEngine, MidiDevice device)
             throws MidiUnavailableException {
-        this(midiSystem, device, null);
+        this(midiEngine, device, null);
     }
 
-    public LXMidiInput(LXMidiSystem midiSystem, MidiDevice device,
-            LXMidiListener listener) throws MidiUnavailableException {
-        this.midiSystem = midiSystem;
+    public LXMidiInput(LXMidiEngine midiEngine, MidiDevice device, LXMidiListener listener) throws MidiUnavailableException {
+        this.midiEngine = midiEngine;
         this.device = device;
         if (listener != null) {
             addListener(listener);
@@ -65,6 +66,15 @@ public class LXMidiInput {
         return this;
     }
 
+    LXMidiInput setEngineInput(boolean isEngineInput) {
+        this.isEngineInput = isEngineInput;
+        return this;
+    }
+
+    /**
+     * This receiver is called by a MIDI thread, it just puts messages
+     * into a queue that can then be called by the engine thread.
+     */
     private class Receiver implements javax.sound.midi.Receiver {
         @Override
         public void close() {
@@ -97,34 +107,21 @@ public class LXMidiInput {
                     break;
                 }
                 if (message != null) {
-                    midiSystem.queueMessage(message.setInput(LXMidiInput.this));
+                    midiEngine.queueMessage(message.setInput(LXMidiInput.this));
                 }
             }
         }
     }
 
-    void dispatch(LXShortMessage message) {
+    /**
+     * This method is invoked on the main thread to process the MIDI message.
+     */
+    public void dispatch(LXShortMessage message) {
         for (LXMidiListener listener : this.listeners) {
-            switch (message.getCommand()) {
-            case ShortMessage.NOTE_ON:
-                listener.noteOnReceived((LXMidiNoteOn) message);
-                break;
-            case ShortMessage.NOTE_OFF:
-                listener.noteOffReceived((LXMidiNoteOff) message);
-                break;
-            case ShortMessage.CONTROL_CHANGE:
-                listener.controlChangeReceived((LXMidiControlChange) message);
-                break;
-            case ShortMessage.PROGRAM_CHANGE:
-                listener.programChangeReceived((LXMidiProgramChange) message);
-                break;
-            case ShortMessage.PITCH_BEND:
-                listener.pitchBendReceived((LXMidiPitchBend) message);
-                break;
-            case ShortMessage.CHANNEL_PRESSURE:
-                listener.aftertouchReceived((LXMidiAftertouch) message);
-                break;
-            }
+            this.midiEngine.dispatch(message, listener);
+        }
+        if (this.isEngineInput) {
+            this.midiEngine.dispatch(message);
         }
     }
 }

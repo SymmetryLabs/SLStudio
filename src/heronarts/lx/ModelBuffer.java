@@ -16,6 +16,7 @@ package heronarts.lx;
 import heronarts.lx.model.LXModel;
 
 public class ModelBuffer implements LXBuffer {
+
     private int[] array;
 
     ModelBuffer(LX lx) {

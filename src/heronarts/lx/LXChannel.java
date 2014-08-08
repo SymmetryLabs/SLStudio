@@ -101,8 +101,19 @@ public class LXChannel implements LXLoopTask {
 
     private final LX lx;
 
+    /**
+     * Whether this channel is enabled.
+     */
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
+
+    /**
+     * Whether this channel should listen to MIDI events
+     */
     public final BooleanParameter midiEnabled = new BooleanParameter("MIDI", false);
+
+    /**
+     * Whether auto pattern transition is enabled on this channel
+     */
     public final BooleanParameter autoTransitionEnabled = new BooleanParameter("AUTO", false);
 
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
@@ -407,7 +418,7 @@ public class LXChannel implements LXLoopTask {
             }
             colors = array;
             for (LXEffect effect : this.effects) {
-                ((LXLayerComponent)effect).setBuffer(this.buffer);
+                ((LXLayeredComponent)effect).setBuffer(this.buffer);
                 effect.loop(deltaMs);
             }
         }

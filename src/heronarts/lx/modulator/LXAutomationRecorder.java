@@ -13,10 +13,18 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.LXLayerComponent;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
+import heronarts.lx.LXLayeredComponent;
 import heronarts.lx.effect.LXEffect;
+import heronarts.lx.midi.LXMidiAftertouch;
+import heronarts.lx.midi.LXMidiControlChange;
+import heronarts.lx.midi.LXMidiListener;
+import heronarts.lx.midi.LXMidiNoteOff;
+import heronarts.lx.midi.LXMidiNoteOn;
+import heronarts.lx.midi.LXMidiPitchBend;
+import heronarts.lx.midi.LXMidiProgramChange;
+import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -28,6 +36,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import javax.sound.midi.InvalidMidiDataException;
+import javax.sound.midi.ShortMessage;
+
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -37,10 +48,11 @@ import com.google.gson.JsonObject;
  * patterns and effects in the system, which can be recorded or played back.
  */
 public class LXAutomationRecorder extends LXModulator implements
-        LXParameterListener {
+        LXParameterListener, LXMidiListener {
 
     private final static String EVENT_PATTERN = "PATTERN";
     private final static String EVENT_PARAMETER = "PARAMETER";
+    private final static String EVENT_MIDI = "MIDI";
     private final static String EVENT_FINISH = "FINISH";
 
     private final static String KEY_EVENT = "event";
@@ -49,6 +61,9 @@ public class LXAutomationRecorder extends LXModulator implements
     private final static String KEY_PATTERN = "pattern";
     private final static String KEY_PARAMETER = "parameter";
     private final static String KEY_VALUE = "value";
+    private final static String KEY_COMMAND = "Command";
+    private final static String KEY_DATA_1 = "data1";
+    private final static String KEY_DATA_2 = "data2";
 
     private final LXEngine engine;
 
@@ -148,6 +163,29 @@ public class LXAutomationRecorder extends LXModulator implements
         }
     }
 
+    private class MidiAutomationEvent extends LXAutomationEvent {
+
+        private final LXShortMessage shortMessage;
+
+        private MidiAutomationEvent(LXShortMessage shortMessage) {
+            super(EVENT_MIDI);
+            this.shortMessage = shortMessage;
+        }
+
+        @Override
+        protected void toJson(JsonObject jsonObj) {
+            jsonObj.addProperty(KEY_CHANNEL, this.shortMessage.getChannel());
+            jsonObj.addProperty(KEY_COMMAND, this.shortMessage.getCommand());
+            jsonObj.addProperty(KEY_DATA_1, this.shortMessage.getData1());
+            jsonObj.addProperty(KEY_DATA_2, this.shortMessage.getData2());
+        }
+
+        @Override
+        void play() {
+            engine.midiEngine.dispatch(this.shortMessage);
+        }
+    }
+
     private class FinishAutomationEvent extends LXAutomationEvent {
 
         private FinishAutomationEvent() {
@@ -173,15 +211,26 @@ public class LXAutomationRecorder extends LXModulator implements
     public LXAutomationRecorder(LXEngine engine) {
         super("AUTOMATION");
         this.engine = engine;
+        registerEngine();
         for (LXChannel channel : engine.getChannels()) {
             registerChannel(channel);
         }
         for (LXEffect effect : engine.getEffects()) {
             registerComponent("effect/" + effect.getClass().getName(), effect);
         }
+        engine.midiEngine.addListener(this);
     }
 
-    public LXAutomationRecorder registerChannel(LXChannel channel) {
+    private LXAutomationRecorder registerEngine() {
+        for (LXParameter parameter : this.engine.getParameters()) {
+            if (parameter instanceof LXListenableParameter) {
+                registerParameter("engine/" + parameter.getLabel(), (LXListenableParameter) parameter);
+            }
+        }
+        return this;
+    }
+
+    private LXAutomationRecorder registerChannel(LXChannel channel) {
         String path = "channel/" + channel.getIndex();
         this.channels.add(channel);
         channel.addListener(new LXChannel.AbstractListener() {
@@ -201,7 +250,7 @@ public class LXAutomationRecorder extends LXModulator implements
         return this;
     }
 
-    public LXAutomationRecorder registerComponent(String prefix, LXLayerComponent component) {
+    private LXAutomationRecorder registerComponent(String prefix, LXLayeredComponent component) {
         for (LXParameter parameter : component.getParameters()) {
             if (parameter instanceof LXListenableParameter) {
                 registerParameter(prefix + "/" + parameter.getLabel(), (LXListenableParameter) parameter);
@@ -210,7 +259,7 @@ public class LXAutomationRecorder extends LXModulator implements
         return this;
     }
 
-    public LXAutomationRecorder registerParameter(String path, LXListenableParameter parameter) {
+    private LXAutomationRecorder registerParameter(String path, LXListenableParameter parameter) {
         this.pathToParameter.put(path, parameter);
         this.parameterToPath.put(parameter, path);
         addParameter(parameter);
@@ -295,6 +344,18 @@ public class LXAutomationRecorder extends LXModulator implements
                 LXChannel channel = this.engine.getChannel(channelIndex);
                 LXPattern pattern = channel.getPattern(patternClassName);
                 event = new PatternAutomationEvent(channel, pattern);
+            } else if (eventType.equals(EVENT_MIDI)) {
+                int command = obj.get(KEY_COMMAND).getAsInt();
+                int channel = obj.get(KEY_CHANNEL).getAsInt();
+                int data1 = obj.get(KEY_DATA_1).getAsInt();
+                int data2 = obj.get(KEY_DATA_2).getAsInt();
+                try {
+                    ShortMessage sm = new ShortMessage();
+                    sm.setMessage(command, channel, data1, data2);
+                    event = new MidiAutomationEvent(LXShortMessage.fromShortMessage(sm));
+                } catch (InvalidMidiDataException imdx) {
+                    System.out.println("Invalid midi data: " + imdx.getMessage());
+                }
             } else if (eventType.equals(EVENT_FINISH)) {
                 event = new FinishAutomationEvent();
             }
@@ -303,5 +364,41 @@ public class LXAutomationRecorder extends LXModulator implements
                 this.events.add(event);
             }
         }
+    }
+
+    private void midiEventReceived(LXShortMessage shortMessage) {
+        if (this.armRecord.isOn()) {
+            events.add(new MidiAutomationEvent(shortMessage));
+        }
+    }
+
+    @Override
+    public void noteOnReceived(LXMidiNoteOn note) {
+        midiEventReceived(note);
+    }
+
+    @Override
+    public void noteOffReceived(LXMidiNoteOff note) {
+        midiEventReceived(note);
+    }
+
+    @Override
+    public void controlChangeReceived(LXMidiControlChange cc) {
+        midiEventReceived(cc);
+    }
+
+    @Override
+    public void programChangeReceived(LXMidiProgramChange pc) {
+        midiEventReceived(pc);
+    }
+
+    @Override
+    public void pitchBendReceived(LXMidiPitchBend pitchBend) {
+        midiEventReceived(pitchBend);
+    }
+
+    @Override
+    public void aftertouchReceived(LXMidiAftertouch aftertouch) {
+        midiEventReceived(aftertouch);
     }
 }

@@ -13,9 +13,9 @@
 
 package heronarts.lx;
 
-public class LXBufferComponent extends LXLayerComponent {
+public class LXBufferedComponent extends LXLayeredComponent {
 
-    protected LXBufferComponent(LX lx) {
+    protected LXBufferedComponent(LX lx) {
         super(lx, new ModelBuffer(lx));
     }
 
@@ -40,7 +40,5 @@ public class LXBufferComponent extends LXLayerComponent {
             super.loop(deltaMs);
         }
     }
-
-
 
 }

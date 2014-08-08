@@ -21,9 +21,10 @@ public interface LXMidiListener {
 
     public void controlChangeReceived(LXMidiControlChange cc);
 
-    public void programChangeReceived(LXMidiProgramChange cc);
+    public void programChangeReceived(LXMidiProgramChange pc);
 
     public void pitchBendReceived(LXMidiPitchBend pitchBend);
 
     public void aftertouchReceived(LXMidiAftertouch aftertouch);
+
 }

@@ -14,11 +14,12 @@
 package heronarts.lx;
 
 import heronarts.lx.effect.LXEffect;
-import heronarts.lx.midi.LXMidiSystem;
+import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameterized;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.pattern.SolidColorPattern;
@@ -51,11 +52,11 @@ import java.util.List;
  *
  * The result of all this generates a display buffer of node values.
  */
-public class LXEngine {
+public class LXEngine extends LXParameterized {
 
     private final LX lx;
 
-    public final LXMidiSystem midiSystem = new LXMidiSystem();
+    public final LXMidiEngine midiEngine;
 
     private Dispatch inputDispatch = null;
 
@@ -161,6 +162,8 @@ public class LXEngine {
             this.black[i] = 0xff000000;
         }
         this.buffer = new DoubleBuffer();
+
+        this.midiEngine = new LXMidiEngine(lx);
 
         addChannel(new LXPattern[] { new IteratorTestPattern(lx) });
         channels.get(0).getFader().setValue(1);
@@ -280,6 +283,14 @@ public class LXEngine {
         return this.paused;
     }
 
+    public LXEngine addComponent(LXComponent component) {
+        return addLoopTask(component);
+    }
+
+    public LXEngine removeComponent(LXComponent component) {
+        return removeLoopTask(component);
+    }
+
     public LXEngine addModulator(LXModulator modulator) {
         return addLoopTask(modulator);
     }
@@ -298,7 +309,7 @@ public class LXEngine {
         return this;
     }
 
-    public synchronized List<LXEffect> getEffects() {
+    public List<LXEffect> getEffects() {
         return this.unmodifiableEffects;
     }
 
@@ -480,8 +491,8 @@ public class LXEngine {
                 );
                 bufferColors = channel.getFaderTransition().getColors();
             }
-
         }
+
         this.timer.channelNanos = System.nanoTime() - channelStart;
 
         // Copy colors into our own rendering buffer
@@ -494,9 +505,10 @@ public class LXEngine {
         // Apply effects in our rendering buffer
         long fxStart = System.nanoTime();
         for (LXEffect fx : this.effects) {
-            ((LXLayerComponent) fx).setBuffer(this.buffer);
+            ((LXLayeredComponent) fx).setBuffer(this.buffer);
             fx.loop(deltaMs);
         }
+
         this.timer.fxNanos = System.nanoTime() - fxStart;
 
         // Process UI input events
@@ -510,7 +522,7 @@ public class LXEngine {
 
         // Process MIDI events
         long midiStart = System.nanoTime();
-        this.midiSystem.dispatch();
+        this.midiEngine.dispatch();
         this.timer.midiNanos = System.nanoTime() - midiStart;
 
         // Send to outputs
@@ -518,6 +530,7 @@ public class LXEngine {
         for (LXOutput output : this.outputs) {
             output.send(this.buffer.render);
         }
+
         this.timer.outputNanos = System.nanoTime() - outputStart;
 
         this.timer.runNanos = System.nanoTime() - runStart;

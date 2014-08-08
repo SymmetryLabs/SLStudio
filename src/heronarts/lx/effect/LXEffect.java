@@ -14,7 +14,7 @@
 package heronarts.lx.effect;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXLayerComponent;
+import heronarts.lx.LXLayeredComponent;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -25,7 +25,7 @@ import heronarts.lx.parameter.LXParameterListener;
  * may be stateless or stateful, though typically they operate on a single
  * frame. Only the current frame is provided at runtime.
  */
-public abstract class LXEffect extends LXLayerComponent implements LXLoopTask {
+public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask {
 
     private final boolean isMomentary;
 

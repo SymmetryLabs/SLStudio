@@ -23,10 +23,7 @@ public abstract class LXParameterized implements LXParameterListener {
 
     protected final List<LXParameter> parameters = new ArrayList<LXParameter>();
 
-    protected LXParameterized() {
-    }
-
-    protected final LXParameterized addParameter(LXParameter parameter) {
+    public final LXParameterized addParameter(LXParameter parameter) {
         this.parameters.add(parameter);
         if (parameter instanceof LXListenableParameter) {
             ((LXListenableParameter) parameter).addListener(this);
@@ -34,7 +31,7 @@ public abstract class LXParameterized implements LXParameterListener {
         return this;
     }
 
-    protected final LXParameterized addParameters(List<LXParameter> parameters) {
+    public final LXParameterized addParameters(List<LXParameter> parameters) {
         for (LXParameter parameter : parameters) {
             addParameter(parameter);
         }

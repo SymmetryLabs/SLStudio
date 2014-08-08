@@ -14,7 +14,7 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXBufferComponent;
+import heronarts.lx.LXBufferedComponent;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXColor;
 import heronarts.lx.LXTime;
@@ -33,7 +33,7 @@ import heronarts.lx.transition.LXTransition;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points. It is
  */
-public abstract class LXPattern extends LXBufferComponent implements LXMidiListener {
+public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener {
 
     /**
      * Reference to the channel this pattern belongs to.

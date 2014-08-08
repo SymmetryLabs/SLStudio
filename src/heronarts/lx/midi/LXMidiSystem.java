@@ -17,7 +17,10 @@ import heronarts.lx.LX;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
@@ -25,13 +28,20 @@ import javax.sound.midi.MidiUnavailableException;
 public class LXMidiSystem {
 
     private static final List<MidiDevice> inputs = new ArrayList<MidiDevice>();
+
     private static final List<MidiDevice> outputs = new ArrayList<MidiDevice>();
 
-    private static final List<MidiDevice> unmodifiableInputs = Collections
-            .unmodifiableList(inputs);
+    private static final List<MidiDevice> unmodifiableInputs =
+        Collections.unmodifiableList(inputs);
 
-    private static final List<MidiDevice> unmodifiableOutputs = Collections
-            .unmodifiableList(outputs);
+    private static final List<MidiDevice> unmodifiableOutputs =
+        Collections.unmodifiableList(outputs);
+
+    private static final Map<MidiDevice, LXMidiInput> inputDeviceMap =
+        new HashMap<MidiDevice, LXMidiInput>();
+
+    private static final Map<MidiDevice, LXMidiOutput> outputDeviceMap =
+        new HashMap<MidiDevice, LXMidiOutput>();
 
     private static boolean initialized = false;
 
@@ -42,8 +52,13 @@ public class LXMidiSystem {
     public static LXMidiInput matchInput(LX lx, String[] substrings) {
         MidiDevice device = matchInputDevice(substrings);
         if (device != null) {
+            LXMidiInput input = inputDeviceMap.get(device);
+            if (input != null) {
+                return input;
+            }
             try {
-                return new LXMidiInput(lx, device);
+                inputDeviceMap.put(device, input = new LXMidiInput(lx, device));
+                return input;
             } catch (MidiUnavailableException mux) {
                 mux.printStackTrace();
             }
@@ -66,8 +81,13 @@ public class LXMidiSystem {
     public static LXMidiOutput matchOutput(LX lx, String[] substrings) {
         MidiDevice device = matchOutputDevice(substrings);
         if (device != null) {
+            LXMidiOutput output = outputDeviceMap.get(device);
+            if (output != null) {
+                return output;
+            }
             try {
-                return new LXMidiOutput(lx, device);
+                outputDeviceMap.put(device, output = new LXMidiOutput(lx, device));
+                return output;
             } catch (MidiUnavailableException mux) {
                 mux.printStackTrace();
             }
@@ -131,27 +151,6 @@ public class LXMidiSystem {
                     mux.printStackTrace();
                 }
             }
-        }
-    }
-
-    private final List<LXShortMessage> midiThreadEventQueue =
-        Collections.synchronizedList(new ArrayList<LXShortMessage>());
-
-    private final List<LXShortMessage> localThreadEventQueue =
-        new ArrayList<LXShortMessage>();
-
-    void queueMessage(LXShortMessage message) {
-        this.midiThreadEventQueue.add(message);
-    }
-
-    public void dispatch() {
-        this.localThreadEventQueue.clear();
-        synchronized (this.midiThreadEventQueue) {
-            this.localThreadEventQueue.addAll(this.midiThreadEventQueue);
-            this.midiThreadEventQueue.clear();
-        }
-        for (LXShortMessage message : this.localThreadEventQueue) {
-            message.getInput().dispatch(message);
         }
     }
 }

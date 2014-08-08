@@ -11,10 +11,14 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.midi;
+package heronarts.lx.midi.device;
 
 import javax.sound.midi.MidiDevice;
+
 import heronarts.lx.LX;
+import heronarts.lx.midi.LXMidiDevice;
+import heronarts.lx.midi.LXMidiInput;
+import heronarts.lx.midi.LXMidiSystem;
 import heronarts.lx.parameter.LXParameter;
 
 public class KorgNanoKontrol extends LXMidiDevice {

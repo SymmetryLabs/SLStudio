@@ -14,7 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXBufferComponent;
+import heronarts.lx.LXBufferedComponent;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -24,7 +24,7 @@ import heronarts.lx.parameter.LXParameter;
  * duration and generate a new array of colors based upon a source pattern and a
  * destination pattern. Transitions also support easing.
  */
-public abstract class LXTransition extends LXBufferComponent {
+public abstract class LXTransition extends LXBufferedComponent {
 
     /**
      * Constants for easing that should be applied to the transition.

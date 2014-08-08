@@ -21,7 +21,7 @@ import java.util.List;
  * attributes, such as parameters, modulators, and layers. For instance,
  * patterns, transitions, and effects are all LXComponents.
  */
-public abstract class LXLayerComponent extends LXComponent implements LXLoopTask {
+public abstract class LXLayeredComponent extends LXComponent implements LXLoopTask {
 
     protected final LX lx;
 
@@ -31,15 +31,15 @@ public abstract class LXLayerComponent extends LXComponent implements LXLoopTask
 
     protected final List<LXLayer> layers = new ArrayList<LXLayer>();
 
-    protected LXLayerComponent(LX lx) {
+    protected LXLayeredComponent(LX lx) {
         this(lx, (LXBuffer) null);
     }
 
-    protected LXLayerComponent(LX lx, LXBufferComponent component) {
+    protected LXLayeredComponent(LX lx, LXBufferedComponent component) {
         this(lx, component.getBuffer());
     }
 
-    protected LXLayerComponent(LX lx, LXBuffer buffer) {
+    protected LXLayeredComponent(LX lx, LXBuffer buffer) {
         this.lx = lx;
         if (buffer != null) {
             setBuffer(buffer);
@@ -50,11 +50,11 @@ public abstract class LXLayerComponent extends LXComponent implements LXLoopTask
         return this.buffer;
     }
 
-    LXLayerComponent setBuffer(LXBufferComponent component) {
+    LXLayeredComponent setBuffer(LXBufferedComponent component) {
         return setBuffer(component.getBuffer());
     }
 
-    LXLayerComponent setBuffer(LXBuffer buffer) {
+    LXLayeredComponent setBuffer(LXBuffer buffer) {
         this.buffer = buffer;
         this.colors = buffer.getArray();
         return this;
