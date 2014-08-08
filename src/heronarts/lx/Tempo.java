@@ -47,8 +47,8 @@ public class Tempo extends LXComponent {
     private int beatCount = 0;
 
     public Tempo() {
-        addModulator(this.click.start());
-        addModulator(this.ramp.start());
+        addModulator(this.click).start();
+        addModulator(this.ramp).start();
     }
 
     public Tempo addListener(Listener listener) {

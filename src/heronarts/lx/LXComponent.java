@@ -43,9 +43,9 @@ public class LXComponent extends LXParameterized implements LXLoopTask, LXMidiLi
         return modulator;
     }
 
-    protected final LXComponent removeModulator(LXModulator modulator) {
+    protected final LXModulator removeModulator(LXModulator modulator) {
         this.modulators.remove(modulator);
-        return this;
+        return modulator;
     }
 
     public final List<LXModulator> getModulators() {

@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -42,7 +42,7 @@ public class Click extends LXPeriodicModulator {
 
     /**
      * Stops the modulator and sets it back to its initial state.
-     * 
+     *
      * @return this
      */
     public Click stopAndReset() {
@@ -56,25 +56,26 @@ public class Click extends LXPeriodicModulator {
      * Sets the value of the click to 1, so that code querying it in this frame of
      * execution sees it as active. On the next iteration of the runloop it will
      * be off again.
-     * 
+     *
      * @return this
      */
     public LXModulator fire() {
         this.elapsedMs = 0;
         setValue(1);
-        return this.start();
+        start();
+        return this;
     }
 
     /**
      * Helper to conditionalize logic based on the click. Typical use is to query
      * as follows:
-     * 
+     *
      * <pre>
      * if (clickInstance.click()) {
      *   // perform periodic operation
      * }
      * </pre>
-     * 
+     *
      * @return true if the value is 1, otherwise false
      */
     public boolean click() {

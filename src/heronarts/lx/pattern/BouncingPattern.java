@@ -43,7 +43,7 @@ public class BouncingPattern extends LXPattern {
             this.speeds[i] = LXUtils.random(300, 400);
             this.accum[i] = LXUtils.random(0, 5000);
             this.magLFO[i] = new TriangleLFO(2, 8, 8000 + i * 1000);
-            this.addModulator(this.magLFO[i].trigger().setValue(this.mags[i]));
+            addModulator(this.magLFO[i].setValue(this.mags[i])).trigger();
         }
         this.transition = new WipeTransition(lx, WipeTransition.Direction.RIGHT);
     }

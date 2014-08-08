@@ -11,11 +11,8 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.modulator;
+package heronarts.lx;
 
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXEngine;
-import heronarts.lx.LXLayeredComponent;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiAftertouch;
 import heronarts.lx.midi.LXMidiControlChange;
@@ -46,7 +43,7 @@ import com.google.gson.JsonObject;
  * An automation recorder contains meta-data about all the controls on the
  * patterns and effects in the system, which can be recorded or played back.
  */
-public class LXAutomationRecorder extends LXModulator implements LXMidiListener {
+public class LXAutomationRecorder extends LXRunnable implements LXMidiListener {
 
     private final static String EVENT_PATTERN = "PATTERN";
     private final static String EVENT_PARAMETER = "PARAMETER";
@@ -207,7 +204,6 @@ public class LXAutomationRecorder extends LXModulator implements LXMidiListener 
     }
 
     public LXAutomationRecorder(LXEngine engine) {
-        super("AUTOMATION");
         this.engine = engine;
         registerEngine();
         for (LXChannel channel : engine.getChannels()) {
@@ -292,19 +288,18 @@ public class LXAutomationRecorder extends LXModulator implements LXMidiListener 
     }
 
     @Override
-    public double computeValue(double deltaMs) {
+    public void run(double deltaMs) {
         this.elapsedMillis += deltaMs;
         if (!this.armRecord.isOn()) {
             while (isRunning() && (this.cursor < this.events.size())) {
                 LXAutomationEvent event = this.events.get(this.cursor);
                 if (this.elapsedMillis < event.millis) {
-                    return 0;
+                    return;
                 }
                 ++this.cursor;
                 event.play();
             }
         }
-        return 0;
     }
 
     @Override

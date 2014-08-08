@@ -13,24 +13,15 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.LXLoopTask;
-import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.LXRunnable;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterized;
-import heronarts.lx.parameter.LXParameterListener;
 
 /**
  * A Modulator is an abstraction for a variable with a value that varies over
  * time, such as an envelope or a low frequency oscillator. Some modulators run
  * continuously, others may halt after they reach a certain value.
  */
-public abstract class LXModulator extends LXParameterized implements
-        LXParameter, LXLoopTask {
-
-    /**
-     * Whether this modulator is currently running.
-     */
-    public final BooleanParameter isRunning = new BooleanParameter("RUN", false);
+public abstract class LXModulator extends LXRunnable implements LXParameter {
 
     /**
      * The current computed value of this modulator.
@@ -56,86 +47,14 @@ public abstract class LXModulator extends LXParameterized implements
      */
     protected LXModulator(String label) {
         this.label = label;
-        this.isRunning.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                if (isRunning.isOn()) {
-                    onStart();
-                } else {
-                    onStop();
-                }
-            }
-        });
     }
 
     public final String getLabel() {
         return this.label;
     }
 
-    /**
-     * Sets the Modulator in motion
-     */
-    public final LXModulator start() {
-        this.isRunning.setValue(true);
-        return this;
-    }
 
-    /**
-     * Pauses the modulator wherever it is. Internal state should be maintained. A
-     * subsequent call to start() should result in the Modulator continuing as it
-     * was running before.
-     */
-    public final LXModulator stop() {
-        this.isRunning.setValue(false);
-        return this;
-    }
-
-    /**
-     * Indicates whether this modulator is running.
-     */
-    public final boolean isRunning() {
-        return this.isRunning.isOn();
-    }
-
-    /**
-     * Invoking the trigger() method restarts a modulator from its initial value,
-     * and should also start the modulator if it is not already running.
-     */
-    public final LXModulator trigger() {
-        return this.reset().start();
-    }
-
-    /**
-     * Resets the modulator to its default condition and stops it.
-     *
-     * @return this, for method chaining
-     */
-    public final LXModulator reset() {
-        this.stop();
-        this.onReset();
-        return this;
-    }
-
-    /**
-     * Optional subclass method when start happens.
-     */
-    protected/* abstract */void onStart() {
-
-    }
-
-    /**
-     * Optional subclass method when stop happens.
-     */
-    protected/* abstract */void onStop() {
-
-    }
-
-    /**
-     * Optional subclass method when reset happens.
-     */
-    protected/* abstract */void onReset() {
-    }
-
-    /**
+        /**
      * Retrieves the current value of the modulator in full precision
      *
      * @return Current value of the modulator
@@ -193,10 +112,9 @@ public abstract class LXModulator extends LXParameterized implements
      *
      * @param deltaMs Milliseconds to advance by
      */
-    public final void loop(double deltaMs) {
-        if (this.isRunning.isOn()) {
-            this.value = this.computeValue(deltaMs);
-        }
+    @Override
+    protected final void run(double deltaMs) {
+        this.value = this.computeValue(deltaMs);
     }
 
     /**

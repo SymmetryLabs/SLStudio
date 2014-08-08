@@ -286,8 +286,8 @@ public class LX {
             this.beatDetect.threshold.setValue(0.75);
             this.beatDetect.release.setValue(480);
 
-            addModulator(eq.start());
-            addModulator(this.beatDetect.start());
+            addModulator(eq).start();
+            addModulator(this.beatDetect).start();
         }
         return this.beatDetect;
     }
@@ -445,9 +445,9 @@ public class LX {
      * @param modulator
      * @return Modulator added
      */
-    public LX addModulator(LXModulator modulator) {
+    public LXModulator addModulator(LXModulator modulator) {
         this.engine.addModulator(modulator);
-        return this;
+        return modulator;
     }
 
     /**
@@ -455,9 +455,9 @@ public class LX {
      *
      * @param modulator
      */
-    public LX removeModulator(LXModulator modulator) {
+    public LXModulator removeModulator(LXModulator modulator) {
         this.engine.removeModulator(modulator);
-        return this;
+        return modulator;
     }
 
     /**
@@ -552,11 +552,12 @@ public class LX {
         }
     }
 
-    private void internalBaseHue(LXModulator modulator) {
+    private LXModulator internalBaseHue(LXModulator modulator) {
         clearBaseHue();
         this.engine.addModulator(modulator);
         this.baseHue = modulator;
         this.baseHueIsInternalModulator = true;
+        return modulator;
     }
 
     public LX setBaseHue(LXParameter parameter) {
@@ -571,7 +572,7 @@ public class LX {
      * @param hue Fixed value to set hue to, 0-360
      */
     public LX setBaseHue(double hue) {
-        internalBaseHue(new LinearEnvelope(this.getBaseHue(), hue, 50).start());
+        internalBaseHue(new LinearEnvelope(this.getBaseHue(), hue, 50)).start();
         return this;
     }
 
@@ -581,7 +582,7 @@ public class LX {
      * @param duration Number of milliseconds for hue cycle
      */
     public LX cycleBaseHue(double duration) {
-        internalBaseHue(new SawLFO(0, 360, duration).setValue(getBaseHue()).start());
+        internalBaseHue(new SawLFO(0, 360, duration).setValue(getBaseHue())).start();
         return this;
     }
 
@@ -594,7 +595,7 @@ public class LX {
      */
     public LX oscillateBaseHue(double lowHue, double highHue, double duration) {
         internalBaseHue(new TriangleLFO(lowHue, highHue, duration).setValue(
-                getBaseHue()).trigger());
+                getBaseHue())).trigger();
         return this;
     }
 
