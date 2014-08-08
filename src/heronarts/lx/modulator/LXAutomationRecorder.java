@@ -61,7 +61,7 @@ public class LXAutomationRecorder extends LXModulator implements
     private final static String KEY_PATTERN = "pattern";
     private final static String KEY_PARAMETER = "parameter";
     private final static String KEY_VALUE = "value";
-    private final static String KEY_COMMAND = "Command";
+    private final static String KEY_COMMAND = "command";
     private final static String KEY_DATA_1 = "data1";
     private final static String KEY_DATA_2 = "data2";
 
