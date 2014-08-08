@@ -53,7 +53,7 @@ public class FadecandyOutput extends OPCOutput {
         return this;
     }
 
-    public FadecandyOutput statusLedAuto() {
+    public FadecandyOutput setStatusLedAuto() {
         this.firmwareConfig &= 0x0C;
         sendFirmwareConfigPacket();
         return this;
