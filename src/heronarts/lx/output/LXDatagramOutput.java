@@ -5,7 +5,7 @@
  *
  * Copyright ##copyright## ##author##
  * All Rights Reserved
- * 
+ *
  * @author      ##author##
  * @modified    ##date##
  * @version     ##library.prettyVersion## (##library.version##)
@@ -53,7 +53,7 @@ public class LXDatagramOutput extends LXOutput {
 
     /**
      * Subclasses may override. Invoked before datagrams are sent.
-     * 
+     *
      * @param colors
      */
     protected/* abstract */void beforeSend(int[] colors) {
@@ -61,7 +61,7 @@ public class LXDatagramOutput extends LXOutput {
 
     /**
      * Subclasses may override. Invoked after datagrams are sent.
-     * 
+     *
      * @param colors
      */
     protected/* abstract */void afterSend(int[] colors) {
@@ -70,6 +70,7 @@ public class LXDatagramOutput extends LXOutput {
     /**
      * Core method which sends the datagrams.
      */
+    @Override
     protected final void onSend(int[] colors) {
         long now = System.currentTimeMillis();
         beforeSend(colors);
