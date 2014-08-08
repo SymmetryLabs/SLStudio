@@ -28,7 +28,6 @@ import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.pattern.LXPattern;
 
 import java.util.ArrayList;
@@ -47,8 +46,7 @@ import com.google.gson.JsonObject;
  * An automation recorder contains meta-data about all the controls on the
  * patterns and effects in the system, which can be recorded or played back.
  */
-public class LXAutomationRecorder extends LXModulator implements
-        LXParameterListener, LXMidiListener {
+public class LXAutomationRecorder extends LXModulator implements LXMidiListener {
 
     private final static String EVENT_PATTERN = "PATTERN";
     private final static String EVENT_PARAMETER = "PARAMETER";
