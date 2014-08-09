@@ -17,7 +17,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heronarts.lx.modulator.Click;
-import heronarts.lx.modulator.LinearEnvelope;
+import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
 
 /**
  * Class to represent a musical tempo at which patterns are operating. This can
@@ -35,10 +37,18 @@ public class Tempo extends LXComponent {
         public void onMeasure(Tempo tempo);
     }
 
+    private final static double MINUTE = 60000;
+    private final static double DEFAULT_BPM = 120;
+    public final static double MIN_BPM = 20;
+    public final static double MAX_BPM = 240;
+
+    public final BasicParameter bpm = new BasicParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM);
+
+    private final MutableParameter period = new MutableParameter(MINUTE / DEFAULT_BPM);
+
     private final List<Listener> listeners = new ArrayList<Listener>();
 
-    private final Click click = new Click(500);
-    private final LinearEnvelope ramp = new LinearEnvelope(0, 1, 500);
+    private final Click click = new Click(period);
 
     private long firstTap = 0;
     private long lastTap = 0;
@@ -47,8 +57,15 @@ public class Tempo extends LXComponent {
     private int beatCount = 0;
 
     public Tempo() {
+        addParameter(this.bpm);
         addModulator(this.click).start();
-        addModulator(this.ramp).start();
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter parameter) {
+        if (parameter == this.bpm) {
+            this.period.setValue(MINUTE / this.bpm.getValue());
+        }
     }
 
     public Tempo addListener(Listener listener) {
@@ -96,7 +113,7 @@ public class Tempo extends LXComponent {
      * @return value from 0-1 indicating phase of beat
      */
     public double ramp() {
-        return this.ramp.getValue();
+        return this.click.getBasis();
     }
 
     /**
@@ -114,7 +131,7 @@ public class Tempo extends LXComponent {
      * @return Current tempo
      */
     public double bpm() {
-        return 60000. / this.click.getPeriod();
+        return this.bpm.getValue();
     }
 
     /**
@@ -127,23 +144,13 @@ public class Tempo extends LXComponent {
     }
 
     /**
-     * Adjusts the tempo by the given amount
-     *
-     * @param deltaMs Number of milliseconds to nudge beat by
-     */
-    public void adjustBpm(double deltaMs) {
-        this.setBpm(this.bpm() + deltaMs);
-    }
-
-    /**
      * Sets the BPM to the given value
      *
      * @param bpm Number of beats per minute
      */
-    public void setBpm(double bpm) {
-        double period = 60000. / bpm;
-        this.click.setPeriod(period);
-        this.ramp.setPeriod(period);
+    public Tempo setBpm(double bpm) {
+        this.bpm.setValue(bpm);
+        return this;
     }
 
     /**
@@ -152,7 +159,6 @@ public class Tempo extends LXComponent {
     public void trigger() {
         this.beatCount = 0;
         this.click.fire();
-        this.ramp.trigger();
     }
 
     /**
@@ -171,20 +177,16 @@ public class Tempo extends LXComponent {
         this.lastTap = now;
         ++this.tapCount;
         if (this.tapCount > 3) {
-            double period = (this.lastTap - this.firstTap)
-                    / (double) (this.tapCount - 1);
-            this.click.setPeriod(period);
-            this.ramp.setPeriod(period);
+            double beatPeriod = (this.lastTap - this.firstTap) / (double) (this.tapCount - 1);
+            setBpm(MINUTE / beatPeriod);
         }
-
-        this.trigger();
+        trigger();
     }
 
     @Override
     public void loop(double deltaMs) {
         super.loop(deltaMs);
         if (beat()) {
-            this.ramp.trigger();
             ++this.beatCount;
         }
     }
