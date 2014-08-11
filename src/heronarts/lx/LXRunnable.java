@@ -15,6 +15,7 @@ package heronarts.lx;
 
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameterized;
 
 public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
@@ -26,17 +27,16 @@ public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
 
     protected LXRunnable() {
         addParameter(this.isRunning);
-    }
-
-    @Override
-    public void onParameterChanged(LXParameter parameter) {
-        if (parameter == this.isRunning) {
-            if (this.isRunning.isOn()) {
-                onStart();
-            } else {
-                onStop();
+        this.isRunning.addListener(new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter parameter) {
+                if (LXRunnable.this.isRunning.isOn()) {
+                    onStart();
+                } else {
+                    onStop();
+                }
             }
-        }
+        });
     }
 
     /**

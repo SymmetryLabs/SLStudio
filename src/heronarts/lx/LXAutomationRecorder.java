@@ -261,7 +261,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXMidiListener {
     }
 
     @Override
-    public void onStart() {
+    protected void onStart() {
         this.elapsedMillis = 0;
         if (this.armRecord.isOn()) {
             this.events.clear();
@@ -275,7 +275,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXMidiListener {
     }
 
     @Override
-    public void onStop() {
+    protected void onStop() {
         if (this.armRecord.isOn()) {
             this.events.add(new FinishAutomationEvent());
             this.armRecord.setValue(false);
@@ -283,12 +283,12 @@ public class LXAutomationRecorder extends LXRunnable implements LXMidiListener {
     }
 
     @Override
-    public void onReset() {
+    protected void onReset() {
         this.cursor = 0;
     }
 
     @Override
-    public void run(double deltaMs) {
+    protected void run(double deltaMs) {
         this.elapsedMillis += deltaMs;
         if (!this.armRecord.isOn()) {
             while (isRunning() && (this.cursor < this.events.size())) {
@@ -305,7 +305,9 @@ public class LXAutomationRecorder extends LXRunnable implements LXMidiListener {
     @Override
     public void onParameterChanged(LXParameter parameter) {
         if (this.armRecord.isOn()) {
-            this.events.add(new ParameterAutomationEvent(parameter));
+            if (this.parameterToPath.containsKey(parameter)) {
+                this.events.add(new ParameterAutomationEvent(parameter));
+            }
         }
     }
 
@@ -320,41 +322,45 @@ public class LXAutomationRecorder extends LXRunnable implements LXMidiListener {
     public final void loadJson(JsonArray jsonArr) {
         this.events.clear();
         for (JsonElement element : jsonArr) {
-            JsonObject obj = element.getAsJsonObject();
-            LXAutomationEvent event = null;
-            String eventType = obj.get(KEY_EVENT).getAsString();
-            if (eventType.equals(EVENT_PARAMETER)) {
-                String parameterPath = obj.get(KEY_PARAMETER).getAsString();
-                LXParameter parameter = pathToParameter.get(parameterPath);
-                if (parameter != null) {
-                    event = new ParameterAutomationEvent(parameter, obj.get(KEY_VALUE).getAsFloat());
-                } else {
-                    System.out.println("Unknown parameter: " + parameterPath);
+            try {
+                JsonObject obj = element.getAsJsonObject();
+                LXAutomationEvent event = null;
+                String eventType = obj.get(KEY_EVENT).getAsString();
+                if (eventType.equals(EVENT_PARAMETER)) {
+                    String parameterPath = obj.get(KEY_PARAMETER).getAsString();
+                    LXParameter parameter = pathToParameter.get(parameterPath);
+                    if (parameter != null) {
+                        event = new ParameterAutomationEvent(parameter, obj.get(KEY_VALUE).getAsFloat());
+                    } else {
+                        System.out.println("Unknown parameter: " + parameterPath);
+                    }
+                } else if (eventType.equals(EVENT_PATTERN)) {
+                    int channelIndex = obj.get(KEY_CHANNEL).getAsInt();
+                    String patternClassName = obj.get(KEY_PATTERN).getAsString();
+                    LXChannel channel = this.engine.getChannel(channelIndex);
+                    LXPattern pattern = channel.getPattern(patternClassName);
+                    event = new PatternAutomationEvent(channel, pattern);
+                } else if (eventType.equals(EVENT_MIDI)) {
+                    int command = obj.get(KEY_COMMAND).getAsInt();
+                    int channel = obj.get(KEY_CHANNEL).getAsInt();
+                    int data1 = obj.get(KEY_DATA_1).getAsInt();
+                    int data2 = obj.get(KEY_DATA_2).getAsInt();
+                    try {
+                        ShortMessage sm = new ShortMessage();
+                        sm.setMessage(command, channel, data1, data2);
+                        event = new MidiAutomationEvent(LXShortMessage.fromShortMessage(sm));
+                    } catch (InvalidMidiDataException imdx) {
+                        System.out.println("Invalid midi data: " + imdx.getMessage());
+                    }
+                } else if (eventType.equals(EVENT_FINISH)) {
+                    event = new FinishAutomationEvent();
                 }
-            } else if (eventType.equals(EVENT_PATTERN)) {
-                int channelIndex = obj.get(KEY_CHANNEL).getAsInt();
-                String patternClassName = obj.get(KEY_PATTERN).getAsString();
-                LXChannel channel = this.engine.getChannel(channelIndex);
-                LXPattern pattern = channel.getPattern(patternClassName);
-                event = new PatternAutomationEvent(channel, pattern);
-            } else if (eventType.equals(EVENT_MIDI)) {
-                int command = obj.get(KEY_COMMAND).getAsInt();
-                int channel = obj.get(KEY_CHANNEL).getAsInt();
-                int data1 = obj.get(KEY_DATA_1).getAsInt();
-                int data2 = obj.get(KEY_DATA_2).getAsInt();
-                try {
-                    ShortMessage sm = new ShortMessage();
-                    sm.setMessage(command, channel, data1, data2);
-                    event = new MidiAutomationEvent(LXShortMessage.fromShortMessage(sm));
-                } catch (InvalidMidiDataException imdx) {
-                    System.out.println("Invalid midi data: " + imdx.getMessage());
+                if (event != null) {
+                    event.millis = obj.get(KEY_MILLIS).getAsFloat();
+                    this.events.add(event);
                 }
-            } else if (eventType.equals(EVENT_FINISH)) {
-                event = new FinishAutomationEvent();
-            }
-            if (event != null) {
-                event.millis = obj.get(KEY_MILLIS).getAsFloat();
-                this.events.add(event);
+            } catch (UnsupportedOperationException uox) {
+                System.out.println("Invalid automation event: " + element);
             }
         }
     }

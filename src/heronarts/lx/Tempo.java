@@ -154,6 +154,17 @@ public class Tempo extends LXComponent {
     }
 
     /**
+     * Adjust the BPM by the given amount
+     *
+     * @param amount
+     * @return this
+     */
+    public Tempo adjustBpm(double amount) {
+        this.bpm.setValue(this.bpm.getValue() + amount);
+        return this;
+    }
+
+    /**
      * Re-triggers the metronome, so that it immediately beats.
      */
     public void trigger() {
