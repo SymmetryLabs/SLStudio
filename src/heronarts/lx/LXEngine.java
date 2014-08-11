@@ -65,6 +65,7 @@ public class LXEngine extends LXParameterized {
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
     private final List<LXOutput> outputs = new ArrayList<LXOutput>();
     private final List<Listener> listeners = new ArrayList<Listener>();
+    private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
     private final List<LXChannel> unmodifiableChannels = Collections.unmodifiableList(this.channels);
     private final List<LXEffect> unmodifiableEffects = Collections.unmodifiableList(this.effects);
@@ -84,6 +85,10 @@ public class LXEngine extends LXParameterized {
         public void channelRemoved(LXEngine engine, LXChannel channel);
     }
 
+    public interface MessageListener {
+        public void onMessage(LXEngine engine, String message);
+    }
+
     public final synchronized LXEngine addListener(Listener listener) {
         this.listeners.add(listener);
         return this;
@@ -91,6 +96,23 @@ public class LXEngine extends LXParameterized {
 
     public final synchronized LXEngine removeListener(Listener listener) {
         this.listeners.remove(listener);
+        return this;
+    }
+
+    public final synchronized LXEngine addMessageListener(MessageListener listener) {
+        this.messageListeners.add(listener);
+        return this;
+    }
+
+    public final synchronized LXEngine removeMessageListener(MessageListener listener) {
+        this.messageListeners.remove(listener);
+        return this;
+    }
+
+    public synchronized LXEngine broadcastMessage(String message) {
+        for (MessageListener listener : this.messageListeners) {
+            listener.onMessage(this, message);
+        }
         return this;
     }
 
