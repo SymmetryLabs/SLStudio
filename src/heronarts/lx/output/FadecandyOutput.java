@@ -27,6 +27,10 @@ public class FadecandyOutput extends OPCOutput {
         super(lx, host, port);
     }
 
+    public FadecandyOutput(LX lx, String host, int port, int[] pointIndices) {
+        super(lx, host, port, pointIndices);
+    }
+
     @Override
     protected void didConnect() {
         sendColorCorrectionPacket();

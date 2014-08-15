@@ -35,10 +35,25 @@ public class OPCOutput extends LXSocketOutput {
 
     private final byte[] packetData;
 
-    public OPCOutput(LX lx, String host, int port) {
-        super(lx, host, port);
+    private final int[] pointIndices;
 
-        int dataLength = BYTES_PER_PIXEL*lx.total;
+    private static int[] allPoints(LX lx) {
+        int[] points = new int[lx.total];
+        for (int i = 0; i < points.length; ++i) {
+            points[i] = i;
+        }
+        return points;
+    }
+
+    public OPCOutput(LX lx, String host, int port) {
+        this(lx, host, port, allPoints(lx));
+    }
+
+    public OPCOutput(LX lx, String host, int port, int[] pointIndices) {
+        super(lx, host, port);
+        this.pointIndices = pointIndices;
+
+        int dataLength = BYTES_PER_PIXEL*pointIndices.length;
         this.packetData = new byte[HEADER_LEN + dataLength];
         this.packetData[INDEX_CHANNEL] = 0;
         this.packetData[INDEX_COMMAND] = COMMAND_SET_PIXEL_COLORS;
@@ -48,11 +63,12 @@ public class OPCOutput extends LXSocketOutput {
 
     @Override
     protected byte[] getPacketData(int[] colors) {
-        for (int i = 0; i < colors.length; ++i) {
+        for (int i = 0; i < this.pointIndices.length; ++i) {
             int dataOffset = INDEX_DATA + i * BYTES_PER_PIXEL;
-            this.packetData[dataOffset + OFFSET_R] = (byte) (0xFF & (colors[i] >> 16));
-            this.packetData[dataOffset + OFFSET_G] = (byte) (0xFF & (colors[i] >> 8));
-            this.packetData[dataOffset + OFFSET_B] = (byte) (0xFF & colors[i]);
+            int c = colors[this.pointIndices[i]];
+            this.packetData[dataOffset + OFFSET_R] = (byte) (0xFF & (c >> 16));
+            this.packetData[dataOffset + OFFSET_G] = (byte) (0xFF & (c >> 8));
+            this.packetData[dataOffset + OFFSET_B] = (byte) (0xFF & c);
         }
         return this.packetData;
     }
