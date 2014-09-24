@@ -16,17 +16,14 @@ package heronarts.lx.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXBufferedComponent;
 import heronarts.lx.LXChannel;
-import heronarts.lx.LXColor;
 import heronarts.lx.LXTime;
 import heronarts.lx.midi.LXMidiAftertouch;
 import heronarts.lx.midi.LXMidiControlChange;
 import heronarts.lx.midi.LXMidiListener;
-import heronarts.lx.midi.LXMidiNoteOff;
+import heronarts.lx.midi.LXMidiNote;
 import heronarts.lx.midi.LXMidiNoteOn;
 import heronarts.lx.midi.LXMidiPitchBend;
 import heronarts.lx.midi.LXMidiProgramChange;
-import heronarts.lx.model.LXFixture;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.transition.LXTransition;
 
 /**
@@ -207,138 +204,6 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
         return transition;
     }
 
-    /**
-     * Sets the color of point i
-     *
-     * @param i Point index
-     * @param c color
-     * @return this
-     */
-    protected final LXPattern setColor(int i, int c) {
-        this.colors[i] = c;
-        return this;
-    }
-
-    /**
-     * Blend the color at index i with its existing value
-     *
-     * @param i Index
-     * @param c New color
-     * @param blendMode blending mode
-     *
-     * @return this
-     */
-    protected final LXPattern blendColor(int i, int c, LXColor.Blend blendMode) {
-        this.colors[i] = LXColor.blend(this.colors[i], c, blendMode);
-        return this;
-    }
-
-    protected final LXPattern blendColor(LXFixture f, int c, LXColor.Blend blendMode) {
-        for (LXPoint p : f.getPoints()) {
-            this.colors[p.index] = LXColor.blend(this.colors[p.index], c, blendMode);
-        }
-        return this;
-    }
-
-    /**
-     * Adds to the color of point i, using blendColor with ADD
-     *
-     * @param i Point index
-     * @param c color
-     * @return this
-     */
-    protected final LXPattern addColor(int i, int c) {
-        this.colors[i] = LXColor.add(i, c);
-        return this;
-    }
-
-    /**
-     * Adds to the color of point (x,y) in a default GridModel, using blendColor
-     *
-     * @param x x-index
-     * @param y y-index
-     * @param c color
-     * @return this
-     */
-    protected final LXPattern addColor(int x, int y, int c) {
-        return addColor(x + y * this.lx.width, c);
-    }
-
-    /**
-     * Adds the color to the fixture
-     *
-     * @param f Fixture
-     * @param c New color
-     * @return this
-     */
-    protected final LXPattern addColor(LXFixture f, int c) {
-        for (LXPoint p : f.getPoints()) {
-            this.colors[p.index] = LXColor.add(this.colors[p.index], c);
-        }
-        return this;
-    }
-
-    /**
-     * Sets the color of point (x,y) in a default GridModel
-     *
-     * @param x x-index
-     * @param y y-index
-     * @param c color
-     * @return this
-     */
-    protected final LXPattern setColor(int x, int y, int c) {
-        this.colors[x + y * this.lx.width] = c;
-        return this;
-    }
-
-    /**
-     * Gets the color at point (x,y) in a GridModel
-     *
-     * @param x x-index
-     * @param y y-index
-     * @return Color value
-     */
-    protected final int getColor(int x, int y) {
-        return this.colors[x + y * this.lx.width];
-    }
-
-    /**
-     * Sets all points to one color
-     *
-     * @param c Color
-     * @return this
-     */
-    protected final LXPattern setColors(int c) {
-        for (int i = 0; i < colors.length; ++i) {
-            this.colors[i] = c;
-        }
-        return this;
-    }
-
-    /**
-     * Sets the color of all points in a fixture
-     *
-     * @param f Fixture
-     * @param c color
-     * @return this
-     */
-    protected final LXPattern setColor(LXFixture f, int c) {
-        for (LXPoint p : f.getPoints()) {
-            this.colors[p.index] = c;
-        }
-        return this;
-    }
-
-    /**
-     * Clears all colors
-     *
-     * @return this
-     */
-    protected final LXPattern clearColors() {
-        this.setColors(0);
-        return this;
-    }
-
     @Override
     protected final void onLoop(double deltaMs) {
         long runStart = System.nanoTime();
@@ -396,7 +261,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * Subclasses may override to handle midi note off events
      */
     @Override
-    public void noteOffReceived(LXMidiNoteOff note) {
+    public void noteOffReceived(LXMidiNote note) {
     }
 
     /**

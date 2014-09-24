@@ -20,7 +20,7 @@ public abstract class LXAbstractMidiListener implements LXMidiListener {
     }
 
     @Override
-    public void noteOffReceived(LXMidiNoteOff note) {
+    public void noteOffReceived(LXMidiNote note) {
     }
 
     @Override

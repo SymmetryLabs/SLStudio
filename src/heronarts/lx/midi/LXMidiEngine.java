@@ -103,7 +103,12 @@ public class LXMidiEngine {
     void dispatch(LXShortMessage message, LXMidiListener listener) {
         switch (message.getCommand()) {
         case ShortMessage.NOTE_ON:
-            listener.noteOnReceived((LXMidiNoteOn) message);
+            LXMidiNote note = (LXMidiNote) message;
+            if (note.getVelocity() == 0) {
+                listener.noteOffReceived(note);
+            } else {
+                listener.noteOnReceived((LXMidiNoteOn) message);
+            }
             break;
         case ShortMessage.NOTE_OFF:
             listener.noteOffReceived((LXMidiNoteOff) message);

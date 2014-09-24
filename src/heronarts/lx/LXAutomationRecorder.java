@@ -17,7 +17,7 @@ import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiAftertouch;
 import heronarts.lx.midi.LXMidiControlChange;
 import heronarts.lx.midi.LXMidiListener;
-import heronarts.lx.midi.LXMidiNoteOff;
+import heronarts.lx.midi.LXMidiNote;
 import heronarts.lx.midi.LXMidiNoteOn;
 import heronarts.lx.midi.LXMidiPitchBend;
 import heronarts.lx.midi.LXMidiProgramChange;
@@ -403,7 +403,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
     }
 
     @Override
-    public void noteOffReceived(LXMidiNoteOff note) {
+    public void noteOffReceived(LXMidiNote note) {
         midiEventReceived(note);
     }
 

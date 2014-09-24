@@ -17,7 +17,7 @@ public interface LXMidiListener {
 
     public void noteOnReceived(LXMidiNoteOn note);
 
-    public void noteOffReceived(LXMidiNoteOff note);
+    public void noteOffReceived(LXMidiNote note);
 
     public void controlChangeReceived(LXMidiControlChange cc);
 

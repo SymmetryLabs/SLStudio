@@ -180,7 +180,7 @@ public class LXMidiDevice implements LXMidiListener {
             }
         }
 
-        private void noteOffReceived(LXMidiNoteOff note) {
+        private void noteOffReceived(LXMidiNote note) {
             switch (this.mode) {
             case OFF:
                 if (this.parameter instanceof BooleanParameter) {
@@ -671,7 +671,7 @@ public class LXMidiDevice implements LXMidiListener {
     }
 
     @Override
-    public final void noteOffReceived(LXMidiNoteOff note) {
+    public final void noteOffReceived(LXMidiNote note) {
         if (this.logEvents) {
             System.out.println(this.input.getName() + ":noteOff:" + note.getChannel()
                     + ":" + note.getPitch() + ":" + note.getVelocity());
@@ -729,7 +729,7 @@ public class LXMidiDevice implements LXMidiListener {
     protected void noteOn(LXMidiNoteOn note) {
     }
 
-    protected void noteOff(LXMidiNoteOff note) {
+    protected void noteOff(LXMidiNote note) {
     }
 
     protected void controlChange(LXMidiControlChange controlChange) {
