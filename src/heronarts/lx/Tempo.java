@@ -56,7 +56,8 @@ public class Tempo extends LXComponent {
 
     private int beatCount = 0;
 
-    public Tempo() {
+    public Tempo(LX lx) {
+        super(lx);
         addParameter(this.bpm);
         addModulator(this.click).start();
     }

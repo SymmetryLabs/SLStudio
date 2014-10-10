@@ -14,7 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXColor;
+import heronarts.lx.color.LXColor;
 
 /**
  * An IrisTransition moves between content by opening or closing a window to the

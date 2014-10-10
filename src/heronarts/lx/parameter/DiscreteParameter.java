@@ -24,6 +24,8 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
 
     private int range;
 
+    private String[] options = null;
+
     /**
      * Parameter with values from [0, range-1], 0 by default
      *
@@ -37,17 +39,36 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     /**
      * Parameter with values from [min, max-1], min by default
      *
-     * @param label
-     * @param range
-     * @param value
+     * @param label Label
+     * @param min Minimum value
+     * @param max Maximum value is 1 less than this
      */
     public DiscreteParameter(String label, int min, int max) {
         this(label, min, min, max);
     }
 
+    /**
+     * Parameter with values from [min, max-1], value by default
+     *
+     * @param label Label
+     * @param value Default value
+     * @param min Minimum value
+     * @param max Maximum value
+     */
     public DiscreteParameter(String label, int value, int min, int max) {
         super(label, value);
         setRange(min, max);
+    }
+
+    /**
+     * Parameter with set of String label values
+     *
+     * @param label Label
+     * @param options Values
+     */
+    public DiscreteParameter(String label, String[] options) {
+        this(label, options.length);
+        this.options = options;
     }
 
     @Override
@@ -73,6 +94,24 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     }
 
     /**
+     * The set of string labels for these parameters
+     *
+     * @return Strings, may be null
+     */
+    public String[] getOptions() {
+        return this.options;
+    }
+
+    /**
+     * The currently selected option
+     *
+     * @return String description, or numerical value
+     */
+    public String getOption() {
+        return (this.options != null) ? this.options[getValuei()] : ("" + getValuei());
+    }
+
+    /**
      * Sets the range from [minValue, maxValue-1] inclusive
      *
      * @param minValue Minimum value
@@ -80,6 +119,9 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
      * @return this
      */
     public DiscreteParameter setRange(int minValue, int maxValue) {
+        if (this.options != null) {
+            throw new UnsupportedOperationException("May not call setRange on a DiscreteParameter with String options");
+        }
         this.minValue = minValue;
         this.maxValue = maxValue - 1;
         if (this.maxValue < this.minValue - 1) {

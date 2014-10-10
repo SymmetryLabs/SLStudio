@@ -17,20 +17,13 @@ import heronarts.lx.LX;
 import heronarts.lx.LXBufferedComponent;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXTime;
-import heronarts.lx.midi.LXMidiAftertouch;
-import heronarts.lx.midi.LXMidiControlChange;
-import heronarts.lx.midi.LXMidiListener;
-import heronarts.lx.midi.LXMidiNote;
-import heronarts.lx.midi.LXMidiNoteOn;
-import heronarts.lx.midi.LXMidiPitchBend;
-import heronarts.lx.midi.LXMidiProgramChange;
 import heronarts.lx.transition.LXTransition;
 
 /**
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points. It is
  */
-public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener {
+public abstract class LXPattern extends LXBufferedComponent {
 
     /**
      * Reference to the channel this pattern belongs to.
@@ -91,9 +84,8 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * @return this
      */
     public final LXPattern setChannel(LXChannel channel) {
-        if (this.channel != null) {
-            throw new RuntimeException(
-                    "LXPattern instance can only be added to LXChannel once.");
+        if ((channel != null) && (this.channel != null)) {
+            throw new UnsupportedOperationException("LXPattern instance can only be added to one LXChannel at a time.");
         }
         this.channel = channel;
         return this;
@@ -153,7 +145,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
     }
 
     /**
-     * Sets whether this pattern is eligible for selection.
+     * Sets whether this pattern is eligible for automatic selection.
      *
      * @param eligible
      * @return this
@@ -248,48 +240,6 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * into this pattern is complete.
      */
     public/* abstract */void onTransitionEnd() {
-    }
-
-    /**
-     * Subclasses may override to handle midi note on events
-     */
-    @Override
-    public void noteOnReceived(LXMidiNoteOn note) {
-    }
-
-    /**
-     * Subclasses may override to handle midi note off events
-     */
-    @Override
-    public void noteOffReceived(LXMidiNote note) {
-    }
-
-    /**
-     * Subclasses may override to handle midi CC events
-     */
-    @Override
-    public void controlChangeReceived(LXMidiControlChange cc) {
-    }
-
-    /**
-     * Subclasses may override to handle midi program change events
-     */
-    @Override
-    public void programChangeReceived(LXMidiProgramChange programChange) {
-    }
-
-    /**
-     * Subclasses may override to handle midi pitch bend events
-     */
-    @Override
-    public void pitchBendReceived(LXMidiPitchBend pitchBend) {
-    }
-
-    /**
-     * Subclasses may override to handle midi aftertouch events
-     */
-    @Override
-    public void aftertouchReceived(LXMidiAftertouch aftertouch) {
     }
 
 }

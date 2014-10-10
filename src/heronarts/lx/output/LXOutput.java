@@ -14,7 +14,7 @@
 package heronarts.lx.output;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXColor;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;

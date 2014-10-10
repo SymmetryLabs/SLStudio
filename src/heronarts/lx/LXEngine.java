@@ -183,12 +183,20 @@ public class LXEngine extends LXParameterized {
         for (int i = 0; i < black.length; ++i) {
             this.black[i] = 0xff000000;
         }
+        // Master double-buffer
         this.buffer = new DoubleBuffer();
 
+        // Midi engine
         this.midiEngine = new LXMidiEngine(lx);
 
+        // Default color palette
+        addComponent(lx.palette);
+
+        // Add a default channel
         addChannel(new LXPattern[] { new IteratorTestPattern(lx) });
-        channels.get(0).getFader().setValue(1);
+        this.channels.get(0).getFader().setValue(1);
+
+        // Initialize timer
         this.lastMillis = System.currentTimeMillis();
     }
 

@@ -15,6 +15,8 @@ package heronarts.lx;
 
 import heronarts.lx.audio.FrequencyGate;
 import heronarts.lx.audio.GraphicEQ;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
@@ -94,6 +96,11 @@ public class LX {
      * The pixel model.
      */
     public final LXModel model;
+
+    /**
+     * The default palette.
+     */
+    public final LXPalette palette;
 
     /**
      * The total number of pixels in the grid, immutable.
@@ -185,14 +192,14 @@ public class LX {
                 this.width = this.height = 0;
             }
         }
+        this.palette = new LXPalette(this);
 
         this.engine = new LXEngine(this);
 
         this.baseHue = null;
         this.cycleBaseHue(30000);
 
-        this.tempo = new Tempo();
-
+        this.tempo = new Tempo(this);
     }
 
     public LX addListener(Listener listener) {

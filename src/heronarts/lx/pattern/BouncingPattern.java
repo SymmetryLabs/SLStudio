@@ -14,8 +14,8 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXColor;
 import heronarts.lx.LXUtils;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.transition.WipeTransition;
 

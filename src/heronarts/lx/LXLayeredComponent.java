@@ -13,8 +13,10 @@
 
 package heronarts.lx;
 
+import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -42,6 +44,7 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
     }
 
     protected LXLayeredComponent(LX lx, LXBuffer buffer) {
+        super(lx);
         this.lx = lx;
         if (buffer != null) {
             setBuffer(buffer);
@@ -71,6 +74,9 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
         long loopStart = System.nanoTime();
 
         // This protects against subclasses from inappropriately nuking the colors buffer
+        // reference. Even if a doofus assigns colors to something else, we'll reset it
+        // here on each pass of the loop. Better than subclasses having to call getColors()
+        // all the time.
         this.colors = this.buffer.getArray();
 
         super.loop(deltaMs);
@@ -79,6 +85,7 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
             layer.setBuffer(this.buffer);
             layer.loop(deltaMs);
         }
+
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 

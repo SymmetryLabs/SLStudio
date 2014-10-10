@@ -14,7 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXColor;
+import heronarts.lx.color.LXColor;
 
 public class SubtractTransition extends BlendTransition {
     public SubtractTransition(LX lx) {

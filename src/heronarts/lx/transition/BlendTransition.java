@@ -14,7 +14,7 @@
 package heronarts.lx.transition;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXColor;
+import heronarts.lx.color.LXColor;
 
 public class BlendTransition extends LXTransition {
 
@@ -35,6 +35,14 @@ public class BlendTransition extends LXTransition {
         if (progress == 0.5) {
             for (int i = 0; i < c1.length; ++i) {
                 this.colors[i] = LXColor.blend(c1[i], c2[i], this.blendMode);
+            }
+        } else if (progress <= 0) {
+            for (int i = 0; i < c1.length; ++i) {
+                this.colors[i] = c1[i];
+            }
+        } else if (progress >= 1) {
+            for (int i = 0; i < c2.length; ++i) {
+                this.colors[i] = c2[i];
             }
         } else if (progress < 0.5) {
             for (int i = 0; i < c1.length; ++i) {

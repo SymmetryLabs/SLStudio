@@ -14,9 +14,9 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXColor;
 import heronarts.lx.LXUtils;
 import heronarts.lx.audio.GraphicEQ;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.transition.WipeTransition;
 
 public class GraphicEqualizerPattern extends LXPattern {

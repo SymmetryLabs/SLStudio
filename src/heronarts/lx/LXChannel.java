@@ -13,7 +13,9 @@
 
 package heronarts.lx;
 
+import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
@@ -29,7 +31,7 @@ import java.util.List;
  * which it plays and rotates. It also has a fader to control how this channel
  * is blended with the channels before it.
  */
-public class LXChannel implements LXLoopTask {
+public class LXChannel extends LXComponent {
 
     /**
      * Listener interface for objects which want to be notified when the internal
@@ -88,12 +90,6 @@ public class LXChannel implements LXLoopTask {
         }
     }
 
-    public class Timer {
-        public long runNanos = 0;
-    }
-
-    public final Timer timer = new Timer();
-
     /**
      * The index of this channel in the engine.
      */
@@ -139,12 +135,32 @@ public class LXChannel implements LXLoopTask {
     private final List<Listener> listeners = new ArrayList<Listener>();
 
     LXChannel(LX lx, int index, LXPattern[] patterns) {
+        super(lx);
         this.lx = lx;
         this.index = index;
         this.buffer = new ModelBuffer(lx);
         this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();
         _updatePatterns(patterns);
+        this.colors = this.getActivePattern().getColors();
+
+        addParameter(this.enabled);
+        addParameter(this.midiEnabled);
+        addParameter(this.autoTransitionEnabled);
+    }
+
+    @Override
+    protected void onModelChanged(LXModel model) {
+        for (LXPattern pattern : this.patterns) {
+            pattern.setModel(model);
+        }
+    }
+
+    @Override
+    protected void onPaletteChanged(LXPalette palette) {
+        for (LXPattern pattern : this.patterns) {
+            pattern.setPalette(palette);
+        }
     }
 
     public synchronized final void addListener(Listener listener) {
@@ -225,9 +241,9 @@ public class LXChannel implements LXLoopTask {
     }
 
     public synchronized final LXChannel addPattern(LXPattern pattern) {
-        if (pattern.getChannel() != this) {
-            pattern.setChannel(this);
-        }
+        pattern.setChannel(this);
+        ((LXComponent)pattern).setModel(this.model);
+        ((LXComponent)pattern).setPalette(this.palette);
         this.patterns.add(pattern);
         for (Listener listener : this.listeners) {
             listener.patternAdded(this, pattern);
@@ -236,7 +252,25 @@ public class LXChannel implements LXLoopTask {
     }
 
     public synchronized final LXChannel removePattern(LXPattern pattern) {
-        if (this.patterns.remove(pattern)) {
+        if (this.patterns.size() <= 1) {
+            throw new UnsupportedOperationException("LXChannel must have at least one pattern");
+        }
+        int index = this.patterns.indexOf(pattern);
+        if (index >= 0) {
+            this.patterns.remove(index);
+            pattern.setChannel(null);
+            if (this.activePatternIndex >= index) {
+                --this.activePatternIndex;
+                if (this.activePatternIndex < 0) {
+                    this.activePatternIndex = this.patterns.size() - 1;
+                }
+            }
+            if (this.nextPatternIndex >= index) {
+                --this.nextPatternIndex;
+                if (this.nextPatternIndex < 0) {
+                    this.nextPatternIndex = this.patterns.size() - 1;
+                }
+            }
             for (Listener listener : this.listeners) {
                 listener.patternRemoved(this, pattern);
             }
@@ -245,8 +279,17 @@ public class LXChannel implements LXLoopTask {
     }
 
     private void _updatePatterns(LXPattern[] patterns) {
+        if (patterns == null) {
+            throw new IllegalArgumentException("May not set null pattern array");
+        }
+        if (patterns.length == 0) {
+            throw new IllegalArgumentException("LXChannel must have at least one pattern");
+        }
         this.patterns.clear();
         for (LXPattern pattern : patterns) {
+            if (pattern == null) {
+                throw new IllegalArgumentException("Pattern array may not include null elements");
+            }
             addPattern(pattern);
         }
     }
@@ -382,7 +425,10 @@ public class LXChannel implements LXLoopTask {
 
     @Override
     public synchronized void loop(double deltaMs) {
-        long runStart = System.nanoTime();
+        long loopStart = System.nanoTime();
+
+        // Run modulators and components
+        super.loop(deltaMs);
 
         // Run active pattern
         LXPattern activePattern = getActivePattern();
@@ -425,7 +471,7 @@ public class LXChannel implements LXLoopTask {
 
         this.colors = colors;
 
-        this.timer.runNanos = System.nanoTime() - runStart;
+        this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
     public synchronized int[] getColors() {

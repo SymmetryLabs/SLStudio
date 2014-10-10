@@ -14,7 +14,7 @@
 package heronarts.lx.effect;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXColor;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BasicParameter;
 
 public class BlurEffect extends LXEffect {

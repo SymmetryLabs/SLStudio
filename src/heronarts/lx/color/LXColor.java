@@ -11,7 +11,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx;
+package heronarts.lx.color;
 
 import java.awt.Color;
 
