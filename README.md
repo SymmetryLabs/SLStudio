@@ -13,9 +13,9 @@ The modular engine design contains a variety of components:
 
 Output via a variety of lighting protocols is supported, including:
 
-* Open Pixel Control
-* E1.31 Streaming ACN
-* Distributed Display Protocol
+* [Open Pixel Control](http://openpixelcontrol.org/)
+* [E1.31 Streaming ACN](http://www.opendmx.net/index.php/E1.31)
+* [Distributed Display Protocol](http://www.3waylabs.com/ddp/)
 * [Fadecandy](https://github.com/scanlime/fadecandy)
 * KiNET
 
