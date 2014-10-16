@@ -1,14 +1,25 @@
 LX
 ==
 
-LX is a library for LED lighting engines with modular UI and control.
+LX is a software library for real-time procedural animation, primarily designed for pixel-based LED lighting systems.
 
-Source code is available as a reference. Note that this software is not under an open source license. Redistribution, use or modification without permission are violations of copyright.
+The modular engine design contains a variety of components:
 
-If you want to use this software for an art project, that is great and something I will happily permit - just email me! If you want to use it for commercial purposes, that is probably also great, but I'll first want to know what you are doing. Again, email me.
+* Generic parameter and time-based modulation APIs
+* Geometric model and matrix transformations
+* MIDI interactivity
+* Real-time audio analysis via [https://github.com/ddf/Minim](Minim)
+* Color composition and blending
 
-mark@heronarts.com
+Output via a variety of lighting protocols is supported, including:
 
-Copyright 2012- Mark Slee, Heron Arts LLC
+* Open Pixel Control
+* E1.31 Streaming ACN
+* Distributed Display Protocol
+* Fadecandy
+* KiNET
 
-All Rights Reserved
+LX differs from many other lighting/VJ software packages in that it is designed for non-uniform 3-D pixel layouts, rather than dense 2-D screens. Whereas many applications render video and map it onto LED pixel arrays, LX functions more like a software vertex shader. The rendering engine knows the discrete position of each pixel and takes exact position information into account as each pixel is rendered.   
+
+A companion library, [P2LX](https://github.com/heronarts/P2LX), makes it simple to embed LX in the Processing 2 environment with modular UI controls and simulation. This is the most typical use case. This core library is free of any dependency on the Processing libraries or runtime. It depends only on [https://github.com/ddf/Minim](Minim) for audio and [https://code.google.com/p/google-gson/](Google Gson) for serialization.
+ 
