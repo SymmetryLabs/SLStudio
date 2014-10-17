@@ -113,7 +113,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * Set the modulator to a certain basis position in its cycle.
      *
      * @param basis
-     * @return
+     * @return this
      */
     public final LXPeriodicModulator setBasis(double basis) {
         if (basis < 0) {
@@ -130,7 +130,6 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * Set the modulator to a certain value in its cycle.
      *
      * @param value The value to apply
-     * @return This modulator, for method chaining
      */
     @Override
     public void onSetValue(double value) {

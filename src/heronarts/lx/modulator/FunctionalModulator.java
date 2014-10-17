@@ -125,7 +125,7 @@ public abstract class FunctionalModulator extends LXRangeModulator {
 
     /**
      * Subclasses determine the basis based on a normalized value from 0 to 1.
-     * 
+     *
      * @param normalizedValue A normalize value from 0 to 1
      */
     @Override
@@ -142,9 +142,9 @@ public abstract class FunctionalModulator extends LXRangeModulator {
     /**
      * Subclasses override this method to compute the value of the function. Basis
      * is a value from 0-1, the result must be a value from 0-1.
-     * 
+     *
      * @param basis
-     * @return
+     * @return Computed value for given basis
      */
     public abstract double compute(double basis);
 
@@ -154,7 +154,7 @@ public abstract class FunctionalModulator extends LXRangeModulator {
      * implemented, an UnsupportedOperationException may be thrown at runtime on
      * invocations to methods that would directly change the value or bounds of
      * the function.
-     * 
+     *
      * @param basis Previous basis, from 0-1
      * @param value New value from 0-1
      * @return New basis, from 0-1

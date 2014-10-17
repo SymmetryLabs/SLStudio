@@ -112,7 +112,7 @@ public abstract class LXOutput {
      * Adds a child to this output, sent after color-correction
      *
      * @param child
-     * @return
+     * @return this
      */
     public LXOutput addChild(LXOutput child) {
         this.children.add(child);
@@ -123,7 +123,7 @@ public abstract class LXOutput {
      * Removes a child
      *
      * @param child
-     * @return
+     * @return this
      */
     public LXOutput removeChild(LXOutput child) {
         this.children.remove(child);

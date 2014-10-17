@@ -128,7 +128,6 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
      * Applies this effect to the current frame
      *
      * @param deltaMs Milliseconds since last frame
-     * @param colors Array of this frame's colors
      */
     @Override
     public final void onLoop(double deltaMs) {
@@ -140,8 +139,6 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
     /**
      * Implementation of the effect. Subclasses need to override this to implement
      * their functionality.
-     *
-     * @param colors
      */
     protected abstract void run(double deltaMs);
 }

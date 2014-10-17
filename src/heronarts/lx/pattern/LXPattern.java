@@ -175,7 +175,7 @@ public abstract class LXPattern extends LXBufferedComponent {
      * pattern is eligible if its eligibility flag has not been set to false, and
      * if it either has no interval, or is currently in its interval.
      *
-     * @return
+     * @return True if pattern is eligible to run now
      */
     public final boolean isEligible() {
         return this.eligible && (!this.hasInterval() || this.isInInterval());

@@ -170,7 +170,6 @@ public abstract class LXTransition extends LXBufferedComponent {
      * @param c1 Colors being blended from
      * @param c2 Colors being blended to
      * @param progress Progress of blend, from 0 to 1
-     * @param deltaMs Milliseconds since last frame
      */
     public final void blend(int[] c1, int[] c2, double progress) {
         long blendStart = System.nanoTime();
