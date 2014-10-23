@@ -21,6 +21,7 @@ package heronarts.lx.output;
 import java.io.IOException;
 import java.io.OutputStream;
 import java.net.ConnectException;
+import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import heronarts.lx.LX;
@@ -46,7 +47,8 @@ public abstract class LXSocketOutput extends LXOutput {
     private void connect() {
         if (this.socket == null) {
             try {
-                this.socket = new Socket(this.host, this.port);
+                this.socket = new Socket();
+                this.socket.connect(new InetSocketAddress(this.host, this.port), 100);
                 this.socket.setTcpNoDelay(true);
                 this.output = this.socket.getOutputStream();
                 didConnect();

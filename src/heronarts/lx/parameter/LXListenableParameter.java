@@ -48,7 +48,7 @@ public abstract class LXListenableParameter implements LXParameter {
 
     protected LXListenableParameter(String label, double value) {
         this.label = label;
-        setValue(this.defaultValue = this.value = value);
+        this.defaultValue = this.value = value;
     }
 
     public final LXListenableParameter addListener(LXParameterListener listener) {
@@ -70,7 +70,7 @@ public abstract class LXListenableParameter implements LXParameter {
     /**
      * Resets the value of the parameter, giving it a new default. Future calls to
      * reset() with no parameter will use this value.
-     * 
+     *
      * @param value New default value
      */
     public final LXParameter reset(double value) {
@@ -103,7 +103,7 @@ public abstract class LXListenableParameter implements LXParameter {
     /**
      * Invoked when the value has changed. Subclasses should update any special
      * internal state according to this new value.
-     * 
+     *
      * @param value New value
      */
     protected abstract double updateValue(double value);
