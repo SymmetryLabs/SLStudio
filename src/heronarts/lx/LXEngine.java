@@ -253,15 +253,19 @@ public class LXEngine extends LXParameterized {
         if (threaded == this.isThreaded) {
             return this;
         }
-        this.isThreaded = threaded;
         if (!threaded) {
+            // Set interrupt flag on the engine thread
             this.engineThread.interrupt();
-            try {
-                this.engineThread.join();
-            } catch (InterruptedException ix) {
+            if (Thread.currentThread() != this.engineThread) {
+                // Called from another thread? If so, wait for engine thread to finish
+                try {
+                    this.engineThread.join();
+                } catch (InterruptedException ix) {
+                    throw new IllegalThreadStateException("Interrupted waiting to join LXEngine thread");
+                }
             }
-            this.engineThread = null;
         } else {
+            this.isThreaded = true;
             // Copy the current frame to avoid a black frame
             for (int i = 0; i < this.buffer.render.length; ++i) {
                 this.buffer.copy[i] = this.buffer.render[i];
@@ -286,11 +290,16 @@ public class LXEngine extends LXParameterized {
                                 try {
                                     sleep(minMillisPerFrame - frameMillis);
                                 } catch (InterruptedException ix) {
+                                    // We're done!
                                     break;
                                 }
                             }
                         }
                     }
+
+                    // We are done threading
+                    LXEngine.this.engineThread = null;
+                    LXEngine.this.isThreaded = false;
                     System.out.println("LX Engine Thread finished.");
                 }
             };
