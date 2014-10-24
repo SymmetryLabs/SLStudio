@@ -22,19 +22,11 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p2lx.ui.component;
+package heronarts.p2lx.ui;
 
-import heronarts.p2lx.ui.UI;
-import heronarts.p2lx.ui.UI2dContext;
-import processing.core.PImage;
+/**
+ * Marker interface for UI components that can be reached by using the tab key
+ */
+public interface UITabFocus {
 
-public class UIImageContext extends UI2dContext {
-    public UIImageContext(UI ui, PImage image) {
-        this(ui, image, 0, 0);
-    }
-
-    public UIImageContext(UI ui, PImage image, float x, float y) {
-        super(ui, x, y, image.width, image.height);
-        new UIImage(image).addToContainer(this);
-    }
 }
