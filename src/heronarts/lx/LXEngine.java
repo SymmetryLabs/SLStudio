@@ -499,13 +499,13 @@ public class LXEngine extends LXParameterized {
         // Run tempo, always using real-time
         this.lx.tempo.loop(deltaMs);
 
-        // Mutate by speed for everything else
-        deltaMs *= this.speed.getValue();
-
-        // Run loop tasks
+        // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {
             loopTask.loop(deltaMs);
         }
+
+        // Mutate by speed for channels and effects
+        deltaMs *= this.speed.getValue();
 
         // Run and blend all of our channels
         long channelStart = System.nanoTime();
