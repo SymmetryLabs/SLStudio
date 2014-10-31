@@ -97,7 +97,14 @@ public class LXComponent extends LXParameterized implements LXLoopTask, LXMidiLi
     }
 
     protected final LXModulator addModulator(LXModulator modulator) {
-        this.modulators.add(modulator);
+        if (!this.modulators.contains(modulator)) {
+            this.modulators.add(modulator);
+        }
+        return modulator;
+    }
+
+    protected final LXModulator startModulator(LXModulator modulator) {
+        addModulator(modulator).start();
         return modulator;
     }
 
