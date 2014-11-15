@@ -344,7 +344,9 @@ public class LXEngine extends LXParameterized {
     }
 
     public synchronized LXEngine addLoopTask(LXLoopTask loopTask) {
-        this.loopTasks.add(loopTask);
+        if (!this.loopTasks.contains(loopTask)) {
+            this.loopTasks.add(loopTask);
+        }
         return this;
     }
 
