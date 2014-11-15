@@ -43,6 +43,11 @@ public abstract class LXPeriodicModulator extends LXModulator {
     private boolean finished = false;
 
     /**
+     * Whether the modulator looped on this cycle.
+     */
+    private boolean looped = false;
+
+    /**
      * The basis is a value that moves from 0 to 1 through the period
      */
     private double basis = 0;
@@ -207,6 +212,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     @Override
     protected final double computeValue(double deltaMs) {
         this.finished = false;
+        this.looped = false;
         double periodv = this.period.getValue();
         if (periodv == 0) {
             this.basis = 1;
@@ -215,6 +221,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
         }
         if (this.basis >= 1.) {
             if (this.looping.isOn()) {
+                this.looped = true;
                 if (this.basis > 1) {
                     this.basis = this.basis % 1;
                 }
@@ -225,6 +232,15 @@ public abstract class LXPeriodicModulator extends LXModulator {
             }
         }
         return computeValue(deltaMs, this.basis);
+    }
+
+    /**
+     * Returns true once each time this modulator loops through its starting position.
+     *
+     * @return true if the modulator just looped
+     */
+    public final boolean loop() {
+        return this.looped;
     }
 
     /**
