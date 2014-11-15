@@ -78,6 +78,10 @@ public abstract class LXListenableParameter implements LXParameter {
         return setValue(this.defaultValue);
     }
 
+    public final LXParameter incrementValue(double amount) {
+        return setValue(this.value + amount);
+    }
+
     public final LXParameter setValue(double value) {
         if (this.value != value) {
             this.value = updateValue(value);

@@ -31,6 +31,10 @@ public class MutableParameter extends LXListenableParameter {
         super(label);
     }
 
+    public MutableParameter(String label, double value) {
+        super(label, value);
+    }
+
     public MutableParameter(double value) {
         super(value);
     }
