@@ -38,6 +38,12 @@ public class LXColor {
         DARKEST
     }
 
+    public static final int BLACK = 0xff000000;
+    public static final int WHITE = 0xffffffff;
+    public static final int RED = 0xffff0000;
+    public static final int GREEN = 0xff00ff00;
+    public static final int BLUE = 0xff0000ff;
+
     public static final int ALPHA_MASK = 0xff000000;
     public static final int RED_MASK = 0x00ff0000;
     public static final int GREEN_MASK = 0x0000ff00;

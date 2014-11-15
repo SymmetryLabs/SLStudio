@@ -21,11 +21,13 @@ package heronarts.lx.color;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.modulator.LinearEnvelope;
+import heronarts.lx.modulator.DampedParameter;
+import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.parameter.BasicParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
 
@@ -36,73 +38,80 @@ import heronarts.lx.parameter.MutableParameter;
  */
 public class LXPalette extends LXComponent {
 
-    public static final int HUE_MODE_FIXED = 0;
+    public static final int HUE_MODE_STATIC = 0;
     public static final int HUE_MODE_CYCLE = 1;
     public static final int HUE_MODE_OSCILLATE = 2;
 
     public final DiscreteParameter hueMode = new DiscreteParameter("Mode",
-        new String[] { "Fixed", "Cycle", "Oscillate" });
+        new String[] { "Static", "Cycle", "Oscillate" });
 
-    public final BasicParameter hue = new BasicParameter("Hue", 0, 360);
+    public final ColorParameter color = new ColorParameter("Color", 0xffff0000);
 
-    public final BasicParameter hue2 = new BasicParameter("Hue2", 0, 360);
+    /**
+     * Hack for Processing 2, doesn't let you address color
+     */
+    public final ColorParameter clr = color;
 
-    public final BasicParameter saturation = new BasicParameter("Saturation", 100, 0, 100);
+    public final BasicParameter range = new BasicParameter("Range", 0, 360);
 
-    public final MutableParameter period = new MutableParameter("Period");
+    public final MutableParameter period = new MutableParameter("Period", 120000);
 
-    private final LinearEnvelope hueFixed = new LinearEnvelope(0, hue, 100);
+    private final DampedParameter hueFixed = new DampedParameter(color.hue, 1800);
 
     private final SawLFO hueCycle = new SawLFO(0, 360, period);
 
-    private final TriangleLFO hueOscillate = new TriangleLFO(hue, hue2, period);
+    private final FunctionalParameter hue2 = new FunctionalParameter() {
+        @Override
+        public double getValue() {
+            return color.hue.getValue() + range.getValue();
+        }
+    };
+
+    private final TriangleLFO hueOscillate = new TriangleLFO(color.hue, hue2, period);
+
+    private LXModulator hue = hueFixed;
 
     public LXPalette(LX lx) {
         super(lx);
-        addParameter(this.hue);
-        addParameter(this.hue2);
-        addParameter(this.saturation);
+        addParameter(this.hueMode);
+        addParameter(this.color);
         addParameter(this.period);
-        addModulator(this.hueFixed);
+        addParameter(this.range);
+        addModulator(this.hueFixed).start();
         addModulator(this.hueCycle);
         addModulator(this.hueOscillate);
     }
 
     @Override
     public void onParameterChanged(LXParameter parameter) {
-        if (parameter == this.hue) {
-            this.hueFixed.start();
-        } else if (parameter == this.hueMode) {
+        if (parameter == this.hueMode) {
+            double hueValue = this.hue.getValue();
+            this.color.hue.setValue(hueValue);
             switch (this.hueMode.getValuei()) {
-                case HUE_MODE_FIXED:
-                    this.hueFixed.start();
+                case HUE_MODE_STATIC:
+                    this.hue = this.hueFixed;
+                    this.hueFixed.setValue(hueValue).start();
                     this.hueCycle.stop();
                     this.hueOscillate.stop();
                     break;
                 case HUE_MODE_CYCLE:
+                    this.hue = this.hueCycle;
                     this.hueFixed.stop();
                     this.hueOscillate.stop();
-                    this.hueCycle.start();
+                    this.hueCycle.setValue(hueValue).start();
                     break;
                 case HUE_MODE_OSCILLATE:
+                    this.hue = this.hueOscillate;
                     this.hueFixed.stop();
-                    this.hueOscillate.stop();
-                    this.hueCycle.start();
+                    this.hueCycle.stop();
+                    this.hueOscillate.setValue(hueValue).start();
                     break;
             }
         }
     }
 
     public double getHue() {
-        switch (this.hueMode.getValuei()) {
-        case HUE_MODE_CYCLE:
-            return this.hueCycle.getValue();
-        case HUE_MODE_OSCILLATE:
-            return this.hueOscillate.getValue();
-        default:
-        case HUE_MODE_FIXED:
-            return this.hueFixed.getValue();
-        }
+        return this.hue.getValue();
     }
 
     public final float getHuef() {
@@ -110,7 +119,7 @@ public class LXPalette extends LXComponent {
     }
 
     public double getSaturation() {
-        return this.saturation.getValue();
+        return this.color.saturation.getValue();
     }
 
     public final float getSaturationf() {
@@ -138,11 +147,17 @@ public class LXPalette extends LXComponent {
     }
 
     public int getColor(double brightness) {
-        return LXColor.hsb(getHue(), getSaturation(), brightness);
+        if (brightness > 0) {
+            return LXColor.hsb(getHue(), getSaturation(), brightness);
+        }
+        return LXColor.BLACK;
     }
 
     public int getColor(double saturation, double brightness) {
-        return LXColor.hsb(getHue(), saturation, brightness);
+        if (brightness > 0) {
+            return LXColor.hsb(getHue(), saturation, brightness);
+        }
+        return LXColor.BLACK;
     }
 
     public int getColor(LXPoint point) {
@@ -150,12 +165,17 @@ public class LXPalette extends LXComponent {
     }
 
     public int getColor(LXPoint point, double brightness) {
-        return getColor(point, getSaturation(point), brightness);
+        if (brightness > 0) {
+            return getColor(point, getSaturation(point), brightness);
+        }
+        return LXColor.BLACK;
     }
 
     public int getColor(LXPoint point, double saturation, double brightness) {
-        return LXColor.hsb(getHue(point), saturation, brightness);
+        if (brightness > 0) {
+            return LXColor.hsb(getHue(point), saturation, brightness);
+        }
+        return LXColor.BLACK;
     }
-
 
 }
