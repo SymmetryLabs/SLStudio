@@ -56,15 +56,15 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
         }
     }
 
-    LXBuffer getBuffer() {
+    protected LXBuffer getBuffer() {
         return this.buffer;
     }
 
-    LXLayeredComponent setBuffer(LXBufferedComponent component) {
+    protected LXLayeredComponent setBuffer(LXBufferedComponent component) {
         return setBuffer(component.getBuffer());
     }
 
-    LXLayeredComponent setBuffer(LXBuffer buffer) {
+    protected LXLayeredComponent setBuffer(LXBuffer buffer) {
         this.buffer = buffer;
         this.colors = buffer.getArray();
         return this;
