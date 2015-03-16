@@ -54,6 +54,10 @@ public class LXUtils {
         return v1 + (v2 - v1) * amt;
     }
 
+    public static float lerpf(float v1, float v2, float amt) {
+        return v1 + (v2 - v1) * amt;
+    }
+
     public static double tri(double t) {
         t = t - Math.floor(t);
         if (t < 0.25) {
