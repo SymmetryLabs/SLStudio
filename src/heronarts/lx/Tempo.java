@@ -60,6 +60,7 @@ public class Tempo extends LXComponent {
     private int tapCount = 0;
 
     private int beatCount = 0;
+    private boolean triggered = false;
 
     public Tempo(LX lx) {
         super(lx);
@@ -176,6 +177,7 @@ public class Tempo extends LXComponent {
     public void trigger() {
         this.beatCount = 0;
         this.click.fire();
+        this.triggered = true;
     }
 
     /**
@@ -203,8 +205,9 @@ public class Tempo extends LXComponent {
     @Override
     public void loop(double deltaMs) {
         super.loop(deltaMs);
-        if (beat()) {
+        if (beat() && !triggered) {
             ++this.beatCount;
         }
+        this.triggered = false;
     }
 }
