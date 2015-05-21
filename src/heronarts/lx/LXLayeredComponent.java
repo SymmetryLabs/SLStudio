@@ -90,6 +90,7 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
             layer.setBuffer(this.buffer);
 
             // TODO(mcslee): is this best here or should it be in addLayer?
+            layer.setModel(this.model);
             layer.setPalette(this.palette);
 
             layer.loop(deltaMs);
