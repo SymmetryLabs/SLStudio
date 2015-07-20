@@ -41,7 +41,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Constructs a projection view of the given model
-     * 
+     *
      * @param model Model
      */
     public LXProjection(LXModel model) {
@@ -55,7 +55,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Reset all points in the projection to the model
-     * 
+     *
      * @return this, for method chaining
      */
     public LXProjection reset() {
@@ -71,7 +71,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Scales the projection
-     * 
+     *
      * @param sx x-factor
      * @param sy y-factor
      * @param sz z-factor
@@ -88,7 +88,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Translates the projection
-     * 
+     *
      * @param tx x-translation
      * @param ty y-translation
      * @param tz z-translation
@@ -106,8 +106,8 @@ public class LXProjection implements Iterable<LXVector> {
     /**
      * Centers the projection, by translating it such that the origin (0, 0, 0)
      * becomes the center of the model
-     * 
-     * @return this, for method chaning
+     *
+     * @return this, for method chaining
      */
     public LXProjection center() {
         return translate(-this.model.cx, -this.model.cy, -this.model.cz);
@@ -115,7 +115,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Translates the model from its center, so (0, 0, 0) becomes (tx, ty, tz)
-     * 
+     *
      * @param tx x-translation
      * @param ty y-translation
      * @param tz z-translation
@@ -128,7 +128,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Reflects the projection about the x-axis
-     * 
+     *
      * @return this, for method chaining
      */
     public LXProjection reflectX() {
@@ -140,7 +140,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Reflects the projection about the y-axis
-     * 
+     *
      * @return this, for method chaining
      */
     public LXProjection reflectY() {
@@ -152,7 +152,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Reflects the projection about the z-axis
-     * 
+     *
      * @return this, for method chaining
      */
     public LXProjection reflectZ() {
@@ -164,7 +164,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Rotates the projection about a vector
-     * 
+     *
      * @param angle Angle to rotate by, in radians
      * @param l vector x-value
      * @param m vector y-value
@@ -207,7 +207,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Rotate about the x-axis
-     * 
+     *
      * @param angle Angle in radians
      * @return this
      */
@@ -217,7 +217,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Rotate about the x-axis
-     * 
+     *
      * @param angle Angle in radians
      * @return this
      */
@@ -227,7 +227,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /**
      * Rotate about the x-axis
-     * 
+     *
      * @param angle Angle in radians
      * @return this
      */

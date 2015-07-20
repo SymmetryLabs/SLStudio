@@ -196,6 +196,62 @@ public class LXVector {
         );
     }
 
+    /**
+     * Rotate in x-y plane
+     *
+     * @param theta
+     * @return this
+     */
+    public LXVector rotate(float theta) {
+        float xx = x;
+        this.x = (float) (xx*Math.cos(theta) - this.y*Math.sin(theta));
+        this.y = (float) (xx*Math.sin(theta) + this.y*Math.cos(theta));
+        return this;
+    }
+
+    /**
+     * Rotate about an arbitrary vector. If you are going to perform this operation
+     * on many LXVectors, it is better to use the LXProjection class to avoid
+     * a lot of redundant computation.
+     *
+     * @param theta Angle to rotate by, in radians
+     * @param l vector x-value
+     * @param m vector y-value
+     * @param n vector z-value
+     * @return this, for method chaining
+     */
+    public LXVector rotate(float theta, float l, float m, float n) {
+        float ss = l * l + m * m + n * n;
+        if (ss != 1) {
+            float sr = (float) Math.sqrt(ss);
+            l /= sr;
+            m /= sr;
+            n /= sr;
+        }
+
+        float sinv = (float) Math.sin(theta);
+        float cosv = (float) Math.cos(theta);
+        float a1 = l * l * (1 - cosv) + cosv;
+        float a2 = l * m * (1 - cosv) - n * sinv;
+        float a3 = l * n * (1 - cosv) + m * sinv;
+        float b1 = l * m * (1 - cosv) + n * sinv;
+        float b2 = m * m * (1 - cosv) + cosv;
+        float b3 = m * n * (1 - cosv) - l * sinv;
+        float c1 = l * n * (1 - cosv) - m * sinv;
+        float c2 = m * n * (1 - cosv) + l * sinv;
+        float c3 = n * n * (1 - cosv) + cosv;
+
+        float xp, yp, zp;
+        xp = this.x * a1 + this.y * a2 + this.z * a3;
+        yp = this.x * b1 + this.y * b2 + this.z * b3;
+        zp = this.x * c1 + this.y * c2 + this.z * c3;
+        this.x = xp;
+        this.y = yp;
+        this.z = zp;
+
+        return this;
+    }
+
     @Override
     public String toString() {
         return "[ " + this.x + ", " + this.y + ", " + this.z + " ]";
