@@ -18,6 +18,8 @@
 
 package heronarts.lx.model;
 
+import heronarts.lx.transform.LXTransform;
+
 /**
  * A point is a node with an immutable position in space and a location in
  */
@@ -96,6 +98,15 @@ public class LXPoint {
      */
     public LXPoint(double x, double y, double z) {
         this((float) x, (float) y, (float) z);
+    }
+
+    /**
+     * Construct a point from transform
+     *
+     * @param transform
+     */
+    public LXPoint(LXTransform transform) {
+        this(transform.x(), transform.y(), transform.z());
     }
 
 }
