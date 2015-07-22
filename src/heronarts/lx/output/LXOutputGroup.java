@@ -25,7 +25,7 @@ import heronarts.lx.LX;
  */
 public class LXOutputGroup extends LXOutput {
 
-    protected LXOutputGroup(LX lx) {
+    public LXOutputGroup(LX lx) {
         super(lx);
     }
 
