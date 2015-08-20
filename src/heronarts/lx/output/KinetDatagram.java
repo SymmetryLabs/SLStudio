@@ -34,54 +34,104 @@ public class KinetDatagram extends LXDatagram {
 
     private final int[] pointIndices;
 
+    public enum Version {
+        DMXOUT,
+        PORTOUT
+    };
+
+    private final Version version;
+
     /**
      * Constructs a datagram that sends on the given kinet supply output port
-     * 
+     *
      * @param kinetPort Number of the output port on the kinet power supply
      * @param indices A list of the point indices that should be sent on this port
      */
     public KinetDatagram(int kinetPort, int[] indices) {
+        this(kinetPort, indices, Version.PORTOUT);
+    }
+
+    public KinetDatagram(int kinetPort, int[] indices, Version version) {
         super(PACKET_LENGTH);
         setPort(KINET_PORT);
 
         this.pointIndices = indices;
+        this.version = version;
 
         // Kinet Header
         this.buffer[0] = (byte) 0x04;
         this.buffer[1] = (byte) 0x01;
         this.buffer[2] = (byte) 0xdc;
         this.buffer[3] = (byte) 0x4a;
-        this.buffer[4] = (byte) 0x01;
-        this.buffer[5] = (byte) 0x00;
-        this.buffer[6] = (byte) 0x08;
-        this.buffer[7] = (byte) 0x01;
-        this.buffer[8] = (byte) 0x00;
-        this.buffer[9] = (byte) 0x00;
-        this.buffer[10] = (byte) 0x00;
-        this.buffer[11] = (byte) 0x00;
-        this.buffer[12] = (byte) 0xff;
-        this.buffer[13] = (byte) 0xff;
-        this.buffer[14] = (byte) 0xff;
-        this.buffer[15] = (byte) 0xff;
 
-        // Port number
-        this.buffer[16] = (byte) kinetPort;
+        switch (this.version) {
+        case PORTOUT:
+            this.buffer[4] = (byte) 0x01;
+            this.buffer[5] = (byte) 0x00;
+            this.buffer[6] = (byte) 0x08;
+            this.buffer[7] = (byte) 0x01;
+            this.buffer[8] = (byte) 0x00;
+            this.buffer[9] = (byte) 0x00;
+            this.buffer[10] = (byte) 0x00;
+            this.buffer[11] = (byte) 0x00;
+            this.buffer[12] = (byte) 0xff;
+            this.buffer[13] = (byte) 0xff;
+            this.buffer[14] = (byte) 0xff;
+            this.buffer[15] = (byte) 0xff;
 
-        // Maybe a checksum? 0x00 works fine
-        this.buffer[17] = (byte) 0x00;
-        this.buffer[18] = (byte) 0x00;
-        this.buffer[19] = (byte) 0x00;
-        this.buffer[20] = (byte) 0x00;
+            // Port number
+            this.buffer[16] = (byte) kinetPort;
 
-        // Total # of ports on controller? (irrelevant)
-        this.buffer[21] = (byte) 0x02;
+            // Maybe a checksum? 0x00 works fine
+            this.buffer[17] = (byte) 0x00;
+            this.buffer[18] = (byte) 0x00;
+            this.buffer[19] = (byte) 0x00;
+            this.buffer[20] = (byte) 0x00;
 
-        // Unused
-        this.buffer[22] = (byte) 0x00;
-        this.buffer[23] = (byte) 0x00;
+            // Total # of ports on controller? (irrelevant)
+            this.buffer[21] = (byte) 0x02;
 
+            // Unused
+            this.buffer[22] = (byte) 0x00;
+            this.buffer[23] = (byte) 0x00;
+            break;
+
+        case DMXOUT:
+            this.buffer[4] = (byte) 0x01;
+            this.buffer[5] = (byte) 0x00;
+
+            // Type number (DMXOUT)
+            this.buffer[6] = (byte) 0x01;
+            this.buffer[7] = (byte) 0x01;
+
+            // Sequence number
+            this.buffer[8] = (byte) 0x00;
+            this.buffer[9] = (byte) 0x00;
+            this.buffer[10] = (byte) 0x00;
+            this.buffer[11] = (byte) 0x00;
+
+            // Unused header
+            this.buffer[12] = (byte) 0x00;
+            this.buffer[13] = (byte) 0x00;
+            this.buffer[14] = (byte) 0x00;
+            this.buffer[15] = (byte) 0x00;
+
+            // Universe
+            this.buffer[16] = (byte) 0xff;
+            this.buffer[17] = (byte) 0xff;
+            this.buffer[18] = (byte) 0xff;
+            this.buffer[19] = (byte) 0xff;
+
+            // Unused
+            this.buffer[20] = (byte) 0x00;
+            this.buffer[21] = (byte) 0x00;
+            this.buffer[22] = (byte) 0x00;
+            this.buffer[23] = (byte) 0x00;
+            break;
+        }
     }
 
+    @Override
     public void onSend(int[] colors) {
         copyPoints(colors, this.pointIndices, HEADER_LENGTH);
     }

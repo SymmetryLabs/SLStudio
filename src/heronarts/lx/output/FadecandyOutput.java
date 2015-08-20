@@ -71,9 +71,9 @@ public class FadecandyOutput extends OPCOutput {
     public FadecandyOutput setStatusLed(boolean on) {
         this.firmwareConfig |= 0x04; // Manual LED control
         if (on) {
-            firmwareConfig |= 0x08;
+            this.firmwareConfig |= 0x08;
         } else {
-            firmwareConfig &= ~0x08;
+            this.firmwareConfig &= ~0x08;
         }
         sendFirmwareConfigPacket();
         return this;
