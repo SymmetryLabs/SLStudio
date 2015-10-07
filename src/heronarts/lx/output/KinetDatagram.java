@@ -26,6 +26,7 @@ package heronarts.lx.output;
  */
 public class KinetDatagram extends LXDatagram {
 
+    private final static int DMXOUT_HEADER_LENGTH = 21;
     private final static int HEADER_LENGTH = 24;
     private final static int DATA_LENGTH = 512;
     private final static int PACKET_LENGTH = HEADER_LENGTH + DATA_LENGTH;
@@ -122,17 +123,21 @@ public class KinetDatagram extends LXDatagram {
             this.buffer[18] = (byte) 0xff;
             this.buffer[19] = (byte) 0xff;
 
-            // Unused
+            // One byte to start data
             this.buffer[20] = (byte) 0x00;
-            this.buffer[21] = (byte) 0x00;
-            this.buffer[22] = (byte) 0x00;
-            this.buffer[23] = (byte) 0x00;
             break;
         }
     }
 
     @Override
     public void onSend(int[] colors) {
-        copyPoints(colors, this.pointIndices, HEADER_LENGTH);
+        switch (this.version) {
+        case DMXOUT:
+            copyPoints(colors, this.pointIndices, DMXOUT_HEADER_LENGTH);
+            break;
+        case PORTOUT:
+            copyPoints(colors, this.pointIndices, HEADER_LENGTH);
+            break;
+        }
     }
 }
