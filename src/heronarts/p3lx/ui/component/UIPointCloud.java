@@ -1,0 +1,123 @@
+/**
+ * Copyright 2013- Mark C. Slee, Heron Arts LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     http://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ *
+ * ##library.name##
+ * ##library.sentence##
+ * ##library.url##
+ *
+ * @author      ##author##
+ * @modified    ##date##
+ * @version     ##library.prettyVersion## (##library.version##)
+ */
+
+package heronarts.p3lx.ui.component;
+
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.p3lx.P3LX;
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI3dComponent;
+import processing.core.PConstants;
+import processing.core.PGraphics;
+
+/**
+ * Draws a cloud of points in the layer
+ */
+public class UIPointCloud extends UI3dComponent {
+
+    protected final P3LX lx;
+
+    protected final LXModel model;
+
+    /**
+     * Weight of points
+     */
+    protected float pointSize = 2;
+
+    protected float[] pointSizeAttenuation = null;
+
+    /**
+     * Point cloud for everything in the LX instance
+     *
+     * @param lx
+     */
+    public UIPointCloud(P3LX lx) {
+        this(lx, lx.model);
+    }
+
+    /**
+     * Point cloud for points in the specified model
+     *
+     * @param lx
+     * @param model
+     */
+    public UIPointCloud(P3LX lx, LXModel model) {
+        this.lx = lx;
+        this.model = model;
+    }
+
+    /**
+     * Sets the weight of points
+     *
+     * @param pointWeight Point weight
+     * @return this
+     */
+    public UIPointCloud setPointSize(float pointSize) {
+        this.pointSize = pointSize;
+        return this;
+    }
+
+    /**
+     * Disable point size attenuation
+     *
+     * @return this
+     */
+    public UIPointCloud disablePointSizeAttenuation() {
+        this.pointSizeAttenuation = null;
+        return this;
+    }
+
+    /**
+     * Sets point size attenuation, fn = 1/sqrt(constant + linear*d + quadratic*d^2)
+     *
+     * @param a Constant factor
+     * @param b Linear factor
+     * @param c Quadratic factor
+     * @return this
+     */
+    public UIPointCloud setPointSizeAttenuation(float a, float b, float c) {
+        if (this.pointSizeAttenuation == null) {
+            this.pointSizeAttenuation = new float[3];
+        }
+        this.pointSizeAttenuation[0] = a;
+        this.pointSizeAttenuation[1] = b;
+        this.pointSizeAttenuation[2] = c;
+        return this;
+    }
+
+    @Override
+    protected void onDraw(UI ui, PGraphics pg) {
+        int[] colors = this.lx.getColors();
+        pg.noFill();
+        pg.strokeWeight(this.pointSize);
+        pg.beginShape(PConstants.POINTS);
+        for (LXPoint p : this.model.points) {
+            pg.stroke(colors[p.index]);
+            pg.vertex(p.x, p.y, p.z);
+        }
+        pg.endShape();
+        pg.strokeWeight(1);
+    }
+}
