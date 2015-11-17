@@ -28,6 +28,8 @@ public interface LXParameter {
     /**
      * A method to reset the value of the parameter, if a default is available.
      * Not necessarily defined for all parameters, may be ignored.
+     *
+     * @return this
      */
     public abstract Object reset();
 
@@ -35,6 +37,7 @@ public interface LXParameter {
      * Sets the value of the parameter.
      *
      * @param value The value
+     * @return this
      */
     public LXParameter setValue(double value);
 

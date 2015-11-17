@@ -120,6 +120,8 @@ public class LXMidiInput {
 
     /**
      * This method is invoked on the main thread to process the MIDI message.
+     *
+     * @param message Midi message
      */
     public void dispatch(LXShortMessage message) {
         for (LXMidiListener listener : this.listeners) {

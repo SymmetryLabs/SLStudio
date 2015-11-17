@@ -67,6 +67,9 @@ public class FrequencyGate extends LXModulator {
 
     /**
      * Constructs a gate that monitors a specified frequency band
+     *
+     * @param label Label
+     * @param eq GraphicEQ object to drive this gate
      */
     public FrequencyGate(String label, GraphicEQ eq) {
         super(label);

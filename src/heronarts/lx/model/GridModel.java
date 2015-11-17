@@ -71,10 +71,10 @@ public class GridModel extends LXModel {
     /**
      * Constructs a grid model with specified x and y spacing
      *
-     * @param width
-     * @param height
-     * @param xSpacing
-     * @param ySpacing
+     * @param width Number of nodes in x dimension
+     * @param height Number of nodes in y dimension
+     * @param xSpacing Spacing of nodes in x dimension
+     * @param ySpacing Spacing of nodes in y dimension
      */
     public GridModel(int width, int height, float xSpacing, float ySpacing) {
         super(new Fixture(width, height, xSpacing, ySpacing));

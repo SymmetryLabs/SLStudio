@@ -152,7 +152,7 @@ public abstract class LXPattern extends LXBufferedComponent {
     /**
      * Sets whether this pattern is eligible for automatic selection.
      *
-     * @param eligible
+     * @param eligible Whether eligible for auto-rotation
      * @return this
      */
     public final LXPattern setEligible(boolean eligible) {
@@ -184,7 +184,7 @@ public abstract class LXPattern extends LXBufferedComponent {
     /**
      * Sets the transition to be used when this pattern becomes active.
      *
-     * @param transition
+     * @param transition Transition
      * @return this
      */
     public final LXPattern setTransition(LXTransition transition) {
@@ -195,7 +195,7 @@ public abstract class LXPattern extends LXBufferedComponent {
     /**
      * Gets the transition to be used when this pattern becomes active.
      *
-     * @return transition
+     * @return Transition on this pattern
      */
     public final LXTransition getTransition() {
         return transition;

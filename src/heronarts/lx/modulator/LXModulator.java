@@ -103,7 +103,7 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
      * ONLY updates the internal value without triggering any other
      * recomputations.
      *
-     * @param value
+     * @param value Value for modulator
      * @return this, for method chaining
      */
     protected final LXModulator updateValue(double value) {
@@ -127,6 +127,7 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
      * must provide and update value appropriately.
      *
      * @param deltaMs Number of milliseconds to advance by
+     * @return Computed value
      */
     protected abstract double computeValue(double deltaMs);
 

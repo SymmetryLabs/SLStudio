@@ -72,6 +72,7 @@ public abstract class LXListenableParameter implements LXParameter {
      * reset() with no parameter will use this value.
      *
      * @param value New default value
+     * @return this
      */
     public final LXParameter reset(double value) {
         this.defaultValue = value;
@@ -109,6 +110,7 @@ public abstract class LXListenableParameter implements LXParameter {
      * internal state according to this new value.
      *
      * @param value New value
+     * @return this
      */
     protected abstract double updateValue(double value);
 

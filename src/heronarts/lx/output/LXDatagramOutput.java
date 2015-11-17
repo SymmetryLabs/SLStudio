@@ -59,7 +59,7 @@ public class LXDatagramOutput extends LXOutput {
     /**
      * Subclasses may override. Invoked before datagrams are sent.
      *
-     * @param colors
+     * @param colors Color values
      */
     protected/* abstract */void beforeSend(int[] colors) {
     }
@@ -67,7 +67,7 @@ public class LXDatagramOutput extends LXOutput {
     /**
      * Subclasses may override. Invoked after datagrams are sent.
      *
-     * @param colors
+     * @param colors Color values
      */
     protected/* abstract */void afterSend(int[] colors) {
     }

@@ -75,9 +75,9 @@ public class LXPoint {
     /**
      * Construct a point in 3-d space
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @param z Z-coordinate
      */
     public LXPoint(float x, float y, float z) {
         this.x = x;
@@ -92,9 +92,9 @@ public class LXPoint {
     /**
      * Construct a point in 3-d space
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @param z Z-coordinate
      */
     public LXPoint(double x, double y, double z) {
         this((float) x, (float) y, (float) z);
@@ -103,7 +103,7 @@ public class LXPoint {
     /**
      * Construct a point from transform
      *
-     * @param transform
+     * @param transform LXTransform stack
      */
     public LXPoint(LXTransform transform) {
         this(transform.x(), transform.y(), transform.z());

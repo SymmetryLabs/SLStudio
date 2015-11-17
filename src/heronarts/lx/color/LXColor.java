@@ -72,7 +72,7 @@ public class LXColor {
     /**
      * Hue of a color from 0-360
      *
-     * @param rgb
+     * @param rgb Color value
      * @return Hue value from 0-360
      */
     public static float h(int rgb) {
@@ -112,7 +112,7 @@ public class LXColor {
     /**
      * Saturation from 0-100
      *
-     * @param rgb
+     * @param rgb Color value
      * @return Saturation value from 0-100
      */
     public static float s(int rgb) {
@@ -133,7 +133,7 @@ public class LXColor {
     /**
      * Brightness from 0-100
      *
-     * @param rgb
+     * @param rgb Color value
      * @return Brightness from 0-100
      */
     public static float b(int rgb) {

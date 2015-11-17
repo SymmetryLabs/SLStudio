@@ -111,7 +111,7 @@ public abstract class LXOutput {
     /**
      * Adds a child to this output, sent after color-correction
      *
-     * @param child
+     * @param child Child output
      * @return this
      */
     public LXOutput addChild(LXOutput child) {
@@ -122,7 +122,7 @@ public abstract class LXOutput {
     /**
      * Removes a child
      *
-     * @param child
+     * @param child Child output
      * @return this
      */
     public LXOutput removeChild(LXOutput child) {
@@ -133,7 +133,8 @@ public abstract class LXOutput {
     /**
      * Sends data to this output, after applying throttle and color correction
      *
-     * @param colors
+     * @param colors Array of color values
+     * @return this
      */
     public final LXOutput send(int[] colors) {
         if (!this.enabled.isOn()) {
@@ -195,7 +196,7 @@ public abstract class LXOutput {
     /**
      * Subclasses implement this to send the data.
      *
-     * @param colors
+     * @param colors Color values
      */
     protected abstract void onSend(int[] colors);
 }

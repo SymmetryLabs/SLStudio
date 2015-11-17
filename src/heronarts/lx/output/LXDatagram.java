@@ -71,8 +71,8 @@ public abstract class LXDatagram {
 
     /**
      * Sets the byte ordering of data in this datagram buffer
-     * 
-     * @param byteOrder
+     *
+     * @param byteOrder Byte ordering
      * @return this
      */
     public LXDatagram setByteOrder(ByteOrder byteOrder) {
@@ -82,7 +82,7 @@ public abstract class LXDatagram {
 
     /**
      * Sets the destination address of this datagram
-     * 
+     *
      * @param ipAddress IP address or hostname as string
      * @return this
      * @throws UnknownHostException Bad address
@@ -94,7 +94,7 @@ public abstract class LXDatagram {
 
     /**
      * Sets the destination address of this datagram
-     * 
+     *
      * @param address Destination address
      * @return this
      */
@@ -105,7 +105,7 @@ public abstract class LXDatagram {
 
     /**
      * Gets the address this datagram sends to
-     * 
+     *
      * @return Destination address
      */
     public InetAddress getAddress() {
@@ -114,7 +114,7 @@ public abstract class LXDatagram {
 
     /**
      * Sets the destination port number to send this datagram on
-     * 
+     *
      * @param port Port number
      * @return this
      */
@@ -127,7 +127,7 @@ public abstract class LXDatagram {
      * Helper for subclasses to copy a list of points into the data buffer at a
      * specified offset. For many subclasses which wrap RGB buffers, onSend() will
      * be a simple call to this method with the right parameters.
-     * 
+     *
      * @param colors Array of color values
      * @param pointIndices Array of point indices
      * @param offset Offset in buffer to write
@@ -150,7 +150,7 @@ public abstract class LXDatagram {
      * Invoked by engine to send this packet when new color data is available. The
      * LXDatagram should update the packet object accordingly to contain the
      * appropriate buffer.
-     * 
+     *
      * @param colors Color buffer
      */
     public abstract void onSend(int[] colors);

@@ -338,7 +338,7 @@ public class LX {
      * Utility function to return the position of an index in x coordinate space
      * normalized from 0 to 1.
      *
-     * @param i
+     * @param i Node index
      * @return Position of this node in x space, from 0 to 1
      */
     public double xn(int i) {
@@ -349,7 +349,7 @@ public class LX {
      * Utility function to return the position of an index in x coordinate space
      * normalized from 0 to 1, as a floating point.
      *
-     * @param i
+     * @param i Node index
      * @return Position of this node in x space, from 0 to 1
      */
     public float xnf(int i) {
@@ -370,7 +370,7 @@ public class LX {
      * Utility function to return the position of an index in y coordinate space
      * normalized from 0 to 1.
      *
-     * @param i
+     * @param i Node index
      * @return Position of this node in y space, from 0 to 1
      */
     public double yn(int i) {
@@ -381,7 +381,7 @@ public class LX {
      * Utility function to return the position of an index in y coordinate space
      * normalized from 0 to 1, as a floating point.
      *
-     * @param i
+     * @param i Node index
      * @return Position of this node in y space, from 0 to 1
      */
     public float ynf(int i) {
@@ -403,6 +403,9 @@ public class LX {
     /**
      * Sets the speed of the entire system. Default is 1.0, any modification will
      * mutate deltaMs values system-wide.
+     *
+     * @param speed Coefficient, 1 is normal speed
+     * @return this
      */
     public LX setSpeed(double speed) {
         this.engine.setSpeed(speed);
@@ -421,7 +424,8 @@ public class LX {
     /**
      * Add multiple effects to the chain
      *
-     * @param effects
+     * @param effects Array of effects
+     * @return this
      */
     public LX addEffects(LXEffect[] effects) {
         for (LXEffect effect : effects) {
@@ -433,8 +437,8 @@ public class LX {
     /**
      * Add an effect to the FX chain.
      *
-     * @param effect
-     * @return Effect added
+     * @param effect Effect
+     * @return this
      */
     public LX addEffect(LXEffect effect) {
         this.engine.addEffect(effect);
@@ -444,7 +448,8 @@ public class LX {
     /**
      * Remove an effect from the chain
      *
-     * @param effect
+     * @param effect Effect
+     * @return this
      */
     public LX removeEffect(LXEffect effect) {
         this.engine.removeEffect(effect);
@@ -454,8 +459,8 @@ public class LX {
     /**
      * Add a generic modulator to the engine
      *
-     * @param modulator
-     * @return Modulator added
+     * @param modulator Modulator
+     * @return The modulator that was added
      */
     public LXModulator addModulator(LXModulator modulator) {
         this.engine.addModulator(modulator);
@@ -465,7 +470,8 @@ public class LX {
     /**
      * Remove a modulator from the engine
      *
-     * @param modulator
+     * @param modulator Modulator
+     * @return The modulator that was removed
      */
     public LXModulator removeModulator(LXModulator modulator) {
         this.engine.removeModulator(modulator);
@@ -476,6 +482,7 @@ public class LX {
      * Pause the engine from running
      *
      * @param paused Whether to pause the engine to pause
+     * @return this
      */
     public LX setPaused(boolean paused) {
         this.engine.setPaused(paused);
@@ -493,6 +500,8 @@ public class LX {
 
     /**
      * Toggles the running state of the engine.
+     *
+     * @return this
      */
     public LX togglePaused() {
         return setPaused(!this.engine.isPaused());
@@ -500,6 +509,8 @@ public class LX {
 
     /**
      * Sets the main channel to the previous pattern.
+     *
+     * @return this
      */
     public LX goPrev() {
         this.engine.goPrev();
@@ -508,6 +519,8 @@ public class LX {
 
     /**
      * Sets the main channel to the next pattern.
+     *
+     * @return this
      */
     public LX goNext() {
         this.engine.goNext();
@@ -518,7 +531,7 @@ public class LX {
      * Sets the main channel to a given pattern instance.
      *
      * @param pattern The pattern instance to run
-     * @return This, for method chaining
+     * @return this
      */
     public LX goPattern(LXPattern pattern) {
         this.engine.goPattern(pattern);
@@ -529,7 +542,7 @@ public class LX {
      * Sets the main channel to a pattern of the given index
      *
      * @param i Index of the pattern to run
-     * @return This, for method chaining
+     * @return this
      */
     public LX goIndex(int i) {
         this.engine.goIndex(i);
@@ -572,6 +585,12 @@ public class LX {
         return modulator;
     }
 
+    /**
+     * Sets the base hue to be a parameter
+     *
+     * @param parameter Parameter to control base hue
+     * @return this
+     */
     public LX setBaseHue(LXParameter parameter) {
         clearBaseHue();
         this.baseHue = parameter;
@@ -582,6 +601,7 @@ public class LX {
      * Sets the base hue to a fixed value
      *
      * @param hue Fixed value to set hue to, 0-360
+     * @return this
      */
     public LX setBaseHue(double hue) {
         internalBaseHue(new LinearEnvelope(this.getBaseHue(), hue, 50)).start();
@@ -592,6 +612,7 @@ public class LX {
      * Sets the base hue to cycle through the spectrum
      *
      * @param duration Number of milliseconds for hue cycle
+     * @return this
      */
     public LX cycleBaseHue(double duration) {
         internalBaseHue(new SawLFO(0, 360, duration).setValue(getBaseHue())).start();
@@ -604,6 +625,7 @@ public class LX {
      * @param lowHue Low hue value
      * @param highHue High hue value
      * @param duration Milliseconds for hue oscillation
+     * @return this
      */
     public LX oscillateBaseHue(double lowHue, double highHue, double duration) {
         internalBaseHue(new TriangleLFO(lowHue, highHue, duration).setValue(
@@ -613,6 +635,8 @@ public class LX {
 
     /**
      * Stops patterns from automatically rotating
+     *
+     * @return this
      */
     public LX disableAutoTransition() {
         this.engine.disableAutoTransition();
@@ -624,6 +648,7 @@ public class LX {
      *
      * @param autoTransitionThreshold Number of milliseconds after which to rotate
      *          pattern
+     * @return this
      */
     public LX enableAutoTransition(int autoTransitionThreshold) {
         this.engine.enableAutoTransition(autoTransitionThreshold);
@@ -642,7 +667,7 @@ public class LX {
     /**
      * Adds an output driver
      *
-     * @param output
+     * @param output Output
      * @return this
      */
     public LX addOutput(LXOutput output) {
@@ -653,7 +678,7 @@ public class LX {
     /**
      * Removes an output driver
      *
-     * @param output
+     * @param output Output
      * @return this
      */
     public LX removeOutput(LXOutput output) {
@@ -664,7 +689,8 @@ public class LX {
     /**
      * Specifies the set of patterns to be run.
      *
-     * @param patterns
+     * @param patterns Array of patterns
+     * @return this
      */
     public LX setPatterns(LXPattern[] patterns) {
         this.engine.setPatterns(patterns);
@@ -674,7 +700,7 @@ public class LX {
     /**
      * Gets the current set of patterns on the main channel.
      *
-     * @return The pattern set
+     * @return The list of patters
      */
     public List<LXPattern> getPatterns() {
         return this.engine.getPatterns();

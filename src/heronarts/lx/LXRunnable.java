@@ -46,6 +46,8 @@ public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
 
     /**
      * Sets the runnable in motion
+     *
+     * @return this
      */
     public final LXRunnable start() {
         this.isRunning.setValue(true);
@@ -56,6 +58,8 @@ public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
      * Pauses the runnable wherever it is. Internal state should be maintained. A
      * subsequent call to start() should result in the runnable continuing as it
      * was running before.
+     *
+     * @return this
      */
     public final LXRunnable stop() {
         this.isRunning.setValue(false);
@@ -64,6 +68,8 @@ public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
 
     /**
      * Indicates whether this runnable is running.
+     *
+     * @return Whether running
      */
     public final boolean isRunning() {
         return this.isRunning.isOn();
@@ -72,6 +78,8 @@ public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
     /**
      * Invoking the trigger() method restarts a runnable from its initial state,
      * and should also start the runnable if it is not already running.
+     *
+     * @return this
      */
     public final LXRunnable trigger() {
         return this.reset().start();
@@ -80,7 +88,7 @@ public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
     /**
      * Resets the runnable to its default condition and stops it.
      *
-     * @return this, for method chaining
+     * @return this
      */
     public final LXRunnable reset() {
         this.stop();
