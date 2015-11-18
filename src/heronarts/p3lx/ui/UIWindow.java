@@ -48,10 +48,10 @@ public class UIWindow extends UI2dContext {
      *
      * @param ui UI to place in
      * @param title Title for this window
-     * @param x
-     * @param y
-     * @param w
-     * @param h
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @param w Width
+     * @param h Height
      */
     public UIWindow(final UI ui, String title, float x, float y, float w, float h) {
         super(ui, x, y, w, h);

@@ -270,7 +270,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Sets the camera's maximum rotation speed
      *
-     * @param rotateVelocity Max radians/per second viewing angle may change by
+     * @param rotationVelocity Max radians/per second viewing angle may change by
      * @return this
      */
     public UI3dContext setRotationVelocity(float rotationVelocity) {
@@ -281,7 +281,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Set's the camera's rotational acceleration, 0 is infinite
      *
-     * @param rotateAcceleration Acceleration of camera rotation
+     * @param rotationAcceleration Acceleration of camera rotation
      * @return this
      */
     public UI3dContext setRotationAcceleration(float rotationAcceleration) {
