@@ -37,7 +37,7 @@ public abstract class UI3dComponent extends UIObject {
     /**
      * Adds a child to this component
      *
-     * @param child
+     * @param child Child component
      * @return this
      */
     public final UI3dComponent addChild(UI3dComponent child) {
@@ -48,7 +48,7 @@ public abstract class UI3dComponent extends UIObject {
     /**
      * Removes a child from this component
      *
-     * @param child
+     * @param child Child component
      * @return this
      */
     public final UI3dComponent removeChild(UI3dComponent child) {

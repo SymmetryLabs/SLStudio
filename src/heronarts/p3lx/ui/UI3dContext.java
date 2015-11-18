@@ -176,7 +176,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Adds a component to the layer
      *
-     * @param component
+     * @param component Component
      * @return this
      */
     public final UI3dContext addComponent(UI3dComponent component) {
@@ -187,7 +187,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Removes a component from the layer
      *
-     * @param component
+     * @param component Component
      * @return this
      */
     public final UI3dContext removeComponent(UI3dComponent component) {
@@ -198,7 +198,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Set radius of the camera
      *
-     * @param radius radius
+     * @param radius Camera radius
      * @return this
      */
     public UI3dContext setRadius(float radius) {
@@ -209,7 +209,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Set interaction mode for mouse/key events.
      *
-     * @param interactionMode mode
+     * @param interactionMode Interaction mode
      * @return this
      */
     public UI3dContext setInteractionMode(InteractionMode interactionMode) {
@@ -237,7 +237,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Sets perspective angle of the camera in degrees
      *
-     * @param perspective angle in degrees
+     * @param perspective Angle in degrees
      * @return this
      */
     public UI3dContext setPerspective(float perspective) {
@@ -259,7 +259,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Set's the camera's zoom acceleration, 0 is infinite
      *
-     * @param cameraAcceleration
+     * @param cameraAcceleration Acceleration for camera
      * @return this
      */
     public UI3dContext setCameraAcceleration(float cameraAcceleration) {
@@ -281,7 +281,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Set's the camera's rotational acceleration, 0 is infinite
      *
-     * @param rotateAcceleration
+     * @param rotateAcceleration Acceleration of camera rotation
      * @return this
      */
     public UI3dContext setRotationAcceleration(float rotationAcceleration) {
@@ -314,8 +314,8 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Sets bounds on the radius
      *
-     * @param minRadius
-     * @param maxRadius
+     * @param minRadius Minimum camera radius
+     * @param maxRadius Maximum camera radius
      * @return this
      */
     public UI3dContext setRadiusBounds(float minRadius, float maxRadius) {
@@ -328,7 +328,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Set minimum radius
      *
-     * @param minRadius
+     * @param minRadius Minimum camera radius
      * @return this
      */
     public UI3dContext setMinRadius(float minRadius) {
@@ -338,7 +338,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Set maximum radius
      *
-     * @param maxRadius
+     * @param maxRadius Maximum camera radius
      * @return this
      */
     public UI3dContext setMaxRadius(float maxRadius) {
@@ -348,7 +348,7 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Determines whether to render a point at the center
      *
-     * @param showCenter
+     * @param showCenter Draw a dot at center of context
      * @return this
      */
     public final UI3dContext showCenterPoint(boolean showCenter) {
@@ -368,9 +368,9 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Sets the center of the scene, only respected in ZOOM mode
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @param z Z-coordinate
      * @return this
      */
     public UI3dContext setCenter(float x, float y, float z) {
@@ -386,9 +386,9 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Sets the eye position, only respected in MOVE mode
      *
-     * @param x
-     * @param y
-     * @param z
+     * @param x X-coordinate
+     * @param y Y-coordinate
+     * @param z Z-coordinate
      * @return this
      */
     public UI3dContext setEye(float x, float y, float z) {
@@ -532,12 +532,18 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
 
     /**
      * Subclasses may override, useful to turn on lighting, etc.
+     *
+     * @param ui UI
+     * @param pg PGraphics
      */
     protected void beforeDraw(UI ui, PGraphics pg) {
     }
 
     /**
      * Subclasses may override, useful to turn off lighting, etc.
+     *
+     * @param ui UI
+     * @param pg PGraphics
      */
     protected void afterDraw(UI ui, PGraphics pg) {
     }

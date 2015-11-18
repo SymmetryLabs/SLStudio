@@ -312,7 +312,7 @@ public abstract class UIObject {
     /**
      * Subclasses override to receive mouse events
      *
-     * @param mouseEvent
+     * @param mouseEvent Mouse event
      * @param mx x-coordinate
      * @param my y-coordinate
      */

@@ -51,7 +51,7 @@ public class UIPointCloud extends UI3dComponent {
     /**
      * Point cloud for everything in the LX instance
      *
-     * @param lx
+     * @param lx LX instance
      */
     public UIPointCloud(P3LX lx) {
         this(lx, lx.model);
@@ -60,8 +60,8 @@ public class UIPointCloud extends UI3dComponent {
     /**
      * Point cloud for points in the specified model
      *
-     * @param lx
-     * @param model
+     * @param lx LX instance
+     * @param model Model to draw
      */
     public UIPointCloud(P3LX lx, LXModel model) {
         this.lx = lx;
@@ -69,9 +69,9 @@ public class UIPointCloud extends UI3dComponent {
     }
 
     /**
-     * Sets the weight of points
+     * Sets the size of points
      *
-     * @param pointWeight Point weight
+     * @param pointSize Point size
      * @return this
      */
     public UIPointCloud setPointSize(float pointSize) {

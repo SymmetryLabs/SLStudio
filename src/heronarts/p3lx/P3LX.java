@@ -144,6 +144,8 @@ public class P3LX extends LX {
     /**
      * Enables the tempo to be controlled by the keyboard arrow keys. Left and
      * right arrows change the tempo by .1 BPM, and the space-bar taps the tempo.
+     *
+     * @return this
      */
     public LX enableKeyboardTempo() {
         this.flags.keyboardTempo = true;
@@ -153,7 +155,9 @@ public class P3LX extends LX {
     /**
      * Adds basic flash and desaturation effects to the engine, triggerable by the
      * keyboard. The 's' key triggers desaturation, and the '/' key triggers a
-     * flash
+     * flash.
+     *
+     * @return this
      */
     public LX enableBasicEffects() {
         this.addEffect(this.desaturation);
@@ -163,6 +167,8 @@ public class P3LX extends LX {
 
     /**
      * Triggers the global flash effect.
+     *
+     * @return this
      */
     public LX flash() {
         this.flash.trigger();

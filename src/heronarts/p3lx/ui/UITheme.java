@@ -53,19 +53,19 @@ public class UITheme {
     }
 
     /**
-     * Gets the default item font for this UI
+     * Gets the default item font
      *
-     * @return The default item font for this UI
+     * @return The default item font
      */
     public PFont getControlFont() {
         return this.controlFont;
     }
 
     /**
-     * Sets the default item font for this UI
+     * Sets the default item font
      *
      * @param font Font to use
-     * @return this UI
+     * @return this
      */
     public UITheme setControlFont(PFont font) {
         this.controlFont = font;
@@ -73,19 +73,19 @@ public class UITheme {
     }
 
     /**
-     * Gets the default title font for this UI
+     * Gets the default title font
      *
-     * @return default title font for this UI
+     * @return default title font
      */
     public PFont getWindowTitleFont() {
         return this.windowTitleFont;
     }
 
     /**
-     * Sets the default title font for this UI
+     * Sets the default title font
      *
      * @param font Default title font
-     * @return this UI
+     * @return this
      */
     public UITheme setWindowTitleFont(PFont font) {
         this.windowTitleFont = font;
@@ -102,7 +102,7 @@ public class UITheme {
     }
 
     /**
-     * Sets the default text color for UI
+     * Sets the default text color
      *
      * @param color Color
      * @return this UI
@@ -164,8 +164,8 @@ public class UITheme {
     /**
      * Sets highlight color
      *
-     * @param color
-     * @return this UI
+     * @param color Color
+     * @return this
      */
     public UITheme setPrimaryColor(int color) {
         this.primaryColor = color;
@@ -184,8 +184,8 @@ public class UITheme {
     /**
      * Sets highlight color
      *
-     * @param color
-     * @return this UI
+     * @param color Color
+     * @return this
      */
     public UITheme setFocusColor(int color) {
         this.focusColor = color;
@@ -205,7 +205,7 @@ public class UITheme {
      * Set active color
      *
      * @param color Color
-     * @return this UI
+     * @return this
      */
     public UITheme setSecondaryColor(int color) {
         this.secondaryColor = color;
@@ -225,7 +225,7 @@ public class UITheme {
      * Set disabled color
      *
      * @param color Color
-     * @return this UI
+     * @return this
      */
     public UITheme setControlDisabldColor(int color) {
         this.controlDisabledColor = color;

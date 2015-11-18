@@ -53,7 +53,7 @@ public abstract class UI2dTextComponent extends UI2dComponent {
     /**
      * Get default font, may be null
      *
-     * @return
+     * @return The default font, or null
      */
     public PFont getFont() {
         return this.font;

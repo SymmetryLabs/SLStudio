@@ -55,7 +55,7 @@ public class UIGLPointCloud extends UIPointCloud {
     /**
      * Point cloud for everything in the LX instance
      *
-     * @param lx
+     * @param lx LX instance
      */
     public UIGLPointCloud(P3LX lx) {
         this(lx, lx.model);
@@ -64,8 +64,8 @@ public class UIGLPointCloud extends UIPointCloud {
     /**
      * Point cloud for points in the specified model
      *
-     * @param lx
-     * @param model
+     * @param lx LX instance
+     * @param model Model to draw
      */
     public UIGLPointCloud(P3LX lx, LXModel model) {
         super(lx, model);
@@ -109,7 +109,7 @@ public class UIGLPointCloud extends UIPointCloud {
      * Enable alpha testing for dense point clouds to minimize some forms of
      * visible billboard aliasing across overlapping points;
      *
-     * @param alphaTestEnabled
+     * @param alphaTestEnabled Whether alpha test enabled
      * @return this
      */
     public UIGLPointCloud setAlphaTestEnabled(boolean alphaTestEnabled) {
