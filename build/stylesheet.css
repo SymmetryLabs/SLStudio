@@ -18,6 +18,11 @@ pre, code {
   padding: 0;
 }
 
+p {
+  margin: 0;
+  padding: 0;
+}
+
 a, a:visited, a:link {
 	color: #47708A;
   text-decoration: none;
