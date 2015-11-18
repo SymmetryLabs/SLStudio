@@ -154,6 +154,7 @@ public class Tempo extends LXComponent {
      * Sets the BPM to the given value
      *
      * @param bpm Number of beats per minute
+     * @return this
      */
     public Tempo setBpm(double bpm) {
         this.bpm.setValue(bpm);
@@ -163,7 +164,7 @@ public class Tempo extends LXComponent {
     /**
      * Adjust the BPM by the given amount
      *
-     * @param amount
+     * @param amount Amount to adjust BPM by
      * @return this
      */
     public Tempo adjustBpm(double amount) {

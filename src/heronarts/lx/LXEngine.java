@@ -248,6 +248,7 @@ public class LXEngine extends LXParameterized {
      * from the Processing animation thread.
      *
      * @param threaded Whether engine should run on its own thread
+     * @return this
      */
     public synchronized LXEngine setThreaded(boolean threaded) {
         if (threaded == this.isThreaded) {
@@ -317,6 +318,7 @@ public class LXEngine extends LXParameterized {
      * Pause the engine from running
      *
      * @param paused Whether to pause the engine to pause
+     * @return this
      */
     public synchronized LXEngine setPaused(boolean paused) {
         this.paused = paused;
@@ -372,7 +374,7 @@ public class LXEngine extends LXParameterized {
     /**
      * Adds an output driver
      *
-     * @param output
+     * @param output Output
      * @return this
      */
     public synchronized LXEngine addOutput(LXOutput output) {
@@ -383,7 +385,7 @@ public class LXEngine extends LXParameterized {
     /**
      * Removes an output driver
      *
-     * @param output
+     * @param output Output
      * @return this
      */
     public synchronized LXEngine removeOutput(LXOutput output) {

@@ -64,7 +64,7 @@ public class IrisTransition extends LXTransition {
     /**
      * Constructs a new default outward radial transition
      *
-     * @param lx
+     * @param lx LX instance
      */
     public IrisTransition(LX lx) {
         this(lx, Shape.RADIAL);
@@ -73,7 +73,7 @@ public class IrisTransition extends LXTransition {
     /**
      * Constructs an OUTWARD transition of the given shape
      *
-     * @param lx
+     * @param lx LX instance
      * @param shape Shape of the transition
      */
     public IrisTransition(LX lx, Shape shape) {
@@ -83,7 +83,7 @@ public class IrisTransition extends LXTransition {
     /**
      * Constructs a RADIAL transition with specified direction
      *
-     * @param lx
+     * @param lx LX instance
      * @param direction Direction of the transition
      */
     public IrisTransition(LX lx, Direction direction) {
@@ -93,7 +93,7 @@ public class IrisTransition extends LXTransition {
     /**
      * Constructs a transition with specified shape and direction
      *
-     * @param lx
+     * @param lx LX instance
      * @param shape Shape of the transition
      * @param direction Direction of the transition
      */

@@ -157,7 +157,7 @@ public class LX {
      * Creates an LX instance. This instance will run patterns for a grid of the
      * specified size.
      *
-     * @param total
+     * @param total Number of nodes
      */
     protected LX(int total) {
         this(total, 1);
@@ -167,8 +167,8 @@ public class LX {
      * Creates a LX instance. This instance will run patterns for a grid of the
      * specified size.
      *
-     * @param width
-     * @param height
+     * @param width Width
+     * @param height Height
      */
     protected LX(int width, int height) {
         this(new GridModel(width, height));

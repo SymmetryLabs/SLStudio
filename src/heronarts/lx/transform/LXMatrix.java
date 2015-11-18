@@ -42,7 +42,7 @@ public class LXMatrix {
 
     /**
      * Makes a new matrix with the given rotation mode
-     * 
+     *
      * @param rotationMode Rotation mode
      */
     public LXMatrix(RotationMode rotationMode) {
@@ -51,7 +51,7 @@ public class LXMatrix {
 
     /**
      * Copies the existing matrix
-     * 
+     *
      * @param m matrix
      */
     public LXMatrix(LXMatrix m) {
@@ -76,8 +76,8 @@ public class LXMatrix {
 
     /**
      * Multiplies the matrix by another matrix
-     * 
-     * @param m
+     *
+     * @param m Matrix to multiply by
      */
     public void multiply(LXMatrix m) {
         float a11 = m11 * m.m11 + m12 * m.m21 + m13 * m.m31 + m14 * m.m41;

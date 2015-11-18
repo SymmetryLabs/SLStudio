@@ -143,7 +143,7 @@ public abstract class FunctionalModulator extends LXRangeModulator {
      * Subclasses override this method to compute the value of the function. Basis
      * is a value from 0-1, the result must be a value from 0-1.
      *
-     * @param basis
+     * @param basis Basis of modulator
      * @return Computed value for given basis
      */
     public abstract double compute(double basis);

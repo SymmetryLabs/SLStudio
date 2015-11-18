@@ -115,6 +115,8 @@ public class LinearEnvelope extends SawLFO {
 
     /**
      * @deprecated Use setRangeFromHereTo(endValue)
+     * @param endValue ending value
+     * @return this
      */
     @Deprecated
     public final LinearEnvelope setEndVal(double endValue) {
@@ -124,6 +126,9 @@ public class LinearEnvelope extends SawLFO {
 
     /**
      * @deprecated Use setRangeFromHereTo(endValue, periodMs)
+     * @param endValue ending value
+     * @param periodMs Period in milliseconds
+     * @return this
      */
     @Deprecated
     public final LinearEnvelope setEndVal(double endValue, double periodMs) {

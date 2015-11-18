@@ -96,6 +96,8 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
 
     /**
      * Disables the effect.
+     *
+     * @return this
      */
     public final LXEffect disable() {
         this.enabled.setValue(false);
@@ -139,6 +141,8 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
     /**
      * Implementation of the effect. Subclasses need to override this to implement
      * their functionality.
+     *
+     * @param deltaMs Number of milliseconds elapsed since last invocation
      */
     protected abstract void run(double deltaMs);
 }

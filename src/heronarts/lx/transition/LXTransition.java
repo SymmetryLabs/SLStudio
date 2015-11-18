@@ -77,7 +77,7 @@ public abstract class LXTransition extends LXBufferedComponent {
     /**
      * Default abstract constructor.
      *
-     * @param lx
+     * @param lx LX instance
      */
     protected LXTransition(LX lx) {
         super(lx);
@@ -104,7 +104,7 @@ public abstract class LXTransition extends LXBufferedComponent {
     /**
      * Sets the duration to the value of a parameter
      *
-     * @param duration
+     * @param duration Parameter to control duration of transition
      * @return this
      */
     public LXTransition setDuration(LXParameter duration) {

@@ -65,8 +65,8 @@ public class LXPoint {
     /**
      * Construct a point in 2-d space, z-val is 0
      *
-     * @param x
-     * @param y
+     * @param x X-coordinate
+     * @param y Y-coordinate
      */
     public LXPoint(float x, float y) {
         this(x, y, 0);

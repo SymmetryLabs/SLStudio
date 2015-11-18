@@ -199,7 +199,7 @@ public class LXVector {
     /**
      * Rotate in x-y plane
      *
-     * @param theta
+     * @param theta Radians to rotate by
      * @return this
      */
     public LXVector rotate(float theta) {

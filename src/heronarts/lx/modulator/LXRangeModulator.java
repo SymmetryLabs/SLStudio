@@ -229,14 +229,18 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
      * Subclasses implement this which returns their value from a 0-1 scale. This
      * class automatically takes care of scaling to the startValue/endValue range.
      *
-     * @param deltaMs
+     * @param deltaMs Milliseconds elapsed
+     * @param basis Basis of modulator
+     * @return Modulator value
      */
     protected abstract double computeNormalizedValue(double deltaMs, double basis);
 
     /**
      * Subclasses determine the basis based on a normalized value from 0 to 1.
      *
+     * @param basis Modulator basis
      * @param normalizedValue A normalize value from 0 to 1
+     * @return Computed normalized basis for modulator
      */
     protected abstract double computeNormalizedBasis(double basis,
             double normalizedValue);

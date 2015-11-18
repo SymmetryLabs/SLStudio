@@ -117,7 +117,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * Set the modulator to a certain basis position in its cycle.
      *
-     * @param basis
+     * @param basis Basis of modulator, from 0-1
      * @return this
      */
     public final LXPeriodicModulator setBasis(double basis) {
@@ -143,6 +143,8 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * Updates the basis of the modulator based on present values.
+     *
+     * @param value New value of the modulator
      */
     protected final void updateBasis(double value) {
         this.basis = computeBasis(this.basis, value);
@@ -150,6 +152,8 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * @deprecated Use setPeriod
+     * @param durationMs Duration in milliseconds
+     * @return this
      */
     @Deprecated
     public final LXPeriodicModulator setDuration(double durationMs) {
@@ -158,6 +162,8 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * @deprecated Use setPeriod
+     * @param durationModulator Modulator to control duration
+     * @return this
      */
     @Deprecated
     public final LXPeriodicModulator modulateDurationBy(
@@ -192,6 +198,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
 
     /**
      * @deprecated Use getPeriod()
+     * @return The period in milliseconds
      */
     @Deprecated
     public final double getDuration() {
@@ -256,8 +263,9 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * Implementation method to compute the value of a modulator given its basis.
      *
-     * @param basis
-     * @return value
+     * @param deltaMs Milliseconds elapsed
+     * @param basis Basis of the modulator
+     * @return Value of modulator
      */
     abstract protected double computeValue(double deltaMs, double basis);
 
@@ -265,8 +273,9 @@ public abstract class LXPeriodicModulator extends LXModulator {
      * Implementation method to compute the appropriate basis for a modulator
      * given its current basis and value.
      *
-     * @param value
-     * @return basis
+     * @param basis Last basis of modulator
+     * @param value Current value of modulator
+     * @return Basis of modulator
      */
     abstract protected double computeBasis(double basis, double value);
 
