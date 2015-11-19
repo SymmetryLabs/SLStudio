@@ -196,26 +196,34 @@ public class P3LX extends LX {
         long drawStart = System.nanoTime();
 
         long engineStart = System.nanoTime();
+        String frameRateStr = "";
         if (this.engine.isThreaded()) {
-            // If the engine is threaded, it is running itself. We just need
-            // to copy its current color buffer into our own in a thread-safe
-            // manner.
+            // NOTE: because we don't hold a lock, it is *possible* that the
+            // engine stops being in threading mode just between these lines,
+            // triggered by some action on the engine thread itself. It's okay
+            // if this happens, worst side effect is the UI getting the last frame
+            // from the copy buffer.
             this.engine.copyBuffer(this.colors = this.buffer);
+            if (this.flags.showFramerate) {
+                frameRateStr = "Engine: " + this.engine.frameRate() + " "
+                    + "Render: " + this.applet.frameRate;
+            }
         } else {
             // If the engine is not threaded, then we run it ourselves, and
             // we can just use its color buffer, as there is no thread contention.
+            // We don't need to worry about lock contention because we are
+            // currently on the only thread that *could* start the engine.
             this.engine.run();
             this.colors = this.engine.renderBuffer();
+            if (this.flags.showFramerate) {
+                frameRateStr = "Framerate: " + this.applet.frameRate;
+            }
         }
         this.timer.engineNanos = System.nanoTime() - engineStart;
 
+        // Print framerate
         if (this.flags.showFramerate) {
-            if (this.engine.isThreaded()) {
-                PApplet.println("Engine: " + this.engine.frameRate() + " "
-                        + "Render: " + this.applet.frameRate);
-            } else {
-                PApplet.println("Framerate: " + this.applet.frameRate);
-            }
+            PApplet.println(frameRateStr);
         }
 
         this.timer.drawNanos = System.nanoTime() - drawStart;

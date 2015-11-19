@@ -352,8 +352,14 @@ public class UI {
 
     public void mouseEvent(MouseEvent mouseEvent) {
         if (isThreaded()) {
+            // NOTE: it's okay that no lock is held here, if threading mode changes
+            // right here, the event queue will still be picked up by next iteration
+            // of the EngineUILoopTask
             this.eventThreadInputEventQueue.add(mouseEvent);
         } else {
+            // NOTE: also okay to be lock-free here, if threading mode was off then
+            // there is no other thread that would have made a call to start the
+            // threading engine
             _mouseEvent(mouseEvent);
         }
     }
