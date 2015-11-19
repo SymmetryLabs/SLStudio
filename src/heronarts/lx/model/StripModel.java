@@ -18,22 +18,65 @@
 
 package heronarts.lx.model;
 
+import heronarts.lx.transform.LXVector;
+
 /**
  * Simple model of a strip of points in one axis.
  */
 public class StripModel extends LXModel {
 
+    public static class Metrics {
+        public final int length;
+        private final LXVector origin = new LXVector(0, 0, 0);
+        private final LXVector spacing = new LXVector(1, 0, 0);
+
+        public Metrics(int length) {
+            this.length = length;
+        }
+
+        public Metrics setOrigin(float x, float y, float z) {
+            this.origin.set(x, y, z);
+            return this;
+        }
+
+        public Metrics setOrigin(LXVector v) {
+            this.origin.set(v);
+            return this;
+        }
+
+        public Metrics setSpacing(float x, float y, float z) {
+            this.spacing.set(x, y, z);
+            return this;
+        }
+
+        public Metrics setSpacing(LXVector v) {
+            this.spacing.set(v);
+            return this;
+        }
+    }
+
+    public final Metrics metrics;
+
     public final int length;
 
+    public StripModel(Metrics metrics) {
+        super(new Fixture(metrics));
+        this.metrics = metrics;
+        this.length = metrics.length;
+    }
+
     public StripModel(int length) {
-        super(new Fixture(length));
-        this.length = length;
+        this(new Metrics(length));
     }
 
     private static class Fixture extends LXAbstractFixture {
-        private Fixture(int length) {
-            for (int i = 0; i < length; ++i) {
-                addPoint(new LXPoint(i, 0, 0));
+        private Fixture(Metrics metrics) {
+            for (int i = 0; i < metrics.length; ++i) {
+                addPoint(new LXPoint(
+                    metrics.origin.x + i * metrics.spacing.x,
+                    metrics.origin.y + i * metrics.spacing.y,
+                    metrics.origin.z + i * metrics.spacing.z
+                ));
             }
         }
     }
