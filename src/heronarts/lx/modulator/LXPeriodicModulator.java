@@ -151,27 +151,6 @@ public abstract class LXPeriodicModulator extends LXModulator {
     }
 
     /**
-     * @deprecated Use setPeriod
-     * @param durationMs Duration in milliseconds
-     * @return this
-     */
-    @Deprecated
-    public final LXPeriodicModulator setDuration(double durationMs) {
-        return this.setPeriod(durationMs);
-    }
-
-    /**
-     * @deprecated Use setPeriod
-     * @param durationModulator Modulator to control duration
-     * @return this
-     */
-    @Deprecated
-    public final LXPeriodicModulator modulateDurationBy(
-            LXModulator durationModulator) {
-        return this.setPeriod(durationModulator);
-    }
-
-    /**
      * Modify the period of this modulator
      *
      * @param periodMs New period, in milliseconds
@@ -194,15 +173,6 @@ public abstract class LXPeriodicModulator extends LXModulator {
      */
     public final float getPeriodf() {
         return (float) this.getPeriod();
-    }
-
-    /**
-     * @deprecated Use getPeriod()
-     * @return The period in milliseconds
-     */
-    @Deprecated
-    public final double getDuration() {
-        return getPeriod();
     }
 
     /**
