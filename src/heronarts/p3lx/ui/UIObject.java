@@ -24,6 +24,10 @@
 
 package heronarts.p3lx.ui;
 
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -35,7 +39,7 @@ public abstract class UIObject {
 
     UI ui = null;
 
-    private boolean visible = true;
+    public final BooleanParameter visible = new BooleanParameter("Visible", true);
 
     final List<UIObject> children = new CopyOnWriteArrayList<UIObject>();
 
@@ -46,6 +50,16 @@ public abstract class UIObject {
     private UIObject pressedChild = null;
 
     private boolean hasFocus = false;
+
+    protected UIObject() {
+        this.visible.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) {
+                if (!UIObject.this.visible.isOn()) {
+                    blur();
+                }
+            }
+        });
+    }
 
     /**
      * Internal method to track the UI that this is a part of
@@ -92,7 +106,7 @@ public abstract class UIObject {
      * @return True if this object is being displayed
      */
     public boolean isVisible() {
-        return this.visible;
+        return this.visible.isOn();
     }
 
     /**
@@ -101,7 +115,8 @@ public abstract class UIObject {
      * @return this
      */
     public UIObject toggleVisible() {
-        return setVisible(!isVisible());
+        this.visible.toggle();
+        return this;
     }
 
     /**
@@ -111,12 +126,7 @@ public abstract class UIObject {
      * @return this
      */
     public UIObject setVisible(boolean visible) {
-        if (this.visible != visible) {
-            this.visible = visible;
-            if (!visible) {
-                blur();
-            }
-        }
+        this.visible.setValue(visible);
         return this;
     }
 

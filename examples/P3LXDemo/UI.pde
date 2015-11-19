@@ -27,6 +27,16 @@ class UIWalls extends UI3dComponent {
   }
 }
 
+class UISimulationControl extends UIWindow {
+  UISimulationControl(UI ui, float x, float y) {
+    super(ui, "SIMULATION", x, y, UIChannelControl.WIDTH, 88);
+    y = UIWindow.TITLE_LABEL_HEIGHT;
+    new UIButton(4, y, width-8, 20).setLabel("Show Walls").setParameter(walls.visible).addToContainer(this);
+    y += 24;
+    new UIButton(4, y, width-8, 20).setLabel("Show Nodes").setParameter(pointCloud.visible).addToContainer(this);
+  }
+}
+
 class UIEngineControl extends UIWindow {
   
   final UIKnob fpsKnob;

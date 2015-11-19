@@ -1,17 +1,5 @@
-// Get all our imports out of the way
-import heronarts.lx.*;
-import heronarts.lx.audio.*;
-import heronarts.lx.color.*;
-import heronarts.lx.model.*;
-import heronarts.lx.modulator.*;
-import heronarts.lx.parameter.*;
-import heronarts.lx.pattern.*;
-import heronarts.lx.transition.*;
-import heronarts.p3lx.*;
-import heronarts.p3lx.ui.*;
-import heronarts.p3lx.ui.control.*;
+// Need to manually import minim
 import ddf.minim.*;
-import com.jogamp.opengl.GL2;
 
 // Let's work in inches
 final static int INCHES = 1;
@@ -20,6 +8,8 @@ final static int FEET = 12*INCHES;
 // Top-level, we have a model and a P3LX instance
 Model model;
 P3LX lx;
+UI3dComponent pointCloud;
+UI3dComponent walls;
 
 // Setup establishes the windowing and LX constructs
 void setup() {
@@ -66,19 +56,21 @@ void setup() {
     .setTheta(PI/24)
     .setPhi(PI/24)
     
-    .setRotationVelocity(12*PI)
-    .setRotationAcceleration(3*PI)
+    // Uncomment these lines to control camera movement 
+    //.setRotationVelocity(12*PI)
+    //.setRotationAcceleration(3*PI)
     
     // Let's add a point cloud of our animation points
-    .addComponent(new UIPointCloud(lx, model).setPointSize(2))
+    .addComponent(pointCloud = new UIPointCloud(lx, model).setPointSize(2))
     
     // And a custom UI object of our own
-    .addComponent(new UIWalls())
+    .addComponent(walls = new UIWalls())
   );
   
   // A basic built-in 2-D control for a channel
   lx.ui.addLayer(new UIChannelControl(lx.ui, lx.engine.getChannel(0), 4, 4));
-  lx.ui.addLayer(new UIEngineControl(lx.ui, 4, 326));
+  lx.ui.addLayer(new UISimulationControl(lx.ui, 4, 326));
+  lx.ui.addLayer(new UIEngineControl(lx.ui, 4, 406));
   lx.ui.addLayer(new UIComponentsDemo(lx.ui, width-144, 4));
 }
 
