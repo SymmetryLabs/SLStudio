@@ -42,6 +42,11 @@ public class LXBufferedComponent extends LXLayeredComponent {
     @Override
     public void loop(double deltaMs) {
         if (this.lx.engine.isThreaded()) {
+            // NOTE: we know that this method will always be invoked from inside
+            // the engine thread run hierarchy, which is synchronized on LXEngine,
+            // therefore we do not need to lock on the engine here as it is already
+            // held, but we synchronize on ourselves to avoid conflict with the
+            // copyColors() method
             synchronized(this) {
                 super.loop(deltaMs);
             }
