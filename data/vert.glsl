@@ -3,10 +3,10 @@
 uniform mat4 modelview;
 uniform mat4 projection;
 
-attribute vec4 vertex;
-attribute vec4 color;
+in vec4 vertex;
+in vec4 color;
 
-varying vec4 vertexColor;
+out vec4 vertexColor;
 
 uniform vec3 attenuation;
 uniform float pointSize;
