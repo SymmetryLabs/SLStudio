@@ -77,9 +77,10 @@ public class LXAudio {
     }
 
     /**
-     * Retrieves an
-     * @param sampleRate
-     * @return
+     * Retrieves an audio input at given sample rate
+     *
+     * @param sampleRate Sample rate for input
+     * @return AudioInput at desired sample rate
      */
     public final AudioInput getInput(int sampleRate) {
         if (this.audioInput == null) {

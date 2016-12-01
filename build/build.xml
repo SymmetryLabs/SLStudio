@@ -21,7 +21,6 @@
   		windowtitle="LX API">
   	 			
 		<link href="${javadoc.java.href}" />
-		<link href="${javadoc.gson.href}" />
 		<link href="${javadoc.minim.href}" />
   		
 		<fileset dir="../src" defaultexcludes="yes">
