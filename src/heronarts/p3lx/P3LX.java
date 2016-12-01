@@ -117,7 +117,7 @@ public class P3LX extends LX {
         this.buffer = new int[this.total];
         this.colors = this.engine.renderBuffer();
 
-        setMinimCallback(applet);
+        this.audio.setMinimCallback(applet);
 
         this.desaturation = new DesaturationEffect(this);
         this.flash = new FlashEffect(this);
