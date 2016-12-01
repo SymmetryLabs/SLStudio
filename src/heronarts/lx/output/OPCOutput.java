@@ -78,4 +78,9 @@ public class OPCOutput extends LXSocketOutput {
         return this.packetData;
     }
 
+    public OPCOutput setChannel(int channel) {
+        this.packetData[INDEX_CHANNEL] = (byte) channel;
+        return this;
+    }
+
 }

@@ -26,10 +26,11 @@ import heronarts.lx.parameter.BasicParameter;
 public class FlashEffect extends LXEffect {
 
     private final LinearEnvelope flash;
-    private final BasicParameter attack;
-    private final BasicParameter decay;
-    private final BasicParameter intensity;
     private final BasicParameter sat;
+
+    public final BasicParameter attack;
+    public final BasicParameter decay;
+    public final BasicParameter intensity;
 
     public FlashEffect(LX lx) {
         super(lx, true);

@@ -95,11 +95,14 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
 
             layer.loop(deltaMs);
         }
+        afterLayers(deltaMs);
 
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
     protected /* abstract */ void onLoop(double deltaMs) {}
+
+    protected /* abstract */ void afterLayers(double deltaMs) {}
 
     protected final LXLayer addLayer(LXLayer layer) {
         this.layers.add(layer);

@@ -149,7 +149,7 @@ public class LX {
     /**
      * Creates an LX instance with no nodes.
      */
-    protected LX() {
+    public LX() {
         this(null);
     }
 
@@ -159,7 +159,7 @@ public class LX {
      *
      * @param total Number of nodes
      */
-    protected LX(int total) {
+    public LX(int total) {
         this(total, 1);
     }
 
@@ -170,7 +170,7 @@ public class LX {
      * @param width Width
      * @param height Height
      */
-    protected LX(int width, int height) {
+    public LX(int width, int height) {
         this(new GridModel(width, height));
     }
 
@@ -179,7 +179,7 @@ public class LX {
      *
      * @param model Pixel model
      */
-    protected LX(LXModel model) {
+    public LX(LXModel model) {
         this.model = model;
 
         if (model == null) {
