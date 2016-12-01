@@ -177,7 +177,7 @@ ${line}
 	<target name="generate.javadoc" if="is.normal">
 	  	<!-- create the java reference of the library -->
 		<javadoc bottom="Processing library ${project.name} by ${author.name}. ${library.copyright}" 
-				classpath="${classpath.local.location}/minim.jar;${classpath.local.location}/video.jar;${classpath.local.location}/core.jar;${classpath.local.location}/jogl-all.jar;${project.lib}/gson-2.3.jar;{project.bin}" 
+				classpath="${classpath.local.location}/minim.jar;${classpath.local.location}/video.jar;${classpath.local.location}/core.jar;${classpath.local.location}/jogl-all.jar;${project.lib}/gson-2.8.0.jar;{project.bin}" 
 				destdir="${project.tmp}/${project.name}/reference" 
 				verbose="false" 
 				stylesheetfile="build/stylesheet.css" 
@@ -188,6 +188,7 @@ ${line}
  			<link href="${javadoc.java.href}" />
 			<link href="${javadoc.processing.href}" />
 			<link href="${javadoc.minim.href}" />
+			<link href="${javadoc.gson.href}" offline="true" packagelistLoc="build" />
 			<fileset dir="${project.tmp}/${project.name}/src" defaultexcludes="yes">
 			<!-- add packages to be added to reference. -->
 				<include name="**/*"/>
