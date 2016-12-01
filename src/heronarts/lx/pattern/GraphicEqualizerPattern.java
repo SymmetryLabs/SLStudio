@@ -30,7 +30,7 @@ public class GraphicEqualizerPattern extends LXPattern {
 
     public GraphicEqualizerPattern(LX lx) {
         super(lx);
-        addModulator(this.eq = new GraphicEQ(lx.audioInput())).start();
+        addModulator(this.eq = new GraphicEQ(lx.audio.getInput())).start();
         this.transition = new WipeTransition(lx, WipeTransition.Direction.UP);
     }
 

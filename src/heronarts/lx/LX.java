@@ -18,8 +18,6 @@
 
 package heronarts.lx;
 
-import heronarts.lx.audio.FrequencyGate;
-import heronarts.lx.audio.GraphicEQ;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
@@ -34,12 +32,8 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 
-import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
-
-import ddf.minim.AudioInput;
-import ddf.minim.Minim;
 
 /**
  * Core controller for a LX instance. Each instance drives a grid of nodes with
@@ -123,21 +117,9 @@ public class LX {
     public final Tempo tempo;
 
     /**
-     * Callback for Minim implementation
-     */
-    private Object minimCallback = this;
-
-    /**
-     * Minim instance to provide audio input.
-     */
-    private Minim minim;
-
-    /**
      * The global audio input.
      */
-    private AudioInput audioInput;
-
-    private FrequencyGate beatDetect = null;
+    public final LXAudio audio;
 
     /**
      * Global modulator for shared base hue.
@@ -205,6 +187,8 @@ public class LX {
         this.cycleBaseHue(30000);
 
         this.tempo = new Tempo(this);
+
+        this.audio = new LXAudio(this);
     }
 
     public LX addListener(Listener listener) {
@@ -217,23 +201,11 @@ public class LX {
         return this;
     }
 
-    protected LX setMinimCallback(Object callback) {
-        this.minimCallback = callback;
-        return this;
-    }
-
     /**
      * Shut down resources of the LX instance.
      */
     public void dispose() {
-        if (this.audioInput != null) {
-            this.audioInput.close();
-            this.audioInput = null;
-        }
-        if (this.minim != null) {
-            this.minim.stop();
-            this.minim = null;
-        }
+        this.audio.dispose();
     }
 
     /**
@@ -261,47 +233,6 @@ public class LX {
      */
     public final LXPattern getNextPattern() {
         return this.engine.getNextPattern();
-    }
-
-    public final AudioInput audioInput() {
-        return audioInput(44100);
-    }
-
-    public final AudioInput audioInput(int sampleRate) {
-        if (this.audioInput == null) {
-            this.minim = new Minim(this.minimCallback);
-            this.audioInput = this.minim.getLineIn(Minim.STEREO, 1024, sampleRate);
-        }
-        return this.audioInput;
-    }
-
-    public String sketchPath(String fileName) {
-        // For Minim compatibility
-        return fileName;
-    }
-
-    public InputStream createInput(String fileName) {
-        // Audio input not yet supported in LX
-        return null;
-    }
-
-    public final FrequencyGate beatDetect() {
-        if (this.beatDetect == null) {
-            GraphicEQ eq = new GraphicEQ(audioInput(), 4);
-            eq.attack.setValue(10);
-            eq.release.setValue(250);
-            eq.range.setValue(14);
-            eq.gain.setValue(16);
-
-            this.beatDetect = new FrequencyGate("BEAT", eq).setBands(1, 4);
-            this.beatDetect.floor.setValue(0.9);
-            this.beatDetect.threshold.setValue(0.75);
-            this.beatDetect.release.setValue(480);
-
-            addModulator(eq).start();
-            addModulator(this.beatDetect).start();
-        }
-        return this.beatDetect;
     }
 
     /**
