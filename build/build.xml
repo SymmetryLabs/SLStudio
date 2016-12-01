@@ -187,7 +187,6 @@ ${line}
  			
  			<link href="${javadoc.java.href}" />
 			<link href="${javadoc.processing.href}" />
-			<link href="${javadoc.gson.href}" />
 			<link href="${javadoc.minim.href}" />
 			<fileset dir="${project.tmp}/${project.name}/src" defaultexcludes="yes">
 			<!-- add packages to be added to reference. -->
