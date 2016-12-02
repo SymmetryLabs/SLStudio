@@ -23,8 +23,25 @@ package heronarts.lx.parameter;
  */
 public class BoundedParameter extends LXListenableNormalizedParameter {
 
+    /**
+     * Scaling functions determine how the BoundedParameter is interpolated from
+     * its normalized values of 0-1 onto the actual range.
+     */
     public enum Scaling {
-        LINEAR, QUAD_IN, QUAD_OUT
+        /**
+         * Linear scaling between v0 and v1
+         */
+        LINEAR,
+
+        /**
+         * Quadratic easing in from v0 to v1
+         */
+        QUAD_IN,
+
+        /**
+         * Quadratic easing out from v0 to v1
+         */
+        QUAD_OUT
     };
 
     public class Range {
@@ -55,8 +72,13 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
     public final Range range;
 
     /**
+     * Underlying LXListenableParameter that this wraps
+     */
+    private final LXListenableParameter underlying;
+
+    /**
      * Labeled parameter with value of 0 and range of 0-1
-     * 
+     *
      * @param label Label for parameter
      */
     public BoundedParameter(String label) {
@@ -64,8 +86,18 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
     }
 
     /**
-     * Basic parameter with label and value
-     * 
+     * A bounded parameter from 0-1 with scaling function, initial value is 0.
+     *
+     * @param label Label
+     * @param scaling Scaling function
+     */
+    public BoundedParameter(String label, Scaling scaling) {
+        this(label, 0, scaling);
+    }
+
+    /**
+     * A bounded parameter with label and value, initial value of 0 and a range of 0-1
+     *
      * @param label Label
      * @param value value
      */
@@ -73,24 +105,123 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         this(label, value, 1);
     }
 
-    public BoundedParameter(String label, double value, double v1) {
-        this(label, value, 0, v1);
+    /**
+     * A bounded parameter from 0-1 with scaling function
+     *
+     * @param label Label
+     * @param value Initial value
+     * @param scaling Scaling function
+     */
+    public BoundedParameter(String label, double value, Scaling scaling) {
+        this(label, value, 0, 1, scaling);
     }
 
+    /**
+     * A bounded parameter with an initial value, and range from 0 to max
+     *
+     * @param label Label
+     * @param value value
+     * @param max Maximum value
+     */
+    public BoundedParameter(String label, double value, double max) {
+        this(label, value, 0, max);
+    }
+
+    /**
+     * A bounded parameter from 0-max with a scaling function
+     *
+     * @param label Label
+     * @param value Initial value
+     * @param max Max value
+     * @param scaling Scaling function
+     */
+    public BoundedParameter(String label, double value, double max, Scaling scaling) {
+        this(label, value, 0, max, scaling);
+    }
+
+    /**
+     * A bounded parameter with initial value and range from v0 to v1. Note that it is not necessary for
+     * v0 to be less than v1, if it is desired for the knob's value to progress negatively.
+     *
+     * @param label Label
+     * @param value Initial value
+     * @param v0 Start of range
+     * @param v1 End of range
+     */
     public BoundedParameter(String label, double value, double v0, double v1) {
         this(label, value, v0, v1, Scaling.LINEAR);
     }
 
+    /**
+     * A bounded parameter with a scaling function applied.
+     *
+     * @param label Label
+     * @param value Initial value
+     * @param v0 Start value
+     * @param v1 End value
+     * @param scaling Scaling function
+     */
     public BoundedParameter(String label, double value, double v0, double v1,
             Scaling scaling) {
+        this(label, value, v0, v1, scaling, null);
+    }
+
+    /**
+     * Creates a BoundedParameter which limits the value of an underlying MutableParameter to a given
+     * range. Changes to the BoundedParameter are forwarded to the MutableParameter, and vice versa.
+     * If the MutableParameter is set to a value outside the specified bounds, this BoundedParmaeter
+     * will ignore the update and the values will be inconsistent. The typical use of this mode is
+     * to create a parameter suitable for limited-range UI control of a parameter, typically a
+     * MutableParameter.
+     *
+     * @param underlying The underlying parameter
+     * @param v0 Beginning of range
+     * @param v1 End of range
+     */
+    public BoundedParameter(LXListenableParameter underlying, double v0, double v1) {
+        this(underlying, v0, v1, Scaling.LINEAR);
+    }
+
+    /**
+     * Creates a BoundedParameter which limits the value of an underlying MutableParameter to a given
+     * range. Changes to the BoundedParameter are forwarded to the MutableParameter, and vice versa.
+     * If the MutableParameter is set to a value outside the specified bounds, this BoundedParmaeter
+     * will ignore the update and the values will be inconsistent. The typical use of this mode is
+     * to create a parameter suitable for limited-range UI control of a parameter, typically a
+     * MutableParameter.
+     *
+     * @param underlying The underlying parameter
+     * @param v0 Beginning of range
+     * @param v1 End of range
+     * @param scaling Scaling function
+     */
+    public BoundedParameter(LXListenableParameter underlying, double v0, double v1, Scaling scaling) {
+        this(underlying.getLabel(), underlying.getValue(), v0, v1, scaling, underlying);
+    }
+
+    private BoundedParameter(String label, double value, double v0, double v1,
+        Scaling scaling, LXListenableParameter underlying) {
         super(label, (value < Math.min(v0, v1)) ? Math.min(v0, v1) : ((value > Math
                 .max(v0, v1)) ? Math.max(v0, v1) : value));
         this.range = new Range(v0, v1, scaling);
+        this.underlying = underlying;
+        if (this.underlying != null) {
+            this.underlying.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    // NOTE: if the MutableParameter is set to a value outside our range, we ignore it
+                    // and the values diverge.
+                    double v = p.getValue();
+                    if (v >= range.min && v <= range.max) {
+                        setValue(v);
+                    }
+                }
+            });
+        }
     }
 
     /**
      * Sets the value of parameter using normal 0-1
-     * 
+     *
      * @param normalized Value from 0-1 through the parameter range
      * @return this, for method chaining
      */
@@ -117,7 +248,7 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
 
     /**
      * Gets a normalized value of the parameter from 0 to 1
-     * 
+     *
      * @return Normalized value, from 0 to 1
      */
     public double getNormalized() {
@@ -142,7 +273,7 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
 
     /**
      * Normalized value as a float
-     * 
+     *
      * @return Normalized value from 0-1 as a float
      */
     public float getNormalizedf() {
@@ -155,6 +286,9 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
             value = this.range.min;
         } else if (value > this.range.max) {
             value = this.range.max;
+        }
+        if (this.underlying != null) {
+            this.underlying.setValue(value);
         }
         return value;
     }
