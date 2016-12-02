@@ -21,24 +21,24 @@ package heronarts.lx.effect;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 
 public class FlashEffect extends LXEffect {
 
     private final LinearEnvelope flash;
-    private final BasicParameter sat;
+    private final BoundedParameter sat;
 
-    public final BasicParameter attack;
-    public final BasicParameter decay;
-    public final BasicParameter intensity;
+    public final BoundedParameter attack;
+    public final BoundedParameter decay;
+    public final BoundedParameter intensity;
 
     public FlashEffect(LX lx) {
         super(lx, true);
         this.addModulator(this.flash = new LinearEnvelope(0, 0, 0));
-        this.addParameter(this.attack = new BasicParameter("ATTACK", 100, 1000));
-        this.addParameter(this.decay = new BasicParameter("DECAY", 1500, 3000));
-        this.addParameter(this.intensity = new BasicParameter("INTENSITY", 1));
-        this.addParameter(this.sat = new BasicParameter("SAT", 0));
+        this.addParameter(this.attack = new BoundedParameter("ATTACK", 100, 1000));
+        this.addParameter(this.decay = new BoundedParameter("DECAY", 1500, 3000));
+        this.addParameter(this.intensity = new BoundedParameter("INTENSITY", 1));
+        this.addParameter(this.sat = new BoundedParameter("SAT", 0));
     }
 
     private double getAttackTime() {

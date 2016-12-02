@@ -25,7 +25,7 @@ import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -52,7 +52,7 @@ public class LXPalette extends LXComponent {
      */
     public final ColorParameter clr = color;
 
-    public final BasicParameter range = new BasicParameter("Range", 0, 360);
+    public final BoundedParameter range = new BoundedParameter("Range", 0, 360);
 
     public final MutableParameter period = new MutableParameter("Period", 120000);
 

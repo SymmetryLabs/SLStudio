@@ -20,7 +20,7 @@ package heronarts.lx.transition;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXBufferedComponent;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -81,7 +81,7 @@ public abstract class LXTransition extends LXBufferedComponent {
      */
     protected LXTransition(LX lx) {
         super(lx);
-        this.duration = new BasicParameter("DURATION", 0);
+        this.duration = new BoundedParameter("DURATION", 0);
         setDuration(LXTransition.DEFAULT_DURATION);
         addParameter(this.duration);
         this.ease = Ease.NONE;

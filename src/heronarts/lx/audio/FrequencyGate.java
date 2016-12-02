@@ -20,7 +20,7 @@ package heronarts.lx.audio;
 
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 /**
@@ -34,7 +34,7 @@ public class FrequencyGate extends LXModulator {
      * this threshold, the gate fires. Value is in the normalized space from 0 to
      * 1.
      */
-    public final BasicParameter threshold = new BasicParameter("Threshold", 0.8);
+    public final BoundedParameter threshold = new BoundedParameter("Threshold", 0.8);
 
     /**
      * The floor at which the trigger releases. Once triggered, the signal must
@@ -42,13 +42,13 @@ public class FrequencyGate extends LXModulator {
      * specified as a fraction of the threshold. So, a value of 0.75 means the
      * signal must fall to 75% of the threshold value.
      */
-    public final BasicParameter floor = new BasicParameter("Floor", 0.75);
+    public final BoundedParameter floor = new BoundedParameter("Floor", 0.75);
 
     /**
      * The time the trigger takes to falloff from 1 to 0 after triggered, in
      * milliseconds
      */
-    public final BasicParameter release = new BasicParameter("Release", 200, 0,
+    public final BoundedParameter release = new BoundedParameter("Release", 200, 0,
             1600);
 
     public final DiscreteParameter minBand;

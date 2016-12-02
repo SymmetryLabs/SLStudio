@@ -21,7 +21,7 @@ package heronarts.lx;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.DissolveTransition;
@@ -132,7 +132,7 @@ public class LXChannel extends LXComponent {
     private int autoTransitionThreshold = 60000;
 
     private LXTransition faderTransition = null;
-    private final BasicParameter fader = new BasicParameter("FADER", 0);
+    private final BoundedParameter fader = new BoundedParameter("FADER", 0);
 
     private LXTransition transition = null;
     private long transitionMillis = 0;
@@ -185,7 +185,7 @@ public class LXChannel extends LXComponent {
         return this.index;
     }
 
-    public final BasicParameter getFader() {
+    public final BoundedParameter getFader() {
         return this.fader;
     }
 

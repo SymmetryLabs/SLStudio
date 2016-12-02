@@ -20,7 +20,7 @@ package heronarts.lx.output;
 
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
@@ -75,7 +75,7 @@ public abstract class LXOutput {
     /**
      * Framerate throttle
      */
-    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 0,
+    public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 0,
             300);
 
     /**
@@ -87,7 +87,7 @@ public abstract class LXOutput {
     /**
      * Brightness of the output
      */
-    public final BasicParameter brightness = new BasicParameter("BRT", 1);
+    public final BoundedParameter brightness = new BoundedParameter("BRT", 1);
 
     /**
      * Time last frame was sent at.

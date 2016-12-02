@@ -22,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heronarts.lx.modulator.Click;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
 
@@ -47,7 +47,7 @@ public class Tempo extends LXComponent {
     public final static double MIN_BPM = 20;
     public final static double MAX_BPM = 240;
 
-    public final BasicParameter bpm = new BasicParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM);
+    public final BoundedParameter bpm = new BoundedParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM);
 
     private final MutableParameter period = new MutableParameter(MINUTE / DEFAULT_BPM);
 

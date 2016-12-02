@@ -1,15 +1,15 @@
 package heronarts.lx.color;
 
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 public class ColorParameter extends LXListenableParameter implements LXParameterListener {
 
-    public final BasicParameter hue;
-    public final BasicParameter saturation;
-    public final BasicParameter brightness;
+    public final BoundedParameter hue;
+    public final BoundedParameter saturation;
+    public final BoundedParameter brightness;
 
     private int color;
     private boolean internalValueUpdate = false;
@@ -21,9 +21,9 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
     public ColorParameter(String label, int color) {
         super(label, Double.longBitsToDouble(color));
         double h = LXColor.h(color);
-        this.hue = new BasicParameter(label+"-Hue", Double.isNaN(h) ? 0 : h, 0, 359);
-        this.saturation = new BasicParameter(label+"-Saturation", LXColor.s(color), 0, 100);
-        this.brightness = new BasicParameter(label+"-Brightness", LXColor.b(color), 0, 100);
+        this.hue = new BoundedParameter(label+"-Hue", Double.isNaN(h) ? 0 : h, 0, 359);
+        this.saturation = new BoundedParameter(label+"-Saturation", LXColor.s(color), 0, 100);
+        this.brightness = new BoundedParameter(label+"-Brightness", LXColor.b(color), 0, 100);
         this.hue.addListener(this);
         this.saturation.addListener(this);
         this.brightness.addListener(this);

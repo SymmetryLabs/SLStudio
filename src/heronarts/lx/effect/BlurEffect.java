@@ -20,11 +20,11 @@ package heronarts.lx.effect;
 
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 
 public class BlurEffect extends LXEffect {
 
-    public final BasicParameter amount = new BasicParameter("BLUR", 0);
+    public final BoundedParameter amount = new BoundedParameter("BLUR", 0);
 
     private final int[] blurBuffer = new int[this.lx.total];
 

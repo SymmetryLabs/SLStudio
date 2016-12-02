@@ -1,7 +1,7 @@
 package heronarts.lx.audio;
 
 import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import ddf.minim.AudioSource;
 import ddf.minim.analysis.FFT;
 
@@ -19,7 +19,7 @@ public class GraphicEQ extends DecibelMeter {
     /**
      * dB/octave slope applied to the equalizer
      */
-    public final BasicParameter slope = new BasicParameter("Slope", 4.5, -3, 12);
+    public final BoundedParameter slope = new BoundedParameter("Slope", 4.5, -3, 12);
 
     /**
      * Number of bands in the equalizer

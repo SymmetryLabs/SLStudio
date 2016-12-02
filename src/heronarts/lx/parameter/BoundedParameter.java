@@ -21,7 +21,7 @@ package heronarts.lx.parameter;
 /**
  * Simple parameter class with a double value.
  */
-public class BasicParameter extends LXListenableNormalizedParameter {
+public class BoundedParameter extends LXListenableNormalizedParameter {
 
     public enum Scaling {
         LINEAR, QUAD_IN, QUAD_OUT
@@ -59,7 +59,7 @@ public class BasicParameter extends LXListenableNormalizedParameter {
      * 
      * @param label Label for parameter
      */
-    public BasicParameter(String label) {
+    public BoundedParameter(String label) {
         this(label, 0);
     }
 
@@ -69,19 +69,19 @@ public class BasicParameter extends LXListenableNormalizedParameter {
      * @param label Label
      * @param value value
      */
-    public BasicParameter(String label, double value) {
+    public BoundedParameter(String label, double value) {
         this(label, value, 1);
     }
 
-    public BasicParameter(String label, double value, double v1) {
+    public BoundedParameter(String label, double value, double v1) {
         this(label, value, 0, v1);
     }
 
-    public BasicParameter(String label, double value, double v0, double v1) {
+    public BoundedParameter(String label, double value, double v0, double v1) {
         this(label, value, v0, v1, Scaling.LINEAR);
     }
 
-    public BasicParameter(String label, double value, double v0, double v1,
+    public BoundedParameter(String label, double value, double v0, double v1,
             Scaling scaling) {
         super(label, (value < Math.min(v0, v1)) ? Math.min(v0, v1) : ((value > Math
                 .max(v0, v1)) ? Math.max(v0, v1) : value));
@@ -94,7 +94,7 @@ public class BasicParameter extends LXListenableNormalizedParameter {
      * @param normalized Value from 0-1 through the parameter range
      * @return this, for method chaining
      */
-    public BasicParameter setNormalized(double normalized) {
+    public BoundedParameter setNormalized(double normalized) {
         if (normalized < 0) {
             normalized = 0;
         } else if (normalized > 1) {

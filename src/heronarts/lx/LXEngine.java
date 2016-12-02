@@ -22,7 +22,7 @@ import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.output.LXOutput;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameterized;
 import heronarts.lx.pattern.IteratorTestPattern;
@@ -77,7 +77,7 @@ public class LXEngine extends LXParameterized {
 
     public final DiscreteParameter focusedChannel = new DiscreteParameter("CHANNEL", 1);
 
-    public final BasicParameter framesPerSecond = new BasicParameter("FPS", 60, 0, 300);
+    public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
 
     private float frameRate = 0;
 
@@ -179,7 +179,7 @@ public class LXEngine extends LXParameterized {
 
     private Thread engineThread = null;
 
-    public final BasicParameter speed = new BasicParameter("SPEED", 1, 0, 2);
+    public final BoundedParameter speed = new BoundedParameter("SPEED", 1, 0, 2);
 
     private boolean paused = false;
 

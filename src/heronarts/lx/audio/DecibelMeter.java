@@ -20,7 +20,7 @@ package heronarts.lx.audio;
 
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import ddf.minim.AudioBuffer;
 import ddf.minim.AudioSource;
 
@@ -40,22 +40,22 @@ public class DecibelMeter extends LXModulator {
     /**
      * Gain of the meter, in decibels
      */
-    public final BasicParameter gain;
+    public final BoundedParameter gain;
 
     /**
      * Range of the meter, in decibels.
      */
-    public final BasicParameter range;
+    public final BoundedParameter range;
 
     /**
      * Meter attack time, in milliseconds
      */
-    public final BasicParameter attack;
+    public final BoundedParameter attack;
 
     /**
      * Meter release time, in milliseconds
      */
-    public final BasicParameter release;
+    public final BoundedParameter release;
 
     /**
      * Default constructor, creates a meter with unity gain and 72dB dynamic range
@@ -84,10 +84,10 @@ public class DecibelMeter extends LXModulator {
     public DecibelMeter(String label, AudioBuffer buffer) {
         super(label);
         this.buffer = buffer;
-        addParameter(this.gain = new BasicParameter("Gain", 0, -48, 48));
-        addParameter(this.range = new BasicParameter("Range", 72, 6, 96));
-        addParameter(this.attack = new BasicParameter("Attack", 30, 0, 500));
-        addParameter(this.release = new BasicParameter("Release", 100, 0, 1600));
+        addParameter(this.gain = new BoundedParameter("Gain", 0, -48, 48));
+        addParameter(this.range = new BoundedParameter("Range", 72, 6, 96));
+        addParameter(this.attack = new BoundedParameter("Attack", 30, 0, 500));
+        addParameter(this.release = new BoundedParameter("Release", 100, 0, 1600));
         this.decibels = new LinearEnvelope(-this.range.getValue());
     }
 

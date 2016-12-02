@@ -21,21 +21,21 @@ package heronarts.lx.effect;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 
 public class DesaturationEffect extends LXEffect {
 
     private final LinearEnvelope desaturation;
-    private final BasicParameter attack;
-    private final BasicParameter decay;
-    private final BasicParameter amount;
+    private final BoundedParameter attack;
+    private final BoundedParameter decay;
+    private final BoundedParameter amount;
 
     public DesaturationEffect(LX lx) {
         super(lx);
         this.addModulator(this.desaturation = new LinearEnvelope(0, 0, 100));
-        this.addParameter(this.attack = new BasicParameter("ATTACK", 0.1));
-        this.addParameter(this.decay = new BasicParameter("DECAY", 0.1));
-        this.addParameter(this.amount = new BasicParameter("AMOUNT", 1.));
+        this.addParameter(this.attack = new BoundedParameter("ATTACK", 0.1));
+        this.addParameter(this.decay = new BoundedParameter("DECAY", 0.1));
+        this.addParameter(this.amount = new BoundedParameter("AMOUNT", 1.));
     }
 
     private double getAttackTime() {

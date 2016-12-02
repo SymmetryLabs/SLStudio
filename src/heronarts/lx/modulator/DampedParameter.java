@@ -18,7 +18,7 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -37,7 +37,7 @@ public class DampedParameter extends LXModulator {
     private double currentVelocity = 0;
 
     public DampedParameter(String label, double velocity) {
-        this(new BasicParameter(label, 0, Double.MIN_VALUE, Double.MAX_VALUE), velocity, 0);
+        this(new BoundedParameter(label, 0, Double.MIN_VALUE, Double.MAX_VALUE), velocity, 0);
     }
 
     public DampedParameter(LXParameter parameter, double velocity) {
