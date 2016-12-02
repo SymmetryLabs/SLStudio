@@ -5,8 +5,8 @@
  
 class LayerDemoPattern extends LXPattern {
   
-  private final BasicParameter colorSpread = new BasicParameter("Clr", 0.5, 0, 3);
-  private final BasicParameter stars = new BasicParameter("Stars", 100, 0, 100);
+  private final BoundedParameter colorSpread = new BoundedParameter("Clr", 0.5, 0, 3);
+  private final BoundedParameter stars = new BoundedParameter("Stars", 100, 0, 100);
   
   public LayerDemoPattern(LX lx) {
     super(lx);

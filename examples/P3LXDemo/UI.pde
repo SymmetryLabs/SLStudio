@@ -67,13 +67,13 @@ class UIEngineControl extends UIWindow {
 class UIComponentsDemo extends UIWindow {
   
   static final int NUM_KNOBS = 4; 
-  final BasicParameter[] knobParameters = new BasicParameter[NUM_KNOBS];  
+  final BoundedParameter[] knobParameters = new BoundedParameter[NUM_KNOBS];  
   
   UIComponentsDemo(UI ui, float x, float y) {
     super(ui, "UI COMPONENTS", x, y, 140, 10);
     
     for (int i = 0; i < knobParameters.length; ++i) {
-      knobParameters[i] = new BasicParameter("Knb" + (i+1), i+1, 0, 4);
+      knobParameters[i] = new BoundedParameter("Knb" + (i+1), i+1, 0, 4);
       knobParameters[i].addListener(new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
           println(p.getLabel() + " value:" + p.getValue());
@@ -105,7 +105,7 @@ class UIComponentsDemo extends UIWindow {
     
     for (int i = 0; i < 4; ++i) {
       new UISlider(UISlider.Direction.VERTICAL, 4 + i*34, y, 30, 60)
-      .setParameter(new BasicParameter("VSl" + i, (i+1)*.25))
+      .setParameter(new BoundedParameter("VSl" + i, (i+1)*.25))
       .setEnabled(i % 2 == 1)
       .addToContainer(this);
     }
@@ -113,7 +113,7 @@ class UIComponentsDemo extends UIWindow {
     
     for (int i = 0; i < 2; ++i) {
       new UISlider(4, y, width-8, 24)
-      .setParameter(new BasicParameter("HSl" + i, (i + 1) * .25))
+      .setParameter(new BoundedParameter("HSl" + i, (i + 1) * .25))
       .setEnabled(i % 2 == 0)
       .addToContainer(this);
       y += 44;
