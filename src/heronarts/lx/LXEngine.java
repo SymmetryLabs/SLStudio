@@ -484,10 +484,6 @@ public class LXEngine extends LXParameterized {
         getDefaultChannel().enableAutoTransition(autoTransitionThreshold);
     }
 
-    protected boolean isAutoTransitionEnabled() {
-        return getDefaultChannel().isAutoTransitionEnabled();
-    }
-
     public synchronized void run() {
         long runStart = System.nanoTime();
 

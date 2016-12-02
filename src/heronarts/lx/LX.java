@@ -587,15 +587,6 @@ public class LX {
     }
 
     /**
-     * Whether auto transition is enabled.
-     *
-     * @return Whether auto transition is enabled.
-     */
-    public boolean isAutoTransitionEnabled() {
-        return this.engine.isAutoTransitionEnabled();
-    }
-
-    /**
      * Adds an output driver
      *
      * @param output Output

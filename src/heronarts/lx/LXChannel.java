@@ -22,6 +22,8 @@ import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.DissolveTransition;
@@ -117,6 +119,11 @@ public class LXChannel extends LXComponent {
      */
     public final BooleanParameter autoTransitionEnabled = new BooleanParameter("AUTO", false);
 
+    /**
+     * Time in milliseconds after which transition thru the pattern set is automatically initiated.
+     */
+    public final MutableParameter autoTransitionTime = new MutableParameter("AUTO-TIME", 60000);
+
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
 
@@ -128,8 +135,6 @@ public class LXChannel extends LXComponent {
 
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
-
-    private int autoTransitionThreshold = 60000;
 
     private LXTransition faderTransition = null;
     private final BoundedParameter fader = new BoundedParameter("FADER", 0);
@@ -152,6 +157,16 @@ public class LXChannel extends LXComponent {
         addParameter(this.enabled);
         addParameter(this.midiEnabled);
         addParameter(this.autoTransitionEnabled);
+
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == this.autoTransitionEnabled) {
+            if (this.transition == null) {
+                this.transitionMillis = System.currentTimeMillis();
+            }
+        }
     }
 
     @Override
@@ -376,22 +391,9 @@ public class LXChannel extends LXComponent {
     }
 
     public synchronized LXChannel enableAutoTransition(int autoTransitionThreshold) {
-        this.autoTransitionThreshold = autoTransitionThreshold;
-        if (!this.autoTransitionEnabled.isOn()) {
-            this.autoTransitionEnabled.setValue(true);
-            if (this.transition == null) {
-                this.transitionMillis = System.currentTimeMillis();
-            }
-        }
+        this.autoTransitionTime.setValue(autoTransitionThreshold);
+        this.autoTransitionEnabled.setValue(true);
         return this;
-    }
-
-    public synchronized int getAutoTransitionThreshold() {
-        return this.autoTransitionThreshold;
-    }
-
-    public synchronized boolean isAutoTransitionEnabled() {
-        return this.autoTransitionEnabled.isOn();
     }
 
     private synchronized void startTransition() {
@@ -455,7 +457,7 @@ public class LXChannel extends LXComponent {
             }
         } else {
             if (this.autoTransitionEnabled.isOn() &&
-                    (this.lx.engine.nowMillis - this.transitionMillis > this.autoTransitionThreshold)) {
+                    (this.lx.engine.nowMillis - this.transitionMillis > this.autoTransitionTime.getValue())) {
                 goNext();
             }
         }
