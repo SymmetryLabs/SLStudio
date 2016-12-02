@@ -183,6 +183,8 @@ public class LXEngine extends LXParameterized {
 
     private boolean paused = false;
 
+    private static final long INIT_RUN = -1;
+
     LXEngine(LX lx) {
         this.lx = lx;
         this.black = new int[lx.total];
@@ -203,7 +205,7 @@ public class LXEngine extends LXParameterized {
         this.channels.get(0).getFader().setValue(1);
 
         // Initialize timer
-        this.lastMillis = System.currentTimeMillis();
+        this.lastMillis = INIT_RUN;
     }
 
     public LXEngine setInputDispatch(Dispatch inputDispatch) {
@@ -489,8 +491,13 @@ public class LXEngine extends LXParameterized {
 
         // Compute elapsed time
         this.nowMillis = System.currentTimeMillis();
+        if (this.lastMillis == INIT_RUN) {
+            // Initial frame is arbitrarily 16 milliseconds (~60 fps)
+            this.lastMillis = this.nowMillis - 16;
+        }
         double deltaMs = this.nowMillis - this.lastMillis;
         this.lastMillis = this.nowMillis;
+
 
         if (this.paused) {
             this.timer.channelNanos = 0;
