@@ -28,7 +28,7 @@ import heronarts.lx.LXLoopTask;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
-import heronarts.lx.parameter.BasicParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
@@ -107,12 +107,12 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     /**
      * Perspective of view
      */
-    public final BasicParameter perspective = new BasicParameter("Perspective", 60, 30, 150);
+    public final BoundedParameter perspective = new BoundedParameter("Perspective", 60, 30, 150);
 
     /**
      * Depth of perspective field, exponential factor of radius by exp(10, Depth)
      */
-    public final BasicParameter depth = new BasicParameter("Depth", 1, 0, 4);
+    public final BoundedParameter depth = new BoundedParameter("Depth", 1, 0, 4);
 
     private final DampedParameter thetaDamped =
         new DampedParameter(this.theta, this.rotationVelocity, this.rotationAcceleration);
