@@ -41,7 +41,7 @@ public class CubesLayout implements Layout {
     static final float globalOffsetZ = 0;
 
     static final float globalRotationX = 0;
-    static final float globalRotationY = -45;
+    static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
 
     static final float objOffsetX = 0;
@@ -60,7 +60,8 @@ public class CubesLayout implements Layout {
 
     static final float TOWER_VERTICAL_SPACING = 2.5f;
     static final float TOWER_RISER = 14;
-    static final float SP = 24+15; //24+9;
+    static final float SP = 24; //24+9;
+    static final float SPV = 24+2; //24+9;
     static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
     static final float INCHES_PER_METER = 39.3701f;
@@ -73,124 +74,138 @@ public class CubesLayout implements Layout {
     //     // new BulbConfig("lifx-5", 0, 0, 0),
     // };
 
-    static final TowerConfig[] TOWER_CONFIG = {
-// OFFICE MAPPINGS APRIL
-    
-//         // left
-//         // new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
-                
-                //backrow left to right
-        new TowerConfig(0, 0,0, -45, new String[] { "326", "198", "6","50" }),
-        new TowerConfig((SP) * 1, 0,0, -45, new String[] { "418", "203", "54" }),
-        new TowerConfig((SP) * 2, 0,0, -45, new String[] { "150", "312", "129" }),
-        new TowerConfig((SP) * 3, 0,0, -45, new String[] { "172", "79", "111", "177" }),
-        
-        // //Back Row Top Center
-        new TowerConfig((SP) * 1.5f, JUMP * 3,0, -45, new String[] {"87"}),        
+    static final float djBoothOffsetX = 0;
+    static final float djBoothOffsetY = 0;
+    static final float djBoothOffsetZ = 0;
 
+    static final float djBoothRotationX = 0;
+    static final float djBoothRotationY = -45;
+    static final float djBoothRotationZ = 0;
 
+    static final TowerConfig[] DJ_BOOTH_CUBES = {
+        new TowerConfig(SP*0.0f, SPV*0.0f,  SP*0.0f, 0f, new String[] { "43", "362" }),
+        new TowerConfig(SP*1.0f, SPV*1.5f,  SP*0.5f, 0f, new String[] { "138" }),
+        new TowerConfig(SP*0.6f, SPV*2.0f,  SP*1.5f, 0f, new String[] { "157" }),
+        new TowerConfig(SP*1.6f, SPV*2.5f,  SP*1.0f, 0f, new String[] { "94" }),
+        new TowerConfig(SP*2.0f, SPV*0.0f,  SP*0.0f, 0f, new String[] { "199", "361", "6", "155" }),
+        new TowerConfig(SP*1.5f, SPV*0.5f, -SP*1.0f, 0f, new String[] { "81" }),
+        new TowerConfig(SP*3.0f, SPV*1.5f, -SP*0.5f, 0f, new String[] { "37" }),
+        new TowerConfig(SP*3.0f, SPV*3.5f, -SP*0.5f, 0f, new String[] { "314" }),
+        new TowerConfig(SP*2.5f, SPV*2.5f, -SP*1.0f, 0f, new String[] { "44" }),
+        new TowerConfig(SP*3.5f, SPV*0.0f, -SP*1.5f, 0f, new String[] { "17", "56", "85", "391", "182" }),
+        new TowerConfig(SP*4.0f, SPV*1.5f, -SP*2.5f, 0f, new String[] { "131" }),
+        new TowerConfig(SP*4.5f, SPV*2.5f, -SP*2.0f, 0f, new String[] { "120" }),
+        new TowerConfig(SP*4.0f, SPV*3.5f, -SP*2.5f, 0f, new String[] { "365" }),
+        new TowerConfig(SP*5.0f, SPV*0.0f, -SP*3.0f, 0f, new String[] { "420", "126", "54", "548", "129" }),
+        new TowerConfig(SP*4.5f, SPV*0.5f, -SP*4.0f, 0f, new String[] { "15" }),
+        new TowerConfig(SP*6.0f, SPV*1.5f, -SP*3.5f, 0f, new String[] { "326" }),
+        new TowerConfig(SP*6.0f, SPV*3.5f, -SP*3.5f, 0f, new String[] { "196" }),
+        new TowerConfig(SP*5.6f, SPV*2.5f, -SP*4.0f, 0f, new String[] { "51" }),
+        new TowerConfig(SP*4.5f, SPV*2.0f, -SP*4.5f, 0f, new String[] { "22" }),
+        new TowerConfig(SP*6.5f, SPV*0.0f, -SP*4.5f, 0f, new String[] { "372", "406hp", "412", "111" }),
+        new TowerConfig(SP*5.5f, SPV*1.5f, -SP*5.0f, 0f, new String[] { "397" }),
+        new TowerConfig(SP*7.0f, SPV*2.5f, -SP*5.5f, 0f, new String[] { "135" }),
+        new TowerConfig(SP*5.0f, SPV*1.0f, -SP*6.0f, 0f, new String[] { "356", "14" }),
+        new TowerConfig(SP*5.5f, SPV*1.5f, -SP*7.0f, 0f, new String[] { "39" }),
 
+    };
 
-        //middle 3
-        new TowerConfig (SP*.5f, 0, -24*2, -45, new String[] {"340", "135", "391", "390"}),
-        new TowerConfig (SP * 1.5f, 0, -24*2, -45, new String[] {"182", "398", "94" }),
-        new TowerConfig (SP * 2.5f, 0, -24*2, -45, new String[] {"29", "30", "199", "27"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 2.5f + 6, 0, -24*2, -45, new String[] { "143"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * .5f + 6, 0, -24*2, -45, new String[] { "393"}),
-        //medium 393
-        //medium (actual) 345
+    static final float windowOffsetX = 350;
+    static final float windowOffsetY = 0;
+    static final float windowOffsetZ = 0;
 
-        //middle 2
-        new TowerConfig (SP * 1, 0, -24*4, -45, new String[] { "383", "211", "d8:80:39:9b:23:ad"}),
-        new TowerConfig (SP * 2, 0, -24*4, -45, new String[] { "196", "18", "361"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1+6, 0, -24*4, -45, new String[] { "210"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 2+6, 0, -24*4, -45, new String[] { "345"}),
-        new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1+12, 0, -24*4, -45, new String[] { "82"}),
-        new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 2+12, 0, -24*4, -45, new String[] { ""}),
-        // front 1
-        new TowerConfig (43.5f, 0, -24*6, -45, new String[] { "74", "63", "33"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1.5f, 0, -24*6, -45, new String[] { "334"}),
-        new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1.75f, 0, -24*6, -45, new String[] { "384"}),
+    static final float windowRotationX = 0;
+    static final float windowRotationY = -45;
+    static final float windowRotationZ = 0;
 
-        
+    static final TowerConfig[] WINDOW_CUBES = {
+        // new TowerConfig(SPACING*0.0, SPACING*0.0, -SPACING*0.0, -45, new String[] { "" }),
 
+        new TowerConfig(SP*0.0f, SPV*1.5f, -SP*0.0f, 0f, new String[] { "128" }),
+        new TowerConfig(SP*0.5f, SPV*0.5f, -SP*0.5f, 0f, new String[] { "159" }),
+        new TowerConfig(SP*0.5f, SPV*2.5f, -SP*0.5f, 0f, new String[] { "61" }),
+        new TowerConfig(SP*1.0f, SPV*0.0f, -SP*0.5f, 0f, new String[] { "91", "357", "367", "71" }),
+        new TowerConfig(SP*2.0f, SPV*0.5f, -SP*1.0f, 0f, new String[] { "186" }),
+        new TowerConfig(SP*2.0f, SPV*2.5f, -SP*1.0f, 0f, new String[] { "191" }),
+        new TowerConfig(SP*3.0f, SPV*0.0f, -SP*1.5f, 0f, new String[] { "320", "46", "137" }),
+        new TowerConfig(SP*2.5f, SPV*1.5f, -SP*0.5f, 0f, new String[] { "337" }),
+        new TowerConfig(SP*3.5f, SPV*0.5f, -SP*2.5f, 0f, new String[] { "184" }),
+        new TowerConfig(SP*4.0f, SPV*1.5f, -SP*2.0f, 0f, new String[] { "23" }),
+    };
 
-// STOCK CONFIG
-    /*    // left
+    static final float cornerRocksOffsetX = -180;
+    static final float cornerRocksOffsetY = 0;
+    static final float cornerRocksOffsetZ = -50;
 
-        new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
+    static final float cornerRocksRotationX = 0;
+    static final float cornerRocksRotationY = 75+180;
+    static final float cornerRocksRotationZ = 0;
 
-        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "22", "204" }),
-        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "static0", "static1", "static2", "static3" }),
+    static final TowerConfig[] CORNER_ROCKS_CUBES = {
+        // new TowerConfig(SPACING*0.0f, SPACING*0.0f, -SPACING*0.0f, 0f, new String[] { "" }),
 
-        new TowerConfig(-SP*4.5f, (JUMP*0)+TOWER_RISER, -SP*3.0f, new String[] { "86" }),
+        new TowerConfig(SP*0.0f, SPV*0.0f, -SP*0.0f, 0f, new String[] { "384", "172", "29", "5" }),
+        new TowerConfig(-SP*1.0f, SPV*1.5f, SP*0.5f, 0f, new String[] { "132" }),
+        new TowerConfig(-SP*0.5f, SPV*2.5f, SP*1.0f, 0f, new String[] { "d8:80:39:9b:23:ad" }), // right?
+        new TowerConfig(SP*1.0f, SPV*2.5f, -SP*0.5f, 0f, new String[] { "55" }),
+        new TowerConfig(SP*0.5f, SPV*1.5f, -SP*1.0f, 0f, new String[] { "?" }), // need to figure out
+        new TowerConfig(SP*1.0f, SPV*0.0f, -SP*2.0f, 0f, new String[] { "82", "9", "70" }),
+        new TowerConfig(SP*0.0f, SPV*0.5f, -SP*1.5f, 0f, new String[] { "177" }),
+        new TowerConfig(SP*1.5f, SPV*1.5f, -SP*3.0f, 0f, new String[] { "163" }),
+    };
 
-        new TowerConfig(-SP*2.0f, 0, -SP*1.0f, new String[] { "25", "199", "177" }),
+    static final float rocksOffsetX = -260;
+    static final float rocksOffsetY = 0;
+    static final float rocksOffsetZ = -250;
 
-        new TowerConfig(-SP*1.5f, (JUMP*0)+TOWER_RISER, -SP*2.0f, new String[] { "94" }),
-        new TowerConfig(-SP*1.0f, (JUMP*0)+TOWER_RISER, -SP*0.5f, new String[] { "90" }),
-        new TowerConfig(-SP*1.0f, (JUMP*2)+TOWER_RISER, -SP*0.5f, new String[] { "64" }),
+    static final float rocksRotationX = 0;
+    static final float rocksRotationY = 90;
+    static final float rocksRotationZ = 0;
 
-        // left tower of 5
-        new TowerConfig(0, 0, 0, new String[] {
-            "19", "190", "121", "1", "103"
-        }),
+    static final TowerConfig[] ROCKS_CUBES = {
+        // new TowerConfig(SPACING*0.0f, SPACING*0.0f, -SPACING*0.0f, 0f, new String[] { "" }),
 
-        new TowerConfig(SP*1.0f, (JUMP*0)+TOWER_RISER, -SP*0.5f, new String[] {"76"}),
-        new TowerConfig(SP*1.0f, (JUMP*2)+TOWER_RISER, -SP*0.5f, new String[] {"18"}),
-        new TowerConfig(SP*1.0f, (JUMP*1)+TOWER_RISER, +SP*0.5f, new String[] {"157"}),
-        new TowerConfig(SP*0.5f, (JUMP*3)+TOWER_RISER, -SP*1.0f, new String[] {"4"}),
-        new TowerConfig(SP*1.5f, (JUMP*2)+0          , -SP*1.5f, new String[] {"126"}),
+        new TowerConfig(SP*0.0f, SPV*0.0f, -SP*0.0f, 45f, new String[] { "336", "79", "203" }),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, SP*0.0f, SPV*2.0f+3f, -SP*0.0f, 45f, new String[] { "393" }), // medium
 
-        new TowerConfig(SP*2.0f, 0, 0, new String[] {
-            "6", "132", "61", "54"
-        }),
+        new TowerConfig(SP*3.0f, SPV*0.0f, -SP*0.0f, 45f, new String[] { "62", "187", "390" }),
+        //new TowerConfig(CubesModel.Cube.Type.MEDIUM, SP*3.0f, SPV*2.0f+3f, -SP*0.0f, 45f, new String[] { "" }), // medium
 
-        new TowerConfig(SP*2.5f, (JUMP*1)+TOWER_RISER, -SP*1.0f, new String[] {"4"}),
-        new TowerConfig(SP*2.5f, (JUMP*3)+TOWER_RISER, -SP*1.0f, new String[] {"151"}),
+        new TowerConfig(SP*6.0f, SPV*0.0f, -SP*0.0f, 45f, new String[] { "419", "106", "408" }),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, SP*6.0f, SPV*2.0f+3f, -SP*0.0f, 45f, new String[] { "100" }), // medium
+    };
 
-        // middle tower of 5
-        new TowerConfig(SP*3.5f, 0, -SP*1.5f, new String[] {
-            "111", "166", "187", "158", "101"
-        }),
+    static final TowerConfig[] SINGLE_TOWERS_CUBES = {
+        // new TowerConfig(SPACING*0.0f, SPACING*0.0f, -SPACING*0.0f, 0f, new String[] { "" }),
 
-        new TowerConfig(SP*4.5f, (JUMP*3)+TOWER_RISER, -SP*2.0f, new String[] {"11"}),
-        new TowerConfig(SP*3.0f, (JUMP*2)+TOWER_RISER, -SP*2.5f, new String[] {"163"}),
-        new TowerConfig(SP*2.0f, (JUMP*3)+0          , -SP*2.0f, new String[] {"34"}),
-        new TowerConfig(SP*4.0f, (JUMP*0)+TOWER_RISER, -SP*2.5f, new String[] {"17", "44"}),
+        // with trees
+        // closer to dj
+        new TowerConfig(SP*0.0f, SPV*0.0f, -SP*8.0f, 180f, new String[] { "50", "35" }),
+        // further from dj
+        new TowerConfig(SP*0.0f, SPV*0.0f, -SP*17.5f, 90f, new String[] { "1", "108" }),
 
-        new TowerConfig(SP*4.5f, 0, -SP*3.5f, new String[] {
-            "102", "156", "13", "82"
-        }),
+        // doorway
+        new TowerConfig(SP*15.0f, SPV*0.0f, -SP*8.0f, 0f, new String[] { "312", "141", "57", "30" }),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, SP*15.0f, SPV*3.0f+3f, -SP*8.0f, 0f, new String[] { "334" }),
 
-        new TowerConfig(SP*5.5f, (JUMP*2)+TOWER_RISER, -SP*3.5f, new String[] {"412"}),
-        new TowerConfig(SP*5.0f, (JUMP*0)+TOWER_RISER, -SP*4.0f, new String[] {"73"}),
-        new TowerConfig(SP*4.0f, (JUMP*1)+TOWER_RISER, -SP*4.0f, new String[] {"47"}),
-        new TowerConfig(SP*4.0f, (JUMP*3)+TOWER_RISER, -SP*4.0f, new String[] {"32"}),
-        new TowerConfig(SP*3.0f, (JUMP*3)+0          , -SP*3.5f, new String[] {"175"}),
+        new TowerConfig(SP*14.0f, SPV*0.0f, -SP*17.5f, 90f, new String[] { "68", "16", "398", "65" }),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, SP*14.0f, SPV*3.0f+3f, -SP*17.5f, 90f, new String[] { "327" }), // ??
 
-        // right tower of 5
-        new TowerConfig(SP*4.5f, 0, -SP*5.0f, new String[] {
-            "183", "180", "57", "51", "108"
-        }),
+        new TowerConfig(SP*15.0f, SPV*0.0f, -SP*22f, 90f, new String[] { "63", "87", "76" }),
 
-        new TowerConfig(SP*3.5f, (JUMP*0)+TOWER_RISER, -SP*5.5f, new String[] {"104"}),
-        new TowerConfig(SP*4.0f, (JUMP*2)+TOWER_RISER, -SP*6.0f, new String[] {"168"}),
-        new TowerConfig(SP*3.0f, (JUMP*2)+3          , -SP*5.5f, new String[] {"188"}),
+        // bar
+        // right
+        new TowerConfig(SP*2.0f, SPV*0.0f, -SP*24.0f, 0f, new String[] { "21", "18", "383" }),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, SP*2.0f, SPV*2.0f+3f, -SP*24.0f, 0f, new String[] { "143" }),
 
-        new TowerConfig(SP*3.0f - 10, 0, -SP*6.5f - 12, new String[] {
-            "100", "85", "110zAQ  AZQ"
-        }),
+        // left
+        new TowerConfig(SP*9.0f, SPV*0.0f, -SP*24.0f, 0f, new String[] { "351", "174", "31" }),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, SP*9.0f, SPV*2.0f+3f, -SP*24.0f, 0f, new String[] { "210" }),
 
-        new TowerConfig((SP*3.0f - 10)-(SP*0.5f), (JUMP*0)+TOWER_RISER, (-SP*6.5f - 12)-(SP*1.0f), new String[] {"87"}),
-        new TowerConfig((SP*3.0f - 10)-(SP*0.0f), (JUMP*0)+0          , (-SP*6.5f - 12)-(SP*2.0f), new String[] {"33"}),
-
-        // table cubes
-        new TowerConfig(SP*-0.5f, 0, -SP*4.0f, new String[] {"74"}),
-        new TowerConfig(0, 0, -SP*5.0f, new String[] {"171"}),
-        new TowerConfig(SP*1.0f, 0, -SP*5.5f, new String[] {"9"}),
-
-        */
+        // roof
+        new TowerConfig(SP*11.0f, SPV*5.0f, -SP*19f, 180f, new String[] { "343", "66" }),
+        new TowerConfig(SP*11.5f, SPV*5.0f, -SP*20.4f, 90f, new String[] { "113" }),
+        new TowerConfig(SP*7.5f, SPV*5.0f, -SP*20.4f, 90f, new String[] { "340" }),
     };
 
     static final StripConfig[] STRIP_CONFIG = {
@@ -293,16 +308,21 @@ public class CubesLayout implements Layout {
         // Any global transforms
         LXTransform globalTransform = new LXTransform();
         globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
         globalTransform.rotateX(globalRotationX * Math.PI / 180.);
+        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
         globalTransform.rotateZ(globalRotationZ * Math.PI / 180.);
 
-        /* Cubes ----------------------------------------------------------*/
         List<CubesModel.Tower> towers = new ArrayList<>();
         List<CubesModel.Cube> allCubes = new ArrayList<>();
 
-        int stripId = 0;
-        for (TowerConfig config : TOWER_CONFIG) {
+        /* DJ BOOTH ----------------------------------------------------------*/
+        globalTransform.push();
+        globalTransform.translate(djBoothOffsetX, djBoothOffsetY, djBoothOffsetZ);
+        globalTransform.rotateX(djBoothRotationX * Math.PI / 180.);
+        globalTransform.rotateY(djBoothRotationY * Math.PI / 180.);
+        globalTransform.rotateZ(djBoothRotationZ * Math.PI / 180.);
+
+        for (TowerConfig config : DJ_BOOTH_CUBES) {
             List<CubesModel.Cube> cubes = new ArrayList<>();
             float x = config.x;
             float z = config.z;
@@ -313,20 +333,123 @@ public class CubesLayout implements Layout {
 
             for (int i = 0; i < config.ids.length; i++) {
                 float y = config.yValues[i];
-                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot+180f, yRot-90f, zRot, globalTransform, type);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
             towers.add(new CubesModel.Tower("", cubes));
         }
+        globalTransform.pop();
+        /*-----------------------------------------------------------------*/
+
+        /* WINDOW ----------------------------------------------------------*/
+        globalTransform.push();
+        globalTransform.translate(windowOffsetX, windowOffsetY, windowOffsetZ);
+        globalTransform.rotateX(windowRotationX * Math.PI / 180.);
+        globalTransform.rotateY(windowRotationY * Math.PI / 180.);
+        globalTransform.rotateZ(windowRotationZ * Math.PI / 180.);
+
+        for (TowerConfig config : WINDOW_CUBES) {
+            List<CubesModel.Cube> cubes = new ArrayList<>();
+            float x = config.x;
+            float z = config.z;
+            float xRot = config.xRot;
+            float yRot = config.yRot;
+            float zRot = config.zRot;
+            CubesModel.Cube.Type type = config.type;
+
+            for (int i = 0; i < config.ids.length; i++) {
+                float y = config.yValues[i];
+                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot+180f, yRot-90f, zRot, globalTransform, type);
+                cubes.add(cube);
+                allCubes.add(cube);
+            }
+            towers.add(new CubesModel.Tower("", cubes));
+        }
+        globalTransform.pop();
+        /*-----------------------------------------------------------------*/
+
+        /* CORNER ROCKS ----------------------------------------------------------*/
+        globalTransform.push();
+        globalTransform.translate(cornerRocksOffsetX, cornerRocksOffsetY, cornerRocksOffsetZ);
+        globalTransform.rotateX(cornerRocksRotationX * Math.PI / 180.);
+        globalTransform.rotateY(cornerRocksRotationY * Math.PI / 180.);
+        globalTransform.rotateZ(cornerRocksRotationZ * Math.PI / 180.);
+
+        for (TowerConfig config : CORNER_ROCKS_CUBES) {
+            List<CubesModel.Cube> cubes = new ArrayList<>();
+            float x = config.x;
+            float z = config.z;
+            float xRot = config.xRot;
+            float yRot = config.yRot;
+            float zRot = config.zRot;
+            CubesModel.Cube.Type type = config.type;
+
+            for (int i = 0; i < config.ids.length; i++) {
+                float y = config.yValues[i];
+                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot+180f, yRot-90f, zRot, globalTransform, type);
+                cubes.add(cube);
+                allCubes.add(cube);
+            }
+            towers.add(new CubesModel.Tower("", cubes));
+        }
+        globalTransform.pop();
+        /*-----------------------------------------------------------------*/
+
+        /* ROCKS ----------------------------------------------------------*/
+        globalTransform.push();
+        globalTransform.translate(rocksOffsetX, rocksOffsetY, rocksOffsetZ);
+        globalTransform.rotateX(rocksRotationX * Math.PI / 180.);
+        globalTransform.rotateY(rocksRotationY * Math.PI / 180.);
+        globalTransform.rotateZ(rocksRotationZ * Math.PI / 180.);
+
+        for (TowerConfig config : ROCKS_CUBES) {
+            List<CubesModel.Cube> cubes = new ArrayList<>();
+            float x = config.x;
+            float z = config.z;
+            float xRot = config.xRot;
+            float yRot = config.yRot;
+            float zRot = config.zRot;
+            CubesModel.Cube.Type type = config.type;
+
+            for (int i = 0; i < config.ids.length; i++) {
+                float y = config.yValues[i];
+                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot+180f, yRot-90f, zRot, globalTransform, type);
+                cubes.add(cube);
+                allCubes.add(cube);
+            }
+            towers.add(new CubesModel.Tower("", cubes));
+        }
+        globalTransform.pop();
+        /*-----------------------------------------------------------------*/
+
+        /* ROCKS ----------------------------------------------------------*/
+        globalTransform.push();
+
+        for (TowerConfig config : SINGLE_TOWERS_CUBES) {
+            List<CubesModel.Cube> cubes = new ArrayList<>();
+            float x = config.x;
+            float z = config.z;
+            float xRot = config.xRot;
+            float yRot = config.yRot;
+            float zRot = config.zRot;
+            CubesModel.Cube.Type type = config.type;
+
+            for (int i = 0; i < config.ids.length; i++) {
+                float y = config.yValues[i];
+                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot+180f, yRot-90f, zRot, globalTransform, type);
+                cubes.add(cube);
+                allCubes.add(cube);
+            }
+            towers.add(new CubesModel.Tower("", cubes));
+        }
+        globalTransform.pop();
         /*-----------------------------------------------------------------*/
 
         CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
         for (int i = 0; i < allCubesArr.length; i++) {
             allCubesArr[i] = allCubes.get(i);
         }
-
-
 
         return new CubesModel(towers, allCubesArr);
     }

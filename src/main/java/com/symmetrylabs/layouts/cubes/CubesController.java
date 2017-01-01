@@ -166,7 +166,14 @@ public class CubesController extends LXOutput {
 
                 for (int i = 0; i < strip.metrics.numPoints; i++) {
                     LXPoint point = strip.getPoints().get(i);
-                    setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+
+                    int col = colors[point.index];
+
+                    if (cube.type == CubesModel.Cube.Type.MEDIUM) {
+                        LXColor.scaleBrightness(col, 0.65f);
+                    }
+
+                    setPixel(stripNum * strip.metrics.numPoints + i, col);
                 }
             }
         } else {
