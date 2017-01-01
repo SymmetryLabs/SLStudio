@@ -148,7 +148,6 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             points = ((CubesModel.DoubleControllerCube)cubesModel.getCubes().get(0)).getPointsA();
-            System.out.println("frame");
         } else {
             for (CubesModel.Cube c : cubesModel.getCubes()) {
                 CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;

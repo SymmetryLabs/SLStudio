@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1532324236992,
+  "timestamp": 1483239282355,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -311,9 +311,9 @@
     },
     "components": {
       "GammaExpander": {
-        "id": 312,
+        "id": 340,
         "class": "com.symmetrylabs.slstudio.component.GammaExpander",
-        "modulationColor": -35584,
+        "modulationColor": -16766465,
         "parameters": {
           "label": "GammaExpander",
           "ON": true,
@@ -367,12 +367,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 103.92673839457102,
-        "theta": 0.14700000000000002,
-        "phi": 0.07800000000000004,
-        "positionX": 1325.0,
-        "positionY": 39.0,
-        "positionZ": -6.999996185302734
+        "radius": 744.8137689130017,
+        "theta": -0.02400000000000001,
+        "phi": -0.08399999999999998,
+        "positionX": 2084.96240234375,
+        "positionY": 300.406005859375,
+        "positionZ": -20.1118221282959
       }
     }
   }
