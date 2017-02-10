@@ -144,7 +144,7 @@ public class UIChannelControl extends UIWindow {
 
         PatternScrollItem(LXPattern pattern) {
             this.pattern = pattern;
-            this.label = UI.uiClassName(pattern, "Pattern");
+            this.label = pattern.getName();
         }
 
         public String getLabel() {
