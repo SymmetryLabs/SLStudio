@@ -22,6 +22,7 @@ import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.BooleanParameter;
@@ -98,16 +99,36 @@ public class LXChannel extends LXComponent {
     }
 
     /**
+     * This channel bypasses the crossfader
+     */
+    public static final int CROSSFADE_GROUP_BYPASS = 0;
+
+    /**
+     * This channel belongs to the left crossfade group
+     */
+    public static final int CROSSFADE_GROUP_LEFT = 1;
+
+    /**
+     * This channel belongs to the right crossfade group
+     */
+    public static final int CROSSFADE_GROUP_RIGHT = 2;
+
+    private final LX lx;
+
+    /**
      * The index of this channel in the engine.
      */
     private int index;
-
-    private final LX lx;
 
     /**
      * Whether this channel is enabled.
      */
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
+
+    /**
+     * Crossfade group this channel belongs to
+     */
+    public final DiscreteParameter crossfadeGroup = new DiscreteParameter("GROUP", 3);
 
     /**
      * Whether this channel should listen to MIDI events
@@ -130,7 +151,11 @@ public class LXChannel extends LXComponent {
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
     private final List<LXEffect> unmodifiableEffects = Collections.unmodifiableList(effects);
 
-    private final ModelBuffer buffer;
+    /**
+     * This is a local buffer used for transition blending on this channel
+     */
+    private final ModelBuffer blendBuffer;
+
     private int[] colors;
 
     private int activePatternIndex = 0;
@@ -148,7 +173,7 @@ public class LXChannel extends LXComponent {
         super(lx);
         this.lx = lx;
         this.index = index;
-        this.buffer = new ModelBuffer(lx);
+        this.blendBuffer = new ModelBuffer(lx);
         this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();
         _updatePatterns(patterns);
@@ -465,13 +490,11 @@ public class LXChannel extends LXComponent {
         int[] colors = (this.transition != null) ? this.transition.getColors() : getActivePattern().getColors();
 
         if (this.effects.size() > 0) {
-            int[] array = this.buffer.getArray();
-            for (int i = 0; i < colors.length; ++i) {
-                array[i] = colors[i];
-            }
+            int[] array = this.blendBuffer.getArray();
+            System.arraycopy(colors, 0, array, 0, colors.length);
             colors = array;
             for (LXEffect effect : this.effects) {
-                ((LXLayeredComponent)effect).setBuffer(this.buffer);
+                ((LXLayeredComponent)effect).setBuffer(this.blendBuffer);
                 effect.loop(deltaMs);
             }
         }

@@ -170,7 +170,7 @@ public class LXEngine extends LXParameterized {
 
     private final DoubleBuffer buffer;
 
-    private final int[] black;
+    private final int[] blank;
 
     long nowMillis = 0;
     private long lastMillis;
@@ -187,9 +187,9 @@ public class LXEngine extends LXParameterized {
 
     LXEngine(LX lx) {
         this.lx = lx;
-        this.black = new int[lx.total];
-        for (int i = 0; i < black.length; ++i) {
-            this.black[i] = 0xff000000;
+        this.blank = new int[lx.total];
+        for (int i = 0; i < blank.length; ++i) {
+            this.blank[i] = 0;
         }
         // Master double-buffer
         this.buffer = new DoubleBuffer();
@@ -520,7 +520,7 @@ public class LXEngine extends LXParameterized {
 
         // Run and blend all of our channels
         long channelStart = System.nanoTime();
-        int[] bufferColors = this.black;
+        int[] bufferColors = this.blank;
         for (LXChannel channel : this.channels) {
             if (channel.enabled.isOn()) {
                 channel.loop(deltaMs);
@@ -552,9 +552,7 @@ public class LXEngine extends LXParameterized {
 
         // Copy colors into our own rendering buffer
         long copyStart = System.nanoTime();
-        for (int i = 0; i < bufferColors.length; ++i) {
-            this.buffer.render[i] = bufferColors[i];
-        }
+        System.arraycopy(bufferColors, 0, this.buffer.render, 0, bufferColors.length);
         this.timer.copyNanos = System.nanoTime() - copyStart;
 
         // Apply effects in our rendering buffer

@@ -18,6 +18,6 @@
 
 package heronarts.lx;
 
-interface LXBuffer {
+public interface LXBuffer {
     public int[] getArray();
 }
