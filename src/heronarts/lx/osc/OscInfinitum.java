@@ -24,4 +24,19 @@ public class OscInfinitum extends OscSentinel {
     public char getTypeTag() {
         return OscTypeTag.INFINITUM;
     }
+
+    @Override
+    public int toInt() {
+        return Integer.MAX_VALUE;
+    }
+
+    @Override
+    public float toFloat() {
+        return Float.POSITIVE_INFINITY;
+    }
+
+    @Override
+    public double toDouble() {
+        return Double.POSITIVE_INFINITY;
+    }
 }

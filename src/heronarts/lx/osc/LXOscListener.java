@@ -18,29 +18,6 @@
 
 package heronarts.lx.osc;
 
-public class OscFalse extends OscBool {
-    @Override
-    public boolean getValue() {
-        return false;
-    }
-
-    @Override
-    public char getTypeTag() {
-        return OscTypeTag.FALSE;
-    }
-
-    @Override
-    public int toInt() {
-        return 0;
-    }
-
-    @Override
-    public float toFloat() {
-        return 0;
-    }
-
-    @Override
-    public double toDouble() {
-        return 0;
-    }
+public interface LXOscListener {
+    public void oscMessage(OscMessage message);
 }

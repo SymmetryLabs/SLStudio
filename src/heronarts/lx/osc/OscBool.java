@@ -20,4 +20,10 @@ package heronarts.lx.osc;
 
 public abstract class OscBool extends OscSentinel {
     public abstract boolean getValue();
+
+    @Override
+    public String toString() {
+        return "<" + getTypeTag() + ">";
+    }
+
 }

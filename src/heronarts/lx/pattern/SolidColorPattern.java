@@ -19,18 +19,35 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.LXParameter;
 
 public class SolidColorPattern extends LXPattern {
-    final int color;
+    public final int color;
+
+    public final BoundedParameter brightness = new BoundedParameter("Bright", 100, 100);
 
     public SolidColorPattern(LX lx, int color) {
         super(lx);
+        addParameter(this.brightness);
+
         this.color = color;
-        for (int i = 0; i < this.colors.length; ++i) {
-            this.colors[i] = color;
+        setBrightness();
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == this.brightness) {
+            setBrightness();
         }
     }
 
+    private void setBrightness() {
+        setColors(LX.hsb(LXColor.h(this.color), LXColor.s(this.color), this.brightness.getValuef()));
+    }
+
+    @Override
     public void run(double deltaMs) {
     }
 }

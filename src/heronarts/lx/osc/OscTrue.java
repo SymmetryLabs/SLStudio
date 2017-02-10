@@ -28,4 +28,19 @@ public class OscTrue extends OscBool {
     public char getTypeTag() {
         return OscTypeTag.TRUE;
     }
+
+    @Override
+    public int toInt() {
+        return 1;
+    }
+
+    @Override
+    public float toFloat() {
+        return 1;
+    }
+
+    @Override
+    public double toDouble() {
+        return 1;
+    }
 }

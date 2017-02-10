@@ -18,4 +18,8 @@
 
 package heronarts.lx.osc;
 
-public class OscSymbol extends OscString {}
+public class OscSymbol extends OscString {
+    public OscSymbol(String string) {
+        super(string);
+    }
+}

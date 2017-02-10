@@ -18,43 +18,109 @@
 
 package heronarts.lx.osc;
 
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class OscMessage extends OscPacket {
+public class OscMessage extends OscPacket implements Iterable<OscArgument> {
     private OscString addressPattern;
+
     private OscString typeTag;
+    private boolean typeTagDirty = true;
 
-    private List<OscArgument> arguments;
+    private InetAddress source;
 
-    public OscMessage() {
-        this.arguments = new ArrayList<OscArgument>();
+    private final List<OscArgument> arguments = new ArrayList<OscArgument>();
+
+    private int cursor = 0;
+
+    public OscMessage() {}
+
+    public OscMessage(String addressPattern) {
+        setAddressPattern(addressPattern);
     }
 
-    public OscMessage addArgument(OscArgument argument) {
-        this.arguments.add(argument);
+    public OscMessage clearArguments() {
+        this.arguments.clear();
+        this.typeTagDirty = true;
         return this;
     }
 
-    public OscMessage addArgument(int argument) {
-        return addArgument(new OscInt(argument));
+    public OscMessage add(OscArgument argument) {
+        this.arguments.add(argument);
+        this.typeTagDirty = true;
+        return this;
     }
 
-    public OscMessage addArgument(String argument) {
-        return addArgument(new OscString(argument));
+    public OscMessage add(int argument) {
+        return add(new OscInt(argument));
     }
 
-    public OscMessage addArgument(double argument) {
-        return addArgument(new OscDouble(argument));
+    public OscMessage add(String argument) {
+        return add(new OscString(argument));
     }
 
-    public OscMessage addArgument(float argument) {
-        return addArgument(new OscFloat(argument));
+    public OscMessage add(double argument) {
+        return add(new OscDouble(argument));
     }
 
-    public List<OscArgument> getArguments() {
-        return this.arguments;
+    public OscMessage add(float argument) {
+        return add(new OscFloat(argument));
+    }
+
+    public OscArgument get() {
+        return this.arguments.get(this.cursor++);
+    }
+
+    public OscArgument get(int index) {
+        return this.arguments.get(index);
+    }
+
+    public int getInt() {
+        return get().toInt();
+    }
+
+    public int getInt(int index) {
+        return get(index).toInt();
+    }
+
+    public float getFloat() {
+        return get().toFloat();
+    }
+
+    public float getFloat(int index) {
+        return get(index).toFloat();
+    }
+
+    public double getDouble() {
+        return get().toDouble();
+    }
+
+    public double getDouble(int index) {
+        return get(index).toDouble();
+    }
+
+    public String getString() {
+        return get().toString();
+    }
+
+    public String getString(int index) {
+        return get(index).toString();
+    }
+
+    public OscBlob getBlob() {
+        return (OscBlob) get();
+    }
+
+    public OscBlob getBlob(int index) {
+        return (OscBlob) get(index);
+    }
+
+    public OscMessage resetCursor() {
+        this.cursor = 0;
+        return this;
     }
 
     public OscMessage setAddressPattern(String addressPattern) {
@@ -67,34 +133,66 @@ public class OscMessage extends OscPacket {
         return this;
     }
 
-    public OscMessage setTypeTag(String typeTag) {
-        this.typeTag = new OscString(typeTag);
+    OscMessage setSource(InetAddress address) {
+        this.source = address;
         return this;
     }
 
-    public OscMessage setTypeTag(OscString typeTag) {
-        this.typeTag = typeTag;
-        return this;
+    public InetAddress getSource() {
+        return this.source;
     }
 
     public OscString getAddressPattern() {
         return this.addressPattern;
     }
 
+    private void rebuildTypeTag() {
+        char[] typeTag = new char[this.arguments.size() + 1];
+        int i = 0;
+        typeTag[i++] = ',';
+        for (OscArgument argument : this.arguments) {
+            typeTag[i++] = argument.getTypeTag();
+        }
+        this.typeTag = new OscString(typeTag);
+        this.typeTagDirty = false;
+    }
+
     public OscString getTypeTag() {
+        if (this.typeTagDirty) {
+            rebuildTypeTag();
+        }
         return this.typeTag;
     }
 
-    public static OscMessage parse(byte[] data, int offset, int len) throws OscException {
+    public boolean matches(String pattern) {
+        // TODO(mcslee): add wildcard matching?
+        return this.addressPattern.getValue().equals(pattern);
+    }
+
+    public boolean hasPrefix(String pattern) {
+        String address = this.addressPattern.getValue();
+        return
+            address.startsWith(pattern) && (
+                (address.length() == pattern.length()) ||
+                (address.charAt(pattern.length()) == '/')
+            );
+    }
+
+    public static OscMessage parse(InetAddress source, byte[] data, int offset, int len) throws OscException {
         OscMessage message = new OscMessage();
+        message.setSource(source);
+
+        // Read address pattern
         OscString addressPattern = OscString.parse(data, offset, len);
         offset += addressPattern.getByteLength();
+        message.setAddressPattern(addressPattern);
 
+        // Is there a typetag?
         if (offset < len) {
             OscString typeTag = OscString.parse(data, offset, len);
             offset += typeTag.getByteLength();
-            message.setTypeTag(typeTag);
 
+            // TODO(mcslee): check for buffer overruns
             ByteBuffer buffer = ByteBuffer.wrap(data);
             String typeTagValue = typeTag.getValue();
             for (int i = 1; i < typeTagValue.length(); ++i) {
@@ -153,10 +251,43 @@ public class OscMessage extends OscPacket {
                         throw new OscMalformedDataException("Unrecognized type tag: " + tag, data, offset, len);
                 }
                 offset += argument.getByteLength();
-                message.addArgument(argument);
+                message.add(argument);
             }
         }
         return message;
     }
 
+    @Override
+    public Iterator<OscArgument> iterator() {
+        return this.arguments.iterator();
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        sb.append(this.addressPattern.toString());
+        if (this.typeTag != null) {
+            sb.append(this.typeTag.toString());
+        }
+        boolean first = true;
+        for (OscArgument argument : this) {
+            if (first) {
+                sb.append(' ');
+                first = false;
+            } else {
+                sb.append(',');
+            }
+            sb.append(argument.toString());
+        }
+        return sb.toString();
+    }
+
+    @Override
+    void serialize(ByteBuffer buffer) {
+        this.addressPattern.serialize(buffer);
+        getTypeTag().serialize(buffer);
+        for (OscArgument argument : this.arguments) {
+            argument.serialize(buffer);
+        }
+    }
 }

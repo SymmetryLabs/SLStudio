@@ -19,30 +19,30 @@
 package heronarts.lx.osc;
 
 import java.net.DatagramPacket;
+import java.net.InetAddress;
+import java.nio.ByteBuffer;
 
 public abstract class OscPacket {
 
-    public static OscPacket parse(byte[] data, int offset, int len) throws OscException {
+    public static OscPacket parse(InetAddress source, byte[] data, int offset, int len) throws OscException {
         if (data == null) {
-            throw new IllegalArgumentException();
+            throw new IllegalArgumentException("OscPacket cannot parse null data array");
         }
         if (len <= 0) {
             throw new OscEmptyPacketException();
         }
-        if (data[0] == '#') {
-            return OscBundle.parse(data, offset, len);
-        } else if (data[0] == '/') {
-            return OscMessage.parse(data, offset, len);
+        if (data[offset] == '#') {
+            return OscBundle.parse(source, data, offset, len);
+        } else if (data[offset] == '/') {
+            return OscMessage.parse(source,data, offset, len);
         } else {
             throw new OscMalformedDataException("Osc Packet does not start with # or /", data, offset, len);
         }
     }
 
-    public static OscPacket parse(byte[] data, int len) throws OscException {
-        return OscPacket.parse(data, 0, len);
+    public static OscPacket parse(DatagramPacket datagram) throws OscException {
+        return OscPacket.parse(datagram.getAddress(), datagram.getData(), datagram.getOffset(), datagram.getLength());
     }
 
-    public static OscPacket parse(DatagramPacket datagram) throws OscException {
-        return OscPacket.parse(datagram.getData(), datagram.getLength());
-    }
+    abstract void serialize(ByteBuffer buffer);
 }

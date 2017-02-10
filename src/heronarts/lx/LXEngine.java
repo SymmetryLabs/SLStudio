@@ -21,6 +21,7 @@ package heronarts.lx;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -62,6 +63,8 @@ public class LXEngine extends LXParameterized {
     private final LX lx;
 
     public final LXMidiEngine midiEngine;
+
+    public final LXOscEngine oscEngine;
 
     private Dispatch inputDispatch = null;
 
@@ -128,6 +131,7 @@ public class LXEngine extends LXParameterized {
         public long fxNanos = 0;
         public long inputNanos = 0;
         public long midiNanos = 0;
+        public long oscNanos = 0;
         public long outputNanos = 0;
     }
 
@@ -196,6 +200,9 @@ public class LXEngine extends LXParameterized {
 
         // Midi engine
         this.midiEngine = new LXMidiEngine(lx);
+
+        // OSC engine
+        this.oscEngine = new LXOscEngine(lx);
 
         // Default color palette
         addComponent(lx.palette);
@@ -498,7 +505,6 @@ public class LXEngine extends LXParameterized {
         double deltaMs = this.nowMillis - this.lastMillis;
         this.lastMillis = this.nowMillis;
 
-
         if (this.paused) {
             this.timer.channelNanos = 0;
             this.timer.copyNanos = 0;
@@ -577,6 +583,11 @@ public class LXEngine extends LXParameterized {
         long midiStart = System.nanoTime();
         this.midiEngine.dispatch();
         this.timer.midiNanos = System.nanoTime() - midiStart;
+
+        // Process OSC events
+        long oscStart = System.nanoTime();
+        this.oscEngine.dispatch();
+        this.timer.oscNanos = System.nanoTime() - oscStart;
 
         // Send to outputs
         long outputStart = System.nanoTime();

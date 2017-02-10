@@ -87,8 +87,12 @@ public class LXMidiEngine {
         }
     }
 
+    private final List<LXMidiListener> listenerSnapshot = new ArrayList<LXMidiListener>();
+
     public void dispatch(LXShortMessage message) {
-        for (LXMidiListener listener : this.listeners) {
+        this.listenerSnapshot.clear();
+        this.listenerSnapshot.addAll(this.listeners);
+        for (LXMidiListener listener : this.listenerSnapshot) {
             dispatch(message, listener);
         }
         for (LXChannel channel : this.lx.engine.getChannels()) {

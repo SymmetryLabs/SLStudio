@@ -18,14 +18,18 @@
 
 package heronarts.lx.osc;
 
+import java.nio.ByteBuffer;
+
 public class OscString implements OscArgument {
 
     private String value;
     private int byteLength;
 
-    OscString() {}
+    public OscString(char[] value) {
+        this(new String(value));
+    }
 
-    OscString(String value) {
+    public OscString(String value) {
         setValue(value);
     }
 
@@ -49,7 +53,7 @@ public class OscString implements OscArgument {
     public static OscString parse(byte[] data, int offset, int len) throws OscException {
         for (int i = offset; i < len; ++i) {
             if (data[i] == 0) {
-                return new OscString().setValue(new String(data, offset, i-offset));
+                return new OscString(new String(data, offset, i-offset));
             }
         }
         throw new OscMalformedDataException("OscString has no terminating null character", data, offset, len);
@@ -58,5 +62,33 @@ public class OscString implements OscArgument {
     @Override
     public char getTypeTag() {
         return OscTypeTag.STRING;
+    }
+
+    @Override
+    public String toString() {
+        return this.value;
+    }
+
+    public void serialize(ByteBuffer buffer) {
+        byte[] bytes = this.value.getBytes();
+        buffer.put(bytes);
+        for (int i = bytes.length; i < this.byteLength; ++i) {
+            buffer.put((byte) 0);
+        }
+    }
+
+    @Override
+    public int toInt() {
+        return Integer.parseInt(this.value);
+    }
+
+    @Override
+    public float toFloat() {
+        return Float.parseFloat(this.value);
+    }
+
+    @Override
+    public double toDouble() {
+        return Double.parseDouble(this.value);
     }
 }

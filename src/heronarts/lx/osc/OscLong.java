@@ -18,6 +18,8 @@
 
 package heronarts.lx.osc;
 
+import java.nio.ByteBuffer;
+
 public class OscLong implements OscArgument {
 
     private long value = 0;
@@ -44,5 +46,30 @@ public class OscLong implements OscArgument {
     @Override
     public char getTypeTag() {
         return OscTypeTag.LONG;
+    }
+
+    @Override
+    public String toString() {
+        return Long.toString(this.value);
+    }
+
+    @Override
+    public void serialize(ByteBuffer buffer) {
+        buffer.putLong(this.value);
+    }
+
+    @Override
+    public int toInt() {
+        return (int) this.value;
+    }
+
+    @Override
+    public float toFloat() {
+        return this.value;
+    }
+
+    @Override
+    public double toDouble() {
+        return this.value;
     }
 }

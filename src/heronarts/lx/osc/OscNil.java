@@ -23,4 +23,20 @@ public class OscNil extends OscSentinel {
     @Override
     public char getTypeTag() {
         return OscTypeTag.NIL;
-    }}
+    }
+
+    @Override
+    public int toInt() {
+        return 0;
+    }
+
+    @Override
+    public float toFloat() {
+        return 0;
+    }
+
+    @Override
+    public double toDouble() {
+        return 0;
+    }
+}

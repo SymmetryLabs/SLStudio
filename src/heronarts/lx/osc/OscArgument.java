@@ -18,6 +18,8 @@
 
 package heronarts.lx.osc;
 
+import java.nio.ByteBuffer;
+
 public interface OscArgument {
     /**
      * Gets the number of bytes used by this argument uses in its encoded representation.
@@ -32,4 +34,23 @@ public interface OscArgument {
      * @return Type-tag character for this argument
      */
     public char getTypeTag();
+
+    /**
+     * Serializes this argument to a buffer
+     *
+     * @param buffer ByteByffer to write to
+     */
+    public void serialize(ByteBuffer buffer);
+
+    /**
+     * Gets an integer value of this argument
+     *
+     * @return Integer value of this argument
+     */
+    public int toInt();
+
+    public float toFloat();
+
+    public double toDouble();
+
 }

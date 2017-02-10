@@ -26,7 +26,7 @@ import heronarts.lx.transition.LXTransition;
 
 /**
  * A pattern is the core object that the animation engine uses to generate
- * colors for all the points. It is
+ * colors for all the points.
  */
 public abstract class LXPattern extends LXBufferedComponent {
 
@@ -39,6 +39,8 @@ public abstract class LXPattern extends LXBufferedComponent {
      * Transition used when this pattern becomes active.
      */
     protected LXTransition transition = null;
+
+    private String name;
 
     private int intervalBegin = -1;
 
@@ -54,6 +56,13 @@ public abstract class LXPattern extends LXBufferedComponent {
 
     protected LXPattern(LX lx) {
         super(lx);
+
+        String simple= getClass().getSimpleName();
+        int index = simple.indexOf("Pattern");
+        if (index >= 0) {
+            simple = simple.substring(0, index);
+        }
+        this.name = simple;
     }
 
     /**
@@ -63,12 +72,18 @@ public abstract class LXPattern extends LXBufferedComponent {
      */
     @Override
     public String getName() {
-        String simple = getClass().getSimpleName();
-        int index = simple.indexOf("Pattern");
-        if (index >= 0) {
-            simple = simple.substring(0, index);
-        }
-        return simple;
+        return this.name;
+    }
+
+    /**
+     * Sets the display name to be used for this pattern.
+     *
+     * @param name
+     * @return This
+     */
+    public LXPattern setName(String name) {
+        this.name = name;
+        return this;
     }
 
     /**

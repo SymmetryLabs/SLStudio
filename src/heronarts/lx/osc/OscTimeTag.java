@@ -19,6 +19,9 @@
 package heronarts.lx.osc;
 
 public class OscTimeTag extends OscLong {
+
+    public final static long NOW = 1;
+
     public OscTimeTag(long time) {
         super(time);
     }

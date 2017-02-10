@@ -18,6 +18,8 @@
 
 package heronarts.lx.osc;
 
+import java.nio.ByteBuffer;
+
 public class OscBlob implements OscArgument {
     private int byteLength;
     private byte[] data;
@@ -49,5 +51,34 @@ public class OscBlob implements OscArgument {
     @Override
     public char getTypeTag() {
         return OscTypeTag.BLOB;
+    }
+
+    @Override
+    public String toString() {
+        return "<" + data.length + "-byte blob>";
+    }
+
+    @Override
+    public void serialize(ByteBuffer buffer) {
+        buffer.putInt(this.byteLength);
+        buffer.put(this.data);
+        for (int i = this.data.length; i < this.byteLength; ++i) {
+            buffer.put((byte) 0);
+        }
+    }
+
+    @Override
+    public int toInt() {
+        return 0;
+    }
+
+    @Override
+    public float toFloat() {
+        return 0;
+    }
+
+    @Override
+    public double toDouble() {
+        return 0;
     }
 }

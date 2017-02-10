@@ -18,8 +18,13 @@
 
 package heronarts.lx.osc;
 
+import java.nio.ByteBuffer;
+
 public abstract class OscSentinel implements OscArgument {
     public int getByteLength() {
         return 0;
     }
+
+    @Override
+    public void serialize(ByteBuffer buffer) {}
 }

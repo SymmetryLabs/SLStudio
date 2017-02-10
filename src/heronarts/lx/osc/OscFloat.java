@@ -18,6 +18,8 @@
 
 package heronarts.lx.osc;
 
+import java.nio.ByteBuffer;
+
 public class OscFloat implements OscArgument {
 
     private float value;
@@ -42,5 +44,30 @@ public class OscFloat implements OscArgument {
     @Override
     public char getTypeTag() {
         return OscTypeTag.FLOAT;
+    }
+
+    @Override
+    public String toString() {
+        return Float.toString(this.value);
+    }
+
+    @Override
+    public void serialize(ByteBuffer buffer) {
+        buffer.putFloat(this.value);
+    }
+
+    @Override
+    public int toInt() {
+        return (int) this.value;
+    }
+
+    @Override
+    public float toFloat() {
+        return this.value;
+    }
+
+    @Override
+    public double toDouble() {
+        return this.value;
     }
 }

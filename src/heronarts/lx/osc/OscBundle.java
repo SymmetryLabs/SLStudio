@@ -18,22 +18,23 @@
 
 package heronarts.lx.osc;
 
+import java.net.InetAddress;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
-public class OscBundle extends OscPacket {
+public class OscBundle extends OscPacket implements Iterable<OscMessage> {
 
     private final static byte[] BUNDLE_HEADER = {
         '#', 'b', 'u', 'n', 'd', 'l', 'e', 0
     };
 
-    private long timeTag;
-    private List<OscPacket> elements;
+    private long timeTag = OscTimeTag.NOW;
 
-    public OscBundle() {
-        this.elements = new ArrayList<OscPacket>();
-    }
+    private final List<OscPacket> elements = new ArrayList<OscPacket>();
+
+    public OscBundle() {}
 
     public List<OscPacket> getElements() {
         return this.elements;
@@ -53,7 +54,7 @@ public class OscBundle extends OscPacket {
         return this;
     }
 
-    public static OscBundle parse(byte[] data, int offset, int len) throws OscException {
+    public static OscBundle parse(InetAddress source, byte[] data, int offset, int len) throws OscException {
         for (int i = 0; i < BUNDLE_HEADER.length; ++i) {
             if (data[offset+i] != BUNDLE_HEADER[i]) {
                 throw new OscMalformedDataException("Missing #bundle header in OscBundle", data, offset, len);
@@ -67,9 +68,49 @@ public class OscBundle extends OscPacket {
         while (offset < len) {
             int packetLength = buffer.getInt(offset);
             offset += 4;
-            bundle.addElement(OscPacket.parse(data, offset, offset + packetLength));
+            bundle.addElement(OscPacket.parse(source, data, offset, offset + packetLength));
             offset += packetLength;
         }
         return bundle;
+    }
+
+    @Override
+    public Iterator<OscMessage> iterator() {
+        List<OscMessage> messages = new ArrayList<OscMessage>(this.elements.size());
+        flattenMessages(messages, this);
+        return messages.iterator();
+    }
+
+    private static void flattenMessages(List<OscMessage> messages, OscBundle bundle) {
+        for (int i = 0; i < bundle.elements.size(); ++i) {
+            OscPacket element = bundle.elements.get(i);
+            if (element instanceof OscMessage) {
+                messages.add((OscMessage) element);
+            } else if (element instanceof OscBundle) {
+                flattenMessages(messages, (OscBundle) element);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        StringBuilder sb = new StringBuilder();
+        for (OscMessage message : this) {
+            sb.append(message.toString());
+            sb.append('\n');
+        }
+        return sb.toString();
+    }
+
+    @Override
+    void serialize(ByteBuffer buffer) {
+        buffer.put(BUNDLE_HEADER);
+        buffer.putLong(this.timeTag);
+        for (OscPacket packet : this.elements) {
+            int sizePosition = buffer.position();
+            buffer.position(sizePosition + 4);
+            packet.serialize(buffer);
+            buffer.putInt(sizePosition, buffer.position() - sizePosition + 4);
+        }
     }
 }
