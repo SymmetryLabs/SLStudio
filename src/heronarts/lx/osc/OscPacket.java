@@ -22,7 +22,7 @@ import java.net.DatagramPacket;
 
 public abstract class OscPacket {
 
-    static OscPacket parse(byte[] data, int offset, int len) throws OscException {
+    public static OscPacket parse(byte[] data, int offset, int len) throws OscException {
         if (data == null) {
             throw new IllegalArgumentException();
         }
@@ -38,11 +38,11 @@ public abstract class OscPacket {
         }
     }
 
-    static OscPacket parse(byte[] data, int len) throws OscException {
+    public static OscPacket parse(byte[] data, int len) throws OscException {
         return OscPacket.parse(data, 0, len);
     }
 
-    static OscPacket parse(DatagramPacket datagram) throws OscException {
+    public static OscPacket parse(DatagramPacket datagram) throws OscException {
         return OscPacket.parse(datagram.getData(), datagram.getLength());
     }
 }

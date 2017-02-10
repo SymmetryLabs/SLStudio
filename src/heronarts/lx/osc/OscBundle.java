@@ -29,18 +29,18 @@ public class OscBundle extends OscPacket {
     };
 
     private long timeTag;
-    private List<OscMessage> messages;
+    private List<OscPacket> elements;
 
     public OscBundle() {
-        this.messages = new ArrayList<OscMessage>();
+        this.elements = new ArrayList<OscPacket>();
     }
 
-    public List<OscMessage> getMessages() {
-        return this.messages;
+    public List<OscPacket> getElements() {
+        return this.elements;
     }
 
-    public OscBundle addMessage(OscMessage message) {
-        this.messages.add(message);
+    public OscBundle addElement(OscPacket packet) {
+        this.elements.add(packet);
         return this;
     }
 
@@ -65,10 +65,10 @@ public class OscBundle extends OscPacket {
         bundle.setTimeTag(buffer.getLong(offset));
         offset += 8;
         while (offset < len) {
-            int messageLength = buffer.getInt(offset);
+            int packetLength = buffer.getInt(offset);
             offset += 4;
-            bundle.addMessage(OscMessage.parse(data, offset, offset + messageLength));
-            offset += messageLength;
+            bundle.addElement(OscPacket.parse(data, offset, offset + packetLength));
+            offset += packetLength;
         }
         return bundle;
     }

@@ -28,7 +28,7 @@ public class OscMessage extends OscPacket {
 
     private List<OscArgument> arguments;
 
-    OscMessage() {
+    public OscMessage() {
         this.arguments = new ArrayList<OscArgument>();
     }
 
