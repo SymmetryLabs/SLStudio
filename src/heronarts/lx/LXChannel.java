@@ -25,6 +25,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.DissolveTransition;
@@ -101,17 +102,19 @@ public class LXChannel extends LXComponent {
     /**
      * This channel bypasses the crossfader
      */
-    public static final int CROSSFADE_GROUP_BYPASS = 0;
+    public static final int CROSSFADE_GROUP_BYPASS = 1;
 
     /**
      * This channel belongs to the left crossfade group
      */
-    public static final int CROSSFADE_GROUP_LEFT = 1;
+    public static final int CROSSFADE_GROUP_LEFT = 0;
 
     /**
      * This channel belongs to the right crossfade group
      */
     public static final int CROSSFADE_GROUP_RIGHT = 2;
+
+    public static final String[] CROSSFADE_OPTIONS = { "A", "X", "B" };
 
     private final LX lx;
 
@@ -121,6 +124,11 @@ public class LXChannel extends LXComponent {
     private int index;
 
     /**
+     * The symbolic name of this channel.
+     */
+    public final StringParameter name;
+
+    /**
      * Whether this channel is enabled.
      */
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
@@ -128,7 +136,7 @@ public class LXChannel extends LXComponent {
     /**
      * Crossfade group this channel belongs to
      */
-    public final DiscreteParameter crossfadeGroup = new DiscreteParameter("GROUP", 3);
+    public final DiscreteParameter crossfadeGroup = new DiscreteParameter("GROUP", CROSSFADE_OPTIONS, CROSSFADE_GROUP_BYPASS);
 
     /**
      * Whether this channel should listen to MIDI events
@@ -173,6 +181,7 @@ public class LXChannel extends LXComponent {
         super(lx);
         this.lx = lx;
         this.index = index;
+        this.name = new StringParameter("Name", "Channel-" + (index+1));
         this.blendBuffer = new ModelBuffer(lx);
         this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();

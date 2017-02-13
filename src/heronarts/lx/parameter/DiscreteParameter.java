@@ -76,6 +76,18 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
         this.options = options;
     }
 
+    /**
+     * Parameter with set of String label values, and a default
+     *
+     * @param label Label
+     * @param options Values
+     * @param value Default index
+     */
+    public DiscreteParameter(String label, String[] options, int value) {
+        this(label, value, 0, options.length);
+        this.options = options;
+    }
+
     @Override
     protected double updateValue(double value) {
         if (value < this.minValue) {
