@@ -29,6 +29,16 @@ public abstract class LXBlend {
         this.lx = lx;
     }
 
+    public final static int NORMAL = 0;
+    public final static int ADD = 1;
+    public final static int MULTIPLY = 2;
+
+    public final static String[] OPTIONS = {
+        "Normal",
+        "Add",
+        "Multiply"
+    };
+
     protected static final int ALPHA_SHIFT = 24;
     protected static final int R_SHIFT = 16;
     protected static final int G_SHIFT = 8;

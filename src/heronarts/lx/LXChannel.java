@@ -18,6 +18,7 @@
 
 package heronarts.lx;
 
+import heronarts.lx.blend.LXBlend;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.LXModel;
@@ -171,6 +172,8 @@ public class LXChannel extends LXComponent {
 
     private LXTransition faderTransition = null;
     private final BoundedParameter fader = new BoundedParameter("FADER", 0);
+
+    public final DiscreteParameter blendMode = new DiscreteParameter("BLEND", LXBlend.OPTIONS);
 
     private LXTransition transition = null;
     private long transitionMillis = 0;
