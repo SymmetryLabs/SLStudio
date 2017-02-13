@@ -62,11 +62,25 @@ public class UILabel extends UI2dTextComponent {
         return this;
     }
 
+    /**
+     * Sets the alignment of the label using PConstants
+     * values LEFT/CENTER/RIGHT
+     *
+     * @param horizontalAlignment
+     * @return this
+     */
     public UILabel setAlignment(int horizontalAlignment) {
         setAlignment(horizontalAlignment, PConstants.BASELINE);
         return this;
     }
 
+    /**
+     * Sets the alignment of the label using PConstants values
+     * LEFT/CENTER/RIGHT and TOP/CENTER/BOTTOM/BASELINE
+     *
+     * @param horizontalAlignment
+     * @return this
+     */
     public UILabel setAlignment(int horizontalAlignment, int verticalAlignment) {
         if ((this.horizontalAlignment != horizontalAlignment)
                 || (this.verticalAlignment != verticalAlignment)) {

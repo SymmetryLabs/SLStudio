@@ -172,7 +172,7 @@ public abstract class UIParameterControl extends UI2dComponent implements
         pg.rect(0, this.height - LABEL_HEIGHT, this.width, LABEL_HEIGHT);
         pg.fill(ui.theme.getControlTextColor());
         pg.textAlign(PConstants.CENTER);
-        pg.textFont(ui.theme.getLabelFont());
+        pg.textFont(ui.theme.getControlFont());
 
         while (pg.textWidth(labelText) > (this.width - TEXT_MARGIN)) {
             labelText = labelText.substring(0, labelText.length() - 1);

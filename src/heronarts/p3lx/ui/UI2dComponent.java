@@ -62,6 +62,8 @@ public abstract class UI2dComponent extends UIObject {
 
     private int borderWeight = 1;
 
+    private int borderRounding = 0;
+
     boolean needsRedraw = true;
 
     boolean childNeedsRedraw = true;
@@ -309,6 +311,14 @@ public abstract class UI2dComponent extends UIObject {
         return this;
     }
 
+    public UI2dComponent setBorderRounding(int borderRounding) {
+        if (this.borderRounding != borderRounding) {
+            this.borderRounding = borderRounding;
+            redraw();
+        }
+        return this;
+    }
+
     /**
      * Removes this components from the container is is held by
      *
@@ -398,6 +408,7 @@ public abstract class UI2dComponent extends UIObject {
             return;
         }
         boolean needsBorder = this.needsRedraw || this.childNeedsRedraw;
+        boolean childBackground = this.hasBackground && !this.needsRedraw;
         if (this.needsRedraw) {
             this.needsRedraw = false;
             drawBackground(ui, pg);
@@ -410,7 +421,12 @@ public abstract class UI2dComponent extends UIObject {
             pg.translate(sx, sy);
             for (UIObject childObject : this.children) {
                 UI2dComponent child = (UI2dComponent) childObject;
-                if (this.needsRedraw || child.needsRedraw || child.childNeedsRedraw) {
+                if (child.needsRedraw || child.childNeedsRedraw) {
+                    if (childBackground && child.needsRedraw) {
+                        pg.noStroke();
+                        pg.fill(this.backgroundColor);
+                        pg.rect(child.x, child.y, child.width, child.height);
+                    }
                     float cx = child.x;
                     float cy = child.y;
                     pg.translate(cx, cy);
@@ -429,7 +445,7 @@ public abstract class UI2dComponent extends UIObject {
         if (this.hasBackground) {
             pg.noStroke();
             pg.fill(this.backgroundColor);
-            pg.rect(0, 0, width, height);
+            pg.rect(0, 0, width, height, this.borderRounding);
         }
     }
 
@@ -439,7 +455,7 @@ public abstract class UI2dComponent extends UIObject {
             pg.strokeWeight(border);
             pg.stroke(this.borderColor);
             pg.noFill();
-            pg.rect(border / 2, border / 2, this.width - border, this.height - border);
+            pg.rect(border / 2, border / 2, this.width - border, this.height - border, this.borderRounding);
 
             // Reset stroke weight
             pg.strokeWeight(1);

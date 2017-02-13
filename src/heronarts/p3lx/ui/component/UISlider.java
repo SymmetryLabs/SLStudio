@@ -39,6 +39,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
     private final Direction direction;
 
     private static final float HANDLE_WIDTH = 12;
+    private static final int HANDLE_ROUNDING = 4;
     private static final float PADDING = 2;
     private static final float GROOVE = 4;
 
@@ -54,7 +55,6 @@ public class UISlider extends UIParameterControl implements UIFocus {
 
     public UISlider(Direction direction, float x, float y, float w, float h) {
         super(x, y, w, h);
-        setBackgroundColor(UI.get().theme.getWindowBackgroundColor());
         this.direction = direction;
         this.handleHeight = h;
     }
@@ -71,7 +71,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.fill(ui.theme.getControlDisabledColor());
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect((int) (PADDING + getNormalized() * (this.width - 2*PADDING - HANDLE_WIDTH)), PADDING,
-                    HANDLE_WIDTH, this.handleHeight - 2*PADDING);
+                    HANDLE_WIDTH, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
             break;
         case VERTICAL:
             pg.rect(this.width / 2 - GROOVE/2, PADDING, GROOVE, this.handleHeight - 2*PADDING);
@@ -81,7 +81,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.fill(ui.theme.getControlDisabledColor());
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect(PADDING, (int) (PADDING + (1 - getNormalized())
-                    * (this.handleHeight - 2*PADDING - HANDLE_WIDTH)), this.width - 2*PADDING, HANDLE_WIDTH);
+                    * (this.handleHeight - 2*PADDING - HANDLE_WIDTH)), this.width - 2*PADDING, HANDLE_WIDTH, HANDLE_ROUNDING);
             break;
         }
 

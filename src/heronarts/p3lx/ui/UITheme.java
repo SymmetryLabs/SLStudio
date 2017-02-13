@@ -48,8 +48,8 @@ public class UITheme {
     private int controlDisabledColor = 0xff666666;
 
     UITheme(PApplet applet) {
-        this.controlFont = applet.createFont("Lucida Grande", 11);
-        this.setLabelFont(this.windowTitleFont = applet.createFont("Myriad Pro", 10));
+        this.controlFont = applet.createFont("Arial", 10);
+        this.setLabelFont(this.windowTitleFont = applet.createFont("Arial-Black", 9));
     }
 
     /**

@@ -206,6 +206,16 @@ public class UI {
     public final int WHITE = 0xffffffff;
 
     /**
+     * Width of the UI
+     */
+    public final int width;
+
+    /**
+     * Height of the UI
+     */
+    public final int height;
+
+    /**
      * Black color
      */
     public final int BLACK = 0xff000000;
@@ -226,6 +236,8 @@ public class UI {
     private UI(PApplet applet, P3LX lx) {
         this.lx = lx;
         this.applet = applet;
+        this.width = lx.applet.width;
+        this.height = lx.applet.height;
         this.theme = new UITheme(applet);
         this.root = new UIRoot();
         applet.registerMethod("draw", this);

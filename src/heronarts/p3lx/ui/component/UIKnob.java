@@ -55,15 +55,10 @@ public class UIKnob extends UIParameterControl implements UIFocus {
 
         pg.ellipseMode(PConstants.CENTER);
 
-        pg.noStroke();
-        pg.fill(ui.theme.getWindowBackgroundColor());
-        pg.rect(0, 0, KNOB_SIZE, KNOB_SIZE);
-
         // Full outer dark ring
         int arcCenter = KNOB_SIZE / 2;
         float arcStart = PConstants.HALF_PI + KNOB_INDENT;
         float arcRange = (PConstants.TWO_PI - 2 * KNOB_INDENT);
-
         pg.fill(ui.theme.getControlBackgroundColor());
         pg.stroke(ui.theme.getWindowBackgroundColor());
         pg.arc(arcCenter, arcCenter, KNOB_SIZE, KNOB_SIZE, arcStart,
