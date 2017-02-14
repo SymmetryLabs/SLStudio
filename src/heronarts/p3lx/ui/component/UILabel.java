@@ -25,7 +25,7 @@
 package heronarts.p3lx.ui.component;
 
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dTextComponent;
+import heronarts.p3lx.ui.UI2dComponent;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -33,7 +33,7 @@ import processing.core.PGraphics;
  * A simple text label object. Draws a string aligned top-left to its x-y
  * position.
  */
-public class UILabel extends UI2dTextComponent {
+public class UILabel extends UI2dComponent {
 
     private int horizontalAlignment = PConstants.LEFT;
 

@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PFont;
 import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -203,7 +204,7 @@ public class UI {
     /**
      * White color
      */
-    public final int WHITE = 0xffffffff;
+    public final static int WHITE = 0xffffffff;
 
     /**
      * Width of the UI
@@ -218,7 +219,7 @@ public class UI {
     /**
      * Black color
      */
-    public final int BLACK = 0xff000000;
+    public final static int BLACK = 0xff000000;
 
     public UI(P3LX lx) {
         this(lx.applet, lx);
@@ -308,6 +309,17 @@ public class UI {
         this.root.children.remove(layer);
         this.root.children.add(layer);
         return this;
+    }
+
+    /**
+     * Create a new font
+     *
+     * @param font Font name
+     * @param size Font size
+     * @return PFont object
+     */
+    public PFont createFont(String font, int size) {
+        return this.applet.createFont(font, size);
     }
 
     void redraw(UI2dComponent object) {
@@ -400,6 +412,9 @@ public class UI {
             this.root.mouseDragged(mouseEvent, mx, my, mx - this.pmx, my - this.pmy);
             this.pmx = mx;
             this.pmy = my;
+            break;
+        case processing.event.MouseEvent.MOVE:
+            this.root.mouseMoved(mouseEvent, mouseEvent.getX(), mouseEvent.getY());
             break;
         }
     }

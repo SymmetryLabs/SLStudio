@@ -287,6 +287,17 @@ public abstract class UIObject {
         onMouseDragged(mouseEvent, mx, my, dx, dy);
     }
 
+    void mouseMoved(MouseEvent mouseEvent, float mx, float my) {
+        for (int i = this.children.size() - 1; i >= 0; --i) {
+            UIObject child = this.children.get(i);
+            if (child.isVisible() && child.contains(mx, my)) {
+                child.mouseMoved(mouseEvent, mx - child.getX(), my - child.getY());
+                break;
+            }
+        }
+        onMouseMoved(mouseEvent, mx, my);
+    }
+
     void mouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
@@ -337,6 +348,9 @@ public abstract class UIObject {
     }
 
     protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+    }
+
+    protected void onMouseMoved(MouseEvent mouseEvent, float mx, float my) {
     }
 
     protected void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {

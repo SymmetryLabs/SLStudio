@@ -24,6 +24,8 @@
 
 package heronarts.p3lx.ui;
 
+import processing.core.PConstants;
+import processing.core.PFont;
 import processing.core.PGraphics;
 
 public abstract class UI2dComponent extends UIObject {
@@ -63,6 +65,16 @@ public abstract class UI2dComponent extends UIObject {
     private int borderWeight = 1;
 
     private int borderRounding = 0;
+
+    private PFont font = null;
+
+    private boolean hasFontColor = false;
+
+    private int fontColor = 0xff000000;
+
+    protected int textAlignHorizontal = PConstants.LEFT;
+
+    protected int textAlignVertical = PConstants.BASELINE;
 
     boolean needsRedraw = true;
 
@@ -320,6 +332,115 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Whether a font is set on this object
+     *
+     * @return true or false
+     */
+    public boolean hasFont() {
+        return this.font != null;
+    }
+
+    /**
+     * Get default font, may be null
+     *
+     * @return The default font, or null
+     */
+    public PFont getFont() {
+        return this.font;
+    }
+
+    /**
+     * Sets the default font for this object to use, null indicates component may
+     * use its own default behavior.
+     *
+     * @param font Font
+     * @return this
+     */
+    public UI2dComponent setFont(PFont font) {
+        if (this.font != font) {
+            this.font = font;
+            redraw();
+        }
+        return this;
+    }
+
+    /**
+     * Whether this object has a specific color
+     *
+     * @return true or false
+     */
+    public boolean hasFontColor() {
+        return this.hasFontColor;
+    }
+
+    /**
+     * The font color, if there is a color specified
+     *
+     * @return color
+     */
+    public int getFontColor() {
+        return this.fontColor;
+    }
+
+    /**
+     * Sets whether the object has a font color
+     *
+     * @param hasFontColor true or false
+     * @return this
+     */
+    public UI2dComponent setFontColor(boolean hasFontColor) {
+        if (this.hasFontColor != hasFontColor) {
+            this.hasFontColor = hasFontColor;
+            redraw();
+        }
+        return this;
+    }
+
+    /**
+     * Sets a font color
+     *
+     * @param fontColor color
+     * @return this
+     */
+    public UI2dComponent setFontColor(int fontColor) {
+        if (!this.hasFontColor|| (this.fontColor != fontColor)) {
+            this.hasFontColor = true;
+            this.fontColor = fontColor;
+            redraw();
+        }
+        return this;
+    }
+
+    /**
+     * Sets the text alignment
+     *
+     * @param horizontalAlignment From PConstants LEFT/RIGHT/CENTER
+     * @return this
+     */
+    public UI2dComponent setTextAlignment(int horizontalAlignment) {
+        return setTextAlignment(horizontalAlignment, this.textAlignVertical);
+    }
+
+    /**
+     * Sets the text alignment of this component
+     *
+     * @param horizontalAlignment From PConstants LEFT/RIGHT/CENTER
+     * @param verticalAlignment From PConstants TOP/BOTTOM/BASELINE/CENTER
+     * @return
+     */
+    public UI2dComponent setTextAlignment(int horizontalAlignment, int verticalAlignment) {
+        boolean changed =
+            (this.textAlignHorizontal != horizontalAlignment) ||
+            (this.textAlignVertical != verticalAlignment);
+        this.textAlignHorizontal = horizontalAlignment;
+        this.textAlignVertical = verticalAlignment;
+        if (changed) {
+            redraw();
+        }
+        return this;
+    }
+
+    /**
      * Removes this components from the container is is held by
      *
      * @return this
@@ -470,13 +591,22 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Focus size for hashes drawn on the outline of the object. May be overridden.
+     *
+     * @return Focus hash line size
+     */
+    protected int getFocusSize() {
+        return (int) Math.min(8, Math.min(this.width, this.height) / 8);
+    }
+
+    /**
      * Draws focus on this object. May be overridden by subclasses.
      *
      * @param ui UI
      * @param pg PGraphics
      */
     protected void drawFocus(UI ui, PGraphics pg) {
-        int focusSize = (int) Math.min(8, Math.min(this.width, this.height) / 8);
+        int focusSize = getFocusSize();
         pg.stroke(getFocusColor(ui));
         pg.noFill();
         // Top left

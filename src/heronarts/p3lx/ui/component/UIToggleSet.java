@@ -29,14 +29,14 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
-import heronarts.p3lx.ui.UI2dTextComponent;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIToggleSet extends UI2dTextComponent implements UIFocus, LXParameterListener {
+public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterListener {
 
     private String[] options = null;
 
@@ -188,7 +188,7 @@ public class UIToggleSet extends UI2dTextComponent implements UIFocus, LXParamet
                 pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 1,
                         this.height - 1);
             }
-            pg.fill(isActive ? ui.WHITE : ui.theme.getControlTextColor());
+            pg.fill(isActive ? UI.WHITE : ui.theme.getControlTextColor());
             pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f,
                     (int) ((this.height / 2) - 2));
             leftBoundary = this.boundaries[i];

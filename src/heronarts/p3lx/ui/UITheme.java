@@ -34,7 +34,7 @@ public class UITheme {
 
     private PFont windowTitleFont;
     private int windowTitleColor = 0xff999999;
-    private int windowBackgroundColor = 0xff444444;
+    private int windowBackgroundColor = 0xff404040;
     private int windowBorderColor = 0xff292929;
 
     private int focusColor = 0xff669966;
@@ -43,7 +43,7 @@ public class UITheme {
 
     private PFont controlFont;
     private int controlBackgroundColor = 0xff222222;
-    private int controlBorderColor = 0xff444444;
+    private int controlBorderColor = 0xff494949;
     private int controlTextColor = 0xff999999;
     private int controlDisabledColor = 0xff666666;
 

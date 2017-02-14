@@ -30,9 +30,8 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
-import heronarts.p3lx.ui.UI2dTextComponent;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +43,7 @@ import processing.event.MouseEvent;
 /**
  * UI for a list of state items
  */
-public class UIItemList extends UI2dTextComponent implements UIFocus {
+public class UIItemList extends UI2dComponent implements UIFocus {
 
     public static interface Item {
 
@@ -146,13 +145,13 @@ public class UIItemList extends UI2dTextComponent implements UIFocus {
             int itemColor;
             int labelColor;
             if (item.isSelected()) {
-                labelColor = ui.WHITE;
+                labelColor = UI.WHITE;
                 itemColor = ui.theme.getPrimaryColor();
             } else if (item.isPending()) {
                 labelColor = 0xfff0f0f0;
                 itemColor = ui.theme.getSecondaryColor();
             } else {
-                labelColor = ui.BLACK;
+                labelColor = UI.BLACK;
                 itemColor = ui.theme.getControlDisabledColor();
             }
             float factor = even ? .92f : 1.08f;

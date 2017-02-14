@@ -68,7 +68,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.rect(PADDING, this.handleHeight / 2 - GROOVE/2, this.width - 2*PADDING, GROOVE);
             pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
             pg.rect(PADDING, this.handleHeight / 2 - GROOVE/2, (int) ((this.width - 2*PADDING) * getNormalized()), GROOVE);
-            pg.fill(ui.theme.getControlDisabledColor());
+            pg.fill(0xff5a5a5a);
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect((int) (PADDING + getNormalized() * (this.width - 2*PADDING - HANDLE_WIDTH)), PADDING,
                     HANDLE_WIDTH, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
@@ -78,7 +78,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
             int fillSize = (int) (getNormalized() * (this.handleHeight - 2*PADDING));
             pg.rect(this.width / 2 - GROOVE/2, this.handleHeight - PADDING - fillSize, GROOVE, fillSize);
-            pg.fill(ui.theme.getControlDisabledColor());
+            pg.fill(0xff5a5a5a);
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect(PADDING, (int) (PADDING + (1 - getNormalized())
                     * (this.handleHeight - 2*PADDING - HANDLE_WIDTH)), this.width - 2*PADDING, HANDLE_WIDTH, HANDLE_ROUNDING);

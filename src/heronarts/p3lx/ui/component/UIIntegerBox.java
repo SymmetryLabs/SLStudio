@@ -29,14 +29,14 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
-import heronarts.p3lx.ui.UI2dTextComponent;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIIntegerBox extends UI2dTextComponent implements UIFocus {
+public class UIIntegerBox extends UI2dComponent implements UIFocus {
 
     private int minValue = 0;
     private int maxValue = PConstants.MAX_INT;

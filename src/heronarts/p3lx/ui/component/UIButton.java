@@ -28,14 +28,14 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
-import heronarts.p3lx.ui.UI2dTextComponent;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIButton extends UI2dTextComponent implements UIFocus {
+public class UIButton extends UI2dComponent implements UIFocus {
 
     protected boolean active = false;
     protected boolean isMomentary = false;
@@ -90,10 +90,15 @@ public class UIButton extends UI2dTextComponent implements UIFocus {
     protected void onDraw(UI ui, PGraphics pg) {
         String label = this.active ? this.activeLabel : this.inactiveLabel;
         if ((label != null) && (label.length() > 0)) {
-            pg.fill(this.active ? 0xffffffff : getFontColor());
+            pg.fill(this.active ? UI.WHITE : getFontColor());
             pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-            pg.textAlign(PConstants.CENTER);
-            pg.text(label, this.width / 2, (int) (this.height * .75));
+            if (this.textAlignVertical == PConstants.CENTER) {
+                pg.textAlign(PConstants.CENTER, PConstants.CENTER);
+                pg.text(label, this.width / 2, this.height / 2 - 2);
+            } else {
+                pg.textAlign(PConstants.CENTER);
+                pg.text(label, this.width / 2, (int) (this.height * .75));
+            }
         }
     }
 
