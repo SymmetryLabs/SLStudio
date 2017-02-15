@@ -122,6 +122,21 @@ public class LXModel implements LXFixture {
     public final float zRange;
 
     /**
+     * Smallest radius from origin
+     */
+    public final float rMin;
+
+    /**
+     * Greatest radius from origin
+     */
+    public final float rMax;
+
+    /**
+     * Range of radial values
+     */
+    public final float rRange;
+
+    /**
      * Constructs a null model with no points
      */
     public LXModel() {
@@ -166,7 +181,7 @@ public class LXModel implements LXFixture {
         this.fixtures = Collections.unmodifiableList(_fixtures);
 
         float _ax = 0, _ay = 0, _az = 0;
-        float _xMin = 0, _xMax = 0, _yMin = 0, _yMax = 0, _zMin = 0, _zMax = 0;
+        float _xMin = 0, _xMax = 0, _yMin = 0, _yMax = 0, _zMin = 0, _zMax = 0, _rMin = 0, _rMax = 0;
 
         boolean firstPoint = true;
         for (LXPoint p : this.points) {
@@ -177,6 +192,7 @@ public class LXModel implements LXFixture {
                 _xMin = _xMax = p.x;
                 _yMin = _yMax = p.y;
                 _zMin = _zMax = p.z;
+                _rMin = _rMax = p.r;
             } else {
                 if (p.x < _xMin)
                     _xMin = p.x;
@@ -190,6 +206,10 @@ public class LXModel implements LXFixture {
                     _zMin = p.z;
                 if (p.z > _zMax)
                     _zMax = p.z;
+                if (p.r < _rMin)
+                    _rMin = p.r;
+                if (p.r > _rMax)
+                    _rMax = p.r;
             }
             firstPoint = false;
         }
@@ -205,6 +225,9 @@ public class LXModel implements LXFixture {
         this.zMin = _zMin;
         this.zMax = _zMax;
         this.zRange = _zMax - _zMin;
+        this.rMin = _rMin;
+        this.rMax = _rMax;
+        this.rRange = _rMax - _rMin;
         this.cx = xMin + xRange / 2.f;
         this.cy = yMin + yRange / 2.f;
         this.cz = zMin + zRange / 2.f;

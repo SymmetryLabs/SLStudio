@@ -57,10 +57,9 @@ public abstract class LXPattern extends LXBufferedComponent {
     protected LXPattern(LX lx) {
         super(lx);
 
-        String simple= getClass().getSimpleName();
-        int index = simple.indexOf("Pattern");
-        if (index >= 0) {
-            simple = simple.substring(0, index);
+        String simple = getClass().getSimpleName();
+        if (simple.endsWith("Pattern")) {
+            simple = simple.substring(0, simple.length() - "Pattern".length());
         }
         this.name = simple;
     }

@@ -18,6 +18,15 @@
 
 package heronarts.lx;
 
+import heronarts.lx.blend.AddBlend;
+import heronarts.lx.blend.DarkestBlend;
+import heronarts.lx.blend.DifferenceBlend;
+import heronarts.lx.blend.LXBlend;
+import heronarts.lx.blend.LightestBlend;
+import heronarts.lx.blend.MultiplyBlend;
+import heronarts.lx.blend.NormalBlend;
+import heronarts.lx.blend.ScreenBlend;
+import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.modulator.LXModulator;
@@ -26,7 +35,6 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameterized;
-import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.transition.LXTransition;
@@ -67,6 +75,11 @@ public class LXEngine extends LXParameterized {
     public final LXOscEngine oscEngine;
 
     private Dispatch inputDispatch = null;
+
+    /**
+     * The available blend modes
+     */
+    private LXBlend[] blendModes;
 
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
@@ -174,6 +187,8 @@ public class LXEngine extends LXParameterized {
 
     private final DoubleBuffer buffer;
 
+    private final ModelBuffer blendBuffer;
+
     private final int[] blank;
 
     long nowMillis = 0;
@@ -195,8 +210,22 @@ public class LXEngine extends LXParameterized {
         for (int i = 0; i < blank.length; ++i) {
             this.blank[i] = 0;
         }
+        this.blendBuffer = new ModelBuffer(lx);
+
         // Master double-buffer
         this.buffer = new DoubleBuffer();
+
+        // Blend modes
+        this.blendModes = new LXBlend[] {
+            new NormalBlend(lx),
+            new AddBlend(lx),
+            new MultiplyBlend(lx),
+            new ScreenBlend(lx),
+            new SubtractBlend(lx),
+            new DifferenceBlend(lx),
+            new LightestBlend(lx),
+            new DarkestBlend(lx)
+        };
 
         // Midi engine
         this.midiEngine = new LXMidiEngine(lx);
@@ -207,16 +236,37 @@ public class LXEngine extends LXParameterized {
         // Default color palette
         addComponent(lx.palette);
 
-        // Add a default channel
-        addChannel(new LXPattern[] { new IteratorTestPattern(lx) });
-        this.channels.get(0).getFader().setValue(1);
-
         // Initialize timer
         this.lastMillis = INIT_RUN;
     }
 
     public LXEngine setInputDispatch(Dispatch inputDispatch) {
         this.inputDispatch = inputDispatch;
+        return this;
+    }
+
+    /**
+     * Gets the available blend modes
+     *
+     * @return Blend modes
+     */
+    public LXBlend[] getBlendModes() {
+        return this.blendModes;
+    }
+
+    /**
+     * Sets the available blend modes. Must be invoked before the engine
+     * is started or UI is created
+     *
+     * @param blendModes Array of blend instances
+     * @return this
+     */
+    public LXEngine setBlendModes(LXBlend[] blendModes) {
+        // TODO(mcslee): throw exception if engine has already started
+        this.blendModes = blendModes;
+        for (LXChannel channel : this.channels) {
+            channel.blendMode.setRange(blendModes.length);
+        }
         return this;
     }
 
@@ -390,7 +440,7 @@ public class LXEngine extends LXParameterized {
      * @param output Output
      * @return this
      */
-    public synchronized LXEngine addOutput(LXOutput output) {
+    public synchronized LXEngine setOutput(LXOutput output) {
         this.outputs.add(output);
         return this;
     }
@@ -526,31 +576,21 @@ public class LXEngine extends LXParameterized {
 
         // Run and blend all of our channels
         long channelStart = System.nanoTime();
-        int[] bufferColors = this.blank;
+        int[] blendDestination = this.blank;
+        int[] blendOutput = blendBuffer.getArray();
         for (LXChannel channel : this.channels) {
             if (channel.enabled.isOn()) {
                 channel.loop(deltaMs);
+
+                // TODO(mcslee): record blend timing somewhere new
                 channel.getFaderTransition().timer.blendNanos = 0;
 
-                // This optimization assumed that all transitions do
-                // nothing at 0 and completely take over at 1. That's
-                // not always the case. Leaving this here for reference.
-
-                // if (channel.getFader().getValue() == 0) {
-                // // No blending on this channel, leave colors as they were
-                // } else if (channel.getFader().getValue() >= 1) {
-                // // Fully faded in, just use this channel
-                // bufferColors = channel.getColors();
-                // } else {
-
-                // Apply the fader to this channel
-                channel.getFaderTransition().loop(deltaMs);
-                channel.getFaderTransition().blend(
-                    bufferColors,
-                    channel.getColors(),
-                    channel.getFader().getValue()
-                );
-                bufferColors = channel.getFaderTransition().getColors();
+                double alpha = channel.getFader().getValue();
+                if (alpha > 0) {
+                    LXBlend blend = this.blendModes[channel.blendMode.getValuei()];
+                    blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
+                    blendDestination = blendOutput;
+                }
             }
         }
 
@@ -558,7 +598,7 @@ public class LXEngine extends LXParameterized {
 
         // Copy colors into our own rendering buffer
         long copyStart = System.nanoTime();
-        System.arraycopy(bufferColors, 0, this.buffer.render, 0, bufferColors.length);
+        System.arraycopy(blendDestination, 0, this.buffer.render, 0, blendDestination.length);
         this.timer.copyNanos = System.nanoTime() - copyStart;
 
         // Apply effects in our rendering buffer

@@ -18,7 +18,6 @@
 
 package heronarts.lx;
 
-import heronarts.lx.blend.LXBlend;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.LXModel;
@@ -42,6 +41,15 @@ import java.util.List;
  * is blended with the channels before it.
  */
 public class LXChannel extends LXComponent {
+
+    public class Timer extends LXComponent.Timer {
+        public long blendNanos;
+    }
+
+    @Override
+    protected LXComponent.Timer constructTimer() {
+        return new Timer();
+    }
 
     /**
      * Listener interface for objects which want to be notified when the internal
@@ -173,7 +181,7 @@ public class LXChannel extends LXComponent {
     private LXTransition faderTransition = null;
     private final BoundedParameter fader = new BoundedParameter("FADER", 0);
 
-    public final DiscreteParameter blendMode = new DiscreteParameter("BLEND", LXBlend.OPTIONS);
+    public final DiscreteParameter blendMode;
 
     private LXTransition transition = null;
     private long transitionMillis = 0;
@@ -186,6 +194,7 @@ public class LXChannel extends LXComponent {
         this.index = index;
         this.name = new StringParameter("Name", "Channel-" + (index+1));
         this.blendBuffer = new ModelBuffer(lx);
+        this.blendMode = new DiscreteParameter("BLEND", lx.engine.getBlendModes().length);
         this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();
         _updatePatterns(patterns);
@@ -506,7 +515,7 @@ public class LXChannel extends LXComponent {
             System.arraycopy(colors, 0, array, 0, colors.length);
             colors = array;
             for (LXEffect effect : this.effects) {
-                ((LXLayeredComponent)effect).setBuffer(this.blendBuffer);
+                ((LXLayeredComponent) effect).setBuffer(this.blendBuffer);
                 effect.loop(deltaMs);
             }
         }

@@ -29,6 +29,7 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 
@@ -97,17 +98,17 @@ public class LX {
     public final LXModel model;
 
     /**
-     * The default palette.
-     */
-    public final LXPalette palette;
-
-    /**
      * The total number of pixels in the grid, immutable.
      */
     public final int total;
 
     /**
-     * The pattern engine.
+     * The default palette.
+     */
+    public final LXPalette palette;
+
+    /**
+     * The animation engine.
      */
     public final LXEngine engine;
 
@@ -181,7 +182,11 @@ public class LX {
         }
         this.palette = new LXPalette(this);
 
+        // Construct the engine
         this.engine = new LXEngine(this);
+
+        // Add a default channel
+        this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).getFader().setValue(1);
 
         this.baseHue = null;
         this.cycleBaseHue(30000);

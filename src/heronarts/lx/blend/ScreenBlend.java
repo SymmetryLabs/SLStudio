@@ -20,9 +20,9 @@ package heronarts.lx.blend;
 
 import heronarts.lx.LX;
 
-public class AddBlend extends LXBlend {
+public class ScreenBlend extends LXBlend {
 
-    public AddBlend(LX lx) {
+    public ScreenBlend(LX lx) {
         super(lx);
     }
 
@@ -33,14 +33,23 @@ public class AddBlend extends LXBlend {
             int a = (((src[i] >>> ALPHA_SHIFT) * alphaAdjust) >> 8) & 0xff;
 
             int srcAlpha = a + (a >= 0x7F ? 1 : 0);
+            int dstAlpha = 0x100 - srcAlpha;
 
-            int rb = (dst[i] & RB_MASK) + ((src[i] & RB_MASK) * srcAlpha >>> 8 & RB_MASK);
-            int gn = (dst[i] & G_MASK) + ((src[i] & G_MASK) * srcAlpha >>> 8);
+            int dstRb = dst[i] & RB_MASK;
+            int dstGn = dst[i] & G_MASK;
+            int srcGn = src[i] & G_MASK;
+            int dstR = (dst[i] & R_MASK) >> R_SHIFT;
+            int dstB = dst[i] & B_MASK;
+
+            int rbSub = (
+                    (src[i] & R_MASK) * (dstR + 1) |
+                    (src[i] & B_MASK) * (dstB + 1)
+                ) >>> 8 & RB_MASK;
+            int gnSub = srcGn * (dstGn + 0x100) >> G_SHIFT & G_MASK;
 
             output[i] = min((dst[i] >>> ALPHA_SHIFT) + a, 0xff) << ALPHA_SHIFT |
-                min(rb & 0xffff0000, R_MASK) |
-                min(gn & 0x00ffff00, G_MASK) |
-                min(rb & 0x0000ffff, B_MASK);
+                (dstRb * dstAlpha + (dstRb + (src[i] & RB_MASK) - rbSub) * srcAlpha) >>> 8 & RB_MASK |
+                (dstGn * dstAlpha + (dstGn + srcGn - gnSub) * srcAlpha) >>> 8 & G_MASK;
         }
     }
 }

@@ -20,9 +20,9 @@ package heronarts.lx.blend;
 
 import heronarts.lx.LX;
 
-public class AddBlend extends LXBlend {
+public class SubtractBlend extends LXBlend {
 
-    public AddBlend(LX lx) {
+    public SubtractBlend(LX lx) {
         super(lx);
     }
 
@@ -34,13 +34,13 @@ public class AddBlend extends LXBlend {
 
             int srcAlpha = a + (a >= 0x7F ? 1 : 0);
 
-            int rb = (dst[i] & RB_MASK) + ((src[i] & RB_MASK) * srcAlpha >>> 8 & RB_MASK);
-            int gn = (dst[i] & G_MASK) + ((src[i] & G_MASK) * srcAlpha >>> 8);
+            int rb = (src[i] & RB_MASK) * srcAlpha >>> 8;
+            int gn = (src[i] & G_MASK) * srcAlpha >>> 8;
 
             output[i] = min((dst[i] >>> ALPHA_SHIFT) + a, 0xff) << ALPHA_SHIFT |
-                min(rb & 0xffff0000, R_MASK) |
-                min(gn & 0x00ffff00, G_MASK) |
-                min(rb & 0x0000ffff, B_MASK);
+                max((dst[i] & R_MASK) - (rb & R_MASK), 0) |
+                max((dst[i] & G_MASK) - (gn & G_MASK), 0) |
+                max((dst[i] & B_MASK) - (rb & B_MASK), 0);
         }
     }
 }

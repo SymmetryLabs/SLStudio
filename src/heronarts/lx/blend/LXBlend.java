@@ -21,23 +21,14 @@ package heronarts.lx.blend;
 import heronarts.lx.LX;
 import heronarts.lx.LXBuffer;
 
+/**
+ * An LXBlend is a loop-based implementation of a compositing algorithm.
+ * Two color buffers are blended together using some logic, typically
+ * a standard alpha-compositing technique. However, more complex blend
+ * modes may be authored, taking into account position information from
+ * the model, for instance.
+ */
 public abstract class LXBlend {
-
-    public final LX lx;
-
-    protected LXBlend(LX lx) {
-        this.lx = lx;
-    }
-
-    public final static int NORMAL = 0;
-    public final static int ADD = 1;
-    public final static int MULTIPLY = 2;
-
-    public final static String[] OPTIONS = {
-        "Normal",
-        "Add",
-        "Multiply"
-    };
 
     protected static final int ALPHA_SHIFT = 24;
     protected static final int R_SHIFT = 16;
@@ -55,6 +46,40 @@ public abstract class LXBlend {
         return (a > b) ? a : b;
     }
 
+    protected final LX lx;
+
+    private String name;
+
+    protected LXBlend(LX lx) {
+        this.lx = lx;
+
+        String simple = this.getClass().getSimpleName();
+        if (simple.endsWith("Blend")) {
+            simple = simple.substring(0, simple.length() - "Blend".length());
+        }
+        this.name = simple;
+    }
+
+    /**
+     * Sets name of this blend mode
+     *
+     * @param name UI name of blend
+     * @return this
+     */
+    public LXBlend setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Returns the name of this blend, to be shown in UI
+     *
+     * @return Blend name
+     */
+    public String getName() {
+        return this.name;
+    }
+
     public void blend(int[] dst, int[] src, double alpha, LXBuffer buffer) {
         blend(dst, src, alpha, buffer.getArray());
     }
@@ -65,7 +90,7 @@ public abstract class LXBlend {
      * @param dst Destination buffer (lower layer)
      * @param src Source buffer (top layer)
      * @param alpha Alpha blend, from 0-1
-     * @param output Output buffer
+     * @param output Output buffer, may be the same as the destination buffer
      */
     public abstract void blend(int[] dst, int[] src, double alpha, int[] output);
 }
