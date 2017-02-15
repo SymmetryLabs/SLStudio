@@ -45,6 +45,8 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
 
     private int highlight = -1;
 
+    private String[] options;
+
     public UIDropMenu(float x, float y, float w, float h, DiscreteParameter parameter) {
         super(x, y, w, h);
         this.closedHeight = h;
@@ -56,6 +58,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
             this.parameter.removeListener(this);
         }
         this.parameter = parameter;
+        setOptions(this.parameter.getOptions());
         this.parameter.addListener(this);
         return this;
     }
@@ -63,6 +66,17 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
     public void onParameterChanged(LXParameter p) {
         this.highlight = this.parameter.getValuei();
         redraw();
+    }
+
+    /**
+     * Sets the list of string options to display in the menu
+     *
+     * @param options Options array
+     * @return this
+     */
+    public UIDropMenu setOptions(String[] options) {
+        this.options = options;
+        return this;
     }
 
     @Override
@@ -73,9 +87,8 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
     @Override
     public void onDraw(UI ui, PGraphics pg) {
         String text;
-        String[] options = this.parameter.getOptions();
-        if (options != null) {
-            text = options[this.parameter.getValuei()];
+        if (this.options != null) {
+            text = this.options[this.parameter.getValuei()];
         } else {
             text = "" + this.parameter.getValuei();
         }
@@ -99,7 +112,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
         if (this.expanded) {
             int range = this.parameter.getRange();
             for (int i = 0; i < range; ++i) {
-                String label = (options != null) ? options[i] : ("" + i);
+                String label = (this.options != null) ? this.options[i] : ("" + i);
                 pg.fill(i == this.highlight ? 0xff000000 : ui.theme.getControlTextColor());
                 pg.textAlign(PConstants.LEFT, PConstants.TOP);
                 pg.text(label, 4, 2 + this.closedHeight * (i+1));

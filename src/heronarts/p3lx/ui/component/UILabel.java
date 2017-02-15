@@ -39,7 +39,10 @@ public class UILabel extends UI2dComponent {
 
     private int verticalAlignment = PConstants.TOP;
 
-    private int padding = 0;
+    private int topPadding = 0;
+    private int rightPadding = 0;
+    private int leftPadding = 0;
+    private int bottomPadding = 0;
 
     /**
      * Label text
@@ -54,9 +57,55 @@ public class UILabel extends UI2dComponent {
         super(x, y, w, h);
     }
 
+    /**
+     * Sets padding on all 4 sides
+     *
+     * @param padding Padding
+     * @return this
+     */
     public UILabel setPadding(int padding) {
-        if (this.padding != padding) {
-            this.padding = padding;
+        return setPadding(padding, padding, padding, padding);
+    }
+
+    /**
+     * Sets padding on top and sides, CSS style
+     *
+     * @param topBottom Top bottom padding
+     * @param leftRight Left right padding
+     * @return this
+     */
+    public UILabel setPadding(int topBottom, int leftRight) {
+        return setPadding(topBottom, leftRight, topBottom, leftRight);
+    }
+
+    /**
+     * Sets padding on all 4 sides
+     *
+     * @param topPadding Top padding
+     * @param rightPadding Right padding
+     * @param bottomPadding Bottom padding
+     * @param leftPadding Left padding
+     * @return this
+     */
+    public UILabel setPadding(int topPadding, int rightPadding, int bottomPadding, int leftPadding) {
+        boolean redraw = false;
+        if (this.topPadding != topPadding) {
+            this.topPadding = topPadding;
+            redraw = true;
+        }
+        if (this.rightPadding != rightPadding) {
+            this.rightPadding = rightPadding;
+            redraw = true;
+        }
+        if (this.bottomPadding != bottomPadding) {
+            this.bottomPadding = bottomPadding;
+            redraw = true;
+        }
+        if (this.leftPadding != leftPadding) {
+            this.leftPadding = leftPadding;
+            redraw = true;
+        }
+        if (redraw) {
             redraw();
         }
         return this;
@@ -95,21 +144,21 @@ public class UILabel extends UI2dComponent {
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(hasFont() ? getFont() : ui.theme.getLabelFont());
         pg.fill(hasFontColor() ? getFontColor() : ui.theme.getLabelColor());
-        float tx = this.padding, ty = this.padding;
+        float tx = this.leftPadding, ty = this.topPadding;
         switch (this.horizontalAlignment) {
         case PConstants.CENTER:
             tx = this.width / 2;
             break;
         case PConstants.RIGHT:
-            tx = this.width - this.padding;
+            tx = this.width - this.rightPadding;
             break;
         }
         switch (this.verticalAlignment) {
         case PConstants.BASELINE:
-            ty = this.height - this.padding;
+            ty = this.height - this.bottomPadding;
             break;
         case PConstants.BOTTOM:
-            ty = this.height - this.padding;
+            ty = this.height - this.bottomPadding;
             break;
         case PConstants.CENTER:
             ty = this.height / 2;

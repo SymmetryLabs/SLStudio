@@ -357,8 +357,8 @@ public class UI {
         @Override
         public void loop(double deltaMs) {
             // This is invoked on the LXEngine thread, which may be different
-            // from the Processing Animation thread. Events need to be
-            // processed on that thread to avoid threading bugs
+            // from the Processing Animation thread. Events are always
+            // processed on the engine thread to avoid bugs.
             localThreadInputEvents.clear();
             synchronized (eventThreadInputEventQueue) {
                 localThreadInputEvents.addAll(eventThreadInputEventQueue);
@@ -375,6 +375,8 @@ public class UI {
     }
 
     public void mouseEvent(MouseEvent mouseEvent) {
+        // NOTE: this method is invoked from the Processing thread! The LX engine
+        // may be running on a separate thread.
         if (isThreaded()) {
             // NOTE: it's okay that no lock is held here, if threading mode changes
             // right here, the event queue will still be picked up by next iteration
@@ -420,6 +422,8 @@ public class UI {
     }
 
     public void keyEvent(KeyEvent keyEvent) {
+        // NOTE: this method is invoked from the Processing thread! The LX engine
+        // may be running on a separate thread.
         if (isThreaded()) {
             this.eventThreadInputEventQueue.add(keyEvent);
         } else {

@@ -25,7 +25,6 @@
 package heronarts.p3lx.ui.component;
 
 import heronarts.lx.LXUtils;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -151,24 +150,28 @@ public class UIItemList extends UI2dComponent implements UIFocus {
                 labelColor = 0xfff0f0f0;
                 itemColor = ui.theme.getSecondaryColor();
             } else {
-                labelColor = UI.BLACK;
-                itemColor = ui.theme.getControlDisabledColor();
+                labelColor = ui.theme.getControlTextColor();
+                itemColor = ui.theme.getControlBackgroundColor();
             }
-            float factor = even ? .92f : 1.08f;
-            itemColor = LXColor.scaleBrightness(itemColor, factor);
+            // float factor = even ? .92f : 1.08f;
+            // itemColor = LXColor.scaleBrightness(itemColor, factor);
 
             pg.noStroke();
             pg.fill(itemColor);
-            pg.rect(0, yp, this.width, this.itemHeight);
+            pg.rect(0, yp, this.width, this.itemHeight-1);
+
+            pg.stroke(ui.theme.getControlDisabledColor());
+            pg.line(0, yp + this.itemHeight - 1, this.width, yp + this.itemHeight - 1);
+
             pg.fill(labelColor);
             pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
             pg.textAlign(PConstants.LEFT, PConstants.TOP);
             pg.text(item.getLabel(), 6, yp + 4);
 
-            if (itemIndex == fi) {
-                pg.stroke(item.isSelected() ? ui.theme.getControlTextColor() : ui.theme.getFocusColor());
+            if (hasFocus() && (itemIndex == fi)) {
+                pg.stroke(ui.theme.getControlTextColor());
                 pg.noFill();
-                pg.rect(0, yp, this.width - 1, this.itemHeight - 1);
+                pg.rect(0, yp, this.width - 1, this.itemHeight - 2);
             }
 
             yp += this.itemHeight;
