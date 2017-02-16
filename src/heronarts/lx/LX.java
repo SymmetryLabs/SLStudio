@@ -337,6 +337,18 @@ public class LX {
     }
 
     /**
+     * Shorthand for LXColor.hsa()
+     *
+     * @param h Hue 0-360
+     * @param s Saturation 0-100
+     * @param a Alpha 0-1
+     * @return Color
+     */
+    public static int hsa(float h, float s, float a) {
+        return LXColor.hsba(h, s, 100, a);
+    }
+
+    /**
      * Sets the speed of the entire system. Default is 1.0, any modification will
      * mutate deltaMs values system-wide.
      *
@@ -592,24 +604,13 @@ public class LX {
     }
 
     /**
-     * Adds an output driver
+     * Sets the output driver
      *
      * @param output Output
      * @return this
      */
-    public LX addOutput(LXOutput output) {
-        this.engine.addOutput(output);
-        return this;
-    }
-
-    /**
-     * Removes an output driver
-     *
-     * @param output Output
-     * @return this
-     */
-    public LX removeOutput(LXOutput output) {
-        this.engine.removeOutput(output);
+    public LX setOutput(LXOutput output) {
+        this.engine.setOutput(output);
         return this;
     }
 

@@ -38,9 +38,12 @@ public class MultiplyBlend extends LXBlend {
             int dstG = (dst[i] & G_MASK);
             int dstR = (dst[i] & R_MASK) >> R_SHIFT;
             int dstB = (dst[i] & B_MASK);
+            dstB += (dstB >= 0x7f) ? 1 : 0;
+            dstR += (dstR >= 0x7f) ? 1 : 0;
+            dstG += (dstG >= 0x7f00) ? 0x100 : 0;
 
-            int rb = ((src[i] & R_MASK) * (dstR+1) | (src[i] & B_MASK) * (dstB+1)) >>> 8 & RB_MASK;
-            int g = (src[i] & G_MASK) * (dstG + 0x100) >>> 16 & G_MASK;
+            int rb = ((src[i] & R_MASK) * dstR | (src[i] & B_MASK) * dstB) >>> 8 & RB_MASK;
+            int g = (src[i] & G_MASK) * dstG >>> 16 & G_MASK;
 
             output[i] = min((dst[i] >>> ALPHA_SHIFT) + a, 0xff) << ALPHA_SHIFT |
                     ((dst[i] & RB_MASK) * dstAlpha + rb * srcAlpha) >>> 8 & RB_MASK |

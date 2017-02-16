@@ -19,13 +19,10 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.AddBlend;
-import heronarts.lx.blend.DarkestBlend;
 import heronarts.lx.blend.DifferenceBlend;
 import heronarts.lx.blend.LXBlend;
-import heronarts.lx.blend.LightestBlend;
 import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
-import heronarts.lx.blend.ScreenBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiEngine;
@@ -81,10 +78,13 @@ public class LXEngine extends LXParameterized {
      */
     private LXBlend[] blendModes;
 
+    private final AddBlend addBlend;
+
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
-    private final List<LXOutput> outputs = new ArrayList<LXOutput>();
+    private LXOutput output = null;
+
     private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
@@ -94,6 +94,11 @@ public class LXEngine extends LXParameterized {
     public final DiscreteParameter focusedChannel = new DiscreteParameter("CHANNEL", 1);
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
+
+    public final BoundedParameter crossfader = new BoundedParameter("CROSSFADE", 0.5);
+    public final DiscreteParameter crossfaderBlendMode;
+
+    public final BoundedParameter speed = new BoundedParameter("SPEED", 1, 0, 2);
 
     private float frameRate = 0;
 
@@ -110,27 +115,27 @@ public class LXEngine extends LXParameterized {
         public void onMessage(LXEngine engine, String message);
     }
 
-    public final synchronized LXEngine addListener(Listener listener) {
+    public final LXEngine addListener(Listener listener) {
         this.listeners.add(listener);
         return this;
     }
 
-    public final synchronized LXEngine removeListener(Listener listener) {
+    public final LXEngine removeListener(Listener listener) {
         this.listeners.remove(listener);
         return this;
     }
 
-    public final synchronized LXEngine addMessageListener(MessageListener listener) {
+    public final LXEngine addMessageListener(MessageListener listener) {
         this.messageListeners.add(listener);
         return this;
     }
 
-    public final synchronized LXEngine removeMessageListener(MessageListener listener) {
+    public final LXEngine removeMessageListener(MessageListener listener) {
         this.messageListeners.remove(listener);
         return this;
     }
 
-    public synchronized LXEngine broadcastMessage(String message) {
+    public LXEngine broadcastMessage(String message) {
         for (MessageListener listener : this.messageListeners) {
             listener.onMessage(this, message);
         }
@@ -169,7 +174,7 @@ public class LXEngine extends LXParameterized {
             this.render = this.buffer1 = new int[lx.total];
             this.copy = this.buffer2 = new int[lx.total];
             for (int i = 0; i < lx.total; ++i) {
-                this.buffer1[i] = this.buffer2[i] = 0xff000000;
+                this.buffer1[i] = this.buffer2[i] = 0;
             }
         }
 
@@ -187,9 +192,10 @@ public class LXEngine extends LXParameterized {
 
     private final DoubleBuffer buffer;
 
-    private final ModelBuffer blendBuffer;
-
-    private final int[] blank;
+    private final ModelBuffer background;
+    private final ModelBuffer blendBufferMain;
+    private final ModelBuffer blendBufferLeft;
+    private final ModelBuffer blendBufferRight;
 
     long nowMillis = 0;
     private long lastMillis;
@@ -198,7 +204,7 @@ public class LXEngine extends LXParameterized {
 
     private Thread engineThread = null;
 
-    public final BoundedParameter speed = new BoundedParameter("SPEED", 1, 0, 2);
+    private boolean hasStarted = false;
 
     private boolean paused = false;
 
@@ -206,26 +212,31 @@ public class LXEngine extends LXParameterized {
 
     LXEngine(LX lx) {
         this.lx = lx;
-        this.blank = new int[lx.total];
-        for (int i = 0; i < blank.length; ++i) {
-            this.blank[i] = 0;
+
+        this.background = new ModelBuffer(lx);
+        int[] backgroundArray = this.background.getArray();
+        for (int i = 0; i < backgroundArray.length; ++i) {
+            backgroundArray[i] = 0xff000000;
         }
-        this.blendBuffer = new ModelBuffer(lx);
+
+        this.blendBufferMain = new ModelBuffer(lx);
+        this.blendBufferLeft = new ModelBuffer(lx);
+        this.blendBufferRight = new ModelBuffer(lx);
 
         // Master double-buffer
         this.buffer = new DoubleBuffer();
 
         // Blend modes
         this.blendModes = new LXBlend[] {
+            this.addBlend = new AddBlend(lx),
             new NormalBlend(lx),
-            new AddBlend(lx),
             new MultiplyBlend(lx),
-            new ScreenBlend(lx),
             new SubtractBlend(lx),
-            new DifferenceBlend(lx),
-            new LightestBlend(lx),
-            new DarkestBlend(lx)
+            new DifferenceBlend(lx)
         };
+
+        // Crossfader blend mode
+        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.blendModes.length);
 
         // Midi engine
         this.midiEngine = new LXMidiEngine(lx);
@@ -262,8 +273,11 @@ public class LXEngine extends LXParameterized {
      * @return this
      */
     public LXEngine setBlendModes(LXBlend[] blendModes) {
-        // TODO(mcslee): throw exception if engine has already started
+        if (this.hasStarted) {
+            throw new UnsupportedOperationException("setBlendModes() may only be invoked before engine has started");
+        }
         this.blendModes = blendModes;
+        this.crossfaderBlendMode.setRange(blendModes.length);
         for (LXChannel channel : this.channels) {
             channel.blendMode.setRange(blendModes.length);
         }
@@ -329,9 +343,7 @@ public class LXEngine extends LXParameterized {
         } else {
             this.isThreaded = true;
             // Copy the current frame to avoid a black frame
-            for (int i = 0; i < this.buffer.render.length; ++i) {
-                this.buffer.copy[i] = this.buffer.render[i];
-            }
+            System.arraycopy(this.buffer.render, 0, this.buffer.copy, 0, this.buffer.render.length);
             this.engineThread = new Thread("LX Engine Thread") {
                 @Override
                 public void run() {
@@ -383,12 +395,12 @@ public class LXEngine extends LXParameterized {
      * @param paused Whether to pause the engine to pause
      * @return this
      */
-    public synchronized LXEngine setPaused(boolean paused) {
+    public LXEngine setPaused(boolean paused) {
         this.paused = paused;
         return this;
     }
 
-    public synchronized boolean isPaused() {
+    public boolean isPaused() {
         return this.paused;
     }
 
@@ -408,14 +420,14 @@ public class LXEngine extends LXParameterized {
         return removeLoopTask(modulator);
     }
 
-    public synchronized LXEngine addLoopTask(LXLoopTask loopTask) {
+    public LXEngine addLoopTask(LXLoopTask loopTask) {
         if (!this.loopTasks.contains(loopTask)) {
             this.loopTasks.add(loopTask);
         }
         return this;
     }
 
-    public synchronized LXEngine removeLoopTask(LXLoopTask loopTask) {
+    public LXEngine removeLoopTask(LXLoopTask loopTask) {
         this.loopTasks.remove(loopTask);
         return this;
     }
@@ -424,35 +436,24 @@ public class LXEngine extends LXParameterized {
         return this.unmodifiableEffects;
     }
 
-    public synchronized LXEngine addEffect(LXEffect fx) {
+    public LXEngine addEffect(LXEffect fx) {
         this.effects.add(fx);
         return this;
     }
 
-    public synchronized LXEngine removeEffect(LXEffect fx) {
+    public LXEngine removeEffect(LXEffect fx) {
         this.effects.remove(fx);
         return this;
     }
 
     /**
-     * Adds an output driver
+     * Sets the output driver
      *
-     * @param output Output
+     * @param output Output driver, or null for no output
      * @return this
      */
-    public synchronized LXEngine setOutput(LXOutput output) {
-        this.outputs.add(output);
-        return this;
-    }
-
-    /**
-     * Removes an output driver
-     *
-     * @param output Output
-     * @return this
-     */
-    public synchronized LXEngine removeOutput(LXOutput output) {
-        this.outputs.remove(output);
+    public LXEngine setOutput(LXOutput output) {
+        this.output = output;
         return this;
     }
 
@@ -460,11 +461,11 @@ public class LXEngine extends LXParameterized {
         return this.unmodifiableChannels;
     }
 
-    public synchronized LXChannel getDefaultChannel() {
+    public LXChannel getDefaultChannel() {
         return this.channels.get(0);
     }
 
-    public synchronized LXChannel getChannel(int channelIndex) {
+    public LXChannel getChannel(int channelIndex) {
         return this.channels.get(channelIndex);
     }
 
@@ -476,7 +477,7 @@ public class LXEngine extends LXParameterized {
         return addChannel(new LXPattern[] { new SolidColorPattern(lx, 0xff000000) });
     }
 
-    public synchronized LXChannel addChannel(LXPattern[] patterns) {
+    public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = new LXChannel(lx, this.channels.size(), patterns);
         this.channels.add(channel);
         this.focusedChannel.setRange(this.channels.size());
@@ -486,7 +487,7 @@ public class LXEngine extends LXParameterized {
         return channel;
     }
 
-    public synchronized void removeChannel(LXChannel channel) {
+    public void removeChannel(LXChannel channel) {
         if (this.channels.remove(channel)) {
             int i = 0;
             for (LXChannel c : this.channels) {
@@ -544,6 +545,8 @@ public class LXEngine extends LXParameterized {
     }
 
     public synchronized void run() {
+        this.hasStarted = true;
+
         long runStart = System.nanoTime();
 
         // Compute elapsed time
@@ -576,39 +579,121 @@ public class LXEngine extends LXParameterized {
 
         // Run and blend all of our channels
         long channelStart = System.nanoTime();
-        int[] blendDestination = this.blank;
-        int[] blendOutput = blendBuffer.getArray();
+        int[] backgroundArray = this.background.getArray();
+        int[] blendOutputMain = this.blendBufferMain.getArray();
+        int[] blendOutputLeft = this.blendBufferLeft.getArray();
+        int[] blendOutputRight = this.blendBufferRight.getArray();
+
+        double crossfadeValue = this.crossfader.getValue();
+
+        boolean leftOn = crossfadeValue < 1.;
+        boolean rightOn = crossfadeValue > 0.;
+
+        int leftChannelCount = 0;
+        int rightChannelCount = 0;
+        int mainChannelCount = 0;
+
         for (LXChannel channel : this.channels) {
             if (channel.enabled.isOn()) {
                 channel.loop(deltaMs);
 
-                // TODO(mcslee): record blend timing somewhere new
-                channel.getFaderTransition().timer.blendNanos = 0;
-
-                double alpha = channel.getFader().getValue();
-                if (alpha > 0) {
-                    LXBlend blend = this.blendModes[channel.blendMode.getValuei()];
-                    blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
-                    blendDestination = blendOutput;
+                boolean doBlend = false;
+                int[] blendDestination;
+                int[] blendOutput;
+                switch (channel.crossfadeGroup.getValuei()) {
+                case LXChannel.CROSSFADE_GROUP_LEFT:
+                    blendDestination = (leftChannelCount++ > 0) ? blendOutputLeft : backgroundArray;
+                    blendOutput = blendOutputLeft;
+                    doBlend = leftOn;
+                    break;
+                case LXChannel.CROSSFADE_GROUP_RIGHT:
+                    blendDestination = (rightChannelCount++ > 0) ? blendOutputRight: backgroundArray;
+                    blendOutput = blendOutputRight;
+                    doBlend = rightOn;
+                    break;
+                default:
+                case LXChannel.CROSSFADE_GROUP_BYPASS:
+                    blendDestination = (mainChannelCount++ > 0) ? blendOutputMain : backgroundArray;
+                    blendOutput = blendOutputMain;
+                    doBlend = true;
+                    break;
                 }
+
+                long blendStart = System.nanoTime();
+                if (doBlend) {
+                    double alpha = channel.getFader().getValue();
+                    if (alpha > 0) {
+                        LXBlend blend = this.blendModes[channel.blendMode.getValuei()];
+                        blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
+                    } else if (blendDestination != blendOutput) {
+                        // Edge-case: copy the blank buffer into the destination blend buffer when
+                        // the channel fader is set to 0
+                        System.arraycopy(blendDestination, 0, blendOutput, 0, blendDestination.length);
+                    }
+                }
+                ((LXChannel.Timer)channel.timer).blendNanos = System.nanoTime() - blendStart;
             }
         }
 
+        boolean leftContent = leftOn && (leftChannelCount > 0);
+        boolean rightContent = rightOn && (rightChannelCount > 0);
+
+        if (leftContent && rightContent) {
+            // There are left and right channels assigned!
+            int[] crossfadeSource, crossfadeDestination;
+            double crossfadeAlpha;
+            if (crossfadeValue <= 0.5) {
+                crossfadeDestination = blendOutputLeft;
+                crossfadeSource = blendOutputRight;
+                crossfadeAlpha = Math.min(1, 2. * crossfadeValue);
+            } else {
+                crossfadeDestination = blendOutputRight;
+                crossfadeSource = blendOutputLeft;
+                crossfadeAlpha = Math.min(1, 2. * (1-crossfadeValue));
+            }
+
+            // Compute the crossfade mix
+            LXBlend blend = this.blendModes[this.crossfaderBlendMode.getValuei()];
+            blend.blend(crossfadeDestination, crossfadeSource, crossfadeAlpha, crossfadeDestination);
+
+            // Add the crossfaded groups to the main buffer
+            int[] blendDestination = (mainChannelCount > 0) ? blendOutputMain : backgroundArray;
+            addBlend.blend(blendDestination, crossfadeDestination, 1., blendOutputMain);
+
+        } else if (leftContent) {
+            // Add the left group to the main buffer
+            int[] blendDestination = (mainChannelCount > 0) ? blendOutputMain : backgroundArray;
+            double blendAlpha = Math.min(1, 2. * (1-crossfadeValue));
+            addBlend.blend(blendDestination, blendOutputLeft, blendAlpha, blendOutputMain);
+        } else if (rightContent) {
+            // Add the right group to the main buffer
+            int[] blendDestination = (mainChannelCount > 0) ? blendOutputMain : backgroundArray;
+            double blendAlpha = Math.min(1, 2. * crossfadeValue);
+            addBlend.blend(blendDestination, blendOutputRight, blendAlpha, blendOutputMain);
+        }
         this.timer.channelNanos = System.nanoTime() - channelStart;
 
-        // Copy colors into our own rendering buffer
-        long copyStart = System.nanoTime();
-        System.arraycopy(blendDestination, 0, this.buffer.render, 0, blendDestination.length);
-        this.timer.copyNanos = System.nanoTime() - copyStart;
+        // Check for edge case of all channels being off, don't leave stale data in blend buffer
+        if ((leftChannelCount + rightChannelCount + mainChannelCount) == 0) {
+            System.arraycopy(backgroundArray, 0, blendOutputMain, 0, backgroundArray.length);
+        }
 
-        // Apply effects in our rendering buffer
+        // Time to apply FX to the main blended output
         long fxStart = System.nanoTime();
         for (LXEffect fx : this.effects) {
             ((LXLayeredComponent) fx).setBuffer(this.buffer);
             fx.loop(deltaMs);
         }
-
         this.timer.fxNanos = System.nanoTime() - fxStart;
+
+        // Copy colors into our own rendering buffer
+        // TODO(mcslee): this is for the UI! take channel cue-ing into account here...
+        long copyStart = System.nanoTime();
+        System.arraycopy(blendOutputMain, 0, this.buffer.render, 0, blendOutputMain.length);
+        this.timer.copyNanos = System.nanoTime() - copyStart;
+
+
+
 
         // Process UI input events
         if (this.inputDispatch == null) {
@@ -631,10 +716,9 @@ public class LXEngine extends LXParameterized {
 
         // Send to outputs
         long outputStart = System.nanoTime();
-        for (LXOutput output : this.outputs) {
-            output.send(this.buffer.render);
+        if (this.output != null) {
+            this.output.send(this.buffer.render);
         }
-
         this.timer.outputNanos = System.nanoTime() - outputStart;
 
         this.timer.runNanos = System.nanoTime() - runStart;

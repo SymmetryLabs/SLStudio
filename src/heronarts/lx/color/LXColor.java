@@ -185,17 +185,29 @@ public class LXColor {
     }
 
     /**
+     * Create a color from HSA, where brightness is always full
+     *
+     * @param h Hue from 0-360
+     * @param s Saturation from 0-100
+     * @param a Alpha mask from 0-1
+     * @return argb color value
+     */
+    public static final int hsa(float h, float s, float a) {
+        return hsba(h, s, 100, a);
+    }
+
+    /**
      * Create a color from HSB
      *
      * @param h Hue from 0-360
      * @param s Saturation from 0-100
      * @param b Brightness from 0-100
      * @param a Alpha from 0-1
-     * @return rgb color value
+     * @return argb color value
      */
     public static int hsba(float h, float s, float b, float a) {
         return
-            (max(0xff, (int) (a * 0xff)) << ALPHA_SHIFT) |
+            (min(0xff, (int) (a * 0xff)) << ALPHA_SHIFT) |
             (hsb(h, s, b) & 0x00ffffff);
     }
 

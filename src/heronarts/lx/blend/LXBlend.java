@@ -90,7 +90,7 @@ public abstract class LXBlend {
      * @param dst Destination buffer (lower layer)
      * @param src Source buffer (top layer)
      * @param alpha Alpha blend, from 0-1
-     * @param output Output buffer, may be the same as the destination buffer
+     * @param output Output buffer, which may be the same as src or dst
      */
     public abstract void blend(int[] dst, int[] src, double alpha, int[] output);
 }
