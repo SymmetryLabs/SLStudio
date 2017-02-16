@@ -26,15 +26,12 @@ package heronarts.p3lx;
 
 import heronarts.p3lx.ui.UI;
 import heronarts.lx.LX;
-import heronarts.lx.effect.DesaturationEffect;
-import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.StripModel;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
-import processing.event.KeyEvent;
 
 /**
  * Harness to run LX inside a Processing 2 sketch
@@ -75,22 +72,12 @@ public class P3LX extends LX {
      */
     private int[] colors;
 
-    /**
-     * Global flash effect.
-     */
-    private final FlashEffect flash;
-
-    /**
-     * Global desaturation effect.
-     */
-    private final DesaturationEffect desaturation;
-
-    private final class Flags {
-        public boolean showFramerate = false;
+    public class Flags {
         public boolean keyboardTempo = false;
+        public boolean showFramerate = false;
     }
 
-    private final Flags flags = new Flags();
+    public final Flags flags = new Flags();
 
     public class Timer {
         public long drawNanos = 0;
@@ -119,16 +106,12 @@ public class P3LX extends LX {
 
         this.audio.setMinimCallback(applet);
 
-        this.desaturation = new DesaturationEffect(this);
-        this.flash = new FlashEffect(this);
-
         this.ui = new UI(this);
 
         applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
 
         applet.registerMethod("draw", this);
         applet.registerMethod("dispose", this);
-        applet.registerMethod("keyEvent", this);
     }
 
     /**
@@ -149,29 +132,6 @@ public class P3LX extends LX {
      */
     public LX enableKeyboardTempo() {
         this.flags.keyboardTempo = true;
-        return this;
-    }
-
-    /**
-     * Adds basic flash and desaturation effects to the engine, triggerable by the
-     * keyboard. The 's' key triggers desaturation, and the '/' key triggers a
-     * flash.
-     *
-     * @return this
-     */
-    public LX enableBasicEffects() {
-        this.addEffect(this.desaturation);
-        this.addEffect(this.flash);
-        return this;
-    }
-
-    /**
-     * Triggers the global flash effect.
-     *
-     * @return this
-     */
-    public LX flash() {
-        this.flash.trigger();
         return this;
     }
 
@@ -227,70 +187,6 @@ public class P3LX extends LX {
         }
 
         this.timer.drawNanos = System.nanoTime() - drawStart;
-    }
-
-    public void keyEvent(KeyEvent keyEvent) {
-        char keyChar = keyEvent.getKey();
-        int keyCode = keyEvent.getKeyCode();
-        int action = keyEvent.getAction();
-        if (action == KeyEvent.RELEASE) {
-            switch (Character.toLowerCase(keyChar)) {
-            case '[':
-                this.engine.goPrev();
-                break;
-            case ']':
-                this.engine.goNext();
-                break;
-            case 'f':
-                this.flags.showFramerate = false;
-                break;
-            case ' ':
-                if (this.flags.keyboardTempo) {
-                    this.tempo.tap();
-                }
-                break;
-            case 's':
-                this.desaturation.disable();
-                break;
-            case '/':
-                this.flash.disable();
-                break;
-            }
-        } else if (action == KeyEvent.PRESS) {
-            switch (keyCode) {
-            case java.awt.event.KeyEvent.VK_UP:
-                if (keyEvent.isMetaDown()) {
-                    this.engine.goPrev();
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_DOWN:
-                if (keyEvent.isMetaDown()) {
-                    this.engine.goNext();
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_LEFT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() - .1);
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_RIGHT:
-                if (this.flags.keyboardTempo) {
-                    this.tempo.setBpm(this.tempo.bpm() + .1);
-                }
-                break;
-            }
-            switch (keyChar) {
-            case 'f':
-                this.flags.showFramerate = true;
-                break;
-            case 's':
-                this.desaturation.enable();
-                break;
-            case '/':
-                this.flash.enable();
-                break;
-            }
-        }
     }
 
 }

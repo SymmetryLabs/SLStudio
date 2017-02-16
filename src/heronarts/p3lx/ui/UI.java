@@ -428,6 +428,9 @@ public class UI {
             this.applet.key = 0;
         }
 
+        // Default handler for key events on the UI thread
+        _uiThreadDefaultKeyEvent(keyEvent);
+
         // NOTE: this method is invoked from the Processing thread! The LX engine
         // may be running on a separate thread.
         if (isThreaded()) {
@@ -438,6 +441,8 @@ public class UI {
     }
 
     private void _keyEvent(KeyEvent keyEvent) {
+        _engineThreadDefaultKeyEvent(keyEvent);
+
         char keyChar = keyEvent.getKey();
         int keyCode = keyEvent.getKeyCode();
         switch (keyEvent.getAction()) {
@@ -455,18 +460,65 @@ public class UI {
         }
     }
 
-    public static String uiClassName(Object o, String suffix) {
-        String s = o.getClass().getName();
-        int li;
-        if ((li = s.lastIndexOf(".")) > 0) {
-            s = s.substring(li + 1);
+    private void _uiThreadDefaultKeyEvent(KeyEvent keyEvent) {
+        char keyChar = keyEvent.getKey();
+        int action = keyEvent.getAction();
+        if (action == KeyEvent.RELEASE) {
+            switch (Character.toLowerCase(keyChar)) {
+            case 'f':
+                this.lx.flags.showFramerate = false;
+                break;
+            }
+        } else if (action == KeyEvent.PRESS) {
+            switch (keyChar) {
+            case 'f':
+                this.lx.flags.showFramerate = true;
+                break;
+            }
         }
-        if ((li = s.indexOf("$")) != -1) {
-            s = s.substring(li + 1);
+    }
+
+    private void _engineThreadDefaultKeyEvent(KeyEvent keyEvent) {
+        char keyChar = keyEvent.getKey();
+        int keyCode = keyEvent.getKeyCode();
+        int action = keyEvent.getAction();
+        if (action == KeyEvent.RELEASE) {
+            switch (Character.toLowerCase(keyChar)) {
+            case '[':
+                this.lx.engine.goPrev();
+                break;
+            case ']':
+                this.lx.engine.goNext();
+                break;
+            case ' ':
+                if (this.lx.flags.keyboardTempo) {
+                    this.lx.tempo.tap();
+                }
+                break;
+            }
+        } else if (action == KeyEvent.PRESS) {
+            switch (keyCode) {
+            case java.awt.event.KeyEvent.VK_UP:
+                if (keyEvent.isMetaDown()) {
+                    this.lx.engine.goPrev();
+                }
+                break;
+            case java.awt.event.KeyEvent.VK_DOWN:
+                if (keyEvent.isMetaDown()) {
+                    this.lx.engine.goNext();
+                }
+                break;
+            case java.awt.event.KeyEvent.VK_LEFT:
+                if (this.lx.flags.keyboardTempo) {
+                    this.lx.tempo.setBpm(this.lx.tempo.bpm() - .1);
+                }
+                break;
+            case java.awt.event.KeyEvent.VK_RIGHT:
+                if (this.lx.flags.keyboardTempo) {
+                    this.lx.tempo.setBpm(this.lx.tempo.bpm() + .1);
+                }
+                break;
+            }
         }
-        if ((suffix != null) && ((li = s.indexOf(suffix)) != -1)) {
-            s = s.substring(0, li);
-        }
-        return s;
     }
 }
