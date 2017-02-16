@@ -42,8 +42,16 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
 
     public final Timer timer = new Timer();
 
+    private String name;
+
     protected LXEffect(LX lx) {
         this(lx, false);
+
+        String simple = getClass().getSimpleName();
+        if (simple.endsWith("Pattern")) {
+            simple = simple.substring(0, simple.length() - "Pattern".length());
+        }
+        this.name = simple;
     }
 
     protected LXEffect(LX lx, boolean isMomentary) {
@@ -58,6 +66,25 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
                 }
             }
         });
+    }
+
+    /**
+     * Sets the name of this effect to be displayed in the UI
+     *
+     * @param name
+     * @return
+     */
+    public LXEffect setName(String name) {
+        this.name = name;
+        return this;
+    }
+
+    /**
+     * Get name of this effect to be displayed in UI
+     */
+    @Override
+    public String getName() {
+        return this.name;
     }
 
     /**
