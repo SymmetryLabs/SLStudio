@@ -36,7 +36,13 @@ public class UISlider extends UIParameterControl implements UIFocus {
         HORIZONTAL, VERTICAL
     };
 
+    public enum FillMode {
+        FULL, MIDPOINT
+    };
+
     private final Direction direction;
+
+    private FillMode fillMode = FillMode.FULL;
 
     private static final float HANDLE_WIDTH = 12;
     private static final int HANDLE_ROUNDING = 4;
@@ -44,6 +50,10 @@ public class UISlider extends UIParameterControl implements UIFocus {
     private static final float GROOVE = 4;
 
     private final float handleHeight;
+
+    private boolean hasFillColor = false;
+
+    private int fillColor = 0;;
 
     public UISlider() {
         this(0, 0, 0, 0);
@@ -59,15 +69,57 @@ public class UISlider extends UIParameterControl implements UIFocus {
         this.handleHeight = h;
     }
 
+    public UISlider setFillMode(FillMode fillMode) {
+        if (this.fillMode != fillMode) {
+            this.fillMode = fillMode;
+            redraw();
+        }
+        return this;
+    }
+
+    public UISlider resetFillColor() {
+        if (this.hasFillColor) {
+            this.hasFillColor = false;
+            redraw();
+        }
+        return this;
+    }
+
+    public UISlider setFillColor(int color) {
+        if (!this.hasFillColor || (this.fillColor != color)) {
+            this.hasFillColor = true;
+            this.fillColor = color;
+            redraw();
+        }
+        return this;
+    }
+
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.noStroke();
         pg.fill(ui.theme.getControlBackgroundColor());
+
+        int controlColor = this.hasFillColor ? this.fillColor :
+            (isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
+
         switch (this.direction) {
         case HORIZONTAL:
             pg.rect(PADDING, this.handleHeight / 2 - GROOVE/2, this.width - 2*PADDING, GROOVE);
-            pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-            pg.rect(PADDING, this.handleHeight / 2 - GROOVE/2, (int) ((this.width - 2*PADDING) * getNormalized()), GROOVE);
+            pg.fill(controlColor);
+
+            int fillX, fillWidth;
+            switch (this.fillMode) {
+            case MIDPOINT:
+                fillX = (int) (this.width / 2);
+                fillWidth = (int) ((getNormalized() - 0.5) * (this.width - 2*PADDING));
+                break;
+            default:
+            case FULL:
+                fillX = (int) PADDING;
+                fillWidth = (int) ((this.width - 2*PADDING) * getNormalized());
+                break;
+            }
+            pg.rect(fillX, this.handleHeight / 2 - GROOVE/2, fillWidth, GROOVE);
             pg.fill(0xff5f5f5f);
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect((int) (PADDING + getNormalized() * (this.width - 2*PADDING - HANDLE_WIDTH)), PADDING,
@@ -75,9 +127,21 @@ public class UISlider extends UIParameterControl implements UIFocus {
             break;
         case VERTICAL:
             pg.rect(this.width / 2 - GROOVE/2, PADDING, GROOVE, this.handleHeight - 2*PADDING);
-            pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-            int fillSize = (int) (getNormalized() * (this.handleHeight - 2*PADDING));
-            pg.rect(this.width / 2 - GROOVE/2, this.handleHeight - PADDING - fillSize, GROOVE, fillSize);
+            pg.fill(controlColor);
+            int fillY;
+            int fillSize;
+            switch (this.fillMode) {
+            case MIDPOINT:
+                fillY = (int) (this.handleHeight / 2);
+                fillSize = (int) ((0.5 - getNormalized()) * (this.handleHeight - 2*PADDING));
+                break;
+            default:
+            case FULL:
+                fillSize = (int) (getNormalized() * (this.handleHeight - 2*PADDING));
+                fillY = (int) (this.handleHeight - PADDING - fillSize);
+                break;
+            }
+            pg.rect(this.width / 2 - GROOVE/2, fillY, GROOVE, fillSize);
             pg.fill(0xff5f5f5f);
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect(PADDING, (int) (PADDING + (1 - getNormalized())

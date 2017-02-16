@@ -108,6 +108,7 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
         pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
+        // TODO(mcslee): handle text overflowing buffer
         pg.text(this.editing ? this.editBuffer : ("" + this.value), this.width / 2, this.height / 2);
     }
 
@@ -121,7 +122,11 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
         super.onBlur();
         if (this.editing) {
             this.editing = false;
-            setValue(Integer.valueOf(this.editBuffer));
+            try {
+                setValue(Integer.parseInt(this.editBuffer));
+            } catch (NumberFormatException nfx) {
+                redraw();
+            }
         }
     }
 
@@ -135,7 +140,9 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
         this.dAccum -= dy;
         int offset = (int) (this.dAccum / 5);
         this.dAccum = this.dAccum - (offset * 5);
-        setValue(this.value + offset);
+        if (!this.editing) {
+            setValue(this.value + offset);
+        }
     }
 
     @Override
@@ -148,28 +155,39 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
             this.editBuffer += keyChar;
             redraw();
         }
-        if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
-            if (this.editing) {
+        if (this.editing) {
+            if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
                 this.editing = false;
-                setValue(Integer.valueOf(this.editBuffer));
+                try {
+                    setValue(Integer.parseInt(this.editBuffer));
+                } catch (NumberFormatException nfx) {
+                    redraw();
+                }
+            } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                if (this.editBuffer.length() > 0) {
+                    this.editBuffer = this.editBuffer.substring(0, this.editBuffer.length() - 1);
+                    redraw();
+                }
+            } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+                this.editing = false;
+                redraw();
             }
-        } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
-            this.editing = false;
-            redraw();
         }
 
-        int times = 1;
-        if (this.parameter != null) {
-            if (keyEvent.isShiftDown()) {
-                times = Math.max(1, this.parameter.getRange() / 10);
+        if (!this.editing) {
+            int times = 1;
+            if (this.parameter != null) {
+                if (keyEvent.isShiftDown()) {
+                    times = Math.max(1, this.parameter.getRange() / 10);
+                }
             }
-        }
-        if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
+            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
                 || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-            setValue(getValue() - times);
-        } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
+                setValue(getValue() - times);
+            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
                 || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-            setValue(getValue() + times);
+                setValue(getValue() + times);
+            }
         }
     }
 }

@@ -32,6 +32,7 @@ import java.util.Collections;
 import java.util.List;
 
 import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PFont;
 import processing.event.Event;
 import processing.event.KeyEvent;
@@ -422,6 +423,11 @@ public class UI {
     }
 
     public void keyEvent(KeyEvent keyEvent) {
+        // Do not close on the ESC key, P3LX UI uses it
+        if (this.applet.key == PConstants.ESC) {
+            this.applet.key = 0;
+        }
+
         // NOTE: this method is invoked from the Processing thread! The LX engine
         // may be running on a separate thread.
         if (isThreaded()) {
