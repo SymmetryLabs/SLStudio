@@ -222,17 +222,21 @@ public class LXEngine extends LXParameterized {
         // Cue setup
         this.cueLeft.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                cueRight.setValue(false);
-                for (LXChannel channel : channels) {
-                    channel.cueActive.setValue(false);
+                if (cueLeft.isOn()) {
+                    cueRight.setValue(false);
+                    for (LXChannel channel : channels) {
+                        channel.cueActive.setValue(false);
+                    }
                 }
             }
         });
         this.cueRight.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                cueLeft.setValue(false);
-                for (LXChannel channel : channels) {
-                    channel.cueActive.setValue(false);
+                if (cueRight.isOn()) {
+                    cueLeft.setValue(false);
+                    for (LXChannel channel : channels) {
+                        channel.cueActive.setValue(false);
+                    }
                 }
             }
         });
