@@ -35,13 +35,6 @@ public class LXOscEngine {
     private final LX lx;
 
     private final List<LXOscListener> listeners = new ArrayList<LXOscListener>();
-    private final List<LXOscListener> listenerSnapshot = new ArrayList<LXOscListener>();
-
-    private final List<OscMessage> threadSafeEventQueue =
-        Collections.synchronizedList(new ArrayList<OscMessage>());
-
-    private final List<OscMessage> engineThreadEventQueue =
-        new ArrayList<OscMessage>();
 
     public LXOscEngine(LX lx) {
         this.lx = lx;
@@ -81,6 +74,15 @@ public class LXOscEngine {
         private final byte[] buffer;
         private final ReceiverThread thread;
 
+        private final List<OscMessage> threadSafeEventQueue =
+            Collections.synchronizedList(new ArrayList<OscMessage>());
+
+        private final List<OscMessage> engineThreadEventQueue =
+            new ArrayList<OscMessage>();
+
+        private final List<LXOscListener> listeners = new ArrayList<LXOscListener>();
+        private final List<LXOscListener> listenerSnapshot = new ArrayList<LXOscListener>();
+
         private Receiver(int port, InetAddress address, int bufferSize) throws SocketException {
             this(new DatagramSocket(port, address), port, bufferSize);
         }
@@ -96,6 +98,16 @@ public class LXOscEngine {
             this.packet = new DatagramPacket(this.buffer, bufferSize);
             this.thread = new ReceiverThread();
             this.thread.start();
+        }
+
+        public Receiver addListener(LXOscListener listener) {
+            this.listeners.add(listener);
+            return this;
+        }
+
+        public Receiver removeListener(LXOscListener listener) {
+            this.listeners.remove(listener);
+            return this;
         }
 
         class ReceiverThread extends Thread {
@@ -132,6 +144,27 @@ public class LXOscEngine {
                         }
                     }
                 }
+            }
+        }
+
+        private void dispatch() {
+            this.engineThreadEventQueue.clear();
+            synchronized (this.threadSafeEventQueue) {
+                this.engineThreadEventQueue.addAll(this.threadSafeEventQueue);
+                this.threadSafeEventQueue.clear();
+            }
+            // TODO(mcslee): do we want to handle NTP timetags?
+            for (OscMessage message : this.engineThreadEventQueue) {
+                dispatch(message);
+            }
+        }
+
+        private void dispatch(OscMessage message) {
+            // NOTE(mcslee): we iterate this way so that listeners can modify the listener list
+            this.listenerSnapshot.clear();
+            this.listenerSnapshot.addAll(this.listeners);
+            for (LXOscListener listener : this.listenerSnapshot) {
+                listener.oscMessage(message);
             }
         }
 
@@ -184,29 +217,9 @@ public class LXOscEngine {
      * input queue.
      */
     public void dispatch() {
-        this.engineThreadEventQueue.clear();
-        synchronized (this.threadSafeEventQueue) {
-            this.engineThreadEventQueue.addAll(this.threadSafeEventQueue);
-            this.threadSafeEventQueue.clear();
-        }
-        // TODO(mcslee): do we want to handle NTP timetags?
-        for (OscMessage message : this.engineThreadEventQueue) {
-            dispatch(message);
+        for (Receiver receiver : this.receivers) {
+            receiver.dispatch();
         }
     }
 
-    /**
-     * May be called from any component of the system to internally dispatch
-     * an OscMessage to all registered listeners.
-     *
-     * @param message
-     */
-    public void dispatch(OscMessage message) {
-        // NOTE(mcslee): we iterate this way so that listeners can modify the listener list
-        this.listenerSnapshot.clear();
-        this.listenerSnapshot.addAll(this.listeners);
-        for (LXOscListener listener : this.listenerSnapshot) {
-            listener.oscMessage(message);
-        }
-    }
 }

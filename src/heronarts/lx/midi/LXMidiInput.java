@@ -39,7 +39,7 @@ public class LXMidiInput {
     private boolean isEngineInput = false;
 
     public LXMidiInput(LX lx, MidiDevice device) throws MidiUnavailableException {
-        this(lx.engine.midiEngine, device);
+        this(lx.engine.midi, device);
     }
 
     public LXMidiInput(LXMidiEngine midiEngine, MidiDevice device)

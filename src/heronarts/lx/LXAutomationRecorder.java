@@ -184,7 +184,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
 
         @Override
         void play() {
-            engine.midiEngine.dispatch(this.shortMessage);
+            engine.midi.dispatch(this.shortMessage);
         }
     }
 
@@ -239,7 +239,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
         for (LXEffect effect : engine.getEffects()) {
             registerComponent("effect/" + effect.getClass().getName(), effect);
         }
-        engine.midiEngine.addListener(this);
+        engine.midi.addListener(this);
         engine.addMessageListener(this);
     }
 

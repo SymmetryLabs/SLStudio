@@ -71,9 +71,9 @@ public class LXEngine extends LXParameterized {
 
     private final LX lx;
 
-    public final LXMidiEngine midiEngine;
+    public final LXMidiEngine midi;
 
-    public final LXOscEngine oscEngine;
+    public final LXOscEngine osc;
 
     private Dispatch inputDispatch = null;
 
@@ -250,10 +250,10 @@ public class LXEngine extends LXParameterized {
         };
 
         // Midi engine
-        this.midiEngine = new LXMidiEngine(lx);
+        this.midi = new LXMidiEngine(lx);
 
         // OSC engine
-        this.oscEngine = new LXOscEngine(lx);
+        this.osc = new LXOscEngine(lx);
 
         // Default color palette
         addComponent(lx.palette);
@@ -574,12 +574,12 @@ public class LXEngine extends LXParameterized {
 
         // Process MIDI events
         long midiStart = System.nanoTime();
-        this.midiEngine.dispatch();
+        this.midi.dispatch();
         this.timer.midiNanos = System.nanoTime() - midiStart;
 
         // Process OSC events
         long oscStart = System.nanoTime();
-        this.oscEngine.dispatch();
+        this.osc.dispatch();
         this.timer.oscNanos = System.nanoTime() - oscStart;
 
         // Process UI input events
