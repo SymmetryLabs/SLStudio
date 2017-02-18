@@ -146,8 +146,23 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
 
     private boolean showCenter = false;
 
+    private final int x;
+    private final int y;
+    private PGraphics pg;
+
     public UI3dContext(UI ui) {
+        this(ui, null, 0, 0);
+    }
+
+    public UI3dContext(UI ui, int x, int y, int w, int h) {
+        this(ui, ui.applet.createGraphics(w, h, PConstants.P3D), x, y);
+    }
+
+    protected UI3dContext(UI ui, PGraphics pg, int x, int y) {
         setUI(ui);
+        this.pg = pg;
+        this.x = x;
+        this.y = y;
         this.thetaDamped.start();
         this.radiusDamped.start();
         this.phiDamped.start();
@@ -456,9 +471,16 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
     }
 
     @Override
-    public final void draw(UI ui, PGraphics pg) {
+    public final void draw(UI ui, PGraphics dstPg) {
         if (!isVisible()) {
             return;
+        }
+
+        PGraphics pg = dstPg;
+        if (this.pg != null) {
+            pg = this.pg;
+            pg.beginDraw();
+            pg.clear();
         }
 
         // Set the camera
@@ -499,6 +521,11 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
 
         if (hasFocus()) {
             drawFocusBorder(ui, pg);
+        }
+
+        if (this.pg != null) {
+            this.pg.endDraw();
+            dstPg.image(this.pg, this.x, this.y);
         }
     }
 

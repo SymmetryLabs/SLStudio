@@ -25,7 +25,7 @@
 package heronarts.p3lx.ui.component;
 
 import heronarts.lx.LXUtils;
-import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -36,64 +36,61 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIIntegerBox extends UI2dComponent implements UIFocus {
+public class UIDoubleBox extends UI2dComponent implements UIFocus {
 
-    private int minValue = 0;
-    private int maxValue = PConstants.MAX_INT;
-    private int value = 0;
-    private DiscreteParameter parameter = null;
+    private double minValue = 0;
+    private double maxValue = Double.MAX_VALUE;
+    private double value = 0;
+    private BoundedParameter parameter = null;
 
     private boolean editing = false;
     private String editBuffer = "";
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
-            setValue(parameter.getValuei());
+            setValue(parameter.getValue());
         }
     };
 
-    public UIIntegerBox() {
+    public UIDoubleBox() {
         this(0, 0, 0, 0);
     }
 
-    public UIIntegerBox(float x, float y, float w, float h) {
+    public UIDoubleBox(float x, float y, float w, float h) {
         super(x, y, w, h);
         setBorderColor(UI.get().theme.getControlBorderColor());
         setBackgroundColor(UI.get().theme.getControlBackgroundColor());
     }
 
-    public UIIntegerBox setParameter(final DiscreteParameter parameter) {
+    public UIDoubleBox setParameter(final BoundedParameter parameter) {
         if (this.parameter != null) {
             this.parameter.removeListener(this.parameterListener);
         }
         this.parameter = parameter;
         if (parameter != null) {
-            this.minValue = parameter.getMinValue();
-            this.maxValue = parameter.getMaxValue();
-            this.value = parameter.getValuei();
+            this.minValue = parameter.range.min;
+            this.maxValue = parameter.range.max;
             this.parameter.addListener(this.parameterListener);
+            setValue(parameter.getValue());
         }
         return this;
     }
 
-    public UIIntegerBox setRange(int minValue, int maxValue) {
+    public UIDoubleBox setRange(double minValue, double maxValue) {
         this.minValue = minValue;
         this.maxValue = maxValue;
         setValue(LXUtils.constrain(this.value, minValue, maxValue));
         return this;
     }
 
-    public int getValue() {
+    public double getValue() {
         return this.value;
     }
 
-    public UIIntegerBox setValue(int value) {
+    public UIDoubleBox setValue(double value) {
+        value = LXUtils.constrain(value, this.minValue, this.maxValue);
         if (this.value != value) {
-            int range = (this.maxValue - this.minValue + 1);
-            while (value < this.minValue) {
-                value += range;
-            }
-            this.value = this.minValue + (value - this.minValue) % range;
+            this.value = value;
             if (this.parameter != null) {
                 this.parameter.setValue(this.value);
             }
@@ -106,13 +103,13 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
+        pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
         pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
         // TODO(mcslee): handle text overflowing buffer
-        pg.text(this.editing ? this.editBuffer : Integer.toString(this.value), this.width / 2, this.height / 2);
+        pg.text(this.editing ? this.editBuffer : String.format("%.2f", this.value), this.width / 2, this.height - 2);
     }
 
-    protected void onValueChange(int value) {
+    protected void onValueChange(double value) {
     }
 
     float dAccum = 0;
@@ -123,7 +120,7 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
         if (this.editing) {
             this.editing = false;
             try {
-                setValue(Integer.parseInt(this.editBuffer));
+                setValue(Double.parseDouble(this.editBuffer));
             } catch (NumberFormatException nfx) {
                 redraw();
             }
@@ -147,7 +144,7 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
 
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (keyChar >= '0' && keyChar <= '9') {
+        if ((keyChar >= '0' && keyChar <= '9') || (keyChar == '.')) {
             if (!this.editing) {
                 this.editing = true;
                 this.editBuffer = "";
@@ -159,7 +156,7 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
             if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
                 this.editing = false;
                 try {
-                    setValue(Integer.parseInt(this.editBuffer));
+                    setValue(Double.parseDouble(this.editBuffer));
                 } catch (NumberFormatException nfx) {}
                 redraw();
             } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
@@ -174,18 +171,16 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
         }
 
         if (!this.editing) {
-            int times = 1;
-            if (this.parameter != null) {
-                if (keyEvent.isShiftDown()) {
-                    times = Math.max(1, this.parameter.getRange() / 10);
-                }
+            double increment = 1;
+            if (keyEvent.isShiftDown()) {
+                increment = .1;
             }
             if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
                 || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-                setValue(getValue() - times);
+                setValue(getValue() - increment);
             } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
                 || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-                setValue(getValue() + times);
+                setValue(getValue() + increment);
             }
         }
     }

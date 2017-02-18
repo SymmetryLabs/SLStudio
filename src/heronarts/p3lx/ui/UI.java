@@ -284,6 +284,8 @@ public class UI {
      * @return this UI
      */
     public UI addLayer(UI3dContext layer) {
+        // TODO(mcslee): these loop tasks should be done on the UI thread
+        // not the engine thread
         this.lx.engine.addLoopTask(layer);
         this.root.children.add(layer);
         layer.parent = this.root;
