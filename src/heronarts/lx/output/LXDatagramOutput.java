@@ -61,16 +61,14 @@ public class LXDatagramOutput extends LXOutput {
      *
      * @param colors Color values
      */
-    protected/* abstract */void beforeSend(int[] colors) {
-    }
+    protected /* abstract */ void beforeSend(int[] colors) {}
 
     /**
      * Subclasses may override. Invoked after datagrams are sent.
      *
      * @param colors Color values
      */
-    protected/* abstract */void afterSend(int[] colors) {
-    }
+    protected /* abstract */ void afterSend(int[] colors) {}
 
     /**
      * Core method which sends the datagrams.

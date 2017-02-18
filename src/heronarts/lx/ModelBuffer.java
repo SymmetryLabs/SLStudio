@@ -24,7 +24,7 @@ public class ModelBuffer implements LXBuffer {
 
     private int[] array;
 
-    ModelBuffer(LX lx) {
+    public ModelBuffer(LX lx) {
         initArray(lx.model);
 
         lx.addListener(new LX.Listener() {

@@ -24,13 +24,17 @@ import heronarts.lx.blend.LXBlend;
 import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameterized;
 import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.pattern.SolidColorPattern;
@@ -83,7 +87,11 @@ public class LXEngine extends LXParameterized {
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
-    private LXOutput output = null;
+
+    /**
+     * The master output drive
+     */
+    public  final LXOutput output;
 
     private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
@@ -97,6 +105,9 @@ public class LXEngine extends LXParameterized {
 
     public final BoundedParameter crossfader = new BoundedParameter("CROSSFADE", 0.5);
     public final DiscreteParameter crossfaderBlendMode;
+
+    public final BooleanParameter cueLeft = new BooleanParameter("CUE-L", false);
+    public final BooleanParameter cueRight = new BooleanParameter("CUE-R", false);
 
     public final BoundedParameter speed = new BoundedParameter("SPEED", 1, 0, 2);
 
@@ -155,47 +166,13 @@ public class LXEngine extends LXParameterized {
 
     public final Timer timer = new Timer();
 
-    /**
-     * Utility class for a threaded engine to do buffer-flipping. One buffer is
-     * actively being worked on, while another copy is held for shuffling off to
-     * another thread.
-     */
-    private class DoubleBuffer implements LXBuffer {
-
-        // Concrete buffer instances, these are real memory
-        private final int[] buffer1;
-        private final int[] buffer2;
-
-        // References, these flip between pointing to buffer1 and buffer 2
-        private int[] render;
-        private int[] copy;
-
-        private DoubleBuffer() {
-            this.render = this.buffer1 = new int[lx.total];
-            this.copy = this.buffer2 = new int[lx.total];
-            for (int i = 0; i < lx.total; ++i) {
-                this.buffer1[i] = this.buffer2[i] = 0;
-            }
-        }
-
-        private void flip() {
-            int[] tmp = this.render;
-            this.render = this.copy;
-            this.copy = tmp;
-        }
-
-        @Override
-        public int[] getArray() {
-            return this.render;
-        }
-    }
-
-    private final DoubleBuffer buffer;
+    private final ModelBuffer uiBuffer;
 
     private final ModelBuffer background;
     private final ModelBuffer blendBufferMain;
     private final ModelBuffer blendBufferLeft;
     private final ModelBuffer blendBufferRight;
+    private final ModelBuffer blendBufferCue;
 
     long nowMillis = 0;
     private long lastMillis;
@@ -213,18 +190,22 @@ public class LXEngine extends LXParameterized {
     LXEngine(LX lx) {
         this.lx = lx;
 
+        // Background and blending buffers
         this.background = new ModelBuffer(lx);
-        int[] backgroundArray = this.background.getArray();
-        for (int i = 0; i < backgroundArray.length; ++i) {
-            backgroundArray[i] = 0xff000000;
-        }
-
         this.blendBufferMain = new ModelBuffer(lx);
         this.blendBufferLeft = new ModelBuffer(lx);
         this.blendBufferRight = new ModelBuffer(lx);
+        this.blendBufferCue = new ModelBuffer(lx);
 
-        // Master double-buffer
-        this.buffer = new DoubleBuffer();
+        // Double-buffer for the UI thread
+        this.uiBuffer = new ModelBuffer(lx);
+
+        // Initilize UI and background to black
+        int[] uiArray = this.uiBuffer.getArray();
+        int[] backgroundArray = this.background.getArray();
+        for (int i = 0; i < backgroundArray.length; ++i) {
+            uiArray[i] = backgroundArray[i] = LXColor.BLACK;
+        }
 
         // Blend modes
         this.blendModes = new LXBlend[] {
@@ -237,6 +218,32 @@ public class LXEngine extends LXParameterized {
 
         // Crossfader blend mode
         this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.blendModes.length);
+
+        // Cue setup
+        this.cueLeft.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                cueRight.setValue(false);
+                for (LXChannel channel : channels) {
+                    channel.cueActive.setValue(false);
+                }
+            }
+        });
+        this.cueRight.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                cueLeft.setValue(false);
+                for (LXChannel channel : channels) {
+                    channel.cueActive.setValue(false);
+                }
+            }
+        });
+
+        // Master output
+        this.output = new LXOutput(lx) {
+            @Override
+            protected void onSend(int[] colors) {
+                // Master output is a dummy container for child outputs
+            }
+        };
 
         // Midi engine
         this.midiEngine = new LXMidiEngine(lx);
@@ -342,8 +349,6 @@ public class LXEngine extends LXParameterized {
             }
         } else {
             this.isThreaded = true;
-            // Copy the current frame to avoid a black frame
-            System.arraycopy(this.buffer.render, 0, this.buffer.copy, 0, this.buffer.render.length);
             this.engineThread = new Thread("LX Engine Thread") {
                 @Override
                 public void run() {
@@ -351,9 +356,6 @@ public class LXEngine extends LXParameterized {
                     while (!isInterrupted()) {
                         long frameStart = System.currentTimeMillis();
                         LXEngine.this.run();
-                        synchronized (buffer) {
-                            buffer.flip();
-                        }
                         long frameMillis = System.currentTimeMillis() - frameStart;
                         frameRate = 1000.f / frameMillis;
                         float targetFPS = framesPerSecond.getValuef();
@@ -452,8 +454,8 @@ public class LXEngine extends LXParameterized {
      * @param output Output driver, or null for no output
      * @return this
      */
-    public LXEngine setOutput(LXOutput output) {
-        this.output = output;
+    public LXEngine addOutput(LXOutput output) {
+        this.output.addChild(output);
         return this;
     }
 
@@ -544,7 +546,7 @@ public class LXEngine extends LXParameterized {
         getDefaultChannel().enableAutoTransition(autoTransitionThreshold);
     }
 
-    public synchronized void run() {
+    public void run() {
         this.hasStarted = true;
 
         long runStart = System.nanoTime();
@@ -566,6 +568,25 @@ public class LXEngine extends LXParameterized {
             return;
         }
 
+        // Process MIDI events
+        long midiStart = System.nanoTime();
+        this.midiEngine.dispatch();
+        this.timer.midiNanos = System.nanoTime() - midiStart;
+
+        // Process OSC events
+        long oscStart = System.nanoTime();
+        this.oscEngine.dispatch();
+        this.timer.oscNanos = System.nanoTime() - oscStart;
+
+        // Process UI input events
+        if (this.inputDispatch == null) {
+            this.timer.inputNanos = 0;
+        } else {
+            long inputStart = System.nanoTime();
+            this.inputDispatch.dispatch();
+            this.timer.inputNanos = System.nanoTime() - inputStart;
+        }
+
         // Run tempo, always using real-time
         this.lx.tempo.loop(deltaMs);
 
@@ -583,18 +604,21 @@ public class LXEngine extends LXParameterized {
         int[] blendOutputMain = this.blendBufferMain.getArray();
         int[] blendOutputLeft = this.blendBufferLeft.getArray();
         int[] blendOutputRight = this.blendBufferRight.getArray();
+        int[] blendOutputCue = this.blendBufferCue.getArray();
+        int[] blendDestinationCue = backgroundArray;
 
         double crossfadeValue = this.crossfader.getValue();
 
         boolean leftOn = crossfadeValue < 1.;
         boolean rightOn = crossfadeValue > 0.;
+        boolean cueOn = false;
 
         int leftChannelCount = 0;
         int rightChannelCount = 0;
         int mainChannelCount = 0;
 
         for (LXChannel channel : this.channels) {
-            if (channel.enabled.isOn()) {
+            if (channel.enabled.isOn() || channel.cueActive.isOn()) {
                 channel.loop(deltaMs);
 
                 boolean doBlend = false;
@@ -604,12 +628,12 @@ public class LXEngine extends LXParameterized {
                 case LXChannel.CROSSFADE_GROUP_LEFT:
                     blendDestination = (leftChannelCount++ > 0) ? blendOutputLeft : backgroundArray;
                     blendOutput = blendOutputLeft;
-                    doBlend = leftOn;
+                    doBlend = leftOn || this.cueLeft.isOn();
                     break;
                 case LXChannel.CROSSFADE_GROUP_RIGHT:
                     blendDestination = (rightChannelCount++ > 0) ? blendOutputRight: backgroundArray;
                     blendOutput = blendOutputRight;
-                    doBlend = rightOn;
+                    doBlend = rightOn || this.cueRight.isOn();
                     break;
                 default:
                 case LXChannel.CROSSFADE_GROUP_BYPASS:
@@ -621,7 +645,7 @@ public class LXEngine extends LXParameterized {
 
                 long blendStart = System.nanoTime();
                 if (doBlend) {
-                    double alpha = channel.getFader().getValue();
+                    double alpha = channel.fader.getValue();
                     if (alpha > 0) {
                         LXBlend blend = this.blendModes[channel.blendMode.getValuei()];
                         blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
@@ -631,8 +655,26 @@ public class LXEngine extends LXParameterized {
                         System.arraycopy(blendDestination, 0, blendOutput, 0, blendDestination.length);
                     }
                 }
+                if (channel.cueActive.isOn()) {
+                    cueOn = true;
+                    this.addBlend.blend(blendDestinationCue, channel.getColors(), 1, blendOutputCue);
+                    blendDestinationCue = blendOutputCue;
+                }
+
                 ((LXChannel.Timer)channel.timer).blendNanos = System.nanoTime() - blendStart;
             }
+        }
+
+        if (this.cueLeft.isOn()) {
+            if (leftChannelCount > 0) {
+                blendDestinationCue = blendOutputLeft;
+            }
+            cueOn = true;
+        } else if (this.cueRight.isOn()) {
+            if (rightChannelCount > 0) {
+                blendDestinationCue = blendOutputRight;
+            }
+            cueOn = true;
         }
 
         boolean leftContent = leftOn && (leftChannelCount > 0);
@@ -678,47 +720,28 @@ public class LXEngine extends LXParameterized {
             System.arraycopy(backgroundArray, 0, blendOutputMain, 0, backgroundArray.length);
         }
 
-        // Time to apply FX to the main blended output
+        // Time to apply master FX to the main blended output
         long fxStart = System.nanoTime();
         for (LXEffect fx : this.effects) {
-            ((LXLayeredComponent) fx).setBuffer(this.buffer);
+            ((LXLayeredComponent) fx).setBuffer(this.blendBufferMain);
             fx.loop(deltaMs);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
 
-        // Copy colors into our own rendering buffer
-        // TODO(mcslee): this is for the UI! take channel cue-ing into account here...
+        // Frame is now ready, copy into the UI buffer
         long copyStart = System.nanoTime();
-        System.arraycopy(blendOutputMain, 0, this.buffer.render, 0, blendOutputMain.length);
-        this.timer.copyNanos = System.nanoTime() - copyStart;
-
-
-
-
-        // Process UI input events
-        if (this.inputDispatch == null) {
-            this.timer.inputNanos = 0;
-        } else {
-            long inputStart = System.nanoTime();
-            this.inputDispatch.dispatch();
-            this.timer.inputNanos = System.nanoTime() - inputStart;
+        synchronized (this.uiBuffer) {
+            if (cueOn) {
+                System.arraycopy(blendDestinationCue, 0, this.uiBuffer.getArray(), 0, blendDestinationCue.length);
+            } else {
+                System.arraycopy(blendOutputMain, 0, this.uiBuffer.getArray(), 0, blendOutputMain.length);
+            }
         }
-
-        // Process MIDI events
-        long midiStart = System.nanoTime();
-        this.midiEngine.dispatch();
-        this.timer.midiNanos = System.nanoTime() - midiStart;
-
-        // Process OSC events
-        long oscStart = System.nanoTime();
-        this.oscEngine.dispatch();
-        this.timer.oscNanos = System.nanoTime() - oscStart;
+        this.timer.copyNanos = System.nanoTime() - copyStart;
 
         // Send to outputs
         long outputStart = System.nanoTime();
-        if (this.output != null) {
-            this.output.send(this.buffer.render);
-        }
+        this.output.send(blendOutputMain);
         this.timer.outputNanos = System.nanoTime() - outputStart;
 
         this.timer.runNanos = System.nanoTime() - runStart;
@@ -731,11 +754,9 @@ public class LXEngine extends LXParameterized {
      *
      * @param copy Buffer to copy into
      */
-    public void copyBuffer(int[] copy) {
-        synchronized (this.buffer) {
-            for (int i = 0; i < this.buffer.copy.length; ++i) {
-                copy[i] = this.buffer.copy[i];
-            }
+    public void copyUIBuffer(int[] copy) {
+        synchronized (this.uiBuffer) {
+            System.arraycopy(this.uiBuffer.getArray(), 0, copy, 0, copy.length);
         }
     }
 
@@ -745,7 +766,7 @@ public class LXEngine extends LXParameterized {
      *
      * @return The internal render buffer
      */
-    public int[] renderBuffer() {
-        return this.buffer.render;
+    public int[] getUIBufferNonThreadSafe() {
+        return this.uiBuffer.getArray();
     }
 }

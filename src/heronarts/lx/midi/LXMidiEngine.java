@@ -33,10 +33,10 @@ public class LXMidiEngine {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
 
-    private final List<LXShortMessage> midiThreadEventQueue =
+    private final List<LXShortMessage> threadSafeEventQueue =
         Collections.synchronizedList(new ArrayList<LXShortMessage>());
 
-    private final List<LXShortMessage> localThreadEventQueue =
+    private final List<LXShortMessage> engineThreadEventQueue =
         new ArrayList<LXShortMessage>();
 
     final LX lx;
@@ -69,7 +69,7 @@ public class LXMidiEngine {
     }
 
     void queueMessage(LXShortMessage message) {
-        this.midiThreadEventQueue.add(message);
+        this.threadSafeEventQueue.add(message);
     }
 
     /**
@@ -77,12 +77,12 @@ public class LXMidiEngine {
      * input queue.
      */
     public void dispatch() {
-        this.localThreadEventQueue.clear();
-        synchronized (this.midiThreadEventQueue) {
-            this.localThreadEventQueue.addAll(this.midiThreadEventQueue);
-            this.midiThreadEventQueue.clear();
+        this.engineThreadEventQueue.clear();
+        synchronized (this.threadSafeEventQueue) {
+            this.engineThreadEventQueue.addAll(this.threadSafeEventQueue);
+            this.threadSafeEventQueue.clear();
         }
-        for (LXShortMessage message : this.localThreadEventQueue) {
+        for (LXShortMessage message : this.engineThreadEventQueue) {
             message.getInput().dispatch(message);
         }
     }
@@ -96,7 +96,7 @@ public class LXMidiEngine {
             dispatch(message, listener);
         }
         for (LXChannel channel : this.lx.engine.getChannels()) {
-            if (channel.midiEnabled.isOn()) {
+            if (channel.midiMonitor.isOn()) {
                 dispatch(message, channel.getActivePattern());
                 LXPattern nextPattern = channel.getNextPattern();
                 if (nextPattern != null) {

@@ -32,27 +32,9 @@ public class LXBufferedComponent extends LXLayeredComponent {
         return getBuffer().getArray();
     }
 
-    public final synchronized void copyColors(int[] copy) {
-        int[] colors = getBuffer().getArray();
-        for (int i = 0; i < colors.length; ++i) {
-            copy[i] = colors[i];
-        }
-    }
-
     @Override
     public void loop(double deltaMs) {
-        if (this.lx.engine.isThreaded()) {
-            // NOTE: we know that this method will always be invoked from inside
-            // the engine thread run hierarchy, which is synchronized on LXEngine,
-            // therefore we do not need to lock on the engine here as it is already
-            // held, but we synchronize on ourselves to avoid conflict with the
-            // copyColors() method
-            synchronized(this) {
-                super.loop(deltaMs);
-            }
-        } else {
-            super.loop(deltaMs);
-        }
+        super.loop(deltaMs);
     }
 
 }

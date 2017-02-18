@@ -186,7 +186,7 @@ public class LX {
         this.engine = new LXEngine(this);
 
         // Add a default channel
-        this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).getFader().setValue(1);
+        this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).fader.setValue(1);
 
         this.baseHue = null;
         this.cycleBaseHue(30000);
@@ -604,13 +604,13 @@ public class LX {
     }
 
     /**
-     * Sets the output driver
+     * Adds an output driver
      *
      * @param output Output
      * @return this
      */
-    public LX setOutput(LXOutput output) {
-        this.engine.setOutput(output);
+    public LX addOutput(LXOutput output) {
+        this.engine.addOutput(output);
         return this;
     }
 

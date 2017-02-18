@@ -103,8 +103,8 @@ public abstract class LXOutput {
         this.allWhite = new int[lx.total];
         this.allOff = new int[lx.total];
         for (int i = 0; i < lx.total; ++i) {
-            this.allWhite[i] = 0xffffffff;
-            this.allOff[i] = 0xff000000;
+            this.allWhite[i] = LXColor.WHITE;
+            this.allOff[i] = LXColor.BLACK;
         }
     }
 

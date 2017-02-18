@@ -37,10 +37,10 @@ public class LXOscEngine {
     private final List<LXOscListener> listeners = new ArrayList<LXOscListener>();
     private final List<LXOscListener> listenerSnapshot = new ArrayList<LXOscListener>();
 
-    private final List<OscMessage> oscThreadEventQueue =
+    private final List<OscMessage> threadSafeEventQueue =
         Collections.synchronizedList(new ArrayList<OscMessage>());
 
-    private final List<OscMessage> localThreadEventQueue =
+    private final List<OscMessage> engineThreadEventQueue =
         new ArrayList<OscMessage>();
 
     public LXOscEngine(LX lx) {
@@ -114,10 +114,10 @@ public class LXOscEngine {
 
                             // Add all messages in the packet to the queue
                             if (oscPacket instanceof OscMessage) {
-                                oscThreadEventQueue.add((OscMessage) oscPacket);
+                                threadSafeEventQueue.add((OscMessage) oscPacket);
                             } else if (oscPacket instanceof OscBundle) {
                                 for (OscMessage message : (OscBundle) oscPacket) {
-                                    oscThreadEventQueue.add(message);
+                                    threadSafeEventQueue.add(message);
                                 }
                             }
                         } catch (OscException oscx) {
@@ -184,13 +184,13 @@ public class LXOscEngine {
      * input queue.
      */
     public void dispatch() {
-        this.localThreadEventQueue.clear();
-        synchronized (this.oscThreadEventQueue) {
-            this.localThreadEventQueue.addAll(this.oscThreadEventQueue);
-            this.oscThreadEventQueue.clear();
+        this.engineThreadEventQueue.clear();
+        synchronized (this.threadSafeEventQueue) {
+            this.engineThreadEventQueue.addAll(this.threadSafeEventQueue);
+            this.threadSafeEventQueue.clear();
         }
         // TODO(mcslee): do we want to handle NTP timetags?
-        for (OscMessage message : this.localThreadEventQueue) {
+        for (OscMessage message : this.engineThreadEventQueue) {
             dispatch(message);
         }
     }

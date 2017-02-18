@@ -28,7 +28,6 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
-import heronarts.lx.transition.DissolveTransition;
 import heronarts.lx.transition.LXTransition;
 
 import java.util.ArrayList;
@@ -150,7 +149,12 @@ public class LXChannel extends LXComponent {
     /**
      * Whether this channel should listen to MIDI events
      */
-    public final BooleanParameter midiEnabled = new BooleanParameter("MIDI", false);
+    public final BooleanParameter midiMonitor = new BooleanParameter("MIDI", false);
+
+    /**
+     * Whether this channel should show in the cue UI.
+     */
+    public final BooleanParameter cueActive = new BooleanParameter("CUE", false);
 
     /**
      * Whether auto pattern transition is enabled on this channel
@@ -178,8 +182,7 @@ public class LXChannel extends LXComponent {
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
 
-    private LXTransition faderTransition = null;
-    private final BoundedParameter fader = new BoundedParameter("FADER", 0);
+    public final BoundedParameter fader = new BoundedParameter("FADER", 0);
 
     public final DiscreteParameter blendMode;
 
@@ -195,13 +198,13 @@ public class LXChannel extends LXComponent {
         this.name = new StringParameter("Name", "Channel-" + (index+1));
         this.blendBuffer = new ModelBuffer(lx);
         this.blendMode = new DiscreteParameter("BLEND", lx.engine.getBlendModes().length);
-        this.faderTransition = new DissolveTransition(lx);
         this.transitionMillis = System.currentTimeMillis();
         _updatePatterns(patterns);
         this.colors = this.getActivePattern().getColors();
 
         addParameter(this.enabled);
-        addParameter(this.midiEnabled);
+        addParameter(this.cueActive);
+        addParameter(this.midiMonitor);
         addParameter(this.autoTransitionEnabled);
 
     }
@@ -211,6 +214,11 @@ public class LXChannel extends LXComponent {
         if (p == this.autoTransitionEnabled) {
             if (this.transition == null) {
                 this.transitionMillis = System.currentTimeMillis();
+            }
+        } else if (p == this.cueActive) {
+            if (this.cueActive.isOn()) {
+                this.lx.engine.cueLeft.setValue(false);
+                this.lx.engine.cueRight.setValue(false);
             }
         }
     }
@@ -229,42 +237,24 @@ public class LXChannel extends LXComponent {
         }
     }
 
-    public synchronized final void addListener(Listener listener) {
+    public final void addListener(Listener listener) {
         this.listeners.add(listener);
     }
 
-    public synchronized final void removeListener(Listener listener) {
+    public final void removeListener(Listener listener) {
         this.listeners.remove(listener);
     }
 
-    final synchronized LXChannel setIndex(int index) {
+    final LXChannel setIndex(int index) {
         this.index = index;
         return this;
     }
 
-    public synchronized final int getIndex() {
+    public final int getIndex() {
         return this.index;
     }
 
-    public final BoundedParameter getFader() {
-        return this.fader;
-    }
-
-    public synchronized final LXTransition getFaderTransition() {
-        return this.faderTransition;
-    }
-
-    public synchronized final LXChannel setFaderTransition(LXTransition transition) {
-        if (this.faderTransition != transition) {
-            this.faderTransition = transition;
-            for (Listener listener : this.listeners) {
-                listener.faderTransitionDidChange(this, this.faderTransition);
-            }
-        }
-        return this;
-    }
-
-    public synchronized final LXChannel addEffect(LXEffect effect) {
+    public final LXChannel addEffect(LXEffect effect) {
         this.effects.add(effect);
         for (Listener listener : this.listeners) {
             listener.effectAdded(this, effect);
@@ -272,7 +262,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized final LXChannel removeEffect(LXEffect effect) {
+    public final LXChannel removeEffect(LXEffect effect) {
         this.effects.remove(effect);
         for (Listener listener : this.listeners) {
             listener.effectRemoved(this, effect);
@@ -280,15 +270,15 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized final List<LXEffect> getEffects() {
+    public final List<LXEffect> getEffects() {
         return this.unmodifiableEffects;
     }
 
-    public synchronized final List<LXPattern> getPatterns() {
+    public final List<LXPattern> getPatterns() {
         return this.unmodifiablePatterns;
     }
 
-    public synchronized final LXPattern getPattern(String className) {
+    public final LXPattern getPattern(String className) {
         for (LXPattern pattern : this.unmodifiablePatterns) {
             if (pattern.getClass().getName().equals(className)) {
                 return pattern;
@@ -297,7 +287,7 @@ public class LXChannel extends LXComponent {
         return null;
     }
 
-    public synchronized final LXChannel setPatterns(LXPattern[] patterns) {
+    public final LXChannel setPatterns(LXPattern[] patterns) {
         getActivePattern().onInactive();
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
@@ -306,7 +296,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized final LXChannel addPattern(LXPattern pattern) {
+    public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         ((LXComponent)pattern).setModel(this.model);
         ((LXComponent)pattern).setPalette(this.palette);
@@ -317,7 +307,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized final LXChannel removePattern(LXPattern pattern) {
+    public final LXChannel removePattern(LXPattern pattern) {
         if (this.patterns.size() <= 1) {
             throw new UnsupportedOperationException("LXChannel must have at least one pattern");
         }
@@ -360,27 +350,27 @@ public class LXChannel extends LXComponent {
         }
     }
 
-    public synchronized final int getActivePatternIndex() {
+    public final int getActivePatternIndex() {
         return this.activePatternIndex;
     }
 
-    public synchronized final LXPattern getActivePattern() {
+    public final LXPattern getActivePattern() {
         return this.patterns.get(this.activePatternIndex);
     }
 
-    public synchronized final int getNextPatternIndex() {
+    public final int getNextPatternIndex() {
         return this.nextPatternIndex;
     }
 
-    public synchronized final LXPattern getNextPattern() {
+    public final LXPattern getNextPattern() {
         return this.patterns.get(this.nextPatternIndex);
     }
 
-    protected synchronized final LXTransition getActiveTransition() {
+    protected final LXTransition getActiveTransition() {
         return this.transition;
     }
 
-    public synchronized final LXChannel goPrev() {
+    public final LXChannel goPrev() {
         if (this.transition != null) {
             return this;
         }
@@ -392,7 +382,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized final LXChannel goNext() {
+    public final LXChannel goNext() {
         if (this.transition != null) {
             return this;
         }
@@ -408,7 +398,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized final LXChannel goPattern(LXPattern pattern) {
+    public final LXChannel goPattern(LXPattern pattern) {
         int pi = 0;
         for (LXPattern p : this.patterns) {
             if (p == pattern) {
@@ -419,7 +409,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized final LXChannel goIndex(int i) {
+    public final LXChannel goIndex(int i) {
         if (this.transition != null) {
             return this;
         }
@@ -431,18 +421,18 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public synchronized LXChannel disableAutoTransition() {
+    public LXChannel disableAutoTransition() {
         this.autoTransitionEnabled.setValue(false);
         return this;
     }
 
-    public synchronized LXChannel enableAutoTransition(int autoTransitionThreshold) {
+    public LXChannel enableAutoTransition(int autoTransitionThreshold) {
         this.autoTransitionTime.setValue(autoTransitionThreshold);
         this.autoTransitionEnabled.setValue(true);
         return this;
     }
 
-    private synchronized void startTransition() {
+    private void startTransition() {
         LXPattern activePattern = getActivePattern();
         LXPattern nextPattern = getNextPattern();
         if (activePattern == nextPattern) {
@@ -462,7 +452,7 @@ public class LXChannel extends LXComponent {
         }
     }
 
-    private synchronized void finishTransition() {
+    private void finishTransition() {
         getActivePattern().onInactive();
         this.activePatternIndex = this.nextPatternIndex;
         LXPattern activePattern = getActivePattern();
@@ -477,7 +467,7 @@ public class LXChannel extends LXComponent {
     }
 
     @Override
-    public synchronized void loop(double deltaMs) {
+    public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
 
         // Run modulators and components
@@ -525,14 +515,8 @@ public class LXChannel extends LXComponent {
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
-    public synchronized int[] getColors() {
+    int[] getColors() {
         return this.colors;
-    }
-
-    public synchronized void copyColors(int[] copy) {
-        for (int i = 0; i < this.colors.length; ++i) {
-            copy[i] = this.colors[i];
-        }
     }
 
 }
