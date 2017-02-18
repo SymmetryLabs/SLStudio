@@ -65,7 +65,7 @@ public class Tempo extends LXComponent {
     public Tempo(LX lx) {
         super(lx);
         addParameter(this.bpm);
-        addModulator(this.click).start();
+        startModulator(this.click);
     }
 
     @Override
@@ -173,11 +173,23 @@ public class Tempo extends LXComponent {
     }
 
     /**
-     * Re-triggers the metronome, so that it immediately beats.
+     * Re-triggers the metronome, so that it immediately beats. Also resetting the
+     * beat count to be at the beginning of a measure.
      */
     public void trigger() {
-        this.beatCount = 0;
-        this.click.fire();
+        trigger(true);
+    }
+
+    /**
+     * Triggers a beat, optionally resetting the beat count
+     *
+     * @param resetBeat True if the beat count should be reset to 0
+     */
+    public void trigger(boolean resetBeat) {
+        if (!beat()) {
+            this.beatCount = resetBeat ? 0 : this.beatCount + 1;
+            this.click.fire();
+        }
         this.triggered = true;
     }
 
