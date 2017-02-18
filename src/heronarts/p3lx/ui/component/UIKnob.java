@@ -60,8 +60,8 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         float arcStart = PConstants.HALF_PI + KNOB_INDENT;
         float arcRange = (PConstants.TWO_PI - 2 * KNOB_INDENT);
         pg.fill(ui.theme.getControlBackgroundColor());
-        pg.stroke(ui.theme.getWindowBackgroundColor());
-        pg.arc(arcCenter, arcCenter, KNOB_SIZE, KNOB_SIZE, arcStart,
+        pg.noStroke();
+        pg.arc(arcCenter, arcCenter, KNOB_SIZE, KNOB_SIZE, arcStart + knobValue * arcRange,
                 arcStart + arcRange);
 
         // Light ring indicating value
