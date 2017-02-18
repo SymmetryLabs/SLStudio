@@ -160,17 +160,22 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
     }
 
     private void toggleExpanded() {
-        if (!this.expanded) {
-            this.expanded = true;
-            this.highlight = this.parameter.getValuei();
-            if (this.direction == Direction.UP) {
-                setPosition(this.x, this.closedY - this.closedHeight * this.parameter.getRange());
+        setExpanded(!this.expanded);
+    }
+
+    private void setExpanded(boolean expanded) {
+        if (this.expanded != expanded) {
+            this.expanded = expanded;
+            if (expanded) {
+                this.highlight = this.parameter.getValuei();
+                if (this.direction == Direction.UP) {
+                    setPosition(this.x, this.closedY - this.closedHeight * this.parameter.getRange());
+                }
+                setSize(this.width, this.closedHeight * (this.parameter.getRange() + 1));
+            } else {
+                setPosition(this.x, this.closedY);
+                setSize(this.width, this.closedHeight);
             }
-            setSize(this.width, this.closedHeight * (this.parameter.getRange() + 1));
-        } else {
-            this.expanded = false;
-            setPosition(this.x, this.closedY);
-            setSize(this.width, this.closedHeight);
         }
     }
 
@@ -217,6 +222,8 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
         if (keyCode == java.awt.event.KeyEvent.VK_ENTER ||
                 keyCode == java.awt.event.KeyEvent.VK_SPACE) {
             toggleExpanded();
+        } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
             this.parameter.increment();
         } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {

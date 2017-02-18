@@ -208,10 +208,8 @@ public abstract class UIObject {
         if (this.parent == null) {
             throw new IllegalStateException("Cannot bring to front when not in any container");
         }
-        synchronized (this.parent.children) {
-            this.parent.children.remove(this);
-            this.parent.children.add(this);
-        }
+        this.parent.children.remove(this);
+        this.parent.children.add(this);
         return this;
     }
 

@@ -165,13 +165,13 @@ public class UI {
     /**
      * Redraw may be called from any thread
      */
-    private final List<UI2dComponent> otherThreadRedrawList =
+    private final List<UI2dComponent> threadSafeRedrawList =
         Collections.synchronizedList(new ArrayList<UI2dComponent>());
 
     /**
      * Objects to redraw on current pass thru animation thread
      */
-    private final List<UI2dComponent> localThreadRedrawList =
+    private final List<UI2dComponent> uiThreadRedrawList =
         new ArrayList<UI2dComponent>();
 
     /**
@@ -324,7 +324,7 @@ public class UI {
     }
 
     void redraw(UI2dComponent object) {
-        this.otherThreadRedrawList.add(object);
+        this.threadSafeRedrawList.add(object);
     }
 
     /**
@@ -334,12 +334,12 @@ public class UI {
         long drawStart = System.nanoTime();
 
         // Iterate through all objects that need redraw state marked
-        this.localThreadRedrawList.clear();
-        synchronized (this.otherThreadRedrawList) {
-            this.localThreadRedrawList.addAll(this.otherThreadRedrawList);
-            this.otherThreadRedrawList.clear();
+        this.uiThreadRedrawList.clear();
+        synchronized (this.threadSafeRedrawList) {
+            this.uiThreadRedrawList.addAll(this.threadSafeRedrawList);
+            this.threadSafeRedrawList.clear();
         }
-        for (UI2dComponent object : this.localThreadRedrawList) {
+        for (UI2dComponent object : this.uiThreadRedrawList) {
             object._redraw();
         }
 
@@ -485,10 +485,10 @@ public class UI {
         if (action == KeyEvent.RELEASE) {
             switch (Character.toLowerCase(keyChar)) {
             case '[':
-                this.lx.engine.goPrev();
+                this.lx.engine.getFocusedChannel().goPrev();
                 break;
             case ']':
-                this.lx.engine.goNext();
+                this.lx.engine.getFocusedChannel().goNext();
                 break;
             case ' ':
                 if (this.lx.flags.keyboardTempo) {
@@ -500,12 +500,12 @@ public class UI {
             switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
                 if (keyEvent.isMetaDown()) {
-                    this.lx.engine.goPrev();
+                    this.lx.engine.getFocusedChannel().goPrev();
                 }
                 break;
             case java.awt.event.KeyEvent.VK_DOWN:
                 if (keyEvent.isMetaDown()) {
-                    this.lx.engine.goNext();
+                    this.lx.engine.getFocusedChannel().goNext();
                 }
                 break;
             case java.awt.event.KeyEvent.VK_LEFT:

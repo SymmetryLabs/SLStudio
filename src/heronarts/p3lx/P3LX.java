@@ -26,6 +26,7 @@ package heronarts.p3lx;
 
 import heronarts.p3lx.ui.UI;
 import heronarts.lx.LX;
+import heronarts.lx.ModelBuffer;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.StripModel;
@@ -64,7 +65,7 @@ public class P3LX extends LX {
     /**
      * Internal buffer for colors, owned by Processing animation thread.
      */
-    private final int[] buffer;
+    private final ModelBuffer buffer;
 
     /**
      * The current frame's colors, either from the engine or the buffer. Note that
@@ -101,8 +102,8 @@ public class P3LX extends LX {
     public P3LX(PApplet applet, LXModel model) {
         super(model);
         this.applet = applet;
-        this.buffer = new int[this.total];
-        this.colors = this.engine.renderBuffer();
+        this.buffer = new ModelBuffer(this);
+        this.colors = this.engine.getUIBufferNonThreadSafe();
 
         this.audio.setMinimCallback(applet);
 
@@ -163,10 +164,10 @@ public class P3LX extends LX {
             // triggered by some action on the engine thread itself. It's okay
             // if this happens, worst side effect is the UI getting the last frame
             // from the copy buffer.
-            this.engine.copyBuffer(this.colors = this.buffer);
+            this.engine.copyUIBuffer(this.colors = this.buffer.getArray());
             if (this.flags.showFramerate) {
                 frameRateStr = "Engine: " + this.engine.frameRate() + " "
-                    + "Render: " + this.applet.frameRate;
+                    + "UI: " + this.applet.frameRate;
             }
         } else {
             // If the engine is not threaded, then we run it ourselves, and
@@ -174,7 +175,7 @@ public class P3LX extends LX {
             // We don't need to worry about lock contention because we are
             // currently on the only thread that *could* start the engine.
             this.engine.run();
-            this.colors = this.engine.renderBuffer();
+            this.colors = this.engine.getUIBufferNonThreadSafe();
             if (this.flags.showFramerate) {
                 frameRateStr = "Framerate: " + this.applet.frameRate;
             }
