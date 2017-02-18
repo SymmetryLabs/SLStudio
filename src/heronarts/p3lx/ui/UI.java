@@ -497,6 +497,9 @@ public class UI {
                 break;
             }
         } else if (action == KeyEvent.PRESS) {
+            if (keyCode == java.awt.event.KeyEvent.VK_T && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
+                this.lx.engine.setThreaded(!this.lx.engine.isThreaded());
+            }
             switch (keyCode) {
             case java.awt.event.KeyEvent.VK_UP:
                 if (keyEvent.isMetaDown()) {
