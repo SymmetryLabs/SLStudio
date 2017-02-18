@@ -77,10 +77,8 @@ public class LXEngine extends LXParameterized {
 
     private Dispatch inputDispatch = null;
 
-    /**
-     * The available blend modes
-     */
-    private LXBlend[] blendModes;
+    private LXBlend[] channelBlendModes;
+    private LXBlend[] patternBlendModes;
 
     private final AddBlend addBlend;
 
@@ -208,7 +206,7 @@ public class LXEngine extends LXParameterized {
         }
 
         // Blend modes
-        this.blendModes = new LXBlend[] {
+        this.channelBlendModes = this.patternBlendModes = new LXBlend[] {
             this.addBlend = new AddBlend(lx),
             new NormalBlend(lx),
             new MultiplyBlend(lx),
@@ -217,7 +215,7 @@ public class LXEngine extends LXParameterized {
         };
 
         // Crossfader blend mode
-        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.blendModes);
+        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.channelBlendModes);
 
         // Cue setup
         this.cueLeft.addListener(new LXParameterListener() {
@@ -273,7 +271,7 @@ public class LXEngine extends LXParameterized {
      * @return Blend modes
      */
     public LXBlend[] getBlendModes() {
-        return this.blendModes;
+        return this.channelBlendModes;
     }
 
     /**
@@ -287,10 +285,44 @@ public class LXEngine extends LXParameterized {
         if (this.hasStarted) {
             throw new UnsupportedOperationException("setBlendModes() may only be invoked before engine has started");
         }
-        this.blendModes = blendModes;
-        this.crossfaderBlendMode.setObjects(blendModes);
+        setChannelBlendModes(blendModes);
+        return this;
+    }
+
+    /**
+     * Sets the blend modes available to the channel mixer
+     *
+     * @param channelBlendModes
+     * @return this
+     */
+    public LXEngine setChannelBlendModes(LXBlend[] channelBlendModes) {
+        if (this.hasStarted) {
+            throw new UnsupportedOperationException("setChannelBlendModes() may only be invoked before engine has started");
+        }
+        this.channelBlendModes = channelBlendModes;
+        this.crossfaderBlendMode.setObjects(channelBlendModes);
         for (LXChannel channel : this.channels) {
-            channel.blendMode.setObjects(blendModes);
+            channel.blendMode.setObjects(channelBlendModes);
+        }
+        return this;
+    }
+
+    /**
+     * Sets the blend modes available to patterns
+     *
+     * @param patternBlendModes
+     * @return this
+     */
+    public LXEngine setPatternBlendModes(LXBlend[] patternBlendModes) {
+        if (this.hasStarted) {
+            throw new UnsupportedOperationException("setPatternBlendModes() may only be invoked before engine has started");
+        }
+        this.patternBlendModes = patternBlendModes;
+        for (LXChannel channel : this.channels) {
+            for (LXPattern pattern : channel.getPatterns()) {
+                // TODO(mcslee): set this jonx
+                // pattern.blendMode.setObjects(patternBlendModes);
+            }
         }
         return this;
     }
@@ -699,7 +731,7 @@ public class LXEngine extends LXParameterized {
             }
 
             // Compute the crossfade mix
-            LXBlend blend = this.blendModes[this.crossfaderBlendMode.getValuei()];
+            LXBlend blend = (LXBlend) this.crossfaderBlendMode.getObject();
             blend.blend(crossfadeDestination, crossfadeSource, crossfadeAlpha, crossfadeDestination);
 
             // Add the crossfaded groups to the main buffer
