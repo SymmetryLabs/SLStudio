@@ -153,7 +153,7 @@ public abstract class UIParameterControl extends UI2dComponent implements
         String labelText;
         if (this.showValue && (this.parameter != null)) {
             if (this.parameter instanceof DiscreteParameter) {
-                labelText = "" + (int) this.parameter.getValue();
+                labelText = ((DiscreteParameter) this.parameter).getOption();
             } else if (this.parameter instanceof BooleanParameter) {
                 labelText = (this.parameter.getValue() > 0) ? "ON" : "OFF";
             } else {

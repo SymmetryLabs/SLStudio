@@ -109,7 +109,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
         if (this.options != null) {
             text = this.options[this.parameter.getValuei()];
         } else {
-            text = "" + this.parameter.getValuei();
+            text = Integer.toString(this.parameter.getValuei());
         }
         pg.stroke(ui.theme.getControlBorderColor());
         pg.fill(ui.theme.getControlBackgroundColor());
