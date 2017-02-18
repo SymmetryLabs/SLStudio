@@ -217,7 +217,7 @@ public class LXEngine extends LXParameterized {
         };
 
         // Crossfader blend mode
-        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.blendModes.length);
+        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.blendModes);
 
         // Cue setup
         this.cueLeft.addListener(new LXParameterListener() {
@@ -288,9 +288,9 @@ public class LXEngine extends LXParameterized {
             throw new UnsupportedOperationException("setBlendModes() may only be invoked before engine has started");
         }
         this.blendModes = blendModes;
-        this.crossfaderBlendMode.setRange(blendModes.length);
+        this.crossfaderBlendMode.setObjects(blendModes);
         for (LXChannel channel : this.channels) {
-            channel.blendMode.setRange(blendModes.length);
+            channel.blendMode.setObjects(blendModes);
         }
         return this;
     }
@@ -651,7 +651,7 @@ public class LXEngine extends LXParameterized {
                 if (doBlend) {
                     double alpha = channel.fader.getValue();
                     if (alpha > 0) {
-                        LXBlend blend = this.blendModes[channel.blendMode.getValuei()];
+                        LXBlend blend = (LXBlend) channel.blendMode.getObject();
                         blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
                     } else if (blendDestination != blendOutput) {
                         // Edge-case: copy the blank buffer into the destination blend buffer when

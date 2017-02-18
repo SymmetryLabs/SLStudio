@@ -80,6 +80,14 @@ public abstract class LXBlend {
         return this.name;
     }
 
+    /**
+     * Name of the blend
+     */
+    @Override
+    public String toString() {
+        return getName();
+    }
+
     public void blend(int[] dst, int[] src, double alpha, LXBuffer buffer) {
         blend(dst, src, alpha, buffer.getArray());
     }
