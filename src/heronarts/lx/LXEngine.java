@@ -547,11 +547,15 @@ public class LXEngine extends LXParameterized {
     }
 
     public void moveChannel(LXChannel channel, int index) {
+        boolean focused = channel.getIndex() == this.focusedChannel.getValuei();
         this.channels.remove(channel);
         this.channels.add(index, channel);
         int i = 0;
         for (LXChannel c: this.channels) {
             c.setIndex(i++);
+        }
+        if (focused) {
+            this.focusedChannel.setValue(index);
         }
         for (Listener listener : this.listeners) {
             listener.channelMoved(this, channel);
