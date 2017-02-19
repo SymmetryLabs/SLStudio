@@ -173,6 +173,26 @@ public abstract class UI2dComponent extends UIObject {
      * Set the position of this component in its parent coordinate space
      *
      * @param x X-position in parents coordinate space
+     * @return this
+     */
+    public UI2dComponent setX(float x) {
+        return setPosition(x, this.y);
+    }
+
+    /**
+     * Set the position of this component in its parent coordinate space
+     *
+     * @param y Y-position in parents coordinate space
+     * @return this
+     */
+    public UI2dComponent setY(float y) {
+        return setPosition(this.x, y);
+    }
+
+    /**
+     * Set the position of this component in its parent coordinate space
+     *
+     * @param x X-position in parents coordinate space
      * @param y Y-position in parents coordinate space
      * @return this
      */
@@ -488,11 +508,26 @@ public abstract class UI2dComponent extends UIObject {
      * @return this
      */
     public UI2dComponent addToContainer(UI2dContainer container) {
+        return addToContainer(container, -1);
+    }
+
+    /**
+     * Adds this component to a container at a specified index, also removing it from any
+     * other container that is currently holding it.
+     *
+     * @param container Container to place in
+     * @return this
+     */
+    public UI2dComponent addToContainer(UI2dContainer container, int index) {
         if (this.parent != null) {
             removeFromContainer();
         }
         UIObject containerObject = (UIObject) container;
-        containerObject.children.add(this);
+        if (index < 0) {
+            containerObject.children.add(this);
+        } else {
+            containerObject.children.add(index, this);
+        }
         this.parent = containerObject;
         setUI(containerObject.ui);
         redraw();
