@@ -63,6 +63,30 @@ import java.util.List;
  */
 public class LX {
 
+    public static class InitTimer {
+        private long lastTime;
+
+        protected void init() {
+            this.lastTime = System.nanoTime();
+        }
+
+        public void log(String label) {
+            long thisTime = System.nanoTime();
+            if (LX.LOG_INIT_TIMING) {
+                System.out.println(String.format("[LX init: %s: %.2fms]", label, (thisTime - lastTime) / 1000000.));
+            }
+            this.lastTime = thisTime;
+        }
+    }
+
+    public static final InitTimer initTimer = new InitTimer();
+
+    private static boolean LOG_INIT_TIMING = false;
+
+    public static void logInitTiming() {
+        LX.LOG_INIT_TIMING = true;
+    }
+
     /**
      * Listener for top-level events
      */
@@ -163,8 +187,8 @@ public class LX {
      * @param model Pixel model
      */
     public LX(LXModel model) {
+        LX.initTimer.init();
         this.model = model;
-
         if (model == null) {
             this.total = this.width = this.height = 0;
             this.cx = this.cy = 0;
@@ -180,20 +204,30 @@ public class LX {
                 this.width = this.height = 0;
             }
         }
+        LX.initTimer.log("Model");
+
+        // Color palette
         this.palette = new LXPalette(this);
+        LX.initTimer.log("Palette");
 
         // Construct the engine
         this.engine = new LXEngine(this);
+        LX.initTimer.log("Engine");
 
         // Add a default channel
         this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).fader.setValue(1);
+        LX.initTimer.log("Default Channel");
 
+        // Base Hue (deprecated)
         this.baseHue = null;
         this.cycleBaseHue(30000);
+        LX.initTimer.log("Base Hue");
 
         this.tempo = new Tempo(this);
+        LX.initTimer.log("Tempo");
 
         this.audio = new LXAudio(this);
+        LX.initTimer.log("Audio");
     }
 
     public LX addListener(Listener listener) {
@@ -525,6 +559,7 @@ public class LX {
         }
     }
 
+    @Deprecated
     private LXModulator internalBaseHue(LXModulator modulator) {
         clearBaseHue();
         this.engine.addModulator(modulator);
@@ -539,6 +574,7 @@ public class LX {
      * @param parameter Parameter to control base hue
      * @return this
      */
+    @Deprecated
     public LX setBaseHue(LXParameter parameter) {
         clearBaseHue();
         this.baseHue = parameter;
@@ -551,6 +587,7 @@ public class LX {
      * @param hue Fixed value to set hue to, 0-360
      * @return this
      */
+    @Deprecated
     public LX setBaseHue(double hue) {
         internalBaseHue(new LinearEnvelope(this.getBaseHue(), hue, 50)).start();
         return this;
@@ -562,6 +599,7 @@ public class LX {
      * @param duration Number of milliseconds for hue cycle
      * @return this
      */
+    @Deprecated
     public LX cycleBaseHue(double duration) {
         internalBaseHue(new SawLFO(0, 360, duration).setValue(getBaseHue())).start();
         return this;
@@ -575,6 +613,7 @@ public class LX {
      * @param duration Milliseconds for hue oscillation
      * @return this
      */
+    @Deprecated
     public LX oscillateBaseHue(double lowHue, double highHue, double duration) {
         internalBaseHue(new TriangleLFO(lowHue, highHue, duration).setValue(
                 getBaseHue())).trigger();

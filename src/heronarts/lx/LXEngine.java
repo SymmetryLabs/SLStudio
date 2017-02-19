@@ -188,6 +188,7 @@ public class LXEngine extends LXParameterized {
 
     LXEngine(LX lx) {
         this.lx = lx;
+        LX.initTimer.log("Engine: Init");
 
         // Background and blending buffers
         this.background = new ModelBuffer(lx);
@@ -205,6 +206,7 @@ public class LXEngine extends LXParameterized {
         for (int i = 0; i < backgroundArray.length; ++i) {
             uiArray[i] = backgroundArray[i] = LXColor.BLACK;
         }
+        LX.initTimer.log("Engine: Buffers");
 
         // Blend modes
         this.channelBlendModes = this.patternBlendModes = new LXBlend[] {
@@ -214,6 +216,7 @@ public class LXEngine extends LXParameterized {
             new SubtractBlend(lx),
             new DifferenceBlend(lx)
         };
+        LX.initTimer.log("Engine: Blends");
 
         // Crossfader blend mode
         this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.channelBlendModes);
@@ -239,6 +242,7 @@ public class LXEngine extends LXParameterized {
                 }
             }
         });
+        LX.initTimer.log("Engine: Cue");
 
         // Master output
         this.output = new LXOutput(lx) {
@@ -247,12 +251,15 @@ public class LXEngine extends LXParameterized {
                 // Master output is a dummy container for child outputs
             }
         };
+        LX.initTimer.log("Engine: Output");
 
         // Midi engine
         this.midi = new LXMidiEngine(lx);
+        LX.initTimer.log("Engine: Midi");
 
         // OSC engine
         this.osc = new LXOscEngine(lx);
+        LX.initTimer.log("Engine: Osc");
 
         // Default color palette
         addComponent(lx.palette);
