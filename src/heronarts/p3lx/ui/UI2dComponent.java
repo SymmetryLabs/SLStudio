@@ -500,6 +500,22 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Sets the index of this object in its container.
+     *
+     * @param index Desired index
+     * @return this
+     */
+    public UI2dComponent setContainerIndex(int index) {
+        if (this.parent == null) {
+            throw new UnsupportedOperationException("Cannot setContainerIndex() on an object not in a container");
+        }
+        this.parent.children.remove(this);
+        this.parent.children.add(index, this);
+        redrawContainer();
+        return this;
+    }
+
+    /**
      * Redraws this object.
      *
      * @return this object
@@ -513,7 +529,7 @@ public abstract class UI2dComponent extends UIObject {
 
     private void redrawContainer() {
         if ((this.parent != null) && (this.parent instanceof UI2dComponent)) {
-            ((UI2dComponent)this.parent).redraw();
+            ((UI2dComponent) this.parent).redraw();
         }
     }
 

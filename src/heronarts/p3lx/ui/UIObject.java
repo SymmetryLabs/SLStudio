@@ -340,34 +340,98 @@ public abstract class UIObject {
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
     }
 
+    /**
+     * Subclasses override to receive mouse events
+     *
+     * @param mouseEvent Mouse event
+     * @param mx x-coordinate
+     * @param my y-coordinate
+     */
     protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
     }
 
+    /**
+     * Subclasses override to receive mouse events
+     *
+     * @param mouseEvent Mouse event
+     * @param mx x-coordinate
+     * @param my y-coordinate
+     */
     protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
-
     }
 
+    /**
+     * Subclasses override to receive mouse events
+     *
+     * @param mouseEvent Mouse event
+     * @param mx x-coordinate
+     * @param my y-coordinate
+     * @param dx movement in x
+     * @param dy movement in y
+     */
     protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
     }
 
+    /**
+     * Subclasses override to receive mouse events
+     *
+     * @param mouseEvent Mouse event
+     * @param mx x-coordinate
+     * @param my y-coordinate
+     */
     protected void onMouseMoved(MouseEvent mouseEvent, float mx, float my) {
     }
 
+    /**
+     * Subclasses override to receive mouse events
+     *
+     * @param mouseEvent Mouse event
+     * @param mx x-coordinate
+     * @param my y-coordinate
+     * @param delta Amount of wheel movement
+     */
     protected void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
     }
 
+    /**
+     * Subclasses override to receive mouse events
+     *
+     * @param mouseEvent Mouse event
+     * @param mx x-coordinate
+     * @param my y-coordinate
+     */
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
     }
 
+    /**
+     * Subclasses override to receive key events
+     *
+     * @param keyEvent Key event
+     * @param keyChar Key character
+     * @param keyCode Key code value
+     */
     protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
     }
 
+    /**
+     * Subclasses override to receive key events
+     *
+     * @param keyEvent Key event
+     * @param keyChar Key character
+     * @param keyCode Key code value
+     */
     protected void onKeyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
     }
 
+    /**
+     * Subclasses override when element is focused
+     */
     protected void onFocus() {
     }
 
+    /**
+     * Subclasses override when element loses focus
+     */
     protected void onBlur() {
     }
 }
