@@ -606,15 +606,17 @@ public abstract class UI2dComponent extends UIObject {
         }
         boolean needsBorder = this.needsRedraw || this.childNeedsRedraw;
         boolean childBackground = this.hasBackground && !this.needsRedraw;
+        float sx = this.scrollX;
+        float sy = this.scrollY;
         if (this.needsRedraw) {
             this.needsRedraw = false;
             drawBackground(ui, pg);
+            pg.translate(sx, sy);
             onDraw(ui, pg);
+            pg.translate(-sx, -sy);
         }
         if (this.childNeedsRedraw) {
             this.childNeedsRedraw = false;
-            float sx = this.scrollX;
-            float sy = this.scrollY;
             pg.translate(sx, sy);
             for (UIObject childObject : this.children) {
                 UI2dComponent child = (UI2dComponent) childObject;

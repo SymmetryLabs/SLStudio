@@ -30,8 +30,10 @@ import heronarts.lx.LXUtils;
 public class UI2dScrollContext extends UI2dContext {
 
     private float scrollWidth;
-
     private float scrollHeight;
+
+    private boolean horizontalScrollingEnabled = false;
+    private boolean verticalScrollingEnabled = true;
 
     public UI2dScrollContext(UI ui, float x, float y, float w, float h) {
         super(ui, x, y, w, h);
@@ -40,8 +42,7 @@ public class UI2dScrollContext extends UI2dContext {
     }
 
     public UI2dScrollContext setScrollSize(float scrollWidth, float scrollHeight) {
-        if ((this.scrollWidth != scrollWidth)
-                || (this.scrollHeight != scrollHeight)) {
+        if ((this.scrollWidth != scrollWidth) || (this.scrollHeight != scrollHeight)) {
             this.scrollWidth = scrollWidth;
             this.scrollHeight = scrollHeight;
             rescroll();
@@ -65,6 +66,16 @@ public class UI2dScrollContext extends UI2dContext {
         return this;
     }
 
+    public UI2dScrollContext setHorizontalScrollingEnabled(boolean horizontalScrollingEnabled) {
+        this.horizontalScrollingEnabled = horizontalScrollingEnabled;
+        return this;
+    }
+
+    public UI2dScrollContext setVerticalScrollingEnabled(boolean verticalScrollingEnabled) {
+        this.verticalScrollingEnabled = verticalScrollingEnabled;
+        return this;
+    }
+
     @Override
     protected void onResize() {
         super.onResize();
@@ -79,10 +90,36 @@ public class UI2dScrollContext extends UI2dContext {
         return Math.min(0, this.height - this.scrollHeight);
     }
 
+    public float getScrollX() {
+        return this.scrollX;
+    }
+
+    public float getScrollY() {
+        return this.scrollY;
+    }
+
+    public UI2dScrollContext setScrollX(float scrollX) {
+        scrollX = LXUtils.constrainf(scrollX, minScrollX(), 0);
+        if (this.scrollX != scrollX) {
+            this.scrollX = scrollX;
+            redraw();
+        }
+        return this;
+    }
+
+    public UI2dScrollContext setScrollY(float scrollY) {
+        scrollY = LXUtils.constrainf(scrollY, minScrollX(), 0);
+        if (this.scrollY != scrollY) {
+            this.scrollY = scrollY;
+            redraw();
+        }
+        return this;
+    }
+
     private void rescroll() {
         float minScrollX = minScrollX();
         float minScrollY = minScrollY();
-        if ((minScrollX > this.scrollX) || (minScrollY > this.scrollY)) {
+        if ((this.scrollX < minScrollX) || (this.scrollY < minScrollY)) {
             this.scrollX = Math.max(this.scrollX, minScrollX);
             this.scrollY = Math.max(this.scrollY, minScrollY);
             redraw();
@@ -90,12 +127,45 @@ public class UI2dScrollContext extends UI2dContext {
     }
 
     @Override
+    void mousePressed(MouseEvent mouseEvent, float mx, float my) {
+        super.mousePressed(mouseEvent, mx - this.scrollX, my - this.scrollY);
+    }
+
+    @Override
+    void mouseReleased(MouseEvent mouseEvent, float mx, float my) {
+        super.mouseReleased(mouseEvent, mx - this.scrollX, my - this.scrollY);
+    }
+
+    @Override
+    void mouseClicked(MouseEvent mouseEvent, float mx, float my) {
+        super.mouseClicked(mouseEvent, mx - this.scrollX, my - this.scrollY);
+    }
+
+    @Override
+    void mouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+        super.mouseDragged(mouseEvent, mx - this.scrollX, my - this.scrollY, dx, dy);
+    }
+
+    @Override
+    void mouseMoved(MouseEvent mouseEvent, float mx, float my) {
+        super.mouseMoved(mouseEvent, mx - this.scrollX, my - this.scrollY);
+    }
+
+    @Override
+    void mouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
+        super.mouseWheel(mouseEvent, mx - this.scrollX, my - this.scrollY, delta);
+    }
+
+    @Override
     protected void onMouseWheel(MouseEvent e, float mx, float my, float delta) {
-        float newScrollY = LXUtils
-                .constrainf(this.scrollY - delta, minScrollY(), 0);
-        if (newScrollY != this.scrollY) {
-            this.scrollY = newScrollY;
-            redraw();
+        if (e.isShiftDown()) {
+            if (this.horizontalScrollingEnabled) {
+                setScrollX(this.scrollX - delta);
+            }
+        } else {
+            if (this.verticalScrollingEnabled) {
+                setScrollY(this.scrollY - delta);
+            }
         }
     }
 }
