@@ -534,6 +534,10 @@ public class LXEngine extends LXParameterized {
     }
 
     public void removeChannel(LXChannel channel) {
+        if (this.channels.size() == 1) {
+            throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
+        }
+
         if (this.channels.remove(channel)) {
             int i = 0;
             for (LXChannel c : this.channels) {
