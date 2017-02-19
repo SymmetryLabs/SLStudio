@@ -142,9 +142,9 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
         pg.fill(ui.theme.getControlTextColor());
         pg.textAlign(PConstants.LEFT, PConstants.TOP);
-        pg.text(text, 4, textY + 2);
+        pg.text(text, 4, textY + 4);
         pg.textAlign(PConstants.RIGHT, PConstants.TOP);
-        pg.text("▾", this.width-3, textY + 2);
+        pg.text("▼", this.width-4, textY + 4);
 
         if (this.expanded) {
             int range = this.parameter.getRange();
@@ -153,7 +153,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
                 String label = (this.options != null) ? this.options[i] : ("" + i);
                 pg.fill(i == this.highlight ? 0xff000000 : ui.theme.getControlTextColor());
                 pg.textAlign(PConstants.LEFT, PConstants.TOP);
-                pg.text(label, 4, 2 + yp);
+                pg.text(label, 4, yp + 4);
                 yp += this.closedHeight;
             }
         }
@@ -223,7 +223,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
                 keyCode == java.awt.event.KeyEvent.VK_SPACE) {
             toggleExpanded();
         } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
-
+            setExpanded(false);
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
             this.parameter.increment();
         } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {

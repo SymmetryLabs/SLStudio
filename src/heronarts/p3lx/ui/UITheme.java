@@ -24,6 +24,7 @@
 
 package heronarts.p3lx.ui;
 
+import heronarts.lx.LX;
 import processing.core.PApplet;
 import processing.core.PFont;
 
@@ -48,8 +49,12 @@ public class UITheme {
     private int controlDisabledColor = 0xff666666;
 
     UITheme(PApplet applet) {
-        this.controlFont = applet.createFont("Arial", 10);
-        this.setLabelFont(this.windowTitleFont = applet.createFont("Arial-Black", 9));
+        // this.controlFont = applet.createFont("Arial", 10);
+        this.controlFont = applet.loadFont("ArialUnicodeMS-10.vlw");
+        LX.initTimer.log("P3LX: UI: Theme: controlFont");
+        // this.setLabelFont(this.windowTitleFont = applet.createFont("Arial-Black", 9));
+        this.setLabelFont(this.windowTitleFont = applet.loadFont("Arial-Black-9.vlw"));
+        LX.initTimer.log("P3LX: UI: Theme: windowTitleFont");
     }
 
     /**

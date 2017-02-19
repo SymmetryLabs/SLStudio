@@ -103,10 +103,10 @@ public class UIDoubleBox extends UI2dComponent implements UIFocus {
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-        pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
+        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
         // TODO(mcslee): handle text overflowing buffer
-        pg.text(this.editing ? this.editBuffer : String.format("%.2f", this.value), this.width / 2, this.height - 2);
+        pg.text(this.editing ? this.editBuffer : String.format("%.2f", this.value), this.width / 2, this.height / 2);
     }
 
     protected void onValueChange(double value) {

@@ -165,7 +165,7 @@ public class UILabel extends UI2dComponent {
             break;
         }
         pg.textAlign(this.horizontalAlignment, this.verticalAlignment);
-        pg.text(this.label, tx, ty);
+        pg.text(this.label, tx + this.textOffsetX, ty + this.textOffsetY);
     }
 
     public UILabel setLabel(String label) {

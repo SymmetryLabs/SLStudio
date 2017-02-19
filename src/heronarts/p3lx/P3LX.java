@@ -104,15 +104,20 @@ public class P3LX extends LX {
         this.applet = applet;
         this.buffer = new ModelBuffer(this);
         this.colors = this.engine.getUIBufferNonThreadSafe();
+        LX.initTimer.log("P3LX: ModelBuffer");
 
         this.audio.setMinimCallback(applet);
+        LX.initTimer.log("P3LX: Minim Callback");
 
         this.ui = new UI(this);
+        LX.initTimer.log("P3LX: UI");
 
         applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
+        LX.initTimer.log("P3LX: colorMode");
 
         applet.registerMethod("draw", this);
         applet.registerMethod("dispose", this);
+        LX.initTimer.log("P3LX: registerMethod");
     }
 
     /**

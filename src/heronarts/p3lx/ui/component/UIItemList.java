@@ -166,7 +166,7 @@ public class UIItemList extends UI2dComponent implements UIFocus {
             pg.fill(labelColor);
             pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
             pg.textAlign(PConstants.LEFT, PConstants.TOP);
-            pg.text(item.getLabel(), 6, yp + 4);
+            pg.text(item.getLabel(), 6, yp + 5);
 
             if (hasFocus() && (itemIndex == fi)) {
                 pg.stroke(ui.theme.getControlTextColor());

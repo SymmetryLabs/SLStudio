@@ -76,6 +76,10 @@ public abstract class UI2dComponent extends UIObject {
 
     protected int textAlignVertical = PConstants.BASELINE;
 
+    protected int textOffsetX = 0;
+
+    protected int textOffsetY = 0;
+
     boolean needsRedraw = true;
 
     boolean childNeedsRedraw = true;
@@ -419,6 +423,24 @@ public abstract class UI2dComponent extends UIObject {
      */
     public UI2dComponent setTextAlignment(int horizontalAlignment) {
         return setTextAlignment(horizontalAlignment, this.textAlignVertical);
+    }
+
+    /**
+     * Sets an offset for text rendering position relative to alignment. Note that
+     * adherence to this offset is not strictly enforced by all subclasses, it is
+     * up to them to implement it.
+     *
+     * @param textOffsetX
+     * @param textOffsetY
+     * @return this
+     */
+    public UI2dComponent setTextOffset(int textOffsetX, int textOffsetY) {
+        if (this.textOffsetX != textOffsetX || this.textOffsetY != textOffsetY) {
+            this.textOffsetX = textOffsetX;
+            this.textOffsetY = textOffsetY;
+            redraw();
+        }
+        return this;
     }
 
     /**

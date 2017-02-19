@@ -24,6 +24,7 @@
 
 package heronarts.p3lx.ui;
 
+import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.p3lx.P3LX;
 
@@ -177,13 +178,13 @@ public class UI {
     /**
      * Input events coming from the event thread
      */
-    private final List<Event> eventThreadInputEventQueue =
+    private final List<Event> threadSafeInputEventQueue =
         Collections.synchronizedList(new ArrayList<Event>());
 
     /**
      * Events on the local processing thread
      */
-    private final List<Event> localThreadInputEvents = new ArrayList<Event>();
+    private final List<Event> engineThreadInputEvents = new ArrayList<Event>();
 
     public class Timer {
         public long drawNanos = 0;
@@ -241,10 +242,13 @@ public class UI {
         this.width = lx.applet.width;
         this.height = lx.applet.height;
         this.theme = new UITheme(applet);
+        LX.initTimer.log("P3LX: UI: Theme");
         this.root = new UIRoot();
+        LX.initTimer.log("P3LX: UI: Root");
         applet.registerMethod("draw", this);
         applet.registerMethod("keyEvent", this);
         applet.registerMethod("mouseEvent", this);
+        LX.initTimer.log("P3LX: UI: register");
         if (lx != null) {
             lx.engine.addLoopTask(new EngineUILoopTask());
         }
@@ -315,14 +319,13 @@ public class UI {
     }
 
     /**
-     * Create a new font
+     * Load a font file
      *
      * @param font Font name
-     * @param size Font size
      * @return PFont object
      */
-    public PFont createFont(String font, int size) {
-        return this.applet.createFont(font, size);
+    public PFont loadFont(String font) {
+        return this.applet.loadFont(font);
     }
 
     void redraw(UI2dComponent object) {
@@ -362,12 +365,12 @@ public class UI {
             // This is invoked on the LXEngine thread, which may be different
             // from the Processing Animation thread. Events are always
             // processed on the engine thread to avoid bugs.
-            localThreadInputEvents.clear();
-            synchronized (eventThreadInputEventQueue) {
-                localThreadInputEvents.addAll(eventThreadInputEventQueue);
-                eventThreadInputEventQueue.clear();
+            engineThreadInputEvents.clear();
+            synchronized (threadSafeInputEventQueue) {
+                engineThreadInputEvents.addAll(threadSafeInputEventQueue);
+                threadSafeInputEventQueue.clear();
             }
-            for (Event event : localThreadInputEvents) {
+            for (Event event : engineThreadInputEvents) {
                 if (event instanceof KeyEvent) {
                     _keyEvent((KeyEvent) event);
                 } else if (event instanceof MouseEvent) {
@@ -384,7 +387,7 @@ public class UI {
             // NOTE: it's okay that no lock is held here, if threading mode changes
             // right here, the event queue will still be picked up by next iteration
             // of the EngineUILoopTask
-            this.eventThreadInputEventQueue.add(mouseEvent);
+            this.threadSafeInputEventQueue.add(mouseEvent);
         } else {
             // NOTE: also okay to be lock-free here, if threading mode was off then
             // there is no other thread that would have made a call to start the
@@ -436,7 +439,7 @@ public class UI {
         // NOTE: this method is invoked from the Processing thread! The LX engine
         // may be running on a separate thread.
         if (isThreaded()) {
-            this.eventThreadInputEventQueue.add(keyEvent);
+            this.threadSafeInputEventQueue.add(keyEvent);
         } else {
             _keyEvent(keyEvent);
         }
