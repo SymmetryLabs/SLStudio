@@ -56,6 +56,8 @@ public class LXChannel extends LXComponent {
      */
     public interface Listener {
 
+        public void indexChanged(LXChannel channel);
+
         public void effectAdded(LXChannel channel, LXEffect effect);
 
         public void effectRemoved(LXChannel channel, LXEffect effect);
@@ -75,6 +77,10 @@ public class LXChannel extends LXComponent {
      * Utility class to extend in cases where only some methods need overriding.
      */
     public abstract static class AbstractListener implements Listener {
+
+        @Override
+        public void indexChanged(LXChannel channel) {
+        }
 
         @Override
         public void effectAdded(LXChannel channel, LXEffect effect) {
@@ -246,7 +252,12 @@ public class LXChannel extends LXComponent {
     }
 
     final LXChannel setIndex(int index) {
-        this.index = index;
+        if (this.index != index) {
+            this.index = index;
+            for (Listener listener : this.listeners) {
+                listener.indexChanged(this);
+            }
+        }
         return this;
     }
 

@@ -118,6 +118,7 @@ public class LXEngine extends LXParameterized {
     public interface Listener {
         public void channelAdded(LXEngine engine, LXChannel channel);
         public void channelRemoved(LXEngine engine, LXChannel channel);
+        public void channelMoved(LXEngine engine, LXChannel channel);
     }
 
     public interface MessageListener {
@@ -535,6 +536,18 @@ public class LXEngine extends LXParameterized {
             for (Listener listener : this.listeners) {
                 listener.channelRemoved(this, channel);
             }
+        }
+    }
+
+    public void moveChannel(LXChannel channel, int index) {
+        this.channels.remove(channel);
+        this.channels.add(index, channel);
+        int i = 0;
+        for (LXChannel c: this.channels) {
+            c.setIndex(i++);
+        }
+        for (Listener listener : this.listeners) {
+            listener.channelMoved(this, channel);
         }
     }
 

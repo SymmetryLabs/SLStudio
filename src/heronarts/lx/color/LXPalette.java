@@ -48,7 +48,7 @@ public class LXPalette extends LXComponent {
     public final ColorParameter color = new ColorParameter("Color", 0xffff0000);
 
     /**
-     * Hack for Processing 2, doesn't let you address color
+     * Hack for Processing 2, preprocessor doesn't let you address objectInstance.color
      */
     public final ColorParameter clr = color;
 
