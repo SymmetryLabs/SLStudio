@@ -52,7 +52,8 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
         super(lx);
         this.lx = lx;
         if (buffer != null) {
-            setBuffer(buffer);
+            this.buffer = buffer;
+            this.colors = buffer.getArray();
         }
     }
 
@@ -246,8 +247,7 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
      * @return this
      */
     protected final LXLayeredComponent clearColors() {
-        this.setColors(0);
-        return this;
+        return setColors(0);
     }
 
 }

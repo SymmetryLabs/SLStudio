@@ -37,4 +37,9 @@ public class LXBufferedComponent extends LXLayeredComponent {
         super.loop(deltaMs);
     }
 
+    @Override
+    protected LXLayeredComponent setBuffer(LXBuffer buffer) {
+        throw new UnsupportedOperationException("Cannot setBuffer on LXBufferedComponent, owns its own buffer");
+    }
+
 }

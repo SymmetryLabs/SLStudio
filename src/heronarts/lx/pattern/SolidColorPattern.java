@@ -26,25 +26,29 @@ import heronarts.lx.parameter.LXParameter;
 public class SolidColorPattern extends LXPattern {
     public final int color;
 
+    public final BoundedParameter hue = new BoundedParameter("Hue", 0, 360);
+    public final BoundedParameter saturation = new BoundedParameter("Sat", 100, 100);
     public final BoundedParameter brightness = new BoundedParameter("Bright", 100, 100);
+
+    public SolidColorPattern(LX lx) {
+        this(lx, LXColor.RED);
+    }
 
     public SolidColorPattern(LX lx, int color) {
         super(lx);
+        addParameter(this.hue);
+        addParameter(this.saturation);
         addParameter(this.brightness);
 
-        this.color = color;
-        setBrightness();
+        this.hue.setValue(LXColor.h(color));
+        this.saturation.setValue(LXColor.s(color));
+        this.brightness.setValue(LXColor.b(color));
+        setColors(this.color = color);
     }
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == this.brightness) {
-            setBrightness();
-        }
-    }
-
-    private void setBrightness() {
-        setColors(LX.hsb(LXColor.h(this.color), LXColor.s(this.color), this.brightness.getValuef()));
+        setColors(LXColor.hsb(this.hue.getValue(), this.saturation.getValue(), this.brightness.getValue()));
     }
 
     @Override

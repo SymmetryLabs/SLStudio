@@ -520,7 +520,7 @@ public class LXEngine extends LXParameterized {
     }
 
     public LXChannel addChannel() {
-        return addChannel(new LXPattern[] { new SolidColorPattern(lx, 0xff000000) });
+        return addChannel(new LXPattern[] { new SolidColorPattern(lx) });
     }
 
     public LXChannel addChannel(LXPattern[] patterns) {
@@ -538,6 +538,9 @@ public class LXEngine extends LXParameterized {
             int i = 0;
             for (LXChannel c : this.channels) {
                 c.setIndex(i++);
+            }
+            if (this.focusedChannel.getValuei() >= this.channels.size()) {
+                this.focusedChannel.decrement();
             }
             this.focusedChannel.setRange(this.channels.size());
             for (Listener listener : this.listeners) {
