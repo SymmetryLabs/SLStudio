@@ -187,8 +187,10 @@ public abstract class UIObject {
             for (UIObject child : this.children) {
                 child.blur();
             }
-            if (this.parent.focusedChild == this) {
-                this.parent.focusedChild = null;
+            if (this.parent != null) {
+                if (this.parent.focusedChild == this) {
+                    this.parent.focusedChild = null;
+                }
             }
             this.hasFocus = false;
             onBlur();

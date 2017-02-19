@@ -177,7 +177,7 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterLi
         }
 
         pg.noStroke();
-        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
+        pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
         int leftBoundary = 0;
 
@@ -190,7 +190,7 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterLi
             }
             pg.fill(isActive ? UI.WHITE : ui.theme.getControlTextColor());
             pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f,
-                    (int) ((this.height / 2) - 2));
+                    (int) (this.height - 2));
             leftBoundary = this.boundaries[i];
         }
     }

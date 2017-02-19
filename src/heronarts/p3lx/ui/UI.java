@@ -474,7 +474,9 @@ public class UI {
         } else if (action == KeyEvent.PRESS) {
             switch (keyChar) {
             case 'f':
-                this.lx.flags.showFramerate = true;
+                if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
+                    this.lx.flags.showFramerate = true;
+                }
                 break;
             }
         }
