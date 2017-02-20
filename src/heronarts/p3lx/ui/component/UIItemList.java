@@ -1,5 +1,5 @@
 /**
- * Copyright 2013- Mark C. Slee, Heron Arts LLC
+ * Copyright 2017- Mark C. Slee, Heron Arts LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -24,286 +24,314 @@
 
 package heronarts.p3lx.ui.component;
 
-import heronarts.lx.LXUtils;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dComponent;
-import heronarts.p3lx.ui.UIFocus;
 import java.util.ArrayList;
 import java.util.List;
 
+import heronarts.lx.LXUtils;
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dScrollContext;
+import heronarts.p3lx.ui.UIFocus;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 /**
- * UI for a list of state items
+ * An ItemList is a scrollable list of elements with a focus state
+ * and action handling when the elements are focused or clicked on.
  */
-public class UIItemList extends UI2dComponent implements UIFocus {
+public class UIItemList extends UI2dScrollContext implements UIFocus {
 
+    private static final int PADDING = 2;
     private static final int SCROLL_BAR_WIDTH = 8;
+    private static final int ROW_HEIGHT = 16;
+    private static final int ROW_MARGIN = 2;
+    private static final int ROW_SPACING = ROW_HEIGHT + ROW_MARGIN;
 
+    /**
+     * Interface to which items in the list must conform
+     */
     public static interface Item {
 
-        public boolean isSelected();
+        /**
+         * Whether this item is in a special active state
+         *
+         * @return If this item is active
+         */
+        public boolean isActive();
 
-        public boolean isPending();
+        /**
+         * Active background color for this item
+         *
+         * @param ui UI context
+         * @return Background color
+         */
+        public int getActiveColor(UI ui);
 
+        /**
+         * String label that displays on this item
+         *
+         * @return Label for the item
+         */
         public String getLabel();
 
-        public void onMousePressed();
+        /**
+         * Action handler, invoked when item is activated
+         */
+        public void onActivate();
 
-        public void onMouseReleased();
+        /**
+         * Action handler, invoked when item is deactivated. Only applies when setMomentary(true)
+         */
+        public void onDeactivate();
+
+        /**
+         * Action handler, invoked when item is focused
+         */
+        public void onFocus();
     }
 
+    /**
+     * Helper class to make item construction easier
+     */
     public static abstract class AbstractItem implements Item {
-        public boolean isPending() {
+
+        public boolean isActive() {
             return false;
         }
 
-        public void onMousePressed() {
+        public int getActiveColor(UI ui) {
+            return ui.theme.getControlBackgroundColor();
         }
 
-        public void onMouseReleased() {
-        }
+        public void onActivate() {}
+
+        public void onDeactivate() {}
+
+        public void onFocus()  {}
     }
 
     private List<Item> items = new ArrayList<Item>();
 
-    public final DiscreteParameter focusIndex = new DiscreteParameter("FOCUS", 1);
-    public final DiscreteParameter scrollOffset = new DiscreteParameter("OFFSET",
-            1);
+    private int focusIndex = -1;
 
-    private int itemHeight = 20;
-    private int numVisibleItems = 0;
+    private boolean singleClickActivate = false;
 
-    private boolean hasScroll;
-    private float scrollYStart;
-    private float scrollYHeight;
+    private boolean momentary = false;
 
-    public UIItemList() {
-        this(0, 0, 0, 0);
+    /**
+     * Constructs an item list
+     *
+     * @param ui UI
+     * @param x x-position
+     * @param y y-position
+     * @param w width
+     * @param h height
+     */
+    public UIItemList(UI ui, float x, float y, float w, float h) {
+        super(ui, x, y, w, h);
+        setBackgroundColor(ui.theme.getWindowBackgroundColor());
+        setBorderRounding(4);
     }
 
-    public UIItemList(float x, float y, float w, float h) {
-        super(x, y, w, h);
-        this.focusIndex.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                onFocusIndexChanged();
-            }
-        });
-        this.scrollOffset.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                onScrollOffsetChanged();
-            }
-        });
-    }
-
-    public int getFocusIndex() {
-        return this.focusIndex.getValuei();
-    }
-
+    /**
+     * Sets the index of the focused item in the list. Checks the bounds
+     * and adjusts the scroll position if necessary.
+     *
+     * @param focusIndex Index of item to focus
+     * @return this
+     */
     public UIItemList setFocusIndex(int focusIndex) {
-        this.focusIndex.setValue(focusIndex);
-        return this;
-    }
-
-    private void onFocusIndexChanged() {
-        int fi = this.focusIndex.getValuei();
-        int so = this.scrollOffset.getValuei();
-        if (fi < so) {
-            setScrollOffset(fi);
-        } else if (fi >= (so + this.numVisibleItems)) {
-            setScrollOffset(fi - this.numVisibleItems + 1);
-        }
-        redraw();
-    }
-
-    public UIItemList select() {
-        Item selectedItem = this.items.get(getFocusIndex());
-        selectedItem.onMousePressed();
-        selectedItem.onMouseReleased();
-        redraw();
-        return this;
-    }
-
-    @Override
-    protected void onDraw(UI ui, PGraphics pg) {
-        int yp = 0;
-        boolean even = true;
-        int so = getScrollOffset();
-        int fi = getFocusIndex();
-        pg.strokeWeight(1);
-
-        float rowWidth = this.width;
-        if (this.hasScroll) {
-            rowWidth -= SCROLL_BAR_WIDTH + 1;
-        }
-
-        for (int i = 0; i < this.numVisibleItems; ++i) {
-            if (i + so >= this.items.size()) {
-                break;
+        focusIndex = LXUtils.constrain(focusIndex, 0, this.items.size() - 1);
+        if (this.focusIndex != focusIndex) {
+            float yp = ROW_SPACING * focusIndex + this.getScrollY();
+            if (yp < 0) {
+                setScrollY(-ROW_SPACING * focusIndex);
+            } else if (yp >= height - ROW_SPACING) {
+                setScrollY(-ROW_SPACING * focusIndex + height - ROW_SPACING);
             }
-            int itemIndex = i + so;
-            Item item = this.items.get(itemIndex);
-            int itemColor;
-            int labelColor;
-            if (item.isSelected()) {
-                labelColor = UI.WHITE;
-                itemColor = ui.theme.getPrimaryColor();
-            } else if (item.isPending()) {
-                labelColor = 0xfff0f0f0;
-                itemColor = ui.theme.getSecondaryColor();
-            } else {
-                labelColor = ui.theme.getControlTextColor();
-                itemColor = ui.theme.getControlBackgroundColor();
-            }
-
-            pg.noStroke();
-            pg.fill(itemColor);
-            pg.rect(0, yp, rowWidth, this.itemHeight-1);
-
-            pg.stroke(ui.theme.getControlDisabledColor());
-            pg.line(0, yp + this.itemHeight - 1, rowWidth-1, yp + this.itemHeight - 1);
-
-            pg.fill(labelColor);
-            pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-            pg.textAlign(PConstants.LEFT, PConstants.TOP);
-            pg.text(item.getLabel(), 6, yp + 5);
-
-            if (hasFocus() && (itemIndex == fi)) {
-                pg.stroke(ui.theme.getControlTextColor());
-                pg.noFill();
-                pg.rect(0, yp, rowWidth - 1, this.itemHeight - 2);
-            }
-
-            yp += this.itemHeight;
-            even = !even;
-        }
-        if (this.hasScroll) {
-            pg.noStroke();
-            pg.fill(0x26ffffff);
-            pg.rect(this.width - SCROLL_BAR_WIDTH, 0, SCROLL_BAR_WIDTH, this.height);
-            pg.fill(ui.theme.getControlBackgroundColor());
-            pg.rect(this.width - SCROLL_BAR_WIDTH + 1, this.scrollYStart+1, SCROLL_BAR_WIDTH - 2, this.scrollYHeight-2);
-        }
-
-    }
-
-    private boolean scrolling = false;
-    private Item pressedItem = null;
-
-    @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        int index = getFocusIndex();
-        if (keyCode == java.awt.event.KeyEvent.VK_UP) {
-            index = Math.max(0, index - 1);
-        } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
-            index = Math.min(index + 1, this.items.size() - 1);
-        } else if ((keyChar == ' ')
-                || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
-            select();
-        }
-        setFocusIndex(index);
-    }
-
-    @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        this.pressedItem = null;
-        if (this.hasScroll && mx >= this.width - SCROLL_BAR_WIDTH) {
-            if ((my >= this.scrollYStart)
-                    && (my < (this.scrollYStart + this.scrollYHeight))) {
-                this.scrolling = true;
-                this.dAccum = 0;
-            }
-        } else {
-            int index = (int) my / this.itemHeight;
-            if (getScrollOffset() + index < this.items.size()) {
-                setFocusIndex(getScrollOffset() + index);
-                this.pressedItem = this.items.get(getFocusIndex());
-                this.pressedItem.onMousePressed();
-                redraw();
-            }
-        }
-    }
-
-    @Override
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
-        this.scrolling = false;
-        if (this.pressedItem != null) {
-            this.pressedItem.onMouseReleased();
+            this.focusIndex = focusIndex;
+            this.items.get(this.focusIndex).onFocus();
             redraw();
         }
+        return this;
     }
 
-    private float dAccum = 0;
+    /**
+     * Sets the items in the list and redraws it
+     *
+     * @param items Items
+     * @return this
+     */
+    public UIItemList setItems(List<UIItemList.Item> items) {
+        this.items = items;
+        if (this.focusIndex >= items.size()) {
+            setFocusIndex(items.size() - 1);
+        }
+        setScrollHeight(ROW_SPACING * items.size() + ROW_MARGIN);
+        redraw();
+        return this;
+    }
+
+    /**
+     * Sets whether single-clicks on an item should activate them. Default behavior
+     * requires double-click or ENTER keypress
+     *
+     * @param singleClickActivate Whether to activate on a single click
+     * @return this
+     */
+    public UIItemList setSingleClickActivate(boolean singleClickActivate) {
+        this.singleClickActivate = singleClickActivate;
+        return this;
+    }
+
+    /**
+     * Sets whether the item list is momentary. If so, then clicking on an item
+     * or pressing ENTER/SPACE sends a deactivate action after the click ends.
+     *
+     * @param momentary
+     * @return this
+     */
+    public UIItemList setMomentary(boolean momentary) {
+        this.momentary = momentary;
+        return this;
+    }
+
+    private void activate() {
+        if (this.focusIndex >= 0) {
+            this.items.get(this.focusIndex).onActivate();
+        }
+    }
+
+    private float getRowWidth() {
+        return (getScrollHeight() > this.height) ? this.width - SCROLL_BAR_WIDTH - PADDING : this.width;
+    }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-        if (this.scrolling) {
-            this.dAccum += dy;
-            float scrollOne = this.height / this.items.size();
-            int offset = (int) (this.dAccum / scrollOne);
-            if (offset != 0) {
-                this.dAccum -= offset * scrollOne;
-                moveScrollOffset(offset);
+    public void drawFocus(UI ui, PGraphics pg) {
+        float yp = ROW_MARGIN + ROW_SPACING*this.focusIndex + this.getScrollY();
+        super.drawFocus(ui, pg, PADDING, yp, getRowWidth()-2*PADDING, ROW_HEIGHT, 2);
+    }
+
+    @Override
+    public void onDraw(UI ui, PGraphics pg) {
+        float yp = ROW_MARGIN;
+        pg.textFont(ui.theme.getControlFont());
+        pg.textAlign(PConstants.LEFT, PConstants.TOP);
+        pg.noStroke();
+        int i = 0;
+
+        float rowWidth = getRowWidth();
+        if (getScrollHeight() > this.height) {
+            pg.noStroke();
+            pg.fill(0xff333333);
+            float percentCovered = this.height / getScrollHeight();
+            float barHeight = percentCovered * this.height - 2*PADDING;
+            float startPosition = -getScrollY() / getScrollHeight();
+            float barY = -getScrollY() + startPosition * this.height + PADDING;
+            pg.rect(width-PADDING-SCROLL_BAR_WIDTH, barY, SCROLL_BAR_WIDTH, barHeight, 4);
+        }
+
+        for (Item item : this.items) {
+            int backgroundColor, textColor;
+            if (item.isActive()) {
+                backgroundColor = item.getActiveColor(ui);
+                textColor = UI.WHITE;
+            } else {
+                backgroundColor = (i == this.focusIndex) ? 0xff333333 : ui.theme.getControlBackgroundColor();
+                textColor = (i == this.focusIndex) ? UI.WHITE : ui.theme.getControlTextColor();
+            }
+            pg.fill(backgroundColor);
+            pg.rect(PADDING, yp, rowWidth-2*PADDING, ROW_HEIGHT, 4);
+            pg.fill(textColor);
+            pg.text(item.getLabel(), 6, yp + 4);
+            yp += ROW_SPACING;
+            ++i;
+        }
+        setScrollHeight(yp);
+    }
+
+    private int getMouseItemIndex(float my) {
+        int index = (int) (my / (ROW_HEIGHT + ROW_MARGIN));
+        return ((my % (ROW_HEIGHT + ROW_MARGIN)) >= ROW_MARGIN) ? index : -1;
+    }
+
+    @Override
+    public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+        if (!this.momentary && !this.singleClickActivate && (mouseEvent.getCount() == 2)) {
+            int index = getMouseItemIndex(my);
+            if (index >= 0) {
+                setFocusIndex(index);
+                activate();
             }
         }
     }
 
-    private float wAccum = 0;
+    private boolean dragging;
 
     @Override
-    protected void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
-        if (!hasFocus()) {
-            // TODO(mcslee): focus
-        }
-        this.wAccum += delta;
-        int offset = (int) (this.wAccum / 5);
-        if (offset != 0) {
-            this.wAccum -= offset * 5;
-            moveScrollOffset(offset);
+    public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+        if (this.dragging) {
+            setScrollY(getScrollY() - dy*(getScrollHeight() / this.height));
         }
     }
 
-    public int getScrollOffset() {
-        return this.scrollOffset.getValuei();
-    }
+    private int mouseActivate = -1;
 
-    public UIItemList setScrollOffset(int offset) {
-        this.scrollOffset.setValue(LXUtils.constrain(offset, 0, this.items.size()
-                - this.numVisibleItems));
-        return this;
-    }
-
-    private void moveScrollOffset(int delta) {
-        setScrollOffset(getScrollOffset() + delta);
-    }
-
-    private void onScrollOffsetChanged() {
-        int so = this.scrollOffset.getValuei();
-        this.scrollYStart = Math.round(so * this.height / this.items.size());
-        this.scrollYHeight = Math.round(this.numVisibleItems * this.height
-                / this.items.size());
-        int fi = this.focusIndex.getValuei();
-        if ((fi < so) || (fi > so + this.numVisibleItems - 1)) {
-            setFocusIndex(so);
+    @Override
+    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+        this.mouseActivate = -1;
+        if (getScrollHeight() > this.height && mx >= getRowWidth()) {
+            this.dragging = true;
+        } else {
+            this.dragging = false;
+            int index = getMouseItemIndex(my);
+            if (index >= 0) {
+                setFocusIndex(index);
+                if (this.momentary || this.singleClickActivate) {
+                    this.mouseActivate = this.focusIndex;
+                    activate();
+                }
+            }
         }
-        redraw();
     }
 
-    public UIItemList setItems(List<Item> items) {
-        this.items = items;
-        this.numVisibleItems = (int) (this.height / this.itemHeight);
-        this.hasScroll = this.items.size() > this.numVisibleItems;
-        this.focusIndex.setRange(0, this.items.size());
-        this.scrollOffset.setRange(0,
-                Math.max(0, this.items.size() - this.numVisibleItems) + 1);
-        onScrollOffsetChanged();
-        redraw();
-        return this;
+    @Override
+    public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+        this.dragging = false;
+        if (this.mouseActivate >= 0 && this.mouseActivate < this.items.size()) {
+            this.items.get(this.mouseActivate).onDeactivate();
+        }
+        this.mouseActivate = -1;
+    }
+
+    private int keyActivate = -1;
+
+    @Override
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+            setFocusIndex(this.focusIndex - 1);
+            redraw();
+        } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+            setFocusIndex(this.focusIndex + 1);
+            redraw();
+        } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+            if (this.momentary) {
+                this.keyActivate = this.focusIndex;
+            }
+            activate();
+        }
+    }
+
+    @Override
+    public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+        if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+            if (this.momentary) {
+                if (this.keyActivate >= 0 && this.keyActivate < this.items.size()) {
+                    this.items.get(this.keyActivate).onDeactivate();
+                }
+                this.keyActivate = -1;
+            }
+        }
     }
 }

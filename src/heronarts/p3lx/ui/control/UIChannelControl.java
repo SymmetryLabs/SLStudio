@@ -94,7 +94,7 @@ public class UIChannelControl extends UIWindow {
             items.add(new PatternScrollItem(p));
         }
         final UIItemList patternList =
-            new UIItemList(1, yp, this.width - 2, 140)
+            new UIItemList(ui, 1, yp, this.width - 2, 140)
             .setItems(items);
         patternList
         .setBackgroundColor(ui.theme.getWindowBackgroundColor())
@@ -140,28 +140,29 @@ public class UIChannelControl extends UIWindow {
 
         private LXPattern pattern;
 
-        private String label;
-
         PatternScrollItem(LXPattern pattern) {
             this.pattern = pattern;
-            this.label = pattern.name.getString();
         }
 
+        @Override
         public String getLabel() {
-            return this.label;
-        }
-
-        public boolean isSelected() {
-            return channel.getActivePattern() == this.pattern;
+            return this.pattern.getName();
         }
 
         @Override
-        public boolean isPending() {
-            return channel.getNextPattern() == this.pattern;
+        public boolean isActive() {
+            return
+                (channel.getActivePattern() == this.pattern) ||
+                (channel.getNextPattern() == this.pattern);
         }
 
         @Override
-        public void onMousePressed() {
+        public int getActiveColor(UI ui) {
+            return (channel.getActivePattern() == this.pattern) ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
+        }
+
+        @Override
+        public void onActivate() {
             channel.goPattern(this.pattern);
         }
     }

@@ -86,7 +86,8 @@ public class UIEffectsControl extends UIWindow {
             items.add(new EffectScrollItem(eff));
         }
         final UIItemList effectList =
-            new UIItemList(1, yp, this.width - 2, 140)
+            new UIItemList(ui, 1, yp, this.width - 2, 140)
+            .setMomentary(true)
             .setItems(items);
 
         effectList
@@ -127,29 +128,30 @@ public class UIEffectsControl extends UIWindow {
     private class EffectScrollItem extends UIItemList.AbstractItem {
 
         private final LXEffect effect;
-        private final String label;
 
         EffectScrollItem(LXEffect effect) {
             this.effect = effect;
-            this.label = effect.name.getString();
         }
 
         public String getLabel() {
-            return this.label;
-        }
-
-        public boolean isSelected() {
-            return selectedEffect == this.effect;
+            return this.effect.getName();
         }
 
         @Override
-        public boolean isPending() {
-            return this.effect.isEnabled();
+        public boolean isActive() {
+            return
+                (selectedEffect == this.effect) ||
+                this.effect.isEnabled();
         }
 
         @Override
-        public void onMousePressed() {
-            if (!this.isSelected()) {
+        public int getActiveColor(UI ui) {
+            return (selectedEffect == this.effect) ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
+        }
+
+        @Override
+        public void onActivate() {
+            if (this.effect != selectedEffect) {
                 selectEffect(this.effect);
             }
 
@@ -161,7 +163,7 @@ public class UIEffectsControl extends UIWindow {
         }
 
         @Override
-        public void onMouseReleased() {
+        public void onDeactivate() {
             if (this.effect.isMomentary()) {
                 this.effect.disable();
             }
