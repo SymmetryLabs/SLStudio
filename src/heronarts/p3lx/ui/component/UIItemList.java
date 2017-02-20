@@ -101,6 +101,11 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         public void onDeactivate();
 
         /**
+         * Action handler, invoked when item is deleted
+         */
+        public void onDelete();
+
+        /**
          * Action handler, invoked when item is focused
          */
         public void onFocus();
@@ -128,6 +133,8 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         public void onDeactivate() {}
 
         public void onCheck(boolean on) {}
+
+        public void onDelete() {}
 
         public void onFocus()  {}
     }
@@ -241,6 +248,12 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         }
     }
 
+    private void delete() {
+        if (this.focusIndex >= 0) {
+            this.items.get(this.focusIndex).onDelete();
+        }
+    }
+
     private void check() {
         if (this.focusIndex >= 0) {
             Item item = this.items.get(this.focusIndex);
@@ -295,11 +308,11 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
             if (this.showCheckboxes) {
              pg.stroke(textColor);
              pg.noFill();
-             pg.rect(textX, yp+5, CHECKBOX_SIZE-1, CHECKBOX_SIZE-1);
+             pg.rect(textX, yp+4, CHECKBOX_SIZE-1, CHECKBOX_SIZE-1);
              if (item.isChecked()) {
                  pg.noStroke();
                  pg.fill(textColor);
-                 pg.rect(textX+2, yp+7, CHECKBOX_SIZE/2, CHECKBOX_SIZE/2);
+                 pg.rect(textX+2, yp+6, CHECKBOX_SIZE/2, CHECKBOX_SIZE/2);
              }
              textX += CHECKBOX_SIZE + 4;
             }
@@ -393,6 +406,8 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
                 }
                 activate();
             }
+        } else if (keyCode == java.awt.event.KeyEvent.VK_D && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
+            delete();
         }
     }
 
