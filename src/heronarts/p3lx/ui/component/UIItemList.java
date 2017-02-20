@@ -24,8 +24,8 @@
 
 package heronarts.p3lx.ui.component;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import heronarts.lx.LXUtils;
 import heronarts.p3lx.ui.UI;
@@ -139,7 +139,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         public void onFocus()  {}
     }
 
-    private List<Item> items = new ArrayList<Item>();
+    private List<Item> items = new CopyOnWriteArrayList<Item>();
 
     private int focusIndex = -1;
 
@@ -188,13 +188,43 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     }
 
     /**
+     * Adds an item to the list
+     *
+     * @param item Item to remove
+     * @return this
+     */
+    public UIItemList addItem(Item item) {
+        this.items.add(item);
+        setScrollHeight(ROW_SPACING * this.items.size() + ROW_MARGIN);
+        redraw();
+        return this;
+    }
+
+    /**
+     * Removes an item from the list
+     *
+     * @param item Item to remove
+     * @return this
+     */
+    public UIItemList removeItem(Item item) {
+        this.items.remove(item);
+        if (this.focusIndex >= this.items.size()) {
+            setFocusIndex(items.size() - 1);
+        }
+        setScrollHeight(ROW_SPACING * this.items.size() + ROW_MARGIN);
+        redraw();
+        return this;
+    }
+
+    /**
      * Sets the items in the list and redraws it
      *
      * @param items Items
      * @return this
      */
-    public UIItemList setItems(List<UIItemList.Item> items) {
-        this.items = items;
+    public UIItemList setItems(List<Item> items) {
+        this.items.clear();
+        this.items.addAll(items);
         if (this.focusIndex >= items.size()) {
             setFocusIndex(items.size() - 1);
         }
