@@ -108,7 +108,7 @@ public class UI2dScrollContext extends UI2dContext {
     }
 
     public UI2dScrollContext setScrollY(float scrollY) {
-        scrollY = LXUtils.constrainf(scrollY, minScrollX(), 0);
+        scrollY = LXUtils.constrainf(scrollY, minScrollY(), 0);
         if (this.scrollY != scrollY) {
             this.scrollY = scrollY;
             redraw();

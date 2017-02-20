@@ -44,6 +44,8 @@ import processing.event.MouseEvent;
  */
 public class UIItemList extends UI2dComponent implements UIFocus {
 
+    private static final int SCROLL_BAR_WIDTH = 8;
+
     public static interface Item {
 
         public boolean isSelected();
@@ -135,6 +137,12 @@ public class UIItemList extends UI2dComponent implements UIFocus {
         int so = getScrollOffset();
         int fi = getFocusIndex();
         pg.strokeWeight(1);
+
+        float rowWidth = this.width;
+        if (this.hasScroll) {
+            rowWidth -= SCROLL_BAR_WIDTH + 1;
+        }
+
         for (int i = 0; i < this.numVisibleItems; ++i) {
             if (i + so >= this.items.size()) {
                 break;
@@ -153,15 +161,13 @@ public class UIItemList extends UI2dComponent implements UIFocus {
                 labelColor = ui.theme.getControlTextColor();
                 itemColor = ui.theme.getControlBackgroundColor();
             }
-            // float factor = even ? .92f : 1.08f;
-            // itemColor = LXColor.scaleBrightness(itemColor, factor);
 
             pg.noStroke();
             pg.fill(itemColor);
-            pg.rect(0, yp, this.width, this.itemHeight-1);
+            pg.rect(0, yp, rowWidth, this.itemHeight-1);
 
             pg.stroke(ui.theme.getControlDisabledColor());
-            pg.line(0, yp + this.itemHeight - 1, this.width, yp + this.itemHeight - 1);
+            pg.line(0, yp + this.itemHeight - 1, rowWidth-1, yp + this.itemHeight - 1);
 
             pg.fill(labelColor);
             pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
@@ -171,7 +177,7 @@ public class UIItemList extends UI2dComponent implements UIFocus {
             if (hasFocus() && (itemIndex == fi)) {
                 pg.stroke(ui.theme.getControlTextColor());
                 pg.noFill();
-                pg.rect(0, yp, this.width - 1, this.itemHeight - 2);
+                pg.rect(0, yp, rowWidth - 1, this.itemHeight - 2);
             }
 
             yp += this.itemHeight;
@@ -180,9 +186,9 @@ public class UIItemList extends UI2dComponent implements UIFocus {
         if (this.hasScroll) {
             pg.noStroke();
             pg.fill(0x26ffffff);
-            pg.rect(this.width - 12, 0, 12, this.height);
+            pg.rect(this.width - SCROLL_BAR_WIDTH, 0, SCROLL_BAR_WIDTH, this.height);
             pg.fill(ui.theme.getControlBackgroundColor());
-            pg.rect(this.width - 11, this.scrollYStart+1, 10, this.scrollYHeight-2);
+            pg.rect(this.width - SCROLL_BAR_WIDTH + 1, this.scrollYStart+1, SCROLL_BAR_WIDTH - 2, this.scrollYHeight-2);
         }
 
     }
@@ -207,7 +213,7 @@ public class UIItemList extends UI2dComponent implements UIFocus {
     @Override
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         this.pressedItem = null;
-        if (this.hasScroll && mx >= this.width - 12) {
+        if (this.hasScroll && mx >= this.width - SCROLL_BAR_WIDTH) {
             if ((my >= this.scrollYStart)
                     && (my < (this.scrollYStart + this.scrollYHeight))) {
                 this.scrolling = true;

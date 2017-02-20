@@ -684,23 +684,24 @@ public abstract class UI2dComponent extends UIObject {
      * @param pg PGraphics
      */
     protected void drawFocus(UI ui, PGraphics pg) {
-        int focusSize = getFocusSize();
+        drawFocus(ui, pg, 0, 0, this.width, this.height, getFocusSize());
+    }
+
+    protected void drawFocus(UI ui, PGraphics pg, float x, float y, float width, float height, int focusSize) {
         pg.stroke(getFocusColor(ui));
         pg.noFill();
         // Top left
-        pg.line(0, 0, focusSize, 0);
-        pg.line(0, 0, 0, focusSize);
+        pg.line(x, y, x + focusSize, y);
+        pg.line(x, y, x, y + focusSize);
         // Top right
-        pg.line(this.width - focusSize - 1, 0, this.width - 1, 0);
-        pg.line(this.width - 1, 0, this.width - 1, focusSize);
+        pg.line(x + width - focusSize - 1, y, x + width - 1, y);
+        pg.line(x + width - 1, y, x + width - 1, y + focusSize);
         // Bottom right
-        pg.line(this.width - focusSize - 1, this.height - 1, this.width - 1,
-                this.height - 1);
-        pg.line(this.width - 1, this.height - 1, this.width - 1, this.height - 1
-                - focusSize);
+        pg.line(x + width - focusSize - 1, y + height - 1, x + width - 1, y + height - 1);
+        pg.line(x + width - 1, y + height - 1, x + width - 1, y + height - 1 - focusSize);
         // Bottom left
-        pg.line(0, this.height - 1, focusSize, this.height - 1);
-        pg.line(0, this.height - 1, 0, this.height - 1 - focusSize);
+        pg.line(x, y + height - 1, x + focusSize, y + height - 1);
+        pg.line(x, y + height - 1, x, y + height - 1 - focusSize);
     }
 
 }
