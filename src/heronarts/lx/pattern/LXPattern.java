@@ -22,6 +22,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXBufferedComponent;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXTime;
+import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.transition.LXTransition;
 
 /**
@@ -40,7 +41,7 @@ public abstract class LXPattern extends LXBufferedComponent {
      */
     protected LXTransition transition = null;
 
-    private String name;
+    public final StringParameter name;
 
     private int intervalBegin = -1;
 
@@ -61,27 +62,26 @@ public abstract class LXPattern extends LXBufferedComponent {
         if (simple.endsWith("Pattern")) {
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
-        this.name = simple;
+        this.name = new StringParameter("Name", simple);
     }
 
     /**
-     * Gets the name of this pattern
+     * Gets the name of the pattern
      *
-     * @return Name of this pattern
+     * @return Pattern name
      */
-    @Override
     public String getName() {
-        return this.name;
+        return this.name.getString();
     }
 
     /**
-     * Sets the display name to be used for this pattern.
+     * Sets the name of the pattern, useful for method chaining
      *
-     * @param name
-     * @return This
+     * @param name Name
+     * @return this
      */
     public LXPattern setName(String name) {
-        this.name = name;
+        this.name.setValue(name);
         return this;
     }
 

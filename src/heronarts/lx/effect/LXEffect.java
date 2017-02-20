@@ -24,6 +24,7 @@ import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.StringParameter;
 
 /**
  * Class to represent an effect that may be applied to the color array. Effects
@@ -42,7 +43,7 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
 
     public final Timer timer = new Timer();
 
-    private String name;
+    public final StringParameter name;
 
     protected LXEffect(LX lx) {
         this(lx, false);
@@ -55,7 +56,7 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
         if (simple.endsWith("Pattern")) {
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
-        this.name = simple;
+        this.name = new StringParameter("Name", simple);
 
         this.isMomentary = isMomentary;
         this.enabled.addListener(new LXParameterListener() {
@@ -70,22 +71,23 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
     }
 
     /**
-     * Sets the name of this effect to be displayed in the UI
+     * Gets the name of the effect
      *
-     * @param name
-     * @return
+     * @return Effect name
      */
-    public LXEffect setName(String name) {
-        this.name = name;
-        return this;
+    public String getName() {
+        return this.name.getString();
     }
 
     /**
-     * Get name of this effect to be displayed in UI
+     * Sets the name of the effect, useful for method chaining
+     *
+     * @param name Name
+     * @return this
      */
-    @Override
-    public String getName() {
-        return this.name;
+    public LXEffect setName(String name) {
+        this.name.setValue(name);
+        return this;
     }
 
     /**

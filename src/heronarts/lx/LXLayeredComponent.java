@@ -71,10 +71,6 @@ public abstract class LXLayeredComponent extends LXComponent implements LXLoopTa
         return this;
     }
 
-    public String getName() {
-        return getClass().getSimpleName();
-    }
-
     @Override
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
