@@ -24,7 +24,6 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.pattern.LXPattern;
@@ -170,7 +169,7 @@ public class LXChannel extends LXComponent {
     /**
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
-    public final MutableParameter autoTransitionTime = new MutableParameter("AUTO-TIME", 60000);
+    public final BoundedParameter autoTransitionTimeSecs = new BoundedParameter("AUTO-TIME", 60, .1, 60*60*4);
 
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
@@ -437,8 +436,14 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public LXChannel enableAutoTransition(int autoTransitionThreshold) {
-        this.autoTransitionTime.setValue(autoTransitionThreshold);
+    /**
+     * Enable automatic transition from pattern to pattern on this channel
+     *
+     * @param autoTransitionThresholdTransition time in seconds
+     * @return
+     */
+    public LXChannel enableAutoTransition(double autoTransitionThreshold) {
+        this.autoTransitionTimeSecs.setValue(autoTransitionThreshold);
         this.autoTransitionEnabled.setValue(true);
         return this;
     }
@@ -504,7 +509,7 @@ public class LXChannel extends LXComponent {
             }
         } else {
             if (this.autoTransitionEnabled.isOn() &&
-                    (this.lx.engine.nowMillis - this.transitionMillis > this.autoTransitionTime.getValue())) {
+                    (this.lx.engine.nowMillis - this.transitionMillis > (1000 * this.autoTransitionTimeSecs.getValue()))) {
                 goNext();
             }
         }
