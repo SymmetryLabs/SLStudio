@@ -46,6 +46,14 @@ public class UIDoubleBox extends UI2dComponent implements UIFocus {
     private boolean editing = false;
     private String editBuffer = "";
 
+    public enum Units {
+        NONE,
+        SECONDS,
+        MILLISECONDS
+    };
+
+    private Units units = Units.NONE;
+
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
             setValue(parameter.getValue());
@@ -83,6 +91,20 @@ public class UIDoubleBox extends UI2dComponent implements UIFocus {
         return this;
     }
 
+    /**
+     * Set units display after the box content
+     *
+     * @param units
+     * @return
+     */
+    public UIDoubleBox setUnits(Units units) {
+        if (this.units != units) {
+            this.units = units;
+            redraw();
+        }
+        return this;
+    }
+
     public double getValue() {
         return this.value;
     }
@@ -100,13 +122,40 @@ public class UIDoubleBox extends UI2dComponent implements UIFocus {
         return this;
     }
 
+    @SuppressWarnings("fallthrough")
+    private static String formatValue(Units units, double value) {
+        switch (units) {
+        case SECONDS:
+            value *= 1000;
+            // pass through!
+        case MILLISECONDS:
+            if (value < 1000) {
+                return String.format("%dms", (int) value);
+            } else if (value < 60000) {
+                return String.format("%.2fs", value / 1000);
+            } else if (value < 3600000) {
+                int minutes = (int) (value / 60000);
+                int seconds = (int) ((value % 60000) / 1000);
+                return String.format("%d:%02ds", minutes, seconds);
+            }
+            int hours = (int) (value / 3600000);
+            value = value % 3600000;
+            int minutes = (int) (value / 60000);
+            int seconds = (int) ((value % 60000) / 1000);
+            return String.format("%d:%02d:%02ds", hours, minutes, seconds);
+        default:
+        case NONE:
+            return String.format("%.2f", value);
+        }
+    }
+
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
         pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
         // TODO(mcslee): handle text overflowing buffer
-        pg.text(this.editing ? this.editBuffer : String.format("%.2f", this.value), this.width / 2, this.height / 2);
+        pg.text(this.editing ? this.editBuffer : formatValue(this.units, this.value), this.width / 2, this.height / 2);
     }
 
     protected void onValueChange(double value) {
