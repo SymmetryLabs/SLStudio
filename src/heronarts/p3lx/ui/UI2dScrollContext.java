@@ -50,12 +50,20 @@ public class UI2dScrollContext extends UI2dContext {
         return this;
     }
 
+    public float getScrollHeight() {
+        return this.scrollHeight;
+    }
+
     public UI2dScrollContext setScrollHeight(float scrollHeight) {
         if (this.scrollHeight != scrollHeight) {
             this.scrollHeight = scrollHeight;
             rescroll();
         }
         return this;
+    }
+
+    public float getScrollWidth() {
+        return this.scrollWidth;
     }
 
     public UI2dScrollContext setScrollWidth(float scrollWidth) {

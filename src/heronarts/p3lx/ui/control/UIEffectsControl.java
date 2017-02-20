@@ -131,7 +131,7 @@ public class UIEffectsControl extends UIWindow {
 
         EffectScrollItem(LXEffect effect) {
             this.effect = effect;
-            this.label = effect.getName();
+            this.label = effect.name.getString();
         }
 
         public String getLabel() {
