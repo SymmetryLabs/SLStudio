@@ -47,6 +47,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     private static final int ROW_HEIGHT = 16;
     private static final int ROW_MARGIN = 2;
     private static final int ROW_SPACING = ROW_HEIGHT + ROW_MARGIN;
+    private static final int CHECKBOX_SIZE = 8;
 
     /**
      * Interface to which items in the list must conform
@@ -59,6 +60,13 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
          * @return If this item is active
          */
         public boolean isActive();
+
+        /**
+         * Whether the item is checked, applies only if checkbox mode set on the list.
+         *
+         * @return If this item is checked
+         */
+        public boolean isChecked();
 
         /**
          * Active background color for this item
@@ -81,6 +89,13 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         public void onActivate();
 
         /**
+         * Action handler invoked when item is checked
+         *
+         * @param checked If checked
+         */
+        public void onCheck(boolean checked);
+
+        /**
          * Action handler, invoked when item is deactivated. Only applies when setMomentary(true)
          */
         public void onDeactivate();
@@ -100,6 +115,10 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
             return false;
         }
 
+        public boolean isChecked() {
+            return false;
+        }
+
         public int getActiveColor(UI ui) {
             return ui.theme.getControlBackgroundColor();
         }
@@ -107,6 +126,8 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         public void onActivate() {}
 
         public void onDeactivate() {}
+
+        public void onCheck(boolean on) {}
 
         public void onFocus()  {}
     }
@@ -117,7 +138,9 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
 
     private boolean singleClickActivate = false;
 
-    private boolean momentary = false;
+    private boolean isMomentary = false;
+
+    private boolean showCheckboxes = false;
 
     /**
      * Constructs an item list
@@ -186,6 +209,21 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     }
 
     /**
+     * Sets whether a column of checkboxes should be shown on the item list, to the
+     * left of the labels. Useful for a secondary selection state.
+     *
+     * @param showCheckboxes
+     * @return
+     */
+    public UIItemList setShowCheckboxes(boolean showCheckboxes) {
+        if (this.showCheckboxes != showCheckboxes) {
+            this.showCheckboxes = showCheckboxes;
+            redraw();
+        }
+        return this;
+    }
+
+    /**
      * Sets whether the item list is momentary. If so, then clicking on an item
      * or pressing ENTER/SPACE sends a deactivate action after the click ends.
      *
@@ -193,13 +231,21 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
      * @return this
      */
     public UIItemList setMomentary(boolean momentary) {
-        this.momentary = momentary;
+        this.isMomentary = momentary;
         return this;
     }
 
     private void activate() {
         if (this.focusIndex >= 0) {
             this.items.get(this.focusIndex).onActivate();
+        }
+    }
+
+    private void check() {
+        if (this.focusIndex >= 0) {
+            Item item = this.items.get(this.focusIndex);
+            item.onCheck(!item.isChecked());
+            redraw();
         }
     }
 
@@ -241,10 +287,24 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
                 backgroundColor = (i == this.focusIndex) ? 0xff333333 : ui.theme.getControlBackgroundColor();
                 textColor = (i == this.focusIndex) ? UI.WHITE : ui.theme.getControlTextColor();
             }
+            pg.noStroke();
             pg.fill(backgroundColor);
             pg.rect(PADDING, yp, rowWidth-2*PADDING, ROW_HEIGHT, 4);
+
+            int textX = 6;
+            if (this.showCheckboxes) {
+             pg.stroke(textColor);
+             pg.noFill();
+             pg.rect(textX, yp+5, CHECKBOX_SIZE-1, CHECKBOX_SIZE-1);
+             if (item.isChecked()) {
+                 pg.noStroke();
+                 pg.fill(textColor);
+                 pg.rect(textX+2, yp+7, CHECKBOX_SIZE/2, CHECKBOX_SIZE/2);
+             }
+             textX += CHECKBOX_SIZE + 4;
+            }
             pg.fill(textColor);
-            pg.text(item.getLabel(), 6, yp + 4);
+            pg.text(item.getLabel(), textX, yp + 4);
             yp += ROW_SPACING;
             ++i;
         }
@@ -258,7 +318,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
 
     @Override
     public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
-        if (!this.momentary && !this.singleClickActivate && (mouseEvent.getCount() == 2)) {
+        if (!this.isMomentary && !this.singleClickActivate && (mouseEvent.getCount() == 2)) {
             int index = getMouseItemIndex(my);
             if (index >= 0) {
                 setFocusIndex(index);
@@ -288,7 +348,11 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
             int index = getMouseItemIndex(my);
             if (index >= 0) {
                 setFocusIndex(index);
-                if (this.momentary || this.singleClickActivate) {
+                if (this.showCheckboxes && (mx < (5*PADDING + CHECKBOX_SIZE))) {
+                    if (mx >= 2*PADDING) {
+                        check();
+                    }
+                } else if (this.isMomentary || this.singleClickActivate) {
                     this.mouseActivate = this.focusIndex;
                     activate();
                 }
@@ -315,18 +379,27 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
             setFocusIndex(this.focusIndex + 1);
             redraw();
-        } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
-            if (this.momentary) {
+        } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
+            if (this.isMomentary) {
                 this.keyActivate = this.focusIndex;
             }
             activate();
+        } else if (keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+            if (this.showCheckboxes) {
+                check();
+            } else {
+                if (this.isMomentary) {
+                    this.keyActivate = this.focusIndex;
+                }
+                activate();
+            }
         }
     }
 
     @Override
     public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
-            if (this.momentary) {
+            if (this.isMomentary) {
                 if (this.keyActivate >= 0 && this.keyActivate < this.items.size()) {
                     this.items.get(this.keyActivate).onDeactivate();
                 }
