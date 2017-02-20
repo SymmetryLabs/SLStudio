@@ -91,6 +91,9 @@ public class LXColor {
             return 0;
         }
         float range = max - min;
+        if (range == 0) {
+            return 0;
+        }
         float h;
         float rc = (max - r) / range;
         float gc = (max - g) / range;
