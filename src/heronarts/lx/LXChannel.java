@@ -323,19 +323,25 @@ public class LXChannel extends LXComponent {
         }
         int index = this.patterns.indexOf(pattern);
         if (index >= 0) {
-            this.patterns.remove(index);
-            pattern.setChannel(null);
-            if (this.activePatternIndex >= index) {
-                --this.activePatternIndex;
-                if (this.activePatternIndex < 0) {
-                    this.activePatternIndex = this.patterns.size() - 1;
-                }
+            if ((this.transition != null) && (
+                    (this.activePatternIndex == index) ||
+                    (this.nextPatternIndex == index)
+                 )) {
+                finishTransition();
             }
-            if (this.nextPatternIndex >= index) {
+            this.patterns.remove(index);
+            // TODO(mcslee): turn this into pattern.destroy() and remove listeners
+            // for garbage collectability
+            pattern.setChannel(null);
+            if (this.activePatternIndex > index) {
+                --this.activePatternIndex;
+            } else if (this.activePatternIndex >= this.patterns.size()) {
+                this.activePatternIndex = this.patterns.size() - 1;
+            }
+            if (this.nextPatternIndex > index) {
                 --this.nextPatternIndex;
-                if (this.nextPatternIndex < 0) {
-                    this.nextPatternIndex = this.patterns.size() - 1;
-                }
+            } else if (this.nextPatternIndex >= this.patterns.size()) {
+                this.nextPatternIndex = this.patterns.size() - 1;
             }
             for (Listener listener : this.listeners) {
                 listener.patternRemoved(this, pattern);
@@ -420,11 +426,11 @@ public class LXChannel extends LXComponent {
     }
 
     public final LXChannel goIndex(int i) {
-        if (this.transition != null) {
-            return this;
-        }
         if (i < 0 || i >= this.patterns.size()) {
             return this;
+        }
+        if (this.transition != null) {
+            finishTransition();
         }
         this.nextPatternIndex = i;
         startTransition();
