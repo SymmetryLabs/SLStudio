@@ -22,6 +22,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXBufferedComponent;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXTime;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.transition.LXTransition;
 
@@ -47,7 +48,7 @@ public abstract class LXPattern extends LXBufferedComponent {
 
     private int intervalEnd = -1;
 
-    private boolean eligible = true;
+    public final BooleanParameter eligible = new BooleanParameter("Eligible", true);
 
     public final Timer timer = new Timer();
 
@@ -170,7 +171,7 @@ public abstract class LXPattern extends LXBufferedComponent {
      * @return this
      */
     public final LXPattern setEligible(boolean eligible) {
-        this.eligible = eligible;
+        this.eligible.setValue(eligible);
         return this;
     }
 
@@ -180,7 +181,7 @@ public abstract class LXPattern extends LXBufferedComponent {
      * @return this
      */
     public final LXPattern toggleEligible() {
-        this.setEligible(!this.eligible);
+        this.eligible.toggle();
         return this;
     }
 
@@ -192,7 +193,7 @@ public abstract class LXPattern extends LXBufferedComponent {
      * @return True if pattern is eligible to run now
      */
     public final boolean isEligible() {
-        return this.eligible && (!this.hasInterval() || this.isInInterval());
+        return this.eligible.isOn() && (!this.hasInterval() || this.isInInterval());
     }
 
     /**

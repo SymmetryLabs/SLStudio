@@ -537,8 +537,9 @@ public class LXEngine extends LXParameterized {
         if (this.channels.size() == 1) {
             throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
         }
-
         if (this.channels.remove(channel)) {
+            // TODO(mcslee): call channel.destroy() which should remove all listeners to the
+            // channel and its parameters, so it can be garbage collected...
             int i = 0;
             for (LXChannel c : this.channels) {
                 c.setIndex(i++);
