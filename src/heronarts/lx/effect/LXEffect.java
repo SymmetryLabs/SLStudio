@@ -46,16 +46,17 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
 
     protected LXEffect(LX lx) {
         this(lx, false);
+    }
+
+    protected LXEffect(LX lx, boolean isMomentary) {
+        super(lx);
 
         String simple = getClass().getSimpleName();
         if (simple.endsWith("Pattern")) {
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
         this.name = simple;
-    }
 
-    protected LXEffect(LX lx, boolean isMomentary) {
-        super(lx);
         this.isMomentary = isMomentary;
         this.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
