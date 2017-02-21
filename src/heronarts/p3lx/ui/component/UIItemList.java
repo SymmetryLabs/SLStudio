@@ -101,6 +101,11 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         public void onDeactivate();
 
         /**
+         * Action handler, invoked when an item is renamed. Only applies when setRenamable(true)
+         */
+        public void onRename(String name);
+
+        /**
          * Action handler, invoked when item is deleted
          */
         public void onDelete();
@@ -134,7 +139,13 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
 
         public void onCheck(boolean on) {}
 
-        public void onDelete() {}
+        public void onDelete() {
+            throw new UnsupportedOperationException("Item does not implement deletion");
+        }
+
+        public void onRename(String name) {
+            throw new UnsupportedOperationException("Item does not implement renaming");
+        }
 
         public void onFocus()  {}
     }
@@ -147,7 +158,13 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
 
     private boolean isMomentary = false;
 
+    private boolean isRenamable = false;
+
     private boolean showCheckboxes = false;
+
+    private boolean renaming = false;
+
+    private String renameBuffer = "";
 
     /**
      * Constructs an item list
@@ -261,6 +278,17 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     }
 
     /**
+     * Sets whether renaming items is allowed
+     *
+     * @param isRenamable If items may be renamed
+     * @return
+     */
+    public UIItemList setRenamable(boolean isRenamable) {
+        this.isRenamable = isRenamable;
+        return this;
+    }
+
+    /**
      * Sets whether the item list is momentary. If so, then clicking on an item
      * or pressing ENTER/SPACE sends a deactivate action after the click ends.
      *
@@ -322,6 +350,8 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         }
 
         for (Item item : this.items) {
+            boolean renameItem = this.renaming && (this.focusIndex == i);
+
             int backgroundColor, textColor;
             if (item.isActive()) {
                 backgroundColor = item.getActiveColor(ui);
@@ -346,8 +376,16 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
              }
              textX += CHECKBOX_SIZE + 4;
             }
-            pg.fill(textColor);
-            pg.text(item.getLabel(), textX, yp + 4);
+            if (renameItem) {
+                pg.noStroke();
+                pg.fill(UI.BLACK);
+                pg.rect(textX-2, yp+1, rowWidth - PADDING - textX + 2, ROW_HEIGHT-2, 4);
+                pg.fill(UI.WHITE);
+                pg.text(this.renameBuffer, textX, yp + 4);
+            } else {
+                pg.fill(textColor);
+                pg.text(item.getLabel(), textX, yp + 4);
+            }
             yp += ROW_SPACING;
             ++i;
         }
@@ -415,29 +453,65 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     private int keyActivate = -1;
 
     @Override
+    public void onBlur() {
+        if (this.renaming) {
+            this.renaming = false;
+            redraw();
+        }
+    }
+
+    @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (keyCode == java.awt.event.KeyEvent.VK_UP) {
-            setFocusIndex(this.focusIndex - 1);
-            redraw();
-        } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
-            setFocusIndex(this.focusIndex + 1);
-            redraw();
-        } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
-            if (this.isMomentary) {
-                this.keyActivate = this.focusIndex;
+        if (this.renaming) {
+            if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+                this.renaming = false;
+                redraw();
+            } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
+                String newName = this.renameBuffer.trim();
+                if (newName.length() > 0) {
+                    this.items.get(this.focusIndex).onRename(newName);
+                }
+                this.renaming = false;
+                redraw();
+            } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                if (this.renameBuffer.length() > 0) {
+                    this.renameBuffer = this.renameBuffer.substring(0, this.renameBuffer.length() - 1);
+                    redraw();
+                }
+            } else if (UITextBox.isValidTextCharacter(keyChar)) {
+                this.renameBuffer += keyChar;
+                redraw();
             }
-            activate();
-        } else if (keyCode == java.awt.event.KeyEvent.VK_SPACE) {
-            if (this.showCheckboxes) {
-                check();
-            } else {
+        } else {
+            if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+                setFocusIndex(this.focusIndex - 1);
+                redraw();
+            } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+                setFocusIndex(this.focusIndex + 1);
+                redraw();
+            } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
                 if (this.isMomentary) {
                     this.keyActivate = this.focusIndex;
                 }
                 activate();
+            } else if (keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+                if (this.showCheckboxes) {
+                    check();
+                } else {
+                    if (this.isMomentary) {
+                        this.keyActivate = this.focusIndex;
+                    }
+                    activate();
+                }
+            } else if (keyCode == java.awt.event.KeyEvent.VK_D && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
+                delete();
+            } else if (keyCode == java.awt.event.KeyEvent.VK_R && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
+                if (this.isRenamable && this.focusIndex >= 0) {
+                    this.renaming = true;
+                    this.renameBuffer = "";
+                    redraw();
+                }
             }
-        } else if (keyCode == java.awt.event.KeyEvent.VK_D && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
-            delete();
         }
     }
 
@@ -450,6 +524,13 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
                 }
                 this.keyActivate = -1;
             }
+        }
+    }
+
+    @Override
+    public void onFocus() {
+        if (this.focusIndex < 0 && this.items.size() > 0) {
+            setFocusIndex(0);
         }
     }
 }

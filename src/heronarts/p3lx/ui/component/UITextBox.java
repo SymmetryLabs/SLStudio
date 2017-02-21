@@ -111,15 +111,18 @@ public class UITextBox extends UI2dComponent implements UIFocus {
         super.onBlur();
         if (this.editing) {
             this.editing = false;
-            setValue(this.editBuffer.toString());
+            String newValue = this.editBuffer.toString().trim();
+            if (newValue.length() > 0) {
+                setValue(newValue);
+            }
             redraw();
         }
     }
 
     private static final String VALID_CHARACTERS =
-        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,./<>?;':\"[]{}-=_+`~!@#$%^&*()|\1234567890";
+        "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,./<>?;':\"[]{}-=_+`~!@#$%^&*()|\\1234567890";
 
-    private boolean isValidTextCharacter(char keyChar) {
+    static boolean isValidTextCharacter(char keyChar) {
         return VALID_CHARACTERS.indexOf(keyChar) >= 0;
     }
 
@@ -138,7 +141,10 @@ public class UITextBox extends UI2dComponent implements UIFocus {
                 edit();
             } else {
                 this.editing = false;
-                setValue(this.editBuffer.toString());
+                String newValue = this.editBuffer.toString().trim();
+                if (newValue.length() > 0) {
+                    setValue(newValue);
+                }
                 redraw();
             }
         }
