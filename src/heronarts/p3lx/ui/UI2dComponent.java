@@ -206,6 +206,26 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Sets the height of this component
+     *
+     * @param height Height
+     * @return this
+     */
+    public UI2dComponent setHeight(float height) {
+        return setSize(this.width, height);
+    }
+
+    /**
+     * Sets the width of this component
+     *
+     * @param width
+     * @return Width of this component
+     */
+    public UI2dComponent setWidth(float width) {
+        return setSize(width, this.height);
+    }
+
+    /**
      * Set the dimensions of this component
      *
      * @param width Width of component
