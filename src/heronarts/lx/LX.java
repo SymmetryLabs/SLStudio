@@ -147,6 +147,18 @@ public class LX {
     public final LXAudio audio;
 
     /**
+     * The list of globally registered pattern classes
+     */
+    private final List<Class<LXPattern>> registeredPatterns =
+        new ArrayList<Class<LXPattern>>();
+
+    /**
+     * The list of globally registered effects
+     */
+    private final List<Class<LXEffect>> registeredEffects =
+        new ArrayList<Class<LXEffect>>();
+
+    /**
      * Global modulator for shared base hue.
      */
     private LXParameter baseHue;
@@ -281,7 +293,7 @@ public class LX {
      * @return Which row this index is in
      */
     public int row(int i) {
-        return i / this.width;
+        return (this.width == 0) ? 0 : (i / this.width);
     }
 
     /**
@@ -291,7 +303,7 @@ public class LX {
      * @return Which column this index is in
      */
     public int column(int i) {
-        return i % this.width;
+        return (this.width == 0) ? 0 : (i % this.width);
     }
 
     /**
@@ -301,7 +313,7 @@ public class LX {
      * @return x coordinate
      */
     public int x(int i) {
-        return i % this.width;
+        return (this.width == 0) ? 0 : (i % this.width);
     }
 
     /**
@@ -312,7 +324,7 @@ public class LX {
      * @return Position of this node in x space, from 0 to 1
      */
     public double xn(int i) {
-        return (i % this.width) / (double) (this.width - 1);
+        return (this.width == 0) ? 0 : ((i % this.width) / (double) (this.width - 1));
     }
 
     /**
@@ -333,7 +345,7 @@ public class LX {
      * @return y coordinate
      */
     public int y(int i) {
-        return i / this.width;
+        return (this.width == 0) ? 0 : (i / this.width);
     }
 
     /**
@@ -344,7 +356,7 @@ public class LX {
      * @return Position of this node in y space, from 0 to 1
      */
     public double yn(int i) {
-        return (i / this.width) / (double) (this.height - 1);
+        return (this.width == 0) ? 0 : ((i / this.width) / (double) (this.height - 1));
     }
 
     /**
@@ -673,5 +685,70 @@ public class LX {
         return this.engine.getPatterns();
     }
 
+    /**
+     * Register a pattern class with the engine
+     *
+     * @param pattern
+     * @return this
+     */
+    public LX registerPattern(Class<LXPattern> pattern) {
+        this.registeredPatterns.add(pattern);
+        return this;
+    }
+
+    /**
+     * Register a pattern class with the engine
+     *
+     * @param pattern
+     * @return this
+     */
+    public LX registerPatterns(Class<LXPattern>[] patterns) {
+        for (Class<LXPattern> pattern : patterns) {
+            registerPattern(pattern);
+        }
+        return this;
+    }
+
+    /**
+     * Gets the list of registered pattern classes
+     *
+     * @return Pattern classes
+     */
+    public List<Class<LXPattern>> getRegisteredPatterns() {
+        return this.registeredPatterns;
+    }
+
+    /**
+     * Register an effect class with the engine
+     *
+     * @param effect
+     * @return this
+     */
+    public LX registerEffect(Class<LXEffect> effect) {
+        this.registeredEffects.add(effect);
+        return this;
+    }
+
+    /**
+     * Register an effect class with the engine
+     *
+     * @param effects
+     * @return this
+     */
+    public LX registerEffects(Class<LXEffect>[] effects) {
+        for (Class<LXEffect> effect : effects) {
+            registerEffect(effect);
+        }
+        return this;
+    }
+
+    /**
+     * Gets the list of registered effect classes
+     *
+     * @return Effect classes
+     */
+    public List<Class<LXEffect>> getRegisteredEffects() {
+        return this.registeredEffects;
+    }
 
 }

@@ -20,6 +20,8 @@ package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.modulator.SawLFO;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.FunctionalParameter;
 
 /**
  * Braindead simple test pattern that iterates through all the nodes turning
@@ -27,14 +29,24 @@ import heronarts.lx.modulator.SawLFO;
  */
 public class IteratorTestPattern extends LXPattern {
 
-    final private SawLFO index;
+    private final SawLFO index;
+    public final BoundedParameter speed = new BoundedParameter("Speed", 10, 1, 100);
+
+    private final FunctionalParameter period = new FunctionalParameter() {
+        @Override
+        public double getValue() {
+            return (1000 / speed.getValue()) * lx.total;
+        }
+    };
 
     public IteratorTestPattern(LX lx) {
         super(lx);
-        this.addModulator(this.index = new SawLFO(0, lx.total, lx.total * 100))
-                .trigger();
+        addParameter(speed);
+        setEligible(false);
+        startModulator(this.index = new SawLFO(0, lx.total, period));
     }
 
+    @Override
     public void run(double deltaMs) {
         int active = (int) Math.floor(this.index.getValue());
         for (int i = 0; i < colors.length; ++i) {
