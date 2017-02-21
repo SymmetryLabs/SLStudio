@@ -201,7 +201,16 @@ public class Tempo extends LXComponent {
      * this is all that is desired.
      */
     public void tap() {
-        long now = System.currentTimeMillis();
+        tap(System.currentTimeMillis());
+    }
+
+    /**
+     * Adjusts the tempo, specificying an exact timestamp in milliseconds
+     * of when the tap event occurred.
+     *
+     * @param now Timestamp of event, should be equivalent to System.currentTimeMillis()
+     */
+    public void tap(long now) {
         if (now - this.lastTap > 2000) {
             this.firstTap = now;
             this.tapCount = 0;
