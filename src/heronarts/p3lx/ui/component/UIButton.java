@@ -48,6 +48,8 @@ public class UIButton extends UI2dComponent implements UIFocus {
 
     private BooleanParameter parameter = null;
 
+    protected long exactToggleTime = -1;
+
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
             setActive(parameter.isOn());
@@ -104,12 +106,14 @@ public class UIButton extends UI2dComponent implements UIFocus {
 
     @Override
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+        this.exactToggleTime = mouseEvent.getMillis();
         setActive(this.isMomentary ? true : !this.active);
     }
 
     @Override
     protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
         if (this.isMomentary) {
+            this.exactToggleTime = mouseEvent.getMillis();
             setActive(false);
         }
     }
@@ -117,6 +121,7 @@ public class UIButton extends UI2dComponent implements UIFocus {
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            this.exactToggleTime = keyEvent.getMillis();
             setActive(this.isMomentary ? true : !this.active);
         }
     }
@@ -125,6 +130,7 @@ public class UIButton extends UI2dComponent implements UIFocus {
     protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.isMomentary) {
+                this.exactToggleTime = keyEvent.getMillis();
                 setActive(false);
             }
         }
