@@ -329,6 +329,7 @@ public class LXChannel extends LXComponent {
                  )) {
                 finishTransition();
             }
+            boolean wasActive = (this.activePatternIndex == index);
             this.patterns.remove(index);
             // TODO(mcslee): turn this into pattern.destroy() and remove listeners
             // for garbage collectability
@@ -345,6 +346,9 @@ public class LXChannel extends LXComponent {
             }
             for (Listener listener : this.listeners) {
                 listener.patternRemoved(this, pattern);
+            }
+            if (wasActive) {
+                startTransition();
             }
         }
         return this;

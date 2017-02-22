@@ -50,6 +50,11 @@ public class LXMidiEngine {
         return this;
     }
 
+    public LXMidiEngine removeInput(LXMidiInput input) {
+        input.setEngineInput(false);
+        return this;
+    }
+
     public LXMidiEngine addInput(String deviceName) {
         LXMidiInput input = LXMidiSystem.matchInput(this.lx, deviceName);
         if (input != null) {

@@ -71,6 +71,10 @@ public class LXMidiInput {
         return this;
     }
 
+    public boolean isEngineInput() {
+        return this.isEngineInput;
+    }
+
     LXMidiInput setEngineInput(boolean isEngineInput) {
         this.isEngineInput = isEngineInput;
         return this;
