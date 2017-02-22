@@ -25,7 +25,7 @@
 package heronarts.p3lx.ui;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXLoopTask;
+import heronarts.lx.LXEngine;
 import heronarts.p3lx.P3LX;
 
 import java.util.ArrayList;
@@ -42,7 +42,7 @@ import processing.event.MouseEvent;
 /**
  * Top-level container for all overlay UI elements.
  */
-public class UI {
+public class UI implements LXEngine.Dispatch {
 
     private static UI instance = null;
 
@@ -250,7 +250,7 @@ public class UI {
         applet.registerMethod("mouseEvent", this);
         LX.initTimer.log("P3LX: UI: register");
         if (lx != null) {
-            lx.engine.addLoopTask(new EngineUILoopTask());
+            lx.engine.setInputDispatch(this);
         }
         UI.instance = this;
     }
@@ -358,24 +358,21 @@ public class UI {
         return (this.lx != null) && (this.lx.engine.isThreaded());
     }
 
-    private class EngineUILoopTask implements LXLoopTask {
 
-        @Override
-        public void loop(double deltaMs) {
-            // This is invoked on the LXEngine thread, which may be different
-            // from the Processing Animation thread. Events are always
-            // processed on the engine thread to avoid bugs.
-            engineThreadInputEvents.clear();
-            synchronized (threadSafeInputEventQueue) {
-                engineThreadInputEvents.addAll(threadSafeInputEventQueue);
-                threadSafeInputEventQueue.clear();
-            }
-            for (Event event : engineThreadInputEvents) {
-                if (event instanceof KeyEvent) {
-                    _keyEvent((KeyEvent) event);
-                } else if (event instanceof MouseEvent) {
-                    _mouseEvent((MouseEvent) event);
-                }
+    public void dispatch() {
+        // This is invoked on the LXEngine thread, which may be different
+        // from the Processing Animation thread. Events are always
+        // processed on the engine thread to avoid bugs.
+        engineThreadInputEvents.clear();
+        synchronized (threadSafeInputEventQueue) {
+            engineThreadInputEvents.addAll(threadSafeInputEventQueue);
+            threadSafeInputEventQueue.clear();
+        }
+        for (Event event : engineThreadInputEvents) {
+            if (event instanceof KeyEvent) {
+                _keyEvent((KeyEvent) event);
+            } else if (event instanceof MouseEvent) {
+                _mouseEvent((MouseEvent) event);
             }
         }
     }

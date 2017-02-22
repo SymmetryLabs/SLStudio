@@ -177,7 +177,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
      */
     public UIItemList(UI ui, float x, float y, float w, float h) {
         super(ui, x, y, w, h);
-        setBackgroundColor(ui.theme.getWindowBackgroundColor());
+        setBackgroundColor(0xff191919);
         setBorderRounding(4);
     }
 
