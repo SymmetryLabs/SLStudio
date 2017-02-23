@@ -36,6 +36,7 @@ public class UITheme {
     private PFont windowTitleFont;
     private int windowTitleColor = 0xff999999;
     private int windowBackgroundColor = 0xff404040;
+    private int windowFocusedBackgroundColor = 0xff494949;
     private int windowBorderColor = 0xff292929;
 
     private int focusColor = 0xff669966;
@@ -134,6 +135,26 @@ public class UITheme {
      */
     public UITheme setWindowBackgroundColor(int color) {
         this.windowBackgroundColor = color;
+        return this;
+    }
+
+    /**
+     * Gets background color
+     *
+     * @return background color
+     */
+    public int getWindowFocusedBackgroundColor() {
+        return this.windowFocusedBackgroundColor;
+    }
+
+    /**
+     * Sets default background color
+     *
+     * @param color color
+     * @return this UI
+     */
+    public UITheme setWindowFocusedBackgroundColor(int color) {
+        this.windowFocusedBackgroundColor = color;
         return this;
     }
 

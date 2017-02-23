@@ -24,14 +24,53 @@
 
 package heronarts.p3lx.ui;
 
-public interface UI2dContainer {
-    /**
-     * @return Width of the container
-     */
-    public float getWidth();
+public class UI2dContainer extends UI2dComponent implements UIContainer {
+
+    private UI2dComponent contentTarget;
+
+    public UI2dContainer(float x, float y, float w, float h) {
+        super(x, y, w, h);
+        this.contentTarget = this;
+    }
+
+    protected UI2dContainer setContentTarget(UI2dComponent contentTarget) {
+        this.contentTarget = contentTarget;
+        this.children.add(contentTarget);
+        contentTarget.parent = this;
+        contentTarget.setUI(this.ui);
+        redraw();
+        return this;
+    }
+
+    protected UI2dContainer addTopLevelComponent(UI2dComponent child) {
+        if (child.parent != null) {
+            child.removeFromContainer();
+        }
+        this.children.add(child);
+        child.parent = this;
+        child.setUI(this.ui);
+        redraw();
+        return this;
+    }
 
     /**
-     * @return Height of the container
+     * Returns the object that elements are added to when placed in this container.
+     * In most cases, it will be "this" - but some elements have special subcontainers.
+     *
+     * @return Element
      */
-    public float getHeight();
+    @Override
+    public UIObject getContentTarget() {
+        return this.contentTarget;
+    }
+
+    @Override
+    public float getContentWidth() {
+        return getContentTarget().getWidth();
+    }
+
+    @Override
+    public float getContentHeight() {
+        return getContentTarget().getHeight();
+    }
 }

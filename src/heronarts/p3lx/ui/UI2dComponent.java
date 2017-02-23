@@ -521,13 +521,23 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Get the parent object that this is in
+     *
+     * @return
+     */
+    @Override
+    public UIObject getParent() {
+        return this.parent;
+    }
+
+    /**
      * Adds this component to a container, also removing it from any other container that
      * is currently holding it.
      *
      * @param container Container to place in
      * @return this
      */
-    public UI2dComponent addToContainer(UI2dContainer container) {
+    public UI2dComponent addToContainer(UIContainer container) {
         return addToContainer(container, -1);
     }
 
@@ -538,11 +548,14 @@ public abstract class UI2dComponent extends UIObject {
      * @param container Container to place in
      * @return this
      */
-    public UI2dComponent addToContainer(UI2dContainer container, int index) {
+    public UI2dComponent addToContainer(UIContainer container, int index) {
         if (this.parent != null) {
             removeFromContainer();
         }
-        UIObject containerObject = (UIObject) container;
+        UIObject containerObject = container.getContentTarget();
+        if (containerObject == this) {
+            throw new IllegalArgumentException("Cannot add an object to itself");
+        }
         if (index < 0) {
             containerObject.children.add(this);
         } else {
@@ -625,7 +638,6 @@ public abstract class UI2dComponent extends UIObject {
             return;
         }
         boolean needsBorder = this.needsRedraw || this.childNeedsRedraw;
-        boolean childBackground = this.hasBackground && !this.needsRedraw;
         float sx = this.scrollX;
         float sy = this.scrollY;
         if (this.needsRedraw) {
@@ -641,11 +653,6 @@ public abstract class UI2dComponent extends UIObject {
             for (UIObject childObject : this.children) {
                 UI2dComponent child = (UI2dComponent) childObject;
                 if (child.needsRedraw || child.childNeedsRedraw) {
-                    if (childBackground && child.needsRedraw) {
-                        pg.noStroke();
-                        pg.fill(this.backgroundColor);
-                        pg.rect(child.x, child.y, child.width, child.height);
-                    }
                     float cx = child.x;
                     float cy = child.y;
                     pg.translate(cx, cy);
@@ -661,11 +668,29 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     private void drawBackground(UI ui, PGraphics pg) {
+        if (!this.hasBackground || (this.borderRounding > 0)) {
+            // If we don't have our own background, or our borders are rounded,
+            // then we need to walk up the UI tree to figure out how to paint
+            // in the background.
+            UIObject component = this.parent;
+            while ((component != null) && (component instanceof UI2dComponent)) {
+                UI2dComponent component2d = (UI2dComponent) component;
+                if (component2d.hasBackground) {
+                    pg.noStroke();
+                    pg.fill(component2d.backgroundColor);
+                    pg.rect(0, 0, this.width, this.height);
+                    break;
+                }
+                component = component.parent;
+            }
+        }
+
         if (this.hasBackground) {
             pg.noStroke();
             pg.fill(this.backgroundColor);
-            pg.rect(0, 0, width, height, this.borderRounding);
+            pg.rect(0, 0, this.width, this.height, this.borderRounding);
         }
+
     }
 
     private void drawBorder(UI ui, PGraphics pg) {

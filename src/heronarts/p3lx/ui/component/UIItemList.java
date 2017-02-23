@@ -139,9 +139,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
 
         public void onCheck(boolean on) {}
 
-        public void onDelete() {
-            throw new UnsupportedOperationException("Item does not implement deletion");
-        }
+        public void onDelete() {}
 
         public void onRename(String name) {
             throw new UnsupportedOperationException("Item does not implement renaming");

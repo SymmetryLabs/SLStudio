@@ -74,6 +74,15 @@ public abstract class UIObject {
     }
 
     /**
+     * Subclasses may access the object that is containing this one
+     *
+     * @return Parent object
+     */
+    protected UIObject getParent() {
+        return this.parent;
+    }
+
+    /**
      * Whether the given point is contained by this object
      *
      * @param x x-coordinate
@@ -137,6 +146,16 @@ public abstract class UIObject {
      */
     public boolean hasFocus() {
         return this.hasFocus;
+    }
+
+    /**
+     * Whether this object has direct focus, meaning that no
+     * child element is focused
+     *
+     * @return true or false
+     */
+    public boolean hasDirectFocus() {
+        return hasFocus() && (this.focusedChild == null);
     }
 
     /**
@@ -245,7 +264,7 @@ public abstract class UIObject {
                 break;
             }
         }
-        if (!hasFocus() && (this instanceof UIFocus)) {
+        if (!hasFocus() && (this instanceof UIMouseFocus)) {
             focus();
         }
         onMousePressed(mouseEvent, mx, my);

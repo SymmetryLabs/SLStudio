@@ -26,9 +26,9 @@ package heronarts.p3lx.ui.control;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
+import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.pattern.LXPattern;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIWindow;
 import heronarts.p3lx.ui.component.UIButton;

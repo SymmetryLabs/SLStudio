@@ -28,7 +28,7 @@ package heronarts.p3lx.ui;
  * Container class for collapsible sections with labels which automatically reflow as
  * they collapse and expand.
  */
-public class UI2dCollapsibleContainer extends UI2dComponent implements UI2dContainer {
+public class UI2dCollapsibleContainer extends UI2dContainer {
 
     private static final int DEFAULT_SECTION_MARGIN = 4;
 

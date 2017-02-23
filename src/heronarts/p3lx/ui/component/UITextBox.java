@@ -54,6 +54,7 @@ public class UITextBox extends UI2dComponent implements UIFocus {
 
     public UITextBox(float x, float y, float w, float h) {
         super(x, y, w, h);
+        setTextAlignment(PConstants.CENTER);
         setBorderColor(UI.get().theme.getControlBorderColor());
         setBackgroundColor(UI.get().theme.getControlBackgroundColor());
     }
@@ -89,7 +90,6 @@ public class UITextBox extends UI2dComponent implements UIFocus {
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-        pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
         if (this.editing) {
             pg.fill(UI.BLACK);
             pg.noStroke();
@@ -98,7 +98,13 @@ public class UITextBox extends UI2dComponent implements UIFocus {
 
         pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
         // TODO(mcslee): handle text overflowing buffer
-        pg.text(this.editing ? this.editBuffer.toString() : this.value, this.width / 2, this.height - 2);
+        if (this.textAlignHorizontal == PConstants.LEFT) {
+            pg.textAlign(PConstants.LEFT, PConstants.BOTTOM);
+            pg.text(this.editing ? this.editBuffer.toString() : this.value, 2, this.height - 2);
+        } else {
+            pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
+            pg.text(this.editing ? this.editBuffer.toString() : this.value, this.width / 2, this.height - 2);
+        }
     }
 
     protected void onValueChange(String value) {

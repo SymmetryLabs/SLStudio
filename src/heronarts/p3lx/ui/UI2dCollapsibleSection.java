@@ -32,10 +32,11 @@ import processing.event.MouseEvent;
 /**
  * Section with a title which can collapse/expand
  */
-public class UI2dCollapsibleSection extends UI2dComponent implements UI2dContainer {
+public class UI2dCollapsibleSection extends UI2dContainer {
 
     private static final int PADDING = 4;
     private static final int TITLE_LABEL_HEIGHT = 12;
+    private static final int CHEVRON_PADDING = 14;
     private static final int CONTENT_Y = TITLE_LABEL_HEIGHT + 6;
     private static final int CLOSED_HEIGHT = TITLE_LABEL_HEIGHT + PADDING;
 
@@ -43,13 +44,7 @@ public class UI2dCollapsibleSection extends UI2dComponent implements UI2dContain
     private boolean expanded = true;
     private final float expandedHeight;
 
-    protected final ContentContainer content;
-
-    protected class ContentContainer extends UI2dComponent implements UI2dContainer {
-        ContentContainer(float x, float y, float w, float h) {
-            super(x, y, w, h);
-        }
-    }
+    private final UI2dContainer content;
 
     /**
      * Constructs a new container for a collapsible section
@@ -65,13 +60,13 @@ public class UI2dCollapsibleSection extends UI2dComponent implements UI2dContain
         setBackgroundColor(ui.theme.getWindowBackgroundColor());
         setBorderRounding(4);
 
-        this.expandedHeight = h;
-        this.content = new ContentContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, h - CONTENT_Y - PADDING);
-        this.content.setVisible(expanded);
-        this.content.addToContainer(this);
+        this.title = new UILabel(PADDING, PADDING, this.width - PADDING - CHEVRON_PADDING, TITLE_LABEL_HEIGHT);
+        addTopLevelComponent(this.title);
 
-        this.title = new UILabel(PADDING, PADDING, width - 2*PADDING, TITLE_LABEL_HEIGHT);
-        this.title.addToContainer(this);
+        this.expandedHeight = h;
+        this.content = new UI2dContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, h - CONTENT_Y - PADDING);
+        this.content.setVisible(this.expanded);
+        setContentTarget(this.content);
     }
 
     /**
@@ -86,7 +81,7 @@ public class UI2dCollapsibleSection extends UI2dComponent implements UI2dContain
     }
 
     @Override
-    public UI2dComponent addToContainer(UI2dContainer container) {
+    public UI2dComponent addToContainer(UIContainer container) {
         if (!(container instanceof UI2dCollapsibleContainer)) {
             throw new UnsupportedOperationException("Can only add UI2dCollapsibleSection to UI2dCollapsibleContainer");
         }
@@ -142,5 +137,11 @@ public class UI2dCollapsibleSection extends UI2dComponent implements UI2dContain
         if (my < TITLE_LABEL_HEIGHT + PADDING) {
             toggle();
         }
+    }
+
+
+    @Override
+    public UI2dContainer getContentTarget() {
+        return this.content;
     }
 }

@@ -46,7 +46,7 @@ public class UI implements LXEngine.Dispatch {
 
     private static UI instance = null;
 
-    private class UIRoot extends UIObject implements UI2dContainer {
+    private class UIRoot extends UIObject implements UIContainer {
 
         private UIRoot() {
             this.ui = UI.this;
@@ -160,6 +160,21 @@ public class UI implements LXEngine.Dispatch {
                 }
             }
             return null;
+        }
+
+        @Override
+        public UIObject getContentTarget() {
+            return this;
+        }
+
+        @Override
+        public float getContentWidth() {
+            return this.ui.width;
+        }
+
+        @Override
+        public float getContentHeight() {
+            return this.ui.height;
         }
     }
 

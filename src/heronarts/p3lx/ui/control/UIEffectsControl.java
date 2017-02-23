@@ -20,7 +20,7 @@ package heronarts.p3lx.ui.control;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
-import heronarts.lx.effect.LXEffect;
+import heronarts.lx.LXEffect;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.p3lx.ui.UI;

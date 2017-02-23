@@ -22,17 +22,30 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx;
+package heronarts.p3lx.ui;
 
-import heronarts.lx.LXPattern;
-import processing.core.PApplet;
+public interface UIContainer {
 
-public abstract class P3LXPattern extends LXPattern {
+    /**
+     * Returns the width of the content container
+     *
+     * @return width of content section
+     */
+    public float getContentWidth();
 
-    protected final PApplet applet;
+    /**
+     * Returns the height of the content container
+     *
+     * @return height of the content section
+     */
+    public float getContentHeight();
 
-    protected P3LXPattern(P3LX lx) {
-        super(lx);
-        this.applet = lx.applet;
-    }
+    /**
+     * Returns the object that elements are added to when placed in this container.
+     * In most cases, it will be "this" - but some elements have special sub-containers.
+     *
+     * @return Element
+     */
+    public UIObject getContentTarget();
+
 }

@@ -32,7 +32,7 @@ import processing.core.PGraphics;
  * persistent across frames and is only redrawn as necessary. It is simply
  * bitmapped onto the UI that is a part of.
  */
-public class UI2dContext extends UI2dComponent implements UI2dContainer {
+public class UI2dContext extends UI2dContainer {
 
     /**
      * Graphics context for this container.

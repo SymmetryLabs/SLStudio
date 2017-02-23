@@ -22,17 +22,11 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx;
+package heronarts.p3lx.ui;
 
-import heronarts.lx.LXPattern;
-import processing.core.PApplet;
+/**
+ * Marker interface for UI components that can be focused by using the mouse
+ */
+public interface UIMouseFocus {
 
-public abstract class P3LXPattern extends LXPattern {
-
-    protected final PApplet applet;
-
-    protected P3LXPattern(P3LX lx) {
-        super(lx);
-        this.applet = lx.applet;
-    }
 }
