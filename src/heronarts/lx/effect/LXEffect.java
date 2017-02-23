@@ -53,8 +53,8 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
         super(lx);
 
         String simple = getClass().getSimpleName();
-        if (simple.endsWith("Pattern")) {
-            simple = simple.substring(0, simple.length() - "Pattern".length());
+        if (simple.endsWith("Effect")) {
+            simple = simple.substring(0, simple.length() - "Effect".length());
         }
         this.name = new StringParameter("Name", simple);
 

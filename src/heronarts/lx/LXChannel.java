@@ -323,13 +323,13 @@ public class LXChannel extends LXComponent {
         }
         int index = this.patterns.indexOf(pattern);
         if (index >= 0) {
+            boolean wasActive = (this.activePatternIndex == index);
             if ((this.transition != null) && (
                     (this.activePatternIndex == index) ||
                     (this.nextPatternIndex == index)
                  )) {
                 finishTransition();
             }
-            boolean wasActive = (this.activePatternIndex == index);
             this.patterns.remove(index);
             // TODO(mcslee): turn this into pattern.destroy() and remove listeners
             // for garbage collectability
@@ -348,7 +348,11 @@ public class LXChannel extends LXComponent {
                 listener.patternRemoved(this, pattern);
             }
             if (wasActive) {
-                startTransition();
+                LXPattern newActive = getActivePattern();
+                newActive.onActive();
+                for (Listener listener : this.listeners) {
+                    listener.patternDidChange(this, newActive);
+                }
             }
         }
         return this;
