@@ -28,19 +28,11 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dComponent;
-import heronarts.p3lx.ui.UIFocus;
-import processing.core.PConstants;
-import processing.core.PGraphics;
-import processing.event.KeyEvent;
 
-public class UITextBox extends UI2dComponent implements UIFocus {
+public class UITextBox extends UIInputBox {
 
     private String value = "";
     private StringParameter parameter = null;
-
-    private boolean editing = false;
-    private final StringBuilder editBuffer = new StringBuilder();
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
@@ -54,7 +46,6 @@ public class UITextBox extends UI2dComponent implements UIFocus {
 
     public UITextBox(float x, float y, float w, float h) {
         super(x, y, w, h);
-        setTextAlignment(PConstants.CENTER);
         setBorderColor(UI.get().theme.getControlBorderColor());
         setBackgroundColor(UI.get().theme.getControlBackgroundColor());
     }
@@ -75,6 +66,11 @@ public class UITextBox extends UI2dComponent implements UIFocus {
         return this.value;
     }
 
+    @Override
+    protected String getValueString() {
+        return this.value;
+    }
+
     public UITextBox setValue(String value) {
         if (!this.value.equals(value)) {
             this.value = value;
@@ -87,87 +83,32 @@ public class UITextBox extends UI2dComponent implements UIFocus {
         return this;
     }
 
-    @Override
-    protected void onDraw(UI ui, PGraphics pg) {
-        pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-        if (this.editing) {
-            pg.fill(UI.BLACK);
-            pg.noStroke();
-            pg.rect(0, 0, this.width, this.height);
-        }
+    /**
+     * Subclasses may override to handle value changes
+     *
+     * @param value
+     */
+    protected /* abstract */ void onValueChange(String value) {}
 
-        pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
-        // TODO(mcslee): handle text overflowing buffer
-        if (this.textAlignHorizontal == PConstants.LEFT) {
-            pg.textAlign(PConstants.LEFT, PConstants.BOTTOM);
-            pg.text(this.editing ? this.editBuffer.toString() : this.value, 2, this.height - 2);
-        } else {
-            pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
-            pg.text(this.editing ? this.editBuffer.toString() : this.value, this.width / 2, this.height - 2);
-        }
-    }
-
-    protected void onValueChange(String value) {
-    }
-
-    float dAccum = 0;
 
     @Override
-    protected void onBlur() {
-        super.onBlur();
-        if (this.editing) {
-            this.editing = false;
-            String newValue = this.editBuffer.toString().trim();
-            if (newValue.length() > 0) {
-                setValue(newValue);
-            }
-            redraw();
+    protected void saveEditBuffer() {
+        String value = this.editBuffer.trim();
+        if (value.length() > 0) {
+            setValue(value);
         }
     }
 
     private static final String VALID_CHARACTERS =
         "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ ,./<>?;':\"[]{}-=_+`~!@#$%^&*()|\\1234567890";
 
-    static boolean isValidTextCharacter(char keyChar) {
+    public static boolean isValidTextCharacter(char keyChar) {
         return VALID_CHARACTERS.indexOf(keyChar) >= 0;
     }
 
-    public void edit() {
-        if (!this.editing) {
-            this.editing = true;
-            this.editBuffer.setLength(0);
-            redraw();
-        }
+    @Override
+    protected boolean isValidCharacter(char keyChar) {
+        return isValidTextCharacter(keyChar);
     }
 
-    @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
-            if (!this.editing) {
-                edit();
-            } else {
-                this.editing = false;
-                String newValue = this.editBuffer.toString().trim();
-                if (newValue.length() > 0) {
-                    setValue(newValue);
-                }
-                redraw();
-            }
-        }
-        if (this.editing && isValidTextCharacter(keyChar)) {
-            this.editBuffer.append(keyChar);
-            redraw();
-        }
-        if (this.editing) {
-            if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
-                if (this.editBuffer.length() > 0) {
-                    this.editBuffer.setLength(this.editBuffer.length() - 1);
-                    redraw();
-                }
-            } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
-                this.editing = false;
-                redraw();
-            }
-        }
-    }
 }

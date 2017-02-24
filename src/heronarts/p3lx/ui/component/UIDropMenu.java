@@ -221,12 +221,16 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_ENTER ||
                 keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+            consumeKeyEvent();
             toggleExpanded();
         } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+            consumeKeyEvent();
             setExpanded(false);
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+            consumeKeyEvent();
             this.parameter.increment();
         } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+            consumeKeyEvent();
             this.parameter.decrement();
         }
     }

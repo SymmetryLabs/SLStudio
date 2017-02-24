@@ -28,23 +28,17 @@ import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dComponent;
-import heronarts.p3lx.ui.UIFocus;
 import processing.core.PConstants;
-import processing.core.PGraphics;
+import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIIntegerBox extends UI2dComponent implements UIFocus {
+public class UIIntegerBox extends UINumberBox {
 
     private int minValue = 0;
     private int maxValue = PConstants.MAX_INT;
     private int value = 0;
     private DiscreteParameter parameter = null;
-
-    private boolean editing = false;
-    private String editBuffer = "";
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
@@ -58,8 +52,6 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
 
     public UIIntegerBox(float x, float y, float w, float h) {
         super(x, y, w, h);
-        setBorderColor(UI.get().theme.getControlBorderColor());
-        setBackgroundColor(UI.get().theme.getControlBackgroundColor());
     }
 
     public UIIntegerBox setParameter(final DiscreteParameter parameter) {
@@ -87,6 +79,11 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
         return this.value;
     }
 
+    @Override
+    public String getValueString() {
+        return Integer.toString(this.value);
+    }
+
     public UIIntegerBox setValue(int value) {
         if (this.value != value) {
             int range = (this.maxValue - this.minValue + 1);
@@ -103,90 +100,54 @@ public class UIIntegerBox extends UI2dComponent implements UIFocus {
         return this;
     }
 
-    @Override
-    protected void onDraw(UI ui, PGraphics pg) {
-        pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
-        pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
-        // TODO(mcslee): handle text overflowing buffer
-        pg.text(this.editing ? this.editBuffer : Integer.toString(this.value), this.width / 2, this.height / 2);
-    }
+    /**
+     * Subclasses may override to handle value changes
+     *
+     * @param value
+     */
+    protected void onValueChange(int value) {}
 
-    protected void onValueChange(int value) {
-    }
-
-    float dAccum = 0;
 
     @Override
-    protected void onBlur() {
-        super.onBlur();
-        if (this.editing) {
-            this.editing = false;
-            try {
-                setValue(Integer.parseInt(this.editBuffer));
-            } catch (NumberFormatException nfx) {
-                redraw();
-            }
-        }
+    protected void saveEditBuffer() {
+        try {
+            setValue(Integer.parseInt(this.editBuffer));
+        } catch (NumberFormatException nfx) {}
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        this.dAccum = 0;
+    protected boolean isValidCharacter(char keyChar) {
+        // TODO Auto-generated method stub
+        return false;
+    }
+
+    private int getIncrement(Event inputEvent) {
+        int increment = 1;
+        if (inputEvent.isShiftDown()) {
+            if (this.hasShiftMultiplier) {
+                increment *= this.shiftMultiplier;
+            } else if (this.parameter != null) {
+                increment = Math.max(1, this.parameter.getRange() / 10);
+            } else {
+                increment *= 10;
+            }
+        }
+        return increment;
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-        this.dAccum -= dy;
-        int offset = (int) (this.dAccum / 5);
-        this.dAccum = this.dAccum - (offset * 5);
-        if (!this.editing) {
-            setValue(this.value + offset);
-        }
+    protected void incrementValue(KeyEvent keyEvent) {
+        setValue(this.value + getIncrement(keyEvent));
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (keyChar >= '0' && keyChar <= '9') {
-            if (!this.editing) {
-                this.editing = true;
-                this.editBuffer = "";
-            }
-            this.editBuffer += keyChar;
-            redraw();
-        }
-        if (this.editing) {
-            if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
-                this.editing = false;
-                try {
-                    setValue(Integer.parseInt(this.editBuffer));
-                } catch (NumberFormatException nfx) {}
-                redraw();
-            } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
-                if (this.editBuffer.length() > 0) {
-                    this.editBuffer = this.editBuffer.substring(0, this.editBuffer.length() - 1);
-                    redraw();
-                }
-            } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
-                this.editing = false;
-                redraw();
-            }
-        }
-
-        if (!this.editing) {
-            int times = 1;
-            if (this.parameter != null) {
-                if (keyEvent.isShiftDown()) {
-                    times = Math.max(1, this.parameter.getRange() / 10);
-                }
-            }
-            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
-                || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-                setValue(getValue() - times);
-            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
-                || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-                setValue(getValue() + times);
-            }
-        }
+    protected void decrementValue(KeyEvent keyEvent) {
+        setValue(this.value - getIncrement(keyEvent));
     }
+
+    @Override
+    protected void incrementMouseValue(MouseEvent mouseEvent, int offset) {
+        setValue(this.value + getIncrement(mouseEvent) * offset);
+    }
+
 }

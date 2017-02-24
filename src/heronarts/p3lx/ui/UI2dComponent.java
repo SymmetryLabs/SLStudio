@@ -693,7 +693,7 @@ public abstract class UI2dComponent extends UIObject {
 
     }
 
-    private void drawBorder(UI ui, PGraphics pg) {
+    protected void drawBorder(UI ui, PGraphics pg) {
         if (this.hasBorder) {
             int border = this.borderWeight;
             pg.strokeWeight(border);

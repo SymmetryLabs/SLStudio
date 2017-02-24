@@ -159,6 +159,16 @@ public abstract class UIObject {
     }
 
     /**
+     * Gets which immediate child of this object is focused, may be null. Child
+     * may also have focused children.
+     *
+     * @return immediate child of this object which has focus
+     */
+    public UIObject getFocusedChild() {
+        return this.focusedChild;
+    }
+
+    /**
      * Focuses on this object, giving focus to everything above
      * and whatever was previously focused below.
      *
@@ -255,6 +265,21 @@ public abstract class UIObject {
      */
     protected void onDraw(UI ui, PGraphics pg) {}
 
+    /**
+     * Called in a key event handler to stop this event from bubbling up the
+     * parent container chain. For example, a button which responds to a space bar
+     * press should call consumeKeyEvent() to stop the event from being handled by its
+     * container.
+     *
+     * @return this
+     */
+    protected UIObject consumeKeyEvent() {
+        this.keyEventConsumed = true;
+        return this;
+    }
+
+    private boolean keyEventConsumed = false;
+
     void mousePressed(MouseEvent mouseEvent, float mx, float my) {
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
@@ -322,6 +347,7 @@ public abstract class UIObject {
             UIObject child = this.children.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
                 child.mouseWheel(mouseEvent, mx - child.getX(), my - child.getY(), delta);
+                this.keyEventConsumed = child.keyEventConsumed;
                 break;
             }
         }
@@ -329,24 +355,39 @@ public abstract class UIObject {
     }
 
     void keyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        this.keyEventConsumed = false;
         if (this.focusedChild != null) {
-            this.focusedChild.keyPressed(keyEvent, keyChar, keyCode);
+            UIObject delegate = this.focusedChild;
+            delegate.keyPressed(keyEvent, keyChar, keyCode);
+            this.keyEventConsumed = delegate.keyEventConsumed;
         }
-        onKeyPressed(keyEvent, keyChar, keyCode);
+        if (!this.keyEventConsumed) {
+            onKeyPressed(keyEvent, keyChar, keyCode);
+        }
     }
 
     void keyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+        this.keyEventConsumed = false;
         if (this.focusedChild != null) {
-            this.focusedChild.keyReleased(keyEvent, keyChar, keyCode);
+            UIObject delegate = this.focusedChild;
+            delegate.keyReleased(keyEvent, keyChar, keyCode);
+            this.keyEventConsumed = delegate.keyEventConsumed;
         }
-        onKeyReleased(keyEvent, keyChar, keyCode);
+        if (!this.keyEventConsumed) {
+            onKeyReleased(keyEvent, keyChar, keyCode);
+        }
     }
 
     void keyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
+        this.keyEventConsumed = false;
         if (this.focusedChild != null) {
-            this.focusedChild.keyTyped(keyEvent, keyChar, keyCode);
+            UIObject delegate = this.focusedChild;
+            delegate.keyTyped(keyEvent, keyChar, keyCode);
+            this.keyEventConsumed = delegate.keyEventConsumed;
         }
-        onKeyTyped(keyEvent, keyChar, keyCode);
+        if (!this.keyEventConsumed) {
+            onKeyTyped(keyEvent, keyChar, keyCode);
+        }
     }
 
     /**

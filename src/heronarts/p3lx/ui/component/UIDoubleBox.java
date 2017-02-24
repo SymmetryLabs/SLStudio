@@ -28,23 +28,16 @@ import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dComponent;
-import heronarts.p3lx.ui.UIFocus;
-import processing.core.PConstants;
-import processing.core.PGraphics;
+import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIDoubleBox extends UI2dComponent implements UIFocus {
+public class UIDoubleBox extends UINumberBox {
 
     private double minValue = 0;
     private double maxValue = Double.MAX_VALUE;
     private double value = 0;
     private BoundedParameter parameter = null;
-
-    private boolean editing = false;
-    private String editBuffer = "";
 
     public enum Units {
         NONE,
@@ -66,8 +59,6 @@ public class UIDoubleBox extends UI2dComponent implements UIFocus {
 
     public UIDoubleBox(float x, float y, float w, float h) {
         super(x, y, w, h);
-        setBorderColor(UI.get().theme.getControlBorderColor());
-        setBackgroundColor(UI.get().theme.getControlBackgroundColor());
     }
 
     public UIDoubleBox setParameter(final BoundedParameter parameter) {
@@ -150,87 +141,58 @@ public class UIDoubleBox extends UI2dComponent implements UIFocus {
     }
 
     @Override
-    protected void onDraw(UI ui, PGraphics pg) {
-        pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
-        pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
-        // TODO(mcslee): handle text overflowing buffer
-        pg.text(this.editing ? this.editBuffer : formatValue(this.units, this.value), this.width / 2, this.height / 2);
+    protected String getValueString() {
+        return formatValue(this.units, this.value);
     }
 
-    protected void onValueChange(double value) {
-    }
-
-    float dAccum = 0;
+    /**
+     * Invoked when value changes, subclasses may override to handle.
+     *
+     * @param value
+     */
+    protected /* abstract */ void onValueChange(double value) {}
 
     @Override
-    protected void onBlur() {
-        super.onBlur();
-        if (this.editing) {
-            this.editing = false;
-            try {
-                setValue(Double.parseDouble(this.editBuffer));
-            } catch (NumberFormatException nfx) {
-                redraw();
-            }
-        }
+    protected void saveEditBuffer() {
+        try {
+            setValue(Double.parseDouble(this.editBuffer));
+        } catch (NumberFormatException nfx) {}
     }
 
     @Override
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        this.dAccum = 0;
+    protected boolean isValidCharacter(char keyChar) {
+        return (keyChar >= '0' && keyChar <= '9') || (keyChar == '.');
+    }
+
+    private float getIncrement(Event inputEvent) {
+        float increment = 1;
+        if (inputEvent.isShiftDown()) {
+            if (this.hasShiftMultiplier) {
+                increment *= this.shiftMultiplier;
+            } else if (this.parameter != null) {
+                increment = (float) (this.parameter.getRange() / 10.);
+            } else {
+                increment *= .1;
+            }
+        }
+        return increment;
     }
 
     @Override
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-        this.dAccum -= dy;
-        int offset = (int) (this.dAccum / 5);
-        this.dAccum = this.dAccum - (offset * 5);
-        if (!this.editing) {
-            setValue(this.value + offset);
-        }
+    protected void decrementValue(KeyEvent keyEvent) {
+        consumeKeyEvent();
+        setValue(getValue() - getIncrement(keyEvent));
     }
 
     @Override
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyChar >= '0' && keyChar <= '9') || (keyChar == '.')) {
-            if (!this.editing) {
-                this.editing = true;
-                this.editBuffer = "";
-            }
-            this.editBuffer += keyChar;
-            redraw();
-        }
-        if (this.editing) {
-            if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
-                this.editing = false;
-                try {
-                    setValue(Double.parseDouble(this.editBuffer));
-                } catch (NumberFormatException nfx) {}
-                redraw();
-            } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
-                if (this.editBuffer.length() > 0) {
-                    this.editBuffer = this.editBuffer.substring(0, this.editBuffer.length() - 1);
-                    redraw();
-                }
-            } else if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
-                this.editing = false;
-                redraw();
-            }
-        }
-
-        if (!this.editing) {
-            double increment = 1;
-            if (keyEvent.isShiftDown()) {
-                increment = .1;
-            }
-            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
-                || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-                setValue(getValue() - increment);
-            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
-                || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-                setValue(getValue() + increment);
-            }
-        }
+    protected void incrementValue(KeyEvent keyEvent) {
+        consumeKeyEvent();
+        setValue(getValue() + getIncrement(keyEvent));
     }
+
+    @Override
+    protected void incrementMouseValue(MouseEvent mouseEvent, int offset) {
+        setValue(this.value + offset * getIncrement(mouseEvent));
+    }
+
 }

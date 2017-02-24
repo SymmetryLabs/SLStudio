@@ -183,7 +183,8 @@ public abstract class UIParameterControl extends UI2dComponent implements
 
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            consumeKeyEvent();
             setShowValue(true);
         }
         if (!isEnabled()) {
@@ -194,27 +195,33 @@ public abstract class UIParameterControl extends UI2dComponent implements
             int times = keyEvent.isShiftDown() ? Math.max(1, dp.getRange() / 10) : 1;
             if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
                     || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
+                consumeKeyEvent();
                 dp.setValue(dp.getValuei() - times);
             } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
                     || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
+                consumeKeyEvent();
                 dp.setValue(dp.getValuei() + times);
             }
         } else if (this.parameter instanceof BooleanParameter) {
             BooleanParameter bp = (BooleanParameter) this.parameter;
             if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
                 || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
+                consumeKeyEvent();
                 bp.setValue(false);
             } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
                 || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
+                consumeKeyEvent();
                 bp.setValue(true);
             }
         } else {
             double amount = keyEvent.isShiftDown() ? .05f : .01f;
             if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
                     || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
+                consumeKeyEvent();
                 setNormalized(LXUtils.constrain(getNormalized() - amount, 0, 1));
             } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
                     || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
+                consumeKeyEvent();
                 setNormalized(LXUtils.constrain(getNormalized() + amount, 0, 1));
             }
         }
@@ -222,7 +229,8 @@ public abstract class UIParameterControl extends UI2dComponent implements
 
     @Override
     protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            consumeKeyEvent();
             setShowValue(false);
         }
     }

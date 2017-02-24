@@ -120,18 +120,20 @@ public class UIButton extends UI2dComponent implements UIFocus {
 
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             this.exactToggleTime = keyEvent.getMillis();
             setActive(this.isMomentary ? true : !this.active);
+            consumeKeyEvent();
         }
     }
 
     @Override
     protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.isMomentary) {
                 this.exactToggleTime = keyEvent.getMillis();
                 setActive(false);
+                consumeKeyEvent();
             }
         }
     }

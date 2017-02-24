@@ -124,12 +124,16 @@ public class UIColorSwatch extends UI2dComponent implements UIFocus {
         double amount = keyEvent.isShiftDown() ? .05 : .01;
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
             this.color.hue.setNormalized(this.color.hue.getNormalized() - amount);
+            consumeKeyEvent();
         } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
             this.color.hue.setNormalized(this.color.hue.getNormalized() + amount);
+            consumeKeyEvent();
         } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {
             this.color.saturation.setNormalized(this.color.saturation.getNormalized() + amount);
+            consumeKeyEvent();
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
             this.color.saturation.setNormalized(this.color.saturation.getNormalized() - amount);
+            consumeKeyEvent();
         }
     }
 }

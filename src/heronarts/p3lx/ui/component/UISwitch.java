@@ -76,8 +76,9 @@ public class UISwitch extends UIParameterControl implements UIFocus {
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyPressed(keyEvent, keyChar, keyCode);
-        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if (this.parameter != null) {
+                consumeKeyEvent();
                 if (this.isMomentary) {
                     getBooleanParameter().setValue(true);
                 } else {
@@ -90,8 +91,9 @@ public class UISwitch extends UIParameterControl implements UIFocus {
     @Override
     protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
         super.onKeyReleased(keyEvent, keyChar, keyCode);
-        if ((keyChar == ' ') || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
             if ((this.parameter != null) && this.isMomentary) {
+                consumeKeyEvent();
                 getBooleanParameter().setValue(false);
             }
         }
