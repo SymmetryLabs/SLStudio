@@ -379,10 +379,10 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
                 pg.fill(UI.BLACK);
                 pg.rect(textX-2, yp+1, rowWidth - PADDING - textX + 2, ROW_HEIGHT-2, 4);
                 pg.fill(UI.WHITE);
-                pg.text(this.renameBuffer, textX, yp + 4);
+                pg.text(clipTextToWidth(pg, this.renameBuffer, rowWidth - textX - 2), textX, yp + 4);
             } else {
                 pg.fill(textColor);
-                pg.text(item.getLabel(), textX, yp + 4);
+                pg.text(clipTextToWidth(pg, item.getLabel(), rowWidth - textX - 2), textX, yp + 4);
             }
             yp += ROW_SPACING;
             ++i;
@@ -509,15 +509,17 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
                     }
                     activate();
                 }
-            } else if (keyCode == java.awt.event.KeyEvent.VK_D && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
-                consumeKeyEvent();
-                delete();
-            } else if (keyCode == java.awt.event.KeyEvent.VK_R && (keyEvent.isControlDown() || keyEvent.isMetaDown())) {
-                if (this.isRenamable && this.focusIndex >= 0) {
+            } else if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
+                if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE || keyCode == java.awt.event.KeyEvent.VK_D) {
                     consumeKeyEvent();
-                    this.renaming = true;
-                    this.renameBuffer = "";
-                    redraw();
+                    delete();
+                } else if (keyCode == java.awt.event.KeyEvent.VK_R) {
+                    if (this.isRenamable && this.focusIndex >= 0) {
+                        consumeKeyEvent();
+                        this.renaming = true;
+                        this.renameBuffer = "";
+                        redraw();
+                    }
                 }
             }
         }

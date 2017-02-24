@@ -520,16 +520,6 @@ public class UI implements LXEngine.Dispatch {
                 this.lx.engine.setThreaded(!this.lx.engine.isThreaded());
             }
             switch (keyCode) {
-            case java.awt.event.KeyEvent.VK_UP:
-                if (keyEvent.isMetaDown()) {
-                    this.lx.engine.getFocusedChannel().goPrev();
-                }
-                break;
-            case java.awt.event.KeyEvent.VK_DOWN:
-                if (keyEvent.isMetaDown()) {
-                    this.lx.engine.getFocusedChannel().goNext();
-                }
-                break;
             case java.awt.event.KeyEvent.VK_LEFT:
                 if (this.lx.flags.keyboardTempo) {
                     this.lx.tempo.setBpm(this.lx.tempo.bpm() - .1);

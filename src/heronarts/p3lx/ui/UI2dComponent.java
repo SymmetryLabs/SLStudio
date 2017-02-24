@@ -503,6 +503,21 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Clip a text to fit in the given width
+     *
+     * @param pg PGraphics
+     * @param str String
+     * @param width Width to fit in
+     * @return
+     */
+    public static String clipTextToWidth(PGraphics pg, String str, float width) {
+        while (str.length() > 0 && pg.textWidth(str) > width) {
+            str = str.substring(0, str.length() - 1);
+        }
+        return str;
+    }
+
+    /**
      * Removes this components from the container is is held by
      *
      * @return this

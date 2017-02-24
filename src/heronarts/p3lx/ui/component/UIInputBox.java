@@ -34,6 +34,8 @@ import processing.event.MouseEvent;
 
 public abstract class UIInputBox extends UI2dComponent implements UIFocus {
 
+    private static final int TEXT_MARGIN = 2;
+
     protected boolean editing = false;
     protected String editBuffer = "";
 
@@ -81,13 +83,14 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
 
         pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
 
-        // TODO(mcslee): handle text overflowing buffer
+        String displayString = clipTextToWidth(pg, this.editing ? this.editBuffer : getValueString(), this.width - TEXT_MARGIN);
+
         if (this.textAlignHorizontal == PConstants.LEFT) {
             pg.textAlign(PConstants.LEFT, PConstants.CENTER);
-            pg.text(this.editing ? this.editBuffer.toString() : getValueString(), 2, this.height / 2);
+            pg.text(displayString, 2, this.height / 2);
         } else {
             pg.textAlign(PConstants.CENTER, PConstants.CENTER);
-            pg.text(this.editing ? this.editBuffer.toString() : getValueString(), this.width / 2, this.height / 2);
+            pg.text(displayString, this.width / 2, this.height / 2);
         }
     }
 

@@ -174,11 +174,7 @@ public abstract class UIParameterControl extends UI2dComponent implements
         pg.textAlign(PConstants.CENTER);
         pg.textFont(ui.theme.getControlFont());
 
-        while (pg.textWidth(labelText) > (this.width - TEXT_MARGIN)) {
-            labelText = labelText.substring(0, labelText.length() - 1);
-        }
-
-        pg.text(labelText, this.width/2, this.height - TEXT_MARGIN);
+        pg.text(clipTextToWidth(pg, labelText, this.width - TEXT_MARGIN), this.width/2, this.height - TEXT_MARGIN);
     }
 
     @Override
