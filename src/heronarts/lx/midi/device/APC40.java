@@ -19,6 +19,7 @@
 package heronarts.lx.midi.device;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.LXPattern;
@@ -174,10 +175,16 @@ public class APC40 extends LXMidiDevice {
     public APC40 bindDeviceControlKnobs(final LXEngine engine) {
         engine.focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
-                bindDeviceControlKnobs(engine.getFocusedChannel());
+                LXBus bus = engine.getFocusedChannel();
+                if (bus instanceof LXChannel) {
+                    bindDeviceControlKnobs((LXChannel) bus);
+                }
             }
         });
-        bindDeviceControlKnobs(engine.getFocusedChannel());
+        LXBus bus = engine.getFocusedChannel();
+        if (bus instanceof LXChannel) {
+            bindDeviceControlKnobs((LXChannel) bus);
+        }
         return this;
     }
 

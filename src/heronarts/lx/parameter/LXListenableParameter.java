@@ -106,6 +106,17 @@ public abstract class LXListenableParameter implements LXParameter {
     }
 
     /**
+     * Manually notify all listeners of this parameter's current value.
+     * Useful in some situations to force state reset.
+     */
+    public LXListenableParameter bang() {
+        for (LXParameterListener l : listeners) {
+            l.onParameterChanged(this);
+        }
+        return this;
+    }
+
+    /**
      * Invoked when the value has changed. Subclasses should update any special
      * internal state according to this new value.
      *

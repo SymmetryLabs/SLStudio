@@ -461,8 +461,20 @@ public class LXEngine extends LXParameterized {
         return this.channels.get(channelIndex);
     }
 
-    public LXChannel getFocusedChannel() {
-        return getChannel(focusedChannel.getValuei());
+    public LXBus getFocusedChannel() {
+        if (this.focusedChannel.getValuei() == this.channels.size()) {
+            return this.masterChannel;
+        }
+        return getChannel(this.focusedChannel.getValuei());
+    }
+
+    public LXEngine setFocusedChannel(LXBus channel) {
+        if (channel == this.masterChannel) {
+            this.focusedChannel.setValue(this.channels.size());
+        } else {
+            this.focusedChannel.setValue(this.channels.indexOf(channel));
+        }
+        return this;
     }
 
     public LXChannel addChannel() {
@@ -472,7 +484,7 @@ public class LXEngine extends LXParameterized {
     public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = new LXChannel(lx, this.channels.size(), patterns);
         this.channels.add(channel);
-        this.focusedChannel.setRange(this.channels.size());
+        this.focusedChannel.setRange(this.channels.size() + 1);
         for (Listener listener : this.listeners) {
             listener.channelAdded(this, channel);
         }
@@ -484,16 +496,21 @@ public class LXEngine extends LXParameterized {
             throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
         }
         if (this.channels.remove(channel)) {
-            // TODO(mcslee): call channel.destroy() which should remove all listeners to the
+            // TODO(mcslee): call channel.dispose() which should remove all listeners to the
             // channel and its parameters, so it can be garbage collected...
             int i = 0;
             for (LXChannel c : this.channels) {
                 c.setIndex(i++);
             }
-            if (this.focusedChannel.getValuei() >= this.channels.size()) {
+            boolean notified = false;
+            if (this.focusedChannel.getValuei() > this.channels.size()) {
+                notified = true;
                 this.focusedChannel.decrement();
             }
-            this.focusedChannel.setRange(this.channels.size());
+            this.focusedChannel.setRange(this.channels.size() + 1);
+            if (!notified) {
+                this.focusedChannel.bang();
+            }
             for (Listener listener : this.listeners) {
                 listener.channelRemoved(this, channel);
             }

@@ -112,6 +112,9 @@ public class LXMidiEngine {
                 }
             }
         }
+        // TODO(mcslee): send MIDI to the master FX bus? should effects really
+        // monitor all MIDI input, or just patterns? with a richer MIDI mapping
+        // implementation effects could just get control...
     }
 
     void dispatch(LXShortMessage message, LXMidiListener listener) {
