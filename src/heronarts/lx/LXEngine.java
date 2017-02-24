@@ -79,7 +79,7 @@ public class LXEngine extends LXParameterized {
 
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
-    private final List<LXEffect> effects = new ArrayList<LXEffect>();
+    public final LXMasterChannel masterChannel;
 
     /**
      * The master output drive
@@ -90,7 +90,6 @@ public class LXEngine extends LXParameterized {
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
 
     private final List<LXChannel> unmodifiableChannels = Collections.unmodifiableList(this.channels);
-    private final List<LXEffect> unmodifiableEffects = Collections.unmodifiableList(this.effects);
 
     public final DiscreteParameter focusedChannel = new DiscreteParameter("CHANNEL", 1);
 
@@ -205,6 +204,10 @@ public class LXEngine extends LXParameterized {
             uiArray[i] = backgroundArray[i] = LXColor.BLACK;
         }
         LX.initTimer.log("Engine: Buffers");
+
+        // Master channel
+        this.masterChannel = new LXMasterChannel(lx);
+        LX.initTimer.log("Engine: Master Channel");
 
         // Channel blend modes
         this.channelBlends = new LXBlend[] {
@@ -432,20 +435,6 @@ public class LXEngine extends LXParameterized {
 
     public LXEngine removeLoopTask(LXLoopTask loopTask) {
         this.loopTasks.remove(loopTask);
-        return this;
-    }
-
-    public List<LXEffect> getEffects() {
-        return this.unmodifiableEffects;
-    }
-
-    public LXEngine addEffect(LXEffect fx) {
-        this.effects.add(fx);
-        return this;
-    }
-
-    public LXEngine removeEffect(LXEffect fx) {
-        this.effects.remove(fx);
         return this;
     }
 
@@ -747,9 +736,9 @@ public class LXEngine extends LXParameterized {
 
         // Time to apply master FX to the main blended output
         long fxStart = System.nanoTime();
-        for (LXEffect fx : this.effects) {
-            ((LXLayeredComponent) fx).setBuffer(this.blendBufferMain);
-            fx.loop(deltaMs);
+        for (LXEffect effect : this.masterChannel.getEffects()) {
+            effect.setBuffer(this.blendBufferMain);
+            effect.loop(deltaMs);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
 

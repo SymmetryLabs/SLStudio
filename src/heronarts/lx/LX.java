@@ -405,15 +405,6 @@ public class LX {
     }
 
     /**
-     * The effects chain
-     *
-     * @return The full effects chain
-     */
-    public List<LXEffect> getEffects() {
-        return this.engine.getEffects();
-    }
-
-    /**
      * Add multiple effects to the chain
      *
      * @param effects Array of effects
@@ -433,7 +424,7 @@ public class LX {
      * @return this
      */
     public LX addEffect(LXEffect effect) {
-        this.engine.addEffect(effect);
+        this.engine.masterChannel.addEffect(effect);
         return this;
     }
 
@@ -444,7 +435,7 @@ public class LX {
      * @return this
      */
     public LX removeEffect(LXEffect effect) {
-        this.engine.removeEffect(effect);
+        this.engine.masterChannel.removeEffect(effect);
         return this;
     }
 

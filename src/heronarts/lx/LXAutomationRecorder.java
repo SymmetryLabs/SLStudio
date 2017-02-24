@@ -234,7 +234,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
         for (LXChannel channel : engine.getChannels()) {
             registerChannel(channel);
         }
-        for (LXEffect effect : engine.getEffects()) {
+        for (LXEffect effect : engine.masterChannel.getEffects()) {
             registerComponent("effect/" + effect.getClass().getName(), effect);
         }
         engine.midi.addListener(this);

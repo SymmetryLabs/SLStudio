@@ -36,7 +36,7 @@ import java.util.List;
  * which it plays and rotates. It also has a fader to control how this channel
  * is blended with the channels before it.
  */
-public class LXChannel extends LXComponent {
+public class LXChannel extends LXBus{
 
     public class Timer extends LXComponent.Timer {
         public long blendNanos;
@@ -51,15 +51,9 @@ public class LXChannel extends LXComponent {
      * Listener interface for objects which want to be notified when the internal
      * channel state is modified.
      */
-    public interface Listener {
+    public interface Listener extends LXBus.Listener {
 
         public void indexChanged(LXChannel channel);
-
-        public void effectAdded(LXChannel channel, LXEffect effect);
-
-        public void effectRemoved(LXChannel channel, LXEffect effect);
-
-        public void effectMoved(LXChannel channel, LXEffect effect);
 
         public void patternAdded(LXChannel channel, LXPattern pattern);
 
@@ -82,15 +76,15 @@ public class LXChannel extends LXComponent {
         }
 
         @Override
-        public void effectAdded(LXChannel channel, LXEffect effect) {
+        public void effectAdded(LXBus channel, LXEffect effect) {
         }
 
         @Override
-        public void effectRemoved(LXChannel channel, LXEffect effect) {
+        public void effectRemoved(LXBus channel, LXEffect effect) {
         }
 
         @Override
-        public void effectMoved(LXChannel channel, LXEffect effect) {
+        public void effectMoved(LXBus channel, LXEffect effect) {
         }
 
         @Override
@@ -111,10 +105,11 @@ public class LXChannel extends LXComponent {
         }
 
         @Override
-        public void faderTransitionDidChange(LXChannel channel,
-                LXTransition faderTransition) {
+        public void faderTransitionDidChange(LXChannel channel, LXTransition faderTransition) {
         }
     }
+
+    private final List<Listener> listeners = new ArrayList<Listener>();
 
     /**
      * This channel bypasses the crossfader
@@ -132,8 +127,6 @@ public class LXChannel extends LXComponent {
     public static final int CROSSFADE_GROUP_RIGHT = 2;
 
     public static final String[] CROSSFADE_OPTIONS = { "A", "X", "B" };
-
-    private final LX lx;
 
     /**
      * The index of this channel in the engine.
@@ -180,9 +173,6 @@ public class LXChannel extends LXComponent {
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
 
-    private final List<LXEffect> effects = new ArrayList<LXEffect>();
-    private final List<LXEffect> unmodifiableEffects = Collections.unmodifiableList(effects);
-
     /**
      * This is a local buffer used for transition blending on this channel
      */
@@ -200,11 +190,8 @@ public class LXChannel extends LXComponent {
     private LXTransition transition = null;
     private long transitionMillis = 0;
 
-    private final List<Listener> listeners = new ArrayList<Listener>();
-
     LXChannel(LX lx, int index, LXPattern[] patterns) {
         super(lx);
-        this.lx = lx;
         this.index = index;
         this.name = new StringParameter("Name", "Channel-" + (index+1));
         this.blendBuffer = new ModelBuffer(lx);
@@ -217,7 +204,6 @@ public class LXChannel extends LXComponent {
         addParameter(this.cueActive);
         addParameter(this.midiMonitor);
         addParameter(this.autoTransitionEnabled);
-
     }
 
     @Override
@@ -236,6 +222,7 @@ public class LXChannel extends LXComponent {
 
     @Override
     protected void onModelChanged(LXModel model) {
+        super.onModelChanged(model);
         for (LXPattern pattern : this.patterns) {
             pattern.setModel(model);
         }
@@ -243,24 +230,27 @@ public class LXChannel extends LXComponent {
 
     @Override
     protected void onPaletteChanged(LXPalette palette) {
+        super.onPaletteChanged(palette);
         for (LXPattern pattern : this.patterns) {
             pattern.setPalette(palette);
         }
     }
 
     public final void addListener(Listener listener) {
+        super.addListener(listener);
         this.listeners.add(listener);
     }
 
     public final void removeListener(Listener listener) {
+        super.removeListener(listener);
         this.listeners.remove(listener);
     }
 
     final LXChannel setIndex(int index) {
         if (this.index != index) {
             this.index = index;
-            for (Listener listener : this.listeners) {
-                listener.indexChanged(this);
+            for (LXBus.Listener listener : this.listeners) {
+                ((LXChannel.Listener)listener).indexChanged(this);
             }
         }
         return this;
@@ -268,47 +258,6 @@ public class LXChannel extends LXComponent {
 
     public final int getIndex() {
         return this.index;
-    }
-
-    public final LXChannel addEffect(LXEffect effect) {
-        this.effects.add(effect);
-        effect.setIndex(this.effects.size() - 1);
-        for (Listener listener : this.listeners) {
-            listener.effectAdded(this, effect);
-        }
-        return this;
-    }
-
-    public final LXChannel removeEffect(LXEffect effect) {
-        int index = this.effects.indexOf(effect);
-        if (index >= 0) {
-            effect.setIndex(-1);
-            this.effects.remove(index);
-            while (index < this.effects.size()) {
-                this.effects.get(index).setIndex(index);
-                ++index;
-            }
-            for (Listener listener : this.listeners) {
-                listener.effectRemoved(this, effect);
-            }
-        }
-        return this;
-    }
-
-    public void moveEffect(LXEffect effect, int index) {
-        this.effects.remove(effect);
-        this.effects.add(index, effect);
-        int i = 0;
-        for (LXEffect e : this.effects) {
-             e.setIndex(i++);
-        }
-        for (Listener listener : this.listeners) {
-            listener.effectMoved(this, effect);
-        }
-    }
-
-    public final List<LXEffect> getEffects() {
-        return this.unmodifiableEffects;
     }
 
     public final List<LXPattern> getPatterns() {
@@ -324,7 +273,7 @@ public class LXChannel extends LXComponent {
         return null;
     }
 
-    public final LXChannel setPatterns(LXPattern[] patterns) {
+    public final LXBus setPatterns(LXPattern[] patterns) {
         getActivePattern().onInactive();
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
@@ -333,7 +282,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public final LXChannel addPattern(LXPattern pattern) {
+    public final LXBus addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         ((LXComponent)pattern).setModel(this.model);
         ((LXComponent)pattern).setPalette(this.palette);
@@ -344,7 +293,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public final LXChannel removePattern(LXPattern pattern) {
+    public final LXBus removePattern(LXPattern pattern) {
         if (this.patterns.size() <= 1) {
             throw new UnsupportedOperationException("LXChannel must have at least one pattern");
         }
@@ -421,7 +370,7 @@ public class LXChannel extends LXComponent {
         return this.transition;
     }
 
-    public final LXChannel goPrev() {
+    public final LXBus goPrev() {
         if (this.transition != null) {
             return this;
         }
@@ -433,7 +382,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public final LXChannel goNext() {
+    public final LXBus goNext() {
         if (this.transition != null) {
             return this;
         }
@@ -449,7 +398,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public final LXChannel goPattern(LXPattern pattern) {
+    public final LXBus goPattern(LXPattern pattern) {
         int pi = 0;
         for (LXPattern p : this.patterns) {
             if (p == pattern) {
@@ -460,7 +409,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public final LXChannel goIndex(int i) {
+    public final LXBus goIndex(int i) {
         if (i < 0 || i >= this.patterns.size()) {
             return this;
         }
@@ -472,7 +421,7 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
-    public LXChannel disableAutoTransition() {
+    public LXBus disableAutoTransition() {
         this.autoTransitionEnabled.setValue(false);
         return this;
     }
@@ -483,7 +432,7 @@ public class LXChannel extends LXComponent {
      * @param autoTransitionThresholdTransition time in seconds
      * @return
      */
-    public LXChannel enableAutoTransition(double autoTransitionThreshold) {
+    public LXBus enableAutoTransition(double autoTransitionThreshold) {
         this.autoTransitionTimeSecs.setValue(autoTransitionThreshold);
         this.autoTransitionEnabled.setValue(true);
         return this;
@@ -575,7 +524,7 @@ public class LXChannel extends LXComponent {
             System.arraycopy(colors, 0, array, 0, colors.length);
             colors = array;
             for (LXEffect effect : this.effects) {
-                ((LXLayeredComponent) effect).setBuffer(this.blendBuffer);
+                effect.setBuffer(this.blendBuffer);
                 effect.loop(deltaMs);
             }
         }
