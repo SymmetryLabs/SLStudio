@@ -175,6 +175,8 @@ public class LXChannel extends LXComponent {
      */
     public final BoundedParameter autoTransitionTimeSecs = new BoundedParameter("AUTO-TIME", 60, .1, 60*60*4);
 
+    private double autoTransitionProgress = 0;
+
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
 
@@ -487,6 +489,15 @@ public class LXChannel extends LXComponent {
         return this;
     }
 
+    /**
+     * Return progress towards making a transition
+     *
+     * @return amount of progress towards the next cycle
+     */
+    public double getAutoTransitionProgress() {
+        return this.autoTransitionProgress;
+    }
+
     private void startTransition() {
         LXPattern activePattern = getActivePattern();
         LXPattern nextPattern = getNextPattern();
@@ -534,6 +545,7 @@ public class LXChannel extends LXComponent {
 
         // Run transition if applicable
         if (this.transition != null) {
+            this.autoTransitionProgress = 1.;
             int transitionMs = (int) (this.lx.engine.nowMillis - this.transitionMillis);
             if (transitionMs >= this.transition.getDuration()) {
                 finishTransition();
@@ -547,9 +559,12 @@ public class LXChannel extends LXComponent {
                 );
             }
         } else {
-            if (this.autoTransitionEnabled.isOn() &&
-                    (this.lx.engine.nowMillis - this.transitionMillis > (1000 * this.autoTransitionTimeSecs.getValue()))) {
-                goNext();
+            this.autoTransitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.autoTransitionTimeSecs.getValue());
+            if (this.autoTransitionProgress >= 1) {
+                this.autoTransitionProgress = 1;
+                if (this.autoTransitionEnabled.isOn()) {
+                    goNext();
+                }
             }
         }
 

@@ -172,9 +172,6 @@ public class LXEngine extends LXParameterized {
     private final ModelBuffer blendBufferRight;
     private final ModelBuffer blendBufferCue;
 
-    long nowMillis = 0;
-    private long lastMillis;
-
     private volatile boolean isThreaded = false;
 
     private Thread engineThread = null;
@@ -184,6 +181,8 @@ public class LXEngine extends LXParameterized {
     private boolean paused = false;
 
     private static final long INIT_RUN = -1;
+    private long lastMillis = INIT_RUN;
+    long nowMillis = 0;
 
     LXEngine(LX lx) {
         this.lx = lx;
@@ -269,8 +268,6 @@ public class LXEngine extends LXParameterized {
         // Default color palette
         addComponent(lx.palette);
 
-        // Initialize timer
-        this.lastMillis = INIT_RUN;
     }
 
     public LXEngine setInputDispatch(Dispatch inputDispatch) {
