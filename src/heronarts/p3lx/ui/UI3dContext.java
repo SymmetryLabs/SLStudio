@@ -642,12 +642,16 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
             amount *= -1;
         }
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+            consumeKeyEvent();
             this.theta.incrementValue(amount);
         } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+            consumeKeyEvent();
             this.theta.incrementValue(-amount);
         } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+            consumeKeyEvent();
             this.phi.incrementValue(-amount);
         } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+            consumeKeyEvent();
             this.phi.incrementValue(amount);
         }
     }

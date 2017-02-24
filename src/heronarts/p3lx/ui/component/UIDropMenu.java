@@ -142,7 +142,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
         pg.fill(ui.theme.getControlTextColor());
         pg.textAlign(PConstants.LEFT, PConstants.TOP);
-        pg.text(text, 4, textY + 4);
+        pg.text(clipTextToWidth(pg, text, this.width - 12), 4, textY + 4);
         pg.textAlign(PConstants.RIGHT, PConstants.TOP);
         pg.text("▼", this.width-4, textY + 4);
 
@@ -153,7 +153,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
                 String label = (this.options != null) ? this.options[i] : ("" + i);
                 pg.fill(i == this.highlight ? 0xff000000 : ui.theme.getControlTextColor());
                 pg.textAlign(PConstants.LEFT, PConstants.TOP);
-                pg.text(label, 4, yp + 4);
+                pg.text(clipTextToWidth(pg, label, this.width - 6), 4, yp + 4);
                 yp += this.closedHeight;
             }
         }
