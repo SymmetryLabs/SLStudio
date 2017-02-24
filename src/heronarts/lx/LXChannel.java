@@ -206,7 +206,7 @@ public class LXChannel extends LXComponent {
         this.index = index;
         this.name = new StringParameter("Name", "Channel-" + (index+1));
         this.blendBuffer = new ModelBuffer(lx);
-        this.blendMode = new DiscreteParameter("BLEND", lx.engine.getBlendModes());
+        this.blendMode = new DiscreteParameter("BLEND", lx.engine.channelBlends);
         this.transitionMillis = System.currentTimeMillis();
         _updatePatterns(patterns);
         this.colors = this.getActivePattern().getColors();

@@ -19,8 +19,10 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.AddBlend;
+import heronarts.lx.blend.DarkestBlend;
 import heronarts.lx.blend.DifferenceBlend;
 import heronarts.lx.blend.LXBlend;
+import heronarts.lx.blend.LightestBlend;
 import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
@@ -75,11 +77,6 @@ public class LXEngine extends LXParameterized {
 
     private Dispatch inputDispatch = null;
 
-    private LXBlend[] channelBlendModes;
-    private LXBlend[] patternBlendModes;
-
-    private final AddBlend addBlend;
-
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     private final List<LXEffect> effects = new ArrayList<LXEffect>();
@@ -99,7 +96,11 @@ public class LXEngine extends LXParameterized {
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
 
+    LXBlend[] channelBlends;
+    private final AddBlend addBlend;
+
     public final BoundedParameter crossfader = new BoundedParameter("CROSSFADE", 0.5);
+    private final LXBlend[] crossfaderBlends;
     public final DiscreteParameter crossfaderBlendMode;
 
     public final BooleanParameter cueLeft = new BooleanParameter("CUE-L", false);
@@ -206,18 +207,24 @@ public class LXEngine extends LXParameterized {
         }
         LX.initTimer.log("Engine: Buffers");
 
-        // Blend modes
-        this.channelBlendModes = this.patternBlendModes = new LXBlend[] {
+        // Channel blend modes
+        this.channelBlends = new LXBlend[] {
             this.addBlend = new AddBlend(lx),
             new NormalBlend(lx),
             new MultiplyBlend(lx),
             new SubtractBlend(lx),
             new DifferenceBlend(lx)
         };
-        LX.initTimer.log("Engine: Blends");
-
         // Crossfader blend mode
-        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.channelBlendModes);
+        this.crossfaderBlends = new LXBlend[] {
+            new AddBlend(lx),
+            new MultiplyBlend(lx),
+            new LightestBlend(lx),
+            new DarkestBlend(lx),
+            new DifferenceBlend(lx)
+        };
+        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.crossfaderBlends);
+        LX.initTimer.log("Engine: Blends");
 
         // Cue setup
         this.cueLeft.addListener(new LXParameterListener() {
@@ -272,63 +279,18 @@ public class LXEngine extends LXParameterized {
     }
 
     /**
-     * Gets the available blend modes
-     *
-     * @return Blend modes
-     */
-    public LXBlend[] getBlendModes() {
-        return this.channelBlendModes;
-    }
-
-    /**
-     * Sets the available blend modes. Must be invoked before the engine
-     * is started or UI is created
-     *
-     * @param blendModes Array of blend instances
-     * @return this
-     */
-    public LXEngine setBlendModes(LXBlend[] blendModes) {
-        if (this.hasStarted) {
-            throw new UnsupportedOperationException("setBlendModes() may only be invoked before engine has started");
-        }
-        setChannelBlendModes(blendModes);
-        return this;
-    }
-
-    /**
      * Sets the blend modes available to the channel mixer
      *
-     * @param channelBlendModes
+     * @param channelBlends
      * @return this
      */
-    public LXEngine setChannelBlendModes(LXBlend[] channelBlendModes) {
+    public LXEngine setChannelBlends(LXBlend[] channelBlends) {
         if (this.hasStarted) {
-            throw new UnsupportedOperationException("setChannelBlendModes() may only be invoked before engine has started");
+            throw new UnsupportedOperationException("setChannelBlends() may only be invoked before engine has started");
         }
-        this.channelBlendModes = channelBlendModes;
-        this.crossfaderBlendMode.setObjects(channelBlendModes);
+        this.channelBlends = channelBlends;
         for (LXChannel channel : this.channels) {
-            channel.blendMode.setObjects(channelBlendModes);
-        }
-        return this;
-    }
-
-    /**
-     * Sets the blend modes available to patterns
-     *
-     * @param patternBlendModes
-     * @return this
-     */
-    public LXEngine setPatternBlendModes(LXBlend[] patternBlendModes) {
-        if (this.hasStarted) {
-            throw new UnsupportedOperationException("setPatternBlendModes() may only be invoked before engine has started");
-        }
-        this.patternBlendModes = patternBlendModes;
-        for (LXChannel channel : this.channels) {
-            for (LXPattern pattern : channel.getPatterns()) {
-                // TODO(mcslee): set this jonx
-                // pattern.blendMode.setObjects(patternBlendModes);
-            }
+            channel.blendMode.setObjects(channelBlends);
         }
         return this;
     }
