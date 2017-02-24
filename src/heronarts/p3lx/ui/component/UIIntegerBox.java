@@ -117,8 +117,7 @@ public class UIIntegerBox extends UINumberBox {
 
     @Override
     protected boolean isValidCharacter(char keyChar) {
-        // TODO Auto-generated method stub
-        return false;
+        return (keyChar >= '0' && keyChar <= '9');
     }
 
     private int getIncrement(Event inputEvent) {
