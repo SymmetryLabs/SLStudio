@@ -61,7 +61,7 @@ public class UIEffectsControl extends UIWindow {
     }
 
     public UIEffectsControl(UI ui, LX lx, String label, int numKnobs, float x, float y) {
-        this(ui, lx.getEffects(), label, numKnobs, x, y);
+        this(ui, lx.engine.masterChannel.getEffects(), label, numKnobs, x, y);
     }
 
     public UIEffectsControl(UI ui, LXChannel channel, float x, float y) {
