@@ -24,7 +24,6 @@
 
 package heronarts.p3lx.ui;
 
-import heronarts.lx.LXLoopTask;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
@@ -42,7 +41,7 @@ import processing.event.MouseEvent;
  * This is a layer that contains a 3d scene with a camera. Mouse movements
  * control the camera, and the scene can contain components.
  */
-public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
+public class UI3dContext extends UIObject implements UITabFocus {
 
     /**
      * Mode of interaction from keyboard mouse events
@@ -163,12 +162,21 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
         this.pg = pg;
         this.x = x;
         this.y = y;
+
+        addLoopTask(this.thetaDamped);
+        addLoopTask(this.phiDamped);
+        addLoopTask(this.radiusDamped);
+        addLoopTask(this.pxDamped);
+        addLoopTask(this.pyDamped);
+        addLoopTask(this.pzDamped);
+
         this.thetaDamped.start();
         this.radiusDamped.start();
         this.phiDamped.start();
         this.pxDamped.start();
         this.pyDamped.start();
         this.pzDamped.start();
+
         computePosition();
         this.radius.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
@@ -656,13 +664,4 @@ public class UI3dContext extends UIObject implements UITabFocus, LXLoopTask {
         }
     }
 
-    @Override
-    public void loop(double deltaMs) {
-        this.thetaDamped.loop(deltaMs);
-        this.phiDamped.loop(deltaMs);
-        this.radiusDamped.loop(deltaMs);
-        this.pxDamped.loop(deltaMs);
-        this.pyDamped.loop(deltaMs);
-        this.pzDamped.loop(deltaMs);
-    }
 }

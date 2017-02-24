@@ -24,10 +24,12 @@
 
 package heronarts.p3lx.ui;
 
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -35,7 +37,7 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public abstract class UIObject {
+public abstract class UIObject implements LXLoopTask {
 
     UI ui = null;
 
@@ -51,6 +53,8 @@ public abstract class UIObject {
 
     private boolean hasFocus = false;
 
+    private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
+
     protected UIObject() {
         this.visible.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
@@ -59,6 +63,43 @@ public abstract class UIObject {
                 }
             }
         });
+    }
+
+    /**
+     * Add a task to be performed on every loop of the UI engine.
+     *
+     * @param loopTask
+     * @return
+     */
+    protected UIObject addLoopTask(LXLoopTask loopTask) {
+        this.loopTasks.add(loopTask);
+        return this;
+    }
+
+    /**
+     * Remove a task from the UI engine
+     *
+     * @param loopTask
+     * @return
+     */
+    protected UIObject removeLoopTask(LXLoopTask loopTask) {
+        this.loopTasks.remove(loopTask);
+        return this;
+    }
+
+    /**
+     * Processes all the loop tasks in this object
+     */
+    @Override
+    public final void loop(double deltaMs) {
+        if (isVisible()) {
+            for (LXLoopTask loopTask : this.loopTasks) {
+                loopTask.loop(deltaMs);
+            }
+            for (UIObject child : this.children) {
+                child.loop(deltaMs);
+            }
+        }
     }
 
     /**

@@ -26,6 +26,7 @@ package heronarts.p3lx.ui;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXEngine;
+import heronarts.lx.LXLoopTask;
 import heronarts.p3lx.P3LX;
 
 import java.util.ArrayList;
@@ -213,6 +214,9 @@ public class UI implements LXEngine.Dispatch {
 
     private UIRoot root;
 
+    private static final long INIT_RUN = -1;
+    private long lastMillis = INIT_RUN;
+
     /**
      * UI look and feel
      */
@@ -275,6 +279,28 @@ public class UI implements LXEngine.Dispatch {
     }
 
     /**
+     * Add a task to be performed on every loop of the UI engine.
+     *
+     * @param loopTask
+     * @return
+     */
+    public UI addLoopTask(LXLoopTask loopTask) {
+        this.root.addLoopTask(loopTask);
+        return this;
+    }
+
+    /**
+     * Remove a task from the UI engine
+     *
+     * @param loopTask
+     * @return
+     */
+    public UI removeLoopTask(LXLoopTask loopTask) {
+        this.root.removeLoopTask(loopTask);
+        return this;
+    }
+
+    /**
      * Add a 2d context to this UI
      *
      * @param layer UI layer
@@ -303,9 +329,7 @@ public class UI implements LXEngine.Dispatch {
      * @return this UI
      */
     public UI addLayer(UI3dContext layer) {
-        // TODO(mcslee): these loop tasks should be done on the UI thread
-        // not the engine thread
-        this.lx.engine.addLoopTask(layer);
+        addLoopTask(layer);
         this.root.children.add(layer);
         layer.parent = this.root;
         layer.setUI(this);
@@ -352,6 +376,17 @@ public class UI implements LXEngine.Dispatch {
      */
     public final void draw() {
         long drawStart = System.nanoTime();
+
+        long nowMillis = System.currentTimeMillis();
+        if (this.lastMillis == INIT_RUN) {
+            // Initial frame is arbitrarily 16 milliseconds (~60 fps)
+            this.lastMillis = nowMillis - 16;
+        }
+        double deltaMs = nowMillis - this.lastMillis;
+        this.lastMillis = nowMillis;
+
+        // Run loop tasks through the UI tree
+        this.root.loop(deltaMs);
 
         // Iterate through all objects that need redraw state marked
         this.uiThreadRedrawList.clear();

@@ -39,6 +39,8 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
     protected boolean editing = false;
     protected String editBuffer = "";
 
+    private boolean immediateEdit = false;
+
     protected UIInputBox() {
         this(0, 0, 0, 0);
     }
@@ -48,6 +50,11 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
         setBorderColor(UI.get().theme.getControlBorderColor());
         setBackgroundColor(UI.get().theme.getControlBackgroundColor());
         setTextAlignment(PConstants.CENTER);
+    }
+
+    protected UIInputBox enableImmediateEdit(boolean immediateEdit) {
+        this.immediateEdit = immediateEdit;
+        return this;
     }
 
     protected abstract String getValueString();
@@ -138,7 +145,12 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
             }
         } else {
             // Not editing
-            if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+            if (this.immediateEdit && isValidCharacter(keyChar)) {
+                consumeKeyEvent();
+                this.editing = true;
+                this.editBuffer = Character.toString(keyChar);
+                redraw();
+            } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
                 consumeKeyEvent();
                 this.editing = true;
                 this.editBuffer = "";
