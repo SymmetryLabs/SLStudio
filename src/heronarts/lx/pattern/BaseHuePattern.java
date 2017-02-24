@@ -19,6 +19,7 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 
 public class BaseHuePattern extends LXPattern {

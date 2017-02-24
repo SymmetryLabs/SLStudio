@@ -16,11 +16,8 @@
  * @author Mark C. Slee <mark@heronarts.com>
  */
 
-package heronarts.lx.effect;
+package heronarts.lx;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXLayeredComponent;
-import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -45,6 +42,8 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
 
     public final StringParameter name;
 
+    private int index = -1;
+
     protected LXEffect(LX lx) {
         this(lx, false);
     }
@@ -68,6 +67,27 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
                 }
             }
         });
+    }
+
+    /**
+     * Called by the engine to assign index on this effect. Should never
+     * be called otherwise.
+     *
+     * @param index
+     * @return
+     */
+    final LXEffect setIndex(int index) {
+        this.index = index;
+        return this;
+    }
+
+    /**
+     * Gets the index of this effect in the channel FX bus.
+     *
+     * @return index of this effect in the channel FX bus
+     */
+    public final int getIndex() {
+        return this.index;
     }
 
     /**

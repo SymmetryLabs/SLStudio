@@ -25,7 +25,6 @@ import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.osc.LXOscEngine;
@@ -36,7 +35,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameterized;
-import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.transition.LXTransition;
 

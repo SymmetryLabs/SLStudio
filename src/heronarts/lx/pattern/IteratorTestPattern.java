@@ -19,6 +19,7 @@
 package heronarts.lx.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.FunctionalParameter;

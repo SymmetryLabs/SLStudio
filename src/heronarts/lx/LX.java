@@ -20,7 +20,6 @@ package heronarts.lx;
 
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
-import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.modulator.LXModulator;
@@ -30,7 +29,6 @@ import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.IteratorTestPattern;
-import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 
 import java.util.ArrayList;

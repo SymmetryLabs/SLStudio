@@ -20,8 +20,8 @@ package heronarts.lx.midi;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
-import heronarts.lx.effect.LXEffect;
-import heronarts.lx.pattern.LXPattern;
+import heronarts.lx.LXEffect;
+import heronarts.lx.LXPattern;
 
 import java.util.ArrayList;
 import java.util.Collections;

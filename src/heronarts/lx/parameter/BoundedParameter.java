@@ -247,6 +247,15 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
     }
 
     /**
+     * Get the range of values for this parameter
+     *
+     * @return range from min and max
+     */
+    public double getRange() {
+        return Math.abs(this.range.max - this.range.min);
+    }
+
+    /**
      * Gets a normalized value of the parameter from 0 to 1
      *
      * @return Normalized value, from 0 to 1

@@ -16,12 +16,8 @@
  * @author Mark C. Slee <mark@heronarts.com>
  */
 
-package heronarts.lx.pattern;
+package heronarts.lx;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXBufferedComponent;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXTime;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.transition.LXTransition;
@@ -103,7 +99,7 @@ public abstract class LXPattern extends LXBufferedComponent {
      * @param channel Channel pattern is loaded onto
      * @return this
      */
-    public final LXPattern setChannel(LXChannel channel) {
+    final LXPattern setChannel(LXChannel channel) {
         if ((channel != null) && (this.channel != null)) {
             throw new UnsupportedOperationException("LXPattern instance can only be added to one LXChannel at a time.");
         }

@@ -18,7 +18,6 @@
 
 package heronarts.lx;
 
-import heronarts.lx.effect.LXEffect;
 import heronarts.lx.midi.LXMidiAftertouch;
 import heronarts.lx.midi.LXMidiControlChange;
 import heronarts.lx.midi.LXMidiListener;
@@ -30,7 +29,6 @@ import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.pattern.LXPattern;
 
 import java.util.ArrayList;
 import java.util.HashMap;

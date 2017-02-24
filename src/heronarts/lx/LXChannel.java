@@ -19,14 +19,12 @@
 package heronarts.lx;
 
 import heronarts.lx.color.LXPalette;
-import heronarts.lx.effect.LXEffect;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.pattern.LXPattern;
 import heronarts.lx.transition.LXTransition;
 
 import java.util.ArrayList;
@@ -61,6 +59,8 @@ public class LXChannel extends LXComponent {
 
         public void effectRemoved(LXChannel channel, LXEffect effect);
 
+        public void effectMoved(LXChannel channel, LXEffect effect);
+
         public void patternAdded(LXChannel channel, LXPattern pattern);
 
         public void patternRemoved(LXChannel channel, LXPattern pattern);
@@ -87,6 +87,10 @@ public class LXChannel extends LXComponent {
 
         @Override
         public void effectRemoved(LXChannel channel, LXEffect effect) {
+        }
+
+        @Override
+        public void effectMoved(LXChannel channel, LXEffect effect) {
         }
 
         @Override
@@ -266,6 +270,7 @@ public class LXChannel extends LXComponent {
 
     public final LXChannel addEffect(LXEffect effect) {
         this.effects.add(effect);
+        effect.setIndex(this.effects.size() - 1);
         for (Listener listener : this.listeners) {
             listener.effectAdded(this, effect);
         }
@@ -273,11 +278,31 @@ public class LXChannel extends LXComponent {
     }
 
     public final LXChannel removeEffect(LXEffect effect) {
-        this.effects.remove(effect);
-        for (Listener listener : this.listeners) {
-            listener.effectRemoved(this, effect);
+        int index = this.effects.indexOf(effect);
+        if (index >= 0) {
+            effect.setIndex(-1);
+            this.effects.remove(index);
+            while (index < this.effects.size()) {
+                this.effects.get(index).setIndex(index);
+                ++index;
+            }
+            for (Listener listener : this.listeners) {
+                listener.effectRemoved(this, effect);
+            }
         }
         return this;
+    }
+
+    public void moveEffect(LXEffect effect, int index) {
+        this.effects.remove(effect);
+        this.effects.add(index, effect);
+        int i = 0;
+        for (LXEffect e : this.effects) {
+             e.setIndex(i++);
+        }
+        for (Listener listener : this.listeners) {
+            listener.effectMoved(this, effect);
+        }
     }
 
     public final List<LXEffect> getEffects() {
