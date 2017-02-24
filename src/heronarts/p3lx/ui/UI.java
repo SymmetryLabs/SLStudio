@@ -25,6 +25,8 @@
 package heronarts.p3lx.ui;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXBus;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.LXLoopTask;
 import heronarts.p3lx.P3LX;
@@ -539,10 +541,15 @@ public class UI implements LXEngine.Dispatch {
         if (action == KeyEvent.RELEASE) {
             switch (Character.toLowerCase(keyChar)) {
             case '[':
-                this.lx.engine.getFocusedChannel().goPrev();
-                break;
             case ']':
-                this.lx.engine.getFocusedChannel().goNext();
+                LXBus bus = this.lx.engine.getFocusedChannel();
+                if (bus instanceof LXChannel) {
+                    if (keyChar == '[') {
+                        ((LXChannel) bus).goPrev();
+                    } else {
+                        ((LXChannel) bus).goNext();
+                    }
+                }
                 break;
             case ' ':
                 if (this.lx.flags.keyboardTempo) {
