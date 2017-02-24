@@ -52,7 +52,7 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
         setTextAlignment(PConstants.CENTER);
     }
 
-    protected UIInputBox enableImmediateEdit(boolean immediateEdit) {
+    public UIInputBox enableImmediateEdit(boolean immediateEdit) {
         this.immediateEdit = immediateEdit;
         return this;
     }
