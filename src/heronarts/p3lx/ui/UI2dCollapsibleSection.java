@@ -32,7 +32,7 @@ import processing.event.MouseEvent;
 /**
  * Section with a title which can collapse/expand
  */
-public class UI2dCollapsibleSection extends UI2dContainer {
+public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocus {
 
     private static final int PADDING = 4;
     private static final int TITLE_LABEL_HEIGHT = 12;
