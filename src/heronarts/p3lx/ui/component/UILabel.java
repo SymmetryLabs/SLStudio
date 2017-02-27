@@ -35,10 +35,6 @@ import processing.core.PGraphics;
  */
 public class UILabel extends UI2dComponent {
 
-    private int horizontalAlignment = PConstants.LEFT;
-
-    private int verticalAlignment = PConstants.TOP;
-
     private int topPadding = 0;
     private int rightPadding = 0;
     private int leftPadding = 0;
@@ -111,41 +107,12 @@ public class UILabel extends UI2dComponent {
         return this;
     }
 
-    /**
-     * Sets the alignment of the label using PConstants
-     * values LEFT/CENTER/RIGHT
-     *
-     * @param horizontalAlignment
-     * @return this
-     */
-    public UILabel setAlignment(int horizontalAlignment) {
-        setAlignment(horizontalAlignment, PConstants.BASELINE);
-        return this;
-    }
-
-    /**
-     * Sets the alignment of the label using PConstants values
-     * LEFT/CENTER/RIGHT and TOP/CENTER/BOTTOM/BASELINE
-     *
-     * @param horizontalAlignment
-     * @return this
-     */
-    public UILabel setAlignment(int horizontalAlignment, int verticalAlignment) {
-        if ((this.horizontalAlignment != horizontalAlignment)
-                || (this.verticalAlignment != verticalAlignment)) {
-            this.horizontalAlignment = horizontalAlignment;
-            this.verticalAlignment = verticalAlignment;
-            redraw();
-        }
-        return this;
-    }
-
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(hasFont() ? getFont() : ui.theme.getLabelFont());
         pg.fill(hasFontColor() ? getFontColor() : ui.theme.getLabelColor());
         float tx = this.leftPadding, ty = this.topPadding;
-        switch (this.horizontalAlignment) {
+        switch (this.textAlignHorizontal) {
         case PConstants.CENTER:
             tx = this.width / 2;
             break;
@@ -153,7 +120,7 @@ public class UILabel extends UI2dComponent {
             tx = this.width - this.rightPadding;
             break;
         }
-        switch (this.verticalAlignment) {
+        switch (this.textAlignVertical) {
         case PConstants.BASELINE:
             ty = this.height - this.bottomPadding;
             break;
@@ -164,7 +131,7 @@ public class UILabel extends UI2dComponent {
             ty = this.height / 2;
             break;
         }
-        pg.textAlign(this.horizontalAlignment, this.verticalAlignment);
+        pg.textAlign(this.textAlignHorizontal, this.textAlignVertical);
         pg.text(this.label, tx + this.textOffsetX, ty + this.textOffsetY);
     }
 

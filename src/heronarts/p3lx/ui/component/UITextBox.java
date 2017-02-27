@@ -27,7 +27,6 @@ package heronarts.p3lx.ui.component;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
-import heronarts.p3lx.ui.UI;
 
 public class UITextBox extends UIInputBox {
 
@@ -46,8 +45,6 @@ public class UITextBox extends UIInputBox {
 
     public UITextBox(float x, float y, float w, float h) {
         super(x, y, w, h);
-        setBorderColor(UI.get().theme.getControlBorderColor());
-        setBackgroundColor(UI.get().theme.getControlBackgroundColor());
     }
 
     public UITextBox setParameter(StringParameter parameter) {

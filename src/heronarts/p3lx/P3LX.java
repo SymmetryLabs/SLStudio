@@ -25,7 +25,10 @@
 package heronarts.p3lx;
 
 import heronarts.p3lx.ui.UI;
+
 import heronarts.lx.LX;
+import heronarts.lx.LXEffect;
+import heronarts.lx.LXPattern;
 import heronarts.lx.ModelBuffer;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
@@ -194,5 +197,48 @@ public class P3LX extends LX {
 
         this.timer.drawNanos = System.nanoTime() - drawStart;
     }
+
+    @Override
+    protected LXEffect instantiateEffect(String className) {
+        Class<? extends LXEffect> cls;
+        try {
+            cls = Class.forName(className).asSubclass(LXEffect.class);
+        } catch (ClassNotFoundException cnfx) {
+            System.err.println(cnfx.getLocalizedMessage());
+            return null;
+        }
+        try {
+            return cls.getConstructor(LX.class).newInstance(this);
+        } catch (Exception x) {
+            try {
+                return cls.getConstructor(applet.getClass(), LX.class).newInstance(applet, this);
+            } catch (Exception x2) {
+                System.err.println(x2.getLocalizedMessage());
+                return null;
+            }
+        }
+    }
+
+    @Override
+    protected LXPattern instantiatePattern(String className) {
+        Class<? extends LXPattern> cls;
+        try {
+            cls = Class.forName(className).asSubclass(LXPattern.class);
+        } catch (ClassNotFoundException cnfx) {
+            System.err.println(cnfx.getLocalizedMessage());
+            return null;
+        }
+        try {
+            return cls.getConstructor(LX.class).newInstance(this);
+        } catch (Exception x) {
+            try {
+                return cls.getConstructor(applet.getClass(), LX.class).newInstance(applet, this);
+            } catch (Exception x2) {
+                System.err.println(x2.getLocalizedMessage());
+                return null;
+            }
+        }
+    }
+
 
 }

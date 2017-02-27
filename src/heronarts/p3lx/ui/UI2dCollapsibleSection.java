@@ -61,6 +61,7 @@ public class UI2dCollapsibleSection extends UI2dContainer {
         setBorderRounding(4);
 
         this.title = new UILabel(PADDING, PADDING, this.width - PADDING - CHEVRON_PADDING, TITLE_LABEL_HEIGHT);
+        this.title.setTextAlignment(PConstants.LEFT, PConstants.TOP).setTextOffset(0,  1);
         addTopLevelComponent(this.title);
 
         this.expandedHeight = h;
@@ -81,16 +82,20 @@ public class UI2dCollapsibleSection extends UI2dContainer {
     }
 
     @Override
-    public UI2dComponent addToContainer(UIContainer container) {
+    public UI2dComponent addToContainer(UIContainer container, int index) {
         if (!(container instanceof UI2dCollapsibleContainer)) {
             throw new UnsupportedOperationException("Can only add UI2dCollapsibleSection to UI2dCollapsibleContainer");
         }
-        return super.addToContainer(container);
+        super.addToContainer(container, index);
+        onResize();
+        return this;
     }
 
     @Override
     public void onResize() {
-        ((UI2dCollapsibleContainer) this.parent).onSectionResize(this);
+        if (this.parent != null) {
+            ((UI2dCollapsibleContainer) this.parent).onSectionResize();
+        }
     }
 
     @Override

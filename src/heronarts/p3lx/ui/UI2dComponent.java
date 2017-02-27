@@ -491,13 +491,11 @@ public abstract class UI2dComponent extends UIObject {
      * @return
      */
     public UI2dComponent setTextAlignment(int horizontalAlignment, int verticalAlignment) {
-        boolean changed =
-            (this.textAlignHorizontal != horizontalAlignment) ||
-            (this.textAlignVertical != verticalAlignment);
-        this.textAlignHorizontal = horizontalAlignment;
-        this.textAlignVertical = verticalAlignment;
-        if (changed) {
-            redraw();
+        if (this.textAlignHorizontal != horizontalAlignment ||
+                this.textAlignVertical != verticalAlignment) {
+                this.textAlignHorizontal = horizontalAlignment;
+                this.textAlignVertical = verticalAlignment;
+                redraw();
         }
         return this;
     }
@@ -552,7 +550,7 @@ public abstract class UI2dComponent extends UIObject {
      * @param container Container to place in
      * @return this
      */
-    public UI2dComponent addToContainer(UIContainer container) {
+    public final UI2dComponent addToContainer(UIContainer container) {
         return addToContainer(container, -1);
     }
 

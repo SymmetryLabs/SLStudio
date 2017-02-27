@@ -42,6 +42,7 @@ public class UITheme {
     private int focusColor = 0xff669966;
     private int primaryColor = 0xff669966;
     private int secondaryColor = 0xff666699;
+    private int attentionColor = 0xff996666;
 
     private PFont controlFont;
     private int controlBackgroundColor = 0xff222222;
@@ -195,6 +196,26 @@ public class UITheme {
      */
     public UITheme setPrimaryColor(int color) {
         this.primaryColor = color;
+        return this;
+    }
+
+    /**
+     * Gets highlight color
+     *
+     * @return Highlight color
+     */
+    public int getAttentionColor() {
+        return this.attentionColor;
+    }
+
+    /**
+     * Sets highlight color
+     *
+     * @param color Color
+     * @return this
+     */
+    public UITheme setAttentionColor(int color) {
+        this.attentionColor = color;
         return this;
     }
 

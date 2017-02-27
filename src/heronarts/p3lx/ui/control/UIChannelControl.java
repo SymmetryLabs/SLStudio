@@ -84,7 +84,7 @@ public class UIChannelControl extends UIWindow {
         int yp = TITLE_LABEL_HEIGHT;
 
         new UIButton(width-18, 4, 14, 14)
-        .setParameter(channel.autoTransitionEnabled)
+        .setParameter(channel.autoCycleEnabled)
         .setLabel("A")
         .setActiveColor(ui.theme.getControlBackgroundColor())
         .addToContainer(this);

@@ -31,6 +31,7 @@ import heronarts.lx.LXEngine;
 import heronarts.lx.LXLoopTask;
 import heronarts.p3lx.P3LX;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -212,7 +213,7 @@ public class UI implements LXEngine.Dispatch {
 
     private final P3LX lx;
 
-    final PApplet applet;
+    public final PApplet applet;
 
     private UIRoot root;
 
@@ -534,12 +535,46 @@ public class UI implements LXEngine.Dispatch {
         }
     }
 
+    public final void onSaveAs(final File file) {
+        if (file != null) {
+            this.lx.engine.addTask(new Runnable() {
+                public void run() {
+                    lx.saveProject(file);
+                }
+            });
+        }
+    }
+
+    public final void onLoad(final File file) {
+        if (file != null) {
+            this.lx.engine.addTask(new Runnable() {
+                public void run() {
+                    lx.loadProject(file);
+                }
+            });
+        }
+    }
+
     private void _engineThreadDefaultKeyEvent(KeyEvent keyEvent) {
         char keyChar = keyEvent.getKey();
         int keyCode = keyEvent.getKeyCode();
         int action = keyEvent.getAction();
         if (action == KeyEvent.RELEASE) {
             switch (Character.toLowerCase(keyChar)) {
+            case 's':
+                if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
+                    if (keyEvent.isShiftDown()) {
+                        this.applet.selectOutput("Select a file to save:", "onSaveAs", this.applet.saveFile("Project.lxp"), this);
+                    } else {
+                        lx.saveProject();
+                    }
+                }
+                break;
+            case 'o':
+                if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
+                    this.applet.selectInput("Select a file to load:", "onLoad", this.applet.saveFile("default.lxp"), this);
+                }
+                break;
             case '[':
             case ']':
                 LXBus bus = this.lx.engine.getFocusedChannel();

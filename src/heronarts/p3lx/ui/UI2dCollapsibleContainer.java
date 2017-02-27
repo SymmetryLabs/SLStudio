@@ -46,23 +46,45 @@ public class UI2dCollapsibleContainer extends UI2dContainer {
      * @return this
      */
     public UI2dCollapsibleContainer setSectionMargin(int sectionMargin) {
-        this.sectionMargin = sectionMargin;
+        if (this.sectionMargin != sectionMargin) {
+            this.sectionMargin = sectionMargin;
+            onSectionResize();
+        }
         return this;
     }
 
-    void onSectionResize(UI2dCollapsibleSection section) {
-        boolean found = false;
+    /**
+     * Collapses all children
+     *
+     * @return this
+     */
+    public UI2dCollapsibleContainer collapseAll() {
+        for (UIObject child : this.children) {
+            ((UI2dCollapsibleSection) child).setExpanded(false);
+        }
+        return this;
+    }
+
+    /**
+     * Expands all children
+     *
+     * @return this
+     */
+    public UI2dCollapsibleContainer expandAll() {
+        for (UIObject child : this.children) {
+            ((UI2dCollapsibleSection) child).setExpanded(true);
+        }
+        return this;
+    }
+
+    void onSectionResize() {
         float yp = 0;
         for (UIObject childObject : this.children) {
             UI2dComponent child = (UI2dComponent) childObject;
-            if (child == section) {
-                found = true;
-                yp = child.getY() + child.getHeight() + this.sectionMargin;
-            } else if (found) {
-                child.setY(yp);
-                yp += child.getHeight() + this.sectionMargin;
-            }
+            child.setY(yp);
+            yp += child.getHeight() + this.sectionMargin;
         }
         setHeight(yp - this.sectionMargin);
     }
+
 }
