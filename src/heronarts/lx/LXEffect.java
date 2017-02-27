@@ -18,6 +18,13 @@
 
 package heronarts.lx;
 
+import heronarts.lx.midi.LXMidiAftertouch;
+import heronarts.lx.midi.LXMidiControlChange;
+import heronarts.lx.midi.LXMidiListener;
+import heronarts.lx.midi.LXMidiNote;
+import heronarts.lx.midi.LXMidiNoteOn;
+import heronarts.lx.midi.LXMidiPitchBend;
+import heronarts.lx.midi.LXMidiProgramChange;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -28,7 +35,7 @@ import heronarts.lx.parameter.StringParameter;
  * may be stateless or stateful, though typically they operate on a single
  * frame. Only the current frame is provided at runtime.
  */
-public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask {
+public abstract class LXEffect extends LXLayeredComponent implements LXMidiListener {
 
     private final boolean isMomentary;
 
@@ -67,6 +74,9 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
                 }
             }
         });
+
+        addParameter("__name", this.name);
+        addParameter("__enabled", this.enabled);
     }
 
     /**
@@ -195,4 +205,35 @@ public abstract class LXEffect extends LXLayeredComponent implements LXLoopTask 
      * @param deltaMs Number of milliseconds elapsed since last invocation
      */
     protected abstract void run(double deltaMs);
+
+    @Override
+    public void noteOnReceived(LXMidiNoteOn note) {
+
+    }
+
+    @Override
+    public void noteOffReceived(LXMidiNote note) {
+
+    }
+
+    @Override
+    public void controlChangeReceived(LXMidiControlChange cc) {
+
+    }
+
+    @Override
+    public void programChangeReceived(LXMidiProgramChange cc) {
+
+    }
+
+    @Override
+    public void pitchBendReceived(LXMidiPitchBend pitchBend) {
+
+    }
+
+    @Override
+    public void aftertouchReceived(LXMidiAftertouch aftertouch) {
+
+    }
+
 }

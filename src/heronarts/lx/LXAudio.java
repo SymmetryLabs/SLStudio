@@ -107,8 +107,8 @@ public class LXAudio {
             this.beatDetect.threshold.setValue(0.75);
             this.beatDetect.release.setValue(480);
 
-            this.lx.addModulator(eq).start();
-            this.lx.addModulator(this.beatDetect).start();
+            this.lx.engine.addModulator(eq).start();
+            this.lx.engine.addModulator(this.beatDetect).start();
         }
         return this.beatDetect;
     }

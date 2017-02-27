@@ -24,6 +24,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 /**
  * Abstract representation of a channel, which could be a normal channel with patterns
  * or the master channel.
@@ -130,5 +134,35 @@ public abstract class LXBus extends LXComponent {
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
+    private static final String KEY_EFFECTS = "effects";
+
+    @Override
+    public void save(JsonObject obj) {
+        super.save(obj);;
+        JsonArray effects = new JsonArray();
+        for (LXEffect effect : this.effects) {
+            JsonObject effectObj = new JsonObject();
+            effect.save(effectObj);
+            effects.add(effectObj);
+        }
+        obj.add(KEY_EFFECTS, effects);
+    }
+
+    @Override
+    public void load(JsonObject obj) {
+        super.load(obj);
+        // Remove effects
+        for (int i = this.effects.size() - 1; i >= 0; --i) {
+            removeEffect(this.effects.get(i));
+        }
+        // Add the effects
+        JsonArray effectsArray = obj.getAsJsonArray(KEY_EFFECTS);
+        for (JsonElement effectElement : effectsArray) {
+            JsonObject effectObj = (JsonObject) effectElement;
+            LXEffect effect = this.lx.instantiateEffect(effectObj.get("class").getAsString());
+            effect.load(effectObj);
+            addEffect(effect);
+        }
+    }
 
 }

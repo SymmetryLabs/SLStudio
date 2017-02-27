@@ -18,6 +18,13 @@
 
 package heronarts.lx;
 
+import heronarts.lx.midi.LXMidiAftertouch;
+import heronarts.lx.midi.LXMidiControlChange;
+import heronarts.lx.midi.LXMidiListener;
+import heronarts.lx.midi.LXMidiNote;
+import heronarts.lx.midi.LXMidiNoteOn;
+import heronarts.lx.midi.LXMidiPitchBend;
+import heronarts.lx.midi.LXMidiProgramChange;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.transition.LXTransition;
@@ -26,7 +33,7 @@ import heronarts.lx.transition.LXTransition;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
-public abstract class LXPattern extends LXBufferedComponent {
+public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener {
 
     /**
      * Reference to the channel this pattern belongs to.
@@ -44,7 +51,7 @@ public abstract class LXPattern extends LXBufferedComponent {
 
     private int intervalEnd = -1;
 
-    public final BooleanParameter eligible = new BooleanParameter("Eligible", true);
+    public final BooleanParameter autoCycleEligible = new BooleanParameter("Cycle", true);
 
     public final Timer timer = new Timer();
 
@@ -60,6 +67,8 @@ public abstract class LXPattern extends LXBufferedComponent {
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
         this.name = new StringParameter("Name", simple);
+
+        addParameter("__name", this.name);
     }
 
     /**
@@ -166,8 +175,8 @@ public abstract class LXPattern extends LXBufferedComponent {
      * @param eligible Whether eligible for auto-rotation
      * @return this
      */
-    public final LXPattern setEligible(boolean eligible) {
-        this.eligible.setValue(eligible);
+    public final LXPattern setAutoCycleEligible(boolean eligible) {
+        this.autoCycleEligible.setValue(eligible);
         return this;
     }
 
@@ -176,8 +185,8 @@ public abstract class LXPattern extends LXBufferedComponent {
      *
      * @return this
      */
-    public final LXPattern toggleEligible() {
-        this.eligible.toggle();
+    public final LXPattern toggleAutoCycleEligible() {
+        this.autoCycleEligible.toggle();
         return this;
     }
 
@@ -188,8 +197,8 @@ public abstract class LXPattern extends LXBufferedComponent {
      *
      * @return True if pattern is eligible to run now
      */
-    public final boolean isEligible() {
-        return this.eligible.isOn() && (!this.hasInterval() || this.isInInterval());
+    public final boolean isAutoCycleEligible() {
+        return this.autoCycleEligible.isOn() && (!this.hasInterval() || this.isInInterval());
     }
 
     /**
@@ -256,6 +265,36 @@ public abstract class LXPattern extends LXBufferedComponent {
      * into this pattern is complete.
      */
     public/* abstract */void onTransitionEnd() {
+    }
+
+    @Override
+    public void noteOnReceived(LXMidiNoteOn note) {
+
+    }
+
+    @Override
+    public void noteOffReceived(LXMidiNote note) {
+
+    }
+
+    @Override
+    public void controlChangeReceived(LXMidiControlChange cc) {
+
+    }
+
+    @Override
+    public void programChangeReceived(LXMidiProgramChange cc) {
+
+    }
+
+    @Override
+    public void pitchBendReceived(LXMidiPitchBend pitchBend) {
+
+    }
+
+    @Override
+    public void aftertouchReceived(LXMidiAftertouch aftertouch) {
+
     }
 
 }

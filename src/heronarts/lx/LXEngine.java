@@ -44,6 +44,10 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 /**
  * The engine is the core class that runs the internal animations. An engine is
  * comprised of top-level modulators, then a number of channels, each of which
@@ -78,6 +82,9 @@ public class LXEngine extends LXParameterized {
     private Dispatch inputDispatch = null;
 
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
+    private final List<Runnable> threadSafeTaskQueue = Collections.synchronizedList(new ArrayList<Runnable>());
+    private final List<Runnable> engineThreadTaskQueue = new ArrayList<Runnable>();
+
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     public final LXMasterChannel masterChannel;
 
@@ -270,7 +277,12 @@ public class LXEngine extends LXParameterized {
 
         // Default color palette
         addComponent(lx.palette);
-
+        addParameter(this.crossfader);
+        addParameter(this.crossfaderBlendMode);
+        addParameter(this.speed);
+        addParameter(this.focusedChannel);
+        addParameter(this.cueLeft);
+        addParameter(this.cueRight);
     }
 
     public LXEngine setInputDispatch(Dispatch inputDispatch) {
@@ -390,6 +402,13 @@ public class LXEngine extends LXParameterized {
         return this;
     }
 
+    /**
+     * Sets a global speed factor on the core animation engine.
+     * This does not impact the tempo object.
+     *
+     * @param speed
+     * @return
+     */
     public LXEngine setSpeed(double speed) {
         this.speed.setValue(speed);
         return this;
@@ -406,26 +425,69 @@ public class LXEngine extends LXParameterized {
         return this;
     }
 
+    /*
+     * Whether execution of the engine is paused.
+     */
     public boolean isPaused() {
         return this.paused;
     }
 
+    /**
+     * Adds a generic component to the engine, run every loop
+     *
+     * @param component
+     * @return
+     */
     public LXEngine addComponent(LXComponent component) {
         return addLoopTask(component);
     }
 
+    /**
+     * Removes a generic component from the engine
+     *
+     * @param component
+     * @return
+     */
     public LXEngine removeComponent(LXComponent component) {
         return removeLoopTask(component);
     }
 
+    /**
+     * Adds a modulator to the core engine loop
+     *
+     * @param modulator
+     * @return
+     */
     public LXEngine addModulator(LXModulator modulator) {
         return addLoopTask(modulator);
     }
 
+    /**
+     * Removes a modulator from the core engine loop
+     * @param modulator
+     * @return
+     */
     public LXEngine removeModulator(LXModulator modulator) {
         return removeLoopTask(modulator);
     }
 
+    /**
+     * Add a task to be run once on the engine thread.
+     *
+     * @param runnable Task to run
+     * @return this
+     */
+    public LXEngine addTask(Runnable runnable) {
+        this.threadSafeTaskQueue.add(runnable);
+        return this;
+    }
+
+    /**
+     * Add a task to be run on every loop of the engine thread.
+     *
+     * @param loopTask
+     * @return
+     */
     public LXEngine addLoopTask(LXLoopTask loopTask) {
         if (!this.loopTasks.contains(loopTask)) {
             this.loopTasks.add(loopTask);
@@ -433,6 +495,12 @@ public class LXEngine extends LXParameterized {
         return this;
     }
 
+    /**
+     * Remove a task from the list run on every loop invocation
+     *
+     * @param loopTask
+     * @return
+     */
     public LXEngine removeLoopTask(LXLoopTask loopTask) {
         this.loopTasks.remove(loopTask);
         return this;
@@ -492,7 +560,11 @@ public class LXEngine extends LXParameterized {
     }
 
     public void removeChannel(LXChannel channel) {
-        if (this.channels.size() == 1) {
+        removeChannel(channel, true);
+    }
+
+    private void removeChannel(LXChannel channel, boolean checkLast) {
+        if (checkLast && (this.channels.size() == 1)) {
             throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
         }
         if (this.channels.remove(channel)) {
@@ -624,6 +696,18 @@ public class LXEngine extends LXParameterized {
         // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {
             loopTask.loop(deltaMs);
+        }
+
+        // Run once-tasks
+        if (this.threadSafeTaskQueue.size() > 0) {
+            this.engineThreadTaskQueue.clear();
+            synchronized (this.threadSafeTaskQueue) {
+                this.engineThreadTaskQueue.addAll(this.threadSafeTaskQueue);
+                this.threadSafeTaskQueue.clear();
+            }
+            for (Runnable runnable : this.engineThreadTaskQueue) {
+                runnable.run();
+            }
         }
 
         // Mutate by speed for channels and effects
@@ -799,5 +883,56 @@ public class LXEngine extends LXParameterized {
      */
     public int[] getUIBufferNonThreadSafe() {
         return this.uiBuffer.getArray();
+    }
+
+    private static final String KEY_PALETTE = "palette";
+    private static final String KEY_CHANNELS = "channels";
+    private static final String KEY_MASTER = "master";
+
+    @Override
+    public void save(JsonObject obj) {
+        super.save(obj);
+        JsonArray channels = new JsonArray();
+        for (LXChannel channel : this.channels) {
+            JsonObject channelObj = new JsonObject();
+            channel.save(channelObj);
+            channels.add(channelObj);
+        }
+        JsonObject masterObj = new JsonObject();
+        this.masterChannel.save(masterObj);
+        JsonObject paletteObj = new JsonObject();
+        lx.palette.save(paletteObj);
+
+        obj.add(KEY_PALETTE, paletteObj);
+        obj.add(KEY_CHANNELS, channels);
+        obj.add(KEY_MASTER, masterObj);
+    }
+
+    @Override
+    public void load(JsonObject obj) {
+        // TODO(mcslee): remove loop tasks that other things might have added? maybe
+        // need to separate engine loop tasks from application-added ones...
+
+        // Remove all channels
+        for (int i = this.channels.size() - 1; i >= 0; --i) {
+            removeChannel(this.channels.get(i), false);
+        }
+        // Add the new channels
+        JsonArray channelsArray = obj.getAsJsonArray(KEY_CHANNELS);
+        for (JsonElement channelElement : channelsArray) {
+            // TODO(mcslee): improve efficiency, allow no-patterns in a channel?
+            LXChannel channel = addChannel();
+            channel.load((JsonObject) channelElement);
+        }
+        // Master channel settings
+        this.masterChannel.load(obj.getAsJsonObject(KEY_MASTER));
+
+        // Palette
+        if (obj.has(KEY_PALETTE)) {
+            lx.palette.load(obj.getAsJsonObject(KEY_PALETTE));
+        }
+
+        // Parameters etc.
+        super.load(obj);
     }
 }

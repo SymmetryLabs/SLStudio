@@ -31,8 +31,17 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.lx.transition.LXTransition;
 
+import java.io.File;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+import com.google.gson.JsonObject;
+import com.google.gson.stream.JsonWriter;
 
 /**
  * Core controller for a LX instance. Each instance drives a grid of nodes with
@@ -93,6 +102,12 @@ public class LX {
     }
 
     private final List<Listener> listeners = new ArrayList<Listener>();
+
+    public interface ProjectListener {
+        public void projectChanged(File file);
+    }
+
+    private final List<ProjectListener> projecListeners = new ArrayList<ProjectListener>();
 
     /**
      * The width of the grid, immutable.
@@ -247,6 +262,16 @@ public class LX {
 
     public LX removeListener(Listener listener) {
         this.listeners.add(listener);
+        return this;
+    }
+
+    public LX addProjectListener(ProjectListener listener) {
+        this.projecListeners.add(listener);
+        return this;
+    }
+
+    public LX removeProjectListener(ProjectListener listener) {
+        this.projecListeners.remove(listener);
         return this;
     }
 
@@ -437,28 +462,6 @@ public class LX {
     public LX removeEffect(LXEffect effect) {
         this.engine.masterChannel.removeEffect(effect);
         return this;
-    }
-
-    /**
-     * Add a generic modulator to the engine
-     *
-     * @param modulator Modulator
-     * @return The modulator that was added
-     */
-    public LXModulator addModulator(LXModulator modulator) {
-        this.engine.addModulator(modulator);
-        return modulator;
-    }
-
-    /**
-     * Remove a modulator from the engine
-     *
-     * @param modulator Modulator
-     * @return The modulator that was removed
-     */
-    public LXModulator removeModulator(LXModulator modulator) {
-        this.engine.removeModulator(modulator);
-        return modulator;
     }
 
     /**
@@ -740,4 +743,89 @@ public class LX {
         return this.registeredEffects;
     }
 
+    private final static String KEY_VERSION = "version";
+    private final static String KEY_TIMESTAMP = "timestamp";
+    private final static String KEY_ENGINE = "engine";
+
+    private File file;
+
+    public File getProject() {
+        return this.file;
+    }
+
+    public void saveProject() {
+        if (this.file != null) {
+            saveProject(this.file);
+        }
+    }
+
+    public void saveProject(File file) {
+        JsonObject obj = new JsonObject();
+        obj.addProperty(KEY_VERSION, "0.1");
+        obj.addProperty(KEY_TIMESTAMP, System.currentTimeMillis());
+        JsonObject engine = new JsonObject();
+        obj.add(KEY_ENGINE, engine);
+        this.engine.save(engine);
+        try {
+            JsonWriter writer = new JsonWriter(new FileWriter(file));
+            new GsonBuilder().setPrettyPrinting().create().toJson(obj, writer);
+            writer.close();
+            System.out.println("Project saved successfully to " + file.toString());
+            this.file = file;
+            for (ProjectListener projectListener : this.projecListeners) {
+                projectListener.projectChanged(file);
+            }
+        } catch (IOException iox) {
+            System.err.println(iox.getLocalizedMessage());
+        }
+    }
+
+    public void loadProject(File file) {
+        try {
+            FileReader fr = null;
+            try {
+                fr = new FileReader(file);
+                JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
+                this.engine.load(obj.getAsJsonObject(KEY_ENGINE));
+                System.out.println("Project loaded successfully from " + file.toString());
+                this.file = file;
+                for (ProjectListener projectListener : this.projecListeners) {
+                    projectListener.projectChanged(file);
+                }
+            } catch (IOException iox) {
+                System.err.println(iox.getLocalizedMessage());
+            } finally {
+                if (fr != null) {
+                    try {
+                        fr.close();
+                    } catch (IOException ignored) {}
+                }
+            }
+        } catch (Exception x) {
+            System.err.println(x.getLocalizedMessage());
+            x.printStackTrace(System.err);
+        }
+    }
+
+    protected LXEffect instantiateEffect(String className) {
+        try {
+            Class<? extends LXEffect> cls = Class.forName(className).asSubclass(LXEffect.class);
+            return cls.getConstructor(LX.class).newInstance(this);
+        } catch (Exception x) {
+            System.err.println(x.getLocalizedMessage());
+        }
+        return null;
+    }
+
+    protected LXPattern instantiatePattern(String className) {
+        try {
+            Class<? extends LXPattern> cls = Class.forName(className).asSubclass(LXPattern.class);
+            return cls.getConstructor(LX.class).newInstance(this);
+        } catch (Exception x) {
+            System.err.println(x.getLocalizedMessage());
+        }
+        return null;
+    }
+
 }
+

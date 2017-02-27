@@ -39,14 +39,19 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
         return this;
     }
 
+    public String getHexString() {
+        return String.format("0x%08x", this.color);
+    }
+
     @Override
     protected double updateValue(double value) {
         this.internalValueUpdate = true;
         this.color = (int) Double.doubleToRawLongBits(value);
-        this.saturation.setValue(LXColor.s(this.color));
-        this.brightness.setValue(LXColor.b(this.color));
-        double h = LXColor.h(this.color);
-        if (!Double.isNaN(h)) {
+        double s = LXColor.s(this.color);
+        double b = LXColor.b(this.color);
+        this.saturation.setValue(s);
+        this.brightness.setValue(b);
+        if (s > 0 && b > 0) {
             this.hue.setValue(LXColor.h(this.color));
         }
         this.internalValueUpdate = false;

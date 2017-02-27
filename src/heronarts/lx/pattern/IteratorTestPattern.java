@@ -43,7 +43,7 @@ public class IteratorTestPattern extends LXPattern {
     public IteratorTestPattern(LX lx) {
         super(lx);
         addParameter(speed);
-        setEligible(false);
+        setAutoCycleEligible(false);
         startModulator(this.index = new SawLFO(0, lx.total, period));
     }
 

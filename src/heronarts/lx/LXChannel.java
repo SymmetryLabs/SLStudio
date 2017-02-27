@@ -31,12 +31,16 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 /**
  * A channel is a single component of the engine that has a set of patterns from
  * which it plays and rotates. It also has a fader to control how this channel
  * is blended with the channels before it.
  */
-public class LXChannel extends LXBus{
+public class LXChannel extends LXBus {
 
     public class Timer extends LXComponent.Timer {
         public long blendNanos;
@@ -161,12 +165,12 @@ public class LXChannel extends LXBus{
     /**
      * Whether auto pattern transition is enabled on this channel
      */
-    public final BooleanParameter autoTransitionEnabled = new BooleanParameter("AUTO", false);
+    public final BooleanParameter autoCycleEnabled = new BooleanParameter("AUTO", false);
 
     /**
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
-    public final BoundedParameter autoTransitionTimeSecs = new BoundedParameter("AUTO-TIME", 60, .1, 60*60*4);
+    public final BoundedParameter autoCycleTimeSecs = new BoundedParameter("AUTO-TIME", 60, .1, 60*60*4);
 
     private double autoTransitionProgress = 0;
 
@@ -200,15 +204,20 @@ public class LXChannel extends LXBus{
         _updatePatterns(patterns);
         this.colors = this.getActivePattern().getColors();
 
-        addParameter(this.enabled);
-        addParameter(this.cueActive);
-        addParameter(this.midiMonitor);
-        addParameter(this.autoTransitionEnabled);
+        addParameter("__name", this.name);
+        addParameter("__channelEnabled", this.enabled);
+        addParameter("__cueActive", this.cueActive);
+        addParameter("__midiMonitor", this.midiMonitor);
+        addParameter("__autoCycleEnabled", this.autoCycleEnabled);
+        addParameter("__autoCycleTimeSecs", this.autoCycleTimeSecs);
+        addParameter("__fader", this.fader);
+        addParameter("__crossfadeGroup", this.crossfadeGroup);
+        addParameter("__blendMode", this.blendMode);
     }
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == this.autoTransitionEnabled) {
+        if (p == this.autoCycleEnabled) {
             if (this.transition == null) {
                 this.transitionMillis = System.currentTimeMillis();
             }
@@ -294,7 +303,11 @@ public class LXChannel extends LXBus{
     }
 
     public final LXBus removePattern(LXPattern pattern) {
-        if (this.patterns.size() <= 1) {
+        return removePattern(pattern, true);
+    }
+
+    private final LXBus removePattern(LXPattern pattern, boolean checkLast) {
+        if (checkLast && (this.patterns.size() <= 1)) {
             throw new UnsupportedOperationException("LXChannel must have at least one pattern");
         }
         int index = this.patterns.indexOf(pattern);
@@ -320,10 +333,14 @@ public class LXChannel extends LXBus{
             } else if (this.nextPatternIndex >= this.patterns.size()) {
                 this.nextPatternIndex = this.patterns.size() - 1;
             }
+            if (this.activePatternIndex < 0) {
+                this.activePatternIndex = 0;
+                this.nextPatternIndex = 0;
+            }
             for (Listener listener : this.listeners) {
                 listener.patternRemoved(this, pattern);
             }
-            if (wasActive) {
+            if (wasActive && (this.patterns.size() > 0)) {
                 LXPattern newActive = getActivePattern();
                 newActive.onActive();
                 for (Listener listener : this.listeners) {
@@ -391,7 +408,7 @@ public class LXChannel extends LXBus{
             this.nextPatternIndex = (this.nextPatternIndex + 1)
                     % this.patterns.size();
         } while ((this.nextPatternIndex != this.activePatternIndex)
-                && !getNextPattern().isEligible());
+                && !getNextPattern().isAutoCycleEligible());
         if (this.nextPatternIndex != this.activePatternIndex) {
             startTransition();
         }
@@ -422,7 +439,7 @@ public class LXChannel extends LXBus{
     }
 
     public LXBus disableAutoTransition() {
-        this.autoTransitionEnabled.setValue(false);
+        this.autoCycleEnabled.setValue(false);
         return this;
     }
 
@@ -433,8 +450,8 @@ public class LXChannel extends LXBus{
      * @return
      */
     public LXBus enableAutoTransition(double autoTransitionThreshold) {
-        this.autoTransitionTimeSecs.setValue(autoTransitionThreshold);
-        this.autoTransitionEnabled.setValue(true);
+        this.autoCycleTimeSecs.setValue(autoTransitionThreshold);
+        this.autoCycleEnabled.setValue(true);
         return this;
     }
 
@@ -508,10 +525,10 @@ public class LXChannel extends LXBus{
                 );
             }
         } else {
-            this.autoTransitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.autoTransitionTimeSecs.getValue());
+            this.autoTransitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.autoCycleTimeSecs.getValue());
             if (this.autoTransitionProgress >= 1) {
                 this.autoTransitionProgress = 1;
-                if (this.autoTransitionEnabled.isOn()) {
+                if (this.autoCycleEnabled.isOn()) {
                     goNext();
                 }
             }
@@ -536,6 +553,52 @@ public class LXChannel extends LXBus{
 
     int[] getColors() {
         return this.colors;
+    }
+
+    private static final String KEY_PATTERNS = "patterns";
+    private static final String KEY_PATTERN_INDEX = "patternIndex";
+
+    @Override
+    public void save(JsonObject obj) {
+        super.save(obj);
+        JsonArray patterns = new JsonArray();
+        for (LXPattern pattern : this.patterns) {
+            JsonObject patternObj = new JsonObject();
+            pattern.save(patternObj);
+            patterns.add(patternObj);
+        }
+        obj.addProperty(KEY_PATTERN_INDEX, this.activePatternIndex);
+        obj.add(KEY_PATTERNS, patterns);
+    }
+
+    @Override
+    public void load(JsonObject obj) {
+        super.load(obj);
+        // Remove patterns
+        for (int i = this.patterns.size() - 1; i >= 0; --i) {
+            removePattern(this.patterns.get(i), false);
+        }
+        // Add patterns
+        JsonArray patternsArray = obj.getAsJsonArray(KEY_PATTERNS);
+        for (JsonElement patternElement : patternsArray) {
+            JsonObject patternObj = (JsonObject) patternElement;
+            LXPattern pattern = this.lx.instantiatePattern(patternObj.get("class").getAsString());
+            pattern.load(patternObj);
+            addPattern(pattern);
+        }
+        // Set the active index instantly, do not transition!
+        if (obj.has(KEY_PATTERN_INDEX)) {
+            int patternIndex = obj.get(KEY_PATTERN_INDEX).getAsInt();
+            if (this.activePatternIndex != patternIndex) {
+                getActivePattern().onInactive();
+                this.activePatternIndex = this.nextPatternIndex = patternIndex;
+                LXPattern activePattern = getActivePattern();
+                activePattern.onActive();
+                for (Listener listener : listeners) {
+                    listener.patternDidChange(this, activePattern);
+                }
+            }
+        }
     }
 
 }
