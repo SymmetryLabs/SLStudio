@@ -43,9 +43,19 @@ public class LXPoint {
     public final float z;
 
     /**
-     * radius of this point from origin in the x-y plane
+     * Radius of this point from origin in 3 dimensions
      */
     public final float r;
+
+    /**
+     * Radius of this point from origin in the x-y plane
+     */
+    public final float rxy;
+
+    /**
+     * Radius of this point from origin in the x-z plane
+     */
+    public final float rxz;
 
     /**
      * angle of this point about the origin in the x-y plane
@@ -55,7 +65,7 @@ public class LXPoint {
     /**
      * angle of this point about the origin in the x-z plane
      */
-    public final float ztheta;
+    public final float phi;
 
     /**
      * Index of this point in the colors array
@@ -83,9 +93,11 @@ public class LXPoint {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.r = (float) Math.sqrt(x * x + y * y);
+        this.r = (float) Math.sqrt(x * x + y * y + z * z);
+        this.rxy = (float) Math.sqrt(x * x + y * y);
+        this.rxz = (float) Math.sqrt(x * x + z * z);
         this.theta = (float) ((Math.PI * 2 + Math.atan2(y, x)) % (Math.PI * 2));
-        this.ztheta = (float) ((Math.PI * 2 + Math.atan2(z, x)) % (Math.PI * 2));
+        this.phi = (float) ((Math.PI * 2 + Math.atan2(z, x)) % (Math.PI * 2));
         this.index = counter++;
     }
 
