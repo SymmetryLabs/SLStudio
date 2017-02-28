@@ -42,7 +42,8 @@ public class UIDoubleBox extends UINumberBox {
     public enum Units {
         NONE,
         SECONDS,
-        MILLISECONDS
+        MILLISECONDS,
+        DECIBELS
     };
 
     private Units units = Units.NONE;
@@ -134,6 +135,8 @@ public class UIDoubleBox extends UINumberBox {
             int minutes = (int) (value / 60000);
             int seconds = (int) ((value % 60000) / 1000);
             return String.format("%d:%02d:%02ds", hours, minutes, seconds);
+        case DECIBELS:
+            return String.format("%.1fdB", value);
         default:
         case NONE:
             return String.format("%.2f", value);

@@ -73,4 +73,17 @@ public class UI2dContainer extends UI2dComponent implements UIContainer {
     public float getContentHeight() {
         return getContentTarget().getHeight();
     }
+
+    public UI2dContainer setContentWidth(float w) {
+        return setContentSize(w, getContentHeight());
+    }
+
+    public UI2dContainer setContentHeight(float h) {
+        return setContentSize(getContentWidth(), h);
+    }
+
+    public UI2dContainer setContentSize(float w, float h) {
+        this.contentTarget.setSize(w, h);
+        return this;
+    }
 }

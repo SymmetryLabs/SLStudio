@@ -34,6 +34,7 @@ import processing.event.MouseEvent;
 public class UIKnob extends UIParameterControl implements UIFocus {
 
     public final static int KNOB_SIZE = 28;
+    public final static int WIDTH = KNOB_SIZE;
 
     private final static float KNOB_INDENT = .4f;
 

@@ -203,6 +203,18 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     }
 
     /**
+     * Retrieves the currently focused item in the list.
+     *
+     * @return Focused item, or null if none is focused
+     */
+    public UIItemList.Item getFocusedItem() {
+        if (this.focusIndex >= 0 && this.focusIndex < this.items.size()) {
+            return this.items.get(this.focusIndex);
+        }
+        return null;
+    }
+
+    /**
      * Adds an item to the list
      *
      * @param item Item to remove
@@ -242,6 +254,8 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
         this.items.addAll(items);
         if (this.focusIndex >= items.size()) {
             setFocusIndex(items.size() - 1);
+        } else if (this.focusIndex >= 0) {
+            this.items.get(this.focusIndex).onFocus();
         }
         setScrollHeight(ROW_SPACING * items.size() + ROW_MARGIN);
         redraw();
