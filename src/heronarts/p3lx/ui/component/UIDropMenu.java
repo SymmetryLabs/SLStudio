@@ -104,6 +104,11 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
     }
 
     @Override
+    public void onBlur() {
+        setExpanded(false);
+    }
+
+    @Override
     public void onDraw(UI ui, PGraphics pg) {
         String text;
         if (this.options != null) {
@@ -113,7 +118,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
         }
         pg.stroke(ui.theme.getControlBorderColor());
         pg.fill(ui.theme.getControlBackgroundColor());
-        pg.rect(0, 0, this.width-1, this.height);
+        pg.rect(0, 0, this.width-1, this.height-1);
 
         float textY;
         float lineY;
@@ -130,7 +135,6 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
             highlightY = this.closedHeight * (1 + this.highlight);
             break;
         }
-
 
         if (this.expanded) {
             pg.line(1, lineY, this.width-2, lineY);
