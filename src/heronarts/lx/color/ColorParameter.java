@@ -13,6 +13,7 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
 
     private int color;
     private boolean internalValueUpdate = false;
+    private boolean internalHsbUpdate = false;
 
     public ColorParameter(String label) {
         this(label, 0xff000000);
@@ -47,12 +48,16 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
     protected double updateValue(double value) {
         this.internalValueUpdate = true;
         this.color = (int) Double.doubleToRawLongBits(value);
-        double s = LXColor.s(this.color);
-        double b = LXColor.b(this.color);
-        this.saturation.setValue(s);
-        this.brightness.setValue(b);
-        if (s > 0 && b > 0) {
-            this.hue.setValue(LXColor.h(this.color));
+        if (!this.internalHsbUpdate) {
+            double b = LXColor.b(this.color);
+            this.brightness.setValue(b);
+            if (b > 0) {
+                double s = LXColor.s(this.color);
+                this.saturation.setValue(s);
+                if (s > 0) {
+                    this.hue.setValue(LXColor.h(this.color));
+                }
+            }
         }
         this.internalValueUpdate = false;
         return value;
@@ -61,11 +66,13 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
     @Override
     public void onParameterChanged(LXParameter parameter) {
         if (!this.internalValueUpdate) {
+            this.internalHsbUpdate = true;
             setColor(LXColor.hsb(
                 this.hue.getValue(),
                 this.saturation.getValue(),
                 this.brightness.getValue())
             );
+            this.internalHsbUpdate = false;
         }
     }
 

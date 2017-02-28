@@ -218,7 +218,6 @@ public class LXEngine extends LXParameterized {
         // Channel blend modes
         this.channelBlends = new LXBlend[] {
             this.addBlend = new AddBlend(lx),
-            new DissolveBlend(lx),
             new MultiplyBlend(lx),
             new SubtractBlend(lx),
             new DifferenceBlend(lx),
