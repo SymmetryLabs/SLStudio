@@ -36,10 +36,10 @@ public class FlashEffect extends LXEffect {
     public FlashEffect(LX lx) {
         super(lx, true);
         this.addModulator(this.flash = new LinearEnvelope(0, 0, 0));
-        this.addParameter(this.attack = new BoundedParameter("ATTACK", 100, 1000));
-        this.addParameter(this.decay = new BoundedParameter("DECAY", 1500, 3000));
-        this.addParameter(this.intensity = new BoundedParameter("INTENSITY", 1));
-        this.addParameter(this.sat = new BoundedParameter("SAT", 0));
+        this.addParameter(this.attack = new BoundedParameter("Attack", 100, 1000));
+        this.addParameter(this.decay = new BoundedParameter("Decay", 1500, 3000));
+        this.addParameter(this.intensity = new BoundedParameter("Intensity", 1));
+        this.addParameter(this.sat = new BoundedParameter("Saturation", 0));
     }
 
     private double getAttackTime() {
@@ -52,27 +52,21 @@ public class FlashEffect extends LXEffect {
 
     @Override
     protected void onEnable() {
-        this.flash.setRange(this.flash.getValue(), this.intensity.getValue(),
-                getAttackTime()).trigger();
+        this.flash.setRangeFromHereTo(this.intensity.getValue(), getAttackTime()).trigger();
     }
 
     @Override
     protected void onDisable() {
-        this.flash.setRange(this.flash.getValue(), 0, getDecayTime()).trigger();
-    }
-
-    @Override
-    protected void onTrigger() {
-        this.flash.setRange(this.intensity.getValue(), 0, getDecayTime()).trigger();
+        this.flash.setRangeFromHereTo(0, getDecayTime()).trigger();
     }
 
     @Override
     protected void run(double deltaMs) {
         float flashValue = this.flash.getValuef();
         double satValue = this.sat.getValue() * 100.;
-        double hueValue = this.lx.getBaseHue();
+        double hueValue = this.lx.palette.getHue();
         if (flashValue > 0) {
-            for (int i = 0; i < this.lx.total; ++i) {
+            for (int i = 0; i < this.colors.length; ++i) {
                 this.colors[i] = LXColor.lerp(this.colors[i], LXColor.hsb(hueValue, satValue, 100.), flashValue);
             }
         }

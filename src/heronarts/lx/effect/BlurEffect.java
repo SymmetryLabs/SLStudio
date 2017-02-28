@@ -20,35 +20,52 @@ package heronarts.lx.effect;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
+import heronarts.lx.ModelBuffer;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BoundedParameter;
 
 public class BlurEffect extends LXEffect {
 
-    public final BoundedParameter amount = new BoundedParameter("BLUR", 0);
+    public final BoundedParameter amount = new BoundedParameter("Amount", 0);
+    private final LinearEnvelope env = new LinearEnvelope(0, 0, 100);
 
-    private final int[] blurBuffer = new int[this.lx.total];
+    private final ModelBuffer blurBuffer;
 
     public BlurEffect(LX lx) {
         super(lx);
-        for (int i = 0; i < blurBuffer.length; ++i) {
-            this.blurBuffer[i] = 0xff000000;
+        this.blurBuffer = new ModelBuffer(lx);
+        int[] blurArray = blurBuffer.getArray();
+        for (int i = 0; i < blurArray.length; ++i) {
+            blurArray[i] = LXColor.BLACK;
         }
         addParameter(this.amount);
+        addModulator(this.env);
+    }
+
+    @Override
+    protected void onEnable() {
+        this.env.setRangeFromHereTo(1).start();
+        System.arraycopy(this.colors, 0, this.blurBuffer.getArray(), 0, this.colors.length);
+    }
+
+    @Override
+    protected void onDisable() {
+        this.env.setRangeFromHereTo(0).start();
     }
 
     @Override
     public void run(double deltaMs) {
-        float blurf = this.amount.getValuef();
+        float blurf = this.env.getValuef() * this.amount.getValuef();
         if (blurf > 0) {
             blurf = 1 - (1 - blurf) * (1 - blurf) * (1 - blurf);
+            int[] blurArray = this.blurBuffer.getArray();
             for (int i = 0; i < this.colors.length; ++i) {
-                int blend = LXColor.screen(this.colors[i], this.blurBuffer[i]);
+                int blend = LXColor.screen(this.colors[i], blurArray[i]);
                 this.colors[i] = LXColor.lerp(this.colors[i], blend, blurf);
             }
+            System.arraycopy(this.colors, 0, blurArray, 0, this.colors.length);
         }
-        for (int i = 0; i < this.colors.length; ++i) {
-            this.blurBuffer[i] = this.colors[i];
-        }
+
     }
 }

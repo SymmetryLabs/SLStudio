@@ -18,6 +18,7 @@
 
 package heronarts.lx;
 
+import heronarts.lx.blend.LXBlend;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
@@ -145,12 +146,12 @@ public class LXChannel extends LXBus {
     /**
      * Whether this channel is enabled.
      */
-    public final BooleanParameter enabled = new BooleanParameter("ON", true);
+    public final BooleanParameter enabled = new BooleanParameter("On", true);
 
     /**
      * Crossfade group this channel belongs to
      */
-    public final DiscreteParameter crossfadeGroup = new DiscreteParameter("GROUP", CROSSFADE_OPTIONS, CROSSFADE_GROUP_BYPASS);
+    public final DiscreteParameter crossfadeGroup = new DiscreteParameter("Group", CROSSFADE_OPTIONS, CROSSFADE_GROUP_BYPASS);
 
     /**
      * Whether this channel should listen to MIDI events
@@ -160,19 +161,25 @@ public class LXChannel extends LXBus {
     /**
      * Whether this channel should show in the cue UI.
      */
-    public final BooleanParameter cueActive = new BooleanParameter("CUE", false);
+    public final BooleanParameter cueActive = new BooleanParameter("Cue", false);
 
     /**
      * Whether auto pattern transition is enabled on this channel
      */
-    public final BooleanParameter autoCycleEnabled = new BooleanParameter("AUTO", false);
+    public final BooleanParameter autoCycleEnabled = new BooleanParameter("Cycle", false);
 
     /**
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
-    public final BoundedParameter autoCycleTimeSecs = new BoundedParameter("AUTO-TIME", 60, .1, 60*60*4);
+    public final BoundedParameter autoCycleTimeSecs = new BoundedParameter("CycleTime", 60, .1, 60*60*4);
 
-    private double autoTransitionProgress = 0;
+    public final BooleanParameter transitionsEnabled = new BooleanParameter("Transitions", false);
+    public final DiscreteParameter transitionBlendMode;
+    public final BoundedParameter transitionTimeSecs = new BoundedParameter("TransitionTime", 5, .1, 180);
+
+    public final BoundedParameter fader = new BoundedParameter("Fader", 0);
+
+    public final DiscreteParameter blendMode;
 
     private final List<LXPattern> patterns = new ArrayList<LXPattern>();
     private final List<LXPattern> unmodifiablePatterns = Collections.unmodifiableList(patterns);
@@ -184,14 +191,12 @@ public class LXChannel extends LXBus {
 
     private int[] colors;
 
+    private double autoCycleProgress = 0;
+    private double transitionProgress = 0;
     private int activePatternIndex = 0;
     private int nextPatternIndex = 0;
 
-    public final BoundedParameter fader = new BoundedParameter("FADER", 0);
-
-    public final DiscreteParameter blendMode;
-
-    private LXTransition transition = null;
+    private LXBlend transition = null;
     private long transitionMillis = 0;
 
     LXChannel(LX lx, int index, LXPattern[] patterns) {
@@ -199,27 +204,31 @@ public class LXChannel extends LXBus {
         this.index = index;
         this.name = new StringParameter("Name", "Channel-" + (index+1));
         this.blendBuffer = new ModelBuffer(lx);
-        this.blendMode = new DiscreteParameter("BLEND", lx.engine.channelBlends);
-        this.transitionMillis = System.currentTimeMillis();
+        this.blendMode = new DiscreteParameter("Blend", lx.engine.channelBlends);
+        this.transitionBlendMode = new DiscreteParameter("TransitionBlend", lx.engine.crossfaderBlends);
+        this.transitionMillis = lx.engine.nowMillis;
         _updatePatterns(patterns);
         this.colors = this.getActivePattern().getColors();
 
-        addParameter("__name", this.name);
-        addParameter("__channelEnabled", this.enabled);
-        addParameter("__cueActive", this.cueActive);
-        addParameter("__midiMonitor", this.midiMonitor);
-        addParameter("__autoCycleEnabled", this.autoCycleEnabled);
-        addParameter("__autoCycleTimeSecs", this.autoCycleTimeSecs);
-        addParameter("__fader", this.fader);
-        addParameter("__crossfadeGroup", this.crossfadeGroup);
-        addParameter("__blendMode", this.blendMode);
+        addParameter("name", this.name);
+        addParameter("channelEnabled", this.enabled);
+        addParameter("cueActive", this.cueActive);
+        addParameter("midiMonitor", this.midiMonitor);
+        addParameter("autoCycleEnabled", this.autoCycleEnabled);
+        addParameter("autoCycleTimeSecs", this.autoCycleTimeSecs);
+        addParameter("fader", this.fader);
+        addParameter("crossfadeGroup", this.crossfadeGroup);
+        addParameter("blendMode", this.blendMode);
+        addParameter("transitionsEnabled", this.transitionsEnabled);
+        addParameter("transitionsTimeSecs", this.transitionTimeSecs);
+        addParameter("transitionBlendMode", this.transitionBlendMode);
     }
 
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == this.autoCycleEnabled) {
             if (this.transition == null) {
-                this.transitionMillis = System.currentTimeMillis();
+                this.transitionMillis = this.lx.engine.nowMillis;
             }
         } else if (p == this.cueActive) {
             if (this.cueActive.isOn()) {
@@ -283,7 +292,11 @@ public class LXChannel extends LXBus {
     }
 
     public final LXBus setPatterns(LXPattern[] patterns) {
-        getActivePattern().onInactive();
+        if (this.transition != null) {
+            finishTransition();
+        } else {
+            getActivePattern().onInactive();
+        }
         _updatePatterns(patterns);
         this.activePatternIndex = this.nextPatternIndex = 0;
         this.transition = null;
@@ -383,10 +396,6 @@ public class LXChannel extends LXBus {
         return this.patterns.get(this.nextPatternIndex);
     }
 
-    protected final LXTransition getActiveTransition() {
-        return this.transition;
-    }
-
     public final LXBus goPrev() {
         if (this.transition != null) {
             return this;
@@ -456,12 +465,21 @@ public class LXChannel extends LXBus {
     }
 
     /**
-     * Return progress towards making a transition
+     * Return progress towards making a cycle
      *
      * @return amount of progress towards the next cycle
      */
-    public double getAutoTransitionProgress() {
-        return this.autoTransitionProgress;
+    public double getAutoCycleProgress() {
+        return this.autoCycleProgress;
+    }
+
+    /**
+     * Return progress through a transition
+     *
+     * @return amount of progress thru current transition
+     */
+    public double getTransitionProgress() {
+        return this.transitionProgress;
     }
 
     private void startTransition() {
@@ -474,13 +492,14 @@ public class LXChannel extends LXBus {
         for (Listener listener : this.listeners) {
             listener.patternWillChange(this, activePattern, nextPattern);
         }
-        this.transition = nextPattern.getTransition();
-        if (this.transition == null) {
-            finishTransition();
-        } else {
+        if (this.transitionsEnabled.isOn()) {
+            this.transition = lx.engine.crossfaderBlends[this.transitionBlendMode.getValuei()];
             nextPattern.onTransitionStart();
-            this.transition.blend(activePattern.getColors(), nextPattern.getColors(), 0);
-            this.transitionMillis = System.currentTimeMillis();
+            // TODO(mcslee): don't think we really need this with new threading implementation
+            // this.transitionOld.blend(activePattern.getColors(), nextPattern.getColors(), 0);
+            this.transitionMillis = this.lx.engine.nowMillis;
+        } else {
+            finishTransition();
         }
     }
 
@@ -492,7 +511,7 @@ public class LXChannel extends LXBus {
             activePattern.onTransitionEnd();
         }
         this.transition = null;
-        this.transitionMillis = System.currentTimeMillis();
+        this.transitionMillis = this.lx.engine.nowMillis;
         for (Listener listener : listeners) {
             listener.patternDidChange(this, activePattern);
         }
@@ -505,40 +524,65 @@ public class LXChannel extends LXBus {
         // Run modulators and components
         super.loop(deltaMs);
 
-        // Run active pattern
-        LXPattern activePattern = getActivePattern();
-        activePattern.loop(deltaMs);
-
-        // Run transition if applicable
+        // Check for transition completion
         if (this.transition != null) {
-            this.autoTransitionProgress = 1.;
-            int transitionMs = (int) (this.lx.engine.nowMillis - this.transitionMillis);
-            if (transitionMs >= this.transition.getDuration()) {
+            double transitionMs = this.lx.engine.nowMillis - this.transitionMillis;
+            double transitionDone = 1000 * this.transitionTimeSecs.getValue();
+            if (transitionMs >= transitionDone) {
                 finishTransition();
-            } else {
-                getNextPattern().loop(deltaMs);
-                this.transition.loop(deltaMs);
-                this.transition.blend(
-                    getActivePattern().getColors(),
-                    getNextPattern().getColors(),
-                    transitionMs / this.transition.getDuration()
-                );
             }
-        } else {
-            this.autoTransitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.autoCycleTimeSecs.getValue());
-            if (this.autoTransitionProgress >= 1) {
-                this.autoTransitionProgress = 1;
+        }
+
+        // Auto-cycle if appropriate
+        if (this.transition == null) {
+            this.autoCycleProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.autoCycleTimeSecs.getValue());
+            if (this.autoCycleProgress >= 1) {
+                this.autoCycleProgress = 1;
                 if (this.autoCycleEnabled.isOn()) {
                     goNext();
                 }
             }
         }
 
-        int[] colors = (this.transition != null) ? this.transition.getColors() : getActivePattern().getColors();
+        // Run active pattern
+        LXPattern activePattern = getActivePattern();
+        activePattern.loop(deltaMs);
+        int[] colors = activePattern.getColors();
 
+        // Run transition!
+        if (this.transition != null) {
+            this.autoCycleProgress = 1.;
+            this.transitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.transitionTimeSecs.getValue());
+            getNextPattern().loop(deltaMs);;
+            this.transition.loop(deltaMs);
+            colors = this.blendBuffer.getArray();
+            if (this.transitionProgress < .5) {
+                double alpha = Math.min(1, this.transitionProgress*2.);
+                this.transition.blend(
+                    getActivePattern().getColors(),
+                    getNextPattern().getColors(),
+                    alpha,
+                    colors
+                );
+            } else {
+                double alpha = Math.max(0, (1-this.transitionProgress)*2.);
+                this.transition.blend(
+                    getNextPattern().getColors(),
+                    getActivePattern().getColors(),
+                    alpha,
+                    colors
+                );
+            }
+        } else {
+            this.transitionProgress = 0;
+        }
+
+        // Apply effects
         if (this.effects.size() > 0) {
             int[] array = this.blendBuffer.getArray();
-            System.arraycopy(colors, 0, array, 0, colors.length);
+            if (colors != array) {
+                System.arraycopy(colors, 0, array, 0, colors.length);
+            }
             colors = array;
             for (LXEffect effect : this.effects) {
                 effect.setBuffer(this.blendBuffer);
@@ -547,7 +591,6 @@ public class LXChannel extends LXBus {
         }
 
         this.colors = colors;
-
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 

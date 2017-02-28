@@ -21,6 +21,7 @@ package heronarts.lx;
 import heronarts.lx.blend.AddBlend;
 import heronarts.lx.blend.DarkestBlend;
 import heronarts.lx.blend.DifferenceBlend;
+import heronarts.lx.blend.DissolveBlend;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.blend.LightestBlend;
 import heronarts.lx.blend.MultiplyBlend;
@@ -38,8 +39,6 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameterized;
 import heronarts.lx.pattern.SolidColorPattern;
-import heronarts.lx.transition.LXTransition;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -106,7 +105,7 @@ public class LXEngine extends LXParameterized {
     private final AddBlend addBlend;
 
     public final BoundedParameter crossfader = new BoundedParameter("CROSSFADE", 0.5);
-    private final LXBlend[] crossfaderBlends;
+    final LXBlend[] crossfaderBlends;
     public final DiscreteParameter crossfaderBlendMode;
 
     public final BooleanParameter cueLeft = new BooleanParameter("CUE-L", false);
@@ -188,7 +187,7 @@ public class LXEngine extends LXParameterized {
 
     private static final long INIT_RUN = -1;
     private long lastMillis = INIT_RUN;
-    long nowMillis = 0;
+    long nowMillis = System.currentTimeMillis();
 
     LXEngine(LX lx) {
         this.lx = lx;
@@ -219,13 +218,15 @@ public class LXEngine extends LXParameterized {
         // Channel blend modes
         this.channelBlends = new LXBlend[] {
             this.addBlend = new AddBlend(lx),
-            new NormalBlend(lx),
+            new DissolveBlend(lx),
             new MultiplyBlend(lx),
             new SubtractBlend(lx),
-            new DifferenceBlend(lx)
+            new DifferenceBlend(lx),
+            new NormalBlend(lx)
         };
         // Crossfader blend mode
         this.crossfaderBlends = new LXBlend[] {
+            new DissolveBlend(lx),
             new AddBlend(lx),
             new MultiplyBlend(lx),
             new LightestBlend(lx),
@@ -619,10 +620,6 @@ public class LXEngine extends LXParameterized {
 
     protected LXPattern getNextPattern() {
         return this.getDefaultChannel().getNextPattern();
-    }
-
-    protected LXTransition getActiveTransition() {
-        return this.getDefaultChannel().getActiveTransition();
     }
 
     public void goPrev() {

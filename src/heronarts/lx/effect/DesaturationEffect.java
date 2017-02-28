@@ -34,38 +34,34 @@ public class DesaturationEffect extends LXEffect {
     public DesaturationEffect(LX lx) {
         super(lx);
         this.addModulator(this.desaturation = new LinearEnvelope(0, 0, 100));
-        this.addParameter(this.attack = new BoundedParameter("ATTACK", 0.1));
-        this.addParameter(this.decay = new BoundedParameter("DECAY", 0.1));
-        this.addParameter(this.amount = new BoundedParameter("AMOUNT", 1.));
-    }
-
-    private double getAttackTime() {
-        return this.attack.getValue() * 1000.;
-    }
-
-    private double getDecayTime() {
-        return this.decay.getValue() * 1000.;
+        this.addParameter(this.amount = new BoundedParameter("Amount", 1.));
+        this.addParameter(this.attack = new BoundedParameter("Attack", 100, 0, 1000));
+        this.addParameter(this.decay = new BoundedParameter("Decay", 100, 0, 1000));
     }
 
     @Override
     protected void onEnable() {
-        this.desaturation.setRangeFromHereTo(amount.getValue() * 100.,
-                getAttackTime()).start();
+        this.desaturation.setRangeFromHereTo(1).setPeriod(this.attack);
+        this.desaturation.start();
     }
 
     @Override
     protected void onDisable() {
-        this.desaturation.setRangeFromHereTo(0, getDecayTime()).start();
+        this.desaturation.setRangeFromHereTo(0).setPeriod(this.decay);
+        this.desaturation.start();
     }
 
     @Override
     protected void run(double deltaMs) {
-        double value = this.desaturation.getValue();
-        if (value > 0) {
+        double d = this.desaturation.getValue() * this.amount.getValue();
+        if (d > 0) {
+            d = 1-d;
             for (int i = 0; i < colors.length; ++i) {
-                colors[i] = LXColor.hsb(LXColor.h(colors[i]),
-                        Math.max(0, LXColor.s(colors[i]) - value), LXColor.b(colors[i]));
-
+                this.colors[i] = LXColor.hsb(
+                    LXColor.h(this.colors[i]),
+                    Math.max(0, LXColor.s(colors[i]) * d),
+                    LXColor.b(colors[i])
+                );
             }
         }
     }

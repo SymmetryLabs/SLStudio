@@ -29,8 +29,6 @@ import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.IteratorTestPattern;
-import heronarts.lx.transition.LXTransition;
-
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
@@ -280,33 +278,6 @@ public class LX {
      */
     public void dispose() {
         this.audio.dispose();
-    }
-
-    /**
-     * Return the currently active transition on the main channel
-     *
-     * @return A transition if one is active
-     */
-    public final LXTransition getTransition() {
-        return this.engine.getActiveTransition();
-    }
-
-    /**
-     * Returns the current pattern on the main channel
-     *
-     * @return Currently active pattern
-     */
-    public final LXPattern getPattern() {
-        return this.engine.getActivePattern();
-    }
-
-    /**
-     * Returns the pattern being transitioned to on the main channel
-     *
-     * @return Next pattern
-     */
-    public final LXPattern getNextPattern() {
-        return this.engine.getNextPattern();
     }
 
     /**

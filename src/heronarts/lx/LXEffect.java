@@ -164,26 +164,10 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
         return this;
     }
 
-    /**
-     * This is to trigger special one-shot effects. If the effect is enabled, then
-     * it is disabled. Otherwise, it's enabled state is never changed and it
-     * simply has its onTrigger method invoked.
-     */
-    public final void trigger() {
-        if (this.enabled.isOn()) {
-            this.disable();
-        } else {
-            this.onTrigger();
-        }
-    }
-
     protected/* abstract */void onEnable() {
     }
 
     protected/* abstract */void onDisable() {
-    }
-
-    protected/* abstract */void onTrigger() {
     }
 
     /**
