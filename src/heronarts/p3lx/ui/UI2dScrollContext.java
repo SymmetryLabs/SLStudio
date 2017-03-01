@@ -168,10 +168,16 @@ public class UI2dScrollContext extends UI2dContext {
     protected void onMouseWheel(MouseEvent e, float mx, float my, float delta) {
         if (e.isShiftDown()) {
             if (this.horizontalScrollingEnabled) {
+                if (this.scrollWidth > this.width) {
+                    consumeMouseWheelEvent();
+                }
                 setScrollX(this.scrollX - delta);
             }
         } else {
             if (this.verticalScrollingEnabled) {
+                if (this.scrollHeight > this.height) {
+                    consumeMouseWheelEvent();
+                }
                 setScrollY(this.scrollY - delta);
             }
         }

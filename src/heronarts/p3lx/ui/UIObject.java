@@ -319,7 +319,19 @@ public abstract class UIObject implements LXLoopTask {
         return this;
     }
 
+    /**
+     * Called in a mouse wheel handler to stop this mouse wheel event from
+     * bubbling. Invoked by nested scroll views.
+     *
+     * @return
+     */
+    protected UIObject consumeMouseWheelEvent() {
+        this.mouseWheelEventConsumed = true;
+        return this;
+    }
+
     private boolean keyEventConsumed = false;
+    private boolean mouseWheelEventConsumed = false;
 
     void mousePressed(MouseEvent mouseEvent, float mx, float my) {
         for (int i = this.children.size() - 1; i >= 0; --i) {
@@ -384,15 +396,18 @@ public abstract class UIObject implements LXLoopTask {
     }
 
     void mouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
+        this.mouseWheelEventConsumed = false;
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
                 child.mouseWheel(mouseEvent, mx - child.getX(), my - child.getY(), delta);
-                this.keyEventConsumed = child.keyEventConsumed;
+                this.mouseWheelEventConsumed = child.mouseWheelEventConsumed;
                 break;
             }
         }
-        onMouseWheel(mouseEvent, mx, my, delta);
+        if (!this.mouseWheelEventConsumed) {
+            onMouseWheel(mouseEvent, mx, my, delta);
+        }
     }
 
     void keyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
