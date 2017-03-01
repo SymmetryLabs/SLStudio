@@ -729,44 +729,48 @@ public class LXEngine extends LXParameterized {
         int mainChannelCount = 0;
 
         for (LXChannel channel : this.channels) {
-            if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+            boolean channelIsEnabled = channel.enabled.isOn();
+            boolean channelIsCue = channel.cueActive.isOn();
+            if (channelIsEnabled || channelIsCue) {
                 channel.loop(deltaMs);
 
-                boolean doBlend = false;
-                int[] blendDestination;
-                int[] blendOutput;
-                switch (channel.crossfadeGroup.getValuei()) {
-                case LXChannel.CROSSFADE_GROUP_LEFT:
-                    blendDestination = (leftChannelCount++ > 0) ? blendOutputLeft : backgroundArray;
-                    blendOutput = blendOutputLeft;
-                    doBlend = leftOn || this.cueLeft.isOn();
-                    break;
-                case LXChannel.CROSSFADE_GROUP_RIGHT:
-                    blendDestination = (rightChannelCount++ > 0) ? blendOutputRight: backgroundArray;
-                    blendOutput = blendOutputRight;
-                    doBlend = rightOn || this.cueRight.isOn();
-                    break;
-                default:
-                case LXChannel.CROSSFADE_GROUP_BYPASS:
-                    blendDestination = (mainChannelCount++ > 0) ? blendOutputMain : backgroundArray;
-                    blendOutput = blendOutputMain;
-                    doBlend = true;
-                    break;
-                }
-
                 long blendStart = System.nanoTime();
-                if (doBlend) {
-                    double alpha = channel.fader.getValue();
-                    if (alpha > 0) {
-                        LXBlend blend = (LXBlend) channel.blendMode.getObject();
-                        blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
-                    } else if (blendDestination != blendOutput) {
-                        // Edge-case: copy the blank buffer into the destination blend buffer when
-                        // the channel fader is set to 0
-                        System.arraycopy(blendDestination, 0, blendOutput, 0, blendDestination.length);
+                if (channelIsEnabled) {
+                    boolean doBlend = false;
+                    int[] blendDestination;
+                    int[] blendOutput;
+                    switch (channel.crossfadeGroup.getValuei()) {
+                    case LXChannel.CROSSFADE_GROUP_LEFT:
+                        blendDestination = (leftChannelCount++ > 0) ? blendOutputLeft : backgroundArray;
+                        blendOutput = blendOutputLeft;
+                        doBlend = leftOn || this.cueLeft.isOn();
+                        break;
+                    case LXChannel.CROSSFADE_GROUP_RIGHT:
+                        blendDestination = (rightChannelCount++ > 0) ? blendOutputRight: backgroundArray;
+                        blendOutput = blendOutputRight;
+                        doBlend = rightOn || this.cueRight.isOn();
+                        break;
+                    default:
+                    case LXChannel.CROSSFADE_GROUP_BYPASS:
+                        blendDestination = (mainChannelCount++ > 0) ? blendOutputMain : backgroundArray;
+                        blendOutput = blendOutputMain;
+                        doBlend = channelIsEnabled;
+                        break;
+                    }
+                    if (doBlend) {
+                        double alpha = channel.fader.getValue();
+                        if (alpha > 0) {
+                            LXBlend blend = (LXBlend) channel.blendMode.getObject();
+                            blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
+                        } else if (blendDestination != blendOutput) {
+                            // Edge-case: copy the blank buffer into the destination blend buffer when
+                            // the channel fader is set to 0
+                            System.arraycopy(blendDestination, 0, blendOutput, 0, blendDestination.length);
+                        }
                     }
                 }
-                if (channel.cueActive.isOn()) {
+
+                if (channelIsCue) {
                     cueOn = true;
                     this.addBlend.blend(blendDestinationCue, channel.getColors(), 1, blendOutputCue);
                     blendDestinationCue = blendOutputCue;
