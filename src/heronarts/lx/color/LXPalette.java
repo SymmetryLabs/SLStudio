@@ -40,11 +40,11 @@ public class LXPalette extends LXComponent {
 
     public enum Mode {
         FIXED,
-        CYCLE,
-        OSCILLATE
+        OSCILLATE,
+        CYCLE
     };
 
-    public final DiscreteParameter hueMode = new DiscreteParameter("Mode", Mode.values()).setOptions(new String[] { "Fixed", "Cycle", "Oscillate" });
+    public final DiscreteParameter hueMode = new DiscreteParameter("Mode", Mode.values()).setOptions(new String[] { "Fixed", "Oscillate", "Cycle" });
 
     public final ColorParameter color = new ColorParameter("Color", 0xffff0000);
 
