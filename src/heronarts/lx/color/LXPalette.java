@@ -20,6 +20,7 @@ package heronarts.lx.color;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
@@ -29,7 +30,6 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.MutableParameter;
 
 /**
  * A palette is an object that is used to compute color values and set modes
@@ -38,23 +38,32 @@ import heronarts.lx.parameter.MutableParameter;
  */
 public class LXPalette extends LXComponent {
 
-    public static final int HUE_MODE_STATIC = 0;
-    public static final int HUE_MODE_CYCLE = 1;
-    public static final int HUE_MODE_OSCILLATE = 2;
+    public enum Mode {
+        FIXED,
+        CYCLE,
+        OSCILLATE
+    };
 
-    public final DiscreteParameter hueMode = new DiscreteParameter("Mode",
-        new String[] { "Static", "Cycle", "Oscillate" });
+    public final DiscreteParameter hueMode = new DiscreteParameter("Mode", Mode.values()).setOptions(new String[] { "Fixed", "Cycle", "Oscillate" });
 
     public final ColorParameter color = new ColorParameter("Color", 0xffff0000);
 
     /**
-     * Hack for Processing 2, preprocessor doesn't let you address objectInstance.color
+     * Hack... the Process preprocessor doesn't let you address object.color, duplicate it to clr
      */
     public final ColorParameter clr = color;
 
     public final BoundedParameter range = new BoundedParameter("Range", 0, 360);
 
-    public final MutableParameter period = new MutableParameter("Period", 120000);
+    public final BoundedParameter period = new BoundedParameter("Period", 120000, 2000, 1800000);
+
+    public final BoundedParameter spreadX = new BoundedParameter("X-add", 0, 360);
+
+    public final BoundedParameter spreadY = new BoundedParameter("Y-add", 0, 360);
+
+    public final BoundedParameter spreadZ = new BoundedParameter("Z-add", 0, 360);
+
+    public final BoundedParameter spreadR = new BoundedParameter("R-add", 0, 360);
 
     private final DampedParameter hueFixed = new DampedParameter(color.hue, 1800);
 
@@ -71,15 +80,39 @@ public class LXPalette extends LXComponent {
 
     private LXModulator hue = hueFixed;
 
+    private double xMult;
+    private double yMult;
+    private double zMult;
+    private double rMult;
+
     public LXPalette(LX lx) {
         super(lx);
+        computeMults(lx.model);
+        lx.addListener(new LX.Listener() {
+            @Override
+            public void modelChanged(LX lx, LXModel model) {
+                computeMults(model);
+            }
+        });
+
         addParameter(this.hueMode);
         addParameter(this.color);
         addParameter(this.period);
         addParameter(this.range);
+        addParameter(this.spreadX);
+        addParameter(this.spreadY);
+        addParameter(this.spreadZ);
+        addParameter(this.spreadR);
         addModulator(this.hueFixed).start();
         addModulator(this.hueCycle);
         addModulator(this.hueOscillate);
+    }
+
+    private void computeMults(LXModel model) {
+        this.xMult = 1 / model.xRange;
+        this.yMult = 1 / model.yRange;
+        this.zMult = 1 / model.zRange;
+        this.rMult = 1 / model.rRange;
     }
 
     @Override
@@ -87,20 +120,20 @@ public class LXPalette extends LXComponent {
         if (parameter == this.hueMode) {
             double hueValue = this.hue.getValue();
             this.color.hue.setValue(hueValue);
-            switch (this.hueMode.getValuei()) {
-                case HUE_MODE_STATIC:
+            switch ((Mode) this.hueMode.getObject()) {
+                case FIXED:
                     this.hue = this.hueFixed;
                     this.hueFixed.setValue(hueValue).start();
                     this.hueCycle.stop();
                     this.hueOscillate.stop();
                     break;
-                case HUE_MODE_CYCLE:
+                case CYCLE:
                     this.hue = this.hueCycle;
                     this.hueFixed.stop();
                     this.hueOscillate.stop();
                     this.hueCycle.setValue(hueValue).start();
                     break;
-                case HUE_MODE_OSCILLATE:
+                case OSCILLATE:
                     this.hue = this.hueOscillate;
                     this.hueFixed.stop();
                     this.hueCycle.stop();
@@ -127,7 +160,14 @@ public class LXPalette extends LXComponent {
     }
 
     public double getHue(LXPoint point) {
-        return getHue();
+        return (
+            this.hue.getValue() +
+            360 +
+            this.spreadX.getValue() * this.xMult * Math.abs(point.x - this.model.cx) +
+            this.spreadY.getValue() * this.yMult * Math.abs(point.y - this.model.cy) +
+            this.spreadZ.getValue() * this.zMult * Math.abs(point.z - this.model.cz) +
+            this.spreadR.getValue() * this.rMult * Math.abs(point.r)
+         ) % 360;
     }
 
     public final float getHuef(LXPoint point) {

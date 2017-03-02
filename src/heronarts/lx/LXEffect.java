@@ -25,9 +25,11 @@ import heronarts.lx.midi.LXMidiNote;
 import heronarts.lx.midi.LXMidiNoteOn;
 import heronarts.lx.midi.LXMidiPitchBend;
 import heronarts.lx.midi.LXMidiProgramChange;
+import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.StringParameter;
 
 /**
@@ -37,9 +39,11 @@ import heronarts.lx.parameter.StringParameter;
  */
 public abstract class LXEffect extends LXLayeredComponent implements LXMidiListener {
 
-    private final boolean isMomentary;
-
     public final BooleanParameter enabled = new BooleanParameter("ENABLED", false);
+
+    protected final MutableParameter enabledDampingAttack = new MutableParameter(100);
+    protected final MutableParameter enabledDampingRelease = new MutableParameter(100);
+    protected final LinearEnvelope enabledDamped = new LinearEnvelope(0, 0, 0);
 
     public class Timer {
         public long runNanos = 0;
@@ -52,10 +56,6 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
     private int index = -1;
 
     protected LXEffect(LX lx) {
-        this(lx, false);
-    }
-
-    protected LXEffect(LX lx, boolean isMomentary) {
         super(lx);
 
         String simple = getClass().getSimpleName();
@@ -64,12 +64,13 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
         }
         this.name = new StringParameter("Name", simple);
 
-        this.isMomentary = isMomentary;
         this.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
                 if (LXEffect.this.enabled.isOn()) {
+                    enabledDamped.setRangeFromHereTo(1, enabledDampingAttack.getValue()).start();
                     onEnable();
                 } else {
+                    enabledDamped.setRangeFromHereTo(0, enabledDampingRelease.getValue()).start();
                     onDisable();
                 }
             }
@@ -77,6 +78,7 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
 
         addParameter("__name", this.name);
         addParameter("__enabled", this.enabled);
+        addModulator(this.enabledDamped);
     }
 
     /**
@@ -128,13 +130,6 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
     }
 
     /**
-     * @return Whether this is a momentary effect or not
-     */
-    public final boolean isMomentary() {
-        return this.isMomentary;
-    }
-
-    /**
      * Toggles the effect.
      *
      * @return this
@@ -178,7 +173,10 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
     @Override
     public final void onLoop(double deltaMs) {
         long runStart = System.nanoTime();
-        run(deltaMs);
+        double enabledDamped = this.enabledDamped.getValue();
+        if (enabledDamped > 0) {
+            run(deltaMs, enabledDamped);
+        }
         this.timer.runNanos = System.nanoTime() - runStart;
     }
 
@@ -187,8 +185,9 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
      * their functionality.
      *
      * @param deltaMs Number of milliseconds elapsed since last invocation
+     * @param enabledAmount The amount of the effect to apply, scaled from 0-1
      */
-    protected abstract void run(double deltaMs);
+    protected abstract void run(double deltaMs, double enabledAmount);
 
     @Override
     public void noteOnReceived(LXMidiNoteOn note) {
