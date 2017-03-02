@@ -298,6 +298,23 @@ public abstract class UIObject implements LXLoopTask {
         }
     }
 
+    void resize(UI ui) {
+        this.onUIResize(ui);
+        for (UIObject child : this.children) {
+            child.resize(ui);
+        }
+    }
+
+    /**
+     * Subclasses may override this method to handle resize events on the global UI.
+     * Called on the UI thread, only happens if ui.setResizable(true) has been called.
+     *
+     * @param ui The UI object
+     */
+    protected void onUIResize(UI ui) {
+
+    }
+
     /**
      * Subclasses should override this method to perform their drawing functions.
      *
@@ -317,6 +334,15 @@ public abstract class UIObject implements LXLoopTask {
     protected UIObject consumeKeyEvent() {
         this.keyEventConsumed = true;
         return this;
+    }
+
+    /**
+     * Checks whether key event was already consumed
+     *
+     * @return
+     */
+    protected boolean keyEventConsumed() {
+        return this.keyEventConsumed;
     }
 
     /**

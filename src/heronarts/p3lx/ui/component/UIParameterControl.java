@@ -26,25 +26,23 @@ package heronarts.p3lx.ui.component;
 
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dComponent;
 
-public abstract class UIParameterControl extends UI2dComponent implements
-        LXParameterListener {
+public abstract class UIParameterControl extends UIInputBox implements LXParameterListener {
 
     protected final static int LABEL_MARGIN = 2;
 
     protected final static int LABEL_HEIGHT = 12;
 
-    private final static int TEXT_MARGIN = 2;
+    private final static int TEXT_MARGIN = 1;
 
     private boolean showValue = false;
 
@@ -56,8 +54,12 @@ public abstract class UIParameterControl extends UI2dComponent implements
 
     private boolean showLabel = true;
 
+    protected boolean keyEditable = false;
+
     protected UIParameterControl(float x, float y, float w, float h) {
         super(x, y, w, h + LABEL_MARGIN + LABEL_HEIGHT);
+        setBackground(false);
+        setBorder(false);
     }
 
     public UIParameterControl setEnabled(boolean enabled) {
@@ -143,6 +145,43 @@ public abstract class UIParameterControl extends UI2dComponent implements
     }
 
     @Override
+    protected String getValueString() {
+        if (this.parameter != null) {
+            if (this.parameter instanceof DiscreteParameter) {
+                return ((DiscreteParameter) this.parameter).getOption();
+            } else if (this.parameter instanceof BooleanParameter) {
+                return ((BooleanParameter)this.parameter).isOn() ? "ON" : "OFF";
+            } else {
+                return String.format("%.2f", this.parameter.getValue());
+            }
+        }
+        return "-";
+    }
+
+    private String getLabelString() {
+        if (this.parameter != null) {
+            return this.parameter.getLabel();
+        } else if (this.label != null) {
+            return this.label;
+        }
+        return "-";
+    }
+
+    @Override
+    protected boolean isValidCharacter(char keyChar) {
+        return UIDoubleBox.isValidInputCharacter(keyChar);
+    }
+
+    @Override
+    protected void saveEditBuffer() {
+        if (this.parameter != null) {
+            try {
+                this.parameter.setValue(Double.parseDouble(this.editBuffer));
+            } catch (NumberFormatException nfx) {}
+        }
+    }
+
+    @Override
     protected void onDraw(UI ui, PGraphics pg) {
         if (this.showLabel) {
             drawLabel(ui, pg);
@@ -150,76 +189,74 @@ public abstract class UIParameterControl extends UI2dComponent implements
     }
 
     private void drawLabel(UI ui, PGraphics pg) {
-        String labelText;
-        if (this.showValue && (this.parameter != null)) {
-            if (this.parameter instanceof DiscreteParameter) {
-                labelText = ((DiscreteParameter) this.parameter).getOption();
-            } else if (this.parameter instanceof BooleanParameter) {
-                labelText = (this.parameter.getValue() > 0) ? "ON" : "OFF";
-            } else {
-                labelText = String.format("%.2f", this.parameter.getValue());
-            }
+        if (this.editing) {
+            pg.fill(ui.theme.getControlBackgroundColor());
+            pg.noStroke();
+            pg.rect(0, this.height - LABEL_HEIGHT, this.width, LABEL_HEIGHT);
+            pg.fill(ui.theme.getPrimaryColor());
+            pg.textFont(ui.theme.getControlFont());
+            pg.text(clipTextToWidth(pg, this.editBuffer, this.width - TEXT_MARGIN), this.width/2, this.height - TEXT_MARGIN);
         } else {
-            labelText = (this.label != null) ? this.label :
-                ((this.parameter != null) ? this.parameter.getLabel() : null);
+            String labelText = this.showValue ? getValueString() : getLabelString();
+            pg.fill(ui.theme.getControlTextColor());
+            pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
+            pg.textFont(ui.theme.getControlFont());
+            pg.text(clipTextToWidth(pg, labelText, this.width - TEXT_MARGIN), this.width/2, this.height - TEXT_MARGIN);
         }
-        if (labelText == null) {
-            labelText = "-";
+    }
+
+    private double getIncrement(Event inputEvent) {
+        return inputEvent.isShiftDown() ? .1 : .02;
+    }
+
+    /**
+     * Subclasses may optionally override to decrement value in response to arrows.
+     * Decrement is invoked for the left or down arrow keys.
+     *
+     * @param keyEvent
+     */
+    @Override
+    protected void decrementValue(KeyEvent keyEvent) {
+        if (this.parameter != null) {
+            consumeKeyEvent();
+            if (this.parameter instanceof DiscreteParameter) {
+                DiscreteParameter dp = (DiscreteParameter) this.parameter;
+                dp.decrement(keyEvent.isShiftDown() ? dp.getRange() / 10 : 1);
+            } else if (this.parameter instanceof BooleanParameter) {
+                ((BooleanParameter)this.parameter).setValue(false);
+            } else {
+                setNormalized(getNormalized() - getIncrement(keyEvent));
+            }
         }
+    }
 
-        pg.noStroke();
-        pg.fill(ui.theme.getControlBackgroundColor());
-        pg.rect(0, this.height - LABEL_HEIGHT, this.width, LABEL_HEIGHT);
-        pg.fill(ui.theme.getControlTextColor());
-        pg.textAlign(PConstants.CENTER);
-        pg.textFont(ui.theme.getControlFont());
-
-        pg.text(clipTextToWidth(pg, labelText, this.width - TEXT_MARGIN), this.width/2, this.height - TEXT_MARGIN);
+    /**
+     * Subclasses may optionally override to decrement value in response to arrows.
+     * Increment is invoked for the right or up keys.
+     *
+     * @param keyEvent
+     */
+    @Override
+    protected void incrementValue(KeyEvent keyEvent) {
+        if (this.parameter != null) {
+            if (this.parameter instanceof DiscreteParameter) {
+                DiscreteParameter dp = (DiscreteParameter) this.parameter;
+                dp.increment(keyEvent.isShiftDown() ? dp.getRange() / 10 : 1);
+            } else if (this.parameter instanceof BooleanParameter) {
+                ((BooleanParameter)this.parameter).setValue(true);
+            } else {
+                setNormalized(getNormalized() + getIncrement(keyEvent));
+            }
+        }
     }
 
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if (!this.editing && ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER))) {
             consumeKeyEvent();
-            setShowValue(true);
-        }
-        if (!isEnabled()) {
-            return;
-        }
-        if (this.parameter instanceof DiscreteParameter) {
-            DiscreteParameter dp = (DiscreteParameter) this.parameter;
-            int times = keyEvent.isShiftDown() ? Math.max(1, dp.getRange() / 10) : 1;
-            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
-                    || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-                consumeKeyEvent();
-                dp.setValue(dp.getValuei() - times);
-            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
-                    || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-                consumeKeyEvent();
-                dp.setValue(dp.getValuei() + times);
-            }
-        } else if (this.parameter instanceof BooleanParameter) {
-            BooleanParameter bp = (BooleanParameter) this.parameter;
-            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
-                || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-                consumeKeyEvent();
-                bp.setValue(false);
-            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
-                || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-                consumeKeyEvent();
-                bp.setValue(true);
-            }
-        } else {
-            double amount = keyEvent.isShiftDown() ? .05f : .01f;
-            if ((keyCode == java.awt.event.KeyEvent.VK_LEFT)
-                    || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-                consumeKeyEvent();
-                setNormalized(LXUtils.constrain(getNormalized() - amount, 0, 1));
-            } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT)
-                    || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-                consumeKeyEvent();
-                setNormalized(LXUtils.constrain(getNormalized() + amount, 0, 1));
-            }
+            setShowValue(true);;
+        } else if (this.keyEditable) {
+            super.onKeyPressed(keyEvent, keyChar, keyCode);
         }
     }
 

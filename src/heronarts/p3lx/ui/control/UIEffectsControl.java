@@ -155,18 +155,12 @@ public class UIEffectsControl extends UIWindow {
                 selectEffect(this.effect);
             }
 
-            if (this.effect.isMomentary()) {
-                this.effect.enable();
-            } else {
-                this.effect.toggle();
-            }
+            this.effect.toggle();
         }
 
         @Override
         public void onDeactivate() {
-            if (this.effect.isMomentary()) {
-                this.effect.disable();
-            }
+            this.effect.disable();
         }
     }
 }

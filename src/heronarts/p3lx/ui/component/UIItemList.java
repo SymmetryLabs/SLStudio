@@ -249,7 +249,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
      * @param items Items
      * @return this
      */
-    public UIItemList setItems(List<Item> items) {
+    public UIItemList setItems(List<? extends Item> items) {
         this.items.clear();
         this.items.addAll(items);
         if (this.focusIndex >= items.size()) {

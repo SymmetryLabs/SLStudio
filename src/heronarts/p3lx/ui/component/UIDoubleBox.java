@@ -38,6 +38,7 @@ public class UIDoubleBox extends UINumberBox {
     private double maxValue = Double.MAX_VALUE;
     private double value = 0;
     private BoundedParameter parameter = null;
+    private double baseIncrement = 1;
 
     public enum Units {
         NONE,
@@ -92,6 +93,7 @@ public class UIDoubleBox extends UINumberBox {
     public UIDoubleBox setUnits(Units units) {
         if (this.units != units) {
             this.units = units;
+            this.baseIncrement = (units == Units.MILLISECONDS) ? 1000 : 1;
             redraw();
         }
         return this;
@@ -128,13 +130,13 @@ public class UIDoubleBox extends UINumberBox {
             } else if (value < 3600000) {
                 int minutes = (int) (value / 60000);
                 int seconds = (int) ((value % 60000) / 1000);
-                return String.format("%d:%02ds", minutes, seconds);
+                return String.format("%dmin %ds", minutes, seconds);
             }
             int hours = (int) (value / 3600000);
             value = value % 3600000;
             int minutes = (int) (value / 60000);
             int seconds = (int) ((value % 60000) / 1000);
-            return String.format("%d:%02d:%02ds", hours, minutes, seconds);
+            return String.format("%d:%02d:%02d", hours, minutes, seconds);
         case DECIBELS:
             return String.format("%.1fdB", value);
         default:
@@ -162,13 +164,17 @@ public class UIDoubleBox extends UINumberBox {
         } catch (NumberFormatException nfx) {}
     }
 
-    @Override
-    protected boolean isValidCharacter(char keyChar) {
-        return (keyChar >= '0' && keyChar <= '9') || (keyChar == '.');
+    public static boolean isValidInputCharacter(char keyChar) {
+        return (keyChar >= '0' && keyChar <= '9') || (keyChar == '.') || (keyChar == '-');
     }
 
-    private float getIncrement(Event inputEvent) {
-        float increment = 1;
+    @Override
+    protected boolean isValidCharacter(char keyChar) {
+        return isValidInputCharacter(keyChar);
+    }
+
+    private double getIncrement(Event inputEvent) {
+        double increment = this.baseIncrement;
         if (inputEvent.isShiftDown()) {
             if (this.hasShiftMultiplier) {
                 increment *= this.shiftMultiplier;

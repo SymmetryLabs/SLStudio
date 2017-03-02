@@ -40,7 +40,7 @@ public class UIPatternControl extends UI2dContainer {
     private final UI2dContainer content;
 
     public UIPatternControl(UI ui, LXPattern pattern, float x, float y, float h) {
-        super(x, y, 0, h);
+        super(x, y, 2*PADDING, h);
         this.pattern = pattern;
         setBackgroundColor(0xff303030);
         setBorderRounding(4);
@@ -60,7 +60,7 @@ public class UIPatternControl extends UI2dContainer {
         }
     }
 
-    private final static int KNOB_X_SPACING = 34;
+    private final static int KNOB_X_SPACING = UIKnob.WIDTH + 4;
     private final static int KNOB_Y_SPACING = 46;
 
     private void buildDefaultControlUI(LXPattern pattern) {
@@ -80,7 +80,7 @@ public class UIPatternControl extends UI2dContainer {
                 ++i;
             }
         }
-        setContentWidth(xp + UIKnob.WIDTH);
+        setContentWidth((i == 0) ? 0 : (xp + UIKnob.WIDTH));
     }
 
     @Override

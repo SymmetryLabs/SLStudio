@@ -233,12 +233,14 @@ public class UI implements LXEngine.Dispatch {
     /**
      * Width of the UI
      */
-    public final int width;
+    int width;
 
     /**
      * Height of the UI
      */
-    public final int height;
+    int height;
+
+    private boolean resizable = false;
 
     /**
      * Black color
@@ -279,6 +281,35 @@ public class UI implements LXEngine.Dispatch {
 
     public static UI get() {
         return UI.instance;
+    }
+
+    /**
+     * Sets whether the UI should be resizable.
+     *
+     * @param resizable
+     * @return
+     */
+    public UI setResizable(boolean resizable) {
+        this.applet.getSurface().setResizable(this.resizable = resizable);
+        return this;
+    }
+
+    /**
+     * Get width of the UI
+     *
+     * @return width
+     */
+    public int getWidth() {
+        return this.width;
+    }
+
+    /**
+     * Get height of the UI
+     *
+     * @return height
+     */
+    public int getHeight() {
+        return this.height;
     }
 
     /**
@@ -378,6 +409,15 @@ public class UI implements LXEngine.Dispatch {
      * Draws the UI
      */
     public final void draw() {
+        // Check for a resize event
+        if (this.resizable) {
+            if (this.applet.width != width || this.applet.height != height) {
+                this.width = this.applet.width;
+                this.height = this.applet.height;
+                this.root.resize(this);
+            }
+        }
+
         long drawStart = System.nanoTime();
 
         long nowMillis = System.currentTimeMillis();

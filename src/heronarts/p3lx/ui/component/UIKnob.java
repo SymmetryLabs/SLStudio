@@ -33,8 +33,9 @@ import processing.event.MouseEvent;
 
 public class UIKnob extends UIParameterControl implements UIFocus {
 
+    public final static int KNOB_MARGIN = 6;
     public final static int KNOB_SIZE = 28;
-    public final static int WIDTH = KNOB_SIZE;
+    public final static int WIDTH = KNOB_SIZE + 2*KNOB_MARGIN;
 
     private final static float KNOB_INDENT = .4f;
 
@@ -43,11 +44,13 @@ public class UIKnob extends UIParameterControl implements UIFocus {
     }
 
     public UIKnob(float x, float y) {
-        this(x, y, KNOB_SIZE, KNOB_SIZE);
+        this(x, y, WIDTH, KNOB_SIZE);
     }
 
     public UIKnob(float x, float y, float w, float h) {
         super(x, y, w, h);
+        this.keyEditable = true;
+        enableImmediateEdit(true);
     }
 
     @Override
@@ -57,23 +60,24 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         pg.ellipseMode(PConstants.CENTER);
 
         // Full outer dark ring
-        int arcCenter = KNOB_SIZE / 2;
+        int arcCenterX = WIDTH / 2;
+        int arcCenterY = KNOB_SIZE / 2;
         float arcStart = PConstants.HALF_PI + KNOB_INDENT;
         float arcRange = (PConstants.TWO_PI - 2 * KNOB_INDENT);
         pg.fill(ui.theme.getControlBackgroundColor());
         pg.noStroke();
-        pg.arc(arcCenter, arcCenter, KNOB_SIZE, KNOB_SIZE, arcStart + knobValue * arcRange,
+        pg.arc(arcCenterX, arcCenterY, KNOB_SIZE, KNOB_SIZE, arcStart + knobValue * arcRange,
                 arcStart + arcRange);
 
         // Light ring indicating value
         pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-        pg.arc(arcCenter, arcCenter, KNOB_SIZE, KNOB_SIZE, arcStart,
+        pg.arc(arcCenterX, arcCenterY, KNOB_SIZE, KNOB_SIZE, arcStart,
                 arcStart + knobValue * arcRange);
 
         // Center circle of knob
         pg.noStroke();
         pg.fill(0xff333333);
-        pg.ellipse(arcCenter, arcCenter, arcCenter, arcCenter);
+        pg.ellipse(arcCenterX, arcCenterY, KNOB_SIZE/2, KNOB_SIZE/2);
 
         super.onDraw(ui, pg);
     }
