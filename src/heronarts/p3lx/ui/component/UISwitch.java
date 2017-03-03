@@ -34,12 +34,14 @@ import processing.event.MouseEvent;
 
 public class UISwitch extends UIParameterControl implements UIFocus {
 
+    public final static int SWITCH_MARGIN = 6;
     public final static int SWITCH_SIZE = 28;
+    public final static int WIDTH = SWITCH_SIZE + 2*SWITCH_MARGIN;
 
     protected boolean isMomentary = false;
 
     public UISwitch(float x, float y) {
-        super(x, y, SWITCH_SIZE, SWITCH_SIZE);
+        super(x, y, WIDTH, SWITCH_SIZE);
     }
 
     public UISwitch setMomentary(boolean momentary) {
@@ -68,7 +70,7 @@ public class UISwitch extends UIParameterControl implements UIFocus {
         } else {
             pg.fill(ui.theme.getControlDisabledColor());
         }
-        pg.rect(0, 0, SWITCH_SIZE, SWITCH_SIZE);
+        pg.rect(SWITCH_MARGIN, 0, SWITCH_SIZE, SWITCH_SIZE);
 
         super.onDraw(ui, pg);
     }
@@ -99,10 +101,17 @@ public class UISwitch extends UIParameterControl implements UIFocus {
         }
     }
 
+    private boolean isOnSwitch(float mx, float my) {
+        return
+            (mx >= SWITCH_MARGIN) &&
+            (mx < SWITCH_SIZE + SWITCH_MARGIN) &&
+            (my < SWITCH_SIZE);
+    }
+
     @Override
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         super.onMousePressed(mouseEvent, mx, my);
-        if (this.parameter != null) {
+        if (this.parameter != null && isOnSwitch(mx, my)) {
             if (this.isMomentary) {
                 getBooleanParameter().setValue(true);
             } else {
@@ -114,7 +123,7 @@ public class UISwitch extends UIParameterControl implements UIFocus {
     @Override
     protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
         super.onMouseReleased(mouseEvent, mx, my);
-        if (this.isMomentary && (this.parameter != null)) {
+        if (this.isMomentary && (this.parameter != null) && isOnSwitch(mx, my)) {
             getBooleanParameter().setValue(false);
         }
     }

@@ -38,6 +38,23 @@ public abstract class UINumberBox extends UIInputBox {
         enableImmediateEdit(true);
     }
 
+    public UINumberBox setFill(boolean hasFill) {
+        if (this.hasFill != hasFill) {
+            this.hasFill = hasFill;
+            redraw();
+        }
+        return this;
+    }
+
+    public UINumberBox setFillColor(int fillColor) {
+        if (!this.hasFill || (this.fillColor != fillColor)) {
+            this.hasFill = true;
+            this.fillColor = fillColor;
+            redraw();
+        }
+        return this;
+    }
+
     /**
      * Sets a multiplier by which the amount value changes are modulated
      * when the shift key is down. Either for more precise control or

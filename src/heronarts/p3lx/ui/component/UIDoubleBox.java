@@ -99,6 +99,14 @@ public class UIDoubleBox extends UINumberBox {
         return this;
     }
 
+    @Override
+    protected double getFillWidthNormalized() {
+        if (this.parameter != null) {
+            return this.parameter.getNormalized();
+        }
+        return (this.value - this.minValue) / (this.maxValue - this.minValue);
+    }
+
     public double getValue() {
         return this.value;
     }

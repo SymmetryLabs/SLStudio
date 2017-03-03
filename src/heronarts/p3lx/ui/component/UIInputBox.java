@@ -39,6 +39,9 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
     protected boolean editing = false;
     protected String editBuffer = "";
 
+    protected boolean hasFill = false;
+    protected int fillColor = 0;
+
     private boolean immediateEdit = false;
 
     protected UIInputBox() {
@@ -79,6 +82,10 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
         }
     }
 
+    protected double getFillWidthNormalized() {
+        return 0;
+    }
+
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
@@ -86,6 +93,14 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
             pg.fill(UI.BLACK);
             pg.noStroke();
             pg.rect(0, 0, this.width, this.height);
+        } else {
+            if (this.hasFill) {
+                int fillWidth = (int) (getFillWidthNormalized() * (this.width-5));
+                if (fillWidth > 0) {
+                    pg.stroke(this.fillColor);
+                    pg.line(2, this.height-3, 2 + fillWidth, this.height-3);
+                }
+            }
         }
 
         pg.fill(this.editing ? ui.theme.getPrimaryColor() : ui.theme.getControlTextColor());
