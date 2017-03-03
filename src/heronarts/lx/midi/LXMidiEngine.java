@@ -89,11 +89,24 @@ public class LXMidiEngine {
                             for (Runnable runnable : initializationLock.listeners) {
                                 runnable.run();
                             }
+                            initializationLock.notifyAll();
                         }
                     }
                 });
             }
         }.start();
+    }
+
+    public void waitUntilReady() {
+        synchronized (this.initializationLock) {
+            while (!this.initializationLock.ready) {
+                try {
+                    this.initializationLock.wait();
+                } catch (InterruptedException ix) {
+                    System.err.println(ix.getLocalizedMessage());
+                }
+            }
+        }
     }
 
     public void onReady(Runnable runnable) {
