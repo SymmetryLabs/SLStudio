@@ -24,7 +24,9 @@
 
 package heronarts.p3lx.ui;
 
-public class UI2dContainer extends UI2dComponent implements UIContainer {
+import java.util.Iterator;
+
+public class UI2dContainer extends UI2dComponent implements UIContainer, Iterable<UIObject> {
 
     private UI2dComponent contentTarget;
 
@@ -85,5 +87,10 @@ public class UI2dContainer extends UI2dComponent implements UIContainer {
     public UI2dContainer setContentSize(float w, float h) {
         this.contentTarget.setSize(w, h);
         return this;
+    }
+
+    @Override
+    public Iterator<UIObject> iterator() {
+        return this.contentTarget.children.iterator();
     }
 }

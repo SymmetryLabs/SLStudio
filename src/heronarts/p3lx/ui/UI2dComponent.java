@@ -80,6 +80,8 @@ public abstract class UI2dComponent extends UIObject {
 
     protected int textOffsetY = 0;
 
+    private boolean mappable = true;
+
     boolean needsRedraw = true;
 
     boolean childNeedsRedraw = true;
@@ -516,6 +518,21 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Sets whether this component can ever be used for mapping control
+     *
+     * @param mappable
+     * @return
+     */
+    public UI2dComponent setMappable(boolean mappable) {
+        this.mappable = mappable;
+        return this;
+    }
+
+    protected boolean isMappable() {
+        return this.mappable;
+    }
+
+    /**
      * Removes this components from the container is is held by
      *
      * @return this
@@ -678,6 +695,14 @@ public abstract class UI2dComponent extends UIObject {
         if (needsBorder) {
             drawBorder(ui, pg);
         }
+        if (isMapping()) {
+            pg.noStroke();
+            pg.fill(0x33ff0000);
+            pg.rect(0, 0, this.width, this.height);
+            if (isControlTarget()) {
+                drawFocus(ui, pg, 0xccff0000);
+            }
+        }
     }
 
     private void drawBackground(UI ui, PGraphics pg) {
@@ -742,11 +767,15 @@ public abstract class UI2dComponent extends UIObject {
      * @param pg PGraphics
      */
     protected void drawFocus(UI ui, PGraphics pg) {
-        drawFocus(ui, pg, 0, 0, this.width, this.height, getFocusSize());
+        drawFocus(ui, pg, ui.theme.getFocusColor());
     }
 
-    protected void drawFocus(UI ui, PGraphics pg, float x, float y, float width, float height, int focusSize) {
-        pg.stroke(getFocusColor(ui));
+    protected void drawFocus(UI ui, PGraphics pg, int color) {
+        drawFocus(ui, pg, color, 0, 0, this.width, this.height, getFocusSize());
+    }
+
+    protected void drawFocus(UI ui, PGraphics pg, int color, float x, float y, float width, float height, int focusSize) {
+        pg.stroke(color);
         pg.noFill();
         // Top left
         pg.line(x, y, x + focusSize, y);

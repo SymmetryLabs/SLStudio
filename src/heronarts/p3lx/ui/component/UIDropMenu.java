@@ -29,13 +29,14 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
+import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIFocus;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterListener {
+public class UIDropMenu extends UI2dComponent implements UIFocus, UIControlTarget, LXParameterListener {
 
     private DiscreteParameter parameter = null;
 
@@ -239,6 +240,9 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, LXParameterLis
         }
     }
 
-
+    @Override
+    public LXParameter getControlTarget() {
+        return this.parameter;
+    }
 
 }

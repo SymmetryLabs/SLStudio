@@ -37,12 +37,13 @@ public class UISlider extends UIParameterControl implements UIFocus {
     };
 
     public enum FillMode {
-        FULL, MIDPOINT
+        UNIPOLAR,
+        BIPOLAR
     };
 
     private final Direction direction;
 
-    private FillMode fillMode = FillMode.FULL;
+    private FillMode fillMode = FillMode.UNIPOLAR;
 
     private static final float HANDLE_WIDTH = 12;
     private static final int HANDLE_ROUNDING = 4;
@@ -111,12 +112,12 @@ public class UISlider extends UIParameterControl implements UIFocus {
 
             int fillX, fillWidth;
             switch (this.fillMode) {
-            case MIDPOINT:
+            case BIPOLAR:
                 fillX = (int) (this.width / 2);
                 fillWidth = (int) ((getNormalized() - 0.5) * (this.width - 2*PADDING));
                 break;
             default:
-            case FULL:
+            case UNIPOLAR:
                 fillX = (int) PADDING;
                 fillWidth = (int) ((this.width - 2*PADDING) * getNormalized());
                 break;
@@ -133,12 +134,12 @@ public class UISlider extends UIParameterControl implements UIFocus {
             int fillY;
             int fillSize;
             switch (this.fillMode) {
-            case MIDPOINT:
+            case BIPOLAR:
                 fillY = (int) (this.handleHeight / 2);
                 fillSize = (int) ((0.5 - getNormalized()) * (this.handleHeight - 2*PADDING));
                 break;
             default:
-            case FULL:
+            case UNIPOLAR:
                 fillSize = (int) (getNormalized() * (this.handleHeight - 2*PADDING));
                 fillY = (int) (this.handleHeight - PADDING - fillSize);
                 break;

@@ -28,11 +28,12 @@ import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.p3lx.ui.UIControlTarget;
 import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIDoubleBox extends UINumberBox {
+public class UIDoubleBox extends UINumberBox implements UIControlTarget {
 
     private double minValue = 0;
     private double maxValue = Double.MAX_VALUE;
@@ -210,6 +211,11 @@ public class UIDoubleBox extends UINumberBox {
     @Override
     protected void incrementMouseValue(MouseEvent mouseEvent, int offset) {
         setValue(this.value + offset * getIncrement(mouseEvent));
+    }
+
+    @Override
+    public LXParameter getControlTarget() {
+        return this.parameter;
     }
 
 }

@@ -28,12 +28,13 @@ import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.p3lx.ui.UIControlTarget;
 import processing.core.PConstants;
 import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIIntegerBox extends UINumberBox {
+public class UIIntegerBox extends UINumberBox implements UIControlTarget {
 
     private int minValue = 0;
     private int maxValue = PConstants.MAX_INT;
@@ -155,6 +156,11 @@ public class UIIntegerBox extends UINumberBox {
     @Override
     protected void incrementMouseValue(MouseEvent mouseEvent, int offset) {
         setValue(this.value + getIncrement(mouseEvent) * offset);
+    }
+
+    @Override
+    public LXParameter getControlTarget() {
+        return this.parameter;
     }
 
 }

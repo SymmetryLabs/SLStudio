@@ -37,7 +37,7 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public abstract class UIObject implements LXLoopTask {
+public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     UI ui = null;
 
@@ -298,6 +298,17 @@ public abstract class UIObject implements LXLoopTask {
         }
     }
 
+    boolean isControlTarget() {
+        return this.ui.getControlTarget() == this;
+    }
+
+    boolean isMapping() {
+        return
+            this.ui.midiMapping &&
+            (this instanceof UIControlTarget) &&
+            ((UIControlTarget) this).getControlTarget() != null;
+    }
+
     void resize(UI ui) {
         this.onUIResize(ui);
         for (UIObject child : this.children) {
@@ -311,9 +322,7 @@ public abstract class UIObject implements LXLoopTask {
      *
      * @param ui The UI object
      */
-    protected void onUIResize(UI ui) {
-
-    }
+    protected void onUIResize(UI ui) {}
 
     /**
      * Subclasses should override this method to perform their drawing functions.
@@ -360,6 +369,10 @@ public abstract class UIObject implements LXLoopTask {
     private boolean mouseWheelEventConsumed = false;
 
     void mousePressed(MouseEvent mouseEvent, float mx, float my) {
+        if (isMapping()) {
+            this.ui.setControlTarget((UIControlTarget) this);
+            return;
+        }
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
@@ -387,6 +400,9 @@ public abstract class UIObject implements LXLoopTask {
     }
 
     void mouseClicked(MouseEvent mouseEvent, float mx, float my) {
+        if (isMapping()) {
+            return;
+        }
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
@@ -398,6 +414,9 @@ public abstract class UIObject implements LXLoopTask {
     }
 
     void mouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+        if (isMapping()) {
+            return;
+        }
         if (this.pressedChild != null) {
             this.pressedChild.mouseDragged(
                 mouseEvent,
@@ -470,99 +489,6 @@ public abstract class UIObject implements LXLoopTask {
         if (!this.keyEventConsumed) {
             onKeyTyped(keyEvent, keyChar, keyCode);
         }
-    }
-
-    /**
-     * Subclasses override to receive mouse events
-     *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
-     */
-    protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-    }
-
-    /**
-     * Subclasses override to receive mouse events
-     *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
-     */
-    protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
-    }
-
-    /**
-     * Subclasses override to receive mouse events
-     *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
-     */
-    protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
-    }
-
-    /**
-     * Subclasses override to receive mouse events
-     *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
-     * @param dx movement in x
-     * @param dy movement in y
-     */
-    protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-    }
-
-    /**
-     * Subclasses override to receive mouse events
-     *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
-     */
-    protected void onMouseMoved(MouseEvent mouseEvent, float mx, float my) {
-    }
-
-    /**
-     * Subclasses override to receive mouse events
-     *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
-     * @param delta Amount of wheel movement
-     */
-    protected void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
-    }
-
-    /**
-     * Subclasses override to receive mouse events
-     *
-     * @param mouseEvent Mouse event
-     * @param mx x-coordinate
-     * @param my y-coordinate
-     */
-    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-    }
-
-    /**
-     * Subclasses override to receive key events
-     *
-     * @param keyEvent Key event
-     * @param keyChar Key character
-     * @param keyCode Key code value
-     */
-    protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
-    }
-
-    /**
-     * Subclasses override to receive key events
-     *
-     * @param keyEvent Key event
-     * @param keyChar Key character
-     * @param keyCode Key code value
-     */
-    protected void onKeyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
     }
 
     /**

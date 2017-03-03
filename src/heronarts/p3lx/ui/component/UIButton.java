@@ -30,12 +30,13 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.UIControlTarget;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIButton extends UI2dComponent implements UIFocus {
+public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus {
 
     protected boolean active = false;
     protected boolean isMomentary = false;
@@ -210,5 +211,10 @@ public class UIButton extends UI2dComponent implements UIFocus {
             }
         }
         return this;
+    }
+
+    @Override
+    public LXParameter getControlTarget() {
+        return isMappable() ? this.parameter : null;
     }
 }

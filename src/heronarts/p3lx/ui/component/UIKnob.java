@@ -38,6 +38,17 @@ public class UIKnob extends UIParameterControl implements UIFocus {
     public final static int WIDTH = KNOB_SIZE + 2*KNOB_MARGIN;
 
     private final static float KNOB_INDENT = .4f;
+    private final static int ARC_CENTER_X = WIDTH / 2;
+    private final static int ARC_CENTER_Y = KNOB_SIZE / 2;
+    private final static float ARC_START = PConstants.HALF_PI + KNOB_INDENT;
+    private final static float ARC_RANGE = PConstants.TWO_PI - 2 * KNOB_INDENT;
+
+    public enum ArcMode {
+        UNIPOLAR,
+        BIPOLAR
+    };
+
+    private ArcMode arcMode = ArcMode.UNIPOLAR;
 
     public UIKnob() {
         this(0, 0);
@@ -53,31 +64,43 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         enableImmediateEdit(true);
     }
 
+    public UIKnob setArcMode(ArcMode arcMode) {
+        if (this.arcMode != arcMode) {
+            this.arcMode = arcMode;
+            redraw();
+        }
+        return this;
+    }
+
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         float knobValue = (float) getNormalized();
-
-        pg.ellipseMode(PConstants.CENTER);
+        float valueEnd = ARC_START + knobValue * ARC_RANGE;
+        float valueStart;
+        switch (this.arcMode) {
+        case BIPOLAR: valueStart = ARC_START + ARC_RANGE/2; break;
+        default: case UNIPOLAR: valueStart = ARC_START; break;
+        }
 
         // Full outer dark ring
-        int arcCenterX = WIDTH / 2;
-        int arcCenterY = KNOB_SIZE / 2;
-        float arcStart = PConstants.HALF_PI + KNOB_INDENT;
-        float arcRange = (PConstants.TWO_PI - 2 * KNOB_INDENT);
-        pg.fill(ui.theme.getControlBackgroundColor());
+        pg.ellipseMode(PConstants.CENTER);
         pg.noStroke();
-        pg.arc(arcCenterX, arcCenterY, KNOB_SIZE, KNOB_SIZE, arcStart + knobValue * arcRange,
-                arcStart + arcRange);
+        pg.fill(ui.theme.getControlBackgroundColor());
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, KNOB_SIZE, KNOB_SIZE, ARC_START, ARC_START + ARC_RANGE);
 
-        // Light ring indicating value
+        // Light ring of value
         pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-        pg.arc(arcCenterX, arcCenterY, KNOB_SIZE, KNOB_SIZE, arcStart,
-                arcStart + knobValue * arcRange);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, KNOB_SIZE, KNOB_SIZE, Math.min(valueStart, valueEnd), Math.max(valueStart, valueEnd));
+
+        if ((this.arcMode == ArcMode.BIPOLAR) && (valueStart == valueEnd)) {
+            pg.stroke(0xff333333);
+            pg.line(ARC_CENTER_X, ARC_CENTER_Y - KNOB_SIZE / 4, ARC_CENTER_X, ARC_CENTER_Y - KNOB_SIZE/2);
+        }
 
         // Center circle of knob
         pg.noStroke();
         pg.fill(0xff333333);
-        pg.ellipse(arcCenterX, arcCenterY, KNOB_SIZE/2, KNOB_SIZE/2);
+        pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, KNOB_SIZE/2, KNOB_SIZE/2);
 
         super.onDraw(ui, pg);
     }

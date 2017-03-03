@@ -35,8 +35,9 @@ import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UIControlTarget;
 
-public abstract class UIParameterControl extends UIInputBox implements LXParameterListener {
+public abstract class UIParameterControl extends UIInputBox implements UIControlTarget, LXParameterListener {
 
     protected final static int LABEL_MARGIN = 2;
 
@@ -195,6 +196,7 @@ public abstract class UIParameterControl extends UIInputBox implements LXParamet
             pg.rect(0, this.height - LABEL_HEIGHT, this.width, LABEL_HEIGHT);
             pg.fill(ui.theme.getPrimaryColor());
             pg.textFont(ui.theme.getControlFont());
+            pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
             pg.text(clipTextToWidth(pg, this.editBuffer, this.width - TEXT_MARGIN), this.width/2, this.height - TEXT_MARGIN);
         } else {
             String labelText = this.showValue ? getValueString() : getLabelString();
@@ -252,10 +254,19 @@ public abstract class UIParameterControl extends UIInputBox implements LXParamet
 
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (!this.editing && ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER))) {
-            consumeKeyEvent();
-            setShowValue(true);;
-        } else if (this.keyEditable) {
+        if (!this.editing) {
+            if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+                consumeKeyEvent();
+                setShowValue(true);
+            } else if (keyEvent.isShiftDown() && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                consumeKeyEvent();
+                if (this.parameter != null) {
+                    this.parameter.reset();
+                }
+            }
+        }
+
+        if (this.keyEditable && !keyEventConsumed()) {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
         }
     }
@@ -281,6 +292,11 @@ public abstract class UIParameterControl extends UIInputBox implements LXParamet
     @Override
     protected void onBlur() {
         setShowValue(false);
+    }
+
+    @Override
+    public LXParameter getControlTarget() {
+        return isMappable() ? this.parameter : null;
     }
 
 }

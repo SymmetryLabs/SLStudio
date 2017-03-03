@@ -29,6 +29,9 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.LXLoopTask;
+import heronarts.lx.LXMappingEngine;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 
 import java.io.File;
@@ -58,11 +61,38 @@ public class UI implements LXEngine.Dispatch {
 
         @Override
         protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-            if (keyCode == java.awt.event.KeyEvent.VK_TAB) {
-                if (keyEvent.isShiftDown()) {
-                    focusPrev();
-                } else {
-                    focusNext();
+            if (topLevelKeyEventHandler != null) {
+                topLevelKeyEventHandler.onKeyPressed(keyEvent, keyChar, keyCode);
+            }
+            if (!keyEventConsumed()) {
+                if (keyCode == java.awt.event.KeyEvent.VK_TAB) {
+                    if (keyEvent.isShiftDown()) {
+                        focusPrev();
+                    } else {
+                        focusNext();
+                    }
+                }
+            }
+        }
+
+        @Override
+        protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+            if (topLevelKeyEventHandler != null) {
+                topLevelKeyEventHandler.onKeyReleased(keyEvent, keyChar, keyCode);
+            }
+        }
+
+        @Override
+        protected void onKeyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
+            if (topLevelKeyEventHandler != null) {
+                topLevelKeyEventHandler.onKeyTyped(keyEvent, keyChar, keyCode);
+            }
+        }
+
+        private void redraw() {
+            for (UIObject child : this.children) {
+                if (child instanceof UI2dComponent) {
+                    ((UI2dComponent) child).redraw();
                 }
             }
         }
@@ -220,6 +250,8 @@ public class UI implements LXEngine.Dispatch {
     private static final long INIT_RUN = -1;
     private long lastMillis = INIT_RUN;
 
+    private UIEventHandler topLevelKeyEventHandler = null;
+
     /**
      * UI look and feel
      */
@@ -242,6 +274,10 @@ public class UI implements LXEngine.Dispatch {
 
     private boolean resizable = false;
 
+    boolean midiMapping = false;
+
+    private UIControlTarget controlTarget = null;
+
     /**
      * Black color
      */
@@ -260,7 +296,7 @@ public class UI implements LXEngine.Dispatch {
         this(applet, null);
     }
 
-    private UI(PApplet applet, P3LX lx) {
+    private UI(PApplet applet, final P3LX lx) {
         this.lx = lx;
         this.applet = applet;
         this.width = lx.applet.width;
@@ -276,11 +312,46 @@ public class UI implements LXEngine.Dispatch {
         if (lx != null) {
             lx.engine.setInputDispatch(this);
         }
+        lx.engine.mapping.mode.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                midiMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI;
+                root.redraw();
+            }
+        });
         UI.instance = this;
     }
 
     public static UI get() {
         return UI.instance;
+    }
+
+    /**
+     * Sets an object to handle top-level input events
+     *
+     * @param eventHandler
+     * @return
+     */
+    public UI setTopLevelKeyEventHandler(UIEventHandler eventHandler) {
+        this.topLevelKeyEventHandler = eventHandler;
+        return this;
+    }
+
+    UI setControlTarget(UIControlTarget controlTarget) {
+        this.lx.engine.mapping.setControlTarget(controlTarget.getControlTarget());
+        if (this.controlTarget != controlTarget) {
+            if (this.controlTarget != null) {
+                ((UI2dComponent) this.controlTarget).redraw();
+            }
+            this.controlTarget = controlTarget;
+            if (this.controlTarget != null) {
+                ((UI2dComponent) this.controlTarget).redraw();
+            }
+        }
+        return this;
+    }
+
+    UIControlTarget getControlTarget() {
+        return this.controlTarget;
     }
 
     /**

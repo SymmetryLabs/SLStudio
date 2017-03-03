@@ -42,7 +42,7 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
 
     private final UILabel title;
     private boolean expanded = true;
-    private final float expandedHeight;
+    private float expandedHeight;
 
     private final UI2dContainer content;
 
@@ -65,7 +65,12 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
         addTopLevelComponent(this.title);
 
         this.expandedHeight = h;
-        this.content = new UI2dContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, h - CONTENT_Y - PADDING);
+        this.content = new UI2dContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, h - CONTENT_Y - PADDING) {
+            @Override
+            public void onResize() {
+                UI2dCollapsibleSection.this.setHeight(expandedHeight = CONTENT_Y + this.height + PADDING);
+            }
+        };
         this.content.setVisible(this.expanded);
         setContentTarget(this.content);
     }
@@ -83,7 +88,7 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
 
     @Override
     public UI2dComponent addToContainer(UIContainer container, int index) {
-        if (!(container instanceof UI2dCollapsibleContainer)) {
+        if (!(container.getContentTarget() instanceof UI2dCollapsibleContainer)) {
             throw new UnsupportedOperationException("Can only add UI2dCollapsibleSection to UI2dCollapsibleContainer");
         }
         super.addToContainer(container, index);
@@ -94,7 +99,7 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
     @Override
     public void onResize() {
         if (this.parent != null) {
-            ((UI2dCollapsibleContainer) this.parent).onSectionResize();
+            ((UI2dCollapsibleContainer) ((UI2dContainer) this.parent).getContentTarget()).onSectionResize();
         }
     }
 

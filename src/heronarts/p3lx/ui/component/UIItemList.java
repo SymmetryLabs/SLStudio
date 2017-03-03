@@ -339,7 +339,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     @Override
     public void drawFocus(UI ui, PGraphics pg) {
         float yp = ROW_MARGIN + ROW_SPACING*this.focusIndex + this.getScrollY();
-        super.drawFocus(ui, pg, PADDING, yp, getRowWidth()-2*PADDING, ROW_HEIGHT, 2);
+        super.drawFocus(ui, pg, ui.theme.getFocusColor(), PADDING, yp, getRowWidth()-2*PADDING, ROW_HEIGHT, 2);
     }
 
     @Override
