@@ -76,6 +76,8 @@ public class LXEngine extends LXParameterized {
 
     public final LXMidiEngine midi;
 
+    public final LXMappingEngine mapping = new LXMappingEngine();
+
     public final LXOscEngine osc;
 
     private Dispatch inputDispatch = null;
@@ -87,10 +89,7 @@ public class LXEngine extends LXParameterized {
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     public final LXMasterChannel masterChannel;
 
-    /**
-     * The master output drive
-     */
-    public  final LXOutput output;
+    public final LXOutput output;
 
     private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
@@ -110,7 +109,6 @@ public class LXEngine extends LXParameterized {
 
     public final BooleanParameter cueLeft = new BooleanParameter("CUE-L", false);
     public final BooleanParameter cueRight = new BooleanParameter("CUE-R", false);
-
     public final BoundedParameter speed = new BoundedParameter("SPEED", 1, 0, 2);
 
     private float frameRate = 0;
@@ -888,6 +886,7 @@ public class LXEngine extends LXParameterized {
     private static final String KEY_PALETTE = "palette";
     private static final String KEY_CHANNELS = "channels";
     private static final String KEY_MASTER = "master";
+    private static final String KEY_MIDI = "midi";
 
     @Override
     public void save(JsonObject obj) {
@@ -901,11 +900,14 @@ public class LXEngine extends LXParameterized {
         JsonObject masterObj = new JsonObject();
         this.masterChannel.save(masterObj);
         JsonObject paletteObj = new JsonObject();
-        lx.palette.save(paletteObj);
+        this.lx.palette.save(paletteObj);
+        JsonObject midiObj = new JsonObject();
+        this.midi.save(midiObj);
 
         obj.add(KEY_PALETTE, paletteObj);
         obj.add(KEY_CHANNELS, channels);
         obj.add(KEY_MASTER, masterObj);
+        obj.add(KEY_MIDI, midiObj);
     }
 
     @Override
@@ -930,6 +932,11 @@ public class LXEngine extends LXParameterized {
         // Palette
         if (obj.has(KEY_PALETTE)) {
             lx.palette.load(obj.getAsJsonObject(KEY_PALETTE));
+        }
+
+        // Midi
+        if (obj.has(KEY_MIDI)) {
+            this.midi.load(obj.getAsJsonObject(KEY_MIDI));
         }
 
         // Parameters etc.

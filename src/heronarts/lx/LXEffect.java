@@ -39,7 +39,7 @@ import heronarts.lx.parameter.StringParameter;
  */
 public abstract class LXEffect extends LXLayeredComponent implements LXMidiListener {
 
-    public final BooleanParameter enabled = new BooleanParameter("ENABLED", false);
+    public final BooleanParameter enabled = new BooleanParameter("On", false);
 
     protected final MutableParameter enabledDampingAttack = new MutableParameter(100);
     protected final MutableParameter enabledDampingRelease = new MutableParameter(100);

@@ -40,6 +40,7 @@ public class LXMidiInput extends LXMidiDevice {
      *
      * @return
      */
+    @Override
     public LXMidiInput open() {
         this.enabled.setValue(true);
         return this;
@@ -81,10 +82,6 @@ public class LXMidiInput extends LXMidiDevice {
 
         @Override
         public void send(MidiMessage midiMessage, long timeStamp) {
-            if (!enabled.isOn()) {
-                return;
-            }
-
             if (midiMessage instanceof ShortMessage) {
                 ShortMessage sm = (ShortMessage) midiMessage;
                 LXShortMessage message = null;
@@ -116,12 +113,11 @@ public class LXMidiInput extends LXMidiDevice {
     }
 
     /**
-     * This method is invoked on the main thread to process the MIDI message.
+     * This method is invoked on the engine thread to process the MIDI message.
      *
      * @param message Midi message
      */
-    public void dispatch(LXShortMessage message) {
-        this.engine.dispatch(message);
+    void dispatch(LXShortMessage message) {
         for (LXMidiListener listener : this.listeners) {
             this.engine.dispatch(message, listener);
         }

@@ -26,6 +26,18 @@ public abstract class MidiNote extends LXShortMessage {
         super(message, command);
     }
 
+    private final static String[] PITCHES = {
+        "C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"
+    };
+
+    public static String getPitchString(int pitch) {
+        return PITCHES[pitch % 12] +  Integer.toString(pitch/12);
+    }
+
+    public String getPitchString() {
+        return getPitchString(getPitch());
+    }
+
     public int getPitch() {
         return getData1();
     }

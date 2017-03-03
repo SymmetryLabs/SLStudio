@@ -167,6 +167,17 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
         return setRange(objects.length);
     }
 
+    public LXParameter setValue(Object object) {
+        if (this.objects == null) {
+            throw new UnsupportedOperationException("Cannot setValue with an object unless setObjects() was called");
+        }
+        for (int i = 0; i < this.objects.length; ++i) {
+            if (this.objects[i] == object) {
+                return setValue(i);
+            }
+        }
+        throw new IllegalArgumentException("Not a valid object for this parameter: " + object.toString());
+    }
 
     /**
      * Sets the range from [minValue, maxValue-1] inclusive

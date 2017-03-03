@@ -20,8 +20,10 @@ package heronarts.lx.midi;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
-import heronarts.lx.LXEffect;
+import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXPattern;
+import heronarts.lx.LXSerializable;
+import heronarts.lx.parameter.LXParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,9 +34,19 @@ import javax.sound.midi.MidiSystem;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiEngine {
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+public class LXMidiEngine implements LXSerializable {
+
+    public interface MappingListener {
+        public void mappingAdded(LXMidiEngine engine, LXMidiMapping mapping);
+        public void mappingRemoved(LXMidiEngine engine, LXMidiMapping mapping);
+    }
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
+    private final List<MappingListener> mappingListeners = new ArrayList<MappingListener>();
 
     private final List<LXShortMessage> threadSafeInputQueue =
         Collections.synchronizedList(new ArrayList<LXShortMessage>());
@@ -47,6 +59,9 @@ public class LXMidiEngine {
 
     private final List<LXMidiInput> unmodifiableInputs = Collections.unmodifiableList(this.inputs);
     private final List<LXMidiOutput> unmodifiableOutputs = Collections.unmodifiableList(this.outputs);
+
+    private final List<LXMidiMapping> mappings = new ArrayList<LXMidiMapping>();
+    private final List<LXMidiMapping> unmodifiableMappings = Collections.unmodifiableList(this.mappings);
 
     private final LX lx;
 
@@ -109,7 +124,7 @@ public class LXMidiEngine {
         }
     }
 
-    public void onReady(Runnable runnable) {
+    public void whenReady(Runnable runnable) {
         synchronized (this.initializationLock) {
             if (this.initializationLock.ready) {
                 runnable.run();
@@ -125,6 +140,10 @@ public class LXMidiEngine {
 
     public List<LXMidiOutput> getOutputs() {
         return this.unmodifiableOutputs;
+    }
+
+    public List<LXMidiMapping> getMappings() {
+        return this.unmodifiableMappings;
     }
 
     public LXMidiInput matchInput(String name) {
@@ -165,6 +184,16 @@ public class LXMidiEngine {
         return this;
     }
 
+    public LXMidiEngine addMappingListener(MappingListener listener) {
+        this.mappingListeners.add(listener);
+        return this;
+    }
+
+    public LXMidiEngine removeMappingListener(MappingListener listener) {
+        this.mappingListeners.remove(listener);
+        return this;
+    }
+
     void queueInputMessage(LXShortMessage message) {
         this.threadSafeInputQueue.add(message);
     }
@@ -180,16 +209,76 @@ public class LXMidiEngine {
             this.threadSafeInputQueue.clear();
         }
         for (LXShortMessage message : this.engineThreadInputQueue) {
-            message.getInput().dispatch(message);
+            LXMidiInput input = message.getInput();
+            if (input.enabled.isOn()) {
+                dispatch(message);
+                input.dispatch(message);
+            }
         }
     }
 
-    private final List<LXMidiListener> listenerSnapshot = new ArrayList<LXMidiListener>();
+    private void createMapping(LXShortMessage message) {
+        // Is there a control parameter selected?
+        LXParameter parameter = lx.engine.mapping.getControlTarget();
+        if (parameter == null) {
+            return;
+        }
+
+        // Is this a valid mapping type?
+        if (!LXMidiMapping.isValidMessageType(message)) {
+            return;
+        }
+
+        // Does this mapping already exist?
+        for (LXMidiMapping mapping : this.mappings) {
+            if (mapping.parameter == parameter && mapping.matches(message)) {
+                return;
+            }
+        }
+
+        // Bada-boom, add it!
+        LXMidiMapping mapping = LXMidiMapping.create(message, parameter);
+        this.mappings.add(mapping);
+        for (MappingListener mappingListener : this.mappingListeners) {
+            mappingListener.mappingAdded(this, mapping);
+        }
+    }
+
+    private boolean applyMapping(LXShortMessage message) {
+        boolean applied = false;
+        for (LXMidiMapping mapping : this.mappings) {
+            if (mapping.matches(message)) {
+                mapping.apply(message);
+                applied = true;
+            }
+        }
+        return applied;
+    }
+
+    /**
+     * Removes a midi mapping
+     *
+     * @param mapping The mapping to remove
+     * @return this
+     */
+    public LXMidiEngine removeMapping(LXMidiMapping mapping) {
+        this.mappings.remove(mapping);
+        for (MappingListener mappingListener : this.mappingListeners) {
+            mappingListener.mappingRemoved(this, mapping);
+        }
+        return this;
+    }
 
     public void dispatch(LXShortMessage message) {
-        this.listenerSnapshot.clear();
-        this.listenerSnapshot.addAll(this.listeners);
-        for (LXMidiListener listener : this.listenerSnapshot) {
+        if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
+            createMapping(message);
+            return;
+        }
+        if (applyMapping(message)) {
+            return;
+        }
+
+        for (LXMidiListener listener : this.listeners) {
             dispatch(message, listener);
         }
         for (LXChannel channel : this.lx.engine.getChannels()) {
@@ -199,9 +288,10 @@ public class LXMidiEngine {
                 if (nextPattern != null) {
                     dispatch(message, nextPattern);
                 }
-                for (LXEffect effect : channel.getEffects()) {
-                    dispatch(message, effect);
-                }
+                // TODO(mcslee): no sending midi to effects right now, they should be mapped...
+                // for (LXEffect effect : channel.getEffects()) {
+                //   dispatch(message, effect);
+                // }
             }
         }
         // TODO(mcslee): send MIDI to the master FX bus? should effects really
@@ -235,6 +325,42 @@ public class LXMidiEngine {
             listener.aftertouchReceived((MidiAftertouch) message);
             break;
         }
+    }
+
+    private static final String KEY_INPUTS = "inputs";
+
+    @Override
+    public void save(JsonObject object) {
+        // TODO(mcslee): preserve active inputs from the load file that weren't found
+        waitUntilReady();
+        JsonArray inputs = new JsonArray();
+        for (LXMidiInput input : this.inputs) {
+            if (input.enabled.isOn()) {
+                inputs.add(input.getName());
+            }
+        }
+        object.add(KEY_INPUTS, inputs);
+    }
+
+    @Override
+    public void load(final JsonObject object) {
+        whenReady(new Runnable() {
+            public void run() {
+                if (object.has(KEY_INPUTS)) {
+                    JsonArray inputNames = object.getAsJsonArray(KEY_INPUTS);
+                    if (inputNames.size() > 0) {
+                        for (LXMidiInput input : inputs) {
+                            String inputName = input.getName();
+                            for (JsonElement element : inputNames) {
+                                if (inputName.equals(element.getAsString())) {
+                                    input.enabled.setValue(true);
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        });
     }
 
 }
