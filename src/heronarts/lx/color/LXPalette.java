@@ -56,7 +56,7 @@ public class LXPalette extends LXComponent {
 
     public final BoundedParameter range = new BoundedParameter("Range", 0, 360);
 
-    public final BoundedParameter period = new BoundedParameter("Period", 120000, 2000, 1800000);
+    public final BoundedParameter period = new BoundedParameter("Period", 120000, 1000, 1800000);
 
     public final BoundedParameter spreadX = new BoundedParameter("X-add", 0, 360);
 

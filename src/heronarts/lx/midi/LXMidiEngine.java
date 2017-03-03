@@ -50,19 +50,58 @@ public class LXMidiEngine {
 
     private final LX lx;
 
+    private class InitializationLock {
+        private final List<Runnable> listeners = new ArrayList<Runnable>();
+        private boolean ready = false;
+    }
+
+    private final InitializationLock initializationLock = new InitializationLock();
+
     public LXMidiEngine(LX lx) {
         this.lx = lx;
-        for (MidiDevice.Info deviceInfo : MidiSystem.getMidiDeviceInfo()) {
-            try {
-                MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
-                if (device.getMaxTransmitters() != 0) {
-                    this.inputs.add(new LXMidiInput(this, device));
+        initialize();
+    }
+
+    private void initialize() {
+        new Thread() {
+            @Override
+            public void run() {
+                // NOTE(mcslee): this can sometimes hang or be slow for unclear reasons...
+                // do it in a separate thread so that we don't delay the whole application
+                // starting up.
+                for (MidiDevice.Info deviceInfo : MidiSystem.getMidiDeviceInfo()) {
+                    try {
+                        MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
+                        if (device.getMaxTransmitters() != 0) {
+                            inputs.add(new LXMidiInput(LXMidiEngine.this, device));
+                        }
+                        if (device.getMaxReceivers() != 0) {
+                            outputs.add(new LXMidiOutput(LXMidiEngine.this, device));
+                        }
+                    } catch (MidiUnavailableException mux) {
+                        mux.printStackTrace();
+                    }
                 }
-                if (device.getMaxReceivers() != 0) {
-                    this.outputs.add(new LXMidiOutput(this, device));
-                }
-            } catch (MidiUnavailableException mux) {
-                mux.printStackTrace();
+                lx.engine.addTask(new Runnable() {
+                    public void run() {
+                        synchronized (initializationLock) {
+                            initializationLock.ready = true;
+                            for (Runnable runnable : initializationLock.listeners) {
+                                runnable.run();
+                            }
+                        }
+                    }
+                });
+            }
+        }.start();
+    }
+
+    public void onReady(Runnable runnable) {
+        synchronized (this.initializationLock) {
+            if (this.initializationLock.ready) {
+                runnable.run();
+            } else {
+                this.initializationLock.listeners.add(runnable);
             }
         }
     }
