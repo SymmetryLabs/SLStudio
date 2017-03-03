@@ -42,7 +42,10 @@ public class BlurEffect extends LXEffect {
 
     @Override
     protected void onEnable() {
-        System.arraycopy(this.colors, 0, this.blurBuffer.getArray(), 0, this.colors.length);
+        int[] blurArray = this.blurBuffer.getArray();
+        for (int i = 0; i < blurArray.length; ++i) {
+            blurArray[i] = 0;
+        }
     }
 
     @Override

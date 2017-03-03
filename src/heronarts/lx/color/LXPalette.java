@@ -26,6 +26,7 @@ import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.FunctionalParameter;
@@ -63,7 +64,15 @@ public class LXPalette extends LXComponent {
 
     public final BoundedParameter spreadZ = new BoundedParameter("Z-add", 0, 360);
 
+    public final BoundedParameter offsetX = new BoundedParameter("X-off", 0, -1, 1);
+
+    public final BoundedParameter offsetY = new BoundedParameter("Y-off", 0, -1, 1);
+
+    public final BoundedParameter offsetZ = new BoundedParameter("Z-off", 0, -1, 1);
+
     public final BoundedParameter spreadR = new BoundedParameter("R-add", 0, 360);
+
+    public final BooleanParameter mirror = new BooleanParameter("Mirror", true);
 
     private final DampedParameter hueFixed = new DampedParameter(color.hue, 1800);
 
@@ -103,6 +112,10 @@ public class LXPalette extends LXComponent {
         addParameter(this.spreadY);
         addParameter(this.spreadZ);
         addParameter(this.spreadR);
+        addParameter(this.offsetX);
+        addParameter(this.offsetY);
+        addParameter(this.offsetZ);
+        addParameter(this.mirror);
         addModulator(this.hueFixed).start();
         addModulator(this.hueCycle);
         addModulator(this.hueOscillate);
@@ -160,12 +173,20 @@ public class LXPalette extends LXComponent {
     }
 
     public double getHue(LXPoint point) {
+        double dx = point.x - this.model.cx - this.offsetX.getValue() * model.xRange;
+        double dy = point.y - this.model.cy - this.offsetY.getValue() * model.yRange;
+        double dz = point.z - this.model.cz - this.offsetZ.getValue() * model.zRange;
+        if (this.mirror.isOn()) {
+            dx = Math.abs(dx);
+            dy = Math.abs(dy);
+            dz = Math.abs(dz);
+        }
         return (
             this.hue.getValue() +
             360 +
-            this.spreadX.getValue() * this.xMult * Math.abs(point.x - this.model.cx) +
-            this.spreadY.getValue() * this.yMult * Math.abs(point.y - this.model.cy) +
-            this.spreadZ.getValue() * this.zMult * Math.abs(point.z - this.model.cz) +
+            this.spreadX.getValue() * this.xMult * dx +
+            this.spreadY.getValue() * this.yMult * dy +
+            this.spreadZ.getValue() * this.zMult * dz +
             this.spreadR.getValue() * this.rMult * Math.abs(point.r)
          ) % 360;
     }
