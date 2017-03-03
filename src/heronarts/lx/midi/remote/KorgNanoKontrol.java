@@ -16,17 +16,12 @@
  * @author Mark C. Slee <mark@heronarts.com>
  */
 
-package heronarts.lx.midi.device;
+package heronarts.lx.midi.remote;
 
-import javax.sound.midi.MidiDevice;
-
-import heronarts.lx.LX;
-import heronarts.lx.midi.LXMidiDevice;
 import heronarts.lx.midi.LXMidiInput;
-import heronarts.lx.midi.LXMidiSystem;
 import heronarts.lx.parameter.LXParameter;
 
-public class KorgNanoKontrol extends LXMidiDevice {
+public class KorgNanoKontrol extends LXMidiRemote {
 
     public static final int SLIDER_1 = 2;
     public static final int SLIDER_2 = 3;
@@ -91,18 +86,6 @@ public class KorgNanoKontrol extends LXMidiDevice {
     public static final int LOOP = 49;
     public static final int STOP = 46;
     public static final int RECORD = 44;
-
-    public static MidiDevice matchInputDevice() {
-        return LXMidiSystem.matchInputDevice(DEVICE_NAMES);
-    }
-
-    public static KorgNanoKontrol getNanoKontrol(LX lx) {
-        LXMidiInput input = LXMidiSystem.matchInput(lx, DEVICE_NAMES);
-        if (input != null) {
-            return new KorgNanoKontrol(input);
-        }
-        return null;
-    }
 
     public KorgNanoKontrol(LXMidiInput input) {
         super(input);

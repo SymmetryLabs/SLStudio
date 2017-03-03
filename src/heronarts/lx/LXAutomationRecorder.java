@@ -18,13 +18,13 @@
 
 package heronarts.lx;
 
-import heronarts.lx.midi.LXMidiAftertouch;
-import heronarts.lx.midi.LXMidiControlChange;
+import heronarts.lx.midi.MidiAftertouch;
+import heronarts.lx.midi.MidiControlChange;
 import heronarts.lx.midi.LXMidiListener;
-import heronarts.lx.midi.LXMidiNote;
-import heronarts.lx.midi.LXMidiNoteOn;
-import heronarts.lx.midi.LXMidiPitchBend;
-import heronarts.lx.midi.LXMidiProgramChange;
+import heronarts.lx.midi.MidiNote;
+import heronarts.lx.midi.MidiNoteOn;
+import heronarts.lx.midi.MidiPitchBend;
+import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableParameter;
@@ -401,32 +401,32 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
     }
 
     @Override
-    public void noteOnReceived(LXMidiNoteOn note) {
+    public void noteOnReceived(MidiNoteOn note) {
         midiEventReceived(note);
     }
 
     @Override
-    public void noteOffReceived(LXMidiNote note) {
+    public void noteOffReceived(MidiNote note) {
         midiEventReceived(note);
     }
 
     @Override
-    public void controlChangeReceived(LXMidiControlChange cc) {
+    public void controlChangeReceived(MidiControlChange cc) {
         midiEventReceived(cc);
     }
 
     @Override
-    public void programChangeReceived(LXMidiProgramChange pc) {
+    public void programChangeReceived(MidiProgramChange pc) {
         midiEventReceived(pc);
     }
 
     @Override
-    public void pitchBendReceived(LXMidiPitchBend pitchBend) {
+    public void pitchBendReceived(MidiPitchBend pitchBend) {
         midiEventReceived(pitchBend);
     }
 
     @Override
-    public void aftertouchReceived(LXMidiAftertouch aftertouch) {
+    public void aftertouchReceived(MidiAftertouch aftertouch) {
         midiEventReceived(aftertouch);
     }
 

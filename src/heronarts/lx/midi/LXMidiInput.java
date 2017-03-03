@@ -18,8 +18,6 @@
 
 package heronarts.lx.midi;
 
-import heronarts.lx.LX;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,37 +26,37 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiInput {
-
-    private final MidiDevice device;
-
-    private final LXMidiEngine midiEngine;
+public class LXMidiInput extends LXMidiDevice {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
+    private boolean isOpen = false;
 
-    private boolean isEngineInput = false;
-
-    public LXMidiInput(LX lx, MidiDevice device) throws MidiUnavailableException {
-        this(lx.engine.midi, device);
+    LXMidiInput(LXMidiEngine engine, MidiDevice device) {
+        super(engine, device);
     }
 
-    public LXMidiInput(LXMidiEngine midiEngine, MidiDevice device)
-            throws MidiUnavailableException {
-        this(midiEngine, device, null);
+    /**
+     * Opens the midi input.
+     *
+     * @return
+     */
+    public LXMidiInput open() {
+        this.enabled.setValue(true);
+        return this;
     }
 
-    public LXMidiInput(LXMidiEngine midiEngine, MidiDevice device, LXMidiListener listener) throws MidiUnavailableException {
-        this.midiEngine = midiEngine;
-        this.device = device;
-        if (listener != null) {
-            addListener(listener);
+    @Override
+    protected void onEnabled(boolean enabled) {
+        if (enabled && !this.isOpen) {
+            try {
+                this.device.open();
+                this.device.getTransmitter().setReceiver(new Receiver());
+                this.isOpen = true;
+            } catch (MidiUnavailableException mux) {
+                System.err.println(mux.getLocalizedMessage());
+                this.enabled.setValue(false);
+            }
         }
-        device.open();
-        device.getTransmitter().setReceiver(new Receiver());
-    }
-
-    public String getName() {
-        return this.device.getDeviceInfo().getName();
     }
 
     public LXMidiInput addListener(LXMidiListener listener) {
@@ -68,15 +66,6 @@ public class LXMidiInput {
 
     public LXMidiInput removeListener(LXMidiListener listener) {
         this.listeners.remove(listener);
-        return this;
-    }
-
-    public boolean isEngineInput() {
-        return this.isEngineInput;
-    }
-
-    LXMidiInput setEngineInput(boolean isEngineInput) {
-        this.isEngineInput = isEngineInput;
         return this;
     }
 
@@ -92,31 +81,35 @@ public class LXMidiInput {
 
         @Override
         public void send(MidiMessage midiMessage, long timeStamp) {
+            if (!enabled.isOn()) {
+                return;
+            }
+
             if (midiMessage instanceof ShortMessage) {
                 ShortMessage sm = (ShortMessage) midiMessage;
                 LXShortMessage message = null;
                 switch (sm.getCommand()) {
                 case ShortMessage.NOTE_ON:
-                    message = new LXMidiNoteOn(sm);
+                    message = new MidiNoteOn(sm);
                     break;
                 case ShortMessage.NOTE_OFF:
-                    message = new LXMidiNoteOff(sm);
+                    message = new MidiNoteOff(sm);
                     break;
                 case ShortMessage.CONTROL_CHANGE:
-                    message = new LXMidiControlChange(sm);
+                    message = new MidiControlChange(sm);
                     break;
                 case ShortMessage.PROGRAM_CHANGE:
-                    message = new LXMidiProgramChange(sm);
+                    message = new MidiProgramChange(sm);
                     break;
                 case ShortMessage.PITCH_BEND:
-                    message = new LXMidiPitchBend(sm);
+                    message = new MidiPitchBend(sm);
                     break;
                 case ShortMessage.CHANNEL_PRESSURE:
-                    message = new LXMidiAftertouch(sm);
+                    message = new MidiAftertouch(sm);
                     break;
                 }
                 if (message != null) {
-                    midiEngine.queueMessage(message.setInput(LXMidiInput.this));
+                    engine.queueInputMessage(message.setInput(LXMidiInput.this));
                 }
             }
         }
@@ -128,11 +121,10 @@ public class LXMidiInput {
      * @param message Midi message
      */
     public void dispatch(LXShortMessage message) {
+        this.engine.dispatch(message);
         for (LXMidiListener listener : this.listeners) {
-            this.midiEngine.dispatch(message, listener);
-        }
-        if (this.isEngineInput) {
-            this.midiEngine.dispatch(message);
+            this.engine.dispatch(message, listener);
         }
     }
+
 }

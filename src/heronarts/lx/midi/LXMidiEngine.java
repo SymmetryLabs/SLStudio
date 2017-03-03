@@ -27,40 +27,80 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+import javax.sound.midi.MidiDevice;
+import javax.sound.midi.MidiSystem;
+import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.ShortMessage;
 
 public class LXMidiEngine {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
 
-    private final List<LXShortMessage> threadSafeEventQueue =
+    private final List<LXShortMessage> threadSafeInputQueue =
         Collections.synchronizedList(new ArrayList<LXShortMessage>());
 
-    private final List<LXShortMessage> engineThreadEventQueue =
+    private final List<LXShortMessage> engineThreadInputQueue =
         new ArrayList<LXShortMessage>();
 
-    final LX lx;
+    private final List<LXMidiInput> inputs = new ArrayList<LXMidiInput>();
+    private final List<LXMidiOutput> outputs = new ArrayList<LXMidiOutput>();
+
+    private final List<LXMidiInput> unmodifiableInputs = Collections.unmodifiableList(this.inputs);
+    private final List<LXMidiOutput> unmodifiableOutputs = Collections.unmodifiableList(this.outputs);
+
+    private final LX lx;
 
     public LXMidiEngine(LX lx) {
         this.lx = lx;
-    }
-
-    public LXMidiEngine addInput(LXMidiInput input) {
-        input.setEngineInput(true);
-        return this;
-    }
-
-    public LXMidiEngine removeInput(LXMidiInput input) {
-        input.setEngineInput(false);
-        return this;
-    }
-
-    public LXMidiEngine addInput(String deviceName) {
-        LXMidiInput input = LXMidiSystem.matchInput(this.lx, deviceName);
-        if (input != null) {
-            addInput(input);
+        for (MidiDevice.Info deviceInfo : MidiSystem.getMidiDeviceInfo()) {
+            try {
+                MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
+                if (device.getMaxTransmitters() != 0) {
+                    this.inputs.add(new LXMidiInput(this, device));
+                }
+                if (device.getMaxReceivers() != 0) {
+                    this.outputs.add(new LXMidiOutput(this, device));
+                }
+            } catch (MidiUnavailableException mux) {
+                mux.printStackTrace();
+            }
         }
-        return this;
+    }
+
+    public List<LXMidiInput> getInputs() {
+        return this.unmodifiableInputs;
+    }
+
+    public List<LXMidiOutput> getOutputs() {
+        return this.unmodifiableOutputs;
+    }
+
+    public LXMidiInput matchInput(String name) {
+        return matchInput(new String[] { name });
+    }
+
+    public LXMidiInput matchInput(String[] names) {
+        return (LXMidiInput) matchDevice(this.inputs, names);
+    }
+
+    public LXMidiOutput matchOutput(String name) {
+        return matchOutput(new String[] { name });
+    }
+
+    public LXMidiOutput matchOutput(String[] names) {
+        return (LXMidiOutput) matchDevice(this.outputs, names);
+    }
+
+    private LXMidiDevice matchDevice(List<? extends LXMidiDevice> devices, String[] names) {
+        for (LXMidiDevice device : devices) {
+            String deviceName = device.getName();
+            for (String name : names) {
+                if (deviceName.contains(name)) {
+                    return device;
+                }
+            }
+        }
+        return null;
     }
 
     public LXMidiEngine addListener(LXMidiListener listener) {
@@ -73,8 +113,8 @@ public class LXMidiEngine {
         return this;
     }
 
-    void queueMessage(LXShortMessage message) {
-        this.threadSafeEventQueue.add(message);
+    void queueInputMessage(LXShortMessage message) {
+        this.threadSafeInputQueue.add(message);
     }
 
     /**
@@ -82,12 +122,12 @@ public class LXMidiEngine {
      * input queue.
      */
     public void dispatch() {
-        this.engineThreadEventQueue.clear();
-        synchronized (this.threadSafeEventQueue) {
-            this.engineThreadEventQueue.addAll(this.threadSafeEventQueue);
-            this.threadSafeEventQueue.clear();
+        this.engineThreadInputQueue.clear();
+        synchronized (this.threadSafeInputQueue) {
+            this.engineThreadInputQueue.addAll(this.threadSafeInputQueue);
+            this.threadSafeInputQueue.clear();
         }
-        for (LXShortMessage message : this.engineThreadEventQueue) {
+        for (LXShortMessage message : this.engineThreadInputQueue) {
             message.getInput().dispatch(message);
         }
     }
@@ -120,7 +160,7 @@ public class LXMidiEngine {
     void dispatch(LXShortMessage message, LXMidiListener listener) {
         switch (message.getCommand()) {
         case ShortMessage.NOTE_ON:
-            LXMidiNoteOn note = (LXMidiNoteOn) message;
+            MidiNoteOn note = (MidiNoteOn) message;
             if (note.getVelocity() == 0) {
                 listener.noteOffReceived(note);
             } else {
@@ -128,19 +168,19 @@ public class LXMidiEngine {
             }
             break;
         case ShortMessage.NOTE_OFF:
-            listener.noteOffReceived((LXMidiNoteOff) message);
+            listener.noteOffReceived((MidiNoteOff) message);
             break;
         case ShortMessage.CONTROL_CHANGE:
-            listener.controlChangeReceived((LXMidiControlChange) message);
+            listener.controlChangeReceived((MidiControlChange) message);
             break;
         case ShortMessage.PROGRAM_CHANGE:
-            listener.programChangeReceived((LXMidiProgramChange) message);
+            listener.programChangeReceived((MidiProgramChange) message);
             break;
         case ShortMessage.PITCH_BEND:
-            listener.pitchBendReceived((LXMidiPitchBend) message);
+            listener.pitchBendReceived((MidiPitchBend) message);
             break;
         case ShortMessage.CHANNEL_PRESSURE:
-            listener.aftertouchReceived((LXMidiAftertouch) message);
+            listener.aftertouchReceived((MidiAftertouch) message);
             break;
         }
     }

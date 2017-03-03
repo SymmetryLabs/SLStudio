@@ -27,17 +27,17 @@ public abstract class LXShortMessage extends ShortMessage {
     public static LXShortMessage fromShortMessage(ShortMessage message) {
         switch (message.getCommand()) {
         case ShortMessage.NOTE_ON:
-            return new LXMidiNoteOn(message);
+            return new MidiNoteOn(message);
         case ShortMessage.NOTE_OFF:
-            return new LXMidiNoteOff(message);
+            return new MidiNoteOff(message);
         case ShortMessage.CONTROL_CHANGE:
-            return new LXMidiControlChange(message);
+            return new MidiControlChange(message);
         case ShortMessage.PROGRAM_CHANGE:
-            return new LXMidiProgramChange(message);
+            return new MidiProgramChange(message);
         case ShortMessage.PITCH_BEND:
-            return new LXMidiPitchBend(message);
+            return new MidiPitchBend(message);
         case ShortMessage.CHANNEL_PRESSURE:
-            return new LXMidiAftertouch(message);
+            return new MidiAftertouch(message);
         }
         throw new IllegalArgumentException("Unsupported LXMidi message command: " + message.getCommand());
     }

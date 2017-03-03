@@ -20,12 +20,17 @@ package heronarts.lx.midi;
 
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiAftertouch extends LXShortMessage {
-    LXMidiAftertouch(ShortMessage message) {
-        super(message, ShortMessage.CHANNEL_PRESSURE);
+public abstract class MidiNote extends LXShortMessage {
+
+    protected MidiNote(ShortMessage message, int command) {
+        super(message, command);
     }
 
-    public int getAftertouch() {
+    public int getPitch() {
         return getData1();
+    }
+
+    public int getVelocity() {
+        return getData2();
     }
 }

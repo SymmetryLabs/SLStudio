@@ -21,27 +21,27 @@ package heronarts.lx.midi;
 public abstract class LXAbstractMidiListener implements LXMidiListener {
 
     @Override
-    public void noteOnReceived(LXMidiNoteOn note) {
+    public void noteOnReceived(MidiNoteOn note) {
     }
 
     @Override
-    public void noteOffReceived(LXMidiNote note) {
+    public void noteOffReceived(MidiNote note) {
     }
 
     @Override
-    public void controlChangeReceived(LXMidiControlChange cc) {
+    public void controlChangeReceived(MidiControlChange cc) {
     }
 
     @Override
-    public void programChangeReceived(LXMidiProgramChange pc) {
+    public void programChangeReceived(MidiProgramChange pc) {
     }
 
     @Override
-    public void pitchBendReceived(LXMidiPitchBend pitchBend) {
+    public void pitchBendReceived(MidiPitchBend pitchBend) {
     }
 
     @Override
-    public void aftertouchReceived(LXMidiAftertouch aftertouch) {
+    public void aftertouchReceived(MidiAftertouch aftertouch) {
     }
 
 }

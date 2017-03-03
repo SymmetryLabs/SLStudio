@@ -20,16 +20,16 @@ package heronarts.lx.midi;
 
 public interface LXMidiListener {
 
-    public void noteOnReceived(LXMidiNoteOn note);
+    public void noteOnReceived(MidiNoteOn note);
 
-    public void noteOffReceived(LXMidiNote note);
+    public void noteOffReceived(MidiNote note);
 
-    public void controlChangeReceived(LXMidiControlChange cc);
+    public void controlChangeReceived(MidiControlChange cc);
 
-    public void programChangeReceived(LXMidiProgramChange pc);
+    public void programChangeReceived(MidiProgramChange pc);
 
-    public void pitchBendReceived(LXMidiPitchBend pitchBend);
+    public void pitchBendReceived(MidiPitchBend pitchBend);
 
-    public void aftertouchReceived(LXMidiAftertouch aftertouch);
+    public void aftertouchReceived(MidiAftertouch aftertouch);
 
 }

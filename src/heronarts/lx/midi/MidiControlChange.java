@@ -20,7 +20,7 @@ package heronarts.lx.midi;
 
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiControlChange extends LXShortMessage {
+public class MidiControlChange extends LXShortMessage {
 
     public final static int BANK_SELECT = 0x00;
     public final static int MOD_WHEEL = 0x01;
@@ -52,7 +52,7 @@ public class LXMidiControlChange extends LXShortMessage {
     public final static int POLY_OFF = 0x7e;
     public final static int POLY_ON = 0x7f;
 
-    LXMidiControlChange(ShortMessage message) {
+    MidiControlChange(ShortMessage message) {
         super(message, ShortMessage.CONTROL_CHANGE);
     }
 

@@ -20,10 +20,10 @@ package heronarts.lx.midi;
 
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiNoteOff extends LXMidiNote {
+public class MidiNoteOn extends MidiNote {
 
-    LXMidiNoteOff(ShortMessage message) {
-        super(message, ShortMessage.NOTE_OFF);
+    MidiNoteOn(ShortMessage message) {
+        super(message, ShortMessage.NOTE_ON);
     }
 
 }

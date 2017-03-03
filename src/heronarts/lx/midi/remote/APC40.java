@@ -16,17 +16,14 @@
  * @author Mark C. Slee <mark@heronarts.com>
  */
 
-package heronarts.lx.midi.device;
+package heronarts.lx.midi.remote;
 
-import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.LXPattern;
-import heronarts.lx.midi.LXMidiDevice;
 import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.midi.LXMidiOutput;
-import heronarts.lx.midi.LXMidiSystem;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -34,7 +31,7 @@ import heronarts.lx.parameter.LXParameterListener;
 /**
  * Note and CC constants for all the APC40 controls
  */
-public class APC40 extends LXMidiDevice {
+public class APC40 extends LXMidiRemote {
 
     // CC numbers
 
@@ -119,23 +116,6 @@ public class APC40 extends LXMidiDevice {
     public final static int NUM_DEVICE_CONTROL_KNOBS = 8;
 
     public final static String DEVICE_NAME = "APC40";
-
-    public static LXMidiInput matchInput(LX lx) {
-        return LXMidiSystem.matchInput(lx, DEVICE_NAME);
-    }
-
-    public static LXMidiOutput matchOutput(LX lx) {
-        return LXMidiSystem.matchOutput(lx, DEVICE_NAME);
-    }
-
-    public static APC40 getAPC40(LX lx) {
-        LXMidiInput input = LXMidiSystem.matchInput(lx, DEVICE_NAME);
-        LXMidiOutput output = LXMidiSystem.matchOutput(lx, DEVICE_NAME);
-        if (input != null) {
-            return new APC40(input, output);
-        }
-        return null;
-    }
 
     public APC40(LXMidiInput input) {
         this(input, null);

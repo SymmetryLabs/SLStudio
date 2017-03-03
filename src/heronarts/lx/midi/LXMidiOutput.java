@@ -18,8 +18,6 @@
 
 package heronarts.lx.midi;
 
-import heronarts.lx.LX;
-
 import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiMessage;
@@ -28,13 +26,13 @@ import javax.sound.midi.Receiver;
 import javax.sound.midi.ShortMessage;
 import javax.sound.midi.SysexMessage;
 
-public class LXMidiOutput implements Receiver {
+public class LXMidiOutput extends LXMidiDevice implements Receiver {
 
-    private final Receiver receiver;
+    private Receiver receiver = null;
+    private boolean isOpen = false;
 
-    public LXMidiOutput(LX lx, MidiDevice device) throws MidiUnavailableException {
-        device.open();
-        this.receiver = device.getReceiver();
+    LXMidiOutput(LXMidiEngine engine, MidiDevice device) {
+        super(engine, device);
     }
 
     @Override
@@ -48,6 +46,9 @@ public class LXMidiOutput implements Receiver {
 
     @Override
     public void send(MidiMessage message, long timeStamp) {
+        if (!this.enabled.isOn()) {
+            throw new UnsupportedOperationException("Cannot send() to an LXMidiOutput that is not enabled");
+        }
         this.receiver.send(message, timeStamp);
     }
 
@@ -85,6 +86,20 @@ public class LXMidiOutput implements Receiver {
 
     public void sendControlChange(int channel, int cc, int value) {
         sendShortMessage(ShortMessage.CONTROL_CHANGE, channel, cc, value);
+    }
+
+    @Override
+    protected void onEnabled(boolean enabled) {
+        if (enabled && !this.isOpen) {
+            try {
+                this.device.open();
+                this.receiver = device.getReceiver();
+                this.isOpen = true;
+            } catch (MidiUnavailableException mux) {
+                System.err.println(mux.getLocalizedMessage());
+                this.enabled.setValue(false);
+            }
+        }
     }
 
 }

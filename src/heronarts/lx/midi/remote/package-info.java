@@ -13,19 +13,16 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  *
- * @author Mark C. Slee <mark@heronarts.com>
+ * ##library.name##
+ * ##library.sentence##
+ * ##library.url##
+ *
+ * @author      ##author##
+ * @modified    ##date##
+ * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.lx.midi;
-
-import javax.sound.midi.ShortMessage;
-
-public class LXMidiPitchBend extends LXShortMessage {
-    LXMidiPitchBend(ShortMessage message) {
-        super(message, ShortMessage.PITCH_BEND);
-    }
-
-    public int getPitchBend() {
-        return (getData1() + (getData2() << 7)) - 0x2000;
-    }
-}
+/**
+ * Pre-built classes for specific MIDI hardware.
+ */
+package heronarts.lx.midi.remote;

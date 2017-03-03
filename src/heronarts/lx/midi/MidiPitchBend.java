@@ -20,12 +20,12 @@ package heronarts.lx.midi;
 
 import javax.sound.midi.ShortMessage;
 
-public class LXMidiProgramChange extends LXShortMessage {
-    LXMidiProgramChange(ShortMessage message) {
-        super(message, ShortMessage.PROGRAM_CHANGE);
+public class MidiPitchBend extends LXShortMessage {
+    MidiPitchBend(ShortMessage message) {
+        super(message, ShortMessage.PITCH_BEND);
     }
 
-    public int getProgram() {
-        return getData1();
+    public int getPitchBend() {
+        return (getData1() + (getData2() << 7)) - 0x2000;
     }
 }

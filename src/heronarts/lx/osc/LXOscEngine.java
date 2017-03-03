@@ -32,13 +32,9 @@ import heronarts.lx.LX;
 
 public class LXOscEngine {
 
-    private final LX lx;
-
     private final List<LXOscListener> listeners = new ArrayList<LXOscListener>();
 
-    public LXOscEngine(LX lx) {
-        this.lx = lx;
-    }
+    public LXOscEngine(LX lx) {}
 
     private final List<Receiver> receivers = new ArrayList<Receiver>();
 
