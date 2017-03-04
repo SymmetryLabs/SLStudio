@@ -18,6 +18,8 @@
 
 package heronarts.lx.parameter;
 
+import heronarts.lx.LXComponent;
+
 /**
  * A FixedParameter is an immutable parameter. It will throw a RuntimeException
  * if setValue() is attempted. Useful for anonymous placeholder values in places
@@ -27,8 +29,33 @@ public class FixedParameter implements LXParameter {
 
     private final double value;
 
+    private LXComponent component;
+    private String path;
+
     public FixedParameter(double value) {
         this.value = value;
+    }
+
+    @Override
+    public LXParameter setComponent(LXComponent component, String path) {
+        this.component = component;
+        this.path = path;
+        return this;
+    }
+
+    @Override
+    public LXComponent getComponent() {
+        return this.component;
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
     @Override

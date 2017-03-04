@@ -81,6 +81,14 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
     }
 
     /**
+     * Gets the label for this pattern
+     */
+    @Override
+    public String getLabel() {
+        return getName();
+    }
+
+    /**
      * Sets the name of the pattern, useful for method chaining
      *
      * @param name Name
@@ -89,6 +97,12 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
     public LXPattern setName(String name) {
         this.name.setValue(name);
         return this;
+    }
+
+    @Override
+    public void dispose() {
+        setChannel(null);
+        super.dispose();
     }
 
     /**

@@ -43,12 +43,12 @@ import com.google.gson.JsonObject;
  */
 public class LXChannel extends LXBus {
 
-    public class Timer extends LXComponent.Timer {
+    public class Timer extends LXLoopComponent.Timer {
         public long blendNanos;
     }
 
     @Override
-    protected LXComponent.Timer constructTimer() {
+    protected LXLoopComponent.Timer constructTimer() {
         return new Timer();
     }
 
@@ -274,6 +274,11 @@ public class LXChannel extends LXBus {
         return this;
     }
 
+    @Override
+    public String getLabel() {
+        return this.name.getString();
+    }
+
     public final int getIndex() {
         return this.index;
     }
@@ -291,7 +296,7 @@ public class LXChannel extends LXBus {
         return null;
     }
 
-    public final LXBus setPatterns(LXPattern[] patterns) {
+    public final LXChannel setPatterns(LXPattern[] patterns) {
         if (this.transition != null) {
             finishTransition();
         } else {
@@ -304,10 +309,10 @@ public class LXChannel extends LXBus {
         return this;
     }
 
-    public final LXBus addPattern(LXPattern pattern) {
+    public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
-        ((LXComponent)pattern).setModel(this.model);
-        ((LXComponent)pattern).setPalette(this.palette);
+        ((LXLoopComponent)pattern).setModel(this.model);
+        ((LXLoopComponent)pattern).setPalette(this.palette);
         this.patterns.add(pattern);
         for (Listener listener : this.listeners) {
             listener.patternAdded(this, pattern);
@@ -315,11 +320,11 @@ public class LXChannel extends LXBus {
         return this;
     }
 
-    public final LXBus removePattern(LXPattern pattern) {
+    public final LXChannel removePattern(LXPattern pattern) {
         return removePattern(pattern, true);
     }
 
-    private final LXBus removePattern(LXPattern pattern, boolean checkLast) {
+    private final LXChannel removePattern(LXPattern pattern, boolean checkLast) {
         if (checkLast && (this.patterns.size() <= 1)) {
             throw new UnsupportedOperationException("LXChannel must have at least one pattern");
         }
@@ -333,9 +338,6 @@ public class LXChannel extends LXBus {
                 finishTransition();
             }
             this.patterns.remove(index);
-            // TODO(mcslee): turn this into pattern.destroy() and remove listeners
-            // for garbage collectability
-            pattern.setChannel(null);
             if (this.activePatternIndex > index) {
                 --this.activePatternIndex;
             } else if (this.activePatternIndex >= this.patterns.size()) {
@@ -360,6 +362,7 @@ public class LXChannel extends LXBus {
                     listener.patternDidChange(this, newActive);
                 }
             }
+            pattern.dispose();
         }
         return this;
     }
@@ -370,6 +373,9 @@ public class LXChannel extends LXBus {
         }
         if (patterns.length == 0) {
             throw new IllegalArgumentException("LXChannel must have at least one pattern");
+        }
+        for (LXPattern pattern : this.patterns) {
+            pattern.dispose();
         }
         this.patterns.clear();
         for (LXPattern pattern : patterns) {
@@ -495,8 +501,6 @@ public class LXChannel extends LXBus {
         if (this.transitionsEnabled.isOn()) {
             this.transition = lx.engine.crossfaderBlends[this.transitionBlendMode.getValuei()];
             nextPattern.onTransitionStart();
-            // TODO(mcslee): don't think we really need this with new threading implementation
-            // this.transitionOld.blend(activePattern.getColors(), nextPattern.getColors(), 0);
             this.transitionMillis = this.lx.engine.nowMillis;
         } else {
             finishTransition();

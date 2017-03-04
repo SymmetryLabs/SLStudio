@@ -21,6 +21,8 @@ package heronarts.lx.parameter;
 import java.util.HashSet;
 import java.util.Set;
 
+import heronarts.lx.LXComponent;
+
 /**
  * This is a parameter instance that can be listened to, meaning we are able to
  * deterministically know when the value has changed. This means that all
@@ -33,6 +35,9 @@ public abstract class LXListenableParameter implements LXParameter {
     private double defaultValue, value;
 
     private final Set<LXParameterListener> listeners = new HashSet<LXParameterListener>();
+
+    private LXComponent component;
+    private String path;
 
     protected LXListenableParameter() {
         this(null, 0);
@@ -61,6 +66,28 @@ public abstract class LXListenableParameter implements LXParameter {
     public final LXListenableParameter removeListener(LXParameterListener listener) {
         listeners.remove(listener);
         return this;
+    }
+
+    @Override
+    public LXParameter setComponent(LXComponent component, String path) {
+        this.component = component;
+        this.path = path;
+        return this;
+    }
+
+    @Override
+    public LXComponent getComponent() {
+        return this.component;
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
+    }
+
+    @Override
+    public void dispose() {
+
     }
 
     public LXParameter reset() {

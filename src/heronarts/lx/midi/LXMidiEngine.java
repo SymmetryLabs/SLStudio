@@ -237,11 +237,7 @@ public class LXMidiEngine implements LXSerializable {
         }
 
         // Bada-boom, add it!
-        LXMidiMapping mapping = LXMidiMapping.create(message, parameter);
-        this.mappings.add(mapping);
-        for (MappingListener mappingListener : this.mappingListeners) {
-            mappingListener.mappingAdded(this, mapping);
-        }
+        addMapping(LXMidiMapping.create(message, parameter));
     }
 
     private boolean applyMapping(LXShortMessage message) {
@@ -253,6 +249,14 @@ public class LXMidiEngine implements LXSerializable {
             }
         }
         return applied;
+    }
+
+    private LXMidiEngine addMapping(LXMidiMapping mapping) {
+        this.mappings.add(mapping);
+        for (MappingListener mappingListener : this.mappingListeners) {
+            mappingListener.mappingAdded(this, mapping);
+        }
+        return this;
     }
 
     /**
@@ -288,15 +292,8 @@ public class LXMidiEngine implements LXSerializable {
                 if (nextPattern != null) {
                     dispatch(message, nextPattern);
                 }
-                // TODO(mcslee): no sending midi to effects right now, they should be mapped...
-                // for (LXEffect effect : channel.getEffects()) {
-                //   dispatch(message, effect);
-                // }
             }
         }
-        // TODO(mcslee): send MIDI to the master FX bus? should effects really
-        // monitor all MIDI input, or just patterns? with a richer MIDI mapping
-        // implementation effects could just get control...
     }
 
     void dispatch(LXShortMessage message, LXMidiListener listener) {
@@ -328,10 +325,12 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     private static final String KEY_INPUTS = "inputs";
+    private static final String KEY_MAPPINGS = "mapping";
+
+    private final List<String> rememberMidiInputs = new ArrayList<String>();
 
     @Override
     public void save(JsonObject object) {
-        // TODO(mcslee): preserve active inputs from the load file that weren't found
         waitUntilReady();
         JsonArray inputs = new JsonArray();
         for (LXMidiInput input : this.inputs) {
@@ -339,22 +338,46 @@ public class LXMidiEngine implements LXSerializable {
                 inputs.add(input.getName());
             }
         }
+        for (String remembered : this.rememberMidiInputs) {
+            inputs.add(remembered);
+        }
+        JsonArray mappings = new JsonArray();
+        for (LXMidiMapping mapping : this.mappings) {
+            JsonObject mappingObj = new JsonObject();
+            mapping.save(mappingObj);
+            mappings.add(mappingObj);
+        }
+
         object.add(KEY_INPUTS, inputs);
+        object.add(KEY_MAPPINGS, mappings);
     }
 
     @Override
     public void load(final JsonObject object) {
+        this.rememberMidiInputs.clear();
+        this.mappings.clear();
+        if (object.has(KEY_MAPPINGS)) {
+            JsonArray mappings = object.getAsJsonArray(KEY_MAPPINGS);
+            for (JsonElement element : mappings) {
+                addMapping(LXMidiMapping.create(element.getAsJsonObject()));
+            }
+        }
         whenReady(new Runnable() {
             public void run() {
                 if (object.has(KEY_INPUTS)) {
                     JsonArray inputNames = object.getAsJsonArray(KEY_INPUTS);
                     if (inputNames.size() > 0) {
-                        for (LXMidiInput input : inputs) {
-                            String inputName = input.getName();
-                            for (JsonElement element : inputNames) {
-                                if (inputName.equals(element.getAsString())) {
+                        for (JsonElement element : inputNames) {
+                            String inputName = element.getAsString();
+                            boolean found = false;
+                            for (LXMidiInput input : inputs) {
+                                if (inputName.equals(input.getName())) {
+                                    found = true;
                                     input.enabled.setValue(true);
                                 }
+                            }
+                            if (!found) {
+                                rememberMidiInputs.add(inputName);
                             }
                         }
                     }

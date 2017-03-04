@@ -18,12 +18,42 @@
 
 package heronarts.lx.parameter;
 
+import heronarts.lx.LXComponent;
+
 /**
  * This class provides a common interface for system components to have
  * parameters that can modify their operation. Any LXComponent can have
  * parameters, such as a pattern, effect, or transition.
  */
 public interface LXParameter {
+
+    /**
+     * Gets the component to which this parameter is registered.
+     *
+     * @return Component this parameter belongs to, may be null
+     */
+    public LXComponent getComponent();
+
+    /**
+     * Gets the path that this parameter is registered to in the component
+     *
+     * @return Component parameter path
+     */
+    public String getPath();
+
+    /**
+     * Sets the component that owns this parameter
+     *
+     * @param component Component
+     * @return this
+     */
+    public LXParameter setComponent(LXComponent component, String path);
+
+    /**
+     * Invoked when the parameter is done being used and none of its resources
+     * are needed anymore.
+     */
+    public void dispose();
 
     /**
      * A method to reset the value of the parameter, if a default is available.
@@ -40,6 +70,7 @@ public interface LXParameter {
      * @return this
      */
     public LXParameter setValue(double value);
+
 
     /**
      * Retrieves the value of the parameter

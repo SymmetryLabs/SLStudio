@@ -21,9 +21,8 @@ package heronarts.lx;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXParameterized;
 
-public abstract class LXRunnable extends LXParameterized implements LXLoopTask {
+public abstract class LXRunnable extends LXComponent implements LXLoopTask {
 
     /**
      * Whether this modulator is currently running.

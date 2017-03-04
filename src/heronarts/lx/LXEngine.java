@@ -37,7 +37,6 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXParameterized;
 import heronarts.lx.pattern.SolidColorPattern;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -70,7 +69,7 @@ import com.google.gson.JsonObject;
  *
  * The result of all this generates a display buffer of node values.
  */
-public class LXEngine extends LXParameterized {
+public class LXEngine extends LXComponent {
 
     private final LX lx;
 
@@ -188,8 +187,8 @@ public class LXEngine extends LXParameterized {
     long nowMillis = System.currentTimeMillis();
 
     LXEngine(LX lx) {
-        this.lx = lx;
         LX.initTimer.log("Engine: Init");
+        this.lx = lx;
 
         // Background and blending buffers
         this.background = new ModelBuffer(lx);
@@ -281,6 +280,11 @@ public class LXEngine extends LXParameterized {
         addParameter(this.focusedChannel);
         addParameter(this.cueLeft);
         addParameter(this.cueRight);
+    }
+
+    @Override
+    public String getLabel() {
+        return "LXEngine";
     }
 
     public LXEngine setInputDispatch(Dispatch inputDispatch) {
@@ -436,7 +440,7 @@ public class LXEngine extends LXParameterized {
      * @param component
      * @return
      */
-    public LXEngine addComponent(LXComponent component) {
+    public LXEngine addComponent(LXLoopComponent component) {
         return addLoopTask(component);
     }
 
@@ -446,7 +450,7 @@ public class LXEngine extends LXParameterized {
      * @param component
      * @return
      */
-    public LXEngine removeComponent(LXComponent component) {
+    public LXEngine removeComponent(LXLoopComponent component) {
         return removeLoopTask(component);
     }
 
@@ -566,8 +570,6 @@ public class LXEngine extends LXParameterized {
             throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
         }
         if (this.channels.remove(channel)) {
-            // TODO(mcslee): call channel.dispose() which should remove all listeners to the
-            // channel and its parameters, so it can be garbage collected...
             int i = 0;
             for (LXChannel c : this.channels) {
                 c.setIndex(i++);
@@ -584,6 +586,8 @@ public class LXEngine extends LXParameterized {
             for (Listener listener : this.listeners) {
                 listener.channelRemoved(this, channel);
             }
+
+            channel.dispose();
         }
     }
 
@@ -913,7 +917,7 @@ public class LXEngine extends LXParameterized {
     @Override
     public void load(JsonObject obj) {
         // TODO(mcslee): remove loop tasks that other things might have added? maybe
-        // need to separate engine loop tasks from application-added ones...
+        // need to separate engine-owned loop tasks from application-added ones...
 
         // Remove all channels
         for (int i = this.channels.size() - 1; i >= 0; --i) {

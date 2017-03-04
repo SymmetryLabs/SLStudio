@@ -228,8 +228,8 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
         }
     }
 
-    public LXAutomationRecorder(LXEngine engine) {
-        this.engine = engine;
+    public LXAutomationRecorder(LX lx) {
+        this.engine = lx.engine;
         registerEngine();
         for (LXChannel channel : engine.getChannels()) {
             registerChannel(channel);
@@ -239,6 +239,11 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
         }
         engine.midi.addListener(this);
         engine.addMessageListener(this);
+    }
+
+    @Override
+    public String getLabel() {
+        return "Automation";
     }
 
     private LXAutomationRecorder registerEngine() {

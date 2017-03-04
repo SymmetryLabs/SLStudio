@@ -30,7 +30,7 @@ import java.util.List;
  * attributes, such as parameters, modulators, and layers. For instance,
  * patterns, transitions, and effects are all LXComponents.
  */
-public abstract class LXLayeredComponent extends LXComponent implements LXLoopTask {
+public abstract class LXLayeredComponent extends LXLoopComponent implements LXLoopTask {
 
     protected final LX lx;
 

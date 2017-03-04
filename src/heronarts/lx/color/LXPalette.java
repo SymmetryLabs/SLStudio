@@ -19,7 +19,7 @@
 package heronarts.lx.color;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXComponent;
+import heronarts.lx.LXLoopComponent;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.DampedParameter;
@@ -37,7 +37,7 @@ import heronarts.lx.parameter.LXParameter;
  * of color computation. Though its use is not required, it is very useful for
  * creating coherent color schemes across patterns.
  */
-public class LXPalette extends LXComponent {
+public class LXPalette extends LXLoopComponent {
 
     public enum Mode {
         FIXED,
@@ -119,6 +119,11 @@ public class LXPalette extends LXComponent {
         addModulator(this.hueFixed).start();
         addModulator(this.hueCycle);
         addModulator(this.hueOscillate);
+    }
+
+    @Override
+    public String getLabel() {
+        return "Palette";
     }
 
     private void computeMults(LXModel model) {

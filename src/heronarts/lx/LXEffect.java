@@ -112,6 +112,16 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
     }
 
     /**
+     * Gets the component label
+     *
+     *  @return label
+     */
+    @Override
+    public String getLabel() {
+        return getName();
+    }
+
+    /**
      * Sets the name of the effect, useful for method chaining
      *
      * @param name Name

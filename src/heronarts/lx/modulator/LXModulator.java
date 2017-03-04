@@ -18,6 +18,7 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXRunnable;
 import heronarts.lx.parameter.LXParameter;
 
@@ -34,6 +35,10 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
     private double value = 0;
 
     private final String label;
+
+    private LXComponent component;
+
+    private String path;
 
     /**
      * Quick helper to get half of PI.
@@ -54,10 +59,27 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
         this.label = label;
     }
 
+    @Override
+    public LXParameter setComponent(LXComponent component, String path) {
+        this.component = component;
+        this.path = path;
+        return this;
+    }
+
+    @Override
+    public LXComponent getComponent() {
+        return this.component;
+    }
+
+    @Override
+    public String getPath() {
+        return this.path;
+    }
+
+    @Override
     public final String getLabel() {
         return this.label;
     }
-
 
         /**
      * Retrieves the current value of the modulator in full precision

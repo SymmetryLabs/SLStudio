@@ -26,4 +26,9 @@ public class LXMasterChannel extends LXBus {
     LXMasterChannel(LX lx) {
         super(lx);
     }
+
+    @Override
+    public String getLabel() {
+        return "Master";
+    }
 }

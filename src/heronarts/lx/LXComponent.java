@@ -18,120 +18,162 @@
 
 package heronarts.lx;
 
-import java.util.ArrayList;
-import java.util.Collections;
+import java.util.Collection;
+import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
-import heronarts.lx.color.LXPalette;
-import heronarts.lx.model.LXModel;
-import heronarts.lx.modulator.LXModulator;
-import heronarts.lx.parameter.LXParameterized;
+import heronarts.lx.color.ColorParameter;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXListenableParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.StringParameter;
 
-public class LXComponent extends LXParameterized implements LXLoopTask {
+/**
+ * Utility base class for objects that have parameters.
+ */
+public abstract class LXComponent implements LXParameterListener, LXSerializable {
 
-    private final List<LXModulator> modulators = new ArrayList<LXModulator>();
-    private final List<LXModulator> unmodifiableModulators = Collections.unmodifiableList(this.modulators);
+    public static final int ID_ENGINE = 1;
+    private static int idCounter = 2;
+    private final static Map<Integer, LXComponent> registry = new HashMap<Integer, LXComponent>();
 
-    protected LXModel model;
+    private int id;
 
-    protected LXPalette palette;
-
-    public class Timer {
-        public long loopNanos;
+    protected LXComponent() {
+        this.id = idCounter++;
     }
 
-    protected Timer constructTimer() {
-        return new Timer();
+    public static LXComponent getById(int id) {
+        return registry.get(id);
     }
 
-    public final Timer timer = constructTimer();
-
-    protected LXComponent(LX lx) {
-        this.model = lx.model;
-        this.palette = lx.palette;
-    }
-
-    public LXModel getModel() {
-        return this.model;
-    }
-
-    public LXComponent setModel(LXModel model) {
-        if (model == null) {
-            throw new IllegalArgumentException("May not set null model");
+    public final LXComponent setId(int id) {
+        registry.remove(this.id);
+        if (registry.containsKey(id)) {
+            throw new IllegalArgumentException("Component id already in use: " + id);
         }
-        if (this.model != model) {
-            this.model = model;
-            onModelChanged(model);
+        registry.put(id, this);
+        this.id = id;
+        return this;
+    }
+
+    public final int getId() {
+        return this.id;
+    }
+
+    public abstract String getLabel();
+
+    public void dispose() {
+        // TODO(mcslee): we need a handle to lx here, got to notify
+        // the midi engine that this component is done for...
+        for (LXParameter parameter : this.parameters.values()) {
+            parameter.dispose();
+        }
+        this.parameters.clear();
+        registry.remove(this.id);
+    }
+
+    protected final Map<String, LXParameter> parameters = new LinkedHashMap<String, LXParameter>();
+
+    public final LXComponent addParameter(LXParameter parameter) {
+        return addParameter(parameter.getLabel(), parameter);
+    }
+
+    public final LXComponent addParameter(String path, LXParameter parameter) {
+        LXComponent component = parameter.getComponent();
+        if (component != null) {
+            throw new IllegalArgumentException("Parameter " + parameter + " already owned by " + component);
+        }
+        if (this.parameters.containsKey(path)) {
+            throw new IllegalArgumentException("Cannot add parameter at existing path: " + path);
+        }
+        parameter.setComponent(this, path);
+        this.parameters.put(path, parameter);
+        if (parameter instanceof LXListenableParameter) {
+            ((LXListenableParameter) parameter).addListener(this);
         }
         return this;
     }
 
-    /**
-     * Subclasses should override to handle changes to which model
-     * they are addressing.
-     *
-     * @param model New model
-     */
-    protected void onModelChanged(LXModel model) {}
-
-    public LXPalette getPalette() {
-        return this.palette;
-    }
-
-    public LXComponent setPalette(LXPalette palette) {
-        if (palette == null) {
-            throw new IllegalArgumentException("May not set null palette");
-        }
-        if (this.palette != palette) {
-            this.palette = palette;
-            onPaletteChanged(palette);
+    public final LXComponent addParameters(List<LXParameter> parameters) {
+        for (LXParameter parameter : parameters) {
+            addParameter(parameter);
         }
         return this;
     }
 
+    public final Collection<LXParameter> getParameters() {
+        return this.parameters.values();
+    }
+
+    public final LXParameter getParameter(String path) {
+        return this.parameters.get(path);
+    }
 
     /**
-     * Subclasses should override to handle changes to which palette
-     * they are using.
-     *
-     * @param palette New palette
+     * Subclasses are free to override this, but in case they don't care a default
+     * implementation is provided.
      */
-    protected void onPaletteChanged(LXPalette palette) {}
-
-    protected final LXModulator addModulator(LXModulator modulator) {
-        if (!this.modulators.contains(modulator)) {
-            this.modulators.add(modulator);
-        }
-        return modulator;
+    public/* abstract */void onParameterChanged(LXParameter parameter) {
     }
 
-    protected final LXModulator startModulator(LXModulator modulator) {
-        addModulator(modulator).start();
-        return modulator;
-    }
-
-    protected final LXModulator removeModulator(LXModulator modulator) {
-        this.modulators.remove(modulator);
-        return modulator;
-    }
-
-    public final List<LXModulator> getModulators() {
-        return this.unmodifiableModulators;
-    }
-
-    @Override
-    public void loop(double deltaMs) {
-        for (LXModulator modulator : this.modulators) {
-            modulator.loop(deltaMs);
-        }
-    }
+    private final static String KEY_ID = "id";
+    private final static String KEY_PARAMETERS = "parameters";
 
     @Override
     public void save(JsonObject obj) {
-        obj.addProperty("class", getClass().getName());
-        super.save(obj);
+        JsonObject parameters = new JsonObject();
+        for (String path : this.parameters.keySet()) {
+            LXParameter parameter = this.parameters.get(path);
+            if (parameter instanceof StringParameter) {
+                parameters.addProperty(path, ((StringParameter) parameter).getString());
+            } else if (parameter instanceof BooleanParameter) {
+                parameters.addProperty(path, ((BooleanParameter) parameter).isOn());
+            } else if (parameter instanceof DiscreteParameter) {
+                parameters.addProperty(path, ((DiscreteParameter) parameter).getValuei());
+            } else if (parameter instanceof ColorParameter) {
+                parameters.addProperty(path, ((ColorParameter) parameter).getColor());
+            } else {
+                parameters.addProperty(path, parameter.getValue());
+            }
+        }
+        obj.addProperty(KEY_ID, this.id);
+        obj.add(KEY_PARAMETERS, parameters);
+    }
+
+    @Override
+    public void load(JsonObject obj) {
+        if (obj.has(KEY_ID)) {
+            setId(obj.get(KEY_ID).getAsInt());
+        }
+        if (obj.has(KEY_PARAMETERS)) {
+            JsonObject parameters = obj.getAsJsonObject(KEY_PARAMETERS);
+            for (String path : this.parameters.keySet()) {
+                if (parameters.has(path)) {
+                    JsonElement value = parameters.get(path);
+                    LXParameter parameter = this.parameters.get(path);
+                    if (parameter instanceof StringParameter) {
+                        ((StringParameter)parameter).setValue(value.getAsString());
+                    } else if (parameter instanceof BooleanParameter) {
+                        ((BooleanParameter)parameter).setValue(value.getAsBoolean());
+                    } else if (parameter instanceof DiscreteParameter) {
+                        parameter.setValue(value.getAsInt());
+                    } else if (parameter instanceof ColorParameter) {
+                        ((ColorParameter)parameter).setColor(value.getAsInt());
+                    } else {
+                        parameter.setValue(value.getAsDouble());
+                    }
+                }
+            }
+        }
+
     }
 
 }

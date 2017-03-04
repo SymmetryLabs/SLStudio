@@ -18,12 +18,16 @@
 
 package heronarts.lx.midi;
 
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LXComponent;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public abstract class LXMidiMapping {
+public abstract class LXMidiMapping implements LXSerializable {
 
     public enum Type {
         NOTE,
@@ -42,6 +46,14 @@ public abstract class LXMidiMapping {
         this.parameter = parameter;
     }
 
+    protected LXMidiMapping(JsonObject object, Type type) {
+        this.channel = object.get(KEY_CHANNEL).getAsInt();
+        this.type = type;
+        int componentId = object.get(KEY_COMPONENT_ID).getAsInt();
+        String parameterPath = object.get(KEY_PARAMETER_PATH).getAsString();
+        this.parameter = LXComponent.getById(componentId).getParameter(parameterPath);
+    }
+
     static boolean isValidMessageType(LXShortMessage message) {
         return (message instanceof MidiNote) || (message instanceof MidiControlChange);
     }
@@ -55,6 +67,14 @@ public abstract class LXMidiMapping {
         throw new IllegalArgumentException("Not a valid message type for a MIDI mapping: " + message);
     }
 
+    static LXMidiMapping create(JsonObject object) {
+        Type type = Type.valueOf(object.get(KEY_TYPE).getAsString());
+        switch (type) {
+        case NOTE: return new Note(object);
+        case CONTROL_CHANGE: return new ControlChange(object);
+        }
+        throw new IllegalArgumentException("Not a valid MidiMapping type: " + object);
+    }
 
     abstract boolean matches(LXShortMessage message);
     abstract void apply(LXShortMessage message);
@@ -90,6 +110,24 @@ public abstract class LXMidiMapping {
         }
     }
 
+    private static final String KEY_CHANNEL = "channel";
+    private static final String KEY_TYPE = "type";
+    private static final String KEY_COMPONENT_ID = "componentId";
+    private static final String KEY_PARAMETER_PATH = "parameterPath";
+
+    @Override
+    public void save(JsonObject object) {
+        object.addProperty(KEY_CHANNEL, this.channel);
+        object.addProperty(KEY_TYPE, this.type.toString());
+        object.addProperty(KEY_COMPONENT_ID, this.parameter.getComponent().getId());
+        object.addProperty(KEY_PARAMETER_PATH, this.parameter.getPath());
+    }
+
+    @Override
+    public void load(JsonObject object) {
+        throw new UnsupportedOperationException("Use LXMidiMapping.create() to load from JsonObject");
+    }
+
     public static class Note extends LXMidiMapping {
 
         public final BooleanParameter momentary = new BooleanParameter("Momentary", false);
@@ -99,6 +137,14 @@ public abstract class LXMidiMapping {
         private Note(MidiNote note, LXParameter parameter) {
             super(note.getChannel(), Type.NOTE, parameter);
             this.pitch = note.getPitch();
+        }
+
+        private Note(JsonObject object) {
+            super(object, Type.NOTE);
+            this.pitch = object.get(KEY_PITCH).getAsInt();
+            if (object.has(KEY_MOMENTARY)) {
+                this.momentary.setValue(object.get(KEY_MOMENTARY).getAsBoolean());
+            }
         }
 
         @Override
@@ -132,7 +178,17 @@ public abstract class LXMidiMapping {
 
         @Override
         public String getDescription() {
-            return "Note " + MidiNote.getPitchString(this.pitch);
+            return MidiNote.getPitchString(this.pitch);
+        }
+
+        private static final String KEY_PITCH = "pitch";
+        private static final String KEY_MOMENTARY = "momentary";
+
+        @Override
+        public void save(JsonObject object) {
+            super.save(object);
+            object.addProperty(KEY_PITCH, this.pitch);
+            object.addProperty(KEY_MOMENTARY, this.momentary.isOn());
         }
     }
 
@@ -143,6 +199,11 @@ public abstract class LXMidiMapping {
         private ControlChange(MidiControlChange controlChange, LXParameter parameter) {
             super(controlChange.getChannel(), Type.CONTROL_CHANGE, parameter);
             this.cc = controlChange.getCC();
+        }
+
+        private ControlChange(JsonObject object) {
+            super(object, Type.CONTROL_CHANGE);
+            this.cc = object.get(KEY_CC).getAsInt();
         }
 
         @Override
@@ -164,7 +225,15 @@ public abstract class LXMidiMapping {
 
         @Override
         public String getDescription() {
-            return "CC " + this.cc;
+            return "CC" + this.cc;
+        }
+
+        private static final String KEY_CC = "cc";
+
+        @Override
+        public void save(JsonObject object) {
+            super.save(object);
+            object.addProperty(KEY_CC, this.cc);
         }
     }
 

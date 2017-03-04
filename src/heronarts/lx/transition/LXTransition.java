@@ -87,6 +87,11 @@ public abstract class LXTransition extends LXBufferedComponent {
         this.ease = Ease.NONE;
     }
 
+    @Override
+    public String getLabel() {
+        return getClass().getSimpleName();
+    }
+
     public final LXTransition setMode(Mode mode) {
         this.mode = mode;
         return this;

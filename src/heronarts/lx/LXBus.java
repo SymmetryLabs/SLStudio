@@ -32,7 +32,7 @@ import com.google.gson.JsonObject;
  * Abstract representation of a channel, which could be a normal channel with patterns
  * or the master channel.
  */
-public abstract class LXBus extends LXComponent {
+public abstract class LXBus extends LXLoopComponent {
 
     /**
      * Listener interface for objects which want to be notified when the internal
@@ -103,6 +103,7 @@ public abstract class LXBus extends LXComponent {
             for (Listener listener : this.listeners) {
                 listener.effectRemoved(this, effect);
             }
+            effect.dispose();
         }
         return this;
     }

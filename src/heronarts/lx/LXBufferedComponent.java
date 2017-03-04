@@ -22,7 +22,7 @@ package heronarts.lx;
  * A component which owns a buffer with its own view of the model. The typical
  * example of this is LXPattern.
  */
-public class LXBufferedComponent extends LXLayeredComponent {
+public abstract class LXBufferedComponent extends LXLayeredComponent {
 
     protected LXBufferedComponent(LX lx) {
         super(lx, new ModelBuffer(lx));

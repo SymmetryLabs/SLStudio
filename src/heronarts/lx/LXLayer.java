@@ -35,6 +35,11 @@ public abstract class LXLayer extends LXLayeredComponent {
     }
 
     @Override
+    public String getLabel() {
+        return "Layer";
+    }
+
+    @Override
     protected final void onLoop(double deltaMs) {
         run(deltaMs);
     }
