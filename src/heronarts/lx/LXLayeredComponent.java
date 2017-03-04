@@ -19,6 +19,7 @@
 package heronarts.lx;
 
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
@@ -30,7 +31,7 @@ import java.util.List;
  * attributes, such as parameters, modulators, and layers. For instance,
  * patterns, transitions, and effects are all LXComponents.
  */
-public abstract class LXLayeredComponent extends LXLoopComponent implements LXLoopTask {
+public abstract class LXLayeredComponent extends LXModelComponent implements LXLoopTask {
 
     protected final LX lx;
 
@@ -39,6 +40,8 @@ public abstract class LXLayeredComponent extends LXLoopComponent implements LXLo
     protected int[] colors = null;
 
     protected final List<LXLayer> layers = new ArrayList<LXLayer>();
+
+    protected final LXPalette palette;
 
     protected LXLayeredComponent(LX lx) {
         this(lx, (LXBuffer) null);
@@ -51,6 +54,7 @@ public abstract class LXLayeredComponent extends LXLoopComponent implements LXLo
     protected LXLayeredComponent(LX lx, LXBuffer buffer) {
         super(lx);
         this.lx = lx;
+        this.palette = lx.palette;
         if (buffer != null) {
             this.buffer = buffer;
             this.colors = buffer.getArray();
@@ -88,7 +92,6 @@ public abstract class LXLayeredComponent extends LXLoopComponent implements LXLo
 
             // TODO(mcslee): is this best here or should it be in addLayer?
             layer.setModel(this.model);
-            layer.setPalette(this.palette);
 
             layer.loop(deltaMs);
         }

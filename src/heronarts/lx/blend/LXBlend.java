@@ -20,7 +20,7 @@ package heronarts.lx.blend;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXBuffer;
-import heronarts.lx.LXLoopComponent;
+import heronarts.lx.LXRunnableComponent;
 
 /**
  * An LXBlend is a loop-based implementation of a compositing algorithm.
@@ -29,7 +29,7 @@ import heronarts.lx.LXLoopComponent;
  * modes may be authored, taking into account position information from
  * the model, for instance.
  */
-public abstract class LXBlend extends LXLoopComponent {
+public abstract class LXBlend extends LXRunnableComponent {
 
     protected static final int ALPHA_SHIFT = 24;
     protected static final int R_SHIFT = 16;

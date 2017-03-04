@@ -36,11 +36,6 @@ import heronarts.lx.transition.LXTransition;
 public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener {
 
     /**
-     * Reference to the channel this pattern belongs to.
-     */
-    private LXChannel channel = null;
-
-    /**
      * Transition used when this pattern becomes active.
      */
     protected LXTransition transition = null;
@@ -99,12 +94,6 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
         return this;
     }
 
-    @Override
-    public void dispose() {
-        setChannel(null);
-        super.dispose();
-    }
-
     /**
      * Gets the channel that this pattern is loaded in. May be null if the pattern is
      * not yet loaded onto any channel.
@@ -112,7 +101,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * @return Channel pattern is loaded onto
      */
     public final LXChannel getChannel() {
-        return this.channel;
+        return (LXChannel) getParent();
     }
 
     /**
@@ -123,10 +112,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * @return this
      */
     final LXPattern setChannel(LXChannel channel) {
-        if ((channel != null) && (this.channel != null)) {
-            throw new UnsupportedOperationException("LXPattern instance can only be added to one LXChannel at a time.");
-        }
-        this.channel = channel;
+        setParent(this);
         return this;
     }
 

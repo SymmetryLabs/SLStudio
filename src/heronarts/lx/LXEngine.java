@@ -95,20 +95,20 @@ public class LXEngine extends LXComponent {
 
     private final List<LXChannel> unmodifiableChannels = Collections.unmodifiableList(this.channels);
 
-    public final DiscreteParameter focusedChannel = new DiscreteParameter("CHANNEL", 1);
+    public final DiscreteParameter focusedChannel = new DiscreteParameter("Channel", 1);
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
 
     LXBlend[] channelBlends;
     private final AddBlend addBlend;
 
-    public final BoundedParameter crossfader = new BoundedParameter("CROSSFADE", 0.5);
+    public final BoundedParameter crossfader = new BoundedParameter("Crossfader", 0.5);
     final LXBlend[] crossfaderBlends;
     public final DiscreteParameter crossfaderBlendMode;
 
-    public final BooleanParameter cueLeft = new BooleanParameter("CUE-L", false);
-    public final BooleanParameter cueRight = new BooleanParameter("CUE-R", false);
-    public final BoundedParameter speed = new BoundedParameter("SPEED", 1, 0, 2);
+    public final BooleanParameter cueLeft = new BooleanParameter("Cue-L", false);
+    public final BooleanParameter cueRight = new BooleanParameter("Cue-R", false);
+    public final BoundedParameter speed = new BoundedParameter("Speed", 1, 0, 2);
 
     private float frameRate = 0;
 
@@ -272,8 +272,10 @@ public class LXEngine extends LXComponent {
         this.osc = new LXOscEngine(lx);
         LX.initTimer.log("Engine: Osc");
 
-        // Default color palette
+        // Default palette, should we run this manually?
         addComponent(lx.palette);
+
+        // Parameters
         addParameter(this.crossfader);
         addParameter(this.crossfaderBlendMode);
         addParameter(this.speed);
@@ -440,18 +442,9 @@ public class LXEngine extends LXComponent {
      * @param component
      * @return
      */
-    public LXEngine addComponent(LXLoopComponent component) {
+    private LXEngine addComponent(LXRunnableComponent component) {
+        component.setParent(this);
         return addLoopTask(component);
-    }
-
-    /**
-     * Removes a generic component from the engine
-     *
-     * @param component
-     * @return
-     */
-    public LXEngine removeComponent(LXLoopComponent component) {
-        return removeLoopTask(component);
     }
 
     /**
@@ -460,7 +453,7 @@ public class LXEngine extends LXComponent {
      * @param modulator
      * @return
      */
-    public LXEngine addModulator(LXModulator modulator) {
+    LXEngine addModulator(LXModulator modulator) {
         return addLoopTask(modulator);
     }
 
@@ -469,7 +462,7 @@ public class LXEngine extends LXComponent {
      * @param modulator
      * @return
      */
-    public LXEngine removeModulator(LXModulator modulator) {
+    LXEngine removeModulator(LXModulator modulator) {
         return removeLoopTask(modulator);
     }
 
@@ -490,10 +483,11 @@ public class LXEngine extends LXComponent {
      * @param loopTask
      * @return
      */
-    public LXEngine addLoopTask(LXLoopTask loopTask) {
-        if (!this.loopTasks.contains(loopTask)) {
-            this.loopTasks.add(loopTask);
+    private LXEngine addLoopTask(LXLoopTask loopTask) {
+        if (this.loopTasks.contains(loopTask)) {
+            throw new IllegalStateException("Cannot add task to engine twice: " + loopTask);
         }
+        this.loopTasks.add(loopTask);
         return this;
     }
 
@@ -503,7 +497,7 @@ public class LXEngine extends LXComponent {
      * @param loopTask
      * @return
      */
-    public LXEngine removeLoopTask(LXLoopTask loopTask) {
+    private LXEngine removeLoopTask(LXLoopTask loopTask) {
         this.loopTasks.remove(loopTask);
         return this;
     }

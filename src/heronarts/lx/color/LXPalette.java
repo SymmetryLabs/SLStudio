@@ -19,7 +19,7 @@
 package heronarts.lx.color;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXLoopComponent;
+import heronarts.lx.LXModelComponent;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.DampedParameter;
@@ -37,7 +37,7 @@ import heronarts.lx.parameter.LXParameter;
  * of color computation. Though its use is not required, it is very useful for
  * creating coherent color schemes across patterns.
  */
-public class LXPalette extends LXLoopComponent {
+public class LXPalette extends LXModelComponent {
 
     public enum Mode {
         FIXED,
@@ -74,7 +74,7 @@ public class LXPalette extends LXLoopComponent {
 
     public final BooleanParameter mirror = new BooleanParameter("Mirror", true);
 
-    private final DampedParameter hueFixed = new DampedParameter(color.hue, 1800);
+    private final DampedParameter hueFixed = new DampedParameter(this.color.hue, 1800);
 
     private final SawLFO hueCycle = new SawLFO(0, 360, period);
 

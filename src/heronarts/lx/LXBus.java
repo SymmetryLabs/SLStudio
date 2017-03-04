@@ -18,7 +18,6 @@
 
 package heronarts.lx;
 
-import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.LXModel;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -32,7 +31,7 @@ import com.google.gson.JsonObject;
  * Abstract representation of a channel, which could be a normal channel with patterns
  * or the master channel.
  */
-public abstract class LXBus extends LXLoopComponent {
+public abstract class LXBus extends LXModelComponent {
 
     /**
      * Listener interface for objects which want to be notified when the internal
@@ -67,13 +66,6 @@ public abstract class LXBus extends LXLoopComponent {
         }
     }
 
-    @Override
-    protected void onPaletteChanged(LXPalette palette) {
-        for (LXEffect effect : this.effects) {
-            effect.setPalette(palette);
-        }
-    }
-
     public final void addListener(Listener listener) {
         this.listeners.add(listener);
     }
@@ -84,6 +76,7 @@ public abstract class LXBus extends LXLoopComponent {
 
     public final LXBus addEffect(LXEffect effect) {
         this.effects.add(effect);
+        effect.setBus(this);
         effect.setIndex(this.effects.size() - 1);
         for (Listener listener : this.listeners) {
             listener.effectAdded(this, effect);

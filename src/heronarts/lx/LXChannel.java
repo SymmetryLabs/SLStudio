@@ -19,7 +19,6 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
-import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -43,12 +42,12 @@ import com.google.gson.JsonObject;
  */
 public class LXChannel extends LXBus {
 
-    public class Timer extends LXLoopComponent.Timer {
+    public class Timer extends LXRunnableComponent.Timer {
         public long blendNanos;
     }
 
     @Override
-    protected LXLoopComponent.Timer constructTimer() {
+    protected LXRunnableComponent.Timer constructTimer() {
         return new Timer();
     }
 
@@ -246,14 +245,6 @@ public class LXChannel extends LXBus {
         }
     }
 
-    @Override
-    protected void onPaletteChanged(LXPalette palette) {
-        super.onPaletteChanged(palette);
-        for (LXPattern pattern : this.patterns) {
-            pattern.setPalette(palette);
-        }
-    }
-
     public final void addListener(Listener listener) {
         super.addListener(listener);
         this.listeners.add(listener);
@@ -311,8 +302,7 @@ public class LXChannel extends LXBus {
 
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
-        ((LXLoopComponent)pattern).setModel(this.model);
-        ((LXLoopComponent)pattern).setPalette(this.palette);
+        pattern.setModel(this.model);
         this.patterns.add(pattern);
         for (Listener listener : this.listeners) {
             listener.patternAdded(this, pattern);

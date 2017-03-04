@@ -44,6 +44,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     private static int idCounter = 2;
     private final static Map<Integer, LXComponent> registry = new HashMap<Integer, LXComponent>();
 
+    private LXComponent parent;
+
     private int id;
 
     protected LXComponent() {
@@ -54,7 +56,19 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         return registry.get(id);
     }
 
-    public final LXComponent setId(int id) {
+    final LXComponent setParent(LXComponent parent) {
+        if (this.parent != null) {
+            throw new IllegalStateException("Component already has parent set");
+        }
+        this.parent = parent;
+        return this;
+    }
+
+    public final LXComponent getParent() {
+        return this.parent;
+    }
+
+    final LXComponent setId(int id) {
         registry.remove(this.id);
         if (registry.containsKey(id)) {
             throw new IllegalArgumentException("Component id already in use: " + id);
@@ -68,6 +82,14 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         return this.id;
     }
 
+    public String getCanonicalPath() {
+        String path = getLabel();
+        if (this.parent != null) {
+            return this.parent.getCanonicalPath() + " | " + path;
+        }
+        return path;
+    }
+
     public abstract String getLabel();
 
     public void dispose() {
@@ -77,6 +99,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             parameter.dispose();
         }
         this.parameters.clear();
+        this.parent = null;
         registry.remove(this.id);
     }
 

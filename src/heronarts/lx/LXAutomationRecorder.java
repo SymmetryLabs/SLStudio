@@ -46,6 +46,7 @@ import com.google.gson.JsonObject;
  * An automation recorder contains meta-data about all the controls on the
  * patterns and effects in the system, which can be recorded or played back.
  */
+@Deprecated
 public class LXAutomationRecorder extends LXRunnable implements LXEngine.MessageListener, LXMidiListener {
 
     private final static String EVENT_PATTERN = "PATTERN";

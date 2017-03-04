@@ -102,6 +102,15 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
         return this.index;
     }
 
+    public LXEffect setBus(LXBus bus) {
+        setParent(bus);
+        return this;
+    }
+
+    public LXBus getBus() {
+        return (LXBus) getParent();
+    }
+
     /**
      * Gets the name of the effect
      *

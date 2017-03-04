@@ -50,13 +50,15 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
      */
     public static final double TWO_PI = Math.PI * 2.;
 
+    private static int idCounter = 1;
+
     /**
      * Utility default constructor
      *
      * @param label Label
      */
     protected LXModulator(String label) {
-        this.label = label;
+        this.label = (label == null) ? (getClass().getSimpleName()+"-"+idCounter++) : label;
     }
 
     @Override

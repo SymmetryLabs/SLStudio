@@ -98,7 +98,7 @@ public class Accelerator extends LXModulator {
      * Sets both the velocity and acceleration of the modulator. Updates the
      * default values so that a future call to trigger() will reset to this
      * velocity.
-     * 
+     *
      * @param initVelocity New velocity
      * @param acceleration Acceleration
      * @return this
@@ -111,7 +111,7 @@ public class Accelerator extends LXModulator {
 
     /**
      * Updates the velocity. Does not reset the default.
-     * 
+     *
      * @param velocity New velocity
      * @return this
      */
@@ -126,7 +126,7 @@ public class Accelerator extends LXModulator {
 
     /**
      * Updates the acceleration.
-     * 
+     *
      * @param acceleration New acceleration
      * @return this
      */
