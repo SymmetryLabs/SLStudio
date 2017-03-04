@@ -20,6 +20,7 @@ package heronarts.lx.midi;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXSerializable;
@@ -27,6 +28,7 @@ import heronarts.lx.parameter.LXParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import javax.sound.midi.MidiDevice;
@@ -269,6 +271,27 @@ public class LXMidiEngine implements LXSerializable {
         this.mappings.remove(mapping);
         for (MappingListener mappingListener : this.mappingListeners) {
             mappingListener.mappingRemoved(this, mapping);
+        }
+        return this;
+    }
+
+    /**
+     * Called when a component is disposed. Remove any midi mappings
+     * pointing to the now-nonexistent component.
+     *
+     * @param component
+     * @return
+     */
+    public LXMidiEngine removeMappings(LXComponent component) {
+        Iterator<LXMidiMapping> iterator = this.mappings.iterator();
+        while (iterator.hasNext()) {
+            LXMidiMapping mapping = iterator.next();
+            if (mapping.parameter.getComponent() == component) {
+                iterator.remove();
+                for (MappingListener mappingListener : this.mappingListeners) {
+                    mappingListener.mappingRemoved(this, mapping);
+                }
+            }
         }
         return this;
     }

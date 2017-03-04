@@ -39,7 +39,9 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
 
     public final Timer timer = constructTimer();
 
-    protected LXRunnableComponent(LX lx) {}
+    protected LXRunnableComponent(LX lx) {
+        super(lx);
+    }
 
     protected final LXModulator addModulator(LXModulator modulator) {
         return addModulator(modulator.getLabel(), modulator);
@@ -70,6 +72,15 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
         this.modulators.remove(modulator);
         modulator.dispose();
         return modulator;
+    }
+
+    @Override
+    public void dispose() {
+        for (LXModulator modulator : this.modulators.values()) {
+            modulator.dispose();
+        }
+        this.modulators.clear();
+        super.dispose();
     }
 
     public final LXModulator getModulator(String path) {

@@ -40,6 +40,8 @@ import heronarts.lx.parameter.StringParameter;
  */
 public abstract class LXComponent implements LXParameterListener, LXSerializable {
 
+    private LX lx;
+
     public static final int ID_ENGINE = 1;
     private static int idCounter = 2;
     private final static Map<Integer, LXComponent> registry = new HashMap<Integer, LXComponent>();
@@ -49,7 +51,12 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     private int id;
 
     protected LXComponent() {
+        this(null);
+    }
+
+    protected LXComponent(LX lx) {
         this.id = idCounter++;
+        this.lx = lx;
     }
 
     public static LXComponent getById(int id) {
@@ -58,8 +65,15 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     final LXComponent setParent(LXComponent parent) {
         if (this.parent != null) {
-            throw new IllegalStateException("Component already has parent set");
+            throw new IllegalStateException("Component already has parent set: " + this + " " + parent);
         }
+        if (parent == null) {
+            throw new IllegalArgumentException("Cannot set null parent on component: " + this);
+        }
+        if (parent.lx == null) {
+            throw new IllegalStateException("Cannot set component parent with no lx instance: " + this + " " + parent);
+        }
+        this.lx = parent.lx;
         this.parent = parent;
         return this;
     }
@@ -84,7 +98,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     public String getCanonicalPath() {
         String path = getLabel();
-        if (this.parent != null) {
+        if (this.parent != null && this.parent != this.lx.engine) {
             return this.parent.getCanonicalPath() + " | " + path;
         }
         return path;
@@ -93,8 +107,10 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     public abstract String getLabel();
 
     public void dispose() {
-        // TODO(mcslee): we need a handle to lx here, got to notify
-        // the midi engine that this component is done for...
+        if (this.lx == null) {
+            throw new IllegalStateException("LXComponent never had lx reference set: " + this);
+        }
+        this.lx.engine.midi.removeMappings(this);
         for (LXParameter parameter : this.parameters.values()) {
             parameter.dispose();
         }

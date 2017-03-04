@@ -187,6 +187,7 @@ public class LXEngine extends LXComponent {
     long nowMillis = System.currentTimeMillis();
 
     LXEngine(LX lx) {
+        super(lx);
         LX.initTimer.log("Engine: Init");
         this.lx = lx;
 
@@ -286,7 +287,7 @@ public class LXEngine extends LXComponent {
 
     @Override
     public String getLabel() {
-        return "LXEngine";
+        return "Engine";
     }
 
     public LXEngine setInputDispatch(Dispatch inputDispatch) {
@@ -547,6 +548,7 @@ public class LXEngine extends LXComponent {
 
     public LXChannel addChannel(LXPattern[] patterns) {
         LXChannel channel = new LXChannel(lx, this.channels.size(), patterns);
+        channel.setParent(this);
         this.channels.add(channel);
         this.focusedChannel.setRange(this.channels.size() + 1);
         for (Listener listener : this.listeners) {
