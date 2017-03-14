@@ -25,6 +25,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
+import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.studio.UIPatternControl;
 import processing.core.PGraphics;
@@ -53,7 +54,7 @@ public class SolidColorPattern extends heronarts.lx.pattern.SolidColorPattern im
         container.setContentWidth(xp - SLIDER_MARGIN);
     }
 
-    private class Slider extends UI2dComponent implements UIFocus {
+    private abstract class Slider extends UI2dComponent implements UIFocus, UIControlTarget {
 
         private final BoundedParameter parameter;
 
@@ -99,6 +100,11 @@ public class SolidColorPattern extends heronarts.lx.pattern.SolidColorPattern im
             pg.stroke(0xffe9e9e9);
             float y = LXUtils.constrainf(this.height-1 - this.parameter.getNormalizedf() * (this.height-1), 1, this.height-2);
             pg.line(0, y, this.width-1, y);
+        }
+
+        @Override
+        public LXParameter getControlTarget() {
+            return this.parameter;
         }
     }
 

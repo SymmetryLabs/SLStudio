@@ -68,7 +68,7 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
         this.content = new UI2dContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, h - CONTENT_Y - PADDING) {
             @Override
             public void onResize() {
-                UI2dCollapsibleSection.this.setHeight(expandedHeight = CONTENT_Y + this.height + PADDING);
+                UI2dCollapsibleSection.this.setHeight(expandedHeight = (this.height == 0 ? CLOSED_HEIGHT : CONTENT_Y + this.height + PADDING));
             }
         };
         this.content.setVisible(this.expanded);
