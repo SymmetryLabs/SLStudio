@@ -26,9 +26,7 @@ import heronarts.lx.audio.FrequencyGate;
 import heronarts.lx.audio.GraphicEQ;
 
 // TODO(mcslee): make this an LXComponent that the engine runs
-public class LXAudio {
-
-    private final LX lx;
+public class LXAudio extends LXRunnableComponent {
 
     /**
      * Callback for Minim implementation
@@ -53,7 +51,7 @@ public class LXAudio {
     public final static int DEFAULT_SAMPLE_RATE = 44100;
 
     LXAudio(LX lx) {
-        this.lx = lx;
+        super(lx);
     }
 
     /**
@@ -102,14 +100,13 @@ public class LXAudio {
             eq.release.setValue(250);
             eq.range.setValue(14);
             eq.gain.setValue(16);
+            startModulator(eq);
 
             this.beatDetect = new FrequencyGate("BEAT", eq).setBands(1, 4);
             this.beatDetect.floor.setValue(0.9);
             this.beatDetect.threshold.setValue(0.75);
             this.beatDetect.release.setValue(480);
-
-            this.lx.engine.addModulator(eq).start();
-            this.lx.engine.addModulator(this.beatDetect).start();
+            startModulator(this.beatDetect);
         }
         return this.beatDetect;
     }
@@ -129,7 +126,8 @@ public class LXAudio {
         return null;
     }
 
-    void dispose() {
+    @Override
+    public void dispose() {
         if (this.audioInput != null) {
             this.audioInput.close();
             this.audioInput = null;
@@ -138,6 +136,12 @@ public class LXAudio {
             this.minim.stop();
             this.minim = null;
         }
+        super.dispose();
+    }
+
+    @Override
+    public String getLabel() {
+        return "Audio";
     }
 
 }

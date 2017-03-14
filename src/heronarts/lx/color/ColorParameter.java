@@ -1,5 +1,6 @@
 package heronarts.lx.color;
 
+import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -22,13 +23,22 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
     public ColorParameter(String label, int color) {
         super(label, Double.longBitsToDouble(color));
         double h = LXColor.h(color);
-        this.hue = new BoundedParameter(label+"-Hue", Double.isNaN(h) ? 0 : h, 0, 359);
-        this.saturation = new BoundedParameter(label+"-Saturation", LXColor.s(color), 0, 100);
-        this.brightness = new BoundedParameter(label+"-Brightness", LXColor.b(color), 0, 100);
+        this.hue = new BoundedParameter(label+"-H", Double.isNaN(h) ? 0 : h, 0, 359);
+        this.saturation = new BoundedParameter(label+"-S", LXColor.s(color), 0, 100);
+        this.brightness = new BoundedParameter(label+"-B", LXColor.b(color), 0, 100);
         this.hue.addListener(this);
         this.saturation.addListener(this);
         this.brightness.addListener(this);
         this.color = color;
+    }
+
+    @Override
+    public LXParameter setComponent(LXComponent component, String path) {
+        super.setComponent(component, path);
+        component.addParameter(path + "/hue", this.hue);
+        component.addParameter(path + "/brightness", this.brightness);
+        component.addParameter(path + "/saturation", this.saturation);
+        return this;
     }
 
     public int getColor() {

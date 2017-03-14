@@ -29,7 +29,6 @@ import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiEngine;
-import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
@@ -187,7 +186,7 @@ public class LXEngine extends LXComponent {
     long nowMillis = System.currentTimeMillis();
 
     LXEngine(LX lx) {
-        super(lx);
+        super(lx, LXComponent.ID_ENGINE);
         LX.initTimer.log("Engine: Init");
         this.lx = lx;
 
@@ -209,10 +208,6 @@ public class LXEngine extends LXComponent {
         }
         LX.initTimer.log("Engine: Buffers");
 
-        // Master channel
-        this.masterChannel = new LXMasterChannel(lx);
-        LX.initTimer.log("Engine: Master Channel");
-
         // Channel blend modes
         this.channelBlends = new LXBlend[] {
             this.addBlend = new AddBlend(lx),
@@ -232,6 +227,10 @@ public class LXEngine extends LXComponent {
         };
         this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.crossfaderBlends);
         LX.initTimer.log("Engine: Blends");
+
+        // Master channel
+        this.masterChannel = new LXMasterChannel(lx);
+        LX.initTimer.log("Engine: Master Channel");
 
         // Cue setup
         this.cueLeft.addListener(new LXParameterListener() {
@@ -272,9 +271,6 @@ public class LXEngine extends LXComponent {
         // OSC engine
         this.osc = new LXOscEngine(lx);
         LX.initTimer.log("Engine: Osc");
-
-        // Default palette, should we run this manually?
-        addComponent(lx.palette);
 
         // Parameters
         addParameter(this.crossfader);
@@ -438,36 +434,6 @@ public class LXEngine extends LXComponent {
     }
 
     /**
-     * Adds a generic component to the engine, run every loop
-     *
-     * @param component
-     * @return
-     */
-    private LXEngine addComponent(LXRunnableComponent component) {
-        component.setParent(this);
-        return addLoopTask(component);
-    }
-
-    /**
-     * Adds a modulator to the core engine loop
-     *
-     * @param modulator
-     * @return
-     */
-    LXEngine addModulator(LXModulator modulator) {
-        return addLoopTask(modulator);
-    }
-
-    /**
-     * Removes a modulator from the core engine loop
-     * @param modulator
-     * @return
-     */
-    LXEngine removeModulator(LXModulator modulator) {
-        return removeLoopTask(modulator);
-    }
-
-    /**
      * Add a task to be run once on the engine thread.
      *
      * @param runnable Task to run
@@ -484,7 +450,7 @@ public class LXEngine extends LXComponent {
      * @param loopTask
      * @return
      */
-    private LXEngine addLoopTask(LXLoopTask loopTask) {
+    public LXEngine addLoopTask(LXLoopTask loopTask) {
         if (this.loopTasks.contains(loopTask)) {
             throw new IllegalStateException("Cannot add task to engine twice: " + loopTask);
         }
@@ -498,7 +464,7 @@ public class LXEngine extends LXComponent {
      * @param loopTask
      * @return
      */
-    private LXEngine removeLoopTask(LXLoopTask loopTask) {
+    public LXEngine removeLoopTask(LXLoopTask loopTask) {
         this.loopTasks.remove(loopTask);
         return this;
     }
@@ -687,6 +653,12 @@ public class LXEngine extends LXComponent {
         // Run tempo, always using real-time
         this.lx.tempo.loop(deltaMs);
 
+        // Mutate by master speed for everything else
+        deltaMs *= this.speed.getValue();
+
+        this.lx.palette.loop(deltaMs);
+        this.lx.audio.loop(deltaMs);
+
         // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {
             loopTask.loop(deltaMs);
@@ -703,9 +675,6 @@ public class LXEngine extends LXComponent {
                 runnable.run();
             }
         }
-
-        // Mutate by speed for channels and effects
-        deltaMs *= this.speed.getValue();
 
         // Run and blend all of our channels
         long channelStart = System.nanoTime();

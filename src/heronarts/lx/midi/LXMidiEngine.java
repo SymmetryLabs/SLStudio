@@ -239,7 +239,7 @@ public class LXMidiEngine implements LXSerializable {
         }
 
         // Bada-boom, add it!
-        addMapping(LXMidiMapping.create(message, parameter));
+        addMapping(LXMidiMapping.create(this.lx, message, parameter));
     }
 
     private boolean applyMapping(LXShortMessage message) {
@@ -382,7 +382,7 @@ public class LXMidiEngine implements LXSerializable {
         if (object.has(KEY_MAPPINGS)) {
             JsonArray mappings = object.getAsJsonArray(KEY_MAPPINGS);
             for (JsonElement element : mappings) {
-                addMapping(LXMidiMapping.create(element.getAsJsonObject()));
+                addMapping(LXMidiMapping.create(this.lx, element.getAsJsonObject()));
             }
         }
         whenReady(new Runnable() {

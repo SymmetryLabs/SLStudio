@@ -592,6 +592,15 @@ public class LXChannel extends LXBus {
         return this.colors;
     }
 
+    @Override
+    public void dispose() {
+        for (LXPattern pattern : this.patterns) {
+            pattern.dispose();
+        }
+        this.patterns.clear();
+        super.dispose();
+    }
+
     private static final String KEY_PATTERNS = "patterns";
     private static final String KEY_PATTERN_INDEX = "patternIndex";
 

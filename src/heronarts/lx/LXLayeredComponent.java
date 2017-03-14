@@ -24,6 +24,7 @@ import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -39,7 +40,8 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
 
     protected int[] colors = null;
 
-    protected final List<LXLayer> layers = new ArrayList<LXLayer>();
+    private final List<LXLayer> internalLayers = new ArrayList<LXLayer>();
+    protected final List<LXLayer> layers = Collections.unmodifiableList(internalLayers);
 
     protected final LXPalette palette;
 
@@ -87,7 +89,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
 
         super.loop(deltaMs);
         onLoop(deltaMs);
-        for (LXLayer layer : this.layers) {
+        for (LXLayer layer : this.internalLayers) {
             layer.setBuffer(this.buffer);
 
             // TODO(mcslee): is this best here or should it be in addLayer?
@@ -105,17 +107,31 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected /* abstract */ void afterLayers(double deltaMs) {}
 
     protected final LXLayer addLayer(LXLayer layer) {
-        this.layers.add(layer);
+        if (this.internalLayers.contains(layer)) {
+            throw new IllegalStateException("Cannot add same layer twice: " + this + " " + layer);
+        }
+        layer.setParent(this);
+        this.internalLayers.add(layer);
         return layer;
     }
 
     protected final LXLayer removeLayer(LXLayer layer) {
-        this.layers.remove(layer);
+        this.internalLayers.remove(layer);
+        layer.dispose();
         return layer;
     }
 
     public final List<LXLayer> getLayers() {
         return this.layers;
+    }
+
+    @Override
+    public void dispose() {
+        for (LXLayer layer : this.internalLayers) {
+            layer.dispose();
+        }
+        this.internalLayers.clear();
+        super.dispose();
     }
 
     /**

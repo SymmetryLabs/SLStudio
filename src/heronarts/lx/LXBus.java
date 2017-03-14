@@ -128,6 +128,15 @@ public abstract class LXBus extends LXModelComponent {
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
+    @Override
+    public void dispose() {
+        for (LXEffect effect : this.effects) {
+            effect.dispose();
+        }
+        this.effects.clear();
+        super.dispose();
+    }
+
     private static final String KEY_EFFECTS = "effects";
 
     @Override

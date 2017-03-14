@@ -20,7 +20,7 @@ package heronarts.lx.midi;
 
 import com.google.gson.JsonObject;
 
-import heronarts.lx.LXComponent;
+import heronarts.lx.LX;
 import heronarts.lx.LXSerializable;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -40,38 +40,42 @@ public abstract class LXMidiMapping implements LXSerializable {
 
     public final LXParameter parameter;
 
-    protected LXMidiMapping(int channel, Type type, LXParameter parameter) {
+    protected LXMidiMapping(LX lx, int channel, Type type, LXParameter parameter) {
+        if (parameter.getComponent() == null) {
+            throw new IllegalStateException("Cannot map parameter with no component: " + parameter);
+        }
         this.channel = channel;
         this.type = type;
         this.parameter = parameter;
     }
 
-    protected LXMidiMapping(JsonObject object, Type type) {
-        this.channel = object.get(KEY_CHANNEL).getAsInt();
-        this.type = type;
-        int componentId = object.get(KEY_COMPONENT_ID).getAsInt();
-        String parameterPath = object.get(KEY_PARAMETER_PATH).getAsString();
-        this.parameter = LXComponent.getById(componentId).getParameter(parameterPath);
+    protected LXMidiMapping(LX lx, JsonObject object, Type type) {
+        this(
+            lx,
+            object.get(KEY_CHANNEL).getAsInt(),
+            type,
+            lx.getComponent(object.get(KEY_COMPONENT_ID).getAsInt()).getParameter(object.get(KEY_PARAMETER_PATH).getAsString())
+        );
     }
 
     static boolean isValidMessageType(LXShortMessage message) {
         return (message instanceof MidiNote) || (message instanceof MidiControlChange);
     }
 
-    static LXMidiMapping create(LXShortMessage message, LXParameter parameter) {
+    static LXMidiMapping create(LX lx, LXShortMessage message, LXParameter parameter) {
         if (message instanceof MidiNote) {
-            return new Note((MidiNote) message, parameter);
+            return new Note(lx, (MidiNote) message, parameter);
         } else if (message instanceof MidiControlChange) {
-            return new ControlChange((MidiControlChange) message, parameter);
+            return new ControlChange(lx, (MidiControlChange) message, parameter);
         }
         throw new IllegalArgumentException("Not a valid message type for a MIDI mapping: " + message);
     }
 
-    static LXMidiMapping create(JsonObject object) {
+    static LXMidiMapping create(LX lx, JsonObject object) {
         Type type = Type.valueOf(object.get(KEY_TYPE).getAsString());
         switch (type) {
-        case NOTE: return new Note(object);
-        case CONTROL_CHANGE: return new ControlChange(object);
+        case NOTE: return new Note(lx, object);
+        case CONTROL_CHANGE: return new ControlChange(lx, object);
         }
         throw new IllegalArgumentException("Not a valid MidiMapping type: " + object);
     }
@@ -134,13 +138,13 @@ public abstract class LXMidiMapping implements LXSerializable {
 
         public final int pitch;
 
-        private Note(MidiNote note, LXParameter parameter) {
-            super(note.getChannel(), Type.NOTE, parameter);
+        private Note(LX lx, MidiNote note, LXParameter parameter) {
+            super(lx, note.getChannel(), Type.NOTE, parameter);
             this.pitch = note.getPitch();
         }
 
-        private Note(JsonObject object) {
-            super(object, Type.NOTE);
+        private Note(LX lx, JsonObject object) {
+            super(lx, object, Type.NOTE);
             this.pitch = object.get(KEY_PITCH).getAsInt();
             if (object.has(KEY_MOMENTARY)) {
                 this.momentary.setValue(object.get(KEY_MOMENTARY).getAsBoolean());
@@ -196,13 +200,13 @@ public abstract class LXMidiMapping implements LXSerializable {
 
         public final int cc;
 
-        private ControlChange(MidiControlChange controlChange, LXParameter parameter) {
-            super(controlChange.getChannel(), Type.CONTROL_CHANGE, parameter);
+        private ControlChange(LX lx, MidiControlChange controlChange, LXParameter parameter) {
+            super(lx, controlChange.getChannel(), Type.CONTROL_CHANGE, parameter);
             this.cc = controlChange.getCC();
         }
 
-        private ControlChange(JsonObject object) {
-            super(object, Type.CONTROL_CHANGE);
+        private ControlChange(LX lx, JsonObject object) {
+            super(lx, object, Type.CONTROL_CHANGE);
             this.cc = object.get(KEY_CC).getAsInt();
         }
 

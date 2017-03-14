@@ -163,7 +163,7 @@ public class LifePattern extends LXPattern {
                 break;
             }
             this.colors[i] = LXColor.hsb(
-                    (this.lx.getBaseHue() + lx.row(i) * 2. + Math.abs(lx.column(i)
+                    (palette.getHue() + lx.row(i) * 2. + Math.abs(lx.column(i)
                             - this.hCenter.getValue()) * 0.4) % 360,
                     Math.min(
                             100,

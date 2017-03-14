@@ -38,6 +38,12 @@ public class FixedParameter implements LXParameter {
 
     @Override
     public LXParameter setComponent(LXComponent component, String path) {
+        if (component == null || path == null) {
+            throw new IllegalArgumentException("May not set null component or path");
+        }
+        if (this.component != null || this.path != null) {
+            throw new IllegalStateException("Component already set on this modulator: " + this);
+        }
         this.component = component;
         this.path = path;
         return this;

@@ -40,7 +40,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      */
     protected LXTransition transition = null;
 
-    public final StringParameter name;
+    public final StringParameter name = new StringParameter("Name");
 
     private int intervalBegin = -1;
 
@@ -61,7 +61,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
         if (simple.endsWith("Pattern")) {
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
-        this.name = new StringParameter("Name", simple);
+        this.name.setValue(simple);
 
         addParameter("__name", this.name);
     }
@@ -112,7 +112,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * @return this
      */
     final LXPattern setChannel(LXChannel channel) {
-        setParent(this);
+        setParent(channel);
         return this;
     }
 

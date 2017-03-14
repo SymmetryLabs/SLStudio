@@ -42,25 +42,74 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     private LX lx;
 
-    public static final int ID_ENGINE = 1;
-    private static int idCounter = 2;
-    private final static Map<Integer, LXComponent> registry = new HashMap<Integer, LXComponent>();
+    private static final int ID_UNASSIGNED = -1;
+    static final int ID_ENGINE = 1;
+
+    static class Registry {
+        private int idCounter = ID_ENGINE+1;
+        private final Map<Integer, LXComponent> components = new HashMap<Integer, LXComponent>();
+
+        LXComponent get(int id) {
+            return this.components.get(id);
+        }
+
+        void register(LXComponent component) {
+            if (component.id == ID_UNASSIGNED) {
+                component.id = this.idCounter++;
+            } else if (component.id <= 0) {
+                throw new IllegalStateException("Component has bunk ID: " + component.id + " " + component);
+            }
+            this.components.put(component.id, component);
+        }
+
+        void setId(LXComponent component, int id) {
+            if (id <= 0) {
+                throw new IllegalArgumentException("Cannot setId to non-positive value: " + id + " " + component);
+            }
+            if (component.id > 0) {
+                this.components.remove(component.id);
+            }
+            if (this.components.containsKey(id)) {
+                throw new IllegalArgumentException("Component id already in use: " + id);
+            }
+            component.id = id;
+            this.components.put(id, component);
+            if (this.idCounter <= id) {
+                this.idCounter = id+1;
+            }
+        }
+
+        void dispose(LXComponent component) {
+            this.components.remove(component.id);
+        }
+
+        void dump() {
+            String stuff = "{\n";
+            for (LXComponent component : this.components.values()) {
+                stuff += "  " + component.id + ": " + component.toString() + "\n";
+            }
+            System.err.println(stuff + "}");
+        }
+    }
 
     private LXComponent parent;
 
     private int id;
 
     protected LXComponent() {
-        this(null);
+        this(null, ID_UNASSIGNED);
     }
 
     protected LXComponent(LX lx) {
-        this.id = idCounter++;
-        this.lx = lx;
+        this(lx, ID_UNASSIGNED);
     }
 
-    public static LXComponent getById(int id) {
-        return registry.get(id);
+    protected LXComponent(LX lx, int id) {
+        this.lx = lx;
+        this.id = id;
+        if (lx != null) {
+            lx.componentRegistry.register(this);
+        }
     }
 
     final LXComponent setParent(LXComponent parent) {
@@ -73,8 +122,12 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (parent.lx == null) {
             throw new IllegalStateException("Cannot set component parent with no lx instance: " + this + " " + parent);
         }
+        if (parent == this) {
+            throw new IllegalStateException("Component cannot be its own parent: " + parent);
+        }
         this.lx = parent.lx;
         this.parent = parent;
+        this.lx.componentRegistry.register(this);
         return this;
     }
 
@@ -83,12 +136,10 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     }
 
     final LXComponent setId(int id) {
-        registry.remove(this.id);
-        if (registry.containsKey(id)) {
-            throw new IllegalArgumentException("Component id already in use: " + id);
+        if (this.lx == null) {
+            throw new IllegalStateException("Cannot setId() on component before it has LX instance");
         }
-        registry.put(id, this);
-        this.id = id;
+        this.lx.componentRegistry.setId(this, id);
         return this;
     }
 
@@ -106,6 +157,11 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     public abstract String getLabel();
 
+    @Override
+    public String toString() {
+        return getClass().getSimpleName() + "[" + getCanonicalPath() + "]";
+    }
+
     public void dispose() {
         if (this.lx == null) {
             throw new IllegalStateException("LXComponent never had lx reference set: " + this);
@@ -116,7 +172,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         }
         this.parameters.clear();
         this.parent = null;
-        registry.remove(this.id);
+        this.lx.componentRegistry.dispose(this);
     }
 
     protected final Map<String, LXParameter> parameters = new LinkedHashMap<String, LXParameter>();
@@ -126,12 +182,12 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     }
 
     public final LXComponent addParameter(String path, LXParameter parameter) {
+        if (this.parameters.containsKey(path)) {
+            throw new IllegalStateException("Cannot add parameter at existing path: " + path);
+        }
         LXComponent component = parameter.getComponent();
         if (component != null) {
-            throw new IllegalArgumentException("Parameter " + parameter + " already owned by " + component);
-        }
-        if (this.parameters.containsKey(path)) {
-            throw new IllegalArgumentException("Cannot add parameter at existing path: " + path);
+            throw new IllegalStateException("Parameter " + parameter + " already owned by " + component);
         }
         parameter.setComponent(this, path);
         this.parameters.put(path, parameter);

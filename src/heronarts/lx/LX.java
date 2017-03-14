@@ -22,12 +22,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.modulator.LXModulator;
-import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.modulator.SawLFO;
-import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.output.LXOutput;
-import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.pattern.IteratorTestPattern;
 import java.io.File;
 import java.io.FileReader;
@@ -105,7 +100,9 @@ public class LX {
         public void projectChanged(File file);
     }
 
-    private final List<ProjectListener> projecListeners = new ArrayList<ProjectListener>();
+    private final List<ProjectListener> projectListeners = new ArrayList<ProjectListener>();
+
+    final LXComponent.Registry componentRegistry = new LXComponent.Registry();
 
     /**
      * The width of the grid, immutable.
@@ -170,13 +167,6 @@ public class LX {
         new ArrayList<Class<LXEffect>>();
 
     /**
-     * Global modulator for shared base hue.
-     */
-    private LXParameter baseHue;
-
-    private boolean baseHueIsInternalModulator = false;
-
-    /**
      * Creates an LX instance with no nodes.
      */
     public LX() {
@@ -237,20 +227,18 @@ public class LX {
         this.engine = new LXEngine(this);
         LX.initTimer.log("Engine");
 
+        // Tempo
+        this.tempo = new Tempo(this);
+        LX.initTimer.log("Tempo");
+
+        // Audio
+        this.audio = new LXAudio(this);
+        LX.initTimer.log("Audio");
+
         // Add a default channel
         this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).fader.setValue(1);
         LX.initTimer.log("Default Channel");
 
-        // Base Hue (deprecated)
-        this.baseHue = null;
-        this.cycleBaseHue(30000);
-        LX.initTimer.log("Base Hue");
-
-        this.tempo = new Tempo(this);
-        LX.initTimer.log("Tempo");
-
-        this.audio = new LXAudio(this);
-        LX.initTimer.log("Audio");
     }
 
     public LX addListener(Listener listener) {
@@ -264,13 +252,17 @@ public class LX {
     }
 
     public LX addProjectListener(ProjectListener listener) {
-        this.projecListeners.add(listener);
+        this.projectListeners.add(listener);
         return this;
     }
 
     public LX removeProjectListener(ProjectListener listener) {
-        this.projecListeners.remove(listener);
+        this.projectListeners.remove(listener);
         return this;
+    }
+
+    public LXComponent getComponent(int id) {
+        return this.componentRegistry.get(id);
     }
 
     /**
@@ -507,95 +499,6 @@ public class LX {
     }
 
     /**
-     * Returns the base hue shared across patterns
-     *
-     * @return Base hue value shared by all patterns
-     */
-    public double getBaseHue() {
-        if (this.baseHue == null) {
-            return 0;
-        }
-        return (this.baseHue.getValue() + 360) % 360;
-    }
-
-    /**
-     * Gets the base hue as a float
-     *
-     * @return The global base hue
-     */
-    public float getBaseHuef() {
-        return (float) this.getBaseHue();
-    }
-
-    private void clearBaseHue() {
-        if (this.baseHueIsInternalModulator) {
-            this.engine.removeModulator((LXModulator) this.baseHue);
-            this.baseHueIsInternalModulator = false;
-        }
-    }
-
-    @Deprecated
-    private LXModulator internalBaseHue(LXModulator modulator) {
-        clearBaseHue();
-        this.engine.addModulator(modulator);
-        this.baseHue = modulator;
-        this.baseHueIsInternalModulator = true;
-        return modulator;
-    }
-
-    /**
-     * Sets the base hue to be a parameter
-     *
-     * @param parameter Parameter to control base hue
-     * @return this
-     */
-    @Deprecated
-    public LX setBaseHue(LXParameter parameter) {
-        clearBaseHue();
-        this.baseHue = parameter;
-        return this;
-    }
-
-    /**
-     * Sets the base hue to a fixed value
-     *
-     * @param hue Fixed value to set hue to, 0-360
-     * @return this
-     */
-    @Deprecated
-    public LX setBaseHue(double hue) {
-        internalBaseHue(new LinearEnvelope(this.getBaseHue(), hue, 50)).start();
-        return this;
-    }
-
-    /**
-     * Sets the base hue to cycle through the spectrum
-     *
-     * @param duration Number of milliseconds for hue cycle
-     * @return this
-     */
-    @Deprecated
-    public LX cycleBaseHue(double duration) {
-        internalBaseHue(new SawLFO(0, 360, duration).setValue(getBaseHue())).start();
-        return this;
-    }
-
-    /**
-     * Sets the base hue to oscillate between two spectrum values
-     *
-     * @param lowHue Low hue value
-     * @param highHue High hue value
-     * @param duration Milliseconds for hue oscillation
-     * @return this
-     */
-    @Deprecated
-    public LX oscillateBaseHue(double lowHue, double highHue, double duration) {
-        internalBaseHue(new TriangleLFO(lowHue, highHue, duration).setValue(
-                getBaseHue())).trigger();
-        return this;
-    }
-
-    /**
      * Stops patterns from automatically rotating
      *
      * @return this
@@ -743,7 +646,7 @@ public class LX {
             writer.close();
             System.out.println("Project saved successfully to " + file.toString());
             this.file = file;
-            for (ProjectListener projectListener : this.projecListeners) {
+            for (ProjectListener projectListener : this.projectListeners) {
                 projectListener.projectChanged(file);
             }
         } catch (IOException iox) {
@@ -760,7 +663,7 @@ public class LX {
                 this.engine.load(obj.getAsJsonObject(KEY_ENGINE));
                 System.out.println("Project loaded successfully from " + file.toString());
                 this.file = file;
-                for (ProjectListener projectListener : this.projecListeners) {
+                for (ProjectListener projectListener : this.projectListeners) {
                     projectListener.projectChanged(file);
                 }
             } catch (IOException iox) {
