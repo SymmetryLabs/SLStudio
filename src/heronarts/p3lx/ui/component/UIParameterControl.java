@@ -30,14 +30,16 @@ import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIControlTarget;
+import heronarts.p3lx.ui.UIModulationTarget;
 
-public abstract class UIParameterControl extends UIInputBox implements UIControlTarget, LXParameterListener {
+public abstract class UIParameterControl extends UIInputBox implements UIControlTarget, UIModulationTarget, LXParameterListener {
 
     protected final static int LABEL_MARGIN = 2;
 
@@ -110,6 +112,9 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
 
     protected double getNormalized() {
         if (this.parameter != null) {
+            if (this.parameter instanceof CompoundParameter) {
+                return ((CompoundParameter) this.parameter).getBaseNormalized();
+            }
             return this.parameter.getNormalized();
         }
         return 0;
@@ -297,6 +302,14 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     @Override
     public LXParameter getControlTarget() {
         return isMappable() ? this.parameter : null;
+    }
+
+    @Override
+    public CompoundParameter getModulationTarget() {
+        if (this.parameter instanceof CompoundParameter) {
+            return isMappable() ? (CompoundParameter) this.parameter : null;
+        }
+        return null;
     }
 
 }

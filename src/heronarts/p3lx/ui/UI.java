@@ -97,20 +97,6 @@ public class UI implements LXEngine.Dispatch {
             }
         }
 
-        private void focusPrev() {
-            UIObject focusTarget = findPrevFocusable();
-            if (focusTarget != null) {
-                focusTarget.focus();
-            }
-        }
-
-        private void focusNext() {
-            UIObject focusTarget = findNextFocusable();
-            if (focusTarget != null) {
-                focusTarget.focus();
-            }
-        }
-
         private UIObject findCurrentFocus() {
             UIObject currentFocus = this;
             while (currentFocus.focusedChild != null) {
@@ -275,6 +261,8 @@ public class UI implements LXEngine.Dispatch {
     private boolean resizable = false;
 
     boolean midiMapping = false;
+    boolean modulationSourceMapping = false;
+    boolean modulationTargetMapping = false;
 
     private UIControlTarget controlTarget = null;
 
@@ -315,6 +303,8 @@ public class UI implements LXEngine.Dispatch {
         lx.engine.mapping.mode.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 midiMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI;
+                modulationSourceMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE;
+                modulationTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_TARGET;
                 root.redraw();
             }
         });
@@ -323,6 +313,20 @@ public class UI implements LXEngine.Dispatch {
 
     public static UI get() {
         return UI.instance;
+    }
+
+    public void focusPrev() {
+        UIObject focusTarget = this.root.findPrevFocusable();
+        if (focusTarget != null) {
+            focusTarget.focus();
+        }
+    }
+
+    public void focusNext() {
+        UIObject focusTarget = this.root.findNextFocusable();
+        if (focusTarget != null) {
+            focusTarget.focus();
+        }
     }
 
     /**

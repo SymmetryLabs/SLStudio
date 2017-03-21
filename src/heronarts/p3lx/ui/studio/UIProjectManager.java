@@ -48,7 +48,6 @@ public class UIProjectManager extends UI2dCollapsibleSection {
         }
 
         setTitle("PROJECT");
-        setExpanded(false);
 
         this.fileLabel = new UILabel(0, 0, getContentWidth(), 16);
         this.fileLabel

@@ -65,6 +65,10 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         });
     }
 
+    protected UI getUI() {
+        return this.ui;
+    }
+
     /**
      * Add a task to be performed on every loop of the UI engine.
      *
@@ -302,7 +306,14 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         return this.ui.getControlTarget() == this;
     }
 
-    boolean isMapping() {
+    boolean isModulationTargetMapping() {
+        return
+            this.ui.modulationTargetMapping &&
+            (this instanceof UIModulationTarget) &&
+            ((UIModulationTarget) this).getModulationTarget() != null;
+    }
+
+    boolean isMidiMapping() {
         return
             this.ui.midiMapping &&
             (this instanceof UIControlTarget) &&
@@ -369,8 +380,11 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     private boolean mouseWheelEventConsumed = false;
 
     void mousePressed(MouseEvent mouseEvent, float mx, float my) {
-        if (isMapping()) {
+        if (isMidiMapping()) {
             this.ui.setControlTarget((UIControlTarget) this);
+            return;
+        } else if (isModulationTargetMapping()) {
+            // TODO(mcslee): create a new modulation!
             return;
         }
         for (int i = this.children.size() - 1; i >= 0; --i) {
@@ -400,7 +414,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     }
 
     void mouseClicked(MouseEvent mouseEvent, float mx, float my) {
-        if (isMapping()) {
+        if (isMidiMapping()) {
             return;
         }
         for (int i = this.children.size() - 1; i >= 0; --i) {
@@ -414,7 +428,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     }
 
     void mouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-        if (isMapping()) {
+        if (isMidiMapping() || isModulationTargetMapping()) {
             return;
         }
         if (this.pressedChild != null) {

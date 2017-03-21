@@ -25,6 +25,8 @@
 package heronarts.p3lx.ui.component;
 
 import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameterModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIFocus;
 import processing.core.PConstants;
@@ -82,16 +84,34 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         default: case UNIPOLAR: valueStart = ARC_START; break;
         }
 
-        // Full outer dark ring
+        float arcSize = KNOB_SIZE;
+
         pg.ellipseMode(PConstants.CENTER);
         pg.noStroke();
+
+        // Modulations!
+        if (this.parameter instanceof CompoundParameter) {
+            CompoundParameter compound = (CompoundParameter) this.parameter;
+            for (LXParameterModulation modulation : compound.modulations) {
+                float modStart = valueEnd;
+                float modEnd = LXUtils.constrainf(modStart + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_START + ARC_RANGE);
+                // Light ring of value
+                pg.noFill();
+                pg.fill(isEnabled() ? ui.theme.getSecondaryColor() : ui.theme.getControlDisabledColor());
+                pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(modStart, modEnd), Math.max(modStart, modEnd));
+                arcSize -= 6;
+            }
+        }
+
+        // Full outer dark ring
         pg.fill(ui.theme.getControlBackgroundColor());
-        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, KNOB_SIZE, KNOB_SIZE, ARC_START, ARC_START + ARC_RANGE);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, ARC_START, ARC_START + ARC_RANGE);
 
         // Light ring of value
         pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, KNOB_SIZE, KNOB_SIZE, Math.min(valueStart, valueEnd), Math.max(valueStart, valueEnd));
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(valueStart, valueEnd), Math.max(valueStart, valueEnd));
 
+        // Center tick mark for bipolar knobs
         if ((this.arcMode == ArcMode.BIPOLAR) && (valueStart == valueEnd)) {
             pg.stroke(0xff333333);
             pg.line(ARC_CENTER_X, ARC_CENTER_Y - KNOB_SIZE / 4, ARC_CENTER_X, ARC_CENTER_Y - KNOB_SIZE/2);
@@ -121,7 +141,11 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         if (!isEnabled()) {
             return;
         }
-        this.dragValue = LXUtils.constrain(this.dragValue - dy / 100., 0, 1);
+        float delta = dy / 100.f;
+        if (mouseEvent.isShiftDown()) {
+            delta /= 10;
+        }
+        this.dragValue = LXUtils.constrain(this.dragValue - delta, 0, 1);
         setNormalized(this.dragValue);
     }
 

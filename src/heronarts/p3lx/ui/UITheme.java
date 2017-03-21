@@ -31,13 +31,16 @@ import processing.core.PFont;
 public class UITheme {
 
     private PFont labelFont;
-    private int labelColor = 0xff999999;
+    private int labelColor = 0xffcccccc;
 
     private PFont windowTitleFont;
-    private int windowTitleColor = 0xff999999;
+    private int windowTitleColor = 0xffcccccc;
     private int windowBackgroundColor = 0xff404040;
     private int windowFocusedBackgroundColor = 0xff4c4c4c;
     private int windowBorderColor = 0xff292929;
+
+    private int paneBackgroundColor = 0xff040404;
+    private int paneInsetColor = 0xff242424;
 
     private int focusColor = 0xff669966;
     private int primaryColor = 0xff669966;
@@ -47,8 +50,11 @@ public class UITheme {
     private PFont controlFont;
     private int controlBackgroundColor = 0xff222222;
     private int controlBorderColor = 0xff494949;
-    private int controlTextColor = 0xff999999;
+    private int controlTextColor = 0xffcccccc;
     private int controlDisabledColor = 0xff666666;
+
+    private int midiMappingColor = 0x33ff0000;
+    private int modulationTargetMappingColor = 0x3300ff00;
 
     UITheme(PApplet applet) {
         // this.controlFont = applet.createFont("Arial", 10);
@@ -176,6 +182,46 @@ public class UITheme {
      */
     public UITheme setWindowBorderColor(int color) {
         this.windowBorderColor = color;
+        return this;
+    }
+
+    /**
+     * Gets border color
+     *
+     * @return bordercolor
+     */
+    public int getPaneBackgroundColor() {
+        return this.paneBackgroundColor;
+    }
+
+    /**
+     * Sets default border color
+     *
+     * @param color color
+     * @return this UI
+     */
+    public UITheme setPaneBackgroundColor(int color) {
+        this.paneBackgroundColor = color;
+        return this;
+    }
+
+    /**
+     * Gets border color
+     *
+     * @return bordercolor
+     */
+    public int getPaneInsetColor() {
+        return this.paneInsetColor;
+    }
+
+    /**
+     * Sets default border color
+     *
+     * @param color color
+     * @return this UI
+     */
+    public UITheme setPaneInsetColor(int color) {
+        this.paneInsetColor = color;
         return this;
     }
 
@@ -376,6 +422,24 @@ public class UITheme {
      */
     public UITheme setLabelColor(int labelColor) {
         this.labelColor = labelColor;
+        return this;
+    }
+
+    public int getMidiMappingColor() {
+        return this.midiMappingColor;
+    }
+
+    public UITheme setMidiMappingColor(int midiMappingColor) {
+        this.midiMappingColor = midiMappingColor;
+        return this;
+    }
+
+    public int getModulationTargetMappingColor() {
+        return this.modulationTargetMappingColor;
+    }
+
+    public UITheme setModulationTargetMappingColor(int modulationTargetMappingColor) {
+        this.modulationTargetMappingColor = modulationTargetMappingColor;
         return this;
     }
 

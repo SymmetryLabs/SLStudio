@@ -102,7 +102,7 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterLi
         }
         if (this.evenSpacing) {
             for (int i = 0; i < this.boundaries.length; ++i) {
-                this.boundaries[i] = (int) ((i + 1) * this.width / this.boundaries.length);
+                this.boundaries[i] = (int) ((i + 1) * (this.width-1) / this.boundaries.length);
             }
         } else {
             int totalLength = 0;
@@ -112,7 +112,7 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterLi
             int lengthSoFar = 0;
             for (int i = 0; i < this.options.length; ++i) {
                 lengthSoFar += this.options[i].length();
-                this.boundaries[i] = (int) (lengthSoFar * this.width / totalLength);
+                this.boundaries[i] = (int) (lengthSoFar * (this.width-1) / totalLength);
             }
         }
     }
@@ -171,13 +171,13 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterLi
     public void onDraw(UI ui, PGraphics pg) {
         pg.stroke(ui.theme.getControlBorderColor());
         pg.fill(ui.theme.getControlBackgroundColor());
-        pg.rect(0, 0, this.width, this.height);
+        pg.rect(0, 0, this.width-1, this.height-1);
         for (int b : this.boundaries) {
-            pg.line(b, 1, b, this.height - 1);
+            pg.line(b, 1, b, this.height - 2);
         }
 
         pg.noStroke();
-        pg.textAlign(PConstants.CENTER, PConstants.BOTTOM);
+        pg.textAlign(PConstants.CENTER, PConstants.CENTER);
         pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
         int leftBoundary = 0;
 
@@ -185,12 +185,10 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterLi
             boolean isActive = (i == this.value);
             if (isActive) {
                 pg.fill(ui.theme.getPrimaryColor());
-                pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 1,
-                        this.height - 1);
+                pg.rect(leftBoundary + 1, 1, this.boundaries[i] - leftBoundary - 2, this.height - 2);
             }
             pg.fill(isActive ? UI.WHITE : ui.theme.getControlTextColor());
-            pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f,
-                    (int) (this.height - 2));
+            pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f, this.height/2);
             leftBoundary = this.boundaries[i];
         }
     }

@@ -205,23 +205,40 @@ public class UISlider extends UIParameterControl implements UIFocus {
     @Override
     protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (isEnabled() && this.editing) {
-            float mp, dim;
-            switch (this.direction) {
-            case VERTICAL:
-                mp = my;
-                dim = this.handleHeight;
-                setNormalized(1 - LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
-                        / (dim - 8 - HANDLE_WIDTH), 0, 1));
-                break;
-            default:
-            case HORIZONTAL:
-                mp = mx;
-                dim = this.width;
-                setNormalized(LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
-                        / (dim - 8 - HANDLE_WIDTH), 0, 1));
-                break;
+            if (mouseEvent.isShiftDown()) {
+                float dv;
+                float dim;
+                switch (this.direction) {
+                case VERTICAL:
+                    dv = -dy;
+                    dim = this.handleHeight;
+                    break;
+                default:
+                case HORIZONTAL:
+                    dv = dx;
+                    dim = this.width;
+                    break;
+                }
+                float delta = dv / dim / 10;
+                setNormalized(LXUtils.constrain(getNormalized() + delta, 0, 1));
+            } else {
+                float mp, dim;
+                switch (this.direction) {
+                case VERTICAL:
+                    mp = my;
+                    dim = this.handleHeight;
+                    setNormalized(1 - LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
+                            / (dim - 8 - HANDLE_WIDTH), 0, 1));
+                    break;
+                default:
+                case HORIZONTAL:
+                    mp = mx;
+                    dim = this.width;
+                    setNormalized(LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
+                            / (dim - 8 - HANDLE_WIDTH), 0, 1));
+                    break;
+                }
             }
-
         }
     }
 }

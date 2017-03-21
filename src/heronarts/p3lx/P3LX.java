@@ -105,6 +105,17 @@ public class P3LX extends LX {
     public P3LX(PApplet applet, LXModel model) {
         super(model);
         this.applet = applet;
+
+
+        for (Class<?> cls : applet.getClass().getDeclaredClasses()) {
+            if (LXPattern.class.isAssignableFrom(cls)) {
+                registerPattern(cls.asSubclass(LXPattern.class));
+            } else if (LXEffect.class.isAssignableFrom(cls)) {
+                registerEffect(cls.asSubclass(LXEffect.class));
+            }
+        }
+
+
         this.buffer = new ModelBuffer(this);
         this.colors = this.engine.getUIBufferNonThreadSafe();
         LX.initTimer.log("P3LX: ModelBuffer");

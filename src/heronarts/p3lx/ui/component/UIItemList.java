@@ -187,13 +187,19 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
      * @return this
      */
     public UIItemList setFocusIndex(int focusIndex) {
+        return setFocusIndex(focusIndex, true);
+    }
+
+    private UIItemList setFocusIndex(int focusIndex, boolean scroll) {
         focusIndex = LXUtils.constrain(focusIndex, 0, this.items.size() - 1);
         if (this.focusIndex != focusIndex) {
-            float yp = ROW_SPACING * focusIndex + this.getScrollY();
-            if (yp < 0) {
-                setScrollY(-ROW_SPACING * focusIndex);
-            } else if (yp >= height - ROW_SPACING) {
-                setScrollY(-ROW_SPACING * focusIndex + height - ROW_SPACING);
+            if (scroll) {
+                float yp = ROW_SPACING * focusIndex + this.getScrollY();
+                if (yp < 0) {
+                    setScrollY(-ROW_SPACING * focusIndex);
+                } else if (yp >= height - ROW_SPACING) {
+                    setScrollY(-ROW_SPACING * focusIndex + height - ROW_SPACING);
+                }
             }
             this.focusIndex = focusIndex;
             this.items.get(this.focusIndex).onFocus();
@@ -555,7 +561,7 @@ public class UIItemList extends UI2dScrollContext implements UIFocus {
     @Override
     public void onFocus() {
         if (this.focusIndex < 0 && this.items.size() > 0) {
-            setFocusIndex(0);
+            setFocusIndex(0, false);
         }
     }
 }

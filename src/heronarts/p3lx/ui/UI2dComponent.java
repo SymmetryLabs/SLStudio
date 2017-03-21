@@ -695,13 +695,17 @@ public abstract class UI2dComponent extends UIObject {
         if (needsBorder) {
             drawBorder(ui, pg);
         }
-        if (isMapping()) {
+        if (isMidiMapping()) {
             pg.noStroke();
-            pg.fill(0x33ff0000);
+            pg.fill(ui.theme.getMidiMappingColor());
             pg.rect(0, 0, this.width, this.height);
             if (isControlTarget()) {
                 drawFocus(ui, pg, 0xccff0000);
             }
+        } else if (isModulationTargetMapping()) {
+            pg.noStroke();
+            pg.fill(ui.theme.getModulationTargetMappingColor());
+            pg.rect(0, 0, this.width, this.height);
         }
     }
 
