@@ -109,6 +109,8 @@ public class LXEngine extends LXComponent {
     public final BooleanParameter cueRight = new BooleanParameter("Cue-R", false);
     public final BoundedParameter speed = new BoundedParameter("Speed", 1, 0, 2);
 
+    public final LXModulationEngine modulation;
+
     private float frameRate = 0;
 
     public interface Dispatch {
@@ -227,6 +229,9 @@ public class LXEngine extends LXComponent {
         };
         this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.crossfaderBlends);
         LX.initTimer.log("Engine: Blends");
+
+        // Modulation matrix
+        this.modulation = new LXModulationEngine(lx);
 
         // Master channel
         this.masterChannel = new LXMasterChannel(lx);
@@ -656,6 +661,7 @@ public class LXEngine extends LXComponent {
         // Mutate by master speed for everything else
         deltaMs *= this.speed.getValue();
 
+        this.modulation.loop(deltaMs);
         this.lx.palette.loop(deltaMs);
         this.lx.audio.loop(deltaMs);
 
@@ -856,6 +862,7 @@ public class LXEngine extends LXComponent {
     private static final String KEY_CHANNELS = "channels";
     private static final String KEY_MASTER = "master";
     private static final String KEY_MIDI = "midi";
+    private static final String KEY_MODULATION = "modulation";
 
     @Override
     public void save(JsonObject obj) {
@@ -872,11 +879,14 @@ public class LXEngine extends LXComponent {
         this.lx.palette.save(paletteObj);
         JsonObject midiObj = new JsonObject();
         this.midi.save(midiObj);
+        JsonObject modulationObj = new JsonObject();
+        this.modulation.save(modulationObj);
 
         obj.add(KEY_PALETTE, paletteObj);
         obj.add(KEY_CHANNELS, channels);
         obj.add(KEY_MASTER, masterObj);
         obj.add(KEY_MIDI, midiObj);
+        obj.add(KEY_MODULATION, modulationObj);
     }
 
     @Override
@@ -906,6 +916,11 @@ public class LXEngine extends LXComponent {
         // Midi
         if (obj.has(KEY_MIDI)) {
             this.midi.load(obj.getAsJsonObject(KEY_MIDI));
+        }
+
+        // Modulation matrix
+        if (obj.has(KEY_MODULATION)) {
+            this.modulation.load(obj.getAsJsonObject(KEY_MODULATION));
         }
 
         // Parameters etc.

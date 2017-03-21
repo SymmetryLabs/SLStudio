@@ -22,6 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heronarts.lx.modulator.Click;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
@@ -49,6 +50,10 @@ public class Tempo extends LXRunnableComponent {
 
     public final BoundedParameter bpm = new BoundedParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM);
 
+    public final BooleanParameter tap = new BooleanParameter("Tap");
+    public final BooleanParameter nudgeUp = new BooleanParameter("Nudge+");
+    public final BooleanParameter nudgeDown = new BooleanParameter("Nudge-");
+
     private final MutableParameter period = new MutableParameter(MINUTE / DEFAULT_BPM);
 
     private final List<Listener> listeners = new ArrayList<Listener>();
@@ -65,6 +70,9 @@ public class Tempo extends LXRunnableComponent {
     public Tempo(LX lx) {
         super(lx);
         addParameter(this.bpm);
+        addParameter(this.tap);
+        addParameter(this.nudgeUp);
+        addParameter(this.nudgeDown);
         startModulator(this.click);
     }
 
@@ -77,6 +85,14 @@ public class Tempo extends LXRunnableComponent {
     public void onParameterChanged(LXParameter parameter) {
         if (parameter == this.bpm) {
             this.period.setValue(MINUTE / this.bpm.getValue());
+        } else if (parameter == this.tap) {
+            if (this.tap.isOn()) {
+                tap();
+            }
+        } else if (parameter == this.nudgeUp) {
+            adjustBpm(this.nudgeUp.isOn() ? .1 : -.1);
+        } else if (parameter == this.nudgeDown) {
+            adjustBpm(this.nudgeDown.isOn() ? -.1 : .1);
         }
     }
 

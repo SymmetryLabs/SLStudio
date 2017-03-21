@@ -548,6 +548,8 @@ public class LXChannel extends LXBus {
             this.autoCycleProgress = 1.;
             this.transitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.transitionTimeSecs.getValue());
             getNextPattern().loop(deltaMs);;
+            // TODO(mcslee): this is incorrect. the blend objects are shared, so the same one may be run on multiple
+            // channels. either they need to be per-channel instances, or they are not loopable with modulators etc.
             this.transition.loop(deltaMs);
             colors = this.blendBuffer.getArray();
             if (this.transitionProgress < .5) {

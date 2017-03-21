@@ -157,14 +157,14 @@ public class LX {
     /**
      * The list of globally registered pattern classes
      */
-    private final List<Class<LXPattern>> registeredPatterns =
-        new ArrayList<Class<LXPattern>>();
+    private final List<Class<? extends LXPattern>> registeredPatterns =
+        new ArrayList<Class<? extends LXPattern>>();
 
     /**
      * The list of globally registered effects
      */
-    private final List<Class<LXEffect>> registeredEffects =
-        new ArrayList<Class<LXEffect>>();
+    private final List<Class<? extends LXEffect>> registeredEffects =
+        new ArrayList<Class<? extends LXEffect>>();
 
     /**
      * Creates an LX instance with no nodes.
@@ -557,7 +557,7 @@ public class LX {
      * @param pattern
      * @return this
      */
-    public LX registerPattern(Class<LXPattern> pattern) {
+    public LX registerPattern(Class<? extends LXPattern> pattern) {
         this.registeredPatterns.add(pattern);
         return this;
     }
@@ -580,7 +580,7 @@ public class LX {
      *
      * @return Pattern classes
      */
-    public List<Class<LXPattern>> getRegisteredPatterns() {
+    public List<Class<? extends LXPattern>> getRegisteredPatterns() {
         return this.registeredPatterns;
     }
 
@@ -590,7 +590,7 @@ public class LX {
      * @param effect
      * @return this
      */
-    public LX registerEffect(Class<LXEffect> effect) {
+    public LX registerEffect(Class<? extends LXEffect> effect) {
         this.registeredEffects.add(effect);
         return this;
     }
@@ -601,8 +601,8 @@ public class LX {
      * @param effects
      * @return this
      */
-    public LX registerEffects(Class<LXEffect>[] effects) {
-        for (Class<LXEffect> effect : effects) {
+    public LX registerEffects(Class<? extends LXEffect>[] effects) {
+        for (Class<? extends LXEffect> effect : effects) {
             registerEffect(effect);
         }
         return this;
@@ -613,7 +613,7 @@ public class LX {
      *
      * @return Effect classes
      */
-    public List<Class<LXEffect>> getRegisteredEffects() {
+    public List<Class<? extends LXEffect>> getRegisteredEffects() {
         return this.registeredEffects;
     }
 

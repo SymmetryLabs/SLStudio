@@ -126,7 +126,7 @@ public abstract class LXListenableParameter implements LXParameter {
         return this;
     }
 
-    public final double getValue() {
+    public double getValue() {
         return this.value;
     }
 

@@ -18,6 +18,8 @@
 
 package heronarts.lx;
 
+import java.util.Collection;
+import java.util.Collections;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -28,6 +30,8 @@ import heronarts.lx.modulator.LXModulator;
 public abstract class LXRunnableComponent extends LXComponent implements LXLoopTask {
 
     private final Map<String, LXModulator> modulators = new LinkedHashMap<String, LXModulator>();
+
+    private final Collection<LXModulator> unmodifiableModulators = Collections.unmodifiableCollection(this.modulators.values());
 
     public class Timer {
         public long loopNanos;
@@ -47,7 +51,7 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
         return addModulator(modulator.getLabel(), modulator);
     }
 
-    protected final LXModulator addModulator(String path, LXModulator modulator) {
+    protected LXModulator addModulator(String path, LXModulator modulator) {
         if (path == null) {
             throw new IllegalArgumentException("Cannot add modulator to null path: " + modulator);
         }
@@ -68,10 +72,14 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
         return modulator;
     }
 
-    protected final LXModulator removeModulator(LXModulator modulator) {
+    protected LXModulator removeModulator(LXModulator modulator) {
         this.modulators.remove(modulator);
         modulator.dispose();
         return modulator;
+    }
+
+    public Collection<LXModulator> getModulators() {
+        return this.unmodifiableModulators;
     }
 
     @Override

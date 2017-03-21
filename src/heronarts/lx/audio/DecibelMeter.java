@@ -21,6 +21,7 @@ package heronarts.lx.audio;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
 import ddf.minim.AudioBuffer;
 import ddf.minim.AudioSource;
 
@@ -29,7 +30,7 @@ import ddf.minim.AudioSource;
  * may be applied to the signal. A decibel range is given in which values are
  * normalized from 0 to 1. Raw decibel values can be accessed if desired.
  */
-public class DecibelMeter extends LXModulator {
+public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
 
     protected static final double LOG_10 = Math.log(10);
 
@@ -151,5 +152,20 @@ public class DecibelMeter extends LXModulator {
         if (!env.isRunning() && env.getValue() > minLevel) {
             env.setRangeFromHereTo(minLevel, release.getValue()).trigger();
         }
+    }
+
+    @Override
+    public LXNormalizedParameter setNormalized(double value) {
+        throw new UnsupportedOperationException("Cannot setNormalized on DecibelMeter");
+    }
+
+    @Override
+    public double getNormalized() {
+        return getValue();
+    }
+
+    @Override
+    public float getNormalizedf() {
+        return (float) getNormalized();
     }
 }

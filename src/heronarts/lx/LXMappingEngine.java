@@ -24,7 +24,8 @@
 
 package heronarts.lx;
 
-import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
@@ -32,17 +33,21 @@ public class LXMappingEngine {
 
     public enum Mode {
         OFF,
-        MIDI
+        MIDI,
+        MODULATION_SOURCE,
+        MODULATION_TARGET
     };
 
     private LXParameter controlTarget = null;
+    private LXNormalizedParameter modulationSource = null;
 
-    public final DiscreteParameter mode = new DiscreteParameter("Mode", Mode.values());
+    public final EnumParameter<Mode> mode = new EnumParameter<Mode>("Mode", Mode.OFF);
 
     LXMappingEngine() {
         mode.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 controlTarget = null;
+                modulationSource = null;
             }
         });
     }
@@ -53,7 +58,7 @@ public class LXMappingEngine {
     }
 
     public Mode getMode() {
-        return (Mode) this.mode.getObject();
+        return this.mode.getEnum();
     }
 
     public LXMappingEngine setControlTarget(LXParameter controlTarget) {
@@ -65,5 +70,13 @@ public class LXMappingEngine {
         return this.controlTarget;
     }
 
+    public LXMappingEngine setModulationSource(LXNormalizedParameter modulationSource) {
+        this.modulationSource = modulationSource;
+        return this;
+    }
+
+    public LXNormalizedParameter getModulationSource() {
+        return this.modulationSource;
+    }
 
 }

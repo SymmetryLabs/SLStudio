@@ -199,7 +199,7 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         this(underlying.getLabel(), underlying.getValue(), v0, v1, scaling, underlying);
     }
 
-    private BoundedParameter(String label, double value, double v0, double v1,
+    protected BoundedParameter(String label, double value, double v0, double v1,
         Scaling scaling, LXListenableParameter underlying) {
         super(label, (value < Math.min(v0, v1)) ? Math.min(v0, v1) : ((value > Math
                 .max(v0, v1)) ? Math.max(v0, v1) : value));
@@ -219,13 +219,7 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         }
     }
 
-    /**
-     * Sets the value of parameter using normal 0-1
-     *
-     * @param normalized Value from 0-1 through the parameter range
-     * @return this, for method chaining
-     */
-    public BoundedParameter setNormalized(double normalized) {
+    protected double normalizedToValue(double normalized) {
         if (normalized < 0) {
             normalized = 0;
         } else if (normalized > 1) {
@@ -242,7 +236,17 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         case LINEAR:
             break;
         }
-        setValue(this.range.v0 + (this.range.v1 - this.range.v0) * normalized);
+        return this.range.v0 + (this.range.v1 - this.range.v0) * normalized;
+    }
+
+    /**
+     * Sets the value of parameter using normal 0-1
+     *
+     * @param normalized Value from 0-1 through the parameter range
+     * @return this, for method chaining
+     */
+    public BoundedParameter setNormalized(double normalized) {
+        setValue(normalizedToValue(normalized));
         return this;
     }
 
@@ -255,17 +259,11 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         return Math.abs(this.range.max - this.range.min);
     }
 
-    /**
-     * Gets a normalized value of the parameter from 0 to 1
-     *
-     * @return Normalized value, from 0 to 1
-     */
-    public double getNormalized() {
+    protected double getNormalized(double value) {
         if (this.range.v0 == this.range.v1) {
             return 0;
         }
-        double normalized = (getValue() - this.range.v0)
-                / (this.range.v1 - this.range.v0);
+        double normalized = (value - this.range.v0) / (this.range.v1 - this.range.v0);
         switch (this.range.scaling) {
         case QUAD_IN:
             normalized = Math.sqrt(normalized);
@@ -278,6 +276,15 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
             break;
         }
         return normalized;
+    }
+
+    /**
+     * Gets a normalized value of the parameter from 0 to 1
+     *
+     * @return Normalized value, from 0 to 1
+     */
+    public double getNormalized() {
+        return getNormalized(getValue());
     }
 
     /**

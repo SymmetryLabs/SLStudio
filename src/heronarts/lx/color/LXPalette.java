@@ -28,7 +28,8 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -45,7 +46,7 @@ public class LXPalette extends LXModelComponent {
         CYCLE
     };
 
-    public final DiscreteParameter hueMode = new DiscreteParameter("Mode", Mode.values()).setOptions(new String[] { "Fixed", "Oscillate", "Cycle" });
+    public final EnumParameter<Mode> hueMode = new EnumParameter<Mode>("Mode", Mode.FIXED);
 
     public final ColorParameter color = new ColorParameter("Color", 0xffff0000);
 
@@ -58,19 +59,19 @@ public class LXPalette extends LXModelComponent {
 
     public final BoundedParameter period = new BoundedParameter("Period", 120000, 1000, 1800000);
 
-    public final BoundedParameter spreadX = new BoundedParameter("X-add", 0, 360);
+    public final CompoundParameter spreadX = new CompoundParameter("X-add", 0, 360);
 
-    public final BoundedParameter spreadY = new BoundedParameter("Y-add", 0, 360);
+    public final CompoundParameter spreadY = new CompoundParameter("Y-add", 0, 360);
 
-    public final BoundedParameter spreadZ = new BoundedParameter("Z-add", 0, 360);
+    public final CompoundParameter spreadZ = new CompoundParameter("Z-add", 0, 360);
 
-    public final BoundedParameter offsetX = new BoundedParameter("X-off", 0, -1, 1);
+    public final CompoundParameter offsetX = new CompoundParameter("X-off", 0, -1, 1);
 
-    public final BoundedParameter offsetY = new BoundedParameter("Y-off", 0, -1, 1);
+    public final CompoundParameter offsetY = new CompoundParameter("Y-off", 0, -1, 1);
 
-    public final BoundedParameter offsetZ = new BoundedParameter("Z-off", 0, -1, 1);
+    public final CompoundParameter offsetZ = new CompoundParameter("Z-off", 0, -1, 1);
 
-    public final BoundedParameter spreadR = new BoundedParameter("R-add", 0, 360);
+    public final CompoundParameter spreadR = new CompoundParameter("R-add", 0, 360);
 
     public final BooleanParameter mirror = new BooleanParameter("Mirror", true);
 
@@ -104,6 +105,7 @@ public class LXPalette extends LXModelComponent {
             }
         });
 
+        this.hueMode.setOptions(new String[] { "Fixed", "Oscillate", "Cycle" });
         addParameter(this.hueMode);
         addParameter(this.color);
         addParameter(this.period);

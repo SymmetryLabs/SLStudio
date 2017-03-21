@@ -237,7 +237,7 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     }
 
     public Object getObject() {
-        return this.objects[(int)getValue()];
+        return this.objects[getValuei()];
     }
 
     public double getNormalized() {

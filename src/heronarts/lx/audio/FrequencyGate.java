@@ -22,12 +22,13 @@ import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
 
 /**
  * A frequency gate monitors a Graphic EQ for a particular frequency range and
  * triggers when that range passes a certain threshold.
  */
-public class FrequencyGate extends LXModulator {
+public class FrequencyGate extends LXModulator implements LXNormalizedParameter {
 
     /**
      * The gate level at which the trigger is engaged. When the signal crosses
@@ -183,5 +184,21 @@ public class FrequencyGate extends LXModulator {
         }
         this.signal.loop(deltaMs);
         return signal.getValue();
+    }
+
+    @Override
+    public LXNormalizedParameter setNormalized(double value) {
+        // TODO Auto-generated method stub
+        return null;
+    }
+
+    @Override
+    public double getNormalized() {
+        return getLevel();
+    }
+
+    @Override
+    public float getNormalizedf() {
+        return (float) getNormalized();
     }
 }
