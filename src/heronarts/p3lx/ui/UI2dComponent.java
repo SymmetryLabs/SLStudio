@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -204,6 +204,9 @@ public abstract class UI2dComponent extends UIObject {
         if ((this.x != x) || (this.y != y)) {
             this.x = x;
             this.y = y;
+            if (this.parent instanceof UI2dContainer) {
+                ((UI2dContainer) this.parent).reflow();
+            }
             redrawContainer();
         }
         return this;
@@ -240,6 +243,9 @@ public abstract class UI2dComponent extends UIObject {
         if ((this.width != width) || (this.height != height)) {
             this.width = width;
             this.height = height;
+            if (this.parent instanceof UI2dContainer) {
+                ((UI2dContainer) this.parent).reflow();
+            }
             onResize();
             redrawContainer();
         }
@@ -547,6 +553,9 @@ public abstract class UI2dComponent extends UIObject {
             blur();
         }
         this.parent.children.remove(this);
+        if (this.parent instanceof UI2dContainer) {
+            ((UI2dContainer) this.parent).reflow();
+        }
         redrawContainer();
         this.parent = null;
         return this;
@@ -595,6 +604,9 @@ public abstract class UI2dComponent extends UIObject {
         }
         this.parent = containerObject;
         setUI(containerObject.ui);
+        if (this.parent instanceof UI2dContainer) {
+            ((UI2dContainer) this.parent).reflow();
+        }
         redraw();
         return this;
     }
@@ -611,6 +623,9 @@ public abstract class UI2dComponent extends UIObject {
         }
         this.parent.children.remove(this);
         this.parent.children.add(index, this);
+        if (this.parent instanceof UI2dContainer) {
+            ((UI2dContainer) this.parent).reflow();
+        }
         redrawContainer();
         return this;
     }
@@ -704,6 +719,14 @@ public abstract class UI2dComponent extends UIObject {
             if (isControlTarget()) {
                 drawFocus(ui, pg, 0xccff0000);
             }
+        } else if (isModulationSource()) {
+            pg.noStroke();
+            pg.fill(ui.theme.getModulationSourceMappingColor());
+            pg.rect(0, 0, this.width, this.height);
+        } else if (isModulationSourceMapping()) {
+            pg.noStroke();
+            pg.fill(ui.theme.getModulationSourceMappingColor());
+            pg.rect(0, 0, this.width, this.height);
         } else if (isModulationTargetMapping()) {
             pg.noStroke();
             pg.fill(ui.theme.getModulationTargetMappingColor());

@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,8 +28,11 @@ package heronarts.p3lx.ui;
 
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXParameterModulation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -308,6 +311,19 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         return this.ui.getControlTarget() == this;
     }
 
+    boolean isModulationSource() {
+        return
+            this.ui.modulationTargetMapping &&
+            (this == this.ui.getModulationSource());
+    }
+
+    boolean isModulationSourceMapping() {
+        return
+            this.ui.modulationSourceMapping &&
+            (this instanceof UIModulationSource) &&
+            ((UIModulationSource) this).getModulationSource() != null;
+    }
+
     boolean isModulationTargetMapping() {
         return
             this.ui.modulationTargetMapping &&
@@ -385,8 +401,16 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         if (isMidiMapping()) {
             this.ui.setControlTarget((UIControlTarget) this);
             return;
+        } else if (isModulationSourceMapping()) {
+            this.ui.mapModulationSource((UIModulationSource) this);
+            return;
         } else if (isModulationTargetMapping()) {
-            // TODO(mcslee): create a new modulation!
+            LXNormalizedParameter source = this.ui.getModulationSource().getModulationSource();
+            CompoundParameter target = ((UIModulationTarget)this).getModulationTarget();
+            if (source != null && target != null) {
+                this.ui.lx.engine.modulation.addModulation(new LXParameterModulation(source, target));
+            }
+            this.ui.mapModulationSource(null);
             return;
         }
         for (int i = this.children.size() - 1; i >= 0; --i) {

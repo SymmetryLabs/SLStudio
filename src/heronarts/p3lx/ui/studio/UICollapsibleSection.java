@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -24,8 +24,11 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui;
+package heronarts.p3lx.ui.studio;
 
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UIMouseFocus;
 import heronarts.p3lx.ui.component.UILabel;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -34,7 +37,7 @@ import processing.event.MouseEvent;
 /**
  * Section with a title which can collapse/expand
  */
-public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocus {
+public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus {
 
     private static final int PADDING = 4;
     private static final int TITLE_LABEL_HEIGHT = 12;
@@ -49,7 +52,7 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
     private final UI2dContainer content;
 
     /**
-     * Constructs a new container for a collapsible section
+     * Constructs a new collapsible section
      *
      * @param ui UI
      * @param x Xpos
@@ -57,7 +60,7 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
      * @param w Width
      * @param h Height
      */
-    public UI2dCollapsibleSection(UI ui, float x, float y, float w, float h) {
+    public UICollapsibleSection(UI ui, float x, float y, float w, float h) {
         super(x, y, w, h);
         setBackgroundColor(ui.theme.getWindowBackgroundColor());
         setBorderRounding(4);
@@ -66,14 +69,16 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
         this.title.setTextAlignment(PConstants.LEFT, PConstants.TOP).setTextOffset(0,  1);
         addTopLevelComponent(this.title);
 
-        this.expandedHeight = h;
-        this.content = new UI2dContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, h - CONTENT_Y - PADDING) {
+        setHeight(this.expandedHeight = (int) Math.max(CLOSED_HEIGHT, h));
+        this.content = new UI2dContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, Math.max(0, this.expandedHeight - PADDING - CONTENT_Y)) {
             @Override
             public void onResize() {
-                UI2dCollapsibleSection.this.setHeight(expandedHeight = (this.height == 0 ? CLOSED_HEIGHT : CONTENT_Y + this.height + PADDING));
+                expandedHeight = (this.height == 0 ? CLOSED_HEIGHT : CONTENT_Y + this.height + PADDING);
+                if (expanded) {
+                    UICollapsibleSection.this.setHeight(expandedHeight);
+                }
             }
         };
-        this.content.setVisible(this.expanded);
         setContentTarget(this.content);
     }
 
@@ -83,26 +88,9 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
      * @param title Title
      * @return this
      */
-    public UI2dCollapsibleSection setTitle(String title) {
+    public UICollapsibleSection setTitle(String title) {
         this.title.setLabel(title);
         return this;
-    }
-
-    @Override
-    public UI2dComponent addToContainer(UIContainer container, int index) {
-        if (!(container.getContentTarget() instanceof UI2dCollapsibleContainer)) {
-            throw new UnsupportedOperationException("Can only add UI2dCollapsibleSection to UI2dCollapsibleContainer");
-        }
-        super.addToContainer(container, index);
-        onResize();
-        return this;
-    }
-
-    @Override
-    public void onResize() {
-        if (this.parent != null) {
-            ((UI2dCollapsibleContainer) ((UI2dContainer) this.parent).getContentTarget()).onSectionResize();
-        }
     }
 
     @Override
@@ -126,7 +114,7 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
      *
      * @return this
      */
-    public UI2dCollapsibleSection toggle() {
+    public UICollapsibleSection toggle() {
         return setExpanded(!this.expanded);
     }
 
@@ -135,11 +123,12 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
      * @param expanded
      * @return this
      */
-    public UI2dCollapsibleSection setExpanded(boolean expanded) {
+    public UICollapsibleSection setExpanded(boolean expanded) {
         if (this.expanded != expanded) {
             this.expanded = expanded;
             this.content.setVisible(this.expanded);
             setHeight(this.expanded ? this.expandedHeight : CLOSED_HEIGHT);
+            redraw();
         }
         return this;
     }
@@ -150,7 +139,6 @@ public class UI2dCollapsibleSection extends UI2dContainer implements UIMouseFocu
             toggle();
         }
     }
-
 
     @Override
     public UI2dContainer getContentTarget() {

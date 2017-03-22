@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -32,13 +32,14 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
+import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIFocus;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterListener {
+public class UIToggleSet extends UI2dComponent implements UIFocus, UIControlTarget, LXParameterListener {
 
     private String[] options = null;
 
@@ -219,6 +220,11 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, LXParameterLi
             consumeKeyEvent();
             setValue(LXUtils.constrain(this.value + 1, 0, this.options.length - 1));
         }
+    }
+
+    @Override
+    public LXParameter getControlTarget() {
+        return this.parameter;
     }
 
 }

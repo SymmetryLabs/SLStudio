@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -40,6 +40,7 @@ public class UIKnob extends UIParameterControl implements UIFocus {
     public final static int KNOB_MARGIN = 6;
     public final static int KNOB_SIZE = 28;
     public final static int WIDTH = KNOB_SIZE + 2*KNOB_MARGIN;
+
 
     private final static float KNOB_INDENT = .4f;
     private final static int ARC_CENTER_X = WIDTH / 2;
@@ -138,17 +139,34 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         }
     }
 
+    private LXParameterModulation getModulation() {
+        if (this.parameter != null && this.parameter instanceof CompoundParameter) {
+            CompoundParameter compound = (CompoundParameter) this.parameter;
+            if (compound.modulations.size() > 0) {
+                return compound.modulations.get(0);
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (!isEnabled()) {
             return;
         }
+
         float delta = dy / 100.f;
         if (mouseEvent.isShiftDown()) {
             delta /= 10;
         }
-        this.dragValue = LXUtils.constrain(this.dragValue - delta, 0, 1);
-        setNormalized(this.dragValue);
+
+        LXParameterModulation modulation = getModulation();
+        if (modulation != null && (mouseEvent.isMetaDown() || mouseEvent.isControlDown())) {
+            modulation.range.setValue(modulation.range.getValue() - delta);
+        } else {
+            this.dragValue = LXUtils.constrain(this.dragValue - delta, 0, 1);
+            setNormalized(this.dragValue);
+        }
     }
 
 }
