@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -61,11 +61,11 @@ public class LXPalette extends LXModelComponent {
 
     public final BoundedParameter period = new BoundedParameter("Period", 120000, 1000, 1800000);
 
-    public final CompoundParameter spreadX = new CompoundParameter("X-add", 0, 360);
+    public final CompoundParameter spreadX = new CompoundParameter("X-add", 0, -360, 360);
 
-    public final CompoundParameter spreadY = new CompoundParameter("Y-add", 0, 360);
+    public final CompoundParameter spreadY = new CompoundParameter("Y-add", 0, -360, 360);
 
-    public final CompoundParameter spreadZ = new CompoundParameter("Z-add", 0, 360);
+    public final CompoundParameter spreadZ = new CompoundParameter("Z-add", 0, -360, 360);
 
     public final CompoundParameter offsetX = new CompoundParameter("X-off", 0, -1, 1);
 
@@ -73,7 +73,7 @@ public class LXPalette extends LXModelComponent {
 
     public final CompoundParameter offsetZ = new CompoundParameter("Z-off", 0, -1, 1);
 
-    public final CompoundParameter spreadR = new CompoundParameter("R-add", 0, 360);
+    public final CompoundParameter spreadR = new CompoundParameter("R-add", 0, -360, 360);
 
     public final BooleanParameter mirror = new BooleanParameter("Mirror", true);
 

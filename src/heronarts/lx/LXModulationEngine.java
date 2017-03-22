@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,6 +28,7 @@ package heronarts.lx;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 import java.util.List;
 
 import com.google.gson.JsonObject;
@@ -67,6 +68,7 @@ public class LXModulationEngine extends LXRunnableComponent {
         if (this.internalModulations.contains(modulation)) {
             throw new IllegalStateException("Cannot add same modulation twice");
         }
+        ((LXComponent) modulation).setParent(this);
         this.internalModulations.add(modulation);
         for (Listener listener : this.listeners) {
             listener.modulationAdded(this, modulation);
@@ -79,12 +81,30 @@ public class LXModulationEngine extends LXRunnableComponent {
         for (Listener listener : this.listeners) {
             listener.modulationRemoved(this, modulation);
         }
+        modulation.dispose();
+        return this;
+    }
+
+    public LXModulationEngine removeModulations(LXComponent component) {
+        Iterator<LXParameterModulation> iterator = this.internalModulations.iterator();
+        while (iterator.hasNext()) {
+            LXParameterModulation modulation = iterator.next();
+            System.out.println(modulation);
+            if (modulation.source == component || modulation.source.getComponent() == component || modulation.target.getComponent() == component) {
+                System.out.println("oijasdf");
+                iterator.remove();
+                for (Listener listener : this.listeners) {
+                    listener.modulationRemoved(this, modulation);
+                }
+                modulation.dispose();
+            }
+        }
         return this;
     }
 
     @Override
-    protected LXModulator addModulator(String path, LXModulator modulator) {
-        super.addModulator(path,  modulator);
+    public LXModulator addModulator(LXModulator modulator) {
+        super.addModulator(modulator);
         for (Listener listener : this.listeners) {
             listener.modulatorAdded(this, modulator);
         }
@@ -92,7 +112,7 @@ public class LXModulationEngine extends LXRunnableComponent {
     }
 
     @Override
-    protected LXModulator removeModulator(LXModulator modulator) {
+    public LXModulator removeModulator(LXModulator modulator) {
         super.removeModulator(modulator);
         for (Listener listener : this.listeners) {
             listener.modulatorRemoved(this, modulator);

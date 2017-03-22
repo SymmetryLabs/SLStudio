@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -23,6 +23,7 @@ package heronarts.lx.modulator;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXRunnable;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.StringParameter;
 
 /**
  * A Modulator is an abstraction for a variable with a value that varies over
@@ -31,16 +32,17 @@ import heronarts.lx.parameter.LXParameter;
  */
 public abstract class LXModulator extends LXRunnable implements LXParameter {
 
+    private LXComponent component;
+
     /**
      * The current computed value of this modulator.
      */
     private double value = 0;
 
-    private final String label;
-
-    private LXComponent component;
-
-    private String path;
+    /**
+     * Label for this modulator
+     */
+    public final StringParameter label = new StringParameter("Name");
 
     /**
      * Quick helper to get half of PI.
@@ -52,27 +54,28 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
      */
     public static final double TWO_PI = Math.PI * 2.;
 
-    private static int idCounter = 1;
-
     /**
      * Utility default constructor
      *
      * @param label Label
      */
     protected LXModulator(String label) {
-        this.label = (label == null) ? (getClass().getSimpleName()+"-"+idCounter++) : label;
+        this.label.setValue((label == null) ? getClass().getSimpleName() : label);
+        addParameter("__label", this.label);
     }
 
     @Override
     public LXParameter setComponent(LXComponent component, String path) {
-        if (component == null || path == null) {
-            throw new IllegalArgumentException("May not set null component or path");
+        if (path != null) {
+            throw new UnsupportedOperationException("setComponent() path not supported for LXModulator");
         }
-        if (this.component != null || this.path != null) {
-            throw new IllegalStateException("Component already set on this modulator: " + this);
+        if (this.component != null) {
+            throw new IllegalStateException("LXModulator already has component");
+        }
+        if (component == null) {
+            throw new IllegalArgumentException("Cannot setComponent() with null value");
         }
         this.component = component;
-        this.path = path;
         return this;
     }
 
@@ -83,12 +86,12 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
 
     @Override
     public String getPath() {
-        return this.path;
+        throw new UnsupportedOperationException("getPath() not supported for LXModulator");
     }
 
     @Override
     public final String getLabel() {
-        return this.label;
+        return this.label.getString();
     }
 
         /**

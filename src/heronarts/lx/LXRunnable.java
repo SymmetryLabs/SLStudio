@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -22,27 +22,27 @@ package heronarts.lx;
 
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 
 public abstract class LXRunnable extends LXComponent implements LXLoopTask {
 
     /**
      * Whether this modulator is currently running.
      */
-    public final BooleanParameter isRunning = new BooleanParameter("RUN", false);
+    public final BooleanParameter running = new BooleanParameter("RUN", false);
 
     protected LXRunnable() {
-        addParameter(this.isRunning);
-        this.isRunning.addListener(new LXParameterListener() {
-            @Override
-            public void onParameterChanged(LXParameter parameter) {
-                if (LXRunnable.this.isRunning.isOn()) {
-                    onStart();
-                } else {
-                    onStop();
-                }
+        addParameter(this.running);
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter parameter) {
+        if (parameter == this.running) {
+            if (this.running.isOn()) {
+                onStart();
+            } else {
+                onStop();
             }
-        });
+        }
     }
 
     /**
@@ -51,7 +51,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      * @return this
      */
     public final LXRunnable start() {
-        this.isRunning.setValue(true);
+        this.running.setValue(true);
         return this;
     }
 
@@ -63,7 +63,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      * @return this
      */
     public final LXRunnable stop() {
-        this.isRunning.setValue(false);
+        this.running.setValue(false);
         return this;
     }
 
@@ -73,7 +73,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      * @return Whether running
      */
     public final boolean isRunning() {
-        return this.isRunning.isOn();
+        return this.running.isOn();
     }
 
     /**
@@ -119,7 +119,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
 
     @Override
     public void loop(double deltaMs) {
-        if (this.isRunning.isOn()) {
+        if (this.running.isOn()) {
             run(deltaMs);
         }
     }

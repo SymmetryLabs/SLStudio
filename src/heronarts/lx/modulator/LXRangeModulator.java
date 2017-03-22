@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -31,14 +31,12 @@ import heronarts.lx.parameter.LXParameter;
  * scaling is done by this class, subclasses can just work in a normalized space
  * between 0 and 1.
  */
-public abstract class LXRangeModulator extends LXPeriodicModulator implements
-        LXNormalizedParameter {
+public abstract class LXRangeModulator extends LXPeriodicModulator implements LXNormalizedParameter {
 
     private LXParameter startValue;
     private LXParameter endValue;
 
-    protected LXRangeModulator(String label, LXParameter startValue,
-            LXParameter endValue, LXParameter periodMs) {
+    protected LXRangeModulator(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, periodMs);
         this.startValue = startValue;
         this.endValue = endValue;
@@ -53,8 +51,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
      * @param periodMs New period, in milliseconds
      * @return this
      */
-    public final LXRangeModulator setRange(double startValue, double endValue,
-            double periodMs) {
+    public final LXRangeModulator setRange(double startValue, double endValue, double periodMs) {
         this.setPeriod(periodMs);
         this.startValue = new FixedParameter(startValue);
         this.endValue = new FixedParameter(endValue);
@@ -194,7 +191,7 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
         if (sv == ev) {
-            return sv;
+            return 0;
         }
         return (value - sv) / (ev - sv);
     }
