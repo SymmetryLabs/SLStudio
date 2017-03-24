@@ -24,6 +24,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.FunctionalParameter;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * A sawtooth LFO oscillates from one extreme value to another. When the later
@@ -41,14 +42,26 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
 
     public final EnumParameter<Waveshape> waveshape = new EnumParameter<Waveshape>("Wave", Waveshape.SIN);
 
-    public final CompoundParameter rate = new CompoundParameter("Rate", 1, 0.01, 10);
-    public final CompoundParameter skew = new CompoundParameter("Skew", 0, -1, 1);
-    public final CompoundParameter shape = new CompoundParameter("Shape", 0, -1, 1);
-    public final CompoundParameter exp = new CompoundParameter("Exp", 0, -1, 1);
+    public final CompoundParameter rate = (CompoundParameter)
+        new CompoundParameter("Rate", 1, 0.03, 10).setExponent(3).setUnits(LXParameter.Units.HERTZ);
+
+    public final CompoundParameter skew = (CompoundParameter)
+        new CompoundParameter("Skew", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+
+    public final CompoundParameter shape = (CompoundParameter)
+        new CompoundParameter("Shape", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+
+    public final CompoundParameter exp = (CompoundParameter)
+        new CompoundParameter("Exp", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+
     public final CompoundParameter phase = new CompoundParameter("Phase", 0);
 
     public VariableLFO() {
-        super("LFO", new FixedParameter(0), new FixedParameter(1), new FixedParameter(1000));
+        this("LFO");
+    }
+
+    public VariableLFO(String label) {
+        super(label, new FixedParameter(0), new FixedParameter(1), new FixedParameter(1000));
         setPeriod(new FunctionalParameter() {
             @Override
             public double getValue() {
@@ -86,19 +99,25 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
 
     @Override
     public double compute(double basis) {
-        basis = basis + this.phase.getValue();
+        return compute(basis, this.phase.getValue(), this.skew.getValue(), this.shape.getValue(), this.exp.getValue());
+    }
+
+    public double computeBase(double basis) {
+        return compute(basis, this.phase.getBaseValue(), this.skew.getBaseValue(), this.shape.getBaseValue(), this.exp.getBaseValue());
+    }
+
+    private double compute(double basis, double phase, double skew, double shape, double exp) {
+        basis = basis + phase;
         if (basis > 1.) {
             basis = basis % 1.;
         }
 
-        double skewValue = this.skew.getValue();
-        double skewPower = (skewValue >= 0) ? (1 + 4*skewValue) : (1 / (1-4*skewValue));
+        double skewPower = (skew >= 0) ? (1 + 3*skew) : (1 / (1-3*skew));
         if (skewPower != 1) {
             basis = Math.pow(basis, skewPower);
         }
         double value = getWaveshape().compute(basis);
-        double shapeValue = this.shape.getValue();
-        double shapePower = (shapeValue <= 0) ? (1 - 4*shapeValue) : (1 / (1+4*shapeValue));
+        double shapePower = (shape <= 0) ? (1 - 3*shape) : (1 / (1+3*shape));
         if (shapePower != 1) {
             if (value >= 0.5) {
                 value = 0.5 + 0.5 * Math.pow(2*(value-0.5), shapePower);
@@ -106,8 +125,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
                 value = 0.5 - 0.5 * Math.pow(2*(0.5 - value), shapePower);
             }
         }
-        double expValue = this.exp.getValue();
-        double expPower = (expValue <= 0) ? (1 - 4*expValue) : (1 / (1+4*expValue));
+        double expPower = (exp >= 0) ? (1 + 3*exp) : (1 / (1 - 3*exp));
         if (expPower != 1) {
             value = Math.pow(value, expPower);
         }

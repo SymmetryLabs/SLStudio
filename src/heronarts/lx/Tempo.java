@@ -37,7 +37,7 @@ import heronarts.lx.parameter.MutableParameter;
  * and ramp() returns a double value indicating the current 4/4 phase from 0 to
  * 1.
  */
-public class Tempo extends LXRunnableComponent {
+public class Tempo extends LXModulatorComponent {
 
     public interface Listener {
         public void onBeat(Tempo tempo);

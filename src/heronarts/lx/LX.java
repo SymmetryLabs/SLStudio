@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -24,6 +24,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.pattern.IteratorTestPattern;
 import java.io.File;
@@ -656,6 +657,10 @@ public class LX {
         }
     }
 
+    public void newProject() {
+        // TODO(mcslee): implement this
+    }
+
     public void loadProject(File file) {
         try {
             FileReader fr = null;
@@ -683,9 +688,9 @@ public class LX {
         }
     }
 
-    protected LXEffect instantiateEffect(String className) {
+    private <T extends LXComponent> T instantiateComponent(String className, Class<T> type) {
         try {
-            Class<? extends LXEffect> cls = Class.forName(className).asSubclass(LXEffect.class);
+            Class<? extends T> cls = Class.forName(className).asSubclass(type);
             return cls.getConstructor(LX.class).newInstance(this);
         } catch (Exception x) {
             System.err.println(x.getLocalizedMessage());
@@ -694,14 +699,24 @@ public class LX {
     }
 
     protected LXPattern instantiatePattern(String className) {
+        return instantiateComponent(className, LXPattern.class);
+    }
+
+    protected LXEffect instantiateEffect(String className) {
+        return instantiateComponent(className, LXEffect.class);
+    }
+
+    protected static LXModulator instantiateModulator(String className) {
         try {
-            Class<? extends LXPattern> cls = Class.forName(className).asSubclass(LXPattern.class);
-            return cls.getConstructor(LX.class).newInstance(this);
+            Class<? extends LXModulator> cls = Class.forName(className).asSubclass(LXModulator.class);
+            return cls.getConstructor().newInstance();
         } catch (Exception x) {
             System.err.println(x.getLocalizedMessage());
         }
         return null;
     }
+
+
 
 }
 

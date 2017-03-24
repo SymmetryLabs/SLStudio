@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -25,7 +25,6 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transition.LXTransition;
 
@@ -44,12 +43,12 @@ import com.google.gson.JsonObject;
  */
 public class LXChannel extends LXBus {
 
-    public class Timer extends LXRunnableComponent.Timer {
+    public class Timer extends LXModulatorComponent.Timer {
         public long blendNanos;
     }
 
     @Override
-    protected LXRunnableComponent.Timer constructTimer() {
+    protected LXModulatorComponent.Timer constructTimer() {
         return new Timer();
     }
 
@@ -140,11 +139,6 @@ public class LXChannel extends LXBus {
     private int index;
 
     /**
-     * The symbolic name of this channel.
-     */
-    public final StringParameter name;
-
-    /**
      * Whether this channel is enabled.
      */
     public final BooleanParameter enabled = new BooleanParameter("On", true);
@@ -172,11 +166,14 @@ public class LXChannel extends LXBus {
     /**
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
-    public final BoundedParameter autoCycleTimeSecs = new BoundedParameter("CycleTime", 60, .1, 60*60*4);
+    public final BoundedParameter autoCycleTimeSecs = (BoundedParameter)
+        new BoundedParameter("CycleTime", 60, .1, 60*60*4).setUnits(LXParameter.Units.SECONDS);
+
+    public final BoundedParameter transitionTimeSecs = (BoundedParameter)
+        new BoundedParameter("TransitionTime", 5, .1, 180).setUnits(LXParameter.Units.SECONDS);
 
     public final BooleanParameter transitionsEnabled = new BooleanParameter("Transitions", false);
     public final DiscreteParameter transitionBlendMode;
-    public final BoundedParameter transitionTimeSecs = new BoundedParameter("TransitionTime", 5, .1, 180);
 
     public final BoundedParameter fader = new BoundedParameter("Fader", 0);
 
@@ -203,7 +200,7 @@ public class LXChannel extends LXBus {
     LXChannel(LX lx, int index, LXPattern[] patterns) {
         super(lx);
         this.index = index;
-        this.name = new StringParameter("Name", "Channel-" + (index+1));
+        this.label.setValue("Channel-" + (index+1));
         this.blendBuffer = new ModelBuffer(lx);
         this.blendMode = new DiscreteParameter("Blend", lx.engine.channelBlends);
         this.transitionBlendMode = new DiscreteParameter("TransitionBlend", lx.engine.crossfaderBlends);
@@ -211,7 +208,6 @@ public class LXChannel extends LXBus {
         _updatePatterns(patterns);
         this.colors = this.getActivePattern().getColors();
 
-        addParameter("name", this.name);
         addParameter("channelEnabled", this.enabled);
         addParameter("cueActive", this.cueActive);
         addParameter("midiMonitor", this.midiMonitor);
@@ -265,11 +261,6 @@ public class LXChannel extends LXBus {
             }
         }
         return this;
-    }
-
-    @Override
-    public String getLabel() {
-        return this.name.getString();
     }
 
     public final int getIndex() {
@@ -632,7 +623,7 @@ public class LXChannel extends LXBus {
         JsonArray patternsArray = obj.getAsJsonArray(KEY_PATTERNS);
         for (JsonElement patternElement : patternsArray) {
             JsonObject patternObj = (JsonObject) patternElement;
-            LXPattern pattern = this.lx.instantiatePattern(patternObj.get("class").getAsString());
+            LXPattern pattern = this.lx.instantiatePattern(patternObj.get(KEY_CLASS).getAsString());
             pattern.load(patternObj);
             addPattern(pattern);
         }

@@ -67,7 +67,8 @@ public abstract class LXPeriodicModulator extends LXModulator {
      */
     protected LXPeriodicModulator(String label, LXParameter period) {
         super(label);
-        this.looping = new BooleanParameter("LOOP-" + label, true);
+        this.looping = new BooleanParameter("Loop", true);
+        addParameter("__loop", this.looping);
         this.period = period;
     }
 

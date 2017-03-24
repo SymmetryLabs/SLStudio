@@ -22,7 +22,7 @@ package heronarts.lx;
 
 import heronarts.lx.model.LXModel;
 
-public abstract class LXModelComponent extends LXRunnableComponent {
+public abstract class LXModelComponent extends LXModulatorComponent {
 
     protected LXModel model;
 

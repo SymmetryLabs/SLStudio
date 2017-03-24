@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -35,6 +35,7 @@ import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -103,7 +104,9 @@ public class LXEngine extends LXComponent {
     LXBlend[] channelBlends;
     private final AddBlend addBlend;
 
-    public final BoundedParameter crossfader = new BoundedParameter("Crossfader", 0.5);
+    public final CompoundParameter crossfader = (CompoundParameter)
+        new CompoundParameter("Crossfader", 0.5).setPolarity(LXParameter.Polarity.BIPOLAR);
+
     final LXBlend[] crossfaderBlends;
     public final DiscreteParameter crossfaderBlendMode;
 

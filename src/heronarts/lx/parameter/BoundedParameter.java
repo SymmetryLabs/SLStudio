@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -25,36 +25,14 @@ package heronarts.lx.parameter;
  */
 public class BoundedParameter extends LXListenableNormalizedParameter {
 
-    /**
-     * Scaling functions determine how the BoundedParameter is interpolated from
-     * its normalized values of 0-1 onto the actual range.
-     */
-    public enum Scaling {
-        /**
-         * Linear scaling between v0 and v1
-         */
-        LINEAR,
-
-        /**
-         * Quadratic easing in from v0 to v1
-         */
-        QUAD_IN,
-
-        /**
-         * Quadratic easing out from v0 to v1
-         */
-        QUAD_OUT
-    };
-
     public class Range {
 
         public final double v0;
         public final double v1;
         public final double min;
         public final double max;
-        public final Scaling scaling;
 
-        private Range(double v0, double v1, Scaling scaling) {
+        private Range(double v0, double v1) {
             this.v0 = v0;
             this.v1 = v1;
             if (v0 < v1) {
@@ -64,7 +42,6 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
                 this.min = v1;
                 this.max = v0;
             }
-            this.scaling = scaling;
         }
     }
 
@@ -88,16 +65,6 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
     }
 
     /**
-     * A bounded parameter from 0-1 with scaling function, initial value is 0.
-     *
-     * @param label Label
-     * @param scaling Scaling function
-     */
-    public BoundedParameter(String label, Scaling scaling) {
-        this(label, 0, scaling);
-    }
-
-    /**
      * A bounded parameter with label and value, initial value of 0 and a range of 0-1
      *
      * @param label Label
@@ -105,17 +72,6 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
      */
     public BoundedParameter(String label, double value) {
         this(label, value, 1);
-    }
-
-    /**
-     * A bounded parameter from 0-1 with scaling function
-     *
-     * @param label Label
-     * @param value Initial value
-     * @param scaling Scaling function
-     */
-    public BoundedParameter(String label, double value, Scaling scaling) {
-        this(label, value, 0, 1, scaling);
     }
 
     /**
@@ -130,18 +86,6 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
     }
 
     /**
-     * A bounded parameter from 0-max with a scaling function
-     *
-     * @param label Label
-     * @param value Initial value
-     * @param max Max value
-     * @param scaling Scaling function
-     */
-    public BoundedParameter(String label, double value, double max, Scaling scaling) {
-        this(label, value, 0, max, scaling);
-    }
-
-    /**
      * A bounded parameter with initial value and range from v0 to v1. Note that it is not necessary for
      * v0 to be less than v1, if it is desired for the knob's value to progress negatively.
      *
@@ -151,22 +95,9 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
      * @param v1 End of range
      */
     public BoundedParameter(String label, double value, double v0, double v1) {
-        this(label, value, v0, v1, Scaling.LINEAR);
+        this(label, value, v0, v1, null);
     }
 
-    /**
-     * A bounded parameter with a scaling function applied.
-     *
-     * @param label Label
-     * @param value Initial value
-     * @param v0 Start value
-     * @param v1 End value
-     * @param scaling Scaling function
-     */
-    public BoundedParameter(String label, double value, double v0, double v1,
-            Scaling scaling) {
-        this(label, value, v0, v1, scaling, null);
-    }
 
     /**
      * Creates a BoundedParameter which limits the value of an underlying MutableParameter to a given
@@ -181,31 +112,13 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
      * @param v1 End of range
      */
     public BoundedParameter(LXListenableParameter underlying, double v0, double v1) {
-        this(underlying, v0, v1, Scaling.LINEAR);
+        this(underlying.getLabel(), underlying.getValue(), v0, v1, underlying);
     }
 
-    /**
-     * Creates a BoundedParameter which limits the value of an underlying MutableParameter to a given
-     * range. Changes to the BoundedParameter are forwarded to the MutableParameter, and vice versa.
-     * If the MutableParameter is set to a value outside the specified bounds, this BoundedParmaeter
-     * will ignore the update and the values will be inconsistent. The typical use of this mode is
-     * to create a parameter suitable for limited-range UI control of a parameter, typically a
-     * MutableParameter.
-     *
-     * @param underlying The underlying parameter
-     * @param v0 Beginning of range
-     * @param v1 End of range
-     * @param scaling Scaling function
-     */
-    public BoundedParameter(LXListenableParameter underlying, double v0, double v1, Scaling scaling) {
-        this(underlying.getLabel(), underlying.getValue(), v0, v1, scaling, underlying);
-    }
-
-    protected BoundedParameter(String label, double value, double v0, double v1,
-        Scaling scaling, LXListenableParameter underlying) {
+    protected BoundedParameter(String label, double value, double v0, double v1, LXListenableParameter underlying) {
         super(label, (value < Math.min(v0, v1)) ? Math.min(v0, v1) : ((value > Math
                 .max(v0, v1)) ? Math.max(v0, v1) : value));
-        this.range = new Range(v0, v1, scaling);
+        this.range = new Range(v0, v1);
         this.underlying = underlying;
         if (this.underlying != null) {
             this.underlying.addListener(new LXParameterListener() {
@@ -227,16 +140,9 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         } else if (normalized > 1) {
             normalized = 1;
         }
-        switch (this.range.scaling) {
-        case QUAD_IN:
-            normalized = normalized * normalized;
-            break;
-        case QUAD_OUT:
-            normalized = 1 - (1 - normalized) * (1 - normalized);
-            break;
-        default:
-        case LINEAR:
-            break;
+        double exponent = getExponent();
+        if (exponent != 1) {
+            normalized = Math.pow(normalized, exponent);
         }
         return this.range.v0 + (this.range.v1 - this.range.v0) * normalized;
     }
@@ -266,16 +172,9 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
             return 0;
         }
         double normalized = (value - this.range.v0) / (this.range.v1 - this.range.v0);
-        switch (this.range.scaling) {
-        case QUAD_IN:
-            normalized = Math.sqrt(normalized);
-            break;
-        case QUAD_OUT:
-            normalized = 1 - Math.sqrt(1 - normalized);
-            break;
-        default:
-        case LINEAR:
-            break;
+        double exponent = getExponent();
+        if (exponent != 1) {
+            normalized = Math.pow(normalized, 1 / exponent);
         }
         return normalized;
     }

@@ -31,12 +31,16 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.LXParameterModulation;
 
-public class LXModulationEngine extends LXRunnableComponent {
+public class LXModulationEngine extends LXModulatorComponent {
+
+    private final LX lx;
 
     public interface Listener {
         public void modulationAdded(LXModulationEngine engine, LXParameterModulation modulation);
@@ -52,6 +56,7 @@ public class LXModulationEngine extends LXRunnableComponent {
 
     LXModulationEngine(LX lx) {
         super(lx);
+        this.lx = lx;
     }
 
     public LXModulationEngine addListener(Listener listener) {
@@ -89,9 +94,7 @@ public class LXModulationEngine extends LXRunnableComponent {
         Iterator<LXParameterModulation> iterator = this.internalModulations.iterator();
         while (iterator.hasNext()) {
             LXParameterModulation modulation = iterator.next();
-            System.out.println(modulation);
             if (modulation.source == component || modulation.source.getComponent() == component || modulation.target.getComponent() == component) {
-                System.out.println("oijasdf");
                 iterator.remove();
                 for (Listener listener : this.listeners) {
                     listener.modulationRemoved(this, modulation);
@@ -134,16 +137,47 @@ public class LXModulationEngine extends LXRunnableComponent {
         return "Mod";
     }
 
+    private static final String KEY_MODULATORS = "modulators";
+    private static final String KEY_MODULATIONS = "modulations";
+
     @Override
     public void save(JsonObject obj) {
-        super.save(obj);
-        // TODO(mcslee): implement saving these!
+        JsonArray modulatorArr = new JsonArray();
+        for (LXModulator modulator : getModulators()) {
+            JsonObject modulatorObj = new JsonObject();
+            modulator.save(modulatorObj);
+            modulatorArr.add(modulatorObj);
+        }
+        obj.add(KEY_MODULATORS, modulatorArr);
+        JsonArray modulationArr = new JsonArray();
+        for (LXParameterModulation modulation : this.modulations) {
+            JsonObject modulationObj = new JsonObject();
+            modulation.save(modulationObj);
+            modulationArr.add(modulationObj);
+        }
+        obj.add(KEY_MODULATIONS, modulationArr);
     }
 
     @Override
     public void load(JsonObject obj) {
-        super.load(obj);
-        // TODO(mcslee): implement loading these!
+        if (obj.has(KEY_MODULATORS)) {
+            JsonArray modulatorArr = obj.getAsJsonArray(KEY_MODULATORS);
+            for (JsonElement modulatorElement : modulatorArr) {
+                JsonObject modulatorObj = modulatorElement.getAsJsonObject();
+                LXModulator modulator = LX.instantiateModulator(modulatorObj.get(KEY_CLASS).getAsString());
+                addModulator(modulator);
+                modulator.load(modulatorObj);
+            }
+        }
+        if (obj.has(KEY_MODULATIONS)) {
+            JsonArray modulationArr = obj.getAsJsonArray(KEY_MODULATIONS);
+            for (JsonElement modulationElement : modulationArr) {
+                JsonObject modulationObj = modulationElement.getAsJsonObject();
+                LXParameterModulation modulation = new LXParameterModulation(this.lx, modulationObj);
+                addModulation(modulation);
+                modulation.load(modulationObj);
+            }
+        }
     }
 
 }

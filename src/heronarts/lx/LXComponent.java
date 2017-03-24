@@ -44,6 +44,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     private LX lx;
 
+    public final StringParameter label = new StringParameter("Label");
+
     private static final int ID_UNASSIGNED = -1;
     static final int ID_ENGINE = 1;
 
@@ -84,14 +86,6 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         void dispose(LXComponent component) {
             this.components.remove(component.id);
         }
-
-        void dump() {
-            String stuff = "{\n";
-            for (LXComponent component : this.components.values()) {
-                stuff += "  " + component.id + ": " + component.toString() + "\n";
-            }
-            System.err.println(stuff + "}");
-        }
     }
 
     private LXComponent parent;
@@ -112,6 +106,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (lx != null) {
             lx.componentRegistry.register(this);
         }
+        addParameter("__label", label);
     }
 
     final LXComponent setParent(LXComponent parent) {
@@ -157,7 +152,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         return path;
     }
 
-    public abstract String getLabel();
+    public String getLabel() {
+        return label.getString();
+    }
 
     @Override
     public String toString() {
@@ -222,7 +219,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     public/* abstract */void onParameterChanged(LXParameter parameter) {
     }
 
-    private final static String KEY_ID = "id";
+    protected final static String KEY_ID = "id";
+    protected final static String KEY_CLASS = "class";
     private final static String KEY_PARAMETERS = "parameters";
 
     @Override
@@ -242,7 +240,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
                 parameters.addProperty(path, parameter.getValue());
             }
         }
+
         obj.addProperty(KEY_ID, this.id);
+        obj.addProperty(KEY_CLASS, getClass().getName());
         obj.add(KEY_PARAMETERS, parameters);
     }
 

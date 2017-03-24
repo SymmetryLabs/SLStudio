@@ -36,6 +36,8 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
     private LXParameter startValue;
     private LXParameter endValue;
 
+    private double exponent = 1;
+
     protected LXRangeModulator(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, periodMs);
         this.startValue = startValue;
@@ -57,6 +59,18 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
         this.endValue = new FixedParameter(endValue);
         onRangeChanged();
         return this;
+    }
+
+    public LXRangeModulator setExponent(double exponent) {
+        if (exponent <= 0) {
+            throw new IllegalArgumentException("May not set zero or negative exponent");
+        }
+        this.exponent = exponent;
+        return this;
+    }
+
+    public double getExponent() {
+        return this.exponent;
     }
 
     /**

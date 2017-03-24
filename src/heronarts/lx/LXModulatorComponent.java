@@ -24,11 +24,9 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
-import com.google.gson.JsonObject;
-
 import heronarts.lx.modulator.LXModulator;
 
-public abstract class LXRunnableComponent extends LXComponent implements LXLoopTask {
+public abstract class LXModulatorComponent extends LXComponent implements LXLoopTask {
 
     private final List<LXModulator> modulators = new ArrayList<LXModulator>();
 
@@ -44,7 +42,7 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
 
     public final Timer timer = constructTimer();
 
-    protected LXRunnableComponent(LX lx) {
+    protected LXModulatorComponent(LX lx) {
         super(lx);
     }
 
@@ -90,12 +88,6 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
         for (LXModulator modulator : this.modulators) {
             modulator.loop(deltaMs);
         }
-    }
-
-    @Override
-    public void save(JsonObject obj) {
-        obj.addProperty("class", getClass().getName());
-        super.save(obj);
     }
 
 }

@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -366,7 +366,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
                     if (parameter != null) {
                         event = new ParameterAutomationEvent(parameter, obj.get(KEY_VALUE).getAsFloat());
                     } else {
-                        System.out.println("LXAutomationRecorder::Invalid parameter: " + parameterPath);
+                        System.err.println("LXAutomationRecorder::Invalid parameter: " + parameterPath);
                     }
                 } else if (eventType.equals(EVENT_PATTERN)) {
                     int channelIndex = obj.get(KEY_CHANNEL).getAsInt();
@@ -384,7 +384,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
                         sm.setMessage(command, channel, data1, data2);
                         event = new MidiAutomationEvent(LXShortMessage.fromShortMessage(sm));
                     } catch (InvalidMidiDataException imdx) {
-                        System.out.println("LXAutomationRecorder::Invalid midi data: " + imdx.getMessage());
+                        System.err.println("LXAutomationRecorder::Invalid midi data: " + imdx.getMessage());
                     }
                 } else if (eventType.equals(EVENT_MESSAGE)) {
                     String message = obj.get(KEY_MESSAGE).getAsString();
@@ -397,7 +397,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
                     this.events.add(event);
                 }
             } catch (UnsupportedOperationException uox) {
-                System.out.println("LXAutomationRecorder::Invalid automation event: " + element);
+                System.err.println("LXAutomationRecorder::Invalid automation event: " + element);
             }
         }
     }

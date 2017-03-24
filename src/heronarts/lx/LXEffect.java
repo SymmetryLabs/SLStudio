@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -32,7 +32,6 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
-import heronarts.lx.parameter.StringParameter;
 
 /**
  * Class to represent an effect that may be applied to the color array. Effects
@@ -53,8 +52,6 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
 
     public final Timer timer = new Timer();
 
-    public final StringParameter name;
-
     private int index = -1;
 
     protected LXEffect(LX lx) {
@@ -64,7 +61,7 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
         if (simple.endsWith("Effect")) {
             simple = simple.substring(0, simple.length() - "Effect".length());
         }
-        this.name = new StringParameter("Name", simple);
+        this.label.setValue(simple);
 
         this.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
@@ -78,7 +75,6 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
             }
         });
 
-        addParameter("__name", this.name);
         addParameter("__enabled", this.enabled);
         addModulator(this.enabledDamped);
     }
@@ -114,32 +110,13 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
     }
 
     /**
-     * Gets the name of the effect
-     *
-     * @return Effect name
-     */
-    public String getName() {
-        return this.name.getString();
-    }
-
-    /**
-     * Gets the component label
-     *
-     *  @return label
-     */
-    @Override
-    public String getLabel() {
-        return getName();
-    }
-
-    /**
      * Sets the name of the effect, useful for method chaining
      *
      * @param name Name
      * @return this
      */
-    public LXEffect setName(String name) {
-        this.name.setValue(name);
+    public LXEffect setLabel(String label) {
+        this.label.setValue(label);
         return this;
     }
 

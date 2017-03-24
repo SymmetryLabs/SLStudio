@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -29,6 +29,71 @@ import heronarts.lx.LXComponent;
  */
 public interface LXParameter {
 
+    public enum Polarity {
+        UNIPOLAR,
+        BIPOLAR;
+
+        @Override
+        public String toString() {
+            switch (this) {
+            case BIPOLAR: return "↔";
+            default:
+            case UNIPOLAR: return "→";
+            }
+        }
+    };
+
+    public enum Units {
+        NONE,
+        SECONDS,
+        MILLISECONDS,
+        DECIBELS,
+        HERTZ;
+
+        public String format(double value) {
+            return Units.format(this, value);
+        }
+
+        @SuppressWarnings("fallthrough")
+        public static String format(Units units, double value) {
+            switch (units) {
+            case SECONDS:
+                value *= 1000;
+                // pass through!
+            case MILLISECONDS:
+                if (value < 1000) {
+                    return String.format("%dms", (int) value);
+                } else if (value < 60000) {
+                    return String.format("%.2fs", value / 1000);
+                } else if (value < 3600000) {
+                    int minutes = (int) (value / 60000);
+                    int seconds = (int) ((value % 60000) / 1000);
+                    return String.format("%dmin %ds", minutes, seconds);
+                }
+                int hours = (int) (value / 3600000);
+                value = value % 3600000;
+                int minutes = (int) (value / 60000);
+                int seconds = (int) ((value % 60000) / 1000);
+                return String.format("%d:%02d:%02d", hours, minutes, seconds);
+            case HERTZ:
+                return String.format("%.1fHz", value);
+            case DECIBELS:
+                return String.format("%.1fdB", value);
+            default:
+            case NONE:
+                return String.format("%.2f", value);
+            }
+        }
+    };
+
+    /**
+     * Sets the component that owns this parameter
+     *
+     * @param component Component
+     * @return this
+     */
+    public LXParameter setComponent(LXComponent component, String path);
+
     /**
      * Gets the component to which this parameter is registered.
      *
@@ -44,12 +109,16 @@ public interface LXParameter {
     public String getPath();
 
     /**
-     * Sets the component that owns this parameter
+     * Gets the unit format that this parameter's value stores.
      *
-     * @param component Component
-     * @return this
+     * @return Units
      */
-    public LXParameter setComponent(LXComponent component, String path);
+    public Units getUnits();
+
+    /**
+     * Gets the polarity of this parameter.
+     */
+    public Polarity getPolarity();
 
     /**
      * Invoked when the parameter is done being used and none of its resources

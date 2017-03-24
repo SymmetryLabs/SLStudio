@@ -28,7 +28,7 @@ import heronarts.lx.audio.FrequencyGate;
 import heronarts.lx.audio.GraphicEQ;
 
 // TODO(mcslee): make this an LXComponent that the engine runs
-public class LXAudio extends LXRunnableComponent {
+public class LXAudio extends LXModulatorComponent {
 
     /**
      * Callback for Minim implementation

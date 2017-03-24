@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -41,6 +41,10 @@ public abstract class LXListenableParameter implements LXParameter {
     private LXComponent component;
     private String path;
 
+    private Units units = LXParameter.Units.NONE;
+
+    private Polarity polarity = LXParameter.Polarity.UNIPOLAR;
+
     protected LXListenableParameter() {
         this(null, 0);
     }
@@ -58,15 +62,37 @@ public abstract class LXListenableParameter implements LXParameter {
         this.defaultValue = this.value = value;
     }
 
+    public LXParameter.Units getUnits() {
+        return this.units;
+    }
+
+    public LXListenableParameter setUnits(LXParameter.Units units) {
+        this.units = units;
+        return this;
+    }
+
+    public LXParameter.Polarity getPolarity() {
+        return this.polarity;
+    }
+
+    public LXListenableParameter setPolarity(LXParameter.Polarity polarity) {
+        this.polarity = polarity;
+        return this;
+    }
+
     public final LXListenableParameter addListener(LXParameterListener listener) {
-        if (listener != null) {
-            listeners.add(listener);
+        if (listener == null) {
+            throw new IllegalArgumentException("Cannot add null parameter listener");
         }
+        if (this.listeners.contains(listener)) {
+            throw new IllegalStateException("Cannot add duplicate listener " + this + " " + listener);
+        }
+        this.listeners.add(listener);
         return this;
     }
 
     public final LXListenableParameter removeListener(LXParameterListener listener) {
-        listeners.remove(listener);
+        this.listeners.remove(listener);
         return this;
     }
 

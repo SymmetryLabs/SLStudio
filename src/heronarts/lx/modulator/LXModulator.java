@@ -22,8 +22,9 @@ package heronarts.lx.modulator;
 
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXRunnable;
+import heronarts.lx.color.ColorParameter;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.StringParameter;
 
 /**
  * A Modulator is an abstraction for a variable with a value that varies over
@@ -34,15 +35,19 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
 
     private LXComponent component;
 
+    private LXParameter.Units units = LXParameter.Units.NONE;
+
+    private LXParameter.Polarity polarity = LXParameter.Polarity.UNIPOLAR;
+
+    public final ColorParameter color = new ColorParameter("Color", LXColor.hsb(Math.random() * 360, 100, 100));
+
+    // Hack so that Processing IDE can access it...
+    public final ColorParameter clr = this.color;
+
     /**
      * The current computed value of this modulator.
      */
     private double value = 0;
-
-    /**
-     * Label for this modulator
-     */
-    public final StringParameter label = new StringParameter("Name");
 
     /**
      * Quick helper to get half of PI.
@@ -61,7 +66,7 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
      */
     protected LXModulator(String label) {
         this.label.setValue((label == null) ? getClass().getSimpleName() : label);
-        addParameter("__label", this.label);
+        addParameter("__color", this.color);
     }
 
     @Override
@@ -89,12 +94,25 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
         throw new UnsupportedOperationException("getPath() not supported for LXModulator");
     }
 
-    @Override
-    public final String getLabel() {
-        return this.label.getString();
+    public LXModulator setUnits(LXParameter.Units units) {
+        this.units = units;
+        return this;
     }
 
-        /**
+    public LXParameter.Units getUnits() {
+        return this.units;
+    }
+
+    public LXModulator setPolarity(LXParameter.Polarity polarity) {
+        this.polarity = polarity;
+        return this;
+    }
+
+    public LXParameter.Polarity getPolarity() {
+        return this.polarity;
+    }
+
+    /**
      * Retrieves the current value of the modulator in full precision
      *
      * @return Current value of the modulator

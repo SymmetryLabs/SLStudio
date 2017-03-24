@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,7 +28,6 @@ import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.StringParameter;
 import heronarts.lx.transition.LXTransition;
 
 /**
@@ -41,8 +40,6 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * Transition used when this pattern becomes active.
      */
     protected LXTransition transition = null;
-
-    public final StringParameter name = new StringParameter("Name");
 
     private int intervalBegin = -1;
 
@@ -63,26 +60,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
         if (simple.endsWith("Pattern")) {
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
-        this.name.setValue(simple);
-
-        addParameter("__name", this.name);
-    }
-
-    /**
-     * Gets the name of the pattern
-     *
-     * @return Pattern name
-     */
-    public String getName() {
-        return this.name.getString();
-    }
-
-    /**
-     * Gets the label for this pattern
-     */
-    @Override
-    public String getLabel() {
-        return getName();
+        this.label.setValue(simple);
     }
 
     /**
@@ -91,8 +69,8 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      * @param name Name
      * @return this
      */
-    public LXPattern setName(String name) {
-        this.name.setValue(name);
+    public LXPattern setLabel(String label) {
+        this.label.setValue(label);
         return this;
     }
 

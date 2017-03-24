@@ -59,21 +59,29 @@ public class LXPalette extends LXModelComponent {
 
     public final BoundedParameter range = new BoundedParameter("Range", 0, 360);
 
-    public final BoundedParameter period = new BoundedParameter("Period", 120000, 1000, 1800000);
+    public final BoundedParameter period = (BoundedParameter)
+        new BoundedParameter("Period", 120000, 1000, 1800000).setUnits(LXParameter.Units.MILLISECONDS);
 
-    public final CompoundParameter spreadX = new CompoundParameter("X-add", 0, -360, 360);
+    public final CompoundParameter spreadX = (CompoundParameter)
+        new CompoundParameter("X-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final CompoundParameter spreadY = new CompoundParameter("Y-add", 0, -360, 360);
+    public final CompoundParameter spreadY = (CompoundParameter)
+        new CompoundParameter("Y-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final CompoundParameter spreadZ = new CompoundParameter("Z-add", 0, -360, 360);
+    public final CompoundParameter spreadZ = (CompoundParameter)
+        new CompoundParameter("Z-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final CompoundParameter offsetX = new CompoundParameter("X-off", 0, -1, 1);
+    public final CompoundParameter offsetX = (CompoundParameter)
+        new CompoundParameter("X-off", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final CompoundParameter offsetY = new CompoundParameter("Y-off", 0, -1, 1);
+    public final CompoundParameter offsetY = (CompoundParameter)
+        new CompoundParameter("Y-off", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final CompoundParameter offsetZ = new CompoundParameter("Z-off", 0, -1, 1);
+    public final CompoundParameter offsetZ = (CompoundParameter)
+        new CompoundParameter("Z-off", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final CompoundParameter spreadR = new CompoundParameter("R-add", 0, -360, 360);
+    public final CompoundParameter spreadR = (CompoundParameter)
+        new CompoundParameter("R-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final BooleanParameter mirror = new BooleanParameter("Mirror", true);
 
