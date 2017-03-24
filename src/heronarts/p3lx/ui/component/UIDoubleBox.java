@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -41,16 +41,6 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget {
     private double maxValue = Double.MAX_VALUE;
     private double value = 0;
     private BoundedParameter parameter = null;
-    private double baseIncrement = 1;
-
-    public enum Units {
-        NONE,
-        SECONDS,
-        MILLISECONDS,
-        DECIBELS
-    };
-
-    private Units units = Units.NONE;
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
@@ -87,21 +77,6 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget {
         return this;
     }
 
-    /**
-     * Set units display after the box content
-     *
-     * @param units
-     * @return
-     */
-    public UIDoubleBox setUnits(Units units) {
-        if (this.units != units) {
-            this.units = units;
-            this.baseIncrement = (units == Units.MILLISECONDS) ? 1000 : 1;
-            redraw();
-        }
-        return this;
-    }
-
     @Override
     protected double getFillWidthNormalized() {
         if (this.parameter != null) {
@@ -127,38 +102,9 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget {
         return this;
     }
 
-    @SuppressWarnings("fallthrough")
-    private static String formatValue(Units units, double value) {
-        switch (units) {
-        case SECONDS:
-            value *= 1000;
-            // pass through!
-        case MILLISECONDS:
-            if (value < 1000) {
-                return String.format("%dms", (int) value);
-            } else if (value < 60000) {
-                return String.format("%.2fs", value / 1000);
-            } else if (value < 3600000) {
-                int minutes = (int) (value / 60000);
-                int seconds = (int) ((value % 60000) / 1000);
-                return String.format("%dmin %ds", minutes, seconds);
-            }
-            int hours = (int) (value / 3600000);
-            value = value % 3600000;
-            int minutes = (int) (value / 60000);
-            int seconds = (int) ((value % 60000) / 1000);
-            return String.format("%d:%02d:%02d", hours, minutes, seconds);
-        case DECIBELS:
-            return String.format("%.1fdB", value);
-        default:
-        case NONE:
-            return String.format("%.2f", value);
-        }
-    }
-
     @Override
     protected String getValueString() {
-        return formatValue(this.units, this.value);
+        return getUnits().format(this.value);
     }
 
     /**
@@ -184,8 +130,30 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget {
         return isValidInputCharacter(keyChar);
     }
 
+    private LXParameter.Units getUnits() {
+        if (this.parameter != null) {
+            return this.parameter.getUnits();
+        }
+        return LXParameter.Units.NONE;
+    }
+
+    private double getBaseIncrement() {
+        switch (getUnits()) {
+        case MILLISECONDS:
+            double range = Math.abs(this.parameter.range.max - this.parameter.range.min);
+            if (range > 10000) {
+                return 1000;
+            } else if (range > 1000) {
+                return 10;
+            }
+            return 1;
+        default:
+            return 1;
+        }
+    }
+
     private double getIncrement(Event inputEvent) {
-        double increment = this.baseIncrement;
+        double increment = getBaseIncrement();
         if (inputEvent.isShiftDown()) {
             if (this.hasShiftMultiplier) {
                 increment *= this.shiftMultiplier;

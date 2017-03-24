@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -38,14 +38,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
         HORIZONTAL, VERTICAL
     };
 
-    public enum FillMode {
-        UNIPOLAR,
-        BIPOLAR
-    };
-
     private final Direction direction;
-
-    private FillMode fillMode = FillMode.UNIPOLAR;
 
     private static final float HANDLE_WIDTH = 12;
     private static final int HANDLE_ROUNDING = 4;
@@ -72,14 +65,6 @@ public class UISlider extends UIParameterControl implements UIFocus {
         enableImmediateEdit(true);
         this.direction = direction;
         this.handleHeight = h;
-    }
-
-    public UISlider setFillMode(FillMode fillMode) {
-        if (this.fillMode != fillMode) {
-            this.fillMode = fillMode;
-            redraw();
-        }
-        return this;
     }
 
     public UISlider resetFillColor() {
@@ -113,7 +98,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.fill(controlColor);
 
             int fillX, fillWidth;
-            switch (this.fillMode) {
+            switch (this.polarity) {
             case BIPOLAR:
                 fillX = (int) (this.width / 2);
                 fillWidth = (int) ((getNormalized() - 0.5) * (this.width - 2*PADDING));
@@ -135,7 +120,7 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.fill(controlColor);
             int fillY;
             int fillSize;
-            switch (this.fillMode) {
+            switch (this.polarity) {
             case BIPOLAR:
                 fillY = (int) (this.handleHeight / 2);
                 fillSize = (int) ((0.5 - getNormalized()) * (this.handleHeight - 2*PADDING));

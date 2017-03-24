@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -35,13 +35,15 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIControlTarget;
+import heronarts.p3lx.ui.UIModulationSource;
 import heronarts.p3lx.ui.UIModulationTarget;
 
-public abstract class UIParameterControl extends UIInputBox implements UIControlTarget, UIModulationTarget, LXParameterListener {
+public abstract class UIParameterControl extends UIInputBox implements UIControlTarget, UIModulationTarget, UIModulationSource, LXParameterListener {
 
     protected final static int LABEL_MARGIN = 2;
 
@@ -52,6 +54,8 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     private boolean showValue = false;
 
     protected LXListenableNormalizedParameter parameter = null;
+
+    protected LXParameter.Polarity polarity = LXParameter.Polarity.UNIPOLAR;
 
     protected boolean enabled = true;
 
@@ -133,12 +137,21 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
         return this.parameter;
     }
 
+    public UIParameterControl setPolarity(LXParameter.Polarity polarity) {
+        if (this.polarity != polarity) {
+            this.polarity = polarity;
+            redraw();
+        }
+        return this;
+    }
+
     public UIParameterControl setParameter(LXListenableNormalizedParameter parameter) {
         if (this.parameter != null) {
             this.parameter.removeListener(this);
         }
         this.parameter = parameter;
         if (this.parameter != null) {
+            this.polarity = this.parameter.getPolarity();
             this.parameter.addListener(this);
         }
         redraw();
@@ -158,9 +171,11 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
             if (this.parameter instanceof DiscreteParameter) {
                 return ((DiscreteParameter) this.parameter).getOption();
             } else if (this.parameter instanceof BooleanParameter) {
-                return ((BooleanParameter)this.parameter).isOn() ? "ON" : "OFF";
+                return ((BooleanParameter) this.parameter).isOn() ? "ON" : "OFF";
+            } else if (this.parameter instanceof CompoundParameter) {
+                return this.parameter.getUnits().format(((CompoundParameter) this.parameter).getBaseValue());
             } else {
-                return String.format("%.2f", this.parameter.getValue());
+                return this.parameter.getUnits().format(this.parameter.getValue());
             }
         }
         return "-";
@@ -303,6 +318,11 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
 
     @Override
     public LXParameter getControlTarget() {
+        return isMappable() ? this.parameter : null;
+    }
+
+    @Override
+    public LXNormalizedParameter getModulationSource() {
         return isMappable() ? this.parameter : null;
     }
 

@@ -40,8 +40,10 @@ public class UIProjectManager extends UICollapsibleSection {
     private final UILabel fileLabel;
     private File file;
 
-    public UIProjectManager(final UI ui, final LX lx, float x, float y, float w, float h) {
-        super(ui, x, y, w, h);
+    public static final float HEIGHT = 118;
+
+    public UIProjectManager(final UI ui, final LX lx, float x, float y, float w) {
+        super(ui, x, y, w, HEIGHT);
         this.lx = lx;
         this.file = lx.getProject();
         if (this.file == null) {
@@ -90,6 +92,18 @@ public class UIProjectManager extends UICollapsibleSection {
         .addToContainer(this);
 
         new UIButton(0, 60, getContentWidth(), 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    lx.newProject();
+                }
+            }
+        }
+        .setLabel("New...")
+        .setMomentary(true)
+        .addToContainer(this);
+
+        new UIButton(0, 80, getContentWidth(), 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {

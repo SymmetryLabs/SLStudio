@@ -26,8 +26,16 @@
 
 package heronarts.p3lx.ui.component;
 
+import java.util.ArrayList;
+import java.util.List;
 import heronarts.lx.LXUtils;
+import heronarts.lx.color.ColorParameter;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXListenableNormalizedParameter;
+import heronarts.lx.parameter.LXListenableParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameterModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIFocus;
@@ -41,19 +49,25 @@ public class UIKnob extends UIParameterControl implements UIFocus {
     public final static int KNOB_SIZE = 28;
     public final static int WIDTH = KNOB_SIZE + 2*KNOB_MARGIN;
 
-
     private final static float KNOB_INDENT = .4f;
     private final static int ARC_CENTER_X = WIDTH / 2;
     private final static int ARC_CENTER_Y = KNOB_SIZE / 2;
     private final static float ARC_START = PConstants.HALF_PI + KNOB_INDENT;
     private final static float ARC_RANGE = PConstants.TWO_PI - 2 * KNOB_INDENT;
+    private final static float ARC_END = ARC_START + ARC_RANGE;
 
-    public enum ArcMode {
-        UNIPOLAR,
-        BIPOLAR
+    private final List<LXListenableParameter> modulationParameters = new ArrayList<LXListenableParameter>();
+
+    private final LXParameterListener redrawListener = new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+            redraw();
+        }
     };
 
-    private ArcMode arcMode = ArcMode.UNIPOLAR;
+    public UIKnob(LXListenableNormalizedParameter parameter) {
+        this();
+        setParameter(parameter);
+    }
 
     public UIKnob() {
         this(0, 0);
@@ -69,12 +83,13 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         enableImmediateEdit(true);
     }
 
-    public UIKnob setArcMode(ArcMode arcMode) {
-        if (this.arcMode != arcMode) {
-            this.arcMode = arcMode;
-            redraw();
+    @Override
+    public UIParameterControl setParameter(LXListenableNormalizedParameter parameter) {
+        for (LXListenableParameter p : this.modulationParameters) {
+            p.removeListener(this.redrawListener);
         }
-        return this;
+        this.modulationParameters.clear();
+        return super.setParameter(parameter);
     }
 
     @Override
@@ -82,50 +97,95 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         float knobValue = (float) getNormalized();
         float valueEnd = ARC_START + knobValue * ARC_RANGE;
         float valueStart;
-        switch (this.arcMode) {
+        switch (this.polarity) {
         case BIPOLAR: valueStart = ARC_START + ARC_RANGE/2; break;
         default: case UNIPOLAR: valueStart = ARC_START; break;
         }
 
         float arcSize = KNOB_SIZE;
-
-        pg.ellipseMode(PConstants.CENTER);
         pg.noStroke();
 
         // Modulations!
         if (this.parameter instanceof CompoundParameter) {
             CompoundParameter compound = (CompoundParameter) this.parameter;
-            for (LXParameterModulation modulation : compound.modulations) {
-                float modStart = valueEnd;
-                float modEnd = LXUtils.constrainf(modStart + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_START + ARC_RANGE);
+            for (int i = compound.modulations.size()-1; i >= 0; --i) {
+                LXParameterModulation modulation = compound.modulations.get(i);
+                float modStart, modEnd;
+                switch (modulation.getPolarity()) {
+                case BIPOLAR:
+                    modStart = LXUtils.constrainf(valueEnd - modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+                    modEnd = LXUtils.constrainf(valueEnd + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+                    break;
+                default:
+                case UNIPOLAR:
+                    modStart = valueEnd;
+                    modEnd = LXUtils.constrainf(modStart + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+                    break;
+                }
+                ColorParameter modulationColor = modulation.color;
+                if (!modulationParameters.contains(modulationColor)) {
+                    modulationParameters.add(modulationColor);
+                    modulationParameters.add(modulation.polarity);
+                    modulationColor.addListener(this.redrawListener);
+                    modulation.polarity.addListener(this.redrawListener);
+                }
                 // Light ring of value
-                pg.noFill();
-                pg.fill(isEnabled() ? ui.theme.getSecondaryColor() : ui.theme.getControlDisabledColor());
-                pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(modStart, modEnd), Math.max(modStart, modEnd));
-                arcSize -= 6;
+                int modColor = ui.theme.getControlDisabledColor();
+                int modColorInv = modColor;
+                if (isEnabled()) {
+                    modColor = modulationColor.getColor();
+                    modColorInv = LXColor.hsb(LXColor.h(modColor), 50, 75);
+                }
+                pg.fill(modColor);
+                switch (modulation.getPolarity()) {
+                case BIPOLAR:
+                    if (modEnd >= modStart) {
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, valueEnd, Math.min(ARC_END, modEnd+.1f));
+                        pg.fill(modColorInv);
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modStart-.1f), valueEnd);
+                    } else {
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modEnd-.1f), valueEnd);
+                        pg.fill(modColorInv);
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, valueEnd, Math.min(ARC_END, modStart+.1f));
+                    }
+                    break;
+                case UNIPOLAR:
+                    pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, Math.min(modStart, modEnd)-.1f), Math.min(ARC_END, Math.max(modStart, modEnd)+.1f));
+                    break;
+                }
+                arcSize -= 3;
+                pg.fill(ui.theme.getWindowBackgroundColor());
+                pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize);
+                arcSize -= 1;
+                if (arcSize < 6) {
+                    break;
+                }
+
             }
         }
 
-        // Full outer dark ring
+        // Outer fill
+        pg.noStroke();
         pg.fill(ui.theme.getControlBackgroundColor());
-        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, ARC_START, ARC_START + ARC_RANGE);
+        pg.ellipseMode(PConstants.CENTER);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, ARC_START, ARC_END);
 
-        // Light ring of value
+        // Value indication
         pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
         pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(valueStart, valueEnd), Math.max(valueStart, valueEnd));
 
         // Center tick mark for bipolar knobs
-        if ((this.arcMode == ArcMode.BIPOLAR) && (valueStart == valueEnd)) {
+        if ((this.polarity == LXParameter.Polarity.BIPOLAR) && (valueStart == valueEnd)) {
             pg.stroke(0xff333333);
-            pg.line(ARC_CENTER_X, ARC_CENTER_Y - KNOB_SIZE / 4, ARC_CENTER_X, ARC_CENTER_Y - KNOB_SIZE/2);
+            pg.line(ARC_CENTER_X, ARC_CENTER_Y, ARC_CENTER_X, ARC_CENTER_Y - arcSize/2);
         }
 
-        // Center circle of knob
+        // Center dot
         pg.noStroke();
         pg.fill(0xff333333);
-        pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, KNOB_SIZE/2, KNOB_SIZE/2);
+        pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, 8, 8);
 
-        super.onDraw(ui, pg);
+        super.onDraw(ui,  pg);
     }
 
     private double dragValue;
@@ -135,15 +195,25 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         super.onMousePressed(mouseEvent, mx, my);
         this.dragValue = getNormalized();
         if ((this.parameter != null) && (mouseEvent.getCount() > 1)) {
-            this.parameter.reset();
+            LXParameterModulation modulation = getModulation(mouseEvent.isShiftDown());
+            if (modulation != null && (mouseEvent.isControlDown() || mouseEvent.isMetaDown())) {
+                modulation.range.reset();
+            } else {
+                this.parameter.reset();
+            }
         }
     }
 
-    private LXParameterModulation getModulation() {
+    private LXParameterModulation getModulation(boolean secondary) {
         if (this.parameter != null && this.parameter instanceof CompoundParameter) {
             CompoundParameter compound = (CompoundParameter) this.parameter;
-            if (compound.modulations.size() > 0) {
-                return compound.modulations.get(0);
+            int size = compound.modulations.size();
+            if (size > 0) {
+                if (secondary && (size > 1)) {
+                    return compound.modulations.get(size-2);
+                } else {
+                    return compound.modulations.get(size-1);
+                }
             }
         }
         return null;
@@ -156,14 +226,13 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         }
 
         float delta = dy / 100.f;
-        if (mouseEvent.isShiftDown()) {
-            delta /= 10;
-        }
-
-        LXParameterModulation modulation = getModulation();
+        LXParameterModulation modulation = getModulation(mouseEvent.isShiftDown());
         if (modulation != null && (mouseEvent.isMetaDown() || mouseEvent.isControlDown())) {
             modulation.range.setValue(modulation.range.getValue() - delta);
         } else {
+            if (mouseEvent.isShiftDown()) {
+                delta /= 10;
+            }
             this.dragValue = LXUtils.constrain(this.dragValue - delta, 0, 1);
             setNormalized(this.dragValue);
         }

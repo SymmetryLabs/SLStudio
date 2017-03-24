@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.component;
 
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -49,13 +50,20 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
     private String activeLabel = "";
     private String inactiveLabel = "";
 
-    private BooleanParameter parameter = null;
+    private EnumParameter<? extends Object> enumParameter = null;
+    private BooleanParameter booleanParameter = null;
 
     protected long exactToggleTime = -1;
 
-    private final LXParameterListener parameterListener = new LXParameterListener() {
+    private final LXParameterListener booleanParameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
-            setActive(parameter.isOn());
+            setActive(booleanParameter.isOn());
+        }
+    };
+
+    private final LXParameterListener enumParameterListener = new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+            setLabel(enumParameter.getEnum().toString());
         }
     };
 
@@ -71,17 +79,38 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
     }
 
     public BooleanParameter getParameter() {
-        return this.parameter;
+        return this.booleanParameter;
+    }
+
+    private void removeParameter() {
+        if (this.booleanParameter != null) {
+            this.booleanParameter.removeListener(this.booleanParameterListener);
+            this.booleanParameter = null;
+        }
+        if (this.enumParameter != null) {
+            this.enumParameter.removeListener(this.enumParameterListener);
+            this.enumParameter = null;
+        }
+    }
+
+    public UIButton setParameter(EnumParameter<? extends Object> parameter) {
+        removeParameter();
+        if (parameter != null) {
+            this.enumParameter = parameter;
+            this.enumParameter.addListener(this.enumParameterListener);
+            setActive(false);
+            setMomentary(true);
+            setLabel(this.enumParameter.getEnum().toString());
+        }
+        return this;
     }
 
     public UIButton setParameter(BooleanParameter parameter) {
-        if (this.parameter != null) {
-            this.parameter.removeListener(this.parameterListener);
-        }
-        this.parameter = parameter;
+        removeParameter();
         if (parameter != null) {
-            parameter.addListener(this.parameterListener);
-            setActive(parameter.isOn());
+            this.booleanParameter = parameter;
+            this.booleanParameter.addListener(this.booleanParameterListener);
+            setActive(this.booleanParameter.isOn());
         }
         return this;
     }
@@ -147,8 +176,12 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
 
     public UIButton setActive(boolean active) {
         if (this.active != active) {
-            if (this.parameter != null) {
-                this.parameter.setValue(active);
+            if (this.enumParameter != null) {
+                if (active) {
+                    this.enumParameter.increment();
+                }
+            } else if (this.booleanParameter != null) {
+                this.booleanParameter.setValue(active);
             }
             setBackgroundColor(active ? this.activeColor : this.inactiveColor);
             onToggle(this.active = active);
@@ -217,6 +250,6 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
 
     @Override
     public LXParameter getControlTarget() {
-        return isMappable() ? this.parameter : null;
+        return isMappable() ? this.booleanParameter : null;
     }
 }
