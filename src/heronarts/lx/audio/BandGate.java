@@ -21,10 +21,10 @@
 package heronarts.lx.audio;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -46,7 +46,7 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      * Range of the meter, in decibels.
      */
     public final BoundedParameter range = (BoundedParameter)
-        new BoundedParameter("Range", 48, 6, 96).setUnits(LXParameter.Units.DECIBELS);
+        new BoundedParameter("Range", 36, 6, 96).setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Meter attack time, in milliseconds
@@ -86,7 +86,19 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      * milliseconds
      */
     public final BoundedParameter decay = (BoundedParameter)
-        new BoundedParameter("Decay", 200, 0, 1600).setUnits(LXParameter.Units.MILLISECONDS);
+        new BoundedParameter("Decay", 400, 0, 1600).setUnits(LXParameter.Units.MILLISECONDS);
+
+    /**
+     * Minimum frequency for the band
+     */
+    public final BoundedParameter minFreq;
+
+    /**
+     * Maximum frequency for the band
+     */
+    public final BoundedParameter maxFreq;
+
+    public final GraphicMeter meter;
 
     /**
      * Trigger parameter is set to true for one frame when the beat is triggered.
@@ -94,20 +106,18 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
     public final BooleanParameter trigger = new BooleanParameter("Trigger");
 
     /**
-     * The first band that is inspected for the avarage
+     * Level parameter is the average of the monitored band
      */
-    public final DiscreteParameter minBand;
+    public final BoundedParameter average = new BoundedParameter("Average");
+
+    private float averageRaw = 0;
 
     /**
-     * The number of bands that are inspected for the average
+     * Envelope value that goes from 1 to 0 after this band is triggered
      */
-    public final DiscreteParameter numBands;
+    private double envelope = 0;
 
-    public final GraphicMeter meter;
-
-    private double level = 0;
-
-    private double smoothed = 0;
+    private double averageOctave = 1;
 
     private boolean waitingForFloor = false;
 
@@ -131,8 +141,14 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
         super(label);
         this.impl = new LXMeterImpl(meter.numBands, meter.fft.getBandOctaveRatio());
         this.meter = meter;
-        this.minBand = new DiscreteParameter("Band", meter.numBands);
-        this.numBands = new DiscreteParameter("Width", 1, meter.numBands + 1);
+        int nyquist = meter.fft.getSampleRate() / 2;
+        this.minFreq = (BoundedParameter) new BoundedParameter("MinFreq", 60, 0, nyquist)
+            .setExponent(4)
+            .setUnits(LXParameter.Units.HERTZ);
+        this.maxFreq = (BoundedParameter) new BoundedParameter("MaxFreq", 120, 0, nyquist)
+            .setExponent(4)
+            .setUnits(LXParameter.Units.HERTZ);
+
         addParameter(this.gain);
         addParameter(this.range);
         addParameter(this.attack);
@@ -141,9 +157,33 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
         addParameter(this.threshold);
         addParameter(this.floor);
         addParameter(this.decay);
-        addParameter(this.minBand);
-        addParameter(this.numBands);
+        addParameter(this.minFreq);
+        addParameter(this.maxFreq);
         addParameter(this.trigger);
+        addParameter(this.average);
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        super.onParameterChanged(p);
+        if (p == this.minFreq) {
+            if (this.minFreq.getValue() > this.maxFreq.getValue()) {
+                this.minFreq.setValue(this.maxFreq.getValue());
+            } else {
+                updateAverageOctave();
+            }
+        } else if (p == this.maxFreq) {
+            if (this.maxFreq.getValue() < this.minFreq.getValue()) {
+                this.maxFreq.setValue(this.minFreq.getValue());
+            } else {
+                updateAverageOctave();
+            }
+        }
+    }
+
+    private void updateAverageOctave() {
+        double averageFreq = (this.minFreq.getValue() + this.maxFreq.getValue()) / 2.;
+        this.averageOctave = Math.log(averageFreq / FourierTransform.BASE_BAND_HZ) / FourierTransform.LOG_2;
     }
 
     /**
@@ -153,9 +193,9 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      * @param minHz Minimum frequency band
      * @param maxHz Maximum frequency band
      */
-    public BandGate(GraphicMeter meter, int minHz, int maxHz) {
+    public BandGate(GraphicMeter meter, float minHz, float maxHz) {
         this("Beat", meter);
-        setRange(minHz, maxHz);
+        setFrequencyRange(minHz, maxHz);
     }
 
     /**
@@ -168,7 +208,7 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      */
     public BandGate(String label, GraphicMeter meter, int minHz, int maxHz) {
         this(label, meter);
-        setRange(minHz, maxHz);
+        setFrequencyRange(minHz, maxHz);
     }
 
     public double getExponent() {
@@ -182,34 +222,9 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      * @param maxHz Maximum frequency
      * @return this
      */
-    public BandGate setRange(int minHz, int maxHz) {
-        // TODO(mcslee): fix this!
-//    int _minBand = -1, _avgBands = 0;
-//    for (int i = 0; i < this.meter.numBands; ++i) {
-//      float centerFreq = this.meter.fft.getAverageCenterFrequency(i);
-//      if ((_minBand < 0) && (centerFreq > minHz)) {
-//        _minBand = i;
-//      }
-//      if (centerFreq > maxHz) {
-//        _avgBands = i - _minBand;
-//        break;
-//      }
-//    }
-//    this.minBand.setValue(_minBand);
-//    this.numBands.setValue(_avgBands);
-        return this;
-    }
-
-    /**
-     * Set the bands to look at
-     *
-     * @param minBand First band index
-     * @param numBands Number of bands to average
-     * @return this
-     */
-    public BandGate setBands(int minBand, int numBands) {
-        this.minBand.setValue(minBand);
-        this.numBands.setValue(numBands);
+    public BandGate setFrequencyRange(float minHz, float maxHz) {
+        this.minFreq.setValue(minHz);
+        this.maxFreq.setValue(maxHz);
         return this;
     }
 
@@ -231,7 +246,7 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      * @return Level of range from 0-1
      */
     public double getLevel() {
-        return this.level;
+        return this.average.getValue();
     }
 
     /**
@@ -247,36 +262,47 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
     protected double computeValue(double deltaMs) {
         float attackGain = (float) Math.exp(-deltaMs / this.attack.getValue());
         float releaseGain = (float) Math.exp(-deltaMs / this.release.getValue());
+        double rangeValue = this.range.getValue();
+        double gainValue = this.gain.getValue();
+        double slopeValue = this.slope.getValue();
+
+        // Computes all the underlying bands
         this.impl.compute(
             this.meter.fft,
             attackGain,
             releaseGain,
-            this.gain.getValue(),
-            this.range.getValue(),
-            this.slope.getValue()
+            gainValue,
+            rangeValue,
+            slopeValue
         );
 
-        this.level = this.impl.getAverage(this.minBand.getValuei(), this.numBands.getValuei());
+        float newAverage = this.meter.fft.getAverage(this.minFreq.getValuef(), this.maxFreq.getValuef()) / this.meter.fft.getSize();
+        float averageGain = (newAverage >= this.averageRaw) ? attackGain : releaseGain;
+        this.averageRaw = newAverage + averageGain * (this.averageRaw - newAverage);
+        double averageDb = 20 * Math.log(this.averageRaw) / DecibelMeter.LOG_10 + gainValue + slopeValue * this.averageOctave;
+
+        double averageNorm = 1 + averageDb / rangeValue;
+        this.average.setValue(LXUtils.constrain(averageNorm, 0, 1));
 
         double thresholdValue = this.threshold.getValue();
 
         if (this.waitingForFloor) {
             double floorValue = thresholdValue * this.floor.getValue();
-            if (this.level < floorValue) {
+            if (averageNorm < floorValue) {
                 this.waitingForFloor = false;
             }
         }
 
-        boolean triggered = !this.waitingForFloor && (thresholdValue > 0) && (this.level >= thresholdValue);
+        boolean triggered = !this.waitingForFloor && (thresholdValue > 0) && (averageNorm >= thresholdValue);
         if (triggered) {
             this.waitingForFloor = true;
-            this.smoothed = 1;
+            this.envelope = 1;
         } else {
-            this.smoothed = Math.max(0, this.smoothed - deltaMs / this.decay.getValue());
+            this.envelope = Math.max(0, this.envelope - deltaMs / this.decay.getValue());
         }
         this.trigger.setValue(triggered);
 
-        return this.smoothed;
+        return this.envelope;
     }
 
     @Override

@@ -76,7 +76,16 @@ public interface LXParameter {
                 int seconds = (int) ((value % 60000) / 1000);
                 return String.format("%d:%02d:%02d", hours, minutes, seconds);
             case HERTZ:
-                return String.format("%.1fHz", value);
+                if (value >= 10000) {
+                    return String.format("%.1fkHz", value/1000);
+                } else if (value >= 1000) {
+                    return String.format("%.2fkHz", value/1000);
+                } else if (value >= 100) {
+                    return String.format("%.0fHz", value);
+                } else if (value >= 10) {
+                    return String.format("%.1fHz", value);
+                }
+                return String.format("%.2fHz", value);
             case DECIBELS:
                 return String.format("%.1fdB", value);
             default:

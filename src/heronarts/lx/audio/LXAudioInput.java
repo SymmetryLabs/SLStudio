@@ -30,7 +30,7 @@ import javax.sound.sampled.TargetDataLine;
 public class LXAudioInput extends LXAudioBuffer implements LineListener {
 
     private static final int SAMPLE_RATE = 44100;
-    private static final int SAMPLE_BUFFER_SIZE = 256;
+    private static final int SAMPLE_BUFFER_SIZE = 512;
     private static final int BYTES_PER_SAMPLE = 2;
     private static final int NUM_CHANNELS = 2;
     private static final int FRAME_SIZE = BYTES_PER_SAMPLE * NUM_CHANNELS;

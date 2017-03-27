@@ -27,8 +27,7 @@ public class GraphicMeter extends DecibelMeter {
      */
     public final int numBands;
 
-    // final FFT fft;
-    final FourierTransform fft;
+    public final FourierTransform fft;
 
     private final float[] fftBuffer;
     public final BoundedParameter[] bands;
@@ -101,16 +100,6 @@ public class GraphicMeter extends DecibelMeter {
     }
 
     /**
-     * Get the latest raw, unsmoothed raw FFT value of the given band
-     *
-     * @param i
-     * @return Normalized FFT value for band i
-     */
-    public float getFft(int i) {
-        return this.fft.getBand(i) / this.fftBuffer.length;
-    }
-
-    /**
      * Get most recent raw unsmoothed RMS amplitude of band i
      *
      * @param i
@@ -134,6 +123,15 @@ public class GraphicMeter extends DecibelMeter {
      */
     public float getDecibelsf(int i) {
         return (float) getDecibels(i);
+    }
+
+    /**
+     * Number of bands on the meter
+     *
+     * @return Number of bands
+     */
+    public int getNumBands() {
+        return this.bands.length;
     }
 
     /**

@@ -28,7 +28,8 @@ package heronarts.lx.audio;
 
 public class FourierTransform {
 
-    private static final float LOG_2 = (float) Math.log(2);
+    public static final float LOG_2 = (float) Math.log(2);
+    public final static float BASE_BAND_HZ = 65.41f; // C2
     public static final int DEFAULT_NUM_BANDS = 16;
 
     enum Window {
@@ -48,7 +49,7 @@ public class FourierTransform {
 
     private final int bufferSize;
     private final int sampleRate;
-    private final double bandWidthInv;
+    private final float bandWidthInv;
 
     private final int logN;
     private final float[] sinN;
@@ -72,7 +73,7 @@ public class FourierTransform {
 
         this.bufferSize = bufferSize;
         this.sampleRate = sampleRate;
-        this.bandWidthInv = this.bufferSize / (double) this.sampleRate;
+        this.bandWidthInv = this.bufferSize / (float) this.sampleRate;
 
         this.logN = (int) (Math.log(bufferSize) / Math.log(2));
 
@@ -114,6 +115,10 @@ public class FourierTransform {
 
     public int getSize() {
         return this.bufferSize;
+    }
+
+    public int getSampleRate() {
+        return this.sampleRate;
     }
 
     public FourierTransform setWindow(Window window) {
@@ -180,7 +185,9 @@ public class FourierTransform {
         return this;
     }
 
-    private final static float BASE_BAND_HZ = 65.41f; // C2
+    public float get(int i) {
+        return this.amplitude[i];
+    }
 
     public FourierTransform setNumBands(int numBands) {
         if (this.numBands != numBands) {
@@ -196,7 +203,7 @@ public class FourierTransform {
 
             for (int i = 0; i < this.numBands; ++i) {
                 float bandLimitHz = (float) Math.pow(2, i * this.bandOctaveRatio) * BASE_BAND_HZ;
-                this.bandOffset[i+1] = (int) Math.round(this.bandWidthInv * bandLimitHz);
+                this.bandOffset[i+1] = Math.round(this.bandWidthInv * bandLimitHz);
             }
         }
         return this;
@@ -212,6 +219,16 @@ public class FourierTransform {
 
     public float getBand(int i) {
         return this.bands[i];
+    }
+
+    public float getAverage(float minHz, float maxHz) {
+        int low = Math.round(minHz * this.bandWidthInv);
+        int high = Math.round(maxHz * this.bandWidthInv);
+        float avg = 0;
+        for (int i = low; i <= high; ++i) {
+            avg += this.amplitude[i];
+        }
+        return avg / (high - low + 1);
     }
 
 }

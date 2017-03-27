@@ -36,8 +36,6 @@ public class LXAudioEngine extends LXModulatorComponent {
      */
     public final LXAudioInput input = new LXAudioInput();
 
-    private BandGate beatDetect = null;
-
     public final GraphicMeter meter = new GraphicMeter("EQ", this.input);
 
     public LXAudioEngine(LX lx) {
@@ -66,29 +64,6 @@ public class LXAudioEngine extends LXModulatorComponent {
      */
     public final LXAudioInput getInput() {
         return this.input;
-    }
-
-    /**
-     * Gets the global beat detection object, creating if necessary
-     *
-     * @return Beat detection object
-     */
-    public final BandGate beatDetect() {
-        if (this.beatDetect == null) {
-            GraphicMeter eq = new GraphicMeter(this.input, 4);
-            eq.attack.setValue(10);
-            eq.release.setValue(250);
-            eq.range.setValue(14);
-            eq.gain.setValue(16);
-            startModulator(eq);
-
-            this.beatDetect = new BandGate("BEAT", eq).setBands(1, 4);
-            this.beatDetect.floor.setValue(0.9);
-            this.beatDetect.threshold.setValue(0.75);
-            this.beatDetect.decay.setValue(480);
-            startModulator(this.beatDetect);
-        }
-        return this.beatDetect;
     }
 
     @Override
