@@ -153,11 +153,6 @@ public class LX {
     public final Tempo tempo;
 
     /**
-     * The global audio input.
-     */
-    public final LXAudio audio;
-
-    /**
      * The list of globally registered pattern classes
      */
     private final List<Class<? extends LXPattern>> registeredPatterns =
@@ -234,10 +229,6 @@ public class LX {
         this.tempo = new Tempo(this);
         LX.initTimer.log("Tempo");
 
-        // Audio
-        this.audio = new LXAudio(this);
-        LX.initTimer.log("Audio");
-
         // Add a default channel
         this.engine.addChannel(new LXPattern[] { new IteratorTestPattern(this) }).fader.setValue(1);
         LX.initTimer.log("Default Channel");
@@ -272,7 +263,7 @@ public class LX {
      * Shut down resources of the LX instance.
      */
     public void dispose() {
-        this.audio.dispose();
+        this.engine.audio.dispose();
     }
 
     /**

@@ -1,12 +1,10 @@
 package heronarts.lx.audio;
 
-import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BoundedParameter;
-import ddf.minim.AudioSource;
-import ddf.minim.analysis.FFT;
+import heronarts.lx.parameter.LXParameter;
 
 /**
- * A graphic equalizer splits the signal into frequency bands and computes
+ * A graphic meter splits the signal into frequency bands and computes
  * envelopes for each of the bands independently. It can also give the overall
  * level, just like a normal decibel meter.
  *
@@ -14,33 +12,34 @@ import ddf.minim.analysis.FFT;
  * slope can be applied to the equalizer to even out the levels, typically
  * something like 4.5 dB/octave is used, though this varies by recording.
  */
-public class GraphicEQ extends DecibelMeter {
+public class GraphicMeter extends DecibelMeter {
+
+    private final LXMeterImpl impl;
 
     /**
      * dB/octave slope applied to the equalizer
      */
-    public final BoundedParameter slope = new BoundedParameter("Slope", 4.5, -3, 12);
+    public final BoundedParameter slope = (BoundedParameter)
+        new BoundedParameter("Slope", 4.5, -3, 12).setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Number of bands in the equalizer
      */
     public final int numBands;
 
-    final FFT fft;
+    // final FFT fft;
+    final FourierTransform fft;
 
-    private final int timeSize;
-
-    private final int bandsPerOctave;
-
-    private final LinearEnvelope[] bands;
+    private final float[] fftBuffer;
+    public final BoundedParameter[] bands;
 
     /**
      * Default graphic equalizer with 2 bands per octave
      *
      * @param source Audio source
      */
-    public GraphicEQ(AudioSource source) {
-        this(source, 2);
+    public GraphicMeter(LXAudioInput input) {
+        this(input, FourierTransform.DEFAULT_NUM_BANDS);
     }
 
     /**
@@ -49,8 +48,8 @@ public class GraphicEQ extends DecibelMeter {
      * @param label Label
      * @param source Audio source
      */
-    public GraphicEQ(String label, AudioSource source) {
-        this(label, source, 2);
+    public GraphicMeter(String label, LXAudioInput input) {
+        this(label, input, FourierTransform.DEFAULT_NUM_BANDS);
     }
 
     /**
@@ -59,8 +58,8 @@ public class GraphicEQ extends DecibelMeter {
      * @param source Audio source to listen to
      * @param bandsPerOctave Number of bands per octave
      */
-    public GraphicEQ(AudioSource source, int bandsPerOctave) {
-        this("GEQ", source, bandsPerOctave);
+    public GraphicMeter(LXAudioInput input, int numBands) {
+        this("Meter", input, numBands);
     }
 
     /**
@@ -70,27 +69,55 @@ public class GraphicEQ extends DecibelMeter {
      * @param source Audio source to listen to
      * @param bandsPerOctave Number of bands per octave
      */
-    public GraphicEQ(String label, AudioSource source, int bandsPerOctave) {
-        super(label, source.mix);
+    public GraphicMeter(String label, LXAudioInput input, int numBands) {
+        super(label, input);
         addParameter(this.slope);
-        this.fft = new FFT(this.timeSize = source.bufferSize(), source.sampleRate());
-        this.fft.window(FFT.HAMMING);
-        this.fft.logAverages(50, this.bandsPerOctave = bandsPerOctave);
-        this.numBands = this.fft.avgSize();
-        this.bands = new LinearEnvelope[this.numBands];
-        for (int i = 0; i < this.numBands; ++i) {
-            this.bands[i] = new LinearEnvelope(-this.range.getValue());
+        this.fftBuffer = new float[input.bufferSize()];
+        this.fft = new FourierTransform(input.bufferSize(), input.sampleRate());
+        this.fft.setNumBands(this.numBands = numBands);
+        this.impl = new LXMeterImpl(this.numBands, this.fft.getBandOctaveRatio());
+        this.bands = this.impl.bands;
+        for (BoundedParameter band : this.bands) {
+            addParameter(band);
         }
     }
 
     @Override
     protected double computeValue(double deltaMs) {
-        this.fft.forward(this.buffer);
-        for (int i = 0; i < this.numBands; ++i) {
-            runEnvelope(deltaMs, this.bands[i], this.fft.getAvg(i) / this.timeSize, i
-                    * this.slope.getValue() / this.bandsPerOctave);
-        }
-        return super.computeValue(deltaMs);
+        double result = super.computeValue(deltaMs);
+        this.buffer.getSamples(this.fftBuffer);
+        this.fft.compute(this.fftBuffer);
+
+        this.impl.compute(
+            this.fft,
+            this.attackGain,
+            this.releaseGain,
+            this.gain.getValue(),
+            this.range.getValue(),
+            this.slope.getValue()
+        );
+
+        return result;
+    }
+
+    /**
+     * Get the latest raw, unsmoothed raw FFT value of the given band
+     *
+     * @param i
+     * @return Normalized FFT value for band i
+     */
+    public float getFft(int i) {
+        return this.fft.getBand(i) / this.fftBuffer.length;
+    }
+
+    /**
+     * Get most recent raw unsmoothed RMS amplitude of band i
+     *
+     * @param i
+     * @return
+     */
+    public float getRaw(int i) {
+        return this.impl.rawBands[i];
     }
 
     /**
@@ -114,9 +141,7 @@ public class GraphicEQ extends DecibelMeter {
      * @return The value of the ith frequency band
      */
     public double getBand(int i) {
-        double norm = (this.bands[i].getValue() + this.range.getValue())
-                / this.range.getValue();
-        return (norm < 0) ? 0 : ((norm > 1) ? 1 : norm);
+        return this.bands[i].getValue();
     }
 
     /**
@@ -156,14 +181,7 @@ public class GraphicEQ extends DecibelMeter {
      * @return Average value of all these bands
      */
     public double getAverage(int minBand, int avgBands) {
-        double avg = 0;
-        int i = 0;
-        for (; i < avgBands; ++i) {
-            if (minBand + i >= numBands)
-                break;
-            avg += getBand(minBand + i);
-        }
-        return avg / i;
+        return this.impl.getAverage(minBand, avgBands);
     }
 
     /**

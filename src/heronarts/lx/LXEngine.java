@@ -20,6 +20,7 @@
 
 package heronarts.lx;
 
+import heronarts.lx.audio.LXAudioEngine;
 import heronarts.lx.blend.AddBlend;
 import heronarts.lx.blend.DarkestBlend;
 import heronarts.lx.blend.DifferenceBlend;
@@ -76,6 +77,8 @@ public class LXEngine extends LXComponent {
     private final LX lx;
 
     public final LXMidiEngine midi;
+
+    public final LXAudioEngine audio;
 
     public final LXMappingEngine mapping = new LXMappingEngine();
 
@@ -277,6 +280,9 @@ public class LXEngine extends LXComponent {
         // Midi engine
         this.midi = new LXMidiEngine(lx);
         LX.initTimer.log("Engine: Midi");
+
+        this.audio = new LXAudioEngine(lx);
+        LX.initTimer.log("Engine: Audio");
 
         // OSC engine
         this.osc = new LXOscEngine(lx);
@@ -668,7 +674,7 @@ public class LXEngine extends LXComponent {
 
         this.modulation.loop(deltaMs);
         this.lx.palette.loop(deltaMs);
-        this.lx.audio.loop(deltaMs);
+        this.audio.loop(deltaMs);
 
         // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {
@@ -866,8 +872,10 @@ public class LXEngine extends LXComponent {
     private static final String KEY_PALETTE = "palette";
     private static final String KEY_CHANNELS = "channels";
     private static final String KEY_MASTER = "master";
-    private static final String KEY_MIDI = "midi";
+    private static final String KEY_AUDIO = "audio";
     private static final String KEY_MODULATION = "modulation";
+    private static final String KEY_MIDI = "midi";
+
 
     @Override
     public void save(JsonObject obj) {
@@ -882,16 +890,19 @@ public class LXEngine extends LXComponent {
         this.masterChannel.save(masterObj);
         JsonObject paletteObj = new JsonObject();
         this.lx.palette.save(paletteObj);
-        JsonObject midiObj = new JsonObject();
-        this.midi.save(midiObj);
+        JsonObject audioObj = new JsonObject();
+        this.audio.save(audioObj);
         JsonObject modulationObj = new JsonObject();
         this.modulation.save(modulationObj);
+        JsonObject midiObj = new JsonObject();
+        this.midi.save(midiObj);
 
         obj.add(KEY_PALETTE, paletteObj);
         obj.add(KEY_CHANNELS, channels);
         obj.add(KEY_MASTER, masterObj);
-        obj.add(KEY_MIDI, midiObj);
+        obj.add(KEY_AUDIO, audioObj);
         obj.add(KEY_MODULATION, modulationObj);
+        obj.add(KEY_MIDI, midiObj);
     }
 
     @Override
@@ -918,14 +929,19 @@ public class LXEngine extends LXComponent {
             lx.palette.load(obj.getAsJsonObject(KEY_PALETTE));
         }
 
-        // Midi
-        if (obj.has(KEY_MIDI)) {
-            this.midi.load(obj.getAsJsonObject(KEY_MIDI));
+        // Audio setup
+        if (obj.has(KEY_AUDIO)) {
+            this.audio.load(obj.getAsJsonObject(KEY_AUDIO));
         }
 
         // Modulation matrix
         if (obj.has(KEY_MODULATION)) {
             this.modulation.load(obj.getAsJsonObject(KEY_MODULATION));
+        }
+
+        // Midi
+        if (obj.has(KEY_MIDI)) {
+            this.midi.load(obj.getAsJsonObject(KEY_MIDI));
         }
 
         // Parameters etc.

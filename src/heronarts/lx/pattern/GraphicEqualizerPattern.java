@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -23,16 +23,16 @@ package heronarts.lx.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
-import heronarts.lx.audio.GraphicEQ;
+import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.transition.WipeTransition;
 
 public class GraphicEqualizerPattern extends LXPattern {
 
-    private final GraphicEQ eq;
+    private final GraphicMeter eq;
 
     public GraphicEqualizerPattern(LX lx) {
         super(lx);
-        addModulator(this.eq = new GraphicEQ(lx.audio.getInput())).start();
+        addModulator(this.eq = new GraphicMeter(lx.engine.audio.getInput())).start();
         this.transition = new WipeTransition(lx, WipeTransition.Direction.UP);
     }
 

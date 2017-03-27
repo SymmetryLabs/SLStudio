@@ -20,12 +20,11 @@
 
 package heronarts.lx.audio;
 
+import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.LXModulator;
-import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
-import ddf.minim.AudioBuffer;
-import ddf.minim.AudioSource;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * A DecibelMeter is a modulator that returns the level of an audio signal. Gain
@@ -36,46 +35,53 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
 
     protected static final double LOG_10 = Math.log(10);
 
-    private final LinearEnvelope decibels;
-
-    protected final AudioBuffer buffer;
+    protected final LXAudioBuffer buffer;
 
     /**
      * Gain of the meter, in decibels
      */
-    public final BoundedParameter gain;
+    public final BoundedParameter gain = (BoundedParameter)
+        new BoundedParameter("Gain", 0, -48, 48).setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Range of the meter, in decibels.
      */
-    public final BoundedParameter range;
+    public final BoundedParameter range = (BoundedParameter)
+        new BoundedParameter("Range", 48, 6, 96).setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Meter attack time, in milliseconds
      */
-    public final BoundedParameter attack;
+    public final BoundedParameter attack = (BoundedParameter)
+        new BoundedParameter("Attack", 10, 0, 100).setUnits(LXParameter.Units.MILLISECONDS);
 
     /**
      * Meter release time, in milliseconds
      */
-    public final BoundedParameter release;
+    public final BoundedParameter release = (BoundedParameter)
+        new BoundedParameter("Release", 100, 0, 1000).setExponent(2).setUnits(LXParameter.Units.MILLISECONDS);
+
+    private final static float PEAK_HOLD = 250;
+
+    protected float attackGain;
+    protected float releaseGain;
+
+    private float rmsRaw = 0;
+    private float rmsLevel = 0;
+    private double dbLevel = -96;
+
+    private float rmsPeak = 0;
+    private double dbPeak = 0;
+    private double normalizedPeak = 0;
+    private long peakMillis = 0;
 
     /**
      * Default constructor, creates a meter with unity gain and 72dB dynamic range
      *
      * @param source Audio source to meter
      */
-    public DecibelMeter(AudioSource source) {
-        this(source.mix);
-    }
-
-    /**
-     * Default constructor, creates a meter with unity gain and 72dB dynamic range
-     *
-     * @param buffer Audio buffer to meter
-     */
-    public DecibelMeter(AudioBuffer buffer) {
-        this("DBM", buffer);
+    public DecibelMeter(LXAudioBuffer buffer) {
+        this("Meter", buffer);
     }
 
     /**
@@ -84,14 +90,13 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
      * @param label Label
      * @param buffer Audio buffer to meter
      */
-    public DecibelMeter(String label, AudioBuffer buffer) {
+    public DecibelMeter(String label, LXAudioBuffer buffer) {
         super(label);
         this.buffer = buffer;
-        addParameter(this.gain = new BoundedParameter("Gain", 0, -48, 48));
-        addParameter(this.range = new BoundedParameter("Range", 72, 6, 96));
-        addParameter(this.attack = new BoundedParameter("Attack", 30, 0, 500));
-        addParameter(this.release = new BoundedParameter("Release", 100, 0, 1600));
-        this.decibels = new LinearEnvelope(-this.range.getValue());
+        addParameter(this.gain);
+        addParameter(this.range);
+        addParameter(this.attack);
+        addParameter(this.release);
     }
 
     public double getExponent() {
@@ -99,10 +104,19 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
     }
 
     /**
+     * Return raw underlying levels, no attack/gain smoothing
+     *
+     * @return
+     */
+    public float getRaw() {
+        return this.rmsRaw;
+    }
+
+    /**
      * @return Raw decibel value of the meter
      */
     public double getDecibels() {
-        return decibels.getValue();
+        return this.dbLevel;
     }
 
     /**
@@ -129,40 +143,46 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
 
     @Override
     protected double computeValue(double deltaMs) {
-        runEnvelope(deltaMs, decibels, this.buffer.level(), 0);
-        double norm = (decibels.getValue() + this.range.getValue())
-                / this.range.getValue();
-        return (norm < 0) ? 0 : ((norm > 1) ? 1 : norm);
-    }
+        double releaseValue = this.release.getValue();
+        this.attackGain = (float) Math.exp(-deltaMs / this.attack.getValue());
+        this.releaseGain = (float) Math.exp(-deltaMs / releaseValue);
 
-    protected void runEnvelope(double deltaMs, LinearEnvelope env,
-            double rawLevel, double slopeGain) {
+        this.rmsRaw = this.buffer.getRms();
+        float rmsGain = (this.rmsRaw >= this.rmsLevel) ? this.attackGain : this.releaseGain;
+        this.rmsLevel = this.rmsRaw + rmsGain * (this.rmsLevel - this.rmsRaw);
 
-        double minLevel = -this.range.getValue();
-        double dbLevel = minLevel;
-        if (rawLevel > 0) {
-            // A signal level of 1.0 is our 0dB reference point, we use the
-            // following definition for decibels:
-            // dBV = 20 * log10(V / Vref);
-            dbLevel = 20 * Math.log(rawLevel) / LOG_10;
-            dbLevel += this.gain.getValue() + slopeGain;
-            if (dbLevel < -this.range.getValue()) {
-                dbLevel = -this.range.getValue();
+        if (this.rmsRaw > this.rmsPeak) {
+            this.rmsPeak = this.rmsRaw;
+            this.peakMillis = 0;
+        } else {
+            this.peakMillis += deltaMs;
+            if (this.peakMillis > PEAK_HOLD) {
+                double peakReleaseTime = Math.min(deltaMs, this.peakMillis - PEAK_HOLD);
+                float releaseGain = (float) Math.exp(-peakReleaseTime / releaseValue);
+                this.rmsPeak *= releaseGain;
             }
         }
+        double range = this.range.getValue();
+        double gain = this.gain.getValue();
 
-        if (dbLevel > env.getValue()) {
-            env.setRangeFromHereTo(dbLevel, attack.getValue()).trigger();
-        }
-        env.loop(deltaMs);
-        if (!env.isRunning() && env.getValue() > minLevel) {
-            env.setRangeFromHereTo(minLevel, release.getValue()).trigger();
-        }
+        this.dbPeak = 20 * Math.log(this.rmsPeak) / LOG_10 + gain;
+        this.normalizedPeak = LXUtils.constrain(1 + this.dbPeak / range, 0, 1);
+
+        this.dbLevel = 20 * Math.log(this.rmsLevel) / LOG_10 + gain;
+        return LXUtils.constrain(1 + this.dbLevel / range, 0, 1);
     }
 
     @Override
     public LXNormalizedParameter setNormalized(double value) {
         throw new UnsupportedOperationException("Cannot setNormalized on DecibelMeter");
+    }
+
+    public double getPeak() {
+        return this.normalizedPeak;
+    }
+
+    public float getPeakf() {
+        return (float) getPeak();
     }
 
     @Override

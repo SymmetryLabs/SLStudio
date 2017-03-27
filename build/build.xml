@@ -12,7 +12,7 @@
   	<mkdir dir="../doc"/>
   	<javadoc
   		bottom="LX library by Mark C. Slee. (C) 2012-" 
-  		classpath="../lib/minim.jar;../lib/gson-2.8.0.jar;" 
+  		classpath="../lib/gson-2.8.0.jar;" 
   		destdir="../doc" 
   		verbose="false" 
   		stylesheetfile="stylesheet.css" 
@@ -21,7 +21,6 @@
   		windowtitle="LX API">
   	 			
 		<link href="${javadoc.java.href}" />
-		<link href="${javadoc.minim.href}" />
   		<link href="${javadoc.gson.href}" offline="true" packagelistLoc="." />
   		
 		<fileset dir="../src" defaultexcludes="yes">
