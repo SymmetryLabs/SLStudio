@@ -48,6 +48,7 @@ public class UIKnob extends UIParameterControl implements UIFocus {
     public final static int KNOB_MARGIN = 6;
     public final static int KNOB_SIZE = 28;
     public final static int WIDTH = KNOB_SIZE + 2*KNOB_MARGIN;
+    public final static int HEIGHT = KNOB_SIZE + LABEL_MARGIN + LABEL_HEIGHT;
 
     private final static float KNOB_INDENT = .4f;
     private final static int ARC_CENTER_X = WIDTH / 2;

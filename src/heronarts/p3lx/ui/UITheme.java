@@ -49,6 +49,8 @@ public class UITheme {
     private int secondaryColor = 0xff666699;
     private int attentionColor = 0xff996666;
 
+    private int darkBackgroundColor = 0xff191919;
+
     private PFont controlFont;
     private int controlBackgroundColor = 0xff222222;
     private int controlBorderColor = 0xff494949;
@@ -265,6 +267,26 @@ public class UITheme {
      */
     public UITheme setAttentionColor(int color) {
         this.attentionColor = color;
+        return this;
+    }
+
+    /**
+     * Gets dark background color
+     *
+     * @return Dark background color
+     */
+    public int getDarkBackgroundColor() {
+        return this.darkBackgroundColor;
+    }
+
+    /**
+     * Sets dark background color
+     *
+     * @param color Color
+     * @return this
+     */
+    public UITheme setDarkBackgroundColor(int color) {
+        this.darkBackgroundColor = color;
         return this;
     }
 

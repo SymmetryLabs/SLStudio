@@ -148,7 +148,7 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget {
             }
             return 1;
         default:
-            return 1;
+            return Math.abs(this.parameter.range.max - this.parameter.range.min) > 1 ? 1 : .01;
         }
     }
 
