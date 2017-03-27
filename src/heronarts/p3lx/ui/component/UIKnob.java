@@ -175,7 +175,7 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(valueStart, valueEnd), Math.max(valueStart, valueEnd));
 
         // Center tick mark for bipolar knobs
-        if ((this.polarity == LXParameter.Polarity.BIPOLAR) && (valueStart == valueEnd)) {
+        if (this.polarity == LXParameter.Polarity.BIPOLAR) {
             pg.stroke(0xff333333);
             pg.line(ARC_CENTER_X, ARC_CENTER_Y, ARC_CENTER_X, ARC_CENTER_Y - arcSize/2);
         }

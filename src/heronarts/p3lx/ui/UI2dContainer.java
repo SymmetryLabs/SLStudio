@@ -81,7 +81,7 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
                 component.setY(y);
                 y += component.getHeight() + this.childMargin;
             }
-            setContentHeight(y - this.childMargin);
+            setContentHeight(Math.max(0, y - this.childMargin));
         } else if (this.layout == Layout.HORIZONTAL) {
             float x = this.padding;
             for (UIObject child : this) {
@@ -89,7 +89,7 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
                 component.setX(x);
                 x += component.getWidth() + this.childMargin;
             }
-            setContentWidth(x - this.childMargin);
+            setContentWidth(Math.max(0, x - this.childMargin));
         }
     }
 

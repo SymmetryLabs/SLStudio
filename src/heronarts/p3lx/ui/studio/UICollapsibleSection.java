@@ -41,9 +41,9 @@ public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus 
 
     private static final int PADDING = 4;
     private static final int TITLE_LABEL_HEIGHT = 12;
-    private static final int CHEVRON_PADDING = 14;
-    private static final int CONTENT_Y = TITLE_LABEL_HEIGHT + 6;
-    private static final int CLOSED_HEIGHT = TITLE_LABEL_HEIGHT + PADDING;
+    private static final int CHEVRON_PADDING = 20;
+    private static final int CLOSED_HEIGHT = TITLE_LABEL_HEIGHT + 2*PADDING;
+    private static final int CONTENT_Y = CLOSED_HEIGHT;
 
     private final UILabel title;
     private boolean expanded = true;
@@ -65,7 +65,7 @@ public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus 
         setBackgroundColor(ui.theme.getWindowBackgroundColor());
         setBorderRounding(4);
 
-        this.title = new UILabel(PADDING, PADDING, this.width - PADDING - CHEVRON_PADDING, TITLE_LABEL_HEIGHT);
+        this.title = new UILabel(PADDING, PADDING + 1, this.width - PADDING - CHEVRON_PADDING, TITLE_LABEL_HEIGHT);
         this.title.setTextAlignment(PConstants.LEFT, PConstants.TOP).setTextOffset(0,  1);
         addTopLevelComponent(this.title);
 
@@ -73,13 +73,19 @@ public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus 
         this.content = new UI2dContainer(PADDING, CONTENT_Y, this.width - 2*PADDING, Math.max(0, this.expandedHeight - PADDING - CONTENT_Y)) {
             @Override
             public void onResize() {
-                expandedHeight = (this.height == 0 ? CLOSED_HEIGHT : CONTENT_Y + this.height + PADDING);
+                expandedHeight = (this.height <= 0 ? CLOSED_HEIGHT : CONTENT_Y + this.height + PADDING);
                 if (expanded) {
                     UICollapsibleSection.this.setHeight(expandedHeight);
                 }
             }
         };
         setContentTarget(this.content);
+    }
+
+    protected UICollapsibleSection setTitleX(float x) {
+        this.title.setX(x);
+        this.title.setWidth(this.width - CHEVRON_PADDING - x);
+        return this;
     }
 
     /**
@@ -96,16 +102,18 @@ public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus 
     @Override
     public void onDraw(UI ui, PGraphics pg) {
         pg.noStroke();
+        pg.fill(0xff333333);
+        pg.rect(width-16, PADDING, 12, 12, 4);
         pg.fill(ui.theme.getControlTextColor());
         if (this.expanded) {
             pg.beginShape();
-            pg.vertex(this.width-6, 7);
-            pg.vertex(this.width-12, 7);
-            pg.vertex(this.width-9, 11);
+            pg.vertex(this.width-7, 9);
+            pg.vertex(this.width-13, 9);
+            pg.vertex(this.width-10, 13);
             pg.endShape(PConstants.CLOSE);
         } else {
             pg.ellipseMode(PConstants.CENTER);
-            pg.ellipse(width-9, 8, 4, 4);
+            pg.ellipse(width-10, 10, 4, 4);
         }
     }
 
@@ -135,8 +143,10 @@ public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus 
 
     @Override
     public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        if (my < TITLE_LABEL_HEIGHT + PADDING) {
-            toggle();
+        if (my < CONTENT_Y) {
+            if ((mx >= this.width - CHEVRON_PADDING) || (mx >= this.title.getX() && mouseEvent.getCount() == 2)) {
+                toggle();
+            }
         }
     }
 

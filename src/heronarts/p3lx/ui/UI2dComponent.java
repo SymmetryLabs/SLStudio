@@ -721,7 +721,7 @@ public abstract class UI2dComponent extends UIObject {
             }
         } else if (isModulationSource()) {
             pg.noFill();
-            pg.stroke(0xff000000 | ui.theme.getModulationSourceMappingColor());
+            pg.stroke(0xff000000 | ui.theme.getModulationTargetMappingColor());
             pg.rect(0, 0, this.width-1, this.height-1, this.borderRounding);
         } else if (isModulationSourceMapping()) {
             pg.noStroke();

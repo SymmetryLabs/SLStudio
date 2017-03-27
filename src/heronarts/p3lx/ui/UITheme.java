@@ -57,7 +57,7 @@ public class UITheme {
 
     private int midiMappingColor = 0x33ff0000;
     private int modulationSourceMappingColor = 0x3300ff00;
-    private int modulationTargetMappingColor = 0x330000ff;
+    private int modulationTargetMappingColor = 0x3300cccc;
 
     UITheme(PApplet applet) {
         // this.controlFont = applet.createFont("Arial", 10);

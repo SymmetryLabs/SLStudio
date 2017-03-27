@@ -1,6 +1,3 @@
-// Need to manually import minim
-import ddf.minim.*;
-
 // Let's work in inches
 final static int INCHES = 1;
 final static int FEET = 12*INCHES;

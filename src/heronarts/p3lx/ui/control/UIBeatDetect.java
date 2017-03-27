@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -29,7 +29,7 @@ package heronarts.p3lx.ui.control;
 import processing.core.PApplet;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
-import heronarts.lx.audio.FrequencyGate;
+import heronarts.lx.audio.BandGate;
 import heronarts.lx.color.LXColor;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIWindow;
@@ -40,7 +40,7 @@ public class UIBeatDetect extends UIWindow {
     private final static int WIDTH = 140;
     private final static int HEIGHT = 188;
 
-    private final FrequencyGate gate;
+    private final BandGate gate;
 
     private final float eqX, eqWidth, eqHeight, eqTop, eqBottom, masterX, masterWidth, kickX, kickWidth, piece;
 
@@ -48,21 +48,21 @@ public class UIBeatDetect extends UIWindow {
 
     private float bandX = 0, bandWidth = 0;
 
-    public UIBeatDetect(UI ui, FrequencyGate gate, float x, float y) {
+    public UIBeatDetect(UI ui, BandGate gate, float x, float y) {
         super(ui, "BEAT DETECT", x, y, WIDTH, HEIGHT);
         this.gate = gate;
 
         float yp = this.height - 96;
         new UIKnob(4, yp).setParameter(gate.minBand).addToContainer(this);
-        new UIKnob(4 + 1*34, yp).setParameter(gate.avgBands).addToContainer(this);
+        new UIKnob(4 + 1*34, yp).setParameter(gate.numBands).addToContainer(this);
         new UIKnob(4 + 2*34, yp).setParameter(gate.floor).addToContainer(this);
         new UIKnob(4 + 3*34, yp).setParameter(gate.threshold).addToContainer(this);
-        new UIKnob(4, yp + 48).setParameter(gate.eq.gain).addToContainer(this);
-        new UIKnob(4 + 1*34, yp + 48).setParameter(gate.eq.slope).addToContainer(this);
-        new UIKnob(4 + 2*34, yp + 48).setParameter(gate.eq.attack).addToContainer(this);
-        new UIKnob(4 + 3*34, yp + 48).setParameter(gate.release).addToContainer(this);
+        new UIKnob(4, yp + 48).setParameter(gate.meter.gain).addToContainer(this);
+        new UIKnob(4 + 1*34, yp + 48).setParameter(gate.meter.slope).addToContainer(this);
+        new UIKnob(4 + 2*34, yp + 48).setParameter(gate.meter.attack).addToContainer(this);
+        new UIKnob(4 + 3*34, yp + 48).setParameter(gate.decay).addToContainer(this);
 
-        this.eqBands = gate.eq.numBands / 2;
+        this.eqBands = gate.meter.numBands / 2;
         this.masterX = 6;
         this.masterWidth = this.kickWidth = 12;
         this.kickX = this.width - this.masterWidth - 6;
@@ -96,21 +96,21 @@ public class UIBeatDetect extends UIWindow {
         pg.noStroke();
         pg.fill(0xff444444);
         this.bandX = this.eqX + 1 + (this.piece * this.gate.minBand.getValuei());
-        this.bandWidth = 1 + this.piece * PApplet.min(this.gate.avgBands.getValuei(), this.eqBands - this.gate.minBand.getValuei());
+        this.bandWidth = 1 + this.piece * PApplet.min(this.gate.numBands.getValuei(), this.eqBands - this.gate.minBand.getValuei());
         pg.rect(this.bandX, this.eqTop + 1, this.bandWidth, this.eqHeight- 1);
-        if ((this.gate.minBand.getValuei() + this.gate.avgBands.getValuei()) <= this.eqBands) {
+        if ((this.gate.minBand.getValuei() + this.gate.numBands.getValuei()) <= this.eqBands) {
             pg.fill(0xff393939);
             pg.rect(this.bandX + this.bandWidth - this.piece, this.eqTop + 3, this.piece-1, this.eqHeight-5);
         }
 
         // Eq bands
         for (int i = 0; i < this.eqBands; ++i) {
-            if (i >= this.gate.minBand.getValuei() && (i < (this.gate.minBand.getValuei() + this.gate.avgBands.getValuei()))) {
+            if (i >= this.gate.minBand.getValuei() && (i < (this.gate.minBand.getValuei() + this.gate.numBands.getValuei()))) {
                 pg.fill(highlight);
             } else {
                 pg.fill(ui.theme.getSecondaryColor());
             }
-            pg.rect(this.eqX + 2 + this.piece*i, this.eqBottom, this.piece-1, -(this.eqHeight-1)*this.gate.eq.getBandf(i));
+            pg.rect(this.eqX + 2 + this.piece*i, this.eqBottom, this.piece-1, -(this.eqHeight-1)*this.gate.meter.getBandf(i));
         }
         pg.fill(highlight);
         pg.rect(this.masterX + 1, this.eqBottom, this.masterWidth-1, -(this.eqHeight-1)*this.gate.getLevelf());
@@ -139,7 +139,7 @@ public class UIBeatDetect extends UIWindow {
         if ((mx >= this.bandX) && (mx < (this.bandX + this.bandWidth)) &&
                 (my >= this.eqTop) && (my <= this.eqBottom)) {
             this.bandDragging = true;
-            this.bandDraggingRange = (mx > (this.bandX + this.piece * (this.gate.avgBands.getValuei() -1 ))) && (mx < (this.eqX + this.eqWidth - this.piece));
+            this.bandDraggingRange = (mx > (this.bandX + this.piece * (this.gate.numBands.getValuei() -1 ))) && (mx < (this.eqX + this.eqWidth - this.piece));
             this.bandDelta = 0;
         }
     }
@@ -153,8 +153,8 @@ public class UIBeatDetect extends UIWindow {
                 int steps = (int) (this.bandDelta / this.piece);
                 if (steps != 0) {
                     if (this.bandDraggingRange) {
-                        int newVal = PApplet.constrain(this.gate.avgBands.getValuei() + steps, 1, this.eqBands);
-                        this.gate.avgBands.setValue(newVal);
+                        int newVal = PApplet.constrain(this.gate.numBands.getValuei() + steps, 1, this.eqBands);
+                        this.gate.numBands.setValue(newVal);
                     } else {
                         int newVal = PApplet.constrain(this.gate.minBand.getValuei() + steps, 0, this.eqBands-1);
                         this.gate.minBand.setValue(newVal);
