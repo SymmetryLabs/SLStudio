@@ -106,6 +106,13 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
     public final BooleanParameter trigger = new BooleanParameter("Trigger");
 
     /**
+     * Turn this parameter on to have this modulator tap the tempo system
+     */
+    public final BooleanParameter teachTempo = new BooleanParameter("Tap", false);
+
+    private int tapCount = 0;
+
+    /**
      * Level parameter is the average of the monitored band
      */
     public final BoundedParameter average = new BoundedParameter("Average");
@@ -161,6 +168,7 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
         addParameter(this.maxFreq);
         addParameter(this.trigger);
         addParameter(this.average);
+        addParameter(this.teachTempo);
     }
 
     @Override
@@ -178,6 +186,8 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
             } else {
                 updateAverageOctave();
             }
+        } else if (p == this.teachTempo) {
+            this.tapCount = 0;
         }
     }
 
@@ -232,32 +242,6 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
         return this.impl.getBand(i);
     }
 
-    /**
-     *
-     * @return true if this is the frame in which the gate was peaked
-     */
-    public boolean peak() {
-        return this.trigger.isOn();
-    }
-
-    /**
-     * Gets the level of the frequency range being monitored.
-     *
-     * @return Level of range from 0-1
-     */
-    public double getLevel() {
-        return this.average.getValue();
-    }
-
-    /**
-     * Gets the level of the frequency range being monitored.
-     *
-     * @return Level of range from 0-1
-     */
-    public float getLevelf() {
-        return (float) getLevel();
-    }
-
     @Override
     protected double computeValue(double deltaMs) {
         float attackGain = (float) Math.exp(-deltaMs / this.attack.getValue());
@@ -295,6 +279,12 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
 
         boolean triggered = !this.waitingForFloor && (thresholdValue > 0) && (averageNorm >= thresholdValue);
         if (triggered) {
+            if (this.teachTempo.isOn()) {
+                getLX().tempo.tap();
+                if (++this.tapCount >= 4) {
+                    this.teachTempo.setValue(false);
+                }
+            }
             this.waitingForFloor = true;
             this.envelope = 1;
         } else {
@@ -312,7 +302,7 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
 
     @Override
     public double getNormalized() {
-        return getLevel();
+        return this.envelope;
     }
 
     @Override

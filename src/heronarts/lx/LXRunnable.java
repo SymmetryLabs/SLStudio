@@ -30,8 +30,13 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      */
     public final BooleanParameter running = new BooleanParameter("Running", false);
 
-    protected LXRunnable() {
+    protected LXRunnable(LX lx) {
+        super(lx);
         addParameter("__running", this.running);
+    }
+
+    protected LXRunnable() {
+        this(null);
     }
 
     @Override

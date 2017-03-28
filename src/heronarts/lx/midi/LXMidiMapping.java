@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -136,8 +136,6 @@ public abstract class LXMidiMapping implements LXSerializable {
 
     public static class Note extends LXMidiMapping {
 
-        public final BooleanParameter momentary = new BooleanParameter("Momentary", false);
-
         public final int pitch;
 
         private Note(LX lx, MidiNote note, LXParameter parameter) {
@@ -148,9 +146,6 @@ public abstract class LXMidiMapping implements LXSerializable {
         private Note(LX lx, JsonObject object) {
             super(lx, object, Type.NOTE);
             this.pitch = object.get(KEY_PITCH).getAsInt();
-            if (object.has(KEY_MOMENTARY)) {
-                this.momentary.setValue(object.get(KEY_MOMENTARY).getAsBoolean());
-            }
         }
 
         @Override
@@ -168,14 +163,22 @@ public abstract class LXMidiMapping implements LXSerializable {
         void apply(LXShortMessage message) {
             MidiNote note = (MidiNote) message;
             if ((note instanceof MidiNoteOff) || note.getVelocity() == 0) {
-                if (momentary.isOn()) {
-                    setValue(false);
+                if (this.parameter instanceof BooleanParameter) {
+                    BooleanParameter booleanParameter = (BooleanParameter) this.parameter;
+                    if (booleanParameter.getMode() == BooleanParameter.Mode.MOMENTARY) {
+                        booleanParameter.setValue(false);
+                    }
                 }
             } else {
                 if (this.parameter instanceof DiscreteParameter) {
                     ((DiscreteParameter) this.parameter).increment();
-                } else if (momentary.isOn()) {
-                    setValue(true);
+                } else if (this.parameter instanceof BooleanParameter) {
+                    BooleanParameter booleanParameter = (BooleanParameter) this.parameter;
+                    if (booleanParameter.getMode() == BooleanParameter.Mode.MOMENTARY) {
+                        booleanParameter.setValue(true);
+                    } else {
+                        booleanParameter.toggle();
+                    }
                 } else {
                     toggleValue();
                 }
@@ -188,13 +191,11 @@ public abstract class LXMidiMapping implements LXSerializable {
         }
 
         private static final String KEY_PITCH = "pitch";
-        private static final String KEY_MOMENTARY = "momentary";
 
         @Override
         public void save(JsonObject object) {
             super.save(object);
             object.addProperty(KEY_PITCH, this.pitch);
-            object.addProperty(KEY_MOMENTARY, this.momentary.isOn());
         }
     }
 

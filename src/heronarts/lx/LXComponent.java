@@ -109,6 +109,15 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         addParameter("__label", label);
     }
 
+    protected LX getLX() {
+        return this.lx;
+    }
+
+    protected LXComponent addSubcomponent(LXComponent child) {
+        child.setParent(this);
+        return this;
+    }
+
     final LXComponent setParent(LXComponent parent) {
         if (this.parent != null) {
             throw new IllegalStateException("Component already has parent set: " + this + " " + parent);

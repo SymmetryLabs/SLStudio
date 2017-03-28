@@ -164,9 +164,14 @@ public class LXModulationEngine extends LXModulatorComponent {
             JsonArray modulatorArr = obj.getAsJsonArray(KEY_MODULATORS);
             for (JsonElement modulatorElement : modulatorArr) {
                 JsonObject modulatorObj = modulatorElement.getAsJsonObject();
-                LXModulator modulator = LX.instantiateModulator(modulatorObj.get(KEY_CLASS).getAsString());
-                addModulator(modulator);
-                modulator.load(modulatorObj);
+                String modulatorClass = modulatorObj.get(KEY_CLASS).getAsString();
+                LXModulator modulator = this.lx.instantiateModulator(modulatorClass);
+                if (modulator == null) {
+                    System.err.println("Could not instantiate modulator: " + modulatorClass);
+                } else {
+                    addModulator(modulator);
+                    modulator.load(modulatorObj);
+                }
             }
         }
         if (obj.has(KEY_MODULATIONS)) {

@@ -43,7 +43,9 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.pattern.SolidColorPattern;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -89,6 +91,7 @@ public class LXEngine extends LXComponent {
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
     private final List<Runnable> threadSafeTaskQueue = Collections.synchronizedList(new ArrayList<Runnable>());
     private final List<Runnable> engineThreadTaskQueue = new ArrayList<Runnable>();
+    private final Map<String, LXComponent> components = new HashMap<String, LXComponent>();
 
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     public final LXMasterChannel masterChannel;
@@ -450,6 +453,14 @@ public class LXEngine extends LXComponent {
     }
 
     /**
+     * Register a component with the engine. It will be saved and loaded.
+     */
+    public LXEngine registerComponent(String key, LXComponent component) {
+        this.components.put(key, component);
+        return this;
+    }
+
+    /**
      * Add a task to be run once on the engine thread.
      *
      * @param runnable Task to run
@@ -723,19 +734,19 @@ public class LXEngine extends LXComponent {
                     boolean doBlend = false;
                     int[] blendDestination;
                     int[] blendOutput;
-                    switch (channel.crossfadeGroup.getValuei()) {
-                    case LXChannel.CROSSFADE_GROUP_LEFT:
+                    switch (channel.crossfadeGroup.getEnum()) {
+                    case A:
                         blendDestination = (leftChannelCount++ > 0) ? blendOutputLeft : backgroundArray;
                         blendOutput = blendOutputLeft;
                         doBlend = leftOn || this.cueLeft.isOn();
                         break;
-                    case LXChannel.CROSSFADE_GROUP_RIGHT:
+                    case B:
                         blendDestination = (rightChannelCount++ > 0) ? blendOutputRight: backgroundArray;
                         blendOutput = blendOutputRight;
                         doBlend = rightOn || this.cueRight.isOn();
                         break;
                     default:
-                    case LXChannel.CROSSFADE_GROUP_BYPASS:
+                    case BYPASS:
                         blendDestination = (mainChannelCount++ > 0) ? blendOutputMain : backgroundArray;
                         blendOutput = blendOutputMain;
                         doBlend = channelIsEnabled;
@@ -873,6 +884,7 @@ public class LXEngine extends LXComponent {
     private static final String KEY_CHANNELS = "channels";
     private static final String KEY_MASTER = "master";
     private static final String KEY_AUDIO = "audio";
+    private static final String KEY_COMPONENTS = "components";
     private static final String KEY_MODULATION = "modulation";
     private static final String KEY_MIDI = "midi";
 
@@ -892,6 +904,12 @@ public class LXEngine extends LXComponent {
         this.lx.palette.save(paletteObj);
         JsonObject audioObj = new JsonObject();
         this.audio.save(audioObj);
+        JsonObject componentsObj = new JsonObject();
+        for (String key : this.components.keySet()) {
+            JsonObject componentObj = new JsonObject();
+            this.components.get(key).save(componentObj);
+            componentsObj.add(key, componentObj);
+        }
         JsonObject modulationObj = new JsonObject();
         this.modulation.save(modulationObj);
         JsonObject midiObj = new JsonObject();
@@ -901,6 +919,7 @@ public class LXEngine extends LXComponent {
         obj.add(KEY_CHANNELS, channels);
         obj.add(KEY_MASTER, masterObj);
         obj.add(KEY_AUDIO, audioObj);
+        obj.add(KEY_COMPONENTS, componentsObj);
         obj.add(KEY_MODULATION, modulationObj);
         obj.add(KEY_MIDI, midiObj);
     }
@@ -932,6 +951,16 @@ public class LXEngine extends LXComponent {
         // Audio setup
         if (obj.has(KEY_AUDIO)) {
             this.audio.load(obj.getAsJsonObject(KEY_AUDIO));
+        }
+
+        // Generic components
+        if (obj.has(KEY_COMPONENTS)) {
+            JsonObject componentsObj = obj.getAsJsonObject(KEY_COMPONENTS);
+            for (String key : this.components.keySet()) {
+                if (componentsObj.has(key)) {
+                    this.components.get(key).load(componentsObj.getAsJsonObject(key));
+                }
+            }
         }
 
         // Modulation matrix

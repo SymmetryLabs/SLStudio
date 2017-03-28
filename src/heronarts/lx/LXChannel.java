@@ -24,6 +24,7 @@ import heronarts.lx.blend.LXBlend;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transition.LXTransition;
@@ -116,22 +117,11 @@ public class LXChannel extends LXBus {
 
     private final List<Listener> listeners = new ArrayList<Listener>();
 
-    /**
-     * This channel bypasses the crossfader
-     */
-    public static final int CROSSFADE_GROUP_BYPASS = 1;
-
-    /**
-     * This channel belongs to the left crossfade group
-     */
-    public static final int CROSSFADE_GROUP_LEFT = 0;
-
-    /**
-     * This channel belongs to the right crossfade group
-     */
-    public static final int CROSSFADE_GROUP_RIGHT = 2;
-
-    public static final String[] CROSSFADE_OPTIONS = { "A", "X", "B" };
+    public enum CrossfadeGroup {
+        BYPASS,
+        A,
+        B
+    };
 
     /**
      * The index of this channel in the engine.
@@ -146,7 +136,7 @@ public class LXChannel extends LXBus {
     /**
      * Crossfade group this channel belongs to
      */
-    public final DiscreteParameter crossfadeGroup = new DiscreteParameter("Group", CROSSFADE_OPTIONS, CROSSFADE_GROUP_BYPASS);
+    public final EnumParameter<CrossfadeGroup> crossfadeGroup = new EnumParameter<CrossfadeGroup>("Group", CrossfadeGroup.BYPASS);
 
     /**
      * Whether this channel should listen to MIDI events

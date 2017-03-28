@@ -697,10 +697,14 @@ public class LX {
         return instantiateComponent(className, LXEffect.class);
     }
 
-    protected static LXModulator instantiateModulator(String className) {
+    protected LXModulator instantiateModulator(String className) {
         try {
             Class<? extends LXModulator> cls = Class.forName(className).asSubclass(LXModulator.class);
-            return cls.getConstructor().newInstance();
+            try {
+                return cls.getConstructor(LX.class).newInstance(this);
+            } catch (NoSuchMethodException nsmx) {
+                return cls.getConstructor().newInstance();
+            }
         } catch (Exception x) {
             System.err.println(x.getLocalizedMessage());
         }
