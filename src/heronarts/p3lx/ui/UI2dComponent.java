@@ -164,6 +164,9 @@ public abstract class UI2dComponent extends UIObject {
     public UIObject setVisible(boolean visible) {
         if (isVisible() != visible) {
             super.setVisible(visible);
+            if (this.parent instanceof UI2dContainer) {
+                ((UI2dContainer) this.parent).reflow();
+            }
             if (visible) {
                 redraw();
             } else {

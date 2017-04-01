@@ -77,17 +77,21 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
         if (this.layout == Layout.VERTICAL) {
             float y = this.padding;
             for (UIObject child : this) {
-                UI2dComponent component = (UI2dComponent) child;
-                component.setY(y);
-                y += component.getHeight() + this.childMargin;
+                if (child.isVisible()) {
+                    UI2dComponent component = (UI2dComponent) child;
+                    component.setY(y);
+                    y += component.getHeight() + this.childMargin;
+                }
             }
             setContentHeight(Math.max(0, y - this.childMargin));
         } else if (this.layout == Layout.HORIZONTAL) {
             float x = this.padding;
             for (UIObject child : this) {
-                UI2dComponent component = (UI2dComponent) child;
-                component.setX(x);
-                x += component.getWidth() + this.childMargin;
+                if (child.isVisible()) {
+                    UI2dComponent component = (UI2dComponent) child;
+                    component.setX(x);
+                    x += component.getWidth() + this.childMargin;
+                }
             }
             setContentWidth(Math.max(0, x - this.childMargin));
         }
