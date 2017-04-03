@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -20,10 +20,12 @@
 
 package heronarts.lx.output;
 
+import heronarts.lx.model.LXFixture;
+
 /**
  * Distributed Display Protocol is a simple protocol developed by 3waylabs. It's
  * a simple framing of raw color buffers, without DMX size limitations.
- * 
+ *
  * The specification is available at http://www.3waylabs.com/ddp/
  */
 public class DDPDatagram extends LXDatagram {
@@ -32,6 +34,10 @@ public class DDPDatagram extends LXDatagram {
     private static final int DEFAULT_PORT = 4048;
 
     private final int[] pointIndices;
+
+    public DDPDatagram(LXFixture fixture) {
+        this(LXOutput.fixtureToIndices(fixture));
+    }
 
     public DDPDatagram(int[] pointIndices) {
         super(HEADER_LENGTH + pointIndices.length * 3);
@@ -62,6 +68,7 @@ public class DDPDatagram extends LXDatagram {
         this.buffer[9] = (byte) (0xff & dataLen);
     }
 
+    @Override
     public void onSend(int[] colors) {
         copyPoints(colors, this.pointIndices, HEADER_LENGTH);
     }

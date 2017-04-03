@@ -21,6 +21,6 @@ Output via a variety of lighting protocols is supported, including:
 
 LX differs from many other lighting/VJ software packages in that it is designed for non-uniform 3-D pixel layouts, rather than dense 2-D screens. Whereas many applications render video and map it onto LED pixel arrays, LX functions more like a software vertex shader. The rendering engine knows the discrete position of each pixel and takes exact position information into account as each pixel is rendered.   
 
-A companion library, [P3LX](https://github.com/heronarts/P3LX), makes it simple to embed LX in the Processing 3 environment with modular UI controls and simulation. This is the most typical use case. This core library is free of any dependency on the Processing libraries or runtime. It depends only on [Minim](https://github.com/ddf/Minim) for audio and [Google Gson](https://code.google.com/p/google-gson/) for serialization.
+A companion library, [P3LX](https://github.com/heronarts/P3LX), makes it simple to embed LX in the Processing 3 environment with modular UI controls and simulation. This is the most typical use case. This core library is free of any dependency on the Processing libraries or runtime. It depends only on [Google Gson](https://code.google.com/p/google-gson/) for serialization.
  
 Building a big cool project? I'm probably interested in hearing about it! Drop me a line: mark@heronarts.com

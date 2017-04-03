@@ -633,7 +633,7 @@ public class LX {
         obj.addProperty(KEY_TIMESTAMP, System.currentTimeMillis());
         JsonObject engine = new JsonObject();
         obj.add(KEY_ENGINE, engine);
-        this.engine.save(engine);
+        this.engine.save(this, engine);
         try {
             JsonWriter writer = new JsonWriter(new FileWriter(file));
             new GsonBuilder().setPrettyPrinting().create().toJson(obj, writer);
@@ -658,7 +658,8 @@ public class LX {
             try {
                 fr = new FileReader(file);
                 JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
-                this.engine.load(obj.getAsJsonObject(KEY_ENGINE));
+                // this.componentRegistry.clearProjectMap();
+                this.engine.load(this, obj.getAsJsonObject(KEY_ENGINE));
                 System.out.println("Project loaded successfully from " + file.toString());
                 this.file = file;
                 for (ProjectListener projectListener : this.projectListeners) {

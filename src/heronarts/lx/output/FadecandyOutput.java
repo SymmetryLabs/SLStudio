@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -23,6 +23,7 @@ package heronarts.lx.output;
 import java.io.IOException;
 
 import heronarts.lx.LX;
+import heronarts.lx.model.LXFixture;
 
 public class FadecandyOutput extends OPCOutput {
 
@@ -32,6 +33,10 @@ public class FadecandyOutput extends OPCOutput {
 
     public FadecandyOutput(LX lx, String host, int port) {
         super(lx, host, port);
+    }
+
+    public FadecandyOutput(LX lx, String host, int port, LXFixture fixture) {
+        this(lx, host, port, LXOutput.fixtureToIndices(fixture));
     }
 
     public FadecandyOutput(LX lx, String host, int port, int[] pointIndices) {

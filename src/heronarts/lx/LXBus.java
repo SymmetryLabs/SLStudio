@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -142,20 +142,14 @@ public abstract class LXBus extends LXModelComponent {
     private static final String KEY_EFFECTS = "effects";
 
     @Override
-    public void save(JsonObject obj) {
-        super.save(obj);;
-        JsonArray effects = new JsonArray();
-        for (LXEffect effect : this.effects) {
-            JsonObject effectObj = new JsonObject();
-            effect.save(effectObj);
-            effects.add(effectObj);
-        }
-        obj.add(KEY_EFFECTS, effects);
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);;
+        obj.add(KEY_EFFECTS, LXSerializable.Utils.toArray(lx, this.effects));
     }
 
     @Override
-    public void load(JsonObject obj) {
-        super.load(obj);
+    public void load(LX lx, JsonObject obj) {
+        super.load(lx, obj);
         // Remove effects
         for (int i = this.effects.size() - 1; i >= 0; --i) {
             removeEffect(this.effects.get(i));
@@ -165,7 +159,7 @@ public abstract class LXBus extends LXModelComponent {
         for (JsonElement effectElement : effectsArray) {
             JsonObject effectObj = (JsonObject) effectElement;
             LXEffect effect = this.lx.instantiateEffect(effectObj.get("class").getAsString());
-            effect.load(effectObj);
+            effect.load(lx, effectObj);
             addEffect(effect);
         }
     }

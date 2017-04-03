@@ -590,21 +590,15 @@ public class LXChannel extends LXBus {
     private static final String KEY_PATTERN_INDEX = "patternIndex";
 
     @Override
-    public void save(JsonObject obj) {
-        super.save(obj);
-        JsonArray patterns = new JsonArray();
-        for (LXPattern pattern : this.patterns) {
-            JsonObject patternObj = new JsonObject();
-            pattern.save(patternObj);
-            patterns.add(patternObj);
-        }
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
         obj.addProperty(KEY_PATTERN_INDEX, this.activePatternIndex);
-        obj.add(KEY_PATTERNS, patterns);
+        obj.add(KEY_PATTERNS, LXSerializable.Utils.toArray(lx, this.patterns));
     }
 
     @Override
-    public void load(JsonObject obj) {
-        super.load(obj);
+    public void load(LX lx, JsonObject obj) {
+        super.load(lx, obj);
         // Remove patterns
         for (int i = this.patterns.size() - 1; i >= 0; --i) {
             removePattern(this.patterns.get(i), false);
@@ -614,7 +608,7 @@ public class LXChannel extends LXBus {
         for (JsonElement patternElement : patternsArray) {
             JsonObject patternObj = (JsonObject) patternElement;
             LXPattern pattern = this.lx.instantiatePattern(patternObj.get(KEY_CLASS).getAsString());
-            pattern.load(patternObj);
+            pattern.load(lx, patternObj);
             addPattern(pattern);
         }
         // Set the active index instantly, do not transition!

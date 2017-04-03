@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -19,6 +19,8 @@
  */
 
 package heronarts.lx.output;
+
+import heronarts.lx.model.LXFixture;
 
 /**
  * A datagram implementing the Kinet protocol, used by Color Kinetics devices.
@@ -43,6 +45,27 @@ public class KinetDatagram extends LXDatagram {
     };
 
     private final Version version;
+
+    /**
+     * Constructs a datagram that sends on the given kinet supply output port
+     *
+     * @param kinetPort Number of the output port on the kinet power supply
+     * @param indices A list of the point indices that should be sent on this port
+     */
+    public KinetDatagram(int kinetPort, LXFixture fixture) {
+        this(kinetPort, fixture, Version.PORTOUT);
+    }
+
+    /**
+     * Constructs a datagram that sends on the given kinet supply output port
+     *
+     * @param kinetPort Number of the output port on the kinet power supply
+     * @param indices A list of the point indices that should be sent on this port
+     * @param version Version of Kinet Protocol
+     */
+    public KinetDatagram(int kinetPort, LXFixture fixture, Version version) {
+        this(kinetPort, LXOutput.fixtureToIndices(fixture), version);
+    }
 
     /**
      * Constructs a datagram that sends on the given kinet supply output port

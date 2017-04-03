@@ -355,7 +355,7 @@ public class LXMidiEngine implements LXSerializable {
     private final List<String> rememberMidiInputs = new ArrayList<String>();
 
     @Override
-    public void save(JsonObject object) {
+    public void save(LX lx, JsonObject object) {
         waitUntilReady();
         JsonArray inputs = new JsonArray();
         for (LXMidiInput input : this.inputs) {
@@ -366,19 +366,12 @@ public class LXMidiEngine implements LXSerializable {
         for (String remembered : this.rememberMidiInputs) {
             inputs.add(remembered);
         }
-        JsonArray mappings = new JsonArray();
-        for (LXMidiMapping mapping : this.mappings) {
-            JsonObject mappingObj = new JsonObject();
-            mapping.save(mappingObj);
-            mappings.add(mappingObj);
-        }
-
         object.add(KEY_INPUTS, inputs);
-        object.add(KEY_MAPPINGS, mappings);
+        object.add(KEY_MAPPINGS, LXSerializable.Utils.toArray(lx, this.mappings));
     }
 
     @Override
-    public void load(final JsonObject object) {
+    public void load(LX lx, final JsonObject object) {
         this.rememberMidiInputs.clear();
         this.mappings.clear();
         if (object.has(KEY_MAPPINGS)) {

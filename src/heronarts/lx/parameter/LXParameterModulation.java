@@ -104,7 +104,7 @@ public class LXParameterModulation extends LXComponent {
 
 
     @Override
-    public void save(JsonObject obj) {
+    public void save(LX lx, JsonObject obj) {
         JsonObject sourceObj = new JsonObject();
         if (this.source instanceof LXComponent) {
             LXComponent sourceComponent = (LXComponent) this.source;
@@ -118,6 +118,6 @@ public class LXParameterModulation extends LXComponent {
         targetObj.addProperty(KEY_COMPONENT_ID, this.target.getComponent().getId());
         targetObj.addProperty(KEY_PARAMETER_PATH, this.target.getPath());
         obj.add(KEY_TARGET, targetObj);
-        super.save(obj);
+        super.save(lx, obj);
     }
 }

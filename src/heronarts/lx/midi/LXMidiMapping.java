@@ -122,7 +122,7 @@ public abstract class LXMidiMapping implements LXSerializable {
     private static final String KEY_PARAMETER_PATH = "parameterPath";
 
     @Override
-    public void save(JsonObject object) {
+    public void save(LX lx, JsonObject object) {
         object.addProperty(KEY_CHANNEL, this.channel);
         object.addProperty(KEY_TYPE, this.type.toString());
         object.addProperty(KEY_COMPONENT_ID, this.parameter.getComponent().getId());
@@ -130,7 +130,7 @@ public abstract class LXMidiMapping implements LXSerializable {
     }
 
     @Override
-    public void load(JsonObject object) {
+    public void load(LX lx, JsonObject object) {
         throw new UnsupportedOperationException("Use LXMidiMapping.create() to load from JsonObject");
     }
 
@@ -193,8 +193,8 @@ public abstract class LXMidiMapping implements LXSerializable {
         private static final String KEY_PITCH = "pitch";
 
         @Override
-        public void save(JsonObject object) {
-            super.save(object);
+        public void save(LX lx, JsonObject object) {
+            super.save(lx, object);
             object.addProperty(KEY_PITCH, this.pitch);
         }
     }
@@ -238,8 +238,8 @@ public abstract class LXMidiMapping implements LXSerializable {
         private static final String KEY_CC = "cc";
 
         @Override
-        public void save(JsonObject object) {
-            super.save(object);
+        public void save(LX lx, JsonObject object) {
+            super.save(lx, object);
             object.addProperty(KEY_CC, this.cc);
         }
     }

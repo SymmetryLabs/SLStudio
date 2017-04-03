@@ -141,25 +141,13 @@ public class LXModulationEngine extends LXModulatorComponent {
     private static final String KEY_MODULATIONS = "modulations";
 
     @Override
-    public void save(JsonObject obj) {
-        JsonArray modulatorArr = new JsonArray();
-        for (LXModulator modulator : getModulators()) {
-            JsonObject modulatorObj = new JsonObject();
-            modulator.save(modulatorObj);
-            modulatorArr.add(modulatorObj);
-        }
-        obj.add(KEY_MODULATORS, modulatorArr);
-        JsonArray modulationArr = new JsonArray();
-        for (LXParameterModulation modulation : this.modulations) {
-            JsonObject modulationObj = new JsonObject();
-            modulation.save(modulationObj);
-            modulationArr.add(modulationObj);
-        }
-        obj.add(KEY_MODULATIONS, modulationArr);
+    public void save(LX lx, JsonObject obj) {
+        obj.add(KEY_MODULATORS, LXSerializable.Utils.toArray(lx, getModulators()));
+        obj.add(KEY_MODULATIONS, LXSerializable.Utils.toArray(lx, this.modulations));
     }
 
     @Override
-    public void load(JsonObject obj) {
+    public void load(LX lx, JsonObject obj) {
         if (obj.has(KEY_MODULATORS)) {
             JsonArray modulatorArr = obj.getAsJsonArray(KEY_MODULATORS);
             for (JsonElement modulatorElement : modulatorArr) {
@@ -170,7 +158,7 @@ public class LXModulationEngine extends LXModulatorComponent {
                     System.err.println("Could not instantiate modulator: " + modulatorClass);
                 } else {
                     addModulator(modulator);
-                    modulator.load(modulatorObj);
+                    modulator.load(lx, modulatorObj);
                 }
             }
         }
@@ -180,7 +168,7 @@ public class LXModulationEngine extends LXModulatorComponent {
                 JsonObject modulationObj = modulationElement.getAsJsonObject();
                 LXParameterModulation modulation = new LXParameterModulation(this.lx, modulationObj);
                 addModulation(modulation);
-                modulation.load(modulationObj);
+                modulation.load(lx, modulationObj);
             }
         }
     }

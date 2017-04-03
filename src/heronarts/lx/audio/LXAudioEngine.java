@@ -24,6 +24,7 @@ import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXModulatorComponent;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 
@@ -80,19 +81,17 @@ public class LXAudioEngine extends LXModulatorComponent {
     private static final String KEY_METER = "meter";
 
     @Override
-    public void save(JsonObject obj) {
-        JsonObject meterObj = new JsonObject();
-        this.meter.save(meterObj);
-        obj.add(KEY_METER, meterObj);
-        super.save(obj);
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        obj.add(KEY_METER, LXSerializable.Utils.toObject(lx, this.meter));
     }
 
     @Override
-    public void load(JsonObject obj) {
+    public void load(LX lx, JsonObject obj) {
         if (obj.has(KEY_METER)) {
-            this.meter.load(obj.getAsJsonObject(KEY_METER));
+            this.meter.load(lx, obj.getAsJsonObject(KEY_METER));
         }
-        super.load(obj);
+        super.load(lx, obj);
     }
 
 }

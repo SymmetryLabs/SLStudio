@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -20,11 +20,13 @@
 
 package heronarts.lx.output;
 
+import heronarts.lx.model.LXFixture;
+
 /**
  * Streaming ACN, also referred to as E1.31, is a standardized protocol for
  * streaming DMX data over ACN protocol. It's a fairly simple UDP-based wrapper
  * on 512 bytes of data with a 16-bit universe number.
- * 
+ *
  * See: http://tsp.plasa.org/tsp/documents/docs/E1-31_2009.pdf
  */
 public class StreamingACNDatagram extends LXDatagram {
@@ -36,6 +38,8 @@ public class StreamingACNDatagram extends LXDatagram {
     private final static int UNIVERSE_NUMBER_POSITION = 113;
 
     private final static int DEFAULT_PORT = 5568;
+
+    private final static int DEFAULT_UNIVERSE_NUMBER = 1;
 
     private final int[] pointIndices;
 
@@ -49,19 +53,27 @@ public class StreamingACNDatagram extends LXDatagram {
      */
     private byte sequenceNumber = 0;
 
+    public StreamingACNDatagram(LXFixture fixture) {
+        this(DEFAULT_UNIVERSE_NUMBER, fixture);
+    }
+
     /**
      * Constructs a datagram on universe 1
-     * 
+     *
      * @param pointIndices Points to send on this universe
      */
     public StreamingACNDatagram(int[] pointIndices) {
-        this(1, pointIndices);
+        this(DEFAULT_UNIVERSE_NUMBER, pointIndices);
+    }
+
+    public StreamingACNDatagram(int universeNumber, LXFixture fixture) {
+        this(universeNumber, LXOutput.fixtureToIndices(fixture));
     }
 
     /**
      * Constructs a datagram, sends the list of point indices on the given
      * universe number.
-     * 
+     *
      * @param universeNumber Universe
      * @param pointIndices List of point indices to encode in packet
      */
@@ -175,7 +187,7 @@ public class StreamingACNDatagram extends LXDatagram {
 
     /**
      * Sets the universe for this datagram
-     * 
+     *
      * @param universeNumber DMX universe
      * @return this
      */
@@ -188,13 +200,14 @@ public class StreamingACNDatagram extends LXDatagram {
 
     /**
      * Universe number for datagram.
-     * 
+     *
      * @return Universe number
      */
     public int getUniverseNumber() {
         return this.universeNumber;
     }
 
+    @Override
     public void onSend(int[] colors) {
         ++this.sequenceNumber;
         this.buffer[SEQUENCE_NUMBER_POSITION] = this.sequenceNumber;

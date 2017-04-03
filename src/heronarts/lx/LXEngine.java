@@ -890,44 +890,21 @@ public class LXEngine extends LXComponent {
 
 
     @Override
-    public void save(JsonObject obj) {
-        super.save(obj);
-        JsonArray channels = new JsonArray();
-        for (LXChannel channel : this.channels) {
-            JsonObject channelObj = new JsonObject();
-            channel.save(channelObj);
-            channels.add(channelObj);
-        }
-        JsonObject masterObj = new JsonObject();
-        this.masterChannel.save(masterObj);
-        JsonObject paletteObj = new JsonObject();
-        this.lx.palette.save(paletteObj);
-        JsonObject audioObj = new JsonObject();
-        this.audio.save(audioObj);
-        JsonObject componentsObj = new JsonObject();
-        for (String key : this.components.keySet()) {
-            JsonObject componentObj = new JsonObject();
-            this.components.get(key).save(componentObj);
-            componentsObj.add(key, componentObj);
-        }
-        JsonObject modulationObj = new JsonObject();
-        this.modulation.save(modulationObj);
-        JsonObject midiObj = new JsonObject();
-        this.midi.save(midiObj);
-
-        obj.add(KEY_PALETTE, paletteObj);
-        obj.add(KEY_CHANNELS, channels);
-        obj.add(KEY_MASTER, masterObj);
-        obj.add(KEY_AUDIO, audioObj);
-        obj.add(KEY_COMPONENTS, componentsObj);
-        obj.add(KEY_MODULATION, modulationObj);
-        obj.add(KEY_MIDI, midiObj);
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        obj.add(KEY_PALETTE, LXSerializable.Utils.toObject(lx, this.lx.palette));
+        obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, this.channels));
+        obj.add(KEY_MASTER, LXSerializable.Utils.toObject(lx, this.masterChannel));
+        obj.add(KEY_AUDIO, LXSerializable.Utils.toObject(lx, this.audio));
+        obj.add(KEY_COMPONENTS, LXSerializable.Utils.toObject(lx, this.components));
+        obj.add(KEY_MODULATION, LXSerializable.Utils.toObject(lx, this.modulation));
+        obj.add(KEY_MIDI, LXSerializable.Utils.toObject(lx, this.midi));
     }
 
     @Override
-    public void load(JsonObject obj) {
+    public void load(LX lx, JsonObject obj) {
         // TODO(mcslee): remove loop tasks that other things might have added? maybe
-        // need to separate engine-owned loop tasks from application-added ones...
+        // need to separate application-owned loop tasks from project-specific ones...
 
         // Remove all channels
         for (int i = this.channels.size() - 1; i >= 0; --i) {
@@ -938,19 +915,19 @@ public class LXEngine extends LXComponent {
         for (JsonElement channelElement : channelsArray) {
             // TODO(mcslee): improve efficiency, allow no-patterns in a channel?
             LXChannel channel = addChannel();
-            channel.load((JsonObject) channelElement);
+            channel.load(lx, (JsonObject) channelElement);
         }
         // Master channel settings
-        this.masterChannel.load(obj.getAsJsonObject(KEY_MASTER));
+        this.masterChannel.load(lx, obj.getAsJsonObject(KEY_MASTER));
 
         // Palette
         if (obj.has(KEY_PALETTE)) {
-            lx.palette.load(obj.getAsJsonObject(KEY_PALETTE));
+            lx.palette.load(lx, obj.getAsJsonObject(KEY_PALETTE));
         }
 
         // Audio setup
         if (obj.has(KEY_AUDIO)) {
-            this.audio.load(obj.getAsJsonObject(KEY_AUDIO));
+            this.audio.load(lx, obj.getAsJsonObject(KEY_AUDIO));
         }
 
         // Generic components
@@ -958,22 +935,22 @@ public class LXEngine extends LXComponent {
             JsonObject componentsObj = obj.getAsJsonObject(KEY_COMPONENTS);
             for (String key : this.components.keySet()) {
                 if (componentsObj.has(key)) {
-                    this.components.get(key).load(componentsObj.getAsJsonObject(key));
+                    this.components.get(key).load(lx, componentsObj.getAsJsonObject(key));
                 }
             }
         }
 
         // Modulation matrix
         if (obj.has(KEY_MODULATION)) {
-            this.modulation.load(obj.getAsJsonObject(KEY_MODULATION));
+            this.modulation.load(lx, obj.getAsJsonObject(KEY_MODULATION));
         }
 
         // Midi
         if (obj.has(KEY_MIDI)) {
-            this.midi.load(obj.getAsJsonObject(KEY_MIDI));
+            this.midi.load(lx, obj.getAsJsonObject(KEY_MIDI));
         }
 
         // Parameters etc.
-        super.load(obj);
+        super.load(lx, obj);
     }
 }

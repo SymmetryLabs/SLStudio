@@ -63,6 +63,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             } else if (component.id <= 0) {
                 throw new IllegalStateException("Component has bunk ID: " + component.id + " " + component);
             }
+            if (this.components.containsKey(component.id)) {
+                throw new IllegalStateException("Component id already registered: " + component.id);
+            }
             this.components.put(component.id, component);
         }
 
@@ -74,7 +77,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
                 this.components.remove(component.id);
             }
             if (this.components.containsKey(id)) {
-                throw new IllegalArgumentException("Component id already in use: " + id);
+                throw new IllegalArgumentException("Component id already in use: " + id + " " + this.components.get(id));
             }
             component.id = id;
             this.components.put(id, component);
@@ -103,6 +106,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     protected LXComponent(LX lx, int id) {
         this.lx = lx;
         this.id = id;
+        if (id != ID_UNASSIGNED && lx == null) {
+            throw new IllegalArgumentException("Cannot specify id on component with no LX instance");
+        }
         if (lx != null) {
             lx.componentRegistry.register(this);
         }
@@ -131,22 +137,16 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (parent == this) {
             throw new IllegalStateException("Component cannot be its own parent: " + parent);
         }
-        this.lx = parent.lx;
         this.parent = parent;
-        this.lx.componentRegistry.register(this);
+        if (this.lx == null) {
+            this.lx = parent.lx;
+            this.lx.componentRegistry.register(this);
+        }
         return this;
     }
 
     public final LXComponent getParent() {
         return this.parent;
-    }
-
-    final LXComponent setId(int id) {
-        if (this.lx == null) {
-            throw new IllegalStateException("Cannot setId() on component before it has LX instance");
-        }
-        this.lx.componentRegistry.setId(this, id);
-        return this;
     }
 
     public final int getId() {
@@ -225,15 +225,14 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
      * Subclasses are free to override this, but in case they don't care a default
      * implementation is provided.
      */
-    public/* abstract */void onParameterChanged(LXParameter parameter) {
-    }
+    public void onParameterChanged(LXParameter parameter) {}
 
     protected final static String KEY_ID = "id";
     protected final static String KEY_CLASS = "class";
     private final static String KEY_PARAMETERS = "parameters";
 
     @Override
-    public void save(JsonObject obj) {
+    public void save(LX lx, JsonObject obj) {
         JsonObject parameters = new JsonObject();
         for (String path : this.parameters.keySet()) {
             LXParameter parameter = this.parameters.get(path);
@@ -256,9 +255,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     }
 
     @Override
-    public void load(JsonObject obj) {
+    public void load(LX lx, JsonObject obj) {
         if (obj.has(KEY_ID)) {
-            setId(obj.get(KEY_ID).getAsInt());
+            lx.componentRegistry.setId(this, obj.get(KEY_ID).getAsInt());
         }
         if (obj.has(KEY_PARAMETERS)) {
             JsonObject parameters = obj.getAsJsonObject(KEY_PARAMETERS);
