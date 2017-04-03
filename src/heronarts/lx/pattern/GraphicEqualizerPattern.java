@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
 import heronarts.lx.audio.GraphicMeter;
-import heronarts.lx.transition.WipeTransition;
 
 public class GraphicEqualizerPattern extends LXPattern {
 
@@ -33,7 +32,6 @@ public class GraphicEqualizerPattern extends LXPattern {
     public GraphicEqualizerPattern(LX lx) {
         super(lx);
         addModulator(this.eq = new GraphicMeter(lx.engine.audio.getInput())).start();
-        this.transition = new WipeTransition(lx, WipeTransition.Direction.UP);
     }
 
     @Override

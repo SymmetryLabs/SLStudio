@@ -27,8 +27,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.transition.LXTransition;
-
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -69,7 +67,6 @@ public class LXChannel extends LXBus {
 
         public void patternDidChange(LXChannel channel, LXPattern pattern);
 
-        public void faderTransitionDidChange(LXChannel channel, LXTransition faderTransition);
     }
 
     /**
@@ -108,10 +105,6 @@ public class LXChannel extends LXBus {
 
         @Override
         public void patternDidChange(LXChannel channel, LXPattern pattern) {
-        }
-
-        @Override
-        public void faderTransitionDidChange(LXChannel channel, LXTransition faderTransition) {
         }
     }
 

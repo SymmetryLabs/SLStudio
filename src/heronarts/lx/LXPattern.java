@@ -28,18 +28,12 @@ import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.transition.LXTransition;
 
 /**
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
 public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener {
-
-    /**
-     * Transition used when this pattern becomes active.
-     */
-    protected LXTransition transition = null;
 
     private int intervalBegin = -1;
 
@@ -179,26 +173,6 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
      */
     public final boolean isAutoCycleEligible() {
         return this.autoCycleEligible.isOn() && (!this.hasInterval() || this.isInInterval());
-    }
-
-    /**
-     * Sets the transition to be used when this pattern becomes active.
-     *
-     * @param transition Transition
-     * @return this
-     */
-    public final LXPattern setTransition(LXTransition transition) {
-        this.transition = transition;
-        return this;
-    }
-
-    /**
-     * Gets the transition to be used when this pattern becomes active.
-     *
-     * @return Transition on this pattern
-     */
-    public final LXTransition getTransition() {
-        return transition;
     }
 
     @Override
