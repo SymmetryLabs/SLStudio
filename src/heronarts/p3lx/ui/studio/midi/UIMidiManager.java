@@ -24,7 +24,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio;
+package heronarts.p3lx.ui.studio.midi;
 
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiInput;
@@ -32,6 +32,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIItemList;
+import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 public class UIMidiManager extends UICollapsibleSection {
 

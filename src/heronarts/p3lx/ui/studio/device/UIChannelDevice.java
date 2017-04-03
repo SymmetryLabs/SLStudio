@@ -36,7 +36,6 @@ import heronarts.p3lx.ui.UITimerTask;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UIDropMenu;
-import heronarts.p3lx.ui.studio.UIPatternControl;
 import processing.core.PGraphics;
 
 class UIChannelDevice extends UIDevice {

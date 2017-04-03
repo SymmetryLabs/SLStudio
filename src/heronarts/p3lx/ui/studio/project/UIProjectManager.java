@@ -24,7 +24,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio;
+package heronarts.p3lx.ui.studio.project;
 
 import java.io.File;
 
@@ -32,6 +32,7 @@ import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UILabel;
+import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import processing.core.PConstants;
 
 public class UIProjectManager extends UICollapsibleSection {
@@ -39,6 +40,9 @@ public class UIProjectManager extends UICollapsibleSection {
     private final LX lx;
     private final UILabel fileLabel;
     private File file;
+    private final UIButton saveButton;
+    private final UIButton saveAsButton;
+    private final UIButton loadButton;
 
     public static final float HEIGHT = 118;
 
@@ -67,7 +71,7 @@ public class UIProjectManager extends UICollapsibleSection {
             }
         });
 
-        new UIButton(0, 20, getContentWidth(), 16) {
+        this.saveButton = (UIButton) new UIButton(0, 20, getContentWidth(), 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -79,7 +83,7 @@ public class UIProjectManager extends UICollapsibleSection {
         .setMomentary(true)
         .addToContainer(this);
 
-        new UIButton(0, 40, getContentWidth(), 16) {
+        this.saveAsButton = (UIButton) new UIButton(0, 40, getContentWidth(), 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -91,7 +95,7 @@ public class UIProjectManager extends UICollapsibleSection {
         .setMomentary(true)
         .addToContainer(this);
 
-        new UIButton(0, 60, getContentWidth(), 16) {
+        this.loadButton = (UIButton) new UIButton(0, 60, getContentWidth(), 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -117,6 +121,8 @@ public class UIProjectManager extends UICollapsibleSection {
     }
 
     public void onSave(final File saveFile) {
+        this.saveButton.setActive(false);
+        this.saveAsButton.setActive(false);
         if (saveFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
@@ -127,6 +133,7 @@ public class UIProjectManager extends UICollapsibleSection {
     }
 
     public void onLoad(final File loadFile) {
+        this.loadButton.setActive(false);
         if (loadFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {

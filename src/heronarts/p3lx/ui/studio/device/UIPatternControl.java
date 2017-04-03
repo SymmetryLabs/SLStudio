@@ -24,12 +24,11 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio;
+package heronarts.p3lx.ui.studio.device;
 
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.p3lx.pattern.LXPatternUI;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIKnob;
@@ -55,8 +54,8 @@ public class UIPatternControl extends UI2dContainer {
         };
         setContentTarget(this.content);
 
-        if (pattern instanceof LXPatternUI) {
-            ((LXPatternUI)pattern).buildControlUI(ui, this);
+        if (pattern instanceof UIPattern) {
+            ((UIPattern)pattern).buildControlUI(ui, this);
         } else {
             buildDefaultControlUI(pattern);
         }

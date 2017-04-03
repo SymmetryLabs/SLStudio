@@ -121,7 +121,7 @@ public class P3LX extends LX {
         this.colors = this.engine.getUIBufferNonThreadSafe();
         LX.initTimer.log("P3LX: ModelBuffer");
 
-        this.ui = new UI(this);
+        this.ui = buildUI();
         LX.initTimer.log("P3LX: UI");
 
         applet.colorMode(PConstants.HSB, 360, 100, 100, 100);
@@ -130,6 +130,15 @@ public class P3LX extends LX {
         applet.registerMethod("draw", this);
         applet.registerMethod("dispose", this);
         LX.initTimer.log("P3LX: registerMethod");
+    }
+
+    /**
+     * Subclass may override.
+     *
+     * @return UI
+     */
+    protected UI buildUI() {
+        return new UI(this);
     }
 
     /**

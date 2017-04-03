@@ -29,12 +29,13 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIFocus;
-import heronarts.p3lx.ui.studio.UIPatternControl;
+import heronarts.p3lx.ui.studio.device.UIPattern;
+import heronarts.p3lx.ui.studio.device.UIPatternControl;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class SolidColorPattern extends heronarts.lx.pattern.SolidColorPattern implements LXPatternUI {
+public class SolidColorPattern extends heronarts.lx.pattern.SolidColorPattern implements UIPattern {
 
     public SolidColorPattern(LX lx) {
         super(lx);
