@@ -27,11 +27,13 @@
 package heronarts.p3lx.ui.studio;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.VariableLFO;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameterModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
@@ -46,6 +48,7 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
 import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 
 public class UIRightPane extends UIPane {
 
@@ -57,6 +60,7 @@ public class UIRightPane extends UIPane {
 
     public static final int PADDING = 4;
     public static final int WIDTH = 244;
+    private static final int ADD_BUTTON_WIDTH = 40;
 
     private int lfoCount = 1;
     private int beatCount = 1;
@@ -71,15 +75,23 @@ public class UIRightPane extends UIPane {
         new UIMidiManager(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth(), 144).addToContainer(this.midi);
         new UIMidiMappings(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
 
-        UI2dContainer bar = new UI2dContainer(0, 0, this.modulation.getContentWidth(), 16);
-        bar.addToContainer(this.modulation);
+        UI2dContainer bar = (UI2dContainer) new UI2dContainer(0, 0, this.modulation.getContentWidth(), 22) {
+            @Override
+            public void onDraw(UI ui, PGraphics pg) {
+                pg.stroke(0xff333333);
+                pg.line(0, this.height-1, UIRightPane.this.width-1, this.height-1);
+            }
+        }
+        .setLayout(UI2dContainer.Layout.HORIZONTAL)
+        .setChildMargin(4)
+        .addToContainer(this.modulation);
 
-        new UILabel(0, 0, 24, 16)
+        new UILabel(0, 0, 20, 16)
         .setLabel("Add")
         .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
         .addToContainer(bar);
 
-        new UIButton(28, 0, 48, 16) {
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -95,7 +107,7 @@ public class UIRightPane extends UIPane {
         .setBorderRounding(4)
         .addToContainer(bar);
 
-        new UIButton(80, 0, 48, 16) {
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -111,7 +123,28 @@ public class UIRightPane extends UIPane {
         .setBorderRounding(4)
         .addToContainer(bar);
 
-        // new UIModulationMatrix(ui, lx, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation);
+        final UIButton mapButton = (UIButton) new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                } else if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
+                    lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                }
+            }
+        }
+        .setLabel("Map")
+        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setBorderRounding(4)
+        .addToContainer(bar);
+
+        lx.engine.mapping.mode.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                if (lx.engine.mapping.getMode() != LXMappingEngine.Mode.MODULATION_SOURCE) {
+                    mapButton.setActive(false);
+                }
+            }
+        });
 
         for (LXModulator modulator : lx.engine.modulation.getModulators()) {
             addModulator(modulator);

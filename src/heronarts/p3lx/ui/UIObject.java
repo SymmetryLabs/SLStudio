@@ -404,7 +404,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         } else if (isModulationSourceMapping()) {
             this.ui.mapModulationSource((UIModulationSource) this);
             return;
-        } else if (isModulationTargetMapping()) {
+        } else if (isModulationTargetMapping() && !isModulationSource()) {
             LXNormalizedParameter source = this.ui.getModulationSource().getModulationSource();
             CompoundParameter target = ((UIModulationTarget)this).getModulationTarget();
             if (source != null && target != null) {

@@ -53,7 +53,7 @@ public class UITheme {
 
     private PFont controlFont;
     private int controlBackgroundColor = 0xff222222;
-    private int controlBorderColor = 0xff494949;
+    private int controlBorderColor = 0xff292929;
     private int controlTextColor = 0xffcccccc;
     private int controlDisabledColor = 0xff666666;
 

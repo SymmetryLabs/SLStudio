@@ -85,7 +85,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         setBackgroundColor(ui.theme.getWindowBackgroundColor());
         setBorderRounding(4);
 
-        float colorX = this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH;
+        float titleRightX = this.width - 3*PADDING - COLOR_WIDTH - MAP_WIDTH;
         UIButton loopingButton = null;
 
         if (this.modulator != null) {
@@ -98,11 +98,11 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
             .addToContainer(this);
 
             if (this.modulator instanceof LXPeriodicModulator) {
-                loopingButton = new UIButton(this.width - 2*(PADDING + MAP_WIDTH), PADDING-1, MAP_WIDTH, 14);
-                colorX -= PADDING + LOOP_WIDTH;
+                loopingButton = new UIButton(this.width - PADDING - COLOR_WIDTH - 2*(PADDING + MAP_WIDTH), PADDING-1, MAP_WIDTH, 14);
+                titleRightX -= PADDING + LOOP_WIDTH;
             }
 
-            this.title = new UITextBox(TITLE_X, PADDING, colorX - TITLE_X - PADDING, 12);
+            this.title = new UITextBox(TITLE_X, PADDING, titleRightX - TITLE_X, 12);
             this.title
             .setParameter(modulator.label)
             .setBorder(false)
@@ -115,7 +115,10 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         } else {
             this.color = new ColorParameter("Modulator", LXColor.hsb(360*Math.random(), 100, 100));
             this.title = null;
-            this.toggleTarget = new UIParameterLabel(2, 1, colorX - PADDING - 2, 12).setParameter(parameter).addToContainer(this);
+            this.toggleTarget = new UIParameterLabel(2, PADDING, titleRightX - 2, 12)
+                .setParameter(parameter)
+                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+                .addToContainer(this);
 
             this.color.addListener(new LXParameterListener() {
                 public void onParameterChanged(LXParameter p) {
@@ -126,7 +129,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
             });
         }
 
-        new UIColorBox(ui, this.color, colorX, PADDING+1, COLOR_WIDTH, COLOR_WIDTH)
+        new UIColorBox(ui, this.color, this.width - PADDING - COLOR_WIDTH, PADDING+1, COLOR_WIDTH, COLOR_WIDTH)
         .addToContainer(this);
 
         if (loopingButton != null) {
@@ -136,7 +139,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
             .addToContainer(this);
         }
 
-        final UIButton mapButton = new UIButton(this.width - PADDING - MAP_WIDTH, PADDING-1, MAP_WIDTH, 14) {
+        final UIButton mapButton = new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING-1, MAP_WIDTH, 14) {
             @Override
             public void onToggle(boolean on) {
                 ui.mapModulationSource(on ? getModulationSourceUI() : null);
@@ -162,7 +165,11 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         };
         setContentTarget(this.content);
 
-        this.modulations = new UI2dContainer(PADDING, this.content.getY() + this.content.getHeight() + PADDING, width-2*PADDING, 0) {
+        float modulationsY = CONTENT_Y + this.content.getHeight();
+        if (this.content.getHeight() > 0) {
+            modulationsY += PADDING;
+        }
+        this.modulations = new UI2dContainer(PADDING, modulationsY, width-2*PADDING, 0) {
             @Override
             public void onResize() {
                 recomputeHeight();
@@ -174,11 +181,13 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
     }
 
     private void recomputeHeight() {
+        float contentHeight = this.content.getHeight();
         float mappingHeight = this.modulations.getHeight();
-        if (mappingHeight > 0) {
-            mappingHeight += PADDING;
+        float padding = PADDING;
+        if (mappingHeight > 0 && contentHeight > 0) {
+            padding += PADDING;
         }
-        UIModulator.this.setHeight(expandedHeight = CONTENT_Y + this.content.getHeight() + mappingHeight + PADDING);
+        UIModulator.this.setHeight(expandedHeight = CONTENT_Y + contentHeight + mappingHeight + padding);
     }
 
     public UIModulator addModulation(LXParameterModulation modulation) {
@@ -190,13 +199,18 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
     }
 
     public UIModulator removeModulation(LXParameterModulation modulation) {
+        int total = 0;
         for (UIObject child : this.modulations) {
-            if (child instanceof UIModulation) {
-                UIModulation uiModulation = (UIModulation) child;
-                if (uiModulation.modulation == modulation) {
-                    uiModulation.removeFromContainer();
-                }
+            ++total;
+            UIModulation uiModulation = (UIModulation) child;
+            if (uiModulation.modulation == modulation) {
+                uiModulation.removeFromContainer();
+                --total;
             }
+        }
+        if ((this.modulator == null) && (total == 0)) {
+            // We're a dead parameter!
+            removeFromContainer();
         }
         return this;
     }
@@ -224,7 +238,6 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
                     for (UIObject uiModulation : this.modulations) {
                         this.lx.engine.modulation.removeModulation(((UIModulation) uiModulation).modulation);
                     }
-                    removeFromContainer();
                 }
             }
         }
@@ -286,8 +299,8 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             if ((keyCode == java.awt.event.KeyEvent.VK_D && (keyEvent.isControlDown() || keyEvent.isMetaDown())) ||
                 keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
-                consumeKeyEvent();
                 lx.engine.modulation.removeModulation(this.modulation);
+                consumeKeyEvent();
             }
         }
     }
