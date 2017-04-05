@@ -33,9 +33,10 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
-
+import java.util.Map.Entry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
 
@@ -652,13 +653,33 @@ public class LX {
         // TODO(mcslee): implement this
     }
 
+    private int getMaxId(JsonObject obj, int max) {
+        for (Entry<String, JsonElement> entry : obj.entrySet()) {
+            if (entry.getKey().equals(LXComponent.KEY_ID)) {
+                int id = entry.getValue().getAsInt();
+                if (id > max) {
+                    max = id;
+                }
+            } else if (entry.getValue().isJsonArray()) {
+                for (JsonElement arrElement : entry.getValue().getAsJsonArray()) {
+                    if (arrElement.isJsonObject()) {
+                        max = getMaxId(arrElement.getAsJsonObject(), max);
+                    }
+                }
+            } else if (entry.getValue().isJsonObject()) {
+                max = getMaxId(entry.getValue().getAsJsonObject(), max);
+            }
+        }
+        return max;
+    }
+
     public void loadProject(File file) {
         try {
             FileReader fr = null;
             try {
                 fr = new FileReader(file);
                 JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
-                // this.componentRegistry.clearProjectMap();
+                this.componentRegistry.setIdCounter(getMaxId(obj, this.componentRegistry.getIdCounter()) + 1);
                 this.engine.load(this, obj.getAsJsonObject(KEY_ENGINE));
                 System.out.println("Project loaded successfully from " + file.toString());
                 this.file = file;

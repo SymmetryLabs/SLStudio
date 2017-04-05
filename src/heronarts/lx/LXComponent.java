@@ -69,6 +69,14 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             this.components.put(component.id, component);
         }
 
+        int getIdCounter() {
+            return this.idCounter;
+        }
+
+        void setIdCounter(int idCounter) {
+            this.idCounter = idCounter;
+        }
+
         void setId(LXComponent component, int id) {
             if (id <= 0) {
                 throw new IllegalArgumentException("Cannot setId to non-positive value: " + id + " " + component);
@@ -77,13 +85,10 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
                 this.components.remove(component.id);
             }
             if (this.components.containsKey(id)) {
-                throw new IllegalArgumentException("Component id already in use: " + id + " " + this.components.get(id));
+                throw new IllegalArgumentException("Component id already in use: " + id + " (requesting: " + component + ") (owner: " + this.components.get(id) + ")");
             }
             component.id = id;
             this.components.put(id, component);
-            if (this.idCounter <= id) {
-                this.idCounter = id+1;
-            }
         }
 
         void dispose(LXComponent component) {
