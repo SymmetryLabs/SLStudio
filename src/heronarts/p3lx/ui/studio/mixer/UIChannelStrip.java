@@ -33,7 +33,6 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.transition.LXTransition;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIButtonGroup;
@@ -151,7 +150,6 @@ public class UIChannelStrip extends UIMixerStrip {
             public void patternRemoved(LXChannel channel, LXPattern pattern) {}
             public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {}
             public void patternDidChange(LXChannel channel, LXPattern pattern) {}
-            public void faderTransitionDidChange(LXChannel channel, LXTransition faderTransition) {}
         });
     }
 

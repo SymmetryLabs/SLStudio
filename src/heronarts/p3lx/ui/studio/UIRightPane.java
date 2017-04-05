@@ -31,6 +31,7 @@ import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.VariableLFO;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
@@ -41,8 +42,8 @@ import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.studio.midi.UIMidiManager;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
 import heronarts.p3lx.ui.studio.modulation.UIBandGate;
-import heronarts.p3lx.ui.studio.modulation.UIModulationMatrix;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
+import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
 import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 import processing.core.PConstants;
 
@@ -110,15 +111,22 @@ public class UIRightPane extends UIPane {
         .setBorderRounding(4)
         .addToContainer(bar);
 
-        new UIModulationMatrix(ui, lx, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation);
+        // new UIModulationMatrix(ui, lx, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation);
 
         for (LXModulator modulator : lx.engine.modulation.getModulators()) {
             addModulator(modulator);
         }
+        for (LXParameterModulation modulation : lx.engine.modulation.modulations) {
+            addModulation(modulation);
+        }
 
         lx.engine.modulation.addListener(new LXModulationEngine.Listener() {
-            public void modulationAdded(LXModulationEngine engine, LXParameterModulation modulation) {}
-            public void modulationRemoved(LXModulationEngine engine, LXParameterModulation modulation) {}
+            public void modulationAdded(LXModulationEngine engine, LXParameterModulation modulation) {
+                addModulation(modulation);
+            }
+            public void modulationRemoved(LXModulationEngine engine, LXParameterModulation modulation) {
+                removeModulation(modulation);
+            }
             public void modulatorAdded(LXModulationEngine engine, LXModulator modulator) {
                 addModulator(modulator);
             }
@@ -134,6 +142,18 @@ public class UIRightPane extends UIPane {
         super.onUIResize(ui);
     }
 
+    private UIModulator findModulator(LXParameter parameter) {
+        for (UIObject child : this.modulation) {
+            if (child instanceof UIModulator) {
+                UIModulator uiModulator = (UIModulator) child;
+                if (uiModulator.parameter  == parameter) {
+                    return uiModulator;
+                }
+            }
+        }
+        return null;
+    }
+
     private void addModulator(LXModulator modulator) {
         if (modulator instanceof VariableLFO) {
             new UIVariableLFO(this.ui, this.lx, (VariableLFO) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
@@ -145,14 +165,24 @@ public class UIRightPane extends UIPane {
     }
 
     private void removeModulator(LXModulator modulator) {
-        for (UIObject child : this.modulation) {
-            if (child instanceof UIModulator) {
-                UIModulator modulatorUI = (UIModulator) child;
-                if (modulatorUI.modulator == modulator) {
-                    modulatorUI.removeFromContainer();
-                    return;
-                }
-            }
+        UIModulator uiModulator = findModulator(modulator);
+        if (uiModulator != null) {
+            uiModulator.removeFromContainer();
+        }
+    }
+
+    private void addModulation(LXParameterModulation modulation) {
+        UIModulator uiModulator = findModulator(modulation.source);
+        if (uiModulator == null) {
+            uiModulator = (UIModulator) new UIParameterModulator(this.ui, this.lx, modulation.source, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
+        }
+        uiModulator.addModulation(modulation);
+    }
+
+    private void removeModulation(LXParameterModulation modulation) {
+        UIModulator uiModulator = findModulator(modulation.source);
+        if (uiModulator != null) {
+            uiModulator.removeModulation(modulation);
         }
     }
 }
