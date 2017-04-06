@@ -58,7 +58,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
     private static final int MODULATION_SPACING = 2;
     protected static final int TITLE_X = 18;
     protected static final int CONTENT_Y = 20;
-    protected static final int MAP_WIDTH = 24;
+    public static final int MAP_WIDTH = 24;
     protected static final int LOOP_WIDTH = MAP_WIDTH;
     protected static final int COLOR_WIDTH = 10;
 
@@ -115,10 +115,16 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         } else {
             this.color = new ColorParameter("Modulator", LXColor.hsb(360*Math.random(), 100, 100));
             this.title = null;
-            this.toggleTarget = new UIParameterLabel(2, PADDING, titleRightX - 2, 12)
-                .setParameter(parameter)
-                .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-                .addToContainer(this);
+            this.toggleTarget = new UIParameterLabel(2, PADDING, titleRightX - 2, 12) {
+                @Override
+                public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+                    super.onMousePressed(mouseEvent, mx, my);
+                    focus();
+                }
+            }
+            .setParameter(parameter)
+            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+            .addToContainer(this);
 
             this.color.addListener(new LXParameterListener() {
                 public void onParameterChanged(LXParameter p) {
@@ -175,8 +181,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
                 recomputeHeight();
             }
         };
-        this.modulations.setBackgroundColor(ui.theme.getDarkBackgroundColor());
-        this.modulations.setLayout(UI2dContainer.Layout.VERTICAL).setPadding(MODULATION_SPACING).setChildMargin(4*MODULATION_SPACING);
+        this.modulations.setLayout(UI2dContainer.Layout.VERTICAL).setPadding(MODULATION_SPACING).setChildMargin(MODULATION_SPACING);
         addTopLevelComponent(this.modulations);
     }
 
@@ -288,6 +293,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         UIModulation(UI ui, final LXParameterModulation modulation, float x, float y, float w) {
             super(x, y, w, HEIGHT);
             this.modulation = modulation;
+            setBackgroundColor(ui.theme.getDarkBackgroundColor());
 
             new UIParameterLabel(PADDING, PADDING, width - 2*PADDING - 14, 12).setParameter(modulation.target).setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(this);
             new UIButton(PADDING + 2, PADDING + 18, 24, 12).setParameter(modulation.polarity).addToContainer(this);

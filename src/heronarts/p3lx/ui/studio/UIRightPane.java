@@ -73,7 +73,7 @@ public class UIRightPane extends UIPane {
         this.midi = this.sections[1];
 
         new UIMidiManager(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth(), 144).addToContainer(this.midi);
-        new UIMidiMappings(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIMidiMappings(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
 
         UI2dContainer bar = (UI2dContainer) new UI2dContainer(0, 0, this.modulation.getContentWidth(), 22) {
             @Override

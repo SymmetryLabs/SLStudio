@@ -26,15 +26,21 @@
 
 package heronarts.p3lx.ui.studio.midi;
 
+import heronarts.lx.LX;
+import heronarts.lx.LXMappingEngine;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiMapping;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.UIObject;
+import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UIParameterLabel;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
+import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
@@ -45,11 +51,11 @@ public class UIMidiMappings extends UICollapsibleSection {
     private final LXMidiEngine midiEngine;
     private final UI ui;
 
-    public UIMidiMappings(UI ui, final LXMidiEngine midiEngine, float x, float y, float w) {
+    public UIMidiMappings(UI ui, final LX lx, float x, float y, float w) {
         super(ui, x, y, w, 0);
         setTitle("MAPPINGS");
         this.ui = ui;
-        this.midiEngine = midiEngine;
+        this.midiEngine = lx.engine.midi;
 
         for (LXMidiMapping mapping : midiEngine.getMappings()) {
             addMapping(mapping);
@@ -67,6 +73,25 @@ public class UIMidiMappings extends UICollapsibleSection {
 
         setLayout(UI2dContainer.Layout.VERTICAL);
         setChildMargin(SPACING);
+
+        final UIButton midiMapButton = new UIButton(getContentWidth() - 36, 3, UIModulator.MAP_WIDTH, 14) {
+            @Override
+            protected void onToggle(boolean on) {
+                if (on) {
+                    lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+                } else if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
+                    lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                }
+            }
+        };
+
+        lx.engine.mapping.mode.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                midiMapButton.setActive(lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI);
+            }
+        });
+
+        addTopLevelComponent(midiMapButton.setLabel("→"));
     }
 
     private void addMapping(LXMidiMapping mapping) {
@@ -117,10 +142,8 @@ public class UIMidiMappings extends UICollapsibleSection {
 
         @Override
         public void drawFocus(UI ui, PGraphics pg) {
-            pg.noFill();
-            // TODO(mcslee): this color should be in UITheme...
-            pg.stroke(0xff555555);
-            pg.rect(0, 0, width-1, height-1);
+            pg.stroke(ui.theme.getPrimaryColor());
+            pg.line(0, 0, 0, this.height-1);
         }
     }
 }
