@@ -28,11 +28,13 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
     /**
      * Whether this modulator is currently running.
      */
-    public final BooleanParameter running = new BooleanParameter("Running", false);
+    public final BooleanParameter running =
+        new BooleanParameter("On", false)
+        .setDescription("Sets whether the component is running");
 
     protected LXRunnable(LX lx) {
         super(lx);
-        addParameter("__running", this.running);
+        addParameter("running", this.running);
     }
 
     protected LXRunnable() {

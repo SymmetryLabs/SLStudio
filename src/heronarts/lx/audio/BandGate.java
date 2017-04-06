@@ -40,38 +40,51 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      * Gain of the meter, in decibels
      */
     public final BoundedParameter gain = (BoundedParameter)
-        new BoundedParameter("Gain", 0, -48, 48).setUnits(LXParameter.Units.DECIBELS);
+        new BoundedParameter("Gain", 0, -48, 48)
+        .setDescription("Sets the gain of the meter in dB")
+        .setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Range of the meter, in decibels.
      */
     public final BoundedParameter range = (BoundedParameter)
-        new BoundedParameter("Range", 36, 6, 96).setUnits(LXParameter.Units.DECIBELS);
+        new BoundedParameter("Range", 36, 6, 96)
+        .setDescription("Sets the range of the meter in dB")
+        .setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Meter attack time, in milliseconds
      */
     public final BoundedParameter attack = (BoundedParameter)
-        new BoundedParameter("Attack", 10, 0, 100).setUnits(LXParameter.Units.MILLISECONDS);
+        new BoundedParameter("Attack", 10, 0, 100)
+        .setDescription("Sets the attack time of the meter response")
+        .setUnits(LXParameter.Units.MILLISECONDS);
 
     /**
      * Meter release time, in milliseconds
      */
     public final BoundedParameter release = (BoundedParameter)
-        new BoundedParameter("Release", 100, 0, 1000).setExponent(2).setUnits(LXParameter.Units.MILLISECONDS);
+        new BoundedParameter("Release", 100, 0, 1000)
+        .setDescription("Sets the release time of the meter response")
+        .setExponent(2)
+        .setUnits(LXParameter.Units.MILLISECONDS);
 
     /**
      * dB/octave slope applied to the equalizer
      */
     public final BoundedParameter slope = (BoundedParameter)
-        new BoundedParameter("Slope", 4.5, -3, 12).setUnits(LXParameter.Units.DECIBELS);
+        new BoundedParameter("Slope", 4.5, -3, 12)
+        .setDescription("Sets the slope of the meter in dB per octave")
+        .setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * The gate level at which the trigger is engaged. When the signal crosses
      * this threshold, the gate fires. Value is in the normalized space from 0 to
      * 1.
      */
-    public final BoundedParameter threshold = new BoundedParameter("Threshold", 0.8);
+    public final BoundedParameter threshold =
+        new BoundedParameter("Threshold", 0.8)
+        .setDescription("Sets the level at which the band is triggered");
 
     /**
      * The floor at which the trigger releases. Once triggered, the signal must
@@ -79,14 +92,18 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
      * specified as a fraction of the threshold. So, a value of 0.75 means the
      * signal must fall to 75% of the threshold value.
      */
-    public final BoundedParameter floor = new BoundedParameter("Floor", 0.75);
+    public final BoundedParameter floor =
+        new BoundedParameter("Floor", 0.75)
+        .setDescription("Sets the level the signal must drop below before being triggered again");
 
     /**
      * The time the trigger takes to falloff from 1 to 0 after triggered, in
      * milliseconds
      */
     public final BoundedParameter decay = (BoundedParameter)
-        new BoundedParameter("Decay", 400, 0, 1600).setUnits(LXParameter.Units.MILLISECONDS);
+        new BoundedParameter("Decay", 400, 0, 1600)
+        .setDescription("Sets the decay time of the trigger signal")
+        .setUnits(LXParameter.Units.MILLISECONDS);
 
     /**
      * Minimum frequency for the band
@@ -103,19 +120,25 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
     /**
      * Trigger parameter is set to true for one frame when the beat is triggered.
      */
-    public final BooleanParameter trigger = new BooleanParameter("Trigger");
+    public final BooleanParameter trigger =
+        new BooleanParameter("Trigger")
+        .setDescription("Engages when the beat is first detected");
 
     /**
      * Turn this parameter on to have this modulator tap the tempo system
      */
-    public final BooleanParameter teachTempo = new BooleanParameter("Tap", false);
+    public final BooleanParameter teachTempo =
+        new BooleanParameter("Tap", false)
+        .setDescription("When enabled, each triggering of the band taps the global tempo");
 
     private int tapCount = 0;
 
     /**
      * Level parameter is the average of the monitored band
      */
-    public final BoundedParameter average = new BoundedParameter("Average");
+    public final BoundedParameter average =
+        new BoundedParameter("Average")
+        .setDescription("Computed average level of the audio within the frequency range");
 
     private float averageRaw = 0;
 
@@ -149,10 +172,12 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
         this.impl = new LXMeterImpl(meter.numBands, meter.fft.getBandOctaveRatio());
         this.meter = meter;
         int nyquist = meter.fft.getSampleRate() / 2;
-        this.minFreq = (BoundedParameter) new BoundedParameter("MinFreq", 60, 0, nyquist)
+        this.minFreq = (BoundedParameter) new BoundedParameter("Min Freq", 60, 0, nyquist)
+            .setDescription("Minimum frequency the gate responds to")
             .setExponent(4)
             .setUnits(LXParameter.Units.HERTZ);
-        this.maxFreq = (BoundedParameter) new BoundedParameter("MaxFreq", 120, 0, nyquist)
+        this.maxFreq = (BoundedParameter) new BoundedParameter("Max Freq", 120, 0, nyquist)
+            .setDescription("Maximum frequency the gate responds to")
             .setExponent(4)
             .setUnits(LXParameter.Units.HERTZ);
 

@@ -46,8 +46,13 @@ public class LXOscEngine extends LXComponent {
     public final static int DEFAULT_PORT = 3030;
     private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
 
-    public final DiscreteParameter port = new DiscreteParameter("Port", DEFAULT_PORT, 1, 9999);
-    public final BooleanParameter active = new BooleanParameter("Active", false);
+    public final DiscreteParameter port =
+        new DiscreteParameter("Port", DEFAULT_PORT, 1, 9999)
+        .setDescription("UDP port on which the engine listens for OSC message");
+
+    public final BooleanParameter active =
+        new BooleanParameter("Active", false)
+        .setDescription("Enables or disabled the OSC engine");
 
     private final List<Receiver> receivers = new ArrayList<Receiver>();
 

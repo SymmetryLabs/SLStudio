@@ -40,10 +40,13 @@ public class LXParameterModulation extends LXComponent {
     public final ColorParameter clr;
 
     public final EnumParameter<LXParameter.Polarity> polarity =
-        new EnumParameter<LXParameter.Polarity>("Polarity", LXParameter.Polarity.UNIPOLAR);
+        new EnumParameter<LXParameter.Polarity>("Polarity", LXParameter.Polarity.UNIPOLAR)
+        .setDescription("Species whether this modulation is unipolar (one-directional) or bipolar (bi-directional)");
 
     public final BoundedParameter range = (BoundedParameter)
-        new BoundedParameter("Range", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new BoundedParameter("Range", 0, -1, 1)
+        .setDescription("Species the depth of this modulation, may be positive or negative")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public LXParameterModulation(LX lx, JsonObject obj) {
         this(

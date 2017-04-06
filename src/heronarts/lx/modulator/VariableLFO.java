@@ -40,21 +40,34 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
         DOWN
     };
 
-    public final EnumParameter<Waveshape> waveshape = new EnumParameter<Waveshape>("Wave", Waveshape.SIN);
+    public final EnumParameter<Waveshape> waveshape =
+        new EnumParameter<Waveshape>("Wave", Waveshape.SIN)
+        .setDescription("Selects the wave shape used by this LFO");
 
     public final CompoundParameter rate = (CompoundParameter)
-        new CompoundParameter("Rate", 1, 0.03, 10).setExponent(3).setUnits(LXParameter.Units.HERTZ);
+        new CompoundParameter("Rate", 1, 0.03, 10)
+        .setDescription("Sets the oscillation frequency of the LFO in Hz")
+        .setExponent(3)
+        .setUnits(LXParameter.Units.HERTZ);
 
     public final CompoundParameter skew = (CompoundParameter)
-        new CompoundParameter("Skew", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Skew", 0, -1, 1)
+        .setDescription("Sets a skew coefficient for the waveshape")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter shape = (CompoundParameter)
-        new CompoundParameter("Shape", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Shape", 0, -1, 1)
+        .setDescription("Applies shaping to the waveshape")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter exp = (CompoundParameter)
-        new CompoundParameter("Exp", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Exp", 0, -1, 1)
+        .setDescription("Applies exponential scaling to the waveshape")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final CompoundParameter phase = new CompoundParameter("Phase", 0);
+    public final CompoundParameter phase =
+        new CompoundParameter("Phase", 0)
+        .setDescription("Shifts the phase of the waveform");
 
     public VariableLFO() {
         this("LFO");

@@ -39,7 +39,9 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
 
     private LXParameter.Polarity polarity = LXParameter.Polarity.UNIPOLAR;
 
-    public final ColorParameter color = new ColorParameter("Color", LXColor.hsb(Math.random() * 360, 100, 100));
+    public final ColorParameter color =
+        new ColorParameter("Modulation Color", LXColor.hsb(Math.random() * 360, 100, 100))
+        .setDescription("The color used to indicate this modulation source");
 
     // Hack so that Processing IDE can access it...
     public final ColorParameter clr = this.color;

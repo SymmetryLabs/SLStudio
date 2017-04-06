@@ -37,7 +37,9 @@ public abstract class LXPeriodicModulator extends LXModulator {
     /**
      * Whether this modulator runs continuously looping.
      */
-    public final BooleanParameter looping;
+    public final BooleanParameter looping =
+        new BooleanParameter("Loop", true)
+        .setDescription("Whether this modulator loops at the end of its cycle");
 
     /**
      * Whether the modulator finished on this cycle.
@@ -67,8 +69,7 @@ public abstract class LXPeriodicModulator extends LXModulator {
      */
     protected LXPeriodicModulator(String label, LXParameter period) {
         super(label);
-        this.looping = new BooleanParameter("Loop", true);
-        addParameter("__loop", this.looping);
+        addParameter("loop", this.looping);
         this.period = period;
     }
 
