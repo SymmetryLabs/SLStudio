@@ -165,8 +165,6 @@ public LXStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
-public CubeOutputTester cubeOutputTester;
-public BroadcastPacketTester broadcastPacketTester;
 
 public void setup() {
     long setupStart = System.nanoTime();
@@ -186,9 +184,9 @@ public void setup() {
             (networkMonitor = new NetworkMonitor(lx)).start();
             setupGammaCorrection();
             buildOutputs(lx);
-            cubeOutputTester = new CubeOutputTester(lx);
-            broadcastPacketTester = new BroadcastPacketTester(lx);
-            new CubeResetModule(lx);
+            //cubeOutputTester = new CubeOutputTester(lx);
+            //broadcastPacketTester = new BroadcastPacketTester(lx);
+            //new CubeResetModule(lx);
             //logTime("Built Outputs");
 
             // try {
@@ -1944,7 +1942,15 @@ static class CubeResetter {
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
  */
 
+public CubeOutputTester cubeOutputTester;
+public BroadcastPacketTester broadcastPacketTester;
+public CubeResetModule cubeResetModule;
+
 public void buildOutputs(final LX lx) {
+    cubeOutputTester = new CubeOutputTester(lx);
+    broadcastPacketTester = new BroadcastPacketTester(lx);
+    cubeResetModule = new CubeResetModule(lx);
+
     networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
         public void itemAdded(int index, NetworkDevice device) {
             String macAddr = NetworkUtils.macAddrToString(device.macAddress);
@@ -2517,6 +2523,148 @@ class BroadcastPacketTester {
 //   }
 // }
 //---------------------------------------------------------------------------------------------
+
+class UIOutputs extends UICollapsibleSection {
+        UIOutputs(UI ui, float x, float y, float w) {
+                super(ui, x, y, w, 124);
+
+                final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
+                        public int compare(SLController o1, SLController o2) {
+                                try {
+                                        return Integer.parseInt(o1.cubeId) - Integer.parseInt(o2.cubeId);
+                                } catch (NumberFormatException e) {
+                                        return o1.cubeId.compareTo(o2.cubeId);
+                                }
+                        }
+                });
+
+                final BooleanParameter allOutputsEnabled = new BooleanParameter("allOutputsEnabled", true);
+
+                final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
+                for (SLController c : controllers) { sortedControllers.add(c); }
+                for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+                final UIItemList outputList = new UIItemList(ui, 0, 24, w-8, 20);
+
+                outputList.setItems(items).setSingleClickActivate(true).addToContainer(this);
+
+                setTitle(items.size());
+
+                controllers.addListener(new ListListener<SLController>() {
+                    public void itemAdded(final int index, final SLController c) {
+                        dispatcher.dispatchUi(new Runnable() {
+                                public void run() {
+                                        if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
+                                        sortedControllers.add(c);
+                                        items.clear();
+                                                for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+                                        outputList.setItems(items);
+                                        setTitle(items.size());
+                                        redraw();
+                                }
+                        });
+                    }
+                    public void itemRemoved(final int index, final SLController c) {
+                        dispatcher.dispatchUi(new Runnable() {
+                                public void run() {
+                                        if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
+                                        sortedControllers.remove(c);
+                                        items.clear();
+                                                for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+                                        outputList.setItems(items);
+                                        setTitle(items.size());
+                                        redraw();
+                                }
+                        });
+                    }
+                });
+
+                UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
+                    @Override
+                    public void onToggle(boolean isOn) { }
+                }.setLabel("Test Broadcast").setParameter(cubeOutputTester.enabled);
+                testOutput.addToContainer(this);
+
+                UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
+                    @Override
+                    public void onToggle(boolean isOn) { 
+                        println(isOn);
+                        cubeResetModule.enabled.setValue(isOn);
+                    }
+                }.setMomentary(true).setLabel("Reset Controllers");
+                resetCubes.addToContainer(this);
+
+                addTopLevelComponent(new UIButton(4, 4, 12, 12) {
+                    @Override
+                    public void onToggle(boolean isOn) {
+                        allOutputsEnabled.setValue(isOn);
+                        for (SLController c : controllers)
+                                c.enabled.setValue(isOn);
+                        redraw();
+                    }
+                }.setParameter(allOutputsEnabled).setBorderRounding(4));
+        }
+
+        private final IntListener deviceVersionListener = new IntListener() {
+                public void onChange(int version) {
+                        dispatcher.dispatchUi(new Runnable() {
+                        public void run() { redraw(); }
+                        });
+                }
+        };
+
+        private void setTitle(int count) {
+                setTitle("OUTPUT (" + count + ")");
+                setTitleX(20);
+        }
+
+        class ControllerItem extends UIItemList.AbstractItem {
+                final SLController controller;
+                final BooleanParameter allOutputsEnabled;
+
+                ControllerItem(BooleanParameter allOutputsEnabled, SLController _controller) {
+                    this.controller = _controller;
+                    this.allOutputsEnabled = allOutputsEnabled;
+                    controller.enabled.addListener(new LXParameterListener() {
+                        public void onParameterChanged(LXParameter parameter) { redraw(); }
+                    });
+                }
+
+                public String getLabel() {
+                        if (controller.networkDevice != null && controller.networkDevice.version.get() != -1) {
+                                return controller.cubeId + " (v" + controller.networkDevice.version + ")";
+                        } else {
+                                return controller.cubeId;
+                        }
+                }
+
+                public boolean isSelected() { 
+                        return controller.enabled.isOn();
+                }
+
+                public @Override
+                boolean isActive() {
+                        return controller.enabled.isOn();
+                }
+
+                @Override
+                public int getActiveColor(UI ui) {
+                        return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
+                }
+
+                @Override
+                public void onActivate() {
+                        if (!allOutputsEnabled.getValueb())
+                                return;
+                        controller.enabled.toggle();
+                }
+
+                // @Override
+                // public void onDeactivate() {
+                //     println("onDeactivate");
+                //     controller.enabled.setValue(false);
+                // }
+        }
+}
 
 
 
@@ -4258,121 +4406,7 @@ static final class Utils {
 //   }        
 // }
 
-class UIOutputs extends UICollapsibleSection {
-        UIOutputs(UI ui, float x, float y, float w) {
-                super(ui, x, y, w, 124);
 
-                final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
-                        public int compare(SLController o1, SLController o2) {
-                                try {
-                                        return Integer.parseInt(o1.cubeId) - Integer.parseInt(o2.cubeId);
-                                } catch (NumberFormatException e) {
-                                        return o1.cubeId.compareTo(o2.cubeId);
-                                }
-                        }
-                });
-                final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-                for (SLController b : controllers) { sortedControllers.add(b); }
-                for (SLController b : sortedControllers) { items.add(new ControllerItem(b)); }
-                final UIItemList outputList = new UIItemList(ui, 1, 0, w-11, 20);
-
-                outputList.setItems(items).addToContainer(this);
-
-                setTitle(items.size());
-
-                controllers.addListener(new ListListener<SLController>() {
-                    public void itemAdded(final int index, final SLController c) {
-                        dispatcher.dispatchUi(new Runnable() {
-                                public void run() {
-                                        if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
-                                        sortedControllers.add(c);
-                                        items.clear();
-                                                for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
-                                        outputList.setItems(items);
-                                        setTitle(items.size());
-                                        redraw();
-                                }
-                        });
-                    }
-                    public void itemRemoved(final int index, final SLController c) {
-                        dispatcher.dispatchUi(new Runnable() {
-                                public void run() {
-                                        if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
-                                        sortedControllers.remove(c);
-                                        items.clear();
-                                                for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
-                                        outputList.setItems(items);
-                                        setTitle(items.size());
-                                        redraw();
-                                }
-                        });
-                    }
-                });
-
-                addTopLevelComponent(new UIButton(4, 4, 12, 12) {
-                    @Override
-                    public void onToggle(boolean on) {
-                        for (SLController c : controllers)
-                                c.enabled.setValue(on);
-                    }
-                }.setBorderRounding(4));
-        }
-
-        private final IntListener deviceVersionListener = new IntListener() {
-                public void onChange(int version) {
-                        dispatcher.dispatchUi(new Runnable() {
-                        public void run() {
-                                        redraw();
-                                }
-                        });
-                }
-        };
-
-        private void setTitle(int count) {
-                setTitle("OUTPUT (" + count + ")");
-                setTitleX(20);
-        }
-
-        class ControllerItem extends UIItemList.AbstractItem {
-                final SLController controller;
-
-                ControllerItem(SLController _controller) {
-                    this.controller = _controller;
-                    controller.enabled.addListener(new LXParameterListener() {
-                        public void onParameterChanged(LXParameter parameter) { redraw(); }
-                    });
-                }
-
-                public String getLabel() {
-                        if (controller.networkDevice != null && controller.networkDevice.version.get() != -1) {
-                                return controller.cubeId + " (v" + controller.networkDevice.version + ")";
-                        } else {
-                                return controller.cubeId;
-                        }
-                }
-
-                public boolean isSelected() { 
-                        return controller.enabled.isOn();
-                }
-
-                @Override
-                public int getActiveColor(UI ui) {
-                        return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
-                }
-
-                @Override
-                public void onActivate() {
-                        println("onActivate");
-                        controller.enabled.toggle();
-                }
-
-                @Override
-                public void onDeactivate() {
-                        println("onDeactivate");
-                        controller.enabled.setValue(false);
-                }
-        }
-}
 
 // class UIEnvelopSource extends UICollapsibleSection {
 //   UIEnvelopSource(UI ui, float x, float y, float w) {

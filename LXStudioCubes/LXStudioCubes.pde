@@ -8,8 +8,6 @@ public LXStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
-public CubeOutputTester cubeOutputTester;
-public BroadcastPacketTester broadcastPacketTester;
 
 void setup() {
   long setupStart = System.nanoTime();
@@ -29,9 +27,9 @@ void setup() {
       (networkMonitor = new NetworkMonitor(lx)).start();
       setupGammaCorrection();
       buildOutputs(lx);
-      cubeOutputTester = new CubeOutputTester(lx);
-      broadcastPacketTester = new BroadcastPacketTester(lx);
-      new CubeResetModule(lx);
+      //cubeOutputTester = new CubeOutputTester(lx);
+      //broadcastPacketTester = new BroadcastPacketTester(lx);
+      //new CubeResetModule(lx);
       //logTime("Built Outputs");
 
       // try {

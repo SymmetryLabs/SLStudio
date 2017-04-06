@@ -12,7 +12,15 @@
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
  */
 
+public CubeOutputTester cubeOutputTester;
+public BroadcastPacketTester broadcastPacketTester;
+public CubeResetModule cubeResetModule;
+
 void buildOutputs(final LX lx) {
+  cubeOutputTester = new CubeOutputTester(lx);
+  broadcastPacketTester = new BroadcastPacketTester(lx);
+  cubeResetModule = new CubeResetModule(lx);
+
   networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
     public void itemAdded(int index, NetworkDevice device) {
       String macAddr = NetworkUtils.macAddrToString(device.macAddress);
@@ -585,3 +593,144 @@ class BroadcastPacketTester {
 //   }
 // }
 //---------------------------------------------------------------------------------------------
+
+class UIOutputs extends UICollapsibleSection {
+    UIOutputs(UI ui, float x, float y, float w) {
+        super(ui, x, y, w, 124);
+
+        final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
+            int compare(SLController o1, SLController o2) {
+                try {
+                    return Integer.parseInt(o1.cubeId) - Integer.parseInt(o2.cubeId);
+                } catch (NumberFormatException e) {
+                    return o1.cubeId.compareTo(o2.cubeId);
+                }
+            }
+        });
+
+        final BooleanParameter allOutputsEnabled = new BooleanParameter("allOutputsEnabled", true);
+
+        final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
+        for (SLController c : controllers) { sortedControllers.add(c); }
+        for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+        final UIItemList outputList = new UIItemList(ui, 0, 24, w-8, 20);
+
+        outputList.setItems(items).setSingleClickActivate(true).addToContainer(this);
+
+        setTitle(items.size());
+
+        controllers.addListener(new ListListener<SLController>() {
+          void itemAdded(final int index, final SLController c) {
+            dispatcher.dispatchUi(new Runnable() {
+                public void run() {
+                    if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
+                    sortedControllers.add(c);
+                    items.clear();
+                        for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+                    outputList.setItems(items);
+                    setTitle(items.size());
+                    redraw();
+                }
+            });
+          }
+          void itemRemoved(final int index, final SLController c) {
+            dispatcher.dispatchUi(new Runnable() {
+                public void run() {
+                    if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
+                    sortedControllers.remove(c);
+                    items.clear();
+                        for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+                    outputList.setItems(items);
+                    setTitle(items.size());
+                    redraw();
+                }
+            });
+          }
+        });
+
+        UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
+          @Override
+          public void onToggle(boolean isOn) { }
+        }.setLabel("Test Broadcast").setParameter(cubeOutputTester.enabled);
+        testOutput.addToContainer(this);
+
+        UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
+          @Override
+          public void onToggle(boolean isOn) { 
+            cubeResetModule.enabled.setValue(isOn);
+          }
+        }.setMomentary(true).setLabel("Reset Controllers");
+        resetCubes.addToContainer(this);
+
+        addTopLevelComponent(new UIButton(4, 4, 12, 12) {
+          @Override
+          public void onToggle(boolean isOn) {
+            allOutputsEnabled.setValue(isOn);
+            for (SLController c : controllers)
+                c.enabled.setValue(isOn);
+            redraw();
+          }
+        }.setParameter(allOutputsEnabled).setBorderRounding(4));
+    }
+
+    private final IntListener deviceVersionListener = new IntListener() {
+        public void onChange(int version) {
+            dispatcher.dispatchUi(new Runnable() {
+            public void run() { redraw(); }
+            });
+        }
+    };
+
+    private void setTitle(int count) {
+        setTitle("OUTPUT (" + count + ")");
+        setTitleX(20);
+    }
+
+    class ControllerItem extends UIItemList.AbstractItem {
+        final SLController controller;
+        final BooleanParameter allOutputsEnabled;
+
+        ControllerItem(BooleanParameter allOutputsEnabled, SLController _controller) {
+          this.controller = _controller;
+          this.allOutputsEnabled = allOutputsEnabled;
+          controller.enabled.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) { redraw(); }
+          });
+        }
+
+        String getLabel() {
+            if (controller.networkDevice != null && controller.networkDevice.version.get() != -1) {
+                return controller.cubeId + " (v" + controller.networkDevice.version + ")";
+            } else {
+                return controller.cubeId;
+            }
+        }
+
+        boolean isSelected() { 
+            return controller.enabled.isOn();
+        }
+
+        @Override
+        boolean isActive() {
+            return controller.enabled.isOn();
+        }
+
+        @Override
+        public int getActiveColor(UI ui) {
+            return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
+        }
+
+        @Override
+        public void onActivate() {
+            if (!allOutputsEnabled.getValueb())
+                return;
+            controller.enabled.toggle();
+        }
+
+        // @Override
+        // public void onDeactivate() {
+        //     println("onDeactivate");
+        //     controller.enabled.setValue(false);
+        // }
+    }
+}
