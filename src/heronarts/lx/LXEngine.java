@@ -34,6 +34,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
+import heronarts.lx.output.LXOutputGroup;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -272,12 +273,8 @@ public class LXEngine extends LXComponent {
         LX.initTimer.log("Engine: Cue");
 
         // Master output
-        this.output = new LXOutput(lx) {
-            @Override
-            protected void onSend(int[] colors) {
-                // Master output is a dummy container for child outputs
-            }
-        };
+        this.output = new LXOutputGroup(lx);
+        ((LXComponent)this.output).setParent(this);
         LX.initTimer.log("Engine: Output");
 
         // Midi engine
@@ -885,6 +882,7 @@ public class LXEngine extends LXComponent {
     private static final String KEY_MASTER = "master";
     private static final String KEY_AUDIO = "audio";
     private static final String KEY_COMPONENTS = "components";
+    private static final String KEY_OUTPUT = "output";
     private static final String KEY_MODULATION = "modulation";
     private static final String KEY_MIDI = "midi";
 
@@ -896,6 +894,7 @@ public class LXEngine extends LXComponent {
         obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, this.channels));
         obj.add(KEY_MASTER, LXSerializable.Utils.toObject(lx, this.masterChannel));
         obj.add(KEY_AUDIO, LXSerializable.Utils.toObject(lx, this.audio));
+        obj.add(KEY_OUTPUT, LXSerializable.Utils.toObject(lx, this.output));
         obj.add(KEY_COMPONENTS, LXSerializable.Utils.toObject(lx, this.components));
         obj.add(KEY_MODULATION, LXSerializable.Utils.toObject(lx, this.modulation));
         obj.add(KEY_MIDI, LXSerializable.Utils.toObject(lx, this.midi));
@@ -938,6 +937,11 @@ public class LXEngine extends LXComponent {
                     this.components.get(key).load(lx, componentsObj.getAsJsonObject(key));
                 }
             }
+        }
+
+        // Output setup
+        if (obj.has(KEY_OUTPUT)) {
+            this.output.load(lx, obj.getAsJsonObject(KEY_OUTPUT));
         }
 
         // Modulation matrix

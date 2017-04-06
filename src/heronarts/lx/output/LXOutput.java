@@ -21,12 +21,14 @@
 package heronarts.lx.output;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 
 import java.awt.Color;
 import java.util.ArrayList;
@@ -37,7 +39,7 @@ import java.util.List;
  * Outputs may have their own brightness, be enabled/disabled, be throttled,
  * etc.
  */
-public abstract class LXOutput {
+public abstract class LXOutput extends LXComponent {
 
     static int[] fixtureToIndices(LXFixture fixture) {
         List<LXPoint> points = fixture.getPoints();
@@ -64,44 +66,33 @@ public abstract class LXOutput {
     /**
      * Whether the output is enabled.
      */
-    public final BooleanParameter enabled = new BooleanParameter("ON", true);
+    public final BooleanParameter enabled = new BooleanParameter("On", true);
+
+    public enum Mode {
+        NORMAL,
+        WHITE,
+        OFF
+    };
 
     /**
      * Sending mode, 0 = normal, 1 = all white, 2 = all off
      */
-    public final DiscreteParameter mode = new DiscreteParameter("MODE", 3);
-
-    /**
-     * Normal output mode, colors are sent according to animation
-     */
-    public final static int MODE_NORMAL = 0;
-
-    /**
-     * White output mode, all pixels are sent full white
-     */
-    public final static int MODE_WHITE = 1;
-
-    /**
-     * Off output mode, all pixels are sent off
-     */
-    public final static int MODE_OFF = 2;
+    public final EnumParameter<Mode> mode = new EnumParameter<Mode>("Mode", Mode.NORMAL);
 
     /**
      * Framerate throttle
      */
-    public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 0,
-            300);
+    public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 0, 300);
 
     /**
      * Gamma correction level
      */
-    public final DiscreteParameter gammaCorrection = new DiscreteParameter(
-            "GAMMA", 4);
+    public final DiscreteParameter gammaCorrection = new DiscreteParameter("Gamma", 4);
 
     /**
      * Brightness of the output
      */
-    public final BoundedParameter brightness = new BoundedParameter("BRT", 1);
+    public final BoundedParameter brightness = new BoundedParameter("Brightness", 1);
 
     /**
      * Time last frame was sent at.
@@ -113,6 +104,12 @@ public abstract class LXOutput {
     private final int[] allOff;
 
     protected LXOutput(LX lx) {
+        this(lx, "Output");
+    }
+
+    protected LXOutput(LX lx, String label) {
+        super(lx);
+        this.label.setValue(label);
         this.outputColors = new int[lx.total];
         this.allWhite = new int[lx.total];
         this.allOff = new int[lx.total];
@@ -120,6 +117,11 @@ public abstract class LXOutput {
             this.allWhite[i] = LXColor.WHITE;
             this.allOff[i] = LXColor.BLACK;
         }
+        addParameter(enabled);
+        addParameter(mode);
+        addParameter(framesPerSecond);
+        addParameter(gammaCorrection);
+        addParameter(brightness);
     }
 
     /**
@@ -129,6 +131,7 @@ public abstract class LXOutput {
      * @return this
      */
     public LXOutput addChild(LXOutput child) {
+        // TODO(mcslee): need to setParent() on the LXComponent...
         this.children.add(child);
         return this;
     }
@@ -158,8 +161,8 @@ public abstract class LXOutput {
         double fps = this.framesPerSecond.getValue();
         if ((fps == 0) || ((now - this.lastFrameMillis) > (1000. / fps))) {
             int[] colorsToSend;
-            switch (this.mode.getValuei()) {
-            case MODE_WHITE:
+            switch (this.mode.getEnum()) {
+            case WHITE:
                 int white = LXColor.hsb(0, 0, 100 * this.brightness.getValuef());
                 for (int i = 0; i < this.allWhite.length; ++i) {
                     this.allWhite[i] = white;
@@ -167,12 +170,12 @@ public abstract class LXOutput {
                 colorsToSend = this.allWhite;
                 break;
 
-            case MODE_OFF:
+            case OFF:
                 colorsToSend = this.allOff;
                 break;
 
             default:
-            case MODE_NORMAL:
+            case NORMAL:
                 colorsToSend = colors;
                 int gamma = this.gammaCorrection.getValuei();
                 double brt = this.brightness.getValuef();
