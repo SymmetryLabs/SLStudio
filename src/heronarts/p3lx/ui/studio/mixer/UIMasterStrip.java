@@ -62,9 +62,9 @@ public class UIMasterStrip extends UIMixerStrip {
         .addToContainer(this);
 
         float yp = 108;
-        new UIButton(4, yp, 16, 16).setLabel("L").setParameter(lx.engine.cueLeft).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
+        new UIButton(4, yp, 16, 16).setLabel("A").setParameter(lx.engine.cueA).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
         new UILabel(26, yp + 4, 28, 13).setLabel("CUE").setTextAlignment(PConstants.LEFT, PConstants.TOP).setFont(ui.theme.getControlFont()).addToContainer(this);
-        new UIButton(52, yp, 16, 16).setLabel("R").setParameter(lx.engine.cueRight).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
+        new UIButton(52, yp, 16, 16).setLabel("B").setParameter(lx.engine.cueB).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
 
         new UIDropMenu(4, height - 40, width-8, 16, lx.engine.crossfaderBlendMode)
         .setDirection(UIDropMenu.Direction.UP)

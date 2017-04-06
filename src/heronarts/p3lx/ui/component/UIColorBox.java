@@ -52,6 +52,11 @@ public class UIColorBox extends UI2dComponent implements UIFocus {
     }
 
     @Override
+    public String getDescription() {
+        return UIParameterControl.getDescription(this.parameter);
+    }
+
+    @Override
     public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         if (mouseEvent.getCount() == 2) {
             this.parameter.hue.setValue(Math.random() * 360);

@@ -34,6 +34,7 @@ import heronarts.lx.LXLoopTask;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.StringParameter;
 import heronarts.p3lx.P3LX;
 
 import java.io.File;
@@ -235,6 +236,12 @@ public class UI implements LXEngine.Dispatch {
 
     private UIRoot root;
 
+    public final StringParameter contextualHelpText = new StringParameter("Contextual Help");
+
+    private boolean hasBackground = false;
+
+    private int backgroundColor = UI.BLACK;
+
     private static final long INIT_RUN = -1;
     private long lastMillis = INIT_RUN;
 
@@ -249,6 +256,11 @@ public class UI implements LXEngine.Dispatch {
      * White color
      */
     public final static int WHITE = 0xffffffff;
+
+    /**
+     * Black color
+     */
+    public final static int BLACK = 0xff000000;
 
     /**
      * Width of the UI
@@ -268,11 +280,6 @@ public class UI implements LXEngine.Dispatch {
 
     private UIControlTarget controlTarget = null;
     private UIModulationSource modulationSource = null;
-
-    /**
-     * Black color
-     */
-    public final static int BLACK = 0xff000000;
 
     public UI(P3LX lx) {
         this(lx.applet, lx);
@@ -316,6 +323,17 @@ public class UI implements LXEngine.Dispatch {
 
     public static UI get() {
         return UI.instance;
+    }
+
+    public UI setBackground(boolean hasBackground) {
+        this.hasBackground = hasBackground;
+        return this;
+    }
+
+    public UI setBackgroundColor(int backgroundColor) {
+        this.hasBackground = true;
+        this.backgroundColor = backgroundColor;
+        return this;
     }
 
     public void focusPrev() {
@@ -530,6 +548,9 @@ public class UI implements LXEngine.Dispatch {
         }
 
         // Draw from the root
+        if (this.hasBackground) {
+            this.applet.background(this.backgroundColor);
+        }
         this.root.draw(this, this.applet.g);
 
         this.timer.drawNanos = System.nanoTime() - drawStart;

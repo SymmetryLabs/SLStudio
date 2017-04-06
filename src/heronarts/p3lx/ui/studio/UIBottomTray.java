@@ -55,7 +55,7 @@ public class UIBottomTray extends UI2dScrollContext {
     private final Map<LXBus, UIDeviceBin> deviceBins = new HashMap<LXBus, UIDeviceBin>();
 
     public UIBottomTray(UI ui, LX lx) {
-        super(ui, 0, ui.getHeight()-HEIGHT, ui.getWidth(), HEIGHT);
+        super(ui, 0, ui.getHeight() - HEIGHT - UIContextualHelpBar.HEIGHT, ui.getWidth(), HEIGHT);
         setHorizontalScrollingEnabled(true);
         setVerticalScrollingEnabled(false);
         this.ui = ui;
@@ -97,7 +97,7 @@ public class UIBottomTray extends UI2dScrollContext {
 
     @Override
     protected void onUIResize(UI ui) {
-        setY(ui.getHeight() - HEIGHT);
+        setY(ui.getHeight() - HEIGHT - UIContextualHelpBar.HEIGHT);
         setWidth(ui.getWidth());
         for (UIDeviceBin deviceBin : this.deviceBins.values()) {
             deviceBin.updateWidth();

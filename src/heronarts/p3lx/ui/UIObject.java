@@ -55,6 +55,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     UIObject focusedChild = null;
 
     private UIObject pressedChild = null;
+    private UIObject overChild = null;
 
     private boolean hasFocus = false;
 
@@ -159,6 +160,23 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         return (this.ui != null) ? this.ui.applet.height : 0;
     }
 
+    private String description = null;
+
+    public UIObject setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    /**
+     * Objects are encouraged to override this method providing a helpful String displayed to the user explaining
+     * the function of this UI component. If no help is available, return null rather than an empty String.
+     *
+     * @return Helpful contextual string explaining function of this element
+     */
+    public String getDescription() {
+        return this.description;
+    }
+
     /**
      * Whether this object is visible.
      *
@@ -174,7 +192,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
      * @return this
      */
     public UIObject toggleVisible() {
-        this.visible.toggle();
+        setVisible(!isVisible());
         return this;
     }
 
@@ -437,6 +455,12 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             this.pressedChild = null;
         }
         onMouseReleased(mouseEvent, mx, my);
+
+        // Check for case where we mouse-dragged outside of an element, now we've released
+        if (this.overChild != null && !this.overChild.contains(mx, my)) {
+            this.overChild.mouseOut(mouseEvent);
+            this.overChild = null;
+        }
     }
 
     void mouseClicked(MouseEvent mouseEvent, float mx, float my) {
@@ -470,14 +494,47 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     }
 
     void mouseMoved(MouseEvent mouseEvent, float mx, float my) {
+        boolean overAnyChild = false;
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
+                overAnyChild = true;
+                if (child != this.overChild) {
+                    if (this.overChild != null) {
+                        this.overChild.mouseOut(mouseEvent);
+                    }
+                    this.overChild = child;
+                    child.mouseOver(mouseEvent);
+                }
                 child.mouseMoved(mouseEvent, mx - child.getX(), my - child.getY());
                 break;
             }
         }
+        if (!overAnyChild && (this.overChild != null)) {
+            this.overChild.mouseOut(mouseEvent);
+            this.overChild = null;
+        }
         onMouseMoved(mouseEvent, mx, my);
+    }
+
+    void mouseOver(MouseEvent mouseEvent) {
+        String description = getDescription();
+        if (description != null) {
+            getUI().contextualHelpText.setValue(description);
+        }
+        onMouseOver(mouseEvent);
+    }
+
+    void mouseOut(MouseEvent mouseEvent) {
+        String description = getDescription();
+        if (description != null) {
+            getUI().contextualHelpText.setValue("");
+        }
+        if (this.overChild != null) {
+            this.overChild.mouseOut(mouseEvent);
+            this.overChild = null;
+        }
+        onMouseOut(mouseEvent);
     }
 
     void mouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {

@@ -93,6 +93,11 @@ public class UIButtonGroup extends UI2dContainer implements UIControlTarget {
     }
 
     @Override
+    public String getDescription() {
+        return UIParameterControl.getDescription(this.parameter);
+    }
+
+    @Override
     public LXParameter getControlTarget() {
         return this.parameter;
     }

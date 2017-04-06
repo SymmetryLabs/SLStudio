@@ -78,6 +78,17 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
         setBackgroundColor(this.inactiveColor);
     }
 
+    @Override
+    public String getDescription() {
+        if (this.booleanParameter != null) {
+            return UIParameterControl.getDescription(this.booleanParameter);
+        }
+        if (this.enumParameter != null) {
+            return UIParameterControl.getDescription(this.enumParameter);
+        }
+        return null;
+    }
+
     public BooleanParameter getParameter() {
         return this.booleanParameter;
     }

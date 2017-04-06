@@ -56,7 +56,7 @@ public abstract class UIPane extends UI2dContext {
     }
 
     protected UIPane(UI ui, LX lx, String[] sectionNames, int x, int w, int topOffset) {
-        super(ui, x, 0, w, ui.getHeight() - UIBottomTray.HEIGHT);
+        super(ui, x, 0, w, ui.getHeight() - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT);
         this.lx = lx;
         this.sectionNames = sectionNames;
         this.topOffset = topOffset;
@@ -86,7 +86,7 @@ public abstract class UIPane extends UI2dContext {
 
     @Override
     protected void onUIResize(UI ui) {
-        setHeight(ui.getHeight() - UIBottomTray.HEIGHT);
+        setHeight(ui.getHeight() - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT);
         this.inset.setHeight(this.height - INSET_Y);
         for (UI2dScrollContext section : this.sections) {
             section.setHeight(this.inset.getHeight() - 2*PADDING);

@@ -39,6 +39,7 @@ import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIPointCloud;
 import heronarts.p3lx.ui.studio.UIBottomTray;
+import heronarts.p3lx.ui.studio.UIContextualHelpBar;
 import heronarts.p3lx.ui.studio.UILeftPane;
 import heronarts.p3lx.ui.studio.UIRightPane;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
@@ -53,39 +54,45 @@ public class LXStudio extends P3LX {
         public final UILeftPane leftPane;
         public final UIRightPane rightPane;
         public final UIBottomTray bottomTray;
+        public final UIContextualHelpBar helpBar;
 
         UI(final LXStudio lx) {
             super(lx);
-
             initialize(lx, this);
+            setBackgroundColor(this.theme.getDarkBackgroundColor());
 
-            this.main = new UI3dContext(this, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT) {
+            this.main = (UI3dContext) new UI3dContext(this, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT) {
                 @Override
                 protected void onUIResize(heronarts.p3lx.ui.UI ui) {
                     setSize(
                         Math.max(100, ui.getWidth() - UILeftPane.WIDTH - UIRightPane.WIDTH),
-                        Math.max(100, ui.getHeight() - UIBottomTray.HEIGHT)
+                        Math.max(100, ui.getHeight() - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT)
                     );
                 }
             }
             .addComponent(new UIPointCloud(lx).setPointSize(3))
             .setCenter(lx.model.cx, lx.model.cy, lx.model.cz)
-            .setRadius(lx.model.rMax * 1.5f);
+            .setRadius(lx.model.rMax * 1.5f)
+            .setDescription("Preview Window: Displays the main output, or the channels/groups with CUE enabled");
 
             this.leftPane = new UILeftPane(this, lx);
             this.rightPane = new UIRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
+            this.helpBar = new UIContextualHelpBar(this);
 
             addLayer(this.main);
             addLayer(this.leftPane);
             addLayer(this.rightPane);
             addLayer(this.bottomTray);
+            addLayer(this.helpBar);
 
             setTopLevelKeyEventHandler(new UIEventHandler() {
                 @Override
                 protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                     if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
                         lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                    } else if (keyChar == '?' && keyEvent.isShiftDown()) {
+                        helpBar.label.toggleVisible();
                     } else if (keyCode == java.awt.event.KeyEvent.VK_M && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
                         if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
                             lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);

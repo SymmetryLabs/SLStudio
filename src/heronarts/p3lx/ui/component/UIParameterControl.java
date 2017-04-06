@@ -79,6 +79,22 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
         return this;
     }
 
+    public static String getDescription(LXParameter parameter) {
+        if (parameter != null) {
+            String parameterHelp = parameter.getDescription();
+            if (parameterHelp != null) {
+                return parameter.getLabel() + ": " + parameterHelp;
+            }
+            return parameter.getLabel();
+        }
+        return null;
+    }
+
+    @Override
+    public String getDescription() {
+        return getDescription(this.parameter);
+    }
+
     public boolean isEnabled() {
         return (this.parameter != null) && this.enabled;
     }

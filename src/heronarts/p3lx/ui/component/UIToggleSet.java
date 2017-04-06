@@ -60,6 +60,11 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, UIControlTarg
     }
 
     @Override
+    public String getDescription() {
+        return UIParameterControl.getDescription(this.parameter);
+    }
+
+    @Override
     protected void onResize() {
         computeBoundaries();
     }
