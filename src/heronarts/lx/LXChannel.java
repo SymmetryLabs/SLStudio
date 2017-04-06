@@ -23,6 +23,7 @@ package heronarts.lx;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -158,7 +159,7 @@ public class LXChannel extends LXBus {
     public final BooleanParameter transitionsEnabled = new BooleanParameter("Transitions", false);
     public final DiscreteParameter transitionBlendMode;
 
-    public final BoundedParameter fader = new BoundedParameter("Fader", 0);
+    public final CompoundParameter fader = new CompoundParameter("Fader", 0);
 
     public final DiscreteParameter blendMode;
 
