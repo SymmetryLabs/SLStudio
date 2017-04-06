@@ -66,7 +66,7 @@ public class LXPalette extends LXModelComponent {
 
     public final BoundedParameter period = (BoundedParameter)
         new BoundedParameter("Period", 120000, 1000, 1800000)
-        .setDescription("Sets the periodicity of the color palette oscillation")
+        .setDescription("Sets how long the palette takes to complete one full oscillation")
         .setUnits(LXParameter.Units.MILLISECONDS);
 
     public final CompoundParameter spreadX = (CompoundParameter)

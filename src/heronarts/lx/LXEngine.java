@@ -112,17 +112,19 @@ public class LXEngine extends LXComponent {
     private final AddBlend addBlend;
 
     public final CompoundParameter crossfader = (CompoundParameter)
-        new CompoundParameter("Crossfader", 0.5).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Crossfader", 0.5)
+        .setDescription("Applies blending between output groups A and B")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     final LXBlend[] crossfaderBlends;
     public final DiscreteParameter crossfaderBlendMode;
 
-    public final BooleanParameter cueLeft =
-        new BooleanParameter("Cue-L", false)
+    public final BooleanParameter cueA =
+        new BooleanParameter("Cue-A", false)
         .setDescription("Enables cue preview of crossfade group A");
 
-    public final BooleanParameter cueRight =
-        new BooleanParameter("Cue-R", false)
+    public final BooleanParameter cueB =
+        new BooleanParameter("Cue-B", false)
         .setDescription("Enables cue preview of crossfade group B");
 
     public final BoundedParameter speed =
@@ -247,7 +249,9 @@ public class LXEngine extends LXComponent {
             new DarkestBlend(lx),
             new DifferenceBlend(lx)
         };
-        this.crossfaderBlendMode = new DiscreteParameter("Crossfader Blend", this.crossfaderBlends);
+        this.crossfaderBlendMode =
+            new DiscreteParameter("Crossfader Blend", this.crossfaderBlends)
+            .setDescription("Sets the blend mode used for the master crossfader");
         LX.initTimer.log("Engine: Blends");
 
         // Modulation matrix
@@ -258,20 +262,20 @@ public class LXEngine extends LXComponent {
         LX.initTimer.log("Engine: Master Channel");
 
         // Cue setup
-        this.cueLeft.addListener(new LXParameterListener() {
+        this.cueA.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                if (cueLeft.isOn()) {
-                    cueRight.setValue(false);
+                if (cueA.isOn()) {
+                    cueB.setValue(false);
                     for (LXChannel channel : channels) {
                         channel.cueActive.setValue(false);
                     }
                 }
             }
         });
-        this.cueRight.addListener(new LXParameterListener() {
+        this.cueB.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                if (cueRight.isOn()) {
-                    cueLeft.setValue(false);
+                if (cueB.isOn()) {
+                    cueA.setValue(false);
                     for (LXChannel channel : channels) {
                         channel.cueActive.setValue(false);
                     }
@@ -301,8 +305,8 @@ public class LXEngine extends LXComponent {
         addParameter("crossfaderBlendMode", this.crossfaderBlendMode);
         addParameter("speed", this.speed);
         addParameter("focusedChannel", this.focusedChannel);
-        addParameter("cueLeft", this.cueLeft);
-        addParameter("cueRight", this.cueRight);
+        addParameter("cueA", this.cueA);
+        addParameter("cueB", this.cueB);
     }
 
     @Override
@@ -752,12 +756,12 @@ public class LXEngine extends LXComponent {
                     case A:
                         blendDestination = (leftChannelCount++ > 0) ? blendOutputLeft : backgroundArray;
                         blendOutput = blendOutputLeft;
-                        doBlend = leftOn || this.cueLeft.isOn();
+                        doBlend = leftOn || this.cueA.isOn();
                         break;
                     case B:
                         blendDestination = (rightChannelCount++ > 0) ? blendOutputRight: backgroundArray;
                         blendOutput = blendOutputRight;
-                        doBlend = rightOn || this.cueRight.isOn();
+                        doBlend = rightOn || this.cueB.isOn();
                         break;
                     default:
                     case BYPASS:
@@ -789,12 +793,12 @@ public class LXEngine extends LXComponent {
             }
         }
 
-        if (this.cueLeft.isOn()) {
+        if (this.cueA.isOn()) {
             if (leftChannelCount > 0) {
                 blendDestinationCue = blendOutputLeft;
             }
             cueOn = true;
-        } else if (this.cueRight.isOn()) {
+        } else if (this.cueB.isOn()) {
             if (rightChannelCount > 0) {
                 blendDestinationCue = blendOutputRight;
             }

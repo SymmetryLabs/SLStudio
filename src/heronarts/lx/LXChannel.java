@@ -125,7 +125,9 @@ public class LXChannel extends LXBus {
     /**
      * Whether this channel is enabled.
      */
-    public final BooleanParameter enabled = new BooleanParameter("On", true);
+    public final BooleanParameter enabled =
+        new BooleanParameter("On", true)
+        .setDescription("Sets whether this channel is on or off");
 
     /**
      * Crossfade group this channel belongs to
@@ -139,7 +141,7 @@ public class LXChannel extends LXBus {
      */
     public final BooleanParameter midiMonitor =
         new BooleanParameter("MIDI", false)
-        .setDescription("Enabled or disables monitoring of MIDI input on this channel");
+        .setDescription("Enables or disables monitoring of MIDI input on this channel");
 
     /**
      * Whether this channel should show in the cue UI.
@@ -159,7 +161,7 @@ public class LXChannel extends LXBus {
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
     public final BoundedParameter autoCycleTimeSecs = (BoundedParameter)
-        new BoundedParameter("CycleTime", 60, .1, 60*60*4)
+        new BoundedParameter("Cycle Time", 60, .1, 60*60*4)
         .setDescription("Sets the number of seconds after which the channel cycles to the next pattern")
         .setUnits(LXParameter.Units.SECONDS);
 
@@ -237,8 +239,8 @@ public class LXChannel extends LXBus {
             }
         } else if (p == this.cueActive) {
             if (this.cueActive.isOn()) {
-                this.lx.engine.cueLeft.setValue(false);
-                this.lx.engine.cueRight.setValue(false);
+                this.lx.engine.cueA.setValue(false);
+                this.lx.engine.cueB.setValue(false);
             }
         }
     }
