@@ -50,37 +50,52 @@ public class LXStudio extends P3LX {
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
-        public final UI3dContext main;
+        public final PreviewWindow preview;
         public final UILeftPane leftPane;
         public final UIRightPane rightPane;
         public final UIBottomTray bottomTray;
         public final UIContextualHelpBar helpBar;
+
+        private boolean toggleHelpBar = false;
+
+        public class PreviewWindow extends UI3dContext {
+            PreviewWindow(UI ui, P3LX lx, int x, int y, int w, int h) {
+                super(ui, x, y, w, h);
+                addComponent(new UIPointCloud(lx).setPointSize(3));
+                setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
+                setRadius(lx.model.rMax * 1.5f);
+                setDescription("Preview Window: Displays the main output, or the channels/groups with CUE enabled");
+            }
+
+            @Override
+            protected void onUIResize(heronarts.p3lx.ui.UI ui) {
+                onHelpBarToggle(ui);
+            }
+
+            void onHelpBarToggle(heronarts.p3lx.ui.UI ui) {
+                float availableHeight = ui.getHeight() - UIBottomTray.HEIGHT;
+                if (helpBar.isVisible()) {
+                    availableHeight -= UIContextualHelpBar.HEIGHT;
+                }
+                setSize(
+                    Math.max(100, ui.getWidth() - UILeftPane.WIDTH - UIRightPane.WIDTH),
+                    Math.max(100, availableHeight)
+                );
+            }
+        }
 
         UI(final LXStudio lx) {
             super(lx);
             initialize(lx, this);
             setBackgroundColor(this.theme.getDarkBackgroundColor());
 
-            this.main = (UI3dContext) new UI3dContext(this, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT) {
-                @Override
-                protected void onUIResize(heronarts.p3lx.ui.UI ui) {
-                    setSize(
-                        Math.max(100, ui.getWidth() - UILeftPane.WIDTH - UIRightPane.WIDTH),
-                        Math.max(100, ui.getHeight() - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT)
-                    );
-                }
-            }
-            .addComponent(new UIPointCloud(lx).setPointSize(3))
-            .setCenter(lx.model.cx, lx.model.cy, lx.model.cz)
-            .setRadius(lx.model.rMax * 1.5f)
-            .setDescription("Preview Window: Displays the main output, or the channels/groups with CUE enabled");
-
+            this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT);
             this.leftPane = new UILeftPane(this, lx);
             this.rightPane = new UIRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
             this.helpBar = new UIContextualHelpBar(this);
 
-            addLayer(this.main);
+            addLayer(this.preview);
             addLayer(this.leftPane);
             addLayer(this.rightPane);
             addLayer(this.bottomTray);
@@ -92,7 +107,7 @@ public class LXStudio extends P3LX {
                     if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
                         lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
                     } else if (keyChar == '?' && keyEvent.isShiftDown()) {
-                        helpBar.label.toggleVisible();
+                        toggleHelpBar = true;
                     } else if (keyCode == java.awt.event.KeyEvent.VK_M && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
                         if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
                             lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
@@ -110,6 +125,22 @@ public class LXStudio extends P3LX {
             });
 
             setResizable(true);
+        }
+
+        @Override
+        protected void beforeDraw() {
+            if (toggleHelpBar) {
+                toggleHelpBar = false;
+                toggleHelpBar();
+            }
+        }
+
+        private void toggleHelpBar() {
+            this.helpBar.toggleVisible();
+            this.bottomTray.onHelpBarToggle(this);
+            this.leftPane.onHelpBarToggle(this);
+            this.rightPane.onHelpBarToggle(this);
+            this.preview.onHelpBarToggle(this);
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";

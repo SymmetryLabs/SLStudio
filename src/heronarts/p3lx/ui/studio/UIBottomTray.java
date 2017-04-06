@@ -35,6 +35,7 @@ import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.studio.device.UIDeviceBin;
@@ -97,12 +98,20 @@ public class UIBottomTray extends UI2dScrollContext {
 
     @Override
     protected void onUIResize(UI ui) {
-        setY(ui.getHeight() - HEIGHT - UIContextualHelpBar.HEIGHT);
+        onHelpBarToggle((LXStudio.UI) ui);
         setWidth(ui.getWidth());
         for (UIDeviceBin deviceBin : this.deviceBins.values()) {
             deviceBin.updateWidth();
         }
         redraw();
+    }
+
+    public void onHelpBarToggle(LXStudio.UI ui) {
+        float yPos = ui.getHeight() - HEIGHT;
+        if (ui.helpBar.isVisible()) {
+            yPos -= UIContextualHelpBar.HEIGHT;
+        }
+        setY(yPos);
     }
 
     private void addChannel(LXBus channel) {

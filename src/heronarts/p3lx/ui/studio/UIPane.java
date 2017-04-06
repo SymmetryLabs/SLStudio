@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.studio;
 
 import heronarts.lx.LX;
+import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dContext;
@@ -86,7 +87,15 @@ public abstract class UIPane extends UI2dContext {
 
     @Override
     protected void onUIResize(UI ui) {
-        setHeight(ui.getHeight() - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT);
+        onHelpBarToggle((LXStudio.UI) ui);
+    }
+
+    public void onHelpBarToggle(LXStudio.UI ui) {
+        float height = ui.getHeight() - UIBottomTray.HEIGHT;
+        if (ui.helpBar.isVisible()) {
+            height -= UIContextualHelpBar.HEIGHT;
+        }
+        setHeight(height);
         this.inset.setHeight(this.height - INSET_Y);
         for (UI2dScrollContext section : this.sections) {
             section.setHeight(this.inset.getHeight() - 2*PADDING);

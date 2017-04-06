@@ -524,6 +524,8 @@ public class UI implements LXEngine.Dispatch {
             }
         }
 
+        beforeDraw();
+
         long drawStart = System.nanoTime();
 
         long nowMillis = System.currentTimeMillis();
@@ -554,6 +556,10 @@ public class UI implements LXEngine.Dispatch {
         this.root.draw(this, this.applet.g);
 
         this.timer.drawNanos = System.nanoTime() - drawStart;
+    }
+
+    // Subclasses may override...
+    protected void beforeDraw() {
     }
 
     private boolean isThreaded() {
