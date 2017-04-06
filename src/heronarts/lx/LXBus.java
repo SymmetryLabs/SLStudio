@@ -51,8 +51,9 @@ public abstract class LXBus extends LXModelComponent {
 
     protected final LX lx;
 
-    protected final List<LXEffect> effects = new ArrayList<LXEffect>();
-    protected final List<LXEffect> unmodifiableEffects = Collections.unmodifiableList(effects);
+    protected final List<LXEffect> internalEffects = new ArrayList<LXEffect>();
+
+    public final List<LXEffect> effects = Collections.unmodifiableList(internalEffects);
 
     private final List<Listener> listeners = new ArrayList<Listener>();
 
@@ -63,7 +64,7 @@ public abstract class LXBus extends LXModelComponent {
 
     @Override
     protected void onModelChanged(LXModel model) {
-        for (LXEffect effect : this.effects) {
+        for (LXEffect effect : this.internalEffects) {
             effect.setModel(model);
         }
     }
@@ -77,9 +78,9 @@ public abstract class LXBus extends LXModelComponent {
     }
 
     public final LXBus addEffect(LXEffect effect) {
-        this.effects.add(effect);
+        this.internalEffects.add(effect);
         effect.setBus(this);
-        effect.setIndex(this.effects.size() - 1);
+        effect.setIndex(this.internalEffects.size() - 1);
         for (Listener listener : this.listeners) {
             listener.effectAdded(this, effect);
         }
@@ -87,12 +88,12 @@ public abstract class LXBus extends LXModelComponent {
     }
 
     public final LXBus removeEffect(LXEffect effect) {
-        int index = this.effects.indexOf(effect);
+        int index = this.internalEffects.indexOf(effect);
         if (index >= 0) {
             effect.setIndex(-1);
-            this.effects.remove(index);
-            while (index < this.effects.size()) {
-                this.effects.get(index).setIndex(index);
+            this.internalEffects.remove(index);
+            while (index < this.internalEffects.size()) {
+                this.internalEffects.get(index).setIndex(index);
                 ++index;
             }
             for (Listener listener : this.listeners) {
@@ -104,10 +105,10 @@ public abstract class LXBus extends LXModelComponent {
     }
 
     public void moveEffect(LXEffect effect, int index) {
-        this.effects.remove(effect);
-        this.effects.add(index, effect);
+        this.internalEffects.remove(effect);
+        this.internalEffects.add(index, effect);
         int i = 0;
-        for (LXEffect e : this.effects) {
+        for (LXEffect e : this.internalEffects) {
              e.setIndex(i++);
         }
         for (Listener listener : this.listeners) {
@@ -116,9 +117,21 @@ public abstract class LXBus extends LXModelComponent {
     }
 
     public final List<LXEffect> getEffects() {
-        return this.unmodifiableEffects;
+        return this.effects;
     }
 
+    public LXEffect getEffect(int i) {
+        return this.effects.get(i);
+    }
+
+    public LXEffect getEffect(String label) {
+        for (LXEffect effect : this.effects) {
+            if (effect.getLabel().equals(label)) {
+                return effect;
+            }
+        }
+        return null;
+    }
 
     @Override
     public void loop(double deltaMs) {
@@ -132,10 +145,10 @@ public abstract class LXBus extends LXModelComponent {
 
     @Override
     public void dispose() {
-        for (LXEffect effect : this.effects) {
+        for (LXEffect effect : this.internalEffects) {
             effect.dispose();
         }
-        this.effects.clear();
+        this.internalEffects.clear();
         super.dispose();
     }
 
@@ -144,15 +157,15 @@ public abstract class LXBus extends LXModelComponent {
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);;
-        obj.add(KEY_EFFECTS, LXSerializable.Utils.toArray(lx, this.effects));
+        obj.add(KEY_EFFECTS, LXSerializable.Utils.toArray(lx, this.internalEffects));
     }
 
     @Override
     public void load(LX lx, JsonObject obj) {
         super.load(lx, obj);
         // Remove effects
-        for (int i = this.effects.size() - 1; i >= 0; --i) {
-            removeEffect(this.effects.get(i));
+        for (int i = this.internalEffects.size() - 1; i >= 0; --i) {
+            removeEffect(this.internalEffects.get(i));
         }
         // Add the effects
         JsonArray effectsArray = obj.getAsJsonArray(KEY_EFFECTS);

@@ -289,12 +289,12 @@ public class LXEngine extends LXComponent {
         LX.initTimer.log("Engine: Osc");
 
         // Parameters
-        addParameter(this.crossfader);
-        addParameter(this.crossfaderBlendMode);
-        addParameter(this.speed);
-        addParameter(this.focusedChannel);
-        addParameter(this.cueLeft);
-        addParameter(this.cueRight);
+        addParameter("crossfader", this.crossfader);
+        addParameter("crossfaderBlendMode", this.crossfaderBlendMode);
+        addParameter("speed", this.speed);
+        addParameter("focusedChannel", this.focusedChannel);
+        addParameter("cueLeft", this.cueLeft);
+        addParameter("cueRight", this.cueRight);
     }
 
     @Override
@@ -385,7 +385,7 @@ public class LXEngine extends LXComponent {
             this.engineThread = new Thread("LX Engine Thread") {
                 @Override
                 public void run() {
-                    System.out.println("LX Engine Thread started.");
+                    System.out.println("LX Engine Thread started");
                     while (!isInterrupted()) {
                         long frameStart = System.currentTimeMillis();
                         LXEngine.this.run();
@@ -411,7 +411,7 @@ public class LXEngine extends LXComponent {
                     engineThread = null;
                     isThreaded = false;
 
-                    System.out.println("LX Engine Thread finished.");
+                    System.out.println("LX Engine Thread finished");
                 }
             };
             this.engineThread.start();
@@ -514,6 +514,15 @@ public class LXEngine extends LXComponent {
 
     public LXChannel getChannel(int channelIndex) {
         return this.channels.get(channelIndex);
+    }
+
+    public LXChannel getChannel(String label) {
+        for (LXChannel channel : this.channels) {
+            if (channel.getLabel().equals(label)) {
+                return channel;
+            }
+        }
+        return null;
     }
 
     public LXBus getFocusedChannel() {
@@ -884,6 +893,7 @@ public class LXEngine extends LXComponent {
     private static final String KEY_COMPONENTS = "components";
     private static final String KEY_OUTPUT = "output";
     private static final String KEY_MODULATION = "modulation";
+    private static final String KEY_OSC = "osc";
     private static final String KEY_MIDI = "midi";
 
 
@@ -897,6 +907,7 @@ public class LXEngine extends LXComponent {
         obj.add(KEY_OUTPUT, LXSerializable.Utils.toObject(lx, this.output));
         obj.add(KEY_COMPONENTS, LXSerializable.Utils.toObject(lx, this.components));
         obj.add(KEY_MODULATION, LXSerializable.Utils.toObject(lx, this.modulation));
+        obj.add(KEY_OSC, LXSerializable.Utils.toObject(lx, this.osc));
         obj.add(KEY_MIDI, LXSerializable.Utils.toObject(lx, this.midi));
     }
 
@@ -947,6 +958,11 @@ public class LXEngine extends LXComponent {
         // Modulation matrix
         if (obj.has(KEY_MODULATION)) {
             this.modulation.load(lx, obj.getAsJsonObject(KEY_MODULATION));
+        }
+
+        // OSC
+        if (obj.has(KEY_OSC)) {
+            this.osc.load(lx, obj.getAsJsonObject(KEY_OSC));
         }
 
         // Midi

@@ -29,18 +29,131 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-
 import heronarts.lx.LX;
+import heronarts.lx.LXBus;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXComponent;
+import heronarts.lx.LXEffect;
+import heronarts.lx.LXPattern;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.StringParameter;
 
-public class LXOscEngine {
+public class LXOscEngine extends LXComponent {
 
-    private final List<LXOscListener> listeners = new ArrayList<LXOscListener>();
+    public final static int DEFAULT_PORT = 3030;
+    private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
 
-    public LXOscEngine(LX lx) {}
+    public final DiscreteParameter port = new DiscreteParameter("Port", DEFAULT_PORT, 1, 9999);
+    public final BooleanParameter active = new BooleanParameter("Active", false);
 
     private final List<Receiver> receivers = new ArrayList<Receiver>();
 
-    private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
+    private Receiver engineReceiver;
+    private final EngineListener engineListener = new EngineListener();
+
+    private final LX lx;
+
+    public LXOscEngine(LX lx) {
+        super(lx);
+        this.lx = lx;
+        this.label.setValue("OSC");
+        addParameter(this.port);
+        addParameter(this.active);
+    }
+
+    private class EngineListener implements LXOscListener {
+
+        private static final String ROUTE_LX = "lx";
+        private static final String ROUTE_MASTER = "master";
+        private static final String ROUTE_CHANNEL = "channel";
+        private static final String ROUTE_PALETTE = "palette";
+        private static final String ROUTE_PATTERN = "pattern";
+        private static final String ROUTE_EFFECT = "effect";
+        private static final String ROUTE_AUDIO = "audio";
+        private static final String ROUTE_FOCUSED = "focused";
+        private static final String ROUTE_ACTIVE = "active";
+
+        @Override
+        public void oscMessage(OscMessage message) {
+            try {
+                String[] parts = message.getAddressPattern().getValue().split("/");
+                if (parts[1].equals(ROUTE_LX)) {
+                    if (parts[2].equals(ROUTE_AUDIO)) {
+                        oscComponent(message, lx.engine.audio, parts, 3);
+                    } else if (parts[2].equals(ROUTE_PALETTE)) {
+                        oscComponent(message, lx.palette, parts, 3);
+                    } else if (parts[2].equals(ROUTE_MASTER)) {
+                        oscChannel(message, lx.engine.masterChannel, parts, 3);
+                    } else if (parts[2].equals(ROUTE_CHANNEL)) {
+                        if (parts[3].equals(ROUTE_FOCUSED)) {
+                            oscChannel(message, lx.engine.getFocusedChannel(), parts, 4);
+                        } else if (parts[3].matches("\\d+")) {
+                            oscChannel(message, lx.engine.getChannel(Integer.parseInt(parts[3])), parts, 4);
+                        } else {
+                            oscChannel(message, lx.engine.getChannel(parts[3]), parts, 4);
+                        }
+                    }
+                }
+            } catch (Exception x) {
+                System.err.println("[OSC] Could not route message: " + message.getAddressPattern().getValue());
+            }
+        }
+
+        private void oscChannel(OscMessage message, LXBus channel, String[] parts, int index) {
+            if (channel instanceof LXChannel && parts[index].equals(ROUTE_PATTERN)) {
+                if (parts[index+1].equals(ROUTE_ACTIVE)) {
+                    oscPattern(message, ((LXChannel) channel).getActivePattern(), parts, index+2);
+                } else if (parts[index+1].matches("\\d+")) {
+                    oscPattern(message, ((LXChannel) channel).getPattern(Integer.parseInt(parts[index+1])), parts, index+2);
+                } else {
+                    oscPattern(message, ((LXChannel) channel).getPattern(parts[index+1]), parts, index+2);
+                }
+                return;
+            }
+            if (parts[index].equals(ROUTE_EFFECT)) {
+                if (parts[index+1].matches("\\d+")) {
+                    oscEffect(message, channel.getEffect(Integer.parseInt(parts[index+1])), parts, index+2);
+                } else {
+                    oscEffect(message, channel.getEffect(parts[index+1]), parts, index+2);
+                }
+                return;
+            }
+            oscComponent(message, channel, parts, index);
+        }
+
+        private void oscEffect(OscMessage message, LXEffect effect, String[] parts, int index) {
+            oscComponent(message, effect, parts, index);
+        }
+
+        private void oscPattern(OscMessage message, LXPattern pattern, String[] parts, int index) {
+            oscComponent(message, pattern, parts, index);
+        }
+
+        private void oscComponent(OscMessage message, LXComponent component, String[] parts, int index) {
+            LXParameter parameter = component.getParameter(parts[index]);
+            if (parameter == null) {
+                System.err.println("[OSC] Component " + component + " does not have parameter: " + parts[index]);
+                return;
+            }
+            if (parameter instanceof BooleanParameter) {
+                ((BooleanParameter)parameter).setValue(message.getBoolean());
+            } else if (parameter instanceof DiscreteParameter) {
+                OscArgument arg = message.get();
+                if (arg instanceof OscInt) {
+                    parameter.setValue(arg.toInt());
+                } else {
+                    ((DiscreteParameter)parameter).setNormalized(arg.toFloat());
+                }
+            } else if (parameter instanceof LXNormalizedParameter) {
+                ((LXNormalizedParameter)parameter).setNormalized(message.getFloat());
+            } else if (parameter instanceof StringParameter) {
+                ((StringParameter) parameter).setValue(message.getString());
+            }
+        }
+    }
 
     public class Transmitter {
 
@@ -111,11 +224,7 @@ public class LXOscEngine {
         class ReceiverThread extends Thread {
             @Override
             public void run() {
-                while (true) {
-                    if (isInterrupted()) {
-                        socket.close();
-                        return;
-                    }
+                while (!isInterrupted()) {
                     try {
                         socket.receive(packet);
                         try {
@@ -134,14 +243,13 @@ public class LXOscEngine {
                             System.err.println("OSC exception: " + oscx.getMessage());
                         }
                     } catch (IOException iox) {
-                        if (isInterrupted()) {
-                            socket.close();
-                            return;
-                        } else {
+                        if (!isInterrupted()) {
                             System.err.println("Exception in OSC listener on port " + port + ":" + iox.getMessage());
                         }
                     }
                 }
+                socket.close();
+                System.out.println("Stopped OSC listener on port " + port);
             }
         }
 
@@ -152,23 +260,56 @@ public class LXOscEngine {
                 this.threadSafeEventQueue.clear();
             }
             // TODO(mcslee): do we want to handle NTP timetags?
-            for (OscMessage message : this.engineThreadEventQueue) {
-                dispatch(message);
-            }
-        }
 
-        private void dispatch(OscMessage message) {
             // NOTE(mcslee): we iterate this way so that listeners can modify the listener list
             this.listenerSnapshot.clear();
             this.listenerSnapshot.addAll(this.listeners);
-            for (LXOscListener listener : this.listenerSnapshot) {
-                listener.oscMessage(message);
+            for (OscMessage message : this.engineThreadEventQueue) {
+                for (LXOscListener listener : this.listenerSnapshot) {
+                    listener.oscMessage(message);
+                }
             }
         }
 
         public void stop() {
             this.thread.interrupt();
             this.socket.close();
+            this.listeners.clear();
+        }
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        if (p == this.port) {
+            if (this.engineReceiver != null) {
+                start();
+            }
+        } else if (p == this.active) {
+            if (this.active.isOn()) {
+                start();
+            } else {
+                stop();
+            }
+        }
+    }
+
+    private void start() {
+        if (this.engineReceiver != null) {
+            stop();
+        }
+        try {
+            this.engineReceiver = receiver(this.port.getValuei());
+            this.engineReceiver.addListener(this.engineListener);
+            System.out.println("Started OSC listener on port " + this.engineReceiver.port);
+        } catch (SocketException sx) {
+            System.err.println("Failed to start OSC receiver: " + sx.getLocalizedMessage());
+        }
+    }
+
+    private void stop() {
+        if (this.engineReceiver != null) {
+            this.engineReceiver.stop();
+            this.engineReceiver = null;
         }
     }
 
@@ -198,16 +339,6 @@ public class LXOscEngine {
 
     public Transmitter transmitter(InetAddress address, int port, int bufferSize) throws SocketException {
         return new Transmitter(address, port, bufferSize);
-    }
-
-    public LXOscEngine addListener(LXOscListener listener) {
-        this.listeners.add(listener);
-        return this;
-    }
-
-    public LXOscEngine removeListener(LXOscListener listener) {
-        this.listeners.remove(listener);
-        return this;
     }
 
     /**

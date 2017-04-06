@@ -372,7 +372,7 @@ public class LXAutomationRecorder extends LXRunnable implements LXEngine.Message
                     int channelIndex = obj.get(KEY_CHANNEL).getAsInt();
                     String patternClassName = obj.get(KEY_PATTERN).getAsString();
                     LXChannel channel = this.engine.getChannel(channelIndex);
-                    LXPattern pattern = channel.getPattern(patternClassName);
+                    LXPattern pattern = channel.getPatternByClassName(patternClassName);
                     event = new PatternAutomationEvent(channel, pattern);
                 } else if (eventType.equals(EVENT_MIDI)) {
                     int command = obj.get(KEY_COMMAND).getAsInt();
