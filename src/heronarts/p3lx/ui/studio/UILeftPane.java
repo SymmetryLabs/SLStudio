@@ -37,6 +37,7 @@ public class UILeftPane extends UIPane {
     public final UI2dScrollContext project;
     public final UI2dScrollContext global;
     public final UIAudio audio;
+    public final UIPalette palette;
 
     public static final int WIDTH = 4*UIKnob.WIDTH + 20 + 2*UIPane.PADDING + 2*UIPane.MARGIN;
     public static final int TOP_OFFSET = 32;
@@ -52,7 +53,7 @@ public class UILeftPane extends UIPane {
         // Global elements
         new UITempo(ui, lx, 0, 0, this.global.getContentWidth(), 26).addToContainer(this.global);
         this.audio = (UIAudio) new UIAudio(ui, lx.engine.audio, this.global.getContentWidth()).addToContainer(this.global);
-        new UIPalette(ui, lx.palette, 0, 0, this.global.getContentWidth(), 184).addToContainer(this.global);
+        this.palette = (UIPalette) new UIPalette(ui, lx.palette, 0, 0, this.global.getContentWidth(), 184).addToContainer(this.global);
 
         // Project elements
         new UIProjectManager(ui, lx, 0, 0, this.project.getContentWidth()).addToContainer(this.project);

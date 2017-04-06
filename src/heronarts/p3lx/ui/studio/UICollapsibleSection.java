@@ -82,6 +82,10 @@ public class UICollapsibleSection extends UI2dContainer implements UIMouseFocus 
         setContentTarget(this.content);
     }
 
+    public boolean isExpanded() {
+        return this.expanded;
+    }
+
     protected UICollapsibleSection setTitleX(float x) {
         this.title.setX(x);
         this.title.setWidth(this.width - CHEVRON_PADDING - x);

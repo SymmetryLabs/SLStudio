@@ -28,20 +28,26 @@ package heronarts.p3lx;
 
 import java.io.File;
 
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LX;
 import heronarts.lx.LXMappingEngine;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.model.LXModel;
 import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
+import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIPointCloud;
 import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UILeftPane;
 import heronarts.p3lx.ui.studio.UIRightPane;
+import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 
 public class LXStudio extends P3LX {
 
-    public class UI extends heronarts.p3lx.ui.UI {
+    public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
         public final UI3dContext main;
         public final UILeftPane leftPane;
@@ -95,9 +101,50 @@ public class LXStudio extends P3LX {
 
             setResizable(true);
         }
+
+        private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
+        private static final String KEY_PALETTE_EXPANDED = "paletteExpanded";
+        private static final String KEY_MODULATORS_EXPANDED = "modulatorExpanded";
+
+        @Override
+        public void save(LX lx, JsonObject object) {
+            object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
+            object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
+            JsonObject modulatorObj = new JsonObject();
+            for (UIObject child : this.rightPane.modulation) {
+                if (child instanceof UIModulator) {
+                    UIModulator uiModulator = (UIModulator) child;
+                    modulatorObj.addProperty(uiModulator.getIdentifier(), uiModulator.isExpanded());
+                }
+            }
+            object.add(KEY_MODULATORS_EXPANDED, modulatorObj);
+        }
+
+        @Override
+        public void load(LX lx, JsonObject object) {
+            if (object.has(KEY_AUDIO_EXPANDED)) {
+                this.leftPane.audio.setExpanded(object.get(KEY_AUDIO_EXPANDED).getAsBoolean());
+            }
+            if (object.has(KEY_PALETTE_EXPANDED)) {
+                this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
+            }
+            if (object.has(KEY_MODULATORS_EXPANDED)) {
+                JsonObject modulatorObj = object.getAsJsonObject(KEY_MODULATORS_EXPANDED);
+                for (UIObject child : this.rightPane.modulation) {
+                    if (child instanceof UIModulator) {
+                        UIModulator uiModulator = (UIModulator) child;
+                        String identifier = uiModulator.getIdentifier();
+                        if (modulatorObj.has(identifier)) {
+                            uiModulator.setExpanded(modulatorObj.get(identifier).getAsBoolean());
+                        }
+                    }
+                }
+            }
+        }
     }
 
     private static final String DEFAULT_FILE_NAME = "default.lxp";
+    private static final String KEY_UI = "ui";
 
     public final UI ui;
 
@@ -105,6 +152,7 @@ public class LXStudio extends P3LX {
         super(applet, model);
         this.ui = (UI) super.ui;
         onUIReady(this, this.ui);
+        registerExternal(KEY_UI, this.ui);
 
         File file = this.applet.saveFile(DEFAULT_FILE_NAME);
         if (file.exists()) {

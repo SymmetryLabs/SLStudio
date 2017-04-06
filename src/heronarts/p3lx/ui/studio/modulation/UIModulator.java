@@ -180,6 +180,29 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         addTopLevelComponent(this.modulations);
     }
 
+    public String getIdentifier() {
+        return ((this.modulator != null) ? String.format("%d", this.modulator.getId()) :
+            (this.parameter.getComponent().getId() + "/" + this.parameter.getPath()));
+    }
+
+    public UIModulator setExpanded(boolean expanded) {
+        if (this.expanded != expanded) {
+            this.expanded = expanded;
+            this.content.setVisible(this.expanded);
+            this.modulations.setVisible(this.expanded);
+            setHeight(this.expanded ? this.expandedHeight : CONTENT_Y);
+        }
+        return this;
+    }
+
+    public UIModulator toggleExpanded() {
+        return setExpanded(!this.expanded);
+    }
+
+    public boolean isExpanded() {
+        return this.expanded;
+    }
+
     private void recomputeHeight() {
         float contentHeight = this.content.getHeight();
         float mappingHeight = this.modulations.getHeight();
@@ -216,13 +239,6 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
     }
 
     protected abstract UIModulationSource getModulationSourceUI();
-
-    private void toggleExpanded() {
-        this.expanded = !this.expanded;
-        this.content.setVisible(this.expanded);
-        this.modulations.setVisible(this.expanded);
-        setHeight(this.expanded ? this.expandedHeight : CONTENT_Y);
-    }
 
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
