@@ -107,6 +107,7 @@ public class UIRightPane extends UIPane {
         .setMomentary(true)
         .setInactiveColor(ui.theme.getWindowBackgroundColor())
         .setBorderRounding(4)
+        .setDescription("Add a new LFO to the modulation engine")
         .addToContainer(bar);
 
         new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
@@ -123,6 +124,7 @@ public class UIRightPane extends UIPane {
         .setMomentary(true)
         .setInactiveColor(ui.theme.getWindowBackgroundColor())
         .setBorderRounding(4)
+        .setDescription("Add a new Beat detector to the modulation engine")
         .addToContainer(bar);
 
         final UIButton mapButton = (UIButton) new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
@@ -138,6 +140,7 @@ public class UIRightPane extends UIPane {
         .setLabel("Map")
         .setInactiveColor(ui.theme.getWindowBackgroundColor())
         .setBorderRounding(4)
+        .setDescription("Add a new parameter mapping to the modulation engine")
         .addToContainer(bar);
 
         lx.engine.mapping.mode.addListener(new LXParameterListener() {

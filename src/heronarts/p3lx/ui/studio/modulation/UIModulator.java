@@ -113,7 +113,10 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
             .addToContainer(this);
             this.toggleTarget = this.title;
         } else {
-            this.color = new ColorParameter("Modulator", LXColor.hsb(360*Math.random(), 100, 100));
+            this.color =
+                new ColorParameter("Modulation Color", LXColor.hsb(360*Math.random(), 100, 100))
+                .setDescription("Indicates the color used for modulations from this parameter");
+
             this.title = null;
             this.toggleTarget = new UIParameterLabel(2, PADDING, titleRightX - 2, 12) {
                 @Override
@@ -153,6 +156,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus 
         };
         mapButton
         .setLabel("→")
+        .setDescription("Map: select a new target for this modulation source")
         .addToContainer(this);
 
         lx.engine.mapping.mode.addListener(new LXParameterListener() {

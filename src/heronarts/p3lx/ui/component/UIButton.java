@@ -86,7 +86,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
         if (this.enumParameter != null) {
             return UIParameterControl.getDescription(this.enumParameter);
         }
-        return null;
+        return super.getDescription();
     }
 
     public BooleanParameter getParameter() {

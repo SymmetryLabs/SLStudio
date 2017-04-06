@@ -79,6 +79,7 @@ public class UIMixer extends UI2dContainer {
         .setInactiveColor(0xff393939) // TODO(mcslee): control disabled color?
         .setBorder(false)
         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
+        .setDescription("New Channel: add another channel")
         .addToContainer(this);
         xp += this.addChannelButton.getWidth() + ADD_CHANNEL_BUTTON_MARGIN;
 

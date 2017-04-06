@@ -74,7 +74,7 @@ public class UIMidiMappings extends UICollapsibleSection {
         setLayout(UI2dContainer.Layout.VERTICAL);
         setChildMargin(SPACING);
 
-        final UIButton midiMapButton = new UIButton(getContentWidth() - 36, 3, UIModulator.MAP_WIDTH, 14) {
+        final UIButton midiMapButton = (UIButton) new UIButton(getContentWidth() - 36, 3, UIModulator.MAP_WIDTH, 14) {
             @Override
             protected void onToggle(boolean on) {
                 if (on) {
@@ -83,7 +83,9 @@ public class UIMidiMappings extends UICollapsibleSection {
                     lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
                 }
             }
-        };
+        }
+        .setLabel("→")
+        .setDescription("Enter MIDI mapping mode");
 
         lx.engine.mapping.mode.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
@@ -91,7 +93,7 @@ public class UIMidiMappings extends UICollapsibleSection {
             }
         });
 
-        addTopLevelComponent(midiMapButton.setLabel("→"));
+        addTopLevelComponent(midiMapButton);
     }
 
     private void addMapping(LXMidiMapping mapping) {

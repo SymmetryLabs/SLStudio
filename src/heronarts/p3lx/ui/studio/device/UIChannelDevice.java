@@ -67,8 +67,9 @@ class UIChannelDevice extends UIDevice {
             }
         });
 
-        final UIPatternList patternList = new UIPatternList(ui, this, 0, 0, PATTERN_LIST_WIDTH, getContentHeight() - 40, channel);
-        patternList.addToContainer(this);
+        new UIPatternList(ui, this, 0, 0, PATTERN_LIST_WIDTH, getContentHeight() - 40, channel)
+        .setDescription("Patterns available on this channel, click to select, double-click to activate")
+        .addToContainer(this);
 
         // Transition Controls
         new UIButton(0, getContentHeight() - 36, 16, 16)

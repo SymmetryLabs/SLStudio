@@ -42,8 +42,9 @@ public class UIMidiManager extends UICollapsibleSection {
         super(ui, x, y, w, h);
         setTitle("MIDI INPUT");
 
-        this.midiInputs = new UIItemList(ui, 0, 0, getContentWidth(), getContentHeight());
-        this.midiInputs.addToContainer(this);
+        this.midiInputs = (UIItemList) new UIItemList(ui, 0, 0, getContentWidth(), getContentHeight())
+            .setDescription("Shows the available MIDI inputs, double-click to enable or disable a device")
+            .addToContainer(this);
 
         midiEngine.whenReady(new Runnable() {
             public void run() {

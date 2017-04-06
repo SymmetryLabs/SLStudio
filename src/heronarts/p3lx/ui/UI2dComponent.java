@@ -99,6 +99,11 @@ public abstract class UI2dComponent extends UIObject {
         this.height = height;
     }
 
+    @Override
+    public UI2dComponent setDescription(String description) {
+        return (UI2dComponent) super.setDescription(description);
+    }
+
     /**
      * X position
      *
