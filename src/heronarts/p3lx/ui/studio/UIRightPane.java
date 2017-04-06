@@ -47,6 +47,7 @@ import heronarts.p3lx.ui.studio.modulation.UIBandGate;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
 import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
+import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
@@ -55,8 +56,8 @@ public class UIRightPane extends UIPane {
     private final LX lx;
     private final UI ui;
 
-    public final UI2dScrollContext midi;
     public final UI2dScrollContext modulation;
+    public final UI2dScrollContext midi;
 
     public static final int PADDING = 4;
     public static final int WIDTH = 244;
@@ -66,12 +67,13 @@ public class UIRightPane extends UIPane {
     private int beatCount = 1;
 
     public UIRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[] { "MODULATION", "MIDI" }, ui.getWidth() - WIDTH, WIDTH);
+        super(ui, lx, new String[] { "MODULATION", "OSC + MIDI" }, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
 
+        new UIOscManager(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiManager(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth(), 144).addToContainer(this.midi);
         new UIMidiMappings(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
 

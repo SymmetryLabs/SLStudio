@@ -40,7 +40,7 @@ public class UIMidiManager extends UICollapsibleSection {
 
     public UIMidiManager(UI ui, final LXMidiEngine midiEngine, float x, float y, float w, float h) {
         super(ui, x, y, w, h);
-        setTitle("DEVICES");
+        setTitle("MIDI INPUT");
 
         this.midiInputs = new UIItemList(ui, 0, 0, getContentWidth(), getContentHeight());
         this.midiInputs.addToContainer(this);

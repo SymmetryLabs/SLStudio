@@ -73,7 +73,7 @@ class UIChannelDevice extends UIDevice {
         // Transition Controls
         new UIButton(0, getContentHeight() - 36, 16, 16)
         .setLabel("⇄")
-        .setParameter(channel.transitionsEnabled)
+        .setParameter(channel.transitionEnabled)
         .setTextOffset(0, -1)
         .addToContainer(this);
         new UIDropMenu(18, getContentHeight() - 36, 80, 16, channel.transitionBlendMode)
@@ -171,7 +171,7 @@ class UIChannelDevice extends UIDevice {
 
         @Override
         protected boolean hasProgress() {
-            return this.channel.transitionsEnabled.isOn();
+            return this.channel.transitionEnabled.isOn();
         }
 
         @Override
