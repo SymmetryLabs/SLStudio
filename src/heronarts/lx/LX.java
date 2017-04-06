@@ -32,7 +32,9 @@ import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Map.Entry;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
@@ -612,9 +614,12 @@ public class LX {
         return this.registeredEffects;
     }
 
+    private final Map<String, LXSerializable> externals = new HashMap<String, LXSerializable>();
+
     private final static String KEY_VERSION = "version";
     private final static String KEY_TIMESTAMP = "timestamp";
     private final static String KEY_ENGINE = "engine";
+    private final static String KEY_EXTERNALS = "externals";
 
     private File file;
 
@@ -632,9 +637,12 @@ public class LX {
         JsonObject obj = new JsonObject();
         obj.addProperty(KEY_VERSION, "0.1");
         obj.addProperty(KEY_TIMESTAMP, System.currentTimeMillis());
-        JsonObject engine = new JsonObject();
-        obj.add(KEY_ENGINE, engine);
-        this.engine.save(this, engine);
+        obj.add(KEY_ENGINE, LXSerializable.Utils.toObject(this, this.engine));
+        JsonObject externalsObj = new JsonObject();
+        for (String key : this.externals.keySet()) {
+            externalsObj.add(key, LXSerializable.Utils.toObject(this, this.externals.get(key)));
+        }
+        obj.add(KEY_EXTERNALS, externalsObj);
         try {
             JsonWriter writer = new JsonWriter(new FileWriter(file));
             new GsonBuilder().setPrettyPrinting().create().toJson(obj, writer);
@@ -651,6 +659,14 @@ public class LX {
 
     public void newProject() {
         // TODO(mcslee): implement this
+    }
+
+    public LX registerExternal(String key, LXSerializable serializable) {
+        if (this.externals.containsKey(key)) {
+            throw new IllegalStateException("Duplicate external for key: " + key + " (already: " + serializable + ")");
+        }
+        this.externals.put(key,  serializable);
+        return this;
     }
 
     private int getMaxId(JsonObject obj, int max) {
@@ -681,6 +697,14 @@ public class LX {
                 JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
                 this.componentRegistry.setIdCounter(getMaxId(obj, this.componentRegistry.getIdCounter()) + 1);
                 this.engine.load(this, obj.getAsJsonObject(KEY_ENGINE));
+                if (obj.has(KEY_EXTERNALS)) {
+                    JsonObject externalsObj = obj.getAsJsonObject(KEY_EXTERNALS);
+                    for (String key : this.externals.keySet()) {
+                        if (externalsObj.has(key)) {
+                            this.externals.get(key).load(this, externalsObj.getAsJsonObject(key));
+                        }
+                    }
+                }
                 System.out.println("Project loaded successfully from " + file.toString());
                 this.file = file;
                 for (ProjectListener projectListener : this.projectListeners) {
