@@ -35,7 +35,6 @@ import heronarts.lx.LXEngine;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.studio.UIBottomTray;
 import processing.core.PConstants;
 
 public class UIMixer extends UI2dContainer {
@@ -45,15 +44,13 @@ public class UIMixer extends UI2dContainer {
     private final static int ADD_CHANNEL_BUTTON_MARGIN = 1;
 
     private final Map<LXChannel, UIChannelStrip> channelStrips = new HashMap<LXChannel, UIChannelStrip>();
-    private final UIBottomTray tray;
     private final UIMasterStrip masterStrip;
     private final UIButton addChannelButton;
 
     final LX lx;
 
-    public UIMixer(final UI ui, final UIBottomTray tray, final LX lx, float x, float y, float h) {
+    public UIMixer(final UI ui, final LX lx, float x, float y, float h) {
         super(x, y, 0, h);
-        this.tray = tray;
         this.lx = lx;
 
         setBackgroundColor(ui.theme.getPaneInsetColor());
@@ -94,9 +91,8 @@ public class UIMixer extends UI2dContainer {
                 UIChannelStrip strip = new UIChannelStrip(ui, lx, channel, width);
                 channelStrips.put(channel, strip);
                 strip.addToContainer(UIMixer.this, channel.getIndex());
-                setWidth(width + STRIP_SPACING);
                 updateStripPositions();
-
+                setWidth(width + STRIP_SPACING);
             }
 
             public void channelRemoved(LXEngine engine, LXChannel channel) {
@@ -108,8 +104,8 @@ public class UIMixer extends UI2dContainer {
                 }
                 channelStrips.remove(channel).removeFromContainer();
                 masterStrip.setPosition(masterStrip.getX() - STRIP_SPACING, masterStrip.getY());
-                setWidth(width - STRIP_SPACING);
                 updateStripPositions();
+                setWidth(width - STRIP_SPACING);
             }
 
             public void channelMoved(LXEngine engine, LXChannel channel) {
@@ -131,7 +127,6 @@ public class UIMixer extends UI2dContainer {
         this.addChannelButton.setX(xp);
         xp += this.addChannelButton.getWidth() + ADD_CHANNEL_BUTTON_MARGIN;
         this.masterStrip.setX(xp);
-        this.tray.onMixerUpdate();
     }
 
 }

@@ -61,7 +61,7 @@ public class UIBottomTray extends UI2dScrollContext {
         this.ui = ui;
         this.lx = lx;
         setBackgroundColor(ui.theme.getPaneBackgroundColor());
-        this.mixer = new UIMixer(ui, this, lx, PADDING, PADDING, HEIGHT-2*PADDING);
+        this.mixer = new UIMixer(ui, lx, PADDING, PADDING, HEIGHT-2*PADDING);
         this.mixer.addToContainer(this);
 
         for (LXChannel channel : lx.engine.getChannels()) {
@@ -91,7 +91,7 @@ public class UIBottomTray extends UI2dScrollContext {
             }
         });
 
-        onMixerUpdate();
+        reflow();
         onChannelFocus();
     }
 
@@ -138,14 +138,14 @@ public class UIBottomTray extends UI2dScrollContext {
         }
     }
 
-    public void onMixerUpdate() {
+    @Override
+    public void reflow() {
         for (UIDeviceBin deviceBin : this.deviceBins.values()) {
             deviceBin.setX(this.mixer.getWidth() + SEPARATOR);
             if (deviceBin.isVisible()) {
                 setScrollWidth(deviceBin.getX() + deviceBin.getWidth() + PADDING);
             }
         }
-        redraw();
     }
 
     @Override

@@ -114,13 +114,6 @@ public class UIDeviceBin extends UI2dContainer {
         return null;
     }
 
-    @Override
-    public void onResize() {
-        if (isVisible()) {
-            this.tray.setScrollWidth(this.getX() + this.getWidth() + UIBottomTray.PADDING);
-        }
-    }
-
     private float getNextDeviceX() {
         if (this.devices.size() > 0) {
             UIDevice lastDevice = this.devices.get(this.devices.size()-1);

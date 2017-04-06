@@ -62,7 +62,10 @@ public class LXStudio extends P3LX {
             this.main = new UI3dContext(this, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT) {
                 @Override
                 protected void onUIResize(heronarts.p3lx.ui.UI ui) {
-                    setSize(ui.getWidth() - UILeftPane.WIDTH - UIRightPane.WIDTH, ui.getHeight() - UIBottomTray.HEIGHT);
+                    setSize(
+                        Math.max(100, ui.getWidth() - UILeftPane.WIDTH - UIRightPane.WIDTH),
+                        Math.max(100, ui.getHeight() - UIBottomTray.HEIGHT)
+                    );
                 }
             }
             .addComponent(new UIPointCloud(lx).setPointSize(3))
