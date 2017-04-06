@@ -44,7 +44,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     private LX lx;
 
-    public final StringParameter label = new StringParameter("Label");
+    public final StringParameter label = new StringParameter("Label")
+        .setDescription("The name of this component");
 
     private static final int ID_UNASSIGNED = -1;
     static final int ID_ENGINE = 1;

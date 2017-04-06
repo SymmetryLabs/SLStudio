@@ -66,7 +66,9 @@ public abstract class LXOutput extends LXComponent {
     /**
      * Whether the output is enabled.
      */
-    public final BooleanParameter enabled = new BooleanParameter("On", true);
+    public final BooleanParameter enabled =
+        new BooleanParameter("On", true)
+        .setDescription("Whether the output is active");
 
     public enum Mode {
         NORMAL,
@@ -77,22 +79,30 @@ public abstract class LXOutput extends LXComponent {
     /**
      * Sending mode, 0 = normal, 1 = all white, 2 = all off
      */
-    public final EnumParameter<Mode> mode = new EnumParameter<Mode>("Mode", Mode.NORMAL);
+    public final EnumParameter<Mode> mode =
+        new EnumParameter<Mode>("Mode", Mode.NORMAL)
+        .setDescription("Operation mode of this output");
 
     /**
      * Framerate throttle
      */
-    public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 0, 300);
+    public final BoundedParameter framesPerSecond =
+        new BoundedParameter("FPS", 0, 300)
+        .setDescription("Maximum frames per second this output will send");
 
     /**
      * Gamma correction level
      */
-    public final DiscreteParameter gammaCorrection = new DiscreteParameter("Gamma", 4);
+    public final DiscreteParameter gammaCorrection =
+        new DiscreteParameter("Gamma", 4)
+        .setDescription("Gamma correction on the output, 0 is none");
 
     /**
      * Brightness of the output
      */
-    public final BoundedParameter brightness = new BoundedParameter("Brightness", 1);
+    public final BoundedParameter brightness =
+        new BoundedParameter("Brightness", 1)
+        .setDescription("Level of the output");
 
     /**
      * Time last frame was sent at.

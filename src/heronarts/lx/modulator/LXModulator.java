@@ -44,6 +44,8 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
     // Hack so that Processing IDE can access it...
     public final ColorParameter clr = this.color;
 
+    private String contextualHelp = null;
+
     /**
      * The current computed value of this modulator.
      */
@@ -67,6 +69,16 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
     protected LXModulator(String label) {
         this.label.setValue((label == null) ? getClass().getSimpleName() : label);
         addParameter("__color", this.color);
+    }
+
+    public LXParameter setContextualHelp(String contextualHelp) {
+        this.contextualHelp = contextualHelp;
+        return this;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.contextualHelp;
     }
 
     @Override

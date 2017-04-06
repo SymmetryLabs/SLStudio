@@ -130,37 +130,53 @@ public class LXChannel extends LXBus {
     /**
      * Crossfade group this channel belongs to
      */
-    public final EnumParameter<CrossfadeGroup> crossfadeGroup = new EnumParameter<CrossfadeGroup>("Group", CrossfadeGroup.BYPASS);
+    public final EnumParameter<CrossfadeGroup> crossfadeGroup =
+        new EnumParameter<CrossfadeGroup>("Group", CrossfadeGroup.BYPASS)
+        .setDescription("Assigns this channel to crossfader group A or B");
 
     /**
      * Whether this channel should listen to MIDI events
      */
-    public final BooleanParameter midiMonitor = new BooleanParameter("MIDI", false);
+    public final BooleanParameter midiMonitor =
+        new BooleanParameter("MIDI", false)
+        .setDescription("Enabled or disables monitoring of MIDI input on this channel");
 
     /**
      * Whether this channel should show in the cue UI.
      */
-    public final BooleanParameter cueActive = new BooleanParameter("Cue", false);
+    public final BooleanParameter cueActive =
+        new BooleanParameter("Cue", false)
+        .setDescription("Toggles the channel CUE state, determining whether it is shown in the preview window");
 
     /**
      * Whether auto pattern transition is enabled on this channel
      */
-    public final BooleanParameter autoCycleEnabled = new BooleanParameter("Cycle", false);
+    public final BooleanParameter autoCycleEnabled =
+        new BooleanParameter("Auto-Cycle", false)
+        .setDescription("When enabled, this channel will automatically cycle between its patterns");
 
     /**
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
     public final BoundedParameter autoCycleTimeSecs = (BoundedParameter)
-        new BoundedParameter("CycleTime", 60, .1, 60*60*4).setUnits(LXParameter.Units.SECONDS);
+        new BoundedParameter("CycleTime", 60, .1, 60*60*4)
+        .setDescription("Sets the number of seconds after which the channel cycles to the next pattern")
+        .setUnits(LXParameter.Units.SECONDS);
 
     public final BoundedParameter transitionTimeSecs = (BoundedParameter)
-        new BoundedParameter("TransitionTime", 5, .1, 180).setUnits(LXParameter.Units.SECONDS);
+        new BoundedParameter("Transition Time", 5, .1, 180)
+        .setDescription("Sets the duration of blending transitions between patterns")
+        .setUnits(LXParameter.Units.SECONDS);
 
-    public final BooleanParameter transitionEnabled = new BooleanParameter("Transitions", false);
+    public final BooleanParameter transitionEnabled =
+        new BooleanParameter("Transitions", false)
+        .setDescription("When enabled, transitions between patterns use a blend");
 
     public final DiscreteParameter transitionBlendMode;
 
-    public final CompoundParameter fader = new CompoundParameter("Fader", 0);
+    public final CompoundParameter fader =
+        new CompoundParameter("Fader", 0)
+        .setDescription("Sets the alpha level of the output of this channel");
 
     public final DiscreteParameter blendMode;
 
@@ -187,9 +203,15 @@ public class LXChannel extends LXBus {
         super(lx);
         this.index = index;
         this.label.setValue("Channel-" + (index+1));
+        this.label.setDescription("The name of this channel");
         this.blendBuffer = new ModelBuffer(lx);
-        this.blendMode = new DiscreteParameter("Blend", lx.engine.channelBlends);
-        this.transitionBlendMode = new DiscreteParameter("TransitionBlend", lx.engine.crossfaderBlends);
+
+        this.blendMode = new DiscreteParameter("Blend", lx.engine.channelBlends)
+            .setDescription("Specifies the blending function used for the channel fader");
+
+        this.transitionBlendMode = new DiscreteParameter("Transition Blend", lx.engine.crossfaderBlends)
+            .setDescription("Specifies the blending function used for transitions between patterns on the channel");
+
         this.transitionMillis = lx.engine.nowMillis;
         _updatePatterns(patterns);
         this.colors = this.getActivePattern().getColors();

@@ -117,9 +117,17 @@ public class LXEngine extends LXComponent {
     final LXBlend[] crossfaderBlends;
     public final DiscreteParameter crossfaderBlendMode;
 
-    public final BooleanParameter cueLeft = new BooleanParameter("Cue-L", false);
-    public final BooleanParameter cueRight = new BooleanParameter("Cue-R", false);
-    public final BoundedParameter speed = new BoundedParameter("Speed", 1, 0, 2);
+    public final BooleanParameter cueLeft =
+        new BooleanParameter("Cue-L", false)
+        .setDescription("Enables cue preview of crossfade group A");
+
+    public final BooleanParameter cueRight =
+        new BooleanParameter("Cue-R", false)
+        .setDescription("Enables cue preview of crossfade group B");
+
+    public final BoundedParameter speed =
+        new BoundedParameter("Speed", 1, 0, 2)
+        .setDescription("Overall speed adjustement to the entire engine (does not apply to master tempo and audio)");
 
     public final LXModulationEngine modulation;
 
@@ -239,7 +247,7 @@ public class LXEngine extends LXComponent {
             new DarkestBlend(lx),
             new DifferenceBlend(lx)
         };
-        this.crossfaderBlendMode = new DiscreteParameter("BLEND", this.crossfaderBlends);
+        this.crossfaderBlendMode = new DiscreteParameter("Crossfader Blend", this.crossfaderBlends);
         LX.initTimer.log("Engine: Blends");
 
         // Modulation matrix
@@ -683,15 +691,15 @@ public class LXEngine extends LXComponent {
             this.timer.inputNanos = System.nanoTime() - inputStart;
         }
 
-        // Run tempo, always using real-time
+        // Run tempo and audio, always using real-time
         this.lx.tempo.loop(deltaMs);
+        this.audio.loop(deltaMs);
 
         // Mutate by master speed for everything else
         deltaMs *= this.speed.getValue();
 
         this.modulation.loop(deltaMs);
         this.lx.palette.loop(deltaMs);
-        this.audio.loop(deltaMs);
 
         // Run top-level loop tasks
         for (LXLoopTask loopTask : this.loopTasks) {

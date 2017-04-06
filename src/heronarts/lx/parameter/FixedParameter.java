@@ -39,6 +39,11 @@ public class FixedParameter implements LXParameter {
     }
 
     @Override
+    public String getDescription() {
+        return null;
+    }
+
+    @Override
     public LXParameter setComponent(LXComponent component, String path) {
         if (component == null || path == null) {
             throw new IllegalArgumentException("May not set null component or path");

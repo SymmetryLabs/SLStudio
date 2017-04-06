@@ -118,6 +118,14 @@ public interface LXParameter {
     public String getPath();
 
     /**
+     * Returns a contextual help message explaining the purpose of this parameter to the user, or null if
+     * none is available.
+     *
+     * @return Contextual help string explaining purpose of parameter.
+     */
+    public String getDescription();
+
+    /**
      * Gets the unit format that this parameter's value stores.
      *
      * @return Units

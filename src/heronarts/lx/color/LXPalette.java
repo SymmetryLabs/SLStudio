@@ -48,42 +48,65 @@ public class LXPalette extends LXModelComponent {
         CYCLE
     };
 
-    public final EnumParameter<Mode> hueMode = new EnumParameter<Mode>("Mode", Mode.FIXED);
+    public final EnumParameter<Mode> hueMode =
+        new EnumParameter<Mode>("Mode", Mode.FIXED)
+        .setDescription("Sets the operation mode of the palette");
 
-    public final ColorParameter color = new ColorParameter("Color", 0xffff0000);
+    public final ColorParameter color =
+        new ColorParameter("Color", 0xffff0000)
+        .setDescription("The base color selection for the palette");
 
     /**
      * Hack... the Process preprocessor doesn't let you address object.color, duplicate it to clr
      */
     public final ColorParameter clr = color;
 
-    public final BoundedParameter range = new BoundedParameter("Range", 0, 360);
+    public final BoundedParameter range = new BoundedParameter("Range", 0, 360)
+        .setDescription("Sets range in degrees (0-360) of how much spread the palette applies");
 
     public final BoundedParameter period = (BoundedParameter)
-        new BoundedParameter("Period", 120000, 1000, 1800000).setUnits(LXParameter.Units.MILLISECONDS);
+        new BoundedParameter("Period", 120000, 1000, 1800000)
+        .setDescription("Sets the periodicity of the color palette oscillation")
+        .setUnits(LXParameter.Units.MILLISECONDS);
 
     public final CompoundParameter spreadX = (CompoundParameter)
-        new CompoundParameter("X-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("X-add", 0, -360, 360)
+        .setDescription("Sets the amount of hue spread on the X axis")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter spreadY = (CompoundParameter)
-        new CompoundParameter("Y-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Y-add", 0, -360, 360)
+        .setDescription("Sets the amount of hue spread on the Y axis")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter spreadZ = (CompoundParameter)
-        new CompoundParameter("Z-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Z-add", 0, -360, 360)
+        .setDescription("Sets the amount of hue spread on the Z axis")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter offsetX = (CompoundParameter)
-        new CompoundParameter("X-off", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("X-off", 0, -1, 1)
+        .setDescription("Sets the offset of the hue spread point on the X axis")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter offsetY = (CompoundParameter)
-        new CompoundParameter("Y-off", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Y-off", 0, -1, 1)
+        .setDescription("Sets the offset of the hue spread point on the Y axis")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter offsetZ = (CompoundParameter)
-        new CompoundParameter("Z-off", 0, -1, 1).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("Z-off", 0, -1, 1)
+        .setDescription("Sets the offset of the hue spread point on the Z axis")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter spreadR = (CompoundParameter)
-        new CompoundParameter("R-add", 0, -360, 360).setPolarity(LXParameter.Polarity.BIPOLAR);
+        new CompoundParameter("R-add", 0, -360, 360)
+        .setDescription("Sets the amount of hue spread in the radius from center")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
 
-    public final BooleanParameter mirror = new BooleanParameter("Mirror", true);
+    public final BooleanParameter mirror =
+        new BooleanParameter("Mirror", true)
+        .setDescription("If engaged, the hue spread is mirrored from center");
 
     private final DampedParameter hueFixed = new DampedParameter(this.color.hue, 1800);
 

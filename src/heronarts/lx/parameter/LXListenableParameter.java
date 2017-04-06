@@ -45,6 +45,8 @@ public abstract class LXListenableParameter implements LXParameter {
 
     private Polarity polarity = LXParameter.Polarity.UNIPOLAR;
 
+    protected String description = null;
+
     protected LXListenableParameter() {
         this(null, 0);
     }
@@ -94,6 +96,16 @@ public abstract class LXListenableParameter implements LXParameter {
     public final LXListenableParameter removeListener(LXParameterListener listener) {
         this.listeners.remove(listener);
         return this;
+    }
+
+    public LXListenableParameter setDescription(String description) {
+        this.description = description;
+        return this;
+    }
+
+    @Override
+    public String getDescription() {
+        return this.description;
     }
 
     @Override

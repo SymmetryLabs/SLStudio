@@ -23,13 +23,21 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
     public ColorParameter(String label, int color) {
         super(label, Double.longBitsToDouble(color));
         double h = LXColor.h(color);
-        this.hue = new BoundedParameter(label+"-H", Double.isNaN(h) ? 0 : h, 0, 359);
-        this.saturation = new BoundedParameter(label+"-S", LXColor.s(color), 0, 100);
-        this.brightness = new BoundedParameter(label+"-B", LXColor.b(color), 0, 100);
+        this.hue = new BoundedParameter(label+"-H", Double.isNaN(h) ? 0 : h, 0, 359)
+            .setDescription("Hue component of the color");
+        this.saturation = new BoundedParameter(label+"-S", LXColor.s(color), 0, 100)
+            .setDescription("Saturation component of the color");
+        this.brightness = new BoundedParameter(label+"-B", LXColor.b(color), 0, 100)
+            .setDescription("Brightness component of the color");
         this.hue.addListener(this);
         this.saturation.addListener(this);
         this.brightness.addListener(this);
         this.color = color;
+    }
+
+    @Override
+    public ColorParameter setDescription(String description) {
+        return (ColorParameter) super.setDescription(description);
     }
 
     @Override

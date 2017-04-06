@@ -41,25 +41,34 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
      * Gain of the meter, in decibels
      */
     public final BoundedParameter gain = (BoundedParameter)
-        new BoundedParameter("Gain", 0, -48, 48).setUnits(LXParameter.Units.DECIBELS);
+        new BoundedParameter("Gain", 0, -48, 48)
+        .setDescription("Sets the gain of the meter in dB")
+        .setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Range of the meter, in decibels.
      */
     public final BoundedParameter range = (BoundedParameter)
-        new BoundedParameter("Range", 48, 6, 96).setUnits(LXParameter.Units.DECIBELS);
+        new BoundedParameter("Range", 48, 6, 96)
+        .setDescription("Sets the range of the meter in dB")
+        .setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Meter attack time, in milliseconds
      */
     public final BoundedParameter attack = (BoundedParameter)
-        new BoundedParameter("Attack", 10, 0, 100).setUnits(LXParameter.Units.MILLISECONDS);
+        new BoundedParameter("Attack", 10, 0, 100)
+        .setDescription("Sets the attack time of the meter response")
+        .setUnits(LXParameter.Units.MILLISECONDS);
 
     /**
      * Meter release time, in milliseconds
      */
     public final BoundedParameter release = (BoundedParameter)
-        new BoundedParameter("Release", 100, 0, 1000).setExponent(2).setUnits(LXParameter.Units.MILLISECONDS);
+        new BoundedParameter("Release", 100, 0, 1000)
+        .setDescription("Sets the release time of the meter response")
+        .setExponent(2)
+        .setUnits(LXParameter.Units.MILLISECONDS);
 
     private final static float PEAK_HOLD = 250;
 

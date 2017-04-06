@@ -41,6 +41,10 @@ public abstract class FunctionalParameter implements LXParameter {
         this.label = label;
     }
 
+    public String getDescription() {
+        return null;
+    }
+
     @Override
     public LXParameter setComponent(LXComponent component, String path) {
         if (component == null || path == null) {

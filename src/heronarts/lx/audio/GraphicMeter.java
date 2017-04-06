@@ -20,7 +20,9 @@ public class GraphicMeter extends DecibelMeter {
      * dB/octave slope applied to the equalizer
      */
     public final BoundedParameter slope = (BoundedParameter)
-        new BoundedParameter("Slope", 4.5, -3, 12).setUnits(LXParameter.Units.DECIBELS);
+        new BoundedParameter("Slope", 4.5, -3, 12)
+        .setDescription("Sets the slope of the meter in dB per octave")
+        .setUnits(LXParameter.Units.DECIBELS);
 
     /**
      * Number of bands in the equalizer

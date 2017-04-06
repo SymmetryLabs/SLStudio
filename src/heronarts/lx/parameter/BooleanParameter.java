@@ -40,6 +40,11 @@ public class BooleanParameter extends LXListenableNormalizedParameter {
         super(label, on ? 1. : 0.);
     }
 
+    @Override
+    public BooleanParameter setDescription(String description) {
+        return (BooleanParameter) super.setDescription(description);
+    }
+
     public BooleanParameter setMode(Mode mode) {
         this.mode = mode;
         return this;

@@ -50,11 +50,22 @@ public class Tempo extends LXModulatorComponent {
     public final static double MIN_BPM = 20;
     public final static double MAX_BPM = 240;
 
-    public final BoundedParameter bpm = new BoundedParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM);
+    public final BoundedParameter bpm =
+        new BoundedParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM)
+        .setDescription("Beats per minute of the master tempo object");
 
-    public final BooleanParameter tap = new BooleanParameter("Tap").setMode(BooleanParameter.Mode.MOMENTARY);
-    public final BooleanParameter nudgeUp = new BooleanParameter("Nudge+");
-    public final BooleanParameter nudgeDown = new BooleanParameter("Nudge-");
+    public final BooleanParameter tap =
+        new BooleanParameter("Tap")
+        .setDescription("When pressed repeatedlly, tempo is learned from the timing between taps")
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+
+    public final BooleanParameter nudgeUp =
+        new BooleanParameter("Nudge+")
+        .setDescription("Temporarily increases tempo while engaged");
+
+    public final BooleanParameter nudgeDown =
+        new BooleanParameter("Nudge-")
+        .setDescription("Temporarily decreases tempo while engaged");
 
     private final MutableParameter period = new MutableParameter(MINUTE / DEFAULT_BPM);
 

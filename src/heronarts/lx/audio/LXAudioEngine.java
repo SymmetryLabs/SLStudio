@@ -30,7 +30,9 @@ import heronarts.lx.parameter.LXParameter;
 
 public class LXAudioEngine extends LXModulatorComponent {
 
-    public BooleanParameter enabled = new BooleanParameter("Enabled", false);
+    public BooleanParameter enabled =
+        new BooleanParameter("Enabled", false)
+        .setDescription("Sets whether the audio engine is active");
 
     /**
      * Audio input object

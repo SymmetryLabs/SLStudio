@@ -90,6 +90,11 @@ public class CompoundParameter extends BoundedParameter implements LXParameterLi
         super(underlying.getLabel(), underlying.getValue(), v0, v1, underlying);
     }
 
+    @Override
+    public CompoundParameter setDescription(String description) {
+        return (CompoundParameter) super.setDescription(description);
+    }
+
     /**
      * Adds a modulation to this parameter
      *

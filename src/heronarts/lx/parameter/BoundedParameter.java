@@ -134,6 +134,11 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         }
     }
 
+    @Override
+    public BoundedParameter setDescription(String description) {
+        return (BoundedParameter) super.setDescription(description);
+    }
+
     protected double normalizedToValue(double normalized) {
         if (normalized < 0) {
             normalized = 0;

@@ -56,7 +56,7 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
 
     protected LXEffect(LX lx) {
         super(lx);
-
+        this.label.setDescription("The name of this effect");
         String simple = getClass().getSimpleName();
         if (simple.endsWith("Effect")) {
             simple = simple.substring(0, simple.length() - "Effect".length());
