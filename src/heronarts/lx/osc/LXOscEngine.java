@@ -41,6 +41,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.audio.LXAudioEngine;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
@@ -51,6 +52,7 @@ public class LXOscEngine extends LXComponent {
 
     private static final String ROUTE_LX = "lx";
     private static final String ROUTE_ENGINE = "engine";
+    private static final String ROUTE_OUTPUT = "output";
     private static final String ROUTE_PALETTE = "palette";
     private static final String ROUTE_MODULATION = "modulation";
     private static final String ROUTE_AUDIO = "audio";
@@ -94,6 +96,8 @@ public class LXOscEngine extends LXComponent {
             return "/lx/palette";
         } else if (component instanceof LXAudioEngine) {
             return "/lx/audio";
+        } else if (component instanceof LXOutput) {
+            return "/lx/output";
         } else if (component instanceof LXModulationEngine) {
             return "/lx/modulation";
         } else if (component instanceof LXMasterChannel) {
@@ -138,6 +142,8 @@ public class LXOscEngine extends LXComponent {
                 if (parts[1].equals(ROUTE_LX)) {
                     if (parts[2].equals(ROUTE_ENGINE)) {
                         oscComponent(message, lx.engine, parts, 3);
+                    } else if (parts[2].equals(ROUTE_OUTPUT)) {
+                        oscComponent(message, lx.engine.output, parts, 3);
                     } else if (parts[2].equals(ROUTE_AUDIO)) {
                         oscComponent(message, lx.engine.audio, parts, 3);
                     } else if (parts[2].equals(ROUTE_PALETTE)) {

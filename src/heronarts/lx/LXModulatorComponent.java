@@ -21,7 +21,6 @@
 package heronarts.lx;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.Collections;
 import java.util.List;
 import heronarts.lx.modulator.LXModulator;
@@ -79,7 +78,7 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
         return null;
     }
 
-    public Collection<LXModulator> getModulators() {
+    public List<LXModulator> getModulators() {
         return this.modulators;
     }
 
