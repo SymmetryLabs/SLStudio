@@ -31,6 +31,7 @@ import processing.core.PGraphics;
 import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;

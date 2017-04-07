@@ -26,16 +26,12 @@
 
 package heronarts.p3lx.ui.component;
 
-import java.util.ArrayList;
-import java.util.List;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
-import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXParameterModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIFocus;
@@ -43,7 +39,7 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-public class UIKnob extends UIParameterControl implements UIFocus {
+public class UIKnob extends UICompoundParameterControl implements UIFocus {
 
     public final static int KNOB_MARGIN = 6;
     public final static int KNOB_SIZE = 28;
@@ -56,14 +52,6 @@ public class UIKnob extends UIParameterControl implements UIFocus {
     private final static float ARC_START = PConstants.HALF_PI + KNOB_INDENT;
     private final static float ARC_RANGE = PConstants.TWO_PI - 2 * KNOB_INDENT;
     private final static float ARC_END = ARC_START + ARC_RANGE;
-
-    private final List<LXListenableParameter> modulationParameters = new ArrayList<LXListenableParameter>();
-
-    private final LXParameterListener redrawListener = new LXParameterListener() {
-        public void onParameterChanged(LXParameter p) {
-            redraw();
-        }
-    };
 
     public UIKnob(LXListenableNormalizedParameter parameter) {
         this();
@@ -82,15 +70,6 @@ public class UIKnob extends UIParameterControl implements UIFocus {
         super(x, y, w, h);
         this.keyEditable = true;
         enableImmediateEdit(true);
-    }
-
-    @Override
-    public UIParameterControl setParameter(LXListenableNormalizedParameter parameter) {
-        for (LXListenableParameter p : this.modulationParameters) {
-            p.removeListener(this.redrawListener);
-        }
-        this.modulationParameters.clear();
-        return super.setParameter(parameter);
     }
 
     @Override
@@ -124,9 +103,9 @@ public class UIKnob extends UIParameterControl implements UIFocus {
                     break;
                 }
                 ColorParameter modulationColor = modulation.color;
-                if (!modulationParameters.contains(modulationColor)) {
-                    modulationParameters.add(modulationColor);
-                    modulationParameters.add(modulation.polarity);
+                if (!this.modulationParameters.contains(modulationColor)) {
+                    this.modulationParameters.add(modulationColor);
+                    this.modulationParameters.add(modulation.polarity);
                     modulationColor.addListener(this.redrawListener);
                     modulation.polarity.addListener(this.redrawListener);
                 }

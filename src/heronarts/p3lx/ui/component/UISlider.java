@@ -32,7 +32,7 @@ import heronarts.p3lx.ui.UIFocus;
 import processing.core.PGraphics;
 import processing.event.MouseEvent;
 
-public class UISlider extends UIParameterControl implements UIFocus {
+public class UISlider extends UICompoundParameterControl implements UIFocus {
 
     public enum Direction {
         HORIZONTAL, VERTICAL
@@ -40,8 +40,8 @@ public class UISlider extends UIParameterControl implements UIFocus {
 
     private final Direction direction;
 
-    private static final float HANDLE_WIDTH = 12;
-    private static final int HANDLE_ROUNDING = 4;
+    private static final float HANDLE_SIZE = 6;
+    private static final int HANDLE_ROUNDING = 2;
     private static final float PADDING = 2;
     private static final float GROOVE = 4;
 
@@ -112,8 +112,8 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.rect(fillX, this.handleHeight / 2 - GROOVE/2, fillWidth, GROOVE);
             pg.fill(0xff5f5f5f);
             pg.stroke(ui.theme.getControlBorderColor());
-            pg.rect((int) (PADDING + getNormalized() * (this.width - 2*PADDING - HANDLE_WIDTH)), PADDING,
-                    HANDLE_WIDTH, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
+            pg.rect((int) (PADDING + getNormalized() * (this.width - 2*PADDING - HANDLE_SIZE)), PADDING,
+                    HANDLE_SIZE, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
             break;
         case VERTICAL:
             pg.rect(this.width / 2 - GROOVE/2, PADDING, GROOVE, this.handleHeight - 2*PADDING);
@@ -135,14 +135,13 @@ public class UISlider extends UIParameterControl implements UIFocus {
             pg.fill(0xff5f5f5f);
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect(PADDING, (int) (PADDING + (1 - getNormalized())
-                    * (this.handleHeight - 2*PADDING - HANDLE_WIDTH)), this.width - 2*PADDING, HANDLE_WIDTH, HANDLE_ROUNDING);
+                    * (this.handleHeight - 2*PADDING - HANDLE_SIZE)), this.width - 2*PADDING, HANDLE_SIZE, HANDLE_ROUNDING);
             break;
         }
 
         super.onDraw(ui, pg);
     }
 
-    private boolean editing = false;
     private float doubleClickMode = 0;
     private float doubleClickP = 0;
 
@@ -150,36 +149,29 @@ public class UISlider extends UIParameterControl implements UIFocus {
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         super.onMousePressed(mouseEvent, mx, my);
         float mp, dim;
-        double handleEdge;
         boolean isVertical = false;
         switch (this.direction) {
         case VERTICAL:
-            handleEdge = PADDING + (1 - getNormalized()) * (this.handleHeight - 2*PADDING - HANDLE_WIDTH);
             mp = my;
             dim = this.handleHeight;
             isVertical = true;
             break;
         default:
         case HORIZONTAL:
-            handleEdge = PADDING + getNormalized() * (this.width - 2*PADDING - HANDLE_WIDTH);
             mp = mx;
             dim = this.width;
             break;
         }
-        if ((mp >= handleEdge) && (mp < handleEdge + HANDLE_WIDTH)) {
-            this.editing = true;
+        if ((mouseEvent.getCount() > 1) && Math.abs(mp - this.doubleClickP) < 3) {
+            setNormalized(this.doubleClickMode);
+        }
+        this.doubleClickP = mp;
+        if (mp < dim * .25) {
+            this.doubleClickMode = isVertical ? 1 : 0;
+        } else if (mp > dim * .75) {
+            this.doubleClickMode = isVertical ? 0 : 1;
         } else {
-            if ((mouseEvent.getCount() > 1) && Math.abs(mp - this.doubleClickP) < 3) {
-                setNormalized(this.doubleClickMode);
-            }
-            this.doubleClickP = mp;
-            if (mp < dim * .25) {
-                this.doubleClickMode = isVertical ? 1 : 0;
-            } else if (mp > dim * .75) {
-                this.doubleClickMode = isVertical ? 0 : 1;
-            } else {
-                this.doubleClickMode = 0.5f;
-            }
+            this.doubleClickMode = 0.5f;
         }
     }
 
@@ -191,40 +183,28 @@ public class UISlider extends UIParameterControl implements UIFocus {
 
     @Override
     protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-        if (isEnabled() && this.editing) {
-            if (mouseEvent.isShiftDown()) {
-                float dv;
-                float dim;
-                switch (this.direction) {
-                case VERTICAL:
-                    dv = -dy;
-                    dim = this.handleHeight;
-                    break;
-                default:
-                case HORIZONTAL:
-                    dv = dx;
-                    dim = this.width;
-                    break;
+        if (isEnabled()) {
+            float dv, dim;
+            boolean valid;
+            switch (this.direction) {
+            case VERTICAL:
+                dv = -dy;
+                dim = this.handleHeight;
+                valid = (my > 0 && dy > 0) || (my < dim && dy < 0);
+                break;
+            default:
+            case HORIZONTAL:
+                dv = dx;
+                dim = this.width;
+                valid = (mx > 0 && dx > 0) || (mx < dim && dx < 0);
+                break;
+            }
+            if (valid) {
+                float delta = dv / (dim - HANDLE_SIZE);
+                if (mouseEvent.isShiftDown()) {
+                    delta /= 10;
                 }
-                float delta = dv / dim / 10;
                 setNormalized(LXUtils.constrain(getNormalized() + delta, 0, 1));
-            } else {
-                float mp, dim;
-                switch (this.direction) {
-                case VERTICAL:
-                    mp = my;
-                    dim = this.handleHeight;
-                    setNormalized(1 - LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
-                            / (dim - 8 - HANDLE_WIDTH), 0, 1));
-                    break;
-                default:
-                case HORIZONTAL:
-                    mp = mx;
-                    dim = this.width;
-                    setNormalized(LXUtils.constrain((mp - HANDLE_WIDTH / 2. - 4)
-                            / (dim - 8 - HANDLE_WIDTH), 0, 1));
-                    break;
-                }
             }
         }
     }
