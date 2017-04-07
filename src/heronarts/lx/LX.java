@@ -711,7 +711,7 @@ public class LX {
                     projectListener.projectChanged(file);
                 }
             } catch (IOException iox) {
-                System.err.println(iox.getLocalizedMessage());
+                System.err.println("Could not load project file: " + iox.getLocalizedMessage());
             } finally {
                 if (fr != null) {
                     try {

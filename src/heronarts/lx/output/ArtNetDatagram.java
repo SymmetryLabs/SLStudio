@@ -51,6 +51,10 @@ public class ArtNetDatagram extends LXDatagram {
         this(indices, 3*indices.length, universeNumber);
     }
 
+    public ArtNetDatagram(LXFixture fixture, int dataLength, int universeNumber) {
+        this(LXOutput.fixtureToIndices(fixture), dataLength, universeNumber);
+    }
+
     public ArtNetDatagram(int[] indices, int dataLength, int universeNumber) {
         super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
 
