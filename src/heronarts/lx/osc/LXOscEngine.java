@@ -24,6 +24,7 @@ import java.io.IOException;
 import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
+import java.net.SocketAddress;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
@@ -66,9 +67,15 @@ public class LXOscEngine extends LXComponent {
 
     public final static int DEFAULT_RECEIVE_PORT = 3030;
     public final static int DEFAULT_TRANSMIT_PORT = 3131;
+
+    public final static String DEFAULT_RECEIVE_HOST = "0.0.0.0";
     public final static String DEFAULT_TRANSMIT_HOST = "localhost";
 
     private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
+
+    public final StringParameter receiveHost =
+        new StringParameter("RX Host", DEFAULT_RECEIVE_HOST)
+        .setDescription("Hostname to which OSC input socket is bound");
 
     public final DiscreteParameter receivePort =
         new DiscreteParameter("RX Port", DEFAULT_RECEIVE_PORT, 1, 9999)
@@ -103,6 +110,7 @@ public class LXOscEngine extends LXComponent {
         super(lx);
         this.lx = lx;
         this.label.setValue("OSC");
+        addParameter("receiveHost", this.receiveHost);
         addParameter("receivePort", this.receivePort);
         addParameter("receiveActive", this.receiveActive);
         addParameter("transmitHost", this.transmitHost);
@@ -411,14 +419,13 @@ public class LXOscEngine extends LXComponent {
         public void modulatorRemoved(LXModulationEngine engine, LXModulator modulator) {
             unregisterComponent(modulator);
         }
-
-
     }
 
     public class Receiver {
 
         public final int port;
         private final DatagramSocket socket;
+        public final SocketAddress address;
         private final DatagramPacket packet;
         private final byte[] buffer;
         private final ReceiverThread thread;
@@ -442,6 +449,7 @@ public class LXOscEngine extends LXComponent {
 
         private Receiver(DatagramSocket socket, int port, int bufferSize) throws SocketException {
             this.socket = socket;
+            this.address = socket.getLocalSocketAddress();
             this.port = port;
             this.buffer = new byte[bufferSize];
             this.packet = new DatagramPacket(this.buffer, bufferSize);
@@ -487,7 +495,7 @@ public class LXOscEngine extends LXComponent {
                     }
                 }
                 socket.close();
-                System.out.println("Stopped OSC listener on port " + port);
+                System.out.println("Stopped OSC listener " + address);
             }
         }
 
@@ -518,7 +526,7 @@ public class LXOscEngine extends LXComponent {
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == this.receivePort) {
+        if (p == this.receivePort || p == this.receiveHost) {
             if (this.engineReceiver != null) {
                 startReceiver();
             }
@@ -551,11 +559,13 @@ public class LXOscEngine extends LXComponent {
             stopReceiver();
         }
         try {
-            this.engineReceiver = receiver(this.receivePort.getValuei());
+            this.engineReceiver = receiver(this.receivePort.getValuei(), this.receiveHost.getString());
             this.engineReceiver.addListener(this.engineListener);
-            System.out.println("Started OSC listener on port " + this.engineReceiver.port);
+            System.out.println("Started OSC listener " + this.engineReceiver.address);
         } catch (SocketException sx) {
             System.err.println("Failed to start OSC receiver: " + sx.getLocalizedMessage());
+        } catch (UnknownHostException uhx) {
+            System.err.println("Bad OSC receive host: " + uhx.getLocalizedMessage());
         }
     }
 
@@ -580,6 +590,10 @@ public class LXOscEngine extends LXComponent {
                 System.err.println("[OSC] Could not start transmitter: " + sx.getLocalizedMessage());
             }
         }
+    }
+
+    public Receiver receiver(int port, String host) throws SocketException, UnknownHostException {
+        return receiver(port, InetAddress.getByName(host));
     }
 
     public Receiver receiver(int port, InetAddress address) throws SocketException {
