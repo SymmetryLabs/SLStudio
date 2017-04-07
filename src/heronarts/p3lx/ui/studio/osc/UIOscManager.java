@@ -32,6 +32,7 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIIntegerBox;
 import heronarts.p3lx.ui.component.UILabel;
+import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import processing.core.PConstants;
 
@@ -49,13 +50,15 @@ public class UIOscManager extends UICollapsibleSection {
             .addToContainer(this);
 
         float yp = 4;
-        new UILabel(6, yp+2, 36, 12).setLabel("Rx Port").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+        new UILabel(6, yp+2, 36, 12).setLabel("Input").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
         new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.receivePort).addToContainer(border);
-        new UIButton(114, yp, border.getContentWidth() - 120, 16).setLabel("Receive").setParameter(lx.engine.osc.receiveActive).addToContainer(border);
+        new UITextBox(114, yp, 70, 16).setParameter(lx.engine.osc.receiveHost).addToContainer(border);
+        new UIButton(188, yp, 16, 16).setParameter(lx.engine.osc.receiveActive).setBorderRounding(4).addToContainer(border);
 
         yp += 20;
-        new UILabel(6, yp+2, 36, 12).setLabel("Tx Port").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+        new UILabel(6, yp+2, 36, 12).setLabel("Output").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
         new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.transmitPort).addToContainer(border);
-        new UIButton(114, yp, border.getContentWidth() - 120, 16).setLabel("Transmit").setParameter(lx.engine.osc.transmitActive).addToContainer(border);
+        new UITextBox(114, yp, 70, 16).setParameter(lx.engine.osc.transmitHost).addToContainer(border);
+        new UIButton(188, yp, 16, 16).setParameter(lx.engine.osc.transmitActive).setBorderRounding(4).addToContainer(border);
     }
 }
