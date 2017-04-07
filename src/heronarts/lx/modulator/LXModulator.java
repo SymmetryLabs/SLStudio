@@ -24,6 +24,7 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.LXRunnable;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.LXParameter;
 
 /**
@@ -31,7 +32,7 @@ import heronarts.lx.parameter.LXParameter;
  * time, such as an envelope or a low frequency oscillator. Some modulators run
  * continuously, others may halt after they reach a certain value.
  */
-public abstract class LXModulator extends LXRunnable implements LXParameter {
+public abstract class LXModulator extends LXRunnable implements LXParameter, LXOscComponent {
 
     private LXComponent component;
 
@@ -71,6 +72,13 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
     protected LXModulator(String label) {
         this.label.setValue((label == null) ? getClass().getSimpleName() : label);
         addParameter("color", this.color);
+    }
+
+    public String getOscAddress() {
+        if (getParent() instanceof LXOscComponent) {
+            return ((LXOscComponent) getParent()).getOscAddress() + "/" + getLabel();
+        }
+        return null;
     }
 
     public LXParameter setContextualHelp(String contextualHelp) {

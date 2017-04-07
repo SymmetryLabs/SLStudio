@@ -36,9 +36,10 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.LXParameterModulation;
 
-public class LXModulationEngine extends LXModulatorComponent {
+public class LXModulationEngine extends LXModulatorComponent implements LXOscComponent {
 
     private final LX lx;
 
@@ -57,6 +58,10 @@ public class LXModulationEngine extends LXModulatorComponent {
     LXModulationEngine(LX lx) {
         super(lx);
         this.lx = lx;
+    }
+
+    public String getOscAddress() {
+        return "/lx/modulation";
     }
 
     public LXModulationEngine addListener(Listener listener) {

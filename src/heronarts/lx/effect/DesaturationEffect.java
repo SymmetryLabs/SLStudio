@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,15 +28,24 @@ import heronarts.lx.parameter.LXParameter;
 
 public class DesaturationEffect extends LXEffect {
 
-    private final BoundedParameter attack;
-    private final BoundedParameter decay;
-    private final BoundedParameter amount;
+    private final BoundedParameter attack =
+        new BoundedParameter("Attack", 100, 0, 1000)
+        .setDescription("Sets the attack time of the desaturation");
+
+    private final BoundedParameter decay =
+        new BoundedParameter("Decay", 100, 0, 1000)
+        .setDescription("Sets the decay time of the desaturation");
+
+    private final BoundedParameter amount =
+        new BoundedParameter("Amount", 1.)
+        .setDescription("Sets the amount of desaturation to apply");
+
 
     public DesaturationEffect(LX lx) {
         super(lx);
-        this.addParameter(this.amount = new BoundedParameter("Amount", 1.));
-        this.addParameter(this.attack = new BoundedParameter("Attack", 100, 0, 1000));
-        this.addParameter(this.decay = new BoundedParameter("Decay", 100, 0, 1000));
+        addParameter("amount", this.amount);
+        addParameter("attack", this.attack);
+        addParameter("decay", this.decay);
     }
 
     @Override

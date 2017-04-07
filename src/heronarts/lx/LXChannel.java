@@ -231,6 +231,10 @@ public class LXChannel extends LXBus {
         addParameter("transitionBlendMode", this.transitionBlendMode);
     }
 
+    public String getOscAddress() {
+        return "/lx/channel/" + this.index;
+    }
+
     @Override
     public void onParameterChanged(LXParameter p) {
         if (p == this.autoCycleEnabled) {

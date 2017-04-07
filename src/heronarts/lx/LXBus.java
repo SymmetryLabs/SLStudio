@@ -21,6 +21,8 @@
 package heronarts.lx;
 
 import heronarts.lx.model.LXModel;
+import heronarts.lx.osc.LXOscComponent;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -33,7 +35,7 @@ import com.google.gson.JsonObject;
  * Abstract representation of a channel, which could be a normal channel with patterns
  * or the master channel.
  */
-public abstract class LXBus extends LXModelComponent {
+public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     /**
      * Listener interface for objects which want to be notified when the internal

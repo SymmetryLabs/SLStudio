@@ -25,10 +25,11 @@ import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 import heronarts.lx.LXModulatorComponent;
 import heronarts.lx.LXSerializable;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class LXAudioEngine extends LXModulatorComponent {
+public class LXAudioEngine extends LXModulatorComponent implements LXOscComponent {
 
     public BooleanParameter enabled =
         new BooleanParameter("Enabled", false)
@@ -45,6 +46,10 @@ public class LXAudioEngine extends LXModulatorComponent {
         super(lx);
         addModulator(this.meter);
         addParameter(this.enabled);
+    }
+
+    public String getOscAddress() {
+        return "/lx/audio";
     }
 
     @Override

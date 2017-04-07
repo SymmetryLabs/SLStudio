@@ -32,6 +32,7 @@ import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiEngine;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.LXOutputGroup;
@@ -75,7 +76,7 @@ import com.google.gson.JsonObject;
  *
  * The result of all this generates a display buffer of node values.
  */
-public class LXEngine extends LXComponent {
+public class LXEngine extends LXComponent implements LXOscComponent {
 
     private final LX lx;
 
@@ -97,7 +98,7 @@ public class LXEngine extends LXComponent {
     private final List<LXChannel> channels = new ArrayList<LXChannel>();
     public final LXMasterChannel masterChannel;
 
-    public final LXOutput output;
+    public final Output output;
 
     private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
@@ -134,6 +135,16 @@ public class LXEngine extends LXComponent {
     public final LXModulationEngine modulation;
 
     private float frameRate = 0;
+
+    public class Output extends LXOutputGroup implements LXOscComponent {
+        Output(LX lx) {
+            super(lx);
+        }
+
+        public String getOscAddress() {
+            return "/lx/output";
+        }
+    }
 
     public interface Dispatch {
         public void dispatch();
@@ -285,7 +296,7 @@ public class LXEngine extends LXComponent {
         LX.initTimer.log("Engine: Cue");
 
         // Master output
-        this.output = new LXOutputGroup(lx);
+        this.output = new Output(lx);
         LX.initTimer.log("Engine: Output");
 
         // Midi engine
@@ -306,6 +317,11 @@ public class LXEngine extends LXComponent {
         addParameter("focusedChannel", this.focusedChannel);
         addParameter("cueA", this.cueA);
         addParameter("cueB", this.cueB);
+    }
+
+    @Override
+    public String getOscAddress() {
+        return "/lx/engine";
     }
 
     @Override

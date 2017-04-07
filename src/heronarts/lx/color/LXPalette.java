@@ -28,6 +28,7 @@ import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -40,7 +41,7 @@ import heronarts.lx.parameter.LXParameter;
  * of color computation. Though its use is not required, it is very useful for
  * creating coherent color schemes across patterns.
  */
-public class LXPalette extends LXModelComponent {
+public class LXPalette extends LXModelComponent implements LXOscComponent {
 
     public enum Mode {
         FIXED,
@@ -154,6 +155,10 @@ public class LXPalette extends LXModelComponent {
         addModulator(this.hueFixed).start();
         addModulator(this.hueCycle);
         addModulator(this.hueOscillate);
+    }
+
+    public String getOscAddress() {
+        return "/lx/palette";
     }
 
     @Override

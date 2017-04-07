@@ -18,23 +18,8 @@
  * @author Mark C. Slee <mark@heronarts.com>
  */
 
-package heronarts.lx;
+package heronarts.lx.osc;
 
-/**
- * Represents the master channel. Doesn't do anything special
- * that a normal bus does not.
- */
-public class LXMasterChannel extends LXBus {
-    LXMasterChannel(LX lx) {
-        super(lx);
-    }
-
-    public String getOscAddress() {
-        return "/lx/master";
-    }
-
-    @Override
-    public String getLabel() {
-        return "Master";
-    }
+public interface LXOscComponent {
+    public String getOscAddress();
 }

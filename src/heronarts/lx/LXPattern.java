@@ -27,13 +27,14 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 
 /**
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
-public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener {
+public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener, LXOscComponent {
 
     private int index = -1;
 
@@ -57,6 +58,14 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
         this.label.setValue(simple);
+    }
+
+    public String getOscAddress() {
+        LXChannel channel = getChannel();
+        if (channel != null) {
+            return channel.getOscAddress() + "/pattern/" + this.index;
+        }
+        return null;
     }
 
     void setIndex(int index) {

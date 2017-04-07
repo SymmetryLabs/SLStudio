@@ -34,14 +34,7 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
-import heronarts.lx.LXMasterChannel;
-import heronarts.lx.LXModulationEngine;
 import heronarts.lx.LXPattern;
-import heronarts.lx.audio.LXAudioEngine;
-import heronarts.lx.color.LXPalette;
-import heronarts.lx.modulator.LXModulator;
-import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
@@ -89,36 +82,6 @@ public class LXOscEngine extends LXComponent {
         addParameter("active", this.active);
     }
 
-    public static String getOscAddress(LXComponent component) {
-        if (component instanceof LXEngine) {
-            return "/lx/engine";
-        } else if (component instanceof LXPalette) {
-            return "/lx/palette";
-        } else if (component instanceof LXAudioEngine) {
-            return "/lx/audio";
-        } else if (component instanceof LXOutput) {
-            return "/lx/output";
-        } else if (component instanceof LXModulationEngine) {
-            return "/lx/modulation";
-        } else if (component instanceof LXMasterChannel) {
-            return "/lx/master";
-        } else if (component instanceof LXChannel) {
-            return "/lx/channel/" + ((LXChannel) component).getIndex();
-        } else if (component instanceof LXPattern) {
-            LXPattern pattern = (LXPattern) component;
-            return getOscAddress(pattern.getChannel()) + "/pattern/" + pattern.getIndex();
-        } else if (component instanceof LXEffect) {
-            LXEffect effect = (LXEffect) component;
-            return getOscAddress(effect.getBus()) + "/effect/" + effect.getIndex();
-        } else if (component instanceof LXModulator) {
-            String componentAddress = getOscAddress(component.getParent());
-            if (componentAddress != null) {
-                return componentAddress + "/" + component.getLabel();
-            }
-        }
-        return null;
-    }
-
     /**
      * Gets the OSC address pattern for a parameter
      *
@@ -126,9 +89,15 @@ public class LXOscEngine extends LXComponent {
      * @return OSC address
      */
     public static String getOscAddress(LXParameter p) {
-        String componentAddress = getOscAddress(p.getComponent());
-        if (componentAddress != null) {
-            return componentAddress + "/" + p.getPath();
+        LXComponent component = p.getComponent();
+        if (component instanceof LXOscComponent) {
+            String componentAddress = ((LXOscComponent) component).getOscAddress();
+            if (componentAddress == null) {
+                System.err.println("Component has no OSC address: " + component + " (parameter: " + p + ")");
+                new Exception().printStackTrace();
+            } else {
+                return componentAddress + "/" + p.getPath();
+            }
         }
         return null;
     }

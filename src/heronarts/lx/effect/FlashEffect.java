@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,17 +28,28 @@ import heronarts.lx.parameter.LXParameter;
 
 public class FlashEffect extends LXEffect {
 
-    private final BoundedParameter sat;
-    public final BoundedParameter attack;
-    public final BoundedParameter decay;
-    public final BoundedParameter intensity;
+    private final BoundedParameter sat =
+        new BoundedParameter("Saturation", 0)
+        .setDescription("Sets the color saturation level of the flash");
+
+    public final BoundedParameter attack =
+        new BoundedParameter("Attack", 100, 1000)
+        .setDescription("Sets the attack time of the flash");
+
+    public final BoundedParameter decay =
+        new BoundedParameter("Decay", 1500, 3000)
+        .setDescription("Sets the decay time of the flash");
+
+    public final BoundedParameter intensity =
+        new BoundedParameter("Intensity", 1)
+        .setDescription("Sets the intensity level of the flash");
 
     public FlashEffect(LX lx) {
         super(lx);
-        this.addParameter(this.attack = new BoundedParameter("Attack", 100, 1000));
-        this.addParameter(this.decay = new BoundedParameter("Decay", 1500, 3000));
-        this.addParameter(this.intensity = new BoundedParameter("Intensity", 1));
-        this.addParameter(this.sat = new BoundedParameter("Saturation", 0));
+        addParameter("attack", this.attack);
+        addParameter("decay", this.decay);
+        addParameter("intensity", this.intensity);
+        addParameter("saturation", this.sat);
     }
 
     @Override

@@ -28,6 +28,7 @@ import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.modulator.LinearEnvelope;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -38,7 +39,7 @@ import heronarts.lx.parameter.MutableParameter;
  * may be stateless or stateful, though typically they operate on a single
  * frame. Only the current frame is provided at runtime.
  */
-public abstract class LXEffect extends LXLayeredComponent implements LXMidiListener {
+public abstract class LXEffect extends LXLayeredComponent implements LXMidiListener, LXOscComponent {
 
     public final BooleanParameter enabled =
         new BooleanParameter("On", false)
@@ -79,6 +80,14 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
 
         addParameter("enabled", this.enabled);
         addModulator(this.enabledDamped);
+    }
+
+    public String getOscAddress() {
+        LXBus bus = getBus();
+        if (bus != null) {
+            return bus.getOscAddress() + "/effect/" + this.index;
+        }
+        return null;
     }
 
     /**
