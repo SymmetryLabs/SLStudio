@@ -286,7 +286,6 @@ public class LXEngine extends LXComponent {
 
         // Master output
         this.output = new LXOutputGroup(lx);
-        ((LXComponent)this.output).setParent(this);
         LX.initTimer.log("Engine: Output");
 
         // Midi engine

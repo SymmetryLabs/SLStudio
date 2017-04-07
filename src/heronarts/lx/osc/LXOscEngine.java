@@ -34,7 +34,13 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
+import heronarts.lx.LXEngine;
+import heronarts.lx.LXMasterChannel;
+import heronarts.lx.LXModulationEngine;
 import heronarts.lx.LXPattern;
+import heronarts.lx.audio.LXAudioEngine;
+import heronarts.lx.color.LXPalette;
+import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
@@ -42,6 +48,18 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
 
 public class LXOscEngine extends LXComponent {
+
+    private static final String ROUTE_LX = "lx";
+    private static final String ROUTE_ENGINE = "engine";
+    private static final String ROUTE_PALETTE = "palette";
+    private static final String ROUTE_MODULATION = "modulation";
+    private static final String ROUTE_AUDIO = "audio";
+    private static final String ROUTE_MASTER = "master";
+    private static final String ROUTE_CHANNEL = "channel";
+    private static final String ROUTE_PATTERN = "pattern";
+    private static final String ROUTE_EFFECT = "effect";
+    private static final String ROUTE_FOCUSED = "focused";
+    private static final String ROUTE_ACTIVE = "active";
 
     public final static int DEFAULT_PORT = 3030;
     private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
@@ -65,31 +83,67 @@ public class LXOscEngine extends LXComponent {
         super(lx);
         this.lx = lx;
         this.label.setValue("OSC");
-        addParameter(this.port);
-        addParameter(this.active);
+        addParameter("port", this.port);
+        addParameter("active", this.active);
+    }
+
+    public static String getOscAddress(LXComponent component) {
+        if (component instanceof LXEngine) {
+            return "/lx/engine";
+        } else if (component instanceof LXPalette) {
+            return "/lx/palette";
+        } else if (component instanceof LXAudioEngine) {
+            return "/lx/audio";
+        } else if (component instanceof LXModulationEngine) {
+            return "/lx/modulation";
+        } else if (component instanceof LXMasterChannel) {
+            return "/lx/master";
+        } else if (component instanceof LXChannel) {
+            return "/lx/channel/" + ((LXChannel) component).getIndex();
+        } else if (component instanceof LXPattern) {
+            LXPattern pattern = (LXPattern) component;
+            return getOscAddress(pattern.getChannel()) + "/pattern/" + pattern.getIndex();
+        } else if (component instanceof LXEffect) {
+            LXEffect effect = (LXEffect) component;
+            return getOscAddress(effect.getBus()) + "/effect/" + effect.getIndex();
+        } else if (component instanceof LXModulator) {
+            String componentAddress = getOscAddress(component.getParent());
+            if (componentAddress != null) {
+                return componentAddress + "/" + component.getLabel();
+            }
+        }
+        return null;
+    }
+
+    /**
+     * Gets the OSC address pattern for a parameter
+     *
+     * @param p parameter
+     * @return OSC address
+     */
+    public static String getOscAddress(LXParameter p) {
+        String componentAddress = getOscAddress(p.getComponent());
+        if (componentAddress != null) {
+            return componentAddress + "/" + p.getPath();
+        }
+        return null;
     }
 
     private class EngineListener implements LXOscListener {
-
-        private static final String ROUTE_LX = "lx";
-        private static final String ROUTE_MASTER = "master";
-        private static final String ROUTE_CHANNEL = "channel";
-        private static final String ROUTE_PALETTE = "palette";
-        private static final String ROUTE_PATTERN = "pattern";
-        private static final String ROUTE_EFFECT = "effect";
-        private static final String ROUTE_AUDIO = "audio";
-        private static final String ROUTE_FOCUSED = "focused";
-        private static final String ROUTE_ACTIVE = "active";
 
         @Override
         public void oscMessage(OscMessage message) {
             try {
                 String[] parts = message.getAddressPattern().getValue().split("/");
                 if (parts[1].equals(ROUTE_LX)) {
-                    if (parts[2].equals(ROUTE_AUDIO)) {
+                    if (parts[2].equals(ROUTE_ENGINE)) {
+                        oscComponent(message, lx.engine, parts, 3);
+                    } else if (parts[2].equals(ROUTE_AUDIO)) {
                         oscComponent(message, lx.engine.audio, parts, 3);
                     } else if (parts[2].equals(ROUTE_PALETTE)) {
                         oscComponent(message, lx.palette, parts, 3);
+                    } else if (parts[2].equals(ROUTE_MODULATION)) {
+                        oscComponent(message, lx.engine.modulation.getModulator(parts[3]), parts, 4);
                     } else if (parts[2].equals(ROUTE_MASTER)) {
                         oscChannel(message, lx.engine.masterChannel, parts, 3);
                     } else if (parts[2].equals(ROUTE_CHANNEL)) {

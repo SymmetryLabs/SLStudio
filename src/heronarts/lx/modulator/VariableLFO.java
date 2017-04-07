@@ -81,12 +81,12 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
                 return 1000 / rate.getValue();
             }
         });
-        addParameter(waveshape);
-        addParameter(rate);
-        addParameter(skew);
-        addParameter(shape);
-        addParameter(phase);
-        addParameter(exp);
+        addParameter("wave", waveshape);
+        addParameter("rate", rate);
+        addParameter("skew", skew);
+        addParameter("shape", shape);
+        addParameter("phase", phase);
+        addParameter("exp", exp);
     }
 
     public LXWaveshape getWaveshape() {

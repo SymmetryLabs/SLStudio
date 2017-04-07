@@ -319,6 +319,7 @@ public class LXChannel extends LXBus {
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         pattern.setModel(this.model);
+        pattern.setIndex(this.internalPatterns.size());
         this.internalPatterns.add(pattern);
         for (Listener listener : this.listeners) {
             listener.patternAdded(this, pattern);
@@ -344,6 +345,9 @@ public class LXChannel extends LXBus {
                 finishTransition();
             }
             this.internalPatterns.remove(index);
+            for (int i = index; i < this.internalPatterns.size(); ++i) {
+                this.internalPatterns.get(i).setIndex(i);
+            }
             if (this.activePatternIndex > index) {
                 --this.activePatternIndex;
             } else if (this.activePatternIndex >= this.internalPatterns.size()) {

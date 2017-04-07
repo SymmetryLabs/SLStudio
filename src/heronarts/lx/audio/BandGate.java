@@ -181,19 +181,19 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
             .setExponent(4)
             .setUnits(LXParameter.Units.HERTZ);
 
-        addParameter(this.gain);
-        addParameter(this.range);
-        addParameter(this.attack);
-        addParameter(this.release);
-        addParameter(this.slope);
-        addParameter(this.threshold);
-        addParameter(this.floor);
-        addParameter(this.decay);
-        addParameter(this.minFreq);
-        addParameter(this.maxFreq);
-        addParameter(this.trigger);
-        addParameter(this.average);
-        addParameter(this.teachTempo);
+        addParameter("gain", this.gain);
+        addParameter("range", this.range);
+        addParameter("attack", this.attack);
+        addParameter("release", this.release);
+        addParameter("slope", this.slope);
+        addParameter("threshold", this.threshold);
+        addParameter("floor", this.floor);
+        addParameter("decay", this.decay);
+        addParameter("minFreq", this.minFreq);
+        addParameter("maxFreq", this.maxFreq);
+        addParameter("trigger", this.trigger);
+        addParameter("average", this.average);
+        addParameter("tap", this.teachTempo);
     }
 
     @Override

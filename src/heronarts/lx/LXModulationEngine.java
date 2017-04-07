@@ -142,7 +142,7 @@ public class LXModulationEngine extends LXModulatorComponent {
 
     @Override
     public void save(LX lx, JsonObject obj) {
-        obj.add(KEY_MODULATORS, LXSerializable.Utils.toArray(lx, getModulators()));
+        obj.add(KEY_MODULATORS, LXSerializable.Utils.toArray(lx, this.modulators));
         obj.add(KEY_MODULATIONS, LXSerializable.Utils.toArray(lx, this.modulations));
     }
 

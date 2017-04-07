@@ -72,7 +72,7 @@ public class GraphicMeter extends DecibelMeter {
      */
     public GraphicMeter(String label, LXAudioInput input, int numBands) {
         super(label, input);
-        addParameter(this.slope);
+        addParameter("slope", this.slope);
         this.fftBuffer = new float[input.bufferSize()];
         this.fft = new FourierTransform(input.bufferSize(), input.sampleRate());
         this.fft.setNumBands(this.numBands = numBands);

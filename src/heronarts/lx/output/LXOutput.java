@@ -127,11 +127,11 @@ public abstract class LXOutput extends LXComponent {
             this.allWhite[i] = LXColor.WHITE;
             this.allOff[i] = LXColor.BLACK;
         }
-        addParameter(enabled);
-        addParameter(mode);
-        addParameter(framesPerSecond);
-        addParameter(gammaCorrection);
-        addParameter(brightness);
+        addParameter("enabled", enabled);
+        addParameter("mode", mode);
+        addParameter("fps", framesPerSecond);
+        addParameter("gamma", gammaCorrection);
+        addParameter("brightness", brightness);
     }
 
     /**

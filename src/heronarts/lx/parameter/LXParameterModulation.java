@@ -59,7 +59,7 @@ public class LXParameterModulation extends LXComponent {
         this.source = source;
         this.target = target;
         if (source instanceof LXModulator) {
-            this.color = ((LXModulator)source).color;
+            this.color = ((LXModulator) source).color;
         } else {
             this.color = new ColorParameter("Color", LXColor.hsb(Math.random() * 360, 100, 100));
             addParameter(this.color);

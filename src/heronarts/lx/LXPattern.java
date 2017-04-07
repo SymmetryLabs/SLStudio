@@ -35,6 +35,8 @@ import heronarts.lx.parameter.BooleanParameter;
  */
 public abstract class LXPattern extends LXBufferedComponent implements LXMidiListener {
 
+    private int index = -1;
+
     private int intervalBegin = -1;
 
     private int intervalEnd = -1;
@@ -55,6 +57,14 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
             simple = simple.substring(0, simple.length() - "Pattern".length());
         }
         this.label.setValue(simple);
+    }
+
+    void setIndex(int index) {
+        this.index = index;
+    }
+
+    public int getIndex() {
+        return this.index;
     }
 
     /**

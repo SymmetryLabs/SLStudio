@@ -102,10 +102,10 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
     public DecibelMeter(String label, LXAudioBuffer buffer) {
         super(label);
         this.buffer = buffer;
-        addParameter(this.gain);
-        addParameter(this.range);
-        addParameter(this.attack);
-        addParameter(this.release);
+        addParameter("gain", this.gain);
+        addParameter("range", this.range);
+        addParameter("attack", this.attack);
+        addParameter("release", this.release);
     }
 
     public double getExponent() {

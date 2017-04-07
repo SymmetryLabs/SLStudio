@@ -118,7 +118,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (lx != null) {
             lx.componentRegistry.register(this);
         }
-        addParameter("__label", label);
+        addParameter("label", label);
     }
 
     protected LX getLX() {

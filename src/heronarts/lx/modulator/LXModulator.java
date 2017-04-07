@@ -70,7 +70,7 @@ public abstract class LXModulator extends LXRunnable implements LXParameter {
      */
     protected LXModulator(String label) {
         this.label.setValue((label == null) ? getClass().getSimpleName() : label);
-        addParameter("__color", this.color);
+        addParameter("color", this.color);
     }
 
     public LXParameter setContextualHelp(String contextualHelp) {

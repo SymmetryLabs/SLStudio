@@ -28,9 +28,9 @@ import heronarts.lx.modulator.LXModulator;
 
 public abstract class LXModulatorComponent extends LXComponent implements LXLoopTask {
 
-    private final List<LXModulator> modulators = new ArrayList<LXModulator>();
+    private final List<LXModulator> internalModulators = new ArrayList<LXModulator>();
 
-    private final List<LXModulator> unmodifiableModulators = Collections.unmodifiableList(this.modulators);
+    public final List<LXModulator> modulators = Collections.unmodifiableList(this.internalModulators);
 
     public class Timer {
         public long loopNanos;
@@ -50,10 +50,10 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
         if (modulator == null) {
             throw new IllegalArgumentException("Cannot add null modulator");
         }
-        if (this.modulators.contains(modulator)) {
+        if (this.internalModulators.contains(modulator)) {
             throw new IllegalStateException("Cannot add modulator twice: " + modulator);
         }
-        this.modulators.add(modulator);
+        this.internalModulators.add(modulator);
         modulator.setComponent(this, null);
         ((LXComponent) modulator).setParent(this);
         return modulator;
@@ -65,27 +65,36 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
     }
 
     public LXModulator removeModulator(LXModulator modulator) {
-        this.modulators.remove(modulator);
+        this.internalModulators.remove(modulator);
         modulator.dispose();
         return modulator;
     }
 
+    public LXModulator getModulator(String label) {
+        for (LXModulator modulator : this.modulators) {
+            if (modulator.getLabel().equals(label)) {
+                return modulator;
+            }
+        }
+        return null;
+    }
+
     public Collection<LXModulator> getModulators() {
-        return this.unmodifiableModulators;
+        return this.modulators;
     }
 
     @Override
     public void dispose() {
-        for (LXModulator modulator : this.modulators) {
+        for (LXModulator modulator : this.internalModulators) {
             modulator.dispose();
         }
-        this.modulators.clear();
+        this.internalModulators.clear();
         super.dispose();
     }
 
     @Override
     public void loop(double deltaMs) {
-        for (LXModulator modulator : this.modulators) {
+        for (LXModulator modulator : this.internalModulators) {
             modulator.loop(deltaMs);
         }
     }
