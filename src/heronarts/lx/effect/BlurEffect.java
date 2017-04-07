@@ -24,12 +24,12 @@ import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.ModelBuffer;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 
 public class BlurEffect extends LXEffect {
 
-    public final BoundedParameter amount =
-        new BoundedParameter("Amount", 0)
+    public final CompoundParameter amount =
+        new CompoundParameter("Amount", 0)
         .setDescription("Sets the amount of blur to apply");
 
     private final ModelBuffer blurBuffer;

@@ -25,7 +25,7 @@ import java.util.Collections;
 import java.util.List;
 import heronarts.lx.LXUtils;
 
-public class CompoundParameter extends BoundedParameter implements LXParameterListener {
+public class CompoundParameter extends BoundedParameter {
 
     private final List<LXParameterModulation> internalModulations = new ArrayList<LXParameterModulation>();
 
@@ -106,7 +106,6 @@ public class CompoundParameter extends BoundedParameter implements LXParameterLi
             throw new IllegalStateException("Cannot add same modulation twice");
         }
         this.internalModulations.add(modulation);
-        modulation.range.addListener(this);
         bang();
         return this;
     }
@@ -119,7 +118,6 @@ public class CompoundParameter extends BoundedParameter implements LXParameterLi
      */
     public CompoundParameter removeModulation(LXParameterModulation modulation) {
         this.internalModulations.remove(modulation);
-        modulation.range.removeListener(this);
         bang();
         return this;
     }
@@ -151,12 +149,6 @@ public class CompoundParameter extends BoundedParameter implements LXParameterLi
             return super.getValue();
         }
         return normalizedToValue(getNormalized());
-    }
-
-    @Override
-    public void onParameterChanged(LXParameter parameter) {
-        // One of our modulation ranges has changed
-        bang();
     }
 
 }

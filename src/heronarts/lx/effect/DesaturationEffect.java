@@ -23,21 +23,21 @@ package heronarts.lx.effect;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 
 public class DesaturationEffect extends LXEffect {
 
-    private final BoundedParameter attack =
-        new BoundedParameter("Attack", 100, 0, 1000)
+    private final CompoundParameter attack =
+        new CompoundParameter("Attack", 100, 0, 1000)
         .setDescription("Sets the attack time of the desaturation");
 
-    private final BoundedParameter decay =
-        new BoundedParameter("Decay", 100, 0, 1000)
+    private final CompoundParameter decay =
+        new CompoundParameter("Decay", 100, 0, 1000)
         .setDescription("Sets the decay time of the desaturation");
 
-    private final BoundedParameter amount =
-        new BoundedParameter("Amount", 1.)
+    private final CompoundParameter amount =
+        new CompoundParameter("Amount", 1.)
         .setDescription("Sets the amount of desaturation to apply");
 
 

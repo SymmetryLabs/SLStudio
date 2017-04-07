@@ -31,6 +31,7 @@ public interface LXSerializable {
     public void load(LX lx, JsonObject object);
 
     public static class Utils {
+
         public static JsonObject toObject(LX lx, LXSerializable serializable) {
             JsonObject obj = new JsonObject();
             serializable.save(lx,  obj);

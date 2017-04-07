@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -23,7 +23,7 @@ package heronarts.lx.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.modulator.SawLFO;
-import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.FunctionalParameter;
 
 /**
@@ -33,7 +33,7 @@ import heronarts.lx.parameter.FunctionalParameter;
 public class IteratorTestPattern extends LXPattern {
 
     private final SawLFO index;
-    public final BoundedParameter speed = new BoundedParameter("Speed", 10, 1, 100);
+    public final CompoundParameter speed = new CompoundParameter("Speed", 10, 1, 100);
 
     private final FunctionalParameter period = new FunctionalParameter() {
         @Override

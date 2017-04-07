@@ -24,20 +24,21 @@ import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 
 public class FlashEffect extends LXEffect {
 
-    private final BoundedParameter sat =
-        new BoundedParameter("Saturation", 0)
+    private final CompoundParameter sat =
+        new CompoundParameter("Saturation", 0)
         .setDescription("Sets the color saturation level of the flash");
 
-    public final BoundedParameter attack =
-        new BoundedParameter("Attack", 100, 1000)
+    public final CompoundParameter attack =
+        new CompoundParameter("Attack", 100, 1000)
         .setDescription("Sets the attack time of the flash");
 
-    public final BoundedParameter decay =
-        new BoundedParameter("Decay", 1500, 3000)
+    public final CompoundParameter decay =
+        new CompoundParameter("Decay", 1500, 3000)
         .setDescription("Sets the decay time of the flash");
 
     public final BoundedParameter intensity =
