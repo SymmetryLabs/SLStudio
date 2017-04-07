@@ -110,7 +110,15 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         this(lx, ID_UNASSIGNED);
     }
 
+    protected LXComponent(LX lx, String label) {
+        this(lx, ID_UNASSIGNED, label);
+    }
+
     protected LXComponent(LX lx, int id) {
+        this(lx, id, null);
+    }
+
+    protected LXComponent(LX lx, int id, String label) {
         this.lx = lx;
         this.id = id;
         if (id != ID_UNASSIGNED && lx == null) {
@@ -119,7 +127,10 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (lx != null) {
             lx.componentRegistry.register(this);
         }
-        addParameter("label", label);
+        if (label != null) {
+            this.label.setValue(label);
+        }
+        addParameter("label", this.label);
     }
 
     protected LX getLX() {

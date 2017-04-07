@@ -107,9 +107,8 @@ public class LXOscEngine extends LXComponent {
     private final LX lx;
 
     public LXOscEngine(LX lx) {
-        super(lx);
+        super(lx, "OSC");
         this.lx = lx;
-        this.label.setValue("OSC");
         addParameter("receiveHost", this.receiveHost);
         addParameter("receivePort", this.receivePort);
         addParameter("receiveActive", this.receiveActive);

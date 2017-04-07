@@ -26,15 +26,10 @@ package heronarts.lx;
  */
 public class LXMasterChannel extends LXBus {
     LXMasterChannel(LX lx) {
-        super(lx);
+        super(lx, "Master");
     }
 
     public String getOscAddress() {
         return "/lx/master";
-    }
-
-    @Override
-    public String getLabel() {
-        return "Master";
     }
 }

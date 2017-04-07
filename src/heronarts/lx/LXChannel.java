@@ -202,9 +202,8 @@ public class LXChannel extends LXBus {
     private long transitionMillis = 0;
 
     LXChannel(LX lx, int index, LXPattern[] patterns) {
-        super(lx);
+        super(lx, "Channel-" + (index+1));
         this.index = index;
-        this.label.setValue("Channel-" + (index+1));
         this.label.setDescription("The name of this channel");
         this.blendBuffer = new ModelBuffer(lx);
 

@@ -54,8 +54,15 @@ public class StringParameter extends LXListenableParameter {
     }
 
     public StringParameter setValue(String string) {
-        this.string = string;
-        incrementValue(1);
+        if (this.string == null) {
+            if (string != null) {
+                this.string = string;
+                incrementValue(1);
+            }
+        } else if (!this.string.equals(string)) {
+            this.string = string;
+            incrementValue(1);
+        }
         return this;
     }
 

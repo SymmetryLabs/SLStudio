@@ -43,7 +43,7 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
     public final GraphicMeter meter = new GraphicMeter("EQ", this.input);
 
     public LXAudioEngine(LX lx) {
-        super(lx);
+        super(lx, "Audio");
         addModulator(this.meter);
         addParameter(this.enabled);
     }
@@ -78,11 +78,6 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
     public void dispose() {
         this.input.close();
         super.dispose();
-    }
-
-    @Override
-    public String getLabel() {
-        return "Audio";
     }
 
     private static final String KEY_METER = "meter";

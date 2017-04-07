@@ -221,7 +221,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     long nowMillis = System.currentTimeMillis();
 
     LXEngine(LX lx) {
-        super(lx, LXComponent.ID_ENGINE);
+        super(lx, LXComponent.ID_ENGINE, "Engine");
         LX.initTimer.log("Engine: Init");
         this.lx = lx;
 
@@ -322,11 +322,6 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     @Override
     public String getOscAddress() {
         return "/lx/engine";
-    }
-
-    @Override
-    public String getLabel() {
-        return "Engine";
     }
 
     public LXEngine setInputDispatch(Dispatch inputDispatch) {

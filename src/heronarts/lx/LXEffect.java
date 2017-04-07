@@ -121,17 +121,6 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
     }
 
     /**
-     * Sets the name of the effect, useful for method chaining
-     *
-     * @param name Name
-     * @return this
-     */
-    public LXEffect setLabel(String label) {
-        this.label.setValue(label);
-        return this;
-    }
-
-    /**
      * @return whether the effect is currently enabled
      */
     public final boolean isEnabled() {

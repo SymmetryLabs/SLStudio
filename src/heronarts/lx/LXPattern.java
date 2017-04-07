@@ -77,17 +77,6 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
     }
 
     /**
-     * Sets the name of the pattern, useful for method chaining
-     *
-     * @param name Name
-     * @return this
-     */
-    public LXPattern setLabel(String label) {
-        this.label.setValue(label);
-        return this;
-    }
-
-    /**
      * Gets the channel that this pattern is loaded in. May be null if the pattern is
      * not yet loaded onto any channel.
      *

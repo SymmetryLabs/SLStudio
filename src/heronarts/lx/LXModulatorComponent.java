@@ -45,6 +45,10 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
         super(lx);
     }
 
+    protected LXModulatorComponent(LX lx, String label) {
+        super(lx, label);
+    }
+
     public LXModulator addModulator(LXModulator modulator) {
         if (modulator == null) {
             throw new IllegalArgumentException("Cannot add null modulator");

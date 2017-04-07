@@ -60,7 +60,11 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     private final List<Listener> listeners = new ArrayList<Listener>();
 
     LXBus(LX lx) {
-        super(lx);
+        this(lx, null);
+    }
+
+    LXBus(LX lx, String label) {
+        super(lx, label);
         this.lx = lx;
     }
 

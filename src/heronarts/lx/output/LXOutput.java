@@ -118,8 +118,7 @@ public abstract class LXOutput extends LXComponent {
     }
 
     protected LXOutput(LX lx, String label) {
-        super(lx);
-        this.label.setValue(label);
+        super(lx, label);
         this.outputColors = new int[lx.total];
         this.allWhite = new int[lx.total];
         this.allOff = new int[lx.total];

@@ -32,14 +32,19 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
         new BooleanParameter("On", false)
         .setDescription("Sets whether the component is running");
 
-    protected LXRunnable(LX lx) {
-        super(lx);
-        addParameter("running", this.running);
-    }
-
     protected LXRunnable() {
         this(null);
     }
+
+    protected LXRunnable(LX lx) {
+        this(lx, null);
+    }
+
+    protected LXRunnable(LX lx, String label) {
+        super(lx, label);
+        addParameter("running", this.running);
+    }
+
 
     @Override
     public void onParameterChanged(LXParameter parameter) {
