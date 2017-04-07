@@ -33,6 +33,8 @@ public class UIEffectManager extends UIComponentManager {
         super(ui, lx, x, y, w, h);
         setTitle("EFFECTS");
 
+        this.itemList.setDescription("Available effects, double-click to add to the active channel");
+
         for (Class<? extends LXEffect> effect : lx.getRegisteredEffects()) {
             this.itemList.addItem(new EffectItem(effect));
         }

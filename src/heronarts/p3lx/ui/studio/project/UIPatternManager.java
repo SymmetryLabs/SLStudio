@@ -35,6 +35,8 @@ public class UIPatternManager extends UIComponentManager {
         super(ui, lx, x, y, w, h);
         setTitle("PATTERNS");
 
+        this.itemList.setDescription("Available patterns, double-click to add to the active channel");
+
         for (Class<? extends LXPattern> pattern : lx.getRegisteredPatterns()) {
             this.itemList.addItem(new PatternItem(pattern));
         }

@@ -215,5 +215,4 @@ public class LXStudio extends P3LX {
 
     protected void onUIReady(LXStudio lx, LXStudio.UI ui) {}
 
-
 }

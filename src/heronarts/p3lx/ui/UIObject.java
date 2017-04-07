@@ -517,18 +517,20 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         onMouseMoved(mouseEvent, mx, my);
     }
 
+    private String setDescription;
+
     void mouseOver(MouseEvent mouseEvent) {
-        String description = getDescription();
-        if (description != null) {
-            getUI().contextualHelpText.setValue(description);
+        this.setDescription = getDescription();
+        if (this.setDescription != null) {
+            getUI().contextualHelpText.setValue(this.setDescription);
         }
         onMouseOver(mouseEvent);
     }
 
     void mouseOut(MouseEvent mouseEvent) {
-        String description = getDescription();
-        if (description != null) {
+        if (this.setDescription != null) {
             getUI().contextualHelpText.setValue("");
+            this.setDescription = null;
         }
         if (this.overChild != null) {
             this.overChild.mouseOut(mouseEvent);

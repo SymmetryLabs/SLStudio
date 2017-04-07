@@ -277,7 +277,7 @@ ${line}
     </target>   
     
 	<target name="lightning">
-		<delete dir="${project.bin}"/>
+		<delete file="${project.bin}/${project.jar.name}" />
 		<mkdir dir="${project.bin}"/>		
 		<javac destdir="${project.bin}" source="${java.target.version}" target="${java.target.version}" includeantruntime="false">
 			<src path="${project.src.lx}"/>
