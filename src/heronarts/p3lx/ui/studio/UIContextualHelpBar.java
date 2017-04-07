@@ -35,7 +35,7 @@ import processing.core.PConstants;
 
 public class UIContextualHelpBar extends UI2dContext {
     public static final int PADDING = 8;
-    public static final int HEIGHT = 19;
+    public static final int HEIGHT = 20;
     public final UILabel label;
 
     public UIContextualHelpBar(final UI ui) {
