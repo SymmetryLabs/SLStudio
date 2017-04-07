@@ -130,7 +130,7 @@ public class UIPatternList extends UIItemList {
 
         @Override
         public void onRename(String label) {
-            this.pattern.setLabel(label);
+            this.pattern.label.setValue(label);
             // TODO(mcslee): redraw??
         }
 
