@@ -90,6 +90,8 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
             CompoundParameter compound = (CompoundParameter) this.parameter;
             for (int i = compound.modulations.size()-1; i >= 0; --i) {
                 LXParameterModulation modulation = compound.modulations.get(i);
+                registerModulation(modulation);
+
                 float modStart, modEnd;
                 switch (modulation.getPolarity()) {
                 case BIPOLAR:
@@ -102,14 +104,9 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
                     modEnd = LXUtils.constrainf(modStart + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
                     break;
                 }
-                ColorParameter modulationColor = modulation.color;
-                if (!this.modulationParameters.contains(modulationColor)) {
-                    this.modulationParameters.add(modulationColor);
-                    this.modulationParameters.add(modulation.polarity);
-                    modulationColor.addListener(this.redrawListener);
-                    modulation.polarity.addListener(this.redrawListener);
-                }
+
                 // Light ring of value
+                ColorParameter modulationColor = modulation.color;
                 int modColor = ui.theme.getControlDisabledColor();
                 int modColorInv = modColor;
                 if (isEnabled()) {

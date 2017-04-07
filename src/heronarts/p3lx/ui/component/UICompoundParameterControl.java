@@ -33,12 +33,14 @@ import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXParameterModulation;
 
 public class UICompoundParameterControl extends UIParameterControl {
 
-    protected final List<LXListenableParameter> modulationParameters = new ArrayList<LXListenableParameter>();
+    private final List<LXListenableParameter> modulationParameters = new ArrayList<LXListenableParameter>();
 
-    protected final LXParameterListener redrawListener = new LXParameterListener() {
+    private final LXParameterListener redrawListener = new LXParameterListener() {
+        @Override
         public void onParameterChanged(LXParameter p) {
             redraw();
         }
@@ -55,6 +57,19 @@ public class UICompoundParameterControl extends UIParameterControl {
         }
         this.modulationParameters.clear();
         return super.setParameter(parameter);
+    }
+
+    protected void registerModulation(LXParameterModulation modulation) {
+        if (!this.modulationParameters.contains(modulation.range)) {
+            this.modulationParameters.add(modulation.range);
+            this.modulationParameters.add(modulation.polarity);
+            modulation.range.addListener(this.redrawListener);
+            modulation.polarity.addListener(this.redrawListener);
+            if (!this.modulationParameters.contains(modulation.color)) {
+                this.modulationParameters.add(modulation.color);
+                modulation.color.addListener(this.redrawListener);
+            }
+        }
     }
 
 }

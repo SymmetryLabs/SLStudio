@@ -37,19 +37,25 @@ import processing.core.PConstants;
 
 public class UIOscManager extends UICollapsibleSection {
 
-    private static final int HEIGHT = 48;
+    private static final int HEIGHT = 68;
 
     public UIOscManager(UI ui, LX lx, float x, float y, float w) {
         super(ui, x, y, w, HEIGHT);
-        setTitle("OSC INPUT");
+        setTitle("OSC I/O");
 
-        UI2dContainer border = (UI2dContainer) new UI2dContainer(0, 0, getContentWidth(), 24)
+        UI2dContainer border = (UI2dContainer) new UI2dContainer(0, 0, getContentWidth(), getContentHeight())
             .setBorderRounding(4)
             .setBackgroundColor(ui.theme.getDarkBackgroundColor())
             .addToContainer(this);
 
-        new UILabel(6, 6, 36, 12).setLabel("Port").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
-        new UIIntegerBox(46, 4, 64, 16).setParameter(lx.engine.osc.port).addToContainer(border);
-        new UIButton(114, 4, border.getContentWidth() - 120, 16).setLabel("Enabled").setParameter(lx.engine.osc.active).addToContainer(border);
+        float yp = 4;
+        new UILabel(6, yp+2, 36, 12).setLabel("Rx Port").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+        new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.receivePort).addToContainer(border);
+        new UIButton(114, yp, border.getContentWidth() - 120, 16).setLabel("Receive").setParameter(lx.engine.osc.receiveActive).addToContainer(border);
+
+        yp += 20;
+        new UILabel(6, yp+2, 36, 12).setLabel("Tx Port").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+        new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.transmitPort).addToContainer(border);
+        new UIButton(114, yp, border.getContentWidth() - 120, 16).setLabel("Transmit").setParameter(lx.engine.osc.transmitActive).addToContainer(border);
     }
 }

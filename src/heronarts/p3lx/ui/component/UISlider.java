@@ -27,6 +27,9 @@
 package heronarts.p3lx.ui.component;
 
 import heronarts.lx.LXUtils;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameterModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIFocus;
 import processing.core.PGraphics;
@@ -40,10 +43,10 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
 
     private final Direction direction;
 
-    private static final float HANDLE_SIZE = 6;
+    private static final int HANDLE_SIZE = 6;
     private static final int HANDLE_ROUNDING = 2;
-    private static final float PADDING = 2;
-    private static final float GROOVE = 4;
+    private static final int PADDING = 2;
+    private static final int GROOVE = 4;
 
     private final float handleHeight;
 
@@ -86,34 +89,115 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
 
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
-        pg.noStroke();
-        pg.fill(ui.theme.getControlBackgroundColor());
-
         int controlColor = this.hasFillColor ? this.fillColor :
             (isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
 
+        double norm = getNormalized();
+        int handleEdge;
+        float grooveDim;
         switch (this.direction) {
         case HORIZONTAL:
+            handleEdge = (int) Math.round(PADDING + norm * (this.width - 2*PADDING - HANDLE_SIZE));
+            grooveDim = this.width - 2*PADDING;
+            break;
+        default:
+        case VERTICAL:
+            handleEdge = (int) Math.round(PADDING + (1 - norm) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
+            grooveDim = this.handleHeight - 2*PADDING;
+            break;
+        }
+        int handleCenter = handleEdge + 1 + HANDLE_SIZE/2;
+
+        // Modulations!
+        if (this.parameter instanceof CompoundParameter) {
+            CompoundParameter compound = (CompoundParameter) this.parameter;
+            for (int i = 0; i < compound.modulations.size() && i < 3; ++i) {
+                LXParameterModulation modulation = compound.modulations.get(i);
+                int modColor = ui.theme.getControlDisabledColor();
+                int modColorInv = modColor;
+                if (isEnabled()) {
+                    modColor = modulation.color.getColor();
+                    modColorInv = LXColor.hsb(LXColor.h(modColor), 50, 75);
+                }
+                pg.strokeWeight(2);
+                boolean drawn = false;
+                switch (this.direction) {
+                case HORIZONTAL:
+                    float y = this.handleHeight/2 - GROOVE/2 - 2*(i+1);
+                    if (y > 0) {
+                        drawn = true;
+                        float xw = grooveDim * modulation.range.getValuef();
+                        float xf;
+                        switch (modulation.getPolarity()) {
+                        case BIPOLAR:
+                            pg.stroke(modColorInv);
+                            xf = LXUtils.constrainf(handleCenter - xw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(handleCenter, y, xf, y);
+                            // Pass-thru
+                        case UNIPOLAR:
+                            pg.stroke(modColor);
+                            xf = LXUtils.constrainf(handleCenter + xw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(handleCenter, y, xf, y);
+                            break;
+                        }
+                    }
+                    break;
+                case VERTICAL:
+                    float x = this.width/2 + GROOVE/2 + 2*(i+1);
+                    if (x < this.width-1) {
+                        drawn = true;
+                        float yw =  grooveDim * modulation.range.getValuef();
+                        float yf;
+                        switch (modulation.getPolarity()) {
+                        case BIPOLAR:
+                            pg.stroke(modColorInv);
+                            yf = LXUtils.constrainf(handleCenter + yw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(x, handleCenter, x, yf);
+                            // Pass thru
+                        case UNIPOLAR:
+                            pg.stroke(modColor);
+                            yf = LXUtils.constrainf(handleCenter - yw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(x, handleCenter, x, yf);
+                            break;
+                        }
+                    }
+                    break;
+                }
+                if (drawn) {
+                    registerModulation(modulation);
+                }
+            }
+        }
+
+        pg.strokeWeight(1);
+        pg.noStroke();
+        pg.fill(ui.theme.getControlBackgroundColor());
+        switch (this.direction) {
+        case HORIZONTAL:
+            // Dark groove
             pg.rect(PADDING, this.handleHeight / 2 - GROOVE/2, this.width - 2*PADDING, GROOVE);
-            pg.fill(controlColor);
 
             int fillX, fillWidth;
             switch (this.polarity) {
             case BIPOLAR:
                 fillX = (int) (this.width / 2);
-                fillWidth = (int) ((getNormalized() - 0.5) * (this.width - 2*PADDING));
+                fillWidth = (int) ((norm - 0.5) * (this.width - 2*PADDING));
                 break;
             default:
             case UNIPOLAR:
-                fillX = (int) PADDING;
+                fillX = PADDING;
                 fillWidth = (int) ((this.width - 2*PADDING) * getNormalized());
                 break;
             }
+
+            // Groove value fill
+            pg.fill(controlColor);
             pg.rect(fillX, this.handleHeight / 2 - GROOVE/2, fillWidth, GROOVE);
+
+            // Handle
             pg.fill(0xff5f5f5f);
             pg.stroke(ui.theme.getControlBorderColor());
-            pg.rect((int) (PADDING + getNormalized() * (this.width - 2*PADDING - HANDLE_SIZE)), PADDING,
-                    HANDLE_SIZE, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
+            pg.rect(handleEdge, PADDING, HANDLE_SIZE, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
             break;
         case VERTICAL:
             pg.rect(this.width / 2 - GROOVE/2, PADDING, GROOVE, this.handleHeight - 2*PADDING);
@@ -123,19 +207,18 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
             switch (this.polarity) {
             case BIPOLAR:
                 fillY = (int) (this.handleHeight / 2);
-                fillSize = (int) ((0.5 - getNormalized()) * (this.handleHeight - 2*PADDING));
+                fillSize = (int) ((0.5 - norm) * (this.handleHeight - 2*PADDING));
                 break;
             default:
             case UNIPOLAR:
-                fillSize = (int) (getNormalized() * (this.handleHeight - 2*PADDING));
+                fillSize = (int) (norm * (this.handleHeight - 2*PADDING));
                 fillY = (int) (this.handleHeight - PADDING - fillSize);
                 break;
             }
             pg.rect(this.width / 2 - GROOVE/2, fillY, GROOVE, fillSize);
             pg.fill(0xff5f5f5f);
             pg.stroke(ui.theme.getControlBorderColor());
-            pg.rect(PADDING, (int) (PADDING + (1 - getNormalized())
-                    * (this.handleHeight - 2*PADDING - HANDLE_SIZE)), this.width - 2*PADDING, HANDLE_SIZE, HANDLE_ROUNDING);
+            pg.rect(PADDING, handleEdge, this.width - 2*PADDING, HANDLE_SIZE, HANDLE_ROUNDING);
             break;
         }
 
@@ -181,6 +264,21 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
         this.editing = false;
     }
 
+    private LXParameterModulation getModulation(boolean secondary) {
+        if (this.parameter != null && this.parameter instanceof CompoundParameter) {
+            CompoundParameter compound = (CompoundParameter) this.parameter;
+            int size = compound.modulations.size();
+            if (size > 0) {
+                if (secondary && (size > 1)) {
+                    return compound.modulations.get(1);
+                } else {
+                    return compound.modulations.get(0);
+                }
+            }
+        }
+        return null;
+    }
+
     @Override
     protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
         if (isEnabled()) {
@@ -200,11 +298,16 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                 break;
             }
             if (valid) {
-                float delta = dv / (dim - HANDLE_SIZE);
-                if (mouseEvent.isShiftDown()) {
-                    delta /= 10;
+                float delta = dv / (dim - HANDLE_SIZE - 2*PADDING);
+                LXParameterModulation modulation = getModulation(mouseEvent.isShiftDown());
+                if (modulation != null && (mouseEvent.isMetaDown() || mouseEvent.isControlDown())) {
+                    modulation.range.setValue(modulation.range.getValue() + delta);
+                } else {
+                    if (mouseEvent.isShiftDown()) {
+                        delta /= 10;
+                    }
+                    setNormalized(LXUtils.constrain(getNormalized() + delta, 0, 1));
                 }
-                setNormalized(LXUtils.constrain(getNormalized() + delta, 0, 1));
             }
         }
     }
