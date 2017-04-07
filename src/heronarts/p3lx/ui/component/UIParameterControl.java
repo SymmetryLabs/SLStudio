@@ -31,6 +31,7 @@ import processing.core.PGraphics;
 import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
+import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -81,11 +82,16 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
 
     public static String getDescription(LXParameter parameter) {
         if (parameter != null) {
-            String parameterHelp = parameter.getDescription();
-            if (parameterHelp != null) {
-                return parameter.getLabel() + ": " + parameterHelp;
+            String label = parameter.getLabel();
+            String description = parameter.getDescription();
+            if (description != null) {
+                label += ": " + description;
             }
-            return parameter.getLabel();
+            String oscAddress = LXOscEngine.getOscAddress(parameter);
+            if (oscAddress != null) {
+                label += "  —  " + oscAddress;
+            }
+            return label;
         }
         return null;
     }
