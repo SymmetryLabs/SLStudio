@@ -37,7 +37,7 @@ public class SolidColorPattern extends LXPattern {
     public SolidColorPattern(LX lx, int color) {
         super(lx);
         this.color.setColor(color);
-        addParameter(this.color);
+        addParameter("color", this.color);
         setColors(this.color.getColor());
     }
 

@@ -25,6 +25,7 @@ import java.net.DatagramPacket;
 import java.net.DatagramSocket;
 import java.net.InetAddress;
 import java.net.SocketException;
+import java.net.UnknownHostException;
 import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -34,11 +35,18 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
+import heronarts.lx.LXEngine;
+import heronarts.lx.LXModulationEngine;
 import heronarts.lx.LXPattern;
+import heronarts.lx.color.ColorParameter;
+import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXParameterModulation;
 import heronarts.lx.parameter.StringParameter;
 
 public class LXOscEngine extends LXComponent {
@@ -56,21 +64,38 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_FOCUSED = "focused";
     private static final String ROUTE_ACTIVE = "active";
 
-    public final static int DEFAULT_PORT = 3030;
+    public final static int DEFAULT_RECEIVE_PORT = 3030;
+    public final static int DEFAULT_TRANSMIT_PORT = 3131;
+    public final static String DEFAULT_TRANSMIT_HOST = "localhost";
+
     private final static int DEFAULT_MAX_PACKET_SIZE = 8192;
 
-    public final DiscreteParameter port =
-        new DiscreteParameter("Port", DEFAULT_PORT, 1, 9999)
+    public final DiscreteParameter receivePort =
+        new DiscreteParameter("RX Port", DEFAULT_RECEIVE_PORT, 1, 9999)
         .setDescription("UDP port on which the engine listens for OSC message");
 
-    public final BooleanParameter active =
-        new BooleanParameter("Active", false)
-        .setDescription("Enables or disabled the OSC engine");
+    public final DiscreteParameter transmitPort =
+        new DiscreteParameter("TX Port", DEFAULT_TRANSMIT_PORT, 1, 9999)
+        .setDescription("UDP port on which the engine transmits OSC messages");
+
+    public final StringParameter transmitHost =
+        new StringParameter("TX Host", DEFAULT_TRANSMIT_HOST)
+        .setDescription("Hostname to which OSC messages are sent");
+
+    public final BooleanParameter receiveActive =
+        new BooleanParameter("RX Active", false)
+        .setDescription("Enables or disables OSC engine input");
+
+    public final BooleanParameter transmitActive =
+        new BooleanParameter("TX Active", false)
+        .setDescription("Enables or disables OSC engine output");
 
     private final List<Receiver> receivers = new ArrayList<Receiver>();
 
     private Receiver engineReceiver;
     private final EngineListener engineListener = new EngineListener();
+
+    private EngineTransmitter engineTransmitter;
 
     private final LX lx;
 
@@ -78,8 +103,11 @@ public class LXOscEngine extends LXComponent {
         super(lx);
         this.lx = lx;
         this.label.setValue("OSC");
-        addParameter("port", this.port);
-        addParameter("active", this.active);
+        addParameter("receivePort", this.receivePort);
+        addParameter("receiveActive", this.receiveActive);
+        addParameter("transmitHost", this.transmitHost);
+        addParameter("transmitPort", this.transmitPort);
+        addParameter("transmitActive", this.transmitActive);
     }
 
     /**
@@ -132,7 +160,7 @@ public class LXOscEngine extends LXComponent {
                     }
                 }
             } catch (Exception x) {
-                System.err.println("[OSC] Could not route message: " + message.getAddressPattern().getValue());
+                System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
             }
         }
 
@@ -174,6 +202,10 @@ public class LXOscEngine extends LXComponent {
             }
             if (parameter instanceof BooleanParameter) {
                 ((BooleanParameter)parameter).setValue(message.getBoolean());
+            } else if (parameter instanceof StringParameter) {
+                ((StringParameter) parameter).setValue(message.getString());
+            }  else if (parameter instanceof ColorParameter) {
+                ((ColorParameter) parameter).setColor(message.getInt());
             } else if (parameter instanceof DiscreteParameter) {
                 OscArgument arg = message.get();
                 if (arg instanceof OscInt) {
@@ -183,8 +215,8 @@ public class LXOscEngine extends LXComponent {
                 }
             } else if (parameter instanceof LXNormalizedParameter) {
                 ((LXNormalizedParameter)parameter).setNormalized(message.getFloat());
-            } else if (parameter instanceof StringParameter) {
-                ((StringParameter) parameter).setValue(message.getString());
+            } else {
+                parameter.setValue(message.getFloat());
             }
         }
     }
@@ -194,7 +226,7 @@ public class LXOscEngine extends LXComponent {
         private final byte[] bytes;
         private final ByteBuffer buffer;
         private final DatagramSocket socket;
-        private final DatagramPacket packet;
+        protected final DatagramPacket packet;
 
         private Transmitter(InetAddress address, int port, int bufferSize) throws SocketException {
             this.bytes = new byte[bufferSize];
@@ -209,6 +241,178 @@ public class LXOscEngine extends LXComponent {
             this.packet.setLength(this.buffer.position());
             this.socket.send(this.packet);
         }
+
+        public void setPort(int port) {
+            this.packet.setPort(port);
+        }
+
+        public void setHost(String host) throws UnknownHostException {
+            this.packet.setAddress(InetAddress.getByName(host));
+        }
+    }
+
+    private class EngineTransmitter extends Transmitter implements LXParameterListener, LXChannel.Listener, LXEngine.Listener, LXModulationEngine.Listener {
+        private EngineTransmitter(String host, int port, int bufferSize) throws SocketException, UnknownHostException {
+            super(InetAddress.getByName(host), port, bufferSize);
+            registerComponent(lx.engine);
+            registerComponent(lx.palette);
+            registerComponent(lx.engine.audio);
+            registerComponent(lx.engine.output);
+            registerComponent(lx.engine.modulation);
+            lx.engine.modulation.addListener(this);
+            registerComponent(lx.engine.masterChannel);
+            for (LXChannel channel : lx.engine.getChannels()) {
+                registerChannel(channel);
+            }
+            lx.engine.addListener(this);
+        }
+
+        private void registerChannel(LXChannel channel) {
+            registerComponent(channel);
+            for (LXPattern p : channel.patterns) {
+                registerComponent(p);
+            }
+            channel.addListener(this);
+        }
+
+        private void unregisterChannel(LXChannel channel) {
+            unregisterComponent(channel);
+            for (LXPattern p : channel.patterns) {
+                unregisterComponent(p);
+            }
+            channel.removeListener(this);
+        }
+
+        private void registerComponent(LXComponent component) {
+            for (LXParameter p : component.getParameters()) {
+                if (p instanceof LXListenableParameter) {
+                    ((LXListenableParameter) p).addListener(this);
+                }
+            }
+        }
+
+        private void unregisterComponent(LXComponent component) {
+            for (LXParameter p : component.getParameters()) {
+                if (p instanceof LXListenableParameter) {
+                    ((LXListenableParameter) p).removeListener(this);
+                }
+            }
+        }
+
+        private final OscMessage oscMessage = new OscMessage("");
+        private final OscFloat oscFloat = new OscFloat(0);
+        private final OscInt oscInt = new OscInt(0);
+        private final OscString oscString = new OscString("");
+
+        @Override
+        public void onParameterChanged(LXParameter parameter) {
+            if (transmitActive.isOn()) {
+                // TODO(mcslee): contemplate accumulating OscMessages into OscBundle
+                // and sending once per engine loop?? Probably a bad tradeoff since
+                // it would require dynamic memory allocations that we can skip here...
+                String address = getOscAddress(parameter);
+                if (address != null) {
+                    oscMessage.setAddressPattern(address);
+                    oscMessage.clearArguments();
+                    if (parameter instanceof BooleanParameter) {
+                        oscInt.setValue(((BooleanParameter) parameter).isOn() ? 1 : 0);
+                        oscMessage.add(oscInt);
+                    } else if (parameter instanceof StringParameter) {
+                        oscString.setValue(((StringParameter) parameter).getString());
+                        oscMessage.add(oscString);
+                    } else if (parameter instanceof ColorParameter) {
+                        oscInt.setValue(((ColorParameter) parameter).getColor());
+                        oscMessage.add(oscInt);
+                    } else if (parameter instanceof DiscreteParameter) {
+                        oscInt.setValue(((DiscreteParameter) parameter).getValuei());
+                        oscMessage.add(oscInt);
+                    } else if (parameter instanceof LXNormalizedParameter) {
+                        oscFloat.setValue(((LXNormalizedParameter) parameter).getNormalizedf());
+                        oscMessage.add(oscFloat);
+                    } else {
+                        oscFloat.setValue(parameter.getValuef());
+                        oscMessage.add(oscFloat);
+                    }
+                    try {
+                        send(oscMessage);
+                    } catch (IOException iox) {
+                        System.err.println("[OSC] Failed to transmit: " + iox.getLocalizedMessage());
+                    }
+                }
+            }
+        }
+
+        @Override
+        public void effectAdded(LXBus channel, LXEffect effect) {
+            registerComponent(effect);
+        }
+
+        @Override
+        public void effectRemoved(LXBus channel, LXEffect effect) {
+            unregisterComponent(effect);
+        }
+
+        @Override
+        public void effectMoved(LXBus channel, LXEffect effect) {}
+
+        @Override
+        public void indexChanged(LXChannel channel) {}
+
+        @Override
+        public void patternAdded(LXChannel channel, LXPattern pattern) {
+            registerComponent(pattern);
+        }
+
+        @Override
+        public void patternRemoved(LXChannel channel, LXPattern pattern) {
+            unregisterComponent(pattern);
+        }
+
+        @Override
+        public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
+            // TODO(mcslee): send an OSC message when this happens?
+        }
+
+        @Override
+        public void patternDidChange(LXChannel channel, LXPattern pattern) {
+            // TODO(mcslee): send an OSC message when this happens?
+        }
+
+        @Override
+        public void channelAdded(LXEngine engine, LXChannel channel) {
+            registerChannel(channel);
+        }
+
+        @Override
+        public void channelRemoved(LXEngine engine, LXChannel channel) {
+            unregisterChannel(channel);
+        }
+
+        @Override
+        public void channelMoved(LXEngine engine, LXChannel channel) {}
+
+        @Override
+        public void modulationAdded(LXModulationEngine engine, LXParameterModulation modulation) {
+            // TODO(mcslee): should probably OSC-map these...
+        }
+
+        @Override
+        public void modulationRemoved(LXModulationEngine engine, LXParameterModulation modulation) {
+            // TODO(mcslee): should probably OSC-map these...
+        }
+
+        @Override
+        public void modulatorAdded(LXModulationEngine engine, LXModulator modulator) {
+            registerComponent(modulator);
+
+        }
+
+        @Override
+        public void modulatorRemoved(LXModulationEngine engine, LXModulator modulator) {
+            unregisterComponent(modulator);
+        }
+
+
     }
 
     public class Receiver {
@@ -314,25 +518,40 @@ public class LXOscEngine extends LXComponent {
 
     @Override
     public void onParameterChanged(LXParameter p) {
-        if (p == this.port) {
+        if (p == this.receivePort) {
             if (this.engineReceiver != null) {
-                start();
+                startReceiver();
             }
-        } else if (p == this.active) {
-            if (this.active.isOn()) {
-                start();
+        } else if (p == this.receiveActive) {
+            if (this.receiveActive.isOn()) {
+                startReceiver();
             } else {
-                stop();
+                stopReceiver();
             }
+        } else if (p == this.transmitPort) {
+            if (this.engineTransmitter != null) {
+                this.engineTransmitter.setPort(this.transmitPort.getValuei());
+            }
+        } else if (p == this.transmitHost) {
+            if (this.engineTransmitter != null) {
+                try {
+                    this.engineTransmitter.setHost(this.transmitHost.getString());
+                } catch (UnknownHostException uhx) {
+                    System.err.println("[OSC] Invalid host: " + uhx.getLocalizedMessage());
+                    this.transmitActive.setValue(false);
+                }
+            }
+        } else if (p == this.transmitActive) {
+            startTransmitter();
         }
     }
 
-    private void start() {
+    private void startReceiver() {
         if (this.engineReceiver != null) {
-            stop();
+            stopReceiver();
         }
         try {
-            this.engineReceiver = receiver(this.port.getValuei());
+            this.engineReceiver = receiver(this.receivePort.getValuei());
             this.engineReceiver.addListener(this.engineListener);
             System.out.println("Started OSC listener on port " + this.engineReceiver.port);
         } catch (SocketException sx) {
@@ -340,10 +559,26 @@ public class LXOscEngine extends LXComponent {
         }
     }
 
-    private void stop() {
+    private void stopReceiver() {
         if (this.engineReceiver != null) {
             this.engineReceiver.stop();
             this.engineReceiver = null;
+        }
+    }
+
+    private void startTransmitter() {
+        if (this.engineTransmitter == null) {
+            try {
+                this.engineTransmitter = new EngineTransmitter(
+                    this.transmitHost.getString(),
+                    this.transmitPort.getValuei(),
+                    DEFAULT_MAX_PACKET_SIZE
+                );
+            } catch (UnknownHostException uhx) {
+                System.err.println("[OSC] Invalid host: " + uhx.getLocalizedMessage());
+            } catch (SocketException sx) {
+                System.err.println("[OSC] Could not start transmitter: " + sx.getLocalizedMessage());
+            }
         }
     }
 
@@ -365,6 +600,10 @@ public class LXOscEngine extends LXComponent {
         Receiver receiver = new Receiver(port, bufferSize);
         this.receivers.add(receiver);
         return receiver;
+    }
+
+    public Transmitter transmitter(String host, int port) throws SocketException, UnknownHostException {
+        return transmitter(InetAddress.getByName(host), port);
     }
 
     public Transmitter transmitter(InetAddress address, int port) throws SocketException {
