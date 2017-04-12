@@ -13,8 +13,6 @@ void setup() {
 
   model = getModel();
 
-  println(model.strips);
-
   lx = new LXStudio(this, model) {
     @Override
     protected void initialize(LXStudio lx, LXStudio.UI ui) {
