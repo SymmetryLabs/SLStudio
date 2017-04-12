@@ -1,36 +1,29 @@
 import java.util.*;
 import java.net.*;
 import java.lang.reflect.*;
-//import org.apache.commons.math3.util.FastMath;
 
 public LXStudio lx;
-//StudioCubes studioCubes;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 
 void setup() {
   long setupStart = System.nanoTime();
-  // LX.logInitTiming();
   size(1280, 800, P3D);
 
   model = getModel();
+
+  println(model.strips);
+
   lx = new LXStudio(this, model) {
     @Override
     protected void initialize(LXStudio lx, LXStudio.UI ui) {
-      //studioCubes = new StudioCubes(lx);
-      //lx.engine.registerComponent("studioCubes", studioCubes);
-      //lx.engine.addLoopTask(studioCubes);
 
       // Output drivers
       (dispatcher = new Dispatcher(lx)).start();
       (networkMonitor = new NetworkMonitor(lx)).start();
       setupGammaCorrection();
       buildOutputs(lx);
-      //cubeOutputTester = new CubeOutputTester(lx);
-      //broadcastPacketTester = new BroadcastPacketTester(lx);
-      //new CubeResetModule(lx);
-      //logTime("Built Outputs");
 
       // try {
       //   lx.engine.output.gammaCorrection.setValue(1);
@@ -69,12 +62,8 @@ void setup() {
     @Override
     protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
-      //ui.main.addComponent(getUIVenue());
-      //ui.main.addComponent(new UISoundObjects());
       ui.main.setPhi(PI/32).setMinRadius(2*FEET).setMaxRadius(48*FEET);
       new UIOutputs(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
-      //new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
-      //new UIEnvelopDecode(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
     }
   };
   long setupFinish = System.nanoTime();
@@ -84,143 +73,3 @@ void setup() {
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
 }
-
-// static class StudioCubes extends LXRunnable {
-  
-//   public final Source source = new Source();
-//   public final Decode decode = new Decode();
-  
-//   public StudioCubes(LX lx) {
-//     super(lx);
-//     addSubcomponent(source);
-//     addSubcomponent(decode);
-//     source.start();
-//     decode.start();
-//     start();
-//   }
-  
-//   @Override
-//   public void run(double deltaMs) {
-//     source.loop(deltaMs);
-//     decode.loop(deltaMs);
-//   }
-  
-//   private final static String KEY_SOURCE = "source";
-//   private final static String KEY_DECODE = "decode";
-  
-//   @Override
-//   public void save(LX lx, JsonObject obj) {
-//     super.save(lx, obj);
-//     obj.add(KEY_SOURCE, LXSerializable.Utils.toObject(lx, this.source));
-//     obj.add(KEY_DECODE, LXSerializable.Utils.toObject(lx, this.decode));
-//   }
-  
-//   @Override
-//   public void load(LX lx, JsonObject obj) {
-//     if (obj.has(KEY_SOURCE)) {
-//       this.source.load(lx, obj.getAsJsonObject(KEY_SOURCE));
-//     }
-//     if (obj.has(KEY_DECODE)) {
-//       this.decode.load(lx, obj.getAsJsonObject(KEY_DECODE));
-//     }
-//     super.load(lx, obj);
-//   }
-  
-//   abstract class Meter extends LXRunnable {
-
-//     private final double[] targets;
-    
-//     public final BoundedParameter gain = (BoundedParameter)
-//       new BoundedParameter("Gain", 0, -24, 24).setUnits(LXParameter.Units.DECIBELS);
-    
-//     public final BoundedParameter range = (BoundedParameter)
-//       new BoundedParameter("Range", 24, 6, 96).setUnits(LXParameter.Units.DECIBELS);
-      
-//     public final BoundedParameter attack = (BoundedParameter)
-//       new BoundedParameter("Attack", 25, 0, 50).setUnits(LXParameter.Units.MILLISECONDS);
-      
-//     public final BoundedParameter release = (BoundedParameter)
-//       new BoundedParameter("Release", 50, 0, 500).setUnits(LXParameter.Units.MILLISECONDS);
-    
-//     protected Meter(int numChannels) {
-//       targets = new double[numChannels];
-//       addParameter(gain);
-//       addParameter(range);
-//       addParameter(attack);
-//       addParameter(release);
-//     }
-    
-//     public void run(double deltaMs) {
-//       BoundedParameter[] channels = getChannels();
-//       for (int i = 0; i < channels.length; ++i) {
-//         double target = this.targets[i];
-//         double value = channels[i].getValue();
-//         double gain = (target >= value) ? Math.exp(-deltaMs / attack.getValue()) : Math.exp(-deltaMs / release.getValue());
-//         channels[i].setValue(target + gain * (value - target));
-//       }
-//     }
-    
-//     public void setLevels(OscMessage message) {
-//       double gainValue = this.gain.getValue();
-//       double rangeValue = this.range.getValue();
-//       for (int i = 0; i < this.targets.length; ++i) {
-//         targets[i] = constrain((float) (1 + (message.getFloat() + gainValue) / rangeValue), 0, 1);
-//       }
-//     }
-    
-//     protected abstract BoundedParameter[] getChannels();
-//   }
-  
-//   class Source extends Meter {
-//     public static final int NUM_CHANNELS = 16;
-    
-//     class Channel extends BoundedParameter {
-      
-//       public final int index;
-//       public boolean active;
-//       public final PVector xyz = new PVector();
-      
-//       float tx;
-//       float ty;
-//       float tz;
-      
-//       Channel(int i) {
-//         super("Source-" + (i+1));
-//         this.index = i+1;
-//         this.active = false;
-//       }
-//     }
-    
-//     public final Channel[] channels = new Channel[NUM_CHANNELS];
-    
-//     Source() {
-//       super(NUM_CHANNELS);
-//       for (int i = 0; i < channels.length; ++i) {
-//         channels[i] = new Channel(i);
-//         addParameter(channels[i]);
-//       }
-//     }
-    
-//     public BoundedParameter[] getChannels() {
-//       return this.channels;
-//     }
-//   }
-  
-//   class Decode extends Meter {
-    
-//     public static final int NUM_CHANNELS = 8;
-//     public final BoundedParameter[] channels = new BoundedParameter[NUM_CHANNELS];
-    
-//     Decode() {
-//       super(NUM_CHANNELS);
-//       for (int i = 0; i < channels.length; ++i) {
-//         channels[i] = new BoundedParameter("Source-" + (i+1));
-//         addParameter(channels[i]);
-//       }
-//     }
-    
-//     public BoundedParameter[] getChannels() {
-//       return this.channels;
-//     }
-//   }
-// }

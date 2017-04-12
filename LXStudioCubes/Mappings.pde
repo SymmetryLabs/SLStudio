@@ -143,6 +143,6 @@ public SLModel buildModel() {
   return new SLModel(towers, allCubesArr);
 }
 
-SLModel getModel() {
+public SLModel getModel() {
   return buildModel();
 }

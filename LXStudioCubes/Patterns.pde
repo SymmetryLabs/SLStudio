@@ -1,7 +1,7 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
-public static class Test extends LXPattern {
+public static class Test extends SLPattern {
   
   final CompoundParameter thing = new CompoundParameter("Thing", 0, model.yRange);
   final SinLFO lfo = new SinLFO("Stuff", 0, 1, 2000);
@@ -19,7 +19,7 @@ public static class Test extends LXPattern {
   }
 }
 
-public static class Palette extends LXPattern {
+public static class Palette extends SLPattern {
   public Palette(LX lx) {
     super(lx);
   }
@@ -31,7 +31,7 @@ public static class Palette extends LXPattern {
   }
 }
 
-public static class CubeEQ extends LXPattern {
+public static class CubeEQ extends SLPattern {
 
   private GraphicMeter eq = null;
   private LXAudioInput audioInput;
@@ -95,114 +95,114 @@ public static class CubeEQ extends LXPattern {
   }
 }
 
-// public static class Swarm extends LXPattern {
+public static class Swarm extends SLPattern {
   
-//   SawLFO offset = new SawLFO(0, 1, 1000);
-//   SinLFO rate = new SinLFO(350, 1200, 63000);
-//   SinLFO falloff = new SinLFO(15, 50, 17000);
-//   SinLFO fX = new SinLFO(model.xMin, model.xMax, 19000);
-//   SinLFO fY = new SinLFO(model.yMin, model.yMax, 11000);
-//   SinLFO hOffX = new SinLFO(model.xMin, model.xMax, 13000);
+  SawLFO offset = new SawLFO(0, 1, 1000);
+  SinLFO rate = new SinLFO(350, 1200, 63000);
+  SinLFO falloff = new SinLFO(15, 50, 17000);
+  SinLFO fX = new SinLFO(model.xMin, model.xMax, 19000);
+  SinLFO fY = new SinLFO(model.yMin, model.yMax, 11000);
+  SinLFO hOffX = new SinLFO(model.xMin, model.xMax, 13000);
 
-//   public Swarm(LX lx) {
-//     super(lx);
+  public Swarm(LX lx) {
+    super(lx);
     
-//     addModulator(offset).trigger();
-//     addModulator(rate).trigger();
-//     addModulator(falloff).trigger();
-//     addModulator(fX).trigger();
-//     addModulator(fY).trigger();
-//     addModulator(hOffX).trigger();
-//     offset.setPeriod(rate);
-//   }
+    addModulator(offset).trigger();
+    addModulator(rate).trigger();
+    addModulator(falloff).trigger();
+    addModulator(fX).trigger();
+    addModulator(fY).trigger();
+    addModulator(hOffX).trigger();
+    offset.setPeriod(rate);
+  }
 
-//   float modDist(float v1, float v2, float mod) {
-//     v1 = v1 % mod;
-//     v2 = v2 % mod;
-//     if (v2 > v1) {
-//       return min(v2-v1, v1+mod-v2);
-//     } 
-//     else {
-//       return min(v1-v2, v2+mod-v1);
-//     }
-//   }
+  float modDist(float v1, float v2, float mod) {
+    v1 = v1 % mod;
+    v2 = v2 % mod;
+    if (v2 > v1) {
+      return min(v2-v1, v1+mod-v2);
+    } 
+    else {
+      return min(v1-v2, v2+mod-v1);
+    }
+  }
 
-//   void run(double deltaMs) {
-//     float s = 0;
-//     for (Strip strip : model.strips) {
-//       int i = 0;
-//       for (LXPoint p : strip.points) {
-//         float fV = max(-1, 1 - dist(p.x/2., p.y, fX.getValuef()/2., fY.getValuef()) / 64.);
-//        // println("fv: " + fV); 
-//         colors[p.index] = lx.hsb(
-//         palette.getHuef() + 0.3 * abs(p.x - hOffX.getValuef()),
-//         constrain(80 + 40 * fV, 0, 100), 
-//         constrain(100 - 
-//           (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
-//           );
-//         ++i;
-//       } 
-//       ++s;
-//     }
-//   }
-// }
+  void run(double deltaMs) {
+    float s = 0;
+    for (Strip strip : model.strips) {
+      int i = 0;
+      for (LXPoint p : strip.points) {
+        float fV = max(-1, 1 - dist(p.x/2., p.y, fX.getValuef()/2., fY.getValuef()) / 64.);
+       // println("fv: " + fV); 
+        colors[p.index] = lx.hsb(
+        palette.getHuef() + 0.3 * abs(p.x - hOffX.getValuef()),
+        constrain(80 + 40 * fV, 0, 100), 
+        constrain(100 - 
+          (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
+          );
+        ++i;
+      } 
+      ++s;
+    }
+  }
+}
 
-// public static class SpaceTime extends LXPattern {
+public static class SpaceTime extends SLPattern {
 
-//   SinLFO pos = new SinLFO(0, 1, 3000);
-//   SinLFO rate = new SinLFO(1000, 9000, 13000);
-//   SinLFO falloff = new SinLFO(10, 70, 5000);
-//   float angle = 0;
+  SinLFO pos = new SinLFO(0, 1, 3000);
+  SinLFO rate = new SinLFO(1000, 9000, 13000);
+  SinLFO falloff = new SinLFO(10, 70, 5000);
+  float angle = 0;
 
-//   BoundedParameter rateParameter = new BoundedParameter("RATE", 0.5);
-//   BoundedParameter sizeParameter = new BoundedParameter("SIZE", 0.5);
+  BoundedParameter rateParameter = new BoundedParameter("RATE", 0.5);
+  BoundedParameter sizeParameter = new BoundedParameter("SIZE", 0.5);
 
-//   public SpaceTime(LX lx) {
-//     super(lx);
+  public SpaceTime(LX lx) {
+    super(lx);
 
-//     addModulator(pos).trigger();
-//     addModulator(rate).trigger();
-//     addModulator(falloff).trigger();
-//     pos.setPeriod(rate);
-//     addParameter(rateParameter);
-//     addParameter(sizeParameter);
-//   }
+    addModulator(  pos).trigger();
+    addModulator(rate).trigger();
+    addModulator(falloff).trigger();
+    pos.setPeriod(rate);
+    addParameter(rateParameter);
+    addParameter(sizeParameter);
+  }
 
-//   public void onParameterChanged(LXParameter parameter) {
-//     if (parameter == rateParameter) {
-//       rate.stop();
-//       rate.setValue(9000 - 8000*parameter.getValuef());
-//     }  else if (parameter == sizeParameter) {
-//       falloff.stop();
-//       falloff.setValue(70 - 60*parameter.getValuef());
-//     }
-//   }
+  public void onParameterChanged(LXParameter parameter) {
+    if (parameter == rateParameter) {
+      rate.stop();
+      rate.setValue(9000 - 8000*parameter.getValuef());
+    }  else if (parameter == sizeParameter) {
+      falloff.stop();
+      falloff.setValue(70 - 60*parameter.getValuef());
+    }
+  }
 
-//   void run(double deltaMs) {
-    // angle += deltaMs * 0.0007;
-    // float sVal1 = model.strips.size() * (0.5 + 0.5*sin(angle));
-    // float sVal2 = model.strips.size() * (0.5 + 0.5*cos(angle));
+  void run(double deltaMs) {
+    angle += deltaMs * 0.0007;
+    float sVal1 = model.strips.size() * (0.5 + 0.5*sin(angle));
+    float sVal2 = model.strips.size() * (0.5 + 0.5*cos(angle));
 
-    // float pVal = pos.getValuef();
-    // float fVal = falloff.getValuef();
+    float pVal = pos.getValuef();
+    float fVal = falloff.getValuef();
 
-    // int s = 0;
-    // for (Strip strip : model.strips) {
-    //   int i = 0;
-    //   for (LXPoint p : strip.points) {
-    //     colors[p.index] = lx.hsb(
-    //       palette.getHuef() + 360 - p.x*.2 + p.y * .3,
-    //       constrain(.4 * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
-    //       max(0, 100 - fVal*abs(i - pVal*(strip.metrics.numPoints - 1)))
-    //     );
-    //     ++i;
-    //   }
-    //   ++s;
-    // }
-//   }
-// }
+    int s = 0;
+    for (Strip strip : model.strips) {
+      int i = 0;
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(
+          palette.getHuef() + 360 - p.x*.2 + p.y * .3,
+          constrain(.4 * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
+          max(0, 100 - fVal*abs(i - pVal*(strip.metrics.numPoints - 1)))
+        );
+        ++i;
+      }
+      ++s;
+    }
+  }
+}
 
-public static class ShiftingPlane extends LXPattern {
+public static class ShiftingPlane extends SLPattern {
 
   final BoundedParameter hueShift = new BoundedParameter("hShift", 0.5, 0, 1);
 
@@ -239,64 +239,6 @@ public static class ShiftingPlane extends LXPattern {
   }
 }
 
-// public static class MidiFlash extends LXPattern {
-  
-//   private final LinearEnvelope brt = new LinearEnvelope("Brt", 100, 0, 1000);  
-  
-//   public MidiFlash(LX lx) {
-//     super(lx);
-//     addModulator(brt.setValue(0));
-//   }
-  
-//   @Override
-//   public void noteOnReceived(MidiNoteOn note) {
-//     brt.setValue(note.getVelocity() / 127. * 100).start();
-//   }
-  
-//   public void run(double deltaMs) {
-//     for (LXPoint p : model.points) {
-//       colors[p.index] = palette.getColor(p, brt.getValuef());
-//     }
-//   }
-// }
-
-// public class EnvelopDecode extends LXPattern {
-  
-//   public final BoundedParameter fade = new BoundedParameter("Fade", 1*FEET, 0.001, 4*FEET); 
-  
-//   public EnvelopDecode(LX lx) {
-//     super(lx);
-//     addParameter(fade);
-//   }
-  
-//   public void run(double deltaMs) {
-//     float fv = fade.getValuef();
-//     float falloff = 100 / fv;
-//     for (Column column : venue.columns) {
-//       float level = studioCubes.decode.channels[column.index].getValuef() * (model.yRange / 2.);
-//       for (LXPoint p : column.points) {
-//         float yn = abs(p.y - model.cy);
-//         float b = falloff * (level - yn);
-//         colors[p.index] = palette.getColor(p, constrain(b, 0, 100));
-//       }
-//     }
-//   }
-// }
-
-// public class SoundObjects extends LXPattern implements UIPattern {
-  
-//   public final BoundedParameter size = new BoundedParameter("Base", 4*FEET, 0, 24*FEET);
-//   public final BoundedParameter response = new BoundedParameter("Level", 0, 1*FEET, 24*FEET);
-  
-//   public SoundObjects(LX lx) {
-//     super(lx);
-//     for (StudioCubes.Source.Channel object : studioCubes.source.channels) {
-//       addLayer(new Layer(lx, object));
-//     }
-//     addParameter(size);
-//     addParameter(response);
-//   }
-  
 //   public void buildControlUI(UI ui, UIPatternControl container) {
 //     int i = 0;
 //     for (LXLayer layer : getLayers()) {
@@ -343,7 +285,7 @@ public static class ShiftingPlane extends LXPattern {
 //   }
 // }
 
-// public class Bouncing extends LXPattern {
+// public class Bouncing extends SLPattern {
   
 //   public CompoundParameter gravity = new CompoundParameter("Gravity", -200, -100, -400);
 //   public CompoundParameter size = new CompoundParameter("Length", 2*FEET, 1*FEET, 4*FEET);
@@ -394,7 +336,7 @@ public static class ShiftingPlane extends LXPattern {
 //   }
 // }
 
-// public class Movers extends LXPattern {
+// public class Movers extends SLPattern {
   
 //   private CompoundParameter period = new CompoundParameter("Speed", 150000, 200000, 50000); 
   
@@ -429,7 +371,7 @@ public static class ShiftingPlane extends LXPattern {
 //   }
 // }
 
-public class Noise extends LXPattern {
+public class Noise extends SLPattern {
   
   public final CompoundParameter scale = new CompoundParameter("Scale", 10, 5, 40);
   public final CompoundParameter xSpeed = new CompoundParameter("XSpd", 0, -6, 6);
@@ -492,5 +434,14 @@ public class Noise extends LXPattern {
       float b = ff + rf * noise(sf*p.x + xo + xAccum.accum, sf*p.y + yo + yAccum.accum, sf*p.z + zo + zAccum.accum);
       colors[p.index] = palette.getColor(p, constrain(b*100, 0, 100));
     }
+  }
+}
+
+public static abstract class SLPattern extends LXPattern {
+  public final SLModel model;
+
+  public SLPattern(LX lx) {
+    super(lx);
+    this.model = (SLModel)lx.model;
   }
 }
