@@ -43,6 +43,7 @@ public static class CubeEQ extends SLPattern {
   public CubeEQ(LX lx) {
     super(lx);
     audioInput = lx.engine.audio.getInput();
+    eq = new GraphicMeter(audioInput);
   }
 
   void onActive() {
@@ -59,8 +60,6 @@ public static class CubeEQ extends SLPattern {
       addParameter(clr);
       addParameter(blockiness);
       addModulator(eq).start();
-
-      eq.gain.setValue(30);
     }
   }
 
@@ -69,7 +68,7 @@ public static class CubeEQ extends SLPattern {
     float clrConst = 1.1 + clr.getValuef();
 
     for (LXPoint p : model.points) {
-      float avgIndex = constrain(2 + p.x / model.xMax * (eq.getNumBands()-4), 0, eq.getNumBands()-4);
+      float avgIndex = constrain(2 + p.x / model.xMax * (eq.numBands-4), 0, eq.numBands-4);
       int avgFloor = (int) avgIndex;
 
       float leftVal = eq.getBandf(avgFloor);

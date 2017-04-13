@@ -345,9 +345,9 @@ public class ControllerScan {
   }
 }
 
-class CubeResetModule {
-  final BooleanParameter enabled = new BooleanParameter("Cube reset enabled");
-  CubeResetModule(LX lx) {
+class ControllerResetModule {
+  final BooleanParameter enabled = new BooleanParameter("Controller reset enabled");
+  ControllerResetModule(LX lx) {
     //moduleRegistrar.modules.add(new Module("Reset all cubes", enabled, true));
     enabled.addListener(new LXParameterListener() {
       public void onParameterChanged(LXParameter parameter) {

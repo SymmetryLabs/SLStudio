@@ -12,15 +12,9 @@
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
  */
 
-public CubeOutputTester cubeOutputTester;
-public BroadcastPacketTester broadcastPacketTester;
-public CubeResetModule cubeResetModule;
+ListenableList<SLController> controllers = new ListenableList<SLController>();
 
-void buildOutputs(final LX lx) {
-  cubeOutputTester = new CubeOutputTester(lx);
-  broadcastPacketTester = new BroadcastPacketTester(lx);
-  cubeResetModule = new CubeResetModule(lx);
-
+void setupOutputs(final LX lx) {
   networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
     public void itemAdded(int index, NetworkDevice device) {
       String macAddr = NetworkUtils.macAddrToString(device.macAddress);
@@ -49,267 +43,39 @@ void buildOutputs(final LX lx) {
   });
 
   lx.addOutput(new SLController(lx, "10.200.1.255"));
-  
   //lx.addOutput(new LIFXOutput());
 }
 
-static final int redGamma[] = new int[256];
-static final int greenGamma[] = new int[256];
-static final int blueGamma[] = new int[256];
+/*
+ * Output Component
+ *---------------------------------------------------------------------------*/
+public final class OutputControl extends LXComponent {
 
-final float[][] gammaSet = {
-  { 2, 2.1, 2.8 },
-  { 2, 2.2, 2.8 },
-};
+  public final BooleanParameter enabled;
 
-final DiscreteParameter gammaSetIndex = new DiscreteParameter("GMA", gammaSet.length+1);
-final BoundedParameter redGammaFactor = new BoundedParameter("RGMA", 2, 1, 4);
-final BoundedParameter greenGammaFactor = new BoundedParameter("GGMA", 2.2, 1, 4);
-final BoundedParameter blueGammaFactor = new BoundedParameter("BGMA", 2.8, 1, 4);
+  public final ControllerResetModule controllerResetModule = new ControllerResetModule(lx);
 
-void setupGammaCorrection() {
-  final float redGammaOrig = redGammaFactor.getValuef();
-  final float greenGammaOrig = greenGammaFactor.getValuef();
-  final float blueGammaOrig = blueGammaFactor.getValuef();
-  gammaSetIndex.addListener(new LXParameterListener() {
-    public void onParameterChanged(LXParameter parameter) {
-      if (gammaSetIndex.getValuei() == 0) {
-        redGammaFactor.reset(redGammaOrig);
-        greenGammaFactor.reset(greenGammaOrig);
-        blueGammaFactor.reset(blueGammaOrig);
-      } else {
-        redGammaFactor.reset(gammaSet[gammaSetIndex.getValuei()-1][0]);
-        greenGammaFactor.reset(gammaSet[gammaSetIndex.getValuei()-1][1]);
-        blueGammaFactor.reset(gammaSet[gammaSetIndex.getValuei()-1][2]);
-      }
-    }
-  });
-  redGammaFactor.addListener(new LXParameterListener() {
-    public void onParameterChanged(LXParameter parameter) {
-      buildGammaCorrection(redGamma, parameter.getValuef());
-    }
-  });
-  buildGammaCorrection(redGamma, redGammaFactor.getValuef());
-  greenGammaFactor.addListener(new LXParameterListener() {
-    public void onParameterChanged(LXParameter parameter) {
-      buildGammaCorrection(greenGamma, parameter.getValuef());
-    }
-  });
-  buildGammaCorrection(greenGamma, greenGammaFactor.getValuef());
-  blueGammaFactor.addListener(new LXParameterListener() {
-    public void onParameterChanged(LXParameter parameter) {
-      buildGammaCorrection(blueGamma, parameter.getValuef());
-    }
-  });
-  buildGammaCorrection(blueGamma, blueGammaFactor.getValuef());
-}
+  public final BooleanParameter broadcastPacket = new BooleanParameter("Broadcast packet enabled", false);
+  public final BooleanParameter testBroadcast   = new BooleanParameter("Test broadcast enabled", false);
 
-void buildGammaCorrection(int[] gammaTable, float gammaCorrection) {
-  for (int i = 0; i < 256; i++) {
-    gammaTable[i] = (int)(pow(1.0 * i / 255, gammaCorrection) * 255 + 0.5);
+  public OutputControl(LX lx) {
+    super(lx, "Output Control");
+    this.enabled = lx.engine.output.enabled;
+
+    addParameter(testBroadcast);
+    
+    enabled.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter parameter) {
+        for (SLController c : controllers)
+          c.enabled.setValue(((BooleanParameter)parameter).isOn());
+      };
+    });
   }
 }
 
-
-
-// public class LIFXOutput extends LXOutput {
-//   DatagramSocket dsocket;
-
-//   int packetSizeBytes = 49;
-//   byte[] packetData;
-
-//   public LIFXOutput() {
-//     super(lx);
-//     packetData = new byte[packetSizeBytes];
-//   }
-
-//   void onSend(int[] colors) {
-//     // Create data socket connection if needed
-//     if (dsocket == null) {
-//       try {
-//         dsocket = new DatagramSocket();
-//         dsocket.connect(new InetSocketAddress("10.1.10.255", 56700));
-//         //socket.setTcpNoDelay(true);
-//         // output = socket.getOutputStream();
-//       }
-//       catch (ConnectException e) {  dispose();  }
-//       catch (IOException      e) {  dispose();  }
-//       if (dsocket == null) return;
-//     }
-
-//     for (LIFXBulb bulb : model.lifxBulbs)
-//       sendPacket(bulb.macAddress, colors[bulb.point.index]);
-//   }
-
-//   void sendPacket(String macAddressString, int col) {
-//     // format mac address
-//     String[] stringBytes = macAddressString.split(":");
-//     byte[] macAddress = new byte[stringBytes.length];
-
-//     for (int x = 0; x < stringBytes.length; x++) {
-//         BigInteger temp = new BigInteger(stringBytes[x], 16);
-//         byte[] raw = temp.toByteArray();
-//         macAddress[x] = raw[raw.length - 1];
-//     }
-
-//     // format colors
-//     int hue = (int)(LXColor.h(col)/360 * 65535);
-//     int sat = (int)(LXColor.s(col)/100 * 65535);
-//     int bri = (int)(LXColor.b(col)/100 * 65535);
-
-//     // build packet
-//     packetData[0] = (byte)0x00;
-//     packetData[1] = (byte)0x00;
-//     packetData[2] = (byte)0x00;
-//     packetData[3] = (byte)0x14;
-
-//     // client id (source)
-//     packetData[4] = (byte)0x00;
-//     packetData[5] = (byte)0x00;
-//     packetData[6] = (byte)0x00;
-//     packetData[7] = (byte)0x00;
-
-//     // frame address
-//     packetData[8]  = macAddress[0];
-//     packetData[9]  = macAddress[1];
-//     packetData[10] = macAddress[2];
-//     packetData[11] = macAddress[3];
-//     packetData[12] = macAddress[4];
-//     packetData[13] = macAddress[5];
-//     packetData[14] = (byte)0x00;
-//     packetData[15] = (byte)0x00;
-
-//     // *reserved*
-//     packetData[16] = (byte)0x00;
-//     packetData[17] = (byte)0x00;
-//     packetData[18] = (byte)0x00;
-//     packetData[19] = (byte)0x00;
-//     packetData[20] = (byte)0x00;
-//     packetData[21] = (byte)0x00;
-
-//     // response
-//     packetData[22] = (byte)0x00;
-
-//     // sequence number
-//     packetData[23] = (byte)0x00;
-
-//     // protocol header
-//     packetData[24] = (byte)0x00;
-//     packetData[25] = (byte)0x00;
-//     packetData[26] = (byte)0x00;
-//     packetData[27] = (byte)0x00;
-//     packetData[28] = (byte)0x00;
-//     packetData[29] = (byte)0x00;
-//     packetData[30] = (byte)0x00;
-//     packetData[31] = (byte)0x00;
-
-//     // message type
-//     packetData[32] = (byte)0x66;
-//     packetData[33] = (byte)0x00;
-
-//     // *reserved*
-//     packetData[34] = (byte)0x00;
-//     packetData[35] = (byte)0x00;
-
-//     /* payload ------*/
-//     // reserved
-//     packetData[36] = (byte)0x00;
-
-//     // hue
-//     packetData[37] = (byte)hue;
-//     packetData[38] = (byte)(hue >> 8);
-
-//     // saturation
-//     packetData[39] = (byte)sat;
-//     packetData[40] = (byte)(sat >> 8);
-
-//     // brightness
-//     packetData[41] = (byte)bri;
-//     packetData[42] = (byte)(bri >> 8);
-
-//     // kelvin
-//     packetData[43] = (byte)0xAC;
-//     packetData[44] = (byte)0x0D;
-
-//     // milliseconds
-//     packetData[45] = (byte)0x00;
-//     packetData[46] = (byte)0x00;
-//     packetData[47] = (byte)0x00;
-//     packetData[48] = (byte)0x00;
-
-//     try {
-//       dsocket.send(new java.net.DatagramPacket(packetData, packetSizeBytes));
-//     } catch (Exception e) {dispose();
-//   }
-// }
-
-
-  // List<Bulb> bulbs;
-
-  // public LIFXOutput() throws IOException {
-  //  super(lx);
-
-  //  bulbs = new ArrayList<Bulb>();
-  //  BroadcastListener listener = new BroadcastListener();
-  //  listener.bus().register(this);
-  //  listener.startListen();
-
-  //  println(listener);
-  //  enabled.setValue(true);
-  // }
-
-  // void onSend(int[] colors) {
-  //  if (model.lifxBulbs.size() < 1) return;
-
-  //  LIFXBulb bulbModel = model.lifxBulbs.get(0);
-  //  //for (LIFXBulb bulb : model.lifxBulbs) {
-  //    for (Bulb bulbOutput : this.bulbs) {
-  //      //if (THEY_DONT_MATCH) continue; <- make them all light up for now
-        
-  //      color c = colors[bulbModel.point.index];
-  //      int r = (int)LXColor.red(c);
-  //      int g = (int)LXColor.green(c);
-  //      int b = (int)LXColor.blue(c);
-  //      try {
-  //        bulbOutput.setColor(LIFXColor.fromRGB(r, g, b) , 1);
-  //      } catch (IOException e) {}
-  //      //break;
-  //    }
-  //  //}
-  // }
-  
-  // public void gatewayFound(GatewayDiscoveredEvent ev) {
-  //  Gateway g = ev.getGateway();
-  //  g.bus().register(this);
-
-  //  println("gatewayFound");
-  //  try {
-  //    g.connect(); // automatically discovers bulbs
-  //  } catch (IOException ex) { }
-  // }
-  
-  // public void bulbDiscovered(GatewayBulbDiscoveredEvent event) throws IOException {
-  //  this.bulbs.add(event.getBulb());
-
-  //  // register for bulb events
-  //  event.getBulb().bus().register(this);
-
-  //  println("bulb discovered");
-    
-  //  // send some packets
-  //  // event.getBulb().turnOff();
-  //  // event.getBulb().setColor(LIFXColor.fromRGB(0, 255, 0));
-  // }
-
-  // public void bulbUpdated(BulbStatusUpdatedEvent event) {
-  //  //System.out.println("bulb updated");
-  // }
-  
-//}
-
-
-ListenableList<SLController> controllers = new ListenableList<SLController>();
-
+/*
+ * Controller
+ *---------------------------------------------------------------------------*/
 class SLController extends LXOutput {
   Socket        socket;
   DatagramSocket dsocket;
@@ -320,15 +86,15 @@ class SLController extends LXOutput {
   boolean       isBroadcast;
 
   // Trip had to change order for Cisco as workaround for rotation bug
-  final int[]   STRIP_ORD      = new int[] { 
-                                             //RED
-                                             9, 10, 11, 
-                                             // GREEN 
-                                             0, 1, 2,   
-                                             // BLUE
-                                             3, 4, 5,
-                                             // WHITE
-                                             6, 7, 8 }; 
+  final int[] STRIP_ORD = new int[] { 
+    // RED
+    9, 10, 11,
+    // GREEN 
+    0, 1, 2,
+    // BLUE
+    3, 4, 5,
+    // WHITE
+    6, 7, 8 }; 
   // final int[]  STRIP_ORD      = new int[] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
   static final int HEADER_LENGTH = 4;
@@ -401,7 +167,7 @@ class SLController extends LXOutput {
   }
 
   void onSend(int[] colors) {
-    if (isBroadcast != broadcastPacketTester.enabled.isOn()) return;
+    if (isBroadcast != outputControl.broadcastPacket.isOn()) return;
 
     // Create data socket connection if needed
     if (dsocket == null) {
@@ -422,7 +188,7 @@ class SLController extends LXOutput {
     // Use the mac address to find the cube if we have it
     // Otherwise use the cube id
     Cube cube = null;
-    if ((cubeOutputTester.enabled.isOn() || isBroadcast) && model.cubes.size() > 0) {
+    if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
       cube = model.cubes.get(0);
     } else {
       for (Cube c : model.cubes) {
@@ -474,128 +240,12 @@ class SLController extends LXOutput {
     dsocket = null;
   }
 }
-//---------------------------------------------------------------------------------------------
 
-// Helper class for testing cube output
-// When a cube is recognized on the network,
-// if this option is enabled, the output classes will
-// send the color data for cube 0 regardless of if the
-// cube that just connected is modelled yet or not
-class CubeOutputTester {
-  final BooleanParameter enabled = new BooleanParameter("Test output enabled");
-  CubeOutputTester(LX lx) {
-    //moduleRegistrar.modules.add(new Module("Test output", enabled));
-  }
-}
-
-class BroadcastPacketTester {
-  final BooleanParameter enabled = new BooleanParameter("Broadcast packet enabled");
-  BroadcastPacketTester(LX lx) {
-    //moduleRegistrar.modules.add(new Module("Broadcast packet", enabled));
-  }
-}
-
-//---------------------------------------------------------------------------------------------
-// class UIOutput extends UIWindow {
-//   UIOutput(float x, float y, float w, float h) {
-//     super(lx.ui,"Output",x,y,w,h);
-//     float yPos = UIWindow.TITLE_LABEL_HEIGHT - 2;
-//     final SortedSet<Beagle> sortedBeagles = new TreeSet<Beagle>(new Comparator<Beagle>() {
-//       int compare(Beagle o1, Beagle o2) {
-//         try {
-//           return Integer.parseInt(o1.cubeId) - Integer.parseInt(o2.cubeId);
-//         } catch (NumberFormatException e) {
-//           return o1.cubeId.compareTo(o2.cubeId);
-//         }
-//       }
-//     });
-//     final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-//     for (Beagle b : beagles) { sortedBeagles.add(b); }
-//     for (Beagle b : sortedBeagles) { items.add(new BeagleItem(b)); }
-//     final UIItemList outputList = new UIItemList(1, yPos, width-2, height-yPos-1);
-//     outputList
-//       .setItems     (items    )
-//       .addToContainer   (this   );
-//     beagles.addListener(new ListListener<Beagle>() {
-//       void itemAdded(final int index, final Beagle b) {
-//         dispatcher.dispatchUi(new Runnable() {
-//           public void run() {
-//             if (b.networkDevice != null) b.networkDevice.version.addListener(deviceVersionListener);
-//             sortedBeagles.add(b);
-//             items.clear();
-//             for (Beagle b : sortedBeagles) { items.add(new BeagleItem(b)); }
-//             outputList.setItems(items);
-//             setTitle(items.size());
-//             redraw();
-//           }
-//         });
-//       }
-//       void itemRemoved(final int index, final Beagle b) {
-//         dispatcher.dispatchUi(new Runnable() {
-//           public void run() {
-//             if (b.networkDevice != null) b.networkDevice.version.removeListener(deviceVersionListener);
-//             sortedBeagles.remove(b);
-//             items.clear();
-//             for (Beagle b : sortedBeagles) { items.add(new BeagleItem(b)); }
-//             outputList.setItems(items);
-//             setTitle(items.size());
-//             redraw();
-//           }
-//         });
-//       }
-//     });
-//     setTitle(items.size());
-
-//     BooleanParameter allOutputsEnabled = new BooleanParameter("allOutputsEnabled", true);
-//     UIButton outputsEnabledButton = new UIButton(87, 4, 50, 15);
-//     outputsEnabledButton.setLabel("Connect").setParameter(allOutputsEnabled);
-//     outputsEnabledButton.addToContainer(this);
-//     allOutputsEnabled.addListener(new LXParameterListener() {
-//       void onParameterChanged(LXParameter parameter) {
-//         for (Beagle beagle : beagles) {
-//           beagle.enabled.setValue(((BooleanParameter)parameter).isOn());
-//         }
-//       }
-//     });
-//   }
-
-//   private final IntListener deviceVersionListener = new IntListener() {
-//     public void onChange(int version) {
-//       dispatcher.dispatchUi(new Runnable() {
-//         public void run() {
-//           redraw();
-//         }
-//       });
-//     }
-//   };
-
-//   private void setTitle(int count) {
-//     setTitle("Output (" + count + ")");
-//   }
-
-//   class BeagleItem extends UIItemList.AbstractItem {
-//     final Beagle beagle;
-//     BeagleItem(Beagle _beagle) {
-//       this.beagle = _beagle;
-//       beagle.enabled.addListener(new LXParameterListener() {
-//         public void onParameterChanged(LXParameter parameter) { redraw(); }
-//       });
-//     }
-//     String  getLabel  () {
-//       if (beagle.networkDevice != null && beagle.networkDevice.version.get() != -1) {
-//         return beagle.cubeId + " (v" + beagle.networkDevice.version + ")";
-//       } else {
-//         return beagle.cubeId;
-//       }
-//     }
-//     boolean isSelected() { return beagle.enabled.isOn(); }
-//     void onMousePressed(boolean hasFocus) { beagle.enabled.toggle(); }
-//   }
-// }
-//---------------------------------------------------------------------------------------------
-
+/*
+ * UIOutput Window
+ *---------------------------------------------------------------------------*/
 class UIOutputs extends UICollapsibleSection {
-    UIOutputs(UI ui, float x, float y, float w) {
+    UIOutputs(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 124);
 
         final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
@@ -608,11 +258,9 @@ class UIOutputs extends UICollapsibleSection {
             }
         });
 
-        final BooleanParameter allOutputsEnabled = new BooleanParameter("allOutputsEnabled", true);
-
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (SLController c : controllers) { sortedControllers.add(c); }
-        for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+        for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
         final UIItemList outputList = new UIItemList(ui, 0, 22, w-8, 20);
 
         outputList.setItems(items).setSingleClickActivate(true).addToContainer(this);
@@ -626,7 +274,7 @@ class UIOutputs extends UICollapsibleSection {
                     if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
                     sortedControllers.add(c);
                     items.clear();
-                        for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+                        for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
                     outputList.setItems(items);
                     setTitle(items.size());
                     redraw();
@@ -639,7 +287,7 @@ class UIOutputs extends UICollapsibleSection {
                     if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
                     sortedControllers.remove(c);
                     items.clear();
-                        for (SLController c : sortedControllers) { items.add(new ControllerItem(allOutputsEnabled, c)); }
+                        for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
                     outputList.setItems(items);
                     setTitle(items.size());
                     redraw();
@@ -651,26 +299,25 @@ class UIOutputs extends UICollapsibleSection {
         UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
           @Override
           public void onToggle(boolean isOn) { }
-        }.setLabel("Test Broadcast").setParameter(cubeOutputTester.enabled);
+        }.setLabel("Test Broadcast").setParameter(outputControl.testBroadcast);
         testOutput.addToContainer(this);
 
         UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
           @Override
           public void onToggle(boolean isOn) { 
-            cubeResetModule.enabled.setValue(isOn);
+            outputControl.controllerResetModule.enabled.setValue(isOn);
           }
         }.setMomentary(true).setLabel("Reset Controllers");
         resetCubes.addToContainer(this);
 
-        addTopLevelComponent(new UIButton(4, 4, 12, 12) {
-          @Override
-          public void onToggle(boolean isOn) {
-            allOutputsEnabled.setValue(isOn);
-            for (SLController c : controllers)
-                c.enabled.setValue(isOn);
+        addTopLevelComponent(new UIButton(4, 4, 12, 12) {}
+          .setParameter(outputControl.enabled).setBorderRounding(4));
+
+        outputControl.enabled.addListener(new LXParameterListener() {
+          public void onParameterChanged(LXParameter parameter) {
             redraw();
-          }
-        }.setParameter(allOutputsEnabled).setBorderRounding(4));
+          };
+        });
     }
 
     private final IntListener deviceVersionListener = new IntListener() {
@@ -688,11 +335,9 @@ class UIOutputs extends UICollapsibleSection {
 
     class ControllerItem extends UIItemList.AbstractItem {
         final SLController controller;
-        final BooleanParameter allOutputsEnabled;
 
-        ControllerItem(BooleanParameter allOutputsEnabled, SLController _controller) {
+        ControllerItem(SLController _controller) {
           this.controller = _controller;
-          this.allOutputsEnabled = allOutputsEnabled;
           controller.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) { redraw(); }
           });
@@ -722,7 +367,7 @@ class UIOutputs extends UICollapsibleSection {
 
         @Override
         public void onActivate() {
-            if (!allOutputsEnabled.getValueb())
+            if (!outputControl.enabled.getValueb())
                 return;
             controller.enabled.toggle();
         }
@@ -733,4 +378,64 @@ class UIOutputs extends UICollapsibleSection {
         //     controller.enabled.setValue(false);
         // }
     }
+}
+
+/*
+ * Gamma Correction
+ *---------------------------------------------------------------------------*/
+static final int redGamma[] = new int[256];
+static final int greenGamma[] = new int[256];
+static final int blueGamma[] = new int[256];
+
+final float[][] gammaSet = {
+  { 2, 2.1, 2.8 },
+  { 2, 2.2, 2.8 },
+};
+
+final DiscreteParameter gammaSetIndex = new DiscreteParameter("GMA", gammaSet.length+1);
+final BoundedParameter redGammaFactor = new BoundedParameter("RGMA", 2, 1, 4);
+final BoundedParameter greenGammaFactor = new BoundedParameter("GGMA", 2.2, 1, 4);
+final BoundedParameter blueGammaFactor = new BoundedParameter("BGMA", 2.8, 1, 4);
+
+void setupGammaCorrection() {
+  final float redGammaOrig = redGammaFactor.getValuef();
+  final float greenGammaOrig = greenGammaFactor.getValuef();
+  final float blueGammaOrig = blueGammaFactor.getValuef();
+  gammaSetIndex.addListener(new LXParameterListener() {
+    public void onParameterChanged(LXParameter parameter) {
+      if (gammaSetIndex.getValuei() == 0) {
+        redGammaFactor.reset(redGammaOrig);
+        greenGammaFactor.reset(greenGammaOrig);
+        blueGammaFactor.reset(blueGammaOrig);
+      } else {
+        redGammaFactor.reset(gammaSet[gammaSetIndex.getValuei()-1][0]);
+        greenGammaFactor.reset(gammaSet[gammaSetIndex.getValuei()-1][1]);
+        blueGammaFactor.reset(gammaSet[gammaSetIndex.getValuei()-1][2]);
+      }
+    }
+  });
+  redGammaFactor.addListener(new LXParameterListener() {
+    public void onParameterChanged(LXParameter parameter) {
+      buildGammaCorrection(redGamma, parameter.getValuef());
+    }
+  });
+  buildGammaCorrection(redGamma, redGammaFactor.getValuef());
+  greenGammaFactor.addListener(new LXParameterListener() {
+    public void onParameterChanged(LXParameter parameter) {
+      buildGammaCorrection(greenGamma, parameter.getValuef());
+    }
+  });
+  buildGammaCorrection(greenGamma, greenGammaFactor.getValuef());
+  blueGammaFactor.addListener(new LXParameterListener() {
+    public void onParameterChanged(LXParameter parameter) {
+      buildGammaCorrection(blueGamma, parameter.getValuef());
+    }
+  });
+  buildGammaCorrection(blueGamma, blueGammaFactor.getValuef());
+}
+
+void buildGammaCorrection(int[] gammaTable, float gammaCorrection) {
+  for (int i = 0; i < 256; i++) {
+    gammaTable[i] = (int)(pow(1.0 * i / 255, gammaCorrection) * 255 + 0.5);
+  }
 }

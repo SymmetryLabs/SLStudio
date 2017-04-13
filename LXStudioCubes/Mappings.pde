@@ -3,7 +3,7 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = 0;
+static final float globalRotationY = 45;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -13,26 +13,17 @@ static final float TOWER_RISER = 14;
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-  new TowerConfig(35*0,           0, 0, 45, new String[] {
-    "23", "0", "0", "0"
+  new TowerConfig(0, 0, 0, new String[] {
+    "110", "31", "9", "177"
   }),
-  new TowerConfig(35*1, TOWER_RISER, 0, 45, new String[] {
-    "0", "0", "0", "0"
+  new TowerConfig(CUBE_WIDTH, 0, -CUBE_WIDTH*0.5, new String[] {
+    "182", "171", "32", "111"
   }),
-  new TowerConfig(35*2,           0, 0, 45, new String[] {
-    "0", "0", "0", "0"
+  new TowerConfig(CUBE_WIDTH*1.5, 0, -CUBE_WIDTH*1.5, new String[] {
+    "127", "122", "101", "151"
   }),
-  new TowerConfig(35*3, TOWER_RISER, 0, 45, new String[] {
-    "0", "0", "0", "0"
-  }),
-  new TowerConfig(35*4,           0, 0, 45, new String[] {
-    "0", "0", "0", "0"
-  }),
-  new TowerConfig(35*5, TOWER_RISER, 0, 45, new String[] {
-    "0", "0", "0", "0"
-  }),
-  new TowerConfig(35*6,           0, 0, 45, new String[] {
-    "0", "0", "0", "0"
+  new TowerConfig(CUBE_WIDTH*2.5, 0, -CUBE_WIDTH*2.0, new String[] {
+    "57", "61", "175", "163"
   }),
 
 };
