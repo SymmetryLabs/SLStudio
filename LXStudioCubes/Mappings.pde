@@ -14,16 +14,13 @@ static final float TOWER_RISER = 14;
 static final TowerConfig[] TOWER_CONFIG = {
 
   new TowerConfig(0, 0, 0, new String[] {
-    "110", "31", "9", "177"
+    "182", "171", "31"
   }),
-  new TowerConfig(CUBE_WIDTH, 0, -CUBE_WIDTH*0.5, new String[] {
-    "182", "171", "32", "111"
+  new TowerConfig(CUBE_WIDTH*0.5, 0, -CUBE_WIDTH*1.0, new String[] {
+    "127", "122", "32"
   }),
   new TowerConfig(CUBE_WIDTH*1.5, 0, -CUBE_WIDTH*1.5, new String[] {
-    "127", "122", "101", "151"
-  }),
-  new TowerConfig(CUBE_WIDTH*2.5, 0, -CUBE_WIDTH*2.0, new String[] {
-    "57", "61", "175", "163"
+     "57"
   }),
 
 };
@@ -136,4 +133,369 @@ public SLModel buildModel() {
 
 public SLModel getModel() {
   return buildModel();
+}
+
+/*
+ * Mapping Pattern
+ *---------------------------------------------------------------------------*/
+public class MappingPattern extends SLPattern {
+  private final SinLFO pulse = new SinLFO(20, 100, 800);
+
+  public color mappedAndOnNetworkColor    = LXColor.GREEN;
+  public color mappedButNotOnNetworkColor = LXColor.BLACK;
+  public color unMappedButOnNetworkColor  = LXColor.BLACK;
+
+  public MappingPattern(LX lx) {
+    super(lx);
+    addModulator(pulse).start();
+
+    final LXParameterListener resetBasis = new LXParameterListener() {
+      public void onParameterChanged(LXParameter p) {
+        pulse.setBasis(0);
+      }
+    };
+
+    mappingMode.mode.addListener(resetBasis);
+    mappingMode.displayMode.addListener(resetBasis);
+    mappingMode.selectedMappedFixture.addListener(resetBasis);
+    mappingMode.selectedUnMappedFixture.addListener(resetBasis);
+  }
+
+  public void run(double deltaMs) {
+    if (!mappingMode.enabled.isOn()) return;
+    setColors(0);
+    updateColors();
+
+    if (mappingMode.inMappedMode())
+      loopMappedFixtures(deltaMs);
+    else loopUnMappedFixtures(deltaMs);
+  }
+
+  private void updateColors() {
+    mappedButNotOnNetworkColor = lx.hsb(LXColor.h(LXColor.RED), 100, pulse.getValuef());
+    unMappedButOnNetworkColor = lx.hsb(LXColor.h(LXColor.BLUE), 100, pulse.getValuef());
+  }
+
+  private void loopMappedFixtures(double deltaMs) {
+    if (mappingMode.inDisplayAllMode()) {
+
+      for (String id : mappingMode.fixturesMappedAndOnTheNetwork)
+        setFixtureColor(id, mappedAndOnNetworkColor);
+
+      for (String id : mappingMode.fixturesMappedButNotOnNetwork)
+        setFixtureColor(id, mappedButNotOnNetworkColor);
+
+    } else {
+      String selectedId = mappingMode.selectedMappedFixture.getOption();
+
+      for (String id : mappingMode.fixturesMappedAndOnTheNetwork)
+        setFixtureColor(id, mappedAndOnNetworkColor, true);
+
+      if (mappingMode.fixturesMappedAndOnTheNetwork.contains(selectedId))
+        setFixtureColor(selectedId, mappedAndOnNetworkColor);
+
+      if (mappingMode.fixturesMappedButNotOnNetwork.contains(selectedId))
+        setFixtureColor(selectedId, mappedButNotOnNetworkColor);
+    }
+  }
+
+  private void loopUnMappedFixtures(double deltaMs) {
+    for (String id : mappingMode.fixturesMappedAndOnTheNetwork)
+      setFixtureColor(id, mappedAndOnNetworkColor, true);
+  }
+
+  private void setFixtureColor(String id, color col) {
+    setFixtureColor(id, col, false);
+  }
+
+  private void setFixtureColor(String id, color col, boolean dotted) {
+    if (id.equals("-")) return;
+
+    // we iterate all cubes and call continue here because multiple cubes might have zero as id
+    for (Cube c : model.cubes) {
+      if (!c.id.equals(id)) continue;
+
+      List<LXPoint> points = c.points;
+      for (int i = 0; i < points.size(); i++) {
+        if (dotted)
+          col = (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2) : LXColor.BLACK;
+
+        setColor(points.get(i).index, col);
+      }
+    }
+  }
+}
+
+/*
+ * Mapping Mode
+ * (TODO) 
+ *  1) iterate through mapped cubes in order (tower by tower, cube by cube)
+ *  2) get cubes not mapped but on network to pulse
+ *  3) get a "display orientation" mode
+ *---------------------------------------------------------------------------*/
+public static enum MappingModeType {MAPPED, UNMAPPED};
+public static enum MappingDisplayModeType {ALL, ITERATE};
+
+public class MappingMode {
+  private LXChannel mappingChannel = null;
+  private LXPattern mappingPattern = null;
+
+  public final BooleanParameter enabled;
+  public final EnumParameter<MappingModeType> mode;
+  public final EnumParameter<MappingDisplayModeType> displayMode;
+  //public final BooleanParameter displayOrientation;
+
+  public final DiscreteParameter selectedMappedFixture;
+  public final DiscreteParameter selectedUnMappedFixture;
+
+  public final List<String> fixturesMappedAndOnTheNetwork = new ArrayList<String>();
+  public final List<String> fixturesMappedButNotOnNetwork = new ArrayList<String>();
+  public final List<String> fixturesOnNetworkButNotMapped = new ArrayList<String>();
+
+  MappingMode(LX lx) {
+    this.enabled = new BooleanParameter("enabled", false)
+     .setDescription("Mapping Mode: toggle on/off");
+
+    this.mode = new EnumParameter<MappingModeType>("mode", MappingModeType.MAPPED)
+     .setDescription("Mapping Mode: toggle between mapped/unmapped fixtures");
+
+    this.displayMode = new EnumParameter<MappingDisplayModeType>("displayMode", MappingDisplayModeType.ALL)
+     .setDescription("Mapping Mode: display all mapped/unmapped fixtures");
+
+    // this.displayOrientation = new BooleanParameter("displayOrientation", false)
+    //  .setDescription("Mapping Mode: display colors on strips to indicate it's orientation");
+
+    for (Cube cube : model.cubes)
+      fixturesMappedButNotOnNetwork.add(cube.id);
+
+    this.selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", fixturesMappedButNotOnNetwork.toArray());
+    this.selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", new String[] {"-"});
+
+    controllers.addListener(new ListListener<SLController>() {
+      void itemAdded(final int index, final SLController c) {
+        if (isFixtureMapped(c.cubeId)) {
+          fixturesMappedButNotOnNetwork.remove(c.cubeId);
+          fixturesMappedAndOnTheNetwork.add(c.cubeId);
+        } else {
+          fixturesOnNetworkButNotMapped.add(c.cubeId);
+        }
+
+        Object[] arr1 = fixturesMappedAndOnTheNetwork.toArray();
+        Object[] arr2 = fixturesOnNetworkButNotMapped.toArray();
+
+        selectedMappedFixture.setObjects(arr1.length > 0 ? arr1 : new String[] {"-"});
+        selectedUnMappedFixture.setObjects(arr2.length > 0 ? arr2 : new String[] {"-"});
+      }
+      void itemRemoved(final int index, final SLController c) {}
+    });
+
+    enabled.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter p) {
+        if (((BooleanParameter)p).isOn())
+          addChannel();
+        else removeChannel();
+      }
+    });
+  }
+
+  private boolean isFixtureMapped(String id) {
+    for (Cube fixture : model.cubes) {
+      if (fixture.id.equals(id))
+        return true;
+    }
+    return false;
+  }
+
+  public boolean inMappedMode() {
+    return mode.getObject() == MappingModeType.MAPPED;
+  }
+
+  public boolean inUnMappedMode() {
+    return mode.getObject() == MappingModeType.UNMAPPED;
+  }
+
+  public boolean inDisplayAllMode() {
+    return displayMode.getObject() == MappingDisplayModeType.ALL;
+  }
+
+  public boolean inIterateFixturesMode() {
+    return displayMode.getObject() == MappingDisplayModeType.ITERATE;
+  }
+
+  public String getSelectedMappedFixtureId() {
+    return (String)mappingMode.selectedMappedFixture.getOption();
+  }
+
+  public String getSelectedUnMappedFixtureId() {
+    return (String)mappingMode.selectedUnMappedFixture.getOption();
+  }
+
+  public boolean isSelectedUnMappedFixture(String id) {
+    return id.equals(mappingMode.selectedUnMappedFixture.getOption());
+  }
+
+  public color getUnMappedColor() {
+    // if (mappingPattern != null)
+    //   return mappingPattern.getUnMappedButOnNetworkColor;
+    // return 0;
+    return LXColor.RED; // temp
+  }
+
+  private void addChannel() {
+    mappingPattern = new MappingPattern(lx);
+    mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
+
+    for (LXChannel channel : lx.engine.channels)
+      channel.cueActive.setValue(false);
+
+    mappingChannel.fader.setValue(1);
+    mappingChannel.label.setValue("Mapping");
+    mappingChannel.cueActive.setValue(true);
+  }
+
+  private void removeChannel() {
+    lx.engine.removeChannel(mappingChannel);
+    mappingChannel = null;
+    mappingPattern = null;
+  }
+}
+
+/*
+ * Mapping Mode: UI Window
+ *---------------------------------------------------------------------------*/
+class UIMapping extends UICollapsibleSection {
+
+  UIMapping(LX lx, UI ui, float x, float y, float w) {
+    super(ui, x, y, w, 124);
+    setTitle("MAPPING");
+    setTitleX(20);
+
+    addTopLevelComponent(new UIButton(4, 4, 12, 12) {
+      @Override
+      public void onToggle(boolean isOn) {
+        redraw();
+      }
+    }.setParameter(mappingMode.enabled).setBorderRounding(4));
+
+    final UIToggleSet toggleMode = new UIToggleSet(0, 2, getContentWidth(), 18)
+     .setEvenSpacing().setParameter(mappingMode.mode);
+    toggleMode.addToContainer(this);
+
+    final UIMappedPanel mappedPanel = new UIMappedPanel(ui, 0, 20, getContentWidth(), 40);
+    mappedPanel.setVisible(mappingMode.inMappedMode());
+    mappedPanel.addToContainer(this);
+
+    final UIUnMappedPanel unMappedPanel = new UIUnMappedPanel(ui, 0, 20, getContentWidth(), 40);
+    unMappedPanel.setVisible(mappingMode.inUnMappedMode());
+    unMappedPanel.addToContainer(this);
+
+    mappingMode.mode.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter p) {
+        mappedPanel.setVisible(mappingMode.inMappedMode());
+        unMappedPanel.setVisible(mappingMode.inUnMappedMode());
+        redraw();
+      }
+    });
+  }
+
+  private class UIMappedPanel extends UI2dContainer {
+    UIMappedPanel(UI ui, float x, float y, float w, float h) {
+      super(x, y, w, h);
+
+      final UIToggleSet toggleDisplayMode = new UIToggleSet(0, 2, 112, 18)
+       .setEvenSpacing().setParameter(mappingMode.displayMode);
+      toggleDisplayMode.addToContainer(this);
+
+      final UILabel selectedFixtureLabel = new UILabel(0, 24, getContentWidth(), 54)
+        .setLabel("");
+      selectedFixtureLabel.setBackgroundColor(#333333)
+        .setFont(createFont("ArialUnicodeMS-10.vlw", 43))
+        .setTextAlignment(PConstants.CENTER, PConstants.TOP);
+      selectedFixtureLabel.addToContainer(this);
+      mappingMode.selectedMappedFixture.addListener(new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+          if (mappingMode.inMappedMode())
+            selectedFixtureLabel.setLabel(mappingMode.getSelectedMappedFixtureId());
+        }
+      });
+
+      mappingMode.displayMode.addListener(new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+          String label = mappingMode.inDisplayAllMode()
+            ? "" : mappingMode.getSelectedMappedFixtureId();
+          selectedFixtureLabel.setLabel(label);
+          redraw();
+        }
+      });
+
+      final UIButton decrementSelectedFixture = new UIButton(122, 2, 25, 18) {
+        @Override
+        protected void onToggle(boolean active) {
+          if (mappingMode.inDisplayAllMode() || !active) return;
+          mappingMode.selectedMappedFixture.decrement(1);
+        }
+      }.setLabel("-").setMomentary(true);
+      decrementSelectedFixture.addToContainer(this);
+
+      final UIButton incrementSelectedFixture = new UIButton(147, 2, 25, 18) {
+        @Override
+        protected void onToggle(boolean active) {
+          if (mappingMode.inDisplayAllMode() || !active) return;
+          mappingMode.selectedMappedFixture.increment(1);
+        }
+      }.setLabel("+").setMomentary(true);
+      incrementSelectedFixture.addToContainer(this);
+    }
+  }
+
+  private class UIUnMappedPanel extends UI2dContainer {
+    UIUnMappedPanel(UI ui, float x, float y, float w, float h) {
+      super(x, y, w, h);
+
+      final UIToggleSet toggleDisplayMode = new UIToggleSet(0, 2, 112, 18)
+       .setEvenSpacing().setParameter(mappingMode.displayMode);
+      toggleDisplayMode.addToContainer(this);
+
+      final UILabel selectedFixtureLabel = new UILabel(0, 24, getContentWidth(), 54)
+        .setLabel("");
+      selectedFixtureLabel.setBackgroundColor(#333333)
+        .setFont(createFont("ArialUnicodeMS-10.vlw", 43))
+        .setTextAlignment(PConstants.CENTER, PConstants.TOP);
+      selectedFixtureLabel.addToContainer(this);
+      mappingMode.selectedUnMappedFixture.addListener(new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+          if (mappingMode.inUnMappedMode())
+            selectedFixtureLabel.setLabel(mappingMode.getSelectedUnMappedFixtureId());
+        }
+      });
+
+      mappingMode.displayMode.addListener(new LXParameterListener() {
+        public void onParameterChanged(LXParameter p) {
+          String label = mappingMode.inDisplayAllMode()
+            ? "" : mappingMode.getSelectedUnMappedFixtureId();
+          selectedFixtureLabel.setLabel(label);
+          redraw();
+        }
+      });
+
+      final UIButton decrementSelectedFixture = new UIButton(122, 2, 25, 18) {
+        @Override
+        protected void onToggle(boolean active) {
+          if (mappingMode.inDisplayAllMode() || !active) return;
+          mappingMode.selectedUnMappedFixture.decrement(1);
+        }
+      }.setLabel("-").setMomentary(true);
+      decrementSelectedFixture.addToContainer(this);
+
+      final UIButton incrementSelectedFixture = new UIButton(147, 2, 25, 18) {
+        @Override
+        protected void onToggle(boolean active) {
+          if (mappingMode.inDisplayAllMode() || !active) return;
+          mappingMode.selectedUnMappedFixture.increment(1);
+        }
+      }.setLabel("+").setMomentary(true);
+      incrementSelectedFixture.addToContainer(this);
+    }
+
+  }
 }

@@ -12,7 +12,7 @@
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
  */
 
-ListenableList<SLController> controllers = new ListenableList<SLController>();
+public static ListenableList<SLController> controllers = new ListenableList<SLController>();
 
 void setupOutputs(final LX lx) {
   networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
@@ -50,7 +50,6 @@ void setupOutputs(final LX lx) {
  * Output Component
  *---------------------------------------------------------------------------*/
 public final class OutputControl extends LXComponent {
-
   public final BooleanParameter enabled;
 
   public final ControllerResetModule controllerResetModule = new ControllerResetModule(lx);
@@ -226,6 +225,32 @@ class SLController extends LXOutput {
       }
     }
 
+    // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+    // TODO: refactor here
+    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+      if (mappingMode.inUnMappedMode()) {
+        if (mappingMode.inDisplayAllMode()) {
+          color col = mappingMode.getUnMappedColor();
+
+          for (int i = 0; i < numPixels; i++)
+            setPixel(i, col);
+        } else {
+          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+            color col = mappingMode.getUnMappedColor();
+
+            for (int i = 0; i < numPixels; i++)
+              setPixel(i, col);
+          } else {
+            for (int i = 0; i < numPixels; i++)
+              setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+          }
+        }
+      } else {
+        for (int i = 0; i < numPixels; i++)
+          setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+      }
+    }
+
     // Send the cube data to the cube. yay!
     try { 
       //println("packetSizeBytes: "+packetSizeBytes);
@@ -261,7 +286,7 @@ class UIOutputs extends UICollapsibleSection {
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (SLController c : controllers) { sortedControllers.add(c); }
         for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
-        final UIItemList outputList = new UIItemList(ui, 0, 22, w-8, 20);
+        final UIItemList outputList = new UIItemList(ui, 0, 22, w-8, 78);
 
         outputList.setItems(items).setSingleClickActivate(true).addToContainer(this);
 
