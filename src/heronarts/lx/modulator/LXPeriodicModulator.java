@@ -80,6 +80,10 @@ public abstract class LXPeriodicModulator extends LXModulator {
             if (this.running.isOn() && this.finished) {
                 this.setBasis(0);
             }
+        } else if (parameter == this.trigger) {
+            if (this.trigger.isOn()) {
+                this.trigger.setValue(false);
+            }
         }
     }
 

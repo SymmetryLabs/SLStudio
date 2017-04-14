@@ -43,6 +43,8 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.pattern.SolidColorPattern;
+import heronarts.lx.script.LXScriptEngine;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -87,6 +89,8 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     public final LXMappingEngine mapping = new LXMappingEngine();
 
     public final LXOscEngine osc;
+
+    public final LXScriptEngine script;
 
     private Dispatch inputDispatch = null;
 
@@ -309,6 +313,10 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         // OSC engine
         this.osc = new LXOscEngine(lx);
         LX.initTimer.log("Engine: Osc");
+
+        // Script engine
+        this.script = new LXScriptEngine(lx);
+        LX.initTimer.log("Engine: Script");
 
         // Parameters
         addParameter("crossfader", this.crossfader);

@@ -27,9 +27,9 @@ import heronarts.lx.LXUtils;
 
 public class CompoundParameter extends BoundedParameter {
 
-    private final List<LXParameterModulation> internalModulations = new ArrayList<LXParameterModulation>();
+    private final List<LXCompoundModulation> internalModulations = new ArrayList<LXCompoundModulation>();
 
-    public final List<LXParameterModulation> modulations = Collections.unmodifiableList(this.internalModulations);
+    public final List<LXCompoundModulation> modulations = Collections.unmodifiableList(this.internalModulations);
 
     /**
      * Labeled parameter with value of 0 and range of 0-1
@@ -101,7 +101,7 @@ public class CompoundParameter extends BoundedParameter {
      * @param modulation
      * @return
      */
-    public CompoundParameter addModulation(LXParameterModulation modulation) {
+    public CompoundParameter addModulation(LXCompoundModulation modulation) {
         if (this.internalModulations.contains(modulation)) {
             throw new IllegalStateException("Cannot add same modulation twice");
         }
@@ -116,7 +116,7 @@ public class CompoundParameter extends BoundedParameter {
      * @param modulation
      * @return
      */
-    public CompoundParameter removeModulation(LXParameterModulation modulation) {
+    public CompoundParameter removeModulation(LXCompoundModulation modulation) {
         this.internalModulations.remove(modulation);
         bang();
         return this;
@@ -133,7 +133,7 @@ public class CompoundParameter extends BoundedParameter {
     @Override
     public double getNormalized() {
         double normalized = super.getNormalized(getBaseValue());
-        for (LXParameterModulation modulation : this.internalModulations) {
+        for (LXCompoundModulation modulation : this.internalModulations) {
             if (modulation.getPolarity() == LXParameter.Polarity.UNIPOLAR) {
                 normalized += modulation.source.getNormalized() * modulation.range.getValue();
             } else {

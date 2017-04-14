@@ -36,7 +36,8 @@ public class LXMappingEngine {
         OFF,
         MIDI,
         MODULATION_SOURCE,
-        MODULATION_TARGET
+        MODULATION_TARGET,
+        TRIGGER_TARGET
     };
 
     private LXParameter controlTarget = null;

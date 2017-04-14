@@ -32,6 +32,11 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
         new BooleanParameter("On", false)
         .setDescription("Sets whether the component is running");
 
+    public final BooleanParameter trigger =
+        new BooleanParameter("Trigger", false)
+        .setMode(BooleanParameter.Mode.MOMENTARY)
+        .setDescription("Resets the cycle and starts running");
+
     protected LXRunnable() {
         this(null);
     }
@@ -43,6 +48,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
     protected LXRunnable(LX lx, String label) {
         super(lx, label);
         addParameter("running", this.running);
+        addParameter("trigger", this.trigger);
     }
 
 
@@ -53,6 +59,12 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
                 onStart();
             } else {
                 onStop();
+            }
+        } else if (parameter == this.trigger) {
+            if (this.trigger.isOn()) {
+                onReset();
+                start();
+                this.trigger.setValue(false);
             }
         }
     }
@@ -95,7 +107,8 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      * @return this
      */
     public final LXRunnable trigger() {
-        return this.reset().start();
+        this.trigger.setValue(true);
+        return this;
     }
 
     /**

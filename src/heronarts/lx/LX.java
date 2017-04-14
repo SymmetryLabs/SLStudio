@@ -228,6 +228,9 @@ public class LX {
         this.engine = new LXEngine(this);
         LX.initTimer.log("Engine");
 
+        // Midi
+        this.engine.midi.initialize();
+
         // Tempo
         this.tempo = new Tempo(this);
         LX.initTimer.log("Tempo");

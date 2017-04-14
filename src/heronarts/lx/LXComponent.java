@@ -179,6 +179,14 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         return path;
     }
 
+    public static String getCanonicalLabel(LXParameter p) {
+        LXComponent component = p.getComponent();
+        if (component != null) {
+            return component.getCanonicalPath() + " | " + p.getLabel();
+        }
+        return p.getLabel();
+    }
+
     public String getLabel() {
         return label.getString();
     }

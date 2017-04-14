@@ -118,10 +118,10 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
     public final GraphicMeter meter;
 
     /**
-     * Trigger parameter is set to true for one frame when the beat is triggered.
+     * Gate parameter is set to true for one frame when the beat is triggered.
      */
-    public final BooleanParameter trigger =
-        new BooleanParameter("Trigger")
+    public final BooleanParameter gate =
+        new BooleanParameter("Gate")
         .setDescription("Engages when the beat is first detected");
 
     /**
@@ -191,7 +191,7 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
         addParameter("decay", this.decay);
         addParameter("minFreq", this.minFreq);
         addParameter("maxFreq", this.maxFreq);
-        addParameter("trigger", this.trigger);
+        addParameter("gate", this.gate);
         addParameter("average", this.average);
         addParameter("tap", this.teachTempo);
     }
@@ -315,7 +315,7 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
         } else {
             this.envelope = Math.max(0, this.envelope - deltaMs / this.decay.getValue());
         }
-        this.trigger.setValue(triggered);
+        this.gate.setValue(triggered);
 
         return this.envelope;
     }

@@ -47,7 +47,8 @@ import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXParameterModulation;
+import heronarts.lx.parameter.LXTriggerModulation;
+import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.StringParameter;
 
 public class LXOscEngine extends LXComponent {
@@ -263,9 +264,13 @@ public class LXOscEngine extends LXComponent {
             super(InetAddress.getByName(host), port, bufferSize);
             registerComponent(lx.engine);
             registerComponent(lx.palette);
+            registerComponent(lx.tempo);
             registerComponent(lx.engine.audio);
             registerComponent(lx.engine.output);
             registerComponent(lx.engine.modulation);
+            for (LXModulator modulator : lx.engine.modulation.modulators) {
+                registerComponent(modulator);
+            }
             lx.engine.modulation.addListener(this);
             registerComponent(lx.engine.masterChannel);
             for (LXChannel channel : lx.engine.getChannels()) {
@@ -399,25 +404,36 @@ public class LXOscEngine extends LXComponent {
         public void channelMoved(LXEngine engine, LXChannel channel) {}
 
         @Override
-        public void modulationAdded(LXModulationEngine engine, LXParameterModulation modulation) {
-            // TODO(mcslee): should probably OSC-map these...
-        }
-
-        @Override
-        public void modulationRemoved(LXModulationEngine engine, LXParameterModulation modulation) {
-            // TODO(mcslee): should probably OSC-map these...
-        }
-
-        @Override
         public void modulatorAdded(LXModulationEngine engine, LXModulator modulator) {
             registerComponent(modulator);
-
         }
 
         @Override
         public void modulatorRemoved(LXModulationEngine engine, LXModulator modulator) {
             unregisterComponent(modulator);
         }
+
+        @Override
+        public void modulationAdded(LXModulationEngine engine, LXCompoundModulation modulation) {
+            // TODO(mcslee): should probably OSC-map these...
+        }
+
+        @Override
+        public void modulationRemoved(LXModulationEngine engine, LXCompoundModulation modulation) {
+            // TODO(mcslee): should probably OSC-map these...
+        }
+
+        @Override
+        public void triggerAdded(LXModulationEngine engine, LXTriggerModulation trigger) {
+            // TODO(mcslee): should probably OSC-map these...
+        }
+
+        @Override
+        public void triggerRemoved(LXModulationEngine engine, LXTriggerModulation trigger) {
+            // TODO(mcslee): should probably OSC-map these...
+        }
+
+
     }
 
     public class Receiver {

@@ -24,6 +24,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heronarts.lx.modulator.Click;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -37,7 +38,7 @@ import heronarts.lx.parameter.MutableParameter;
  * and ramp() returns a double value indicating the current 4/4 phase from 0 to
  * 1.
  */
-public class Tempo extends LXModulatorComponent {
+public class Tempo extends LXModulatorComponent implements LXOscComponent {
 
     public interface Listener {
         public void onBeat(Tempo tempo);
@@ -82,11 +83,15 @@ public class Tempo extends LXModulatorComponent {
 
     public Tempo(LX lx) {
         super(lx);
-        addParameter(this.bpm);
-        addParameter(this.tap);
-        addParameter(this.nudgeUp);
-        addParameter(this.nudgeDown);
+        addParameter("bpm", this.bpm);
+        addParameter("tap", this.tap);
+        addParameter("nudgeUp", this.nudgeUp);
+        addParameter("nudgeDown", this.nudgeDown);
         startModulator(this.click);
+    }
+
+    public String getOscAddress() {
+        return "/lx/tempo";
     }
 
     @Override

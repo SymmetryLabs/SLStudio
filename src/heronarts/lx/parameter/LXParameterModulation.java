@@ -24,66 +24,16 @@ import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
-import heronarts.lx.color.ColorParameter;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.modulator.LXModulator;
 
-public class LXParameterModulation extends LXComponent {
+public abstract class LXParameterModulation extends LXComponent {
 
-    public final LXNormalizedParameter source;
+    private final LXParameter source;
 
-    public final CompoundParameter target;
+    private final LXParameter target;
 
-    public final ColorParameter color;
-
-    // Hack so that Processing IDE can access it...
-    public final ColorParameter clr;
-
-    public final EnumParameter<LXParameter.Polarity> polarity =
-        new EnumParameter<LXParameter.Polarity>("Polarity", LXParameter.Polarity.UNIPOLAR)
-        .setDescription("Species whether this modulation is unipolar (one-directional) or bipolar (bi-directional)");
-
-    public final BoundedParameter range = (BoundedParameter)
-        new BoundedParameter("Range", 0, -1, 1)
-        .setDescription("Species the depth of this modulation, may be positive or negative")
-        .setPolarity(LXParameter.Polarity.BIPOLAR);
-
-    public LXParameterModulation(LX lx, JsonObject obj) {
-        this(
-            (LXNormalizedParameter) getParameter(lx, obj.getAsJsonObject(KEY_SOURCE)),
-            (CompoundParameter) getParameter(lx, obj.getAsJsonObject(KEY_TARGET))
-        );
-    }
-
-    public LXParameterModulation(LXNormalizedParameter source, CompoundParameter target) {
+    protected LXParameterModulation(LXParameter source, LXParameter target) {
         this.source = source;
         this.target = target;
-        if (source instanceof LXModulator) {
-            this.color = ((LXModulator) source).color;
-        } else {
-            this.color = new ColorParameter("Color", LXColor.hsb(Math.random() * 360, 100, 100));
-            addParameter(this.color);
-        }
-        this.clr = this.color;
-        this.polarity.setValue(source.getPolarity());
-        addParameter(this.polarity);
-        addParameter(this.range);
-        target.addModulation(this);
-    }
-
-    public LXParameterModulation setPolarity(LXParameter.Polarity polarity) {
-        this.polarity.setValue(polarity);
-        return this;
-    }
-
-    public LXParameter.Polarity getPolarity() {
-        return this.polarity.getEnum();
-    }
-
-    @Override
-    public void dispose() {
-        this.target.removeModulation(this);
-        super.dispose();
     }
 
     @Override
@@ -91,12 +41,13 @@ public class LXParameterModulation extends LXComponent {
         return this.source.getLabel() + " > " + this.target.getLabel();
     }
 
-    private static final String KEY_SOURCE = "source";
-    private static final String KEY_TARGET = "target";
+    protected static final String KEY_SOURCE = "source";
+    protected static final String KEY_TARGET = "target";
+
     private static final String KEY_COMPONENT_ID = "componentId";
     private static final String KEY_PARAMETER_PATH = "parameterPath";
 
-    private static LXParameter getParameter(LX lx, JsonObject obj) {
+    protected static LXParameter getParameter(LX lx, JsonObject obj) {
         if (obj.has(KEY_ID)) {
             return (LXParameter) lx.getComponent(obj.get(KEY_ID).getAsInt());
         }
@@ -104,7 +55,6 @@ public class LXParameterModulation extends LXComponent {
         String path = obj.get(KEY_PARAMETER_PATH).getAsString();
         return component.getParameter(path);
     }
-
 
     @Override
     public void save(LX lx, JsonObject obj) {
@@ -123,4 +73,5 @@ public class LXParameterModulation extends LXComponent {
         obj.add(KEY_TARGET, targetObj);
         super.save(lx, obj);
     }
+
 }

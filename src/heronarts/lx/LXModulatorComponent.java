@@ -62,7 +62,7 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
         return modulator;
     }
 
-    protected final LXModulator startModulator(LXModulator modulator) {
+    public final LXModulator startModulator(LXModulator modulator) {
         addModulator(modulator).start();
         return modulator;
     }

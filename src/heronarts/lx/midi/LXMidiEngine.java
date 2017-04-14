@@ -44,6 +44,36 @@ import com.google.gson.JsonObject;
 
 public class LXMidiEngine implements LXSerializable {
 
+    public enum Channel {
+        CH_1, CH_2, CH_3, CH_4, CH_5, CH_6, CH_7, CH_8, CH_9, CH_10, CH_11, CH_12, CH_13, CH_14, CH_15, CH_16, OMNI;
+
+        public boolean matches(ShortMessage message) {
+            switch (this) {
+            case OMNI: return true;
+            default: return message.getChannel() == ordinal();
+            }
+        }
+
+        public int getChannel() {
+            switch (this) {
+            case OMNI:
+                return -1;
+            default:
+                return ordinal();
+            }
+        }
+
+        @Override
+        public String toString() {
+            switch (this) {
+            case OMNI:
+                return "Omni";
+            default:
+                return "Ch." + (ordinal() + 1);
+            }
+        }
+    }
+
     public interface MappingListener {
         public void mappingAdded(LXMidiEngine engine, LXMidiMapping mapping);
         public void mappingRemoved(LXMidiEngine engine, LXMidiMapping mapping);
@@ -78,10 +108,9 @@ public class LXMidiEngine implements LXSerializable {
 
     public LXMidiEngine(LX lx) {
         this.lx = lx;
-        initialize();
     }
 
-    private void initialize() {
+    public void initialize() {
         new Thread() {
             @Override
             public void run() {
@@ -311,7 +340,8 @@ public class LXMidiEngine implements LXSerializable {
             dispatch(message, listener);
         }
         for (LXChannel channel : this.lx.engine.getChannels()) {
-            if (channel.midiMonitor.isOn()) {
+            if (channel.midiMonitor.isOn() && channel.midiChannel.getEnum().matches(message)) {
+                channel.midiMessage(message);
                 dispatch(message, channel.getActivePattern());
                 LXPattern nextPattern = channel.getNextPattern();
                 if (nextPattern != null) {
@@ -321,7 +351,7 @@ public class LXMidiEngine implements LXSerializable {
         }
     }
 
-    void dispatch(LXShortMessage message, LXMidiListener listener) {
+    public void dispatch(LXShortMessage message, LXMidiListener listener) {
         switch (message.getCommand()) {
         case ShortMessage.NOTE_ON:
             MidiNoteOn note = (MidiNoteOn) message;

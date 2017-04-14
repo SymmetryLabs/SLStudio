@@ -21,6 +21,8 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
+import heronarts.lx.midi.LXMidiEngine;
+import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -57,17 +59,15 @@ public class LXChannel extends LXBus {
      * channel state is modified.
      */
     public interface Listener extends LXBus.Listener {
-
         public void indexChanged(LXChannel channel);
-
         public void patternAdded(LXChannel channel, LXPattern pattern);
-
         public void patternRemoved(LXChannel channel, LXPattern pattern);
-
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern);
-
         public void patternDidChange(LXChannel channel, LXPattern pattern);
+    }
 
+    public interface MidiListener {
+        public void midiReceived(LXChannel channel);
     }
 
     /**
@@ -110,6 +110,7 @@ public class LXChannel extends LXBus {
     }
 
     private final List<Listener> listeners = new ArrayList<Listener>();
+    private final List<MidiListener> midiListeners = new ArrayList<MidiListener>();
 
     public enum CrossfadeGroup {
         BYPASS,
@@ -142,6 +143,13 @@ public class LXChannel extends LXBus {
     public final BooleanParameter midiMonitor =
         new BooleanParameter("MIDI", false)
         .setDescription("Enables or disables monitoring of MIDI input on this channel");
+
+    /**
+     * Which channel MIDI messages this channel observes
+     */
+    public final EnumParameter<LXMidiEngine.Channel> midiChannel =
+        new EnumParameter<LXMidiEngine.Channel>("MIDI Channel", LXMidiEngine.Channel.OMNI)
+        .setDescription("Determines which MIDI channel is responded to");
 
     /**
      * Whether this channel should show in the cue UI.
@@ -220,6 +228,7 @@ public class LXChannel extends LXBus {
         addParameter("enabled", this.enabled);
         addParameter("cue", this.cueActive);
         addParameter("midiMonitor", this.midiMonitor);
+        addParameter("midiChannel", this.midiChannel);
         addParameter("autoCycleEnabled", this.autoCycleEnabled);
         addParameter("autoCycleTimeSecs", this.autoCycleTimeSecs);
         addParameter("fader", this.fader);
@@ -264,6 +273,22 @@ public class LXChannel extends LXBus {
     public final void removeListener(Listener listener) {
         super.removeListener(listener);
         this.listeners.remove(listener);
+    }
+
+    public LXChannel addMidiListener(MidiListener listener) {
+        this.midiListeners.add(listener);
+        return this;
+    }
+
+    public LXChannel removeMidiListener(MidiListener listener) {
+        this.midiListeners.remove(listener);
+        return this;
+    }
+
+    public void midiMessage(LXShortMessage message) {
+        for (MidiListener listener : this.midiListeners) {
+            listener.midiReceived(this);
+        }
     }
 
     final LXChannel setIndex(int index) {
