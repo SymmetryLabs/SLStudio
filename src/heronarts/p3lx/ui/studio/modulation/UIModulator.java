@@ -66,7 +66,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     protected static final int CONTENT_Y = 20;
     public static final int MAP_WIDTH = 24;
     protected static final int LOOP_WIDTH = MAP_WIDTH;
-    protected static final int TRIGGER_WIDTH = 12;
+    protected static final int TRIGGER_WIDTH = 14;
     protected static final int COLOR_WIDTH = 10;
 
     private final UI ui;
@@ -107,13 +107,12 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             .addToContainer(this);
 
             if (this.modulator instanceof LXPeriodicModulator) {
-                new UIButton(TITLE_X, PADDING, TRIGGER_WIDTH, 12)
+                new UIButton(TITLE_X, PADDING, 12, 12)
                     .setLabel("\u2022")
                     .setParameter(this.modulator.trigger)
                     .setBorderRounding(4)
                     .addToContainer(this);
-
-                titleX += PADDING + TRIGGER_WIDTH;
+                titleX += PADDING + 12;
 
                 loopingButton = new UIButton(this.width - 3*PADDING - COLOR_WIDTH - MAP_WIDTH - LOOP_WIDTH, PADDING-1, LOOP_WIDTH, 14)
                     .setLabel("\u21BA")
