@@ -32,7 +32,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXParameterModulation;
+import heronarts.lx.parameter.LXTriggerModulation;
+import heronarts.lx.parameter.LXCompoundModulation;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -329,6 +330,19 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         return this.ui.getControlTarget() == this;
     }
 
+    boolean isTriggerSource() {
+        return
+            this.ui.triggerTargetMapping &&
+            (this == this.ui.getTriggerSource());
+    }
+
+    boolean isTriggerTargetMapping() {
+        return
+            this.ui.triggerTargetMapping &&
+            (this instanceof UITriggerTarget) &&
+            ((UITriggerTarget) this).getTriggerTarget() != null;
+    }
+
     boolean isModulationSource() {
         return
             this.ui.modulationTargetMapping &&
@@ -426,10 +440,17 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             LXNormalizedParameter source = this.ui.getModulationSource().getModulationSource();
             CompoundParameter target = ((UIModulationTarget)this).getModulationTarget();
             if (source != null && target != null) {
-                this.ui.lx.engine.modulation.addModulation(new LXParameterModulation(source, target));
+                this.ui.lx.engine.modulation.addModulation(new LXCompoundModulation(source, target));
             }
             this.ui.mapModulationSource(null);
             return;
+        } else if (isTriggerTargetMapping() && !isTriggerSource()) {
+            BooleanParameter source = this.ui.getTriggerSource().getTriggerSource();
+            BooleanParameter target = ((UITriggerTarget)this).getTriggerTarget();
+            if (source != null && target != null) {
+                this.ui.lx.engine.modulation.addTrigger(new LXTriggerModulation(source, target));
+            }
+            this.ui.mapTriggerSource(null);
         }
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
@@ -522,14 +543,14 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     void mouseOver(MouseEvent mouseEvent) {
         this.setDescription = getDescription();
         if (this.setDescription != null) {
-            getUI().contextualHelpText.setValue(this.setDescription);
+            getUI().setMouseoverHelpText(this.setDescription);
         }
         onMouseOver(mouseEvent);
     }
 
     void mouseOut(MouseEvent mouseEvent) {
         if (this.setDescription != null) {
-            getUI().contextualHelpText.setValue("");
+            getUI().clearMouseoverHelpText();
             this.setDescription = null;
         }
         if (this.overChild != null) {

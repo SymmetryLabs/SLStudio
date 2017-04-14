@@ -33,7 +33,6 @@ import heronarts.p3lx.ui.component.UIDropMenu;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UISlider;
 import processing.core.PConstants;
-import processing.core.PGraphics;
 
 public class UIMasterStrip extends UIMixerStrip {
 
@@ -56,7 +55,7 @@ public class UIMasterStrip extends UIMixerStrip {
         .addToContainer(this);
 
         float syp = 22;
-        new UISlider(UISlider.Direction.VERTICAL, this.width-PADDING-FADER_WIDTH, syp, FADER_WIDTH, 80)
+        new UISlider(UISlider.Direction.VERTICAL, this.width-PADDING-FADER_WIDTH, syp, FADER_WIDTH, FADER_HEIGHT)
         .setShowLabel(false)
         .setParameter(lx.engine.output.brightness)
         .addToContainer(this);
@@ -74,12 +73,6 @@ public class UIMasterStrip extends UIMixerStrip {
         .setParameter(lx.engine.crossfader)
         .setShowLabel(false)
         .addToContainer(this);
-    }
-
-    @Override
-    public void onDraw(UI ui, PGraphics pg) {
-        super.onDraw(ui, pg);
-        pg.line(1, this.height - 64, this.width-2, this.height - 64);
     }
 
 }

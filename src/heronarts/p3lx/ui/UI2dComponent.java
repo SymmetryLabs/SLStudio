@@ -580,6 +580,15 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     /**
+     * Returns the 2d container that this is in
+     *
+     * @return
+     */
+    public UI2dContainer getContainer() {
+        return (UI2dContainer) this.parent;
+    }
+
+    /**
      * Adds this component to a container, also removing it from any other container that
      * is currently holding it.
      *
@@ -727,7 +736,7 @@ public abstract class UI2dComponent extends UIObject {
             if (isControlTarget()) {
                 drawFocus(ui, pg, 0xccff0000);
             }
-        } else if (isModulationSource()) {
+        } else if (isModulationSource() || isTriggerSource()) {
             pg.noFill();
             pg.stroke(0xff000000 | ui.theme.getModulationTargetMappingColor());
             pg.rect(0, 0, this.width-1, this.height-1, this.borderRounding);
@@ -735,7 +744,7 @@ public abstract class UI2dComponent extends UIObject {
             pg.noStroke();
             pg.fill(ui.theme.getModulationSourceMappingColor());
             pg.rect(0, 0, this.width, this.height);
-        } else if (isModulationTargetMapping()) {
+        } else if (isModulationTargetMapping() || isTriggerTargetMapping()) {
             pg.noStroke();
             pg.fill(ui.theme.getModulationTargetMappingColor());
             pg.rect(0, 0, this.width, this.height);

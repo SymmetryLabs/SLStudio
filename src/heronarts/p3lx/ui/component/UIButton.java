@@ -121,6 +121,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
         if (parameter != null) {
             this.booleanParameter = parameter;
             this.booleanParameter.addListener(this.booleanParameterListener);
+            setMomentary(this.booleanParameter.getMode() == BooleanParameter.Mode.MOMENTARY);
             setActive(this.booleanParameter.isOn());
         }
         return this;
@@ -263,4 +264,5 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
     public LXParameter getControlTarget() {
         return isMappable() ? this.booleanParameter : null;
     }
+
 }

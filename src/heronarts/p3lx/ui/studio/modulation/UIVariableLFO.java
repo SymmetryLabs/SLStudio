@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.studio.modulation;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.VariableLFO;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -35,12 +36,15 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIModulationSource;
+import heronarts.p3lx.ui.UITimerTask;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UIToggleSet;
 import processing.core.PGraphics;
+import processing.event.MouseEvent;
 
 public class UIVariableLFO extends UIModulator {
 
+    private static final int WAVE_HEIGHT = 40;
     private static final int HEIGHT = 110;
 
     private final VariableLFO lfo;
@@ -50,8 +54,12 @@ public class UIVariableLFO extends UIModulator {
         super(ui, lx, lfo, x, y, w, HEIGHT);
         this.lfo = lfo;
 
-        this.wave = new UIWave(ui, 0, 0, getContentWidth(), 40);
+        this.wave = new UIWave(ui, 0, 0, getContentWidth(), WAVE_HEIGHT);
         this.wave.addToContainer(this);
+
+        // TODO(mcslee): improve this Basis UI...
+        // new UIBasis(ui, 0, WAVE_HEIGHT, getContentWidth(), 4).addToContainer(this);
+
         new UIToggleSet(0, 44, getContentWidth(), 16)
         .setParameter(lfo.waveshape)
         .addToContainer(this);
@@ -72,7 +80,46 @@ public class UIVariableLFO extends UIModulator {
         return this.wave;
     }
 
+    private class UIBasis extends UI2dComponent {
+        private int basisX;
+
+        private UIBasis(UI ui, float x, float y, float w, float h) {
+            super(x, y, w, h);
+            setBackgroundColor(ui.theme.getControlDisabledColor());
+
+            addLoopTask(new UITimerTask(60, UITimerTask.Mode.FPS) {
+                @Override
+                protected void run() {
+                    int bX = (int) Math.round(1 + lfo.getBasisf() * (width-3.));
+                    if (bX != basisX) {
+                        basisX = bX;
+                        redraw();
+                    }
+                }
+            });
+        }
+
+        @Override
+        protected void onDraw(UI ui, PGraphics pg) {
+            pg.fill(ui.theme.getPrimaryColor());
+            pg.noStroke();
+            pg.rect(LXUtils.constrainf(this.basisX, 0, this.width-2), 0, 2, this.height-1);
+        }
+
+        @Override
+        public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+            lfo.setBasis((mx-1) / (this.width-2));
+        }
+
+        @Override
+        public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+            lfo.setBasis((mx-1) / (this.width-2));
+        }
+    }
+
     private class UIWave extends UI2dComponent implements UIModulationSource {
+
+
         private UIWave(UI ui, float x, float y, float w, float h) {
             super(x, y, w, h);
             setBackgroundColor(ui.theme.getDarkBackgroundColor());

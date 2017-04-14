@@ -20,6 +20,10 @@
 
 package heronarts.p3lx.ui.studio.project;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
@@ -34,11 +38,21 @@ public class UIPatternManager extends UIComponentManager {
     public UIPatternManager(UI ui, LX lx, float x, float y, float w, float h) {
         super(ui, lx, x, y, w, h);
         setTitle("PATTERNS");
-
         this.itemList.setDescription("Available patterns, double-click to add to the active channel");
 
-        for (Class<? extends LXPattern> pattern : lx.getRegisteredPatterns()) {
-            this.itemList.addItem(new PatternItem(pattern));
+        List<Class<? extends LXPattern>> patterns = lx.getRegisteredPatterns();
+        PatternItem[] items = new PatternItem[patterns.size()];
+        for (int i = 0; i < items.length; ++i) {
+            items[i] = new PatternItem(patterns.get(i));
+        }
+        Arrays.sort(items, new Comparator<PatternItem>() {
+            @Override
+            public int compare(PatternItem o1, PatternItem o2) {
+                return o1.label.compareToIgnoreCase(o2.label);
+            }
+        });
+        for (PatternItem item : items) {
+            this.itemList.addItem(item);
         }
     }
 

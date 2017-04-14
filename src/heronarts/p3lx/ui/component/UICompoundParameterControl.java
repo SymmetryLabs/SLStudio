@@ -33,7 +33,7 @@ import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXParameterModulation;
+import heronarts.lx.parameter.LXCompoundModulation;
 
 public class UICompoundParameterControl extends UIParameterControl {
 
@@ -59,7 +59,7 @@ public class UICompoundParameterControl extends UIParameterControl {
         return super.setParameter(parameter);
     }
 
-    protected void registerModulation(LXParameterModulation modulation) {
+    protected void registerModulation(LXCompoundModulation modulation) {
         if (!this.modulationParameters.contains(modulation.range)) {
             this.modulationParameters.add(modulation.range);
             this.modulationParameters.add(modulation.polarity);

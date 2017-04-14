@@ -75,7 +75,7 @@ public class UITempo extends UI2dContainer {
         Blinker(Tempo tempo, float x, float y, float w, float h) {
             super(x, y, w, h);
             this.tempo = tempo;
-            addLoopTask(new UITimerTask(14, UITimerTask.FPS) {
+            addLoopTask(new UITimerTask(14, UITimerTask.Mode.FPS) {
                 @Override
                 public void run() {
                     if (blinkOn) {

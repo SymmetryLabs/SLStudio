@@ -41,7 +41,7 @@ public class UIIntegerBox extends UINumberBox implements UIControlTarget {
     private int minValue = 0;
     private int maxValue = PConstants.MAX_INT;
     private int value = 0;
-    private DiscreteParameter parameter = null;
+    protected DiscreteParameter parameter = null;
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {

@@ -38,13 +38,15 @@ import processing.event.MouseEvent;
 
 public abstract class UIMixerStrip extends UI2dContainer {
 
-    public final static int WIDTH = 72;
     public final static int MARGIN = UIMixer.PADDING;
-    public final static int SPACING = 1;
     public final static int PADDING = 2;
-    public final static int HEIGHT = 168;
+    public final static int WIDTH = 72;
+    public final static int SPACING = 1;
 
-    public final static int FADER_WIDTH = 22;
+    private final static int HEIGHT = 168;
+
+    protected final static int FADER_WIDTH = 22;
+    protected final static int FADER_HEIGHT = 80;
 
     private final UI ui;
     protected final LX lx;
@@ -81,6 +83,8 @@ public abstract class UIMixerStrip extends UI2dContainer {
     public void onDraw(UI ui, PGraphics pg) {
         pg.stroke(0xff333333);
         pg.line(1, 20, this.width-2, 20);
+
+        pg.line(1, this.height - 64, this.width-2, this.height - 64);
     }
 
     @Override

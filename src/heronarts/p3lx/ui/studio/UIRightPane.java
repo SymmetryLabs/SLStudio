@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.studio;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
@@ -34,7 +35,8 @@ import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.VariableLFO;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.parameter.LXParameterModulation;
+import heronarts.lx.parameter.LXTriggerModulation;
+import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
@@ -154,22 +156,28 @@ public class UIRightPane extends UIPane {
         for (LXModulator modulator : lx.engine.modulation.getModulators()) {
             addModulator(modulator);
         }
-        for (LXParameterModulation modulation : lx.engine.modulation.modulations) {
+        for (LXCompoundModulation modulation : lx.engine.modulation.modulations) {
             addModulation(modulation);
         }
 
         lx.engine.modulation.addListener(new LXModulationEngine.Listener() {
-            public void modulationAdded(LXModulationEngine engine, LXParameterModulation modulation) {
-                addModulation(modulation);
-            }
-            public void modulationRemoved(LXModulationEngine engine, LXParameterModulation modulation) {
-                removeModulation(modulation);
-            }
             public void modulatorAdded(LXModulationEngine engine, LXModulator modulator) {
                 addModulator(modulator);
             }
             public void modulatorRemoved(LXModulationEngine engine, LXModulator modulator) {
                 removeModulator(modulator);
+            }
+            public void modulationAdded(LXModulationEngine engine, LXCompoundModulation modulation) {
+                addModulation(modulation);
+            }
+            public void modulationRemoved(LXModulationEngine engine, LXCompoundModulation modulation) {
+                removeModulation(modulation);
+            }
+            public void triggerAdded(LXModulationEngine engine, LXTriggerModulation trigger) {
+                addTrigger(trigger);
+            }
+            public void triggerRemoved(LXModulationEngine engine, LXTriggerModulation trigger) {
+                removeTrigger(trigger);
             }
         });
     }
@@ -209,7 +217,7 @@ public class UIRightPane extends UIPane {
         }
     }
 
-    private void addModulation(LXParameterModulation modulation) {
+    private void addModulation(LXCompoundModulation modulation) {
         UIModulator uiModulator = findModulator(modulation.source);
         if (uiModulator == null) {
             uiModulator = (UIModulator) new UIParameterModulator(this.ui, this.lx, modulation.source, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
@@ -217,10 +225,32 @@ public class UIRightPane extends UIPane {
         uiModulator.addModulation(modulation);
     }
 
-    private void removeModulation(LXParameterModulation modulation) {
+    private void removeModulation(LXCompoundModulation modulation) {
         UIModulator uiModulator = findModulator(modulation.source);
         if (uiModulator != null) {
             uiModulator.removeModulation(modulation);
+        }
+    }
+
+    private UIModulator findModulator(LXTriggerModulation trigger) {
+        LXComponent source = trigger.source.getComponent();
+        if (source instanceof LXModulator) {
+            return findModulator((LXModulator) source);
+        }
+        return null;
+    }
+
+    private void addTrigger(LXTriggerModulation trigger) {
+        UIModulator uiModulator = findModulator(trigger);
+        if (uiModulator != null) {
+            uiModulator.addTrigger(trigger);
+        }
+    }
+
+    private void removeTrigger(LXTriggerModulation trigger) {
+        UIModulator uiModulator = findModulator(trigger);
+        if (uiModulator != null) {
+            uiModulator.removeTrigger(trigger);
         }
     }
 }

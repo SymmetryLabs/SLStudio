@@ -108,6 +108,7 @@ public class P3LX extends LX {
         super(model);
         this.applet = applet;
 
+        this.engine.script.setScriptPath(applet.sketchPath());
 
         for (Class<?> cls : applet.getClass().getDeclaredClasses()) {
             if (LXPattern.class.isAssignableFrom(cls)) {

@@ -32,7 +32,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterModulation;
+import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIFocus;
 import processing.core.PConstants;
@@ -84,12 +84,13 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
 
         float arcSize = KNOB_SIZE;
         pg.noStroke();
+        pg.ellipseMode(PConstants.CENTER);
 
         // Modulations!
         if (this.parameter instanceof CompoundParameter) {
             CompoundParameter compound = (CompoundParameter) this.parameter;
             for (int i = compound.modulations.size()-1; i >= 0; --i) {
-                LXParameterModulation modulation = compound.modulations.get(i);
+                LXCompoundModulation modulation = compound.modulations.get(i);
                 registerModulation(modulation);
 
                 float modStart, modEnd;
@@ -144,7 +145,6 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         // Outer fill
         pg.noStroke();
         pg.fill(ui.theme.getControlBackgroundColor());
-        pg.ellipseMode(PConstants.CENTER);
         pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, ARC_START, ARC_END);
 
         // Value indication
@@ -172,7 +172,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         super.onMousePressed(mouseEvent, mx, my);
         this.dragValue = getNormalized();
         if ((this.parameter != null) && (mouseEvent.getCount() > 1)) {
-            LXParameterModulation modulation = getModulation(mouseEvent.isShiftDown());
+            LXCompoundModulation modulation = getModulation(mouseEvent.isShiftDown());
             if (modulation != null && (mouseEvent.isControlDown() || mouseEvent.isMetaDown())) {
                 modulation.range.reset();
             } else {
@@ -181,7 +181,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         }
     }
 
-    private LXParameterModulation getModulation(boolean secondary) {
+    private LXCompoundModulation getModulation(boolean secondary) {
         if (this.parameter != null && this.parameter instanceof CompoundParameter) {
             CompoundParameter compound = (CompoundParameter) this.parameter;
             int size = compound.modulations.size();
@@ -203,7 +203,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         }
 
         float delta = dy / 100.f;
-        LXParameterModulation modulation = getModulation(mouseEvent.isShiftDown());
+        LXCompoundModulation modulation = getModulation(mouseEvent.isShiftDown());
         if (modulation != null && (mouseEvent.isMetaDown() || mouseEvent.isControlDown())) {
             modulation.range.setValue(modulation.range.getValue() - delta);
         } else {

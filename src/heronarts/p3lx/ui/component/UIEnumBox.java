@@ -24,41 +24,36 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui;
+package heronarts.p3lx.ui.component;
 
-import heronarts.lx.LXLoopTask;
+import processing.event.KeyEvent;
 
-public abstract class UITimerTask implements LXLoopTask {
+public class UIEnumBox extends UIIntegerBox {
 
-    private double accum = 0;
-
-    private final double period;
-
-    public enum Mode {
-        MILLISECONDS,
-        FPS
+    public UIEnumBox() {
+        this(0, 0, 0, 0);
     }
 
-    protected UITimerTask(double period) {
-        this(period, Mode.MILLISECONDS);
-    }
-
-    protected UITimerTask(double period, Mode mode) {
-        this.period = (mode == Mode.FPS) ? (1000. / period) : period;
+    public UIEnumBox(float x, float y, float w, float h) {
+        super(x, y, w, h);
+        enableImmediateEdit(false);
     }
 
     @Override
-    public final void loop(double deltaMs) {
-        this.accum += deltaMs;
-        if (this.accum >= this.period) {
-            this.accum = this.accum % this.period;
-            run();
+    public String getValueString() {
+        if (this.parameter != null) {
+            return this.parameter.getOption();
         }
+        return super.getValueString();
     }
 
-    /**
-     * Subclasses implement this method to perform the operation
-     */
-    protected abstract void run();
-
+    @Override
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+            consumeKeyEvent();
+            incrementValue(keyEvent);
+        } else {
+            super.onKeyPressed(keyEvent, keyChar, keyCode);
+        }
+    }
 }

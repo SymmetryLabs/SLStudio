@@ -135,7 +135,7 @@ class UIChannelDevice extends UIDevice {
         UIProgressBox(final LXChannel channel, float x, float y, float w, float h) {
             super(x, y, w, h);
             this.channel = channel;
-            addLoopTask(new UITimerTask(30, UITimerTask.FPS) {
+            addLoopTask(new UITimerTask(30, UITimerTask.Mode.FPS) {
                 @Override
                 public void run() {
                     if (hasProgress()) {

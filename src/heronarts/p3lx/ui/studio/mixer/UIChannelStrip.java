@@ -30,16 +30,20 @@ import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIButtonGroup;
 import heronarts.p3lx.ui.component.UIDropMenu;
+import heronarts.p3lx.ui.component.UIEnumBox;
 import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.component.UITextBox;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -51,6 +55,46 @@ public class UIChannelStrip extends UIMixerStrip {
     private final UITextBox channelName;
     private final UIButton activeButton;
     private final UISlider fader;
+
+    private class MidiIndicator extends UI2dComponent implements LXChannel.MidiListener {
+
+        private static final int BLINK_MS = 150;
+        private boolean on = false;
+        private double turnOff = 0;
+
+        private MidiIndicator(float x, float y, float w, float h) {
+            super(x, y, w, h);
+            channel.addMidiListener(this);
+            addLoopTask(new LXLoopTask() {
+                @Override
+                public void loop(double deltaMs) {
+                    if (turnOff < BLINK_MS) {
+                        turnOff += deltaMs;
+                        if (turnOff >= BLINK_MS) {
+                            on = false;
+                            redraw();
+                        }
+                    }
+                }
+            });
+        }
+
+        @Override
+        public void onDraw(UI ui, PGraphics pg) {
+            pg.noStroke();
+            pg.rect(0, 0, this.width, this.height);
+            pg.fill(this.on ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
+            pg.ellipseMode(PConstants.CENTER);
+            pg.ellipse(this.width/2, this.height/2, this.width-2, this.height-2);
+        }
+
+        @Override
+        public void midiReceived(LXChannel channel) {
+            this.turnOff = 0;
+            this.on = true;
+            redraw();
+        }
+    }
 
     UIChannelStrip(final UI ui, final LX lx, final LXChannel channel, float x) {
         super(ui, lx, channel, x);
@@ -67,7 +111,7 @@ public class UIChannelStrip extends UIMixerStrip {
 
         float yp = 40;
 
-        // Active + Midi buttons
+        // Active + Cue buttons
         float bxp = 6*PADDING;
         this.activeButton = new UIButton(bxp, yp, 28, 28);
         activeButton
@@ -77,11 +121,6 @@ public class UIChannelStrip extends UIMixerStrip {
             .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
             .setTextOffset(0, 2);
         yp += 28 + MARGIN;
-        final UIButton midiButton =
-            new UIButton(bxp, yp, 28, 14)
-            .setLabel("♪")
-            .setParameter(channel.midiMonitor);
-        yp += 16;
         final UIButton cueButton =
             new UIButton(bxp, yp, 28, 16) {
                 @Override
@@ -101,17 +140,28 @@ public class UIChannelStrip extends UIMixerStrip {
             .setActiveColor(ui.theme.getAttentionColor())
             .setParameter(channel.cueActive);
 
+
+        // MIDI
+        yp = 108;
+        final UIButton midiButton =
+            new UIButton(2*PADDING, yp, 16, 16)
+            .setLabel("♪")
+            .setParameter(channel.midiMonitor);
+        final UIEnumBox midiChannel = (UIEnumBox)
+            new UIEnumBox(2*PADDING + 18, yp, 34, 16)
+            .setParameter(channel.midiChannel);
+        final MidiIndicator midiIndicator = new MidiIndicator(60, 112, 8, 8);
+
         // Crossfade select
         int xfh = 16;
         int xfo = 2*PADDING;
-
         UIButtonGroup crossfadeGroup = new UIButtonGroup(channel.crossfadeGroup, xfo, height-MARGIN-xfh, width-6, xfh, true);
         crossfadeGroup.buttons[LXChannel.CrossfadeGroup.B.ordinal()].setActiveColor(ui.theme.getSecondaryColor());
         crossfadeGroup.setChildMargin(2);
 
         // Slider
         float syp = 22;
-        this.fader = new UISlider(UISlider.Direction.VERTICAL, this.width-PADDING-FADER_WIDTH, syp, FADER_WIDTH, 102);
+        this.fader = new UISlider(UISlider.Direction.VERTICAL, this.width-PADDING-FADER_WIDTH, syp, FADER_WIDTH, FADER_HEIGHT);
         this.fader.setParameter(channel.fader).setShowLabel(false);
         if (!channel.enabled.isOn()) {
             fader.setFillColor(ui.theme.getControlDisabledColor());
@@ -123,9 +173,11 @@ public class UIChannelStrip extends UIMixerStrip {
 
         // Add them all
         activeButton.addToContainer(this);
-        midiButton.addToContainer(this);
         cueButton.addToContainer(this);
         fader.addToContainer(this);
+        midiButton.addToContainer(this);
+        midiChannel.addToContainer(this);
+        midiIndicator.addToContainer(this);
         blendMode.addToContainer(this);
         crossfadeGroup.addToContainer(this);
 

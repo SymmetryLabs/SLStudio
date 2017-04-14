@@ -29,7 +29,7 @@ package heronarts.p3lx.ui.component;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.LXParameterModulation;
+import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIFocus;
 import processing.core.PGraphics;
@@ -112,7 +112,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
         if (this.parameter instanceof CompoundParameter) {
             CompoundParameter compound = (CompoundParameter) this.parameter;
             for (int i = 0; i < compound.modulations.size() && i < 3; ++i) {
-                LXParameterModulation modulation = compound.modulations.get(i);
+                LXCompoundModulation modulation = compound.modulations.get(i);
                 int modColor = ui.theme.getControlDisabledColor();
                 int modColorInv = modColor;
                 if (isEnabled()) {
@@ -264,7 +264,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
         this.editing = false;
     }
 
-    private LXParameterModulation getModulation(boolean secondary) {
+    private LXCompoundModulation getModulation(boolean secondary) {
         if (this.parameter != null && this.parameter instanceof CompoundParameter) {
             CompoundParameter compound = (CompoundParameter) this.parameter;
             int size = compound.modulations.size();
@@ -299,7 +299,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
             }
             if (valid) {
                 float delta = dv / (dim - HANDLE_SIZE - 2*PADDING);
-                LXParameterModulation modulation = getModulation(mouseEvent.isShiftDown());
+                LXCompoundModulation modulation = getModulation(mouseEvent.isShiftDown());
                 if (modulation != null && (mouseEvent.isMetaDown() || mouseEvent.isControlDown())) {
                     modulation.range.setValue(modulation.range.getValue() + delta);
                 } else {

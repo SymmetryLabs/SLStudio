@@ -20,6 +20,10 @@
 
 package heronarts.p3lx.ui.studio.project;
 
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.p3lx.P3LX;
@@ -32,11 +36,21 @@ public class UIEffectManager extends UIComponentManager {
     public  UIEffectManager(UI ui, LX lx, float x, float y, float w, float h) {
         super(ui, lx, x, y, w, h);
         setTitle("EFFECTS");
-
         this.itemList.setDescription("Available effects, double-click to add to the active channel");
 
-        for (Class<? extends LXEffect> effect : lx.getRegisteredEffects()) {
-            this.itemList.addItem(new EffectItem(effect));
+        List<Class<? extends LXEffect>> effects = lx.getRegisteredEffects();
+        EffectItem[] items = new EffectItem[effects.size()];
+        for (int i = 0; i < items.length; ++i) {
+            items[i] = new EffectItem(effects.get(i));
+        }
+        Arrays.sort(items, new Comparator<EffectItem>() {
+            @Override
+            public int compare(EffectItem o1, EffectItem o2) {
+                return o1.label.compareToIgnoreCase(o2.label);
+            }
+        });
+        for (EffectItem item : items) {
+            this.itemList.addItem(item);
         }
     }
 
