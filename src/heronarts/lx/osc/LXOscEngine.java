@@ -31,6 +31,8 @@ import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+
+import javax.sound.midi.InvalidMidiDataException;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
@@ -40,6 +42,9 @@ import heronarts.lx.LXEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.ColorParameter;
+import heronarts.lx.midi.MidiControlChange;
+import heronarts.lx.midi.MidiNoteOn;
+import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -59,6 +64,10 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_PALETTE = "palette";
     private static final String ROUTE_MODULATION = "modulation";
     private static final String ROUTE_AUDIO = "audio";
+    private static final String ROUTE_MIDI = "midi";
+    private static final String ROUTE_NOTE = "note";
+    private static final String ROUTE_CC = "cc";
+    private static final String ROUTE_PITCHBEND = "pitchbend";
     private static final String ROUTE_MASTER = "master";
     private static final String ROUTE_CHANNEL = "channel";
     private static final String ROUTE_PATTERN = "pattern";
@@ -147,6 +156,8 @@ public class LXOscEngine extends LXComponent {
                 if (parts[1].equals(ROUTE_LX)) {
                     if (parts[2].equals(ROUTE_ENGINE)) {
                         oscComponent(message, lx.engine, parts, 3);
+                    } else if (parts[2].equals(ROUTE_MIDI)) {
+                        oscMidi(message, parts, 3);
                     } else if (parts[2].equals(ROUTE_OUTPUT)) {
                         oscComponent(message, lx.engine.output, parts, 3);
                     } else if (parts[2].equals(ROUTE_AUDIO)) {
@@ -169,6 +180,30 @@ public class LXOscEngine extends LXComponent {
                 }
             } catch (Exception x) {
                 System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
+            }
+        }
+
+        private void oscMidi(OscMessage message, String[] parts, int index) {
+            try {
+                if (parts[index].equals(ROUTE_NOTE)) {
+                    int pitch = message.getInt();
+                    int velocity = message.getInt();
+                    int channel = message.getInt();
+                    lx.engine.midi.dispatch(new MidiNoteOn(channel, pitch, velocity));
+                } else if (parts[index].equals(ROUTE_CC)) {
+                    int value = message.getInt();
+                    int cc = message.getInt();
+                    int channel = message.getInt();
+                    lx.engine.midi.dispatch(new MidiControlChange(channel, cc, value));
+                } else if (parts[index].equals(ROUTE_PITCHBEND)) {
+                    int msb = message.getInt();
+                    int channel = message.getInt();
+                    lx.engine.midi.dispatch(new MidiPitchBend(channel, msb));
+                } else {
+                    System.err.println("[OSC] Unrecognized MIDI message: " + message.getAddressPattern().getValue());
+                }
+            } catch (InvalidMidiDataException imdx) {
+                System.err.println("[OSC] Invalid MIDI message: " + imdx.getLocalizedMessage());
             }
         }
 

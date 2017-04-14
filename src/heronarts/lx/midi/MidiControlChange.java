@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -20,6 +20,7 @@
 
 package heronarts.lx.midi;
 
+import javax.sound.midi.InvalidMidiDataException;
 import javax.sound.midi.ShortMessage;
 
 public class MidiControlChange extends LXShortMessage {
@@ -53,6 +54,10 @@ public class MidiControlChange extends LXShortMessage {
     public final static int OMNI_ON = 0x7d;
     public final static int POLY_OFF = 0x7e;
     public final static int POLY_ON = 0x7f;
+
+    public MidiControlChange(int channel, int cc, int value) throws InvalidMidiDataException {
+        super(ShortMessage.CONTROL_CHANGE, channel, cc, value);
+    }
 
     MidiControlChange(ShortMessage message) {
         super(message, ShortMessage.CONTROL_CHANGE);
