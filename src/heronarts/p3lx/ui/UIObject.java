@@ -451,6 +451,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
                 this.ui.lx.engine.modulation.addTrigger(new LXTriggerModulation(source, target));
             }
             this.ui.mapTriggerSource(null);
+            return;
         }
         for (int i = this.children.size() - 1; i >= 0; --i) {
             UIObject child = this.children.get(i);
