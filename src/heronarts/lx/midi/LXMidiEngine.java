@@ -328,12 +328,18 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     public void dispatch(LXShortMessage message) {
-        if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
-            createMapping(message);
-            return;
-        }
-        if (applyMapping(message)) {
-            return;
+        dispatch(message, true);
+    }
+
+    public void dispatch(LXShortMessage message, boolean mappingEligible) {
+        if (mappingEligible) {
+            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
+                createMapping(message);
+                return;
+            }
+            if (applyMapping(message)) {
+                return;
+            }
         }
 
         for (LXMidiListener listener : this.listeners) {

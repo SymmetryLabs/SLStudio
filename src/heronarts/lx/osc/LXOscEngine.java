@@ -189,16 +189,16 @@ public class LXOscEngine extends LXComponent {
                     int pitch = message.getInt();
                     int velocity = message.getInt();
                     int channel = message.getInt();
-                    lx.engine.midi.dispatch(new MidiNoteOn(channel, pitch, velocity));
+                    lx.engine.midi.dispatch(new MidiNoteOn(channel, pitch, velocity), false);
                 } else if (parts[index].equals(ROUTE_CC)) {
                     int value = message.getInt();
                     int cc = message.getInt();
                     int channel = message.getInt();
-                    lx.engine.midi.dispatch(new MidiControlChange(channel, cc, value));
+                    lx.engine.midi.dispatch(new MidiControlChange(channel, cc, value), false);
                 } else if (parts[index].equals(ROUTE_PITCHBEND)) {
                     int msb = message.getInt();
                     int channel = message.getInt();
-                    lx.engine.midi.dispatch(new MidiPitchBend(channel, msb));
+                    lx.engine.midi.dispatch(new MidiPitchBend(channel, msb), false);
                 } else {
                     System.err.println("[OSC] Unrecognized MIDI message: " + message.getAddressPattern().getValue());
                 }
