@@ -28,6 +28,8 @@ package heronarts.p3lx;
 
 import heronarts.p3lx.ui.UI;
 
+import java.lang.reflect.Modifier;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
@@ -111,10 +113,12 @@ public class P3LX extends LX {
         this.engine.script.setScriptPath(applet.sketchPath());
 
         for (Class<?> cls : applet.getClass().getDeclaredClasses()) {
-            if (LXPattern.class.isAssignableFrom(cls)) {
-                registerPattern(cls.asSubclass(LXPattern.class));
-            } else if (LXEffect.class.isAssignableFrom(cls)) {
+            if (!Modifier.isAbstract(cls.getModifiers())) {
+                if (LXPattern.class.isAssignableFrom(cls)) {
+                    registerPattern(cls.asSubclass(LXPattern.class));
+                } else if (LXEffect.class.isAssignableFrom(cls)) {
                 registerEffect(cls.asSubclass(LXEffect.class));
+                }
             }
         }
 

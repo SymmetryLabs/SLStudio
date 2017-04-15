@@ -34,7 +34,7 @@ import heronarts.lx.LXPattern;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIItemList;
 
-public class UIPatternList extends UIItemList {
+public class UIPatternList extends UIItemList.ScrollList {
 
     private final LXChannel channel;
     private final UIChannelDevice channelDevice;

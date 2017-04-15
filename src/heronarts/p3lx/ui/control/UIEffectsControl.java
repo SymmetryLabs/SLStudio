@@ -87,8 +87,8 @@ public class UIEffectsControl extends UIWindow {
         for (LXEffect eff : effects) {
             items.add(new EffectScrollItem(eff));
         }
-        final UIItemList effectList =
-            new UIItemList(ui, 1, yp, this.width - 2, 140)
+        final UIItemList.ScrollList effectList = (UIItemList.ScrollList)
+            new UIItemList.ScrollList(ui, 1, yp, this.width - 2, 140)
             .setMomentary(true)
             .setItems(items);
 

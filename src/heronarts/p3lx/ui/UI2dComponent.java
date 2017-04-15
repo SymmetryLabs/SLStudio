@@ -820,7 +820,7 @@ public abstract class UI2dComponent extends UIObject {
         drawFocus(ui, pg, color, 0, 0, this.width, this.height, getFocusSize());
     }
 
-    protected void drawFocus(UI ui, PGraphics pg, int color, float x, float y, float width, float height, int focusSize) {
+    public static void drawFocus(UI ui, PGraphics pg, int color, float x, float y, float width, float height, int focusSize) {
         pg.stroke(color);
         pg.noFill();
         // Top left

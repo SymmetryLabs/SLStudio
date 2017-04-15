@@ -31,18 +31,21 @@ import heronarts.lx.midi.LXMidiInput;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 public class UIMidiManager extends UICollapsibleSection {
 
-    private final UIItemList midiInputs;
+    private final UIItemList.BasicList midiInputs;
 
-    public UIMidiManager(UI ui, final LXMidiEngine midiEngine, float x, float y, float w, float h) {
-        super(ui, x, y, w, h);
+    public UIMidiManager(UI ui, final LXMidiEngine midiEngine, float x, float y, float w) {
+        super(ui, x, y, w, 0);
         setTitle("MIDI INPUT");
+        setLayout(UI2dContainer.Layout.VERTICAL);
 
-        this.midiInputs = (UIItemList) new UIItemList(ui, 0, 0, getContentWidth(), getContentHeight())
+        this.midiInputs = (UIItemList.BasicList)
+            new UIItemList.BasicList(ui, 0, 0, getContentWidth(), getContentHeight())
             .setDescription("Shows the available MIDI inputs, double-click to enable or disable a device")
             .addToContainer(this);
 

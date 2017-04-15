@@ -57,7 +57,7 @@ public class UILeftPane extends UIPane {
 
         // Project elements
         new UIProjectManager(ui, lx, 0, 0, this.project.getContentWidth()).addToContainer(this.project);
-        new UIPatternManager(ui, lx, 0, 0, this.project.getContentWidth(), 240).addToContainer(this.project);
-        new UIEffectManager(ui, lx, 0, 9, this.project.getContentWidth(), 240).addToContainer(this.project);
+        new UIPatternManager(ui, lx, 0, 0, this.project.getContentWidth()).addToContainer(this.project);
+        new UIEffectManager(ui, lx, 0, 9, this.project.getContentWidth()).addToContainer(this.project);
     }
 }

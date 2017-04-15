@@ -69,19 +69,13 @@ public abstract class UIPane extends UI2dContext {
 
         this.sections = new UI2dScrollContext[sectionNames.length];
         for (int i = 0; i < sectionNames.length; ++i) {
-            this.sections[i] = new UI2dScrollContext(ui, PADDING, PADDING, this.inset.getWidth() - 2*PADDING, this.inset.getHeight() - 2*PADDING) {
-                @Override
-                protected void reflow() {
-                    super.reflow();
-                }
-            };
+            this.sections[i] = (UI2dScrollContext)
+                new UI2dScrollContext(ui, PADDING, PADDING, this.inset.getWidth() - 2*PADDING, this.inset.getHeight() - 2*PADDING)
+                .setLayout(UI2dContainer.Layout.VERTICAL)
+                .setChildMargin(CHILD_MARGIN)
+                .setBackgroundColor(ui.theme.getPaneInsetColor())
+                .addToContainer(this.inset);
             this.sections[i].setVisible(i == 0);
-
-            this.sections[i]
-            .setLayout(UI2dContainer.Layout.VERTICAL)
-            .setChildMargin(CHILD_MARGIN)
-            .setBackgroundColor(ui.theme.getPaneInsetColor())
-            .addToContainer(this.inset);
         }
     }
 
@@ -96,7 +90,7 @@ public abstract class UIPane extends UI2dContext {
             height -= UIContextualHelpBar.HEIGHT;
         }
         setHeight(height);
-        this.inset.setHeight(this.height - INSET_Y);
+        this.inset.setHeight(this.height - (this.topOffset + INSET_Y));
         for (UI2dScrollContext section : this.sections) {
             section.setHeight(this.inset.getHeight() - 2*PADDING);
         }

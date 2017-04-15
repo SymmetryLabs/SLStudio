@@ -33,8 +33,8 @@ import processing.core.PApplet;
 
 public class UIEffectManager extends UIComponentManager {
 
-    public  UIEffectManager(UI ui, LX lx, float x, float y, float w, float h) {
-        super(ui, lx, x, y, w, h);
+    public  UIEffectManager(UI ui, LX lx, float x, float y, float w) {
+        super(ui, lx, x, y, w);
         setTitle("EFFECTS");
         this.itemList.setDescription("Available effects, double-click to add to the active channel");
 

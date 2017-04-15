@@ -22,19 +22,21 @@ package heronarts.p3lx.ui.studio.project;
 
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 public abstract class UIComponentManager extends UICollapsibleSection {
 
     protected final LX lx;
-    protected final UIItemList itemList;
+    protected final UIItemList.BasicList itemList;
 
-    protected UIComponentManager(UI ui, LX lx, float x, float y, float w, float h) {
-        super(ui, x, y, w, h);
+    protected UIComponentManager(UI ui, LX lx, float x, float y, float w) {
+        super(ui, x, y, w, 0);
         this.lx = lx;
+        setLayout(UI2dContainer.Layout.VERTICAL);
 
-        this.itemList = new UIItemList(ui, 0, 0, getContentWidth(), getContentHeight());
+        this.itemList = new UIItemList.BasicList(ui, 0, 0, getContentWidth(), getContentHeight());
         this.itemList.addToContainer(this);
     }
 }

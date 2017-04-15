@@ -208,7 +208,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
                 recomputeHeight();
             }
         };
-        this.modulations.setLayout(UI2dContainer.Layout.VERTICAL).setPadding(MODULATION_SPACING).setChildMargin(MODULATION_SPACING);
+        this.modulations.setLayout(UI2dContainer.Layout.VERTICAL).setPadding(MODULATION_SPACING, 0, 0, 0).setChildMargin(MODULATION_SPACING);
         addTopLevelComponent(this.modulations);
     }
 

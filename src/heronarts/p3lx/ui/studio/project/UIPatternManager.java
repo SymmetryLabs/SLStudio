@@ -35,8 +35,8 @@ import processing.core.PApplet;
 
 public class UIPatternManager extends UIComponentManager {
 
-    public UIPatternManager(UI ui, LX lx, float x, float y, float w, float h) {
-        super(ui, lx, x, y, w, h);
+    public UIPatternManager(UI ui, LX lx, float x, float y, float w) {
+        super(ui, lx, x, y, w);
         setTitle("PATTERNS");
         this.itemList.setDescription("Available patterns, double-click to add to the active channel");
 

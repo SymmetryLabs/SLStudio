@@ -95,9 +95,8 @@ public class UIChannelControl extends UIWindow {
         for (LXPattern p : channel.getPatterns()) {
             items.add(new PatternScrollItem(p));
         }
-        final UIItemList patternList =
-            new UIItemList(ui, 1, yp, this.width - 2, 140)
-            .setItems(items);
+        final UIItemList.ScrollList patternList = new UIItemList.ScrollList(ui, 1, yp, this.width - 2, 140);
+        patternList.setItems(items);
         patternList
         .setBackgroundColor(ui.theme.getWindowBackgroundColor())
         .addToContainer(this);
