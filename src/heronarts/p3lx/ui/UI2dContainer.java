@@ -33,14 +33,18 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
     public enum Layout {
         NONE,
         VERTICAL,
-        HORIZONTAL
+        HORIZONTAL,
+        VERTICAL_GRID,
+        HORIZONTAL_GRID
     }
 
     private Layout layout = Layout.NONE;
 
     private int topPadding = 0, rightPadding = 0, bottomPadding = 0, leftPadding = 0;
 
-    private int childMargin = 0;
+    private int childMarginX = 0, childMarginY = 0;
+
+    private float minHeight = 0, minWidth = 0;
 
     private UI2dContainer contentTarget;
 
@@ -78,9 +82,33 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
     }
 
     public UI2dContainer setChildMargin(int childMargin) {
-        if (this.contentTarget.childMargin != childMargin) {
-            this.contentTarget.childMargin = childMargin;
+        return setChildMargin(childMargin, childMargin);
+    }
+
+    public UI2dContainer setChildMargin(int childMarginY, int childMarginX) {
+        if (this.contentTarget.childMarginX != childMarginX) {
+            this.contentTarget.childMarginX = childMarginX;
             this.contentTarget.reflow();
+        }
+        if (this.contentTarget.childMarginY != childMarginY) {
+            this.contentTarget.childMarginY = childMarginY;
+            this.contentTarget.reflow();
+        }
+        return this;
+    }
+
+    public UI2dContainer setMinWidth(float minWidth) {
+        if (this.minWidth != minWidth) {
+            this.minWidth = minWidth;
+            reflow();
+        }
+        return this;
+    }
+
+    public UI2dContainer setMinHeight(float minHeight) {
+        if (this.minHeight!= minHeight) {
+            this.minHeight = minHeight;
+            reflow();
         }
         return this;
     }
@@ -100,22 +128,58 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
                 if (child.isVisible()) {
                     UI2dComponent component = (UI2dComponent) child;
                     component.setY(y);
-                    y += component.getHeight() + this.childMargin;
+                    y += component.getHeight() + this.childMarginY;
                 }
             }
             y += this.bottomPadding;
-            setContentHeight(Math.max(0, y - this.childMargin));
+            setContentHeight(Math.max(this.minHeight, y - this.childMarginY));
         } else if (this.layout == Layout.HORIZONTAL) {
             float x = this.leftPadding;
             for (UIObject child : this) {
                 if (child.isVisible()) {
                     UI2dComponent component = (UI2dComponent) child;
                     component.setX(x);
-                    x += component.getWidth() + this.childMargin;
+                    x += component.getWidth() + this.childMarginX;
                 }
             }
             x += this.rightPadding;
-            setContentWidth(Math.max(0, x - this.childMargin));
+            setContentWidth(Math.max(this.minWidth, x - this.childMarginX));
+        } else if (this.layout == Layout.VERTICAL_GRID) {
+            float x = this.leftPadding;
+            float y = this.topPadding;
+            float w = 0;
+            for (UIObject child : this) {
+                if (child.isVisible()) {
+                    UI2dComponent component = (UI2dComponent) child;
+                    if (y + component.getHeight() > getContentHeight()) {
+                        x += w + this.childMarginX;
+                        y = this.topPadding;
+                        w = 0;
+                    }
+                    component.setPosition(x, y);
+                    w = Math.max(0, component.getWidth());
+                    y += component.getHeight() + this.childMarginY;
+                }
+            }
+            setContentWidth(Math.max(this.minWidth, x + w));
+        } else if (this.layout == Layout.HORIZONTAL_GRID) {
+            float x = this.leftPadding;
+            float y = this.topPadding;
+            float h = 0;
+            for (UIObject child : this) {
+                if (child.isVisible()) {
+                    UI2dComponent component = (UI2dComponent) child;
+                    if (x + component.getWidth() > getContentWidth()) {
+                        y += h + this.childMarginY;
+                        x = this.leftPadding;
+                        h = 0;
+                    }
+                    component.setPosition(x, y);
+                    h = Math.max(0, component.getHeight());
+                    x += component.getWidth() + this.childMarginX;
+                }
+            }
+            setContentHeight(Math.max(this.minHeight, y + h));
         }
     }
 

@@ -61,7 +61,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
     private boolean expanded = true;
     private float expandedWidth;
 
-    private final UI2dContainer content;
+    protected final UI2dContainer content;
 
     UIDevice(UI ui, float w) {
         super(0, UIDeviceBin.PADDING, w, HEIGHT);
@@ -86,7 +86,12 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
         .addToContainer(this)
         .setVisible(false);
 
-        this.content = new UI2dContainer(PADDING, TITLE_PADDING + PADDING, w - 2*PADDING, height-TITLE_PADDING-2*PADDING);
+        this.content = new UI2dContainer(PADDING, TITLE_PADDING + PADDING, w - 2*PADDING, height-TITLE_PADDING-2*PADDING) {
+            @Override
+            public void onResize() {
+                setExpandedWidth(getWidth() + 2*PADDING);
+            }
+        };
         setContentTarget(this.content);
     }
 
@@ -98,29 +103,16 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
         return super.addToContainer(container, index);
     }
 
-    protected UIDevice setExpandedWidth(float w) {
+    private UIDevice setExpandedWidth(float w) {
         this.expandedWidth = w;
-        this.content.setWidth(w - 2*PADDING);
-        this.titleBox.setWidth(this.hasEnabledButton ?
-            this.width - TITLE_MARGIN - ENABLED_BUTTON_PADDING :
-            this.width - 2*TITLE_MARGIN
-        );
         if (this.expanded) {
             setWidth(w);
         }
-        return this;
-    }
-
-    @Override
-    public void onResize() {
         this.titleBox.setWidth(this.hasEnabledButton ?
             this.width - TITLE_MARGIN - ENABLED_BUTTON_PADDING :
             this.width - 2*TITLE_MARGIN
         );
-        this.content.setWidth(this.width - 2*PADDING);
-        if (getParent() != null) {
-            ((UIDeviceBin) getParent()).onDeviceChange();
-        }
+        return this;
     }
 
     protected UIDevice setEnabledButton(BooleanParameter p) {

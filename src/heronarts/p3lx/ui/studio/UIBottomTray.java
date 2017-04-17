@@ -101,7 +101,7 @@ public class UIBottomTray extends UI2dScrollContext {
         onHelpBarToggle((LXStudio.UI) ui);
         setWidth(ui.getWidth());
         for (UIDeviceBin deviceBin : this.deviceBins.values()) {
-            deviceBin.updateWidth();
+            deviceBin.updateMinWidth();
         }
         redraw();
     }
@@ -130,7 +130,7 @@ public class UIBottomTray extends UI2dScrollContext {
     private void onChannelsChanged() {
         // The channel mixer width is different now, collapse bins with extra width
         for (UIDeviceBin deviceBin : this.deviceBins.values()) {
-            deviceBin.updateWidth();
+            deviceBin.updateMinWidth();
         }
     }
 

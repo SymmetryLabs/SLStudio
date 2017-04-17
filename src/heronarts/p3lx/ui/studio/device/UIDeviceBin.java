@@ -56,6 +56,10 @@ public class UIDeviceBin extends UI2dContainer {
 
         setBackgroundColor(ui.theme.getPaneInsetColor());
         setBorderRounding(4);
+        setLayout(UI2dContainer.Layout.HORIZONTAL);
+        setPadding(PADDING);
+        setChildMargin(PADDING);
+        setMinWidth(this.tray.getWidth() - this.x - UIBottomTray.PADDING);
 
         if (channel instanceof LXChannel) {
             this.channelDevice = new UIChannelDevice(ui, (LXChannel) channel);
@@ -97,7 +101,6 @@ public class UIDeviceBin extends UI2dContainer {
                     devices.remove(effectDevice);
                     devices.add(effect.getIndex() + effectDeviceOffset, effectDevice);
                     effectDevice.setContainerIndex(effect.getIndex() + effectDeviceOffset);
-                    onDeviceChange();
                 }
             }
         });
@@ -114,37 +117,9 @@ public class UIDeviceBin extends UI2dContainer {
         return null;
     }
 
-    private float getNextDeviceX() {
-        if (this.devices.size() > 0) {
-            UIDevice lastDevice = this.devices.get(this.devices.size()-1);
-            return  lastDevice.getX() + lastDevice.getWidth() + PADDING;
-        }
-        return PADDING;
-    }
-
-    public void updateWidth() {
-        updateWidth(getNextDeviceX());
-    }
-
-    private void updateWidth(float w) {
-        setWidth(Math.max(w, this.tray.getWidth() - this.x - UIBottomTray.PADDING));
-    }
-
-    public UIDeviceBin onDeviceChange() {
-        float x = PADDING;
-        for (UIDevice device : this.devices) {
-            device.setX(x);
-            x += device.getWidth() + PADDING;
-        }
-        updateWidth(x);
-        return this;
-    }
-
     public UIDeviceBin addDevice(UIDevice device) {
-        device.setX(getNextDeviceX());
         device.addToContainer(this);
         this.devices.add(device);
-        updateWidth(device.getX() + device.getWidth() + PADDING);
         return this;
     }
 
@@ -152,16 +127,12 @@ public class UIDeviceBin extends UI2dContainer {
         int index = this.devices.indexOf(device);
         if (index >= 0) {
             this.devices.remove(index).removeFromContainer();
-            float x = device.getX();
-            while (index < this.devices.size()) {
-                UIDevice next = this.devices.get(index);
-                next.setX(x);
-                x += next.getWidth() + PADDING;
-                ++index;
-            }
-            updateWidth(x);
         }
         return this;
+    }
+
+    public void updateMinWidth() {
+        setMinWidth(this.tray.getWidth() - this.x - UIBottomTray.PADDING);
     }
 
     @Override

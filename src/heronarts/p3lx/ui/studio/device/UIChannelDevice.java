@@ -42,7 +42,7 @@ class UIChannelDevice extends UIDevice {
 
     private static final int PADDING = 4;
     private static final int PATTERN_LIST_WIDTH = 140;
-    private static final int WIDTH = 310;
+    private static final int WIDTH = PATTERN_LIST_WIDTH + 3*PADDING;
 
     private final UI ui;
     private final LXChannel channel;
@@ -73,7 +73,7 @@ class UIChannelDevice extends UIDevice {
 
         // Transition Controls
         new UIButton(0, getContentHeight() - 36, 16, 16)
-        .setLabel("⇄")
+        .setLabel("\u21C4")
         .setParameter(channel.transitionEnabled)
         .setTextOffset(0, -1)
         .addToContainer(this);
@@ -106,7 +106,7 @@ class UIChannelDevice extends UIDevice {
             boolean visible = patternControl.pattern == focusedPattern;
             patternControl.setVisible(visible);
             if (visible) {
-                setExpandedWidth(patternControl.getWidth() + PATTERN_LIST_WIDTH + 3*PADDING);
+                setContentWidth(patternControl.getX() + patternControl.getWidth());
             }
         }
     }

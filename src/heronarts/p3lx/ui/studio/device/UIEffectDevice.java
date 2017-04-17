@@ -34,6 +34,7 @@ import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIKnob;
 import processing.event.KeyEvent;
 
@@ -51,22 +52,14 @@ class UIEffectDevice extends UIDevice {
         setTitle(effect.label);
         setEnabledButton(effect.enabled);
 
-        float xp = 0, yp = 0;
-        int i = 0;
+        this.content.setPadding(6, 0, 0, 0);
+        this.content.setLayout(UI2dContainer.Layout.VERTICAL_GRID);
+        this.content.setChildMargin(2, 4);
         for (LXParameter parameter : effect.getParameters()) {
             if (parameter instanceof BoundedParameter || parameter instanceof DiscreteParameter) {
-                if ((i > 0) && (i % 3 == 0)) {
-                    xp += UIKnob.WIDTH + 4;
-                    yp = 0;
-                }
-                new UIKnob(xp, yp)
-                .setParameter((LXListenableNormalizedParameter) parameter)
-                .addToContainer(this);
-                yp += 48;
-                ++i;
+                new UIKnob((LXListenableNormalizedParameter) parameter).addToContainer(this);
             }
         }
-        setExpandedWidth(xp + UIKnob.WIDTH + 8);
 
         effect.label.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
