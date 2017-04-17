@@ -173,10 +173,8 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
                 this.editBuffer = "";
                 redraw();
             } else if ((keyCode == java.awt.event.KeyEvent.VK_LEFT) || (keyCode == java.awt.event.KeyEvent.VK_DOWN)) {
-                consumeKeyEvent();
                 decrementValue(keyEvent);
             } else if ((keyCode == java.awt.event.KeyEvent.VK_RIGHT) || (keyCode == java.awt.event.KeyEvent.VK_UP)) {
-                consumeKeyEvent();
                 incrementValue(keyEvent);
             }
         }

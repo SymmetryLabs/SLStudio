@@ -219,8 +219,10 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
                 consumeKeyEvent();
                 editTitle();
             } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+                consumeKeyEvent();
                 setExpanded(false);
             } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+                consumeKeyEvent();
                 setExpanded(true);
             }
         }
