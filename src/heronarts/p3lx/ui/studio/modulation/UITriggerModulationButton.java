@@ -24,7 +24,7 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.component;
+package heronarts.p3lx.ui.studio.modulation;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXMappingEngine;
@@ -32,13 +32,15 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UITriggerSource;
+import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIParameterControl;
 
-public class UITriggerButton extends UIButton implements UITriggerSource {
+public class UITriggerModulationButton extends UIButton implements UITriggerSource {
 
     private final LX lx;
     private final BooleanParameter trigger;
 
-    public UITriggerButton(final LX lx, BooleanParameter trigger, float x, float y, float w, float h) {
+    public UITriggerModulationButton(final LX lx, BooleanParameter trigger, float x, float y, float w, float h) {
         super(x, y, w, h);
         this.lx = lx;
         this.trigger = trigger;

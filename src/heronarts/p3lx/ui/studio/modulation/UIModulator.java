@@ -52,7 +52,6 @@ import heronarts.p3lx.ui.component.UIColorBox;
 import heronarts.p3lx.ui.component.UIParameterLabel;
 import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.component.UITextBox;
-import heronarts.p3lx.ui.component.UITriggerButton;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
@@ -120,7 +119,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
                 titleRightX -= PADDING + LOOP_WIDTH;
             } else if (this.modulator instanceof BandGate) {
                 // TODO(mcslee): make a generic system for Modulators with a trigger output!
-                gateButton = new UITriggerButton(lx, ((BandGate) this.modulator).gate, titleRightX - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14);
+                gateButton = new UITriggerModulationButton(lx, ((BandGate) this.modulator).gate, titleRightX - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14);
                 titleRightX -= PADDING + TRIGGER_WIDTH;
             }
 
