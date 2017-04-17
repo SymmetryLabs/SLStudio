@@ -702,6 +702,7 @@ public abstract class UI2dComponent extends UIObject {
             return;
         }
         boolean needsBorder = this.needsRedraw || this.childNeedsRedraw;
+        boolean needsMappingOverlay = this.needsRedraw;
         float sx = this.scrollX;
         float sy = this.scrollY;
         if (this.needsRedraw) {
@@ -722,32 +723,42 @@ public abstract class UI2dComponent extends UIObject {
                     pg.translate(cx, cy);
                     child.draw(ui, pg);
                     pg.translate(-cx, -cy);
+                    if (!needsMappingOverlay) {
+                        drawMappingOverlay(ui, pg, cx, cy, child.width, child.height);
+                    }
                 }
             }
             pg.translate(-sx, -sy);
         }
         if (needsBorder) {
             drawBorder(ui, pg);
+            if (isModulationSource() || isTriggerSource()) {
+                pg.noFill();
+                pg.stroke(0xff000000 | ui.theme.getModulationTargetMappingColor());
+                pg.rect(0, 0, this.width-1, this.height-1, this.borderRounding);
+            }
         }
+        if (needsMappingOverlay) {
+            drawMappingOverlay(ui, pg, 0, 0, this.width, this.height);
+        }
+    }
+
+    private void drawMappingOverlay(UI ui, PGraphics pg, float x, float y, float w, float h) {
         if (isMidiMapping()) {
             pg.noStroke();
             pg.fill(ui.theme.getMidiMappingColor());
-            pg.rect(0, 0, this.width, this.height);
+            pg.rect(x, y, w, h);
             if (isControlTarget()) {
                 drawFocus(ui, pg, 0xccff0000);
             }
-        } else if (isModulationSource() || isTriggerSource()) {
-            pg.noFill();
-            pg.stroke(0xff000000 | ui.theme.getModulationTargetMappingColor());
-            pg.rect(0, 0, this.width-1, this.height-1, this.borderRounding);
         } else if (isModulationSourceMapping()) {
             pg.noStroke();
             pg.fill(ui.theme.getModulationSourceMappingColor());
-            pg.rect(0, 0, this.width, this.height);
+            pg.rect(x, y, w, h);
         } else if (isModulationTargetMapping() || isTriggerTargetMapping()) {
             pg.noStroke();
             pg.fill(ui.theme.getModulationTargetMappingColor());
-            pg.rect(0, 0, this.width, this.height);
+            pg.rect(x, y, w, h);
         }
     }
 
