@@ -216,7 +216,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         return addParameter(parameter.getLabel(), parameter);
     }
 
-    public final LXComponent addParameter(String path, LXParameter parameter) {
+    public LXComponent addParameter(String path, LXParameter parameter) {
         if (this.parameters.containsKey(path)) {
             throw new IllegalStateException("Cannot add parameter at existing path: " + path);
         }
@@ -236,6 +236,23 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         for (LXParameter parameter : parameters) {
             addParameter(parameter);
         }
+        return this;
+    }
+
+    public LXComponent removeParameter(String path) {
+        LXParameter parameter = this.parameters.get(path);
+        if (parameter ==  null) {
+            throw new IllegalStateException("No parameter at path: " + path);
+        }
+        return removeParameter(parameter);
+    }
+
+    public LXComponent removeParameter(LXParameter parameter) {
+        if (parameter.getComponent() != this) {
+            throw new IllegalStateException("Cannot remove parameter not owned by component");
+        }
+        this.parameters.remove(parameter.getPath());
+        parameter.dispose();
         return this;
     }
 

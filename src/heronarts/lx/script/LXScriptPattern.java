@@ -23,6 +23,8 @@ package heronarts.lx.script;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.script.Bindings;
 import javax.script.Invocable;
@@ -32,6 +34,7 @@ import javax.script.ScriptException;
 import javax.script.SimpleScriptContext;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.StringParameter;
@@ -45,7 +48,10 @@ public class LXScriptPattern extends LXPattern {
     private ScriptContext context;
     private Bindings bindings;
 
-    private boolean initialized = false;
+    protected final List<LXParameter> jsParameters = new ArrayList<LXParameter>();
+
+    private boolean jsInitializing = false;
+    private boolean jsInitialized = false;
 
     private final String IMPORT_JS =
         // Color
@@ -72,11 +78,19 @@ public class LXScriptPattern extends LXPattern {
         // Pattern methods
         "var addModulator = function(modulator) { self.addModulator(modulator); };" +
         "var startModulator = function(modulator) { self.startModulator(modulator) };" +
-        "var addParameter = function(parameter) { self.addParameter(parameter) };";
+        "var addParameter = function(path, parameter) { parameter ? self.addParameter(path, parameter) : self.addParameter(path); };";
 
     public LXScriptPattern(LX lx) {
         super(lx);
         addParameter(this.scriptPath);
+    }
+
+    @Override
+    public LXComponent addParameter(String path, LXParameter parameter) {
+        if (this.jsInitializing) {
+            this.jsParameters.add(parameter);
+        }
+        return super.addParameter(path, parameter);
     }
 
     @Override
@@ -91,10 +105,12 @@ public class LXScriptPattern extends LXPattern {
     }
 
     protected void initialize() {
-        // TODO(mcslee): figure out how to handle parameter changes... remove old ones, add new ones
-        // but somehow preserve modulations for parameters with unchanged paths??
-
-        this.initialized = false;
+        for (LXParameter parameter : this.jsParameters) {
+            removeParameter(parameter);
+        }
+        this.jsParameters.clear();
+        this.jsInitialized = false;
+        this.jsInitializing = true;
         try {
             FileReader reader = new FileReader(getFile());
             ScriptEngine engine = lx.engine.script.getEngine();
@@ -113,7 +129,7 @@ public class LXScriptPattern extends LXPattern {
             engine.eval(IMPORT_JS);
             engine.eval(reader);
             ((Invocable) engine).invokeFunction("init");
-            this.initialized = true;
+            this.jsInitialized = true;
         } catch (FileNotFoundException fnfx) {
             System.err.println("[SCRIPT] " + getLabel() + " (" + this.scriptPath.getString() + ") File not found: " + fnfx.getLocalizedMessage());
         } catch (NoSuchMethodException nsmx) {
@@ -123,24 +139,25 @@ public class LXScriptPattern extends LXPattern {
         } catch (Exception x) {
             System.err.println("[SCRIPT] " + getLabel() + " (" + this.scriptPath.getString() + ") error: " + x.getLocalizedMessage());
         }
+        this.jsInitializing = false;
     }
 
     @Override
     public void run(double deltaMs) {
-        if (this.initialized) {
+        if (this.jsInitialized) {
             ScriptEngine engine = lx.engine.script.getEngine();
             engine.setContext(this.context);
             try {
                 ((Invocable) engine).invokeFunction("run", deltaMs);
             } catch (NoSuchMethodException nsmx) {
                 System.err.println("[SCRIPT] " + getLabel() + " (" + this.scriptPath.getString() + ") has no run() function: " + nsmx.getLocalizedMessage());
-                this.initialized = false;
+                this.jsInitialized = false;
             } catch (ScriptException sx) {
                 System.err.println("[SCRIPT] " + getLabel() + " (" + this.scriptPath.getString() + ") error in run: " + sx.getLocalizedMessage());
-                this.initialized = false;
+                this.jsInitialized = false;
             } catch (Exception x) {
                 System.err.println("[SCRIPT] " + getLabel() + " (" + this.scriptPath.getString() + ") error: " + x.getLocalizedMessage());
-                this.initialized = false;
+                this.jsInitialized = false;
             }
         }
     }
