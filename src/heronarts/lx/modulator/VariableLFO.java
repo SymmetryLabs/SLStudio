@@ -23,7 +23,6 @@ package heronarts.lx.modulator;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.FixedParameter;
-import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.parameter.LXParameter;
 
 /**
@@ -44,11 +43,11 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
         new EnumParameter<Waveshape>("Wave", Waveshape.SIN)
         .setDescription("Selects the wave shape used by this LFO");
 
-    public final CompoundParameter rate = (CompoundParameter)
-        new CompoundParameter("Rate", 1, 0.03, 10)
-        .setDescription("Sets the oscillation frequency of the LFO in Hz")
-        .setExponent(3)
-        .setUnits(LXParameter.Units.HERTZ);
+    public final CompoundParameter period = (CompoundParameter)
+        new CompoundParameter("Period", 1000, 100, 10000)
+        .setDescription("Sets the period of the LFO in secs")
+        .setExponent(2)
+        .setUnits(LXParameter.Units.MILLISECONDS);
 
     public final CompoundParameter skew = (CompoundParameter)
         new CompoundParameter("Skew", 0, -1, 1)
@@ -75,14 +74,9 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
 
     public VariableLFO(String label) {
         super(label, new FixedParameter(0), new FixedParameter(1), new FixedParameter(1000));
-        setPeriod(new FunctionalParameter() {
-            @Override
-            public double getValue() {
-                return 1000 / rate.getValue();
-            }
-        });
+        setPeriod(period);
         addParameter("wave", waveshape);
-        addParameter("rate", rate);
+        addParameter("period", period);
         addParameter("skew", skew);
         addParameter("shape", shape);
         addParameter("phase", phase);
