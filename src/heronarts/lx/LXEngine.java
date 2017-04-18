@@ -32,6 +32,7 @@ import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiEngine;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.output.LXOutput;
@@ -224,7 +225,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     private long lastMillis = INIT_RUN;
     long nowMillis = System.currentTimeMillis();
 
-    LXEngine(LX lx) {
+    LXEngine(final LX lx) {
         super(lx, LXComponent.ID_ENGINE, "Engine");
         LX.initTimer.log("Engine: Init");
         this.lx = lx;
@@ -281,6 +282,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
             public void onParameterChanged(LXParameter p) {
                 if (cueA.isOn()) {
                     cueB.setValue(false);
+                    lx.palette.cue.setValue(false);
                     for (LXChannel channel : internalChannels) {
                         channel.cueActive.setValue(false);
                     }
@@ -291,6 +293,18 @@ public class LXEngine extends LXComponent implements LXOscComponent {
             public void onParameterChanged(LXParameter p) {
                 if (cueB.isOn()) {
                     cueA.setValue(false);
+                    lx.palette.cue.setValue(false);
+                    for (LXChannel channel : internalChannels) {
+                        channel.cueActive.setValue(false);
+                    }
+                }
+            }
+        });
+        lx.palette.cue.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                if (lx.palette.cue.isOn()) {
+                    cueA.setValue(false);
+                    cueB.setValue(false);
                     for (LXChannel channel : internalChannels) {
                         channel.cueActive.setValue(false);
                     }
@@ -873,6 +887,15 @@ public class LXEngine extends LXComponent implements LXOscComponent {
             effect.loop(deltaMs);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
+
+        // If cue-ing the palette!
+        if (lx.palette.cue.isOn()) {
+            for (LXPoint p : this.lx.model.points) {
+                blendOutputCue[p.index] = lx.palette.getColor(p);
+            }
+            blendDestinationCue = blendOutputCue;
+            cueOn = true;
+        }
 
         // Frame is now ready, copy into the UI buffer
         long copyStart = System.nanoTime();

@@ -49,6 +49,10 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         CYCLE
     };
 
+    public final BooleanParameter cue =
+        new BooleanParameter("Cue-Palette", false)
+        .setDescription("Enables cue preview of the palette");
+
     public final EnumParameter<Mode> hueMode =
         new EnumParameter<Mode>("Mode", Mode.FIXED)
         .setDescription("Sets the operation mode of the palette");
@@ -140,6 +144,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         });
 
         this.hueMode.setOptions(new String[] { "Fixed", "Oscillate", "Cycle" });
+        addParameter("cue", this.cue);
         addParameter("hueMode", this.hueMode);
         addParameter("color", this.color);
         addParameter("period", this.period);
