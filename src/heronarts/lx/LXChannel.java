@@ -62,6 +62,7 @@ public class LXChannel extends LXBus {
         public void indexChanged(LXChannel channel);
         public void patternAdded(LXChannel channel, LXPattern pattern);
         public void patternRemoved(LXChannel channel, LXPattern pattern);
+        public void patternMoved(LXChannel channel, LXPattern pattern);
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern);
         public void patternDidChange(LXChannel channel, LXPattern pattern);
     }
@@ -97,6 +98,10 @@ public class LXChannel extends LXBus {
 
         @Override
         public void patternRemoved(LXChannel channel, LXPattern pattern) {
+        }
+
+        @Override
+        public void patternMoved(LXChannel channel, LXPattern pattern) {
         }
 
         @Override
@@ -422,6 +427,23 @@ public class LXChannel extends LXBus {
             }
             addPattern(pattern);
         }
+    }
+
+    public LXChannel movePattern(LXPattern pattern, int index) {
+        LXPattern activePattern = getActivePattern();
+        LXPattern nextPattern = getNextPattern();
+        this.internalPatterns.remove(pattern);
+        this.internalPatterns.add(index, pattern);
+        int i = 0;
+        for (LXPattern p : this.internalPatterns) {
+             p.setIndex(i++);
+        }
+        this.activePatternIndex = activePattern.getIndex();
+        this.nextPatternIndex = nextPattern.getIndex();
+        for (Listener listener : this.listeners) {
+            listener.patternMoved(this, pattern);
+        }
+        return this;
     }
 
     public final int getActivePatternIndex() {

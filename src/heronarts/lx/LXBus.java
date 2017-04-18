@@ -110,7 +110,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         return this;
     }
 
-    public void moveEffect(LXEffect effect, int index) {
+    public LXBus moveEffect(LXEffect effect, int index) {
         this.internalEffects.remove(effect);
         this.internalEffects.add(index, effect);
         int i = 0;
@@ -120,6 +120,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         for (Listener listener : this.listeners) {
             listener.effectMoved(this, effect);
         }
+        return this;
     }
 
     public final List<LXEffect> getEffects() {

@@ -445,6 +445,11 @@ public class LXOscEngine extends LXComponent {
         }
 
         @Override
+        public void patternMoved(LXChannel channel, LXPattern pattern) {
+
+        }
+
+        @Override
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
             sendMessage(channel.getOscAddress() + "/nextPattern", nextPattern.getIndex());
         }
