@@ -94,10 +94,10 @@ public class UIMultiStageEnvelope extends UIModulator {
             for (MultiStageEnvelope.Stage stage : envelope.stages) {
                 float tx = (float) LXUtils.lerp(1, width-2, stage.getBasis());
                 float ty = (float) LXUtils.lerp(height-2, 1, stage.getValue());
-                float lx = LXUtils.constrainf(tx-2, 1, this.width-1);
-                float rx = LXUtils.constrainf(tx+2, 1, this.width-1);
-                float ly = LXUtils.constrainf(ty-2, 1, this.height-1);
-                float ry = LXUtils.constrainf(ty+2, 1, this.height-1);
+                float lx = LXUtils.constrainf(tx-3, 0, this.width-1);
+                float rx = LXUtils.constrainf(tx+3, 0, this.width-1);
+                float ly = LXUtils.constrainf(ty-3, 0, this.height-1);
+                float ry = LXUtils.constrainf(ty+3, 0, this.height-1);
                 if (stage == this.editing) {
                     pg.fill(envelope.color.getColor());
                     pg.noStroke();

@@ -30,6 +30,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
@@ -46,6 +47,13 @@ public class UIPalette extends UICollapsibleSection {
         super(ui, x, y, w, h);
         setTitle("COLOR PALETTE");
         this.palette = palette;
+
+        addTopLevelComponent(
+            new UIButton(getWidth() - 48, 2, 28, 16)
+            .setLabel("CUE")
+            .setActiveColor(ui.theme.getAttentionColor())
+            .setParameter(palette.cue)
+        );
 
         new UIToggleSet(0, 2, getContentWidth(), 18)
         .setEvenSpacing()
