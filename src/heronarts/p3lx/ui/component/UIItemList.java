@@ -99,8 +99,18 @@ public interface UIItemList {
 
         /**
          * Action handler, invoked when an item is renamed. Only applies when setRenamable(true)
+         *
+         * @param name
          */
         public void onRename(String name);
+
+        /**
+         * Action handler, invoked when an item is reordered. Only applies to the item that the action
+         * was taken upon, not other items affected by the reordering. Only applies when setReorderable(true)
+         *
+         * @param order
+         */
+        public void onReorder(int order);
 
         /**
          * Action handler, invoked when item is deleted
@@ -142,6 +152,10 @@ public interface UIItemList {
             throw new UnsupportedOperationException("Item does not implement renaming");
         }
 
+        public void onReorder(int index) {
+            throw new UnsupportedOperationException("Item does not implement reordering");
+        }
+
         public void onFocus()  {}
     }
 
@@ -165,6 +179,8 @@ public interface UIItemList {
         private boolean isMomentary = false;
 
         private boolean isRenamable = false;
+
+        private boolean isReorderable = false;
 
         private boolean showCheckboxes = false;
 
@@ -280,6 +296,10 @@ public interface UIItemList {
 
         private void setMomentary(boolean momentary) {
             this.isMomentary = momentary;
+        }
+
+        private void setReorderable(boolean isReorderable) {
+            this.isReorderable = isReorderable;
         }
 
         private void activate() {
@@ -490,12 +510,32 @@ public interface UIItemList {
             } else {
                 if (keyCode == java.awt.event.KeyEvent.VK_UP) {
                     consume = true;
-                    setFocusIndex(this.focusIndex - 1);
-                    this.list.redraw();
+                    if (this.isReorderable && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
+                        if (this.focusIndex > 0) {
+                            Item item = this.items.remove(this.focusIndex);
+                            this.focusIndex = this.focusIndex - 1;
+                            this.items.add(this.focusIndex, item);
+                            item.onReorder(this.focusIndex);
+                            this.list.redraw();
+                        }
+                    } else {
+                        setFocusIndex(this.focusIndex - 1);
+                        this.list.redraw();
+                    }
                 } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
                     consume = true;
-                    setFocusIndex(this.focusIndex + 1);
-                    this.list.redraw();
+                    if (this.isReorderable && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
+                        if (this.focusIndex < this.items.size() - 1) {
+                            Item item = this.items.remove(this.focusIndex);
+                            this.focusIndex = this.focusIndex + 1;
+                            this.items.add(this.focusIndex, item);
+                            item.onReorder(this.focusIndex);
+                            this.list.redraw();
+                        }
+                    } else {
+                        setFocusIndex(this.focusIndex + 1);
+                        this.list.redraw();
+                    }
                 } else if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
                     consume = true;
                     if (this.isMomentary) {
@@ -601,6 +641,11 @@ public interface UIItemList {
 
         public UIItemList setMomentary(boolean momentary) {
             this.impl.setMomentary(momentary);
+            return this;
+        }
+
+        public UIItemList setReorderable(boolean reorderable) {
+            this.impl.setReorderable(reorderable);
             return this;
         }
 
@@ -712,6 +757,11 @@ public interface UIItemList {
 
         public UIItemList setMomentary(boolean momentary) {
             this.impl.setMomentary(momentary);
+            return this;
+        }
+
+        public UIItemList setReorderable(boolean reorderable) {
+            this.impl.setReorderable(reorderable);
             return this;
         }
 
@@ -846,5 +896,14 @@ public interface UIItemList {
      * @return this
      */
     public UIItemList setMomentary(boolean momentary);
+
+    /**
+     * Sets whether the list is reorderable. If so, then pressing the modifier key
+     * with the up or down arrows will reorder the items.
+     *
+     * @param reorderable
+     * @return this
+     */
+    public UIItemList setReorderable(boolean reorderable);
 
 }

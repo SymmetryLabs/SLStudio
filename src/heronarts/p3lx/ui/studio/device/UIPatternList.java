@@ -42,6 +42,7 @@ public class UIPatternList extends UIItemList.ScrollList {
     public UIPatternList(UI ui, UIChannelDevice channelDevice, float x, float y, float w, float h, LXChannel channel) {
         super(ui, x, y, w, h);
         setRenamable(true);
+        setReorderable(true);
         setShowCheckboxes(true);
 
         this.channel = channel;
@@ -132,6 +133,11 @@ public class UIPatternList extends UIItemList.ScrollList {
         public void onRename(String label) {
             this.pattern.label.setValue(label);
             // TODO(mcslee): redraw??
+        }
+
+        @Override
+        public void onReorder(int index) {
+            channel.movePattern(this.pattern, index);
         }
 
         @Override

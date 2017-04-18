@@ -27,11 +27,8 @@
 package heronarts.p3lx.ui.studio.mixer;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
-import heronarts.lx.LXEffect;
 import heronarts.lx.LXLoopTask;
-import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -191,17 +188,11 @@ public class UIChannelStrip extends UIMixerStrip {
             }
         });
 
-        channel.addListener(new LXChannel.Listener() {
+        channel.addListener(new LXChannel.AbstractListener() {
+            @Override
             public void indexChanged(LXChannel channel) {
                 activeButton.setLabel(Integer.toString(channel.getIndex() + 1));
             }
-            public void effectAdded(LXBus bus, LXEffect effect) {}
-            public void effectRemoved(LXBus bus, LXEffect effect) {}
-            public void effectMoved(LXBus bus, LXEffect effect) {}
-            public void patternAdded(LXChannel channel, LXPattern pattern) {}
-            public void patternRemoved(LXChannel channel, LXPattern pattern) {}
-            public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {}
-            public void patternDidChange(LXChannel channel, LXPattern pattern) {}
         });
     }
 
