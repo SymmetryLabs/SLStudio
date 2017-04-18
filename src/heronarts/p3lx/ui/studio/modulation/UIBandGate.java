@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.studio.modulation;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.audio.BandGate;
 import heronarts.lx.audio.FourierTransform;
@@ -136,6 +137,11 @@ public class UIBandGate extends UIModulator {
                     redraw();
                 }
             });
+        }
+
+        @Override
+        public String getDescription() {
+            return LXComponent.getCanonicalLabel(bandGate) + ": selects the audio band response, click and drag to adjust frequency, threshold, and floor";
         }
 
         private float hzToX(float hz) {
@@ -297,6 +303,11 @@ public class UIBandGate extends UIModulator {
         }
 
         @Override
+        public String getDescription() {
+            return LXComponent.getCanonicalLabel(bandGate.average) + ": " + bandGate.average.getDescription();
+        }
+
+        @Override
         public void onDraw(UI ui, PGraphics pg) {
             pg.noStroke();
             pg.fill(ui.theme.getPrimaryColor());
@@ -326,6 +337,11 @@ public class UIBandGate extends UIModulator {
                     }
                 }
             });
+        }
+
+        @Override
+        public String getDescription() {
+            return LXComponent.getCanonicalLabel(bandGate) + ": shows the output envelope value";
         }
 
         @Override
