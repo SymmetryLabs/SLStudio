@@ -32,6 +32,7 @@ import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.modulator.MultiStageEnvelope;
 import heronarts.lx.modulator.VariableLFO;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -47,6 +48,7 @@ import heronarts.p3lx.ui.studio.midi.UIMidiManager;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
 import heronarts.p3lx.ui.studio.modulation.UIBandGate;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
+import heronarts.p3lx.ui.studio.modulation.UIMultiStageEnvelope;
 import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
 import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
@@ -66,6 +68,7 @@ public class UIRightPane extends UIPane {
     private static final int ADD_BUTTON_WIDTH = 40;
 
     private int lfoCount = 1;
+    private int envCount = 1;
     private int beatCount = 1;
 
     public UIRightPane(UI ui, final LX lx) {
@@ -116,6 +119,23 @@ public class UIRightPane extends UIPane {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
+                    MultiStageEnvelope envelope = new MultiStageEnvelope("Env " + envCount++);
+                    lx.engine.modulation.addModulator(envelope);
+                    envelope.start();
+                }
+            }
+        }
+        .setLabel("Env")
+        .setMomentary(true)
+        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setBorderRounding(4)
+        .setDescription("Add a new envelope to the modulation engine")
+        .addToContainer(bar);
+
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
                     BandGate beatDetect = new BandGate("Beat " + beatCount++, lx);
                     lx.engine.modulation.addModulator(beatDetect);
                     beatDetect.start();
@@ -139,7 +159,7 @@ public class UIRightPane extends UIPane {
                 }
             }
         }
-        .setLabel("Map")
+        .setLabel("→")
         .setInactiveColor(ui.theme.getWindowBackgroundColor())
         .setBorderRounding(4)
         .setDescription("Add a new parameter mapping to the modulation engine")
@@ -203,6 +223,8 @@ public class UIRightPane extends UIPane {
     private void addModulator(LXModulator modulator) {
         if (modulator instanceof VariableLFO) {
             new UIVariableLFO(this.ui, this.lx, (VariableLFO) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
+        } else if (modulator instanceof MultiStageEnvelope) {
+            new UIMultiStageEnvelope(this.ui, this.lx, (MultiStageEnvelope) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
         } else if (modulator instanceof BandGate) {
             new UIBandGate(this.ui, this.lx, (BandGate) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
         } else {

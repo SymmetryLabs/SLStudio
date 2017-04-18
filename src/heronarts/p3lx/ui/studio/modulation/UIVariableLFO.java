@@ -71,7 +71,7 @@ public class UIVariableLFO extends UIModulator {
         new UIKnob(lfo.shape).addToContainer(knobs);
         new UIKnob(lfo.exp).addToContainer(knobs);
         new UIKnob(lfo.phase).addToContainer(knobs);
-        new UIKnob(lfo.rate).addToContainer(knobs);
+        new UIKnob(lfo.period).addToContainer(knobs);
 
     }
 
@@ -118,7 +118,6 @@ public class UIVariableLFO extends UIModulator {
     }
 
     private class UIWave extends UI2dComponent implements UIModulationSource {
-
 
         private UIWave(UI ui, float x, float y, float w, float h) {
             super(x, y, w, h);
