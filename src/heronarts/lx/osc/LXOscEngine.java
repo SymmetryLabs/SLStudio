@@ -64,12 +64,15 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_PALETTE = "palette";
     private static final String ROUTE_MODULATION = "modulation";
     private static final String ROUTE_AUDIO = "audio";
+    private static final String ROUTE_METER = "meter";
     private static final String ROUTE_MIDI = "midi";
     private static final String ROUTE_NOTE = "note";
     private static final String ROUTE_CC = "cc";
     private static final String ROUTE_PITCHBEND = "pitchbend";
     private static final String ROUTE_MASTER = "master";
     private static final String ROUTE_CHANNEL = "channel";
+    private static final String ROUTE_ACTIVE_PATTERN = "activePattern";
+    private static final String ROUTE_NEXT_PATTERN = "nextPattern";
     private static final String ROUTE_PATTERN = "pattern";
     private static final String ROUTE_EFFECT = "effect";
     private static final String ROUTE_FOCUSED = "focused";
@@ -161,7 +164,7 @@ public class LXOscEngine extends LXComponent {
                     } else if (parts[2].equals(ROUTE_OUTPUT)) {
                         oscComponent(message, lx.engine.output, parts, 3);
                     } else if (parts[2].equals(ROUTE_AUDIO)) {
-                        oscComponent(message, lx.engine.audio, parts, 3);
+                        oscAudio(message, parts, 3);
                     } else if (parts[2].equals(ROUTE_PALETTE)) {
                         oscComponent(message, lx.palette, parts, 3);
                     } else if (parts[2].equals(ROUTE_MODULATION)) {
@@ -180,6 +183,14 @@ public class LXOscEngine extends LXComponent {
                 }
             } catch (Exception x) {
                 System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
+            }
+        }
+
+        private void oscAudio(OscMessage message, String[] parts, int index) {
+            if (parts[index].equals(ROUTE_METER)) {
+                oscComponent(message, lx.engine.audio.meter, parts, index+1);
+            } else {
+                oscComponent(message, lx.engine.audio, parts, index);
             }
         }
 
@@ -208,15 +219,20 @@ public class LXOscEngine extends LXComponent {
         }
 
         private void oscChannel(OscMessage message, LXBus channel, String[] parts, int index) {
-            if (channel instanceof LXChannel && parts[index].equals(ROUTE_PATTERN)) {
-                if (parts[index+1].equals(ROUTE_ACTIVE)) {
-                    oscPattern(message, ((LXChannel) channel).getActivePattern(), parts, index+2);
-                } else if (parts[index+1].matches("\\d+")) {
-                    oscPattern(message, ((LXChannel) channel).getPattern(Integer.parseInt(parts[index+1])), parts, index+2);
-                } else {
-                    oscPattern(message, ((LXChannel) channel).getPattern(parts[index+1]), parts, index+2);
+            if (channel instanceof LXChannel) {
+                if (parts[index].equals(ROUTE_PATTERN)) {
+                    if (parts[index+1].equals(ROUTE_ACTIVE)) {
+                        oscPattern(message, ((LXChannel) channel).getActivePattern(), parts, index+2);
+                    } else if (parts[index+1].matches("\\d+")) {
+                        oscPattern(message, ((LXChannel) channel).getPattern(Integer.parseInt(parts[index+1])), parts, index+2);
+                    } else {
+                        oscPattern(message, ((LXChannel) channel).getPattern(parts[index+1]), parts, index+2);
+                    }
+                    return;
+                } else if (parts[index].equals(ROUTE_ACTIVE_PATTERN) || parts[index].equals(ROUTE_NEXT_PATTERN)) {
+                    ((LXChannel) channel).goIndex(message.getInt());
+                    return;
                 }
-                return;
             }
             if (parts[index].equals(ROUTE_EFFECT)) {
                 if (parts[index+1].matches("\\d+")) {
@@ -301,6 +317,7 @@ public class LXOscEngine extends LXComponent {
             registerComponent(lx.palette);
             registerComponent(lx.tempo);
             registerComponent(lx.engine.audio);
+            registerComponent(lx.engine.audio.meter);
             registerComponent(lx.engine.output);
             registerComponent(lx.engine.modulation);
             for (LXModulator modulator : lx.engine.modulation.modulators) {
@@ -359,8 +376,8 @@ public class LXOscEngine extends LXComponent {
                 // it would require dynamic memory allocations that we can skip here...
                 String address = getOscAddress(parameter);
                 if (address != null) {
-                    oscMessage.setAddressPattern(address);
                     oscMessage.clearArguments();
+                    oscMessage.setAddressPattern(address);
                     if (parameter instanceof BooleanParameter) {
                         oscInt.setValue(((BooleanParameter) parameter).isOn() ? 1 : 0);
                         oscMessage.add(oscInt);
@@ -380,12 +397,24 @@ public class LXOscEngine extends LXComponent {
                         oscFloat.setValue(parameter.getValuef());
                         oscMessage.add(oscFloat);
                     }
-                    try {
-                        send(oscMessage);
-                    } catch (IOException iox) {
-                        System.err.println("[OSC] Failed to transmit: " + iox.getLocalizedMessage());
-                    }
+                    sendMessage(oscMessage);
                 }
+            }
+        }
+
+        private void sendMessage(String address, int value) {
+            oscMessage.clearArguments();
+            oscMessage.setAddressPattern(address);
+            oscInt.setValue(value);
+            oscMessage.add(oscInt);
+            sendMessage(oscMessage);
+        }
+
+        private void sendMessage(OscMessage message) {
+            try {
+                send(oscMessage);
+            } catch (IOException iox) {
+                System.err.println("[OSC] Failed to transmit: " + iox.getLocalizedMessage());
             }
         }
 
@@ -417,12 +446,13 @@ public class LXOscEngine extends LXComponent {
 
         @Override
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
-            // TODO(mcslee): send an OSC message when this happens?
+            sendMessage(channel.getOscAddress() + "/nextPattern", nextPattern.getIndex());
         }
 
         @Override
         public void patternDidChange(LXChannel channel, LXPattern pattern) {
-            // TODO(mcslee): send an OSC message when this happens?
+            sendMessage(channel.getOscAddress() + "/activePattern", pattern.getIndex());
+            sendMessage(channel.getOscAddress() + "/nextPattern", -1);
         }
 
         @Override

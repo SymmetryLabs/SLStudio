@@ -20,7 +20,7 @@
 
 package heronarts.lx.audio;
 
-import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.NormalizedParameter;
 
 class LXMeterImpl {
 
@@ -30,7 +30,7 @@ class LXMeterImpl {
     final float[] rawBands;
     final float[] rmsBands;
     final double[] dbBands;
-    final BoundedParameter[] bands;
+    final NormalizedParameter[] bands;
 
     LXMeterImpl(int numBands, float bandOctaveRatio) {
         this.numBands = numBands;
@@ -38,9 +38,9 @@ class LXMeterImpl {
         this.rawBands = new float[this.numBands];
         this.rmsBands = new float[this.numBands];
         this.dbBands = new double[this.numBands];
-        this.bands = new BoundedParameter[this.numBands];
+        this.bands = new NormalizedParameter[this.numBands];
         for (int i = 0; i < this.numBands; ++i) {
-            this.bands[i] = new BoundedParameter("Band-" + (i+1), 0);
+            this.bands[i] = new NormalizedParameter("Band-" + (i+1), 0);
             this.rawBands[i] = 0;
             this.rmsBands[i] = 0;
             this.dbBands[i] = -96;

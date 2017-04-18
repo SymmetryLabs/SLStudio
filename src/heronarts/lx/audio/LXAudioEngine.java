@@ -40,12 +40,12 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
      */
     public final LXAudioInput input = new LXAudioInput();
 
-    public final GraphicMeter meter = new GraphicMeter("EQ", this.input);
+    public final GraphicMeter meter = new GraphicMeter("Meter", this.input);
 
     public LXAudioEngine(LX lx) {
         super(lx, "Audio");
         addModulator(this.meter);
-        addParameter(this.enabled);
+        addParameter("enabled", this.enabled);
     }
 
     public String getOscAddress() {

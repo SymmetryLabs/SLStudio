@@ -27,6 +27,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.NormalizedParameter;
 
 /**
  * A frequency gate monitors a Graphic Meter for a particular frequency range and
@@ -136,8 +137,8 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
     /**
      * Level parameter is the average of the monitored band
      */
-    public final BoundedParameter average =
-        new BoundedParameter("Average")
+    public final NormalizedParameter average =
+        new NormalizedParameter("Average")
         .setDescription("Computed average level of the audio within the frequency range");
 
     private float averageRaw = 0;

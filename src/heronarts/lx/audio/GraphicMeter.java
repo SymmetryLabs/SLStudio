@@ -2,6 +2,7 @@ package heronarts.lx.audio;
 
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.NormalizedParameter;
 
 /**
  * A graphic meter splits the signal into frequency bands and computes
@@ -32,7 +33,8 @@ public class GraphicMeter extends DecibelMeter {
     public final FourierTransform fft;
 
     private final float[] fftBuffer;
-    public final BoundedParameter[] bands;
+
+    public final NormalizedParameter[] bands;
 
     /**
      * Default graphic equalizer with 2 bands per octave
@@ -78,7 +80,7 @@ public class GraphicMeter extends DecibelMeter {
         this.fft.setNumBands(this.numBands = numBands);
         this.impl = new LXMeterImpl(this.numBands, this.fft.getBandOctaveRatio());
         this.bands = this.impl.bands;
-        for (BoundedParameter band : this.bands) {
+        for (NormalizedParameter band : this.bands) {
             addParameter(band);
         }
     }
