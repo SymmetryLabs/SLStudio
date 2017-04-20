@@ -49,14 +49,14 @@ public class UIAudio extends UICollapsibleSection {
     public static void addGainAndRange(UI2dContainer container, float yp, BoundedParameter gain, BoundedParameter range) {
         new UILabel(0, yp, 24, 12).setLabel("Gain").addToContainer(container);
         new UIDoubleBox(26, yp, 54, 16).setParameter(gain).setShiftMultiplier(.1f).addToContainer(container);
-        new UILabel(84, yp, 24, 12).setLabel("Range").addToContainer(container);
+        new UILabel(84, yp, 34, 12).setLabel("Range").addToContainer(container);
         new UIDoubleBox(118, yp, 54, 16).setParameter(range).setShiftMultiplier(.1f).addToContainer(container);
     }
 
     public static void addAttackAndRelease(UI2dContainer container, float yp, BoundedParameter attack, BoundedParameter release) {
         new UILabel(0, yp, 24, 12).setLabel("Atck").addToContainer(container);
         new UIDoubleBox(26, yp, 54, 16).setParameter(attack).addToContainer(container);
-        new UILabel(84, yp, 24, 12).setLabel("Rels").addToContainer(container);
+        new UILabel(84, yp, 30, 12).setLabel("Rels").addToContainer(container);
         new UIDoubleBox(118, yp, 54, 16).setParameter(release).addToContainer(container);
     }
 

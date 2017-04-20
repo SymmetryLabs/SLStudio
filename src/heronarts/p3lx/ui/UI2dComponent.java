@@ -744,7 +744,9 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     private void drawMappingOverlay(UI ui, PGraphics pg, float x, float y, float w, float h) {
-        if (isMidiMapping()) {
+        if (isModulationSource() || isTriggerSource()) {
+            // Do nothing!
+        } else if (isMidiMapping()) {
             pg.noStroke();
             pg.fill(ui.theme.getMidiMappingColor());
             pg.rect(x, y, w, h);

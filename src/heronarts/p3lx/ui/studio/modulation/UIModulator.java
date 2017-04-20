@@ -27,12 +27,13 @@
 package heronarts.p3lx.ui.studio.modulation;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
-import heronarts.lx.audio.BandGate;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LXPeriodicModulator;
+import heronarts.lx.modulator.LXTriggerSource;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -106,20 +107,22 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             .addToContainer(this);
 
             if (this.modulator instanceof LXPeriodicModulator) {
-                new UIButton(TITLE_X, PADDING, 12, 12)
+                new UIButton(this.width - 4*PADDING - COLOR_WIDTH - MAP_WIDTH - LOOP_WIDTH - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14)
                     .setLabel("\u2022")
                     .setParameter(this.modulator.trigger)
                     .setBorderRounding(4)
                     .addToContainer(this);
-                titleX += PADDING + 12;
 
                 loopingButton = new UIButton(this.width - 3*PADDING - COLOR_WIDTH - MAP_WIDTH - LOOP_WIDTH, PADDING-1, LOOP_WIDTH, 14)
                     .setLabel("\u21BA")
                     .setParameter(((LXPeriodicModulator) this.modulator).looping);
-                titleRightX -= PADDING + LOOP_WIDTH;
-            } else if (this.modulator instanceof BandGate) {
-                // TODO(mcslee): make a generic system for Modulators with a trigger output!
-                gateButton = new UITriggerModulationButton(lx, ((BandGate) this.modulator).gate, titleRightX - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14);
+
+                titleRightX -= 2*PADDING + LOOP_WIDTH + TRIGGER_WIDTH;
+
+            }
+
+            if (this.modulator instanceof LXTriggerSource) {
+                gateButton = new UITriggerModulationButton(lx, ((LXTriggerSource) this.modulator).getTriggerSource(), titleRightX - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14);
                 titleRightX -= PADDING + TRIGGER_WIDTH;
             }
 
@@ -169,7 +172,16 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         final UIButton mapButton = new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING-1, MAP_WIDTH, 14) {
             @Override
             public void onToggle(boolean on) {
-                ui.mapModulationSource(on ? getModulationSourceUI() : null);
+                if (on) {
+                    UIModulationSource modulationSource = getModulationSourceUI();
+                    if (modulationSource != null) {
+                        ui.mapModulationSource(modulationSource);
+                    } else {
+                        lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                    }
+                } else {
+                    ui.mapModulationSource(null);
+                }
             }
         };
         mapButton
@@ -294,11 +306,15 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
-            if (this.modulator != null && keyCode == java.awt.event.KeyEvent.VK_R) {
+            if (keyCode == java.awt.event.KeyEvent.VK_DOWN || keyCode == java.awt.event.KeyEvent.VK_UP) {
+                consumeKeyEvent();
+                setExpanded(!this.expanded);
+            } else if (this.modulator != null && keyCode == java.awt.event.KeyEvent.VK_R) {
                 consumeKeyEvent();
                 this.title.focus();
                 this.title.edit();
             } else if (keyCode == java.awt.event.KeyEvent.VK_D || keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                consumeKeyEvent();
                 if (this.modulator != null) {
                     this.lx.engine.modulation.removeModulator(this.modulator);
                 } else {
@@ -369,7 +385,11 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         UITriggerModulation(UI ui, final LXTriggerModulation trigger, float x, float y, float w) {
             super(ui, trigger, x, y, w, HEIGHT);
             this.trigger = trigger;
-            new UIParameterLabel(PADDING, PADDING, width - 2*PADDING - 14, 12).setParameter(trigger.target).setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(this);
+            new UIParameterLabel(PADDING, PADDING, width - 2*PADDING, 12)
+            .setPrefix("Trig > ")
+            .setParameter(trigger.target)
+            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+            .addToContainer(this);
         }
 
         @Override
@@ -388,7 +408,22 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             super(ui, modulation, x, y, w, HEIGHT);
             this.modulation = modulation;
 
-            new UIParameterLabel(PADDING, PADDING, width - 2*PADDING - 14, 12).setParameter(modulation.target).setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(this);
+            final UIParameterLabel label = (UIParameterLabel) new UIParameterLabel(PADDING, PADDING, width - 2*PADDING, 12)
+            .setParameter(modulation.target)
+            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+            .addToContainer(this);
+
+            if (modulation.source != modulator) {
+                label.setPrefix(modulation.source.getLabel() + " > ");
+                if (modulation.source instanceof LXComponent) {
+                    ((LXComponent) modulation.source).label.addListener(new LXParameterListener() {
+                        public void onParameterChanged(LXParameter p) {
+                            label.setPrefix(modulation.source.getLabel() + " > ");
+                        }
+                    });
+                }
+            }
+
             new UIButton(PADDING + 2, PADDING + 18, 24, 12).setParameter(modulation.polarity).addToContainer(this);
             final UISlider slider = (UISlider) new UISlider(2*PADDING + 26, PADDING + 16, width-3*PADDING - 26, 16)
             .setFillColor(modulation.clr.getColor())

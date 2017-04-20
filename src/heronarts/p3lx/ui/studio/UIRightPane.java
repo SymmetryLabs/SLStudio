@@ -32,6 +32,7 @@ import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.audio.BandGate;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.modulator.MacroKnobs;
 import heronarts.lx.modulator.MultiStageEnvelope;
 import heronarts.lx.modulator.VariableLFO;
 import heronarts.lx.parameter.LXParameter;
@@ -43,16 +44,15 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.studio.midi.UIMidiManager;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
 import heronarts.p3lx.ui.studio.modulation.UIBandGate;
+import heronarts.p3lx.ui.studio.modulation.UIMacroKnobs;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.modulation.UIMultiStageEnvelope;
 import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
 import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
-import processing.core.PConstants;
 import processing.core.PGraphics;
 
 public class UIRightPane extends UIPane {
@@ -70,6 +70,7 @@ public class UIRightPane extends UIPane {
     private int lfoCount = 1;
     private int envCount = 1;
     private int beatCount = 1;
+    private int macroCount = 1;
 
     public UIRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[] { "MODULATION", "OSC + MIDI" }, ui.getWidth() - WIDTH, WIDTH);
@@ -92,11 +93,6 @@ public class UIRightPane extends UIPane {
         .setLayout(UI2dContainer.Layout.HORIZONTAL)
         .setChildMargin(4)
         .addToContainer(this.modulation);
-
-        new UILabel(0, 0, 20, 16)
-        .setLabel("Add")
-        .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-        .addToContainer(bar);
 
         new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
             @Override
@@ -149,7 +145,24 @@ public class UIRightPane extends UIPane {
         .setDescription("Add a new Beat detector to the modulation engine")
         .addToContainer(bar);
 
-        final UIButton mapButton = (UIButton) new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    MacroKnobs macroKnobs = new MacroKnobs("Macro " + macroCount++);
+                    lx.engine.modulation.addModulator(macroKnobs);
+                    macroKnobs.start();
+                }
+            }
+        }
+        .setLabel("Macro")
+        .setMomentary(true)
+        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setBorderRounding(4)
+        .setDescription("Add a new Beat detector to the modulation engine")
+        .addToContainer(bar);
+
+        final UIButton mapButton = (UIButton) new UIButton(0, 0, 24, 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -212,7 +225,7 @@ public class UIRightPane extends UIPane {
         for (UIObject child : this.modulation) {
             if (child instanceof UIModulator) {
                 UIModulator uiModulator = (UIModulator) child;
-                if (uiModulator.parameter  == parameter) {
+                if (uiModulator.parameter == parameter || uiModulator.parameter == parameter.getComponent()) {
                     return uiModulator;
                 }
             }
@@ -227,6 +240,8 @@ public class UIRightPane extends UIPane {
             new UIMultiStageEnvelope(this.ui, this.lx, (MultiStageEnvelope) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
         } else if (modulator instanceof BandGate) {
             new UIBandGate(this.ui, this.lx, (BandGate) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
+        } else if (modulator instanceof MacroKnobs) {
+            new UIMacroKnobs(this.ui, this.lx, (MacroKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
         } else {
             System.err.println("No UI available for modulator type: " + modulator.getClass().getName());
         }

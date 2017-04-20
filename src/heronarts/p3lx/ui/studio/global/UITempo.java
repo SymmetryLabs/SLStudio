@@ -102,7 +102,7 @@ public class UITempo extends UI2dContainer {
                 pg.fill(ui.theme.getControlDisabledColor());
             }
             pg.ellipseMode(PConstants.CENTER);
-            pg.ellipse(width/2, height/2, 8, 8);
+            pg.ellipse(this.width/2, this.height/2, 8, 8);
         }
     }
 }

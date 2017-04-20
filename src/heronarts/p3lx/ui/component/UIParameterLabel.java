@@ -83,7 +83,7 @@ public class UIParameterLabel extends UILabel implements LXParameterListener {
         if (this.parameter == null) {
             setLabel("");
         } else {
-            setLabel((this.prefix != null ? (this.prefix + " ") : "") + LXComponent.getCanonicalLabel(this.parameter));
+            setLabel((this.prefix != null ? this.prefix : "") + LXComponent.getCanonicalLabel(this.parameter));
         }
     }
 }
