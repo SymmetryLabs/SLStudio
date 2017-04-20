@@ -64,6 +64,8 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_PALETTE = "palette";
     private static final String ROUTE_MODULATION = "modulation";
     private static final String ROUTE_AUDIO = "audio";
+    private static final String ROUTE_TEMPO = "tempo";
+    private static final String ROUTE_BEAT = "beat";
     private static final String ROUTE_METER = "meter";
     private static final String ROUTE_MIDI = "midi";
     private static final String ROUTE_NOTE = "note";
@@ -77,6 +79,9 @@ public class LXOscEngine extends LXComponent {
     private static final String ROUTE_EFFECT = "effect";
     private static final String ROUTE_FOCUSED = "focused";
     private static final String ROUTE_ACTIVE = "active";
+    private static final String ROUTE_HUE = "hue";
+    private static final String ROUTE_SATURATION = "saturation";
+    private static final String ROUTE_BRIGHTNESS = "brightness";
 
     public final static int DEFAULT_RECEIVE_PORT = 3030;
     public final static int DEFAULT_TRANSMIT_PORT = 3131;
@@ -161,6 +166,8 @@ public class LXOscEngine extends LXComponent {
                         oscComponent(message, lx.engine, parts, 3);
                     } else if (parts[2].equals(ROUTE_MIDI)) {
                         oscMidi(message, parts, 3);
+                    } else if (parts[2].equals(ROUTE_TEMPO)) {
+                        oscTempo(message, parts, 3);
                     } else if (parts[2].equals(ROUTE_OUTPUT)) {
                         oscComponent(message, lx.engine.output, parts, 3);
                     } else if (parts[2].equals(ROUTE_AUDIO)) {
@@ -183,6 +190,14 @@ public class LXOscEngine extends LXComponent {
                 }
             } catch (Exception x) {
                 System.err.println("[OSC] No route for message: " + message.getAddressPattern().getValue());
+            }
+        }
+
+        private void oscTempo(OscMessage message, String[] parts, int index) {
+            if (parts[index].equals(ROUTE_BEAT)) {
+                lx.tempo.trigger(message.getInt());
+            } else {
+                oscComponent(message, lx.tempo, parts, index);
             }
         }
 
@@ -263,8 +278,18 @@ public class LXOscEngine extends LXComponent {
                 ((BooleanParameter)parameter).setValue(message.getBoolean());
             } else if (parameter instanceof StringParameter) {
                 ((StringParameter) parameter).setValue(message.getString());
-            }  else if (parameter instanceof ColorParameter) {
-                ((ColorParameter) parameter).setColor(message.getInt());
+            } else if (parameter instanceof ColorParameter) {
+                if (parts.length >= index+1) {
+                    if (parts[index+1].equals(ROUTE_HUE)) {
+                        ((ColorParameter) parameter).hue.setNormalized(message.getFloat());
+                    } else if (parts[index+1].equals(ROUTE_SATURATION)) {
+                        ((ColorParameter) parameter).saturation.setNormalized(message.getFloat());
+                    } else if (parts[index+1].equals(ROUTE_BRIGHTNESS)) {
+                        ((ColorParameter) parameter).brightness.setNormalized(message.getFloat());
+                    }
+                } else {
+                    ((ColorParameter) parameter).setColor(message.getInt());
+                }
             } else if (parameter instanceof DiscreteParameter) {
                 OscArgument arg = message.get();
                 if (arg instanceof OscInt) {

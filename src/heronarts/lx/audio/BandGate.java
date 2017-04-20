@@ -23,6 +23,7 @@ package heronarts.lx.audio;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.modulator.LXTriggerSource;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
@@ -35,7 +36,7 @@ import heronarts.lx.parameter.NormalizedParameter;
  * does *not* respect the attack and release settings of the underlying meter, it
  * merely shares the raw values. The BeatDetect applies its own time-band filtering.
  */
-public class BandGate extends LXModulator implements LXNormalizedParameter {
+public class BandGate extends LXModulator implements LXNormalizedParameter, LXTriggerSource {
 
     /**
      * Gain of the meter, in decibels
@@ -334,5 +335,10 @@ public class BandGate extends LXModulator implements LXNormalizedParameter {
     @Override
     public float getNormalizedf() {
         return (float) getNormalized();
+    }
+
+    @Override
+    public BooleanParameter getTriggerSource() {
+        return this.gate;
     }
 }

@@ -79,7 +79,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     private int tapCount = 0;
 
     private int beatCount = 0;
-    private boolean triggered = false;
+    private boolean manuallyTriggered = false;
 
     public Tempo(LX lx) {
         super(lx);
@@ -219,6 +219,14 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         trigger(true);
     }
 
+    public void trigger(int beat) {
+        this.beatCount = beat-1;
+        if (!beat()) {
+            this.click.fire();
+        }
+        this.manuallyTriggered = true;
+    }
+
     /**
      * Triggers a beat, optionally resetting the beat count
      *
@@ -229,7 +237,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
             this.beatCount = resetBeat ? 0 : this.beatCount + 1;
             this.click.fire();
         }
-        this.triggered = true;
+        this.manuallyTriggered = true;
     }
 
     /**
@@ -266,9 +274,9 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     @Override
     public void loop(double deltaMs) {
         super.loop(deltaMs);
-        if (beat() && !triggered) {
+        if (beat() && !this.manuallyTriggered) {
             ++this.beatCount;
         }
-        this.triggered = false;
+        this.manuallyTriggered = false;
     }
 }
