@@ -38,7 +38,11 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
         .setDescription("Resets the cycle and starts running");
 
     protected LXRunnable() {
-        this(null);
+        this(null, null);
+    }
+
+    protected LXRunnable(String label) {
+        this(null, label);
     }
 
     protected LXRunnable(LX lx) {
