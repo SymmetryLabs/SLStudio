@@ -90,7 +90,7 @@ public class UIRightPane extends UIPane {
     }
 
     private void buildModulationUI() {
-        this.modulation.setKeyFocus(UI2dContainer.KeyFocus.VERTICAL);
+        this.modulation.setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL);
 
         UI2dContainer bar = (UI2dContainer) new UI2dContainer(0, 0, this.modulation.getContentWidth(), 22) {
             @Override

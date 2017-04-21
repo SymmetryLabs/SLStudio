@@ -28,69 +28,75 @@ package heronarts.p3lx.ui.studio.midi;
 
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiInput;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
-import heronarts.p3lx.ui.component.UIItemList;
+import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
+import processing.core.PConstants;
+import processing.core.PGraphics;
 
 public class UIMidiManager extends UICollapsibleSection {
 
-    private final UIItemList.BasicList midiInputs;
-
-    public UIMidiManager(UI ui, final LXMidiEngine midiEngine, float x, float y, float w) {
+    public UIMidiManager(final UI ui, final LXMidiEngine midiEngine, float x, float y, float w) {
         super(ui, x, y, w, 0);
         setTitle("MIDI INPUT");
         setLayout(UI2dContainer.Layout.VERTICAL);
-
-        this.midiInputs = (UIItemList.BasicList)
-            new UIItemList.BasicList(ui, 0, 0, getContentWidth(), getContentHeight())
-            .setDescription("Shows the available MIDI inputs, double-click to enable or disable a device")
-            .addToContainer(this);
+        setChildMargin(2);
+        setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL);
 
         midiEngine.whenReady(new Runnable() {
             public void run() {
                 for (LXMidiInput input : midiEngine.getInputs()) {
-                    midiInputs.addItem(new MidiListItem(input));
+                    new UIMidiInput(ui, input, getContentWidth()).addToContainer(UIMidiManager.this);
                 }
             }
         });
     }
 
-    private class MidiListItem extends UIItemList.AbstractItem implements LXParameterListener {
+    private class UIMidiInput extends UI2dContainer implements UIFocus {
 
-        private final LXMidiInput input;
+        private static final int HEIGHT = 20;
+        private static final int PADDING = 4;
+        private static final int BUTTON_WIDTH = 12;
 
-        MidiListItem(LXMidiInput input) {
-            this.input = input;
-            input.enabled.addListener(this);
+        UIMidiInput(UI ui, LXMidiInput input, float w) {
+            super(0, 0, w, HEIGHT);
+            setBackgroundColor(ui.theme.getDarkBackgroundColor());
+            float buttonX = w - 3*(PADDING + BUTTON_WIDTH);
+
+            new UILabel(PADDING, PADDING, buttonX - 2*PADDING, 12)
+            .setLabel(input.getDescription())
+            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+            .addToContainer(this);
+
+            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 12)
+            .setParameter(input.channelEnabled)
+            .setMappable(false)
+            .addToContainer(this);
+            buttonX += BUTTON_WIDTH + PADDING;
+
+            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 12)
+            .setParameter(input.controlEnabled)
+            .setMappable(false)
+            .addToContainer(this);
+            buttonX += BUTTON_WIDTH + PADDING;
+
+            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 12)
+            .setParameter(input.syncEnabled)
+            .setMappable(false)
+            .addToContainer(this);
+            buttonX += BUTTON_WIDTH + PADDING;
         }
 
         @Override
-        public void onParameterChanged(LXParameter p) {
-            redraw();
+        public void drawFocus(UI ui, PGraphics pg) {
+            pg.stroke(ui.theme.getPrimaryColor());
+            pg.line(0, 0, 0, this.height-1);
         }
 
-        @Override
-        public boolean isActive() {
-            return this.input.enabled.isOn();
-        }
-
-        @Override
-        public int getActiveColor(UI ui) {
-            return ui.theme.getPrimaryColor();
-        }
-
-        @Override
-        public void onActivate() {
-            this.input.enabled.toggle();
-            midiInputs.redraw();
-        }
-
-        public String getLabel() {
-            return this.input.getDescription();
-        }
     }
+
 }
 

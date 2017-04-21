@@ -51,14 +51,14 @@ public class UIOscManager extends UICollapsibleSection {
 
         float yp = 4;
         new UILabel(6, yp+2, 36, 12).setLabel("Input").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
-        new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.receivePort).addToContainer(border);
+        new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.receivePort).setMappable(false).addToContainer(border);
         new UITextBox(114, yp, 70, 16).setParameter(lx.engine.osc.receiveHost).addToContainer(border);
-        new UIButton(188, yp, 16, 16).setParameter(lx.engine.osc.receiveActive).setBorderRounding(4).addToContainer(border);
+        new UIButton(188, yp, 16, 16).setParameter(lx.engine.osc.receiveActive).setMappable(false).setBorderRounding(4).addToContainer(border);
 
         yp += 20;
         new UILabel(6, yp+2, 36, 12).setLabel("Output").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
-        new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.transmitPort).addToContainer(border);
+        new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.transmitPort).setMappable(false).addToContainer(border);
         new UITextBox(114, yp, 70, 16).setParameter(lx.engine.osc.transmitHost).addToContainer(border);
-        new UIButton(188, yp, 16, 16).setParameter(lx.engine.osc.transmitActive).setBorderRounding(4).addToContainer(border);
+        new UIButton(188, yp, 16, 16).setParameter(lx.engine.osc.transmitActive).setMappable(false).setBorderRounding(4).addToContainer(border);
     }
 }

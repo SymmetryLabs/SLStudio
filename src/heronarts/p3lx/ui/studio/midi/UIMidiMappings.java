@@ -72,7 +72,7 @@ public class UIMidiMappings extends UICollapsibleSection {
         });
 
         setLayout(UI2dContainer.Layout.VERTICAL);
-        setKeyFocus(UI2dContainer.KeyFocus.VERTICAL);
+        setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL);
         setChildMargin(SPACING);
 
         final UIButton midiMapButton = (UIButton) new UIButton(getContentWidth() - 36, 3, UIModulator.MAP_WIDTH, 14) {
