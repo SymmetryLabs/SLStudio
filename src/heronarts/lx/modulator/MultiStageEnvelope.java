@@ -144,7 +144,7 @@ public class MultiStageEnvelope extends LXRangeModulator implements LXWaveshape 
     public MultiStageEnvelope(String label) {
         super(label, new FixedParameter(0), new FixedParameter(1), new FixedParameter(1000));
         setPeriod(period);
-        setLooping(true);
+        setLooping(false);
         addParameter("period", period);
         internalStages.add(new Stage(0, 0, 1, true, false));
         internalStages.add(new Stage(1, 1, 1, false, true));
