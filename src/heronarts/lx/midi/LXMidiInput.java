@@ -38,7 +38,7 @@ public class LXMidiInput extends LXMidiDevice {
     private boolean isOpen = false;
 
     public final BooleanParameter channelEnabled =
-        new BooleanParameter("Track", false)
+        new BooleanParameter("Channel", false)
         .setDescription("Whether midi events from this device are forwarded to channels");
 
     public final BooleanParameter controlEnabled =
