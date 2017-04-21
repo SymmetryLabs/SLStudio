@@ -29,6 +29,7 @@ package heronarts.p3lx.ui;
 import heronarts.lx.LX;
 import processing.core.PApplet;
 import processing.core.PFont;
+import processing.core.PImage;
 
 public class UITheme {
 
@@ -61,6 +62,10 @@ public class UITheme {
     private int modulationSourceMappingColor = 0x3300ff00;
     private int modulationTargetMappingColor = 0x3300cccc;
 
+    public final PImage iconNote;
+    public final PImage iconTempo;
+    public final PImage iconControl;
+
     UITheme(PApplet applet) {
         // this.controlFont = applet.createFont("Arial", 10);
         this.controlFont = applet.loadFont("ArialUnicodeMS-10.vlw");
@@ -68,6 +73,11 @@ public class UITheme {
         // this.setLabelFont(this.windowTitleFont = applet.createFont("Arial-Black", 9));
         this.setLabelFont(this.windowTitleFont = applet.loadFont("Arial-Black-9.vlw"));
         LX.initTimer.log("P3LX: UI: Theme: windowTitleFont");
+
+        this.iconNote = applet.loadImage("icon-note.png");
+        this.iconTempo = applet.loadImage("icon-tempo.png");
+        this.iconControl = applet.loadImage("icon-control.png");
+        LX.initTimer.log("P3LX: UI: Theme: Icons");
     }
 
     /**

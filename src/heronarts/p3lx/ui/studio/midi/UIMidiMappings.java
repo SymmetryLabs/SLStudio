@@ -122,6 +122,7 @@ public class UIMidiMappings extends UICollapsibleSection {
             this.mapping = mapping;
 
             setBackgroundColor(ui.theme.getDarkBackgroundColor());
+            setBorderRounding(4);
 
             new UILabel(PADDING, 0, 14, HEIGHT).setLabel(Integer.toString(mapping.channel + 1)).setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(this);
             new UILabel(20, 0, 30, HEIGHT).setLabel(mapping.getDescription()).setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(this);
@@ -130,11 +131,9 @@ public class UIMidiMappings extends UICollapsibleSection {
 
         @Override
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-            // TODO(mcslee): add up/down key navigation thru this list of items
             if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE ||
                     ((keyEvent.isControlDown() || keyEvent.isMetaDown()) && keyCode == java.awt.event.KeyEvent.VK_D)) {
                 midiEngine.removeMapping(this.mapping);
-                // TODO(mcslee): send keyfocus to neighbor
             }
         }
 
@@ -143,5 +142,6 @@ public class UIMidiMappings extends UICollapsibleSection {
             pg.stroke(ui.theme.getPrimaryColor());
             pg.line(0, 0, 0, this.height-1);
         }
+
     }
 }

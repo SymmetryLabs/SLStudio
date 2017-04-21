@@ -57,35 +57,46 @@ public class UIMidiManager extends UICollapsibleSection {
 
     private class UIMidiInput extends UI2dContainer implements UIFocus {
 
-        private static final int HEIGHT = 20;
+        private static final int HEIGHT = 24;
         private static final int PADDING = 4;
-        private static final int BUTTON_WIDTH = 12;
+        private static final int BUTTON_WIDTH = 16;
 
         UIMidiInput(UI ui, LXMidiInput input, float w) {
             super(0, 0, w, HEIGHT);
             setBackgroundColor(ui.theme.getDarkBackgroundColor());
+            setBorderRounding(4);
+
             float buttonX = w - 3*(PADDING + BUTTON_WIDTH);
 
-            new UILabel(PADDING, PADDING, buttonX - 2*PADDING, 12)
+            new UILabel(PADDING, PADDING, buttonX - 2*PADDING, 16)
             .setLabel(input.getDescription())
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
             .addToContainer(this);
 
-            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 12)
+            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 16)
             .setParameter(input.channelEnabled)
+            .setIcon(ui.theme.iconNote)
             .setMappable(false)
+            .setBorder(false)
+            .setFocusColor(0xff555555)
             .addToContainer(this);
             buttonX += BUTTON_WIDTH + PADDING;
 
-            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 12)
+            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 16)
             .setParameter(input.controlEnabled)
+            .setIcon(ui.theme.iconControl)
             .setMappable(false)
+            .setBorder(false)
+            .setFocusColor(0xff555555)
             .addToContainer(this);
             buttonX += BUTTON_WIDTH + PADDING;
 
-            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 12)
+            new UIButton(buttonX, PADDING, BUTTON_WIDTH, 16)
             .setParameter(input.syncEnabled)
+            .setIcon(ui.theme.iconTempo)
             .setMappable(false)
+            .setBorder(false)
+            .setFocusColor(0xff555555)
             .addToContainer(this);
             buttonX += BUTTON_WIDTH + PADDING;
         }

@@ -142,7 +142,7 @@ public class UIChannelStrip extends UIMixerStrip {
         yp = 108;
         final UIButton midiButton =
             new UIButton(2*PADDING, yp, 16, 16)
-            .setLabel("♪")
+            .setIcon(ui.theme.iconNote)
             .setParameter(channel.midiMonitor);
         final UIEnumBox midiChannel = (UIEnumBox)
             new UIEnumBox(2*PADDING + 18, yp, 34, 16)

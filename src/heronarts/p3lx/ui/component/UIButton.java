@@ -36,6 +36,7 @@ import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.UIControlTarget;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -49,6 +50,9 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
 
     private String activeLabel = "";
     private String inactiveLabel = "";
+
+    private PImage activeIcon = null;
+    private PImage inactiveIcon = null;
 
     private EnumParameter<? extends Object> enumParameter = null;
     private BooleanParameter booleanParameter = null;
@@ -134,16 +138,25 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
 
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
-        String label = this.active ? this.activeLabel : this.inactiveLabel;
-        if ((label != null) && (label.length() > 0)) {
-            pg.fill(this.active ? UI.WHITE : getFontColor());
-            pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
-            if (this.textAlignVertical == PConstants.CENTER) {
-                pg.textAlign(PConstants.CENTER, PConstants.CENTER);
-                pg.text(label, this.width / 2 + this.textOffsetX, this.height / 2 - 2 + this.textOffsetY);
-            } else {
-                pg.textAlign(PConstants.CENTER);
-                pg.text(label, this.width / 2 + this.textOffsetX, (int) (this.height * .75) + this.textOffsetY);
+        PImage icon = this.active ? this.activeIcon : this.inactiveIcon;
+        if (icon != null) {
+            if (!this.active) {
+                pg.tint(getFontColor());
+            }
+            pg.image(icon, this.width/2 - icon.width/2, this.height/2 - icon.height/2);
+            pg.noTint();
+        } else {
+            String label = this.active ? this.activeLabel : this.inactiveLabel;
+            if ((label != null) && (label.length() > 0)) {
+                pg.fill(this.active ? UI.WHITE : getFontColor());
+                pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
+                if (this.textAlignVertical == PConstants.CENTER) {
+                    pg.textAlign(PConstants.CENTER, PConstants.CENTER);
+                    pg.text(label, this.width / 2 + this.textOffsetX, this.height / 2 - 2 + this.textOffsetY);
+                } else {
+                    pg.textAlign(PConstants.CENTER);
+                    pg.text(label, this.width / 2 + this.textOffsetX, (int) (this.height * .75) + this.textOffsetY);
+                }
             }
         }
     }
@@ -253,6 +266,32 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
     public UIButton setInactiveLabel(String inactiveLabel) {
         if (!this.inactiveLabel.equals(inactiveLabel)) {
             this.inactiveLabel = inactiveLabel;
+            if (!this.active) {
+                redraw();
+            }
+        }
+        return this;
+    }
+
+    public UIButton setIcon(PImage icon) {
+        setActiveIcon(icon);
+        setInactiveIcon(icon);
+        return this;
+    }
+
+    public UIButton setActiveIcon(PImage activeIcon) {
+        if (this.activeIcon != activeIcon) {
+            this.activeIcon = activeIcon;
+            if (this.active) {
+                redraw();
+            }
+        }
+        return this;
+    }
+
+    public UIButton setInactiveIcon(PImage inactiveIcon) {
+        if (this.inactiveIcon != inactiveIcon) {
+            this.inactiveIcon = inactiveIcon;
             if (!this.active) {
                 redraw();
             }

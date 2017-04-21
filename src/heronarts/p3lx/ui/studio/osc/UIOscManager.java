@@ -45,8 +45,8 @@ public class UIOscManager extends UICollapsibleSection {
         setTitle("OSC I/O");
 
         UI2dContainer border = (UI2dContainer) new UI2dContainer(0, 0, getContentWidth(), getContentHeight())
-            .setBorderRounding(4)
             .setBackgroundColor(ui.theme.getDarkBackgroundColor())
+            .setBorderRounding(4)
             .addToContainer(this);
 
         float yp = 4;

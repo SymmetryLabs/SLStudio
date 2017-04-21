@@ -68,6 +68,10 @@ public abstract class UI2dComponent extends UIObject {
 
     private int borderRounding = 0;
 
+    private boolean hasFocusColor = false;
+
+    private int focusColor = 0;
+
     private PFont font = null;
 
     private boolean hasFontColor = false;
@@ -393,6 +397,12 @@ public abstract class UI2dComponent extends UIObject {
         return this;
     }
 
+    public UI2dComponent setFocusColor(int focusColor) {
+        this.hasFocusColor = true;
+        this.focusColor = focusColor;
+        return this;
+    }
+
     /**
      * Whether a font is set on this object
      *
@@ -653,7 +663,7 @@ public abstract class UI2dComponent extends UIObject {
      * @return this object
      */
     public final UI2dComponent redraw() {
-        if (this.ui != null) {
+        if (this.ui != null && this.parent != null && this.isVisible()) {
             this.ui.redraw(this);
         }
         return this;
@@ -807,7 +817,7 @@ public abstract class UI2dComponent extends UIObject {
     }
 
     protected int getFocusColor(UI ui) {
-        return ui.theme.getFocusColor();
+        return this.hasFocusColor ? this.focusColor : ui.theme.getFocusColor();
     }
 
     /**
@@ -826,7 +836,7 @@ public abstract class UI2dComponent extends UIObject {
      * @param pg PGraphics
      */
     protected void drawFocus(UI ui, PGraphics pg) {
-        drawFocus(ui, pg, ui.theme.getFocusColor());
+        drawFocus(ui, pg, getFocusColor(ui));
     }
 
     protected void drawFocus(UI ui, PGraphics pg, int color) {
