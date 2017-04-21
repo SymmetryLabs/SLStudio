@@ -37,7 +37,7 @@ import heronarts.lx.model.LXModel;
 import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.UIObject;
-import heronarts.p3lx.ui.component.UIPointCloud;
+import heronarts.p3lx.ui.component.UIGLPointCloud;
 import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
 import heronarts.p3lx.ui.studio.UILeftPane;
@@ -61,7 +61,7 @@ public class LXStudio extends P3LX {
         public class PreviewWindow extends UI3dContext {
             PreviewWindow(UI ui, P3LX lx, int x, int y, int w, int h) {
                 super(ui, x, y, w, h);
-                addComponent(new UIPointCloud(lx).setPointSize(3));
+                addComponent(new UIGLPointCloud(lx).setPointSize(3));
                 setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
                 setRadius(lx.model.rMax * 1.5f);
                 setDescription("Preview Window: Displays the main output, or the channels/groups with CUE enabled");
