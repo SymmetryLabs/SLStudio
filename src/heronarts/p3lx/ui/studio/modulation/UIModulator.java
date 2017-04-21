@@ -142,7 +142,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
                 .setDescription("Indicates the color used for modulations from this parameter");
 
             this.title = null;
-            this.toggleTarget = new UIParameterLabel(2, PADDING, titleRightX - 2, 12) {
+            this.toggleTarget = new UIParameterLabel(PADDING, PADDING, titleRightX - PADDING, 12) {
                 @Override
                 public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
                     super.onMousePressed(mouseEvent, mx, my);
@@ -413,7 +413,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
             .addToContainer(this);
 
-            if (modulation.source != modulator) {
+            if (modulation.source != parameter) {
                 label.setPrefix(modulation.source.getLabel() + " > ");
                 if (modulation.source instanceof LXComponent) {
                     ((LXComponent) modulation.source).label.addListener(new LXParameterListener() {
