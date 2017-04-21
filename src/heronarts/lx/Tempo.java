@@ -81,6 +81,8 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     private int beatCount = 0;
     private boolean manuallyTriggered = false;
 
+    private boolean manualPeriodUpdate = false;
+
     public Tempo(LX lx) {
         super(lx);
         addParameter("bpm", this.bpm);
@@ -102,7 +104,9 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     @Override
     public void onParameterChanged(LXParameter parameter) {
         if (parameter == this.bpm) {
-            this.period.setValue(MINUTE / this.bpm.getValue());
+            if (!this.manualPeriodUpdate) {
+                this.period.setValue(MINUTE / this.bpm.getValue());
+            }
         } else if (parameter == this.tap) {
             if (this.tap.isOn()) {
                 tap();
@@ -212,6 +216,19 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     }
 
     /**
+     * Sets the period of one beat
+     *
+     * @param beatMillis
+     * @return
+     */
+    public Tempo setPeriod(double beatMillis) {
+        this.manualPeriodUpdate = true;
+        this.period.setValue(beatMillis);
+        this.bpm.setValue(MINUTE / beatMillis);
+        return this;
+    }
+
+    /**
      * Re-triggers the metronome, so that it immediately beats. Also resetting the
      * beat count to be at the beginning of a measure.
      */
@@ -220,7 +237,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     }
 
     public void trigger(int beat) {
-        this.beatCount = beat-1;
+        this.beatCount = beat;
         if (!beat()) {
             this.click.fire();
         }
@@ -236,6 +253,8 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         if (!beat()) {
             this.beatCount = resetBeat ? 0 : this.beatCount + 1;
             this.click.fire();
+        } else if (resetBeat) {
+            this.beatCount = 0;
         }
         this.manuallyTriggered = true;
     }

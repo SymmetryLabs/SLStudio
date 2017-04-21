@@ -328,30 +328,40 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     public void dispatch(LXShortMessage message) {
-        dispatch(message, true);
-    }
-
-    public void dispatch(LXShortMessage message, boolean mappingEligible) {
-        if (mappingEligible) {
-            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
-                createMapping(message);
-                return;
+        LXMidiInput input = message.getInput();
+        if (input != null) {
+            if (input.controlEnabled.isOn()) {
+                if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
+                    createMapping(message);
+                    return;
+                }
+                if (applyMapping(message)) {
+                    return;
+                }
             }
-            if (applyMapping(message)) {
-                return;
+            if (input.syncEnabled.isOn() && message instanceof MidiBeat) {
+                MidiBeat beat = (MidiBeat) message;
+                this.lx.tempo.trigger(((MidiBeat) message).getBeat());
+                double period = beat.getPeriod();
+                if (period != MidiBeat.PERIOD_UNKNOWN) {
+                    this.lx.tempo.setPeriod(period);
+                }
             }
         }
 
         for (LXMidiListener listener : this.listeners) {
             dispatch(message, listener);
         }
-        for (LXChannel channel : this.lx.engine.getChannels()) {
-            if (channel.midiMonitor.isOn() && channel.midiChannel.getEnum().matches(message)) {
-                channel.midiMessage(message);
-                dispatch(message, channel.getActivePattern());
-                LXPattern nextPattern = channel.getNextPattern();
-                if (nextPattern != null) {
-                    dispatch(message, nextPattern);
+
+        if (input == null || input.channelEnabled.isOn()) {
+            for (LXChannel channel : this.lx.engine.getChannels()) {
+                if (channel.midiMonitor.isOn() && channel.midiChannel.getEnum().matches(message)) {
+                    channel.midiMessage(message);
+                    dispatch(message, channel.getActivePattern());
+                    LXPattern nextPattern = channel.getNextPattern();
+                    if (nextPattern != null) {
+                        dispatch(message, nextPattern);
+                    }
                 }
             }
         }

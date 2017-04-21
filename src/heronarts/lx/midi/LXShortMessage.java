@@ -25,6 +25,8 @@ import javax.sound.midi.ShortMessage;
 
 public abstract class LXShortMessage extends ShortMessage {
 
+    static final int SYSTEM_COMMAND = 0xF0;
+
     private LXMidiInput input = null;
 
     public static LXShortMessage fromShortMessage(ShortMessage message) {

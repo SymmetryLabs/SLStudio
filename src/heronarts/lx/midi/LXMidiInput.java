@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -28,13 +28,38 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.ShortMessage;
 
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+
 public class LXMidiInput extends LXMidiDevice {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
     private boolean isOpen = false;
 
+    public final BooleanParameter channelEnabled =
+        new BooleanParameter("Track", false)
+        .setDescription("Whether midi events from this device are forwarded to channels");
+
+    public final BooleanParameter controlEnabled =
+        new BooleanParameter("Control", false)
+        .setDescription("Whether midi events from this device are used for control mapping");
+
+    public final BooleanParameter syncEnabled =
+        new BooleanParameter("Sync", false)
+        .setDescription("Whether midi clock signal from this device is used to control tempo");
+
     LXMidiInput(LXMidiEngine engine, MidiDevice device) {
         super(engine, device);
+
+        LXParameterListener enabledListener = new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                enabled.setValue(channelEnabled.isOn() || controlEnabled.isOn() || syncEnabled.isOn());
+            }
+        };
+        this.channelEnabled.addListener(enabledListener);
+        this.controlEnabled.addListener(enabledListener);
+        this.syncEnabled.addListener(enabledListener);
     }
 
     /**
@@ -44,8 +69,7 @@ public class LXMidiInput extends LXMidiDevice {
      */
     @Override
     public LXMidiInput open() {
-        this.enabled.setValue(true);
-        return this;
+        return (LXMidiInput) super.open();
     }
 
     @Override
@@ -77,6 +101,12 @@ public class LXMidiInput extends LXMidiDevice {
      * into a queue that can then be called by the engine thread.
      */
     private class Receiver implements javax.sound.midi.Receiver {
+
+        private final static int PULSES_PER_QUARTER_NOTE = 24;
+
+        private int beatClock = 0;
+        private long lastBeatNanos = -1;
+
         @Override
         public void close() {
             listeners.clear();
@@ -106,9 +136,44 @@ public class LXMidiInput extends LXMidiDevice {
                 case ShortMessage.CHANNEL_PRESSURE:
                     message = new MidiAftertouch(sm);
                     break;
+                case LXShortMessage.SYSTEM_COMMAND:
+                    switch (sm.getStatus()) {
+                    case ShortMessage.START:
+                        this.beatClock = 0;
+                        this.lastBeatNanos = System.nanoTime();
+                        message = new MidiBeat(sm, 0);
+                        break;
+                    case ShortMessage.CONTINUE:
+                        if (this.beatClock % PULSES_PER_QUARTER_NOTE == 0) {
+                            this.lastBeatNanos = System.nanoTime();
+                            message = new MidiBeat(sm, this.beatClock / PULSES_PER_QUARTER_NOTE);
+                        }
+                        break;
+                    case ShortMessage.STOP:
+                        this.lastBeatNanos = -1;
+                        break;
+                    case ShortMessage.SONG_POSITION_POINTER:
+                        this.lastBeatNanos = -1;
+                        int sixteenthNotes = sm.getData1() + (sm.getData2() << 7);
+                        this.beatClock = sixteenthNotes * PULSES_PER_QUARTER_NOTE / 4;
+                        break;
+                    case ShortMessage.TIMING_CLOCK:
+                        ++this.beatClock;
+                        if (this.beatClock % PULSES_PER_QUARTER_NOTE == 0) {
+                            long now = System.nanoTime();
+                            MidiBeat beat = new MidiBeat(sm, this.beatClock / PULSES_PER_QUARTER_NOTE);
+                            if (this.lastBeatNanos > 0) {
+                                beat.setPeriod((now - this.lastBeatNanos) / 1000000.);
+                            }
+                            message = beat;
+                            this.lastBeatNanos = now;
+                        }
+                        break;
+                    }
                 }
                 if (message != null) {
-                    engine.queueInputMessage(message.setInput(LXMidiInput.this));
+                    message.setInput(LXMidiInput.this);
+                    engine.queueInputMessage(message);
                 }
             }
         }

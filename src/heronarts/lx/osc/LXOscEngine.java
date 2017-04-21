@@ -195,7 +195,7 @@ public class LXOscEngine extends LXComponent {
 
         private void oscTempo(OscMessage message, String[] parts, int index) {
             if (parts[index].equals(ROUTE_BEAT)) {
-                lx.tempo.trigger(message.getInt());
+                lx.tempo.trigger(message.getInt()-1);
             } else {
                 oscComponent(message, lx.tempo, parts, index);
             }
@@ -215,16 +215,16 @@ public class LXOscEngine extends LXComponent {
                     int pitch = message.getInt();
                     int velocity = message.getInt();
                     int channel = message.getInt();
-                    lx.engine.midi.dispatch(new MidiNoteOn(channel, pitch, velocity), false);
+                    lx.engine.midi.dispatch(new MidiNoteOn(channel, pitch, velocity));
                 } else if (parts[index].equals(ROUTE_CC)) {
                     int value = message.getInt();
                     int cc = message.getInt();
                     int channel = message.getInt();
-                    lx.engine.midi.dispatch(new MidiControlChange(channel, cc, value), false);
+                    lx.engine.midi.dispatch(new MidiControlChange(channel, cc, value));
                 } else if (parts[index].equals(ROUTE_PITCHBEND)) {
                     int msb = message.getInt();
                     int channel = message.getInt();
-                    lx.engine.midi.dispatch(new MidiPitchBend(channel, msb), false);
+                    lx.engine.midi.dispatch(new MidiPitchBend(channel, msb));
                 } else {
                     System.err.println("[OSC] Unrecognized MIDI message: " + message.getAddressPattern().getValue());
                 }
