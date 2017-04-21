@@ -59,15 +59,6 @@ public class UIBandGate extends UIModulator {
     public UIBandGate(UI ui, final LX lx, BandGate bandGate, float x, float y, float w) {
         super(ui, lx, bandGate, x, y, w, HEIGHT);
 
-        // TODO(mcslee): this needs to work better...
-        //float tempoX = this.width - 2*(PADDING + MAP_WIDTH);
-        //addTopLevelComponent(
-        //  new UIButton(tempoX, PADDING-1, MAP_WIDTH, 14)
-        //  .setLabel("TAP")
-        //  .setParameter(bandGate.teachTempo)
-        //);
-        //this.title.setWidth(tempoX - PADDING - this.title.getX());
-
         this.bandGate = bandGate;
         this.bandSelector = new UIBandSelector(ui, 0, 0, getContentWidth() - 2*MARGIN - 2*ENV_WIDTH, METER_HEIGHT);
         this.bandSelector.addToContainer(this);
@@ -89,7 +80,6 @@ public class UIBandGate extends UIModulator {
         new UIKnob(bandGate.release).addToContainer(knobs);
         new UIKnob(bandGate.slope).addToContainer(knobs);
         new UIKnob(bandGate.decay).addToContainer(knobs);
-
     }
 
     void addControlRow(float yp, String label1, BoundedParameter p1, String label2, BoundedParameter p2) {
