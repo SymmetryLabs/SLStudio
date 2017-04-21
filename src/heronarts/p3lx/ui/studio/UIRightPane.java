@@ -79,9 +79,18 @@ public class UIRightPane extends UIPane {
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
 
+        buildMidiUI();
+        buildModulationUI();
+    }
+
+    private void buildMidiUI() {
         new UIOscManager(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiManager(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiMappings(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+    }
+
+    private void buildModulationUI() {
+        this.modulation.setKeyFocus(UI2dContainer.KeyFocus.VERTICAL);
 
         UI2dContainer bar = (UI2dContainer) new UI2dContainer(0, 0, this.modulation.getContentWidth(), 22) {
             @Override

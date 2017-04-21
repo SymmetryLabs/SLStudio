@@ -72,6 +72,7 @@ public class UIMidiMappings extends UICollapsibleSection {
         });
 
         setLayout(UI2dContainer.Layout.VERTICAL);
+        setKeyFocus(UI2dContainer.KeyFocus.VERTICAL);
         setChildMargin(SPACING);
 
         final UIButton midiMapButton = (UIButton) new UIButton(getContentWidth() - 36, 3, UIModulator.MAP_WIDTH, 14) {
@@ -134,11 +135,6 @@ public class UIMidiMappings extends UICollapsibleSection {
                     ((keyEvent.isControlDown() || keyEvent.isMetaDown()) && keyCode == java.awt.event.KeyEvent.VK_D)) {
                 midiEngine.removeMapping(this.mapping);
                 // TODO(mcslee): send keyfocus to neighbor
-            }
-            if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
-                getUI().focusNext();
-            } else if (keyCode == java.awt.event.KeyEvent.VK_UP) {
-                getUI().focusPrev();
             }
         }
 

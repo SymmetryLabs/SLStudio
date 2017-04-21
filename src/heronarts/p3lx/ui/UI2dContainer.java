@@ -28,6 +28,9 @@ package heronarts.p3lx.ui;
 
 import java.util.Iterator;
 
+import heronarts.lx.LXUtils;
+import processing.event.KeyEvent;
+
 public class UI2dContainer extends UI2dComponent implements UIContainer, Iterable<UIObject> {
 
     public enum Layout {
@@ -38,7 +41,15 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
         HORIZONTAL_GRID
     }
 
+    public enum KeyFocus{
+        NONE,
+        VERTICAL,
+        HORIZONTAL
+    };
+
     private Layout layout = Layout.NONE;
+
+    private KeyFocus keyFocus = KeyFocus.NONE;
 
     private int topPadding = 0, rightPadding = 0, bottomPadding = 0, leftPadding = 0;
 
@@ -118,6 +129,11 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
             this.contentTarget.layout = layout;
             this.contentTarget.reflow();
         }
+        return this;
+    }
+
+    public UI2dContainer setKeyFocus(KeyFocus keyFocus) {
+        this.contentTarget.keyFocus = keyFocus;
         return this;
     }
 
@@ -240,5 +256,42 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
     @Override
     public Iterator<UIObject> iterator() {
         return this.contentTarget.children.iterator();
+    }
+
+    private void keyFocus(int delta) {
+        if (this.children.size() > 0) {
+            UIObject focusedChild = getFocusedChild();
+            if (focusedChild == null) {
+                this.children.get(0).focus();
+            } else {
+                int index = this.children.indexOf(focusedChild);
+                int next = LXUtils.constrain(index + delta, 0, this.children.size()-1);
+                if (index != next) {
+                    this.children.get(next).focus();
+                }
+            }
+        }
+    }
+
+    @Override
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        super.onKeyPressed(keyEvent, keyChar, keyCode);
+        if (this.keyFocus == KeyFocus.VERTICAL) {
+            if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+                consumeKeyEvent();
+                keyFocus(-1);
+            } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+                consumeKeyEvent();
+                keyFocus(1);
+            }
+        } else if (this.keyFocus == KeyFocus.HORIZONTAL) {
+            if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+                consumeKeyEvent();
+                keyFocus(-1);
+            } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+                consumeKeyEvent();
+                keyFocus(1);
+            }
+        }
     }
 }
