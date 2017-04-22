@@ -195,6 +195,17 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
 
     @Override
     public void load(LX lx, JsonObject obj) {
+        // Remove everything first
+        for (int i = this.modulators.size() - 1; i >= 0; --i) {
+            removeModulator(this.modulators.get(i));
+        }
+        for (int i = this.modulations.size() - 1; i >= 0; --i) {
+            removeModulation(this.modulations.get(i));
+        }
+        for (int i = this.triggers.size() - 1; i >= 0; --i) {
+            removeTrigger(this.triggers.get(i));
+        }
+
         if (obj.has(KEY_MODULATORS)) {
             JsonArray modulatorArr = obj.getAsJsonArray(KEY_MODULATORS);
             for (JsonElement modulatorElement : modulatorArr) {

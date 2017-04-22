@@ -661,7 +661,11 @@ public class LX {
     }
 
     public void newProject() {
-        // TODO(mcslee): implement this
+        this.file = null;
+        this.engine.load(this, new JsonObject());
+        for (ProjectListener projectListener : this.projectListeners) {
+            projectListener.projectChanged(file);
+        }
     }
 
     public LX registerExternal(String key, LXSerializable serializable) {

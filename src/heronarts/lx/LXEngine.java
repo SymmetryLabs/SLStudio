@@ -974,14 +974,21 @@ public class LXEngine extends LXComponent implements LXOscComponent {
             removeChannel(this.internalChannels.get(i), false);
         }
         // Add the new channels
-        JsonArray channelsArray = obj.getAsJsonArray(KEY_CHANNELS);
-        for (JsonElement channelElement : channelsArray) {
-            // TODO(mcslee): improve efficiency, allow no-patterns in a channel?
-            LXChannel channel = addChannel();
-            channel.load(lx, (JsonObject) channelElement);
+        if (obj.has(KEY_CHANNELS)) {
+            JsonArray channelsArray = obj.getAsJsonArray(KEY_CHANNELS);
+            for (JsonElement channelElement : channelsArray) {
+                // TODO(mcslee): improve efficiency, allow no-patterns in a channel?
+                LXChannel channel = addChannel();
+                channel.load(lx, (JsonObject) channelElement);
+            }
+        } else {
+            addChannel().fader.setValue(1);
         }
+
         // Master channel settings
-        this.masterChannel.load(lx, obj.getAsJsonObject(KEY_MASTER));
+        if (obj.has(KEY_MASTER)) {
+            this.masterChannel.load(lx, obj.getAsJsonObject(KEY_MASTER));
+        }
 
         // Palette
         if (obj.has(KEY_PALETTE)) {
@@ -1009,9 +1016,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         }
 
         // Modulation matrix
-        if (obj.has(KEY_MODULATION)) {
-            this.modulation.load(lx, obj.getAsJsonObject(KEY_MODULATION));
-        }
+        this.modulation.load(lx, obj.has(KEY_MODULATION) ? obj.getAsJsonObject(KEY_MODULATION) : new JsonObject());
 
         // OSC
         if (obj.has(KEY_OSC)) {
