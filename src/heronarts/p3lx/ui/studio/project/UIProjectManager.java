@@ -67,7 +67,7 @@ public class UIProjectManager extends UICollapsibleSection {
         lx.addProjectListener(new LX.ProjectListener() {
             public void projectChanged(File file) {
                 UIProjectManager.this.file = file;
-                fileLabel.setLabel(file.getName());
+                fileLabel.setLabel(file != null ? file.getName() : "<New Project>");
             }
         });
 
@@ -75,7 +75,11 @@ public class UIProjectManager extends UICollapsibleSection {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    lx.saveProject(file);
+                    if (file != null) {
+                        lx.saveProject(file);
+                    } else {
+                        ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile("new-project.lxp"), UIProjectManager.this);
+                    }
                 }
             }
         }

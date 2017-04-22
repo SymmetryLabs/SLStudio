@@ -789,7 +789,7 @@ public class UI implements LXEngine.Dispatch {
             switch (Character.toLowerCase(keyChar)) {
             case 's':
                 if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
-                    if (keyEvent.isShiftDown()) {
+                    if (keyEvent.isShiftDown() || lx.getProject() == null) {
                         this.applet.selectOutput("Select a file to save:", "onSaveAs", this.applet.saveFile("Project.lxp"), this);
                     } else {
                         lx.saveProject();
