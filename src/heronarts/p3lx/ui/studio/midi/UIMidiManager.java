@@ -84,7 +84,7 @@ public class UIMidiManager extends UICollapsibleSection {
 
             new UIButton(buttonX, PADDING, BUTTON_WIDTH, 16)
             .setParameter(input.controlEnabled)
-            .setIcon(ui.theme.iconControl)
+            .setIcon(ui.theme.iconMap)
             .setMappable(false)
             .setBorder(false)
             .setFocusColor(0xff555555)
