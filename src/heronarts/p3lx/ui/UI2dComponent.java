@@ -733,7 +733,7 @@ public abstract class UI2dComponent extends UIObject {
                     pg.translate(cx, cy);
                     child.draw(ui, pg);
                     pg.translate(-cx, -cy);
-                    if (!needsMappingOverlay) {
+                    if (child.needsRedraw && !needsMappingOverlay) {
                         drawMappingOverlay(ui, pg, cx, cy, child.width, child.height);
                     }
                 }
