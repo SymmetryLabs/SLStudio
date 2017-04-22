@@ -65,6 +65,10 @@ public class UITheme {
     public final PImage iconNote;
     public final PImage iconTempo;
     public final PImage iconControl;
+    public final PImage iconTrigger;
+    public final PImage iconTriggerSource;
+    public final PImage iconLoop;
+    public final PImage iconMap;
 
     UITheme(PApplet applet) {
         // this.controlFont = applet.createFont("Arial", 10);
@@ -77,6 +81,10 @@ public class UITheme {
         this.iconNote = applet.loadImage("icon-note.png");
         this.iconTempo = applet.loadImage("icon-tempo.png");
         this.iconControl = applet.loadImage("icon-control.png");
+        this.iconTrigger = applet.loadImage("icon-trigger.png");
+        this.iconTriggerSource = applet.loadImage("icon-trigger-source.png");
+        this.iconLoop = applet.loadImage("icon-loop.png");
+        this.iconMap = applet.loadImage("icon-map.png");
         LX.initTimer.log("P3LX: UI: Theme: Icons");
     }
 

@@ -181,7 +181,7 @@ public class UIRightPane extends UIPane {
                 }
             }
         }
-        .setLabel("→")
+        .setIcon(ui.theme.iconMap)
         .setInactiveColor(ui.theme.getWindowBackgroundColor())
         .setBorderRounding(4)
         .setDescription("Add a new parameter mapping to the modulation engine")

@@ -85,7 +85,7 @@ public class UIMidiMappings extends UICollapsibleSection {
                 }
             }
         }
-        .setLabel("→")
+        .setIcon(ui.theme.iconMap)
         .setDescription("Enter MIDI mapping mode");
 
         lx.engine.mapping.mode.addListener(new LXParameterListener() {

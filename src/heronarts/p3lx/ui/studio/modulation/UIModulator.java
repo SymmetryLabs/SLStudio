@@ -65,8 +65,8 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     protected static final int TITLE_X = 18;
     protected static final int CONTENT_Y = 20;
     public static final int MAP_WIDTH = 24;
-    protected static final int LOOP_WIDTH = MAP_WIDTH;
-    protected static final int TRIGGER_WIDTH = 14;
+    protected static final int LOOP_WIDTH = 18;
+    protected static final int TRIGGER_WIDTH = 16;
     protected static final int COLOR_WIDTH = 10;
 
     private final UI ui;
@@ -108,13 +108,13 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
             if (this.modulator instanceof LXPeriodicModulator) {
                 new UIButton(this.width - 4*PADDING - COLOR_WIDTH - MAP_WIDTH - LOOP_WIDTH - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14)
-                    .setLabel("\u2022")
+                    .setIcon(ui.theme.iconTrigger)
                     .setParameter(this.modulator.trigger)
                     .setBorderRounding(4)
                     .addToContainer(this);
 
                 loopingButton = new UIButton(this.width - 3*PADDING - COLOR_WIDTH - MAP_WIDTH - LOOP_WIDTH, PADDING-1, LOOP_WIDTH, 14)
-                    .setLabel("\u21BA")
+                    .setIcon(ui.theme.iconLoop)
                     .setParameter(((LXPeriodicModulator) this.modulator).looping);
 
                 titleRightX -= 2*PADDING + LOOP_WIDTH + TRIGGER_WIDTH;
@@ -122,7 +122,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             }
 
             if (this.modulator instanceof LXTriggerSource) {
-                gateButton = new UITriggerModulationButton(lx, ((LXTriggerSource) this.modulator).getTriggerSource(), titleRightX - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14);
+                gateButton = new UITriggerModulationButton(ui, lx, ((LXTriggerSource) this.modulator).getTriggerSource(), titleRightX - TRIGGER_WIDTH, PADDING-1, TRIGGER_WIDTH, 14);
                 titleRightX -= PADDING + TRIGGER_WIDTH;
             }
 
@@ -185,7 +185,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             }
         };
         mapButton
-        .setLabel("→")
+        .setIcon(ui.theme.iconMap)
         .setDescription("Map: select a new target for this modulation source")
         .addToContainer(this);
 

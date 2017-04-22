@@ -31,6 +31,7 @@ import heronarts.lx.LXMappingEngine;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UITriggerSource;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIParameterControl;
@@ -40,11 +41,11 @@ public class UITriggerModulationButton extends UIButton implements UITriggerSour
     private final LX lx;
     private final BooleanParameter trigger;
 
-    public UITriggerModulationButton(final LX lx, BooleanParameter trigger, float x, float y, float w, float h) {
+    public UITriggerModulationButton(UI ui, final LX lx, BooleanParameter trigger, float x, float y, float w, float h) {
         super(x, y, w, h);
         this.lx = lx;
         this.trigger = trigger;
-        setLabel("\u2022");
+        setIcon(ui.theme.iconTriggerSource);
         lx.engine.mapping.mode.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 if (lx.engine.mapping.mode.getEnum() != LXMappingEngine.Mode.TRIGGER_TARGET) {
