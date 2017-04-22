@@ -44,7 +44,6 @@ public static class CubeEQ extends SLPattern {
     super(lx);
     audioInput = lx.engine.audio.getInput();
     eq = new GraphicMeter(audioInput);
-    println(eq.gain);
     // addParameter(eq.gain);
     // addParameter(eq.range);
     // addParameter(eq.attack);
