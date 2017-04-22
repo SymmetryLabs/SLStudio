@@ -44,24 +44,35 @@ public static class CubeEQ extends SLPattern {
     super(lx);
     audioInput = lx.engine.audio.getInput();
     eq = new GraphicMeter(audioInput);
+    println(eq.gain);
+    // addParameter(eq.gain);
+    // addParameter(eq.range);
+    // addParameter(eq.attack);
+    // addParameter(eq.release);
+    // addParameter(eq.slope);
+    addParameter(edge);
+    addParameter(clr);
+    addParameter(blockiness);
+    addModulator(eq).start();
   }
 
-  void onActive() {
-    if (eq == null) {
-      eq = new GraphicMeter(audioInput);
-      // eq.range.setValue(48);
-      // eq.release.setValue(800);
-      // addParameter(eq.gain);
-      // addParameter(eq.range);
-      // addParameter(eq.attack);
-      // addParameter(eq.release);
-      //addParameter(eq.slope);
-      addParameter(edge);
-      addParameter(clr);
-      addParameter(blockiness);
-      addModulator(eq).start();
-    }
-  }
+  // void onActive() {
+  //   if (eq == null) {
+  //     audioInput = lx.engine.audio.getInput();
+  //     eq = new GraphicMeter(audioInput);
+  //     eq.range.setValue(48);
+  //     eq.release.setValue(800);
+  //     addParameter(eq.gain);
+  //     addParameter(eq.range);
+  //     addParameter(eq.attack);
+  //     addParameter(eq.release);
+  //     addParameter(eq.slope);
+  //     addParameter(edge);
+  //     addParameter(clr);
+  //     addParameter(blockiness);
+  //     addModulator(eq).start();
+  //   }
+  // }
 
   public void run(double deltaMs) {
     float edgeConst = 2 + 30*edge.getValuef();

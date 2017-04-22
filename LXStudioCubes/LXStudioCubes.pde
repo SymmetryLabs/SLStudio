@@ -23,14 +23,13 @@ void setup() {
       (dispatcher = new Dispatcher(lx)).start();
       (networkMonitor = new NetworkMonitor(lx)).start();
       setupGammaCorrection();
+      setupGammaCorrection();
       setupOutputs(lx);
       outputControl = new OutputControl(lx);
       lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
       mappingMode = new MappingMode(lx);
-      //lx.engine.registerComponent("mappingMode", mappingMode);
-      //lx.engine.addLoopTask((LXLoopTask)mappingMode);
 
       // try {
       //   lx.engine.output.gammaCorrection.setValue(1);
@@ -95,6 +94,9 @@ void setup() {
       new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
     }
   };
+
+  lx.engine.audio.enabled.setValue(true);
+
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
 }
