@@ -118,7 +118,7 @@
 //     }
 
 // /* Pre PatternControls UI
-//   boolean noteOn(LXMidiNote note) {
+//   boolean noteOn(MidiNote note) {
 //     if (handleNote(note)) {
 //         updateLights();
 //         return true;
@@ -127,7 +127,7 @@
 //     }
 //     }
 
-//     boolean handleNote(LXMidiNote note) { 
+//     boolean handleNote(MidiNote note) { 
 //         int row = note.getPitch(), col = note.getChannel();
 //         for (int i=0; i<picks.size(); i++) if (picks.get(i).set(row, col))          { presetManager.dirty(this); return true; }
 //         for (int i=0; i<bools.size(); i++) if (bools.get(i).toggle(row, col))   { presetManager.dirty(this); return true; }
@@ -139,9 +139,9 @@
 // */
 
 
-//   // boolean noteOn(LXMidiNote note) {return false;}
+//   // boolean noteOn(MidiNote note) {return false;}
 
-//   // boolean handleNote(LXMidiNote note) {return false;}
+//   // boolean handleNote(MidiNote note) {return false;}
 
 //   void    onInactive()      {}
 
