@@ -398,7 +398,7 @@ public class LXMidiEngine implements LXSerializable {
     private static final String KEY_INPUTS = "inputs";
     private static final String KEY_MAPPINGS = "mapping";
 
-    private final List<String> rememberMidiInputs = new ArrayList<String>();
+    private final List<JsonObject> rememberMidiInputs = new ArrayList<JsonObject>();
 
     @Override
     public void save(LX lx, JsonObject object) {
@@ -406,10 +406,10 @@ public class LXMidiEngine implements LXSerializable {
         JsonArray inputs = new JsonArray();
         for (LXMidiInput input : this.inputs) {
             if (input.enabled.isOn()) {
-                inputs.add(input.getName());
+                inputs.add(LXSerializable.Utils.toObject(lx, input));
             }
         }
-        for (String remembered : this.rememberMidiInputs) {
+        for (JsonObject remembered : this.rememberMidiInputs) {
             inputs.add(remembered);
         }
         object.add(KEY_INPUTS, inputs);
@@ -417,7 +417,7 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     @Override
-    public void load(LX lx, final JsonObject object) {
+    public void load(final LX lx, final JsonObject object) {
         this.rememberMidiInputs.clear();
         this.mappings.clear();
         if (object.has(KEY_MAPPINGS)) {
@@ -432,16 +432,17 @@ public class LXMidiEngine implements LXSerializable {
                     JsonArray inputNames = object.getAsJsonArray(KEY_INPUTS);
                     if (inputNames.size() > 0) {
                         for (JsonElement element : inputNames) {
-                            String inputName = element.getAsString();
+                            JsonObject inputObj = element.getAsJsonObject();
+                            String inputName = inputObj.get(LXMidiInput.KEY_NAME).getAsString();
                             boolean found = false;
                             for (LXMidiInput input : inputs) {
                                 if (inputName.equals(input.getName())) {
                                     found = true;
-                                    input.enabled.setValue(true);
+                                    input.load(lx, inputObj);
                                 }
                             }
                             if (!found) {
-                                rememberMidiInputs.add(inputName);
+                                rememberMidiInputs.add(inputObj);
                             }
                         }
                     }

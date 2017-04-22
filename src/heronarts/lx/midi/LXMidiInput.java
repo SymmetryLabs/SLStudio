@@ -28,11 +28,15 @@ import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.ShortMessage;
 
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LX;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-public class LXMidiInput extends LXMidiDevice {
+public class LXMidiInput extends LXMidiDevice implements LXSerializable {
 
     private final List<LXMidiListener> listeners = new ArrayList<LXMidiListener>();
     private boolean isOpen = false;
@@ -188,6 +192,34 @@ public class LXMidiInput extends LXMidiDevice {
         for (LXMidiListener listener : this.listeners) {
             this.engine.dispatch(message, listener);
         }
+    }
+
+    final static String KEY_NAME = "name";
+    private final static String KEY_CHANNEL = "channel";
+    private final static String KEY_CONTROL = "control";
+    private final static String KEY_SYNC = "sync";
+
+
+    @Override
+    public void save(LX lx, JsonObject object) {
+        object.addProperty(KEY_NAME, getName());
+        object.addProperty(KEY_CHANNEL, this.channelEnabled.isOn());
+        object.addProperty(KEY_CONTROL, this.controlEnabled.isOn());
+        object.addProperty(KEY_SYNC, this.syncEnabled.isOn());
+    }
+
+    @Override
+    public void load(LX lx, JsonObject object) {
+        if (object.has(KEY_CHANNEL)) {
+            this.channelEnabled.setValue(object.get(KEY_CHANNEL).getAsBoolean());
+        }
+        if (object.has(KEY_CONTROL)) {
+            this.controlEnabled.setValue(object.get(KEY_CONTROL).getAsBoolean());
+        }
+        if (object.has(KEY_SYNC)) {
+            this.syncEnabled.setValue(object.get(KEY_SYNC).getAsBoolean());
+        }
+
     }
 
 }

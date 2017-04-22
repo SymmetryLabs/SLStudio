@@ -1024,9 +1024,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         }
 
         // Midi
-        if (obj.has(KEY_MIDI)) {
-            this.midi.load(lx, obj.getAsJsonObject(KEY_MIDI));
-        }
+        this.midi.load(lx, obj.has(KEY_MIDI) ? obj.getAsJsonObject(KEY_MIDI) : new JsonObject());
 
         // Parameters etc.
         super.load(lx, obj);
