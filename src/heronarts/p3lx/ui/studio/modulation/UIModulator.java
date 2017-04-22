@@ -50,6 +50,7 @@ import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.UITriggerTarget;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIColorBox;
+import heronarts.p3lx.ui.component.UIImage;
 import heronarts.p3lx.ui.component.UIParameterLabel;
 import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.component.UITextBox;
@@ -219,7 +220,11 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
                 recomputeHeight();
             }
         };
-        this.modulations.setLayout(UI2dContainer.Layout.VERTICAL).setPadding(MODULATION_SPACING, 0, 0, 0).setChildMargin(MODULATION_SPACING);
+        this.modulations
+        .setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL)
+        .setLayout(UI2dContainer.Layout.VERTICAL)
+        .setPadding(MODULATION_SPACING, 0, 0, 0)
+        .setChildMargin(MODULATION_SPACING);
         addTopLevelComponent(this.modulations);
     }
 
@@ -385,11 +390,15 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         UITriggerModulation(UI ui, final LXTriggerModulation trigger, float x, float y, float w) {
             super(ui, trigger, x, y, w, HEIGHT);
             this.trigger = trigger;
-            new UIParameterLabel(PADDING, PADDING, width - 2*PADDING, 12)
-            .setPrefix("Trig > ")
+            new UIParameterLabel(PADDING + 10, PADDING, width - 2*PADDING - 10, 12)
             .setParameter(trigger.target)
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
             .addToContainer(this);
+        }
+
+        @Override
+        protected void onDraw(UI ui, PGraphics pg) {
+            pg.image(ui.theme.iconTriggerSource, 0, 3);
         }
 
         @Override
@@ -403,22 +412,32 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
         private static final int HEIGHT = 34 + 2*PADDING;
         private final LXCompoundModulation modulation;
+        private final String MAP_BLANK = "       ";
 
-        UICompoundModulation(UI ui, final LXCompoundModulation modulation, float x, float y, float w) {
+        UICompoundModulation(final UI ui, final LXCompoundModulation modulation, float x, float y, float w) {
             super(ui, modulation, x, y, w, HEIGHT);
             this.modulation = modulation;
 
             final UIParameterLabel label = (UIParameterLabel) new UIParameterLabel(PADDING, PADDING, width - 2*PADDING, 12)
+            .setPrefix(MAP_BLANK)
             .setParameter(modulation.target)
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
             .addToContainer(this);
 
+            final UIImage map = (UIImage) new UIImage(ui.theme.iconMap).setPosition(4, 3).addToContainer(this);
+
             if (modulation.source != parameter) {
-                label.setPrefix(modulation.source.getLabel() + " > ");
+                String sourceLabel = modulation.source.getLabel();
+                ui.applet.g.textFont(ui.theme.getLabelFont());
+                map.setX(ui.applet.g.textWidth(sourceLabel) + PADDING + 2);
+                label.setPrefix(sourceLabel + MAP_BLANK);
                 if (modulation.source instanceof LXComponent) {
                     ((LXComponent) modulation.source).label.addListener(new LXParameterListener() {
                         public void onParameterChanged(LXParameter p) {
-                            label.setPrefix(modulation.source.getLabel() + " > ");
+                            String sourceLabel = modulation.source.getLabel();
+                            ui.applet.g.textFont(ui.theme.getLabelFont());
+                            map.setX(ui.applet.g.textWidth(sourceLabel) + PADDING + 2);
+                            label.setPrefix(sourceLabel + MAP_BLANK);
                         }
                     });
                 }
