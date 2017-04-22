@@ -286,9 +286,10 @@ class UIOutputs extends UICollapsibleSection {
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (SLController c : controllers) { sortedControllers.add(c); }
         for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
-        final UIItemList outputList = new UIItemList(ui, 0, 22, w-8, 78);
+        final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
 
-        outputList.setItems(items).setSingleClickActivate(true).addToContainer(this);
+        outputList.setItems(items).setSingleClickActivate(true);
+        outputList.addToContainer(this);
 
         setTitle(items.size());
 
