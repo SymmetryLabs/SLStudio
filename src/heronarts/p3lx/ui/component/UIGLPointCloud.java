@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -47,7 +47,7 @@ import heronarts.p3lx.ui.UI;
  */
 public class UIGLPointCloud extends UIPointCloud {
 
-    private final PShader shader;
+    private PShader shader;
     private final FloatBuffer vertexData;
     private int vertexBufferObjectName;
     private boolean alphaTestEnabled = false;
@@ -117,6 +117,12 @@ public class UIGLPointCloud extends UIPointCloud {
     public UIGLPointCloud setAlphaTestEnabled(boolean alphaTestEnabled) {
         this.alphaTestEnabled = alphaTestEnabled;
         return this;
+    }
+
+    @Override
+    protected void onUIResize(UI ui) {
+        // Reset the shader after UI is resized
+        this.shader = lx.applet.loadShader("frag.glsl", "vert.glsl");
     }
 
     @Override
