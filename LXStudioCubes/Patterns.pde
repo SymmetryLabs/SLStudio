@@ -1,40 +1,279 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
-public static class Test extends SLPattern {
-  
-  final CompoundParameter thing = new CompoundParameter("Thing", 0, model.yRange);
-  final SinLFO lfo = new SinLFO("Stuff", 0, 1, 2000);
-  
-  public Test(LX lx) {
+public class Noise extends DPat {
+  int       CurAnim, iSymm;
+  int       XSym=1,YSym=2,RadSym=3;
+  float       zTime , zTheta=0, zSin, zCos, rtime, ttime;
+  BoundedParameter  pSpeed , pDensity, pSharp;
+  DiscreteParameter     pChoose, pSymm;
+  int       _ND = 4;
+  NDat      N[] = new NDat[_ND];
+
+  public Noise(LX lx) {
     super(lx);
-    addParameter(thing);
-    startModulator(lfo);
+    pSpeed = new BoundedParameter("Fast", .55, -2, 2);
+    addParameter(pSpeed);
+    pDensity  = addParam("Dens"    , .3);
+    pSharp    = addParam("Shrp"    ,  0);
+    pSymm     = new DiscreteParameter("Symm" , new String[] {"None", "X", "Y", "Rad"} );
+    pChoose   = new DiscreteParameter("Anim", new String[] {"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark","VWav", "Wave"}  );
+    pChoose.setValue(6);
+    //addNonKnobParameter(pSymm);
+    //addNonKnobParameter(pChoose);
+      //addSingleParameterUIRow(pChoose);
+      //addSingleParameterUIRow(pSymm);
+    for (int i=0; i<_ND; i++) N[i] = new NDat();
+  }
+
+  void onActive() { zTime = random(500); zTheta=0; rtime = 0; ttime = 0; }
+
+  void StartRun(double deltaMs) {
+    zTime   += deltaMs*(1*val(pSpeed)-.50) * .002;
+    zTheta  += deltaMs*(spin()-.5)*.01  ;
+    rtime += deltaMs;
+    iSymm  = pSymm.getValuei();
+    zSin  = sin(zTheta);
+    zCos  = cos(zTheta);
+
+    if (pChoose.getValuei() != CurAnim) {
+      CurAnim = pChoose.getValuei(); ttime = rtime;
+      pSpin   .reset(); zTheta    = 0;
+      pDensity  .reset(); pSpeed    .reset();
+      for (int i=0; i<_ND; i++) { N[i].isActive = false; }
+      
+      switch(CurAnim) {
+      //               hue xz  yz  zz den mph angle
+      case 0: N[0].set(0  ,75 ,75 ,150,45 ,3  ,0  ); 
+              N[1].set(20, 25, 50, 50, 25, 1, 0 ); 
+                    N[2].set(80, 25, 50, 50, 15, 2, 0 );  
+                    pSharp.setValue(1 );   break;  // drip
+      case 1: N[0].set(0  ,100,100,200,45 ,3  ,180); pSharp.setValue(0 ); break;  // clouds
+      case 2: N[0].set(0  ,2  ,400,2  ,20 ,3  ,0  ); pSharp.setValue(.5); break;  // rain
+      case 3: N[0].set(40 ,100,100,200,10 ,1  ,180); 
+          N[1].set(0  ,100,100,200,10 ,5  ,180); pSharp.setValue(0 ); break;  // fire 1
+      case 4: N[0].set(0  ,40 ,40 ,40 ,15 ,2.5,180);
+          N[1].set(20 ,40 ,40 ,40 ,15 ,4  ,0  );
+          N[2].set(40 ,40 ,40 ,40 ,15 ,2  ,90 );
+                    N[3].set(60 ,40 ,40 ,40 ,15 ,3  ,-90); pSharp.setValue(.5); break; // machine       
+      case 5: N[0].set(0  ,400,100,2  ,15 ,3  ,90 );
+          N[1].set(20 ,400,100,2  ,15 ,2.5,0  );
+          N[2].set(40 ,100,100,2  ,15 ,2  ,180);
+          N[3].set(60 ,100,100,2  ,15 ,1.5,270); pSharp.setValue(.5); break; // spark
+      }
+    }
+    
+    for (int i=0; i<_ND; i++) if (N[i].Active()) {
+      N[i].sinAngle = sin(radians(N[i].angle));
+      N[i].cosAngle = cos(radians(N[i].angle));
+    }
+  }
+
+  color CalcPoint(PVector p) {
+    color c = 0;
+    rotateZ(p, mCtr, zSin, zCos);
+        //rotateY(p, mCtr, ySin, yCos);
+        //rotateX(p, mCtr, xSin, xCos); 
+    if (CurAnim == 6 || CurAnim == 7) {
+      setNorm(p);
+      return lx.hsb(lxh(),100, 100 * (
+              constrain(1-50*(1-val(pDensity))*abs(p.y-sin(zTime*10  + p.x*(300))*.5 - .5),0,1) + 
+      (CurAnim == 7 ? constrain(1-50*(1-val(pDensity))*abs(p.x-sin(zTime*10  + p.y*(300))*.5 - .5),0,1) : 0))
+      );
+    }     
+
+    if (iSymm == XSym && p.x > mMax.x/2) p.x = mMax.x-p.x;
+    if (iSymm == YSym && p.y > mMax.y/2) p.y = mMax.y-p.y;
+
+    for (int i=0;i<_ND; i++) if (N[i].Active()) {
+      NDat  n     = N[i];
+      float zx    = zTime * n.speed * n.sinAngle,
+          zy    = zTime * n.speed * n.cosAngle;
+
+      float b     = (iSymm==RadSym ? (zTime*n.speed+n.xoff-p.dist(mCtr)/n.xz)
+                     : noise(p.x/n.xz+zx+n.xoff,p.y/n.yz+zy+n.yoff,p.z/n.zz+n.zoff))
+              *1.8;
+
+      b +=  n.den/100 -.4 + val(pDensity) -1;
+    c =   PImage.blendColor(c,lx.hsb(lxh()+n.hue,100,c1c(b)),ADD);
+    }
+    return c;
+  }
+}
+
+public class StripPlay extends SLPattern {
+  private final int NUM_OSC = 300;
+  private final int MAX_PERIOD = 20000; 
+  private BoundedParameter brightParameter = new BoundedParameter("bright", 96, 70, 100); 
+  private BoundedParameter hueSpread = new BoundedParameter("hueSpread", 1); 
+  private BoundedParameter speed = new BoundedParameter("speed", .5); 
+  private BoundedParameter xSpeed = new BoundedParameter("xSpeed", 2000, 500, MAX_PERIOD);
+  private BoundedParameter ySpeed = new BoundedParameter("ySpeed", 1600, 500, MAX_PERIOD);
+  private BoundedParameter zSpeed = new BoundedParameter("zSpeed", 1000, 500, MAX_PERIOD); 
+  private DiscreteParameter numOsc = new DiscreteParameter("Strips", 179, 1, NUM_OSC); 
+  
+
+  SinLFO[] fX = new SinLFO[NUM_OSC]; //new SinLFO(0, model.xMax, 5000);
+  SinLFO[] fY = new SinLFO[NUM_OSC]; //new SinLFO(0, model.yMax, 4000);
+  SinLFO[] fZ = new SinLFO[NUM_OSC]; //new SinLFO(0, model.yMax, 3000);
+  SinLFO[] sat = new SinLFO[NUM_OSC];
+  float[] colorOffset = new float[NUM_OSC];
+ 
+  public StripPlay(LX lx) {
+    super(lx);
+    addParameter(brightParameter); 
+    addParameter(numOsc);
+    addParameter(hueSpread); 
+    addParameter(speed); 
+    addParameter(xSpeed);
+    addParameter(ySpeed);
+    addParameter(zSpeed);
+
+      for (int i=0;i<NUM_OSC;i++) {
+        fX[i] = new SinLFO(model.xMin, model.xMax, random(2000,MAX_PERIOD)); 
+        fY[i] = new SinLFO(model.yMin, model.yMax, random(2000,MAX_PERIOD)); 
+        fZ[i] = new SinLFO(model.zMin, model.zMax, random(2000,MAX_PERIOD)); 
+        sat[i] = new SinLFO(80, 100, random(2000,5000)); 
+        addModulator(fX[i]).trigger();      
+        addModulator(fY[i]).trigger();
+        addModulator(fZ[i]).trigger();
+        colorOffset[i]= sin(random(-PI, PI))*40; 
+      }
+  }
+
+  public void onParameterChanged(LXParameter parameter) {
+    if (parameter == xSpeed) { 
+      for (int i = 0; i < NUM_OSC; i++) {
+        fX[i].setPeriod(MAX_PERIOD + 1 - xSpeed.getValue());
+      }
+    } else if (parameter == ySpeed) { 
+      for (int i = 0; i < NUM_OSC; i++) {
+        fY[i].setPeriod(MAX_PERIOD + 1  - ySpeed.getValue());
+      }
+    } else if (parameter == zSpeed) { 
+      for (int i = 0; i < NUM_OSC; i++) {
+        fZ[i].setPeriod(MAX_PERIOD + 1  - zSpeed.getValue());
+      }
+    }  else if (parameter == hueSpread) { 
+      for (int i = 0; i < NUM_OSC; i++) {
+        colorOffset[i] = colorOffset[i]*hueSpread.getValuef(); 
+      }
+    }  
   }
   
   public void run(double deltaMs) {
-    for (LXPoint p : model.points) {
-      colors[p.index] = palette.getColor(max(0, 100 - 10*abs(p.y - thing.getValuef())));
+    setColors(#000000); 
+    float[] bright = new float[model.points.size()];
+    for (Strip strip : model.strips) {
+      LXPoint centerPoint = strip.points.get(8);
+      for (int i=0;i<numOsc.getValue();i++) {
+        float avgdist = dist(centerPoint.x,centerPoint.y,centerPoint.z,fX[i].getValuef(),fY[i].getValuef(),fZ[i].getValuef());
+        boolean on = avgdist<30;
+        if (on) {
+          float hv = palette.getHuef()+colorOffset[i];
+          float br = max(0,100-avgdist*2*(100 - brightParameter.getValuef()));
+          int colr = lx.hsb(hv, sat[i].getValuef(), br);
+          for (LXPoint p : strip.points) {
+            if (br>bright[p.index]) {
+              //colors[p.index] = lx.hsb(hv,sat[i].getValuef(),br);
+              addColor(p.index, colr);
+              bright[p.index] = br;
+            }
+          }
+        }
+      }
     }
   }
 }
 
-public static class Palette extends SLPattern {
-  public Palette(LX lx) {
+public class Pong extends DPat {
+  SinLFO x,y,z,dx,dy,dz;
+  float cRad; BoundedParameter pSize;
+  DiscreteParameter   pChoose;
+  PVector v = new PVector(), vMir =  new PVector();
+
+  public Pong(LX lx) {
     super(lx);
+    cRad = mMax.x/10;
+    addModulator(dx = new SinLFO(6000,  500, 30000  )).trigger();
+    addModulator(dy = new SinLFO(3000,  500, 22472  )).trigger();
+    addModulator(dz = new SinLFO(1000,  500, 18420  )).trigger();
+    addModulator(x  = new SinLFO(cRad, mMax.x - cRad, 0)).trigger();  x.setPeriod(dx);
+    addModulator(y  = new SinLFO(cRad, mMax.y - cRad, 0)).trigger();  y.setPeriod(dy);
+    addModulator(z  = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();  z.setPeriod(dz);
+      pSize = addParam  ("Size"     , 0.4 );
+      pChoose = new DiscreteParameter("Anim", new String[] {"Pong", "Ball", "Cone"} );
+      pChoose.setValue(2);
+      //addNonKnobParameter(pChoose);
+      //addSingleParameterUIRow(pChoose);
+  }
+
+  void    StartRun(double deltaMs)  { cRad = mMax.x*val(pSize)/6; }
+  color CalcPoint(PVector p)      {
+    v.set(x.getValuef(), y.getValuef(), z.getValuef());
+    v.z=0;p.z=0;// ignore z dimension
+    switch(pChoose.getValuei()) {
+    case 0: vMir.set(mMax); vMir.sub(p);
+        return lx.hsb(lxh(),100,c1c(1 - min(v.dist(p), v.dist(vMir))*.5/cRad));   // balls
+    case 1: return lx.hsb(lxh(),100,c1c(1 - v.dist(p)*.5/cRad));              // ball
+    case 2: vMir.set(mMax.x/2,0,mMax.z/2);
+        return lx.hsb(lxh(),100,c1c(1 - calcCone(p,v,vMir) * max(.02,.45-val(pSize))));   // spot
+    }
+    return lx.hsb(0,0,0);
+  }
+}
+
+public class BassPod extends SLPattern {
+
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
+  
+  private final BoundedParameter clr = new BoundedParameter("CLR", 0.5);
+  
+  public BassPod(LX lx) {
+    super(lx);
+    addParameter(clr);
+    // addParameter(eq.gain);
+    // addParameter(eq.range);
+    // addParameter(eq.attack);
+    // addParameter(eq.release);
+    // addParameter(eq.slope);
+    addModulator(eq).start();
   }
   
+  void onActive() {
+    eq.range.setValue(36);
+    eq.release.setValue(300);
+    eq.gain.setValue(-6);
+    eq.slope.setValue(6);
+  }
+
   public void run(double deltaMs) {
+    float bassLevel = eq.getAveragef(0, 5);
+    float satBase = bassLevel*480*clr.getValuef();
+    
     for (LXPoint p : model.points) {
-      colors[p.index] = palette.getColor(p);
+      int avgIndex = (int) constrain(1 + abs(p.x-model.cx)/(model.cx)*(eq.numBands-5), 0, eq.numBands-5);
+      float value = 0;
+      for (int i = avgIndex; i < avgIndex + 5; ++i) {
+        value += eq.getBandf(i);
+      }
+      value /= 5.;
+
+      float b = constrain(8 * (value*model.yMax - abs(p.y-model.yMax/2.)), 0, 100);
+      colors[p.index] = lx.hsb(
+        palette.getHuef() + abs(p.y - model.cy) + abs(p.x - model.cx),
+        constrain(satBase - .6*dist(p.x, p.y, model.cx, model.cy), 0, 100),
+        b
+      );
     }
   }
 }
 
-public static class CubeEQ extends SLPattern {
+public class CubeEQ extends SLPattern {
 
-  private GraphicMeter eq = null;
-  private LXAudioInput audioInput;
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
 
   private final BoundedParameter edge = new BoundedParameter("EDGE", 0.5);
   private final BoundedParameter clr = new BoundedParameter("CLR", 0.1, 0, .5);
@@ -42,9 +281,6 @@ public static class CubeEQ extends SLPattern {
 
   public CubeEQ(LX lx) {
     super(lx);
-    audioInput = lx.engine.audio.getInput();
-    eq = new GraphicMeter(audioInput);
-    // addParameter(eq.gain);
     // addParameter(eq.range);
     // addParameter(eq.attack);
     // addParameter(eq.release);
@@ -55,23 +291,10 @@ public static class CubeEQ extends SLPattern {
     addModulator(eq).start();
   }
 
-  // void onActive() {
-  //   if (eq == null) {
-  //     audioInput = lx.engine.audio.getInput();
-  //     eq = new GraphicMeter(audioInput);
-  //     eq.range.setValue(48);
-  //     eq.release.setValue(800);
-  //     addParameter(eq.gain);
-  //     addParameter(eq.range);
-  //     addParameter(eq.attack);
-  //     addParameter(eq.release);
-  //     addParameter(eq.slope);
-  //     addParameter(edge);
-  //     addParameter(clr);
-  //     addParameter(blockiness);
-  //     addModulator(eq).start();
-  //   }
-  // }
+  void onActive() {
+    eq.range.setValue(48);
+    eq.release.setValue(300);
+  }
 
   public void run(double deltaMs) {
     float edgeConst = 2 + 30*edge.getValuef();
@@ -104,7 +327,7 @@ public static class CubeEQ extends SLPattern {
   }
 }
 
-public static class Swarm extends SLPattern {
+public class Swarm extends SLPattern {
   
   SawLFO offset = new SawLFO(0, 1, 1000);
   SinLFO rate = new SinLFO(350, 1200, 63000);
@@ -156,7 +379,7 @@ public static class Swarm extends SLPattern {
   }
 }
 
-public static class SpaceTime extends SLPattern {
+public class SpaceTime extends SLPattern {
 
   SinLFO pos = new SinLFO(0, 1, 3000);
   SinLFO rate = new SinLFO(1000, 9000, 13000);
@@ -211,7 +434,161 @@ public static class SpaceTime extends SLPattern {
   }
 }
 
-public static class ShiftingPlane extends SLPattern {
+public class Traktor extends SLPattern {
+
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
+
+  final int FRAME_WIDTH = 120;
+  
+  final BoundedParameter speed = new BoundedParameter("SPD", 0.5);
+  final BoundedParameter hueSpread = new BoundedParameter("hueSpread", .4, 0, 1);
+  final BoundedParameter trebleGain= new BoundedParameter("trebG", 1, 0, 10);
+  final BoundedParameter bassGain = new BoundedParameter("bassG", 1, 0, 10);
+  private float[] bass = new float[FRAME_WIDTH];
+  private float[] treble = new float[FRAME_WIDTH];
+    
+  private int index = 0;
+
+  public Traktor(LX lx) {
+    super(lx);
+    for (int i = 0; i < FRAME_WIDTH; ++i) {
+      bass[i] = 0;
+      treble[i] = 0;
+    }
+    addParameter(speed);
+    addParameter(hueSpread);
+    addParameter(bassGain);
+    addParameter(trebleGain);
+    addModulator(eq).start();
+  }
+
+  public void onActive() {
+    eq.slope.setValue(6);
+    eq.gain.setValue(12);
+    eq.range.setValue(36);
+    eq.release.setValue(200);
+    // addParameter(eq.gain);
+    // addParameter(eq.range);
+    // addParameter(eq.attack);
+    // addParameter(eq.release);
+    // addParameter(eq.slope);
+  }
+
+  int counter = 0;
+  
+  public void run(double deltaMs) {
+    
+    int stepThresh = (int) (40 - 39*speed.getValuef());
+    counter += deltaMs;
+    if (counter < stepThresh) {
+      return;
+    }
+    counter = counter % stepThresh;
+
+    index = (index + 1) % FRAME_WIDTH;
+    
+    float rawBass = eq.getAveragef(0, 4);
+    float rawTreble = eq.getAveragef(eq.numBands-7, 7);
+    
+    bass[index] = rawBass * rawBass * rawBass * rawBass;
+    treble[index] = rawTreble * rawTreble;
+    float hueV = hueSpread.getValuef();
+    float bassG = bassGain.getValuef();
+    float trebG = trebleGain.getValuef(); 
+    for (LXPoint p : model.points) {
+      int i = (int) constrain((model.xMax - p.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
+      int pos = (index + FRAME_WIDTH - i) % FRAME_WIDTH;
+      
+      colors[p.index] = lx.hsb(
+        360 + palette.getHuef() + .8*hueV*abs(p.x-model.cx),
+        100,
+        constrain(9 * bassG *(bass[pos]*model.cy - abs(p.y - model.cy + 5)), 0, 100)
+      );
+      blendColor(p.index, lx.hsb(
+        400 + palette.getHuef() + .5*hueV*abs(p.x-model.cx),
+        60,
+        constrain(7* trebG * (treble[pos]*.6*model.cy - abs(p.y - model.cy)), 0, 100)
+
+      ), LXColor.Blend.ADD);
+    }
+  }
+}
+
+public class AskewPlanes extends DPat {
+
+  BoundedParameter thickness = new BoundedParameter("THCK", 0.2, 0.1, 0.9);
+  float huev = 0;
+
+  class Plane {
+    private final SinLFO a;
+    private final SinLFO b;
+    private final SinLFO c;
+    float av = 1;
+    float bv = 1;
+    float cv = 1;
+    float denom = 0.1;
+    
+    Plane(int i) {
+      addModulator(a = new SinLFO(-1, 1, 4000 + 1029*i)).trigger();
+      addModulator(b = new SinLFO(-1, 1, 11000 - 1104*i)).trigger();
+      addModulator(c = new SinLFO(-50, 50, 4000 + 1000*i * ((i % 2 == 0) ? 1 : -1))).trigger();
+    }
+    
+    void run(double deltaMs) {
+      av = a.getValuef();
+      bv = b.getValuef();
+      cv = c.getValuef();
+      denom = sqrt(av*av + bv*bv);
+    }
+  }
+    
+  final Plane[] planes;
+  final int NUM_PLANES = 3;
+  
+  public AskewPlanes(LX lx) {
+    super(lx);
+    addParameter(thickness);
+    planes = new Plane[NUM_PLANES];
+    for (int i = 0; i < planes.length; ++i) {
+      planes[i] = new Plane(i);
+    }
+    pTransX.setValue(1);
+  }
+  
+  void StartRun(double deltaMs) {
+    huev = palette.getHuef();
+    
+    // This is super fucking bizarre. But if this is a for loop, the framerate
+    // tanks to like 30FPS, instead of 60. Call them manually and it works fine.
+    // Doesn't make ANY sense... there must be some weird side effect going on
+    // with the Processing internals perhaps?
+//    for (Plane plane : planes) {
+//      plane.run(deltaMs);
+//    }
+    planes[0].run(deltaMs);
+    planes[1].run(deltaMs);
+    planes[2].run(deltaMs);
+  }
+    
+  color CalcPoint(PVector p) {
+    //for (LXPoint p : model.points) {
+      float d = MAX_FLOAT;
+      for (Plane plane : planes) {
+        if (plane.denom != 0) {
+          d = min(d, abs(plane.av*(p.x-model.cx) + plane.bv*(p.y-model.cy) + plane.cv) / plane.denom);
+        }
+      }
+      return lx.hsb(
+        huev + abs(p.x-model.cx)*.3 + p.y*.8,
+        max(0, 100 - .15*abs(p.x - model.cx)),
+        constrain(700.*thickness.getValuef() - 10.*d, 0, 100)
+      );
+    //}
+  }
+}
+
+public class ShiftingPlane extends SLPattern {
 
   final BoundedParameter hueShift = new BoundedParameter("hShift", 0.5, 0, 1);
 
@@ -248,204 +625,1062 @@ public static class ShiftingPlane extends SLPattern {
   }
 }
 
-//   public void buildControlUI(UI ui, UIPatternControl container) {
-//     int i = 0;
-//     for (LXLayer layer : getLayers()) {
-//       new UIButton((i % 4)*33, (i/4)*22, 28, 18).setLabel(Integer.toString(i+1)).setParameter(((Layer)layer).active).addToContainer(container);
-//       ++i;
-//     }
-//     int knobSpacing = UIKnob.WIDTH + 4;
-//     new UIKnob(0, 92).setParameter(size).addToContainer(container);
-//     new UIKnob(knobSpacing, 92).setParameter(response).addToContainer(container);
-
-//     container.setContentWidth(3*knobSpacing - 4);
-//   }
+public class CubeFlash extends SLPattern {
+  private BoundedParameter rateParameter = new BoundedParameter("RATE", 0.125);
+  private BoundedParameter attackParameter = new BoundedParameter("ATTK", 0.5);
+  private BoundedParameter decayParameter = new BoundedParameter("DECAY", 0.5);
+  private BoundedParameter hueVarianceParameter = new BoundedParameter("H.V.", 0.25);
+  private BoundedParameter saturationParameter = new BoundedParameter("SAT", 0.5);
   
-//   class Layer extends LXLayer {
+  class Flash {
+    Cube c;
+    float value;
+    float hue;
+    boolean hasPeaked;
     
-//     private final StudioCubes.Source.Channel object;
-//     private final BooleanParameter active = new BooleanParameter("Active", true); 
+    Flash() {
+      c = model.cubes.get(floor(random(model.cubes.size())));
+      hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
+      boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
+      hasPeaked = infiniteAttack;
+      value = (infiniteAttack ? 1 : 0);
+    }
     
-//     Layer(LX lx, StudioCubes.Source.Channel object) {
-//       super(lx);
-//       this.object = object;
-//       addParameter(active);
-//     }
-    
-//     public void run(double deltaMs) {
-//       if (!this.active.isOn()) {
-//         return;
-//       }
-//       if (object.active) {
-//         float falloff = 100 / (size.getValuef() + response.getValuef() * object.getValuef());
-//         for (LXPoint p : model.points) {
-//           float dist = dist(p.x, p.y, p.z, object.tx, object.ty, object.tz);
-//           float b = 100 - dist*falloff;
-//           if (b > 0) {
-//             addColor(p.index, palette.getColor(p,  b));
-//           }
-//         }
-//       }
-//     }
-//   }
-  
-//   public void run(double deltaMs) {
-//     setColors(LXColor.BLACK);
-//   }
-// }
-
-// public class Bouncing extends SLPattern {
-  
-//   public CompoundParameter gravity = new CompoundParameter("Gravity", -200, -100, -400);
-//   public CompoundParameter size = new CompoundParameter("Length", 2*FEET, 1*FEET, 4*FEET);
-//   public CompoundParameter amp = new CompoundParameter("Height", model.yRange, 1*FEET, model.yRange);
-  
-//   public Bouncing(LX lx) {
-//     super(lx);
-//     // for (Column column : venue.columns) {
-//     //   addLayer(new Bouncer(lx, column));
-//     // }
-//     addParameter(gravity);
-//     addParameter(size);
-//     addParameter(amp);
-//   }
-  
-//   class Bouncer extends LXLayer {
-    
-//     private final Column column;
-//     private final Accelerator position;
-    
-//     Bouncer(LX lx, Column column) {
-//       super(lx);
-//       this.column = column;
-//       this.position = new Accelerator(column.yMax, 0, gravity);
-//       startModulator(position);
-//     }
-    
-//     public void run(double deltaMs) {
-//       if (position.getValue() < 0) {
-//         position.setValue(-position.getValue());
-//         position.setVelocity(sqrt(abs(2 * (amp.getValuef() - random(0, 2*FEET)) * gravity.getValuef()))); 
-//       }
-//       float h = palette.getHuef();
-//       float falloff = 100. / size.getValuef();
-//       //for (Rail rail : column.rails) {
-//         for (LXPoint p : model.points) {
-//           float b = 100 - falloff * abs(p.y - position.getValuef());
-//           if (b > 0) {
-//             addColor(p.index, palette.getColor(p, b));
-//           }
-//         }
-//       //}
-//     }
-//   }
-    
-//   public void run(double deltaMs) {
-//     setColors(LXColor.BLACK);
-//   }
-// }
-
-// public class Movers extends SLPattern {
-  
-//   private CompoundParameter period = new CompoundParameter("Speed", 150000, 200000, 50000); 
-  
-//   public Movers(LX lx) {  
-//     super(lx);
-//     addParameter(period);
-//     for (int i = 0; i < 15; ++i) {
-//       addLayer(new Mover(lx));
-//     }
-//   }
-  
-//   class Mover extends LXLayer {
-//     final TriangleLFO pos = new TriangleLFO(0, lx.total, period);
-    
-//     Mover(LX lx) {
-//       super(lx);
-//       startModulator(pos.randomBasis());
-//     }
-    
-//     public void run(double deltaMs) {
-//       for (LXPoint p : model.points) {
-//         float b = 100 - 3*abs(p.index - pos.getValuef());
-//         if (b > 0) {
-//           addColor(p.index, palette.getColor(p, b));
-//         }
-//       }
-//     }
-//   }
-  
-//   public void run(double deltaMs) {
-//     setColors(LXColor.BLACK);
-//   }
-// }
-
-public class Noise extends SLPattern {
-  
-  public final CompoundParameter scale = new CompoundParameter("Scale", 10, 5, 40);
-  public final CompoundParameter xSpeed = new CompoundParameter("XSpd", 0, -6, 6);
-  public final CompoundParameter ySpeed = new CompoundParameter("YSpd", 0, -6, 6);
-  public final CompoundParameter zSpeed = new CompoundParameter("ZSpd", 1, -6, 6);
-  public final CompoundParameter floor = new CompoundParameter("Floor", 0, -2, 2);
-  public final CompoundParameter range = new CompoundParameter("Range", 1, .2, 4);
-  public final CompoundParameter xOffset = new CompoundParameter("XOffs", 0, -1, 1);
-  public final CompoundParameter yOffset = new CompoundParameter("YOffs", 0, -1, 1);
-  public final CompoundParameter zOffset = new CompoundParameter("ZOffs", 0, -1, 1);
-  
-  public Noise(LX lx) {
-    super(lx);
-    addParameter(scale);
-    addParameter(floor);
-    addParameter(range);
-    addParameter(xSpeed);
-    addParameter(ySpeed);
-    addParameter(zSpeed);
-    addParameter(xOffset);
-    addParameter(yOffset);
-    addParameter(zOffset);
+    // returns TRUE if this should die
+    boolean age(double ms) {
+      if (!hasPeaked) {
+        value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
+        if (value >= 1.0) {
+          value = 1.0;
+          hasPeaked = true;
+        }
+        return false;
+      } else {
+        value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
+        return value <= 0;
+      }
+    }
   }
   
-  private class Accum {
-    private float accum = 0;
-    private int equalCount = 0;
-    private float sign = 1;
-    
-    void accum(double deltaMs, float speed) {
-      float newAccum = (float) (this.accum + this.sign * deltaMs * speed / 4000.);
-      if (newAccum == this.accum) {
-        if (++this.equalCount >= 5) {
-          this.equalCount = 0;
-          this.sign = -sign;
-          newAccum = this.accum + sign*.01;
-        }
-      }
-      this.accum = newAccum;
-    }
-  };
+  private float leftoverMs = 0;
+  private List<Flash> flashes;
   
-  private final Accum xAccum = new Accum();
-  private final Accum yAccum = new Accum();
-  private final Accum zAccum = new Accum();
-    
-  @Override
+  public CubeFlash(LX lx) {
+    super(lx);
+    addParameter(rateParameter);
+    addParameter(attackParameter);
+    addParameter(decayParameter);
+    addParameter(hueVarianceParameter);
+    addParameter(saturationParameter);
+    flashes = new LinkedList<Flash>();
+  }
+  
   public void run(double deltaMs) {
-    xAccum.accum(deltaMs, xSpeed.getValuef());
-    yAccum.accum(deltaMs, ySpeed.getValuef());
-    zAccum.accum(deltaMs, zSpeed.getValuef());
+    leftoverMs += deltaMs;
+    float msPerFlash = 1000 / ((rateParameter.getValuef() + .01) * 100);
+    while (leftoverMs > msPerFlash) {
+      leftoverMs -= msPerFlash;
+      flashes.add(new Flash());
+    }
     
-    float sf = scale.getValuef() / 1000.;
-    float rf = range.getValuef();
-    float ff = floor.getValuef();
-    float xo = xOffset.getValuef();
-    float yo = yOffset.getValuef();
-    float zo = zOffset.getValuef();
-    for (LXPoint p :  model.points) {
-      float b = ff + rf * noise(sf*p.x + xo + xAccum.accum, sf*p.y + yo + yAccum.accum, sf*p.z + zo + zAccum.accum);
-      colors[p.index] = palette.getColor(p, constrain(b*100, 0, 100));
+    for (LXPoint p : model.points) {
+      colors[p.index] = 0;
+    }
+    
+    for (Flash flash : flashes) {
+      color c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+      for (LXPoint p : flash.c.points) {
+        colors[p.index] = c;
+      }
+    }
+    
+    Iterator<Flash> i = flashes.iterator();
+    while (i.hasNext()) {
+      Flash flash = i.next();
+      boolean dead = flash.age(deltaMs);
+      if (dead) {
+        i.remove();
+      }
+    }
+  } 
+}
+
+public class Spheres extends SLPattern {
+  private BoundedParameter hueParameter = new BoundedParameter("RAD", 1.0);
+  private BoundedParameter periodParameter = new BoundedParameter("PERIOD", 4000.0, 200.0, 10000.0);
+  private BoundedParameter hueVariance = new BoundedParameter("HueVar", 50, 0, 180);
+  private final SawLFO lfo = new SawLFO(0, 1, 10000);
+  private final SinLFO sinLfo = new SinLFO(0, 1, periodParameter);
+  private final float centerX, centerY, centerZ;
+  
+  class Sphere {
+    float x, y, z;
+    float radius;
+    float hue;
+  }
+  
+  private final Sphere[] spheres;
+  
+  public Spheres(LX lx) {
+    super(lx);
+    addParameter(hueParameter);
+    addParameter(periodParameter);
+    addParameter(hueVariance);
+    addModulator(lfo).trigger();
+    addModulator(sinLfo).trigger();
+    centerX = (model.xMax + model.xMin) / 2;
+    centerY = (model.yMax + model.yMin) / 2;
+    centerZ = (model.zMax + model.zMin) / 2;
+    
+    spheres = new Sphere[2];
+    
+    spheres[0] = new Sphere();
+    spheres[0].x = model.xMin;
+    spheres[0].y = centerY;
+    spheres[0].z = centerZ;
+    spheres[0].hue = palette.getHuef() - hueVariance.getValuef()/2;
+    spheres[0].radius = 50;
+    
+    spheres[1] = new Sphere();
+    spheres[1].x = model.xMax;
+    spheres[1].y = centerY;
+    spheres[1].z = centerZ;
+    spheres[1].hue =  palette.getHuef() + hueVariance.getValuef()/2;
+    spheres[1].radius = 50;
+  }
+  
+  public void run(double deltaMs) {
+    // Access the core master hue via this method call
+    float hv = hueParameter.getValuef();
+    float lfoValue = lfo.getValuef();
+    float sinLfoValue = sinLfo.getValuef();
+
+    spheres[0].hue = palette.getHuef() - hueVariance.getValuef()/2;
+    spheres[1].hue = palette.getHuef() + hueVariance.getValuef()/2;
+    
+    spheres[0].x = model.xMin + sinLfoValue * model.xMax;
+    spheres[1].x = model.xMax - sinLfoValue * model.xMax;
+    
+    spheres[0].radius = 100 * hueParameter.getValuef();
+    spheres[1].radius = 100 * hueParameter.getValuef();
+    
+    for (LXPoint p : model.points) {
+      float value = 0;
+
+      color c = lx.hsb(0, 0, 0);
+      for (Sphere s : spheres) {
+        float d = sqrt(pow(p.x - s.x, 2) + pow(p.y - s.y, 2) + pow(p.z - s.z, 2));
+        float r = (s.radius); // * (sinLfoValue + 0.5));
+        value = max(0, 1 - max(0, d - r) / 10);
+        
+        c = PImage.blendColor(c, lx.hsb(s.hue, 100, min(1, value) * 100), ADD);
+      }
+      
+      colors[p.index] = c;
+    }
+  } 
+}
+
+public class Rings extends SLPattern {
+  float dx, dy, dz;
+  float angleParam, spacingParam;
+  float dzParam, centerParam;
+
+  BoundedParameter pDepth = new BoundedParameter("DEPTH", 0.6);
+  BoundedParameter pBright = new BoundedParameter("BRT", 0.75);
+  BoundedParameter pSaturation = new BoundedParameter("SAT", 0.5);
+
+  BoundedParameter pSpeed1 = new BoundedParameter("SPD1", 0.2);
+  BoundedParameter pSpeed2 = new BoundedParameter("SPD2", 0.4);
+  BoundedParameter pScale = new BoundedParameter("SCALE", 0.15);
+
+  public Rings(LX lx) {
+    super(lx);
+    addParameter(pDepth);
+    addParameter(pBright);
+    addParameter(pSaturation);
+
+    addParameter(pSpeed1);
+    addParameter(pSpeed2);
+    addParameter(pScale);
+  }
+
+  public void run(double deltaMs) {
+
+    float xyspeed = pSpeed1.getValuef() * 0.01f;
+    float zspeed = pSpeed1.getValuef() * 0.08f;
+    float scale = pScale.getValuef() * 20.0f;
+    float br = pBright.getValuef() * 3.0f;
+    float gamma = 3.0f;
+    float depth = 1.0f - pDepth.getValuef();
+    float saturation = pSaturation.getValuef() * 100.0f;
+
+    float angleSpeed = pSpeed1.getValuef() * 0.002f;
+    angleParam = (float)((angleParam + angleSpeed * deltaMs) % (2*(float)Math.PI));
+    float angle = (float)Math.sin(angleParam);
+
+    spacingParam += (float)deltaMs * pSpeed2.getValuef() * 0.001f;
+    dzParam += (float)deltaMs * 0.000014f;
+    centerParam += (float)deltaMs * pSpeed2.getValuef() * 0.001f;
+
+    float spacing = noise(spacingParam) * 50.0f;
+
+    dx += (float)Math.cos(angle) * xyspeed;
+    dy += (float)Math.sin(angle) * xyspeed;
+    dz += (float)(Math.pow(noise(dzParam), 1.8f) - 0.5f) * zspeed;
+
+    float centerx = map(noise(centerParam, 100.0f), 0.0f, 1.0f, -0.1f, 1.1f);
+    float centery = map(noise(centerParam, 200.0f), 0.0f, 1.0f, -0.1f, 1.1f);
+    float centerz = map(noise(centerParam, 300.0f), 0.0f, 1.0f, -0.1f, 1.1f);
+
+    float coordMin = (float)Math.min(model.xMin, (float)Math.min(model.yMin, model.zMin));
+    float coordMax = (float)Math.max(model.xMax, (float)Math.max(model.yMax, model.zMax));
+
+    noiseDetail(4);
+    for (LXPoint p : model.points) {
+      // Scale while preserving aspect ratio
+      float x = map(p.x, coordMin, coordMax, 0.0f, 1.0f);
+      float y = map(p.y, coordMin, coordMax, 0.0f, 1.0f);
+      float z = map(p.z, coordMin, coordMax, 0.0f, 1.0f);
+
+      float dist = (float)Math.sqrt(Math.pow((x - centerx),2) + Math.pow((y - centery),2) + Math.pow((z - centerz),2));
+      float pulse = (float)(Math.sin(dz + dist * spacing) - 0.3f) * 0.6f;
+
+      float n = map(noise(dx + (x - centerx) * scale + centerx + pulse,
+                          dy + (y - centery) * scale + centery,
+                          dz + (z - centerz) * scale + centerz)
+                    - depth, 0.0f, 1.0f, 0.0f, 2.0f);
+
+      float brightness = 100.0f * constrain((float)Math.pow(br * n, gamma), 0.0f, 1.0f);
+      if (brightness == 0) {
+        colors[p.index] = LXColor.BLACK;
+        continue;
+      }
+
+      float m = map(noise(dx + (x - centerx) * scale + centerx,
+                          dy + (y - centery) * scale + centery,
+                          dz + (z - centerz) * scale + centerz),
+                    0.0f, 1.0f, 0.0f, 300.0f);
+
+      colors[p.index] = lx.hsb(
+        palette.getHuef() + m,
+        saturation,
+        brightness
+        );
+    }
+    noiseDetail(1);
+  }
+};
+
+// requires it's own vector classes, but should prob refactor to use standard vector class
+// public class Raindrops extends SLPattern {
+
+//   BoundedParameter numRainDrops = new BoundedParameter("NUM", -40, -500, -20);
+//   BoundedParameter size = new BoundedParameter("SIZE", 0.35, 0.1, 1.0);
+//   BoundedParameter speedP = new BoundedParameter("SPD", -1000, -7000, -300);
+
+//   Vector3 randomVector3() {
+//     return new Vector3(
+//         random(model.xMax - model.xMin) + model.xMin,
+//         random(model.yMax - model.yMin) + model.yMin,
+//         random(model.zMax - model.zMin) + model.zMin);
+//   }
+
+//   class Raindrop {
+//     Vector3 p;
+//     Vector3 v;
+//     float radius;
+//     float hue;
+//     float speed;
+    
+//     Raindrop() {
+//       this.radius = (model.yRange*.4)*size.getValuef();
+//       this.p = new Vector3(
+//               random(model.xMax - model.xMin) + model.xMin,
+//               model.yMax + this.radius,
+//               random(model.zMax - model.zMin) + model.zMin);
+//       float velMagnitude = 120;
+//       this.v = new Vector3(
+//           0,
+//           -3 * model.yMax,
+//           0);
+//       this.hue = random(15) + palette.getHuef();
+//       this.speed = Math.abs(speedP.getValuef());
+//     }
+    
+//     // returns TRUE when this should die
+//     boolean age(double ms) {
+//       p.add(v, (float) (ms / this.speed));
+//       return this.p.y < (0 - this.radius);
+//     }
+//   }
+  
+//   private float leftoverMs = 0;
+//   private float msPerRaindrop = 40;
+//   private List<Raindrop> raindrops;
+  
+//   public Raindrops(LX lx) {
+//     super(lx);
+//     addParameter(numRainDrops);
+//     addParameter(size); 
+//     addParameter(speedP);
+//     raindrops = new LinkedList<Raindrop>();
+//   }
+  
+//   public void run(double deltaMs) {
+//     leftoverMs += deltaMs;
+//     float msPerRaindrop = Math.abs(numRainDrops.getValuef());
+//     while (leftoverMs > msPerRaindrop) {
+//       leftoverMs -= msPerRaindrop;
+//       raindrops.add(new Raindrop());
+//     }
+    
+//     for (LXPoint p : model.points) {
+//       color c = 
+//         PImage.blendColor(
+//           lx.hsb(210, 20, (float)Math.max(0, 1 - Math.pow((model.yMax - p.y) / 10, 2)) * 50),
+//           lx.hsb(220, 60, (float)Math.max(0, 1 - Math.pow((p.y - model.yMin) / 10, 2)) * 100),
+//           ADD);
+//       for (Raindrop raindrop : raindrops) {
+//         if (p.x >= (raindrop.p.x - raindrop.radius) && p.x <= (raindrop.p.x + raindrop.radius) &&
+//             p.y >= (raindrop.p.y - raindrop.radius) && p.y <= (raindrop.p.y + raindrop.radius)) {
+//           float d = raindrop.p.distanceTo(p) / raindrop.radius;
+//   //      float value = (float)Math.max(0, 1 - Math.pow(Math.min(0, d - raindrop.radius) / 5, 2)); 
+//           if (d < 1) {
+//             c = PImage.blendColor(c, lx.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), ADD);
+//           }
+//         }
+//       }
+//       colors[p.index] = c;
+//     }
+    
+//     Iterator<Raindrop> i = raindrops.iterator();
+//     while (i.hasNext()) {
+//       Raindrop raindrop = i.next();
+//       boolean dead = raindrop.age(deltaMs);
+//       if (dead) {
+//         i.remove();
+//       }
+//     }
+//   } 
+// }
+
+public class Swim extends SLPattern {
+
+  // Projection stuff
+  private final LXProjection projection;
+  SinLFO rotationX = new SinLFO(-PI/16, PI/8, 9000);
+  SinLFO rotationY = new SinLFO(-PI/8, PI/8, 7000);
+  SinLFO rotationZ = new SinLFO(-PI/8, PI/16, 11000);
+  SinLFO yPos = new SinLFO(-1, 1, 13234);
+  SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
+  SawLFO phaseLFO = new SawLFO(0, 2 * PI, 15000 - 13000 * 0.5);
+  final BoundedParameter phaseParam = new BoundedParameter("Spd", 0.5);
+  final BoundedParameter crazyParam = new BoundedParameter("Crzy", 0.5);
+
+  final BoundedParameter hueScale = new BoundedParameter("HUE", 0.1, 0.0, 0.2);
+
+  public Swim(LX lx) {
+    super(lx);
+    projection = new LXProjection(model);
+    addParameter(hueScale);
+    addParameter(crazyParam);
+    addParameter(phaseParam);
+
+    addModulator(rotationX).trigger();
+    addModulator(rotationY).trigger();
+    addModulator(rotationZ).trigger();
+    addModulator(yPos).trigger();
+    addModulator(phaseLFO).trigger();
+  }
+  
+  public void onParameterChanged(LXParameter parameter) {
+    if (parameter == phaseParam) {
+      phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
+    }
+  }
+
+  int beat = 0;
+  float prevRamp = 0;
+  void run(double deltaMs) {
+
+    float phase = phaseLFO.getValuef();
+    
+    float up_down_range = (model.yMax - model.yMin) / 4;
+
+    // Swim around the world
+    float crazy_factor = crazyParam.getValuef() / 0.2;
+    projection.reset()
+    .rotate(rotationZ.getValuef() * crazy_factor,  0, 1, 0)
+      .rotate(rotationX.getValuef() * crazy_factor, 0, 0, 1)
+        .rotate(rotationY.getValuef() * crazy_factor, 0, 1, 0)
+          .translate(0, up_down_range * yPos.getValuef(), 0);
+
+
+    float model_height =  model.yMax - model.yMin;
+    float model_width =  model.xMax - model.xMin;
+    for (LXVector p : projection) {
+      float x_percentage = (p.x - model.xMin)/model_width;
+
+      // Multiply by sineHeight to shrink the size of the sin wave to be less than the height of the cubes.
+      float y_in_range = sineHeight.getValuef() * (2*p.y - model.yMax - model.yMin) / model_height;
+      float sin_x =  sin(phase + 2 * PI * x_percentage);       
+
+      float size_of_sin_wave = 0.4;
+      
+      float v1 = (abs(y_in_range - sin_x) > size_of_sin_wave) ? 0 : abs((y_in_range - sin_x + size_of_sin_wave) / size_of_sin_wave / 2 * 100);
+
+
+      float hue_color = palette.getHuef() + hueScale.getValuef() * (abs(p.x-model.xMax/2.)*.01 + abs(p.y-model.yMax/2)*.6 + abs(p.z - model.zMax/1.));
+      colors[p.index] = lx.hsb(hue_color, 100, v1);
     }
   }
 }
 
+public class ViolinWave extends SLPattern {
+
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
+  
+  BoundedParameter level = new BoundedParameter("LVL", 0.45);
+  BoundedParameter range = new BoundedParameter("RNG", 0.5);
+  BoundedParameter edge = new BoundedParameter("EDG", 0.5);
+  BoundedParameter release = new BoundedParameter("RLS", 0.5);
+  BoundedParameter speed = new BoundedParameter("SPD", 0.5);
+  BoundedParameter amp = new BoundedParameter("AMP", 0.25, 0, 3);
+  BoundedParameter period = new BoundedParameter("WAVE", 0.5);
+  BoundedParameter pSize = new BoundedParameter("PSIZE", 0.5);
+  BoundedParameter pSpeed = new BoundedParameter("PSPD", 0.5);
+  BoundedParameter pDensity = new BoundedParameter("PDENS", 0.25);
+  
+  LinearEnvelope dbValue = new LinearEnvelope(0, 0, 10);
+  
+  public ViolinWave(LX lx) {
+    super(lx);
+    addParameter(level);
+    addParameter(edge);
+    addParameter(range);
+    addParameter(release);
+    addParameter(speed);
+    addParameter(amp);
+    addParameter(period);
+    addParameter(pSize);
+    addParameter(pSpeed);
+    addParameter(pDensity);
+    addModulator(dbValue);
+    addModulator(eq).start();
+  }
+  
+  final List<Particle> particles = new ArrayList<Particle>();
+  
+  class Particle {
+    
+    LinearEnvelope x = new LinearEnvelope(0, 0, 0);
+    LinearEnvelope y = new LinearEnvelope(0, 0, 0);
+    
+    Particle() {
+      addModulator(x);
+      addModulator(y);
+    }
+    
+    Particle trigger(boolean direction) {
+      float xInit = random(model.xMin, model.xMax);
+      float time = 3000 - 2500*pSpeed.getValuef();
+      x.setRange(xInit, xInit + random(-40, 40), time).trigger();
+      y.setRange(model.cy + 10, direction ? model.yMax + 50 : model.yMin - 50, time).trigger();
+      return this;
+    }
+    
+    boolean isActive() {
+      return x.isRunning() || y.isRunning();
+    }
+    
+    public void run(double deltaMs) {
+      if (!isActive()) {
+        return;
+      }
+      
+      float pFalloff = (30 - 27*pSize.getValuef());
+      for (LXPoint p : model.points) {
+        float b = 100 - pFalloff * (abs(p.x - x.getValuef()) + abs(p.y - y.getValuef()));
+        if (b > 0) {
+          blendColor(p.index, lx.hsb(
+            palette.getHuef(), 20, b
+          ), LXColor.Blend.ADD);
+        }
+      }
+    }
+  }
+  
+  float[] centers = new float[30];
+  double accum = 0;
+  boolean rising = true;
+  
+  void fireParticle(boolean direction) {
+    boolean gotOne = false;
+    for (Particle p : particles) {
+      if (!p.isActive()) {
+       p.trigger(direction);
+       return;
+      }
+    }
+    particles.add(new Particle().trigger(direction));
+  }
+  
+  final double LOG_10 = Math.log(10);
+  
+  public void run(double deltaMs) {
+    accum += deltaMs / (1000. - 900.*speed.getValuef());
+    for (int i = 0; i < centers.length; ++i) {
+      centers[i] = model.cy + 30*amp.getValuef()*sin((float) (accum + (i-centers.length/2.)/(1. + 9.*period.getValuef())));
+    }
+    float zeroDBReference = pow(10, (50 - 190*level.getValuef())/20.);
+    float dB = (float) (20*Math.log((eq.getSquaref()) / zeroDBReference) / LOG_10);
+    if (dB > dbValue.getValuef()) {
+      rising = true;
+      dbValue.setRangeFromHereTo(dB, 10).trigger();
+    } else {
+      if (rising) {
+        for (int j = 0; j < pDensity.getValuef()*3; ++j) {
+          fireParticle(true);
+          fireParticle(false);
+        }
+      }
+      rising = false;
+      dbValue.setRangeFromHereTo(max(dB, -96), 50 + 1000*release.getValuef()).trigger();
+    }
+    float edg = 1 + edge.getValuef() * 40;
+    float rng = (78 - 64 * range.getValuef()) / (model.yMax - model.cy);
+    float val = max(2, dbValue.getValuef());
+    
+    for (LXPoint p : model.points) {
+      int ci = (int) lerp(0, centers.length-1, (p.x - model.xMin) / (model.xMax - model.xMin));
+      float rFactor = 1.0 -  0.9 * abs(p.x - model.cx) / (model.xMax - model.cx);
+      colors[p.index] = lx.hsb(
+        palette.getHuef() + abs(p.x - model.cx),
+        min(100, 20 + 8*abs(p.y - centers[ci])),
+        constrain(edg*(val*rFactor - rng * abs(p.y-centers[ci])), 0, 100)
+      );
+    }
+    
+    for (Particle p : particles) {
+      p.run(deltaMs);
+    }
+  }
+}
+
+public class CrossSections extends SLPattern {
+  
+  final SinLFO x = new SinLFO(model.xMin, model.xMax, 5000);
+  final SinLFO y = new SinLFO(model.yMin, model.yMax, 6000);
+  final SinLFO z = new SinLFO(model.zMin, model.zMax, 7000);
+  
+  final BoundedParameter xw = new BoundedParameter("XWID", 0.3);
+  final BoundedParameter yw = new BoundedParameter("YWID", 0.3);
+  final BoundedParameter zw = new BoundedParameter("ZWID", 0.3);
+  final BoundedParameter xr = new BoundedParameter("XRAT", 0.7);
+  final BoundedParameter yr = new BoundedParameter("YRAT", 0.6);
+  final BoundedParameter zr = new BoundedParameter("ZRAT", 0.5);
+  final BoundedParameter xl = new BoundedParameter("XLEV", 1);
+  final BoundedParameter yl = new BoundedParameter("YLEV", 1);
+  final BoundedParameter zl = new BoundedParameter("ZLEV", 0.5);
+
+  public CrossSections(LX lx) {
+    super(lx);
+    addModulator(x).trigger();
+    addModulator(y).trigger();
+    addModulator(z).trigger();
+    addParams();
+  }
+  
+  protected void addParams() {
+    addParameter(xr);
+    addParameter(yr);
+    addParameter(zr);
+    addParameter(xw);
+    addParameter(xl);
+    addParameter(yl);
+    addParameter(zl);
+    addParameter(yw);
+    addParameter(zw);
+  }
+  
+  void onParameterChanged(LXParameter p) {
+    if (p == xr) {
+      x.setPeriod(10000 - 8800*p.getValuef());
+    } else if (p == yr) {
+      y.setPeriod(10000 - 9000*p.getValuef());
+    } else if (p == zr) {
+      z.setPeriod(10000 - 9000*p.getValuef());
+    }
+  }
+  
+  float xv, yv, zv;
+  
+  protected void updateXYZVals() {
+    xv = x.getValuef();
+    yv = y.getValuef();
+    zv = z.getValuef();
+  }
+
+  public void run(double deltaMs) {
+    updateXYZVals();
+    
+    float xlv = 100*xl.getValuef();
+    float ylv = 100*yl.getValuef();
+    float zlv = 100*zl.getValuef();
+    
+    float xwv = 100. / (10 + 40*xw.getValuef());
+    float ywv = 100. / (10 + 40*yw.getValuef());
+    float zwv = 100. / (10 + 40*zw.getValuef());
+    
+    for (LXPoint p : model.points) {
+      color c = 0;
+      c = PImage.blendColor(c, lx.hsb(
+      palette.getHuef() + p.x/10 + p.y/3, 
+      constrain(140 - 1.1*abs(p.x - model.xMax/2.), 0, 100), 
+      max(0, xlv - xwv*abs(p.x - xv))
+        ), ADD);
+      c = PImage.blendColor(c, lx.hsb(
+      palette.getHuef() + 80 + p.y/10, 
+      constrain(140 - 2.2*abs(p.y - model.yMax/2.), 0, 100), 
+      max(0, ylv - ywv*abs(p.y - yv))
+        ), ADD); 
+      c = PImage.blendColor(c, lx.hsb(
+      palette.getHuef() + 160 + p.z / 10 + p.y/2, 
+      constrain(140 - 2.2*abs(p.z - model.zMax/2.), 0, 100), 
+      max(0, zlv - zwv*abs(p.z - zv))
+        ), ADD); 
+      colors[p.index] = c;
+    }
+  }
+}
+
+public class Bubbles extends SLPattern {
+
+    private final float MAX_VELOCITY = 1.5;
+    //private final float MAX_SIZE = 25;
+    private final float MAX_SPROUT_TIME = 150;
+    private final Random rand = new Random();
+
+    private final BoundedParameter rate = new BoundedParameter("num", 0.3);
+    private final BoundedParameter speed = new BoundedParameter("spd", 0.01, 0.25, 1.0);
+    private final BoundedParameter saturation  = new BoundedParameter("col", 50, 0, 100);
+    private final BoundedParameter maxBubbleSize = new BoundedParameter("size", 20, 10, 50);
+    private final BoundedParameter transparency  = new BoundedParameter("trns", 9, 0.1, 25);
+    private final BoundedParameter popFrequency  = new BoundedParameter("aPop", 30, 30, 500);
+    private final BoundedParameter zDep = new BoundedParameter("zDep", 2, 0.1, 5);
+
+    private final List<Bubble> bubbles = new LinkedList<Bubble>();
+    float leftoverMs = 0;
+
+    public Bubbles(LX lx) {
+        super(lx);
+        addParameter(rate);
+        addParameter(speed);
+        addParameter(saturation);
+        addParameter(maxBubbleSize);
+        addParameter(transparency);
+        addParameter(popFrequency);
+        addParameter(zDep);
+    }
+
+    public void run(double deltaMs) {
+        leftoverMs += deltaMs;
+        float msPerBubble = 20000 / ((rate.getValuef() + .01) * 100);
+        while (leftoverMs > msPerBubble) {
+          leftoverMs -= msPerBubble;
+          bubbles.add(new Bubble());
+        }
+
+        // if pop frequency is at "normalized zero", we will use sensor data
+        // otherwise use as a frequency parameter for autopopping
+        float popFreqV = popFrequency.getValuef();
+        if (popFreqV > 30) {
+            int indexToPop = (int)(bubbles.size() * popFreqV * rand.nextFloat());
+            if (indexToPop < bubbles.size())
+                bubbles.get(indexToPop).pop();
+        }
+
+        for (Bubble bubble : bubbles) {
+            bubble.run(deltaMs);
+        }
+
+        for (LXPoint point : model.points) {
+            colors[point.index] = 0;
+            for (Bubble bubble : bubbles)
+                bubble.paint(point);
+        }
+
+        Iterator<Bubble> i = bubbles.iterator();
+        while (i.hasNext()) {
+          Bubble bubble = i.next();
+          if (bubble.isDead)
+            i.remove();
+        }
+    }
+
+    private class Bubble {
+        float x = (rand.nextFloat() * model.xRange) + model.xMin;
+        float y = (rand.nextFloat() * model.yRange) + model.yMin;
+        float z = (rand.nextFloat() * model.zRange) + model.zMin;
+
+        float xVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
+        float yVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
+        float zVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
+
+        float size = rand.nextFloat() * maxBubbleSize.getValuef() + 4.0f;
+        float sproutTime = rand.nextFloat() * MAX_SPROUT_TIME;
+        float hue = rand.nextFloat() * 360;
+
+        boolean hasGrown = false;
+        boolean isPopped = false;
+        boolean isDead = false;
+        float radius = 0;
+        int counter = 0;
+
+        QuadraticEnvelope yMod = new QuadraticEnvelope(-0.2, 0.2, 2000);
+        QuadraticEnvelope pop = new QuadraticEnvelope(0, 15, 200);
+
+        public Bubble() {
+            yMod.setEase(QuadraticEnvelope.Ease.BOTH);
+            pop.setEase(QuadraticEnvelope.Ease.OUT);
+            addModulator(yMod).start();
+            addModulator(pop);
+        }
+
+        public void run(double deltaMs) {
+            float xVel = xVelocity * speed.getValuef();
+            float yVel = yVelocity * speed.getValuef();
+            float zVel = zVelocity * speed.getValuef();
+
+            if (!hasGrown) {
+                x += xVel * 0.2f;
+                y += yVel * 0.2f;
+                z += zVel * 0.2f;
+                radius = (float)counter / sproutTime * size;
+                radius *= radius;
+                if (radius > size)
+                    hasGrown = true;
+            } else {
+                x += xVel;
+                y += yVel + yMod.getValuef();
+                z += zVel;
+                radius = size;
+            }
+            counter++;
+
+            if (isPopped) {
+                if (radius < size*1.5)
+                    radius += pop.getValuef();
+            }
+
+            if (x > model.xMax+radius || x < model.xMin-radius 
+             || y > model.yMax+radius || y < model.yMin-radius) {
+                isDead = true;
+            }
+        }
+
+        public float distanceTo(LXPoint p) {
+            return (float)Math.sqrt(Math.pow(Math.abs(x - p.x), 2) + Math.pow(Math.abs(y - p.y), 2) + Math.pow(Math.abs(z - p.z), 2));
+        }
+
+        public void paint(LXPoint p) {
+            if (Math.abs(p.x - x) > radius
+             || Math.abs(p.y - y) > radius
+             || Math.abs(p.z - z) > radius * zDep.getValuef()) {
+                return;
+            }
+
+            float distance = (float)LXUtils.distance((double)p.x, (double)p.y, (double)x, (double)y);
+            //float distance = distanceTo(p);
+            if (distance > radius) return;
+
+            float gradient = 100*pow(distance/radius, 6);
+            float brightness = 0;
+            float edge = size * 0.85;
+            float falloff = pow(Math.abs(distance - edge) / (size - edge), 1) * 100;
+
+            brightness = max(0, min(100 , gradient) - ((pop.getValuef() / 15) * 100))
+                + transparency.getValuef();
+            // if (hasGrown && distance > edge) {
+            //     if (isPopped)
+            //         falloff = pow(falloff, 1);
+            //     brightness -= falloff;
+            // }
+
+            if (brightness < 5) brightness = 0; // ugh, fix this (popped bubbles dont come out to zero)
+
+            colors[p.index] = PImage.blendColor(
+                colors[p.index],
+                lx.hsb(
+                    hue + 1.7*((x-p.x) + (y-p.y)),
+                    saturation.getValuef(), //min(100, gradient*1.2f+5.0f),
+                    brightness
+                ), ADD
+            );
+        }
+
+        public void pop() {
+            if (isPopped) return;
+            isPopped = true;
+            pop.trigger();
+        }
+
+    }
+
+}
+
+public class Balance extends SLPattern {
+
+  final BoundedParameter hueScale = new BoundedParameter("Hue", 0.4);
+
+  class Sphere {
+    float x, y, z;
+  }
+
+
+  // Projection stuff
+  private final LXProjection projection;
+
+  SinLFO sphere1Z = new SinLFO(0, 0, 15323);
+  SinLFO sphere2Z = new SinLFO(0, 0, 8323);
+  SinLFO rotationX = new SinLFO(-PI/32, PI/32, 9000);
+  SinLFO rotationY = new SinLFO(-PI/16, PI/16, 7000);
+  SinLFO rotationZ = new SinLFO(-PI/16, PI/16, 11000);
+  SawLFO phaseLFO = new SawLFO(0, 2 * PI, 5000 - 4500 * 0.5);
+  final BoundedParameter phaseParam = new BoundedParameter("Spd", 0.5);
+  final BoundedParameter crazyParam = new BoundedParameter("Crzy", 0.2);
+
+
+  private final Sphere[] spheres;
+  private final float centerX, centerY, centerZ, modelHeight, modelWidth, modelDepth;
+  SinLFO heightMod = new SinLFO(0.8, 1.9, 17298);
+
+  public Balance(LX lx) {
+    super(lx);
+
+    projection = new LXProjection(model);
+
+    addParameter(hueScale);
+    addParameter(phaseParam);
+    addParameter(crazyParam);
+
+    spheres = new Sphere[2];
+    centerX = (model.xMax + model.xMin) / 2;
+    centerY = (model.yMax + model.yMin) / 2;
+    centerZ = (model.zMax + model.zMin) / 2;
+    modelHeight = model.yMax - model.yMin;
+    modelWidth = model.xMax - model.xMin;
+    modelDepth = model.zMax - model.zMin;
+
+    spheres[0] = new Sphere();
+    spheres[0].x = 1*modelWidth/2 + model.xMin;
+    spheres[0].y = centerY + 20;
+    spheres[0].z = centerZ;
+
+    spheres[1] = new Sphere();
+    spheres[1].x = model.xMin;
+    spheres[1].y = centerY - 20;
+    spheres[1].z = centerZ;
+
+    addModulator(rotationX).trigger();
+    addModulator(rotationY).trigger();
+    addModulator(rotationZ).trigger();
+
+
+    addModulator(sphere1Z).trigger();
+    addModulator(sphere2Z).trigger();
+    addModulator(phaseLFO).trigger();
+
+    addModulator(heightMod).trigger();
+  }
+
+  public void onParameterChanged(LXParameter parameter) {
+    if (parameter == phaseParam) {
+      phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
+    }
+  }
+
+  int beat = 0;
+  float prevRamp = 0;
+  void run(double deltaMs) {
+
+    // Sync to the beat
+    float ramp = (float)lx.tempo.ramp();
+    if (ramp < prevRamp) {
+      beat = (beat + 1) % 4;
+    }
+    prevRamp = ramp;
+    float phase = phaseLFO.getValuef();
+
+    float crazy_factor = crazyParam.getValuef() / 0.2;
+    projection.reset()
+      .rotate(rotationZ.getValuef() * crazy_factor,  0, 1, 0)
+        .rotate(rotationX.getValuef() * crazy_factor, 0, 0, 1)
+          .rotate(rotationY.getValuef() * crazy_factor, 0, 1, 0);
+
+    for (LXVector p : projection) {
+      float x_percentage = (p.x - model.xMin)/modelWidth;
+
+      float y_in_range = heightMod.getValuef() * (2*p.y - model.yMax - model.yMin) / modelHeight;
+      float sin_x =  sin(PI / 2 + phase + 2 * PI * x_percentage);       
+
+      // Color fade near the top of the sin wave
+      float v1 = max(0, 100 * (1 - 4*abs(sin_x - y_in_range)));     
+
+      float hue_color = palette.getHuef() + hueScale.getValuef() * (abs(p.x-model.xMax/2.) + abs(p.y-model.yMax/2)*.2 + abs(p.z - model.zMax/2.)*.5);
+      color c = lx.hsb(hue_color, 80, v1);
+
+      // Now draw the spheres
+      for (Sphere s : spheres) {
+        float phase_x = (s.x - phase / (2 * PI) * modelWidth) % modelWidth;    
+        float x_dist = LXUtils.wrapdistf(p.x, phase_x, modelWidth);
+
+        float sphere_z = (s == spheres[0]) ? (s.z + sphere1Z.getValuef()) : (s.z - sphere2Z.getValuef()); 
+
+
+        float d = sqrt(pow(x_dist, 2) + pow(p.y - s.y, 2) + pow(p.z - sphere_z, 2));
+
+        float distance_from_beat =  (beat % 2 == 1) ? 1 - ramp : ramp;
+
+        min(ramp, 1-ramp);
+
+        float r = 40 - pow(distance_from_beat, 0.75) * 20;
+
+        float distance_value = max(0, 1 - max(0, d - r) / 10);
+        float beat_value = 1.0;
+
+        float value = min(beat_value, distance_value);
+
+        float sphere_color = palette.getHuef() - (1 - hueScale.getValuef()) * d/r * 45;
+
+        c = PImage.blendColor(c, lx.hsb(sphere_color + 270, 60, min(1, value) * 100), ADD);
+      }
+      colors[p.index] = c;
+    }
+  }
+}
+
+public class TelevisionStatic extends SLPattern {
+  BoundedParameter brightParameter = new BoundedParameter("BRIGHT", 1.0);
+  BoundedParameter saturationParameter = new BoundedParameter("SAT", 1.0);
+  BoundedParameter hueParameter = new BoundedParameter("HUE", 1.0);
+  SinLFO direction = new SinLFO(0, 10, 3000);
+  
+  public TelevisionStatic(LX lx) {
+    super(lx);
+    addModulator(direction).trigger();
+    addParameter(brightParameter);
+    addParameter(saturationParameter);
+    addParameter(hueParameter);
+  }
+
+ void run(double deltaMs) {
+    boolean d = direction.getValuef() > 5.0;
+    for (LXPoint p : model.points) {
+      colors[p.index] = lx.hsb(palette.getHuef() + random(hueParameter.getValuef() * 360), random(saturationParameter.getValuef() * 100), random(brightParameter.getValuef() * 100));
+    }
+  }
+}
+
+// public class Noise extends SLPattern {
+  
+//   public final CompoundParameter scale = new CompoundParameter("Scale", 10, 5, 40);
+//   public final CompoundParameter xSpeed = new CompoundParameter("XSpd", 0, -6, 6);
+//   public final CompoundParameter ySpeed = new CompoundParameter("YSpd", 0, -6, 6);
+//   public final CompoundParameter zSpeed = new CompoundParameter("ZSpd", 1, -6, 6);
+//   public final CompoundParameter floor = new CompoundParameter("Floor", 0, -2, 2);
+//   public final CompoundParameter range = new CompoundParameter("Range", 1, .2, 4);
+//   public final CompoundParameter xOffset = new CompoundParameter("XOffs", 0, -1, 1);
+//   public final CompoundParameter yOffset = new CompoundParameter("YOffs", 0, -1, 1);
+//   public final CompoundParameter zOffset = new CompoundParameter("ZOffs", 0, -1, 1);
+  
+//   public Noise(LX lx) {
+//     super(lx);
+//     addParameter(scale);
+//     addParameter(floor);
+//     addParameter(range);
+//     addParameter(xSpeed);
+//     addParameter(ySpeed);
+//     addParameter(zSpeed);
+//     addParameter(xOffset);
+//     addParameter(yOffset);
+//     addParameter(zOffset);
+//   }
+  
+//   private class Accum {
+//     private float accum = 0;
+//     private int equalCount = 0;
+//     private float sign = 1;
+    
+//     void accum(double deltaMs, float speed) {
+//       float newAccum = (float) (this.accum + this.sign * deltaMs * speed / 4000.);
+//       if (newAccum == this.accum) {
+//         if (++this.equalCount >= 5) {
+//           this.equalCount = 0;
+//           this.sign = -sign;
+//           newAccum = this.accum + sign*.01;
+//         }
+//       }
+//       this.accum = newAccum;
+//     }
+//   };
+  
+//   private final Accum xAccum = new Accum();
+//   private final Accum yAccum = new Accum();
+//   private final Accum zAccum = new Accum();
+    
+//   @Override
+//   public void run(double deltaMs) {
+//     xAccum.accum(deltaMs, xSpeed.getValuef());
+//     yAccum.accum(deltaMs, ySpeed.getValuef());
+//     zAccum.accum(deltaMs, zSpeed.getValuef());
+    
+//     float sf = scale.getValuef() / 1000.;
+//     float rf = range.getValuef();
+//     float ff = floor.getValuef();
+//     float xo = xOffset.getValuef();
+//     float yo = yOffset.getValuef();
+//     float zo = zOffset.getValuef();
+//     for (LXPoint p :  model.points) {
+//       float b = ff + rf * noise(sf*p.x + xo + xAccum.accum, sf*p.y + yo + yAccum.accum, sf*p.z + zo + zAccum.accum);
+//       colors[p.index] = palette.getColor(p, constrain(b*100, 0, 100));
+//     }
+//   }
+// }
+
+public class Test extends SLPattern {
+  
+  final CompoundParameter thing = new CompoundParameter("Thing", 0, model.yRange);
+  final SinLFO lfo = new SinLFO("Stuff", 0, 1, 2000);
+  
+  public Test(LX lx) {
+    super(lx);
+    addParameter(thing);
+    startModulator(lfo);
+  }
+  
+  public void run(double deltaMs) {
+    for (LXPoint p : model.points) {
+      colors[p.index] = palette.getColor(max(0, 100 - 10*abs(p.y - thing.getValuef())));
+    }
+  }
+}
+
+public class Palette extends SLPattern {
+  public Palette(LX lx) {
+    super(lx);
+  }
+  
+  public void run(double deltaMs) {
+    for (LXPoint p : model.points) {
+      colors[p.index] = palette.getColor(p);
+    }
+  }
+}
+
+/* Non-Patterns */
 public static abstract class SLPattern extends LXPattern {
   public final SLModel model;
 

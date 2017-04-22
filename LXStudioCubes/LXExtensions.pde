@@ -91,3 +91,51 @@ class DispatchQueue {
     }
   }
 }
+
+// // Used to get a handle on the eq parameters for pattern ui 
+// public class ProxyParameter extends LXVirtualParameter {
+//   LXListenableParameter parameter;
+
+//   public ProxyParameter(LXParameter parameter) {
+//     this.parameter = (LXListenableParameter)parameter;
+//   }
+
+//   public LXParameter getRealParameter() {
+//     return parameter;
+//   }
+
+//   public LXParameter.Polarity getPolarity() {
+//     return parameter.getPolarity();
+//   }
+
+//   public LXListenableParameter setPolarity(LXParameter.Polarity polarity) {
+//     return parameter;
+//   }
+
+//   @Override
+//   public LXParameter setComponent(LXComponent component, String path) {
+//     return parameter;
+//   }
+
+//   @Override
+//   public LXComponent getComponent() {
+//     return parameter.getComponent();
+//   }
+
+//   @Override
+//   public String getPath() {
+//     return parameter.getPath();
+//   }
+
+//   @Override
+//   public String getDescription() {
+//     return parameter.getDescription();
+//   }
+
+//   public LXParameter.Units getUnits() {
+//     return parameter.getUnits();
+//   }
+
+//   @Override
+//   public void dispose() {}
+// }
