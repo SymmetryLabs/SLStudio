@@ -67,7 +67,7 @@ public class DPat extends SLPattern {
     PVector     xyzJog = new PVector(), modmin;
 
     float           NoiseMove   = random(10000);
-    BoundedParameter  pSpark, pWave, pRotX, pRotY, pRotZ, pSpin, pTransX, pTransY;
+    CompoundParameter  pSpark, pWave, pRotX, pRotY, pRotZ, pSpin, pTransX, pTransY;
     BooleanParameter            pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
 
     float       lxh     ()                                  { return palette.getHuef();                                          }
@@ -78,7 +78,7 @@ public class DPat extends SLPattern {
     void        setVec  (PVector vec, LXPoint p)                { vec.set(p.x, p.y, p.z);                                           }
     void        interpolate(float i, PVector a, PVector b)  { a.set(interp(i,a.x,b.x), interp(i,a.y,b.y), interp(i,a.z,b.z));   }
     void        StartRun(double deltaMs)                    { }
-    float       val     (BoundedParameter p)                  { return p.getValuef();                                             }
+    float       val     (CompoundParameter p)                  { return p.getValuef();                                             }
     color       CalcPoint(PVector p)                        { return lx.hsb(0,0,0);                                             }
     color       blend3(color c1, color c2, color c3)        { return PImage.blendColor(c1,PImage.blendColor(c2,c3,ADD),ADD);                    }
 
@@ -86,12 +86,12 @@ public class DPat extends SLPattern {
     void    rotateX (PVector p, PVector o, float nSin, float nCos) { p.set(p.x,nCos*(p.y-o.y) - nSin*(p.z-o.z) + o.y    , nSin*(p.y-o.y) + nCos*(p.z-o.z) + o.z    ); }
     void    rotateY (PVector p, PVector o, float nSin, float nCos) { p.set(    nSin*(p.z-o.z) + nCos*(p.x-o.x) + o.x,p.y, nCos*(p.z-o.z) - nSin*(p.x-o.x) + o.z    ); }
 
-    BoundedParameter  addParam(String label, double value)    { BoundedParameter p = new BoundedParameter(label, value); addParameter(p); return p; }
-    BoundedParameter  addParam(String label, double value, double min, double max)  { BoundedParameter p2 = new BoundedParameter(label, value, min, max); addParameter(p2); return p2; }
+    CompoundParameter  addParam(String label, double value)    { CompoundParameter p = new CompoundParameter(label, value); addParameter(p); return p; }
+    CompoundParameter  addParam(String label, double value, double min, double max)  { CompoundParameter p2 = new CompoundParameter(label, value, min, max); addParameter(p2); return p2; }
     PVector     vT1 = new PVector(), vT2 = new PVector();
     float       calcCone (PVector v1, PVector v2, PVector c)    {   vT1.set(v1); vT2.set(v2); vT1.sub(c); vT2.sub(c);
                                                                     return degrees(angleBetween(vT1,vT2)); }
-
+    
     // Pick        addPick(String name, int def, int _max, String[] desc) {
     //     Pick P      = new Pick(name, def, _max+1, nMaxRow, desc); 
     //     nMaxRow     = P.EndRow + 1;
@@ -204,7 +204,6 @@ public class DPat extends SLPattern {
         mHalf       =   new PVector(.5,.5,.5);
         xWaveNz     =   new float[ceil(mMax.y)+1];
         yWaveNz     =   new float[ceil(mMax.x)+1];
-
         //println (model.xMin + " " + model.yMin + " " +  model.zMin);
         //println (model.xMax + " " + model.yMax + " " +  model.zMax);
       //for (MidiOutputDevice o: RWMidi.getOutputDevices()) { if (o.toString().contains("APC")) { APCOut = o.createOutput(); break;}}

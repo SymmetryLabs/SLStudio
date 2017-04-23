@@ -5,14 +5,14 @@ public class Noise extends DPat {
   int       CurAnim, iSymm;
   int       XSym=1,YSym=2,RadSym=3;
   float       zTime , zTheta=0, zSin, zCos, rtime, ttime;
-  BoundedParameter  pSpeed , pDensity, pSharp;
+  CompoundParameter  pSpeed , pDensity, pSharp;
   DiscreteParameter     pChoose, pSymm;
   int       _ND = 4;
   NDat      N[] = new NDat[_ND];
 
   public Noise(LX lx) {
     super(lx);
-    pSpeed = new BoundedParameter("Fast", .55, -2, 2);
+    pSpeed = new CompoundParameter("Fast", .55, -2, 2);
     addParameter(pSpeed);
     pDensity  = addParam("Dens"    , .3);
     pSharp    = addParam("Shrp"    ,  0);
@@ -111,15 +111,15 @@ public class SoundParticles extends SLPattern   {
     public  LXProjection scaleProjection; 
     //private LeapMotion leap; 
     public  GraphicMeter eq = null;
-    public  BoundedParameter spark = new BoundedParameter("Spark", 0); 
-    public  BoundedParameter magnitude = new BoundedParameter("Mag", 0.1, 1);
-    public  BoundedParameter scale = new BoundedParameter("scale", 1, .8, 1.2); 
-    public  BoundedParameter spin  = new BoundedParameter("Spin", .5 , 0, 1); 
-    public  BoundedParameter sizeV = new BoundedParameter("Size", .33, 0, 1); 
-    public  BoundedParameter speed = new BoundedParameter("Speed", 16, 0, 500); 
-    public  BoundedParameter colorWheel = new BoundedParameter("Color", 0, 0, 360); 
-    public  BoundedParameter wobble = new BoundedParameter("wobble", 1, 0, 10); 
-    public  BoundedParameter radius = new BoundedParameter("radius", 700, 0, 1500); 
+    public  CompoundParameter spark = new CompoundParameter("Spark", 0); 
+    public  CompoundParameter magnitude = new CompoundParameter("Mag", 0.1, 1);
+    public  CompoundParameter scale = new CompoundParameter("scale", 1, .8, 1.2); 
+    public  CompoundParameter spin  = new CompoundParameter("Spin", .5 , 0, 1); 
+    public  CompoundParameter sizeV = new CompoundParameter("Size", .33, 0, 1); 
+    public  CompoundParameter speed = new CompoundParameter("Speed", 16, 0, 500); 
+    public  CompoundParameter colorWheel = new CompoundParameter("Color", 0, 0, 360); 
+    public  CompoundParameter wobble = new CompoundParameter("wobble", 1, 0, 10); 
+    public  CompoundParameter radius = new CompoundParameter("radius", 700, 0, 1500); 
     private ArrayList<Particle> particles = new ArrayList<Particle>(); 
     public  ArrayList<SinLFO> xPos = new ArrayList<SinLFO>();
     public  ArrayList<SinLFO> yPos = new ArrayList<SinLFO>();
@@ -491,12 +491,12 @@ public class SoundParticles extends SLPattern   {
 public class StripPlay extends SLPattern {
   private final int NUM_OSC = 300;
   private final int MAX_PERIOD = 20000; 
-  private BoundedParameter brightParameter = new BoundedParameter("bright", 96, 70, 100); 
-  private BoundedParameter hueSpread = new BoundedParameter("hueSpread", 1); 
-  private BoundedParameter speed = new BoundedParameter("speed", .5); 
-  private BoundedParameter xSpeed = new BoundedParameter("xSpeed", 2000, 500, MAX_PERIOD);
-  private BoundedParameter ySpeed = new BoundedParameter("ySpeed", 1600, 500, MAX_PERIOD);
-  private BoundedParameter zSpeed = new BoundedParameter("zSpeed", 1000, 500, MAX_PERIOD); 
+  private CompoundParameter brightParameter = new CompoundParameter("bright", 96, 70, 100); 
+  private CompoundParameter hueSpread = new CompoundParameter("hueSpread", 1); 
+  private CompoundParameter speed = new CompoundParameter("speed", .5); 
+  private CompoundParameter xSpeed = new CompoundParameter("xSpeed", 2000, 500, MAX_PERIOD);
+  private CompoundParameter ySpeed = new CompoundParameter("ySpeed", 1600, 500, MAX_PERIOD);
+  private CompoundParameter zSpeed = new CompoundParameter("zSpeed", 1000, 500, MAX_PERIOD); 
   private DiscreteParameter numOsc = new DiscreteParameter("Strips", 179, 1, NUM_OSC); 
   
 
@@ -575,7 +575,7 @@ public class StripPlay extends SLPattern {
 
 public class Pong extends DPat {
   SinLFO x,y,z,dx,dy,dz;
-  float cRad; BoundedParameter pSize;
+  float cRad; CompoundParameter pSize;
   DiscreteParameter   pChoose;
   PVector v = new PVector(), vMir =  new PVector();
 
@@ -615,7 +615,7 @@ public class BassPod extends SLPattern {
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
   
-  private final BoundedParameter clr = new BoundedParameter("CLR", 0.5);
+  private final CompoundParameter clr = new CompoundParameter("CLR", 0.5);
   
   public BassPod(LX lx) {
     super(lx);
@@ -662,9 +662,9 @@ public class CubeEQ extends SLPattern {
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
 
-  private final BoundedParameter edge = new BoundedParameter("EDGE", 0.5);
-  private final BoundedParameter clr = new BoundedParameter("CLR", 0.1, 0, .5);
-  private final BoundedParameter blockiness = new BoundedParameter("BLK", 0.5);
+  private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
+  private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
+  private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
 
   public CubeEQ(LX lx) {
     super(lx);
@@ -773,8 +773,8 @@ public class SpaceTime extends SLPattern {
   SinLFO falloff = new SinLFO(10, 70, 5000);
   float angle = 0;
 
-  BoundedParameter rateParameter = new BoundedParameter("RATE", 0.5);
-  BoundedParameter sizeParameter = new BoundedParameter("SIZE", 0.5);
+  CompoundParameter rateParameter = new CompoundParameter("RATE", 0.5);
+  CompoundParameter sizeParameter = new CompoundParameter("SIZE", 0.5);
 
   public SpaceTime(LX lx) {
     super(lx);
@@ -828,10 +828,10 @@ public class Traktor extends SLPattern {
 
   final int FRAME_WIDTH = 120;
   
-  final BoundedParameter speed = new BoundedParameter("SPD", 0.5);
-  final BoundedParameter hueSpread = new BoundedParameter("hueSpread", .4, 0, 1);
-  final BoundedParameter trebleGain= new BoundedParameter("trebG", 1, 0, 10);
-  final BoundedParameter bassGain = new BoundedParameter("bassG", 1, 0, 10);
+  final CompoundParameter speed = new CompoundParameter("SPD", 0.5);
+  final CompoundParameter hueSpread = new CompoundParameter("hueSpread", .4, 0, 1);
+  final CompoundParameter trebleGain= new CompoundParameter("trebG", 1, 0, 10);
+  final CompoundParameter bassGain = new CompoundParameter("bassG", 1, 0, 10);
   private float[] bass = new float[FRAME_WIDTH];
   private float[] treble = new float[FRAME_WIDTH];
     
@@ -904,7 +904,7 @@ public class Traktor extends SLPattern {
 
 public class AskewPlanes extends DPat {
 
-  BoundedParameter thickness = new BoundedParameter("THCK", 0.2, 0.1, 0.9);
+  CompoundParameter thickness = new CompoundParameter("THCK", 0.2, 0.1, 0.9);
   float huev = 0;
 
   class Plane {
@@ -977,7 +977,7 @@ public class AskewPlanes extends DPat {
 
 public class ShiftingPlane extends SLPattern {
 
-  final BoundedParameter hueShift = new BoundedParameter("hShift", 0.5, 0, 1);
+  final CompoundParameter hueShift = new CompoundParameter("hShift", 0.5, 0, 1);
 
   final SinLFO a = new SinLFO(-.2, .2, 5300);
   final SinLFO b = new SinLFO(1, -1, 13300);
@@ -1013,11 +1013,11 @@ public class ShiftingPlane extends SLPattern {
 }
 
 public class CubeFlash extends SLPattern {
-  private BoundedParameter rateParameter = new BoundedParameter("RATE", 0.125);
-  private BoundedParameter attackParameter = new BoundedParameter("ATTK", 0.5);
-  private BoundedParameter decayParameter = new BoundedParameter("DECAY", 0.5);
-  private BoundedParameter hueVarianceParameter = new BoundedParameter("H.V.", 0.25);
-  private BoundedParameter saturationParameter = new BoundedParameter("SAT", 0.5);
+  private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
+  private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
+  private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
+  private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
+  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
   
   class Flash {
     Cube c;
@@ -1093,9 +1093,9 @@ public class CubeFlash extends SLPattern {
 }
 
 public class Spheres extends SLPattern {
-  private BoundedParameter hueParameter = new BoundedParameter("RAD", 1.0);
-  private BoundedParameter periodParameter = new BoundedParameter("PERIOD", 4000.0, 200.0, 10000.0);
-  private BoundedParameter hueVariance = new BoundedParameter("HueVar", 50, 0, 180);
+  private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);
+  private CompoundParameter periodParameter = new CompoundParameter("PERIOD", 4000.0, 200.0, 10000.0);
+  private CompoundParameter hueVariance = new CompoundParameter("HueVar", 50, 0, 180);
   private final SawLFO lfo = new SawLFO(0, 1, 10000);
   private final SinLFO sinLfo = new SinLFO(0, 1, periodParameter);
   private final float centerX, centerY, centerZ;
@@ -1173,13 +1173,13 @@ public class Rings extends SLPattern {
   float angleParam, spacingParam;
   float dzParam, centerParam;
 
-  BoundedParameter pDepth = new BoundedParameter("DEPTH", 0.6);
-  BoundedParameter pBright = new BoundedParameter("BRT", 0.75);
-  BoundedParameter pSaturation = new BoundedParameter("SAT", 0.5);
+  CompoundParameter pDepth = new CompoundParameter("DEPTH", 0.6);
+  CompoundParameter pBright = new CompoundParameter("BRT", 0.75);
+  CompoundParameter pSaturation = new CompoundParameter("SAT", 0.5);
 
-  BoundedParameter pSpeed1 = new BoundedParameter("SPD1", 0.2);
-  BoundedParameter pSpeed2 = new BoundedParameter("SPD2", 0.4);
-  BoundedParameter pScale = new BoundedParameter("SCALE", 0.15);
+  CompoundParameter pSpeed1 = new CompoundParameter("SPD1", 0.2);
+  CompoundParameter pSpeed2 = new CompoundParameter("SPD2", 0.4);
+  CompoundParameter pScale = new CompoundParameter("SCALE", 0.15);
 
   public Rings(LX lx) {
     super(lx);
@@ -1262,9 +1262,9 @@ public class Rings extends SLPattern {
 // requires it's own vector classes, but should prob refactor to use standard vector class
 // public class Raindrops extends SLPattern {
 
-//   BoundedParameter numRainDrops = new BoundedParameter("NUM", -40, -500, -20);
-//   BoundedParameter size = new BoundedParameter("SIZE", 0.35, 0.1, 1.0);
-//   BoundedParameter speedP = new BoundedParameter("SPD", -1000, -7000, -300);
+//   CompoundParameter numRainDrops = new CompoundParameter("NUM", -40, -500, -20);
+//   CompoundParameter size = new CompoundParameter("SIZE", 0.35, 0.1, 1.0);
+//   CompoundParameter speedP = new CompoundParameter("SPD", -1000, -7000, -300);
 
 //   Vector3 randomVector3() {
 //     return new Vector3(
@@ -1362,10 +1362,10 @@ public class Swim extends SLPattern {
   SinLFO yPos = new SinLFO(-1, 1, 13234);
   SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
   SawLFO phaseLFO = new SawLFO(0, 2 * PI, 15000 - 13000 * 0.5);
-  final BoundedParameter phaseParam = new BoundedParameter("Spd", 0.5);
-  final BoundedParameter crazyParam = new BoundedParameter("Crzy", 0.5);
+  final CompoundParameter phaseParam = new CompoundParameter("Spd", 0.5);
+  final CompoundParameter crazyParam = new CompoundParameter("Crzy", 0.5);
 
-  final BoundedParameter hueScale = new BoundedParameter("HUE", 0.1, 0.0, 0.2);
+  final CompoundParameter hueScale = new CompoundParameter("HUE", 0.1, 0.0, 0.2);
 
   public Swim(LX lx) {
     super(lx);
@@ -1429,16 +1429,16 @@ public class ViolinWave extends SLPattern {
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
   
-  BoundedParameter level = new BoundedParameter("LVL", 0.45);
-  BoundedParameter range = new BoundedParameter("RNG", 0.5);
-  BoundedParameter edge = new BoundedParameter("EDG", 0.5);
-  BoundedParameter release = new BoundedParameter("RLS", 0.5);
-  BoundedParameter speed = new BoundedParameter("SPD", 0.5);
-  BoundedParameter amp = new BoundedParameter("AMP", 0.25, 0, 3);
-  BoundedParameter period = new BoundedParameter("WAVE", 0.5);
-  BoundedParameter pSize = new BoundedParameter("PSIZE", 0.5);
-  BoundedParameter pSpeed = new BoundedParameter("PSPD", 0.5);
-  BoundedParameter pDensity = new BoundedParameter("PDENS", 0.25);
+  CompoundParameter level = new CompoundParameter("LVL", 0.45);
+  CompoundParameter range = new CompoundParameter("RNG", 0.5);
+  CompoundParameter edge = new CompoundParameter("EDG", 0.5);
+  CompoundParameter release = new CompoundParameter("RLS", 0.5);
+  CompoundParameter speed = new CompoundParameter("SPD", 0.5);
+  CompoundParameter amp = new CompoundParameter("AMP", 0.25, 0, 3);
+  CompoundParameter period = new CompoundParameter("WAVE", 0.5);
+  CompoundParameter pSize = new CompoundParameter("PSIZE", 0.5);
+  CompoundParameter pSpeed = new CompoundParameter("PSPD", 0.5);
+  CompoundParameter pDensity = new CompoundParameter("PDENS", 0.25);
   
   LinearEnvelope dbValue = new LinearEnvelope(0, 0, 10);
   
@@ -1562,15 +1562,15 @@ public class CrossSections extends SLPattern {
   final SinLFO y = new SinLFO(model.yMin, model.yMax, 6000);
   final SinLFO z = new SinLFO(model.zMin, model.zMax, 7000);
   
-  final BoundedParameter xw = new BoundedParameter("XWID", 0.3);
-  final BoundedParameter yw = new BoundedParameter("YWID", 0.3);
-  final BoundedParameter zw = new BoundedParameter("ZWID", 0.3);
-  final BoundedParameter xr = new BoundedParameter("XRAT", 0.7);
-  final BoundedParameter yr = new BoundedParameter("YRAT", 0.6);
-  final BoundedParameter zr = new BoundedParameter("ZRAT", 0.5);
-  final BoundedParameter xl = new BoundedParameter("XLEV", 1);
-  final BoundedParameter yl = new BoundedParameter("YLEV", 1);
-  final BoundedParameter zl = new BoundedParameter("ZLEV", 0.5);
+  final CompoundParameter xw = new CompoundParameter("XWID", 0.3);
+  final CompoundParameter yw = new CompoundParameter("YWID", 0.3);
+  final CompoundParameter zw = new CompoundParameter("ZWID", 0.3);
+  final CompoundParameter xr = new CompoundParameter("XRAT", 0.7);
+  final CompoundParameter yr = new CompoundParameter("YRAT", 0.6);
+  final CompoundParameter zr = new CompoundParameter("ZRAT", 0.5);
+  final CompoundParameter xl = new CompoundParameter("XLEV", 1);
+  final CompoundParameter yl = new CompoundParameter("YLEV", 1);
+  final CompoundParameter zl = new CompoundParameter("ZLEV", 0.5);
 
   public CrossSections(LX lx) {
     super(lx);
@@ -1650,13 +1650,13 @@ public class Bubbles extends SLPattern {
     private final float MAX_SPROUT_TIME = 150;
     private final Random rand = new Random();
 
-    private final BoundedParameter rate = new BoundedParameter("num", 0.3);
-    private final BoundedParameter speed = new BoundedParameter("spd", 0.01, 0.25, 1.0);
-    private final BoundedParameter saturation  = new BoundedParameter("col", 50, 0, 100);
-    private final BoundedParameter maxBubbleSize = new BoundedParameter("size", 20, 10, 50);
-    private final BoundedParameter transparency  = new BoundedParameter("trns", 9, 0.1, 25);
-    private final BoundedParameter popFrequency  = new BoundedParameter("aPop", 30, 30, 500);
-    private final BoundedParameter zDep = new BoundedParameter("zDep", 2, 0.1, 5);
+    private final CompoundParameter rate = new CompoundParameter("num", 0.3);
+    private final CompoundParameter speed = new CompoundParameter("spd", 0.01, 0.25, 1.0);
+    private final CompoundParameter saturation  = new CompoundParameter("col", 50, 0, 100);
+    private final CompoundParameter maxBubbleSize = new CompoundParameter("size", 20, 10, 50);
+    private final CompoundParameter transparency  = new CompoundParameter("trns", 9, 0.1, 25);
+    private final CompoundParameter popFrequency  = new CompoundParameter("aPop", 30, 30, 500);
+    private final CompoundParameter zDep = new CompoundParameter("zDep", 2, 0.1, 5);
 
     private final List<Bubble> bubbles = new LinkedList<Bubble>();
     float leftoverMs = 0;
@@ -1820,7 +1820,7 @@ public class Bubbles extends SLPattern {
 
 public class Balance extends SLPattern {
 
-  final BoundedParameter hueScale = new BoundedParameter("Hue", 0.4);
+  final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
 
   class Sphere {
     float x, y, z;
@@ -1836,8 +1836,8 @@ public class Balance extends SLPattern {
   SinLFO rotationY = new SinLFO(-PI/16, PI/16, 7000);
   SinLFO rotationZ = new SinLFO(-PI/16, PI/16, 11000);
   SawLFO phaseLFO = new SawLFO(0, 2 * PI, 5000 - 4500 * 0.5);
-  final BoundedParameter phaseParam = new BoundedParameter("Spd", 0.5);
-  final BoundedParameter crazyParam = new BoundedParameter("Crzy", 0.2);
+  final CompoundParameter phaseParam = new CompoundParameter("Spd", 0.5);
+  final CompoundParameter crazyParam = new CompoundParameter("Crzy", 0.2);
 
 
   private final Sphere[] spheres;
@@ -1950,9 +1950,9 @@ public class Balance extends SLPattern {
 }
 
 public class TelevisionStatic extends SLPattern {
-  BoundedParameter brightParameter = new BoundedParameter("BRIGHT", 1.0);
-  BoundedParameter saturationParameter = new BoundedParameter("SAT", 1.0);
-  BoundedParameter hueParameter = new BoundedParameter("HUE", 1.0);
+  CompoundParameter brightParameter = new CompoundParameter("BRIGHT", 1.0);
+  CompoundParameter saturationParameter = new CompoundParameter("SAT", 1.0);
+  CompoundParameter hueParameter = new CompoundParameter("HUE", 1.0);
   SinLFO direction = new SinLFO(0, 10, 3000);
   
   public TelevisionStatic(LX lx) {

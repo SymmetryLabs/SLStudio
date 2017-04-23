@@ -11,6 +11,7 @@ public MappingMode mappingMode;
 
 public boolean envelopOn = true;
 public Envelop envelop = null;
+
 void setup() {
   long setupStart = System.nanoTime();
   size(1280, 800, P3D);
