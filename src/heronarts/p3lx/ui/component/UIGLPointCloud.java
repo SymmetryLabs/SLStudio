@@ -121,8 +121,11 @@ public class UIGLPointCloud extends UIPointCloud {
 
     @Override
     protected void onUIResize(UI ui) {
-        // Reset the shader after UI is resized
-        this.shader = lx.applet.loadShader("frag.glsl", "vert.glsl");
+        resetShader();
+    }
+
+    public void resetShader() {
+        this.shader = this.lx.applet.loadShader("frag.glsl", "vert.glsl");
     }
 
     @Override
