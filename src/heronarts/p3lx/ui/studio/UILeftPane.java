@@ -21,6 +21,7 @@
 package heronarts.p3lx.ui.studio;
 
 import heronarts.lx.LX;
+import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.component.UIImage;
@@ -44,7 +45,10 @@ public class UILeftPane extends UIPane {
 
     public UILeftPane(UI ui, LX lx) {
         super(ui, lx, new String[] { "PROJECT", "GLOBAL" }, 0, WIDTH, TOP_OFFSET);
-        new UIImage(ui.applet.loadImage("lxstudio.png"), MARGIN, 4).addToContainer(this);
+
+        new UIImage(ui.applet.loadImage("lxstudio.png"), MARGIN, 4)
+        .setDescription(LXStudio.COPYRIGHT)
+        .addToContainer(this);
 
         this.project = this.sections[0];
         this.global = this.sections[1];

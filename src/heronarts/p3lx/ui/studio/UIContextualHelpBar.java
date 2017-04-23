@@ -28,6 +28,7 @@ package heronarts.p3lx.ui.studio;
 
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContext;
 import heronarts.p3lx.ui.component.UILabel;
@@ -43,6 +44,7 @@ public class UIContextualHelpBar extends UI2dContext {
         setBackgroundColor(ui.theme.getPaneBackgroundColor());
 
         this.label = (UILabel) new UILabel(PADDING, 0, getContentWidth() - 2*PADDING, HEIGHT + 4)
+        .setLabel(LXStudio.COPYRIGHT)
         .setPadding(5, 0, 0, PADDING)
         .setTextAlignment(PConstants.LEFT, PConstants.TOP)
         .setFontColor(0xffa0a0a0)

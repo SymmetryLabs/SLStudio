@@ -48,6 +48,8 @@ import processing.event.KeyEvent;
 
 public class LXStudio extends P3LX {
 
+    public static final String COPYRIGHT = "LXStudio: Designed + Developed by Mark C. Slee. Copyright 2017 Heron Arts LLC.";
+
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
         public final PreviewWindow preview;
