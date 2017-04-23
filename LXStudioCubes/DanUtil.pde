@@ -194,6 +194,7 @@ public class DPat extends SLPattern {
         // addNonKnobParameter(pGrey);
 
         nPoints     =   model.points.size();
+
         
         //addMultipleParameterUIRow("Bools",pXsym,pYsym,pRsym,pXdup,pJog,pGrey);
 
