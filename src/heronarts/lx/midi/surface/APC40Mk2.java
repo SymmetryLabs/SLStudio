@@ -139,6 +139,8 @@ public class APC40Mk2 extends LXMidiSurface {
 
         private LXComponent device = null;
         private LXEffect effect = null;
+        private LXPattern pattern = null;
+        private LXBus channel = null;
 
         private final LXListenableNormalizedParameter[] knobs =
             new LXListenableNormalizedParameter[DEVICE_KNOB_NUM];
@@ -150,7 +152,16 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         void registerChannel(LXBus channel) {
-            if (channel.effects.size() > 0) {
+            if (this.channel != null) {
+                if (this.channel instanceof LXChannel) {
+                    ((LXChannel) this.channel).focusedPattern.removeListener(this);
+                }
+            }
+            this.channel = channel;
+            if (channel instanceof LXChannel) {
+                ((LXChannel) channel).focusedPattern.addListener(this);
+                register(((LXChannel) channel).getFocusedPattern());
+            } else if (channel.effects.size() > 0) {
                 register(channel.getEffect(0));
             } else {
                 register(null);
@@ -162,6 +173,8 @@ public class APC40Mk2 extends LXMidiSurface {
                 int effectIndex = this.effect.getIndex();
                 if (effectIndex > 0) {
                     register(this.effect.getBus().getEffect(effectIndex - 1));
+                } else if (this.channel instanceof LXChannel) {
+                    register(((LXChannel) this.channel).getFocusedPattern());
                 }
             }
         }
@@ -171,6 +184,10 @@ public class APC40Mk2 extends LXMidiSurface {
                 int effectIndex = this.effect.getIndex();
                 if (effectIndex < this.effect.getBus().effects.size() - 1) {
                     register(this.effect.getBus().getEffect(effectIndex + 1));
+                }
+            } else if (this.pattern != null) {
+                if (channel.effects.size() > 0) {
+                    register(channel.getEffect(0));
                 }
             }
         }
@@ -188,27 +205,38 @@ public class APC40Mk2 extends LXMidiSurface {
                     }
                     this.device.controlSurfaceSempahore.decrement();
                 }
+                this.pattern = null;
                 this.effect = null;
                 this.device = device;
                 if (this.device instanceof LXEffect) {
                     this.effect = (LXEffect) this.device;
                     this.effect.enabled.addListener(this);
+                } else if (this.device instanceof LXPattern) {
+                    this.pattern = (LXPattern) this.device;
                 }
 
                 int i = 0;
                 boolean isEnabled = false;
                 if (this.device != null) {
-                    isEnabled = (this.effect != null) ? this.effect.isEnabled() : true;
+                    if (this.effect != null) {
+                        isEnabled = this.effect.isEnabled();
+                    } else if (this.pattern != null) {
+                        isEnabled = this.pattern == ((LXChannel) this.channel).getActivePattern();
+                    }
                     for (LXParameter p : this.device.getParameters()) {
+                        if (i >= this.knobs.length) {
+                            break;
+                        }
                         if (p instanceof LXListenableNormalizedParameter) {
-                            if (this.effect != null && p != this.effect.enabled) {
-                                LXListenableNormalizedParameter parameter = (LXListenableNormalizedParameter) p;
-                                this.knobs[i] = parameter;
-                                parameter.addListener(this);
-                                sendControlChange(0, DEVICE_KNOB_STYLE + i, p.getPolarity() == LXParameter.Polarity.BIPOLAR ? LED_STYLE_BIPOLAR : LED_STYLE_UNIPOLAR);
-                                sendControlChange(0, DEVICE_KNOB + i, (int) (parameter.getNormalized() * 127));
-                                ++i;
+                            if (this.effect != null && p == this.effect.enabled) {
+                                continue;
                             }
+                            LXListenableNormalizedParameter parameter = (LXListenableNormalizedParameter) p;
+                            this.knobs[i] = parameter;
+                            parameter.addListener(this);
+                            sendControlChange(0, DEVICE_KNOB_STYLE + i, p.getPolarity() == LXParameter.Polarity.BIPOLAR ? LED_STYLE_BIPOLAR : LED_STYLE_UNIPOLAR);
+                            sendControlChange(0, DEVICE_KNOB + i, (int) (parameter.getNormalized() * 127));
+                            ++i;
                         }
                     }
                     this.device.controlSurfaceSempahore.increment();
@@ -223,7 +251,11 @@ public class APC40Mk2 extends LXMidiSurface {
 
         @Override
         public void onParameterChanged(LXParameter parameter) {
-            if (this.effect != null && parameter == this.effect.enabled) {
+            if (this.channel != null && this.channel instanceof LXChannel && parameter == ((LXChannel)this.channel).focusedPattern) {
+                if (this.device instanceof LXPattern) {
+                    register(((LXChannel)this.channel).getFocusedPattern());
+                }
+            } else if (this.effect != null && parameter == this.effect.enabled) {
                 sendNoteOn(0, DEVICE_ON_OFF, this.effect.enabled.isOn() ? 1 : 0);
             } else {
                 for (int i = 0; i < this.knobs.length; ++i) {
@@ -236,7 +268,10 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         void onDeviceOnOff() {
-            if (this.effect != null) {
+            if (this.pattern != null) {
+                this.pattern.getChannel().goIndex(this.pattern.getIndex());
+                sendNoteOn(0, DEVICE_ON_OFF, 1);
+            } else if (this.effect != null) {
                 this.effect.enabled.toggle();
             }
         }
@@ -342,6 +377,8 @@ public class APC40Mk2 extends LXMidiSurface {
         if (on) {
             initialize();
             register();
+        } else {
+            this.deviceListener.register(null);
         }
     }
 
@@ -464,6 +501,23 @@ public class APC40Mk2 extends LXMidiSurface {
         });
 
         deviceListener.registerChannel(this.lx.engine.getFocusedChannel());
+
+        this.lx.engine.cueA.addListener(new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter parameter) {
+                sendNoteOn(0, CLIP_DEVICE_VIEW, lx.engine.cueA.isOn() ? 1 : 0);
+            }
+        });
+        sendNoteOn(0, CLIP_DEVICE_VIEW, lx.engine.cueA.isOn() ? 1 : 0);
+
+        this.lx.engine.cueB.addListener(new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter parameter) {
+                sendNoteOn(0, DETAIL_VIEW, lx.engine.cueB.isOn() ? 1 : 0);
+            }
+        });
+        sendNoteOn(0, DETAIL_VIEW, lx.engine.cueB.isOn() ? 1 : 0);
+
     }
 
     private void registerChannel(LXChannel channel) {
@@ -516,24 +570,34 @@ public class APC40Mk2 extends LXMidiSurface {
                 lx.engine.focusedChannel.setValue(lx.engine.channels.size());
                 return;
             case BANK_SELECT_LEFT:
-                lx.engine.focusedChannel.decrement();
+                this.deviceListener.registerPrevious();
                 return;
             case BANK_SELECT_RIGHT:
-                lx.engine.focusedChannel.increment();
+                this.deviceListener.registerNext();
                 return;
             case BANK_SELECT_UP:
-                bus = lx.engine.getFocusedChannel();
+                bus = this.lx.engine.getFocusedChannel();
                 if (bus instanceof LXChannel) {
-                    ((LXChannel) bus).goPrev();
+                    ((LXChannel) bus).focusedPattern.decrement();
                 }
                 return;
             case BANK_SELECT_DOWN:
-                bus = lx.engine.getFocusedChannel();
+                bus = this.lx.engine.getFocusedChannel();
                 if (bus instanceof LXChannel) {
-                    ((LXChannel) bus).goNext();
+                    ((LXChannel) bus).focusedPattern.increment();
                 }
                 return;
+            case CLIP_DEVICE_VIEW:
+                this.lx.engine.cueA.toggle();
+                return;
+            case DETAIL_VIEW:
+                this.lx.engine.cueB.toggle();
+                return;
+            case BANK:
+                this.lx.engine.crossfaderBlendMode.increment();
+                return;
             }
+
             if (pitch >= CLIP_LAUNCH && pitch <= CLIP_LAUNCH_MAX) {
                 int channelIndex = (pitch - CLIP_LAUNCH) % GRID_COLUMNS;
                 int index = GRID_ROWS - 1 - ((pitch - CLIP_LAUNCH) / GRID_COLUMNS);
@@ -566,7 +630,11 @@ public class APC40Mk2 extends LXMidiSurface {
                 channel.cueActive.toggle();
                 return;
             case CHANNEL_CROSSFADE_GROUP:
-                channel.crossfadeGroup.increment();
+                if (this.shiftOn) {
+                    channel.blendMode.increment();
+                } else {
+                    channel.crossfadeGroup.increment();
+                }
                 return;
             case CLIP_STOP:
                 if (this.shiftOn) {
@@ -586,9 +654,15 @@ public class APC40Mk2 extends LXMidiSurface {
                 this.deviceListener.onDeviceOnOff();
                 return;
             case DEVICE_LEFT:
-                this.deviceListener.registerPrevious();
+                this.lx.engine.focusedChannel.decrement();
                 return;
             case DEVICE_RIGHT:
+                this.lx.engine.focusedChannel.increment();
+                return;
+            case BANK_LEFT:
+                this.deviceListener.registerPrevious();
+                return;
+            case BANK_RIGHT:
                 this.deviceListener.registerNext();
                 return;
             }

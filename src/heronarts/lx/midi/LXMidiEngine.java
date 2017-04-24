@@ -138,7 +138,6 @@ public class LXMidiEngine implements LXSerializable {
                 for (LXMidiInput input : inputs) {
                     LXMidiSurface surface = LXMidiSurface.get(lx, LXMidiEngine.this, input);
                     if (surface != null) {
-                        System.out.println("Surface!");;
                         internalSurfaces.add(surface);
                     }
                 }

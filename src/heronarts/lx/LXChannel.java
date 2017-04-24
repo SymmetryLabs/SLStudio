@@ -129,6 +129,11 @@ public class LXChannel extends LXBus {
     private int index;
 
     /**
+     * Which pattern is focused in the channel
+     */
+    public final DiscreteParameter focusedPattern;
+
+    /**
      * Whether this channel is enabled.
      */
     public final BooleanParameter enabled =
@@ -219,6 +224,10 @@ public class LXChannel extends LXBus {
         this.index = index;
         this.label.setDescription("The name of this channel");
         this.blendBuffer = new ModelBuffer(lx);
+
+        this.focusedPattern =
+            new DiscreteParameter("Focused Pattern", 0, patterns.length)
+            .setDescription("Which pattern has focus in the UI");
 
         this.blendMode = new DiscreteParameter("Blend", lx.engine.channelBlends)
             .setDescription("Specifies the blending function used for the channel fader");
@@ -354,8 +363,12 @@ public class LXChannel extends LXBus {
         pattern.setModel(this.model);
         pattern.setIndex(this.internalPatterns.size());
         this.internalPatterns.add(pattern);
+        this.focusedPattern.setRange(this.internalPatterns.size());
         for (Listener listener : this.listeners) {
             listener.patternAdded(this, pattern);
+        }
+        if (this.internalPatterns.size() == 1) {
+            this.focusedPattern.bang();
         }
         return this;
     }
@@ -395,6 +408,7 @@ public class LXChannel extends LXBus {
                 this.activePatternIndex = 0;
                 this.nextPatternIndex = 0;
             }
+            this.focusedPattern.setRange(Math.max(1, this.internalPatterns.size()));
             for (Listener listener : this.listeners) {
                 listener.patternRemoved(this, pattern);
             }
@@ -430,6 +444,7 @@ public class LXChannel extends LXBus {
     }
 
     public LXChannel movePattern(LXPattern pattern, int index) {
+        LXPattern focusedPattern = getFocusedPattern();
         LXPattern activePattern = getActivePattern();
         LXPattern nextPattern = getNextPattern();
         this.internalPatterns.remove(pattern);
@@ -443,11 +458,18 @@ public class LXChannel extends LXBus {
         for (Listener listener : this.listeners) {
             listener.patternMoved(this, pattern);
         }
+        if (pattern == focusedPattern) {
+            this.focusedPattern.setValue(pattern.getIndex());
+        }
         return this;
     }
 
     public final int getActivePatternIndex() {
         return this.activePatternIndex;
+    }
+
+    public final LXPattern getFocusedPattern() {
+        return this.internalPatterns.get(this.focusedPattern.getValuei());
     }
 
     public final LXPattern getActivePattern() {
@@ -690,6 +712,7 @@ public class LXChannel extends LXBus {
         for (int i = this.internalPatterns.size() - 1; i >= 0; --i) {
             removePattern(this.internalPatterns.get(i), false);
         }
+
         // Add patterns
         JsonArray patternsArray = obj.getAsJsonArray(KEY_PATTERNS);
         for (JsonElement patternElement : patternsArray) {
@@ -698,6 +721,7 @@ public class LXChannel extends LXBus {
             pattern.load(lx, patternObj);
             addPattern(pattern);
         }
+
         // Set the active index instantly, do not transition!
         if (obj.has(KEY_PATTERN_INDEX)) {
             int patternIndex = obj.get(KEY_PATTERN_INDEX).getAsInt();
