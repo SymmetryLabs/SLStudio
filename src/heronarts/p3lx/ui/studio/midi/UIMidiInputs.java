@@ -37,9 +37,9 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import processing.core.PConstants;
 import processing.core.PGraphics;
 
-public class UIMidiManager extends UICollapsibleSection {
+public class UIMidiInputs extends UICollapsibleSection {
 
-    public UIMidiManager(final UI ui, final LXMidiEngine midiEngine, float x, float y, float w) {
+    public UIMidiInputs(final UI ui, final LXMidiEngine midiEngine, float x, float y, float w) {
         super(ui, x, y, w, 0);
         setTitle("MIDI INPUT");
         setLayout(UI2dContainer.Layout.VERTICAL);
@@ -49,7 +49,7 @@ public class UIMidiManager extends UICollapsibleSection {
         midiEngine.whenReady(new Runnable() {
             public void run() {
                 for (LXMidiInput input : midiEngine.getInputs()) {
-                    new UIMidiInput(ui, input, getContentWidth()).addToContainer(UIMidiManager.this);
+                    new UIMidiInput(ui, input, getContentWidth()).addToContainer(UIMidiInputs.this);
                 }
             }
         });

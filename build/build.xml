@@ -121,7 +121,9 @@ ${line}
 	</target>
 	
 	<target name="generate.jar">
-		<jar jarfile="${project.tmp}/${project.name}/${folder}/${project.jar.name}" basedir="${project.bin}"/>
+		<jar jarfile="${project.tmp}/${project.name}/${folder}/${project.jar.name}" basedir="${project.bin}">
+			<zipgroupfileset dir="${project.lib}" includes="coremidi4j-0.9.jar" />
+		</jar>
 	</target>
 	
 	<target name="generate.structure">
@@ -290,7 +292,9 @@ ${line}
 		<copy todir="${project.bin.data}">
 			<fileset dir="${project.data}" excludes="README" />
 		</copy>
-		<jar jarfile="${project.bin}/${project.jar.name}" basedir="${project.bin}"/>
+		<jar jarfile="${project.bin}/${project.jar.name}" basedir="${project.bin}">
+			<zipgroupfileset dir="${project.lib}" includes="coremidi4j-0.9.jar" />
+		</jar>
 	</target>
 	
 	<target name="clean" depends="library.run">

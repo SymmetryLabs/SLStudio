@@ -44,8 +44,9 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.studio.midi.UIMidiManager;
+import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
+import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIBandGate;
 import heronarts.p3lx.ui.studio.modulation.UIMacroKnobs;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
@@ -85,7 +86,8 @@ public class UIRightPane extends UIPane {
 
     private void buildMidiUI() {
         new UIOscManager(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
-        new UIMidiManager(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIMidiSurfaces(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIMidiInputs(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiMappings(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
     }
 

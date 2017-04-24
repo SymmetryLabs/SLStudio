@@ -7,5 +7,6 @@
 	<classpathentry kind="lib" path="classpath/jogl-all.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/LX"/>
 	<classpathentry kind="lib" path="lib/gson-2.8.0.jar"/>
+	<classpathentry kind="lib" path="lib/coremidi4j-0.9.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
