@@ -26,6 +26,7 @@ import java.util.Map;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXEngine;
 import heronarts.lx.LXPattern;
@@ -38,6 +39,7 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
+import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
@@ -130,6 +132,123 @@ public class APC40Mk2 extends LXMidiSurface {
     private boolean shiftOn = false;
 
     private final Map<LXChannel, ChannelListener> channelListeners = new HashMap<LXChannel, ChannelListener>();
+
+    private final DeviceListener deviceListener = new DeviceListener();
+
+    private class DeviceListener implements LXParameterListener {
+
+        private LXComponent device = null;
+        private LXEffect effect = null;
+
+        private final LXListenableNormalizedParameter[] knobs =
+            new LXListenableNormalizedParameter[DEVICE_KNOB_NUM];
+
+        DeviceListener() {
+            for (int i = 0; i < this.knobs.length; ++i) {
+                this.knobs[i] = null;
+            }
+        }
+
+        void registerChannel(LXBus channel) {
+            if (channel.effects.size() > 0) {
+                register(channel.getEffect(0));
+            } else {
+                register(null);
+            }
+        }
+
+        void registerPrevious() {
+            if (this.effect != null) {
+                int effectIndex = this.effect.getIndex();
+                if (effectIndex > 0) {
+                    register(this.effect.getBus().getEffect(effectIndex - 1));
+                }
+            }
+        }
+
+        void registerNext() {
+            if (this.effect != null) {
+                int effectIndex = this.effect.getIndex();
+                if (effectIndex < this.effect.getBus().effects.size() - 1) {
+                    register(this.effect.getBus().getEffect(effectIndex + 1));
+                }
+            }
+        }
+
+        void register(LXComponent device) {
+            if (this.device != device) {
+                if (this.effect != null) {
+                    this.effect.enabled.removeListener(this);
+                }
+                if (this.device != null) {
+                    for (int i = 0; i < this.knobs.length; ++i) {
+                        if (this.knobs[i] != null) {
+                            this.knobs[i].removeListener(this);
+                        }
+                    }
+                    this.device.controlSurfaceSempahore.decrement();
+                }
+                this.effect = null;
+                this.device = device;
+                if (this.device instanceof LXEffect) {
+                    this.effect = (LXEffect) this.device;
+                    this.effect.enabled.addListener(this);
+                }
+
+                int i = 0;
+                boolean isEnabled = false;
+                if (this.device != null) {
+                    isEnabled = (this.effect != null) ? this.effect.isEnabled() : true;
+                    for (LXParameter p : this.device.getParameters()) {
+                        if (p instanceof LXListenableNormalizedParameter) {
+                            if (this.effect != null && p != this.effect.enabled) {
+                                LXListenableNormalizedParameter parameter = (LXListenableNormalizedParameter) p;
+                                this.knobs[i] = parameter;
+                                parameter.addListener(this);
+                                sendControlChange(0, DEVICE_KNOB_STYLE + i, p.getPolarity() == LXParameter.Polarity.BIPOLAR ? LED_STYLE_BIPOLAR : LED_STYLE_UNIPOLAR);
+                                sendControlChange(0, DEVICE_KNOB + i, (int) (parameter.getNormalized() * 127));
+                                ++i;
+                            }
+                        }
+                    }
+                    this.device.controlSurfaceSempahore.increment();
+                }
+                sendNoteOn(0, DEVICE_ON_OFF, isEnabled ? 1 : 0);
+                while (i < this.knobs.length) {
+                    sendControlChange(0, DEVICE_KNOB_STYLE + i, LED_STYLE_OFF);
+                    ++i;
+                }
+            }
+        }
+
+        @Override
+        public void onParameterChanged(LXParameter parameter) {
+            if (this.effect != null && parameter == this.effect.enabled) {
+                sendNoteOn(0, DEVICE_ON_OFF, this.effect.enabled.isOn() ? 1 : 0);
+            } else {
+                for (int i = 0; i < this.knobs.length; ++i) {
+                    if (parameter == this.knobs[i]) {
+                        sendControlChange(0, DEVICE_KNOB + i, (int) (this.knobs[i].getNormalized() * 127));
+                        break;
+                    }
+                }
+            }
+        }
+
+        void onDeviceOnOff() {
+            if (this.effect != null) {
+                this.effect.enabled.toggle();
+            }
+        }
+
+        void onKnob(int index, double normalized) {
+            if (this.knobs[index] != null) {
+                this.knobs[index].setNormalized(normalized);
+            }
+        }
+
+
+    }
 
     private class ChannelListener implements LXChannel.Listener, LXParameterListener {
 
@@ -286,15 +405,17 @@ public class APC40Mk2 extends LXMidiSurface {
         }
         for (int y = 0; y < GRID_ROWS; ++y) {
             int note = CLIP_LAUNCH + GRID_COLUMNS * (GRID_ROWS - 1 - y) + index;
+            int midiChannel = 0;
             int color = 0;
             if (y == activeIndex) {
                 color = 9;
             } else if (y == nextIndex) {
+                midiChannel = 10;
                 color = 11;
             } else if (y < numPatterns) {
                 color = 8;
             }
-            sendNoteOn(0, note, color);
+            sendNoteOn(midiChannel, note, color);
         }
     }
 
@@ -338,8 +459,11 @@ public class APC40Mk2 extends LXMidiSurface {
         this.lx.engine.focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 sendChannelFocus();
+                deviceListener.registerChannel(lx.engine.getFocusedChannel());
             }
         });
+
+        deviceListener.registerChannel(this.lx.engine.getFocusedChannel());
     }
 
     private void registerChannel(LXChannel channel) {
@@ -452,7 +576,20 @@ public class APC40Mk2 extends LXMidiSurface {
                 }
                 return;
             case CHANNEL_FOCUS:
-                lx.engine.focusedChannel.setValue(channel.getIndex());
+                if (this.shiftOn) {
+                    channel.autoCycleEnabled.toggle();
+                } else {
+                    this.lx.engine.focusedChannel.setValue(channel.getIndex());
+                }
+                return;
+            case DEVICE_ON_OFF:
+                this.deviceListener.onDeviceOnOff();
+                return;
+            case DEVICE_LEFT:
+                this.deviceListener.registerPrevious();
+                return;
+            case DEVICE_RIGHT:
+                this.deviceListener.registerNext();
                 return;
             }
         }
@@ -472,7 +609,8 @@ public class APC40Mk2 extends LXMidiSurface {
 
     @Override
     public void controlChangeReceived(MidiControlChange cc) {
-        switch (cc.getCC()) {
+        int number = cc.getCC();
+        switch (number) {
         case TEMPO:
             if (this.shiftOn) {
                 this.lx.tempo.adjustBpm(.1 * cc.getRelative());
@@ -496,6 +634,12 @@ public class APC40Mk2 extends LXMidiSurface {
             this.lx.engine.crossfader.setNormalized(cc.getNormalized());
             return;
         }
+
+        if (number >= DEVICE_KNOB && number <= DEVICE_KNOB_MAX) {
+            this.deviceListener.onKnob(number - DEVICE_KNOB, cc.getNormalized());
+            return;
+        }
+
         System.out.println("APC40mk2 UNMAPPED: " + cc);
     }
 

@@ -35,6 +35,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.StringParameter;
 
 /**
@@ -47,6 +48,10 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     public final StringParameter label =
         new StringParameter("Label")
         .setDescription("The name of this component");
+
+    public final MutableParameter controlSurfaceSempahore = (MutableParameter)
+        new MutableParameter("Control-Surfaces", 0)
+        .setDescription("How many control surfaces are controlling this componentt");
 
     private static final int ID_UNASSIGNED = -1;
     static final int ID_ENGINE = 1;
