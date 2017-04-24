@@ -46,7 +46,7 @@ class UIEffectDevice extends UIDevice {
     final LXEffect effect;
 
     UIEffectDevice(UI ui, LXBus bus, final LXEffect effect) {
-        super(ui, WIDTH);
+        super(ui, effect, WIDTH);
         this.bus = bus;
         this.effect = effect;
         setTitle(effect.label);

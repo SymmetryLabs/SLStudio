@@ -50,7 +50,7 @@ class UIChannelDevice extends UIDevice {
         new HashMap<LXPattern, UIPatternControl>();
 
     UIChannelDevice(UI ui, final LXChannel channel) {
-        super(ui, WIDTH);
+        super(ui, channel, WIDTH);
         this.ui = ui;
         this.channel = channel;
         setTitle(channel.label);

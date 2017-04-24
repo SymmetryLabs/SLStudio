@@ -26,6 +26,7 @@
 
 package heronarts.p3lx.ui.studio.device;
 
+import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -62,12 +63,24 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
     private float expandedWidth;
 
     protected final UI2dContainer content;
+    protected final LXComponent component;
 
-    UIDevice(UI ui, float w) {
+    UIDevice(final UI ui, final LXComponent component, float w) {
         super(0, UIDeviceBin.PADDING, w, HEIGHT);
         setBackgroundColor(ui.theme.getWindowBackgroundColor());
         setBorderRounding(4);
+        this.component = component;
         this.expandedWidth = w;
+
+        this.component.controlSurfaceSempahore.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                if (component.controlSurfaceSempahore.getValue() > 0) {
+                    setBorderColor(ui.theme.getAttentionColor());
+                } else {
+                    setBorder(false);
+                }
+            }
+        });
 
         this.enabledButton = new UIButton(PADDING, PADDING, 12, 12);
         this.enabledButton
