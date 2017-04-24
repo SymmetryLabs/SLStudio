@@ -8,7 +8,8 @@ public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
-public MappingMode mappingMode = null;
+public MappingMode mappingMode;
+public SceneController sceneController;
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -60,18 +61,55 @@ void setup() {
         lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
       } catch (SocketException sx) {
         throw new RuntimeException(sx);
-      } 
-        
+      }
+
+      // Devices
+      devices.add(new Device(lx, "localhost"));
+
+      sceneController = new SceneController(lx, new Scene[] {
+        new TestScene(lx)
+      });
+
+      try {
+        lx.engine.osc.receiver(2121).addListener(new SceneActionListener());
+      } catch (SocketException e) {
+        throw new RuntimeException(e);
+      }
+
+      lx.engine.registerComponent("sceneController", sceneController);
+      lx.engine.addLoopTask(sceneController);
+
+      // lx.engine.midi.addListener(new LXMidiListener() {
+      //   public void noteOnReceived(MidiNoteOn note) {
+      //     println("noteOnReceived");
+      //   }
+      //   public void noteOffReceived(MidiNote note) {
+      //     println("noteOffReceived");
+      //   }
+      //   public void controlChangeReceived(MidiControlChange cc) {
+      //     println("controlChangeReceived");
+      //   }
+      //   public void programChangeReceived(MidiProgramChange pc) {
+      //     println("programChangeReceived");
+      //   }
+      //   public void pitchBendReceived(MidiPitchBend pitchBend) {
+      //     println("pitchBendReceived");
+      //   }
+      //   public void aftertouchReceived(MidiAftertouch aftertouch) {
+      //     println("aftertouchReceived");
+      //   }
+      // });
+
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
         IteratorTestPattern.class
       });
-      lx.registerEffects(new Class[]{ 
+      lx.registerEffects(new Class[]{
         FlashEffect.class,
         BlurEffect.class,
         DesaturationEffect.class
       });
-    
+
       ui.theme.setPrimaryColor(#008ba0);
       ui.theme.setSecondaryColor(#00a08b);
       ui.theme.setAttentionColor(#a00044);
