@@ -31,22 +31,22 @@ import java.util.List;
 
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIItemList;
 
 public class UIPatternList extends UIItemList.ScrollList {
 
     private final LXChannel channel;
-    private final UIChannelDevice channelDevice;
 
-    public UIPatternList(UI ui, UIChannelDevice channelDevice, float x, float y, float w, float h, LXChannel channel) {
+    public UIPatternList(UI ui, float x, float y, float w, float h, final LXChannel channel) {
         super(ui, x, y, w, h);
         setRenamable(true);
         setReorderable(true);
         setShowCheckboxes(true);
 
         this.channel = channel;
-        this.channelDevice = channelDevice;
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (LXPattern p : channel.getPatterns()) {
             items.add(new PatternItem(p));
@@ -92,6 +92,14 @@ public class UIPatternList extends UIItemList.ScrollList {
         };
 
         channel.addListener(lxListener);
+
+        channel.focusedPattern.addListener(new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter parameter) {
+                setFocusIndex(channel.focusedPattern.getValuei());
+            }
+        });
+
         lxListener.patternDidChange(channel, channel.getActivePattern());
     }
 
@@ -158,16 +166,8 @@ public class UIPatternList extends UIItemList.ScrollList {
 
         @Override
         public void onFocus() {
-            channelDevice.setFocusedPattern(this.pattern);
+            channel.focusedPattern.setValue(this.pattern.getIndex());
         }
-    }
-
-    public LXPattern getFocusedPattern() {
-        PatternItem patternItem = (PatternItem) getFocusedItem();
-        if (patternItem != null) {
-            return patternItem.pattern;
-        }
-        return null;
     }
 
 }

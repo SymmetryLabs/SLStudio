@@ -31,6 +31,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIKnob;
@@ -42,11 +43,22 @@ public class UIPatternControl extends UI2dContainer {
     public final LXPattern pattern;
     private final UI2dContainer content;
 
-    public UIPatternControl(UI ui, LXPattern pattern, float x, float y, float h) {
+    public UIPatternControl(final UI ui, final LXPattern pattern, float x, float y, float h) {
         super(x, y, 2*PADDING, h);
         this.pattern = pattern;
         setBackgroundColor(0xff303030);
         setBorderRounding(4);
+
+        this.pattern.controlSurfaceSempahore.addListener(new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter parameter) {
+                if (pattern.controlSurfaceSempahore.getValue() > 0) {
+                    setBorderColor(ui.theme.getSurfaceColor());
+                } else {
+                    setBorder(false);
+                }
+            }
+        });
 
         this.content = new UI2dContainer(PADDING, PADDING, 0, this.height-2*PADDING) {
             @Override

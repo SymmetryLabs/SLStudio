@@ -601,7 +601,7 @@ public interface UIItemList {
         }
 
         public UIItemList setFocusIndex(int focusIndex) {
-            this.impl.setFocusIndex(focusIndex, true);
+            this.impl.setFocusIndex(focusIndex);
             return this;
         }
 

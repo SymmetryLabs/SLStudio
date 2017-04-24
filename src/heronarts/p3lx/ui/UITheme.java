@@ -49,6 +49,7 @@ public class UITheme {
     private int primaryColor = 0xff669966;
     private int secondaryColor = 0xff666699;
     private int attentionColor = 0xff996666;
+    private int surfaceColor = 0xff669999;
 
     private int darkBackgroundColor = 0xff191919;
 
@@ -285,6 +286,26 @@ public class UITheme {
      */
     public UITheme setAttentionColor(int color) {
         this.attentionColor = color;
+        return this;
+    }
+
+    /**
+     * Gets highlight color
+     *
+     * @return Highlight color
+     */
+    public int getSurfaceColor() {
+        return this.surfaceColor;
+    }
+
+    /**
+     * Sets highlight color
+     *
+     * @param color Color
+     * @return this
+     */
+    public UITheme setSurfaceColor(int color) {
+        this.surfaceColor = color;
         return this;
     }
 

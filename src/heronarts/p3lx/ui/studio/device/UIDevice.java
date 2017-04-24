@@ -75,7 +75,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
         this.component.controlSurfaceSempahore.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 if (component.controlSurfaceSempahore.getValue() > 0) {
-                    setBorderColor(ui.theme.getAttentionColor());
+                    setBorderColor(ui.theme.getSurfaceColor());
                 } else {
                     setBorder(false);
                 }

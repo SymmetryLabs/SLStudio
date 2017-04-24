@@ -31,6 +31,8 @@ import java.util.Map;
 
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UITimerTask;
 import heronarts.p3lx.ui.component.UIButton;
@@ -67,7 +69,7 @@ class UIChannelDevice extends UIDevice {
             }
         });
 
-        new UIPatternList(ui, this, 0, 0, PATTERN_LIST_WIDTH, getContentHeight() - 40, channel)
+        new UIPatternList(ui, 0, 0, PATTERN_LIST_WIDTH, getContentHeight() - 40, channel)
         .setDescription("Patterns available on this channel, click to select, double-click to activate")
         .addToContainer(this);
 
@@ -98,7 +100,14 @@ class UIChannelDevice extends UIDevice {
         for (LXPattern pattern : channel.getPatterns()) {
             addPattern(pattern);
         }
-        setFocusedPattern(channel.getActivePattern());
+
+        setFocusedPattern(channel.getFocusedPattern());
+        channel.focusedPattern.addListener(new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter parameter) {
+                setFocusedPattern(channel.getFocusedPattern());
+            }
+        });
     }
 
     void setFocusedPattern(LXPattern focusedPattern) {
@@ -113,7 +122,7 @@ class UIChannelDevice extends UIDevice {
 
     private void addPattern(LXPattern pattern) {
         UIPatternControl patternControl = new UIPatternControl(this.ui, pattern, 144, 0, 140);
-        patternControl.setVisible(this.channel.getActivePattern() == pattern);
+        patternControl.setVisible(this.channel.getFocusedPattern() == pattern);
         this.patternControls.put(pattern, patternControl);
         patternControl.addToContainer(this);
     }
