@@ -139,6 +139,20 @@ public class BoundedParameter extends LXListenableNormalizedParameter {
         return (BoundedParameter) super.setDescription(description);
     }
 
+    public BoundedParameter incrementValue(double amount, boolean wrap) {
+        double newValue = getValue() + amount;
+        if (wrap) {
+            if (newValue > this.range.max) {
+                newValue = this.range.min + ((newValue - this.range.max) % (this.range.max - this.range.min));
+            } else if (newValue < this.range.min) {
+                while (newValue < this.range.min) {
+                    newValue += (this.range.max - this.range.min);
+                }
+            }
+        }
+        return (BoundedParameter) setValue(newValue);
+    }
+
     protected double normalizedToValue(double normalized) {
         if (normalized < 0) {
             normalized = 0;

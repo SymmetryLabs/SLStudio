@@ -26,7 +26,9 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXSerializable;
+import heronarts.lx.midi.surface.LXMidiSurface;
 import heronarts.lx.parameter.LXParameter;
+import uk.co.xfactorylibrarians.coremidi4j.CoreMidiDeviceProvider;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -88,11 +90,13 @@ public class LXMidiEngine implements LXSerializable {
     private final List<LXShortMessage> engineThreadInputQueue =
         new ArrayList<LXShortMessage>();
 
-    private final List<LXMidiInput> inputs = new ArrayList<LXMidiInput>();
-    private final List<LXMidiOutput> outputs = new ArrayList<LXMidiOutput>();
+    private final List<LXMidiInput> internalInputs = new ArrayList<LXMidiInput>();
+    private final List<LXMidiOutput> internalOutputs = new ArrayList<LXMidiOutput>();
+    private final List<LXMidiSurface> internalSurfaces = new ArrayList<LXMidiSurface>();
 
-    private final List<LXMidiInput> unmodifiableInputs = Collections.unmodifiableList(this.inputs);
-    private final List<LXMidiOutput> unmodifiableOutputs = Collections.unmodifiableList(this.outputs);
+    public final List<LXMidiInput> inputs = Collections.unmodifiableList(this.internalInputs);
+    public final List<LXMidiOutput> outputs = Collections.unmodifiableList(this.internalOutputs);
+    public final List<LXMidiSurface> surfaces = Collections.unmodifiableList(this.internalSurfaces);
 
     private final List<LXMidiMapping> mappings = new ArrayList<LXMidiMapping>();
     private final List<LXMidiMapping> unmodifiableMappings = Collections.unmodifiableList(this.mappings);
@@ -117,19 +121,28 @@ public class LXMidiEngine implements LXSerializable {
                 // NOTE(mcslee): this can sometimes hang or be slow for unclear reasons...
                 // do it in a separate thread so that we don't delay the whole application
                 // starting up.
-                for (MidiDevice.Info deviceInfo : MidiSystem.getMidiDeviceInfo()) {
+                // for (MidiDevice.Info deviceInfo : MidiSystem.getMidiDeviceInfo()) {
+                for (MidiDevice.Info deviceInfo : CoreMidiDeviceProvider.getMidiDeviceInfo()) {
                     try {
                         MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
                         if (device.getMaxTransmitters() != 0) {
-                            inputs.add(new LXMidiInput(LXMidiEngine.this, device));
+                            internalInputs.add(new LXMidiInput(LXMidiEngine.this, device));
                         }
                         if (device.getMaxReceivers() != 0) {
-                            outputs.add(new LXMidiOutput(LXMidiEngine.this, device));
+                            internalOutputs.add(new LXMidiOutput(LXMidiEngine.this, device));
                         }
                     } catch (MidiUnavailableException mux) {
                         mux.printStackTrace();
                     }
                 }
+                for (LXMidiInput input : inputs) {
+                    LXMidiSurface surface = LXMidiSurface.get(lx, LXMidiEngine.this, input);
+                    if (surface != null) {
+                        System.out.println("Surface!");;
+                        internalSurfaces.add(surface);
+                    }
+                }
+
                 lx.engine.addTask(new Runnable() {
                     public void run() {
                         synchronized (initializationLock) {
@@ -168,11 +181,11 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     public List<LXMidiInput> getInputs() {
-        return this.unmodifiableInputs;
+        return this.inputs;
     }
 
     public List<LXMidiOutput> getOutputs() {
-        return this.unmodifiableOutputs;
+        return this.outputs;
     }
 
     public List<LXMidiMapping> getMappings() {
@@ -184,7 +197,7 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     public LXMidiInput matchInput(String[] names) {
-        return (LXMidiInput) matchDevice(this.inputs, names);
+        return (LXMidiInput) matchDevice(this.internalInputs, names);
     }
 
     public LXMidiOutput matchOutput(String name) {
@@ -192,7 +205,7 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     public LXMidiOutput matchOutput(String[] names) {
-        return (LXMidiOutput) matchDevice(this.outputs, names);
+        return (LXMidiOutput) matchDevice(this.internalOutputs, names);
     }
 
     private LXMidiDevice matchDevice(List<? extends LXMidiDevice> devices, String[] names) {
@@ -229,25 +242,6 @@ public class LXMidiEngine implements LXSerializable {
 
     void queueInputMessage(LXShortMessage message) {
         this.threadSafeInputQueue.add(message);
-    }
-
-    /**
-     * Invoked by the main engine to dispatch all midi messages on the
-     * input queue.
-     */
-    public void dispatch() {
-        this.engineThreadInputQueue.clear();
-        synchronized (this.threadSafeInputQueue) {
-            this.engineThreadInputQueue.addAll(this.threadSafeInputQueue);
-            this.threadSafeInputQueue.clear();
-        }
-        for (LXShortMessage message : this.engineThreadInputQueue) {
-            LXMidiInput input = message.getInput();
-            if (input.enabled.isOn()) {
-                dispatch(message);
-                input.dispatch(message);
-            }
-        }
     }
 
     private void createMapping(LXShortMessage message) {
@@ -327,6 +321,25 @@ public class LXMidiEngine implements LXSerializable {
         return this;
     }
 
+    /**
+     * Invoked by the main engine to dispatch all midi messages on the
+     * input queue.
+     */
+    public void dispatch() {
+        this.engineThreadInputQueue.clear();
+        synchronized (this.threadSafeInputQueue) {
+            this.engineThreadInputQueue.addAll(this.threadSafeInputQueue);
+            this.threadSafeInputQueue.clear();
+        }
+        for (LXShortMessage message : this.engineThreadInputQueue) {
+            LXMidiInput input = message.getInput();
+            input.dispatch(message);
+            if (input.enabled.isOn()) {
+                dispatch(message);
+            }
+        }
+    }
+
     public void dispatch(LXShortMessage message) {
         LXMidiInput input = message.getInput();
         if (input != null) {
@@ -396,15 +409,17 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     private static final String KEY_INPUTS = "inputs";
+    private static final String KEY_SURFACES = "surfaces";
     private static final String KEY_MAPPINGS = "mapping";
 
     private final List<JsonObject> rememberMidiInputs = new ArrayList<JsonObject>();
+    private final List<JsonObject> rememberMidiSurfaces = new ArrayList<JsonObject>();
 
     @Override
     public void save(LX lx, JsonObject object) {
         waitUntilReady();
         JsonArray inputs = new JsonArray();
-        for (LXMidiInput input : this.inputs) {
+        for (LXMidiInput input : this.internalInputs) {
             if (input.enabled.isOn()) {
                 inputs.add(LXSerializable.Utils.toObject(lx, input));
             }
@@ -412,7 +427,18 @@ public class LXMidiEngine implements LXSerializable {
         for (JsonObject remembered : this.rememberMidiInputs) {
             inputs.add(remembered);
         }
+        JsonArray surfaces = new JsonArray();
+        for (LXMidiSurface surface : this.internalSurfaces) {
+            if (surface.enabled.isOn()) {
+                surfaces.add(LXSerializable.Utils.toObject(lx, surface));
+            }
+        }
+        for (JsonObject remembered : this.rememberMidiSurfaces) {
+            surfaces.add(remembered);
+        }
+
         object.add(KEY_INPUTS, inputs);
+        object.add(KEY_SURFACES, surfaces);
         object.add(KEY_MAPPINGS, LXSerializable.Utils.toArray(lx, this.mappings));
     }
 
@@ -429,20 +455,41 @@ public class LXMidiEngine implements LXSerializable {
         whenReady(new Runnable() {
             public void run() {
                 if (object.has(KEY_INPUTS)) {
-                    JsonArray inputNames = object.getAsJsonArray(KEY_INPUTS);
-                    if (inputNames.size() > 0) {
-                        for (JsonElement element : inputNames) {
+                    JsonArray inputs = object.getAsJsonArray(KEY_INPUTS);
+                    if (inputs.size() > 0) {
+                        for (JsonElement element : inputs) {
                             JsonObject inputObj = element.getAsJsonObject();
                             String inputName = inputObj.get(LXMidiInput.KEY_NAME).getAsString();
                             boolean found = false;
-                            for (LXMidiInput input : inputs) {
+                            for (LXMidiInput input : internalInputs) {
                                 if (inputName.equals(input.getName())) {
                                     found = true;
                                     input.load(lx, inputObj);
+                                    break;
                                 }
                             }
                             if (!found) {
                                 rememberMidiInputs.add(inputObj);
+                            }
+                        }
+                    }
+                }
+                if (object.has(KEY_SURFACES)) {
+                    JsonArray surfaces = object.getAsJsonArray(KEY_SURFACES);
+                    if (surfaces.size() > 0) {
+                        for (JsonElement element : surfaces) {
+                            JsonObject surfaceObj = element.getAsJsonObject();
+                            String surfaceDescription = surfaceObj.get(LXMidiSurface.KEY_DESCRIPTION).getAsString();
+                            boolean found = false;
+                            for (LXMidiSurface surface : internalSurfaces) {
+                                if (surfaceDescription.equals(surface.getDescription())) {
+                                    found = true;
+                                    surface.enabled.setValue(true);
+                                    break;
+                                }
+                            }
+                            if (!found) {
+                                rememberMidiSurfaces.add(surfaceObj);
                             }
                         }
                     }

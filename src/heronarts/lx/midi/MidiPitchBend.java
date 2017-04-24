@@ -40,4 +40,9 @@ public class MidiPitchBend extends LXShortMessage {
     public int getPitchBend() {
         return (getData1() + (getData2() << 7)) - 0x2000;
     }
+
+    @Override
+    public String toString() {
+        return "MidiPitchBend:" + getChannel() + ":Bend:" + getPitchBend();
+    }
 }

@@ -21,6 +21,7 @@
 package heronarts.lx.midi;
 
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.SysexMessage;
 
 public class MidiBeat extends LXShortMessage {
 
@@ -30,7 +31,7 @@ public class MidiBeat extends LXShortMessage {
     private double period = PERIOD_UNKNOWN;
 
     MidiBeat(ShortMessage message, int beat) {
-        super(message, LXShortMessage.SYSTEM_COMMAND);
+        super(message, SysexMessage.SYSTEM_EXCLUSIVE);
         this.beat = beat;
     }
 

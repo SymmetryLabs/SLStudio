@@ -70,4 +70,22 @@ public class MidiControlChange extends LXShortMessage {
     public int getValue() {
         return getData2();
     }
+
+    public double getNormalized() {
+        return getValue() / 127.;
+    }
+
+    public int getRelative() {
+        int value = getValue();
+        if (value >= 64) {
+            return value - 128;
+        }
+        return value;
+    }
+
+
+    @Override
+    public String toString() {
+        return "MidiControlChange:" + getChannel() + ":CC:" + getCC() + ":Value: " + getValue();
+    }
 }

@@ -27,6 +27,7 @@ import javax.sound.midi.MidiDevice;
 import javax.sound.midi.MidiMessage;
 import javax.sound.midi.MidiUnavailableException;
 import javax.sound.midi.ShortMessage;
+import javax.sound.midi.SysexMessage;
 
 import com.google.gson.JsonObject;
 
@@ -140,7 +141,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
                 case ShortMessage.CHANNEL_PRESSURE:
                     message = new MidiAftertouch(sm);
                     break;
-                case LXShortMessage.SYSTEM_COMMAND:
+                case SysexMessage.SYSTEM_EXCLUSIVE:
                     switch (sm.getStatus()) {
                     case ShortMessage.START:
                         this.beatClock = 0;

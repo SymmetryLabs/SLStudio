@@ -52,4 +52,5 @@ public abstract class MidiNote extends LXShortMessage {
     public int getVelocity() {
         return getData2();
     }
+
 }
