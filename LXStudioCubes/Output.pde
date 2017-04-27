@@ -182,32 +182,34 @@ class SLController extends LXOutput {
     }
 
     if (automappingController.isRunning()) {
-      // if (automappingController.automappingEffect.colors == null) {
-      //   for (int i = 0; i < numPixels; i++) {
-      //     setPixel(i, automappingController.automappingEffect.globalColor);
-      //   }
-      // } else {
-      //   if (macAddress != null) {
-      //     int cubeIndex = 0;
-      //     for (String macAddress : automappingController.macAddresses) {
-      //       if (this.macAddress.equals(macAddress)) {
-      //         break;
-      //       }
-      //       cubeIndex++;
-      //     }
-      //     if (cubeIndex < automappingController.macAddresses.length) {
-      //       for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-      //         int stripId = STRIP_ORD[stripNum];
+      if (automappingController.automappingEffect.colors == null) {
+        for (int i = 0; i < numPixels; i++) {
+          setPixel(i, automappingController.automappingEffect.globalColor);
+        }
+      } else {
+        String macAddressString = networkDevice.macAddress.toString();
+        if (macAddressString != null) {
+          int cubeIndex = 0;
+          for (String macAddress : automappingController.macAddresses) {
+            if (macAddressString.equals(macAddress)) {
+              break;
+            }
+            cubeIndex++;
+          }
+          if (cubeIndex < automappingController.macAddresses.length) {
+            for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+              int stripId = STRIP_ORD[stripNum];
 
-      //         for (int i = 0; i < numPixelsPerStrip; i++) {
-      //           int pixelIndexInCube = stripNum * numPixelsPerStrip + i;
-      //           int colr = automappingController.automappingEffect.colors[180*cubeIndex+pixelIndexInCube];
-      //           setPixel(pixelIndexInCube, colr);
-      //         }
-      //       }
-      //     }
-      //   }
-      // }
+              // hardcoded numPixelsPerStrip to 15
+              for (int i = 0; i < 15; i++) {
+                int pixelIndexInCube = stripNum * 15 + i;
+                int colr = automappingController.automappingEffect.colors[180*cubeIndex+pixelIndexInCube];
+                setPixel(pixelIndexInCube, colr);
+              }
+            }
+          }
+        }
+      }
     } else {
       // Find the Cube we're outputting to
       // If we're on broadcast, use cube 0 for all cubes, even
