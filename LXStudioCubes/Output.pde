@@ -181,73 +181,102 @@ class SLController extends LXOutput {
       if (dsocket == null) return;
     }
 
-    // Find the Cube we're outputting to
-    // If we're on broadcast, use cube 0 for all cubes, even
-    // if that cube isn't modelled yet
-    // Use the mac address to find the cube if we have it
-    // Otherwise use the cube id
-    Cube cube = null;
-    if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
-      cube = model.cubes.get(0);
+    if (automappingController.isRunning()) {
+      // if (automappingController.automappingEffect.colors == null) {
+      //   for (int i = 0; i < numPixels; i++) {
+      //     setPixel(i, automappingController.automappingEffect.globalColor);
+      //   }
+      // } else {
+      //   if (macAddress != null) {
+      //     int cubeIndex = 0;
+      //     for (String macAddress : automappingController.macAddresses) {
+      //       if (this.macAddress.equals(macAddress)) {
+      //         break;
+      //       }
+      //       cubeIndex++;
+      //     }
+      //     if (cubeIndex < automappingController.macAddresses.length) {
+      //       for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+      //         int stripId = STRIP_ORD[stripNum];
+
+      //         for (int i = 0; i < numPixelsPerStrip; i++) {
+      //           int pixelIndexInCube = stripNum * numPixelsPerStrip + i;
+      //           int colr = automappingController.automappingEffect.colors[180*cubeIndex+pixelIndexInCube];
+      //           setPixel(pixelIndexInCube, colr);
+      //         }
+      //       }
+      //     }
+      //   }
+      // }
     } else {
-      for (Cube c : model.cubes) {
-        if (c.id != null && c.id.equals(cubeId)) {
-          cube = c;
-          break;
+      // Find the Cube we're outputting to
+      // If we're on broadcast, use cube 0 for all cubes, even
+      // if that cube isn't modelled yet
+      // Use the mac address to find the cube if we have it
+      // Otherwise use the cube id
+      Cube cube = null;
+      if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
+        cube = model.cubes.get(0);
+      } else {
+        for (Cube c : model.cubes) {
+          if (c.id != null && c.id.equals(cubeId)) {
+            cube = c;
+            break;
+          }
         }
       }
-    }
 
-    // Initialize packet data base on cube type.
-    // If we don't know the cube type, default to
-    // using the cube type with the most pixels
-    Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-    int numPixels = cubeType.POINTS_PER_CUBE;
-    if (packetData == null || packetData.length != numPixels) {
-      initPacketData(numPixels);
-    }
+      // Initialize packet data base on cube type.
+      // If we don't know the cube type, default to
+      // using the cube type with the most pixels
+      Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
+      int numPixels = cubeType.POINTS_PER_CUBE;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
 
-    // Fill the datagram with pixel data
-    // Fill with all black if we don't have cube data
-    if (cube != null) {
-      for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-        int stripId = STRIP_ORD[stripNum];
-        Strip strip = cube.strips.get(stripId);
+      // Fill the datagram with pixel data
+      // Fill with all black if we don't have cube data
+      if (cube != null) {
+        for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+          int stripId = STRIP_ORD[stripNum];
+          Strip strip = cube.strips.get(stripId);
 
-        for (int i = 0; i < strip.metrics.numPoints; i++) {
-          LXPoint point = strip.getPoints().get(i);
-          setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+          for (int i = 0; i < strip.metrics.numPoints; i++) {
+            LXPoint point = strip.getPoints().get(i);
+            setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+          }
+        }
+      } else {
+        for (int i = 0; i < numPixels; i++) {
+          setPixel(i, LXColor.BLACK);
         }
       }
-    } else {
-      for (int i = 0; i < numPixels; i++) {
-        setPixel(i, LXColor.BLACK);
-      }
-    }
 
-    // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-    // TODO: refactor here
-    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
-      if (mappingMode.inUnMappedMode()) {
-        if (mappingMode.inDisplayAllMode()) {
-          color col = mappingMode.getUnMappedColor();
-
-          for (int i = 0; i < numPixels; i++)
-            setPixel(i, col);
-        } else {
-          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+      // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+      // TODO: refactor here
+      if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+        if (mappingMode.inUnMappedMode()) {
+          if (mappingMode.inDisplayAllMode()) {
             color col = mappingMode.getUnMappedColor();
 
             for (int i = 0; i < numPixels; i++)
               setPixel(i, col);
           } else {
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+            if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+              color col = mappingMode.getUnMappedColor();
+
+              for (int i = 0; i < numPixels; i++)
+                setPixel(i, col);
+            } else {
+              for (int i = 0; i < numPixels; i++)
+                setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+            }
           }
+        } else {
+          for (int i = 0; i < numPixels; i++)
+            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
         }
-      } else {
-        for (int i = 0; i < numPixels; i++)
-          setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
       }
     }
 

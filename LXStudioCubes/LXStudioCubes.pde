@@ -8,6 +8,7 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode;
+public AutomappingController automappingController;
 
 public boolean envelopOn = true;
 public Envelop envelop = null;
@@ -47,6 +48,8 @@ void setup() {
       // Mapping
       mappingMode = new MappingMode(lx);
 
+      // Automapping
+      automappingController = new AutomappingController(lx);
 
       // lx.engine.midi.addListener(new LXMidiListener() {
       //   public void noteOnReceived(MidiNoteOn note) {
@@ -90,8 +93,9 @@ void setup() {
     protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
       ui.preview.setPhi(0).setTheta(15*PI/8).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
-      new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
+      new UIAutomapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
+      new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);
 
       if (envelopOn) {
         new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);

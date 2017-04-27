@@ -139,3 +139,66 @@ class DispatchQueue {
 //   @Override
 //   public void dispose() {}
 // }
+
+public static abstract class SLEffect extends LXEffect {
+
+  protected SLModel model;
+
+  protected SLEffect(LX lx) {
+    super(lx);
+    this.model = (SLModel)lx.model;
+  }
+
+  // protected SLEffect(LX lx, boolean isMomentary) {
+  //   super(lx, isMomentary);
+  //   this.model = (SLModel)lx.model;
+  // }
+
+  /**
+   * Reset this pattern to its default state.
+   */
+  public final void reset() {
+    for (LXParameter parameter : getParameters()) {
+      parameter.reset();
+    }
+    onReset();
+  }
+
+  /**
+   * Subclasses may override to add additional reset functionality.
+   */
+  protected /*abstract*/ void onReset() {}
+
+  /**
+   * Invoked by engine when this effect is focused an a midi note is received.  
+   * 
+   * @param note
+   * @return True if the effect has consumed this note, false if the top-level
+   *         may handle it
+   */
+  // public boolean noteOn(LXMidiNote note) {
+  //   return false;
+  // }
+
+  /**
+   * Invoked by engine when this effect is focused an a midi note off is received.  
+   * 
+   * @param note
+   * @return True if the effect has consumed this note, false if the top-level
+   *         may handle it
+   */
+  // public boolean noteOff(LXMidiNote note) {
+  //   return false;
+  // }
+
+  /**
+   * Invoked by engine when this effect is focused an a controller is received  
+   * 
+   * @param cc
+   * @return True if the effect has consumed this controller, false if the top-level
+   *         may handle it
+   */
+  // public boolean controllerChange(LXMidiControlChange cc) {
+  //   return false;
+  // }
+}
