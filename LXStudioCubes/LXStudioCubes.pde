@@ -7,9 +7,9 @@ public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
-public MappingMode mappingMode;
+public MappingMode mappingMode = null;
 
-public boolean envelopOn = true;
+public boolean envelopOn = false;
 public Envelop envelop = null;
 
 void setup() {
@@ -45,8 +45,11 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
-      mappingMode = new MappingMode(lx);
+      if (((SLModel)model).cubes.size() > 0)
+        mappingMode = new MappingMode(lx);
 
+
+      println("Number of points: " + model.points.size());
 
       // lx.engine.midi.addListener(new LXMidiListener() {
       //   public void noteOnReceived(MidiNoteOn note) {
@@ -91,7 +94,9 @@ void setup() {
       ui.leftPane.audio.setVisible(true);
       ui.preview.setPhi(0).setTheta(15*PI/8).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
       new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
-      new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
+      
+      if (((SLModel)model).cubes.size() > 0)
+        new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
 
       if (envelopOn) {
         new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);

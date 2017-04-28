@@ -13,255 +13,261 @@ static final float TOWER_RISER = 14;
 
 static final float JUMP = CUBE_HEIGHT+CUBE_SPACING;
 
+static final StripConfig[] STRIP_CONFIG = {
+                // controller id    x   y   z  xRot,  yRot,  zRot,   num leds      pitch in inches
+  new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
+
+};
+
 static final TowerConfig[] TOWER_CONFIG = {
 
-      new TowerConfig(Cube.Type.LARGE, 0*JUMP, 0*JUMP, -3*JUMP, new String[] {
-        "168",
-        "190",
-        "26"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 0*JUMP, 0*JUMP, -3*JUMP, new String[] {
+      //   "168",
+      //   "190",
+      //   "26"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 0*JUMP, 0*JUMP, -5*JUMP, new String[] {
-        "185",
-        "77"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 0*JUMP, 0*JUMP, -5*JUMP, new String[] {
+      //   "185",
+      //   "77"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 1*JUMP, 0.5*JUMP, -2.5*JUMP, new String[] {
-        "34",
-        "83",
-        "105",
-        "4"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 1*JUMP, 0.5*JUMP, -2.5*JUMP, new String[] {
+      //   "34",
+      //   "83",
+      //   "105",
+      //   "4"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 1.5*JUMP, 0*JUMP, -3.5*JUMP, new String[] {
-        "50",
-        "73",
-        "25",
-        "76"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 1.5*JUMP, 0*JUMP, -3.5*JUMP, new String[] {
+      //   "50",
+      //   "73",
+      //   "25",
+      //   "76"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 1*JUMP, 0.5*JUMP, -4.5*JUMP, new String[] {
-        "184",
-        "95",
-        "21"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 1*JUMP, 0.5*JUMP, -4.5*JUMP, new String[] {
+      //   "184",
+      //   "95",
+      //   "21"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 1.5*JUMP, 0.5*JUMP, -6*JUMP, new String[] {
-        "19",
-        "153"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 1.5*JUMP, 0.5*JUMP, -6*JUMP, new String[] {
+      //   "19",
+      //   "153"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 2*JUMP, 0*JUMP, -2*JUMP, new String[] {
-        "39",
-        "28",
-        "84",
-        "119",
-        "78"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 2*JUMP, 0*JUMP, -2*JUMP, new String[] {
+      //   "39",
+      //   "28",
+      //   "84",
+      //   "119",
+      //   "78"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 2*JUMP, 0*JUMP, -5*JUMP, new String[] {
-        "113",
-        "11",
-        "63"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 2*JUMP, 0*JUMP, -5*JUMP, new String[] {
+      //   "113",
+      //   "11",
+      //   "63"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 3*JUMP, 3.5*JUMP, -2.5*JUMP, new String[] {
-        "195"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 3*JUMP, 3.5*JUMP, -2.5*JUMP, new String[] {
+      //   "195"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 3.5*JUMP, 0*JUMP, -3.5*JUMP, new String[] {
-        "163",
-        "187",
-        "35",
-        "23"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 3.5*JUMP, 0*JUMP, -3.5*JUMP, new String[] {
+      //   "163",
+      //   "187",
+      //   "35",
+      //   "23"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 3*JUMP, 2.5*JUMP, -4.5*JUMP, new String[] {
-        "191"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 3*JUMP, 2.5*JUMP, -4.5*JUMP, new String[] {
+      //   "191"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
-        "100",
-        "142",
-        "145",
-        "135",
-        "133"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
+      //   "100",
+      //   "142",
+      //   "145",
+      //   "135",
+      //   "133"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 4*JUMP, 0*JUMP, -2*JUMP, new String[] {
-        "162",
-        "171",
-        "196",
-        "189",
-        "200"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 4*JUMP, 0*JUMP, -2*JUMP, new String[] {
+      //   "162",
+      //   "171",
+      //   "196",
+      //   "189",
+      //   "200"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0.5*JUMP, -3*JUMP, new String[] {
-        "62",
-        "82",
-        "13"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0.5*JUMP, -3*JUMP, new String[] {
+      //   "62",
+      //   "82",
+      //   "13"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 5*JUMP, 3.5*JUMP, -1.5*JUMP, new String[] {
-        "115",
-        "48"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 5*JUMP, 3.5*JUMP, -1.5*JUMP, new String[] {
+      //   "115",
+      //   "48"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 5*JUMP, 0*JUMP, -4*JUMP, new String[] {
-        "110",
-        "201"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 5*JUMP, 0*JUMP, -4*JUMP, new String[] {
+      //   "110",
+      //   "201"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 6.5*JUMP, 1.5*JUMP, -0*JUMP, new String[] {
-        "59",
-        "107",
-        "93"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 6.5*JUMP, 1.5*JUMP, -0*JUMP, new String[] {
+      //   "59",
+      //   "107",
+      //   "93"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 6*JUMP, 0*JUMP, -1*JUMP, new String[] {
-        "194",
-        "2",
-        "55",
-        "18"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 6*JUMP, 0*JUMP, -1*JUMP, new String[] {
+      //   "194",
+      //   "2",
+      //   "55",
+      //   "18"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 6.5*JUMP, 0.5*JUMP, -2*JUMP, new String[] {
-        "90",
-        "144",
-        "40",
-        "109"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 6.5*JUMP, 0.5*JUMP, -2*JUMP, new String[] {
+      //   "90",
+      //   "144",
+      //   "40",
+      //   "109"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 6*JUMP, 0*JUMP, -3*JUMP, new String[] {
-        "57",
-        "68",
-        "44"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 6*JUMP, 0*JUMP, -3*JUMP, new String[] {
+      //   "57",
+      //   "68",
+      //   "44"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 7.5*JUMP, 0*JUMP, -0*JUMP, new String[] {
-        "181",
-        "146",
-        "412"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 7.5*JUMP, 0*JUMP, -0*JUMP, new String[] {
+      //   "181",
+      //   "146",
+      //   "412"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 7.5*JUMP, 0*JUMP, -1.5*JUMP, new String[] {
-        "156",
-        "38",
-        "104"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 7.5*JUMP, 0*JUMP, -1.5*JUMP, new String[] {
+      //   "156",
+      //   "38",
+      //   "104"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 8*JUMP, 1.5*JUMP, -1*JUMP, new String[] {
-        "212",
-        "199"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 8*JUMP, 1.5*JUMP, -1*JUMP, new String[] {
+      //   "212",
+      //   "199"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 8.5*JUMP, 0*JUMP, -2*JUMP, new String[] {
-        "72",
-        "178"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 8.5*JUMP, 0*JUMP, -2*JUMP, new String[] {
+      //   "72",
+      //   "178"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 9*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
-        "9",
-        "154",
-        "87"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 9*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
+      //   "9",
+      //   "154",
+      //   "87"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 10*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
-        "54"
-      }),
-
-
-
-      new TowerConfig(Cube.Type.LARGE, 2.5*JUMP, 1*JUMP, -10*JUMP, new String[] {
-        "47"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 3.5*JUMP, 0*JUMP, -8*JUMP, new String[] {
-        "116",
-        "71",
-        "37"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 3*JUMP, 0.5*JUMP, -9*JUMP, new String[] {
-        "29",
-        "66"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 3.5*JUMP, 0*JUMP, -10*JUMP, new String[] {
-        "20"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 3*JUMP, 0*JUMP, -12*JUMP, new String[] {
-        "211",
-        "128"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 4*JUMP, 1.5*JUMP, -7*JUMP, new String[] {
-        "134"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0.5*JUMP, -7.5*JUMP, new String[] {
-        "58"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 4*JUMP, 0*JUMP, -13*JUMP, new String[] {
-        "92"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 5.5*JUMP, 0*JUMP, -9*JUMP, new String[] {
-        "5"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 5.5*JUMP, 0*JUMP, -11*JUMP, new String[] {
-        "111"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 5*JUMP, 0*JUMP, -13*JUMP, new String[] {
-        "15"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 4.75*JUMP, 1*JUMP, -13.5*JUMP, new String[] {
-        "202"
-      }),
-
-      new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0*JUMP, -14*JUMP, new String[] {
-        "175"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 10*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
+      //   "54"
+      // }),
 
 
-      new TowerConfig(Cube.Type.LARGE, 6.5*JUMP, 0*JUMP, -5*JUMP, new String[] {
-        "159"
-      }),
+
+      // new TowerConfig(Cube.Type.LARGE, 2.5*JUMP, 1*JUMP, -10*JUMP, new String[] {
+      //   "47"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 3.5*JUMP, 0*JUMP, -8*JUMP, new String[] {
+      //   "116",
+      //   "71",
+      //   "37"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 3*JUMP, 0.5*JUMP, -9*JUMP, new String[] {
+      //   "29",
+      //   "66"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 3.5*JUMP, 0*JUMP, -10*JUMP, new String[] {
+      //   "20"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 3*JUMP, 0*JUMP, -12*JUMP, new String[] {
+      //   "211",
+      //   "128"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 4*JUMP, 1.5*JUMP, -7*JUMP, new String[] {
+      //   "134"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0.5*JUMP, -7.5*JUMP, new String[] {
+      //   "58"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 4*JUMP, 0*JUMP, -13*JUMP, new String[] {
+      //   "92"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 5.5*JUMP, 0*JUMP, -9*JUMP, new String[] {
+      //   "5"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 5.5*JUMP, 0*JUMP, -11*JUMP, new String[] {
+      //   "111"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 5*JUMP, 0*JUMP, -13*JUMP, new String[] {
+      //   "15"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 4.75*JUMP, 1*JUMP, -13.5*JUMP, new String[] {
+      //   "202"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 4.5*JUMP, 0*JUMP, -14*JUMP, new String[] {
+      //   "175"
+      // }),
 
 
-      new TowerConfig(Cube.Type.LARGE, 10*JUMP, 0*JUMP, -3.5*JUMP, new String[] {
-        "61"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 6.5*JUMP, 0*JUMP, -5*JUMP, new String[] {
+      //   "159"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 11*JUMP, 1.5*JUMP, -2.5*JUMP, new String[] {
-        "51"
-      }),
 
-      new TowerConfig(Cube.Type.LARGE, 12*JUMP, 0*JUMP, -3*JUMP, new String[] {
-        "101",
-        "118",
-        "96"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 10*JUMP, 0*JUMP, -3.5*JUMP, new String[] {
+      //   "61"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 12.5*JUMP, 0.5*JUMP, -4*JUMP, new String[] {
-        "33"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 11*JUMP, 1.5*JUMP, -2.5*JUMP, new String[] {
+      //   "51"
+      // }),
 
-      new TowerConfig(Cube.Type.SMALL, 10*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
-        "311",
-        "307"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 12*JUMP, 0*JUMP, -3*JUMP, new String[] {
+      //   "101",
+      //   "118",
+      //   "96"
+      // }),
 
-      new TowerConfig(Cube.Type.LARGE, 10*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
-        "148",
-        "176",
-        "310"
-      }),
+      // new TowerConfig(Cube.Type.LARGE, 12.5*JUMP, 0.5*JUMP, -4*JUMP, new String[] {
+      //   "33"
+      // }),
+
+      // new TowerConfig(Cube.Type.SMALL, 10*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
+      //   "311",
+      //   "307"
+      // }),
+
+      // new TowerConfig(Cube.Type.LARGE, 10*JUMP, 0*JUMP, -0.5*JUMP, new String[] {
+      //   "148",
+      //   "176",
+      //   "310"
+      // }),
 
       // new TowerConfig(1*JUMP, 1*JUMP, -1*JUMP, Cube.Type.LARGE_DOUBLE, 5.0, new String[] {
       //   "403",
@@ -274,6 +280,30 @@ static final TowerConfig[] TOWER_CONFIG = {
       //   "342" // Bar
       // }),
 };
+
+static class StripConfig {
+  String id;
+  int numPoints;
+  float spacing;
+  float x;
+  float y;
+  float z;
+  float xRot;
+  float yRot;
+  float zRot;
+
+  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
+    this.id = id;
+    this.numPoints = numPoints;
+    this.spacing = spacing;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.xRot = xRot;
+    this.yRot = yRot;
+    this.zRot = zRot;
+  }
+}
 
 static class TowerConfig {
 
@@ -373,12 +403,30 @@ public SLModel buildModel() {
   }
   /*-----------------------------------------------------------------*/
 
+  /* Strips ----------------------------------------------------------*/
+  List<Strip> strips = new ArrayList<Strip>();
+
+  for (StripConfig stripConfig : STRIP_CONFIG) {
+    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
+
+    globalTransform.push();
+    globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
+    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
+    globalTransform.rotateX(stripConfig.yRot * PI / 180.);
+    globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
+
+    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+
+    globalTransform.pop();
+  }
+  /*-----------------------------------------------------------------*/
+
   Cube[] allCubesArr = new Cube[allCubes.size()];
   for (int i = 0; i < allCubesArr.length; i++) {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr);
+  return new SLModel(towers, allCubesArr, strips);
 }
 
 public SLModel getModel() {
