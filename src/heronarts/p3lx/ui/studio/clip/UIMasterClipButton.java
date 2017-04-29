@@ -24,15 +24,25 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio.mixer;
+package heronarts.p3lx.ui.studio.clip;
 
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.studio.mixer.UIMixer;
+import processing.event.KeyEvent;
 
-public class UIMasterStrip extends UIMixerStrip {
+public class UIMasterClipButton extends UIClipButton {
 
-    protected UIMasterStrip(UI ui, UIMixer mixer, LX lx, float x, float y) {
-        super(ui, mixer, lx, x, y);
+    public UIMasterClipButton(UI ui, UIMixer mixer, LX lx, int index, float x, float y) {
+        super(ui, mixer, lx, index, x, y);
     }
 
+    @Override
+    protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        super.onKeyPressed(keyEvent, keyChar, keyCode);
+        if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+            consumeKeyEvent();
+            this.mixer.channelStrips.get(this.lx.engine.getChannel(this.lx.engine.channels.size()-1)).clipLauncher.clips.get(this.index).focus();
+        }
+    }
 }

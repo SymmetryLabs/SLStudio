@@ -24,15 +24,34 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio.mixer;
+package heronarts.p3lx.ui.studio.clip;
 
 import heronarts.lx.LX;
+import heronarts.lx.clip.LXClip;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.studio.mixer.UIMixer;
 
-public class UIMasterStrip extends UIMixerStrip {
+public abstract class UIClipButton extends UI2dContainer implements UIFocus {
 
-    protected UIMasterStrip(UI ui, UIMixer mixer, LX lx, float x, float y) {
-        super(ui, mixer, lx, x, y);
+    public static final int HEIGHT = 20;
+    public static final int PADDING = 2;
+    protected static final int LABEL_X = 14;
+
+    protected final UIMixer mixer;
+    protected final LX lx;
+    protected final int index;
+
+    protected UIClipButton(UI ui, UIMixer mixer, LX lx, int index, float x, float y) {
+        super(x, y, UIClipLauncher.WIDTH, HEIGHT);
+        this.mixer = mixer;
+        this.lx = lx;
+        this.index = index;
+        setBorderColor(ui.theme.getControlBorderColor());
+        setBackgroundColor(ui.theme.getControlBackgroundColor());
     }
+
+    protected void setClip(LXClip clip) {}
 
 }

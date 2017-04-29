@@ -24,15 +24,33 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio.mixer;
+package heronarts.p3lx.ui.studio.clip;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.clip.LXClip;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.studio.mixer.UIMixer;
 
-public class UIMasterStrip extends UIMixerStrip {
+public class UIChannelClipLauncher extends UIClipLauncher {
 
-    protected UIMasterStrip(UI ui, UIMixer mixer, LX lx, float x, float y) {
-        super(ui, mixer, lx, x, y);
+    public UIChannelClipLauncher(UI ui, UIMixer mixer, LX lx, LXChannel channel) {
+        super(ui, mixer, lx);
+        for (int i = 0; i < NUM_CLIPS; ++i) {
+            this.internalClips.add((UIChannelClipButton) new UIChannelClipButton(ui, mixer, lx, channel, i, 0, i * UIClipButton.HEIGHT).addToContainer(this));
+        }
+        channel.addClipListener(new LXChannel.ClipListener() {
+            @Override
+            public void clipRemoved(LXChannel channel, LXClip clip) {
+                clips.get(clip.getIndex()).setClip(clip);
+            }
+
+            @Override
+            public void clipAdded(LXChannel channel, LXClip clip) {
+                clips.get(clip.getIndex()).setClip(clip);
+            }
+        });
     }
+
 
 }
