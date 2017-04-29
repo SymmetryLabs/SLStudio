@@ -28,7 +28,6 @@ package heronarts.lx.clip;
 
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Comparator;
 import java.util.Iterator;
 import java.util.List;
 
@@ -41,100 +40,11 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.LXRunnableComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
-import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
 
 public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
-
-    public abstract class Event implements Comparator<Event> {
-
-        private final LXComponent component;
-        private double cursor;
-
-        Event() {
-            this(LXClip.this.cursor, null);
-        }
-
-        Event(LXComponent component) {
-            this(LXClip.this.cursor, component);
-        }
-
-        Event(double cursor) {
-            this(cursor, null);
-        }
-
-        Event(double cursor, LXComponent component) {
-            this.cursor = cursor;
-            this.component = component;
-        }
-
-        public double getCursor() {
-            return this.cursor;
-        }
-
-        public double getBasis() {
-            return this.cursor / length.getValue();
-        }
-
-        @Override
-        public int compare(Event arg0, Event arg1) {
-            if (arg0.cursor < arg1.cursor) {
-                return -1;
-            } else if (arg0.cursor > arg1.cursor) {
-                return 1;
-            }
-            return 0;
-        }
-
-        public abstract void execute();
-    }
-
-    public class ParameterEvent extends Event {
-
-        public final LXNormalizedParameter parameter;
-        private double normalized;
-
-        ParameterEvent(LXNormalizedParameter parameter) {
-            this(parameter, parameter.getNormalized());
-        }
-
-        ParameterEvent(LXNormalizedParameter parameter, double normalized) {
-            super(parameter.getComponent());
-            this.parameter = parameter;
-            this.normalized = normalized;
-        }
-
-        public ParameterEvent setNormalized(double normalized) {
-            this.normalized = normalized;
-            return this;
-        }
-
-        public double getNormalized() {
-            return this.normalized;
-        }
-
-        @Override
-        public void execute() {
-            this.parameter.setNormalized(this.normalized);
-        }
-    }
-
-    public class PatternEvent extends Event {
-
-        private final LXPattern pattern;
-
-        PatternEvent(LXPattern pattern) {
-            super(pattern);
-            this.pattern = pattern;
-        }
-
-        @Override
-        public void execute() {
-            channel.goPattern(this.pattern);
-        }
-    }
 
     public interface TargetListener {
         public void targetAdded(LXClip clip, LXParameter parameter);
@@ -143,7 +53,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
 
     private final List<TargetListener> targetListeners = new ArrayList<TargetListener>();
 
-    private double cursor = 0;
+    double cursor = 0;
 
     public final MutableParameter length = (MutableParameter)
         new MutableParameter("Length", 0)
@@ -160,14 +70,14 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
 
     private int index;
 
-    private final List<Event> internalEvents = new ArrayList<Event>();
-    public final List<Event> events = Collections.unmodifiableList(internalEvents);
+    private final List<LXClipEvent> internalEvents = new ArrayList<LXClipEvent>();
+    public final List<LXClipEvent> events = Collections.unmodifiableList(this.internalEvents);
 
     private final LXParameterListener parameterRecorder = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
             if (isRunning() && channel.arm.isOn()) {
                 LXListenableNormalizedParameter parameter = (LXListenableNormalizedParameter) p;
-                addEvent(new ParameterEvent(parameter));
+                addEvent(new ParameterClipEvent(LXClip.this, parameter));
                 addTarget(parameter);
             }
         }
@@ -237,7 +147,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
                 if (this.channel.arm.isOn()) {
                     this.cursor = 0;
                     this.length.setValue(0);
-                    addEvent(new PatternEvent(this.channel.getActivePattern()));
+                    addEvent(new PatternClipEvent(this, this.channel.getActivePattern()));
                     this.internalEvents.clear();
                 }
             } else {
@@ -249,7 +159,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
         }
     }
 
-    private void addEvent(Event event) {
+    private void addEvent(LXClipEvent event) {
         this.internalEvents.add(event);
     }
 
@@ -267,9 +177,9 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
                 ((LXListenableNormalizedParameter) p).removeListener(this.parameterRecorder);
             }
         }
-        Iterator<Event> iter = this.internalEvents.iterator();
+        Iterator<LXClipEvent> iter = this.internalEvents.iterator();
         while (iter.hasNext()) {
-            Event event = iter.next();
+            LXClipEvent event = iter.next();
             if (event.component == component) {
                 iter.remove();
             }
@@ -291,7 +201,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
     }
 
     private void executeEvents(double from, double to) {
-        for (Event event : this.internalEvents) {
+        for (LXClipEvent event : this.internalEvents) {
             if (from <= event.cursor && to > event.cursor) {
                 event.execute();
             }
@@ -354,7 +264,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
     @Override
     public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
         if (isRunning() && this.channel.arm.isOn()) {
-            addEvent(new PatternEvent(nextPattern));
+            addEvent(new PatternClipEvent(this, nextPattern));
         }
     }
 
