@@ -78,7 +78,7 @@ public class UIMidiInputs extends UICollapsibleSection {
             .setIcon(ui.theme.iconNote)
             .setMappable(false)
             .setBorder(false)
-            .setFocusColor(0xff555555)
+            .setFocusColor(ui.theme.getCursorColor())
             .addToContainer(this);
             buttonX += BUTTON_WIDTH + PADDING;
 
@@ -87,7 +87,7 @@ public class UIMidiInputs extends UICollapsibleSection {
             .setIcon(ui.theme.iconMap)
             .setMappable(false)
             .setBorder(false)
-            .setFocusColor(0xff555555)
+            .setFocusColor(ui.theme.getCursorColor())
             .addToContainer(this);
             buttonX += BUTTON_WIDTH + PADDING;
 
@@ -96,7 +96,7 @@ public class UIMidiInputs extends UICollapsibleSection {
             .setIcon(ui.theme.iconTempo)
             .setMappable(false)
             .setBorder(false)
-            .setFocusColor(0xff555555)
+            .setFocusColor(ui.theme.getCursorColor())
             .addToContainer(this);
             buttonX += BUTTON_WIDTH + PADDING;
         }

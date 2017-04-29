@@ -131,7 +131,7 @@ public class UIVariableLFO extends UIModulator {
         @Override
         protected void onDraw(UI ui, PGraphics pg) {
             pg.image(this.g, 1, 1);
-            pg.stroke(0xff555555);
+            pg.stroke(ui.theme.getCursorColor());
             pg.line(this.basisX, 1, this.basisX, this.height-2);
         }
 

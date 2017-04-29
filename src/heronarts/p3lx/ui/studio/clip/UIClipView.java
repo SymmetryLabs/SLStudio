@@ -32,6 +32,8 @@ import java.util.List;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.clip.LXClip;
+import heronarts.lx.clip.LXClipEvent;
+import heronarts.lx.clip.ParameterClipEvent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -238,15 +240,15 @@ public class UIClipView extends UI2dContainer implements LXClip.TargetListener, 
         @Override
         protected void onDraw(UI ui, PGraphics pg) {
             if (clip != null) {
-                pg.stroke(0xff555555);
+                pg.stroke(ui.theme.getCursorColor());
                 pg.line(this.cursorX, 0, this.cursorX, this.height-1);
                 if (this.target != null) {
                     int startX = -1;
                     int startY = -1;
 
-                    for (LXClip.Event event : clip.events) {
-                        if (event instanceof LXClip.ParameterEvent) {
-                            LXClip.ParameterEvent parameterEvent = (LXClip.ParameterEvent) event;
+                    for (LXClipEvent event : clip.events) {
+                        if (event instanceof ParameterClipEvent) {
+                            ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
                             if (parameterEvent.parameter == this.target) {
                                 double eventBasis = parameterEvent.getBasis();
                                 double eventNormalized = parameterEvent.getNormalized();
@@ -256,7 +258,7 @@ public class UIClipView extends UI2dContainer implements LXClip.TargetListener, 
                                     pg.stroke(ui.theme.getPrimaryColor());
                                     pg.line(startX, startY, endX, endY);
                                 } else {
-                                    pg.stroke(0xff555555);
+                                    pg.stroke(ui.theme.getCursorColor());
                                     pg.line(0, endY, endX, endY);
                                 }
                                 startX = endX;
@@ -265,12 +267,11 @@ public class UIClipView extends UI2dContainer implements LXClip.TargetListener, 
                         }
                     }
                     if (startX < this.width-1) {
-                        pg.stroke(0xff555555);
+                        pg.stroke(ui.theme.getCursorColor());
                         pg.line(startX, startY, this.width-1, startY);
                     }
                 }
             }
         }
     }
-
 }
