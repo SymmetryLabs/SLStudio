@@ -49,7 +49,7 @@ public class UIEnumBox extends UIIntegerBox {
 
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE) {
+        if (this.enabled && (keyCode == java.awt.event.KeyEvent.VK_ENTER || keyCode == java.awt.event.KeyEvent.VK_SPACE)) {
             consumeKeyEvent();
             incrementValue(keyEvent);
         } else {

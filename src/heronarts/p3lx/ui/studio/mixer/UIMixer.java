@@ -40,8 +40,9 @@ import processing.core.PConstants;
 public class UIMixer extends UI2dContainer {
 
     public final static int PADDING = 6;
-    public final static int STRIP_SPACING = UIMixerStrip.WIDTH + UIMixerStrip.SPACING;
+    public final static int STRIP_SPACING = UIMixerStripControls.WIDTH + UIMixerStripControls.SPACING;
     private final static int ADD_CHANNEL_BUTTON_MARGIN = 1;
+    public final static int HEIGHT = UIMixerStrip.HEIGHT + 2*PADDING;
 
     private final Map<LXChannel, UIChannelStrip> channelStrips = new HashMap<LXChannel, UIChannelStrip>();
     private final UIMasterStrip masterStrip;
@@ -56,15 +57,15 @@ public class UIMixer extends UI2dContainer {
         setBackgroundColor(ui.theme.getPaneInsetColor());
         setBorderRounding(4);
 
-        int xp = UIMixerStrip.MARGIN;
+        int xp = PADDING;
         for (LXChannel channel : lx.engine.getChannels()) {
-            UIChannelStrip strip = new UIChannelStrip(ui, lx, channel, xp);
+            UIChannelStrip strip = new UIChannelStrip(ui, lx, channel, xp, PADDING);
             this.channelStrips.put(channel, strip);
             strip.addToContainer(this);
             xp += STRIP_SPACING;
         }
 
-        this.addChannelButton = new UIButton(xp, UIMixerStrip.MARGIN, 16, this.height - 2*UIMixerStrip.MARGIN) {
+        this.addChannelButton = new UIButton(xp, PADDING + UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, 16, UIMixerStripControls.HEIGHT) {
             @Override
             public void onToggle(boolean on) {
                 if (!on) {
@@ -83,13 +84,13 @@ public class UIMixer extends UI2dContainer {
         .addToContainer(this);
         xp += this.addChannelButton.getWidth() + ADD_CHANNEL_BUTTON_MARGIN;
 
-        this.masterStrip = new UIMasterStrip(ui, lx, xp);
+        this.masterStrip = new UIMasterStrip(ui, lx, xp, PADDING);
         this.masterStrip.addToContainer(this);
-        setWidth(xp + UIMixerStrip.WIDTH + UIMixerStrip.MARGIN);
+        setWidth(xp + UIMixerStripControls.WIDTH + PADDING);
 
         lx.engine.addListener(new LXEngine.Listener() {
             public void channelAdded(LXEngine engine, LXChannel channel) {
-                UIChannelStrip strip = new UIChannelStrip(ui, lx, channel, width);
+                UIChannelStrip strip = new UIChannelStrip(ui, lx, channel, width, PADDING);
                 channelStrips.put(channel, strip);
                 strip.addToContainer(UIMixer.this, channel.getIndex());
                 updateStripPositions();
@@ -112,7 +113,7 @@ public class UIMixer extends UI2dContainer {
             public void channelMoved(LXEngine engine, LXChannel channel) {
                 for (LXChannel c : channelStrips.keySet()) {
                     UIChannelStrip strip = channelStrips.get(c);
-                    strip.setPosition(UIMixerStrip.MARGIN + STRIP_SPACING * c.getIndex(), strip.getY());
+                    strip.setPosition(PADDING + STRIP_SPACING * c.getIndex(), strip.getY());
                 }
                 channelStrips.get(channel).setContainerIndex(channel.getIndex());
             }
@@ -120,7 +121,7 @@ public class UIMixer extends UI2dContainer {
     }
 
     void updateStripPositions() {
-        int xp = UIMixerStrip.MARGIN;
+        int xp = PADDING;
         for (LXChannel channel : lx.engine.getChannels()) {
             this.channelStrips.get(channel).setX(xp);
             xp += STRIP_SPACING;

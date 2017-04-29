@@ -38,6 +38,8 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
 
     private static final int TEXT_MARGIN = 2;
 
+    protected boolean enabled = true;
+
     protected boolean editing = false;
     protected String editBuffer = "";
 
@@ -66,8 +68,17 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
 
     protected abstract void saveEditBuffer();
 
+    public UIInputBox setEnabled(boolean enabled) {
+        this.enabled = enabled;
+        if (this.editing && !this.enabled) {
+            this.editing = false;
+            redraw();
+        }
+        return this;
+    }
+
     public void edit() {
-        if (!this.editing) {
+        if (this.enabled && !this.editing) {
             this.editing = true;
             this.editBuffer = "";
         }
@@ -160,7 +171,7 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
                 this.editing = false;
                 redraw();
             }
-        } else {
+        } else if (this.enabled) {
             // Not editing
             if (this.immediateEdit && isValidCharacter(keyChar)) {
                 consumeKeyEvent();

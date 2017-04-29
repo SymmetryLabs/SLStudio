@@ -32,7 +32,9 @@ import heronarts.lx.parameter.StringParameter;
 
 public class UITextBox extends UIInputBox {
 
-    private String value = "";
+    private final static String NO_VALUE = "-";
+
+    private String value = NO_VALUE;
     private StringParameter parameter = null;
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
@@ -57,6 +59,8 @@ public class UITextBox extends UIInputBox {
         if (parameter != null) {
             this.parameter.addListener(this.parameterListener);
             setValue(parameter.getString());
+        } else {
+            setValue(NO_VALUE);
         }
         return this;
     }

@@ -205,9 +205,9 @@ public interface UIItemList {
         }
 
         private void setFocusIndex(int focusIndex, boolean scroll) {
-            focusIndex = LXUtils.constrain(focusIndex, 0, this.items.size() - 1);
+            focusIndex = LXUtils.constrain(focusIndex, -1, this.items.size() - 1);
             if (this.focusIndex != focusIndex) {
-                if (scroll && this.list instanceof ScrollList) {
+                if (focusIndex >= 0 && scroll && this.list instanceof ScrollList) {
                     UI2dScrollContext scrollList = (UI2dScrollContext) this.list;
                     float yp = ROW_SPACING * focusIndex + scrollList.getScrollY();
                     if (yp < 0) {
@@ -217,7 +217,9 @@ public interface UIItemList {
                     }
                 }
                 this.focusIndex = focusIndex;
-                this.items.get(this.focusIndex).onFocus();
+                if (this.focusIndex >= 0) {
+                    this.items.get(this.focusIndex).onFocus();
+                }
                 this.list.redraw();
             }
         }

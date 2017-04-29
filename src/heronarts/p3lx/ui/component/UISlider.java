@@ -88,6 +88,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
     }
 
     @Override
+    @SuppressWarnings("fallthrough")
     protected void onDraw(UI ui, PGraphics pg) {
         int controlColor = this.hasFillColor ? this.fillColor :
             (isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());

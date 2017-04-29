@@ -50,6 +50,7 @@ public class UITheme {
     private int secondaryColor = 0xff666699;
     private int attentionColor = 0xff996666;
     private int surfaceColor = 0xff669999;
+    private int recordingColor = 0xffa00044;
 
     private int darkBackgroundColor = 0xff191919;
 
@@ -70,6 +71,7 @@ public class UITheme {
     public final PImage iconTriggerSource;
     public final PImage iconLoop;
     public final PImage iconMap;
+    public final PImage iconArm;
 
     UITheme(PApplet applet) {
         // this.controlFont = applet.createFont("Arial", 10);
@@ -86,6 +88,7 @@ public class UITheme {
         this.iconTriggerSource = applet.loadImage("icon-trigger-source.png");
         this.iconLoop = applet.loadImage("icon-loop.png");
         this.iconMap = applet.loadImage("icon-map.png");
+        this.iconArm = applet.loadImage("icon-arm.png");
         LX.initTimer.log("P3LX: UI: Theme: Icons");
     }
 
@@ -306,6 +309,27 @@ public class UITheme {
      */
     public UITheme setSurfaceColor(int color) {
         this.surfaceColor = color;
+        return this;
+    }
+
+
+    /**
+     * Gets highlight color
+     *
+     * @return Highlight color
+     */
+    public int getRecordingColor() {
+        return this.recordingColor;
+    }
+
+    /**
+     * Sets highlight color
+     *
+     * @param color Color
+     * @return this
+     */
+    public UITheme setRecordingColor(int color) {
+        this.recordingColor = color;
         return this;
     }
 

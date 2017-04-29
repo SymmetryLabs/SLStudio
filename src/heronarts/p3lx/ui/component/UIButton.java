@@ -54,6 +54,8 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
     private PImage activeIcon = null;
     private PImage inactiveIcon = null;
 
+    protected boolean enabled = true;
+
     private EnumParameter<? extends Object> enumParameter = null;
     private BooleanParameter booleanParameter = null;
 
@@ -80,6 +82,13 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
         setBorderColor(UI.get().theme.getControlBorderColor());
         setFontColor(UI.get().theme.getControlTextColor());
         setBackgroundColor(this.inactiveColor);
+    }
+
+    public UIButton setEnabled(boolean enabled) {
+        if (this.enabled != enabled) {
+            this.enabled = enabled;
+        }
+        return this;
     }
 
     @Override
@@ -163,34 +172,42 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UIFocus 
 
     @Override
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        this.exactToggleTime = mouseEvent.getMillis();
-        setActive(this.isMomentary ? true : !this.active);
+        if (this.enabled) {
+            this.exactToggleTime = mouseEvent.getMillis();
+            setActive(this.isMomentary ? true : !this.active);
+        }
     }
 
     @Override
     protected void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
-        if (this.isMomentary) {
-            this.exactToggleTime = mouseEvent.getMillis();
-            setActive(false);
+        if (this.enabled) {
+            if (this.isMomentary) {
+                this.exactToggleTime = mouseEvent.getMillis();
+                setActive(false);
+            }
         }
     }
 
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
-            this.exactToggleTime = keyEvent.getMillis();
-            setActive(this.isMomentary ? true : !this.active);
-            consumeKeyEvent();
+        if (this.enabled) {
+            if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+                this.exactToggleTime = keyEvent.getMillis();
+                setActive(this.isMomentary ? true : !this.active);
+                consumeKeyEvent();
+            }
         }
     }
 
     @Override
     protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
-            if (this.isMomentary) {
-                this.exactToggleTime = keyEvent.getMillis();
-                setActive(false);
-                consumeKeyEvent();
+        if (this.enabled) {
+            if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+                if (this.isMomentary) {
+                    this.exactToggleTime = keyEvent.getMillis();
+                    setActive(false);
+                    consumeKeyEvent();
+                }
             }
         }
     }

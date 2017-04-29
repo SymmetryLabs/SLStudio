@@ -45,7 +45,7 @@ import processing.event.MouseEvent;
 
 public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
 
-    protected final static int HEIGHT = UIDeviceBin.HEIGHT - 2*UIDeviceBin.PADDING;
+    protected final static int HEIGHT = 168;
     protected static final int PADDING = 4;
     protected static final int MARGIN = UIDeviceBin.PADDING;
     protected static final int TITLE_MARGIN = 4;
@@ -66,7 +66,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
     protected final LXComponent component;
 
     UIDevice(final UI ui, final LXComponent component, float w) {
-        super(0, UIDeviceBin.PADDING, w, HEIGHT);
+        super(0, 0, w, HEIGHT);
         setBackgroundColor(ui.theme.getWindowBackgroundColor());
         setBorderRounding(4);
         this.component = component;

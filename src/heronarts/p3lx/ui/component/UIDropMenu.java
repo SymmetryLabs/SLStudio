@@ -163,7 +163,7 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, UIControlTarge
             float yp = (this.direction == Direction.DOWN) ? this.closedHeight : 0;
             for (int i = 0; i < range; ++i) {
                 String label = (this.options != null) ? this.options[i] : ("" + i);
-                pg.fill(i == this.highlight ? 0xff000000 : ui.theme.getControlTextColor());
+                pg.fill(i == this.highlight ? UI.WHITE : ui.theme.getControlTextColor());
                 pg.textAlign(PConstants.LEFT, PConstants.TOP);
                 pg.text(clipTextToWidth(pg, label, this.width - 6), 4, yp + 4);
                 yp += this.closedHeight;

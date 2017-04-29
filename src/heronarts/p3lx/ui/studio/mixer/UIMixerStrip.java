@@ -27,88 +27,32 @@
 package heronarts.p3lx.ui.studio.mixer;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXBus;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.LXChannel;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
-import processing.core.PGraphics;
-import processing.event.KeyEvent;
-import processing.event.MouseEvent;
 
 public abstract class UIMixerStrip extends UI2dContainer {
 
-    public final static int MARGIN = UIMixer.PADDING;
-    public final static int PADDING = 2;
+    public final static int SPACING = 6;
+    public final static int HEIGHT = UIMixerStripControls.HEIGHT + SPACING + UIClipLauncher.HEIGHT;
     public final static int WIDTH = 72;
-    public final static int SPACING = 1;
 
-    private final static int HEIGHT = 168;
-
-    protected final static int FADER_WIDTH = 22;
-    protected final static int FADER_HEIGHT = 80;
-
-    private final UI ui;
     protected final LX lx;
-    protected final LXBus bus;
+    protected final UIClipLauncher clipLauncher;
+    protected final UIMixerStripControls controls;
 
-    UIMixerStrip(final UI ui, final LX lx, final LXBus bus, float x) {
-        super(x, MARGIN, WIDTH, HEIGHT);
-        this.ui = ui;
+    protected UIMixerStrip(final UI ui, final LX lx, float x, float y) {
+        super(x, y, WIDTH, HEIGHT);
         this.lx = lx;
-        this.bus = bus;
-        setBackground();
-
-        lx.engine.focusedChannel.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (lx.engine.getFocusedChannel() == bus) {
-                    if (!hasFocus()) {
-                        focus();
-                    }
-                }
-                setBackground();
-            }
-        });
+        this.clipLauncher = (UIClipLauncher) new UIClipLauncher(ui, lx, lx.engine.masterChannel).addToContainer(this);
+        this.controls = (UIMixerStripControls) new UIMasterStripControls(ui, lx).addToContainer(this);
     }
 
-    protected void setBackground() {
-        if (lx.engine.getFocusedChannel() == this.bus) {
-            setBackgroundColor(this.ui.theme.getWindowFocusedBackgroundColor());
-        } else {
-            setBackgroundColor(this.ui.theme.getWindowBackgroundColor());
-        }
-    }
-
-    @Override
-    public void onDraw(UI ui, PGraphics pg) {
-        pg.stroke(0xff333333);
-        pg.line(1, 20, this.width-2, 20);
-
-        pg.line(1, this.height - 64, this.width-2, this.height - 64);
-    }
-
-    @Override
-    public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        if (my < 24) {
-            lx.engine.setFocusedChannel(this.bus);
-        }
-    }
-
-    @Override
-    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (!(keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-            if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
-                if (lx.engine.focusedChannel.getValuei() > 0) {
-                    consumeKeyEvent();
-                    lx.engine.focusedChannel.decrement();
-                }
-            } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-                if (lx.engine.focusedChannel.getValuei() < lx.engine.focusedChannel.getRange() - 1) {
-                    consumeKeyEvent();
-                    lx.engine.focusedChannel.increment();
-                }
-            }
-        }
+    protected UIMixerStrip(final UI ui, final LX lx, LXChannel channel, float x, float y) {
+        super(x, y, WIDTH, HEIGHT);
+        this.lx = lx;
+        this.clipLauncher = (UIClipLauncher) new UIClipLauncher(ui, lx, channel).addToContainer(this);
+        this.controls = (UIMixerStripControls) new UIChannelStripControls(ui, lx, channel).addToContainer(this);
     }
 
 }

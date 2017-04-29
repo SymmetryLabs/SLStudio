@@ -73,6 +73,7 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
         setBorder(false);
     }
 
+    @Override
     public UIParameterControl setEnabled(boolean enabled) {
         if (enabled != this.enabled) {
             this.enabled = enabled;
@@ -303,7 +304,7 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
             if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
                 consumeKeyEvent();
                 setShowValue(true);
-            } else if (keyEvent.isShiftDown() && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+            } else if (this.enabled && keyEvent.isShiftDown() && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
                 consumeKeyEvent();
                 if (this.parameter != null) {
                     this.parameter.reset();

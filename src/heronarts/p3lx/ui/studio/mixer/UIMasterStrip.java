@@ -28,51 +28,11 @@ package heronarts.p3lx.ui.studio.mixer;
 
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.component.UIDropMenu;
-import heronarts.p3lx.ui.component.UILabel;
-import heronarts.p3lx.ui.component.UISlider;
-import processing.core.PConstants;
 
 public class UIMasterStrip extends UIMixerStrip {
 
-    public UIMasterStrip(UI ui, final LX lx, float x) {
-        super(ui, lx, lx.engine.masterChannel, x);
-
-        // Strip name
-        new UILabel(PADDING, PADDING-1, this.width-2*PADDING, 16)
-        .setLabel("Master")
-        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-        .setTextOffset(0, 1)
-        .setFontColor(ui.theme.getControlTextColor())
-        .addToContainer(this);
-
-        new UIButton(6*PADDING, 40, 28, 28)
-        .setLabel("Live")
-        .setParameter(lx.engine.output.enabled)
-        .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-        .setTextOffset(0, 2)
-        .addToContainer(this);
-
-        float syp = 22;
-        new UISlider(UISlider.Direction.VERTICAL, this.width-PADDING-FADER_WIDTH, syp, FADER_WIDTH, FADER_HEIGHT)
-        .setShowLabel(false)
-        .setParameter(lx.engine.output.brightness)
-        .addToContainer(this);
-
-        float yp = 108;
-        new UIButton(4, yp, 16, 16).setLabel("A").setParameter(lx.engine.cueA).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
-        new UILabel(26, yp + 4, 28, 13).setLabel("CUE").setTextAlignment(PConstants.LEFT, PConstants.TOP).setFont(ui.theme.getControlFont()).addToContainer(this);
-        new UIButton(52, yp, 16, 16).setLabel("B").setParameter(lx.engine.cueB).setActiveColor(ui.theme.getAttentionColor()).addToContainer(this);
-
-        new UIDropMenu(4, height - 40, width-8, 16, lx.engine.crossfaderBlendMode)
-        .setDirection(UIDropMenu.Direction.UP)
-        .addToContainer(this);
-
-        new UISlider(PADDING, height - 20 - PADDING, width-2*PADDING, 20)
-        .setParameter(lx.engine.crossfader)
-        .setShowLabel(false)
-        .addToContainer(this);
+    protected UIMasterStrip(UI ui, LX lx, float x, float y) {
+        super(ui, lx, x, y);
     }
 
 }

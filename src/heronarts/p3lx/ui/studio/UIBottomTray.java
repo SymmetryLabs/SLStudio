@@ -37,33 +37,47 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dScrollContext;
+import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UI2dContext;
+import heronarts.p3lx.ui.studio.clip.UIClipView;
 import heronarts.p3lx.ui.studio.device.UIDeviceBin;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
-import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
+import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 
-public class UIBottomTray extends UI2dScrollContext {
+public class UIBottomTray extends UI2dContext {
 
     public static final int PADDING = 8;
-    public static final int HEIGHT = 196;
+    public static final int HEIGHT = UIMixer.HEIGHT + 2*PADDING;
     private static final int SEPARATOR = 16;
 
     private final UI ui;
     private final LX lx;
     private final UIMixer mixer;
+    private final UI2dContainer rightSection;
+
     private final Map<LXBus, UIDeviceBin> deviceBins = new HashMap<LXBus, UIDeviceBin>();
+    public final UIClipView clipView;
 
     public UIBottomTray(UI ui, LX lx) {
         super(ui, 0, ui.getHeight() - HEIGHT - UIContextualHelpBar.HEIGHT, ui.getWidth(), HEIGHT);
-        setHorizontalScrollingEnabled(true);
-        setVerticalScrollingEnabled(false);
         this.ui = ui;
         this.lx = lx;
         setBackgroundColor(ui.theme.getPaneBackgroundColor());
+
         this.mixer = new UIMixer(ui, lx, PADDING, PADDING, HEIGHT-2*PADDING);
         this.mixer.addToContainer(this);
+
+        float rightX = getRightSectionX();
+        this.rightSection = (UI2dContainer)
+            new UI2dContainer(rightX, PADDING, getContentWidth() - rightX - PADDING, UIMixer.HEIGHT)
+            .setBackgroundColor(ui.theme.getPaneInsetColor())
+            .setBorderRounding(4)
+            .addToContainer(this);
+
+        this.clipView = new UIClipView(ui, lx, UIDeviceBin.PADDING, UIDeviceBin.PADDING, this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
+        this.clipView.addToContainer(this.rightSection);
 
         for (LXChannel channel : lx.engine.getChannels()) {
             addChannel(channel);
@@ -100,9 +114,7 @@ public class UIBottomTray extends UI2dScrollContext {
     protected void onUIResize(UI ui) {
         onHelpBarToggle((LXStudio.UI) ui);
         setWidth(ui.getWidth());
-        for (UIDeviceBin deviceBin : this.deviceBins.values()) {
-            deviceBin.updateMinWidth();
-        }
+        reflow();
         redraw();
     }
 
@@ -114,45 +126,40 @@ public class UIBottomTray extends UI2dScrollContext {
         setY(yPos);
     }
 
+    private float getRightSectionX() {
+        return this.mixer.getWidth() + SEPARATOR;
+    }
+
     private void addChannel(LXBus channel) {
-        UIDeviceBin deviceBin = new UIDeviceBin(ui, this, channel, this.mixer.getWidth() + SEPARATOR);
+        UIDeviceBin deviceBin = new UIDeviceBin(ui, channel, this.rightSection.getContentHeight() - UIDeviceBin.HEIGHT - UIDeviceBin.PADDING, this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
         this.deviceBins.put(channel, deviceBin);
         deviceBin.setVisible(false);
-        deviceBin.addToContainer(this);
-        onChannelsChanged();
+        deviceBin.addToContainer(this.rightSection);
     }
 
     private void removeChannel(LXBus channel) {
         this.deviceBins.remove(channel).removeFromContainer();
-        onChannelsChanged();
-    }
-
-    private void onChannelsChanged() {
-        // The channel mixer width is different now, collapse bins with extra width
-        for (UIDeviceBin deviceBin : this.deviceBins.values()) {
-            deviceBin.updateMinWidth();
-        }
     }
 
     void onChannelFocus() {
         LXBus focusedChannel = lx.engine.getFocusedChannel();
         for (LXBus channel : this.deviceBins.keySet()) {
             UIDeviceBin deviceBin = this.deviceBins.get(channel);
-            if (channel == focusedChannel) {
-                deviceBin.setVisible(true);
-                setScrollWidth(deviceBin.getX() + deviceBin.getWidth() + PADDING);
-            } else {
-                deviceBin.setVisible(false);
-            }
+            deviceBin.setVisible(channel == focusedChannel);
         }
     }
 
     @Override
     public void reflow() {
-        for (UIDeviceBin deviceBin : this.deviceBins.values()) {
-            deviceBin.setX(this.mixer.getWidth() + SEPARATOR);
-            if (deviceBin.isVisible()) {
-                setScrollWidth(deviceBin.getX() + deviceBin.getWidth() + PADDING);
+        float deviceX = this.mixer.getWidth() + SEPARATOR;
+        if (this.rightSection != null) {
+            this.rightSection.setX(deviceX);
+            this.rightSection.setWidth(getContentWidth() - deviceX - PADDING);
+            if (this.clipView != null) {
+                this.clipView.setWidth(this.rightSection.getWidth() - 2*UIDeviceBin.PADDING);
+            }
+            for (UIDeviceBin deviceBin : this.deviceBins.values()) {
+                deviceBin.setWidth(this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
             }
         }
     }
@@ -160,7 +167,7 @@ public class UIBottomTray extends UI2dScrollContext {
     @Override
     public void onDraw(UI ui, PGraphics pg) {
         pg.stroke(ui.theme.getPrimaryColor());
-        float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.focusedChannel.getValuei() + UIMixerStrip.WIDTH/2;
+        float channelX = PADDING + UIMixer.PADDING + UIMixer.STRIP_SPACING * lx.engine.focusedChannel.getValuei() + UIMixerStripControls.WIDTH/2;
         float binX = this.mixer.getX() + this.mixer.getWidth() + SEPARATOR + 12;
         float b = 4;
         pg.strokeWeight(2);

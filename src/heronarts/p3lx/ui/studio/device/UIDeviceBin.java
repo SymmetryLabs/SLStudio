@@ -34,32 +34,27 @@ import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
-import heronarts.p3lx.ui.studio.UIBottomTray;
+import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import processing.event.KeyEvent;
 
-public class UIDeviceBin extends UI2dContainer {
+public class UIDeviceBin extends UI2dScrollContext {
 
-    private static final int MARGIN = UIBottomTray.PADDING;
-    static final int HEIGHT = UIBottomTray.HEIGHT - 2*MARGIN;
-    static final int PADDING = 6;
+    public static final int PADDING = UIMixer.PADDING;
+    public static final int HEIGHT = UIDevice.HEIGHT;
 
-    private final UIBottomTray tray;
     private final UIChannelDevice channelDevice;
     private final int effectDeviceOffset;
 
     private final List<UIDevice> devices = new ArrayList<UIDevice>();
 
-    public UIDeviceBin(final UI ui, final UIBottomTray tray, LXBus channel, float x) {
-        super(x, MARGIN, 0, HEIGHT);
-        this.tray = tray;
-
-        setBackgroundColor(ui.theme.getPaneInsetColor());
-        setBorderRounding(4);
+    public UIDeviceBin(final UI ui, LXBus channel, float y, float w) {
+        super(ui, PADDING, y, w, HEIGHT);
         setLayout(UI2dContainer.Layout.HORIZONTAL);
-        setPadding(PADDING);
         setChildMargin(PADDING);
-        setMinWidth(this.tray.getWidth() - this.x - UIBottomTray.PADDING);
+        setHorizontalScrollingEnabled(true);
+        setVerticalScrollingEnabled(true);
 
         if (channel instanceof LXChannel) {
             this.channelDevice = new UIChannelDevice(ui, (LXChannel) channel);
@@ -129,10 +124,6 @@ public class UIDeviceBin extends UI2dContainer {
             this.devices.remove(index).removeFromContainer();
         }
         return this;
-    }
-
-    public void updateMinWidth() {
-        setMinWidth(this.tray.getWidth() - this.x - UIBottomTray.PADDING);
     }
 
     @Override
