@@ -23,7 +23,7 @@ package heronarts.lx;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public abstract class LXRunnable extends LXComponent implements LXLoopTask {
+public abstract class LXRunnableComponent extends LXComponent implements LXLoopTask {
 
     /**
      * Whether this modulator is currently running.
@@ -37,19 +37,19 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
         .setMode(BooleanParameter.Mode.MOMENTARY)
         .setDescription("Resets the cycle and starts running");
 
-    protected LXRunnable() {
+    protected LXRunnableComponent() {
         this(null, null);
     }
 
-    protected LXRunnable(String label) {
+    protected LXRunnableComponent(String label) {
         this(null, label);
     }
 
-    protected LXRunnable(LX lx) {
+    protected LXRunnableComponent(LX lx) {
         this(lx, null);
     }
 
-    protected LXRunnable(LX lx, String label) {
+    protected LXRunnableComponent(LX lx, String label) {
         super(lx, label);
         addParameter("running", this.running);
         addParameter("trigger", this.trigger);
@@ -78,7 +78,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      *
      * @return this
      */
-    public final LXRunnable start() {
+    public final LXRunnableComponent start() {
         this.running.setValue(true);
         return this;
     }
@@ -90,7 +90,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      *
      * @return this
      */
-    public final LXRunnable stop() {
+    public final LXRunnableComponent stop() {
         this.running.setValue(false);
         return this;
     }
@@ -110,7 +110,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      *
      * @return this
      */
-    public final LXRunnable trigger() {
+    public final LXRunnableComponent trigger() {
         this.trigger.setValue(true);
         return this;
     }
@@ -120,7 +120,7 @@ public abstract class LXRunnable extends LXComponent implements LXLoopTask {
      *
      * @return this
      */
-    public final LXRunnable reset() {
+    public final LXRunnableComponent reset() {
         this.stop();
         this.onReset();
         return this;

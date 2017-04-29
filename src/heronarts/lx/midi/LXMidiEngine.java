@@ -369,9 +369,10 @@ public class LXMidiEngine implements LXSerializable {
             for (LXChannel channel : this.lx.engine.getChannels()) {
                 if (channel.midiMonitor.isOn() && channel.midiChannel.getEnum().matches(message)) {
                     channel.midiMessage(message);
-                    dispatch(message, channel.getActivePattern());
+                    LXPattern activePattern = channel.getActivePattern();
+                    dispatch(message, activePattern);
                     LXPattern nextPattern = channel.getNextPattern();
-                    if (nextPattern != null) {
+                    if (nextPattern != null && nextPattern != activePattern) {
                         dispatch(message, nextPattern);
                     }
                 }

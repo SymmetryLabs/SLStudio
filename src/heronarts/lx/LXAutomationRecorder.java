@@ -49,7 +49,7 @@ import com.google.gson.JsonObject;
  * patterns and effects in the system, which can be recorded or played back.
  */
 @Deprecated
-public class LXAutomationRecorder extends LXRunnable implements LXEngine.MessageListener, LXMidiListener {
+public class LXAutomationRecorder extends LXRunnableComponent implements LXEngine.MessageListener, LXMidiListener {
 
     private final static String EVENT_PATTERN = "PATTERN";
     private final static String EVENT_PARAMETER = "PARAMETER";

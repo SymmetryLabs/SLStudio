@@ -172,10 +172,10 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     }
 
     private void computeMults(LXModel model) {
-        this.xMult = 1 / model.xRange;
-        this.yMult = 1 / model.yRange;
-        this.zMult = 1 / model.zRange;
-        this.rMult = 1 / model.rRange;
+        this.xMult = (model.xRange == 0) ? 1 : (1 / model.xRange);
+        this.yMult = (model.yRange == 0) ? 1 : (1 / model.yRange);
+        this.zMult = (model.zRange == 0) ? 1 : (1 / model.zRange);
+        this.rMult = (model.rRange == 0) ? 1 : (1 / model.rRange);
     }
 
     @Override

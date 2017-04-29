@@ -30,6 +30,7 @@ import heronarts.lx.blend.LightestBlend;
 import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
+import heronarts.lx.clip.LXClip;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.model.LXPoint;
@@ -43,6 +44,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.script.LXScriptEngine;
 
@@ -139,6 +141,30 @@ public class LXEngine extends LXComponent implements LXOscComponent {
 
     public final LXModulationEngine modulation;
 
+    public class FocusedClipParameter extends MutableParameter {
+
+        private LXClip clip = null;
+
+        private FocusedClipParameter() {
+            super("Focused Clip");
+            setDescription("Parameter which indicate the globally focused clip");
+        }
+
+        public FocusedClipParameter setClip(LXClip clip) {
+            if (this.clip != clip) {
+                this.clip = clip;
+                setValue(getValue() + 1);
+            }
+            return this;
+        }
+
+        public LXClip getClip() {
+            return this.clip;
+        }
+    };
+
+    public final FocusedClipParameter focusedClip = new FocusedClipParameter();
+
     private float frameRate = 0;
 
     public class Output extends LXOutputGroup implements LXOscComponent {
@@ -161,6 +187,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         public void channelMoved(LXEngine engine, LXChannel channel);
     }
 
+    @Deprecated
     public interface MessageListener {
         public void onMessage(LXEngine engine, String message);
     }
@@ -175,16 +202,19 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         return this;
     }
 
+    @Deprecated
     public final LXEngine addMessageListener(MessageListener listener) {
         this.messageListeners.add(listener);
         return this;
     }
 
+    @Deprecated
     public final LXEngine removeMessageListener(MessageListener listener) {
         this.messageListeners.remove(listener);
         return this;
     }
 
+    @Deprecated
     public LXEngine broadcastMessage(String message) {
         for (MessageListener listener : this.messageListeners) {
             listener.onMessage(this, message);

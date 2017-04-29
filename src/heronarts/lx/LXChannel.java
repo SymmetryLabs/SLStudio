@@ -21,6 +21,7 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
+import heronarts.lx.clip.LXClip;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.model.LXModel;
@@ -71,6 +72,11 @@ public class LXChannel extends LXBus {
         public void midiReceived(LXChannel channel);
     }
 
+    public interface ClipListener {
+        public void clipAdded(LXChannel channel, LXClip clip);
+        public void clipRemoved(LXChannel channel, LXClip clip);
+    }
+
     /**
      * Utility class to extend in cases where only some methods need overriding.
      */
@@ -115,6 +121,7 @@ public class LXChannel extends LXBus {
     }
 
     private final List<Listener> listeners = new ArrayList<Listener>();
+    private final List<ClipListener> clipListeners = new ArrayList<ClipListener>();
     private final List<MidiListener> midiListeners = new ArrayList<MidiListener>();
 
     public enum CrossfadeGroup {
@@ -146,6 +153,13 @@ public class LXChannel extends LXBus {
     public final EnumParameter<CrossfadeGroup> crossfadeGroup =
         new EnumParameter<CrossfadeGroup>("Group", CrossfadeGroup.BYPASS)
         .setDescription("Assigns this channel to crossfader group A or B");
+
+    /**
+     * Arms the channel for clip recording.
+     */
+    public final BooleanParameter arm =
+        new BooleanParameter("Arm")
+        .setDescription("Arms the channel for clip recording");
 
     /**
      * Whether this channel should listen to MIDI events
@@ -204,6 +218,10 @@ public class LXChannel extends LXBus {
 
     public final List<LXPattern> patterns = Collections.unmodifiableList(internalPatterns);
 
+    private final List<LXClip> internalClips = new ArrayList<LXClip>();
+
+    public final List<LXClip> clips = Collections.unmodifiableList(internalClips);
+
     /**
      * This is a local buffer used for transition blending on this channel
      */
@@ -240,6 +258,7 @@ public class LXChannel extends LXBus {
         this.colors = this.getActivePattern().getColors();
 
         addParameter("enabled", this.enabled);
+        addParameter("arm", this.arm);
         addParameter("cue", this.cueActive);
         addParameter("midiMonitor", this.midiMonitor);
         addParameter("midiChannel", this.midiChannel);
@@ -287,6 +306,16 @@ public class LXChannel extends LXBus {
     public final void removeListener(Listener listener) {
         super.removeListener(listener);
         this.listeners.remove(listener);
+    }
+
+    public LXChannel addClipListener(ClipListener listener) {
+        this.clipListeners.add(listener);
+        return this;
+    }
+
+    public LXChannel removeClipListener(ClipListener listener) {
+        this.clipListeners.remove(listener);
+        return this;
     }
 
     public LXChannel addMidiListener(MidiListener listener) {
@@ -384,6 +413,7 @@ public class LXChannel extends LXBus {
         int index = this.internalPatterns.indexOf(pattern);
         if (index >= 0) {
             boolean wasActive = (this.activePatternIndex == index);
+            int focusedPatternIndex = this.focusedPattern.getValuei();
             if ((this.transition != null) && (
                     (this.activePatternIndex == index) ||
                     (this.nextPatternIndex == index)
@@ -404,9 +434,21 @@ public class LXChannel extends LXBus {
             } else if (this.nextPatternIndex >= this.internalPatterns.size()) {
                 this.nextPatternIndex = this.internalPatterns.size() - 1;
             }
+            if (focusedPatternIndex > index) {
+                --focusedPatternIndex;
+            } else if (focusedPatternIndex >= this.internalPatterns.size()) {
+                focusedPatternIndex = this.internalPatterns.size() - 1;
+            }
             if (this.activePatternIndex < 0) {
                 this.activePatternIndex = 0;
                 this.nextPatternIndex = 0;
+            }
+            if (focusedPatternIndex >= 0) {
+                if (this.focusedPattern.getValuei() != focusedPatternIndex) {
+                    this.focusedPattern.setValue(focusedPatternIndex);
+                } else {
+                    this.focusedPattern.bang();
+                }
             }
             this.focusedPattern.setRange(Math.max(1, this.internalPatterns.size()));
             for (Listener listener : this.listeners) {
@@ -535,6 +577,28 @@ public class LXChannel extends LXBus {
         return this;
     }
 
+    public LXClip addClip() {
+        LXClip clip = new LXClip(this.lx, this, this.internalClips.size());
+        clip.label.setValue("Clip-" + this.internalClips.size());
+        this.internalClips.add(clip);
+        for (ClipListener listener : this.clipListeners) {
+            listener.clipAdded(this, clip);
+        }
+        return clip;
+    }
+
+    public LXClip removeClip(LXClip clip) {
+        int index = this.internalClips.indexOf(clip);
+        if (index < 0) {
+            throw new IllegalArgumentException("Clip is not owned by channel: " + clip + " " + this);
+        }
+        this.internalClips.remove(index);
+        for (ClipListener listener : this.clipListeners) {
+            listener.clipRemoved(this, clip);
+        }
+        return clip;
+    }
+
     public LXBus disableAutoTransition() {
         this.autoCycleEnabled.setValue(false);
         return this;
@@ -609,6 +673,11 @@ public class LXChannel extends LXBus {
 
         // Run modulators and components
         super.loop(deltaMs);
+
+        // Run clips
+        for (LXClip clip : this.internalClips) {
+            clip.loop(deltaMs);
+        }
 
         // Check for transition completion
         if (this.transition != null) {

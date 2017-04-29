@@ -21,7 +21,7 @@
 package heronarts.lx.modulator;
 
 import heronarts.lx.LXComponent;
-import heronarts.lx.LXRunnable;
+import heronarts.lx.LXRunnableComponent;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.osc.LXOscComponent;
@@ -32,7 +32,7 @@ import heronarts.lx.parameter.LXParameter;
  * time, such as an envelope or a low frequency oscillator. Some modulators run
  * continuously, others may halt after they reach a certain value.
  */
-public abstract class LXModulator extends LXRunnable implements LXParameter, LXOscComponent {
+public abstract class LXModulator extends LXRunnableComponent implements LXParameter, LXOscComponent {
 
     private LXComponent component;
 

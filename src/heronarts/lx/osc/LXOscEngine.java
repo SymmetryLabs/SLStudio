@@ -476,13 +476,13 @@ public class LXOscEngine extends LXComponent {
 
         @Override
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
-            sendMessage(channel.getOscAddress() + "/nextPattern", nextPattern.getIndex());
+            sendMessage(channel.getOscAddress() + "/" + ROUTE_NEXT_PATTERN, nextPattern.getIndex());
         }
 
         @Override
         public void patternDidChange(LXChannel channel, LXPattern pattern) {
-            sendMessage(channel.getOscAddress() + "/activePattern", pattern.getIndex());
-            sendMessage(channel.getOscAddress() + "/nextPattern", -1);
+            sendMessage(channel.getOscAddress() + "/" + ROUTE_ACTIVE_PATTERN, pattern.getIndex());
+            sendMessage(channel.getOscAddress() + "/" + ROUTE_NEXT_PATTERN, -1);
         }
 
         @Override
