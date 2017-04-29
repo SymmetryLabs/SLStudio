@@ -273,7 +273,7 @@ public class LXChannel extends LXBus {
     }
 
     public String getOscAddress() {
-        return "/lx/channel/" + this.index;
+        return "/lx/channel/" + (this.index+1);
     }
 
     @Override
@@ -578,9 +578,16 @@ public class LXChannel extends LXBus {
     }
 
     public LXClip addClip() {
-        LXClip clip = new LXClip(this.lx, this, this.internalClips.size());
-        clip.label.setValue("Clip-" + this.internalClips.size());
-        this.internalClips.add(clip);
+        return addClip(this.internalClips.size());
+    }
+
+    public LXClip addClip(int index) {
+        while (this.internalClips.size() <= index) {
+            this.internalClips.add(null);
+        }
+        LXClip clip = new LXClip(this.lx, this, index);
+        clip.label.setValue("Clip-" + (index+1));
+        this.internalClips.set(index, clip);
         for (ClipListener listener : this.clipListeners) {
             listener.clipAdded(this, clip);
         }
@@ -592,7 +599,12 @@ public class LXChannel extends LXBus {
         if (index < 0) {
             throw new IllegalArgumentException("Clip is not owned by channel: " + clip + " " + this);
         }
-        this.internalClips.remove(index);
+        return removeClip(index);
+    }
+
+    public LXClip removeClip(int index) {
+        LXClip clip = this.internalClips.get(index);
+        this.internalClips.set(index, null);
         for (ClipListener listener : this.clipListeners) {
             listener.clipRemoved(this, clip);
         }
@@ -674,9 +686,12 @@ public class LXChannel extends LXBus {
         // Run modulators and components
         super.loop(deltaMs);
 
-        // Run clips
+        // Run the active clip...
+        // TODO(mcslee): don't loop, keep tabs of which is active now
         for (LXClip clip : this.internalClips) {
-            clip.loop(deltaMs);
+            if (clip != null) {
+                clip.loop(deltaMs);
+            }
         }
 
         // Check for transition completion

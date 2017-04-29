@@ -182,7 +182,7 @@ public class LXOscEngine extends LXComponent {
                         if (parts[3].equals(ROUTE_FOCUSED)) {
                             oscChannel(message, lx.engine.getFocusedChannel(), parts, 4);
                         } else if (parts[3].matches("\\d+")) {
-                            oscChannel(message, lx.engine.getChannel(Integer.parseInt(parts[3])), parts, 4);
+                            oscChannel(message, lx.engine.getChannel(Integer.parseInt(parts[3]) - 1), parts, 4);
                         } else {
                             oscChannel(message, lx.engine.getChannel(parts[3]), parts, 4);
                         }
@@ -239,7 +239,7 @@ public class LXOscEngine extends LXComponent {
                     if (parts[index+1].equals(ROUTE_ACTIVE)) {
                         oscPattern(message, ((LXChannel) channel).getActivePattern(), parts, index+2);
                     } else if (parts[index+1].matches("\\d+")) {
-                        oscPattern(message, ((LXChannel) channel).getPattern(Integer.parseInt(parts[index+1])), parts, index+2);
+                        oscPattern(message, ((LXChannel) channel).getPattern(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
                     } else {
                         oscPattern(message, ((LXChannel) channel).getPattern(parts[index+1]), parts, index+2);
                     }
@@ -251,7 +251,7 @@ public class LXOscEngine extends LXComponent {
             }
             if (parts[index].equals(ROUTE_EFFECT)) {
                 if (parts[index+1].matches("\\d+")) {
-                    oscEffect(message, channel.getEffect(Integer.parseInt(parts[index+1])), parts, index+2);
+                    oscEffect(message, channel.getEffect(Integer.parseInt(parts[index+1]) - 1), parts, index+2);
                 } else {
                     oscEffect(message, channel.getEffect(parts[index+1]), parts, index+2);
                 }

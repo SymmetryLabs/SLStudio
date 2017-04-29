@@ -85,7 +85,7 @@ public abstract class LXEffect extends LXLayeredComponent implements LXMidiListe
     public String getOscAddress() {
         LXBus bus = getBus();
         if (bus != null) {
-            return bus.getOscAddress() + "/effect/" + this.index;
+            return bus.getOscAddress() + "/effect/" + (this.index+1);
         }
         return null;
     }

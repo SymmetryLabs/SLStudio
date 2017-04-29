@@ -63,7 +63,7 @@ public abstract class LXPattern extends LXBufferedComponent implements LXMidiLis
     public String getOscAddress() {
         LXChannel channel = getChannel();
         if (channel != null) {
-            return channel.getOscAddress() + "/pattern/" + this.index;
+            return channel.getOscAddress() + "/pattern/" + (this.index + 1);
         }
         return null;
     }
