@@ -230,29 +230,29 @@ class SLController extends LXOutput {
 
     // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
     // TODO: refactor here
-    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
-      if (mappingMode.inUnMappedMode()) {
-        if (mappingMode.inDisplayAllMode()) {
-          color col = mappingMode.getUnMappedColor();
+    // if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+    //   if (mappingMode.inUnMappedMode()) {
+    //     if (mappingMode.inDisplayAllMode()) {
+    //       color col = mappingMode.getUnMappedColor();
 
-          for (int i = 0; i < numPixels; i++)
-            setPixel(i, col);
-        } else {
-          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
-            color col = mappingMode.getUnMappedColor();
+    //       for (int i = 0; i < numPixels; i++)
+    //         setPixel(i, col);
+    //     } else {
+    //       if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+    //         color col = mappingMode.getUnMappedColor();
 
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, col);
-          } else {
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-          }
-        }
-      } else {
-        for (int i = 0; i < numPixels; i++)
-          setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-      }
-    }
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, col);
+    //       } else {
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //       }
+    //     }
+    //   } else {
+    //     for (int i = 0; i < numPixels; i++)
+    //       setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //   }
+    // }
 
     // Send the cube data to the cube. yay!
     try { 
@@ -287,19 +287,19 @@ class OlaOutput extends LXOutput {
   void onSend(int[] colors) {
     for (OlaStrip strip : model.olaStrips) {
       int universe = Integer.parseInt(strip.universe);
-      short[] vals = new short[5*strip.points.size()];
-      int i = 0;
+      short[] channels = new short[5*strip.points.size()];
 
+      int i = 0;
       for (LXPoint p : strip.points) {
         color col = colors[p.index];
-        vals[i++] = (short)(LXColor.s(col)/100 * Short.MAX_VALUE); // intesity
-        vals[i++] = (short)Short.MAX_VALUE;                        // color?
-        vals[i++] = (short)Short.MAX_VALUE;                        // temperature
-        vals[i++] = (short)(LXColor.s(col)/100 * Short.MAX_VALUE); // saturation
-        vals[i++] = (short)(LXColor.h(col)/360 * Short.MAX_VALUE); // hue
+        channels[i++] = (short)(LXColor.s(col)/100 * Short.MAX_VALUE); // intesity
+        channels[i++] = (short)Short.MAX_VALUE;                        // color?
+        channels[i++] = (short)Short.MAX_VALUE;                        // temperature
+        channels[i++] = (short)(LXColor.s(col)/100 * Short.MAX_VALUE); // saturation
+        channels[i++] = (short)(LXColor.h(col)/360 * Short.MAX_VALUE); // hue
       }
 
-      olaClient.sendDmx(universe, vals);
+      olaClient.sendDmx(universe, channels);
     }
   }
 }

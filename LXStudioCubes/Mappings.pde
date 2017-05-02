@@ -21,7 +21,7 @@ static final StripConfig[] STRIP_CONFIG = {
 
 static final StripConfig[] OLA_STRIP_CONFIG = {
            // universe number    x   y   z  xRot,  yRot,  zRot,   num leds      pitch in inches
-  new StripConfig("1",           0,  0,  0,    0,     0,     0,        10,                 0.25),
+  new StripConfig("1",           0,  0,  0,    0,     0,     0,        30,                 0.25),
 
 };
 
