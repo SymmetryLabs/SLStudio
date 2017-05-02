@@ -1,5 +1,7 @@
 //import org.timothyb89.lifx.net.BroadcastListener;
 //import java.math.BigInteger;
+import ola.*;
+import com.google.protobuf.*;
 
   /*
  *     DOUBLE BLACK DIAMOND        DOUBLE BLACK DIAMOND
@@ -44,6 +46,7 @@ void setupOutputs(final LX lx) {
 
   lx.addOutput(new SLController(lx, "10.200.1.255"));
   //lx.addOutput(new LIFXOutput());
+  lx.addOutput(new OlaOutput(lx));
 }
 
 /*
@@ -263,6 +266,41 @@ class SLController extends LXOutput {
     println("Failed to connect to OPC server " + host);
     socket = null;
     dsocket = null;
+  }
+}
+
+/*
+ * Ola Output
+ *---------------------------------------------------------------------------*/
+class OlaOutput extends LXOutput {
+  private OlaClient olaClient;
+
+  public OlaOutput(LX lx) {
+    super(lx);
+    try {
+      this.olaClient = new OlaClient();
+    } catch (Exception e) {
+      println(e.toString());
+    }
+  }
+
+  void onSend(int[] colors) {
+    for (OlaStrip strip : model.olaStrips) {
+      int universe = Integer.parseInt(strip.universe);
+      short[] vals = new short[5*strip.points.size()];
+      int i = 0;
+
+      for (LXPoint p : strip.points) {
+        color col = colors[p.index];
+        vals[i++] = (short)(LXColor.s(col)/100 * Short.MAX_VALUE); // intesity
+        vals[i++] = (short)Short.MAX_VALUE;                        // color?
+        vals[i++] = (short)Short.MAX_VALUE;                        // temperature
+        vals[i++] = (short)(LXColor.s(col)/100 * Short.MAX_VALUE); // saturation
+        vals[i++] = (short)(LXColor.h(col)/360 * Short.MAX_VALUE); // hue
+      }
+
+      olaClient.sendDmx(universe, vals);
+    }
   }
 }
 

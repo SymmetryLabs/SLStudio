@@ -34,10 +34,11 @@ public static class SLModel extends LXModel {
   public final List<Cube> cubes;
   public final List<Face> faces;
   public final List<Strip> strips;
+  public final List<OlaStrip> olaStrips;
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<OlaStrip> olaStrips) {
     super(new Fixture(cubeArr, strips));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -73,6 +74,7 @@ public static class SLModel extends LXModel {
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
+    this.olaStrips = Collections.unmodifiableList(olaStrips);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
   }
 
@@ -424,7 +426,7 @@ public static class Strip extends LXModel {
   Strip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
     super(points);
     this.isHorizontal = isHorizontal;
-    this.metrics = metrics;   
+    this.metrics = metrics;
     this.ry = ry;
   }
 
@@ -447,5 +449,16 @@ public static class Strip extends LXModel {
       }
       transform.pop();
     }
+  }
+}
+
+/**
+ * A wrapper around strip, these output to ola (dmx) instead of our controllers
+ */
+public static class OlaStrip extends Strip {
+  String universe;
+  OlaStrip(String universe, Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+    super(metrics, ry, transform, isHorizontal);
+    this.universe = universe;
   }
 }
