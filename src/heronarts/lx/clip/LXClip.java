@@ -46,12 +46,12 @@ import heronarts.lx.parameter.MutableParameter;
 
 public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
 
-    public interface TargetListener {
-        public void targetAdded(LXClip clip, LXParameter parameter);
-        public void targetRemoved(LXClip clip, LXParameter parameter);
+    public interface Listener {
+        public void parameterLaneAdded(LXClip clip, ParameterClipLane lane);
+        public void parameterLaneRemoved(LXClip clip, ParameterClipLane lane);
     }
 
-    private final List<TargetListener> targetListeners = new ArrayList<TargetListener>();
+    private final List<Listener> listeners = new ArrayList<Listener>();
 
     double cursor = 0;
 
@@ -63,22 +63,21 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
     public final BooleanParameter loop = new BooleanParameter("Loop")
     .setDescription("Whether to loop the clip");
 
-    private final List<LXParameter> internalTargets = new ArrayList<LXParameter>();
-    public final List<LXParameter> targets = Collections.unmodifiableList(this.internalTargets);
+    public final PatternClipLane patternLane = new PatternClipLane(this);
+
+    private final List<LXClipLane> mutableLanes = new ArrayList<LXClipLane>();
+    public final List<LXClipLane> lanes = Collections.unmodifiableList(this.mutableLanes);
 
     public final LXChannel channel;
 
     private int index;
 
-    private final List<LXClipEvent> internalEvents = new ArrayList<LXClipEvent>();
-    public final List<LXClipEvent> events = Collections.unmodifiableList(this.internalEvents);
-
     private final LXParameterListener parameterRecorder = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
             if (isRunning() && channel.arm.isOn()) {
                 LXListenableNormalizedParameter parameter = (LXListenableNormalizedParameter) p;
-                addEvent(new ParameterClipEvent(LXClip.this, parameter));
-                addTarget(parameter);
+                ParameterClipLane lane = getParameterLane(parameter, true);
+                lane.addEvent(new ParameterClipEvent(LXClip.this, parameter));
             }
         }
     };
@@ -88,13 +87,16 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
         this.label.setDescription("The name of this clip");
         this.channel = channel;
         this.index = index;
+        this.mutableLanes.add(this.patternLane);
         setParent(this.channel);
         addParameter("length", this.length);
         addParameter("loop", this.loop);
 
         this.channel.addListener(this);
 
-        registerComponent(channel);
+        channel.fader.addListener(this.parameterRecorder);
+        channel.enabled.addListener(this.parameterRecorder);
+
         for (LXPattern pattern : channel.patterns) {
             registerComponent(pattern);
         }
@@ -103,25 +105,43 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
         }
     }
 
-    private void addTarget(LXParameter parameter) {
-        if (!this.internalTargets.contains(parameter)) {
-            this.internalTargets.add(parameter);
-            for (TargetListener listener : this.targetListeners) {
-                listener.targetAdded(this, parameter);
+    private ParameterClipLane getParameterLane(LXParameter parameter, boolean create) {
+        for (LXClipLane lane : this.lanes) {
+            if (lane instanceof ParameterClipLane) {
+                if (((ParameterClipLane) lane).parameter == parameter) {
+                    return (ParameterClipLane) lane;
+                }
             }
         }
+        if (create) {
+            ParameterClipLane lane = new ParameterClipLane(this, parameter);
+            this.mutableLanes.add(lane);
+            for (Listener listener : this.listeners) {
+                listener.parameterLaneAdded(this, lane);
+            }
+            return lane;
+        }
+        return null;
     }
 
-    public LXClip addTargetListener(TargetListener listener) {
-        if (this.targetListeners.contains(listener)) {
-            throw new IllegalStateException("Already registered target listener: " + listener);
+    public LXClip removeParameterLane(ParameterClipLane lane) {
+        this.mutableLanes.remove(lane);
+        for (Listener listener : this.listeners) {
+            listener.parameterLaneRemoved(this, lane);
         }
-        this.targetListeners.add(listener);
         return this;
     }
 
-    public LXClip removeTargetListener(TargetListener listener) {
-        this.targetListeners.remove(listener);
+    public LXClip addListener(Listener listener) {
+        if (this.listeners.contains(listener)) {
+            throw new IllegalStateException("Already registered listener: " + listener);
+        }
+        this.listeners.add(listener);
+        return this;
+    }
+
+    public LXClip removeListener(Listener listener) {
+        this.listeners.remove(listener);
         return this;
     }
 
@@ -144,11 +164,19 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
             this.cursor = 0;
         } else if (p == this.running) {
             if (this.running.isOn()) {
+                for (LXClip clip : this.channel.clips) {
+                    if (clip != null && clip != this) {
+                        clip.stop();
+                    }
+                }
                 if (this.channel.arm.isOn()) {
+                    // Start recording a new clip.
+                    // TODO(mcslee): toggle an overdub / replace recording mode
                     this.cursor = 0;
                     this.length.setValue(0);
-                    addEvent(new PatternClipEvent(this, this.channel.getActivePattern()));
-                    this.internalEvents.clear();
+                    clearLanes();
+
+                    this.patternLane.addEvent(new PatternClipEvent(this, this.channel.getActivePattern()));
                 }
             } else {
                 // Finished recording
@@ -159,8 +187,19 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
         }
     }
 
-    private void addEvent(LXClipEvent event) {
-        this.internalEvents.add(event);
+    private void clearLanes() {
+        Iterator<LXClipLane> iter = this.mutableLanes.iterator();
+        while (iter.hasNext()) {
+            LXClipLane lane = iter.next();
+            if (lane instanceof ParameterClipLane) {
+                iter.remove();
+                for (Listener listener : this.listeners) {
+                    listener.parameterLaneRemoved(this, (ParameterClipLane) lane);
+                }
+            } else {
+                lane.clear();
+            }
+        }
     }
 
     private void registerComponent(LXComponent component) {
@@ -172,16 +211,16 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
     }
 
     private void unregisterComponent(LXComponent component) {
-        for (LXParameter p : channel.getParameters()) {
+        for (LXParameter p : component.getParameters()) {
             if (p instanceof LXListenableNormalizedParameter) {
                 ((LXListenableNormalizedParameter) p).removeListener(this.parameterRecorder);
-            }
-        }
-        Iterator<LXClipEvent> iter = this.internalEvents.iterator();
-        while (iter.hasNext()) {
-            LXClipEvent event = iter.next();
-            if (event.component == component) {
-                iter.remove();
+                ParameterClipLane lane = getParameterLane(p, false);
+                if (lane != null) {
+                    this.mutableLanes.remove(lane);
+                    for (Listener listener : this.listeners) {
+                        listener.parameterLaneRemoved(this, lane);
+                    }
+                }
             }
         }
     }
@@ -197,14 +236,15 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
 
     @Override
     public void dispose() {
+        // TODO(mcslee): unregister as a listener to all the channel and device parameters
+        this.mutableLanes.clear();
+        this.listeners.clear();
         super.dispose();
     }
 
     private void executeEvents(double from, double to) {
-        for (LXClipEvent event : this.internalEvents) {
-            if (from <= event.cursor && to > event.cursor) {
-                event.execute();
-            }
+        for (LXClipLane lane : this.lanes) {
+            lane.executeEvents(from, to);
         }
     }
 
@@ -213,7 +253,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
         double nextCursor = this.cursor + deltaMs;
         double lengthValue = this.length.getValue();
         if (!this.channel.arm.isOn()) {
-            // TODO(mcslee): make this more efficient, keep track of index
+            // TODO(mcslee): make this more efficient, keep track of our index
             executeEvents(this.cursor, nextCursor);
             while (nextCursor > lengthValue) {
                 if (!this.loop.isOn()) {
@@ -222,7 +262,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
                     break;
                 } else {
                     nextCursor -= lengthValue;
-                    executeEvents(0, nextCursor);
+                    executeEvents(this.cursor, nextCursor);
                 }
             }
         } else {
@@ -264,7 +304,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
     @Override
     public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
         if (isRunning() && this.channel.arm.isOn()) {
-            addEvent(new PatternClipEvent(this, nextPattern));
+            this.patternLane.addEvent(new PatternClipEvent(this, nextPattern));
         }
     }
 

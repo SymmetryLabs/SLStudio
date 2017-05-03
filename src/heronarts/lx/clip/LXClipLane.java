@@ -26,50 +26,39 @@
 
 package heronarts.lx.clip;
 
-import java.util.Comparator;
-import heronarts.lx.LXComponent;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 
-public abstract class LXClipEvent implements Comparator<LXClipEvent> {
+public abstract class LXClipLane {
 
     protected final LXClip clip;
-    protected final LXComponent component;
-    protected double cursor;
 
-    LXClipEvent(LXClip clip) {
-        this(clip, clip.cursor, null);
-    }
+    protected final List<LXClipEvent> internalEvents = new ArrayList<LXClipEvent>();
+    public final List<LXClipEvent> events = Collections.unmodifiableList(this.internalEvents);
 
-    LXClipEvent(LXClip clip, LXComponent component) {
-        this(clip, clip.cursor, component);
-    }
-
-    LXClipEvent(LXClip clip, double cursor) {
-        this(clip, cursor, null);
-    }
-
-    LXClipEvent(LXClip clip, double cursor, LXComponent component) {
+    protected LXClipLane(LXClip clip) {
         this.clip = clip;
-        this.cursor = cursor;
-        this.component = component;
     }
 
-    public double getCursor() {
-        return this.cursor;
+    protected LXClipLane addEvent(LXClipEvent event) {
+        // TODO(mcslee): insertion sort?
+        this.internalEvents.add(event);
+        return this;
     }
 
-    public double getBasis() {
-        return this.cursor / this.clip.length.getValue();
-    }
+    public abstract String getLabel();
 
-    @Override
-    public int compare(LXClipEvent arg0, LXClipEvent arg1) {
-        if (arg0.cursor < arg1.cursor) {
-            return -1;
-        } else if (arg0.cursor > arg1.cursor) {
-            return 1;
+    void executeEvents(double from, double to) {
+        for (LXClipEvent event : this.internalEvents) {
+            if (from <= event.cursor && to > event.cursor) {
+                event.execute();
+            }
         }
-        return 0;
     }
 
-    public abstract void execute();
+    void clear() {
+        this.internalEvents.clear();
+    }
+
 }

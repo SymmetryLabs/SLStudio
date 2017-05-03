@@ -73,6 +73,11 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
         }
     }
 
+    public final LXRunnableComponent toggle() {
+        this.running.toggle();
+        return this;
+    }
+
     /**
      * Sets the runnable in motion
      *

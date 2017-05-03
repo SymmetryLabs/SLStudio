@@ -218,9 +218,9 @@ public class LXChannel extends LXBus {
 
     public final List<LXPattern> patterns = Collections.unmodifiableList(internalPatterns);
 
-    private final List<LXClip> internalClips = new ArrayList<LXClip>();
+    private final List<LXClip> mutableClips = new ArrayList<LXClip>();
 
-    public final List<LXClip> clips = Collections.unmodifiableList(internalClips);
+    public final List<LXClip> clips = Collections.unmodifiableList(this.mutableClips);
 
     /**
      * This is a local buffer used for transition blending on this channel
@@ -577,17 +577,24 @@ public class LXChannel extends LXBus {
         return this;
     }
 
+    public LXClip getClip(int index) {
+        if (index < this.clips.size()) {
+            return this.clips.get(index);
+        }
+        return null;
+    }
+
     public LXClip addClip() {
-        return addClip(this.internalClips.size());
+        return addClip(this.mutableClips.size());
     }
 
     public LXClip addClip(int index) {
-        while (this.internalClips.size() <= index) {
-            this.internalClips.add(null);
+        while (this.mutableClips.size() <= index) {
+            this.mutableClips.add(null);
         }
         LXClip clip = new LXClip(this.lx, this, index);
         clip.label.setValue("Clip-" + (index+1));
-        this.internalClips.set(index, clip);
+        this.mutableClips.set(index, clip);
         for (ClipListener listener : this.clipListeners) {
             listener.clipAdded(this, clip);
         }
@@ -595,7 +602,7 @@ public class LXChannel extends LXBus {
     }
 
     public LXClip removeClip(LXClip clip) {
-        int index = this.internalClips.indexOf(clip);
+        int index = this.mutableClips.indexOf(clip);
         if (index < 0) {
             throw new IllegalArgumentException("Clip is not owned by channel: " + clip + " " + this);
         }
@@ -603,8 +610,8 @@ public class LXChannel extends LXBus {
     }
 
     public LXClip removeClip(int index) {
-        LXClip clip = this.internalClips.get(index);
-        this.internalClips.set(index, null);
+        LXClip clip = this.mutableClips.get(index);
+        this.mutableClips.set(index, null);
         for (ClipListener listener : this.clipListeners) {
             listener.clipRemoved(this, clip);
         }
@@ -688,7 +695,7 @@ public class LXChannel extends LXBus {
 
         // Run the active clip...
         // TODO(mcslee): don't loop, keep tabs of which is active now
-        for (LXClip clip : this.internalClips) {
+        for (LXClip clip : this.mutableClips) {
             if (clip != null) {
                 clip.loop(deltaMs);
             }

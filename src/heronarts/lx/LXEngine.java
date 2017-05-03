@@ -153,7 +153,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         public FocusedClipParameter setClip(LXClip clip) {
             if (this.clip != clip) {
                 this.clip = clip;
-                setValue(getValue() + 1);
+                bang();
             }
             return this;
         }
@@ -302,6 +302,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
 
         // Modulation matrix
         this.modulation = new LXModulationEngine(lx);
+        LX.initTimer.log("Engine: Modulation");
 
         // Master channel
         this.masterChannel = new LXMasterChannel(lx);
@@ -361,6 +362,17 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         // Script engine
         this.script = new LXScriptEngine(lx);
         LX.initTimer.log("Engine: Script");
+
+        // Listener
+        this.focusedChannel.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                LXClip clip = focusedClip.getClip();
+                if (clip != null && clip.channel != getFocusedChannel()) {
+                    focusedClip.setClip(null);
+                }
+            }
+        });
+        LX.initTimer.log("Engine: Focus Listener");
 
         // Parameters
         addParameter("crossfader", this.crossfader);

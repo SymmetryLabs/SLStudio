@@ -26,50 +26,30 @@
 
 package heronarts.lx.clip;
 
-import java.util.Comparator;
 import heronarts.lx.LXComponent;
+import heronarts.lx.parameter.LXParameter;
 
-public abstract class LXClipEvent implements Comparator<LXClipEvent> {
+public class ParameterClipLane extends LXClipLane {
 
-    protected final LXClip clip;
-    protected final LXComponent component;
-    protected double cursor;
+    public final LXParameter parameter;
 
-    LXClipEvent(LXClip clip) {
-        this(clip, clip.cursor, null);
-    }
-
-    LXClipEvent(LXClip clip, LXComponent component) {
-        this(clip, clip.cursor, component);
-    }
-
-    LXClipEvent(LXClip clip, double cursor) {
-        this(clip, cursor, null);
-    }
-
-    LXClipEvent(LXClip clip, double cursor, LXComponent component) {
-        this.clip = clip;
-        this.cursor = cursor;
-        this.component = component;
-    }
-
-    public double getCursor() {
-        return this.cursor;
-    }
-
-    public double getBasis() {
-        return this.cursor / this.clip.length.getValue();
+    ParameterClipLane(LXClip clip, LXParameter parameter) {
+        super(clip);
+        this.parameter = parameter;
     }
 
     @Override
-    public int compare(LXClipEvent arg0, LXClipEvent arg1) {
-        if (arg0.cursor < arg1.cursor) {
-            return -1;
-        } else if (arg0.cursor > arg1.cursor) {
-            return 1;
+    public String getLabel() {
+        LXComponent component = this.parameter.getComponent();
+        if (component != this.clip.channel) {
+            return this.parameter.getComponent().getLabel() + " | " + this.parameter.getLabel();
         }
-        return 0;
+        return this.parameter.getLabel();
     }
 
-    public abstract void execute();
+    public ParameterClipLane addEvent(ParameterClipEvent event) {
+        super.addEvent(event);
+        return this;
+    }
 }
+
