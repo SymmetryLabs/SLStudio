@@ -181,6 +181,9 @@ class SLController extends LXOutput {
       if (dsocket == null) return;
     }
 
+    /**
+     * Cubes
+     *------------------------------------------------------------------------------------------------*/
     // Find the Cube we're outputting to
     // If we're on broadcast, use cube 0 for all cubes, even
     // if that cube isn't modelled yet
@@ -227,27 +230,65 @@ class SLController extends LXOutput {
 
     // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
     // TODO: refactor here
-    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
-      if (mappingMode.inUnMappedMode()) {
-        if (mappingMode.inDisplayAllMode()) {
-          color col = mappingMode.getUnMappedColor();
+    // if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+    //   if (mappingMode.inUnMappedMode()) {
+    //     if (mappingMode.inDisplayAllMode()) {
+    //       color col = mappingMode.getUnMappedColor();
 
-          for (int i = 0; i < numPixels; i++)
-            setPixel(i, col);
-        } else {
-          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
-            color col = mappingMode.getUnMappedColor();
+    //       for (int i = 0; i < numPixels; i++)
+    //         setPixel(i, col);
+    //     } else {
+    //       if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+    //         color col = mappingMode.getUnMappedColor();
 
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, col);
-          } else {
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-          }
-        }
-      } else {
-        for (int i = 0; i < numPixels; i++)
-          setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, col);
+    //       } else {
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //       }
+    //     }
+    //   } else {
+    //     for (int i = 0; i < numPixels; i++)
+    //       setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //   }
+    // }
+
+    /**
+     * Strips
+     *------------------------------------------------------------------------------------------------*/
+
+
+    /**
+     * Leaves
+     *------------------------------------------------------------------------------------------------*/
+    Leaf leaf = null;
+    for (Leaf l : model.leaves) {
+      if (l.id != null && l.id.equals(cubeId)) {
+        leaf = l;
+        break;
+      }
+    }
+    if (leaf != null) {
+      // for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+      //   int stripId = STRIP_ORD[stripNum];
+      //   Strip strip = cube.strips.get(stripId);
+
+      //   for (int i = 0; i < strip.metrics.numPoints; i++) {
+      //     LXPoint point = strip.getPoints().get(i);
+      //     setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+      //   }
+      // }
+      setPixel(0, colors[leaf.points.get(0).index]);
+      setPixel(1, colors[leaf.points.get(1).index]);
+      setPixel(2, colors[leaf.points.get(2).index]);
+      setPixel(3, colors[leaf.points.get(3).index]);
+      setPixel(4, colors[leaf.points.get(2).index]);
+      setPixel(5, colors[leaf.points.get(1).index]);
+      setPixel(6, colors[leaf.points.get(0).index]);
+    } else {
+      for (int i = 0; i < numPixels; i++) {
+        setPixel(i, LXColor.BLACK);
       }
     }
 

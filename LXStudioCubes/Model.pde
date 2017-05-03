@@ -34,11 +34,12 @@ public static class SLModel extends LXModel {
   public final List<Cube> cubes;
   public final List<Face> faces;
   public final List<Strip> strips;
+  public final List<Leaf> leaves;
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Leaf> leaves) {
-    super(new Fixture(cubeArr, strips));
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Leaf> leavesList) {
+    super(new Fixture(cubeArr, strips, leavesList));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -49,6 +50,8 @@ public static class SLModel extends LXModel {
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+
+    this.leaves = Collections.unmodifiableList(leavesList);
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -69,6 +72,9 @@ public static class SLModel extends LXModel {
     for (Strip strip : strips)
       stripList.add(strip);
 
+    for (Leaf leaf : leaves)
+      stripList.add((Strip)leaf);
+
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
@@ -77,7 +83,7 @@ public static class SLModel extends LXModel {
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(Cube[] cubeArr, List<Strip> strips, List<Leaf> leaves) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -87,6 +93,11 @@ public static class SLModel extends LXModel {
       } 
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
+          this.points.add(point);
+        }
+      }
+      for (Leaf leaf : leaves) {
+        for (LXPoint point : leaf.points) {
           this.points.add(point);
         }
       }
@@ -204,8 +215,8 @@ public static class Cube extends LXModel {
       this.LEDS_PER_METER = ledsPerMeter;
 
       this.FACE_METRICS = new Face.Metrics(
-        new LinearStrip.Metrics(this.EDGE_WIDTH, POINTS_PER_STRIP, ledsPerMeter), 
-        new LinearStrip.Metrics(this.EDGE_HEIGHT, POINTS_PER_STRIP, ledsPerMeter)
+        new Strip.Metrics(this.EDGE_WIDTH, POINTS_PER_STRIP, ledsPerMeter), 
+        new Strip.Metrics(this.EDGE_HEIGHT, POINTS_PER_STRIP, ledsPerMeter)
       );
     }
 
@@ -328,10 +339,10 @@ public static class Face extends LXModel {
   public final static int STRIPS_PER_FACE = 3;
 
   public static class Metrics {
-    final LinearStrip.Metrics horizontal;
-    final LinearStrip.Metrics vertical;
+    final Strip.Metrics horizontal;
+    final Strip.Metrics vertical;
 
-    public Metrics(LinearStrip.Metrics horizontal, LinearStrip.Metrics vertical) {
+    public Metrics(Strip.Metrics horizontal, Strip.Metrics vertical) {
       this.horizontal = horizontal;
       this.vertical = vertical;
     }
@@ -363,8 +374,8 @@ public static class Face extends LXModel {
       transform.translate(0, metrics.vertical.length, 0);
       for (int i = 0; i < STRIPS_PER_FACE; i++) {
         boolean isHorizontal = (i % 2 == 0);
-        LinearStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-        Strip strip = (Strip)(new LinearStrip(stripMetrics, ry, transform, isHorizontal));
+        Strip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
+        Strip strip = new Strip(stripMetrics, ry, transform, isHorizontal);
         this.strips.add(strip);
         transform.translate(isHorizontal ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
         transform.rotateZ(HALF_PI);
@@ -377,47 +388,19 @@ public static class Face extends LXModel {
   }
 }
 
-/**
- * Leaf for the Tenere Tree
- */
 public static class Leaf extends Strip {
   public String id;
 
-  public Leaf(String id, LXTransform transform) {
-    super(new Fixture(transform));
+  Leaf(String id, Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+    super(metrics, ry, transform, isHorizontal);
     this.id = id;
   }
-
-  private static class Fixture extends LXAbstractFixture {
-    public final static float POINT_PITCH = 0.2;
-    
-    private Fixture(LXTransform t) {
-      for (int i = 0; i < 5; i++) {
-        t.transform(POINT_PITCH, 0, 0);
-        this.points.add(new LXPoint(t.x(), t.y(), t.z()));
-      }
-      t.transform(0, 0, -0.25);
-      for (int i = 0; i < 4; i--) {
-        t.transform(-POINT_PITCH, 0, 0);
-        this.points.add(new LXPoint(t.x(), t.y(), t.z()));
-      }
-    }
-  }
 }
 
 /**
- * This is an abstract class to be an atomic "grouping" of leds
+ * A strip is a linear run of points along a single edge of one cube.
  */
-public static abstract class Strip extends LXModel {
-  public Strip(LXAbstractFixture fixture) {
-    super(fixture);
-  }
-}
-
-/**
- * A strip is a linear run of points along a single straight line
- */
-public static class LinearStrip extends Strip {
+public static class Strip extends LXModel {
 
   public static final float INCHES_PER_METER = 39.3701;
 
@@ -458,14 +441,14 @@ public static class LinearStrip extends Strip {
 
   public Object obj1 = null, obj2 = null;
 
-  LinearStrip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
+  Strip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
     super(points);
     this.isHorizontal = isHorizontal;
     this.metrics = metrics;   
     this.ry = ry;
   }
 
-  LinearStrip(Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+  Strip(Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
     super(new Fixture(metrics, ry, transform));
     this.metrics = metrics;
     this.isHorizontal = isHorizontal;
