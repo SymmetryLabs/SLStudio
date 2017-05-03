@@ -14,8 +14,8 @@ static final float TOWER_RISER = 14;
 static final float JUMP = CUBE_HEIGHT+CUBE_SPACING;
 
 static final StripConfig[] STRIP_CONFIG = {
-                // controller id    x   y   z  xRot,  yRot,  zRot,   num leds      pitch in inches
-  //new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
+          // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
+//new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
 
 };
 
