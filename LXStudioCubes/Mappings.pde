@@ -23,9 +23,9 @@ static final float JUMP = CUBE_HEIGHT+CUBE_SPACING;
 
 static final LeafConfig[] LEAF_CONFIG = {
                 // controller id   x   y   z  xRot   yRot   zRot
-  new LeafConfig("206",            0,  0,  0,    0,     0,     0),
-  new LeafConfig("413",            10,  15,  0,    0,     0,     0),
-  new LeafConfig("344",            20,  10,  0,    0,     0,     0),
+  new LeafConfig("206",            0,  0,  0,    0,     0,     -90),
+  new LeafConfig("413",            10,  15,  0,    0,     0,     -90),
+  new LeafConfig("344",            20,  10,  0,    0,     0,     -90),
 
 };
 
@@ -466,7 +466,7 @@ public SLModel buildModel() {
   List<Leaf> leaves = new ArrayList<Leaf>();
 
   for (LeafConfig leafConfig : LEAF_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(4, 0.2);
+    Strip.Metrics metrics = new Strip.Metrics(4, 1);
 
     globalTransform.push();
     globalTransform.translate(leafConfig.x, leafConfig.y, leafConfig.z);
