@@ -3,8 +3,16 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
+
+static final float cubesOffsetX = 0;
+static final float cubesOffsetY = 0;
+static final float cubesOffsetZ = 0;
+
+static final float cubesRotationX = 0;
+static final float cubesRotationY = -45;
+static final float cubesRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
 static final float CUBE_HEIGHT = 24;
@@ -12,6 +20,12 @@ static final float CUBE_SPACING = 2;
 static final float TOWER_RISER = 14;
 
 static final float JUMP = CUBE_HEIGHT+CUBE_SPACING;
+
+static final LeafConfig[] LEAF_CONFIG = {
+                // controller id    x   y   z  xRot,  yRot,  zRot,   num leds      pitch in inches
+  //new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
+
+};
 
 static final StripConfig[] STRIP_CONFIG = {
                 // controller id    x   y   z  xRot,  yRot,  zRot,   num leds      pitch in inches
@@ -305,6 +319,26 @@ static class StripConfig {
   }
 }
 
+static class LeafConfig {
+  String id;
+  float x;
+  float y;
+  float z;
+  float xRot;
+  float yRot;
+  float zRot;
+
+  LeafConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot) {
+    this.id = id;
+    this.x = x;
+    this.y = y;
+    this.z = z;
+    this.zRot = xRot;
+    this.yRot = yRot;
+    this.zRot = zRot;
+  }
+}
+
 static class TowerConfig {
 
   final Cube.Type type;
@@ -381,6 +415,11 @@ public SLModel buildModel() {
   globalTransform.rotateZ(globalRotationZ * PI / 180.);
 
   /* Cubes ----------------------------------------------------------*/
+  globalTransform.translate(cubesOffsetX, cubesOffsetY, cubesOffsetZ);
+  globalTransform.rotateY(cubesRotationY * PI / 180.);
+  globalTransform.rotateX(cubesRotationX * PI / 180.);
+  globalTransform.rotateZ(cubesRotationZ * PI / 180.);
+
   List<Tower> towers = new ArrayList<Tower>();
   List<Cube> allCubes = new ArrayList<Cube>();
 
@@ -407,7 +446,7 @@ public SLModel buildModel() {
   List<Strip> strips = new ArrayList<Strip>();
 
   for (StripConfig stripConfig : STRIP_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
+    LinearStrip.Metrics metrics = new LinearStrip.Metrics(stripConfig.numPoints, stripConfig.spacing);
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
@@ -415,7 +454,23 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+    strips.add((Strip)(new LinearStrip(metrics, stripConfig.yRot, globalTransform, true)));
+
+    globalTransform.pop();
+  }
+  /*-----------------------------------------------------------------*/
+
+  /* Leaves ---------------------------------------------------------*/
+  List<Leaf> leaves = new ArrayList<Leaf>();
+
+  for (LeafConfig leafConfig : LEAF_CONFIG) {
+    globalTransform.push();
+    globalTransform.translate(leafConfig.x, leafConfig.y, leafConfig.z);
+    globalTransform.rotateY(leafConfig.xRot * PI / 180.);
+    globalTransform.rotateX(leafConfig.yRot * PI / 180.);
+    globalTransform.rotateZ(leafConfig.zRot * PI / 180.);
+
+    leaves.add(new Leaf(leafConfig.id, globalTransform));
 
     globalTransform.pop();
   }
@@ -426,7 +481,7 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
+  return new SLModel(towers, allCubesArr, strips, leaves);
 }
 
 public SLModel getModel() {

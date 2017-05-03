@@ -37,7 +37,7 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Leaf> leaves) {
     super(new Fixture(cubeArr, strips));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -204,8 +204,8 @@ public static class Cube extends LXModel {
       this.LEDS_PER_METER = ledsPerMeter;
 
       this.FACE_METRICS = new Face.Metrics(
-        new Strip.Metrics(this.EDGE_WIDTH, POINTS_PER_STRIP, ledsPerMeter), 
-        new Strip.Metrics(this.EDGE_HEIGHT, POINTS_PER_STRIP, ledsPerMeter)
+        new LinearStrip.Metrics(this.EDGE_WIDTH, POINTS_PER_STRIP, ledsPerMeter), 
+        new LinearStrip.Metrics(this.EDGE_HEIGHT, POINTS_PER_STRIP, ledsPerMeter)
       );
     }
 
@@ -328,10 +328,10 @@ public static class Face extends LXModel {
   public final static int STRIPS_PER_FACE = 3;
 
   public static class Metrics {
-    final Strip.Metrics horizontal;
-    final Strip.Metrics vertical;
+    final LinearStrip.Metrics horizontal;
+    final LinearStrip.Metrics vertical;
 
-    public Metrics(Strip.Metrics horizontal, Strip.Metrics vertical) {
+    public Metrics(LinearStrip.Metrics horizontal, LinearStrip.Metrics vertical) {
       this.horizontal = horizontal;
       this.vertical = vertical;
     }
@@ -363,8 +363,8 @@ public static class Face extends LXModel {
       transform.translate(0, metrics.vertical.length, 0);
       for (int i = 0; i < STRIPS_PER_FACE; i++) {
         boolean isHorizontal = (i % 2 == 0);
-        Strip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-        Strip strip = new Strip(stripMetrics, ry, transform, isHorizontal);
+        LinearStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
+        Strip strip = (Strip)(new LinearStrip(stripMetrics, ry, transform, isHorizontal));
         this.strips.add(strip);
         transform.translate(isHorizontal ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
         transform.rotateZ(HALF_PI);
@@ -378,9 +378,46 @@ public static class Face extends LXModel {
 }
 
 /**
- * A strip is a linear run of points along a single edge of one cube.
+ * Leaf for the Tenere Tree
  */
-public static class Strip extends LXModel {
+public static class Leaf extends Strip {
+  public String id;
+
+  public Leaf(String id, LXTransform transform) {
+    super(new Fixture(transform));
+    this.id = id;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+    public final static float POINT_PITCH = 0.2;
+    
+    private Fixture(LXTransform t) {
+      for (int i = 0; i < 5; i++) {
+        t.transform(POINT_PITCH, 0, 0);
+        this.points.add(new LXPoint(t.x(), t.y(), t.z()));
+      }
+      t.transform(0, 0, -0.25);
+      for (int i = 0; i < 4; i--) {
+        t.transform(-POINT_PITCH, 0, 0);
+        this.points.add(new LXPoint(t.x(), t.y(), t.z()));
+      }
+    }
+  }
+}
+
+/**
+ * This is an abstract class to be an atomic "grouping" of leds
+ */
+public static abstract class Strip extends LXModel {
+  public Strip(LXAbstractFixture fixture) {
+    super(fixture);
+  }
+}
+
+/**
+ * A strip is a linear run of points along a single straight line
+ */
+public static class LinearStrip extends Strip {
 
   public static final float INCHES_PER_METER = 39.3701;
 
@@ -421,14 +458,14 @@ public static class Strip extends LXModel {
 
   public Object obj1 = null, obj2 = null;
 
-  Strip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
+  LinearStrip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
     super(points);
     this.isHorizontal = isHorizontal;
     this.metrics = metrics;   
     this.ry = ry;
   }
 
-  Strip(Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+  LinearStrip(Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
     super(new Fixture(metrics, ry, transform));
     this.metrics = metrics;
     this.isHorizontal = isHorizontal;
