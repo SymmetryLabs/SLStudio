@@ -182,6 +182,7 @@ public class LXClip extends LXRunnableComponent implements LXChannel.Listener {
                 // Finished recording
                 if (this.channel.arm.isOn()) {
                     this.length.setValue(this.cursor);
+                    this.channel.arm.setValue(false);
                 }
             }
         }
