@@ -31,7 +31,7 @@ import heronarts.lx.LXChannel;
 import heronarts.p3lx.ui.UI;
 
 public class UIChannelStrip extends UIMixerStrip {
-    public UIChannelStrip(UI ui, UIMixer mixer, LX lx, LXChannel channel, float x, float y) {
-        super(ui, mixer, lx, channel, x, y);
+    public UIChannelStrip(UI ui, UIMixer mixer, LX lx, LXChannel channel) {
+        super(ui, mixer, lx, channel, 0, UIMixer.PADDING);
     }
 }

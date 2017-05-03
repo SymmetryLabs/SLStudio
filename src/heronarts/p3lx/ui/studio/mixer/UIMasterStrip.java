@@ -31,8 +31,8 @@ import heronarts.p3lx.ui.UI;
 
 public class UIMasterStrip extends UIMixerStrip {
 
-    protected UIMasterStrip(UI ui, UIMixer mixer, LX lx, float x, float y) {
-        super(ui, mixer, lx, x, y);
+    protected UIMasterStrip(UI ui, UIMixer mixer, LX lx) {
+        super(ui, mixer, lx, 0, UIMixer.PADDING);
     }
 
 }

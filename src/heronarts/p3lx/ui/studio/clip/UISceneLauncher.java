@@ -26,33 +26,32 @@
 
 package heronarts.p3lx.ui.studio.clip;
 
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+
 import heronarts.lx.LX;
-import heronarts.lx.LXChannel;
-import heronarts.lx.clip.LXClip;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 
-public class UIChannelClipLauncher extends UIClipLauncher {
+public class UISceneLauncher extends UI2dContainer {
 
-    public UIChannelClipLauncher(UI ui, UIMixer mixer, LX lx, LXChannel channel) {
-        super(ui, mixer, lx);
-        for (int i = 0; i < NUM_CLIPS; ++i) {
-            this.mutableClips.add((UIChannelClipButton) new UIChannelClipButton(ui, mixer, lx, channel, i, 0, i * UIClipButton.HEIGHT).addToContainer(this));
+    public static final float WIDTH = 20;
+
+    private final List<UISceneButton> mutableScenes = new ArrayList<UISceneButton>();
+    public final List<UISceneButton> scenes = Collections.unmodifiableList(this.mutableScenes);
+
+    public UISceneLauncher(UI ui, UIMixer mixer, LX lx, float x, float y) {
+        super(x, y, WIDTH, UIClipLauncher.HEIGHT);
+        setLayout(UI2dContainer.Layout.VERTICAL);
+        setChildMargin(UIClipLauncher.SPACING);
+        setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL);
+        for (int i = 0; i < UIClipLauncher.NUM_CLIPS; ++i) {
+            UISceneButton scene = new UISceneButton(ui, mixer, lx, i);
+            this.mutableScenes.add(scene);
+            scene.addToContainer(this);
         }
-        new UIChannelClipStop(ui, channel).addToContainer(this);
-
-        channel.addClipListener(new LXChannel.ClipListener() {
-            @Override
-            public void clipRemoved(LXChannel channel, LXClip clip) {
-                clips.get(clip.getIndex()).setClip(null);
-            }
-
-            @Override
-            public void clipAdded(LXChannel channel, LXClip clip) {
-                clips.get(clip.getIndex()).setClip(clip);
-            }
-        });
+        new UISceneStop(ui, lx).addToContainer(this);
     }
-
-
 }

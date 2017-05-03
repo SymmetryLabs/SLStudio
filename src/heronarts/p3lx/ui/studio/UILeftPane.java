@@ -35,7 +35,7 @@ import heronarts.p3lx.ui.studio.project.UIProjectManager;
 
 public class UILeftPane extends UIPane {
 
-    public final UI2dScrollContext project;
+    public final UI2dScrollContext browser;
     public final UI2dScrollContext global;
     public final UIAudio audio;
     public final UIPalette palette;
@@ -44,13 +44,13 @@ public class UILeftPane extends UIPane {
     public static final int TOP_OFFSET = 32;
 
     public UILeftPane(UI ui, LX lx) {
-        super(ui, lx, new String[] { "PROJECT", "GLOBAL" }, 0, WIDTH, TOP_OFFSET);
+        super(ui, lx, new String[] { "BROWSER", "GLOBAL" }, 0, WIDTH, TOP_OFFSET);
 
         new UIImage(ui.applet.loadImage("lxstudio.png"), MARGIN, 4)
         .setDescription(LXStudio.COPYRIGHT)
         .addToContainer(this);
 
-        this.project = this.sections[0];
+        this.browser = this.sections[0];
         this.global = this.sections[1];
         setActiveSection(1);
 
@@ -60,8 +60,8 @@ public class UILeftPane extends UIPane {
         this.palette = (UIPalette) new UIPalette(ui, lx.palette, 0, 0, this.global.getContentWidth(), 184).addToContainer(this.global);
 
         // Project elements
-        new UIProjectManager(ui, lx, 0, 0, this.project.getContentWidth()).addToContainer(this.project);
-        new UIPatternManager(ui, lx, 0, 0, this.project.getContentWidth()).addToContainer(this.project);
-        new UIEffectManager(ui, lx, 0, 9, this.project.getContentWidth()).addToContainer(this.project);
+        new UIProjectManager(ui, lx, 0, 0, this.browser.getContentWidth()).addToContainer(this.browser);
+        new UIPatternManager(ui, lx, 0, 0, this.browser.getContentWidth()).addToContainer(this.browser);
+        new UIEffectManager(ui, lx, 0, 9, this.browser.getContentWidth()).addToContainer(this.browser);
     }
 }

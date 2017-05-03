@@ -36,21 +36,24 @@ import heronarts.lx.LXEngine;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.studio.clip.UIChannelClipLauncher;
+import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
+import heronarts.p3lx.ui.studio.clip.UISceneLauncher;
 import processing.core.PConstants;
+import processing.core.PGraphics;
 
 public class UIMixer extends UI2dContainer {
 
     public final static int PADDING = 6;
-    public final static int STRIP_SPACING = UIMixerStripControls.WIDTH + UIMixerStripControls.SPACING;
-    private final static int ADD_CHANNEL_BUTTON_MARGIN = 1;
+    private final static int CHILD_MARGIN = 1;
+    public final static int STRIP_SPACING = UIMixerStripControls.WIDTH + CHILD_MARGIN;
     public final static int HEIGHT = UIMixerStrip.HEIGHT + 2*PADDING;
 
     private final Map<LXChannel, UIChannelStrip> internalChannelStrips = new HashMap<LXChannel, UIChannelStrip>();
     public final Map<LXChannel, UIChannelStrip> channelStrips = Collections.unmodifiableMap(this.internalChannelStrips);
 
-    public final UIMasterStrip masterStrip;
     private final UIButton addChannelButton;
+    public final UIMasterStrip masterStrip;
+    public UISceneLauncher sceneLauncher;
 
     final LX lx;
 
@@ -60,16 +63,17 @@ public class UIMixer extends UI2dContainer {
 
         setBackgroundColor(ui.theme.getPaneInsetColor());
         setBorderRounding(4);
+        setLayout(UI2dContainer.Layout.HORIZONTAL);
+        setChildMargin(CHILD_MARGIN);
+        setPadding(0, PADDING, 0, PADDING);
 
-        int xp = PADDING;
         for (LXChannel channel : lx.engine.getChannels()) {
-            UIChannelStrip strip = new UIChannelStrip(ui, this, lx, channel, xp, PADDING);
+            UIChannelStrip strip = new UIChannelStrip(ui, this, lx, channel);
             this.internalChannelStrips.put(channel, strip);
             strip.addToContainer(this);
-            xp += STRIP_SPACING;
         }
 
-        this.addChannelButton = new UIButton(xp, PADDING + UIChannelClipLauncher.HEIGHT + UIMixerStrip.SPACING, 16, UIMixerStripControls.HEIGHT) {
+        this.addChannelButton = new UIButton(0, PADDING + UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, 16, UIMixerStripControls.HEIGHT) {
             @Override
             public void onToggle(boolean on) {
                 if (!on) {
@@ -86,53 +90,39 @@ public class UIMixer extends UI2dContainer {
         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
         .setDescription("New Channel: add another channel")
         .addToContainer(this);
-        xp += this.addChannelButton.getWidth() + ADD_CHANNEL_BUTTON_MARGIN;
 
-        this.masterStrip = new UIMasterStrip(ui, this, lx, xp, PADDING);
-        this.masterStrip.addToContainer(this);
-        setWidth(xp + UIMixerStripControls.WIDTH + PADDING);
+        this.masterStrip = (UIMasterStrip) new UIMasterStrip(ui, this, lx).addToContainer(this);
+        this.sceneLauncher = (UISceneLauncher) new UISceneLauncher(ui, this, lx, 0, PADDING).addToContainer(this);
 
         lx.engine.addListener(new LXEngine.Listener() {
             public void channelAdded(LXEngine engine, LXChannel channel) {
-                UIChannelStrip strip = new UIChannelStrip(ui, UIMixer.this, lx, channel, width, PADDING);
+                UIChannelStrip strip = new UIChannelStrip(ui, UIMixer.this, lx, channel);
                 internalChannelStrips.put(channel, strip);
                 strip.addToContainer(UIMixer.this, channel.getIndex());
-                updateStripPositions();
-                setWidth(width + STRIP_SPACING);
             }
 
             public void channelRemoved(LXEngine engine, LXChannel channel) {
-                for (LXChannel c : internalChannelStrips.keySet()) {
-                    if (c.getIndex() >= channel.getIndex()) {
-                        UIChannelStrip strip = internalChannelStrips.get(c);
-                        strip.setPosition(strip.getX() - STRIP_SPACING, strip.getY());
-                    }
-                }
                 internalChannelStrips.remove(channel).removeFromContainer();
-                masterStrip.setPosition(masterStrip.getX() - STRIP_SPACING, masterStrip.getY());
-                updateStripPositions();
-                setWidth(width - STRIP_SPACING);
             }
 
             public void channelMoved(LXEngine engine, LXChannel channel) {
-                for (LXChannel c : internalChannelStrips.keySet()) {
-                    UIChannelStrip strip = internalChannelStrips.get(c);
-                    strip.setPosition(PADDING + STRIP_SPACING * c.getIndex(), strip.getY());
-                }
                 internalChannelStrips.get(channel).setContainerIndex(channel.getIndex());
             }
         });
     }
 
-    void updateStripPositions() {
-        int xp = PADDING;
-        for (LXChannel channel : lx.engine.getChannels()) {
-            this.internalChannelStrips.get(channel).setX(xp);
-            xp += STRIP_SPACING;
-        }
-        this.addChannelButton.setX(xp);
-        xp += this.addChannelButton.getWidth() + ADD_CHANNEL_BUTTON_MARGIN;
-        this.masterStrip.setX(xp);
+    @Override
+    protected void onDraw(UI ui, PGraphics pg) {
+        super.onDraw(ui, pg);
+        pg.noStroke();
+        pg.fill(0xff393939);
+        pg.rect(
+            this.width - PADDING - UISceneLauncher.WIDTH,
+            this.height - PADDING - UIChannelStripControls.HEIGHT,
+            UISceneLauncher.WIDTH,
+            UIChannelStripControls.HEIGHT
+        );
+
     }
 
 }

@@ -31,12 +31,14 @@ import java.util.Collections;
 import java.util.List;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXBus;
+import heronarts.lx.clip.LXClip;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 
-public abstract class UIClipLauncher extends UI2dContainer {
+public class UIClipLauncher extends UI2dContainer {
 
     public static final int NUM_CLIPS = 5;
     public static final int WIDTH = UIMixerStripControls.WIDTH;
@@ -49,12 +51,29 @@ public abstract class UIClipLauncher extends UI2dContainer {
     protected final List<UIClipButton> mutableClips = new ArrayList<UIClipButton>(NUM_CLIPS);
     public final List<UIClipButton> clips = Collections.unmodifiableList(this.mutableClips);
 
-    protected UIClipLauncher(UI ui, UIMixer mixer, LX lx) {
+    public UIClipLauncher(UI ui, UIMixer mixer, LX lx, LXBus bus) {
         super(0, 0, WIDTH, HEIGHT);
         this.mixer = mixer;
         this.lx = lx;
         setLayout(UI2dContainer.Layout.VERTICAL);
         setChildMargin(SPACING);
         setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL);
+
+        for (int i = 0; i < NUM_CLIPS; ++i) {
+            this.mutableClips.add((UIClipButton) new UIClipButton(ui, mixer, lx, bus, i, 0, i * UIClipButton.HEIGHT).addToContainer(this));
+        }
+        new UIClipStop(ui, bus).addToContainer(this);
+
+        bus.addClipListener(new LXBus.ClipListener() {
+            @Override
+            public void clipRemoved(LXBus bus, LXClip clip) {
+                clips.get(clip.getIndex()).setClip(null);
+            }
+
+            @Override
+            public void clipAdded(LXBus bus, LXClip clip) {
+                clips.get(clip.getIndex()).setClip(clip);
+            }
+        });
     }
 }

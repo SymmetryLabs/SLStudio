@@ -27,36 +27,35 @@
 package heronarts.p3lx.ui.studio.clip;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXChannel;
-import heronarts.lx.clip.LXClip;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
+import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIMasterClipButton extends UIClipButton {
+public class UISceneButton extends UI2dComponent implements UIFocus {
 
+    private final UIMixer mixer;
+    private final LX lx;
+    private final int index;
     private boolean playButtonDown = false;
 
-    public UIMasterClipButton(UI ui, UIMixer mixer, LX lx, int index, float x, float y) {
-        super(ui, mixer, lx, index, x, y);
+    public UISceneButton(UI ui, UIMixer mixer, LX lx, int index) {
+        super(0, 0, UISceneLauncher.WIDTH, UIClipButton.HEIGHT);
+        this.mixer = mixer;
+        this.lx = lx;
+        this.index = index;
+        setBorderColor(ui.theme.getControlBorderColor());
+        setBackgroundColor(ui.theme.getControlBackgroundColor());
     }
 
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         pg.noStroke();
         pg.fill(this.playButtonDown ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-        drawPlayTriangle(ui, pg);
-    }
-
-    private void triggerScene() {
-        for (LXChannel channel : this.lx.engine.channels) {
-            LXClip clip = channel.getClip(this.index);
-            if (clip != null) {
-                clip.trigger();
-            }
-        }
+        UIClipButton.drawPlayTriangle(ui, pg);
     }
 
     @Override
@@ -64,10 +63,10 @@ public class UIMasterClipButton extends UIClipButton {
         super.onKeyPressed(keyEvent, keyChar, keyCode);
         if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
             consumeKeyEvent();
-            this.mixer.channelStrips.get(this.lx.engine.getChannel(this.lx.engine.channels.size()-1)).clipLauncher.clips.get(this.index).focus();
+            this.mixer.masterStrip.clipLauncher.clips.get(this.index).focus();
         } else if (keyCode == java.awt.event.KeyEvent.VK_SPACE) {
             consumeKeyEvent();
-            triggerScene();
+            this.lx.engine.triggerScene(this.index);
             this.playButtonDown = true;
             redraw();
         }
@@ -83,11 +82,9 @@ public class UIMasterClipButton extends UIClipButton {
 
     @Override
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        if (mx < LABEL_X) {
-            triggerScene();
-            this.playButtonDown = true;
-            redraw();
-        }
+        this.lx.engine.triggerScene(this.index);
+        this.playButtonDown = true;
+        redraw();
     }
 
     @Override
@@ -97,4 +94,4 @@ public class UIMasterClipButton extends UIClipButton {
             redraw();
         }
     }
-}
+ }

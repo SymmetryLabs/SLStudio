@@ -32,7 +32,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
-import heronarts.p3lx.ui.studio.clip.UIChannelClipLauncher;
+import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -41,7 +41,6 @@ public abstract class UIMixerStripControls extends UI2dContainer {
 
     public final static int PADDING = 2;
     public final static int WIDTH = UIMixerStrip.WIDTH;
-    public final static int SPACING = 1;
 
     public final static int HEIGHT = 168;
 
@@ -55,7 +54,7 @@ public abstract class UIMixerStripControls extends UI2dContainer {
     protected final LXBus bus;
 
     UIMixerStripControls(final UI ui, final LX lx, final LXBus bus) {
-        super(0, UIChannelClipLauncher.HEIGHT + UIMixerStrip.SPACING, WIDTH, HEIGHT);
+        super(0, UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, WIDTH, HEIGHT);
         this.ui = ui;
         this.lx = lx;
         this.bus = bus;

@@ -30,14 +30,12 @@ import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
-import heronarts.p3lx.ui.studio.clip.UIChannelClipLauncher;
 import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
-import heronarts.p3lx.ui.studio.clip.UIMasterClipLauncher;
 
 public abstract class UIMixerStrip extends UI2dContainer {
 
     public final static int SPACING = 6;
-    public final static int HEIGHT = UIMixerStripControls.HEIGHT + SPACING + UIChannelClipLauncher.HEIGHT;
+    public final static int HEIGHT = UIMixerStripControls.HEIGHT + SPACING + UIClipLauncher.HEIGHT;
     public final static int WIDTH = 72;
 
     protected final LX lx;
@@ -48,14 +46,14 @@ public abstract class UIMixerStrip extends UI2dContainer {
     protected UIMixerStrip(UI ui, UIMixer mixer, LX lx, float x, float y) {
         super(x, y, WIDTH, HEIGHT);
         this.lx = lx;
-        this.clipLauncher = (UIClipLauncher) new UIMasterClipLauncher(ui, mixer, lx).addToContainer(this);
+        this.clipLauncher = (UIClipLauncher) new UIClipLauncher(ui, mixer, lx, lx.engine.masterChannel).addToContainer(this);
         this.controls = (UIMixerStripControls) new UIMasterStripControls(ui, lx).addToContainer(this);
     }
 
     protected UIMixerStrip(UI ui, UIMixer mixer, LX lx, LXChannel channel, float x, float y) {
         super(x, y, WIDTH, HEIGHT);
         this.lx = lx;
-        this.clipLauncher = (UIClipLauncher) new UIChannelClipLauncher(ui, mixer, lx, channel).addToContainer(this);
+        this.clipLauncher = (UIClipLauncher) new UIClipLauncher(ui, mixer, lx, channel).addToContainer(this);
         this.controls = (UIMixerStripControls) new UIChannelStripControls(ui, lx, channel).addToContainer(this);
     }
 

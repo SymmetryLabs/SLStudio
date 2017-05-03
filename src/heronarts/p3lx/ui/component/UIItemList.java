@@ -255,9 +255,15 @@ public interface UIItemList {
          * @return this
          */
         private void removeItem(Item item) {
-            this.items.remove(item);
+            int itemIndex = this.items.indexOf(item);
+            if (itemIndex < 0) {
+                throw new IllegalArgumentException("Item is not in UIItemList: " + item);
+            }
+            this.items.remove(itemIndex);
             if (this.focusIndex >= this.items.size()) {
                 setFocusIndex(items.size() - 1);
+            } else {
+                this.items.get(this.focusIndex).onFocus();
             }
             setContentHeight(ROW_SPACING * this.items.size() + ROW_MARGIN);
             this.list.redraw();

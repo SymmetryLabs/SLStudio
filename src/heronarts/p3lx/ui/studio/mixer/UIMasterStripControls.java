@@ -47,11 +47,19 @@ public class UIMasterStripControls extends UIMixerStripControls {
         .setFontColor(ui.theme.getControlTextColor())
         .addToContainer(this);
 
-        new UIButton(6*PADDING, ACTIVE_BUTTON_Y, 28, 28)
+        float bxp = 6*PADDING;
+
+        new UIButton(bxp, ACTIVE_BUTTON_Y, 28, 28)
         .setLabel("Live")
         .setParameter(lx.engine.output.enabled)
         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
         .setTextOffset(0, 2)
+        .addToContainer(this);
+
+        new UIButton(bxp, 80, 28, 16)
+        .setIcon(ui.theme.iconArm)
+        .setActiveColor(ui.theme.getRecordingColor())
+        .setParameter(this.bus.arm)
         .addToContainer(this);
 
         float syp = 22;
