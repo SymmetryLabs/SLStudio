@@ -38,7 +38,7 @@ import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 
 public abstract class UIClipLauncher extends UI2dContainer {
 
-    public static final int NUM_CLIPS = 4;
+    public static final int NUM_CLIPS = 5;
     public static final int WIDTH = UIMixerStripControls.WIDTH;
     public static final int SPACING = 1;
     public static final int HEIGHT = (NUM_CLIPS + 1) * UIClipButton.HEIGHT + NUM_CLIPS * SPACING;

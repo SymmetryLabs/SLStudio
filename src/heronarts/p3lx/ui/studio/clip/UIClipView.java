@@ -53,7 +53,7 @@ import processing.core.PGraphics;
 
 public class UIClipView extends UI2dContainer implements LXClip.Listener, LXParameterListener {
 
-    private final static int HEIGHT = 104;
+    private final static int HEIGHT = 124;
     private final static int PADDING = 4;
     private final static int LIST_WIDTH = 140;
 
