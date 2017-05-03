@@ -367,7 +367,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         this.focusedChannel.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
                 LXClip clip = focusedClip.getClip();
-                if (clip != null && clip.channel != getFocusedChannel()) {
+                if (clip != null && clip.bus != getFocusedChannel()) {
                     focusedClip.setClip(null);
                 }
             }
@@ -688,6 +688,37 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         }
     }
 
+    public LXEngine triggerScene(int index) {
+        LXClip clip;
+        for (LXChannel channel : this.lx.engine.channels) {
+            clip = channel.getClip(index);
+            if (clip != null) {
+                clip.trigger();
+            }
+        }
+        clip = this.masterChannel.getClip(index);
+        if (clip != null) {
+            clip.trigger();
+        }
+        return this;
+    }
+
+    public LXEngine stopClips() {
+        for (LXChannel channel : this.lx.engine.channels) {
+            for (LXClip clip : channel.clips) {
+                if (clip != null) {
+                    clip.stop();
+                }
+            }
+        }
+        for (LXClip clip : this.masterChannel.clips) {
+            if (clip != null) {
+                clip.stop();
+            }
+        }
+        return this;
+    }
+
     public void setPatterns(LXPattern[] patterns) {
         this.getDefaultChannel().setPatterns(patterns);
     }
@@ -819,6 +850,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
             boolean channelIsEnabled = channel.enabled.isOn();
             boolean channelIsCue = channel.cueActive.isOn();
             if (channelIsEnabled || channelIsCue) {
+                // TODO(mcslee): should clips still run even if channel is disabled??
                 channel.loop(deltaMs);
 
                 long blendStart = System.nanoTime();
@@ -866,6 +898,9 @@ public class LXEngine extends LXComponent implements LXOscComponent {
                 ((LXChannel.Timer)channel.timer).blendNanos = System.nanoTime() - blendStart;
             }
         }
+
+        // Run the master channel (may have clips)
+        this.masterChannel.loop(deltaMs);
 
         if (this.cueA.isOn()) {
             if (leftChannelCount > 0) {

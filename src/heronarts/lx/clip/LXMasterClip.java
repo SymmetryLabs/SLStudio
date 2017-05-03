@@ -26,30 +26,12 @@
 
 package heronarts.lx.clip;
 
-import heronarts.lx.LXComponent;
-import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.LX;
 
-public class ParameterClipLane extends LXClipLane {
-
-    public final LXParameter parameter;
-
-    ParameterClipLane(LXClip clip, LXParameter parameter) {
-        super(clip);
-        this.parameter = parameter;
-    }
-
-    @Override
-    public String getLabel() {
-        LXComponent component = this.parameter.getComponent();
-        if (component != this.clip.bus) {
-            return this.parameter.getComponent().getLabel() + " | " + this.parameter.getLabel();
-        }
-        return this.parameter.getLabel();
-    }
-
-    public ParameterClipLane addEvent(ParameterClipEvent event) {
-        super.addEvent(event);
-        return this;
+public class LXMasterClip extends LXClip {
+    public LXMasterClip(LX lx, int index) {
+        super(lx, lx.engine.masterChannel, index);
+        lx.engine.crossfader.addListener(this.parameterRecorder);
+        registerComponent(lx.palette);
     }
 }
-

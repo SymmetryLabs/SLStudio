@@ -21,6 +21,7 @@
 package heronarts.lx;
 
 import heronarts.lx.blend.LXBlend;
+import heronarts.lx.clip.LXChannelClip;
 import heronarts.lx.clip.LXClip;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
@@ -72,11 +73,6 @@ public class LXChannel extends LXBus {
         public void midiReceived(LXChannel channel);
     }
 
-    public interface ClipListener {
-        public void clipAdded(LXChannel channel, LXClip clip);
-        public void clipRemoved(LXChannel channel, LXClip clip);
-    }
-
     /**
      * Utility class to extend in cases where only some methods need overriding.
      */
@@ -121,7 +117,6 @@ public class LXChannel extends LXBus {
     }
 
     private final List<Listener> listeners = new ArrayList<Listener>();
-    private final List<ClipListener> clipListeners = new ArrayList<ClipListener>();
     private final List<MidiListener> midiListeners = new ArrayList<MidiListener>();
 
     public enum CrossfadeGroup {
@@ -153,13 +148,6 @@ public class LXChannel extends LXBus {
     public final EnumParameter<CrossfadeGroup> crossfadeGroup =
         new EnumParameter<CrossfadeGroup>("Group", CrossfadeGroup.BYPASS)
         .setDescription("Assigns this channel to crossfader group A or B");
-
-    /**
-     * Arms the channel for clip recording.
-     */
-    public final BooleanParameter arm =
-        new BooleanParameter("Arm")
-        .setDescription("Arms the channel for clip recording");
 
     /**
      * Whether this channel should listen to MIDI events
@@ -218,10 +206,6 @@ public class LXChannel extends LXBus {
 
     public final List<LXPattern> patterns = Collections.unmodifiableList(internalPatterns);
 
-    private final List<LXClip> mutableClips = new ArrayList<LXClip>();
-
-    public final List<LXClip> clips = Collections.unmodifiableList(this.mutableClips);
-
     /**
      * This is a local buffer used for transition blending on this channel
      */
@@ -258,7 +242,6 @@ public class LXChannel extends LXBus {
         this.colors = this.getActivePattern().getColors();
 
         addParameter("enabled", this.enabled);
-        addParameter("arm", this.arm);
         addParameter("cue", this.cueActive);
         addParameter("midiMonitor", this.midiMonitor);
         addParameter("midiChannel", this.midiChannel);
@@ -308,16 +291,6 @@ public class LXChannel extends LXBus {
         this.listeners.remove(listener);
     }
 
-    public LXChannel addClipListener(ClipListener listener) {
-        this.clipListeners.add(listener);
-        return this;
-    }
-
-    public LXChannel removeClipListener(ClipListener listener) {
-        this.clipListeners.remove(listener);
-        return this;
-    }
-
     public LXChannel addMidiListener(MidiListener listener) {
         this.midiListeners.add(listener);
         return this;
@@ -346,6 +319,11 @@ public class LXChannel extends LXBus {
 
     public final int getIndex() {
         return this.index;
+    }
+
+    @Override
+    protected LXClip constructClip(int index) {
+        return new LXChannelClip(this.lx, this, index);
     }
 
     public final List<LXPattern> getPatterns() {
@@ -577,47 +555,6 @@ public class LXChannel extends LXBus {
         return this;
     }
 
-    public LXClip getClip(int index) {
-        if (index < this.clips.size()) {
-            return this.clips.get(index);
-        }
-        return null;
-    }
-
-    public LXClip addClip() {
-        return addClip(this.mutableClips.size());
-    }
-
-    public LXClip addClip(int index) {
-        while (this.mutableClips.size() <= index) {
-            this.mutableClips.add(null);
-        }
-        LXClip clip = new LXClip(this.lx, this, index);
-        clip.label.setValue("Clip-" + (index+1));
-        this.mutableClips.set(index, clip);
-        for (ClipListener listener : this.clipListeners) {
-            listener.clipAdded(this, clip);
-        }
-        return clip;
-    }
-
-    public LXClip removeClip(LXClip clip) {
-        int index = this.mutableClips.indexOf(clip);
-        if (index < 0) {
-            throw new IllegalArgumentException("Clip is not owned by channel: " + clip + " " + this);
-        }
-        return removeClip(index);
-    }
-
-    public LXClip removeClip(int index) {
-        LXClip clip = this.mutableClips.get(index);
-        this.mutableClips.set(index, null);
-        for (ClipListener listener : this.clipListeners) {
-            listener.clipRemoved(this, clip);
-        }
-        return clip;
-    }
-
     public LXBus disableAutoTransition() {
         this.autoCycleEnabled.setValue(false);
         return this;
@@ -692,14 +629,6 @@ public class LXChannel extends LXBus {
 
         // Run modulators and components
         super.loop(deltaMs);
-
-        // Run the active clip...
-        // TODO(mcslee): don't loop, keep tabs of which is active now
-        for (LXClip clip : this.mutableClips) {
-            if (clip != null) {
-                clip.loop(deltaMs);
-            }
-        }
 
         // Check for transition completion
         if (this.transition != null) {

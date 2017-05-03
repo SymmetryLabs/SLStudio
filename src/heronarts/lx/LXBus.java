@@ -20,8 +20,10 @@
 
 package heronarts.lx;
 
+import heronarts.lx.clip.LXClip;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.osc.LXOscComponent;
+import heronarts.lx.parameter.BooleanParameter;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -42,14 +44,23 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
      * channel state is modified.
      */
     public interface Listener {
-
         public void effectAdded(LXBus channel, LXEffect effect);
-
         public void effectRemoved(LXBus channel, LXEffect effect);
-
         public void effectMoved(LXBus channel, LXEffect effect);
-
     }
+
+    public interface ClipListener {
+        public void clipAdded(LXBus bus, LXClip clip);
+        public void clipRemoved(LXBus bus, LXClip clip);
+    }
+
+
+    /**
+     * Arms the channel for clip recording.
+     */
+    public final BooleanParameter arm =
+        new BooleanParameter("Arm")
+        .setDescription("Arms the channel for clip recording");
 
     protected final LX lx;
 
@@ -57,7 +68,12 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     public final List<LXEffect> effects = Collections.unmodifiableList(internalEffects);
 
+    private final List<LXClip> mutableClips = new ArrayList<LXClip>();
+
+    public final List<LXClip> clips = Collections.unmodifiableList(this.mutableClips);
+
     private final List<Listener> listeners = new ArrayList<Listener>();
+    private final List<ClipListener> clipListeners = new ArrayList<ClipListener>();
 
     LXBus(LX lx) {
         this(lx, null);
@@ -66,6 +82,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     LXBus(LX lx, String label) {
         super(lx, label);
         this.lx = lx;
+        addParameter("arm", this.arm);
     }
 
     @Override
@@ -81,6 +98,16 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     public final void removeListener(Listener listener) {
         this.listeners.remove(listener);
+    }
+
+    public LXBus addClipListener(ClipListener listener) {
+        this.clipListeners.add(listener);
+        return this;
+    }
+
+    public LXBus removeClipListener(ClipListener listener) {
+        this.clipListeners.remove(listener);
+        return this;
     }
 
     public final LXBus addEffect(LXEffect effect) {
@@ -140,12 +167,63 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         return null;
     }
 
+    public LXClip getClip(int index) {
+        if (index < this.clips.size()) {
+            return this.clips.get(index);
+        }
+        return null;
+    }
+
+    public LXClip addClip() {
+        return addClip(this.mutableClips.size());
+    }
+
+    public LXClip addClip(int index) {
+        while (this.mutableClips.size() <= index) {
+            this.mutableClips.add(null);
+        }
+        LXClip clip = constructClip(index);
+        clip.label.setValue("Clip-" + (index+1));
+        this.mutableClips.set(index, clip);
+        for (ClipListener listener : this.clipListeners) {
+            listener.clipAdded(this, clip);
+        }
+        return clip;
+    }
+
+    protected abstract LXClip constructClip(int index);
+
+    public LXClip removeClip(LXClip clip) {
+        int index = this.mutableClips.indexOf(clip);
+        if (index < 0) {
+            throw new IllegalArgumentException("Clip is not owned by channel: " + clip + " " + this);
+        }
+        return removeClip(index);
+    }
+
+    public LXClip removeClip(int index) {
+        LXClip clip = this.mutableClips.get(index);
+        this.mutableClips.set(index, null);
+        for (ClipListener listener : this.clipListeners) {
+            listener.clipRemoved(this, clip);
+        }
+        return clip;
+    }
+
     @Override
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
 
         // Run modulators and components
         super.loop(deltaMs);
+
+        // Run the active clip...
+        // TODO(mcslee): keep tabs of which is active?
+        for (LXClip clip : this.clips) {
+            if (clip != null) {
+                clip.loop(deltaMs);
+            }
+        }
 
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
