@@ -153,13 +153,9 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         return 0;
     }
 
-    public float getWidth() {
-        return (this.ui != null) ? this.ui.applet.width : 0;
-    }
+    public abstract float getWidth();
 
-    public float getHeight() {
-        return (this.ui != null) ? this.ui.applet.height : 0;
-    }
+    public abstract float getHeight();
 
     private String description = null;
 

@@ -27,7 +27,6 @@
 package heronarts.p3lx.ui.studio;
 
 import heronarts.lx.LX;
-import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dContext;
@@ -57,11 +56,12 @@ public abstract class UIPane extends UI2dContext {
     }
 
     protected UIPane(UI ui, LX lx, String[] sectionNames, int x, int w, int topOffset) {
-        super(ui, x, 0, w, ui.getHeight() - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT);
+        super(ui, x, 0, w, ui.getHeight() - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
         this.lx = lx;
         this.sectionNames = sectionNames;
         this.topOffset = topOffset;
         setBackgroundColor(ui.theme.getPaneBackgroundColor());
+
         this.pillWidth = (w - (1+sectionNames.length)*UIPane.MARGIN) / sectionNames.length;
 
         this.inset = new UI2dContainer(MARGIN, this.topOffset + INSET_Y, width-2*MARGIN, height - (this.topOffset + INSET_Y));
@@ -80,21 +80,12 @@ public abstract class UIPane extends UI2dContext {
     }
 
     @Override
-    protected void onUIResize(UI ui) {
-        onHelpBarToggle((LXStudio.UI) ui);
-    }
-
-    public void onHelpBarToggle(LXStudio.UI ui) {
-        float height = ui.getHeight() - UIBottomTray.HEIGHT;
-        if (ui.helpBar.isVisible()) {
-            height -= UIContextualHelpBar.HEIGHT;
-        }
-        setHeight(height);
+    protected void onResize() {
+        super.onResize();
         this.inset.setHeight(this.height - (this.topOffset + INSET_Y));
         for (UI2dScrollContext section : this.sections) {
             section.setHeight(this.inset.getHeight() - 2*PADDING);
         }
-        redraw();
     }
 
     @Override

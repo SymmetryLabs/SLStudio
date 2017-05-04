@@ -54,7 +54,7 @@ public class UIProjectManager extends UICollapsibleSection {
             this.file = ui.applet.saveFile("default.lxp");
         }
 
-        setTitle("FILE");
+        setTitle("PROJECT");
 
         this.fileLabel = new UILabel(0, 0, getContentWidth(), 16);
         this.fileLabel

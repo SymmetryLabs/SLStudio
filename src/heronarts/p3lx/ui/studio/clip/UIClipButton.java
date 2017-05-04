@@ -203,7 +203,7 @@ public class UIClipButton extends UI2dContainer implements UIFocus {
                 }
                 target.clipLauncher.clips.get(this.index).focus();
             } else if (this.bus instanceof LXMasterChannel) {
-                this.mixer.sceneLauncher.scenes.get(this.index).focus();
+                this.mixer.sceneStrip.sceneLauncher.scenes.get(this.index).focus();
             }
         }
     }

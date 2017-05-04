@@ -226,12 +226,6 @@ public class UIRightPane extends UIPane {
         });
     }
 
-    @Override
-    protected void onUIResize(UI ui) {
-        setX(ui.getWidth() - WIDTH);
-        super.onUIResize(ui);
-    }
-
     private UIModulator findModulator(LXParameter parameter) {
         for (UIObject child : this.modulation) {
             if (child instanceof UIModulator) {

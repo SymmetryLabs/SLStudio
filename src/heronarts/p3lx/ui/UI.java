@@ -67,6 +67,16 @@ public class UI implements LXEngine.Dispatch {
         }
 
         @Override
+        public float getWidth() {
+            return this.ui.applet.width;
+        }
+
+        @Override
+        public float getHeight() {
+            return this.ui.applet.height;
+        }
+
+        @Override
         protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             if (topLevelKeyEventHandler != null) {
                 topLevelKeyEventHandler.onKeyPressed(keyEvent, keyChar, keyCode);
@@ -360,6 +370,10 @@ public class UI implements LXEngine.Dispatch {
         UI.instance = this;
     }
 
+    public void reflow() {
+        // Subclasses may override this method for top-level UI changes
+    }
+
     public static UI get() {
         return UI.instance;
     }
@@ -592,6 +606,7 @@ public class UI implements LXEngine.Dispatch {
                 this.width = this.applet.width;
                 this.height = this.applet.height;
                 this.root.resize(this);
+                onResize();
             }
         }
 
@@ -629,8 +644,13 @@ public class UI implements LXEngine.Dispatch {
         this.timer.drawNanos = System.nanoTime() - drawStart;
     }
 
-    // Subclasses may override...
+
     protected void beforeDraw() {
+        // Subclasses may override...
+    }
+
+    protected void onResize() {
+        // Subclasses may override
     }
 
     private boolean isThreaded() {

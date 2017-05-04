@@ -42,6 +42,12 @@ import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
 import heronarts.p3lx.ui.studio.UILeftPane;
 import heronarts.p3lx.ui.studio.UIRightPane;
+import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
+import heronarts.p3lx.ui.studio.clip.UIClipView;
+import heronarts.p3lx.ui.studio.device.UIDeviceBin;
+import heronarts.p3lx.ui.studio.mixer.UIMixer;
+import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
+import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
@@ -59,6 +65,9 @@ public class LXStudio extends P3LX {
         public final UIContextualHelpBar helpBar;
 
         private boolean toggleHelpBar = false;
+        private boolean toggleClipView = false;
+
+        private boolean clipViewVisible = true;
 
         public class PreviewWindow extends UI3dContext {
 
@@ -73,21 +82,10 @@ public class LXStudio extends P3LX {
             }
 
             @Override
-            protected void onUIResize(heronarts.p3lx.ui.UI ui) {
-                onHelpBarToggle(ui);
-            }
-
-            void onHelpBarToggle(heronarts.p3lx.ui.UI ui) {
-                float availableHeight = ui.getHeight() - UIBottomTray.HEIGHT;
-                if (helpBar.isVisible()) {
-                    availableHeight -= UIContextualHelpBar.HEIGHT;
-                }
-                setSize(
-                    Math.max(100, ui.getWidth() - UILeftPane.WIDTH - UIRightPane.WIDTH),
-                    Math.max(100, availableHeight)
-                );
+            protected void onResize() {
                 this.pointCloud.resetShader();
             }
+
         }
 
         UI(final LXStudio lx) {
@@ -95,7 +93,7 @@ public class LXStudio extends P3LX {
             initialize(lx, this);
             setBackgroundColor(this.theme.getDarkBackgroundColor());
 
-            this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.HEIGHT);
+            this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
             this.leftPane = new UILeftPane(this, lx);
             this.rightPane = new UIRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
@@ -135,18 +133,86 @@ public class LXStudio extends P3LX {
 
         @Override
         protected void beforeDraw() {
-            if (toggleHelpBar) {
-                toggleHelpBar = false;
+            if (this.toggleHelpBar) {
+                this.toggleHelpBar = false;
                 toggleHelpBar();
             }
+            if (this.toggleClipView) {
+                this.toggleClipView = false;
+                _toggleClipView();
+            }
+        }
+
+        public boolean toggleClipView() {
+            this.toggleClipView = true;
+            return (this.clipViewVisible = !this.clipViewVisible);
+        }
+
+        @Override
+        protected void onResize() {
+            reflow();
         }
 
         private void toggleHelpBar() {
             this.helpBar.toggleVisible();
-            this.bottomTray.onHelpBarToggle(this);
-            this.leftPane.onHelpBarToggle(this);
-            this.rightPane.onHelpBarToggle(this);
-            this.preview.onHelpBarToggle(this);
+            reflow();
+        }
+
+        private void _toggleClipView() {
+            // Mixer section
+            float controlsY = this.clipViewVisible ? UIMixer.PADDING + UIClipLauncher.HEIGHT : 0;
+            float stripHeight = this.clipViewVisible ? UIMixerStrip.HEIGHT : UIMixerStripControls.HEIGHT;
+
+            UIMixer mixer = this.bottomTray.mixer;
+            for (UIMixerStrip strip : mixer.channelStrips.values()) {
+                strip.clipLauncher.setVisible(this.clipViewVisible);
+                strip.controls.setY(controlsY);
+                strip.setHeight(stripHeight);
+            }
+            mixer.addChannelButton.setY(controlsY + UIMixer.PADDING);
+            mixer.masterStrip.clipLauncher.setVisible(this.clipViewVisible);
+            mixer.masterStrip.controls.setY(controlsY);
+            mixer.masterStrip.setHeight(stripHeight);
+            mixer.sceneStrip.sceneLauncher.setVisible(this.clipViewVisible);
+            mixer.sceneStrip.clipViewToggle.setY(controlsY);
+            mixer.sceneStrip.setHeight(stripHeight);
+            mixer.setContentHeight(stripHeight + 2*UIMixer.PADDING);
+
+            // Clip/device section
+            this.bottomTray.clipView.setVisible(this.clipViewVisible);
+            float binY = this.clipViewVisible ? UIClipView.HEIGHT + UIBottomTray.PADDING + UIMixerStrip.SPACING - 1 : UIMixerStrip.SPACING;
+            for (UIDeviceBin bin : this.bottomTray.deviceBins.values()) {
+                bin.setY(binY);
+            }
+            this.bottomTray.rightSection.setHeight(stripHeight + 2*UIMixer.PADDING);
+
+            // Overall height
+            this.bottomTray.setHeight(this.clipViewVisible ? UIBottomTray.HEIGHT : UIBottomTray.CLOSED_HEIGHT);
+
+            // Reflow the UI
+            reflow();
+        }
+
+        @Override
+        public void reflow() {
+            float uiWidth = getWidth();
+            float uiHeight = getHeight();
+            float helpBarHeight = this.helpBar.isVisible() ? UIContextualHelpBar.VISIBLE_HEIGHT : 0;
+            float bottomTrayHeight = this.bottomTray.getHeight();
+            float bottomTrayY = Math.max(100, uiHeight - bottomTrayHeight - helpBarHeight);
+            this.bottomTray.setY(bottomTrayY);
+            this.bottomTray.setWidth(uiWidth);
+            this.bottomTray.reflow();
+            this.helpBar.setY(uiHeight - helpBarHeight);
+            this.helpBar.setWidth(uiWidth);
+            this.leftPane.setHeight(bottomTrayY);
+            this.rightPane.setHeight(bottomTrayY);
+            this.rightPane.setX(uiWidth - this.rightPane.getWidth());
+
+            this.preview.setSize(
+                Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),
+                Math.max(100, bottomTrayY)
+            );
         }
 
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";

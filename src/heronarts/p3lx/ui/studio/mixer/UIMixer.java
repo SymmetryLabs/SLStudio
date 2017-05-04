@@ -37,9 +37,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
-import heronarts.p3lx.ui.studio.clip.UISceneLauncher;
 import processing.core.PConstants;
-import processing.core.PGraphics;
 
 public class UIMixer extends UI2dContainer {
 
@@ -51,9 +49,9 @@ public class UIMixer extends UI2dContainer {
     private final Map<LXChannel, UIChannelStrip> internalChannelStrips = new HashMap<LXChannel, UIChannelStrip>();
     public final Map<LXChannel, UIChannelStrip> channelStrips = Collections.unmodifiableMap(this.internalChannelStrips);
 
-    private final UIButton addChannelButton;
+    public final UIButton addChannelButton;
     public final UIMasterStrip masterStrip;
-    public UISceneLauncher sceneLauncher;
+    public final UISceneStrip sceneStrip;
 
     final LX lx;
 
@@ -73,7 +71,7 @@ public class UIMixer extends UI2dContainer {
             strip.addToContainer(this);
         }
 
-        this.addChannelButton = new UIButton(0, PADDING + UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, 16, UIMixerStripControls.HEIGHT) {
+        this.addChannelButton = new UIButton(0, PADDING + UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, 20, UIMixerStripControls.HEIGHT) {
             @Override
             public void onToggle(boolean on) {
                 if (!on) {
@@ -92,7 +90,7 @@ public class UIMixer extends UI2dContainer {
         .addToContainer(this);
 
         this.masterStrip = (UIMasterStrip) new UIMasterStrip(ui, this, lx).addToContainer(this);
-        this.sceneLauncher = (UISceneLauncher) new UISceneLauncher(ui, this, lx, 0, PADDING).addToContainer(this);
+        this.sceneStrip = (UISceneStrip) new UISceneStrip(ui, this, lx).addToContainer(this);
 
         lx.engine.addListener(new LXEngine.Listener() {
             public void channelAdded(LXEngine engine, LXChannel channel) {
@@ -109,20 +107,6 @@ public class UIMixer extends UI2dContainer {
                 internalChannelStrips.get(channel).setContainerIndex(channel.getIndex());
             }
         });
-    }
-
-    @Override
-    protected void onDraw(UI ui, PGraphics pg) {
-        super.onDraw(ui, pg);
-        pg.noStroke();
-        pg.fill(0xff393939);
-        pg.rect(
-            this.width - PADDING - UISceneLauncher.WIDTH,
-            this.height - PADDING - UIChannelStripControls.HEIGHT,
-            UISceneLauncher.WIDTH,
-            UIChannelStripControls.HEIGHT
-        );
-
     }
 
 }

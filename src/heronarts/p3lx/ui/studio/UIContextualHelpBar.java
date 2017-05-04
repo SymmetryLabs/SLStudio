@@ -36,14 +36,15 @@ import processing.core.PConstants;
 
 public class UIContextualHelpBar extends UI2dContext {
     public static final int PADDING = 8;
-    public static final int HEIGHT = 20;
+    public static final int VISIBLE_HEIGHT = 20;
+    private static final int MARGIN = 4;
     public final UILabel label;
 
     public UIContextualHelpBar(final UI ui) {
-        super(ui, 0, ui.getHeight() - HEIGHT, ui.getWidth(), HEIGHT + 4);
+        super(ui, 0, ui.getHeight() - VISIBLE_HEIGHT, ui.getWidth(), VISIBLE_HEIGHT + MARGIN);
         setBackgroundColor(ui.theme.getPaneBackgroundColor());
 
-        this.label = (UILabel) new UILabel(PADDING, 0, getContentWidth() - 2*PADDING, HEIGHT + 4)
+        this.label = (UILabel) new UILabel(PADDING, 0, getContentWidth() - 2*PADDING, VISIBLE_HEIGHT + 4)
         .setLabel(LXStudio.COPYRIGHT)
         .setPadding(5, 0, 0, PADDING)
         .setTextAlignment(PConstants.LEFT, PConstants.TOP)
@@ -60,10 +61,10 @@ public class UIContextualHelpBar extends UI2dContext {
     }
 
     @Override
-    protected void onUIResize(UI ui) {
-        setWidth(ui.getWidth());
+    protected void onResize() {
         this.label.setWidth(getContentWidth() - 2*PADDING);
-        setY(ui.getHeight() - HEIGHT);
+        super.onResize();
     }
+
 
 }

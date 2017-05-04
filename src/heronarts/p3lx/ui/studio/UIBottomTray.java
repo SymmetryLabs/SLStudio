@@ -26,6 +26,7 @@
 
 package heronarts.p3lx.ui.studio;
 
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -35,7 +36,6 @@ import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dContext;
@@ -50,18 +50,20 @@ public class UIBottomTray extends UI2dContext {
 
     public static final int PADDING = 8;
     public static final int HEIGHT = UIMixer.HEIGHT + 2*PADDING;
+    public static final int CLOSED_HEIGHT = UIMixerStripControls.HEIGHT + 2*UIMixer.PADDING + 2*PADDING;
     private static final int SEPARATOR = 16;
 
     private final UI ui;
     private final LX lx;
-    private final UIMixer mixer;
-    private final UI2dContainer rightSection;
+    public final UIMixer mixer;
+    public final UI2dContainer rightSection;
 
-    private final Map<LXBus, UIDeviceBin> deviceBins = new HashMap<LXBus, UIDeviceBin>();
+    private final Map<LXBus, UIDeviceBin> mutableDeviceBins = new HashMap<LXBus, UIDeviceBin>();
+    public final Map<LXBus, UIDeviceBin> deviceBins = Collections.unmodifiableMap(this.mutableDeviceBins);
     public final UIClipView clipView;
 
     public UIBottomTray(UI ui, LX lx) {
-        super(ui, 0, ui.getHeight() - HEIGHT - UIContextualHelpBar.HEIGHT, ui.getWidth(), HEIGHT);
+        super(ui, 0, ui.getHeight() - HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT, ui.getWidth(), HEIGHT);
         this.ui = ui;
         this.lx = lx;
         setBackgroundColor(ui.theme.getPaneBackgroundColor());
@@ -110,41 +112,25 @@ public class UIBottomTray extends UI2dContext {
         onChannelFocus();
     }
 
-    @Override
-    protected void onUIResize(UI ui) {
-        onHelpBarToggle((LXStudio.UI) ui);
-        setWidth(ui.getWidth());
-        reflow();
-        redraw();
-    }
-
-    public void onHelpBarToggle(LXStudio.UI ui) {
-        float yPos = ui.getHeight() - HEIGHT;
-        if (ui.helpBar.isVisible()) {
-            yPos -= UIContextualHelpBar.HEIGHT;
-        }
-        setY(yPos);
-    }
-
     private float getRightSectionX() {
         return this.mixer.getWidth() + SEPARATOR;
     }
 
     private void addChannel(LXBus channel) {
         UIDeviceBin deviceBin = new UIDeviceBin(ui, channel, this.rightSection.getContentHeight() - UIDeviceBin.HEIGHT - UIDeviceBin.PADDING, this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
-        this.deviceBins.put(channel, deviceBin);
+        this.mutableDeviceBins.put(channel, deviceBin);
         deviceBin.setVisible(false);
         deviceBin.addToContainer(this.rightSection);
     }
 
     private void removeChannel(LXBus channel) {
-        this.deviceBins.remove(channel).removeFromContainer();
+        this.mutableDeviceBins.remove(channel).removeFromContainer();
     }
 
     void onChannelFocus() {
         LXBus focusedChannel = lx.engine.getFocusedChannel();
-        for (LXBus channel : this.deviceBins.keySet()) {
-            UIDeviceBin deviceBin = this.deviceBins.get(channel);
+        for (LXBus channel : this.mutableDeviceBins.keySet()) {
+            UIDeviceBin deviceBin = this.mutableDeviceBins.get(channel);
             deviceBin.setVisible(channel == focusedChannel);
         }
     }
@@ -158,7 +144,7 @@ public class UIBottomTray extends UI2dContext {
             if (this.clipView != null) {
                 this.clipView.setWidth(this.rightSection.getWidth() - 2*UIDeviceBin.PADDING);
             }
-            for (UIDeviceBin deviceBin : this.deviceBins.values()) {
+            for (UIDeviceBin deviceBin : this.mutableDeviceBins.values()) {
                 deviceBin.setWidth(this.rightSection.getContentWidth() - 2*UIDeviceBin.PADDING);
             }
         }

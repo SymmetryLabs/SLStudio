@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -198,15 +198,28 @@ public class UI3dContext extends UIObject implements UITabFocus {
         });
     }
 
+    @Override
+    public float getWidth() {
+        return (this.pg == null) ? this.ui.applet.width : this.pg.width;
+    }
+
+    @Override
+    public float getHeight() {
+        return (this.pg == null) ? this.ui.applet.height : this.pg.height;
+    }
+
     public UI3dContext setSize(float width, float height) {
         if (this.pg == null) {
             throw new UnsupportedOperationException("Cannot resize UI3dContext created with no size.");
         } else {
             this.pg.dispose();
             this.pg = this.ui.applet.createGraphics((int) width, (int) height, PConstants.P3D);
+            onResize();
         }
         return this;
     }
+
+    protected void onResize() {}
 
 
     /**
