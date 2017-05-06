@@ -381,6 +381,18 @@ public class LX {
     }
 
     /**
+     * Shorthand for LXColor.rgb()
+     *
+     * @param r Red 0-255
+     * @param g Green 0-255
+     * @param b Blue 0-255
+     * @return color
+     */
+    public static int rgb(int r, int g, int b) {
+        return LXColor.rgb(r, g, b);
+    }
+
+    /**
      * Sets the speed of the entire system. Default is 1.0, any modification will
      * mutate deltaMs values system-wide.
      *

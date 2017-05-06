@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -150,6 +150,35 @@ public class LXColor {
             max = b;
         }
         return 100.f * max / 255.f;
+    }
+
+    /**
+     * Computes an RGB color value
+     *
+     * @param r Red 0-255
+     * @param g Green 0-255
+     * @param b Blue 0-255
+     * @return Color
+     */
+    public static final int rgb(int r, int g, int b) {
+        return rgba(r, g, b, 255);
+    }
+
+    /**
+     * Computes an RGB color value
+     *
+     * @param r Red 0-255
+     * @param g Green 0-255
+     * @param b Blue 0-255
+     * @param a Alpha 0-255
+     * @return Color
+     */
+    public static final int rgba(int r, int g, int b, int a) {
+        return
+            ((a & 0xff) << ALPHA_SHIFT) |
+            ((r & 0xff) << RED_SHIFT) |
+            ((g & 0xff) << GREEN_SHIFT) |
+            (b & 0xff);
     }
 
     /**
