@@ -693,7 +693,11 @@ public class APC40Mk2 extends LXMidiSurface {
             }
             return;
         case CUE_LEVEL:
-            this.lx.palette.color.hue.incrementValue(cc.getRelative(), true);
+            if (this.shiftOn) {
+                this.lx.palette.color.saturation.incrementValue(cc.getRelative());
+            } else {
+                this.lx.palette.color.hue.incrementValue(cc.getRelative(), true);
+            }
             return;
         case CHANNEL_FADER:
             int channel = cc.getChannel();
