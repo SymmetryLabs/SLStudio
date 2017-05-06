@@ -26,13 +26,7 @@
 
 package heronarts.p3lx.ui.studio.device;
 
-import java.util.HashMap;
-import java.util.Map;
-
 import heronarts.lx.LXChannel;
-import heronarts.lx.LXPattern;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UITimerTask;
 import heronarts.p3lx.ui.component.UIButton;
@@ -46,28 +40,9 @@ class UIChannelDevice extends UIDevice {
     private static final int PATTERN_LIST_WIDTH = 140;
     private static final int WIDTH = PATTERN_LIST_WIDTH + 3*PADDING;
 
-    private final UI ui;
-    private final LXChannel channel;
-    private final Map<LXPattern, UIPatternControl> patternControls =
-        new HashMap<LXPattern, UIPatternControl>();
-
-    UIChannelDevice(UI ui, final LXChannel channel) {
+    UIChannelDevice(UI ui, UIDeviceBin deviceBin, final LXChannel channel) {
         super(ui, channel, WIDTH);
-        this.ui = ui;
-        this.channel = channel;
         setTitle(channel.label);
-
-        channel.addListener(new LXChannel.AbstractListener() {
-            @Override
-            public void patternAdded(LXChannel channel, LXPattern pattern) {
-                addPattern(pattern);
-            }
-
-            @Override
-            public void patternRemoved(LXChannel channel, LXPattern pattern) {
-                removePattern(pattern);
-            }
-        });
 
         new UIPatternList(ui, 0, 0, PATTERN_LIST_WIDTH, getContentHeight() - 40, channel)
         .setDescription("Patterns available on this channel, click to select, double-click to activate")
@@ -96,43 +71,8 @@ class UIChannelDevice extends UIDevice {
         .setParameter(channel.autoCycleTimeSecs)
         .setShiftMultiplier(60)
         .addToContainer(this);
-
-        for (LXPattern pattern : channel.getPatterns()) {
-            addPattern(pattern);
-        }
-
-        setFocusedPattern(channel.getFocusedPattern());
-        channel.focusedPattern.addListener(new LXParameterListener() {
-            @Override
-            public void onParameterChanged(LXParameter parameter) {
-                setFocusedPattern(channel.getFocusedPattern());
-            }
-        });
     }
 
-    void setFocusedPattern(LXPattern focusedPattern) {
-        for (UIPatternControl patternControl : this.patternControls.values()) {
-            boolean visible = patternControl.pattern == focusedPattern;
-            patternControl.setVisible(visible);
-            if (visible) {
-                setContentWidth(patternControl.getX() + patternControl.getWidth());
-            }
-        }
-    }
-
-    private void addPattern(LXPattern pattern) {
-        UIPatternControl patternControl = new UIPatternControl(this.ui, pattern, 144, 0, 140);
-        patternControl.setVisible(this.channel.getFocusedPattern() == pattern);
-        this.patternControls.put(pattern, patternControl);
-        patternControl.addToContainer(this);
-    }
-
-    private void removePattern(LXPattern pattern) {
-        UIPatternControl patternControl = this.patternControls.remove(pattern);
-        if (patternControl != null) {
-            patternControl.removeFromContainer();
-        }
-    }
 
     abstract class UIProgressBox extends UIDoubleBox {
         protected final LXChannel channel;

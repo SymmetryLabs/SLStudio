@@ -27,8 +27,8 @@
 package heronarts.p3lx.ui;
 
 import java.util.Iterator;
+import java.util.List;
 
-import heronarts.lx.LXUtils;
 import processing.event.KeyEvent;
 
 public class UI2dContainer extends UI2dComponent implements UIContainer, Iterable<UIObject> {
@@ -109,16 +109,16 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
     }
 
     public UI2dContainer setMinWidth(float minWidth) {
-        if (this.minWidth != minWidth) {
-            this.minWidth = minWidth;
+        if (this.contentTarget.minWidth != minWidth) {
+            this.contentTarget.minWidth = minWidth;
             reflow();
         }
         return this;
     }
 
     public UI2dContainer setMinHeight(float minHeight) {
-        if (this.minHeight!= minHeight) {
-            this.minHeight = minHeight;
+        if (this.contentTarget.minHeight != minHeight) {
+            this.contentTarget.minHeight = minHeight;
             reflow();
         }
         return this;
@@ -201,7 +201,7 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
 
     protected UI2dContainer setContentTarget(UI2dContainer contentTarget) {
         this.contentTarget = contentTarget;
-        this.children.add(contentTarget);
+        this.mutableChildren.add(contentTarget);
         contentTarget.parent = this;
         contentTarget.setUI(this.ui);
         redraw();
@@ -212,7 +212,7 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
         if (child.parent != null) {
             child.removeFromContainer();
         }
-        this.children.add(child);
+        this.mutableChildren.add(child);
         child.parent = this;
         child.setUI(this.ui);
         redraw();
@@ -255,19 +255,35 @@ public class UI2dContainer extends UI2dComponent implements UIContainer, Iterabl
 
     @Override
     public Iterator<UIObject> iterator() {
-        return this.contentTarget.children.iterator();
+        return this.contentTarget.mutableChildren.iterator();
+    }
+
+    public List<UIObject> getChildren() {
+        return this.contentTarget.mutableChildren;
     }
 
     private void keyFocus(int delta) {
         if (this.children.size() > 0) {
             UIObject focusedChild = getFocusedChild();
             if (focusedChild == null) {
-                this.children.get(0).focus();
+                for (UIObject object : this.children) {
+                    if (object.isVisible() && (object instanceof UIKeyFocus)) {
+                        object.focus();
+                        break;
+                    }
+                }
             } else {
                 int index = this.children.indexOf(focusedChild);
-                int next = LXUtils.constrain(index + delta, 0, this.children.size()-1);
-                if (index != next) {
-                    this.children.get(next).focus();
+                while (true) {
+                    index += delta;
+                    if (index < 0 || index >= this.children.size()) {
+                        break;
+                    }
+                    UIObject object = this.children.get(index);
+                    if (object.isVisible() && (object instanceof UIKeyFocus)) {
+                        object.focus();
+                        break;
+                    }
                 }
             }
         }

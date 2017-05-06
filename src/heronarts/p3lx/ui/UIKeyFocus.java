@@ -15,13 +15,20 @@
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
  *
- * @author Mark C. Slee <mark@heronarts.com>
+ * ##library.name##
+ * ##library.sentence##
+ * ##library.url##
+ *
+ * @author      ##author##
+ * @modified    ##date##
+ * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio.device;
+package heronarts.p3lx.ui;
 
-import heronarts.p3lx.ui.UI;
+/**
+ * Marker interface for UI components that can be reached by using key navigation
+ */
+public interface UIKeyFocus {
 
-public interface UIPattern {
-    public abstract void buildDeviceUI(UI ui, UIPatternDevice device);
 }

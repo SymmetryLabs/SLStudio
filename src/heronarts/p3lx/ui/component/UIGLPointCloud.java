@@ -180,6 +180,9 @@ public class UIGLPointCloud extends UIPointCloud {
         // Draw the arrays
         pgl.drawArrays(PGL.POINTS, 0, this.model.size);
 
+        gl2.glDisable(GL2.GL_VERTEX_PROGRAM_POINT_SIZE);
+        gl2.glDisable(GL2.GL_POINT_SPRITE);
+
         // Unbind
         if (this.alphaTestEnabled) {
             gl2.glDisable(GL2.GL_ALPHA_TEST);

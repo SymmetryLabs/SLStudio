@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -30,7 +30,7 @@ import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.studio.device.UIPattern;
-import heronarts.p3lx.ui.studio.device.UIPatternControl;
+import heronarts.p3lx.ui.studio.device.UIPatternDevice;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -46,15 +46,15 @@ public class SolidColorPattern extends heronarts.lx.pattern.SolidColorPattern im
     private static final int SLIDER_SPACING = SLIDER_WIDTH + SLIDER_MARGIN;
 
     @Override
-    public void buildControlUI(UI ui, UIPatternControl container) {
+    public void buildDeviceUI(UI ui, UIPatternDevice device) {
         float xp = 0;
-        new HueSlider(ui, xp, 0, SLIDER_WIDTH, container.getContentHeight()).addToContainer(container);
+        new HueSlider(ui, xp, 0, SLIDER_WIDTH, device.getContentHeight()).addToContainer(device);
         xp += SLIDER_SPACING;
-        new SaturationSlider(ui, xp, 0, SLIDER_WIDTH, container.getContentHeight()).addToContainer(container);
+        new SaturationSlider(ui, xp, 0, SLIDER_WIDTH, device.getContentHeight()).addToContainer(device);
         xp += SLIDER_SPACING;
-        new BrightnessSlider(ui, xp, 0, SLIDER_WIDTH, container.getContentHeight()).addToContainer(container);
+        new BrightnessSlider(ui, xp, 0, SLIDER_WIDTH, device.getContentHeight()).addToContainer(device);
         xp += SLIDER_SPACING;
-        container.setContentWidth(xp - SLIDER_MARGIN);
+        device.setContentWidth(xp - SLIDER_MARGIN);
     }
 
     private abstract class Slider extends UI2dComponent implements UIFocus, UIControlTarget {

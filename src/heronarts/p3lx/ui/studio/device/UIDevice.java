@@ -35,6 +35,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIContainer;
+import heronarts.p3lx.ui.UIKeyFocus;
 import heronarts.p3lx.ui.UIMouseFocus;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UITextBox;
@@ -43,7 +44,7 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
+public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UIKeyFocus {
 
     protected final static int HEIGHT = 168;
     protected static final int PADDING = 4;
@@ -72,9 +73,9 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus {
         this.component = component;
         this.expandedWidth = w;
 
-        this.component.controlSurfaceSempahore.addListener(new LXParameterListener() {
+        this.component.controlSurfaceSemaphore.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                if (component.controlSurfaceSempahore.getValue() > 0) {
+                if (component.controlSurfaceSemaphore.getValue() > 0) {
                     setBorderColor(ui.theme.getSurfaceColor());
                 } else {
                     setBorder(false);

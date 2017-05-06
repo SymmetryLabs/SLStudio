@@ -570,7 +570,7 @@ public abstract class UI2dComponent extends UIObject {
         if (hasFocus()) {
             blur();
         }
-        this.parent.children.remove(this);
+        this.parent.mutableChildren.remove(this);
         if (this.parent instanceof UI2dContainer) {
             ((UI2dContainer) this.parent).reflow();
         }
@@ -625,9 +625,9 @@ public abstract class UI2dComponent extends UIObject {
             throw new IllegalArgumentException("Cannot add an object to itself");
         }
         if (index < 0) {
-            containerObject.children.add(this);
+            containerObject.mutableChildren.add(this);
         } else {
-            containerObject.children.add(index, this);
+            containerObject.mutableChildren.add(index, this);
         }
         this.parent = containerObject;
         setUI(containerObject.ui);
@@ -648,8 +648,8 @@ public abstract class UI2dComponent extends UIObject {
         if (this.parent == null) {
             throw new UnsupportedOperationException("Cannot setContainerIndex() on an object not in a container");
         }
-        this.parent.children.remove(this);
-        this.parent.children.add(index, this);
+        this.parent.mutableChildren.remove(this);
+        this.parent.mutableChildren.add(index, this);
         if (this.parent instanceof UI2dContainer) {
             ((UI2dContainer) this.parent).reflow();
         }
@@ -694,8 +694,8 @@ public abstract class UI2dComponent extends UIObject {
      */
     private final void _redrawChildren() {
         this.needsRedraw = true;
-        this.childNeedsRedraw = (this.children.size() > 0);
-        for (UIObject child : this.children) {
+        this.childNeedsRedraw = (this.mutableChildren.size() > 0);
+        for (UIObject child : this.mutableChildren) {
             ((UI2dComponent)child)._redrawChildren();
         }
     }
@@ -725,7 +725,7 @@ public abstract class UI2dComponent extends UIObject {
         if (this.childNeedsRedraw) {
             this.childNeedsRedraw = false;
             pg.translate(sx, sy);
-            for (UIObject childObject : this.children) {
+            for (UIObject childObject : this.mutableChildren) {
                 UI2dComponent child = (UI2dComponent) childObject;
                 if (child.needsRedraw || child.childNeedsRedraw) {
                     float cx = child.x;

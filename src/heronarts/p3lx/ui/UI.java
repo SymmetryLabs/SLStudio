@@ -107,7 +107,7 @@ public class UI implements LXEngine.Dispatch {
         }
 
         private void redraw() {
-            for (UIObject child : this.children) {
+            for (UIObject child : this.mutableChildren) {
                 if (child instanceof UI2dComponent) {
                     ((UI2dComponent) child).redraw();
                 }
@@ -134,7 +134,7 @@ public class UI implements LXEngine.Dispatch {
 
             // Work up the tree, trying siblings at each level
             while (focus.parent != null) {
-                int focusIndex = focus.parent.children.indexOf(focus);
+                int focusIndex = focus.parent.mutableChildren.indexOf(focus);
                 focusableChild = findNextFocusableChild(focus.parent, focusIndex + 1);
                 if (focusableChild != null) {
                     return focusableChild;
@@ -147,8 +147,8 @@ public class UI implements LXEngine.Dispatch {
         }
 
         private UIObject findNextFocusableChild(UIObject focus, int startIndex) {
-            for (int i = startIndex; i < focus.children.size(); ++i) {
-                UIObject child = focus.children.get(i);
+            for (int i = startIndex; i < focus.mutableChildren.size(); ++i) {
+                UIObject child = focus.mutableChildren.get(i);
                 if (child.isVisible()) {
                     if (child instanceof UITabFocus) {
                         return child;
@@ -168,7 +168,7 @@ public class UI implements LXEngine.Dispatch {
 
             // Check its previous siblings, depth-first
             while (focus.parent != null) {
-                int focusIndex = focus.parent.children.indexOf(focus);
+                int focusIndex = focus.parent.mutableChildren.indexOf(focus);
                 UIObject focusableChild = findPrevFocusableChild(focus.parent, focusIndex - 1);
                 if (focusableChild != null) {
                     return focusableChild;
@@ -180,14 +180,14 @@ public class UI implements LXEngine.Dispatch {
             }
 
             // We failed! Wrap around to the end
-            return findPrevFocusableChild(this, this.children.size() - 1);
+            return findPrevFocusableChild(this, this.mutableChildren.size() - 1);
         }
 
         private UIObject findPrevFocusableChild(UIObject focus, int startIndex) {
             for (int i = startIndex; i >= 0; --i) {
-                UIObject child = focus.children.get(i);
+                UIObject child = focus.mutableChildren.get(i);
                 if (child.isVisible()) {
-                    UIObject recurse = findPrevFocusableChild(child, child.children.size() - 1);
+                    UIObject recurse = findPrevFocusableChild(child, child.mutableChildren.size() - 1);
                     if (recurse != null) {
                         return recurse;
                     }
@@ -555,7 +555,7 @@ public class UI implements LXEngine.Dispatch {
      */
     public UI addLayer(UI3dContext layer) {
         addLoopTask(layer);
-        this.root.children.add(layer);
+        this.root.mutableChildren.add(layer);
         layer.parent = this.root;
         layer.setUI(this);
         return this;
@@ -565,7 +565,7 @@ public class UI implements LXEngine.Dispatch {
         if (layer.parent != this.root) {
             throw new IllegalStateException("Cannot remove 3d layer which is not present");
         }
-        this.root.children.remove(layer);
+        this.root.mutableChildren.remove(layer);
         layer.parent = null;
         return this;
     }
@@ -577,8 +577,8 @@ public class UI implements LXEngine.Dispatch {
      * @return this UI
      */
     public UI bringToTop(UI2dContext layer) {
-        this.root.children.remove(layer);
-        this.root.children.add(layer);
+        this.root.mutableChildren.remove(layer);
+        this.root.mutableChildren.add(layer);
         return this;
     }
 

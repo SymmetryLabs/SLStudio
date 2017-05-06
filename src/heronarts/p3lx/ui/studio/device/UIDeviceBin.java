@@ -27,51 +27,107 @@
 package heronarts.p3lx.ui.studio.device;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
+import heronarts.lx.LXPattern;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
-import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
-import processing.event.KeyEvent;
+import processing.core.PConstants;
+import processing.core.PGraphics;
 
 public class UIDeviceBin extends UI2dScrollContext {
 
     public static final int PADDING = UIMixer.PADDING;
     public static final int HEIGHT = UIDevice.HEIGHT;
 
+    private final UI ui;
     private final UIChannelDevice channelDevice;
-    private final int effectDeviceOffset;
+    private int effectDeviceOffset;
+    private int effectContainerOffset;
 
     private final List<UIDevice> devices = new ArrayList<UIDevice>();
 
-    public UIDeviceBin(final UI ui, LXBus channel, float y, float w) {
+    private final Map<LXPattern, UIPatternDevice> patternDevices =
+        new HashMap<LXPattern, UIPatternDevice>();
+
+    private final LXChannel channel;
+
+    public UIDeviceBin(final UI ui, LXBus bus, float y, float w) {
         super(ui, PADDING, y, w, HEIGHT);
         setLayout(UI2dContainer.Layout.HORIZONTAL);
         setChildMargin(PADDING);
         setHorizontalScrollingEnabled(true);
-        setVerticalScrollingEnabled(true);
+        setVerticalScrollingEnabled(false);
+        setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.HORIZONTAL);
+        this.ui = ui;
 
-        if (channel instanceof LXChannel) {
-            this.channelDevice = new UIChannelDevice(ui, (LXChannel) channel);
+        if (bus instanceof LXChannel) {
+            this.channel = (LXChannel) bus;
             this.effectDeviceOffset = 1;
-            addDevice(this.channelDevice);
+            this.effectContainerOffset = 2;
+
+            this.channel.addListener(new LXChannel.AbstractListener() {
+                @Override
+                public void patternAdded(LXChannel channel, LXPattern pattern) {
+                    addPatternDevice(pattern);
+                }
+
+                @Override
+                public void patternRemoved(LXChannel channel, LXPattern pattern) {
+                    removePatternDevice(pattern);
+                }
+            });
+
+            this.channelDevice = new UIChannelDevice(ui, this, this.channel);
+            addDevice(this.channelDevice, 0);
+
+            for (LXPattern pattern : this.channel.patterns) {
+                addPatternDevice(pattern);
+            }
+
+            new UI2dComponent(0, 0, 4, getContentHeight()) {
+                @Override
+                protected void onDraw(UI ui, PGraphics pg) {
+                    pg.ellipseMode(PConstants.CENTER);
+                    pg.noStroke();
+                    pg.fill(ui.theme.getControlDisabledColor());
+                    for (int i = 0; i < 3; ++i) {
+                        pg.ellipse(this.width/2, this.height/2 + (i-1) * (this.width + 4), this.width, this.width);
+                    }
+                }
+            }.addToContainer(this);
+
+            setFocusedPattern(this.channel.getFocusedPattern());
+            this.channel.focusedPattern.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter parameter) {
+                    setFocusedPattern(channel.getFocusedPattern());
+                }
+            });
         } else {
-            this.effectDeviceOffset = 0;
+            this.channel = null;
             this.channelDevice = null;
+            this.effectDeviceOffset = 0;
+            this.effectContainerOffset = 0;
         }
-        for (LXEffect effect : channel.getEffects()) {
-            addDevice(new UIEffectDevice(ui, channel, effect));
+        for (LXEffect effect : bus.getEffects()) {
+            addDevice(new UIEffectDevice(ui, bus, effect), -1);
         }
 
-        channel.addListener(new LXChannel.AbstractListener() {
+        bus.addListener(new LXChannel.AbstractListener() {
             @Override
             public void effectAdded(LXBus bus, LXEffect effect) {
-                addDevice(new UIEffectDevice(ui, bus, effect));
+                addDevice(new UIEffectDevice(ui, bus, effect), -1);
             }
 
             @Override
@@ -95,7 +151,7 @@ public class UIDeviceBin extends UI2dScrollContext {
                 if (effectDevice != null) {
                     devices.remove(effectDevice);
                     devices.add(effect.getIndex() + effectDeviceOffset, effectDevice);
-                    effectDevice.setContainerIndex(effect.getIndex() + effectDeviceOffset);
+                    effectDevice.setContainerIndex(effect.getIndex() + effectContainerOffset);
                 }
             }
         });
@@ -112,13 +168,18 @@ public class UIDeviceBin extends UI2dScrollContext {
         return null;
     }
 
-    public UIDeviceBin addDevice(UIDevice device) {
-        device.addToContainer(this);
-        this.devices.add(device);
+    private UIDeviceBin addDevice(UIDevice device, int index) {
+        if (index < 0) {
+            device.addToContainer(this);
+            this.devices.add(device);
+        } else {
+            device.addToContainer(this, index);
+            this.devices.add(index, device);
+        }
         return this;
     }
 
-    public UIDeviceBin removeDevice(UIDevice device) {
+    private UIDeviceBin removeDevice(UIDevice device) {
         int index = this.devices.indexOf(device);
         if (index >= 0) {
             this.devices.remove(index).removeFromContainer();
@@ -126,28 +187,27 @@ public class UIDeviceBin extends UI2dScrollContext {
         return this;
     }
 
-    @Override
-    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (keyCode == java.awt.event.KeyEvent.VK_LEFT ||
-                keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-            UIObject focusedChild = getFocusedChild();
-            if (focusedChild != null) {
-                int index = this.devices.indexOf(focusedChild);
-                if (index >= 0) {
-                    if (keyCode == java.awt.event.KeyEvent.VK_LEFT && index > 0) {
-                        this.devices.get(index-1).focus();
-                        consumeKeyEvent();
-                    } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT && (index < this.devices.size() - 1)) {
-                        this.devices.get(index+1).focus();
-                        consumeKeyEvent();
-                    }
-                }
-            } else if (hasDirectFocus()) {
-                if (this.devices.size() > 0) {
-                    this.devices.get(0).focus();
-                    consumeKeyEvent();
-                }
-            }
+    private void setFocusedPattern(LXPattern pattern) {
+        for (UIPatternDevice patternDevice : this.patternDevices.values()) {
+            patternDevice.setVisible(patternDevice.pattern == pattern);
+        }
+    }
+
+    private void addPatternDevice(LXPattern pattern) {
+        UIPatternDevice patternDevice = new UIPatternDevice(this.ui, this.channel, pattern);
+        patternDevice.setVisible(false);
+        this.patternDevices.put(pattern, patternDevice);
+        addDevice(patternDevice, 1);
+        ++this.effectDeviceOffset;
+        ++this.effectContainerOffset;
+    }
+
+    private void removePatternDevice(LXPattern pattern) {
+        UIPatternDevice patternDevice = this.patternDevices.remove(pattern);
+        if (patternDevice != null) {
+            removeDevice(patternDevice);
+            --this.effectDeviceOffset;
+            --this.effectContainerOffset;
         }
     }
 }

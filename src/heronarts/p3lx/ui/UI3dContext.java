@@ -229,7 +229,7 @@ public class UI3dContext extends UIObject implements UITabFocus {
      * @return this
      */
     public final UI3dContext addComponent(UI3dComponent component) {
-        this.children.add(component);
+        this.mutableChildren.add(component);
         return this;
     }
 
@@ -240,7 +240,7 @@ public class UI3dContext extends UIObject implements UITabFocus {
      * @return this
      */
     public final UI3dContext removeComponent(UI3dComponent component) {
-        this.children.remove(component);
+        this.mutableChildren.remove(component);
         return this;
     }
 
@@ -543,7 +543,7 @@ public class UI3dContext extends UIObject implements UITabFocus {
         if (this.showCenter) {
             drawCenterDot(pg);
         }
-        for (UIObject child : this.children) {
+        for (UIObject child : this.mutableChildren) {
             child.draw(ui, pg);
         }
         this.afterDraw(ui, pg);

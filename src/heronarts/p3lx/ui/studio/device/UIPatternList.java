@@ -59,7 +59,6 @@ public class UIPatternList extends UIItemList.ScrollList {
             public void patternAdded(LXChannel channel, LXPattern pattern) {
                 items.add(new PatternItem(pattern));
                 setItems(items);
-                setFocusIndex(items.size()-1);
             }
 
             @Override
@@ -108,6 +107,11 @@ public class UIPatternList extends UIItemList.ScrollList {
 
         PatternItem(LXPattern pattern) {
             this.pattern = pattern;
+            pattern.label.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    redraw();
+                }
+            });
         }
 
         @Override

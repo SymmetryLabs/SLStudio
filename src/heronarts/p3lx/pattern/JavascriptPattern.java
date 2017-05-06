@@ -36,7 +36,7 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.device.UIPattern;
-import heronarts.p3lx.ui.studio.device.UIPatternControl;
+import heronarts.p3lx.ui.studio.device.UIPatternDevice;
 import processing.core.PConstants;
 
 public class JavascriptPattern extends LXScriptPattern implements UIPattern {
@@ -50,15 +50,15 @@ public class JavascriptPattern extends LXScriptPattern implements UIPattern {
     }
 
     @Override
-    public void buildControlUI(UI ui, final UIPatternControl container) {
-        container.setContentWidth(MIN_WIDTH);
+    public void buildDeviceUI(UI ui, final UIPatternDevice device) {
+        device.setContentWidth(MIN_WIDTH);
 
-        new UITextBox(0, 0, container.getContentWidth() - 22, 20)
+        new UITextBox(0, 0, device.getContentWidth() - 22, 20)
         .setParameter(this.scriptPath)
         .setTextAlignment(PConstants.CENTER)
-        .addToContainer(container);
+        .addToContainer(device);
 
-        new UIButton(container.getContentWidth() - 20, 0, 20, 20) {
+        new UIButton(device.getContentWidth() - 20, 0, 20, 20) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -68,9 +68,9 @@ public class JavascriptPattern extends LXScriptPattern implements UIPattern {
         }
         .setLabel("\u21BA")
         .setMomentary(true)
-        .addToContainer(container);
+        .addToContainer(device);
 
-        new UIButton(0, 24, container.getContentWidth(), 16) {
+        new UIButton(0, 24, device.getContentWidth(), 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -84,19 +84,19 @@ public class JavascriptPattern extends LXScriptPattern implements UIPattern {
         }
         .setLabel("Edit")
         .setMomentary(true)
-        .addToContainer(container);
+        .addToContainer(device);
 
-        this.knobs = new UI2dContainer(0, 44, container.getContentWidth(), container.getContentHeight() - 44) {
+        this.knobs = new UI2dContainer(0, 44, device.getContentWidth(), device.getContentHeight() - 44) {
             @Override
             protected void onResize() {
-                container.setContentWidth(getWidth());
+                device.setContentWidth(getWidth());
             }
         };
         knobs.setLayout(UI2dContainer.Layout.VERTICAL_GRID);
         knobs.setPadding(2, 0, 0, 0);
         knobs.setChildMargin(2, 4);
         knobs.setMinWidth(MIN_WIDTH);
-        knobs.addToContainer(container);
+        knobs.addToContainer(device);
 
         resetKnobs();
     }

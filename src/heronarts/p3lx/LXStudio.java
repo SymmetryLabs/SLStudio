@@ -262,6 +262,10 @@ public class LXStudio extends P3LX {
     public final UI ui;
 
     public LXStudio(PApplet applet, LXModel model) {
+        this(applet, model, true);
+    }
+
+    public LXStudio(PApplet applet, LXModel model, boolean multiThreaded) {
         super(applet, model);
         this.ui = (UI) super.ui;
         onUIReady(this, this.ui);
@@ -272,7 +276,7 @@ public class LXStudio extends P3LX {
             loadProject(file);
         }
 
-        this.engine.setThreaded(true);
+        this.engine.setThreaded(multiThreaded);
     }
 
     @Override

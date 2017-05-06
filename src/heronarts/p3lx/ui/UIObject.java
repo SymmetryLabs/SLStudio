@@ -36,6 +36,7 @@ import heronarts.lx.parameter.LXTriggerModulation;
 import heronarts.lx.parameter.LXCompoundModulation;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -49,7 +50,8 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     public final BooleanParameter visible = new BooleanParameter("Visible", true);
 
-    final List<UIObject> children = new CopyOnWriteArrayList<UIObject>();
+    final List<UIObject> mutableChildren = new CopyOnWriteArrayList<UIObject>();
+    protected final List<UIObject> children = Collections.unmodifiableList(this.mutableChildren);
 
     UIObject parent = null;
 
@@ -107,7 +109,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             for (LXLoopTask loopTask : this.loopTasks) {
                 loopTask.loop(deltaMs);
             }
-            for (UIObject child : this.children) {
+            for (UIObject child : this.mutableChildren) {
                 child.loop(deltaMs);
             }
         }
@@ -120,7 +122,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
      */
     void setUI(UI ui) {
         this.ui = ui;
-        for (UIObject child : this.children) {
+        for (UIObject child : this.mutableChildren) {
             child.setUI(ui);
         }
     }
@@ -278,7 +280,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
      */
     public UIObject blur() {
         if (this.hasFocus) {
-            for (UIObject child : this.children) {
+            for (UIObject child : this.mutableChildren) {
                 child.blur();
             }
             if (this.parent != null) {
@@ -304,15 +306,15 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         if (this.parent == null) {
             throw new IllegalStateException("Cannot bring to front when not in any container");
         }
-        this.parent.children.remove(this);
-        this.parent.children.add(this);
+        this.parent.mutableChildren.remove(this);
+        this.parent.mutableChildren.add(this);
         return this;
     }
 
     void draw(UI ui, PGraphics pg) {
         if (isVisible()) {
             onDraw(ui, pg);
-            for (UIObject child : this.children) {
+            for (UIObject child : this.mutableChildren) {
                 float cx = child.getX();
                 float cy = child.getY();
                 pg.translate(cx, cy);
@@ -368,7 +370,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     void resize(UI ui) {
         this.onUIResize(ui);
-        for (UIObject child : this.children) {
+        for (UIObject child : this.mutableChildren) {
             child.resize(ui);
         }
     }
@@ -449,8 +451,8 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             this.ui.mapTriggerSource(null);
             return;
         }
-        for (int i = this.children.size() - 1; i >= 0; --i) {
-            UIObject child = this.children.get(i);
+        for (int i = this.mutableChildren.size() - 1; i >= 0; --i) {
+            UIObject child = this.mutableChildren.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
                 child.mousePressed(mouseEvent, mx - child.getX(), my - child.getY());
                 this.pressedChild = child;
@@ -485,8 +487,8 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         if (isMidiMapping()) {
             return;
         }
-        for (int i = this.children.size() - 1; i >= 0; --i) {
-            UIObject child = this.children.get(i);
+        for (int i = this.mutableChildren.size() - 1; i >= 0; --i) {
+            UIObject child = this.mutableChildren.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
                 child.mouseClicked(mouseEvent, mx - child.getX(), my - child.getY());
                 break;
@@ -513,8 +515,8 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     void mouseMoved(MouseEvent mouseEvent, float mx, float my) {
         boolean overAnyChild = false;
-        for (int i = this.children.size() - 1; i >= 0; --i) {
-            UIObject child = this.children.get(i);
+        for (int i = this.mutableChildren.size() - 1; i >= 0; --i) {
+            UIObject child = this.mutableChildren.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
                 overAnyChild = true;
                 if (child != this.overChild) {
@@ -559,8 +561,8 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     void mouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
         this.mouseWheelEventConsumed = false;
-        for (int i = this.children.size() - 1; i >= 0; --i) {
-            UIObject child = this.children.get(i);
+        for (int i = this.mutableChildren.size() - 1; i >= 0; --i) {
+            UIObject child = this.mutableChildren.get(i);
             if (child.isVisible() && child.contains(mx, my)) {
                 child.mouseWheel(mouseEvent, mx - child.getX(), my - child.getY(), delta);
                 this.mouseWheelEventConsumed = child.mouseWheelEventConsumed;

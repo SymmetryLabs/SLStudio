@@ -227,7 +227,7 @@ public class P3LX extends LX {
         try {
             cls = Class.forName(className).asSubclass(LXEffect.class);
         } catch (ClassNotFoundException cnfx) {
-            System.err.println(cnfx.getLocalizedMessage());
+            System.err.println("No effect class found for " + className + ": " + cnfx.getLocalizedMessage());
             return null;
         }
         try {
@@ -236,7 +236,7 @@ public class P3LX extends LX {
             try {
                 return cls.getConstructor(applet.getClass(), LX.class).newInstance(applet, this);
             } catch (Exception x2) {
-                System.err.println(x2.getLocalizedMessage());
+                System.err.println("Effect instantiation failed: " + x2.getLocalizedMessage());
                 return null;
             }
         }
@@ -248,7 +248,7 @@ public class P3LX extends LX {
         try {
             cls = Class.forName(className).asSubclass(LXPattern.class);
         } catch (ClassNotFoundException cnfx) {
-            System.err.println(cnfx.getLocalizedMessage());
+            System.err.println("No pattern class found for " + className + ": " + cnfx.getLocalizedMessage());
             return null;
         }
         try {
@@ -257,7 +257,7 @@ public class P3LX extends LX {
             try {
                 return cls.getConstructor(applet.getClass(), LX.class).newInstance(applet, this);
             } catch (Exception x2) {
-                System.err.println(x2.getLocalizedMessage());
+                System.err.println("Pattern instantiation failed: " + x2.getLocalizedMessage());
                 return null;
             }
         }

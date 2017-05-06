@@ -32,7 +32,6 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIKnob;
@@ -60,12 +59,6 @@ class UIEffectDevice extends UIDevice {
                 new UIKnob((LXListenableNormalizedParameter) parameter).addToContainer(this);
             }
         }
-
-        effect.label.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                setTitle(effect.getLabel());
-            }
-        });
     }
 
     @Override

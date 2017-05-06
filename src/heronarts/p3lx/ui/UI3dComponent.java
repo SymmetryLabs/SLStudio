@@ -53,7 +53,7 @@ public abstract class UI3dComponent extends UIObject {
      * @return this
      */
     public final UI3dComponent addChild(UI3dComponent child) {
-        this.children.add(child);
+        this.mutableChildren.add(child);
         return this;
     }
 
@@ -64,7 +64,7 @@ public abstract class UI3dComponent extends UIObject {
      * @return this
      */
     public final UI3dComponent removeChild(UI3dComponent child) {
-        this.children.remove(child);
+        this.mutableChildren.remove(child);
         return this;
     }
 }
