@@ -141,6 +141,8 @@ public class LXEngine extends LXComponent implements LXOscComponent {
 
     public final LXModulationEngine modulation;
 
+    private boolean logTimers = false;
+
     public class FocusedClipParameter extends MutableParameter {
 
         private LXClip clip = null;
@@ -381,6 +383,10 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         addParameter("focusedChannel", this.focusedChannel);
         addParameter("cueA", this.cueA);
         addParameter("cueB", this.cueB);
+    }
+
+    public void logTimers() {
+        this.logTimers = true;
     }
 
     @Override
@@ -988,9 +994,23 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         // Send to outputs
         long outputStart = System.nanoTime();
         this.output.send(blendOutputMain);
-        this.timer.outputNanos = System.nanoTime() - outputStart;
+        long outputEnd = System.nanoTime();
+        this.timer.outputNanos = outputEnd - outputStart;
 
-        this.timer.runNanos = System.nanoTime() - runStart;
+        this.timer.runNanos = outputEnd - runStart;
+
+        if (this.logTimers) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
+            sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
+            for (LXChannel channel : this.channels) {
+                sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
+                LXPattern pattern = channel.getActivePattern();
+                sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
+            }
+            System.out.println(sb);
+            this.logTimers = false;
+        }
     }
 
     /**

@@ -727,7 +727,7 @@ public class LX {
                 }
             }
         } catch (Exception x) {
-            System.err.println(x.getLocalizedMessage());
+            System.err.println("Exception in loadProject: " + x.getLocalizedMessage());
             x.printStackTrace(System.err);
         }
     }
@@ -737,7 +737,7 @@ public class LX {
             Class<? extends T> cls = Class.forName(className).asSubclass(type);
             return cls.getConstructor(LX.class).newInstance(this);
         } catch (Exception x) {
-            System.err.println(x.getLocalizedMessage());
+            System.err.println("Exception in instantiateComponent: " + x.getLocalizedMessage());
         }
         return null;
     }
@@ -759,7 +759,7 @@ public class LX {
                 return cls.getConstructor().newInstance();
             }
         } catch (Exception x) {
-            System.err.println(x.getLocalizedMessage());
+            System.err.println("Exception in instantiateModulator: " + x.getLocalizedMessage());
         }
         return null;
     }

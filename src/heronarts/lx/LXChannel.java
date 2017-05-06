@@ -31,6 +31,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.parameter.BooleanParameter;
 import java.util.ArrayList;
 import java.util.Collections;
@@ -738,22 +739,27 @@ public class LXChannel extends LXBus {
         for (JsonElement patternElement : patternsArray) {
             JsonObject patternObj = (JsonObject) patternElement;
             LXPattern pattern = this.lx.instantiatePattern(patternObj.get(KEY_CLASS).getAsString());
-            pattern.load(lx, patternObj);
-            addPattern(pattern);
+            if (pattern != null) {
+                pattern.load(lx, patternObj);
+                addPattern(pattern);
+            }
+        }
+        if (this.patterns.size() == 0) {
+            addPattern(new SolidColorPattern(lx));
         }
 
         // Set the active index instantly, do not transition!
+        this.activePatternIndex = this.nextPatternIndex = 0;
         if (obj.has(KEY_PATTERN_INDEX)) {
             int patternIndex = obj.get(KEY_PATTERN_INDEX).getAsInt();
-            if (this.activePatternIndex != patternIndex) {
-                getActivePattern().onInactive();
+            if (patternIndex < this.patterns.size()) {
                 this.activePatternIndex = this.nextPatternIndex = patternIndex;
-                LXPattern activePattern = getActivePattern();
-                activePattern.onActive();
-                for (Listener listener : listeners) {
-                    listener.patternDidChange(this, activePattern);
-                }
             }
+        }
+        LXPattern activePattern = getActivePattern();
+        activePattern.onActive();
+        for (Listener listener : listeners) {
+            listener.patternDidChange(this, activePattern);
         }
     }
 

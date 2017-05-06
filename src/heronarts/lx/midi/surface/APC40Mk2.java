@@ -203,7 +203,7 @@ public class APC40Mk2 extends LXMidiSurface {
                             this.knobs[i].removeListener(this);
                         }
                     }
-                    this.device.controlSurfaceSempahore.decrement();
+                    this.device.controlSurfaceSemaphore.decrement();
                 }
                 this.pattern = null;
                 this.effect = null;
@@ -239,7 +239,7 @@ public class APC40Mk2 extends LXMidiSurface {
                             ++i;
                         }
                     }
-                    this.device.controlSurfaceSempahore.increment();
+                    this.device.controlSurfaceSemaphore.increment();
                 }
                 sendNoteOn(0, DEVICE_ON_OFF, isEnabled ? 1 : 0);
                 while (i < this.knobs.length) {

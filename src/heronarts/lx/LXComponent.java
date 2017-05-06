@@ -49,7 +49,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         new StringParameter("Label")
         .setDescription("The name of this component");
 
-    public final MutableParameter controlSurfaceSempahore = (MutableParameter)
+    public final MutableParameter controlSurfaceSemaphore = (MutableParameter)
         new MutableParameter("Control-Surfaces", 0)
         .setDescription("How many control surfaces are controlling this componentt");
 
