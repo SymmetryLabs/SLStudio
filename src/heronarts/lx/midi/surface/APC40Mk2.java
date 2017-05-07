@@ -718,7 +718,7 @@ public class APC40Mk2 extends LXMidiSurface {
             return;
         }
 
-        System.out.println("APC40mk2 UNMAPPED: " + cc);
+        // System.out.println("APC40mk2 UNMAPPED: " + cc);
     }
 
     @Override

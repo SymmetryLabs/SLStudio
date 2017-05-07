@@ -233,12 +233,11 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         }
         return (
             this.hue.getValue() +
-            360 +
             this.spreadX.getValue() * this.xMult * dx +
             this.spreadY.getValue() * this.yMult * dy +
             this.spreadZ.getValue() * this.zMult * dz +
-            this.spreadR.getValue() * this.rMult * Math.abs(point.r)
-         ) % 360;
+            this.spreadR.getValue() * this.rMult * (point.r - model.rMin)
+         );
     }
 
     public final float getHuef(LXPoint point) {

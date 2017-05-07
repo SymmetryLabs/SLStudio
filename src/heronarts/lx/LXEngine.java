@@ -474,41 +474,48 @@ public class LXEngine extends LXComponent implements LXOscComponent {
             }
         } else {
             this.isThreaded = true;
-            this.engineThread = new Thread("LX Engine Thread") {
-                @Override
-                public void run() {
-                    System.out.println("LX Engine Thread started");
-                    while (!isInterrupted()) {
-                        long frameStart = System.currentTimeMillis();
-                        LXEngine.this.run();
-                        long frameMillis = System.currentTimeMillis() - frameStart;
-                        frameRate = 1000.f / frameMillis;
-                        float targetFPS = framesPerSecond.getValuef();
-                        if (targetFPS > 0) {
-                            long minMillisPerFrame = (long) (1000. / targetFPS);
-                            if (frameMillis < minMillisPerFrame) {
-                                frameRate = targetFPS;
-                                try {
-                                    sleep(minMillisPerFrame - frameMillis);
-                                } catch (InterruptedException ix) {
-                                    // We're done!
-                                    break;
-                                }
-                            }
-                        }
-                    }
-
-                    // We are done threading
-                    frameRate = 0;
-                    engineThread = null;
-                    isThreaded = false;
-
-                    System.out.println("LX Engine Thread finished");
-                }
-            };
+            this.engineThread = new EngineThread();
             this.engineThread.start();
         }
         return this;
+    }
+
+    private class EngineThread extends Thread {
+
+        private EngineThread() {
+            super("LX Engine Thread");
+        }
+
+        @Override
+        public void run() {
+            System.out.println("LX Engine Thread started");
+            while (!isInterrupted()) {
+                long frameStart = System.currentTimeMillis();
+                LXEngine.this.run();
+                long frameMillis = System.currentTimeMillis() - frameStart;
+                frameRate = 1000.f / frameMillis;
+                float targetFPS = framesPerSecond.getValuef();
+                if (targetFPS > 0) {
+                    long minMillisPerFrame = (long) (1000. / targetFPS);
+                    if (frameMillis < minMillisPerFrame) {
+                        frameRate = targetFPS;
+                        try {
+                            sleep(minMillisPerFrame - frameMillis);
+                        } catch (InterruptedException ix) {
+                            // We're done!
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // We are done threading
+            frameRate = 0;
+            engineThread = null;
+            isThreaded = false;
+
+            System.out.println("LX Engine Thread finished");
+        }
     }
 
     /**

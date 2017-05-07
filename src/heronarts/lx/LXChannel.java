@@ -118,6 +118,7 @@ public class LXChannel extends LXBus {
     }
 
     private final List<Listener> listeners = new ArrayList<Listener>();
+    private final List<Listener> listenerSnapshot = new ArrayList<Listener>();
     private final List<MidiListener> midiListeners = new ArrayList<MidiListener>();
 
     public enum CrossfadeGroup {
@@ -372,7 +373,9 @@ public class LXChannel extends LXBus {
         pattern.setIndex(this.internalPatterns.size());
         this.internalPatterns.add(pattern);
         this.focusedPattern.setRange(this.internalPatterns.size());
-        for (Listener listener : this.listeners) {
+        this.listenerSnapshot.clear();
+        this.listenerSnapshot.addAll(this.listeners);
+        for (Listener listener : this.listenerSnapshot) {
             listener.patternAdded(this, pattern);
         }
         if (this.internalPatterns.size() == 1) {
@@ -430,7 +433,9 @@ public class LXChannel extends LXBus {
                 }
             }
             this.focusedPattern.setRange(Math.max(1, this.internalPatterns.size()));
-            for (Listener listener : this.listeners) {
+            this.listenerSnapshot.clear();
+            this.listenerSnapshot.addAll(this.listeners);
+            for (Listener listener : this.listenerSnapshot) {
                 listener.patternRemoved(this, pattern);
             }
             if (wasActive && (this.internalPatterns.size() > 0)) {
