@@ -38,6 +38,7 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.LXRunnableComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
+import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
@@ -73,7 +74,7 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
             if (isRunning() && bus.arm.isOn()) {
                 LXListenableNormalizedParameter parameter = (LXListenableNormalizedParameter) p;
                 ParameterClipLane lane = getParameterLane(parameter, true);
-                lane.addEvent(new ParameterClipEvent(LXClip.this, parameter));
+                lane.appendEvent(new ParameterClipEvent(lane, parameter));
             }
         }
     };
@@ -93,7 +94,11 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
         bus.addListener(this);
     }
 
-    private ParameterClipLane getParameterLane(LXParameter parameter, boolean create) {
+    public double getLength() {
+        return this.length.getValue();
+    }
+
+    private ParameterClipLane getParameterLane(LXNormalizedParameter parameter, boolean create) {
         for (LXClipLane lane : this.lanes) {
             if (lane instanceof ParameterClipLane) {
                 if (((ParameterClipLane) lane).parameter == parameter) {
@@ -206,7 +211,7 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
         for (LXParameter p : component.getParameters()) {
             if (p instanceof LXListenableNormalizedParameter) {
                 ((LXListenableNormalizedParameter) p).removeListener(this.parameterRecorder);
-                ParameterClipLane lane = getParameterLane(p, false);
+                ParameterClipLane lane = getParameterLane((LXNormalizedParameter) p, false);
                 if (lane != null) {
                     this.mutableLanes.remove(lane);
                     for (Listener listener : this.listeners) {
@@ -234,9 +239,9 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
         super.dispose();
     }
 
-    private void executeEvents(double from, double to) {
+    private void advanceCursor(double from, double to) {
         for (LXClipLane lane : this.lanes) {
-            lane.executeEvents(from, to);
+            lane.advanceCursor(from, to);
         }
     }
 
@@ -245,8 +250,8 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
         double nextCursor = this.cursor + deltaMs;
         double lengthValue = this.length.getValue();
         if (!this.bus.arm.isOn()) {
-            // TODO(mcslee): make this more efficient, keep track of our index
-            executeEvents(this.cursor, nextCursor);
+            // TODO(mcslee): make this more efficient, keep track of our indices...
+            advanceCursor(this.cursor, nextCursor);
             while (nextCursor > lengthValue) {
                 if (!this.loop.isOn()) {
                     this.cursor = nextCursor = lengthValue;
@@ -254,7 +259,7 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
                     break;
                 } else {
                     nextCursor -= lengthValue;
-                    executeEvents(this.cursor, nextCursor);
+                    advanceCursor(0, nextCursor);
                 }
             }
         } else {

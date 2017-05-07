@@ -27,13 +27,14 @@
 package heronarts.lx.clip;
 
 import heronarts.lx.LXComponent;
-import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.LXNormalizedParameter;
 
 public class ParameterClipLane extends LXClipLane {
 
-    public final LXParameter parameter;
+    public final LXNormalizedParameter parameter;
 
-    ParameterClipLane(LXClip clip, LXParameter parameter) {
+    ParameterClipLane(LXClip clip, LXNormalizedParameter parameter) {
         super(clip);
         this.parameter = parameter;
     }
@@ -47,9 +48,43 @@ public class ParameterClipLane extends LXClipLane {
         return this.parameter.getLabel();
     }
 
-    public ParameterClipLane addEvent(ParameterClipEvent event) {
-        super.addEvent(event);
+    public ParameterClipLane appendEvent(ParameterClipEvent event) {
+        super.appendEvent(event);
         return this;
+    }
+
+    public ParameterClipLane insertEvent(double basis, double normalized) {
+        super.insertEvent(
+            new ParameterClipEvent(this, this.parameter, normalized)
+            .setCursor(basis * this.clip.length.getValue())
+        );
+        return this;
+    }
+
+    @Override
+    void advanceCursor(double from, double to) {
+        if (this.events.size() == 0) {
+            return;
+        }
+        LXClipEvent prior = null;
+        LXClipEvent next = null;
+        for (LXClipEvent event : this.events) {
+            prior = next;
+            next = event;
+            if (next.cursor > to) {
+                break;
+            }
+        }
+        if (prior == null) {
+            this.parameter.setNormalized(((ParameterClipEvent) next).getNormalized());
+        } else {
+            this.parameter.setNormalized(LXUtils.lerp(
+                ((ParameterClipEvent) prior).getNormalized(),
+                ((ParameterClipEvent) next).getNormalized(),
+                (to - prior.cursor) / (next.cursor - prior.cursor)
+            ));
+        }
+
     }
 }
 

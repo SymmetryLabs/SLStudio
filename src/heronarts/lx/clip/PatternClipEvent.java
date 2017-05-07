@@ -8,10 +8,10 @@ public class PatternClipEvent extends LXClipEvent {
     private final LXPattern pattern;
     private final LXChannel channel;
 
-    PatternClipEvent(LXChannelClip clip, LXPattern pattern) {
-        super(clip, pattern);
+    PatternClipEvent(LXClipLane lane, LXChannel channel, LXPattern pattern) {
+        super(lane, pattern);
         this.pattern = pattern;
-        this.channel = clip.channel;
+        this.channel = channel;
     }
 
     @Override

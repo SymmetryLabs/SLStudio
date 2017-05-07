@@ -52,7 +52,7 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener {
 
     @Override
     protected void onStartRecording() {
-        this.patternLane.addEvent(new PatternClipEvent(this, this.channel.getActivePattern()));
+        this.patternLane.addEvent(new PatternClipEvent(this.patternLane, this.channel, this.channel.getActivePattern()));
     }
 
     @Override
@@ -75,7 +75,7 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener {
     @Override
     public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
         if (isRunning() && this.bus.arm.isOn()) {
-            this.patternLane.addEvent(new PatternClipEvent(this, nextPattern));
+            this.patternLane.addEvent(new PatternClipEvent(this.patternLane, channel, nextPattern));
         }
     }
 

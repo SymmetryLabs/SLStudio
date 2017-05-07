@@ -26,39 +26,106 @@
 
 package heronarts.lx.clip;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import heronarts.lx.LXUtils;
+import heronarts.lx.parameter.MutableParameter;
 
 public abstract class LXClipLane {
 
+    public final MutableParameter onChange = new MutableParameter();
+
     protected final LXClip clip;
 
-    protected final List<LXClipEvent> internalEvents = new ArrayList<LXClipEvent>();
-    public final List<LXClipEvent> events = Collections.unmodifiableList(this.internalEvents);
+    protected final List<LXClipEvent> mutableEvents = new CopyOnWriteArrayList<LXClipEvent>();
+    public final List<LXClipEvent> events = Collections.unmodifiableList(this.mutableEvents);
 
     protected LXClipLane(LXClip clip) {
         this.clip = clip;
     }
 
-    protected LXClipLane addEvent(LXClipEvent event) {
-        // TODO(mcslee): insertion sort?
-        this.internalEvents.add(event);
+    protected LXClipLane appendEvent(LXClipEvent event) {
+        this.mutableEvents.add(event);
+        this.onChange.bang();
+        return this;
+    }
+
+    protected LXClipLane insertEvent(LXClipEvent event) {
+        int index = 0;
+        while (index < this.events.size()) {
+            if (event.cursor < this.events.get(index).cursor) {
+                break;
+            }
+            ++index;
+        }
+        this.mutableEvents.add(index, event);
+        this.onChange.bang();
+        return this;
+    }
+
+    public LXClipLane moveEvent(LXClipEvent event, double basis) {
+        double clipLength = this.clip.getLength();
+        double min = 0;
+        double max = clipLength;
+        int index = this.events.indexOf(event);
+        if (index > 0) {
+            min = this.events.get(index-1).cursor;
+        }
+        if (index < this.events.size() - 1) {
+            max = this.events.get(index+1).cursor;
+        }
+        double newCursor = LXUtils.constrain(basis * clipLength, min, max);
+        if (event.cursor != newCursor) {
+            event.cursor = newCursor;
+            this.onChange.bang();
+        }
         return this;
     }
 
     public abstract String getLabel();
 
-    void executeEvents(double from, double to) {
-        for (LXClipEvent event : this.internalEvents) {
-            if (from <= event.cursor && to > event.cursor) {
+    void advanceCursor(double from, double to) {
+        for (LXClipEvent event : this.mutableEvents) {
+            if (from <= event.cursor && event.cursor < to) {
                 event.execute();
             }
         }
     }
 
+    public LXClipLane clearSelection(double fromBasis, double toBasis) {
+        double from = fromBasis * this.clip.length.getValue();
+        double to = toBasis * this.clip.length.getValue();
+        int i = 0;
+        boolean removed = false;
+        while (i < this.mutableEvents.size()) {
+            LXClipEvent event = this.mutableEvents.get(i);
+            if (from <= event.cursor) {
+                if (event.cursor > to) {
+                    break;
+                }
+                removed = true;
+                this.mutableEvents.remove(i);
+            } else {
+                ++i;
+            }
+        }
+        if (removed) {
+            this.onChange.bang();
+        }
+        return this;
+    }
+
+    public LXClipLane removeEvent(LXClipEvent event) {
+        this.mutableEvents.remove(event);
+        this.onChange.bang();
+        return this;
+    }
+
     void clear() {
-        this.internalEvents.clear();
+        this.mutableEvents.clear();
+        this.onChange.bang();
     }
 
 }

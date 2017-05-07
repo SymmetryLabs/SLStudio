@@ -1,5 +1,6 @@
 package heronarts.lx.clip;
 
+import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.LXNormalizedParameter;
 
 public class ParameterClipEvent extends LXClipEvent {
@@ -7,18 +8,22 @@ public class ParameterClipEvent extends LXClipEvent {
     public final LXNormalizedParameter parameter;
     private double normalized;
 
-    ParameterClipEvent(LXClip clip, LXNormalizedParameter parameter) {
-        this(clip, parameter, parameter.getNormalized());
+    ParameterClipEvent(LXClipLane lane, LXNormalizedParameter parameter) {
+        this(lane, parameter, parameter.getNormalized());
     }
 
-    ParameterClipEvent(LXClip clip, LXNormalizedParameter parameter, double normalized) {
-        super(clip, parameter.getComponent());
+    ParameterClipEvent(LXClipLane lane, LXNormalizedParameter parameter, double normalized) {
+        super(lane, parameter.getComponent());
         this.parameter = parameter;
         this.normalized = normalized;
     }
 
     public ParameterClipEvent setNormalized(double normalized) {
-        this.normalized = normalized;
+        normalized = LXUtils.constrain(normalized, 0, 1);
+        if (this.normalized != normalized) {
+            this.normalized = normalized;
+            this.lane.onChange.bang();
+        }
         return this;
     }
 

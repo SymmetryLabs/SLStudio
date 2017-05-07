@@ -37,7 +37,7 @@ public class PatternClipLane extends LXClipLane {
     }
 
     PatternClipLane addEvent(PatternClipEvent event) {
-        super.addEvent(event);
+        super.appendEvent(event);
         return this;
     }
 }

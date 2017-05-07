@@ -31,24 +31,24 @@ import heronarts.lx.LXComponent;
 
 public abstract class LXClipEvent implements Comparator<LXClipEvent> {
 
-    protected final LXClip clip;
+    protected final LXClipLane lane;
     protected final LXComponent component;
     protected double cursor;
 
-    LXClipEvent(LXClip clip) {
-        this(clip, clip.cursor, null);
+    LXClipEvent(LXClipLane lane) {
+        this(lane, lane.clip.cursor, null);
     }
 
-    LXClipEvent(LXClip clip, LXComponent component) {
-        this(clip, clip.cursor, component);
+    LXClipEvent(LXClipLane lane, LXComponent component) {
+        this(lane, lane.clip.cursor, component);
     }
 
-    LXClipEvent(LXClip clip, double cursor) {
-        this(clip, cursor, null);
+    LXClipEvent(LXClipLane lane, double cursor) {
+        this(lane, cursor, null);
     }
 
-    LXClipEvent(LXClip clip, double cursor, LXComponent component) {
-        this.clip = clip;
+    LXClipEvent(LXClipLane lane, double cursor, LXComponent component) {
+        this.lane = lane;
         this.cursor = cursor;
         this.component = component;
     }
@@ -57,8 +57,13 @@ public abstract class LXClipEvent implements Comparator<LXClipEvent> {
         return this.cursor;
     }
 
+    LXClipEvent setCursor(double cursor) {
+        this.cursor = cursor;
+        return this;
+    }
+
     public double getBasis() {
-        return this.cursor / this.clip.length.getValue();
+        return this.cursor / this.lane.clip.length.getValue();
     }
 
     @Override
