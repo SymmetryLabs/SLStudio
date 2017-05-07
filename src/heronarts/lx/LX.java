@@ -69,6 +69,9 @@ import com.google.gson.stream.JsonWriter;
  */
 public class LX {
 
+    public static final double HALF_PI = Math.PI / 2.;
+    public static final double TWO_PI = Math.PI * 2.;
+
     public static class InitTimer {
         private long lastTime;
 
@@ -207,7 +210,7 @@ public class LX {
             this.total = this.width = this.height = 0;
             this.cx = this.cy = 0;
         } else {
-            this.total = model.points.size();
+            this.total = model.points.length;
             this.cx = model.cx;
             this.cy = model.cy;
             if (model instanceof GridModel) {
@@ -218,6 +221,7 @@ public class LX {
                 this.width = this.height = 0;
             }
         }
+        model.computeNormals();
         LX.initTimer.log("Model");
 
         // Color palette

@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -20,6 +20,7 @@
 
 package heronarts.lx.model;
 
+import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 
 /**
@@ -67,7 +68,32 @@ public class LXPoint {
     /**
      * angle of this point about the origin in the x-z plane
      */
-    public final float phi;
+    public final float aziumuth;
+
+    /**
+     * angle of this point about the origin in the x-z plane
+     */
+    public final float elevation;
+
+    /**
+     * normalized position of point in x-space (0-1);
+     */
+    public float xn = 0;
+
+    /**
+     * normalized position of point in y-space (0-1);
+     */
+    public float yn = 0;
+
+    /**
+     * normalized position of point in z-space (0-1);
+     */
+    public float zn = 0;
+
+    /**
+     * normalized position of point in radial space (0-1), 0 is origin, 1 is max radius
+     */
+    public float rn = 0;
 
     /**
      * Index of this point in the colors array
@@ -98,8 +124,9 @@ public class LXPoint {
         this.r = (float) Math.sqrt(x * x + y * y + z * z);
         this.rxy = (float) Math.sqrt(x * x + y * y);
         this.rxz = (float) Math.sqrt(x * x + z * z);
-        this.theta = (float) ((Math.PI * 2 + Math.atan2(y, x)) % (Math.PI * 2));
-        this.phi = (float) ((Math.PI * 2 + Math.atan2(z, x)) % (Math.PI * 2));
+        this.theta = (float) ((LX.TWO_PI + Math.atan2(y, x)) % (LX.TWO_PI));
+        this.aziumuth = (float) ((LX.TWO_PI + Math.atan2(z, x)) % (LX.TWO_PI));
+        this.elevation = (float) ((LX.TWO_PI + Math.atan2(y, rxz)) % (LX.TWO_PI));
         this.index = counter++;
     }
 
@@ -123,4 +150,10 @@ public class LXPoint {
         this(transform.x(), transform.y(), transform.z());
     }
 
+    void computeNormals(LXModel model) {
+        this.xn = (this.x - model.xMin) / model.xRange;
+        this.yn = (this.y - model.yMin) / model.yRange;
+        this.zn = (this.z - model.zMin) / model.zRange;
+        this.rn = this.r / model.rRange;
+    }
 }

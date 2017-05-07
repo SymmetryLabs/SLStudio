@@ -54,15 +54,6 @@ public abstract class LXModulator extends LXRunnableComponent implements LXParam
      */
     private double value = 0;
 
-    /**
-     * Quick helper to get half of PI.
-     */
-    public static final double HALF_PI = Math.PI / 2.;
-
-    /**
-     * Quick helper to get two times PI.
-     */
-    public static final double TWO_PI = Math.PI * 2.;
 
     /**
      * Utility default constructor

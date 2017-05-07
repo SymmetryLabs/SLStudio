@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -36,7 +36,9 @@ public class LXModel implements LXFixture {
     /**
      * An immutable list of all the points in this model
      */
-    public final List<LXPoint> points;
+    public final LXPoint[] points;
+
+    private final List<LXPoint> pointList;
 
     /**
      * An immutable list of all the fixtures in this model
@@ -179,7 +181,8 @@ public class LXModel implements LXFixture {
         }
 
         this.size = _points.size();
-        this.points = Collections.unmodifiableList(_points);
+        this.pointList = Collections.unmodifiableList(_points);
+        this.points = _points.toArray(new LXPoint[0]);
         this.fixtures = Collections.unmodifiableList(_fixtures);
 
         float _ax = 0, _ay = 0, _az = 0;
@@ -215,9 +218,9 @@ public class LXModel implements LXFixture {
             }
             firstPoint = false;
         }
-        this.ax = _ax / Math.max(1, this.points.size());
-        this.ay = _ay / Math.max(1, this.points.size());
-        this.az = _az / Math.max(1, this.points.size());
+        this.ax = _ax / Math.max(1, this.points.length);
+        this.ay = _ay / Math.max(1, this.points.length);
+        this.az = _az / Math.max(1, this.points.length);
         this.xMin = _xMin;
         this.xMax = _xMax;
         this.xRange = _xMax - _xMin;
@@ -236,7 +239,7 @@ public class LXModel implements LXFixture {
     }
 
     public List<LXPoint> getPoints() {
-        return this.points;
+        return this.pointList;
     }
 
     private final static class BasicFixture implements LXFixture {
@@ -248,6 +251,12 @@ public class LXModel implements LXFixture {
 
         public List<LXPoint> getPoints() {
             return this.points;
+        }
+    }
+
+    public void computeNormals() {
+        for (LXPoint p : this.points) {
+            p.computeNormals(this);
         }
     }
 

@@ -20,6 +20,8 @@
 
 package heronarts.lx.modulator;
 
+import heronarts.lx.LX;
+
 /**
  * Waveshapes compute a function in the range 0-1 over a basis 0-1.
  */
@@ -31,7 +33,7 @@ public interface LXWaveshape {
     public static LXWaveshape SIN = new LXWaveshape() {
         @Override
         public double compute(double basis) {
-            return (1 + Math.sin(basis * LXModulator.TWO_PI - LXModulator.HALF_PI)) / 2.;
+            return (1 + Math.sin(basis * LX.TWO_PI - LX.HALF_PI)) / 2.;
         }
 
         @Override
@@ -41,7 +43,7 @@ public interface LXWaveshape {
             if (basisHint > 0.5) {
                 angle = Math.PI - angle;
             }
-            return (angle + LXModulator.HALF_PI) / LXModulator.TWO_PI;
+            return (angle + LX.HALF_PI) / LX.TWO_PI;
         }
     };
 
