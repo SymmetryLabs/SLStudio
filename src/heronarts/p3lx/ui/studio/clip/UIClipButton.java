@@ -31,11 +31,13 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXMasterChannel;
 import heronarts.lx.clip.LXClip;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.UITriggerTarget;
 import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
@@ -44,7 +46,7 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIClipButton extends UI2dContainer implements UIFocus {
+public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTarget {
 
     public static final int HEIGHT = 20;
     public static final int PADDING = 2;
@@ -223,6 +225,11 @@ public class UIClipButton extends UI2dContainer implements UIFocus {
                 }
             }
         }
+    }
+
+    @Override
+    public BooleanParameter getTriggerTarget() {
+        return (this.clip != null) ? this.clip.trigger : null;
     }
 
 }
