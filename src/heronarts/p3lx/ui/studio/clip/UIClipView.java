@@ -44,12 +44,15 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UITextBox;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+import processing.event.KeyEvent;
+import processing.event.MouseEvent;
 
 public class UIClipView extends UI2dContainer implements LXClip.Listener, LXParameterListener {
 
@@ -166,6 +169,9 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         if (laneItem != null) {
             this.laneList.removeItem(laneItem);
         }
+        if (this.envelope.lane == lane) {
+            this.envelope.setLane(null);
+        }
     }
 
     @Override
@@ -229,11 +235,17 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
 
     }
 
-    private class UIClipEnvelope extends UI2dContainer {
+    private class UIClipEnvelope extends UI2dContainer implements UIFocus {
 
         private int cursorX = 0;
 
         private LXClipLane lane;
+
+        private LXClipEvent editEvent = null;
+
+        private double selectionStart = 0;
+        private double selectionEnd = 0;
+        private boolean hasSelection = false;
 
         UIClipEnvelope(UI ui, float w) {
             super(UIClipInfo.WIDTH + LIST_WIDTH + 2*PADDING, 0, w, HEIGHT);
@@ -253,9 +265,23 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             });
         }
 
+        private LXParameterListener redraw = new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                redraw();
+            }
+        };
+
         void setLane(LXClipLane lane) {
             if (this.lane != lane) {
+                if (this.lane != null) {
+                    this.lane.onChange.removeListener(this.redraw);
+                }
                 this.lane = lane;
+                if (this.lane != null) {
+                    this.lane.onChange.addListener(this.redraw);
+                }
+                this.editEvent = null;
+                clearSelection();
                 redraw();
             }
         }
@@ -266,6 +292,14 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
                 pg.stroke(ui.theme.getCursorColor());
                 pg.line(this.cursorX, 0, this.cursorX, this.height-1);
                 if (this.lane != null && this.lane instanceof ParameterClipLane) {
+                    if (this.hasSelection) {
+                        pg.noStroke();
+                        pg.fill(ui.theme.getSelectionColor());
+                        int startX = (int) (Math.min(this.selectionStart, this.selectionEnd) * (this.width-1));
+                        int endX = (int) (Math.max(this.selectionStart, this.selectionEnd) * (this.width-1));
+                        pg.rect(startX, 0, endX-startX, this.height);
+                    }
+
                     int startX = -1;
                     int startY = -1;
                     for (LXClipEvent event : this.lane.events) {
@@ -274,25 +308,107 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
                         double eventNormalized = parameterEvent.getNormalized();
                         int endX = (int) Math.round(eventBasis * (this.width-1));
                         int endY = (int) Math.round(this.height - 1 - eventNormalized * (this.height-1));
+                        pg.stroke(ui.theme.getPrimaryColor());
                         if (startX >= 0) {
-                            pg.stroke(ui.theme.getPrimaryColor());
                             pg.line(startX, startY, endX, endY);
                         } else {
-                            pg.stroke(ui.theme.getCursorColor());
                             pg.line(0, endY, endX, endY);
                         }
-                        float rectX = LXUtils.constrainf(endX, 0, this.width-3);
-                        float rectY = LXUtils.constrainf(endY, 0, this.height-3);
+                        float rectX = LXUtils.constrainf(endX-2, 0, this.width-5);
+                        float rectY = LXUtils.constrainf(endY-2, 0, this.height-5);
+
                         pg.noStroke();
-                        pg.fill(ui.theme.getPrimaryColor());
-                        pg.rect(rectX, rectY, 3, 3);
+                        if (this.editEvent == event) {
+                            pg.fill(ui.theme.getRecordingColor());
+                        } else {
+                            pg.fill(ui.theme.getPrimaryColor());
+                        }
+                        pg.rect(rectX, rectY, 5, 5);
                         startX = endX;
                         startY = endY;
                     }
                     if (startX < this.width-1 && startY >= 0) {
-                        pg.stroke(ui.theme.getCursorColor());
+                        pg.fill(ui.theme.getPrimaryColor());
+                        pg.stroke(ui.theme.getPrimaryColor());
                         pg.line(startX, startY, this.width-1, startY);
                     }
+                }
+            }
+        }
+
+        private void clearSelection() {
+            if (this.hasSelection) {
+                this.hasSelection = false;
+                redraw();
+            }
+        }
+
+        private final static int EVENT_SELECTION_THRESHOLD = 6;
+
+        @Override
+        protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+            clearSelection();
+            this.selectionStart = this.selectionEnd = LXUtils.constrain(mx / (this.width-1), 0, 1);
+            LXClipEvent edit = null;
+
+            if (this.lane != null && this.lane instanceof ParameterClipLane) {
+                for (LXClipEvent event : this.lane.events) {
+                    ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
+                    double eventBasis = parameterEvent.getBasis();
+                    double eventNormalized = parameterEvent.getNormalized();
+                    int endX = (int) (eventBasis * (this.width-1));
+                    int endY = (int) (this.height - 1 - eventNormalized * (this.height-1));
+                    if (Math.abs(mx - endX) < EVENT_SELECTION_THRESHOLD && Math.abs(my - endY) < EVENT_SELECTION_THRESHOLD) {
+                        edit = parameterEvent;
+                        break;
+                    }
+                }
+            }
+
+            if (edit != this.editEvent) {
+                this.editEvent = edit;
+                redraw();
+            }
+        }
+
+        @Override
+        protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+            clearSelection();
+            if (this.lane != null && this.lane instanceof ParameterClipLane && mouseEvent.getCount() == 2) {
+                double basis = mx / (this.width - 1);
+                double normalized = 1. - my / (this.height-1);
+                ((ParameterClipLane) this.lane).insertEvent(basis, normalized);
+            }
+        }
+
+        @Override
+        protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+            if (this.lane != null && this.editEvent != null) {
+                this.lane.moveEvent(this.editEvent, mx / (this.width-1));
+                if (this.editEvent instanceof ParameterClipEvent) {
+                    ((ParameterClipEvent) this.editEvent).setNormalized(1. - my / (this.height-1));
+                }
+            } else {
+                this.hasSelection = true;
+                this.selectionEnd = LXUtils.constrain(mx / (this.width-1), 0, 1);
+                redraw();
+            }
+        }
+
+        @Override
+        protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+            super.onKeyPressed(keyEvent, keyChar, keyCode);
+            if (this.lane != null && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                if (this.editEvent != null) {
+                    consumeKeyEvent();
+                    LXClipEvent edit = this.editEvent;
+                    this.editEvent = null;
+                    this.lane.removeEvent(edit);
+                } else if (this.hasSelection) {
+                    consumeKeyEvent();
+                    double clearBegin = Math.min(this.selectionStart, this.selectionEnd);
+                    double clearEnd = Math.max(this.selectionStart, this.selectionEnd);
+                    this.lane.clearSelection(clearBegin, clearEnd);
                 }
             }
         }

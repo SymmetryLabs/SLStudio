@@ -52,6 +52,7 @@ public class UITheme {
     private int surfaceColor = 0xff669999;
     private int recordingColor = 0xffa00044;
     private int cursorColor = 0xff555555;
+    private int selectionColor = 0xff333333;
 
     private int darkBackgroundColor = 0xff191919;
 
@@ -351,6 +352,26 @@ public class UITheme {
      */
     public UITheme setCursorColor(int color) {
         this.cursorColor = color;
+        return this;
+    }
+
+    /**
+     * Gets highlight color
+     *
+     * @return Highlight color
+     */
+    public int getSelectionColor() {
+        return this.selectionColor;
+    }
+
+    /**
+     * Sets highlight color
+     *
+     * @param color Color
+     * @return this
+     */
+    public UITheme setSelectionColor(int color) {
+        this.selectionColor = color;
         return this;
     }
 
