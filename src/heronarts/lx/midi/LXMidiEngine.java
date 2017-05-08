@@ -90,16 +90,16 @@ public class LXMidiEngine implements LXSerializable {
     private final List<LXShortMessage> engineThreadInputQueue =
         new ArrayList<LXShortMessage>();
 
-    private final List<LXMidiInput> internalInputs = new ArrayList<LXMidiInput>();
-    private final List<LXMidiOutput> internalOutputs = new ArrayList<LXMidiOutput>();
-    private final List<LXMidiSurface> internalSurfaces = new ArrayList<LXMidiSurface>();
+    private final List<LXMidiInput> mutableInputs = new ArrayList<LXMidiInput>();
+    private final List<LXMidiOutput> mutableOutputs = new ArrayList<LXMidiOutput>();
+    private final List<LXMidiSurface> mutableSurfaces = new ArrayList<LXMidiSurface>();
 
-    public final List<LXMidiInput> inputs = Collections.unmodifiableList(this.internalInputs);
-    public final List<LXMidiOutput> outputs = Collections.unmodifiableList(this.internalOutputs);
-    public final List<LXMidiSurface> surfaces = Collections.unmodifiableList(this.internalSurfaces);
+    public final List<LXMidiInput> inputs = Collections.unmodifiableList(this.mutableInputs);
+    public final List<LXMidiOutput> outputs = Collections.unmodifiableList(this.mutableOutputs);
+    public final List<LXMidiSurface> surfaces = Collections.unmodifiableList(this.mutableSurfaces);
 
-    private final List<LXMidiMapping> mappings = new ArrayList<LXMidiMapping>();
-    private final List<LXMidiMapping> unmodifiableMappings = Collections.unmodifiableList(this.mappings);
+    private final List<LXMidiMapping> mutableMappings = new ArrayList<LXMidiMapping>();
+    public final List<LXMidiMapping> mappings = Collections.unmodifiableList(this.mutableMappings);
 
     private final LX lx;
 
@@ -126,10 +126,10 @@ public class LXMidiEngine implements LXSerializable {
                     try {
                         MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
                         if (device.getMaxTransmitters() != 0) {
-                            internalInputs.add(new LXMidiInput(LXMidiEngine.this, device));
+                            mutableInputs.add(new LXMidiInput(LXMidiEngine.this, device));
                         }
                         if (device.getMaxReceivers() != 0) {
-                            internalOutputs.add(new LXMidiOutput(LXMidiEngine.this, device));
+                            mutableOutputs.add(new LXMidiOutput(LXMidiEngine.this, device));
                         }
                     } catch (MidiUnavailableException mux) {
                         mux.printStackTrace();
@@ -138,7 +138,7 @@ public class LXMidiEngine implements LXSerializable {
                 for (LXMidiInput input : inputs) {
                     LXMidiSurface surface = LXMidiSurface.get(lx, LXMidiEngine.this, input);
                     if (surface != null) {
-                        internalSurfaces.add(surface);
+                        mutableSurfaces.add(surface);
                     }
                 }
 
@@ -187,16 +187,12 @@ public class LXMidiEngine implements LXSerializable {
         return this.outputs;
     }
 
-    public List<LXMidiMapping> getMappings() {
-        return this.unmodifiableMappings;
-    }
-
     public LXMidiInput matchInput(String name) {
         return matchInput(new String[] { name });
     }
 
     public LXMidiInput matchInput(String[] names) {
-        return (LXMidiInput) matchDevice(this.internalInputs, names);
+        return (LXMidiInput) matchDevice(this.mutableInputs, names);
     }
 
     public LXMidiOutput matchOutput(String name) {
@@ -204,7 +200,7 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     public LXMidiOutput matchOutput(String[] names) {
-        return (LXMidiOutput) matchDevice(this.internalOutputs, names);
+        return (LXMidiOutput) matchDevice(this.mutableOutputs, names);
     }
 
     private LXMidiDevice matchDevice(List<? extends LXMidiDevice> devices, String[] names) {
@@ -256,7 +252,7 @@ public class LXMidiEngine implements LXSerializable {
         }
 
         // Does this mapping already exist?
-        for (LXMidiMapping mapping : this.mappings) {
+        for (LXMidiMapping mapping : this.mutableMappings) {
             if (mapping.parameter == parameter && mapping.matches(message)) {
                 return;
             }
@@ -268,7 +264,7 @@ public class LXMidiEngine implements LXSerializable {
 
     private boolean applyMapping(LXShortMessage message) {
         boolean applied = false;
-        for (LXMidiMapping mapping : this.mappings) {
+        for (LXMidiMapping mapping : this.mutableMappings) {
             if (mapping.matches(message)) {
                 mapping.apply(message);
                 applied = true;
@@ -278,7 +274,7 @@ public class LXMidiEngine implements LXSerializable {
     }
 
     private LXMidiEngine addMapping(LXMidiMapping mapping) {
-        this.mappings.add(mapping);
+        this.mutableMappings.add(mapping);
         for (MappingListener mappingListener : this.mappingListeners) {
             mappingListener.mappingAdded(this, mapping);
         }
@@ -292,7 +288,7 @@ public class LXMidiEngine implements LXSerializable {
      * @return this
      */
     public LXMidiEngine removeMapping(LXMidiMapping mapping) {
-        this.mappings.remove(mapping);
+        this.mutableMappings.remove(mapping);
         for (MappingListener mappingListener : this.mappingListeners) {
             mappingListener.mappingRemoved(this, mapping);
         }
@@ -307,7 +303,7 @@ public class LXMidiEngine implements LXSerializable {
      * @return
      */
     public LXMidiEngine removeMappings(LXComponent component) {
-        Iterator<LXMidiMapping> iterator = this.mappings.iterator();
+        Iterator<LXMidiMapping> iterator = this.mutableMappings.iterator();
         while (iterator.hasNext()) {
             LXMidiMapping mapping = iterator.next();
             if (mapping.parameter.getComponent() == component) {
@@ -419,7 +415,7 @@ public class LXMidiEngine implements LXSerializable {
     public void save(LX lx, JsonObject object) {
         waitUntilReady();
         JsonArray inputs = new JsonArray();
-        for (LXMidiInput input : this.internalInputs) {
+        for (LXMidiInput input : this.mutableInputs) {
             if (input.enabled.isOn()) {
                 inputs.add(LXSerializable.Utils.toObject(lx, input));
             }
@@ -428,7 +424,7 @@ public class LXMidiEngine implements LXSerializable {
             inputs.add(remembered);
         }
         JsonArray surfaces = new JsonArray();
-        for (LXMidiSurface surface : this.internalSurfaces) {
+        for (LXMidiSurface surface : this.mutableSurfaces) {
             if (surface.enabled.isOn()) {
                 surfaces.add(LXSerializable.Utils.toObject(lx, surface));
             }
@@ -439,13 +435,13 @@ public class LXMidiEngine implements LXSerializable {
 
         object.add(KEY_INPUTS, inputs);
         object.add(KEY_SURFACES, surfaces);
-        object.add(KEY_MAPPINGS, LXSerializable.Utils.toArray(lx, this.mappings));
+        object.add(KEY_MAPPINGS, LXSerializable.Utils.toArray(lx, this.mutableMappings));
     }
 
     @Override
     public void load(final LX lx, final JsonObject object) {
         this.rememberMidiInputs.clear();
-        this.mappings.clear();
+        this.mutableMappings.clear();
         if (object.has(KEY_MAPPINGS)) {
             JsonArray mappings = object.getAsJsonArray(KEY_MAPPINGS);
             for (JsonElement element : mappings) {
@@ -461,7 +457,7 @@ public class LXMidiEngine implements LXSerializable {
                             JsonObject inputObj = element.getAsJsonObject();
                             String inputName = inputObj.get(LXMidiInput.KEY_NAME).getAsString();
                             boolean found = false;
-                            for (LXMidiInput input : internalInputs) {
+                            for (LXMidiInput input : mutableInputs) {
                                 if (inputName.equals(input.getName())) {
                                     found = true;
                                     input.load(lx, inputObj);
@@ -481,7 +477,7 @@ public class LXMidiEngine implements LXSerializable {
                             JsonObject surfaceObj = element.getAsJsonObject();
                             String surfaceDescription = surfaceObj.get(LXMidiSurface.KEY_DESCRIPTION).getAsString();
                             boolean found = false;
-                            for (LXMidiSurface surface : internalSurfaces) {
+                            for (LXMidiSurface surface : mutableSurfaces) {
                                 if (surfaceDescription.equals(surface.getDescription())) {
                                     found = true;
                                     surface.enabled.setValue(true);

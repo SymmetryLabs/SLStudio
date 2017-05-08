@@ -27,9 +27,9 @@ import heronarts.lx.modulator.LXModulator;
 
 public abstract class LXModulatorComponent extends LXComponent implements LXLoopTask {
 
-    private final List<LXModulator> internalModulators = new ArrayList<LXModulator>();
+    private final List<LXModulator> mutableModulators = new ArrayList<LXModulator>();
 
-    public final List<LXModulator> modulators = Collections.unmodifiableList(this.internalModulators);
+    public final List<LXModulator> modulators = Collections.unmodifiableList(this.mutableModulators);
 
     public class Timer {
         public long loopNanos;
@@ -53,10 +53,10 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
         if (modulator == null) {
             throw new IllegalArgumentException("Cannot add null modulator");
         }
-        if (this.internalModulators.contains(modulator)) {
+        if (this.mutableModulators.contains(modulator)) {
             throw new IllegalStateException("Cannot add modulator twice: " + modulator);
         }
-        this.internalModulators.add(modulator);
+        this.mutableModulators.add(modulator);
         modulator.setComponent(this, null);
         ((LXComponent) modulator).setParent(this);
         return modulator;
@@ -68,7 +68,7 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
     }
 
     public LXModulator removeModulator(LXModulator modulator) {
-        this.internalModulators.remove(modulator);
+        this.mutableModulators.remove(modulator);
         modulator.dispose();
         return modulator;
     }
@@ -88,16 +88,16 @@ public abstract class LXModulatorComponent extends LXComponent implements LXLoop
 
     @Override
     public void dispose() {
-        for (LXModulator modulator : this.internalModulators) {
+        for (LXModulator modulator : this.mutableModulators) {
             modulator.dispose();
         }
-        this.internalModulators.clear();
+        this.mutableModulators.clear();
         super.dispose();
     }
 
     @Override
     public void loop(double deltaMs) {
-        for (LXModulator modulator : this.internalModulators) {
+        for (LXModulator modulator : this.mutableModulators) {
             modulator.loop(deltaMs);
         }
     }

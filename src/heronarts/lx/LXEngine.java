@@ -102,15 +102,15 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     private final List<Runnable> engineThreadTaskQueue = new ArrayList<Runnable>();
     private final Map<String, LXComponent> components = new HashMap<String, LXComponent>();
 
-    private final List<LXChannel> internalChannels = new ArrayList<LXChannel>();
+    private final List<LXChannel> mutableChannels = new ArrayList<LXChannel>();
+    public final List<LXChannel> channels = Collections.unmodifiableList(this.mutableChannels);
+
     public final LXMasterChannel masterChannel;
 
     public final Output output;
 
     private final List<Listener> listeners = new ArrayList<Listener>();
     private final List<MessageListener> messageListeners = new ArrayList<MessageListener>();
-
-    public final List<LXChannel> channels = Collections.unmodifiableList(this.internalChannels);
 
     public final DiscreteParameter focusedChannel = new DiscreteParameter("Channel", 1);
 
@@ -316,7 +316,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
                 if (cueA.isOn()) {
                     cueB.setValue(false);
                     lx.palette.cue.setValue(false);
-                    for (LXChannel channel : internalChannels) {
+                    for (LXChannel channel : mutableChannels) {
                         channel.cueActive.setValue(false);
                     }
                 }
@@ -327,7 +327,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
                 if (cueB.isOn()) {
                     cueA.setValue(false);
                     lx.palette.cue.setValue(false);
-                    for (LXChannel channel : internalChannels) {
+                    for (LXChannel channel : mutableChannels) {
                         channel.cueActive.setValue(false);
                     }
                 }
@@ -338,7 +338,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
                 if (lx.palette.cue.isOn()) {
                     cueA.setValue(false);
                     cueB.setValue(false);
-                    for (LXChannel channel : internalChannels) {
+                    for (LXChannel channel : mutableChannels) {
                         channel.cueActive.setValue(false);
                     }
                 }
@@ -410,7 +410,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
             throw new UnsupportedOperationException("setChannelBlends() may only be invoked before engine has started");
         }
         this.channelBlends = channelBlends;
-        for (LXChannel channel : this.internalChannels) {
+        for (LXChannel channel : this.mutableChannels) {
             channel.blendMode.setObjects(channelBlends);
         }
         return this;
@@ -608,15 +608,15 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     }
 
     public LXChannel getDefaultChannel() {
-        return this.internalChannels.get(0);
+        return this.mutableChannels.get(0);
     }
 
     public LXChannel getChannel(int channelIndex) {
-        return this.internalChannels.get(channelIndex);
+        return this.mutableChannels.get(channelIndex);
     }
 
     public LXChannel getChannel(String label) {
-        for (LXChannel channel : this.internalChannels) {
+        for (LXChannel channel : this.mutableChannels) {
             if (channel.getLabel().equals(label)) {
                 return channel;
             }
@@ -625,7 +625,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     }
 
     public LXBus getFocusedChannel() {
-        if (this.focusedChannel.getValuei() == this.internalChannels.size()) {
+        if (this.focusedChannel.getValuei() == this.mutableChannels.size()) {
             return this.masterChannel;
         }
         return getChannel(this.focusedChannel.getValuei());
@@ -633,9 +633,9 @@ public class LXEngine extends LXComponent implements LXOscComponent {
 
     public LXEngine setFocusedChannel(LXBus channel) {
         if (channel == this.masterChannel) {
-            this.focusedChannel.setValue(this.internalChannels.size());
+            this.focusedChannel.setValue(this.mutableChannels.size());
         } else {
-            this.focusedChannel.setValue(this.internalChannels.indexOf(channel));
+            this.focusedChannel.setValue(this.mutableChannels.indexOf(channel));
         }
         return this;
     }
@@ -645,10 +645,10 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     }
 
     public LXChannel addChannel(LXPattern[] patterns) {
-        LXChannel channel = new LXChannel(lx, this.internalChannels.size(), patterns);
+        LXChannel channel = new LXChannel(lx, this.mutableChannels.size(), patterns);
         channel.setParent(this);
-        this.internalChannels.add(channel);
-        this.focusedChannel.setRange(this.internalChannels.size() + 1);
+        this.mutableChannels.add(channel);
+        this.focusedChannel.setRange(this.mutableChannels.size() + 1);
         for (Listener listener : this.listeners) {
             listener.channelAdded(this, channel);
         }
@@ -660,20 +660,20 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     }
 
     private void removeChannel(LXChannel channel, boolean checkLast) {
-        if (checkLast && (this.internalChannels.size() == 1)) {
+        if (checkLast && (this.mutableChannels.size() == 1)) {
             throw new UnsupportedOperationException("Cannot remove last channel from LXEngine");
         }
-        if (this.internalChannels.remove(channel)) {
+        if (this.mutableChannels.remove(channel)) {
             int i = 0;
-            for (LXChannel c : this.internalChannels) {
+            for (LXChannel c : this.mutableChannels) {
                 c.setIndex(i++);
             }
             boolean notified = false;
-            if (this.focusedChannel.getValuei() > this.internalChannels.size()) {
+            if (this.focusedChannel.getValuei() > this.mutableChannels.size()) {
                 notified = true;
                 this.focusedChannel.decrement();
             }
-            this.focusedChannel.setRange(this.internalChannels.size() + 1);
+            this.focusedChannel.setRange(this.mutableChannels.size() + 1);
             if (!notified) {
                 this.focusedChannel.bang();
             }
@@ -687,10 +687,10 @@ public class LXEngine extends LXComponent implements LXOscComponent {
 
     public void moveChannel(LXChannel channel, int index) {
         boolean focused = channel.getIndex() == this.focusedChannel.getValuei();
-        this.internalChannels.remove(channel);
-        this.internalChannels.add(index, channel);
+        this.mutableChannels.remove(channel);
+        this.mutableChannels.add(index, channel);
         int i = 0;
-        for (LXChannel c: this.internalChannels) {
+        for (LXChannel c: this.mutableChannels) {
             c.setIndex(i++);
         }
         if (focused) {
@@ -859,7 +859,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         int rightChannelCount = 0;
         int mainChannelCount = 0;
 
-        for (LXChannel channel : this.internalChannels) {
+        for (LXChannel channel : this.mutableChannels) {
             boolean channelIsEnabled = channel.enabled.isOn();
             boolean channelIsCue = channel.cueActive.isOn();
             if (channelIsEnabled || channelIsCue) {
@@ -1058,7 +1058,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
         obj.add(KEY_PALETTE, LXSerializable.Utils.toObject(lx, this.lx.palette));
-        obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, this.internalChannels));
+        obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, this.mutableChannels));
         obj.add(KEY_MASTER, LXSerializable.Utils.toObject(lx, this.masterChannel));
         obj.add(KEY_AUDIO, LXSerializable.Utils.toObject(lx, this.audio));
         obj.add(KEY_OUTPUT, LXSerializable.Utils.toObject(lx, this.output));
@@ -1074,8 +1074,8 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         // need to separate application-owned loop tasks from project-specific ones...
 
         // Remove all channels
-        for (int i = this.internalChannels.size() - 1; i >= 0; --i) {
-            removeChannel(this.internalChannels.get(i), false);
+        for (int i = this.mutableChannels.size() - 1; i >= 0; --i) {
+            removeChannel(this.mutableChannels.get(i), false);
         }
         // Add the new channels
         if (obj.has(KEY_CHANNELS)) {

@@ -27,9 +27,9 @@ import heronarts.lx.LXUtils;
 
 public class CompoundParameter extends BoundedParameter {
 
-    private final List<LXCompoundModulation> internalModulations = new ArrayList<LXCompoundModulation>();
+    private final List<LXCompoundModulation> mutableModulations = new ArrayList<LXCompoundModulation>();
 
-    public final List<LXCompoundModulation> modulations = Collections.unmodifiableList(this.internalModulations);
+    public final List<LXCompoundModulation> modulations = Collections.unmodifiableList(this.mutableModulations);
 
     /**
      * Labeled parameter with value of 0 and range of 0-1
@@ -102,10 +102,10 @@ public class CompoundParameter extends BoundedParameter {
      * @return
      */
     public CompoundParameter addModulation(LXCompoundModulation modulation) {
-        if (this.internalModulations.contains(modulation)) {
+        if (this.mutableModulations.contains(modulation)) {
             throw new IllegalStateException("Cannot add same modulation twice");
         }
-        this.internalModulations.add(modulation);
+        this.mutableModulations.add(modulation);
         bang();
         return this;
     }
@@ -117,7 +117,7 @@ public class CompoundParameter extends BoundedParameter {
      * @return
      */
     public CompoundParameter removeModulation(LXCompoundModulation modulation) {
-        this.internalModulations.remove(modulation);
+        this.mutableModulations.remove(modulation);
         bang();
         return this;
     }
@@ -133,7 +133,7 @@ public class CompoundParameter extends BoundedParameter {
     @Override
     public double getNormalized() {
         double normalized = super.getNormalized(getBaseValue());
-        for (LXCompoundModulation modulation : this.internalModulations) {
+        for (LXCompoundModulation modulation : this.mutableModulations) {
             if (modulation.getPolarity() == LXParameter.Polarity.UNIPOLAR) {
                 normalized += modulation.source.getNormalized() * modulation.range.getValue();
             } else {
@@ -145,7 +145,7 @@ public class CompoundParameter extends BoundedParameter {
 
     @Override
     public double getValue() {
-        if (this.internalModulations.size() == 0) {
+        if (this.mutableModulations.size() == 0) {
             return super.getValue();
         }
         return normalizedToValue(getNormalized());

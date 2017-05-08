@@ -42,8 +42,8 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
 
     protected int[] colors = null;
 
-    private final List<LXLayer> internalLayers = new ArrayList<LXLayer>();
-    protected final List<LXLayer> layers = Collections.unmodifiableList(internalLayers);
+    private final List<LXLayer> mutableLayers = new ArrayList<LXLayer>();
+    protected final List<LXLayer> layers = Collections.unmodifiableList(mutableLayers);
 
     protected final LXPalette palette;
 
@@ -91,7 +91,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
 
         super.loop(deltaMs);
         onLoop(deltaMs);
-        for (LXLayer layer : this.internalLayers) {
+        for (LXLayer layer : this.mutableLayers) {
             layer.setBuffer(this.buffer);
 
             // TODO(mcslee): is this best here or should it be in addLayer?
@@ -109,16 +109,16 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected /* abstract */ void afterLayers(double deltaMs) {}
 
     protected final LXLayer addLayer(LXLayer layer) {
-        if (this.internalLayers.contains(layer)) {
+        if (this.mutableLayers.contains(layer)) {
             throw new IllegalStateException("Cannot add same layer twice: " + this + " " + layer);
         }
         layer.setParent(this);
-        this.internalLayers.add(layer);
+        this.mutableLayers.add(layer);
         return layer;
     }
 
     protected final LXLayer removeLayer(LXLayer layer) {
-        this.internalLayers.remove(layer);
+        this.mutableLayers.remove(layer);
         layer.dispose();
         return layer;
     }
@@ -129,10 +129,10 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
 
     @Override
     public void dispose() {
-        for (LXLayer layer : this.internalLayers) {
+        for (LXLayer layer : this.mutableLayers) {
             layer.dispose();
         }
-        this.internalLayers.clear();
+        this.mutableLayers.clear();
         super.dispose();
     }
 

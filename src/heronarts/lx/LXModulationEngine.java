@@ -57,11 +57,11 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
 
     private final List<Listener> listeners = new ArrayList<Listener>();
 
-    private final List<LXCompoundModulation> internalModulations = new ArrayList<LXCompoundModulation>();
-    public final List<LXCompoundModulation> modulations = Collections.unmodifiableList(this.internalModulations);
+    private final List<LXCompoundModulation> mutableModulations = new ArrayList<LXCompoundModulation>();
+    public final List<LXCompoundModulation> modulations = Collections.unmodifiableList(this.mutableModulations);
 
-    private final List<LXTriggerModulation> internalTriggers = new ArrayList<LXTriggerModulation>();
-    public final List<LXTriggerModulation> triggers = Collections.unmodifiableList(this.internalTriggers);
+    private final List<LXTriggerModulation> mutableTriggers = new ArrayList<LXTriggerModulation>();
+    public final List<LXTriggerModulation> triggers = Collections.unmodifiableList(this.mutableTriggers);
 
     LXModulationEngine(LX lx) {
         super(lx);
@@ -83,11 +83,11 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
     }
 
     public LXModulationEngine addModulation(LXCompoundModulation modulation) {
-        if (this.internalModulations.contains(modulation)) {
+        if (this.mutableModulations.contains(modulation)) {
             throw new IllegalStateException("Cannot add same modulation twice");
         }
         ((LXComponent) modulation).setParent(this);
-        this.internalModulations.add(modulation);
+        this.mutableModulations.add(modulation);
         for (Listener listener : this.listeners) {
             listener.modulationAdded(this, modulation);
         }
@@ -95,7 +95,7 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
     }
 
     public LXModulationEngine removeModulation(LXCompoundModulation modulation) {
-        this.internalModulations.remove(modulation);
+        this.mutableModulations.remove(modulation);
         for (Listener listener : this.listeners) {
             listener.modulationRemoved(this, modulation);
         }
@@ -104,11 +104,11 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
     }
 
     public LXModulationEngine addTrigger(LXTriggerModulation trigger) {
-        if (this.internalTriggers.contains(trigger)) {
+        if (this.mutableTriggers.contains(trigger)) {
             throw new IllegalStateException("Cannot add same trigger twice");
         }
         ((LXComponent) trigger).setParent(this);
-        this.internalTriggers.add(trigger);
+        this.mutableTriggers.add(trigger);
         for (Listener listener : this.listeners) {
             listener.triggerAdded(this, trigger);
         }
@@ -116,7 +116,7 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
     }
 
     public LXModulationEngine removeTrigger(LXTriggerModulation trigger) {
-        this.internalTriggers.remove(trigger);
+        this.mutableTriggers.remove(trigger);
         for (Listener listener : this.listeners) {
             listener.triggerRemoved(this, trigger);
         }
@@ -125,7 +125,7 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
     }
 
     public LXModulationEngine removeModulations(LXComponent component) {
-        Iterator<LXCompoundModulation> iterator = this.internalModulations.iterator();
+        Iterator<LXCompoundModulation> iterator = this.mutableModulations.iterator();
         while (iterator.hasNext()) {
             LXCompoundModulation modulation = iterator.next();
             if (modulation.source == component || modulation.source.getComponent() == component || modulation.target.getComponent() == component) {
@@ -136,7 +136,7 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
                 modulation.dispose();
             }
         }
-        Iterator<LXTriggerModulation> triggerIterator = this.internalTriggers.iterator();
+        Iterator<LXTriggerModulation> triggerIterator = this.mutableTriggers.iterator();
         while (triggerIterator.hasNext()) {
             LXTriggerModulation trigger = triggerIterator.next();
             if (trigger.source.getComponent() == component || trigger.target.getComponent() == component) {
@@ -170,10 +170,10 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
 
     @Override
     public void dispose() {
-        for (LXCompoundModulation modulation : this.internalModulations) {
+        for (LXCompoundModulation modulation : this.mutableModulations) {
             modulation.dispose();
         }
-        this.internalModulations.clear();
+        this.mutableModulations.clear();
         super.dispose();
     }
 
