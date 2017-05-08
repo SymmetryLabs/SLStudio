@@ -57,7 +57,7 @@ public class UIMidiMappings extends UICollapsibleSection {
         this.ui = ui;
         this.midiEngine = lx.engine.midi;
 
-        for (LXMidiMapping mapping : midiEngine.getMappings()) {
+        for (LXMidiMapping mapping : midiEngine.mappings) {
             addMapping(mapping);
         }
 

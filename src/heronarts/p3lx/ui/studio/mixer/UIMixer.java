@@ -46,8 +46,8 @@ public class UIMixer extends UI2dContainer {
     public final static int STRIP_SPACING = UIMixerStripControls.WIDTH + CHILD_MARGIN;
     public final static int HEIGHT = UIMixerStrip.HEIGHT + 2*PADDING;
 
-    private final Map<LXChannel, UIChannelStrip> internalChannelStrips = new HashMap<LXChannel, UIChannelStrip>();
-    public final Map<LXChannel, UIChannelStrip> channelStrips = Collections.unmodifiableMap(this.internalChannelStrips);
+    private final Map<LXChannel, UIChannelStrip> mutableChannelStrips = new HashMap<LXChannel, UIChannelStrip>();
+    public final Map<LXChannel, UIChannelStrip> channelStrips = Collections.unmodifiableMap(this.mutableChannelStrips);
 
     public final UIButton addChannelButton;
     public final UIMasterStrip masterStrip;
@@ -67,7 +67,7 @@ public class UIMixer extends UI2dContainer {
 
         for (LXChannel channel : lx.engine.getChannels()) {
             UIChannelStrip strip = new UIChannelStrip(ui, this, lx, channel);
-            this.internalChannelStrips.put(channel, strip);
+            this.mutableChannelStrips.put(channel, strip);
             strip.addToContainer(this);
         }
 
@@ -95,16 +95,16 @@ public class UIMixer extends UI2dContainer {
         lx.engine.addListener(new LXEngine.Listener() {
             public void channelAdded(LXEngine engine, LXChannel channel) {
                 UIChannelStrip strip = new UIChannelStrip(ui, UIMixer.this, lx, channel);
-                internalChannelStrips.put(channel, strip);
+                mutableChannelStrips.put(channel, strip);
                 strip.addToContainer(UIMixer.this, channel.getIndex());
             }
 
             public void channelRemoved(LXEngine engine, LXChannel channel) {
-                internalChannelStrips.remove(channel).removeFromContainer();
+                mutableChannelStrips.remove(channel).removeFromContainer();
             }
 
             public void channelMoved(LXEngine engine, LXChannel channel) {
-                internalChannelStrips.get(channel).setContainerIndex(channel.getIndex());
+                mutableChannelStrips.get(channel).setContainerIndex(channel.getIndex());
             }
         });
     }
