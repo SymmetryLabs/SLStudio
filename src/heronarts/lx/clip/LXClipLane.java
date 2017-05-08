@@ -30,10 +30,16 @@ import java.util.Collections;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LX;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.MutableParameter;
 
-public abstract class LXClipLane {
+public abstract class LXClipLane implements LXSerializable {
 
     public final MutableParameter onChange = new MutableParameter();
 
@@ -127,5 +133,36 @@ public abstract class LXClipLane {
         this.mutableEvents.clear();
         this.onChange.bang();
     }
+
+    private static final String KEY_EVENTS = "events";
+    protected static final String KEY_LANE_TYPE = "laneType";
+    protected static final String VALUE_LANE_TYPE_PARAMETER = "parameter";
+    protected static final String VALUE_LANE_TYPE_PATTERN = "pattern";
+
+    public void load(LX lx, JsonObject obj) {
+        this.mutableEvents.clear();
+        if (obj.has(KEY_EVENTS)) {
+            JsonArray eventsArr = obj.get(KEY_EVENTS).getAsJsonArray();
+            for (JsonElement eventElem : eventsArr) {
+                JsonObject eventObj = eventElem.getAsJsonObject();
+                LXClipEvent event = loadEvent(lx, eventObj);
+                event.load(lx, eventObj);
+                this.mutableEvents.add(event);
+            }
+        }
+        this.onChange.bang();
+    }
+
+    protected abstract LXClipEvent loadEvent(LX lx, JsonObject eventObj);
+
+    public void save(LX lx, JsonObject obj) {
+        if (this instanceof ParameterClipLane) {
+            obj.addProperty(KEY_LANE_TYPE, VALUE_LANE_TYPE_PARAMETER);
+        } else if (this instanceof PatternClipLane) {
+            obj.addProperty(KEY_LANE_TYPE, VALUE_LANE_TYPE_PATTERN);
+        }
+        obj.add(KEY_EVENTS, LXSerializable.Utils.toArray(lx, this.events));
+    }
+
 
 }

@@ -23,6 +23,7 @@ package heronarts.lx.midi;
 import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXSerializable;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -56,7 +57,7 @@ public abstract class LXMidiMapping implements LXSerializable {
             lx,
             object.get(KEY_CHANNEL).getAsInt(),
             type,
-            lx.getComponent(object.get(KEY_COMPONENT_ID).getAsInt()).getParameter(object.get(KEY_PARAMETER_PATH).getAsString())
+            lx.getComponent(object.get(LXComponent.KEY_COMPONENT_ID).getAsInt()).getParameter(object.get(LXComponent.KEY_PARAMETER_PATH).getAsString())
         );
     }
 
@@ -118,15 +119,13 @@ public abstract class LXMidiMapping implements LXSerializable {
 
     private static final String KEY_CHANNEL = "channel";
     private static final String KEY_TYPE = "type";
-    private static final String KEY_COMPONENT_ID = "componentId";
-    private static final String KEY_PARAMETER_PATH = "parameterPath";
 
     @Override
     public void save(LX lx, JsonObject object) {
         object.addProperty(KEY_CHANNEL, this.channel);
         object.addProperty(KEY_TYPE, this.type.toString());
-        object.addProperty(KEY_COMPONENT_ID, this.parameter.getComponent().getId());
-        object.addProperty(KEY_PARAMETER_PATH, this.parameter.getPath());
+        object.addProperty(LXComponent.KEY_COMPONENT_ID, this.parameter.getComponent().getId());
+        object.addProperty(LXComponent.KEY_PARAMETER_PATH, this.parameter.getPath());
     }
 
     @Override

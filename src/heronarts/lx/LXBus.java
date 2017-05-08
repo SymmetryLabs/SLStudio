@@ -238,16 +238,29 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     }
 
     private static final String KEY_EFFECTS = "effects";
+    private static final String KEY_CLIPS = "clips";
 
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);;
         obj.add(KEY_EFFECTS, LXSerializable.Utils.toArray(lx, this.internalEffects));
+        JsonArray clipsArr = new JsonArray();
+        for (LXClip clip : this.clips) {
+            if (clip != null) {
+                clipsArr.add(LXSerializable.Utils.toObject(lx, clip));
+            }
+        }
+        obj.add(KEY_CLIPS, clipsArr);
     }
 
     @Override
     public void load(LX lx, JsonObject obj) {
-        super.load(lx, obj);
+        // Remove clips
+        for (LXClip clip : this.clips) {
+            if (clip != null) {
+                removeClip(clip);
+            }
+        }
         // Remove effects
         for (int i = this.internalEffects.size() - 1; i >= 0; --i) {
             removeEffect(this.internalEffects.get(i));
@@ -260,6 +273,18 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
             effect.load(lx, effectObj);
             addEffect(effect);
         }
+        // Add the new clips
+        if (obj.has(KEY_CLIPS)) {
+            JsonArray clipsArr = obj.get(KEY_CLIPS).getAsJsonArray();
+            for (JsonElement clipElem : clipsArr) {
+                JsonObject clipObj = clipElem.getAsJsonObject();
+                int clipIndex = clipObj.get(LXClip.KEY_INDEX).getAsInt();
+                LXClip clip = addClip(clipIndex);
+                clip.load(lx, clipObj);
+            }
+        }
+
+        super.load(lx, obj);
     }
 
 }

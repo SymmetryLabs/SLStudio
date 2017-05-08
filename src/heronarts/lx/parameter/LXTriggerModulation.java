@@ -24,7 +24,7 @@ import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 
-public class LXTriggerModulation extends LXParameterModulation{
+public class LXTriggerModulation extends LXParameterModulation {
 
     public final BooleanParameter source;
 

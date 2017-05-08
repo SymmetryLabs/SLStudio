@@ -31,11 +31,16 @@ import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXRunnableComponent;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
@@ -280,4 +285,38 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
 
     @Override
     public void effectMoved(LXBus channel, LXEffect effect) {}
+
+    private static final String KEY_LANES = "parameterLanes";
+    public static final String KEY_INDEX = "index";
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        clearLanes();
+        if (obj.has(KEY_LANES)) {
+            JsonArray lanesArr = obj.get(KEY_LANES).getAsJsonArray();
+            for (JsonElement laneElement : lanesArr) {
+                JsonObject laneObj = laneElement.getAsJsonObject();
+                String laneType = laneObj.get(LXClipLane.KEY_LANE_TYPE).getAsString();
+                loadLane(lx, laneType, laneObj);
+            }
+        }
+        super.load(lx, obj);
+    }
+
+    protected void loadLane(LX lx, String laneType, JsonObject laneObj) {
+        if (laneType.equals(LXClipLane.VALUE_LANE_TYPE_PARAMETER)) {
+            LXComponent component = lx.getComponent(laneObj.get(KEY_COMPONENT_ID).getAsInt());
+            String path = laneObj.get(KEY_PARAMETER_PATH).getAsString();
+            LXParameter parameter = component.getParameter(path);
+            LXClipLane lane = getParameterLane((LXNormalizedParameter) parameter, true);
+            lane.load(lx, laneObj);
+        }
+    }
+
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        obj.addProperty(KEY_INDEX, this.index);
+        obj.add(KEY_LANES, LXSerializable.Utils.toArray(lx, this.lanes));
+    }
 }

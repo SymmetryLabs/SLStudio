@@ -27,9 +27,14 @@
 package heronarts.lx.clip;
 
 import java.util.Comparator;
-import heronarts.lx.LXComponent;
 
-public abstract class LXClipEvent implements Comparator<LXClipEvent> {
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
+import heronarts.lx.LXSerializable;
+
+public abstract class LXClipEvent implements Comparator<LXClipEvent>, LXSerializable {
 
     protected final LXClipLane lane;
     protected final LXComponent component;
@@ -77,4 +82,18 @@ public abstract class LXClipEvent implements Comparator<LXClipEvent> {
     }
 
     public abstract void execute();
+
+    protected static final String KEY_CURSOR = "cursor";
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        if (obj.has(KEY_CURSOR)) {
+            this.cursor = obj.get(KEY_CURSOR).getAsDouble();
+        }
+    }
+
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        obj.addProperty(KEY_CURSOR, this.cursor);
+    }
 }

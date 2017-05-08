@@ -44,9 +44,6 @@ public abstract class LXParameterModulation extends LXComponent {
     protected static final String KEY_SOURCE = "source";
     protected static final String KEY_TARGET = "target";
 
-    private static final String KEY_COMPONENT_ID = "componentId";
-    private static final String KEY_PARAMETER_PATH = "parameterPath";
-
     protected static LXParameter getParameter(LX lx, JsonObject obj) {
         if (obj.has(KEY_ID)) {
             return (LXParameter) lx.getComponent(obj.get(KEY_ID).getAsInt());

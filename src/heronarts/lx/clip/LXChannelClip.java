@@ -26,6 +26,8 @@
 
 package heronarts.lx.clip;
 
+import com.google.gson.JsonObject;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
@@ -84,4 +86,12 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener {
 
     }
 
+    @Override
+    protected void loadLane(LX lx, String laneType, JsonObject laneObj) {
+        if (laneType.equals(LXClipLane.VALUE_LANE_TYPE_PATTERN)) {
+            this.patternLane.load(lx, laneObj);
+        } else {
+            super.loadLane(lx, laneType, laneObj);
+        }
+    }
 }

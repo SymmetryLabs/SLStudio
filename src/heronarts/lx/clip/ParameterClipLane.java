@@ -26,6 +26,9 @@
 
 package heronarts.lx.clip;
 
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.LXNormalizedParameter;
@@ -84,7 +87,19 @@ public class ParameterClipLane extends LXClipLane {
                 (to - prior.cursor) / (next.cursor - prior.cursor)
             ));
         }
+    }
 
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        obj.addProperty(LXComponent.KEY_COMPONENT_ID, this.parameter.getComponent().getId());
+        obj.addProperty(LXComponent.KEY_PARAMETER_PATH, this.parameter.getPath());
+    }
+
+    @Override
+    protected LXClipEvent loadEvent(LX lx, JsonObject eventObj) {
+        double normalized = eventObj.get(ParameterClipEvent.KEY_NORMALIZED).getAsDouble();
+        return new ParameterClipEvent(this, this.parameter, normalized);
     }
 }
 

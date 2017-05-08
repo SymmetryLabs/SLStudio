@@ -26,6 +26,12 @@
 
 package heronarts.lx.clip;
 
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXPattern;
+
 public class PatternClipLane extends LXClipLane {
     PatternClipLane(LXClip clip) {
         super(clip);
@@ -39,5 +45,12 @@ public class PatternClipLane extends LXClipLane {
     PatternClipLane addEvent(PatternClipEvent event) {
         super.appendEvent(event);
         return this;
+    }
+
+    @Override
+    protected LXClipEvent loadEvent(LX lx, JsonObject eventObj) {
+        LXChannel channel = (LXChannel) this.clip.bus;
+        LXPattern pattern = channel.patterns.get(eventObj.get(PatternClipEvent.KEY_PATTERN_INDEX).getAsInt());
+        return new PatternClipEvent(this, channel, pattern);
     }
 }

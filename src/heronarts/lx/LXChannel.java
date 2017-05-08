@@ -733,7 +733,6 @@ public class LXChannel extends LXBus {
 
     @Override
     public void load(LX lx, JsonObject obj) {
-        super.load(lx, obj);
         // Remove patterns
         for (int i = this.internalPatterns.size() - 1; i >= 0; --i) {
             removePattern(this.internalPatterns.get(i), false);
@@ -766,6 +765,8 @@ public class LXChannel extends LXBus {
         for (Listener listener : listeners) {
             listener.patternDidChange(this, activePattern);
         }
+
+        super.load(lx, obj);
     }
 
 }
