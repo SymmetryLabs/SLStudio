@@ -394,36 +394,60 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             protected void onDraw(UI ui, PGraphics pg) {
                 int startX = -1;
                 int startY = -1;
+
+                // Lines
+                pg.stroke(ui.theme.getPrimaryColor());
                 for (LXClipEvent event : lane.events) {
                     ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
                     double eventBasis = parameterEvent.getBasis();
                     double eventNormalized = parameterEvent.getNormalized();
                     int endX = (int) Math.round(eventBasis * (width-1));
                     int endY = (int) Math.round(height - 1 - eventNormalized * (height-1));
-                    pg.stroke(ui.theme.getPrimaryColor());
                     if (startX >= 0) {
                         pg.line(startX, startY, endX, endY);
                     } else {
                         pg.line(0, endY, endX, endY);
                     }
-                    float rectX = LXUtils.constrainf(endX-2, 0, width-5);
-                    float rectY = LXUtils.constrainf(endY-2, 0, height-5);
+                    startX = endX;
+                    startY = endY;
+                }
+                if (startX < width-1 && startY >= 0) {
+                    pg.line(startX, startY, width-1, startY);
+                }
 
-                    pg.noStroke();
+                // Dots
+                pg.noStroke();
+                for (LXClipEvent event : lane.events) {
+                    ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
+                    double eventBasis = parameterEvent.getBasis();
+                    double eventNormalized = parameterEvent.getNormalized();
+                    int endX = (int) Math.round(eventBasis * (width-1));
+                    int endY = (int) Math.round(height - 1 - eventNormalized * (height-1));
+                    float rectWidth = 5;
+                    float rectHeight = 5;
+                    float rectX = endX - 2;
+                    float rectY = endY - 2;
+                    if (rectY < 0) {
+                        rectHeight += rectY;
+                        rectY = 0;
+                    } else if (rectY > height-5) {
+                        rectHeight -= rectY - (height-5);
+                    }
+                    if (rectX < 0) {
+                        rectWidth += rectX;
+                        rectX = 0;
+                    } else if (rectX > width-5) {
+                        rectWidth -= rectX - (width-5);
+                    }
+
                     if (this.editEvent == event) {
                         pg.fill(ui.theme.getRecordingColor());
                     } else {
                         pg.fill(ui.theme.getPrimaryColor());
                     }
-                    pg.rect(rectX, rectY, 5, 5);
-                    startX = endX;
-                    startY = endY;
+                    pg.rect(rectX, rectY, rectWidth, rectHeight);
                 }
-                if (startX < width-1 && startY >= 0) {
-                    pg.fill(ui.theme.getPrimaryColor());
-                    pg.stroke(ui.theme.getPrimaryColor());
-                    pg.line(startX, startY, width-1, startY);
-                }
+
             }
 
             private final static int EVENT_SELECTION_THRESHOLD = 6;
