@@ -37,7 +37,7 @@ public abstract class LXClipLane {
 
     public final MutableParameter onChange = new MutableParameter();
 
-    protected final LXClip clip;
+    public final LXClip clip;
 
     protected final List<LXClipEvent> mutableEvents = new CopyOnWriteArrayList<LXClipEvent>();
     public final List<LXClipEvent> events = Collections.unmodifiableList(this.mutableEvents);

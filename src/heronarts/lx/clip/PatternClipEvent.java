@@ -5,8 +5,8 @@ import heronarts.lx.LXPattern;
 
 public class PatternClipEvent extends LXClipEvent {
 
-    private final LXPattern pattern;
-    private final LXChannel channel;
+    public final LXPattern pattern;
+    public final LXChannel channel;
 
     PatternClipEvent(LXClipLane lane, LXChannel channel, LXPattern pattern) {
         super(lane, pattern);
