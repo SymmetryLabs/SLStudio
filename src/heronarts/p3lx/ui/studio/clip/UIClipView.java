@@ -32,6 +32,7 @@ import java.util.List;
 import java.util.Map;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.LXUtils;
 import heronarts.lx.clip.LXClip;
@@ -39,6 +40,8 @@ import heronarts.lx.clip.LXClipEvent;
 import heronarts.lx.clip.LXClipLane;
 import heronarts.lx.clip.ParameterClipEvent;
 import heronarts.lx.clip.ParameterClipLane;
+import heronarts.lx.clip.PatternClipEvent;
+import heronarts.lx.clip.PatternClipLane;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -240,8 +243,10 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         private int cursorX = 0;
 
         private LXClipLane lane;
+        private LaneImpl impl;
 
-        private LXClipEvent editEvent = null;
+        private final ParameterLaneImpl parameterLane = new ParameterLaneImpl();
+        private final PatternLaneImpl patternLane = new PatternLaneImpl();
 
         private double selectionStart = 0;
         private double selectionEnd = 0;
@@ -279,60 +284,19 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
                 this.lane = lane;
                 if (this.lane != null) {
                     this.lane.onChange.addListener(this.redraw);
+                    if (this.lane instanceof ParameterClipLane) {
+                        this.impl = this.parameterLane;
+                    } else if (this.lane instanceof PatternClipLane) {
+                        this.impl = this.patternLane;
+                    }
+                } else {
+                    this.impl = null;
                 }
-                this.editEvent = null;
+                if (this.impl != null) {
+                    this.impl.initialize();
+                }
                 clearSelection();
                 redraw();
-            }
-        }
-
-        @Override
-        protected void onDraw(UI ui, PGraphics pg) {
-            if (clip != null) {
-                pg.stroke(ui.theme.getCursorColor());
-                pg.line(this.cursorX, 0, this.cursorX, this.height-1);
-                if (this.lane != null && this.lane instanceof ParameterClipLane) {
-                    if (this.hasSelection) {
-                        pg.noStroke();
-                        pg.fill(ui.theme.getSelectionColor());
-                        int startX = (int) (Math.min(this.selectionStart, this.selectionEnd) * (this.width-1));
-                        int endX = (int) (Math.max(this.selectionStart, this.selectionEnd) * (this.width-1));
-                        pg.rect(startX, 0, endX-startX, this.height);
-                    }
-
-                    int startX = -1;
-                    int startY = -1;
-                    for (LXClipEvent event : this.lane.events) {
-                        ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
-                        double eventBasis = parameterEvent.getBasis();
-                        double eventNormalized = parameterEvent.getNormalized();
-                        int endX = (int) Math.round(eventBasis * (this.width-1));
-                        int endY = (int) Math.round(this.height - 1 - eventNormalized * (this.height-1));
-                        pg.stroke(ui.theme.getPrimaryColor());
-                        if (startX >= 0) {
-                            pg.line(startX, startY, endX, endY);
-                        } else {
-                            pg.line(0, endY, endX, endY);
-                        }
-                        float rectX = LXUtils.constrainf(endX-2, 0, this.width-5);
-                        float rectY = LXUtils.constrainf(endY-2, 0, this.height-5);
-
-                        pg.noStroke();
-                        if (this.editEvent == event) {
-                            pg.fill(ui.theme.getRecordingColor());
-                        } else {
-                            pg.fill(ui.theme.getPrimaryColor());
-                        }
-                        pg.rect(rectX, rectY, 5, 5);
-                        startX = endX;
-                        startY = endY;
-                    }
-                    if (startX < this.width-1 && startY >= 0) {
-                        pg.fill(ui.theme.getPrimaryColor());
-                        pg.stroke(ui.theme.getPrimaryColor());
-                        pg.line(startX, startY, this.width-1, startY);
-                    }
-                }
             }
         }
 
@@ -343,52 +307,52 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
         }
 
-        private final static int EVENT_SELECTION_THRESHOLD = 6;
+        @Override
+        protected void onDraw(UI ui, PGraphics pg) {
+            if (clip != null) {
+                // Highlight background selection
+                if (this.lane != null && this.hasSelection) {
+                    pg.noStroke();
+                    pg.fill(ui.theme.getSelectionColor());
+                    int startX = (int) (Math.min(this.selectionStart, this.selectionEnd) * (this.width-1));
+                    int endX = (int) (Math.max(this.selectionStart, this.selectionEnd) * (this.width-1));
+                    pg.rect(startX, 0, endX-startX, this.height);
+                }
+
+                // Draw position cursor
+                pg.stroke(ui.theme.getCursorColor());
+                pg.line(this.cursorX, 0, this.cursorX, this.height-1);
+
+                if (this.impl != null) {
+                    this.impl.onDraw(ui, pg);
+                }
+            }
+        }
 
         @Override
         protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
             clearSelection();
             this.selectionStart = this.selectionEnd = LXUtils.constrain(mx / (this.width-1), 0, 1);
-            LXClipEvent edit = null;
-
-            if (this.lane != null && this.lane instanceof ParameterClipLane) {
-                for (LXClipEvent event : this.lane.events) {
-                    ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
-                    double eventBasis = parameterEvent.getBasis();
-                    double eventNormalized = parameterEvent.getNormalized();
-                    int endX = (int) (eventBasis * (this.width-1));
-                    int endY = (int) (this.height - 1 - eventNormalized * (this.height-1));
-                    if (Math.abs(mx - endX) < EVENT_SELECTION_THRESHOLD && Math.abs(my - endY) < EVENT_SELECTION_THRESHOLD) {
-                        edit = parameterEvent;
-                        break;
-                    }
-                }
-            }
-
-            if (edit != this.editEvent) {
-                this.editEvent = edit;
-                redraw();
+            if (this.impl != null) {
+                this.impl.onMousePressed(mouseEvent, mx, my);
             }
         }
 
         @Override
         protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
             clearSelection();
-            if (this.lane != null && this.lane instanceof ParameterClipLane && mouseEvent.getCount() == 2) {
-                double basis = mx / (this.width - 1);
-                double normalized = 1. - my / (this.height-1);
-                ((ParameterClipLane) this.lane).insertEvent(basis, normalized);
+            if (this.impl != null) {
+                this.impl.onMouseClicked(mouseEvent, mx, my);
             }
         }
 
         @Override
         protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-            if (this.lane != null && this.editEvent != null) {
-                this.lane.moveEvent(this.editEvent, mx / (this.width-1));
-                if (this.editEvent instanceof ParameterClipEvent) {
-                    ((ParameterClipEvent) this.editEvent).setNormalized(1. - my / (this.height-1));
-                }
-            } else {
+            boolean implHandled = false;
+            if (this.impl != null) {
+                implHandled = this.impl.onMouseDragged(mouseEvent, mx, my, dx, dy);
+            }
+            if (!implHandled) {
                 this.hasSelection = true;
                 this.selectionEnd = LXUtils.constrain(mx / (this.width-1), 0, 1);
                 redraw();
@@ -398,19 +362,234 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         @Override
         protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
-            if (this.lane != null && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+            if (this.impl != null) {
+                this.impl.onKeyPressed(keyEvent, keyChar, keyCode);
+            }
+            if (!keyEventConsumed() && this.hasSelection) {
+                consumeKeyEvent();
+                double clearBegin = Math.min(this.selectionStart, this.selectionEnd);
+                double clearEnd = Math.max(this.selectionStart, this.selectionEnd);
+                this.lane.clearSelection(clearBegin, clearEnd);
+            }
+        }
+
+        private abstract class LaneImpl {
+            protected abstract void initialize();
+            protected abstract void onDraw(UI ui, PGraphics pg);
+            protected abstract void onMousePressed(MouseEvent mouseEvent, float mx, float my);
+            protected abstract void onMouseClicked(MouseEvent mouseEvent, float mx, float my);
+            protected abstract boolean onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy);
+            protected abstract void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode);
+        }
+
+        private class ParameterLaneImpl extends LaneImpl {
+            private LXClipEvent editEvent;
+
+            @Override
+            protected void initialize() {
+                this.editEvent = null;
+            }
+
+            @Override
+            protected void onDraw(UI ui, PGraphics pg) {
+                int startX = -1;
+                int startY = -1;
+                for (LXClipEvent event : lane.events) {
+                    ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
+                    double eventBasis = parameterEvent.getBasis();
+                    double eventNormalized = parameterEvent.getNormalized();
+                    int endX = (int) Math.round(eventBasis * (width-1));
+                    int endY = (int) Math.round(height - 1 - eventNormalized * (height-1));
+                    pg.stroke(ui.theme.getPrimaryColor());
+                    if (startX >= 0) {
+                        pg.line(startX, startY, endX, endY);
+                    } else {
+                        pg.line(0, endY, endX, endY);
+                    }
+                    float rectX = LXUtils.constrainf(endX-2, 0, width-5);
+                    float rectY = LXUtils.constrainf(endY-2, 0, height-5);
+
+                    pg.noStroke();
+                    if (this.editEvent == event) {
+                        pg.fill(ui.theme.getRecordingColor());
+                    } else {
+                        pg.fill(ui.theme.getPrimaryColor());
+                    }
+                    pg.rect(rectX, rectY, 5, 5);
+                    startX = endX;
+                    startY = endY;
+                }
+                if (startX < width-1 && startY >= 0) {
+                    pg.fill(ui.theme.getPrimaryColor());
+                    pg.stroke(ui.theme.getPrimaryColor());
+                    pg.line(startX, startY, width-1, startY);
+                }
+            }
+
+            private final static int EVENT_SELECTION_THRESHOLD = 6;
+
+            @Override
+            protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+                LXClipEvent edit = null;
+                for (LXClipEvent event : lane.events) {
+                    ParameterClipEvent parameterEvent = (ParameterClipEvent) event;
+                    double eventBasis = parameterEvent.getBasis();
+                    double eventNormalized = parameterEvent.getNormalized();
+                    int endX = (int) (eventBasis * (width-1));
+                    int endY = (int) (height - 1 - eventNormalized * (height-1));
+                    if (Math.abs(mx - endX) < EVENT_SELECTION_THRESHOLD && Math.abs(my - endY) < EVENT_SELECTION_THRESHOLD) {
+                        edit = parameterEvent;
+                        break;
+                    }
+                }
+                if (edit != this.editEvent) {
+                    this.editEvent = edit;
+                    redraw();
+                }
+            }
+
+            @Override
+            protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+                if (mouseEvent.getCount() == 2) {
+                    double basis = mx / (width - 1);
+                    double normalized = 1. - my / (height-1);
+                    ((ParameterClipLane) lane).insertEvent(basis, normalized);
+                }
+            }
+
+
+            @Override
+            protected boolean onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
                 if (this.editEvent != null) {
+                    lane.moveEvent(this.editEvent, mx / (width-1));
+                    ((ParameterClipEvent) this.editEvent).setNormalized(1. - my / (height-1));
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                if (this.editEvent != null && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
                     consumeKeyEvent();
                     LXClipEvent edit = this.editEvent;
                     this.editEvent = null;
-                    this.lane.removeEvent(edit);
-                } else if (this.hasSelection) {
-                    consumeKeyEvent();
-                    double clearBegin = Math.min(this.selectionStart, this.selectionEnd);
-                    double clearEnd = Math.max(this.selectionStart, this.selectionEnd);
-                    this.lane.clearSelection(clearBegin, clearEnd);
+                    lane.removeEvent(edit);
                 }
             }
+
+        }
+
+        private class PatternLaneImpl extends LaneImpl {
+
+            private PatternClipEvent selectedEvent = null;
+
+            @Override
+            protected void initialize() {
+                this.selectedEvent = null;
+            }
+
+            @Override
+            protected void onDraw(UI ui, PGraphics pg) {
+                LXChannel channel = (LXChannel) lane.clip.bus;
+                int numPatterns = channel.patterns.size();
+                int patternRowHeight = (int) Math.floor(height / numPatterns);
+                for (int i = 1; i < numPatterns; ++i) {
+                    pg.stroke(ui.theme.getSelectionColor());
+                    pg.line(1, i * patternRowHeight, width-2, i * patternRowHeight);
+                }
+
+                int startX = 0;
+                PatternClipEvent lastPattern = null;
+                for (LXClipEvent event : lane.events) {
+                    int endX = (int) Math.round(event.getBasis() * (width-1));
+                    if (lastPattern != null) {
+                        drawPattern(ui, pg, startX, endX, lastPattern, patternRowHeight);
+                    }
+                    lastPattern = (PatternClipEvent) event;
+                    startX = endX;
+                }
+                if (lastPattern != null) {
+                    drawPattern(ui, pg, startX, (int) (width-1), lastPattern, patternRowHeight);
+                }
+            }
+
+            private void drawPattern(UI ui, PGraphics pg, int fromX, int toX, PatternClipEvent patternEvent, int patternRowHeight) {
+                int y = patternEvent.pattern.getIndex() * patternRowHeight;
+                if (patternEvent == this.selectedEvent) {
+                    pg.fill(ui.theme.getPrimaryColor());
+                } else {
+                    pg.noFill();
+                }
+                pg.stroke(ui.theme.getPrimaryColor());
+                pg.rect(fromX, y, toX - fromX, patternRowHeight-1, 4);
+                pg.fill((patternEvent == this.selectedEvent) ? UI.WHITE : ui.theme.getPrimaryColor());
+                pg.textAlign(PConstants.CENTER, PConstants.CENTER);
+                pg.textFont(ui.theme.getControlFont());
+                int textPos = fromX + (toX - fromX) / 2;
+                String text = clipTextToWidth(
+                    pg,
+                    patternEvent.pattern.getLabel(),
+                    2 * Math.min(textPos, width - textPos)
+                );
+                pg.text(text, textPos, y + patternRowHeight / 2);
+            }
+
+            @Override
+            protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+                LXChannel channel = (LXChannel) lane.clip.bus;
+                int numPatterns = channel.patterns.size();
+                int patternRowHeight = (int) Math.floor(height / numPatterns);
+                int startX = 0;
+                PatternClipEvent selected = null;
+                PatternClipEvent lastPattern = null;
+                for (LXClipEvent event : lane.events) {
+                    int endX = (int) Math.round(event.getBasis() * (width-1));
+                    if (lastPattern != null) {
+                        if (startX <= mx && mx < endX) {
+                            int y = lastPattern.pattern.getIndex() * patternRowHeight;
+                            if (y <= my && my < (y + patternRowHeight)) {
+                                selected = lastPattern;
+                                break;
+                            }
+                        }
+                    }
+                    lastPattern = (PatternClipEvent) event;
+                    startX = endX;
+                }
+                if (selected == null && lastPattern != null) {
+                    int y = lastPattern.pattern.getIndex() * patternRowHeight;
+                    if (y <= my && my < (y + patternRowHeight)) {
+                        selected = lastPattern;
+                    }
+                }
+                if (this.selectedEvent != selected) {
+                    this.selectedEvent = selected;
+                    redraw();
+                }
+            }
+
+            @Override
+            protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+
+            }
+
+            @Override
+            protected boolean onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+                if (this.selectedEvent != null) {
+                    lane.moveEvent(this.selectedEvent, this.selectedEvent.getBasis() + dx / width);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                if (this.selectedEvent != null && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                    lane.removeEvent(this.selectedEvent);
+                }
+            }
+
         }
     }
 }
