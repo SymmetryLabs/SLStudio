@@ -24,7 +24,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
-import heronarts.lx.LXPattern;
 import heronarts.lx.LXSerializable;
 import heronarts.lx.midi.surface.LXMidiSurface;
 import heronarts.lx.parameter.LXParameter;
@@ -358,49 +357,15 @@ public class LXMidiEngine implements LXSerializable {
         }
 
         for (LXMidiListener listener : this.listeners) {
-            dispatch(message, listener);
+            message.dispatch(listener);
         }
 
         if (input == null || input.channelEnabled.isOn()) {
             for (LXChannel channel : this.lx.engine.getChannels()) {
                 if (channel.midiMonitor.isOn() && channel.midiChannel.getEnum().matches(message)) {
                     channel.midiMessage(message);
-                    LXPattern activePattern = channel.getActivePattern();
-                    dispatch(message, activePattern);
-                    LXPattern nextPattern = channel.getNextPattern();
-                    if (nextPattern != null && nextPattern != activePattern) {
-                        dispatch(message, nextPattern);
-                    }
                 }
             }
-        }
-    }
-
-    public void dispatch(LXShortMessage message, LXMidiListener listener) {
-        switch (message.getCommand()) {
-        case ShortMessage.NOTE_ON:
-            MidiNoteOn note = (MidiNoteOn) message;
-            if (note.getVelocity() == 0) {
-                listener.noteOffReceived(note);
-            } else {
-                listener.noteOnReceived(note);
-            }
-            break;
-        case ShortMessage.NOTE_OFF:
-            listener.noteOffReceived((MidiNoteOff) message);
-            break;
-        case ShortMessage.CONTROL_CHANGE:
-            listener.controlChangeReceived((MidiControlChange) message);
-            break;
-        case ShortMessage.PROGRAM_CHANGE:
-            listener.programChangeReceived((MidiProgramChange) message);
-            break;
-        case ShortMessage.PITCH_BEND:
-            listener.pitchBendReceived((MidiPitchBend) message);
-            break;
-        case ShortMessage.CHANNEL_PRESSURE:
-            listener.aftertouchReceived((MidiAftertouch) message);
-            break;
         }
     }
 

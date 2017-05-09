@@ -31,10 +31,13 @@ import com.google.gson.JsonObject;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
+import heronarts.lx.midi.LXShortMessage;
+import heronarts.lx.midi.MidiNote;
 
-public class LXChannelClip extends LXClip implements LXChannel.Listener {
+public class LXChannelClip extends LXClip implements LXChannel.Listener, LXChannel.MidiListener {
 
     public final PatternClipLane patternLane = new PatternClipLane(this);
+    public final MidiNoteClipLane midiNoteLane = new MidiNoteClipLane(this);
 
     public final LXChannel channel;
 
@@ -42,8 +45,10 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener {
         super(lx, channel, index);
         this.channel = channel;
         this.mutableLanes.add(this.patternLane);
+        this.mutableLanes.add(this.midiNoteLane);
 
         channel.addListener(this);
+        channel.addMidiListener(this);
         channel.fader.addListener(this.parameterRecorder);
         channel.enabled.addListener(this.parameterRecorder);
 
@@ -54,7 +59,7 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener {
 
     @Override
     protected void onStartRecording() {
-        this.patternLane.addEvent(new PatternClipEvent(this.patternLane, this.channel, this.channel.getActivePattern()));
+        this.patternLane.appendEvent(new PatternClipEvent(this.patternLane, this.channel, this.channel.getActivePattern()));
     }
 
     @Override
@@ -77,7 +82,7 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener {
     @Override
     public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
         if (isRunning() && this.bus.arm.isOn()) {
-            this.patternLane.addEvent(new PatternClipEvent(this.patternLane, channel, nextPattern));
+            this.patternLane.appendEvent(new PatternClipEvent(this.patternLane, channel, nextPattern));
         }
     }
 
@@ -90,8 +95,17 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener {
     protected void loadLane(LX lx, String laneType, JsonObject laneObj) {
         if (laneType.equals(LXClipLane.VALUE_LANE_TYPE_PATTERN)) {
             this.patternLane.load(lx, laneObj);
+        } else if (laneType.equals(LXClipLane.VALUE_LANE_TYPE_MIDI_NOTE)) {
+            this.midiNoteLane.load(lx, laneObj);
         } else {
             super.loadLane(lx, laneType, laneObj);
+        }
+    }
+
+    @Override
+    public void midiReceived(LXChannel channel, LXShortMessage message) {
+        if (message instanceof MidiNote) {
+            this.midiNoteLane.appendEvent(new MidiNoteClipEvent(this.midiNoteLane, (MidiNote) message));
         }
     }
 }

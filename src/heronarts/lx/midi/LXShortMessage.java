@@ -73,4 +73,31 @@ public abstract class LXShortMessage extends ShortMessage {
         return this.input;
     }
 
+    public void dispatch(LXMidiListener listener) {
+        switch (getCommand()) {
+        case ShortMessage.NOTE_ON:
+            MidiNoteOn note = (MidiNoteOn) this;
+            if (note.getVelocity() == 0) {
+                listener.noteOffReceived(note);
+            } else {
+                listener.noteOnReceived(note);
+            }
+            break;
+        case ShortMessage.NOTE_OFF:
+            listener.noteOffReceived((MidiNoteOff) this);
+            break;
+        case ShortMessage.CONTROL_CHANGE:
+            listener.controlChangeReceived((MidiControlChange) this);
+            break;
+        case ShortMessage.PROGRAM_CHANGE:
+            listener.programChangeReceived((MidiProgramChange) this);
+            break;
+        case ShortMessage.PITCH_BEND:
+            listener.pitchBendReceived((MidiPitchBend) this);
+            break;
+        case ShortMessage.CHANNEL_PRESSURE:
+            listener.aftertouchReceived((MidiAftertouch) this);
+            break;
+        }
+    }
 }

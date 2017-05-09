@@ -71,7 +71,7 @@ public class LXChannel extends LXBus {
     }
 
     public interface MidiListener {
-        public void midiReceived(LXChannel channel);
+        public void midiReceived(LXChannel channel, LXShortMessage message);
     }
 
     /**
@@ -304,7 +304,17 @@ public class LXChannel extends LXBus {
 
     public void midiMessage(LXShortMessage message) {
         for (MidiListener listener : this.midiListeners) {
-            listener.midiReceived(this);
+            listener.midiReceived(this, message);
+        }
+        midiDispatch(message);
+    }
+
+    public void midiDispatch(LXShortMessage message) {
+        LXPattern activePattern = getActivePattern();
+        message.dispatch(activePattern);
+        LXPattern nextPattern = getNextPattern();
+        if (nextPattern != null && nextPattern != activePattern) {
+            message.dispatch(nextPattern);
         }
     }
 

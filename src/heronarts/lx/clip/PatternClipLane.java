@@ -42,11 +42,6 @@ public class PatternClipLane extends LXClipLane {
         return "Pattern";
     }
 
-    PatternClipLane addEvent(PatternClipEvent event) {
-        super.appendEvent(event);
-        return this;
-    }
-
     @Override
     protected LXClipEvent loadEvent(LX lx, JsonObject eventObj) {
         LXChannel channel = (LXChannel) this.clip.bus;

@@ -191,7 +191,7 @@ public class LXMidiInput extends LXMidiDevice implements LXSerializable {
      */
     void dispatch(LXShortMessage message) {
         for (LXMidiListener listener : this.listeners) {
-            this.engine.dispatch(message, listener);
+            message.dispatch(listener);
         }
     }
 

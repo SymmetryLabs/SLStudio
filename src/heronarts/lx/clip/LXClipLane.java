@@ -138,6 +138,7 @@ public abstract class LXClipLane implements LXSerializable {
     protected static final String KEY_LANE_TYPE = "laneType";
     protected static final String VALUE_LANE_TYPE_PARAMETER = "parameter";
     protected static final String VALUE_LANE_TYPE_PATTERN = "pattern";
+    protected static final String VALUE_LANE_TYPE_MIDI_NOTE = "midiNote";
 
     public void load(LX lx, JsonObject obj) {
         this.mutableEvents.clear();
@@ -146,8 +147,10 @@ public abstract class LXClipLane implements LXSerializable {
             for (JsonElement eventElem : eventsArr) {
                 JsonObject eventObj = eventElem.getAsJsonObject();
                 LXClipEvent event = loadEvent(lx, eventObj);
-                event.load(lx, eventObj);
-                this.mutableEvents.add(event);
+                if (event != null) {
+                    event.load(lx, eventObj);
+                    this.mutableEvents.add(event);
+                }
             }
         }
         this.onChange.bang();
@@ -160,6 +163,8 @@ public abstract class LXClipLane implements LXSerializable {
             obj.addProperty(KEY_LANE_TYPE, VALUE_LANE_TYPE_PARAMETER);
         } else if (this instanceof PatternClipLane) {
             obj.addProperty(KEY_LANE_TYPE, VALUE_LANE_TYPE_PATTERN);
+        } else if (this instanceof MidiNoteClipLane) {
+            obj.addProperty(KEY_LANE_TYPE, VALUE_LANE_TYPE_MIDI_NOTE);
         }
         obj.add(KEY_EVENTS, LXSerializable.Utils.toArray(lx, this.events));
     }
