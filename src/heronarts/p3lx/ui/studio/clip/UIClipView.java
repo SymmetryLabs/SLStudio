@@ -38,6 +38,8 @@ import heronarts.lx.LXUtils;
 import heronarts.lx.clip.LXClip;
 import heronarts.lx.clip.LXClipEvent;
 import heronarts.lx.clip.LXClipLane;
+import heronarts.lx.clip.MidiNoteClipEvent;
+import heronarts.lx.clip.MidiNoteClipLane;
 import heronarts.lx.clip.ParameterClipEvent;
 import heronarts.lx.clip.ParameterClipLane;
 import heronarts.lx.clip.PatternClipEvent;
@@ -247,6 +249,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
 
         private final ParameterLaneImpl parameterLane = new ParameterLaneImpl();
         private final PatternLaneImpl patternLane = new PatternLaneImpl();
+        private final MidiNoteLaneImpl midiNoteLane = new MidiNoteLaneImpl();
 
         private double selectionStart = 0;
         private double selectionEnd = 0;
@@ -279,15 +282,21 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
         void setLane(LXClipLane lane) {
             if (this.lane != lane) {
                 if (this.lane != null) {
+                    this.lane.clip.length.removeListener(this.redraw);
                     this.lane.onChange.removeListener(this.redraw);
                 }
                 this.lane = lane;
                 if (this.lane != null) {
+                    this.lane.clip.length.addListener(this.redraw);
                     this.lane.onChange.addListener(this.redraw);
                     if (this.lane instanceof ParameterClipLane) {
                         this.impl = this.parameterLane;
                     } else if (this.lane instanceof PatternClipLane) {
                         this.impl = this.patternLane;
+                    } else if (this.lane instanceof MidiNoteClipLane) {
+                        this.impl = this.midiNoteLane;
+                    } else {
+                        this.impl = null;
                     }
                 } else {
                     this.impl = null;
@@ -319,13 +328,13 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
                     pg.rect(startX, 0, endX-startX, this.height);
                 }
 
-                // Draw position cursor
-                pg.stroke(ui.theme.getCursorColor());
-                pg.line(this.cursorX, 0, this.cursorX, this.height-1);
-
                 if (this.impl != null) {
                     this.impl.onDraw(ui, pg);
                 }
+
+                // Draw position cursor
+                pg.stroke(ui.theme.getCursorColor());
+                pg.line(this.cursorX, 0, this.cursorX, this.height-1);
             }
         }
 
@@ -582,9 +591,11 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
                     startX = endX;
                 }
                 if (selected == null && lastPattern != null) {
-                    int y = lastPattern.pattern.getIndex() * patternRowHeight;
-                    if (y <= my && my < (y + patternRowHeight)) {
-                        selected = lastPattern;
+                    if (startX <= mx) {
+                        int y = lastPattern.pattern.getIndex() * patternRowHeight;
+                        if (y <= my && my < (y + patternRowHeight)) {
+                            selected = lastPattern;
+                        }
                     }
                 }
                 if (this.selectedEvent != selected) {
@@ -612,6 +623,64 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
                 if (this.selectedEvent != null && keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
                     lane.removeEvent(this.selectedEvent);
                 }
+            }
+        }
+
+        private class MidiNoteLaneImpl extends LaneImpl {
+
+            @Override
+            protected void initialize() {
+
+            }
+
+            private static final int NOTE_RANGE = 128;
+            private final MidiNoteClipEvent[] noteEvents = new MidiNoteClipEvent[128];
+
+            @Override
+            protected void onDraw(UI ui, PGraphics pg) {
+                for (int i = 0; i < NOTE_RANGE; ++i) {
+                    this.noteEvents[i] = null;
+                }
+                pg.noStroke();
+                pg.fill(ui.theme.getPrimaryColor());
+                for (LXClipEvent event : lane.events) {
+                    MidiNoteClipEvent midiEvent = (MidiNoteClipEvent) event;
+                    int pitch = midiEvent.midiNote.getPitch();
+                    if (midiEvent.midiNote.isNoteOn()) {
+                        if (this.noteEvents[pitch] == null) {
+                            this.noteEvents[pitch] = midiEvent;
+                        }
+                    } else {
+                        if (this.noteEvents[pitch] != null) {
+                            int startX = (int) Math.round(this.noteEvents[pitch].getBasis() * (width-1));
+                            int endX =  (int) Math.round(midiEvent.getBasis() * (width-1));
+                            this.noteEvents[pitch] = null;
+                            pg.rect(startX, 0, endX - startX, 24, 4);
+                        }
+                    }
+                }
+            }
+
+            @Override
+            protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            protected void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+                // TODO Auto-generated method stub
+            }
+
+            @Override
+            protected boolean onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+                // TODO Auto-generated method stub
+                return false;
+            }
+
+            @Override
+            protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                // TODO Auto-generated method stub
+
             }
 
         }

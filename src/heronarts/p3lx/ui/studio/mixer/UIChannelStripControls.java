@@ -29,6 +29,7 @@ package heronarts.p3lx.ui.studio.mixer;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXLoopTask;
+import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -87,7 +88,7 @@ public class UIChannelStripControls extends UIMixerStripControls {
         }
 
         @Override
-        public void midiReceived(LXChannel channel) {
+        public void midiReceived(LXChannel channel, LXShortMessage message) {
             this.turnOff = 0;
             this.on = true;
             redraw();
