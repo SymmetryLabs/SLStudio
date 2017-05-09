@@ -155,8 +155,8 @@ public class LXChannel extends LXBus {
      * Whether this channel should listen to MIDI events
      */
     public final BooleanParameter midiMonitor =
-        new BooleanParameter("MIDI", false)
-        .setDescription("Enables or disables monitoring of MIDI input on this channel");
+        new BooleanParameter("MIDI Monitor", false)
+        .setDescription("Enables or disables monitoring of live MIDI input on this channel");
 
     /**
      * Which channel MIDI messages this channel observes
