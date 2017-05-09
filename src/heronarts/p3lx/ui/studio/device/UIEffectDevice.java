@@ -28,13 +28,7 @@ package heronarts.p3lx.ui.studio.device;
 
 import heronarts.lx.LXBus;
 import heronarts.lx.LXEffect;
-import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXListenableNormalizedParameter;
-import heronarts.lx.parameter.LXParameter;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dContainer;
-import heronarts.p3lx.ui.component.UIKnob;
 import processing.event.KeyEvent;
 
 class UIEffectDevice extends UIDevice {
@@ -51,14 +45,7 @@ class UIEffectDevice extends UIDevice {
         setTitle(effect.label);
         setEnabledButton(effect.enabled);
 
-        this.content.setPadding(6, 0, 0, 0);
-        this.content.setLayout(UI2dContainer.Layout.VERTICAL_GRID);
-        this.content.setChildMargin(2, 4);
-        for (LXParameter parameter : effect.getParameters()) {
-            if (parameter instanceof BoundedParameter || parameter instanceof DiscreteParameter) {
-                new UIKnob((LXListenableNormalizedParameter) parameter).addToContainer(this);
-            }
-        }
+        buildDefaultControlUI(effect);
     }
 
     @Override

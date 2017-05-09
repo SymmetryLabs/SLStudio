@@ -26,8 +26,14 @@
 
 package heronarts.p3lx.ui.studio.device;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.StringParameter;
@@ -38,6 +44,7 @@ import heronarts.p3lx.ui.UIContainer;
 import heronarts.p3lx.ui.UIKeyFocus;
 import heronarts.p3lx.ui.UIMouseFocus;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UITextBox;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -178,6 +185,32 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
             redraw();
         }
         return this;
+    }
+
+    protected void buildDefaultControlUI(LXComponent component) {
+        List<LXListenableNormalizedParameter> knobs = new ArrayList<LXListenableNormalizedParameter>();
+        for (LXParameter parameter : component.getParameters()) {
+            if (parameter instanceof BoundedParameter || parameter instanceof DiscreteParameter) {
+                knobs.add((LXListenableNormalizedParameter) parameter);
+            }
+        }
+        int perRow;
+        if (knobs.size() <= 3) {
+            perRow = 1;
+        } else {
+            perRow = (int) Math.ceil(knobs.size() / 3.);
+            if (perRow < 4) {
+                perRow = 4;
+            }
+        }
+        int ki = 0;
+        for (LXListenableNormalizedParameter knob : knobs) {
+            new UIKnob((ki % perRow) * (UIKnob.WIDTH + 4), 6 + (ki / perRow) * (UIKnob.HEIGHT + 2))
+            .setParameter(knob)
+            .addToContainer(this);
+            ++ki;
+        }
+        setContentWidth(perRow * (UIKnob.WIDTH + 4) - 4);
     }
 
     @Override

@@ -28,13 +28,7 @@ package heronarts.p3lx.ui.studio.device;
 
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
-import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXListenableNormalizedParameter;
-import heronarts.lx.parameter.LXParameter;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dContainer;
-import heronarts.p3lx.ui.component.UIKnob;
 
 public class UIPatternDevice extends UIDevice {
 
@@ -51,17 +45,6 @@ public class UIPatternDevice extends UIDevice {
             ((UIPattern) pattern).buildDeviceUI(ui, this);
         } else {
             buildDefaultControlUI(pattern);
-        }
-    }
-
-    private void buildDefaultControlUI(LXPattern pattern) {
-        this.content.setPadding(2, 0, 0, 0);
-        this.content.setLayout(UI2dContainer.Layout.VERTICAL_GRID);
-        this.content.setChildMargin(2, 4);
-        for (LXParameter parameter : pattern.getParameters()) {
-            if (parameter instanceof BoundedParameter || parameter instanceof DiscreteParameter) {
-                new UIKnob((LXListenableNormalizedParameter) parameter).addToContainer(this);
-            }
         }
     }
 
