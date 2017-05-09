@@ -39,6 +39,8 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -227,10 +229,7 @@ public class APC40Mk2 extends LXMidiSurface {
                         if (i >= this.knobs.length) {
                             break;
                         }
-                        if (p instanceof LXListenableNormalizedParameter) {
-                            if (this.effect != null && p == this.effect.enabled) {
-                                continue;
-                            }
+                        if (p instanceof BoundedParameter || p instanceof DiscreteParameter) {
                             LXListenableNormalizedParameter parameter = (LXListenableNormalizedParameter) p;
                             this.knobs[i] = parameter;
                             parameter.addListener(this);
@@ -570,21 +569,21 @@ public class APC40Mk2 extends LXMidiSurface {
                 lx.engine.focusedChannel.setValue(lx.engine.channels.size());
                 return;
             case BANK_SELECT_LEFT:
-                this.deviceListener.registerPrevious();
+                this.lx.engine.focusedChannel.decrement(false);
                 return;
             case BANK_SELECT_RIGHT:
-                this.deviceListener.registerNext();
+                this.lx.engine.focusedChannel.increment(false);
                 return;
             case BANK_SELECT_UP:
                 bus = this.lx.engine.getFocusedChannel();
                 if (bus instanceof LXChannel) {
-                    ((LXChannel) bus).focusedPattern.decrement();
+                    ((LXChannel) bus).focusedPattern.decrement(false);
                 }
                 return;
             case BANK_SELECT_DOWN:
                 bus = this.lx.engine.getFocusedChannel();
                 if (bus instanceof LXChannel) {
-                    ((LXChannel) bus).focusedPattern.increment();
+                    ((LXChannel) bus).focusedPattern.increment(false);
                 }
                 return;
             case CLIP_DEVICE_VIEW:
@@ -654,10 +653,10 @@ public class APC40Mk2 extends LXMidiSurface {
                 this.deviceListener.onDeviceOnOff();
                 return;
             case DEVICE_LEFT:
-                this.lx.engine.focusedChannel.decrement();
+                this.deviceListener.registerPrevious();
                 return;
             case DEVICE_RIGHT:
-                this.lx.engine.focusedChannel.increment();
+                this.deviceListener.registerNext();
                 return;
             case BANK_LEFT:
                 this.deviceListener.registerPrevious();

@@ -222,20 +222,40 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     }
 
     public DiscreteParameter increment() {
-        return increment(1);
+        return increment(1, true);
+    }
+
+    public DiscreteParameter increment(boolean wrap) {
+        return increment(1, wrap);
     }
 
     public DiscreteParameter increment(int amt) {
-        this.setValue(getValuei() + amt);
+        return increment(amt, true);
+    }
+
+    public DiscreteParameter increment(int amt, boolean wrap) {
+        if (wrap || (getValuei() + amt < this.minValue + this.range)) {
+            this.setValue(getValuei() + amt);
+        }
         return this;
     }
 
     public DiscreteParameter decrement() {
-        return decrement(1);
+        return decrement(1, true);
+    }
+
+    public DiscreteParameter decrement(boolean wrap) {
+        return decrement(1, wrap);
     }
 
     public DiscreteParameter decrement(int amt) {
-        this.setValue(getValuei() - amt);
+        return decrement(amt, true);
+    }
+
+    public DiscreteParameter decrement(int amt, boolean wrap) {
+        if (wrap || (getValuei() - amt >= this.minValue)) {
+            this.setValue(getValuei() - amt);
+        }
         return this;
     }
 
