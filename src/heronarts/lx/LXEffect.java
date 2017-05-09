@@ -42,7 +42,7 @@ import heronarts.lx.parameter.MutableParameter;
 public abstract class LXEffect extends LXLayeredComponent implements LXMidiListener, LXOscComponent {
 
     public final BooleanParameter enabled =
-        new BooleanParameter("On", false)
+        new BooleanParameter("Enabled", false)
         .setDescription("Whether the effect is enabled");
 
     protected final MutableParameter enabledDampingAttack = new MutableParameter(100);

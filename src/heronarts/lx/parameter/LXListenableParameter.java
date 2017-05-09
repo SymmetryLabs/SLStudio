@@ -87,7 +87,7 @@ public abstract class LXListenableParameter implements LXParameter {
             throw new IllegalArgumentException("Cannot add null parameter listener");
         }
         if (this.listeners.contains(listener)) {
-            throw new IllegalStateException("Cannot add duplicate listener " + this + " " + listener);
+            throw new IllegalStateException("Cannot add duplicate listener " + getLabel() + " " + listener);
         }
         this.listeners.add(listener);
         return this;

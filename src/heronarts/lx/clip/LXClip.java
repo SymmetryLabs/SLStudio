@@ -85,6 +85,10 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
     };
 
     public LXClip(LX lx, LXBus bus, int index) {
+        this(lx, bus, index, true);
+    }
+
+    protected LXClip(LX lx, LXBus bus, int index, boolean registerListener) {
         super(lx);
         this.label.setDescription("The name of this clip");
         this.bus = bus;
@@ -96,7 +100,9 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
         for (LXEffect effect : bus.effects) {
             registerComponent(effect);
         }
-        bus.addListener(this);
+        if (registerListener) {
+            bus.addListener(this);
+        }
     }
 
     public double getLength() {

@@ -67,7 +67,7 @@ public abstract class LXOutput extends LXComponent {
      * Whether the output is enabled.
      */
     public final BooleanParameter enabled =
-        new BooleanParameter("On", true)
+        new BooleanParameter("Enabled", true)
         .setDescription("Whether the output is active");
 
     public enum Mode {

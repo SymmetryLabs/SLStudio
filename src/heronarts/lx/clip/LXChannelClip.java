@@ -42,7 +42,7 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener, LXChann
     public final LXChannel channel;
 
     public LXChannelClip(LX lx, LXChannel channel, int index) {
-        super(lx, channel, index);
+        super(lx, channel, index, false);
         this.channel = channel;
         this.mutableLanes.add(this.patternLane);
         this.mutableLanes.add(this.midiNoteLane);
