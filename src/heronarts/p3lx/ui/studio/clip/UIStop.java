@@ -29,6 +29,7 @@ package heronarts.p3lx.ui.studio.clip;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
@@ -39,10 +40,13 @@ public abstract class UIStop extends UI2dComponent implements UIFocus {
 
     private boolean stopButtonDown = false;
 
-    protected UIStop(UI ui, float width) {
+    protected final UIMixer mixer;
+
+    protected UIStop(UI ui, UIMixer mixer, float width) {
         super(0, 0, width, UIClipButton.HEIGHT);
         setBackgroundColor(ui.theme.getDarkBackgroundColor());
         setBorderColor(ui.theme.getControlBorderColor());
+        this.mixer = mixer;
     }
 
     @Override

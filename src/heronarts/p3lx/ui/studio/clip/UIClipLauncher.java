@@ -50,6 +50,7 @@ public class UIClipLauncher extends UI2dContainer {
 
     protected final List<UIClipButton> mutableClips = new ArrayList<UIClipButton>(NUM_CLIPS);
     public final List<UIClipButton> clips = Collections.unmodifiableList(this.mutableClips);
+    public final UIClipStop stop;
 
     public UIClipLauncher(UI ui, UIMixer mixer, LX lx, LXBus bus) {
         super(0, 0, WIDTH, HEIGHT);
@@ -62,7 +63,7 @@ public class UIClipLauncher extends UI2dContainer {
         for (int i = 0; i < NUM_CLIPS; ++i) {
             this.mutableClips.add((UIClipButton) new UIClipButton(ui, mixer, lx, bus, i, 0, i * UIClipButton.HEIGHT).addToContainer(this));
         }
-        new UIClipStop(ui, bus).addToContainer(this);
+        this.stop = (UIClipStop) new UIClipStop(ui, mixer, lx, bus).addToContainer(this);
 
         bus.addClipListener(new LXBus.ClipListener() {
             @Override

@@ -41,6 +41,7 @@ public class UISceneLauncher extends UI2dContainer {
 
     private final List<UISceneButton> mutableScenes = new ArrayList<UISceneButton>();
     public final List<UISceneButton> scenes = Collections.unmodifiableList(this.mutableScenes);
+    public final UISceneStop stop;
 
     public UISceneLauncher(UI ui, UIMixer mixer, LX lx, float x, float y) {
         super(x, y, WIDTH, UIClipLauncher.HEIGHT);
@@ -52,6 +53,6 @@ public class UISceneLauncher extends UI2dContainer {
             this.mutableScenes.add(scene);
             scene.addToContainer(this);
         }
-        new UISceneStop(ui, lx).addToContainer(this);
+        this.stop = (UISceneStop) new UISceneStop(ui, mixer, lx).addToContainer(this);
     }
 }
