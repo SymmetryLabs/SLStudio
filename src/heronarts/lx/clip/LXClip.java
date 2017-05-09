@@ -105,6 +105,18 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
         }
     }
 
+    @Override
+    public void dispose() {
+        for (LXEffect effect : bus.effects) {
+            unregisterComponent(effect);
+        }
+        this.bus.removeListener(this);
+        this.mutableLanes.clear();
+        this.listeners.clear();
+        super.dispose();
+    }
+
+
     public double getLength() {
         return this.length.getValue();
     }
@@ -242,13 +254,6 @@ public abstract class LXClip extends LXRunnableComponent implements LXBus.Listen
         return this;
     }
 
-    @Override
-    public void dispose() {
-        // TODO(mcslee): unregister as a listener to all the channel and device parameters
-        this.mutableLanes.clear();
-        this.listeners.clear();
-        super.dispose();
-    }
 
     private void advanceCursor(double from, double to) {
         for (LXClipLane lane : this.lanes) {

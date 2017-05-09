@@ -58,6 +58,19 @@ public class LXChannelClip extends LXClip implements LXChannel.Listener, LXChann
     }
 
     @Override
+    public void dispose() {
+        this.channel.removeListener(this);
+        this.channel.removeMidiListener(this);
+        this.channel.fader.removeListener(this.parameterRecorder);
+        this.channel.enabled.removeListener(this.parameterRecorder);
+        this.channel.removeListener(this);
+        for (LXPattern pattern : this.channel.patterns) {
+            unregisterComponent(pattern);
+        }
+        super.dispose();
+    }
+
+    @Override
     protected void onStartRecording() {
         this.patternLane.appendEvent(new PatternClipEvent(this.patternLane, this.channel, this.channel.getActivePattern()));
     }
