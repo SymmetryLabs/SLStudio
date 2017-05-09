@@ -191,21 +191,21 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     protected abstract LXClip constructClip(int index);
 
-    public LXClip removeClip(LXClip clip) {
+    public void removeClip(LXClip clip) {
         int index = this.mutableClips.indexOf(clip);
         if (index < 0) {
             throw new IllegalArgumentException("Clip is not owned by channel: " + clip + " " + this);
         }
-        return removeClip(index);
+        removeClip(index);
     }
 
-    public LXClip removeClip(int index) {
+    public void removeClip(int index) {
         LXClip clip = this.mutableClips.get(index);
         this.mutableClips.set(index, null);
         for (ClipListener listener : this.clipListeners) {
             listener.clipRemoved(this, clip);
         }
-        return clip;
+        clip.dispose();
     }
 
     @Override
