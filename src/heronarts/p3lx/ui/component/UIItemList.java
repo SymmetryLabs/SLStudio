@@ -527,8 +527,10 @@ public interface UIItemList {
                             this.list.redraw();
                         }
                     } else {
-                        setFocusIndex(this.focusIndex - 1);
-                        this.list.redraw();
+                        if (this.focusIndex > 0) {
+                            setFocusIndex(this.focusIndex - 1);
+                            this.list.redraw();
+                        }
                     }
                 } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
                     consume = true;
