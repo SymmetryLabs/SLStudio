@@ -205,7 +205,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         }
         int ki = 0;
         for (LXListenableNormalizedParameter knob : knobs) {
-            new UIKnob((ki % perRow) * (UIKnob.WIDTH + 4), 6 + (ki / perRow) * (UIKnob.HEIGHT + 2))
+            new UIKnob((ki % perRow) * (UIKnob.WIDTH + 4), 4 + (ki / perRow) * (UIKnob.HEIGHT + 4))
             .setParameter(knob)
             .addToContainer(this);
             ++ki;
