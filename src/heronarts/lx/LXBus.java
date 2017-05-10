@@ -166,8 +166,15 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     }
 
     public LXClip getClip(int index) {
+        return getClip(index, false);
+    }
+
+    public LXClip getClip(int index, boolean create) {
         if (index < this.clips.size()) {
             return this.clips.get(index);
+        }
+        if (create) {
+            return addClip(index);
         }
         return null;
     }
@@ -187,6 +194,15 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
             listener.clipAdded(this, clip);
         }
         return clip;
+    }
+
+    public LXBus stopClips() {
+        for (LXClip clip : this.clips) {
+            if (clip != null) {
+                clip.stop();
+            }
+        }
+        return this;
     }
 
     protected abstract LXClip constructClip(int index);
@@ -212,9 +228,6 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
 
-        // Run modulators and components
-        super.loop(deltaMs);
-
         // Run the active clip...
         // TODO(mcslee): keep tabs of which is active?
         for (LXClip clip : this.clips) {
@@ -222,6 +235,9 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
                 clip.loop(deltaMs);
             }
         }
+
+        // Run modulators and components
+        super.loop(deltaMs);
 
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }

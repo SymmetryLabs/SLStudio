@@ -701,7 +701,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         }
     }
 
-    public LXEngine triggerScene(int index) {
+    public LXEngine launchScene(int index) {
         LXClip clip;
         for (LXChannel channel : this.lx.engine.channels) {
             clip = channel.getClip(index);
