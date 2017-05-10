@@ -44,6 +44,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.UIKeyFocus;
 import heronarts.p3lx.ui.UIModulationSource;
 import heronarts.p3lx.ui.UIMouseFocus;
 import heronarts.p3lx.ui.UIObject;
@@ -59,7 +60,7 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public abstract class UIModulator extends UI2dContainer implements UIMouseFocus, UITriggerTarget {
+public abstract class UIModulator extends UI2dContainer implements UIMouseFocus, UIKeyFocus, UITriggerTarget {
 
     protected static final int PADDING = 4;
     private static final int MODULATION_SPACING = 2;

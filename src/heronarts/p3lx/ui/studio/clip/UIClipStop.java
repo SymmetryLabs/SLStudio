@@ -4,7 +4,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXMasterChannel;
-import heronarts.lx.clip.LXClip;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import processing.event.KeyEvent;
@@ -22,11 +21,7 @@ public class UIClipStop extends UIStop {
 
     @Override
     protected void stop() {
-        for (LXClip clip : this.bus.clips) {
-            if (clip != null) {
-                clip.stop();
-            }
-        }
+        this.bus.stopClips();
     }
 
     @Override

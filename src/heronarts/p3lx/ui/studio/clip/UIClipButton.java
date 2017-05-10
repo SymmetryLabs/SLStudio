@@ -69,7 +69,7 @@ public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTar
         }
     };
 
-    protected UIClipButton(UI ui, UIMixer mixer, LX lx, LXBus bus, int index, float x, float y) {
+    protected UIClipButton(UI ui, UIMixer mixer, final LX lx, LXBus bus, int index, float x, float y) {
         super(x, y, UIClipLauncher.WIDTH, HEIGHT);
         this.mixer = mixer;
         this.lx = lx;
@@ -88,6 +88,16 @@ public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTar
         .setVisible(false);
 
         bus.arm.addListener(this.redraw);
+
+        lx.engine.focusedClip.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                if (clip != null && lx.engine.focusedClip.getClip() == clip) {
+                    if (!hasFocus()) {
+                        focus();
+                    }
+                }
+            }
+        });
     }
 
     protected void setClip(LXClip clip) {

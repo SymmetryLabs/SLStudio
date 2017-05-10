@@ -66,7 +66,7 @@ public class UISceneButton extends UI2dComponent implements UIFocus {
             this.mixer.masterStrip.clipLauncher.clips.get(this.index).focus();
         } else if (keyCode == java.awt.event.KeyEvent.VK_SPACE) {
             consumeKeyEvent();
-            this.lx.engine.triggerScene(this.index);
+            this.lx.engine.launchScene(this.index);
             this.playButtonDown = true;
             redraw();
         }
@@ -82,7 +82,7 @@ public class UISceneButton extends UI2dComponent implements UIFocus {
 
     @Override
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        this.lx.engine.triggerScene(this.index);
+        this.lx.engine.launchScene(this.index);
         this.playButtonDown = true;
         redraw();
     }
