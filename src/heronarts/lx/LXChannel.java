@@ -46,7 +46,7 @@ import com.google.gson.JsonObject;
  * which it plays and rotates. It also has a fader to control how this channel
  * is blended with the channels before it.
  */
-public class LXChannel extends LXBus {
+public class LXChannel extends LXBus implements LXComponent.Renamable {
 
     public class Timer extends LXModulatorComponent.Timer {
         public long blendNanos;

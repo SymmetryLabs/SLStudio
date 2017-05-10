@@ -25,7 +25,6 @@ import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
-
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
@@ -42,6 +41,11 @@ import heronarts.lx.parameter.StringParameter;
  * Utility base class for objects that have parameters.
  */
 public abstract class LXComponent implements LXParameterListener, LXSerializable {
+
+    /**
+     * Marker interface for components which can have their label changed
+     */
+    public interface Renamable {}
 
     private LX lx;
 
@@ -312,9 +316,12 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (obj.has(KEY_PARAMETERS)) {
             JsonObject parameters = obj.getAsJsonObject(KEY_PARAMETERS);
             for (String path : this.parameters.keySet()) {
+                LXParameter parameter = this.parameters.get(path);
+                if (parameter == this.label && !(this instanceof LXComponent.Renamable)) {
+                    continue;
+                }
                 if (parameters.has(path)) {
                     JsonElement value = parameters.get(path);
-                    LXParameter parameter = this.parameters.get(path);
                     if (parameter instanceof StringParameter) {
                         ((StringParameter)parameter).setValue(value.getAsString());
                     } else if (parameter instanceof BooleanParameter) {

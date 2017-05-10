@@ -32,7 +32,7 @@ import heronarts.lx.parameter.LXParameter;
  * time, such as an envelope or a low frequency oscillator. Some modulators run
  * continuously, others may halt after they reach a certain value.
  */
-public abstract class LXModulator extends LXRunnableComponent implements LXParameter, LXOscComponent {
+public abstract class LXModulator extends LXRunnableComponent implements LXComponent.Renamable, LXParameter, LXOscComponent {
 
     private LXComponent component;
 
