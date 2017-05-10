@@ -316,6 +316,13 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             }
         }
 
+        private void selectAll() {
+            this.selectionStart = 0;
+            this.selectionEnd = 1;
+            this.hasSelection = true;
+            redraw();
+        }
+
         @Override
         protected void onDraw(UI ui, PGraphics pg) {
             if (clip != null) {
@@ -374,11 +381,19 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             if (this.impl != null) {
                 this.impl.onKeyPressed(keyEvent, keyChar, keyCode);
             }
-            if (!keyEventConsumed() && this.hasSelection) {
-                consumeKeyEvent();
-                double clearBegin = Math.min(this.selectionStart, this.selectionEnd);
-                double clearEnd = Math.max(this.selectionStart, this.selectionEnd);
-                this.lane.clearSelection(clearBegin, clearEnd);
+            if (!keyEventConsumed()) {
+                if (this.hasSelection) {
+                    if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                        consumeKeyEvent();
+                        double clearBegin = Math.min(this.selectionStart, this.selectionEnd);
+                        double clearEnd = Math.max(this.selectionStart, this.selectionEnd);
+                        this.lane.clearSelection(clearBegin, clearEnd);
+                    }
+                } else {
+                    if ((keyEvent.isMetaDown() || keyEvent.isControlDown()) && keyCode == java.awt.event.KeyEvent.VK_A) {
+                        selectAll();
+                    }
+                }
             }
         }
 
