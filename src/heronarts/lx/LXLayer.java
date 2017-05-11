@@ -32,7 +32,7 @@ public abstract class LXLayer extends LXLayeredComponent {
         super(lx);
     }
 
-    protected LXLayer(LX lx, LXBufferedComponent buffer) {
+    protected LXLayer(LX lx, LXDeviceComponent buffer) {
         super(lx, buffer);
     }
 

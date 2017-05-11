@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -36,6 +36,11 @@ import java.util.List;
  */
 public abstract class LXLayeredComponent extends LXModelComponent implements LXLoopTask {
 
+    /**
+     * Marker interface for instances which own their own buffer.
+     */
+    public interface Buffered {}
+
     protected final LX lx;
 
     private LXBuffer buffer = null;
@@ -51,12 +56,18 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         this(lx, (LXBuffer) null);
     }
 
-    protected LXLayeredComponent(LX lx, LXBufferedComponent component) {
+    protected LXLayeredComponent(LX lx, LXDeviceComponent component) {
         this(lx, component.getBuffer());
     }
 
     protected LXLayeredComponent(LX lx, LXBuffer buffer) {
         super(lx);
+        if (this instanceof Buffered) {
+            if (buffer != null) {
+                throw new IllegalArgumentException("Cannot pass existing buffer to LXLayeredComponent.Buffered, has its own");
+            }
+            buffer = new ModelBuffer(lx);
+        }
         this.lx = lx;
         this.palette = lx.palette;
         if (buffer != null) {
@@ -69,7 +80,14 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         return this.buffer;
     }
 
-    protected LXLayeredComponent setBuffer(LXBufferedComponent component) {
+    public int[] getColors() {
+        return getBuffer().getArray();
+    }
+
+    protected LXLayeredComponent setBuffer(LXDeviceComponent component) {
+        if (this instanceof Buffered) {
+            throw new UnsupportedOperationException("Cannot setBuffer on LXLayerdComponent.Buffered, owns its own buffer");
+        }
         return setBuffer(component.getBuffer());
     }
 

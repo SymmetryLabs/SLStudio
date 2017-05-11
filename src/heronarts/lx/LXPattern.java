@@ -34,7 +34,7 @@ import heronarts.lx.parameter.BooleanParameter;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
-public abstract class LXPattern extends LXBufferedComponent implements LXComponent.Renamable, LXMidiListener, LXOscComponent {
+public abstract class LXPattern extends LXDeviceComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent {
 
     private int index = -1;
 

@@ -39,7 +39,7 @@ import heronarts.lx.parameter.MutableParameter;
  * may be stateless or stateful, though typically they operate on a single
  * frame. Only the current frame is provided at runtime.
  */
-public abstract class LXEffect extends LXLayeredComponent implements LXComponent.Renamable, LXMidiListener, LXOscComponent {
+public abstract class LXEffect extends LXDeviceComponent implements LXComponent.Renamable, LXMidiListener, LXOscComponent {
 
     public final BooleanParameter enabled =
         new BooleanParameter("Enabled", false)
