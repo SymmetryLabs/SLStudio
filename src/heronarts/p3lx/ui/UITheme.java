@@ -36,6 +36,8 @@ public class UITheme {
     private PFont labelFont;
     private int labelColor = 0xffcccccc;
 
+    private PFont deviceFont;
+
     private PFont windowTitleFont;
     private int windowTitleColor = 0xffcccccc;
     private int windowBackgroundColor = 0xff404040;
@@ -76,11 +78,9 @@ public class UITheme {
     public final PImage iconArm;
 
     UITheme(PApplet applet) {
-        // this.controlFont = applet.createFont("Arial", 10);
         this.controlFont = applet.loadFont("ArialUnicodeMS-10.vlw");
         LX.initTimer.log("P3LX: UI: Theme: controlFont");
-        // this.setLabelFont(this.windowTitleFont = applet.createFont("Arial-Black", 9));
-        this.setLabelFont(this.windowTitleFont = applet.loadFont("Arial-Black-9.vlw"));
+        this.labelFont = this.deviceFont = this.windowTitleFont = applet.loadFont("Arial-Black-9.vlw");
         LX.initTimer.log("P3LX: UI: Theme: windowTitleFont");
 
         this.iconNote = applet.loadImage("icon-note.png");
@@ -533,6 +533,10 @@ public class UITheme {
     public UITheme setLabelFont(PFont labelFont) {
         this.labelFont = labelFont;
         return this;
+    }
+
+    public PFont getDeviceFont() {
+        return this.deviceFont;
     }
 
     /**

@@ -33,17 +33,21 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UIDropMenu;
 import processing.core.PGraphics;
+import processing.event.KeyEvent;
 
 class UIChannelDevice extends UIDevice {
 
     private static final int PADDING = 4;
     private static final int PATTERN_LIST_WIDTH = 140;
-    private static final int WIDTH = PATTERN_LIST_WIDTH + 3*PADDING;
+    private static final int WIDTH = PATTERN_LIST_WIDTH;
+
+    private final UIPatternList patternList;
 
     UIChannelDevice(UI ui, UIDeviceBin deviceBin, final LXChannel channel) {
         super(ui, channel, WIDTH);
         setTitle(channel.label);
 
+        this.patternList = (UIPatternList)
         new UIPatternList(ui, 0, 0, PATTERN_LIST_WIDTH, getContentHeight() - 40, channel)
         .setDescription("Patterns available on this channel, click to select, double-click to activate")
         .addToContainer(this);
@@ -73,6 +77,15 @@ class UIChannelDevice extends UIDevice {
         .addToContainer(this);
     }
 
+    @Override
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        super.onKeyPressed(keyEvent, keyChar, keyCode);
+        if (!keyEventConsumed()) {
+            if (keyCode == java.awt.event.KeyEvent.VK_UP || keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+                this.patternList.onKeyPressed(keyEvent, keyChar, keyCode);
+            }
+        }
+    }
 
     abstract class UIProgressBox extends UIDoubleBox {
         protected final LXChannel channel;
@@ -145,6 +158,5 @@ class UIChannelDevice extends UIDevice {
         protected double getProgress() {
             return this.channel.getAutoCycleProgress();
         }
-
     }
 }

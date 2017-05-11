@@ -168,7 +168,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
                 pg.textFont(hasFont() ? getFont() : ui.theme.getControlFont());
                 if (this.textAlignVertical == PConstants.CENTER) {
                     pg.textAlign(PConstants.CENTER, PConstants.CENTER);
-                    pg.text(label, this.width / 2 + this.textOffsetX, this.height / 2 - 2 + this.textOffsetY);
+                    pg.text(label, this.width / 2 + this.textOffsetX, this.height / 2 + this.textOffsetY);
                 } else {
                     pg.textAlign(PConstants.CENTER);
                     pg.text(label, this.width / 2 + this.textOffsetX, (int) (this.height * .75) + this.textOffsetY);

@@ -287,6 +287,7 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
     @Override
     protected void incrementValue(KeyEvent keyEvent) {
         if (this.parameter != null) {
+            consumeKeyEvent();
             if (this.parameter instanceof DiscreteParameter) {
                 DiscreteParameter dp = (DiscreteParameter) this.parameter;
                 dp.increment(keyEvent.isShiftDown() ? dp.getRange() / 10 : 1);
