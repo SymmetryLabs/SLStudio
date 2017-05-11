@@ -76,6 +76,7 @@ public class UITheme {
     public final PImage iconLoop;
     public final PImage iconMap;
     public final PImage iconArm;
+    public final PImage iconLfo;
 
     UITheme(PApplet applet) {
         this.controlFont = applet.loadFont("ArialUnicodeMS-10.vlw");
@@ -91,6 +92,7 @@ public class UITheme {
         this.iconLoop = applet.loadImage("icon-loop.png");
         this.iconMap = applet.loadImage("icon-map.png");
         this.iconArm = applet.loadImage("icon-arm.png");
+        this.iconLfo = applet.loadImage("icon-lfo.png");
         LX.initTimer.log("P3LX: UI: Theme: Icons");
     }
 

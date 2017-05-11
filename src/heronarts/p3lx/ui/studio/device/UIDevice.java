@@ -30,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import heronarts.lx.LXComponent;
+import heronarts.lx.LXDeviceComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -61,6 +62,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
     protected static final int ENABLED_BUTTON_PADDING = 18;
     protected static final int DEVICE_BAR_WIDTH = 20;
     protected static final int CHEVRON_PADDING = 21;
+    protected static final int MODULATOR_SIZE = 20;
 
     private String title = "Device";
     private boolean titleParameter;
@@ -68,8 +70,12 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
     private final UIButton enabledButton;
     private boolean hasEnabledButton = false;
 
-    private boolean expanded = true;
-    private float expandedWidth;
+    private final boolean hasModulators;
+    private boolean modulatorsExpanded = false;
+    private float modulatorY;
+    protected final UI2dContainer modulatorContent;
+
+    private boolean contentExpanded = true;
 
     protected final UI2dContainer content;
     protected final LXComponent component;
@@ -79,7 +85,6 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         setBackgroundColor(ui.theme.getWindowBackgroundColor());
         setBorderRounding(4);
         this.component = component;
-        this.expandedWidth = this.width;
 
         this.component.controlSurfaceSemaphore.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
@@ -95,8 +100,9 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         this.enabledButton
         .setLabel("")
         .setBorderRounding(4)
-        .addToContainer(this)
         .setVisible(false);
+
+        this.modulatorY = 0;
 
         // TODO(mcslee): add vertical orientation option to TextBox
         this.titleBox = new UITextBox(DEVICE_BAR_WIDTH + TITLE_MARGIN, TITLE_MARGIN, 0, 12);
@@ -108,14 +114,24 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         .setTextAlignment(PConstants.LEFT)
         .setVisible(false);
         setTitleBoxWidth();
-        // this.titleBox.addToContainer(this);
 
-        this.content = new UI2dContainer(DEVICE_BAR_WIDTH + PADDING, PADDING, contentWidth, height - 2*PADDING) {
-            @Override
-            public void onResize() {
-                setExpandedWidth(getWidth() + 2*PADDING + DEVICE_BAR_WIDTH);
-            }
-        };
+        if (this.component instanceof LXDeviceComponent) {
+            this.hasModulators = true;
+            this.modulatorContent = (UIDeviceModulators)
+                new UIDeviceModulators(ui, (LXDeviceComponent) this.component, DEVICE_BAR_WIDTH + PADDING, PADDING, 80, height - 2*PADDING)
+                .setVisible(false);
+        } else {
+            this.hasModulators = false;
+            this.modulatorContent = null;
+        }
+
+        this.content = new UI2dContainer(DEVICE_BAR_WIDTH + PADDING, PADDING, contentWidth, height - 2*PADDING);
+
+        this.enabledButton.addToContainer(this);
+        // this.titleBox.addToContainer(this);
+        if (this.hasModulators) {
+            this.modulatorContent.addToContainer(this);
+        }
         setContentTarget(this.content);
     }
 
@@ -131,13 +147,20 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         this.titleBox.setWidth(this.width - TITLE_MARGIN - DEVICE_BAR_WIDTH - PADDING);
     }
 
-    private UIDevice setExpandedWidth(float w) {
-        this.expandedWidth = w;
-        if (this.expanded) {
-            setWidth(w);
+    @Override
+    protected void reflow() {
+        float width = DEVICE_BAR_WIDTH;
+        if (this.modulatorsExpanded) {
+            width += PADDING + this.modulatorContent.getWidth();
         }
+        this.content.setX(width + PADDING);
+        if (this.contentExpanded) {
+            width += 2*PADDING + this.content.getWidth();
+        } else if (this.modulatorsExpanded) {
+            width += PADDING;
+        }
+        setWidth(width);
         setTitleBoxWidth();
-        return this;
     }
 
     protected UIDevice setEnabledButton(BooleanParameter p) {
@@ -147,12 +170,13 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
     protected UIDevice setEnabledButton(BooleanParameter p, boolean isMomentary) {
         this.hasEnabledButton = true;
         this.enabledButton.setParameter(p).setMomentary(isMomentary).setVisible(true);
+        this.modulatorY = this.enabledButton.getY() + this.enabledButton.getHeight();
         setTitleBoxWidth();
         return this;
     }
 
     protected UIDevice editTitle() {
-        if (this.expanded && this.titleParameter) {
+        if (this.contentExpanded && this.titleParameter) {
             this.titleBox.focus();
             this.titleBox.edit();
         }
@@ -180,12 +204,10 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
     }
 
     protected UIDevice setExpanded(boolean expanded) {
-        if (this.expanded != expanded) {
-            this.expanded = expanded;
+        if (this.contentExpanded != expanded) {
+            this.contentExpanded = expanded;
             this.titleBox.setVisible(expanded && this.titleParameter);
             this.content.setVisible(expanded);
-            setWidth(expanded ? this.expandedWidth : DEVICE_BAR_WIDTH);
-            redraw();
         }
         return this;
     }
@@ -235,14 +257,20 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         pg.fill(ui.theme.getLabelColor());
         pg.textAlign(PConstants.LEFT, PConstants.TOP);
         String titleString = this.titleParameter ? this.titleBox.getValue() : this.title;
-        if (this.expanded) {
+        if (this.contentExpanded || this.modulatorsExpanded) {
             pg.stroke(0xff333333);
             pg.line(DEVICE_BAR_WIDTH, 1, DEVICE_BAR_WIDTH, height-2);
         }
 
+        if (this.hasModulators) {
+            pg.tint(this.modulatorsExpanded ? ui.theme.getPrimaryColor() : 0xff999999);
+            pg.image(ui.theme.iconLfo, PADDING, this.modulatorY + PADDING);
+            pg.noTint();
+        }
+
         float tx = DEVICE_BAR_WIDTH / 2;
         float ty = height - CHEVRON_PADDING;
-        float availableWidth = ty - PADDING - (this.hasEnabledButton ? ENABLED_BUTTON_PADDING : 0);
+        float availableWidth = ty - MODULATOR_SIZE - (this.hasEnabledButton ? ENABLED_BUTTON_PADDING : 0);
         pg.translate(tx, ty);
         pg.rotate(-PConstants.HALF_PI);
         pg.textAlign(PConstants.LEFT, PConstants.CENTER);
@@ -255,7 +283,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         pg.beginShape();
         float x = PADDING + 1;
         float y = this.height - PADDING - 1;
-        if (this.expanded) {
+        if (this.contentExpanded) {
             pg.vertex(x, y-10);
             pg.vertex(x+10, y-10);
             pg.vertex(x+10, y);
@@ -271,7 +299,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
         if (keyCode == java.awt.event.KeyEvent.VK_SPACE || keyCode == java.awt.event.KeyEvent.VK_ENTER) {
             consumeKeyEvent();
-            setExpanded(!this.expanded);
+            setExpanded(!this.contentExpanded);
         }
         if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
             if (keyCode == java.awt.event.KeyEvent.VK_R) {
@@ -283,8 +311,13 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
 
     @Override
     public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-        if (mx < DEVICE_BAR_WIDTH && my > this.height - CHEVRON_PADDING) {
-            setExpanded(!this.expanded);
+        if (mx < DEVICE_BAR_WIDTH){
+            if (my > this.height - CHEVRON_PADDING) {
+                setExpanded(!this.contentExpanded);
+            } else if (this.hasModulators && my >= this.modulatorY && my < this.modulatorY + MODULATOR_SIZE) {
+                this.modulatorsExpanded = !this.modulatorsExpanded;
+                this.modulatorContent.setVisible(this.modulatorsExpanded);
+            }
         }
     }
 }

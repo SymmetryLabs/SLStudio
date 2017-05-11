@@ -37,7 +37,6 @@ import processing.event.KeyEvent;
 
 class UIChannelDevice extends UIDevice {
 
-    private static final int PADDING = 4;
     private static final int PATTERN_LIST_WIDTH = 140;
     private static final int WIDTH = PATTERN_LIST_WIDTH;
 
