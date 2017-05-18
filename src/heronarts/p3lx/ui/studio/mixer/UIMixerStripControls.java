@@ -30,6 +30,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
@@ -53,8 +54,16 @@ public abstract class UIMixerStripControls extends UI2dContainer {
     protected final LX lx;
     protected final LXBus bus;
 
+    private static float yPosition(UI ui) {
+        float y = UIClipLauncher.HEIGHT + UIMixerStrip.SPACING;
+        if (ui instanceof LXStudio.UI) {
+            y = ((LXStudio.UI) ui).isClipViewVisible() ? y : 0;
+        }
+        return y;
+    }
+
     UIMixerStripControls(final UI ui, final LX lx, final LXBus bus) {
-        super(0, UIClipLauncher.HEIGHT + UIMixerStrip.SPACING, WIDTH, HEIGHT);
+        super(0, yPosition(ui), WIDTH, HEIGHT);
         this.ui = ui;
         this.lx = lx;
         this.bus = bus;

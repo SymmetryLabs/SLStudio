@@ -33,6 +33,7 @@ import java.util.List;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.clip.LXClip;
+import heronarts.p3lx.LXStudio;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
@@ -59,6 +60,9 @@ public class UIClipLauncher extends UI2dContainer {
         setLayout(UI2dContainer.Layout.VERTICAL);
         setChildMargin(SPACING);
         setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL);
+        if (ui instanceof LXStudio.UI) {
+            setVisible(((LXStudio.UI) ui).isClipViewVisible());
+        }
 
         for (int i = 0; i < NUM_CLIPS; ++i) {
             this.mutableClips.add((UIClipButton) new UIClipButton(ui, mixer, lx, bus, i, 0, i * UIClipButton.HEIGHT).addToContainer(this));
