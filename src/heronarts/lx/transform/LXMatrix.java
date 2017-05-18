@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -26,14 +26,17 @@ package heronarts.lx.transform;
 public class LXMatrix {
 
     public enum RotationMode {
-        RIGHT_HANDED, LEFT_HANDED
+        RIGHT_HANDED,
+        LEFT_HANDED
     };
 
     private final RotationMode rotationMode;
 
-    public float m11 = 1, m12 = 0, m13 = 0, m14 = 0, m21 = 0, m22 = 1, m23 = 0,
-            m24 = 0, m31 = 0, m32 = 0, m33 = 1, m34 = 0, m41 = 0, m42 = 0, m43 = 0,
-            m44 = 1;
+    public float
+        m11 = 1, m12 = 0, m13 = 0, m14 = 0,
+        m21 = 0, m22 = 1, m23 = 0, m24 = 0,
+        m31 = 0, m32 = 0, m33 = 1, m34 = 0,
+        m41 = 0, m42 = 0, m43 = 0, m44 = 1;
 
     /**
      * Makes a new identity matrix.
