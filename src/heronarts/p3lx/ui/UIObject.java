@@ -313,6 +313,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     void draw(UI ui, PGraphics pg) {
         if (isVisible()) {
+            beginDraw(ui, pg);
             onDraw(ui, pg);
             for (UIObject child : this.mutableChildren) {
                 float cx = child.getX();
@@ -321,6 +322,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
                 child.draw(ui, pg);
                 pg.translate(-cx, -cy);
             }
+            endDraw(ui, pg);
         }
     }
 
@@ -384,12 +386,30 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     protected void onUIResize(UI ui) {}
 
     /**
+     * Subclasses may override this method to perform operations before their
+     * onDraw method is called or any children are drawn.
+     *
+     * @param ui
+     * @param pg
+     */
+    protected void beginDraw(UI ui, PGraphics pg) {}
+
+    /**
      * Subclasses should override this method to perform their drawing functions.
      *
      * @param ui UI context
      * @param pg Graphics context
      */
     protected void onDraw(UI ui, PGraphics pg) {}
+
+    /**
+     * Subclasses may override this method to perform operations after their onDraw
+     * method has been called and after all children have been drawn
+     *
+     * @param ui
+     * @param pg
+     */
+    protected void endDraw(UI ui, PGraphics pg) {}
 
     /**
      * Called in a key event handler to stop this event from bubbling up the

@@ -83,7 +83,7 @@ public class LXStudio extends P3LX {
 
             @Override
             protected void onResize() {
-                this.pointCloud.resetShader();
+                this.pointCloud.loadShader();
             }
 
         }

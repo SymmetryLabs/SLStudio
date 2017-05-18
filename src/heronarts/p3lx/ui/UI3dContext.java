@@ -198,6 +198,10 @@ public class UI3dContext extends UIObject implements UITabFocus {
         });
     }
 
+    public PGraphics getGraphics() {
+        return this.pg;
+    }
+
     @Override
     public float getWidth() {
         return (this.pg == null) ? this.ui.applet.width : this.pg.width;

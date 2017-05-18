@@ -49,7 +49,14 @@ public class UIGLPointCloud extends UIPointCloud {
 
     private PShader shader;
     private final FloatBuffer vertexData;
-    private int vertexBufferObjectName;
+    private final int vertexBufferObjectName;
+
+    private final FloatBuffer colorData;
+    private final int colorBufferObjectName;
+
+    private int vertexLocation = -1;
+    private int colorLocation = -1;
+
     private boolean alphaTestEnabled = false;
 
     private static final float[] NO_ATTENUATION = { 1, 0, 0 };
@@ -73,37 +80,55 @@ public class UIGLPointCloud extends UIPointCloud {
         super(lx, model);
 
         // Load shader
-        this.shader = lx.applet.loadShader("frag.glsl", "vert.glsl");
+        loadShader();
 
         // Create a buffer for vertex data
         this.vertexData = ByteBuffer
-            .allocateDirect(model.size * 7 * Float.SIZE/8)
+            .allocateDirect(model.size * 3 * Float.SIZE/8)
             .order(ByteOrder.nativeOrder())
             .asFloatBuffer();
 
         // Put all the points into the buffer
         this.vertexData.rewind();
         for (LXPoint point : model.points) {
-            // Each point has 7 floats, XYZRGBA
+            // Each point has 3 floats, XYZ
             this.vertexData.put(point.x);
             this.vertexData.put(point.y);
             this.vertexData.put(point.z);
-            this.vertexData.put(0f);
-            this.vertexData.put(0f);
-            this.vertexData.put(0f);
-            this.vertexData.put(1f);
         }
         this.vertexData.position(0);
 
+        // Create a buffer for color data
+        this.colorData = ByteBuffer
+            .allocateDirect(model.size * 4 * Float.SIZE/8)
+            .order(ByteOrder.nativeOrder())
+            .asFloatBuffer();
+
+        // Put all the points into the buffer
+        this.colorData.rewind();
+        for (int i = 0; i < model.points.length; ++i) {
+            // Each point has 4 floats, RGBA
+            this.colorData.put(0f);
+            this.colorData.put(0f);
+            this.colorData.put(0f);
+            this.colorData.put(1f);
+        }
+        this.colorData.position(0);
+
         // Generate a buffer binding
         IntBuffer resultBuffer = ByteBuffer
-            .allocateDirect(1 * Integer.SIZE/8)
+            .allocateDirect(2 * Integer.SIZE/8)
             .order(ByteOrder.nativeOrder())
             .asIntBuffer();
 
         PGL pgl = this.lx.applet.beginPGL();
-        pgl.genBuffers(1, resultBuffer); // Generates a buffer, places its id in resultBuffer[0]
+        pgl.genBuffers(2, resultBuffer); // Generates a buffer, places its id in resultBuffer[0]
         this.vertexBufferObjectName = resultBuffer.get(0); // Grab our buffer name
+        this.colorBufferObjectName = resultBuffer.get(1);
+        pgl.bindBuffer(PGL.ARRAY_BUFFER, this.vertexBufferObjectName);
+        pgl.bufferData(PGL.ARRAY_BUFFER, this.model.size * 3 * Float.SIZE/8, this.vertexData, PGL.STATIC_DRAW);
+        pgl.bindBuffer(PGL.ARRAY_BUFFER, 0);
+
         this.lx.applet.endPGL();
     }
 
@@ -121,42 +146,47 @@ public class UIGLPointCloud extends UIPointCloud {
 
     @Override
     protected void onUIResize(UI ui) {
-        resetShader();
+        loadShader();
     }
 
-    public void resetShader() {
+    public void loadShader() {
         this.shader = this.lx.applet.loadShader("frag.glsl", "vert.glsl");
+        this.vertexLocation = this.colorLocation = -1;
     }
 
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         int[] colors = this.lx.getColors();
 
-        // Put our new colors in the vertex data
+        // Put our new colors in the VBO
         int i = 0;
         for (LXPoint p : this.model.points) {
             int c = colors[p.index];
-            this.vertexData.put(7*i + 3, (0xff & (c >> 16)) / 255f); // R
-            this.vertexData.put(7*i + 4, (0xff & (c >> 8)) / 255f); // G
-            this.vertexData.put(7*i + 5, (0xff & (c)) / 255f); // B
+            this.colorData.put(4*i + 0, (0xff & (c >> 16)) / 255f); // R
+            this.colorData.put(4*i + 1, (0xff & (c >> 8)) / 255f);  // G
+            this.colorData.put(4*i + 2, (0xff & (c)) / 255f);       // B
             ++i;
         }
 
         // Get PGL context
         PGL pgl = pg.beginPGL();
 
-        // Bind to our vertex buffer object, place the new color data
-        pgl.bindBuffer(PGL.ARRAY_BUFFER, this.vertexBufferObjectName);
-        pgl.bufferData(PGL.ARRAY_BUFFER, this.model.size * 7 * Float.SIZE/8, this.vertexData, PGL.DYNAMIC_DRAW);
-
         // Set up shader
         this.shader.bind();
-        int vertexLocation = pgl.getAttribLocation(this.shader.glProgram, "vertex");
-        int colorLocation = pgl.getAttribLocation(this.shader.glProgram, "color");
-        pgl.enableVertexAttribArray(vertexLocation);
-        pgl.enableVertexAttribArray(colorLocation);
-        pgl.vertexAttribPointer(vertexLocation, 3, PGL.FLOAT, false, 7 * Float.SIZE/8, 0);
-        pgl.vertexAttribPointer(colorLocation, 4, PGL.FLOAT, false, 7 * Float.SIZE/8, 3 * Float.SIZE/8);
+        if (this.vertexLocation < 0) {
+            this.vertexLocation = pgl.getAttribLocation(this.shader.glProgram, "vertex");
+            this.colorLocation = pgl.getAttribLocation(this.shader.glProgram, "color");
+        }
+
+        // Bind to our vertex buffer object, place the new color data
+        pgl.bindBuffer(PGL.ARRAY_BUFFER, this.colorBufferObjectName);
+        pgl.bufferData(PGL.ARRAY_BUFFER, this.model.size * 4 * Float.SIZE/8, this.colorData, PGL.STREAM_DRAW);
+        pgl.enableVertexAttribArray(this.colorLocation);
+        pgl.vertexAttribPointer(this.colorLocation, 4, PGL.FLOAT, false, 4 * Float.SIZE/8, 0);
+
+        pgl.bindBuffer(PGL.ARRAY_BUFFER, this.vertexBufferObjectName);
+        pgl.enableVertexAttribArray(this.vertexLocation);
+        pgl.vertexAttribPointer(this.vertexLocation, 3, PGL.FLOAT, false, 3 * Float.SIZE/8, 0);
 
         this.shader.set("pointSize", this.pointSize);
         if (this.pointSizeAttenuation != null) {
@@ -187,8 +217,8 @@ public class UIGLPointCloud extends UIPointCloud {
         if (this.alphaTestEnabled) {
             gl2.glDisable(GL2.GL_ALPHA_TEST);
         }
-        pgl.disableVertexAttribArray(vertexLocation);
-        pgl.disableVertexAttribArray(colorLocation);
+        pgl.disableVertexAttribArray(this.vertexLocation);
+        pgl.disableVertexAttribArray(this.colorLocation);
         this.shader.unbind();
         pgl.bindBuffer(PGL.ARRAY_BUFFER, 0);
 
