@@ -30,6 +30,7 @@ import com.google.gson.JsonObject;
 
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -228,6 +229,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     public LXComponent addParameter(String path, LXParameter parameter) {
         if (this.parameters.containsKey(path)) {
             throw new IllegalStateException("Cannot add parameter at existing path: " + path);
+        } else if (this.parameters.containsValue(parameter)) {
+            throw new IllegalStateException("Cannot add parameter twice: " + parameter);
         }
         LXComponent component = parameter.getComponent();
         if (component != null) {
@@ -298,6 +301,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
                 parameters.addProperty(path, ((DiscreteParameter) parameter).getValuei());
             } else if (parameter instanceof ColorParameter) {
                 parameters.addProperty(path, ((ColorParameter) parameter).getColor());
+            } else if (parameter instanceof CompoundParameter) {
+                parameters.addProperty(path, ((CompoundParameter) parameter).getBaseValue());
             } else {
                 parameters.addProperty(path, parameter.getValue());
             }
@@ -330,6 +335,8 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
                         parameter.setValue(value.getAsInt());
                     } else if (parameter instanceof ColorParameter) {
                         ((ColorParameter)parameter).setColor(value.getAsInt());
+                    } else if (parameter instanceof CompoundParameter) {
+                        parameter.setValue(value.getAsDouble());
                     } else {
                         parameter.setValue(value.getAsDouble());
                     }
