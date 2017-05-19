@@ -36,6 +36,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.UITriggerTarget;
 import heronarts.p3lx.ui.component.UITextBox;
@@ -46,7 +47,7 @@ import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTarget {
+public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTarget, UIControlTarget {
 
     public static final int HEIGHT = 20;
     public static final int PADDING = 2;
@@ -239,6 +240,11 @@ public class UIClipButton extends UI2dContainer implements UIFocus, UITriggerTar
 
     @Override
     public BooleanParameter getTriggerTarget() {
+        return (this.clip != null) ? this.clip.trigger : null;
+    }
+
+    @Override
+    public LXParameter getControlTarget() {
         return (this.clip != null) ? this.clip.trigger : null;
     }
 
