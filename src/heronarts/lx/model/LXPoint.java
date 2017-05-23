@@ -68,7 +68,7 @@ public class LXPoint {
     /**
      * angle of this point about the origin in the x-z plane
      */
-    public final float aziumuth;
+    public final float azimuth;
 
     /**
      * angle of this point about the origin in the x-z plane
@@ -125,7 +125,7 @@ public class LXPoint {
         this.rxy = (float) Math.sqrt(x * x + y * y);
         this.rxz = (float) Math.sqrt(x * x + z * z);
         this.theta = (float) ((LX.TWO_PI + Math.atan2(y, x)) % (LX.TWO_PI));
-        this.aziumuth = (float) ((LX.TWO_PI + Math.atan2(z, x)) % (LX.TWO_PI));
+        this.azimuth = (float) ((LX.TWO_PI + Math.atan2(z, x)) % (LX.TWO_PI));
         this.elevation = (float) ((LX.TWO_PI + Math.atan2(y, rxz)) % (LX.TWO_PI));
         this.index = counter++;
     }
