@@ -132,7 +132,7 @@ public class LXStudio extends P3LX {
         }
 
         @Override
-        protected void beforeDraw() {
+        protected void beginDraw() {
             if (this.toggleHelpBar) {
                 this.toggleHelpBar = false;
                 toggleHelpBar();

@@ -610,7 +610,7 @@ public class UI implements LXEngine.Dispatch {
             }
         }
 
-        beforeDraw();
+        beginDraw();
 
         long drawStart = System.nanoTime();
 
@@ -641,11 +641,17 @@ public class UI implements LXEngine.Dispatch {
         }
         this.root.draw(this, this.applet.g);
 
+        endDraw();
+
         this.timer.drawNanos = System.nanoTime() - drawStart;
     }
 
 
-    protected void beforeDraw() {
+    protected void beginDraw() {
+        // Subclasses may override...
+    }
+
+    protected void endDraw() {
         // Subclasses may override...
     }
 

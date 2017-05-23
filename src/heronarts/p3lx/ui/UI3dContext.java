@@ -543,14 +543,14 @@ public class UI3dContext extends UIObject implements UITabFocus {
         pg.hint(PConstants.ENABLE_DEPTH_TEST);
 
         // Draw all the components in the scene
-        this.beforeDraw(ui, pg);
+        beginDraw(ui, pg);
         if (this.showCenter) {
             drawCenterDot(pg);
         }
         for (UIObject child : this.mutableChildren) {
             child.draw(ui, pg);
         }
-        this.afterDraw(ui, pg);
+        endDraw(ui, pg);
 
         // Reset the depth test, camera and perspective
         pg.hint(PConstants.DISABLE_DEPTH_TEST);
@@ -593,24 +593,6 @@ public class UI3dContext extends UIObject implements UITabFocus {
         // Bottom right
         pg.line(ui.applet.width - focusInset, ui.applet.height - focusInset, ui.applet.width - focusInset - focusDash, ui.applet.height - focusInset);
         pg.line(ui.applet.width - focusInset, ui.applet.height - focusInset, ui.applet.width - focusInset, ui.applet.height - focusInset - focusDash);
-    }
-
-    /**
-     * Subclasses may override, useful to turn on lighting, etc.
-     *
-     * @param ui UI
-     * @param pg PGraphics
-     */
-    protected void beforeDraw(UI ui, PGraphics pg) {
-    }
-
-    /**
-     * Subclasses may override, useful to turn off lighting, etc.
-     *
-     * @param ui UI
-     * @param pg PGraphics
-     */
-    protected void afterDraw(UI ui, PGraphics pg) {
     }
 
     @Override
