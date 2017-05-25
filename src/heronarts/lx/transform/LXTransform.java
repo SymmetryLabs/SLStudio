@@ -29,25 +29,14 @@ import java.util.Stack;
  */
 public class LXTransform {
 
-    private final LXMatrix.RotationMode rotationMode;
-
     private final Stack<LXMatrix> matrices;
 
     /**
      * Constructs a new transform
      */
     public LXTransform() {
-        this(LXMatrix.RotationMode.RIGHT_HANDED);
-    }
-
-    public LXTransform(LXMatrix.RotationMode rotationMode) {
-        this.rotationMode = rotationMode;
         this.matrices = new Stack<LXMatrix>();
-        this.matrices.push(new LXMatrix(rotationMode));
-    }
-
-    public LXMatrix.RotationMode getRotationMode() {
-        return this.rotationMode;
+        this.matrices.push(new LXMatrix());
     }
 
     public LXMatrix getMatrix() {
@@ -92,7 +81,7 @@ public class LXTransform {
     }
 
     /**
-     * Translates the point, defualt of 0 in the z-axis
+     * Translates the point, default of 0 in the z-axis
      *
      * @param tx x translation
      * @param ty y translation
