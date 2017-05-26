@@ -66,12 +66,13 @@ public class LXPoint {
     public final float theta;
 
     /**
-     * angle of this point about the origin in the x-z plane
+     * Angle of this point about the origin in the x-z plane
+     * (right-handed angle of rotation about the Y-axis)
      */
     public final float azimuth;
 
     /**
-     * angle of this point about the origin in the x-z plane
+     * Angle of this point between the y-value and the x-z plane
      */
     public final float elevation;
 
