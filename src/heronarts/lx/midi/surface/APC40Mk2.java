@@ -41,6 +41,7 @@ import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -249,7 +250,10 @@ public class APC40Mk2 extends LXMidiSurface {
                             this.knobs[i] = parameter;
                             parameter.addListener(this);
                             sendControlChange(0, DEVICE_KNOB_STYLE + i, p.getPolarity() == LXParameter.Polarity.BIPOLAR ? LED_STYLE_BIPOLAR : LED_STYLE_UNIPOLAR);
-                            sendControlChange(0, DEVICE_KNOB + i, (int) (parameter.getNormalized() * 127));
+                            double normalized = (parameter instanceof CompoundParameter) ?
+                                ((CompoundParameter) parameter).getBaseNormalized() :
+                                parameter.getNormalized();
+                            sendControlChange(0, DEVICE_KNOB + i, (int) (normalized * 127));
                             ++i;
                         }
                     }
@@ -274,7 +278,10 @@ public class APC40Mk2 extends LXMidiSurface {
             } else {
                 for (int i = 0; i < this.knobs.length; ++i) {
                     if (parameter == this.knobs[i]) {
-                        sendControlChange(0, DEVICE_KNOB + i, (int) (this.knobs[i].getNormalized() * 127));
+                        double normalized = (parameter instanceof CompoundParameter) ?
+                            ((CompoundParameter) parameter).getBaseNormalized() :
+                            this.knobs[i].getNormalized();
+                        sendControlChange(0, DEVICE_KNOB + i, (int) (normalized * 127));
                         break;
                     }
                 }
