@@ -58,6 +58,11 @@ import processing.event.MouseEvent;
  */
 public class UI implements LXEngine.Dispatch {
 
+    public enum CoordinateSystem {
+        LEFT_HANDED,
+        RIGHT_HANDED;
+    }
+
     private static UI instance = null;
 
     private class UIRoot extends UIObject implements UIContainer {
@@ -256,6 +261,8 @@ public class UI implements LXEngine.Dispatch {
 
     private int backgroundColor = UI.BLACK;
 
+    protected CoordinateSystem coordinateSystem = CoordinateSystem.LEFT_HANDED;
+
     private static final long INIT_RUN = -1;
     private long lastMillis = INIT_RUN;
 
@@ -368,6 +375,11 @@ public class UI implements LXEngine.Dispatch {
         });
 
         UI.instance = this;
+    }
+
+    public UI setCoordinateSystem(CoordinateSystem coordinateSystem) {
+        this.coordinateSystem = coordinateSystem;
+        return this;
     }
 
     public void reflow() {

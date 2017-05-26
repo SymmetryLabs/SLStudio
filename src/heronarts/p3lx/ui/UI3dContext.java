@@ -539,6 +539,10 @@ public class UI3dContext extends UIObject implements UITabFocus {
             radiusValue * depthFactor
         );
 
+        if (ui.coordinateSystem == UI.CoordinateSystem.RIGHT_HANDED) {
+            pg.scale(1, 1, -1);
+        }
+
         // Enable depth test
         pg.hint(PConstants.ENABLE_DEPTH_TEST);
 
