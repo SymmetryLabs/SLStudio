@@ -82,12 +82,18 @@ public class GridModel extends LXModel {
         }
     }
 
-    public class GridStripModel extends LXModel {
+    public class Strip extends LXModel {
+
         public int index;
 
-        public GridStripModel(int index, List<LXPoint> points) {
-            super(points);
+        public final GridPoint[] points;
+
+        public Strip(int index, List<LXPoint> pointList) {
+            super(pointList);
             this.index = index;
+            LXPoint[] points = ((LXModel) this).points;
+            this.points = new GridPoint[points.length];
+            System.arraycopy(points, 0, this.points, 0, points.length);
         }
     }
 
@@ -99,12 +105,12 @@ public class GridModel extends LXModel {
     /**
      * All the rows in this model
      */
-    public final List<GridStripModel> rows;
+    public final List<Strip> rows;
 
     /**
      * All the columns in this model
      */
-    public final List<GridStripModel> columns;
+    public final List<Strip> columns;
 
     /**
      * Metrics for the grid
@@ -149,23 +155,23 @@ public class GridModel extends LXModel {
         this.points = new GridPoint[points.length];
         System.arraycopy(points, 0, this.points, 0, points.length);
 
-        List<GridStripModel> rows = new ArrayList<GridStripModel>();
+        List<Strip> rows = new ArrayList<Strip>();
         for (int y = 0; y < height; ++y) {
             List<LXPoint> row = new ArrayList<LXPoint>();
             for (int x = 0; x < width; ++x) {
                 row.add(points[x + y * this.width]);
             }
-            rows.add(new GridStripModel(y, row));
+            rows.add(new Strip(y, row));
         }
         this.rows = Collections.unmodifiableList(rows);
 
-        List<GridStripModel> columns = new ArrayList<GridStripModel>();
+        List<Strip> columns = new ArrayList<Strip>();
         for (int x = 0; x < width; ++x) {
             List<LXPoint> column = new ArrayList<LXPoint>();
             for (int y = 0; y < height; ++y) {
                 column.add(points[x + y * this.width]);
             }
-            columns.add(new GridStripModel(x, column));
+            columns.add(new Strip(x, column));
         }
         this.columns = Collections.unmodifiableList(columns);
     }
