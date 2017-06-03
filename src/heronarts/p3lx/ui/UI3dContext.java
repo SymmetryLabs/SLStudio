@@ -583,20 +583,20 @@ public class UI3dContext extends UIObject implements UITabFocus {
     private void drawFocusBorder(UI ui, PGraphics pg) {
         pg.strokeWeight(1);
         pg.stroke(ui.theme.getFocusColor());
-        int focusInset = 2;
+        float focusInset = .5f;
         int focusDash = 10;
         // Top left
         pg.line(focusInset, focusInset, focusInset + focusDash, focusInset);
         pg.line(focusInset, focusInset, focusInset, focusInset + focusDash);
         // Top right
-        pg.line(ui.applet.width - focusInset, focusInset, ui.applet.width - focusInset - focusDash, focusInset);
-        pg.line(ui.applet.width - focusInset, focusInset, ui.applet.width - focusInset, focusInset + focusDash);
+        pg.line(pg.width - focusInset, focusInset, pg.width - focusInset - focusDash, focusInset);
+        pg.line(pg.width - focusInset, focusInset, pg.width - focusInset, focusInset + focusDash);
         // Bottom left
-        pg.line(focusInset, ui.applet.height - focusInset, focusInset + focusDash, ui.applet.height - focusInset);
-        pg.line(focusInset, ui.applet.height - focusInset, focusInset, ui.applet.height - focusInset - focusDash);
+        pg.line(focusInset, pg.height - focusInset, focusInset + focusDash, pg.height - focusInset);
+        pg.line(focusInset, pg.height - focusInset, focusInset, pg.height - focusInset - focusDash);
         // Bottom right
-        pg.line(ui.applet.width - focusInset, ui.applet.height - focusInset, ui.applet.width - focusInset - focusDash, ui.applet.height - focusInset);
-        pg.line(ui.applet.width - focusInset, ui.applet.height - focusInset, ui.applet.width - focusInset, ui.applet.height - focusInset - focusDash);
+        pg.line(pg.width - focusInset, pg.height - focusInset, pg.width - focusInset - focusDash, pg.height - focusInset);
+        pg.line(pg.width - focusInset, pg.height - focusInset, pg.width - focusInset, pg.height - focusInset - focusDash);
     }
 
     @Override

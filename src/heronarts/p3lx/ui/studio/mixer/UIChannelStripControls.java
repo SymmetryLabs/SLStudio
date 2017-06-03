@@ -117,8 +117,7 @@ public class UIChannelStripControls extends UIMixerStripControls {
             .setLabel(Integer.toString(channel.getIndex() + 1))
             .setParameter(channel.enabled)
             .setFont(ui.loadFont("Arial-Black-11.vlw"))
-            .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-            .setTextOffset(0, 2);
+            .setTextAlignment(PConstants.CENTER, PConstants.CENTER);
         yp += 32;
         final UIButton cueButton =
             new UIButton(bxp, yp, 28, 16) {

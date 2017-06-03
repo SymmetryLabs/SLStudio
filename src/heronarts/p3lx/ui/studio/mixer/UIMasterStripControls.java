@@ -53,7 +53,6 @@ public class UIMasterStripControls extends UIMixerStripControls {
         .setLabel("Live")
         .setParameter(lx.engine.output.enabled)
         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
-        .setTextOffset(0, 2)
         .addToContainer(this);
 
         new UIButton(bxp, 80, 28, 16)
