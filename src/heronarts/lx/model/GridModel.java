@@ -83,6 +83,11 @@ public class GridModel extends LXModel {
     }
 
     /**
+     * Points in the model
+     */
+    public final GridPoint[] points;
+
+    /**
      * All the rows in this model
      */
     public final List<LXModel> rows;
@@ -130,6 +135,10 @@ public class GridModel extends LXModel {
         this.height = metrics.height;
         this.xSpacing = metrics.xSpacing;
         this.ySpacing = metrics.ySpacing;
+
+        LXPoint[] points = ((LXModel) this).points;
+        this.points = new GridPoint[points.length];
+        System.arraycopy(points, 0, this.points, 0, points.length);
 
         List<LXModel> _rows = new ArrayList<LXModel>();
         for (int y = 0; y < height; ++y) {
@@ -179,7 +188,8 @@ public class GridModel extends LXModel {
         private Fixture(Metrics metrics) {
             for (int y = 0; y < metrics.height; ++y) {
                 for (int x = 0; x < metrics.width; ++x) {
-                    this.points.add(new LXPoint(
+                    this.points.add(new GridPoint(
+                        x, y,
                         metrics.origin.x + x * metrics.xSpacing,
                         metrics.origin.y + y * metrics.ySpacing,
                         metrics.origin.z
