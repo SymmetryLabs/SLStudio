@@ -82,6 +82,15 @@ public class GridModel extends LXModel {
         }
     }
 
+    public class GridStripModel extends LXModel {
+        public int index;
+
+        public GridStripModel(int index, List<LXPoint> points) {
+            super(points);
+            this.index = index;
+        }
+    }
+
     /**
      * Points in the model
      */
@@ -90,12 +99,12 @@ public class GridModel extends LXModel {
     /**
      * All the rows in this model
      */
-    public final List<LXModel> rows;
+    public final List<GridStripModel> rows;
 
     /**
      * All the columns in this model
      */
-    public final List<LXModel> columns;
+    public final List<GridStripModel> columns;
 
     /**
      * Metrics for the grid
@@ -140,25 +149,25 @@ public class GridModel extends LXModel {
         this.points = new GridPoint[points.length];
         System.arraycopy(points, 0, this.points, 0, points.length);
 
-        List<LXModel> _rows = new ArrayList<LXModel>();
+        List<GridStripModel> rows = new ArrayList<GridStripModel>();
         for (int y = 0; y < height; ++y) {
             List<LXPoint> row = new ArrayList<LXPoint>();
             for (int x = 0; x < width; ++x) {
                 row.add(points[x + y * this.width]);
             }
-            _rows.add(new LXModel(row));
+            rows.add(new GridStripModel(y, row));
         }
-        this.rows = Collections.unmodifiableList(_rows);
+        this.rows = Collections.unmodifiableList(rows);
 
-        List<LXModel> _columns = new ArrayList<LXModel>();
+        List<GridStripModel> columns = new ArrayList<GridStripModel>();
         for (int x = 0; x < width; ++x) {
             List<LXPoint> column = new ArrayList<LXPoint>();
             for (int y = 0; y < height; ++y) {
                 column.add(points[x + y * this.width]);
             }
-            _columns.add(new LXModel(column));
+            columns.add(new GridStripModel(x, column));
         }
-        this.columns = Collections.unmodifiableList(_columns);
+        this.columns = Collections.unmodifiableList(columns);
     }
 
     /**
