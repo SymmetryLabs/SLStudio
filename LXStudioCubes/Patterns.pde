@@ -1,6 +1,31 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class Ball extends DPat {
+
+  CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
+  CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
+  CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
+
+  CompoundParameter size = new CompoundParameter("size", model.xRange*0.1, model.xRange*0.01, model.xRange*0.5);
+
+  public Ball(LX lx) {
+    super(lx);
+    addParameter(xPos);
+    addParameter(yPos);
+    addParameter(zPos);
+    addParameter(size);
+  }
+
+  color CalcPoint(PVector p) {
+    if (LXUtils.distance(p.x, p.y, xPos.getValuef(), yPos.getValuef()) < size.getValuef()) {
+      return lx.hsb(lxh(), 100, 100);
+    } else {
+      return LXColor.BLACK;
+    }
+  }
+}
+
 public class Noise extends DPat {
   int       CurAnim, iSymm;
   int       XSym=1,YSym=2,RadSym=3;
