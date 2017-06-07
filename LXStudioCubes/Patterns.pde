@@ -155,7 +155,7 @@ public class SoundParticles extends SLPattern   {
     public  PVector startVelocity = new PVector(); 
     private PVector modelCenter = new PVector(); 
     public  SawLFO angle = new SawLFO(0, TWO_PI, 1000); 
-    private float[] randomFloat = new float[model.points.size()];
+    private float[] randomFloat = new float[model.points.length];
     private float[] freqBuckets; 
     // private float lastParticleBirth = millis(); 
     // private float lastTime = millis(); 
@@ -345,7 +345,7 @@ public class SoundParticles extends SLPattern   {
         } 
     public  SoundParticles(LX lx) {
       super(lx);
-      for (int i = 0 ; i < model.points.size(); i++) {
+      for (int i = 0 ; i < model.points.length; i++) {
         randomFloat[i]=randomGaussian()*10; 
       }
       //physics=new VerletPhysics();
@@ -575,9 +575,9 @@ public class StripPlay extends SLPattern {
   
   public void run(double deltaMs) {
     setColors(#000000); 
-    float[] bright = new float[model.points.size()];
+    float[] bright = new float[model.points.length];
     for (Strip strip : model.strips) {
-      LXPoint centerPoint = strip.points.get(8);
+      LXPoint centerPoint = strip.points[8];
       for (int i=0;i<numOsc.getValue();i++) {
         float avgdist = dist(centerPoint.x,centerPoint.y,centerPoint.z,fX[i].getValuef(),fY[i].getValuef(),fZ[i].getValuef());
         boolean on = avgdist<30;

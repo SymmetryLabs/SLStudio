@@ -14,12 +14,12 @@
  */
 
 
-static final float globalOffsetX = 0;
-static final float globalOffsetY = 0;
-static final float globalOffsetZ = 0;
+static final float globalOffsetX = 34;
+static final float globalOffsetY = -23;
+static final float globalOffsetZ = 136;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = 45;
+static final float globalRotationY = -45;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -355,12 +355,12 @@ public class MappingPattern extends SLPattern {
     for (Cube c : model.cubes) {
       if (!c.id.equals(id)) continue;
 
-      List<LXPoint> points = c.points;
-      for (int i = 0; i < points.size(); i++) {
+      LXPoint[] points = c.points;
+      for (int i = 0; i < points.length; i++) {
         if (dotted)
           col = (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2) : LXColor.BLACK;
 
-        setColor(points.get(i).index, col);
+        setColor(points[i].index, col);
       }
     }
   }
