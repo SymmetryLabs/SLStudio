@@ -199,6 +199,10 @@ public class GridModel extends LXModel {
         this(new Metrics(width, height).setSpacing(xSpacing, ySpacing));
     }
 
+    public GridPoint getPoint(int x, int y) {
+        return this.points[y * this.width + x];
+    }
+
     private static class Fixture extends LXAbstractFixture {
         private Fixture(Metrics metrics) {
             for (int y = 0; y < metrics.height; ++y) {

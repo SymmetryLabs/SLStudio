@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -51,93 +51,74 @@ public class QuadraticEnvelope extends LXRangeModulator {
     private Ease ease = Ease.IN;
 
     public QuadraticEnvelope(double startValue, double endValue, double periodMs) {
-        this(new FixedParameter(startValue), new FixedParameter(endValue),
-                new FixedParameter(periodMs));
+        this(new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(LXParameter startValue, double endValue,
-            double periodMs) {
+    public QuadraticEnvelope(LXParameter startValue, double endValue, double periodMs) {
         this(startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(double startValue, LXParameter endValue,
-            double periodMs) {
+    public QuadraticEnvelope(double startValue, LXParameter endValue, double periodMs) {
         this(new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(double startValue, double endValue,
-            LXParameter periodMs) {
+    public QuadraticEnvelope(double startValue, double endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
 
-    public QuadraticEnvelope(LXParameter startValue, LXParameter endValue,
-            double periodMs) {
+    public QuadraticEnvelope(LXParameter startValue, LXParameter endValue, double periodMs) {
         this(startValue, endValue, new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(LXParameter startValue, double endValue,
-            LXParameter periodMs) {
+    public QuadraticEnvelope(LXParameter startValue, double endValue, LXParameter periodMs) {
         this(startValue, new FixedParameter(endValue), periodMs);
     }
 
-    public QuadraticEnvelope(double startValue, LXParameter endValue,
-            LXParameter periodMs) {
+    public QuadraticEnvelope(double startValue, LXParameter endValue, LXParameter periodMs) {
         this(new FixedParameter(startValue), endValue, periodMs);
     }
 
-    public QuadraticEnvelope(LXParameter startValue, LXParameter endValue,
-            LXParameter periodMs) {
+    public QuadraticEnvelope(LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         this("QENV", startValue, endValue, periodMs);
     }
 
-    public QuadraticEnvelope(String label, double startValue, double endValue,
-            double periodMs) {
-        this(label, new FixedParameter(startValue), new FixedParameter(endValue),
-                new FixedParameter(periodMs));
+    public QuadraticEnvelope(String label, double startValue, double endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(String label, LXParameter startValue,
-            double endValue, double periodMs) {
-        this(label, startValue, new FixedParameter(endValue), new FixedParameter(
-                periodMs));
+    public QuadraticEnvelope(String label, LXParameter startValue, double endValue, double periodMs) {
+        this(label, startValue, new FixedParameter(endValue), new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(String label, double startValue,
-            LXParameter endValue, double periodMs) {
-        this(label, new FixedParameter(startValue), endValue, new FixedParameter(
-                periodMs));
+    public QuadraticEnvelope(String label, double startValue, LXParameter endValue, double periodMs) {
+        this(label, new FixedParameter(startValue), endValue, new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(String label, double startValue, double endValue,
-            LXParameter periodMs) {
-        this(label, new FixedParameter(startValue), new FixedParameter(endValue),
-                periodMs);
+    public QuadraticEnvelope(String label, double startValue, double endValue, LXParameter periodMs) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), periodMs);
     }
 
-    public QuadraticEnvelope(String label, LXParameter startValue,
-            LXParameter endValue, double periodMs) {
+    public QuadraticEnvelope(String label, LXParameter startValue, LXParameter endValue, double periodMs) {
         this(label, startValue, endValue, new FixedParameter(periodMs));
     }
 
-    public QuadraticEnvelope(String label, LXParameter startValue,
-            double endValue, LXParameter periodMs) {
+    public QuadraticEnvelope(String label, LXParameter startValue, double endValue, LXParameter periodMs) {
         this(label, startValue, new FixedParameter(endValue), periodMs);
     }
 
-    public QuadraticEnvelope(String label, double startValue,
-            LXParameter endValue, LXParameter periodMs) {
+    public QuadraticEnvelope(String label, double startValue, LXParameter endValue, LXParameter periodMs) {
         this(label, new FixedParameter(startValue), endValue, periodMs);
     }
 
-    public QuadraticEnvelope(String label, LXParameter startValue,
-            LXParameter endValue, LXParameter periodMs) {
+    public QuadraticEnvelope(String label, LXParameter startValue, LXParameter endValue, LXParameter periodMs) {
         super(label, startValue, endValue, periodMs);
+        setExponent(2);
         setLooping(false);
     }
 
     /**
      * Sets the easing type
-     * 
+     *
      * @param ease easing type
      * @return this
      */
@@ -148,17 +129,17 @@ public class QuadraticEnvelope extends LXRangeModulator {
 
     @Override
     protected double computeNormalizedValue(double deltaMs, double basis) {
+        double exponent = getExponent();
         switch (this.ease) {
         case IN:
-            return basis * basis;
+            return Math.pow(basis, exponent);
         case OUT:
-            return 1 - (1 - basis) * (1 - basis);
+            return 1 - Math.pow(1 - basis, exponent);
         case BOTH:
             if (basis < 0.5) {
-                return (basis * 2) * (basis * 2) / 2.;
+                return .5 * Math.pow(2*basis, exponent);
             } else {
-                final double biv = 1 - (basis - 0.5) * 2.;
-                return 0.5 + (1 - biv * biv) / 2.;
+                return .5 + .5 * Math.pow(1 - 2 * (basis - 0.5), exponent);
             }
         }
         return 0;
