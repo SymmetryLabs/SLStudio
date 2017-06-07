@@ -28,14 +28,16 @@ package heronarts.p3lx.ui.component;
 
 import heronarts.lx.LXUtils;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UIControlTarget;
+import heronarts.p3lx.ui.UIModulationTarget;
 import processing.event.Event;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIDoubleBox extends UINumberBox implements UIControlTarget {
+public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModulationTarget {
 
     private double minValue = 0;
     private double maxValue = Double.MAX_VALUE;
@@ -191,6 +193,14 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget {
     @Override
     public LXParameter getControlTarget() {
         return isMappable() ? this.parameter : null;
+    }
+
+    @Override
+    public CompoundParameter getModulationTarget() {
+        if (isMappable() && (this.parameter instanceof CompoundParameter)) {
+            return (CompoundParameter) this.parameter;
+        }
+        return null;
     }
 
 }
