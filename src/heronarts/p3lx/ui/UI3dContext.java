@@ -26,6 +26,10 @@
 
 package heronarts.p3lx.ui;
 
+import com.google.gson.JsonObject;
+
+import heronarts.lx.LX;
+import heronarts.lx.LXSerializable;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
@@ -43,7 +47,7 @@ import processing.event.MouseEvent;
  * This is a layer that contains a 3d scene with a camera. Mouse movements
  * control the camera, and the scene can contain components.
  */
-public class UI3dContext extends UIObject implements UITabFocus {
+public class UI3dContext extends UIObject implements LXSerializable, UITabFocus {
 
     /**
      * Mode of interaction from keyboard mouse events
@@ -678,6 +682,32 @@ public class UI3dContext extends UIObject implements UITabFocus {
             consumeKeyEvent();
             this.phi.incrementValue(amount);
         }
+    }
+
+    private static final String KEY_RADIUS = "radius";
+    private static final String KEY_THETA = "theta";
+    private static final String KEY_PHI = "phi";
+
+    @Override
+    public void save(LX lx, JsonObject object) {
+        object.addProperty(KEY_RADIUS, this.radius.getValue());
+        object.addProperty(KEY_THETA, this.theta.getValue());
+        object.addProperty(KEY_PHI, this.phi.getValue());
+    }
+
+    @Override
+    public void load(LX lx, JsonObject object) {
+        if (object.has(KEY_RADIUS)) {
+            this.radius.setValue(object.get(KEY_RADIUS).getAsDouble());
+        }
+        if (object.has(KEY_THETA)) {
+            this.theta.setValue(object.get(KEY_THETA).getAsDouble());
+        }
+        if (object.has(KEY_PHI)) {
+            this.phi.setValue(object.get(KEY_PHI).getAsDouble());
+        }
+
+
     }
 
 }

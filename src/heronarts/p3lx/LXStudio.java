@@ -229,6 +229,7 @@ public class LXStudio extends P3LX {
         private static final String KEY_PALETTE_EXPANDED = "paletteExpanded";
         private static final String KEY_MODULATORS_EXPANDED = "modulatorExpanded";
         private static final String KEY_CLIP_VIEW_VISIBLE = "clipViewVisible";
+        private static final String KEY_PREVIEW = "preview";
 
         @Override
         public void save(LX lx, JsonObject object) {
@@ -243,6 +244,7 @@ public class LXStudio extends P3LX {
                 }
             }
             object.add(KEY_MODULATORS_EXPANDED, modulatorObj);
+            object.add(KEY_PREVIEW, LXSerializable.Utils.toObject(lx, ui.preview));
         }
 
         @Override
@@ -267,6 +269,9 @@ public class LXStudio extends P3LX {
                         }
                     }
                 }
+            }
+            if (object.has(KEY_PREVIEW)) {
+                ui.preview.load(lx, object.getAsJsonObject(KEY_PREVIEW));
             }
         }
     }
