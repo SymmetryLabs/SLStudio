@@ -30,7 +30,6 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.FunctionalParameter;
@@ -66,11 +65,11 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
      */
     public final ColorParameter clr = color;
 
-    public final BoundedParameter range = new BoundedParameter("Range", 0, 360)
+    public final CompoundParameter range = new CompoundParameter("Range", 0, 360)
         .setDescription("Sets range in degrees (0-360) of how much spread the palette applies");
 
-    public final BoundedParameter period = (BoundedParameter)
-        new BoundedParameter("Period", 120000, 1000, 1800000)
+    public final CompoundParameter period = (CompoundParameter)
+        new CompoundParameter("Period", 120000, 1000, 1800000)
         .setDescription("Sets how long the palette takes to complete one full oscillation")
         .setUnits(LXParameter.Units.MILLISECONDS);
 

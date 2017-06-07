@@ -1,16 +1,16 @@
 package heronarts.lx.color;
 
 import heronarts.lx.LXComponent;
-import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 public class ColorParameter extends LXListenableParameter implements LXParameterListener {
 
-    public final BoundedParameter hue;
-    public final BoundedParameter saturation;
-    public final BoundedParameter brightness;
+    public final CompoundParameter hue;
+    public final CompoundParameter saturation;
+    public final CompoundParameter brightness;
 
     private int color;
     private boolean internalValueUpdate = false;
@@ -23,11 +23,11 @@ public class ColorParameter extends LXListenableParameter implements LXParameter
     public ColorParameter(String label, int color) {
         super(label, Double.longBitsToDouble(color));
         double h = LXColor.h(color);
-        this.hue = new BoundedParameter(label+"-H", Double.isNaN(h) ? 0 : h, 0, 359)
+        this.hue = new CompoundParameter(label+"-H", Double.isNaN(h) ? 0 : h, 0, 359)
             .setDescription("Hue component of the color");
-        this.saturation = new BoundedParameter(label+"-S", LXColor.s(color), 0, 100)
+        this.saturation = new CompoundParameter(label+"-S", LXColor.s(color), 0, 100)
             .setDescription("Saturation component of the color");
-        this.brightness = new BoundedParameter(label+"-B", LXColor.b(color), 0, 100)
+        this.brightness = new CompoundParameter(label+"-B", LXColor.b(color), 0, 100)
             .setDescription("Brightness component of the color");
         this.hue.addListener(this);
         this.saturation.addListener(this);
