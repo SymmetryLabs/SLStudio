@@ -123,6 +123,7 @@ ${line}
 	<target name="generate.jar">
 		<jar jarfile="${project.tmp}/${project.name}/${folder}/${project.jar.name}" basedir="${project.bin}">
 			<zipgroupfileset dir="${project.lib}" includes="coremidi4j-0.9.jar" />
+			<zipgroupfileset dir="${project.lib}" includes="gson-2.8.0.jar" />
 		</jar>
 	</target>
 	
@@ -294,6 +295,7 @@ ${line}
 		</copy>
 		<jar jarfile="${project.bin}/${project.jar.name}" basedir="${project.bin}">
 			<zipgroupfileset dir="${project.lib}" includes="coremidi4j-0.9.jar" />
+			<zipgroupfileset dir="${project.lib}" includes="gson-2.8.0.jar" />
 		</jar>
 	</target>
 	

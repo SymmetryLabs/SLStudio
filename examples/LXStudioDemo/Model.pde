@@ -1,8 +1,9 @@
 /**
  * This is a very basic model class that is a 3-D matrix
- * of points. The model contains just one fixture.
+ * of points. The model contains just one fixture with all the
+ * points in the matrix.
  */
-static class Model extends LXModel {
+public static class Model extends LXModel {
   
   public Model() {
     super(new Fixture());
@@ -26,4 +27,3 @@ static class Model extends LXModel {
     }
   }
 }
-
