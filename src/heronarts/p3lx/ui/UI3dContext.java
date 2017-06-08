@@ -650,7 +650,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     protected void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
         switch (this.interactionMode) {
         case ZOOM:
-            this.radius.incrementValue(delta);
+            this.radius.incrementValue(delta * this.radius.getValue() / 1000.);
             break;
         case MOVE:
             float dcx = delta * (float) Math.sin(this.thetaDamped.getValuef());

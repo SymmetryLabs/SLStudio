@@ -40,9 +40,10 @@ public class UITheme {
 
     private PFont windowTitleFont;
     private int windowTitleColor = 0xffcccccc;
-    private int windowBackgroundColor = 0xff404040;
-    private int windowFocusedBackgroundColor = 0xff4c4c4c;
-    private int windowBorderColor = 0xff292929;
+
+    private int deviceBackgroundColor = 0xff404040;
+    private int deviceFocusedBackgroundColor = 0xff4c4c4c;
+    private int deviceBorderColor = 0xff292929;
 
     private int paneBackgroundColor = 0xff040404;
     private int paneInsetColor = 0xff242424;
@@ -161,8 +162,8 @@ public class UITheme {
      *
      * @return background color
      */
-    public int getWindowBackgroundColor() {
-        return this.windowBackgroundColor;
+    public int getDeviceBackgroundColor() {
+        return this.deviceBackgroundColor;
     }
 
     /**
@@ -171,8 +172,8 @@ public class UITheme {
      * @param color color
      * @return this UI
      */
-    public UITheme setWindowBackgroundColor(int color) {
-        this.windowBackgroundColor = color;
+    public UITheme setDeviceBackgroundColor(int color) {
+        this.deviceBackgroundColor = color;
         return this;
     }
 
@@ -181,8 +182,8 @@ public class UITheme {
      *
      * @return background color
      */
-    public int getWindowFocusedBackgroundColor() {
-        return this.windowFocusedBackgroundColor;
+    public int getDeviceFocusedBackgroundColor() {
+        return this.deviceFocusedBackgroundColor;
     }
 
     /**
@@ -191,8 +192,8 @@ public class UITheme {
      * @param color color
      * @return this UI
      */
-    public UITheme setWindowFocusedBackgroundColor(int color) {
-        this.windowFocusedBackgroundColor = color;
+    public UITheme setDeviceFocusedBackgroundColor(int color) {
+        this.deviceFocusedBackgroundColor = color;
         return this;
     }
 
@@ -201,8 +202,8 @@ public class UITheme {
      *
      * @return bordercolor
      */
-    public int getWindowBorderColor() {
-        return this.windowBorderColor;
+    public int getDeviceBorderColor() {
+        return this.deviceBorderColor;
     }
 
     /**
@@ -211,8 +212,8 @@ public class UITheme {
      * @param color color
      * @return this UI
      */
-    public UITheme setWindowBorderColor(int color) {
-        this.windowBorderColor = color;
+    public UITheme setDeviceBorderColor(int color) {
+        this.deviceBorderColor = color;
         return this;
     }
 

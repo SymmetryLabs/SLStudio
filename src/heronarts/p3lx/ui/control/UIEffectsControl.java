@@ -93,7 +93,7 @@ public class UIEffectsControl extends UIWindow {
             .setItems(items);
 
         effectList
-            .setBackgroundColor(ui.theme.getWindowBackgroundColor())
+            .setBackgroundColor(ui.theme.getDeviceBackgroundColor())
             .addToContainer(this);
         yp += effectList.getHeight() + 10;
 

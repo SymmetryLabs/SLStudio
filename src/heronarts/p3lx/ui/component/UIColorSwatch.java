@@ -89,7 +89,7 @@ public class UIColorSwatch extends UI2dComponent implements UIFocus {
         // Cursor
         pg.strokeWeight(1);
         pg.noFill();
-        pg.stroke(this.enabled ? ui.theme.getWindowBorderColor() : ui.theme.getControlDisabledColor());
+        pg.stroke(this.enabled ? ui.theme.getDeviceBorderColor() : ui.theme.getControlDisabledColor());
         pg.rect(
             this.color.hue.getNormalizedf() * (this.width-RECT_SIZE-1),
             (1-this.color.saturation.getNormalizedf()) * (this.height-RECT_SIZE-1),

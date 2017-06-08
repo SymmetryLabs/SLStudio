@@ -94,14 +94,14 @@ public abstract class UIPane extends UI2dContext {
         pg.textFont(ui.theme.getLabelFont());
         pg.textAlign(PConstants.CENTER, PConstants.TOP);
         for (int i = 0; i < this.sectionNames.length; ++i) {
-            pg.fill(i == activeSection ? ui.theme.getWindowBackgroundColor() : 0xff333333);
+            pg.fill(i == activeSection ? ui.theme.getDeviceBackgroundColor() : 0xff333333);
             pg.rect(MARGIN + i*(MARGIN + this.pillWidth), this.topOffset, this.pillWidth, PILL_HEIGHT, 4);
             pg.fill(i == activeSection ? ui.theme.getControlTextColor() : ui.theme.getControlDisabledColor());
             pg.text(this.sectionNames[i], MARGIN + i*(MARGIN + this.pillWidth) + this.pillWidth/2, this.topOffset + 4);
         }
 
         // Active line
-        pg.stroke(ui.theme.getWindowBackgroundColor());
+        pg.stroke(ui.theme.getDeviceBackgroundColor());
         pg.strokeWeight(2);
         int lineX = MARGIN + this.activeSection * (MARGIN + this.pillWidth) + pillWidth/2;
         pg.line(lineX, this.topOffset + PILL_HEIGHT, lineX, this.inset.getY());

@@ -78,9 +78,9 @@ public abstract class UIMixerStripControls extends UI2dContainer {
 
     protected void setBackground() {
         if (lx.engine.getFocusedChannel() == this.bus) {
-            setBackgroundColor(this.ui.theme.getWindowFocusedBackgroundColor());
+            setBackgroundColor(this.ui.theme.getDeviceFocusedBackgroundColor());
         } else {
-            setBackgroundColor(this.ui.theme.getWindowBackgroundColor());
+            setBackgroundColor(this.ui.theme.getDeviceBackgroundColor());
         }
     }
 

@@ -117,7 +117,7 @@ public class UIRightPane extends UIPane {
         }
         .setLabel("LFO")
         .setMomentary(true)
-        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setInactiveColor(ui.theme.getDeviceBackgroundColor())
         .setBorderRounding(4)
         .setDescription("Add a new LFO to the modulation engine")
         .addToContainer(bar);
@@ -134,7 +134,7 @@ public class UIRightPane extends UIPane {
         }
         .setLabel("Env")
         .setMomentary(true)
-        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setInactiveColor(ui.theme.getDeviceBackgroundColor())
         .setBorderRounding(4)
         .setDescription("Add a new envelope to the modulation engine")
         .addToContainer(bar);
@@ -151,7 +151,7 @@ public class UIRightPane extends UIPane {
         }
         .setLabel("Beat")
         .setMomentary(true)
-        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setInactiveColor(ui.theme.getDeviceBackgroundColor())
         .setBorderRounding(4)
         .setDescription("Add a new Beat detector to the modulation engine")
         .addToContainer(bar);
@@ -168,7 +168,7 @@ public class UIRightPane extends UIPane {
         }
         .setLabel("Macro")
         .setMomentary(true)
-        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setInactiveColor(ui.theme.getDeviceBackgroundColor())
         .setBorderRounding(4)
         .setDescription("Add a new Beat detector to the modulation engine")
         .addToContainer(bar);
@@ -184,7 +184,7 @@ public class UIRightPane extends UIPane {
             }
         }
         .setIcon(ui.theme.iconMap)
-        .setInactiveColor(ui.theme.getWindowBackgroundColor())
+        .setInactiveColor(ui.theme.getDeviceBackgroundColor())
         .setBorderRounding(4)
         .setDescription("Add a new parameter mapping to the modulation engine")
         .addToContainer(bar);

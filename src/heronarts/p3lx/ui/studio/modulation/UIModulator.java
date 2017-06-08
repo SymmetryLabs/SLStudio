@@ -91,7 +91,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         this.lx = lx;
         this.parameter = parameter;
         this.modulator = isModulator ? (LXModulator) this.parameter : null;
-        setBackgroundColor(ui.theme.getWindowBackgroundColor());
+        setBackgroundColor(ui.theme.getDeviceBackgroundColor());
         setBorderRounding(4);
 
         float titleX = TITLE_X;
@@ -353,12 +353,12 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
     @Override
     public void onFocus() {
-        setBackgroundColor(ui.theme.getWindowFocusedBackgroundColor());
+        setBackgroundColor(ui.theme.getDeviceFocusedBackgroundColor());
     }
 
     @Override
     public void onBlur() {
-        setBackgroundColor(ui.theme.getWindowBackgroundColor());
+        setBackgroundColor(ui.theme.getDeviceBackgroundColor());
     }
 
     private abstract class UIModulation extends UI2dContainer implements UIFocus {

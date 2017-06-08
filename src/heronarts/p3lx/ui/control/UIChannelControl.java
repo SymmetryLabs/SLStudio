@@ -98,7 +98,7 @@ public class UIChannelControl extends UIWindow {
         final UIItemList.ScrollList patternList = new UIItemList.ScrollList(ui, 1, yp, this.width - 2, 140);
         patternList.setItems(items);
         patternList
-        .setBackgroundColor(ui.theme.getWindowBackgroundColor())
+        .setBackgroundColor(ui.theme.getDeviceBackgroundColor())
         .addToContainer(this);
         yp += patternList.getHeight() + 10;
 

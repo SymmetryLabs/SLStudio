@@ -57,8 +57,8 @@ public class UIWindow extends UI2dContext {
      */
     public UIWindow(final UI ui, String title, float x, float y, float w, float h) {
         super(ui, x, y, w, h);
-        setBackgroundColor(ui.theme.getWindowBackgroundColor());
-        setBorderColor(ui.theme.getWindowBorderColor());
+        setBackgroundColor(ui.theme.getDeviceBackgroundColor());
+        setBorderColor(ui.theme.getDeviceBorderColor());
         this.label = new UILabel(0, 0, w, TITLE_LABEL_HEIGHT);
         this.label
             .setLabel(title)

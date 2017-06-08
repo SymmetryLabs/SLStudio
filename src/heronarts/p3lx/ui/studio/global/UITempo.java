@@ -38,7 +38,7 @@ public class UITempo extends UI2dContainer {
 
     public UITempo(UI ui, final LX lx, float x, float y, float w, float h) {
         super(x, y, w, h);
-        setBackgroundColor(ui.theme.getWindowBackgroundColor());
+        setBackgroundColor(ui.theme.getDeviceBackgroundColor());
         setBorderRounding(4);
 
         new UIButton(PADDING, PADDING, 36, 18)

@@ -132,7 +132,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
                     break;
                 }
                 arcSize -= 3;
-                pg.fill(ui.theme.getWindowBackgroundColor());
+                pg.fill(ui.theme.getDeviceBackgroundColor());
                 pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize);
                 arcSize -= 1;
                 if (arcSize < 6) {

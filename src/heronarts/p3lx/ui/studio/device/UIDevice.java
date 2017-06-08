@@ -82,7 +82,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
 
     UIDevice(final UI ui, final LXComponent component, float contentWidth) {
         super(0, 0, contentWidth + 2*PADDING + DEVICE_BAR_WIDTH, HEIGHT);
-        setBackgroundColor(ui.theme.getWindowBackgroundColor());
+        setBackgroundColor(ui.theme.getDeviceBackgroundColor());
         setBorderRounding(4);
         this.component = component;
 
@@ -241,12 +241,12 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
 
     @Override
     public void onFocus() {
-        setBackgroundColor(getUI().theme.getWindowFocusedBackgroundColor());
+        setBackgroundColor(getUI().theme.getDeviceFocusedBackgroundColor());
     }
 
     @Override
     public void onBlur() {
-        setBackgroundColor(getUI().theme.getWindowBackgroundColor());
+        setBackgroundColor(getUI().theme.getDeviceBackgroundColor());
     }
 
     @Override
