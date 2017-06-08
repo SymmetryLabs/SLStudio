@@ -81,7 +81,7 @@ import com.google.gson.JsonObject;
  *
  * The result of all this generates a display buffer of node values.
  */
-public class LXEngine extends LXComponent implements LXOscComponent {
+public class LXEngine extends LXComponent implements LXOscComponent, LXModulationComponent {
 
     private final LX lx;
 
@@ -303,7 +303,7 @@ public class LXEngine extends LXComponent implements LXOscComponent {
         LX.initTimer.log("Engine: Blends");
 
         // Modulation matrix
-        this.modulation = new LXModulationEngine(lx);
+        this.modulation = new LXModulationEngine(lx, this);
         LX.initTimer.log("Engine: Modulation");
 
         // Master channel
@@ -1132,5 +1132,10 @@ public class LXEngine extends LXComponent implements LXOscComponent {
 
         // Parameters etc.
         super.load(lx, obj);
+    }
+
+    @Override
+    public LXModulationEngine getModulation() {
+        return this.modulation;
     }
 }

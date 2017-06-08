@@ -37,12 +37,14 @@ import com.google.gson.JsonObject;
 
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.osc.LXOscComponent;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.LXTriggerModulation;
 
 public class LXModulationEngine extends LXModulatorComponent implements LXOscComponent {
 
     private final LX lx;
+    private final LXComponent component;
 
     public interface Listener {
         public void modulatorAdded(LXModulationEngine engine, LXModulator modulator);
@@ -63,13 +65,22 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
     private final List<LXTriggerModulation> mutableTriggers = new ArrayList<LXTriggerModulation>();
     public final List<LXTriggerModulation> triggers = Collections.unmodifiableList(this.mutableTriggers);
 
-    LXModulationEngine(LX lx) {
+    public LXModulationEngine(LX lx, LXComponent component) {
         super(lx);
         this.lx = lx;
+        this.component = component;
+        setParent(component);
+    }
+
+    public boolean isValidTarget(CompoundParameter target) {
+        if (this.component instanceof LXEngine) {
+            return true;
+        }
+        return target.getComponent() == this.component;
     }
 
     public String getOscAddress() {
-        return "/lx/modulation";
+        return ((LXOscComponent) this.component).getOscAddress() + "/modulation";
     }
 
     public LXModulationEngine addListener(Listener listener) {
@@ -161,6 +172,7 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
 
     @Override
     public LXModulator removeModulator(LXModulator modulator) {
+        removeModulations(modulator);
         super.removeModulator(modulator);
         for (Listener listener : this.listeners) {
             listener.modulatorRemoved(this, modulator);
@@ -180,6 +192,20 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
     @Override
     public String getLabel() {
         return "Mod";
+    }
+
+    protected LXModulator instantiateModulator(String className) {
+        try {
+            Class<? extends LXModulator> cls = Class.forName(className).asSubclass(LXModulator.class);
+            try {
+                return cls.getConstructor(LX.class).newInstance(this.lx);
+            } catch (NoSuchMethodException nsmx) {
+                return cls.getConstructor().newInstance();
+            }
+        } catch (Exception x) {
+            System.err.println("Exception in instantiateModulator: " + x.getLocalizedMessage());
+        }
+        return null;
     }
 
     private static final String KEY_MODULATORS = "modulators";
@@ -211,7 +237,7 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
             for (JsonElement modulatorElement : modulatorArr) {
                 JsonObject modulatorObj = modulatorElement.getAsJsonObject();
                 String modulatorClass = modulatorObj.get(KEY_CLASS).getAsString();
-                LXModulator modulator = this.lx.instantiateModulator(modulatorClass);
+                LXModulator modulator = instantiateModulator(modulatorClass);
                 if (modulator == null) {
                     System.err.println("Could not instantiate modulator: " + modulatorClass);
                 } else {

@@ -24,7 +24,6 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXPalette;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.pattern.IteratorTestPattern;
 import java.io.File;
@@ -765,22 +764,6 @@ public class LX {
     protected LXEffect instantiateEffect(String className) {
         return instantiateComponent(className, LXEffect.class);
     }
-
-    protected LXModulator instantiateModulator(String className) {
-        try {
-            Class<? extends LXModulator> cls = Class.forName(className).asSubclass(LXModulator.class);
-            try {
-                return cls.getConstructor(LX.class).newInstance(this);
-            } catch (NoSuchMethodException nsmx) {
-                return cls.getConstructor().newInstance();
-            }
-        } catch (Exception x) {
-            System.err.println("Exception in instantiateModulator: " + x.getLocalizedMessage());
-        }
-        return null;
-    }
-
-
 
 }
 

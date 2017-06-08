@@ -28,7 +28,6 @@ import heronarts.lx.LXComponent;
 public abstract class LXParameterModulation extends LXComponent {
 
     private final LXParameter source;
-
     private final LXParameter target;
 
     protected LXParameterModulation(LXParameter source, LXParameter target) {

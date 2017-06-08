@@ -143,7 +143,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         addParameter("label", this.label);
     }
 
-    protected LX getLX() {
+    public LX getLX() {
         return this.lx;
     }
 

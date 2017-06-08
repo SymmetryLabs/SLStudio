@@ -39,6 +39,7 @@ import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXEngine;
+import heronarts.lx.LXModulationComponent;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.ColorParameter;
@@ -174,8 +175,6 @@ public class LXOscEngine extends LXComponent {
                         oscAudio(message, parts, 3);
                     } else if (parts[2].equals(ROUTE_PALETTE)) {
                         oscComponent(message, lx.palette, parts, 3);
-                    } else if (parts[2].equals(ROUTE_MODULATION)) {
-                        oscComponent(message, lx.engine.modulation.getModulator(parts[3]), parts, 4);
                     } else if (parts[2].equals(ROUTE_MASTER)) {
                         oscChannel(message, lx.engine.masterChannel, parts, 3);
                     } else if (parts[2].equals(ROUTE_CHANNEL)) {
@@ -269,6 +268,10 @@ public class LXOscEngine extends LXComponent {
         }
 
         private void oscComponent(OscMessage message, LXComponent component, String[] parts, int index) {
+            if (component instanceof LXModulationComponent && parts[index].equals(ROUTE_MODULATION)) {
+                oscComponent(message, ((LXModulationComponent) component).getModulation().getModulator(parts[index+1]), parts, index+2);
+            }
+
             LXParameter parameter = component.getParameter(parts[index]);
             if (parameter == null) {
                 System.err.println("[OSC] Component " + component + " does not have parameter: " + parts[index]);
