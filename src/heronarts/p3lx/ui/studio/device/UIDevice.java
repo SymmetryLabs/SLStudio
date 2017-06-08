@@ -118,7 +118,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         if (this.component instanceof LXDeviceComponent) {
             this.hasModulators = true;
             this.modulatorContent = (UIDeviceModulators)
-                new UIDeviceModulators(ui, (LXDeviceComponent) this.component, DEVICE_BAR_WIDTH + PADDING, PADDING, 80, height - 2*PADDING)
+                new UIDeviceModulators(ui, (LXDeviceComponent) this.component, DEVICE_BAR_WIDTH, 0, 80, height)
                 .setVisible(false);
         } else {
             this.hasModulators = false;
@@ -151,13 +151,11 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
     protected void reflow() {
         float width = DEVICE_BAR_WIDTH;
         if (this.modulatorsExpanded) {
-            width += PADDING + this.modulatorContent.getWidth();
+            width += this.modulatorContent.getWidth();
         }
         this.content.setX(width + PADDING);
         if (this.contentExpanded) {
             width += 2*PADDING + this.content.getWidth();
-        } else if (this.modulatorsExpanded) {
-            width += PADDING;
         }
         setWidth(width);
         setTitleBoxWidth();
@@ -259,7 +257,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         String titleString = this.titleParameter ? this.titleBox.getValue() : this.title;
         if (this.contentExpanded || this.modulatorsExpanded) {
             pg.stroke(0xff333333);
-            pg.line(DEVICE_BAR_WIDTH, 1, DEVICE_BAR_WIDTH, height-2);
+            pg.line(DEVICE_BAR_WIDTH, 1, DEVICE_BAR_WIDTH, this.height-2);
         }
 
         if (this.hasModulators) {
@@ -269,7 +267,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         }
 
         float tx = DEVICE_BAR_WIDTH / 2;
-        float ty = height - CHEVRON_PADDING;
+        float ty = this.height - CHEVRON_PADDING;
         float availableWidth = ty - MODULATOR_SIZE - (this.hasEnabledButton ? ENABLED_BUTTON_PADDING : 0);
         pg.translate(tx, ty);
         pg.rotate(-PConstants.HALF_PI);

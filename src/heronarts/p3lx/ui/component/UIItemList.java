@@ -562,8 +562,11 @@ public interface UIItemList {
                         }
                         activate();
                     }
+                } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+                    consume = true;
+                    delete();
                 } else if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
-                    if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE || keyCode == java.awt.event.KeyEvent.VK_D) {
+                    if (keyCode == java.awt.event.KeyEvent.VK_D) {
                         consume = true;
                         delete();
                     } else if (keyCode == java.awt.event.KeyEvent.VK_R) {

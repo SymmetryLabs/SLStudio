@@ -33,6 +33,7 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.LXEngine;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.LXMappingEngine;
+import heronarts.lx.LXModulationEngine;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXMidiMapping;
 import heronarts.lx.parameter.LXNormalizedParameter;
@@ -299,6 +300,7 @@ public class UI implements LXEngine.Dispatch {
     boolean modulationSourceMapping = false;
     boolean modulationTargetMapping = false;
     boolean triggerTargetMapping = false;
+    LXModulationEngine modulationEngine = null;
 
     private UITriggerSource triggerSource = null;
     private UIControlTarget controlTarget = null;
@@ -467,6 +469,7 @@ public class UI implements LXEngine.Dispatch {
     }
 
     public UI mapTriggerSource(UITriggerSource triggerSource) {
+        this.modulationEngine = this.lx.engine.modulation;
         this.triggerSource = triggerSource;
         this.lx.engine.mapping.setMode(triggerSource == null ? LXMappingEngine.Mode.OFF : LXMappingEngine.Mode.TRIGGER_TARGET);
         return this;
@@ -477,6 +480,11 @@ public class UI implements LXEngine.Dispatch {
     }
 
     public UI mapModulationSource(UIModulationSource modulationSource) {
+        return mapModulationSource(this.lx.engine.modulation, modulationSource);
+    }
+
+    public UI mapModulationSource(LXModulationEngine modulationEngine, UIModulationSource modulationSource) {
+        this.modulationEngine = modulationEngine;
         this.modulationSource = modulationSource;
         this.lx.engine.mapping.setMode(modulationSource == null ? LXMappingEngine.Mode.OFF : LXMappingEngine.Mode.MODULATION_TARGET);
         return this;

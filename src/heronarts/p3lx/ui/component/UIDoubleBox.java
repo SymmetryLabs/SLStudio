@@ -145,9 +145,9 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModul
     }
 
     private double getBaseIncrement() {
+        double range = Math.abs(this.parameter.range.max - this.parameter.range.min);
         switch (getUnits()) {
         case MILLISECONDS:
-            double range = Math.abs(this.parameter.range.max - this.parameter.range.min);
             if (range > 10000) {
                 return 1000;
             } else if (range > 1000) {
@@ -155,7 +155,7 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModul
             }
             return 1;
         default:
-            return Math.abs(this.parameter.range.max - this.parameter.range.min) > 1 ? 1 : .01;
+            return (range > 100) ? 1 : (range / 100.);
         }
     }
 

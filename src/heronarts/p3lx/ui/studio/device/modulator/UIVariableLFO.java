@@ -24,47 +24,27 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio.modulation;
+package heronarts.p3lx.ui.studio.device.modulator;
 
-import heronarts.lx.LX;
 import heronarts.lx.modulator.VariableLFO;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIModulationSource;
-import heronarts.p3lx.ui.component.UIKnob;
-import heronarts.p3lx.ui.component.UIToggleSet;
 import heronarts.p3lx.ui.studio.lfo.UIWave;
 
 public class UIVariableLFO extends UIModulator {
 
-    private static final int WAVE_HEIGHT = 40;
-    private static final int HEIGHT = 110;
+    private static final float WAVE_HEIGHT = 40;
 
     private final UIWave wave;
 
-    public UIVariableLFO(UI ui, LX lx, VariableLFO lfo, float x, float y, float w) {
-        super(ui, lx, lfo, true, x, y, w, HEIGHT);
-
-        this.wave = new UIWave(ui, lfo, 0, 0, getContentWidth(), WAVE_HEIGHT);
-        this.wave.addToContainer(this);
-
-        new UIToggleSet(0, 44, getContentWidth(), 16)
-        .setParameter(lfo.waveshape)
-        .addToContainer(this);
-
-        UI2dContainer knobs = new UI2dContainer(0, 68, getContentWidth(), UIKnob.HEIGHT);
-        knobs.setLayout(UI2dContainer.Layout.HORIZONTAL).setChildMargin(2).addToContainer(this);
-
-        new UIKnob(lfo.skew).addToContainer(knobs);
-        new UIKnob(lfo.shape).addToContainer(knobs);
-        new UIKnob(lfo.exp).addToContainer(knobs);
-        new UIKnob(lfo.phase).addToContainer(knobs);
-        new UIKnob(lfo.period).addToContainer(knobs);
-
+    public UIVariableLFO(UI ui, VariableLFO lfo, float x, float y, float w, float h) {
+        super(ui, lfo, x, y, w, h);
+        this.wave = (UIWave) new UIWave(ui, lfo, 0, 0, getContentWidth(), WAVE_HEIGHT).addToContainer(this);
     }
 
     @Override
-    protected UIModulationSource getModulationSourceUI() {
+    public UIModulationSource getModulationSource() {
         return this.wave;
     }
+
 }

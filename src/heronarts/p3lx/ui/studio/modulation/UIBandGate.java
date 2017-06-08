@@ -57,7 +57,7 @@ public class UIBandGate extends UIModulator {
     private final UIEnvMeter envMeter;
 
     public UIBandGate(UI ui, final LX lx, BandGate bandGate, float x, float y, float w) {
-        super(ui, lx, bandGate, x, y, w, HEIGHT);
+        super(ui, lx, bandGate, true, x, y, w, HEIGHT);
 
         this.bandGate = bandGate;
         this.bandSelector = new UIBandSelector(ui, 0, 0, getContentWidth() - 2*MARGIN - 2*ENV_WIDTH, METER_HEIGHT);

@@ -36,7 +36,7 @@ public class UIParameterModulator extends UIModulator implements UIModulationSou
     private static final int HEIGHT = 0;
 
     public UIParameterModulator(UI ui, LX lx, LXNormalizedParameter parameter, float x, float y, float w) {
-        super(ui, lx, parameter, x, y, w, HEIGHT);
+        super(ui, lx, parameter, false, x, y, w, HEIGHT);
     }
 
     @Override

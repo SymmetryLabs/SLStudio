@@ -44,7 +44,6 @@ class UIEffectDevice extends UIDevice {
         this.effect = effect;
         setTitle(effect.label);
         setEnabledButton(effect.enabled);
-
         buildDefaultControlUI(effect);
     }
 
@@ -53,12 +52,15 @@ class UIEffectDevice extends UIDevice {
         if (keyCode == java.awt.event.KeyEvent.VK_ENTER) {
             consumeKeyEvent();
             effect.enabled.toggle();
+        } else if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+            consumeKeyEvent();
+            bus.removeEffect(effect);
         } else {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
         }
 
         if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
-            if (keyCode == java.awt.event.KeyEvent.VK_D || keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+            if (keyCode == java.awt.event.KeyEvent.VK_D) {
                 consumeKeyEvent();
                 bus.removeEffect(effect);
             } else if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {

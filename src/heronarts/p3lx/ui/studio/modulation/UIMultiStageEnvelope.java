@@ -53,7 +53,7 @@ public class UIMultiStageEnvelope extends UIModulator {
     private final UIWave wave;
 
     public UIMultiStageEnvelope(UI ui, LX lx, MultiStageEnvelope envelope, float x, float y, float w) {
-        super(ui, lx, envelope, x, y, w, HEIGHT);
+        super(ui, lx, envelope, true, x, y, w, HEIGHT);
         this.envelope = envelope;
         this.wave = (UIWave) new UIWave(ui, 0, 0, getContentWidth()-44, WAVE_HEIGHT).addToContainer(this);
         new UIKnob(getContentWidth() - 40, 0).setParameter(this.envelope.period).addToContainer(this);

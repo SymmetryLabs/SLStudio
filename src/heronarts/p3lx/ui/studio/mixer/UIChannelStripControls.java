@@ -204,12 +204,17 @@ public class UIChannelStripControls extends UIMixerStripControls {
 
     @Override
     public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
+        if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+            consumeKeyEvent();
+            if (lx.engine.getChannels().size() > 1) {
+                lx.engine.removeChannel(this.channel);
+            }
+        } else if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
             if (keyCode == java.awt.event.KeyEvent.VK_R) {
                 consumeKeyEvent();
                 channelName.focus();
                 channelName.edit();
-            } else if (keyCode == java.awt.event.KeyEvent.VK_D || keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE) {
+            } else if (keyCode == java.awt.event.KeyEvent.VK_D) {
                 consumeKeyEvent();
                 if (lx.engine.getChannels().size() > 1) {
                     lx.engine.removeChannel(this.channel);

@@ -357,10 +357,11 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     }
 
     boolean isModulationTargetMapping() {
-        return
-            this.ui.modulationTargetMapping &&
-            (this instanceof UIModulationTarget) &&
-            ((UIModulationTarget) this).getModulationTarget() != null;
+        if (this.ui.modulationTargetMapping && (this instanceof UIModulationTarget)) {
+            CompoundParameter target = ((UIModulationTarget) this).getModulationTarget();
+            return (target != null) && this.ui.modulationEngine.isValidTarget(target);
+        }
+        return false;
     }
 
     boolean isMidiMapping() {
@@ -458,7 +459,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             LXNormalizedParameter source = this.ui.getModulationSource().getModulationSource();
             CompoundParameter target = ((UIModulationTarget)this).getModulationTarget();
             if (source != null && target != null) {
-                this.ui.lx.engine.modulation.addModulation(new LXCompoundModulation(source, target));
+                this.ui.modulationEngine.addModulation(new LXCompoundModulation(source, target));
             }
             this.ui.mapModulationSource(null);
             return;
@@ -466,7 +467,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             BooleanParameter source = this.ui.getTriggerSource().getTriggerSource();
             BooleanParameter target = ((UITriggerTarget)this).getTriggerTarget();
             if (source != null && target != null) {
-                this.ui.lx.engine.modulation.addTrigger(new LXTriggerModulation(source, target));
+                this.ui.modulationEngine.addTrigger(new LXTriggerModulation(source, target));
             }
             this.ui.mapTriggerSource(null);
             return;

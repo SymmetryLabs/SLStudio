@@ -38,7 +38,7 @@ public class UIMacroKnobs extends UIModulator {
     private final static int TOP_PADDING = 4;
 
     public UIMacroKnobs(UI ui, LX lx, MacroKnobs macroKnobs, float x, float y, float w) {
-        super(ui, lx, macroKnobs, x, y, w, UIKnob.HEIGHT + TOP_PADDING);
+        super(ui, lx, macroKnobs, true, x, y, w, UIKnob.HEIGHT + TOP_PADDING);
         setLayout(UI2dContainer.Layout.HORIZONTAL);
         setChildMargin(2);
         new UIKnob(macroKnobs.macro1).setY(TOP_PADDING).addToContainer(this);
