@@ -119,7 +119,7 @@ public class NormalizedParameter implements LXNormalizedParameter {
 
     @Override
     public NormalizedParameter setNormalized(double value) {
-        return setNormalized(value);
+        return setValue(value);
     }
 
     @Override

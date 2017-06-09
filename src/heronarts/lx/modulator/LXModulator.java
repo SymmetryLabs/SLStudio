@@ -47,7 +47,7 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
     // Hack so that Processing IDE can access it...
     public final ColorParameter clr = this.color;
 
-    private String contextualHelp = null;
+    private String description = null;
 
     /**
      * The current computed value of this modulator.
@@ -72,14 +72,14 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
         return null;
     }
 
-    public LXParameter setContextualHelp(String contextualHelp) {
-        this.contextualHelp = contextualHelp;
+    public LXParameter setDescription(String description) {
+        this.description = description;
         return this;
     }
 
     @Override
     public String getDescription() {
-        return this.contextualHelp;
+        return this.description;
     }
 
     @Override

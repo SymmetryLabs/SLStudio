@@ -204,10 +204,12 @@ public abstract class LXRangeModulator extends LXPeriodicModulator implements LX
     private final double getNormalized(double value) {
         double sv = this.startValue.getValue();
         double ev = this.endValue.getValue();
+        double min = Math.min(sv, ev);
+        double max = Math.max(sv, ev);
         if (sv == ev) {
             return 0;
         }
-        return (value - sv) / (ev - sv);
+        return (value - min) / (max - min);
     }
 
     public final double getNormalized() {

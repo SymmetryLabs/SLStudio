@@ -146,10 +146,7 @@ public class LXOscEngine extends LXComponent {
         LXComponent component = p.getComponent();
         if (component instanceof LXOscComponent) {
             String componentAddress = ((LXOscComponent) component).getOscAddress();
-            if (componentAddress == null) {
-                System.err.println("Component has no OSC address: " + component + " (parameter: " + p + ")");
-                new Exception().printStackTrace();
-            } else {
+            if (componentAddress != null) {
                 return componentAddress + "/" + p.getPath();
             }
         }
