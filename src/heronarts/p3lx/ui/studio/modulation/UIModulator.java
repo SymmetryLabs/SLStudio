@@ -232,8 +232,11 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     }
 
     public String getIdentifier() {
-        return ((this.modulator != null) ? String.format("%d", this.modulator.getId()) :
-            (this.parameter.getComponent().getId() + "/" + this.parameter.getPath()));
+        if (this.parameter instanceof LXComponent) {
+            return String.format("%d", ((LXComponent)this.parameter).getId());
+        } else {
+            return this.parameter.getComponent().getId() + "/" + this.parameter.getPath();
+        }
     }
 
     public UIModulator setExpanded(boolean expanded) {
