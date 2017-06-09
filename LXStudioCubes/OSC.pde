@@ -18,19 +18,43 @@ class EssentiaOSCListener implements LXOscListener {
     }
   }
   public void oscMessage(OscMessage message) {
-    
+
     if (message.matches("/essentia/rms")) {
         message.setAddressPattern(BASE_ROUTE + "/rms");
-    } else if (message.matches("/essentia/pitch")) {
-        message.setAddressPattern(BASE_ROUTE + "/pitch");
-    } else if (message.matches("/essentia/spectrum")) {
-        message.setAddressPattern(BASE_ROUTE + "/spectrum");
-    } else if (message.matches("/essentia/onset")) {
-        message.setAddressPattern(BASE_ROUTE + "/onset");
-    } else if (message.matches("/essentia/mfss")) {
-        message.setAddressPattern(BASE_ROUTE + "/mfss");
-    } else if (message.matches("/essentia/centroid")) {
+
+    } else if (message.matches("/essentia/power")) {
+        message.setAddressPattern(BASE_ROUTE + "/power");
+
+    } else if (message.matches("/essentia/pitchConf")) {
+        message.setAddressPattern(BASE_ROUTE + "/ptch confidence");
+
+    } else if (message.matches("/essentia/pitchSalience")) {
+        message.setAddressPattern(BASE_ROUTE + "/ptch salience");
+
+    } else if (message.matches("/essentia/inharmonicity")) {
+        message.setAddressPattern(BASE_ROUTE + "/inharmonicity");
+
+    // } else if (message.matches("/essentia/dissonance")) {
+    //     message.setAddressPattern(BASE_ROUTE + "/dissonance");
+
+    } else if (message.matches("/essentia/hfc")) {
+        message.setAddressPattern(BASE_ROUTE + "/hfc");
+
+    } else if (message.matches("/essentia/centroidNorm")) {
         message.setAddressPattern(BASE_ROUTE + "/centroid");
+
+    } else if (message.matches("/essentia/strongDecayNorm")) {
+        message.setAddressPattern(BASE_ROUTE + "/str decay");
+
+    } else if (message.matches("/essentia/strongPeakNorm")) {
+        message.setAddressPattern(BASE_ROUTE + "/str peak");
+
+    } else if (message.matches("/essentia/rollOffNorm")) {
+        message.setAddressPattern(BASE_ROUTE + "/roll off");
+
+    } else if (message.matches("/essentia/specCompNorm")) {
+        message.setAddressPattern(BASE_ROUTE + "/spec complexity");
+
     } else {
         return;
     }
