@@ -14,40 +14,51 @@ static final float GLOBAL_Y_OFFSET = 50.39;
 
 // mappings
 static final BarConfig[] BAR_CONFIG = {
-  //             id    controller    x Rotation    #LEDs
-  new BarConfig("1",          "304",         20.0,      78),
-  new BarConfig("2",          "304",         25.5,      63),
-  new BarConfig("3",          "304",         31.0,      53),
-  new BarConfig("4",          "304",         36.5,      46),
-  new BarConfig("5",          "304",         42.0,      46),
-  new BarConfig("6",          "305",         47.5,      37),
-  new BarConfig("7",          "305",         53.0,      34),
-  new BarConfig("8",          "305",         58.5,      33),
-  new BarConfig("9",          "305",         64.0,      33),
-  new BarConfig("10",         "305",         69.5,      32),
-  new BarConfig("11",         "305",         69.5,      32),
-  new BarConfig("12",         "305",         64.0,      28),
-  new BarConfig("13",         "305",         58.5,      30),
-  new BarConfig("14",         "305",         53.0,      32),
-  new BarConfig("15",         "306",         47.5,      33),
-  new BarConfig("16",         "306",         42.0,      37),
-  new BarConfig("17",         "306",         36.5,      40),
-  new BarConfig("18",         "306",         31.0,      47),
-  new BarConfig("19",         "306",         25.5,      58),
-  new BarConfig("20",         "306",         20.0,      72)
+  //            (id)       (controller)  (x Rotation)  (inside trim)   (#LEDs inside)   (#LEDs outside)
+/* in studio debug setup:
+  new BarConfig("1",          "201",         20.0,           0,             25,              30),  
+  new BarConfig("2",          "118",         25.5,           0,             24,              25),
+  new BarConfig("3",          "116",         31.0,           0,             28,              28),
+  new BarConfig("4",          "306",         36.5,           0,             25,              25) 
+*/
+  new BarConfig("1",          "118",         20.0,           0,             75,              78),  // 304
+  new BarConfig("2",          "116",         25.5,           0,             60,              63), 
+  new BarConfig("3",          "144",         31.0,           0,             50,              53), 
+  new BarConfig("4",          "144",         36.5,           0,             43,              46),  
+  new BarConfig("5",          "201",         42.0,           0,             39,              41),  // 305
+  new BarConfig("6",          "201",         47.5,           0,             35,              37),
+  new BarConfig("7",          "201",         53.0,           0,             32,              34),
+  new BarConfig("8",          "304",         58.5,           0,             31,              34),
+  new BarConfig("9",          "304",         64.0,           0,             29,              33), 
+  new BarConfig("10",         "304",         69.5,           0,             28,              32),  // 118
+  new BarConfig("11",         "306",         69.5,           0,             27,              32),
+  new BarConfig("12",         "306",         64.0,           0,             26,              29),
+  new BarConfig("13",         "306",         58.5,           0,             27,              30),
+  new BarConfig("14",         "400",         53.0,           0,             28,              32),
+  new BarConfig("15",         "400",         47.5,           0,             30,              33),
+  new BarConfig("16",         "400",         42.0,           0,             35,              37),
+  new BarConfig("17",         "401",         36.5,           0,             38,              40),  // 306
+  new BarConfig("18",         "401",         31.0,           0,             45,              47),
+  new BarConfig("19",         "403",         25.5,           0,             55,              58),
+  new BarConfig("20",         "404",         20.0,           0,             69,              72) 
+
 };  
 
 static class BarConfig {
   final String id;
   final String controllerId;
   final float rotX;
-  final int numPoints; 
+  final float insideTrim;
+  final int numPointsInside;
+  final int numPointsOutside;
 
-  BarConfig(String id, String controllerId, float rotX, int numPoints) {
+  BarConfig(String id, String controllerId, float rotX, float insideTrim, int numPointsInside, int numPointsOutside) {
     this.id = id;
     this.controllerId = controllerId;
     this.rotX = rotX;
-    this.numPoints = numPoints;
+    this.insideTrim = insideTrim;
+    this.numPointsInside = numPointsInside;
+    this.numPointsOutside = numPointsOutside;
   }
 }
 
@@ -73,7 +84,7 @@ public SLModel buildModel() {
   transform.translate(0, GLOBAL_Y_OFFSET, 0);
 
   for (BarConfig barConfig : BAR_CONFIG) {
-    allBars.add(new Bar(barConfig.id, barConfig.controllerId, transform, barConfig.rotX, barConfig.numPoints));
+    allBars.add(new Bar(barConfig.id, barConfig.controllerId, transform, barConfig.rotX, barConfig.insideTrim, barConfig.numPointsInside, barConfig.numPointsOutside));
     transform.translate(BAR_SPACING, 0, 0);
   }
 
@@ -163,6 +174,7 @@ public SLModel buildModel() {
   // }
 
   Bar[] allBarsArr = new Bar[allBars.size()];
+  
   for (int i = 0; i < allBarsArr.length; i++) {
     allBarsArr[i] = allBars.get(i);
   }

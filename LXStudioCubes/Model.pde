@@ -1,4 +1,4 @@
-  /**
+/**
  *     DOUBLE BLACK DIAMOND        DOUBLE BLACK DIAMOND
  *
  *         //\\   //\\                 //\\   //\\  
@@ -30,8 +30,8 @@ public static class SLModel extends LXModel {
   private final Bar[] _bars;
   public final Map<String, Bar> barTable;
   public final List<Strip> strips;
-  public final List<Strip> outerStrips;
   public final List<Strip> innerStrips;
+  public final List<Strip> outerStrips; 
 
   public SLModel(List<Bar> bars, Bar[] barArr) {
     super(new Fixture(barArr));
@@ -51,17 +51,16 @@ public static class SLModel extends LXModel {
       _barTable.put(bar.id, bar);
 
       stripList.addAll(bar.strips);
-      outerStripList.add(bar.outerStrip);
       innerStripList.add(bar.innerStrip);
+      outerStripList.add(bar.outerStrip);
     }
 
     this.bars = Collections.unmodifiableList(barList);
     this.barTable = Collections.unmodifiableMap (_barTable);
 
     this.strips = Collections.unmodifiableList(stripList);
-    this.outerStrips = Collections.unmodifiableList(outerStripList);
     this.innerStrips = Collections.unmodifiableList(innerStripList);
-
+    this.outerStrips = Collections.unmodifiableList(outerStripList);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -69,10 +68,10 @@ public static class SLModel extends LXModel {
       for (Bar bar : barArr) { 
         if (bar != null) { 
           for (LXPoint point : bar.points) { 
-            this.points.add(point); 
-          } 
-        } 
-      } 
+            this.points.add(point);
+          }
+        }
+      }
     }
   }
 
@@ -81,7 +80,7 @@ public static class SLModel extends LXModel {
    * 
    * @param index
    * @return
-   */  
+   */
 
   public Bar getBarByRawIndex(int index) {
     return _bars[index];
@@ -124,12 +123,12 @@ public static class SLModel extends LXModel {
  * Model of a set of cubes stacked in a tower
  */
 // public static class Tower extends LXModel {
-  
+
 //   /**
 //    * Tower id
 //    */
 //   public final String id;
-  
+
 //   /**
 //    * Immutable list of cubes
 //    */
@@ -193,7 +192,7 @@ public static class SLModel extends LXModel {
 //     MEDIUM    (18,        60,       23),
 //    LARGE         (24,        30,       15),
 //    LARGE_DOUBLE  (24,        60,       30);
-    
+
 
 //     public final float EDGE_WIDTH;
 //     public final float EDGE_HEIGHT;
@@ -409,8 +408,8 @@ public static class Bar extends LXModel {
   Strip outerStrip;
   Strip innerStrip;
 
-  public Bar(String id, String controllerId, LXTransform transform, float rotX, int numPoints) {
-    super(new Fixture(transform, rotX, numPoints));
+  public Bar(String id, String controllerId, LXTransform transform, float rotX, float insideTrim, int numPointsInside, int numPointsOutside) {
+    super(new Fixture(transform, rotX, insideTrim, numPointsInside, numPointsOutside));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     this.id = id;
@@ -421,35 +420,37 @@ public static class Bar extends LXModel {
     this.rx = rotX;
     this.ry = 0.;
     this.rz = 0.;
-    this.height = numPoints * 1.589608667;
-    this.outerStrip = fixture.outerStrip;
+    this.height = numPointsOutside * 1.589608667;
     this.innerStrip = fixture.innerStrip;
+    this.outerStrip = fixture.outerStrip;
     this.strips = new ArrayList<Strip>();
-    this.strips.add(outerStrip);
     this.strips.add(innerStrip);
+    this.strips.add(outerStrip);
   }
 
   private static class Fixture extends LXAbstractFixture {
-    Strip outerStrip;
     Strip innerStrip;
+    Strip outerStrip;
 
-    private Fixture(LXTransform transform, float rotX, int numPoints) {
+    private Fixture(LXTransform transform, float rotX, float insideTrim, int numPointsInside, int numPointsOutside) {
       transform.push();
       transform.rotateX(rotX * PI / 180.);
 
+      // inner strip
+      this.innerStrip = new Strip(transform, numPointsOutside, Strip.Orientation.DOWN);
+      for (LXPoint p : innerStrip.points) {
+        this.points.add(p);
+      }
+
+      transform.push();
+      transform.translate(0, insideTrim, +1.5);
+
       // outer strip
-      this.outerStrip = new Strip(transform, numPoints, Strip.Orientation.UP);
+      this.outerStrip = new Strip(transform, numPointsInside, Strip.Orientation.UP);
       for (LXPoint p : outerStrip.points) {
         this.points.add(p);
       }
 
-      // inner strip
-      transform.push();
-      transform.translate(0, -1.5, 3);
-      this.innerStrip = new Strip(transform, numPoints - 3, Strip.Orientation.DOWN);
-      for (LXPoint p : innerStrip.points) {
-        this.points.add(p);
-      }
       transform.pop();
       transform.pop();
     }
@@ -458,7 +459,6 @@ public static class Bar extends LXModel {
   public float height() {
     return height;
   }
-
 }
 
 /**
@@ -488,9 +488,9 @@ public static class Strip extends LXModel {
 
       // bi-directional just to make patterns like swarm and spacetime more interesting
       switch (orientation) {
-        case DOWN:
-          spacingY = Strip.POINT_SPACING;
-          transform.translate(0, -(numPoints * Strip.POINT_SPACING), 0);
+      case DOWN:
+        spacingY = Strip.POINT_SPACING;
+        transform.translate(0, -((numPoints-1) * Strip.POINT_SPACING), 0);
       }
 
       for (int i = 0; i < numPoints; i++) {
@@ -505,7 +505,6 @@ public static class Strip extends LXModel {
   public int size() {
     return size;
   }
-
 }
 
 // public static class Strip extends LXModel {
@@ -577,4 +576,3 @@ public static class Strip extends LXModel {
 //     }
 //   }
 // }
-

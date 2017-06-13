@@ -1,4 +1,4 @@
-  /*
+/*
  *     DOUBLE BLACK DIAMOND        DOUBLE BLACK DIAMOND
  *
  *         //\\   //\\                 //\\   //\\
@@ -8,6 +8,10 @@
  *
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
  */
+
+// OUTPUT.PDE
+
+static final boolean FLIP_STRIPS = true;
 
 int nPointsPerPin = 252;
 
@@ -26,7 +30,8 @@ void buildOutputs(final LX lx) {
         public void run() {
           lx.addOutput(beagle);
         }
-      });
+      }
+      );
     }
     public void itemRemoved(int index, NetworkDevice device) {
       final Beagle beagle = beagles.remove(index);
@@ -34,9 +39,11 @@ void buildOutputs(final LX lx) {
         public void run() {
           //lx.removeOutput(beagle);
         }
-      });
+      }
+      );
     }
-  });
+  }
+  );
 
   lx.addOutput(new Beagle(lx, "10.200.1.255"));
 }
@@ -46,8 +53,8 @@ static final int greenGamma[] = new int[256];
 static final int blueGamma[] = new int[256];
 
 final float[][] gammaSet = {
-  { 2, 2.1, 2.8 },
-  { 2, 2.2, 2.8 },
+  { 2, 2.1, 2.8 }, 
+  { 2, 2.2, 2.8 }, 
 };
 
 final DiscreteParameter gammaSetIndex = new DiscreteParameter("GMA", gammaSet.length+1);
@@ -71,24 +78,28 @@ void setupGammaCorrection() {
         blueGammaFactor.reset(gammaSet[gammaSetIndex.getValuei()-1][2]);
       }
     }
-  });
+  }
+  );
   redGammaFactor.addListener(new LXParameterListener() {
     public void onParameterChanged(LXParameter parameter) {
       buildGammaCorrection(redGamma, parameter.getValuef());
     }
-  });
+  }
+  );
   buildGammaCorrection(redGamma, redGammaFactor.getValuef());
   greenGammaFactor.addListener(new LXParameterListener() {
     public void onParameterChanged(LXParameter parameter) {
       buildGammaCorrection(greenGamma, parameter.getValuef());
     }
-  });
+  }
+  );
   buildGammaCorrection(greenGamma, greenGammaFactor.getValuef());
   blueGammaFactor.addListener(new LXParameterListener() {
     public void onParameterChanged(LXParameter parameter) {
       buildGammaCorrection(blueGamma, parameter.getValuef());
     }
-  });
+  }
+  );
   buildGammaCorrection(blueGamma, blueGammaFactor.getValuef());
 }
 
@@ -169,11 +180,11 @@ class Beagle extends LXOutput {
     int offset = 4 + number * 3;
 
     // Extract individual colors
-      int r = c >> 16 & 0xFF;
-      int g = c >> 8 & 0xFF;
-      int b = c & 0xFF;
+    int r = c >> 16 & 0xFF;
+    int g = c >> 8 & 0xFF;
+    int b = c & 0xFF;
 
-      // Repack gamma corrected colors
+    // Repack gamma corrected colors
     packetData[offset + 0] = (byte) redGamma[r];
     packetData[offset + 1] = (byte) greenGamma[g];
     packetData[offset + 2] = (byte) blueGamma[b];
@@ -190,8 +201,12 @@ class Beagle extends LXOutput {
         //socket.setTcpNoDelay(true);
         // output = socket.getOutputStream();
       }
-      catch (ConnectException e) {  dispose();  }
-      catch (IOException      e) {  dispose();  }
+      catch (ConnectException e) {  
+        dispose();
+      }
+      catch (IOException      e) {  
+        dispose();
+      }
       if (dsocket == null) return;
     }
 
@@ -213,23 +228,38 @@ class Beagle extends LXOutput {
     // Fill with all black if we don't have bar data
     int packetIndex = 0;
     for (Bar bar : bars) {
-      for (LXPoint p : bar.outerStrip.points) {
-        setPixel(packetIndex++, colors[p.index]);
-      }
+
+      LXPoint[] innerPoints = bar.innerStrip.points;
+      LXPoint[] outerPoints = bar.outerStrip.points;
 
       // because we flipped strip in model,
       // but he has them wired so all strip inputs are at top
-      LXPoint[] innerPoints = bar.innerStrip.points;
-      for (int i2 = innerPoints.length - 1; i2 > -1; i2--) {
-        setPixel(packetIndex++, colors[innerPoints[i2].index]);
+      if (FLIP_STRIPS) {
+        for (int i2 = innerPoints.length-1; i2 >= 0; i2--) {
+          setPixel(packetIndex++, colors[innerPoints[i2].index]);
+        }
+        for (int i2 = outerPoints.length-1; i2 >= 0; i2--) {
+          setPixel(packetIndex++, colors[outerPoints[i2].index]);
+        }
+      } else {
+        for (int i2 = 0; i2 < innerPoints.length; i2++) {
+          setPixel(packetIndex++, colors[innerPoints[i2].index]);
+        }
+        for (LXPoint p : bar.outerStrip.points) {    // alt method for iterating from 0 
+          setPixel(packetIndex++, colors[p.index]);
+        }
       }
+
     }
 
     // Send the bar data to the bar. yay!
     try { 
       //println("packetSizeBytes: "+packetSizeBytes);
-      dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));} 
-    catch (Exception e) {dispose();}
+      dsocket.send(new java.net.DatagramPacket(packetData, packetSizeBytes));
+    } 
+    catch (Exception e) {
+      dispose();
+    }
   }  
 
   void dispose() {
@@ -263,20 +293,26 @@ class BroadcastPacketTester {
 //---------------------------------------------------------------------------------------------
 // class UIOutput extends SCWindow {
 //   UIOutput(float x, float y, float w, float h) {
-//     super(lx.ui,"OUTPUT",x,y,w,h);
+//     super(lx.ui, "OUTPUT", x, y, w, h);
 //     float yPos = UIWindow.TITLE_LABEL_HEIGHT - 2;
 //     final SortedSet<Beagle> sortedBeagles = new TreeSet<Beagle>(new Comparator<Beagle>() {
 //       int compare(Beagle o1, Beagle o2) {
 //         try {
 //           return Integer.parseInt(o1.controllerId) - Integer.parseInt(o2.controllerId);
-//         } catch (NumberFormatException e) {
+//         } 
+//         catch (NumberFormatException e) {
 //           return o1.controllerId.compareTo(o2.controllerId);
 //         }
 //       }
-//     });
+//     }
+//     );
 //     final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-//     for (Beagle b : beagles) { sortedBeagles.add(b); }
-//     for (Beagle b : sortedBeagles) { items.add(new BeagleItem(b)); }
+//     for (Beagle b : beagles) { 
+//       sortedBeagles.add(b);
+//     }
+//     for (Beagle b : sortedBeagles) { 
+//       items.add(new BeagleItem(b));
+//     }
 //     final UIItemList outputList = new UIItemList(1, yPos, width-2, height-yPos-1);
 //     outputList
 //       .setItems     (items    )
@@ -288,12 +324,15 @@ class BroadcastPacketTester {
 //             if (b.networkDevice != null) b.networkDevice.version.addListener(deviceVersionListener);
 //             sortedBeagles.add(b);
 //             items.clear();
-//             for (Beagle b : sortedBeagles) { items.add(new BeagleItem(b)); }
+//             for (Beagle b : sortedBeagles) { 
+//               items.add(new BeagleItem(b));
+//             }
 //             outputList.setItems(items);
 //             setTitle(items.size());
 //             redraw();
 //           }
-//         });
+//         }
+//         );
 //       }
 //       void itemRemoved(final int index, final Beagle b) {
 //         dispatcher.dispatchUi(new Runnable() {
@@ -301,14 +340,18 @@ class BroadcastPacketTester {
 //             if (b.networkDevice != null) b.networkDevice.version.removeListener(deviceVersionListener);
 //             sortedBeagles.remove(b);
 //             items.clear();
-//             for (Beagle b : sortedBeagles) { items.add(new BeagleItem(b)); }
+//             for (Beagle b : sortedBeagles) { 
+//               items.add(new BeagleItem(b));
+//             }
 //             outputList.setItems(items);
 //             setTitle(items.size());
 //             redraw();
 //           }
-//         });
+//         }
+//         );
 //       }
-//     });
+//     }
+//     );
 //     setTitle(items.size());
 //   }
 
@@ -318,7 +361,8 @@ class BroadcastPacketTester {
 //         public void run() {
 //           redraw();
 //         }
-//       });
+//       }
+//       );
 //     }
 //   };
 
@@ -331,8 +375,11 @@ class BroadcastPacketTester {
 //     BeagleItem(Beagle _beagle) {
 //       this.beagle = _beagle;
 //       beagle.enabled.addListener(new LXParameterListener() {
-//         public void onParameterChanged(LXParameter parameter) { redraw(); }
-//       });
+//         public void onParameterChanged(LXParameter parameter) { 
+//           redraw();
+//         }
+//       }
+//       );
 //     }
 //     String  getLabel  () {
 //       if (beagle.networkDevice != null && beagle.networkDevice.version.get() != -1) {
@@ -341,8 +388,12 @@ class BroadcastPacketTester {
 //         return beagle.controllerId;
 //       }
 //     }
-//     boolean isSelected() { return beagle.enabled.isOn(); }
-//     void onMousePressed(boolean hasFocus) { beagle.enabled.toggle(); }
+//     boolean isSelected() { 
+//       return beagle.enabled.isOn();
+//     }
+//     void onMousePressed(boolean hasFocus) { 
+//       beagle.enabled.toggle();
+//     }
 //   }
 // }
 //---------------------------------------------------------------------------------------------
