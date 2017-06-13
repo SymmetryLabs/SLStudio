@@ -2082,6 +2082,16 @@ public class Test extends SLPattern {
   }
 }
 
+public class Blank extends SLPattern {
+  public Blank(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    setColors(LXColor.BLACK);
+  }
+}
+
 public class Palette extends SLPattern {
   public Palette(LX lx) {
     super(lx);
