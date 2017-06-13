@@ -7,7 +7,7 @@ public SLStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
-//public OutputControl outputControl;
+public OutputControl outputControl;
 //public MappingMode mappingMode = null;
 
 // public boolean envelopOn = false;
@@ -47,9 +47,9 @@ void setup() {
       (networkMonitor = new NetworkMonitor(lx)).start();
       setupGammaCorrection();
       setupGammaCorrection();
-      buildOutputs(lx);
-      // outputControl = new OutputControl(lx);
-      // lx.engine.registerComponent("outputControl", outputControl);
+      setupOutputs(lx);
+      outputControl = new OutputControl(lx);
+      lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
       // if (((SLModel)model).cubes.size() > 0)
