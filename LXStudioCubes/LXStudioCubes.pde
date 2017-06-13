@@ -85,6 +85,8 @@ void setup() {
       ui.preview.setPhi(0).setTheta(15*PI/8).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
+      new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+      
       // if (((SLModel)model).cubes.size() > 0)
       //   new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
 
