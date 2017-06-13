@@ -83,6 +83,9 @@ void setup() {
     protected void onUIReady(SLStudio lx, SLStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
       ui.preview.setPhi(0).setTheta(15*PI/8).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
+
+      new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
       // if (((SLModel)model).cubes.size() > 0)
