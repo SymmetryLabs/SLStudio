@@ -7,198 +7,51 @@
  *         \\//   \\//                 \\//   \\//
  *
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
- *
- * This file implements the mapping functions needed to lay out the physical
- * cubes and the output ports on the panda board. It should only be modified
- * when physical changes or tuning is being done to the structure.
  */
 
+static final float BAR_SPACING = 17.72;
+static final float GLOBAL_Y_OFFSET = 50.39;
 
-static final float globalOffsetX = 34;
-static final float globalOffsetY = -23;
-static final float globalOffsetZ = 136;
+// mappings
+static final BarConfig[] BAR_CONFIG = {
+  //             id    controller    x Rotation    #LEDs
+  new BarConfig("1",          "304",         20.0,      78),
+  new BarConfig("2",          "304",         25.5,      63),
+  new BarConfig("3",          "304",         31.0,      53),
+  new BarConfig("4",          "304",         36.5,      46),
+  new BarConfig("5",          "304",         42.0,      46),
+  new BarConfig("6",          "305",         47.5,      37),
+  new BarConfig("7",          "305",         53.0,      34),
+  new BarConfig("8",          "305",         58.5,      33),
+  new BarConfig("9",          "305",         64.0,      33),
+  new BarConfig("10",         "305",         69.5,      32),
+  new BarConfig("11",         "305",         69.5,      32),
+  new BarConfig("12",         "305",         64.0,      28),
+  new BarConfig("13",         "305",         58.5,      30),
+  new BarConfig("14",         "305",         53.0,      32),
+  new BarConfig("15",         "306",         47.5,      33),
+  new BarConfig("16",         "306",         42.0,      37),
+  new BarConfig("17",         "306",         36.5,      40),
+  new BarConfig("18",         "306",         31.0,      47),
+  new BarConfig("19",         "306",         25.5,      58),
+  new BarConfig("20",         "306",         20.0,      72)
+};  
 
-static final float globalRotationX = 0;
-static final float globalRotationY = -45;
-static final float globalRotationZ = 0;
+static class BarConfig {
+  final String id;
+  final String controllerId;
+  final float rotX;
+  final int numPoints; 
 
-static final float CUBE_WIDTH = 24;
-static final float CUBE_HEIGHT = 24;
-static final float TOWER_WIDTH = 24;
-static final float TOWER_HEIGHT = 24;
-static final float CUBE_SPACING = 2.5;
-
-static final float TOWER_VERTICAL_SPACING = 2.5;
-static final float TOWER_VERTICAL_SPACING_BIG = 5;
-
-static final float TOWER_RISER = 14;
-
-static final float SP = 24;
-
-static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
-
-// static final BulbConfig[] BULB_CONFIG = {
-//     // new BulbConfig("lifx-1", -50, 50, -30),
-//     // new BulbConfig("lifx-2", 0, 50, 0),
-//     // new BulbConfig("lifx-3", -65, 20, -100),
-//     // new BulbConfig("lifx-4", 0, 0, 0),
-//     // new BulbConfig("lifx-5", 0, 0, 0),
-// };
-
-static final TowerConfig[] TOWER_CONFIG = {
-
-    // left
-    new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-      "22", "204"
-    }),
-    new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {"86"}),
-    new TowerConfig(-SP*5.5, (JUMP*0)+0          , -SP*3.5, new String[] {"5"}),
-
-    new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-      "25", "199", "177"
-    }),
-
-    new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {"94"}),
-    new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"90"}),
-    new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"64"}),
-
-    // left tower of 5
-    new TowerConfig(0, 0, 0, new String[] {
-      "19", "190", "121", "1", "103"
-    }),
-    new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),
-    new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),
-    new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),
-    new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),
-    new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),
-
-    new TowerConfig(SP*2.0, 0, 0, new String[] {
-      "6", "132", "61", "54"
-    }),
-    new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),
-    new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),
-
-    // middle tower of 5
-    new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {
-      "111", "166", "187", "158", "101"
-    }),
-    new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),
-    new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),
-    new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),
-    new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),
-
-    new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {
-      "102", "156", "13", "82"
-    }),
-    new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),
-    new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),
-    new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),
-    new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),
-    new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),
-
-    // right tower of 5
-    new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {
-      "183", "180", "57", "51", "108"
-    }),
-    new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),
-    new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),
-    new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),
-
-    new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {
-      "100", "85", "110zAQ  AZQ"
-    }),
-    new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),
-    new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),
-
-    // table cubes
-    new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),
-    new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),
-    new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),
-};
-
-
-static final StripConfig[] STRIP_CONFIG = {
-          // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
-//new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
-
-};
-
-static class StripConfig {
-  String id;
-  int numPoints;
-  float spacing;
-  float x;
-  float y;
-  float z;
-  float xRot;
-  float yRot;
-  float zRot;
-
-  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
+  BarConfig(String id, String controllerId, float rotX, int numPoints) {
     this.id = id;
+    this.controllerId = controllerId;
+    this.rotX = rotX;
     this.numPoints = numPoints;
-    this.spacing = spacing;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.xRot = xRot;
-    this.yRot = yRot;
-    this.zRot = zRot;
   }
-}
-
-static class TowerConfig {
-
-  final Cube.Type type;
-  final float x;
-  final float y;
-  final float z;
-  final float xRot;
-  final float yRot;
-  final float zRot;
-  final String[] ids;
-  final float[] yValues;
-
-  TowerConfig(float x, float y, float z, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, ids);
-  }
-
-  TowerConfig(float x, float y, float z, float yRot, String[] ids) {
-    this(x, y, z, 0, yRot, 0, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, String[] ids) {
-    this(type, x, y, z, 0, 0, 0, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
-    this(type, x, y, z, 0, yRot, 0, ids);
-  }
-
-  TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-    this.type = type;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.xRot = xRot;
-    this.yRot = yRot;
-    this.zRot = zRot;
-    this.ids = ids;
-
-    this.yValues = new float[ids.length];
-    for (int i = 0; i < ids.length; i++) {
-      yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
-    }
-  }
-
 }
 
 Map<String, String> macToPhysid = new HashMap<String, String>();
-Map<String, String> physidToMac = new HashMap<String, String>();
 
 public SLModel buildModel() {
 
@@ -208,434 +61,111 @@ public SLModel buildModel() {
       JsonObject json = new Gson().fromJson(new String(bytes), JsonObject.class);
       for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
         macToPhysid.put(entry.getValue().getAsString(), entry.getKey());
-        physidToMac.put(entry.getKey(), entry.getValue().getAsString());
       }
     } catch (JsonSyntaxException e) {
       e.printStackTrace();
     }
   }
 
-  // Any global transforms
-  LXTransform globalTransform = new LXTransform();
-  globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-  globalTransform.rotateY(globalRotationY * PI / 180.);
-  globalTransform.rotateX(globalRotationX * PI / 180.);
-  globalTransform.rotateZ(globalRotationZ * PI / 180.);
+  List<Bar> allBars = new ArrayList<Bar>();
 
-  /* Cubes ----------------------------------------------------------*/
-  List<Tower> towers = new ArrayList<Tower>();
-  List<Cube> allCubes = new ArrayList<Cube>();
+  LXTransform transform = new LXTransform();
+  transform.translate(0, GLOBAL_Y_OFFSET, 0);
 
-  for (TowerConfig config : TOWER_CONFIG) {
-    List<Cube> cubes = new ArrayList<Cube>();
-    float x = config.x;
-    float z = config.z;
-    float xRot = config.xRot;
-    float yRot = config.yRot;
-    float zRot = config.zRot;
-    Cube.Type type = config.type;
-
-    for (int i = 0; i < config.ids.length; i++) {
-      float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot-90, zRot, globalTransform, type);
-      cubes.add(cube);
-      allCubes.add(cube);
-    }
-    towers.add(new Tower("", cubes));
-  }
-  /*-----------------------------------------------------------------*/
-
-  /* Strips ----------------------------------------------------------*/
-  List<Strip> strips = new ArrayList<Strip>();
-
-  for (StripConfig stripConfig : STRIP_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
-
-    globalTransform.push();
-    globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
-    globalTransform.rotateX(stripConfig.yRot * PI / 180.);
-    globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
-
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
-
-    globalTransform.pop();
-  }
-  /*-----------------------------------------------------------------*/
-
-  Cube[] allCubesArr = new Cube[allCubes.size()];
-  for (int i = 0; i < allCubesArr.length; i++) {
-    allCubesArr[i] = allCubes.get(i);
+  for (BarConfig barConfig : BAR_CONFIG) {
+    allBars.add(new Bar(barConfig.id, barConfig.controllerId, transform, barConfig.rotX, barConfig.numPoints));
+    transform.translate(BAR_SPACING, 0, 0);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
-}
+  // List<Tower> towers = new ArrayList<Tower>();
+  // for (TowerConfig tower : config.towers) {
+  //   List<Cube> cubes = new ArrayList<Cube>();
 
-public SLModel getModel() {
-  return buildModel();
-}
+  //   for (int i = 0; i < tower.ids.length; i++) {
 
-/*
- * Mapping Pattern
- *---------------------------------------------------------------------------*/
-public class MappingPattern extends SLPattern {
-  private final SinLFO pulse = new SinLFO(20, 100, 800);
+  //     LXTransform globalTransform = new LXTransform();
+  //     globalTransform.translate(config.globalOffsetX, config.globalOffsetY, config.globalOffsetZ);
+  //     if (tower.useAdjustment) {
+  //       globalTransform.rotateX(config.globalRotationX * PI / 180.);
+  //       globalTransform.rotateY(config.globalRotationY * PI / 180.);
+  //       globalTransform.rotateZ(config.globalRotationZ * PI / 180.);
+  //     }
 
-  public color mappedAndOnNetworkColor    = LXColor.GREEN;
-  public color mappedButNotOnNetworkColor = LXColor.BLACK;
-  public color unMappedButOnNetworkColor  = LXColor.BLACK;
+  //     float x = tower.x;
+  //     float y = tower.yValues[i];
+  //     float z = tower.z;
+  //     float xRot = tower.xRot;
+  //     float yRot = tower.yRot;
+  //     float zRot = tower.zRot;
+  //     String id = tower.ids[i];
+  //     Cube.Type type = tower.type;
 
-  public MappingPattern(LX lx) {
-    super(lx);
-    addModulator(pulse).start();
+  //     Cube cube = new Cube(id, x, y, z, xRot, yRot, zRot, globalTransform, type);
+  //     cubes.add(cube);
+  //     allCubes.add(cube);
+  //   }
+  //   towers.add(new Tower("", cubes));
+  // }
 
-    final LXParameterListener resetBasis = new LXParameterListener() {
-      public void onParameterChanged(LXParameter p) {
-        pulse.setBasis(0);
-      }
-    };
+  // Cube[] allCubesArr = new Cube[allCubes.size()];
+  // for (int i = 0; i < allCubesArr.length; i++) {
+  //   allCubesArr[i] = allCubes.get(i);
+  // }
 
-    mappingMode.mode.addListener(resetBasis);
-    mappingMode.displayMode.addListener(resetBasis);
-    mappingMode.selectedMappedFixture.addListener(resetBasis);
-    mappingMode.selectedUnMappedFixture.addListener(resetBasis);
+
+  // List<Cube> allCubes = new ArrayList<Cube>();
+
+  // // list of chandeliers
+  // List<Chandelier> chandeliers = new ArrayList<Chandelier>();
+
+  // println("Num of chandeliers: " + config.chandeliers.size());
+
+  // for (CiscoChandelierConfig chandelierConfig : config.chandeliers) {
+  //   List<Tower> towers = new ArrayList<Tower>();
+  //   List<Cube> chandelierCubes = new ArrayList<Cube>();
+
+  //   globalTransform.push();
+  //   globalTransform.translate(chandelierConfig.x, chandelierConfig.y, chandelierConfig.z);
+  //   globalTransform.rotateX(chandelierConfig.xRot * PI / 180.);
+  //   globalTransform.rotateY(chandelierConfig.yRot * PI / 180.);
+  //   globalTransform.rotateZ(chandelierConfig.zRot * PI / 180.);
+
+  //   for (CiscoTowerConfig towerConfig : chandelierConfig.towers) {
+  //     List<Cube> towerCubes = new ArrayList<Cube>();
+
+  //     globalTransform.push();
+  //     globalTransform.translate(towerConfig.x, towerConfig.y, towerConfig.z);
+  //     globalTransform.rotateX(towerConfig.xRot * PI / 180.);
+  //     globalTransform.rotateY(towerConfig.yRot * PI / 180.);
+  //     globalTransform.rotateZ(towerConfig.zRot * PI / 180.);
+
+  //     for (CiscoCubeConfig cubeConfig : towerConfig.cubes) {
+  //       String id = cubeConfig.id;
+  //       float x = cubeConfig.x;
+  //       float y = cubeConfig.y;
+  //       float z = cubeConfig.z;
+  //       float xRot = cubeConfig.xRot;
+  //       float yRot = cubeConfig.yRot;
+  //       float zRot = cubeConfig.zRot;
+
+  //       Cube cube = new Cube(id, x, y, z, xRot, yRot, zRot, globalTransform, Cube.Type.LARGE);
+  //       allCubes.add(cube);
+  //       chandelierCubes.add(cube);
+  //       towerCubes.add(cube);
+  //     }
+
+  //     globalTransform.pop();
+  //     towers.add(new Tower(towerConfig.id, towerCubes));
+  //   }
+
+  //   globalTransform.pop();
+  //   chandeliers.add(new Chandelier(chandelierConfig.id, towers, chandelierCubes));
+  // }
+
+  Bar[] allBarsArr = new Bar[allBars.size()];
+  for (int i = 0; i < allBarsArr.length; i++) {
+    allBarsArr[i] = allBars.get(i);
   }
 
-  public void run(double deltaMs) {
-    if (!mappingMode.enabled.isOn()) return;
-    setColors(0);
-    updateColors();
-
-    if (mappingMode.inMappedMode())
-      loopMappedFixtures(deltaMs);
-    else loopUnMappedFixtures(deltaMs);
-  }
-
-  private void updateColors() {
-    mappedButNotOnNetworkColor = lx.hsb(LXColor.h(LXColor.RED), 100, pulse.getValuef());
-    unMappedButOnNetworkColor = lx.hsb(LXColor.h(LXColor.BLUE), 100, pulse.getValuef());
-  }
-
-  private void loopMappedFixtures(double deltaMs) {
-    if (mappingMode.inDisplayAllMode()) {
-
-      for (String id : mappingMode.fixturesMappedAndOnTheNetwork)
-        setFixtureColor(id, mappedAndOnNetworkColor);
-
-      for (String id : mappingMode.fixturesMappedButNotOnNetwork)
-        setFixtureColor(id, mappedButNotOnNetworkColor);
-
-    } else {
-      String selectedId = mappingMode.selectedMappedFixture.getOption();
-
-      for (String id : mappingMode.fixturesMappedAndOnTheNetwork)
-        setFixtureColor(id, mappedAndOnNetworkColor, true);
-
-      if (mappingMode.fixturesMappedAndOnTheNetwork.contains(selectedId))
-        setFixtureColor(selectedId, mappedAndOnNetworkColor);
-
-      if (mappingMode.fixturesMappedButNotOnNetwork.contains(selectedId))
-        setFixtureColor(selectedId, mappedButNotOnNetworkColor);
-    }
-  }
-
-  private void loopUnMappedFixtures(double deltaMs) {
-    for (String id : mappingMode.fixturesMappedAndOnTheNetwork)
-      setFixtureColor(id, mappedAndOnNetworkColor, true);
-  }
-
-  private void setFixtureColor(String id, color col) {
-    setFixtureColor(id, col, false);
-  }
-
-  private void setFixtureColor(String id, color col, boolean dotted) {
-    if (id.equals("-")) return;
-
-    // we iterate all cubes and call continue here because multiple cubes might have zero as id
-    for (Cube c : model.cubes) {
-      if (!c.id.equals(id)) continue;
-
-      LXPoint[] points = c.points;
-      for (int i = 0; i < points.length; i++) {
-        if (dotted)
-          col = (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2) : LXColor.BLACK;
-
-        setColor(points[i].index, col);
-      }
-    }
-  }
-}
-
-/*
- * Mapping Mode
- * (TODO) 
- *  1) iterate through mapped cubes in order (tower by tower, cube by cube)
- *  2) get cubes not mapped but on network to pulse
- *  3) get a "display orientation" mode
- *---------------------------------------------------------------------------*/
-public static enum MappingModeType {MAPPED, UNMAPPED};
-public static enum MappingDisplayModeType {ALL, ITERATE};
-
-public class MappingMode {
-  private LXChannel mappingChannel = null;
-  private LXPattern mappingPattern = null;
-
-  public final BooleanParameter enabled;
-  public final EnumParameter<MappingModeType> mode;
-  public final EnumParameter<MappingDisplayModeType> displayMode;
-  //public final BooleanParameter displayOrientation;
-
-  public final DiscreteParameter selectedMappedFixture;
-  public final DiscreteParameter selectedUnMappedFixture;
-
-  public final List<String> fixturesMappedAndOnTheNetwork = new ArrayList<String>();
-  public final List<String> fixturesMappedButNotOnNetwork = new ArrayList<String>();
-  public final List<String> fixturesOnNetworkButNotMapped = new ArrayList<String>();
-
-  MappingMode(LX lx) {
-    this.enabled = new BooleanParameter("enabled", false)
-     .setDescription("Mapping Mode: toggle on/off");
-
-    this.mode = new EnumParameter<MappingModeType>("mode", MappingModeType.MAPPED)
-     .setDescription("Mapping Mode: toggle between mapped/unmapped fixtures");
-
-    this.displayMode = new EnumParameter<MappingDisplayModeType>("displayMode", MappingDisplayModeType.ALL)
-     .setDescription("Mapping Mode: display all mapped/unmapped fixtures");
-
-    // this.displayOrientation = new BooleanParameter("displayOrientation", false)
-    //  .setDescription("Mapping Mode: display colors on strips to indicate it's orientation");
-
-    for (Cube cube : model.cubes)
-      fixturesMappedButNotOnNetwork.add(cube.id);
-
-    this.selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", fixturesMappedButNotOnNetwork.toArray());
-    this.selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", new String[] {"-"});
-
-    controllers.addListener(new ListListener<SLController>() {
-      void itemAdded(final int index, final SLController c) {
-        if (isFixtureMapped(c.cubeId)) {
-          fixturesMappedButNotOnNetwork.remove(c.cubeId);
-          fixturesMappedAndOnTheNetwork.add(c.cubeId);
-        } else {
-          fixturesOnNetworkButNotMapped.add(c.cubeId);
-        }
-
-        Object[] arr1 = fixturesMappedAndOnTheNetwork.toArray();
-        Object[] arr2 = fixturesOnNetworkButNotMapped.toArray();
-
-        selectedMappedFixture.setObjects(arr1.length > 0 ? arr1 : new String[] {"-"});
-        selectedUnMappedFixture.setObjects(arr2.length > 0 ? arr2 : new String[] {"-"});
-      }
-      void itemRemoved(final int index, final SLController c) {}
-    });
-
-    enabled.addListener(new LXParameterListener() {
-      public void onParameterChanged(LXParameter p) {
-        if (((BooleanParameter)p).isOn())
-          addChannel();
-        else removeChannel();
-      }
-    });
-  }
-
-  private boolean isFixtureMapped(String id) {
-    for (Cube fixture : model.cubes) {
-      if (fixture.id.equals(id))
-        return true;
-    }
-    return false;
-  }
-
-  public boolean inMappedMode() {
-    return mode.getObject() == MappingModeType.MAPPED;
-  }
-
-  public boolean inUnMappedMode() {
-    return mode.getObject() == MappingModeType.UNMAPPED;
-  }
-
-  public boolean inDisplayAllMode() {
-    return displayMode.getObject() == MappingDisplayModeType.ALL;
-  }
-
-  public boolean inIterateFixturesMode() {
-    return displayMode.getObject() == MappingDisplayModeType.ITERATE;
-  }
-
-  public String getSelectedMappedFixtureId() {
-    return (String)mappingMode.selectedMappedFixture.getOption();
-  }
-
-  public String getSelectedUnMappedFixtureId() {
-    return (String)mappingMode.selectedUnMappedFixture.getOption();
-  }
-
-  public boolean isSelectedUnMappedFixture(String id) {
-    return id.equals(mappingMode.selectedUnMappedFixture.getOption());
-  }
-
-  public color getUnMappedColor() {
-    // if (mappingPattern != null)
-    //   return mappingPattern.getUnMappedButOnNetworkColor;
-    // return 0;
-    return LXColor.RED; // temp
-  }
-
-  private void addChannel() {
-    mappingPattern = new MappingPattern(lx);
-    mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
-
-    for (LXChannel channel : lx.engine.channels)
-      channel.cueActive.setValue(false);
-
-    mappingChannel.fader.setValue(1);
-    mappingChannel.label.setValue("Mapping");
-    mappingChannel.cueActive.setValue(true);
-  }
-
-  private void removeChannel() {
-    lx.engine.removeChannel(mappingChannel);
-    mappingChannel = null;
-    mappingPattern = null;
-  }
-}
-
-/*
- * Mapping Mode: UI Window
- *---------------------------------------------------------------------------*/
-class UIMapping extends UICollapsibleSection {
-
-  UIMapping(LX lx, UI ui, float x, float y, float w) {
-    super(ui, x, y, w, 124);
-    setTitle("MAPPING");
-    setTitleX(20);
-
-    addTopLevelComponent(new UIButton(4, 4, 12, 12) {
-      @Override
-      public void onToggle(boolean isOn) {
-        redraw();
-      }
-    }.setParameter(mappingMode.enabled).setBorderRounding(4));
-
-    final UIToggleSet toggleMode = new UIToggleSet(0, 2, getContentWidth(), 18)
-     .setEvenSpacing().setParameter(mappingMode.mode);
-    toggleMode.addToContainer(this);
-
-    final UIMappedPanel mappedPanel = new UIMappedPanel(ui, 0, 20, getContentWidth(), 40);
-    mappedPanel.setVisible(mappingMode.inMappedMode());
-    mappedPanel.addToContainer(this);
-
-    final UIUnMappedPanel unMappedPanel = new UIUnMappedPanel(ui, 0, 20, getContentWidth(), 40);
-    unMappedPanel.setVisible(mappingMode.inUnMappedMode());
-    unMappedPanel.addToContainer(this);
-
-    mappingMode.mode.addListener(new LXParameterListener() {
-      public void onParameterChanged(LXParameter p) {
-        mappedPanel.setVisible(mappingMode.inMappedMode());
-        unMappedPanel.setVisible(mappingMode.inUnMappedMode());
-        redraw();
-      }
-    });
-  }
-
-  private class UIMappedPanel extends UI2dContainer {
-    UIMappedPanel(UI ui, float x, float y, float w, float h) {
-      super(x, y, w, h);
-
-      final UIToggleSet toggleDisplayMode = new UIToggleSet(0, 2, 112, 18)
-       .setEvenSpacing().setParameter(mappingMode.displayMode);
-      toggleDisplayMode.addToContainer(this);
-
-      final UILabel selectedFixtureLabel = new UILabel(0, 24, getContentWidth(), 54)
-        .setLabel("");
-      selectedFixtureLabel.setBackgroundColor(#333333)
-        .setFont(createFont("ArialUnicodeMS-10.vlw", 43))
-        .setTextAlignment(PConstants.CENTER, PConstants.TOP);
-      selectedFixtureLabel.addToContainer(this);
-      mappingMode.selectedMappedFixture.addListener(new LXParameterListener() {
-        public void onParameterChanged(LXParameter p) {
-          if (mappingMode.inMappedMode())
-            selectedFixtureLabel.setLabel(mappingMode.getSelectedMappedFixtureId());
-        }
-      });
-
-      mappingMode.displayMode.addListener(new LXParameterListener() {
-        public void onParameterChanged(LXParameter p) {
-          String label = mappingMode.inDisplayAllMode()
-            ? "" : mappingMode.getSelectedMappedFixtureId();
-          selectedFixtureLabel.setLabel(label);
-          redraw();
-        }
-      });
-
-      final UIButton decrementSelectedFixture = new UIButton(122, 2, 25, 18) {
-        @Override
-        protected void onToggle(boolean active) {
-          if (mappingMode.inDisplayAllMode() || !active) return;
-          mappingMode.selectedMappedFixture.decrement(1);
-        }
-      }.setLabel("-").setMomentary(true);
-      decrementSelectedFixture.addToContainer(this);
-
-      final UIButton incrementSelectedFixture = new UIButton(147, 2, 25, 18) {
-        @Override
-        protected void onToggle(boolean active) {
-          if (mappingMode.inDisplayAllMode() || !active) return;
-          mappingMode.selectedMappedFixture.increment(1);
-        }
-      }.setLabel("+").setMomentary(true);
-      incrementSelectedFixture.addToContainer(this);
-    }
-  }
-
-  private class UIUnMappedPanel extends UI2dContainer {
-    UIUnMappedPanel(UI ui, float x, float y, float w, float h) {
-      super(x, y, w, h);
-
-      final UIToggleSet toggleDisplayMode = new UIToggleSet(0, 2, 112, 18)
-       .setEvenSpacing().setParameter(mappingMode.displayMode);
-      toggleDisplayMode.addToContainer(this);
-
-      final UILabel selectedFixtureLabel = new UILabel(0, 24, getContentWidth(), 54)
-        .setLabel("");
-      selectedFixtureLabel.setBackgroundColor(#333333)
-        .setFont(createFont("ArialUnicodeMS-10.vlw", 43))
-        .setTextAlignment(PConstants.CENTER, PConstants.TOP);
-      selectedFixtureLabel.addToContainer(this);
-      mappingMode.selectedUnMappedFixture.addListener(new LXParameterListener() {
-        public void onParameterChanged(LXParameter p) {
-          if (mappingMode.inUnMappedMode())
-            selectedFixtureLabel.setLabel(mappingMode.getSelectedUnMappedFixtureId());
-        }
-      });
-
-      mappingMode.displayMode.addListener(new LXParameterListener() {
-        public void onParameterChanged(LXParameter p) {
-          String label = mappingMode.inDisplayAllMode()
-            ? "" : mappingMode.getSelectedUnMappedFixtureId();
-          selectedFixtureLabel.setLabel(label);
-          redraw();
-        }
-      });
-
-      final UIButton decrementSelectedFixture = new UIButton(122, 2, 25, 18) {
-        @Override
-        protected void onToggle(boolean active) {
-          if (mappingMode.inDisplayAllMode() || !active) return;
-          mappingMode.selectedUnMappedFixture.decrement(1);
-        }
-      }.setLabel("-").setMomentary(true);
-      decrementSelectedFixture.addToContainer(this);
-
-      final UIButton incrementSelectedFixture = new UIButton(147, 2, 25, 18) {
-        @Override
-        protected void onToggle(boolean active) {
-          if (mappingMode.inDisplayAllMode() || !active) return;
-          mappingMode.selectedUnMappedFixture.increment(1);
-        }
-      }.setLabel("+").setMomentary(true);
-      incrementSelectedFixture.addToContainer(this);
-    }
-
-  }
+  return new SLModel(allBars, allBarsArr);
 }

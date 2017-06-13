@@ -7,8 +7,8 @@ public SLStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
-public OutputControl outputControl;
-public MappingMode mappingMode = null;
+//public OutputControl outputControl;
+//public MappingMode mappingMode = null;
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -19,7 +19,7 @@ void setup() {
 
   model = buildModel();
   println("-- Model ----");
-  println("# of cubes: " + model.cubes.size());
+  //println("# of cubes: " + model.cubes.size());
   println("# of points: " + model.points.length);
   println("model.xMin: " + model.xMin); println("model.xMax: " + model.xMax); println("model.xRange: " + model.xRange);
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
@@ -47,13 +47,13 @@ void setup() {
       (networkMonitor = new NetworkMonitor(lx)).start();
       setupGammaCorrection();
       setupGammaCorrection();
-      setupOutputs(lx);
-      outputControl = new OutputControl(lx);
-      lx.engine.registerComponent("outputControl", outputControl);
+      buildOutputs(lx);
+      // outputControl = new OutputControl(lx);
+      // lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
-      if (((SLModel)model).cubes.size() > 0)
-        mappingMode = new MappingMode(lx);
+      // if (((SLModel)model).cubes.size() > 0)
+      //   mappingMode = new MappingMode(lx);
 
       // Adaptor for mapping osc messages from Essentia to lx osc engine
       try {

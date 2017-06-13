@@ -1,6 +1,8 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+final static int NUM_LEDS_PER_STRIP_FIX = 78;
+
 public class Ball extends DPat {
 
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
@@ -782,7 +784,7 @@ public class Swarm extends SLPattern {
         palette.getHuef() + 0.3 * abs(p.x - hOffX.getValuef()),
         constrain(80 + 40 * fV, 0, 100), 
         constrain(100 - 
-          (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
+          (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * NUM_LEDS_PER_STRIP_FIX, NUM_LEDS_PER_STRIP_FIX), 0, 100)
           );
         ++i;
       } 
@@ -837,7 +839,7 @@ public class SpaceTime extends SLPattern {
         colors[p.index] = lx.hsb(
           palette.getHuef() + 360 - p.x*.2 + p.y * .3,
           constrain(.4 * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
-          max(0, 100 - fVal*abs(i - pVal*(strip.metrics.numPoints - 1)))
+          max(0, 100 - fVal*abs(i - pVal*(NUM_LEDS_PER_STRIP_FIX - 1)))
         );
         ++i;
       }
@@ -1037,85 +1039,85 @@ public class ShiftingPlane extends SLPattern {
   }
 }
 
-public class CubeFlash extends SLPattern {
-  private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
-  private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
-  private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
-  private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
-  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+// public class CubeFlash extends SLPattern {
+//   private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
+//   private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
+//   private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
+//   private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
+//   private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
   
-  class Flash {
-    Cube c;
-    float value;
-    float hue;
-    boolean hasPeaked;
+//   class Flash {
+//     Cube c;
+//     float value;
+//     float hue;
+//     boolean hasPeaked;
     
-    Flash() {
-      c = model.cubes.get(floor(random(model.cubes.size())));
-      hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
-      boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
-      hasPeaked = infiniteAttack;
-      value = (infiniteAttack ? 1 : 0);
-    }
+//     Flash() {
+//       c = model.cubes.get(floor(random(model.cubes.size())));
+//       hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
+//       boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
+//       hasPeaked = infiniteAttack;
+//       value = (infiniteAttack ? 1 : 0);
+//     }
     
-    // returns TRUE if this should die
-    boolean age(double ms) {
-      if (!hasPeaked) {
-        value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
-        if (value >= 1.0) {
-          value = 1.0;
-          hasPeaked = true;
-        }
-        return false;
-      } else {
-        value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
-        return value <= 0;
-      }
-    }
-  }
+//     // returns TRUE if this should die
+//     boolean age(double ms) {
+//       if (!hasPeaked) {
+//         value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
+//         if (value >= 1.0) {
+//           value = 1.0;
+//           hasPeaked = true;
+//         }
+//         return false;
+//       } else {
+//         value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
+//         return value <= 0;
+//       }
+//     }
+//   }
   
-  private float leftoverMs = 0;
-  private List<Flash> flashes;
+//   private float leftoverMs = 0;
+//   private List<Flash> flashes;
   
-  public CubeFlash(LX lx) {
-    super(lx);
-    addParameter(rateParameter);
-    addParameter(attackParameter);
-    addParameter(decayParameter);
-    addParameter(hueVarianceParameter);
-    addParameter(saturationParameter);
-    flashes = new LinkedList<Flash>();
-  }
+//   public CubeFlash(LX lx) {
+//     super(lx);
+//     addParameter(rateParameter);
+//     addParameter(attackParameter);
+//     addParameter(decayParameter);
+//     addParameter(hueVarianceParameter);
+//     addParameter(saturationParameter);
+//     flashes = new LinkedList<Flash>();
+//   }
   
-  public void run(double deltaMs) {
-    leftoverMs += deltaMs;
-    float msPerFlash = 1000 / ((rateParameter.getValuef() + .01) * 100);
-    while (leftoverMs > msPerFlash) {
-      leftoverMs -= msPerFlash;
-      flashes.add(new Flash());
-    }
+//   public void run(double deltaMs) {
+//     leftoverMs += deltaMs;
+//     float msPerFlash = 1000 / ((rateParameter.getValuef() + .01) * 100);
+//     while (leftoverMs > msPerFlash) {
+//       leftoverMs -= msPerFlash;
+//       flashes.add(new Flash());
+//     }
     
-    for (LXPoint p : model.points) {
-      colors[p.index] = 0;
-    }
+//     for (LXPoint p : model.points) {
+//       colors[p.index] = 0;
+//     }
     
-    for (Flash flash : flashes) {
-      color c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-      for (LXPoint p : flash.c.points) {
-        colors[p.index] = c;
-      }
-    }
+//     for (Flash flash : flashes) {
+//       color c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+//       for (LXPoint p : flash.c.points) {
+//         colors[p.index] = c;
+//       }
+//     }
     
-    Iterator<Flash> i = flashes.iterator();
-    while (i.hasNext()) {
-      Flash flash = i.next();
-      boolean dead = flash.age(deltaMs);
-      if (dead) {
-        i.remove();
-      }
-    }
-  } 
-}
+//     Iterator<Flash> i = flashes.iterator();
+//     while (i.hasNext()) {
+//       Flash flash = i.next();
+//       boolean dead = flash.age(deltaMs);
+//       if (dead) {
+//         i.remove();
+//       }
+//     }
+//   } 
+// }
 
 public class Spheres extends SLPattern {
   private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);
