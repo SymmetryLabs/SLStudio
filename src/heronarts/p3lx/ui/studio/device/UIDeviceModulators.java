@@ -169,7 +169,7 @@ public class UIDeviceModulators extends UI2dContainer {
 
         UIModulator uiModulator = null;
         if (modulator instanceof VariableLFO) {
-            uiModulator = new UIVariableLFO(this.ui, (VariableLFO) modulator, 0, PADDING+2, 140, getContentHeight() - 2*PADDING - 2);
+            uiModulator = new UIVariableLFO(this.ui, (VariableLFO) modulator, 0, PADDING+2, getContentHeight() - 2*PADDING - 2);
         }
         if (uiModulator != null) {
             uiModulator.setVisible(false);

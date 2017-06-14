@@ -28,6 +28,7 @@ package heronarts.p3lx.ui.studio.device.modulator;
 
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.modulator.LXModulator;
@@ -206,7 +207,8 @@ public abstract class UIModulator extends UI2dContainer {
             }
             if (this.modulationIndex < numModulations) {
                 LXCompoundModulation modulation = this.modulations.get(this.modulationIndex);
-                this.label.setLabel(modulation.target.getLabel());
+                LXComponent device = modulator.getParent().getParent();
+                this.label.setLabel(LXComponent.getCanonicalLabel(modulation.target, device));
                 this.label.setVisible(true);
                 this.range.setParameter(modulation.range);
                 this.range.setEnabled(true);
