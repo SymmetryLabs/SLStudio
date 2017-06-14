@@ -207,11 +207,13 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
 
     @Override
     protected void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
-        this.dAccum -= dy;
-        int offset = (int) (this.dAccum / 5);
-        this.dAccum = this.dAccum - (offset * 5);
-        if (!this.editing) {
-            incrementMouseValue(mouseEvent, offset);
+        if (this.enabled) {
+            this.dAccum -= dy;
+            int offset = (int) (this.dAccum / 5);
+            this.dAccum = this.dAccum - (offset * 5);
+            if (!this.editing) {
+                incrementMouseValue(mouseEvent, offset);
+            }
         }
     }
 

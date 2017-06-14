@@ -145,7 +145,10 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModul
     }
 
     private double getBaseIncrement() {
-        double range = Math.abs(this.parameter.range.max - this.parameter.range.min);
+        double range = this.maxValue - this.minValue;
+        if (this.parameter != null) {
+            range = Math.abs(this.parameter.range.max - this.parameter.range.min);
+        }
         switch (getUnits()) {
         case MILLISECONDS:
             if (range > 10000) {

@@ -26,8 +26,7 @@
 
 package heronarts.p3lx.ui.studio.device.modulator;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import heronarts.lx.LXModulationEngine;
 import heronarts.lx.color.ColorParameter;
@@ -36,6 +35,7 @@ import heronarts.lx.modulator.LXPeriodicModulator;
 import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UIFocus;
 import heronarts.p3lx.ui.UIModulationSource;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIColorBox;
@@ -60,7 +60,7 @@ public abstract class UIModulator extends UI2dContainer {
     private final ColorParameter color;
     private final float lineX;
 
-    private final Map<LXCompoundModulation, UIModulation> uiModulations = new HashMap<LXCompoundModulation, UIModulation>();
+    private final UIModulations uiModulations;
 
     protected UIModulator(UI ui, LXModulator modulator, float x, float y, float w, float h) {
         super(x, y, w, h);
@@ -95,20 +95,20 @@ public abstract class UIModulator extends UI2dContainer {
         new UIColorBox(ui, this.color, this.width - COLOR_WIDTH, 1, COLOR_WIDTH, COLOR_WIDTH)
         .addToContainer(this);
 
-        UI2dContainer content = new UI2dContainer(0, CONTENT_Y, w, this.height - CONTENT_Y);
+        this.uiModulations = (UIModulations)
+            new UIModulations(0, getContentHeight() - UIModulations.HEIGHT, getContentWidth())
+            .addToContainer(this);
+
+        UI2dContainer content = new UI2dContainer(0, CONTENT_Y, w, this.height - CONTENT_Y - UIModulations.HEIGHT);
         setContentTarget(content);
     }
 
     public void addModulation(LXCompoundModulation modulation) {
-        UIModulation uiModulation = (UIModulation) new UIModulation(modulation, 0, getContentHeight() - UIModulation.HEIGHT, getContentWidth()).addToContainer(this);
-        this.uiModulations.put(modulation,  uiModulation);
+        this.uiModulations.addModulation(modulation);
     }
 
     public void removeModulation(LXCompoundModulation modulation) {
-        UIModulation uiModulation = this.uiModulations.remove(modulation);
-        if (uiModulation != null) {
-            uiModulation.removeFromContainer();
-        }
+        this.uiModulations.removeModulation(modulation);
     }
 
     @Override
@@ -119,41 +119,116 @@ public abstract class UIModulator extends UI2dContainer {
 
     public abstract UIModulationSource getModulationSource();
 
-    class UIModulation extends UI2dContainer {
+    class UIModulations extends UI2dContainer {
 
         private static final float PADDING = 4;
         private static final float HEIGHT = 14;
         private static final float AMOUNT_WIDTH = 40;
 
-        private final LXCompoundModulation modulation;
+        private int modulationIndex = 0;
 
-        UIModulation(LXCompoundModulation modulation, float x, float y, float w) {
+        private final CopyOnWriteArrayList<LXCompoundModulation> modulations =
+            new CopyOnWriteArrayList<LXCompoundModulation>();
+
+        private final UILabel label;
+
+        private final UIDoubleBox range;
+
+        UIModulations(float x, float y, float w) {
             super(x, y, w, HEIGHT);
 
-            this.modulation = modulation;
-
-            new UILabel(0, 0, w - PADDING - AMOUNT_WIDTH, HEIGHT)
-            .setLabel(modulation.target.getLabel())
+            this.label = (UILabel) new UIModulationLabel(0, 0, w - PADDING - AMOUNT_WIDTH, HEIGHT)
+            .setLabel("")
             .setPadding(4)
             .setBackgroundColor(ui.theme.getControlBackgroundColor())
             .setBorderColor(ui.theme.getControlBorderColor())
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
-            .addToContainer(this);
+            .setFont(ui.theme.getControlFont())
+            .setVisible(false);
 
-            new UIDoubleBox(w - AMOUNT_WIDTH, 0, AMOUNT_WIDTH, HEIGHT)
-            .setParameter(modulation.range)
-            .addToContainer(this);
+            this.label.addToContainer(this);
+
+            this.range = (UIDoubleBox) new UIDoubleBox(w - AMOUNT_WIDTH, 0, AMOUNT_WIDTH, HEIGHT)
+            .setEnabled(false)
+            .setVisible(false);
+
+            this.range.addToContainer(this);
         }
 
-        @Override
-        public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-            if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE ||
-                (keyEvent.isControlDown() || keyEvent.isMetaDown()) && keyCode == java.awt.event.KeyEvent.VK_D) {
-                consumeKeyEvent();
-                ((LXModulationEngine) modulator.getParent()).removeModulation(this.modulation);
+        class UIModulationLabel extends UILabel implements UIFocus {
+
+            UIModulationLabel(float x, float y, float w, float h) {
+                super(x, y, w, h);
+            }
+
+            @Override
+            public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                if (keyCode == java.awt.event.KeyEvent.VK_UP) {
+                    consumeKeyEvent();
+                    selectModulation(-1);
+                } else if (keyCode == java.awt.event.KeyEvent.VK_DOWN) {
+                    consumeKeyEvent();
+                    selectModulation(1);
+                }
+            }
+        }
+
+        private void removeModulation() {
+            if (this.modulationIndex < this.modulations.size()) {
+                LXCompoundModulation modulation = this.modulations.get(this.modulationIndex);
+                ((LXModulationEngine) modulator.getParent()).removeModulation(modulation);
+            }
+        }
+
+        private void addModulation(LXCompoundModulation modulation) {
+            this.modulations.add(modulation);
+            this.modulationIndex = this.modulations.size() - 1;
+            selectModulation(0);
+        }
+
+        private void removeModulation(LXCompoundModulation modulation) {
+            int index = this.modulations.indexOf(modulation);
+            if (index >= 0) {
+                this.modulations.remove(index);
+                if (this.modulationIndex >= index) {
+                    this.modulationIndex = Math.max(0, this.modulationIndex - 1);
+                    selectModulation(0);
+                }
+            }
+        }
+
+        private void selectModulation(int delta) {
+            int numModulations = this.modulations.size();
+            if (numModulations > 0) {
+                this.modulationIndex = (this.modulationIndex + delta + numModulations) % numModulations;
+            } else {
+                this.modulationIndex = 0;
+            }
+            if (this.modulationIndex < numModulations) {
+                LXCompoundModulation modulation = this.modulations.get(this.modulationIndex);
+                this.label.setLabel(modulation.target.getLabel());
+                this.label.setVisible(true);
+                this.range.setParameter(modulation.range);
+                this.range.setEnabled(true);
+                this.range.setVisible(true);
+            } else {
+                this.label.setVisible(false);
+                this.label.setLabel("");
+                this.range.setVisible(false);
+                this.range.setParameter(null);
+                this.range.setEnabled(false);
+
             }
         }
     }
 
+    @Override
+    public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+        if (keyCode == java.awt.event.KeyEvent.VK_BACK_SPACE ||
+            (keyEvent.isControlDown() || keyEvent.isMetaDown()) && keyCode == java.awt.event.KeyEvent.VK_D) {
+            consumeKeyEvent();
+            this.uiModulations.removeModulation();
+        }
+    }
 
 }

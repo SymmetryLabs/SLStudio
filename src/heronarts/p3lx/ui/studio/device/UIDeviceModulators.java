@@ -116,10 +116,17 @@ public class UIDeviceModulators extends UI2dContainer {
             }
         });
 
+        // Add the modulators
         for (LXModulator modulator : device.modulation.modulators) {
             addModulator(modulator);
         }
 
+        // Add the modulations
+        for (LXCompoundModulation modulation : device.modulation.modulations) {
+            uiModulators.get(modulation.source).addModulation(modulation);
+        }
+
+        // Register listeners for modulation changes
         device.modulation.addListener(new LXModulationEngine.Listener() {
 
             @Override
@@ -144,12 +151,12 @@ public class UIDeviceModulators extends UI2dContainer {
 
             @Override
             public void triggerAdded(LXModulationEngine engine, LXTriggerModulation modulation) {
-
+                // TODO(mcslee): support device triggers
             }
 
             @Override
             public void triggerRemoved(LXModulationEngine engine, LXTriggerModulation modulation) {
-
+                // TODO(mcslee): support device triggers
             }
 
         });
