@@ -182,11 +182,23 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     }
 
     public String getCanonicalPath() {
+        return getCanonicalPath(this.lx.engine);
+    }
+
+    public String getCanonicalPath(LXComponent root) {
         String path = getLabel();
-        if (this.parent != null && this.parent != this.lx.engine) {
-            return this.parent.getCanonicalPath() + " | " + path;
+        if (this.parent != null && this.parent != root) {
+            return this.parent.getCanonicalPath(root) + " | " + path;
         }
         return path;
+    }
+
+    public static String getCanonicalLabel(LXParameter p, LXComponent root) {
+        LXComponent component = p.getComponent();
+        if (component != null && component != root) {
+            return component.getCanonicalPath(root) + " | " + p.getLabel();
+        }
+        return p.getLabel();
     }
 
     public static String getCanonicalLabel(LXParameter p) {

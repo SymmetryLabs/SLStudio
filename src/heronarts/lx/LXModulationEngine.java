@@ -76,7 +76,14 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
         if (this.component instanceof LXEngine) {
             return true;
         }
-        return target.getComponent() == this.component;
+        LXComponent parent = target.getComponent();
+        while (parent != null) {
+            if (parent == this.component) {
+                return true;
+            }
+            parent = parent.getParent();
+        }
+        return false;
     }
 
     public String getOscAddress() {
