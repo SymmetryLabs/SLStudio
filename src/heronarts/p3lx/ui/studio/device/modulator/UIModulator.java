@@ -33,6 +33,7 @@ import heronarts.lx.LXModulationEngine;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LXPeriodicModulator;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
@@ -124,6 +125,7 @@ public abstract class UIModulator extends UI2dContainer {
 
         private static final float PADDING = 4;
         private static final float HEIGHT = 14;
+        private static final float POLARITY_WIDTH = 24;
         private static final float AMOUNT_WIDTH = 40;
 
         private int modulationIndex = 0;
@@ -132,13 +134,13 @@ public abstract class UIModulator extends UI2dContainer {
             new CopyOnWriteArrayList<LXCompoundModulation>();
 
         private final UILabel label;
-
         private final UIDoubleBox range;
+        private final UIButton polarity;
 
         UIModulations(float x, float y, float w) {
             super(x, y, w, HEIGHT);
 
-            this.label = (UILabel) new UIModulationLabel(0, 0, w - PADDING - AMOUNT_WIDTH, HEIGHT)
+            this.label = (UILabel) new UIModulationLabel(0, 0, w - 2*PADDING - AMOUNT_WIDTH - POLARITY_WIDTH, HEIGHT)
             .setLabel("")
             .setPadding(4)
             .setBackgroundColor(ui.theme.getControlBackgroundColor())
@@ -148,6 +150,11 @@ public abstract class UIModulator extends UI2dContainer {
             .setVisible(false);
 
             this.label.addToContainer(this);
+
+            this.polarity = (UIButton) new UIButton(w - AMOUNT_WIDTH - PADDING - POLARITY_WIDTH, 0, POLARITY_WIDTH, HEIGHT)
+            .setVisible(false);
+
+            this.polarity.addToContainer(this);
 
             this.range = (UIDoubleBox) new UIDoubleBox(w - AMOUNT_WIDTH, 0, AMOUNT_WIDTH, HEIGHT)
             .setEnabled(false)
@@ -210,12 +217,16 @@ public abstract class UIModulator extends UI2dContainer {
                 LXComponent device = modulator.getParent().getParent();
                 this.label.setLabel(LXComponent.getCanonicalLabel(modulation.target, device));
                 this.label.setVisible(true);
+                this.polarity.setParameter(modulation.polarity);
+                this.polarity.setVisible(true);
                 this.range.setParameter(modulation.range);
                 this.range.setEnabled(true);
                 this.range.setVisible(true);
             } else {
                 this.label.setVisible(false);
                 this.label.setLabel("");
+                this.polarity.setVisible(false);
+                this.polarity.setParameter((BooleanParameter) null);
                 this.range.setVisible(false);
                 this.range.setParameter(null);
                 this.range.setEnabled(false);
