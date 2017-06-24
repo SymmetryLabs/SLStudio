@@ -1,6 +1,184 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class Voronoi extends LXPattern {
+  public CompoundParameter speed = new CompoundParameter("SPEED", 1.8, 0, 10);
+  public CompoundParameter width = new CompoundParameter("WIDTH", 0.2, 0.1, 1);
+  public CompoundParameter hue = new CompoundParameter("HUE", 0, 0, 360);
+  public DiscreteParameter num = new DiscreteParameter("NUM", 14, 5, 28);
+  private List<Site> sites = new ArrayList<Site>();
+  public float xMaxDist = model.xMax - model.xMin;
+  public float yMaxDist = model.yMax - model.yMin;
+  public float zMaxDist = model.zMax - model.zMin;
+
+  class Site {
+    float xPos = 0;
+    float yPos = 0;
+    float zPos = 0;
+    PVector velocity = new PVector(0,0,0);
+
+    public Site() {
+        xPos = random(model.xMin, model.xMax);
+        yPos = random(model.yMin, model.yMax);
+        zPos = random(model.zMin, model.zMax);
+        velocity = new PVector(random(-1,1), random(-1,1), random(-1,1));
+    }
+
+    public void move(float speed) {
+      xPos += speed * velocity.x;
+      if ((xPos < model.xMin - 20) || (xPos > model.xMax + 20)) {
+        velocity.x *= -1;
+      }
+      yPos += speed * velocity.y;
+      if ((yPos < model.yMin - 20) || (yPos > model.yMax + 20)) {
+        velocity.y *= -1;
+      }
+      zPos += speed * velocity.z;
+      if ((zPos < model.zMin - 20) || (zPos > model.zMax + 20)) {
+        velocity.z *= -1;
+      }
+    }
+  }
+
+  public Voronoi(LX lx) {
+    super(lx);
+    addParameter(speed);
+    addParameter(width);
+    addParameter(hue);
+    addParameter(num);
+  }
+
+  public void run(double deltaMs) {
+    for (LXPoint p: model.points) {
+      float numSites = num.getValuef();
+      float lineWidth = width.getValuef();
+
+      while(sites.size()>numSites){
+        sites.remove(0);
+      }
+
+      while(sites.size()<numSites){
+        sites.add(new Site());
+      }
+
+      float minDistSq = 10000;
+      float nextMinDistSq = 10000;
+      float calcRestraintConst = 20 / (numSites + 15);
+      lineWidth = lineWidth * 40 / (numSites + 20);
+
+      for (Site site : sites) {
+        float dx = site.xPos - p.x;
+        float dy = site.yPos - p.y;
+        float dz = site.zPos - p.z;
+
+        if (abs(dy) < yMaxDist * calcRestraintConst &&
+            abs(dx) < xMaxDist * calcRestraintConst &&
+            abs(dz) < zMaxDist * calcRestraintConst) { //restraint on calculation
+          float distSq = dx * dx + dy * dy + dz * dz;
+          if (distSq < nextMinDistSq) {
+            if (distSq < minDistSq) {
+              nextMinDistSq = minDistSq;
+              minDistSq = distSq;
+            } else {
+              nextMinDistSq = distSq;
+            }
+          }
+        }
+      }
+      colors[p.index] = lx.hsb(
+        palette.getHuef(),
+        100,
+        max(0, min(100, 100 - sqrt(nextMinDistSq - minDistSq) / lineWidth))
+      );
+    }
+    for (Site site: sites) {
+      site.move(speed.getValuef());
+    }
+  }
+}
+
+
+public class Sparkle extends LXPattern {
+  private CompoundParameter densityParameter = new CompoundParameter("DENS", 0.15);
+  private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.4);
+  private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.3);
+  private CompoundParameter hueParameter = new CompoundParameter("HUE", 0.5);
+  private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
+  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+  
+  class Spark {
+    LXPoint point;
+    float value;
+    float hue;
+    boolean hasPeaked;
+    
+    Spark() {
+      point = model.points[floor(random(model.points.length))];
+      hue = random(1);
+      boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
+      hasPeaked = infiniteAttack;
+      value = (infiniteAttack ? 1 : 0);
+    }
+    
+    // returns TRUE if this should die
+    boolean age(double ms) {
+      if (!hasPeaked) {
+        value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
+        if (value >= 1.0) {
+          value = 1.0;
+          hasPeaked = true;
+        }
+        return false;
+      } else {
+        value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
+        return value <= 0;
+      }
+    }
+  }
+  
+  private float leftoverMs = 0;
+  private List<Spark> sparks;
+  
+  public Sparkle(LX lx) {
+    super(lx);
+    addParameter(densityParameter);
+    addParameter(attackParameter);
+    addParameter(decayParameter);
+    addParameter(hueParameter);
+    addParameter(hueVarianceParameter);
+    addParameter(saturationParameter);
+    sparks = new LinkedList<Spark>();
+  }
+  
+  public void run(double deltaMs) {
+    leftoverMs += deltaMs;
+    float msPerSpark = 1000 / ((densityParameter.getValuef() + .01) * (model.xRange*10));
+    while (leftoverMs > msPerSpark) {
+      leftoverMs -= msPerSpark;
+      sparks.add(new Spark());
+    }
+    
+    for (LXPoint p : model.points) {
+      colors[p.index] = 0;
+    }
+    
+    for (Spark spark : sparks) {
+      float hue = (hueParameter.getValuef() + (hueVarianceParameter.getValuef() * spark.hue)) % 1.0;
+      color c = lx.hsb(hue * 360, saturationParameter.getValuef() * 100, (spark.value) * 100);
+      colors[spark.point.index] = c;
+    }
+    
+    Iterator<Spark> i = sparks.iterator();
+    while (i.hasNext()) {
+      Spark spark = i.next();
+      boolean dead = spark.age(deltaMs);
+      if (dead) {
+        i.remove();
+      }
+    }
+  } 
+}
+
 public class Ball extends DPat {
 
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
@@ -43,7 +221,7 @@ public class Noise extends DPat {
     pSharp    = addParam("Shrp"    ,  0);
     pSymm     = new DiscreteParameter("Symm" , new String[] {"None", "X", "Y", "Rad"} );
     pChoose   = new DiscreteParameter("Anim", new String[] {"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark","VWav", "Wave"}  );
-    pChoose.setValue(6);
+    pChoose.setValue(7);
     //addNonKnobParameter(pSymm);
     //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);
@@ -604,18 +782,21 @@ public class Pong extends DPat {
   DiscreteParameter   pChoose;
   PVector v = new PVector(), vMir =  new PVector();
 
+  CompoundParameter hueOffset = new CompoundParameter("hueSh", 0);
+
   public Pong(LX lx) {
     super(lx);
     cRad = mMax.x/10;
-    addModulator(dx = new SinLFO(6000,  500, 30000  )).trigger();
-    addModulator(dy = new SinLFO(3000,  500, 22472  )).trigger();
-    addModulator(dz = new SinLFO(1000,  500, 18420  )).trigger();
-    addModulator(x  = new SinLFO(cRad, mMax.x - cRad, 0)).trigger();  x.setPeriod(dx);
-    addModulator(y  = new SinLFO(cRad, mMax.y - cRad, 0)).trigger();  y.setPeriod(dy);
-    addModulator(z  = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();  z.setPeriod(dz);
+    addModulator(dx = new SinLFO(6000,  500+(2000*Math.random()), 30000  )).trigger();
+    addModulator(dy = new SinLFO(3000,  500+(2000*Math.random()), 22472  )).trigger();
+    addModulator(dz = new SinLFO(1000,  500+(2000*Math.random()), 18420  )).trigger();
+    addModulator(x  = new SinLFO(cRad, mMax.x - cRad, 0)).trigger();  x.setPeriod(dx); x.setValue((mMax.x - cRad)*Math.random());
+    addModulator(y  = new SinLFO(cRad, mMax.y - cRad, 0)).trigger();  y.setPeriod(dy); y.setValue((mMax.y - cRad)*Math.random());
+    addModulator(z  = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();  z.setPeriod(dz); z.setValue((mMax.z - cRad)*Math.random());
+    addParameter(hueOffset);
       pSize = addParam  ("Size"     , 0.4 );
       pChoose = new DiscreteParameter("Anim", new String[] {"Pong", "Ball", "Cone"} );
-      pChoose.setValue(2);
+      pChoose.setValue(1);
       //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);
   }
@@ -626,10 +807,10 @@ public class Pong extends DPat {
     v.z=0;p.z=0;// ignore z dimension
     switch(pChoose.getValuei()) {
     case 0: vMir.set(mMax); vMir.sub(p);
-        return lx.hsb(lxh(),100,c1c(1 - min(v.dist(p), v.dist(vMir))*.5/cRad));   // balls
-    case 1: return lx.hsb(lxh(),100,c1c(1 - v.dist(p)*.5/cRad));              // ball
+        return lx.hsb(lxh()+(hueOffset.getValuef()*360),100,c1c(1 - min(v.dist(p), v.dist(vMir))*.5/cRad));   // balls
+    case 1: return lx.hsb(lxh()+(hueOffset.getValuef()*360),100,c1c(1 - v.dist(p)*.5/cRad));              // ball
     case 2: vMir.set(mMax.x/2,0,mMax.z/2);
-        return lx.hsb(lxh(),100,c1c(1 - calcCone(p,v,vMir) * max(.02,.45-val(pSize))));   // spot
+        return lx.hsb(lxh()+(hueOffset.getValuef()*360),100,c1c(1 - calcCone(p,v,vMir) * max(.02,.45-val(pSize))));   // spot
     }
     return lx.hsb(0,0,0);
   }
@@ -1275,7 +1456,7 @@ public class Rings extends SLPattern {
                     0.0f, 1.0f, 0.0f, 300.0f);
 
       colors[p.index] = lx.hsb(
-        palette.getHuef() + m,
+        palette.getHuef(),
         saturation,
         brightness
         );

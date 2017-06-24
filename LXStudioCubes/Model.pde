@@ -37,8 +37,8 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(cubeArr, strips));
+  public SLModel(List<Tower> towers, Cube[] cubeArr) {
+    super(new Fixture(cubeArr));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -66,9 +66,6 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips)
-      stripList.add(strip);
-
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
@@ -77,18 +74,13 @@ public static class SLModel extends LXModel {
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(Cube[] cubeArr) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
             this.points.add(point); 
           } 
         } 
-      } 
-      for (Strip strip : strips) {
-        for (LXPoint point : strip.points) {
-          this.points.add(point);
-        }
       }
     }
   }
@@ -179,7 +171,7 @@ public static class Cube extends LXModel {
     //            Inches   |  Meter  |  Edge
     SMALL         (12,        72,       15),
     MEDIUM        (18,        60,       23),
-    LARGE         (24,        30,       84),
+    LARGE         (24,        30,       15),
     LARGE_DOUBLE  (24,        60,       30);
     
 
