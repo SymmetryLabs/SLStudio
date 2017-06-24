@@ -30,6 +30,14 @@ static final float section2RotationX = 0;
 static final float section2RotationY = 0;
 static final float section2RotationZ = 0;
 
+static final float section3OffsetX = 300;
+static final float section3OffsetY = 0;
+static final float section3OffsetZ = 50;
+
+static final float section3RotationX = 0;
+static final float section3RotationY = 180;
+static final float section3RotationZ = 0;
+
 static final float CUBE_WIDTH = 24;
 static final float CUBE_HEIGHT = 24;
 static final float TOWER_WIDTH = 24;
@@ -45,6 +53,38 @@ static final BulbConfig[] BULB_CONFIG = {
     // new BulbConfig("lifx-4", 115, 30, -60),
     // new BulbConfig("lifx-5", 100, 30, -30),
 };
+
+static final TowerConfig[] SECTION_3 =  {
+  new TowerConfig(0, 0, 0, 0, new String[] {"50"}),
+  new TowerConfig(24, 0, -30, 0, new String[] {"4"}),
+  new TowerConfig(48, 0, -2, 0, new String[] {"343"}),
+  new TowerConfig(57, 0, -27, 12, new String[] {"157"}),
+  new TowerConfig(90, 0, -30, 45-90, new String[] {"11"}),
+  new TowerConfig(130, 0, -30, 45-90, new String[] {"96"}),
+  new TowerConfig(160, 0, -15, 60-90, new String[] {"81"}),
+  new TowerConfig(200, 0, -16, 45-90, new String[] {"90"}),
+  new TowerConfig(230, 0, 6, 90-90, new String[] {"113"}),
+
+  new TowerConfig(4, 24, -12, 0, new String[] {"9"}),
+  new TowerConfig(33, 24, -15, 0, new String[] {"92"}),
+  new TowerConfig(62, 24, -20, 0, new String[] {"86"}),
+  new TowerConfig(106, 24, -30, 45-90, new String[] {"167"}),
+  new TowerConfig(150, 24, -30, 45-105, new String[] {"21"}),
+  new TowerConfig(190, 24, -27, 45-105, new String[] {"66"}),
+  new TowerConfig(218, 24, 6, 90-90, new String[] {"128"}),
+
+  new TowerConfig(24, 48, -8, 0, new String[] {"74"}),
+  new TowerConfig(54, 48, -11, 0, new String[] {"186"}),
+  new TowerConfig(94, 48, -30, 45-90, new String[] {"1"}),
+  new TowerConfig(130, 48, -30, 45-90, new String[] {"37"}),
+  new TowerConfig(160, 48, -15, 60-90, new String[] {"6"}),
+  new TowerConfig(200, 48, -16, 45-90, new String[] {"105"}),
+
+  new TowerConfig(50, 72, -10, 45-90, new String[] {"40"}),
+  new TowerConfig(83, 72, -33, 45-90, new String[] {"155"}),
+  new TowerConfig(150, 72, -30, 45-105, new String[] {"84"}),
+};
+
 
 static final TowerConfig[] SECTION_2 =  {
 
@@ -250,7 +290,7 @@ public SLModel buildModel() {
 
     for (int i = 0; i < config.ids.length; i++) {
       float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot-90, zRot, globalTransform, type);
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot+180, yRot-90, zRot, globalTransform, type);
       cubes.add(cube);
       allCubes.add(cube);
     }
@@ -273,7 +313,31 @@ public SLModel buildModel() {
 
     for (int i = 0; i < config.ids.length; i++) {
       float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot-90, zRot, globalTransform, type);
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot+180, yRot-90, zRot, globalTransform, type);
+      cubes.add(cube);
+      allCubes.add(cube);
+    }
+    towers.add(new Tower("", cubes));
+  }
+  globalTransform.pop();
+
+  globalTransform.push();
+  globalTransform.translate(section3OffsetX, section3OffsetY, section3OffsetZ);
+  globalTransform.rotateY(section3RotationY * PI / 180.);
+  globalTransform.rotateX(section3RotationX * PI / 180.);
+  globalTransform.rotateZ(section3RotationZ * PI / 180.);
+  for (TowerConfig config : SECTION_3) {
+    List<Cube> cubes = new ArrayList<Cube>();
+    float x = config.x;
+    float z = config.z;
+    float xRot = config.xRot;
+    float yRot = config.yRot;
+    float zRot = config.zRot;
+    Cube.Type type = config.type;
+
+    for (int i = 0; i < config.ids.length; i++) {
+      float y = config.yValues[i];
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot+180, yRot-90, zRot, globalTransform, type);
       cubes.add(cube);
       allCubes.add(cube);
     }
