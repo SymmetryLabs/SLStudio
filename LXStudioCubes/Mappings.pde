@@ -14,200 +14,117 @@
  */
 
 
-static final float globalOffsetX = 0;
-static final float globalOffsetY = 0;
-static final float globalOffsetZ = 0;
+static final float globalOffsetX = 33;
+static final float globalOffsetY = 50;
+static final float globalOffsetZ = 40;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = 0;
+static final float globalRotationY = 40;
 static final float globalRotationZ = 0;
-
-static final float section2OffsetX = 600;
-static final float section2OffsetY = 0;
-static final float section2OffsetZ = 0;
-
-static final float section2RotationX = 0;
-static final float section2RotationY = 0;
-static final float section2RotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
 static final float CUBE_HEIGHT = 24;
 static final float TOWER_WIDTH = 24;
 static final float TOWER_HEIGHT = 24;
 static final float CUBE_SPACING = 2.5;
+
 static final float TOWER_VERTICAL_SPACING = 2.5;
+
 static final float TOWER_RISER = 14;
 
-static final BulbConfig[] BULB_CONFIG = {
-    // new BulbConfig("lifx-1", -10, 60, -50),
-    // new BulbConfig("lifx-2", 35, 60, -120),
-    // new BulbConfig("lifx-3", -20, 30, -70),
-    // new BulbConfig("lifx-4", 115, 30, -60),
-    // new BulbConfig("lifx-5", 100, 30, -30),
+
+/**
+ * Front Face
+ *------------------------------------------------------------------------*/
+static final float frontFaceOffsetX = 0;
+static final float frontFaceOffsetY = 0;
+static final float frontFaceOffsetZ = 0;
+
+static final float frontFaceRotationX = 0;
+static final float frontFaceRotationY = 0;
+static final float frontFaceRotationZ = 0;
+
+static final TowerConfig[] FRONT_FACE_CONFIG = {
+  (TowerConfig) new TowerConfigA4(  -3,   0,    0, new String[] {"168", "103", "326", "312"}),
+  (TowerConfig) new TowerConfigB3(  30, -12,  -64, new String[] {"61", "138", "399"}),
+  (TowerConfig) new TowerConfigC4(  90,   0,  -75, new String[] {"163", "390", "184", "64"}),
+  (TowerConfig) new TowerConfigD3( 126, -12,  -72, new String[] {"171", "139", "123"}),
+  (TowerConfig) new TowerConfigE1( 170, -35,  -31, new String[] {"181"}),
 };
 
-static final TowerConfig[] SECTION_2 =  {
+/**
+ * Back Face
+ *------------------------------------------------------------------------*/
+static final float backFaceOffsetX = 200;
+static final float backFaceOffsetY = 0;
+static final float backFaceOffsetZ = 24;
 
-  // layer 1
-  new TowerConfig(0, 0, 0, -105, new String[] {"160"}),
-  new TowerConfig(19, 0, 26, -175+90, new String[] {"119"}),
-  new TowerConfig(45, 0, 11, -40, new String[] {"196"}),
-  new TowerConfig(46, 0, -17, -105, new String[] {"5"}),
-  new TowerConfig(73, 0, 0, -60, new String[] {"110"}),
+static final float backFaceRotationX = 0;
+static final float backFaceRotationY = 180;
+static final float backFaceRotationZ = 0;
 
-  // layer 2
-  new TowerConfig(7, 24, 8, -175+90, new String[] {"174"}),
-  new TowerConfig(35, 24, 22, -105+90, new String[] {"183"}),
-  new TowerConfig(53, 24, 0, -53, new String[] {"204"}),
-
-  // layer 3
-  new TowerConfig(10, 48, 9, -60, new String[] {"70"}),
-  new TowerConfig(44, 48, 0, -175+90, new String[] {"44"}),
-
-  // layer 4
-  new TowerConfig(16, 72, 10, -87, new String[] {"108"}),
+static final TowerConfig[] BACK_FACE_CONFIG = {
+  (TowerConfig) new TowerConfigA4(  -3,   0,    0, new String[] {"36", "57", "47", "54"}),
+  (TowerConfig) new TowerConfigB3(  30, -12,  -64, new String[] {"39", "14", "76"}),
+  (TowerConfig) new TowerConfigC4(  90,   0,  -75, new String[] {"94", "73", "351", "48"}),
+  (TowerConfig) new TowerConfigD3( 126, -12,  -72, new String[] {"405", "349", "100"}),
+  (TowerConfig) new TowerConfigE1( 170, -35,  -31, new String[] {"198"}),
 };
 
-static final TowerConfig[] SECTION_1 = {
-
-  // (GROUP 1)
-  // layer 1
-  new TowerConfig(0 ,  0, -26, -55, new String[] {"34"}), // 0
-  new TowerConfig(36,  0, -29, -53, new String[] {"7"}), // +36
-  new TowerConfig(74,  0, -28, -37, new String[] {"111"}), // +38
-  new TowerConfig(116,  0, -27, -32, new String[] {"147"}), // +42
-  new TowerConfig(153,  0, -34, -40, new String[] {"190"}), // +35
-  new TowerConfig(188,  0, -30, -65, new String[] {"408"}), // +34
-
-  // layer 2
-  new TowerConfig(17.5, 24, -26, -55, new String[] {"28"}), // 17.5
-  new TowerConfig(53.5, 24, -30, -40, new String[] {"19"}), // +38
-  new TowerConfig(95, 24, -23, -47, new String[] {"166"}), // +41
-  new TowerConfig(135, 24, -27, -45, new String[] {"52"}), // +39
-  new TowerConfig(170.5, 24, -32, -75, new String[] {"104"}), // +35
-
-  // layer 3
-  new TowerConfig(35,  48, -24, -45, new String[] {"137"}), 
-  new TowerConfig(74,  48, -28, -37, new String[] {"17"}),
-  new TowerConfig(112, 48, -27, -55, new String[] {"151"}),
-  new TowerConfig(149.5, 48, -30, -40, new String[] {"30"}),
-  new TowerConfig(187.5, 48, -30, -55, new String[] {"65"}),
-
-  // layer 4
-  new TowerConfig(52.5, 72, -26, -49, new String[] {"205"}),
-  new TowerConfig(131.5, 72, -24, -60, new String[] {"77"}),
-  new TowerConfig(169, 72, -27, -35, new String[] {"129"}),
-
-  // (GROUP 2)
-  // layer 1
-  new TowerConfig(225,  0, -27, -30, new String[] {"142"}),
-  new TowerConfig(259,  0, -29, -26, new String[] {"16"}),
-  new TowerConfig(296,  0, -28, -44, new String[] {"68"}),
-  new TowerConfig(338,  0, -22, -20, new String[] {"33"}),
-
-  // layer 2
-  new TowerConfig(205.5, 24, -32, -38, new String[] {"177"}),
-  new TowerConfig(243, 24, -27, -45, new String[] {"199"}),
-  new TowerConfig(278.5, 24, -25, -65, new String[] {"191"}),
-  new TowerConfig(316.5, 24, -26, -35, new String[] {"22"}),
-
-  // layer 3
-  new TowerConfig(223,  48, -26, -50, new String[] {"156"}),
-  new TowerConfig(262,  48, -26, -57, new String[] {"344"}),
-  new TowerConfig(299,  48, -27, -36, new String[] {"101"}),
-  new TowerConfig(342,  48, -22, -35, new String[] {"132"}), // CHECK MAPPING
-
-  // layer 4
-  new TowerConfig(244, 72, -26, -34, new String[] {"173"}),
-  new TowerConfig(322.5, 72, -23, -60, new String[] {"15"}),
-
-  // (GROUP 3)
-  // layer 1
-  new TowerConfig(376,  0, -29, -45, new String[] {"58"}),
-  new TowerConfig(408,  0, -45, -38, new String[] {"203"}),
-  new TowerConfig(430,  0, -28, -43, new String[] {"83"}),
-  new TowerConfig(468,  0, -25, -31, new String[] {"126"}),
-  new TowerConfig(500,  0, -14, -50, new String[] {"180"}),
-
-  // layer 2
-  new TowerConfig(358.5, 24, -19, -65, new String[] {"26"}),
-  new TowerConfig(402, 24, -31, -43, new String[] {"397"}),
-  new TowerConfig(444, 24, -31, -37, new String[] {"140"}),
-  new TowerConfig(483, 24, -21, -16, new String[] {"133"}),
-
-  // layer 3
-  new TowerConfig(381, 48, -26, -40, new String[] {"357"}),
-  new TowerConfig(422, 48, -31.5, -40, new String[] {"32"}),
-  new TowerConfig(465, 48, -27, -15, new String[] {"121"}),
-
-  // layer 4
-  new TowerConfig(404, 72, -27, -65, new String[] {"134"}),
-  new TowerConfig(444, 72, -31, -37, new String[] {"82"}),
-
-};
-
-static class BulbConfig {
-  final String id;
-  final float x;
-  final float y;
-  final float z;
-
-  BulbConfig(String id, float x, float y, float z) {
-    this.id = id;
-    this.x = x;
-    this.y = y;
-    this.z = z;
+// These are unique classes for each 'tower' tyoe going from left to right along a face
+// The letter indicates it's position, the number indicates how many cubes it has
+static class TowerConfigA4 extends TowerConfig {
+  TowerConfigA4(float x, float y, float z, String[] ids) {
+    cubes.add(new CubeConfig(   x,    y,    z, ids[2]));
+    cubes.add(new CubeConfig(   x, y-25,    z, ids[1]));
+    cubes.add(new CubeConfig(   x, y-50,    z, ids[0]));
+    cubes.add(new CubeConfig( x-8, y-39, z-25, ids[3]));
+  }
+}
+static class TowerConfigB3 extends TowerConfig {
+  TowerConfigB3(float x, float y, float z, String[] ids) {
+    cubes.add(new CubeConfig(   x,    y,   z, ids[1]));
+    cubes.add(new CubeConfig(   x, y-25,   z, ids[0]));
+    cubes.add(new CubeConfig(x-25, y-14, z+8, ids[2]));
+  }
+}
+static class TowerConfigC4 extends TowerConfig {
+  TowerConfigC4(float x, float y, float z, String[] ids) {
+    cubes.add(new CubeConfig(   x,    y,    z, ids[2]));
+    cubes.add(new CubeConfig(   x, y-25,    z, ids[1]));
+    cubes.add(new CubeConfig(   x, y-50,    z, ids[0]));
+    cubes.add(new CubeConfig(x-25, y-14,  z-8, ids[3]));
+  }
+}
+static class TowerConfigD3 extends TowerConfig {
+  TowerConfigD3(float x, float y, float z, String[] ids) {
+    cubes.add(new CubeConfig(   x,    y,    z, ids[1]));
+    cubes.add(new CubeConfig(   x, y-25,    z, ids[0]));
+    cubes.add(new CubeConfig(x+25, y-14, z+14, ids[2]));
+  }
+}
+static class TowerConfigE1 extends TowerConfig {
+  TowerConfigE1(float x, float y, float z, String[] ids) {
+    cubes.add(new CubeConfig(   x,    y,    z, ids[0]));
   }
 }
 
-static class TowerConfig {
+static abstract class TowerConfig {
+  final List<CubeConfig> cubes = new ArrayList<CubeConfig>();
+}
 
-  final Cube.Type type;
+static class CubeConfig {
   final float x;
   final float y;
   final float z;
-  final float xRot;
-  final float yRot;
-  final float zRot;
-  final String[] ids;
-  final float[] yValues;
+  final String id;
 
-  TowerConfig(float x, float y, float z, Cube.Type type, float spacing, String[] ids) {
-    this(type, x, y, z, 0, -90, 0, ids);
-  }
-
-  TowerConfig(float x, float y, float z, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, ids);
-  }
-
-  TowerConfig(float x, float y, float z, float yRot, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, 0, yRot, 0, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, String[] ids) {
-    this(type, x, y, z, 0, -90, 0, ids);
-  }
-
-  TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-    this.type = type;
+  CubeConfig(float x, float y, float z, String id) {
     this.x = x;
     this.y = y;
     this.z = z;
-    this.xRot = xRot;
-    this.yRot = yRot;
-    this.zRot = zRot;
-    this.ids = ids;
-
-    this.yValues = new float[ids.length];
-    for (int i = 0; i < ids.length; i++) {
-      yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
-    }
+    this.id = id;
   }
-
 }
 
 Map<String, String> macToPhysid = new HashMap<String, String>();
@@ -239,47 +156,52 @@ public SLModel buildModel() {
   List<Tower> towers = new ArrayList<Tower>();
   List<Cube> allCubes = new ArrayList<Cube>();
 
-  for (TowerConfig config : SECTION_1) {
-    List<Cube> cubes = new ArrayList<Cube>();
-    float x = config.x;
-    float z = config.z;
-    float xRot = config.xRot;
-    float yRot = config.yRot;
-    float zRot = config.zRot;
-    Cube.Type type = config.type;
+  /* Front Face -----------------------------------------------------*/
+  globalTransform.translate(frontFaceOffsetX, frontFaceOffsetY, frontFaceOffsetZ);
+  globalTransform.rotateY(frontFaceRotationY * PI / 180.);
+  globalTransform.rotateX(frontFaceRotationX * PI / 180.);
+  globalTransform.rotateZ(frontFaceRotationZ * PI / 180.);
 
-    for (int i = 0; i < config.ids.length; i++) {
-      float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot-90, zRot, globalTransform, type);
-      cubes.add(cube);
-      allCubes.add(cube);
+  for (TowerConfig towerConfig : FRONT_FACE_CONFIG) {
+    List<Cube> towerCubes = new ArrayList<Cube>();
+
+    for (CubeConfig cubeConfig : towerConfig.cubes) {
+      String id = cubeConfig.id;
+      float x = cubeConfig.x;
+      float y = cubeConfig.y;
+      float z = cubeConfig.z;
+
+      Cube c = new Cube(id, x, y, z, 0, -180, 90, globalTransform, Cube.Type.LARGE);
+      towerCubes.add(c);
+      allCubes.add(c);
     }
-    towers.add(new Tower("", cubes));
+
+    towers.add(new Tower("", towerCubes));
   }
+  /*-----------------------------------------------------------------*/
 
-  globalTransform.push();
-  globalTransform.translate(section2OffsetX, section2OffsetY, section2OffsetZ);
-  globalTransform.rotateY(section2RotationY * PI / 180.);
-  globalTransform.rotateX(section2RotationX * PI / 180.);
-  globalTransform.rotateZ(section2RotationZ * PI / 180.);
-  for (TowerConfig config : SECTION_2) {
-    List<Cube> cubes = new ArrayList<Cube>();
-    float x = config.x;
-    float z = config.z;
-    float xRot = config.xRot;
-    float yRot = config.yRot;
-    float zRot = config.zRot;
-    Cube.Type type = config.type;
+  /* Front Face -----------------------------------------------------*/
+  globalTransform.translate(backFaceOffsetX, backFaceOffsetY, backFaceOffsetZ);
+  globalTransform.rotateY(backFaceRotationY * PI / 180.);
+  globalTransform.rotateX(backFaceRotationX * PI / 180.);
+  globalTransform.rotateZ(backFaceRotationZ * PI / 180.);
 
-    for (int i = 0; i < config.ids.length; i++) {
-      float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot-90, zRot, globalTransform, type);
-      cubes.add(cube);
-      allCubes.add(cube);
+  for (TowerConfig towerConfig : BACK_FACE_CONFIG) {
+    List<Cube> towerCubes = new ArrayList<Cube>();
+
+    for (CubeConfig cubeConfig : towerConfig.cubes) {
+      String id = cubeConfig.id;
+      float x = cubeConfig.x;
+      float y = cubeConfig.y;
+      float z = cubeConfig.z;
+
+      Cube c = new Cube(id, x, y, z, 0, -180, 90, globalTransform, Cube.Type.LARGE);
+      towerCubes.add(c);
+      allCubes.add(c);
     }
-    towers.add(new Tower("", cubes));
+
+    towers.add(new Tower("", towerCubes));
   }
-  globalTransform.pop();
   /*-----------------------------------------------------------------*/
 
   Cube[] allCubesArr = new Cube[allCubes.size()];
