@@ -2092,6 +2092,16 @@ public class Palette extends SLPattern {
   }
 }
 
+public class Blank extends SLPattern {
+  public Blank(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    setColors(LXColor.BLACK);
+  }
+}
+
 /* Non-Patterns */
 public static abstract class SLPattern extends LXPattern {
   public final SLModel model;
