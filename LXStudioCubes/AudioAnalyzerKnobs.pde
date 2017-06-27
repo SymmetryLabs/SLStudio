@@ -43,6 +43,9 @@ public class UIAudioAnalyzerKnobs extends UIModulator {
 
     new UIKnob(audioAnalyzerKnobs.spectralComplexity)
       .setY(TOP_PADDING+(Y_SPACING)).setX(X_SPACING*4).addToContainer(this);
+
+    new UIKnob(audioAnalyzerKnobs.onset)
+      .setY(TOP_PADDING+(Y_SPACING)).setX(X_SPACING*5).addToContainer(this);
   }
 
   @Override
@@ -90,6 +93,9 @@ public class AudioAnalyzerKnobs extends LXModulator {
   public final BoundedParameter spectralComplexity = new BoundedParameter("spectral complexity")
     .setDescription("spectral complexity parameter");
 
+  public final BoundedParameter onset = new BoundedParameter("onset")
+    .setDescription("onset parameter");
+
   public AudioAnalyzerKnobs(String label) {
     super(label);
     addParameter("rms", this.rms);
@@ -104,6 +110,7 @@ public class AudioAnalyzerKnobs extends LXModulator {
     addParameter("str peak", this.strongPeak);
     addParameter("roll off", this.rollOff);
     addParameter("spec complexity", this.spectralComplexity);
+    addParameter("onset", this.onset);
   }
 
   @Override

@@ -14,9 +14,9 @@
  */
 
 
-static final float globalOffsetX = 34;
-static final float globalOffsetY = -23;
-static final float globalOffsetZ = 136;
+static final float globalOffsetX = 0;
+static final float globalOffsetY = 0;
+static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
 static final float globalRotationY = -45;
@@ -48,72 +48,20 @@ static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 static final TowerConfig[] TOWER_CONFIG = {
 
     // left
-    new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-      "22", "204"
-    }),
-    new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {"86"}),
-    new TowerConfig(-SP*5.5, (JUMP*0)+0          , -SP*3.5, new String[] {"5"}),
-
-    new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-      "25", "199", "177"
-    }),
-
-    new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {"94"}),
-    new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"90"}),
-    new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"64"}),
-
-    // left tower of 5
     new TowerConfig(0, 0, 0, new String[] {
-      "19", "190", "121", "1", "103"
-    }),
-    new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),
-    new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),
-    new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),
-    new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),
-    new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),
+      "182", "170", "51"
+      }),
 
-    new TowerConfig(SP*2.0, 0, 0, new String[] {
-      "6", "132", "61", "54"
-    }),
-    new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),
-    new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),
+    new TowerConfig(12, 0, -24, new String[] {
+      "187", "361", "158"
+      }),
 
-    // middle tower of 5
-    new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {
-      "111", "166", "187", "158", "101"
-    }),
-    new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),
-    new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),
-    new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),
-    new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),
+    new TowerConfig(24, 0, -48, new String[] {
+      "185", "18", "107"
+      }),
 
-    new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {
-      "102", "156", "13", "82"
-    }),
-    new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),
-    new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),
-    new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),
-    new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),
-    new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),
+    
 
-    // right tower of 5
-    new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {
-      "183", "180", "57", "51", "108"
-    }),
-    new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),
-    new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),
-    new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),
-
-    new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {
-      "100", "85", "110zAQ  AZQ"
-    }),
-    new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),
-    new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),
-
-    // table cubes
-    new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),
-    new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),
-    new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),
 };
 
 
