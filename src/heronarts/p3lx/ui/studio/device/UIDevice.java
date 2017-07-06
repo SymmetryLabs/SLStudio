@@ -26,10 +26,24 @@
 
 package heronarts.p3lx.ui.studio.device;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXDeviceComponent;
-import heronarts.lx.parameter.*;
-import heronarts.p3lx.ui.*;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXListenableNormalizedParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.StringParameter;
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
+import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UIContainer;
+import heronarts.p3lx.ui.UIKeyFocus;
+import heronarts.p3lx.ui.UIMouseFocus;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
@@ -38,9 +52,6 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UIKeyFocus {
 
@@ -219,20 +230,20 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
             }
         }
         int ki = 0;
-        for (LXListenableNormalizedParameter knob : params) {
+        for (LXListenableNormalizedParameter param : params) {
             float x = (ki % perRow) * (UIKnob.WIDTH + 4);
             float y = 7 + (ki / perRow) * (UIKnob.HEIGHT + 10);
-            if (knob instanceof BoundedParameter || knob instanceof DiscreteParameter) {
+            if (param instanceof BoundedParameter || param instanceof DiscreteParameter) {
                 new UIKnob(x, y)
-                        .setParameter(knob)
+                        .setParameter(param)
                         .addToContainer(this);
-            } else if (knob instanceof BooleanParameter) {
+            } else if (param instanceof BooleanParameter) {
                 new UISwitch(x, y)
-                        .setParameter(knob)
+                        .setParameter(param)
                         .addToContainer(this);
             } else {
                 // Hey developer: probably added a type in the for-loop above that wasn't handled down here.
-                throw new RuntimeException("Cannot generate control, unsupported pattern parameter type: " + knob.getClass());
+                throw new RuntimeException("Cannot generate control, unsupported pattern parameter type: " + param.getClass());
             }
 
             ++ki;
