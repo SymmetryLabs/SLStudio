@@ -46,6 +46,7 @@ import heronarts.p3lx.ui.UIKeyFocus;
 import heronarts.p3lx.ui.UIMouseFocus;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIKnob;
+import heronarts.p3lx.ui.component.UISwitch;
 import heronarts.p3lx.ui.component.UITextBox;
 import processing.core.PConstants;
 import processing.core.PGraphics;
@@ -211,26 +212,40 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
     }
 
     protected void buildDefaultControlUI(LXComponent component) {
-        List<LXListenableNormalizedParameter> knobs = new ArrayList<LXListenableNormalizedParameter>();
+        List<LXListenableNormalizedParameter> params = new ArrayList<LXListenableNormalizedParameter>();
         for (LXParameter parameter : component.getParameters()) {
-            if (parameter instanceof BoundedParameter || parameter instanceof DiscreteParameter) {
-                knobs.add((LXListenableNormalizedParameter) parameter);
-            }
+            if (parameter instanceof BoundedParameter || parameter instanceof DiscreteParameter ||
+                    parameter instanceof BooleanParameter
+            ) {
+                params.add((LXListenableNormalizedParameter) parameter);
+            } // else, ignore unsupported types
         }
         int perRow;
-        if (knobs.size() <= 3) {
+        if (params.size() <= 3) {
             perRow = 1;
         } else {
-            perRow = (int) Math.ceil(knobs.size() / 3.);
+            perRow = (int) Math.ceil(params.size() / 3.);
             if (perRow < 4) {
                 perRow = 4;
             }
         }
         int ki = 0;
-        for (LXListenableNormalizedParameter knob : knobs) {
-            new UIKnob((ki % perRow) * (UIKnob.WIDTH + 4), 7 + (ki / perRow) * (UIKnob.HEIGHT + 10))
-            .setParameter(knob)
-            .addToContainer(this);
+        for (LXListenableNormalizedParameter param : params) {
+            float x = (ki % perRow) * (UIKnob.WIDTH + 4);
+            float y = 7 + (ki / perRow) * (UIKnob.HEIGHT + 10);
+            if (param instanceof BoundedParameter || param instanceof DiscreteParameter) {
+                new UIKnob(x, y)
+                        .setParameter(param)
+                        .addToContainer(this);
+            } else if (param instanceof BooleanParameter) {
+                new UISwitch(x, y)
+                        .setParameter(param)
+                        .addToContainer(this);
+            } else {
+                // Hey developer: probably added a type in the for-loop above that wasn't handled down here.
+                throw new RuntimeException("Cannot generate control, unsupported pattern parameter type: " + param.getClass());
+            }
+
             ++ki;
         }
         setContentWidth(perRow * (UIKnob.WIDTH + 4) - 4);
