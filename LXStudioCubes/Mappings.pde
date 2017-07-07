@@ -47,36 +47,41 @@ static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-    new TowerConfig(SP*0, 0, 0, new String[] {
-      "22", "204", "0", "0"
-    }),
-    new TowerConfig(SP*1, 0, 0, new String[] {
-      "22", "204", "0", "0"
-    }),
-    new TowerConfig(SP*2, 0, 0, new String[] {
-      "22", "204", "0", "0"
-    }),
-    new TowerConfig(SP*3, 0, 0, new String[] {
-      "22", "204", "0", "0"
-    }),
-    new TowerConfig(SP*4, 0, 0, new String[] {
-      "22", "204", "0", "0"
-    }),
-    new TowerConfig(SP*5, 0, 0, new String[] {
-      "22", "204", "0", "0"
-    }),
+    // new TowerConfig(SP*0, 0, 0, new String[] {
+    //   "22", "204", "0", "0"
+    // }),
+    // new TowerConfig(SP*1, 0, 0, new String[] {
+    //   "22", "204", "0", "0"
+    // }),
+    // new TowerConfig(SP*2, 0, 0, new String[] {
+    //   "22", "204", "0", "0"
+    // }),
+    // new TowerConfig(SP*3, 0, 0, new String[] {
+    //   "22", "204", "0", "0"
+    // }),
+    // new TowerConfig(SP*4, 0, 0, new String[] {
+    //   "22", "204", "0", "0"
+    // }),
+    // new TowerConfig(SP*5, 0, 0, new String[] {
+    //   "22", "204", "0", "0"
+    // }),
 
 };
 
 
-static final StripConfig[] STRIP_CONFIG = {
-          // controller id        x   y   z  xRot   yRot   zRot    num leds      pitch in inches
-new StripConfig("206",            0,  0,  0,    0,     0,     0,        100,                 1),
+static final BarConfig[] BAR_CONFIG = {
+        // if it takes 1 id
+        // controller id          x   y   z  xRot   yRot   zRot    num leds      pitch in inches
+  new BarConfig("206",            0,  0,  0,    0,     0,     0,        100,                 1),
 
+        // if it takes 2 ids
+        // 2 controller ids       x   y   z  xRot   yRot   zRot    num leds      pitch in inches
+  new BarConfig("0", "0",         0,  0,  0,    0,     0,     0,        100,                 1),
 };
 
-static class StripConfig {
+static class BarConfig {
   String id;
+  String secondId;
   int numPoints;
   float spacing;
   float x;
@@ -86,8 +91,13 @@ static class StripConfig {
   float yRot;
   float zRot;
 
-  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
+  BarConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
+    this(id, null, x, y, z, xRot, yRot, zRot, numPoints, spacing);
+  }
+
+  BarConfig(String id, String secondId, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
     this.id = id;
+    this.secondId = secondId;
     this.numPoints = numPoints;
     this.spacing = spacing;
     this.x = x;
@@ -197,19 +207,19 @@ public SLModel buildModel() {
   }
   /*-----------------------------------------------------------------*/
 
-  /* Strips ----------------------------------------------------------*/
-  List<Strip> strips = new ArrayList<Strip>();
+  /* Bars -----------------------------------------------------------*/
+  List<Bar> bars = new ArrayList<Bar>();
 
-  for (StripConfig stripConfig : STRIP_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
+  for (BarConfig barConfig : BAR_CONFIG) {
+    Strip.Metrics metrics = new Strip.Metrics(barConfig.numPoints, barConfig.spacing);
 
     globalTransform.push();
-    globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
-    globalTransform.rotateX(stripConfig.yRot * PI / 180.);
-    globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
+    globalTransform.translate(barConfig.x, barConfig.y, barConfig.z);
+    globalTransform.rotateY(barConfig.xRot * PI / 180.);
+    globalTransform.rotateX(barConfig.yRot * PI / 180.);
+    globalTransform.rotateZ(barConfig.zRot * PI / 180.);
 
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+    bars.add(new Bar(barConfig.id, barConfig.secondId, metrics, globalTransform));
 
     globalTransform.pop();
   }
@@ -220,7 +230,7 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
+  return new SLModel(towers, allCubesArr, bars);
 }
 
 public SLModel getModel() {

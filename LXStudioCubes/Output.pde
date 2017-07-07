@@ -197,57 +197,118 @@ class SLController extends LXOutput {
         }
       }
     }
-
-    // Initialize packet data base on cube type.
-    // If we don't know the cube type, default to
-    // using the cube type with the most pixels
-    Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-    int numPixels = cubeType.POINTS_PER_CUBE;
-    if (packetData == null || packetData.length != numPixels) {
-      initPacketData(numPixels);
-    }
-
-    // Fill the datagram with pixel data
-    // Fill with all black if we don't have cube data
-    if (cube != null) {
-      for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-        int stripId = STRIP_ORD[stripNum];
-        Strip strip = cube.strips.get(stripId);
-
-        for (int i = 0; i < strip.metrics.numPoints; i++) {
-          LXPoint point = strip.getPoints().get(i);
-          setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+    Bar bar = null;
+    if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.bars.size() > 0) {
+      bar = model.bars.get(0);
+    } else {
+      for (Bar b : model.bars) {
+        if (b.id != null && b.id.equals(cubeId)) {
+          bar = b;
+          break;
+        }
+        if (b.secondId != null && b.secondId.equals(cubeId)) {
+          bar = b;
+          break;
         }
       }
-    } else {
-      for (int i = 0; i < numPixels; i++) {
-        setPixel(i, LXColor.BLACK);
+    }
+
+    if (bar != null) {
+      // Initialize packet data base on cube type.
+      // If we don't know the cube type, default to
+      // using the cube type with the most pixels
+      int numPixels = bar.strips.get(0).points.length;
+
+      if (bar.secondId == null) {
+        numPixels *= 2;
+      }
+
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
+      // Fill the datagram with pixel data
+      // Fill with all black if we don't have cube data
+      if (bar != null) {
+          int counter = 0;
+          if (bar.secondId == null) {
+            for (int i = 0; i < bar.points.length; i++) {
+              setPixel(counter++, colors[bar.points[i].index]);
+            }
+            for (int i = bar.points.length-1; i > -1; i--) {
+              setPixel(counter++, colors[bar.points[i].index]);
+            }
+          } else {
+            if (bar.id.equals(cubeId)) {
+              for (int i = 0; i < bar.points.length; i++) {
+                setPixel(counter++, colors[bar.points[i].index]);
+              }
+            } else if (bar.secondId.equals(cubeId)) {
+              for (int i = bar.points.length-1; i > -1; i--) {
+                setPixel(counter++, colors[bar.points[i].index]);
+              }
+            }
+          }
+          //setPixel(colors[point.index]);
+      } else {
+        for (int i = 0; i < numPixels; i++) {
+          setPixel(i, LXColor.BLACK);
+        }
       }
     }
 
-    // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-    // TODO: refactor here
-    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
-      if (mappingMode.inUnMappedMode()) {
-        if (mappingMode.inDisplayAllMode()) {
-          color col = mappingMode.getUnMappedColor();
+    if (cube != null) {
+      // Initialize packet data base on cube type.
+      // If we don't know the cube type, default to
+      // using the cube type with the most pixels
+      Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
+      int numPixels = cubeType.POINTS_PER_CUBE;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
 
-          for (int i = 0; i < numPixels; i++)
-            setPixel(i, col);
-        } else {
-          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+      // Fill the datagram with pixel data
+      // Fill with all black if we don't have cube data
+      if (cube != null) {
+        for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+          int stripId = STRIP_ORD[stripNum];
+          Strip strip = cube.strips.get(stripId);
+
+          for (int i = 0; i < strip.metrics.numPoints; i++) {
+            LXPoint point = strip.getPoints().get(i);
+            setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+          }
+        }
+      } else {
+        for (int i = 0; i < numPixels; i++) {
+          setPixel(i, LXColor.BLACK);
+        }
+      }
+
+      // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+      // TODO: refactor here
+      if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+        if (mappingMode.inUnMappedMode()) {
+          if (mappingMode.inDisplayAllMode()) {
             color col = mappingMode.getUnMappedColor();
 
             for (int i = 0; i < numPixels; i++)
               setPixel(i, col);
           } else {
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+            if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+              color col = mappingMode.getUnMappedColor();
+
+              for (int i = 0; i < numPixels; i++)
+                setPixel(i, col);
+            } else {
+              for (int i = 0; i < numPixels; i++)
+                setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+            }
           }
+        } else {
+          for (int i = 0; i < numPixels; i++)
+            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
         }
-      } else {
-        for (int i = 0; i < numPixels; i++)
-          setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
       }
     }
 

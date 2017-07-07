@@ -34,11 +34,12 @@ public static class SLModel extends LXModel {
   public final List<Cube> cubes;
   public final List<Face> faces;
   public final List<Strip> strips;
+  public final List<Bar> bars;
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(cubeArr, strips));
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Bar> bars) {
+    super(new Fixture(cubeArr, bars));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -48,6 +49,7 @@ public static class SLModel extends LXModel {
     List<Cube> cubeList = new ArrayList<Cube>();
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
+    List<Bar> barList = new ArrayList<Bar>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
     
     for (Tower tower : towers) {
@@ -66,18 +68,23 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips)
-      stripList.add(strip);
+    for (Bar bar : bars) {
+      barList.add(bar);
+      for (Strip strip : bar.strips) {
+        stripList.add(strip);
+      }
+    }
 
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
+    this.bars       = Collections.unmodifiableList(barList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(Cube[] cubeArr, List<Bar> bars) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -85,8 +92,8 @@ public static class SLModel extends LXModel {
           } 
         } 
       } 
-      for (Strip strip : strips) {
-        for (LXPoint point : strip.points) {
+      for (Bar bar : bars) {
+        for (LXPoint point : bar.points) {
           this.points.add(point);
         }
       }
@@ -373,6 +380,35 @@ public static class Face extends LXModel {
         }
       }
       transform.pop();
+    }
+  }
+}
+
+public static class Bar extends LXModel {
+  List<Strip> strips = new ArrayList<Strip>();
+  String id;
+  String secondId;
+
+  Bar(String id, String secondId, Strip.Metrics metrics, LXTransform transform) {
+    super(new Fixture(metrics, transform));
+
+    this.id = id;
+    this.secondId = secondId;
+
+    Fixture fixture = (Fixture) this.fixtures.get(0);
+    this.strips = Collections.unmodifiableList(fixture.strips);
+  }
+
+
+  private static class Fixture extends LXAbstractFixture {
+    private final List<Strip> strips = new ArrayList<Strip>();
+
+    private Fixture(Strip.Metrics metrics, LXTransform transform) {
+      Strip strip = new Strip(metrics, 0, transform, true);
+      this.strips.add(strip);
+      for (LXPoint p : strip.points) {
+        this.points.add(p);
+      }
     }
   }
 }
