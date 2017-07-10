@@ -22,6 +22,9 @@ package heronarts.lx.audio;
 
 public class LXAudioBuffer {
 
+    protected static final int SAMPLE_RATE = 44100;
+    protected static final float INV_16_BIT = 1 / 32768.0f;
+
     final float[] samples;
     float rms;
 
@@ -33,8 +36,32 @@ public class LXAudioBuffer {
         return this.samples.length;
     }
 
+    public int sampleRate() {
+        return SAMPLE_RATE;
+    }
+
     public float getRms() {
         return this.rms;
+    }
+
+    protected synchronized void computeMix(LXAudioBuffer left, LXAudioBuffer right) {
+        float sumSquares = 0;
+        for (int i = 0; i < samples.length; ++i) {
+            this.samples[i] = (left.samples[i] + right.samples[i]) * .5f;
+            sumSquares += this.samples[i] * this.samples[i];
+        }
+        this.rms = (float) Math.sqrt(sumSquares / this.samples.length);
+    }
+
+    protected synchronized void putSamples(byte[] rawBytes, int offset, int dataSize, int frameSize) {
+        int frameIndex = 0;
+        float sumSquares = 0;
+        for (int i = 0; i < dataSize; i += frameSize) {
+            this.samples[frameIndex] = ((rawBytes[offset + i+1] << 8) | (rawBytes[offset + i] & 0xff)) * INV_16_BIT;
+            sumSquares += this.samples[frameIndex] * this.samples[frameIndex];
+            ++frameIndex;
+        }
+        this.rms = (float) Math.sqrt(sumSquares / this.samples.length);
     }
 
     public synchronized void getSamples(float[] dest) {

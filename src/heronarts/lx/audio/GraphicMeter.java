@@ -41,8 +41,8 @@ public class GraphicMeter extends DecibelMeter {
      *
      * @param source Audio source
      */
-    public GraphicMeter(LXAudioInput input) {
-        this(input, FourierTransform.DEFAULT_NUM_BANDS);
+    public GraphicMeter(LXAudioBuffer buffer) {
+        this(buffer, FourierTransform.DEFAULT_NUM_BANDS);
     }
 
     /**
@@ -51,8 +51,8 @@ public class GraphicMeter extends DecibelMeter {
      * @param label Label
      * @param source Audio source
      */
-    public GraphicMeter(String label, LXAudioInput input) {
-        this(label, input, FourierTransform.DEFAULT_NUM_BANDS);
+    public GraphicMeter(String label, LXAudioBuffer buffer) {
+        this(label, buffer, FourierTransform.DEFAULT_NUM_BANDS);
     }
 
     /**
@@ -61,8 +61,8 @@ public class GraphicMeter extends DecibelMeter {
      * @param source Audio source to listen to
      * @param bandsPerOctave Number of bands per octave
      */
-    public GraphicMeter(LXAudioInput input, int numBands) {
-        this("Meter", input, numBands);
+    public GraphicMeter(LXAudioBuffer buffer, int numBands) {
+        this("Meter", buffer, numBands);
     }
 
     /**
@@ -72,11 +72,11 @@ public class GraphicMeter extends DecibelMeter {
      * @param source Audio source to listen to
      * @param bandsPerOctave Number of bands per octave
      */
-    public GraphicMeter(String label, LXAudioInput input, int numBands) {
-        super(label, input);
+    public GraphicMeter(String label, LXAudioBuffer buffer, int numBands) {
+        super(label, buffer);
         addParameter("slope", this.slope);
-        this.fftBuffer = new float[input.bufferSize()];
-        this.fft = new FourierTransform(input.bufferSize(), input.sampleRate());
+        this.fftBuffer = new float[buffer.bufferSize()];
+        this.fft = new FourierTransform(buffer.bufferSize(), buffer.sampleRate());
         this.fft.setNumBands(this.numBands = numBands);
         this.impl = new LXMeterImpl(this.numBands, this.fft.getBandOctaveRatio());
         this.bands = this.impl.bands;

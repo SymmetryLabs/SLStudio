@@ -28,15 +28,11 @@ import javax.sound.sampled.LineListener;
 import javax.sound.sampled.TargetDataLine;
 
 public class LXAudioInput extends LXAudioBuffer implements LineListener {
-
-    private static final int SAMPLE_RATE = 44100;
     private static final int SAMPLE_BUFFER_SIZE = 512;
     private static final int BYTES_PER_SAMPLE = 2;
     private static final int NUM_CHANNELS = 2;
     private static final int FRAME_SIZE = BYTES_PER_SAMPLE * NUM_CHANNELS;
-    private static final int INPUT_DATA_SIZE = SAMPLE_BUFFER_SIZE*BYTES_PER_SAMPLE*NUM_CHANNELS;
-
-    private final static float INV_16_BIT = 1 / 32768.0f;
+    private static final int INPUT_DATA_SIZE = SAMPLE_BUFFER_SIZE * FRAME_SIZE;
 
     private TargetDataLine line;
     private final AudioFormat format;
@@ -76,33 +72,12 @@ public class LXAudioInput extends LXAudioBuffer implements LineListener {
                 line.read(rawBytes, 0, rawBytes.length);
 
                 // Put the left and right buffers
-                putBuffer(left, 0);
-                putBuffer(right, 2);
-
-                // Compute the mix buffer
-                synchronized (this) {
-                    float sumSquares = 0;
-                    for (int i = 0; i < samples.length; ++i) {
-                        samples[i] = (left.samples[i] + right.samples[i]) / 2.f;
-                        sumSquares += samples[i] * samples[i];
-                    }
-                    rms = (float) Math.sqrt(sumSquares / samples.length);
-                }
+                left.putSamples(rawBytes, 0, INPUT_DATA_SIZE, FRAME_SIZE);
+                right.putSamples(rawBytes, 2, INPUT_DATA_SIZE, FRAME_SIZE);
+                computeMix(left, right);
             }
         }
 
-        private void putBuffer(LXAudioBuffer buffer, int offset) {
-            synchronized (buffer) {
-                int frameIndex = 0;
-                float sumSquares = 0;
-                for (int i = 0; i < INPUT_DATA_SIZE; i += FRAME_SIZE) {
-                    buffer.samples[frameIndex] = ((rawBytes[offset + i+1] << 8) | (rawBytes[offset + i] & 0xff)) * INV_16_BIT;
-                    sumSquares += buffer.samples[frameIndex] * buffer.samples[frameIndex];
-                    ++frameIndex;
-                }
-                buffer.rms = (float) Math.sqrt(sumSquares / buffer.samples.length);
-            }
-        }
     };
 
     LXAudioInput() {
@@ -185,10 +160,6 @@ public class LXAudioInput extends LXAudioBuffer implements LineListener {
         } else if (type == LineEvent.Type.CLOSE) {
             this.closed = true;
         }
-    }
-
-    public int sampleRate() {
-        return SAMPLE_RATE;
     }
 
 }

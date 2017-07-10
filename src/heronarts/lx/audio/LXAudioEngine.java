@@ -40,6 +40,8 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
      */
     public final LXAudioInput input = new LXAudioInput();
 
+    public final LXAudioOutput output = new LXAudioOutput();
+
     public final GraphicMeter meter = new GraphicMeter("Meter", this.input);
 
     public LXAudioEngine(LX lx) {
