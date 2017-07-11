@@ -20,7 +20,10 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.parameter.*;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.FixedParameter;
+import heronarts.lx.parameter.LXParameter;
 
 /**
  * A sawtooth LFO oscillates from one extreme value to another. When the later
