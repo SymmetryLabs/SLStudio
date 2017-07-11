@@ -20,10 +20,7 @@
 
 package heronarts.lx.modulator;
 
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.EnumParameter;
-import heronarts.lx.parameter.FixedParameter;
-import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.*;
 
 /**
  * A sawtooth LFO oscillates from one extreme value to another. When the later
@@ -31,23 +28,14 @@ import heronarts.lx.parameter.LXParameter;
  */
 public class VariableLFO extends LXRangeModulator implements LXWaveshape {
 
-    public enum Waveshape {
-        SIN,
-        TRI,
-        SQUARE,
-        UP,
-        DOWN
-    };
+    /**
+     * Parameter of {@link LXWaveshape} objects that select the wave shape used by this LFO.
+     * Default options are the waveshapes predefined in {@link LXWaveshape}, but you can pass your own.
+     */
+    public final DiscreteParameter waveshape;
 
-    public final EnumParameter<Waveshape> waveshape =
-        new EnumParameter<Waveshape>("Wave", Waveshape.SIN)
-        .setDescription("Selects the wave shape used by this LFO");
-
-    public final CompoundParameter period = (CompoundParameter)
-        new CompoundParameter("Period", 1000, 100, 10000)
-        .setDescription("Sets the period of the LFO in secs")
-        .setExponent(2)
-        .setUnits(LXParameter.Units.MILLISECONDS);
+    /** Period of the waveform, in ms */
+    public final CompoundParameter period;
 
     public final CompoundParameter skew = (CompoundParameter)
         new CompoundParameter("Skew", 0, -1, 1)
@@ -69,11 +57,49 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
         .setDescription("Shifts the phase of the waveform");
 
     public VariableLFO() {
-        this("LFO");
+        this("LFO", null, null);
     }
 
     public VariableLFO(String label) {
+        this(label, null, null);
+    }
+
+    public VariableLFO(String label, LXWaveshape[] waveshapes) {
+        this(label, waveshapes, null);
+    }
+
+    /**
+     * Constructs a VariableLFO with a custom list of waveshapes
+     * @param label LFO label
+     * @param waveshapes Optional list of custom {@link LXWaveshape}.  If null, will use predefined ones
+     *                   in {@link LXWaveshape}
+     * @param period Optional. Parameter that supplies custom waveform period, in ms.  Default goes 100-10000ms.
+     */
+    public VariableLFO(String label, LXWaveshape[] waveshapes, CompoundParameter period) {
         super(label, new FixedParameter(0), new FixedParameter(1), new FixedParameter(1000));
+
+        if (waveshapes == null) {
+            waveshapes = new LXWaveshape[] {
+                    LXWaveshape.SIN,
+                    LXWaveshape.TRI,
+                    LXWaveshape.SQUARE,
+                    LXWaveshape.UP,
+                    LXWaveshape.DOWN
+            };
+        }
+
+        this.waveshape = new DiscreteParameter("Wave", waveshapes);
+        this.waveshape.setDescription("Selects the wave shape used by this LFO");
+
+        if (period == null) {
+            period = (CompoundParameter) new CompoundParameter("Period", 1000, 100, 10000)
+                .setDescription("Sets the period of the LFO in secs")
+                .setExponent(2)
+                .setUnits(LXParameter.Units.MILLISECONDS);
+        }
+        this.period = period;
+
+
         setPeriod(period);
         addParameter("wave", waveshape);
         addParameter("period", period);
@@ -84,14 +110,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
     }
 
     public LXWaveshape getWaveshape() {
-        switch (this.waveshape.getEnum()) {
-        case SIN: return LXWaveshape.SIN;
-        case TRI: return LXWaveshape.TRI;
-        case UP: return LXWaveshape.UP;
-        case DOWN: return LXWaveshape.DOWN;
-        case SQUARE: return LXWaveshape.SQUARE;
-        }
-        return LXWaveshape.SIN;
+        return (LXWaveshape) this.waveshape.getObject();
     }
 
     @Override

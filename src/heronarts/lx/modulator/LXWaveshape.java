@@ -45,6 +45,11 @@ public interface LXWaveshape {
             }
             return (angle + LX.HALF_PI) / LX.TWO_PI;
         }
+
+        @Override
+        public String toString() {
+            return "SIN";
+        }
     };
 
     public static LXWaveshape TRI = new LXWaveshape() {
@@ -56,6 +61,11 @@ public interface LXWaveshape {
         @Override
         public double invert(double value, double basisHint) {
             return (basisHint < 0.5) ? (value / 2.) : (1. - (value / 2.));
+        }
+
+        @Override
+        public String toString() {
+            return "TRI";
         }
     };
 
@@ -70,6 +80,11 @@ public interface LXWaveshape {
         public double invert(double value, double basisHint) {
             return value;
         }
+
+        @Override
+        public String toString() {
+            return "UP";
+        }
     };
 
     public static LXWaveshape DOWN = new LXWaveshape() {
@@ -83,6 +98,11 @@ public interface LXWaveshape {
         public double invert(double value, double basisHint) {
             return 1. - value;
         }
+
+        @Override
+        public String toString() {
+            return "DOWN";
+        }
     };
 
     public static LXWaveshape SQUARE = new LXWaveshape() {
@@ -95,6 +115,11 @@ public interface LXWaveshape {
         @Override
         public double invert(double value, double basisHint) {
             return (value == 0) ? 0 : 0.5;
+        }
+
+        @Override
+        public String toString() {
+            return "SQUARE";
         }
     };
 
