@@ -48,10 +48,10 @@ static final float leftFaceRotationY = -90;
 static final float leftFaceRotationZ = 0;
 
 static final BarConfig[] LEFT_FACE_CONFIG = {
-  new BarConfig("0",                 0,                 0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // bottom
-  new BarConfig("0", LONG_BAR_LENGTH/4, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
-  new BarConfig("0",                 0,   LONG_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top 
-  new BarConfig("0",                 0,                 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // vertical
+  new BarConfig("335",                 0,                 0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH, true), // bottom
+  // new BarConfig("0", LONG_BAR_LENGTH/4, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
+  // new BarConfig("0",                 0,   LONG_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top 
+  // new BarConfig("0",                 0,                 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // vertical
 };
 
 /**
@@ -66,10 +66,10 @@ static final float rightFaceRotationY = -90;
 static final float rightFaceRotationZ = 0;
 
 static final BarConfig[] RIGHT_FACE_CONFIG = {
-  new BarConfig("0",    0,                 0, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // bottom
-  new BarConfig("0",    0, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        SHORT_NUM_LEDS, PIXEL_PITCH), // middle
-  new BarConfig("0",    0,   LONG_BAR_LENGTH, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // top 
-  new BarConfig("0",    0,                 0, 0,       0, 0, 90,         LONG_NUM_LEDS, PIXEL_PITCH), // vertical
+  // new BarConfig("0",    0,                 0, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // bottom
+  // new BarConfig("0",    0, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        SHORT_NUM_LEDS, PIXEL_PITCH), // middle
+  // new BarConfig("0",    0,   LONG_BAR_LENGTH, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // top 
+  // new BarConfig("0",    0,                 0, 0,       0, 0, 90,         LONG_NUM_LEDS, PIXEL_PITCH), // vertical
 };
 
 /**
@@ -84,10 +84,10 @@ static final float squareRotationY = 0;
 static final float squareRotationZ = 0;
 
 static final BarConfig[] SQUARE_CONFIG = {
-  new BarConfig("0",                  0,                0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // bottom
-  new BarConfig("0",                  0, SHORT_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top
-  new BarConfig("0",                  0,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // left
-  new BarConfig("0",    LONG_BAR_LENGTH,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // right
+  // new BarConfig("0",                  0,                0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // bottom
+  // new BarConfig("0",                  0, SHORT_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top
+  // new BarConfig("0",                  0,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // left
+  // new BarConfig("0",    LONG_BAR_LENGTH,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // right
 };
 
 /**
@@ -102,9 +102,9 @@ static final float backVerticalRotationY = 0;
 static final float backVerticalRotationZ = 0;
 
 static final BarConfig[] BACK_VERTICAL_CONFIG = {
-  new BarConfig("0",               0, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // left
-  new BarConfig("0",              15, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
-  new BarConfig("0", LONG_BAR_LENGTH, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // right
+  // new BarConfig("0",               0, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // left
+  // new BarConfig("0",              15, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
+  // new BarConfig("0", LONG_BAR_LENGTH, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // right
 };
 
 /**
@@ -119,10 +119,10 @@ static final float rightVerticalRotationY = 0;
 static final float rightVerticalRotationZ = 0;
 
 static final BarConfig[] RIGHT_VERTICAL_CONFIG = {
-  new BarConfig("0",   0, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-left
-  new BarConfig("0",  10, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-right
-  new BarConfig("0",   0, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-left
-  new BarConfig("0",  10, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-right
+  // new BarConfig("0",   0, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-left
+  // new BarConfig("0",  10, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-right
+  // new BarConfig("0",   0, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-left
+  // new BarConfig("0",  10, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-right
 };
 
 /**
@@ -137,49 +137,49 @@ static final float longHorizontalRotationY = 0;
 static final float longHorizontalRotationZ = 0;
 
 static final BarConfig[] LONG_HORIZONTAL_CONFIG = {
-  // left side, bottom
-  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // left side, bottom
+  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // left side, middle
-  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // left side, middle
+  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // left side, top
-  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // left side, top
+  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // top, left
-  new BarConfig("0",  8, LONG_BAR_LENGTH+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  8, LONG_BAR_LENGTH+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // top, left
+  // new BarConfig("0",  8, LONG_BAR_LENGTH+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  8, LONG_BAR_LENGTH+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // top, middle
-  new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // top, middle
+  // new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // top, right
-  new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // top, right
+  // new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // right, bottom
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // right, bottom
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // right, middle/bottom
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // right, middle/bottom
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // right, middle/top
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // right, middle/top
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // right, top
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // right, top
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // right/right, middle/bottom
-  new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // // right/right, middle/bottom
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 };
 
 

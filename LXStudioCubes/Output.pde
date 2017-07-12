@@ -229,22 +229,33 @@ class SLController extends LXOutput {
 
       LXPoint[] points = bar.points;
 
-      if (bar.flip) {
-        Collections.reverse(Arrays.asList(points));
-      }
+      // if (bar.flip) {
+      //   Collections.reverse(Arrays.asList(points));
+      // }
 
       // Fill the datagram with pixel data
       // Fill with all black if we don't have cube data
       if (bar != null) {
           int counter = 0;
           if (bar.secondId == null) {
-            for (int i = 0; i < bar.points.length; i++) {
-              setPixel(counter++, colors[points[i].index]);
-            }
-            for (int i = points.length-1; i > -1; i--) {
-              setPixel(counter++, colors[points[i].index]);
+            // one controller
+            if (!bar.flip) {
+              for (int i = 0; i < bar.points.length; i++) {
+                setPixel(counter++, colors[points[i].index]);
+              }
+              for (int i = points.length-1; i > -1; i--) {
+                setPixel(counter++, colors[points[i].index]);
+              }
+            } else {
+              for (int i = points.length-1; i > -1; i--) {
+                setPixel(counter++, colors[points[i].index]);
+              }
+              for (int i = 0; i < bar.points.length; i++) {
+                setPixel(counter++, colors[points[i].index]);
+              }
             }
           } else {
+            // two controllers
             if (bar.id.equals(cubeId)) {
               for (int i = 0; i < points.length; i++) {
                 setPixel(counter++, colors[points[i].index]);

@@ -129,18 +129,18 @@ public class ControllableRectangles extends LXPattern {
   CompoundParameter ball1xPos = new CompoundParameter("1xPos", model.cx, model.xMin, model.xMax);
   CompoundParameter ball1yPos = new CompoundParameter("1yPos", model.cy, model.yMin, model.yMax);
   CompoundParameter ball1zPos = new CompoundParameter("1zPos", model.cz, model.zMin, model.zMax);
-  CompoundParameter ball1xSize = new CompoundParameter("1xSize", model.xRange*0.1, 0, model.xRange);
-  CompoundParameter ball1ySize = new CompoundParameter("1ySize", model.xRange*0.1, 0, model.yRange);
-  CompoundParameter ball1zSize = new CompoundParameter("1zSize", model.xRange*0.1, 0, model.zRange);
+  CompoundParameter ball1xSize = new CompoundParameter("1xSize", 1, 0, model.xRange);
+  CompoundParameter ball1ySize = new CompoundParameter("1ySize", 1, 0, model.yRange);
+  CompoundParameter ball1zSize = new CompoundParameter("1zSize", 1, 0, model.zRange);
   CompoundParameter ball1hue = new CompoundParameter("1hue", 0, 0, 360);
   CompoundParameter ball1sat = new CompoundParameter("1sat", 100, 0, 100);
 
   CompoundParameter ball2xPos = new CompoundParameter("2xPos", model.cx, model.xMin, model.xMax);
   CompoundParameter ball2yPos = new CompoundParameter("2yPos", model.cy, model.yMin, model.yMax);
   CompoundParameter ball2zPos = new CompoundParameter("2zPos", model.cz, model.zMin, model.zMax);
-  CompoundParameter ball2xSize = new CompoundParameter("2xSize", model.xRange*0.1, 0, model.xRange);
-  CompoundParameter ball2ySize = new CompoundParameter("2ySize", model.xRange*0.1, 0, model.yRange);
-  CompoundParameter ball2zSize = new CompoundParameter("2zSize", model.xRange*0.1, 0, model.zRange);
+  CompoundParameter ball2xSize = new CompoundParameter("2xSize", 1, 0, model.xRange);
+  CompoundParameter ball2ySize = new CompoundParameter("2ySize", 1, 0, model.yRange);
+  CompoundParameter ball2zSize = new CompoundParameter("2zSize", 1, 0, model.zRange);
   CompoundParameter ball2hue = new CompoundParameter("2hue", 0, 0, 360);
   CompoundParameter ball2sat = new CompoundParameter("2sat", 100, 0, 100);
 
