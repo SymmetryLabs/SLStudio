@@ -1,6 +1,238 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class TestBarPattern extends LXPattern {
+    
+  public TestBarPattern(LX lx) {
+    super(lx);
+  }
+  
+  public void run(double deltaMs) {
+    int i = 0;
+    for (Bar bar : ((SLModel)model).bars) {
+      for (LXPoint p : bar.points) {
+        colors[p.index] = lx.hsb(
+          (i)%360,
+          100,
+          100
+        );
+      }
+      i += 100;
+    }
+  }
+}
+
+public class TestOrientationPattern extends LXPattern {
+    
+  public TestOrientationPattern(LX lx) {
+    super(lx);
+  }
+  
+  public void run(double deltaMs) {
+    for (Bar bar : ((SLModel)model).bars) {
+      int i = 0;
+      for (LXPoint p : bar.points) {
+        colors[p.index] = lx.hsb(
+          0,
+          100,
+          i++ < 20 ? 100 : 0
+        );
+      }
+    }
+  }
+}
+
+
+public class Sparkle extends LXPattern {
+  private CompoundParameter densityParameter = new CompoundParameter("DENS", 0.15);
+  private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.4);
+  private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.3);
+  private CompoundParameter hueParameter = new CompoundParameter("HUE", 0.5);
+  private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
+  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+  
+  class Spark {
+    LXPoint point;
+    float value;
+    float hue;
+    boolean hasPeaked;
+    
+    Spark() {
+      point = model.points[floor(random(model.points.length))];
+      hue = random(1);
+      boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
+      hasPeaked = infiniteAttack;
+      value = (infiniteAttack ? 1 : 0);
+    }
+    
+    // returns TRUE if this should die
+    boolean age(double ms) {
+      if (!hasPeaked) {
+        value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
+        if (value >= 1.0) {
+          value = 1.0;
+          hasPeaked = true;
+        }
+        return false;
+      } else {
+        value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
+        return value <= 0;
+      }
+    }
+  }
+  
+  private float leftoverMs = 0;
+  private List<Spark> sparks;
+  
+  public Sparkle(LX lx) {
+    super(lx);
+    addParameter(densityParameter);
+    addParameter(attackParameter);
+    addParameter(decayParameter);
+    addParameter(hueParameter);
+    addParameter(hueVarianceParameter);
+    addParameter(saturationParameter);
+    sparks = new LinkedList<Spark>();
+  }
+  
+  public void run(double deltaMs) {
+    leftoverMs += deltaMs;
+    float msPerSpark = 1000 / ((densityParameter.getValuef() + .01) * (model.xRange*10));
+    while (leftoverMs > msPerSpark) {
+      leftoverMs -= msPerSpark;
+      sparks.add(new Spark());
+    }
+    
+    for (LXPoint p : model.points) {
+      colors[p.index] = 0;
+    }
+    
+    for (Spark spark : sparks) {
+      float hue = (hueParameter.getValuef() + (hueVarianceParameter.getValuef() * spark.hue)) % 1.0;
+      color c = lx.hsb(hue * 360, saturationParameter.getValuef() * 100, (spark.value) * 100);
+      colors[spark.point.index] = c;
+    }
+    
+    Iterator<Spark> i = sparks.iterator();
+    while (i.hasNext()) {
+      Spark spark = i.next();
+      boolean dead = spark.age(deltaMs);
+      if (dead) {
+        i.remove();
+      }
+    }
+  } 
+}
+
+public class ControllableRectangles extends LXPattern {
+
+  CompoundParameter ball1xPos = new CompoundParameter("1xPos", model.cx, model.xMin, model.xMax);
+  CompoundParameter ball1yPos = new CompoundParameter("1yPos", model.cy, model.yMin, model.yMax);
+  CompoundParameter ball1zPos = new CompoundParameter("1zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter ball1xSize = new CompoundParameter("1xSize", model.xRange*0.1, 0, model.xRange);
+  CompoundParameter ball1ySize = new CompoundParameter("1ySize", model.xRange*0.1, 0, model.yRange);
+  CompoundParameter ball1zSize = new CompoundParameter("1zSize", model.xRange*0.1, 0, model.zRange);
+  CompoundParameter ball1hue = new CompoundParameter("1hue", 0, 0, 360);
+  CompoundParameter ball1sat = new CompoundParameter("1sat", 100, 0, 100);
+
+  CompoundParameter ball2xPos = new CompoundParameter("2xPos", model.cx, model.xMin, model.xMax);
+  CompoundParameter ball2yPos = new CompoundParameter("2yPos", model.cy, model.yMin, model.yMax);
+  CompoundParameter ball2zPos = new CompoundParameter("2zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter ball2xSize = new CompoundParameter("2xSize", model.xRange*0.1, 0, model.xRange);
+  CompoundParameter ball2ySize = new CompoundParameter("2ySize", model.xRange*0.1, 0, model.yRange);
+  CompoundParameter ball2zSize = new CompoundParameter("2zSize", model.xRange*0.1, 0, model.zRange);
+  CompoundParameter ball2hue = new CompoundParameter("2hue", 0, 0, 360);
+  CompoundParameter ball2sat = new CompoundParameter("2sat", 100, 0, 100);
+
+
+  public ControllableRectangles(LX lx) {
+    super(lx);
+    addParameter(ball1xPos);
+    addParameter(ball1yPos);
+    addParameter(ball1zPos);
+    addParameter(ball1xSize);
+    addParameter(ball1ySize);
+    addParameter(ball1zSize);
+    addParameter(ball1hue);
+    addParameter(ball1sat);
+
+    addParameter(ball2xPos);
+    addParameter(ball2yPos);
+    addParameter(ball2zPos);
+    addParameter(ball2xSize);
+    addParameter(ball2ySize);
+    addParameter(ball2zSize);
+    addParameter(ball2hue);
+    addParameter(ball2sat);
+  }
+
+  private float distance(float a, float b) {
+    return Math.abs(a - b);
+  }
+
+  public void run(double deltaMs) {
+    for (LXPoint p : model.points) {
+      color c = 0;
+
+      color ball1 = (distance(p.x, ball1xPos.getValuef()) < ball1xSize.getValuef()
+       && distance(p.y, ball1yPos.getValuef()) < ball1ySize.getValuef()
+       && distance(p.z, ball1zPos.getValuef()) < ball1zSize.getValuef()) 
+       ? lx.hsb(ball1hue.getValuef(), ball1sat.getValuef(), 100) : LXColor.BLACK;
+      c = PImage.blendColor(c, ball1, ADD);
+
+      color ball2 = (distance(p.x, ball2xPos.getValuef()) < ball2xSize.getValuef()
+       && distance(p.y, ball2yPos.getValuef()) < ball2ySize.getValuef()
+       && distance(p.z, ball2zPos.getValuef()) < ball2zSize.getValuef()) 
+       ? lx.hsb(ball2hue.getValuef(), ball2sat.getValuef(), 100) : LXColor.BLACK;
+      c = PImage.blendColor(c, ball2, ADD);
+
+      colors[p.index] = c;
+    }
+  }
+
+  // color CalcPoint(PVector p) {
+  //   if (distance(p.x, p.y, p.z, xPos.getValuef(), yPos.getValuef(), zPos.getValuef()) < size.getValuef()) {
+  //     return lx.hsb(hue.getValuef(), sat.getValuef(), 100);
+  //   } else {
+  //     return LXColor.BLACK;
+  //   }
+  // }
+}
+
+public class HueBall extends DPat {
+
+  CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
+  CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
+  CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
+  CompoundParameter sat = new CompoundParameter("sat", 100, 0, 100);
+
+  CompoundParameter size = new CompoundParameter("size", model.xRange*0.1, model.xRange*0.01, model.xRange*0.5);
+
+  public HueBall(LX lx) {
+    super(lx);
+    addParameter(xPos);
+    addParameter(yPos);
+    addParameter(zPos);
+    addParameter(size);
+    addParameter(hue);
+    addParameter(sat);
+  }
+
+  private float distance(float x1, float y1, float z1, float x2, float y2, float z2) {
+    return (float)Math.sqrt(Math.pow(x1-x2, 2) + Math.pow(y1-y2, 2) + Math.pow(z1-z2, 2));
+  }
+
+  color CalcPoint(PVector p) {
+    if (distance(p.x, p.y, p.z, xPos.getValuef(), yPos.getValuef(), zPos.getValuef()) < size.getValuef()) {
+      return lx.hsb(hue.getValuef(), sat.getValuef(), 100);
+    } else {
+      return LXColor.BLACK;
+    }
+  }
+}
+
+
 public class Ball extends DPat {
 
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
@@ -1648,16 +1880,19 @@ public class CrossSections extends SLPattern {
     
     for (LXPoint p : model.points) {
       color c = 0;
+
       c = PImage.blendColor(c, lx.hsb(
       palette.getHuef() + p.x/10 + p.y/3, 
       constrain(140 - 1.1*abs(p.x - model.xMax/2.), 0, 100), 
       max(0, xlv - xwv*abs(p.x - xv))
         ), ADD);
+
       c = PImage.blendColor(c, lx.hsb(
       palette.getHuef() + 80 + p.y/10, 
       constrain(140 - 2.2*abs(p.y - model.yMax/2.), 0, 100), 
       max(0, ylv - ywv*abs(p.y - yv))
         ), ADD); 
+
       c = PImage.blendColor(c, lx.hsb(
       palette.getHuef() + 160 + p.z / 10 + p.y/2, 
       constrain(140 - 2.2*abs(p.z - model.zMax/2.), 0, 100), 

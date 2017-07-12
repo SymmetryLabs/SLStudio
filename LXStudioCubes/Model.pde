@@ -388,12 +388,14 @@ public static class Bar extends LXModel {
   List<Strip> strips = new ArrayList<Strip>();
   String id;
   String secondId;
+  boolean flip;
 
-  Bar(String id, String secondId, Strip.Metrics metrics, LXTransform transform) {
+  Bar(String id, String secondId, Strip.Metrics metrics, LXTransform transform, boolean flip) {
     super(new Fixture(metrics, transform));
 
     this.id = id;
     this.secondId = secondId;
+    this.flip = flip;
 
     Fixture fixture = (Fixture) this.fixtures.get(0);
     this.strips = Collections.unmodifiableList(fixture.strips);
