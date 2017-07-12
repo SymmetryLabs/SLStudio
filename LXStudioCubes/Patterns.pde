@@ -43,7 +43,7 @@ public class Noise extends DPat {
     pSharp    = addParam("Shrp"    ,  0);
     pSymm     = new DiscreteParameter("Symm" , new String[] {"None", "X", "Y", "Rad"} );
     pChoose   = new DiscreteParameter("Anim", new String[] {"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark","VWav", "Wave"}  );
-    pChoose.setValue(6);
+    pChoose.setValue(3);
     //addNonKnobParameter(pSymm);
     //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);

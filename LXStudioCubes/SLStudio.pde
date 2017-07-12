@@ -1,261 +1,191 @@
-import java.io.File;
+// final static float INCHES = 5;
+// final static float IN = INCHES;
+// final static float FEET = 12*INCHES;
+// final static float FT = FEET;
+// final static int _width = 1200;
+// final static int _height = 960;
 
-import com.google.gson.JsonObject;
-import processing.core.PApplet;
-import processing.event.KeyEvent;
+// // Our engine and our model
+// LXStudio lx;
+// SLModel model;
+// Sensors sensors;
+// PApplet applet = Tenere.this;
 
-public class SLStudio extends P3LX {
+// // Processing's main invocation, build our model and set up LX
+// void setup() {
+//   size(1200, 960, P3D);
+//   final Timer t = new Timer();
+//   model = buildModel();
+//   t.log("Built Model");
+//   try {
+//     lx = new LXStudio(this, model, false) {
+//       public void initialize(LXStudio lx, LXStudio.UI ui) {
+//         // Register a couple top-level effects
+//         lx.registerEffect(BlurEffect.class);
+//         lx.registerEffect(DesaturationEffect.class);        
+        
+//         // End-to-end test, sending one branch worth of data
+//         // 8 assemblages, 15 leaves, 7 leds = 840 points = 2,520 RGB bytes = 2,524 OPC bytes
+//         try {
+//           // Update appropriately for testing!
+//           final String OPC_ADDRESS = "192.168.0.10"; 
+//           final int OPC_PORT = 7890;
+          
+//         } catch (Exception x) {
+//           println("Failed to construct UDP output: " + x);
+//           x.printStackTrace();
+//         }
+        
+//         t.log("Initialized LXStudio");
+//       }
+      
+//       public void onUIReady(LXStudio lx, LXStudio.UI ui) {
+//         ui.preview.setRadius(80*FEET).setPhi(-PI/18).setTheta(PI/12);
+//         ui.preview.setCenter(0, model.cy - 2*FEET, 0);
+//         ui.preview.addComponent(new UISimulation());
+//         ui.preview.pointCloud.setVisible(false);
+        
+//         // Narrow angle lens, for a fuller visualization
+//         ui.preview.perspective.setValue(30);
 
-  public static final String COPYRIGHT = "SLStudio | Symmetry Labs";
+//         // Sensor integrations
+//         new UISensors(ui, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global);
+        
+//         t.log("Initialized LX UI");
+//       }
+//     };
+//   } catch (Exception x) {
+//     println("Initialization error: " + x);
+//     x.printStackTrace();
+//   }
+// }
 
-  public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
+// private class Settings extends LXComponent {
+  
+//   private final LXStudio.UI ui;
+  
+//   private Settings(LX lx, LXStudio.UI ui) {
+//     super(lx);
+//     this.ui = ui;
+//   }
+  
+//   private static final String KEY_POINTS_VISIBLE = "pointsVisible";
+//   private static final String KEY_LEAVES_VISIBLE = "leavesVisible";
+//   private static final String KEY_STRUCTURE_VISIBLE = "structureVisible";
+//   private static final String KEY_CONTROLS_EXPANDED = "controlsExpanded";
+  
+//   @Override
+//   public void save(LX lx, JsonObject obj) {
+//     obj.addProperty(KEY_POINTS_VISIBLE, this.ui.preview.pointCloud.isVisible());
+//     obj.addProperty(KEY_LEAVES_VISIBLE, uiLeaves.isVisible());
+//     obj.addProperty(KEY_STRUCTURE_VISIBLE, uiTreeStructure.isVisible());
+//     obj.addProperty(KEY_CONTROLS_EXPANDED, uiTreeControls.isExpanded());
+//   }
+  
+//   @Override
+//   public void load(LX lx, JsonObject obj) {
+//     if (obj.has(KEY_POINTS_VISIBLE)) {
+//       uiTreeControls.pointsVisible.setActive(obj.get(KEY_POINTS_VISIBLE).getAsBoolean());
+//     }
+//     if (obj.has(KEY_LEAVES_VISIBLE)) {
+//       uiTreeControls.leavesVisible.setActive(obj.get(KEY_LEAVES_VISIBLE).getAsBoolean());
+//     }
+//     if (obj.has(KEY_STRUCTURE_VISIBLE)) {
+//       uiTreeControls.structureVisible.setActive(obj.get(KEY_STRUCTURE_VISIBLE).getAsBoolean());
+//     }
+//     if (obj.has(KEY_CONTROLS_EXPANDED)) {
+//       uiTreeControls.setExpanded(obj.get(KEY_CONTROLS_EXPANDED).getAsBoolean());
+//     }
+//   }
+// }
 
-    public final PreviewWindow preview;
-    public final UILeftPane leftPane;
-    public final UIOverriddenRightPane rightPane;
-    public final UIBottomTray bottomTray;
-    public final UIContextualHelpBar helpBar;
+// class CameraPosition {
+//   final float radius;
+//   final float theta;
+//   final float phi;
+  
+//   public CameraPosition(float radius, float theta, float phi) {
+//     this.radius = radius;
+//     this.theta = theta;
+//     this.phi = phi;
+//   }
+  
+//   public void set(UI3dContext context) {
+//     context.setRadius(this.radius).setTheta(this.theta).setPhi(this.phi);
+//   }
+// }
 
-    private boolean toggleHelpBar = false;
-    private boolean toggleClipView = false;
+// final CameraPosition[] cameraPositions = {
+//   new CameraPosition(120*FEET, PI/6, -PI/24),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12),
+//   new CameraPosition(90*FEET, -PI/6, -PI/12)
+// };
 
-    private boolean clipViewVisible = true;
+// float cameraInterp = 1;
+// CameraPosition currentCamera = cameraPositions[0];
+// CameraPosition targetCamera = cameraPositions[0];
 
-    public class PreviewWindow extends UI3dContext {
+// void draw() {
+//   // LX handles everything for us!
+//   if (cameraInterp < 1) {
+//     cameraInterp += .001;
+//     cameraInterp = min(1, cameraInterp);
+//     lx.ui.preview
+//       .setRadius(lerp(currentCamera.radius, targetCamera.radius, cameraInterp))
+//       .setTheta(lerp(currentCamera.theta, targetCamera.theta, cameraInterp*cameraInterp))
+//       .setPhi(lerp(currentCamera.phi, targetCamera.phi, cameraInterp));
+//   } else {
+//     currentCamera = targetCamera;
+//   }
+   
+// }
 
-      public final UIGLPointCloud pointCloud;
+// void keyPressed(KeyEvent keyEvent) {
+//   if (key == 'z') {
+//     // Little utility to get a bit of trace info from the engine
+//     lx.engine.logTimers();
+//   } else if (key >= '0' && key <= '9') {
+//     int cameraIndex = key - '0';
+//     if (cameraIndex < cameraPositions.length) {
+//       if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
+//         cameraPositions[cameraIndex] = new CameraPosition(
+//           lx.ui.preview.radius.getValuef(),
+//           lx.ui.preview.theta.getValuef(),
+//           lx.ui.preview.phi.getValuef()
+//         );
+//         currentCamera = targetCamera = cameraPositions[cameraIndex];
+//         cameraInterp = 1;
+//         println("Stored camera position " + cameraIndex);
+//       } else {
+//         cameraInterp = 0;
+//         targetCamera = cameraPositions[cameraIndex];
+//         println("Moving camera to position " + cameraIndex);
+//       }
+//     }
+//   } else if (key == 'c') {
+//     cameraInterp = 1;
+//     println("Manual camera control");
+//   }
+// }
 
-      PreviewWindow(UI ui, P3LX lx, int x, int y, int w, int h) {
-        super(ui, x, y, w, h);
-        addComponent(this.pointCloud = (UIGLPointCloud) new UIGLPointCloud(lx).setPointSize(3));
-        setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
-        setRadius(lx.model.rMax * 1.5f);
-        setDescription("Preview Window: Displays the main output, or the channels/groups with CUE enabled");
-      }
-
-      @Override
-      protected void onResize() {
-        this.pointCloud.loadShader();
-      }
-
-    }
-
-    UI(final SLStudio lx) {
-      super(lx);
-      initialize(lx, this);
-      setBackgroundColor(this.theme.getDarkBackgroundColor());
-
-      this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIOverriddenRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
-      this.leftPane = new UILeftPane(this, lx);
-      this.rightPane = new UIOverriddenRightPane(this, lx);
-      this.bottomTray = new UIBottomTray(this, lx);
-      this.helpBar = new UIContextualHelpBar(this);
-
-      addLayer(this.preview);
-      addLayer(this.leftPane);
-      addLayer(this.rightPane);
-      addLayer(this.bottomTray);
-      addLayer(this.helpBar);
-
-      setTopLevelKeyEventHandler(new UIEventHandler() {
-        @Override
-        protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-          if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
-            lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-          } else if (keyChar == '?' && keyEvent.isShiftDown()) {
-            toggleHelpBar = true;
-          } else if (keyCode == java.awt.event.KeyEvent.VK_M && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-            } else {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
-            }
-          } else if ((keyCode == java.awt.event.KeyEvent.VK_COMMA) && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-            } else {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
-            }
-          }
-        }
-      });
-
-      setResizable(true);
-    }
-
-    @Override
-    protected void beginDraw() {
-      if (this.toggleHelpBar) {
-        this.toggleHelpBar = false;
-        toggleHelpBar();
-      }
-      if (this.toggleClipView) {
-        this.toggleClipView = false;
-        _toggleClipView();
-      }
-    }
-
-    public boolean isClipViewVisible() {
-      return this.clipViewVisible;
-    }
-
-    private void setClipViewVisible(boolean visible) {
-      if (this.clipViewVisible != visible) {
-        toggleClipView();
-      }
-    }
-
-    public boolean toggleClipView() {
-      this.toggleClipView = true;
-      return (this.clipViewVisible = !this.clipViewVisible);
-    }
-
-    @Override
-    protected void onResize() {
-      reflow();
-    }
-
-    private void toggleHelpBar() {
-      this.helpBar.toggleVisible();
-      reflow();
-    }
-
-    private void _toggleClipView() {
-      // Mixer section
-      float controlsY = this.clipViewVisible ? UIMixer.PADDING + UIClipLauncher.HEIGHT : 0;
-      float stripHeight = this.clipViewVisible ? UIMixerStrip.HEIGHT : UIMixerStripControls.HEIGHT;
-
-      UIMixer mixer = this.bottomTray.mixer;
-      for (UIMixerStrip strip : mixer.channelStrips.values()) {
-        strip.clipLauncher.setVisible(this.clipViewVisible);
-        strip.controls.setY(controlsY);
-        strip.setHeight(stripHeight);
-      }
-      mixer.addChannelButton.setY(controlsY + UIMixer.PADDING);
-      mixer.masterStrip.clipLauncher.setVisible(this.clipViewVisible);
-      mixer.masterStrip.controls.setY(controlsY);
-      mixer.masterStrip.setHeight(stripHeight);
-      mixer.sceneStrip.sceneLauncher.setVisible(this.clipViewVisible);
-      mixer.sceneStrip.clipViewToggle.setY(controlsY);
-      mixer.sceneStrip.setHeight(stripHeight);
-      mixer.setContentHeight(stripHeight + 2*UIMixer.PADDING);
-
-      // Clip/device section
-      this.bottomTray.clipView.setVisible(this.clipViewVisible);
-      float binY = this.clipViewVisible ? UIClipView.HEIGHT + UIBottomTray.PADDING + UIMixerStrip.SPACING - 1 : UIMixerStrip.SPACING;
-      for (UIDeviceBin bin : this.bottomTray.deviceBins.values()) {
-        bin.setY(binY);
-      }
-      this.bottomTray.rightSection.setHeight(stripHeight + 2*UIMixer.PADDING);
-
-      // Overall height
-      this.bottomTray.setHeight(this.clipViewVisible ? UIBottomTray.HEIGHT : UIBottomTray.CLOSED_HEIGHT);
-
-      // Reflow the UI
-      reflow();
-    }
-
-    @Override
-    public void reflow() {
-      float uiWidth = getWidth();
-      float uiHeight = getHeight();
-      float helpBarHeight = this.helpBar.isVisible() ? UIContextualHelpBar.VISIBLE_HEIGHT : 0;
-      float bottomTrayHeight = this.bottomTray.getHeight();
-      float bottomTrayY = Math.max(100, uiHeight - bottomTrayHeight - helpBarHeight);
-      this.bottomTray.setY(bottomTrayY);
-      this.bottomTray.setWidth(uiWidth);
-      this.bottomTray.reflow();
-      this.helpBar.setY(uiHeight - helpBarHeight);
-      this.helpBar.setWidth(uiWidth);
-      this.leftPane.setHeight(bottomTrayY);
-      this.rightPane.setHeight(bottomTrayY);
-      this.rightPane.setX(uiWidth - this.rightPane.getWidth());
-
-      this.preview.setSize(
-        Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),
-        Math.max(100, bottomTrayY)
-      );
-    }
-
-    private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
-    private static final String KEY_PALETTE_EXPANDED = "paletteExpanded";
-    private static final String KEY_MODULATORS_EXPANDED = "modulatorExpanded";
-    private static final String KEY_CLIP_VIEW_VISIBLE = "clipViewVisible";
-
-    @Override
-    public void save(LX lx, JsonObject object) {
-      object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
-      object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
-      object.addProperty(KEY_CLIP_VIEW_VISIBLE, this.clipViewVisible);
-      JsonObject modulatorObj = new JsonObject();
-      for (UIObject child : this.rightPane.modulation) {
-        if (child instanceof UIModulator) {
-          UIModulator uiModulator = (UIModulator) child;
-          modulatorObj.addProperty(uiModulator.getIdentifier(), uiModulator.isExpanded());
-        }
-      }
-      object.add(KEY_MODULATORS_EXPANDED, modulatorObj);
-    }
-
-    @Override
-    public void load(LX lx, JsonObject object) {
-      if (object.has(KEY_AUDIO_EXPANDED)) {
-        this.leftPane.audio.setExpanded(object.get(KEY_AUDIO_EXPANDED).getAsBoolean());
-      }
-      if (object.has(KEY_PALETTE_EXPANDED)) {
-        this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
-      }
-      if (object.has(KEY_CLIP_VIEW_VISIBLE)) {
-        setClipViewVisible(object.get(KEY_CLIP_VIEW_VISIBLE).getAsBoolean());
-      }
-      if (object.has(KEY_MODULATORS_EXPANDED)) {
-        JsonObject modulatorObj = object.getAsJsonObject(KEY_MODULATORS_EXPANDED);
-        for (UIObject child : this.rightPane.modulation) {
-          if (child instanceof UIModulator) {
-            UIModulator uiModulator = (UIModulator) child;
-            String identifier = uiModulator.getIdentifier();
-            if (modulatorObj.has(identifier)) {
-              uiModulator.setExpanded(modulatorObj.get(identifier).getAsBoolean());
-            }
-          }
-        }
-      }
-    }
-  }
-
-  private static final String DEFAULT_FILE_NAME = "default.lxp";
-  private static final String KEY_UI = "ui";
-
-  public final UI ui;
-
-  public SLStudio(PApplet applet, LXModel model) {
-    this(applet, model, true);
-  }
-
-  public SLStudio(PApplet applet, LXModel model, boolean multiThreaded) {
-    super(applet, model);
-    this.ui = (UI) super.ui;
-    onUIReady(this, this.ui);
-    registerExternal(KEY_UI, this.ui);
-
-    File file = this.applet.saveFile(DEFAULT_FILE_NAME);
-    if (file.exists()) {
-      loadProject(file);
-    }
-
-    this.engine.setThreaded(multiThreaded);
-  }
-
-  @Override
-  protected heronarts.p3lx.ui.UI buildUI() {
-    return new UI(this);
-  }
-
-  /**
-   * Subclasses may override to register additional components before the UI is built
-   */
-  protected void initialize(SLStudio lx, SLStudio.UI ui) {}
-
-  protected void onUIReady(SLStudio lx, SLStudio.UI ui) {}
-
-}
+// private class Timer {
+//   private long last;
+  
+//   Timer() {
+//     this.last = millis();
+//   }
+  
+//   void log(String event) {
+//     long now = millis();
+//     println(event + ": " + (now - last) + "ms");
+//     this.last = now;
+//   }
+  
+// }

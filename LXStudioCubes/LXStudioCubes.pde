@@ -3,7 +3,7 @@ import java.net.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
 
-public SLStudio lx;
+public LXStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
@@ -25,9 +25,9 @@ void setup() {
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
 
-  lx = new SLStudio(this, model) {
+  lx = new LXStudio(this, model) {
     @Override
-    protected void initialize(SLStudio lx, SLStudio.UI ui) {
+    protected void initialize(LXStudio lx, LXStudio.UI ui) {
       // if (envelopOn) {
       //   envelop = new Envelop(lx);
       //   lx.engine.registerComponent("envelop", envelop);
@@ -80,16 +80,16 @@ void setup() {
     } 
     
     @Override
-    protected void onUIReady(SLStudio lx, SLStudio.UI ui) {
+    protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
-      ui.preview.setPhi(0).setTheta(15*PI/8).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
+      ui.preview.setPhi(0).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
-      //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
+      new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
-      // if (((SLModel)model).cubes.size() > 0)
-      //   new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
+      //if (((SLModel)model).cubes.size() > 0)
+      //new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
 
       // if (envelopOn) {
       //   new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);

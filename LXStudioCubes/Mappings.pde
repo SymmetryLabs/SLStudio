@@ -13,70 +13,71 @@
  * when physical changes or tuning is being done to the structure.
  */
 
-
-static final float globalOffsetX = 34;
-static final float globalOffsetY = -23;
-static final float globalOffsetZ = 136;
+static final float globalOffsetX = 0;
+static final float globalOffsetY = 0;
+static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
-static final float CUBE_WIDTH = 24;
-static final float CUBE_HEIGHT = 24;
-static final float TOWER_WIDTH = 24;
-static final float TOWER_HEIGHT = 24;
-static final float CUBE_SPACING = 2.5;
-
-static final float TOWER_VERTICAL_SPACING = 2.5;
-static final float TOWER_VERTICAL_SPACING_BIG = 5;
-
-static final float TOWER_RISER = 14;
-
-static final float SP = 40;
-
-static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
-
-// static final BulbConfig[] BULB_CONFIG = {
-//     // new BulbConfig("lifx-1", -50, 50, -30),
-//     // new BulbConfig("lifx-2", 0, 50, 0),
-//     // new BulbConfig("lifx-3", -65, 20, -100),
-//     // new BulbConfig("lifx-4", 0, 0, 0),
-//     // new BulbConfig("lifx-5", 0, 0, 0),
-// };
-
-static final TowerConfig[] TOWER_CONFIG = {
-
-    // new TowerConfig(SP*0, 0, 0, new String[] {
-    //   "22", "204", "0", "0"
-    // }),
-    // new TowerConfig(SP*1, 0, 0, new String[] {
-    //   "22", "204", "0", "0"
-    // }),
-    // new TowerConfig(SP*2, 0, 0, new String[] {
-    //   "22", "204", "0", "0"
-    // }),
-    // new TowerConfig(SP*3, 0, 0, new String[] {
-    //   "22", "204", "0", "0"
-    // }),
-    // new TowerConfig(SP*4, 0, 0, new String[] {
-    //   "22", "204", "0", "0"
-    // }),
-    // new TowerConfig(SP*5, 0, 0, new String[] {
-    //   "22", "204", "0", "0"
-    // }),
-
-};
-
+// X (positive to the right), (probably positive/counter-clockwise)
+// Y (positive upward), (rotates positive/counter-clockwise)
+// Z (positive goes backward), (rotates positive/counter-clockwise)
 
 static final BarConfig[] BAR_CONFIG = {
         // if it takes 1 id
-        // controller id          x   y   z  xRot   yRot   zRot    num leds      pitch in inches
-  new BarConfig("206",            0,  0,  0,    0,     0,     0,        100,                 1),
+        // controller id              x    y    z  xRot   yRot   zRot    num leds      pitch in inches
+  
+  new BarConfig("210",         139*0*0.65,   0,   0,    0,     0,     0,        139,                 0.65),
+  new BarConfig("0",         139*1*0.65,  10,   0,   90,     0,     0,        139,                 0.65),
+  new BarConfig("0",         139*2*0.65,  20,   0,    0,    90,     0,        139,                 0.65),
+  new BarConfig("0",         139*3*0.65,  30,   0,    0,     0,    90,        139,                 0.65),
+  // left stack of 3
+  // new BarConfig("0",            0,  45,  0,    0,     90,     0,        35*8,                 0.65),
+  // new BarConfig("0",            30,  70,  0,    0,     90,     0,        35*8,                 0.65),
+  // new BarConfig("0",            0,  85,  0,    0,     90,     0,        35*8,                 0.65),
 
-        // if it takes 2 ids
-        // 2 controller ids       x   y   z  xRot   yRot   zRot    num leds      pitch in inches
-  new BarConfig("0", "0",         0,  0,  0,    0,     0,     0,        100,                 1),
+  // // next step
+  // new BarConfig("0",            -22.5,  0,  -35,    0,     0,     0,        35*4,                 0.65),
+  // new BarConfig("0",            -22.5,  0,  -35,    0,     0,     90,       35*2,                 0.65),
+  // new BarConfig("0",            -22.5,  22.5*3,  -35,    0,     0,     90,       35*1,                 0.65),
+  // new BarConfig("0",            -22.5,  22.5*4,  -35,    0,     0,     0,        35*4,                 0.65),
+  // new BarConfig("0",            -30,  22.5*5,  -35,    0,     0,     0,        35*4,                 0.65),
+  // new BarConfig("0",            0,  45,  -35,    0,     0,     0,        35*3,                 0.65),
+
+  // // back square
+  // new BarConfig("0",           72,  22.5,  -35,    90,     0,     0,        35*4,                 0.65),
+  // new BarConfig("0",           72,  67.5,  -35,    90,     0,     0,        35*4,                 0.65),
+
+  // new BarConfig("0",           72,  22.5,  -35,    90,     0,     90,        35*2,                 0.65),
+  // new BarConfig("0",           72,  22.5,  -125,    90,     0,     90,        35*2,                 0.65),
+
+
+  // new BarConfig("0",            -22.5,  140,  -50,    0,     90,     0,        35*8,                 0.65),
+  // new BarConfig("0",            -22.5,  130,  -100,    0,     90,     0,        35*8,                 0.65),
+  // new BarConfig("0",            -22.5,  130,  -125,    0,     90,     0,        35*8,                 0.65),
+
+
+  // new BarConfig("0",            -22.5,  0,  -125,    0,     0,     90,       35*4,                 0.65),
+  // new BarConfig("0",            -22.5,  0,  -125,    0,     0,     0,       35*4,                 0.65),
+  // new BarConfig("0",            -22.5,  22.5*2,  -125,    0,     0,     0,       35*2,                 0.65),
+  // new BarConfig("0",            -22.5,  22.5*4,  -125,    0,     0,     0,       35*4,                 0.65),
+  
+
+  // new BarConfig("0",            0,  22.5*3.5,  -150,    0,     0,     0,       35*8,                 0.65),
+  //       // if it takes 2 ids
+  //       // 2 controller ids       x   y   z  xRot   yRot   zRot    num leds      pitch in inches
+  // new BarConfig("0",            0,  22.5*2.5,  -155,    0,     0,     0,       35*8,                 0.65),
+  // new BarConfig("0",            0,  22.5*2,  -155,    0,     0,     0,       35*8,                 0.65),
+  // new BarConfig("0",            0,  22.5*1.5,  -150,    0,     0,     0,       35*8,                 0.65),
+  // new BarConfig("0",            0,  22.5*2,  -170,    0,     0,     0,       35*8,                 0.65),
+
+
+  // new BarConfig("0",            250,  0,  -15,    0,     0,     90,       35*5,                 0.65),
+  // new BarConfig("0",            250,  0,  -30,    0,     0,     90,       35*5,                 0.65),
+  // new BarConfig("0",            250,  0,  -150,    0,     0,     90,       35*5,                 0.65),
+  //new BarConfig("0", "0",         0,  0,  0,    0,     0,     0,        144,                 0.65),
 };
 
 static class BarConfig {
@@ -108,6 +109,8 @@ static class BarConfig {
     this.zRot = zRot;
   }
 }
+
+static final TowerConfig[] TOWER_CONFIG = {};
 
 static class TowerConfig {
 
@@ -153,7 +156,7 @@ static class TowerConfig {
 
     this.yValues = new float[ids.length];
     for (int i = 0; i < ids.length; i++) {
-      yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
+      yValues[i] = y + i * (24 + 2.5);
     }
   }
 
@@ -215,8 +218,8 @@ public SLModel buildModel() {
 
     globalTransform.push();
     globalTransform.translate(barConfig.x, barConfig.y, barConfig.z);
-    globalTransform.rotateY(barConfig.xRot * PI / 180.);
-    globalTransform.rotateX(barConfig.yRot * PI / 180.);
+    globalTransform.rotateX(barConfig.xRot * PI / 180.);
+    globalTransform.rotateY(barConfig.yRot * PI / 180.);
     globalTransform.rotateZ(barConfig.zRot * PI / 180.);
 
     bars.add(new Bar(barConfig.id, barConfig.secondId, metrics, globalTransform));
