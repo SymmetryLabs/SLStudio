@@ -48,10 +48,10 @@ static final float leftFaceRotationY = -90;
 static final float leftFaceRotationZ = 0;
 
 static final BarConfig[] LEFT_FACE_CONFIG = {
-  new BarConfig("335",                 0,                 0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH, true), // bottom
-  // new BarConfig("0", LONG_BAR_LENGTH/4, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
-  // new BarConfig("0",                 0,   LONG_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top 
-  // new BarConfig("0",                 0,                 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // vertical
+  new BarConfig("335",               0,                 0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // bottom
+  new BarConfig("0", LONG_BAR_LENGTH/4, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
+  new BarConfig("0",                 0,   LONG_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top 
+  new BarConfig("0",                 0,                 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // vertical
 };
 
 /**
@@ -66,10 +66,10 @@ static final float rightFaceRotationY = -90;
 static final float rightFaceRotationZ = 0;
 
 static final BarConfig[] RIGHT_FACE_CONFIG = {
-  // new BarConfig("0",    0,                 0, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // bottom
-  // new BarConfig("0",    0, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        SHORT_NUM_LEDS, PIXEL_PITCH), // middle
-  // new BarConfig("0",    0,   LONG_BAR_LENGTH, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // top 
-  // new BarConfig("0",    0,                 0, 0,       0, 0, 90,         LONG_NUM_LEDS, PIXEL_PITCH), // vertical
+  new BarConfig("0",    0,                 0, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // bottom
+  new BarConfig("0",    0, LONG_BAR_LENGTH/2, 0,       0, 0,  0,        SHORT_NUM_LEDS, PIXEL_PITCH), // middle
+  new BarConfig("0",    0,   LONG_BAR_LENGTH, 0,       0, 0,  0,         LONG_NUM_LEDS, PIXEL_PITCH), // top 
+  new BarConfig("0",    0,                 0, 0,       0, 0, 90,         LONG_NUM_LEDS, PIXEL_PITCH), // vertical
 };
 
 /**
@@ -84,10 +84,10 @@ static final float squareRotationY = 0;
 static final float squareRotationZ = 0;
 
 static final BarConfig[] SQUARE_CONFIG = {
-  // new BarConfig("0",                  0,                0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // bottom
-  // new BarConfig("0",                  0, SHORT_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top
-  // new BarConfig("0",                  0,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // left
-  // new BarConfig("0",    LONG_BAR_LENGTH,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // right
+  new BarConfig("0",                  0,                0, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // bottom
+  new BarConfig("0",                  0, SHORT_BAR_LENGTH, 0,       0, 0,  0,        LONG_NUM_LEDS, PIXEL_PITCH), // top
+  new BarConfig("0",                  0,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // left
+  new BarConfig("0",    LONG_BAR_LENGTH,                0, 0,       0, 0, 90,       SHORT_NUM_LEDS, PIXEL_PITCH), // right
 };
 
 /**
@@ -102,9 +102,9 @@ static final float backVerticalRotationY = 0;
 static final float backVerticalRotationZ = 0;
 
 static final BarConfig[] BACK_VERTICAL_CONFIG = {
-  // new BarConfig("0",               0, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // left
-  // new BarConfig("0",              15, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
-  // new BarConfig("0", LONG_BAR_LENGTH, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // right
+  new BarConfig("0",               0, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // left
+  new BarConfig("0",              15, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // middle
+  new BarConfig("0", LONG_BAR_LENGTH, 0, 0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // right
 };
 
 /**
@@ -119,10 +119,10 @@ static final float rightVerticalRotationY = 0;
 static final float rightVerticalRotationZ = 0;
 
 static final BarConfig[] RIGHT_VERTICAL_CONFIG = {
-  // new BarConfig("0",   0, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-left
-  // new BarConfig("0",  10, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-right
-  // new BarConfig("0",   0, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-left
-  // new BarConfig("0",  10, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-right
+  new BarConfig("0",   0, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-left
+  new BarConfig("0",  10, 0,  0,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // back-right
+  new BarConfig("0",   0, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-left
+  new BarConfig("0",  10, 0, 10,       0, 0, 90,        LONG_NUM_LEDS, PIXEL_PITCH), // front-right
 };
 
 /**
@@ -137,110 +137,50 @@ static final float longHorizontalRotationY = 0;
 static final float longHorizontalRotationZ = 0;
 
 static final BarConfig[] LONG_HORIZONTAL_CONFIG = {
-  // // left side, bottom
-  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // left side, bottom
+  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // left side, middle
-  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // left side, middle
+  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // left side, top
-  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // left side, top
+  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  -LONG_BAR_LENGTH*0.4, LONG_BAR_LENGTH*0.5+30, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // top, left
-  // new BarConfig("0",  8, LONG_BAR_LENGTH+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  8, LONG_BAR_LENGTH+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // top, left
+  new BarConfig("0",  8, LONG_BAR_LENGTH+20,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  8, LONG_BAR_LENGTH+20, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // top, middle
-  // new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // top, middle
+  new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  LONG_BAR_LENGTH*0.7, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // top, right
-  // new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // top, right
+  new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  LONG_BAR_LENGTH*0.9, LONG_BAR_LENGTH+12, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // right, bottom
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // right, bottom
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.3, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // right, middle/bottom
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // right, middle/bottom
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // right, middle/top
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // right, middle/top
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.6, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // right, top
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // right, top
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  LONG_BAR_LENGTH*1.35, LONG_BAR_LENGTH*0.8, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 
-  // // right/right, middle/bottom
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
-  // new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  // right/right, middle/bottom
+  new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5,               0,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
+  new BarConfig("0",  LONG_BAR_LENGTH*1.65, LONG_BAR_LENGTH*0.5, LONG_BAR_LENGTH,       0, -90, 0,        LONG_NUM_LEDS, PIXEL_PITCH),
 };
-
-
-// static final BarConfig[] LEFT_FACE_CONFIG = {
-//         // if it takes 1 id
-//         // controller id              x    y    z  xRot   yRot   zRot    num leds      pitch in inches
-  
-//   // new BarConfig("210",         139*0*0.65,   0,   0,    0,     0,     0,        139,                 0.65),
-//   // new BarConfig("0",         139*1*0.65,  10,   0,   90,     0,     0,        139,                 0.65),
-//   // new BarConfig("0",         139*2*0.65,  20,   0,    0,    90,     0,        139,                 0.65),
-//   // new BarConfig("0",         139*3*0.65,  30,   0,    0,     0,    90,        139,                 0.65),
-
-
-
-
-//   // left stack of 3
-//   new BarConfig("0",            0,  45,  0,    0,     90,     0,        35*8,                 0.65),
-//   new BarConfig("0",            30,  70,  0,    0,     90,     0,        35*8,                 0.65),
-//   new BarConfig("0",            0,  85,  0,    0,     90,     0,        35*8,                 0.65),
-
-//   // next step
-//   new BarConfig("0",            -22.5,  0,  -35,    0,     0,    0,        35*4,                 0.65),
-//   new BarConfig("0",            -22.5,  0,  -35,    0,     0,     90,       35*2,                 0.65),
-//   new BarConfig("0",            -22.5,  22.5*3,  -35,    0,     0,     90,       35*1,                 0.65),
-//   new BarConfig("0",            -22.5,  22.5*4,  -35,    0,     0,     0,        35*4,                 0.65),
-//   new BarConfig("0",            -30,  22.5*5,  -35,    0,     0,     0,        35*4,                 0.65),
-//   new BarConfig("0",            0,  45,  -35,    0,     0,     0,        35*3,                 0.65),
-
-//   // back square
-//   new BarConfig("0",           72,  22.5,  -35,    90,     0,     0,        35*4,                 0.65),
-//   new BarConfig("0",           72,  67.5,  -35,    90,     0,     0,        35*4,                 0.65),
-
-//   new BarConfig("0",           72,  22.5,  -35,    90,     0,     90,        35*2,                 0.65),
-//   new BarConfig("0",           72,  22.5,  -125,    90,     0,     90,        35*2,                 0.65),
-
-
-//   new BarConfig("0",            -22.5,  140,  -50,    0,     90,     0,        35*8,                 0.65),
-//   new BarConfig("0",            -22.5,  130,  -100,    0,     90,     0,        35*8,                 0.65),
-//   new BarConfig("0",            -22.5,  130,  -125,    0,     90,     0,        35*8,                 0.65),
-
-
-//   new BarConfig("0",            -22.5,  0,  -125,    0,     0,     90,       35*4,                 0.65),
-//   new BarConfig("0",            -22.5,  0,  -125,    0,     0,     0,       35*4,                 0.65),
-//   new BarConfig("0",            -22.5,  22.5*2,  -125,    0,     0,     0,       35*2,                 0.65),
-//   new BarConfig("0",            -22.5,  22.5*4,  -125,    0,     0,     0,       35*4,                 0.65),
-  
-
-//   new BarConfig("0",            0,  22.5*3.5,  -150,    0,     0,     0,       35*8,                 0.65),
-//         // if it takes 2 ids
-//         // 2 controller ids       x   y   z  xRot   yRot   zRot    num leds      pitch in inches
-//   new BarConfig("0",            0,  22.5*2.5,  -155,    0,     0,     0,       35*8,                 0.65),
-//   new BarConfig("0",            0,  22.5*2,  -155,    0,     0,     0,       35*8,                 0.65),
-//   new BarConfig("0",            0,  22.5*1.5,  -150,    0,     0,     0,       35*8,                 0.65),
-//   new BarConfig("0",            0,  22.5*2,  -170,    0,     0,     0,       35*8,                 0.65),
-
-
-//   new BarConfig("0",            250,  0,  -15,    0,     0,     90,       35*5,                 0.65),
-//   new BarConfig("0",            250,  0,  -30,    0,     0,     90,       35*5,                 0.65),
-//   new BarConfig("0",            250,  0,  -150,    0,     0,     90,       35*5,                 0.65),
-//   new BarConfig("0", "0",         0,  0,  0,    0,     0,     0,        144,                 0.65),
-// };
 
 static class BarConfig {
   String id;
