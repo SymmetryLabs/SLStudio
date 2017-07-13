@@ -269,7 +269,7 @@ public abstract class LXClip extends LXRunnableComponent implements LXComponent.
             // TODO(mcslee): make this more efficient, keep track of our indices...
             advanceCursor(this.cursor, nextCursor);
             while (nextCursor > lengthValue) {
-                if (!this.loop.isOn()) {
+                if (!this.loop.isOn() || (lengthValue == 0)) {
                     this.cursor = nextCursor = lengthValue;
                     stop();
                     break;
