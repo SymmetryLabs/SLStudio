@@ -95,7 +95,7 @@ ${line}
 	
 	<target name="copyToExamples">
 		<echo message="Copying jar file to the examples." />
-		<copy file="${project.tmp}/${project.name}/library/P3LX.jar" toDir="./examples/P3LXDemo/code" />
+		<copy file="${project.tmp}/${project.name}/library/P3LX.jar" toDir="./examples/LXStudioDemo/code" />
 	</target>
 
 	<target name="copyToSketchbook">
@@ -297,6 +297,8 @@ ${line}
 			<zipgroupfileset dir="${project.lib}" includes="coremidi4j-0.9.jar" />
 			<zipgroupfileset dir="${project.lib}" includes="gson-2.8.0.jar" />
 		</jar>
+		<copy file="${project.bin}/${project.jar.name}" toDir="./examples/LXStudioDemo/code" />
+		
 	</target>
 	
 	<target name="clean" depends="library.run">
