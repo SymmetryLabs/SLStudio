@@ -27,15 +27,17 @@
 package heronarts.p3lx.ui.studio.clip;
 
 import heronarts.lx.LX;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.UITriggerTarget;
 import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UISceneButton extends UI2dComponent implements UIFocus {
+public class UISceneButton extends UI2dComponent implements UIFocus, UITriggerTarget {
 
     private final UIMixer mixer;
     private final LX lx;
@@ -94,4 +96,9 @@ public class UISceneButton extends UI2dComponent implements UIFocus {
             redraw();
         }
     }
- }
+
+    @Override
+    public BooleanParameter getTriggerTarget() {
+        return lx.engine.getScene(this.index);
+    }
+}
