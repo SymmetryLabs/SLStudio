@@ -112,7 +112,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         new BooleanParameter("Mirror", true)
         .setDescription("If engaged, the hue spread is mirrored from center");
 
-    private final DampedParameter hueFixed = new DampedParameter(this.color.hue, 1800);
+    private final DampedParameter hueFixed = new DampedParameter(this.color.hue, 1800).setModulus(360.);
 
     private final SawLFO hueCycle = new SawLFO(0, 360, period);
 
