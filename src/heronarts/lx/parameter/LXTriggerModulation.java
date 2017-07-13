@@ -47,9 +47,13 @@ public class LXTriggerModulation extends LXParameterModulation {
     @Override
     public void onParameterChanged(LXParameter p) {
         super.onParameterChanged(p);
+
         if (p == this.source) {
             if (this.source.isOn()) {
                 this.target.setValue(true);
+
+            } else if (this.target.getMode() == BooleanParameter.Mode.MOMENTARY) {
+                this.target.setValue(false);
             }
         }
     }
