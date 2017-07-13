@@ -85,6 +85,10 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
                     // Write to the output line
                     line.write(this.buffer, 0, len);
 
+                    // TODO(mcslee): Need some kind of timing-fu in here so that the metering
+                    // is in sync. Right now this sort of rushes ahead as the ouptut buffer is
+                    // big.
+
                     // Put the left and right buffers
                     left.putSamples(this.buffer, 0, OUTPUT_DATA_SIZE, FRAME_SIZE);
                     right.putSamples(this.buffer, 2, OUTPUT_DATA_SIZE, FRAME_SIZE);
@@ -138,21 +142,7 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
 
     private void open() {
         if (this.clip == null) {
-            // DataLine.Info info = new DataLine.Info(Clip.class,  this.format);
-//      if (!AudioSystem.isLineSupported(info)) {
-//        System.err.println("AudioSystem does not support stereo 16-bit output");
-//        return;
-//      }
             try {
-//        System.out.println("Get clip");
-//        this.clip = AudioSystem.getClip();
-//        System.out.println("Open input stream");
-//        this.clip.open(this.inputStream);
-//        this.clip.addLineListener(this);
-//        System.out.println("start");
-//        this.clip.start();
-//        System.out.println("Started clip: " + this.inputStream);
-//        this.clip.loop(Clip.LOOP_CONTINUOUSLY);
                 this.line = (SourceDataLine) AudioSystem.getLine(new DataLine.Info(SourceDataLine.class, this.format));
                 this.line.addLineListener(this);
                 this.line.open(this.format);
