@@ -83,6 +83,8 @@ import com.google.gson.JsonObject;
  */
 public class LXEngine extends LXComponent implements LXOscComponent, LXModulationComponent {
 
+    private static final int MAX_SCENES = 5;
+
     private final LX lx;
 
     public final LXMidiEngine midi;
@@ -138,6 +140,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public final BoundedParameter speed =
         new BoundedParameter("Speed", 1, 0, 2)
         .setDescription("Overall speed adjustement to the entire engine (does not apply to master tempo and audio)");
+
+    private final BooleanParameter[] scenes = new BooleanParameter[MAX_SCENES];
 
     public final LXModulationEngine modulation;
 
@@ -345,6 +349,22 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             }
         });
         LX.initTimer.log("Engine: Cue");
+
+        // Scenes
+        for (int i = 0; i < this.scenes.length; ++i) {
+            final int sceneIndex = i;
+            this.scenes[i] = new BooleanParameter("Scene-" + (i+1));
+            addParameter("scene-" + (i+1), this.scenes[i]);
+            this.scenes[i].addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    BooleanParameter scene = (BooleanParameter) p;
+                    if (scene.isOn()) {
+                        launchScene(sceneIndex);
+                        scene.setValue(false);
+                    }
+                }
+            });
+        }
 
         // Master output
         this.output = new Output(lx);
@@ -699,6 +719,16 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         for (Listener listener : this.listeners) {
             listener.channelMoved(this, channel);
         }
+    }
+
+    /**
+     * Get the boolean parameter that launches a scene
+     *
+     * @param index
+     * @return
+     */
+    public BooleanParameter getScene(int index) {
+        return this.scenes[index];
     }
 
     public LXEngine launchScene(int index) {
