@@ -115,11 +115,11 @@ public class UIProjectManager extends UICollapsibleSection {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    ui.applet.selectInput("Select a file to load:", "onLoad", ui.applet.saveFile("default.lxp"), UIProjectManager.this);
+                    ui.applet.selectInput("Select a file to open:", "onLoad", ui.applet.saveFile("default.lxp"), UIProjectManager.this);
                 }
             }
         }
-        .setLabel("Load...")
+        .setLabel("Open...")
         .setMomentary(true)
         .addToContainer(this);
     }
