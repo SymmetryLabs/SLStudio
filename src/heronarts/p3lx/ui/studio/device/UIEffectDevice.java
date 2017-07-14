@@ -27,7 +27,9 @@
 package heronarts.p3lx.ui.studio.device;
 
 import heronarts.lx.LXBus;
+import heronarts.lx.LXComponent;
 import heronarts.lx.LXEffect;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.p3lx.ui.UI;
 import processing.event.KeyEvent;
 
@@ -45,6 +47,11 @@ class UIEffectDevice extends UIDevice {
         setTitle(effect.label);
         setEnabledButton(effect.enabled);
         buildDefaultControlUI(effect);
+    }
+
+    @Override
+    protected boolean isEligibleControlParameter(LXComponent component, LXParameter parameter) {
+        return (parameter != effect.enabled) && super.isEligibleControlParameter(component, parameter);
     }
 
     @Override

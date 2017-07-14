@@ -211,14 +211,19 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
         return this;
     }
 
+    protected boolean isEligibleControlParameter(LXComponent component, LXParameter parameter) {
+        return
+            parameter instanceof BoundedParameter ||
+            parameter instanceof DiscreteParameter ||
+            parameter instanceof BooleanParameter;
+    }
+
     protected void buildDefaultControlUI(LXComponent component) {
         List<LXListenableNormalizedParameter> params = new ArrayList<LXListenableNormalizedParameter>();
         for (LXParameter parameter : component.getParameters()) {
-            if (parameter instanceof BoundedParameter || parameter instanceof DiscreteParameter ||
-                    parameter instanceof BooleanParameter
-            ) {
+            if (isEligibleControlParameter(component, parameter)) {
                 params.add((LXListenableNormalizedParameter) parameter);
-            } // else, ignore unsupported types
+            }
         }
         int perRow;
         if (params.size() <= 3) {
@@ -242,7 +247,7 @@ public abstract class UIDevice extends UI2dContainer implements UIMouseFocus, UI
                         .setParameter(param)
                         .addToContainer(this);
             } else {
-                // Hey developer: probably added a type in the for-loop above that wasn't handled down here.
+                // Hey developer: probably added a type in isEligibleControlParameter() that wasn't handled down here.
                 throw new RuntimeException("Cannot generate control, unsupported pattern parameter type: " + param.getClass());
             }
 
