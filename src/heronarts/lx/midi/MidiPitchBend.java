@@ -37,8 +37,23 @@ public class MidiPitchBend extends LXShortMessage {
         super(message, ShortMessage.PITCH_BEND);
     }
 
+    /**
+     * Returns the pitch bend value, signed from [-8192, +8191]
+     *
+     * @return Pitch bend value
+     */
     public int getPitchBend() {
         return (getData1() + (getData2() << 7)) - 0x2000;
+    }
+
+    /**
+     * Returns the pitch bend value normalized space from [-1, +1]
+     *
+     * @return Normalized pitch bend amount
+     */
+    public double getNormalized() {
+        int pitchBend = getPitchBend();
+        return (pitchBend > 0) ? (pitchBend / 8191.) : (pitchBend / 8192.);
     }
 
     @Override

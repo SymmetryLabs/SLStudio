@@ -410,7 +410,11 @@ public class LXMidiEngine implements LXSerializable {
         if (object.has(KEY_MAPPINGS)) {
             JsonArray mappings = object.getAsJsonArray(KEY_MAPPINGS);
             for (JsonElement element : mappings) {
-                addMapping(LXMidiMapping.create(this.lx, element.getAsJsonObject()));
+                try {
+                    addMapping(LXMidiMapping.create(this.lx, element.getAsJsonObject()));
+                } catch (Exception x) {
+                    System.err.println("Could not load MIDI mapping: " + element.toString());
+                }
             }
         }
         whenReady(new Runnable() {

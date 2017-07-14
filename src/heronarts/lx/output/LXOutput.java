@@ -196,13 +196,12 @@ public abstract class LXOutput extends LXComponent {
                         g = (rgb >> 8) & 0xff;
                         b = rgb & 0xff;
                         Color.RGBtoHSB(r, g, b, this.hsb);
-                        float scaleBrightness = hsb[2];
+                        float scaleBrightness = this.hsb[2];
                         for (int x = 0; x < gamma; ++x) {
-                            scaleBrightness *= hsb[2];
+                            scaleBrightness *= this.hsb[2];
                         }
                         scaleBrightness *= brt;
-                        this.outputColors[i] = Color.HSBtoRGB(hsb[0], hsb[1],
-                                scaleBrightness);
+                        this.outputColors[i] = Color.HSBtoRGB(hsb[0], hsb[1], scaleBrightness);
                     }
                     colorsToSend = this.outputColors;
                 }
