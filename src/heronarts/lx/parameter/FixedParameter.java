@@ -66,12 +66,16 @@ public class FixedParameter implements LXParameter {
         return this.path;
     }
 
-    public LXParameter.Units getUnits() {
-        return LXParameter.Units.NONE;
+    public Formatter getFormatter() {
+        return getUnits();
     }
 
-    public LXParameter.Polarity getPolarity() {
-        return LXParameter.Polarity.UNIPOLAR;
+    public Units getUnits() {
+        return Units.NONE;
+    }
+
+    public Polarity getPolarity() {
+        return Polarity.UNIPOLAR;
     }
 
     @Override

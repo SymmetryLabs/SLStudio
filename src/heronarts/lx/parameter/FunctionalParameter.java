@@ -69,13 +69,18 @@ public abstract class FunctionalParameter implements LXParameter {
     }
 
     @Override
-    public LXParameter.Polarity getPolarity() {
-        return LXParameter.Polarity.UNIPOLAR;
+    public Polarity getPolarity() {
+        return Polarity.UNIPOLAR;
     }
 
     @Override
-    public LXParameter.Units getUnits() {
-        return LXParameter.Units.NONE;
+    public Formatter getFormatter() {
+        return getUnits();
+    }
+
+    @Override
+    public Units getUnits() {
+        return Units.NONE;
     }
 
     @Override

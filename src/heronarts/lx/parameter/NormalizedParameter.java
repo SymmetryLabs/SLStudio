@@ -77,13 +77,18 @@ public class NormalizedParameter implements LXNormalizedParameter {
     }
 
     @Override
+    public Formatter getFormatter() {
+        return getUnits();
+    }
+
+    @Override
     public Units getUnits() {
-        return LXParameter.Units.NONE;
+        return Units.NONE;
     }
 
     @Override
     public Polarity getPolarity() {
-        return LXParameter.Polarity.UNIPOLAR;
+        return Polarity.UNIPOLAR;
     }
 
     @Override

@@ -36,9 +36,11 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
 
     private LXComponent component;
 
-    private LXParameter.Units units = LXParameter.Units.NONE;
+    private Formatter formatter = null;
 
-    private LXParameter.Polarity polarity = LXParameter.Polarity.UNIPOLAR;
+    private Units units = Units.NONE;
+
+    private Polarity polarity = Polarity.UNIPOLAR;
 
     public final ColorParameter color =
         new ColorParameter("Modulation Color", LXColor.hsb(Math.random() * 360, 100, 100))
@@ -107,21 +109,30 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
         throw new UnsupportedOperationException("getPath() not supported for LXModulator");
     }
 
-    public LXModulator setUnits(LXParameter.Units units) {
+    public LXModulator setFormatter(Formatter formatter) {
+        this.formatter = formatter;
+        return this;
+    }
+
+    public Formatter getFormatter() {
+        return (this.formatter != null) ? this.formatter : getUnits();
+    }
+
+    public LXModulator setUnits(Units units) {
         this.units = units;
         return this;
     }
 
-    public LXParameter.Units getUnits() {
+    public Units getUnits() {
         return this.units;
     }
 
-    public LXModulator setPolarity(LXParameter.Polarity polarity) {
+    public LXModulator setPolarity(Polarity polarity) {
         this.polarity = polarity;
         return this;
     }
 
-    public LXParameter.Polarity getPolarity() {
+    public Polarity getPolarity() {
         return this.polarity;
     }
 

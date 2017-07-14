@@ -41,9 +41,11 @@ public abstract class LXListenableParameter implements LXParameter {
     private LXComponent component;
     private String path;
 
-    private Units units = LXParameter.Units.NONE;
+    private Units units = Units.NONE;
 
-    private Polarity polarity = LXParameter.Polarity.UNIPOLAR;
+    private Formatter formatter = null;
+
+    private Polarity polarity = Polarity.UNIPOLAR;
 
     protected String description = null;
 
@@ -64,20 +66,29 @@ public abstract class LXListenableParameter implements LXParameter {
         this.defaultValue = this.value = value;
     }
 
-    public LXParameter.Units getUnits() {
+    public Formatter getFormatter() {
+        return (this.formatter != null) ? this.formatter : getUnits();
+    }
+
+    public LXListenableParameter setFormatter(Formatter formatter) {
+        this.formatter = formatter;
+        return this;
+    }
+
+    public Units getUnits() {
         return this.units;
     }
 
-    public LXListenableParameter setUnits(LXParameter.Units units) {
+    public LXListenableParameter setUnits(Units units) {
         this.units = units;
         return this;
     }
 
-    public LXParameter.Polarity getPolarity() {
+    public Polarity getPolarity() {
         return this.polarity;
     }
 
-    public LXListenableParameter setPolarity(LXParameter.Polarity polarity) {
+    public LXListenableParameter setPolarity(Polarity polarity) {
         this.polarity = polarity;
         return this;
     }

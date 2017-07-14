@@ -134,7 +134,7 @@ public class CompoundParameter extends BoundedParameter {
     public double getNormalized() {
         double normalized = super.getNormalized(getBaseValue());
         for (LXCompoundModulation modulation : this.mutableModulations) {
-            if (modulation.getPolarity() == LXParameter.Polarity.UNIPOLAR) {
+            if (modulation.getPolarity() == Polarity.UNIPOLAR) {
                 normalized += modulation.source.getNormalized() * modulation.range.getValue();
             } else {
                 normalized += 2.*(modulation.source.getNormalized()-.5) * modulation.range.getValue();
