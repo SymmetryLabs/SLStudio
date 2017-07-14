@@ -197,9 +197,9 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
             } else if (this.parameter instanceof BooleanParameter) {
                 return ((BooleanParameter) this.parameter).isOn() ? "ON" : "OFF";
             } else if (this.parameter instanceof CompoundParameter) {
-                return this.parameter.getUnits().format(((CompoundParameter) this.parameter).getBaseValue());
+                return this.parameter.getFormatter().format(((CompoundParameter) this.parameter).getBaseValue());
             } else {
-                return this.parameter.getUnits().format(this.parameter.getValue());
+                return this.parameter.getFormatter().format(this.parameter.getValue());
             }
         }
         return "-";

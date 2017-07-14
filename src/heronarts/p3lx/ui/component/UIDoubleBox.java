@@ -111,7 +111,10 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModul
 
     @Override
     protected String getValueString() {
-        return getUnits().format(this.value);
+        if (this.parameter != null) {
+            return this.parameter.getFormatter().format(this.value);
+        }
+        return LXParameter.Units.NONE.format(this.value);
     }
 
     /**

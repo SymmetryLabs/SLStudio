@@ -141,7 +141,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
             if (this.clip != null) {
                 this.info.clipName.setParameter(this.clip.label);
                 this.info.clipName.setEnabled(true);
-                this.info.clipLength.setLabel(this.clip.length.getUnits().format(this.clip.length.getValue()));
+                this.info.clipLength.setLabel(this.clip.length.getFormatter().format(this.clip.length.getValue()));
                 this.clip.length.addListener(this);
                 this.info.clipLoop.setParameter(this.clip.loop);
                 this.info.clipLoop.setEnabled(true);
@@ -183,7 +183,7 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
     public void onParameterChanged(LXParameter p) {
         if (this.clip != null) {
             if (p == this.clip.length) {
-                this.info.clipLength.setLabel(this.clip.length.getUnits().format(this.clip.length.getValue()));
+                this.info.clipLength.setLabel(this.clip.length.getFormatter().format(this.clip.length.getValue()));
             }
         }
     }
