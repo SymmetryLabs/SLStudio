@@ -1,5 +1,43 @@
 import java.awt.Color;
 
+public static class SquareMask extends LXEffect {
+  BooleanParameter mask = new BooleanParameter("mask", false);
+
+  public SquareMask(LX lx) {
+    super(lx);
+    addParameter(mask);
+  }
+
+  @Override
+  public void run(double deltaMs, double amount) {
+    //if (getBus().getLabel().equals("Square")) {
+      if (!mask.getValueb()) {
+        for (Bar bar : ((SLModel)model).bars) {
+          if (bar.id.equals("500") || bar.id.equals("501")
+           || bar.id.equals("502") || bar.id.equals("329")) {
+            // keep colors
+          } else {
+            for (LXPoint p : bar.points) {
+              colors[p.index] = LXColor.BLACK;
+            }
+          }
+        }
+      } else {
+        for (Bar bar : ((SLModel)model).bars) {
+          if (bar.id.equals("500") || bar.id.equals("501")
+           || bar.id.equals("502") || bar.id.equals("329")) {
+            for (LXPoint p : bar.points) {
+              colors[p.index] = LXColor.BLACK;
+            }
+          } else {
+            // keep colors
+          }
+        }
+      }
+    //}
+  }
+}
+
 public static class Strobe extends LXEffect {
   
   public enum Waveshape {

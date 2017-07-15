@@ -308,6 +308,7 @@ public static class Cube extends LXModel {
       t.rotateY(ry * PI / 180.);
       t.rotateZ(rz * PI / 180.);
       t.translate(-type.EDGE_WIDTH/2, -type.EDGE_HEIGHT/2, -type.EDGE_WIDTH/2);
+      
 
       for (int i = 0; i < FACES_PER_CUBE; i++) {
         Face face = new Face(type.FACE_METRICS, (ry + 90*i) % 360, t);
