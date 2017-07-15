@@ -144,18 +144,18 @@ public class Sparkle extends LXPattern {
 
 public class ControllableRectangles extends LXPattern {
 
-  CompoundParameter ball1xPos = new CompoundParameter("1xPos", model.cx, model.xMin, model.xMax);
-  CompoundParameter ball1yPos = new CompoundParameter("1yPos", model.cy, model.yMin, model.yMax);
-  CompoundParameter ball1zPos = new CompoundParameter("1zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter ball1xPos = new CompoundParameter("1xPos", model.cx, model.xMin-200, model.xMax+200);
+  CompoundParameter ball1yPos = new CompoundParameter("1yPos", model.cy, model.yMin-200, model.yMax+200);
+  CompoundParameter ball1zPos = new CompoundParameter("1zPos", model.cz, model.zMin-200, model.zMax+200);
   CompoundParameter ball1xSize = new CompoundParameter("1xSize", 1, 0, model.xRange);
   CompoundParameter ball1ySize = new CompoundParameter("1ySize", 1, 0, model.yRange);
   CompoundParameter ball1zSize = new CompoundParameter("1zSize", 1, 0, model.zRange);
   CompoundParameter ball1hue = new CompoundParameter("1hue", 0, 0, 360);
   CompoundParameter ball1sat = new CompoundParameter("1sat", 100, 0, 100);
 
-  CompoundParameter ball2xPos = new CompoundParameter("2xPos", model.cx, model.xMin, model.xMax);
-  CompoundParameter ball2yPos = new CompoundParameter("2yPos", model.cy, model.yMin, model.yMax);
-  CompoundParameter ball2zPos = new CompoundParameter("2zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter ball2xPos = new CompoundParameter("2xPos", model.cx-200, model.xMin, model.xMax+200);
+  CompoundParameter ball2yPos = new CompoundParameter("2yPos", model.cy-200, model.yMin, model.yMax+200);
+  CompoundParameter ball2zPos = new CompoundParameter("2zPos", model.cz-200, model.zMin, model.zMax+200);
   CompoundParameter ball2xSize = new CompoundParameter("2xSize", 1, 0, model.xRange);
   CompoundParameter ball2ySize = new CompoundParameter("2ySize", 1, 0, model.yRange);
   CompoundParameter ball2zSize = new CompoundParameter("2zSize", 1, 0, model.zRange);
@@ -1073,7 +1073,7 @@ public class Pong extends DPat {
   void    StartRun(double deltaMs)  { cRad = mMax.x*val(pSize)/6; }
   color CalcPoint(PVector p)      {
     v.set(x.getValuef(), y.getValuef(), z.getValuef());
-    //v.z=0;p.z=0;// ignore z dimension
+    v.z=0;p.z=0;// ignore z dimension
     switch(pChoose.getValuei()) {
     case 0: vMir.set(mMax); vMir.sub(p);
         return lx.hsb(lxh(),100,c1c(1 - min(v.dist(p), v.dist(vMir))*.5/cRad));   // balls
