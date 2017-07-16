@@ -144,18 +144,18 @@ public class Sparkle extends LXPattern {
 
 public class ControllableRectangles extends LXPattern {
 
-  CompoundParameter ball1xPos = new CompoundParameter("1xPos", model.cx, model.xMin, model.xMax);
-  CompoundParameter ball1yPos = new CompoundParameter("1yPos", model.cy, model.yMin, model.yMax);
-  CompoundParameter ball1zPos = new CompoundParameter("1zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter ball1xPos = new CompoundParameter("1xPos", model.cx, model.xMin-200, model.xMax+200);
+  CompoundParameter ball1yPos = new CompoundParameter("1yPos", model.cy, model.yMin-200, model.yMax+200);
+  CompoundParameter ball1zPos = new CompoundParameter("1zPos", model.cz, model.zMin-200, model.zMax+200);
   CompoundParameter ball1xSize = new CompoundParameter("1xSize", 1, 0, model.xRange);
   CompoundParameter ball1ySize = new CompoundParameter("1ySize", 1, 0, model.yRange);
   CompoundParameter ball1zSize = new CompoundParameter("1zSize", 1, 0, model.zRange);
   CompoundParameter ball1hue = new CompoundParameter("1hue", 0, 0, 360);
   CompoundParameter ball1sat = new CompoundParameter("1sat", 100, 0, 100);
 
-  CompoundParameter ball2xPos = new CompoundParameter("2xPos", model.cx, model.xMin, model.xMax);
-  CompoundParameter ball2yPos = new CompoundParameter("2yPos", model.cy, model.yMin, model.yMax);
-  CompoundParameter ball2zPos = new CompoundParameter("2zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter ball2xPos = new CompoundParameter("2xPos", model.cx, model.xMin-200, model.xMax+200);
+  CompoundParameter ball2yPos = new CompoundParameter("2yPos", model.cy, model.yMin-200, model.yMax+200);
+  CompoundParameter ball2zPos = new CompoundParameter("2zPos", model.cz, model.zMin-200, model.zMax+200);
   CompoundParameter ball2xSize = new CompoundParameter("2xSize", 1, 0, model.xRange);
   CompoundParameter ball2ySize = new CompoundParameter("2ySize", 1, 0, model.yRange);
   CompoundParameter ball2zSize = new CompoundParameter("2zSize", 1, 0, model.zRange);
@@ -476,6 +476,223 @@ public class NoiseV extends DPat {
   }
 }
 
+
+class Vector2 {
+  float x, y;
+  
+  Vector2() {
+    this(0, 0);
+  }
+  
+  Vector2(float x, float y) {
+    this.x = x;
+    this.y = y;
+  }
+  
+  float distanceTo(float x, float y) {
+    return sqrt(pow(x - this.x, 2) + pow(y - this.y, 2));
+  }
+  
+  float distanceTo(Vector2 v) {
+    return distanceTo(v.x, v.y);
+  }
+  
+  Vector2 plus(float x, float y) {
+    return new Vector2(this.x + x, this.y + y);
+  }
+  
+  Vector2 plus(Vector2 v) {
+    return plus(v.x, v.y);
+  }
+    
+  Vector2 minus(Vector2 v) {
+    return plus(-1 * v.x, -1 * v.y);
+  }
+}
+
+class Vector3 {
+  float x, y, z;
+  
+  Vector3() {
+    this(0, 0, 0);
+  }
+  
+  Vector3(float x, float y, float z) {
+    this.x = x;
+    this.y = y;
+    this.z = z;
+  }
+  
+  float distanceTo(float x, float y, float z) {
+    return sqrt(pow(x - this.x, 2) + pow(y - this.y, 2) + pow(z - this.z, 2));
+  }
+  
+  float distanceTo(Vector3 v) {
+    return distanceTo(v.x, v.y, v.z);
+  }
+  
+  float distanceTo(LXPoint p) {
+    return distanceTo(p.x, p.y, p.z);
+  }
+  
+  void add(Vector3 other, float multiplier) {
+    this.add(other.x * multiplier, other.y * multiplier, other.z * multiplier);
+  }  
+    
+  void add(float x, float y, float z) {
+    this.x += x;
+    this.y += y;
+    this.z += z;
+  }
+  
+  void divide(float factor) {
+    this.x /= factor;
+    this.y /= factor;
+    this.z /= factor;
+  }
+}
+
+class Rotation {
+  private float a, b, c, d, e, f, g, h, i;
+  
+  Rotation(float yaw, float pitch, float roll) {
+    float cosYaw = cos(yaw);
+    float sinYaw = sin(yaw);
+    float cosPitch = cos(pitch);
+    float sinPitch = sin(pitch);
+    float cosRoll = cos(roll);
+    float sinRoll = sin(roll);
+    
+    a = cosYaw * cosPitch;
+    b = cosYaw * sinPitch * sinRoll - sinYaw * cosRoll;
+    c = cosYaw * sinPitch * cosRoll + sinYaw * sinRoll;
+    d = sinYaw * cosPitch;
+    e = sinYaw * sinPitch * sinRoll + cosYaw * cosRoll;
+    f = sinYaw * sinPitch * cosRoll - cosYaw * sinRoll;
+    g = -1 * sinPitch;
+    h = cosPitch * sinRoll;
+    i = cosPitch * cosRoll;
+  }
+  
+  Vector3 rotated(Vector3 v) {
+    return new Vector3(
+      rotatedX(v),
+      rotatedY(v),
+      rotatedZ(v));
+
+  }
+  
+  float rotatedX(Vector3 v) {
+    return a * v.x + b * v.y + c * v.z;
+  }
+  
+  float rotatedY(Vector3 v) {
+    return d * v.x + e * v.y + f * v.z;
+  }
+  
+  float rotatedZ(Vector3 v) {
+    return g * v.x + h * v.y + i * v.z;
+  }
+}
+
+/**
+ * Very literal rain effect.  Not that great as-is but some tweaking could make it nice.
+ * A couple ideas:
+ *   - changing hue and direction of "rain" could make a nice fire effect
+ *   - knobs to change frequency and size of rain drops
+ *   - sync somehow to tempo but maybe less frequently than every beat?
+ */
+public class Raindrops extends LXPattern {
+
+  CompoundParameter numRainDrops = new CompoundParameter("NUM", -40, -500, -20);
+  CompoundParameter size = new CompoundParameter("SIZE", 0.35, 0.1, 1.0);
+  CompoundParameter speedP = new CompoundParameter("SPD", -1000, -7000, -300);
+  CompoundParameter hueV = new CompoundParameter("HUE", 200, 0, 360);
+
+  Vector3 randomVector3() {
+    return new Vector3(
+        random(model.xMax - model.xMin) + model.xMin,
+        random(model.yMax - model.yMin) + model.yMin,
+        random(model.zMax - model.zMin) + model.zMin);
+  }
+
+  class Raindrop {
+    Vector3 p;
+    Vector3 v;
+    float radius;
+    float hue;
+    float speed;
+    
+    Raindrop() {
+      this.radius = (model.yRange*.4)*size.getValuef();
+      this.p = new Vector3(
+              random(model.xMax - model.xMin) + model.xMin,
+              model.yMax + this.radius,
+              random(model.zMax - model.zMin) + model.zMin);
+      float velMagnitude = 120;
+      this.v = new Vector3(
+          0,
+          -3 * model.yMax,
+          0);
+      this.hue = random(15) + hueV.getValuef();
+      this.speed = Math.abs(speedP.getValuef());
+    }
+    
+    // returns TRUE when this should die
+    boolean age(double ms) {
+      p.add(v, (float) (ms / this.speed));
+      return this.p.y < (0 - this.radius);
+    }
+  }
+  
+  private float leftoverMs = 0;
+  private float msPerRaindrop = 40;
+  private List<Raindrop> raindrops;
+  
+  public Raindrops(LX lx) {
+    super(lx);
+    addParameter(numRainDrops);
+    addParameter(size); 
+    addParameter(speedP);
+    addParameter(hueV);
+    raindrops = new LinkedList<Raindrop>();
+  }
+  
+  public void run(double deltaMs) {
+    leftoverMs += deltaMs;
+    float msPerRaindrop = Math.abs(numRainDrops.getValuef());
+    while (leftoverMs > msPerRaindrop) {
+      leftoverMs -= msPerRaindrop;
+      raindrops.add(new Raindrop());
+    }
+    
+    for (LXPoint p : model.points) {
+      color c = 0;
+      for (Raindrop raindrop : raindrops) {
+        if (p.x >= (raindrop.p.x - raindrop.radius) && p.x <= (raindrop.p.x + raindrop.radius) &&
+            p.y >= (raindrop.p.y - raindrop.radius) && p.y <= (raindrop.p.y + raindrop.radius)) {
+          //float d = raindrop.p.distanceTo(p) / raindrop.radius;
+  //      float value = (float)Math.max(0, 1 - Math.pow(Math.min(0, d - raindrop.radius) / 5, 2)); 
+          //if (d < 1) {
+            c = PImage.blendColor(c, lx.hsb(raindrop.hue, 80, 100), ADD);
+          //}
+        }
+      }
+      colors[p.index] = c;
+    }
+    
+    Iterator<Raindrop> i = raindrops.iterator();
+    while (i.hasNext()) {
+      Raindrop raindrop = i.next();
+      boolean dead = raindrop.age(deltaMs);
+      if (dead) {
+        i.remove();
+      }
+    }
+  } 
+}
+
+
 public class Noise extends DPat {
   int       CurAnim, iSymm;
   int       XSym=1,YSym=2,RadSym=3;
@@ -484,6 +701,7 @@ public class Noise extends DPat {
   DiscreteParameter     pChoose, pSymm;
   int       _ND = 4;
   NDat      N[] = new NDat[_ND];
+  CompoundParameter hue = new CompoundParameter("hue", 0, 0, 100);
 
   public Noise(LX lx) {
     super(lx);
@@ -493,12 +711,13 @@ public class Noise extends DPat {
     pSharp    = addParam("Shrp"    ,  0);
     pSymm     = new DiscreteParameter("Symm" , new String[] {"None", "X", "Y", "Rad"} );
     pChoose   = new DiscreteParameter("Anim", new String[] {"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark","VWav", "Wave"}  );
-    pChoose.setValue(7);
+    pChoose.setValue(1);
     //addNonKnobParameter(pSymm);
     //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);
       //addSingleParameterUIRow(pSymm);
     for (int i=0; i<_ND; i++) N[i] = new NDat();
+    addParameter(hue);
   }
 
   void onActive() { zTime = random(500); zTheta=0; rtime = 0; ttime = 0; }
@@ -570,7 +789,8 @@ public class Noise extends DPat {
               *1.8;
 
       b +=  n.den/100 -.4 + val(pDensity) -1;
-    c =   PImage.blendColor(c,lx.hsb(lxh()+n.hue,100,c1c(b)),ADD);
+    //c =   PImage.blendColor(c,lx.hsb(lxh(),100,c1c(b)),ADD);
+    c = lx.hsb(lxh()+hue.getValuef(), 100, c1c(b));
     }
     return c;
   }
@@ -1486,6 +1706,87 @@ public class ShiftingPlane extends SLPattern {
     }
   }
 }
+
+public class BarFlash extends SLPattern {
+  private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
+  private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
+  private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
+  private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
+  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+  
+  class Flash {
+    Bar c;
+    float value;
+    float hue;
+    boolean hasPeaked;
+    
+    Flash() {
+      c = ((SLModel)model).bars.get(floor(random(((SLModel)model).bars.size())));
+      hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
+      boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
+      hasPeaked = infiniteAttack;
+      value = (infiniteAttack ? 1 : 0);
+    }
+    
+    // returns TRUE if this should die
+    boolean age(double ms) {
+      if (!hasPeaked) {
+        value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
+        if (value >= 1.0) {
+          value = 1.0;
+          hasPeaked = true;
+        }
+        return false;
+      } else {
+        value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
+        return value <= 0;
+      }
+    }
+  }
+  
+  private float leftoverMs = 0;
+  private List<Flash> flashes;
+  
+  public BarFlash(LX lx) {
+    super(lx);
+    addParameter(rateParameter);
+    addParameter(attackParameter);
+    addParameter(decayParameter);
+    addParameter(hueVarianceParameter);
+    addParameter(saturationParameter);
+    flashes = new LinkedList<Flash>();
+  }
+  
+  public void run(double deltaMs) {
+    leftoverMs += deltaMs;
+    float msPerFlash = 1000 / ((rateParameter.getValuef() + .01) * 100);
+    while (leftoverMs > msPerFlash) {
+      leftoverMs -= msPerFlash;
+      flashes.add(new Flash());
+    }
+    
+    for (LXPoint p : model.points) {
+      colors[p.index] = 0;
+    }
+    
+    for (Flash flash : flashes) {
+      color c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+      for (LXPoint p : flash.c.points) {
+        colors[p.index] = c;
+      }
+    }
+    
+    Iterator<Flash> i = flashes.iterator();
+    while (i.hasNext()) {
+      Flash flash = i.next();
+      boolean dead = flash.age(deltaMs);
+      if (dead) {
+        i.remove();
+      }
+    }
+  } 
+}
+
 
 public class CubeFlash extends SLPattern {
   private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);

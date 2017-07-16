@@ -1,5 +1,6 @@
 import java.awt.Color;
 
+
 public static class SquareMask extends LXEffect {
   BooleanParameter mask = new BooleanParameter("mask", false);
 
@@ -14,7 +15,8 @@ public static class SquareMask extends LXEffect {
       if (!mask.getValueb()) {
         for (Bar bar : ((SLModel)model).bars) {
           if (bar.id.equals("500") || bar.id.equals("501")
-           || bar.id.equals("502") || bar.id.equals("329")) {
+           || bar.id.equals("502") || bar.id.equals("329")
+           || bar.id.equals("508") || bar.id.equals("509")) {
             // keep colors
           } else {
             for (LXPoint p : bar.points) {
@@ -25,7 +27,8 @@ public static class SquareMask extends LXEffect {
       } else {
         for (Bar bar : ((SLModel)model).bars) {
           if (bar.id.equals("500") || bar.id.equals("501")
-           || bar.id.equals("502") || bar.id.equals("329")) {
+           || bar.id.equals("502") || bar.id.equals("329")
+           || bar.id.equals("508") || bar.id.equals("509")) {
             for (LXPoint p : bar.points) {
               colors[p.index] = LXColor.BLACK;
             }
