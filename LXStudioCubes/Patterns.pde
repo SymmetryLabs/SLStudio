@@ -1277,8 +1277,6 @@ public class Snap extends SLPattern {
     }
   }
 
-
-
 }
 
 public class Rings extends SLPattern {

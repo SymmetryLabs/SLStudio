@@ -84,7 +84,7 @@ public static class SLModel extends LXModel {
             this.points.add(point); 
           } 
         } 
-      } 
+      }
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
           this.points.add(point);
@@ -448,6 +448,3 @@ public static class Strip extends LXModel {
     }
   }
 }
-
-
-

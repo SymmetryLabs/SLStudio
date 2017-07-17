@@ -1,9 +1,7 @@
 import java.math.*;
 
 
-public class CVCube extends UI3dComponent implements Comparable<CVCube> {
-
-  private final float SIZE = Cube.Type.LARGE.EDGE_WIDTH;
+public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
 
   String id;
   float[] rotation;
@@ -13,17 +11,9 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
   PVector tvec;
   int ms;
 
-
   boolean flashOn = false;
 
-
   boolean selected = false;
-  boolean regenerate = false;
-
-
-  PImage selectedTex = null;
-  PImage notSelectedTex = null;
-  PShape s = null;
 
   private ArrayList<LXPoint> points;
   private float w;
@@ -57,8 +47,7 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
   }
 
 
-  public CVCube(ArrayList<ArrayList<Double>> rawMatrix, ArrayList<Double> rvec, ArrayList<Double> tvec, String id) {
-    println("OTHER EDIGE WIDTH", Cube.Type.LARGE.EDGE_WIDTH);
+  public CVFixture(ArrayList<ArrayList<Double>> rawMatrix, ArrayList<Double> rvec, ArrayList<Double> tvec, String id) {
 
     int rows = rawMatrix.size();
     int cols = rawMatrix.get(0).size();
@@ -89,7 +78,6 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
     LXPoint[] raw = automappingController.getRawPointsForId(id);
 
 
-    // points = automappingController.centerPoints(new ArrayList<LXPoint>(Arrays.asList(raw)));
     points = new ArrayList<LXPoint>(Arrays.asList(raw));
 
     minX = points.get(0).x;
@@ -146,7 +134,7 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
   }
 
   @Override
-    public int compareTo(CVCube other) {
+    public int compareTo(CVFixture other) {
     int me = parseInt(getLabel());
     int o = parseInt(other.getLabel());
 
@@ -188,41 +176,8 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
   @Override
     protected void onDraw(UI ui, PGraphics pg) {
 
-    // int delta = millis() - ms;
-    // sinLfo.run(delta);
-
-
-
     pg.pushMatrix();
 
-    // PMatrix3D copy = new PMatrix3D(mat);
-
-
-
-    // PMatrix3D t = new PMatrix3D();
-    // t.m01 = copy.m10;
-    // t.m02 = copy.m20;
-    // t.m12 = copy.m21;
-
-    // t.m10 = copy.m01;
-    // t.m20 = copy.m02;
-    // t.m21 = copy.m12;
-
-    // copy.m01 = t.m01;
-    // copy.m02 = t.m02;
-    // copy.m12 = t.m12;
-    // copy.m10 = t.m10;
-    // copy.m20 = t.m20;
-    // copy.m21 = t.m21;
-
-    // copy.m23 *= -1;
-
-    // pg.translate(tvec.x, tvec.y, tvec.z);
-
-
-    // pg.rotateX(rvec.x);
-    // pg.rotateY(rvec.y);
-    // pg.rotateZ(rvec.z);
 
     PMatrix3D copy = new PMatrix3D(mat);
 
@@ -235,18 +190,6 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
 
 
 
-
-    // copy.m23 *= -1;
-
-    // copy.m03 += globalOffsetX;
-    // copy.m13 += globalOffsetY;
-    // copy.m23 += globalOffsetZ;
-
-    // pg.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-
-
-
-
     pg.applyMatrix(copy);
 
 
@@ -254,31 +197,6 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
       flashOn = !flashOn;
       ms = millis();
     }
-
-
-    //  if (flashOn && selected) {
-    //   pg.stroke(255);
-    //   pg.strokeWeight(5);
-    //  } else {
-    //   pg.stroke(0);
-    //   pg.strokeWeight(1);
-    //  }
-
-    // for (LXPoint p: points) {
-    //   pg.pushMatrix();
-
-    //   pg.translate(p.x, p.y, p.z);
-    //   if (flashOn && selected) {
-    //     pg.fill(255);
-    //   } else {
-    //     pg.colorMode(HSB, 360, 100, 100);
-    //     pg.fill(getColor());
-    //   }
-
-    //   pg.noStroke();
-    //   pg.sphere(0.5);
-    //   pg.popMatrix();
-    // }
 
     color mainColor;
 
@@ -291,9 +209,7 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
       mainColor = getColor();
     }
     pg.stroke(mainColor);
-    // pg.translate(minX, minY, minZ);
-    // pg.box(w, h, d);
-    // PMatrix cur = getMatrix();
+
     PVector a = new PVector(minX, minY, minZ);
     PVector b = new PVector(maxX, minY, minZ);
 
@@ -321,26 +237,6 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
     }
     }
     }
-
-
-
-    // for (int i = 0; i < points.size(); i++) {
-    //   LXPoint p = points.get(i);
-    //   pg.pushMatrix();
-    //   pg.translate(p.x, p.y, p.z);
-    //   if (i == 0 || i == 20) {
-    //     pg.stroke(color(0, 100, 100));
-    //   } else if (i == 1 || i == 21) {
-    //     pg.stroke(color(120, 100, 100));
-    //   } else if (i == 2 || i == 22) {
-    //     pg.stroke(color(240, 100, 100));
-    //   } else {
-    //     pg.stroke(mainColor);
-    //   }
-    //   pg.box(0.2);
-    //   pg.popMatrix();
-    // }
-
 
     pg.pushMatrix();
     pg.pushStyle();
@@ -414,50 +310,24 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
 
    
 
-    // pg.pushMatrix();
-    // pg.translate(model.cx, model.cy, model.cz);
-
-    // SLStudio.UI sUI = ((SLStudio)lx).ui;
-    // float theta = sUI.preview.theta.getValuef();
-    // float phi = sUI.preview.phi.getValuef();
-    // pg.rotateY(PI-theta);
-    // pg.rotateX(PI);
-    // // pg.rotateX(PI/5 + phi);
-
-    // if (!automappingController.hideLabels) {
-    //   pg.text(getLabel(), 0, 0, 0);
-    // }
-    // pg.popMatrix();
-
-    // pg.colorMode(RGB, 256, 256, 256);
-
 
     pg.popMatrix();
   }
 }
 
-CVCube previous = null;
+CVFixture previous = null;
 
 
 class MappedCubeItem extends UIItemList.AbstractItem {
-  final CVCube cube;
+  final CVFixture cube;
 
-  MappedCubeItem(CVCube _cube) {
+  MappedCubeItem(CVFixture _cube) {
     this.cube = _cube;
   }
 
   String getLabel() {
     return cube.getLabel();
   }
-
-  // boolean isSelected() { 
-  //     return false;
-  // }
-
-  // @Override
-  // public int getActiveColor(UI ui) {
-  //     return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
-  // }
 
   @Override
     public void onFocus() {
@@ -483,7 +353,7 @@ class MappedCubeList extends UIItemList.ScrollList {
     MappedCubeItem item = (MappedCubeItem)getFocusedItem();
     if (item == null) return;
 
-    CVCube cube = item.cube;
+    CVFixture cube = item.cube;
 
     if (keyCode == BACKSPACE) {
       automappingController.removeCube(cube.id);
@@ -506,13 +376,6 @@ class MappedCubeList extends UIItemList.ScrollList {
 
     super.onKeyPressed(keyEvent, keyChar, keyCode);
 
-    // if (keyCode == UP) {
-    //   setFocusIndex(max(0, cube.listIndex - 1));
-    // }
-
-    // if (keyCode == DOWN) {
-    //   setFocusIndex(min(automappingController.mappedCubes.size() - 1, cube.listIndex + 1));
-    // }
   }
 
   @Override
@@ -668,7 +531,7 @@ class UIAutomapping extends UICollapsibleSection {
     final MappedCubeList outputList = new MappedCubeList(ui, 0, yOffset, w-8, h);
 
 
-    for (CVCube c : automappingController.mappedCubes) { 
+    for (CVFixture c : automappingController.mappedFixtures) { 
       items.add(new MappedCubeItem(c));
     }
 
@@ -680,7 +543,7 @@ class UIAutomapping extends UICollapsibleSection {
       public void run() {
         final List<UIItemList.Item> localItems = new ArrayList<UIItemList.Item>();
         int i = 0;
-        for (CVCube c : automappingController.mappedCubes) { 
+        for (CVFixture c : automappingController.mappedFixtures) { 
           localItems.add(new MappedCubeItem(c));
         }
         outputList.setItems(localItems);
@@ -689,11 +552,11 @@ class UIAutomapping extends UICollapsibleSection {
     };
 
 
-    automappingController.mappedCubes.addListener(new ListListener<CVCube>() {
-      public void itemAdded(final int index, final CVCube c) {
+    automappingController.mappedFixtures.addListener(new ListListener<CVFixture>() {
+      public void itemAdded(final int index, final CVFixture c) {
         dispatcher.dispatchUi(update);
       }
-      public void itemRemoved(final int index, final CVCube c) {
+      public void itemRemoved(final int index, final CVFixture c) {
         dispatcher.dispatchUi(update);
       }
     }
@@ -790,7 +653,7 @@ class AutomappingController extends LXComponent {
   public ClientCommunicator communicator;
 
 
-  public ListenableList<CVCube> mappedCubes;
+  public ListenableList<CVFixture> mappedFixtures;
 
 
   PatternState patternState;
@@ -833,7 +696,7 @@ class AutomappingController extends LXComponent {
     addParameter(enabled);
     addParameter(state);
 
-    mappedCubes = new ListenableList<CVCube>();
+    mappedFixtures = new ListenableList<CVFixture>();
 
     // pixelOrder = new int[180];
     // for (int i = 0; i < pixelOrder.length; i++) {
@@ -907,8 +770,8 @@ class AutomappingController extends LXComponent {
   }
 
   void rotateCubes(char dir) {
-    CVCube selected = null;
-    for (CVCube cube : mappedCubes) {
+    CVFixture selected = null;
+    for (CVFixture cube : mappedFixtures) {
       if (cube.selected) {
         selected = cube;
         break;
@@ -946,67 +809,28 @@ class AutomappingController extends LXComponent {
       throw new RuntimeException("Invalid direction in rotate");
     }
 
-    for (CVCube cube : mappedCubes) {
+    for (CVFixture cube : mappedFixtures) {
       cube.mat.preApply(inv);
       cube.mat.preApply(rot);
     }
   }
 
   void center() {
-    if (mappedCubes.size() == 0) {
+    if (mappedFixtures.size() == 0) {
       return;
     }
 
     PVector sum = new PVector(0, 0, 0);
-    for (CVCube c : mappedCubes) {
+    for (CVFixture c : mappedFixtures) {
       PVector t = new PVector(c.mat.m03, c.mat.m13, c.mat.m23);
       sum.add(t);
     }
-    sum.div(mappedCubes.size());
+    sum.div(mappedFixtures.size());
 
-    for (CVCube c : mappedCubes) {
+    for (CVFixture c : mappedFixtures) {
       c.mat.m03 -= sum.x;
       c.mat.m13 -= sum.y;
       c.mat.m23 -= sum.z;
-
-
-
-      // float x = c.mat.m03;
-      // float y = c.mat.m13;
-      // float z = c.mat.m23;
-
-      // PMatrix3D eye = new PMatrix3D();
-
-      // eye.rotateY(0.1);
-
-      // PVector n = eye.mult(new PVector(x, y, z), null);
-
-      // c.mat.m03 = n.x;
-      // c.mat.m13 = n.y;
-      // c.mat.m23 = n.z;
-
-      // c.mat.rotateY(-0.1);
-
-      // c.mat.translate(c.mat.m03, c.mat.m13, c.mat.m23);
-
-      // SLStudio.UI sUI = ((SLStudio)lx).ui;
-      // float theta = sUI.preview.theta.getValuef();
-      // float phi = sUI.preview.phi.getValuef();
-      // PMatrix3D eye = new PMatrix3D();
-      // eye.translate(c.mat.m03, c.mat.m13, c.mat.m23);
-      // eye.rotateY(phi);
-
-      // c.mat.m03 = 0;
-      // c.mat.m13 = 0;
-      // c.mat.m23 = 0;
-
-      // eye.preApply(c.mat);
-
-      // c.mat = eye;
-
-
-
-
 
     }
   }
@@ -1014,10 +838,10 @@ class AutomappingController extends LXComponent {
   void addCube(ArrayList<ArrayList<Double>> matrix, ArrayList<Double> rvec, ArrayList<Double> tvec, String id) {
     SLStudio.UI sUI = ((SLStudio)lx).ui;
 
-    CVCube c = new CVCube(matrix, rvec, tvec, id);
+    CVFixture c = new CVFixture(matrix, rvec, tvec, id);
 
-    mappedCubes.add(c);
-    Collections.sort(mappedCubes.list);
+    mappedFixtures.add(c);
+    Collections.sort(mappedFixtures.list);
 
 
     sUI.preview.addComponent(c);
@@ -1026,10 +850,10 @@ class AutomappingController extends LXComponent {
 
 
   void removeCube(String id) {
-    CVCube cube = null;
+    CVFixture cube = null;
     int cubeIndex = -1;
-    for (int i = 0; i < mappedCubes.size(); i++) {
-      CVCube temp = mappedCubes.get(i);
+    for (int i = 0; i < mappedFixtures.size(); i++) {
+      CVFixture temp = mappedFixtures.get(i);
       if (temp.id.equals(id)) {
         cube = temp;
         cubeIndex = i;
@@ -1044,11 +868,11 @@ class AutomappingController extends LXComponent {
     SLStudio.UI sUI = ((SLStudio)lx).ui;
     sUI.preview.removeComponent(cube);
 
-    mappedCubes.remove(cubeIndex);
+    mappedFixtures.remove(cubeIndex);
   }
 
   boolean alreadyMapped(String id) {
-    for (CVCube c : mappedCubes) {
+    for (CVFixture c : mappedFixtures) {
       if (id.equals(c.id)) {
         return true;
       }
@@ -1060,7 +884,7 @@ class AutomappingController extends LXComponent {
 
   ArrayList<Object> getMappedTransforms() {
     ArrayList<Object> transforms = new ArrayList<Object>();
-    for (CVCube c : mappedCubes) {
+    for (CVFixture c : mappedFixtures) {
       transforms.add(c.getRawMatrix());
     }
     return transforms;
@@ -1068,7 +892,7 @@ class AutomappingController extends LXComponent {
 
   ArrayList<String> getMappedIds() {
     ArrayList<String> ids = new ArrayList<String>();
-    for (CVCube c : mappedCubes) {
+    for (CVFixture c : mappedFixtures) {
       ids.add(c.id);
     }
     return ids;
@@ -1197,16 +1021,6 @@ class AutomappingController extends LXComponent {
     LXModel model = getModelForId(id);
     return model.points;
 
-    // Cube.Type t = ((Cube)model).type;
-
-    // if (t == Cube.Type.LARGE)
-    //     return kyleCubeModel(1.3125, 1.7, 15);
-    // if (t == Cube.Type.MEDIUM)
-    //     return kyleCubeModel(1.3125 / 2, 1.7, 23);
-    // if (t == Cube.Type.SMALL)
-    //     return kyleCubeModel(1.3125 / 2, 2.5, 12);
-
-    // throw new RuntimeException("UNKNOWN CUBE TYPE IN RAW POINTS");
 
   }
 
@@ -1237,11 +1051,11 @@ class AutomappingController extends LXComponent {
     for (int i : po) {
       points.add(rawPoints[i]);
     }
-    return points;//centerPoints(points);
+    return points;
   }
 
-  CVCube getMappedCube(String id) {
-    for (CVCube c : mappedCubes) {
+  CVFixture getMappedCube(String id) {
+    for (CVFixture c : mappedFixtures) {
       if (c.id.equals(id)) {
         return c;
       }
@@ -1259,7 +1073,7 @@ class AutomappingController extends LXComponent {
 
   void saveToJSON() {
     ArrayList<HashMap<String, Object>> jsonCubes = new ArrayList<HashMap<String, Object>>();
-    for (CVCube c : mappedCubes) {
+    for (CVFixture c : mappedFixtures) {
       HashMap<String, Object> m = new HashMap<String, Object>();
       m.put("id", c.id);
       m.put("transform", c.getRawMatrix());
@@ -1521,12 +1335,18 @@ class AutomappingController extends LXComponent {
 
 
   color getPixelColor(String cubeId, int i) {
+    if (macToPhysid.get(cubeId).equals("393")) {
+      return LXColor.WHITE; //.hsb(map(i, 0, 105, 0, 360), 50, 100);
+      // return LXColor.GREEN;
+    }
+
+
     AutomappingState s = state.getEnum();
 
     if (s != AutomappingState.RUNNING) {
 
 
-      CVCube c = getMappedCube(cubeId);
+      CVFixture c = getMappedCube(cubeId);
       if (c == null) {
         return s == AutomappingState.DISCONNECTED ? LXColor.RED : color(20, 20, 20);
       }
@@ -1600,8 +1420,6 @@ public class AutomappingPattern extends SLPattern {
   public AutomappingPattern(LX lx) {
     super(lx);
   }
-
-
 
   public void run(double deltaMs) {
     automappingController.updateFrame();

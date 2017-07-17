@@ -31,12 +31,8 @@ static final float TOWER_HEIGHT = 24;
 static final float CUBE_SPACING = 2.5;
 
 static final float TOWER_VERTICAL_SPACING = 2.5;
-static final float TOWER_VERTICAL_SPACING_BIG = 5;
-
 static final float TOWER_RISER = 14;
-
 static final float SP = 24;
-
 static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
 // static final BulbConfig[] BULB_CONFIG = {
@@ -229,7 +225,6 @@ public SLModel buildModelFromJson(LXTransform globalTransform) {
     List<Tower> emptyTowers = new ArrayList<Tower>();
     Cube emptyCubes[] = new Cube[0];
     List<Strip> emptyStrips = new ArrayList<Strip>();
-
     return new SLModel(emptyTowers, emptyCubes, emptyStrips);
   }
 
@@ -341,137 +336,9 @@ public SLModel buildModelFromJson(LXTransform globalTransform) {
 }
 
 float floatify(Double v) {
-    double v_ = v;
-    return (float)v_;
-  }
-
-// public SLModel buildModelFromJson(LXTransform globalTransform) {
-//   List<Tower> towers = new ArrayList<Tower>();
-//   Cube[] cubes = new Cube[200];
-
-//   String data = new String(loadBytes("cube_transforms.json"));
-//   ArrayList<Object> message = (new Gson()).fromJson(data, new TypeToken<ArrayList<Object>>() {
-//   }
-//   .getType());
-
-//   int cubeIndex = 0;
-
-//   float end =  180 / PI;
-//   float step = 0.1 * 180 / PI;
-//   int[] zs = {0, 50};
-//   for (int rx = 0; rx < end; rx += step) {
-//     for (int z : zs) {
-//       List<Cube> tower = new ArrayList<Cube>();
-//       Cube cube = new Cube(
-//          new Integer(cubeIndex).toString(),
-//          0, 0, z, 0, 0, rx,
-//          globalTransform,
-//          Cube.Type.LARGE
-//        );
-//        println(new Integer(cubeIndex).toString(), cube.z);
-//        tower.add(cube);
-//        cubes[++cubeIndex] = cube;
-//        towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
-//     }
-//   }
-
-  
-
-//   // for (Object cube_ : message) {
-//   //   Map<String, Object> c = (Map<String, Object>)cube_;
-//   //   ArrayList<ArrayList<Double>> jsonTransform = (ArrayList<ArrayList<Double>>)c.get("transform");
-//   //   String mac = (String)c.get("id");
-
-
-//   //   ArrayList<Double> rvec = (ArrayList<Double>)c.get("rvec");
-//   //   ArrayList<Double> tvec = (ArrayList<Double>)c.get("tvec");
-
- 
-//   //   List<Cube> tower = new ArrayList<Cube>();
-
-//   //   float x = floatify(tvec.get(0));
-//   //   float y = floatify(tvec.get(1));
-//   //   float z = floatify(tvec.get(2));
-
-//   //   float rx = floatify(rvec.get(0)) * 180 / PI;
-//   //   float ry = floatify(rvec.get(1)) * 180 / PI;
-//   //   float rz = floatify(rvec.get(2)) * 180 / PI;
-
-//   //   LXTransform transform = new LXTransform();
-//   //   LXMatrix matrix = transform.getMatrix();
-
-//   //   // JsonObject cubeInfo = element.getAsJsonObject();
-
-//   //   // int rowNum = 0;
-//   //   // for (JsonElement row : c.getAsJsonArray("transform")) {
-//   //   //   int colNum = 0;
-//   //   //   for (JsonElement entry : row.getAsJsonArray()) {
-//   //   //     float value = entry.getAsFloat();
-//   //   //     switch (rowNum) {
-//   //   //       case 0:
-//   //   //         switch (colNum) {
-//   //   //           case 0: matrix.m11 = value; break;
-//   //   //           case 1: matrix.m12 = value; break;
-//   //   //           case 2: matrix.m13 = value; break;
-//   //   //           case 3: matrix.m14 = value; break;
-//   //   //         }
-//   //   //         break;
-//   //   //       case 1:
-//   //   //         switch (colNum) {
-//   //   //           case 0: matrix.m21 = value; break;
-//   //   //           case 1: matrix.m22 = value; break;
-//   //   //           case 2: matrix.m23 = value; break;
-//   //   //           case 3: matrix.m24 = value; break;
-//   //   //         }
-//   //   //         break;
-//   //   //       case 2:
-//   //   //         switch (colNum) {
-//   //   //           case 0: matrix.m31 = value; break;
-//   //   //           case 1: matrix.m32 = value; break;
-//   //   //           case 2: matrix.m33 = value; break;
-//   //   //           case 3: matrix.m34 = value; break;
-//   //   //         }
-//   //   //         break;
-//   //   //       case 3:
-//   //   //         switch (colNum) {
-//   //   //           case 0: matrix.m41 = value; break;
-//   //   //           case 1: matrix.m42 = value; break;
-//   //   //           case 2: matrix.m43 = value; break;
-//   //   //           case 3: matrix.m44 = value; break;
-//   //   //         }
-//   //   //         break;
-//   //   //     }
-//   //   //     colNum++;
-//   //   //   }
-//   //   //   rowNum++;
-//   //   // }
-
-//   //   // Cube cube = new Cube(
-//   //   //   mac,
-//   //   //   x,
-//   //   //   z,
-//   //   //   y,
-//   //   //   floatify(rvec.get(0) * 180 / PI),
-//   //   //   floatify(rvec.get(1) * 180 / PI),
-//   //   //   floatify(rvec.get(2) * 180 / PI),
-//   //   //   globalTransform,
-//   //   //   Cube.Type.LARGE
-//   //   // );
-
-//   //   Cube cube = new Cube(
-//   //     new Integer(cubeIndex).toString(),
-//   //     x, y, z, rx, ry, rz,
-//   //     globalTransform,
-//   //     Cube.Type.LARGE
-//   //   );
-//   //   println(new Integer(cubeIndex).toString(), cube.z);
-//   //   tower.add(cube);
-//   //   cubes[++cubeIndex] = cube;
-//   //   towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
-//   // }
-//   List<Strip> emptyStrips = new ArrayList<Strip>();
-//   return new SLModel(towers, cubes, emptyStrips);
-// }
+  double v_ = v;
+  return (float)v_;
+}
 
 public SLModel buildModel() {
 

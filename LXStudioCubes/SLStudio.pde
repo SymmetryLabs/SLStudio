@@ -3,6 +3,7 @@ import java.io.File;
 import com.google.gson.JsonObject;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
+import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 public class SLStudio extends P3LX {
 

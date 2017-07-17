@@ -1,4 +1,4 @@
-public class UIAudioAnalyzerKnobs extends UIModulator {
+public class UIAudioAnalyzerKnobs extends heronarts.p3lx.ui.studio.modulation.UIModulator {
 
   private final static int TOP_PADDING = 4;
   private final static int X_SPACING = UIKnob.WIDTH + 1;
