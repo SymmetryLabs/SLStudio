@@ -38,6 +38,9 @@ public class UIOverriddenRightPane extends UIPane {
 
     if (((SLModel)model).cubes.size() > 0)
       new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+
+    new UIAutomapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+
   }
 
   private void buildMidiUI() {

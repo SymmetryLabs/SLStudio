@@ -9,6 +9,11 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
+public AppServer appServer;
+public AutomappingController automappingController;
+
+final boolean MAPPING_MODE = true;
+
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -55,11 +60,19 @@ void setup() {
       if (((SLModel)model).cubes.size() > 0)
         mappingMode = new MappingMode(lx);
 
-      // Adaptor for mapping osc messages from Essentia to lx osc engine
+      // Automapping
+      automappingController = new AutomappingController(lx);
+
+      // Setup server listeners
+      //    Adaptor for mapping osc messages from Essentia to lx osc engine
+      //    TCP server for iOS Automapper
       try {
         lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
+        appServer = new AppServer(lx);
       } catch (SocketException sx) {
-        throw new RuntimeException(sx);
+        javax.swing.JOptionPane.showMessageDialog(null, "Looks like you're already running LXStudioCubes. Quitting now.");
+        exit();
+        // throw new RuntimeException(sx);
       } 
         
       lx.registerPatterns(new Class[]{
@@ -71,6 +84,7 @@ void setup() {
         BlurEffect.class,
         DesaturationEffect.class
       });
+
     
       ui.theme.setPrimaryColor(#008ba0);
       ui.theme.setSecondaryColor(#00a08b);
@@ -82,7 +96,7 @@ void setup() {
     @Override
     protected void onUIReady(SLStudio lx, SLStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
-      ui.preview.setPhi(0).setTheta(15*PI/8).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
+      ui.preview.setPhi(0).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
@@ -95,11 +109,24 @@ void setup() {
       //   new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);
       //   new UIEnvelopDecode(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 6);
       // }
-     
+
+
+
     }
   };
 
-  lx.engine.audio.enabled.setValue(true);
+  // lx.engine.audio.enabled.setValue(true);
+
+  //    LXPattern mappingPattern = new Bubbles(lx);
+  //   LXChannel mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
+
+  //   for (LXChannel channel : lx.engine.channels)
+  //     channel.cueActive.setValue(false);
+
+  //   mappingChannel.fader.setValue(1);
+  //   mappingChannel.label.setValue("Bubbles");
+  //   mappingChannel.cueActive.setValue(true);
+
 
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 

@@ -1,0 +1,1185 @@
+{
+	"auto_complete":
+	{
+		"selected_items":
+		[
+			[
+				"tran",
+				"translation"
+			],
+			[
+				"trans",
+				"transform"
+			],
+			[
+				"tra",
+				"transform"
+			],
+			[
+				"SL",
+				"SLStudio"
+			],
+			[
+				"json",
+				"jsonTransform"
+			],
+			[
+				"Aut",
+				"AutomappingPattern"
+			],
+			[
+				"pixelI",
+				"pixelIndex"
+			],
+			[
+				"network",
+				"networkDevice"
+			],
+			[
+				"cubeI",
+				"cubeIndex"
+			],
+			[
+				"LX",
+				"LXColor"
+			],
+			[
+				"pixelInde",
+				"pixelIndexInCube"
+			],
+			[
+				"reset",
+				"resetFrameBaseColor"
+			],
+			[
+				"patt",
+				"patternState"
+			],
+			[
+				"aut",
+				"automappingController"
+			],
+			[
+				"Auto",
+				"AutomappingState"
+			],
+			[
+				"server",
+				"ServerDiscvery"
+			],
+			[
+				"euler",
+				"euler_matrix"
+			],
+			[
+				"euler_",
+				"euler_from_matrix"
+			],
+			[
+				"if",
+				"ifmain\tif __name__ == '__main__'"
+			],
+			[
+				"opt",
+				"optimizers"
+			],
+			[
+				"X",
+				"X_train"
+			],
+			[
+				"explo",
+				"explorer_count\tint"
+			],
+			[
+				"exp",
+				"explorer_count"
+			],
+			[
+				"e",
+				"explorer\ttuple | list"
+			],
+			[
+				"BO",
+				"BOARD_LEN_F"
+			],
+			[
+				"time",
+				"time_start"
+			],
+			[
+				"car",
+				"caress_start\ttypes.NoneType | tuple"
+			],
+			[
+				"last",
+				"last_center\ttypes.NoneType"
+			],
+			[
+				"la",
+				"last_caressed\ttypes.NoneType | datetime.datetime"
+			],
+			[
+				"st",
+				"strftime\tfunction"
+			],
+			[
+				"from",
+				"fromBoard"
+			],
+			[
+				"res",
+				"resized_image\t"
+			],
+			[
+				"clien",
+				"clientY"
+			],
+			[
+				"cl",
+				"clientX"
+			],
+			[
+				"constai",
+				"constrainedY"
+			],
+			[
+				"constr",
+				"constrainedX"
+			],
+			[
+				"random",
+				"randomSpeed"
+			],
+			[
+				"snap",
+				"startSnap"
+			],
+			[
+				"snapp",
+				"snappingDests"
+			],
+			[
+				"im",
+				"imshow\tfunction"
+			],
+			[
+				"one_hot",
+				"one_hot_y_train\tnumpy.ndarray"
+			],
+			[
+				"split",
+				"split_batches\t"
+			],
+			[
+				"wav",
+				"wav_data"
+			],
+			[
+				"file",
+				"filename\t"
+			],
+			[
+				"key",
+				"keyLoop"
+			],
+			[
+				"rando",
+				"randomizePoints"
+			],
+			[
+				"gui",
+				"guiWidth"
+			],
+			[
+				"speed",
+				"speedMultiplier"
+			],
+			[
+				"vert",
+				"vertexColors"
+			],
+			[
+				"pon",
+				"pointsGeometry"
+			],
+			[
+				"points",
+				"pointsGeometry"
+			],
+			[
+				"rand",
+				"randomSpeed"
+			],
+			[
+				"img",
+				"imgAr"
+			],
+			[
+				"softmax",
+				"softmax_cross_entropy_with_logits\tfunction"
+			],
+			[
+				"lis",
+				"Listener\t"
+			],
+			[
+				"print",
+				"print_distances"
+			],
+			[
+				"human",
+				"human_cs"
+			],
+			[
+				"accur",
+				"accuracy_stats"
+			],
+			[
+				"class",
+				"classifications"
+			],
+			[
+				"first",
+				"first_max"
+			],
+			[
+				"atten",
+				"attention_max"
+			],
+			[
+				"repla",
+				"replace_num"
+			],
+			[
+				"fi",
+				"first_files"
+			],
+			[
+				"num",
+				"num_images"
+			],
+			[
+				"softm",
+				"softmaxed"
+			],
+			[
+				"Book",
+				"BookInstance"
+			],
+			[
+				"Auth",
+				"AuthorAdmin"
+			],
+			[
+				"Boo",
+				"BookInstance"
+			],
+			[
+				"pass",
+				"passage_chars"
+			],
+			[
+				"char",
+				"char_index"
+			],
+			[
+				"sigmoid",
+				"sigmoid_grad"
+			]
+		]
+	},
+	"buffers":
+	[
+		{
+			"file": "Automapping.pde",
+			"settings":
+			{
+				"buffer_size": 12580,
+				"encoding": "UTF-8",
+				"line_ending": "Unix"
+			}
+		},
+		{
+			"file": "Effects.pde",
+			"settings":
+			{
+				"buffer_size": 3185,
+				"line_ending": "Unix"
+			}
+		}
+	],
+	"build_system": "Packages/Processing/Build Systems/Processing.sublime-build",
+	"build_system_choices":
+	[
+		[
+			[
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					""
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Traditional"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - PdfLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - XeLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Basic Builder - LuaLaTeX"
+				],
+				[
+					"Packages/LaTeXTools/LaTeX.sublime-build",
+					"Script Builder"
+				]
+			],
+			[
+				"Packages/LaTeXTools/LaTeX.sublime-build",
+				""
+			]
+		],
+		[
+			[
+				[
+					"Packages/Processing/Build Systems/Processing.sublime-build",
+					""
+				],
+				[
+					"Packages/Processing/Build Systems/Processing.sublime-build",
+					"Re-run sketch"
+				],
+				[
+					"Packages/Processing/Build Systems/Processing.sublime-build",
+					"Run sketch (Processing 3 only)"
+				],
+				[
+					"Packages/Processing/Build Systems/Processing.sublime-build",
+					"Run sketch fullscreen"
+				],
+				[
+					"Packages/Processing/Build Systems/Processing.sublime-build",
+					"Export sketch as application"
+				],
+				[
+					"Packages/Processing/Build Systems/Processing.sublime-build",
+					"Kill running sketches"
+				]
+			],
+			[
+				"Packages/Processing/Build Systems/Processing.sublime-build",
+				""
+			]
+		]
+	],
+	"build_varint": "",
+	"command_palette":
+	{
+		"height": 27.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"prv",
+				"PackageResourceViewer: Open Resource"
+			],
+			[
+				"package",
+				"Package Control: Install Package"
+			],
+			[
+				"rer",
+				"Build With: Processing - Re-run sketch"
+			],
+			[
+				"rerun",
+				"Build With: Processing - Re-run sketch"
+			],
+			[
+				"",
+				"Build With: Processing - Re-run sketch"
+			],
+			[
+				"reru",
+				"Build With: Processing - Re-run sketch"
+			],
+			[
+				"build",
+				"Build With: Processing - Re-run sketch"
+			],
+			[
+				"spaces",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"brow",
+				"SFTP: Browse Server…"
+			],
+			[
+				"sftp",
+				"SFTP: Browse Server…"
+			],
+			[
+				"tabs",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"jsx",
+				"Set Syntax: JSX"
+			],
+			[
+				"packa",
+				"Package Control: Install Package"
+			],
+			[
+				"json",
+				"Set Syntax: JSON"
+			],
+			[
+				"kite",
+				"Kite: Open Settings"
+			],
+			[
+				"processing",
+				"Set Syntax: Processing"
+			],
+			[
+				"pack",
+				"Package Control: Install Package"
+			],
+			[
+				"convert to",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"br",
+				"SFTP: Browse Server…"
+			],
+			[
+				"word",
+				"LaTeXTools: Show word count"
+			],
+			[
+				"brows",
+				"SFTP: Browse Server…"
+			],
+			[
+				"edi",
+				"SFTP: Edit Server…"
+			],
+			[
+				"edit",
+				"SFTP: Edit Server…"
+			],
+			[
+				"space",
+				"Indentation: Convert to Spaces"
+			],
+			[
+				"ji",
+				"Set Syntax: HTML (Jinja2)"
+			],
+			[
+				"convert ta",
+				"Indentation: Convert to Tabs"
+			],
+			[
+				"jin",
+				"Set Syntax: HTML (Jinja2)"
+			],
+			[
+				"jinj",
+				"Set Syntax: HTML (Jinja2)"
+			],
+			[
+				"sf",
+				"SFTP: Browse Server…"
+			],
+			[
+				"pakc",
+				"Package Control: Install Package"
+			],
+			[
+				"package in",
+				"Package Control: Install Package"
+			]
+		],
+		"width": 503.0
+	},
+	"console":
+	{
+		"height": 0.0,
+		"history":
+		[
+		]
+	},
+	"distraction_free":
+	{
+		"menu_visible": true,
+		"show_minimap": false,
+		"show_open_files": false,
+		"show_tabs": false,
+		"side_bar_visible": false,
+		"status_bar_visible": false
+	},
+	"file_history":
+	[
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/data/transformations.py",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/Mappings.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/LXStudioCubes.pde",
+		"/Users/raphie/Library/Application Support/Sublime Text 3/Packages/Processing/Build Systems/Processing.sublime-build",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/SocketServer.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/Model.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/SLStudio.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/data/cube_transforms.json",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/Request",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/Output.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/Patterns.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/Effects.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/ServerDiscovery.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/LXStudioCubes/LXStudioCubes/UIOverriddenRightPane.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/Model.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/SocketServer.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/Internals.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/data/snapper.py",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/AlexLeapWavefronts.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/data/cube_transforms.json",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/DanUtil.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/.gitignore",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/KyleFleming.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/Mappings.pde",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/data/transformations.py",
+		"/Users/raphie/Dropbox/Code/symmetry/SugarCubes/Rhythm.pde",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1498258307/symmetry/home/ubuntu/timemelter/train_network.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1498260617/symmetry/home/ubuntu/done.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1498251562/symmetry/home/ubuntu/timemelter/train_network.py",
+		"/Volumes/JAE LAWS/pixel.rc",
+		"/Users/raphie/Dropbox/Code/receipts/receipts/runner.",
+		"/Users/raphie/Dropbox/Code/particlepad/particlepad.py",
+		"/Users/raphie/Dropbox/Code/remote/circleblooms",
+		"/Volumes/ULTIMAKER 2/home.gcode",
+		"/Volumes/ULTIMAKER 2/runprint.gcode",
+		"/Users/raphie/Dropbox/Code/printercontrol/runprint.g",
+		"/Users/raphie/Dropbox/Code/printercontrol/home.g",
+		"/Users/raphie/Dropbox/Code/googlecreative/template.json",
+		"/Users/raphie/Dropbox/Code/googlecreative/processing.py",
+		"/Users/raphie/Dropbox/Code/googlecreative/output.json",
+		"/Users/raphie/Dropbox/Code/dotwork/static/index.html",
+		"/Users/raphie/Dropbox/Code/dotwork/static/fader.js",
+		"/Users/raphie/Dropbox/Code/dotwork/Caddyfile",
+		"/Users/raphie/Dropbox/Code/dotwork/static/index.js",
+		"/Users/raphie/Dropbox/Code/warpdrive/test.csv",
+		"/Users/raphie/Dropbox/Code/warpdrive/processing",
+		"/Users/raphie/Dropbox/Code/warpdrive/download.py",
+		"/Users/raphie/Pictures/Photo Booth Library/Pictures/Photo on 3-27-17 at 6.52 PM.jpg",
+		"/Users/raphie/Dropbox/Code/dotwork/index.js",
+		"/Users/raphie/Dropbox/Code/dotwork/index.html",
+		"/Users/raphie/Dropbox/Code/dotwork/index.css",
+		"/Users/raphie/Dropbox/Code/dotwork/hd-aspect-1471537670-es-081716-vaporwave.jpg",
+		"/Users/raphie/Dropbox/Code/dotwork/worker.js",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1490207735/PDP/home/rpalefsk/DRAM/analysis.py",
+		"/Users/raphie/groupme_stats/temp.csv",
+		"/usr/local/lib/python2.7/site-packages/tensorflow/python/ops/rnn_cell.py",
+		"/private/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1490042537/PDP/home/rpalefsk/DRAM/analysis.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1490042537/PDP/home/rpalefsk/DRAM/DRAMtraditional.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1490043592/PDP/home/rpalefsk/DRAM/DRAMcluttered.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1490042537/PDP/home/rpalefsk/DRAM/combine.py",
+		"/Users/raphie/Downloads/template/nips2013.tex",
+		"/Users/raphie/Library/Application Support/Sublime Text 3/Packages/User/sftp_servers/lit2vec",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1489363220/lit2vec/home/lit2vec/tinylstm/evaluate.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1489289248/lit2vec/home/lit2vec/tinylstm/model.py",
+		"/Users/raphie/Dropbox/cache_rnn/ptb/cache.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1489087055/PDP/home/rpalefsk/DRAM/DRAMcluttered.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1488935427/lit2vec/home/lit2vec/cache_rnn/ptb/cache.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1488935380/lit2vec/home/lit2vec/cache_rnn/ptb/ptb_word_lm.py",
+		"/Users/raphie/Dropbox/Code/cs224n/assignment3/rnn",
+		"/Users/raphie/Dropbox/lit2vec/torch-rnn/cv/checkpoint_5000.t7",
+		"/Users/raphie/.bash_profile",
+		"/Users/raphie/Dropbox/lit2vec/torch-rnn/train.log",
+		"/Users/raphie/torch/install/share/lua/5.1/hdf5/config.lua",
+		"/Users/raphie/Dropbox/lit2vec/build_input.py",
+		"/Users/raphie/Dropbox/lit2vec/notes.txt",
+		"/Users/raphie/.bashrc",
+		"/Users/raphie/torch/install/share/lua/5.1/hdf5/ffi.lua",
+		"/Users/raphie/torch/install/share/lua/5.1/hdf5/ffi.luaffi.lua",
+		"/torch/install/share/lua/5.1/hdf5/ffi.luaffi.lua",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1487388004/Blackout/root/mentorbot/models.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1487387646/Blackout/root/mentorbot/app.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1487388134/Blackout/root/mentorbot/handlers.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1487137162/Blackout/root/mentorbot/slack.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1487137036/Blackout/root/mentorbot/app.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1487136613/Blackout/root/mentorbot/models.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/forms.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/urls.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/views.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/locallibrary/settings.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/locallibrary/urls.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/templates/catalog/bookinstance_list_borrowed_user.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/templates/base_generic.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/templates/index.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/templates/registration/logout.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/locallibrary/templates/registration/login.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/models.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/templates/catalog/book_list.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/templates/catalog/book_detail.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/templates/book_list.html",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/admin.py",
+		"/Users/raphie/Dropbox/Code/locallibrary/catalog/static/css/styles.css",
+		"/Users/raphie/Dropbox/Code/cs224n/assignment1/writeup.tex",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1486484594/PDP/home/rpalefsk/PDP/FFBP/classes/Layer.py",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1486484527/PDP/home/rpalefsk/PDP/FFBP/classes/Network.py",
+		"/Users/raphie/Dropbox/Code/psych209/hw3/writeup.",
+		"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1485253229/PDP/home/rpalefsk/PDP/plotdata.py",
+		"/Users/raphie/Dropbox/Code/cs131/HW5_out/writeup.tex",
+		"/Users/raphie/Dropbox/Code/localParticle/Particle-NeoPixel/src/neopixel/neopixel.h"
+	],
+	"find":
+	{
+		"height": 35.0
+	},
+	"find_in_files":
+	{
+		"height": 93.0,
+		"where_history":
+		[
+			"-build-tmp/*, -EssentiaAudioFeaturesDebug.app/*",
+			"-build-tmp/*",
+			"",
+			"cube_trans",
+			""
+		]
+	},
+	"find_state":
+	{
+		"case_sensitive": false,
+		"find_history":
+		[
+			"addCube",
+			"gotCube",
+			"gotCubeTransform",
+			"gotCube",
+			"gotCubeTransform",
+			"Rot",
+			"rot",
+			"Rot",
+			"rot",
+			"Rot",
+			"rot",
+			"Rot",
+			"rot",
+			"200",
+			"yo",
+			"println",
+			"pg",
+			"PG",
+			"pg",
+			"gotCubeTra",
+			" pg.vertex",
+			"pg.fill(",
+			"//",
+			"size(",
+			"got",
+			"vertex",
+			"float",
+			"double",
+			"math",
+			"_EPS",
+			"M[",
+			"double",
+			"(float)",
+			"M[j, i]",
+			"M[i, i]",
+			"gotCubeTra",
+			"transform",
+			"gotCube",
+			"Cuboi",
+			"gotCubeTransform",
+			"rotateX",
+			"gson",
+			"null",
+			"t",
+			"T",
+			"t",
+			"T",
+			"t",
+			"LXTransform",
+			"lx.ui",
+			"sLX",
+			"Float",
+			"ArrayList",
+			"INCHES",
+			"* INCHES",
+			"type.",
+			"Cube.Type.Large",
+			"cuboi",
+			"println",
+			"method",
+			"12",
+			"= 3",
+			"ALL_ON",
+			".enabled",
+			"outputControl",
+			"2",
+			"12",
+			"pixelOrder",
+			"startCal",
+			"stopAll",
+			"about",
+			"remove",
+			"TODO",
+			"AutomappingEffectMode",
+			"automappingEffect.",
+			"addChannel",
+			"mappingPattern",
+			"MappingChannel",
+			"colors",
+			"updateFrame",
+			"timescalled",
+			"updateFrame",
+			"timesCalled",
+			"nextFrame",
+			"cubeId",
+			"unmapped",
+			"setFixtureColor",
+			"MappingPattern",
+			"StripPlay",
+			"stripPlay",
+			"mappingPattern",
+			"MappingChannel",
+			"onSend",
+			"frameCount",
+			"pixelIndex",
+			"pixelOrder",
+			"pixel",
+			"getPixel",
+			"identify",
+			"networkDevice",
+			"cubeId",
+			"host = ",
+			"controllers",
+			"ControllerItem",
+			"OutputControl",
+			"Test Broadcast",
+			"macAddresses",
+			" == ",
+			"model.cubes",
+			"macAddress",
+			"println",
+			"enabled",
+			"fps",
+			"framesPer",
+			"target",
+			"fps",
+			"framesPer",
+			"IDENTIFY",
+			"startMapp",
+			"pixelIndex",
+			"cubeIndex",
+			"physid",
+			"phys",
+			"physid",
+			"macAddress",
+			"numPi",
+			"TODO",
+			"onSend"
+		],
+		"highlight": true,
+		"in_selection": false,
+		"preserve_case": false,
+		"regex": false,
+		"replace_history":
+		[
+			"addCube",
+			"CVCube"
+		],
+		"reverse": false,
+		"show_context": true,
+		"use_buffer2": true,
+		"whole_word": true,
+		"wrap": true
+	},
+	"groups":
+	[
+		{
+			"selected": 0,
+			"sheets":
+			[
+				{
+					"buffer": 0,
+					"file": "Automapping.pde",
+					"semi_transient": false,
+					"settings":
+					{
+						"buffer_size": 12580,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								4448,
+								4448
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"syntax": "Packages/Processing/Syntaxes/Processing.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 2347.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 0,
+					"type": "text"
+				},
+				{
+					"buffer": 1,
+					"file": "Effects.pde",
+					"semi_transient": true,
+					"settings":
+					{
+						"buffer_size": 3185,
+						"regions":
+						{
+						},
+						"selection":
+						[
+							[
+								1430,
+								1430
+							]
+						],
+						"settings":
+						{
+							"incomplete_sync": null,
+							"remote_loading": false,
+							"synced": false,
+							"syntax": "Packages/Processing/Syntaxes/Processing.tmLanguage",
+							"tab_size": 2,
+							"translate_tabs_to_spaces": true
+						},
+						"translation.x": 0.0,
+						"translation.y": 0.0,
+						"zoom_level": 1.0
+					},
+					"stack_index": 1,
+					"type": "text"
+				}
+			]
+		}
+	],
+	"incremental_find":
+	{
+		"height": 23.0
+	},
+	"input":
+	{
+		"height": 31.0
+	},
+	"layout":
+	{
+		"cells":
+		[
+			[
+				0,
+				0,
+				1,
+				1
+			]
+		],
+		"cols":
+		[
+			0.0,
+			1.0
+		],
+		"rows":
+		[
+			0.0,
+			1.0
+		]
+	},
+	"menu_visible": true,
+	"output.exec":
+	{
+		"height": 100.0
+	},
+	"output.find_results":
+	{
+		"height": 0.0
+	},
+	"output.latextools":
+	{
+		"height": 100.0
+	},
+	"output.mdpopups":
+	{
+		"height": 0.0
+	},
+	"output.sftp":
+	{
+		"height": 100.0
+	},
+	"pinned_build_system": "Packages/Processing/Build Systems/Processing.sublime-build",
+	"project": "LXStudioCubes.sublime-project",
+	"replace":
+	{
+		"height": 42.0
+	},
+	"save_all_on_build": true,
+	"select_file":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+			[
+				"sock",
+				"LXStudioCubes/SocketServer.pde"
+			],
+			[
+				"out",
+				"LXStudioCubes/Output.pde"
+			],
+			[
+				"lxs",
+				"LXStudioCubes/LXStudioCubes.pde"
+			],
+			[
+				"lxstud",
+				"LXStudioCubes/LXStudioCubes.pde"
+			],
+			[
+				"sere",
+				"LXStudioCubes/ServerDiscovery.pde"
+			],
+			[
+				"sl",
+				"LXStudioCubes/SLStudio.pde"
+			],
+			[
+				"snapp",
+				"data/snapper.py"
+			],
+			[
+				"danu",
+				"DanUtil.pde"
+			],
+			[
+				"mapp",
+				"Mappings.pde"
+			],
+			[
+				"model",
+				"Model.pde"
+			],
+			[
+				"k",
+				"KyleFleming.pde"
+			],
+			[
+				"py",
+				"flash.py"
+			],
+			[
+				"tem",
+				"template.json"
+			],
+			[
+				"",
+				"processing.py"
+			],
+			[
+				"index",
+				"index.css"
+			],
+			[
+				"do",
+				"download.py"
+			],
+			[
+				"pro",
+				"processing.py"
+			],
+			[
+				"anal",
+				"/var/folders/wj/fdjvlrw54pq1ds_44sv810100000gn/T/sublime-sftp-browse-1490116684/PDP/home/rpalefsk/DRAM/analysis.py"
+			],
+			[
+				"note",
+				"notes.txt"
+			],
+			[
+				"tra",
+				"torch-rnn/train.log"
+			],
+			[
+				"trai",
+				"torch-rnn/train.log"
+			],
+			[
+				"train",
+				"torch-rnn/train.log"
+			],
+			[
+				"form",
+				"catalog/forms.py"
+			],
+			[
+				"url",
+				"catalog/urls.py"
+			],
+			[
+				"user",
+				"catalog/templates/catalog/bookinstance_list_borrowed_user.html"
+			],
+			[
+				"book",
+				"catalog/templates/catalog/book_list.html"
+			],
+			[
+				"urls",
+				"catalog/urls.py"
+			],
+			[
+				"vi",
+				"catalog/views.py"
+			],
+			[
+				"base",
+				"catalog/templates/base_generic.html"
+			],
+			[
+				"ind",
+				"catalog/templates/index.html"
+			],
+			[
+				"admin",
+				"catalog/admin.py"
+			],
+			[
+				"vie",
+				"catalog/views.py"
+			],
+			[
+				"gener",
+				"catalog/templates/base_generic.html"
+			],
+			[
+				"settin",
+				"locallibrary/settings.py"
+			]
+		],
+		"width": 0.0
+	},
+	"select_project":
+	{
+		"height": 0.0,
+		"last_filter": "",
+		"selected_items":
+		[
+		],
+		"width": 0.0
+	},
+	"select_symbol":
+	{
+		"height": 127.0,
+		"last_filter": "Cube",
+		"selected_items":
+		[
+			[
+				"Cube",
+				"Cube"
+			],
+			[
+				"SLS",
+				"SLStudio"
+			],
+			[
+				"cube",
+				"Cube"
+			],
+			[
+				"addC",
+				"addChannel"
+			],
+			[
+				"addCha",
+				"addChannel"
+			],
+			[
+				"buil",
+				"buildModel"
+			],
+			[
+				"Output",
+				"OutputControl"
+			],
+			[
+				"Cuboi",
+				"Cuboi"
+			],
+			[
+				"Mapping",
+				"MappingPattern"
+			],
+			[
+				"commun",
+				"ClientCommunicator"
+			],
+			[
+				"keypr",
+				"onKeyPressed"
+			],
+			[
+				"SLMo",
+				"SLModel"
+			],
+			[
+				"Bo",
+				"Book"
+			],
+			[
+				"xav",
+				"xavier_weight_init"
+			]
+		],
+		"width": 392.0
+	},
+	"selected_group": 0,
+	"settings":
+	{
+	},
+	"show_minimap": false,
+	"show_open_files": false,
+	"show_tabs": true,
+	"side_bar_visible": true,
+	"side_bar_width": 260.0,
+	"status_bar_visible": true,
+	"template_settings":
+	{
+	}
+}
