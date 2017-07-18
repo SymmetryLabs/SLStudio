@@ -723,7 +723,11 @@ public class UI implements LXEngine.Dispatch {
     private void _mouseEvent(MouseEvent mouseEvent) {
         switch (mouseEvent.getAction()) {
         case MouseEvent.WHEEL:
-            this.root.mouseWheel(mouseEvent, mouseEvent.getX(), mouseEvent.getY(), mouseEvent.getCount());
+            int wheelCount = mouseEvent.getCount();
+            if (PApplet.platform == PConstants.WINDOWS) {
+                wheelCount *= 50;
+            }
+            this.root.mouseWheel(mouseEvent, mouseEvent.getX(), mouseEvent.getY(), wheelCount);
             return;
         case MouseEvent.PRESS:
             this.pmx = mouseEvent.getX();
@@ -788,21 +792,14 @@ public class UI implements LXEngine.Dispatch {
     }
 
     private void _uiThreadDefaultKeyEvent(KeyEvent keyEvent) {
-        char keyChar = keyEvent.getKey();
         int action = keyEvent.getAction();
         if (action == KeyEvent.RELEASE) {
-            switch (Character.toLowerCase(keyChar)) {
-            case 'f':
+            if (keyEvent.getKeyCode() == java.awt.event.KeyEvent.VK_F) {
                 this.lx.flags.showFramerate = false;
-                break;
             }
         } else if (action == KeyEvent.PRESS) {
-            switch (keyChar) {
-            case 'f':
-                if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
-                    this.lx.flags.showFramerate = true;
-                }
-                break;
+            if ((keyEvent.isControlDown() || keyEvent.isMetaDown()) && keyEvent.getKeyCode() == java.awt.event.KeyEvent.VK_F) {
+                this.lx.flags.showFramerate = true;
             }
         }
     }
