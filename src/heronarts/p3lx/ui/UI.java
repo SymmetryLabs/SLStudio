@@ -863,7 +863,11 @@ public class UI implements LXEngine.Dispatch {
             }
         } else if (action == KeyEvent.PRESS) {
             if (keyCode == java.awt.event.KeyEvent.VK_T && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-                this.lx.engine.setThreaded(!this.lx.engine.isThreaded());
+                if (keyEvent.isShiftDown()) {
+                    this.lx.engine.setSuperThreaded(!this.lx.engine.isSuperThreaded());
+                } else {
+                    this.lx.engine.setThreaded(!this.lx.engine.isThreaded());
+                }
             }
             switch (keyCode) {
             case java.awt.event.KeyEvent.VK_LEFT:
