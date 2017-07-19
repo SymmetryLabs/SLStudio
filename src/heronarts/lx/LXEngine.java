@@ -251,6 +251,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     private volatile boolean isThreaded = false;
 
+    private volatile boolean isSuperThreaded = false;
+
     private Thread engineThread = null;
 
     private boolean hasStarted = false;
@@ -498,6 +500,16 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             this.engineThread.start();
         }
         return this;
+    }
+
+    public LXEngine setSuperThreaded(boolean superThreaded) {
+        this.isSuperThreaded = superThreaded;
+        System.out.println("LXEngine SuperThreading mode: " + (superThreaded ? "ON" : "OFF"));
+        return this;
+    }
+
+    public boolean isSuperThreaded() {
+        return this.isSuperThreaded;
     }
 
     private class EngineThread extends Thread {
@@ -889,13 +901,49 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         int rightChannelCount = 0;
         int mainChannelCount = 0;
 
+        // If we are in super-threaded mode, run the channels on their own threads!
+        if (this.isSuperThreaded) {
+            // Kick off threads per channel
+            for (LXChannel channel : this.mutableChannels) {
+                if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+                    synchronized (channel.thread) {
+                        channel.thread.signal.workDone = false;
+                        channel.thread.deltaMs = deltaMs;
+                        channel.thread.workReady = true;
+                        channel.thread.notify();
+                        if (!channel.thread.hasStarted) {
+                            channel.thread.hasStarted = true;
+                            channel.thread.start();
+                        }
+                    }
+                }
+            }
+
+            // Wait for all the channel threads to finish
+            for (LXChannel channel : this.mutableChannels) {
+                if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+                    synchronized (channel.thread.signal) {
+                        while (!channel.thread.signal.workDone) {
+                            try {
+                                channel.thread.signal.wait();
+                            } catch (InterruptedException ix) {
+                                ix.printStackTrace();
+                            }
+                        }
+                        channel.thread.signal.workDone = false;
+                    }
+                }
+            }
+        }
+
         for (LXChannel channel : this.mutableChannels) {
             boolean channelIsEnabled = channel.enabled.isOn();
             boolean channelIsCue = channel.cueActive.isOn();
             if (channelIsEnabled || channelIsCue) {
-                // TODO(mcslee): should clips still run even if channel is disabled??
-                channel.loop(deltaMs);
-
+                if (!this.isSuperThreaded) {
+                    // TODO(mcslee): should clips still run even if channel is disabled??
+                    channel.loop(deltaMs);
+                }
                 long blendStart = System.nanoTime();
                 if (channelIsEnabled) {
                     boolean doBlend = false;

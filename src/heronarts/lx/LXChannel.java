@@ -222,6 +222,45 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
     private LXBlend transition = null;
     private long transitionMillis = 0;
 
+    ChannelThread thread = new ChannelThread();
+
+    class ChannelThread extends Thread {
+
+        boolean hasStarted = false;
+        boolean workReady = true;
+        double deltaMs;
+
+        class Signal {
+            boolean workDone = false;
+        }
+
+        Signal signal = new Signal();
+
+        @Override
+        public void run() {
+            System.out.println("LXChannel thread started [" + getLabel() + "]");
+            while (!isInterrupted()) {
+                synchronized (this) {
+                    try {
+                        while (!this.workReady) {
+                            wait();
+                        }
+                    } catch (InterruptedException ix) {
+                        // Channel is finished
+                        break;
+                    }
+                    this.workReady = false;
+                }
+                loop(this.deltaMs);
+                synchronized (this.signal) {
+                    this.signal.workDone = true;
+                    this.signal.notify();
+                }
+            }
+            System.out.println("LXChannel thread finished [" + getLabel() + "]");
+        }
+    };
+
     LXChannel(LX lx, int index, LXPattern[] patterns) {
         super(lx, "Channel-" + (index+1));
         this.index = index;
@@ -727,6 +766,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
             pattern.dispose();
         }
         this.mutablePatterns.clear();
+        if (this.thread.hasStarted) {
+            this.thread.interrupt();
+        }
         super.dispose();
     }
 
