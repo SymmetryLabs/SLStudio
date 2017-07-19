@@ -179,7 +179,7 @@ public static class Cube extends LXModel {
     //            Inches   |  Meter  |  Edge
     SMALL         (12,        72,       15),
     MEDIUM        (18,        60,       23),
-    LARGE         (24,        30,       84),
+    LARGE         (24,        30,       72),
     LARGE_DOUBLE  (24,        60,       30);
     
 
