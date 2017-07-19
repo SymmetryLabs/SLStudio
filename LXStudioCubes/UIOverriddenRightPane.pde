@@ -8,6 +8,7 @@ public class UIOverriddenRightPane extends UIPane {
   public final UI2dScrollContext utility;
   public final UI2dScrollContext modulation;
   public final UI2dScrollContext midi;
+  public final UI2dScrollContext wearables; 
 
   public static final int PADDING = 4;
   public static final int WIDTH = 282;
@@ -19,16 +20,49 @@ public class UIOverriddenRightPane extends UIPane {
   private int macroCount = 1;
 
   public UIOverriddenRightPane(UI ui, final LX lx) {
-    super(ui, lx, new String[] { "MODULATION", "OSC + MIDI", "UTILITY" }, ui.getWidth() - WIDTH, WIDTH);
+    super(ui, lx, new String[] { "MODULATE", "OSC + MIDI", "UTILITY", "WEARABLES" }, ui.getWidth() - WIDTH, WIDTH);
     this.ui = ui;
     this.lx = lx;
     this.modulation = this.sections[0];
     this.midi = this.sections[1];
     this.utility = this.sections[2];
+    this.wearables = this.sections[3];
 
     buildUtilityUI();
     buildMidiUI();
     buildModulationUI();
+    buildWearablesUI();
+  }
+
+  private void buildWearablesUI() {
+    new DeviceSection(lx, ui, 0, 0, wearables.getContentWidth(), wearables).addToContainer(wearables);
+
+    final UIButton mapButton = (UIButton) new UIButton(0, 0, 24, 16) {
+      @Override
+      public void onToggle(boolean on) {
+        if (on) {
+          lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+        } else if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
+          lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+        }
+      }
+    }
+    .setIcon(ui.theme.iconMap)
+    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setBorderRounding(4)
+    .setDescription("Add a new parameter mapping to the modulation engine")
+    .addToContainer(wearables);
+
+    lx.engine.mapping.mode.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter p) {
+        if (lx.engine.mapping.getMode() != LXMappingEngine.Mode.MODULATION_SOURCE) {
+          mapButton.setActive(false);
+        }
+      }
+    });
+    // DeviceKnobs deviceKnobs = new DeviceKnobs("Wearable Signals");
+    // lx.engine.modulation.addModulator(deviceKnobs);
+    // deviceKnobs.start();
   }
 
   private void buildUtilityUI() {
@@ -38,6 +72,8 @@ public class UIOverriddenRightPane extends UIPane {
 
     if (((SLModel)model).cubes.size() > 0)
       new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+
+    // TODO: list wearables ("devices")
   }
 
   private void buildMidiUI() {
@@ -146,6 +182,7 @@ public class UIOverriddenRightPane extends UIPane {
     .setDescription("Map audio analyzation properties")
     .addToContainer(bar);
 
+
     final UIButton mapButton = (UIButton) new UIButton(0, 0, 24, 16) {
       @Override
       public void onToggle(boolean on) {
@@ -199,6 +236,8 @@ public class UIOverriddenRightPane extends UIPane {
     });
   }
 
+
+
   private UIModulator findModulator(LXParameter parameter) {
     for (UIObject child : this.modulation) {
       if (child instanceof UIModulator) {
@@ -222,7 +261,11 @@ public class UIOverriddenRightPane extends UIPane {
       new UIMacroKnobs(this.ui, this.lx, (MacroKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
     } else if (modulator instanceof AudioAnalyzerKnobs) {
       new UIAudioAnalyzerKnobs(this.ui, this.lx, (AudioAnalyzerKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-    } else {
+    } 
+    // else if (modulator instanceof DeviceKnobs) {
+    //   new UIDeviceKnobs(this.ui, this.lx, (DeviceKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
+    // } 
+    else {
       System.err.println("No UI available for modulator type: " + modulator.getClass().getName());
     }
   }

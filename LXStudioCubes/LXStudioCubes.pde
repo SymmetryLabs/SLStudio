@@ -3,11 +3,17 @@ import java.net.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
 
+// //midiMinVar = 21, midiMaxVar = 108, so 88 in total
+// int[] r = new int[108]; //setup arrays for R,G & B values - could be a single array of COLOR objects instead
+// int[] g = new int[108];
+// int[] b = new int[108];
+
 public SLStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
+public DeviceController deviceController;
 public MappingMode mappingMode = null;
 
 // public boolean envelopOn = false;
@@ -55,12 +61,21 @@ void setup() {
       if (((SLModel)model).cubes.size() > 0)
         mappingMode = new MappingMode(lx);
 
+      deviceController = new DeviceController(lx);
+
       // Adaptor for mapping osc messages from Essentia to lx osc engine
       try {
         lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
       } catch (SocketException sx) {
         throw new RuntimeException(sx);
       } 
+
+      // Adaptor for mapping osc messages from Agents/wearables to lx osc engine
+      try {
+        lx.engine.osc.receiver(5005).addListener(new AgentOSCListener()); //TODO: PUT CORRECT PORT # IN THERE 
+      } catch (SocketException sx) {
+        throw new RuntimeException(sx);
+      }
         
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
@@ -101,10 +116,34 @@ void setup() {
 
   lx.engine.audio.enabled.setValue(true);
 
-  long setupFinish = System.nanoTime();
-  println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
+  // LXPattern mappingPattern = new Bubbles(lx);
+  //     LXChannel mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
+
+  //     for (LXChannel channel : lx.engine.channels)
+  //       channel.cueActive.setValue(false);
+
+  //     mappingChannel.fader.setValue(1);
+  //     mappingChannel.label.setValue("BUBBLES");
+  //     mappingChannel.cueActive.setValue(true);
+      
+
+  // long setupFinish = System.nanoTime();
+  // println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
+
+  // --------- TONAL SETUP ------------
+  // size(400,400);
+  // frameRate(25);
+  // OscProperties myProperties = new OscProperties();
+  // // increase the datagram size to 10000 bytes
+  // // by default it is set to 1536 bytes
+  // myProperties.setDatagramSize(10000); 
+  // myProperties.setListeningPort(1331);
+  // oscP5 = new OscP5(this,myProperties); 
+  
+  // --------- END TONAL --------------
 }
 
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
+
 }
