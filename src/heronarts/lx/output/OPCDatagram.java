@@ -56,6 +56,10 @@ public class OPCDatagram extends LXDatagram implements OPCConstants {
         return this;
     }
 
+    public byte getChannel() {
+        return this.buffer[INDEX_CHANNEL];
+    }
+
     @Override
     public void onSend(int[] colors) {
         copyPoints(colors, this.indices, INDEX_DATA);
