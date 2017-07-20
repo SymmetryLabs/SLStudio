@@ -113,16 +113,18 @@ public class LXStudio extends P3LX {
                     } else if (keyChar == '?' && keyEvent.isShiftDown()) {
                         toggleHelpBar = true;
                     } else if (keyCode == java.awt.event.KeyEvent.VK_M && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-                        if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
-                            lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                        if (keyEvent.isShiftDown()) {
+                            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
+                                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                            } else {
+                                lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                            }
                         } else {
-                            lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
-                        }
-                    } else if ((keyCode == java.awt.event.KeyEvent.VK_COMMA) && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-                        if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
-                            lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-                        } else {
-                            lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
+                                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                            } else {
+                                lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+                            }
                         }
                     }
                 }
