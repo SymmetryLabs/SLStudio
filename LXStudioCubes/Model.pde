@@ -360,7 +360,7 @@ public static class Face extends LXModel {
 
     private Fixture(Metrics metrics, float ry, LXTransform transform) {
       transform.push();
-      // transform.translate(0, metrics.vertical.length, 0);
+      transform.translate(0, metrics.vertical.length, 0);
       for (int i = 0; i < STRIPS_PER_FACE; i++) {
         boolean isHorizontal = (i % 2 == 0);
         Strip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
