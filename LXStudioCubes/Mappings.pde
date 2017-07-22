@@ -14,9 +14,9 @@
  */
 
 
-static final float globalOffsetX = 34;
-static final float globalOffsetY = -23;
-static final float globalOffsetZ = 136;
+static final float globalOffsetX = 0;
+static final float globalOffsetY = 0;
+static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
 static final float globalRotationY = -45;
@@ -29,12 +29,8 @@ static final float TOWER_HEIGHT = 24;
 static final float CUBE_SPACING = 2.5;
 
 static final float TOWER_VERTICAL_SPACING = 2.5;
-static final float TOWER_VERTICAL_SPACING_BIG = 5;
-
 static final float TOWER_RISER = 14;
-
 static final float SP = 24;
-
 static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
 // static final BulbConfig[] BULB_CONFIG = {
