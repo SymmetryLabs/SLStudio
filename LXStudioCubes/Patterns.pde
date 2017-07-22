@@ -615,6 +615,7 @@ public class Pong extends DPat {
     addModulator(z  = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();  z.setPeriod(dz);
       pSize = addParam  ("Size"     , 0.4 );
       pChoose = new DiscreteParameter("Anim", new String[] {"Pong", "Ball", "Cone"} );
+      pChoose.setValue(1);
       pChoose.setValue(2);
       //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);
@@ -623,7 +624,7 @@ public class Pong extends DPat {
   void    StartRun(double deltaMs)  { cRad = mMax.x*val(pSize)/6; }
   color CalcPoint(PVector p)      {
     v.set(x.getValuef(), y.getValuef(), z.getValuef());
-    v.z=0;p.z=0;// ignore z dimension
+    // v.z=0;p.z=0;// ignore z dimension
     switch(pChoose.getValuei()) {
     case 0: vMir.set(mMax); vMir.sub(p);
         return lx.hsb(lxh(),100,c1c(1 - min(v.dist(p), v.dist(vMir))*.5/cRad));   // balls
@@ -1729,9 +1730,9 @@ public class CrossSections extends SLPattern {
     float ylv = 100*yl.getValuef();
     float zlv = 100*zl.getValuef();
     
-    float xwv = 100. / (10 + 40*xw.getValuef());
-    float ywv = 100. / (10 + 40*yw.getValuef());
-    float zwv = 100. / (10 + 40*zw.getValuef());
+    float xwv = 100. / (1 + 40*xw.getValuef());
+    float ywv = 100. / (1 + 40*yw.getValuef());
+    float zwv = 100. / (1 + 40*zw.getValuef());
     
     for (LXPoint p : model.points) {
       color c = 0;

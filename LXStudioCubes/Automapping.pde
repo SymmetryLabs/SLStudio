@@ -13,6 +13,7 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
   PVector tvec;
   int ms;
 
+
   boolean flashOn = false;
 
 
@@ -23,6 +24,21 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
   PImage selectedTex = null;
   PImage notSelectedTex = null;
   PShape s = null;
+
+  private ArrayList<LXPoint> points;
+  private float w;
+  private float h;
+  private float d;
+
+  float minX;
+  float maxX;
+  float minY;
+  float maxY;
+  float minZ;
+  float maxZ;
+
+  PVector currentCorner = null;
+
 
   void printMat(PMatrix3D mat) {
     println("==================");
@@ -70,7 +86,31 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
 
     ms = millis();
 
+    LXPoint[] raw = automappingController.getRawPointsForId(id);
 
+
+    // points = automappingController.centerPoints(new ArrayList<LXPoint>(Arrays.asList(raw)));
+    points = new ArrayList<LXPoint>(Arrays.asList(raw));
+
+    minX = points.get(0).x;
+    maxX = points.get(0).x;
+    minY = points.get(0).y;
+    maxY = points.get(0).y;
+    minZ = points.get(0).z;
+    maxZ = points.get(0).z;
+
+    for (LXPoint p : points) {
+      minX = min(p.x, minX);
+      maxX = max(p.x, maxX);
+      minY = min(p.y, minY);
+      maxY = max(p.y, maxY);
+      minZ = min(p.z, minZ);
+      maxZ = max(p.z, maxZ);
+    }
+
+    w = maxX - minX;
+    h = maxY - minY;
+    d = maxZ - minZ;
   }
 
   float floatify(Double v) {
@@ -129,7 +169,7 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
 
     // println("HASHER", id, abs(hash) % 256);
 
-    return color(abs(hash) % 360, 100, 100);
+    return color(abs(hash * 17) % 360, 100, 100);
   }
 
   void drawSideIfSelected(PGraphics pg, String label) {
@@ -148,8 +188,8 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
   @Override
     protected void onDraw(UI ui, PGraphics pg) {
 
-      // int delta = millis() - ms;
-      // sinLfo.run(delta);
+    // int delta = millis() - ms;
+    // sinLfo.run(delta);
 
 
 
@@ -186,9 +226,8 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
 
     PMatrix3D copy = new PMatrix3D(mat);
 
-        PMatrix3D inverter = new PMatrix3D();
+    PMatrix3D inverter = new PMatrix3D();
     inverter.m00 = -1;
-    // inverter.m00 = textScaleX;
     inverter.m22 = -1;
 
 
@@ -210,169 +249,190 @@ public class CVCube extends UI3dComponent implements Comparable<CVCube> {
 
     pg.applyMatrix(copy);
 
-    // pg.colorMode(RGB, 256);
 
-     pg.beginShape(QUADS);
-
-     // pg.colorMode(RGB, 1);
-
-     // pg.noStroke();
-
-     // pg.fill(selected ? ui.theme.getPrimaryColor() : 255);
-     pg.colorMode(HSB, 360, 100, 100);
-     pg.fill(getColor());
-     pg.colorMode(RGB, 256, 256, 256);
-
-     if (millis() - ms > 500) {
+    if (millis() - ms > 500) {
       flashOn = !flashOn;
       ms = millis();
-     }
-
-     if (flashOn && selected) {
-      pg.stroke(255);
-      pg.strokeWeight(5);
-     } else {
-      pg.stroke(0);
-      pg.strokeWeight(1);
-     }
-
-    float s = 0;
-    float e = SIZE;
-
-    pg.vertex(s, s,  e);
-    pg.vertex(s,  e,  e);
-    pg.vertex( e,  e,  e);
-    pg.vertex( e, s,  e);
-
-    pg.vertex( e, s,  e);
-    pg.vertex( e,  e,  e);
-    pg.vertex( e,  e, s);
-    pg.vertex( e, s, s);
-
-    pg.vertex( e, s, s);
-    pg.vertex( e,  e, s);
-    pg.vertex(s,  e, s);
-    pg.vertex(s, s, s);
-
-    pg.vertex(s, s, s);
-    pg.vertex(s,  e, s);
-    pg.vertex(s,  e,  e);
-    pg.vertex(s, s,  e);
-
-    pg.vertex(s, s,  e);
-    pg.vertex(s, s, s);
-    pg.vertex( e, s, s);
-    pg.vertex( e, s,  e);
-
-    pg.vertex(s,  e,  e);
-    pg.vertex(s,  e, s);
-    pg.vertex( e,  e, s);
-    pg.vertex( e,  e,  e);
+    }
 
 
+    //  if (flashOn && selected) {
+    //   pg.stroke(255);
+    //   pg.strokeWeight(5);
+    //  } else {
+    //   pg.stroke(0);
+    //   pg.strokeWeight(1);
+    //  }
 
+    // for (LXPoint p: points) {
+    //   pg.pushMatrix();
 
+    //   pg.translate(p.x, p.y, p.z);
+    //   if (flashOn && selected) {
+    //     pg.fill(255);
+    //   } else {
+    //     pg.colorMode(HSB, 360, 100, 100);
+    //     pg.fill(getColor());
+    //   }
 
-    pg.endShape();
+    //   pg.noStroke();
+    //   pg.sphere(0.5);
+    //   pg.popMatrix();
+    // }
 
-  pg.pushMatrix();
-  pg.pushStyle();
-  // pg.fill(255);
-  // pg.noStroke();
-  pg.translate(1.5, 4.1, 0.4);
-  pg.rotateX(-PI/3);
-  pg.box(2, 2, 5);
-  pg.popStyle();
-  pg.popMatrix();
+    color mainColor;
 
+    pg.noFill();
+    pg.strokeWeight(3);
+    if (flashOn && selected) {
+      mainColor = 255;
+    } else {
+      pg.colorMode(HSB, 360, 100, 100);
+      mainColor = getColor();
+    }
+    pg.stroke(mainColor);
+    // pg.translate(minX, minY, minZ);
+    // pg.box(w, h, d);
+    // PMatrix cur = getMatrix();
+    PVector a = new PVector(minX, minY, minZ);
+    PVector b = new PVector(maxX, minY, minZ);
 
-  pg.fill(color(0, 255, 0));
-  pg.stroke(color(0, 255, 0));
+    float[] dX = {minX, maxX};
+    float[] dY = {minY, maxY};
+    float[] dZ = {minZ, maxZ};
 
-  pg.scale(-1, -1);
-  pg.textMode(SHAPE);
-  pg.textSize(8);
-  pg.textAlign(CENTER, CENTER);
+    for (float startX : dX) {
+    for (float endX : dX) {
+    for (float startY : dY) {
+    for (float endY : dY) {
+    for (float startZ : dZ) {
+    for (float endZ : dZ) {
+      boolean drawX = startX != endX && startY == endY && startZ == endZ;
+      boolean drawY = startX == endX && startY != endY && startZ == endZ;
+      boolean drawZ = startX == endX && startY == endY && startZ != endZ;
+      
+      if (drawX || drawY || drawZ) {
+        pg.line(startX, startY, startZ, endX, endY, endZ);
+      }
 
-  // pg.pushMatrix();
-  // pg.rotateX(textRotX);
-  // pg.rotateY(textRotY);
-  // pg.rotateZ(textRotZ);
-  // pg.text(getLabel(), textCoordX, textCoordY, textCoordZ);
-  // pg.popMatrix();
-
-  pg.pushMatrix();
-  pg.translate(-SIZE/2, -SIZE/2, SIZE + 0.1);
-  pg.text(getLabel(), 0, 0, 0);
-  drawSideIfSelected(pg, "f");
-  pg.popMatrix();
+    }
+    }
+    }
+    }
+    }
+    }
 
 
 
-  pg.pushMatrix();
-  pg.rotateY(PI/2);
-  pg.translate(-SIZE/2, -SIZE/2, 0.1);
-  pg.text(getLabel(), 0, 0, 0);
-  drawSideIfSelected(pg, "r");
-  pg.popMatrix();
+    // for (int i = 0; i < points.size(); i++) {
+    //   LXPoint p = points.get(i);
+    //   pg.pushMatrix();
+    //   pg.translate(p.x, p.y, p.z);
+    //   if (i == 0 || i == 20) {
+    //     pg.stroke(color(0, 100, 100));
+    //   } else if (i == 1 || i == 21) {
+    //     pg.stroke(color(120, 100, 100));
+    //   } else if (i == 2 || i == 22) {
+    //     pg.stroke(color(240, 100, 100));
+    //   } else {
+    //     pg.stroke(mainColor);
+    //   }
+    //   pg.box(0.2);
+    //   pg.popMatrix();
+    // }
 
 
-  pg.pushMatrix();
-  pg.rotateY(PI);
-  pg.translate(SIZE/2, -SIZE/2, 0.1);
-  pg.text(getLabel(), 0, 0, 0);
-  drawSideIfSelected(pg, "b");
-  pg.popMatrix();
+    pg.pushMatrix();
+    pg.pushStyle();
+
+    PMatrix before = pg.getMatrix();
+
+    boolean[] signs = {true, false};
+
+    PVector[] corners = new PVector[8];
+
+    int i = 0;
+    for (boolean x : signs) {
+      for (boolean y : signs) {
+        for (boolean z : signs) {
+          corners[i++] = new PVector(x ? minX : maxX, y ? minY : maxY, z ? minZ : maxZ);
+        }
+      }
+    }
+
+    PVector minCorner = null;
+    PVector target = new PVector();
+    float minDist = Float.POSITIVE_INFINITY;
+    for (PVector corner : corners) {
+      before.mult(corner, target);
+      float d = target.magSq();
+      if (d < minDist) {
+        minCorner = corner;
+        minDist = d;
+      }
+    }
+
+    float cDist = Float.POSITIVE_INFINITY;
+    if (currentCorner != null) {
+      before.mult(currentCorner, target);
+      cDist = target.magSq(); 
+    }
 
 
-  pg.pushMatrix();
-  pg.rotateY(3.0 *PI / 2.0);
-  pg.translate(SIZE/2, -SIZE/2, SIZE + 0.1);
-  pg.text(getLabel(), 0, 0, 0);
-  drawSideIfSelected(pg, "l");
-  pg.popMatrix();
 
-
-  pg.pushMatrix();
-  pg.rotateX(PI/2);
-  pg.translate(-SIZE/2, SIZE/2, SIZE + 0.1);
-  pg.text(getLabel(), 0, 0, 0);
-  drawSideIfSelected(pg, "u");
-  pg.popMatrix();
-
-
-  pg.pushMatrix();
-  pg.rotateX(-PI/2);
-  pg.translate(-SIZE/2, -SIZE/2, 0.1);
-  pg.text(getLabel(), 0, 0, 0);
-  drawSideIfSelected(pg, "d");
-  pg.popMatrix();
+    if (minDist < (cDist - 750)) {
+      currentCorner = minCorner;
+    }
 
 
 
+    pg.translate(currentCorner.x, currentCorner.y, currentCorner.z);
 
-  // pg.text(getLabel(), -SIZE/2, -SIZE/2, -0.1);
+    PMatrix current = pg.getMatrix();
+    PMatrix3D currentCopy = new PMatrix3D(current);
+    current.invert();
 
-  // pg.pushMatrix();
-  // pg.rotateX(PI/2);
-  // pg.text(getLabel(), SIZE/2, SIZE/2, -0.1);
-  // pg.rotateX(PI/2);
-  // pg.text(getLabel(), SIZE/2, SIZE/2, -SIZE -0.1);
-  // pg.rotateX(PI/2);
-  // pg.text(getLabel(), SIZE/2, -SIZE + SIZE/2, -SIZE -0.1);
-  // pg.popMatrix();
+    pg.applyMatrix(current);
+    pg.translate(currentCopy.m03, currentCopy.m13, currentCopy.m23);
+    // pg.noFill();
+    // pg.noStroke();
+    pg.textMode(SHAPE);
+    pg.textSize(5);
+    pg.textAlign(CENTER, CENTER);
 
-  // pg.pushMatrix();
-  // pg.rotateY(PI/2);
-  // pg.text(getLabel(), -SIZE + SIZE/2, -SIZE/2, -0.1);
-  // pg.popMatrix();
+    if (!automappingController.hideLabels) {
+      pg.fill(ui.theme.getDarkBackgroundColor());
+      pg.noStroke();
+      pg.box(10, 7, 1);
+      pg.fill(mainColor);
+      pg.stroke(mainColor);
+      pg.text(getLabel(), 0, 0, 0.50000001);
+    }
+    // pg.sphere(0.5);
+    pg.popStyle();
+    pg.popMatrix();
 
-  // pg.pushMatrix();
-  // pg.rotateY(- PI/2);
-  // pg.text(getLabel(), SIZE/2, -SIZE/2, -SIZE -0.1);
-  // pg.popMatrix();
+   
 
-  pg.popMatrix();
+    // pg.pushMatrix();
+    // pg.translate(model.cx, model.cy, model.cz);
+
+    // SLStudio.UI sUI = ((SLStudio)lx).ui;
+    // float theta = sUI.preview.theta.getValuef();
+    // float phi = sUI.preview.phi.getValuef();
+    // pg.rotateY(PI-theta);
+    // pg.rotateX(PI);
+    // // pg.rotateX(PI/5 + phi);
+
+    // if (!automappingController.hideLabels) {
+    //   pg.text(getLabel(), 0, 0, 0);
+    // }
+    // pg.popMatrix();
+
+    // pg.colorMode(RGB, 256, 256, 256);
+
+
+    pg.popMatrix();
   }
 }
 
@@ -400,26 +460,19 @@ class MappedCubeItem extends UIItemList.AbstractItem {
   // }
 
   @Override
-  public void onFocus() {
+    public void onFocus() {
     if (previous != null && previous != cube) {
       previous.setSelected(false);
     }
     cube.setSelected(true);
     previous = cube;
   }
-
-  
-
 }
 
 class MappedCubeList extends UIItemList.ScrollList {
 
   MappedCubeList(UI ui, float x, float y, float w, float h) {
     super(ui, x, y, w, h);
-
-    // setReorderable(true);
-    // setMomentary(true);
-
   }
 
   @Override
@@ -434,6 +487,12 @@ class MappedCubeList extends UIItemList.ScrollList {
 
     if (keyCode == BACKSPACE) {
       automappingController.removeCube(cube.id);
+      return;
+    }
+
+    if (keyChar == 'h') {
+      println("SWAPPING LABELS");
+      automappingController.hideLabels = !automappingController.hideLabels;
       return;
     }
 
@@ -457,14 +516,12 @@ class MappedCubeList extends UIItemList.ScrollList {
   }
 
   @Override
-  void onBlur() {
+    void onBlur() {
     if (previous != null) {
       previous.setSelected(false);
       previous = null;
     }
   }
-
-
 }
 
 
@@ -505,6 +562,15 @@ class UIAutomapping extends UICollapsibleSection {
     return 0;
   }
 
+  void centerView() {
+    SLStudio.UI sUI = ((SLStudio)lx).ui;
+
+    sUI.preview.setCenter(0, 0, 0);
+    sUI.preview.setPhi(0);
+    sUI.preview.setPerspective(0);
+    sUI.preview.setTheta(0);
+  }
+
   int buildStartMappingButton(float yOffset, float w) {
     final String disconnected = "No App Connected";
     final String connected = "Start Mapping";
@@ -512,10 +578,14 @@ class UIAutomapping extends UICollapsibleSection {
 
     int h = 18;
 
+    int buttonW = 120;
     int margin = 3;
-    float buttonW = (w - (8 + margin)) / 2;
+    float bigW = w - (buttonW + margin + 8);
+    float smallerW =  (buttonW - margin) / 2;
 
-    final UIButton startMapping = new UIButton(0, yOffset, buttonW, h) {
+
+
+    final UIButton startMapping = new UIButton(0, yOffset, bigW, h) {
       @Override
         protected void onToggle(boolean active) {
         if (!active) return;
@@ -560,22 +630,30 @@ class UIAutomapping extends UICollapsibleSection {
     }
     );
 
-    new UIButton(buttonW + margin, yOffset, buttonW, h) {
+
+    new UIButton(bigW + margin, yOffset, smallerW, h) {
       @Override
         protected void onToggle(boolean active) {
         if (!active) return;
 
-        SLStudio.UI sUI = ((SLStudio)lx).ui;
+        centerView();
+        // automappingController.center();
+      }
+    }
+    .setLabel("C. View")
+      .setMomentary(true)
+      .addToContainer(this);
 
-        sUI.preview.setCenter(0, 0, 0);
-        sUI.preview.setPhi(0);
-        sUI.preview.setPerspective(0);
-        sUI.preview.setTheta(0);
+    new UIButton(bigW + 2*margin + smallerW, yOffset, smallerW, h) {
+      @Override
+        protected void onToggle(boolean active) {
+        if (!active) return;
 
+        // centerView();
         automappingController.center();
       }
     }
-    .setLabel("Center Cubes")
+    .setLabel("C. Model")
       .setMomentary(true)
       .addToContainer(this);
 
@@ -607,10 +685,6 @@ class UIAutomapping extends UICollapsibleSection {
         }
         outputList.setItems(localItems);
         redraw();
-        // UIItemList.Item item = outputList.getFocusedItem();
-        // if (item != null) {
-        //   item.onActivate();
-        // }
       }
     };
 
@@ -694,12 +768,12 @@ public static enum PatternMode {
     MAPPING, 
     SHOW_PIXEL, 
     ALL_ON, 
-    ALL_OFF,
+    ALL_OFF, 
     SHOW_CUBE
 }
 
 class AutomappingController extends LXComponent {
-  final LX lx;
+  LX lx;
 
   private LXChannel mappingChannel = null;
   private LXPattern mappingPattern = null;
@@ -729,19 +803,23 @@ class AutomappingController extends LXComponent {
   int NUM_RUNTHROUGHS = 1;
   int NUM_CALIBRATION_RUNTHROUGHS = -1;
 
-  int RESET_FRAMES = 100;
+  int RESET_FRAMES = 30;
   int RESET_BLACK_FRAMES = 16;
-  int S0_FRAMES = 4;
-  int S1_FRAMES = 4;
-  int S2_FRAMES = 4;
-  int S3_FRAMES = 4;
+  int S0_FRAMES = 3;
+  int S1_FRAMES = 3;
+  int S2_FRAMES = 3;
+  int S3_FRAMES = 3;
 
   int numPoints = 0;
   int runthroughCount = -1;
   int patternPixelIndex = 0;
   int frameCounter = 0;
   int showPixelIndex = 0;
+  int mod = 1;
+  boolean hideLabels = false;
   String currentCubeId = null;
+
+  HashMap<String, Cube.Type> knownCubeTypes;
 
   final JLabel label = new JLabel();
 
@@ -749,6 +827,7 @@ class AutomappingController extends LXComponent {
 
 
   AutomappingController(LX lx) {
+    super(lx);
     this.lx = lx;
 
     addParameter(enabled);
@@ -770,9 +849,36 @@ class AutomappingController extends LXComponent {
           removeChannel();
         }
       }
-    }
-    );
+    });
+
+    knownCubeTypes = loadKnownCubeTypes();
   }
+
+  HashMap<String, Cube.Type> loadKnownCubeTypes() {
+    HashMap<String, Cube.Type> types = new HashMap();
+
+    String data = new String(loadBytes("physid_to_size.json"));
+    HashMap<String, String> map = (new Gson()).fromJson(data, new TypeToken<HashMap<String, String>>() {}.getType());
+
+    for (Map.Entry<String, String> entry : map.entrySet()) {
+      String k = entry.getKey();
+      String stringType = entry.getValue();
+      Cube.Type v;
+      if (stringType.equals("SMALL")) {
+        v = Cube.Type.SMALL;
+      } else if (stringType.equals("MEDIUM")) {
+        v = Cube.Type.MEDIUM;
+      } else if (stringType.equals("LARGE")) {
+        v = Cube.Type.LARGE;
+      } else {
+        throw new RuntimeException("UNKNOWN CUBE TYPE: " + stringType);
+      }
+      types.put(k, v);
+    }
+
+    return types;
+  }
+
 
   void showError(String message, boolean sendToClient) {
     label.setText(message);
@@ -819,14 +925,25 @@ class AutomappingController extends LXComponent {
     PMatrix3D rot = new PMatrix3D();
 
     switch(dir) {
-      case 'u': break;
-      case 'd': rot.rotateX(PI); break;
-      case 'l': rot.rotateZ(PI/2); break;
-      case 'r': rot.rotateZ(-PI/2); break;
-      case 'b': rot.rotateX(PI/2); break;
-      case 'f': rot.rotateX(-PI/2); break;
-      default: throw new RuntimeException("Invalid direction in rotate");
-
+    case 'u': 
+      break;
+    case 'd': 
+      rot.rotateX(PI); 
+      break;
+    case 'l': 
+      rot.rotateZ(PI/2); 
+      break;
+    case 'r': 
+      rot.rotateZ(-PI/2); 
+      break;
+    case 'b': 
+      rot.rotateX(PI/2); 
+      break;
+    case 'f': 
+      rot.rotateX(-PI/2); 
+      break;
+    default: 
+      throw new RuntimeException("Invalid direction in rotate");
     }
 
     for (CVCube cube : mappedCubes) {
@@ -851,16 +968,57 @@ class AutomappingController extends LXComponent {
       c.mat.m03 -= sum.x;
       c.mat.m13 -= sum.y;
       c.mat.m23 -= sum.z;
+
+
+
+      // float x = c.mat.m03;
+      // float y = c.mat.m13;
+      // float z = c.mat.m23;
+
+      // PMatrix3D eye = new PMatrix3D();
+
+      // eye.rotateY(0.1);
+
+      // PVector n = eye.mult(new PVector(x, y, z), null);
+
+      // c.mat.m03 = n.x;
+      // c.mat.m13 = n.y;
+      // c.mat.m23 = n.z;
+
+      // c.mat.rotateY(-0.1);
+
+      // c.mat.translate(c.mat.m03, c.mat.m13, c.mat.m23);
+
+      // SLStudio.UI sUI = ((SLStudio)lx).ui;
+      // float theta = sUI.preview.theta.getValuef();
+      // float phi = sUI.preview.phi.getValuef();
+      // PMatrix3D eye = new PMatrix3D();
+      // eye.translate(c.mat.m03, c.mat.m13, c.mat.m23);
+      // eye.rotateY(phi);
+
+      // c.mat.m03 = 0;
+      // c.mat.m13 = 0;
+      // c.mat.m23 = 0;
+
+      // eye.preApply(c.mat);
+
+      // c.mat = eye;
+
+
+
+
+
     }
   }
 
-  void addCube(ArrayList<ArrayList<Double>> matrix, ArrayList<Double> rvec,  ArrayList<Double> tvec, String id) {
+  void addCube(ArrayList<ArrayList<Double>> matrix, ArrayList<Double> rvec, ArrayList<Double> tvec, String id) {
     SLStudio.UI sUI = ((SLStudio)lx).ui;
 
     CVCube c = new CVCube(matrix, rvec, tvec, id);
 
     mappedCubes.add(c);
     Collections.sort(mappedCubes.list);
+
 
     sUI.preview.addComponent(c);
   }
@@ -910,10 +1068,8 @@ class AutomappingController extends LXComponent {
 
   ArrayList<String> getMappedIds() {
     ArrayList<String> ids = new ArrayList<String>();
-    for (String id : macAddresses) {
-      if (alreadyMapped(id)) {
-        ids.add(id);
-      }
+    for (CVCube c : mappedCubes) {
+      ids.add(c.id);
     }
     return ids;
   }
@@ -926,6 +1082,162 @@ class AutomappingController extends LXComponent {
       }
     }
     return ids;
+  }
+
+  LXModel getModelForId(String id) {
+    return getModelForId(id, new LXTransform());
+  }
+
+  Cube.Type getCubeTypeForId(String id) {
+    if (id.equals("SMALLBOI")) {
+      return Cube.Type.SMALL;
+    }
+
+
+    if (!macToPhysid.containsKey(id)) {
+      return Cube.Type.LARGE;
+    }
+
+
+    String physId = macToPhysid.get(id);
+    if (!knownCubeTypes.containsKey(physId)) {
+      return Cube.Type.LARGE;
+    }
+        
+    return knownCubeTypes.get(physId);
+  }
+
+  LXModel getModelForId(String id, LXTransform t) {
+    Cube.Type type = getCubeTypeForId(id);
+
+    String realId;
+    if (macToPhysid.containsKey(id)) {
+      realId = macToPhysid.get(id);
+    } else {
+      realId = "UNKNOWN";
+    }
+
+    return new Cube(realId, 0, 0, 0, 0, 0, 0, t, type);
+  }
+
+  ArrayList<LXPoint> centerPoints(ArrayList<LXPoint> input) {
+    ArrayList<LXPoint> output = new ArrayList<LXPoint>();
+    LXVector avgPoint = new LXVector(0, 0, 0);
+    for (LXPoint p : input) {
+      avgPoint.add(new LXVector(p));
+    }
+    avgPoint.div(input.size());
+    for (LXPoint p : input) {
+      output.add(new LXPoint(p.x - avgPoint.x, p.y - avgPoint.y, p.z - avgPoint.z));
+    }
+    return output;
+  }
+
+  LXPoint[] kyleCubeModel(float ledDistance, float edgeDistance, int ledsPerStrip) {
+    int n = ledsPerStrip * 12;
+    int m = ledsPerStrip - 1;
+    LXVector[] idealVectors = new LXVector[n];
+    LXPoint[] idealPoints = new LXPoint[n];
+    for (int pixelIndexInCube = 0; pixelIndexInCube < n; pixelIndexInCube++) {
+      int pixelIndexInStrip = pixelIndexInCube % ledsPerStrip;
+      int stripIndex = pixelIndexInCube / ledsPerStrip;
+
+      if (stripIndex == 0) {
+        idealVectors[pixelIndexInCube] = new LXVector(edgeDistance + pixelIndexInStrip, 2 * edgeDistance + m, 0);
+      } else if (stripIndex == 1) {
+        idealVectors[pixelIndexInCube] = new LXVector(2*edgeDistance+m, edgeDistance+(m-pixelIndexInStrip), 0);
+      } else if (stripIndex == 2) {
+        idealVectors[pixelIndexInCube] = new LXVector(edgeDistance+(m-pixelIndexInStrip), 0, 0);
+      } else if (stripIndex == 3) {
+        idealVectors[pixelIndexInCube] = new LXVector(2*edgeDistance+m, 2*edgeDistance+m, edgeDistance+pixelIndexInStrip);
+      } else if (stripIndex == 4) {
+        idealVectors[pixelIndexInCube] = new LXVector(2*edgeDistance+m, edgeDistance+(m-pixelIndexInStrip), 2*edgeDistance+m);
+      } else if (stripIndex == 5) {
+        idealVectors[pixelIndexInCube] = new LXVector(2*edgeDistance+m, 0, edgeDistance+(m-pixelIndexInStrip));
+      } else if (stripIndex == 6) {
+        idealVectors[pixelIndexInCube] = new LXVector(edgeDistance+(m-pixelIndexInStrip), 2*edgeDistance+m, 2*edgeDistance+m);
+      } else if (stripIndex == 7) {
+        idealVectors[pixelIndexInCube] = new LXVector(0, edgeDistance+(m-pixelIndexInStrip), 2*edgeDistance+m);
+      } else if (stripIndex == 8) {
+        idealVectors[pixelIndexInCube] = new LXVector(edgeDistance+pixelIndexInStrip, 0, 2*edgeDistance+m);
+      } else if (stripIndex == 9) {
+        idealVectors[pixelIndexInCube] = new LXVector(0, 2*edgeDistance+m, edgeDistance+(m-pixelIndexInStrip));
+      } else if (stripIndex == 10) {
+        idealVectors[pixelIndexInCube] = new LXVector(0, edgeDistance+(m-pixelIndexInStrip), 0);
+      } else if (stripIndex == 11) {
+        idealVectors[pixelIndexInCube] = new LXVector(0, 0, edgeDistance+pixelIndexInStrip);
+      }
+    }
+
+    float maxX = 0;
+    float maxY = 0;
+    float maxZ = 0;
+
+
+    for (int i = 0; i < n; i++) {
+      LXVector v = idealVectors[i];
+      v.x *= ledDistance;
+      v.y *= ledDistance;
+      v.z *= ledDistance;
+      maxX = max(maxX, v.x);
+      maxY = max(maxY, v.y);
+      maxZ = max(maxZ, v.z);
+    }
+
+    for (int i = 0; i < n; i++) {
+      LXVector v = idealVectors[i];
+      idealPoints[i] = new LXPoint(v.x, v.y, v.z);
+    }
+
+
+    return idealPoints;
+  }
+
+  private LXPoint[] getRawPointsForId(String id) {
+    LXModel model = getModelForId(id);
+    return model.points;
+
+    // Cube.Type t = ((Cube)model).type;
+
+    // if (t == Cube.Type.LARGE)
+    //     return kyleCubeModel(1.3125, 1.7, 15);
+    // if (t == Cube.Type.MEDIUM)
+    //     return kyleCubeModel(1.3125 / 2, 1.7, 23);
+    // if (t == Cube.Type.SMALL)
+    //     return kyleCubeModel(1.3125 / 2, 2.5, 12);
+
+    // throw new RuntimeException("UNKNOWN CUBE TYPE IN RAW POINTS");
+
+  }
+
+  ArrayList<LXPoint> getPointsForId(String id) {
+    LXPoint[] rawPoints = getRawPointsForId(id);
+    ArrayList<LXPoint> points = new ArrayList<LXPoint>();
+    int[] po = getPixelOrder();
+
+    if (po == null || po.length != rawPoints.length) {
+      int n = rawPoints.length;
+      ArrayList<Integer> orderAr = new ArrayList<Integer>();
+      int[] shuffled = new int[n];
+      for (int i = 0; i < n; i++) {
+        orderAr.add(i);
+      }
+
+      Collections.shuffle(orderAr);
+
+      for (int i = 0; i < n; i++) {
+        shuffled[i] = orderAr.get(i);
+      }
+
+      setPixelOrder(shuffled);
+
+      po = shuffled;
+    }
+
+    for (int i : po) {
+      points.add(rawPoints[i]);
+    }
+    return points;//centerPoints(points);
   }
 
   CVCube getMappedCube(String id) {
@@ -1001,6 +1313,7 @@ class AutomappingController extends LXComponent {
 
   void setPixelOrder(int[] pixelOrder) {
     this.pixelOrder = pixelOrder;
+    mod = pixelOrder.length;
   }
 
   int[] getPixelOrder() {
@@ -1061,7 +1374,6 @@ class AutomappingController extends LXComponent {
     frameCounter = 0;
     patternState = PatternState.S1_BLACK;
     mode = PatternMode.MAPPING;
-
   }
 
   void showNextCube(String id) {
@@ -1123,7 +1435,7 @@ class AutomappingController extends LXComponent {
     case S0_IDENTIFY:
       frameCounter = (frameCounter+1) % S0_FRAMES;
       if (frameCounter == 0) {
-        patternPixelIndex = (patternPixelIndex+1) % 180;
+        patternPixelIndex = (patternPixelIndex+1) % mod;
       }
       break;
 
@@ -1206,6 +1518,8 @@ class AutomappingController extends LXComponent {
   }
 
 
+
+
   color getPixelColor(String cubeId, int i) {
     AutomappingState s = state.getEnum();
 
@@ -1214,17 +1528,30 @@ class AutomappingController extends LXComponent {
 
       CVCube c = getMappedCube(cubeId);
       if (c == null) {
-        return s == AutomappingState.DISCONNECTED ? color(20, 0, 0) : color(20, 20, 20);
+        return s == AutomappingState.DISCONNECTED ? LXColor.RED : color(20, 20, 20);
       }
+
+      // if (p.x == minX && p.y == minY) {
+      //   pg.stroke(color(0, 100, 100));
+      // } else if (p.x == minX && p.z == minZ) {
+      //   pg.stroke(color(120, 100, 100));
+      // } else if (p.y == minY && p.z == minZ) {
+      //   pg.stroke(color(240, 100, 100));
+      // } else {
+      //   pg.noStroke();
+      // }
 
       if (c.selected && c.flashOn) {
         return LXColor.WHITE;
+      // } else if (i == 0 || i == 20) {
+      //   return LXColor.RED;
+      // } else if (i == 1 || i == 21) {
+      //   return LXColor.GREEN;
+      // } else if (i == 2 || i == 22) {
+      //   return LXColor.BLUE;
       } else {
         return c.getColor();
       }
-
-
-
     }
 
 

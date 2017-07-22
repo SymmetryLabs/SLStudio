@@ -86,14 +86,15 @@ class SLController extends LXOutput {
 
   // Trip had to change order for Cisco as workaround for rotation bug
   final int[] STRIP_ORD = new int[] { 
-    // RED
-    9, 10, 11,
     // GREEN 
     0, 1, 2,
     // BLUE
     3, 4, 5,
     // WHITE
-    6, 7, 8 }; 
+    6, 7, 8,
+    // RED
+    9, 10, 11
+  }; 
   // final int[]  STRIP_ORD      = new int[] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
 
   static final int HEADER_LENGTH = 4;

@@ -177,9 +177,9 @@ public static class Cube extends LXModel {
     //            Edge     |  LEDs   |  LEDs
     //            Length   |  Per    |  Per
     //            Inches   |  Meter  |  Edge
-    SMALL         (12,        72,       15),
+    SMALL         (10.7,        60,       12),
     MEDIUM        (18,        60,       23),
-    LARGE         (24,        30,       15),
+    LARGE         (22.85,        30,       15),
     LARGE_DOUBLE  (24,        60,       30);
     
 
@@ -217,7 +217,7 @@ public static class Cube extends LXModel {
 
   public final static int STRIPS_PER_CUBE = FACES_PER_CUBE*Face.STRIPS_PER_FACE;
 
-  public final static float CHANNEL_WIDTH = 1.5f;
+  public final static float CHANNEL_WIDTH = 0f;
 
   public final Type type;
 
@@ -360,7 +360,7 @@ public static class Face extends LXModel {
 
     private Fixture(Metrics metrics, float ry, LXTransform transform) {
       transform.push();
-      transform.translate(0, metrics.vertical.length, 0);
+      // transform.translate(0, metrics.vertical.length, 0);
       for (int i = 0; i < STRIPS_PER_FACE; i++) {
         boolean isHorizontal = (i % 2 == 0);
         Strip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
@@ -449,3 +449,6 @@ public static class Strip extends LXModel {
     }
   }
 }
+
+
+

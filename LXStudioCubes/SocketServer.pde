@@ -169,18 +169,18 @@ public class ParseClientTask implements LXLoopTask {
       }
 
       if (method.equals("mapping.startMapping")) {
-        List<Double> pixelOrder = (List)args.get("pixelOrder");
-        int[] pixelOrderArray = null;
-        if (pixelOrder != null) {
-          pixelOrderArray = automappingController.getPixelOrder();
-          if (pixelOrderArray == null || pixelOrderArray.length != pixelOrder.size()) {
-            pixelOrderArray = new int[pixelOrder.size()];
-            for (int i = 0; i < pixelOrder.size(); i++) {
-              pixelOrderArray[i] = pixelOrder.get(i).intValue();
-            }
-          }
-        }
-        automappingController.setPixelOrder(pixelOrderArray);
+        // List<Double> pixelOrder = (List)args.get("pixelOrder");
+        // int[] pixelOrderArray = null;
+        // if (pixelOrder != null) {
+        //   pixelOrderArray = automappingController.getPixelOrder();
+        //   if (pixelOrderArray == null || pixelOrderArray.length != pixelOrder.size()) {
+        //     pixelOrderArray = new int[pixelOrder.size()];
+        //     for (int i = 0; i < pixelOrder.size(); i++) {
+        //       pixelOrderArray[i] = pixelOrder.get(i).intValue();
+        //     }
+        //   }
+        // }
+        // automappingController.setPixelOrder(pixelOrderArray);
         automappingController.startMapping();
 
         HashMap<String, Object> mappingState = new HashMap<String, Object>();
@@ -195,7 +195,20 @@ public class ParseClientTask implements LXLoopTask {
       if (method.equals("mapping.mapNextCube")) {
         String cubeId = (String)args.get("id");
         automappingController.mapNextCube(cubeId);
-        communicator.sendResponse(id);
+
+        // ArrayList<HashMap> points = new ArrayList<HashMap>();
+        ArrayList<LXPoint> points = automappingController.getPointsForId(cubeId);
+
+        ArrayList<HashMap<String, Float>> xyz = new ArrayList<HashMap<String, Float>>();
+        for (LXPoint p : points) {
+          HashMap<String, Float> hm = new HashMap<String, Float>();
+          hm.put("x", p.x);
+          hm.put("y", p.y);
+          hm.put("z", p.z);
+          xyz.add(hm);
+        }
+
+        communicator.sendResponse(id, xyz);
         return;
       } 
 
@@ -345,7 +358,7 @@ class ClientCommunicator {
       if (delayedResponse.frameDelay <= 0) {
         delayedResponses.remove(i);
         i--;
-        System.out.println("Sent delayed response: " + gson.toJson(delayedResponse.response));
+        // System.out.println("Sent delayed response: " + gson.toJson(delayedResponse.response));
         sendMessage(delayedResponse.response);
       }
     }
@@ -360,7 +373,7 @@ class ClientCommunicator {
     json.put("command", command);
     json.put("args", args);
     sendMessage(json);
-    System.out.println("Sent command: " + gson.toJson(json));
+    System.out.println("Sent command: " + command);
   }
 
   void sendResponse(Object id) {

@@ -22,6 +22,9 @@ void setup() {
   long setupStart = System.nanoTime();
   size(1280, 800, P3D);
 
+  // Automapping
+  automappingController = new AutomappingController(lx);
+
   model = buildModel();
   println("-- Model ----");
   println("# of cubes: " + model.cubes.size());
@@ -33,6 +36,7 @@ void setup() {
   lx = new SLStudio(this, model) {
     @Override
     protected void initialize(SLStudio lx, SLStudio.UI ui) {
+      automappingController.lx = lx;
       // if (envelopOn) {
       //   envelop = new Envelop(lx);
       //   lx.engine.registerComponent("envelop", envelop);
@@ -60,8 +64,51 @@ void setup() {
       if (((SLModel)model).cubes.size() > 0)
         mappingMode = new MappingMode(lx);
 
-      // Automapping
-      automappingController = new AutomappingController(lx);
+
+    //   HashMap<String, LXPoint[]> debugs = new HashMap();
+
+
+      Cube mod = new Cube(
+        "no",
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        new LXTransform(),
+        Cube.Type.LARGE
+      );
+
+
+
+      println("PVector[] fromLX = {");
+      int i = 0;
+      for (LXPoint p : mod.points) {
+        System.out.printf("new PVector(%.5f, %.5f, %.5f)", p.x, p.y, p.z);
+        if (i < mod.points.length - 1) {
+          System.out.printf(",\n");
+        }
+        i++;
+      }
+      i = 0;
+      println("};");
+    //   LXPoint[] kP = automappingController.getRawPointsForId("SMALLBOI");
+    //   debugs.put("kyle_model", kP);
+
+    //   for (LXPoint p : kP) {
+    //     System.out.printf("new PVector(%.5f, %.5f, %.5f)", p.x, p.y, p.z);
+    //     if (i < kP.length - 1) {
+    //       System.out.printf(",\n");
+    //     }
+    //     i++;
+    //   }
+    //   println("};");
+
+    // Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+
+    // saveBytes(dataPath("model_points.json"), gson.toJson(debugs).getBytes());
 
       // Setup server listeners
       //    Adaptor for mapping osc messages from Essentia to lx osc engine

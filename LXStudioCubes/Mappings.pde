@@ -16,12 +16,12 @@
  import heronarts.lx.transform.*;
 
 
-static final float globalOffsetX = 34;
-static final float globalOffsetY = -23;
-static final float globalOffsetZ = 136;
+static final float globalOffsetX = 0;
+static final float globalOffsetY = 0;
+static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -219,220 +219,259 @@ static class TowerConfig {
 Map<String, String> macToPhysid = new HashMap<String, String>();
 Map<String, String> physidToMac = new HashMap<String, String>();
 
-// public SLModel buildModelFromJson(LXTransform globalTransform) {
-//   byte[] bytes = loadBytes("cube_transforms.json");
-//   String jsonStr = new String(bytes);
-//   JsonArray json = new Gson().fromJson(jsonStr, JsonArray.class);
+public SLModel buildModelFromJson(LXTransform globalTransform) {
+  String jsonStr;
+  try {
+    byte[] bytes = loadBytes("cube_transforms.json");
+    jsonStr = new String(bytes);
+    // float yo = 10 / 0;
+  } catch (Exception e) {
+    List<Tower> emptyTowers = new ArrayList<Tower>();
+    Cube emptyCubes[] = new Cube[0];
+    List<Strip> emptyStrips = new ArrayList<Strip>();
 
-//   List<Tower> towers = new ArrayList<Tower>();
-//   Cube[] cubes = new Cube[200];
-//   int cubeIndex = 0;
+    return new SLModel(emptyTowers, emptyCubes, emptyStrips);
+  }
 
-//   for (JsonElement element : json) {
-//     LXTransform transform = new LXTransform();
-//     LXMatrix matrix = transform.getMatrix();
+  JsonArray json = new Gson().fromJson(jsonStr, JsonArray.class);
 
-//     JsonObject cubeInfo = element.getAsJsonObject();
+  List<Tower> towers = new ArrayList<Tower>();
+  Cube[] cubes = new Cube[200];
+  int cubeIndex = 0;
 
-//     int rowNum = 0;
-//     for (JsonElement row : cubeInfo.getAsJsonArray("transform")) {
-//       int colNum = 0;
-//       for (JsonElement entry : row.getAsJsonArray()) {
-//         float value = entry.getAsFloat();
-//         switch (rowNum) {
-//           case 0:
-//             switch (colNum) {
-//               case 0: matrix.m11 = value; break;
-//               case 1: matrix.m12 = value; break;
-//               case 2: matrix.m13 = value; break;
-//               case 3: matrix.m14 = value; break;
-//             }
-//             break;
-//           case 1:
-//             switch (colNum) {
-//               case 0: matrix.m21 = value; break;
-//               case 1: matrix.m22 = value; break;
-//               case 2: matrix.m23 = value; break;
-//               case 3: matrix.m24 = value; break;
-//             }
-//             break;
-//           case 2:
-//             switch (colNum) {
-//               case 0: matrix.m31 = value; break;
-//               case 1: matrix.m32 = value; break;
-//               case 2: matrix.m33 = value; break;
-//               case 3: matrix.m34 = value; break;
-//             }
-//             break;
-//           case 3:
-//             switch (colNum) {
-//               case 0: matrix.m41 = value; break;
-//               case 1: matrix.m42 = value; break;
-//               case 2: matrix.m43 = value; break;
-//               case 3: matrix.m44 = value; break;
-//             }
-//             break;
-//         }
-//         colNum++;
-//       }
-//       rowNum++;
-//     }
+  for (JsonElement element : json) {
+    LXTransform transform = new LXTransform();
+    LXMatrix matrix = transform.getMatrix();
 
-//     String macAddress = cubeInfo.get("id").getAsString();
+    JsonObject cubeInfo = element.getAsJsonObject();
 
-//     List<Cube> tower = new ArrayList<Cube>();
+    int rowNum = 0;
+    for (JsonElement row : cubeInfo.getAsJsonArray("transform")) {
+      int colNum = 0;
+      for (JsonElement entry : row.getAsJsonArray()) {
+        float value = entry.getAsFloat();
+        switch (rowNum) {
+          case 0:
+            switch (colNum) {
+              case 0: matrix.m11 = value; break;
+              case 1: matrix.m12 = value; break;
+              case 2: matrix.m13 = value; break;
+              case 3: matrix.m14 = value; break;
+            }
+            break;
+          case 1:
+            switch (colNum) {
+              case 0: matrix.m21 = value; break;
+              case 1: matrix.m22 = value; break;
+              case 2: matrix.m23 = value; break;
+              case 3: matrix.m24 = value; break;
+            }
+            break;
+          case 2:
+            switch (colNum) {
+              case 0: matrix.m31 = value; break;
+              case 1: matrix.m32 = value; break;
+              case 2: matrix.m33 = value; break;
+              case 3: matrix.m34 = value; break;
+            }
+            break;
+          case 3:
+            switch (colNum) {
+              case 0: matrix.m41 = value; break;
+              case 1: matrix.m42 = value; break;
+              case 2: matrix.m43 = value; break;
+              case 3: matrix.m44 = value; break;
+            }
+            break;
+        }
+        colNum++;
+      }
+      rowNum++;
+    }
 
-//     Cube cube = new Cube(
-//       new Integer(cubeIndex).toString(),
-//       transform.x(),
-//       transform.y(),
-//       transform.z(),
-//       0,
-//       0,
-//       0,
-//       transform,
-//       Cube.Type.LARGE
-//     );
-//     tower.add(cube);
-//     cubes[++cubeIndex] = cube;
-//     towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
-//   }
-//   List<Strip> emptyStrips = new ArrayList<Strip>();
-//   return new SLModel(towers, cubes, emptyStrips);
-// }
+        List<Cube> tower = new ArrayList<Cube>();
+
+
+
+
+    String macAddress = cubeInfo.get("id").getAsString();
+
+    // Cube yikes = new Cube(
+    //   new Integer(cubeIndex).toString(),
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   transform,
+    //   Cube.Type.LARGE
+    // );
+
+    // Cube.Type t = automappingController.getCubeTypeForId(macAddress);
+    // float w = t.EDGE_WIDTH;
+    // transform.translate(-w/2, -w/2, -w/2);
+
+    LXMatrix inverter = new LXMatrix();
+    // inverter.m11 = -1;
+    // inverter.m33 = -1;
+    // matrix.multiply(inverter);
+
+    Cube cube = (Cube)automappingController.getModelForId(macAddress, transform);
+
+    // println("WIDTHS", w, cube.xRange);
+
+    // Cube cube = new Cube(
+    //   new Integer(cubeIndex).toString(),
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   transform,
+    //   Cube.Type.LARGE
+    // );
+    tower.add(cube);
+    cubes[++cubeIndex] = cube;
+    towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
+  }
+  List<Strip> emptyStrips = new ArrayList<Strip>();
+  return new SLModel(towers, cubes, emptyStrips);
+}
 
 float floatify(Double v) {
     double v_ = v;
     return (float)v_;
   }
 
-public SLModel buildModelFromJson(LXTransform globalTransform) {
-  List<Tower> towers = new ArrayList<Tower>();
-  Cube[] cubes = new Cube[200];
+// public SLModel buildModelFromJson(LXTransform globalTransform) {
+//   List<Tower> towers = new ArrayList<Tower>();
+//   Cube[] cubes = new Cube[200];
 
-  String data = new String(loadBytes("cube_transforms.json"));
-  ArrayList<Object> message = (new Gson()).fromJson(data, new TypeToken<ArrayList<Object>>() {
-  }
-  .getType());
+//   String data = new String(loadBytes("cube_transforms.json"));
+//   ArrayList<Object> message = (new Gson()).fromJson(data, new TypeToken<ArrayList<Object>>() {
+//   }
+//   .getType());
 
-  int cubeIndex = 0;
+//   int cubeIndex = 0;
 
-  float end =  180 / PI;
-  float step = 0.1 * 180 / PI;
-  int[] zs = {0, 50};
-  for (int rx = 0; rx < end; rx += step) {
-    for (int z : zs) {
-      List<Cube> tower = new ArrayList<Cube>();
-      Cube cube = new Cube(
-         new Integer(cubeIndex).toString(),
-         0, 0, z, 0, 0, rx,
-         globalTransform,
-         Cube.Type.LARGE
-       );
-       println(new Integer(cubeIndex).toString(), cube.z);
-       tower.add(cube);
-       cubes[++cubeIndex] = cube;
-       towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
-    }
-  }
+//   float end =  180 / PI;
+//   float step = 0.1 * 180 / PI;
+//   int[] zs = {0, 50};
+//   for (int rx = 0; rx < end; rx += step) {
+//     for (int z : zs) {
+//       List<Cube> tower = new ArrayList<Cube>();
+//       Cube cube = new Cube(
+//          new Integer(cubeIndex).toString(),
+//          0, 0, z, 0, 0, rx,
+//          globalTransform,
+//          Cube.Type.LARGE
+//        );
+//        println(new Integer(cubeIndex).toString(), cube.z);
+//        tower.add(cube);
+//        cubes[++cubeIndex] = cube;
+//        towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
+//     }
+//   }
 
   
 
-  // for (Object cube_ : message) {
-  //   Map<String, Object> c = (Map<String, Object>)cube_;
-  //   ArrayList<ArrayList<Double>> jsonTransform = (ArrayList<ArrayList<Double>>)c.get("transform");
-  //   String mac = (String)c.get("id");
+//   // for (Object cube_ : message) {
+//   //   Map<String, Object> c = (Map<String, Object>)cube_;
+//   //   ArrayList<ArrayList<Double>> jsonTransform = (ArrayList<ArrayList<Double>>)c.get("transform");
+//   //   String mac = (String)c.get("id");
 
 
-  //   ArrayList<Double> rvec = (ArrayList<Double>)c.get("rvec");
-  //   ArrayList<Double> tvec = (ArrayList<Double>)c.get("tvec");
+//   //   ArrayList<Double> rvec = (ArrayList<Double>)c.get("rvec");
+//   //   ArrayList<Double> tvec = (ArrayList<Double>)c.get("tvec");
 
  
-  //   List<Cube> tower = new ArrayList<Cube>();
+//   //   List<Cube> tower = new ArrayList<Cube>();
 
-  //   float x = floatify(tvec.get(0));
-  //   float y = floatify(tvec.get(1));
-  //   float z = floatify(tvec.get(2));
+//   //   float x = floatify(tvec.get(0));
+//   //   float y = floatify(tvec.get(1));
+//   //   float z = floatify(tvec.get(2));
 
-  //   float rx = floatify(rvec.get(0)) * 180 / PI;
-  //   float ry = floatify(rvec.get(1)) * 180 / PI;
-  //   float rz = floatify(rvec.get(2)) * 180 / PI;
+//   //   float rx = floatify(rvec.get(0)) * 180 / PI;
+//   //   float ry = floatify(rvec.get(1)) * 180 / PI;
+//   //   float rz = floatify(rvec.get(2)) * 180 / PI;
 
-  //   LXTransform transform = new LXTransform();
-  //   LXMatrix matrix = transform.getMatrix();
+//   //   LXTransform transform = new LXTransform();
+//   //   LXMatrix matrix = transform.getMatrix();
 
-  //   // JsonObject cubeInfo = element.getAsJsonObject();
+//   //   // JsonObject cubeInfo = element.getAsJsonObject();
 
-  //   // int rowNum = 0;
-  //   // for (JsonElement row : c.getAsJsonArray("transform")) {
-  //   //   int colNum = 0;
-  //   //   for (JsonElement entry : row.getAsJsonArray()) {
-  //   //     float value = entry.getAsFloat();
-  //   //     switch (rowNum) {
-  //   //       case 0:
-  //   //         switch (colNum) {
-  //   //           case 0: matrix.m11 = value; break;
-  //   //           case 1: matrix.m12 = value; break;
-  //   //           case 2: matrix.m13 = value; break;
-  //   //           case 3: matrix.m14 = value; break;
-  //   //         }
-  //   //         break;
-  //   //       case 1:
-  //   //         switch (colNum) {
-  //   //           case 0: matrix.m21 = value; break;
-  //   //           case 1: matrix.m22 = value; break;
-  //   //           case 2: matrix.m23 = value; break;
-  //   //           case 3: matrix.m24 = value; break;
-  //   //         }
-  //   //         break;
-  //   //       case 2:
-  //   //         switch (colNum) {
-  //   //           case 0: matrix.m31 = value; break;
-  //   //           case 1: matrix.m32 = value; break;
-  //   //           case 2: matrix.m33 = value; break;
-  //   //           case 3: matrix.m34 = value; break;
-  //   //         }
-  //   //         break;
-  //   //       case 3:
-  //   //         switch (colNum) {
-  //   //           case 0: matrix.m41 = value; break;
-  //   //           case 1: matrix.m42 = value; break;
-  //   //           case 2: matrix.m43 = value; break;
-  //   //           case 3: matrix.m44 = value; break;
-  //   //         }
-  //   //         break;
-  //   //     }
-  //   //     colNum++;
-  //   //   }
-  //   //   rowNum++;
-  //   // }
+//   //   // int rowNum = 0;
+//   //   // for (JsonElement row : c.getAsJsonArray("transform")) {
+//   //   //   int colNum = 0;
+//   //   //   for (JsonElement entry : row.getAsJsonArray()) {
+//   //   //     float value = entry.getAsFloat();
+//   //   //     switch (rowNum) {
+//   //   //       case 0:
+//   //   //         switch (colNum) {
+//   //   //           case 0: matrix.m11 = value; break;
+//   //   //           case 1: matrix.m12 = value; break;
+//   //   //           case 2: matrix.m13 = value; break;
+//   //   //           case 3: matrix.m14 = value; break;
+//   //   //         }
+//   //   //         break;
+//   //   //       case 1:
+//   //   //         switch (colNum) {
+//   //   //           case 0: matrix.m21 = value; break;
+//   //   //           case 1: matrix.m22 = value; break;
+//   //   //           case 2: matrix.m23 = value; break;
+//   //   //           case 3: matrix.m24 = value; break;
+//   //   //         }
+//   //   //         break;
+//   //   //       case 2:
+//   //   //         switch (colNum) {
+//   //   //           case 0: matrix.m31 = value; break;
+//   //   //           case 1: matrix.m32 = value; break;
+//   //   //           case 2: matrix.m33 = value; break;
+//   //   //           case 3: matrix.m34 = value; break;
+//   //   //         }
+//   //   //         break;
+//   //   //       case 3:
+//   //   //         switch (colNum) {
+//   //   //           case 0: matrix.m41 = value; break;
+//   //   //           case 1: matrix.m42 = value; break;
+//   //   //           case 2: matrix.m43 = value; break;
+//   //   //           case 3: matrix.m44 = value; break;
+//   //   //         }
+//   //   //         break;
+//   //   //     }
+//   //   //     colNum++;
+//   //   //   }
+//   //   //   rowNum++;
+//   //   // }
 
-  //   // Cube cube = new Cube(
-  //   //   mac,
-  //   //   x,
-  //   //   z,
-  //   //   y,
-  //   //   floatify(rvec.get(0) * 180 / PI),
-  //   //   floatify(rvec.get(1) * 180 / PI),
-  //   //   floatify(rvec.get(2) * 180 / PI),
-  //   //   globalTransform,
-  //   //   Cube.Type.LARGE
-  //   // );
+//   //   // Cube cube = new Cube(
+//   //   //   mac,
+//   //   //   x,
+//   //   //   z,
+//   //   //   y,
+//   //   //   floatify(rvec.get(0) * 180 / PI),
+//   //   //   floatify(rvec.get(1) * 180 / PI),
+//   //   //   floatify(rvec.get(2) * 180 / PI),
+//   //   //   globalTransform,
+//   //   //   Cube.Type.LARGE
+//   //   // );
 
-  //   Cube cube = new Cube(
-  //     new Integer(cubeIndex).toString(),
-  //     x, y, z, rx, ry, rz,
-  //     globalTransform,
-  //     Cube.Type.LARGE
-  //   );
-  //   println(new Integer(cubeIndex).toString(), cube.z);
-  //   tower.add(cube);
-  //   cubes[++cubeIndex] = cube;
-  //   towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
-  // }
-  List<Strip> emptyStrips = new ArrayList<Strip>();
-  return new SLModel(towers, cubes, emptyStrips);
-}
+//   //   Cube cube = new Cube(
+//   //     new Integer(cubeIndex).toString(),
+//   //     x, y, z, rx, ry, rz,
+//   //     globalTransform,
+//   //     Cube.Type.LARGE
+//   //   );
+//   //   println(new Integer(cubeIndex).toString(), cube.z);
+//   //   tower.add(cube);
+//   //   cubes[++cubeIndex] = cube;
+//   //   towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
+//   // }
+//   List<Strip> emptyStrips = new ArrayList<Strip>();
+//   return new SLModel(towers, cubes, emptyStrips);
+// }
 
 public SLModel buildModel() {
 
@@ -459,12 +498,7 @@ public SLModel buildModel() {
 
   if (MAPPING_MODE) {
     // if in mapping mode, return an "empty" model
-    List<Tower> emptyTowers = new ArrayList<Tower>();
-    Cube emptyCubes[] = new Cube[0];
-    List<Strip> emptyStrips = new ArrayList<Strip>();
-
-    return new SLModel(emptyTowers, emptyCubes, emptyStrips);
-    // return buildModelFromJson(globalTransform);
+    return buildModelFromJson(globalTransform);
   }
 
   /* Cubes ----------------------------------------------------------*/
