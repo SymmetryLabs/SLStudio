@@ -55,6 +55,9 @@ class EssentiaOSCListener implements LXOscListener {
     } else if (message.matches("/essentia/specCompNorm")) {
         message.setAddressPattern(BASE_ROUTE + "/spec complexity");
 
+    } else if (message.matches("/essentia/isOnset")) {
+        message.setAddressPattern(BASE_ROUTE + "/onset");
+
     } else {
         return;
     }
