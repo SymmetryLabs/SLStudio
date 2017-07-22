@@ -516,7 +516,7 @@ public SLModel buildModel() {
 
     for (int i = 0; i < config.ids.length; i++) {
       float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot-90, zRot, globalTransform, type);
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
       cubes.add(cube);
       allCubes.add(cube);
     }

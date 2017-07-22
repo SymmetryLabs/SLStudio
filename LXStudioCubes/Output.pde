@@ -84,18 +84,12 @@ class SLController extends LXOutput {
   InetAddress   host;
   boolean       isBroadcast;
 
-  // Trip had to change order for Cisco as workaround for rotation bug
-  final int[] STRIP_ORD = new int[] { 
-    // GREEN 
-    0, 1, 2,
-    // BLUE
-    3, 4, 5,
-    // WHITE
-    6, 7, 8,
-    // RED
-    9, 10, 11
-  }; 
-  // final int[]  STRIP_ORD      = new int[] { 6, 7, 8, 9, 10, 11, 0, 1, 2, 3, 4, 5 };
+  final int[] STRIP_ORD = new int[] {
+    6, 7, 8,   // white
+    9, 10, 11, // red
+    0, 1, 2,   // green
+    3, 4, 5    // blue
+  };
 
   static final int HEADER_LENGTH = 4;
   static final int BYTES_PER_PIXEL = 3;
