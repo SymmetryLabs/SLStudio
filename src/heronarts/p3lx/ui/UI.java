@@ -825,12 +825,11 @@ public class UI implements LXEngine.Dispatch {
     }
 
     private void _engineThreadDefaultKeyEvent(KeyEvent keyEvent) {
-        char keyChar = keyEvent.getKey();
         int keyCode = keyEvent.getKeyCode();
         int action = keyEvent.getAction();
         if (action == KeyEvent.RELEASE) {
-            switch (Character.toLowerCase(keyChar)) {
-            case 's':
+            switch (keyCode) {
+            case java.awt.event.KeyEvent.VK_S:
                 if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
                     if (keyEvent.isShiftDown() || lx.getProject() == null) {
                         this.applet.selectOutput("Select a file to save:", "onSaveAs", this.applet.saveFile("Project.lxp"), this);
@@ -839,23 +838,23 @@ public class UI implements LXEngine.Dispatch {
                     }
                 }
                 break;
-            case 'o':
+            case java.awt.event.KeyEvent.VK_O:
                 if (keyEvent.isControlDown() || keyEvent.isMetaDown()) {
                     this.applet.selectInput("Select a file to load:", "onLoad", this.applet.saveFile("default.lxp"), this);
                 }
                 break;
-            case '[':
-            case ']':
+            case java.awt.event.KeyEvent.VK_BRACELEFT:
+            case java.awt.event.KeyEvent.VK_BRACERIGHT:
                 LXBus bus = this.lx.engine.getFocusedChannel();
                 if (bus instanceof LXChannel) {
-                    if (keyChar == '[') {
+                    if (keyCode == java.awt.event.KeyEvent.VK_BRACELEFT) {
                         ((LXChannel) bus).goPrev();
                     } else {
                         ((LXChannel) bus).goNext();
                     }
                 }
                 break;
-            case ' ':
+            case java.awt.event.KeyEvent.VK_SPACE:
                 if (this.lx.flags.keyboardTempo) {
                     this.lx.tempo.tap();
                 }
