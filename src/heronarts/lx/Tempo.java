@@ -178,7 +178,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     }
 
     /**
-     * Gets the count of the current beat we are on in a measure
+     * Gets the count of the current beat we are on
      *
      * @return Beat count
      */
