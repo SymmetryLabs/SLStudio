@@ -8,7 +8,7 @@ public class UIOverriddenRightPane extends UIPane {
   public final UI2dScrollContext utility;
   public final UI2dScrollContext modulation;
   public final UI2dScrollContext midi;
-  public final UI2dScrollContext wearables; 
+  public final UI2dScrollContext wearables;
 
   public static final int PADDING = 4;
   public static final int WIDTH = 282;
@@ -35,6 +35,7 @@ public class UIOverriddenRightPane extends UIPane {
   }
 
   private void buildWearablesUI() {
+    new UIInputKnobs(lx, ui, 0, 0, wearables.getContentWidth()).addToContainer(wearables);
     new DeviceSection(lx, ui, 0, 0, wearables.getContentWidth(), wearables).addToContainer(wearables);
 
     final UIButton mapButton = (UIButton) new UIButton(0, 0, 24, 16) {
@@ -261,10 +262,10 @@ public class UIOverriddenRightPane extends UIPane {
       new UIMacroKnobs(this.ui, this.lx, (MacroKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
     } else if (modulator instanceof AudioAnalyzerKnobs) {
       new UIAudioAnalyzerKnobs(this.ui, this.lx, (AudioAnalyzerKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-    } 
+    }
     // else if (modulator instanceof DeviceKnobs) {
     //   new UIDeviceKnobs(this.ui, this.lx, (DeviceKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-    // } 
+    // }
     else {
       System.err.println("No UI available for modulator type: " + modulator.getClass().getName());
     }

@@ -30,7 +30,7 @@ class AgentOSCListener implements LXOscListener {
             return;
         }
 
-        LXParameter p = device.ensureParameter(param);
+        BoundedParameter p = device.ensureParameter(param);
         p.setValue(value);
     }
 
@@ -47,7 +47,12 @@ class AgentOSCListener implements LXOscListener {
 class Device extends LXComponent {
     String name;
     InetAddress address;
-    List<NewParameterWatcher> watchers = new ArrayList<NewParameterWatcher>();
+
+    private Map<String, BoundedParameter> deviceParams = new HashMap<String, BoundedParameter>();
+    private Map<String, BoundedParameter> inputParams = new HashMap<String, BoundedParameter>();
+
+    private List<DeviceParameterWatcher> paramWatchers = new ArrayList<DeviceParameterWatcher>();
+    private List<DeviceParameterWatcher> inputWatchers = new ArrayList<DeviceParameterWatcher>();
 
     private LXOscEngine.Transmitter transmitter;
 
@@ -64,16 +69,50 @@ class Device extends LXComponent {
 
     }
 
-    public LXParameter ensureParameter(String param) {
-        LXParameter p = getParameter(param);
+    public Collection<BoundedParameter> getDeviceParameters() {
+        return Collections.unmodifiableCollection(deviceParams.values());
+    }
+
+    public Collection<BoundedParameter> getInputParameters() {
+        return Collections.unmodifiableCollection(inputParams.values());
+    }
+
+    public BoundedParameter ensureParameter(String paramName) {
+        BoundedParameter p = deviceParams.get(paramName);
         if (p == null) {
-            p = new BoundedParameter(param);
-            addParameter(param, p);
-            for (NewParameterWatcher w : watchers) {
+            p = new CompoundParameter(paramName);
+            deviceParams.put(paramName, p);
+            addParameter(paramName, p);
+
+            for (DeviceParameterWatcher w : paramWatchers) {
                 w.onParameterAdded(p);
             }
         }
         return p;
+    }
+
+    public void ensureInputs(List<String> inputs) {
+        for (String inputName : inputs) {
+            System.out.println("Device " + name + " input: " + inputName);
+
+            BoundedParameter p = inputParams.get(inputName);
+            if (p == null) {
+                p = new CompoundParameter(inputName);
+                inputParams.put(inputName, p);
+                addParameter("input-" + inputName, p);
+
+                p.addListener(new LXParameterListener() {
+                    @Override
+                    public void onParameterChanged(LXParameter p) {
+                        sendInput(p.getLabel(), (float)p.getValue());
+                    }
+                });
+
+                for (DeviceParameterWatcher w : inputWatchers) {
+                    w.onParameterAdded(p);
+                }
+            }
+        }
     }
 
     public void queryInputs() {
@@ -89,24 +128,40 @@ class Device extends LXComponent {
         }
     }
 
-    public void ensureInputs(List<String> inputs) {
-        for (String input : inputs) {
-            System.out.println("Device " + name + " input: " + input);
+    public void sendInput(String name, float value) {
+        if (transmitter == null)
+            return;
+
+        OscMessage m = new OscMessage("/input/" + name);
+        m.add(value);
+        try {
+            transmitter.send(m);
+        }
+        catch (java.io.IOException e) {
+            System.err.println(e);
         }
     }
 
-    public void addNewParameterWatcher(NewParameterWatcher w) {
-        watchers.add(w);
+    public void addParameterWatcher(DeviceParameterWatcher w) {
+        paramWatchers.add(w);
+    }
+
+    public void addInputWatcher(DeviceParameterWatcher w) {
+        inputWatchers.add(w);
     }
 }
 
-public interface NewParameterWatcher {
-    public void onParameterAdded(LXParameter p);
+public interface DeviceParameterWatcher {
+    public void onParameterAdded(BoundedParameter p);
 }
 
 class DeviceController extends LXComponent {
-    ListenableList<Device> devices = new ListenableList<Device>();
+    public final ListenableList<Device> devices = new ListenableList<Device>();
+
     private Map<String, Device> deviceByName = new HashMap<String, Device>();
+    private Map<String, List<BoundedParameter>> allDeviceInputs = new HashMap<String, List<BoundedParameter>>();
+    private Map<String, BoundedParameter> inputProxyParams = new HashMap<String, BoundedParameter>();
+    private List<DeviceParameterWatcher> inputWatchers = new ArrayList<DeviceParameterWatcher>();
 
     DeviceController(LX lx) {
         super(lx);
@@ -128,13 +183,57 @@ class DeviceController extends LXComponent {
         Device device = deviceByName.get(name);
         if (device == null) {
             device = new Device(lx, name, addr);
+            device.addInputWatcher(new DeviceParameterWatcher() {
+                @Override
+                public void onParameterAdded(BoundedParameter p) {
+                    String inputName = p.getLabel();
+                    List<BoundedParameter> params = allDeviceInputs.get(inputName);
+                    if (params == null) {
+                        params = new ArrayList<BoundedParameter>();
+                        allDeviceInputs.put(inputName, params);
+
+                        BoundedParameter proxyParam = new CompoundParameter(inputName);
+                        proxyParam.addListener(new LXParameterListener() {
+                            @Override
+                            public void onParameterChanged(LXParameter proxyParam) {
+                                String inputName = proxyParam.getLabel();
+                                System.err.println(inputName + ": " + proxyParam.getValue());
+                                List<BoundedParameter> deviceInputParams = allDeviceInputs.get(inputName);
+                                if (deviceInputParams == null)
+                                    return;
+
+                                for (BoundedParameter p : deviceInputParams) {
+                                    p.setValue(proxyParam.getValue());
+                                }
+                            }
+                        });
+                        inputProxyParams.put(inputName, proxyParam);
+                        addParameter(proxyParam);
+
+                        for (DeviceParameterWatcher w : inputWatchers) {
+                            w.onParameterAdded(proxyParam);
+                        }
+                    }
+                    params.add(p);
+                }
+            });
             devices.add(device);
         }
         return device;
     }
+
+    public Collection<BoundedParameter> getInputParameters() {
+        return Collections.unmodifiableCollection(inputProxyParams.values());
+    }
+
+    public BoundedParameter getInputParameter(String inputName) {
+        return inputProxyParams.get(inputName);
+    }
+
     public ListenableList<Device> getDevices() {
         return devices;
     }
+
     public void removeDevice(Device device) {
         String nameOfDeviceToDelete = device.name;
         Iterator it = devices.iterator();
@@ -145,6 +244,10 @@ class DeviceController extends LXComponent {
                 it.remove();
             }
         }
+    }
+
+    public void addInputWatcher(DeviceParameterWatcher w) {
+        inputWatchers.add(w);
     }
 }
 
@@ -218,7 +321,6 @@ class DeviceSection extends UICollapsibleSection {
             }
         };
 
-
         deviceController.devices.addListener(new ListListener<Device>() {
             public void itemAdded(final int index, final Device c) {
                 dispatcher.dispatchUi(update);
@@ -226,8 +328,53 @@ class DeviceSection extends UICollapsibleSection {
             public void itemRemoved(final int index, final Device c) {
                 dispatcher.dispatchUi(update);
             }
+        });
+    }
+}
+
+public class UIInputKnobs extends UICollapsibleSection {
+
+    private final static int TOP_PADDING = 4;
+    private final static int X_SPACING = UIKnob.WIDTH + 1;
+    private final static int Y_SPACING = UIKnob.HEIGHT + TOP_PADDING;
+    private final static int TOTAL_WIDTH = (UIKnob.WIDTH + 1) * 6;
+    private final static int TOP_MARGIN = 20;
+    private final static int RIGHT_MARGIN = 10;
+
+    private int knobCount = 0;
+    private int numColumns;
+
+    UIInputKnobs(LX lx, UI ui, float x, float y, float w) {
+        super(ui, x, y, w + RIGHT_MARGIN, (UIKnob.HEIGHT + TOP_PADDING)*2 + TOP_MARGIN);
+        setTitle("Inputs");
+        setChildMargin(0);
+
+        numColumns = (int)(w / UIKnob.WIDTH);
+
+        for (BoundedParameter p : deviceController.getInputParameters()) {
+            int row = knobCount / numColumns;
+            int column = knobCount % numColumns;
+
+            new UIKnob(X_SPACING * column, Y_SPACING * row)
+                .setParameter(p)
+                .addToContainer(UIInputKnobs.this);
+
+            ++knobCount;
         }
-        );
+
+        deviceController.addInputWatcher(new DeviceParameterWatcher() {
+            @Override
+            public void onParameterAdded(BoundedParameter p) {
+                int row = knobCount / numColumns;
+                int column = knobCount % numColumns;
+
+                new UIKnob(X_SPACING * column, Y_SPACING * row)
+                    .setParameter(p)
+                    .addToContainer(UIInputKnobs.this);
+
+                ++knobCount;
+            }
+        });
     }
 }
 
@@ -243,35 +390,36 @@ public class UIDeviceKnobs extends UICollapsibleSection {
     private int knobCount = 0;
     private int numColumns;
 
-
     UIDeviceKnobs(LX lx, UI ui, float x, float y, float w, Device device) {
         super(ui, x, y, w + RIGHT_MARGIN, (UIKnob.HEIGHT + TOP_PADDING)*2 + TOP_MARGIN);
         setTitle(device.name);
         setChildMargin(0);
 
-        numColumns = (int) (w / UIKnob.WIDTH);
-        Collection<LXParameter> deviceParams = device.getParameters();
+        numColumns = (int)(w / UIKnob.WIDTH);
+        Collection<BoundedParameter> deviceParams = device.getDeviceParameters();
 
-        for (LXParameter param : deviceParams) {
-            if (param.getLabel() == "Label") {
-                continue;
-            }
-            System.out.println(param.getLabel());
-            System.out.println(param.getValue());
+        for (BoundedParameter p : deviceParams) {
             int row = knobCount / numColumns;
             int column = knobCount % numColumns;
-            new UIKnob((BoundedParameter) param).setY(Y_SPACING * row).setX(X_SPACING * column).addToContainer(this);
-            knobCount ++;
 
+            new UIKnob(X_SPACING * column, Y_SPACING * row)
+                .setParameter(p)
+                .addToContainer(UIDeviceKnobs.this);
+
+            ++knobCount;
         }
 
-        device.addNewParameterWatcher(new NewParameterWatcher() {
+        device.addParameterWatcher(new DeviceParameterWatcher() {
             @Override
-            public void onParameterAdded(LXParameter p) {
+            public void onParameterAdded(BoundedParameter p) {
                 int row = knobCount / numColumns;
                 int column = knobCount % numColumns;
-                new UIKnob((BoundedParameter) p).setY(Y_SPACING * row).setX(X_SPACING * column).addToContainer(UIDeviceKnobs.this);
-                knobCount ++;
+
+                new UIKnob(X_SPACING * column, Y_SPACING * row)
+                    .setParameter(p)
+                    .addToContainer(UIDeviceKnobs.this);
+
+                ++knobCount;
             }
         });
     }
