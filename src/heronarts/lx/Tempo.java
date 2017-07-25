@@ -27,7 +27,7 @@ import heronarts.lx.modulator.Click;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.LXListenableParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
 
@@ -52,9 +52,8 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     public final static double MAX_BPM = 240;
 
     public interface Listener {
-        void onBeat(Tempo tempo);
-        void onHalf(Tempo tempo);
-        void onMeasure(Tempo tempo);
+        public void onBeat(Tempo tempo, int beat);
+        public void onMeasure(Tempo tempo);
     }
 
     /**
@@ -62,14 +61,9 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
      *
      * Extend this to avoid boilerplate for beat types you don't care about.
      */
-    public static class BaseTempoListener implements Listener {
+    public static class AbstractListener implements Listener {
         @Override
-        public void onBeat(Tempo tempo) {
-            // default is no-op, override to add custom
-        }
-
-        @Override
-        public void onHalf(Tempo tempo) {
+        public void onBeat(Tempo tempo, int beat) {
             // default is no-op, override to add custom
         }
 
@@ -81,6 +75,9 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
 
     private final static double MS_PER_MINUTE = 60000;
     private final static double DEFAULT_BPM = 120;
+
+    public final DiscreteParameter beatsPerMeasure = new DiscreteParameter("Beats", 4, 1, 9)
+        .setDescription("Beats per measure");
 
     public final BoundedParameter bpm =
         new BoundedParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM)
@@ -99,7 +96,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         new BooleanParameter("Nudge-")
         .setDescription("Temporarily decreases tempo while engaged");
 
-    private final MutableParameter period = (MutableParameter) new MutableParameter(MS_PER_MINUTE / DEFAULT_BPM)
+    public final MutableParameter period = (MutableParameter) new MutableParameter(MS_PER_MINUTE / DEFAULT_BPM)
         .setDescription("Reports the duration between beats (ms)");
 
     private final List<Listener> listeners = new ArrayList<Listener>();
@@ -113,14 +110,16 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     private int beatCount = 0;
     private boolean manuallyTriggered = false;
 
-    private boolean manualPeriodUpdate = false;
+    private boolean parameterUpdate = false;
 
     public Tempo(LX lx) {
         super(lx);
+        addParameter("period", this.period);
         addParameter("bpm", this.bpm);
         addParameter("tap", this.tap);
         addParameter("nudgeUp", this.nudgeUp);
         addParameter("nudgeDown", this.nudgeDown);
+        addParameter("beatsPerMeasure", this.beatsPerMeasure);
         startModulator(this.click);
     }
 
@@ -135,9 +134,17 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
 
     @Override
     public void onParameterChanged(LXParameter parameter) {
-        if (parameter == this.bpm) {
-            if (!this.manualPeriodUpdate) {
+        if (parameter == this.period) {
+            if (!this.parameterUpdate) {
+                this.parameterUpdate = true;
+                this.bpm.setValue(MS_PER_MINUTE / this.period.getValue());
+                this.parameterUpdate = false;
+            }
+        } else if (parameter == this.bpm) {
+            if (!this.parameterUpdate) {
+                this.parameterUpdate = true;
                 this.period.setValue(MS_PER_MINUTE / this.bpm.getValue());
+                this.parameterUpdate = false;
             }
         } else if (parameter == this.tap) {
             if (this.tap.isOn()) {
@@ -171,12 +178,12 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     }
 
     /**
-     * Method to indicate when we are on-beat, for half a measure.
+     * Gets the count of the current beat we are on in a measure
      *
-     * @return true if we are on a half-note beat
+     * @return Beat count
      */
-    public boolean half() {
-        return beat() && (this.beatCount % 2 == 0);
+    public int beatCount() {
+        return this.beatCount;
     }
 
     /**
@@ -185,7 +192,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
      * @return true if we are on a measure-beat
      */
     public boolean measure() {
-        return beat() && (this.beatCount % 4 == 0);
+        return beat() && (this.beatCount % this.beatsPerMeasure.getValuei() == 0);
     }
 
     /**
@@ -254,17 +261,8 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
      * @return
      */
     public Tempo setPeriod(double beatMillis) {
-        this.manualPeriodUpdate = true;
         this.period.setValue(beatMillis);
-        this.bpm.setValue(MS_PER_MINUTE / beatMillis);
         return this;
-    }
-
-    /**
-     * @return a listenable parameter containing the beat period, in ms
-     */
-    public LXListenableParameter getPeriodMs() {
-        return this.period;
     }
 
     /**
@@ -310,7 +308,7 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     }
 
     /**
-     * Adjusts the tempo, specificying an exact timestamp in milliseconds
+     * Adjusts the tempo, specifying an exact timestamp in milliseconds
      * of when the tap event occurred.
      *
      * @param now Timestamp of event, should be equivalent to System.currentTimeMillis()
@@ -332,28 +330,20 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     @Override
     public void loop(double deltaMs) {
         super.loop(deltaMs);
-        if (beat() && !this.manuallyTriggered) {
-            ++this.beatCount;
+        if (beat()) {
+            if (!this.manuallyTriggered) {
+                ++this.beatCount;
+            }
+            int beatIndex = this.beatCount % this.beatsPerMeasure.getValuei();
+            if (beatIndex == 0) {
+                for (Listener listener : listeners) {
+                    listener.onMeasure(this);
+                }
+            }
+            for (Listener listener : listeners) {
+                listener.onBeat(this, beatIndex);
+            }
         }
         this.manuallyTriggered = false;
-
-        // Trigger listeners
-        if (measure()) {
-            for (Listener listener : listeners) {
-                listener.onMeasure(this);
-                listener.onHalf(this);
-                listener.onBeat(this);
-            }
-        } else if (half()) {
-            for (Listener listener : listeners) {
-                listener.onHalf(this);
-                listener.onBeat(this);
-            }
-        } else if (beat()) {
-            for (Listener listener : listeners) {
-                listener.onBeat(this);
-            }
-        }
-
     }
 }
