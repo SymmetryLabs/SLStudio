@@ -132,6 +132,20 @@ class DeviceController extends LXComponent {
         }
         return device;
     }
+    public ListenableList<Device> getDevices() {
+        return devices;
+    }
+    public void removeDevice(Device device) {
+        String nameOfDeviceToDelete = device.name;
+        Iterator it = devices.iterator();
+        while (it.hasNext()) {
+            String currName = ((Device) it.next()).name;
+            if (currName.equals(nameOfDeviceToDelete)) {
+                // deviceByName.remove(nameOfDeviceToDelete);
+                it.remove();
+            }
+        }
+    }
 }
 
 class DeviceListItem extends UIItemList.AbstractItem {
@@ -163,6 +177,10 @@ class DeviceList extends UIItemList.ScrollList {
         if (keyCode == ENTER) {
             Device selected = ((DeviceListItem) getFocusedItem()).device;
             new UIDeviceKnobs(lx, ui, x, y, w, selected).addToContainer(scrollContext);
+        }
+        if (keyCode == 68) {
+            Device selected = ((DeviceListItem) getFocusedItem()).device;
+            deviceController.removeDevice(selected);
         } else {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
         }
@@ -218,30 +236,42 @@ public class UIDeviceKnobs extends UICollapsibleSection {
     private final static int TOP_PADDING = 4;
     private final static int X_SPACING = UIKnob.WIDTH + 1;
     private final static int Y_SPACING = UIKnob.HEIGHT + TOP_PADDING;
+    private final static int TOTAL_WIDTH = (UIKnob.WIDTH + 1) * 6;
+    private final static int TOP_MARGIN = 20;
+    private final static int RIGHT_MARGIN = 10;
 
-    private int xMultiplier = 0;
+    private int knobCount = 0;
+    private int numColumns;
+
 
     UIDeviceKnobs(LX lx, UI ui, float x, float y, float w, Device device) {
-        super(ui, x, y, w, 140);
+        super(ui, x, y, w + RIGHT_MARGIN, (UIKnob.HEIGHT + TOP_PADDING)*2 + TOP_MARGIN);
         setTitle(device.name);
         setChildMargin(0);
 
+        numColumns = (int) (w / UIKnob.WIDTH);
         Collection<LXParameter> deviceParams = device.getParameters();
+
         for (LXParameter param : deviceParams) {
             if (param.getLabel() == "Label") {
                 continue;
             }
             System.out.println(param.getLabel());
             System.out.println(param.getValue());
-            new UIKnob((BoundedParameter) param).setY(TOP_PADDING).setX(X_SPACING*xMultiplier).addToContainer(this);
-            xMultiplier++;
+            int row = knobCount / numColumns;
+            int column = knobCount % numColumns;
+            new UIKnob((BoundedParameter) param).setY(Y_SPACING * row).setX(X_SPACING * column).addToContainer(this);
+            knobCount ++;
+
         }
 
         device.addNewParameterWatcher(new NewParameterWatcher() {
             @Override
             public void onParameterAdded(LXParameter p) {
-                new UIKnob((BoundedParameter) p).setY(TOP_PADDING).setX(X_SPACING*xMultiplier).addToContainer(UIDeviceKnobs.this);
-                xMultiplier++;
+                int row = knobCount / numColumns;
+                int column = knobCount % numColumns;
+                new UIKnob((BoundedParameter) p).setY(Y_SPACING * row).setX(X_SPACING * column).addToContainer(UIDeviceKnobs.this);
+                knobCount ++;
             }
         });
     }
