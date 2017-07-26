@@ -148,6 +148,7 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int LED_MODE_BLINK = 15;
 
     private boolean shiftOn = false;
+    private boolean bankOn = false;
 
     private final Map<LXChannel, ChannelListener> channelListeners = new HashMap<LXChannel, ChannelListener>();
 
@@ -370,27 +371,27 @@ public class APC40Mk2 extends LXMidiSurface {
 
         @Override
         public void patternAdded(LXChannel channel, LXPattern pattern) {
-
+            sendChannelPatterns(channel.getIndex(), channel);
         }
 
         @Override
         public void patternRemoved(LXChannel channel, LXPattern pattern) {
-
+            sendChannelPatterns(channel.getIndex(), channel);
         }
 
         @Override
         public void patternMoved(LXChannel channel, LXPattern pattern) {
-
+            sendChannelPatterns(channel.getIndex(), channel);
         }
 
         @Override
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern) {
-
+            sendChannelPatterns(channel.getIndex(), channel);
         }
 
         @Override
         public void patternDidChange(LXChannel channel, LXPattern pattern) {
-
+            sendChannelPatterns(channel.getIndex(), channel);
         }
 
         @Override
@@ -440,11 +441,16 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     private void initialize() {
+        this.output.sendNoteOn(0, BANK, this.bankOn ? LED_ON : LED_OFF);
         for (int i = 0; i < CHANNEL_KNOB_NUM; ++i) {
             sendControlChange(0, CHANNEL_KNOB_STYLE+i, LED_STYLE_OFF);
         }
         for (int i = 0; i < DEVICE_KNOB_NUM; ++i) {
             sendControlChange(0, DEVICE_KNOB_STYLE+i, LED_STYLE_OFF);
+        }
+        for (int i = 0; i < CHANNEL_KNOB_NUM; ++i) {
+            sendControlChange(0, CHANNEL_KNOB+i, 64);
+            sendControlChange(0, CHANNEL_KNOB_STYLE+i, LED_STYLE_SINGLE);
         }
         sendChannels();
     }
@@ -454,6 +460,14 @@ public class APC40Mk2 extends LXMidiSurface {
             sendChannel(i, getChannel(i));
         }
         sendChannelFocus();
+    }
+
+    private void sendChannelGrid() {
+        for (int i = 0; i < NUM_CHANNELS; ++i) {
+            LXChannel channel = getChannel(i);
+            sendChannelPatterns(i, channel);
+            sendChannelClips(i, channel);
+        }
     }
 
     private void sendChannel(int index, LXChannel channel) {
@@ -468,10 +482,40 @@ public class APC40Mk2 extends LXMidiSurface {
             sendNoteOn(index, CHANNEL_SOLO, LED_OFF);
             sendNoteOn(index, CHANNEL_ARM, LED_OFF);
         }
+        sendChannelPatterns(index, channel);
         sendChannelClips(index, channel);
     }
 
+    private void sendChannelPatterns(int index, LXChannel channel) {
+        if (!this.bankOn) {
+            return;
+        }
+        int numPatterns = 0, activeIndex = -1, nextIndex = -1;
+        if (channel != null) {
+            numPatterns = channel.patterns.size();
+            activeIndex = channel.getActivePatternIndex();
+            nextIndex = channel.getNextPatternIndex();
+        }
+        for (int y = 0; y < CLIP_LAUNCH_ROWS; ++y) {
+            int note = CLIP_LAUNCH + CLIP_LAUNCH_COLUMNS * (CLIP_LAUNCH_ROWS - 1 - y) + index;
+            int midiChannel = LED_MODE_PRIMARY;
+            int color = LED_OFF;
+            if (y == activeIndex) {
+                color = 9;
+            } else if (y == nextIndex) {
+                midiChannel = LED_MODE_PULSE;
+                color = 11;
+            } else if (y < numPatterns) {
+                color = 8;
+            }
+            sendNoteOn(midiChannel, note, color);
+        }
+    }
+
     private void sendChannelClips(int index, LXChannel channel) {
+        if (this.bankOn) {
+            return;
+        }
         for (int i = 0; i < CLIP_LAUNCH_ROWS; ++i) {
             int color = LED_OFF;
             int mode = LED_MODE_PRIMARY;
@@ -589,6 +633,13 @@ public class APC40Mk2 extends LXMidiSurface {
         case SHIFT:
             this.shiftOn = on;
             return;
+        case BANK:
+            if (on) {
+                this.bankOn = !this.bankOn;
+                sendNoteOn(note.getChannel(), pitch, this.bankOn ? LED_ON : LED_OFF);
+                sendChannelGrid();
+            }
+            return;
         case TAP_TEMPO:
             lx.tempo.tap.setValue(on);
             return;
@@ -660,15 +711,19 @@ public class APC40Mk2 extends LXMidiSurface {
                 int index = CLIP_LAUNCH_ROWS - 1 - ((pitch - CLIP_LAUNCH) / CLIP_LAUNCH_COLUMNS);
                 LXChannel channel = getChannel(channelIndex);
                 if (channel != null) {
-                    LXClip clip = channel.getClip(index);
-                    if (clip == null) {
-                        clip = channel.addClip(index);
+                    if (this.bankOn) {
+                        channel.goIndex(index);
                     } else {
-                        if (clip.isRunning()) {
-                            clip.stop();
+                        LXClip clip = channel.getClip(index);
+                        if (clip == null) {
+                            clip = channel.addClip(index);
                         } else {
-                            clip.trigger();
-                            this.lx.engine.focusedClip.setClip(clip);
+                            if (clip.isRunning()) {
+                                clip.stop();
+                            } else {
+                                clip.trigger();
+                                this.lx.engine.focusedClip.setClip(clip);
+                            }
                         }
                     }
                 }
@@ -774,6 +829,11 @@ public class APC40Mk2 extends LXMidiSurface {
 
         if (number >= DEVICE_KNOB && number <= DEVICE_KNOB_MAX) {
             this.deviceListener.onKnob(number - DEVICE_KNOB, cc.getNormalized());
+            return;
+        }
+
+        if (number >= CHANNEL_KNOB && number <= CHANNEL_KNOB_MAX) {
+            sendControlChange(cc.getChannel(), cc.getCC(), cc.getValue());
             return;
         }
 
