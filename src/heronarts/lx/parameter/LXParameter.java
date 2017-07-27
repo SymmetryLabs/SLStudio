@@ -21,6 +21,7 @@
 package heronarts.lx.parameter;
 
 import heronarts.lx.LXComponent;
+import heronarts.lx.midi.MidiNote;
 
 /**
  * This class provides a common interface for system components to have
@@ -52,7 +53,8 @@ public interface LXParameter {
         SECONDS,
         MILLISECONDS,
         DECIBELS,
-        HERTZ;
+        HERTZ,
+        MIDI_NOTE;
 
         @Override
         public String format(double value) {
@@ -93,6 +95,8 @@ public interface LXParameter {
                 return String.format("%.2fHz", value);
             case DECIBELS:
                 return String.format("%.1fdB", value);
+            case MIDI_NOTE:
+                return MidiNote.getPitchString((int) value);
             default:
             case NONE:
                 return String.format("%.2f", value);
