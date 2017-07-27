@@ -45,6 +45,15 @@ class AgentOSCListener implements LXOscListener {
     }
 }
 
+public interface DeviceParameterWatcher {
+    public void onParameterAdded(BoundedParameter p);
+}
+
+public interface DeviceWatcher {
+    public void onDeviceAdded(Device d);
+    public void onDeviceRemoved(Device d);
+}
+
 class Device extends LXComponent {
     String name;
     InetAddress address;
@@ -153,16 +162,7 @@ class Device extends LXComponent {
     }
 }
 
-public interface DeviceParameterWatcher {
-    public void onParameterAdded(BoundedParameter p);
-}
-
-public interface DeviceWatcher {
-    public void onDeviceAdded(Device d);
-    public void onDeviceRemoved(Device d);
-}
-
-class DeviceController extends LXComponent {
+class DeviceController extends LXComponent implements LXLoopTask {
 
     private Map<String, Device> deviceByName = new HashMap<String, Device>();
     private Map<String, List<BoundedParameter>> allDeviceInputs = new HashMap<String, List<BoundedParameter>>();
@@ -172,6 +172,23 @@ class DeviceController extends LXComponent {
 
     DeviceController(LX lx) {
         super(lx);
+
+        lx.engine.addLoopTask(this);
+    }
+
+    @Override
+    public void loop(double deltaMs) {
+        for (BoundedParameter proxyParam : inputProxyParams.values()) {
+            String inputName = proxyParam.getLabel();
+            System.err.println(inputName + ": " + proxyParam.getValue());
+            List<BoundedParameter> deviceInputParams = allDeviceInputs.get(inputName);
+            if (deviceInputParams == null)
+                continue;
+
+            for (BoundedParameter p : deviceInputParams) {
+                p.setValue(proxyParam.getValue());
+            }
+        }
     }
 
     public Device getDeviceByName(String name) {
@@ -190,27 +207,13 @@ class DeviceController extends LXComponent {
                 @Override
                 public void onParameterAdded(BoundedParameter p) {
                     String inputName = p.getLabel();
-                    System.out.println("FUCK" + d.name + ": " + inputName);
+                    System.out.println("New input for device " + d.name + ": " + inputName);
                     List<BoundedParameter> params = allDeviceInputs.get(inputName);
                     if (params == null) {
                         params = new ArrayList<BoundedParameter>();
                         allDeviceInputs.put(inputName, params);
 
                         BoundedParameter proxyParam = new CompoundParameter(inputName);
-                        proxyParam.addListener(new LXParameterListener() {
-                            @Override
-                            public void onParameterChanged(LXParameter proxyParam) {
-                                String inputName = proxyParam.getLabel();
-                                System.err.println(inputName + ": " + proxyParam.getValue());
-                                List<BoundedParameter> deviceInputParams = allDeviceInputs.get(inputName);
-                                if (deviceInputParams == null)
-                                    return;
-
-                                for (BoundedParameter p : deviceInputParams) {
-                                    p.setValue(proxyParam.getValue());
-                                }
-                            }
-                        });
                         inputProxyParams.put(inputName, proxyParam);
                         addParameter(proxyParam);
 
