@@ -45,8 +45,10 @@ void setup() {
       //     lx.engine.osc.receiver(3366).addListener(new EnvelopOscMeterListener());
       //   } catch (SocketException sx) {
       //     throw new RuntimeException(sx);
-      //   } 
+      //   }
       // }
+
+      lx.engine.framesPerSecond.setValue(300);
 
       // Output
       (dispatcher = new Dispatcher(lx)).start();
@@ -68,32 +70,32 @@ void setup() {
         lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
       } catch (SocketException sx) {
         throw new RuntimeException(sx);
-      } 
+      }
 
       // Adaptor for mapping osc messages from Agents/wearables to lx osc engine
       try {
-        lx.engine.osc.receiver(5005).addListener(new AgentOSCListener()); //TODO: PUT CORRECT PORT # IN THERE 
+        lx.engine.osc.receiver(5005).addListener(new AgentOSCListener()); //TODO: PUT CORRECT PORT # IN THERE
       } catch (SocketException sx) {
         throw new RuntimeException(sx);
       }
-        
+
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
         IteratorTestPattern.class
       });
-      lx.registerEffects(new Class[]{ 
+      lx.registerEffects(new Class[]{
         FlashEffect.class,
         BlurEffect.class,
         DesaturationEffect.class
       });
-    
+
       ui.theme.setPrimaryColor(#008ba0);
       ui.theme.setSecondaryColor(#00a08b);
       ui.theme.setAttentionColor(#a00044);
       ui.theme.setFocusColor(#0094aa);
       ui.theme.setControlBorderColor(#292929);
-    } 
-    
+    }
+
     @Override
     protected void onUIReady(SLStudio lx, SLStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
@@ -102,7 +104,7 @@ void setup() {
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
-      
+
       // if (((SLModel)model).cubes.size() > 0)
       //   new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
 
@@ -110,7 +112,7 @@ void setup() {
       //   new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);
       //   new UIEnvelopDecode(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 6);
       // }
-     
+
     }
   };
 
@@ -125,10 +127,10 @@ void setup() {
   //     mappingChannel.fader.setValue(1);
   //     mappingChannel.label.setValue("BUBBLES");
   //     mappingChannel.cueActive.setValue(true);
-      
+
 
   // long setupFinish = System.nanoTime();
-  // println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
+  // println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
 
   // --------- TONAL SETUP ------------
   // size(400,400);
@@ -136,10 +138,10 @@ void setup() {
   // OscProperties myProperties = new OscProperties();
   // // increase the datagram size to 10000 bytes
   // // by default it is set to 1536 bytes
-  // myProperties.setDatagramSize(10000); 
+  // myProperties.setDatagramSize(10000);
   // myProperties.setListeningPort(1331);
-  // oscP5 = new OscP5(this,myProperties); 
-  
+  // oscP5 = new OscP5(this,myProperties);
+
   // --------- END TONAL --------------
 }
 

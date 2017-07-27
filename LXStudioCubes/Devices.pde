@@ -180,7 +180,7 @@ class DeviceController extends LXComponent implements LXLoopTask {
     public void loop(double deltaMs) {
         for (BoundedParameter proxyParam : inputProxyParams.values()) {
             String inputName = proxyParam.getLabel();
-            System.err.println(inputName + ": " + proxyParam.getValue());
+            //System.err.println(inputName + ": " + proxyParam.getValue());
             List<BoundedParameter> deviceInputParams = allDeviceInputs.get(inputName);
             if (deviceInputParams == null)
                 continue;
