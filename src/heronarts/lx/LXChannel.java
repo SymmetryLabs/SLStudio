@@ -817,6 +817,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
             listener.patternDidChange(this, activePattern);
         }
 
+        // Set the focused pattern to the active one
+        this.focusedPattern.setValue(this.activePatternIndex);
+
         super.load(lx, obj);
     }
 

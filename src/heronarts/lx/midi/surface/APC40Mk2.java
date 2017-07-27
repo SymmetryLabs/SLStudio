@@ -148,7 +148,7 @@ public class APC40Mk2 extends LXMidiSurface {
     public static final int LED_MODE_BLINK = 15;
 
     private boolean shiftOn = false;
-    private boolean bankOn = false;
+    private boolean bankOn = true;
 
     private final Map<LXChannel, ChannelListener> channelListeners = new HashMap<LXChannel, ChannelListener>();
 
