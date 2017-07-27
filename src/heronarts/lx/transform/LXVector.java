@@ -254,6 +254,36 @@ public class LXVector {
         return this;
     }
 
+    /**
+     * Calculates and returns the angle (in radians) between two vectors.
+     * @param v1 the x, y, and z components of an LXVector
+     * @param v2 the x, y, and z components of an LXVector
+     */
+    static public float angleBetween(LXVector v1, LXVector v2) {
+
+        // We get NaN if we pass in a zero vector which can cause problems
+        // Zero seems like a reasonable angle between a (0,0,0) vector and something else
+        if (v1.x == 0 && v1.y == 0 && v1.z == 0 ) return 0.0f;
+        if (v2.x == 0 && v2.y == 0 && v2.z == 0 ) return 0.0f;
+
+        double dot = v1.x * v2.x + v1.y * v2.y + v1.z * v2.z;
+        double v1mag = Math.sqrt(v1.x * v1.x + v1.y * v1.y + v1.z * v1.z);
+        double v2mag = Math.sqrt(v2.x * v2.x + v2.y * v2.y + v2.z * v2.z);
+        // This should be a number between -1 and 1, since it's "normalized"
+        double amt = dot / (v1mag * v2mag);
+        // But if it's not due to rounding error, then we need to fix it
+        // http://code.google.com/p/processing/issues/detail?id=340
+        // Otherwise if outside the range, acos() will return NaN
+        // http://www.cppreference.com/wiki/c/math/acos
+        if (amt <= -1) {
+            return (float) Math.PI;
+        } else if (amt >= 1) {
+            // http://code.google.com/p/processing/issues/detail?id=435
+            return 0;
+        }
+        return (float) Math.acos(amt);
+    }
+
     @Override
     public String toString() {
         return "[ " + this.x + ", " + this.y + ", " + this.z + " ]";
