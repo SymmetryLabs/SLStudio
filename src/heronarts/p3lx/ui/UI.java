@@ -333,48 +333,68 @@ public class UI implements LXEngine.Dispatch {
         applet.registerMethod("mouseEvent", this);
         LX.initTimer.log("P3LX: UI: register");
         if (lx != null) {
-            lx.engine.setInputDispatch(this);
-        }
-        lx.engine.mapping.mode.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                midiMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI;
-                modulationSourceMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE;
-                modulationTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_TARGET;
-                triggerTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.TRIGGER_TARGET;
+            lx.addProjectListener(new LX.ProjectListener() {
+                @Override
+                public void projectChanged(File file, Change change) {
+                    switch (change) {
+                    case NEW:
+                        contextualHelpText.setValue("Created new project");
+                        break;
+                    case SAVE:
+                        contextualHelpText.setValue("Saved project file: " + file.getName());
+                        break;
+                    case OPEN:
+                        contextualHelpText.setValue("Opened project file: " + file.getName());
+                        break;
 
-                if (midiMapping) {
-                    contextualHelpText.setValue("Click on a control target to MIDI map, eligible controls are highlighted");
-                } else if (modulationSourceMapping) {
-                    contextualHelpText.setValue("Click on a modulation source, eligible sources are highlighted ");
-                } else if (modulationTargetMapping) {
-                    LXNormalizedParameter sourceParameter = modulationSource.getModulationSource();
-                    if (sourceParameter == null) {
-                        contextualHelpText.setValue("You are somehow mapping a non-existent source parameter, choose a destination");
-                    } else {
-                        contextualHelpText.setValue("Select a modulation destination for " + LXComponent.getCanonicalLabel(sourceParameter) + ", eligible targets are highlighted");
                     }
-                } else if (triggerTargetMapping) {
-                    contextualHelpText.setValue("Select a trigger destination for " + LXComponent.getCanonicalLabel(triggerSource.getTriggerSource()) + ", eligible targets are highlighted");
-                } else {
-                    contextualHelpText.setValue("");
                 }
 
-                root.redraw();
-            }
-        });
-        lx.engine.midi.addMappingListener(new LXMidiEngine.MappingListener() {
+            });
 
-            @Override
-            public void mappingRemoved(LXMidiEngine engine, LXMidiMapping mapping) {
-            }
+            lx.engine.setInputDispatch(this);
 
-            @Override
-            public void mappingAdded(LXMidiEngine engine, LXMidiMapping mapping) {
-                if (midiMapping) {
-                    contextualHelpText.setValue("Successfully mapped MIDI Ch." + (mapping.channel+1) + " " + mapping.getDescription() + " to " + LXComponent.getCanonicalLabel(mapping.parameter));
+            lx.engine.mapping.mode.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    midiMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI;
+                    modulationSourceMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE;
+                    modulationTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_TARGET;
+                    triggerTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.TRIGGER_TARGET;
+
+                    if (midiMapping) {
+                        contextualHelpText.setValue("Click on a control target to MIDI map, eligible controls are highlighted");
+                    } else if (modulationSourceMapping) {
+                        contextualHelpText.setValue("Click on a modulation source, eligible sources are highlighted ");
+                    } else if (modulationTargetMapping) {
+                        LXNormalizedParameter sourceParameter = modulationSource.getModulationSource();
+                        if (sourceParameter == null) {
+                            contextualHelpText.setValue("You are somehow mapping a non-existent source parameter, choose a destination");
+                        } else {
+                            contextualHelpText.setValue("Select a modulation destination for " + LXComponent.getCanonicalLabel(sourceParameter) + ", eligible targets are highlighted");
+                        }
+                    } else if (triggerTargetMapping) {
+                        contextualHelpText.setValue("Select a trigger destination for " + LXComponent.getCanonicalLabel(triggerSource.getTriggerSource()) + ", eligible targets are highlighted");
+                    } else {
+                        contextualHelpText.setValue("");
+                    }
+
+                    root.redraw();
                 }
-            }
-        });
+            });
+            lx.engine.midi.addMappingListener(new LXMidiEngine.MappingListener() {
+
+                @Override
+                public void mappingRemoved(LXMidiEngine engine, LXMidiMapping mapping) {
+                }
+
+                @Override
+                public void mappingAdded(LXMidiEngine engine, LXMidiMapping mapping) {
+                    if (midiMapping) {
+                        contextualHelpText.setValue("Successfully mapped MIDI Ch." + (mapping.channel+1) + " " + mapping.getDescription() + " to " + LXComponent.getCanonicalLabel(mapping.parameter));
+                    }
+                }
+            });
+        }
 
         UI.instance = this;
     }
@@ -818,7 +838,7 @@ public class UI implements LXEngine.Dispatch {
         if (file != null) {
             this.lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.loadProject(file);
+                    lx.openProject(file);
                 }
             });
         }

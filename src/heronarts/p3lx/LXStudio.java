@@ -278,7 +278,7 @@ public class LXStudio extends P3LX {
         }
     }
 
-    private static final String DEFAULT_FILE_NAME = "default.lxp";
+    private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
 
     public final UI ui;
@@ -293,12 +293,30 @@ public class LXStudio extends P3LX {
         onUIReady(this, this.ui);
         registerExternal(KEY_UI, this.ui);
 
-        File file = this.applet.saveFile(DEFAULT_FILE_NAME);
-        if (file.exists()) {
-            loadProject(file);
+        try {
+            File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
+            if (projectFile.exists()) {
+                String[] lines = this.applet.loadStrings(PROJECT_FILE_NAME);
+                if (lines != null && lines.length > 0) {
+                    File file = this.applet.saveFile(lines[0]);
+                    if (file.exists()) {
+                        openProject(file);
+                    }
+                }
+            }
+        } catch (Exception x) {
+            // ignored
         }
 
         this.engine.setThreaded(multiThreaded);
+    }
+
+    @Override
+    protected void setProject(File file, ProjectListener.Change change) {
+        super.setProject(file,  change);
+        if (file != null) {
+            this.applet.saveStrings(PROJECT_FILE_NAME, new String[] { file.getName() });
+        }
     }
 
     @Override

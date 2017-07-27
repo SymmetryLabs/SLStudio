@@ -29,6 +29,7 @@ package heronarts.p3lx.ui.studio.project;
 import java.io.File;
 
 import heronarts.lx.LX;
+import heronarts.lx.LX.ProjectListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UILabel;
@@ -42,30 +43,27 @@ public class UIProjectManager extends UICollapsibleSection {
     private File file;
     private final UIButton saveButton;
     private final UIButton saveAsButton;
-    private final UIButton loadButton;
+    private final UIButton openButton;
 
     public static final float HEIGHT = 118;
+    private static final String DEFAULT_PROJECT_NAME = "project.lxp";
 
     public UIProjectManager(final UI ui, final LX lx, float x, float y, float w) {
         super(ui, x, y, w, HEIGHT);
         this.lx = lx;
         this.file = lx.getProject();
-        if (this.file == null) {
-            this.file = ui.applet.saveFile("default.lxp");
-        }
-
         setTitle("PROJECT");
 
         this.fileLabel = new UILabel(0, 0, getContentWidth(), 16);
         this.fileLabel
-        .setLabel(this.file.getName())
+        .setLabel(file != null ? file.getName() : "<New Project>")
         .setBackgroundColor(UI.BLACK)
         .setBorderRounding(4)
         .setTextAlignment(PConstants.CENTER, PConstants.CENTER)
         .addToContainer(this);
 
         lx.addProjectListener(new LX.ProjectListener() {
-            public void projectChanged(File file) {
+            public void projectChanged(File file, ProjectListener.Change change) {
                 UIProjectManager.this.file = file;
                 fileLabel.setLabel(file != null ? file.getName() : "<New Project>");
             }
@@ -78,7 +76,7 @@ public class UIProjectManager extends UICollapsibleSection {
                     if (file != null) {
                         lx.saveProject(file);
                     } else {
-                        ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile("new-project.lxp"), UIProjectManager.this);
+                        ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile(DEFAULT_PROJECT_NAME), UIProjectManager.this);
                     }
                 }
             }
@@ -91,7 +89,7 @@ public class UIProjectManager extends UICollapsibleSection {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile("default.lxp"), UIProjectManager.this);
+                    ui.applet.selectOutput("Select a file to save to:", "onSave", ui.applet.saveFile(file != null ? file.getName() : DEFAULT_PROJECT_NAME), UIProjectManager.this);
                 }
             }
         }
@@ -99,7 +97,7 @@ public class UIProjectManager extends UICollapsibleSection {
         .setMomentary(true)
         .addToContainer(this);
 
-        this.loadButton = (UIButton) new UIButton(0, 60, getContentWidth(), 16) {
+        this.openButton = (UIButton) new UIButton(0, 60, getContentWidth(), 16) {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
@@ -115,7 +113,7 @@ public class UIProjectManager extends UICollapsibleSection {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    ui.applet.selectInput("Select a file to open:", "onLoad", ui.applet.saveFile("default.lxp"), UIProjectManager.this);
+                    ui.applet.selectInput("Select a file to open:", "onOpen", ui.applet.saveFile("default.lxp"), UIProjectManager.this);
                 }
             }
         }
@@ -136,12 +134,12 @@ public class UIProjectManager extends UICollapsibleSection {
         }
     }
 
-    public void onLoad(final File loadFile) {
-        this.loadButton.setActive(false);
-        if (loadFile != null) {
+    public void onOpen(final File openFile) {
+        this.openButton.setActive(false);
+        if (openFile != null) {
             lx.engine.addTask(new Runnable() {
                 public void run() {
-                    lx.loadProject(loadFile);
+                    lx.openProject(openFile);
                 }
             });
         }
