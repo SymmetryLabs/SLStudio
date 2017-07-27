@@ -105,7 +105,14 @@ public class LX {
     private final List<Listener> listeners = new ArrayList<Listener>();
 
     public interface ProjectListener {
-        public void projectChanged(File file);
+
+        enum Change {
+            NEW,
+            SAVE,
+            OPEN
+        };
+
+        public void projectChanged(File file, Change change);
     }
 
     private final List<ProjectListener> projectListeners = new ArrayList<ProjectListener>();
@@ -641,6 +648,13 @@ public class LX {
 
     private File file;
 
+    protected void setProject(File file, ProjectListener.Change change) {
+        this.file = file;
+        for (ProjectListener projectListener : this.projectListeners) {
+            projectListener.projectChanged(file, change);
+        }
+    }
+
     public File getProject() {
         return this.file;
     }
@@ -666,21 +680,15 @@ public class LX {
             new GsonBuilder().setPrettyPrinting().create().toJson(obj, writer);
             writer.close();
             System.out.println("Project saved successfully to " + file.toString());
-            this.file = file;
-            for (ProjectListener projectListener : this.projectListeners) {
-                projectListener.projectChanged(file);
-            }
+            setProject(file, ProjectListener.Change.SAVE);
         } catch (IOException iox) {
             System.err.println(iox.getLocalizedMessage());
         }
     }
 
     public void newProject() {
-        this.file = null;
         this.engine.load(this, new JsonObject());
-        for (ProjectListener projectListener : this.projectListeners) {
-            projectListener.projectChanged(file);
-        }
+        setProject(null, ProjectListener.Change.NEW);
     }
 
     public LX registerExternal(String key, LXSerializable serializable) {
@@ -711,7 +719,7 @@ public class LX {
         return max;
     }
 
-    public void loadProject(File file) {
+    public void openProject(File file) {
         try {
             FileReader fr = null;
             try {
@@ -727,11 +735,8 @@ public class LX {
                         }
                     }
                 }
+                setProject(file, ProjectListener.Change.OPEN);
                 System.out.println("Project loaded successfully from " + file.toString());
-                this.file = file;
-                for (ProjectListener projectListener : this.projectListeners) {
-                    projectListener.projectChanged(file);
-                }
             } catch (IOException iox) {
                 System.err.println("Could not load project file: " + iox.getLocalizedMessage());
             } finally {

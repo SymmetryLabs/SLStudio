@@ -62,7 +62,7 @@ public class LXHeadless {
 
             // On the CLI you specify an argument with an .lxp file
             if (args.length > 0) {
-                lx.loadProject(new File(args[0]));
+                lx.openProject(new File(args[0]));
             }
 
             lx.engine.start();
