@@ -336,6 +336,11 @@ public class APC40Mk2 extends LXMidiSurface {
         }
 
         public void onParameterChanged(LXParameter p) {
+            int index = this.channel.getIndex();
+            if (index >= CLIP_LAUNCH_COLUMNS) {
+                return;
+            }
+
             if (p == this.channel.cueActive) {
                 sendNoteOn(this.channel.getIndex(), CHANNEL_SOLO, this.channel.cueActive.isOn() ? LED_ON : LED_OFF);
             } else if (p == this.channel.enabled) {
@@ -487,7 +492,7 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     private void sendChannelPatterns(int index, LXChannel channel) {
-        if (!this.bankOn) {
+        if (index >= CLIP_LAUNCH_COLUMNS || !this.bankOn) {
             return;
         }
         int numPatterns = 0, activeIndex = -1, nextIndex = -1;
@@ -513,7 +518,7 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     private void sendChannelClips(int index, LXChannel channel) {
-        if (this.bankOn) {
+        if (index >= CLIP_LAUNCH_COLUMNS || this.bankOn) {
             return;
         }
         for (int i = 0; i < CLIP_LAUNCH_ROWS; ++i) {
@@ -601,10 +606,8 @@ public class APC40Mk2 extends LXMidiSurface {
     }
 
     private void registerChannel(LXChannel channel) {
-        if (channel.getIndex() < CLIP_LAUNCH_COLUMNS) {
-            ChannelListener channelListener = new ChannelListener(channel);
-            this.channelListeners.put(channel, channelListener);
-        }
+        ChannelListener channelListener = new ChannelListener(channel);
+        this.channelListeners.put(channel, channelListener);
     }
 
     private void unregisterChannel(LXChannel channel) {
