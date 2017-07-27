@@ -49,8 +49,8 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
     private final AudioFormat format;
     private AudioInputStream inputStream;
 
-    private boolean stopped = false;
-    private boolean closed = false;
+    // private boolean stopped = false;
+    // private boolean closed = false;
 
     public final LXAudioBuffer left = new LXAudioBuffer(SAMPLE_BUFFER_SIZE);
     public final LXAudioBuffer right = new LXAudioBuffer(SAMPLE_BUFFER_SIZE);
@@ -147,8 +147,8 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
                 this.line.addLineListener(this);
                 this.line.open(this.format);
                 this.line.start();
-                this.stopped = false;
-                this.closed = false;
+                // this.stopped = false;
+                // this.closed = false;
                 this.outputThread = new OutputThread();
                 this.outputThread.start();
             } catch (Exception x) {
@@ -167,10 +167,10 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
             System.out.println("LXAudioOuput START");
         } else if (type == LineEvent.Type.STOP) {
             System.out.println("LXAudioOuput STOP");
-            this.stopped = true;
+            // this.stopped = true;
         } else if (type == LineEvent.Type.CLOSE) {
             System.out.println("LXAudioOuput CLOSE");
-            this.closed = true;
+            // this.closed = true;
         }
     }
 
