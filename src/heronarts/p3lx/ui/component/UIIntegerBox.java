@@ -97,6 +97,9 @@ public class UIIntegerBox extends UINumberBox implements UIControlTarget {
 
     @Override
     public String getValueString() {
+        if (this.parameter != null) {
+            return this.parameter.getFormatter().format(this.value);
+        }
         return Integer.toString(this.value);
     }
 

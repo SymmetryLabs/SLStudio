@@ -69,9 +69,11 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
     protected abstract void saveEditBuffer();
 
     public UIInputBox setEnabled(boolean enabled) {
-        this.enabled = enabled;
-        if (this.editing && !this.enabled) {
-            this.editing = false;
+        if (this.enabled != enabled) {
+            this.enabled = enabled;
+            if (this.editing && !this.enabled) {
+                this.editing = false;
+            }
             redraw();
         }
         return this;
@@ -107,6 +109,11 @@ public abstract class UIInputBox extends UI2dComponent implements UIFocus {
             pg.noStroke();
             pg.rect(0, 0, this.width, this.height);
         } else {
+            if (!this.enabled) {
+                pg.fill(ui.theme.getControlDisabledColor());
+                pg.noStroke();
+                pg.rect(1, 1, this.width-2, this.height-2);
+            }
             if (this.hasFill) {
                 int fillWidth = (int) (getFillWidthNormalized() * (this.width-5));
                 if (fillWidth > 0) {

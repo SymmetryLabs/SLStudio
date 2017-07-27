@@ -89,6 +89,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
     public UIButton setEnabled(boolean enabled) {
         if (this.enabled != enabled) {
             this.enabled = enabled;
+            redraw();
         }
         return this;
     }
@@ -154,6 +155,12 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
 
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
+        if (!this.enabled) {
+            pg.fill(ui.theme.getControlDisabledColor());
+            pg.noStroke();
+            pg.rect(1, 1, this.width-2, this.height-2);
+        }
+
         PImage icon = this.active ? this.activeIcon : this.inactiveIcon;
         if (icon != null) {
             if (!this.active) {
@@ -197,25 +204,23 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
 
     @Override
     protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (this.enabled) {
-            if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            if (this.enabled) {
                 this.exactToggleTime = keyEvent.getMillis();
                 setActive(this.isMomentary ? true : !this.active);
-                consumeKeyEvent();
             }
+            consumeKeyEvent();
         }
     }
 
     @Override
     protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
-        if (this.enabled) {
-            if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
-                if (this.isMomentary) {
-                    this.exactToggleTime = keyEvent.getMillis();
-                    setActive(false);
-                    consumeKeyEvent();
-                }
+        if ((keyCode == java.awt.event.KeyEvent.VK_SPACE) || (keyCode == java.awt.event.KeyEvent.VK_ENTER)) {
+            if (this.enabled && this.isMomentary) {
+                this.exactToggleTime = keyEvent.getMillis();
+                setActive(false);
             }
+            consumeKeyEvent();
         }
     }
 
