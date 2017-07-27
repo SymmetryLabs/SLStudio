@@ -1,7 +1,7 @@
 class AgentOSCListener implements LXOscListener {
     public void oscMessage(OscMessage msg) {
         String[] splitMsg = msg.getAddressPattern().toString().split("/");
-        //System.out.println(msg);
+        // System.out.println(msg);
 
         if ("nebula".equals(splitMsg[1])) {
             String deviceName = splitMsg[2];
@@ -37,6 +37,7 @@ class AgentOSCListener implements LXOscListener {
     public void setDeviceInputs(String deviceName, InetAddress deviceAddress, List<String> inputs) {
         Device device = deviceController.getOrCreateDevice(deviceName, deviceAddress);
         if (device == null) {
+            System.err.println("Device is null: " + deviceName);
             return;
         }
 
@@ -119,6 +120,7 @@ class Device extends LXComponent {
         if (transmitter == null)
             return;
 
+        System.out.println("Sending list-inputs to: " + name);
         OscMessage m = new OscMessage("/list-inputs");
         try {
             transmitter.send(m);
@@ -155,38 +157,40 @@ public interface DeviceParameterWatcher {
     public void onParameterAdded(BoundedParameter p);
 }
 
+public interface DeviceWatcher {
+    public void onDeviceAdded(Device d);
+    public void onDeviceRemoved(Device d);
+}
+
 class DeviceController extends LXComponent {
-    public final ListenableList<Device> devices = new ListenableList<Device>();
 
     private Map<String, Device> deviceByName = new HashMap<String, Device>();
     private Map<String, List<BoundedParameter>> allDeviceInputs = new HashMap<String, List<BoundedParameter>>();
     private Map<String, BoundedParameter> inputProxyParams = new HashMap<String, BoundedParameter>();
     private List<DeviceParameterWatcher> inputWatchers = new ArrayList<DeviceParameterWatcher>();
+    private List<DeviceWatcher> deviceWatchers = new ArrayList<DeviceWatcher>();
 
     DeviceController(LX lx) {
         super(lx);
-
-        devices.addListener(new ListListener<Device>() {
-            public void itemAdded(final int index, final Device c) {
-                deviceByName.put(c.name, c);
-                c.queryInputs();
-            }
-            public void itemRemoved(final int index, final Device c) {
-                deviceByName.remove(c.name);
-            }
-        });
     }
+
     public Device getDeviceByName(String name) {
         return deviceByName.get(name);
     }
+
     public Device getOrCreateDevice(String name, InetAddress addr) {
         Device device = deviceByName.get(name);
         if (device == null) {
+            System.out.println("New device: " + name + " (" + addr.getHostAddress() + ")");
             device = new Device(lx, name, addr);
+            deviceByName.put(device.name, device);
+
+            final Device d = device;
             device.addInputWatcher(new DeviceParameterWatcher() {
                 @Override
                 public void onParameterAdded(BoundedParameter p) {
                     String inputName = p.getLabel();
+                    System.out.println("FUCK" + d.name + ": " + inputName);
                     List<BoundedParameter> params = allDeviceInputs.get(inputName);
                     if (params == null) {
                         params = new ArrayList<BoundedParameter>();
@@ -217,7 +221,11 @@ class DeviceController extends LXComponent {
                     params.add(p);
                 }
             });
-            devices.add(device);
+            device.queryInputs();
+
+            for (DeviceWatcher w : deviceWatchers) {
+                w.onDeviceAdded(device);
+            }
         }
         return device;
     }
@@ -230,24 +238,16 @@ class DeviceController extends LXComponent {
         return inputProxyParams.get(inputName);
     }
 
-    public ListenableList<Device> getDevices() {
-        return devices;
-    }
-
-    public void removeDevice(Device device) {
-        String nameOfDeviceToDelete = device.name;
-        Iterator it = devices.iterator();
-        while (it.hasNext()) {
-            String currName = ((Device) it.next()).name;
-            if (currName.equals(nameOfDeviceToDelete)) {
-                // deviceByName.remove(nameOfDeviceToDelete);
-                it.remove();
-            }
-        }
-    }
-
     public void addInputWatcher(DeviceParameterWatcher w) {
         inputWatchers.add(w);
+    }
+
+    public Collection<Device> getDevices() {
+        return Collections.unmodifiableCollection(deviceByName.values());
+    }
+
+    public void addDeviceWatcher(DeviceWatcher w) {
+        deviceWatchers.add(w);
     }
 }
 
@@ -283,7 +283,7 @@ class DeviceList extends UIItemList.ScrollList {
         }
         if (keyCode == 68) {
             Device selected = ((DeviceListItem) getFocusedItem()).device;
-            deviceController.removeDevice(selected);
+            // deviceController.removeDevice(selected);
         } else {
             super.onKeyPressed(keyEvent, keyChar, keyCode);
         }
@@ -298,35 +298,24 @@ class DeviceSection extends UICollapsibleSection {
 
         int h = 78;
 
-        final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         final DeviceList outputList = new DeviceList(ui, 0, 8, w-8, h, sc);
 
-        for (Device device : deviceController.devices) {
-            items.add(new DeviceListItem(device));
+        for (Device d : deviceController.getDevices()) {
+            outputList.addItem(new DeviceListItem(d));
         }
 
-
-        outputList.setItems(items).setSingleClickActivate(true);
+        outputList.setSingleClickActivate(true);
         outputList.addToContainer(this);
 
-        final Runnable update = new Runnable() {
-            public void run() {
-                final List<UIItemList.Item> localItems = new ArrayList<UIItemList.Item>();
-                int i = 0;
-                for (Device device : deviceController.devices) {
-                    localItems.add(new DeviceListItem(device));
-                }
-                outputList.setItems(localItems);
-                redraw();
+        deviceController.addDeviceWatcher(new DeviceWatcher() {
+            @Override
+            public void onDeviceAdded(Device d) {
+                outputList.addItem(new DeviceListItem(d));
             }
-        };
 
-        deviceController.devices.addListener(new ListListener<Device>() {
-            public void itemAdded(final int index, final Device c) {
-                dispatcher.dispatchUi(update);
-            }
-            public void itemRemoved(final int index, final Device c) {
-                dispatcher.dispatchUi(update);
+            @Override
+            public void onDeviceRemoved(Device d) {
+
             }
         });
     }
