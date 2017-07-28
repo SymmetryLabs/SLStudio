@@ -26,6 +26,9 @@
 
 package heronarts.p3lx.ui.studio;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
@@ -73,6 +76,9 @@ public class UIRightPane extends UIPane {
     private int beatCount = 1;
     private int macroCount = 1;
 
+    private final Map<Class<? extends LXModulator>, Class<? extends UIModulator>> modulatorUIRegistry =
+        new HashMap<Class<? extends LXModulator>, Class<? extends UIModulator>>();
+
     public UIRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[] { "MODULATION", "OSC + MIDI" }, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
@@ -80,15 +86,24 @@ public class UIRightPane extends UIPane {
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
 
+        registerModulatorUI(VariableLFO.class, UIVariableLFO.class);
+        registerModulatorUI(MultiStageEnvelope.class, UIMultiStageEnvelope.class);
+        registerModulatorUI(BandGate.class, UIBandGate.class);
+        registerModulatorUI(MacroKnobs.class, UIMacroKnobs.class);
+
         buildMidiUI();
         buildModulationUI();
     }
 
+    public void registerModulatorUI(Class<? extends LXModulator> modulatorClass, Class<? extends UIModulator> uiClass) {
+        this.modulatorUIRegistry.put(modulatorClass, uiClass);
+    }
+
     private void buildMidiUI() {
-        new UIOscManager(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
-        new UIMidiSurfaces(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
-        new UIMidiInputs(ui, lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
-        new UIMidiMappings(ui, lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIOscManager(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIMidiSurfaces(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIMidiInputs(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
+        new UIMidiMappings(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
     }
 
     private void buildModulationUI() {
@@ -239,16 +254,20 @@ public class UIRightPane extends UIPane {
     }
 
     private void addModulator(LXModulator modulator) {
-        if (modulator instanceof VariableLFO) {
-            new UIVariableLFO(this.ui, this.lx, (VariableLFO) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-        } else if (modulator instanceof MultiStageEnvelope) {
-            new UIMultiStageEnvelope(this.ui, this.lx, (MultiStageEnvelope) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-        } else if (modulator instanceof BandGate) {
-            new UIBandGate(this.ui, this.lx, (BandGate) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-        } else if (modulator instanceof MacroKnobs) {
-            new UIMacroKnobs(this.ui, this.lx, (MacroKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
+        Class<? extends LXModulator> modulatorClass = modulator.getClass();
+        Class<? extends UIModulator> uiClass = this.modulatorUIRegistry.get(modulatorClass);
+        if (uiClass == null) {
+            System.err.println("No UI class registered for modulator type: " + modulatorClass.getName());
         } else {
-            System.err.println("No UI available for modulator type: " + modulator.getClass().getName());
+            try {
+                uiClass
+                    .getConstructor(UI.class, LX.class, modulatorClass, Float.TYPE, Float.TYPE, Float.TYPE)
+                    .newInstance(this.ui, this.lx, modulatorClass.cast(modulator), 0, 0, this.modulation.getContentWidth())
+                    .addToContainer(this.modulation);
+            } catch (Exception x) {
+                System.err.println("Could not instantiate modulator UI for " + modulatorClass.getName() + ": " + x.getLocalizedMessage());
+                x.printStackTrace();
+            }
         }
     }
 
