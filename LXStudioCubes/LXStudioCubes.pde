@@ -14,6 +14,7 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public DeviceController deviceController;
+public OscServer deviceOscServer;
 public MappingMode mappingMode = null;
 
 // public boolean envelopOn = false;
@@ -48,7 +49,7 @@ void setup() {
       //   }
       // }
 
-      lx.engine.framesPerSecond.setValue(300);
+      lx.engine.framesPerSecond.setValue(120);
 
       // Output
       (dispatcher = new Dispatcher(lx)).start();
@@ -74,7 +75,13 @@ void setup() {
 
       // Adaptor for mapping osc messages from Agents/wearables to lx osc engine
       try {
-        lx.engine.osc.receiver(5005).addListener(new AgentOSCListener()); //TODO: PUT CORRECT PORT # IN THERE
+        deviceOscServer = new OscServer(5005);
+        deviceOscServer.addConnectionWatcher(new OscServer.ConnectionWatcher() {
+            public void onConnection(OscServer.Connection c) {
+                c.addListener(new DeviceOSCListener(c));
+            }
+        });
+        deviceOscServer.start();
       } catch (SocketException sx) {
         throw new RuntimeException(sx);
       }
