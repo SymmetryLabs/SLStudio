@@ -183,6 +183,7 @@ public class OscServer {
                                 catch (InterruptedException e) { /* pass */ }
                         }
 
+                        log.info("Reconnecting to " + address.getHostAddress() + ":" + port);
                         try {
                                 socket = new Socket(address, port);
 
@@ -201,6 +202,10 @@ public class OscServer {
                         return false;
                 }
 
+                private final static byte[] BUNDLE_HEADER = {
+                        '#', 'b', 'u', 'n', 'd', 'l', 'e', 0
+                };
+
                 public void send(OscPacket packet) throws IOException {
                         if (socket.isClosed() && autoReconnect) {
                                 reconnect();
@@ -211,7 +216,26 @@ public class OscServer {
 
                         synchronized (outputBuffer) {
                                 outputBuffer.position(4);
-                                packet.serialize(outputBuffer);
+
+                                try {
+                                        if (packet instanceof OscBundle) {
+                                                outputBuffer.put(BUNDLE_HEADER);
+                                                outputBuffer.putLong(((OscBundle)packet).getTimeTag());
+                                                for (OscPacket p : ((OscBundle)packet).getElements()) {
+                                                        int sizePosition = outputBuffer.position();
+                                                        outputBuffer.position(sizePosition + 4);
+                                                        p.serialize(outputBuffer);
+                                                        outputBuffer.putInt(sizePosition, outputBuffer.position() - (sizePosition + 4));
+                                                }
+                                        }
+                                        else {
+                                                packet.serialize(outputBuffer);
+                                        }
+                                }
+                                catch (Exception e) {
+                                        log.error("Error serializing OSC message", e);
+                                }
+
                                 int packetSize = outputBuffer.position() - 4;
                                 outputBuffer.putInt(0, packetSize);
                                 //log.info("Sending message with size " + packetSize + " in buffer with size " + outputBuffer.position());
@@ -279,8 +303,32 @@ public class OscServer {
                                         }
                                         else {
                                                 try {
-                                                        OscPacket p = OscPacket.parse(socket.getInetAddress(), inputBuffer.array(),
-                                                                        inputBuffer.arrayOffset() + 4, packetSize + 4);
+                                                        // warning: the "length" parameter is misleading,
+                                                        //   it doesn't include the offset
+                                                        OscPacket p = OscPacket.parse(socket.getInetAddress(),
+                                                                        inputBuffer.array(),
+                                                                        inputBuffer.arrayOffset() + 4,
+                                                                        inputBuffer.arrayOffset() + packetSize + 4);
+
+                                                        /*
+                                                        log.warn("OscPacket.parse: "
+                                                                        + (inputBuffer.arrayOffset() + 4)
+                                                                        + ", " + (inputBuffer.arrayOffset() + packetSize + 4)
+                                                                        + ", " + (char)(inputBuffer.array()[inputBuffer.arrayOffset() + 4] & 0xFF));
+
+                                                        OscPacket p;
+                                                        byte[] data = inputBuffer.array();
+                                                        int offset = inputBuffer.arrayOffset() + 4;
+                                                        int len = inputBuffer.arrayOffset() + packetSize + 4;
+
+                                                        if (data[offset] == '#') {
+                                                                p = OscBundle.parse(socket.getInetAddress(), data, offset, len);
+                                                        } else if (data[offset] == '/') {
+                                                                p = OscMessage.parse(socket.getInetAddress(), data, offset, len);
+                                                        } else {
+                                                                throw new OscMalformedDataException("Osc Packet does not start with # or /", data, offset, len);
+                                                        }
+                                                        */
 
                                                         List<OscMessage> messages = getPacketMessages(p);
                                                         for (LXOscListener listener : listeners) {
@@ -292,13 +340,11 @@ public class OscServer {
                                                 catch (OscException e) {
                                                         log.error("Caught exception while parsing OSC packet", e);
 
-                                                        /*
-                                                        System.out.print("{");
+                                                        System.err.print("{");
                                                         for (int i = 0; i < packetSize + 4; ++i) {
-                                                                System.out.format("%02X ", inputBuffer.get(i));
+                                                                System.err.format("%02X ", inputBuffer.get(i));
                                                         }
-                                                        System.out.println("}");
-                                                        */
+                                                        System.err.println("}");
                                                 }
                                         }
 
