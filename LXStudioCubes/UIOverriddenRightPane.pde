@@ -1,4 +1,5 @@
 import processing.core.PGraphics;
+import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 
 public class UIOverriddenRightPane extends UIPane {
 
@@ -49,7 +50,7 @@ public class UIOverriddenRightPane extends UIPane {
       }
     }
     .setIcon(ui.theme.iconMap)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new parameter mapping to the modulation engine")
     .addToContainer(wearables);
@@ -110,7 +111,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("LFO")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new LFO to the modulation engine")
     .addToContainer(bar);
@@ -127,7 +128,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("Env")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new envelope to the modulation engine")
     .addToContainer(bar);
@@ -144,7 +145,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("Beat")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new Beat detector to the modulation engine")
     .addToContainer(bar);
@@ -161,7 +162,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("Macro")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new Beat detector to the modulation engine")
     .addToContainer(bar);
@@ -178,7 +179,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("Audio")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Map audio analyzation properties")
     .addToContainer(bar);
@@ -195,7 +196,7 @@ public class UIOverriddenRightPane extends UIPane {
       }
     }
     .setIcon(ui.theme.iconMap)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new parameter mapping to the modulation engine")
     .addToContainer(bar);

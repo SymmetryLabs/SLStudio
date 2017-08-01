@@ -240,7 +240,7 @@ public class SLStudio extends P3LX {
 
     File file = this.applet.saveFile(DEFAULT_FILE_NAME);
     if (file.exists()) {
-      loadProject(file);
+      openProject(file);
     }
 
     this.engine.setThreaded(multiThreaded);

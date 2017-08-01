@@ -202,10 +202,6 @@ public class OscServer {
                         return false;
                 }
 
-                private final static byte[] BUNDLE_HEADER = {
-                        '#', 'b', 'u', 'n', 'd', 'l', 'e', 0
-                };
-
                 public void send(OscPacket packet) throws IOException {
                         if (socket.isClosed() && autoReconnect) {
                                 reconnect();
@@ -218,19 +214,7 @@ public class OscServer {
                                 outputBuffer.position(4);
 
                                 try {
-                                        if (packet instanceof OscBundle) {
-                                                outputBuffer.put(BUNDLE_HEADER);
-                                                outputBuffer.putLong(((OscBundle)packet).getTimeTag());
-                                                for (OscPacket p : ((OscBundle)packet).getElements()) {
-                                                        int sizePosition = outputBuffer.position();
-                                                        outputBuffer.position(sizePosition + 4);
-                                                        p.serialize(outputBuffer);
-                                                        outputBuffer.putInt(sizePosition, outputBuffer.position() - (sizePosition + 4));
-                                                }
-                                        }
-                                        else {
-                                                packet.serialize(outputBuffer);
-                                        }
+                                        packet.serialize(outputBuffer);
                                 }
                                 catch (Exception e) {
                                         log.error("Error serializing OSC message", e);
