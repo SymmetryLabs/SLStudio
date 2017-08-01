@@ -25,6 +25,8 @@ import heronarts.lx.parameter.LXParameter;
 
 public abstract class LXRunnableComponent extends LXComponent implements LXLoopTask {
 
+    protected double runMs = 0;
+
     /**
      * Whether this modulator is currently running.
      */
@@ -154,6 +156,7 @@ public abstract class LXRunnableComponent extends LXComponent implements LXLoopT
     @Override
     public void loop(double deltaMs) {
         if (this.running.isOn()) {
+            this.runMs += deltaMs;
             run(deltaMs);
         }
     }
