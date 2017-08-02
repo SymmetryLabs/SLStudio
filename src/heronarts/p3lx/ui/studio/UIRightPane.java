@@ -26,7 +26,9 @@
 
 package heronarts.p3lx.ui.studio;
 
+import java.util.Deque;
 import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.Map;
 
 import heronarts.lx.LX;
@@ -76,8 +78,10 @@ public class UIRightPane extends UIPane {
     private int beatCount = 1;
     private int macroCount = 1;
 
-    private final Map<Class<? extends LXModulator>, Class<? extends UIModulator>> modulatorUIRegistry =
-        new HashMap<Class<? extends LXModulator>, Class<? extends UIModulator>>();
+    private final Map<Class<? extends LXModulator>, UIModulator.Factory> modulatorUIRegistry =
+        new HashMap<Class<? extends LXModulator>, UIModulator.Factory>();
+
+    private final Deque<Class<? extends LXModulator>> modulatorClasses = new LinkedList<Class<? extends LXModulator>>();
 
     public UIRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[] { "MODULATION", "OSC + MIDI" }, ui.getWidth() - WIDTH, WIDTH);
@@ -96,7 +100,14 @@ public class UIRightPane extends UIPane {
     }
 
     public void registerModulatorUI(Class<? extends LXModulator> modulatorClass, Class<? extends UIModulator> uiClass) {
-        this.modulatorUIRegistry.put(modulatorClass, uiClass);
+        registerModulatorUI(modulatorClass, new UIModulator.DefaultFactory(modulatorClass, uiClass));
+    }
+
+    public void registerModulatorUI(Class<? extends LXModulator> modulatorClass, UIModulator.Factory uiFactory) {
+        this.modulatorUIRegistry.put(modulatorClass, uiFactory);
+        if (!this.modulatorClasses.contains(modulatorClasses)) {
+            this.modulatorClasses.addFirst(modulatorClass);
+        }
     }
 
     private void buildMidiUI() {
@@ -255,19 +266,20 @@ public class UIRightPane extends UIPane {
 
     private void addModulator(LXModulator modulator) {
         Class<? extends LXModulator> modulatorClass = modulator.getClass();
-        Class<? extends UIModulator> uiClass = this.modulatorUIRegistry.get(modulatorClass);
-        if (uiClass == null) {
+        UIModulator.Factory uiFactory = this.modulatorUIRegistry.get(modulatorClass);
+        if (uiFactory == null) {
+            // If direct hash lookup fails, fall back to instance checks
+            for (Class<? extends LXModulator> clazz : this.modulatorClasses) {
+                if (clazz.isInstance(modulator)) {
+                    uiFactory = this.modulatorUIRegistry.get(clazz);
+                }
+            }
+        }
+
+        if (uiFactory == null) {
             System.err.println("No UI class registered for modulator type: " + modulatorClass.getName());
         } else {
-            try {
-                uiClass
-                    .getConstructor(UI.class, LX.class, modulatorClass, Float.TYPE, Float.TYPE, Float.TYPE)
-                    .newInstance(this.ui, this.lx, modulatorClass.cast(modulator), 0, 0, this.modulation.getContentWidth())
-                    .addToContainer(this.modulation);
-            } catch (Exception x) {
-                System.err.println("Could not instantiate modulator UI for " + modulatorClass.getName() + ": " + x.getLocalizedMessage());
-                x.printStackTrace();
-            }
+            uiFactory.buildUI(this.ui, this.lx, modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation);
         }
     }
 

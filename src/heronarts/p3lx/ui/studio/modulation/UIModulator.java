@@ -62,6 +62,34 @@ import processing.event.MouseEvent;
 
 public abstract class UIModulator extends UI2dContainer implements UIMouseFocus, UIKeyFocus, UITriggerTarget {
 
+    public interface Factory {
+        public UIModulator buildUI(UI ui, LX lx, LXModulator modulator, float x, float y, float width);
+    }
+
+    public static class DefaultFactory implements Factory {
+
+        private final Class<? extends LXModulator> modulatorClass;
+        private final Class<? extends UIModulator> uiClass;
+
+        public DefaultFactory(Class<? extends LXModulator> modulatorClass, Class<? extends UIModulator> uiClass) {
+            this.modulatorClass = modulatorClass;
+            this.uiClass = uiClass;
+        }
+
+        public UIModulator buildUI(UI ui, LX lx, LXModulator modulator, float x, float y, float width) {
+            try {
+                return
+                    this.uiClass
+                    .getConstructor(UI.class, LX.class, this.modulatorClass, Float.TYPE, Float.TYPE, Float.TYPE)
+                    .newInstance(ui, lx, this.modulatorClass.cast(modulator), 0, 0, width);
+            } catch (Exception ex) {
+                System.err.println("Could not instantiate modulator UI for " + this.modulatorClass.getName() + ": " + ex.getLocalizedMessage());
+                ex.printStackTrace();
+                throw new RuntimeException(ex);
+            }
+        }
+    }
+
     protected static final int PADDING = 4;
     private static final int MODULATION_SPACING = 2;
     protected static final int TITLE_X = 18;
