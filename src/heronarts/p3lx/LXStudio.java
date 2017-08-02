@@ -278,6 +278,7 @@ public class LXStudio extends P3LX {
         }
     }
 
+    private static final String DEFAULT_PROJECT_FILE = "default.lxp";
     private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
 
@@ -302,6 +303,11 @@ public class LXStudio extends P3LX {
                     if (file.exists()) {
                         openProject(file);
                     }
+                }
+            } else {
+                File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
+                if (defaultProject.exists()) {
+                    openProject(defaultProject);
                 }
             }
         } catch (Exception x) {
