@@ -104,10 +104,10 @@ public class UIRightPane extends UIPane {
     }
 
     public void registerModulatorUI(Class<? extends LXModulator> modulatorClass, UIModulator.Factory uiFactory) {
-        this.modulatorUIRegistry.put(modulatorClass, uiFactory);
-        if (!this.modulatorClasses.contains(modulatorClasses)) {
+        if (!this.modulatorUIRegistry.containsKey(modulatorClass)) {
             this.modulatorClasses.addFirst(modulatorClass);
         }
+        this.modulatorUIRegistry.put(modulatorClass, uiFactory);
     }
 
     private void buildMidiUI() {
