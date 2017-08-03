@@ -34,42 +34,54 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import heronarts.lx.LX;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
 
 public class LXAudioOutput extends LXAudioComponent implements LineListener {
 
-    private static final int SAMPLE_RATE = 44100;
-    private static final int SAMPLE_BUFFER_SIZE = 512;
-    private static final int BYTES_PER_SAMPLE = 2;
-    private static final int NUM_CHANNELS = 2;
-    private static final int FRAME_SIZE = BYTES_PER_SAMPLE * NUM_CHANNELS;
-    private static final int OUTPUT_DATA_SIZE = SAMPLE_BUFFER_SIZE * FRAME_SIZE;
-
     private SourceDataLine line;
-    private final AudioFormat format;
+    private AudioFormat format;
     private AudioInputStream inputStream;
 
-    // private boolean stopped = false;
-    // private boolean closed = false;
+    private boolean stopped = false;
+    private boolean closed = false;
+
+    public final BooleanParameter play = new BooleanParameter("Play", false)
+        .setDescription("Play/Pause state of the output audio file");
 
     public LXAudioOutput(LX lx) {
         super(lx, "Audio Output");
-        this.format = new AudioFormat(SAMPLE_RATE, 8*BYTES_PER_SAMPLE, NUM_CHANNELS, true, false);
+        this.format = STEREO;
+        addParameter("play", this.play);
     }
 
     private OutputThread outputThread = null;
 
     private class OutputThread extends Thread {
 
-        private final byte[] buffer = new byte[OUTPUT_DATA_SIZE];
+        private final SourceDataLine line;
 
-        private OutputThread() {
+        private final byte[] buffer = new byte[STEREO_BUFFER_SIZE];
+
+        private OutputThread(SourceDataLine line) {
             super("LXAudioEngine Output Thread");
-            System.out.println(this.buffer.length);
+            this.line = line;
         }
 
         @Override
         public void run() {
-            while (true) {
+            while (!closed) {
+                while (stopped) {
+                    if (closed) {
+                        return;
+                    }
+                    try {
+                        synchronized (this) {
+                            wait();
+                        }
+                    } catch (InterruptedException ix) {}
+                }
+
                 try {
                     // Read from the input stream
                     int len = inputStream.read(this.buffer, 0, this.buffer.length);
@@ -85,8 +97,8 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
                     // big.
 
                     // Put the left and right buffers
-                    left.putSamples(this.buffer, 0, OUTPUT_DATA_SIZE, FRAME_SIZE);
-                    right.putSamples(this.buffer, 2, OUTPUT_DATA_SIZE, FRAME_SIZE);
+                    left.putSamples(this.buffer, 0, STEREO_BUFFER_SIZE, STEREO_FRAME_SIZE);
+                    right.putSamples(this.buffer, 2, STEREO_BUFFER_SIZE, STEREO_FRAME_SIZE);
                     mix.computeMix(left, right);
 
                 } catch (IOException iox) {
@@ -94,9 +106,8 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
                     break;
                 }
             }
-            System.out.println("LXAudioOutput draining the line");
+
             line.drain();
-            System.out.println("LXAudioOutput thread finished");
         }
     }
 
@@ -130,26 +141,61 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
     public LXAudioOutput setAudioInputStream(AudioInputStream inputStream) {
         // TOOD(mcslee): handle case where already open
         this.inputStream = inputStream;
-        System.out.println("Try opening");
         open();
         return this;
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        super.onParameterChanged(p);
+        if (p == this.play) {
+            if (this.play.isOn()) {
+                if (this.line == null) {
+                    this.play.setValue(false);
+                } else {
+                    start();
+                }
+            } else {
+                stop();
+            }
+        }
     }
 
     private void open() {
         if (this.line == null) {
             try {
-                this.line = (SourceDataLine) AudioSystem.getLine(STEREO_LINE);
+                this.line = (SourceDataLine) AudioSystem.getLine(STEREO_SOURCE_LINE);
                 this.line.addLineListener(this);
+                this.closed = false;
                 this.line.open(this.format);
-                this.line.start();
-                // this.stopped = false;
-                // this.closed = false;
-                this.outputThread = new OutputThread();
+                this.stopped = true;
+                if (this.play.isOn()) {
+                    this.stopped = false;
+                    this.line.start();
+                }
+                this.outputThread = new OutputThread(this.line);
                 this.outputThread.start();
             } catch (Exception x) {
                 System.err.println(x.getLocalizedMessage());
                 return;
             }
+        }
+    }
+
+    void start() {
+        if (this.line != null) {
+            this.stopped = false;
+            this.line.start();
+            synchronized (this.outputThread) {
+                this.outputThread.notify();
+            }
+        }
+    }
+
+    void stop() {
+        if (this.line != null) {
+            this.stopped = true;
+            this.line.stop();
         }
     }
 
@@ -162,10 +208,14 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
             System.out.println("LXAudioOuput START");
         } else if (type == LineEvent.Type.STOP) {
             System.out.println("LXAudioOuput STOP");
-            // this.stopped = true;
+            if (this.line == event.getLine()) {
+                this.stopped = true;
+            }
         } else if (type == LineEvent.Type.CLOSE) {
             System.out.println("LXAudioOuput CLOSE");
-            // this.closed = true;
+            if (this.line == event.getLine()) {
+                this.closed = true;
+            }
         }
     }
 

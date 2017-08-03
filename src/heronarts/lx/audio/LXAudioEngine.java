@@ -27,6 +27,7 @@ import heronarts.lx.LXModulatorComponent;
 import heronarts.lx.LXSerializable;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 
 public class LXAudioEngine extends LXModulatorComponent implements LXOscComponent {
@@ -44,9 +45,19 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
 
     public final GraphicMeter meter;
 
+    public enum Mode {
+        INPUT,
+        OUTPUT
+    };
+
+    public final EnumParameter<Mode> mode = new EnumParameter<Mode>("Mode", Mode.INPUT);
+
     public LXAudioEngine(LX lx) {
         super(lx, "Audio");
         addParameter("enabled", this.enabled);
+        addParameter("mode", this.mode);
+
+        this.mode.setOptions(new String[] { "Input", "Output" });
 
         this.input = new LXAudioInput(lx);
         this.output = new LXAudioOutput(lx);
@@ -65,10 +76,17 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
             if (this.enabled.isOn()) {
                 this.input.open();
                 this.input.start();
+                this.output.start();
             } else {
                 this.input.stop();
+                this.output.stop();
             }
             this.meter.running.setValue(this.enabled.isOn());
+        } else if (p == this.mode) {
+            switch (this.mode.getEnum()) {
+            case INPUT: this.meter.setBuffer(this.input.mix); break;
+            case OUTPUT: this.meter.setBuffer(this.output.mix); break;
+            }
         }
     }
 

@@ -35,7 +35,7 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
 
     protected static final double LOG_10 = Math.log(10);
 
-    protected final LXAudioBuffer buffer;
+    protected LXAudioBuffer buffer;
 
     /**
      * Gain of the meter, in decibels
@@ -106,6 +106,11 @@ public class DecibelMeter extends LXModulator implements LXNormalizedParameter {
         addParameter("range", this.range);
         addParameter("attack", this.attack);
         addParameter("release", this.release);
+    }
+
+    public DecibelMeter setBuffer(LXAudioBuffer buffer) {
+        this.buffer = buffer;
+        return this;
     }
 
     public double getExponent() {

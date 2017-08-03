@@ -60,7 +60,7 @@ public class LXAudioInput extends LXAudioComponent implements LineListener {
         private InputThread(AudioFormat format) {
             super("LXAudioEngine Input Thread");
             this.format = format;
-            this.rawBytes = new byte[this.format == MONO ? MONO_INPUT_DATA_SIZE : STEREO_INPUT_DATA_SIZE];
+            this.rawBytes = new byte[this.format == MONO ? MONO_BUFFER_SIZE : STEREO_BUFFER_SIZE];
         }
 
         @Override
@@ -81,10 +81,10 @@ public class LXAudioInput extends LXAudioComponent implements LineListener {
                 line.read(rawBytes, 0, rawBytes.length);
 
                 if (this.format == MONO) {
-                    mix.putSamples(rawBytes, 0, MONO_INPUT_DATA_SIZE, MONO_FRAME_SIZE);
+                    mix.putSamples(rawBytes, 0, MONO_BUFFER_SIZE, MONO_FRAME_SIZE);
                 } else {
-                    left.putSamples(rawBytes, 0, STEREO_INPUT_DATA_SIZE, STEREO_FRAME_SIZE);
-                    right.putSamples(rawBytes, 2, STEREO_INPUT_DATA_SIZE, STEREO_FRAME_SIZE);
+                    left.putSamples(rawBytes, 0, STEREO_BUFFER_SIZE, STEREO_FRAME_SIZE);
+                    right.putSamples(rawBytes, 2, STEREO_BUFFER_SIZE, STEREO_FRAME_SIZE);
                     mix.computeMix(left, right);
                 }
             }
@@ -151,12 +151,12 @@ public class LXAudioInput extends LXAudioComponent implements LineListener {
         if (this.line == null) {
             Device device = (Device) this.device.getObject();
             DataLine.Info info = null;
-            if (device.mixer.isLineSupported(STEREO_LINE)) {
+            if (device.mixer.isLineSupported(STEREO_TARGET_LINE)) {
                 this.format = STEREO;
-                info = STEREO_LINE;
-            } else if (device.mixer.isLineSupported(MONO_LINE)) {
+                info = STEREO_TARGET_LINE;
+            } else if (device.mixer.isLineSupported(MONO_TARGET_LINE)) {
                 this.format = MONO;
-                info = MONO_LINE;
+                info = MONO_TARGET_LINE;
             } else {
                 System.err.println("Device " + device + " does not support mono/stereo 16-bit input");
                 return;
@@ -164,7 +164,7 @@ public class LXAudioInput extends LXAudioComponent implements LineListener {
             try {
                 this.line = (TargetDataLine) device.mixer.getLine(info);
                 this.line.addLineListener(this);
-                this.line.open(this.format, 2 * (this.format == MONO ? MONO_INPUT_DATA_SIZE : STEREO_INPUT_DATA_SIZE));
+                this.line.open(this.format, 2 * (this.format == MONO ? MONO_BUFFER_SIZE : STEREO_BUFFER_SIZE));
                 this.line.start();
                 this.stopped = false;
                 this.closed = false;
