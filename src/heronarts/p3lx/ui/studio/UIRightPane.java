@@ -229,6 +229,9 @@ public class UIRightPane extends UIPane {
         for (LXCompoundModulation modulation : lx.engine.modulation.modulations) {
             addModulation(modulation);
         }
+        for (LXTriggerModulation trigger : lx.engine.modulation.triggers) {
+            addTrigger(trigger);
+        }
 
         lx.engine.modulation.addListener(new LXModulationEngine.Listener() {
             public void modulatorAdded(LXModulationEngine engine, LXModulator modulator) {
