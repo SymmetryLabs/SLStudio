@@ -145,4 +145,9 @@ public class UILabel extends UI2dComponent {
         }
         return this;
     }
+
+    @Override
+    public String getDescription() {
+        return this.label;
+    }
 }
