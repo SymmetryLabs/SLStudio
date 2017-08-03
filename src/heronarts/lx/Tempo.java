@@ -42,9 +42,9 @@ import heronarts.lx.parameter.MutableParameter;
  * The {@link #bpm} parameter indicates the current BPM, and {@link #getPeriodMs()} can be used to invert the beat
  * frequency (BPM) into a listenable period (ms per beat).
  *
- * Additional utility functions are available that assume beats represent the classic 4/4 tempo:
- *   - {@link #half()} and {@link #measure()} can be polled to check half-measure and measure beats, respectively.
- *   - {@link Listener}'s can be added to trigger on beats, halves, or measures without polling the Tempo object.
+ * Additional utility functions are available that assume beats represent the tempo:
+ *   - {@link #measure()} can be polled to check measure beats, respectively.
+ *   - {@link Listener}'s can be added to trigger on beats or measures without polling the Tempo object.
  */
 public class Tempo extends LXModulatorComponent implements LXOscComponent {
 
