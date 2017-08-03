@@ -26,11 +26,6 @@
 
 package heronarts.p3lx.ui.studio;
 
-import java.util.Deque;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.Map;
-
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
@@ -52,12 +47,8 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
 import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
-import heronarts.p3lx.ui.studio.modulation.UIBandGate;
-import heronarts.p3lx.ui.studio.modulation.UIMacroKnobs;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
-import heronarts.p3lx.ui.studio.modulation.UIMultiStageEnvelope;
 import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
-import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
 
@@ -78,11 +69,6 @@ public class UIRightPane extends UIPane {
     private int beatCount = 1;
     private int macroCount = 1;
 
-    private final Map<Class<? extends LXModulator>, UIModulator.Factory> modulatorUIRegistry =
-        new HashMap<Class<? extends LXModulator>, UIModulator.Factory>();
-
-    private final Deque<Class<? extends LXModulator>> modulatorClasses = new LinkedList<Class<? extends LXModulator>>();
-
     public UIRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[] { "MODULATION", "OSC + MIDI" }, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
@@ -90,24 +76,8 @@ public class UIRightPane extends UIPane {
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
 
-        registerModulatorUI(VariableLFO.class, UIVariableLFO.class);
-        registerModulatorUI(MultiStageEnvelope.class, UIMultiStageEnvelope.class);
-        registerModulatorUI(BandGate.class, UIBandGate.class);
-        registerModulatorUI(MacroKnobs.class, UIMacroKnobs.class);
-
         buildMidiUI();
         buildModulationUI();
-    }
-
-    public <T extends LXModulator> void registerModulatorUI(Class<T> modulatorClass, Class<? extends UIModulator> uiClass) {
-        registerModulatorUI(modulatorClass, new UIModulator.DefaultFactory<>(modulatorClass, uiClass));
-    }
-
-    public <T extends LXModulator> void registerModulatorUI(Class<T> modulatorClass, UIModulator.Factory<T> uiFactory) {
-        if (!this.modulatorUIRegistry.containsKey(modulatorClass)) {
-            this.modulatorClasses.addFirst(modulatorClass);
-        }
-        this.modulatorUIRegistry.put(modulatorClass, uiFactory);
     }
 
     private void buildMidiUI() {
@@ -267,20 +237,11 @@ public class UIRightPane extends UIPane {
         return null;
     }
 
+    @SuppressWarnings({ "unchecked", "rawtypes" })
     private void addModulator(LXModulator modulator) {
-        Class<? extends LXModulator> modulatorClass = modulator.getClass();
-        UIModulator.Factory uiFactory = this.modulatorUIRegistry.get(modulatorClass);
+        UIModulator.Factory uiFactory = this.ui.registry.getModulatorUIFactory(modulator);
         if (uiFactory == null) {
-            // If direct hash lookup fails, fall back to instance checks
-            for (Class<? extends LXModulator> clazz : this.modulatorClasses) {
-                if (clazz.isInstance(modulator)) {
-                    uiFactory = this.modulatorUIRegistry.get(clazz);
-                }
-            }
-        }
-
-        if (uiFactory == null) {
-            System.err.println("No UI class registered for modulator type: " + modulatorClass.getName());
+            System.err.println("No UI class registered for modulator type: " + modulator.getClass().getName());
         } else {
             uiFactory.buildUI(this.ui, this.lx, modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation);
         }

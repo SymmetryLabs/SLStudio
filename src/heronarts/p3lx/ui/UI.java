@@ -275,6 +275,11 @@ public class UI implements LXEngine.Dispatch {
     public final UITheme theme;
 
     /**
+     * Registry of UI factory elements
+     */
+    public final UIRegistry registry;
+
+    /**
      * White color
      */
     public final static int WHITE = 0xffffffff;
@@ -325,6 +330,7 @@ public class UI implements LXEngine.Dispatch {
         this.width = lx.applet.width;
         this.height = lx.applet.height;
         this.theme = new UITheme(applet);
+        this.registry = new UIRegistry();
         LX.initTimer.log("P3LX: UI: Theme");
         this.root = new UIRoot();
         LX.initTimer.log("P3LX: UI: Root");
