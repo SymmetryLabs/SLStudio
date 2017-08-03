@@ -20,28 +20,31 @@
 
 package heronarts.lx.audio;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioSystem;
 import javax.sound.sampled.DataLine;
+import javax.sound.sampled.Line;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
+import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 
-public class LXAudioInput extends LXAudioBuffer implements LineListener {
-    private static final int SAMPLE_BUFFER_SIZE = 512;
-    private static final int BYTES_PER_SAMPLE = 2;
-    private static final int NUM_CHANNELS = 2;
-    private static final int FRAME_SIZE = BYTES_PER_SAMPLE * NUM_CHANNELS;
-    private static final int INPUT_DATA_SIZE = SAMPLE_BUFFER_SIZE * FRAME_SIZE;
+import heronarts.lx.LX;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
+
+public class LXAudioInput extends LXAudioComponent implements LineListener {
+
+    private AudioFormat format = STEREO;
+
+    private final LX lx;
 
     private TargetDataLine line;
-    private final AudioFormat format;
 
-    private final byte[] rawBytes = new byte[INPUT_DATA_SIZE];
-
-    public final LXAudioBuffer left = new LXAudioBuffer(SAMPLE_BUFFER_SIZE);
-    public final LXAudioBuffer right = new LXAudioBuffer(SAMPLE_BUFFER_SIZE);
-    public final LXAudioBuffer mix = this;
+    public final DiscreteParameter device;
 
     private boolean closed = true;
     private boolean stopped = false;
@@ -50,8 +53,14 @@ public class LXAudioInput extends LXAudioBuffer implements LineListener {
 
     private class InputThread extends Thread {
 
-        private InputThread() {
+        private final AudioFormat format;
+
+        private final byte[] rawBytes;
+
+        private InputThread(AudioFormat format) {
             super("LXAudioEngine Input Thread");
+            this.format = format;
+            this.rawBytes = new byte[this.format == MONO ? MONO_INPUT_DATA_SIZE : STEREO_INPUT_DATA_SIZE];
         }
 
         @Override
@@ -71,18 +80,67 @@ public class LXAudioInput extends LXAudioBuffer implements LineListener {
                 // Read from the audio line
                 line.read(rawBytes, 0, rawBytes.length);
 
-                // Put the left and right buffers
-                left.putSamples(rawBytes, 0, INPUT_DATA_SIZE, FRAME_SIZE);
-                right.putSamples(rawBytes, 2, INPUT_DATA_SIZE, FRAME_SIZE);
-                computeMix(left, right);
+                if (this.format == MONO) {
+                    mix.putSamples(rawBytes, 0, MONO_INPUT_DATA_SIZE, MONO_FRAME_SIZE);
+                } else {
+                    left.putSamples(rawBytes, 0, STEREO_INPUT_DATA_SIZE, STEREO_FRAME_SIZE);
+                    right.putSamples(rawBytes, 2, STEREO_INPUT_DATA_SIZE, STEREO_FRAME_SIZE);
+                    mix.computeMix(left, right);
+                }
             }
         }
 
     };
 
-    LXAudioInput() {
-        super(SAMPLE_BUFFER_SIZE);
-        this.format = new AudioFormat(SAMPLE_RATE, 8*BYTES_PER_SAMPLE, NUM_CHANNELS, true, false);
+    public class Device {
+        public final Mixer.Info info;
+        public final Mixer mixer;
+        public final DataLine.Info line;
+
+        Device(Mixer.Info info, Mixer mixer, DataLine.Info dataLine) {
+            this.info = info;
+            this.mixer = mixer;
+            this.line = dataLine;
+        }
+
+        @Override
+        public String toString() {
+            return this.info.getName();
+        }
+    }
+
+    LXAudioInput(LX lx) {
+        super(lx, "Audio Input");
+        this.lx = lx;
+
+        // Find system input devices...
+        List<Device> devices = new ArrayList<Device>();
+        Mixer.Info[] mixers = AudioSystem.getMixerInfo();
+        for (Mixer.Info mixerInfo : mixers) {
+            Mixer mixer = AudioSystem.getMixer(mixerInfo);
+            Line.Info[] targetLines = mixer.getTargetLineInfo();
+            for (Line.Info lineInfo : targetLines) {
+                if (lineInfo instanceof DataLine.Info) {
+                    devices.add(new Device(mixerInfo, mixer, (DataLine.Info) lineInfo));
+                    break;
+                }
+            }
+        }
+
+        this.device = new DiscreteParameter("Device", devices.toArray(new Device[] {}));
+        addParameter("device", this.device);
+
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter p) {
+        super.onParameterChanged(p);
+        if (p == this.device) {
+            close();
+            if (this.lx.engine.audio.enabled.isOn()) {
+                open();
+            }
+        }
     }
 
     public AudioFormat getFormat() {
@@ -91,19 +149,26 @@ public class LXAudioInput extends LXAudioBuffer implements LineListener {
 
     void open() {
         if (this.line == null) {
-            DataLine.Info info = new DataLine.Info(TargetDataLine.class,  this.format);
-            if (!AudioSystem.isLineSupported(info)) {
-                System.err.println("AudioSystem does not support stereo 16-bit input");
+            Device device = (Device) this.device.getObject();
+            DataLine.Info info = null;
+            if (device.mixer.isLineSupported(STEREO_LINE)) {
+                this.format = STEREO;
+                info = STEREO_LINE;
+            } else if (device.mixer.isLineSupported(MONO_LINE)) {
+                this.format = MONO;
+                info = MONO_LINE;
+            } else {
+                System.err.println("Device " + device + " does not support mono/stereo 16-bit input");
                 return;
             }
             try {
-                this.line = (TargetDataLine) AudioSystem.getLine(info);
+                this.line = (TargetDataLine) device.mixer.getLine(info);
                 this.line.addLineListener(this);
-                this.line.open(this.format, INPUT_DATA_SIZE*2);
+                this.line.open(this.format, 2 * (this.format == MONO ? MONO_INPUT_DATA_SIZE : STEREO_INPUT_DATA_SIZE));
                 this.line.start();
                 this.stopped = false;
                 this.closed = false;
-                this.inputThread = new InputThread();
+                this.inputThread = new InputThread(this.format);
                 this.inputThread.start();
             } catch (Exception x) {
                 System.err.println(x.getLocalizedMessage());
@@ -154,11 +219,15 @@ public class LXAudioInput extends LXAudioBuffer implements LineListener {
     public void update(LineEvent event) {
         LineEvent.Type type = event.getType();
         if (type == LineEvent.Type.OPEN) {
-        } else if (type == LineEvent.Type.START){
+        } else if (type == LineEvent.Type.START) {
         } else if (type == LineEvent.Type.STOP) {
-            this.stopped = true;
+            if (this.line == event.getLine()) {
+                this.stopped = true;
+            }
         } else if (type == LineEvent.Type.CLOSE) {
-            this.closed = true;
+            if (this.line == event.getLine()) {
+                this.closed = true;
+            }
         }
     }
 

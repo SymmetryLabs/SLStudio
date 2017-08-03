@@ -38,16 +38,21 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
     /**
      * Audio input object
      */
-    public final LXAudioInput input = new LXAudioInput();
+    public final LXAudioInput input;
 
-    public final LXAudioOutput output = new LXAudioOutput();
+    public final LXAudioOutput output;
 
-    public final GraphicMeter meter = new GraphicMeter("Meter", this.input);
+    public final GraphicMeter meter;
 
     public LXAudioEngine(LX lx) {
         super(lx, "Audio");
-        addModulator(this.meter);
         addParameter("enabled", this.enabled);
+
+        this.input = new LXAudioInput(lx);
+        this.output = new LXAudioOutput(lx);
+
+        this.meter = new GraphicMeter("Meter", this.input.mix);
+        addModulator(this.meter);
     }
 
     public String getOscAddress() {
@@ -83,17 +88,22 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
     }
 
     private static final String KEY_METER = "meter";
+    private static final String KEY_INPUT = "input";
 
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
         obj.add(KEY_METER, LXSerializable.Utils.toObject(lx, this.meter));
+        obj.add(KEY_INPUT, LXSerializable.Utils.toObject(lx, this.input));
     }
 
     @Override
     public void load(LX lx, JsonObject obj) {
         if (obj.has(KEY_METER)) {
             this.meter.load(lx, obj.getAsJsonObject(KEY_METER));
+        }
+        if (obj.has(KEY_INPUT)) {
+            this.input.load(lx, obj.getAsJsonObject(KEY_INPUT));
         }
         super.load(lx, obj);
     }

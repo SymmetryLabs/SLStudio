@@ -28,14 +28,14 @@ import java.io.InputStream;
 import javax.sound.sampled.AudioFormat;
 import javax.sound.sampled.AudioInputStream;
 import javax.sound.sampled.AudioSystem;
-import javax.sound.sampled.Clip;
-import javax.sound.sampled.DataLine;
 import javax.sound.sampled.LineEvent;
 import javax.sound.sampled.LineListener;
 import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
-public class LXAudioOutput extends LXAudioBuffer implements LineListener {
+import heronarts.lx.LX;
+
+public class LXAudioOutput extends LXAudioComponent implements LineListener {
 
     private static final int SAMPLE_RATE = 44100;
     private static final int SAMPLE_BUFFER_SIZE = 512;
@@ -44,7 +44,6 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
     private static final int FRAME_SIZE = BYTES_PER_SAMPLE * NUM_CHANNELS;
     private static final int OUTPUT_DATA_SIZE = SAMPLE_BUFFER_SIZE * FRAME_SIZE;
 
-    private Clip clip;
     private SourceDataLine line;
     private final AudioFormat format;
     private AudioInputStream inputStream;
@@ -52,12 +51,8 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
     // private boolean stopped = false;
     // private boolean closed = false;
 
-    public final LXAudioBuffer left = new LXAudioBuffer(SAMPLE_BUFFER_SIZE);
-    public final LXAudioBuffer right = new LXAudioBuffer(SAMPLE_BUFFER_SIZE);
-    public final LXAudioBuffer mix = this;
-
-    public LXAudioOutput() {
-        super(SAMPLE_BUFFER_SIZE);
+    public LXAudioOutput(LX lx) {
+        super(lx, "Audio Output");
         this.format = new AudioFormat(SAMPLE_RATE, 8*BYTES_PER_SAMPLE, NUM_CHANNELS, true, false);
     }
 
@@ -92,7 +87,7 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
                     // Put the left and right buffers
                     left.putSamples(this.buffer, 0, OUTPUT_DATA_SIZE, FRAME_SIZE);
                     right.putSamples(this.buffer, 2, OUTPUT_DATA_SIZE, FRAME_SIZE);
-                    computeMix(left, right);
+                    mix.computeMix(left, right);
 
                 } catch (IOException iox) {
                     System.err.println(iox);
@@ -141,9 +136,9 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
     }
 
     private void open() {
-        if (this.clip == null) {
+        if (this.line == null) {
             try {
-                this.line = (SourceDataLine) AudioSystem.getLine(new DataLine.Info(SourceDataLine.class, this.format));
+                this.line = (SourceDataLine) AudioSystem.getLine(STEREO_LINE);
                 this.line.addLineListener(this);
                 this.line.open(this.format);
                 this.line.start();
@@ -174,8 +169,4 @@ public class LXAudioOutput extends LXAudioBuffer implements LineListener {
         }
     }
 
-    @Override
-    public int sampleRate() {
-        return SAMPLE_RATE;
-    }
 }
