@@ -26,8 +26,12 @@
 
 package heronarts.p3lx.ui.studio.global;
 
+import java.io.File;
+
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.audio.LXAudioEngine;
+import heronarts.lx.audio.LXAudioEngine.Mode;
+import heronarts.lx.audio.LXAudioOutput;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -36,13 +40,14 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UIModulationSource;
-import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.component.UIDropMenu;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UILabel;
+import heronarts.p3lx.ui.component.UIToggleSet;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
+import processing.core.PConstants;
 import processing.core.PGraphics;
 
 public class UIAudio extends UICollapsibleSection {
@@ -61,14 +66,14 @@ public class UIAudio extends UICollapsibleSection {
         new UIDoubleBox(118, yp, 54, 16).setParameter(release).addToContainer(container);
     }
 
-    private static final int HEIGHT = 170;
+    private static final int HEIGHT = 194;
     private static final int PADDING = 4;
 
     private final LXAudioEngine audio;
     private final UIMeter meter;
     private final UIGraphicMeter graphicMeter;
 
-    public UIAudio(UI ui, LXAudioEngine audio, float w) {
+    public UIAudio(final UI ui, final LXAudioEngine audio, float w) {
         super(ui, 0, 0, w, HEIGHT);
         this.audio = audio;
         setTitle("AUDIO");
@@ -83,10 +88,74 @@ public class UIAudio extends UICollapsibleSection {
 
         addTopLevelComponent(this.meter = new UIMeter(ui, 58, PADDING, 102, 12));
 
-        this.graphicMeter = new UIGraphicMeter(ui, 0, 20, getContentWidth(), getContentHeight() - 20);
+        // Mode selector
+        new UIToggleSet(0, 2, getContentWidth(), 18)
+        .setEvenSpacing()
+        .setParameter(audio.mode)
+        .addToContainer(this);
+
+        this.graphicMeter = new UIGraphicMeter(ui, 0, 44, getContentWidth(), getContentHeight() - 44);
         this.graphicMeter.addToContainer(this);
 
-        new UIDropMenu(0, 0, getContentWidth(), 16, audio.input.device).addToContainer(this);
+        // Input menu
+        final UIDropMenu inputMenu = new UIDropMenu(0, 24, getContentWidth(), 16, audio.input.device);
+        inputMenu.setVisible(audio.mode.getEnum() == Mode.INPUT);
+        inputMenu.addToContainer(this);
+
+        // Output playback
+        final UIOutputControls outputControls = new UIOutputControls(ui, audio.output, 0, 24, getContentWidth(), 16);
+        outputControls.setVisible(audio.mode.getEnum() == Mode.OUTPUT);
+        outputControls.addToContainer(this);
+
+        audio.mode.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                inputMenu.setVisible(audio.mode.getEnum() == Mode.INPUT);
+                outputControls.setVisible(audio.mode.getEnum() == Mode.OUTPUT);
+            }
+        });
+
+    }
+
+    public class UIOutputControls extends UI2dContainer {
+
+        private final UILabel fileLabel;
+
+        UIOutputControls(final UI ui, final LXAudioOutput output, float x, float y, float w, float h) {
+            super(x, y, w, h);
+
+            new UIButton(0, 0, 16, getContentHeight())
+            .setParameter(output.play)
+            .setLabel("►")
+            .addToContainer(this);
+
+            this.fileLabel = (UILabel) new UILabel(20, 0, getContentWidth() - 40, getContentHeight())
+            .setPadding(0, 4)
+            .setBackgroundColor(ui.theme.getControlBackgroundColor())
+            .setBorderColor(ui.theme.getControlBorderColor())
+            .setFont(ui.theme.getControlFont())
+            .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
+            .addToContainer(this);
+
+            new UIButton(getContentWidth() - 16, 0, 16, getContentHeight()) {
+                @Override
+                public void onToggle(boolean enabled) {
+                    if (enabled) {
+                        ui.applet.selectInput("Select a WAV file:", "onOpen", null, UIOutputControls.this);
+                    }
+                }
+            }
+            .setLabel("+")
+            .setMomentary(true)
+            .setDescription("Opens a new audio file for playback")
+            .addToContainer(this);
+        }
+
+        public void onOpen(File openFile) {
+            if (openFile != null) {
+                this.fileLabel.setLabel(openFile.getName());
+                audio.output.setInputStream(openFile);
+            }
+        }
     }
 
     class UIGraphicMeter extends UI2dContainer {
@@ -115,16 +184,6 @@ public class UIAudio extends UICollapsibleSection {
             new UIKnob(8, yp).setParameter(audio.meter.attack).addToContainer(this);
             new UIKnob(62, yp).setParameter(audio.meter.release).addToContainer(this);
             new UIKnob(116, yp).setParameter(audio.meter.slope).addToContainer(this);
-
-            audio.enabled.addListener(new LXParameterListener() {
-                public void onParameterChanged(LXParameter p) {
-                    for (UIObject obj : UIGraphicMeter.this) {
-                        if (obj instanceof UIKnob) {
-                            ((UIKnob) obj).setEnabled(audio.enabled.isOn());
-                        }
-                    }
-                }
-            });
 
             addLoopTask(new LXLoopTask() {
                 public void loop(double deltaMs) {

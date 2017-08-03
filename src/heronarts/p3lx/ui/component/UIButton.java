@@ -230,6 +230,8 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
 
     public UIButton setActive(boolean active) {
         if (this.active != active) {
+            this.active = active;
+            setBackgroundColor(active ? this.activeColor : this.inactiveColor);
             if (this.enumParameter != null) {
                 if (active) {
                     this.enumParameter.increment();
@@ -237,8 +239,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
             } else if (this.booleanParameter != null) {
                 this.booleanParameter.setValue(active);
             }
-            setBackgroundColor(active ? this.activeColor : this.inactiveColor);
-            onToggle(this.active = active);
+            onToggle(active);
             redraw();
         }
         return this;
