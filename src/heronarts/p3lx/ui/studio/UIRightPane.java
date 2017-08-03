@@ -40,10 +40,10 @@ import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.MacroKnobs;
 import heronarts.lx.modulator.MultiStageEnvelope;
 import heronarts.lx.modulator.VariableLFO;
+import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXTriggerModulation;
-import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
@@ -99,11 +99,11 @@ public class UIRightPane extends UIPane {
         buildModulationUI();
     }
 
-    public void registerModulatorUI(Class<? extends LXModulator> modulatorClass, Class<? extends UIModulator> uiClass) {
-        registerModulatorUI(modulatorClass, new UIModulator.DefaultFactory(modulatorClass, uiClass));
+    public <T extends LXModulator> void registerModulatorUI(Class<T> modulatorClass, Class<? extends UIModulator> uiClass) {
+        registerModulatorUI(modulatorClass, new UIModulator.DefaultFactory<>(modulatorClass, uiClass));
     }
 
-    public void registerModulatorUI(Class<? extends LXModulator> modulatorClass, UIModulator.Factory uiFactory) {
+    public <T extends LXModulator> void registerModulatorUI(Class<T> modulatorClass, UIModulator.Factory<T> uiFactory) {
         if (!this.modulatorUIRegistry.containsKey(modulatorClass)) {
             this.modulatorClasses.addFirst(modulatorClass);
         }

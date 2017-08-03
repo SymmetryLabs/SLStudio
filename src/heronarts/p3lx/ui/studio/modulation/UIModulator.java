@@ -62,21 +62,21 @@ import processing.event.MouseEvent;
 
 public abstract class UIModulator extends UI2dContainer implements UIMouseFocus, UIKeyFocus, UITriggerTarget {
 
-    public interface Factory {
-        public UIModulator buildUI(UI ui, LX lx, LXModulator modulator, float x, float y, float width);
+    public interface Factory<T extends LXModulator> {
+        UIModulator buildUI(UI ui, LX lx, T modulator, float x, float y, float width);
     }
 
-    public static class DefaultFactory implements Factory {
+    public static class DefaultFactory<T extends LXModulator> implements Factory<T> {
 
-        private final Class<? extends LXModulator> modulatorClass;
+        private final Class<T> modulatorClass;
         private final Class<? extends UIModulator> uiClass;
 
-        public DefaultFactory(Class<? extends LXModulator> modulatorClass, Class<? extends UIModulator> uiClass) {
+        public DefaultFactory(Class<T> modulatorClass, Class<? extends UIModulator> uiClass) {
             this.modulatorClass = modulatorClass;
             this.uiClass = uiClass;
         }
 
-        public UIModulator buildUI(UI ui, LX lx, LXModulator modulator, float x, float y, float width) {
+        public UIModulator buildUI(UI ui, LX lx, T modulator, float x, float y, float width) {
             try {
                 return
                     this.uiClass
