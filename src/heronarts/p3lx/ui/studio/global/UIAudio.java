@@ -39,6 +39,7 @@ import heronarts.p3lx.ui.UIModulationSource;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
+import heronarts.p3lx.ui.component.UIDropMenu;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
@@ -60,7 +61,7 @@ public class UIAudio extends UICollapsibleSection {
         new UIDoubleBox(118, yp, 54, 16).setParameter(release).addToContainer(container);
     }
 
-    private static final int HEIGHT = 150;
+    private static final int HEIGHT = 170;
     private static final int PADDING = 4;
 
     private final LXAudioEngine audio;
@@ -82,8 +83,10 @@ public class UIAudio extends UICollapsibleSection {
 
         addTopLevelComponent(this.meter = new UIMeter(ui, 58, PADDING, 102, 12));
 
-        this.graphicMeter = new UIGraphicMeter(ui, 0, 0, getContentWidth(), getContentHeight());
+        this.graphicMeter = new UIGraphicMeter(ui, 0, 20, getContentWidth(), getContentHeight() - 20);
         this.graphicMeter.addToContainer(this);
+
+        new UIDropMenu(0, 0, getContentWidth(), 16, audio.input.device).addToContainer(this);
     }
 
     class UIGraphicMeter extends UI2dContainer {
