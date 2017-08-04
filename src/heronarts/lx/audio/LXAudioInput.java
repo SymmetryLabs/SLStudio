@@ -33,10 +33,11 @@ import javax.sound.sampled.Mixer;
 import javax.sound.sampled.TargetDataLine;
 
 import heronarts.lx.LX;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class LXAudioInput extends LXAudioComponent implements LineListener {
+public class LXAudioInput extends LXAudioComponent implements LXOscComponent, LineListener {
 
     private AudioFormat format = STEREO;
 
@@ -130,6 +131,10 @@ public class LXAudioInput extends LXAudioComponent implements LineListener {
         this.device = new DiscreteParameter("Device", devices.toArray(new Device[] {}));
         addParameter("device", this.device);
 
+    }
+
+    public String getOscAddress() {
+        return "/lx/audio/input";
     }
 
     @Override

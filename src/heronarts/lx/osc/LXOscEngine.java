@@ -61,6 +61,7 @@ public class LXOscEngine extends LXComponent {
 
     private static final String ROUTE_LX = "lx";
     private static final String ROUTE_ENGINE = "engine";
+    private static final String ROUTE_INPUT = "input";
     private static final String ROUTE_OUTPUT = "output";
     private static final String ROUTE_PALETTE = "palette";
     private static final String ROUTE_MODULATION = "modulation";
@@ -198,7 +199,11 @@ public class LXOscEngine extends LXComponent {
         }
 
         private void oscAudio(OscMessage message, String[] parts, int index) {
-            if (parts[index].equals(ROUTE_METER)) {
+            if (parts[index].equals(ROUTE_INPUT)) {
+                oscComponent(message, lx.engine.audio.input, parts, index+1);
+            } else if (parts[index].equals(ROUTE_OUTPUT)) {
+                oscComponent(message, lx.engine.audio.output, parts, index+1);
+            } else if (parts[index].equals(ROUTE_METER)) {
                 oscComponent(message, lx.engine.audio.meter, parts, index+1);
             } else {
                 oscComponent(message, lx.engine.audio, parts, index);

@@ -36,10 +36,11 @@ import javax.sound.sampled.SourceDataLine;
 import javax.sound.sampled.UnsupportedAudioFileException;
 
 import heronarts.lx.LX;
+import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class LXAudioOutput extends LXAudioComponent implements LineListener {
+public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, LineListener {
 
     private SourceDataLine line;
     private AudioFormat format;
@@ -63,6 +64,10 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
         addParameter("play", this.play);
         addParameter("trigger", this.trigger);
         addParameter("looping", this.looping);
+    }
+
+    public String getOscAddress() {
+        return "/lx/audio/output";
     }
 
     private OutputThread outputThread = null;
