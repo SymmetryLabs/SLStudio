@@ -22,6 +22,8 @@ package heronarts.lx.audio;
 
 import java.io.BufferedInputStream;
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 
@@ -46,13 +48,21 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
     private boolean stopped = false;
     private boolean closed = false;
 
+    public final BooleanParameter trigger = new BooleanParameter("Trigger", false)
+        .setDescription("Triggers playback of the audio file from its beginning");
+
     public final BooleanParameter play = new BooleanParameter("Play", false)
         .setDescription("Play/Pause state of the output audio file");
+
+    public final BooleanParameter looping = new BooleanParameter("Loop", false)
+        .setDescription("Whether playback of the audio file should loop");
 
     public LXAudioOutput(LX lx) {
         super(lx, "Audio Output");
         this.format = STEREO;
         addParameter("play", this.play);
+        addParameter("trigger", this.trigger);
+        addParameter("looping", this.looping);
     }
 
     private OutputThread outputThread = null;
@@ -62,6 +72,8 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
         private final SourceDataLine line;
 
         private final byte[] buffer = new byte[STEREO_BUFFER_SIZE];
+
+        private volatile boolean trigger = false;
 
         private OutputThread(SourceDataLine line) {
             super("LXAudioEngine Output Thread");
@@ -83,14 +95,39 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
                 }
 
                 try {
+                    if (this.trigger) {
+                        if (inputStream.markSupported()) {
+                            inputStream.reset();
+                        } else {
+                            System.err.println("Audio file does not support reset");
+                        }
+                        this.trigger = false;
+                    }
+
                     // Read from the input stream
                     int len = inputStream.read(this.buffer, 0, this.buffer.length);
-                    if (len < 0) {
-                        break;
+
+                    // Mysterious: some WAV files seem to have a bit of junk at the end?!
+                    len -= len % STEREO_FRAME_SIZE;
+
+                    // Reached the end of the file...
+                    if (len <= 0) {
+                        line.drain();
+                        this.trigger = true;
+                        if (!looping.isOn()) {
+                            play.setValue(false);
+                        }
+                        continue;
                     }
 
                     // Write to the output line
-                    line.write(this.buffer, 0, len);
+                    try {
+                        line.write(this.buffer, 0, len - (len % STEREO_FRAME_SIZE));
+                    } catch (Exception x) {
+                        System.err.println("LXAudioOutput error: " + x.getLocalizedMessage());
+                        x.printStackTrace();
+                        play.setValue(false);
+                    }
 
                     // TODO(mcslee): Need some kind of timing-fu in here so that the metering
                     // is in sync. Right now this sort of rushes ahead as the ouptut buffer is
@@ -103,22 +140,20 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
 
                 } catch (IOException iox) {
                     System.err.println(iox);
+                    iox.printStackTrace();
                     break;
                 }
             }
 
-            line.drain();
+            line.flush();
         }
     }
 
     public LXAudioOutput setInputStream(File file) {
         try {
-            return setAudioInputStream(AudioSystem.getAudioInputStream(file));
-        } catch (UnsupportedAudioFileException uafx) {
-            uafx.printStackTrace(System.err);
-            System.err.println(uafx.getLocalizedMessage());
-        } catch (IOException iox) {
-            System.err.println(iox.getLocalizedMessage());
+            return setInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException fnfx) {
+            System.err.println(fnfx.getLocalizedMessage());
         }
         return this;
     }
@@ -139,8 +174,10 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
     }
 
     public LXAudioOutput setAudioInputStream(AudioInputStream inputStream) {
-        // TOOD(mcslee): handle case where already open
         this.inputStream = inputStream;
+        if (this.inputStream.markSupported()) {
+            this.inputStream.mark(Integer.MAX_VALUE);
+        }
         open();
         return this;
     }
@@ -157,6 +194,14 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
                 }
             } else {
                 stop();
+            }
+        } else if (p == this.trigger) {
+            if (this.trigger.isOn()) {
+                if (this.line != null) {
+                    this.play.setValue(true);
+                    this.outputThread.trigger = true;
+                }
+                this.trigger.setValue(false);
             }
         }
     }
@@ -218,5 +263,4 @@ public class LXAudioOutput extends LXAudioComponent implements LineListener {
             }
         }
     }
-
 }
