@@ -22,14 +22,16 @@ package heronarts.lx.audio;
 
 public class LXAudioBuffer {
 
-    protected static final int SAMPLE_RATE = 44100;
     protected static final float INV_16_BIT = 1 / 32768.0f;
+
+    private final int sampleRate;
 
     final float[] samples;
     float rms;
 
-    LXAudioBuffer(int bufferSize) {
+    LXAudioBuffer(int bufferSize, int sampleRate) {
         this.samples = new float[bufferSize];
+        this.sampleRate = sampleRate;
     }
 
     public int bufferSize() {
@@ -37,7 +39,7 @@ public class LXAudioBuffer {
     }
 
     public int sampleRate() {
-        return SAMPLE_RATE;
+        return this.sampleRate;
     }
 
     public float getRms() {

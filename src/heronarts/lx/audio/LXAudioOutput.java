@@ -79,6 +79,7 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
         private final byte[] buffer = new byte[STEREO_BUFFER_SIZE];
 
         private volatile boolean trigger = false;
+        private volatile boolean flush = false;
 
         private OutputThread(SourceDataLine line) {
             super("LXAudioEngine Output Thread");
@@ -100,6 +101,11 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
                 }
 
                 try {
+                    if (this.flush) {
+                        line.flush();
+                        this.flush = false;
+                    }
+
                     if (this.trigger) {
                         if (inputStream.markSupported()) {
                             inputStream.reset();
@@ -109,11 +115,10 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
                         this.trigger = false;
                     }
 
-                    // Read from the input stream
-                    int len = inputStream.read(this.buffer, 0, this.buffer.length);
+                    boolean mono = inputStream.getFormat().getChannels() == 1;
 
-                    // Mysterious: some WAV files seem to have a bit of junk at the end?!
-                    len -= len % STEREO_FRAME_SIZE;
+                    // Read from the input stream
+                    int len = inputStream.read(this.buffer, 0, mono ? MONO_BUFFER_SIZE : STEREO_BUFFER_SIZE);
 
                     // Reached the end of the file...
                     if (len <= 0) {
@@ -125,9 +130,18 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
                         continue;
                     }
 
+                    // When reading mono files, double the length for stereo output
+                    if (mono) {
+                        for (int i = len - MONO_FRAME_SIZE; i >= 0; i -= MONO_FRAME_SIZE) {
+                            this.buffer[2*i] = this.buffer[2*i+2] = this.buffer[i];
+                            this.buffer[2*i+1] = this.buffer[2*i+3] = this.buffer[i+1];
+                        }
+                        len *= 2;
+                    }
+
                     // Write to the output line
                     try {
-                        line.write(this.buffer, 0, len - (len % STEREO_FRAME_SIZE));
+                        line.write(this.buffer, 0, len);
                     } catch (Exception x) {
                         System.err.println("LXAudioOutput error: " + x.getLocalizedMessage());
                         x.printStackTrace();
@@ -179,9 +193,34 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
     }
 
     public LXAudioOutput setAudioInputStream(AudioInputStream inputStream) {
+        AudioFormat format = inputStream.getFormat();
+        if (format.getSampleRate() != SAMPLE_RATE) {
+            System.err.println("Audio file must have sample rate of " + SAMPLE_RATE);
+            return this;
+        }
+        if (format.getSampleSizeInBits() != BITS_PER_SAMPLE) {
+            System.err.println("Audio file must have " + BITS_PER_SAMPLE + " bits per sample");
+            return this;
+        }
+        if (format.isBigEndian()) {
+            System.err.println("Audio file must be little endian");
+            return this;
+        }
+        if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
+            System.err.println("Audio file must be PCM signed");
+            return this;
+        }
+        if (format.getChannels() > 2) {
+            System.err.println("Audio file has more than 2 channels");
+        }
+
+        // Okay we're valid!
         this.inputStream = inputStream;
         if (this.inputStream.markSupported()) {
             this.inputStream.mark(Integer.MAX_VALUE);
+        }
+        if (this.outputThread != null) {
+            this.outputThread.flush = true;
         }
         open();
         return this;
@@ -217,7 +256,7 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
                 this.line = (SourceDataLine) AudioSystem.getLine(STEREO_SOURCE_LINE);
                 this.line.addLineListener(this);
                 this.closed = false;
-                this.line.open(this.format);
+                this.line.open(this.format, 4*STEREO_BUFFER_SIZE);
                 this.stopped = true;
                 if (this.play.isOn()) {
                     this.stopped = false;
