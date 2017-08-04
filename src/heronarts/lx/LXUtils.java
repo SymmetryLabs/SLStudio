@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -80,20 +80,32 @@ public class LXUtils {
     }
 
     public static float avgf(float v1, float v2) {
-        return (float) LXUtils.avg(v1, v2);
+        return (v1 + v2) / 2.f;
     }
 
-    public static double wrapdist(double v1, double v2, double mod) {
-        v1 = (v1 >= 0) ? (v1 % mod) : (mod + (v1 % mod));
-        v2 = (v2 >= 0) ? (v2 % mod) : (mod + (v2 % mod));
+    /**
+     * Computes the distance between v1 and v2 with a wrap-around at the modulus.
+     * Both v1 and v2 must be in the range [0, modulus]. For example, if v1=1, v2=11,
+     * and modulus = 12, then the distance is 2, not 10.
+     *
+     * @param v1 First value
+     * @param v2 Second value
+     * @param modulus Modulus to wrap around
+     * @return
+     */
+    public static double wrapdist(double v1, double v2, double modulus) {
         if (v1 < v2) {
-            return Math.min(v2 - v1, v1 + mod - v2);
+            return Math.min(v2 - v1, v1 + modulus - v2);
         } else {
-            return Math.min(v1 - v2, v2 + mod - v1);
+            return Math.min(v1 - v2, v2 + modulus - v1);
         }
     }
 
-    public static float wrapdistf(float v1, float v2, float mod) {
-        return (float) LXUtils.wrapdist(v1, v2, mod);
+    public static float wrapdistf(float v1, float v2, float modulus) {
+        if (v1 < v2) {
+            return Math.min(v2 - v1, v1 + modulus - v2);
+        } else {
+            return Math.min(v1 - v2, v2 + modulus - v1);
+        }
     }
 }

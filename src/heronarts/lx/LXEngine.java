@@ -231,7 +231,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public class Timer {
         public long runNanos = 0;
         public long channelNanos = 0;
-        public long copyNanos = 0;
         public long fxNanos = 0;
         public long inputNanos = 0;
         public long midiNanos = 0;
@@ -241,17 +240,61 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public final Timer timer = new Timer();
 
-    private final ModelBuffer uiBuffer;
+    class EngineBuffer {
+
+        boolean cueOn;
+        DoubleBuffer main;
+        DoubleBuffer cue;
+
+        EngineBuffer(LX lx) {
+            this.main = new DoubleBuffer(lx);
+            this.cue = new DoubleBuffer(lx);
+        }
+
+        void sync() {
+            System.arraycopy(this.main.render.getArray(), 0, this.main.copy.getArray(), 0, this.main.copy.getArray().length);
+            System.arraycopy(this.cue.render.getArray(), 0, this.cue.copy.getArray(), 0, this.cue.copy.getArray().length);
+        }
+
+        void flip() {
+            this.main.flip();
+            this.cue.flip();
+        }
+
+        class DoubleBuffer {
+
+            ModelBuffer render;
+            ModelBuffer copy;
+
+            DoubleBuffer(LX lx) {
+                this.render = new ModelBuffer(lx);
+                this.copy = new ModelBuffer(lx);
+            }
+
+            void flip() {
+                ModelBuffer tmp = this.copy;
+                this.copy = this.render;
+                this.render = tmp;
+            }
+
+            void copy(int[] destination) {
+                System.arraycopy(this.copy.getArray(), 0, destination, 0, destination.length);
+            }
+        }
+    }
+
+    private final EngineBuffer buffer;
 
     private final ModelBuffer background;
-    private final ModelBuffer blendBufferMain;
     private final ModelBuffer blendBufferLeft;
     private final ModelBuffer blendBufferRight;
-    private final ModelBuffer blendBufferCue;
 
     private volatile boolean isThreaded = false;
+    private volatile boolean isChannelMultithreaded = false;
+    private volatile boolean isNetworkMultithreaded = false;
 
-    private volatile boolean isSuperThreaded = false;
+    private boolean isNetworkThreadStarted = false;
+    private final NetworkThread networkThread;
 
     private Thread engineThread = null;
 
@@ -269,20 +312,18 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.lx = lx;
 
         // Background and blending buffers
+        this.buffer = new EngineBuffer(lx);
         this.background = new ModelBuffer(lx);
-        this.blendBufferMain = new ModelBuffer(lx);
         this.blendBufferLeft = new ModelBuffer(lx);
         this.blendBufferRight = new ModelBuffer(lx);
-        this.blendBufferCue = new ModelBuffer(lx);
 
-        // Double-buffer for the UI thread
-        this.uiBuffer = new ModelBuffer(lx);
+        // Initialize network thread (don't start it yet)
+        this.networkThread = new NetworkThread(lx);
 
-        // Initilize UI and background to black
-        int[] uiArray = this.uiBuffer.getArray();
+        // Initialize UI and background to black
         int[] backgroundArray = this.background.getArray();
         for (int i = 0; i < backgroundArray.length; ++i) {
-            uiArray[i] = backgroundArray[i] = LXColor.BLACK;
+            backgroundArray[i] = LXColor.BLACK;
         }
         LX.initTimer.log("Engine: Buffers");
 
@@ -495,6 +536,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 }
             }
         } else {
+            this.buffer.sync();
             this.isThreaded = true;
             this.engineThread = new EngineThread();
             this.engineThread.start();
@@ -502,25 +544,37 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         return this;
     }
 
-    public LXEngine setSuperThreaded(boolean superThreaded) {
-        this.isSuperThreaded = superThreaded;
-        System.out.println("LXEngine SuperThreading mode: " + (superThreaded ? "ON" : "OFF"));
+    public LXEngine setChannelMultithreaded(boolean channelMultithreaded) {
+        this.isChannelMultithreaded = channelMultithreaded;
+        System.out.println("LXEngine Channel Multihreading: " + (channelMultithreaded ? "ON" : "OFF"));
         return this;
     }
 
-    public boolean isSuperThreaded() {
-        return this.isSuperThreaded;
+    public boolean isChannelMultithreaded() {
+        return this.isChannelMultithreaded;
+    }
+
+    public LXEngine setNetworkMultithreaded(boolean networkMultithreaded) {
+        if (networkMultithreaded && !this.isNetworkThreadStarted) {
+            this.networkThread.start();
+        }
+        this.isNetworkMultithreaded = networkMultithreaded;
+        return this;
+    }
+
+    public boolean isNetworkMultithreaded() {
+        return this.isNetworkMultithreaded;
     }
 
     private class EngineThread extends Thread {
 
         private EngineThread() {
-            super("LX Engine Thread");
+            super("LXEngine Render Thread");
         }
 
         @Override
         public void run() {
-            System.out.println("LX Engine Thread started");
+            System.out.println("LXEngine Render Thread started");
             while (!isInterrupted()) {
                 long frameStart = System.currentTimeMillis();
                 LXEngine.this.run();
@@ -546,7 +600,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             engineThread = null;
             isThreaded = false;
 
-            System.out.println("LX Engine Thread finished");
+            System.out.println("LXEngine Render Thread finished");
         }
     }
 
@@ -830,7 +884,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         if (this.paused) {
             this.timer.channelNanos = 0;
-            this.timer.copyNanos = 0;
             this.timer.fxNanos = 0;
             this.timer.runNanos = System.nanoTime() - runStart;
             return;
@@ -885,10 +938,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Run and blend all of our channels
         long channelStart = System.nanoTime();
         int[] backgroundArray = this.background.getArray();
-        int[] blendOutputMain = this.blendBufferMain.getArray();
+        int[] blendOutputMain = this.buffer.main.render.getArray();
+        int[] blendOutputCue = this.buffer.cue.render.getArray();
         int[] blendOutputLeft = this.blendBufferLeft.getArray();
         int[] blendOutputRight = this.blendBufferRight.getArray();
-        int[] blendOutputCue = this.blendBufferCue.getArray();
         int[] blendDestinationCue = backgroundArray;
 
         double crossfadeValue = this.crossfader.getValue();
@@ -902,7 +955,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         int mainChannelCount = 0;
 
         // If we are in super-threaded mode, run the channels on their own threads!
-        if (this.isSuperThreaded) {
+        if (this.isChannelMultithreaded) {
             // Kick off threads per channel
             for (LXChannel channel : this.mutableChannels) {
                 if (channel.enabled.isOn() || channel.cueActive.isOn()) {
@@ -940,7 +993,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             boolean channelIsEnabled = channel.enabled.isOn();
             boolean channelIsCue = channel.cueActive.isOn();
             if (channelIsEnabled || channelIsCue) {
-                if (!this.isSuperThreaded) {
+                if (!this.isChannelMultithreaded) {
                     // TODO(mcslee): should clips still run even if channel is disabled??
                     channel.loop(deltaMs);
                 }
@@ -1051,7 +1104,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Time to apply master FX to the main blended output
         long fxStart = System.nanoTime();
         for (LXEffect effect : this.masterChannel.getEffects()) {
-            effect.setBuffer(this.blendBufferMain);
+            effect.setBuffer(this.buffer.main.render);
             effect.loop(deltaMs);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
@@ -1065,24 +1118,32 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             cueOn = true;
         }
 
-        // Frame is now ready, copy into the UI buffer
-        long copyStart = System.nanoTime();
-        synchronized (this.uiBuffer) {
-            if (cueOn) {
-                System.arraycopy(blendDestinationCue, 0, this.uiBuffer.getArray(), 0, blendDestinationCue.length);
-            } else {
-                System.arraycopy(blendOutputMain, 0, this.uiBuffer.getArray(), 0, blendOutputMain.length);
+        // Frame is now ready
+        if (this.isThreaded) {
+            // If multi-threading UI, lock the double buffer and clip it
+            synchronized (this.buffer) {
+                this.buffer.cueOn = cueOn;
+                this.buffer.flip();
             }
+        } else {
+            // Otherwise lock-free!
+            this.buffer.cueOn = cueOn;
         }
-        this.timer.copyNanos = System.nanoTime() - copyStart;
 
         // Send to outputs
-        long outputStart = System.nanoTime();
-        this.output.send(blendOutputMain);
-        long outputEnd = System.nanoTime();
-        this.timer.outputNanos = outputEnd - outputStart;
-
-        this.timer.runNanos = outputEnd - runStart;
+        if (this.isNetworkMultithreaded) {
+            // Multi-threaded? Just notify the network thread!
+            synchronized (this.networkThread) {
+                this.networkThread.notify();
+            }
+        } else {
+            // Otherwise do it ourself here
+            long outputStart = System.nanoTime();
+            this.output.send(blendOutputMain);
+            long outputEnd = System.nanoTime();
+            this.timer.outputNanos = outputEnd - outputStart;
+            this.timer.runNanos = outputEnd - runStart;
+        }
 
         if (this.logTimers) {
             StringBuilder sb = new StringBuilder();
@@ -1098,6 +1159,41 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         }
     }
 
+    class NetworkThread extends Thread {
+
+        private final ModelBuffer networkBuffer;
+
+        NetworkThread(LX lx) {
+            super("LXEngine Network Thread");
+            this.networkBuffer = new ModelBuffer(lx);
+        }
+
+        @Override
+        public void run() {
+            System.out.println("LXEngine Network Thread started");
+            while (!isInterrupted()) {
+                try {
+                    synchronized(this) {
+                        wait();
+                    }
+                } catch (InterruptedException ix) {
+                    System.err.println("LXEngine Network Thread interrupted");
+                    break;
+                }
+
+                if (output.enabled.isOn()) {
+                    // Copy from the double-buffer into our local storage and send from here
+                    int[] networkArray = networkBuffer.getArray();
+                    synchronized (buffer) {
+                        System.arraycopy(buffer.main.copy.getArray(), 0, networkArray, 0, networkArray.length);
+                    }
+                    output.send(networkArray);
+                }
+            }
+            System.out.println("LXEngine Network Thread finished");
+        }
+    }
+
     /**
      * This should be used when in threaded mode. It synchronizes on the
      * double-buffer and duplicates the internal copy buffer into the provided
@@ -1106,8 +1202,12 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      * @param copy Buffer to copy into
      */
     public void copyUIBuffer(int[] copy) {
-        synchronized (this.uiBuffer) {
-            System.arraycopy(this.uiBuffer.getArray(), 0, copy, 0, copy.length);
+        synchronized (this.buffer) {
+            if (this.buffer.cueOn) {
+                System.arraycopy(this.buffer.cue.copy.getArray(), 0, copy, 0, copy.length);
+            } else {
+                System.arraycopy(this.buffer.main.copy.getArray(), 0, copy, 0, copy.length);
+            }
         }
     }
 
@@ -1118,7 +1218,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      * @return The internal render buffer
      */
     public int[] getUIBufferNonThreadSafe() {
-        return this.uiBuffer.getArray();
+        return this.buffer.cueOn ? this.buffer.cue.render.getArray() : this.buffer.main.render.getArray();
     }
 
     private static final String KEY_PALETTE = "palette";

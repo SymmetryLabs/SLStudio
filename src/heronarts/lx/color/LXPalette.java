@@ -27,7 +27,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
-import heronarts.lx.modulator.TriangleLFO;
+import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -123,7 +123,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         }
     };
 
-    private final TriangleLFO hueOscillate = new TriangleLFO(color.hue, hue2, period);
+    private final SinLFO hueOscillate = new SinLFO(color.hue, hue2, period);
 
     private LXModulator hue = hueFixed;
 

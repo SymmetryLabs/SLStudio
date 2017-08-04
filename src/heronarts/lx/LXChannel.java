@@ -224,7 +224,13 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
 
     ChannelThread thread = new ChannelThread();
 
+    private static int channelThreadCount = 1;
+
     class ChannelThread extends Thread {
+
+        ChannelThread() {
+            super("LXChannel thread #" + channelThreadCount++);
+        }
 
         boolean hasStarted = false;
         boolean workReady = true;
