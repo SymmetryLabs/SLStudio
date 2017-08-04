@@ -124,17 +124,29 @@ public class UIAudio extends UICollapsibleSection {
             super(x, y, w, h);
 
             new UIButton(0, 0, 16, getContentHeight())
+            .setTriggerable(true)
             .setParameter(output.play)
             .setLabel("►")
             .addToContainer(this);
 
-            this.fileLabel = (UILabel) new UILabel(20, 0, getContentWidth() - 40, getContentHeight())
+            this.fileLabel = (UILabel) new UILabel(20, 0, getContentWidth() - 80, getContentHeight())
             .setPadding(0, 4)
             .setBackgroundColor(ui.theme.getControlBackgroundColor())
             .setBorderColor(ui.theme.getControlBorderColor())
             .setFont(ui.theme.getControlFont())
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
             .addToContainer(this);
+
+            new UIButton(getContentWidth() - 56, 0, 16, getContentHeight())
+            .setTriggerable(true)
+            .setIcon(ui.theme.iconTrigger)
+            .setParameter(output.trigger)
+            .addToContainer(this);
+
+            new UIButton(getContentWidth() - 36, 0, 16, getContentHeight())
+                .setIcon(ui.theme.iconLoop)
+                .setParameter(output.looping)
+                .addToContainer(this);
 
             new UIButton(getContentWidth() - 16, 0, 16, getContentHeight()) {
                 @Override
@@ -144,7 +156,7 @@ public class UIAudio extends UICollapsibleSection {
                     }
                 }
             }
-            .setLabel("+")
+            .setIcon(ui.theme.iconLoad)
             .setMomentary(true)
             .setDescription("Opens a new audio file for playback")
             .addToContainer(this);
