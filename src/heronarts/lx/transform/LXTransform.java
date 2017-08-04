@@ -29,14 +29,17 @@ import java.util.Stack;
  */
 public class LXTransform {
 
-    private final Stack<LXMatrix> matrices;
+    private final Stack<LXMatrix> matrices = new Stack<LXMatrix>();
 
     /**
      * Constructs a new transform
      */
     public LXTransform() {
-        this.matrices = new Stack<LXMatrix>();
-        this.matrices.push(new LXMatrix());
+        this(new LXMatrix());
+    }
+
+    public LXTransform(LXMatrix matrix) {
+        this.matrices.push(matrix);
     }
 
     public LXMatrix getMatrix() {
@@ -101,6 +104,27 @@ public class LXTransform {
      */
     public LXTransform translate(float tx, float ty, float tz) {
         getMatrix().translate(tx, ty, tz);
+        return this;
+    }
+
+    public LXTransform scale(float sv) {
+        return scale(sv, sv, sv);
+    }
+
+    public LXTransform scaleX(float sx) {
+        return scale(sx, 1, 1);
+    }
+
+    public LXTransform scaleY(float sy) {
+        return scale(1, sy, 1);
+    }
+
+    public LXTransform scaleZ(float sz) {
+        return scale(1, 1, sz);
+    }
+
+    public LXTransform scale(float sx, float sy, float sz) {
+        getMatrix().scale(sx, sy, sz);
         return this;
     }
 
