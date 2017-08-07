@@ -200,12 +200,11 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
         if (this.objects!= null && (this.objects.length != maxValue - minValue)) {
             throw new UnsupportedOperationException("May not call setRange on a DiscreteParameter with Object list of different length");
         }
+        if (maxValue <= minValue) {
+            throw new IllegalArgumentException("DiscreteParameter must have range of at least 1");
+        }
         this.minValue = minValue;
         this.maxValue = maxValue - 1;
-        if (this.maxValue < this.minValue - 1) {
-            throw new IllegalArgumentException(
-                    "DiscreteParameter must have range of at least 1");
-        }
         this.range = maxValue - minValue;
         setValue(updateValue(this.getValue()));
         return this;

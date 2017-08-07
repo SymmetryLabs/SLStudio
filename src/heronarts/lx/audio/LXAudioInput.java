@@ -93,7 +93,7 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
 
     };
 
-    public class Device {
+    public static class Device {
         public final Mixer.Info info;
         public final Mixer mixer;
         public final DataLine.Info line;
@@ -107,6 +107,27 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
         @Override
         public String toString() {
             return this.info.getName();
+        }
+
+        public boolean isAvailable() {
+            return true;
+        }
+
+        public static class Unavailable extends Device {
+            Unavailable() {
+                super(null, null, null);
+            }
+
+            @Override
+            public String toString() {
+                return "No Input";
+            }
+
+            @Override
+            public boolean isAvailable() {
+                return false;
+            }
+
         }
     }
 
@@ -126,6 +147,9 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
                     break;
                 }
             }
+        }
+        if (devices.size() == 0) {
+            devices.add(new Device.Unavailable());
         }
 
         this.device = new DiscreteParameter("Device", devices.toArray(new Device[] {}));
@@ -155,6 +179,10 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
     void open() {
         if (this.line == null) {
             Device device = (Device) this.device.getObject();
+            if (!device.isAvailable()) {
+                return;
+            }
+
             DataLine.Info info = null;
             if (device.mixer.isLineSupported(STEREO_TARGET_LINE)) {
                 this.format = STEREO;
