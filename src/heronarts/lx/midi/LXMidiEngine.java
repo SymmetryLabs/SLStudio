@@ -121,18 +121,23 @@ public class LXMidiEngine implements LXSerializable {
                 // do it in a separate thread so that we don't delay the whole application
                 // starting up.
                 // for (MidiDevice.Info deviceInfo : MidiSystem.getMidiDeviceInfo()) {
-                for (MidiDevice.Info deviceInfo : CoreMidiDeviceProvider.getMidiDeviceInfo()) {
-                    try {
-                        MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
-                        if (device.getMaxTransmitters() != 0) {
-                            mutableInputs.add(new LXMidiInput(LXMidiEngine.this, device));
+                try {
+                    for (MidiDevice.Info deviceInfo : CoreMidiDeviceProvider.getMidiDeviceInfo()) {
+                        try {
+                            MidiDevice device = MidiSystem.getMidiDevice(deviceInfo);
+                            if (device.getMaxTransmitters() != 0) {
+                                mutableInputs.add(new LXMidiInput(LXMidiEngine.this, device));
+                            }
+                            if (device.getMaxReceivers() != 0) {
+                                mutableOutputs.add(new LXMidiOutput(LXMidiEngine.this, device));
+                            }
+                        } catch (MidiUnavailableException mux) {
+                            mux.printStackTrace();
                         }
-                        if (device.getMaxReceivers() != 0) {
-                            mutableOutputs.add(new LXMidiOutput(LXMidiEngine.this, device));
-                        }
-                    } catch (MidiUnavailableException mux) {
-                        mux.printStackTrace();
                     }
+                } catch (Exception x) {
+                    System.err.println("Unexpected MIDI error, MIDI unavailable: " + x.getLocalizedMessage());
+                    x.printStackTrace();
                 }
                 for (LXMidiInput input : inputs) {
                     LXMidiSurface surface = LXMidiSurface.get(lx, LXMidiEngine.this, input);
