@@ -1119,7 +1119,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         }
 
         // Frame is now ready
-        if (this.isThreaded) {
+        if (this.isThreaded || this.isNetworkMultithreaded) {
             // If multi-threading UI, lock the double buffer and clip it
             synchronized (this.buffer) {
                 this.buffer.cueOn = cueOn;
