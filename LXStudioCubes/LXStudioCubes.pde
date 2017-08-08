@@ -18,6 +18,11 @@ public DeviceController deviceController;
 public DeviceModel deviceModel;
 public OscServer deviceOscServer;
 public MappingMode mappingMode = null;
+public AppServer appServer;
+public AutomappingController automappingController;
+
+final boolean MAPPING_MODE = true;
+
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -26,39 +31,11 @@ void setup() {
   long setupStart = System.nanoTime();
   size(1280, 800, P3D);
 
+  // Automapping
+  automappingController = new AutomappingController(lx);
+
   int switchModel = 1;
 
-// public final EnumParameter<Mode> hueMode =
-//     new EnumParameter<Mode>("Mode", Mode.FIXED)
-//     .setDescription("Sets the operation mode of the palette");
-// this.hueMode.setOptions(new String[] { "Fixed", "Oscillate", "Cycle" });
-
-//   new UIToggleSet(0, 2, 200, 18)
-//     .setEvenSpacing()
-//     .setParameter()
-//     .addToContainer(this);
-
-// @Override
-//   public void onParameterChanged(LXParameter parameter) {
-//     if (parameter == this.hueMode) {
-//       double hueValue = this.hue.getValue();
-//       this.color.hue.setValue(hueValue);
-//       switch ((Mode) this.hueMode.getObject()) {
-//         case FIXED:
-//           this.hue = this.hueFixed;
-//           this.hueFixed.setValue(hueValue).start();
-//           this.hueCycle.stop();
-//           this.hueOscillate.stop();
-//           break;
-//         case CYCLE:
-//           this.hue = this.hueCycle;
-//           this.hueFixed.stop();
-//           this.hueOscillate.stop();
-//           this.hueCycle.setValue(hueValue).start();
-//           break;
-//       }
-//     }
-//   }
   // these 3 lines must be commented out in order for cubes model to work
   GridModel.Metrics metrics = new GridModel.Metrics(8, 8);
   metrics.setSpacing(10.0, 10.0);
@@ -84,6 +61,7 @@ void setup() {
   lx = new SLStudio(this, currModel) {
     @Override
     protected void initialize(SLStudio lx, SLStudio.UI ui) {
+      automappingController.lx = lx;
       // if (envelopOn) {
       //   envelop = new Envelop(lx);
       //   lx.engine.registerComponent("envelop", envelop);
@@ -117,11 +95,62 @@ void setup() {
 
       deviceController = new DeviceController(lx);
 
-      // Adaptor for mapping osc messages from Essentia to lx osc engine
+
+    //   HashMap<String, LXPoint[]> debugs = new HashMap();
+
+
+      Cube mod = new Cube(
+        "no",
+        0,
+        0,
+        0,
+        0,
+        0,
+        0,
+        new LXTransform(),
+        Cube.Type.LARGE
+      );
+
+
+
+      println("PVector[] fromLX = {");
+      int i = 0;
+      for (LXPoint p : mod.points) {
+        System.out.printf("new PVector(%.5f, %.5f, %.5f)", p.x, p.y, p.z);
+        if (i < mod.points.length - 1) {
+          System.out.printf(",\n");
+        }
+        i++;
+      }
+      i = 0;
+      println("};");
+    //   LXPoint[] kP = automappingController.getRawPointsForId("SMALLBOI");
+    //   debugs.put("kyle_model", kP);
+
+    //   for (LXPoint p : kP) {
+    //     System.out.printf("new PVector(%.5f, %.5f, %.5f)", p.x, p.y, p.z);
+    //     if (i < kP.length - 1) {
+    //       System.out.printf(",\n");
+    //     }
+    //     i++;
+    //   }
+    //   println("};");
+
+    // Gson gson = new GsonBuilder().setPrettyPrinting().create();
+
+
+    // saveBytes(dataPath("model_points.json"), gson.toJson(debugs).getBytes());
+
+      // Setup server listeners
+      //    Adaptor for mapping osc messages from Essentia to lx osc engine
+      //    TCP server for iOS Automapper
       try {
         lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
+        appServer = new AppServer(lx);
       } catch (SocketException sx) {
-        throw new RuntimeException(sx);
+        javax.swing.JOptionPane.showMessageDialog(null, "Looks like you're already running LXStudioCubes. Quitting now.");
+        exit();
+        // throw new RuntimeException(sx);
       }
 
       // Adaptor for mapping osc messages from Agents/wearables to lx osc engine
@@ -174,7 +203,18 @@ void setup() {
     }
   };
 
-  lx.engine.audio.enabled.setValue(true);
+  // lx.engine.audio.enabled.setValue(true);
+
+  //    LXPattern mappingPattern = new Bubbles(lx);
+  //   LXChannel mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});
+
+  //   for (LXChannel channel : lx.engine.channels)
+  //     channel.cueActive.setValue(false);
+
+  //   mappingChannel.fader.setValue(1);
+  //   mappingChannel.label.setValue("Bubbles");
+  //   mappingChannel.cueActive.setValue(true);
+
 
   // LXPattern mappingPattern = new Bubbles(lx);
   //     LXChannel mappingChannel = lx.engine.addChannel(new LXPattern[] {mappingPattern});

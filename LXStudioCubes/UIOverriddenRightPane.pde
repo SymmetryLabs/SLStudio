@@ -72,10 +72,10 @@ public class UIOverriddenRightPane extends UIPane {
 
     new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
 
-    if (((SLModel)model).cubes.size() > 0)
-      new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+    // if (((SLModel)model).cubes.size() > 0)
+    //   new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
 
-    // TODO: list wearables ("devices")
+    new UIAutomapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
   }
 
   private void buildMidiUI() {

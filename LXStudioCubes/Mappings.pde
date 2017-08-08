@@ -13,13 +13,14 @@
  * when physical changes or tuning is being done to the structure.
  */
 
+ import heronarts.lx.transform.*;
 
 static final float globalOffsetX = 0;
 static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -213,6 +214,131 @@ static class TowerConfig {
 Map<String, String> macToPhysid = new HashMap<String, String>();
 Map<String, String> physidToMac = new HashMap<String, String>();
 
+public SLModel buildModelFromJson(LXTransform globalTransform) {
+  String jsonStr;
+  try {
+    byte[] bytes = loadBytes("cube_transforms.json");
+    jsonStr = new String(bytes);
+    // float yo = 10 / 0;
+  } catch (Exception e) {
+    List<Tower> emptyTowers = new ArrayList<Tower>();
+    Cube emptyCubes[] = new Cube[0];
+    List<Strip> emptyStrips = new ArrayList<Strip>();
+    return new SLModel(emptyTowers, emptyCubes, emptyStrips);
+  }
+
+  JsonArray json = new Gson().fromJson(jsonStr, JsonArray.class);
+
+  List<Tower> towers = new ArrayList<Tower>();
+  Cube[] cubes = new Cube[200];
+  int cubeIndex = 0;
+
+  for (JsonElement element : json) {
+    LXTransform transform = new LXTransform();
+    LXMatrix matrix = transform.getMatrix();
+
+    JsonObject cubeInfo = element.getAsJsonObject();
+
+    int rowNum = 0;
+    for (JsonElement row : cubeInfo.getAsJsonArray("transform")) {
+      int colNum = 0;
+      for (JsonElement entry : row.getAsJsonArray()) {
+        float value = entry.getAsFloat();
+        switch (rowNum) {
+          case 0:
+            switch (colNum) {
+              case 0: matrix.m11 = value; break;
+              case 1: matrix.m12 = value; break;
+              case 2: matrix.m13 = value; break;
+              case 3: matrix.m14 = value; break;
+            }
+            break;
+          case 1:
+            switch (colNum) {
+              case 0: matrix.m21 = value; break;
+              case 1: matrix.m22 = value; break;
+              case 2: matrix.m23 = value; break;
+              case 3: matrix.m24 = value; break;
+            }
+            break;
+          case 2:
+            switch (colNum) {
+              case 0: matrix.m31 = value; break;
+              case 1: matrix.m32 = value; break;
+              case 2: matrix.m33 = value; break;
+              case 3: matrix.m34 = value; break;
+            }
+            break;
+          case 3:
+            switch (colNum) {
+              case 0: matrix.m41 = value; break;
+              case 1: matrix.m42 = value; break;
+              case 2: matrix.m43 = value; break;
+              case 3: matrix.m44 = value; break;
+            }
+            break;
+        }
+        colNum++;
+      }
+      rowNum++;
+    }
+
+        List<Cube> tower = new ArrayList<Cube>();
+
+
+
+
+    String macAddress = cubeInfo.get("id").getAsString();
+
+    // Cube yikes = new Cube(
+    //   new Integer(cubeIndex).toString(),
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   transform,
+    //   Cube.Type.LARGE
+    // );
+
+    // Cube.Type t = automappingController.getCubeTypeForId(macAddress);
+    // float w = t.EDGE_WIDTH;
+    // transform.translate(-w/2, -w/2, -w/2);
+
+    LXMatrix inverter = new LXMatrix();
+    // inverter.m11 = -1;
+    // inverter.m33 = -1;
+    // matrix.multiply(inverter);
+
+    Cube cube = (Cube)automappingController.getModelForId(macAddress, transform);
+
+    // println("WIDTHS", w, cube.xRange);
+
+    // Cube cube = new Cube(
+    //   new Integer(cubeIndex).toString(),
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   0,
+    //   transform,
+    //   Cube.Type.LARGE
+    // );
+    tower.add(cube);
+    cubes[++cubeIndex] = cube;
+    towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
+  }
+  List<Strip> emptyStrips = new ArrayList<Strip>();
+  return new SLModel(towers, cubes, emptyStrips);
+}
+
+float floatify(Double v) {
+  double v_ = v;
+  return (float)v_;
+}
+
 public SLModel buildModel() {
 
   byte[] bytes = loadBytes("physid_to_mac.json");
@@ -228,12 +354,18 @@ public SLModel buildModel() {
     }
   }
 
+
   // Any global transforms
   LXTransform globalTransform = new LXTransform();
   globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
   globalTransform.rotateY(globalRotationY * PI / 180.);
   globalTransform.rotateX(globalRotationX * PI / 180.);
   globalTransform.rotateZ(globalRotationZ * PI / 180.);
+
+  if (MAPPING_MODE) {
+    // if in mapping mode, return an "empty" model
+    return buildModelFromJson(globalTransform);
+  }
 
   /* Cubes ----------------------------------------------------------*/
   List<Tower> towers = new ArrayList<Tower>();

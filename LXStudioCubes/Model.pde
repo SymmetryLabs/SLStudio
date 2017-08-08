@@ -84,7 +84,7 @@ public static class SLModel extends LXModel {
             this.points.add(point); 
           } 
         } 
-      } 
+      }
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
           this.points.add(point);
@@ -177,9 +177,9 @@ public static class Cube extends LXModel {
     //            Edge     |  LEDs   |  LEDs
     //            Length   |  Per    |  Per
     //            Inches   |  Meter  |  Edge
-    SMALL         (12,        72,       15),
+    SMALL         (10.7,        60,       12),
     MEDIUM        (18,        60,       23),
-    LARGE         (24,        30,       15),
+    LARGE         (22.85,        30,       15),
     LARGE_DOUBLE  (24,        60,       30);
     
 
@@ -217,7 +217,7 @@ public static class Cube extends LXModel {
 
   public final static int STRIPS_PER_CUBE = FACES_PER_CUBE*Face.STRIPS_PER_FACE;
 
-  public final static float CHANNEL_WIDTH = 1.5f;
+  public final static float CHANNEL_WIDTH = 0f;
 
   public final Type type;
 
