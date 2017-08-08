@@ -116,13 +116,13 @@ public class ParseClientTask implements LXLoopTask {
       if (args == null) args = new HashMap<String, Object>();
 
       if (method.equals("mapping.startCalibration")) {
-        automappingController.startCalibration();        
+        automappingController.startCalibration();
         communicator.sendResponse(id);
         return;
       }
 
       if (method.equals("debug.setText")) {
-        println("SIZE", Cube.Type.LARGE.EDGE_WIDTH);
+        println("SIZE", CubesModel.Cube.Type.LARGE.EDGE_WIDTH);
 
         textScaleX = (float)(double)args.get("textScaleX");
         textScaleY = (float)(double)args.get("textScaleY");
@@ -152,7 +152,7 @@ public class ParseClientTask implements LXLoopTask {
 
         ArrayList<ArrayList<Double>> jsonTransform = (ArrayList<ArrayList<Double>>)args.get("transform");
 
-  
+
 
         ArrayList<Double> rvec = (ArrayList<Double>)args.get("rvec");
         ArrayList<Double> tvec = (ArrayList<Double>)args.get("tvec");
@@ -210,14 +210,14 @@ public class ParseClientTask implements LXLoopTask {
 
         communicator.sendResponse(id, xyz);
         return;
-      } 
+      }
 
       if (method.equals("mapping.showNextCube")) {
         String cubeId = (String)args.get("id");
         automappingController.showNextCube(cubeId);
         communicator.sendResponse(id);
         return;
-      } 
+      }
 
       if (method.equals("mapping.showAutomappingPattern")) {
         String cubeId = (String)args.get("id");
@@ -239,7 +239,7 @@ public class ParseClientTask implements LXLoopTask {
       }
 
 
-     
+
 
       if (method.equals("mapping.showImageForPixel")) {
         Number pixelIndex = (Number)args.get("pixelIndex");

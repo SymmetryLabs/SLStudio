@@ -1,6 +1,7 @@
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 // See: https://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
 public static final class OsUtils {
@@ -123,106 +124,6 @@ public static final class NumberUtils {
 
   public static int byteToInt(byte b) {
     return (b + 256) % 256;
-  }
-
-}
-
-public static final class MathUtils {
-
-  public static byte byteSubtract(int a, int b) {
-    byte res = (byte)(a - b);
-    return (byte)(res & (byte)((b&0xFF) <= (a&0xFF) ? -1 : 0));
-  }
-  
-  public static byte byteMultiply(byte b, double s) {
-    int res = (int)((b&0xFF) * s);
-    byte hi = (byte)(res >> 8);
-    byte lo = (byte)(res);
-    return (byte)(lo | (byte)(hi==0 ? 0 : -1));
-  }
-
-  public static void interpolateArray(float[] in, float[] out) {
-    if (out.length == in.length) {
-      System.arraycopy(in, 0, out, 0, out.length);
-      return;
-    }
-
-    float outPerIn = 1.0f * (out.length-1) / (in.length-1);
-    for (int outIndex = 0; outIndex < out.length; outIndex++) {
-      int inIndex = (int)(outIndex / outPerIn);
-      // Test if we're the nearest index to the exact index in the `in` array
-      // to keep those crisp and un-aliased
-      if ((int)(outIndex % outPerIn) == 0) { //  || inIndex+1 >= in.length
-        out[outIndex] = in[inIndex];
-      } else {
-        // Use spline fitting. (Double up the value if we're at the edge of the `out` array)
-        if (inIndex >= 1 && inIndex < in.length-2) {
-          out[outIndex] = Utils.curvePoint(in[inIndex-1], in[inIndex], in[inIndex+1],
-            in[inIndex+2], (outIndex/outPerIn) % 1);
-        } else if (inIndex == 0) {
-          out[outIndex] = Utils.curvePoint(in[inIndex], in[inIndex], in[inIndex+1],
-            in[inIndex+2], (outIndex/outPerIn) % 1);
-        } else {
-          out[outIndex] = Utils.curvePoint(in[inIndex-1], in[inIndex], in[inIndex+1],
-            in[inIndex+1], (outIndex/outPerIn) % 1);
-        }
-      }
-    }
-  }
-
-}
-
-public static final class ColorUtils {
-
-  public static int setAlpha(int rgb, int alpha) {
-    return (rgb & (~LXColor.ALPHA_MASK)) | ((alpha << LXColor.ALPHA_SHIFT) & LXColor.ALPHA_MASK);
-  }
-
-  public static int setAlpha(int rgb, float alpha) {
-    return setAlpha(rgb, (int) (alpha * 0xff));
-  }
-
-  public static int setAlpha(int rgb, double alpha) {
-    return setAlpha(rgb, (int) (alpha * 0xff));
-  }
-
-  public static int scaleAlpha(int argb, double s) {
-    return setAlpha(argb, MathUtils.byteMultiply(LXColor.alpha(argb), s));
-  }
-
-  public static int subtractAlpha(int argb, int amount) {
-    return setAlpha(argb, MathUtils.byteSubtract(LXColor.alpha(argb), amount));
-  }
-
-  public static void blend(int[] dst, int[] src) {
-    for (int i = 0; i < src.length; i++) {
-      dst[i] = ColorUtils.blend(dst[i], src[i]);
-    }
-  }
-
-  public static int blend(int dst, int src) {
-    float dstA = (dst>>24&0xFF) / 255.0;
-    float srcA = (src>>24&0xFF) / 255.0;
-    float outA = srcA + dstA * (1 - srcA);
-    if (outA == 0) {
-      return 0;
-    }
-    int outR = FastMath.round(((src>>16&0xFF) * srcA + (dst>>16&0xFF) * dstA * (1 - srcA)) / outA)&0xFF;
-    int outG = FastMath.round(((src>>8&0xFF) * srcA + (dst>>8&0xFF) * dstA * (1 - srcA)) / outA)&0xFF;
-    int outB = FastMath.round(((src&0xFF) * srcA + (dst&0xFF) * dstA * (1 - srcA)) / outA)&0xFF;
-    return (((int)(outA*0xFF))&0xFF)<<24 | outR<<16 | outG<<8 | outB;
-  }
-
-  public static int max(int dst, int src) {
-    int outA = FastMath.max(src>>24&0xFF, dst>>24&0xFF);
-    int outR = FastMath.max(src>>16&0xFF, dst>>16&0xFF);
-    int outG = FastMath.max(src>>8&0xFF, dst>>8&0xFF);
-    int outB = FastMath.max(src&0xFF, dst&0xFF);
-    return outA<<24 | outR<<16 | outG<<8 | outB;
-  }
-
-  public static int maxAlpha(int dst, int src) {
-    return (src>>24&0xFF) > (dst>>24&0xFF) ? src : dst;
   }
 
 }
@@ -427,17 +328,17 @@ public static class ClassPathHack {
   public static void addLibraryPath(String pathToAdd) throws Exception {
     final Field usrPathsField = ClassLoader.class.getDeclaredField("usr_paths");
     usrPathsField.setAccessible(true);
- 
+
     //get array of paths
     final String[] paths = (String[])usrPathsField.get(null);
- 
+
     //check if the path to add is already present
     for(String path : paths) {
       if(path.equals(pathToAdd)) {
         return;
       }
     }
- 
+
     //add the new path
     final String[] newPaths = Arrays.copyOf(paths, paths.length + 1);
     newPaths[newPaths.length-1] = pathToAdd;

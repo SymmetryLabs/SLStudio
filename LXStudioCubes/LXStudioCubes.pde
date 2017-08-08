@@ -3,13 +3,16 @@ import java.net.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
 
+final static float INCHES = 1;
+final static float FEET = 12*INCHES;
+
 // //midiMinVar = 21, midiMaxVar = 108, so 88 in total
 // int[] r = new int[108]; //setup arrays for R,G & B values - could be a single array of COLOR objects instead
 // int[] g = new int[108];
 // int[] b = new int[108];
 
 public SLStudio lx;
-public SLModel model;
+public CubesModel model;
 public LXModel currModel;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
@@ -76,6 +79,9 @@ void setup() {
       //   }
       // }
 
+      for (Class<? extends LXPattern> c : PackageUtils.getPatternClassesInPackage("com.symmetrylabs")) {
+        lx.registerPattern(c);
+      }
 
       lx.engine.framesPerSecond.setValue(120);
 
@@ -89,57 +95,11 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
-      // if (((SLModel)model).cubes.size() > 0)
+      // if (((CubesModel)model).cubes.size() > 0)
       //   mappingMode = new MappingMode(lx);
       mappingMode = new MappingMode(lx);
 
       deviceController = new DeviceController(lx);
-
-
-    //   HashMap<String, LXPoint[]> debugs = new HashMap();
-
-
-      Cube mod = new Cube(
-        "no",
-        0,
-        0,
-        0,
-        0,
-        0,
-        0,
-        new LXTransform(),
-        Cube.Type.LARGE
-      );
-
-
-
-      println("PVector[] fromLX = {");
-      int i = 0;
-      for (LXPoint p : mod.points) {
-        System.out.printf("new PVector(%.5f, %.5f, %.5f)", p.x, p.y, p.z);
-        if (i < mod.points.length - 1) {
-          System.out.printf(",\n");
-        }
-        i++;
-      }
-      i = 0;
-      println("};");
-    //   LXPoint[] kP = automappingController.getRawPointsForId("SMALLBOI");
-    //   debugs.put("kyle_model", kP);
-
-    //   for (LXPoint p : kP) {
-    //     System.out.printf("new PVector(%.5f, %.5f, %.5f)", p.x, p.y, p.z);
-    //     if (i < kP.length - 1) {
-    //       System.out.printf(",\n");
-    //     }
-    //     i++;
-    //   }
-    //   println("};");
-
-    // Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-
-    // saveBytes(dataPath("model_points.json"), gson.toJson(debugs).getBytes());
 
       // Setup server listeners
       //    Adaptor for mapping osc messages from Essentia to lx osc engine
@@ -192,7 +152,7 @@ void setup() {
 
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
 
-      // if (((SLModel)model).cubes.size() > 0)
+      // if (((CubesModel)model).cubes.size() > 0)
       //   new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
 
       // if (envelopOn) {

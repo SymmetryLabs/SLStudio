@@ -62,7 +62,7 @@ public final class OutputControl extends LXComponent {
     this.enabled = lx.engine.output.enabled;
 
     addParameter(testBroadcast);
-    
+
     enabled.addListener(new LXParameterListener() {
       public void onParameterChanged(LXParameter parameter) {
         for (SLController c : controllers)
@@ -181,11 +181,11 @@ class SLController extends LXOutput {
     // if that cube isn't modelled yet
     // Use the mac address to find the cube if we have it
     // Otherwise use the cube id
-    Cube cube = null;
+    CubesModel.Cube cube = null;
     if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
       cube = model.cubes.get(0);
     } else {
-      for (Cube c : model.cubes) {
+      for (CubesModel.Cube c : model.cubes) {
         if (c.id != null && c.id.equals(cubeId)) {
           cube = c;
           break;
@@ -196,7 +196,7 @@ class SLController extends LXOutput {
     // Initialize packet data base on cube type.
     // If we don't know the cube type, default to
     // using the cube type with the most pixels
-    Cube.Type cubeType = cube != null ? cube.type : Cube.Type.LARGE;
+    CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.Type.LARGE;
     int numPixels = cubeType.POINTS_PER_CUBE;
     if (packetData == null || packetData.length != numPixels) {
       initPacketData(numPixels);
@@ -207,7 +207,7 @@ class SLController extends LXOutput {
     if (cube != null) {
       for (int stripNum = 0; stripNum < numStrips; stripNum++) {
         int stripId = STRIP_ORD[stripNum];
-        Strip strip = cube.strips.get(stripId);
+        CubesModel.Strip strip = cube.strips.get(stripId);
 
         for (int i = 0; i < strip.metrics.numPoints; i++) {
           LXPoint point = strip.getPoints().get(i);
@@ -255,11 +255,11 @@ class SLController extends LXOutput {
     }
 
     // Send the cube data to the cube. yay!
-    try { 
+    try {
       //println("packetSizeBytes: "+packetSizeBytes);
-      dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));} 
+      dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));}
     catch (Exception e) {dispose();}
-  }  
+  }
 
   void dispose() {
     if (dsocket != null)  println("Disconnected from OPC server");
@@ -333,7 +333,7 @@ class UIOutputs extends UICollapsibleSection {
 
         UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
           @Override
-          public void onToggle(boolean isOn) { 
+          public void onToggle(boolean isOn) {
             outputControl.controllerResetModule.enabled.setValue(isOn);
           }
         }.setMomentary(true).setLabel("Reset Controllers");
@@ -380,7 +380,7 @@ class UIOutputs extends UICollapsibleSection {
             }
         }
 
-        boolean isSelected() { 
+        boolean isSelected() {
             return controller.enabled.isOn();
         }
 

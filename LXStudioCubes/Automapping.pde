@@ -70,8 +70,8 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
     mat = new PMatrix3D();
     mat.set(values);
 
-    this.rvec = new PVector(floatify(rvec.get(0)), floatify(rvec.get(1)), floatify(rvec.get(2)));  
-    this.tvec = new PVector(floatify(tvec.get(0)), floatify(tvec.get(1)), floatify(tvec.get(2)));  
+    this.rvec = new PVector(floatify(rvec.get(0)), floatify(rvec.get(1)), floatify(rvec.get(2)));
+    this.tvec = new PVector(floatify(tvec.get(0)), floatify(tvec.get(1)), floatify(tvec.get(2)));
 
     ms = millis();
 
@@ -226,7 +226,7 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
       boolean drawX = startX != endX && startY == endY && startZ == endZ;
       boolean drawY = startX == endX && startY != endY && startZ == endZ;
       boolean drawZ = startX == endX && startY == endY && startZ != endZ;
-      
+
       if (drawX || drawY || drawZ) {
         pg.line(startX, startY, startZ, endX, endY, endZ);
       }
@@ -271,7 +271,7 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
     float cDist = Float.POSITIVE_INFINITY;
     if (currentCorner != null) {
       before.mult(currentCorner, target);
-      cDist = target.magSq(); 
+      cDist = target.magSq();
     }
 
 
@@ -308,7 +308,7 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
     pg.popStyle();
     pg.popMatrix();
 
-   
+
 
 
     pg.popMatrix();
@@ -346,8 +346,8 @@ class MappedCubeList extends UIItemList.ScrollList {
   }
 
   @Override
-    void onKeyPressed(KeyEvent keyEvent, 
-    char keyChar, 
+    void onKeyPressed(KeyEvent keyEvent,
+    char keyChar,
     int keyCode) {
 
     MappedCubeItem item = (MappedCubeItem)getFocusedItem();
@@ -475,14 +475,14 @@ class UIAutomapping extends UICollapsibleSection {
         AutomappingState state = ((EnumParameter<AutomappingState>)p).getEnum();
         String label;
         switch (state) {
-        case DISCONNECTED: 
-          label = disconnected; 
+        case DISCONNECTED:
+          label = disconnected;
           break;
-        case CONNECTED: 
-          label = connected; 
+        case CONNECTED:
+          label = connected;
           break;
-        case RUNNING: 
-          label = inProgress; 
+        case RUNNING:
+          label = inProgress;
           break;
         default:
           throw new RuntimeException("Invalid state in button label");
@@ -531,7 +531,7 @@ class UIAutomapping extends UICollapsibleSection {
     final MappedCubeList outputList = new MappedCubeList(ui, 0, yOffset, w-8, h);
 
 
-    for (CVFixture c : automappingController.mappedFixtures) { 
+    for (CVFixture c : automappingController.mappedFixtures) {
       items.add(new MappedCubeItem(c));
     }
 
@@ -543,7 +543,7 @@ class UIAutomapping extends UICollapsibleSection {
       public void run() {
         final List<UIItemList.Item> localItems = new ArrayList<UIItemList.Item>();
         int i = 0;
-        for (CVFixture c : automappingController.mappedFixtures) { 
+        for (CVFixture c : automappingController.mappedFixtures) {
           localItems.add(new MappedCubeItem(c));
         }
         outputList.setItems(localItems);
@@ -610,16 +610,16 @@ class UIAutomapping extends UICollapsibleSection {
 }
 
 public static enum AutomappingState {
-  DISCONNECTED, 
-    CONNECTED, 
+  DISCONNECTED,
+    CONNECTED,
     RUNNING
 }
 
 public static enum PatternState {
-  S0_IDENTIFY, 
-    S1_BLACK, 
-    S2_WHITE, 
-    S3_BLACK, 
+  S0_IDENTIFY,
+    S1_BLACK,
+    S2_WHITE,
+    S3_BLACK,
     STATE_END;
   public static final PatternState values[] = values();
 }
@@ -627,11 +627,11 @@ public static enum PatternState {
 
 // TODO RENAME
 public static enum PatternMode {
-  CALIBRATING, 
-    MAPPING, 
-    SHOW_PIXEL, 
-    ALL_ON, 
-    ALL_OFF, 
+  CALIBRATING,
+    MAPPING,
+    SHOW_PIXEL,
+    ALL_ON,
+    ALL_OFF,
     SHOW_CUBE
 }
 
@@ -682,7 +682,7 @@ class AutomappingController extends LXComponent {
   boolean hideLabels = false;
   String currentCubeId = null;
 
-  HashMap<String, Cube.Type> knownCubeTypes;
+  HashMap<String, CubesModel.Cube.Type> knownCubeTypes;
 
   final JLabel label = new JLabel();
 
@@ -717,8 +717,8 @@ class AutomappingController extends LXComponent {
     knownCubeTypes = loadKnownCubeTypes();
   }
 
-  HashMap<String, Cube.Type> loadKnownCubeTypes() {
-    HashMap<String, Cube.Type> types = new HashMap();
+  HashMap<String, CubesModel.Cube.Type> loadKnownCubeTypes() {
+    HashMap<String, CubesModel.Cube.Type> types = new HashMap();
 
     String data = new String(loadBytes("physid_to_size.json"));
     HashMap<String, String> map = (new Gson()).fromJson(data, new TypeToken<HashMap<String, String>>() {}.getType());
@@ -726,13 +726,13 @@ class AutomappingController extends LXComponent {
     for (Map.Entry<String, String> entry : map.entrySet()) {
       String k = entry.getKey();
       String stringType = entry.getValue();
-      Cube.Type v;
+      CubesModel.Cube.Type v;
       if (stringType.equals("SMALL")) {
-        v = Cube.Type.SMALL;
+        v = CubesModel.Cube.Type.SMALL;
       } else if (stringType.equals("MEDIUM")) {
-        v = Cube.Type.MEDIUM;
+        v = CubesModel.Cube.Type.MEDIUM;
       } else if (stringType.equals("LARGE")) {
-        v = Cube.Type.LARGE;
+        v = CubesModel.Cube.Type.LARGE;
       } else {
         throw new RuntimeException("UNKNOWN CUBE TYPE: " + stringType);
       }
@@ -788,24 +788,24 @@ class AutomappingController extends LXComponent {
     PMatrix3D rot = new PMatrix3D();
 
     switch(dir) {
-    case 'u': 
+    case 'u':
       break;
-    case 'd': 
-      rot.rotateX(PI); 
+    case 'd':
+      rot.rotateX(PI);
       break;
-    case 'l': 
-      rot.rotateZ(PI/2); 
+    case 'l':
+      rot.rotateZ(PI/2);
       break;
-    case 'r': 
-      rot.rotateZ(-PI/2); 
+    case 'r':
+      rot.rotateZ(-PI/2);
       break;
-    case 'b': 
-      rot.rotateX(PI/2); 
+    case 'b':
+      rot.rotateX(PI/2);
       break;
-    case 'f': 
-      rot.rotateX(-PI/2); 
+    case 'f':
+      rot.rotateX(-PI/2);
       break;
-    default: 
+    default:
       throw new RuntimeException("Invalid direction in rotate");
     }
 
@@ -912,27 +912,27 @@ class AutomappingController extends LXComponent {
     return getModelForId(id, new LXTransform());
   }
 
-  Cube.Type getCubeTypeForId(String id) {
+  CubesModel.Cube.Type getCubeTypeForId(String id) {
     if (id.equals("SMALLBOI")) {
-      return Cube.Type.SMALL;
+      return CubesModel.Cube.Type.SMALL;
     }
 
 
     if (!macToPhysid.containsKey(id)) {
-      return Cube.Type.LARGE;
+      return CubesModel.Cube.Type.LARGE;
     }
 
 
     String physId = macToPhysid.get(id);
     if (!knownCubeTypes.containsKey(physId)) {
-      return Cube.Type.LARGE;
+      return CubesModel.Cube.Type.LARGE;
     }
-        
+
     return knownCubeTypes.get(physId);
   }
 
   LXModel getModelForId(String id, LXTransform t) {
-    Cube.Type type = getCubeTypeForId(id);
+    CubesModel.Cube.Type type = getCubeTypeForId(id);
 
     String realId;
     if (macToPhysid.containsKey(id)) {
@@ -941,7 +941,7 @@ class AutomappingController extends LXComponent {
       realId = "UNKNOWN";
     }
 
-    return new Cube(realId, 0, 0, 0, 0, 0, 0, t, type);
+    return new CubesModel.Cube(realId, 0, 0, 0, 0, 0, 0, t, type);
   }
 
   ArrayList<LXPoint> centerPoints(ArrayList<LXPoint> input) {
@@ -1262,9 +1262,9 @@ class AutomappingController extends LXComponent {
       if (frameCounter == 0 && patternPixelIndex == 0) {
         runthroughCount++;
       }
-      break; 
+      break;
 
-    case S3_BLACK: 
+    case S3_BLACK:
       frameCounter = (frameCounter+1) % (patternPixelIndex == 0 ? RESET_BLACK_FRAMES : S3_FRAMES);
       break;
 
@@ -1323,7 +1323,7 @@ class AutomappingController extends LXComponent {
     case S2_WHITE:
       return resetFrameBaseColor;
 
-    case S3_BLACK: 
+    case S3_BLACK:
       return LXColor.BLACK;
 
     default:
@@ -1380,7 +1380,7 @@ class AutomappingController extends LXComponent {
     case CALIBRATING:
       return patternState == PatternState.S1_BLACK ? LXColor.BLACK : resetFrameBaseColor;
     case MAPPING:
-      return mappingColor(cubeId, i);        
+      return mappingColor(cubeId, i);
     case SHOW_PIXEL:
       return showPixelIndex == i ? LXColor.WHITE : LXColor.BLACK;
     case ALL_ON:
@@ -1414,7 +1414,7 @@ class AutomappingController extends LXComponent {
   }
 }
 
-public class AutomappingPattern extends SLPattern {
+public class AutomappingPattern extends CubesPattern {
 
 
   public AutomappingPattern(LX lx) {

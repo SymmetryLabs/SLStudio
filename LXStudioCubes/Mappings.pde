@@ -163,7 +163,7 @@ static class StripConfig {
 
 static class TowerConfig {
 
-  final Cube.Type type;
+  final CubesModel.Cube.Type type;
   final float x;
   final float y;
   final float z;
@@ -174,26 +174,26 @@ static class TowerConfig {
   final float[] yValues;
 
   TowerConfig(float x, float y, float z, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, ids);
+    this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
   }
 
   TowerConfig(float x, float y, float z, float yRot, String[] ids) {
     this(x, y, z, 0, yRot, 0, ids);
   }
 
-  TowerConfig(Cube.Type type, float x, float y, float z, String[] ids) {
+  TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
     this(type, x, y, z, 0, 0, 0, ids);
   }
 
-  TowerConfig(Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
+  TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
     this(type, x, y, z, 0, yRot, 0, ids);
   }
 
   TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
+    this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
   }
 
-  TowerConfig(Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+  TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
     this.type = type;
     this.x = x;
     this.y = y;
@@ -214,23 +214,23 @@ static class TowerConfig {
 Map<String, String> macToPhysid = new HashMap<String, String>();
 Map<String, String> physidToMac = new HashMap<String, String>();
 
-public SLModel buildModelFromJson(LXTransform globalTransform) {
+public CubesModel buildModelFromJson(LXTransform globalTransform) {
   String jsonStr;
   try {
     byte[] bytes = loadBytes("cube_transforms.json");
     jsonStr = new String(bytes);
     // float yo = 10 / 0;
   } catch (Exception e) {
-    List<Tower> emptyTowers = new ArrayList<Tower>();
-    Cube emptyCubes[] = new Cube[0];
-    List<Strip> emptyStrips = new ArrayList<Strip>();
-    return new SLModel(emptyTowers, emptyCubes, emptyStrips);
+    List<CubesModel.Tower> emptyTowers = new ArrayList<CubesModel.Tower>();
+    CubesModel.Cube emptyCubes[] = new CubesModel.Cube[0];
+    List<CubesModel.Strip> emptyStrips = new ArrayList<CubesModel.Strip>();
+    return new CubesModel(emptyTowers, emptyCubes, emptyStrips);
   }
 
   JsonArray json = new Gson().fromJson(jsonStr, JsonArray.class);
 
-  List<Tower> towers = new ArrayList<Tower>();
-  Cube[] cubes = new Cube[200];
+  List<CubesModel.Tower> towers = new ArrayList<CubesModel.Tower>();
+  CubesModel.Cube[] cubes = new CubesModel.Cube[200];
   int cubeIndex = 0;
 
   for (JsonElement element : json) {
@@ -283,10 +283,7 @@ public SLModel buildModelFromJson(LXTransform globalTransform) {
       rowNum++;
     }
 
-        List<Cube> tower = new ArrayList<Cube>();
-
-
-
+    List<CubesModel.Cube> tower = new ArrayList<CubesModel.Cube>();
 
     String macAddress = cubeInfo.get("id").getAsString();
 
@@ -311,7 +308,7 @@ public SLModel buildModelFromJson(LXTransform globalTransform) {
     // inverter.m33 = -1;
     // matrix.multiply(inverter);
 
-    Cube cube = (Cube)automappingController.getModelForId(macAddress, transform);
+    CubesModel.Cube cube = (CubesModel.Cube)automappingController.getModelForId(macAddress, transform);
 
     // println("WIDTHS", w, cube.xRange);
 
@@ -328,10 +325,10 @@ public SLModel buildModelFromJson(LXTransform globalTransform) {
     // );
     tower.add(cube);
     cubes[++cubeIndex] = cube;
-    towers.add(new Tower(new Integer(cubeIndex).toString(), tower));
+    towers.add(new CubesModel.Tower(new Integer(cubeIndex).toString(), tower));
   }
-  List<Strip> emptyStrips = new ArrayList<Strip>();
-  return new SLModel(towers, cubes, emptyStrips);
+  List<CubesModel.Strip> emptyStrips = new ArrayList<CubesModel.Strip>();
+  return new CubesModel(towers, cubes, emptyStrips);
 }
 
 float floatify(Double v) {
@@ -339,7 +336,7 @@ float floatify(Double v) {
   return (float)v_;
 }
 
-public SLModel buildModel() {
+public CubesModel buildModel() {
 
   byte[] bytes = loadBytes("physid_to_mac.json");
   if (bytes != null) {
@@ -368,33 +365,33 @@ public SLModel buildModel() {
   }
 
   /* Cubes ----------------------------------------------------------*/
-  List<Tower> towers = new ArrayList<Tower>();
-  List<Cube> allCubes = new ArrayList<Cube>();
+  List<CubesModel.Tower> towers = new ArrayList<CubesModel.Tower>();
+  List<CubesModel.Cube> allCubes = new ArrayList<CubesModel.Cube>();
 
   for (TowerConfig config : TOWER_CONFIG) {
-    List<Cube> cubes = new ArrayList<Cube>();
+    List<CubesModel.Cube> cubes = new ArrayList<CubesModel.Cube>();
     float x = config.x;
     float z = config.z;
     float xRot = config.xRot;
     float yRot = config.yRot;
     float zRot = config.zRot;
-    Cube.Type type = config.type;
+    CubesModel.Cube.Type type = config.type;
 
     for (int i = 0; i < config.ids.length; i++) {
       float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+      CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
       cubes.add(cube);
       allCubes.add(cube);
     }
-    towers.add(new Tower("", cubes));
+    towers.add(new CubesModel.Tower("", cubes));
   }
   /*-----------------------------------------------------------------*/
 
   /* Strips ----------------------------------------------------------*/
-  List<Strip> strips = new ArrayList<Strip>();
+  List<CubesModel.Strip> strips = new ArrayList<CubesModel.Strip>();
 
   for (StripConfig stripConfig : STRIP_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
+    CubesModel.Strip.Metrics metrics = new CubesModel.Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
@@ -402,28 +399,28 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new CubesModel.Strip(metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }
   /*-----------------------------------------------------------------*/
 
-  Cube[] allCubesArr = new Cube[allCubes.size()];
+  CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
   for (int i = 0; i < allCubesArr.length; i++) {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
+  return new CubesModel(towers, allCubesArr, strips);
 }
 
-public SLModel getModel() {
+public CubesModel getModel() {
   return buildModel();
 }
 
 /*
  * Mapping Pattern
  *---------------------------------------------------------------------------*/
-public class MappingPattern extends SLPattern {
+public class MappingPattern extends CubesPattern {
   private final SinLFO pulse = new SinLFO(20, 100, 800);
 
   public color mappedAndOnNetworkColor    = LXColor.GREEN;
@@ -498,7 +495,7 @@ public class MappingPattern extends SLPattern {
 
     // we iterate all cubes and call continue here because multiple cubes might have zero as id
     System.out.println(model.getClass());
-    // for (Cube c : model.cubes) {
+    // for (CubesModel.Cube c : model.cubes) {
     //   if (!c.id.equals(id)) continue;
 
     //   LXPoint[] points = c.points;
@@ -551,7 +548,7 @@ public class MappingMode {
     // this.displayOrientation = new BooleanParameter("displayOrientation", false)
     //  .setDescription("Mapping Mode: display colors on strips to indicate it's orientation");
 
-    for (Cube cube : model.cubes)
+    for (CubesModel.Cube cube : model.cubes)
       fixturesMappedButNotOnNetwork.add(cube.id);
 
     this.selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", fixturesMappedButNotOnNetwork.toArray());
@@ -585,7 +582,7 @@ public class MappingMode {
   }
 
   private boolean isFixtureMapped(String id) {
-    for (Cube fixture : model.cubes) {
+    for (CubesModel.Cube fixture : model.cubes) {
       if (fixture.id.equals(id))
         return true;
     }
