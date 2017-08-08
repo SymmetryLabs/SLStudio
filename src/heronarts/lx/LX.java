@@ -677,7 +677,8 @@ public class LX {
         obj.add(KEY_EXTERNALS, externalsObj);
         try {
             JsonWriter writer = new JsonWriter(new FileWriter(file));
-            new GsonBuilder().setPrettyPrinting().create().toJson(obj, writer);
+            writer.setIndent("  ");
+            new GsonBuilder().create().toJson(obj, writer);
             writer.close();
             System.out.println("Project saved successfully to " + file.toString());
             setProject(file, ProjectListener.Change.SAVE);
