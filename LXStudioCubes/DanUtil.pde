@@ -2,13 +2,13 @@
 // int         NumApcRows=4, NumApcCols=8;
 
 // // public class Pick {
-// //     public int  NumPicks, Default   ,   
+// //     public int  NumPicks, Default   ,
 // //             CurRow  , CurCol    ,
 // //             StartRow, EndRow    ;
 // //     String  tag     , Desc[]    ;
 
 // //     public Pick (String label, int _Def, int _Num,  int nStart, String d[]) {
-// //         NumPicks    = _Num;     Default = _Def; 
+// //         NumPicks    = _Num;     Default = _Def;
 // //         StartRow    = nStart;   EndRow  = StartRow + floor((NumPicks-1) / NumApcCols);
 // //         tag         = label;    Desc    = d;
 // //         reset();
@@ -36,7 +36,7 @@ public class NDat {
         isActive = true;
         hue=_hue; xz=_xz; yz=_yz; zz =_zz; den=_den; speed=_speed; angle=_angle;
         xoff = random(100e3); yoff = random(100e3); zoff = random(100e3);
-     
+
     }
 }
 
@@ -52,14 +52,14 @@ public class DBool {
     }
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-public class DPat extends SLPattern {
+public class DPat extends LXPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     ArrayList<DBool>  bools  = new ArrayList<DBool> ();
-    PVector pTrans= new PVector(); 
+    PVector pTrans= new PVector();
     PVector     mMax, mCtr, mHalf;
 
     LXMidiOutput  APCOut;
-    LXMidiOutput MidiFighterTwisterOut; 
+    LXMidiOutput MidiFighterTwisterOut;
     int         nMaxRow     = 53;
     float       LastJog = -1;
     float[]     xWaveNz, yWaveNz;
@@ -91,9 +91,9 @@ public class DPat extends SLPattern {
     PVector     vT1 = new PVector(), vT2 = new PVector();
     float       calcCone (PVector v1, PVector v2, PVector c)    {   vT1.set(v1); vT2.set(v2); vT1.sub(c); vT2.sub(c);
                                                                     return degrees(angleBetween(vT1,vT2)); }
-    
+
     // Pick        addPick(String name, int def, int _max, String[] desc) {
-    //     Pick P      = new Pick(name, def, _max+1, nMaxRow, desc); 
+    //     Pick P      = new Pick(name, def, _max+1, nMaxRow, desc);
     //     nMaxRow     = P.EndRow + 1;
     //     picks.add(P);
     //     return P;
@@ -122,7 +122,7 @@ public class DPat extends SLPattern {
         float A             = x - x1, B = y - y1, C = x2 - x1, D = y2 - y1;
         float dot           = A * C + B * D, len_sq = C * C + D * D;
         float xx, yy,param  = dot / len_sq;
-        
+
         if (param < 0 || (x1 == x2 && y1 == y2)) {  xx = x1; yy = y1; }
         else if (param > 1) {                       xx = x2; yy = y2; }
         else {                                      xx = x1 + param * C;
@@ -141,7 +141,7 @@ public class DPat extends SLPattern {
     }
     }
 
-    boolean handleNote(LXMidiNote note) { 
+    boolean handleNote(LXMidiNote note) {
         int row = note.getPitch(), col = note.getChannel();
         for (int i=0; i<picks.size(); i++) if (picks.get(i).set(row, col))          { presetManager.dirty(this); return true; }
         for (int i=0; i<bools.size(); i++) if (bools.get(i).toggle(row, col))   { presetManager.dirty(this); return true; }
@@ -162,7 +162,7 @@ public class DPat extends SLPattern {
     void        onReset()               {
         // for (int i=0; i<bools .size(); i++) bools.get(i).reset();
         // for (int i=0; i<picks .size(); i++) picks.get(i).reset();
-        //presetManager.dirty(this); 
+        //presetManager.dirty(this);
     //  updateLights(); now handled by patternControl UI
     }
 
@@ -195,7 +195,7 @@ public class DPat extends SLPattern {
 
         nPoints     =   model.points.length;
 
-        
+
         //addMultipleParameterUIRow("Bools",pXsym,pYsym,pRsym,pXdup,pJog,pGrey);
 
         modmin      =   new PVector(model.xMin, model.yMin, model.zMin);
@@ -218,18 +218,18 @@ public class DPat extends SLPattern {
     }
     return 0.5;
     }
-    
+
     // void setAPCOutput(LXMidiOutput output) {
     //   APCOut = output;
     // }
-    
+
     // void setMidiFighterTwisterOutput(LXMidiOutput output) {
-    //     MidiFighterTwisterOut = output; 
+    //     MidiFighterTwisterOut = output;
     // }
 
     //Pre patternControls UI
-    // void updateLights() {     if (APCOut == null ) return; 
-    //     for (int i = 0; i < NumApcRows; ++i) 
+    // void updateLights() {     if (APCOut == null ) return;
+    //     for (int i = 0; i < NumApcRows; ++i)
     //         for (int j = 0; j < 8; ++j)         APCOut.sendNoteOn(j, 53+i,  0);
     //     for (int i=0; i<picks .size(); i++)     APCOut.sendNoteOn(picks.get(i).CurCol, picks.get(i).CurRow, 3);
     //     for (int i=0; i<bools .size(); i++)     if (bools.get(i).b)     APCOut.sendNoteOn   (bools.get(i).col, bools.get(i).row, 1);
@@ -259,7 +259,7 @@ public class DPat extends SLPattern {
         if (pJog.getValueb()) {
             float tRamp = (lx.tempo.rampf() % .25);
             if (tRamp < LastJog) xyzJog.set(randctr(mMax.x*.2), randctr(mMax.y*.2), randctr(mMax.z*.2));
-            LastJog = tRamp; 
+            LastJog = tRamp;
         }
 
         // precalculate this stuff
@@ -294,8 +294,8 @@ public class DPat extends SLPattern {
     }
 }
 // //----------------------------------------------------------------------------------------------------------------------------------
-// class dTurn { 
-//     dVertex v; 
+// class dTurn {
+//     dVertex v;
 //     int pos0, pos1;
 //     dTurn(int _pos0, dVertex _v, int _pos1) { v = _v; pos0 = _pos0; pos1 = _pos1; }
 // }
@@ -316,7 +316,7 @@ public class DPat extends SLPattern {
 // //----------------------------------------------------------------------------------------------------------------------------------
 // public class dPixel   { public dVertex v; public int pos; public dPixel(dVertex _v, int _pos) { v=_v; pos=_pos; } }
 // public class dLattice {
-//     void    addTurn  (dVertex v0, int pos0, dVertex v1, int pos1) { dTurn t = new dTurn(pos0, v1, pos1); 
+//     void    addTurn  (dVertex v0, int pos0, dVertex v1, int pos1) { dTurn t = new dTurn(pos0, v1, pos1);
 //                                                                     if (v0.t0 == null) { v0.t0=t; return; }
 //                                                                     if (v0.t1 == null) { v0.t1=t; return; }
 //                                                                     if (v0.t2 == null) { v0.t2=t; return; }
@@ -336,9 +336,9 @@ public class DPat extends SLPattern {
 //         if (v1.c2 != null && sameBar(v2.s, v1.c2.s)) return;
 //         if (v1.c3 != null && sameBar(v2.s, v1.c3.s)) return;
 
-//         if      (v1.c0 == null) v1.c0 = v2; 
-//         else if (v1.c1 == null) v1.c1 = v2; 
-//         else if (v1.c2 == null) v1.c2 = v2; 
+//         if      (v1.c0 == null) v1.c0 = v2;
+//         else if (v1.c1 == null) v1.c1 = v2;
+//         else if (v1.c2 == null) v1.c2 = v2;
 //         else if (v1.c3 == null) v1.c3 = v2;
 //     }
 
@@ -391,7 +391,7 @@ public class DPat extends SLPattern {
 //             }
 
 //             if (d>5) continue;
-//             addTurn(v0(s1), pos1, v0(s2), pos2); addTurn(v1(s1), 14-pos1, v0(s2), pos2); 
+//             addTurn(v0(s1), pos1, v0(s2), pos2); addTurn(v1(s1), 14-pos1, v0(s2), pos2);
 //             addTurn(v0(s2), pos2, v0(s1), pos1); addTurn(v1(s2), 14-pos2, v0(s1), pos1);
 //         }}
 //     }
