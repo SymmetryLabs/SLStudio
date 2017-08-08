@@ -108,4 +108,51 @@ public class LXUtils {
             return Math.min(v1 - v2, v2 + modulus - v1);
         }
     }
+
+    public static class LookupTable {
+
+        public interface Function {
+            static Function SIN = new Function() {
+                public float compute(int i, int tableSize) {
+                    return (float) Math.sin(i * LX.TWO_PI / tableSize);
+                }
+            };
+
+            public float compute(int i, int tableSize);
+        }
+
+        public static class Sin extends LookupTable {
+            public Sin(int tableSize) {
+                super(tableSize, Function.SIN);
+            }
+
+            public float sin(float radians) {
+                return this.values[(int) Math.round(radians / LX.TWO_PI * this.tableSize)];
+            }
+        }
+
+        protected final int tableSize;
+        protected float[] values;
+
+        public LookupTable(int tableSize, Function function) {
+            this.tableSize = tableSize;
+            this.values = new float[tableSize + 1];
+            for (int i = 0; i <= tableSize; ++i) {
+                this.values[i] = function.compute(i, tableSize);
+            }
+        }
+
+        /**
+         * Looks up the value in the table
+         * @param basis
+         * @return
+         */
+        public float get(float basis) {
+            return this.values[Math.round(basis * this.tableSize)];
+        }
+
+        public float get(double basis) {
+            return this.values[(int) Math.round(basis * this.tableSize)];
+        }
+    }
 }
