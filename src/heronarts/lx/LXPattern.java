@@ -44,6 +44,8 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
 
     public final BooleanParameter autoCycleEligible = new BooleanParameter("Cycle", true);
 
+    protected double runMs = 0;
+
     public final Timer timer = new Timer();
 
     public class Timer {
@@ -186,6 +188,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     @Override
     protected final void onLoop(double deltaMs) {
         long runStart = System.nanoTime();
+        this.runMs += deltaMs;
         this.run(deltaMs);
         this.timer.runNanos = System.nanoTime() - runStart;
     }
