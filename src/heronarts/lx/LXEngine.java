@@ -536,7 +536,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 }
             }
         } else {
+            // Synchronize the two buffers, flip so that the engine thread doesn't start
+            // rendering over the top of the buffer that the UI thread might be currently
+            // working on drawing
             this.buffer.sync();
+            this.buffer.flip();
             this.isThreaded = true;
             this.engineThread = new EngineThread();
             this.engineThread.start();
@@ -1204,9 +1208,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public void copyUIBuffer(int[] copy) {
         synchronized (this.buffer) {
             if (this.buffer.cueOn) {
-                System.arraycopy(this.buffer.cue.copy.getArray(), 0, copy, 0, copy.length);
+                this.buffer.cue.copy(copy);
             } else {
-                System.arraycopy(this.buffer.main.copy.getArray(), 0, copy, 0, copy.length);
+                this.buffer.main.copy(copy);
             }
         }
     }

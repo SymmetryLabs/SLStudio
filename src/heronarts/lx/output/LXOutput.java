@@ -127,11 +127,11 @@ public abstract class LXOutput extends LXComponent {
             this.allWhite[i] = LXColor.WHITE;
             this.allOff[i] = LXColor.BLACK;
         }
-        addParameter("enabled", enabled);
-        addParameter("mode", mode);
-        addParameter("fps", framesPerSecond);
-        addParameter("gamma", gammaCorrection);
-        addParameter("brightness", brightness);
+        addParameter("enabled", this.enabled);
+        addParameter("mode", this.mode);
+        addParameter("fps", this.framesPerSecond);
+        addParameter("gamma", this.gammaCorrection);
+        addParameter("brightness", this.brightness);
     }
 
     /**
@@ -171,6 +171,7 @@ public abstract class LXOutput extends LXComponent {
         double fps = this.framesPerSecond.getValue();
         if ((fps == 0) || ((now - this.lastFrameMillis) > (1000. / fps))) {
             int[] colorsToSend;
+
             switch (this.mode.getEnum()) {
             case WHITE:
                 int white = LXColor.hsb(0, 0, 100 * this.brightness.getValuef());
