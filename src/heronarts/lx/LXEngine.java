@@ -294,7 +294,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private volatile boolean isNetworkMultithreaded = false;
 
     private boolean isNetworkThreadStarted = false;
-    private final NetworkThread networkThread;
+    public final NetworkThread network;
 
     private Thread engineThread = null;
 
@@ -318,7 +318,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.blendBufferRight = new ModelBuffer(lx);
 
         // Initialize network thread (don't start it yet)
-        this.networkThread = new NetworkThread(lx);
+        this.network = new NetworkThread(lx);
 
         // Initialize UI and background to black
         int[] backgroundArray = this.background.getArray();
@@ -560,7 +560,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public LXEngine setNetworkMultithreaded(boolean networkMultithreaded) {
         if (networkMultithreaded && !this.isNetworkThreadStarted) {
-            this.networkThread.start();
+            this.network.start();
         }
         this.isNetworkMultithreaded = networkMultithreaded;
         return this;
@@ -1137,8 +1137,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Send to outputs
         if (this.isNetworkMultithreaded) {
             // Multi-threaded? Just notify the network thread!
-            synchronized (this.networkThread) {
-                this.networkThread.notify();
+            synchronized (this.network) {
+                this.network.notify();
             }
         } else {
             // Otherwise do it ourself here
@@ -1165,6 +1165,13 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     class NetworkThread extends Thread {
 
+        public class Timer {
+            public long copyNanos = 0;
+            public long sendNanos = 0;
+        }
+
+        public final Timer timer = new Timer();
+
         private final ModelBuffer networkBuffer;
 
         NetworkThread(LX lx) {
@@ -1187,11 +1194,15 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
                 if (output.enabled.isOn()) {
                     // Copy from the double-buffer into our local storage and send from here
+                    long copyStart = System.nanoTime();
                     int[] networkArray = networkBuffer.getArray();
                     synchronized (buffer) {
                         System.arraycopy(buffer.main.copy.getArray(), 0, networkArray, 0, networkArray.length);
                     }
+                    long copyEnd = System.nanoTime();
+                    this.timer.copyNanos = copyEnd- copyStart;
                     output.send(networkArray);
+                    this.timer.sendNanos = System.nanoTime() - copyEnd;
                 }
             }
             System.out.println("LXEngine Network Thread finished");
