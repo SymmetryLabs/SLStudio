@@ -5,12 +5,12 @@
  * modify it under the terms of the GNU General Public License
  * as published by the Free Software Foundation; either version 2
  * of the License, or (at your option) any later version.
- * 
+ *
  * This program is distributed in the hope that it will be useful,
  * but WITHOUT ANY WARRANTY; without even the implied warranty of
  * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
  * GNU General Public License for more details.
- * 
+ *
  * You should have received a copy of the GNU General Public License
  * along with this program; if not, write to the Free Software
  * Foundation, Inc., 51 Franklin Street, Fifth Floor, Boston, MA  02110-1301, USA.
@@ -42,17 +42,17 @@ public abstract class LXDatagram {
     /**
      * Note that the order here MUST match the order specified above
      */
-    private static final int[][] BYTE_ORDERING = {
-            // R G B
-            { 0, 1, 2 }, // RGB
-            { 0, 2, 1 }, // RBG
-            { 1, 0, 2 }, // GRB
-            { 2, 0, 1 }, // GBR
-            { 1, 2, 0 }, // BRG
-            { 2, 1, 0 }, // BGR
+    protected static final int[][] BYTE_ORDERING = {
+        // R G B
+        { 0, 1, 2 }, // RGB
+        { 0, 2, 1 }, // RBG
+        { 1, 0, 2 }, // GRB
+        { 2, 0, 1 }, // GBR
+        { 1, 2, 0 }, // BRG
+        { 2, 1, 0 }, // BGR
     };
 
-    private ByteOrder byteOrder = ByteOrder.RGB;
+    protected ByteOrder byteOrder = ByteOrder.RGB;
 
     protected final byte[] buffer;
 

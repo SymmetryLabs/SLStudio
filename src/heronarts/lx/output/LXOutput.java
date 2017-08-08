@@ -73,6 +73,7 @@ public abstract class LXOutput extends LXComponent {
     public enum Mode {
         NORMAL,
         WHITE,
+        RAW,
         OFF
     };
 
@@ -181,6 +182,10 @@ public abstract class LXOutput extends LXComponent {
 
             case OFF:
                 colorsToSend = this.allOff;
+                break;
+
+            case RAW:
+                colorsToSend = colors;
                 break;
 
             default:
