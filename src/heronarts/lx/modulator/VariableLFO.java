@@ -76,7 +76,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
      * @param label LFO label
      * @param waveshapes Optional list of custom {@link LXWaveshape}.  If null, will use predefined ones
      *                   in {@link LXWaveshape}
-     * @param period Optional. Parameter that supplies custom waveform period, in ms.  Default goes 100-10000ms.
+     * @param period Optional. Parameter that supplies custom waveform period, in ms.  Default goes 100-60000ms.
      */
     public VariableLFO(String label, LXWaveshape[] waveshapes, CompoundParameter period) {
         super(label, new FixedParameter(0), new FixedParameter(1), new FixedParameter(1000));
@@ -95,9 +95,9 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
         this.waveshape.setDescription("Selects the wave shape used by this LFO");
 
         if (period == null) {
-            period = (CompoundParameter) new CompoundParameter("Period", 1000, 100, 10000)
+            period = (CompoundParameter) new CompoundParameter("Period", 1000, 100, 60000)
                 .setDescription("Sets the period of the LFO in secs")
-                .setExponent(2)
+                .setExponent(4)
                 .setUnits(LXParameter.Units.MILLISECONDS);
         }
         this.period = period;
