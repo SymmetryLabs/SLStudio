@@ -244,7 +244,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
 
         @Override
         public void run() {
-            System.out.println("LXChannel thread started [" + getLabel() + "]");
+            System.out.println("LXEngine Channel thread started [" + getLabel() + "]");
             while (!isInterrupted()) {
                 synchronized (this) {
                     try {
@@ -263,7 +263,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
                     this.signal.notify();
                 }
             }
-            System.out.println("LXChannel thread finished [" + getLabel() + "]");
+            System.out.println("LXEngine Channel thread finished [" + getLabel() + "]");
         }
     };
 
