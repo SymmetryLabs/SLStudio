@@ -1266,6 +1266,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // TODO(mcslee): remove loop tasks that other things might have added? maybe
         // need to separate application-owned loop tasks from project-specific ones...
 
+        // Clear all the modulation
+        this.modulation.clear();
+
         // Remove all channels
         for (int i = this.mutableChannels.size() - 1; i >= 0; --i) {
             removeChannel(this.mutableChannels.get(i), false);

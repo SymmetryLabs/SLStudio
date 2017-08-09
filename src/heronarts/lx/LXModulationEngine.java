@@ -226,9 +226,7 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
         obj.add(KEY_TRIGGERS, LXSerializable.Utils.toArray(lx, this.triggers));
     }
 
-    @Override
-    public void load(LX lx, JsonObject obj) {
-        // Remove everything first
+    public void clear() {
         for (int i = this.modulators.size() - 1; i >= 0; --i) {
             removeModulator(this.modulators.get(i));
         }
@@ -238,6 +236,12 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
         for (int i = this.triggers.size() - 1; i >= 0; --i) {
             removeTrigger(this.triggers.get(i));
         }
+    }
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        // Remove everything first
+        clear();
 
         if (obj.has(KEY_MODULATORS)) {
             JsonArray modulatorArr = obj.getAsJsonArray(KEY_MODULATORS);

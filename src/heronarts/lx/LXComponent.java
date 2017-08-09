@@ -222,6 +222,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         if (this.lx == null) {
             throw new IllegalStateException("LXComponent never had lx reference set: " + this);
         }
+        if (this instanceof LXModulationComponent) {
+            ((LXModulationComponent) this).getModulation().dispose();
+        }
         this.lx.engine.midi.removeMappings(this);
         this.lx.engine.modulation.removeModulations(this);
         for (LXParameter parameter : this.parameters.values()) {
