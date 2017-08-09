@@ -39,6 +39,7 @@ import heronarts.lx.LX;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.StringParameter;
 
 public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, LineListener {
 
@@ -49,6 +50,8 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
     private boolean stopped = false;
     private boolean closed = false;
 
+    private String mediaPath = ".";
+
     public final BooleanParameter trigger = new BooleanParameter("Trigger", false)
         .setDescription("Triggers playback of the audio file from its beginning");
 
@@ -58,12 +61,16 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
     public final BooleanParameter looping = new BooleanParameter("Loop", false)
         .setDescription("Whether playback of the audio file should loop");
 
+    public final StringParameter file = new StringParameter("File")
+        .setDescription("File for audio playback");
+
     public LXAudioOutput(LX lx) {
         super(lx, "Audio Output");
         this.format = STEREO;
         addParameter("play", this.play);
         addParameter("trigger", this.trigger);
         addParameter("looping", this.looping);
+        addParameter("file", this.file);
     }
 
     public String getOscAddress() {
@@ -168,16 +175,20 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
         }
     }
 
-    public LXAudioOutput setInputStream(File file) {
-        try {
-            return setInputStream(new FileInputStream(file));
-        } catch (FileNotFoundException fnfx) {
-            System.err.println(fnfx.getLocalizedMessage());
-        }
+    public LXAudioOutput setMediaPath(String mediaPath) {
+        this.mediaPath = mediaPath;
         return this;
     }
 
-    public LXAudioOutput setInputStream(InputStream inputStream) {
+    private void setInputStream(File file) {
+        try {
+            setInputStream(new FileInputStream(file));
+        } catch (FileNotFoundException fnfx) {
+            System.err.println(fnfx.getLocalizedMessage());
+        }
+    }
+
+    private boolean setInputStream(InputStream inputStream) {
         if (!inputStream.markSupported()) {
             inputStream = new BufferedInputStream(inputStream);
         }
@@ -189,10 +200,10 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
         } catch (IOException iox) {
             System.err.println(iox.getLocalizedMessage());
         }
-        return this;
+        return false;
     }
 
-    public LXAudioOutput setAudioInputStream(AudioInputStream inputStream) {
+    private boolean setAudioInputStream(AudioInputStream inputStream) {
         AudioFormat format = inputStream.getFormat();
 
         // Decode MP3 formats or whatever-or-other we got
@@ -206,29 +217,29 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
                 format = inputStream.getFormat();
             } catch (Exception x) {
                 System.err.println("Invalid audio format: " + x.getLocalizedMessage());
-                return this;
+                return false;
             }
         }
 
         if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
             System.err.println("Audio must be decodable to PCM_SIGNED data");
-            return this;
+            return false;
         }
         if (format.getSampleRate() != SAMPLE_RATE) {
             System.err.println("Audio file must have sample rate of " + SAMPLE_RATE);
-            return this;
+            return false;
         }
         if (format.getSampleSizeInBits() != BITS_PER_SAMPLE) {
             System.err.println("Audio file must have " + BITS_PER_SAMPLE + " bits per sample");
-            return this;
+            return false;
         }
         if (format.isBigEndian()) {
             System.err.println("Audio file must be little endian");
-            return this;
+            return false;
         }
         if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
             System.err.println("Audio file must be PCM signed");
-            return this;
+            return false;
         }
         if (format.getChannels() > 2) {
             System.err.println("Audio file has more than 2 channels");
@@ -243,7 +254,7 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
             this.outputThread.flush = true;
         }
         open();
-        return this;
+        return true;
     }
 
     @Override
@@ -267,7 +278,18 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
                 }
                 this.trigger.setValue(false);
             }
+        } else if (p == this.file) {
+            String path = this.file.getString();
+            if (path != null && path.length() > 0) {
+                setInputStream(new File(this.mediaPath, path));
+            } else {
+                stop();
+            }
         }
+    }
+
+    public String getFileName() {
+        return new File(this.file.getString()).getName();
     }
 
     private void open() {

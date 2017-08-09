@@ -76,10 +76,10 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
             if (this.enabled.isOn()) {
                 this.input.open();
                 this.input.start();
-                this.output.start();
+                // TODO(mcslee): start/stop output?
             } else {
                 this.input.stop();
-                this.output.stop();
+                // TODO(mcslee): start/stop output?
             }
             this.meter.running.setValue(this.enabled.isOn());
         } else if (p == this.mode) {
@@ -107,12 +107,14 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
 
     private static final String KEY_METER = "meter";
     private static final String KEY_INPUT = "input";
+    private static final String KEY_OUTPUT = "output";
 
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
         obj.add(KEY_METER, LXSerializable.Utils.toObject(lx, this.meter));
         obj.add(KEY_INPUT, LXSerializable.Utils.toObject(lx, this.input));
+        obj.add(KEY_OUTPUT, LXSerializable.Utils.toObject(lx, this.output));
     }
 
     @Override
@@ -122,6 +124,9 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
         }
         if (obj.has(KEY_INPUT)) {
             this.input.load(lx, obj.getAsJsonObject(KEY_INPUT));
+        }
+        if (obj.has(KEY_OUTPUT)) {
+            this.output.load(lx, obj.getAsJsonObject(KEY_OUTPUT));
         }
         super.load(lx, obj);
     }
