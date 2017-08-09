@@ -25,6 +25,7 @@ import heronarts.lx.LX;
 import java.io.IOException;
 import java.net.DatagramSocket;
 import java.net.SocketException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -36,6 +37,8 @@ public class LXDatagramOutput extends LXOutput {
     private final DatagramSocket socket;
 
     private final List<LXDatagram> datagrams = new ArrayList<LXDatagram>();
+
+    private final SimpleDateFormat date = new SimpleDateFormat("[HH:mm:ss]");
 
     public LXDatagramOutput(LX lx) throws SocketException {
         this(lx, new DatagramSocket());
@@ -85,21 +88,21 @@ public class LXDatagramOutput extends LXOutput {
                 try {
                     this.socket.send(datagram.packet);
                     if (datagram.failureCount > 0) {
-                        System.out.println("Recovered connectivity to " + datagram.packet.getAddress());
+                        System.out.println(this.date.format(now) + " Recovered connectivity to " + datagram.packet.getAddress());
                     }
                     datagram.failureCount = 0;
                     datagram.sendAfter = 0;
                 } catch (IOException iox) {
                     if (datagram.failureCount == 0) {
-                        System.out.println("IOException sending to "
-                                + datagram.packet.getAddress() + " (" + iox.getMessage()
-                                + "), " + "will initiate backoff after 3 consecutive failures");
+                        System.out.println(this.date.format(now) + " IOException sending to "
+                                + datagram.packet.getAddress() + " (" + iox.getLocalizedMessage()
+                                + "), will initiate backoff after 3 consecutive failures");
                     }
                     ++datagram.failureCount;
                     if (datagram.failureCount >= 3) {
                         int pow = Math.min(5, datagram.failureCount - 3);
                         long waitFor = (long) (50 * Math.pow(2, pow));
-                        System.out.println("Retrying " + datagram.packet.getAddress()
+                        System.out.println(this.date.format(now) + " Retrying " + datagram.packet.getAddress()
                                 + " in " + waitFor + "ms" + " (" + datagram.failureCount
                                 + " consecutive failures)");
                         datagram.sendAfter = now + waitFor;
