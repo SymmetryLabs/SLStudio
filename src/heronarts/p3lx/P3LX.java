@@ -191,6 +191,10 @@ public class P3LX extends LX {
 
         long engineStart = System.nanoTime();
         String frameRateStr = "";
+
+        // Give the engine a chance to sort itself out each frame
+        this.engine.onDraw();
+
         if (this.engine.isThreaded()) {
             // NOTE: because we don't hold a lock, it is *possible* that the
             // engine stops being in threading mode just between these lines,

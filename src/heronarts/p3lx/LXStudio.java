@@ -230,6 +230,7 @@ public class LXStudio extends P3LX {
         private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
         private static final String KEY_PALETTE_EXPANDED = "paletteExpanded";
         private static final String KEY_MODULATORS_EXPANDED = "modulatorExpanded";
+        private static final String KEY_ENGINE_EXPANDED = "engineExpanded";
         private static final String KEY_CLIP_VIEW_VISIBLE = "clipViewVisible";
         private static final String KEY_PREVIEW = "preview";
 
@@ -237,6 +238,7 @@ public class LXStudio extends P3LX {
         public void save(LX lx, JsonObject object) {
             object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
             object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
+            object.addProperty(KEY_ENGINE_EXPANDED, this.leftPane.engine.isExpanded());
             object.addProperty(KEY_CLIP_VIEW_VISIBLE, this.clipViewVisible);
             JsonObject modulatorObj = new JsonObject();
             for (UIObject child : this.rightPane.modulation) {
@@ -256,6 +258,9 @@ public class LXStudio extends P3LX {
             }
             if (object.has(KEY_PALETTE_EXPANDED)) {
                 this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
+            }
+            if (object.has(KEY_ENGINE_EXPANDED)) {
+                this.leftPane.engine.setExpanded(object.get(KEY_ENGINE_EXPANDED).getAsBoolean());
             }
             if (object.has(KEY_CLIP_VIEW_VISIBLE)) {
                 setClipViewVisible(object.get(KEY_CLIP_VIEW_VISIBLE).getAsBoolean());

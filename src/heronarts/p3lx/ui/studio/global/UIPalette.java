@@ -41,10 +41,12 @@ import processing.event.MouseEvent;
 
 public class UIPalette extends UICollapsibleSection {
 
+    private static final float HEIGHT = 184;
+
     private final LXPalette palette;
 
-    public UIPalette(UI ui, final LXPalette palette, float x, float y, float w, float h) {
-        super(ui, x, y, w, h);
+    public UIPalette(UI ui, final LXPalette palette, float x, float y, float w) {
+        super(ui, x, y, w, HEIGHT);
         setTitle("COLOR PALETTE");
         this.palette = palette;
 

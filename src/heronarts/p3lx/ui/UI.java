@@ -709,7 +709,6 @@ public class UI implements LXEngine.Dispatch {
         return (this.lx != null) && (this.lx.engine.isThreaded());
     }
 
-
     public void dispatch() {
         // This is invoked on the LXEngine thread, which may be different
         // from the Processing Animation thread. Events are always
@@ -889,9 +888,9 @@ public class UI implements LXEngine.Dispatch {
         } else if (action == KeyEvent.PRESS) {
             if (keyCode == java.awt.event.KeyEvent.VK_T && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
                 if (keyEvent.isShiftDown()) {
-                    this.lx.engine.setChannelMultithreaded(!this.lx.engine.isChannelMultithreaded());
+                    this.lx.engine.isChannelMultithreaded.toggle();
                 } else {
-                    this.lx.engine.setThreaded(!this.lx.engine.isThreaded());
+                    this.lx.engine.isMultithreaded.toggle();
                 }
             }
             switch (keyCode) {
