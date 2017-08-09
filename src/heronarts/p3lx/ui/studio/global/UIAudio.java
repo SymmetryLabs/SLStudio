@@ -27,6 +27,7 @@
 package heronarts.p3lx.ui.studio.global;
 
 import java.io.File;
+import java.nio.file.Path;
 
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.audio.LXAudioEngine;
@@ -69,12 +70,14 @@ public class UIAudio extends UICollapsibleSection {
     private static final int HEIGHT = 194;
     private static final int PADDING = 4;
 
+    private final UI ui;
     private final LXAudioEngine audio;
     private final UIMeter meter;
     private final UIGraphicMeter graphicMeter;
 
     public UIAudio(final UI ui, final LXAudioEngine audio, float w) {
         super(ui, 0, 0, w, HEIGHT);
+        this.ui = ui;
         this.audio = audio;
         setTitle("AUDIO");
         setTitleX(20);
@@ -118,8 +121,6 @@ public class UIAudio extends UICollapsibleSection {
 
     public class UIOutputControls extends UI2dContainer {
 
-        private final UILabel fileLabel;
-
         UIOutputControls(final UI ui, final LXAudioOutput output, float x, float y, float w, float h) {
             super(x, y, w, h);
 
@@ -129,8 +130,9 @@ public class UIAudio extends UICollapsibleSection {
             .setLabel("►")
             .addToContainer(this);
 
-            this.fileLabel = (UILabel) new UILabel(20, 0, getContentWidth() - 80, getContentHeight())
+            final UILabel fileLabel = (UILabel) new UILabel(20, 0, getContentWidth() - 80, getContentHeight())
             .setPadding(0, 4)
+            .setLabel(audio.output.getFileName())
             .setBackgroundColor(ui.theme.getControlBackgroundColor())
             .setBorderColor(ui.theme.getControlBorderColor())
             .setFont(ui.theme.getControlFont())
@@ -160,12 +162,18 @@ public class UIAudio extends UICollapsibleSection {
             .setMomentary(true)
             .setDescription("Opens a new audio file for playback")
             .addToContainer(this);
+
+            audio.output.file.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    fileLabel.setLabel(audio.output.getFileName());
+                }
+            });
         }
 
         public void onOpen(File openFile) {
             if (openFile != null) {
-                this.fileLabel.setLabel(openFile.getName());
-                audio.output.setInputStream(openFile);
+                Path path = new File(ui.applet.sketchPath()).toPath().relativize(openFile.toPath());
+                audio.output.file.setValue(path.toString());
             }
         }
     }

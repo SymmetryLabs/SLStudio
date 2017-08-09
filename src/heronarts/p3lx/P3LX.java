@@ -110,7 +110,9 @@ public class P3LX extends LX {
         super(model);
         this.applet = applet;
 
-        this.engine.script.setScriptPath(applet.sketchPath());
+        String sketchPath = applet.sketchPath();
+        this.engine.script.setScriptPath(sketchPath);
+        this.engine.audio.output.setMediaPath(sketchPath);
 
         for (Class<?> cls : applet.getClass().getDeclaredClasses()) {
             if (!Modifier.isAbstract(cls.getModifiers())) {
