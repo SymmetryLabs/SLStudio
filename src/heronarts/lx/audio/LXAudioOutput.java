@@ -110,7 +110,7 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
                         if (inputStream.markSupported()) {
                             inputStream.reset();
                         } else {
-                            System.err.println("Audio file does not support reset");
+                            System.err.println("Audio format does not support reset");
                         }
                         this.trigger = false;
                     }
@@ -194,6 +194,26 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
 
     public LXAudioOutput setAudioInputStream(AudioInputStream inputStream) {
         AudioFormat format = inputStream.getFormat();
+
+        // Decode MP3 formats or whatever-or-other we got
+        if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
+            try {
+                inputStream = AudioSystem.getAudioInputStream(STEREO, inputStream);
+                if (!inputStream.markSupported()) {
+                    // Buffer it! We need reset/mark support
+                    inputStream = new AudioInputStream(new BufferedInputStream(inputStream), STEREO, inputStream.getFrameLength());
+                }
+                format = inputStream.getFormat();
+            } catch (Exception x) {
+                System.err.println("Invalid audio format: " + x.getLocalizedMessage());
+                return this;
+            }
+        }
+
+        if (format.getEncoding() != AudioFormat.Encoding.PCM_SIGNED) {
+            System.err.println("Audio must be decodable to PCM_SIGNED data");
+            return this;
+        }
         if (format.getSampleRate() != SAMPLE_RATE) {
             System.err.println("Audio file must have sample rate of " + SAMPLE_RATE);
             return this;
