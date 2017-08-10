@@ -1,11 +1,5 @@
 
 class DeviceOSCListener implements LXOscListener {
-    private OscServer.Connection connection;
-
-    public DeviceOSCListener(OscServer.Connection connection) {
-        this.connection = connection;
-    }
-
     public void oscMessage(OscMessage msg) {
         String[] splitMsg = msg.getAddressPattern().toString().split("/");
         //System.out.println(msg);
@@ -15,7 +9,7 @@ class DeviceOSCListener implements LXOscListener {
             InetAddress deviceAddress = msg.getSource();
             String param = splitMsg[3];
 
-            Device device = deviceController.getOrCreateDevice(deviceName, deviceAddress, connection);
+            Device device = deviceController.getOrCreateDevice(deviceName, deviceAddress);
             if (device == null)
                 return;
 
@@ -55,21 +49,25 @@ class Device extends LXComponent {
     private List<DeviceParameterWatcher> paramWatchers = new ArrayList<DeviceParameterWatcher>();
     private List<DeviceParameterWatcher> inputWatchers = new ArrayList<DeviceParameterWatcher>();
 
-    private OscServer.Connection connection;
+    private LXOscEngine.Transmitter transmitter;
 
-    Device(LX lx, String name, InetAddress address, OscServer.Connection connection) {
+    Device(LX lx, String name, InetAddress address) {
         super(lx);
 
         this.name = name;
         this.address = address;
-        this.connection = connection;
 
-        lx.addOutput(new OscOutput(lx, address.getHostAddress(), 11232));
-    }
+        try {
+            transmitter = lx.engine.osc.transmitter(address, 5005);
+        }
+        catch (java.net.SocketException e) { System.err.println(e); }
 
-    public Device setConnection(OscServer.Connection connection) {
-        this.connection = connection;
-        return this;
+        try {
+            lx.addOutput(new OscOutput(lx, address, 11232));
+        }
+        catch (SocketException e) {
+            System.err.println(e);
+        }
     }
 
     public Collection<BoundedParameter> getDeviceParameters() {
@@ -126,13 +124,13 @@ class Device extends LXComponent {
     }
 
     public void queryInputs() {
-        if (connection == null)
+        if (transmitter == null)
             return;
 
         System.out.println("Sending list-inputs to: " + name);
         OscMessage m = new OscMessage("/list-inputs");
         try {
-            connection.send(m);
+            transmitter.send(m);
         }
         catch (java.io.IOException e) {
             System.err.println(e);
@@ -140,13 +138,13 @@ class Device extends LXComponent {
     }
 
     public void sendInput(String name, float value) {
-        if (connection == null)
+        if (transmitter == null)
             return;
 
         OscMessage m = new OscMessage("/input/" + name);
         m.add(value);
         try {
-            connection.send(m);
+            transmitter.send(m);
         }
         catch (java.io.IOException e) {
             System.err.println(e);
@@ -195,11 +193,11 @@ class DeviceController extends LXComponent implements LXLoopTask {
         return deviceByName.get(name);
     }
 
-    public Device getOrCreateDevice(String name, InetAddress addr, OscServer.Connection c) {
+    public Device getOrCreateDevice(String name, InetAddress addr) {
         Device device = deviceByName.get(name);
         if (device == null) {
             System.out.println("New device: " + name + " (" + addr.getHostAddress() + ")");
-            device = new Device(lx, name, addr, c);
+            device = new Device(lx, name, addr);
             deviceByName.put(device.name, device);
 
             final Device d = device;
@@ -229,9 +227,6 @@ class DeviceController extends LXComponent implements LXLoopTask {
             for (DeviceWatcher w : deviceWatchers) {
                 w.onDeviceAdded(device);
             }
-        }
-        else {
-            device.setConnection(c);
         }
         return device;
     }

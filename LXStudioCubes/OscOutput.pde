@@ -1,18 +1,17 @@
 public class OscOutput extends LXOutput {
 
-    private String host;
+    private InetAddress address;
     private int port;
     private LXOscEngine.Transmitter transmitter;
 
-    public OscOutput(LX lx, String host, int port)
-            throws SocketException, UnknownHostException {
+    public OscOutput(LX lx, InetAddress address, int port) throws SocketException {
 
         super(lx);
 
-        this.host = host;
+        this.address = address;
         this.port = port;
 
-        transmitter = lx.engine.osc.transmitter(host, port);
+        transmitter = lx.engine.osc.transmitter(address, port);
     }
 
     @Override

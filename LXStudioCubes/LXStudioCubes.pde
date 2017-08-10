@@ -19,7 +19,6 @@ public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public DeviceController deviceController;
 public DeviceModel deviceModel;
-public OscServer deviceOscServer;
 public MappingMode mappingMode = null;
 
 // public boolean envelopOn = false;
@@ -132,13 +131,7 @@ void setup() {
 
       // Adaptor for mapping osc messages from Agents/wearables to lx osc engine
       try {
-        deviceOscServer = new OscServer(5005);
-        deviceOscServer.addConnectionWatcher(new OscServer.ConnectionWatcher() {
-            public void onConnection(OscServer.Connection c) {
-                c.addListener(new DeviceOSCListener(c));
-            }
-        });
-        deviceOscServer.start();
+        lx.engine.osc.receiver(5005).addListener(new DeviceOSCListener());
       } catch (SocketException sx) {
         throw new RuntimeException(sx);
       }
