@@ -50,6 +50,7 @@ public interface LXParameter {
 
     public enum Units implements Formatter {
         NONE,
+        INTEGER,
         SECONDS,
         MILLISECONDS,
         DECIBELS,
@@ -64,6 +65,8 @@ public interface LXParameter {
         @SuppressWarnings("fallthrough")
         public static String format(Units units, double value) {
             switch (units) {
+            case INTEGER:
+                return String.format("%d", (int) value);
             case SECONDS:
                 value *= 1000;
                 // pass through!

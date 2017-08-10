@@ -97,13 +97,15 @@ public class LXOscEngine extends LXComponent {
         new StringParameter("RX Host", DEFAULT_RECEIVE_HOST)
         .setDescription("Hostname to which OSC input socket is bound");
 
-    public final DiscreteParameter receivePort =
+    public final DiscreteParameter receivePort = (DiscreteParameter)
         new DiscreteParameter("RX Port", DEFAULT_RECEIVE_PORT, 1, 9999)
-        .setDescription("UDP port on which the engine listens for OSC message");
+        .setDescription("UDP port on which the engine listens for OSC message")
+        .setUnits(LXParameter.Units.INTEGER);
 
-    public final DiscreteParameter transmitPort =
+    public final DiscreteParameter transmitPort = (DiscreteParameter)
         new DiscreteParameter("TX Port", DEFAULT_TRANSMIT_PORT, 1, 9999)
-        .setDescription("UDP port on which the engine transmits OSC messages");
+        .setDescription("UDP port on which the engine transmits OSC messages")
+        .setUnits(LXParameter.Units.INTEGER);
 
     public final StringParameter transmitHost =
         new StringParameter("TX Host", DEFAULT_TRANSMIT_HOST)
