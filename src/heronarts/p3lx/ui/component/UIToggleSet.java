@@ -169,7 +169,7 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, UIControlTarg
             if (this.parameter != null) {
                 this.parameter.setValue(value);
             }
-            onToggle(getValue());
+            onToggle(this.value);
             redraw();
         }
         return this;
@@ -199,6 +199,10 @@ public class UIToggleSet extends UI2dComponent implements UIFocus, UIControlTarg
             pg.text(this.options[i], (leftBoundary + this.boundaries[i]) / 2.f, this.height/2);
             leftBoundary = this.boundaries[i];
         }
+    }
+
+    protected void onToggle(int value) {
+        onToggle(getValue());
     }
 
     protected void onToggle(String option) {
