@@ -63,6 +63,8 @@ class Device extends LXComponent {
         this.name = name;
         this.address = address;
         this.connection = connection;
+
+        lx.addOutput(new OscOutput(lx, address.getHostAddress(), 11232));
     }
 
     public Device setConnection(OscServer.Connection connection) {
