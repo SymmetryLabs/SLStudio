@@ -21,29 +21,49 @@
 package heronarts.p3lx.ui.studio.global;
 
 import heronarts.lx.LXEngine;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIDoubleBox;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 public class UIEngine extends UICollapsibleSection {
 
-    public UIEngine(UI ui, LXEngine engine, float x, float y, float w) {
-        super(ui, x, y, w, 80);
+    public UIEngine(UI ui, final LXEngine engine, float x, float y, float w) {
+        super(ui, x, y, w, 0);
         setTitle("ENGINE");
+
+        setLayout(UI2dContainer.Layout.VERTICAL);
+        setChildMargin(2);
 
         new UIButton(0, 0, getContentWidth(), 16)
         .setParameter(engine.isMultithreaded)
         .setLabel("Engine Thread")
         .addToContainer(this);
 
-        new UIButton(0, 20, getContentWidth(), 16)
+        final UIDoubleBox fps = (UIDoubleBox) new UIDoubleBox(0, 0, getContentWidth(), 16)
+        .setParameter(engine.framesPerSecond)
+        .setEnabled(engine.isMultithreaded.isOn())
+        .addToContainer(this);
+
+        engine.isMultithreaded.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                fps.setEnabled(engine.isMultithreaded.isOn());
+            }
+        });
+
+        new UIButton(0, 0, getContentWidth(), 16)
         .setParameter(engine.isNetworkMultithreaded)
         .setLabel("Network Thread")
         .addToContainer(this);
 
-        new UIButton(0, 40, getContentWidth(), 16)
+        new UIButton(0, 0, getContentWidth(), 16)
         .setParameter(engine.isChannelMultithreaded)
         .setLabel("Channel Threads")
         .addToContainer(this);
+
+
     }
 }

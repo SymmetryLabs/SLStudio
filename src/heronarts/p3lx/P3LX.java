@@ -119,7 +119,7 @@ public class P3LX extends LX {
                 if (LXPattern.class.isAssignableFrom(cls)) {
                     registerPattern(cls.asSubclass(LXPattern.class));
                 } else if (LXEffect.class.isAssignableFrom(cls)) {
-                registerEffect(cls.asSubclass(LXEffect.class));
+                    registerEffect(cls.asSubclass(LXEffect.class));
                 }
             }
         }
