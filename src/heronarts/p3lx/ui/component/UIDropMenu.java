@@ -210,7 +210,9 @@ public class UIDropMenu extends UI2dComponent implements UIFocus, UIControlTarge
     @Override
     public void onMousePressed(MouseEvent mouseEvent, float x, float y) {
         if (!this.expanded) {
-            toggleExpanded();
+            if (!this.mousePressFocused) {
+                toggleExpanded();
+            }
         } else {
             int selected = this.getSelectedIndex(y);
             if (selected >= 0) {

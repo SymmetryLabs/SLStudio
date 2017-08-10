@@ -447,6 +447,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     private boolean keyEventConsumed = false;
     private boolean mouseWheelEventConsumed = false;
+    protected boolean mousePressFocused = false;
 
     void mousePressed(MouseEvent mouseEvent, float mx, float my) {
         if (isMidiMapping()) {
@@ -481,9 +482,11 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             }
         }
         if (!hasFocus() && (this instanceof UIMouseFocus)) {
+            this.mousePressFocused = true;
             focus();
         }
         onMousePressed(mouseEvent, mx, my);
+        this.mousePressFocused = false;
     }
 
     void mouseReleased(MouseEvent mouseEvent, float mx, float my) {
