@@ -1,6 +1,22 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class StripOrientation extends SLPattern {
+  public StripOrientation(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    for (Strip s : model.strips) {
+      int i = 0;
+      for (LXPoint p : s.points) {
+        float b = i++ > 3 ? 0 : 100;
+        colors[p.index] = lx.hsb(0, 100, b);
+      }
+    }
+  }
+}
+
 public class Ball extends DPat {
 
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);

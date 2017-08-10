@@ -28,113 +28,98 @@ static final float TOWER_WIDTH = 24;
 static final float TOWER_HEIGHT = 24;
 static final float CUBE_SPACING = 2.5;
 
-static final float TOWER_VERTICAL_SPACING = 2.5;
-static final float TOWER_RISER = 14;
-static final float SP = 24;
-static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
+static final float POINT_SPACING = 0.4;
 
-// static final BulbConfig[] BULB_CONFIG = {
-//     // new BulbConfig("lifx-1", -50, 50, -30),
-//     // new BulbConfig("lifx-2", 0, 50, 0),
-//     // new BulbConfig("lifx-3", -65, 20, -100),
-//     // new BulbConfig("lifx-4", 0, 0, 0),
-//     // new BulbConfig("lifx-5", 0, 0, 0),
-// };
+static final int STANDARD_NUM_POINTS = 73;
+static final int OUTER_SHORT_NUM_POINTS = STANDARD_NUM_POINTS - 16;
+static final int INNER_SHORT_NUM_POINTS = STANDARD_NUM_POINTS - 10;
 
-static final TowerConfig[] TOWER_CONFIG = {
+static final float STANDARD_STRIP_LENGTH    = POINT_SPACING * STANDARD_NUM_POINTS;
+static final float OUTER_SHORT_STRIP_LENGTH = POINT_SPACING * OUTER_SHORT_NUM_POINTS;
+static final float INNER_SHORT_STRIP_LENGTH = POINT_SPACING * INNER_SHORT_NUM_POINTS;
 
-    // left
-    new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-      "22", "204"
-      }),
+static final float OUTER_WIDTH = (STANDARD_STRIP_LENGTH*6) + (OUTER_SHORT_STRIP_LENGTH);
+static final float INNER_WIDTH = (STANDARD_STRIP_LENGTH*2) + (INNER_SHORT_STRIP_LENGTH);
 
-    new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
-      "86"
-      }),
-
-    new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
-      "5"
-      }),
-
-   new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-      "25", "199", "177"
-      }),
-
-   new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
-      "94"
-      }),
-
-   new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
-      "90"
-      }),
-
-   new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
-      "64"
-      }),
-
-    // left tower of 5   
-    new TowerConfig(0, 0, 0, new String[] {   
-      "19", "190", "121", "1", "103"    
-    }),   
-    new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
-    new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
-    new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
-    new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
-   
-    new TowerConfig(SP*2.0, 0, 0, new String[] {    
-      "6", "132", "61", "54"    
-    }),   
-
-    new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
-     
-    // middle tower of 5    
-    new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
-      "111", "166", "187", "158", "101"   
-    }),  
-
-    new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
-    new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
-    new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
-    new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
-     
-    new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
-      "102", "156", "13", "82"    
-    }),   
-    new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
-    new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
-    new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
-    new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
-    new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
-     
-    // right tower of 5   
-    new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
-      "183", "180", "57", "51", "108"   
-    }),   
-    new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
-    new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
-    new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
-     
-    new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
-     "100", "85", "110zAQ  AZQ"    
-    }),   
-    new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
-    new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
-    
-    // table cubes    
-    new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
-    new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
-    new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
-};
-
-
+static final float INNER_PADDING = (OUTER_WIDTH - INNER_WIDTH) / 2.f;
 
 static final StripConfig[] STRIP_CONFIG = {
-          // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
-//new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
 
+  // looking down, strips go left to right
+  // the top can be arbitrary
+
+  // controller id, {x, y, z}, {xRot, yRot, zRot}, num leds
+
+  // CEILING | OUTER ------------------------------------------------------------------------------------------------------------
+  // outer (top)
+  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*0, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*1, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*2, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*3, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*4, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*5, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*6, 0, 0 }, new float[] { 0, 0, 0 }, OUTER_SHORT_NUM_POINTS),
+
+  // outer (right)
+  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -90 }, OUTER_SHORT_NUM_POINTS),
+
+  // outer (bottom)
+  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*0, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*1, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*2, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*3, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*4, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*5, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*6, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, OUTER_SHORT_NUM_POINTS),
+
+  // outer (left)
+  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -270 }, OUTER_SHORT_NUM_POINTS),
+  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+
+  // CEILING | INNER -------------------------------------------------------------------------------------------------------------
+  // inner (top)
+  new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH-INNER_SHORT_STRIP_LENGTH*0, -INNER_PADDING, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH-INNER_SHORT_STRIP_LENGTH*1, -INNER_PADDING, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH-INNER_SHORT_STRIP_LENGTH*2, -INNER_PADDING, 0 }, new float[] { 0, 0, -180 }, INNER_SHORT_NUM_POINTS),
+
+  // inner (left)
+  new StripConfig("0", new float[] { INNER_PADDING, -INNER_PADDING-INNER_SHORT_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING, -INNER_PADDING-INNER_SHORT_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING, -INNER_PADDING-INNER_SHORT_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, INNER_SHORT_NUM_POINTS),
+
+  // inner (bottom)
+  new StripConfig("0", new float[] { INNER_PADDING+STANDARD_STRIP_LENGTH*0, -INNER_PADDING-INNER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING+STANDARD_STRIP_LENGTH*1, -INNER_PADDING-INNER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING+STANDARD_STRIP_LENGTH*2, -INNER_PADDING-INNER_WIDTH, 0 }, new float[] { 0, 0, 0 }, INNER_SHORT_NUM_POINTS),
+
+  // inner (right)
+  new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH, -INNER_PADDING-INNER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH, -INNER_PADDING-INNER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH, -INNER_PADDING-INNER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, INNER_SHORT_NUM_POINTS),
+
+  // DESKS -----------------------------------------------------------------------------------------------------------------
+  // for now just make them all the same (use however many of these you need)
+  new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 };
+
+static final TowerConfig[] TOWER_CONFIG = {};
 
 static class StripConfig {
   String id;
@@ -147,16 +132,16 @@ static class StripConfig {
   float yRot;
   float zRot;
 
-  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
+  StripConfig(String id, float[] coords, float[] rotations, int numPoints) {
     this.id = id;
     this.numPoints = numPoints;
-    this.spacing = spacing;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.xRot = xRot;
-    this.yRot = yRot;
-    this.zRot = zRot;
+    this.spacing = POINT_SPACING;
+    this.x = coords[0];
+    this.y = coords[1];
+    this.z = coords[2];
+    this.xRot = rotations[0];
+    this.yRot = rotations[1];
+    this.zRot = rotations[2];
   }
 }
 
