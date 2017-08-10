@@ -1,7 +1,7 @@
 import java.awt.Color;
 
 public static class Strobe extends LXEffect {
-  
+
   public enum Waveshape {
     TRI,
     SIN,
@@ -9,29 +9,29 @@ public static class Strobe extends LXEffect {
     UP,
     DOWN
   };
-  
+
   public final EnumParameter<Waveshape> mode = new EnumParameter<Waveshape>("Shape", Waveshape.TRI);
-  
+
   public final CompoundParameter frequency = (CompoundParameter)
-    new CompoundParameter("Freq", 1, .05, 10).setUnits(LXParameter.Units.HERTZ);  
-  
+    new CompoundParameter("Freq", 1, .05, 10).setUnits(LXParameter.Units.HERTZ);
+
   private final SawLFO basis = new SawLFO(1, 0, new FunctionalParameter() {
     public double getValue() {
       return 1000 / frequency.getValue();
   }});
-        
+
   public Strobe(LX lx) {
     super(lx);
     addParameter(mode);
     addParameter(frequency);
     startModulator(basis);
   }
-  
+
   @Override
   protected void onEnable() {
     basis.setBasis(0).start();
   }
-  
+
   private LXWaveshape getWaveshape() {
     switch (this.mode.getEnum()) {
     case SIN: return LXWaveshape.SIN;
@@ -42,9 +42,9 @@ public static class Strobe extends LXEffect {
     }
     return LXWaveshape.SIN;
   }
-  
+
   private final float[] hsb = new float[3];
-  
+
   @Override
   public void run(double deltaMs, double amount) {
     float amt = this.enabledDamped.getValuef();
@@ -70,11 +70,11 @@ public static class Strobe extends LXEffect {
 }
 
 public class LSD extends LXEffect {
-  
+
   public final BoundedParameter scale = new BoundedParameter("Scale", 10, 5, 40);
   public final BoundedParameter speed = new BoundedParameter("Speed", 4, 1f, 6);
   public final BoundedParameter range = new BoundedParameter("Range", 1, .7, 2);
-  
+
   public LSD(LX lx) {
     super(lx);
     addParameter(scale);
@@ -83,13 +83,13 @@ public class LSD extends LXEffect {
     this.enabledDampingAttack.setValue(500);
     this.enabledDampingRelease.setValue(500);
   }
-  
+
   final float[] hsb = new float[3];
 
   private float accum = 0;
   private int equalCount = 0;
   private float sign = 1;
-  
+
   @Override
   public void run(double deltaMs, double amount) {
     float newAccum = (float) (accum + sign * deltaMs * speed.getValuef() / 4000.);
@@ -103,7 +103,7 @@ public class LSD extends LXEffect {
     accum = newAccum;
     float sf = scale.getValuef() / 1000.;
     float rf = range.getValuef();
-    for (LXPoint p :  model.points) {
+    for (LXPoint p :  lx.model.points) {
       LXColor.RGBtoHSB(colors[p.index], hsb);
       float h = rf * noise(sf*p.x, sf*p.y, sf*p.z + accum);
       int c2 = LX.hsb(h * 360, 100, hsb[2]*100);

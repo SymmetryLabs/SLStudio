@@ -28,52 +28,11 @@ void setup() {
   long setupStart = System.nanoTime();
   size(1280, 800, P3D);
 
-  int switchModel = 1;
-
-// public final EnumParameter<Mode> hueMode =
-//     new EnumParameter<Mode>("Mode", Mode.FIXED)
-//     .setDescription("Sets the operation mode of the palette");
-// this.hueMode.setOptions(new String[] { "Fixed", "Oscillate", "Cycle" });
-
-//   new UIToggleSet(0, 2, 200, 18)
-//     .setEvenSpacing()
-//     .setParameter()
-//     .addToContainer(this);
-
-// @Override
-//   public void onParameterChanged(LXParameter parameter) {
-//     if (parameter == this.hueMode) {
-//       double hueValue = this.hue.getValue();
-//       this.color.hue.setValue(hueValue);
-//       switch ((Mode) this.hueMode.getObject()) {
-//         case FIXED:
-//           this.hue = this.hueFixed;
-//           this.hueFixed.setValue(hueValue).start();
-//           this.hueCycle.stop();
-//           this.hueOscillate.stop();
-//           break;
-//         case CYCLE:
-//           this.hue = this.hueCycle;
-//           this.hueFixed.stop();
-//           this.hueOscillate.stop();
-//           this.hueCycle.setValue(hueValue).start();
-//           break;
-//       }
-//     }
-//   }
-  // these 3 lines must be commented out in order for cubes model to work
-  GridModel.Metrics metrics = new GridModel.Metrics(8, 8);
-  metrics.setSpacing(10.0, 10.0);
-  deviceModel = new DeviceModel(metrics);
+  deviceModel = new DeviceModel();
 
   // if buildModel() isn't called, we enter a whole world of shit
   model = buildModel();
-  // model = deviceModel;
-  if (switchModel == 0) {
-    currModel = model;
-  } else {
-    currModel = deviceModel;
-  }
+  currModel = deviceModel;
 
   println("-- Model ----");
   println("# of cubes: " + model.cubes.size());

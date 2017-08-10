@@ -63,7 +63,7 @@ class Device extends LXComponent {
         catch (java.net.SocketException e) { System.err.println(e); }
 
         try {
-            lx.addOutput(new OscOutput(lx, address, 11232));
+            lx.addOutput(new UdpOutput(lx, address, 7890));
         }
         catch (SocketException e) {
             System.err.println(e);
