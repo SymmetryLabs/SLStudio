@@ -171,9 +171,10 @@ public class UIClipView extends UI2dContainer implements LXClip.Listener, LXPara
 
     public void parameterLaneRemoved(LXClip clip, ParameterClipLane lane) {
         LaneItem laneItem = this.laneMap.remove(lane);
-        if (laneItem != null) {
-            this.laneList.removeItem(laneItem);
+        if (laneItem == null) {
+            throw new IllegalStateException("No LaneItem found for removed ParameterClipLane: " + lane);
         }
+        this.laneList.removeItem(laneItem);
         if (this.envelope.lane == lane) {
             this.envelope.setLane(null);
         }
