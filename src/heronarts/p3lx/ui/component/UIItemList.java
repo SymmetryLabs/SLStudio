@@ -262,7 +262,7 @@ public interface UIItemList {
             this.items.remove(itemIndex);
             if (this.focusIndex >= this.items.size()) {
                 setFocusIndex(items.size() - 1);
-            } else {
+            } else if (this.focusIndex >= 0) {
                 this.items.get(this.focusIndex).onFocus();
             }
             setContentHeight(ROW_SPACING * this.items.size() + ROW_MARGIN);
