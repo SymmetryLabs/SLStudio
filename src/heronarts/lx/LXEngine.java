@@ -1189,12 +1189,16 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     }
 
-    class NetworkThread extends Thread {
+    public class NetworkThread extends Thread {
 
         public class Timer {
             public long copyNanos = 0;
             public long sendNanos = 0;
         }
+
+        private long lastFrame = System.currentTimeMillis();
+
+        private float frameRate = 0;
 
         public final Timer timer = new Timer();
 
@@ -1230,8 +1234,18 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                     output.send(networkArray);
                     this.timer.sendNanos = System.nanoTime() - copyEnd;
                 }
+
+                // Compute network framerate
+                long now = System.currentTimeMillis();
+                this.frameRate = 1000.f / (now - this.lastFrame);
+                this.lastFrame = now;
             }
+
             System.out.println("LXEngine Network Thread finished");
+        }
+
+        public float frameRate() {
+            return this.frameRate;
         }
     }
 
