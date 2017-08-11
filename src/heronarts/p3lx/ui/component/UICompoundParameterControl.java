@@ -34,8 +34,11 @@ import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXCompoundModulation;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.LXLoopTask;
 
 public class UICompoundParameterControl extends UIParameterControl {
+    private double lastParameterValue = 0;
 
     private final List<LXListenableParameter> modulationParameters = new ArrayList<LXListenableParameter>();
 
@@ -46,8 +49,21 @@ public class UICompoundParameterControl extends UIParameterControl {
         }
     };
 
+    private final LXLoopTask checkRedrawTask = new LXLoopTask() {
+        @Override
+        public void loop(double deltaMs) {
+            double parameterValue = getNormalized();
+            if (parameterValue != lastParameterValue) {
+                redraw();
+            }
+            lastParameterValue = parameterValue;
+        }
+    };
+
     protected UICompoundParameterControl(float x, float y, float w, float h) {
         super(x, y, w, h);
+
+        addLoopTask(checkRedrawTask);
     }
 
     @Override
@@ -57,6 +73,17 @@ public class UICompoundParameterControl extends UIParameterControl {
         }
         this.modulationParameters.clear();
         return super.setParameter(parameter);
+    }
+
+    protected double getBaseNormalized() {
+        if (this.parameter != null) {
+            if (this.parameter instanceof CompoundParameter) {
+                return ((CompoundParameter) this.parameter).getBaseNormalized();
+            } else {
+                return getNormalized();
+            }
+        }
+        return 0;
     }
 
     protected void registerModulation(LXCompoundModulation modulation) {
@@ -71,5 +98,5 @@ public class UICompoundParameterControl extends UIParameterControl {
             }
         }
     }
-
+    
 }

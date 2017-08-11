@@ -142,9 +142,9 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
 
     protected double getNormalized() {
         if (this.parameter != null) {
-            if (this.parameter instanceof CompoundParameter) {
-                return ((CompoundParameter) this.parameter).getBaseNormalized();
-            }
+            // if (this.parameter instanceof CompoundParameter) {
+            //   return ((CompoundParameter) this.parameter).getBaseNormalized();
+            // }
             return this.parameter.getNormalized();
         }
         return 0;

@@ -247,7 +247,7 @@ ${line}
 		/>
 
 		<zip destfile="${project.dist.version}/P3LXDemo.zip"
-		   basedir="./examples/P3LXDemo"
+		   basedir="./examples/LXStudioDemo"
 		   excludes="**/.DS_Store"
 		/>
 

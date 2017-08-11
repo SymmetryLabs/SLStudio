@@ -94,20 +94,25 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
             (isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
 
         double norm = getNormalized();
+        double base = getBaseNormalized();
         int handleEdge;
+        int modHandleEdge;
         float grooveDim;
         switch (this.direction) {
         case HORIZONTAL:
             handleEdge = (int) Math.round(PADDING + norm * (this.width - 2*PADDING - HANDLE_SIZE));
+            modHandleEdge = (int) Math.round(PADDING + base * (this.width - 2*PADDING - HANDLE_SIZE));
             grooveDim = this.width - 2*PADDING;
             break;
         default:
         case VERTICAL:
             handleEdge = (int) Math.round(PADDING + (1 - norm) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
+            modHandleEdge = (int) Math.round(PADDING + (1 - base) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
             grooveDim = this.handleHeight - 2*PADDING;
             break;
         }
         int handleCenter = handleEdge + 1 + HANDLE_SIZE/2;
+        int modHandleCenter = modHandleEdge + 1 + HANDLE_SIZE/2;
 
         // Modulations!
         if (this.parameter instanceof CompoundParameter) {
@@ -132,13 +137,13 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                         switch (modulation.getPolarity()) {
                         case BIPOLAR:
                             pg.stroke(modColorInv);
-                            xf = LXUtils.constrainf(handleCenter - xw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(handleCenter, y, xf, y);
+                            xf = LXUtils.constrainf(modHandleCenter - xw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(modHandleCenter, y, xf, y);
                             // Pass-thru
                         case UNIPOLAR:
                             pg.stroke(modColor);
-                            xf = LXUtils.constrainf(handleCenter + xw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(handleCenter, y, xf, y);
+                            xf = LXUtils.constrainf(modHandleCenter + xw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(modHandleCenter, y, xf, y);
                             break;
                         }
                     }
@@ -152,13 +157,13 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                         switch (modulation.getPolarity()) {
                         case BIPOLAR:
                             pg.stroke(modColorInv);
-                            yf = LXUtils.constrainf(handleCenter + yw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(x, handleCenter, x, yf);
+                            yf = LXUtils.constrainf(modHandleCenter + yw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(x, modHandleCenter, x, yf);
                             // Pass thru
                         case UNIPOLAR:
                             pg.stroke(modColor);
-                            yf = LXUtils.constrainf(handleCenter - yw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(x, handleCenter, x, yf);
+                            yf = LXUtils.constrainf(modHandleCenter - yw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(x, modHandleCenter, x, yf);
                             break;
                         }
                     }
@@ -187,7 +192,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
             default:
             case UNIPOLAR:
                 fillX = PADDING;
-                fillWidth = (int) ((this.width - 2*PADDING) * getNormalized());
+                fillWidth = (int) ((this.width - 2*PADDING) * norm);
                 break;
             }
 
@@ -307,9 +312,10 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                     if (mouseEvent.isShiftDown()) {
                         delta /= 10;
                     }
-                    setNormalized(LXUtils.constrain(getNormalized() + delta, 0, 1));
+                    setNormalized(LXUtils.constrain(getBaseNormalized() + delta, 0, 1));
                 }
             }
         }
     }
+    
 }
