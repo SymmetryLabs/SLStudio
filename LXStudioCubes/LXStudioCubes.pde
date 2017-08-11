@@ -129,6 +129,8 @@ void setup() {
       //   new UIEnvelopDecode(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 6);
       // }
 
+      ui.preview.perspective.setValue(20);
+
     }
   };
 

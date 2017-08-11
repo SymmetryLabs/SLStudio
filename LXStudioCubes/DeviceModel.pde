@@ -1,6 +1,6 @@
 public static class DeviceModel extends LXModel {
     // might want to create a metric obj based on the specific form factor size
-    public DeviceModel(GridModel.Metrics metrics) {
+    public DeviceModel() {
          // this then calls the Fixture constructor (defined in GridModel) with the Metrics obj
         super(Arrays.asList(new LXPoint[] {
             new LXPoint(00, 00, 0), new LXPoint(00, 10, 0), new LXPoint(00, 20, 0), new LXPoint(00, 30, 0), new LXPoint(00, 40, 0), new LXPoint(00, 50, 0), new LXPoint(00, 60, 0), new LXPoint(00, 70, 0),
