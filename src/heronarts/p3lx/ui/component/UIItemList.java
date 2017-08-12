@@ -194,6 +194,9 @@ public interface UIItemList {
 
         private int keyActivate = -1;
 
+        private int controlSurfaceFocusIndex = -1;
+        private int controlSurfaceFocusLength = -1;
+
         private Impl(UI ui, UI2dContainer list) {
             this.list = list;
             list.setBackgroundColor(ui.theme.getDarkBackgroundColor());
@@ -213,7 +216,7 @@ public interface UIItemList {
                     if (yp < 0) {
                         scrollList.setScrollY(-ROW_SPACING * focusIndex);
                     } else if (yp >= list.getHeight() - ROW_SPACING) {
-                        scrollList.setScrollY(-ROW_SPACING * focusIndex + list.getHeight() - ROW_SPACING);
+                        scrollList.setScrollY(list.getHeight() - ROW_SPACING * (focusIndex+1) - ROW_MARGIN);
                     }
                 }
                 this.focusIndex = focusIndex;
@@ -308,6 +311,12 @@ public interface UIItemList {
 
         private void setReorderable(boolean isReorderable) {
             this.isReorderable = isReorderable;
+        }
+
+        private void setControlSurfaceFocus(int index, int length) {
+            this.controlSurfaceFocusIndex = index;
+            this.controlSurfaceFocusLength = length;
+            this.list.redraw();
         }
 
         private void activate() {
@@ -429,6 +438,18 @@ public interface UIItemList {
                 }
                 yp += ROW_SPACING;
                 ++i;
+            }
+
+            if (this.controlSurfaceFocusIndex >= 0 && this.controlSurfaceFocusLength > 0) {
+                pg.noFill();
+                pg.stroke(ui.theme.getSurfaceColor());
+                pg.rect(
+                    PADDING,
+                    ROW_MARGIN + this.controlSurfaceFocusIndex * ROW_SPACING,
+                    rowWidth - 2*PADDING,
+                    Math.min(this.controlSurfaceFocusLength, this.items.size() - this.controlSurfaceFocusIndex) * ROW_SPACING - ROW_MARGIN,
+                    4
+                );
             }
         }
 
@@ -663,6 +684,12 @@ public interface UIItemList {
         }
 
         @Override
+        public UIItemList setControlSurfaceFocus(int index, int length) {
+            this.impl.setControlSurfaceFocus(index, length);
+            return this;
+        }
+
+        @Override
         public void drawFocus(UI ui, PGraphics pg) {
             this.impl.drawFocus(ui, pg);
         }
@@ -717,6 +744,7 @@ public interface UIItemList {
         public void onFocus() {
             this.impl.onFocus();
         }
+
     }
 
     public static class BasicList extends UI2dContainer implements UIItemList, UIFocus {
@@ -778,6 +806,11 @@ public interface UIItemList {
             return this;
         }
 
+        public UIItemList setControlSurfaceFocus(int index, int length) {
+            this.impl.setControlSurfaceFocus(index, length);
+            return this;
+        }
+
         @Override
         public void drawFocus(UI ui, PGraphics pg) {
             this.impl.drawFocus(ui, pg);
@@ -833,6 +866,7 @@ public interface UIItemList {
         public void onFocus() {
             this.impl.onFocus();
         }
+
     }
 
     /**
@@ -918,5 +952,14 @@ public interface UIItemList {
      * @return this
      */
     public UIItemList setReorderable(boolean reorderable);
+
+    /**
+     * Sets a control focus range that is highlighted in the list
+     *
+     * @param index Start of the surface focus
+     * @param length Length of the surface focus block
+     * @return this
+     */
+    public UIItemList setControlSurfaceFocus(int index, int length);
 
 }

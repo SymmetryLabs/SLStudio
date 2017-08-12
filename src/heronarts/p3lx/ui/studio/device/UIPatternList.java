@@ -52,6 +52,19 @@ public class UIPatternList extends UIItemList.ScrollList {
             addPattern(pattern);
         }
 
+        // Set up control surface listener
+        final LXParameterListener setControlSurfaceFocus = new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                setControlSurfaceFocus(
+                    channel.controlSurfaceFocusIndex.getValuei(),
+                    channel.controlSurfaceFocusLength.getValuei()
+                );
+            }
+        };
+        channel.controlSurfaceFocusIndex.addListener(setControlSurfaceFocus);
+        channel.controlSurfaceFocusLength.addListener(setControlSurfaceFocus);
+        setControlSurfaceFocus.onParameterChanged(null);
+
         LXChannel.Listener lxListener = new LXChannel.AbstractListener() {
 
             @Override
