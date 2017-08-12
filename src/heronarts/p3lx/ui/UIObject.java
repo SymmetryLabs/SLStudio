@@ -336,6 +336,13 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             (this == this.ui.getTriggerSource());
     }
 
+    boolean isTriggerSourceMapping() {
+        return
+            this.ui.triggerSourceMapping &&
+            (this instanceof UITriggerSource) &&
+            ((UITriggerSource) this).getTriggerSource() != null;
+    }
+
     boolean isTriggerTargetMapping() {
         return
             this.ui.triggerTargetMapping &&
@@ -463,6 +470,9 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
                 this.ui.modulationEngine.addModulation(new LXCompoundModulation(source, target));
             }
             this.ui.mapModulationSource(null);
+            return;
+        } else if (isTriggerSourceMapping()) {
+            this.ui.mapTriggerSource((UITriggerSource) this);
             return;
         } else if (isTriggerTargetMapping() && !isTriggerSource()) {
             BooleanParameter source = this.ui.getTriggerSource().getTriggerSource();

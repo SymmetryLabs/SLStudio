@@ -95,8 +95,8 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     protected static final int TITLE_X = 18;
     protected static final int CONTENT_Y = 20;
     public static final int MAP_WIDTH = 24;
+    public static final int TRIGGER_WIDTH = 16;
     protected static final int LOOP_WIDTH = 18;
-    protected static final int TRIGGER_WIDTH = 16;
     protected static final int COLOR_WIDTH = 10;
 
     private final UI ui;
@@ -201,25 +201,43 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             gateButton.addToContainer(this);
         }
 
-        final UIButton mapButton = new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING, MAP_WIDTH, 12) {
-            @Override
-            public void onToggle(boolean on) {
-                if (on) {
-                    UIModulationSource modulationSource = getModulationSourceUI();
-                    if (modulationSource != null) {
-                        ui.mapModulationSource(modulationSource);
+        final UIButton mapButton;
+        if (this instanceof UITriggerModulator) {
+            mapButton = new UIButton(this.width - 2*PADDING - TRIGGER_WIDTH - COLOR_WIDTH, PADDING, TRIGGER_WIDTH, 12) {
+                @Override
+                public void onToggle(boolean on) {
+                    if (on) {
+                        ui.mapTriggerSource((UITriggerModulator) UIModulator.this);
                     } else {
-                        lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                        ui.mapTriggerSource(null);
                     }
-                } else {
-                    ui.mapModulationSource(null);
                 }
-            }
-        };
-        mapButton
-        .setIcon(ui.theme.iconMap)
-        .setDescription("Map: select a new target for this modulation source")
-        .addToContainer(this);
+            };
+            mapButton
+            .setIcon(ui.theme.iconTriggerSource)
+            .setDescription("Map: select a new target for this trigger source")
+            .addToContainer(this);
+        } else {
+            mapButton = new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING, MAP_WIDTH, 12) {
+                @Override
+                public void onToggle(boolean on) {
+                    if (on) {
+                        UIModulationSource modulationSource = getModulationSourceUI();
+                        if (modulationSource != null) {
+                            ui.mapModulationSource(modulationSource);
+                        } else {
+                            lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                        }
+                    } else {
+                        ui.mapModulationSource(null);
+                    }
+                }
+            };
+            mapButton
+            .setIcon(ui.theme.iconMap)
+            .setDescription("Map: select a new target for this modulation source")
+            .addToContainer(this);
+        }
 
         new UIColorBox(ui, this.color, this.width - PADDING - COLOR_WIDTH, PADDING + 1, COLOR_WIDTH, COLOR_WIDTH)
         .addToContainer(this);
@@ -367,7 +385,13 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             this.lx.engine.modulation.removeModulator(this.modulator);
         } else {
             for (UIObject uiModulation : this.modulations) {
-                this.lx.engine.modulation.removeModulation(((UICompoundModulation) uiModulation).modulation);
+                if (uiModulation instanceof UICompoundModulation) {
+                    this.lx.engine.modulation.removeModulation(((UICompoundModulation) uiModulation).modulation);
+                } else if (uiModulation instanceof UITriggerModulation) {
+                    this.lx.engine.modulation.removeTrigger(((UITriggerModulation) uiModulation).trigger);
+                } else {
+                    throw new IllegalStateException("Unknown child modulation type: " + uiModulation);
+                }
             }
         }
     }

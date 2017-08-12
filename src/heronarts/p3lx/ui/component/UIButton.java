@@ -33,6 +33,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.UITriggerSource;
 import heronarts.p3lx.ui.UITriggerTarget;
 import heronarts.p3lx.ui.UIControlTarget;
 import processing.core.PConstants;
@@ -41,7 +42,7 @@ import processing.core.PImage;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UIButton extends UI2dComponent implements UIControlTarget, UITriggerTarget, UIFocus {
+public class UIButton extends UI2dComponent implements UIControlTarget, UITriggerSource, UITriggerTarget, UIFocus {
 
     protected boolean active = false;
     protected boolean isMomentary = false;
@@ -332,6 +333,11 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
     @Override
     public LXParameter getControlTarget() {
         return isMappable() ? this.booleanParameter : null;
+    }
+
+    @Override
+    public BooleanParameter getTriggerSource() {
+        return this.triggerable ? this.booleanParameter : null;
     }
 
     @Override
