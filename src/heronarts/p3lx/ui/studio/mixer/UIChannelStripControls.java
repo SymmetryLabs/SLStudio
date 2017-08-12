@@ -112,9 +112,10 @@ public class UIChannelStripControls extends UIMixerStripControls {
 
         // Active + Cue buttons
         float bxp = 6*PADDING;
-        this.activeButton = new UIButton(bxp, yp, 28, 28);
-        activeButton
+        this.activeButton = (UIButton)
+            new UIButton(bxp, yp, 28, 28)
             .setLabel(Integer.toString(channel.getIndex() + 1))
+            .setTriggerable(true)
             .setParameter(channel.enabled)
             .setFont(ui.loadFont("Arial-Black-11.vlw"))
             .setTextAlignment(PConstants.CENTER, PConstants.CENTER);
