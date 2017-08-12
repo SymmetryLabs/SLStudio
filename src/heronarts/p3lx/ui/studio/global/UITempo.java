@@ -23,6 +23,8 @@ package heronarts.p3lx.ui.studio.global;
 import heronarts.lx.LX;
 import heronarts.lx.Tempo;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
@@ -84,6 +86,11 @@ public class UITempo extends UI2dContainer {
                     }
                 }
             });
+            tempo.enabled.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    redraw();
+                }
+            });
         }
 
         @Override
@@ -93,7 +100,6 @@ public class UITempo extends UI2dContainer {
             } else {
                 this.tempo.enabled.toggle();
             }
-            redraw();
         }
 
         @Override
