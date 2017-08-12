@@ -133,6 +133,8 @@ public class UIBottomTray extends UI2dContext {
             UIDeviceBin deviceBin = this.mutableDeviceBins.get(channel);
             deviceBin.setVisible(channel == focusedChannel);
         }
+        // For the green line at the bottom
+        redraw();
     }
 
     @Override
