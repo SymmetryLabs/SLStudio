@@ -118,6 +118,7 @@ public class APC40Mk2 extends LXMidiSurface {
 
     public static final int PLAY = 91;
     public static final int RECORD = 93;
+    public static final int SESSION = 102;
 
     public static final int BANK_SELECT_UP = 94;
     public static final int BANK_SELECT_DOWN = 95;
@@ -126,10 +127,10 @@ public class APC40Mk2 extends LXMidiSurface {
 
     public static final int SHIFT = 98;
 
+    public static final int METRONOME = 90;
     public static final int TAP_TEMPO = 99;
     public static final int NUDGE_MINUS = 100;
     public static final int NUDGE_PLUS = 101;
-    public static final int SESSION = 103;
 
     public static final int BANK = 103;
 
@@ -632,6 +633,13 @@ public class APC40Mk2 extends LXMidiSurface {
         });
         sendNoteOn(0, DETAIL_VIEW, lx.engine.cueB.isOn() ? 1 : 0);
 
+        this.lx.tempo.enabled.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) {
+                sendNoteOn(0, METRONOME, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
+            }
+        });
+        sendNoteOn(0, METRONOME, lx.tempo.enabled.isOn() ? LED_ON : LED_OFF);
+
     }
 
     private void registerChannel(LXChannel channel) {
@@ -670,6 +678,11 @@ public class APC40Mk2 extends LXMidiSurface {
                 this.bankOn = !this.bankOn;
                 sendNoteOn(note.getChannel(), pitch, this.bankOn ? LED_ON : LED_OFF);
                 sendChannelGrid();
+            }
+            return;
+        case METRONOME:
+            if (on) {
+                lx.tempo.enabled.toggle();
             }
             return;
         case TAP_TEMPO:
