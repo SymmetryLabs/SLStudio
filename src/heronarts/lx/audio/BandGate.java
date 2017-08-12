@@ -124,7 +124,8 @@ public class BandGate extends LXModulator implements LXNormalizedParameter, LXTr
      */
     public final BooleanParameter gate =
         new BooleanParameter("Gate")
-        .setDescription("Engages when the beat is first detected");
+        .setDescription("Engages when the beat is first detected")
+        .setMode(BooleanParameter.Mode.MOMENTARY);
 
     /**
      * Turn this parameter on to have this modulator tap the tempo system

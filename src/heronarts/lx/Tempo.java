@@ -83,6 +83,15 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         new BoundedParameter("BPM", DEFAULT_BPM, MIN_BPM, MAX_BPM)
         .setDescription("Beats per minute of the master tempo object");
 
+    public final BooleanParameter trigger =
+        new BooleanParameter("Trigger")
+        .setDescription("Listeable trigger which is set on each beat")
+        .setMode(BooleanParameter.Mode.MOMENTARY);
+
+    public final BooleanParameter enabled =
+        new BooleanParameter("Enabled")
+        .setDescription("Whether tempo trigger modulation is enabled");
+
     public final BooleanParameter tap =
         new BooleanParameter("Tap")
         .setDescription("When pressed repeatedlly, tempo is learned from the timing between taps")
@@ -120,6 +129,8 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
         addParameter("nudgeUp", this.nudgeUp);
         addParameter("nudgeDown", this.nudgeDown);
         addParameter("beatsPerMeasure", this.beatsPerMeasure);
+        addParameter("trigger", this.trigger);
+        addParameter("enabled", this.enabled);
         startModulator(this.click);
     }
 
@@ -133,27 +144,31 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
     }
 
     @Override
-    public void onParameterChanged(LXParameter parameter) {
-        if (parameter == this.period) {
+    public void onParameterChanged(LXParameter p) {
+        if (p == this.period) {
             if (!this.parameterUpdate) {
                 this.parameterUpdate = true;
                 this.bpm.setValue(MS_PER_MINUTE / this.period.getValue());
                 this.parameterUpdate = false;
             }
-        } else if (parameter == this.bpm) {
+        } else if (p == this.bpm) {
             if (!this.parameterUpdate) {
                 this.parameterUpdate = true;
                 this.period.setValue(MS_PER_MINUTE / this.bpm.getValue());
                 this.parameterUpdate = false;
             }
-        } else if (parameter == this.tap) {
+        } else if (p == this.tap) {
             if (this.tap.isOn()) {
                 tap();
             }
-        } else if (parameter == this.nudgeUp) {
+        } else if (p == this.nudgeUp) {
             adjustBpm(this.nudgeUp.isOn() ? .1 : -.1);
-        } else if (parameter == this.nudgeDown) {
+        } else if (p == this.nudgeDown) {
             adjustBpm(this.nudgeDown.isOn() ? -.1 : .1);
+        } else if (p == this.trigger) {
+            if (this.trigger.isOn()) {
+                this.trigger.setValue(false);
+            }
         }
     }
 
@@ -342,6 +357,9 @@ public class Tempo extends LXModulatorComponent implements LXOscComponent {
             }
             for (Listener listener : listeners) {
                 listener.onBeat(this, beatIndex);
+            }
+            if (this.enabled.isOn()) {
+                this.trigger.setValue(true);
             }
         }
         this.manuallyTriggered = false;

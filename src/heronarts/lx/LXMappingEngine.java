@@ -37,6 +37,7 @@ public class LXMappingEngine {
         MIDI,
         MODULATION_SOURCE,
         MODULATION_TARGET,
+        TRIGGER_SOURCE,
         TRIGGER_TARGET
     };
 

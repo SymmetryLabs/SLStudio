@@ -27,13 +27,17 @@ import heronarts.lx.LX;
 public class LXTriggerModulation extends LXParameterModulation {
 
     public final BooleanParameter source;
-
     public final BooleanParameter target;
+
+    private final boolean sourceMomentary;
+    private final boolean targetMomentary;
 
     public LXTriggerModulation(BooleanParameter source, BooleanParameter target) {
         super(source, target);
         this.source = source;
         this.target = target;
+        this.sourceMomentary = (source.getMode() == BooleanParameter.Mode.MOMENTARY);
+        this.targetMomentary = (target.getMode() == BooleanParameter.Mode.MOMENTARY);
         this.source.addListener(this);
     }
 
@@ -47,13 +51,17 @@ public class LXTriggerModulation extends LXParameterModulation {
     @Override
     public void onParameterChanged(LXParameter p) {
         super.onParameterChanged(p);
-
         if (p == this.source) {
-            if (this.source.isOn()) {
-                this.target.setValue(true);
-
-            } else if (this.target.getMode() == BooleanParameter.Mode.MOMENTARY) {
-                this.target.setValue(false);
+            if (this.sourceMomentary) {
+                if (this.source.isOn()) {
+                    if (this.targetMomentary) {
+                        this.target.setValue(true);
+                    } else {
+                        this.target.toggle();
+                    }
+                }
+            } else {
+                this.target.setValue(this.source.getValue());
             }
         }
     }
