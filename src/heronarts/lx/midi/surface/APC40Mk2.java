@@ -133,6 +133,7 @@ public class APC40Mk2 extends LXMidiSurface {
 
     public static final int BANK = 103;
 
+    // LED color + mode definitions
     public static final int LED_OFF = 0;
     public static final int LED_ON = 1;
     public static final int LED_GRAY = 2;
@@ -320,6 +321,10 @@ public class APC40Mk2 extends LXMidiSurface {
             this.channel.crossfadeGroup.addListener(this);
             this.channel.arm.addListener(this);
             this.channel.focusedPattern.addListener(this);
+
+            this.channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
+            int focusedPatternIndex = this.channel.getFocusedPatternIndex();
+            this.channel.controlSurfaceFocusIndex.setValue(focusedPatternIndex < CLIP_LAUNCH_ROWS ? 0 : (focusedPatternIndex - CLIP_LAUNCH_ROWS + 1));
         }
 
         public void dispose() {
@@ -335,6 +340,8 @@ public class APC40Mk2 extends LXMidiSurface {
                     clip.running.removeListener(this);
                 }
             }
+            this.channel.controlSurfaceFocusLength.setValue(0);
+            this.channel.controlSurfaceFocusIndex.setValue(0);
         }
 
         public void onParameterChanged(LXParameter p) {
@@ -353,6 +360,13 @@ public class APC40Mk2 extends LXMidiSurface {
                 sendNoteOn(index, CHANNEL_ARM, this.channel.arm.isOn() ? LED_ON : LED_OFF);
                 sendChannelClips(this.channel.getIndex(), this.channel);
             } else if (p == this.channel.focusedPattern) {
+                int focusedPatternIndex = this.channel.getFocusedPatternIndex();
+                int channelSurfaceIndex = this.channel.controlSurfaceFocusIndex.getValuei();
+                if (focusedPatternIndex < channelSurfaceIndex) {
+                    this.channel.controlSurfaceFocusIndex.setValue(focusedPatternIndex);
+                } else if (focusedPatternIndex >= channelSurfaceIndex + CLIP_LAUNCH_ROWS) {
+                    this.channel.controlSurfaceFocusIndex.setValue(focusedPatternIndex - CLIP_LAUNCH_ROWS + 1);
+                }
                 sendChannelPatterns(index, this.channel);
             } else if (p.getComponent() instanceof LXClip) {
                 // TODO(mcslee): could be more efficient...
@@ -429,6 +443,9 @@ public class APC40Mk2 extends LXMidiSurface {
             register();
         } else {
             this.deviceListener.register(null);
+            for (LXChannel channel : this.lx.engine.channels) {
+                channel.controlSurfaceFocusLength.setValue(0);
+            }
         }
     }
 
@@ -499,12 +516,13 @@ public class APC40Mk2 extends LXMidiSurface {
         if (index >= CLIP_LAUNCH_COLUMNS || !this.bankOn) {
             return;
         }
-        int numPatterns = 0, activeIndex = -1, nextIndex = -1, focusedIndex = -1;
+        int endIndex = -1, activeIndex = -1, nextIndex = -1, focusedIndex = -1;
         if (channel != null) {
-            numPatterns = channel.patterns.size();
-            activeIndex = channel.getActivePatternIndex();
-            nextIndex = channel.getNextPatternIndex();
-            focusedIndex = channel.getFocusedPattern().getIndex();
+            int baseIndex = channel.controlSurfaceFocusIndex.getValuei();
+            endIndex = channel.patterns.size() - baseIndex;
+            activeIndex = channel.getActivePatternIndex() - baseIndex;
+            nextIndex = channel.getNextPatternIndex() - baseIndex;
+            focusedIndex = channel.focusedPattern.getValuei() - baseIndex;
         }
         for (int y = 0; y < CLIP_LAUNCH_ROWS; ++y) {
             int note = CLIP_LAUNCH + CLIP_LAUNCH_COLUMNS * (CLIP_LAUNCH_ROWS - 1 - y) + index;
@@ -518,7 +536,7 @@ public class APC40Mk2 extends LXMidiSurface {
                 color = 9;
             } else if (y == focusedIndex) {
                 color = 10;
-            } else if (y < numPatterns) {
+            } else if (y < endIndex) {
                 color = 117;
             }
             sendNoteOn(midiChannel, note, color);
@@ -562,6 +580,9 @@ public class APC40Mk2 extends LXMidiSurface {
 
     private void register() {
         if (this.registered) {
+            for (LXChannel channel : this.lx.engine.channels) {
+                channel.controlSurfaceFocusLength.setValue(CLIP_LAUNCH_ROWS);
+            }
             return;
         }
         for (LXChannel channel : this.lx.engine.channels) {
@@ -689,13 +710,13 @@ public class APC40Mk2 extends LXMidiSurface {
             case BANK_SELECT_UP:
                 bus = this.lx.engine.getFocusedChannel();
                 if (bus instanceof LXChannel) {
-                    ((LXChannel) bus).focusedPattern.decrement(false);
+                    ((LXChannel) bus).focusedPattern.decrement(this.shiftOn ? CLIP_LAUNCH_ROWS : 1 , false);
                 }
                 return;
             case BANK_SELECT_DOWN:
                 bus = this.lx.engine.getFocusedChannel();
                 if (bus instanceof LXChannel) {
-                    ((LXChannel) bus).focusedPattern.increment(false);
+                    ((LXChannel) bus).focusedPattern.increment(this.shiftOn ? CLIP_LAUNCH_ROWS : 1 , false);
                 }
                 return;
             case CLIP_DEVICE_VIEW:
@@ -721,6 +742,7 @@ public class APC40Mk2 extends LXMidiSurface {
                 int channelIndex = (pitch - CLIP_LAUNCH) % CLIP_LAUNCH_COLUMNS;
                 int index = CLIP_LAUNCH_ROWS - 1 - ((pitch - CLIP_LAUNCH) / CLIP_LAUNCH_COLUMNS);
                 LXChannel channel = getChannel(channelIndex);
+                index += channel.controlSurfaceFocusIndex.getValuei();
                 if (channel != null) {
                     if (this.bankOn) {
                         if (index < channel.getPatterns().size()) {

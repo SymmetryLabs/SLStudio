@@ -31,6 +31,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.parameter.BooleanParameter;
 import java.util.ArrayList;
@@ -203,6 +204,14 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         .setDescription("Sets the alpha level of the output of this channel");
 
     public final DiscreteParameter blendMode;
+
+    public final MutableParameter controlSurfaceFocusIndex = (MutableParameter)
+        new MutableParameter("SurfaceFocusIndex", 0)
+        .setDescription("Control surface focus index");
+
+    public final MutableParameter controlSurfaceFocusLength = (MutableParameter)
+        new MutableParameter("SurfaceFocusLength", 0)
+        .setDescription("Control surface focus length");
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
@@ -544,12 +553,17 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         return this;
     }
 
-    public final int getActivePatternIndex() {
-        return this.activePatternIndex;
+
+    public final int getFocusedPatternIndex() {
+        return this.focusedPattern.getValuei();
     }
 
     public final LXPattern getFocusedPattern() {
         return this.mutablePatterns.get(this.focusedPattern.getValuei());
+    }
+
+    public final int getActivePatternIndex() {
+        return this.activePatternIndex;
     }
 
     public final LXPattern getActivePattern() {

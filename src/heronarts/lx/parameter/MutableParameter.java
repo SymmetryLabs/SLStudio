@@ -54,4 +54,8 @@ public class MutableParameter extends LXListenableParameter {
         return value;
     }
 
+    public int getValuei() {
+        return (int) getValue();
+    }
+
 }

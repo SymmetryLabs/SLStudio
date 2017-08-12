@@ -56,7 +56,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     public final MutableParameter controlSurfaceSemaphore = (MutableParameter)
         new MutableParameter("Control-Surfaces", 0)
-        .setDescription("How many control surfaces are controlling this componentt");
+        .setDescription("How many control surfaces are controlling this component");
 
     private static final int ID_UNASSIGNED = -1;
     static final int ID_ENGINE = 1;
