@@ -755,8 +755,8 @@ public class APC40Mk2 extends LXMidiSurface {
                 int channelIndex = (pitch - CLIP_LAUNCH) % CLIP_LAUNCH_COLUMNS;
                 int index = CLIP_LAUNCH_ROWS - 1 - ((pitch - CLIP_LAUNCH) / CLIP_LAUNCH_COLUMNS);
                 LXChannel channel = getChannel(channelIndex);
-                index += channel.controlSurfaceFocusIndex.getValuei();
                 if (channel != null) {
+                    index += channel.controlSurfaceFocusIndex.getValuei();
                     if (this.bankOn) {
                         if (index < channel.getPatterns().size()) {
                             channel.focusedPattern.setValue(index);
