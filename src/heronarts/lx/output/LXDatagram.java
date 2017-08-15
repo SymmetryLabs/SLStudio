@@ -63,6 +63,8 @@ public abstract class LXDatagram {
      */
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
 
+    public final BooleanParameter error = new BooleanParameter("Error", false);
+
     protected LXDatagram(int bufferSize) {
         this.buffer = new byte[bufferSize];
         for (int i = 0; i < bufferSize; ++i) {

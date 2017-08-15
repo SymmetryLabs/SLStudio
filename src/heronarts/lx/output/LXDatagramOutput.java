@@ -90,6 +90,7 @@ public class LXDatagramOutput extends LXOutput {
                     if (datagram.failureCount > 0) {
                         System.out.println(this.date.format(now) + " Recovered connectivity to " + datagram.packet.getAddress());
                     }
+                    datagram.error.setValue(false);
                     datagram.failureCount = 0;
                     datagram.sendAfter = 0;
                 } catch (IOException iox) {
@@ -106,6 +107,7 @@ public class LXDatagramOutput extends LXOutput {
                                 + " in " + waitFor + "ms" + " (" + datagram.failureCount
                                 + " consecutive failures)");
                         datagram.sendAfter = now + waitFor;
+                        datagram.error.setValue(true);
                     }
                 }
             }
