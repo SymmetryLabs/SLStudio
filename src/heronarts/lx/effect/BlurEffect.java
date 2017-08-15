@@ -23,6 +23,8 @@ package heronarts.lx.effect;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.ModelBuffer;
+import heronarts.lx.blend.NormalBlend;
+import heronarts.lx.blend.ScreenBlend;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
@@ -48,7 +50,7 @@ public class BlurEffect extends LXEffect {
     protected void onEnable() {
         int[] blurArray = this.blurBuffer.getArray();
         for (int i = 0; i < blurArray.length; ++i) {
-            blurArray[i] = 0;
+            blurArray[i] = LXColor.BLACK;
         }
     }
 
@@ -58,10 +60,14 @@ public class BlurEffect extends LXEffect {
         if (blurf > 0) {
             blurf = 1 - (1 - blurf) * (1 - blurf) * (1 - blurf);
             int[] blurArray = this.blurBuffer.getArray();
-            for (int i = 0; i < this.colors.length; ++i) {
-                int blend = LXColor.screen(this.colors[i], blurArray[i]);
-                this.colors[i] = LXColor.lerp(this.colors[i], blend, blurf);
-            }
+
+            // Screen blend the colors onto the blur array
+            ScreenBlend.screen(blurArray, this.colors, 1, blurArray);
+
+            // Lerp onto the colors based upon amount
+            NormalBlend.lerp(this.colors, blurArray, blurf, this.colors);
+
+            // Copy colors into blur array for next frame
             System.arraycopy(this.colors, 0, blurArray, 0, this.colors.length);
         }
 

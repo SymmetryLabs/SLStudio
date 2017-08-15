@@ -152,8 +152,17 @@ public class LXColor {
         return 100.f * max / 255.f;
     }
 
-    public static int gray(float brightness) {
+    public static int gray(double brightness) {
         int b = 0xff & (int) (255 * (brightness / 100.));
+        return
+            0xff000000 |
+            ((b & 0xff) << RED_SHIFT) |
+            ((b & 0xff) << GREEN_SHIFT) |
+            (b & 0xff);
+    }
+
+    public static int gray(float brightness) {
+        int b = 0xff & (int) (255 * (brightness / 100.f));
         return
             0xff000000 |
             ((b & 0xff) << RED_SHIFT) |
