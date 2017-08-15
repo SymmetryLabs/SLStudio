@@ -26,13 +26,15 @@ import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 
-public class ADEnvelope extends LXModulator implements LXNormalizedParameter {
+public class ADSREnvelope extends LXModulator implements LXNormalizedParameter {
 
     private final LXParameter startValue;
     private final LXParameter endValue;
 
     private final LXParameter attack;
     private final LXParameter decay;
+    private final LXParameter sustain;
+    private final LXParameter release;
 
     private final LXParameter shape;
 
@@ -40,7 +42,9 @@ public class ADEnvelope extends LXModulator implements LXNormalizedParameter {
 
     private enum Stage {
         ATTACK,
-        DECAY
+        DECAY,
+        SUSTAIN,
+        RELEASE
     };
 
     public final BooleanParameter engage =
@@ -50,26 +54,28 @@ public class ADEnvelope extends LXModulator implements LXNormalizedParameter {
 
     private Stage stage = Stage.ATTACK;
 
-    public ADEnvelope(String label, LXParameter startValue, LXParameter endValue, LXParameter attack, LXParameter decay, LXParameter shape) {
+    public ADSREnvelope(String label, LXParameter startValue, LXParameter endValue, LXParameter attack, LXParameter decay, LXParameter sustain, LXParameter release, LXParameter shape) {
         super(label);
         this.startValue = startValue;
         this.endValue = endValue;
         this.attack = attack;
         this.decay = decay;
+        this.sustain = sustain;
+        this.release = release;
         this.shape = shape;
         addParameter("engage", this.engage);
     }
 
-    public ADEnvelope(String label, double startValue, double endValue, LXParameter attack, LXParameter decay) {
-        this(label, new FixedParameter(startValue), new FixedParameter(endValue), attack, decay, new FixedParameter(1));
+    public ADSREnvelope(String label, double startValue, double endValue, LXParameter attack, LXParameter decay, LXParameter sustain, LXParameter release) {
+        this(label, new FixedParameter(startValue), new FixedParameter(endValue), attack, decay, sustain, release, new FixedParameter(1));
     }
 
-    public ADEnvelope(String label, double startValue, LXParameter endValue, LXParameter attack, LXParameter decay) {
-        this(label, new FixedParameter(startValue), endValue, attack, decay, new FixedParameter(1));
+    public ADSREnvelope(String label, double startValue, LXParameter endValue, LXParameter attack, LXParameter decay, LXParameter sustain, LXParameter release) {
+        this(label, new FixedParameter(startValue), endValue, attack, decay, sustain, release, new FixedParameter(1));
     }
 
-    public ADEnvelope(String label, double startValue, LXParameter endValue, LXParameter attack, LXParameter decay, LXParameter shape) {
-        this(label, new FixedParameter(startValue), endValue, attack, decay, shape);
+    public ADSREnvelope(String label, double startValue, LXParameter endValue, LXParameter attack, LXParameter decay, LXParameter sustain, LXParameter release, LXParameter shape) {
+        this(label, new FixedParameter(startValue), endValue, attack, decay, sustain, release, shape);
     }
 
     @Override
@@ -82,14 +88,14 @@ public class ADEnvelope extends LXModulator implements LXNormalizedParameter {
     public void onParameterChanged(LXParameter p) {
         super.onParameterChanged(p);
         if (p == this.engage) {
-            this.stage = this.engage.isOn() ? Stage.ATTACK : Stage.DECAY;
+            this.stage = this.engage.isOn() ? Stage.ATTACK : Stage.RELEASE;
             start();
         }
     }
 
     @Override
     public LXNormalizedParameter setNormalized(double value) {
-        throw new UnsupportedOperationException("Cannot setNormalized on ADEnvelope");
+        throw new UnsupportedOperationException("Cannot setNormalized on ADSREnvelope");
     }
 
     @Override
@@ -110,16 +116,28 @@ public class ADEnvelope extends LXModulator implements LXNormalizedParameter {
     @Override
     protected double computeValue(double deltaMs) {
         double norm = this.normalized;
-        switch (stage) {
+        switch (this.stage) {
         case ATTACK:
             norm += deltaMs / this.attack.getValue();
             if (norm >= 1) {
                 norm = 1;
-                this.running.setValue(false);
+                this.stage = Stage.DECAY;
             }
             break;
         case DECAY:
-            norm -= deltaMs / this.decay.getValue();
+            double sustain = this.sustain.getValue();
+            norm -= deltaMs * (1 - sustain) / this.decay.getValue();
+            if (norm <= sustain) {
+                norm = sustain;
+                this.stage = Stage.SUSTAIN;
+                this.running.setValue(false);
+            }
+            break;
+        case SUSTAIN:
+            norm = this.sustain.getValue();
+            break;
+        case RELEASE:
+            norm -= deltaMs * this.sustain.getValue() / this.release.getValue();
             if (norm <= 0) {
                 norm = 0;
                 this.running.setValue(false);
