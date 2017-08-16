@@ -8,6 +8,7 @@ import java.util.function.IntFunction;
 
 final static float INCHES = 1;
 final static float FEET = 12*INCHES;
+final static float INCHES_PER_METER = 39.3701;
   /**
  *     DOUBLE BLACK DIAMOND        DOUBLE BLACK DIAMOND
  *
@@ -34,11 +35,20 @@ public static class SLModel extends LXModel {
   public final List<Cube> cubes;
   public final List<Face> faces;
   public final List<Strip> strips;
+  public final List<Bar> bars;
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(cubeArr, strips));
+  public final List<Ring> rings;
+
+  public final Skylight skylight;
+  public final WallBars wallBars;
+  public final LevelRings levelRings;
+  public final RotatedRings rotatedRings;
+  public final UpstairsRings upstairsRings;
+
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Bar> bars, Skylight skylight, WallBars wallBars, LevelRings levelRings, RotatedRings rotatedRings, UpstairsRings upstairsRings, List<Ring> rings) {
+    super(new Fixture(cubeArr, strips, rings));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -48,7 +58,10 @@ public static class SLModel extends LXModel {
     List<Cube> cubeList = new ArrayList<Cube>();
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
+    List<Bar> barList = new ArrayList<Bar>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+
+    List<Ring> ringList = new ArrayList<Ring>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -66,18 +79,32 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips)
+    for (Strip strip : strips) {
       stripList.add(strip);
+    }
+
+    for (Ring ring : levelRings.rings) {
+      ringList.add(ring);
+    }
 
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
+    this.bars      = Collections.unmodifiableList(barList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
+
+    this.rings     = Collections.unmodifiableList(ringList);
+
+    this.skylight = skylight;
+    this.wallBars = wallBars;
+    this.levelRings = levelRings;
+    this.rotatedRings = rotatedRings;
+    this.upstairsRings = upstairsRings;
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(Cube[] cubeArr, List<Strip> strips, List<Ring> rings) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -87,6 +114,11 @@ public static class SLModel extends LXModel {
       } 
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
+          this.points.add(point);
+        }
+      }
+      for (Ring ring : rings) {
+        for (LXPoint point : ring.points) {
           this.points.add(point);
         }
       }
@@ -372,6 +404,316 @@ public static class Face extends LXModel {
         }
       }
       transform.pop();
+    }
+  }
+}
+
+public static class Skylight extends LXModel {
+  public final List<Bar> bars;
+  public final List<Strip> strips;
+
+  public Skylight(List<Bar> bars) {
+    super(new Fixture(bars));
+    this.bars = bars;
+    this.strips = new ArrayList<Strip>();
+    for (Bar bar : bars) {
+      for (Strip s : bar.strips) {
+        this.strips.add(s);
+      }
+    }
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+    private Fixture(List<Bar> bars) {
+      for (Bar bar : bars) {
+        for (LXPoint p : bar.points) {
+          this.points.add(p);
+        }
+      }
+    }
+  }
+}
+
+public static class WallBars extends LXModel {
+  public final List<Bar> bars;
+  public final List<Strip> strips;
+
+  public WallBars(List<Bar> bars) {
+    super(new Fixture(bars));
+    this.bars = bars;
+    this.strips = new ArrayList<Strip>();
+    for (Bar bar : bars) {
+      for (Strip s : bar.strips) {
+        this.strips.add(s);
+      }
+    }
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+    private Fixture(List<Bar> bars) {
+      for (Bar bar : bars) {
+        for (LXPoint p : bar.points) {
+          this.points.add(p);
+        }
+      }
+    }
+  }
+}
+
+public static class LevelRings extends LXModel {
+
+  public final List<Ring> rings;
+
+  public LevelRings(RingChandelierConfig config, LXTransform t) {
+    super(new Fixture(config, t));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+    this.rings = fixture.rings;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    public final List<Ring> rings = new ArrayList<Ring>();
+
+    private Fixture(RingChandelierConfig config, LXTransform t) {
+      t.push();
+      t.translate(config.coordinates[0], config.coordinates[1], config.coordinates[2]);
+      t.rotateX(config.rotations[0] * PI / 180.);
+      t.rotateY(config.rotations[1] * PI / 180.);
+      t.rotateZ(config.rotations[2] * PI / 180.);
+
+      for (RingConfig rc : config.rings) {
+        this.rings.add(new Ring(rc.id, rc.coordinates, rc.rotations, rc.numPoints, rc.radius, t));
+      }
+      t.pop();
+    }
+  }
+}
+
+public static class RotatedRings extends LXModel {
+
+  public final List<Ring> rings;
+
+  public RotatedRings(RingChandelierConfig config, LXTransform t) {
+    super(new Fixture(config, t));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+    this.rings = fixture.rings;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    public final List<Ring> rings = new ArrayList<Ring>();
+
+    private Fixture(RingChandelierConfig config, LXTransform t) {
+      t.push();
+      t.translate(config.coordinates[0], config.coordinates[1], config.coordinates[2]);
+      t.rotateX(config.rotations[0] * PI / 180.);
+      t.rotateY(config.rotations[1] * PI / 180.);
+      t.rotateZ(config.rotations[2] * PI / 180.);
+
+      for (RingConfig rc : config.rings) {
+        this.rings.add(new Ring(rc.id, rc.coordinates, rc.rotations, rc.numPoints, rc.radius, t));
+      }
+      t.pop();
+    }
+  }
+}
+
+public static class UpstairsRings extends LXModel {
+
+  public final List<Ring> rings;
+
+  public UpstairsRings(RingChandelierConfig config, LXTransform t) {
+    super(new Fixture(config, t));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+    this.rings = fixture.rings;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    public final List<Ring> rings = new ArrayList<Ring>();
+
+    private Fixture(RingChandelierConfig config, LXTransform t) {
+      t.push();
+      t.translate(config.coordinates[0], config.coordinates[1], config.coordinates[2]);
+      t.rotateX(config.rotations[0] * PI / 180.);
+      t.rotateY(config.rotations[1] * PI / 180.);
+      t.rotateZ(config.rotations[2] * PI / 180.);
+
+      for (RingConfig rc : config.rings) {
+        this.rings.add(new Ring(rc.id, rc.coordinates, rc.rotations, rc.numPoints, rc.radius, t));
+      }
+      t.pop();
+    }
+  }
+}
+
+// public static class LevelRings extends LXModel {
+
+//   public final List<Ring> rings = new ArrayList<Ring>();
+
+//   public final Ring topRing;
+//   public final Ring middleRing;
+//   public final Ring bottomRing;
+
+//   public LevelRings(String[] ids, float[] coordinates, float[] rotations, LXTransform t) {
+//     super(new Fixture(ids, coordinates, rotations, t));
+//     Fixture fixture = (Fixture)this.fixtures.get(0);
+
+//     this.rings.add(this.topRing = fixture.topRing);
+//     this.rings.add(this.middleRing = fixture.middleRing);
+//     this.rings.add(this.bottomRing = fixture.bottomRing);
+//   }
+
+//   private static class Fixture extends LXAbstractFixture {
+//     public final Ring topRing;
+//     public final Ring middleRing;
+//     public final Ring bottomRing;
+
+//     private Fixture(String[] ids, float[] coordinates, float[] rotations, LXTransform t) {
+//       t.push();
+//       t.translate(coordinates[0], coordinates[1], coordinates[2]);
+//       t.rotateX(rotations[0] * PI / 180.);
+//       t.rotateY(rotations[1] * PI / 180.);
+//       t.rotateZ(rotations[2] * PI / 180.);
+
+//       this.bottomRing = new Ring(ids[0], new float[] {0,  0, 0}, new float[] {90, 0, 0}, 100, 6, t);
+//       this.middleRing = new Ring(ids[1], new float[] {0, 10, 0}, new float[] {90, 0, 0}, 150, 12, t);
+//       this.topRing    = new Ring(ids[2], new float[] {0, 20, 0}, new float[] {90, 0, 0}, 200, 18, t);
+      
+//       t.pop();
+//     }
+//   }
+// }
+
+public static class Ring extends LXModel {
+  public final String id;
+  public final float x;
+  public final float y;
+  public final float z;
+  public final float radius;
+
+  public Ring(String id, float[] cordinates, float[] rotations, int numPoints, float radius, LXTransform t) {
+    super(new Fixture(cordinates, rotations, numPoints, radius, t));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+    this.id = id;
+    this.x = fixture.x;
+    this.y = fixture.y;
+    this.z = fixture.z;
+    this.radius = radius;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+    public final float x;
+    public final float y;
+    public final float z;
+
+    private Fixture(float[] coordinates, float[] rotations, int numPoints, float radius, LXTransform t) {
+      t.push();
+      t.translate(coordinates[0], coordinates[1], coordinates[2]);
+      t.rotateX(rotations[0] * PI / 180.);
+      t.rotateY(rotations[1] * PI / 180.);
+      t.rotateZ(rotations[2] * PI / 180.);
+      this.x = t.x();
+      this.y = t.y();
+      this.z = t.z();
+
+      for (int i = 0; i < numPoints; i++) {
+        t.push();
+        float theta = 360*((float)i / (float)numPoints);
+        float x = (float)(radius*Math.cos(Math.toRadians(theta)));
+        float y = (float)(radius*Math.sin(Math.toRadians(theta)));
+        t.translate(x, y, 0);
+        this.points.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.pop();
+      }
+      t.pop();
+    }
+  }
+}
+
+public static class Bar extends LXModel {
+
+  public static class Metrics {
+
+    public static enum StripOrientation {
+      CONSISTENT, DOWN_BACK
+    }
+
+    public final int numStrips;
+    public final StripOrientation stripOrientation;
+    public final Strip.Metrics strip;
+
+    public Metrics(int numStrips, int numPointsPerStrip, float spacing, Metrics.StripOrientation stripOrientation) {
+      this.strip = new Strip.Metrics(numPointsPerStrip, spacing);
+      this.numStrips = numStrips;
+      this.stripOrientation = stripOrientation;
+    }
+  }
+
+  public String id;
+  public Metrics metrics;
+  public List<Strip> strips;
+
+  public float x;
+  public float y;
+  public float z;
+  public float xRot;
+  public float yRot;
+  public float zRot;
+
+  public Bar(BarConfig barConfig, LXTransform t) {
+    this(barConfig.id, barConfig.metrics, barConfig.x, barConfig.y, barConfig.z, barConfig.xRot, barConfig.yRot, barConfig.zRot, t);
+  }
+
+  public Bar(String id, Metrics metrics, float x, float y, float z, float xRot, float yRot, float zRot, LXTransform t) {
+    super(new Fixture(metrics, x, y, z, xRot, yRot, zRot, t));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+
+    this.id = id;
+    this.metrics = metrics;
+    this.x = fixture.x;
+    this.y = fixture.y;
+    this.z = fixture.z;
+    this.xRot = xRot;
+    this.yRot = yRot;
+    this.zRot = zRot;
+
+    this.strips = fixture.strips;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    public float x;
+    public float y;
+    public float z;
+
+    private final List<Strip> strips = new ArrayList<Strip>();
+
+    private Fixture(Metrics metrics, float x, float y, float z, float xRot, float yRot, float zRot, LXTransform t) {
+      t.push();
+      t.translate(x, y, z);
+      t.rotateY(xRot * PI / 180.);
+      t.rotateX(yRot * PI / 180.);
+      t.rotateZ(zRot * PI / 180.);
+
+      this.x = t.x();
+      this.y = t.y();
+      this.z = t.z();
+
+      this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
+
+      t.push();
+      t.translate(metrics.strip.length, 0.5, 0);
+      t.rotateZ(180 * PI / 180.);
+      this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
+      t.pop();
+
+      for (Strip s : strips) {
+        for (LXPoint p : s.points) {
+          this.points.add(p);
+        }
+      }
+      t.pop();
     }
   }
 }

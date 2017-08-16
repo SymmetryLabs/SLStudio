@@ -791,6 +791,58 @@ public class Swarm extends SLPattern {
   }
 }
 
+public class LevelRingsSwarm extends SLPattern {
+  
+  SawLFO offset = new SawLFO(0, 1, 1000);
+  SinLFO rate = new SinLFO(350, 1200, 63000);
+  SinLFO falloff = new SinLFO(15, 50, 17000);
+  SinLFO fX = new SinLFO(model.levelRings.xMin, model.levelRings.xMax, 19000);
+  SinLFO fY = new SinLFO(model.levelRings.yMin, model.levelRings.yMax, 11000);
+  SinLFO hOffX = new SinLFO(model.levelRings.xMin, model.levelRings.xMax, 13000);
+
+  public LevelRingsSwarm(LX lx) {
+    super(lx);
+    
+    addModulator(offset).trigger();
+    addModulator(rate).trigger();
+    addModulator(falloff).trigger();
+    addModulator(fX).trigger();
+    addModulator(fY).trigger();
+    addModulator(hOffX).trigger();
+    offset.setPeriod(rate);
+  }
+
+  float modDist(float v1, float v2, float mod) {
+    v1 = v1 % mod;
+    v2 = v2 % mod;
+    if (v2 > v1) {
+      return min(v2-v1, v1+mod-v2);
+    } 
+    else {
+      return min(v1-v2, v2+mod-v1);
+    }
+  }
+
+  void run(double deltaMs) {
+    float s = 0;
+    for (Ring ring : model.levelRings.rings) {
+      int i = 0;
+      for (LXPoint p : ring.points) {
+        float fV = max(-1, 1 - dist(p.x/2., p.y, fX.getValuef()/2., fY.getValuef()) / 64.);
+       // println("fv: " + fV); 
+        colors[p.index] = lx.hsb(
+        palette.getHuef() + 0.3 * abs(p.x - hOffX.getValuef()),
+        constrain(80 + 40 * fV, 0, 100), 
+        constrain(100 - 
+          (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * ring.points.length, ring.points.length), 0, 100)
+          );
+        ++i;
+      } 
+      ++s;
+    }
+  }
+}
+
 public class SpaceTime extends SLPattern {
 
   SinLFO pos = new SinLFO(0, 1, 3000);
@@ -1032,6 +1084,80 @@ public class ShiftingPlane extends SLPattern {
         hv + (abs(p.x-model.cx)*.6 + abs(p.y-model.cy)*.9 + abs(p.z - model.cz))*hueShift.getValuef(),
         constrain(110 - d*6, 0, 100),
         constrain(130 - 7*d, 0, 100)
+      );
+    }
+  }
+}
+
+public class SkylightShiftingPlane extends SLPattern {
+
+  final CompoundParameter hueShift = new CompoundParameter("hShift", 0.5, 0, 1);
+
+  final SinLFO a = new SinLFO(-.2, .2, 5300);
+  final SinLFO b = new SinLFO(1, -1, 13300);
+  final SinLFO c = new SinLFO(-1.4, 1.4, 5700);
+  final SinLFO d = new SinLFO(-10, 10, 9500);
+
+  public SkylightShiftingPlane(LX lx) {
+    super(lx);
+    addParameter(hueShift);
+    addModulator(a).trigger();
+    addModulator(b).trigger();
+    addModulator(c).trigger();
+    addModulator(d).trigger();
+  }
+  
+  public void run(double deltaMs) {
+    float hv = palette.getHuef();
+    float av = a.getValuef();
+    float bv = b.getValuef();
+    float cv = c.getValuef();
+    float dv = d.getValuef();
+    float denom = sqrt(av*av + bv*bv + cv*cv);
+
+    for (LXPoint p : model.skylight.points) {
+      float d = abs(av*(p.x-model.skylight.cx) + bv*(p.y-model.skylight.cy) + cv*(p.z-model.skylight.cz) + dv) / denom;
+      colors[p.index] = lx.hsb(
+        hv + (abs(p.x-model.skylight.cx)*.6 + abs(p.y-model.skylight.cy)*.9 + abs(p.z - model.skylight.cz))*hueShift.getValuef(),
+        constrain(110 - d*6, 0, 100),
+        constrain(130 - 7*d, 0, 100)
+      );
+    }
+  }
+}
+
+public class WallBarsShiftingPlane extends SLPattern {
+
+  final CompoundParameter hueShift = new CompoundParameter("hShift", 0.5, 0, 1);
+
+  final SinLFO a = new SinLFO(-.2, .2, 5300);
+  final SinLFO b = new SinLFO(1, -1, 13300);
+  final SinLFO c = new SinLFO(-1.4, 1.4, 5700);
+  final SinLFO d = new SinLFO(-10, 10, 9500);
+
+  public WallBarsShiftingPlane(LX lx) {
+    super(lx);
+    addParameter(hueShift);
+    addModulator(a).trigger();
+    addModulator(b).trigger();
+    addModulator(c).trigger();
+    addModulator(d).trigger();
+  }
+  
+  public void run(double deltaMs) {
+    float hv = palette.getHuef();
+    float av = a.getValuef();
+    float bv = b.getValuef();
+    float cv = c.getValuef();
+    float dv = d.getValuef();
+    float denom = sqrt(av*av + bv*bv + cv*cv);
+
+    for (LXPoint p : model.wallBars.points) {
+      float d = abs(av*(p.x-model.wallBars.cx) + bv*(p.y-model.wallBars.cy) + cv*(p.z-model.wallBars.cz) + dv) / denom;
+      colors[p.index] = lx.hsb(
+        hv + (abs(p.x-model.wallBars.cx)*.6 + abs(p.y-model.wallBars.cy)*.9 + abs(p.z - model.wallBars.cz))*hueShift.getValuef(),
+        constrain(110 - d*6, 0, 100),
+        constrain(80 - 7*d, 0, 100)
       );
     }
   }
