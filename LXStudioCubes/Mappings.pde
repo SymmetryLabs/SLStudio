@@ -422,8 +422,10 @@ public class MappingMode {
     for (CubesModel.Cube cube : model.cubes)
       fixturesMappedButNotOnNetwork.add(cube.id);
 
-    this.selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", fixturesMappedButNotOnNetwork.toArray());
-    this.selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", new String[] {"-"});
+    String[] selectedArray = fixturesMappedButNotOnNetwork.isEmpty()
+        ? new String[] {"-"} : fixturesMappedButNotOnNetwork.toArray(new String[0]);
+    selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", selectedArray);
+    selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", new String[] {"-"});
 
     controllers.addListener(new ListListener<SLController>() {
       void itemAdded(final int index, final SLController c) {

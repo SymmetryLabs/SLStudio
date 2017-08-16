@@ -18,7 +18,6 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public DeviceController deviceController;
-public DeviceModel deviceModel;
 public MappingMode mappingMode = null;
 
 // public boolean envelopOn = false;
@@ -28,11 +27,15 @@ void setup() {
   long setupStart = System.nanoTime();
   size(1280, 800, P3D);
 
-  deviceModel = new DeviceModel();
+  int switchModel = 1;
 
-  // if buildModel() isn't called, we enter a whole world of shit
-  model = buildModel();
-  currModel = deviceModel;
+  if (switchModel == 0) {
+    model = buildModel();
+    currModel = model;
+  } else {
+    model = new CubesModel();
+    currModel = new DeviceModel();
+  }
 
   println("-- Model ----");
   println("# of cubes: " + model.cubes.size());
