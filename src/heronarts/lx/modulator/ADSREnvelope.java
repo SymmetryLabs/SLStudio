@@ -78,6 +78,16 @@ public class ADSREnvelope extends LXModulator implements LXNormalizedParameter {
         this(label, new FixedParameter(startValue), endValue, attack, decay, sustain, release, shape);
     }
 
+    public void attack() {
+        this.stage = Stage.ATTACK;
+        this.engage.setValue(true);
+        start();
+    }
+
+    public void release() {
+        this.engage.setValue(false);
+    }
+
     @Override
     public void onReset() {
         this.normalized = 0;
