@@ -261,18 +261,26 @@ public class LXModulationEngine extends LXModulatorComponent implements LXOscCom
             JsonArray modulationArr = obj.getAsJsonArray(KEY_MODULATIONS);
             for (JsonElement modulationElement : modulationArr) {
                 JsonObject modulationObj = modulationElement.getAsJsonObject();
-                LXCompoundModulation modulation = new LXCompoundModulation(this.lx, modulationObj);
-                addModulation(modulation);
-                modulation.load(lx, modulationObj);
+                try {
+                    LXCompoundModulation modulation = new LXCompoundModulation(this.lx, modulationObj);
+                    addModulation(modulation);
+                    modulation.load(lx, modulationObj);
+                } catch (Exception x) {
+                    System.err.println(x.getLocalizedMessage());
+                }
             }
         }
         if (obj.has(KEY_TRIGGERS)) {
             JsonArray triggerArr = obj.getAsJsonArray(KEY_TRIGGERS);
             for (JsonElement triggerElement : triggerArr) {
                 JsonObject triggerObj = triggerElement.getAsJsonObject();
-                LXTriggerModulation trigger = new LXTriggerModulation(this.lx, triggerObj);
-                addTrigger(trigger);
-                trigger.load(lx, triggerObj);
+                try {
+                    LXTriggerModulation trigger = new LXTriggerModulation(this.lx, triggerObj);
+                    addTrigger(trigger);
+                    trigger.load(lx, triggerObj);
+                } catch (Exception x) {
+                    System.err.println(x.getLocalizedMessage());
+                }
             }
         }
     }
