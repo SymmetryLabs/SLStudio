@@ -20,7 +20,9 @@
 
 package heronarts.lx.parameter;
 
+import java.util.ArrayDeque;
 import java.util.HashSet;
+import java.util.Queue;
 import java.util.Set;
 
 import heronarts.lx.LXComponent;
@@ -167,13 +169,28 @@ public abstract class LXListenableParameter implements LXParameter {
         return setValue(this.value + amount);
     }
 
+    private boolean inListener = false;
+    private final Queue<Double> setValues = new ArrayDeque<Double>();
+
     public final LXParameter setValue(double value) {
-        if (this.value != value) {
-            value = updateValue(value);
+        if (this.inListener) {
+            // setValue() was called recursively from a parameter listener.
+            // This is okay, but we need to call all the listeners with the
+            // first value before we make this next update.
+            this.setValues.add(value);
+        } else {
             if (this.value != value) {
-                this.value = value;
-                for (LXParameterListener l : listeners) {
-                    l.onParameterChanged(this);
+                value = updateValue(value);
+                if (this.value != value) {
+                    this.value = value;
+                    this.inListener = true;
+                    for (LXParameterListener l : listeners) {
+                        l.onParameterChanged(this);
+                    }
+                    this.inListener = false;
+                    while (!this.setValues.isEmpty()) {
+                        setValue(this.setValues.poll());
+                    }
                 }
             }
         }
