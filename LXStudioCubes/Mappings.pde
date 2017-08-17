@@ -47,7 +47,7 @@ RingChandelierConfig upstairsRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 0, 0},
   new RingConfig[] {
-    new RingConfig("0", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 100, 6)
+    new RingConfig("512", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 100, 6)
   }
 );
 /*-------------------------------------------------------------------------*/
