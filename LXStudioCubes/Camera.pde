@@ -3,8 +3,8 @@ public class PhotoBoothCamera extends DPat {
     Capture camera;
     PImage frame;
 
-    private int WIDTH = (int)model.photoBoothCanvas.xRange;
-    private int HEIGHT = (int)model.photoBoothCanvas.yRange;
+    private int WIDTH = (int)model.photoBoothCanvas.xRange*10;
+    private int HEIGHT = (int)model.photoBoothCanvas.yRange*10;
 
     public PhotoBoothCamera(LX lx) {
         super(lx);
@@ -12,7 +12,10 @@ public class PhotoBoothCamera extends DPat {
         cameras = Capture.list();
         println("Available cameras: " + cameras[0]);
 
-        camera = new Capture(applet, WIDTH, HEIGHT, cameras[0]);
+        println("w: " + WIDTH);
+        println("h: " + HEIGHT);
+
+        camera = new Capture(applet, cameras[0]);
         camera.start();
 
         frame = createImage(WIDTH, HEIGHT, RGB);
@@ -24,12 +27,16 @@ public class PhotoBoothCamera extends DPat {
             frame.updatePixels();
             camera.read();
         }
+
+        for (int i = 0; i < frame.pixels.length; i++) {
+           //print(frame.pixels[i] + ", ");
+        }
     }
 
     public color CalcPoint(PVector p) {
         int x = (int)((p.x / WIDTH) * frame.width);
         int y = (int)((p.y / HEIGHT) * frame.height);
-        print(frame.get(x, y));
+        // print(frame.get(x, y));
         return frame.get(x, y);
     }
 }
