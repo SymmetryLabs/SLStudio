@@ -36,10 +36,12 @@ public static class SLModel extends LXModel {
   public final List<Face> faces;
   public final List<Strip> strips;
   public final List<Bar> bars;
-  public final Map<String, Cube> cubeTable;
-  private final Cube[] _cubes;
-
   public final List<Ring> rings;
+
+  public final Map<String, Cube> cubeTable;
+  public final Map<String, Bar> barTable;
+  public final Map<String, Ring> ringTable;
+  private final Cube[] _cubes;
 
   public final Skylight skylight;
   public final WallBars wallBars;
@@ -59,9 +61,11 @@ public static class SLModel extends LXModel {
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
     List<Bar> barList = new ArrayList<Bar>();
-    Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
-
     List<Ring> ringList = new ArrayList<Ring>();
+
+    Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+    Map<String, Bar> _barTable = new HashMap<String, Bar>();
+    Map<String, Ring> _ringTable = new HashMap<String, Ring>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -79,12 +83,21 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips) {
-      stripList.add(strip);
+    for (Bar bar : bars) {
+      barList.add(bar);
+      _barTable.put(bar.id, bar);
+      for (Strip strip : bar.strips) {
+        stripList.add(strip);
+      }
     }
 
-    for (Ring ring : levelRings.rings) {
+    for (Ring ring : rings) {
       ringList.add(ring);
+      _ringTable.put(ring.id, ring);
+    }
+
+    for (Strip strip : strips) {
+      stripList.add(strip);
     }
 
     this.towers    = Collections.unmodifiableList(towerList);
@@ -92,9 +105,11 @@ public static class SLModel extends LXModel {
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
     this.bars      = Collections.unmodifiableList(barList);
-    this.cubeTable = Collections.unmodifiableMap (_cubeTable);
-
     this.rings     = Collections.unmodifiableList(ringList);
+
+    this.cubeTable = Collections.unmodifiableMap(_cubeTable);
+    this.barTable  = Collections.unmodifiableMap(_barTable);
+    this.ringTable  = Collections.unmodifiableMap(_ringTable);
 
     this.skylight = skylight;
     this.wallBars = wallBars;
@@ -137,6 +152,14 @@ public static class SLModel extends LXModel {
   
   public Cube getCubeById(String id) {
     return this.cubeTable.get(id);
+  }
+
+  public Bar getBarById(String id) {
+    return this.barTable.get(id);
+  }
+
+  public Ring getRingById(String id) {
+    return this.ringTable.get(id);
   }
 }
 
@@ -635,18 +658,16 @@ public static class Bar extends LXModel {
 
   public static class Metrics {
 
-    public static enum StripOrientation {
-      CONSISTENT, DOWN_BACK
+    public static enum NumStrips {
+      TWO, THREE
     }
 
-    public final int numStrips;
-    public final StripOrientation stripOrientation;
+    public final NumStrips numStrips;
     public final Strip.Metrics strip;
 
-    public Metrics(int numStrips, int numPointsPerStrip, float spacing, Metrics.StripOrientation stripOrientation) {
+    public Metrics(Metrics.NumStrips numStrips, int numPointsPerStrip, float spacing) {
       this.strip = new Strip.Metrics(numPointsPerStrip, spacing);
       this.numStrips = numStrips;
-      this.stripOrientation = stripOrientation;
     }
   }
 
@@ -692,21 +713,40 @@ public static class Bar extends LXModel {
     private Fixture(Metrics metrics, float x, float y, float z, float xRot, float yRot, float zRot, LXTransform t) {
       t.push();
       t.translate(x, y, z);
-      t.rotateY(xRot * PI / 180.);
-      t.rotateX(yRot * PI / 180.);
+      t.rotateX(xRot * PI / 180.);
+      t.rotateY(yRot * PI / 180.);
       t.rotateZ(zRot * PI / 180.);
 
       this.x = t.x();
       this.y = t.y();
       this.z = t.z();
 
-      this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
 
-      t.push();
-      t.translate(metrics.strip.length, 0.5, 0);
-      t.rotateZ(180 * PI / 180.);
-      this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
-      t.pop();
+      if (metrics.numStrips == Bar.Metrics.NumStrips.TWO) {
+        this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
+
+        t.push();
+        t.translate(metrics.strip.length, 0.5, 0);
+        t.rotateZ(180 * PI / 180.);
+        this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
+        t.pop();
+      }
+
+      if (metrics.numStrips == Bar.Metrics.NumStrips.THREE) {
+        this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
+
+        t.push();
+        t.translate(metrics.strip.length, 0.5, 0);
+        t.rotateZ(180 * PI / 180.);
+        this.strips.add(new Strip(metrics.strip, yRot, t, zRot != 0));
+        t.pop();
+
+        t.push();
+        t.translate(0.25, 1, 0);
+        Strip.Metrics shortStripMetrics = new Strip.Metrics(metrics.strip.numPoints-1, metrics.strip.POINT_SPACING);
+        this.strips.add(new Strip(shortStripMetrics, yRot, t, zRot != 0));
+        t.pop();
+      }
 
       for (Strip s : strips) {
         for (LXPoint p : s.points) {

@@ -34,9 +34,9 @@ static final float SP = 24;
 static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
 /* Upstairs Ring Chandelier -----------------------------------------------*/
-static final float upstairsOffsetX = 0;
-static final float upstairsOffsetY = 150;
-static final float upstairsOffsetZ = 50;
+static final float upstairsOffsetX = 140;
+static final float upstairsOffsetY = 120;
+static final float upstairsOffsetZ = 60;
 
 static final float upstairsRotationX = 0;
 static final float upstairsRotationY = 0;
@@ -47,15 +47,15 @@ RingChandelierConfig upstairsRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 0, 0},
   new RingConfig[] {
-    new RingConfig("0", new float[] {0,  0, 0}, new float[] {90, 0, 0}, 100, 6)
+    new RingConfig("0", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 100, 6)
   }
 );
 /*-------------------------------------------------------------------------*/
 
 /* Kitchen Ring Chandeliers -----------------------------------------------*/
-static final float kitchenOffsetX = 0;
+static final float kitchenOffsetX = 30;
 static final float kitchenOffsetY = 50;
-static final float kitchenOffsetZ = -150;
+static final float kitchenOffsetZ = -180;
 
 static final float kitchenRotationX = 0;
 static final float kitchenRotationY = 0;
@@ -66,20 +66,20 @@ RingChandelierConfig levelRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 0, 0},
   new RingConfig[] {
-    new RingConfig("0", new float[] {0,  0, 0}, new float[] {90, 0, 0}, 100, 6),
-    new RingConfig("0", new float[] {0, 10, 0}, new float[] {90, 0, 0}, 150, 12),
-    new RingConfig("0", new float[] {0, 20, 0}, new float[] {90, 0, 0}, 200, 18)
+    new RingConfig("p2r1", new float[] {0,  0, 0}, new float[] {90, 0, 0}, 87, 3.5),
+    new RingConfig("p2r2", new float[] {0, 10, 0}, new float[] {90, 0, 0}, 180, 7.5),
+    new RingConfig("p2r3", new float[] {0, 20, 0}, new float[] {90, 0, 0}, 268, 11)
   }
 );
 
 // Rotated Rings Chandelier
 RingChandelierConfig rotatedRingsConfig = new RingChandelierConfig(
-  new float[] {50, 0, 0},
-  new float[] {180, 0, 0},
+  new float[] {65, 0, 0},
+  new float[] {180, -20, 0},
   new RingConfig[] {
-    new RingConfig("0", new float[] {0, 0, 0}, new float[] {125,  0, 0}, 100, 6),
-    new RingConfig("0", new float[] {0, 0, 0}, new float[] {90, -35, 0}, 150, 12),
-    new RingConfig("0", new float[] {0, 0, 0}, new float[] {90,  35, 0}, 200, 18)
+    new RingConfig("p1r1", new float[] {0, 0, 0}, new float[] {220, 0, 0}, 87, 3.5),
+    new RingConfig("p1r2", new float[] {0, 0, 0}, new float[] {90, -35, 0}, 180, 7.5),
+    new RingConfig("p1r3", new float[] {0, 0, 0}, new float[] {90,  35, 0}, 268, 11)
   }
 );
 /*-------------------------------------------------------------------------*/
@@ -90,39 +90,39 @@ static final float skylightOffsetY = 100;
 static final float skylightOffsetZ = 0;
 
 static final float skylightRotationX = 0;
-static final float skylightRotationY = -90;
+static final float skylightRotationY = 90;
 static final float skylightRotationZ = 0;
 
 static final BarConfig[] SKYLIGHT_CONFIG = {
-  new BarConfig("0", new float[] {0, 8*0,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*1,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*2,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*3,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*4,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*5,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*6,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*7,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*8,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*9,  0}, new float[] {0, 0, 0}, 139, 0.7),
-  new BarConfig("0", new float[] {0, 8*10, 0}, new float[] {0, 0, 0}, 139, 0.7),
+  new BarConfig("510", new float[] {0, 0,  10*0}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("339", new float[] {0, 0,  10*1}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("506", new float[] {0, 0,  10*2}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("507", new float[] {0, 0,  10*3}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("504", new float[] {0, 0,  10*4}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("503", new float[] {0, 0,  10*5}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("501", new float[] {0, 0,  10*6}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("511", new float[] {0, 0,  10*7}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("509", new float[] {0, 0,  10*8}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("502", new float[] {0, 0,  10*9}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("508", new float[] {0, 0, 10*10}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
 };
 /*-------------------------------------------------------------------------*/
 
 /* Wall Bars --------------------------------------------------------------*/
-static final float wallBarsOffsetX = 100;
-static final float wallBarsOffsetY = 150;
-static final float wallBarsOffsetZ = 0;
+static final float wallBarsOffsetX = 75;
+static final float wallBarsOffsetY = 135;
+static final float wallBarsOffsetZ = 40;
 
-static final float wallBarsRotationX = 0;
-static final float wallBarsRotationY = 0;
+static final float wallBarsRotationX = 180;
+static final float wallBarsRotationY = 180;
 static final float wallBarsRotationZ = 90;
 
 static final BarConfig[] WALL_BARS_CONFIG = {
-  new BarConfig("0", new float[] {0, 8*0,  0}, new float[] {0, 0, 0}, 50, 0.7),
-  new BarConfig("0", new float[] {0, 8*1,  0}, new float[] {0, 0, 0}, 50, 0.7),
-  new BarConfig("0", new float[] {0, 8*2,  0}, new float[] {0, 0, 0}, 50, 0.7),
-  new BarConfig("0", new float[] {0, 8*3,  0}, new float[] {0, 0, 0}, 50, 0.7),
-  new BarConfig("0", new float[] {0, 8*4,  0}, new float[] {0, 0, 0}, 50, 0.7),
+  new BarConfig("123", new float[] {0, 8*0, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  new BarConfig("381", new float[] {0, 8*1, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  new BarConfig("378", new float[] {0, 8*2, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  new BarConfig("313", new float[] {0, 8*3, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  new BarConfig("361", new float[] {0, 8*4, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
 };
 /*-------------------------------------------------------------------------*/
 
@@ -131,90 +131,7 @@ static final TowerConfig[] TOWER_CONFIG = {
   new TowerConfig(0, 0, 0, new String[] {
     "22", "204"
   }),
-
-    // left
-    // new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-    //   "22", "204"
-    //   }),
-
-   //  new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
-   //    "86"
-   //    }),
-
-   //  new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
-   //    "5"
-   //    }),
-
-   // new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-   //    "25", "199", "177"
-   //    }),
-
-   // new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
-   //    "94"
-   //    }),
-
-   // new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
-   //    "90"
-   //    }),
-
-   // new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
-   //    "64"
-   //    }),
-
-   //  // left tower of 5   
-   //  new TowerConfig(0, 0, 0, new String[] {   
-   //    "19", "190", "121", "1", "103"    
-   //  }),   
-   //  new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
-   //  new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
-   //  new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
-   //  new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-   //  new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
    
-   //  new TowerConfig(SP*2.0, 0, 0, new String[] {    
-   //    "6", "132", "61", "54"    
-   //  }),   
-
-   //  new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-   //  new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
-     
-   //  // middle tower of 5    
-   //  new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
-   //    "111", "166", "187", "158", "101"   
-   //  }),  
-
-   //  new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
-   //  new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
-   //  new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
-   //  new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
-     
-   //  new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
-   //    "102", "156", "13", "82"    
-   //  }),   
-   //  new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
-   //  new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
-   //  new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
-   //  new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
-   //  new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
-     
-   //  // right tower of 5   
-   //  new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
-   //    "183", "180", "57", "51", "108"   
-   //  }),   
-   //  new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
-   //  new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
-   //  new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
-     
-   //  new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
-   //   "100", "85", "110zAQ  AZQ"    
-   //  }),   
-   //  new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
-   //  new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
-    
-   //  // table cubes    
-   //  new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
-   //  new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
-   //  new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
 };
 
 
@@ -288,7 +205,7 @@ static class BarConfig {
   final Bar.Metrics metrics;
   final float length;
 
-  BarConfig(String id, float[] coordinates, float[] rotations, int numPoints, float pixelPitch) {
+  BarConfig(String id, float[] coordinates, float[] rotations, int numPoints, float pixelPitch, Bar.Metrics.NumStrips numStrips) {
     this.id = id;
     this.x = coordinates[0];
     this.y = coordinates[1];
@@ -296,7 +213,7 @@ static class BarConfig {
     this.xRot = rotations[0];
     this.yRot = rotations[1];
     this.zRot = rotations[2];
-    this.metrics = new Bar.Metrics(2, numPoints, pixelPitch, Bar.Metrics.StripOrientation.DOWN_BACK);
+    this.metrics = new Bar.Metrics(numStrips, numPoints, pixelPitch);
     this.length = numPoints * pixelPitch;
   }
 }
@@ -424,8 +341,8 @@ public SLModel buildModel() {
   Skylight skylight;
   globalTransform.push();
   globalTransform.translate(skylightOffsetX, skylightOffsetY, skylightOffsetZ);
-  globalTransform.rotateY(skylightRotationX * PI / 180.);
-  globalTransform.rotateX(skylightRotationY * PI / 180.);
+  globalTransform.rotateX(skylightRotationX * PI / 180.);
+  globalTransform.rotateY(skylightRotationY * PI / 180.);
   globalTransform.rotateZ(skylightRotationZ * PI / 180.);
   List<Bar> skylightBars = new ArrayList<Bar>();
   for (BarConfig barConfig : SKYLIGHT_CONFIG) {
@@ -440,8 +357,8 @@ public SLModel buildModel() {
   WallBars wallBars;
   globalTransform.push();
   globalTransform.translate(wallBarsOffsetX, wallBarsOffsetY, wallBarsOffsetZ);
-  globalTransform.rotateY(wallBarsRotationX * PI / 180.);
-  globalTransform.rotateX(wallBarsRotationY * PI / 180.);
+  globalTransform.rotateX(wallBarsRotationX * PI / 180.);
+  globalTransform.rotateY(wallBarsRotationY * PI / 180.);
   globalTransform.rotateZ(wallBarsRotationZ * PI / 180.);
   List<Bar> wallBarsBars = new ArrayList<Bar>();
   for (BarConfig barConfig : WALL_BARS_CONFIG) {
@@ -458,8 +375,8 @@ public SLModel buildModel() {
 
   globalTransform.push();
   globalTransform.translate(kitchenOffsetX, kitchenOffsetY, kitchenOffsetZ);
-  globalTransform.rotateY(kitchenRotationX * PI / 180.);
-  globalTransform.rotateX(kitchenRotationY * PI / 180.);
+  globalTransform.rotateX(kitchenRotationX * PI / 180.);
+  globalTransform.rotateY(kitchenRotationY * PI / 180.);
   globalTransform.rotateZ(kitchenRotationZ * PI / 180.);
 
   // Level Ring Chandelier
@@ -480,8 +397,8 @@ public SLModel buildModel() {
   /* Upstairs Rings -------------------------------------------------*/
   globalTransform.push();
   globalTransform.translate(upstairsOffsetX, upstairsOffsetY, upstairsOffsetZ);
-  globalTransform.rotateY(upstairsRotationX * PI / 180.);
-  globalTransform.rotateX(upstairsRotationY * PI / 180.);
+  globalTransform.rotateX(upstairsRotationX * PI / 180.);
+  globalTransform.rotateY(upstairsRotationY * PI / 180.);
   globalTransform.rotateZ(upstairsRotationZ * PI / 180.);
 
   // Upstairs Ring Chandelier
@@ -649,11 +566,11 @@ public class MappingMode {
 
     controllers.addListener(new ListListener<SLController>() {
       void itemAdded(final int index, final SLController c) {
-        if (isFixtureMapped(c.cubeId)) {
-          fixturesMappedButNotOnNetwork.remove(c.cubeId);
-          fixturesMappedAndOnTheNetwork.add(c.cubeId);
+        if (isFixtureMapped(c.controllerId)) {
+          fixturesMappedButNotOnNetwork.remove(c.controllerId);
+          fixturesMappedAndOnTheNetwork.add(c.controllerId);
         } else {
-          fixturesOnNetworkButNotMapped.add(c.cubeId);
+          fixturesOnNetworkButNotMapped.add(c.controllerId);
         }
 
         Object[] arr1 = fixturesMappedAndOnTheNetwork.toArray();

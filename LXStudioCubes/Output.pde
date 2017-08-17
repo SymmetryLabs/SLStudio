@@ -42,8 +42,28 @@ void setupOutputs(final LX lx) {
     }
   });
 
-  lx.addOutput(new SLController(lx, "10.200.1.255"));
+  lx.addOutput(new SLController(lx, "10.200.1.255")); // 192.168.1.110?
   //lx.addOutput(new LIFXOutput());
+
+
+  try {
+    final String PIXLITE1_IP = "192.168.1.110";
+
+   /** 
+    * PixLite 1
+    *--------------------------------------------------------------------------*/
+    final LXDatagramOutput pixlite1 = new LXDatagramOutput(lx);
+    //                                  Ring ID,    IP Addresss,  Output 
+    pixlite1.addDatagrams(new RingOutput("p1r1",    PIXLITE1_IP,     1).getDatagrams());
+    pixlite1.addDatagrams(new RingOutput("p1r2",    PIXLITE1_IP,     2).getDatagrams());
+    pixlite1.addDatagrams(new RingOutput("p1r3",    PIXLITE1_IP,     3).getDatagrams());
+
+    // Add the pixlites
+    lx.addOutput(pixlite1);
+
+  } catch (SocketException e) {
+    e.printStackTrace();
+  }
 }
 
 /*
@@ -72,6 +92,180 @@ public final class OutputControl extends LXComponent {
   }
 }
 
+public class RingOutput {
+
+  private Ring ring;
+  private LXDatagram[] datagrams = new LXDatagram[2];
+
+  public RingOutput(String id, String ipAddress, int output) {
+    this.ring = model.getRingById(id);
+
+    if (ring == null) {
+      println("TRYING TO OUTPUT TO A RING ID THAT IS NOT IN MODEL (ID: " + id + ")");
+    } else {
+
+      int counter = 0;
+      int[] indices = new int[ring.points.length];
+      for (int i = 0; i < ring.points.length; i++) {
+        indices[counter++] = ring.points[i].index;
+      }
+      
+      // create array of indices for each datagram/universe
+      int counter1 = 0;
+      int[] firstIndices = new int[indices.length > 170 ? 170 : indices.length];
+      for (int i = 0; i < firstIndices.length; i++) {
+        firstIndices[i] = indices[counter1++];
+      }
+      int[] secondIndices = new int[(ring.points.length) - firstIndices.length];
+      for (int i = 0; i < secondIndices.length; i++) {
+        secondIndices[i] = indices[counter1++];
+      }
+
+      println("--------------------------------------------------------------");
+      println("Ring: " + id + ", Pixlite: " + ipAddress + ", Output: " + output);
+      println("Ring number of points: " + ring.points.length);
+      println("First universe number of indices: " + firstIndices.length);
+      println("Second universe number of indices: " + secondIndices.length);
+      println(" ");
+
+      this.datagrams[0] = new ArtNetDatagram(ipAddress, firstIndices, output*2-2);
+      this.datagrams[1] = new ArtNetDatagram(ipAddress, secondIndices, output*2-1);
+    }
+  }
+
+  public LXDatagram[] getDatagrams() {
+    return datagrams;
+  }
+}
+
+public class BarOutput {
+
+  private Bar bar;
+  private LXDatagram[] datagrams = new LXDatagram[2];
+
+  public BarOutput(String id, String ipAddress, int output) {
+    this.bar = model.getBarById(id);
+
+    if (bar == null) {
+      println("TRYING TO OUTPUT TO A BAR ID THAT IS NOT IN MODEL (ID: " + id + ")");
+    } else {
+
+      // build array of indices (note that we output to 2 strips by going up and down the one strip in model)
+      int counter = 0;
+      int[] indices = new int[bar.points.length*2];
+      for (int i = 0; i < bar.points.length; i++) {
+        indices[counter++] = bar.points[i].index;
+      }
+      for (int i = bar.points.length-1; i > -1; i--) {
+        indices[counter++] = bar.points[i].index;
+      }
+      
+      // create array of indices for each datagram/universe
+      int counter1 = 0;
+      int[] firstIndices = new int[indices.length > 170 ? 170 : indices.length];
+      for (int i = 0; i < firstIndices.length; i++) {
+        firstIndices[i] = indices[counter1++];
+      }
+      int[] secondIndices = new int[(bar.points.length*2) - firstIndices.length];
+      for (int i = 0; i < secondIndices.length; i++) {
+        secondIndices[i] = indices[counter1++];
+      }
+
+      println("--------------------------------------------------------------");
+      println("Bar: " + id + ", Pixlite: " + ipAddress + ", Output: " + output);
+      println("Bar number of points: " + bar.points.length);
+      println("First universe number of indices: " + firstIndices.length);
+      println("Second universe number of indices: " + secondIndices.length);
+      println(" ");
+
+      this.datagrams[0] = new ArtNetDatagram(ipAddress, firstIndices, output*2-2);
+      this.datagrams[1] = new ArtNetDatagram(ipAddress, secondIndices, output*2-1);
+    }
+  }
+
+  public LXDatagram[] getDatagrams() {
+    return datagrams;
+  }
+}
+
+public class ArtNetDatagram extends LXDatagram {
+
+  private final static int DEFAULT_UNIVERSE = 0;
+  private final static int ARTNET_HEADER_LENGTH = 18;
+  private final static int ARTNET_PORT = 6454;
+  private final static int SEQUENCE_INDEX = 12;
+
+  private final int[] pointIndices;
+
+  private boolean sequenceEnabled = false;
+
+  private byte sequence = 1;
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
+    this(ipAddress, indices, 3*indices.length, universeNumber);
+  }
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
+
+    this.pointIndices = indices;
+
+    try {
+        setAddress(ipAddress);
+        setPort(ARTNET_PORT);
+    } catch (UnknownHostException e) {
+        System.out.println("COULD NOT FIND PIXLITE HOST WITH IP: " + ipAddress);
+    }
+
+    this.buffer[0] = 'A';
+    this.buffer[1] = 'r';
+    this.buffer[2] = 't';
+    this.buffer[3] = '-';
+    this.buffer[4] = 'N';
+    this.buffer[5] = 'e';
+    this.buffer[6] = 't';
+    this.buffer[7] = 0;
+    this.buffer[8] = 0x00; // ArtDMX opcode
+    this.buffer[9] = 0x50; // ArtDMX opcode
+    this.buffer[10] = 0; // Protcol version
+    this.buffer[11] = 14; // Protcol version
+    this.buffer[12] = 0; // Sequence
+    this.buffer[13] = 0; // Physical
+    this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
+    this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
+    this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
+    this.buffer[17] = (byte) (dataLength & 0xff);
+
+    // Ensure zero rest of buffer
+    for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
+     this.buffer[i] = 0;
+    }
+  }
+
+  /**
+   * Set whether to increment and send sequence numbers
+   *
+   * @param sequenceEnabled true if sequence should be incremented and transmitted
+   * @return this
+   */
+  public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    this.sequenceEnabled = sequenceEnabled;
+    return this;
+  }
+
+  @Override
+  public void onSend(int[] colors) {
+    copyPoints(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
+
+    if (this.sequenceEnabled) {
+      if (++this.sequence == 0) {
+        ++this.sequence;
+      }
+      this.buffer[SEQUENCE_INDEX] = this.sequence;
+    }
+  }
+}
+
 /*
  * Controller
  *---------------------------------------------------------------------------*/
@@ -80,7 +274,7 @@ class SLController extends LXOutput {
   DatagramSocket dsocket;
   OutputStream    output;
   NetworkDevice networkDevice;
-  String        cubeId;
+  String        controllerId;
   InetAddress   host;
   boolean       isBroadcast;
 
@@ -100,28 +294,28 @@ class SLController extends LXOutput {
   int packetSizeBytes;
   byte[] packetData;
 
-  SLController(LX lx, NetworkDevice device, String cubeId) {
-    this(lx, device, device.ipAddress, cubeId, false);
+  SLController(LX lx, NetworkDevice device, String controllerId) {
+    this(lx, device, device.ipAddress, controllerId, false);
   }
 
-  SLController(LX lx, String _host, String _cubeId) {
-    this(lx, _host, _cubeId, false);
+  SLController(LX lx, String _host, String _controllerId) {
+    this(lx, _host, _controllerId, false);
   }
 
   SLController(LX lx, String _host) {
     this(lx, _host, "", true);
   }
 
-  private SLController(LX lx, String host, String cubeId, boolean isBroadcast) {
-    this(lx, null, NetworkUtils.ipAddrToInetAddr(host), cubeId, isBroadcast);
+  private SLController(LX lx, String host, String controllerId, boolean isBroadcast) {
+    this(lx, null, NetworkUtils.ipAddrToInetAddr(host), controllerId, isBroadcast);
   }
 
-  private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String cubeId, boolean isBroadcast) {
+  private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String controllerId, boolean isBroadcast) {
     super(lx);
 
     this.networkDevice = networkDevice;
     this.host = host;
-    this.cubeId = cubeId;
+    this.controllerId = controllerId;
     this.isBroadcast = isBroadcast;
 
     enabled.setValue(true);
@@ -182,29 +376,31 @@ class SLController extends LXOutput {
     // Use the mac address to find the cube if we have it
     // Otherwise use the cube id
     Cube cube = null;
+    Bar bar = null;
     if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
       cube = model.cubes.get(0);
     } else {
       for (Cube c : model.cubes) {
-        if (c.id != null && c.id.equals(cubeId)) {
+        if (c.id != null && c.id.equals(controllerId)) {
           cube = c;
+          break;
+        }
+      }
+      for (Bar b : model.bars) {
+        if (b.id != null && b.id.equals(controllerId)) {
+          bar = b;
           break;
         }
       }
     }
 
-    // Initialize packet data base on cube type.
-    // If we don't know the cube type, default to
-    // using the cube type with the most pixels
-    Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-    int numPixels = cubeType.POINTS_PER_CUBE;
-    if (packetData == null || packetData.length != numPixels) {
-      initPacketData(numPixels);
-    }
-
-    // Fill the datagram with pixel data
-    // Fill with all black if we don't have cube data
     if (cube != null) {
+      Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
+      int numPixels = cubeType.POINTS_PER_CUBE;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
       for (int stripNum = 0; stripNum < numStrips; stripNum++) {
         int stripId = STRIP_ORD[stripNum];
         Strip strip = cube.strips.get(stripId);
@@ -214,7 +410,21 @@ class SLController extends LXOutput {
           setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
         }
       }
-    } else {
+    }
+
+    if (bar != null) {
+      int numPixels = bar.points.length;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
+      int i = 0;
+      for (LXPoint p : bar.points) {
+        setPixel(i++, colors[p.index]);
+      }
+    }
+
+    if (cube == null && bar == null) {
       for (int i = 0; i < numPixels; i++) {
         setPixel(i, LXColor.BLACK);
       }
@@ -222,7 +432,7 @@ class SLController extends LXOutput {
 
     // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
     // TODO: refactor here
-    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(controllerId)) {
       if (mappingMode.inUnMappedMode()) {
         if (mappingMode.inDisplayAllMode()) {
           color col = mappingMode.getUnMappedColor();
@@ -230,7 +440,7 @@ class SLController extends LXOutput {
           for (int i = 0; i < numPixels; i++)
             setPixel(i, col);
         } else {
-          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+          if (mappingMode.isSelectedUnMappedFixture(controllerId)) {
             color col = mappingMode.getUnMappedColor();
 
             for (int i = 0; i < numPixels; i++)
@@ -271,9 +481,9 @@ class UIOutputs extends UICollapsibleSection {
         final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
             int compare(SLController o1, SLController o2) {
                 try {
-                    return Integer.parseInt(o1.cubeId) - Integer.parseInt(o2.cubeId);
+                    return Integer.parseInt(o1.controllerId) - Integer.parseInt(o2.controllerId);
                 } catch (NumberFormatException e) {
-                    return o1.cubeId.compareTo(o2.cubeId);
+                    return o1.controllerId.compareTo(o2.controllerId);
                 }
             }
         });
@@ -366,9 +576,9 @@ class UIOutputs extends UICollapsibleSection {
 
         String getLabel() {
             if (controller.networkDevice != null && controller.networkDevice.version.get() != -1) {
-                return controller.cubeId + " (v" + controller.networkDevice.version + ")";
+                return controller.controllerId + " (v" + controller.networkDevice.version + ")";
             } else {
-                return controller.cubeId;
+                return controller.controllerId;
             }
         }
 
