@@ -45,7 +45,7 @@ static final float upstairsRotationZ = 0;
 // Upstairs Rings Chandelier
 RingChandelierConfig upstairsRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
-  new float[] {0, 0, 0},
+  new float[] {0, 15, 0},
   new RingConfig[] {
     new RingConfig("512", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 270, 12)
   }
@@ -126,11 +126,31 @@ static final BarConfig[] WALL_BARS_CONFIG = {
 };
 /*-------------------------------------------------------------------------*/
 
+
+static final float cubesOffsetX = 70;
+static final float cubesOffsetY = -50;
+static final float cubesOffsetZ = 0;
+
+static final float cubesRotationX = 0;
+static final float cubesRotationY = 45;
+static final float cubesRotationZ = 0;
+
 static final TowerConfig[] TOWER_CONFIG = {
 
-  new TowerConfig(0, 0, 0, new String[] {
-    "22", "204"
-  }),
+  new TowerConfig(0, 0,  0, 0,  0-45, 0, new String[] {"155"}),
+  new TowerConfig(-3, 24, -4, 0, -20, 0, new String[] {"21"}),
+  new TowerConfig(0, 48, 0, 0,  0-45, 0, new String[] {"2"}),
+  new TowerConfig(-3, 72, -4, 0, -20, 0, new String[] {"72"}),
+
+  new TowerConfig(40+0, 0,  0, 0,  0-45, 0, new String[] {"148"}),
+  new TowerConfig(40+-3, 24, -4, 0, -20, 0, new String[] {"386"}),
+  new TowerConfig(40+0, 48, 0, 0,  0-45, 0, new String[] {"195"}),
+  new TowerConfig(40+-3, 72, -4, 0, -20, 0, new String[] {"102"}),
+
+  new TowerConfig(80+0, 0,  0, 0,  0-45, 0, new String[] {"124"}),
+  new TowerConfig(80+-3, 24, -4, 0, -20, 0, new String[] {"388"}),
+  new TowerConfig(80+0, 48, 0, 0,  0-45, 0, new String[] {"399"}),
+  new TowerConfig(80+-3, 72, -4, 0, -20, 0, new String[] {"205"}),
    
 };
 
@@ -297,6 +317,12 @@ public SLModel buildModel() {
   List<Tower> towers = new ArrayList<Tower>();
   List<Cube> allCubes = new ArrayList<Cube>();
 
+  globalTransform.push();
+  globalTransform.translate(cubesOffsetX, cubesOffsetY, cubesOffsetZ);
+  globalTransform.rotateY(cubesRotationY * PI / 180.);
+  globalTransform.rotateX(cubesRotationX * PI / 180.);
+  globalTransform.rotateZ(cubesRotationZ * PI / 180.);
+
   for (TowerConfig config : TOWER_CONFIG) {
     List<Cube> cubes = new ArrayList<Cube>();
     float x = config.x;
@@ -308,12 +334,13 @@ public SLModel buildModel() {
 
     for (int i = 0; i < config.ids.length; i++) {
       float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot-180, yRot, zRot, globalTransform, type);
       cubes.add(cube);
       allCubes.add(cube);
     }
     towers.add(new Tower("", cubes));
   }
+  globalTransform.pop();
   /*-----------------------------------------------------------------*/
 
   /* Strips ----------------------------------------------------------*/
