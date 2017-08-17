@@ -48,6 +48,7 @@ void setupOutputs(final LX lx) {
 
   try {
     final String PIXLITE1_IP = "192.168.1.110";
+    final String PIXLITE2_IP = "192.168.1.140";
 
    /** 
     * PixLite 1
@@ -58,8 +59,18 @@ void setupOutputs(final LX lx) {
     pixlite1.addDatagrams(new RingOutput("p1r2",    PIXLITE1_IP,     2).getDatagrams());
     pixlite1.addDatagrams(new RingOutput("p1r3",    PIXLITE1_IP,     3).getDatagrams());
 
+    /** 
+     * PixLite 2
+     *--------------------------------------------------------------------------*/
+     final LXDatagramOutput pixlite2 = new LXDatagramOutput(lx);
+     //                                  Ring ID,    IP Addresss,  Output 
+     pixlite2.addDatagrams(new RingOutput("p2r1",    PIXLITE2_IP,     1).getDatagrams());
+     pixlite2.addDatagrams(new RingOutput("p2r2",    PIXLITE2_IP,     2).getDatagrams());
+     pixlite2.addDatagrams(new RingOutput("p2r3",    PIXLITE2_IP,     3).getDatagrams());
+
     // Add the pixlites
     lx.addOutput(pixlite1);
+    //lx.addOutput(pixlite2);
 
   } catch (SocketException e) {
     e.printStackTrace();
