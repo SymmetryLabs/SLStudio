@@ -377,6 +377,7 @@ class SLController extends LXOutput {
     // Otherwise use the cube id
     Cube cube = null;
     Bar bar = null;
+    Ring ring = null;
     if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
       cube = model.cubes.get(0);
     } else {
@@ -389,6 +390,12 @@ class SLController extends LXOutput {
       for (Bar b : model.bars) {
         if (b.id != null && b.id.equals(controllerId)) {
           bar = b;
+          break;
+        }
+      }
+      for (Ring r : model.rings) {
+        if (r.id != null && r.id.equals(controllerId)) {
+          ring = r;
           break;
         }
       }
@@ -425,6 +432,24 @@ class SLController extends LXOutput {
     }
 
     if (cube == null && bar == null) {
+      for (int i = 0; i < numPixels; i++) {
+        setPixel(i, LXColor.BLACK);
+      }
+    }
+
+    if (ring != null) {
+      int numPixels = ring.points.length;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
+      int i = 0;
+      for (LXPoint p : ring.points) {
+        setPixel(i++, colors[p.index]);
+      }
+    }
+
+    if (cube == null && bar == null && ring == null) {
       for (int i = 0; i < numPixels; i++) {
         setPixel(i, LXColor.BLACK);
       }

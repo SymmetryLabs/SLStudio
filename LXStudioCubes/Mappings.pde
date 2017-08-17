@@ -42,12 +42,12 @@ static final float upstairsRotationX = 0;
 static final float upstairsRotationY = 0;
 static final float upstairsRotationZ = 0;
 
-// Level Rings Chandelier
+// Upstairs Rings Chandelier
 RingChandelierConfig upstairsRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 0, 0},
   new RingConfig[] {
-    new RingConfig("512", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 100, 6)
+    new RingConfig("512", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 270, 12)
   }
 );
 /*-------------------------------------------------------------------------*/
