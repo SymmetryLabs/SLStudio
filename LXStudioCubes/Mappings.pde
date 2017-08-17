@@ -19,7 +19,7 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -42,6 +42,39 @@ static final float OUTER_WIDTH = (STANDARD_STRIP_LENGTH*6) + (OUTER_SHORT_STRIP_
 static final float INNER_WIDTH = (STANDARD_STRIP_LENGTH*2) + (INNER_SHORT_STRIP_LENGTH);
 
 static final float INNER_PADDING = (OUTER_WIDTH - INNER_WIDTH) / 2.f;
+
+static final StripConfig[] PHOTO_BOOTH_STRIP_CONFIG = {
+  new StripConfig("0", new float[] {0, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {1, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {2, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {3, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {4, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {6, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {7, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {8, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {9, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {10, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {11, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {12, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {13, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {14, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {15, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {16, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {17, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {18, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {19, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {20, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {21, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {22, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {23, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {24, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {25, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {26, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {27, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {28, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("0", new float[] {29, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+};
 
 static final StripConfig[] STRIP_CONFIG = {
 
@@ -245,8 +278,9 @@ public SLModel buildModel() {
 
   /* Strips ----------------------------------------------------------*/
   List<Strip> strips = new ArrayList<Strip>();
+  PhotoBoothCanvas photoBoothCanvas = null;
 
-  for (StripConfig stripConfig : STRIP_CONFIG) {
+  for (StripConfig stripConfig : PHOTO_BOOTH_STRIP_CONFIG) {
     Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
 
     globalTransform.push();
@@ -256,17 +290,18 @@ public SLModel buildModel() {
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
     strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
-
     globalTransform.pop();
   }
   /*-----------------------------------------------------------------*/
+
+  photoBoothCanvas = new PhotoBoothCanvas(strips);
 
   Cube[] allCubesArr = new Cube[allCubes.size()];
   for (int i = 0; i < allCubesArr.length; i++) {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
+  return new SLModel(towers, allCubesArr, strips, photoBoothCanvas);
 }
 
 public SLModel getModel() {

@@ -2,6 +2,7 @@ import java.util.*;
 import java.net.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
+import processing.video.*;
 
 public SLStudio lx;
 public SLModel model;
@@ -9,6 +10,7 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
+public PApplet applet;
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -16,6 +18,8 @@ public MappingMode mappingMode = null;
 void setup() {
   long setupStart = System.nanoTime();
   size(1280, 800, P3D);
+
+  applet = this;
 
   model = buildModel();
   println("-- Model ----");
