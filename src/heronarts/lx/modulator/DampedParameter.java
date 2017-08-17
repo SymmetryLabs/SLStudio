@@ -36,6 +36,8 @@ public class DampedParameter extends LXModulator {
 
     private final LXParameter acceleration;
 
+    private final LXParameter deceleration;
+
     private double currentVelocity = 0;
 
     private boolean hasModulus = false;
@@ -51,7 +53,11 @@ public class DampedParameter extends LXModulator {
     }
 
     public DampedParameter(LXParameter parameter, double velocity, double acceleration) {
-        this("DAMPED-" + parameter.getLabel(), parameter, velocity, acceleration);
+        this("DAMPED-" + parameter.getLabel(), parameter, velocity, acceleration, acceleration);
+    }
+
+    public DampedParameter(LXParameter parameter, double velocity, double acceleration, double deceleration) {
+        this("DAMPED-" + parameter.getLabel(), parameter, velocity, acceleration, deceleration);
     }
 
     public DampedParameter(LXParameter parameter, LXParameter velocity) {
@@ -67,18 +73,31 @@ public class DampedParameter extends LXModulator {
     }
 
     public DampedParameter(String label, LXParameter parameter, double velocity, double acceleration) {
-        this(label, parameter, new FixedParameter(velocity), new FixedParameter(acceleration));
+        this(label, parameter, velocity, acceleration, acceleration);
+    }
+
+    public DampedParameter(String label, LXParameter parameter, double velocity, double acceleration, double deceleration) {
+        this(label, parameter, new FixedParameter(velocity), new FixedParameter(acceleration), new FixedParameter(deceleration));
     }
 
     public DampedParameter(String label, LXParameter parameter, LXParameter velocity, double acceleration) {
-        this(label, parameter, velocity, new FixedParameter(acceleration));
+        this(label, parameter, velocity, acceleration, acceleration);
+    }
+
+    public DampedParameter(String label, LXParameter parameter, LXParameter velocity, double acceleration, double deceleration) {
+        this(label, parameter, velocity, new FixedParameter(acceleration), new FixedParameter(deceleration));
     }
 
     public DampedParameter(String label, LXParameter parameter, LXParameter velocity, LXParameter acceleration) {
+        this(label, parameter, velocity, acceleration, acceleration);
+    }
+
+    public DampedParameter(String label, LXParameter parameter, LXParameter velocity, LXParameter acceleration, LXParameter deceleration) {
         super(label);
         this.parameter = parameter;
         this.velocity = velocity;
         this.acceleration = acceleration;
+        this.deceleration = deceleration;
         updateValue(parameter.getValue());
     }
 
@@ -130,22 +149,24 @@ public class DampedParameter extends LXModulator {
         }
 
         double av = Math.abs(this.acceleration.getValue());
+        double dv = Math.abs(this.deceleration.getValue());
         double vv = Math.abs(this.velocity.getValue());
 
         double deltaS = deltaMs / 1000.;
-        if (av > 0) {
+        if (av > 0 || dv > 0) {
             double position = value;
             if (target < value) {
                 av = -av;
+                dv = -dv;
             }
-            double decelTime = Math.abs(this.currentVelocity / av);
-            double decelPosition = position + this.currentVelocity * decelTime - .5 * av * decelTime * decelTime;
+            double decelTime = Math.abs(this.currentVelocity / dv);
+            double decelPosition = position + this.currentVelocity * decelTime - .5 * dv * decelTime * decelTime;
             if (target > value) {
                 // Moving positively
                 if ((this.currentVelocity > 0) && (decelPosition > target)) {
                     // Decelerating
-                    position = Math.min(target, value + this.currentVelocity * deltaS + .5 * -av * deltaS * deltaS);
-                    this.currentVelocity = Math.max(0, this.currentVelocity - av * deltaS);
+                    position = Math.min(target, value + this.currentVelocity * deltaS + .5 * -dv * deltaS * deltaS);
+                    this.currentVelocity = Math.max(0, this.currentVelocity - dv * deltaS);
                 } else {
                     // Accelerating
                     position = Math.min(target, value + this.currentVelocity * deltaS + .5 * av * deltaS * deltaS);
@@ -155,8 +176,8 @@ public class DampedParameter extends LXModulator {
                 // Moving negatively
                 if ((this.currentVelocity < 0) && (decelPosition < target)) {
                     // Decelerating
-                    position = Math.max(target, value + this.currentVelocity * deltaS + .5 * -av * deltaS * deltaS);
-                    this.currentVelocity = Math.min(0, this.currentVelocity - av * deltaS);
+                    position = Math.max(target, value + this.currentVelocity * deltaS + .5 * -dv * deltaS * deltaS);
+                    this.currentVelocity = Math.min(0, this.currentVelocity - dv * deltaS);
                 } else {
                     // Accelerating
                     position = Math.max(target, value + this.currentVelocity * deltaS + .5 * av * deltaS * deltaS);
