@@ -22,59 +22,56 @@ static final float globalRotationX = 0;
 static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
-static final float CUBE_WIDTH = 24;
-static final float CUBE_HEIGHT = 24;
-static final float TOWER_WIDTH = 24;
-static final float TOWER_HEIGHT = 24;
-static final float CUBE_SPACING = 2.5;
+static final float INCHES_PER_METER = 39.3701;
 
-static final float POINT_SPACING = 0.4;
+static final float DEFAULT_PIXEL_PITCH = (1/60) * INCHES_PER_METER;
 
 static final int STANDARD_NUM_POINTS = 73;
 static final int OUTER_SHORT_NUM_POINTS = STANDARD_NUM_POINTS - 16;
 static final int INNER_SHORT_NUM_POINTS = STANDARD_NUM_POINTS - 10;
 
-static final float STANDARD_STRIP_LENGTH    = POINT_SPACING * STANDARD_NUM_POINTS;
-static final float OUTER_SHORT_STRIP_LENGTH = POINT_SPACING * OUTER_SHORT_NUM_POINTS;
-static final float INNER_SHORT_STRIP_LENGTH = POINT_SPACING * INNER_SHORT_NUM_POINTS;
+static final float STANDARD_STRIP_LENGTH    = DEFAULT_PIXEL_PITCH * STANDARD_NUM_POINTS;
+static final float OUTER_SHORT_STRIP_LENGTH = DEFAULT_PIXEL_PITCH * OUTER_SHORT_NUM_POINTS;
+static final float INNER_SHORT_STRIP_LENGTH = DEFAULT_PIXEL_PITCH * INNER_SHORT_NUM_POINTS;
 
 static final float OUTER_WIDTH = (STANDARD_STRIP_LENGTH*6) + (OUTER_SHORT_STRIP_LENGTH);
 static final float INNER_WIDTH = (STANDARD_STRIP_LENGTH*2) + (INNER_SHORT_STRIP_LENGTH);
 
 static final float INNER_PADDING = (OUTER_WIDTH - INNER_WIDTH) / 2.f;
 
+
+/* Photo Booth ----------------------------------------------------------------------------------------------------------------------*/
+static final int   PHOTO_NUM_POINTS = 240;
+static final float PHOTO_STRIP_SPACING = 3;
+static final float PHOTO_PIXEL_PITCH = (1.f/144.f) * INCHES_PER_METER;
+
+static final float photoBoothOffsetX = 0;
+static final float photoBoothOffsetY = 0;
+static final float photoBoothOffsetZ = 0;
+
+static final float photoBoothRotationX = 0;
+static final float photoBoothRotationY = 0;
+static final float photoBoothRotationZ = 0;
+
 static final StripConfig[] PHOTO_BOOTH_STRIP_CONFIG = {
-  new StripConfig("0", new float[] {0, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {1, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {2, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {3, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {4, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {6, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {7, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {8, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {9, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {10, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {11, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {12, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {13, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {14, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {15, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {16, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {17, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {18, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {19, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {20, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {21, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {22, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {23, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {24, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {25, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {26, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {27, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {28, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] {29, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+  new StripConfig("1",  new float[] {PHOTO_STRIP_SPACING*0,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("2",  new float[] {PHOTO_STRIP_SPACING*1,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("3",  new float[] {PHOTO_STRIP_SPACING*2,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("4",  new float[] {PHOTO_STRIP_SPACING*3,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("5",  new float[] {PHOTO_STRIP_SPACING*4,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("6",  new float[] {PHOTO_STRIP_SPACING*5,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("7",  new float[] {PHOTO_STRIP_SPACING*6,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("8",  new float[] {PHOTO_STRIP_SPACING*7,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("9",  new float[] {PHOTO_STRIP_SPACING*8,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("10", new float[] {PHOTO_STRIP_SPACING*9,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("11", new float[] {PHOTO_STRIP_SPACING*10, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("12", new float[] {PHOTO_STRIP_SPACING*11, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("13", new float[] {PHOTO_STRIP_SPACING*12, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("14", new float[] {PHOTO_STRIP_SPACING*13, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("15", new float[] {PHOTO_STRIP_SPACING*14, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("16", new float[] {PHOTO_STRIP_SPACING*15, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
 };
+/* -----------------------------------------------------------------------------------------------------------------------------------*/
 
 static final StripConfig[] STRIP_CONFIG = {
 
@@ -152,12 +149,10 @@ static final StripConfig[] STRIP_CONFIG = {
   new StripConfig("0", new float[] { -5, 0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 };
 
-static final TowerConfig[] TOWER_CONFIG = {};
-
 static class StripConfig {
   String id;
   int numPoints;
-  float spacing;
+  float pixelPitch;
   float x;
   float y;
   float z;
@@ -166,9 +161,13 @@ static class StripConfig {
   float zRot;
 
   StripConfig(String id, float[] coords, float[] rotations, int numPoints) {
+    this(id, coords, rotations, numPoints, DEFAULT_PIXEL_PITCH);
+  }
+
+  StripConfig(String id, float[] coords, float[] rotations, int numPoints, float pixelPitch) {
     this.id = id;
     this.numPoints = numPoints;
-    this.spacing = POINT_SPACING;
+    this.pixelPitch = pixelPitch;
     this.x = coords[0];
     this.y = coords[1];
     this.z = coords[2];
@@ -176,56 +175,6 @@ static class StripConfig {
     this.yRot = rotations[1];
     this.zRot = rotations[2];
   }
-}
-
-static class TowerConfig {
-
-  final Cube.Type type;
-  final float x;
-  final float y;
-  final float z;
-  final float xRot;
-  final float yRot;
-  final float zRot;
-  final String[] ids;
-  final float[] yValues;
-
-  TowerConfig(float x, float y, float z, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, ids);
-  }
-
-  TowerConfig(float x, float y, float z, float yRot, String[] ids) {
-    this(x, y, z, 0, yRot, 0, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, String[] ids) {
-    this(type, x, y, z, 0, 0, 0, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
-    this(type, x, y, z, 0, yRot, 0, ids);
-  }
-
-  TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-    this(Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
-  }
-
-  TowerConfig(Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
-    this.type = type;
-    this.x = x;
-    this.y = y;
-    this.z = z;
-    this.xRot = xRot;
-    this.yRot = yRot;
-    this.zRot = zRot;
-    this.ids = ids;
-
-    this.yValues = new float[ids.length];
-    for (int i = 0; i < ids.length; i++) {
-      yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
-    }
-  }
-
 }
 
 Map<String, String> macToPhysid = new HashMap<String, String>();
@@ -256,24 +205,6 @@ public SLModel buildModel() {
   /* Cubes ----------------------------------------------------------*/
   List<Tower> towers = new ArrayList<Tower>();
   List<Cube> allCubes = new ArrayList<Cube>();
-
-  for (TowerConfig config : TOWER_CONFIG) {
-    List<Cube> cubes = new ArrayList<Cube>();
-    float x = config.x;
-    float z = config.z;
-    float xRot = config.xRot;
-    float yRot = config.yRot;
-    float zRot = config.zRot;
-    Cube.Type type = config.type;
-
-    for (int i = 0; i < config.ids.length; i++) {
-      float y = config.yValues[i];
-      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
-      cubes.add(cube);
-      allCubes.add(cube);
-    }
-    towers.add(new Tower("", cubes));
-  }
   /*-----------------------------------------------------------------*/
 
   /* Strips ----------------------------------------------------------*/
@@ -281,7 +212,7 @@ public SLModel buildModel() {
   PhotoBoothCanvas photoBoothCanvas = null;
 
   for (StripConfig stripConfig : PHOTO_BOOTH_STRIP_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
+    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.pixelPitch);
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
@@ -296,6 +227,7 @@ public SLModel buildModel() {
 
   photoBoothCanvas = new PhotoBoothCanvas(strips);
 
+  // not used
   Cube[] allCubesArr = new Cube[allCubes.size()];
   for (int i = 0; i < allCubesArr.length; i++) {
     allCubesArr[i] = allCubes.get(i);
