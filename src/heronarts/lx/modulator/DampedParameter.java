@@ -68,6 +68,10 @@ public class DampedParameter extends LXModulator {
         this("DAMPED-" + parameter.getLabel(), parameter, velocity, acceleration);
     }
 
+    public DampedParameter(LXParameter parameter, LXParameter velocity, LXParameter acceleration, LXParameter deceleration) {
+        this("DAMPED-" + parameter.getLabel(), parameter, velocity, acceleration, deceleration);
+    }
+
     public DampedParameter(String label, LXParameter parameter, LXParameter velocity) {
         this(label, parameter, velocity, 0);
     }
