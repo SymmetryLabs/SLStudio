@@ -33,8 +33,6 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
 
     private String[] options = null;
 
-    private Object[] objects = null;
-
     /**
      * Parameter with values from [0, range-1], 0 by default
      *
@@ -78,17 +76,6 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     public DiscreteParameter(String label, String[] options) {
         this(label, options.length);
         this.options = options;
-    }
-
-    /**
-     * Parameter with set of arbitrary object values
-     *
-     * @param label Label
-     * @param objects Values
-     */
-    public DiscreteParameter(String label, Object[] objects) {
-        this(label, objects.length);
-        setObjects(objects);
     }
 
     /**
@@ -160,33 +147,6 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     }
 
     /**
-     * Set a list of objects for the parameter
-     *
-     * @param options Array of arbitrary object values
-     * @return this
-     */
-    public DiscreteParameter setObjects(Object[] objects) {
-        this.objects = objects;
-        this.options = new String[objects.length];
-        for (int i = 0; i < objects.length; ++i) {
-            this.options[i] = objects[i].toString();
-        }
-        return setRange(objects.length);
-    }
-
-    public LXParameter setValue(Object object) {
-        if (this.objects == null) {
-            throw new UnsupportedOperationException("Cannot setValue with an object unless setObjects() was called");
-        }
-        for (int i = 0; i < this.objects.length; ++i) {
-            if (this.objects[i] == object) {
-                return setValue(i);
-            }
-        }
-        throw new IllegalArgumentException("Not a valid object for this parameter: " + object.toString());
-    }
-
-    /**
      * Sets the range from [minValue, maxValue-1] inclusive
      *
      * @param minValue Minimum value
@@ -196,9 +156,6 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
     public DiscreteParameter setRange(int minValue, int maxValue) {
         if (this.options != null && (this.options.length != maxValue - minValue)) {
             throw new UnsupportedOperationException("May not call setRange on a DiscreteParameter with String options of different length");
-        }
-        if (this.objects!= null && (this.objects.length != maxValue - minValue)) {
-            throw new UnsupportedOperationException("May not call setRange on a DiscreteParameter with Object list of different length");
         }
         if (maxValue <= minValue) {
             throw new IllegalArgumentException("DiscreteParameter must have range of at least 1");
@@ -264,10 +221,6 @@ public class DiscreteParameter extends LXListenableNormalizedParameter {
 
     public int getValuei() {
         return (int) getValue();
-    }
-
-    public Object getObject() {
-        return this.objects[getValuei()];
     }
 
     public double getNormalized() {

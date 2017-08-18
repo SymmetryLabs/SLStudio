@@ -20,14 +20,15 @@
 
 package heronarts.lx.parameter;
 
-public class EnumParameter<T> extends DiscreteParameter {
+public class EnumParameter<T> extends ObjectParameter<T> {
 
-    private static Object[] valuesFor(Object o) {
+    @SuppressWarnings("unchecked")
+    private static <T> T[] valuesFor(T o) {
         if (!(o instanceof Enum)) {
             throw new IllegalArgumentException("Must pass Enum value to EnumParameter");
         }
         try {
-            return (Object[]) o.getClass().getMethod("values").invoke(null);
+            return (T[]) o.getClass().getMethod("values").invoke(null);
         } catch (Exception x) {
             throw new RuntimeException(x);
         }
@@ -38,15 +39,14 @@ public class EnumParameter<T> extends DiscreteParameter {
         setValue(t);
     }
 
-    @SuppressWarnings("unchecked")
     @Override
     public EnumParameter<T> setDescription(String description) {
-        return (EnumParameter<T>) super.setDescription(description);
+        super.setDescription(description);
+        return this;
     }
 
-    @SuppressWarnings("unchecked")
     public T getEnum() {
-        return (T) getObject();
+        return getObject();
     }
 
 }

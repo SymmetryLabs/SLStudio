@@ -188,7 +188,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         if (parameter == this.hueMode) {
             double hueValue = this.hue.getValue();
             this.color.hue.setValue(hueValue);
-            switch ((Mode) this.hueMode.getObject()) {
+            switch (this.hueMode.getEnum()) {
                 case FIXED:
                     this.hue = this.hueFixed;
                     this.hueFixed.setValue(hueValue).start();

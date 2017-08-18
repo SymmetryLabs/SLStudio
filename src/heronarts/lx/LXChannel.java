@@ -32,6 +32,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.parameter.BooleanParameter;
 import java.util.ArrayList;
@@ -197,13 +198,13 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         new BooleanParameter("Transitions", false)
         .setDescription("When enabled, transitions between patterns use a blend");
 
-    public final DiscreteParameter transitionBlendMode;
+    public final ObjectParameter<LXBlend> transitionBlendMode;
 
     public final CompoundParameter fader =
         new CompoundParameter("Fader", 0)
         .setDescription("Sets the alpha level of the output of this channel");
 
-    public final DiscreteParameter blendMode;
+    public final ObjectParameter<LXBlend> blendMode;
 
     public final MutableParameter controlSurfaceFocusIndex = (MutableParameter)
         new MutableParameter("SurfaceFocusIndex", 0)
@@ -286,10 +287,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
             new DiscreteParameter("Focused Pattern", 0, patterns.length)
             .setDescription("Which pattern has focus in the UI");
 
-        this.blendMode = new DiscreteParameter("Blend", lx.engine.channelBlends)
+        this.blendMode = new ObjectParameter<LXBlend>("Blend", lx.engine.channelBlends)
             .setDescription("Specifies the blending function used for the channel fader");
 
-        this.transitionBlendMode = new DiscreteParameter("Transition Blend", lx.engine.crossfaderBlends)
+        this.transitionBlendMode = new ObjectParameter<LXBlend>("Transition Blend", lx.engine.crossfaderBlends)
             .setDescription("Specifies the blending function used for transitions between patterns on the channel");
 
         this.transitionMillis = lx.engine.nowMillis;

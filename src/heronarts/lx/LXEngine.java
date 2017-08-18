@@ -45,6 +45,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.script.LXScriptEngine;
 
@@ -127,7 +128,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     final LXBlend[] crossfaderBlends;
-    public final DiscreteParameter crossfaderBlendMode;
+    public final ObjectParameter<LXBlend> crossfaderBlendMode;
 
     public final BooleanParameter cueA =
         new BooleanParameter("Cue-A", false)
@@ -352,7 +353,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             new DifferenceBlend(lx)
         };
         this.crossfaderBlendMode =
-            new DiscreteParameter("Crossfader Blend", this.crossfaderBlends)
+            new ObjectParameter<LXBlend>("Crossfader Blend", this.crossfaderBlends)
             .setDescription("Sets the blend mode used for the master crossfader");
         LX.initTimer.log("Engine: Blends");
 
@@ -1049,7 +1050,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                     if (doBlend) {
                         double alpha = channel.fader.getValue();
                         if (alpha > 0) {
-                            LXBlend blend = (LXBlend) channel.blendMode.getObject();
+                            LXBlend blend = channel.blendMode.getObject();
                             blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
                         } else if (blendDestination != blendOutput) {
                             // Edge-case: copy the blank buffer into the destination blend buffer when
@@ -1102,7 +1103,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             }
 
             // Compute the crossfade mix
-            LXBlend blend = (LXBlend) this.crossfaderBlendMode.getObject();
+            LXBlend blend = this.crossfaderBlendMode.getObject();
             blend.blend(crossfadeDestination, crossfadeSource, crossfadeAlpha, crossfadeDestination);
 
             // Add the crossfaded groups to the main buffer

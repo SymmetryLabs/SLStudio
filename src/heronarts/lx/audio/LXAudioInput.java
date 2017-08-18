@@ -34,8 +34,8 @@ import javax.sound.sampled.TargetDataLine;
 
 import heronarts.lx.LX;
 import heronarts.lx.osc.LXOscComponent;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.ObjectParameter;
 
 public class LXAudioInput extends LXAudioComponent implements LXOscComponent, LineListener {
 
@@ -45,7 +45,7 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
 
     private TargetDataLine line;
 
-    public final DiscreteParameter device;
+    public final ObjectParameter<Device> device;
 
     private boolean closed = true;
     private boolean stopped = false;
@@ -152,7 +152,7 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
             devices.add(new Device.Unavailable());
         }
 
-        this.device = new DiscreteParameter("Device", devices.toArray(new Device[] {}));
+        this.device = new ObjectParameter<Device>("Device", devices.toArray(new Device[] {}));
         addParameter("device", this.device);
 
     }
@@ -178,7 +178,7 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
 
     void open() {
         if (this.line == null) {
-            Device device = (Device) this.device.getObject();
+            Device device = this.device.getObject();
             if (!device.isAvailable()) {
                 return;
             }

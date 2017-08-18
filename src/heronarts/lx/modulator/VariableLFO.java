@@ -21,9 +21,9 @@
 package heronarts.lx.modulator;
 
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.FixedParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.ObjectParameter;
 
 /**
  * A sawtooth LFO oscillates from one extreme value to another. When the later
@@ -35,7 +35,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
      * Parameter of {@link LXWaveshape} objects that select the wave shape used by this LFO.
      * Default options are the waveshapes predefined in {@link LXWaveshape}, but you can pass your own.
      */
-    public final DiscreteParameter waveshape;
+    public final ObjectParameter<LXWaveshape> waveshape;
 
     /** Period of the waveform, in ms */
     public final CompoundParameter period;
@@ -91,7 +91,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
             };
         }
 
-        this.waveshape = new DiscreteParameter("Wave", waveshapes);
+        this.waveshape = new ObjectParameter<LXWaveshape>("Wave", waveshapes);
         this.waveshape.setDescription("Selects the wave shape used by this LFO");
 
         if (period == null) {
@@ -113,7 +113,7 @@ public class VariableLFO extends LXRangeModulator implements LXWaveshape {
     }
 
     public LXWaveshape getWaveshape() {
-        return (LXWaveshape) this.waveshape.getObject();
+        return this.waveshape.getObject();
     }
 
     @Override
