@@ -47,7 +47,7 @@ RingChandelierConfig upstairsRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 15, 0},
   new RingConfig[] {
-    new RingConfig("512", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 270, 12)
+    //new RingConfig("512", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 270, 12)
   }
 );
 /*-------------------------------------------------------------------------*/
@@ -66,9 +66,9 @@ RingChandelierConfig levelRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 0, 0},
   new RingConfig[] {
-    new RingConfig("p2r1", new float[] {0,  0, 0}, new float[] {90, 0, 0}, 87, 3.5),
-    new RingConfig("p2r2", new float[] {0, 10, 0}, new float[] {90, 0, 0}, 180, 7.5),
-    new RingConfig("p2r3", new float[] {0, 20, 0}, new float[] {90, 0, 0}, 268, 11)
+    // new RingConfig("p2r1", new float[] {0,  0, 0}, new float[] {90, 0, 0}, 87, 3.5),
+    // new RingConfig("p2r2", new float[] {0, 10, 0}, new float[] {90, 0, 0}, 180, 7.5),
+    // new RingConfig("p2r3", new float[] {0, 20, 0}, new float[] {90, 0, 0}, 268, 11)
   }
 );
 
@@ -77,34 +77,34 @@ RingChandelierConfig rotatedRingsConfig = new RingChandelierConfig(
   new float[] {65, 0, 0},
   new float[] {180, -20, 0},
   new RingConfig[] {
-    new RingConfig("p1r1", new float[] {0, 0, 0}, new float[] {220, 0, 0}, 87, 3.5),
-    new RingConfig("p1r2", new float[] {0, 0, 0}, new float[] {90, -35, 0}, 180, 7.5),
-    new RingConfig("p1r3", new float[] {0, 0, 0}, new float[] {90,  35, 0}, 268, 11)
+    // new RingConfig("p1r1", new float[] {0, 0, 0}, new float[] {220, 0, 0}, 87, 3.5),
+    // new RingConfig("p1r2", new float[] {0, 0, 0}, new float[] {90, -35, 0}, 180, 7.5),
+    // new RingConfig("p1r3", new float[] {0, 0, 0}, new float[] {90,  35, 0}, 268, 11)
   }
 );
 /*-------------------------------------------------------------------------*/
 
 /* Skylight Bars ----------------------------------------------------------*/
 static final float skylightOffsetX = 0;
-static final float skylightOffsetY = 100;
+static final float skylightOffsetY = 0;
 static final float skylightOffsetZ = 0;
 
 static final float skylightRotationX = 0;
-static final float skylightRotationY = 90;
+static final float skylightRotationY = 0;
 static final float skylightRotationZ = 0;
 
 static final BarConfig[] SKYLIGHT_CONFIG = {
-  new BarConfig("510", new float[] {0, 0,  10*0}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("339", new float[] {0, 0,  10*1}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("506", new float[] {0, 0,  10*2}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("507", new float[] {0, 0,  10*3}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("504", new float[] {0, 0,  10*4}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("503", new float[] {0, 0,  10*5}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("501", new float[] {0, 0,  10*6}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("511", new float[] {0, 0,  10*7}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("509", new float[] {0, 0,  10*8}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("502", new float[] {0, 0,  10*9}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
-  new BarConfig("508", new float[] {0, 0, 10*10}, new float[] {90, 0, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("510", new float[] {10*0, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("339", new float[] {10*1, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("506", new float[] {10*2, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("507", new float[] {10*3, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("504", new float[] {10*4, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("503", new float[] {10*5, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("501", new float[] {10*6, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("511", new float[] {10*7, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("509", new float[] {10*8, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("502", new float[] {10*9, 0, 0}, new float[]  {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
+  new BarConfig("508", new float[] {10*10, 0, 0}, new float[] {0, -90, 0}, 139, 0.7, Bar.Metrics.NumStrips.TWO),
 };
 /*-------------------------------------------------------------------------*/
 
@@ -118,11 +118,11 @@ static final float wallBarsRotationY = 180;
 static final float wallBarsRotationZ = 90;
 
 static final BarConfig[] WALL_BARS_CONFIG = {
-  new BarConfig("123", new float[] {0, 8*0, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
-  new BarConfig("381", new float[] {0, 8*1, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
-  new BarConfig("378", new float[] {0, 8*2, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
-  new BarConfig("313", new float[] {0, 8*3, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
-  new BarConfig("361", new float[] {0, 8*4, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  // new BarConfig("123", new float[] {0, 8*0, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  // new BarConfig("381", new float[] {0, 8*1, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  // new BarConfig("378", new float[] {0, 8*2, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  // new BarConfig("313", new float[] {0, 8*3, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
+  // new BarConfig("361", new float[] {0, 8*4, 0}, new float[] {0, 0, 0}, 59, 0.5, Bar.Metrics.NumStrips.THREE),
 };
 /*-------------------------------------------------------------------------*/
 
