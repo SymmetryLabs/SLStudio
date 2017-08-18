@@ -73,38 +73,43 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         .setDescription("Sets how long the palette takes to complete one full oscillation")
         .setUnits(LXParameter.Units.MILLISECONDS);
 
+    public final CompoundParameter spread = (CompoundParameter)
+        new CompoundParameter("Spread", 0, -360, 360)
+        .setDescription("Sets the amount of hue spread")
+        .setPolarity(LXParameter.Polarity.BIPOLAR);
+
     public final CompoundParameter spreadX = (CompoundParameter)
-        new CompoundParameter("X-add", 0, -360, 360)
+        new CompoundParameter("XSprd", 0, -1, 1)
         .setDescription("Sets the amount of hue spread on the X axis")
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter spreadY = (CompoundParameter)
-        new CompoundParameter("Y-add", 0, -360, 360)
+        new CompoundParameter("YSprd", 0, -1, 1)
         .setDescription("Sets the amount of hue spread on the Y axis")
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter spreadZ = (CompoundParameter)
-        new CompoundParameter("Z-add", 0, -360, 360)
+        new CompoundParameter("ZSprd", 0, -1, 1)
         .setDescription("Sets the amount of hue spread on the Z axis")
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter offsetX = (CompoundParameter)
-        new CompoundParameter("X-off", 0, -1, 1)
+        new CompoundParameter("XOffs", 0, -1, 1)
         .setDescription("Sets the offset of the hue spread point on the X axis")
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter offsetY = (CompoundParameter)
-        new CompoundParameter("Y-off", 0, -1, 1)
+        new CompoundParameter("YOffs", 0, -1, 1)
         .setDescription("Sets the offset of the hue spread point on the Y axis")
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter offsetZ = (CompoundParameter)
-        new CompoundParameter("Z-off", 0, -1, 1)
+        new CompoundParameter("ZOffs", 0, -1, 1)
         .setDescription("Sets the offset of the hue spread point on the Z axis")
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
     public final CompoundParameter spreadR = (CompoundParameter)
-        new CompoundParameter("R-add", 0, -360, 360)
+        new CompoundParameter("RSprd", 0, -1, 1)
         .setDescription("Sets the amount of hue spread in the radius from center")
         .setPolarity(LXParameter.Polarity.BIPOLAR);
 
@@ -148,6 +153,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         addParameter("color", this.color);
         addParameter("period", this.period);
         addParameter("range", this.range);
+        addParameter("spread", this.spread);
         addParameter("spreadX", this.spreadX);
         addParameter("spreadY", this.spreadY);
         addParameter("spreadZ", this.spreadZ);
@@ -225,6 +231,7 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         double dx = point.x - this.model.cx - this.offsetX.getValue() * model.xRange;
         double dy = point.y - this.model.cy - this.offsetY.getValue() * model.yRange;
         double dz = point.z - this.model.cz - this.offsetZ.getValue() * model.zRange;
+        double spread = this.spread.getValue();
         if (this.mirror.isOn()) {
             dx = Math.abs(dx);
             dy = Math.abs(dy);
@@ -232,10 +239,10 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         }
         return (
             this.hue.getValue() +
-            this.spreadX.getValue() * this.xMult * dx +
-            this.spreadY.getValue() * this.yMult * dy +
-            this.spreadZ.getValue() * this.zMult * dz +
-            this.spreadR.getValue() * this.rMult * (point.r - model.rMin)
+            spread * this.spreadX.getValue() * this.xMult * dx +
+            spread * this.spreadY.getValue() * this.yMult * dy +
+            spread * this.spreadZ.getValue() * this.zMult * dz +
+            spread * this.spreadR.getValue() * this.rMult * (point.r - model.rMin)
          );
     }
 
