@@ -136,6 +136,10 @@ class SLController extends LXOutput {
     setHeader();
   }
 
+  String getMacAddressString() {
+    return NetworkUtils.macAddrToString(networkDevice.macAddress);
+  }
+
   void setHeader() {
     packetData[0] = 0;  // Channel
     packetData[1] = 0;  // Command (Set pixel colors)
@@ -197,7 +201,8 @@ class SLController extends LXOutput {
     // If we don't know the cube type, default to
     // using the cube type with the most pixels
     Cube.Type cubeType = cube != null ? cube.type : Cube.Type.LARGE;
-    int numPixels = cubeType.POINTS_PER_CUBE;
+    // int numPixels = cubeType.POINTS_PER_CUBE;
+    int numPixels = 60 * 5; // TODO Don't hard-code this.
     if (packetData == null || packetData.length != numPixels) {
       initPacketData(numPixels);
     }

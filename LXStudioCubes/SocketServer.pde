@@ -86,6 +86,11 @@ public class ParseClientTask implements LXLoopTask {
 
     automappingController.setClientsConnected(server.clientCount > 0);
 
+    final ColorMappingController cmc =
+      automappingController.getColorMappingController();
+
+    cmc.updateActiveClients(server.clients);
+
     try {
       Client client = server.available();
       if (client == null) return;
@@ -114,6 +119,10 @@ public class ParseClientTask implements LXLoopTask {
 
       if (method == null) return;
       if (args == null) args = new HashMap<String, Object>();
+
+      if (cmc.handleMethod(client, message)) {
+        return;
+      }
 
       if (method.equals("mapping.startCalibration")) {
         automappingController.startCalibration();        

@@ -686,8 +686,13 @@ class AutomappingController extends LXComponent {
 
   final JLabel label = new JLabel();
 
-
-
+  private ColorMappingController cmc = null;
+  ColorMappingController getColorMappingController() {
+    if (cmc == null) {
+      cmc = new ColorMappingController(this);
+    }
+    return cmc;
+  }
 
   AutomappingController(LX lx) {
     super(lx);
@@ -1331,10 +1336,11 @@ class AutomappingController extends LXComponent {
     }
   }
 
-
-
-
   color getPixelColor(String cubeId, int i) {
+    if (cmc != null && cmc.getClientCount() > 0) {
+      return cmc.getPixelColor(cubeId, i);
+    }
+
     if (macToPhysid.get(cubeId).equals("393")) {
       return LXColor.WHITE; //.hsb(map(i, 0, 105, 0, 360), 50, 100);
       // return LXColor.GREEN;
