@@ -37,9 +37,9 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public final PhotoBoothCanvas photoBoothCanvas;
+  public final PhotoBoothWall photoBoothWall;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, PhotoBoothCanvas photoBoothCanvas) {
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, PhotoBoothWall photoBoothWall) {
     super(new Fixture(cubeArr, strips));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -71,7 +71,7 @@ public static class SLModel extends LXModel {
     for (Strip strip : strips)
       stripList.add(strip);
 
-    this.photoBoothCanvas = photoBoothCanvas;
+    this.photoBoothWall = photoBoothWall;
 
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
@@ -165,9 +165,9 @@ public static class Tower extends LXModel {
   }
 }
 
-public static class PhotoBoothCanvas extends LXModel {
+public static class PhotoBoothWall extends LXModel {
 
-  public PhotoBoothCanvas(List<Strip> strips) {
+  public PhotoBoothWall(List<Strip> strips) {
     super(new Fixture(strips));
   }
 
