@@ -121,7 +121,7 @@ public class UIMultiStageEnvelope extends UIModulator {
                 float ly = LXUtils.constrainf(ty-3, 0, this.g.height-1);
                 float ry = LXUtils.constrainf(ty+3, 0, this.g.height-1);
                 if (stage == this.editing) {
-                    this.g.fill(envelope.color.getColor());
+                    this.g.fill(envelope.modulationColor.getColor());
                     this.g.noStroke();
                     this.g.rect(lx, ly, rx-lx+1, ry-ly+1);
                 } else {

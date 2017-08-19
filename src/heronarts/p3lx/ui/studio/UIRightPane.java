@@ -48,8 +48,7 @@ import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
 import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
-import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
-import heronarts.p3lx.ui.studio.modulation.UITriggerModulator;
+import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
 
@@ -246,13 +245,21 @@ public class UIRightPane extends UIPane {
     }
 
     private UIModulator findModulator(LXParameter parameter) {
+        return findModulator(parameter, false);
+    }
+
+    private UIModulator findModulator(LXParameter parameter, boolean create) {
         for (UIObject child : this.modulation) {
             if (child instanceof UIModulator) {
                 UIModulator uiModulator = (UIModulator) child;
-                if (uiModulator.parameter == parameter || uiModulator.parameter == parameter.getComponent()) {
+                if (uiModulator.component == parameter || uiModulator.component == parameter.getComponent()) {
                     return uiModulator;
                 }
             }
+        }
+        if (create) {
+            LXComponent component = (parameter instanceof LXComponent) ? (LXComponent) parameter : parameter.getComponent();
+            return (UIModulator) new UIComponentModulator(this.ui, this.lx, component, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
         }
         return null;
     }
@@ -275,11 +282,7 @@ public class UIRightPane extends UIPane {
     }
 
     private void addModulation(LXCompoundModulation modulation) {
-        UIModulator uiModulator = findModulator(modulation.source);
-        if (uiModulator == null) {
-            uiModulator = (UIModulator) new UIParameterModulator(this.ui, this.lx, modulation.source, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-        }
-        uiModulator.addModulation(modulation);
+        findModulator(modulation.source, true).addModulation(modulation);
     }
 
     private void removeModulation(LXCompoundModulation modulation) {
@@ -289,28 +292,12 @@ public class UIRightPane extends UIPane {
         }
     }
 
-    private UIModulator findModulator(LXTriggerModulation trigger) {
-        LXComponent sourceComponent = trigger.source.getComponent();
-        UIModulator uiModulator = null;
-        if (sourceComponent instanceof LXModulator) {
-            uiModulator = findModulator((LXModulator) sourceComponent);
-        }
-        if (uiModulator == null) {
-            uiModulator = findModulator(trigger.source);
-        }
-        return uiModulator;
-    }
-
     private void addTrigger(LXTriggerModulation trigger) {
-        UIModulator uiModulator = findModulator(trigger);
-        if (uiModulator == null) {
-            uiModulator = (UIModulator) new UITriggerModulator(this.ui, this.lx, trigger.source, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-        }
-        uiModulator.addTrigger(trigger);
+        findModulator(trigger.source, true).addTrigger(trigger);
     }
 
     private void removeTrigger(LXTriggerModulation trigger) {
-        UIModulator uiModulator = findModulator(trigger);
+        UIModulator uiModulator = findModulator(trigger.source);
         if (uiModulator != null) {
             uiModulator.removeTrigger(trigger);
         }

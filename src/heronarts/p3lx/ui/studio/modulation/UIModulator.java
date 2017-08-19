@@ -29,8 +29,6 @@ package heronarts.p3lx.ui.studio.modulation;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
-import heronarts.lx.color.ColorParameter;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LXPeriodicModulator;
 import heronarts.lx.modulator.LXTriggerSource;
@@ -51,6 +49,7 @@ import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.UITriggerTarget;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIColorBox;
+import heronarts.p3lx.ui.component.UIComponentLabel;
 import heronarts.p3lx.ui.component.UIImage;
 import heronarts.p3lx.ui.component.UIParameterLabel;
 import heronarts.p3lx.ui.component.UISlider;
@@ -101,24 +100,23 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
     private final UI ui;
     private final LX lx;
-    public final LXParameter parameter;
+    public final LXComponent component;
     public final LXModulator modulator;
     protected final UI2dComponent toggleTarget;
     protected final UITextBox title;
     private final UI2dContainer content;
-    private final UI2dContainer modulations;
-    private final ColorParameter color;
+    protected final UI2dContainer modulations;
 
     private float expandedHeight;
     private boolean expanded = true;
 
-    public UIModulator(final UI ui, final LX lx, final LXParameter parameter, boolean isModulator, float x, float y, float w, float h) {
+    public UIModulator(final UI ui, final LX lx, final LXComponent component, boolean isModulator, float x, float y, float w, float h) {
         super(x, y, w, CONTENT_Y + h + PADDING);
         this.expandedHeight = this.height;
         this.ui = ui;
         this.lx = lx;
-        this.parameter = parameter;
-        this.modulator = isModulator ? (LXModulator) this.parameter : null;
+        this.component = component;
+        this.modulator = isModulator ? (LXModulator) this.component : null;
         setBackgroundColor(ui.theme.getDeviceBackgroundColor());
         setBorderRounding(4);
 
@@ -126,21 +124,6 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         float titleRightX = this.width - 3*PADDING - COLOR_WIDTH - MAP_WIDTH;
         UIButton loopingButton = null;
         UIButton gateButton = null;
-
-        if (parameter instanceof LXModulator) {
-            this.color = ((LXModulator) parameter).color;
-        } else {
-            this.color =
-                new ColorParameter("Modulation Color", LXColor.hsb(360*Math.random(), 100, 100))
-                .setDescription("Indicates the color used for modulations from this parameter");
-            this.color.addListener(new LXParameterListener() {
-                public void onParameterChanged(LXParameter p) {
-                    for (UIObject uiModulation : modulations) {
-                        ((UICompoundModulation) uiModulation).modulation.clr.setColor(color.getColor());
-                    }
-                }
-            });
-        }
 
         if (this.modulator != null) {
             new UIButton(PADDING, PADDING, 12, 12)
@@ -181,17 +164,16 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             this.toggleTarget = this.title;
         } else {
             this.title = null;
-            this.toggleTarget = new UIParameterLabel(PADDING, PADDING, titleRightX - PADDING, 12) {
+            this.toggleTarget = new UIComponentLabel(PADDING, PADDING, titleRightX - PADDING, 12) {
                 @Override
                 public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
                     super.onMousePressed(mouseEvent, mx, my);
                     focus();
                 }
             }
-            .setParameter(parameter)
+            .setComponent(this.component)
             .setTextAlignment(PConstants.LEFT, PConstants.CENTER)
             .addToContainer(this);
-
         }
 
         if (loopingButton != null) {
@@ -201,47 +183,28 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             gateButton.addToContainer(this);
         }
 
-        final UIButton mapButton;
-        if (this instanceof UITriggerModulator) {
-            mapButton = new UIButton(this.width - 2*PADDING - TRIGGER_WIDTH - COLOR_WIDTH, PADDING, TRIGGER_WIDTH, 12) {
-                @Override
-                public void onToggle(boolean on) {
-                    if (on) {
-                        ui.mapTriggerSource((UITriggerModulator) UIModulator.this);
+        final UIButton mapButton = new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING, MAP_WIDTH, 12) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    UIModulationSource modulationSource = getModulationSourceUI();
+                    if (modulationSource != null) {
+                        ui.mapModulationSource(modulationSource);
                     } else {
-                        ui.mapTriggerSource(null);
+                        lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
                     }
+                } else {
+                    ui.mapModulationSource(null);
                 }
-            };
-            mapButton
-            .setIcon(ui.theme.iconTriggerSource)
-            .setDescription("Map: select a new target for this trigger source")
-            .addToContainer(this);
-        } else {
-            mapButton = new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING, MAP_WIDTH, 12) {
-                @Override
-                public void onToggle(boolean on) {
-                    if (on) {
-                        UIModulationSource modulationSource = getModulationSourceUI();
-                        if (modulationSource != null) {
-                            ui.mapModulationSource(modulationSource);
-                        } else {
-                            lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
-                        }
-                    } else {
-                        ui.mapModulationSource(null);
-                    }
-                }
-            };
-            mapButton
-            .setIcon(ui.theme.iconMap)
-            .setDescription("Map: select a new target for this modulation source")
-            .addToContainer(this);
-        }
-
-        new UIColorBox(ui, this.color, this.width - PADDING - COLOR_WIDTH, PADDING + 1, COLOR_WIDTH, COLOR_WIDTH)
+            }
+        };
+        mapButton
+        .setIcon(ui.theme.iconMap)
+        .setDescription("Map: select a new target for this modulation source")
         .addToContainer(this);
 
+        new UIColorBox(ui, this.component.modulationColor, this.width - PADDING - COLOR_WIDTH, PADDING + 1, COLOR_WIDTH, COLOR_WIDTH)
+        .addToContainer(this);
 
         lx.engine.mapping.mode.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
@@ -278,11 +241,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     }
 
     public String getIdentifier() {
-        if (this.parameter instanceof LXComponent) {
-            return String.format("%d", ((LXComponent)this.parameter).getId());
-        } else {
-            return this.parameter.getComponent().getId() + "/" + this.parameter.getPath();
-        }
+        return String.format("%d", this.component.getId());
     }
 
     public UIModulator setExpanded(boolean expanded) {
@@ -314,9 +273,6 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     }
 
     public UIModulator addModulation(LXCompoundModulation modulation) {
-        if (this.modulator == null) {
-            modulation.clr.setColor(this.color.getColor());
-        }
         new UICompoundModulation(this.ui, modulation, 0, 0, this.modulations.getContentWidth()).addToContainer(this.modulations);
         return this;
     }
@@ -416,11 +372,11 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         setBackgroundColor(ui.theme.getDeviceBackgroundColor());
     }
 
-    private abstract class UIModulation extends UI2dContainer implements UIFocus {
+    protected abstract class UIModulation extends UI2dContainer implements UIFocus {
 
         protected static final int PADDING = 4;
 
-        private final LXParameterModulation modulation;
+        protected final LXParameterModulation modulation;
 
         UIModulation(UI ui, final LXParameterModulation modulation, float x, float y, float w, float h) {
             super(x, y, w, h);
@@ -432,7 +388,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
         @Override
         public void drawFocus(UI ui, PGraphics pg) {
-            pg.stroke(color.getColor());
+            pg.stroke(component.modulationColor.getColor());
             pg.line(0, 0, 0, this.height-1);
         }
 
@@ -473,11 +429,11 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
     }
 
-    private class UICompoundModulation extends UIModulation {
+    protected class UICompoundModulation extends UIModulation {
 
         private static final int HEIGHT = 34 + 2*PADDING;
-        private final LXCompoundModulation modulation;
         private final String MAP_BLANK = "       ";
+        protected final LXCompoundModulation modulation;
 
         UICompoundModulation(final UI ui, final LXCompoundModulation modulation, float x, float y, float w) {
             super(ui, modulation, x, y, w, HEIGHT);
@@ -491,7 +447,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
             final UIImage map = (UIImage) new UIImage(ui.theme.iconMap).setPosition(4, 3).addToContainer(this);
 
-            if (modulation.source != parameter) {
+            if (modulation.source != component) {
                 String sourceLabel = modulation.source.getLabel();
                 ui.applet.g.textFont(ui.theme.getLabelFont());
                 map.setX(ui.applet.g.textWidth(sourceLabel) + PADDING + 2);

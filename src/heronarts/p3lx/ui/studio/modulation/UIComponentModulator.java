@@ -27,26 +27,21 @@
 package heronarts.p3lx.ui.studio.modulation;
 
 import heronarts.lx.LX;
-import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.LXComponent;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIModulationSource;
-import heronarts.p3lx.ui.UITriggerSource;
 
-public class UITriggerModulator extends UIModulator implements UITriggerSource {
+public class UIComponentModulator extends UIModulator {
 
     private static final int HEIGHT = 0;
 
-    public UITriggerModulator(UI ui, LX lx, BooleanParameter parameter, float x, float y, float w) {
-        super(ui, lx, parameter, false, x, y, w, HEIGHT);
-    }
-
-    @Override
-    public BooleanParameter getTriggerSource() {
-        return (BooleanParameter) this.parameter;
+    public UIComponentModulator(UI ui, LX lx, LXComponent component, float x, float y, float w) {
+        super(ui, lx, component, false, x, y, w, HEIGHT);
     }
 
     @Override
     protected UIModulationSource getModulationSourceUI() {
         return null;
     }
+
 }
