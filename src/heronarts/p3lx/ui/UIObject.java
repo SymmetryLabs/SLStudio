@@ -360,9 +360,10 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
 
     boolean isModulationSourceMapping() {
         return
-            this.ui.modulationSourceMapping &&
-            (this instanceof UIModulationSource) &&
-            ((UIModulationSource) this).getModulationSource() != null;
+            this.ui.modulationSourceMapping && (
+                ((this instanceof UIModulationSource) && ((UIModulationSource) this).getModulationSource() != null) ||
+                ((this instanceof UITriggerSource) && ((UITriggerSource) this).getTriggerSource() != null)
+            );
     }
 
     boolean isModulationTargetMapping() {
@@ -463,7 +464,13 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
             this.ui.setControlTarget((UIControlTarget) this);
             return;
         } else if (isModulationSourceMapping()) {
-            this.ui.mapModulationSource((UIModulationSource) this);
+            if (this instanceof UIModulationSource) {
+                this.ui.mapModulationSource((UIModulationSource) this);
+            } else if (this instanceof UITriggerSource) {
+                this.ui.mapTriggerSource((UITriggerSource) this);
+            } else {
+                throw new IllegalStateException("isModulationSourceMapping() was true but the element is not a modulation or trigger source: " + this);
+            }
             return;
         } else if (isModulationTargetMapping() && !isModulationSource()) {
             LXNormalizedParameter source = this.ui.getModulationSource().getModulationSource();
