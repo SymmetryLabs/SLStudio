@@ -29,6 +29,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import heronarts.lx.color.ColorParameter;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -53,6 +54,10 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     public final StringParameter label =
         new StringParameter("Label")
         .setDescription("The name of this component");
+
+    public final ColorParameter modulationColor =
+        new ColorParameter("Modulation Color", LXColor.hsb(Math.random() * 360, 100, 100))
+        .setDescription("The color used to indicate this modulation source");
 
     public final MutableParameter controlSurfaceSemaphore = (MutableParameter)
         new MutableParameter("Control-Surfaces", 0)
@@ -299,6 +304,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
     protected final static String KEY_ID = "id";
     protected final static String KEY_CLASS = "class";
+    protected final static String KEY_MODULATION_COLOR = "modulationColor";
     private final static String KEY_PARAMETERS = "parameters";
     public static final String KEY_COMPONENT_ID = "componentId";
     public static final String KEY_PARAMETER_PATH = "parameterPath";
@@ -325,6 +331,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
 
         obj.addProperty(KEY_ID, this.id);
         obj.addProperty(KEY_CLASS, getClass().getName());
+        obj.addProperty(KEY_MODULATION_COLOR, this.modulationColor.getColor());
         obj.add(KEY_PARAMETERS, parameters);
     }
 
@@ -332,6 +339,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     public void load(LX lx, JsonObject obj) {
         if (obj.has(KEY_ID)) {
             lx.componentRegistry.setId(this, obj.get(KEY_ID).getAsInt());
+        }
+        if (obj.has(KEY_MODULATION_COLOR)) {
+            this.modulationColor.setColor(obj.get(KEY_MODULATION_COLOR).getAsInt());
         }
         if (obj.has(KEY_PARAMETERS)) {
             JsonObject parameters = obj.getAsJsonObject(KEY_PARAMETERS);

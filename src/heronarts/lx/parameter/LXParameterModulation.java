@@ -24,15 +24,23 @@ import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.color.ColorParameter;
 
 public abstract class LXParameterModulation extends LXComponent {
 
     private final LXParameter source;
     private final LXParameter target;
 
+    public final ColorParameter color;
+
+    // Hack so that Processing IDE can access it...
+    public final ColorParameter clr;
+
     protected LXParameterModulation(LXParameter source, LXParameter target) {
         this.source = source;
         this.target = target;
+        this.color = (source instanceof LXComponent) ? ((LXComponent) source).modulationColor : source.getComponent().modulationColor;
+        this.clr = this.color;
     }
 
     @Override

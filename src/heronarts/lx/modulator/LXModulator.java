@@ -22,8 +22,6 @@ package heronarts.lx.modulator;
 
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXRunnableComponent;
-import heronarts.lx.color.ColorParameter;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.LXParameter;
 
@@ -42,13 +40,6 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
 
     private Polarity polarity = Polarity.UNIPOLAR;
 
-    public final ColorParameter color =
-        new ColorParameter("Modulation Color", LXColor.hsb(Math.random() * 360, 100, 100))
-        .setDescription("The color used to indicate this modulation source");
-
-    // Hack so that Processing IDE can access it...
-    public final ColorParameter clr = this.color;
-
     private String description = null;
 
     /**
@@ -64,7 +55,6 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
      */
     protected LXModulator(String label) {
         this.label.setValue((label == null) ? getClass().getSimpleName() : label);
-        addParameter("color", this.color);
     }
 
     public String getOscAddress() {
