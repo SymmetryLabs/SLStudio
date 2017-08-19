@@ -13,7 +13,6 @@ final static float FEET = 12*INCHES;
 
 public SLStudio lx;
 public CubesModel model;
-public LXModel currModel;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
@@ -29,6 +28,7 @@ void setup() {
 
   int switchModel = 1;
 
+  LXModel currModel;
   if (switchModel == 0) {
     model = buildModel();
     currModel = model;
