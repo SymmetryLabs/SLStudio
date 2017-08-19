@@ -258,7 +258,10 @@ public class UIRightPane extends UIPane {
             }
         }
         if (create) {
-            LXComponent component = (parameter instanceof LXComponent) ? (LXComponent) parameter : parameter.getComponent();
+            LXComponent component = parameter.getComponent();
+            if (component == this.lx.engine.modulation && (parameter instanceof LXComponent)) {
+                component = (LXComponent) parameter;
+            }
             return (UIModulator) new UIComponentModulator(this.ui, this.lx, component, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
         }
         return null;
