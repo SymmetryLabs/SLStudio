@@ -24,6 +24,7 @@ import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.LXModulationEngine;
 import heronarts.lx.color.ColorParameter;
 
 public abstract class LXParameterModulation extends LXComponent {
@@ -39,7 +40,12 @@ public abstract class LXParameterModulation extends LXComponent {
     protected LXParameterModulation(LXParameter source, LXParameter target) {
         this.source = source;
         this.target = target;
-        this.color = (source instanceof LXComponent) ? ((LXComponent) source).modulationColor : source.getComponent().modulationColor;
+        LXComponent component = source.getComponent();
+        if (component instanceof LXModulationEngine) {
+            this.color = ((LXComponent) source).modulationColor;
+        } else {
+            this.color = component.modulationColor;
+        }
         this.clr = this.color;
     }
 
