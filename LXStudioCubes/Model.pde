@@ -37,10 +37,11 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
+  public final List<RubrikLogo> logos;
   public final PhotoBoothWall photoBoothWall;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, PhotoBoothWall photoBoothWall) {
-    super(new Fixture(cubeArr, strips));
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<RubrikLogo> logos, PhotoBoothWall photoBoothWall) {
+    super(new Fixture(cubeArr, strips, logos));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -68,9 +69,11 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips)
+    for (Strip strip : strips) {
       stripList.add(strip);
+    }
 
+    this.logos = logos;
     this.photoBoothWall = photoBoothWall;
 
     this.towers    = Collections.unmodifiableList(towerList);
@@ -81,7 +84,7 @@ public static class SLModel extends LXModel {
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(Cube[] cubeArr, List<Strip> strips, List<RubrikLogo> logos) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -91,6 +94,11 @@ public static class SLModel extends LXModel {
       } 
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
+          this.points.add(point);
+        }
+      }
+      for (RubrikLogo logo : logos) {
+        for (LXPoint point : logo.points) {
           this.points.add(point);
         }
       }
@@ -457,9 +465,9 @@ public static class Strip extends LXModel {
 
   private static class Fixture extends LXAbstractFixture {
     private Fixture(Metrics metrics, float ry, LXTransform transform) {
-      float offset = (metrics.length - (metrics.numPoints - 1) * metrics.POINT_SPACING) / 2.f;
+      //float offset = (metrics.length - (metrics.numPoints - 1) * metrics.POINT_SPACING) / 2.f;
       transform.push();
-      transform.translate(offset, -Cube.CHANNEL_WIDTH/2.f, 0);
+      //transform.translate(offset, -Cube.CHANNEL_WIDTH/2.f, 0);
       for (int i = 0; i < metrics.numPoints; i++) {
         LXPoint point = new LXPoint(transform.x(), transform.y(), transform.z());
         this.points.add(point);

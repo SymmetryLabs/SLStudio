@@ -24,6 +24,7 @@
 // 2) Make a test pattern that does the following
 //    a) shows orientation of all strips (indicates what side controller is on)
 //    b) shows four different colors to showcase orientation on tables
+// 3) Figure out nice way of handling ids on logos and outputing
 
 // Global Transformations
 static final float globalOffsetX = 0;
@@ -74,6 +75,34 @@ static final int NUM_PHOTO_STRIPS = 16;
 static final float PHOTO_HEIGHT = PHOTO_NUM_POINTS * PHOTO_PIXEL_PITCH;
 static final float PHOTO_WIDTH = NUM_PHOTO_STRIPS * PHOTO_STRIP_SPACING;
 
+/* Rubrik Logos ---------------------------------------------------------------------------------------------------------------------*/
+static final RubrikLogoConfig[] RUBRIK_LOGOS_CONFIG = {
+  /* Notes
+   * { topLeftId, topRightId, rightTopId, rightBottomId... and so on clockwise }, { x, y, z }, { xRot, yRot, zRot }
+   * ^ Refer to wiring diagram given by Tim
+   */
+  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { OUTER_WIDTH/2-20, 0, -250 }, new float[] { 0, 0, 0 }),
+  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { 80, 0, -OUTER_WIDTH/2+20 }, new float[] { 0, 90, 0 }),
+  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { 250, 0, -OUTER_WIDTH/2-20 }, new float[] { 0, -90, 0 }),
+  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { OUTER_WIDTH/2+20, 0, -72 }, new float[] { 0, 180, 0 }),
+};
+/* -----------------------------------------------------------------------------------------------------------------------------------*/
+
+/* Tables ----------------------------------------------------------------------------------------------------------------------------*/
+static final TableConfig[] TABLE_CONFIG = {
+    /* Notes
+     * { leftTopId, leftBottomId, rightTopId, rightBottomId }, { x, y, z }, yRototation
+     */
+
+    // check the orientation of these by going to the "TestMapping" pattern
+    // each of the four strips should light up in the following order (red, green, blue, white)
+    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0,            0 }, -45),
+    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0,            0 },  45),
+    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0, -OUTER_WIDTH }, -45),
+    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0, -OUTER_WIDTH },  45)
+};
+/* -----------------------------------------------------------------------------------------------------------------------------------*/
+
 /* Photo Booth ----------------------------------------------------------------------------------------------------------------------*/
 static final float photoBoothOffsetX = OUTER_WIDTH/2 - PHOTO_WIDTH/2;
 static final float photoBoothOffsetY = PHOTO_HEIGHT;
@@ -103,45 +132,6 @@ static final StripConfig[] PHOTO_BOOTH_STRIP_CONFIG = {
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
-/* Tables ----------------------------------------------------------------------------------------------------------------------------*/
-static final TableConfig[] TABLE_CONFIG = {
-    /* Notes
-     * { x, y, z }, yRototation, { leftTopId, leftBottomId, rightTopId, rightBottomId }
-     *
-     */
-
-    // check the orientation of these by going to the "TestMapping" pattern
-    // each of the four strips should light up in the following order (red, green, blue, white)
-    new TableConfig(new float[] { 0,           0,            0 }, -45, new String[] { "0", "0", "0", "0" }),
-    new TableConfig(new float[] { OUTER_WIDTH, 0,            0 },  45, new String[] { "0", "0", "0", "0" }),
-    new TableConfig(new float[] { OUTER_WIDTH, 0, -OUTER_WIDTH }, -45, new String[] { "0", "0", "0", "0" }),
-    new TableConfig(new float[] { 0,           0, -OUTER_WIDTH },  45, new String[] { "0", "0", "0", "0" })
-};
-
-static class TableConfig {
-  float x;
-  float y;
-  float z;
-  float xRot;
-  float yRot;
-  float zRot;
-  StripConfig[] stripConfigs = new StripConfig[4];
-
-  TableConfig(float[] coordinates, float yRot, String[] ids) {
-    this.x = coordinates[0];
-    this.y = coordinates[1];
-    this.z = coordinates[2];
-    this.xRot = 0;
-    this.yRot = yRot;
-    this.zRot = 0;
-
-    this.stripConfigs[0] = new StripConfig(ids[0], new float[] { 0,            0,              0 }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
-    this.stripConfigs[1] = new StripConfig(ids[1], new float[] { 0,            0, -STRIP_SPACING }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
-    this.stripConfigs[2] = new StripConfig(ids[2], new float[] { TABLE_LENGTH, 0,              0 }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
-    this.stripConfigs[3] = new StripConfig(ids[3], new float[] { TABLE_LENGTH, 0, -STRIP_SPACING }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
-  }
-};
-/* -----------------------------------------------------------------------------------------------------------------------------------*/
 
 /* Ceiling ---------------------------------------------------------------------------------------------------------------------------*/
 static final float ceilingOffsetX = 0;
@@ -264,6 +254,42 @@ static final StripConfig[] PILLAR_CONFIG = {
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
+static class RubrikLogoConfig {
+  String[] ids;
+  float[] coordinates;
+  float[] rotations;
+
+  RubrikLogoConfig(String[] ids, float[] coordinates, float[] rotations) {
+    this.ids = ids;
+    this.coordinates = coordinates;
+    this.rotations = rotations;
+  }
+}
+
+static class TableConfig {
+  float x;
+  float y;
+  float z;
+  float xRot;
+  float yRot;
+  float zRot;
+  StripConfig[] stripConfigs = new StripConfig[4];
+
+  TableConfig(String[] ids, float[] coordinates, float yRot) {
+    this.x = coordinates[0];
+    this.y = coordinates[1];
+    this.z = coordinates[2];
+    this.xRot = 0;
+    this.yRot = yRot;
+    this.zRot = 0;
+
+    this.stripConfigs[0] = new StripConfig(ids[0], new float[] { 0,            0,              0 }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
+    this.stripConfigs[1] = new StripConfig(ids[1], new float[] { 0,            0, -STRIP_SPACING }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
+    this.stripConfigs[2] = new StripConfig(ids[2], new float[] { TABLE_LENGTH, 0,              0 }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
+    this.stripConfigs[3] = new StripConfig(ids[3], new float[] { TABLE_LENGTH, 0, -STRIP_SPACING }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
+  }
+};
+
 static class StripConfig {
   String id;
   int numPoints;
@@ -367,7 +393,14 @@ public SLModel buildModel() {
   }
   globalTransform.pop();
 
-  // Tables
+  // Rubrik Logos (Real models)
+  List<RubrikLogo> logos = new ArrayList<RubrikLogo>();
+
+  for (RubrikLogoConfig logoConfig : RUBRIK_LOGOS_CONFIG) {
+    logos.add(new RubrikLogo(logoConfig.ids, logoConfig.coordinates, logoConfig.rotations, globalTransform));
+  }
+
+  // Tables (Make a into a real model)
   for (TableConfig tableConfig : TABLE_CONFIG) {
     globalTransform.push();
     globalTransform.translate(tableConfig.x, tableConfig.y, tableConfig.z);
@@ -391,7 +424,7 @@ public SLModel buildModel() {
     globalTransform.pop();
   }
 
-  // Photobooth
+  // Photobooth (Make into a real model)
   globalTransform.push();
   globalTransform.translate(photoBoothOffsetX, photoBoothOffsetY, photoBoothOffsetZ);
   globalTransform.rotateX(photoBoothRotationX * PI / 180.);
@@ -426,7 +459,7 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips, photoBoothWall);
+  return new SLModel(towers, allCubesArr, strips, logos, photoBoothWall);
 }
 
 public SLModel getModel() {

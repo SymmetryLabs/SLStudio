@@ -14,6 +14,15 @@ public class StripOrientation extends SLPattern {
         colors[p.index] = lx.hsb(0, 100, b);
       }
     }
+    for (RubrikLogo logo : model.logos) {
+      for (Box box : logo.boxes) {
+        int i = 0;
+        for (LXPoint p : box.points) {
+          float b = i++ > 3 ? 0 : 100;
+          colors[p.index] = lx.hsb(0, 100, b);
+        }
+      }
+    }
   }
 }
 
