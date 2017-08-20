@@ -255,6 +255,11 @@ private class ColorMappingClientState {
 
     rgbChars = rgbChars.toLowerCase();
 
+    if (rgbChars.equals("rgb")) {
+      needToCallGetPixelColor = false;
+      return LXColor.scaleBrightness(LXColor.WHITE, 0.5);
+    }
+
     int c = LXColor.BLACK;
 
     // TODO Allow different brightness?
@@ -270,6 +275,8 @@ private class ColorMappingClientState {
     if (rgbChars.indexOf("b") >= 0) {
       c |= LXColor.BLUE;
     }
+
+    c = LXColor.scaleBrightness(c, 0.5);
 
     // Now that we've called getPixelColor and gotten a color that was
     // relevant to the current request, we can send a response to the

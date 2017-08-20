@@ -225,9 +225,17 @@ class SLController extends LXOutput {
       }
     }
 
-    // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-    // TODO: refactor here
-    if (mappingMode != null && mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+    if (automappingController.enabled.isOn()) {
+      for (int i = 0; i < numPixels; i++) {
+        String mac = NetworkUtils.macAddrToString(networkDevice.macAddress);
+        color c = automappingController.getPixelColor(mac, i);
+        setPixel(i, c);
+      }
+    } else if (mappingMode != null &&
+               mappingMode.enabled.isOn() &&
+               !mappingMode.isFixtureMapped(cubeId)) {
+      // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+      // TODO: refactor here
       if (mappingMode.inUnMappedMode()) {
         if (mappingMode.inDisplayAllMode()) {
           color col = mappingMode.getUnMappedColor();
@@ -248,14 +256,6 @@ class SLController extends LXOutput {
       } else {
         for (int i = 0; i < numPixels; i++)
           setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-      }
-    }
-
-    if (automappingController.enabled.isOn()) {
-      for (int i = 0; i < numPixels; i++) {
-        String mac = NetworkUtils.macAddrToString(networkDevice.macAddress);
-        color c = automappingController.getPixelColor(mac, i);
-        setPixel(i, c);
       }
     }
 
