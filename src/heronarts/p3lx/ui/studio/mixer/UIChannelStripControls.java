@@ -51,9 +51,9 @@ public class UIChannelStripControls extends UIMixerStripControls {
     private static final int TITLE_MARGIN = 4;
 
     private final LXChannel channel;
-    private final UITextBox channelName;
     private final UIButton activeButton;
     private final UISlider fader;
+    final UITextBox channelName;
 
     private class MidiIndicator extends UI2dComponent implements LXChannel.MidiListener {
 
@@ -99,14 +99,14 @@ public class UIChannelStripControls extends UIMixerStripControls {
         super(ui, lx, channel);
         this.channel = channel;
 
-        this.channelName = new UITextBox(TITLE_MARGIN, TITLE_MARGIN-1, this.width-2*TITLE_MARGIN, 14);
-        this.channelName
-        .setParameter(channel.label)
-        .setBorder(false)
-        .setBackground(false)
-        .setFont(ui.theme.getLabelFont())
-        .setFontColor(ui.theme.getControlTextColor())
-        .addToContainer(this);
+        this.channelName = (UITextBox)
+            new UITextBox(TITLE_MARGIN, TITLE_MARGIN-1, this.width-2*TITLE_MARGIN, 14)
+            .setParameter(channel.label)
+            .setBorder(false)
+            .setBackground(false)
+            .setFont(ui.theme.getLabelFont())
+            .setFontColor(ui.theme.getControlTextColor())
+            .addToContainer(this);
 
         float yp = ACTIVE_BUTTON_Y;
 

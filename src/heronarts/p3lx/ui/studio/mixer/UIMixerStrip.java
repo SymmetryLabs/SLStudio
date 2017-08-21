@@ -57,4 +57,8 @@ public abstract class UIMixerStrip extends UI2dContainer {
         this.controls = (UIMixerStripControls) new UIChannelStripControls(ui, lx, channel).addToContainer(this);
     }
 
+    protected UIMixer getMixer() {
+        return (UIMixer) getParent();
+    }
+
 }

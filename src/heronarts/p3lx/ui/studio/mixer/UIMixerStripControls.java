@@ -76,6 +76,14 @@ public abstract class UIMixerStripControls extends UI2dContainer {
         });
     }
 
+    protected UIMixer getMixer() {
+        return getMixerStrip().getMixer();
+    }
+
+    protected UIMixerStrip getMixerStrip() {
+        return (UIMixerStrip) getParent();
+    }
+
     protected void setBackground() {
         if (lx.engine.getFocusedChannel() == this.bus) {
             setBackgroundColor(this.ui.theme.getDeviceFocusedBackgroundColor());
@@ -105,11 +113,13 @@ public abstract class UIMixerStripControls extends UI2dContainer {
                 if (lx.engine.focusedChannel.getValuei() > 0) {
                     consumeKeyEvent();
                     this.lx.engine.focusedChannel.decrement();
+                    getMixer().focusStrip(this.lx.engine.getFocusedChannel());
                 }
             } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
                 if (lx.engine.focusedChannel.getValuei() < lx.engine.focusedChannel.getRange() - 1) {
                     consumeKeyEvent();
                     this.lx.engine.focusedChannel.increment();
+                    getMixer().focusStrip(this.lx.engine.getFocusedChannel());
                 }
             }
         }
