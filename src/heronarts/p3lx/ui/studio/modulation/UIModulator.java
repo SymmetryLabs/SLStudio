@@ -183,36 +183,37 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
             gateButton.addToContainer(this);
         }
 
-        final UIButton mapButton = new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING, MAP_WIDTH, 12) {
-            @Override
-            public void onToggle(boolean on) {
-                if (on) {
-                    UIModulationSource modulationSource = getModulationSourceUI();
-                    if (modulationSource != null) {
-                        ui.mapModulationSource(modulationSource);
+        if (isModulator) {
+            final UIButton mapButton = (UIButton) new UIButton(this.width - 2*PADDING - MAP_WIDTH - COLOR_WIDTH, PADDING, MAP_WIDTH, 12) {
+                @Override
+                public void onToggle(boolean on) {
+                    if (on) {
+                        UIModulationSource modulationSource = getModulationSourceUI();
+                        if (modulationSource != null) {
+                            ui.mapModulationSource(modulationSource);
+                        } else {
+                            lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                        }
                     } else {
-                        lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+                        ui.mapModulationSource(null);
                     }
-                } else {
-                    ui.mapModulationSource(null);
                 }
             }
-        };
-        mapButton
-        .setIcon(ui.theme.iconMap)
-        .setDescription("Map: select a new target for this modulation source")
-        .addToContainer(this);
+            .setIcon(ui.theme.iconMap)
+            .setDescription("Map: select a new target for this modulation source")
+            .addToContainer(this);
+
+            lx.engine.mapping.mode.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.OFF || lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
+                        mapButton.setActive(false);
+                    }
+                }
+            });
+        }
 
         new UIColorBox(ui, this.component.modulationColor, this.width - PADDING - COLOR_WIDTH, PADDING + 1, COLOR_WIDTH, COLOR_WIDTH)
         .addToContainer(this);
-
-        lx.engine.mapping.mode.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter p) {
-                if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.OFF || lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
-                    mapButton.setActive(false);
-                }
-            }
-        });
 
         this.content = new UI2dContainer(PADDING, CONTENT_Y, width-2*PADDING, h) {
             @Override
