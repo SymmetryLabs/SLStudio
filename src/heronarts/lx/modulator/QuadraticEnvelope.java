@@ -139,7 +139,7 @@ public class QuadraticEnvelope extends LXRangeModulator {
             if (basis < 0.5) {
                 return .5 * Math.pow(2*basis, exponent);
             } else {
-                return .5 + .5 * Math.pow(1 - 2 * (basis - 0.5), exponent);
+                return .5 + .5 * (1 - Math.pow(1 - 2 * (basis - 0.5), exponent));
             }
         }
         return 0;
