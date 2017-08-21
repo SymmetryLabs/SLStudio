@@ -67,10 +67,10 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
     public LXAudioOutput(LX lx) {
         super(lx, "Audio Output");
         this.format = STEREO;
-        addParameter("play", this.play);
+        addParameter("file", this.file);
         addParameter("trigger", this.trigger);
         addParameter("looping", this.looping);
-        addParameter("file", this.file);
+        addParameter("play", this.play);
     }
 
     public String getOscAddress() {
