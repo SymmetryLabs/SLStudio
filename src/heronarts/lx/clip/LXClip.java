@@ -316,7 +316,7 @@ public abstract class LXClip extends LXRunnableComponent implements LXComponent.
 
     protected void loadLane(LX lx, String laneType, JsonObject laneObj) {
         if (laneType.equals(LXClipLane.VALUE_LANE_TYPE_PARAMETER)) {
-            LXComponent component = lx.getComponent(laneObj.get(KEY_COMPONENT_ID).getAsInt());
+            LXComponent component = lx.getProjectComponent(laneObj.get(KEY_COMPONENT_ID).getAsInt());
             String path = laneObj.get(KEY_PARAMETER_PATH).getAsString();
             LXParameter parameter = component.getParameter(path);
             LXClipLane lane = getParameterLane((LXNormalizedParameter) parameter, true);

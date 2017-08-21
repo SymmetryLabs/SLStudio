@@ -57,7 +57,7 @@ public abstract class LXMidiMapping implements LXSerializable {
             lx,
             object.get(KEY_CHANNEL).getAsInt(),
             type,
-            lx.getComponent(object.get(LXComponent.KEY_COMPONENT_ID).getAsInt()).getParameter(object.get(LXComponent.KEY_PARAMETER_PATH).getAsString())
+            lx.getProjectComponent(object.get(LXComponent.KEY_COMPONENT_ID).getAsInt()).getParameter(object.get(LXComponent.KEY_PARAMETER_PATH).getAsString())
         );
     }
 

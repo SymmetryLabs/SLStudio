@@ -271,8 +271,8 @@ public class LX {
         return this;
     }
 
-    public LXComponent getComponent(int id) {
-        return this.componentRegistry.get(id);
+    public LXComponent getProjectComponent(int projectId) {
+        return this.componentRegistry.getProjectComponent(projectId);
     }
 
     /**
@@ -681,6 +681,7 @@ public class LX {
             new GsonBuilder().create().toJson(obj, writer);
             writer.close();
             System.out.println("Project saved successfully to " + file.toString());
+            this.componentRegistry.resetProject();
             setProject(file, ProjectListener.Change.SAVE);
         } catch (IOException iox) {
             System.err.println(iox.getLocalizedMessage());
@@ -688,6 +689,7 @@ public class LX {
     }
 
     public void newProject() {
+        this.componentRegistry.resetProject();
         this.engine.load(this, new JsonObject());
         setProject(null, ProjectListener.Change.NEW);
     }
@@ -726,6 +728,7 @@ public class LX {
             try {
                 fr = new FileReader(file);
                 JsonObject obj = new Gson().fromJson(fr, JsonObject.class);
+                this.componentRegistry.resetProject();
                 this.componentRegistry.setIdCounter(getMaxId(obj, this.componentRegistry.getIdCounter()) + 1);
                 this.engine.load(this, obj.getAsJsonObject(KEY_ENGINE));
                 if (obj.has(KEY_EXTERNALS)) {

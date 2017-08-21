@@ -59,9 +59,9 @@ public abstract class LXParameterModulation extends LXComponent {
 
     protected static LXParameter getParameter(LX lx, JsonObject obj) {
         if (obj.has(KEY_ID)) {
-            return (LXParameter) lx.getComponent(obj.get(KEY_ID).getAsInt());
+            return (LXParameter) lx.getProjectComponent(obj.get(KEY_ID).getAsInt());
         }
-        LXComponent component = lx.getComponent(obj.get(KEY_COMPONENT_ID).getAsInt());
+        LXComponent component = lx.getProjectComponent(obj.get(KEY_COMPONENT_ID).getAsInt());
         String path = obj.get(KEY_PARAMETER_PATH).getAsString();
         return component.getParameter(path);
     }

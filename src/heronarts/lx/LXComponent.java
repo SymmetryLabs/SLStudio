@@ -69,9 +69,20 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     static class Registry {
         private int idCounter = ID_ENGINE+1;
         private final Map<Integer, LXComponent> components = new HashMap<Integer, LXComponent>();
+        private final Map<Integer, LXComponent> projectIdMap = new HashMap<Integer, LXComponent>();
 
-        LXComponent get(int id) {
-            return this.components.get(id);
+        LXComponent getProjectComponent(int projectId) {
+            // Check first in the project ID map, there may be another layer of
+            // indirection if the engine components have changed underneath us
+            LXComponent component = this.projectIdMap.get(projectId);
+            if (component == null) {
+                component = this.components.get(projectId);
+            }
+            return component;
+        }
+
+        void resetProject() {
+            this.projectIdMap.clear();
         }
 
         void register(LXComponent component) {
@@ -94,18 +105,25 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             this.idCounter = idCounter;
         }
 
-        void setId(LXComponent component, int id) {
+        void registerId(LXComponent component, int id) {
             if (id <= 0) {
                 throw new IllegalArgumentException("Cannot setId to non-positive value: " + id + " " + component);
             }
-            if (component.id > 0) {
-                this.components.remove(component.id);
+            if (component.id == id) {
+                return;
             }
             if (this.components.containsKey(id)) {
-                throw new IllegalArgumentException("Component id already in use: " + id + " (requesting: " + component + ") (owner: " + this.components.get(id) + ")");
+                // Check for an ID collision, which can happen if the engine
+                // has new components, for instance. In that case record in a map
+                // what the IDs in the project file refer to.
+                this.projectIdMap.put(id, component);
+            } else {
+                if (component.id > 0) {
+                    this.components.remove(component.id);
+                }
+                component.id = id;
+                this.components.put(id, component);
             }
-            component.id = id;
-            this.components.put(id, component);
         }
 
         void dispose(LXComponent component) {
@@ -338,7 +356,7 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
     @Override
     public void load(LX lx, JsonObject obj) {
         if (obj.has(KEY_ID)) {
-            lx.componentRegistry.setId(this, obj.get(KEY_ID).getAsInt());
+            lx.componentRegistry.registerId(this, obj.get(KEY_ID).getAsInt());
         }
         if (obj.has(KEY_MODULATION_COLOR)) {
             this.modulationColor.setColor(obj.get(KEY_MODULATION_COLOR).getAsInt());
