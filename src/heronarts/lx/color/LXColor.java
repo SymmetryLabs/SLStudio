@@ -320,6 +320,7 @@ public class LXColor {
      * @param s Factor by which to scale brightness
      * @return Array of new color values
      */
+    @Deprecated
     public static int[] scaleBrightness(int[] rgbs, float s) {
         int[] result = new int[rgbs.length];
         scaleBrightness(rgbs, s, result);
@@ -333,6 +334,7 @@ public class LXColor {
      * @param s Factor by which to scale brightness
      * @param result Array to write results into, if null, input array is modified
      */
+    @Deprecated
     public static void scaleBrightness(int[] rgbs, float s, int[] result) {
         int r, g, b, rgb;
         float[] hsb = new float[3];
@@ -356,6 +358,7 @@ public class LXColor {
      * @param s Factory by which to scale brightness
      * @return New color
      */
+    @Deprecated
     public static int scaleBrightness(int rgb, float s) {
         int r = (rgb & RED_MASK) >> RED_SHIFT;
         int g = (rgb & GREEN_MASK) >> GREEN_SHIFT;
