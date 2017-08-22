@@ -23,8 +23,9 @@
 // 1) Make groups on model for each component of the model
 // 2) Make a test pattern that does the following
 //    a) shows orientation of all strips (indicates what side controller is on)
-//    b) shows four different colors to showcase orientation on tables
+//    b) shows four different colors to showcase orientation on desks
 // 3) Figure out nice way of handling ids on logos and outputing
+// 4) Put proper dimensions in for DESK_WIDTH, etc...
 
 // Global Transformations
 static final float globalOffsetX = 0;
@@ -55,16 +56,22 @@ static final float INNER_WIDTH = (STANDARD_STRIP_LENGTH*2) + (INNER_SHORT_STRIP_
 static final float INNER_PADDING = (OUTER_WIDTH - INNER_WIDTH) / 2.f;
 
 // Pillar Constants
-static final float PILLAR_HEIGHT = (STANDARD_STRIP_LENGTH*6);
+static final float PILLAR_HEIGHT = (STANDARD_STRIP_LENGTH*5);
 static final float PILLAR_WIDTH = INNER_WIDTH;
 
-// Table Constants
-static final float TABLE_WIDTH = 35;
-static final float TABLE_HEIGHT = 35;
-static final float TABLE_LENGTH = 60;
+// Desk Constants
+static final int DESK_VERTICAL_NUM_POINTS = 50;
+static final int DESK_HORIZONTAL_NUM_POINTS = 9;
 
-static final float STRIP_SPACING = 5;
-static final int TABLE_NUM_POINTS = STANDARD_NUM_POINTS - 14;
+static final float DESK_WIDTH = 35;
+static final float DESK_HEIGHT = DESK_VERTICAL_NUM_POINTS * DEFAULT_PIXEL_PITCH;
+static final float DESK_LENGTH = 40;
+
+static final float DESK_STRIP_SPACING = 5;
+static final int DESK_NUM_POINTS = STANDARD_NUM_POINTS - 14;
+
+// Logo Constants
+static final float LOGO_RIGGING_HEIGHT = 160;
 
 // Photobooth Constants
 static final int PHOTO_NUM_POINTS = 240;
@@ -77,35 +84,76 @@ static final float PHOTO_WIDTH = NUM_PHOTO_STRIPS * PHOTO_STRIP_SPACING;
 
 /* Rubrik Logos ---------------------------------------------------------------------------------------------------------------------*/
 static final RubrikLogoConfig[] RUBRIK_LOGOS_CONFIG = {
-  /* Notes
-   * { topLeftId, topRightId, rightTopId, rightBottomId... and so on clockwise }, { x, y, z }, { xRot, yRot, zRot }
-   * ^ Refer to wiring diagram given by Tim
+  /* (Notes)
+   * Refer to wiring diagram from Tim... (as far as what the terms (top, left), (right, bottom) and such mean
+   * Turn on the RubrikTestPattern to show the colors in both the visualizer and on the structure.
+   * Use the RubrikTestPattern to compare the visualizer to the physical logo to make sure it's mapped/oriented correctly.
+   *
+   * RubrikLogoConfig ordering:
+   *    { controller ids... }, { x, y, z }, { xRot, yRot, zRot }
+   *
+   * The ids go in the following order:
+   * (Top, Left: RED)
+   * (Top, Right: BLUE)
+   * (Right, Top: GREEN)
+   * (Right, Bottom: ORANGE)
+   * (Bottom, Right: DARKER PURPLE)
+   * (Bottom, Left: TEAL)
+   * (Left, Bottom: YELLOW)
+   * (Left, Top: LIGHTER PURPLE)
    */
-  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { OUTER_WIDTH/2-20, 0, -250 }, new float[] { 0, 0, 0 }),
-  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { 80, 0, -OUTER_WIDTH/2+20 }, new float[] { 0, 90, 0 }),
-  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { 250, 0, -OUTER_WIDTH/2-20 }, new float[] { 0, -90, 0 }),
-  new RubrikLogoConfig(new String[] { "0", "0", "0", "0", "0", "0", "0", "0" }, new float[] { OUTER_WIDTH/2+20, 0, -72 }, new float[] { 0, 180, 0 }),
+
+  new RubrikLogoConfig(
+    new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
+    new float[] { OUTER_WIDTH/2-20, LOGO_RIGGING_HEIGHT, -250 },
+    new float[] { 0, 0, 0 }
+  ),
+
+  new RubrikLogoConfig(
+    new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
+    new float[] { 80, LOGO_RIGGING_HEIGHT, -OUTER_WIDTH/2+20 },
+    new float[] { 0, 90, 0 }
+  ),
+
+  new RubrikLogoConfig(
+    new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
+    new float[] { 250, LOGO_RIGGING_HEIGHT, -OUTER_WIDTH/2-20 },
+    new float[] { 0, -90, 0 }
+  ),
+
+  new RubrikLogoConfig(
+    new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
+    new float[] { OUTER_WIDTH/2+20, LOGO_RIGGING_HEIGHT, -72 },
+    new float[] { 0, 180, 0 }
+  ),
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
-/* Tables ----------------------------------------------------------------------------------------------------------------------------*/
-static final TableConfig[] TABLE_CONFIG = {
-    /* Notes
-     * { leftTopId, leftBottomId, rightTopId, rightBottomId }, { x, y, z }, yRototation
+/* Desks ----------------------------------------------------------------------------------------------------------------------------*/
+static final DeskConfig[] DESK_CONFIG = {
+    /* (Notes)
+     * Turn on the RubrikTestPattern to show the colors in both the visualizer and on the structure.
+     * Use the RubrikTestPattern to compare the visualizer to the physical desks to make sure they're mapped/oriented correctly.
+     *
+     * DeskConfig ordering: { controller ids }, { x, y, z }, yRot
+     *
+     * The ids go in the following order:
+     * (Left, Top: RED)
+     * (Left, Bottom: YELLOW)
+     * (Right, Top: GREEN)
+     * (Right, Bottom: BLUE)
      */
 
-    // check the orientation of these by going to the "TestMapping" pattern
-    // each of the four strips should light up in the following order (red, green, blue, white)
-    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0,            0 }, -45),
-    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0,            0 },  45),
-    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0, -OUTER_WIDTH }, -45),
-    new TableConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0, -OUTER_WIDTH },  45)
+    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0,            0 }, -45),
+    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0,            0 },  45),
+    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0, -OUTER_WIDTH }, -45),
+    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0, -OUTER_WIDTH },  45)
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
 /* Photo Booth ----------------------------------------------------------------------------------------------------------------------*/
 static final float photoBoothOffsetX = OUTER_WIDTH/2 - PHOTO_WIDTH/2;
-static final float photoBoothOffsetY = PHOTO_HEIGHT;
+static final float photoBoothOffsetY = 0;
 static final float photoBoothOffsetZ = -OUTER_WIDTH;
 
 static final float photoBoothRotationX = 0;
@@ -113,22 +161,29 @@ static final float photoBoothRotationY = 0;
 static final float photoBoothRotationZ = 0;
 
 static final StripConfig[] PHOTO_BOOTH_STRIP_CONFIG = {
-  new StripConfig("1",  new float[] {PHOTO_STRIP_SPACING*0,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("2",  new float[] {PHOTO_STRIP_SPACING*1,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("3",  new float[] {PHOTO_STRIP_SPACING*2,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("4",  new float[] {PHOTO_STRIP_SPACING*3,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("5",  new float[] {PHOTO_STRIP_SPACING*4,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("6",  new float[] {PHOTO_STRIP_SPACING*5,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("7",  new float[] {PHOTO_STRIP_SPACING*6,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("8",  new float[] {PHOTO_STRIP_SPACING*7,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("9",  new float[] {PHOTO_STRIP_SPACING*8,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("10", new float[] {PHOTO_STRIP_SPACING*9,  0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("11", new float[] {PHOTO_STRIP_SPACING*10, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("12", new float[] {PHOTO_STRIP_SPACING*11, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("13", new float[] {PHOTO_STRIP_SPACING*12, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("14", new float[] {PHOTO_STRIP_SPACING*13, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("15", new float[] {PHOTO_STRIP_SPACING*14, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("16", new float[] {PHOTO_STRIP_SPACING*15, 0, 0 }, new float[] { 0, 0, -90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  /* (Notes)
+   * StripConfig ordering: id, { x, y, z }, { xRot, yRot, zRot }, numPoints, pixelPitch }
+   *
+   * The order of these bars goes from left to right. But since the wall is double-sided, it doesn't matter too much...
+   * just make sure its orientated correctly on the y-axis when you map it.
+   */
+
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*0,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*1,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*2,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*3,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*4,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*5,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*6,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*7,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*8,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*9,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*10, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*11, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*12, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*13, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*14, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*15, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -266,27 +321,15 @@ static class RubrikLogoConfig {
   }
 }
 
-static class TableConfig {
-  float x;
-  float y;
-  float z;
-  float xRot;
-  float yRot;
-  float zRot;
-  StripConfig[] stripConfigs = new StripConfig[4];
+static class DeskConfig {
+  String[] ids;
+  float[] coordinates;
+  float[] rotations;
 
-  TableConfig(String[] ids, float[] coordinates, float yRot) {
-    this.x = coordinates[0];
-    this.y = coordinates[1];
-    this.z = coordinates[2];
-    this.xRot = 0;
-    this.yRot = yRot;
-    this.zRot = 0;
-
-    this.stripConfigs[0] = new StripConfig(ids[0], new float[] { 0,            0,              0 }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
-    this.stripConfigs[1] = new StripConfig(ids[1], new float[] { 0,            0, -STRIP_SPACING }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
-    this.stripConfigs[2] = new StripConfig(ids[2], new float[] { TABLE_LENGTH, 0,              0 }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
-    this.stripConfigs[3] = new StripConfig(ids[3], new float[] { TABLE_LENGTH, 0, -STRIP_SPACING }, new float[] { 0, 0, 90 }, TABLE_NUM_POINTS);
+  DeskConfig(String[] ids, float[] coordinates, float yRot) {
+    this.ids = ids;
+    this.coordinates = coordinates;
+    this.rotations = new float[] { 0, yRot, 0 };
   }
 };
 
@@ -352,6 +395,9 @@ public SLModel buildModel() {
   List<Strip> strips = new ArrayList<Strip>();
 
   // Ceiling
+  Ceiling ceiling;
+  List<Strip> ceilingStrips = new ArrayList<Strip>();
+
   globalTransform.push();
   globalTransform.translate(ceilingOffsetX, ceilingOffsetY, ceilingOffsetZ);
   globalTransform.rotateX(ceilingRotationX * PI / 180.);
@@ -367,12 +413,18 @@ public SLModel buildModel() {
     globalTransform.rotateY(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+    Strip strip = new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true);
+    strips.add(strip);
+    ceilingStrips.add(strip);
     globalTransform.pop();
   }
   globalTransform.pop();
+  ceiling = new Ceiling(ceilingStrips);
 
   // Pillar
+  Pillar pillar;
+  List<Strip> pillarStrips = new ArrayList<Strip>();
+
   globalTransform.push();
   globalTransform.translate(pillarOffsetX, pillarOffsetY, pillarOffsetZ);
   globalTransform.rotateX(pillarRotationX * PI / 180.);
@@ -388,10 +440,13 @@ public SLModel buildModel() {
     globalTransform.rotateY(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+    Strip strip = new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true);
+    strips.add(strip);
+    pillarStrips.add(strip);
     globalTransform.pop();
   }
   globalTransform.pop();
+  pillar = new Pillar(pillarStrips);
 
   // Rubrik Logos (Real models)
   List<RubrikLogo> logos = new ArrayList<RubrikLogo>();
@@ -400,28 +455,11 @@ public SLModel buildModel() {
     logos.add(new RubrikLogo(logoConfig.ids, logoConfig.coordinates, logoConfig.rotations, globalTransform));
   }
 
-  // Tables (Make a into a real model)
-  for (TableConfig tableConfig : TABLE_CONFIG) {
-    globalTransform.push();
-    globalTransform.translate(tableConfig.x, tableConfig.y, tableConfig.z);
-    globalTransform.rotateX(tableConfig.xRot * PI / 180.);
-    globalTransform.rotateY(tableConfig.yRot * PI / 180.);
-    globalTransform.rotateZ(tableConfig.zRot * PI / 180.);
+  // Desks (Real Models)
+  List<Desk> desks = new ArrayList<Desk>();
 
-    for (StripConfig stripConfig : tableConfig.stripConfigs) {
-        Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.pixelPitch);
-
-        globalTransform.push();
-        globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-        globalTransform.rotateX(stripConfig.xRot * PI / 180.);
-        globalTransform.rotateY(stripConfig.yRot * PI / 180.);
-        globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
-
-        strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
-        globalTransform.pop();
-    }
-
-    globalTransform.pop();
+  for (DeskConfig deskConfig : DESK_CONFIG) {
+    desks.add(new Desk(deskConfig.ids, deskConfig.coordinates, deskConfig.rotations, globalTransform));
   }
 
   // Photobooth (Make into a real model)
@@ -443,7 +481,7 @@ public SLModel buildModel() {
     globalTransform.rotateY(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    Strip strip = new Strip(metrics, stripConfig.yRot, globalTransform, true);
+    Strip strip = new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true);
     strips.add(strip);
     photoBoothStrips.add(strip);
     globalTransform.pop();
@@ -459,7 +497,7 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips, logos, photoBoothWall);
+  return new SLModel(towers, allCubesArr, strips, ceiling, pillar, logos, desks, photoBoothWall);
 }
 
 public SLModel getModel() {

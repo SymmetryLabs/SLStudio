@@ -1,27 +1,128 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
-public class StripOrientation extends SLPattern {
-  public StripOrientation(LX lx) {
+public class RubrikTestMapping extends SLPattern {
+  public RubrikTestMapping(LX lx) {
     super(lx);
   }
 
   public void run(double deltaMs) {
-    for (Strip s : model.strips) {
-      int i = 0;
-      for (LXPoint p : s.points) {
-        float b = i++ > 3 ? 0 : 100;
-        colors[p.index] = lx.hsb(0, 100, b);
+    // for (Strip s : model.strips) {
+    //   int i = 0;
+    //   for (LXPoint p : s.points) {
+    //     float b = i++ > 10 ? 0 : 100;
+    //     colors[p.index] = lx.hsb(0, 100, b);
+    //   }
+    // }
+
+    // Ceiling - outer strips
+    for (int i = 0; i < 7; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(0, 100, 100);
       }
     }
-    for (RubrikLogo logo : model.logos) {
-      for (Box box : logo.boxes) {
-        int i = 0;
-        for (LXPoint p : box.points) {
-          float b = i++ > 3 ? 0 : 100;
-          colors[p.index] = lx.hsb(0, 100, b);
-        }
+    for (int i = 7; i < 14; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(100, 100, 100);
       }
+    }
+    for (int i = 14; i < 21; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(200, 100, 100);
+      }
+    }
+    for (int i = 21; i < 28; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(300, 100, 100);
+      }
+    }
+
+    // Ceiling - inner strips
+    for (int i = 28; i < 31; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(0, 100, 100);
+      }
+    }
+    for (int i = 31; i < 34; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(300, 100, 100);
+      }
+    }
+    for (int i = 34; i < 37; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(200, 100, 100);
+      }
+    }
+    for (int i = 37; i < 40; i++) {
+      Strip strip = model.ceiling.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(100, 100, 100);
+      }
+    }
+
+    // Pillar
+    for (int i = 0; i < 6; i++) {
+      Strip strip = model.pillar.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(0, 100, 100);
+      }
+    }
+    for (int i = 6; i < 12; i++) {
+      Strip strip = model.pillar.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(100, 100, 100);
+      }
+    }
+    for (int i = 12; i < 18; i++) {
+      Strip strip = model.pillar.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(200, 100, 100);
+      }
+    }
+    for (int i = 18; i < 24; i++) {
+      Strip strip = model.pillar.strips.get(i);
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(300, 100, 100);
+      }
+    }
+
+    // Rubrik Logo
+    // Color each output group
+    for (RubrikLogo logo : model.logos) {
+      float hue = 0;
+      for (OutputGroup outputGroup : logo.outputGroups) {
+        for (LXPoint p : outputGroup.points) {
+          colors[p.index] = lx.hsb(hue%360, 100, 100);
+        }
+        hue += 250;
+      }
+    }
+
+    // Desks
+    for (Desk desk : model.desks) {
+      int hue = 0;
+      for (OutputGroup og : desk.outputGroups) {
+        for (LXPoint p : og.points) {
+          colors[p.index] = lx.hsb(hue, 100, 100);
+        }
+        hue += 72;
+      }
+    }
+
+    // Photobooth
+    int photoBoothHue = 0;
+    for (Strip strip : model.photoBoothWall.strips) {
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(photoBoothHue, 100, 100);
+      } 
+      photoBoothHue += 10;
     }
   }
 }

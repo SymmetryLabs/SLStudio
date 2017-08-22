@@ -182,39 +182,87 @@ class SLController extends LXOutput {
     // Use the mac address to find the cube if we have it
     // Otherwise use the cube id
     Cube cube = null;
-    if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
-      cube = model.cubes.get(0);
+    Strip strip = null;
+    OutputGroup outputGroup = null;
+
+    if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.strips.size() > 0) {
+      strip = model.strips.get(0);
     } else {
       for (Cube c : model.cubes) {
         if (c.id != null && c.id.equals(cubeId)) {
           cube = c;
+        }
+      }
+      for (Strip s : model.strips) {
+        if (s.id != null && s.id.equals(cubeId)) {
+          strip = s;
           break;
         }
       }
-    }
-
-    // Initialize packet data base on cube type.
-    // If we don't know the cube type, default to
-    // using the cube type with the most pixels
-    Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-    int numPixels = cubeType.POINTS_PER_CUBE;
-    if (packetData == null || packetData.length != numPixels) {
-      initPacketData(numPixels);
-    }
-
-    // Fill the datagram with pixel data
-    // Fill with all black if we don't have cube data
-    if (cube != null) {
-      for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-        int stripId = STRIP_ORD[stripNum];
-        Strip strip = cube.strips.get(stripId);
-
-        for (int i = 0; i < strip.metrics.numPoints; i++) {
-          LXPoint point = strip.getPoints().get(i);
-          setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+      for (OutputGroup og : model.outputGroups) {
+        if (og.id != null && og.id.equals(cubeId)) {
+          outputGroup = og;
         }
       }
-    } else {
+    }
+
+    // Strips
+    if (strip != null) {
+      int numPixels = strip.points.length;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
+      for (int i = 0; i < strip.points.length; i++) {
+        setPixel(i, colors[strip.points[i].index]);
+      }
+    }
+
+    // OutputGroup
+    if (outputGroup != null) {
+      int numPixels = outputGroup.points.size();
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
+      for (int i = 0; i < outputGroup.points.size(); i++) {
+        setPixel(i, colors[outputGroup.points.get(i).index]);
+      }
+    }
+
+    // Cubes
+    if (cube != null) {
+      // Initialize packet data base on cube type.
+      // If we don't know the cube type, default to
+      // using the cube type with the most pixels
+      Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
+      int numPixels = cubeType.POINTS_PER_CUBE;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
+      // Fill the datagram with pixel data
+      // Fill with all black if we don't have cube data
+      //if (cube != null) {
+        for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+          int stripId = STRIP_ORD[stripNum];
+          Strip localStrip = cube.strips.get(stripId);
+
+          for (int i = 0; i < localStrip.metrics.numPoints; i++) {
+            LXPoint point = localStrip.getPoints().get(i);
+            setPixel(stripNum * localStrip.metrics.numPoints + i, colors[point.index]);
+          }
+        }
+      //} else {
+        for (int i = 0; i < numPixels; i++) {
+          setPixel(i, LXColor.BLACK);
+        }
+      //}
+    }
+
+    if (cube == null && strip == null && outputGroup == null) {
+      int numPixels = 300;
+
       for (int i = 0; i < numPixels; i++) {
         setPixel(i, LXColor.BLACK);
       }

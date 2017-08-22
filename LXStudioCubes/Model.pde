@@ -37,11 +37,16 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
+  public final Ceiling ceiling;
+  public final Pillar pillar;
   public final List<RubrikLogo> logos;
+  public final List<Desk> desks;
   public final PhotoBoothWall photoBoothWall;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<RubrikLogo> logos, PhotoBoothWall photoBoothWall) {
-    super(new Fixture(cubeArr, strips, logos));
+  public final List<OutputGroup> outputGroups;
+
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, Ceiling ceiling, Pillar pillar, List<RubrikLogo> logos, List<Desk> desks, PhotoBoothWall photoBoothWall) {
+    super(new Fixture(cubeArr, strips, logos, desks));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -52,6 +57,8 @@ public static class SLModel extends LXModel {
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+
+    List<OutputGroup> outputGroupList = new ArrayList<OutputGroup>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -69,22 +76,47 @@ public static class SLModel extends LXModel {
       }
     }
 
+    this.ceiling = ceiling;
+    this.pillar = pillar;
+    this.photoBoothWall = photoBoothWall;
+
+    // Does not include logos and desks
     for (Strip strip : strips) {
       stripList.add(strip);
     }
 
     this.logos = logos;
-    this.photoBoothWall = photoBoothWall;
+    for (RubrikLogo logo : logos) {
+      for (OutputGroup og : logo.outputGroups) {
+        outputGroupList.add(og);
+      }
+      // These are heavily diffused, maybe make the whole box a "strip"?
+      // for (Strip strip : logo.strips) {
+      //   stripList.add(strip);
+      // }
+    }
+
+    this.desks = desks;
+    for (Desk desk : desks) {
+      for (OutputGroup og : desk.outputGroups) {
+        outputGroupList.add(og);
+      }
+      for (Strip strip : desk.strips) {
+        stripList.add(strip);
+      }
+    }
 
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
+
+    this.outputGroups = Collections.unmodifiableList(outputGroupList);
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips, List<RubrikLogo> logos) {
+    private Fixture(Cube[] cubeArr, List<Strip> strips, List<RubrikLogo> logos, List<Desk> desks) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -99,6 +131,11 @@ public static class SLModel extends LXModel {
       }
       for (RubrikLogo logo : logos) {
         for (LXPoint point : logo.points) {
+          this.points.add(point);
+        }
+      }
+      for (Desk desk : desks) {
+        for (LXPoint point : desk.points) {
           this.points.add(point);
         }
       }
@@ -175,13 +212,22 @@ public static class Tower extends LXModel {
 
 public static class PhotoBoothWall extends LXModel {
 
+  public final List<Strip> strips;
+
   public PhotoBoothWall(List<Strip> strips) {
     super(new Fixture(strips));
+    Fixture fixture = (Fixture) this.fixtures.get(0);
+    this.strips = Collections.unmodifiableList(fixture.strips);
   }
 
   private static class Fixture extends LXAbstractFixture {
+
+    private final List<Strip> strips = new ArrayList<Strip>();
+
     private Fixture(List<Strip> strips) {
       for (Strip strip : strips) {
+        this.strips.add(strip);
+
         for (LXPoint p : strip.points) {
           this.points.add(p);
         }
@@ -189,6 +235,32 @@ public static class PhotoBoothWall extends LXModel {
     }
   }
 }
+
+// public static class Desk extends LXModel {
+
+//   public final List<Strip> strips;
+
+//   public Desk(List<Strip> strips) {
+//     super(new Fixture(strips));
+//     Fixture fixture = (Fixture) this.fixtures.get(0);
+//     this.strips = Collections.unmodifiableList(fixture.strips);
+//   }
+
+//   private static class Fixture extends LXAbstractFixture {
+
+//     private final List<Strip> strips = new ArrayList<Strip>();
+
+//     private Fixture(List<Strip> strips) {
+//       for (Strip strip : strips) {
+//         this.strips.add(strip);
+
+//         for (LXPoint p : strip.points) {
+//           this.points.add(p);
+//         }
+//       }
+//     }
+//   }
+// }
 
 /**
  * Model of a single cube, which has an orientation and position on the
@@ -392,7 +464,7 @@ public static class Face extends LXModel {
       for (int i = 0; i < STRIPS_PER_FACE; i++) {
         boolean isHorizontal = (i % 2 == 0);
         Strip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-        Strip strip = new Strip(stripMetrics, ry, transform, isHorizontal);
+        Strip strip = new Strip("-", stripMetrics, ry, transform, isHorizontal);
         this.strips.add(strip);
         transform.translate(isHorizontal ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
         transform.rotateZ(HALF_PI);
@@ -409,6 +481,8 @@ public static class Face extends LXModel {
  * A strip is a linear run of points along a single edge of one cube.
  */
 public static class Strip extends LXModel {
+
+  public final String id;
 
   public static final float INCHES_PER_METER = 39.3701;
 
@@ -449,15 +523,17 @@ public static class Strip extends LXModel {
 
   public Object obj1 = null, obj2 = null;
 
-  Strip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
+  Strip(String id, Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
     super(points);
+    this.id = id;
     this.isHorizontal = isHorizontal;
     this.metrics = metrics;   
     this.ry = ry;
   }
 
-  Strip(Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+  Strip(String id, Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
     super(new Fixture(metrics, ry, transform));
+    this.id = id;
     this.metrics = metrics;
     this.isHorizontal = isHorizontal;
     this.ry = ry;
