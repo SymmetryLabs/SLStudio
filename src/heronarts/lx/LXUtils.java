@@ -118,6 +118,18 @@ public class LXUtils {
                 }
             };
 
+            static Function COS = new Function() {
+                public float compute(int i, int tableSize) {
+                    return (float) Math.cos(i * LX.TWO_PI / tableSize);
+                }
+            };
+
+            static Function TAN = new Function() {
+                public float compute(int i, int tableSize) {
+                    return (float) Math.tan(i * LX.TWO_PI / tableSize);
+                }
+            };
+
             public float compute(int i, int tableSize);
         }
 
@@ -127,7 +139,32 @@ public class LXUtils {
             }
 
             public float sin(float radians) {
-                return this.values[(int) Math.round(radians / LX.TWO_PI * this.tableSize)];
+                int index = (int) Math.round(Math.abs(radians) / LX.TWO_PI * this.tableSize);
+                float val = this.values[index % this.values.length];
+                return (radians > 0) ? val : -val;
+            }
+        }
+
+        public static class Cos extends LookupTable {
+            public Cos(int tableSize) {
+                super(tableSize, Function.COS);
+            }
+
+            public float cos(float radians) {
+                int index = (int) Math.round(Math.abs(radians) / LX.TWO_PI * this.tableSize);
+                return this.values[index % this.values.length];
+            }
+        }
+
+        public static class Tan extends LookupTable {
+            public Tan(int tableSize) {
+                super(tableSize, Function.TAN);
+            }
+
+            public float tan(float radians) {
+                int index = (int) Math.round(Math.abs(radians) / LX.TWO_PI * this.tableSize);
+                float val = this.values[index % this.values.length];
+                return (radians > 0) ? val : -val;
             }
         }
 
