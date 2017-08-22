@@ -56,8 +56,8 @@ static final float INNER_WIDTH = (STANDARD_STRIP_LENGTH*2) + (INNER_SHORT_STRIP_
 static final float INNER_PADDING = (OUTER_WIDTH - INNER_WIDTH) / 2.f;
 
 // Pillar Constants
-static final float PILLAR_HEIGHT = (STANDARD_STRIP_LENGTH*5);
-static final float PILLAR_WIDTH = INNER_WIDTH;
+static final float PILLAR_HEIGHT = (STANDARD_STRIP_LENGTH*4);
+static final float PILLAR_WIDTH = 7*12;
 
 // Desk Constants
 static final int DESK_VERTICAL_NUM_POINTS = 50;
@@ -65,13 +65,19 @@ static final int DESK_HORIZONTAL_NUM_POINTS = 9;
 
 static final float DESK_WIDTH = 35;
 static final float DESK_HEIGHT = DESK_VERTICAL_NUM_POINTS * DEFAULT_PIXEL_PITCH;
-static final float DESK_LENGTH = 40;
+static final float DESK_LENGTH = 55;
 
-static final float DESK_STRIP_SPACING = 5;
+static final float DESK_STRIP_SPACING = 3;
 static final int DESK_NUM_POINTS = STANDARD_NUM_POINTS - 14;
 
+static final float DESK_POSITION_CORRECTION = (float)Math.cos(45 * PI / 180.)*DESK_LENGTH;
+static final float DESK_PADDING = 2*12;
+
 // Logo Constants
-static final float LOGO_RIGGING_HEIGHT = 160;
+static final float RUBRIK_LOGO_HEIGHT = 3.9 * 12;
+static final float RUBRIK_LOGO_WIDTH = 3.9 * 12;
+
+static final float LOGO_RIGGING_HEIGHT = PILLAR_HEIGHT - RUBRIK_LOGO_HEIGHT;
 
 // Photobooth Constants
 static final int PHOTO_NUM_POINTS = 240;
@@ -105,26 +111,26 @@ static final RubrikLogoConfig[] RUBRIK_LOGOS_CONFIG = {
 
   new RubrikLogoConfig(
     new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
-    new float[] { OUTER_WIDTH/2-20, LOGO_RIGGING_HEIGHT, -250 },
+    new float[] { OUTER_WIDTH/2-RUBRIK_LOGO_WIDTH/2, LOGO_RIGGING_HEIGHT, -OUTER_WIDTH-5 },
     new float[] { 0, 0, 0 }
   ),
 
   new RubrikLogoConfig(
     new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
-    new float[] { 80, LOGO_RIGGING_HEIGHT, -OUTER_WIDTH/2+20 },
-    new float[] { 0, 90, 0 }
-  ),
-
-  new RubrikLogoConfig(
-    new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
-    new float[] { 250, LOGO_RIGGING_HEIGHT, -OUTER_WIDTH/2-20 },
+    new float[] { OUTER_WIDTH+5, LOGO_RIGGING_HEIGHT, -OUTER_WIDTH/2 },
     new float[] { 0, -90, 0 }
   ),
 
   new RubrikLogoConfig(
     new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
-    new float[] { OUTER_WIDTH/2+20, LOGO_RIGGING_HEIGHT, -72 },
+    new float[] { OUTER_WIDTH/2+RUBRIK_LOGO_WIDTH/2, LOGO_RIGGING_HEIGHT, 5 },
     new float[] { 0, 180, 0 }
+  ),
+
+  new RubrikLogoConfig(
+    new String[] { "0", "0", "0", "0", "0", "0", "0", "0" },
+    new float[] { -5, LOGO_RIGGING_HEIGHT, -OUTER_WIDTH/2 + RUBRIK_LOGO_WIDTH/2 },
+    new float[] { 0, 90, 0 }
   ),
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
@@ -144,10 +150,29 @@ static final DeskConfig[] DESK_CONFIG = {
      * (Right, Bottom: BLUE)
      */
 
-    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0,            0 }, -45),
-    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0,            0 },  45),
-    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { OUTER_WIDTH, 0, -OUTER_WIDTH }, -45),
-    new DeskConfig(new String[] { "0", "0", "0", "0" }, new float[] { 0,           0, -OUTER_WIDTH },  45)
+    new DeskConfig(
+      new String[] { "0", "0", "0", "0" }, 
+      new float[] { DESK_POSITION_CORRECTION+DESK_PADDING, 0, -DESK_PADDING },
+      135
+    ),
+    
+    new DeskConfig(
+      new String[] { "0", "0", "0", "0" },
+      new float[] { OUTER_WIDTH-DESK_PADDING, 0, -DESK_POSITION_CORRECTION-DESK_PADDING },
+      225
+    ),
+
+    new DeskConfig(
+      new String[] { "0", "0", "0", "0" },
+      new float[] { OUTER_WIDTH-DESK_POSITION_CORRECTION-DESK_PADDING, 0, -OUTER_WIDTH+DESK_PADDING },
+      -45
+    ),
+
+    new DeskConfig(
+      new String[] { "0", "0", "0", "0" },
+      new float[] { DESK_PADDING, 0, -OUTER_WIDTH+DESK_POSITION_CORRECTION+DESK_PADDING },
+      45
+    )
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -265,9 +290,9 @@ static final StripConfig[] CEILING_CONFIG = {
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
 /* Pillar ----------------------------------------------------------------------------------------------------------------------------*/
-static final float pillarOffsetX = INNER_PADDING;
+static final float pillarOffsetX = (INNER_PADDING + ((INNER_WIDTH-PILLAR_WIDTH)/2));
 static final float pillarOffsetY = PILLAR_HEIGHT;
-static final float pillarOffsetZ = -INNER_PADDING;
+static final float pillarOffsetZ = -(INNER_PADDING + ((INNER_WIDTH-PILLAR_WIDTH)/2));
 
 static final float pillarRotationX = 0;
 static final float pillarRotationY = 0;
@@ -280,32 +305,24 @@ static final StripConfig[] PILLAR_CONFIG = {
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 
     // back right corner
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 
     // front right corner
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*0, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*1, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*2, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*3, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*4, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*5, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 
     // front left corner
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*0, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*1, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*2, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*3, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*4, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*5, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 

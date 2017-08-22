@@ -74,7 +74,7 @@ public static class Desk extends LXModel {
 
     private Fixture(String[] ids, float[] coordinates, float[] rotations, LXTransform t) {
       t.push();
-      t.translate(coordinates[0], coordinates[1], coordinates[2]);
+      t.translate(coordinates[0], coordinates[1]+DESK_HEIGHT, coordinates[2]);
       //t.translate(DESK_LENGTH/2, DESK_HEIGHT/2, DESK_WIDTH/2);
       t.rotateX(rotations[0] * PI / 180.);
       t.rotateY(rotations[1] * PI / 180.);
@@ -96,7 +96,8 @@ public static class Desk extends LXModel {
           t.pop();
 
           t.push();
-          t.translate(0, DESK_HEIGHT, 0);
+          t.translate(horizontalMetrics.length, 0, 0);
+          t.rotateY(180 * PI / 180.);
           Strip stripH1 = new Strip("-", horizontalMetrics, rotations[1], t, true);
           this.strips.add(stripH1);
           outputGroup1.add(stripH1);
@@ -116,7 +117,8 @@ public static class Desk extends LXModel {
           t.pop();
 
           t.push();
-          t.translate(0, DESK_HEIGHT, 0);
+          t.translate(horizontalMetrics.length, 0, 0);
+          t.rotateY(180 * PI / 180.);
           Strip stripH2 = new Strip("-", horizontalMetrics, rotations[1], t, true);
           this.strips.add(stripH2);
           outputGroup2.add(stripH2);
@@ -136,8 +138,7 @@ public static class Desk extends LXModel {
           t.pop();
 
           t.push();
-          t.translate(0, DESK_HEIGHT, 0);
-          t.rotateY(180 * PI / 180.);
+          t.translate(-horizontalMetrics.length, 0, 0);
           Strip stripH3 = new Strip("-", horizontalMetrics, rotations[1], t, true);
           this.strips.add(stripH3);
           outputGroup3.add(stripH3);
@@ -157,8 +158,7 @@ public static class Desk extends LXModel {
           t.pop();
 
           t.push();
-          t.translate(0, DESK_HEIGHT, 0);
-          t.rotateY(180 * PI / 180.);
+          t.translate(-horizontalMetrics.length, 0, 0);
           Strip stripH4 = new Strip("-", horizontalMetrics, rotations[1], t, true);
           this.strips.add(stripH4);
           outputGroup4.add(stripH4);

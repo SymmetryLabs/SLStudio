@@ -68,25 +68,25 @@ public class RubrikTestMapping extends SLPattern {
     }
 
     // Pillar
-    for (int i = 0; i < 6; i++) {
+    for (int i = 0; i < 4; i++) {
       Strip strip = model.pillar.strips.get(i);
       for (LXPoint p : strip.points) {
         colors[p.index] = lx.hsb(0, 100, 100);
       }
     }
-    for (int i = 6; i < 12; i++) {
+    for (int i = 4; i < 8; i++) {
       Strip strip = model.pillar.strips.get(i);
       for (LXPoint p : strip.points) {
         colors[p.index] = lx.hsb(100, 100, 100);
       }
     }
-    for (int i = 12; i < 18; i++) {
+    for (int i = 8; i < 12; i++) {
       Strip strip = model.pillar.strips.get(i);
       for (LXPoint p : strip.points) {
         colors[p.index] = lx.hsb(200, 100, 100);
       }
     }
-    for (int i = 18; i < 24; i++) {
+    for (int i = 12; i < 16; i++) {
       Strip strip = model.pillar.strips.get(i);
       for (LXPoint p : strip.points) {
         colors[p.index] = lx.hsb(300, 100, 100);
