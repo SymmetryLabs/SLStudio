@@ -75,6 +75,7 @@ void setup() {
       setupGammaCorrection();
       setupOutputs(lx);
       outputControl = new OutputControl(lx);
+      //outputControl.setValue();
       lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping

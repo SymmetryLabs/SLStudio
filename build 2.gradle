@@ -1,0 +1,53 @@
+buildscript {
+    repositories {
+        jcenter()
+    }
+    dependencies {
+        classpath 'com.github.jengelman.gradle.plugins:shadow:1.2.4'
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'com.github.johnrengelman.shadow'
+
+group = 'com.symmetrylabs'
+version = '1.0-SNAPSHOT'
+
+description = """common"""
+
+sourceCompatibility = 1.8
+targetCompatibility = 1.8
+tasks.withType(JavaCompile) {
+	options.encoding = 'UTF-8'
+}
+
+repositories {
+    maven { url "http://repo.maven.apache.org/maven2" }
+}
+
+configurations {
+  provided
+}
+
+sourceSets {
+    main.compileClasspath += configurations.provided
+    test.compileClasspath += configurations.provided
+    test.runtimeClasspath += configurations.provided
+}
+
+dependencies {
+    provided files('lib/LX.jar')
+
+    provided group: 'org.apache.commons', name: 'commons-math3', version: '3.6.1'
+    provided group: 'org.processing', name: 'core', version: '3.3.5'
+    compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
+}
+
+jar {
+    exclude("**/*.swp")
+    exclude("**/*.swo")
+}
+
+task make {
+    dependsOn assemble
+}

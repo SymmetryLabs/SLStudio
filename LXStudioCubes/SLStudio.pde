@@ -27,7 +27,7 @@ public class SLStudio extends P3LX {
 
       PreviewWindow(UI ui, P3LX lx, int x, int y, int w, int h) {
         super(ui, x, y, w, h);
-        addComponent(this.pointCloud = (UIGLPointCloud) new UIGLPointCloud(lx).setPointSize(3));
+        addComponent(this.pointCloud = (UIGLPointCloud) new UIGLPointCloud(lx).setPointSize(12));
         setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
         setRadius(lx.model.rMax * 1.5f);
         setDescription("Preview Window: Displays the main output, or the channels/groups with CUE enabled");
