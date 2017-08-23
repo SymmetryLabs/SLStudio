@@ -66,7 +66,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
 
     private final LXParameterListener booleanParameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
-            setActive(booleanParameter.isOn());
+            setActive(booleanParameter.isOn(), false);
         }
     };
 
@@ -144,7 +144,7 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
             this.booleanParameter = parameter;
             this.booleanParameter.addListener(this.booleanParameterListener);
             setMomentary(this.booleanParameter.getMode() == BooleanParameter.Mode.MOMENTARY);
-            setActive(this.booleanParameter.isOn());
+            setActive(this.booleanParameter.isOn(), false);
         }
         return this;
     }
@@ -230,15 +230,21 @@ public class UIButton extends UI2dComponent implements UIControlTarget, UITrigge
     }
 
     public UIButton setActive(boolean active) {
+        return setActive(active, true);
+    }
+
+    protected UIButton setActive(boolean active, boolean pushToParameter) {
         if (this.active != active) {
             this.active = active;
             setBackgroundColor(active ? this.activeColor : this.inactiveColor);
-            if (this.enumParameter != null) {
-                if (active) {
-                    this.enumParameter.increment();
+            if (pushToParameter) {
+                if (this.enumParameter != null) {
+                    if (active) {
+                        this.enumParameter.increment();
+                    }
+                } else if (this.booleanParameter != null) {
+                    this.booleanParameter.setValue(active);
                 }
-            } else if (this.booleanParameter != null) {
-                this.booleanParameter.setValue(active);
             }
             onToggle(active);
             redraw();
