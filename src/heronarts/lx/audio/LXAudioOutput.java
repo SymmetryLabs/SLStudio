@@ -349,4 +349,10 @@ public class LXAudioOutput extends LXAudioComponent implements LXOscComponent, L
             }
         }
     }
+
+    void reset() {
+        this.play.setValue(false);
+        this.looping.setValue(false);
+        this.file.setValue("");
+    }
 }

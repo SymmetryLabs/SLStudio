@@ -119,6 +119,7 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
 
     @Override
     public void load(LX lx, JsonObject obj) {
+        this.output.reset();
         if (obj.has(KEY_METER)) {
             this.meter.load(lx, obj.getAsJsonObject(KEY_METER));
         }
