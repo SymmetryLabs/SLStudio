@@ -1,0 +1,46 @@
+
+You might have to install the Kinect library in Processing. To do this:
+1) Open Processing
+2) Tools -> Add Tool -> Libraries Tab
+3) Search “kinect”
+4) Install “Open Kinect for Processing”
+
+Other things to know:
+
+1) You will probably utilize the auto-cycle.
+
+2) You will probably utilize the Color Palette, although we will probably have this pre-set.
+
+3) I added some effects to the kinect that are kind of cool (Blur and LSD). Maybe you might want to tinker with mapping some modulations to these?
+
+
+Channel 1 (Global)
+
+This channel will run patterns across the entire booth.
+
+
+Channel 2 (Structure)
+
+This channel has a mask over the Structure sub-components (ceiling and pillar)
+
+This allows you to run a pattern on just the ceiling and pillar. Note that by default the blend mode is set to “Normal”. This means that it will completely overwrite anything thats running on the Global Channel. If you put it to say “add”, it will do an additive blend with the pattern on the Global Channel. Say you needed to turn the ceiling and pillar black for some reason, you could enable this channel, set it to the blank pattern, and put the blend mode to Normal. 
+
+Channel 3 (Logos)
+
+This is the same setup as Structure but masks over the logos.
+
+Channel 4 (Desks)
+
+This is the same setup as Structure and Logos.
+
+Channel 5 (Photo Booth)
+
+This is the same as Structure, Logos, and Desks. Play something here if they request a specific pattern for the Photo Booth.
+
+Channel 6 (Kinect)
+
+You will prob never change this. If you want to “disable” the kinect, just disable the channel completely.
+
+Channel 7 (Test) 
+
+This is set to “Normal” blend mode, meaning it will completely overwrite and other enabled channels. It has the test patterns. So if you need to turn the test patterns on, just enable the channel and then disable when you are finished with it.
