@@ -1,5 +1,165 @@
 import java.awt.Color;
 
+public static class StructureMask extends LXEffect {
+
+  private SLModel slModel;
+
+  public StructureMask(LX lx) {
+    super(lx);
+    this.slModel = (SLModel)model;
+  }
+
+  public void run(double deltaMs, double amount) {
+
+    // Structure
+    // for (LXPoint p : model.ceiling.points) {
+    //   colors[p.index] = 0;
+    // }
+    // for (LXPoint p : model.pillar.points) {
+    //   colors[p.index] = 0;
+    // }
+
+    // Logos
+    for (RubrikLogo logo : slModel.logos) {
+      for (LXPoint p : logo.points) {
+        colors[p.index] = 0;
+      }
+    }
+
+    // Desks
+    for (Desk desk : slModel.desks) {
+      for (LXPoint p : desk.points) {
+        colors[p.index] = 0;
+      }
+    }
+
+    // Photobooth
+    for (LXPoint p : slModel.photoBoothWall.points) {
+      colors[p.index] = 0;
+    }
+  }
+}
+
+public static class LogosMask extends LXEffect {
+
+  private SLModel slModel;
+
+  public LogosMask(LX lx) {
+    super(lx);
+    this.slModel = (SLModel)model;
+  }
+
+  public void run(double deltaMs, double amount) {
+
+    // Structure
+    for (LXPoint p : slModel.ceiling.points) {
+      colors[p.index] = 0;
+    }
+    for (LXPoint p : slModel.pillar.points) {
+      colors[p.index] = 0;
+    }
+
+    // Logos
+    // for (RubrikLogo logo : slModel.logos) {
+    //   for (LXPoint p : logo.points) {
+    //     colors[p.index] = 0;
+    //   }
+    // }
+
+    // Desks
+    for (Desk desk : slModel.desks) {
+      for (LXPoint p : desk.points) {
+        colors[p.index] = 0;
+      }
+    }
+
+    // Photobooth
+    for (LXPoint p : slModel.photoBoothWall.points) {
+      colors[p.index] = 0;
+    }
+  }
+}
+
+public static class DesksMask extends LXEffect {
+
+  private SLModel slModel;
+
+  public DesksMask(LX lx) {
+    super(lx);
+    this.slModel = (SLModel)model;
+  }
+
+  public void run(double deltaMs, double amount) {
+
+    // Structure
+    for (LXPoint p : slModel.ceiling.points) {
+      colors[p.index] = 0;
+    }
+    for (LXPoint p : slModel.pillar.points) {
+      colors[p.index] = 0;
+    }
+
+    // Logos
+    for (RubrikLogo logo : slModel.logos) {
+      for (LXPoint p : logo.points) {
+        colors[p.index] = 0;
+      }
+    }
+
+    // Desks
+    // for (Desk desk : slModel.desks) {
+    //   for (LXPoint p : desk.points) {
+    //     colors[p.index] = 0;
+    //   }
+    // }
+
+    // Photobooth
+    for (LXPoint p : slModel.photoBoothWall.points) {
+      colors[p.index] = 0;
+    }
+  }
+}
+
+public static class PhotoboothMask extends LXEffect {
+
+  private SLModel slModel;
+
+  public PhotoboothMask(LX lx) {
+    super(lx);
+    this.slModel = (SLModel)model;
+  }
+
+  public void run(double deltaMs, double amount) {
+
+    // Structure
+    for (LXPoint p : slModel.ceiling.points) {
+      colors[p.index] = 0;
+    }
+    for (LXPoint p : slModel.pillar.points) {
+      colors[p.index] = 0;
+    }
+
+    // Logos
+    for (RubrikLogo logo : slModel.logos) {
+      for (LXPoint p : logo.points) {
+        colors[p.index] = 0;
+      }
+    }
+
+    // Desks
+    for (Desk desk : slModel.desks) {
+      for (LXPoint p : desk.points) {
+        colors[p.index] = 0;
+      }
+    }
+
+    // Photobooth
+    // for (LXPoint p : slModel.photoBoothWall.points) {
+    //   colors[p.index] = 0;
+    // }
+  }
+}
+
 public static class Strobe extends LXEffect {
   
   public enum Waveshape {

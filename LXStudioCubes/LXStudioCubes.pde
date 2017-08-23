@@ -3,6 +3,8 @@ import java.net.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
 import processing.video.*;
+import java.nio.*; // kinect
+import org.openkinect.processing.*; // kinect
 
 public SLStudio lx;
 public SLModel model;
@@ -11,6 +13,7 @@ public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
 public PApplet applet;
+public Kinect2 kinect2; // kinect
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -45,6 +48,10 @@ void setup() {
       //     throw new RuntimeException(sx);
       //   } 
       // }
+
+      kinect2 = new Kinect2(applet); // kinect
+      kinect2.initDepth(); // kinect
+      kinect2.initDevice(); // kinect
 
       // Output
       (dispatcher = new Dispatcher(lx)).start();
