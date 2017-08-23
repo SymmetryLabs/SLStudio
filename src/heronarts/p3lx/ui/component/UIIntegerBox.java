@@ -45,7 +45,7 @@ public class UIIntegerBox extends UINumberBox implements UIControlTarget {
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
-            setValue(parameter.getValuei());
+            setValue(parameter.getValuei(), false);
         }
     };
 
@@ -104,13 +104,17 @@ public class UIIntegerBox extends UINumberBox implements UIControlTarget {
     }
 
     public UIIntegerBox setValue(int value) {
+        return setValue(value, true);
+    }
+
+    protected UIIntegerBox setValue(int value, boolean pushToParameter) {
         if (this.value != value) {
             int range = (this.maxValue - this.minValue + 1);
             while (value < this.minValue) {
                 value += range;
             }
             this.value = this.minValue + (value - this.minValue) % range;
-            if (this.parameter != null) {
+            if (this.parameter != null && pushToParameter) {
                 this.parameter.setValue(this.value);
             }
             this.onValueChange(this.value);
@@ -125,7 +129,6 @@ public class UIIntegerBox extends UINumberBox implements UIControlTarget {
      * @param value
      */
     protected void onValueChange(int value) {}
-
 
     @Override
     protected void saveEditBuffer() {

@@ -329,7 +329,7 @@ public class LXStudio extends P3LX {
 
     @Override
     protected void setProject(File file, ProjectListener.Change change) {
-        super.setProject(file,  change);
+        super.setProject(file, change);
         if (file != null) {
             this.applet.saveStrings(PROJECT_FILE_NAME, new String[] { file.getName() });
         }
