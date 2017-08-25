@@ -351,11 +351,21 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
     }
 
     boolean isModulationSource() {
-        return
-            this.ui.modulationTargetMapping &&
-            ((this == this.ui.getModulationSource()) ||
-                ((this instanceof UIModulationSource) &&
-                    ((UIModulationSource) this).getModulationSource() == this.ui.getModulationSource().getModulationSource()));
+        if (this.ui.modulationTargetMapping) {
+            UIModulationSource modulationSource = this.ui.getModulationSource();
+            if (modulationSource == null) {
+                return false;
+            }
+            if (this == modulationSource) {
+                return true;
+            }
+            if (this instanceof UIModulationSource) {
+                if (((UIModulationSource) this).getModulationSource() == modulationSource.getModulationSource()) {
+                    return true;
+                }
+            }
+        }
+        return false;
     }
 
     boolean isModulationSourceMapping() {
