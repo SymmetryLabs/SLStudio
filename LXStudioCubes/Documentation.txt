@@ -1,9 +1,9 @@
 
-You might have to install the Kinect library in Processing. To do this:
+You might have to install the Kinect library and/or Processing.video in Processing. To do this:
 1) Open Processing
 2) Tools -> Add Tool -> Libraries Tab
-3) Search “kinect”
-4) Install “Open Kinect for Processing”
+3) Search “kinect” OR "video"
+4) Install “Open Kinect for Processing”, "Processing.video"
 
 Other things to know:
 
