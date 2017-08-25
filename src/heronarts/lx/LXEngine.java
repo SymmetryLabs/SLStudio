@@ -1280,6 +1280,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private static final String KEY_PALETTE = "palette";
     private static final String KEY_CHANNELS = "channels";
     private static final String KEY_MASTER = "master";
+    private static final String KEY_TEMPO = "tempo";
     private static final String KEY_AUDIO = "audio";
     private static final String KEY_COMPONENTS = "components";
     private static final String KEY_OUTPUT = "output";
@@ -1294,6 +1295,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         obj.add(KEY_PALETTE, LXSerializable.Utils.toObject(lx, this.lx.palette));
         obj.add(KEY_CHANNELS, LXSerializable.Utils.toArray(lx, this.mutableChannels));
         obj.add(KEY_MASTER, LXSerializable.Utils.toObject(lx, this.masterChannel));
+        obj.add(KEY_TEMPO, LXSerializable.Utils.toObject(lx, this.lx.tempo));
         obj.add(KEY_AUDIO, LXSerializable.Utils.toObject(lx, this.audio));
         obj.add(KEY_OUTPUT, LXSerializable.Utils.toObject(lx, this.output));
         obj.add(KEY_COMPONENTS, LXSerializable.Utils.toObject(lx, this.components));
@@ -1334,6 +1336,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Palette
         if (obj.has(KEY_PALETTE)) {
             lx.palette.load(lx, obj.getAsJsonObject(KEY_PALETTE));
+        }
+
+        // Tempo
+        if (obj.has(KEY_TEMPO)) {
+            lx.tempo.load(lx, obj.getAsJsonObject(KEY_TEMPO));
         }
 
         // Audio setup
