@@ -202,6 +202,7 @@ class SLController extends LXOutput {
       for (OutputGroup og : model.outputGroups) {
         if (og.id != null && og.id.equals(cubeId)) {
           outputGroup = og;
+          break;
         }
       }
     }
@@ -262,6 +263,7 @@ class SLController extends LXOutput {
 
     if (cube == null && strip == null && outputGroup == null) {
       int numPixels = 300;
+      initPacketData(numPixels);
 
       for (int i = 0; i < numPixels; i++) {
         setPixel(i, LXColor.BLACK);

@@ -40,9 +40,13 @@ static final float globalRotationZ = 0;
 static final float INCHES_PER_METER = 39.3701;
 
 static final int   STANDARD_NUM_POINTS = 73;
+static final int   SHORT_NUM_POINTS = 69;
+static final int   PILLAR_CORRECTION_POINTS = 4;
+
+
 static final float DEFAULT_PIXEL_PITCH = (1.f/60) * INCHES_PER_METER;
 static final float STANDARD_STRIP_LENGTH = DEFAULT_PIXEL_PITCH * STANDARD_NUM_POINTS;
-
+static final float PILLAR_CORRECTION_LENGTH = DEFAULT_PIXEL_PITCH * PILLAR_CORRECTION_POINTS;
 // Ceiling Constants
 static final int OUTER_SHORT_NUM_POINTS = STANDARD_NUM_POINTS - 16;
 static final int INNER_SHORT_NUM_POINTS = STANDARD_NUM_POINTS - 10;
@@ -87,6 +91,46 @@ static final int NUM_PHOTO_STRIPS = 16;
 
 static final float PHOTO_HEIGHT = PHOTO_NUM_POINTS * PHOTO_PIXEL_PITCH;
 static final float PHOTO_WIDTH = NUM_PHOTO_STRIPS * PHOTO_STRIP_SPACING;
+
+
+
+/* Photo Booth ----------------------------------------------------------------------------------------------------------------------*/
+static final float photoBoothOffsetX = OUTER_WIDTH/2 - PHOTO_WIDTH/2;
+static final float photoBoothOffsetY = 0;
+static final float photoBoothOffsetZ = -OUTER_WIDTH;
+
+static final float photoBoothRotationX = 0;
+static final float photoBoothRotationY = 0;
+static final float photoBoothRotationZ = 0;
+
+
+
+static final StripConfig[] PHOTO_BOOTH_STRIP_CONFIG = {
+  /* (Notes)
+   * StripConfig ordering: id, { x, y, z }, { xRot, yRot, zRot }, numPoints, pixelPitch }
+   *
+   * The order of these bars goes from left to right. But since the wall is double-sided, it doesn't matter too much...
+   * just make sure its orientated correctly on the y-axis when you map it.
+   */
+
+
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*0,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*1,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*2,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*3,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*4,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*5,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*6,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*7,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*8,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*9,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*10, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*11, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*12, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*13, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*14, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*15, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
+};
 
 /* Rubrik Logos ---------------------------------------------------------------------------------------------------------------------*/
 static final RubrikLogoConfig[] RUBRIK_LOGOS_CONFIG = {
@@ -175,41 +219,7 @@ static final DeskConfig[] DESK_CONFIG = {
     )
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
-
-/* Photo Booth ----------------------------------------------------------------------------------------------------------------------*/
-static final float photoBoothOffsetX = OUTER_WIDTH/2 - PHOTO_WIDTH/2;
-static final float photoBoothOffsetY = 0;
-static final float photoBoothOffsetZ = -OUTER_WIDTH;
-
-static final float photoBoothRotationX = 0;
-static final float photoBoothRotationY = 0;
-static final float photoBoothRotationZ = 0;
-
-static final StripConfig[] PHOTO_BOOTH_STRIP_CONFIG = {
-  /* (Notes)
-   * StripConfig ordering: id, { x, y, z }, { xRot, yRot, zRot }, numPoints, pixelPitch }
-   *
-   * The order of these bars goes from left to right. But since the wall is double-sided, it doesn't matter too much...
-   * just make sure its orientated correctly on the y-axis when you map it.
-   */
-
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*0,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*1,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*2,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*3,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*4,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*5,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*6,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*7,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*8,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*9,  0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*10, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*11, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*12, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*13, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*14, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-  new StripConfig("0", new float[] {PHOTO_STRIP_SPACING*15, 0, 0 }, new float[] { 0, 0, 90 }, PHOTO_NUM_POINTS, PHOTO_PIXEL_PITCH),
-};
+// PHOTO BOOTH GOES HERE
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
 
@@ -222,7 +232,7 @@ static final float ceilingRotationX = 90;
 static final float ceilingRotationY = 0;
 static final float ceilingRotationZ = 0;
 
-static final StripConfig[] CEILING_CONFIG = {
+static final StripConfig[] CEILING_CONFIG = { 
   // looking down, strips go left to right
   // the top can be arbitrary
 
@@ -233,59 +243,104 @@ static final StripConfig[] CEILING_CONFIG = {
   // OUTER CEILING NOW GOES COUNTER CLOCKWISE - MAKING APPROPRIATE CHANGES!
 
   // LEFT first
-  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -270 }, OUTER_SHORT_NUM_POINTS),
+//   new StripConfig("178", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("139", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("336", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("170", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("100", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("321", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("146", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -270 }, OUTER_SHORT_NUM_POINTS),
 
-  // BOTTOM SECOND OUTER_WIDTH-STANDARD_STRIP_LENGTH*6+OUTER_SHORT_STRIP_LENGTH/2,
-  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*2, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*3, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*4, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*5, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { STANDARD_STRIP_LENGTH*6, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, OUTER_SHORT_NUM_POINTS),
+//   // // BOTTOM SECOND OUTER_WIDTH-STANDARD_STRIP_LENGTH*6+OUTER_SHORT_STRIP_LENGTH/2,
+//   // new StripConfig("154", new float[] { STANDARD_STRIP_LENGTH, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   // new StripConfig("168", new float[] { STANDARD_STRIP_LENGTH*2, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   // new StripConfig("406", new float[] { STANDARD_STRIP_LENGTH*3, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   // new StripConfig("325", new float[] { STANDARD_STRIP_LENGTH*4, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   // new StripConfig("362", new float[] { STANDARD_STRIP_LENGTH*5, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   // new StripConfig("167", new float[] { STANDARD_STRIP_LENGTH*6, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   // new StripConfig("375", new float[] { OUTER_WIDTH, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, OUTER_SHORT_NUM_POINTS),
 
+//   //New bottom -> flipped back to orig
+//   new StripConfig("375", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*0, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("167", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*1, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("362", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*2, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("325", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*3, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("406", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*4, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("168", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*5, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("154", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*6, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, OUTER_SHORT_NUM_POINTS),
 
-// outer (right)
-  new StripConfig("0", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -90 }, OUTER_SHORT_NUM_POINTS),
-// TOP
-  new StripConfig("0", new float[] { OUTER_WIDTH, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*1, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*2, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*3, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*4, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*5, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*6, 0, 0 }, new float[] { 0, 0, -180 }, OUTER_SHORT_NUM_POINTS),
+// // outer (right)
+//   new StripConfig("198", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+//   new StripConfig("175", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+//   new StripConfig("331", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+//   new StripConfig("105", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+//   new StripConfig("329", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+//   new StripConfig("376", new float[] { OUTER_WIDTH, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+//   new StripConfig("147", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -90 }, OUTER_SHORT_NUM_POINTS),
+// // TOP new
+//   new StripConfig("142", new float[] { OUTER_WIDTH, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   new StripConfig("389", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*1, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   new StripConfig("344", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*2, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   new StripConfig("310", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*3, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   new StripConfig("353", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*4, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   new StripConfig("212", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*5, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+//   new StripConfig("363", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*6, 0, 0 }, new float[] { 0, 0, -180 }, OUTER_SHORT_NUM_POINTS),
 
-  
+ 
+
+// top
+//  new StripConfig("142", new float[] { STANDARD_STRIP_LENGTH*0, 0, 0 }, new float[] { 0, 0, 0 }, 480),
+// //  new StripConfig("389", new float[] { STANDARD_STRIP_LENGTH*1, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("344", new float[] { STANDARD_STRIP_LENGTH*2, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("310", new float[] { STANDARD_STRIP_LENGTH*3, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("353", new float[] { STANDARD_STRIP_LENGTH*4, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("212", new float[] { STANDARD_STRIP_LENGTH*5, 0, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+//   new StripConfig("363", new float[] { STANDARD_STRIP_LENGTH*6, 0, 0 }, new float[] { 0, 0, 0 }, OUTER_SHORT_NUM_POINTS),
+
+// TOP GOOD!!! 8/27
+  new StripConfig("142", new float[] { OUTER_WIDTH, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("389", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*1, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("344", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*2, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("310", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*3, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("353", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*4, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("212", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*5, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+  new StripConfig("363", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*6, 0, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
+
+  // outer (right)
+  new StripConfig("147", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, 90 }, STANDARD_NUM_POINTS),
+  new StripConfig("376", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, 90 }, STANDARD_NUM_POINTS),
+  new StripConfig("239", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, 90 }, STANDARD_NUM_POINTS),
+  new StripConfig("105", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, 90 }, STANDARD_NUM_POINTS),
+  new StripConfig("331", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, 90 }, STANDARD_NUM_POINTS),
+  new StripConfig("175", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, 90 }, STANDARD_NUM_POINTS),
+  new StripConfig("198", new float[] { OUTER_WIDTH, -STANDARD_STRIP_LENGTH*7, 0 }, new float[] { 0, 0, 90 }, STANDARD_NUM_POINTS),
+
   // outer (bottom)
-  // new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*0, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*1, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*2, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*3, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*4, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*5, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*6, -OUTER_WIDTH, 0 }, new float[] { 0, 0, -180 }, OUTER_SHORT_NUM_POINTS),
+  new StripConfig("375", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*1, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("167", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*2, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("362", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*3, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("325", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*4, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("406", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*5, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("168", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*6, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
+  new StripConfig("154", new float[] { OUTER_WIDTH-STANDARD_STRIP_LENGTH*7, -OUTER_WIDTH, 0 }, new float[] { 0, 0, 0 }, STANDARD_NUM_POINTS),
 
   // outer (left)
-  // new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -270 }, OUTER_SHORT_NUM_POINTS),
-  // new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
-  // new StripConfig("0", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("146", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -270 }, OUTER_SHORT_NUM_POINTS),
+  new StripConfig("321", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("100", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("170", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("336", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("139", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+  new StripConfig("178", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+
+  //   new StripConfig("178", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("139", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("336", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("170", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("100", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*4, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("321", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*5, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
+//   new StripConfig("146", new float[] { 0, -OUTER_WIDTH+STANDARD_STRIP_LENGTH*6, 0 }, new float[] { 0, 0, -270 }, OUTER_SHORT_NUM_POINTS),
+
 
   // CEILING | INNER -------------------------------------------------------------------------------------------------------------
   // inner (top)
@@ -307,7 +362,6 @@ static final StripConfig[] CEILING_CONFIG = {
   new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH, -INNER_PADDING-INNER_WIDTH+STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
   new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH, -INNER_PADDING-INNER_WIDTH+STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -270 }, STANDARD_NUM_POINTS),
   new StripConfig("0", new float[] { INNER_PADDING+INNER_WIDTH, -INNER_PADDING-INNER_WIDTH+STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -270 }, INNER_SHORT_NUM_POINTS),
-
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
@@ -321,30 +375,30 @@ static final float pillarRotationY = 0;
 static final float pillarRotationZ = 0;
 
 static final StripConfig[] PILLAR_CONFIG = {
-
+    // NOTE- THE TOP strips in each pillar were 4 LEDs too long, so we cut 4 LEDs off each one, and moved the bottom 3 strips 4 LEDs UP in length
     // back left corner
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*1 + PILLAR_CORRECTION_LENGTH, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*2 + PILLAR_CORRECTION_LENGTH, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*3 + PILLAR_CORRECTION_LENGTH, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 
     // back right corner
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*0, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*1, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*2, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*3, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*1 + PILLAR_CORRECTION_LENGTH, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*2 + PILLAR_CORRECTION_LENGTH, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*3 + PILLAR_CORRECTION_LENGTH, 0 }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 
-    // front right corner
+    //front right corner
     new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*0, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*1, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*2, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*3, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*1 + PILLAR_CORRECTION_LENGTH, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*2 + PILLAR_CORRECTION_LENGTH, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { PILLAR_WIDTH, -STANDARD_STRIP_LENGTH*3 + PILLAR_CORRECTION_LENGTH, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 
-    // front left corner
+    // front left corner SHORT_NUM_POINTS
     new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*0, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*1, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*2, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
-    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*3, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*1 + PILLAR_CORRECTION_LENGTH, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*2 + PILLAR_CORRECTION_LENGTH, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
+    new StripConfig("0", new float[] { 0, -STANDARD_STRIP_LENGTH*3 + PILLAR_CORRECTION_LENGTH, -PILLAR_WIDTH }, new float[] { 0, 0, -90 }, STANDARD_NUM_POINTS),
 };
 /* -----------------------------------------------------------------------------------------------------------------------------------*/
 
