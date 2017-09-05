@@ -3,12 +3,16 @@ import java.net.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
 
+import java.nio.*; // kinect
+import org.openkinect.processing.*; // kinect
+
 public SLStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
+public Kinect2 kinect2; // kinect
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -24,6 +28,11 @@ void setup() {
   println("model.xMin: " + model.xMin); println("model.xMax: " + model.xMax); println("model.xRange: " + model.xRange);
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
+
+  // kinect
+  kinect2 = new Kinect2(this); // kinect
+  kinect2.initDepth(); // kinect
+  kinect2.initDevice(); // kinect
 
   lx = new SLStudio(this, model) {
     @Override
