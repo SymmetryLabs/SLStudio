@@ -43,96 +43,193 @@ static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-    // left
-    new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-      "22", "204"
-      }),
+   //  // left
+   //  new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
+   //    "22", "204"
+   //    }),
 
-    new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
-      "86"
-      }),
+   //  new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
+   //    "86"
+   //    }),
 
-    new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
-      "5"
-      }),
+   //  new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
+   //    "5"
+   //    }),
 
-   new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-      "25", "199", "177"
-      }),
+   // new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
+   //    "25", "199", "177"
+   //    }),
 
-   new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
-      "94"
-      }),
+   // new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
+   //    "94"
+   //    }),
 
-   new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
-      "90"
-      }),
+   // new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
+   //    "90"
+   //    }),
 
-   new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
-      "64"
-      }),
+   // new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
+   //    "64"
+   //    }),
 
-    // left tower of 5   
-    new TowerConfig(0, 0, 0, new String[] {   
-      "19", "190", "121", "1", "103"    
-    }),   
-    new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
-    new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
-    new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
-    new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
+   //  // left tower of 5   
+   //  new TowerConfig(0, 0, 0, new String[] {   
+   //    "19", "190", "121", "1", "103"    
+   //  }),   
+   //  new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
+   //  new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
+   //  new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
+   //  new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
+   //  new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
    
-    new TowerConfig(SP*2.0, 0, 0, new String[] {    
-      "6", "132", "61", "54"    
-    }),   
+   //  new TowerConfig(SP*2.0, 0, 0, new String[] {    
+   //    "6", "132", "61", "54"    
+   //  }),   
 
-    new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
+   //  new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
+   //  new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
      
-    // middle tower of 5    
-    new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
-      "111", "166", "187", "158", "101"   
-    }),  
+   //  // middle tower of 5    
+   //  new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
+   //    "111", "166", "187", "158", "101"   
+   //  }),  
 
-    new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
-    new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
-    new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
-    new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
+   //  new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
+   //  new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
+   //  new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
+   //  new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
      
-    new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
-      "102", "156", "13", "82"    
-    }),   
-    new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
-    new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
-    new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
-    new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
-    new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
+   //  new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
+   //    "102", "156", "13", "82"    
+   //  }),   
+   //  new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
+   //  new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
+   //  new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
+   //  new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
+   //  new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
      
-    // right tower of 5   
-    new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
-      "183", "180", "57", "51", "108"   
-    }),   
-    new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
-    new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
-    new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
+   //  // right tower of 5   
+   //  new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
+   //    "183", "180", "57", "51", "108"   
+   //  }),   
+   //  new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
+   //  new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
+   //  new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
      
-    new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
-     "100", "85", "110zAQ  AZQ"    
-    }),   
-    new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
-    new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
+   //  new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
+   //   "100", "85", "110zAQ  AZQ"    
+   //  }),   
+   //  new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
+   //  new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
     
-    // table cubes    
-    new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
-    new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
-    new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
+   //  // table cubes    
+   //  new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
+   //  new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
+   //  new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
 };
-
-
 
 static final StripConfig[] STRIP_CONFIG = {
           // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
-//new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
+
+  // 1
+  new StripConfig("0",           0,  0,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  10,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  20,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  30,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  40,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  50,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  60,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  70,  0,    0,     0,     0,       170,                 0.25),
+
+  //2
+  new StripConfig("0",           0,  80,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  90,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  100,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  110,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  120,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  130,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  140,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  150,  0,    0,     0,     0,       170,                 0.25),
+
+  // 3
+  new StripConfig("0",           0,  160,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  170,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  180,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  190,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  200,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  210,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  220,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  230,  0,    0,     0,     0,       170,                 0.25),
+
+  // 4
+  new StripConfig("0",           0,  240,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  250,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  260,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  270,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  280,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  290,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  300,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  310,  0,    0,     0,     0,       170,                 0.25),
+
+  // 5
+  new StripConfig("0",           0,  320,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  330,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  340,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  350,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  360,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  370,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  380,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  390,  0,    0,     0,     0,       170,                 0.25),
+
+  // 6
+  new StripConfig("0",           0,  400,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  410,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  420,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  430,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  440,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  450,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  460,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  470,  0,    0,     0,     0,       170,                 0.25),
+
+  // 7
+  new StripConfig("0",           0,  480,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  490,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  500,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  510,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  520,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  530,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  540,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  550,  0,    0,     0,     0,       170,                 0.25),
+
+  // 8
+  new StripConfig("0",           0,  560,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  570,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  580,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  590,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  600,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  610,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  620,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  630,  0,    0,     0,     0,       170,                 0.25),
+
+  // 9
+  new StripConfig("0",           0,  640,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  650,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  660,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  670,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  680,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  690,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  700,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  710,  0,    0,     0,     0,       170,                 0.25),
+
+  // 10
+  new StripConfig("0",           0,  720,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  730,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  740,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  750,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  760,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  770,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  780,  0,    0,     0,     0,       170,                 0.25),
+  new StripConfig("0",           0,  790,  0,    0,     0,     0,       170,                 0.25),
 
 };
 
@@ -510,6 +607,47 @@ public class MappingMode {
     lx.engine.removeChannel(mappingChannel);
     mappingChannel = null;
     mappingPattern = null;
+  }
+}
+
+class UIUniverse extends UICollapsibleSection {
+
+  UIUniverse(LX lx, UI ui, float x, float y, float w) {
+    super(ui, x, y, w, 124);
+    setTitle("UNIVERSES");
+    setTitleX(20);
+
+    final UIButton decrementUniverse = new UIButton(122, 2, 25, 18) {
+      @Override
+      protected void onToggle(boolean active) {
+        if (!active) return;
+        universe.setValue(Math.max(((int)universe.getValue())-1, 0));
+      }
+    }.setLabel("-").setMomentary(true);
+    decrementUniverse.addToContainer(this);
+
+    final UIButton incrementUniverse = new UIButton(147, 2, 25, 18) {
+      @Override
+      protected void onToggle(boolean active) {
+        if (!active) return;
+        universe.setValue(Math.min(((int)universe.getValue())+1, 79));
+      }
+    }.setLabel("+").setMomentary(true);
+    incrementUniverse.addToContainer(this);
+
+
+    final UILabel selectedUniverseLabel = new UILabel(0, 24, getContentWidth(), 54)
+      .setLabel("1");
+    selectedUniverseLabel.setBackgroundColor(#333333)
+      .setFont(createFont("ArialUnicodeMS-10.vlw", 43))
+      .setTextAlignment(PConstants.CENTER, PConstants.TOP);
+    selectedUniverseLabel.addToContainer(this);
+
+    universe.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter p) {
+        selectedUniverseLabel.setLabel(Integer.toString(((int)universe.getValue())+1));
+      }
+    });
   }
 }
 

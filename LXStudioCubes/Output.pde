@@ -42,8 +42,154 @@ void setupOutputs(final LX lx) {
     }
   });
 
-  lx.addOutput(new SLController(lx, "10.200.1.255"));
+  //lx.addOutput(new SLController(lx, "10.200.1.255"));
   //lx.addOutput(new LIFXOutput());
+
+  // final String ip0 = "10.200.1.11";
+  // final String ip1 = "10.200.1.12";
+  // final String ip2 = "10.200.1.13";
+  // final String ip3 = "10.200.1.14";
+  // final String ip4 = "10.200.1.15";
+  // final String ip5 = "10.200.1.16";
+  // final String ip6 = "10.200.1.17";
+  // final String ip7 = "10.200.1.18";
+  // final String ip8 = "10.200.1.19";
+  // final String ip9 = "10.200.1.20";
+
+  try {
+    final LXDatagramOutput artnetController = new LXDatagramOutput(lx);
+
+    // int[] indices = new int[170];
+    // for (int i = 0; i < 170; i++) {
+    //   indices[i] = i;
+    // }
+
+    // for (int i = 11; i < 21; i++) {
+    //   String ip = "10.200.1." + Integer.toString(i);
+
+    //   for (int i1 = 0; i1 < 8; i1++) {
+    //     artnetController.addDatagram((LXDatagram)(new ArtNetDatagram(ip, indices, i1)));
+    //     println("Created ArtNetDatagram for ip (" + ip + ") with universe (" + i1 + ")");
+    //   }
+    // }
+
+    int[][] indices = new int[80][170];
+
+    for (int i = 0; i < 80; i++) {
+      for (int i1 = 0; i1 < 170; i1++) {
+        indices[i][i1] = (i*170)+i1;
+      }
+    }
+
+    // 10.200.1.11
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[0], 0))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[1], 1))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[2], 2))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[3], 3))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[4], 4))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[5], 5))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[6], 6))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.11", indices[7], 7))); // 8
+
+    // 10.200.1.12
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[8], 8))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[9], 9))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[10], 10))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[11], 11))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[12], 12))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[13], 13))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[14], 14))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.12", indices[15], 15))); // 8
+
+    // 10.200.1.13
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[16], 16))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[17], 17))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[18], 18))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[19], 19))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[20], 20))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[21], 21))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[22], 22))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.13", indices[23], 23))); // 8
+
+    // 10.200.1.14
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[24], 24))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[25], 25))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[26], 26))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[27], 27))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[28], 28))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[29], 29))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[30], 30))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.14", indices[31], 31))); // 8
+
+    // 10.200.1.15
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[32], 32))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[33], 33))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[34], 34))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[35], 35))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[36], 36))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[37], 37))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[38], 38))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.15", indices[39], 39))); // 8
+
+    // 10.200.1.16
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[40], 40))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[41], 41))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[42], 42))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[43], 43))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[44], 44))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[45], 45))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[46], 46))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.16", indices[47], 47))); // 8
+
+    // 10.200.1.17
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[48], 48))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[49], 49))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[50], 50))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[51], 51))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[52], 52))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[53], 53))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[54], 54))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.17", indices[55], 55))); // 8
+
+
+    // 10.200.1.18
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[56], 56))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[57], 57))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[58], 58))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[59], 59))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[60], 60))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[61], 61))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[62], 62))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.18", indices[63], 63))); // 8
+
+
+    // 10.200.1.19
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[64], 64))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[65], 65))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[66], 66))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[67], 67))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[68], 68))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[69], 69))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[70], 70))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.19", indices[71], 71))); // 8
+
+
+    // // 10.200.1.20
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[72], 72))); // 1
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[73], 73))); // 2
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[74], 74))); // 3
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[75], 75))); // 4
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[76], 76))); // 5
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[77], 77))); // 6
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[78], 78))); // 7
+    artnetController.addDatagram((LXDatagram)(new ArtNetDatagram("10.200.1.20", indices[79], 79))); // 8
+
+    lx.addOutput(artnetController);
+    println("Added Artnet Controller");
+
+  } catch (SocketException e) {
+   e.printStackTrace();
+  }
 }
 
 /*
@@ -69,6 +215,84 @@ public final class OutputControl extends LXComponent {
           c.enabled.setValue(((BooleanParameter)parameter).isOn());
       };
     });
+  }
+}
+
+public class ArtNetDatagram extends LXDatagram {
+
+  private final static int DEFAULT_UNIVERSE = 0;
+  private final static int ARTNET_HEADER_LENGTH = 18;
+  private final static int ARTNET_PORT = 6454;
+  private final static int SEQUENCE_INDEX = 12;
+
+  private final int[] pointIndices;
+
+  private boolean sequenceEnabled = false;
+
+  private byte sequence = 1;
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
+    this(ipAddress, indices, 3*indices.length, universeNumber);
+  }
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
+
+    this.pointIndices = indices;
+
+    try {
+        setAddress(ipAddress);
+        setPort(ARTNET_PORT);
+    } catch (UnknownHostException e) {
+        System.out.println("COULD NOT FIND PIXLITE HOST WITH IP: " + ipAddress);
+    }
+
+    this.buffer[0] = 'A';
+    this.buffer[1] = 'r';
+    this.buffer[2] = 't';
+    this.buffer[3] = '-';
+    this.buffer[4] = 'N';
+    this.buffer[5] = 'e';
+    this.buffer[6] = 't';
+    this.buffer[7] = 0;
+    this.buffer[8] = 0x00; // ArtDMX opcode
+    this.buffer[9] = 0x50; // ArtDMX opcode
+    this.buffer[10] = 0; // Protcol version
+    this.buffer[11] = 14; // Protcol version
+    this.buffer[12] = 0; // Sequence
+    this.buffer[13] = 0; // Physical
+    this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
+    this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
+    this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
+    this.buffer[17] = (byte) (dataLength & 0xff);
+
+    // Ensure zero rest of buffer
+    for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
+     this.buffer[i] = 0;
+    }
+  }
+
+  /**
+   * Set whether to increment and send sequence numbers
+   *
+   * @param sequenceEnabled true if sequence should be incremented and transmitted
+   * @return this
+   */
+  public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    this.sequenceEnabled = sequenceEnabled;
+    return this;
+  }
+
+  @Override
+  public void onSend(int[] colors) {
+    copyPoints(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
+
+    if (this.sequenceEnabled) {
+      if (++this.sequence == 0) {
+        ++this.sequence;
+      }
+      this.buffer[SEQUENCE_INDEX] = this.sequence;
+    }
   }
 }
 

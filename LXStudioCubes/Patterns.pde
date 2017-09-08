@@ -1,6 +1,50 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class HuePattern extends LXPattern {
+  public CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
+  public HuePattern(LX lx) {
+    super(lx);
+    addParameter(hue);
+  }
+
+  public void run(double deltaMs) {
+    for (LXPoint p : model.points) {
+      colors[p.index] = lx.hsb(hue.getValuef(), 100, 100);
+    }
+  }
+}
+
+public class TestStrip extends LXPattern {
+
+  public SinLFO flash = new SinLFO("flash", 30, 100, 500);
+
+  private final SLModel localModel;
+
+  public TestStrip(LX lx) {
+    super(lx);
+    //addParameter(universe);
+    addModulator(flash).start();
+
+    this.localModel = (SLModel)model;
+  }
+
+  public void run(double deltaMs) {
+    for (int i = 0; i < localModel.strips.size(); i++) {
+      float bri = 0;
+
+      if (((int)universe.getValue()) == i) {
+        bri = flash.getValuef();
+      }
+
+      Strip s = localModel.strips.get(i);
+      for (LXPoint p : s.points) {
+        colors[p.index] = lx.hsb(100, 100, bri);
+      }
+    }
+  }
+}
+
 public class Ball extends DPat {
 
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);

@@ -10,6 +10,8 @@ public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
 
+public CompoundParameter universe = new CompoundParameter("universe", 0, 0, 79);
+
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
 
@@ -85,6 +87,8 @@ void setup() {
       ui.preview.setPhi(0).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+
+      new UIUniverse(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
