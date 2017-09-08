@@ -53,6 +53,8 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
     private final static float ARC_RANGE = PConstants.TWO_PI - 2 * KNOB_INDENT;
     private final static float ARC_END = ARC_START + ARC_RANGE;
 
+    private final static int BRIGHTEN = 20;
+
     public UIKnob(LXListenableNormalizedParameter parameter) {
         this();
         setParameter(parameter);
@@ -77,7 +79,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         float knobValue = (float) getNormalized();
         float baseValue = (float) getBaseNormalized();
         float valueEnd = ARC_START + knobValue * ARC_RANGE;
-        float modValueEnd = ARC_START + baseValue * ARC_RANGE;
+        float baseValueEnd = ARC_START + baseValue * ARC_RANGE;
         float valueStart;
         switch (this.polarity) {
         case BIPOLAR: valueStart = ARC_START + ARC_RANGE/2; break;
@@ -98,12 +100,12 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
                 float modStart, modEnd;
                 switch (modulation.getPolarity()) {
                 case BIPOLAR:
-                    modStart = LXUtils.constrainf(modValueEnd - modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
-                    modEnd = LXUtils.constrainf(modValueEnd + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+                    modStart = LXUtils.constrainf(baseValueEnd - modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+                    modEnd = LXUtils.constrainf(baseValueEnd + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
                     break;
                 default:
                 case UNIPOLAR:
-                    modStart = modValueEnd;
+                    modStart = baseValueEnd;
                     modEnd = LXUtils.constrainf(modStart + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
                     break;
                 }
@@ -120,13 +122,13 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
                 switch (modulation.getPolarity()) {
                 case BIPOLAR:
                     if (modEnd >= modStart) {
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, modValueEnd, Math.min(ARC_END, modEnd+.1f));
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseValueEnd, Math.min(ARC_END, modEnd+.1f));
                         pg.fill(modColorInv);
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modStart-.1f), modValueEnd);
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modStart-.1f), baseValueEnd);
                     } else {
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modEnd-.1f), modValueEnd);
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modEnd-.1f), baseValueEnd);
                         pg.fill(modColorInv);
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, modValueEnd, Math.min(ARC_END, modStart+.1f));
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseValueEnd, Math.min(ARC_END, modStart+.1f));
                     }
                     break;
                 case UNIPOLAR:
@@ -150,9 +152,24 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, ARC_START, ARC_END);
 
         // Value indication
-        pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(valueStart, valueEnd), Math.max(valueStart, valueEnd));
+        int baseColor;
+        int valueColor;
+        if (isEnabled()) {
+            int dim = ui.theme.getPrimaryColor();
+            int bright = LXColor.hsb(LXColor.h(dim), LXColor.s(dim), LXColor.b(dim) + BRIGHTEN);
+            baseColor = bright;
+            valueColor = dim;
+        } else {
+            int disabled = ui.theme.getControlDisabledColor();
+            baseColor = disabled;
+            valueColor = disabled;
+        }
 
+
+        pg.fill(baseColor);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(valueStart, baseValueEnd), Math.max(valueStart, baseValueEnd));
+        pg.fill(valueColor);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(baseValueEnd, valueEnd), Math.max(baseValueEnd, valueEnd));
 
         // Center tick mark for bipolar knobs
         if (this.polarity == LXParameter.Polarity.BIPOLAR) {
@@ -161,9 +178,10 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         }
 
         // Center dot
+        int dotSize = 8;
         pg.noStroke();
         pg.fill(0xff333333);
-        pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, 8, 8);
+        pg.ellipse(ARC_CENTER_X, ARC_CENTER_Y, dotSize, dotSize);
 
         super.onDraw(ui,  pg);
     }
