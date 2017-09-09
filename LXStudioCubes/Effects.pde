@@ -1,5 +1,30 @@
 import java.awt.Color;
 
+public static class ColorFilter extends LXEffect {
+
+  public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
+
+  public final CompoundParameter saturation = new CompoundParameter("sat", 100, 0, 100);
+
+  public ColorFilter(LX lx) {
+    super(lx);
+    addParameter(hue);
+    addParameter(saturation);
+  }
+
+  @Override
+  public void run(double deltaMs, double amount) {
+    for (LXPoint p : model.points) {
+      float brightness = LXColor.b(colors[p.index]);
+      colors[p.index] = lx.hsb(
+        hue.getValuef(),
+        saturation.getValuef(),
+        brightness
+      );
+    }
+  }
+}
+
 public static class Strobe extends LXEffect {
   
   public enum Waveshape {
