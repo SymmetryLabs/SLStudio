@@ -686,7 +686,7 @@ public class CubeEQ extends SLPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
-
+  private final CompoundParameter gain = new CompoundParameter("gain", 1, 0, 5); 
   private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
   private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
   private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
@@ -697,6 +697,7 @@ public class CubeEQ extends SLPattern {
     // addParameter(eq.attack);
     // addParameter(eq.release);
     // addParameter(eq.slope);
+    addParameter(gain);
     addParameter(edge);
     addParameter(clr);
     addParameter(blockiness);
@@ -727,7 +728,7 @@ public class CubeEQ extends SLPattern {
         eq.getBandf(avgFloor/4*4 + 3)
       ) / 4.; 
       
-      float value = lerp(smoothValue, chunkyValue, blockiness.getValuef());
+      float value = gain.getValuef()*lerp(smoothValue, chunkyValue, blockiness.getValuef());
 
       float b = constrain(edgeConst * (value*model.yMax - p.y), 0, 100);
       colors[p.index] = lx.hsb(
