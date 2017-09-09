@@ -618,8 +618,14 @@ public class Pong extends DPat {
       pSize = addParam  ("Size"     , 0.4 );
       pChoose = new DiscreteParameter("Anim", new String[] {"Pong", "Ball", "Cone"} );
       pChoose.setValue(2);
+      addParameter(pChoose);
       //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);
+    removeParameter(pRotX);
+    removeParameter(pRotY);
+    removeParameter(pRotZ);
+    removeParameter(pRotX);
+    removeParameter(pSpin);
   }
 
   void    StartRun(double deltaMs)  { cRad = mMax.x*val(pSize)/6; }
@@ -931,8 +937,10 @@ public class Traktor extends SLPattern {
 
 public class AskewPlanes extends DPat {
 
-  CompoundParameter thickness = new CompoundParameter("THCK", 0.2, 0.1, 0.9);
+  CompoundParameter thickness = new CompoundParameter("thck", 0.2, 0.1, 0.9);
   float huev = 0;
+
+  DiscreteParameter numPlanes = new DiscreteParameter("num" , new String[] {"3", "2", "1"});
 
   class Plane {
     private final SinLFO a;
@@ -968,6 +976,12 @@ public class AskewPlanes extends DPat {
       planes[i] = new Plane(i);
     }
     pTransX.setValue(1);
+    addParameter(numPlanes);
+    removeParameter(pRotX);
+    removeParameter(pRotY);
+    removeParameter(pRotZ);
+    removeParameter(pRotX);
+    removeParameter(pSpin);
   }
   
   void StartRun(double deltaMs) {
@@ -988,7 +1002,10 @@ public class AskewPlanes extends DPat {
   color CalcPoint(PVector p) {
     //for (LXPoint p : model.points) {
       float d = MAX_FLOAT;
+
+      int i = 0;
       for (Plane plane : planes) {
+        if (i++ <= numPlanes.getValuei()-1) continue;
         if (plane.denom != 0) {
           d = min(d, abs(plane.av*(p.x-model.cx) + plane.bv*(p.y-model.cy) + plane.cv) / plane.denom);
         }
