@@ -1,4 +1,6 @@
 import processing.core.PGraphics;
+import heronarts.p3lx.ui.studio.modulation.UIModulator;
+import heronarts.p3lx.ui.studio.modulation.UIVariableLFO;
 
 public class UIOverriddenRightPane extends UIPane {
 
@@ -35,9 +37,6 @@ public class UIOverriddenRightPane extends UIPane {
     //new UIAudioAnalyzer(this.lx, this.ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
 
     new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
-
-    if (((SLModel)model).cubes.size() > 0)
-      new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
   }
 
   private void buildMidiUI() {
@@ -73,7 +72,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("LFO")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDarkBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new LFO to the modulation engine")
     .addToContainer(bar);
@@ -90,7 +89,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("Env")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDarkBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new envelope to the modulation engine")
     .addToContainer(bar);
@@ -107,7 +106,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("Beat")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDarkBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new Beat detector to the modulation engine")
     .addToContainer(bar);
@@ -124,27 +123,27 @@ public class UIOverriddenRightPane extends UIPane {
     }
     .setLabel("Macro")
     .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDarkBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new Beat detector to the modulation engine")
     .addToContainer(bar);
 
-    new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
-      @Override
-      public void onToggle(boolean on) {
-        if (on) {
-          AudioAnalyzerKnobs audioAnalyzerKnobs = new AudioAnalyzerKnobs("Audio Analyzation");
-          lx.engine.modulation.addModulator(audioAnalyzerKnobs);
-          audioAnalyzerKnobs.start();
-        }
-      }
-    }
-    .setLabel("Audio")
-    .setMomentary(true)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
-    .setBorderRounding(4)
-    .setDescription("Map audio analyzation properties")
-    .addToContainer(bar);
+    // new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+    //   @Override
+    //   public void onToggle(boolean on) {
+    //     if (on) {
+    //       AudioAnalyzerKnobs audioAnalyzerKnobs = new AudioAnalyzerKnobs("Audio Analyzation");
+    //       lx.engine.modulation.addModulator(audioAnalyzerKnobs);
+    //       audioAnalyzerKnobs.start();
+    //     }
+    //   }
+    // }
+    // .setLabel("Audio")
+    // .setMomentary(true)
+    // .setInactiveColor(ui.theme.getDarkBackgroundColor())
+    // .setBorderRounding(4)
+    // .setDescription("Map audio analyzation properties")
+    // .addToContainer(bar);
 
     final UIButton mapButton = (UIButton) new UIButton(0, 0, 24, 16) {
       @Override
@@ -157,7 +156,7 @@ public class UIOverriddenRightPane extends UIPane {
       }
     }
     .setIcon(ui.theme.iconMap)
-    .setInactiveColor(ui.theme.getWindowBackgroundColor())
+    .setInactiveColor(ui.theme.getDarkBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new parameter mapping to the modulation engine")
     .addToContainer(bar);
@@ -200,10 +199,12 @@ public class UIOverriddenRightPane extends UIPane {
   }
 
   private UIModulator findModulator(LXParameter parameter) {
+    println("HERE IS PARAMETER", parameter);
     for (UIObject child : this.modulation) {
       if (child instanceof UIModulator) {
         UIModulator uiModulator = (UIModulator) child;
-        if (uiModulator.parameter == parameter || uiModulator.parameter == parameter.getComponent()) {
+        LXModulator mod = uiModulator.modulator;
+        if (mod == parameter || mod == parameter.getComponent()) {
           return uiModulator;
         }
       }
@@ -220,9 +221,7 @@ public class UIOverriddenRightPane extends UIPane {
       new UIBandGate(this.ui, this.lx, (BandGate) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
     } else if (modulator instanceof MacroKnobs) {
       new UIMacroKnobs(this.ui, this.lx, (MacroKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-    } else if (modulator instanceof AudioAnalyzerKnobs) {
-      new UIAudioAnalyzerKnobs(this.ui, this.lx, (AudioAnalyzerKnobs) modulator, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-    } else {
+   } else {
       System.err.println("No UI available for modulator type: " + modulator.getClass().getName());
     }
   }

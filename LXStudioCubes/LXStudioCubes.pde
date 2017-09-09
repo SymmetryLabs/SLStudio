@@ -8,7 +8,6 @@ public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
-public MappingMode mappingMode = null;
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -50,10 +49,6 @@ void setup() {
       setupOutputs(lx);
       outputControl = new OutputControl(lx);
       lx.engine.registerComponent("outputControl", outputControl);
-
-      // Mapping
-      if (((SLModel)model).cubes.size() > 0)
-        mappingMode = new MappingMode(lx);
 
       // Adaptor for mapping osc messages from Essentia to lx osc engine
       try {
