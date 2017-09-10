@@ -970,10 +970,11 @@ public class BassPod extends SLPattern {
   private GraphicMeter eq = new GraphicMeter(audioInput);
   
   private final CompoundParameter clr = new CompoundParameter("CLR", 0.5);
-  
+  private final CompoundParameter gain = new CompoundParameter("gain", 0.5);
   public BassPod(LX lx) {
     super(lx);
     addParameter(clr);
+    addParameter(gain);
     // addParameter(eq.gain);
     // addParameter(eq.range);
     // addParameter(eq.attack);
@@ -990,7 +991,7 @@ public class BassPod extends SLPattern {
   }
 
   public void run(double deltaMs) {
-    float bassLevel = eq.getAveragef(0, 5);
+    float bassLevel = gain.getValuef()*eq.getAveragef(0, 5);
     float satBase = bassLevel*480*clr.getValuef();
     
     for (LXPoint p : model.points) {
@@ -1016,6 +1017,7 @@ public class CubeEQ extends SLPattern {
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
 
+  private final CompoundParameter gain = new CompoundParameter("gain", 1, 0, 5);
   private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
   private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
   private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
@@ -1026,6 +1028,7 @@ public class CubeEQ extends SLPattern {
     // addParameter(eq.attack);
     // addParameter(eq.release);
     // addParameter(eq.slope);
+    addParameter(gain);
     addParameter(edge);
     addParameter(clr);
     addParameter(blockiness);
@@ -1047,7 +1050,7 @@ public class CubeEQ extends SLPattern {
 
       float leftVal = eq.getBandf(avgFloor);
       float rightVal = eq.getBandf(avgFloor+1);
-      float smoothValue = lerp(leftVal, rightVal, avgIndex-avgFloor);
+      float smoothValue = gain.getValuef()*lerp(leftVal, rightVal, avgIndex-avgFloor);
       
       float chunkyValue = (
         eq.getBandf(avgFloor/4*4) +
