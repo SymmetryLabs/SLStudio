@@ -4,6 +4,7 @@ import com.google.gson.JsonObject;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
+import java.util.Iterator;
 
 public class SLStudio extends P3LX {
 
@@ -13,7 +14,8 @@ public class SLStudio extends P3LX {
 
     public final PreviewWindow preview;
     public final UILeftPane leftPane;
-    public final UIOverriddenRightPane rightPane;
+    //public final UIOverriddenRightPane rightPane;
+    public final UIRightPane rightPane;
     public final UIBottomTray bottomTray;
     public final UIContextualHelpBar helpBar;
 
@@ -46,9 +48,9 @@ public class SLStudio extends P3LX {
       initialize(lx, this);
       setBackgroundColor(this.theme.getDarkBackgroundColor());
 
-      this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIOverriddenRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
+      this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0, this.applet.width - UILeftPane.WIDTH - UIRightPane.WIDTH, this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
       this.leftPane = new UILeftPane(this, lx);
-      this.rightPane = new UIOverriddenRightPane(this, lx);
+      this.rightPane = new UIRightPane(this, lx);
       this.bottomTray = new UIBottomTray(this, lx);
       this.helpBar = new UIContextualHelpBar(this);
 
