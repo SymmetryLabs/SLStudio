@@ -52,7 +52,7 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
-      if (((SLModel)model).cubes.size() > 0)
+      if (((SLModel)model).bars.size() > 0)
         mappingMode = new MappingMode(lx);
 
       // Adaptor for mapping osc messages from Essentia to lx osc engine
@@ -88,8 +88,8 @@ void setup() {
 
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
-      // if (((SLModel)model).cubes.size() > 0)
-      //   new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
+      //if (((SLModel)model).cubes.size() > 0)
+        new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
 
       // if (envelopOn) {
       //   new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);

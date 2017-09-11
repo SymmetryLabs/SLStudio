@@ -1011,7 +1011,7 @@ public class AskewPlanes extends DPat {
         }
       }
       return lx.hsb(
-        huev + abs(p.x-model.cx)*.3 + p.y*.8,
+        huev + abs(p.x-model.cx)*.1 + p.y*.36,
         max(0, 100 - .15*abs(p.x - model.cx)),
         constrain(700.*thickness.getValuef() - 10.*d, 0, 100)
       );

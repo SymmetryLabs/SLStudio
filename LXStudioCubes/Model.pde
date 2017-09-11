@@ -33,12 +33,13 @@ public static class SLModel extends LXModel {
   public final List<Tower> towers;
   public final List<Cube> cubes;
   public final List<Face> faces;
+  public final List<Bar> bars;
   public final List<Strip> strips;
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(cubeArr, strips));
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Bar> bars, List<Strip> strips) {
+    super(new Fixture(cubeArr, bars, strips));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -47,6 +48,7 @@ public static class SLModel extends LXModel {
     List<Tower> towerList = new ArrayList<Tower>();
     List<Cube> cubeList = new ArrayList<Cube>();
     List<Face> faceList = new ArrayList<Face>();
+    List<Bar> barList = new ArrayList<Bar>();
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
     
@@ -66,18 +68,25 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips)
+    for (Bar bar : bars) {
+      barList.add(bar);
+      stripList.add(bar.strip);
+    }
+
+    for (Strip strip : strips) {
       stripList.add(strip);
+    }
 
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
+    this.bars      = Collections.unmodifiableList(barList);
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(Cube[] cubeArr, List<Bar> bars, List<Strip> strips) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -85,6 +94,11 @@ public static class SLModel extends LXModel {
           } 
         } 
       } 
+      for (Bar bar : bars) {
+        for (LXPoint point : bar.points) {
+          this.points.add(point);
+        }
+      }
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
           this.points.add(point);
@@ -158,6 +172,67 @@ public static class Tower extends LXModel {
     this.cubes = Collections.unmodifiableList(cubeList);
     this.faces = Collections.unmodifiableList(faceList);
     this.strips = Collections.unmodifiableList(stripList);
+  }
+}
+
+public static class Bar extends LXModel {
+
+  public String id;
+  public Strip.Metrics metrics;
+  public Strip strip;
+
+  public float x;
+  public float y;
+  public float z;
+  public float xRot;
+  public float yRot;
+  public float zRot;
+
+  public Bar(BarConfig barConfig, LXTransform t) {
+    this(barConfig.id, barConfig.metrics, barConfig.x, barConfig.y, barConfig.z, barConfig.xRot, barConfig.yRot, barConfig.zRot, t);
+  }
+
+  public Bar(String id, Strip.Metrics metrics, float x, float y, float z, float xRot, float yRot, float zRot, LXTransform t) {
+    super(new Fixture(metrics, x, y, z, xRot, yRot, zRot, t));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+
+    this.id = id;
+    this.metrics = metrics;
+    this.x = fixture.x;
+    this.y = fixture.y;
+    this.z = fixture.z;
+    this.xRot = xRot;
+    this.yRot = yRot;
+    this.zRot = zRot;
+
+    this.strip = fixture.strip;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    public float x;
+    public float y;
+    public float z;
+
+    private final Strip strip;
+
+    private Fixture(Strip.Metrics metrics, float x, float y, float z, float xRot, float yRot, float zRot, LXTransform t) {
+      t.push();
+      t.translate(x, y, z);
+      t.rotateY(xRot * PI / 180.);
+      t.rotateX(yRot * PI / 180.);
+      t.rotateZ(zRot * PI / 180.);
+
+      this.x = t.x();
+      this.y = t.y();
+      this.z = t.z();
+
+      this.strip = new Strip(metrics, yRot, t, zRot != 0);
+      for (LXPoint p : strip.points) {
+        this.points.add(p);
+      }
+      t.pop();
+    }
   }
 }
 

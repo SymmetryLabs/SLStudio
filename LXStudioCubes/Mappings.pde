@@ -19,7 +19,7 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -33,6 +33,12 @@ static final float TOWER_RISER = 14;
 static final float SP = 24;
 static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
+static final int BAR_NUM_POINTS = 139;
+static final float BAR_PIXEL_PITCH = 0.656168;
+static final float BAR_SPACING_X = 4*12;
+
+
+
 // static final BulbConfig[] BULB_CONFIG = {
 //     // new BulbConfig("lifx-1", -50, 50, -30),
 //     // new BulbConfig("lifx-2", 0, 50, 0),
@@ -41,94 +47,104 @@ static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 //     // new BulbConfig("lifx-5", 0, 0, 0),
 // };
 
-static final TowerConfig[] TOWER_CONFIG = {
+static final BarConfig[] BAR_CONFIG = {
 
-    // left
-    new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-      "22", "204"
-      }),
+  // row 7
+  new BarConfig("140", new float[] {180+BAR_SPACING_X*0, 70, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("347", new float[] {180+BAR_SPACING_X*1, 70, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("501",   new float[] {180+BAR_SPACING_X*2, 70, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("413", new float[] {180+BAR_SPACING_X*3, 70, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("158", new float[] {180+BAR_SPACING_X*4, 70, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("95",  new float[] {180+BAR_SPACING_X*5, 70, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("74",  new float[] {180+BAR_SPACING_X*6, 70, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
 
-    new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
-      "86"
-      }),
 
-    new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
-      "5"
-      }),
+  // row 6
+  new BarConfig("210", new float[] {67+BAR_SPACING_X*0, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("141", new float[] {67+BAR_SPACING_X*1, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("180", new float[] {67+BAR_SPACING_X*2, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("159", new float[] {67+BAR_SPACING_X*3, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("503",   new float[] {67+BAR_SPACING_X*4, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("502",   new float[] {67+BAR_SPACING_X*5, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("506",   new float[] {67+BAR_SPACING_X*6, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("107", new float[] {67+BAR_SPACING_X*6, 117, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
 
-   new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-      "25", "199", "177"
-      }),
+  // row 5
+  new BarConfig("176", new float[] {BAR_SPACING_X*0, 64, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("189", new float[] {BAR_SPACING_X*1, 64, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  // gap
+  new BarConfig("206", new float[] {500+BAR_SPACING_X*0, 64, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("362", new float[] {500+BAR_SPACING_X*1, 64, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
 
-   new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
-      "94"
-      }),
+  // row 4 
+  new BarConfig("402", new float[] {92+BAR_SPACING_X*0, 108, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("411", new float[] {92+BAR_SPACING_X*1, 108, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("350", new float[] {92+BAR_SPACING_X*2, 108, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("505", new float[] {92+BAR_SPACING_X*3, 108, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("389", new float[] {92+BAR_SPACING_X*4, 108, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("153", new float[] {92+BAR_SPACING_X*5, 108, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("163", new float[] {92+BAR_SPACING_X*6, 108, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
 
-   new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
-      "90"
-      }),
+  // row 3 
+  new BarConfig("375", new float[] {112+BAR_SPACING_X*0, 200+90, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("138", new float[] {112+BAR_SPACING_X*1, 200+90, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("507",   new float[] {112+BAR_SPACING_X*2, 200+90, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("405", new float[] {112+BAR_SPACING_X*3, 200+90, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("147", new float[] {112+BAR_SPACING_X*4, 200+90, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("105", new float[] {112+BAR_SPACING_X*5, 200+90, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("183", new float[] {112+BAR_SPACING_X*6, 200+90, 0}, new float[] {0, 0, -90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
 
-   new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
-      "64"
-      }),
+  // row 2
+  new BarConfig("55",  new float[] {5+BAR_SPACING_X*0,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("321", new float[] {5+BAR_SPACING_X*1,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("348", new float[] {5+BAR_SPACING_X*2,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("145", new float[] {5+BAR_SPACING_X*3,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("111", new float[] {5+BAR_SPACING_X*4,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("14",  new float[] {5+BAR_SPACING_X*5,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("35",  new float[] {5+BAR_SPACING_X*6,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("154", new float[] {5+BAR_SPACING_X*7,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("392", new float[] {5+BAR_SPACING_X*8,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("332", new float[] {5+BAR_SPACING_X*9,  265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("73",  new float[] {5+BAR_SPACING_X*10, 265, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
 
-    // left tower of 5   
-    new TowerConfig(0, 0, 0, new String[] {   
-      "19", "190", "121", "1", "103"    
-    }),   
-    new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
-    new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
-    new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
-    new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
-   
-    new TowerConfig(SP*2.0, 0, 0, new String[] {    
-      "6", "132", "61", "54"    
-    }),   
-
-    new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
-     
-    // middle tower of 5    
-    new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
-      "111", "166", "187", "158", "101"   
-    }),  
-
-    new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
-    new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
-    new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
-    new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
-     
-    new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
-      "102", "156", "13", "82"    
-    }),   
-    new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
-    new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
-    new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
-    new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
-    new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
-     
-    // right tower of 5   
-    new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
-      "183", "180", "57", "51", "108"   
-    }),   
-    new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
-    new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
-    new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
-     
-    new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
-     "100", "85", "110zAQ  AZQ"    
-    }),   
-    new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
-    new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
-    
-    // table cubes    
-    new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
-    new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
-    new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
+  // row 1
+  new BarConfig("500",   new float[] {108+BAR_SPACING_X*0, 315, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("170", new float[] {108+BAR_SPACING_X*1, 315, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("212", new float[] {108+BAR_SPACING_X*2, 315, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("184", new float[] {108+BAR_SPACING_X*3, 315, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("133", new float[] {108+BAR_SPACING_X*4, 315, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("134", new float[] {108+BAR_SPACING_X*5, 315, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
+  new BarConfig("504",   new float[] {108+BAR_SPACING_X*6, 315, 0}, new float[] {0, 0, 90}, BAR_NUM_POINTS, BAR_PIXEL_PITCH),
 };
 
 
+static final TowerConfig[] TOWER_CONFIG = {
+ 
+};
+
+static class BarConfig {
+  final String id;
+  final float x;
+  final float y;
+  final float z;
+  final float xRot;
+  final float yRot;
+  final float zRot;
+  final Strip.Metrics metrics;
+  final float length;
+
+  BarConfig(String id, float[] coordinates, float[] rotations, int numPoints, float pixelPitch) {
+    this.id = id;
+    this.x = coordinates[0];
+    this.y = coordinates[1];
+    this.z = coordinates[2];
+    this.xRot = rotations[0];
+    this.yRot = rotations[1];
+    this.zRot = rotations[2];
+    this.metrics = new Strip.Metrics(numPoints, pixelPitch);
+    this.length = numPoints * pixelPitch;
+  }
+}
 
 static final StripConfig[] STRIP_CONFIG = {
           // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
@@ -231,8 +247,8 @@ public SLModel buildModel() {
   // Any global transforms
   LXTransform globalTransform = new LXTransform();
   globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-  globalTransform.rotateY(globalRotationY * PI / 180.);
-  globalTransform.rotateX(globalRotationX * PI / 180.);
+  globalTransform.rotateX(globalRotationY * PI / 180.);
+  globalTransform.rotateY(globalRotationX * PI / 180.);
   globalTransform.rotateZ(globalRotationZ * PI / 180.);
 
   /* Cubes ----------------------------------------------------------*/
@@ -258,6 +274,18 @@ public SLModel buildModel() {
   }
   /*-----------------------------------------------------------------*/
 
+  List<Bar> allBars = new ArrayList<Bar>();
+
+  for (BarConfig barConfig : BAR_CONFIG) {
+    globalTransform.push();
+    //globalTransform.translate(djBoothOffsetX, djBoothOffsetY, djBoothOffsetZ);
+
+    Bar bar = new Bar(barConfig, globalTransform);
+    allBars.add(bar);
+
+    globalTransform.pop();
+  }
+
   /* Strips ----------------------------------------------------------*/
   List<Strip> strips = new ArrayList<Strip>();
 
@@ -266,8 +294,8 @@ public SLModel buildModel() {
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
-    globalTransform.rotateX(stripConfig.yRot * PI / 180.);
+    globalTransform.rotateX(stripConfig.xRot * PI / 180.);
+    globalTransform.rotateY(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
     strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
@@ -281,7 +309,7 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
+  return new SLModel(towers, allCubesArr, allBars,    strips);
 }
 
 public SLModel getModel() {
@@ -365,7 +393,7 @@ public class MappingPattern extends SLPattern {
     if (id.equals("-")) return;
 
     // we iterate all cubes and call continue here because multiple cubes might have zero as id
-    for (Cube c : model.cubes) {
+    for (Bar c : model.bars) {
       if (!c.id.equals(id)) continue;
 
       LXPoint[] points = c.points;
@@ -418,7 +446,7 @@ public class MappingMode {
     // this.displayOrientation = new BooleanParameter("displayOrientation", false)
     //  .setDescription("Mapping Mode: display colors on strips to indicate it's orientation");
 
-    for (Cube cube : model.cubes)
+    for (Bar cube : model.bars)
       fixturesMappedButNotOnNetwork.add(cube.id);
 
     this.selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", fixturesMappedButNotOnNetwork.toArray());
