@@ -23,6 +23,12 @@ LX differs from many other lighting/VJ software packages in that it is designed 
 
 A companion library, [P3LX](https://github.com/heronarts/P3LX), makes it simple to embed LX in the Processing 3 environment with modular UI controls and simulation, the  most typical use case. This core library, however, is free of any dependency on the Processing libraries or runtime.
 
-LX is made available under the GPLv2 with special linking exceptions that permit the use of [CoreMidi4J](https://github.com/DerekCook/CoreMidi4J) (which improves MIDI support on OSX - thanks Derek!) and [google-gson](https://github.com/google/gson). If this licensing is obstructive to your needs, you may contact me to discuss dual-licensing. 
- 
-Building a big cool project? I'm probably interested in hearing about it! Drop me a line: mark@heronarts.com
+## Licensing Notes ##
+
+LX is made available under the GPLv2 with special linking exceptions that permit the use of [CoreMidi4J](https://github.com/DerekCook/CoreMidi4J) (which improves MIDI support on OSX - thanks Derek!) and [google-gson](https://github.com/google/gson). This means that you are free to distribute a project using LX so long as all the components of your project are open-source and GPL compatible. Specifically, this means ***you may not distribute software using LX if any portion of that software is proprietary closed-source or non-GPL compatible***.
+
+If this licensing is obstructive to your needs or you are unclear as to whether your desired use case is compliant, contact me to discuss licensing options: mark@heronarts.com.
+
+### Contact and Collaboration ###
+
+Building a big cool project? I'm probably interested in hearing about it! Want to solicit some help, request new framework features, or just ask a random question? Drop me a line: mark@heronarts.com
