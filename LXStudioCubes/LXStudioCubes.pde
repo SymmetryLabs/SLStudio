@@ -105,7 +105,8 @@ void setup() {
   };
 
   lx.engine.audio.enabled.setValue(true);
-
+  lx.engine.isChannelMultithreaded.setValue(true);
+  //lx.engine.setSuperThreaded(true); 
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
 }
