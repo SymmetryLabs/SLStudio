@@ -9,6 +9,7 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
+public ArtNetRunner artNetRunner;
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -41,6 +42,11 @@ void setup() {
       //     throw new RuntimeException(sx);
       //   } 
       // }
+
+      // ArtNet Runner
+      (artNetRunner = new ArtNetRunner(lx)).start();
+
+      lx.engine.addLoopTask(artNetRunner);
 
       // Output
       (dispatcher = new Dispatcher(lx)).start();
@@ -86,6 +92,7 @@ void setup() {
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
+      //new MappableColors(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
       // if (((SLModel)model).cubes.size() > 0)

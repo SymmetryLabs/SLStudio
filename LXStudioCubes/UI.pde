@@ -1,3 +1,64 @@
+// class MappableColors extends UICollapsibleSection {
+
+//     public final List<MappableColor> mappableColors = new ArrayList<MappableColor>();
+
+//     public MappableColors(UI ui, LX lx, float x, float y, float w) {
+//         super(ui, x, y, w, 10*50);
+//         setTitle("Mappable Colors");
+//         setBackgroundColor(#404040); //ui.theme.getDeviceBackgroundColor()
+//         setBorderRounding(4);
+
+//         for (int i = 0; i < 5; i++) {
+//             float ly = (y + MappableColor.HEADER_HEIGHT) + (i * MappableColor.HEIGHT);
+//             MappableColor mappableColor = new MappableColor(i, 0, ly, w, MappableColor.HEIGHT);
+//             this.mappableColors.add(mappableColor);
+//             mappableColor.addToContainer(this);
+//         }
+//     }
+
+//     private class MappableColor extends UI2dContainer {
+//         private static final float HEADER_HEIGHT = 5;
+//         private static final float HEIGHT = 70;
+
+//         private UI2dContainer self = this;
+//         private float y;
+
+//         public final BooleanParameter enabled = new BooleanParameter("enabled", false);
+//         public final CompoundParameter hue;
+
+//         private MappableColor(int index, float x, float y, float w, float h) {
+//             super(x, y, w, h);
+//             this.setBackgroundColor(#232323);
+
+//             this.y = HEADER_HEIGHT + index*HEIGHT;
+
+//             this.hue = new CompoundParameter("color " + index, 0, 0, 360);;
+
+//             new UILabel(5, x, 50, 12)
+//             .setLabel("Color " + index)
+//             .addToContainer(this);
+
+//             enabled.setMode(BooleanParameter.Mode.MOMENTARY);
+//             final UIButton button = new UIButton(60, y+12, 30, 30);
+//             button.setLabel("on");
+//             button.setParameter(enabled);
+//             button.addToContainer(this);
+
+//             final UIKnob knob = new UIKnob(5, y+12);
+//             knob.setParameter(hue);
+//             knob.addToContainer(this);
+
+//             hue.addListener(new LXParameterListener() {
+//                 public void onParameterChanged(LXParameter p) {
+//                     //self.setBackgroundColor(lx.hsb(hue.getValuef(), 100, 100));
+//                     redraw();
+//                 }
+//             });
+//         }
+//     }
+
+// }
+
 class UISpeed extends UI2dContainer {
   public UISpeed(UI ui, final LX lx, float x, float y, float w) {
     super(x, y, w, 20);
