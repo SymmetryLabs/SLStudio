@@ -184,7 +184,7 @@ class ArtNetRunner extends LXRunnableComponent {
     }
     channel4.crossfadeGroup.setValue(channel4CrossfadeGroup); // [30]
 
-    int channel4MaskValue = get(30); // [30]
+    int channel4MaskValue = get(31); // [30]
     for (LXEffect effect : channel4.effects) {
       if (effect.label.getString().equals("HangingCubesMask")) {
         if (channel4MaskValue == 1) {
