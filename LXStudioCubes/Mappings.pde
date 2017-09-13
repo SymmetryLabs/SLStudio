@@ -43,7 +43,7 @@ static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
 static final float SPACING = 5*12;
 
-static final TowerConfig[] TOWER_CONFIG = {
+static final TowerConfig[] HANGING_CONFIG = {
 
   // hanging
   new TowerConfig(Cube.Type.LARGE,  SPACING*0,   12*8,    0, -45-180, -45, 0, new String[] {"126"}),
@@ -60,8 +60,9 @@ static final TowerConfig[] TOWER_CONFIG = {
 
   new TowerConfig(Cube.Type.LARGE,  SPACING*4,   12*8,    0, -45-180, -45, 0, new String[] {"187"}),
   new TowerConfig(Cube.Type.MEDIUM, SPACING*4+7, 12*8+6,  6, -45-180, -45, 0, new String[] {"143"}),
+};
 
-
+static final TowerConfig[] FLOOR_CONFIG = {
   // floor
   // left - back
   new TowerConfig(Cube.Type.LARGE, SPACING*0,     0, -30, -180, -45, 0, new String[] {"119"}),
@@ -188,7 +189,10 @@ public SLModel buildModel() {
   List<Tower> towers = new ArrayList<Tower>();
   List<Cube> allCubes = new ArrayList<Cube>();
 
-  for (TowerConfig config : TOWER_CONFIG) {
+  List<Cube> hangingCubes = new ArrayList();
+  List<Cube> floorCubes = new ArrayList();
+
+  for (TowerConfig config : HANGING_CONFIG) {
     List<Cube> cubes = new ArrayList<Cube>();
     float x = config.x;
     float z = config.z;
@@ -202,6 +206,26 @@ public SLModel buildModel() {
       Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
       cubes.add(cube);
       allCubes.add(cube);
+      hangingCubes.add(cube);
+    }
+    towers.add(new Tower("", cubes));
+  }
+
+  for (TowerConfig config : FLOOR_CONFIG) {
+    List<Cube> cubes = new ArrayList<Cube>();
+    float x = config.x;
+    float z = config.z;
+    float xRot = config.xRot;
+    float yRot = config.yRot;
+    float zRot = config.zRot;
+    Cube.Type type = config.type;
+
+    for (int i = 0; i < config.ids.length; i++) {
+      float y = config.yValues[i];
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+      cubes.add(cube);
+      allCubes.add(cube);
+      floorCubes.add(cube);
     }
     towers.add(new Tower("", cubes));
   }
@@ -230,7 +254,7 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
+  return new SLModel(towers, allCubesArr, hangingCubes, floorCubes, strips);
 }
 
 public SLModel getModel() {

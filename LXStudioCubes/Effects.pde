@@ -1,5 +1,37 @@
 import java.awt.Color;
 
+public static class HangingCubesMask extends LXEffect {
+
+  public HangingCubesMask(LX lx) {
+    super(lx);
+  }
+
+  @Override
+  public void run(double deltaMs, double amount) {
+    for (Cube cube : ((SLModel)model).floorCubes) {
+      for (LXPoint p : cube.points) {
+        colors[p.index] = 0;
+      }
+    }
+  }
+}
+
+public static class FloorCubesMask extends LXEffect {
+
+  public FloorCubesMask(LX lx) {
+    super(lx);
+  }
+
+  @Override
+  public void run(double deltaMs, double amount) {
+    for (Cube cube : ((SLModel)model).hangingCubes) {
+      for (LXPoint p : cube.points) {
+        colors[p.index] = 0;
+      }
+    }
+  }
+}
+
 public static class ColorFilter extends LXEffect {
 
   public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);

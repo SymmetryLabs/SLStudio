@@ -37,7 +37,10 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
+  public final List<Cube> hangingCubes;
+  public final List<Cube> floorCubes;
+
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Cube> hangingCubes, List<Cube> floorCubes, List<Strip> strips) {
     super(new Fixture(cubeArr, strips));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -65,6 +68,9 @@ public static class SLModel extends LXModel {
         }
       }
     }
+
+    this.hangingCubes = hangingCubes;
+    this.floorCubes = floorCubes;
 
     for (Strip strip : strips)
       stripList.add(strip);
