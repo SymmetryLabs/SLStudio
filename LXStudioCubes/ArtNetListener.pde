@@ -40,48 +40,99 @@ class ArtNetRunner extends LXRunnableComponent {
   protected void run(double deltaMs) {
     //if (!artnet.enabled.isOn()) return;
 
-    this.channels = artNetListener.getCurrentInputDmxArray();
+    //this.channels = artNetListener.getCurrentInputDmxArray();
 
     // [0] (live)
-    outputControl.enabled.setValue(channels[0] > 0);
+    outputControl.enabled.setValue(get(0) > 0);
 
     // [1] (speed)
-    lx.engine.speed.setValue(normalize(channels[1]));
+    lx.engine.speed.setValue(getNormalized(1));
 
     // [2] (brightness)
-    lx.engine.output.brightness.setValue(normalize(channels[2]));
+    lx.engine.output.brightness.setValue(getNormalized(2));
+
+    // [3] (crossfader)
+    lx.engine.crossfader.setValue(getNormalized(3));
 
     // [3, 4, 5] (rgb color)
-    lx.palette.clr.setColor(LXColor.rgb(channels[3], channels[4], channels[5]));
+    lx.palette.clr.setColor(LXColor.rgb(get(4), get(5), get(6)));
 
     // CHANNEL 1
     LXChannel channel1 = lx.engine.getChannel(0);
-    channel1.enabled.setValue(channels[6] > 0); // [6]
-    channel1.fader.setValue(normalize(channels[7])); // [7]
-    channel1.goIndex(channels[8]); // [8]
+    channel1.enabled.setValue(get(7) > 0); // [6]
+    channel1.fader.setValue(getNormalized(8)); // [7]
+    channel1.goIndex(get(9)); // [8]
+
+    LXChannel.CrossfadeGroup channel1CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    if (get(10) == 0) {
+      channel1CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    } else if (get(10) == 1) {
+      channel1CrossfadeGroup = LXChannel.CrossfadeGroup.A;
+    } else if (get(10) > 127) {
+      channel1CrossfadeGroup = LXChannel.CrossfadeGroup.B;
+    }
+    channel1.crossfadeGroup.setValue(channel1CrossfadeGroup);
 
     // CHANNEL 2
     LXChannel channel2 = lx.engine.getChannel(1);
-    channel2.enabled.setValue(channels[9] > 0); // [9]
-    channel2.fader.setValue(normalize(channels[10])); // [10]
-    channel2.goIndex(channels[11]); // [11]
+    channel2.enabled.setValue(get(11) > 0); // [6]
+    channel2.fader.setValue(getNormalized(12)); // [7]
+    channel2.goIndex(get(13)); // [8]
+
+    LXChannel.CrossfadeGroup channel2CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    if (get(14) == 0) {
+      channel2CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    } else if (get(14) == 1) {
+      channel2CrossfadeGroup = LXChannel.CrossfadeGroup.A;
+    } else if (get(14) > 127) {
+      channel2CrossfadeGroup = LXChannel.CrossfadeGroup.B;
+    }
+    channel2.crossfadeGroup.setValue(channel2CrossfadeGroup);
 
     // CHANNEL 3
     LXChannel channel3 = lx.engine.getChannel(2);
-    channel3.enabled.setValue(channels[12] > 0); // [12]
-    channel3.fader.setValue(normalize(channels[13])); // [13]
-    channel3.goIndex(channels[14]); // [14]
+    channel3.enabled.setValue(get(15) > 0); // [6]
+    channel3.fader.setValue(getNormalized(16)); // [7]
+    channel3.goIndex(get(17)); // [8]
+
+    LXChannel.CrossfadeGroup channel3CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    if (get(18) == 0) {
+      channel3CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    } else if (get(18) == 1) {
+      channel3CrossfadeGroup = LXChannel.CrossfadeGroup.A;
+    } else if (get(18) > 127) {
+      channel3CrossfadeGroup = LXChannel.CrossfadeGroup.B;
+    }
+    channel3.crossfadeGroup.setValue(channel3CrossfadeGroup);
 
     // CHANNEL 4
     LXChannel channel4 = lx.engine.getChannel(3);
-    channel4.enabled.setValue(channels[15] > 0); // [15]
-    channel4.fader.setValue(normalize(channels[16])); // [16]
-    channel4.goIndex(channels[17]); // [17]
+    channel4.enabled.setValue(get(19) > 0); // [6]
+    channel4.fader.setValue(getNormalized(20)); // [7]
+    channel4.goIndex(get(21)); // [8]
+
+    LXChannel.CrossfadeGroup channel4CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    if (get(22) == 0) {
+      channel4CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
+    } else if (get(22) == 1) {
+      channel4CrossfadeGroup = LXChannel.CrossfadeGroup.A;
+    } else if (get(22) > 127) {
+      channel4CrossfadeGroup = LXChannel.CrossfadeGroup.B;
+    }
+    channel4.crossfadeGroup.setValue(channel4CrossfadeGroup);
 
     // for (int i = 0; i < bindings.length; i++) {
     //   if (bindingExists(i))
     //     runCommand(bindings[i], channels[i]);
     // }
+  }
+
+  private int get(int i) {
+    return artNetListener.getValueAt(i);
+  }
+
+  private float getNormalized(int i) {
+    return get(i)/255.;
   }
 
   // private void runCommand(String command, int value) {

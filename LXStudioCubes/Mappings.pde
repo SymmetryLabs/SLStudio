@@ -46,46 +46,43 @@ static final float SPACING = 5*12;
 static final TowerConfig[] TOWER_CONFIG = {
 
   // hanging
-  new TowerConfig(Cube.Type.LARGE,  SPACING*0,   12*8,  0, -45, -45, 0, new String[] {"0"}),
-  new TowerConfig(Cube.Type.MEDIUM, SPACING*0+7, 12*8,  0, -45, -45, 0, new String[] {"0"}),
+  new TowerConfig(Cube.Type.LARGE,  SPACING*0,   12*8,    0, -45-180, -45, 0, new String[] {"126"}),
+  new TowerConfig(Cube.Type.MEDIUM, SPACING*0+7, 12*8+6,  6, -45-180, -45, 0, new String[] {"200"}),
 
-  new TowerConfig(Cube.Type.LARGE,  SPACING*1,   12*8,  0, -45, -45, 0, new String[] {"0"}),
-  new TowerConfig(Cube.Type.MEDIUM, SPACING*1+7, 12*8,  0, -45, -45, 0, new String[] {"0"}),
+  new TowerConfig(Cube.Type.LARGE,  SPACING*1,   12*8,    0, -45-180, -45, 0, new String[] {"61"}),
+  new TowerConfig(Cube.Type.MEDIUM, SPACING*1+7, 12*8+6,  6, -45-180, -45, 0, new String[] {"334"}),
 
-  new TowerConfig(Cube.Type.LARGE,  SPACING*2,   12*8,  0, -45, -45, 0, new String[] {"0"}),
-  new TowerConfig(Cube.Type.MEDIUM, SPACING*2+7, 12*8,  0, -45, -45, 0, new String[] {"0"}),
+  new TowerConfig(Cube.Type.LARGE,  SPACING*2,   12*8,    0, -45-180, -45, 0, new String[] {"6"}),
+  new TowerConfig(Cube.Type.MEDIUM, SPACING*2+7, 12*8+6,  6, -45-180, -45, 0, new String[] {"345"}),
 
-  new TowerConfig(Cube.Type.LARGE,  SPACING*3,   12*8,  0, -45, -45, 0, new String[] {"0"}),
-  new TowerConfig(Cube.Type.MEDIUM, SPACING*3+7, 12*8,  0, -45, -45, 0, new String[] {"0"}),
+  new TowerConfig(Cube.Type.LARGE,  SPACING*3,   12*8,    0, -45-180, -45, 0, new String[] {"18"}),
+  new TowerConfig(Cube.Type.MEDIUM, SPACING*3+7, 12*8+6,  6, -45-180, -45, 0, new String[] {"333"}),
 
-  new TowerConfig(Cube.Type.LARGE,  SPACING*4,   12*8,  0, -45, -45, 0, new String[] {"0"}),
-  new TowerConfig(Cube.Type.MEDIUM, SPACING*4+7, 12*8,  0, -45, -45, 0, new String[] {"0"}),
+  new TowerConfig(Cube.Type.LARGE,  SPACING*4,   12*8,    0, -45-180, -45, 0, new String[] {"187"}),
+  new TowerConfig(Cube.Type.MEDIUM, SPACING*4+7, 12*8+6,  6, -45-180, -45, 0, new String[] {"143"}),
 
 
   // floor
   // left - back
-  new TowerConfig(Cube.Type.LARGE, SPACING*0,     0, -30, 0, -45, 0, new String[] {"119"}),
-  new TowerConfig(Cube.Type.SMALL, SPACING*0+14, 24, -32, 0, -45, 0, new String[] {"173"}),
+  new TowerConfig(Cube.Type.LARGE, SPACING*0,     0, -30, -180, -45, 0, new String[] {"119"}),
+  new TowerConfig(Cube.Type.SMALL, SPACING*0+14, 24, -16, -180, -45, 0, new String[] {"173"}),
 
   // left - front
-  new TowerConfig(Cube.Type.LARGE, SPACING*0.4,     0, -80, 0, -45, 0, new String[] {"48"}),
-  new TowerConfig(Cube.Type.SMALL, SPACING*0.4+14, 24, -82, 0, -45, 0, new String[] {"165"}),
-      
-  // right - back   
-  new TowerConfig(Cube.Type.LARGE, SPACING*4,   0,  -30, 0, -45, 0, new String[] {"81"}),
-  new TowerConfig(Cube.Type.SMALL, SPACING*4+14, 24, -32, 0, -45, 0, new String[] {"370"}),
-      
-  // right - front   
-  new TowerConfig(Cube.Type.LARGE, SPACING*3.6,    0, -80, 0, -45, 0, new String[] {"23"}),
-  new TowerConfig(Cube.Type.SMALL, SPACING*3.6+14, 24, -82, 0, -45, 0, new String[] {"384"}),
+  new TowerConfig(Cube.Type.LARGE, SPACING*0.4,     0, -80, -180, -45, 0, new String[] {"48"}),
+  new TowerConfig(Cube.Type.SMALL, SPACING*0.4+14, 24, -66, -180, -45, 0, new String[] {"165"}),
+        
+  // right - back  
+  new TowerConfig(Cube.Type.LARGE, SPACING*4,   0,  -30, -180, -45, 0, new String[] {"81"}),
+  new TowerConfig(Cube.Type.SMALL, SPACING*4+14, 24, -16, -180, -45, 0, new String[] {"370"}),
+        
+  // right - front  
+  new TowerConfig(Cube.Type.LARGE, SPACING*3.6,    0, -80, -180, -45, 0, new String[] {"23"}),
+  new TowerConfig(Cube.Type.SMALL, SPACING*3.6+14, 24, -66, -180, -45, 0, new String[] {"384"}),
 };
-
-
 
 static final StripConfig[] STRIP_CONFIG = {
           // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
 //new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
-
 };
 
 static class StripConfig {
