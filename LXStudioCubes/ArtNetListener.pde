@@ -45,163 +45,159 @@ class ArtNetRunner extends LXRunnableComponent {
     int i = 0;
 
     // [0] (live)
-    outputControl.enabled.setValue(get(i++) > 0);
+    outputControl.enabled.setValue(get(0) > 0);
 
     // [1] (speed)
-    lx.engine.speed.setNormalized(getNormalized(i++));
+    lx.engine.speed.setNormalized(getNormalized(1));
 
     // [2] (brightness)
-    lx.engine.output.brightness.setNormalized(getNormalized(i++));
+    lx.engine.output.brightness.setNormalized(getNormalized(2));
 
     // [3] (blend mode)
-    lx.engine.crossfaderBlendMode.setValue((int)Math.min(5, get(i++)));
+    lx.engine.crossfaderBlendMode.setValue((int)Math.min(5, get(3)));
 
     // [4] (crossfader)
-    lx.engine.crossfader.setNormalized(getNormalized(i++));
+    lx.engine.crossfader.setNormalized(getNormalized(4));
 
     // [5, 6, 7] (rgb color)
-    lx.palette.clr.setColor(LXColor.rgb(get(i++), get(i++), get(i++)));
+    lx.palette.clr.setColor(LXColor.rgb(get(5), get(6), get(7)));
 
     // CHANNEL 1
     LXChannel channel1 = lx.engine.getChannel(0);
-    channel1.enabled.setValue(get(i++) > 0); // [8]
-    channel1.fader.setNormalized(getNormalized(i++)); // [9]
-    channel1.blendMode.setValue((int)Math.min(4, get(i++))); // [10]
-    channel1.goIndex(get(i++)); // [11]
+    channel1.enabled.setValue(get(8) > 0); // [8]
+    channel1.fader.setNormalized(getNormalized(9)); // [9]
+    channel1.blendMode.setValue((int)Math.min(4, get(10))); // [10]
+    channel1.goIndex(get(11)); // [11]
 
     LXChannel.CrossfadeGroup channel1CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    if (get(i) == 0) {
+    if (get(12) == 0) {
       channel1CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    } else if (get(i) == 1) {
+    } else if (get(12) == 1) {
       channel1CrossfadeGroup = LXChannel.CrossfadeGroup.A;
-    } else if (get(i++) > 127) {
+    } else if (get(12) == 2) {
       channel1CrossfadeGroup = LXChannel.CrossfadeGroup.B;
     }
     channel1.crossfadeGroup.setValue(channel1CrossfadeGroup); // [12]
 
-    for (LXEffect effect : channel1.effects) { // [13]
-      if (effect.label.getString() == "HangingCubesMask") {
-        if (get(i) == 0 || get(i) == 2) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i) == 1) {
+    int channel1MaskValue = get(13); // [13]
+    for (LXEffect effect : channel1.effects) {
+      if (effect.label.getString().equals("HangingCubesMask")) {
+        if (channel1MaskValue == 1) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
-      if (effect.label.getString() == "FloorCubesMask") {
-        if (get(i) == 0 || get(i) == 1) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i++) == 2) {
+      if (effect.label.getString().equals("FloorCubesMask")) {
+        if (channel1MaskValue == 2) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
     }
 
     // CHANNEL 2
     LXChannel channel2 = lx.engine.getChannel(1);
-    channel2.enabled.setValue(get(i++) > 0); // [14]
-    channel2.fader.setNormalized(getNormalized(i++)); // [15]
-    channel2.blendMode.setValue((int)Math.min(4, get(i++))); // [16]
-    channel2.goIndex(get(i++)); // [17]
+    channel2.enabled.setValue(get(14) > 0); // [14]
+    channel2.fader.setNormalized(getNormalized(15)); // [15]
+    channel2.blendMode.setValue((int)Math.min(4, get(16))); // [16]
+    channel2.goIndex(get(17)); // [17]
 
     LXChannel.CrossfadeGroup channel2CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    if (get(i) == 0) {
+    if (get(18) == 0) {
       channel2CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    } else if (get(i) == 1) {
+    } else if (get(18) == 1) {
       channel2CrossfadeGroup = LXChannel.CrossfadeGroup.A;
-    } else if (get(i++) > 127) {
+    } else if (get(18) == 2) {
       channel2CrossfadeGroup = LXChannel.CrossfadeGroup.B;
     }
     channel2.crossfadeGroup.setValue(channel2CrossfadeGroup); // [18]
 
-    for (LXEffect effect : channel2.effects) { // [19]
-      if (effect.label.getString() == "HangingCubesMask") {
-        if (get(i) == 0 || get(i) == 2) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i) == 1) {
+    int channel2MaskValue = get(19); // [19]
+    for (LXEffect effect : channel2.effects) {
+      if (effect.label.getString().equals("HangingCubesMask")) {
+        if (channel2MaskValue == 1) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
-      if (effect.label.getString() == "FloorCubesMask") {
-        if (get(i) == 0 || get(i) == 1) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i++) == 2) {
+      if (effect.label.getString().equals("FloorCubesMask")) {
+        if (channel2MaskValue == 2) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
     }
 
     // CHANNEL 3
     LXChannel channel3 = lx.engine.getChannel(2);
-    channel3.enabled.setValue(get(i++) > 0); // [20]
-    channel3.fader.setNormalized(getNormalized(i++)); // [21]
-    channel3.blendMode.setValue((int)Math.min(4, get(i++))); // [22]
-    channel3.goIndex(get(i++)); // [23]
+    channel3.enabled.setValue(get(20) > 0); // [20]
+    channel3.fader.setNormalized(getNormalized(21)); // [21]
+    channel3.blendMode.setValue((int)Math.min(4, get(22))); // [22]
+    channel3.goIndex(get(23)); // [23]
 
     LXChannel.CrossfadeGroup channel3CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    if (get(i) == 0) {
+    if (get(24) == 0) {
       channel3CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    } else if (get(i) == 1) {
+    } else if (get(24) == 1) {
       channel3CrossfadeGroup = LXChannel.CrossfadeGroup.A;
-    } else if (get(i++) > 127) {
+    } else if (get(24) == 2) {
       channel3CrossfadeGroup = LXChannel.CrossfadeGroup.B;
     }
     channel3.crossfadeGroup.setValue(channel3CrossfadeGroup); // [24]
 
-    for (LXEffect effect : channel3.effects) { // [25]
-      if (effect.label.getString() == "HangingCubesMask") {
-        if (get(i) == 0 || get(i) == 2) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i) == 1) {
+    int channel3MaskValue = get(25); // [25]
+    for (LXEffect effect : channel3.effects) {
+      if (effect.label.getString().equals("HangingCubesMask")) {
+        if (channel3MaskValue == 1) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
-      if (effect.label.getString() == "FloorCubesMask") {
-        if (get(i) == 0 || get(i) == 1) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i++) == 2) {
+      if (effect.label.getString().equals("FloorCubesMask")) {
+        if (channel3MaskValue == 2) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
     }
 
     // CHANNEL 4
     LXChannel channel4 = lx.engine.getChannel(3);
-    channel4.enabled.setValue(get(i++) > 0); // [26]
-    channel4.fader.setNormalized(getNormalized(i++)); // [27]
-    channel4.blendMode.setValue((int)Math.min(4, get(i++))); // [28]
-    channel4.goIndex(get(i++)); // [29]
+    channel4.enabled.setValue(get(26) > 0); // [26]
+    channel4.fader.setNormalized(getNormalized(27)); // [27]
+    channel4.blendMode.setValue((int)Math.min(4, get(28))); // [28]
+    channel4.goIndex(get(29)); // [29]
 
     LXChannel.CrossfadeGroup channel4CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    if (get(i) == 0) {
+    if (get(30) == 0) {
       channel4CrossfadeGroup = LXChannel.CrossfadeGroup.BYPASS;
-    } else if (get(i) == 1) {
+    } else if (get(30) == 1) {
       channel4CrossfadeGroup = LXChannel.CrossfadeGroup.A;
-    } else if (get(i++) > 127) {
+    } else if (get(30) == 2) {
       channel4CrossfadeGroup = LXChannel.CrossfadeGroup.B;
     }
     channel4.crossfadeGroup.setValue(channel4CrossfadeGroup); // [30]
 
-    for (LXEffect effect : channel4.effects) { // [31]
-      if (effect.label.getString() == "HangingCubesMask") {
-        if (get(i) == 0 || get(i) == 2) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i) == 1) {
+    int channel4MaskValue = get(30); // [30]
+    for (LXEffect effect : channel4.effects) {
+      if (effect.label.getString().equals("HangingCubesMask")) {
+        if (channel4MaskValue == 1) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
-      if (effect.label.getString() == "FloorCubesMask") {
-        if (get(i) == 0 || get(i) == 1) {
-          effect.enabled.setValue(false);
-        }
-        if (get(i++) == 2) {
+      if (effect.label.getString().equals("FloorCubesMask")) {
+        if (channel4MaskValue == 2) {
           effect.enabled.setValue(true);
+        } else {
+          effect.enabled.setValue(false);
         }
       }
     }
