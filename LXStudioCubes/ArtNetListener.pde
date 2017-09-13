@@ -38,6 +38,8 @@ class ArtNetRunner extends LXRunnableComponent {
   }
 
   protected void run(double deltaMs) {
+    //if (!artnet.enabled.isOn()) return;
+
     this.channels = artNetListener.getCurrentInputDmxArray();
 
     // [0] (live)

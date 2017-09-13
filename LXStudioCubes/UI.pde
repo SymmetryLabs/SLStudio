@@ -1,3 +1,19 @@
+class UIArtNet extends UICollapsibleSection {
+
+    public UIArtNet(UI ui, LX lx, float x, float y, float w) {
+        super(ui, x, y, w, 60);
+        setTitle("ArtNet");
+        setBackgroundColor(#404040); //ui.theme.getDeviceBackgroundColor()
+        setBorderRounding(4);
+
+        final UIButton button = new UIButton(5, 5, 30, 30);
+        button.setLabel("on");
+        button.setParameter(artNetRunner.running);
+        button.addToContainer(this);
+    }
+
+}
+
 // class MappableColors extends UICollapsibleSection {
 
 //     public final List<MappableColor> mappableColors = new ArrayList<MappableColor>();

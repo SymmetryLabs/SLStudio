@@ -10,6 +10,7 @@ public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
 public ArtNetRunner artNetRunner;
+public UIArtNet artnet;
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -91,6 +92,7 @@ void setup() {
       ui.preview.setPhi(0).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+      new UIArtNet(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
       //new MappableColors(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
