@@ -107,7 +107,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
     protected final UITextBox title;
     private final UI2dContainer content;
     private final UI2dContainer modulations;
-    private final ColorParameter color;
+    private final ColorParameter modulationColor;
 
     private float expandedHeight;
     private boolean expanded = true;
@@ -128,15 +128,15 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         UIButton gateButton = null;
 
         if (parameter instanceof LXModulator) {
-            this.color = ((LXModulator) parameter).color;
+            this.modulationColor = ((LXModulator) parameter).modulationColor;
         } else {
-            this.color =
+            this.modulationColor =
                 new ColorParameter("Modulation Color", LXColor.hsb(360*Math.random(), 100, 100))
                 .setDescription("Indicates the color used for modulations from this parameter");
-            this.color.addListener(new LXParameterListener() {
+            this.modulationColor.addListener(new LXParameterListener() {
                 public void onParameterChanged(LXParameter p) {
                     for (UIObject uiModulation : modulations) {
-                        ((UICompoundModulation) uiModulation).modulation.clr.setColor(color.getColor());
+                        ((UICompoundModulation) uiModulation).modulation.modulationColor.setColor(modulationColor.getColor());
                     }
                 }
             });
@@ -221,7 +221,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         .setDescription("Map: select a new target for this modulation source")
         .addToContainer(this);
 
-        new UIColorBox(ui, this.color, this.width - PADDING - COLOR_WIDTH, PADDING + 1, COLOR_WIDTH, COLOR_WIDTH)
+        new UIColorBox(ui, this.modulationColor, this.width - PADDING - COLOR_WIDTH, PADDING + 1, COLOR_WIDTH, COLOR_WIDTH)
         .addToContainer(this);
 
 
@@ -297,7 +297,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
     public UIModulator addModulation(LXCompoundModulation modulation) {
         if (this.modulator == null) {
-            modulation.clr.setColor(this.color.getColor());
+            modulation.modulationColor.setColor(this.modulationColor.getColor());
         }
         new UICompoundModulation(this.ui, modulation, 0, 0, this.modulations.getContentWidth()).addToContainer(this.modulations);
         return this;
@@ -408,7 +408,7 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
         @Override
         public void drawFocus(UI ui, PGraphics pg) {
-            pg.stroke(color.getColor());
+            pg.stroke(modulationColor.getColor());
             pg.line(0, 0, 0, this.height-1);
         }
 
@@ -486,14 +486,14 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
 
             new UIButton(PADDING + 2, PADDING + 18, 24, 12).setParameter(modulation.polarity).addToContainer(this);
             final UISlider slider = (UISlider) new UISlider(2*PADDING + 26, PADDING + 16, width-3*PADDING - 26, 16)
-            .setFillColor(modulation.clr.getColor())
+            .setFillColor(modulation.modulationColor.getColor())
             .setShowLabel(false)
             .setParameter(modulation.range)
             .addToContainer(this);
 
-            modulation.clr.addListener(new LXParameterListener() {
+            modulation.modulationColor.addListener(new LXParameterListener() {
                 public void onParameterChanged(LXParameter p) {
-                    slider.setFillColor(modulation.clr.getColor());
+                    slider.setFillColor(modulation.modulationColor.getColor());
                     redraw();
                 }
             });
