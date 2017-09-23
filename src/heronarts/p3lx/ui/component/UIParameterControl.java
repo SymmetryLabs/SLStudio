@@ -40,6 +40,7 @@ import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.color.LXColor;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIModulationSource;
@@ -142,9 +143,6 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
 
     protected double getNormalized() {
         if (this.parameter != null) {
-            // if (this.parameter instanceof CompoundParameter) {
-            //   return ((CompoundParameter) this.parameter).getBaseNormalized();
-            // }
             return this.parameter.getNormalized();
         }
         return 0;
@@ -357,6 +355,19 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
             return isMappable() ? (CompoundParameter) this.parameter : null;
         }
         return null;
+    }
+
+    /**
+     * Given a base color for a control, return the color used to display the modulated component of its value.
+     * Currently, just dims the base color.
+     * @param baseColor
+     */
+     public int getModulatedValueColor(int baseColor) {
+        int DIM_AMOUNT = 20;
+        float h = LXColor.h(baseColor);
+        float s = LXColor.s(baseColor);
+        float b = LXColor.b(baseColor);
+        return LXColor.hsb(h, s, b - DIM_AMOUNT);
     }
 
 }

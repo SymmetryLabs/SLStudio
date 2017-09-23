@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1502429615492,
+  "timestamp": 1504845633827,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -86,7 +86,7 @@
             "class": "LXStudioDemo$LayerDemoPattern",
             "parameters": {
               "label": "LayerDemo",
-              "numStars": 14.999999664723873
+              "numStars": 44.99999899417162
             },
             "modulation": {
               "modulators": [],
@@ -199,16 +199,16 @@
     "modulation": {
       "modulators": [
         {
-          "id": 1257,
+          "id": 1878,
           "class": "heronarts.lx.modulator.VariableLFO",
           "parameters": {
             "label": "LFO 1",
             "running": true,
             "trigger": false,
-            "color/hue": 220.47061157226562,
+            "color/hue": 354.1176452636719,
             "color/brightness": 100.0,
             "color/saturation": 100.0,
-            "color": -16755713,
+            "color": -65511,
             "loop": true,
             "wave": 0,
             "period": 1000.0,
@@ -222,18 +222,18 @@
       "modulations": [
         {
           "source": {
-            "id": 1257
+            "id": 1878
           },
           "target": {
             "componentId": 31,
             "parameterPath": "numStars"
           },
-          "id": 1258,
+          "id": 2497,
           "class": "heronarts.lx.parameter.LXCompoundModulation",
           "parameters": {
             "label": "",
             "Polarity": 0,
-            "Range": 0.47500001545995474
+            "Range": 0.0
           }
         }
       ],
@@ -265,7 +265,7 @@
       "engineExpanded": true,
       "clipViewVisible": true,
       "modulatorExpanded": {
-        "1257": true
+        "1878": true
       },
       "preview": {
         "radius": 342.946044921875,
