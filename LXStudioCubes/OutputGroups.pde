@@ -11,32 +11,30 @@ public final String IP_ADDRESS_9 = "10.200.1.20";
 
 public final List<OutputGroup> OUTPUT_GROUP_CONFIG = {
   new OutputGroup(IP_ADDRESS_0, 1)
-    .addPoints(LedTape.splicePoints("strip1", 0, 70, OutputGroup.REVERSE))
-    .addPoints(LedTape.splicePoints("strip2", 0, 70)
-    .reversePoints(),
+    .addPoints(LedTape.splicePoints("strip1", 0, 48)),
 
-  new OutputGroup(IP_ADDRESS_0, 2)
-    .addPoints(LedTape.splicePoints("strip3", 0, 170)),
+  // new OutputGroup(IP_ADDRESS_0, 2)
+  //   .addPoints(LedTape.splicePoints("strip3", 0, 170)),
 
-  new OutputGroup(IP_ADDRESS_0, 3)
-    .addPoints(LedTape.splicePoints("strip4", 0, 170)),
+  // new OutputGroup(IP_ADDRESS_0, 3)
+  //   .addPoints(LedTape.splicePoints("strip4", 0, 170)),
 
-  new OutputGroup(IP_ADDRESS_0, 4)
-    .addPoints(LedTape.splicePoints("strip5", 0, 170, OutputGroup.REVERSE))
-    .reversePoints(),
+  // new OutputGroup(IP_ADDRESS_0, 4)
+  //   .addPoints(LedTape.splicePoints("strip5", 0, 170, OutputGroup.REVERSE))
+  //   .reversePoints(),
 
-  new OutputGroup(IP_ADDRESS_0, 5)
-    .addPoints(LedTape.splicePoints("strip6", 0, 170, OutputGroup.REVERSE)),
+  // new OutputGroup(IP_ADDRESS_0, 5)
+  //   .addPoints(LedTape.splicePoints("strip6", 0, 170, OutputGroup.REVERSE)),
 
-  new OutputGroup(IP_ADDRESS_0, 6)
-    .addPoints(LedTape.splicePoints("strip7", 0, 170)),
+  // new OutputGroup(IP_ADDRESS_0, 6)
+  //   .addPoints(LedTape.splicePoints("strip7", 0, 170)),
 
-  new OutputGroup(IP_ADDRESS_0, 7)
-    .addPoints(LedTape.splicePoints("strip8", 0, 170))
-    .reversePoints(),
+  // new OutputGroup(IP_ADDRESS_0, 7)
+  //   .addPoints(LedTape.splicePoints("strip8", 0, 170))
+  //   .reversePoints(),
 
-  new OutputGroup(IP_ADDRESS_0, 8)
-    .addPoints(LedTape.splicePoints("strip9", 0, 170)),
+  // new OutputGroup(IP_ADDRESS_0, 8)
+  //   .addPoints(LedTape.splicePoints("strip9", 0, 170)),
 };
 
 public class OutputGroup {

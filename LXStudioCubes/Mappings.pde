@@ -19,7 +19,7 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -41,202 +41,173 @@ static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 //     // new BulbConfig("lifx-5", 0, 0, 0),
 // };
 
-static final TowerConfig[] TOWER_CONFIG = {
+static final float PIXEL_PITCH = 1.25; // double check measurement
 
-   //  // left
-   //  new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-   //    "22", "204"
-   //    }),
+static final float CONTOUR_WIDTH = 5; // needs measurement;
 
-   //  new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
-   //    "86"
-   //    }),
+static final TowerConfig[] TOWER_CONFIG = {};
 
-   //  new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
-   //    "5"
-   //    }),
+static final StripConfig[] VIP_LOUGNE_STRIP_CONFIG = {
+  // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
-   // new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-   //    "25", "199", "177"
-   //    }),
+  // horizontals - bottom
+  new StripConfig("vip-lounge-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43, 55),
+  new StripConfig("vip-lounge-strip2", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
 
-   // new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
-   //    "94"
-   //    }),
+  // horizontals - middle bottom
+  new StripConfig("vip-lounge-strip3", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
+  new StripConfig("vip-lounge-strip4", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
 
-   // new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
-   //    "90"
-   //    }),
+  // horizontals - middle top
+  new StripConfig("vip-lounge-strip5", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
+  new StripConfig("vip-lounge-strip6", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
 
-   // new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
-   //    "64"
-   //    }),
+  // horizontals - top
+  new StripConfig("vip-lounge-strip7", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
+  new StripConfig("vip-lounge-strip8", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
 
-   //  // left tower of 5   
-   //  new TowerConfig(0, 0, 0, new String[] {   
-   //    "19", "190", "121", "1", "103"    
-   //  }),   
-   //  new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
-   //  new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
-   //  new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
-   //  new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-   //  new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
-   
-   //  new TowerConfig(SP*2.0, 0, 0, new String[] {    
-   //    "6", "132", "61", "54"    
-   //  }),   
+  // verticals - left
+  new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
+  new StripConfig("vip-lounge-strip10", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
 
-   //  new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-   //  new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
-     
-   //  // middle tower of 5    
-   //  new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
-   //    "111", "166", "187", "158", "101"   
-   //  }),  
+  // verticals - right 
+  new StripConfig("vip-lounge-strip11", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
+  new StripConfig("vip-lounge-strip12", new float[] {0, 0, 0}, new float[] {0,  0, 0}, 43), // need count (little guy)
+  new StripConfig("vip-lounge-strip13", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
 
-   //  new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
-   //  new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
-   //  new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
-   //  new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
-     
-   //  new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
-   //    "102", "156", "13", "82"    
-   //  }),   
-   //  new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
-   //  new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
-   //  new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
-   //  new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
-   //  new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
-     
-   //  // right tower of 5   
-   //  new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
-   //    "183", "180", "57", "51", "108"   
-   //  }),   
-   //  new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
-   //  new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
-   //  new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
-     
-   //  new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
-   //   "100", "85", "110zAQ  AZQ"    
-   //  }),   
-   //  new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
-   //  new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
-    
-   //  // table cubes    
-   //  new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
-   //  new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
-   //  new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
+  // bottom angle
+  new StripConfig("vip-lounge-strip14", new float[] {0, 0, 0}, new float[] {0, 0, 45}, 43), // need count
+  new StripConfig("vip-lounge-strip15", new float[] {0, 0, 0}, new float[] {0, 0, 45}, 43), // need count
+
+  // top angle
+  new StripConfig("vip-lounge-strip16", new float[] {0, 0, 0}, new float[] {0, 0, 135}, 43), // need count
+  new StripConfig("vip-lounge-strip17", new float[] {0, 0, 0}, new float[] {0, 0, 135}, 43), // need count
+
 };
 
-static final StripConfig[] STRIP_CONFIG = {
-          // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
+static final StringConfig[] VJ_BOOTH_STRIP_CONFIG = {
 
-  // 1
-  new StripConfig("0",           0,  0,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  10,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  20,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  30,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  40,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  50,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  60,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  70,  0,    0,     0,     0,       170,                 0.25),
+}
 
-  //2
-  new StripConfig("0",           0,  80,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  90,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  100,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  110,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  120,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  130,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  140,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  150,  0,    0,     0,     0,       170,                 0.25),
+static final StringConfig[] LONG_SKINNY_RUN_STRIP_CONFIG = {
 
-  // 3
-  new StripConfig("0",           0,  160,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  170,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  180,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  190,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  200,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  210,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  220,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  230,  0,    0,     0,     0,       170,                 0.25),
+};
 
-  // 4
-  new StripConfig("0",           0,  240,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  250,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  260,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  270,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  280,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  290,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  300,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  310,  0,    0,     0,     0,       170,                 0.25),
+static final StringConfig[] COLUMNS_STRIP_CONFIG = {
+  // ceiling
 
-  // 5
-  new StripConfig("0",           0,  320,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  330,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  340,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  350,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  360,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  370,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  380,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  390,  0,    0,     0,     0,       170,                 0.25),
+  // first square
+  // second square
+  // third square
+  // fourth square
+};
 
-  // 6
-  new StripConfig("0",           0,  400,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  410,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  420,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  430,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  440,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  450,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  460,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  470,  0,    0,     0,     0,       170,                 0.25),
+static final StringConfig[] TEST_STRIP_CONFIG = {
+  // // 1
+  // new StripConfig("0",           0,  0,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  10,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  20,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  30,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  40,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  50,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  60,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  70,  0,    0,     0,     0,       170,                 0.25),
 
-  // 7
-  new StripConfig("0",           0,  480,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  490,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  500,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  510,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  520,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  530,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  540,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  550,  0,    0,     0,     0,       170,                 0.25),
+  // //2
+  // new StripConfig("0",           0,  80,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  90,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  100,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  110,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  120,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  130,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  140,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  150,  0,    0,     0,     0,       170,                 0.25),
 
-  // 8
-  new StripConfig("0",           0,  560,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  570,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  580,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  590,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  600,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  610,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  620,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  630,  0,    0,     0,     0,       170,                 0.25),
+  // // 3
+  // new StripConfig("0",           0,  160,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  170,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  180,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  190,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  200,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  210,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  220,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  230,  0,    0,     0,     0,       170,                 0.25),
 
-  // 9
-  new StripConfig("0",           0,  640,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  650,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  660,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  670,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  680,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  690,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  700,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  710,  0,    0,     0,     0,       170,                 0.25),
+  // // 4
+  // new StripConfig("0",           0,  240,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  250,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  260,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  270,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  280,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  290,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  300,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  310,  0,    0,     0,     0,       170,                 0.25),
 
-  // 10
-  new StripConfig("0",           0,  720,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  730,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  740,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  750,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  760,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  770,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  780,  0,    0,     0,     0,       170,                 0.25),
-  new StripConfig("0",           0,  790,  0,    0,     0,     0,       170,                 0.25),
+  // // 5
+  // new StripConfig("0",           0,  320,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  330,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  340,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  350,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  360,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  370,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  380,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  390,  0,    0,     0,     0,       170,                 0.25),
 
+  // // 6
+  // new StripConfig("0",           0,  400,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  410,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  420,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  430,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  440,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  450,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  460,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  470,  0,    0,     0,     0,       170,                 0.25),
+
+  // // 7
+  // new StripConfig("0",           0,  480,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  490,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  500,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  510,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  520,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  530,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  540,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  550,  0,    0,     0,     0,       170,                 0.25),
+
+  // // 8
+  // new StripConfig("0",           0,  560,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  570,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  580,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  590,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  600,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  610,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  620,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  630,  0,    0,     0,     0,       170,                 0.25),
+
+  // // 9
+  // new StripConfig("0",           0,  640,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  650,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  660,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  670,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  680,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  690,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  700,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  710,  0,    0,     0,     0,       170,                 0.25),
+
+  // // 10
+  // new StripConfig("0",           0,  720,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  730,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  740,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  750,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  760,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  770,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  780,  0,    0,     0,     0,       170,                 0.25),
+  // new StripConfig("0",           0,  790,  0,    0,     0,     0,       170,                 0.25),
 };
 
 static class StripConfig {
   String id;
   int numPoints;
-  float spacing;
+  float length;
   float x;
   float y;
   float z;
@@ -244,10 +215,14 @@ static class StripConfig {
   float yRot;
   float zRot;
 
-  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
+  StripConfig(String id, float[] coordinates, float[] rotations, float length, int numPoints) {
+    this(id, coordinates[0], coordinates[1], coordinates[2], rotations[0], rotations[1], rotations[2], length, numPoints);
+  }
+
+  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, , float length, int numPoints) {
     this.id = id;
     this.numPoints = numPoints;
-    this.spacing = spacing;
+    this.length = length;
     this.x = x;
     this.y = y;
     this.z = z;
@@ -358,8 +333,8 @@ public SLModel buildModel() {
   /* Strips ----------------------------------------------------------*/
   List<Strip> strips = new ArrayList<Strip>();
 
-  for (StripConfig stripConfig : STRIP_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
+  for (StripConfig stripConfig : VIP_LOUGNE_STRIP_CONFIG) {
+    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.numPoints/stripConfig.length);
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
