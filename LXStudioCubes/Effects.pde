@@ -1,5 +1,16 @@
 import java.awt.Color;
 
+public class BlackenDeadPoints extends LXEffect {
+  public BlackenDeadPoints(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs, double amount) {
+    LXPoint deadPoint = ((SLModel)model).points[((SLModel)model).points.length-1];
+    colors[deadPoint.index] = 0;
+  }
+}
+
 public static class Strobe extends LXEffect {
   
   public enum Waveshape {
