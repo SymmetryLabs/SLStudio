@@ -35,6 +35,7 @@ public static class SLModel extends LXModel {
   public final List<Face> faces;
   public final List<Strip> strips;
   public final Map<String, Cube> cubeTable;
+  public final Map<String, Strip> stripTable;
   private final Cube[] _cubes;
 
   public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
@@ -49,6 +50,7 @@ public static class SLModel extends LXModel {
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+    Map<String, Strip> _stripTable = new HashMap<String, Strip>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -66,14 +68,17 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips)
+    for (Strip strip : strips) {
       stripList.add(strip);
+      _stripTable.put(strip.id, strip);
+    }
 
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
+    this.stripTable = Collections.unmodifiableMap (_stripTable);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -90,7 +95,18 @@ public static class SLModel extends LXModel {
           this.points.add(point);
         }
       }
+      this.points.add(new LXPoint(0, 0, 0));
     }
+  }
+
+  public LXPoint[] splicePoints(String stripId, int startIndex, int numPoints) {
+    LXPoint[] points = getStripById(stripId).points;
+
+    if (startIndex < 0 || startIndex >= points.length || startIndex + numPoints-1 >= points.length) {
+      throw new RuntimeException("OutputGroup.addPoints() out of bounds. (Strip Id: " + stripId + ", startIndex: " + startIndex + ", numPointsToSplice: " + numPoints + ", numPointsOnStrip: " + points.length + ")");
+    }
+
+    return Arrays.copyOfRange(points, startIndex, startIndex + numPoints-1);
   }
 
   /**
@@ -105,6 +121,10 @@ public static class SLModel extends LXModel {
   
   public Cube getCubeById(String id) {
     return this.cubeTable.get(id);
+  }
+
+  public Strip getStripById(String id) {
+    return this.stripTable.get(id);
   }
 }
 
@@ -406,6 +426,8 @@ public static class Strip extends LXModel {
     }
   }
 
+  public final String id;
+
   public final Metrics metrics;
 
   /**
@@ -422,6 +444,7 @@ public static class Strip extends LXModel {
 
   Strip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
     super(points);
+    this.id = "";
     this.isHorizontal = isHorizontal;
     this.metrics = metrics;   
     this.ry = ry;
@@ -429,6 +452,23 @@ public static class Strip extends LXModel {
 
   Strip(Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
     super(new Fixture(metrics, ry, transform));
+    this.id = "";
+    this.metrics = metrics;
+    this.isHorizontal = isHorizontal;
+    this.ry = ry;
+  }
+
+  Strip(String id, Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
+    super(points);
+    this.id = id;
+    this.isHorizontal = isHorizontal;
+    this.metrics = metrics;   
+    this.ry = ry;
+  }
+
+  Strip(String id, Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+    super(new Fixture(metrics, ry, transform));
+    this.id = id;
     this.metrics = metrics;
     this.isHorizontal = isHorizontal;
     this.ry = ry;

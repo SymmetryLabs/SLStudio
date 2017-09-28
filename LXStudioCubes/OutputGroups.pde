@@ -9,33 +9,36 @@ public final String IP_ADDRESS_7 = "10.200.1.18";
 public final String IP_ADDRESS_8 = "10.200.1.19";
 public final String IP_ADDRESS_9 = "10.200.1.20";
 
-public final List<OutputGroup> OUTPUT_GROUP_CONFIG = {
-  new OutputGroup(IP_ADDRESS_0, 1)
-    .addPoints(LedTape.splicePoints("strip1", 0, 48)),
+public OutputGroup[] buildOutputGroups() {
+  return new OutputGroup[] {
+    new OutputGroup(IP_ADDRESS_0, 2)
+      .addPoints(model.splicePoints("vip-lounge-strip17", 0, 71))
+      .addPoints(model.splicePoints("vip-lounge-strip8",  0, 70), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vip-lounge-strip10", 41, 8), OutputGroup.REVERSE),
 
-  // new OutputGroup(IP_ADDRESS_0, 2)
-  //   .addPoints(LedTape.splicePoints("strip3", 0, 170)),
+    new OutputGroup(IP_ADDRESS_0, 3)
+      .addPoints(model.splicePoints("vip-lounge-strip10", 0,  41), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vip-lounge-strip5",  0, 104)),
 
-  // new OutputGroup(IP_ADDRESS_0, 3)
-  //   .addPoints(LedTape.splicePoints("strip4", 0, 170)),
+    new OutputGroup(IP_ADDRESS_0, 4)
+      .addPoints(model.splicePoints("vip-lounge-strip7",   0, 206), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vip-lounge-strip18", 47,  25), OutputGroup.REVERSE),
 
-  // new OutputGroup(IP_ADDRESS_0, 4)
-  //   .addPoints(LedTape.splicePoints("strip5", 0, 170, OutputGroup.REVERSE))
-  //   .reversePoints(),
+    new OutputGroup(IP_ADDRESS_0, 7)
+      .addPoints(model.splicePoints("vip-lounge-strip18", 0, 47), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vip-lounge-strip6",  0, 64))
+      .addPoints(model.splicePoints("vip-lounge-strip14", 0, 59)),
 
-  // new OutputGroup(IP_ADDRESS_0, 5)
-  //   .addPoints(LedTape.splicePoints("strip6", 0, 170, OutputGroup.REVERSE)),
+    new OutputGroup(IP_ADDRESS_0, 10)
+      .addPoints(model.splicePoints("vip-lounge-strip3", 0, 92), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vip-lounge-strip9", 0, 48), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vip-lounge-strip9", 0, 9)),
 
-  // new OutputGroup(IP_ADDRESS_0, 6)
-  //   .addPoints(LedTape.splicePoints("strip7", 0, 170)),
-
-  // new OutputGroup(IP_ADDRESS_0, 7)
-  //   .addPoints(LedTape.splicePoints("strip8", 0, 170))
-  //   .reversePoints(),
-
-  // new OutputGroup(IP_ADDRESS_0, 8)
-  //   .addPoints(LedTape.splicePoints("strip9", 0, 170)),
-};
+    new OutputGroup(IP_ADDRESS_0, 12)
+      .addDeadPoints(2)
+      .addPoints(model.splicePoints("vip-lounge-strip4", 0, 44), OutputGroup.REVERSE)
+  };
+}
 
 public class OutputGroup {
 
@@ -60,7 +63,9 @@ public class OutputGroup {
   public int[] getIndices() {
     int[] indices = new int[points.size()];
 
-    for (int i = 0; i < points.length; i++) {
+    println("indices length: " + indices.length + ", points length: " + points.size() + " | ");
+    for (int i = 0; i < points.size(); i++) {
+      print(i + ", ");
       indices[i] = points.get(i).index;
     }
     return indices;
@@ -88,20 +93,30 @@ public class OutputGroup {
     return this;
   }
 
-  public LedTape addPoints(List<LXPoint> pointsToAdd) {
+  public OutputGroup addPoints(List<LXPoint> pointsToAdd) {
     for (LXPoint p : pointsToAdd) {
       this.points.add(p);
     }
     return this;
   }
 
-  public LedTape addPoints(List<LXPoint> pointsToAdd, boolean reverseOrdering) {
+  public OutputGroup addPoints(List<LXPoint> pointsToAdd, boolean reverseOrdering) {
     if (reverseOrdering) {
       Collections.reverse(Arrays.asList(pointsToAdd));
     }
     for (LXPoint p : pointsToAdd) {
       this.points.add(p);
     }
+    return this;
+  }
+
+  public OutputGroup addDeadPoints(int numPointsToAdd) {
+    LXPoint deadPoint = ((SLModel)model).points[((SLModel)model).points.length-1];
+
+    for (int i = 0; i < numPointsToAdd; i++) {
+      this.points.add(deadPoint);
+    }
+
     return this;
   }
 }

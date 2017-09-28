@@ -51,49 +51,49 @@ static final StripConfig[] VIP_LOUGNE_STRIP_CONFIG = {
   // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
   // horizontals - bottom
-  new StripConfig("vip-lounge-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43, 55),
-  new StripConfig("vip-lounge-strip2", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
+  new StripConfig("vip-lounge-strip1", new float[] { 0, 0, 0}, new float[] {0, 0, 0}, 43),
+  new StripConfig("vip-lounge-strip2", new float[] {64, 0, 0}, new float[] {0, 0, 0}, 138),// one overlaps???
 
   // horizontals - middle bottom
-  new StripConfig("vip-lounge-strip3", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
-  new StripConfig("vip-lounge-strip4", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
+  new StripConfig("vip-lounge-strip3", new float[] {  0, 62, 0}, new float[] {0, 0, 0}, 92),
+  new StripConfig("vip-lounge-strip4", new float[] {123, 62, 0}, new float[] {0, 0, 0}, 98), // need count
 
   // horizontals - middle top
-  new StripConfig("vip-lounge-strip5", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
-  new StripConfig("vip-lounge-strip6", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
+  new StripConfig("vip-lounge-strip5", new float[] {0,   68, 0}, new float[] {0, 0, 0}, 121), // need count
+  new StripConfig("vip-lounge-strip6", new float[] {163, 68, 0}, new float[] {0, 0, 0}, 64), // need count
 
-  // horizontals - top
-  new StripConfig("vip-lounge-strip7", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
-  new StripConfig("vip-lounge-strip8", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 43), // need count
+  // // horizontals - top
+  new StripConfig("vip-lounge-strip8", new float[] {0, 130, 0}, new float[] {0, 0, 0}, 70), // need count
+  new StripConfig("vip-lounge-strip7", new float[] {97, 130, 0}, new float[] {0, 0, 0}, 119+7), // need count
 
-  // verticals - left
-  new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
-  new StripConfig("vip-lounge-strip10", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
+  // // verticals - left
+  new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 48), // need count
+  new StripConfig("vip-lounge-strip10", new float[] {0, 68, 0}, new float[] {0, 0, 90}, 49), // need count
 
-  // verticals - right 
-  new StripConfig("vip-lounge-strip11", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
-  new StripConfig("vip-lounge-strip12", new float[] {0, 0, 0}, new float[] {0,  0, 0}, 43), // need count (little guy)
-  new StripConfig("vip-lounge-strip13", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 43), // need count
+  // // verticals - right 
+  new StripConfig("vip-lounge-strip11", new float[] {238, 0, 0}, new float[] {0, 0, 90}, 39), // need count
+  new StripConfig("vip-lounge-strip12", new float[] {240, 49, 0}, new float[] {0,  0, 0}, 3), // need count (little guy)
+  new StripConfig("vip-lounge-strip13", new float[] {244, 48.5, 0}, new float[] {0, 0, 90}, 10), // need count
+  new StripConfig("vip-lounge-strip14", new float[] {244, 68  , 0}, new float[] {0, 0, 90}, 49), // need count
 
-  // bottom angle
-  new StripConfig("vip-lounge-strip14", new float[] {0, 0, 0}, new float[] {0, 0, 45}, 43), // need count
-  new StripConfig("vip-lounge-strip15", new float[] {0, 0, 0}, new float[] {0, 0, 45}, 43), // need count
+  // // bottom angle (left, right)
+  new StripConfig("vip-lounge-strip15", new float[] {55, 1, 0}, new float[] {0, 0, 45}, 67), // need count
+  new StripConfig("vip-lounge-strip16", new float[] {63, 1, 0}, new float[] {0, 0, 45}, 67), // need count
 
-  // top angle
-  new StripConfig("vip-lounge-strip16", new float[] {0, 0, 0}, new float[] {0, 0, 135}, 43), // need count
-  new StripConfig("vip-lounge-strip17", new float[] {0, 0, 0}, new float[] {0, 0, 135}, 43), // need count
+  // // top angle (left, right)
+  new StripConfig("vip-lounge-strip17", new float[] {152, 68, 0}, new float[] {0, 0, 137.5}, 71), // need count
+  new StripConfig("vip-lounge-strip18", new float[] {161, 68, 0}, new float[] {0, 0, 137.5}, 72), // need count
+};
+
+static final StripConfig[] VJ_BOOTH_STRIP_CONFIG = {
 
 };
 
-static final StringConfig[] VJ_BOOTH_STRIP_CONFIG = {
-
-}
-
-static final StringConfig[] LONG_SKINNY_RUN_STRIP_CONFIG = {
+static final StripConfig[] LONG_SKINNY_RUN_STRIP_CONFIG = {
 
 };
 
-static final StringConfig[] COLUMNS_STRIP_CONFIG = {
+static final StripConfig[] COLUMNS_STRIP_CONFIG = {
   // ceiling
 
   // first square
@@ -102,7 +102,7 @@ static final StringConfig[] COLUMNS_STRIP_CONFIG = {
   // fourth square
 };
 
-static final StringConfig[] TEST_STRIP_CONFIG = {
+static final StripConfig[] TEST_STRIP_CONFIG = {
   // // 1
   // new StripConfig("0",           0,  0,  0,    0,     0,     0,       170,                 0.25),
   // new StripConfig("0",           0,  10,  0,    0,     0,     0,       170,                 0.25),
@@ -215,14 +215,13 @@ static class StripConfig {
   float yRot;
   float zRot;
 
-  StripConfig(String id, float[] coordinates, float[] rotations, float length, int numPoints) {
-    this(id, coordinates[0], coordinates[1], coordinates[2], rotations[0], rotations[1], rotations[2], length, numPoints);
+  StripConfig(String id, float[] coordinates, float[] rotations, int numPoints) {
+    this(id, coordinates[0], coordinates[1], coordinates[2], rotations[0], rotations[1], rotations[2], numPoints);
   }
 
-  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, , float length, int numPoints) {
+  StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints) {
     this.id = id;
     this.numPoints = numPoints;
-    this.length = length;
     this.x = x;
     this.y = y;
     this.z = z;
@@ -334,7 +333,7 @@ public SLModel buildModel() {
   List<Strip> strips = new ArrayList<Strip>();
 
   for (StripConfig stripConfig : VIP_LOUGNE_STRIP_CONFIG) {
-    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.numPoints/stripConfig.length);
+    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, PIXEL_PITCH);
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
@@ -342,7 +341,7 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }
