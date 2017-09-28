@@ -13,7 +13,7 @@ public OutputGroup[] buildOutputGroups() {
   return new OutputGroup[] {
     new OutputGroup(IP_ADDRESS_0, 2)
       .addPoints(model.splicePoints("vip-lounge-strip17", 0, 71))
-      .addPoints(model.splicePoints("vip-lounge-strip8",  0, 70), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vip-lounge-strip7",  0, 70), OutputGroup.REVERSE)
       .addPoints(model.splicePoints("vip-lounge-strip10", 41, 8), OutputGroup.REVERSE),
 
     new OutputGroup(IP_ADDRESS_0, 3)

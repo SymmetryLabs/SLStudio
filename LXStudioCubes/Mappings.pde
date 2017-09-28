@@ -63,8 +63,8 @@ static final StripConfig[] VIP_LOUGNE_STRIP_CONFIG = {
   new StripConfig("vip-lounge-strip6", new float[] {163, 68, 0}, new float[] {0, 0, 0}, 64), // need count
 
   // // horizontals - top
-  new StripConfig("vip-lounge-strip8", new float[] {0, 130, 0}, new float[] {0, 0, 0}, 70), // need count
-  new StripConfig("vip-lounge-strip7", new float[] {97, 130, 0}, new float[] {0, 0, 0}, 119+7), // need count
+  new StripConfig("vip-lounge-strip7", new float[] {0, 130, 0}, new float[] {0, 0, 0}, 70), // need count
+  new StripConfig("vip-lounge-strip8", new float[] {97, 130, 0}, new float[] {0, 0, 0}, 119+7), // need count
 
   // // verticals - left
   new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 48), // need count
