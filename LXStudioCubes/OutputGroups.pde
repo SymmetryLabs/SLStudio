@@ -80,14 +80,14 @@ public final OutputGroup[] buildOutputGroups() {
      * Long Skinny
      *------------------------------------------------------------------------------------*/
 
-    new OutputGroup(UNIVERSE_14)
+    new OutputGroup(UNIVERSE_15)
       .addPoints(model.splicePoints("long-skinny-strip6", 0, 42))
       .addPoints(model.splicePoints("long-skinny-strip9", 0, 17), OutputGroup.REVERSE)
       .addPoints(model.splicePoints("long-skinny-strip1", 0, 90)),
 
-    new OutputGroup(UNIVERSE_15)
-      .addPoints(model.splicePoints("long-skinny-strip7", 0, 144), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip12", 21, 12), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_15)
+    //   .addPoints(model.splicePoints("long-skinny-strip7", 0, 144), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip12", 21, 12), OutputGroup.REVERSE),
 
     new OutputGroup(UNIVERSE_17)
       .addPoints(model.splicePoints("long-skinny-strip2", 0, 121))
