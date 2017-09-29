@@ -30,12 +30,13 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIFocus;
+import heronarts.p3lx.ui.UITriggerSource;
 import heronarts.p3lx.ui.UITriggerTarget;
 import processing.core.PGraphics;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
-public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTarget {
+public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTarget, UITriggerSource {
 
     public final static int SWITCH_MARGIN = 6;
     public final static int SWITCH_SIZE = 28;
@@ -68,6 +69,11 @@ public class UISwitch extends UIParameterControl implements UIFocus, UITriggerTa
 
     @Override
     public BooleanParameter getTriggerTarget() {
+        return getBooleanParameter();
+    }
+
+    @Override
+    public BooleanParameter getTriggerSource() {
         return getBooleanParameter();
     }
 

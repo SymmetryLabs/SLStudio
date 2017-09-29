@@ -27,6 +27,7 @@ import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.component.UIImage;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.studio.global.UIAudio;
+import heronarts.p3lx.ui.studio.global.UICamera;
 import heronarts.p3lx.ui.studio.global.UIEngine;
 import heronarts.p3lx.ui.studio.global.UIPalette;
 import heronarts.p3lx.ui.studio.global.UITempo;
@@ -41,6 +42,7 @@ public class UILeftPane extends UIPane {
     public final UIAudio audio;
     public final UIPalette palette;
     public final UIEngine engine;
+    public final UICamera camera;
 
     public static final int WIDTH = 4*UIKnob.WIDTH + 20 + 2*UIPane.PADDING + 2*UIPane.MARGIN;
     public static final int TOP_OFFSET = 32;
@@ -62,6 +64,12 @@ public class UILeftPane extends UIPane {
         this.palette = (UIPalette) new UIPalette(ui, lx.palette, 0, 0, this.global.getContentWidth()).addToContainer(this.global);
         this.engine = (UIEngine) new UIEngine(ui, lx.engine, 0, 0, this.global.getContentWidth()).addToContainer(this.global);
         this.engine.setVisible(false);
+        if (ui instanceof LXStudio.UI) {
+            this.camera = (UICamera) new UICamera(ui, ((LXStudio.UI) ui).preview, 0, 0, this.global.getContentWidth()).addToContainer(this.global);
+            this.camera.setVisible(false);
+        } else {
+            this.camera = null;
+        }
 
         // Project elements
         new UIProjectManager(ui, lx, 0, 0, this.browser.getContentWidth()).addToContainer(this.browser);

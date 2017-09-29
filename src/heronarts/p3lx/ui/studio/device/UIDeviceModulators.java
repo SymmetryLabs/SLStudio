@@ -83,7 +83,9 @@ public class UIDeviceModulators extends UI2dContainer {
             @Override
             public void onToggle(boolean on) {
                 if (on) {
-                    device.modulation.addModulator(new VariableLFO());
+                    VariableLFO lfo = new VariableLFO();
+                    device.modulation.addModulator(lfo);
+                    modulatorList.setFocusIndex(modulatorItems.size() - 1);
                 }
             }
         }

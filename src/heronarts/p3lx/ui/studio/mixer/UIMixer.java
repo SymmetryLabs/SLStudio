@@ -31,8 +31,10 @@ import java.util.HashMap;
 import java.util.Map;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEngine;
+import heronarts.lx.LXMasterChannel;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UIButton;
@@ -107,6 +109,14 @@ public class UIMixer extends UI2dContainer {
                 mutableChannelStrips.get(channel).setContainerIndex(channel.getIndex());
             }
         });
+    }
+
+    void focusStrip(LXBus bus) {
+        if (bus instanceof LXMasterChannel) {
+            this.masterStrip.controls.focus();
+        } else {
+            ((UIChannelStripControls) this.mutableChannelStrips.get(bus).controls).channelName.focus();
+        }
     }
 
 }

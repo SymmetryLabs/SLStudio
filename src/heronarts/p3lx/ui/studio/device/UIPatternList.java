@@ -26,8 +26,8 @@
 
 package heronarts.p3lx.ui.studio.device;
 
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
@@ -39,6 +39,7 @@ import heronarts.p3lx.ui.component.UIItemList;
 public class UIPatternList extends UIItemList.ScrollList {
 
     private final LXChannel channel;
+    final Map<LXPattern, PatternItem> patternToItem = new HashMap<LXPattern, PatternItem>();
 
     public UIPatternList(UI ui, float x, float y, float w, float h, final LXChannel channel) {
         super(ui, x, y, w, h);
@@ -47,36 +48,38 @@ public class UIPatternList extends UIItemList.ScrollList {
         setShowCheckboxes(true);
 
         this.channel = channel;
-        final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        for (LXPattern p : channel.getPatterns()) {
-            items.add(new PatternItem(p));
+        for (LXPattern pattern : channel.getPatterns()) {
+            addPattern(pattern);
         }
-        setItems(items);
+
+        // Set up control surface listener
+        final LXParameterListener setControlSurfaceFocus = new LXParameterListener() {
+            public void onParameterChanged(LXParameter p) {
+                setControlSurfaceFocus(
+                    channel.controlSurfaceFocusIndex.getValuei(),
+                    channel.controlSurfaceFocusLength.getValuei()
+                );
+            }
+        };
+        channel.controlSurfaceFocusIndex.addListener(setControlSurfaceFocus);
+        channel.controlSurfaceFocusLength.addListener(setControlSurfaceFocus);
+        setControlSurfaceFocus.onParameterChanged(null);
 
         LXChannel.Listener lxListener = new LXChannel.AbstractListener() {
 
             @Override
             public void patternAdded(LXChannel channel, LXPattern pattern) {
-                items.add(new PatternItem(pattern));
-                setItems(items);
+                addPattern(pattern);
             }
 
             @Override
             public void patternRemoved(LXChannel channel, LXPattern pattern) {
-                int index = -1;
-                int i = 0;
-                for (UIItemList.Item item : items) {
-                    PatternItem patternItem = (PatternItem) item;
-                    if (patternItem.pattern == pattern) {
-                        index = i;
-                        break;
-                    }
-                    ++i;
-                }
-                if (index >= 0) {
-                    items.remove(index);
-                    setItems(items);
-                }
+                removePattern(pattern);
+            }
+
+            @Override
+            public void patternMoved(LXChannel channel, LXPattern pattern) {
+                // TODO(mcslee): should we handle? right now only happens from within the UI
             }
 
             @Override
@@ -100,6 +103,20 @@ public class UIPatternList extends UIItemList.ScrollList {
         });
 
         lxListener.patternDidChange(channel, channel.getActivePattern());
+    }
+
+    private void addPattern(LXPattern pattern) {
+        PatternItem item = new PatternItem(pattern);
+        this.patternToItem.put(pattern, item);
+        addItem(item);
+    }
+
+    private void removePattern(LXPattern pattern) {
+        PatternItem patternItem = this.patternToItem.remove(pattern);
+        if (patternItem == null) {
+            throw new IllegalStateException("Pattern removed from channel not found in map: " + pattern);
+        }
+        removeItem(patternItem);
     }
 
     class PatternItem implements UIItemList.Item {

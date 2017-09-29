@@ -114,16 +114,16 @@ public class LXStudio extends P3LX {
                         toggleHelpBar = true;
                     } else if (keyCode == java.awt.event.KeyEvent.VK_M && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
                         if (keyEvent.isShiftDown()) {
-                            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
-                                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-                            } else {
-                                lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
-                            }
-                        } else {
                             if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
                                 lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
                             } else {
                                 lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+                            }
+                        } else {
+                            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
+                                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                            } else {
+                                lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
                             }
                         }
                     }
@@ -231,6 +231,7 @@ public class LXStudio extends P3LX {
         private static final String KEY_PALETTE_EXPANDED = "paletteExpanded";
         private static final String KEY_MODULATORS_EXPANDED = "modulatorExpanded";
         private static final String KEY_ENGINE_EXPANDED = "engineExpanded";
+        private static final String KEY_CAMERA_EXPANDED = "cameraExpanded";
         private static final String KEY_CLIP_VIEW_VISIBLE = "clipViewVisible";
         private static final String KEY_PREVIEW = "preview";
 
@@ -239,6 +240,7 @@ public class LXStudio extends P3LX {
             object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
             object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
             object.addProperty(KEY_ENGINE_EXPANDED, this.leftPane.engine.isExpanded());
+            object.addProperty(KEY_CAMERA_EXPANDED, this.leftPane.camera.isExpanded());
             object.addProperty(KEY_CLIP_VIEW_VISIBLE, this.clipViewVisible);
             JsonObject modulatorObj = new JsonObject();
             for (UIObject child : this.rightPane.modulation) {
@@ -261,6 +263,9 @@ public class LXStudio extends P3LX {
             }
             if (object.has(KEY_ENGINE_EXPANDED)) {
                 this.leftPane.engine.setExpanded(object.get(KEY_ENGINE_EXPANDED).getAsBoolean());
+            }
+            if (object.has(KEY_CAMERA_EXPANDED)) {
+                this.leftPane.camera.setExpanded(object.get(KEY_CAMERA_EXPANDED).getAsBoolean());
             }
             if (object.has(KEY_CLIP_VIEW_VISIBLE)) {
                 setClipViewVisible(object.get(KEY_CLIP_VIEW_VISIBLE).getAsBoolean());
@@ -324,7 +329,7 @@ public class LXStudio extends P3LX {
 
     @Override
     protected void setProject(File file, ProjectListener.Change change) {
-        super.setProject(file,  change);
+        super.setProject(file, change);
         if (file != null) {
             this.applet.saveStrings(PROJECT_FILE_NAME, new String[] { file.getName() });
         }

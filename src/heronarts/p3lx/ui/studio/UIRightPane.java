@@ -48,7 +48,7 @@ import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
 import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
-import heronarts.p3lx.ui.studio.modulation.UIParameterModulator;
+import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
 
@@ -62,7 +62,7 @@ public class UIRightPane extends UIPane {
 
     public static final int PADDING = 4;
     public static final int WIDTH = 244;
-    private static final int ADD_BUTTON_WIDTH = 40;
+    private static final int ADD_BUTTON_WIDTH = 38;
 
     private int lfoCount = 1;
     private int envCount = 1;
@@ -169,6 +169,22 @@ public class UIRightPane extends UIPane {
         .setDescription("Add a new Beat detector to the modulation engine")
         .addToContainer(bar);
 
+        final UIButton triggerButton = (UIButton) new UIButton(0, 0, 16, 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    lx.engine.mapping.setMode(LXMappingEngine.Mode.TRIGGER_SOURCE);
+                } else if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.TRIGGER_SOURCE) {
+                    lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+                }
+            }
+        }
+        .setIcon(ui.theme.iconTriggerSource)
+        .setInactiveColor(ui.theme.getDeviceBackgroundColor())
+        .setBorderRounding(4)
+        .setDescription("Add a new trigger mapping to the modulation engine")
+        .addToContainer(bar);
+
         final UIButton mapButton = (UIButton) new UIButton(0, 0, 24, 16) {
             @Override
             public void onToggle(boolean on) {
@@ -189,6 +205,9 @@ public class UIRightPane extends UIPane {
             public void onParameterChanged(LXParameter p) {
                 if (lx.engine.mapping.getMode() != LXMappingEngine.Mode.MODULATION_SOURCE) {
                     mapButton.setActive(false);
+                }
+                if (lx.engine.mapping.getMode() != LXMappingEngine.Mode.TRIGGER_SOURCE) {
+                    triggerButton.setActive(false);
                 }
             }
         });
@@ -226,13 +245,24 @@ public class UIRightPane extends UIPane {
     }
 
     private UIModulator findModulator(LXParameter parameter) {
+        return findModulator(parameter, false);
+    }
+
+    private UIModulator findModulator(LXParameter parameter, boolean create) {
         for (UIObject child : this.modulation) {
             if (child instanceof UIModulator) {
                 UIModulator uiModulator = (UIModulator) child;
-                if (uiModulator.parameter == parameter || uiModulator.parameter == parameter.getComponent()) {
+                if (uiModulator.component == parameter || uiModulator.component == parameter.getComponent()) {
                     return uiModulator;
                 }
             }
+        }
+        if (create) {
+            LXComponent component = parameter.getComponent();
+            if (component == this.lx.engine.modulation && (parameter instanceof LXComponent)) {
+                component = (LXComponent) parameter;
+            }
+            return (UIModulator) new UIComponentModulator(this.ui, this.lx, component, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
         }
         return null;
     }
@@ -255,11 +285,7 @@ public class UIRightPane extends UIPane {
     }
 
     private void addModulation(LXCompoundModulation modulation) {
-        UIModulator uiModulator = findModulator(modulation.source);
-        if (uiModulator == null) {
-            uiModulator = (UIModulator) new UIParameterModulator(this.ui, this.lx, modulation.source, 0, 0, this.modulation.getContentWidth()).addToContainer(this.modulation, 1);
-        }
-        uiModulator.addModulation(modulation);
+        findModulator(modulation.source, true).addModulation(modulation);
     }
 
     private void removeModulation(LXCompoundModulation modulation) {
@@ -269,23 +295,12 @@ public class UIRightPane extends UIPane {
         }
     }
 
-    private UIModulator findModulator(LXTriggerModulation trigger) {
-        LXComponent source = trigger.source.getComponent();
-        if (source instanceof LXModulator) {
-            return findModulator((LXModulator) source);
-        }
-        return null;
-    }
-
     private void addTrigger(LXTriggerModulation trigger) {
-        UIModulator uiModulator = findModulator(trigger);
-        if (uiModulator != null) {
-            uiModulator.addTrigger(trigger);
-        }
+        findModulator(trigger.source, true).addTrigger(trigger);
     }
 
     private void removeTrigger(LXTriggerModulation trigger) {
-        UIModulator uiModulator = findModulator(trigger);
+        UIModulator uiModulator = findModulator(trigger.source);
         if (uiModulator != null) {
             uiModulator.removeTrigger(trigger);
         }

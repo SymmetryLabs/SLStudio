@@ -304,11 +304,12 @@ public class UI implements LXEngine.Dispatch {
     boolean midiMapping = false;
     boolean modulationSourceMapping = false;
     boolean modulationTargetMapping = false;
+    boolean triggerSourceMapping = false;
     boolean triggerTargetMapping = false;
     LXModulationEngine modulationEngine = null;
 
-    private UITriggerSource triggerSource = null;
     private UIControlTarget controlTarget = null;
+    private UITriggerSource triggerSource = null;
     private UIModulationSource modulationSource = null;
 
     public UI(P3LX lx) {
@@ -365,6 +366,7 @@ public class UI implements LXEngine.Dispatch {
                     midiMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI;
                     modulationSourceMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE;
                     modulationTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_TARGET;
+                    triggerSourceMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.TRIGGER_SOURCE;
                     triggerTargetMapping = lx.engine.mapping.getMode() == LXMappingEngine.Mode.TRIGGER_TARGET;
 
                     if (midiMapping) {
@@ -378,6 +380,8 @@ public class UI implements LXEngine.Dispatch {
                         } else {
                             contextualHelpText.setValue("Select a modulation destination for " + LXComponent.getCanonicalLabel(sourceParameter) + ", eligible targets are highlighted");
                         }
+                    } else if (triggerSourceMapping) {
+                        contextualHelpText.setValue("Click on a trigger source, eligible sources are highlighted ");
                     } else if (triggerTargetMapping) {
                         contextualHelpText.setValue("Select a trigger destination for " + LXComponent.getCanonicalLabel(triggerSource.getTriggerSource()) + ", eligible targets are highlighted");
                     } else {
@@ -444,7 +448,7 @@ public class UI implements LXEngine.Dispatch {
     }
 
     private boolean isMapping() {
-        return this.midiMapping || this.modulationSourceMapping || this.modulationTargetMapping || this.triggerTargetMapping;
+        return this.midiMapping || this.modulationSourceMapping || this.modulationTargetMapping || this.triggerSourceMapping || this.triggerTargetMapping;
     }
 
     void setMouseoverHelpText(String helpText) {

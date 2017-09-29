@@ -30,7 +30,6 @@ import java.util.concurrent.CopyOnWriteArrayList;
 
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXModulationEngine;
-import heronarts.lx.color.ColorParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.LXPeriodicModulator;
 import heronarts.lx.parameter.BooleanParameter;
@@ -59,7 +58,6 @@ public abstract class UIModulator extends UI2dContainer {
     protected static final int TRIGGER_WIDTH = 16;
 
     private final UI ui;
-    private final ColorParameter modulationColor;
     private final float lineX;
 
     private final UIModulations uiModulations;
@@ -68,8 +66,6 @@ public abstract class UIModulator extends UI2dContainer {
         super(x, y, w, h);
         this.ui = ui;
         this.modulator = modulator;
-
-        this.modulationColor = this.modulator.modulationColor;
 
         new UIButton(0, 0, RUNNING_WIDTH, RUNNING_WIDTH)
         .setParameter(modulator.running)
@@ -94,7 +90,7 @@ public abstract class UIModulator extends UI2dContainer {
             this.lineX = PADDING + RUNNING_WIDTH;
         }
 
-        new UIColorBox(ui, this.modulationColor, this.width - COLOR_WIDTH, 1, COLOR_WIDTH, COLOR_WIDTH)
+        new UIColorBox(ui, this.modulator.modulationColor, this.width - COLOR_WIDTH, 1, COLOR_WIDTH, COLOR_WIDTH)
         .addToContainer(this);
 
         this.uiModulations = (UIModulations)

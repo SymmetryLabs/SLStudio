@@ -85,16 +85,17 @@ public class UIPalette extends UICollapsibleSection {
 
         int ky = 70;
         int ks = UIKnob.WIDTH + 4;
-        new UIKnob(0, ky).setParameter(palette.spreadX).addToContainer(this);
-        new UIKnob(ks, ky).setParameter(palette.spreadY).addToContainer(this);
-        new UIKnob(2*ks, ky).setParameter(palette.spreadZ).addToContainer(this);
-        new UIKnob(3*ks, ky).setParameter(palette.spreadR).addToContainer(this);
+        new UIKnob(0, ky).setParameter(palette.spread).addToContainer(this);
+        new UIKnob(ks, ky).setParameter(palette.spreadX).addToContainer(this);
+        new UIKnob(2*ks, ky).setParameter(palette.spreadY).addToContainer(this);
+        new UIKnob(3*ks, ky).setParameter(palette.spreadZ).addToContainer(this);
 
         ky += 48;
-        new UIKnob(0, ky).setParameter(palette.offsetX).addToContainer(this);
-        new UIKnob(ks, ky).setParameter(palette.offsetY).addToContainer(this);
-        new UIKnob(2*ks, ky).setParameter(palette.offsetZ).addToContainer(this);
-        new UISwitch(3*ks, ky).setParameter(palette.mirror).addToContainer(this);
+        new UISwitch(0, ky).setParameter(palette.mirror).addToContainer(this);
+        new UIKnob(ks, ky).setParameter(palette.offsetX).addToContainer(this);
+        new UIKnob(2*ks, ky).setParameter(palette.offsetY).addToContainer(this);
+        new UIKnob(3*ks, ky).setParameter(palette.offsetZ).addToContainer(this);
+
 
     }
 

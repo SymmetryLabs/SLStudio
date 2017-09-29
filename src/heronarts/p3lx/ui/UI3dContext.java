@@ -33,6 +33,7 @@ import heronarts.lx.LXSerializable;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -74,6 +75,14 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
     private final PVector eyeDamped = new PVector(0, 0, 0);
 
+    public final BooleanParameter ortho =
+        new BooleanParameter("Ortho")
+        .setDescription("Orthographic projection mode");
+
+    public final BooleanParameter phiLock =
+        new BooleanParameter("PhiLock", true)
+        .setDescription("Locks phi to reasonable bounds");
+
     /**
      * Angle of the eye position about the vertical Z-axis
      */
@@ -112,12 +121,17 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     /**
      * Perspective of view
      */
-    public final BoundedParameter perspective = new BoundedParameter("Perspective", 60, 30, 150);
+    public final BoundedParameter perspective = (BoundedParameter)
+        new BoundedParameter("Perspective", 60, 15, 150)
+        .setExponent(2)
+        .setDescription("Camera perspective factor");
 
     /**
      * Depth of perspective field, exponential factor of radius by exp(10, Depth)
      */
-    public final BoundedParameter depth = new BoundedParameter("Depth", 1, 0, 4);
+    public final BoundedParameter depth =
+        new BoundedParameter("Depth", 1, 0, 4)
+        .setDescription("Camera's depth of perspective field");
 
     private final DampedParameter thetaDamped =
         new DampedParameter(this.theta, this.rotationVelocity, this.rotationAcceleration);
@@ -128,20 +142,20 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     private final DampedParameter radiusDamped =
         new DampedParameter(this.radius, this.cameraVelocity, this.cameraAcceleration);
 
-    private final MutableParameter pxParameter = new MutableParameter();
-    private final MutableParameter pyParameter = new MutableParameter();
-    private final MutableParameter pzParameter = new MutableParameter();
+    private final MutableParameter positionX = new MutableParameter();
+    private final MutableParameter positionY = new MutableParameter();
+    private final MutableParameter positionZ = new MutableParameter();
 
-    private final DampedParameter pxDamped = new DampedParameter(
-        this.pxParameter, this.cameraVelocity, this.cameraAcceleration
+    private final DampedParameter xDamped = new DampedParameter(
+        this.positionX, this.cameraVelocity, this.cameraAcceleration
     );
 
-    private final DampedParameter pyDamped = new DampedParameter(
-        this.pyParameter, this.cameraVelocity, this.cameraAcceleration
+    private final DampedParameter yDamped = new DampedParameter(
+        this.positionY, this.cameraVelocity, this.cameraAcceleration
     );
 
-    private final DampedParameter pzDamped = new DampedParameter(
-        this.pzParameter, this.cameraVelocity, this.cameraAcceleration
+    private final DampedParameter zDamped = new DampedParameter(
+        this.positionZ, this.cameraVelocity, this.cameraAcceleration
     );
 
     // Radius bounds
@@ -172,16 +186,16 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         addLoopTask(this.thetaDamped);
         addLoopTask(this.phiDamped);
         addLoopTask(this.radiusDamped);
-        addLoopTask(this.pxDamped);
-        addLoopTask(this.pyDamped);
-        addLoopTask(this.pzDamped);
+        addLoopTask(this.xDamped);
+        addLoopTask(this.yDamped);
+        addLoopTask(this.zDamped);
 
         this.thetaDamped.start();
         this.radiusDamped.start();
         this.phiDamped.start();
-        this.pxDamped.start();
-        this.pyDamped.start();
-        this.pzDamped.start();
+        this.xDamped.start();
+        this.yDamped.start();
+        this.zDamped.start();
 
         computePosition();
         this.radius.addListener(new LXParameterListener() {
@@ -194,9 +208,11 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         });
         this.phi.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter p) {
-                double value = phi.getValue();
-                if (value < -MAX_PHI || value > MAX_PHI) {
-                    phi.setValue(LXUtils.constrain(value, -MAX_PHI, MAX_PHI));
+                if (phiLock.isOn()) {
+                    double value = phi.getValue();
+                    if (value < -MAX_PHI || value > MAX_PHI) {
+                        phi.setValue(LXUtils.constrain(value, -MAX_PHI, MAX_PHI));
+                    }
                 }
             }
         });
@@ -281,12 +297,12 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
                 position = this.eye;
                 break;
             }
-            this.pxParameter.setValue(position.x);
-            this.pyParameter.setValue(position.y);
-            this.pzParameter.setValue(position.z);
-            this.pxDamped.setValue(position.x);
-            this.pyDamped.setValue(position.y);
-            this.pzDamped.setValue(position.z);
+            this.positionX.setValue(position.x);
+            this.positionY.setValue(position.y);
+            this.positionZ.setValue(position.z);
+            this.xDamped.setValue(position.x);
+            this.yDamped.setValue(position.y);
+            this.zDamped.setValue(position.z);
         }
         return this;
     }
@@ -352,7 +368,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
      * @param theta Angle about the y axis
      * @return this
      */
-    public UI3dContext setTheta(float theta) {
+    public UI3dContext setTheta(double theta) {
         this.theta.setValue(theta);
         return this;
     }
@@ -434,9 +450,9 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         if (this.interactionMode != InteractionMode.ZOOM) {
             throw new IllegalStateException("setCenter() only allowed in ZOOM mode");
         }
-        this.pxParameter.setValue(this.center.x = x);
-        this.pyParameter.setValue(this.center.y = y);
-        this.pzParameter.setValue(this.center.z = z);
+        this.positionX.setValue(this.center.x = x);
+        this.positionY.setValue(this.center.y = y);
+        this.positionZ.setValue(this.center.z = z);
         return this;
     }
 
@@ -452,9 +468,9 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         if (this.interactionMode != InteractionMode.MOVE) {
             throw new IllegalStateException("setCenter() only allowed in MOVE mode");
         }
-        this.pxParameter.setValue(this.eye.x = x);
-        this.pyParameter.setValue(this.eye.y = y);
-        this.pzParameter.setValue(this.eye.z = z);
+        this.positionX.setValue(this.eye.x = x);
+        this.positionY.setValue(this.eye.y = y);
+        this.positionZ.setValue(this.eye.z = z);
         return this;
     }
 
@@ -486,9 +502,9 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         float sinphi = (float) Math.sin(pv);
         float cosphi = (float) Math.cos(pv);
 
-        float px = this.pxDamped.getValuef();
-        float py = this.pyDamped.getValuef();
-        float pz = this.pzDamped.getValuef();
+        float px = this.xDamped.getValuef();
+        float py = this.yDamped.getValuef();
+        float pz = this.zDamped.getValuef();
 
         switch (this.interactionMode) {
         case ZOOM:
@@ -535,13 +551,18 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
 
         // Set perspective projection
         float radiusValue = this.radiusDamped.getValuef();
-        float depthFactor = (float) Math.pow(10, this.depth.getValue());
-        pg.perspective(
-            this.perspective.getValuef() / 180.f * PConstants.PI,
-            pg.width / (float) pg.height,
-            radiusValue / depthFactor,
-            radiusValue * depthFactor
-        );
+        if (this.ortho.isOn()) {
+            float halfRadius = radiusValue * .5f;
+            pg.ortho(-halfRadius, halfRadius, -halfRadius, halfRadius);
+        } else {
+            float depthFactor = (float) Math.pow(10, this.depth.getValue());
+            pg.perspective(
+                this.perspective.getValuef() / 180.f * PConstants.PI,
+                pg.width / (float) pg.height,
+                radiusValue / depthFactor,
+                radiusValue * depthFactor
+            );
+        }
 
         if (ui.coordinateSystem == UI.CoordinateSystem.RIGHT_HANDED) {
             pg.scale(1, 1, -1);
@@ -579,7 +600,7 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         pg.stroke(LXColor.RED);
         pg.strokeWeight(10);
         pg.beginShape(PConstants.POINTS);
-        pg.vertex(this.pxDamped.getValuef(), this.pyDamped.getValuef(), this.pzDamped.getValuef());
+        pg.vertex(this.xDamped.getValuef(), this.yDamped.getValuef(), this.zDamped.getValuef());
         pg.endShape();
         pg.strokeWeight(1);
     }

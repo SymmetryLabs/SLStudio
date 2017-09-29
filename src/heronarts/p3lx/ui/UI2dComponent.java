@@ -763,7 +763,7 @@ public abstract class UI2dComponent extends UIObject {
             if (isControlTarget()) {
                 drawFocus(ui, pg, 0xccff0000);
             }
-        } else if (isModulationSourceMapping()) {
+        } else if (isModulationSourceMapping() || isTriggerSourceMapping()) {
             pg.noStroke();
             pg.fill(ui.theme.getModulationSourceMappingColor());
             pg.rect(x, y, w, h);

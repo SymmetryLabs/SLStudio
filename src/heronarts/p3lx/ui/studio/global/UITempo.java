@@ -22,10 +22,14 @@ package heronarts.p3lx.ui.studio.global;
 
 import heronarts.lx.LX;
 import heronarts.lx.Tempo;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UITimerTask;
+import heronarts.p3lx.ui.UITriggerSource;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIDoubleBox;
 import processing.core.PConstants;
@@ -64,37 +68,44 @@ public class UITempo extends UI2dContainer {
         .setMomentary(true)
         .addToContainer(this);
 
-        new Blinker(lx.tempo, 163, PADDING + 3, 12, 12).addToContainer(this);
+        new Blinker(lx.tempo, 160, PADDING, 18, 18).addToContainer(this);
     }
 
-    private class Blinker extends UI2dComponent {
+    private class Blinker extends UI2dComponent implements UITriggerSource {
 
         private final Tempo tempo;
-        private boolean blinkOn = false;
 
-        Blinker(Tempo tempo, float x, float y, float w, float h) {
+        Blinker(final Tempo tempo, float x, float y, float w, float h) {
             super(x, y, w, h);
             this.tempo = tempo;
             addLoopTask(new UITimerTask(14, UITimerTask.Mode.FPS) {
                 @Override
                 public void run() {
-                    if (blinkOn) {
+                    if (tempo.enabled.isOn()) {
                         redraw();
                     }
+                }
+            });
+            tempo.enabled.addListener(new LXParameterListener() {
+                public void onParameterChanged(LXParameter p) {
+                    redraw();
                 }
             });
         }
 
         @Override
         public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
-            this.blinkOn = !this.blinkOn;
-            redraw();
+            if (mouseEvent.isControlDown() || mouseEvent.isMetaDown()) {
+                this.getUI().mapTriggerSource(this);
+            } else {
+                this.tempo.enabled.toggle();
+            }
         }
 
         @Override
         public void onDraw(UI ui, PGraphics pg) {
             pg.noStroke();
-            if (this.blinkOn) {
+            if (this.tempo.enabled.isOn()) {
                 int fill = ui.theme.getPrimaryColor();
                 fill = (fill & 0xffffff) | (((int) ((1 - this.tempo.ramp()) * 0xff)) << 24);
                 pg.fill(fill);
@@ -103,6 +114,11 @@ public class UITempo extends UI2dContainer {
             }
             pg.ellipseMode(PConstants.CENTER);
             pg.ellipse(this.width/2, this.height/2, 8, 8);
+        }
+
+        @Override
+        public BooleanParameter getTriggerSource() {
+            return this.tempo.trigger;
         }
     }
 }

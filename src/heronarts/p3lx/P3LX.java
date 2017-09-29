@@ -203,8 +203,12 @@ public class P3LX extends LX {
             // from the copy buffer.
             this.engine.copyUIBuffer(this.colors = this.buffer.getArray());
             if (this.flags.showFramerate) {
-                frameRateStr = "Engine: " + this.engine.frameRate() + " "
-                    + "UI: " + this.applet.frameRate;
+                frameRateStr =
+                    "Engine: " + this.engine.frameRate() + " " +
+                    "UI: " + this.applet.frameRate;
+                if (this.engine.isNetworkMultithreaded.isOn()) {
+                    frameRateStr += " Network: " + this.engine.network.frameRate();
+                }
             }
         } else {
             // If the engine is not threaded, then we run it ourselves, and
@@ -215,6 +219,9 @@ public class P3LX extends LX {
             this.colors = this.engine.getUIBufferNonThreadSafe();
             if (this.flags.showFramerate) {
                 frameRateStr = "Framerate: " + this.applet.frameRate;
+                if (this.engine.isNetworkMultithreaded.isOn()) {
+                    frameRateStr += " Network: " + this.engine.network.frameRate();
+                }
             }
         }
         this.timer.engineNanos = System.nanoTime() - engineStart;

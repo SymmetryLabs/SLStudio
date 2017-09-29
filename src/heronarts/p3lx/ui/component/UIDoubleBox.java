@@ -46,7 +46,7 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModul
 
     private final LXParameterListener parameterListener = new LXParameterListener() {
         public void onParameterChanged(LXParameter p) {
-            setValue(parameter.getValue());
+            setValue(p);
         }
     };
 
@@ -72,7 +72,7 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModul
             this.minValue = parameter.range.min;
             this.maxValue = parameter.range.max;
             this.parameter.addListener(this.parameterListener);
-            setValue(parameter.getValue());
+            setValue(parameter);
         }
         return this;
     }
@@ -96,11 +96,23 @@ public class UIDoubleBox extends UINumberBox implements UIControlTarget, UIModul
         return this.value;
     }
 
+    protected UIDoubleBox setValue(LXParameter p) {
+        if (p instanceof CompoundParameter) {
+            return setValue(((CompoundParameter) p).getBaseValue(), false);
+        } else {
+            return setValue(p.getValue(), false);
+        }
+    }
+
     public UIDoubleBox setValue(double value) {
+        return setValue(value, true);
+    }
+
+    protected UIDoubleBox setValue(double value, boolean pushToParameter) {
         value = LXUtils.constrain(value, this.minValue, this.maxValue);
         if (this.value != value) {
             this.value = value;
-            if (this.parameter != null) {
+            if (this.parameter != null && pushToParameter) {
                 this.parameter.setValue(this.value);
             }
             this.onValueChange(this.value);

@@ -24,28 +24,22 @@
  * @version     ##library.prettyVersion## (##library.version##)
  */
 
-package heronarts.p3lx.ui.studio.modulation;
+package heronarts.p3lx.ui.studio.global;
 
-import heronarts.lx.LX;
-import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UIModulationSource;
+import heronarts.p3lx.ui.UI3dContext;
+import heronarts.p3lx.ui.component.UIKnob;
+import heronarts.p3lx.ui.component.UISwitch;
+import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
-public class UIParameterModulator extends UIModulator implements UIModulationSource {
+public class UICamera extends UICollapsibleSection {
 
-    private static final int HEIGHT = 0;
+    private static final int HEIGHT = 66;
 
-    public UIParameterModulator(UI ui, LX lx, LXNormalizedParameter parameter, float x, float y, float w) {
-        super(ui, lx, parameter, false, x, y, w, HEIGHT);
-    }
-
-    @Override
-    protected UIModulationSource getModulationSourceUI() {
-        return this;
-    }
-
-    @Override
-    public LXNormalizedParameter getModulationSource() {
-        return (LXNormalizedParameter) this.parameter;
+    public UICamera(UI ui, UI3dContext context, float x, float y, float w) {
+        super(ui, x, y, w, HEIGHT);
+        setTitle("CAMERA");
+        new UISwitch(0, 0).setParameter(context.ortho).addToContainer(this);
+        new UIKnob(44, 0).setParameter(context.perspective).addToContainer(this);
     }
 }
