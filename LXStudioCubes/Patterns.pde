@@ -1,6 +1,87 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class Sparkle extends LXPattern {
+  private CompoundParameter densityParameter = new CompoundParameter("DENS", 0.15);
+  private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.4);
+  private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.3);
+  private CompoundParameter hueParameter = new CompoundParameter("HUE", 0.5);
+  private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
+  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+  
+  class Spark {
+    LXPoint point;
+    float value;
+    float hue;
+    boolean hasPeaked;
+    
+    Spark() {
+      point = model.points[floor(random(model.points.length))];
+      hue = random(1);
+      boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
+      hasPeaked = infiniteAttack;
+      value = (infiniteAttack ? 1 : 0);
+    }
+    
+    // returns TRUE if this should die
+    boolean age(double ms) {
+      if (!hasPeaked) {
+        value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
+        if (value >= 1.0) {
+          value = 1.0;
+          hasPeaked = true;
+        }
+        return false;
+      } else {
+        value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
+        return value <= 0;
+      }
+    }
+  }
+  
+  private float leftoverMs = 0;
+  private List<Spark> sparks;
+  
+  public Sparkle(LX lx) {
+    super(lx);
+    addParameter(densityParameter);
+    addParameter(attackParameter);
+    addParameter(decayParameter);
+    addParameter(hueParameter);
+    addParameter(hueVarianceParameter);
+    addParameter(saturationParameter);
+    sparks = new LinkedList<Spark>();
+  }
+  
+  public void run(double deltaMs) {
+    leftoverMs += deltaMs;
+    float msPerSpark = 1000 / ((densityParameter.getValuef() + .01) * (model.xRange*10));
+    while (leftoverMs > msPerSpark) {
+      leftoverMs -= msPerSpark;
+      sparks.add(new Spark());
+    }
+    
+    for (LXPoint p : model.points) {
+      colors[p.index] = 0;
+    }
+    
+    for (Spark spark : sparks) {
+      float hue = (hueParameter.getValuef() + (hueVarianceParameter.getValuef() * spark.hue)) % 1.0;
+      color c = lx.hsb(hue * 360, saturationParameter.getValuef() * 100, (spark.value) * 100);
+      colors[spark.point.index] = c;
+    }
+    
+    Iterator<Spark> i = sparks.iterator();
+    while (i.hasNext()) {
+      Spark spark = i.next();
+      boolean dead = spark.age(deltaMs);
+      if (dead) {
+        i.remove();
+      }
+    }
+  } 
+}
+
 public class HuePattern extends LXPattern {
   public CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
   public HuePattern(LX lx) {
