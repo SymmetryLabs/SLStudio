@@ -47,43 +47,53 @@ static final float CONTOUR_WIDTH = 5; // needs measurement;
 
 static final TowerConfig[] TOWER_CONFIG = {};
 
+
+/**
+ * Vip Lounge
+ *---------------------------------------------------------------------------------------------*/
+static final float vip_lounge_offset_x = 0;
+static final float vip_lounge_offset_y = 0;
+static final float vip_lounge_offset_z = 0;
+static final float vip_lounge_rotation_x = 0;
+static final float vip_lounge_rotation_y = 0;
+static final float vip_lounge_rotation_z = 0;
+
 static final StripConfig[] VIP_LOUGNE_STRIP_CONFIG = {
   // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
-  // horizontals - bottom
-  new StripConfig("vip-lounge-strip1", new float[] { 0, 0, 0}, new float[] {0, 0, 0}, 44),
-  new StripConfig("vip-lounge-strip2", new float[] {64, 0, 0}, new float[] {0, 0, 0}, 141),
+  // // horizontals - bottom
+  // new StripConfig("vip-lounge-strip1", new float[] { 0, 0, 0}, new float[] {0, 0, 0}, 44),
+  // new StripConfig("vip-lounge-strip2", new float[] {64, 0, 0}, new float[] {0, 0, 0}, 141),
 
-  // horizontals - middle bottom
-  new StripConfig("vip-lounge-strip3", new float[] {  0, 62, 0}, new float[] {0, 0, 0}, 92),
-  new StripConfig("vip-lounge-strip4", new float[] {123, 62, 0}, new float[] {0, 0, 0}, 98),
+  // // horizontals - middle bottom
+  // new StripConfig("vip-lounge-strip3", new float[] {  0, 62, 0}, new float[] {0, 0, 0}, 92),
+  // new StripConfig("vip-lounge-strip4", new float[] {123, 62, 0}, new float[] {0, 0, 0}, 98),
 
-  // horizontals - middle top
-  new StripConfig("vip-lounge-strip5", new float[] {0,   68, 0}, new float[] {0, 0, 0}, 121),
-  new StripConfig("vip-lounge-strip6", new float[] {163, 68, 0}, new float[] {0, 0, 0}, 66),
+  // // horizontals - middle top
+  // new StripConfig("vip-lounge-strip5", new float[] {0,   68, 0}, new float[] {0, 0, 0}, 121),
+  // new StripConfig("vip-lounge-strip6", new float[] {163, 68, 0}, new float[] {0, 0, 0}, 66),
 
-  // // horizontals - top
-  new StripConfig("vip-lounge-strip7", new float[] {0, 130, 0}, new float[] {0, 0, 0}, 71),
-  new StripConfig("vip-lounge-strip8", new float[] {97, 130, 0}, new float[] {0, 0, 0}, 119+7), 
+  // // // horizontals - top
+  // new StripConfig("vip-lounge-strip7", new float[] {0, 130, 0}, new float[] {0, 0, 0}, 71),
+  // new StripConfig("vip-lounge-strip8", new float[] {97, 130, 0}, new float[] {0, 0, 0}, 119+7), 
 
-  // // verticals - left
-  new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 50), 
-  new StripConfig("vip-lounge-strip10", new float[] {0, 68, 0}, new float[] {0, 0, 90}, 49), 
+  // // // verticals - left
+  // new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 50), 
+  // new StripConfig("vip-lounge-strip10", new float[] {0, 68, 0}, new float[] {0, 0, 90}, 49), 
 
-  // // verticals - right 
-  new StripConfig("vip-lounge-strip11", new float[] {238, 0, 0}, new float[] {0, 0, 90}, 39), 
-  new StripConfig("vip-lounge-strip12", new float[] {240, 49, 0}, new float[] {0, 0, 0}, 3),
-  new StripConfig("vip-lounge-strip13", new float[] {244, 48.5, 0}, new float[] {0, 0, 90}, 10), 
-  new StripConfig("vip-lounge-strip14", new float[] {244, 68  , 0}, new float[] {0, 0, 90}, 49), 
+  // // // verticals - right 
+  // new StripConfig("vip-lounge-strip11", new float[] {238, 0, 0}, new float[] {0, 0, 90}, 39), 
+  // new StripConfig("vip-lounge-strip12", new float[] {240, 49, 0}, new float[] {0, 0, 0}, 3),
+  // new StripConfig("vip-lounge-strip13", new float[] {244, 48.5, 0}, new float[] {0, 0, 90}, 10), 
+  // new StripConfig("vip-lounge-strip14", new float[] {244, 68  , 0}, new float[] {0, 0, 90}, 49), 
 
-  // // bottom angle (left, right)
-  new StripConfig("vip-lounge-strip15", new float[] {55, 1, 0}, new float[] {0, 0, 45}, 69), 
-  new StripConfig("vip-lounge-strip16", new float[] {63, 1, 0}, new float[] {0, 0, 45}, 67), 
+  // // // bottom angle (left, right)
+  // new StripConfig("vip-lounge-strip15", new float[] {55, 1, 0}, new float[] {0, 0, 45}, 69), 
+  // new StripConfig("vip-lounge-strip16", new float[] {63, 1, 0}, new float[] {0, 0, 45}, 67), 
 
-  // // top angle (left, right)
-  new StripConfig("vip-lounge-strip17", new float[] {152, 68, 0}, new float[] {0, 0, 137.5}, 72), 
-  new StripConfig("vip-lounge-strip18", new float[] {161, 68, 0}, new float[] {0, 0, 137.5}, 74), 
-
+  // // // top angle (left, right)
+  // new StripConfig("vip-lounge-strip17", new float[] {152, 68, 0}, new float[] {0, 0, 137.7}, 72), 
+  // new StripConfig("vip-lounge-strip18", new float[] {162, 67, 0}, new float[] {0, 0, 137.7}, 74), 
 
 };
 
@@ -91,10 +101,43 @@ static final StripConfig[] VJ_BOOTH_STRIP_CONFIG = {
 
 };
 
+/**
+ * Long Skinny
+ *---------------------------------------------------------------------------------------------*/
+static final float long_skinny_offset_x = 0;
+static final float long_skinny_offset_y = 136;
+static final float long_skinny_offset_z = 0;
+static final float long_skinny_rotation_x = 0;
+static final float long_skinny_rotation_y = 0;
+static final float long_skinny_rotation_z = 0;
+
 static final StripConfig[] LONG_SKINNY_RUN_STRIP_CONFIG = {
 
-  //new StripConfig("long-skinny-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 44),
+  // horizontals - bottom 
+  new StripConfig("long-skinny-strip1", new float[] {  0, 0, 0}, new float[] {0, 0, 0}, 98),
+  new StripConfig("long-skinny-strip2", new float[] {132, 0, 0}, new float[] {0, 0, 0}, 121),
+  new StripConfig("long-skinny-strip3", new float[] {294, 0, 0}, new float[] {0, 0, 0}, 84),
+  new StripConfig("long-skinny-strip4", new float[] {407, 0, 0}, new float[] {0, 0, 0}, 79),
 
+  // horizontals - top
+  new StripConfig("long-skinny-strip5", new float[] { -1, 24, 0}, new float[] {0, 0, 0}, 129),
+  new StripConfig("long-skinny-strip6", new float[] {170, 24, 0}, new float[] {0, 0, 0}, 64),
+  new StripConfig("long-skinny-strip7", new float[] {260, 24, 0}, new float[] {0, 0, 0}, 144),
+  new StripConfig("long-skinny-strip8", new float[] {448, 24, 0}, new float[] {0, 0, 0}, 75),
+
+  // verticals & angles
+  new StripConfig("long-skinny-strip9", new float[] {0, 1, 0}, new float[] {0, 0, 90}, 17), 
+
+  new StripConfig("long-skinny-strip10", new float[] {124, 1, 0}, new float[] {0, 0, 33}, 32), 
+  new StripConfig("long-skinny-strip11", new float[] {134, 1, 0}, new float[] {0, 0, 33}, 32), 
+
+  new StripConfig("long-skinny-strip12", new float[] {284, -1, 0}, new float[] {0, 0, 144.5}, 33), 
+  new StripConfig("long-skinny-strip13", new float[] {293, -1.5, 0}, new float[] {0, 0, 144}, 34), 
+
+  new StripConfig("long-skinny-strip14", new float[] {399, 2, 0}, new float[] {0, 0, 28}, 33), 
+  new StripConfig("long-skinny-strip15", new float[] {407, 2, 0}, new float[] {0, 0, 28}, 33), 
+
+  new StripConfig("long-skinny-strip16", new float[] {407, 2, 0}, new float[] {0, 0, 28}, 32), 
 };
 
 static final StripConfig[] COLUMNS_STRIP_CONFIG = {
@@ -336,6 +379,13 @@ public SLModel buildModel() {
   /* Strips ----------------------------------------------------------*/
   List<Strip> strips = new ArrayList<Strip>();
 
+  // Vip Lounge
+  globalTransform.push();
+  globalTransform.translate(vip_lounge_offset_x, vip_lounge_offset_y, vip_lounge_offset_z);
+  globalTransform.rotateX(vip_lounge_rotation_x * PI / 180.);
+  globalTransform.rotateY(vip_lounge_rotation_y * PI / 180.);
+  globalTransform.rotateZ(vip_lounge_rotation_z * PI / 180.);
+
   for (StripConfig stripConfig : VIP_LOUGNE_STRIP_CONFIG) {
     Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, PIXEL_PITCH);
 
@@ -349,6 +399,31 @@ public SLModel buildModel() {
 
     globalTransform.pop();
   }
+  globalTransform.pop();
+  /*-----------------------------------------------------------------*/
+
+
+  // Long Skinny
+  globalTransform.push();
+  globalTransform.translate(long_skinny_offset_x, long_skinny_offset_y, long_skinny_offset_z);
+  globalTransform.rotateX(long_skinny_rotation_x *  PI / 180.);
+  globalTransform.rotateY(long_skinny_rotation_y *  PI / 180.);
+  globalTransform.rotateZ(long_skinny_rotation_z *  PI / 180.);
+
+  for (StripConfig stripConfig : LONG_SKINNY_RUN_STRIP_CONFIG) {
+    Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, PIXEL_PITCH);
+
+    globalTransform.push();
+    globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
+    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
+    globalTransform.rotateX(stripConfig.yRot * PI / 180.);
+    globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
+
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
+
+    globalTransform.pop();
+  }
+  globalTransform.pop();
   /*-----------------------------------------------------------------*/
 
   Cube[] allCubesArr = new Cube[allCubes.size()];

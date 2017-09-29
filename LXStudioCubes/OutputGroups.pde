@@ -23,55 +23,86 @@ int UNIVERSE_71 = 71; int UNIVERSE_72 = 72; int UNIVERSE_73 = 73; int UNIVERSE_7
 public final OutputGroup[] buildOutputGroups() {
   return new OutputGroup[] {
 
-    new OutputGroup(UNIVERSE_1)
-      .addPoints(model.splicePoints("vip-lounge-strip17", 0, 72))
-      .addPoints(model.splicePoints("vip-lounge-strip7",  0, 71), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vip-lounge-strip10", 41, 8), OutputGroup.REVERSE),
+    /**
+     * Vip Booth
+     *------------------------------------------------------------------------------------*/
+    // new OutputGroup(UNIVERSE_1)
+    //   .addPoints(model.splicePoints("vip-lounge-strip17", 0, 72))
+    //   .addPoints(model.splicePoints("vip-lounge-strip7",  0, 71), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vip-lounge-strip10", 41, 8), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_2).addDeadPoints(3)
-      .addPoints(model.splicePoints("vip-lounge-strip10", 0,  41), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vip-lounge-strip5",  0, 105))
-      .addDeadPoints(2),
+    // new OutputGroup(UNIVERSE_2).addDeadPoints(3)
+    //   .addPoints(model.splicePoints("vip-lounge-strip10", 0,  41), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vip-lounge-strip5",  0, 105))
+    //   .addDeadPoints(2),
 
-    new OutputGroup(UNIVERSE_3)
-      .addPoints(model.splicePoints("vip-lounge-strip5", 104, 17), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_3)
+    //   .addPoints(model.splicePoints("vip-lounge-strip5", 104, 17), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_4)
-      .addPoints(model.splicePoints("vip-lounge-strip8", 0, 125), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vip-lounge-strip18", 47, 26), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_4)
+    //   .addPoints(model.splicePoints("vip-lounge-strip8", 0, 125), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vip-lounge-strip18", 47, 26), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_6).addDeadPoints(1)
-      .addPoints(model.splicePoints("vip-lounge-strip18", 0, 48), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vip-lounge-strip6", 0, 66))
-      .addPoints(model.splicePoints("vip-lounge-strip14", 0, 35)),
+    // new OutputGroup(UNIVERSE_6).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("vip-lounge-strip18", 0, 48), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vip-lounge-strip6", 0, 66))
+    //   .addPoints(model.splicePoints("vip-lounge-strip14", 0, 35)),
 
-    new OutputGroup(UNIVERSE_9)
-      .addPoints(model.splicePoints("vip-lounge-strip3", 0, 92), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vip-lounge-strip9", 0, 50), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vip-lounge-strip1", 0, 10)),
+    // new OutputGroup(UNIVERSE_9)
+    //   .addPoints(model.splicePoints("vip-lounge-strip3", 0, 92), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vip-lounge-strip9", 0, 50), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vip-lounge-strip1", 0, 10)),
 
-    new OutputGroup(UNIVERSE_10).addDeadPoints(1)
-      .addPoints(model.splicePoints("vip-lounge-strip1", 10, 34))
-      .addPoints(model.splicePoints("vip-lounge-strip15", 0, 69)),
+    // new OutputGroup(UNIVERSE_10).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("vip-lounge-strip1", 10, 34))
+    //   .addPoints(model.splicePoints("vip-lounge-strip15", 0, 69)),
 
-    new OutputGroup(UNIVERSE_11).addDeadPoints(2)
-      .addPoints(model.splicePoints("vip-lounge-strip4", 0, 44), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_11).addDeadPoints(2)
+    //   .addPoints(model.splicePoints("vip-lounge-strip4", 0, 44), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_64)
-      .addPoints(model.splicePoints("vip-lounge-strip16", 0, 67), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vip-lounge-strip2", 0, 84))
-      .addDeadPoints(2),
+    // new OutputGroup(UNIVERSE_64)
+    //   .addPoints(model.splicePoints("vip-lounge-strip16", 0, 67), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vip-lounge-strip2", 0, 84))
+    //   .addDeadPoints(2),
 
-    new OutputGroup(UNIVERSE_65).addDeadPoints(1)
-      .addPoints(model.splicePoints("vip-lounge-strip2", 83, 57))
-      .addDeadPoints(1)
-      .addPoints(model.splicePoints("vip-lounge-strip11", 0, 39))
-      .addPoints(model.splicePoints("vip-lounge-strip12", 0, 3))
-      .addPoints(model.splicePoints("vip-lounge-strip13", 0, 10))
-      .addPoints(model.splicePoints("vip-lounge-strip4", 55, 40), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_65).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("vip-lounge-strip2", 83, 57))
+    //   .addDeadPoints(1)
+    //   .addPoints(model.splicePoints("vip-lounge-strip11", 0, 39))
+    //   .addPoints(model.splicePoints("vip-lounge-strip12", 0, 3))
+    //   .addPoints(model.splicePoints("vip-lounge-strip13", 0, 10))
+    //   .addPoints(model.splicePoints("vip-lounge-strip4", 55, 40), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_72).addDeadPoints(1)
-      .addPoints(model.splicePoints("vip-lounge-strip14", 37, 12))
+    // new OutputGroup(UNIVERSE_72).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("vip-lounge-strip14", 37, 12)),
+
+    /**
+     * Long Skinny
+     *------------------------------------------------------------------------------------*/
+
+    new OutputGroup(UNIVERSE_14)
+      .addPoints(model.splicePoints("long-skinny-strip6", 0, 42))
+      .addPoints(model.splicePoints("long-skinny-strip9", 0, 17), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("long-skinny-strip1", 0, 90)),
+
+    new OutputGroup(UNIVERSE_15)
+      .addPoints(model.splicePoints("long-skinny-strip7", 0, 144), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("long-skinny-strip12", 21, 12), OutputGroup.REVERSE),
+
+    new OutputGroup(UNIVERSE_17)
+      .addPoints(model.splicePoints("long-skinny-strip2", 0, 121))
+      .addPoints(model.splicePoints("long-skinny-strip11", 0, 28)),
+
+    new OutputGroup(UNIVERSE_20)
+      .addPoints(model.splicePoints("long-skinny-strip12", 0, 23))
+      .addPoints(model.splicePoints("long-skinny-strip3", 0, 84))
+      .addPoints(model.splicePoints("long-skinny-strip14", 0, 33)),
+
+    new OutputGroup(UNIVERSE_27)
+      .addPoints(model.splicePoints("long-skinny-strip1", 90, 7))
+      .addPoints(model.splicePoints("long-skinny-strip10", 0, 32))
+      .addPoints(model.splicePoints("long-skinny-strip5", 43, 85), OutputGroup.REVERSE),
+
   };
 }
 
