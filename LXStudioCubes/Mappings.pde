@@ -270,9 +270,9 @@ static final StripConfig[] STAGE_AND_ENTRANCE_STRIP_CONFIG = {
   new StripConfig("stage-and-entrance-strip7", new float[] {109, 70, 0}, new float[] {0, 0, 0}, 158), // NEEDS TO BE AN ANGLE!! UGH
 
   // floor
-  new StripConfig("stage-and-entrance-strip8", new float[] {355, 65, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 26),
-  new StripConfig("stage-and-entrance-strip9", new float[] {355, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 75),
-  new StripConfig("stage-and-entrance-strip10", new float[] {355+94, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 90}, 49),
+  new StripConfig("stage-and-entrance-strip8", new float[] {325, 65, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 26),
+  new StripConfig("stage-and-entrance-strip9", new float[] {325, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 75),
+  new StripConfig("stage-and-entrance-strip10", new float[] {325+94, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 90}, 49),
 };
 
 static final StripConfig[] TEST_STRIP_CONFIG = {

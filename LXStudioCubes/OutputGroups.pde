@@ -260,7 +260,12 @@ public final OutputGroup[] buildOutputGroups() {
       .addPoints(model.splicePoints("stage-and-entrance-strip1", 0, 39)),
 
     new OutputGroup(UNIVERSE_69)
-      .addPoints(model.splicePoints("stage-and-entrance-strip7", 8, 150), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("stage-and-entrance-strip7", 8, 150), OutputGroup.REVERSE),
+
+    new OutputGroup(UNIVERSE_61)
+      .addPoints(model.splicePoints("stage-and-entrance-strip8", 0, 26))
+      .addPoints(model.splicePoints("stage-and-entrance-strip9", 0, 75))
+      .addPoints(model.splicePoints("stage-and-entrance-strip10", 0, 49)),
   };
 }
 
