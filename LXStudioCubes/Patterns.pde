@@ -195,6 +195,9 @@ public class Noise extends DPat {
     pSymm     = new DiscreteParameter("Symm" , new String[] {"None", "X", "Y", "Rad"} );
     pChoose   = new DiscreteParameter("Anim", new String[] {"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark","VWav", "Wave"}  );
     pChoose.setValue(6);
+
+    addParameter(pSymm);
+    addParameter(pChoose);
     //addNonKnobParameter(pSymm);
     //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);
@@ -767,6 +770,13 @@ public class Pong extends DPat {
       pSize = addParam  ("Size"     , 0.4 );
       pChoose = new DiscreteParameter("Anim", new String[] {"Pong", "Ball", "Cone"} );
       pChoose.setValue(2);
+      addParameter(pChoose);
+      
+      removeParameter(pRotX);
+      removeParameter(pRotY);
+      removeParameter(pRotZ);
+      removeParameter(pRotX);
+      removeParameter(pSpin);
       //addNonKnobParameter(pChoose);
       //addSingleParameterUIRow(pChoose);
   }
@@ -1117,6 +1127,12 @@ public class AskewPlanes extends DPat {
       planes[i] = new Plane(i);
     }
     pTransX.setValue(1);
+
+    removeParameter(pRotX);
+    removeParameter(pRotY);
+    removeParameter(pRotZ);
+    removeParameter(pRotX);
+    removeParameter(pSpin);
   }
   
   void StartRun(double deltaMs) {

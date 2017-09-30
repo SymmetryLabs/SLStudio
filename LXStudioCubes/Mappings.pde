@@ -62,39 +62,39 @@ static final float vip_lounge_rotation_z = 0;
 static final StripConfig[] VIP_LOUGNE_STRIP_CONFIG = {
   //strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
-  // // horizontals - bottom
-  // new StripConfig("vip-lounge-strip1", new float[] { 0, 0, 0}, new float[] {0, 0, 0}, 44),
-  // new StripConfig("vip-lounge-strip2", new float[] {64, 0, 0}, new float[] {0, 0, 0}, 141),
+  // horizontals - bottom
+  new StripConfig("vip-lounge-strip1", new float[] { 0, 0, 0}, new float[] {0, 0, 0}, 44),
+  new StripConfig("vip-lounge-strip2", new float[] {64, 0, 0}, new float[] {0, 0, 0}, 141),
 
-  // // horizontals - middle bottom
-  // new StripConfig("vip-lounge-strip3", new float[] {  0, 62, 0}, new float[] {0, 0, 0}, 92),
-  // new StripConfig("vip-lounge-strip4", new float[] {123, 62, 0}, new float[] {0, 0, 0}, 98),
+  // horizontals - middle bottom
+  new StripConfig("vip-lounge-strip3", new float[] {  0, 62, 0}, new float[] {0, 0, 0}, 92),
+  new StripConfig("vip-lounge-strip4", new float[] {123, 62, 0}, new float[] {0, 0, 0}, 98),
 
-  // // horizontals - middle top
-  // new StripConfig("vip-lounge-strip5", new float[] {0,   68, 0}, new float[] {0, 0, 0}, 121),
-  // new StripConfig("vip-lounge-strip6", new float[] {163, 68, 0}, new float[] {0, 0, 0}, 66),
+  // horizontals - middle top
+  new StripConfig("vip-lounge-strip5", new float[] {0,   68, 0}, new float[] {0, 0, 0}, 121),
+  new StripConfig("vip-lounge-strip6", new float[] {163, 68, 0}, new float[] {0, 0, 0}, 66),
 
-  // // // horizontals - top
-  // new StripConfig("vip-lounge-strip7", new float[] {0, 130, 0}, new float[] {0, 0, 0}, 71),
-  // new StripConfig("vip-lounge-strip8", new float[] {97, 130, 0}, new float[] {0, 0, 0}, 119+7), 
+  // // horizontals - top
+  new StripConfig("vip-lounge-strip7", new float[] {0, 130, 0}, new float[] {0, 0, 0}, 71),
+  new StripConfig("vip-lounge-strip8", new float[] {97, 130, 0}, new float[] {0, 0, 0}, 119+7), 
 
-  // // // verticals - left
-  // new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 50), 
-  // new StripConfig("vip-lounge-strip10", new float[] {0, 68, 0}, new float[] {0, 0, 90}, 49), 
+  // // verticals - left
+  new StripConfig("vip-lounge-strip9",  new float[] {0, 0, 0}, new float[] {0, 0, 90}, 50), 
+  new StripConfig("vip-lounge-strip10", new float[] {0, 68, 0}, new float[] {0, 0, 90}, 49), 
 
-  // // // verticals - right 
-  // new StripConfig("vip-lounge-strip11", new float[] {238, 0, 0}, new float[] {0, 0, 90}, 39), 
-  // new StripConfig("vip-lounge-strip12", new float[] {240, 49, 0}, new float[] {0, 0, 0}, 3),
-  // new StripConfig("vip-lounge-strip13", new float[] {244, 48.5, 0}, new float[] {0, 0, 90}, 10), 
-  // new StripConfig("vip-lounge-strip14", new float[] {244, 68  , 0}, new float[] {0, 0, 90}, 49), 
+  // // verticals - right 
+  new StripConfig("vip-lounge-strip11", new float[] {238, 0, 0}, new float[] {0, 0, 90}, 39), 
+  new StripConfig("vip-lounge-strip12", new float[] {240, 49, 0}, new float[] {0, 0, 0}, 3),
+  new StripConfig("vip-lounge-strip13", new float[] {244, 48.5, 0}, new float[] {0, 0, 90}, 10), 
+  new StripConfig("vip-lounge-strip14", new float[] {244, 68  , 0}, new float[] {0, 0, 90}, 49), 
 
-  // // // bottom angle (left, right)
-  // new StripConfig("vip-lounge-strip15", new float[] {55, 1, 0}, new float[] {0, 0, 45}, 69), 
-  // new StripConfig("vip-lounge-strip16", new float[] {63, 1, 0}, new float[] {0, 0, 45}, 67), 
+  // // bottom angle (left, right)
+  new StripConfig("vip-lounge-strip15", new float[] {55, 1, 0}, new float[] {0, 0, 45}, 69), 
+  new StripConfig("vip-lounge-strip16", new float[] {63, 1, 0}, new float[] {0, 0, 45}, 67), 
 
-  // // // top angle (left, right)
-  // new StripConfig("vip-lounge-strip17", new float[] {152, 68, 0}, new float[] {0, 0, 137.7}, 72), 
-  // new StripConfig("vip-lounge-strip18", new float[] {162, 67, 0}, new float[] {0, 0, 137.7}, 74), 
+  // // top angle (left, right)
+  new StripConfig("vip-lounge-strip17", new float[] {152, 68, 0}, new float[] {0, 0, 137.7}, 72), 
+  new StripConfig("vip-lounge-strip18", new float[] {162, 67, 0}, new float[] {0, 0, 137.7}, 74), 
 
 };
 
@@ -114,31 +114,31 @@ static final float long_skinny_rotation_z = 0;
 
 static final StripConfig[] LONG_SKINNY_RUN_STRIP_CONFIG = {
 
-  // // horizontals - bottom 
-  // new StripConfig("long-skinny-strip1", new float[] {  0, 0, 0}, new float[] {0, 0, 0}, 98),
-  // new StripConfig("long-skinny-strip2", new float[] {132, 0, 0}, new float[] {0, 0, 0}, 121),
-  // new StripConfig("long-skinny-strip3", new float[] {294, 0, 0}, new float[] {0, 0, 0}, 84),
-  // new StripConfig("long-skinny-strip4", new float[] {407, 0, 0}, new float[] {0, 0, 0}, 79),
+  // horizontals - bottom 
+  new StripConfig("long-skinny-strip1", new float[] {  0, 0, 0}, new float[] {0, 0, 0}, 98),
+  new StripConfig("long-skinny-strip2", new float[] {132, 0, 0}, new float[] {0, 0, 0}, 121),
+  new StripConfig("long-skinny-strip3", new float[] {294, 0, 0}, new float[] {0, 0, 0}, 84),
+  new StripConfig("long-skinny-strip4", new float[] {407, 0, 0}, new float[] {0, 0, 0}, 79),
 
-  // // horizontals - top
-  // new StripConfig("long-skinny-strip5", new float[] { -1, 24, 0}, new float[] {0, 0, 0}, 129),
-  // new StripConfig("long-skinny-strip6", new float[] {170, 24, 0}, new float[] {0, 0, 0}, 68),
-  // new StripConfig("long-skinny-strip7", new float[] {260, 24, 0}, new float[] {0, 0, 0}, 144),
-  // new StripConfig("long-skinny-strip8", new float[] {448, 24, 0}, new float[] {0, 0, 0}, 76),
+  // horizontals - top
+  new StripConfig("long-skinny-strip5", new float[] { -1, 24, 0}, new float[] {0, 0, 0}, 129),
+  new StripConfig("long-skinny-strip6", new float[] {170, 24, 0}, new float[] {0, 0, 0}, 68),
+  new StripConfig("long-skinny-strip7", new float[] {260, 24, 0}, new float[] {0, 0, 0}, 144),
+  new StripConfig("long-skinny-strip8", new float[] {448, 24, 0}, new float[] {0, 0, 0}, 76),
 
-  // // verticals & angles
-  // new StripConfig("long-skinny-strip9", new float[] {0, 1, 0}, new float[] {0, 0, 90}, 18), 
+  // verticals & angles
+  new StripConfig("long-skinny-strip9", new float[] {0, 1, 0}, new float[] {0, 0, 90}, 18), 
 
-  // new StripConfig("long-skinny-strip10", new float[] {124, 1, 0}, new float[] {0, 0, 33}, 32), 
-  // new StripConfig("long-skinny-strip11", new float[] {134, 1, 0}, new float[] {0, 0, 33}, 32), 
+  new StripConfig("long-skinny-strip10", new float[] {124, 1, 0}, new float[] {0, 0, 33}, 32), 
+  new StripConfig("long-skinny-strip11", new float[] {134, 1, 0}, new float[] {0, 0, 33}, 32), 
 
-  // new StripConfig("long-skinny-strip12", new float[] {284, -1, 0}, new float[] {0, 0, 144.5}, 33), 
-  // new StripConfig("long-skinny-strip13", new float[] {293, -1.5, 0}, new float[] {0, 0, 144}, 35), 
+  new StripConfig("long-skinny-strip12", new float[] {284, -1, 0}, new float[] {0, 0, 144.5}, 33), 
+  new StripConfig("long-skinny-strip13", new float[] {293, -1.5, 0}, new float[] {0, 0, 144}, 35), 
 
-  // new StripConfig("long-skinny-strip14", new float[] {399, 2, 0}, new float[] {0, 0, 28}, 33), 
-  // new StripConfig("long-skinny-strip15", new float[] {407, 2, 0}, new float[] {0, 0, 28}, 33), 
+  new StripConfig("long-skinny-strip14", new float[] {399, 2, 0}, new float[] {0, 0, 28}, 33), 
+  new StripConfig("long-skinny-strip15", new float[] {407, 2, 0}, new float[] {0, 0, 28}, 33), 
 
-  // new StripConfig("long-skinny-strip16", new float[] {505, 2, 0}, new float[] {0, 0, 28}, 32)
+  new StripConfig("long-skinny-strip16", new float[] {505, 2, 0}, new float[] {0, 0, 28}, 32)
 };
 
 /**
@@ -153,34 +153,34 @@ static final float columns_rotation_y = 0;
 static final float columns_rotation_z = 0;
 
 static final StripConfig[] COLUMNS_STRIP_CONFIG = {
-  // // ceiling
-  // new StripConfig("columns-strip1", new float[] {40+28, 0, 12}, new float[] {0, 0, 0}, 48), // 448 total
-  // new StripConfig("columns-strip2", new float[] {40+28+60, 0, 12}, new float[] {0, 0, 0}, 147),
-  // new StripConfig("columns-strip3", new float[] {40+28+60+183, 0, 12}, new float[] {0, 0, 0}, 147),
-  // new StripConfig("columns-strip4", new float[] {40+28+60+183+182, 0, 12}, new float[] {0, 0, 0}, 145),
+  // ceiling
+  new StripConfig("columns-strip1", new float[] {40+28, 0, 12}, new float[] {0, 0, 0}, 49),
+  new StripConfig("columns-strip2", new float[] {40+28+60, 0, 12}, new float[] {0, 0, 0}, 149),
+  new StripConfig("columns-strip3", new float[] {40+28+60+183, 0, 12}, new float[] {0, 0, 0}, 149),
+  new StripConfig("columns-strip4", new float[] {40+28+60+183+182, 0, 12}, new float[] {0, 0, 0}, 145),
 
-  // new StripConfig("columns-strip5", new float[] {40+28, 19, 12}, new float[] {0, 0, 0}, 49),
-  // new StripConfig("columns-strip6", new float[] {40+28+61, 19, 12}, new float[] {0, 0, 0}, 146),
-  // new StripConfig("columns-strip7", new float[] {40+28+61+182, 19, 12}, new float[] {0, 0, 0}, 143),
-  // new StripConfig("columns-strip8", new float[] {40+28+61+182+179, 19, 12}, new float[] {0, 0, 0}, 151),
+  new StripConfig("columns-strip5", new float[] {40+28, 19, 12}, new float[] {0, 0, 0}, 49),
+  new StripConfig("columns-strip6", new float[] {40+28+61, 19, 12}, new float[] {0, 0, 0}, 146),
+  new StripConfig("columns-strip7", new float[] {40+28+61+182, 19, 12}, new float[] {0, 0, 0}, 143),
+  new StripConfig("columns-strip8", new float[] {40+28+61+182+179, 19, 12}, new float[] {0, 0, 0}, 151),
 
-  // // first square (TRIM POSITION!!!)
-  // new StripConfig("columns-strip9", new float[] {150, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 26), // top
-  // new StripConfig("columns-strip10", new float[] {150+32, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 25), // right
-  // new StripConfig("columns-strip11", new float[] {150+32, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -180}, 26), // bottom
-  // new StripConfig("columns-strip12", new float[] {150, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -270}, 26), // left
+  // first square (TRIM POSITION!!!)
+  new StripConfig("columns-strip9", new float[] {150, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 26), // top
+  new StripConfig("columns-strip10", new float[] {150+32, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 25), // right
+  new StripConfig("columns-strip11", new float[] {150+32, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -180}, 26), // bottom
+  new StripConfig("columns-strip12", new float[] {150, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -270}, 26), // left
 
-  // // second square (TRIM POSITION!!!)
-  // new StripConfig("columns-strip13", new float[] {321, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 27), // top
-  // new StripConfig("columns-strip14", new float[] {321+32, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 25), // right
-  // new StripConfig("columns-strip15", new float[] {321+32, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -180}, 26), // bottom
-  // new StripConfig("columns-strip16", new float[] {321, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -270}, 26), // left
+  // second square (TRIM POSITION!!!)
+  new StripConfig("columns-strip13", new float[] {321, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 27), // top
+  new StripConfig("columns-strip14", new float[] {321+32, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 25), // right
+  new StripConfig("columns-strip15", new float[] {321+32, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -180}, 26), // bottom
+  new StripConfig("columns-strip16", new float[] {321, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -270}, 26), // left
 
-  // // third square (TRIM POSITION!!!)
-  // new StripConfig("columns-strip17", new float[] {491, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 28), // top
-  // new StripConfig("columns-strip18", new float[] {491+32, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 27), // right
-  // new StripConfig("columns-strip19", new float[] {491+32, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -180}, 26), // bottom
-  // new StripConfig("columns-strip20", new float[] {491, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -270}, 26), // left
+  // third square (TRIM POSITION!!!)
+  new StripConfig("columns-strip17", new float[] {491, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 28), // top
+  new StripConfig("columns-strip18", new float[] {491+32, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 27), // right
+  new StripConfig("columns-strip19", new float[] {491+32, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -180}, 26), // bottom
+  new StripConfig("columns-strip20", new float[] {491, -10, DISTANCE_TO_FLOOR}, new float[] {0, 0, -270}, 26), // left
 
 };
 
@@ -197,16 +197,16 @@ static final float stairs_rotation_z = 175;
 
 static final StripConfig[] STAIRS_STRIP_CONFIG = {
   // PROBLEMS TO FIX!!!
-  // //top to bottom (just straight strips for now)
-  // new StripConfig("stairs-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 34), // top
-  // new StripConfig("stairs-strip2", new float[] {-3.5, -12, 8}, new float[] {0, 0, 0}, 46),
-  // new StripConfig("stairs-strip3", new float[] {-8.5, -24, 16}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip4", new float[] {-8.5, -36, 24}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip5", new float[] {-8.5, -48, 32}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip6", new float[] {-8.5, -60, 40}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip7", new float[] {-8.5, -72, 48}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip8", new float[] {-8.5, -84, 56}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip9", new float[] {-20, -96, 64}, new float[] {0, 0, 0}, 73), // bottom
+  //top to bottom (just straight strips for now)
+  new StripConfig("stairs-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 34), // top
+  new StripConfig("stairs-strip2", new float[] {-3.5, -12, 8}, new float[] {0, 0, 0}, 46),
+  new StripConfig("stairs-strip3", new float[] {-8.5, -24, 16}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip4", new float[] {-8.5, -36, 24}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip5", new float[] {-8.5, -48, 32}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip6", new float[] {-8.5, -60, 40}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip7", new float[] {-8.5, -72, 48}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip8", new float[] {-8.5, -84, 56}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip9", new float[] {-20, -96, 64}, new float[] {0, 0, 0}, 73), // bottom
 
 };
 
@@ -223,24 +223,24 @@ static final float big_long_section_rotation_z = 0;
 
 static final StripConfig[] BIG_LONG_SECTION_STRIP_CONFIG = {
 
-  // // horizontal bottom
-  // new StripConfig("big-long-section-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 199), // contains corner pixel
-  // new StripConfig("big-long-section-strip2", new float[] {255, 0, 0}, new float[] {0, 0, 0}, 73),
-  // new StripConfig("big-long-section-strip3", new float[] {255+100, 0, 0}, new float[] {0, 0, 0}, 153),
+  // horizontal bottom
+  new StripConfig("big-long-section-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 199), // contains corner pixel
+  new StripConfig("big-long-section-strip2", new float[] {255, 0, 0}, new float[] {0, 0, 0}, 73),
+  new StripConfig("big-long-section-strip3", new float[] {255+100, 0, 0}, new float[] {0, 0, 0}, 153),
 
-  // // horizontal top
-  // new StripConfig("big-long-section-strip4", new float[] {83, 54, 0}, new float[] {0, 0, 0}, 84),
-  // new StripConfig("big-long-section-strip5", new float[] {83+112, 54, 0}, new float[] {0, 0, 0}, 185),
-  // new StripConfig("big-long-section-strip6", new float[] {83+112+237, 54, 0}, new float[] {0, 0, 0}, 93),
+  // horizontal top
+  new StripConfig("big-long-section-strip4", new float[] {83, 54, 0}, new float[] {0, 0, 0}, 84),
+  new StripConfig("big-long-section-strip5", new float[] {83+112, 54, 0}, new float[] {0, 0, 0}, 185),
+  new StripConfig("big-long-section-strip6", new float[] {83+112+237, 54, 0}, new float[] {0, 0, 0}, 93),
 
-  // // angles
-  // new StripConfig("big-long-section-strip7", new float[] {1, 1, 0}, new float[] {0, 0, 35}, 73),
+  // angles
+  new StripConfig("big-long-section-strip7", new float[] {1, 1, 0}, new float[] {0, 0, 35}, 73),
 
-  // new StripConfig("big-long-section-strip8", new float[] {250, -2, 0}, new float[] {0, 0, 138}, 70),
-  // new StripConfig("big-long-section-strip9", new float[] {255, -1, 0}, new float[] {0, 0, 138}, 69),
+  new StripConfig("big-long-section-strip8", new float[] {250, -2, 0}, new float[] {0, 0, 138}, 70),
+  new StripConfig("big-long-section-strip9", new float[] {255, -1, 0}, new float[] {0, 0, 138}, 69),
 
-  // new StripConfig("big-long-section-strip10", new float[] {112+237-2, 2, 0}, new float[] {0, 0, 34}, 72),
-  // new StripConfig("big-long-section-strip11", new float[] {112+237+6, 2, 0}, new float[] {0, 0, 34}, 71),
+  new StripConfig("big-long-section-strip10", new float[] {112+237-2, 2, 0}, new float[] {0, 0, 34}, 72),
+  new StripConfig("big-long-section-strip11", new float[] {112+237+6, 2, 0}, new float[] {0, 0, 34}, 71),
 };
 
 /**
