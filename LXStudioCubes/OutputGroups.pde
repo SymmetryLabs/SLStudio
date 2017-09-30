@@ -201,38 +201,38 @@ public final OutputGroup[] buildOutputGroups() {
     /**
      * Big Long Section
      *------------------------------------------------------------------------------------*/
-    new OutputGroup(UNIVERSE_44).addDeadPoints(1)
+    new OutputGroup(UNIVERSE_43).addDeadPoints(1)
       .addPoints(model.splicePoints("big-long-section-strip1", 149, 48))
       .addPoints(model.splicePoints("big-long-section-strip8", 0, 68))
       .addPoints(model.splicePoints("big-long-section-strip4", 52, 32), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_46).addDeadPoints(1)
+    new OutputGroup(UNIVERSE_45).addDeadPoints(1)
       .addPoints(model.splicePoints("big-long-section-strip5", 148, 35))
       .addPoints(model.splicePoints("big-long-section-strip10", 0, 71), OutputGroup.REVERSE)
       .addPoints(model.splicePoints("big-long-section-strip2", 30, 32), OutputGroup.REVERSE),
 
 
-    new OutputGroup(UNIVERSE_48)
+    new OutputGroup(UNIVERSE_47)
       .addPoints(model.splicePoints("big-long-section-strip5", 0, 149)),
 
-    new OutputGroup(UNIVERSE_49)
+    new OutputGroup(UNIVERSE_48)
       .addPoints(model.splicePoints("big-long-section-strip6", 76, 16)),
 
-    new OutputGroup(UNIVERSE_51)
+    new OutputGroup(UNIVERSE_50)
       .addPoints(model.splicePoints("big-long-section-strip4", 0, 52), OutputGroup.REVERSE)
       .addPoints(model.splicePoints("big-long-section-strip7", 0, 73), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_52)
+    new OutputGroup(UNIVERSE_51)
       .addPoints(model.splicePoints("big-long-section-strip1", 0, 149)),
 
-    new OutputGroup(UNIVERSE_53).addDeadPoints(1)
+    new OutputGroup(UNIVERSE_52).addDeadPoints(1)
       .addPoints(model.splicePoints("big-long-section-strip2", 0, 30), OutputGroup.REVERSE)
       .addPoints(model.splicePoints("big-long-section-strip9", 0, 64)),
 
-    new OutputGroup(UNIVERSE_67)
+    new OutputGroup(UNIVERSE_66)
       .addPoints(model.splicePoints("big-long-section-strip3", 0, 153), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_69)
+    new OutputGroup(UNIVERSE_68)
       .addPoints(model.splicePoints("big-long-section-strip11", 1, 70))
       .addPoints(model.splicePoints("big-long-section-strip6", 0, 77))
       .addDeadPoints(3),
