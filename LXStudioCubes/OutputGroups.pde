@@ -239,6 +239,28 @@ public final OutputGroup[] buildOutputGroups() {
     /**
      * Stage and Entrace
      *------------------------------------------------------------------------------------*/
+     // SOMETHING WEIRD IN THE LONG RUN LIKE WE ARE SKIPPING OUT OF SOME LEDS!!!
+    new OutputGroup(UNIVERSE_65)
+      .addPoints(model.splicePoints("stage-and-entrance-strip1", 37, 112))
+      .addDeadPoints(1)
+      .addPoints(model.splicePoints("stage-and-entrance-strip2", 0, 45)),
+
+    new OutputGroup(UNIVERSE_75)
+      .addPoints(model.splicePoints("stage-and-entrance-strip2", 45, 104))
+      .addPoints(model.splicePoints("stage-and-entrance-strip3", 0, 46)),
+
+    new OutputGroup(UNIVERSE_62)
+      .addPoints(model.splicePoints("stage-and-entrance-strip5", 0, 29), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("stage-and-entrance-strip4", 0, 72), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("stage-and-entrance-strip3", 45, 15), OutputGroup.REVERSE),
+
+    new OutputGroup(UNIVERSE_74).addDeadPoints(2)
+      .addPoints(model.splicePoints("stage-and-entrance-strip7", 0, 10), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("stage-and-entrance-strip6", 0, 101), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("stage-and-entrance-strip1", 0, 39)),
+
+    new OutputGroup(UNIVERSE_69)
+      .addPoints(model.splicePoints("stage-and-entrance-strip7", 8, 150), OutputGroup.REVERSE)
   };
 }
 

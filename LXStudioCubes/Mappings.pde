@@ -60,7 +60,7 @@ static final float vip_lounge_rotation_y = 0;
 static final float vip_lounge_rotation_z = 0;
 
 static final StripConfig[] VIP_LOUGNE_STRIP_CONFIG = {
-  // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
+  //strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
   // // horizontals - bottom
   // new StripConfig("vip-lounge-strip1", new float[] { 0, 0, 0}, new float[] {0, 0, 0}, 44),
@@ -145,7 +145,7 @@ static final StripConfig[] LONG_SKINNY_RUN_STRIP_CONFIG = {
  * Columns (and ceiling above)
  *---------------------------------------------------------------------------------------------*/
 
-static final float columns_offset_x = -5;
+static final float columns_offset_x = -32;
 static final float columns_offset_y = 203;
 static final float columns_offset_z = 0;
 static final float columns_rotation_x = 0;
@@ -153,16 +153,16 @@ static final float columns_rotation_y = 0;
 static final float columns_rotation_z = 0;
 
 static final StripConfig[] COLUMNS_STRIP_CONFIG = {
-  // ceiling
-  // new StripConfig("columns-strip1", new float[] {28, 0, 12}, new float[] {0, 0, 0}, 48), // 448 total
-  // new StripConfig("columns-strip2", new float[] {28+60, 0, 12}, new float[] {0, 0, 0}, 147),
-  // new StripConfig("columns-strip3", new float[] {28+60+183, 0, 12}, new float[] {0, 0, 0}, 147),
-  // new StripConfig("columns-strip4", new float[] {28+60+183+182, 0, 12}, new float[] {0, 0, 0}, 145),
+  // // ceiling
+  // new StripConfig("columns-strip1", new float[] {40+28, 0, 12}, new float[] {0, 0, 0}, 48), // 448 total
+  // new StripConfig("columns-strip2", new float[] {40+28+60, 0, 12}, new float[] {0, 0, 0}, 147),
+  // new StripConfig("columns-strip3", new float[] {40+28+60+183, 0, 12}, new float[] {0, 0, 0}, 147),
+  // new StripConfig("columns-strip4", new float[] {40+28+60+183+182, 0, 12}, new float[] {0, 0, 0}, 145),
 
-  // new StripConfig("columns-strip5", new float[] {28, 19, 12}, new float[] {0, 0, 0}, 49),
-  // new StripConfig("columns-strip6", new float[] {28+61, 19, 12}, new float[] {0, 0, 0}, 146),
-  // new StripConfig("columns-strip7", new float[] {28+61+182, 19, 12}, new float[] {0, 0, 0}, 143),
-  // new StripConfig("columns-strip8", new float[] {28+61+182+179, 19, 12}, new float[] {0, 0, 0}, 151),
+  // new StripConfig("columns-strip5", new float[] {40+28, 19, 12}, new float[] {0, 0, 0}, 49),
+  // new StripConfig("columns-strip6", new float[] {40+28+61, 19, 12}, new float[] {0, 0, 0}, 146),
+  // new StripConfig("columns-strip7", new float[] {40+28+61+182, 19, 12}, new float[] {0, 0, 0}, 143),
+  // new StripConfig("columns-strip8", new float[] {40+28+61+182+179, 19, 12}, new float[] {0, 0, 0}, 151),
 
   // // first square (TRIM POSITION!!!)
   // new StripConfig("columns-strip9", new float[] {150, 22, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 26), // top
@@ -197,7 +197,7 @@ static final float stairs_rotation_z = 175;
 
 static final StripConfig[] STAIRS_STRIP_CONFIG = {
   // PROBLEMS TO FIX!!!
-  //top to bottom (just straight strips for now)
+  // //top to bottom (just straight strips for now)
   // new StripConfig("stairs-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 34), // top
   // new StripConfig("stairs-strip2", new float[] {-3.5, -12, 8}, new float[] {0, 0, 0}, 46),
   // new StripConfig("stairs-strip3", new float[] {-8.5, -24, 16}, new float[] {0, 0, 0}, 51),
@@ -214,7 +214,7 @@ static final StripConfig[] STAIRS_STRIP_CONFIG = {
  * Big Long Section
  *---------------------------------------------------------------------------------------------*/
 
-static final float big_long_section_offset_x = 134; // TRIM THIS !!!
+static final float big_long_section_offset_x = 108; // TRIM THIS !!!
 static final float big_long_section_offset_y = 203+25;
 static final float big_long_section_offset_z = 0;
 static final float big_long_section_rotation_x = 0;
@@ -244,10 +244,10 @@ static final StripConfig[] BIG_LONG_SECTION_STRIP_CONFIG = {
 };
 
 /**
- * Vip Lounge
+ * Stage and Entrance
  *---------------------------------------------------------------------------------------------*/
-static final float stage_and_entrance_offset_x = 0;
-static final float stage_and_entrance_offset_y = 0;
+static final float stage_and_entrance_offset_x = 155;
+static final float stage_and_entrance_offset_y = 295;
 static final float stage_and_entrance_offset_z = 0;
 static final float stage_and_entrance_rotation_x = 0;
 static final float stage_and_entrance_rotation_y = 0;
@@ -268,6 +268,11 @@ static final StripConfig[] STAGE_AND_ENTRANCE_STRIP_CONFIG = {
   // stage (angle, then stage)
   new StripConfig("stage-and-entrance-strip6", new float[] {1, 1, 0}, new float[] {0, 0, 33}, 101),
   new StripConfig("stage-and-entrance-strip7", new float[] {109, 70, 0}, new float[] {0, 0, 0}, 158), // NEEDS TO BE AN ANGLE!! UGH
+
+  // floor
+  new StripConfig("stage-and-entrance-strip8", new float[] {355, 65, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 26),
+  new StripConfig("stage-and-entrance-strip9", new float[] {355, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 75),
+  new StripConfig("stage-and-entrance-strip10", new float[] {355+94, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 90}, 49),
 };
 
 static final StripConfig[] TEST_STRIP_CONFIG = {
