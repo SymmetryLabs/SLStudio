@@ -256,6 +256,18 @@ static final float stage_and_entrance_rotation_z = 0;
 static final StripConfig[] STAGE_AND_ENTRANCE_STRIP_CONFIG = {
   // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
+  // bottom long horizontal
+  new StripConfig("stage-and-entrance-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 150),
+  new StripConfig("stage-and-entrance-strip2", new float[] {188, 0, 0}, new float[] {0, 0, 0}, 150),
+  new StripConfig("stage-and-entrance-strip3", new float[] {376, 0, 0}, new float[] {0, 0, 0}, 60),
+
+  // bathrooms
+  new StripConfig("stage-and-entrance-strip4", new float[] {451, 0, 0}, new float[] {0, 0, 90}, 72),
+  new StripConfig("stage-and-entrance-strip5", new float[] {451, 90, 0}, new float[] {0, 0, 180}, 29),
+
+  // stage (angle, then stage)
+  new StripConfig("stage-and-entrance-strip6", new float[] {1, 1, 0}, new float[] {0, 0, 33}, 101),
+  new StripConfig("stage-and-entrance-strip7", new float[] {109, 70, 0}, new float[] {0, 0, 0}, 158), // NEEDS TO BE AN ANGLE!! UGH
 };
 
 static final StripConfig[] TEST_STRIP_CONFIG = {
