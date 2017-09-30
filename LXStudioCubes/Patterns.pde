@@ -1,6 +1,32 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class CountLeds extends LXPattern {
+  public CountLeds(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    for (Strip strip : ((SLModel)model).strips) {
+      int i = 0;
+
+      for (LXPoint p : strip.points) {
+        colors[p.index] = lx.hsb(0, 0, 10);
+
+        if (i % 5 == 0) {
+          colors[p.index] = LXColor.RED;
+        }
+
+        if (i % 25 == 0) {
+          colors[p.index] = LXColor.BLUE;
+        }
+
+        i++;
+      }
+    }
+  }
+}
+
 public class Sparkle extends LXPattern {
   private CompoundParameter densityParameter = new CompoundParameter("DENS", 0.15);
   private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.4);
