@@ -214,18 +214,34 @@ static final StripConfig[] STAIRS_STRIP_CONFIG = {
  * Big Long Section
  *---------------------------------------------------------------------------------------------*/
 
-static final float big_long_section_offset_x = 280;
-static final float big_long_section_offset_y = 30;
-static final float big_long_section_offset_z = 40;
+static final float big_long_section_offset_x = 111;
+static final float big_long_section_offset_y = 203+25;
+static final float big_long_section_offset_z = 0;
 static final float big_long_section_rotation_x = 0;
 static final float big_long_section_rotation_y = 0;
-static final float big_long_section_rotation_z = 175;
+static final float big_long_section_rotation_z = 0;
 
 static final StripConfig[] BIG_LONG_SECTION_STRIP_CONFIG = {
 
-  new StripConfig("big-long-section-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 0), // bottom
+  // horizontal bottom
+  new StripConfig("big-long-section-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 199), // contains corner pixel
+  new StripConfig("big-long-section-strip2", new float[] {186, 0, 0}, new float[] {0, 0, 0}, 73),
+  new StripConfig("big-long-section-strip3", new float[] {186+80, 0, 0}, new float[] {0, 0, 0}, 153),
 
-}
+  // horizontal top
+  new StripConfig("big-long-section-strip4", new float[] {80, 56, 0}, new float[] {0, 0, 0}, 84),
+  new StripConfig("big-long-section-strip5", new float[] {80+112, 56, 0}, new float[] {0, 0, 0}, 184),
+  new StripConfig("big-long-section-strip6", new float[] {80+112+236, 56, 0}, new float[] {0, 0, 0}, 93),
+
+  // angles
+  new StripConfig("big-long-section-strip7", new float[] {0, 0, 0}, new float[] {0, 0, 45}, 73),
+
+  new StripConfig("big-long-section-strip8", new float[] {180, 0, 0}, new float[] {0, 0, 135}, 68),
+  new StripConfig("big-long-section-strip9", new float[] {186, 0, 0}, new float[] {0, 0, 135}, 64),
+
+  new StripConfig("big-long-section-strip10", new float[] {260, 0, 0}, new float[] {0, 0, 45}, 71),
+  new StripConfig("big-long-section-strip11", new float[] {266, 0, 0}, new float[] {0, 0, 45}, 71),
+};
 
 static final StripConfig[] TEST_STRIP_CONFIG = {
   // // 1
