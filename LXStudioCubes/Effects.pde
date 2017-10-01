@@ -11,6 +11,57 @@ public class BlackenDeadPoints extends LXEffect {
   }
 }
 
+public class BarChannelControl extends LXRunnableComponent {
+
+  private final LX lx;
+
+  public BarChannelControl(LX lx) {
+    super(lx);
+    this.lx = lx;
+  }
+
+  protected void run(double deltaMs) {
+    LXChannel channel = null;
+    for (LXChannel ch : lx.engine.getChannels()) {
+      // disabling A/B decks!
+      //ch.crossfadeGroup.setValue(CrossfadeGroup.BYPASS);
+
+      if (ch.getLabel().equals("Bar")) {
+        channel = ch;
+      }
+    }
+
+    if (channel == null) {
+      LXChannel channelToAdd = lx.engine.addChannel();
+      channelToAdd.label.setValue("Bar");
+    }
+
+    if (channel != null) {
+      // always keep blend mode to "Normal" to mask everything
+      //channel.blendMode.setValue(4);
+
+      // get StairsMask effect if it exists
+      LXEffect barMaskEffect = null;
+      for (LXEffect localEffect : channel.getEffects()) {
+        if (localEffect.getClass().getSimpleName().equals("BarMask")) {
+          barMaskEffect = localEffect;
+        }
+      }
+
+      // create and apply it if it doesn't
+      if (barMaskEffect == null) {
+        LXEffect mask = new BarMask(lx);
+        channel.addEffect(mask);
+        mask.enabled.setValue(true);
+      } else {
+        barMaskEffect.enabled.setValue(true);
+      }
+
+    }
+  }
+
+}
+
 public class StairsChannelControl extends LXRunnableComponent {
 
   private final LX lx;
@@ -68,6 +119,28 @@ public class StairsMask extends LXEffect {
   private final LX lx;
 
   public StairsMask(LX lx) {
+    super(lx);
+    this.lx = lx;
+  }
+
+  public void run(double deltaMs, double amount) {
+    for (Strip strip : ((SLModel)model).strips) {
+      if (!strip.classes.contains(className)) {
+        for (LXPoint p : strip.points) {
+          colors[p.index] = 0;
+        }
+      }
+    }
+  }
+}
+
+
+public class BarMask extends LXEffect {
+  public final String className = "bar";
+
+  private final LX lx;
+
+  public BarMask(LX lx) {
     super(lx);
     this.lx = lx;
   }

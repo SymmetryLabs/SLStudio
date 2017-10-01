@@ -33,7 +33,7 @@ public class Sparkle extends LXPattern {
   private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.3);
   private CompoundParameter hueParameter = new CompoundParameter("HUE", 0.5);
   private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
-  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 1.0);
   
   class Spark {
     LXPoint point;
@@ -117,7 +117,7 @@ public class HuePattern extends LXPattern {
 
   public void run(double deltaMs) {
     for (LXPoint p : model.points) {
-      colors[p.index] = lx.hsb(hue.getValuef(), 100, 100);
+      colors[p.index] = lx.hsb((palette.getHuef() + hue.getValuef()) % 360, 100, 100);
     }
   }
 }
@@ -761,9 +761,9 @@ public class Pong extends DPat {
   public Pong(LX lx) {
     super(lx);
     cRad = mMax.x/10;
-    addModulator(dx = new SinLFO(6000,  500, 30000  )).trigger();
-    addModulator(dy = new SinLFO(3000,  500, 22472  )).trigger();
-    addModulator(dz = new SinLFO(1000,  500, 18420  )).trigger();
+    addModulator(dx = new SinLFO(6000,  2500, 30000  )).trigger();
+    addModulator(dy = new SinLFO(3000,  1800, 22472  )).trigger();
+    addModulator(dz = new SinLFO(2000,  1500, 18420  )).trigger();
     addModulator(x  = new SinLFO(cRad, mMax.x - cRad, 0)).trigger();  x.setPeriod(dx);
     addModulator(y  = new SinLFO(cRad, mMax.y - cRad, 0)).trigger();  y.setPeriod(dy);
     addModulator(z  = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();  z.setPeriod(dz);

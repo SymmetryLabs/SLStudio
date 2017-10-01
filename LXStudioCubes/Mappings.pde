@@ -345,23 +345,23 @@ static final float BAR_SHELF_WIDTH = 22;
 static final StripConfig[] BAR_STRIP_CONFIG = {
  // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
-  new StripConfig("bar-strip1", new float[] {BAR_SHELF_WIDTH*0, 0, 0}, new float[] {0, 0, 90}, 49),
-  new StripConfig("bar-strip2", new float[] {BAR_SHELF_WIDTH*1, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip1", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*0, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip2", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*1, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  new StripConfig("bar-strip3", new float[] {BAR_SHELF_WIDTH*1+3, 0, 0}, new float[] {0, 0, 90}, 49),
-  new StripConfig("bar-strip4", new float[] {BAR_SHELF_WIDTH*2+3, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip3", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*1+3, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip4", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*2+3, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  new StripConfig("bar-strip5", new float[] {BAR_SHELF_WIDTH*2+6, 0, 0}, new float[] {0, 0, 90}, 49),
-  new StripConfig("bar-strip6", new float[] {BAR_SHELF_WIDTH*3+6, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip5", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*2+6, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip6", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*3+6, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  new StripConfig("bar-strip7", new float[] {BAR_SHELF_WIDTH*3+9, 0, 0}, new float[] {0, 0, 90}, 49),
-  new StripConfig("bar-strip8", new float[] {BAR_SHELF_WIDTH*4+9, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip7", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*3+9, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip8", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*4+9, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  new StripConfig("bar-strip9", new float[]  {BAR_SHELF_WIDTH*5+12, 0, 0}, new float[] {0, 0, 90}, 49),
-  new StripConfig("bar-strip10", new float[] {BAR_SHELF_WIDTH*6+12, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip9", new String[] {"bar"}, new float[]  {BAR_SHELF_WIDTH*5+12, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip10", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*6+12, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  new StripConfig("bar-strip11", new float[] {BAR_SHELF_WIDTH*6+15, 0, 0}, new float[] {0, 0, 90}, 49),
-  new StripConfig("bar-strip12", new float[] {BAR_SHELF_WIDTH*7+15, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip11", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*6+15, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip12", new String[] {"bar"}, new float[] {BAR_SHELF_WIDTH*7+15, 0, 0}, new float[] {0, 0, 90}, 49),
 };
 
 static final StripConfig[] TEST_STRIP_CONFIG = {

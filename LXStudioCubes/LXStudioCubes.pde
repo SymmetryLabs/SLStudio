@@ -54,6 +54,7 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       lx.engine.addLoopTask(new StairsChannelControl(lx).start());
+      lx.engine.addLoopTask(new BarChannelControl(lx).start());
 
       // Mapping
       if (((SLModel)model).cubes.size() > 0)
@@ -90,7 +91,7 @@ void setup() {
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
-      new UIUniverse(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+      //new UIUniverse(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
