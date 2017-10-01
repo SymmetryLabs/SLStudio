@@ -283,16 +283,23 @@ public final OutputGroup[] buildOutputGroups() {
       .addPoints(model.splicePoints("vj_booth-strip6", 0, 39), OutputGroup.REVERSE),
 
     new OutputGroup(UNIVERSE_5)
-      .addPoints(model.splicePoints("vj_booth-strip9", 0, 102)),
+      .addPoints(model.splicePoints("vj_booth-strip9", 0, 103))
+      .addDeadPoints(2),
 
     new OutputGroup(UNIVERSE_7)
-      .addPoints(model.splicePoints("vj_booth-strip10", 0, 48), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vj_booth-strip7", 0, 81))
-      .addPoints(model.splicePoints("vj_booth-strip11", 0, 25)),
+      .addPoints(model.splicePoints("vj_booth-strip10", 0, 49), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vj_booth-strip7", 0, 82))
+      .addPoints(model.splicePoints("vj_booth-strip11", 0, 26)),
 
     new OutputGroup(UNIVERSE_8)
-      .addPoints(model.splicePoints("vj_booth-strip14", 0, 63))
-      .addPoints(model.splicePoints("vj_booth-strip12", 0, 51)),
+      .addPoints(model.splicePoints("vj_booth-strip14", 0, 64))
+      .addPoints(model.splicePoints("vj_booth-strip12", 0, 52))
+      .addDeadPoints(2),
+
+    new OutputGroup(UNIVERSE_72)
+      .addPoints(model.splicePoints("vj_booth-strip15", 0, 44))
+      .addPoints(model.splicePoints("vj_booth-strip8", 0, 25))
+      .addPoints(model.splicePoints("vj_booth-strip13", 0, 72)),
 
     /**
      * Bar

@@ -295,25 +295,25 @@ static final StripConfig[] VJ_BOOTH_STRIP_CONFIG = {
 
  // next part (FINISH HERE!!!)
  // horizontals - bottom
- new StripConfig("vj_booth-strip7", new float[] {0, 14, 0}, new float[] {0, 0, 0}, 81), // bottom
+ new StripConfig("vj_booth-strip7", new float[] {0, 14, 0}, new float[] {0, 0, 0}, 82), // bottom
 
  // horizontals - top
  new StripConfig("vj_booth-strip8", new float[] {3, 14+60, 0}, new float[] {0, 0, 0}, 25), // top
- new StripConfig("vj_booth-strip9", new float[] {32+7+3, 14+60, 0}, new float[] {0, 0, 0}, 102), // top 2
+ new StripConfig("vj_booth-strip9", new float[] {32+7+3, 14+60, 0}, new float[] {0, 0, 0}, 103), // top 2
 
  // verticals
- new StripConfig("vj_booth-strip10", new float[] {0, 14, 0}, new float[] {0, 0, 90}, 48),
+ new StripConfig("vj_booth-strip10", new float[] {0, 14, 0}, new float[] {0, 0, 90}, 49),
 
  // angles on the right
- new StripConfig("vj_booth-strip11", new float[] {100, 14, 0}, new float[] {0, 0, 67}, 25), // bottom - (PLACE!!!)
- new StripConfig("vj_booth-strip12", new float[] {110+5, 47, 0}, new float[] {0, 0, 25}, 51), // bottom - (PLACE!!!)
+ new StripConfig("vj_booth-strip11", new float[] {100, 14, 0}, new float[] {0, 0, 67}, 26),
+ new StripConfig("vj_booth-strip12", new float[] {110+5, 47, 0}, new float[] {0, 0, 25}, 52),
 
  // contour angles
- new StripConfig("vj_booth-strip13", new float[] {31+3, 14+60, 0}, new float[] {0, 0, -20}, 70), // (PLACE!!!)
- new StripConfig("vj_booth-strip14", new float[] {31+9+3, 14+60-1, 0}, new float[] {0, 0, -20}, 63), // (PLACE!!!)
+ new StripConfig("vj_booth-strip13", new float[] {31+3, 14+60, 0}, new float[] {0, 0, -20}, 72),
+ new StripConfig("vj_booth-strip14", new float[] {31+9+3, 14+60-1, 0}, new float[] {0, 0, -20}, 64),
 
  // over the stairs
- new StripConfig("vj_booth-strip15", new float[] {-52.5, 14+60, 0}, new float[] {0, 0, 0}, 42), // top
+ new StripConfig("vj_booth-strip15", new float[] {-52.5, 14+60, 0}, new float[] {0, 0, 0}, 44), // top
 };
 
 /**
