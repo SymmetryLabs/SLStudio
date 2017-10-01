@@ -81,241 +81,241 @@ public final OutputGroup[] buildOutputGroups() {
      * Long Skinny
      *------------------------------------------------------------------------------------*/
 
-    new OutputGroup(UNIVERSE_13).addDeadPoints(2)
-      .addPoints(model.splicePoints("long-skinny-strip12", 28, 5), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip6", 0, 68), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip11", 0, 32), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_13).addDeadPoints(2)
+    //   .addPoints(model.splicePoints("long-skinny-strip12", 28, 5), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip6", 0, 68), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip11", 0, 32), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_14)
-      .addPoints(model.splicePoints("long-skinny-strip5", 0, 44), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip9", 0, 18), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip1", 0, 90)),
+    // new OutputGroup(UNIVERSE_14)
+    //   .addPoints(model.splicePoints("long-skinny-strip5", 0, 44), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip9", 0, 18), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip1", 0, 90)),
 
-    new OutputGroup(UNIVERSE_15)
-      .addPoints(model.splicePoints("long-skinny-strip7", 0, 144), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip13", 23, 11), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_15)
+    //   .addPoints(model.splicePoints("long-skinny-strip7", 0, 144), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip13", 23, 11), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_17)
-      .addPoints(model.splicePoints("long-skinny-strip2", 0, 121))
-      .addDeadPoints(3)
-      .addPoints(model.splicePoints("long-skinny-strip12", 0, 28)),
+    // new OutputGroup(UNIVERSE_17)
+    //   .addPoints(model.splicePoints("long-skinny-strip2", 0, 121))
+    //   .addDeadPoints(3)
+    //   .addPoints(model.splicePoints("long-skinny-strip12", 0, 28)),
 
-    new OutputGroup(UNIVERSE_20)
-      .addPoints(model.splicePoints("long-skinny-strip13", 0, 23), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip3", 0, 84))
-      .addPoints(model.splicePoints("long-skinny-strip14", 0, 33)),
+    // new OutputGroup(UNIVERSE_20)
+    //   .addPoints(model.splicePoints("long-skinny-strip13", 0, 23), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip3", 0, 84))
+    //   .addPoints(model.splicePoints("long-skinny-strip14", 0, 33)),
 
-    new OutputGroup(UNIVERSE_22)
-      .addPoints(model.splicePoints("long-skinny-strip15", 0, 33))
-      .addPoints(model.splicePoints("long-skinny-strip8", 0, 76))
-      .addDeadPoints(2)
-      .addPoints(model.splicePoints("long-skinny-strip16", 21, 11), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_22)
+    //   .addPoints(model.splicePoints("long-skinny-strip15", 0, 33))
+    //   .addPoints(model.splicePoints("long-skinny-strip8", 0, 76))
+    //   .addDeadPoints(2)
+    //   .addPoints(model.splicePoints("long-skinny-strip16", 21, 11), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_25)
-      .addDeadPoints(3)
-      .addPoints(model.splicePoints("long-skinny-strip16", 0, 21), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("long-skinny-strip4", 0, 79), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_25)
+    //   .addDeadPoints(3)
+    //   .addPoints(model.splicePoints("long-skinny-strip16", 0, 21), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("long-skinny-strip4", 0, 79), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_27)
-      .addPoints(model.splicePoints("long-skinny-strip1", 89, 8))
-      .addPoints(model.splicePoints("long-skinny-strip10", 0, 32))
-      .addDeadPoints(3)
-      .addPoints(model.splicePoints("long-skinny-strip5", 43, 83), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_27)
+    //   .addPoints(model.splicePoints("long-skinny-strip1", 89, 8))
+    //   .addPoints(model.splicePoints("long-skinny-strip10", 0, 32))
+    //   .addDeadPoints(3)
+    //   .addPoints(model.splicePoints("long-skinny-strip5", 43, 83), OutputGroup.REVERSE),
 
 
     /**
      * Columns (and ceiling above)
      *------------------------------------------------------------------------------------*/
 
-    //ceiling
-    new OutputGroup(UNIVERSE_79)
-      .addPoints(model.splicePoints("columns-strip1", 0, 49)),
+    // //ceiling
+    // new OutputGroup(UNIVERSE_79)
+    //   .addPoints(model.splicePoints("columns-strip1", 0, 49)),
 
-    new OutputGroup(UNIVERSE_30)
-      .addPoints(model.splicePoints("columns-strip2", 0, 148), OutputGroup.REVERSE)
-      .addDeadPoints(3),
+    // new OutputGroup(UNIVERSE_30)
+    //   .addPoints(model.splicePoints("columns-strip2", 0, 148), OutputGroup.REVERSE)
+    //   .addDeadPoints(3),
 
-    new OutputGroup(UNIVERSE_36).addDeadPoints(1)
-      .addPoints(model.splicePoints("columns-strip3", 0, 148), OutputGroup.REVERSE)
-      .addDeadPoints(3),
+    // new OutputGroup(UNIVERSE_36).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("columns-strip3", 0, 148), OutputGroup.REVERSE)
+    //   .addDeadPoints(3),
 
-    new OutputGroup(UNIVERSE_35)
-      .addPoints(model.splicePoints("columns-strip4", 0, 145), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_35)
+    //   .addPoints(model.splicePoints("columns-strip4", 0, 145), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_37)
-      .addPoints(model.splicePoints("columns-strip5", 0, 49)),
+    // new OutputGroup(UNIVERSE_37)
+    //   .addPoints(model.splicePoints("columns-strip5", 0, 49)),
 
-    new OutputGroup(UNIVERSE_49).addDeadPoints(2)
-      .addPoints(model.splicePoints("columns-strip6", 0, 146), OutputGroup.REVERSE)
-      .addDeadPoints(2),
+    // new OutputGroup(UNIVERSE_49).addDeadPoints(2)
+    //   .addPoints(model.splicePoints("columns-strip6", 0, 146), OutputGroup.REVERSE)
+    //   .addDeadPoints(2),
 
-    new OutputGroup(UNIVERSE_59).addDeadPoints(8)
-      .addPoints(model.splicePoints("columns-strip7", 0, 143), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_59).addDeadPoints(8)
+    //   .addPoints(model.splicePoints("columns-strip7", 0, 143), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_53)
-      .addPoints(model.splicePoints("columns-strip8", 0, 151), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_53)
+    //   .addPoints(model.splicePoints("columns-strip8", 0, 151), OutputGroup.REVERSE),
 
-    // first square
-    new OutputGroup(UNIVERSE_24).addDeadPoints(1)
-      .addPoints(model.splicePoints("columns-strip9", 8, 18))
-      .addPoints(model.splicePoints("columns-strip10", 0, 25))
-      .addPoints(model.splicePoints("columns-strip11", 0, 26))
-      .addPoints(model.splicePoints("columns-strip12", 0, 26))
-      .addPoints(model.splicePoints("columns-strip9", 0, 8)),
+    // // first square
+    // new OutputGroup(UNIVERSE_24).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("columns-strip9", 8, 18))
+    //   .addPoints(model.splicePoints("columns-strip10", 0, 25))
+    //   .addPoints(model.splicePoints("columns-strip11", 0, 26))
+    //   .addPoints(model.splicePoints("columns-strip12", 0, 26))
+    //   .addPoints(model.splicePoints("columns-strip9", 0, 8)),
 
-    new OutputGroup(UNIVERSE_19).addDeadPoints(1)
-      .addPoints(model.splicePoints("columns-strip13", 8, 19))
-      .addPoints(model.splicePoints("columns-strip14", 0, 25))
-      .addPoints(model.splicePoints("columns-strip15", 0, 26))
-      .addPoints(model.splicePoints("columns-strip16", 0, 26))
-      .addPoints(model.splicePoints("columns-strip13", 0, 8)),
+    // new OutputGroup(UNIVERSE_19).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("columns-strip13", 8, 19))
+    //   .addPoints(model.splicePoints("columns-strip14", 0, 25))
+    //   .addPoints(model.splicePoints("columns-strip15", 0, 26))
+    //   .addPoints(model.splicePoints("columns-strip16", 0, 26))
+    //   .addPoints(model.splicePoints("columns-strip13", 0, 8)),
 
-    new OutputGroup(UNIVERSE_16).addDeadPoints(1)
-      .addPoints(model.splicePoints("columns-strip17", 8, 19))
-      .addPoints(model.splicePoints("columns-strip18", 0, 27))
-      .addPoints(model.splicePoints("columns-strip19", 0, 26))
-      .addPoints(model.splicePoints("columns-strip20", 0, 26))
-      .addPoints(model.splicePoints("columns-strip17", 0, 8)),
+    // new OutputGroup(UNIVERSE_16).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("columns-strip17", 8, 19))
+    //   .addPoints(model.splicePoints("columns-strip18", 0, 27))
+    //   .addPoints(model.splicePoints("columns-strip19", 0, 26))
+    //   .addPoints(model.splicePoints("columns-strip20", 0, 26))
+    //   .addPoints(model.splicePoints("columns-strip17", 0, 8)),
 
     /**
      * Stairs
      *------------------------------------------------------------------------------------*/
 
-    new OutputGroup(UNIVERSE_41)
-      .addPoints(model.splicePoints("stairs-strip1", 0, 34), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
-      .addPoints(model.splicePoints("stairs-strip2", 0, 46), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
-      .addPoints(model.splicePoints("stairs-strip3", 0, 51), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
+    // new OutputGroup(UNIVERSE_41)
+    //   .addPoints(model.splicePoints("stairs-strip1", 0, 34), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
+    //   .addPoints(model.splicePoints("stairs-strip2", 0, 46), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
+    //   .addPoints(model.splicePoints("stairs-strip3", 0, 51), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
 
-    new OutputGroup(UNIVERSE_46)
-      .addPoints(model.splicePoints("stairs-strip4", 0, 51), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
-      .addPoints(model.splicePoints("stairs-strip5", 0, 51), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
+    // new OutputGroup(UNIVERSE_46)
+    //   .addPoints(model.splicePoints("stairs-strip4", 0, 51), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
+    //   .addPoints(model.splicePoints("stairs-strip5", 0, 51), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
 
-    new OutputGroup(UNIVERSE_28)
-      .addPoints(model.splicePoints("stairs-strip6", 0, 51), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
-      .addPoints(model.splicePoints("stairs-strip7", 0, 51), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
+    // new OutputGroup(UNIVERSE_28)
+    //   .addPoints(model.splicePoints("stairs-strip6", 0, 51), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
+    //   .addPoints(model.splicePoints("stairs-strip7", 0, 51), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
 
-    new OutputGroup(UNIVERSE_34)
-      .addPoints(model.splicePoints("stairs-strip8", 0, 51), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
-      .addPoints(model.splicePoints("stairs-strip9", 0, 73), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
+    // new OutputGroup(UNIVERSE_34)
+    //   .addPoints(model.splicePoints("stairs-strip8", 0, 51), OutputGroup.REVERSE) // WEIRD OFFSET PROBLEMS
+    //   .addPoints(model.splicePoints("stairs-strip9", 0, 73), OutputGroup.REVERSE), // WEIRD OFFSET PROBLEMS
 
 
     /**
      * Big Long Section
      *------------------------------------------------------------------------------------*/
-    new OutputGroup(UNIVERSE_43).addDeadPoints(1)
-      .addPoints(model.splicePoints("big-long-section-strip1", 149, 48))
-      .addPoints(model.splicePoints("big-long-section-strip8", 0, 70))
-      .addPoints(model.splicePoints("big-long-section-strip4", 51, 33), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_43).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("big-long-section-strip1", 149, 48))
+    //   .addPoints(model.splicePoints("big-long-section-strip8", 0, 70))
+    //   .addPoints(model.splicePoints("big-long-section-strip4", 51, 33), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_45).addDeadPoints(1)
-      .addPoints(model.splicePoints("big-long-section-strip5", 148, 36))
-      .addPoints(model.splicePoints("big-long-section-strip10", 0, 72), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("big-long-section-strip2", 29, 43), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_45).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("big-long-section-strip5", 148, 36))
+    //   .addPoints(model.splicePoints("big-long-section-strip10", 0, 72), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("big-long-section-strip2", 29, 43), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_47)
-      .addPoints(model.splicePoints("big-long-section-strip5", 0, 150)),
+    // new OutputGroup(UNIVERSE_47)
+    //   .addPoints(model.splicePoints("big-long-section-strip5", 0, 150)),
 
-    new OutputGroup(UNIVERSE_48)
-      .addPoints(model.splicePoints("big-long-section-strip6", 76, 17), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_48)
+    //   .addPoints(model.splicePoints("big-long-section-strip6", 76, 17), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_50)
-      .addPoints(model.splicePoints("big-long-section-strip4", 0, 52), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("big-long-section-strip7", 0, 73), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_50)
+    //   .addPoints(model.splicePoints("big-long-section-strip4", 0, 52), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("big-long-section-strip7", 0, 73), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_51)
-      .addPoints(model.splicePoints("big-long-section-strip1", 0, 150)),
+    // new OutputGroup(UNIVERSE_51)
+    //   .addPoints(model.splicePoints("big-long-section-strip1", 0, 150)),
 
-    new OutputGroup(UNIVERSE_52).addDeadPoints(1)
-      .addPoints(model.splicePoints("big-long-section-strip2", 0, 32), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("big-long-section-strip9", 0, 69)),
+    // new OutputGroup(UNIVERSE_52).addDeadPoints(1)
+    //   .addPoints(model.splicePoints("big-long-section-strip2", 0, 32), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("big-long-section-strip9", 0, 69)),
 
-    new OutputGroup(UNIVERSE_66)
-      .addPoints(model.splicePoints("big-long-section-strip3", 0, 153), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_66)
+    //   .addPoints(model.splicePoints("big-long-section-strip3", 0, 153), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_68)
-      .addPoints(model.splicePoints("big-long-section-strip11", 1, 70))
-      .addPoints(model.splicePoints("big-long-section-strip6", 0, 78))
-      .addDeadPoints(3),
+    // new OutputGroup(UNIVERSE_68)
+    //   .addPoints(model.splicePoints("big-long-section-strip11", 1, 70))
+    //   .addPoints(model.splicePoints("big-long-section-strip6", 0, 78))
+    //   .addDeadPoints(3),
 
     /**
      * Stage and Entrace
      *------------------------------------------------------------------------------------*/
      // SOMETHING WEIRD IN THE LONG RUN LIKE WE ARE SKIPPING OUT OF SOME LEDS!!!
-    new OutputGroup(UNIVERSE_65)
-      .addPoints(model.splicePoints("stage-and-entrance-strip1", 37, 112))
-      .addDeadPoints(1)
-      .addPoints(model.splicePoints("stage-and-entrance-strip2", 0, 45)),
+    // new OutputGroup(UNIVERSE_65)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip1", 37, 112))
+    //   .addDeadPoints(1)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip2", 0, 45)),
 
-    new OutputGroup(UNIVERSE_75)
-      .addPoints(model.splicePoints("stage-and-entrance-strip2", 45, 104))
-      .addPoints(model.splicePoints("stage-and-entrance-strip3", 0, 46)),
+    // new OutputGroup(UNIVERSE_75)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip2", 45, 104))
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip3", 0, 46)),
 
-    new OutputGroup(UNIVERSE_62)
-      .addPoints(model.splicePoints("stage-and-entrance-strip5", 0, 29), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("stage-and-entrance-strip4", 0, 72), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("stage-and-entrance-strip3", 45, 15), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_62)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip5", 0, 29), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip4", 0, 72), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip3", 45, 15), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_74).addDeadPoints(2)
-      .addPoints(model.splicePoints("stage-and-entrance-strip7", 0, 10), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("stage-and-entrance-strip6", 0, 101), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("stage-and-entrance-strip1", 0, 39)),
+    // new OutputGroup(UNIVERSE_74).addDeadPoints(2)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip7", 0, 10), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip6", 0, 101), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip1", 0, 39)),
 
-    new OutputGroup(UNIVERSE_69)
-      .addPoints(model.splicePoints("stage-and-entrance-strip7", 8, 150), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_69)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip7", 8, 150), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_61)
-      .addPoints(model.splicePoints("stage-and-entrance-strip8", 0, 26))
-      .addPoints(model.splicePoints("stage-and-entrance-strip9", 0, 75))
-      .addPoints(model.splicePoints("stage-and-entrance-strip10", 0, 49)),
+    // new OutputGroup(UNIVERSE_61)
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip8", 0, 26))
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip9", 0, 75))
+    //   .addPoints(model.splicePoints("stage-and-entrance-strip10", 0, 49)),
 
     /**
      * VJ Booth
      *------------------------------------------------------------------------------------*/
-    new OutputGroup(UNIVERSE_23)
-      .addPoints(model.splicePoints("vj_booth-strip2", 2, 30), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vj_booth-strip1", 0, 35), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vj_booth-strip4", 0, 8))
-      .addPoints(model.splicePoints("vj_booth-strip5", 0, 81)),
+    // new OutputGroup(UNIVERSE_23)
+    //   .addPoints(model.splicePoints("vj_booth-strip2", 2, 30), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vj_booth-strip1", 0, 35), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vj_booth-strip4", 0, 8))
+    //   .addPoints(model.splicePoints("vj_booth-strip5", 0, 81)),
 
-    new OutputGroup(UNIVERSE_26)
-      .addPoints(model.splicePoints("vj_booth-strip2", 30, 3))
-      .addPoints(model.splicePoints("vj_booth-strip3", 0, 47))
-      .addPoints(model.splicePoints("vj_booth-strip6", 0, 39), OutputGroup.REVERSE),
+    // new OutputGroup(UNIVERSE_26)
+    //   .addPoints(model.splicePoints("vj_booth-strip2", 30, 3))
+    //   .addPoints(model.splicePoints("vj_booth-strip3", 0, 47))
+    //   .addPoints(model.splicePoints("vj_booth-strip6", 0, 39), OutputGroup.REVERSE),
 
-    new OutputGroup(UNIVERSE_5)
-      .addPoints(model.splicePoints("vj_booth-strip9", 0, 103))
-      .addDeadPoints(2),
+    // new OutputGroup(UNIVERSE_5)
+    //   .addPoints(model.splicePoints("vj_booth-strip9", 0, 103))
+    //   .addDeadPoints(2),
 
-    new OutputGroup(UNIVERSE_7)
-      .addPoints(model.splicePoints("vj_booth-strip10", 0, 49), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vj_booth-strip7", 0, 82))
-      .addPoints(model.splicePoints("vj_booth-strip11", 0, 26)),
+    // new OutputGroup(UNIVERSE_7)
+    //   .addPoints(model.splicePoints("vj_booth-strip10", 0, 49), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vj_booth-strip7", 0, 82))
+    //   .addPoints(model.splicePoints("vj_booth-strip11", 0, 26)),
 
-    new OutputGroup(UNIVERSE_8)
-      .addPoints(model.splicePoints("vj_booth-strip14", 0, 64))
-      .addPoints(model.splicePoints("vj_booth-strip12", 0, 52))
-      .addDeadPoints(2),
+    // new OutputGroup(UNIVERSE_8)
+    //   .addPoints(model.splicePoints("vj_booth-strip14", 0, 64))
+    //   .addPoints(model.splicePoints("vj_booth-strip12", 0, 52))
+    //   .addDeadPoints(2),
 
-    new OutputGroup(UNIVERSE_72)
-      .addPoints(model.splicePoints("vj_booth-strip15", 0, 44))
-      .addPoints(model.splicePoints("vj_booth-strip8", 0, 25))
-      .addPoints(model.splicePoints("vj_booth-strip13", 0, 72)),
+    // new OutputGroup(UNIVERSE_72)
+    //   .addPoints(model.splicePoints("vj_booth-strip15", 0, 44))
+    //   .addPoints(model.splicePoints("vj_booth-strip8", 0, 25))
+    //   .addPoints(model.splicePoints("vj_booth-strip13", 0, 72)),
 
-    new OutputGroup(UNIVERSE_40)
-      .addPoints(model.splicePoints("vj_booth-strip16", 0, 66)),
+    // new OutputGroup(UNIVERSE_40)
+    //   .addPoints(model.splicePoints("vj_booth-strip16", 0, 66)),
 
-    new OutputGroup(UNIVERSE_29)
-      .addPoints(model.splicePoints("vj_booth-strip18", 0, 75), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vj_booth-strip17", 0, 75), OutputGroup.REVERSE)
-      .addPoints(model.splicePoints("vj_booth-strip16", 64, 11), OutputGroup.REVERSE)
-      .addDeadPoints(3),
+    // new OutputGroup(UNIVERSE_29)
+    //   .addPoints(model.splicePoints("vj_booth-strip18", 0, 75), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vj_booth-strip17", 0, 75), OutputGroup.REVERSE)
+    //   .addPoints(model.splicePoints("vj_booth-strip16", 64, 11), OutputGroup.REVERSE)
+    //   .addDeadPoints(3),
 
     /**
      * Bar
      *------------------------------------------------------------------------------------*/
-
-    new OutputGroup(UNIVERSE_76)
-      .addPoints(model.splicePoints("bar-strip1", 0, 49)),
+     // CAN'T ADDRESS THEM INDIVIDUALLY!
+    // new OutputGroup(UNIVERSE_76)
+    //   .addPoints(model.splicePoints("bar-strip1", 0, 49)),
   };
 }
 
