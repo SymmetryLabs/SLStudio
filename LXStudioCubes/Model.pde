@@ -38,7 +38,10 @@ public static class SLModel extends LXModel {
   public final Map<String, Strip> stripTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
+  public final StairsModel stairs;
+  public final BarModel bar;
+
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, StairsModel stairs, BarModel bar) {
     super(new Fixture(cubeArr, strips));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -51,6 +54,9 @@ public static class SLModel extends LXModel {
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
     Map<String, Strip> _stripTable = new HashMap<String, Strip>();
+
+    this.stairs = stairs;
+    this.bar = bar;
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -179,6 +185,64 @@ public static class Tower extends LXModel {
     this.faces = Collections.unmodifiableList(faceList);
     this.strips = Collections.unmodifiableList(stripList);
   }
+}
+
+public static class StairsModel extends LXModel {
+
+  public final List<Strip> strips;
+
+  public StairsModel(List<Strip> strips) {
+    super(new Fixture(strips));
+    Fixture fixture = (Fixture) this.fixtures.get(0);
+
+    this.strips = fixture.strips;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    public final List<Strip> strips = new ArrayList<Strip>();
+
+    private Fixture(List<Strip> strips) {
+      for (Strip strip : strips) {
+        this.strips.add(strip);
+
+        for (LXPoint p : strip.points) {
+          this.points.add(p);
+        }
+      }
+    }
+
+  }
+
+}
+
+public static class BarModel extends LXModel {
+
+  public final List<Strip> strips;
+
+  public BarModel(List<Strip> strips) {
+    super(new Fixture(strips));
+    Fixture fixture = (Fixture) this.fixtures.get(0);
+
+    this.strips = fixture.strips;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    public final List<Strip> strips = new ArrayList<Strip>();
+
+    private Fixture(List<Strip> strips) {
+      for (Strip strip : strips) {
+        this.strips.add(strip);
+
+        for (LXPoint p : strip.points) {
+          this.points.add(p);
+        }
+      }
+    }
+
+  }
+
 }
 
 /**
@@ -428,6 +492,8 @@ public static class Strip extends LXModel {
 
   public final String id;
 
+  public final List<String> classes = new ArrayList<String>();
+
   public final Metrics metrics;
 
   /**
@@ -469,6 +535,42 @@ public static class Strip extends LXModel {
   Strip(String id, Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
     super(new Fixture(metrics, ry, transform));
     this.id = id;
+    this.metrics = metrics;
+    this.isHorizontal = isHorizontal;
+    this.ry = ry;
+  }
+
+  Strip(String id, List<String> classes, Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
+    super(points);
+    this.id = id;
+    this.classes.addAll(classes);
+    this.isHorizontal = isHorizontal;
+    this.metrics = metrics;   
+    this.ry = ry;
+  }
+
+  Strip(String id, List<String> classes, Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+    super(new Fixture(metrics, ry, transform));
+    this.id = id;
+    this.classes.addAll(classes);
+    this.metrics = metrics;
+    this.isHorizontal = isHorizontal;
+    this.ry = ry;
+  }
+
+  Strip(Metrics metrics, List<String> classes, float ry, List<LXPoint> points, boolean isHorizontal) {
+    super(points);
+    this.id = "";
+    this.classes.addAll(classes);
+    this.isHorizontal = isHorizontal;
+    this.metrics = metrics;   
+    this.ry = ry;
+  }
+
+  Strip(Metrics metrics, List<String> classes, float ry, LXTransform transform, boolean isHorizontal) {
+    super(new Fixture(metrics, ry, transform));
+    this.id = "";
+    this.classes.addAll(classes);
     this.metrics = metrics;
     this.isHorizontal = isHorizontal;
     this.ry = ry;

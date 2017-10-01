@@ -11,6 +11,78 @@ public class BlackenDeadPoints extends LXEffect {
   }
 }
 
+public class StairsChannelControl extends LXRunnableComponent {
+
+  private final LX lx;
+
+  public StairsChannelControl(LX lx) {
+    super(lx);
+    this.lx = lx;
+  }
+
+  protected void run(double deltaMs) {
+    LXChannel channel = null;
+    for (LXChannel ch : lx.engine.getChannels()) {
+      // disabling A/B decks!
+      //ch.crossfadeGroup.setValue(CrossfadeGroup.BYPASS);
+
+      if (ch.getLabel().equals("Stairs")) {
+        channel = ch;
+      }
+    }
+
+    if (channel == null) {
+      LXChannel channelToAdd = lx.engine.addChannel();
+      channelToAdd.label.setValue("Stairs");
+    }
+
+    if (channel != null) {
+      // always keep blend mode to "Normal" to mask everything
+      //channel.blendMode.setValue(4);
+
+      // get StairsMask effect if it exists
+      LXEffect stairsMaskEffect = null;
+      for (LXEffect localEffect : channel.getEffects()) {
+        if (localEffect.getClass().getSimpleName().equals("StairsMask")) {
+          stairsMaskEffect = localEffect;
+        }
+      }
+
+      // create and apply it if it doesn't
+      if (stairsMaskEffect == null) {
+        LXEffect mask = new StairsMask(lx);
+        channel.addEffect(mask);
+        mask.enabled.setValue(true);
+      } else {
+        stairsMaskEffect.enabled.setValue(true);
+      }
+
+    }
+  }
+
+}
+
+public class StairsMask extends LXEffect {
+  public final String className = "stairs";
+
+  private final LX lx;
+
+  public StairsMask(LX lx) {
+    super(lx);
+    this.lx = lx;
+  }
+
+  public void run(double deltaMs, double amount) {
+    for (Strip strip : ((SLModel)model).strips) {
+      if (!strip.classes.contains(className)) {
+        for (LXPoint p : strip.points) {
+          colors[p.index] = 0;
+        }
+      }
+    }
+  }
+}
+
 public static class Strobe extends LXEffect {
   
   public enum Waveshape {

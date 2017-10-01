@@ -53,6 +53,8 @@ void setup() {
       outputControl = new OutputControl(lx);
       lx.engine.registerComponent("outputControl", outputControl);
 
+      lx.engine.addLoopTask(new StairsChannelControl(lx).start());
+
       // Mapping
       if (((SLModel)model).cubes.size() > 0)
         mappingMode = new MappingMode(lx);
