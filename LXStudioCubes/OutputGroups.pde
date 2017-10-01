@@ -313,6 +313,9 @@ public final OutputGroup[] buildOutputGroups() {
     /**
      * Bar
      *------------------------------------------------------------------------------------*/
+
+    new OutputGroup(UNIVERSE_76)
+      .addPoints(model.splicePoints("bar-strip1", 0, 49)),
   };
 }
 
