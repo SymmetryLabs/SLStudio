@@ -280,9 +280,19 @@ public final OutputGroup[] buildOutputGroups() {
     new OutputGroup(UNIVERSE_26)
       .addPoints(model.splicePoints("vj_booth-strip2", 30, 3))
       .addPoints(model.splicePoints("vj_booth-strip3", 0, 47))
-      .addPoints(model.splicePoints("vj_booth-strip6", 0, 39), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vj_booth-strip6", 0, 39), OutputGroup.REVERSE),
 
-    
+    new OutputGroup(UNIVERSE_5)
+      .addPoints(model.splicePoints("vj_booth-strip9", 0, 102)),
+
+    new OutputGroup(UNIVERSE_7)
+      .addPoints(model.splicePoints("vj_booth-strip10", 0, 48), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vj_booth-strip7", 0, 81))
+      .addPoints(model.splicePoints("vj_booth-strip11", 0, 25)),
+
+    new OutputGroup(UNIVERSE_8)
+      .addPoints(model.splicePoints("vj_booth-strip14", 0, 63))
+      .addPoints(model.splicePoints("vj_booth-strip12", 0, 51)),
 
     /**
      * Bar
