@@ -293,7 +293,6 @@ static final StripConfig[] VJ_BOOTH_STRIP_CONFIG = {
  new StripConfig("vj_booth-strip5", new float[] {0, 8, 0}, new float[] {0, 0, 0}, 81),
  new StripConfig("vj_booth-strip6", new float[] {100, 8, 0}, new float[] {0, 0, -90}, 39),
 
- // next part (FINISH HERE!!!)
  // horizontals - bottom
  new StripConfig("vj_booth-strip7", new float[] {0, 14, 0}, new float[] {0, 0, 0}, 82), // bottom
 
@@ -314,6 +313,12 @@ static final StripConfig[] VJ_BOOTH_STRIP_CONFIG = {
 
  // over the stairs
  new StripConfig("vj_booth-strip15", new float[] {-52.5, 14+60, 0}, new float[] {0, 0, 0}, 44), // top
+
+ // bottom of the bar
+ new StripConfig("vj_booth-strip16", new float[] {250, 150, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75), // left
+ new StripConfig("vj_booth-strip17", new float[] {250-50, 150-78, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75),
+ new StripConfig("vj_booth-strip18", new float[] {250-100, 150-156, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75), // right
+
 };
 
 /**
@@ -601,7 +606,7 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    //strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }
@@ -624,7 +629,7 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    //strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }
@@ -647,7 +652,7 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    //strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }
@@ -672,9 +677,9 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    //Strip strip = new Strip(stripConfig.id, stripConfig.classes, metrics, stripConfig.yRot, globalTransform, true);
-    //strips.add(strip);
-    //stairsStrips.add(strip);
+    Strip strip = new Strip(stripConfig.id, stripConfig.classes, metrics, stripConfig.yRot, globalTransform, true);
+    strips.add(strip);
+    stairsStrips.add(strip);
 
     globalTransform.pop();
   }
@@ -699,7 +704,7 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    //strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }
@@ -722,7 +727,7 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    //strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }
@@ -772,8 +777,8 @@ public SLModel buildModel() {
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
     Strip strip = new Strip(stripConfig.id, stripConfig.classes, metrics, stripConfig.yRot, globalTransform, true);
-    //strips.add(strip);
-    //stairsStrips.add(strip);
+    strips.add(strip);
+    stairsStrips.add(strip);
 
     globalTransform.pop();
   }
