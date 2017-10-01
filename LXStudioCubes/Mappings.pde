@@ -204,15 +204,15 @@ static final float stairs_rotation_z = 175;
 static final StripConfig[] STAIRS_STRIP_CONFIG = {
   // PROBLEMS TO FIX!!!
   //top to bottom (just straight strips for now)
-  // new StripConfig("stairs-strip1", new String[] {"stairs"}, new float[] {0, 0, 0}, new float[] {0, 0, 0}, 34), // top
-  // new StripConfig("stairs-strip2", new String[] {"stairs"}, new float[] {-3.5, -12, 8}, new float[] {0, 0, 0}, 46),
-  // new StripConfig("stairs-strip3", new String[] {"stairs"}, new float[] {-8.5, -24, 16}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip4", new String[] {"stairs"}, new float[] {-8.5, -36, 24}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip5", new String[] {"stairs"}, new float[] {-8.5, -48, 32}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip6", new String[] {"stairs"}, new float[] {-8.5, -60, 40}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip7", new String[] {"stairs"}, new float[] {-8.5, -72, 48}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip8", new String[] {"stairs"}, new float[] {-8.5, -84, 56}, new float[] {0, 0, 0}, 51),
-  // new StripConfig("stairs-strip9", new String[] {"stairs"}, new float[] {-20, -96, 64}, new float[] {0, 0, 0}, 73), // bottom
+  new StripConfig("stairs-strip1", new String[] {"stairs"}, new float[] {0, 0, 0}, new float[] {0, 0, 0}, 34), // top
+  new StripConfig("stairs-strip2", new String[] {"stairs"}, new float[] {-3.5, -12, 8}, new float[] {0, 0, 0}, 46),
+  new StripConfig("stairs-strip3", new String[] {"stairs"}, new float[] {-8.5, -24, 16}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip4", new String[] {"stairs"}, new float[] {-8.5, -36, 24}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip5", new String[] {"stairs"}, new float[] {-8.5, -48, 32}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip6", new String[] {"stairs"}, new float[] {-8.5, -60, 40}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip7", new String[] {"stairs"}, new float[] {-8.5, -72, 48}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip8", new String[] {"stairs"}, new float[] {-8.5, -84, 56}, new float[] {0, 0, 0}, 51),
+  new StripConfig("stairs-strip9", new String[] {"stairs"}, new float[] {-20, -96, 64}, new float[] {0, 0, 0}, 73), // bottom
 
 };
 
@@ -229,24 +229,24 @@ static final float big_long_section_rotation_z = 0;
 
 static final StripConfig[] BIG_LONG_SECTION_STRIP_CONFIG = {
 
-  // // horizontal bottom
-  // new StripConfig("big-long-section-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 199), // contains corner pixel
-  // new StripConfig("big-long-section-strip2", new float[] {255, 0, 0}, new float[] {0, 0, 0}, 73),
-  // new StripConfig("big-long-section-strip3", new float[] {255+100, 0, 0}, new float[] {0, 0, 0}, 153),
+  // horizontal bottom
+  new StripConfig("big-long-section-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 199), // contains corner pixel
+  new StripConfig("big-long-section-strip2", new float[] {255, 0, 0}, new float[] {0, 0, 0}, 73),
+  new StripConfig("big-long-section-strip3", new float[] {255+100, 0, 0}, new float[] {0, 0, 0}, 153),
 
-  // // horizontal top
-  // new StripConfig("big-long-section-strip4", new float[] {83, 54, 0}, new float[] {0, 0, 0}, 84),
-  // new StripConfig("big-long-section-strip5", new float[] {83+112, 54, 0}, new float[] {0, 0, 0}, 185),
-  // new StripConfig("big-long-section-strip6", new float[] {83+112+237, 54, 0}, new float[] {0, 0, 0}, 93),
+  // horizontal top
+  new StripConfig("big-long-section-strip4", new float[] {83, 54, 0}, new float[] {0, 0, 0}, 84),
+  new StripConfig("big-long-section-strip5", new float[] {83+112, 54, 0}, new float[] {0, 0, 0}, 185),
+  new StripConfig("big-long-section-strip6", new float[] {83+112+237, 54, 0}, new float[] {0, 0, 0}, 93),
 
-  // // angles
-  // new StripConfig("big-long-section-strip7", new float[] {1, 1, 0}, new float[] {0, 0, 35}, 73),
+  // angles
+  new StripConfig("big-long-section-strip7", new float[] {1, 1, 0}, new float[] {0, 0, 35}, 73),
 
-  // new StripConfig("big-long-section-strip8", new float[] {250, -2, 0}, new float[] {0, 0, 138}, 70),
-  // new StripConfig("big-long-section-strip9", new float[] {255, -1, 0}, new float[] {0, 0, 138}, 69),
+  new StripConfig("big-long-section-strip8", new float[] {250, -2, 0}, new float[] {0, 0, 138}, 70),
+  new StripConfig("big-long-section-strip9", new float[] {255, -1, 0}, new float[] {0, 0, 138}, 69),
 
-  // new StripConfig("big-long-section-strip10", new float[] {112+237-2, 2, 0}, new float[] {0, 0, 34}, 72),
-  // new StripConfig("big-long-section-strip11", new float[] {112+237+6, 2, 0}, new float[] {0, 0, 34}, 71),
+  new StripConfig("big-long-section-strip10", new float[] {112+237-2, 2, 0}, new float[] {0, 0, 34}, 72),
+  new StripConfig("big-long-section-strip11", new float[] {112+237+6, 2, 0}, new float[] {0, 0, 34}, 71),
 };
 
 /**
@@ -262,23 +262,23 @@ static final float stage_and_entrance_rotation_z = 0;
 static final StripConfig[] STAGE_AND_ENTRANCE_STRIP_CONFIG = {
   // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
-  // // bottom long horizontal
-  // new StripConfig("stage-and-entrance-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 150),
-  // new StripConfig("stage-and-entrance-strip2", new float[] {188, 0, 0}, new float[] {0, 0, 0}, 150),
-  // new StripConfig("stage-and-entrance-strip3", new float[] {376, 0, 0}, new float[] {0, 0, 0}, 60),
+  // bottom long horizontal
+  new StripConfig("stage-and-entrance-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 150),
+  new StripConfig("stage-and-entrance-strip2", new float[] {188, 0, 0}, new float[] {0, 0, 0}, 150),
+  new StripConfig("stage-and-entrance-strip3", new float[] {376, 0, 0}, new float[] {0, 0, 0}, 60),
 
-  // // bathrooms
-  // new StripConfig("stage-and-entrance-strip4", new float[] {451, 0, 0}, new float[] {0, 0, 90}, 72),
-  // new StripConfig("stage-and-entrance-strip5", new float[] {451, 90, 0}, new float[] {0, 0, 180}, 29),
+  // bathrooms
+  new StripConfig("stage-and-entrance-strip4", new float[] {451, 0, 0}, new float[] {0, 0, 90}, 72),
+  new StripConfig("stage-and-entrance-strip5", new float[] {451, 90, 0}, new float[] {0, 0, 180}, 29),
 
-  // // stage (angle, then stage)
-  // new StripConfig("stage-and-entrance-strip6", new float[] {1, 1, 0}, new float[] {0, 0, 33}, 101),
-  // new StripConfig("stage-and-entrance-strip7", new float[] {109, 70, 0}, new float[] {0, 0, 0}, 158), // NEEDS TO BE AN ANGLE!! UGH
+  // stage (angle, then stage)
+  new StripConfig("stage-and-entrance-strip6", new float[] {1, 1, 0}, new float[] {0, 0, 33}, 101),
+  new StripConfig("stage-and-entrance-strip7", new float[] {109, 70, 0}, new float[] {0, 0, 0}, 158), // NEEDS TO BE AN ANGLE!! UGH
 
-  // // floor
-  // new StripConfig("stage-and-entrance-strip8", new float[] {325, 65, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 26),
-  // new StripConfig("stage-and-entrance-strip9", new float[] {325, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 75),
-  // new StripConfig("stage-and-entrance-strip10", new float[] {325+94, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 90}, 49),
+  // floor
+  new StripConfig("stage-and-entrance-strip8", new float[] {325, 65, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90}, 26),
+  new StripConfig("stage-and-entrance-strip9", new float[] {325, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 0}, 75),
+  new StripConfig("stage-and-entrance-strip10", new float[] {325+94, 65-32, DISTANCE_TO_FLOOR}, new float[] {0, 0, 90}, 49),
 };
 
 
@@ -295,39 +295,39 @@ static final float vj_booth_rotation_z = 0;
 static final StripConfig[] VJ_BOOTH_STRIP_CONFIG = {
  // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
- // new StripConfig("vj_booth-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 35),
- // new StripConfig("vj_booth-strip2", new float[] {43, 0, 0}, new float[] {0, 0, -90}, 33), // vertical
- // new StripConfig("vj_booth-strip3", new float[] {43, -39, 0}, new float[] {0, 0, 0}, 47),
+ new StripConfig("vj_booth-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 0}, 35),
+ new StripConfig("vj_booth-strip2", new float[] {43, 0, 0}, new float[] {0, 0, -90}, 33), // vertical
+ new StripConfig("vj_booth-strip3", new float[] {43, -39, 0}, new float[] {0, 0, 0}, 47),
 
- // new StripConfig("vj_booth-strip4", new float[] {0, -1, 0}, new float[] {0, 0, 90}, 8), // tiny part
- // new StripConfig("vj_booth-strip5", new float[] {0, 8, 0}, new float[] {0, 0, 0}, 81),
- // new StripConfig("vj_booth-strip6", new float[] {100, 8, 0}, new float[] {0, 0, -90}, 39),
+ new StripConfig("vj_booth-strip4", new float[] {0, -1, 0}, new float[] {0, 0, 90}, 8), // tiny part
+ new StripConfig("vj_booth-strip5", new float[] {0, 8, 0}, new float[] {0, 0, 0}, 81),
+ new StripConfig("vj_booth-strip6", new float[] {100, 8, 0}, new float[] {0, 0, -90}, 39),
 
- // // horizontals - bottom
- // new StripConfig("vj_booth-strip7", new float[] {0, 14, 0}, new float[] {0, 0, 0}, 82), // bottom
+ // horizontals - bottom
+ new StripConfig("vj_booth-strip7", new float[] {0, 14, 0}, new float[] {0, 0, 0}, 82), // bottom
 
- // // horizontals - top
- // new StripConfig("vj_booth-strip8", new float[] {3, 14+60, 0}, new float[] {0, 0, 0}, 25), // top
- // new StripConfig("vj_booth-strip9", new float[] {32+7+3, 14+60, 0}, new float[] {0, 0, 0}, 103), // top 2
+ // horizontals - top
+ new StripConfig("vj_booth-strip8", new float[] {3, 14+60, 0}, new float[] {0, 0, 0}, 25), // top
+ new StripConfig("vj_booth-strip9", new float[] {32+7+3, 14+60, 0}, new float[] {0, 0, 0}, 103), // top 2
 
- // // verticals
- // new StripConfig("vj_booth-strip10", new float[] {0, 14, 0}, new float[] {0, 0, 90}, 49),
+ // verticals
+ new StripConfig("vj_booth-strip10", new float[] {0, 14, 0}, new float[] {0, 0, 90}, 49),
 
- // // angles on the right
- // new StripConfig("vj_booth-strip11", new float[] {100, 14, 0}, new float[] {0, 0, 67}, 26),
- // new StripConfig("vj_booth-strip12", new float[] {110+5, 47, 0}, new float[] {0, 0, 25}, 52),
+ // angles on the right
+ new StripConfig("vj_booth-strip11", new float[] {100, 14, 0}, new float[] {0, 0, 67}, 26),
+ new StripConfig("vj_booth-strip12", new float[] {110+5, 47, 0}, new float[] {0, 0, 25}, 52),
 
- // // contour angles
- // new StripConfig("vj_booth-strip13", new float[] {31+3, 14+60, 0}, new float[] {0, 0, -20}, 72),
- // new StripConfig("vj_booth-strip14", new float[] {31+9+3, 14+60-1, 0}, new float[] {0, 0, -20}, 64),
+ // contour angles
+ new StripConfig("vj_booth-strip13", new float[] {31+3, 14+60, 0}, new float[] {0, 0, -20}, 72),
+ new StripConfig("vj_booth-strip14", new float[] {31+9+3, 14+60-1, 0}, new float[] {0, 0, -20}, 64),
 
- // // over the stairs
- // new StripConfig("vj_booth-strip15", new float[] {-52.5, 14+60, 0}, new float[] {0, 0, 0}, 44), // top
+ // over the stairs
+ new StripConfig("vj_booth-strip15", new float[] {-52.5, 14+60, 0}, new float[] {0, 0, 0}, 44), // top
 
- // // bottom of the bar
- // new StripConfig("vj_booth-strip16", new float[] {250, 150, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75), // left
- // new StripConfig("vj_booth-strip17", new float[] {250-50, 150-78, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75),
- // new StripConfig("vj_booth-strip18", new float[] {250-100, 150-156, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75), // right
+ // bottom of the bar
+ new StripConfig("vj_booth-strip16", new float[] {250, 150, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75), // left
+ new StripConfig("vj_booth-strip17", new float[] {250-50, 150-78, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75),
+ new StripConfig("vj_booth-strip18", new float[] {250-100, 150-156, DISTANCE_TO_FLOOR}, new float[] {0, 0, -122}, 75), // right
 
 };
 
@@ -345,23 +345,23 @@ static final float BAR_SHELF_WIDTH = 22;
 static final StripConfig[] BAR_STRIP_CONFIG = {
  // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
-  // new StripConfig("bar-strip1", new float[] {BAR_SHELF_WIDTH*0, 0, 0}, new float[] {0, 0, 90}, 49),
-  // new StripConfig("bar-strip2", new float[] {BAR_SHELF_WIDTH*1, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip1", new float[] {BAR_SHELF_WIDTH*0, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip2", new float[] {BAR_SHELF_WIDTH*1, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  // new StripConfig("bar-strip3", new float[] {BAR_SHELF_WIDTH*1+3, 0, 0}, new float[] {0, 0, 90}, 49),
-  // new StripConfig("bar-strip4", new float[] {BAR_SHELF_WIDTH*2+3, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip3", new float[] {BAR_SHELF_WIDTH*1+3, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip4", new float[] {BAR_SHELF_WIDTH*2+3, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  // new StripConfig("bar-strip5", new float[] {BAR_SHELF_WIDTH*2+6, 0, 0}, new float[] {0, 0, 90}, 49),
-  // new StripConfig("bar-strip6", new float[] {BAR_SHELF_WIDTH*3+6, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip5", new float[] {BAR_SHELF_WIDTH*2+6, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip6", new float[] {BAR_SHELF_WIDTH*3+6, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  // new StripConfig("bar-strip7", new float[] {BAR_SHELF_WIDTH*3+9, 0, 0}, new float[] {0, 0, 90}, 49),
-  // new StripConfig("bar-strip8", new float[] {BAR_SHELF_WIDTH*4+9, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip7", new float[] {BAR_SHELF_WIDTH*3+9, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip8", new float[] {BAR_SHELF_WIDTH*4+9, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  // new StripConfig("bar-strip9", new float[]  {BAR_SHELF_WIDTH*5+12, 0, 0}, new float[] {0, 0, 90}, 49),
-  // new StripConfig("bar-strip10", new float[] {BAR_SHELF_WIDTH*6+12, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip9", new float[]  {BAR_SHELF_WIDTH*5+12, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip10", new float[] {BAR_SHELF_WIDTH*6+12, 0, 0}, new float[] {0, 0, 90}, 49),
 
-  // new StripConfig("bar-strip11", new float[] {BAR_SHELF_WIDTH*6+15, 0, 0}, new float[] {0, 0, 90}, 49),
-  // new StripConfig("bar-strip12", new float[] {BAR_SHELF_WIDTH*7+15, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip11", new float[] {BAR_SHELF_WIDTH*6+15, 0, 0}, new float[] {0, 0, 90}, 49),
+  new StripConfig("bar-strip12", new float[] {BAR_SHELF_WIDTH*7+15, 0, 0}, new float[] {0, 0, 90}, 49),
 };
 
 static final StripConfig[] TEST_STRIP_CONFIG = {
