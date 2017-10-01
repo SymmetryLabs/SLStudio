@@ -100,12 +100,12 @@ static final StripConfig[] VIP_LOUGNE_STRIP_CONFIG = {
   // floor - top
   new StripConfig("vip-lounge-strip19", new float[] {260, 55, DISTANCE_TO_FLOOR-10}, new float[] {0, 0, 180}, 100), 
   new StripConfig("vip-lounge-strip20", new float[] {135, 55, DISTANCE_TO_FLOOR-10}, new float[] {0, 0, 136}, 97), 
-  new StripConfig("vip-lounge-strip21", new float[] {50, 230-94, DISTANCE_TO_FLOOR-10}, new float[] {0, 0, -90-180}, 75),
+  new StripConfig("vip-lounge-strip21", new float[] {50, 230-94, DISTANCE_TO_FLOOR-10}, new float[] {0, 0, -90-180}, 78),
 
   // floor - bottom
   new StripConfig("vip-lounge-strip22", new float[] {260, 69, DISTANCE_TO_FLOOR}, new float[] {0, 0, 180}, 100), 
-  new StripConfig("vip-lounge-strip21", new float[] {135, 69, DISTANCE_TO_FLOOR}, new float[] {0, 0, 136}, 79),
-  new StripConfig("vip-lounge-strip23", new float[] {65, 230-94, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90-180}, 75),
+  new StripConfig("vip-lounge-strip23", new float[] {135, 69, DISTANCE_TO_FLOOR}, new float[] {0, 0, 136}, 79),
+  new StripConfig("vip-lounge-strip24", new float[] {65, 230-94, DISTANCE_TO_FLOOR}, new float[] {0, 0, -90-180}, 80),
 };
 
 /**

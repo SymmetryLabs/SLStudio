@@ -77,6 +77,22 @@ public final OutputGroup[] buildOutputGroups() {
       .addPoints(model.splicePoints("vip-lounge-strip14", 35, 14))
       .addDeadPoints(1),
 
+    new OutputGroup(UNIVERSE_31)
+      .addPoints(model.splicePoints("vip-lounge-strip19", 0, 100))
+      .addPoints(model.splicePoints("vip-lounge-strip20", 0, 51)),
+
+    new OutputGroup(UNIVERSE_42)
+      .addPoints(model.splicePoints("vip-lounge-strip22", 0, 100))
+      .addPoints(model.splicePoints("vip-lounge-strip23", 0, 73)),
+
+    new OutputGroup(UNIVERSE_54).addDeadPoints(10)
+      .addPoints(model.splicePoints("vip-lounge-strip23", 49, 26))
+      .addPoints(model.splicePoints("vip-lounge-strip24", 0, 80)),
+
+    new OutputGroup(UNIVERSE_58).addDeadPoints(2)
+      .addPoints(model.splicePoints("vip-lounge-strip20", 49, 48))
+      .addPoints(model.splicePoints("vip-lounge-strip21", 0, 78)),
+
     /**
      * Long Skinny
      *------------------------------------------------------------------------------------*/
