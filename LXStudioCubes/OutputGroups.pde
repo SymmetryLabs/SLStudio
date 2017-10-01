@@ -301,6 +301,15 @@ public final OutputGroup[] buildOutputGroups() {
       .addPoints(model.splicePoints("vj_booth-strip8", 0, 25))
       .addPoints(model.splicePoints("vj_booth-strip13", 0, 72)),
 
+    new OutputGroup(UNIVERSE_40)
+      .addPoints(model.splicePoints("vj_booth-strip16", 0, 66)),
+
+    new OutputGroup(UNIVERSE_29)
+      .addPoints(model.splicePoints("vj_booth-strip18", 0, 75), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vj_booth-strip17", 0, 75), OutputGroup.REVERSE)
+      .addPoints(model.splicePoints("vj_booth-strip16", 64, 11), OutputGroup.REVERSE)
+      .addDeadPoints(3),
+
     /**
      * Bar
      *------------------------------------------------------------------------------------*/

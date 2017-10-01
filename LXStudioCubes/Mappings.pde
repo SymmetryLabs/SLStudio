@@ -324,34 +324,34 @@ static final StripConfig[] VJ_BOOTH_STRIP_CONFIG = {
 /**
  * Bar
  *---------------------------------------------------------------------------------------------*/
-static final float bar_offset_x = 0;
+static final float bar_offset_x = 510;
 static final float bar_offset_y = 0;
 static final float bar_offset_z = 0;
-static final float bar_rotation_x = 0;
-static final float bar_rotation_y = 0;
+static final float bar_rotation_x = 90;
+static final float bar_rotation_y = 57;
 static final float bar_rotation_z = 0;
-static final float BAR_SHELF_WIDTH = 18;
+static final float BAR_SHELF_WIDTH = 22;
 
 static final StripConfig[] BAR_STRIP_CONFIG = {
  // strip id, {x, y, z}, {xRot, yRot, zRot}, num leds, length
 
-  // new StripConfig("bar-strip1", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
-  // new StripConfig("bar-strip2", new float[] {0+BAR_SHELF_WIDTH, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
+  new StripConfig("bar-strip1", new float[] {BAR_SHELF_WIDTH*0, 0, 0}, new float[] {0, 0, 90}, 48),
+  new StripConfig("bar-strip2", new float[] {BAR_SHELF_WIDTH*1, 0, 0}, new float[] {0, 0, 90}, 48),
 
-  // new StripConfig("bar-strip3", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
-  // new StripConfig("bar-strip4", new float[] {0+BAR_SHELF_WIDTH, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
+  new StripConfig("bar-strip3", new float[] {BAR_SHELF_WIDTH*1+3, 0, 0}, new float[] {0, 0, 90}, 48),
+  new StripConfig("bar-strip4", new float[] {BAR_SHELF_WIDTH*2+3, 0, 0}, new float[] {0, 0, 90}, 48),
 
-  // new StripConfig("bar-strip5", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
-  // new StripConfig("bar-strip6", new float[] {0+BAR_SHELF_WIDTH, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
+  new StripConfig("bar-strip5", new float[] {BAR_SHELF_WIDTH*2+6, 0, 0}, new float[] {0, 0, 90}, 48),
+  new StripConfig("bar-strip6", new float[] {BAR_SHELF_WIDTH*3+6, 0, 0}, new float[] {0, 0, 90}, 48),
 
-  // new StripConfig("bar-strip7", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
-  // new StripConfig("bar-strip8", new float[] {0+BAR_SHELF_WIDTH, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
+  new StripConfig("bar-strip7", new float[] {BAR_SHELF_WIDTH*3+9, 0, 0}, new float[] {0, 0, 90}, 48),
+  new StripConfig("bar-strip8", new float[] {BAR_SHELF_WIDTH*4+9, 0, 0}, new float[] {0, 0, 90}, 48),
 
-  // new StripConfig("bar-strip9", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
-  // new StripConfig("bar-strip10", new float[] {0+BAR_SHELF_WIDTH, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
+  new StripConfig("bar-strip9", new float[]  {BAR_SHELF_WIDTH*5+12, 0, 0}, new float[] {0, 0, 90}, 48),
+  new StripConfig("bar-strip10", new float[] {BAR_SHELF_WIDTH*6+12, 0, 0}, new float[] {0, 0, 90}, 48),
 
-  // new StripConfig("bar-strip11", new float[] {0, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
-  // new StripConfig("bar-strip12", new float[] {0+BAR_SHELF_WIDTH, 0, 0}, new float[] {0, 0, 90}, 71), // (COUNT PIXELS!!!)
+  new StripConfig("bar-strip11", new float[] {BAR_SHELF_WIDTH*6+15, 0, 0}, new float[] {0, 0, 90}, 48),
+  new StripConfig("bar-strip12", new float[] {BAR_SHELF_WIDTH*7+15, 0, 0}, new float[] {0, 0, 90}, 48),
 };
 
 static final StripConfig[] TEST_STRIP_CONFIG = {
