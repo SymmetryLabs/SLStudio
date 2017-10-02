@@ -45,6 +45,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIControlTarget;
 import heronarts.p3lx.ui.UIModulationSource;
 import heronarts.p3lx.ui.UIModulationTarget;
+import heronarts.p3lx.ui.UITimerTask;
 
 public abstract class UIParameterControl extends UIInputBox implements UIControlTarget, UIModulationTarget, UIModulationSource, LXParameterListener {
 
@@ -143,6 +144,9 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
 
     protected double getNormalized() {
         if (this.parameter != null) {
+            if (this.parameter instanceof CompoundParameter) {
+                return ((CompoundParameter) this.parameter).getBaseNormalized();
+            }
             return this.parameter.getNormalized();
         }
         return 0;
@@ -367,7 +371,8 @@ public abstract class UIParameterControl extends UIInputBox implements UIControl
         float h = LXColor.h(baseColor);
         float s = LXColor.s(baseColor);
         float b = LXColor.b(baseColor);
-        return LXColor.hsb(h, s, b - DIM_AMOUNT);
+        float dimmedB = Math.max(0, b - DIM_AMOUNT);
+        return LXColor.hsb(h, s, dimmedB);
     }
 
 }

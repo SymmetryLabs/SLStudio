@@ -35,7 +35,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.LXLoopTask;
+import heronarts.p3lx.ui.UITimerTask;
 
 public class UICompoundParameterControl extends UIParameterControl {
     private double lastParameterValue = 0;
@@ -49,10 +49,10 @@ public class UICompoundParameterControl extends UIParameterControl {
         }
     };
 
-    private final LXLoopTask checkRedrawTask = new LXLoopTask() {
+    private final UITimerTask checkRedrawTask = new UITimerTask(30, UITimerTask.Mode.FPS) {
         @Override
-        public void loop(double deltaMs) {
-            double parameterValue = getNormalized();
+        public void run() {
+            double parameterValue = getCompoundNormalized();
             if (parameterValue != lastParameterValue) {
                 redraw();
             }
@@ -75,10 +75,10 @@ public class UICompoundParameterControl extends UIParameterControl {
         return super.setParameter(parameter);
     }
 
-    protected double getBaseNormalized() {
+    protected double getCompoundNormalized() {
         if (this.parameter != null) {
             if (this.parameter instanceof CompoundParameter) {
-                return ((CompoundParameter) this.parameter).getBaseNormalized();
+                return ((CompoundParameter) this.parameter).getNormalized();
             } else {
                 return getNormalized();
             }

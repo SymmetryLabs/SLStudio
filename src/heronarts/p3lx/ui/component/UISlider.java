@@ -95,8 +95,8 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
         // value refers to the current, possibly-modulated value of the control's parameter.
         // base is the unmodulated, base value of that parameter.
         // If unmodulated, these will be equal
-        double value = getNormalized();
-        double base = getBaseNormalized();
+        double value = getCompoundNormalized();
+        double base = getNormalized();
         boolean modulated = base != value;
         int baseHandleEdge;
         int handleEdge;
@@ -268,7 +268,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                 pg.rect(this.width / 2 - GROOVE/2, fillY, GROOVE, fillSize);
             }
 
-            pg.fill(0xff5f5f5f);
+            pg.fill(HANDLE_COLOR);
             pg.stroke(ui.theme.getControlBorderColor());
             pg.rect(PADDING, baseHandleEdge, this.width - 2*PADDING, HANDLE_SIZE, HANDLE_ROUNDING);
             break;
@@ -358,7 +358,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                     if (mouseEvent.isShiftDown()) {
                         delta /= 10;
                     }
-                    setNormalized(LXUtils.constrain(getBaseNormalized() + delta, 0, 1));
+                    setNormalized(LXUtils.constrain(getNormalized() + delta, 0, 1));
                 }
             }
         }

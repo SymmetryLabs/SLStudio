@@ -77,8 +77,8 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         // value refers to the current, possibly-modulated value of the control's parameter.
         // base is the unmodulated, base value of that parameter.
         // If unmodulated, these will be equal
-        float value = (float) getNormalized();
-        float base = (float) getBaseNormalized();
+        float value = (float) getCompoundNormalized();
+        float base = (float) getNormalized();
         float valueEnd = ARC_START + value * ARC_RANGE;
         float baseEnd = ARC_START + base * ARC_RANGE;
         float valueStart;
@@ -189,7 +189,7 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
     @Override
     protected void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
         super.onMousePressed(mouseEvent, mx, my);
-        this.dragValue = getBaseNormalized();
+        this.dragValue = getNormalized();
         if ((this.parameter != null) && (mouseEvent.getCount() > 1)) {
             LXCompoundModulation modulation = getModulation(mouseEvent.isShiftDown());
             if (modulation != null && (mouseEvent.isControlDown() || mouseEvent.isMetaDown())) {
