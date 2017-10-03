@@ -74,8 +74,13 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
 
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
-        float knobValue = (float) getNormalized();
-        float valueEnd = ARC_START + knobValue * ARC_RANGE;
+        // value refers to the current, possibly-modulated value of the control's parameter.
+        // base is the unmodulated, base value of that parameter.
+        // If unmodulated, these will be equal
+        float value = (float) getCompoundNormalized();
+        float base = (float) getNormalized();
+        float valueEnd = ARC_START + value * ARC_RANGE;
+        float baseEnd = ARC_START + base * ARC_RANGE;
         float valueStart;
         switch (this.polarity) {
         case BIPOLAR: valueStart = ARC_START + ARC_RANGE/2; break;
@@ -96,12 +101,12 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
                 float modStart, modEnd;
                 switch (modulation.getPolarity()) {
                 case BIPOLAR:
-                    modStart = LXUtils.constrainf(valueEnd - modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
-                    modEnd = LXUtils.constrainf(valueEnd + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+                    modStart = LXUtils.constrainf(baseEnd - modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
+                    modEnd = LXUtils.constrainf(baseEnd + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
                     break;
                 default:
                 case UNIPOLAR:
-                    modStart = valueEnd;
+                    modStart = baseEnd;
                     modEnd = LXUtils.constrainf(modStart + modulation.range.getValuef() * ARC_RANGE, ARC_START, ARC_END);
                     break;
                 }
@@ -118,13 +123,13 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
                 switch (modulation.getPolarity()) {
                 case BIPOLAR:
                     if (modEnd >= modStart) {
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, valueEnd, Math.min(ARC_END, modEnd+.1f));
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseEnd, Math.min(ARC_END, modEnd+.1f));
                         pg.fill(modColorInv);
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modStart-.1f), valueEnd);
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modStart-.1f), baseEnd);
                     } else {
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modEnd-.1f), valueEnd);
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.max(ARC_START, modEnd-.1f), baseEnd);
                         pg.fill(modColorInv);
-                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, valueEnd, Math.min(ARC_END, modStart+.1f));
+                        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, baseEnd, Math.min(ARC_END, modStart+.1f));
                     }
                     break;
                 case UNIPOLAR:
@@ -147,9 +152,23 @@ public class UIKnob extends UICompoundParameterControl implements UIFocus {
         pg.fill(ui.theme.getControlBackgroundColor());
         pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, ARC_START, ARC_END);
 
+        // Compute colors for base/value fills
+        int baseColor;
+        int valueColor;
+        if (isEnabled()) {
+            baseColor = ui.theme.getPrimaryColor();
+            valueColor = getModulatedValueColor(baseColor);
+        } else {
+            int disabled = ui.theme.getControlDisabledColor();
+            baseColor = disabled;
+            valueColor = disabled;
+        }
+
         // Value indication
-        pg.fill(isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(valueStart, valueEnd), Math.max(valueStart, valueEnd));
+        pg.fill(baseColor);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(valueStart, baseEnd), Math.max(valueStart, baseEnd));
+        pg.fill(valueColor);
+        pg.arc(ARC_CENTER_X, ARC_CENTER_Y, arcSize, arcSize, Math.min(baseEnd, valueEnd), Math.max(baseEnd, valueEnd));
 
         // Center tick mark for bipolar knobs
         if (this.polarity == LXParameter.Polarity.BIPOLAR) {

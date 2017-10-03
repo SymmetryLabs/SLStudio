@@ -48,6 +48,8 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
     private static final int PADDING = 2;
     private static final int GROOVE = 4;
 
+    private final static int HANDLE_COLOR = 0xff5f5f5f;
+
     private final float handleHeight;
 
     private boolean hasFillColor = false;
@@ -90,23 +92,30 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
     @Override
     @SuppressWarnings("fallthrough")
     protected void onDraw(UI ui, PGraphics pg) {
-        int controlColor = this.hasFillColor ? this.fillColor :
-            (isEnabled() ? ui.theme.getPrimaryColor() : ui.theme.getControlDisabledColor());
-
-        double norm = getNormalized();
+        // value refers to the current, possibly-modulated value of the control's parameter.
+        // base is the unmodulated, base value of that parameter.
+        // If unmodulated, these will be equal
+        double value = getCompoundNormalized();
+        double base = getNormalized();
+        boolean modulated = base != value;
+        int baseHandleEdge;
         int handleEdge;
         float grooveDim;
         switch (this.direction) {
         case HORIZONTAL:
-            handleEdge = (int) Math.round(PADDING + norm * (this.width - 2*PADDING - HANDLE_SIZE));
+            baseHandleEdge = (int) Math.round(PADDING + base * (this.width - 2*PADDING - HANDLE_SIZE));
+            handleEdge = (int) Math.round(PADDING + value * (this.width - 2*PADDING - HANDLE_SIZE));
             grooveDim = this.width - 2*PADDING;
             break;
         default:
         case VERTICAL:
-            handleEdge = (int) Math.round(PADDING + (1 - norm) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
+            baseHandleEdge = (int) Math.round(PADDING + (1 - base) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
+            handleEdge =  (int) Math.round(PADDING + (1 - value) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
+
             grooveDim = this.handleHeight - 2*PADDING;
             break;
         }
+        int baseHandleCenter = baseHandleEdge + 1 + HANDLE_SIZE/2;
         int handleCenter = handleEdge + 1 + HANDLE_SIZE/2;
 
         // Modulations!
@@ -132,13 +141,13 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                         switch (modulation.getPolarity()) {
                         case BIPOLAR:
                             pg.stroke(modColorInv);
-                            xf = LXUtils.constrainf(handleCenter - xw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(handleCenter, y, xf, y);
+                            xf = LXUtils.constrainf(baseHandleCenter - xw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(baseHandleCenter, y, xf, y);
                             // Pass-thru
                         case UNIPOLAR:
                             pg.stroke(modColor);
-                            xf = LXUtils.constrainf(handleCenter + xw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(handleCenter, y, xf, y);
+                            xf = LXUtils.constrainf(baseHandleCenter + xw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(baseHandleCenter, y, xf, y);
                             break;
                         }
                     }
@@ -152,13 +161,13 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
                         switch (modulation.getPolarity()) {
                         case BIPOLAR:
                             pg.stroke(modColorInv);
-                            yf = LXUtils.constrainf(handleCenter + yw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(x, handleCenter, x, yf);
+                            yf = LXUtils.constrainf(baseHandleCenter + yw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(x, baseHandleCenter, x, yf);
                             // Pass thru
                         case UNIPOLAR:
                             pg.stroke(modColor);
-                            yf = LXUtils.constrainf(handleCenter - yw, PADDING, PADDING + grooveDim - 1);
-                            pg.line(x, handleCenter, x, yf);
+                            yf = LXUtils.constrainf(baseHandleCenter - yw, PADDING, PADDING + grooveDim - 1);
+                            pg.line(x, baseHandleCenter, x, yf);
                             break;
                         }
                     }
@@ -170,56 +179,98 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
             }
         }
 
+        int baseColor;
+        int valueColor;
+        if (isEnabled()) {
+            baseColor = this.hasFillColor ? this.fillColor : ui.theme.getPrimaryColor();
+            valueColor = getModulatedValueColor(baseColor);
+        } else {
+            int disabled = ui.theme.getControlDisabledColor();
+            baseColor = disabled;
+            valueColor = disabled;
+        }
+
         pg.strokeWeight(1);
         pg.noStroke();
         pg.fill(ui.theme.getControlBackgroundColor());
+
         switch (this.direction) {
         case HORIZONTAL:
             // Dark groove
             pg.rect(PADDING, this.handleHeight / 2 - GROOVE/2, this.width - 2*PADDING, GROOVE);
 
-            int fillX, fillWidth;
+            int baseFillX, fillX, baseFillWidth, fillWidth;
             switch (this.polarity) {
             case BIPOLAR:
-                fillX = (int) (this.width / 2);
-                fillWidth = (int) ((norm - 0.5) * (this.width - 2*PADDING));
+                baseFillX = (int) (this.width / 2);
+                baseFillWidth = (int) ((base - 0.5) * (this.width - 2*PADDING));
+                fillX = baseFillX + baseFillWidth;
+                fillWidth = (int) ((value - base)* (this.width - 2*PADDING));
                 break;
             default:
             case UNIPOLAR:
-                fillX = PADDING;
-                fillWidth = (int) ((this.width - 2*PADDING) * getNormalized());
+                baseFillX = PADDING;
+                baseFillWidth = (int) ((this.width - 2*PADDING) * base);
+                fillX = baseFillX + baseFillWidth;
+                fillWidth = (int) ((this.width - 2*PADDING) * (value - base));
                 break;
             }
 
+            float topY = this.handleHeight / 2 - GROOVE/2;
+
             // Groove value fill
-            pg.fill(controlColor);
-            pg.rect(fillX, this.handleHeight / 2 - GROOVE/2, fillWidth, GROOVE);
+            pg.fill(baseColor);
+            pg.rect(baseFillX, topY, baseFillWidth, GROOVE);
+            if (modulated) {
+                pg.fill(valueColor);
+                pg.rect(fillX, topY, fillWidth, GROOVE);
+            }
+
+            // If we're modulating accross the center, draw a small divider
+            if ((base > 0.5 && value < 0.5) || (base < 0.5 && value > 0.5)) {
+                float centerX = this.width / 2; 
+                pg.stroke(ui.theme.getControlBackgroundColor());
+                pg.strokeWeight(1);
+                pg.line(centerX, topY, centerX, topY + GROOVE);
+            }
 
             // Handle
-            pg.fill(0xff5f5f5f);
+            pg.fill(HANDLE_COLOR);
             pg.stroke(ui.theme.getControlBorderColor());
-            pg.rect(handleEdge, PADDING, HANDLE_SIZE, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
+            pg.rect(baseHandleEdge, PADDING, HANDLE_SIZE, this.handleHeight - 2*PADDING, HANDLE_ROUNDING);
             break;
         case VERTICAL:
             pg.rect(this.width / 2 - GROOVE/2, PADDING, GROOVE, this.handleHeight - 2*PADDING);
-            pg.fill(controlColor);
+            int baseFillY;
             int fillY;
+            int baseFillSize;
             int fillSize;
             switch (this.polarity) {
             case BIPOLAR:
-                fillY = (int) (this.handleHeight / 2);
-                fillSize = (int) ((0.5 - norm) * (this.handleHeight - 2*PADDING));
+                baseFillY = (int) (this.handleHeight / 2);
+                fillY = baseFillY;
+                baseFillSize = (int) ((0.5 - base) * (this.handleHeight - 2*PADDING));
+                fillSize = (int) ((0.5 - value) * (this.handleHeight - 2*PADDING));
                 break;
             default:
             case UNIPOLAR:
-                fillSize = (int) (norm * (this.handleHeight - 2*PADDING));
-                fillY = (int) (this.handleHeight - PADDING - fillSize);
+                baseFillSize = (int) (base * (this.handleHeight - 2*PADDING));
+                baseFillY = (int) (this.handleHeight - PADDING - baseFillSize);
+                fillSize = (int) ((value - base) * (this.handleHeight - 2*PADDING));
+                fillY = baseFillY - fillSize;
                 break;
             }
-            pg.rect(this.width / 2 - GROOVE/2, fillY, GROOVE, fillSize);
-            pg.fill(0xff5f5f5f);
+
+            pg.fill(baseColor);
+            pg.rect(this.width / 2 - GROOVE/2, baseFillY, GROOVE, baseFillSize);
+            if (modulated) {
+                pg.fill(valueColor);
+                pg.rect(this.width / 2 - GROOVE/2, fillY, GROOVE, fillSize);
+            }
+
+            pg.fill(HANDLE_COLOR);
             pg.stroke(ui.theme.getControlBorderColor());
-            pg.rect(PADDING, handleEdge, this.width - 2*PADDING, HANDLE_SIZE, HANDLE_ROUNDING);
+            pg.rect(PADDING, baseHandleEdge, this.width - 2*PADDING, HANDLE_SIZE, HANDLE_ROUNDING);
             break;
         }
 
@@ -312,4 +363,5 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
             }
         }
     }
+    
 }
