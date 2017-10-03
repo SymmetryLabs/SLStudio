@@ -658,6 +658,10 @@ public interface UIItemList {
             return this;
         }
 
+        public List<? extends Item> getItems() {
+            return this.impl.items;
+        }
+
         public UIItemList setSingleClickActivate(boolean singleClickActivate) {
             this.impl.setSingleClickActivate(singleClickActivate);
             return this;
@@ -779,6 +783,10 @@ public interface UIItemList {
         public UIItemList setItems(List<? extends Item> items) {
             this.impl.setItems(items);
             return this;
+        }
+
+        public List<? extends Item> getItems() {
+            return this.impl.items;
         }
 
         public UIItemList setSingleClickActivate(boolean singleClickActivate) {
@@ -908,6 +916,13 @@ public interface UIItemList {
      * @return this
      */
     public UIItemList setItems(List<? extends Item> items);
+
+    /**
+     * Get the items in the list
+     *
+     * @return list of items
+     */
+    public List<? extends Item> getItems();
 
     /**
      * Sets whether single-clicks on an item should activate them. Default behavior
