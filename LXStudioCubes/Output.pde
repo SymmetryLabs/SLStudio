@@ -33,12 +33,12 @@ void setupOutputs(final LX lx) {
       //controller.enabled.setValue(false);
     }
     public void itemRemoved(int index, NetworkDevice device) {
-      // final SLController controller = controllers.remove(index);
-      // dispatcher.dispatchEngine(new Runnable() {
-      //   public void run() {
-      //     lx.removeOutput(controller);
-      //   }
-      // });
+      final SLController controller = controllers.remove(index);
+      dispatcher.dispatchEngine(new Runnable() {
+        public void run() {
+          //lx.removeOutput(controller);
+        }
+      });
     }
   });
 
