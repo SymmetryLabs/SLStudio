@@ -1,11 +1,11 @@
-public class UIAudioAnalyzerKnobs extends UIModulator {
+public class UIAudioAnalyzerKnobs extends heronarts.p3lx.ui.studio.modulation.UIModulator {
 
   private final static int TOP_PADDING = 4;
   private final static int X_SPACING = UIKnob.WIDTH + 1;
   private final static int Y_SPACING = UIKnob.HEIGHT + TOP_PADDING;
 
   public UIAudioAnalyzerKnobs(UI ui, LX lx, AudioAnalyzerKnobs audioAnalyzerKnobs, float x, float y, float w) {
-    super(ui, lx, audioAnalyzerKnobs, x, y, w, (UIKnob.HEIGHT + TOP_PADDING)*2);
+    super(ui, lx, audioAnalyzerKnobs, true, x, y, w, (UIKnob.HEIGHT + TOP_PADDING)*2);
     //setLayout(UI2dContainer.Layout.HORIZONTAL);
     setChildMargin(0);
     new UIKnob(audioAnalyzerKnobs.rms)

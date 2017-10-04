@@ -418,10 +418,17 @@ public class MappingMode {
     // this.displayOrientation = new BooleanParameter("displayOrientation", false)
     //  .setDescription("Mapping Mode: display colors on strips to indicate it's orientation");
 
-    for (Cube cube : model.cubes)
+    for (Cube cube : model.cubes) {
       fixturesMappedButNotOnNetwork.add(cube.id);
+    }
 
-    this.selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", fixturesMappedButNotOnNetwork.toArray());
+    // this is dumb
+    String[] stringArr = new String[fixturesMappedButNotOnNetwork.size()];
+    for (int i = 0; i < stringArr.length; i++) {
+      stringArr[i] = fixturesMappedButNotOnNetwork.get(i);
+    }
+
+    this.selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", stringArr);
     this.selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", new String[] {"-"});
 
     controllers.addListener(new ListListener<SLController>() {
@@ -433,11 +440,18 @@ public class MappingMode {
           fixturesOnNetworkButNotMapped.add(c.cubeId);
         }
 
-        Object[] arr1 = fixturesMappedAndOnTheNetwork.toArray();
-        Object[] arr2 = fixturesOnNetworkButNotMapped.toArray();
+        String[] stringArr1 = new String[fixturesMappedAndOnTheNetwork.size()];
+        for (int i = 0; i < stringArr1.length; i++) {
+          stringArr1[i] = fixturesMappedAndOnTheNetwork.get(i);
+        }
 
-        selectedMappedFixture.setObjects(arr1.length > 0 ? arr1 : new String[] {"-"});
-        selectedUnMappedFixture.setObjects(arr2.length > 0 ? arr2 : new String[] {"-"});
+        String[] stringArr2 = new String[fixturesOnNetworkButNotMapped.size()];
+        for (int i = 0; i < stringArr2.length; i++) {
+          stringArr2[i] = fixturesOnNetworkButNotMapped.get(i);
+        }
+
+        selectedMappedFixture.setOptions(stringArr1.length > 0 ? stringArr1 : new String[] {"-"});
+        selectedUnMappedFixture.setOptions(stringArr2.length > 0 ? stringArr2 : new String[] {"-"});
       }
       void itemRemoved(final int index, final SLController c) {}
     });

@@ -1,12 +1,8 @@
-import java.io.File;
-
-import com.google.gson.JsonObject;
-import processing.core.PApplet;
-import processing.event.KeyEvent;
+import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 public class SLStudio extends P3LX {
 
-  public static final String COPYRIGHT = "SLStudio | Symmetry Labs";
+  public static final String COPYRIGHT = "Symmetry Labs";
 
   public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
@@ -65,16 +61,18 @@ public class SLStudio extends P3LX {
           } else if (keyChar == '?' && keyEvent.isShiftDown()) {
             toggleHelpBar = true;
           } else if (keyCode == java.awt.event.KeyEvent.VK_M && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+            if (keyEvent.isShiftDown()) {
+              if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
+                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+              } else {
+                lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
+              }
             } else {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
-            }
-          } else if ((keyCode == java.awt.event.KeyEvent.VK_COMMA) && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-            } else {
-              lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+              if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
+                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
+              } else {
+                lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
+              }
             }
           }
         }
@@ -180,12 +178,17 @@ public class SLStudio extends P3LX {
     private static final String KEY_AUDIO_EXPANDED = "audioExpanded";
     private static final String KEY_PALETTE_EXPANDED = "paletteExpanded";
     private static final String KEY_MODULATORS_EXPANDED = "modulatorExpanded";
+    private static final String KEY_ENGINE_EXPANDED = "engineExpanded";
+    private static final String KEY_CAMERA_EXPANDED = "cameraExpanded";
     private static final String KEY_CLIP_VIEW_VISIBLE = "clipViewVisible";
+    private static final String KEY_PREVIEW = "preview";
 
     @Override
     public void save(LX lx, JsonObject object) {
       object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
       object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
+      object.addProperty(KEY_ENGINE_EXPANDED, this.leftPane.engine.isExpanded());
+      object.addProperty(KEY_CAMERA_EXPANDED, this.leftPane.camera.isExpanded());
       object.addProperty(KEY_CLIP_VIEW_VISIBLE, this.clipViewVisible);
       JsonObject modulatorObj = new JsonObject();
       for (UIObject child : this.rightPane.modulation) {
@@ -195,6 +198,7 @@ public class SLStudio extends P3LX {
         }
       }
       object.add(KEY_MODULATORS_EXPANDED, modulatorObj);
+      object.add(KEY_PREVIEW, LXSerializable.Utils.toObject(lx, ui.preview));
     }
 
     @Override
@@ -204,6 +208,12 @@ public class SLStudio extends P3LX {
       }
       if (object.has(KEY_PALETTE_EXPANDED)) {
         this.leftPane.palette.setExpanded(object.get(KEY_PALETTE_EXPANDED).getAsBoolean());
+      }
+      if (object.has(KEY_ENGINE_EXPANDED)) {
+        this.leftPane.engine.setExpanded(object.get(KEY_ENGINE_EXPANDED).getAsBoolean());
+      }
+      if (object.has(KEY_CAMERA_EXPANDED)) {
+        this.leftPane.camera.setExpanded(object.get(KEY_CAMERA_EXPANDED).getAsBoolean());
       }
       if (object.has(KEY_CLIP_VIEW_VISIBLE)) {
         setClipViewVisible(object.get(KEY_CLIP_VIEW_VISIBLE).getAsBoolean());
@@ -220,10 +230,14 @@ public class SLStudio extends P3LX {
           }
         }
       }
+      if (object.has(KEY_PREVIEW)) {
+        ui.preview.load(lx, object.getAsJsonObject(KEY_PREVIEW));
+      }
     }
   }
 
-  private static final String DEFAULT_FILE_NAME = "default.lxp";
+  private static final String DEFAULT_PROJECT_FILE = "default.lxp";
+  private static final String PROJECT_FILE_NAME = ".lxproject";
   private static final String KEY_UI = "ui";
 
   public final UI ui;
@@ -238,12 +252,35 @@ public class SLStudio extends P3LX {
     onUIReady(this, this.ui);
     registerExternal(KEY_UI, this.ui);
 
-    File file = this.applet.saveFile(DEFAULT_FILE_NAME);
-    if (file.exists()) {
-      loadProject(file);
+    try {
+      File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
+      if (projectFile.exists()) {
+        String[] lines = this.applet.loadStrings(PROJECT_FILE_NAME);
+        if (lines != null && lines.length > 0) {
+          File file = this.applet.saveFile(lines[0]);
+          if (file.exists()) {
+            openProject(file);
+          }
+        }
+      } else {
+        File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
+        if (defaultProject.exists()) {
+          openProject(defaultProject);
+        }
+      }
+    } catch (Exception x) {
+      // ignored
     }
 
     this.engine.setThreaded(multiThreaded);
+  }
+
+  @Override
+  protected void setProject(File file, ProjectListener.Change change) {
+    super.setProject(file, change);
+    if (file != null) {
+      this.applet.saveStrings(PROJECT_FILE_NAME, new String[] { file.getName() });
+    }
   }
 
   @Override

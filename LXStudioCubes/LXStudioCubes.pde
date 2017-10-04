@@ -10,6 +10,7 @@ public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
 
+
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
 
@@ -25,7 +26,7 @@ void setup() {
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
 
-  lx = new SLStudio(this, model) {
+  lx = new SLStudio(this, model, true) {
     @Override
     protected void initialize(SLStudio lx, SLStudio.UI ui) {
       // if (envelopOn) {
