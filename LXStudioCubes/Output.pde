@@ -47,8 +47,8 @@ void setupOutputs(final LX lx) {
 
 
   try {
-    final String PIXLITE1_IP = "192.168.1.110";
-    final String PIXLITE2_IP = "192.168.1.140";
+    final String PIXLITE1_IP = "192.168.1.120";
+    final String PIXLITE2_IP = "192.168.1.62";
 
    /** 
     * PixLite 1

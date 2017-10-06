@@ -66,9 +66,9 @@ RingChandelierConfig levelRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 0, 0},
   new RingConfig[] {
-    // new RingConfig("p2r1", new float[] {0,  0, 0}, new float[] {90, 0, 0}, 87, 3.5),
-    // new RingConfig("p2r2", new float[] {0, 10, 0}, new float[] {90, 0, 0}, 180, 7.5),
-    // new RingConfig("p2r3", new float[] {0, 20, 0}, new float[] {90, 0, 0}, 268, 11)
+    new RingConfig("p2r1", new float[] {0,  0, 0}, new float[] {90, 0, 0}, 87, 3.5),
+    new RingConfig("p2r2", new float[] {0, 10, 0}, new float[] {90, 0, 0}, 180, 7.5),
+    new RingConfig("p2r3", new float[] {0, 20, 0}, new float[] {90, 0, 0}, 268, 11)
   }
 );
 
@@ -77,9 +77,9 @@ RingChandelierConfig rotatedRingsConfig = new RingChandelierConfig(
   new float[] {65, 0, 0},
   new float[] {180, -20, 0},
   new RingConfig[] {
-    // new RingConfig("p1r1", new float[] {0, 0, 0}, new float[] {220, 0, 0}, 87, 3.5),
-    // new RingConfig("p1r2", new float[] {0, 0, 0}, new float[] {90, -35, 0}, 180, 7.5),
-    // new RingConfig("p1r3", new float[] {0, 0, 0}, new float[] {90,  35, 0}, 268, 11)
+    new RingConfig("p1r1", new float[] {0, 0, 0}, new float[] {220, 0, 0}, 87, 3.5),
+    new RingConfig("p1r2", new float[] {0, 0, 0}, new float[] {90, -35, 0}, 180, 7.5),
+    new RingConfig("p1r3", new float[] {0, 0, 0}, new float[] {90,  35, 0}, 268, 11)
   }
 );
 /*-------------------------------------------------------------------------*/
