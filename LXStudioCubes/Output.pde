@@ -45,10 +45,9 @@ void setupOutputs(final LX lx) {
   lx.addOutput(new SLController(lx, "10.200.1.255")); // 192.168.1.110?
   //lx.addOutput(new LIFXOutput());
 
-
   try {
-    final String PIXLITE1_IP = "192.168.1.62";
-    final String PIXLITE2_IP = "192.168.1.120";
+    final String PIXLITE1_IP = "192.168.1.62"; // unlevel
+    final String PIXLITE2_IP = "192.168.1.120"; // level
 
    /** 
     * PixLite 1
@@ -70,7 +69,7 @@ void setupOutputs(final LX lx) {
 
     // Add the pixlites
     lx.addOutput(pixlite1);
-    //lx.addOutput(pixlite2);
+    lx.addOutput(pixlite2);
 
   } catch (SocketException e) {
     e.printStackTrace();

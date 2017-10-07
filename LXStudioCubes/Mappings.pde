@@ -47,7 +47,7 @@ RingChandelierConfig upstairsRingsConfig = new RingChandelierConfig(
   new float[] {0, 0, 0},
   new float[] {0, 15, 0},
   new RingConfig[] {
-    new RingConfig("512", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 270, 12)
+    new RingConfig("600", new float[] {0, 0, 0}, new float[] {90, 0, 0}, 270, 12)
   }
 );
 /*-------------------------------------------------------------------------*/
@@ -137,20 +137,20 @@ static final float cubesRotationZ = 0;
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-  new TowerConfig(0, 0,  0, 0,  0-45, 0, new String[] {"155"}),
-  new TowerConfig(-3, 24, -4, 0, -20, 0, new String[] {"21"}),
-  new TowerConfig(0, 48, 0, 0,  0-45, 0, new String[] {"2"}),
-  new TowerConfig(-3, 72, -4, 0, -20, 0, new String[] {"72"}),
+  new TowerConfig(0, 0,  0, 0,  0-45, 0, new String[] {"55"}),
+  new TowerConfig(-3, 24, -4, 0, -20, 0, new String[] {"1"}),
+  new TowerConfig(0, 48, 0, 0,  0-45, 0, new String[] {"170"}),
+  new TowerConfig(-3, 72, -4, 0, -20, 0, new String[] {"189"}),
 
-  new TowerConfig(40+0, 0,  0, 0,  0-45, 0, new String[] {"148"}),
-  new TowerConfig(40+-3, 24, -4, 0, -20, 0, new String[] {"386"}),
-  new TowerConfig(40+0, 48, 0, 0,  0-45, 0, new String[] {"195"}),
-  new TowerConfig(40+-3, 72, -4, 0, -20, 0, new String[] {"102"}),
+  new TowerConfig(40+0, 0,  0, 0,  0-45, 0, new String[] {"180"}),
+  new TowerConfig(40+-3, 24, -4, 0, -20, 0, new String[] {"362"}),
+  new TowerConfig(40+0, 48, 0, 0,  0-45, 0, new String[] {"163"}),
+  new TowerConfig(40+-3, 72, -4, 0, -20, 0, new String[] {"134"}),
 
-  new TowerConfig(80+0, 0,  0, 0,  0-45, 0, new String[] {"124"}),
-  new TowerConfig(80+-3, 24, -4, 0, -20, 0, new String[] {"388"}),
-  new TowerConfig(80+0, 48, 0, 0,  0-45, 0, new String[] {"399"}),
-  new TowerConfig(80+-3, 72, -4, 0, -20, 0, new String[] {"205"}),
+  new TowerConfig(80+0, 0,  0, 0,  0-45, 0, new String[] {"206"}),
+  new TowerConfig(80+-3, 24, -4, 0, -20, 0, new String[] {"44"}),
+  new TowerConfig(80+0, 48, 0, 0,  0-45, 0, new String[] {"184"}),
+  new TowerConfig(80+-3, 72, -4, 0, -20, 0, new String[] {"35"}),
    
 };
 
