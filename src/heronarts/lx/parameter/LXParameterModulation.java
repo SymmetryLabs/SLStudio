@@ -37,6 +37,10 @@ public abstract class LXParameterModulation extends LXComponent {
     // Hack so that Processing IDE can access it...
     public final ColorParameter clr;
 
+    public final BooleanParameter enabled =
+        new BooleanParameter("Enabled", true)
+        .setDescription("Whether this modulation is enabled");
+
     protected LXParameterModulation(LXParameter source, LXParameter target) {
         this.source = source;
         this.target = target;
@@ -47,6 +51,7 @@ public abstract class LXParameterModulation extends LXComponent {
             this.color = component.modulationColor;
         }
         this.clr = this.color;
+        addParameter("enabled", this.enabled);
     }
 
     @Override
