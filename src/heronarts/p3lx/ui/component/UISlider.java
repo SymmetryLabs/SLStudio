@@ -99,24 +99,19 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
         double base = getNormalized();
         boolean modulated = base != value;
         int baseHandleEdge;
-        int handleEdge;
         float grooveDim;
         switch (this.direction) {
         case HORIZONTAL:
             baseHandleEdge = (int) Math.round(PADDING + base * (this.width - 2*PADDING - HANDLE_SIZE));
-            handleEdge = (int) Math.round(PADDING + value * (this.width - 2*PADDING - HANDLE_SIZE));
             grooveDim = this.width - 2*PADDING;
             break;
         default:
         case VERTICAL:
             baseHandleEdge = (int) Math.round(PADDING + (1 - base) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
-            handleEdge =  (int) Math.round(PADDING + (1 - value) * (this.handleHeight - 2*PADDING - HANDLE_SIZE));
-
             grooveDim = this.handleHeight - 2*PADDING;
             break;
         }
         int baseHandleCenter = baseHandleEdge + 1 + HANDLE_SIZE/2;
-        int handleCenter = handleEdge + 1 + HANDLE_SIZE/2;
 
         // Modulations!
         if (this.parameter instanceof CompoundParameter) {
@@ -228,7 +223,7 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
 
             // If we're modulating accross the center, draw a small divider
             if ((base > 0.5 && value < 0.5) || (base < 0.5 && value > 0.5)) {
-                float centerX = this.width / 2; 
+                float centerX = this.width / 2;
                 pg.stroke(ui.theme.getControlBackgroundColor());
                 pg.strokeWeight(1);
                 pg.line(centerX, topY, centerX, topY + GROOVE);
@@ -363,5 +358,5 @@ public class UISlider extends UICompoundParameterControl implements UIFocus {
             }
         }
     }
-    
+
 }
