@@ -270,7 +270,8 @@ public abstract class UIModulator extends UI2dContainer implements UIMouseFocus,
         if (mappingHeight > 0 && contentHeight > 0) {
             padding += PADDING;
         }
-        UIModulator.this.setHeight(expandedHeight = CONTENT_Y + contentHeight + mappingHeight + padding);
+        this.expandedHeight = CONTENT_Y + contentHeight + mappingHeight + padding;
+        UIModulator.this.setHeight(this.expanded ? this.expandedHeight : CONTENT_Y);
     }
 
     public UIModulator addModulation(LXCompoundModulation modulation) {
