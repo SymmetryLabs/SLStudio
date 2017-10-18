@@ -188,7 +188,7 @@ public class SLStudio extends P3LX {
       object.addProperty(KEY_AUDIO_EXPANDED, this.leftPane.audio.isExpanded());
       object.addProperty(KEY_PALETTE_EXPANDED, this.leftPane.palette.isExpanded());
       object.addProperty(KEY_ENGINE_EXPANDED, this.leftPane.engine.isExpanded());
-      object.addProperty(KEY_CAMERA_EXPANDED, this.leftPane.camera.isExpanded());
+      //object.addProperty(KEY_CAMERA_EXPANDED, this.leftPane.camera.isExpanded());
       object.addProperty(KEY_CLIP_VIEW_VISIBLE, this.clipViewVisible);
       JsonObject modulatorObj = new JsonObject();
       for (UIObject child : this.rightPane.modulation) {

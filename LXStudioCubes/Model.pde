@@ -37,11 +37,15 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(cubeArr, strips));
+  public final Heart heart;
+
+  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, Heart heart) {
+    super(new Fixture(cubeArr, strips, heart));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
+
+    this.heart = heart;
 
     // Make unmodifiable accessors to the model data
     List<Tower> towerList = new ArrayList<Tower>();
@@ -77,7 +81,7 @@ public static class SLModel extends LXModel {
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(Cube[] cubeArr, List<Strip> strips, Heart heart) {
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -89,6 +93,9 @@ public static class SLModel extends LXModel {
         for (LXPoint point : strip.points) {
           this.points.add(point);
         }
+      }
+      for (LXPoint p : heart.points) {
+        this.points.add(p);
       }
     }
   }
@@ -106,6 +113,14 @@ public static class SLModel extends LXModel {
   public Cube getCubeById(String id) {
     return this.cubeTable.get(id);
   }
+}
+
+public static class Heart extends LXModel {
+
+  public Heart(List<LXPoint> points) {
+    super(points);
+  }
+
 }
 
 /**

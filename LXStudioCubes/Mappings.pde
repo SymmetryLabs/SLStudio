@@ -19,7 +19,7 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 90;
 static final float globalRotationZ = 0;
 
 static final float CUBE_WIDTH = 24;
@@ -33,6 +33,8 @@ static final float TOWER_RISER = 14;
 static final float SP = 24;
 static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
+static final float INCHES_PER_METER = 39.3701;
+
 // static final BulbConfig[] BULB_CONFIG = {
 //     // new BulbConfig("lifx-1", -50, 50, -30),
 //     // new BulbConfig("lifx-2", 0, 50, 0),
@@ -43,89 +45,89 @@ static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-    // left
-    new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-      "22", "204"
-      }),
+   //  // left
+   //  new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
+   //    "22", "204"
+   //    }),
 
-    new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
-      "86"
-      }),
+   //  new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
+   //    "86"
+   //    }),
 
-    new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
-      "5"
-      }),
+   //  new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
+   //    "5"
+   //    }),
 
-   new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-      "25", "199", "177"
-      }),
+   // new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
+   //    "25", "199", "177"
+   //    }),
 
-   new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
-      "94"
-      }),
+   // new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
+   //    "94"
+   //    }),
 
-   new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
-      "90"
-      }),
+   // new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
+   //    "90"
+   //    }),
 
-   new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
-      "64"
-      }),
+   // new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
+   //    "64"
+   //    }),
 
-    // left tower of 5   
-    new TowerConfig(0, 0, 0, new String[] {   
-      "19", "190", "121", "1", "103"    
-    }),   
-    new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
-    new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
-    new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
-    new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
+   //  // left tower of 5   
+   //  new TowerConfig(0, 0, 0, new String[] {   
+   //    "19", "190", "121", "1", "103"    
+   //  }),   
+   //  new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
+   //  new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
+   //  new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
+   //  new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
+   //  new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
    
-    new TowerConfig(SP*2.0, 0, 0, new String[] {    
-      "6", "132", "61", "54"    
-    }),   
+   //  new TowerConfig(SP*2.0, 0, 0, new String[] {    
+   //    "6", "132", "61", "54"    
+   //  }),   
 
-    new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
+   //  new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
+   //  new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
      
-    // middle tower of 5    
-    new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
-      "111", "166", "187", "158", "101"   
-    }),  
+   //  // middle tower of 5    
+   //  new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
+   //    "111", "166", "187", "158", "101"   
+   //  }),  
 
-    new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
-    new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
-    new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
-    new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
+   //  new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
+   //  new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
+   //  new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
+   //  new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
      
-    new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
-      "102", "156", "13", "82"    
-    }),   
-    new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
-    new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
-    new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
-    new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
-    new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
+   //  new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
+   //    "102", "156", "13", "82"    
+   //  }),   
+   //  new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
+   //  new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
+   //  new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
+   //  new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
+   //  new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
      
-    // right tower of 5   
-    new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
-      "183", "180", "57", "51", "108"   
-    }),   
-    new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
-    new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
-    new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
+   //  // right tower of 5   
+   //  new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
+   //    "183", "180", "57", "51", "108"   
+   //  }),   
+   //  new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
+   //  new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
+   //  new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
      
-    new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
-     "100", "85", "110zAQ  AZQ"    
-    }),   
-    new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
-    new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
+   //  new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
+   //   "100", "85", "110zAQ  AZQ"    
+   //  }),   
+   //  new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
+   //  new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
     
-    // table cubes    
-    new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
-    new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
-    new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
+   //  // table cubes    
+   //  new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
+   //  new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
+   //  new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
 };
 
 
@@ -223,7 +225,7 @@ public SLModel buildModel() {
         macToPhysid.put(entry.getValue().getAsString(), entry.getKey());
         physidToMac.put(entry.getKey(), entry.getValue().getAsString());
       }
-    } catch (JsonSyntaxException e) {
+    }  catch (JsonSyntaxException e) {
       e.printStackTrace();
     }
   }
@@ -234,6 +236,37 @@ public SLModel buildModel() {
   globalTransform.rotateY(globalRotationY * PI / 180.);
   globalTransform.rotateX(globalRotationX * PI / 180.);
   globalTransform.rotateZ(globalRotationZ * PI / 180.);
+
+  /* Heart ----------------------------------------------------------*/
+  List<LXPoint> heartPoints = new ArrayList<LXPoint>();
+
+  byte[] heartBytes = loadBytes("data/heart.json");
+  if (heartBytes != null) {
+    try {
+      JsonObject heartJson = new Gson().fromJson(new String(heartBytes), JsonObject.class);
+      JsonArray heartPointsJson = (JsonArray)heartJson.get("points");
+
+      for (JsonElement heartPointJsonElement : heartPointsJson) {
+        JsonArray heartPointJsonArray = (JsonArray)heartPointJsonElement;
+        float x = heartPointJsonArray.get(0).getAsFloat() * INCHES_PER_METER;
+        float y = heartPointJsonArray.get(1).getAsFloat() * INCHES_PER_METER;
+        float z = heartPointJsonArray.get(2).getAsFloat() * INCHES_PER_METER;
+
+        globalTransform.push();
+        globalTransform.translate(x, y, z);
+
+        heartPoints.add(new LXPoint(globalTransform.x(), globalTransform.y(), globalTransform.z()));
+
+        globalTransform.pop();
+      }
+
+    } catch (JsonSyntaxException e) {
+      e.printStackTrace();
+    }
+  }
+
+  Heart heart = new Heart(heartPoints);
+  /*-----------------------------------------------------------------*/
 
   /* Cubes ----------------------------------------------------------*/
   List<Tower> towers = new ArrayList<Tower>();
@@ -281,7 +314,7 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips);
+  return new SLModel(towers, allCubesArr, strips, heart);
 }
 
 public SLModel getModel() {
