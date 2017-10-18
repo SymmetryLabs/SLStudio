@@ -37,15 +37,13 @@ public static class SLModel extends LXModel {
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
 
-  public final Heart heart;
+  public final List<LXModel> objModels;
 
-  public SLModel(List<Tower> towers, Cube[] cubeArr, List<Strip> strips, Heart heart) {
-    super(new Fixture(cubeArr, strips, heart));
+  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
+    super(new Fixture(objModels, cubeArr, strips));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
-
-    this.heart = heart;
 
     // Make unmodifiable accessors to the model data
     List<Tower> towerList = new ArrayList<Tower>();
@@ -70,18 +68,25 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips)
+    for (Strip strip : strips) {
       stripList.add(strip);
+    }
 
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
+    this.objModels = objModels;
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(Cube[] cubeArr, List<Strip> strips, Heart heart) {
+    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips) {
+      for (LXModel model : objModels) {
+        for (LXPoint point : model.points) {
+          this.points.add(point);
+        }
+      }
       for (Cube cube : cubeArr) { 
         if (cube != null) { 
           for (LXPoint point : cube.points) { 
@@ -93,9 +98,6 @@ public static class SLModel extends LXModel {
         for (LXPoint point : strip.points) {
           this.points.add(point);
         }
-      }
-      for (LXPoint p : heart.points) {
-        this.points.add(p);
       }
     }
   }

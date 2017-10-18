@@ -22,6 +22,14 @@ static final float globalRotationX = 0;
 static final float globalRotationY = 90;
 static final float globalRotationZ = 0;
 
+static final float objOffsetX = 0;
+static final float objOffsetY = 0;
+static final float objOffsetZ = 0;
+
+static final float objRotationX = 0;
+static final float objRotationY = 90;
+static final float objRotationZ = 0;
+
 static final float CUBE_WIDTH = 24;
 static final float CUBE_HEIGHT = 24;
 static final float TOWER_WIDTH = 24;
@@ -237,37 +245,6 @@ public SLModel buildModel() {
   globalTransform.rotateX(globalRotationX * PI / 180.);
   globalTransform.rotateZ(globalRotationZ * PI / 180.);
 
-  /* Heart ----------------------------------------------------------*/
-  List<LXPoint> heartPoints = new ArrayList<LXPoint>();
-
-  byte[] heartBytes = loadBytes("data/heart.json");
-  if (heartBytes != null) {
-    try {
-      JsonObject heartJson = new Gson().fromJson(new String(heartBytes), JsonObject.class);
-      JsonArray heartPointsJson = (JsonArray)heartJson.get("points");
-
-      for (JsonElement heartPointJsonElement : heartPointsJson) {
-        JsonArray heartPointJsonArray = (JsonArray)heartPointJsonElement;
-        float x = heartPointJsonArray.get(0).getAsFloat() * INCHES_PER_METER;
-        float y = heartPointJsonArray.get(1).getAsFloat() * INCHES_PER_METER;
-        float z = heartPointJsonArray.get(2).getAsFloat() * INCHES_PER_METER;
-
-        globalTransform.push();
-        globalTransform.translate(x, y, z);
-
-        heartPoints.add(new LXPoint(globalTransform.x(), globalTransform.y(), globalTransform.z()));
-
-        globalTransform.pop();
-      }
-
-    } catch (JsonSyntaxException e) {
-      e.printStackTrace();
-    }
-  }
-
-  Heart heart = new Heart(heartPoints);
-  /*-----------------------------------------------------------------*/
-
   /* Cubes ----------------------------------------------------------*/
   List<Tower> towers = new ArrayList<Tower>();
   List<Cube> allCubes = new ArrayList<Cube>();
@@ -314,7 +291,42 @@ public SLModel buildModel() {
     allCubesArr[i] = allCubes.get(i);
   }
 
-  return new SLModel(towers, allCubesArr, strips, heart);
+  /* Obj Importer ----------------------------------------------------*/
+  List<LXModel> objModels = new ArrayList<LXModel>();
+
+  File[] dataDirectoryFiles = new File("data").listFiles();
+
+  for (File file : dataDirectoryFiles) {
+    System.out.println("File: " + file.getName());
+  }
+
+  // byte[] heartBytes = loadBytes("data/heart.json");
+  // if (heartBytes != null) {
+  //   try {
+  //     JsonObject heartJson = new Gson().fromJson(new String(heartBytes), JsonObject.class);
+  //     JsonArray heartPointsJson = (JsonArray)heartJson.get("points");
+
+  //     for (JsonElement heartPointJsonElement : heartPointsJson) {
+  //       JsonArray heartPointJsonArray = (JsonArray)heartPointJsonElement;
+  //       float x = heartPointJsonArray.get(0).getAsFloat() * INCHES_PER_METER;
+  //       float y = heartPointJsonArray.get(1).getAsFloat() * INCHES_PER_METER;
+  //       float z = heartPointJsonArray.get(2).getAsFloat() * INCHES_PER_METER;
+
+  //       globalTransform.push();
+  //       globalTransform.translate(x, y, z);
+
+  //       heartPoints.add(new LXPoint(globalTransform.x(), globalTransform.y(), globalTransform.z()));
+
+  //       globalTransform.pop();
+  //     }
+
+  //   } catch (JsonSyntaxException e) {
+  //     e.printStackTrace();
+  //   }
+  // }
+  /*-----------------------------------------------------------------*/
+
+  return new SLModel(objModels, towers, allCubesArr, strips);
 }
 
 public SLModel getModel() {
