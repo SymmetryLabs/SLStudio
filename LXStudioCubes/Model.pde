@@ -82,6 +82,7 @@ public static class SLModel extends LXModel {
 
   private static class Fixture extends LXAbstractFixture {
     private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips) {
+      println("Number of obj models: " + objModels.size());
       for (LXModel model : objModels) {
         for (LXPoint point : model.points) {
           this.points.add(point);
