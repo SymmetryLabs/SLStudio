@@ -19,7 +19,7 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = 0;
+static final float globalRotationY = -45;
 static final float globalRotationZ = 0;
 
 static final float objOffsetX = 0;
