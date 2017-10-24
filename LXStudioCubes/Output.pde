@@ -220,31 +220,31 @@ class SLController extends LXOutput {
       }
     }
 
-    // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
-    // TODO: refactor here
-    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
-      if (mappingMode.inUnMappedMode()) {
-        if (mappingMode.inDisplayAllMode()) {
-          color col = mappingMode.getUnMappedColor();
+    // // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+    // // TODO: refactor here
+    // if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+    //   if (mappingMode.inUnMappedMode()) {
+    //     if (mappingMode.inDisplayAllMode()) {
+    //       color col = mappingMode.getUnMappedColor();
 
-          for (int i = 0; i < numPixels; i++)
-            setPixel(i, col);
-        } else {
-          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
-            color col = mappingMode.getUnMappedColor();
+    //       for (int i = 0; i < numPixels; i++)
+    //         setPixel(i, col);
+    //     } else {
+    //       if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+    //         color col = mappingMode.getUnMappedColor();
 
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, col);
-          } else {
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-          }
-        }
-      } else {
-        for (int i = 0; i < numPixels; i++)
-          setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-      }
-    }
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, col);
+    //       } else {
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //       }
+    //     }
+    //   } else {
+    //     for (int i = 0; i < numPixels; i++)
+    //       setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //   }
+    // }
 
     // Send the cube data to the cube. yay!
     try { 

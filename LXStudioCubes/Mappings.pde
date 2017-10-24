@@ -294,16 +294,17 @@ public SLModel buildModel() {
   /* Obj Importer ----------------------------------------------------*/
   List<LXModel> objModels = new ObjImporter("data", globalTransform).getModels();
 
-  objModels.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 0, 0, 0, 0, 0, 0));
-  objModels.add(new Sun(globalTransform, Sun.Type.ONE_HALF, 24*12, 0, 6*12, 0, 0, 0));
-  objModels.add(new Sun(globalTransform, Sun.Type.ONE_HALF, 32*12, 0, -6*12, 0, 0, 0));
-  objModels.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 45*12, 0, 10*12, 0, 0, 0));
-  objModels.add(new Sun(globalTransform, Sun.Type.THREE_QUARTERS, 55*12, 0, 2*12, 0, 0, 0));
-  objModels.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 68*12, 0, -6*12, 0, 0, 0));
-  objModels.add(new Sun(globalTransform, Sun.Type.ONE_HALF, 80*12, 0, 6*12, 0, 0, 0));
-  objModels.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 92*12, 0, -3*12, 0, 0, 0));
+  List<Sun> suns = new ArrayList<Sun>();
+  suns.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 0, 0, 0, 0, 0, 0));
+  suns.add(new Sun(globalTransform, Sun.Type.ONE_HALF, 24*12, 0, 6*12, 0, 0, 0));
+  suns.add(new Sun(globalTransform, Sun.Type.ONE_HALF, 32*12, 0, -6*12, 0, 0, 0));
+  suns.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 45*12, 0, 10*12, 0, 0, 0));
+  suns.add(new Sun(globalTransform, Sun.Type.THREE_QUARTERS, 55*12, 0, 2*12, 0, 0, 0));
+  suns.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 68*12, 0, -6*12, 0, 0, 0));
+  suns.add(new Sun(globalTransform, Sun.Type.ONE_HALF, 80*12, 0, 6*12, 0, 0, 0));
+  suns.add(new Sun(globalTransform, Sun.Type.ONE_QUARTER, 92*12, 0, -3*12, 0, 0, 0));
 
-  return new SLModel(objModels, towers, allCubesArr, strips);
+  return new SLModel(objModels, towers, allCubesArr, strips, suns);
 }
 
 public SLModel getModel() {

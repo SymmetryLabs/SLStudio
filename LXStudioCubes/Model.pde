@@ -39,8 +39,10 @@ public static class SLModel extends LXModel {
 
   public final List<LXModel> objModels;
 
-  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(objModels, cubeArr, strips));
+  public final List<Sun> suns;
+
+  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Sun> suns) {
+    super(new Fixture(objModels, cubeArr, strips, suns));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -78,10 +80,11 @@ public static class SLModel extends LXModel {
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
     this.objModels = objModels;
+    this.suns = suns;
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips, List<Sun> suns) {
       println("Number of obj models: " + objModels.size());
       for (LXModel model : objModels) {
         for (LXPoint point : model.points) {
@@ -97,6 +100,11 @@ public static class SLModel extends LXModel {
       } 
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
+          this.points.add(point);
+        }
+      }
+      for (Sun sun : suns) {
+        for (LXPoint point : sun.points) {
           this.points.add(point);
         }
       }
