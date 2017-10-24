@@ -179,6 +179,75 @@ public static class Tower extends LXModel {
   }
 }
 
+public static class Sun extends LXModel {
+
+  public final static float RADIUS = 8*12;
+  public final static float DIAMETER = Sun.RADIUS*2;
+
+  private final static int NUM_POINTS_ON_WHOLE_SPHERE = 3000000;
+  private final static float Z_SCALING = 0.3;
+
+  public final Type type;
+
+  public enum Type {
+    ONE_QUARTER (0.25),
+    ONE_HALF (0.5),
+    THREE_QUARTERS (0.75);
+
+    public final float size;
+
+    private Type(float size) {
+      this.size = size;
+    }
+  }
+
+  public Sun(LXTransform transform, Type type, float x, float y, float z, float xRot, float yRot, float zRot) {
+    super(new Fixture(transform, type, x, y, z, xRot, yRot, zRot));
+    this.type = type;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    private Fixture(LXTransform transform, Sun.Type type, float x, float y, float z, float xRot, float yRot, float zRot) {
+      transform.push();
+      transform.translate(x, y, z);
+      transform.rotateX(xRot * PI / 180.);
+      transform.rotateY(yRot * PI / 180.);
+      transform.rotateZ(zRot * PI / 180.);
+
+      double a = 4.0 * Math.PI*(DIAMETER / NUM_POINTS_ON_WHOLE_SPHERE);
+      double d = Math.sqrt(a);
+      int m_theta = (int)Math.round(Math.PI / d);
+      double d_theta = Math.PI / m_theta;
+      double d_phi = a / d_theta;
+
+      for (int m = 0; m < m_theta; m++) {
+        double theta = Math.PI * (m + 0.5) / m_theta;
+        int m_phi = (int)Math.round(2.0 * Math.PI * Math.sin(theta) / d_phi);
+
+        for (int n = 0; n < m_phi; n++) {
+          transform.push();
+
+          double phi = 2.0 * Math.PI * n / m_phi;
+          float px = (float)(RADIUS + RADIUS * Math.sin(theta) * Math.cos(phi));
+          float py = (float)(RADIUS + RADIUS * Math.sin(theta) * Math.sin(phi));
+          float pz = (float)(RADIUS + RADIUS * Math.cos(theta)) * Z_SCALING;
+
+          transform.translate(px, py - ((1 - type.size) * DIAMETER), pz);
+
+          if (py > (1 - type.size) * DIAMETER) {
+            this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
+          }
+          transform.pop();
+        }
+      }
+
+      transform.pop();
+    }
+
+  }
+}
+
 /**
  * Model of a single cube, which has an orientation and position on the
  * car. The position is specified in x,y,z coordinates with rotation. The

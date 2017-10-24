@@ -57,11 +57,11 @@ void setup() {
         mappingMode = new MappingMode(lx);
 
       // Adaptor for mapping osc messages from Essentia to lx osc engine
-      try {
-        lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
-      } catch (SocketException sx) {
-        throw new RuntimeException(sx);
-      } 
+      // try {
+      //   lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
+      // } catch (SocketException sx) {
+      //   throw new RuntimeException(sx);
+      // } 
         
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,

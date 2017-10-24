@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1508364611378,
+  "timestamp": 1508883336310,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 359.0,
+        "color/hue": 195.7894744873047,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -65532,
+        "color": -16728833,
         "period": 5000.0,
         "range": 96.37795275590553,
         "spread": 0.0,
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 214,
@@ -147,18 +147,18 @@
             "parameters": {
               "label": "Noise",
               "Sprk": 0.0,
-              "Wave": 0.0,
+              "Wave": 0.1599999964237213,
               "TrnX": 0.5,
               "TrnY": 0.5,
               "RotX": 0.5,
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.7500000074505806,
-              "Dens": 0.5100000072270632,
-              "Shrp": 0.0,
+              "Fast": 0.5100000128149986,
+              "Dens": 0.029999999329447746,
+              "Shrp": 1.0,
               "Symm": 0,
-              "Anim": 3
+              "Anim": 0
             },
             "modulation": {
               "modulators": [],
@@ -310,11 +310,11 @@
           "release": 100.0,
           "slope": -1.5000000335276127,
           "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
+          "Band-2": 0.023345035542259862,
+          "Band-3": 0.04050651962993823,
+          "Band-4": 0.05421713272492479,
+          "Band-5": 0.06715107380901664,
+          "Band-6": 0.048660104064813026,
           "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
@@ -470,9 +470,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 223.97123230559043,
-        "theta": 0.10200000000000004,
-        "phi": 0.0030000000000000773
+        "radius": 576.0,
+        "theta": -0.018000000000000207,
+        "phi": -0.04200000000000007
       }
     }
   }
