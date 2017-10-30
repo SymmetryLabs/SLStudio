@@ -708,12 +708,18 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
     private static final String KEY_RADIUS = "radius";
     private static final String KEY_THETA = "theta";
     private static final String KEY_PHI = "phi";
+    private static final String KEY_POSITION_X = "positionX";
+    private static final String KEY_POSITION_Y = "positionY";
+    private static final String KEY_POSITION_Z = "positionZ";
 
     @Override
     public void save(LX lx, JsonObject object) {
         object.addProperty(KEY_RADIUS, this.radius.getValue());
         object.addProperty(KEY_THETA, this.theta.getValue());
         object.addProperty(KEY_PHI, this.phi.getValue());
+        object.addProperty(KEY_POSITION_X, this.positionX.getValue());
+        object.addProperty(KEY_POSITION_Y, this.positionY.getValue());
+        object.addProperty(KEY_POSITION_Z, this.positionZ.getValue());
     }
 
     @Override
@@ -726,6 +732,15 @@ public class UI3dContext extends UIObject implements LXSerializable, UITabFocus 
         }
         if (object.has(KEY_PHI)) {
             this.phi.setValue(object.get(KEY_PHI).getAsDouble());
+        }
+        if (object.has(KEY_POSITION_X)) {
+            this.positionX.setValue(object.get(KEY_POSITION_X).getAsDouble());
+        }
+        if (object.has(KEY_POSITION_Y)) {
+            this.positionY.setValue(object.get(KEY_POSITION_Y).getAsDouble());
+        }
+        if (object.has(KEY_POSITION_Z)) {
+            this.positionZ.setValue(object.get(KEY_POSITION_Z).getAsDouble());
         }
 
 
