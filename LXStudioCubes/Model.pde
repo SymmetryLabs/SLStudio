@@ -39,8 +39,10 @@ public static class SLModel extends LXModel {
 
   public final List<LXModel> objModels;
 
-  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(objModels, cubeArr, strips));
+  public final List<Panel> panels;
+
+  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Panel> panels) {
+    super(new Fixture(objModels, cubeArr, strips, panels));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -78,10 +80,12 @@ public static class SLModel extends LXModel {
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
     this.objModels = objModels;
+
+    this.panels = panels;
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips, List<Panel> panels) {
       println("Number of obj models: " + objModels.size());
       for (LXModel model : objModels) {
         for (LXPoint point : model.points) {
@@ -97,6 +101,11 @@ public static class SLModel extends LXModel {
       } 
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
+          this.points.add(point);
+        }
+      }
+      for (Panel panel : panels) {
+        for (LXPoint point : panel.points) {
           this.points.add(point);
         }
       }
@@ -176,6 +185,231 @@ public static class Tower extends LXModel {
     this.cubes = Collections.unmodifiableList(cubeList);
     this.faces = Collections.unmodifiableList(faceList);
     this.strips = Collections.unmodifiableList(stripList);
+  }
+}
+
+public static class HalfHeart extends LXModel {
+
+  private static final float PANEL_PADDING = 12;
+
+  public final String id;
+  public final List<Panel> panels;
+  public final Type type;
+
+  private enum Type {
+    RIGHT, LEFT
+  }
+
+  public HalfHeart(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+    super(new Fixture(id, type, coordinates, rotations, transform));
+    Fixture fixture = (Fixture) this.fixtures.get(0);
+
+    this.id = id;
+    this.type = type;
+    this.panels = Collections.unmodifiableList(fixture.panels);
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    private final List<Panel> panels = new ArrayList<Panel>();
+
+    private Fixture(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+      transform.push();
+      transform.translate(coordinates[0], coordinates[1], coordinates[2]);
+      transform.rotateX(rotations[0] * PI / 180);
+      transform.rotateY(rotations[1] * PI / 180);
+      transform.rotateZ((rotations[2]+45) * PI / 180);
+
+      if (type == Type.RIGHT) {
+        // row 1
+        this.panels.add(new Panel(id + "_panel_1",  Panel.Type.F, new float[] {PANEL_PADDING*0+10, PANEL_PADDING*0,    0}, new float[] {0, 0,  90}, transform));
+        this.panels.add(new Panel(id + "_panel_2",  Panel.Type.A, new float[] {PANEL_PADDING*1,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
+        this.panels.add(new Panel(id + "_panel_3",  Panel.Type.A, new float[] {PANEL_PADDING*2,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
+        this.panels.add(new Panel(id + "_panel_4",  Panel.Type.A, new float[] {PANEL_PADDING*3,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
+        this.panels.add(new Panel(id + "_panel_5",  Panel.Type.A, new float[] {PANEL_PADDING*4,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
+        this.panels.add(new Panel(id + "_panel_6",  Panel.Type.A, new float[] {PANEL_PADDING*5,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
+        this.panels.add(new Panel(id + "_panel_7",  Panel.Type.A, new float[] {PANEL_PADDING*6,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
+        this.panels.add(new Panel(id + "_panel_8",  Panel.Type.A, new float[] {PANEL_PADDING*7,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
+        this.panels.add(new Panel(id + "_panel_9",  Panel.Type.B, new float[] {PANEL_PADDING*8+10, PANEL_PADDING*0+10, 0}, new float[] {0, 0, 180}, transform));
+        this.panels.add(new Panel(id + "_panel_10", Panel.Type.E, new float[] {PANEL_PADDING*9+8,  PANEL_PADDING*0+4,  0}, new float[] {0, 0,  90}, transform));
+
+        // row 2
+        this.panels.add(new Panel(id + "_panel_11", Panel.Type.F, new float[] {22+PANEL_PADDING*0, PANEL_PADDING*1, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel(id + "_panel_12", Panel.Type.A, new float[] {12+PANEL_PADDING*1, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_13", Panel.Type.A, new float[] {12+PANEL_PADDING*2, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_14", Panel.Type.A, new float[] {12+PANEL_PADDING*3, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_15", Panel.Type.A, new float[] {12+PANEL_PADDING*4, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_16", Panel.Type.A, new float[] {12+PANEL_PADDING*5, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_17", Panel.Type.A, new float[] {12+PANEL_PADDING*6, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_18", Panel.Type.A, new float[] {12+PANEL_PADDING*7, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_19", Panel.Type.A, new float[] {12+PANEL_PADDING*8, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_20", Panel.Type.D, new float[] {12+PANEL_PADDING*9+6, PANEL_PADDING*1+10, 0}, new float[] {0, 0,180}, transform));
+
+        // row 3
+        this.panels.add(new Panel(id + "_panel_21", Panel.Type.F, new float[] {34+PANEL_PADDING*0, PANEL_PADDING*2, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel(id + "_panel_22", Panel.Type.A, new float[] {24+PANEL_PADDING*1, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_23", Panel.Type.A, new float[] {24+PANEL_PADDING*2, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_24", Panel.Type.A, new float[] {24+PANEL_PADDING*3, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_25", Panel.Type.A, new float[] {24+PANEL_PADDING*4, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_26", Panel.Type.A, new float[] {24+PANEL_PADDING*5, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_27", Panel.Type.A, new float[] {24+PANEL_PADDING*6, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_28", Panel.Type.A, new float[] {24+PANEL_PADDING*7, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_29", Panel.Type.C, new float[] {24+PANEL_PADDING*8, PANEL_PADDING*2+10, 0}, new float[] {0, 0,-90}, transform));
+
+        // row 4
+        this.panels.add(new Panel(id + "_panel_30", Panel.Type.F, new float[] {46+PANEL_PADDING*0, PANEL_PADDING*3, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel(id + "_panel_31", Panel.Type.A, new float[] {36+PANEL_PADDING*1, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_32", Panel.Type.A, new float[] {36+PANEL_PADDING*2, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_33", Panel.Type.A, new float[] {36+PANEL_PADDING*3, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_34", Panel.Type.A, new float[] {36+PANEL_PADDING*4, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_35", Panel.Type.A, new float[] {36+PANEL_PADDING*5, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_36", Panel.Type.A, new float[] {36+PANEL_PADDING*6, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_37", Panel.Type.A, new float[] {36+PANEL_PADDING*7, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+
+        // row 5
+        this.panels.add(new Panel(id + "_panel_38", Panel.Type.F, new float[] {58+PANEL_PADDING*0, PANEL_PADDING*4, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel(id + "_panel_39", Panel.Type.A, new float[] {48+PANEL_PADDING*1, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_40", Panel.Type.A, new float[] {48+PANEL_PADDING*2, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_41", Panel.Type.A, new float[] {48+PANEL_PADDING*3, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_42", Panel.Type.A, new float[] {48+PANEL_PADDING*4, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_43", Panel.Type.A, new float[] {48+PANEL_PADDING*5, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_44", Panel.Type.B, new float[] {48+PANEL_PADDING*6, PANEL_PADDING*4+10, 0}, new float[] {0, 0,-90}, transform));
+
+        // row 6
+        this.panels.add(new Panel(id + "_panel_45", Panel.Type.F, new float[] {70+PANEL_PADDING*0, PANEL_PADDING*5, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel(id + "_panel_46", Panel.Type.A, new float[] {60+PANEL_PADDING*1, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_47", Panel.Type.A, new float[] {60+PANEL_PADDING*2, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_48", Panel.Type.A, new float[] {60+PANEL_PADDING*3, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_49", Panel.Type.A, new float[] {60+PANEL_PADDING*4, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_50", Panel.Type.E, new float[] {60+PANEL_PADDING*5+6, PANEL_PADDING*5+8, 0}, new float[] {0, 0,180}, transform));
+
+        // row 7
+        this.panels.add(new Panel(id + "_panel_51", Panel.Type.F, new float[] {82+PANEL_PADDING*0, PANEL_PADDING*6, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel(id + "_panel_52", Panel.Type.A, new float[] {72+PANEL_PADDING*1, PANEL_PADDING*6, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_53", Panel.Type.C, new float[] {72+PANEL_PADDING*2, PANEL_PADDING*6, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel(id + "_panel_54", Panel.Type.D, new float[] {72+PANEL_PADDING*3, PANEL_PADDING*6+6, 0}, new float[] {0, 0, -90}, transform));
+      }
+
+      transform.pop();
+    }
+  }
+}
+
+public static class Panel extends LXModel {
+
+  public final String id;
+
+  private enum Type {
+    // from bottom right corners (go from biggest to smallest)
+    A (new float[][] { // square
+      {10, 0 }, { 9, 0 }, { 8, 0 }, { 7, 0 }, { 6, 0 }, { 5, 0 }, { 4, 0 }, { 3, 0 }, { 2, 0 }, { 1, 0 }, { 0, 0 },
+      { 0, 1 }, { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 5, 1 }, { 6, 1 }, { 7, 1 }, { 8, 1 }, { 9, 1 }, {10, 1 },
+      {10, 2 }, { 9, 2 }, { 8, 2 }, { 7, 2 }, { 6, 2 }, { 5, 2 }, { 4, 2 }, { 3, 2 }, { 2, 2 }, { 1, 2 }, { 0, 2 },
+      { 0, 3 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 5, 3 }, { 6, 3 }, { 7, 3 }, { 8, 3 }, { 9, 3 }, {10, 3 },
+      {10, 4 }, { 9, 4 }, { 8, 4 }, { 7, 4 }, { 6, 4 }, { 5, 4 }, { 4, 4 }, { 3, 4 }, { 2, 4 }, { 1, 4 }, { 0, 4 },
+      { 0, 5 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 }, { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 }, {10, 5 },
+      {10, 6 }, { 9, 6 }, { 8, 6 }, { 7, 6 }, { 6, 6 }, { 5, 6 }, { 4, 6 }, { 3, 6 }, { 2, 6 }, { 1, 6 }, { 0, 6 },
+      { 0, 7 }, { 1, 7 }, { 2, 7 }, { 3, 7 }, { 4, 7 }, { 5, 7 }, { 6, 7 }, { 7, 7 }, { 8, 7 }, { 9, 7 }, {10, 7 },
+      {10, 8 }, { 9, 8 }, { 8, 8 }, { 7, 8 }, { 6, 8 }, { 5, 8 }, { 4, 8 }, { 3, 8 }, { 2, 8 }, { 1, 8 }, { 0, 8 },
+      { 0, 9 }, { 1, 9 }, { 2, 9 }, { 3, 9 }, { 4, 9 }, { 5, 9 }, { 6, 9 }, { 7, 9 }, { 8, 9 }, { 9, 9 }, {10, 9 },
+      {10, 10}, { 9, 10}, { 8, 10}, { 7, 10}, { 6, 10}, { 5, 10}, { 4, 10}, { 3, 10}, { 2, 10}, { 1, 10}, { 0, 10}
+    }),
+
+    B (new float[][] { // almost square 1
+      {10, 0 }, { 9, 0 }, { 8, 0 }, { 7, 0 }, { 6, 0 }, { 5, 0 }, { 4, 0 }, { 3, 0 }, { 2, 0 }, { 1, 0 }, { 0, 0 },
+      { 0, 1 }, { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 5, 1 }, { 6, 1 }, { 7, 1 }, { 8, 1 }, { 9, 1 }, {10, 1 },
+      {10, 2 }, { 9, 2 }, { 8, 2 }, { 7, 2 }, { 6, 2 }, { 5, 2 }, { 4, 2 }, { 3, 2 }, { 2, 2 }, { 1, 2 }, { 0, 2 },
+      { 0, 3 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 5, 3 }, { 6, 3 }, { 7, 3 }, { 8, 3 }, { 9, 3 }, {10, 3 },
+      {10, 4 }, { 9, 4 }, { 8, 4 }, { 7, 4 }, { 6, 4 }, { 5, 4 }, { 4, 4 }, { 3, 4 }, { 2, 4 }, { 1, 4 }, { 0, 4 },
+      { 0, 5 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 }, { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 }, {10, 5 },
+      {10, 6 }, { 9, 6 }, { 8, 6 }, { 7, 6 }, { 6, 6 }, { 5, 6 }, { 4, 6 }, { 3, 6 }, { 2, 6 }, { 1, 6 }, { 0, 6 },
+      { 0, 7 }, { 1, 7 }, { 2, 7 }, { 3, 7 }, { 4, 7 }, { 5, 7 }, { 6, 7 }, { 7, 7 }, { 8, 7 }, { 9, 7 }, {10, 7 },
+      {10, 8 }, { 9, 8 }, { 8, 8 }, { 7, 8 }, { 6, 8 }, { 5, 8 }, { 4, 8 }, { 3, 8 }, { 2, 8 }, { 1, 8 },
+      { 4, 9 }, { 5, 9 }, { 6, 9 }, { 7, 9 }, { 8, 9 }, { 9, 9 }, {10, 9 },
+      {10, 10}, { 9, 10}, { 8, 10}, { 7, 10}
+    }),
+
+    C (new float[][] { // almost square 2
+      {10, 0 }, { 9, 0 }, { 8, 0 }, { 7, 0 }, { 6, 0 }, { 5, 0 }, { 4, 0 }, { 3, 0 }, { 2, 0 }, { 1, 0 }, { 0, 0 },
+      { 0, 1 }, { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 5, 1 }, { 6, 1 }, { 7, 1 }, { 8, 1 }, { 9, 1 }, {10, 1 },
+      {10, 2 }, { 9, 2 }, { 8, 2 }, { 7, 2 }, { 6, 2 }, { 5, 2 }, { 4, 2 }, { 3, 2 }, { 2, 2 }, { 1, 2 }, { 0, 2 },
+      { 0, 3 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 5, 3 }, { 6, 3 }, { 7, 3 }, { 8, 3 }, { 9, 3 }, {10, 3 },
+      {10, 4 }, { 9, 4 }, { 8, 4 }, { 7, 4 }, { 6, 4 }, { 5, 4 }, { 4, 4 }, { 3, 4 }, { 2, 4 }, { 1, 4 }, { 0, 4 },
+      { 0, 5 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 }, { 5, 5 }, { 6, 5 }, { 7, 5 }, { 8, 5 }, { 9, 5 }, {10, 5 },
+      {10, 6 }, { 9, 6 }, { 8, 6 }, { 7, 6 }, { 6, 6 }, { 5, 6 }, { 4, 6 }, { 3, 6 }, { 2, 6 }, { 1, 6 }, { 0, 6 },
+      { 0, 7 }, { 1, 7 }, { 2, 7 }, { 3, 7 }, { 4, 7 }, { 5, 7 }, { 6, 7 }, { 7, 7 }, { 8, 7 }, { 9, 7 }, {10, 7 },
+      { 9, 8 }, { 8, 8 }, { 7, 8 }, { 6, 8 }, { 5, 8 }, { 4, 8 }, { 3, 8 }, { 2, 8 }, { 1, 8 }, { 0, 8 },
+      { 0, 9 }, { 1, 9 }, { 2, 9 }, { 3, 9 }, { 4, 9 }, { 5, 9 }, { 6, 9 },
+      { 0, 10}, { 1, 10}, { 2, 10}, { 3, 10}
+    }),
+
+    D (new float[][] { // almost triangle 1
+      { 6, 8 },
+      { 5, 7 }, { 6, 7 },
+      { 6, 6 }, { 5, 6 }, { 4, 6 },
+      { 3, 5 }, { 4, 5 }, { 5, 5 }, { 6, 5 },
+      { 6, 4 }, { 5, 4 }, { 4, 4 }, { 3, 4 }, { 2, 4 },
+      { 2, 3 }, { 3, 3 }, { 4, 3 }, { 5, 3 }, { 6, 3 },
+      { 6, 2 }, { 5, 2 }, { 4, 2 }, { 3, 2 }, { 2, 2 }, { 1, 2 },
+      { 0, 1 }, { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 5, 1 }, { 6, 1 },
+      { 6, 0 }, { 5, 0 }, { 4, 0 }, { 3, 0 }, { 2, 0 }, { 1, 0 }, { 0, 0 }
+    }),
+
+    E (new float[][] { // almost triange 2
+      { 6, 0 },
+      { 5, 1 }, { 6, 1 },
+      { 6, 2 }, { 5, 2 }, { 4, 2 },
+      { 3, 3 }, { 4, 3 }, { 5, 3 }, { 6, 3 },
+      { 6, 4 }, { 5, 4 }, { 4, 4 }, { 3, 4 }, { 2, 4 },
+      { 2, 5 }, { 3, 5 }, { 4, 5 }, { 5, 5 }, { 6, 5 },
+      { 6, 6 }, { 5, 6 }, { 4, 6 }, { 3, 6 }, { 2, 6 }, { 1, 6 },
+      { 0, 7 }, { 1, 7 }, { 2, 7 }, { 3, 7 }, { 4, 7 }, { 5, 7 }, { 6, 7 },
+      { 6, 8 }, { 5, 8 }, { 4, 8 }, { 3, 8 }, { 2, 8 }, { 1, 8 }, { 0, 8 }
+    }),
+
+    F (new float[][] { // triangle
+      { 9, 0 }, { 8, 0 }, { 7, 0 }, { 6, 0 }, { 5, 0 }, { 4, 0 }, { 3, 0 }, { 2, 0 }, { 1, 0 }, { 0, 0 },
+      { 0, 1 }, { 1, 1 }, { 2, 1 }, { 3, 1 }, { 4, 1 }, { 5, 1 }, { 6, 1 }, { 7, 1 }, { 8, 1 },
+      { 7, 2 }, { 6, 2 }, { 5, 2 }, { 4, 2 }, { 3, 2 }, { 2, 2 }, { 1, 2 }, { 0, 2 },
+      { 0, 3 }, { 1, 3 }, { 2, 3 }, { 3, 3 }, { 4, 3 }, { 5, 3 }, { 6, 3 },
+      { 5, 4 }, { 4, 4 }, { 3, 4 }, { 2, 4 }, { 1, 4 }, { 0, 4 },
+      { 0, 5 }, { 1, 5 }, { 2, 5 }, { 3, 5 }, { 4, 5 },
+      { 3, 6 }, { 2, 6 }, { 1, 6 }, { 0, 6 },
+      { 0, 7 }, { 1, 7 }, { 2, 7 },
+      { 1, 8 }, { 0, 8 },
+      { 0, 9 }
+    });
+
+    public final float[][] coordinates;
+
+    private Type(float[][] coordinates) {
+      this.coordinates = coordinates;
+    }
+
+  }
+
+  public Panel(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+    super(new Fixture(type, coordinates, rotations, transform));
+    this.id = id;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+    private Fixture(Panel.Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+      transform.push();
+      transform.translate(coordinates[0], coordinates[1], coordinates[2]);
+      transform.rotateX(rotations[0] * PI / 180);
+      transform.rotateY(rotations[1] * PI / 180);
+      transform.rotateZ(rotations[2] * PI / 180);
+
+      for (int i = 0; i < type.coordinates.length; i++) {
+        transform.push();
+        transform.translate(type.coordinates[i][0], type.coordinates[i][1], 0);
+        this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
+        transform.pop();
+      }
+
+      transform.pop();
+    }
   }
 }
 
