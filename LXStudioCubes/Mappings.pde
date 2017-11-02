@@ -204,9 +204,9 @@ public SLModel buildModel() {
   List<HalfHeart> hearts = new ArrayList<HalfHeart>();
   List<Panel> panels = new ArrayList<Panel>();
   hearts.add(new HalfHeart("half_heart_A", HalfHeart.Type.LEFT, new float[]{0, 0, 0}, new float[] {0, 0, 0}, globalTransform));
-  hearts.add(new HalfHeart("half_heart_B", HalfHeart.Type.RIGHT, new float[]{0, 0, 0}, new float[] {0, 0, 0}, globalTransform));
-  hearts.add(new HalfHeart("half_heart_C", HalfHeart.Type.LEFT, new float[]{0, 0, 5}, new float[] {0, 180, 0}, globalTransform));
-  hearts.add(new HalfHeart("half_heart_D", HalfHeart.Type.RIGHT, new float[]{0, 0, 5}, new float[] {0, 180, 0}, globalTransform));
+  // hearts.add(new HalfHeart("half_heart_B", HalfHeart.Type.RIGHT, new float[]{0, 0, 0}, new float[] {0, 0, 0}, globalTransform));
+  // hearts.add(new HalfHeart("half_heart_C", HalfHeart.Type.LEFT, new float[]{0, 0, 5}, new float[] {0, 180, 0}, globalTransform));
+  // hearts.add(new HalfHeart("half_heart_D", HalfHeart.Type.RIGHT, new float[]{0, 0, 5}, new float[] {0, 180, 0}, globalTransform));
 
   for (HalfHeart heart : hearts) {
     for (Panel panel : heart.panels) {

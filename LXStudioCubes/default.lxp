@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1509651722485,
+  "timestamp": 1509656356342,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.9499999601393938,
-      "focusedChannel": 0,
+      "focusedChannel": 4,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -171,10 +171,10 @@
               "RotY": 0.5,
               "RotZ": 0.5799999982118607,
               "Spin": 0.5,
-              "xPos": 1.707106590270996,
-              "yPos": 0.7071065902709961,
+              "xPos": -0.7071065902709961,
+              "yPos": 0.7071075439453125,
               "zPos": 0.0,
-              "size": 95.09256685868593,
+              "size": 74.95331573486328,
               "foff": 3.0
             },
             "modulation": {
@@ -347,10 +347,10 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "xPos": 1.707106590270996,
-              "yPos": 0.7071065902709961,
+              "xPos": -0.7071065902709961,
+              "yPos": 0.7071075439453125,
               "zPos": 0.0,
-              "size": 98.05081809719032,
+              "size": 74.95331573486328,
               "foff": 3.0
             },
             "modulation": {
@@ -523,10 +523,10 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "xPos": 1.707106590270996,
-              "yPos": 0.7071065902709961,
+              "xPos": -0.7071065902709961,
+              "yPos": 0.7071075439453125,
               "zPos": 0.0,
-              "size": 89.14636438205487,
+              "size": 74.95331573486328,
               "foff": 3.0
             },
             "modulation": {
@@ -673,13 +673,13 @@
         "parameters": {
           "label": "Channel-5",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -937,7 +937,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 131.65973488751737,
+        "radius": 67.39515467480146,
         "theta": -0.024000000000000188,
         "phi": 0.0180000000000001
       }
