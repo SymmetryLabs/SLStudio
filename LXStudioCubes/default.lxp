@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1509656356342,
+  "timestamp": 1509666345502,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -174,7 +174,7 @@
               "xPos": -0.7071065902709961,
               "yPos": 0.7071075439453125,
               "zPos": 0.0,
-              "size": 74.95331573486328,
+              "size": 74.59976196289062,
               "foff": 3.0
             },
             "modulation": {
@@ -350,7 +350,7 @@
               "xPos": -0.7071065902709961,
               "yPos": 0.7071075439453125,
               "zPos": 0.0,
-              "size": 74.95331573486328,
+              "size": 74.59976196289062,
               "foff": 3.0
             },
             "modulation": {
@@ -526,7 +526,7 @@
               "xPos": -0.7071065902709961,
               "yPos": 0.7071075439453125,
               "zPos": 0.0,
-              "size": 74.95331573486328,
+              "size": 74.59976196289062,
               "foff": 3.0
             },
             "modulation": {
@@ -673,7 +673,7 @@
         "parameters": {
           "label": "Channel-5",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -783,7 +783,7 @@
           "Band-5": 0.0,
           "Band-6": 0.0,
           "Band-7": 0.0,
-          "Band-8": 0.0,
+          "Band-8": 0.03750462085673678,
           "Band-9": 0.0,
           "Band-10": 0.0,
           "Band-11": 0.0,

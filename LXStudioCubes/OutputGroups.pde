@@ -8,17 +8,17 @@ public OutputGroup[] setupOutputGroups() {
     /*
      * Heart Half A
      *----------------------------------------------------*/
-    new OutputGroup("0") // 1
+    new OutputGroup("175") // 1 (DOES IT WORK??)
       .addPoints(heartA.getPanel("1"))
       .addPoints(heartA.getPanel("2"))
       .addPoints(heartA.getPanel("3")),
 
-    new OutputGroup("0") // 2
+    new OutputGroup("100") // 2
       .addPoints(heartA.getPanel("4"))
       .addPoints(heartA.getPanel("5"))
       .addPoints(heartA.getPanel("6")),
 
-    new OutputGroup("0") // 3
+    new OutputGroup("380") // 3
       .addPoints(heartA.getPanel("7"))
       .addPoints(heartA.getPanel("8"))
       .addPoints(heartA.getPanel("17")),
@@ -28,27 +28,27 @@ public OutputGroup[] setupOutputGroups() {
       .addPoints(heartA.getPanel("18"))
       .addPoints(heartA.getPanel("27")),
 
-    new OutputGroup("0") // 5
+    new OutputGroup("d8:80:39:9b:e:70") // 5
       .addPoints(heartA.getPanel("10"))
       .addPoints(heartA.getPanel("19"))
       .addPoints(heartA.getPanel("20")),
 
-    new OutputGroup("0") // 6
+    new OutputGroup("167") // 6
       .addPoints(heartA.getPanel("11"))
       .addPoints(heartA.getPanel("12"))
       .addPoints(heartA.getPanel("13")),
 
-    new OutputGroup("0") // 7
+    new OutputGroup("102") // 7
       .addPoints(heartA.getPanel("14"))
       .addPoints(heartA.getPanel("15"))
       .addPoints(heartA.getPanel("16")),
 
-    new OutputGroup("0") // 8
+    new OutputGroup("329") // 8
       .addPoints(heartA.getPanel("21"))
       .addPoints(heartA.getPanel("22"))
       .addPoints(heartA.getPanel("23")),
 
-    new OutputGroup("0") // 9
+    new OutputGroup("310") // 9
       .addPoints(heartA.getPanel("24"))
       .addPoints(heartA.getPanel("25"))
       .addPoints(heartA.getPanel("26")),
@@ -57,42 +57,42 @@ public OutputGroup[] setupOutputGroups() {
       .addPoints(heartA.getPanel("28"))
       .addPoints(heartA.getPanel("29")),
 
-    new OutputGroup("0") // 11
+    new OutputGroup("146") // 11
       .addPoints(heartA.getPanel("30"))
       .addPoints(heartA.getPanel("31"))
       .addPoints(heartA.getPanel("32")),
 
-    new OutputGroup("0") // 12
+    new OutputGroup("374") // 12
       .addPoints(heartA.getPanel("33"))
       .addPoints(heartA.getPanel("34"))
       .addPoints(heartA.getPanel("35")),
 
-    new OutputGroup("0") // 13
+    new OutputGroup("423") // 13
       .addPoints(heartA.getPanel("36"))
       .addPoints(heartA.getPanel("37"))
       .addPoints(heartA.getPanel("44")),
 
-    new OutputGroup("0") // 14
+    new OutputGroup("d8:80:39:9a:d3:69") // 14
       .addPoints(heartA.getPanel("38"))
       .addPoints(heartA.getPanel("39"))
       .addPoints(heartA.getPanel("40")),
 
-    new OutputGroup("0") // 15
+    new OutputGroup("325") // 15
       .addPoints(heartA.getPanel("41"))
       .addPoints(heartA.getPanel("42"))
       .addPoints(heartA.getPanel("43")),
 
-    new OutputGroup("0") // 16
+    new OutputGroup("d8:80:39:9a:d4:3b") // 16
       .addPoints(heartA.getPanel("45"))
       .addPoints(heartA.getPanel("46"))
       .addPoints(heartA.getPanel("47")),
 
-    new OutputGroup("0") // 17
+    new OutputGroup("425") // 17
       .addPoints(heartA.getPanel("48"))
       .addPoints(heartA.getPanel("49"))
       .addPoints(heartA.getPanel("50")),
 
-    new OutputGroup("0") // 18
+    new OutputGroup("190") // 18
       .addPoints(heartA.getPanel("51"))
       .addPoints(heartA.getPanel("52"))
       .addPoints(heartA.getPanel("53"))
@@ -382,7 +382,7 @@ public OutputGroup[] setupOutputGroups() {
 public class OutputGroup {
 
   public final String id;
-  private final List<LXPoint> points = new ArrayList<LXPoint>();
+  public final List<LXPoint> points = new ArrayList<LXPoint>();
 
   public OutputGroup(String id) {
     this(id, new ArrayList<LXPoint>());

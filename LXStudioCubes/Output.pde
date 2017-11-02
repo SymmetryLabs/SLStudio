@@ -181,14 +181,26 @@ class SLController extends LXOutput {
     // if that cube isn't modelled yet
     // Use the mac address to find the cube if we have it
     // Otherwise use the cube id
-    Cube cube = null;
-    if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
-      cube = model.cubes.get(0);
+    // Cube cube = null;
+    // if ((outputControl.testBroadcast.isOn() || isBroadcast) && model.cubes.size() > 0) {
+    //   cube = model.cubes.get(0);
+    // } else {
+    //   for (Cube c : model.cubes) {
+    //     if (c.id != null && c.id.equals(cubeId)) {
+    //       cube = c;
+    //       break;
+    //     }
+    //   }
+    // }
+
+    OutputGroup outputGroup = null;
+
+    if ((outputControl.testBroadcast.isOn() || isBroadcast) && outputGroup.getPoints().size() > 0) {
+      outputGroup = outputGroups[0];
     } else {
-      for (Cube c : model.cubes) {
-        if (c.id != null && c.id.equals(cubeId)) {
-          cube = c;
-          break;
+      for (OutputGroup og : outputGroups) {
+        if (og.id != null && og.id.equals(cubeId)) {
+          outputGroup = og;
         }
       }
     }
@@ -196,25 +208,42 @@ class SLController extends LXOutput {
     // Initialize packet data base on cube type.
     // If we don't know the cube type, default to
     // using the cube type with the most pixels
-    Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-    int numPixels = cubeType.POINTS_PER_CUBE;
-    if (packetData == null || packetData.length != numPixels) {
-      initPacketData(numPixels);
-    }
+    // Cube.Type cubeType = cube != null ? cube.type : Cube.CUBE_TYPE_WITH_MOST_PIXELS;
 
     // Fill the datagram with pixel data
     // Fill with all black if we don't have cube data
-    if (cube != null) {
-      for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-        int stripId = STRIP_ORD[stripNum];
-        Strip strip = cube.strips.get(stripId);
+    // if (cube != null) {
+    //   for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+    //     int stripId = STRIP_ORD[stripNum];
+    //     Strip strip = cube.strips.get(stripId);
 
-        for (int i = 0; i < strip.metrics.numPoints; i++) {
-          LXPoint point = strip.getPoints().get(i);
-          setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
-        }
+    //     for (int i = 0; i < strip.metrics.numPoints; i++) {
+    //       LXPoint point = strip.getPoints().get(i);
+    //       setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+    //     }
+    //   }
+    // } else {
+    //   for (int i = 0; i < numPixels; i++) {
+    //     setPixel(i, LXColor.BLACK);
+    //   }
+    // }
+
+    if (outputGroup != null) {
+      int numPixels = outputGroup.getPoints().size();
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
+      int i = 0;
+      for (LXPoint p : outputGroup.getPoints()) {
+        setPixel(i++, colors[p.index]);
       }
     } else {
+      int numPixels = 350;
+      if (packetData == null || packetData.length != numPixels) {
+        initPacketData(numPixels);
+      }
+
       for (int i = 0; i < numPixels; i++) {
         setPixel(i, LXColor.BLACK);
       }
@@ -222,29 +251,29 @@ class SLController extends LXOutput {
 
     // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
     // TODO: refactor here
-    if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
-      if (mappingMode.inUnMappedMode()) {
-        if (mappingMode.inDisplayAllMode()) {
-          color col = mappingMode.getUnMappedColor();
+    // if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+    //   if (mappingMode.inUnMappedMode()) {
+    //     if (mappingMode.inDisplayAllMode()) {
+    //       color col = mappingMode.getUnMappedColor();
 
-          for (int i = 0; i < numPixels; i++)
-            setPixel(i, col);
-        } else {
-          if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
-            color col = mappingMode.getUnMappedColor();
+    //       for (int i = 0; i < numPixels; i++)
+    //         setPixel(i, col);
+    //     } else {
+    //       if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+    //         color col = mappingMode.getUnMappedColor();
 
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, col);
-          } else {
-            for (int i = 0; i < numPixels; i++)
-              setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-          }
-        }
-      } else {
-        for (int i = 0; i < numPixels; i++)
-          setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
-      }
-    }
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, col);
+    //       } else {
+    //         for (int i = 0; i < numPixels; i++)
+    //           setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //       }
+    //     }
+    //   } else {
+    //     for (int i = 0; i < numPixels; i++)
+    //       setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2) : LXColor.BLACK);
+    //   }
+    // }
 
     // Send the cube data to the cube. yay!
     try { 
