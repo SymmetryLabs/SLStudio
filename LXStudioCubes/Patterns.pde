@@ -1,13 +1,37 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class PanelTestInput extends LXPattern {
+  public PanelTestInput(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    setColors(0);
+
+    for (Panel panel : ((SLModel)model).panels) {
+      colors[panel.points[0].index] = LXColor.RED;
+      colors[panel.points[1].index] = LXColor.BLUE;
+      colors[panel.points[2].index] = LXColor.BLUE;
+      colors[panel.points[3].index] = LXColor.BLUE;
+      colors[panel.points[4].index] = LXColor.BLUE;
+      colors[panel.points[5].index] = LXColor.BLUE;
+      colors[panel.points[6].index] = LXColor.BLUE;
+      colors[panel.points[7].index] = LXColor.BLUE;
+      colors[panel.points[8].index] = LXColor.BLUE;
+    }
+  }
+}
+
 public class Ball extends DPat {
 
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
   CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
   CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
 
-  CompoundParameter size = new CompoundParameter("size", model.xRange*0.1, model.xRange*0.01, model.xRange*0.5);
+  CompoundParameter size = new CompoundParameter("size", model.xRange*0.1, model.xRange*0.01, model.xRange*1);
+
+  CompoundParameter falloff = new CompoundParameter("foff", 0.5, 0, 3);
 
   public Ball(LX lx) {
     super(lx);
@@ -15,11 +39,25 @@ public class Ball extends DPat {
     addParameter(yPos);
     addParameter(zPos);
     addParameter(size);
+    addParameter(falloff);
   }
 
   color CalcPoint(PVector p) {
-    if (LXUtils.distance(p.x, p.y, xPos.getValuef(), yPos.getValuef()) < size.getValuef()) {
-      return lx.hsb(lxh(), 100, 100);
+    float distance = (float)LXUtils.distance(p.x, p.y, xPos.getValuef(), yPos.getValuef());
+
+    if (distance < size.getValuef()) {
+
+      float normalizedDistance = (distance / size.getValuef());
+
+
+      // falloff at most: near to be 1 and far to be 0
+      // falloff at least: near to be 1 and far to be 1
+
+      float falloffEdge = (3 - falloff.getValuef()); 
+
+      // * (falloffEdge) (falloff) }
+
+      return lx.hsb(lxh(), 100, constrain(100 - ((normalizedDistance - falloffEdge) * 130), 0, 100));
     } else {
       return LXColor.BLACK;
     }
@@ -29,7 +67,7 @@ public class Ball extends DPat {
 public class Noise extends DPat {
   int       CurAnim, iSymm;
   int       XSym=1,YSym=2,RadSym=3;
-  float       zTime , zTheta=0, zSin, zCos, rtime, ttime;
+  float       zTime , zTheta=0, zSin, zCos, rtime, ttime; 
   CompoundParameter  pSpeed , pDensity, pSharp;
   DiscreteParameter     pChoose, pSymm;
   int       _ND = 4;

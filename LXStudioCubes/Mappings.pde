@@ -201,11 +201,17 @@ public SLModel buildModel() {
   }
   /*-----------------------------------------------------------------*/
 
+  List<HalfHeart> hearts = new ArrayList<HalfHeart>();
   List<Panel> panels = new ArrayList<Panel>();
-  HalfHeart heart = new HalfHeart("half_heart_a", HalfHeart.Type.RIGHT, new float[] {0, 0, 0}, new float[] {0, 0, 0}, globalTransform);
+  hearts.add(new HalfHeart("half_heart_A", HalfHeart.Type.LEFT, new float[]{0, 0, 0}, new float[] {0, 0, 0}, globalTransform));
+  hearts.add(new HalfHeart("half_heart_B", HalfHeart.Type.RIGHT, new float[]{0, 0, 0}, new float[] {0, 0, 0}, globalTransform));
+  hearts.add(new HalfHeart("half_heart_C", HalfHeart.Type.LEFT, new float[]{0, 0, 5}, new float[] {0, 180, 0}, globalTransform));
+  hearts.add(new HalfHeart("half_heart_D", HalfHeart.Type.RIGHT, new float[]{0, 0, 5}, new float[] {0, 180, 0}, globalTransform));
 
-  for (Panel panel : heart.panels) {
-    panels.add(panel);
+  for (HalfHeart heart : hearts) {
+    for (Panel panel : heart.panels) {
+      panels.add(panel);
+    }
   }
 
   Cube[] allCubesArr = new Cube[allCubes.size()];
@@ -216,7 +222,7 @@ public SLModel buildModel() {
   /* Obj Importer ----------------------------------------------------*/
   List<LXModel> objModels = new ObjImporter("data", globalTransform).getModels();
 
-  return new SLModel(objModels, towers, allCubesArr, strips, panels);
+  return new SLModel(objModels, towers, allCubesArr, strips, hearts, panels);
 }
 
 public SLModel getModel() {

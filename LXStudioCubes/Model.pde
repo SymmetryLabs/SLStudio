@@ -40,8 +40,12 @@ public static class SLModel extends LXModel {
   public final List<LXModel> objModels;
 
   public final List<Panel> panels;
+  public final Map<String, Panel> panelTable;
 
-  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Panel> panels) {
+  public final List<HalfHeart> hearts;
+  public final Map<String, HalfHeart> heartTable;
+
+  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<HalfHeart> hearts, List<Panel> panels) {
     super(new Fixture(objModels, cubeArr, strips, panels));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -53,6 +57,8 @@ public static class SLModel extends LXModel {
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+    Map<String, Panel> _panelTable = new HashMap<String, Panel>();
+    Map<String, HalfHeart> _heartTable = new HashMap<String, HalfHeart>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -74,6 +80,13 @@ public static class SLModel extends LXModel {
       stripList.add(strip);
     }
 
+    for (Panel panel : panels) {
+      _panelTable.put(panel.id, panel);
+    }
+    for (HalfHeart heart : hearts) {
+      _heartTable.put(heart.id, heart);
+    }
+
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
@@ -82,6 +95,11 @@ public static class SLModel extends LXModel {
     this.objModels = objModels;
 
     this.panels = panels;
+    this.panelTable = Collections.unmodifiableMap (_panelTable);
+
+
+    this.hearts = hearts;
+    this.heartTable = Collections.unmodifiableMap (_heartTable);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -125,14 +143,14 @@ public static class SLModel extends LXModel {
   public Cube getCubeById(String id) {
     return this.cubeTable.get(id);
   }
-}
 
-public static class Heart extends LXModel {
-
-  public Heart(List<LXPoint> points) {
-    super(points);
+  public Panel getPanelById(String id) {
+    return this.panelTable.get(id);
   }
 
+  public HalfHeart getHeartById(String id) {
+    return this.heartTable.get(id);
+  }
 }
 
 /**
@@ -201,7 +219,7 @@ public static class HalfHeart extends LXModel {
   }
 
   public HalfHeart(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
-    super(new Fixture(id, type, coordinates, rotations, transform));
+    super(new Fixture(type, coordinates, rotations, transform));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     this.id = id;
@@ -209,86 +227,169 @@ public static class HalfHeart extends LXModel {
     this.panels = Collections.unmodifiableList(fixture.panels);
   }
 
+  public Panel getPanel(String id) {
+    for (Panel panel : panels) {
+      if (panel.id.equals(id)) {
+        return panel;
+      }
+    }
+    return null;
+  }
+
   private static class Fixture extends LXAbstractFixture {
 
     private final List<Panel> panels = new ArrayList<Panel>();
 
-    private Fixture(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+    private Fixture(Type type, float[] coordinates, float[] rotations, LXTransform transform) {
       transform.push();
       transform.translate(coordinates[0], coordinates[1], coordinates[2]);
       transform.rotateX(rotations[0] * PI / 180);
       transform.rotateY(rotations[1] * PI / 180);
-      transform.rotateZ((rotations[2]+45) * PI / 180);
 
       if (type == Type.RIGHT) {
+        transform.rotateZ((rotations[2]+45) * PI / 180);
         // row 1
-        this.panels.add(new Panel(id + "_panel_1",  Panel.Type.F, new float[] {PANEL_PADDING*0+10, PANEL_PADDING*0,    0}, new float[] {0, 0,  90}, transform));
-        this.panels.add(new Panel(id + "_panel_2",  Panel.Type.A, new float[] {PANEL_PADDING*1,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
-        this.panels.add(new Panel(id + "_panel_3",  Panel.Type.A, new float[] {PANEL_PADDING*2,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
-        this.panels.add(new Panel(id + "_panel_4",  Panel.Type.A, new float[] {PANEL_PADDING*3,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
-        this.panels.add(new Panel(id + "_panel_5",  Panel.Type.A, new float[] {PANEL_PADDING*4,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
-        this.panels.add(new Panel(id + "_panel_6",  Panel.Type.A, new float[] {PANEL_PADDING*5,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
-        this.panels.add(new Panel(id + "_panel_7",  Panel.Type.A, new float[] {PANEL_PADDING*6,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
-        this.panels.add(new Panel(id + "_panel_8",  Panel.Type.A, new float[] {PANEL_PADDING*7,    PANEL_PADDING*0,    0}, new float[] {0, 0,   0}, transform));
-        this.panels.add(new Panel(id + "_panel_9",  Panel.Type.B, new float[] {PANEL_PADDING*8+10, PANEL_PADDING*0+10, 0}, new float[] {0, 0, 180}, transform));
-        this.panels.add(new Panel(id + "_panel_10", Panel.Type.E, new float[] {PANEL_PADDING*9+8,  PANEL_PADDING*0+4,  0}, new float[] {0, 0,  90}, transform));
+        this.panels.add(new Panel("1",  Panel.Type.F, new float[] {PANEL_PADDING*0+10, PANEL_PADDING*0,    0}, new float[] {0, 0,  90}, transform));
+        this.panels.add(new Panel("2",  Panel.Type.A, new float[] {PANEL_PADDING*1,    PANEL_PADDING*0+10,    0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("3",  Panel.Type.A, new float[] {PANEL_PADDING*2,    PANEL_PADDING*0+10,    0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("4",  Panel.Type.A, new float[] {PANEL_PADDING*3,    PANEL_PADDING*0+10,    0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("5",  Panel.Type.A, new float[] {PANEL_PADDING*4,    PANEL_PADDING*0+10,    0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("6",  Panel.Type.A, new float[] {PANEL_PADDING*5,    PANEL_PADDING*0+10,    0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("7",  Panel.Type.A, new float[] {PANEL_PADDING*6,    PANEL_PADDING*0+10,    0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("8",  Panel.Type.A, new float[] {PANEL_PADDING*7,    PANEL_PADDING*0+10,    0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("9",  Panel.Type.B, new float[] {PANEL_PADDING*8+10, PANEL_PADDING*0+10, 0}, new float[] {0, 0, 180}, transform));
+        this.panels.add(new Panel("10", Panel.Type.E, new float[] {PANEL_PADDING*9+8,  PANEL_PADDING*0+4,  0}, new float[] {0, 0,  90}, transform));
 
         // row 2
-        this.panels.add(new Panel(id + "_panel_11", Panel.Type.F, new float[] {22+PANEL_PADDING*0, PANEL_PADDING*1, 0}, new float[] {0, 0, 90}, transform));
-        this.panels.add(new Panel(id + "_panel_12", Panel.Type.A, new float[] {12+PANEL_PADDING*1, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_13", Panel.Type.A, new float[] {12+PANEL_PADDING*2, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_14", Panel.Type.A, new float[] {12+PANEL_PADDING*3, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_15", Panel.Type.A, new float[] {12+PANEL_PADDING*4, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_16", Panel.Type.A, new float[] {12+PANEL_PADDING*5, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_17", Panel.Type.A, new float[] {12+PANEL_PADDING*6, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_18", Panel.Type.A, new float[] {12+PANEL_PADDING*7, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_19", Panel.Type.A, new float[] {12+PANEL_PADDING*8, PANEL_PADDING*1, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_20", Panel.Type.D, new float[] {12+PANEL_PADDING*9+6, PANEL_PADDING*1+10, 0}, new float[] {0, 0,180}, transform));
+        this.panels.add(new Panel("11", Panel.Type.F, new float[] {22+PANEL_PADDING*0, PANEL_PADDING*1, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel("12", Panel.Type.A, new float[] {12+PANEL_PADDING*1, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("13", Panel.Type.A, new float[] {12+PANEL_PADDING*2, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("14", Panel.Type.A, new float[] {12+PANEL_PADDING*3, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("15", Panel.Type.A, new float[] {12+PANEL_PADDING*4, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("16", Panel.Type.A, new float[] {12+PANEL_PADDING*5, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("17", Panel.Type.A, new float[] {12+PANEL_PADDING*6, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("18", Panel.Type.A, new float[] {12+PANEL_PADDING*7, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("19", Panel.Type.A, new float[] {12+PANEL_PADDING*8, PANEL_PADDING*1+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("20", Panel.Type.D, new float[] {12+PANEL_PADDING*9+6, PANEL_PADDING*1+10, 0}, new float[] {0, 0,180}, transform));
 
         // row 3
-        this.panels.add(new Panel(id + "_panel_21", Panel.Type.F, new float[] {34+PANEL_PADDING*0, PANEL_PADDING*2, 0}, new float[] {0, 0, 90}, transform));
-        this.panels.add(new Panel(id + "_panel_22", Panel.Type.A, new float[] {24+PANEL_PADDING*1, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_23", Panel.Type.A, new float[] {24+PANEL_PADDING*2, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_24", Panel.Type.A, new float[] {24+PANEL_PADDING*3, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_25", Panel.Type.A, new float[] {24+PANEL_PADDING*4, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_26", Panel.Type.A, new float[] {24+PANEL_PADDING*5, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_27", Panel.Type.A, new float[] {24+PANEL_PADDING*6, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_28", Panel.Type.A, new float[] {24+PANEL_PADDING*7, PANEL_PADDING*2, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_29", Panel.Type.C, new float[] {24+PANEL_PADDING*8, PANEL_PADDING*2+10, 0}, new float[] {0, 0,-90}, transform));
+        this.panels.add(new Panel("21", Panel.Type.F, new float[] {34+PANEL_PADDING*0, PANEL_PADDING*2, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel("22", Panel.Type.A, new float[] {24+PANEL_PADDING*1, PANEL_PADDING*2+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("23", Panel.Type.A, new float[] {24+PANEL_PADDING*2, PANEL_PADDING*2+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("24", Panel.Type.A, new float[] {24+PANEL_PADDING*3, PANEL_PADDING*2+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("25", Panel.Type.A, new float[] {24+PANEL_PADDING*4, PANEL_PADDING*2+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("26", Panel.Type.A, new float[] {24+PANEL_PADDING*5, PANEL_PADDING*2+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("27", Panel.Type.A, new float[] {24+PANEL_PADDING*6, PANEL_PADDING*2+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("28", Panel.Type.A, new float[] {24+PANEL_PADDING*7, PANEL_PADDING*2+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("29", Panel.Type.C, new float[] {24+PANEL_PADDING*8, PANEL_PADDING*2+10, 0}, new float[] {0, 0,-90}, transform));
 
         // row 4
-        this.panels.add(new Panel(id + "_panel_30", Panel.Type.F, new float[] {46+PANEL_PADDING*0, PANEL_PADDING*3, 0}, new float[] {0, 0, 90}, transform));
-        this.panels.add(new Panel(id + "_panel_31", Panel.Type.A, new float[] {36+PANEL_PADDING*1, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_32", Panel.Type.A, new float[] {36+PANEL_PADDING*2, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_33", Panel.Type.A, new float[] {36+PANEL_PADDING*3, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_34", Panel.Type.A, new float[] {36+PANEL_PADDING*4, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_35", Panel.Type.A, new float[] {36+PANEL_PADDING*5, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_36", Panel.Type.A, new float[] {36+PANEL_PADDING*6, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_37", Panel.Type.A, new float[] {36+PANEL_PADDING*7, PANEL_PADDING*3, 0}, new float[] {0, 0,  0}, transform));
+        this.panels.add(new Panel("30", Panel.Type.F, new float[] {46+PANEL_PADDING*0, PANEL_PADDING*3, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel("31", Panel.Type.A, new float[] {36+PANEL_PADDING*1, PANEL_PADDING*3+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("32", Panel.Type.A, new float[] {36+PANEL_PADDING*2, PANEL_PADDING*3+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("33", Panel.Type.A, new float[] {36+PANEL_PADDING*3, PANEL_PADDING*3+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("34", Panel.Type.A, new float[] {36+PANEL_PADDING*4, PANEL_PADDING*3+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("35", Panel.Type.A, new float[] {36+PANEL_PADDING*5, PANEL_PADDING*3+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("36", Panel.Type.A, new float[] {36+PANEL_PADDING*6, PANEL_PADDING*3+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("37", Panel.Type.A, new float[] {36+PANEL_PADDING*7, PANEL_PADDING*3+10, 0}, new float[] {0, 0, -90}, transform));
 
         // row 5
-        this.panels.add(new Panel(id + "_panel_38", Panel.Type.F, new float[] {58+PANEL_PADDING*0, PANEL_PADDING*4, 0}, new float[] {0, 0, 90}, transform));
-        this.panels.add(new Panel(id + "_panel_39", Panel.Type.A, new float[] {48+PANEL_PADDING*1, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_40", Panel.Type.A, new float[] {48+PANEL_PADDING*2, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_41", Panel.Type.A, new float[] {48+PANEL_PADDING*3, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_42", Panel.Type.A, new float[] {48+PANEL_PADDING*4, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_43", Panel.Type.A, new float[] {48+PANEL_PADDING*5, PANEL_PADDING*4, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_44", Panel.Type.B, new float[] {48+PANEL_PADDING*6, PANEL_PADDING*4+10, 0}, new float[] {0, 0,-90}, transform));
+        this.panels.add(new Panel("38", Panel.Type.F, new float[] {58+PANEL_PADDING*0, PANEL_PADDING*4, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel("39", Panel.Type.A, new float[] {48+PANEL_PADDING*1, PANEL_PADDING*4+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("40", Panel.Type.A, new float[] {48+PANEL_PADDING*2, PANEL_PADDING*4+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("41", Panel.Type.A, new float[] {48+PANEL_PADDING*3, PANEL_PADDING*4+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("42", Panel.Type.A, new float[] {48+PANEL_PADDING*4, PANEL_PADDING*4+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("43", Panel.Type.A, new float[] {48+PANEL_PADDING*5, PANEL_PADDING*4+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("44", Panel.Type.B, new float[] {48+PANEL_PADDING*6, PANEL_PADDING*4+10, 0}, new float[] {0, 0,-90}, transform));
 
         // row 6
-        this.panels.add(new Panel(id + "_panel_45", Panel.Type.F, new float[] {70+PANEL_PADDING*0, PANEL_PADDING*5, 0}, new float[] {0, 0, 90}, transform));
-        this.panels.add(new Panel(id + "_panel_46", Panel.Type.A, new float[] {60+PANEL_PADDING*1, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_47", Panel.Type.A, new float[] {60+PANEL_PADDING*2, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_48", Panel.Type.A, new float[] {60+PANEL_PADDING*3, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_49", Panel.Type.A, new float[] {60+PANEL_PADDING*4, PANEL_PADDING*5, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_50", Panel.Type.E, new float[] {60+PANEL_PADDING*5+6, PANEL_PADDING*5+8, 0}, new float[] {0, 0,180}, transform));
+        this.panels.add(new Panel("45", Panel.Type.F, new float[] {70+PANEL_PADDING*0, PANEL_PADDING*5, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel("46", Panel.Type.A, new float[] {60+PANEL_PADDING*1, PANEL_PADDING*5+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("47", Panel.Type.A, new float[] {60+PANEL_PADDING*2, PANEL_PADDING*5+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("48", Panel.Type.A, new float[] {60+PANEL_PADDING*3, PANEL_PADDING*5+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("49", Panel.Type.A, new float[] {60+PANEL_PADDING*4, PANEL_PADDING*5+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("50", Panel.Type.E, new float[] {60+PANEL_PADDING*5+6, PANEL_PADDING*5+8, 0}, new float[] {0, 0,180}, transform));
 
         // row 7
-        this.panels.add(new Panel(id + "_panel_51", Panel.Type.F, new float[] {82+PANEL_PADDING*0, PANEL_PADDING*6, 0}, new float[] {0, 0, 90}, transform));
-        this.panels.add(new Panel(id + "_panel_52", Panel.Type.A, new float[] {72+PANEL_PADDING*1, PANEL_PADDING*6, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_53", Panel.Type.C, new float[] {72+PANEL_PADDING*2, PANEL_PADDING*6, 0}, new float[] {0, 0,  0}, transform));
-        this.panels.add(new Panel(id + "_panel_54", Panel.Type.D, new float[] {72+PANEL_PADDING*3, PANEL_PADDING*6+6, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("51", Panel.Type.F, new float[] {82+PANEL_PADDING*0, PANEL_PADDING*6, 0}, new float[] {0, 0, 90}, transform));
+        this.panels.add(new Panel("52", Panel.Type.A, new float[] {72+PANEL_PADDING*1, PANEL_PADDING*6+10, 0}, new float[] {0, 0, -90}, transform));
+        this.panels.add(new Panel("53", Panel.Type.C, new float[] {72+PANEL_PADDING*2, PANEL_PADDING*6, 0}, new float[] {0, 0, 0}, transform));
+        this.panels.add(new Panel("54", Panel.Type.D, new float[] {72+PANEL_PADDING*3, PANEL_PADDING*6+6, 0}, new float[] {0, 0, -90}, transform));
       }
+
+      if (type == Type.LEFT) {
+        // STILL CHANGES TO MAKE
+        transform.rotateY(PI);
+        transform.rotateZ((rotations[2]+45) * PI / 180);
+        // row 1
+        this.panels.add(new Panel("1",  Panel.Type.F, new float[] {PANEL_PADDING*0+10, PANEL_PADDING*0,    0}, new float[] {180, 0,  180}, transform));
+        this.panels.add(new Panel("2",  Panel.Type.A, new float[] {PANEL_PADDING*1+10,    PANEL_PADDING*0,    0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("3",  Panel.Type.A, new float[] {PANEL_PADDING*2+10,    PANEL_PADDING*0,    0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("4",  Panel.Type.A, new float[] {PANEL_PADDING*3+10,    PANEL_PADDING*0,    0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("5",  Panel.Type.A, new float[] {PANEL_PADDING*4+10,    PANEL_PADDING*0,    0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("6",  Panel.Type.A, new float[] {PANEL_PADDING*5+10,    PANEL_PADDING*0,    0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("7",  Panel.Type.A, new float[] {PANEL_PADDING*6+10,    PANEL_PADDING*0,    0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("8",  Panel.Type.A, new float[] {PANEL_PADDING*7+10,    PANEL_PADDING*0,    0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("9",  Panel.Type.C, new float[] {PANEL_PADDING*8, PANEL_PADDING*0+10, 0}, new float[] {180, 0, 0}, transform));
+        this.panels.add(new Panel("10", Panel.Type.E, new float[] {PANEL_PADDING*9+8,  PANEL_PADDING*0+4,  0}, new float[] {0, 0,  90}, transform));
+
+        // // row 2
+        this.panels.add(new Panel("11", Panel.Type.F, new float[] {22+PANEL_PADDING*0, PANEL_PADDING*1, 0}, new float[] {180, 0, 180}, transform));
+        this.panels.add(new Panel("12", Panel.Type.A, new float[] {12+PANEL_PADDING*1+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("13", Panel.Type.A, new float[] {12+PANEL_PADDING*2+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("14", Panel.Type.A, new float[] {12+PANEL_PADDING*3+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("15", Panel.Type.A, new float[] {12+PANEL_PADDING*4+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("16", Panel.Type.A, new float[] {12+PANEL_PADDING*5+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("17", Panel.Type.A, new float[] {12+PANEL_PADDING*6+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("18", Panel.Type.A, new float[] {12+PANEL_PADDING*7+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("19", Panel.Type.A, new float[] {12+PANEL_PADDING*8+10, PANEL_PADDING*1, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("20", Panel.Type.D, new float[] {12+PANEL_PADDING*9+6, PANEL_PADDING*1+10, 0}, new float[] {0, 0,180}, transform));
+
+        // // row 3
+        this.panels.add(new Panel("21", Panel.Type.F, new float[] {34+PANEL_PADDING*0, PANEL_PADDING*2, 0}, new float[] {180, 0, 180}, transform));
+        this.panels.add(new Panel("22", Panel.Type.A, new float[] {24+PANEL_PADDING*1+10, PANEL_PADDING*2, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("23", Panel.Type.A, new float[] {24+PANEL_PADDING*2+10, PANEL_PADDING*2, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("24", Panel.Type.A, new float[] {24+PANEL_PADDING*3+10, PANEL_PADDING*2, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("25", Panel.Type.A, new float[] {24+PANEL_PADDING*4+10, PANEL_PADDING*2, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("26", Panel.Type.A, new float[] {24+PANEL_PADDING*5+10, PANEL_PADDING*2, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("27", Panel.Type.A, new float[] {24+PANEL_PADDING*6+10, PANEL_PADDING*2, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("28", Panel.Type.A, new float[] {24+PANEL_PADDING*7+10, PANEL_PADDING*2, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("29", Panel.Type.B, new float[] {24+PANEL_PADDING*8, PANEL_PADDING*2, 0}, new float[] {0, 180,90}, transform));
+
+        // // row 4
+        this.panels.add(new Panel("30", Panel.Type.F, new float[] {46+PANEL_PADDING*0, PANEL_PADDING*3, 0}, new float[] {180, 0, 180}, transform));
+        this.panels.add(new Panel("31", Panel.Type.A, new float[] {36+PANEL_PADDING*1+10, PANEL_PADDING*3, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("32", Panel.Type.A, new float[] {36+PANEL_PADDING*2+10, PANEL_PADDING*3, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("33", Panel.Type.A, new float[] {36+PANEL_PADDING*3+10, PANEL_PADDING*3, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("34", Panel.Type.A, new float[] {36+PANEL_PADDING*4+10, PANEL_PADDING*3, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("35", Panel.Type.A, new float[] {36+PANEL_PADDING*5+10, PANEL_PADDING*3, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("36", Panel.Type.A, new float[] {36+PANEL_PADDING*6+10, PANEL_PADDING*3, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("37", Panel.Type.A, new float[] {36+PANEL_PADDING*7+10, PANEL_PADDING*3, 0}, new float[] {180, 0, -180}, transform));
+
+        // // row 5
+        this.panels.add(new Panel("38", Panel.Type.F, new float[] {58+PANEL_PADDING*0, PANEL_PADDING*4, 0}, new float[] {180, 0, 180}, transform));
+        this.panels.add(new Panel("39", Panel.Type.A, new float[] {48+PANEL_PADDING*1+10, PANEL_PADDING*4, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("40", Panel.Type.A, new float[] {48+PANEL_PADDING*2+10, PANEL_PADDING*4, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("41", Panel.Type.A, new float[] {48+PANEL_PADDING*3+10, PANEL_PADDING*4, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("42", Panel.Type.A, new float[] {48+PANEL_PADDING*4+10, PANEL_PADDING*4, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("43", Panel.Type.A, new float[] {48+PANEL_PADDING*5+10, PANEL_PADDING*4, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("44", Panel.Type.C, new float[] {48+PANEL_PADDING*6, PANEL_PADDING*4, 0}, new float[] {0, 180, 90}, transform));
+
+        // // row 6
+        this.panels.add(new Panel("45", Panel.Type.F, new float[] {70+PANEL_PADDING*0, PANEL_PADDING*5, 0}, new float[] {180, 0, 180}, transform));
+        this.panels.add(new Panel("46", Panel.Type.A, new float[] {60+PANEL_PADDING*1+10, PANEL_PADDING*5, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("47", Panel.Type.A, new float[] {60+PANEL_PADDING*2+10, PANEL_PADDING*5, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("48", Panel.Type.A, new float[] {60+PANEL_PADDING*3+10, PANEL_PADDING*5, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("49", Panel.Type.A, new float[] {60+PANEL_PADDING*4+10, PANEL_PADDING*5, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("50", Panel.Type.E, new float[] {60+PANEL_PADDING*5+6, PANEL_PADDING*5+8, 0}, new float[] {0, 0,180}, transform));
+
+        // // row 7
+        this.panels.add(new Panel("51", Panel.Type.F, new float[] {82+PANEL_PADDING*0, PANEL_PADDING*6, 0}, new float[] {180, 0, 180}, transform));
+        this.panels.add(new Panel("52", Panel.Type.A, new float[] {72+PANEL_PADDING*1+10, PANEL_PADDING*6, 0}, new float[] {180, 0, -180}, transform));
+        this.panels.add(new Panel("53", Panel.Type.B, new float[] {72+PANEL_PADDING*2+10, PANEL_PADDING*6, 0}, new float[] {180, 0, 180}, transform));
+        this.panels.add(new Panel("54", Panel.Type.D, new float[] {72+PANEL_PADDING*3, PANEL_PADDING*6+6, 0}, new float[] {0, 0, -90}, transform));
+      }
+
 
       transform.pop();
     }
