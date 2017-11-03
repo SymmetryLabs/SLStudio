@@ -23,12 +23,12 @@ public OutputGroup[] setupOutputGroups() {
       .addPoints(heartA.getPanel("8"))
       .addPoints(heartA.getPanel("17")),
 
-    new OutputGroup("0") // 4
-      .addPoints(heartA.getPanel("9"))
+    new OutputGroup("d8:80:39:9b:e:70") // 4
+      .addPoints(heartA.getPanel("27"))
       .addPoints(heartA.getPanel("18"))
-      .addPoints(heartA.getPanel("27")),
+      .addPoints(heartA.getPanel("9")),
 
-    new OutputGroup("d8:80:39:9b:e:70") // 5
+    new OutputGroup("420") // 5
       .addPoints(heartA.getPanel("10"))
       .addPoints(heartA.getPanel("19"))
       .addPoints(heartA.getPanel("20")),
