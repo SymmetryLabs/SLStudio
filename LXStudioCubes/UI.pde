@@ -15,6 +15,87 @@ class UISpeed extends UI2dContainer {
   }
 }
 
+class UIHeartEvents extends UI2dContainer {
+    public UIHeartEvents(UI ui, final LX lx, float x, float y, float w) {
+        super(x, y, w, 100);
+        setBackgroundColor(#404040); //ui.theme.getDeviceBackgroundColor()
+        setBorderRounding(4);
+
+        new UILabel(5, 2, 80, 12)
+        .setLabel("HEART EVENTS")
+        .addToContainer(this);
+
+        // Station 1 -------------------------------------------------------------
+        final UIButton triggerEventStation1Event1 = new UIButton(5, 21, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner1.start();
+            }
+        }.setLabel("Station 1").setMomentary(true);
+        triggerEventStation1Event1.addToContainer(this);
+
+        final UIButton triggerEventStation1Event1b = new UIButton(64, 21, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner1.start();
+            }
+        }.setLabel("Finale").setMomentary(true);
+        triggerEventStation1Event1b.addToContainer(this);
+
+        // Station 2 -------------------------------------------------------------
+        final UIButton triggerEventStation1Event2 = new UIButton(5, 40, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner2.start();
+            }
+        }.setLabel("Station 2").setMomentary(true);
+        triggerEventStation1Event2.addToContainer(this);
+
+        final UIButton triggerEventStation1Event2b = new UIButton(64, 40, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner2.start();
+            }
+        }.setLabel("Finale").setMomentary(true);
+        triggerEventStation1Event2b.addToContainer(this);
+
+        // Station 3 -------------------------------------------------------------
+        final UIButton triggerEventStation1Event3 = new UIButton(5, 59, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner3.start();
+            }
+        }.setLabel("Station 3").setMomentary(true);
+        triggerEventStation1Event3.addToContainer(this);
+
+        final UIButton triggerEventStation1Event3b = new UIButton(64, 59, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner3.start();
+            }
+        }.setLabel("Finale").setMomentary(true);
+        triggerEventStation1Event3b.addToContainer(this);
+
+        // Station 4 -------------------------------------------------------------
+        final UIButton triggerEventStation1Event4 = new UIButton(5, 78, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner4.start();
+            }
+        }.setLabel("Station 4").setMomentary(true);
+        triggerEventStation1Event4.addToContainer(this);
+
+
+        final UIButton triggerEventStation1Event4b = new UIButton(64, 78, 55, 16) {
+            @Override
+            protected void onToggle(boolean active) {
+                heartRunner4.start();
+            }
+        }.setLabel("Finale").setMomentary(true);
+        triggerEventStation1Event4b.addToContainer(this);
+    }
+}
+
 // class UIEnvelopSource extends UICollapsibleSection {
 //   UIEnvelopSource(UI ui, float x, float y, float w) {
 //     super(ui, x, y, w, 124);

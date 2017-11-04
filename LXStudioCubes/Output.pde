@@ -195,7 +195,7 @@ class SLController extends LXOutput {
 
     OutputGroup outputGroup = null;
 
-    if ((outputControl.testBroadcast.isOn() || isBroadcast) && outputGroup.getPoints().size() > 0) {
+    if ((outputControl.testBroadcast.isOn() || isBroadcast)) {
       outputGroup = outputGroups[0];
     } else {
       for (OutputGroup og : outputGroups) {

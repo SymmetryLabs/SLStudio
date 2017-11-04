@@ -381,7 +381,7 @@ public static class HalfHeart extends LXModel {
         this.panels.add(new Panel("47", Panel.Type.A, new float[] {60+PANEL_PADDING*2+10, PANEL_PADDING*5-1, 8}, new float[] {180-16.7, 0, -180}, transform));
         this.panels.add(new Panel("48", Panel.Type.A, new float[] {60+PANEL_PADDING*3+10, PANEL_PADDING*5-1, 7}, new float[] {180-16.7, -6, -180}, transform));
         this.panels.add(new Panel("49", Panel.Type.A, new float[] {60+PANEL_PADDING*4+10, PANEL_PADDING*5-1.5, 4}, new float[] {180-16.7, -15, -180}, transform));
-        this.panels.add(new Panel("50", Panel.Type.E, new float[] {60+PANEL_PADDING*5+6, PANEL_PADDING*5+8, 5}, new float[] {0, 0, 0}, transform));
+        this.panels.add(new Panel("50", Panel.Type.E, new float[] {60+PANEL_PADDING*5+5, PANEL_PADDING*5+5.5, -1.5}, new float[] {-14, 25, 180}, transform));
 
         // // row 7
         this.panels.add(new Panel("51", Panel.Type.F, new float[] {82+PANEL_PADDING*0, PANEL_PADDING*6-1, 4}, new float[] {180-25, 0, 180}, transform));

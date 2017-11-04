@@ -5,191 +5,191 @@ public OutputGroup[] setupOutputGroups() {
   HalfHeart heartD = model.getHeartById("half_heart_D");
 
   return new OutputGroup[] {
-    /*
-     * Heart Half A
-     *----------------------------------------------------*/
-    new OutputGroup("175") // 1 (DOES IT WORK??)
-      .addPoints(heartA.getPanel("1"))
-      .addPoints(heartA.getPanel("2"))
-      .addPoints(heartA.getPanel("3")),
+    // /*
+    //  * Heart Half A
+    //  *----------------------------------------------------*/
+    // new OutputGroup("175") // 1 (DOES IT WORK??)
+    //   .addPoints(heartA.getPanel("1"))
+    //   .addPoints(heartA.getPanel("2"))
+    //   .addPoints(heartA.getPanel("3")),
 
-    new OutputGroup("100") // 2
-      .addPoints(heartA.getPanel("4"))
-      .addPoints(heartA.getPanel("5"))
-      .addPoints(heartA.getPanel("6")),
+    // new OutputGroup("100") // 2
+    //   .addPoints(heartA.getPanel("4"))
+    //   .addPoints(heartA.getPanel("5"))
+    //   .addPoints(heartA.getPanel("6")),
 
-    new OutputGroup("380") // 3
-      .addPoints(heartA.getPanel("7"))
-      .addPoints(heartA.getPanel("8"))
-      .addPoints(heartA.getPanel("17")),
+    // new OutputGroup("380") // 3
+    //   .addPoints(heartA.getPanel("7"))
+    //   .addPoints(heartA.getPanel("8"))
+    //   .addPoints(heartA.getPanel("17")),
 
-    new OutputGroup("d8:80:39:9b:e:70") // 4
-      .addPoints(heartA.getPanel("27"))
-      .addPoints(heartA.getPanel("18"))
-      .addPoints(heartA.getPanel("9")),
+    // new OutputGroup("d8:80:39:9b:e:70") // 4
+    //   .addPoints(heartA.getPanel("27"))
+    //   .addPoints(heartA.getPanel("18"))
+    //   .addPoints(heartA.getPanel("9")),
 
-    new OutputGroup("420") // 5
-      .addPoints(heartA.getPanel("10"))
-      .addPoints(heartA.getPanel("19"))
-      .addPoints(heartA.getPanel("20")),
+    // new OutputGroup("420") // 5
+    //   .addPoints(heartA.getPanel("10"))
+    //   .addPoints(heartA.getPanel("19"))
+    //   .addPoints(heartA.getPanel("20")),
 
-    new OutputGroup("167") // 6
-      .addPoints(heartA.getPanel("11"))
-      .addPoints(heartA.getPanel("12"))
-      .addPoints(heartA.getPanel("13")),
+    // new OutputGroup("167") // 6
+    //   .addPoints(heartA.getPanel("11"))
+    //   .addPoints(heartA.getPanel("12"))
+    //   .addPoints(heartA.getPanel("13")),
 
-    new OutputGroup("102") // 7
-      .addPoints(heartA.getPanel("14"))
-      .addPoints(heartA.getPanel("15"))
-      .addPoints(heartA.getPanel("16")),
+    // new OutputGroup("102") // 7
+    //   .addPoints(heartA.getPanel("14"))
+    //   .addPoints(heartA.getPanel("15"))
+    //   .addPoints(heartA.getPanel("16")),
 
-    new OutputGroup("329") // 8
-      .addPoints(heartA.getPanel("21"))
-      .addPoints(heartA.getPanel("22"))
-      .addPoints(heartA.getPanel("23")),
+    // new OutputGroup("329") // 8
+    //   .addPoints(heartA.getPanel("21"))
+    //   .addPoints(heartA.getPanel("22"))
+    //   .addPoints(heartA.getPanel("23")),
 
-    new OutputGroup("310") // 9
-      .addPoints(heartA.getPanel("24"))
-      .addPoints(heartA.getPanel("25"))
-      .addPoints(heartA.getPanel("26")),
+    // new OutputGroup("310") // 9
+    //   .addPoints(heartA.getPanel("24"))
+    //   .addPoints(heartA.getPanel("25"))
+    //   .addPoints(heartA.getPanel("26")),
 
-    new OutputGroup("0") // 10
-      .addPoints(heartA.getPanel("28"))
-      .addPoints(heartA.getPanel("29")),
+    // new OutputGroup("d8:80:39:9b:3c:32") // 10
+    //   .addPoints(heartA.getPanel("28"))
+    //   .addPoints(heartA.getPanel("29")),
 
-    new OutputGroup("146") // 11
-      .addPoints(heartA.getPanel("30"))
-      .addPoints(heartA.getPanel("31"))
-      .addPoints(heartA.getPanel("32")),
+    // new OutputGroup("146") // 11
+    //   .addPoints(heartA.getPanel("30"))
+    //   .addPoints(heartA.getPanel("31"))
+    //   .addPoints(heartA.getPanel("32")),
 
-    new OutputGroup("374") // 12
-      .addPoints(heartA.getPanel("33"))
-      .addPoints(heartA.getPanel("34"))
-      .addPoints(heartA.getPanel("35")),
+    // new OutputGroup("374") // 12
+    //   .addPoints(heartA.getPanel("33"))
+    //   .addPoints(heartA.getPanel("34"))
+    //   .addPoints(heartA.getPanel("35")),
 
-    new OutputGroup("423") // 13
-      .addPoints(heartA.getPanel("36"))
-      .addPoints(heartA.getPanel("37"))
-      .addPoints(heartA.getPanel("44")),
+    // new OutputGroup("423") // 13
+    //   .addPoints(heartA.getPanel("36"))
+    //   .addPoints(heartA.getPanel("37"))
+    //   .addPoints(heartA.getPanel("44")),
 
-    new OutputGroup("d8:80:39:9a:d3:69") // 14
-      .addPoints(heartA.getPanel("38"))
-      .addPoints(heartA.getPanel("39"))
-      .addPoints(heartA.getPanel("40")),
+    // new OutputGroup("d8:80:39:9a:d3:69") // 14
+    //   .addPoints(heartA.getPanel("38"))
+    //   .addPoints(heartA.getPanel("39"))
+    //   .addPoints(heartA.getPanel("40")),
 
-    new OutputGroup("325") // 15
-      .addPoints(heartA.getPanel("41"))
-      .addPoints(heartA.getPanel("42"))
-      .addPoints(heartA.getPanel("43")),
+    // new OutputGroup("325") // 15
+    //   .addPoints(heartA.getPanel("41"))
+    //   .addPoints(heartA.getPanel("42"))
+    //   .addPoints(heartA.getPanel("43")),
 
-    new OutputGroup("d8:80:39:9a:d4:3b") // 16
-      .addPoints(heartA.getPanel("45"))
-      .addPoints(heartA.getPanel("46"))
-      .addPoints(heartA.getPanel("47")),
+    // new OutputGroup("d8:80:39:9a:d4:3b") // 16
+    //   .addPoints(heartA.getPanel("45"))
+    //   .addPoints(heartA.getPanel("46"))
+    //   .addPoints(heartA.getPanel("47")),
 
-    new OutputGroup("425") // 17
-      .addPoints(heartA.getPanel("48"))
-      .addPoints(heartA.getPanel("49"))
-      .addPoints(heartA.getPanel("50")),
+    // new OutputGroup("425") // 17
+    //   .addPoints(heartA.getPanel("48"))
+    //   .addPoints(heartA.getPanel("49"))
+    //   .addPoints(heartA.getPanel("50")),
 
-    new OutputGroup("190") // 18
-      .addPoints(heartA.getPanel("51"))
-      .addPoints(heartA.getPanel("52"))
-      .addPoints(heartA.getPanel("53"))
-      .addPoints(heartA.getPanel("54")),
+    // new OutputGroup("190") // 18
+    //   .addPoints(heartA.getPanel("51"))
+    //   .addPoints(heartA.getPanel("52"))
+    //   .addPoints(heartA.getPanel("53"))
+    //   .addPoints(heartA.getPanel("54")),
 
     // /*
     //  * Heart Half B
     //  *----------------------------------------------------*/
-    // new OutputGroup("0") // 1
-    //   .addPoints(heartB.getPanel("1"))
-    //   .addPoints(heartB.getPanel("2"))
-    //   .addPoints(heartB.getPanel("3")),
+    new OutputGroup("0") // 1
+      .addPoints(heartB.getPanel("1"))
+      .addPoints(heartB.getPanel("2"))
+      .addPoints(heartB.getPanel("3")),
 
-    // new OutputGroup("0") // 2
-    //   .addPoints(heartB.getPanel("4"))
-    //   .addPoints(heartB.getPanel("5"))
-    //   .addPoints(heartB.getPanel("6")),
+    new OutputGroup("0") // 2
+      .addPoints(heartB.getPanel("4"))
+      .addPoints(heartB.getPanel("5"))
+      .addPoints(heartB.getPanel("6")),
 
-    // new OutputGroup("0") // 3
-    //   .addPoints(heartB.getPanel("7"))
-    //   .addPoints(heartB.getPanel("8"))
-    //   .addPoints(heartB.getPanel("17")),
+    new OutputGroup("0") // 3
+      .addPoints(heartB.getPanel("7"))
+      .addPoints(heartB.getPanel("8"))
+      .addPoints(heartB.getPanel("17")),
 
-    // new OutputGroup("0") // 4
-    //   .addPoints(heartB.getPanel("9"))
-    //   .addPoints(heartB.getPanel("18"))
-    //   .addPoints(heartB.getPanel("27")),
+    new OutputGroup("0") // 4
+      .addPoints(heartB.getPanel("9"))
+      .addPoints(heartB.getPanel("18"))
+      .addPoints(heartB.getPanel("27")),
 
-    // new OutputGroup("0") // 5
-    //   .addPoints(heartB.getPanel("10"))
-    //   .addPoints(heartB.getPanel("19"))
-    //   .addPoints(heartB.getPanel("20")),
+    new OutputGroup("0") // 5
+      .addPoints(heartB.getPanel("10"))
+      .addPoints(heartB.getPanel("19"))
+      .addPoints(heartB.getPanel("20")),
 
-    // new OutputGroup("0") // 6
-    //   .addPoints(heartB.getPanel("11"))
-    //   .addPoints(heartB.getPanel("12"))
-    //   .addPoints(heartB.getPanel("13")),
+    new OutputGroup("0") // 6
+      .addPoints(heartB.getPanel("11"))
+      .addPoints(heartB.getPanel("12"))
+      .addPoints(heartB.getPanel("13")),
 
-    // new OutputGroup("0") // 7
-    //   .addPoints(heartB.getPanel("14"))
-    //   .addPoints(heartB.getPanel("15"))
-    //   .addPoints(heartB.getPanel("16")),
+    new OutputGroup("0") // 7
+      .addPoints(heartB.getPanel("14"))
+      .addPoints(heartB.getPanel("15"))
+      .addPoints(heartB.getPanel("16")),
 
-    // new OutputGroup("0") // 8
-    //   .addPoints(heartB.getPanel("21"))
-    //   .addPoints(heartB.getPanel("22"))
-    //   .addPoints(heartB.getPanel("23")),
+    new OutputGroup("0") // 8
+      .addPoints(heartB.getPanel("21"))
+      .addPoints(heartB.getPanel("22"))
+      .addPoints(heartB.getPanel("23")),
 
-    // new OutputGroup("0") // 9
-    //   .addPoints(heartB.getPanel("24"))
-    //   .addPoints(heartB.getPanel("25"))
-    //   .addPoints(heartB.getPanel("26")),
+    new OutputGroup("0") // 9
+      .addPoints(heartB.getPanel("24"))
+      .addPoints(heartB.getPanel("25"))
+      .addPoints(heartB.getPanel("26")),
 
-    // new OutputGroup("0") // 10
-    //   .addPoints(heartB.getPanel("28"))
-    //   .addPoints(heartB.getPanel("29")),
+    new OutputGroup("0") // 10
+      .addPoints(heartB.getPanel("28"))
+      .addPoints(heartB.getPanel("29")),
 
-    // new OutputGroup("0") // 11
-    //   .addPoints(heartB.getPanel("30"))
-    //   .addPoints(heartB.getPanel("31"))
-    //   .addPoints(heartB.getPanel("32")),
+    new OutputGroup("0") // 11
+      .addPoints(heartB.getPanel("30"))
+      .addPoints(heartB.getPanel("31"))
+      .addPoints(heartB.getPanel("32")),
 
-    // new OutputGroup("0") // 12
-    //   .addPoints(heartB.getPanel("33"))
-    //   .addPoints(heartB.getPanel("34"))
-    //   .addPoints(heartB.getPanel("35")),
+    new OutputGroup("0") // 12
+      .addPoints(heartB.getPanel("33"))
+      .addPoints(heartB.getPanel("34"))
+      .addPoints(heartB.getPanel("35")),
 
-    // new OutputGroup("0") // 13
-    //   .addPoints(heartB.getPanel("36"))
-    //   .addPoints(heartB.getPanel("37"))
-    //   .addPoints(heartB.getPanel("44")),
+    new OutputGroup("0") // 13
+      .addPoints(heartB.getPanel("36"))
+      .addPoints(heartB.getPanel("37"))
+      .addPoints(heartB.getPanel("44")),
 
-    // new OutputGroup("0") // 14
-    //   .addPoints(heartB.getPanel("38"))
-    //   .addPoints(heartB.getPanel("39"))
-    //   .addPoints(heartB.getPanel("40")),
+    new OutputGroup("0") // 14
+      .addPoints(heartB.getPanel("38"))
+      .addPoints(heartB.getPanel("39"))
+      .addPoints(heartB.getPanel("40")),
 
-    // new OutputGroup("0") // 15
-    //   .addPoints(heartB.getPanel("41"))
-    //   .addPoints(heartB.getPanel("42"))
-    //   .addPoints(heartB.getPanel("43")),
+    new OutputGroup("0") // 15
+      .addPoints(heartB.getPanel("41"))
+      .addPoints(heartB.getPanel("42"))
+      .addPoints(heartB.getPanel("43")),
 
-    // new OutputGroup("0") // 16
-    //   .addPoints(heartB.getPanel("45"))
-    //   .addPoints(heartB.getPanel("46"))
-    //   .addPoints(heartB.getPanel("47")),
+    new OutputGroup("0") // 16
+      .addPoints(heartB.getPanel("45"))
+      .addPoints(heartB.getPanel("46"))
+      .addPoints(heartB.getPanel("47")),
 
-    // new OutputGroup("0") // 17
-    //   .addPoints(heartB.getPanel("48"))
-    //   .addPoints(heartB.getPanel("49"))
-    //   .addPoints(heartB.getPanel("50")),
+    new OutputGroup("0") // 17
+      .addPoints(heartB.getPanel("48"))
+      .addPoints(heartB.getPanel("49"))
+      .addPoints(heartB.getPanel("50")),
 
-    // new OutputGroup("0") // 18
-    //   .addPoints(heartB.getPanel("51"))
-    //   .addPoints(heartB.getPanel("52"))
-    //   .addPoints(heartB.getPanel("53"))
-    //   .addPoints(heartB.getPanel("54")),
+    new OutputGroup("0") // 18
+      .addPoints(heartB.getPanel("51"))
+      .addPoints(heartB.getPanel("52"))
+      .addPoints(heartB.getPanel("53"))
+      .addPoints(heartB.getPanel("54")),
 
     // /*
     //  * Heart Half C

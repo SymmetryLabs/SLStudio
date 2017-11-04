@@ -11,6 +11,12 @@ public OutputControl outputControl;
 public MappingMode mappingMode = null;
 public OutputGroup[] outputGroups;
 
+public HeartEventListener heartEventListener;
+public HeartEventRunner heartRunner1;
+public HeartEventRunner heartRunner2;
+public HeartEventRunner heartRunner3;
+public HeartEventRunner heartRunner4;
+
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
 
@@ -54,15 +60,33 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
-      if (((SLModel)model).cubes.size() > 0)
+      if (((SLModel)model).cubes.size() > 0) {
         mappingMode = new MappingMode(lx);
+      }
 
-      // Adaptor for mapping osc messages from Essentia to lx osc engine
-      try {
-        lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
-      } catch (SocketException sx) {
-        throw new RuntimeException(sx);
-      } 
+      println(lx.engine.getChannels());
+
+      heartRunner1 = new HeartEventRunner("Station 1");
+      lx.engine.registerComponent("heartRunner1", heartRunner1);
+      lx.engine.addLoopTask(heartRunner1);
+
+      // heartRunner2 = new HeartEventRunner(lx.engine.getChannel("Station 2"));
+      // lx.engine.registerComponent("heartRunner2", heartRunner2);
+
+      // heartRunner3 = new HeartEventRunner(lx.engine.getChannel("Station 3"));
+      // lx.engine.registerComponent("heartRunner3", heartRunner3);
+
+      // heartRunner4 = new HeartEventRunner(lx.engine.getChannel("Station 4"));
+      // lx.engine.registerComponent("heartRunner4", heartRunner4);
+
+      heartEventListener = new HeartEventListener();
+
+      // // Adaptor for mapping osc messages from Essentia to lx osc engine
+      // try {
+      //   lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
+      // } catch (SocketException sx) {
+      //   throw new RuntimeException(sx);
+      // } 
         
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
@@ -87,6 +111,7 @@ void setup() {
       ui.preview.setPhi(0).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+      new UIHeartEvents(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
