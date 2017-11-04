@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1509754453688,
+  "timestamp": 1509834044901,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "Idle 1",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -263,7 +263,7 @@
         "parameters": {
           "label": "Idle 2",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -439,7 +439,7 @@
         "parameters": {
           "label": "Idle 3",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -621,7 +621,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -647,7 +647,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 2981,
@@ -668,6 +668,26 @@
               "Shrp": 0.5,
               "Symm": 0,
               "Anim": 4
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3749,
+            "class": "LXStudioCubes$AskewPlanes",
+            "modulationColor": -36352,
+            "parameters": {
+              "label": "AskewPlanes",
+              "Sprk": 0.0,
+              "Wave": 0.0,
+              "TrnX": 1.0,
+              "TrnY": 0.5,
+              "thck": 0.20000000298023224,
+              "num": 0
             },
             "modulation": {
               "modulators": [],
@@ -734,15 +754,15 @@
           "Band-4": 0.0,
           "Band-5": 0.0,
           "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
-          "Band-13": 0.0,
-          "Band-14": 0.0,
-          "Band-15": 0.0,
+          "Band-7": 0.0037517067432323303,
+          "Band-8": 1.8675248363331232E-4,
+          "Band-9": 0.08091733001660695,
+          "Band-10": 0.19592829256596556,
+          "Band-11": 0.13663045054112521,
+          "Band-12": 0.21804978966550814,
+          "Band-13": 0.2442956198789249,
+          "Band-14": 0.1831879020472108,
+          "Band-15": 0.16076246232175073,
           "Band-16": 0.0
         }
       },
@@ -782,6 +802,16 @@
       }
     },
     "components": {
+      "heartRunner1": {
+        "id": -1,
+        "class": "LXStudioCubes$HeartEventRunner",
+        "modulationColor": -12288,
+        "parameters": {
+          "label": "",
+          "running": false,
+          "trigger": false
+        }
+      },
       "outputControl": {
         "id": 32,
         "class": "LXStudioCubes$OutputControl",
