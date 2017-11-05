@@ -44,7 +44,7 @@ public class HeartEventRunner extends LXRunnableComponent {
 public class HeartEventListener {
 
   private final boolean TESTING_ENABLED = false;
-  private final int PORT = 12121;
+  private final int PORT = 8080;
 
   private DatagramSocket socket;
 
@@ -115,11 +115,37 @@ public class HeartEventListener {
   }
 
   private void triggerEvent(int index) {
-    println("received a new heart event! " + index);
+    //println("received a new heart event! " + index);
 
     switch(index) {
-      case 0: 
+      case 49: // 1 
+        // research event
         heartRunner1.start();
+        break;
+
+      case 50: // 1 
+        // research finale
+        heartRunner1.start();
+        break;
+
+      case 51: // 1 
+        // patient event
+        heartRunner2.start();
+        break;
+
+      case 52: // 1 
+        // patient finale
+        heartRunner2.start();
+        break;
+
+      case 53: // 1 
+        // care team event
+        heartRunner3.start();
+        break;
+
+      case 54: // 1 
+        // care team finale
+        heartRunner3.start();
         break;
 
       default:

@@ -203,10 +203,10 @@ public OutputGroup[] setupOutputGroups() {
     // 45
     // 51
 
-    // new OutputGroup("0") // 1
-    //   .addPoints(heartC.getPanel("1"))
-    //   .addPoints(heartC.getPanel("2"))
-    //   .addPoints(heartC.getPanel("3")),
+    new OutputGroup("d8:80:39:9b:23:37") // 1
+      .addPoints(heartC.getPanel("1"))
+      .addPoints(heartC.getPanel("2"))
+      .addPoints(heartC.getPanel("3")),
 
     new OutputGroup("100") // 2
       .addPoints(heartC.getPanel("4"))

@@ -66,18 +66,17 @@ void setup() {
 
       println(lx.engine.getChannels());
 
-      heartRunner1 = new HeartEventRunner("Station 1");
+      heartRunner1 = new HeartEventRunner("Research");
       lx.engine.registerComponent("heartRunner1", heartRunner1);
       lx.engine.addLoopTask(heartRunner1);
 
-      // heartRunner2 = new HeartEventRunner(lx.engine.getChannel("Station 2"));
-      // lx.engine.registerComponent("heartRunner2", heartRunner2);
+      heartRunner2 = new HeartEventRunner("Patient");
+      lx.engine.registerComponent("heartRunner2", heartRunner2);
+      lx.engine.addLoopTask(heartRunner2);
 
-      // heartRunner3 = new HeartEventRunner(lx.engine.getChannel("Station 3"));
-      // lx.engine.registerComponent("heartRunner3", heartRunner3);
-
-      // heartRunner4 = new HeartEventRunner(lx.engine.getChannel("Station 4"));
-      // lx.engine.registerComponent("heartRunner4", heartRunner4);
+      heartRunner3 = new HeartEventRunner("Care Team");
+      lx.engine.registerComponent("heartRunner3", heartRunner3);
+      lx.engine.addLoopTask(heartRunner3);
 
       heartEventListener = new HeartEventListener();
 
