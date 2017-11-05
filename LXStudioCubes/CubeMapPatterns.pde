@@ -27,7 +27,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
    */
   protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int faceRes) {
     super(lx);
-    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3); //<>//
+    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>//
     this.origin = origin;
     this.bboxSize = bboxSize;
     this.faceRes = faceRes;
