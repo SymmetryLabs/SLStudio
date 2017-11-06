@@ -160,7 +160,7 @@ public OutputGroup[] setupOutputGroups() {
       .addPoints(heartB.getPanel("34"))
       .addPoints(heartB.getPanel("35")),
 
-    new OutputGroup("d8:80:39:9a:f2:db") // 13
+    new OutputGroup("d8:80:39:9a:dc:d4") // 13
       .addPoints(heartB.getPanel("36"))
       .addPoints(heartB.getPanel("37"))
       .addPoints(heartB.getPanel("44")),

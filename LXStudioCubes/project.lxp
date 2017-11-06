@@ -1,10 +1,10 @@
 {
   "version": "0.1",
-  "timestamp": 1509930219770,
+  "timestamp": 1509931858443,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
-    "modulationColor": -16318209,
+    "modulationColor": -55296,
     "parameters": {
       "label": "Engine",
       "scene-1": false,
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 5,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -400,7 +400,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.9300000667572021,
+          "fader": 0.0,
           "crossfadeGroup": 1,
           "blendMode": 4,
           "transitionEnabled": false,
@@ -739,22 +739,22 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.0,
-          "Band-2": 0.020604026146160526,
-          "Band-3": 0.1004173039663937,
-          "Band-4": 0.18669181681613223,
-          "Band-5": 0.2873546724704551,
-          "Band-6": 0.42007586761604443,
-          "Band-7": 0.401739105568939,
-          "Band-8": 0.3306903602729082,
-          "Band-9": 0.2910779779251308,
-          "Band-10": 0.35543708035281696,
-          "Band-11": 0.3466900759771634,
-          "Band-12": 0.28904858224014773,
-          "Band-13": 0.1712861308089243,
-          "Band-14": 0.12048703721123688,
-          "Band-15": 0.038878666396233386,
-          "Band-16": 0.0
+          "Band-1": 0.29426039609143606,
+          "Band-2": 0.414747850746256,
+          "Band-3": 0.5719105125793407,
+          "Band-4": 0.6925389369547028,
+          "Band-5": 0.8954586534983754,
+          "Band-6": 1.0,
+          "Band-7": 1.0,
+          "Band-8": 0.8572030329300908,
+          "Band-9": 0.6894657396217034,
+          "Band-10": 0.6574056625432612,
+          "Band-11": 0.6715293476784336,
+          "Band-12": 0.6220463234801252,
+          "Band-13": 0.5394555857487309,
+          "Band-14": 0.6450424241340642,
+          "Band-15": 0.37512579641118593,
+          "Band-16": 0.08381444136075389
         }
       },
       "input": {
@@ -782,21 +782,21 @@
     "output": {
       "id": 19,
       "class": "heronarts.lx.LXEngine$Output",
-      "modulationColor": -16728065,
+      "modulationColor": -16711934,
       "parameters": {
         "label": "Output",
         "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.8285714276134968
       }
     },
     "components": {
       "heartRunnerResearchFinale": {
         "id": -1,
         "class": "LXStudioCubes$HeartEventRunner_Hearts",
-        "modulationColor": -16773633,
+        "modulationColor": -14549248,
         "parameters": {
           "label": "",
           "running": false,
@@ -806,7 +806,7 @@
       "heartRunnerPatientFinale": {
         "id": -1,
         "class": "LXStudioCubes$HeartEventRunner_Hearts",
-        "modulationColor": -16711843,
+        "modulationColor": -16769793,
         "parameters": {
           "label": "",
           "running": false,
@@ -816,7 +816,7 @@
       "heartRunnerResearch": {
         "id": -1,
         "class": "LXStudioCubes$HeartEventRunner_PanelFlash",
-        "modulationColor": -1179393,
+        "modulationColor": -65482,
         "parameters": {
           "label": "",
           "running": false,
@@ -826,7 +826,7 @@
       "heartRunnerCareTeam": {
         "id": -1,
         "class": "LXStudioCubes$HeartEventRunner_PanelFlash",
-        "modulationColor": -16728321,
+        "modulationColor": -65483,
         "parameters": {
           "label": "",
           "running": false,
@@ -836,7 +836,7 @@
       "heartRunnerCareTeamFinale": {
         "id": -1,
         "class": "LXStudioCubes$HeartEventRunner_Hearts",
-        "modulationColor": -3735808,
+        "modulationColor": -16711829,
         "parameters": {
           "label": "",
           "running": false,
@@ -846,7 +846,7 @@
       "outputControl": {
         "id": 32,
         "class": "LXStudioCubes$OutputControl",
-        "modulationColor": -16752385,
+        "modulationColor": -10026753,
         "parameters": {
           "label": "Output Control",
           "Test broadcast enabled": false
@@ -855,10 +855,10 @@
       "heartRunnerPatient": {
         "id": -1,
         "class": "LXStudioCubes$HeartEventRunner_PanelFlash",
-        "modulationColor": -16719361,
+        "modulationColor": -9371393,
         "parameters": {
           "label": "",
-          "running": true,
+          "running": false,
           "trigger": false
         }
       }
@@ -871,7 +871,7 @@
     "osc": {
       "id": 24,
       "class": "heronarts.lx.osc.LXOscEngine",
-      "modulationColor": -65440,
+      "modulationColor": -16747265,
       "parameters": {
         "label": "OSC",
         "receiveHost": "0.0.0.0",
@@ -896,7 +896,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 99.72090474954794,
+        "radius": 360.0,
         "theta": 0.0,
         "phi": 0.0
       }
