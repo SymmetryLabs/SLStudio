@@ -12,10 +12,13 @@ public MappingMode mappingMode = null;
 public OutputGroup[] outputGroups;
 
 public HeartEventListener heartEventListener;
-public HeartEventRunner heartRunner1;
-public HeartEventRunner heartRunner2;
-public HeartEventRunner heartRunner3;
-public HeartEventRunner heartRunner4;
+
+public HeartEventRunner_PanelFlash heartRunnerResearch;
+public HeartEventRunner_Hearts heartRunnerResearchFinale;
+public HeartEventRunner_PanelFlash heartRunnerPatient;
+public HeartEventRunner_Hearts heartRunnerPatientFinale;
+public HeartEventRunner_PanelFlash heartRunnerCareTeam;
+public HeartEventRunner_Hearts heartRunnerCareTeamFinale;
 
 // public boolean envelopOn = false;
 // public Envelop envelop = null;
@@ -64,19 +67,32 @@ void setup() {
         mappingMode = new MappingMode(lx);
       }
 
-      println(lx.engine.getChannels());
+      // Research
+      heartRunnerResearch = new HeartEventRunner_PanelFlash("Research");
+      lx.engine.registerComponent("heartRunnerResearch", heartRunnerResearch);
+      lx.engine.addLoopTask(heartRunnerResearch);
 
-      heartRunner1 = new HeartEventRunner("Research");
-      lx.engine.registerComponent("heartRunner1", heartRunner1);
-      lx.engine.addLoopTask(heartRunner1);
+      heartRunnerResearchFinale = new HeartEventRunner_Hearts("Research Finale");
+      lx.engine.registerComponent("heartRunnerResearchFinale", heartRunnerResearchFinale);
+      lx.engine.addLoopTask(heartRunnerResearchFinale);
 
-      heartRunner2 = new HeartEventRunner("Patient");
-      lx.engine.registerComponent("heartRunner2", heartRunner2);
-      lx.engine.addLoopTask(heartRunner2);
+      // Patient
+      heartRunnerPatient = new HeartEventRunner_PanelFlash("Patient");
+      lx.engine.registerComponent("heartRunnerPatient", heartRunnerPatient);
+      lx.engine.addLoopTask(heartRunnerPatient);
 
-      heartRunner3 = new HeartEventRunner("Care Team");
-      lx.engine.registerComponent("heartRunner3", heartRunner3);
-      lx.engine.addLoopTask(heartRunner3);
+      heartRunnerPatientFinale = new HeartEventRunner_Hearts("Patient Finale");
+      lx.engine.registerComponent("heartRunnerPatientFinale", heartRunnerPatientFinale);
+      lx.engine.addLoopTask(heartRunnerPatientFinale);
+
+      // Care Team
+      heartRunnerCareTeam = new HeartEventRunner_PanelFlash("Care Team");
+      lx.engine.registerComponent("heartRunnerCareTeam", heartRunnerCareTeam);
+      lx.engine.addLoopTask(heartRunnerCareTeam);
+
+      heartRunnerCareTeamFinale = new HeartEventRunner_Hearts("Care Team Finale");
+      lx.engine.registerComponent("heartRunnerCareTeamFinale", heartRunnerCareTeamFinale);
+      lx.engine.addLoopTask(heartRunnerCareTeamFinale);
 
       heartEventListener = new HeartEventListener();
 

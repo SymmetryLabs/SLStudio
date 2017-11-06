@@ -1,5 +1,24 @@
 import java.awt.Color;
 
+public static class ResearchMask extends LXEffect {
+
+  public ResearchMask(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs, double amount) {
+    LXChannel prevChannel = lx.engine.getChannel("Idle");
+    LXChannel currChannel = lx.engine.getChannel("Research");
+
+    for (LXPoint p : model.points) {
+      if (LXColor.b(prevChannel.getActivePattern().getColors()[p.index]) < 15) {
+        colors[p.index] = prevChannel.getActivePattern().getColors()[p.index];
+      }
+    }
+  }
+
+}
+
 public static class ColorFilter extends LXEffect {
 
   public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);

@@ -1,6 +1,210 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+// public class Hearts extends DPat {
+//     PImage img = loadImage("data/heart.png");
+
+//     private float scale = 0;
+
+//     public Hearts(LX lx) {
+//         super(lx);
+//         img.loadPixels();
+//     }
+
+//     void StartRun(double deltaMs) {
+//       scale += 0.01;
+//     }
+
+//     color CalcPoint(PVector p) {
+//         float xBasis = p.x / (model.xMax - model.xMin);
+//         float yBasis = p.y / (model.yMax - model.yMin);
+
+//         if (xBasis < 0.5) {
+//           xBasis += scale;
+//         } else {
+//           xBasis -= scale;
+//         }
+
+//         if (yBasis < 0.5) {
+//           yBasis += scale;
+//         } else {
+//           yBasis -= scale;
+//         }
+
+
+//         int x = (int)(xBasis * img.width);
+//         int y = (int)(yBasis * img.height);
+
+//         color c = img.get(x, y);
+
+//         return c;
+//     }
+
+// }
+
+public class PanelFlash extends LXPattern {
+  private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
+  private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
+  private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
+  private CompoundParameter hueParameter = new CompoundParameter("HUE", 0.5);
+  private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
+  private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+  private CompoundParameter ythreshold = new CompoundParameter("YTHRE", 0.1, 0.1, 1);
+  
+  public class Flash {
+    Panel panel = null;
+    float value;
+    float hue;
+    boolean hasPeaked;
+    
+    Flash() {
+      while(true) {
+        panel = ((SLModel)model).panels.get(floor(random(((SLModel)model).panels.size())));
+
+        if (panel.points[0].y / model.yRange <= ythreshold.getValuef()) {
+          break;
+        }
+      }
+
+      hue = random(1);
+      boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
+      hasPeaked = infiniteAttack;
+      value = (infiniteAttack ? 1 : 0);
+    }
+    
+    // returns TRUE if this should die
+    boolean age(double ms) {
+      if (!hasPeaked) {
+        value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
+        if (value >= 1.0) {
+          value = 1.0;
+          hasPeaked = true;
+        }
+        return false;
+      } else {
+        value = value - (float) (ms / 1000.0f * ((decayParameter.getValuef() + 0.01) * 10));
+        return value <= 0;
+      }
+    }
+  }
+  
+  private float leftoverMs = 0;
+  public List<Flash> flashes;
+  
+  public PanelFlash(LX lx) {
+    super(lx);
+    addParameter(rateParameter);
+    addParameter(attackParameter);
+    addParameter(decayParameter);
+    addParameter(hueParameter);
+    addParameter(hueVarianceParameter);
+    addParameter(saturationParameter);
+    addParameter(ythreshold);
+    flashes = new LinkedList<Flash>();
+  }
+  
+  public void run(double deltaMs) {
+    leftoverMs += deltaMs;
+    float msPerFlash = 1000 / ((rateParameter.getValuef() + .01) * 100);
+    while (leftoverMs > msPerFlash) {
+      leftoverMs -= msPerFlash;
+      flashes.add(new Flash());
+    }
+    
+    for (LXPoint p : model.points) {
+      colors[p.index] = 0;
+    }
+    
+    for (Flash flash : flashes) {
+      float hue = (hueParameter.getValuef() + (hueVarianceParameter.getValuef() * flash.hue)) % 1.0;
+      color c = lx.hsb(hue * 360, saturationParameter.getValuef() * 100, (flash.value) * 100);
+      for (LXPoint p : flash.panel.points) {
+        colors[p.index] = c;
+      }
+    }
+    
+    Iterator<Flash> i = flashes.iterator();
+    while (i.hasNext()) {
+      Flash flash = i.next();
+      boolean dead = flash.age(deltaMs);
+      if (dead) {
+        i.remove();
+      }
+    }
+  } 
+}
+
+
+public class Hearts extends LXPattern {
+    private final int MAX_NUM_PROJECTIONS = 5;
+
+    private final PImage img = loadImage("data/heart.png");
+
+    private LXProjection[] hearts = new LXProjection[MAX_NUM_PROJECTIONS];
+
+    private float[] elapsedMs;
+
+    public Hearts(LX lx) {
+        super(lx);
+        img.loadPixels();
+        resetHearts();
+    }
+
+    public void resetHearts() {
+      elapsedMs = new float[] { 0, 800, 1600, 2400, 3200 };
+
+      for (int i = 0; i < MAX_NUM_PROJECTIONS; i++) {
+        hearts[i] = new LXProjection(model);
+      }
+
+      for (LXProjection heart : hearts) {
+        heart.scale(30, 30, 1);
+        heart.translate(-model.xRange*14, -model.yRange*14, 0);
+      }
+    }
+
+    public void onActive() {
+      resetHearts();
+    }
+
+    public void run(double deltaMs) {
+      setColors(0);
+
+      for (int i = 0; i < elapsedMs.length; i++) {
+        if ((elapsedMs[i] += deltaMs) > 4000) {
+          LXProjection heart = hearts[i];
+          heart.reset();
+          heart.scale(30, 30, 1);
+          heart.translate(-model.xRange*14, -model.yRange*14, 0);
+          heart.center();
+          elapsedMs[i] = 0;
+        }
+      } 
+
+      int i = 0;
+      for (LXProjection heart : hearts) {
+        heart.scale(0.95, 0.95, 0);
+        heart.translate(model.xRange*0.025, model.yRange*0.025, 0);
+
+        for (LXVector p : heart) {
+          int x = (int)((p.x / (model.xMax - model.xMin)) * img.width);
+          int y = (int)((p.y / (model.yMax - model.yMin)) * img.height);
+          addColor(p.index, img.get(x, y));
+        }
+      }
+    }
+
+    // color CalcPoint(PVector p) {
+    //     int x = (int)((p.x / (model.xMax - model.xMin)) * img.width);
+    //     int y = (int)((p.y / (model.yMax - model.yMin)) * img.height);
+
+    //     color c = img.get(x, y);
+
+    //     return c;
+    // }
+
+}
+
 public class PanelTestInput extends LXPattern {
   public PanelTestInput(LX lx) {
     super(lx);
@@ -553,7 +757,7 @@ public class SoundParticles extends SLPattern   {
 
  }
 
-public class StripPlay extends SLPattern {
+public class PanelPlay extends SLPattern {
   private final int NUM_OSC = 300;
   private final int MAX_PERIOD = 20000; 
   private CompoundParameter brightParameter = new CompoundParameter("bright", 96, 70, 100); 
@@ -571,7 +775,7 @@ public class StripPlay extends SLPattern {
   SinLFO[] sat = new SinLFO[NUM_OSC];
   float[] colorOffset = new float[NUM_OSC];
  
-  public StripPlay(LX lx) {
+  public PanelPlay(LX lx) {
     super(lx);
     addParameter(brightParameter); 
     addParameter(numOsc);
@@ -616,8 +820,8 @@ public class StripPlay extends SLPattern {
   public void run(double deltaMs) {
     setColors(#000000); 
     float[] bright = new float[model.points.length];
-    for (Strip strip : model.strips) {
-      LXPoint centerPoint = strip.points[8];
+    for (Panel panel : model.panels) {
+      LXPoint centerPoint = panel.points[5];
       for (int i=0;i<numOsc.getValue();i++) {
         float avgdist = dist(centerPoint.x,centerPoint.y,centerPoint.z,fX[i].getValuef(),fY[i].getValuef(),fZ[i].getValuef());
         boolean on = avgdist<30;
@@ -625,7 +829,7 @@ public class StripPlay extends SLPattern {
           float hv = palette.getHuef()+colorOffset[i];
           float br = max(0,100-avgdist*2*(100 - brightParameter.getValuef()));
           int colr = lx.hsb(hv, sat[i].getValuef(), br);
-          for (LXPoint p : strip.points) {
+          for (LXPoint p : panel.points) {
             if (br>bright[p.index]) {
               //colors[p.index] = lx.hsb(hv,sat[i].getValuef(),br);
               addColor(p.index, colr);
@@ -1791,12 +1995,12 @@ public class Bubbles extends SLPattern {
 
     private class Bubble {
         float x = (rand.nextFloat() * model.xRange) + model.xMin;
-        float y = (rand.nextFloat() * model.yRange) + model.yMin;
+        float y = model.yMin; //(rand.nextFloat() * model.yRange) + model.yMin;
         float z = (rand.nextFloat() * model.zRange) + model.zMin;
 
-        float xVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
-        float yVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
-        float zVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
+        float xVelocity = 0;//rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
+        float yVelocity = model.yMin;//rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
+        float zVelocity = 0;//rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
 
         float size = rand.nextFloat() * maxBubbleSize.getValuef() + 4.0f;
         float sproutTime = rand.nextFloat() * MAX_SPROUT_TIME;
@@ -1808,11 +2012,11 @@ public class Bubbles extends SLPattern {
         float radius = 0;
         int counter = 0;
 
-        QuadraticEnvelope yMod = new QuadraticEnvelope(-0.2, 0.2, 2000);
+        QuadraticEnvelope yMod = new QuadraticEnvelope(5, 0.1, 2000);
         QuadraticEnvelope pop = new QuadraticEnvelope(0, 15, 200);
 
         public Bubble() {
-            yMod.setEase(QuadraticEnvelope.Ease.BOTH);
+            yMod.setEase(QuadraticEnvelope.Ease.OUT);
             pop.setEase(QuadraticEnvelope.Ease.OUT);
             addModulator(yMod).start();
             addModulator(pop);
