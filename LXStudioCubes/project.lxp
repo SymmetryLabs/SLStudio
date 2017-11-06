@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1509927402171,
+  "timestamp": 1509930219770,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 4,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -94,7 +94,7 @@
               "enabled": true,
               "Scale": 5.0,
               "Speed": 1.0,
-              "Range": 1.272000009596348
+              "Range": 1.3369999796822665
             },
             "modulation": {
               "modulators": [],
@@ -400,9 +400,9 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.007000000216066837,
+          "fader": 0.9300000667572021,
           "crossfadeGroup": 1,
-          "blendMode": 0,
+          "blendMode": 4,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
@@ -430,8 +430,8 @@
             "modulationColor": -6357248,
             "parameters": {
               "label": "Blur",
-              "enabled": false,
-              "amount": 0.0
+              "enabled": true,
+              "amount": 0.9299994111061096
             },
             "modulation": {
               "modulators": [],
@@ -450,12 +450,12 @@
             "parameters": {
               "label": "PanelFlash",
               "RATE": 1.0,
-              "ATTK": 0.20000000298023224,
+              "ATTK": 0.19000000320374966,
               "DECAY": 0.5,
               "HUE": 0.5,
               "H.V.": 0.25,
               "SAT": 0.5,
-              "YTHRE": 0.10500000417232513
+              "YTHRE": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -553,7 +553,7 @@
           "autoCycleTimeSecs": 60.0,
           "fader": 0.007000000216066837,
           "crossfadeGroup": 1,
-          "blendMode": 0,
+          "blendMode": 4,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
@@ -581,7 +581,7 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "hue": 35.999999195337296,
+              "hue": 28.799999356269836,
               "sat": 100.0
             },
             "modulation": {
@@ -632,7 +632,7 @@
           "autoCycleTimeSecs": 60.0,
           "fader": 0.009999999776482582,
           "crossfadeGroup": 1,
-          "blendMode": 0,
+          "blendMode": 4,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
@@ -740,21 +740,21 @@
           "release": 100.0,
           "slope": 4.5,
           "Band-1": 0.0,
-          "Band-2": 0.11135285846760656,
-          "Band-3": 0.23221935776252112,
-          "Band-4": 0.3346304888584476,
-          "Band-5": 0.4352232004845389,
-          "Band-6": 0.5534049915410979,
-          "Band-7": 0.6063640388790705,
-          "Band-8": 0.549992810826168,
-          "Band-9": 0.5465624379986544,
-          "Band-10": 0.5854194301050364,
-          "Band-11": 0.6157841612754846,
-          "Band-12": 0.6708975233703538,
-          "Band-13": 0.736490366133872,
-          "Band-14": 0.9061919651193387,
-          "Band-15": 0.9590280925208837,
-          "Band-16": 0.711989411207292
+          "Band-2": 0.020604026146160526,
+          "Band-3": 0.1004173039663937,
+          "Band-4": 0.18669181681613223,
+          "Band-5": 0.2873546724704551,
+          "Band-6": 0.42007586761604443,
+          "Band-7": 0.401739105568939,
+          "Band-8": 0.3306903602729082,
+          "Band-9": 0.2910779779251308,
+          "Band-10": 0.35543708035281696,
+          "Band-11": 0.3466900759771634,
+          "Band-12": 0.28904858224014773,
+          "Band-13": 0.1712861308089243,
+          "Band-14": 0.12048703721123688,
+          "Band-15": 0.038878666396233386,
+          "Band-16": 0.0
         }
       },
       "input": {
@@ -858,7 +858,7 @@
         "modulationColor": -16719361,
         "parameters": {
           "label": "",
-          "running": false,
+          "running": true,
           "trigger": false
         }
       }
@@ -896,7 +896,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 360.0,
+        "radius": 99.72090474954794,
         "theta": 0.0,
         "phi": 0.0
       }
