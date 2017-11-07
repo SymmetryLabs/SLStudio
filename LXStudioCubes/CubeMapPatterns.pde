@@ -35,9 +35,9 @@ public abstract class P3CubeMapPattern extends SLPattern {
   
   @Override
   final protected void run(double deltaMs) {
-    pg.beginDraw(); //<>//
+    //pg.beginDraw(); //<>//
     run(deltaMs, pg);
-    pg.endDraw();
+    //pg.endDraw();
     pg.loadPixels();
     
     for (LXPoint p : model.points) {
@@ -121,6 +121,7 @@ public class TestCube extends P3CubeMapPattern {
   }
   
   void run(double deltaMs, PGraphics pg) {
+    pg.beginDraw();
     pg.background(0);
     
     pg.rectMode(CORNERS);
@@ -164,5 +165,6 @@ public class TestCube extends P3CubeMapPattern {
     pg.strokeWeight(10);
     pg.line(40, 150, 360, 150);
     pg.line(150, 40, 150, 260);
+    pg.endDraw();
   }  
 }
