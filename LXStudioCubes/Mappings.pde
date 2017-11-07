@@ -110,7 +110,7 @@ static class StripConfig {
     this.numPoints = numPoints;
     this.spacing = 1;
     this.x = (float)(MAX_NUM_POINTS - numPoints) / 2;
-    this.y = counter++;
+    this.y = counter += 3.5;
     this.z = 0;
     this.xRot = 0;
     this.yRot = 0;

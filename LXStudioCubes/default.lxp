@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1508364611378,
+  "timestamp": 1510091592855,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -100,10 +100,25 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 2679,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16711686,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.38999999314546585
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 214,
@@ -130,7 +145,7 @@
               "Wave": 0.0,
               "TrnX": 0.5,
               "TrnY": 0.5,
-              "Size": 0.939999982714653,
+              "Size": 0.6599999889731407,
               "Anim": 1
             },
             "modulation": {
@@ -154,11 +169,11 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.7500000074505806,
-              "Dens": 0.5100000072270632,
-              "Shrp": 0.0,
+              "Fast": 0.550000011920929,
+              "Dens": 0.5900000054389238,
+              "Shrp": 0.5,
               "Symm": 0,
-              "Anim": 3
+              "Anim": 7
             },
             "modulation": {
               "modulators": [],
@@ -208,10 +223,10 @@
             "parameters": {
               "label": "AskewPlanes",
               "Sprk": 0.0,
-              "Wave": 0.0,
+              "Wave": 0.5999999903142452,
               "TrnX": 1.0,
               "TrnY": 0.0,
-              "thck": 0.28799999822676203,
+              "thck": 0.10000000149011612,
               "num": 1
             },
             "modulation": {
@@ -310,10 +325,10 @@
           "release": 100.0,
           "slope": -1.5000000335276127,
           "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
+          "Band-2": 0.042116209555792206,
+          "Band-3": 0.07633365143440762,
+          "Band-4": 0.0991831524337663,
+          "Band-5": 0.0482740177326586,
           "Band-6": 0.0,
           "Band-7": 0.0,
           "Band-8": 0.0,
@@ -355,7 +370,7 @@
       "modulationColor": -2621696,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -471,8 +486,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 223.97123230559043,
-        "theta": 0.10200000000000004,
-        "phi": 0.0030000000000000773
+        "theta": -0.10200000000000028,
+        "phi": 1.3964523981613297E-16
       }
     }
   }

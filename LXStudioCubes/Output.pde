@@ -46,22 +46,21 @@ void setupOutputs(final LX lx) {
   //lx.addOutput(new LIFXOutput());
 
   try {
-    final String PIXLITE1_IP = "192.168.1.211"; // container 1
+    final String PIXLITE1_IP = "192.168.1.212"; // container 1
 
    /** 
     * PixLite 1
     *--------------------------------------------------------------------------*/
     final LXDatagramOutput pixlite = new LXDatagramOutput(lx);
     
-    //                                  bar ID,    IP Addresss,  Output 
-    pixlite.addDatagrams(new OutputGroupDatagrams("1",    PIXLITE1_IP,     1).getDatagrams());
-    pixlite.addDatagrams(new OutputGroupDatagrams("2",    PIXLITE1_IP,     2).getDatagrams());
-    pixlite.addDatagrams(new OutputGroupDatagrams("3",    PIXLITE1_IP,     3).getDatagrams());
-    pixlite.addDatagrams(new OutputGroupDatagrams("4",    PIXLITE1_IP,     4).getDatagrams());
-    pixlite.addDatagrams(new OutputGroupDatagrams("5",    PIXLITE1_IP,     5).getDatagrams());
-    pixlite.addDatagrams(new OutputGroupDatagrams("6",    PIXLITE1_IP,     6).getDatagrams());
-    pixlite.addDatagrams(new OutputGroupDatagrams("7",    PIXLITE1_IP,     7).getDatagrams());
-    pixlite.addDatagrams(new OutputGroupDatagrams("8",    PIXLITE1_IP,     8).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("1", PIXLITE1_IP, 1).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("2", PIXLITE1_IP, 2).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("3", PIXLITE1_IP, 3).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("4", PIXLITE1_IP, 4).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("5", PIXLITE1_IP, 5).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("6", PIXLITE1_IP, 6).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("7", PIXLITE1_IP, 7).getDatagrams());
+    pixlite.addDatagrams(new OutputGroupDatagrams("8", PIXLITE1_IP, 8).getDatagrams());
 
     // add pixlites
     lx.addOutput(pixlite);
@@ -72,29 +71,125 @@ void setupOutputs(final LX lx) {
 
 }
 
-/*
- * Output Component
- *---------------------------------------------------------------------------*/
-public final class OutputControl extends LXComponent {
-  public final BooleanParameter enabled;
+public class OutputGroupDatagrams {
 
-  public final ControllerResetModule controllerResetModule = new ControllerResetModule(lx);
+  private OutputGroup group = null;
+  private LXDatagram[] datagrams = new LXDatagram[2];
 
-  public final BooleanParameter broadcastPacket = new BooleanParameter("Broadcast packet enabled", false);
-  public final BooleanParameter testBroadcast   = new BooleanParameter("Test broadcast enabled", false);
+  public OutputGroupDatagrams(String id, String ipAddress, int output) {
+    for (OutputGroup group : outputGroups) {
+      if (group.id.equals(id)) {
+        this.group = group;
+      }
+    }
 
-  public OutputControl(LX lx) {
-    super(lx, "Output Control");
-    this.enabled = lx.engine.output.enabled;
+    if (group == null) {
+      println("TRYING TO OUTPUT TO A OUTPUTGROUP THAT IS NOT IN MODEL (ID: " + id + ")");
+    } else {
 
-    addParameter(testBroadcast);
-    
-    enabled.addListener(new LXParameterListener() {
-      public void onParameterChanged(LXParameter parameter) {
-        for (SLController c : controllers)
-          c.enabled.setValue(((BooleanParameter)parameter).isOn());
-      };
-    });
+      // build array of indices (note that we output to 2 strips by going up and down the one strip in model)
+      int counter = 0;
+      int[] indices = new int[group.getPoints().size()];
+      for (int i = 0; i < group.getPoints().size(); i++) {
+        indices[counter++] = group.getPoints().get(i).index;
+      }
+      
+      // create array of indices for each datagram/universe
+      int counter1 = 0;
+      int[] firstIndices = new int[indices.length > 170 ? 170 : indices.length];
+      for (int i = 0; i < firstIndices.length; i++) {
+        firstIndices[i] = indices[counter1++];
+      }
+      int[] secondIndices = new int[indices.length - firstIndices.length];
+      for (int i = 0; i < secondIndices.length; i++) {
+        secondIndices[i] = indices[counter1++];
+      }
+
+      this.datagrams[0] = new ArtNetDatagram(ipAddress, firstIndices, output*2-2);
+      this.datagrams[1] = new ArtNetDatagram(ipAddress, secondIndices, output*2-1);
+    }
+  }
+
+  public LXDatagram[] getDatagrams() {
+    return datagrams;
+  }
+}
+
+public class ArtNetDatagram extends LXDatagram {
+
+  private final static int DEFAULT_UNIVERSE = 0;
+  private final static int ARTNET_HEADER_LENGTH = 18;
+  private final static int ARTNET_PORT = 6454;
+  private final static int SEQUENCE_INDEX = 12;
+
+  private final int[] pointIndices;
+
+  private boolean sequenceEnabled = false;
+
+  private byte sequence = 1;
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
+    this(ipAddress, indices, 3*indices.length, universeNumber);
+  }
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
+
+    this.pointIndices = indices;
+
+    try {
+        setAddress(ipAddress);
+        setPort(ARTNET_PORT);
+    } catch (UnknownHostException e) {
+     //   System.out.println("COULD NOT FIND PIXLITE HOST WITH IP: " + ipAddress);
+    }
+
+    this.buffer[0] = 'A';
+    this.buffer[1] = 'r';
+    this.buffer[2] = 't';
+    this.buffer[3] = '-';
+    this.buffer[4] = 'N';
+    this.buffer[5] = 'e';
+    this.buffer[6] = 't';
+    this.buffer[7] = 0;
+    this.buffer[8] = 0x00; // ArtDMX opcode
+    this.buffer[9] = 0x50; // ArtDMX opcode
+    this.buffer[10] = 0; // Protcol version
+    this.buffer[11] = 14; // Protcol version
+    this.buffer[12] = 0; // Sequence
+    this.buffer[13] = 0; // Physical
+    this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
+    this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
+    this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
+    this.buffer[17] = (byte) (dataLength & 0xff);
+
+    // Ensure zero rest of buffer
+    for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
+     this.buffer[i] = 0;
+    }
+  }
+
+  /**
+   * Set whether to increment and send sequence numbers
+   *
+   * @param sequenceEnabled true if sequence should be incremented and transmitted
+   * @return this
+   */
+  public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    this.sequenceEnabled = sequenceEnabled;
+    return this;
+  }
+
+  @Override
+  public void onSend(int[] colors) {
+    copyPoints(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
+
+    if (this.sequenceEnabled) {
+      if (++this.sequence == 0) {
+        ++this.sequence;
+      }
+      this.buffer[SEQUENCE_INDEX] = this.sequence;
+    }
   }
 }
 
@@ -287,125 +382,29 @@ class SLController extends LXOutput {
   }
 }
 
-public class OutputGroupDatagrams {
+/*
+ * Output Component
+ *---------------------------------------------------------------------------*/
+public final class OutputControl extends LXComponent {
+  public final BooleanParameter enabled;
 
-  private OutputGroup group = null;
-  private LXDatagram[] datagrams = new LXDatagram[2];
+  public final ControllerResetModule controllerResetModule = new ControllerResetModule(lx);
 
-  public OutputGroupDatagrams(String id, String ipAddress, int output) {
-    for (OutputGroup group : outputGroups) {
-      if (group.id.equals(id)) {
-        this.group = group;
-      }
-    }
+  public final BooleanParameter broadcastPacket = new BooleanParameter("Broadcast packet enabled", false);
+  public final BooleanParameter testBroadcast   = new BooleanParameter("Test broadcast enabled", false);
 
-    if (group == null) {
-    //  println("TRYING TO OUTPUT TO A STRIP ID THAT IS NOT IN MODEL (ID: " + id + ")");
-    } else {
+  public OutputControl(LX lx) {
+    super(lx, "Output Control");
+    this.enabled = lx.engine.output.enabled;
 
-      // build array of indices (note that we output to 2 strips by going up and down the one strip in model)
-      int counter = 0;
-      int[] indices = new int[group.getPoints().size()];
-      for (int i = 0; i < group.getPoints().size(); i++) {
-        indices[counter++] = group.getPoints().get(i).index;
-      }
-      
-      // create array of indices for each datagram/universe
-      int counter1 = 0;
-      int[] firstIndices = new int[indices.length > 170 ? 170 : indices.length];
-      for (int i = 0; i < firstIndices.length; i++) {
-        firstIndices[i] = indices[counter1++];
-      }
-      int[] secondIndices = new int[(group.getPoints().size()) - firstIndices.length];
-      for (int i = 0; i < secondIndices.length; i++) {
-        secondIndices[i] = indices[counter1++];
-      }
-
-      this.datagrams[0] = new ArtNetDatagram(ipAddress, firstIndices, output*2-2);
-      this.datagrams[1] = new ArtNetDatagram(ipAddress, secondIndices, output*2-1);
-    }
-  }
-
-  public LXDatagram[] getDatagrams() {
-    return datagrams;
-  }
-}
-
-public class ArtNetDatagram extends LXDatagram {
-
-  private final static int DEFAULT_UNIVERSE = 0;
-  private final static int ARTNET_HEADER_LENGTH = 18;
-  private final static int ARTNET_PORT = 6454;
-  private final static int SEQUENCE_INDEX = 12;
-
-  private final int[] pointIndices;
-
-  private boolean sequenceEnabled = false;
-
-  private byte sequence = 1;
-
-  public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
-    this(ipAddress, indices, 3*indices.length, universeNumber);
-  }
-
-  public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
-    super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
-
-    this.pointIndices = indices;
-
-    try {
-        setAddress(ipAddress);
-        setPort(ARTNET_PORT);
-    } catch (UnknownHostException e) {
-     //   System.out.println("COULD NOT FIND PIXLITE HOST WITH IP: " + ipAddress);
-    }
-
-    this.buffer[0] = 'A';
-    this.buffer[1] = 'r';
-    this.buffer[2] = 't';
-    this.buffer[3] = '-';
-    this.buffer[4] = 'N';
-    this.buffer[5] = 'e';
-    this.buffer[6] = 't';
-    this.buffer[7] = 0;
-    this.buffer[8] = 0x00; // ArtDMX opcode
-    this.buffer[9] = 0x50; // ArtDMX opcode
-    this.buffer[10] = 0; // Protcol version
-    this.buffer[11] = 14; // Protcol version
-    this.buffer[12] = 0; // Sequence
-    this.buffer[13] = 0; // Physical
-    this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
-    this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
-    this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
-    this.buffer[17] = (byte) (dataLength & 0xff);
-
-    // Ensure zero rest of buffer
-    for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
-     this.buffer[i] = 0;
-    }
-  }
-
-  /**
-   * Set whether to increment and send sequence numbers
-   *
-   * @param sequenceEnabled true if sequence should be incremented and transmitted
-   * @return this
-   */
-  public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
-    this.sequenceEnabled = sequenceEnabled;
-    return this;
-  }
-
-  @Override
-  public void onSend(int[] colors) {
-    copyPoints(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
-
-    if (this.sequenceEnabled) {
-      if (++this.sequence == 0) {
-        ++this.sequence;
-      }
-      this.buffer[SEQUENCE_INDEX] = this.sequence;
-    }
+    addParameter(testBroadcast);
+    
+    enabled.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter parameter) {
+        for (SLController c : controllers)
+          c.enabled.setValue(((BooleanParameter)parameter).isOn());
+      };
+    });
   }
 }
 
