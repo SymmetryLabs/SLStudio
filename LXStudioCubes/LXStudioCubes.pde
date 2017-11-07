@@ -9,6 +9,7 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
+public OutputGroup[] outputGroups;
 
 
 // public boolean envelopOn = false;
@@ -48,6 +49,7 @@ void setup() {
       (networkMonitor = new NetworkMonitor(lx)).start();
       setupGammaCorrection();
       setupGammaCorrection();
+      outputGroups = setupOutputGroups();
       setupOutputs(lx);
       outputControl = new OutputControl(lx);
       lx.engine.registerComponent("outputControl", outputControl);

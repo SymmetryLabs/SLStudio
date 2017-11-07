@@ -19,7 +19,7 @@ static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
 
 static final float globalRotationX = 0;
-static final float globalRotationY = -45;
+static final float globalRotationY = 0;
 static final float globalRotationZ = 0;
 
 static final float objOffsetX = 0;
@@ -53,100 +53,48 @@ static final float INCHES_PER_METER = 39.3701;
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-    // left
-    new TowerConfig(-SP*3.5, 0, -SP*2.5, new String[] {
-      "22", "204"
-      }),
 
-    new TowerConfig(-SP*4.5, (JUMP*0)+TOWER_RISER, -SP*3.0, new String[] {
-      "86"
-      }),
-
-    new TowerConfig(-SP*5.5, (JUMP*0)+0, -SP*3.5, new String[] {
-      "5"
-      }),
-
-   new TowerConfig(-SP*2.0, 0, -SP*1.0, new String[] {
-      "25", "199", "177"
-      }),
-
-   new TowerConfig(-SP*1.5, (JUMP*0)+TOWER_RISER, -SP*2.0, new String[] {
-      "94"
-      }),
-
-   new TowerConfig(-SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {
-      "90"
-      }),
-
-   new TowerConfig(-SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {
-      "64"
-      }),
-
-    // left tower of 5   
-    new TowerConfig(0, 0, 0, new String[] {   
-      "19", "190", "121", "1", "103"    
-    }),   
-    new TowerConfig(SP*1.0, (JUMP*0)+TOWER_RISER, -SP*0.5, new String[] {"76"}),    
-    new TowerConfig(SP*1.0, (JUMP*2)+TOWER_RISER, -SP*0.5, new String[] {"18"}),    
-    new TowerConfig(SP*1.0, (JUMP*1)+TOWER_RISER, +SP*0.5, new String[] {"157"}),   
-    new TowerConfig(SP*0.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*1.5, (JUMP*2)+0          , -SP*1.5, new String[] {"126"}),   
-   
-    new TowerConfig(SP*2.0, 0, 0, new String[] {    
-      "6", "132", "61", "54"    
-    }),   
-
-    new TowerConfig(SP*2.5, (JUMP*1)+TOWER_RISER, -SP*1.0, new String[] {"4"}),   
-    new TowerConfig(SP*2.5, (JUMP*3)+TOWER_RISER, -SP*1.0, new String[] {"151"}),   
-     
-    // middle tower of 5    
-    new TowerConfig(SP*3.5, 0, -SP*1.5, new String[] {    
-      "111", "166", "187", "158", "101"   
-    }),  
-
-    new TowerConfig(SP*4.5, (JUMP*3)+TOWER_RISER, -SP*2.0, new String[] {"11"}),    
-    new TowerConfig(SP*3.0, (JUMP*2)+TOWER_RISER, -SP*2.5, new String[] {"163"}),   
-    new TowerConfig(SP*2.0, (JUMP*3)+0          , -SP*2.0, new String[] {"34"}),    
-    new TowerConfig(SP*4.0, (JUMP*0)+TOWER_RISER, -SP*2.5, new String[] {"17", "44"}),    
-     
-    new TowerConfig(SP*4.5, 0, -SP*3.5, new String[] {    
-      "102", "156", "13", "82"    
-    }),   
-    new TowerConfig(SP*5.5, (JUMP*2)+TOWER_RISER, -SP*3.5, new String[] {"412"}),   
-    new TowerConfig(SP*5.0, (JUMP*0)+TOWER_RISER, -SP*4.0, new String[] {"73"}),    
-    new TowerConfig(SP*4.0, (JUMP*1)+TOWER_RISER, -SP*4.0, new String[] {"47"}),    
-    new TowerConfig(SP*4.0, (JUMP*3)+TOWER_RISER, -SP*4.0, new String[] {"32"}),    
-    new TowerConfig(SP*3.0, (JUMP*3)+0          , -SP*3.5, new String[] {"175"}),   
-     
-    // right tower of 5   
-    new TowerConfig(SP*4.5, 0, -SP*5.0, new String[] {    
-      "183", "180", "57", "51", "108"   
-    }),   
-    new TowerConfig(SP*3.5, (JUMP*0)+TOWER_RISER, -SP*5.5, new String[] {"104"}),   
-    new TowerConfig(SP*4.0, (JUMP*2)+TOWER_RISER, -SP*6.0, new String[] {"168"}),   
-    new TowerConfig(SP*3.0, (JUMP*2)+3          , -SP*5.5, new String[] {"188"}),   
-     
-    new TowerConfig(SP*3.0-10, 0, -SP*6.5-12, new String[] {    
-     "100", "85", "110zAQ  AZQ"    
-    }),   
-    new TowerConfig((SP*3.0-10)-(SP*0.5), (JUMP*0)+TOWER_RISER, (-SP*6.5-12)-(SP*1.0), new String[] {"87"}),    
-    new TowerConfig((SP*3.0-10)-(SP*0.0), (JUMP*0)+0          , (-SP*6.5-12)-(SP*2.0), new String[] {"33"}),    
-    
-    // table cubes    
-    new TowerConfig(SP*-0.5, 0, -SP*4.0, new String[] {"74"}),    
-    new TowerConfig(0, 0, -SP*5.0, new String[] {"171"}),   
-    new TowerConfig(SP*1.0, 0, -SP*5.5, new String[] {"9"}),    
 };
 
 
 
 static final StripConfig[] STRIP_CONFIG = {
           // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
-//new StripConfig("206",            0,  0,  0,    0,     0,     0,        10,                 0.25),
+  new StripConfig("A", 88),
+  new StripConfig("B", 88),
+
+  new StripConfig("C", 86),
+  new StripConfig("D", 86),
+
+  new StripConfig("E", 85),
+  new StripConfig("F", 84),
+
+  new StripConfig("G", 82),
+  new StripConfig("H", 80),
+
+  new StripConfig("I", 78),
+  new StripConfig("J", 76),
+
+  new StripConfig("K", 74),
+  new StripConfig("L", 71),
+
+  new StripConfig("M", 67),
+  new StripConfig("N", 62),
+  new StripConfig("O", 57),
+
+  new StripConfig("P", 51),
+  new StripConfig("Q", 45),
+  new StripConfig("R", 38),
+  new StripConfig("S", 28),
+  new StripConfig("T", 19),
+  new StripConfig("U", 9),
 
 };
 
 static class StripConfig {
+  final int MAX_NUM_POINTS = 88;
+  static int counter = 0;
+
   String id;
   int numPoints;
   float spacing;
@@ -156,6 +104,18 @@ static class StripConfig {
   float xRot;
   float yRot;
   float zRot;
+
+  StripConfig(String id, int numPoints) {
+    this.id = id;
+    this.numPoints = numPoints;
+    this.spacing = 1;
+    this.x = (float)(MAX_NUM_POINTS - numPoints) / 2;
+    this.y = counter++;
+    this.z = 0;
+    this.xRot = 0;
+    this.yRot = 0;
+    this.zRot = 0;
+  }
 
   StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, int numPoints, float spacing) {
     this.id = id;
@@ -280,7 +240,7 @@ public SLModel buildModel() {
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
-    strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+    strips.add(new Strip(stripConfig.id, metrics, stripConfig.yRot, globalTransform, true));
 
     globalTransform.pop();
   }

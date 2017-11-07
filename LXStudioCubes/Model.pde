@@ -35,6 +35,7 @@ public static class SLModel extends LXModel {
   public final List<Face> faces;
   public final List<Strip> strips;
   public final Map<String, Cube> cubeTable;
+  public final Map<String, Strip> stripTable;
   private final Cube[] _cubes;
 
   public final List<LXModel> objModels;
@@ -51,6 +52,7 @@ public static class SLModel extends LXModel {
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+    Map<String, Strip> _stripTable = new HashMap<String, Strip>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -70,6 +72,7 @@ public static class SLModel extends LXModel {
 
     for (Strip strip : strips) {
       stripList.add(strip);
+      _stripTable.put(strip.id, strip);
     }
 
     this.towers    = Collections.unmodifiableList(towerList);
@@ -77,6 +80,7 @@ public static class SLModel extends LXModel {
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
+    this.stripTable = Collections.unmodifiableMap (_stripTable);
     this.objModels = objModels;
   }
 
@@ -116,6 +120,10 @@ public static class SLModel extends LXModel {
   public Cube getCubeById(String id) {
     return this.cubeTable.get(id);
   }
+
+  public Strip getStripById(String id) {
+    return this.stripTable.get(id);
+  }
 }
 
 public static class Heart extends LXModel {
@@ -124,6 +132,47 @@ public static class Heart extends LXModel {
     super(points);
   }
 
+}
+
+public static class Arc extends LXModel {
+
+  public final String id;
+
+  public Arc(String id, float x, float y, float z, float xRot, float yRot, float zRot, LXTransform transform) {
+    super(new Fixture(x, y, z, xRot, yRot, zRot, transform));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+
+    this.id = id;
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    private final float ARC_WIDTH = 30;
+    private final float ARC_HEIGHT = 20;
+    private final float NUM_POINTS = 100;
+    private final float RADIUS = 20;
+
+    private Fixture(float x, float y, float z, float xRot, float yRot, float zRot, LXTransform transform) {
+      transform.push();
+      transform.translate(x, y, z);
+      transform.rotateX(xRot * PI / 180);
+      transform.rotateY(yRot * PI / 180);
+      transform.rotateZ(zRot * PI / 180);
+
+      for (int i = 0; i < NUM_POINTS; i++) {
+        transform.push();
+        transform.translate(x, y, 0);
+
+        float t = (float)(Math.PI / 2.) * ((float)i / (float)NUM_POINTS - 1.);
+        float px = (float)Math.cos(t) * RADIUS;
+        float py = (float)Math.sin(t) * RADIUS;
+        transform.translate(px, py, 0);
+
+        this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
+        transform.pop();
+      }
+    }
+  }
 }
 
 /**
@@ -399,6 +448,8 @@ public static class Face extends LXModel {
  */
 public static class Strip extends LXModel {
 
+  public final String id;
+
   public static final float INCHES_PER_METER = 39.3701;
 
   public static class Metrics {
@@ -440,13 +491,23 @@ public static class Strip extends LXModel {
 
   Strip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
     super(points);
+    this.id = "";
     this.isHorizontal = isHorizontal;
     this.metrics = metrics;   
     this.ry = ry;
   }
 
+  Strip(String id, Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
+    super(new Fixture(metrics, ry, transform));
+    this.id = id;
+    this.metrics = metrics;
+    this.isHorizontal = isHorizontal;
+    this.ry = ry;
+  }
+
   Strip(Metrics metrics, float ry, LXTransform transform, boolean isHorizontal) {
     super(new Fixture(metrics, ry, transform));
+    this.id = "";
     this.metrics = metrics;
     this.isHorizontal = isHorizontal;
     this.ry = ry;
