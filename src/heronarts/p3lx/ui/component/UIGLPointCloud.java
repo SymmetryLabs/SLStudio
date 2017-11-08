@@ -61,6 +61,8 @@ public class UIGLPointCloud extends UIPointCloud {
 
     private static final float[] NO_ATTENUATION = { 1, 0, 0 };
 
+    private boolean updateVertexPositions = false;
+
     /**
      * Point cloud for everything in the LX instance
      *
@@ -78,6 +80,15 @@ public class UIGLPointCloud extends UIPointCloud {
      */
     public UIGLPointCloud(P3LX lx, LXModel model) {
         super(lx, model);
+
+        model.addListener(new LXModel.Listener() {
+            @Override
+            public void onModelUpdated(LXModel model) {
+                // If the model has been updated, then the next rendering pass needs
+                // to update the vertex position data.
+                updateVertexPositions();
+            }
+        });
 
         // Load shader
         loadShader();
@@ -133,6 +144,16 @@ public class UIGLPointCloud extends UIPointCloud {
     }
 
     /**
+     * Mark the vertex positions to be updated on next rendering pass.
+     *
+     * @return this
+     */
+    public UIGLPointCloud updateVertexPositions() {
+        this.updateVertexPositions = true;
+        return this;
+    }
+
+    /**
      * Enable alpha testing for dense point clouds to minimize some forms of
      * visible billboard aliasing across overlapping points;
      *
@@ -165,6 +186,11 @@ public class UIGLPointCloud extends UIPointCloud {
             this.colorData.put(4*i + 0, (0xff & (c >> 16)) / 255f); // R
             this.colorData.put(4*i + 1, (0xff & (c >> 8)) / 255f);  // G
             this.colorData.put(4*i + 2, (0xff & (c)) / 255f);       // B
+            if (this.updateVertexPositions) {
+                this.vertexData.put(3*i + 0, p.x);
+                this.vertexData.put(3*i + 1, p.y);
+                this.vertexData.put(3*i + 2, p.z);
+            }
             ++i;
         }
 
@@ -185,6 +211,10 @@ public class UIGLPointCloud extends UIPointCloud {
         pgl.vertexAttribPointer(this.colorLocation, 4, PGL.FLOAT, false, 4 * Float.SIZE/8, 0);
 
         pgl.bindBuffer(PGL.ARRAY_BUFFER, this.vertexBufferObjectName);
+        if (this.updateVertexPositions) {
+            pgl.bufferData(PGL.ARRAY_BUFFER, this.model.size * 3 * Float.SIZE/8, this.vertexData, PGL.STREAM_DRAW);
+            this.updateVertexPositions = false;
+        }
         pgl.enableVertexAttribArray(this.vertexLocation);
         pgl.vertexAttribPointer(this.vertexLocation, 3, PGL.FLOAT, false, 3 * Float.SIZE/8, 0);
 
