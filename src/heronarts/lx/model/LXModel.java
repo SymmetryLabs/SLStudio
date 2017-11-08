@@ -33,6 +33,10 @@ import java.util.List;
  */
 public class LXModel implements LXFixture {
 
+    public interface Listener {
+        public void onModelUpdated(LXModel model);
+    }
+
     /**
      * An immutable list of all the points in this model
      */
@@ -187,6 +191,24 @@ public class LXModel implements LXFixture {
         average();
     }
 
+    private final List<Listener> listeners = new ArrayList<Listener>();
+
+    public final LXModel addListener(Listener listener) {
+        if (listener == null) {
+            throw new IllegalArgumentException("Cannot add null modellistener");
+        }
+        if (this.listeners.contains(listener)) {
+            throw new IllegalStateException("Cannot add duplicate listener to model " + listener);
+        }
+        this.listeners.add(listener);
+        return this;
+    }
+
+    public final LXModel removeListener(Listener listener) {
+        this.listeners.remove(listener);
+        return this;
+    }
+
     /**
      * Update the meta-values in this model. Re-normalizes the points relative to
      * this model and recomputes its averages
@@ -228,6 +250,15 @@ public class LXModel implements LXFixture {
         average();
         if (normalize) {
             normalize();
+        }
+        bang();
+        return this;
+    }
+
+    public LXModel bang() {
+        // Notify the listeners of this model that it has changed
+        for (Listener listener : this.listeners) {
+            listener.onModelUpdated(this);
         }
         return this;
     }
