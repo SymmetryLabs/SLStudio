@@ -33,48 +33,48 @@ public class LXPoint {
     /**
      * x coordinate of this point
      */
-    public final float x;
+    public float x;
 
     /**
      * y coordinate of this point
      */
-    public final float y;
+    public float y;
 
     /**
      * z coordinate of this point
      */
-    public final float z;
+    public float z;
 
     /**
      * Radius of this point from origin in 3 dimensions
      */
-    public final float r;
+    public float r;
 
     /**
      * Radius of this point from origin in the x-y plane
      */
-    public final float rxy;
+    public float rxy;
 
     /**
      * Radius of this point from origin in the x-z plane
      */
-    public final float rxz;
+    public float rxz;
 
     /**
      * angle of this point about the origin in the x-y plane
      */
-    public final float theta;
+    public float theta;
 
     /**
      * Angle of this point about the origin in the x-z plane
      * (right-handed angle of rotation about the Y-axis)
      */
-    public final float azimuth;
+    public float azimuth;
 
     /**
      * Angle of this point between the y-value and the x-z plane
      */
-    public final float elevation;
+    public float elevation;
 
     /**
      * normalized position of point in x-space (0-1);
@@ -122,13 +122,8 @@ public class LXPoint {
         this.x = x;
         this.y = y;
         this.z = z;
-        this.r = (float) Math.sqrt(x * x + y * y + z * z);
-        this.rxy = (float) Math.sqrt(x * x + y * y);
-        this.rxz = (float) Math.sqrt(x * x + z * z);
-        this.theta = (float) ((LX.TWO_PI + Math.atan2(y, x)) % (LX.TWO_PI));
-        this.azimuth = (float) ((LX.TWO_PI + Math.atan2(z, x)) % (LX.TWO_PI));
-        this.elevation = (float) ((LX.TWO_PI + Math.atan2(y, rxz)) % (LX.TWO_PI));
         this.index = counter++;
+        update();
     }
 
     /**
@@ -143,6 +138,51 @@ public class LXPoint {
     }
 
     /**
+     * Updates this point to a new x-y-z position
+     *
+     * @param x X-position
+     * @param y Y-position
+     * @param z Z-position
+     * @return this
+     */
+    public LXPoint update(float x, float y, float z) {
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        return update();
+    }
+
+    public LXPoint updateX(float x) {
+        this.x = x;
+        return update();
+    }
+
+    public LXPoint updateY(float y) {
+        this.y = y;
+        return update();
+    }
+
+    public LXPoint updateZ(float z) {
+        this.z = z;
+        return update();
+    }
+
+    /**
+     * Updates the point's meta-coordinates, based upon the x y z values.
+     *
+     * @return
+     */
+    public LXPoint update() {
+        this.r = (float) Math.sqrt(x * x + y * y + z * z);
+        this.rxy = (float) Math.sqrt(x * x + y * y);
+        this.rxz = (float) Math.sqrt(x * x + z * z);
+        this.theta = (float) ((LX.TWO_PI + Math.atan2(y, x)) % (LX.TWO_PI));
+        this.azimuth = (float) ((LX.TWO_PI + Math.atan2(z, x)) % (LX.TWO_PI));
+        this.elevation = (float) ((LX.TWO_PI + Math.atan2(y, rxz)) % (LX.TWO_PI));
+        return this;
+    }
+
+    /**
      * Construct a point from transform
      *
      * @param transform LXTransform stack
@@ -151,7 +191,7 @@ public class LXPoint {
         this(transform.x(), transform.y(), transform.z());
     }
 
-    void computeNormals(LXModel model) {
+    void normalize(LXModel model) {
         this.xn = (this.x - model.xMin) / model.xRange;
         this.yn = (this.y - model.yMin) / model.yRange;
         this.zn = (this.z - model.zMin) / model.zRange;

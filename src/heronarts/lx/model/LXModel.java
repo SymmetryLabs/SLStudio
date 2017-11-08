@@ -53,92 +53,92 @@ public class LXModel implements LXFixture {
     /**
      * Center of the model in x space
      */
-    public final float cx;
+    public float cx;
 
     /**
      * Center of the model in y space
      */
-    public final float cy;
+    public float cy;
 
     /**
      * Center of the model in z space
      */
-    public final float cz;
+    public float cz;
 
     /**
      * Average x point
      */
-    public final float ax;
+    public float ax;
 
     /**
      * Average y point
      */
-    public final float ay;
+    public float ay;
 
     /**
      * Average z points
      */
-    public final float az;
+    public float az;
 
     /**
      * Minimum x value
      */
-    public final float xMin;
+    public float xMin;
 
     /**
      * Maximum x value
      */
-    public final float xMax;
+    public float xMax;
 
     /**
      * Range of x values
      */
-    public final float xRange;
+    public float xRange;
 
     /**
      * Minimum y value
      */
-    public final float yMin;
+    public float yMin;
 
     /**
      * Maximum y value
      */
-    public final float yMax;
+    public float yMax;
 
     /**
      * Range of y values
      */
-    public final float yRange;
+    public float yRange;
 
     /**
      * Minimum z value
      */
-    public final float zMin;
+    public float zMin;
 
     /**
      * Maximum z value
      */
-    public final float zMax;
+    public float zMax;
 
     /**
      * Range of z values
      */
-    public final float zRange;
+    public float zRange;
 
     /**
      * Smallest radius from origin
      */
-    public final float rMin;
+    public float rMin;
 
     /**
      * Greatest radius from origin
      */
-    public final float rMax;
+    public float rMax;
 
     /**
      * Range of radial values
      */
-    public final float rRange;
+    public float rRange;
 
     /**
      * Constructs a null model with no points
@@ -184,58 +184,123 @@ public class LXModel implements LXFixture {
         this.pointList = Collections.unmodifiableList(_points);
         this.points = _points.toArray(new LXPoint[0]);
         this.fixtures = Collections.unmodifiableList(_fixtures);
+        average();
+    }
 
-        float _ax = 0, _ay = 0, _az = 0;
-        float _xMin = 0, _xMax = 0, _yMin = 0, _yMax = 0, _zMin = 0, _zMax = 0, _rMin = 0, _rMax = 0;
+    /**
+     * Update the meta-values in this model. Re-normalizes the points relative to
+     * this model and recomputes its averages
+     *
+     * @return this
+     */
+    public LXModel update() {
+        return update(true, false);
+    }
+
+    /**
+     * Update the averages and mins/maxes of the model.
+     *
+     * @param normalize If true, normalize the points relative to this model
+     * @return this
+     */
+    public LXModel update(boolean normalize) {
+        return update(normalize, false);
+    }
+
+    /**
+     * Updates the averages and min/maxes of the model
+     *
+     * @param normalize If true, normalize the points relative to this model
+     * @param recurse If true, compute averages for sub-models as well
+     * @return
+     */
+    public LXModel update(boolean normalize, boolean recurse) {
+        // Recursively update values of sub-models
+        if (recurse) {
+            for (LXFixture fixture : this.fixtures) {
+                if (fixture instanceof LXModel) {
+                    // NOTE: normals are relative to master model,
+                    // flip to false for sub-models
+                    ((LXModel) fixture).average();
+                }
+            }
+        }
+        average();
+        if (normalize) {
+            normalize();
+        }
+        return this;
+    }
+
+    /**
+     * Recompute the averages in this model
+     *
+     * @return
+     */
+    public LXModel average() {
+        float ax = 0, ay = 0, az = 0;
+        float xMin = 0, xMax = 0, yMin = 0, yMax = 0, zMin = 0, zMax = 0, rMin = 0, rMax = 0;
 
         boolean firstPoint = true;
         for (LXPoint p : this.points) {
-            _ax += p.x;
-            _ay += p.y;
-            _az += p.z;
+            ax += p.x;
+            ay += p.y;
+            az += p.z;
             if (firstPoint) {
-                _xMin = _xMax = p.x;
-                _yMin = _yMax = p.y;
-                _zMin = _zMax = p.z;
-                _rMin = _rMax = p.r;
+                xMin = xMax = p.x;
+                yMin = yMax = p.y;
+                zMin = zMax = p.z;
+                rMin = rMax = p.r;
             } else {
-                if (p.x < _xMin)
-                    _xMin = p.x;
-                if (p.x > _xMax)
-                    _xMax = p.x;
-                if (p.y < _yMin)
-                    _yMin = p.y;
-                if (p.y > _yMax)
-                    _yMax = p.y;
-                if (p.z < _zMin)
-                    _zMin = p.z;
-                if (p.z > _zMax)
-                    _zMax = p.z;
-                if (p.r < _rMin)
-                    _rMin = p.r;
-                if (p.r > _rMax)
-                    _rMax = p.r;
+                if (p.x < xMin)
+                    xMin = p.x;
+                if (p.x > xMax)
+                    xMax = p.x;
+                if (p.y < yMin)
+                    yMin = p.y;
+                if (p.y > yMax)
+                    yMax = p.y;
+                if (p.z < zMin)
+                    zMin = p.z;
+                if (p.z > zMax)
+                    zMax = p.z;
+                if (p.r < rMin)
+                    rMin = p.r;
+                if (p.r > rMax)
+                    rMax = p.r;
             }
             firstPoint = false;
         }
-        this.ax = _ax / Math.max(1, this.points.length);
-        this.ay = _ay / Math.max(1, this.points.length);
-        this.az = _az / Math.max(1, this.points.length);
-        this.xMin = _xMin;
-        this.xMax = _xMax;
-        this.xRange = _xMax - _xMin;
-        this.yMin = _yMin;
-        this.yMax = _yMax;
-        this.yRange = _yMax - _yMin;
-        this.zMin = _zMin;
-        this.zMax = _zMax;
-        this.zRange = _zMax - _zMin;
-        this.rMin = _rMin;
-        this.rMax = _rMax;
-        this.rRange = _rMax - _rMin;
+        this.ax = ax / Math.max(1, this.points.length);
+        this.ay = ay / Math.max(1, this.points.length);
+        this.az = az / Math.max(1, this.points.length);
+        this.xMin = xMin;
+        this.xMax = xMax;
+        this.xRange = xMax - xMin;
+        this.yMin = yMin;
+        this.yMax = yMax;
+        this.yRange = yMax - yMin;
+        this.zMin = zMin;
+        this.zMax = zMax;
+        this.zRange = zMax - zMin;
+        this.rMin = rMin;
+        this.rMax = rMax;
+        this.rRange = rMax - rMin;
         this.cx = xMin + xRange / 2.f;
         this.cy = yMin + yRange / 2.f;
         this.cz = zMin + zRange / 2.f;
+
+        return this;
+    }
+
+    /**
+     * Sets the normalized values of all the points in this model (xn, yn, zn)
+     * relative to this model's absolute bounds.
+     */
+    public void normalize() {
+        for (LXPoint p : this.points) {
+            p.normalize(this);
+        }
     }
 
     public List<LXPoint> getPoints() {
@@ -251,12 +316,6 @@ public class LXModel implements LXFixture {
 
         public List<LXPoint> getPoints() {
             return this.points;
-        }
-    }
-
-    public void computeNormals() {
-        for (LXPoint p : this.points) {
-            p.computeNormals(this);
         }
     }
 

@@ -227,7 +227,7 @@ public class LX {
                 this.width = this.height = 0;
             }
         }
-        model.computeNormals();
+        model.normalize();
         LX.initTimer.log("Model");
 
         // Color palette
