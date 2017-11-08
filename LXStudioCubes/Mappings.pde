@@ -53,6 +53,17 @@ static final float INCHES_PER_METER = 39.3701;
 
 static final TowerConfig[] TOWER_CONFIG = {
 
+  // new TowerConfig(0, 0, 0, new String[] {
+  //   "0", "0", "0"
+  // }),
+
+  // new TowerConfig(100, 0, 0, new String[] {
+  //   "0", "0", "0"
+  // }),
+
+  // new TowerConfig(-100, 0, 0, new String[] {
+  //   "0", "0", "0"
+  // })
 
 };
 

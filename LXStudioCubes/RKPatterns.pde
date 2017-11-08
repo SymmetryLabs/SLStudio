@@ -1,0 +1,174 @@
+public class RKPattern01 extends P3CubeMapPattern {
+
+  int ringRes = 40;
+  float l1 = 600, l2 = 600, l3 = 300;
+  Ring [] testRings;
+
+  PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
+
+  public RKPattern01(LX lx) {
+
+    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    initCubeMap();
+    testRings = new Ring[20];
+    for (int i=0; i<testRings.length; i++) {
+      float initTheta = i*PI/testRings.length;
+      testRings[i] = new Ring(ringRes, initTheta, l1, l2, l3);
+    }
+  }
+
+  void run(double deltaMs, PGraphics pg) {
+
+    for (int i=0; i<testRings.length; i++) {
+      testRings[i].update();
+    }
+    updateCubeMap();
+    
+    pg.beginDraw();
+    pg.background(0);
+    pg.image(pgL, 0, 100);  // left face
+    pg.image(pgR, 200, 100);  // right face
+
+    pg.image(pgD, 100, 0);  // up face
+    pg.image(pgU, 100, 200);  // down face
+
+    pg.image(pgF, 100, 100);  // front face
+    pg.image(pgB, 300, 100);  // back face
+    pg.endDraw();
+  }
+
+  void initCubeMap() {
+    pgF = createGraphics(100, 100, P3D);
+    pgB = createGraphics(100, 100, P3D);
+    pgL = createGraphics(100, 100, P3D);
+    pgR = createGraphics(100, 100, P3D);
+    pgU = createGraphics(100, 100, P3D);
+    pgD = createGraphics(100, 100, P3D);
+  }
+
+  void updateCubeMap() {
+    pgF.beginDraw();
+    pgF.background(0);
+    pgF.camera(0, 0, 0, 0, 0, 1, 0, 1, 0);
+    pgF.frustum(-10, 10, -10, 10, 10, 1000);
+    drawScene(pgF);
+    pgF.endDraw();
+
+    pgL.beginDraw();
+    pgL.background(0);
+    pgL.camera(0, 0, 0, 1, 0, 0, 0, 1, 0);
+    pgL.frustum(-10, 10, -10, 10, 10, 1000);
+    drawScene(pgL);
+    pgL.endDraw();
+
+    pgR.beginDraw();
+    pgR.background(0);
+    pgR.camera(0, 0, 0, -1, 0, 0, 0, 1, 0);
+    pgR.frustum(-10, 10, -10, 10, 10, 1000);
+    drawScene(pgR);
+    pgR.endDraw();
+
+    pgB.beginDraw();
+    pgB.background(0);
+    pgB.camera(0, 0, 0, 0, 0, -1, 0, 1, 0);
+    pgB.frustum(-10, 10, -10, 10, 10, 1000);
+    drawScene(pgB);
+    pgB.endDraw();
+
+    pgD.beginDraw();
+    pgD.background(0);
+    pgD.camera(0, 0, -.001, 0, -1, 0, 0, 1, 0);
+    pgD.frustum(-10, 10, -10, 10, 10, 1000);
+    drawScene(pgD);
+    pgD.endDraw();
+
+    pgU.beginDraw();
+    pgU.background(0);
+    pgU.camera(0, 0, -.001, 0, 1, 0, 0, 1, 0);
+    pgU.frustum(-10, 10, -10, 10, 10, 1000);
+    drawScene(pgU);
+    pgU.endDraw();
+  }
+
+  void drawScene(PGraphics pg) {
+    for (int i=0; i<testRings.length; i++) {
+      testRings[i].display(pg);
+    }
+  }
+}
+
+class Ring {
+
+  int amt;
+  float l1, l2, l3, theta, weight;
+  Vtx [] vts;
+
+  Ring(int amt, float theta, float l1, float l2, float l3) {
+
+    this.amt = amt;
+    this.l1 = l1;
+    this.l2 = l2;
+    this.l3 = l3;
+    this.theta = theta;
+
+    vts = new Vtx[this.amt];
+    for (int i=0; i<vts.length; i++) {
+      float initPhi = i*TWO_PI/amt;
+      vts[i] = new Vtx(this.theta, initPhi, this.l1, this.l2, this.l3);
+    }
+  }
+
+  void update() {
+    theta += PI/720;
+    if (theta>PI) theta -= PI;
+
+    weight = sin(theta)*4;
+
+    for (int i=0; i<vts.length; i++) {
+      vts[i].update(theta);
+    }
+  }
+
+  void display(PGraphics pg) {
+    pg.noFill();
+    pg.stroke(255);
+    pg.strokeWeight(weight);
+    pg.beginShape();
+    for (int i=0; i<vts.length; i++) {
+      pg.curveVertex(vts[i].pos.x, vts[i].pos.y, vts[i].pos.z);
+    }
+    pg.curveVertex(vts[0].pos.x, vts[0].pos.y, vts[0].pos.z);
+    pg.curveVertex(vts[1].pos.x, vts[1].pos.y, vts[1].pos.z);
+    pg.curveVertex(vts[2].pos.x, vts[2].pos.y, vts[2].pos.z);
+    pg.endShape();
+  }
+}
+
+class Vtx {
+
+  PVector pos;
+  float thetaBase, thetaOfst, thetaOfstRange, theta, phi;
+  float l1, l2, l3;
+
+  Vtx(float theta, float phi, float l1, float l2, float l3) {
+    pos = new PVector();
+    this.theta = thetaBase = theta;
+    this.phi = phi;
+    this.l1 = l1;
+    this.l2 = l2;
+    this.l3 = l3;
+  }
+
+  void update(float thetaBase) {
+    this.thetaBase = thetaBase;
+
+    thetaOfstRange = sin(theta)*HALF_PI;
+    thetaOfst = (noise(phi+frameCount*.005, cos(this.thetaBase)-frameCount*.005)-.5)*thetaOfstRange;
+    theta = this.thetaBase + thetaOfst;
+    pos.set(
+      sin(theta)*cos(phi)*.5*l1, 
+      cos(theta)*.5*l2, 
+      sin(theta)*sin(phi)*.5*l3
+      );
+  }
+}
