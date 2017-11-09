@@ -35,7 +35,7 @@ void setup() {
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
 
-  lx = new SLStudio(this, model, true) {
+  lx = new SLStudio(this, model, false) {
     @Override
     protected void initialize(SLStudio lx, SLStudio.UI ui) {
       // if (envelopOn) {
