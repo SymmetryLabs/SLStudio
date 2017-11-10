@@ -1,7 +1,14 @@
 public class RKPattern01 extends P3CubeMapPattern {
-
+  
+  CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
+  CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
+  CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
+  CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
+  
   int ringRes = 40;
   float l1 = 600, l2 = 600, l3 = 300;
+  float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, thetaSpeed, thetaSpeedT;
   Ring [] testRings;
 
   public RKPattern01(LX lx) {
@@ -12,9 +19,26 @@ public class RKPattern01 extends P3CubeMapPattern {
       float initTheta = i*PI/testRings.length;
       testRings[i] = new Ring(ringRes, initTheta, l1, l2, l3);
     }
+    
+    addParameter(rX);
+    addParameter(rY);
+    addParameter(rZ);
+    addParameter(speed);
+    addParameter(dsp);
   }
 
   void run(double deltaMs, PGraphics pg) {
+    
+    rotXT = rX.getValuef();
+    rotYT = rY.getValuef();
+    rotZT = rZ.getValuef();
+    thetaSpeedT = speed.getValuef();
+    dspmtT = dsp.getValuef();
+    rotX = lerp(rotX, rotXT, .1);
+    rotY = lerp(rotY, rotYT, .1);
+    rotZ = lerp(rotZ, rotZT, .1);
+    thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .1);
+    dspmt = lerp(dspmt, dspmtT, .1);
 
     for (int i=0; i<testRings.length; i++) {
       testRings[i].update();
@@ -37,6 +61,9 @@ public class RKPattern01 extends P3CubeMapPattern {
     pg.background(0);
     pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
     pg.frustum(-10, 10, -10, 10, 10, 1000);
+    pg.rotateX(rotX);
+    pg.rotateY(rotY);
+    pg.rotateZ(rotZ);
     drawScene(pg);
     pg.endDraw();
   }
@@ -78,8 +105,9 @@ public class RKPattern01 extends P3CubeMapPattern {
     }
 
     void update() {
-      theta += PI/720;
+      theta += thetaSpeed/720;
       if (theta>PI) theta -= PI;
+      else if(theta<0) theta += PI;
 
       weight = sin(theta)*4;
 
@@ -121,7 +149,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     void update(float thetaBase) {
       this.thetaBase = thetaBase;
 
-      thetaOfstRange = sin(theta)*HALF_PI;
+      thetaOfstRange = sin(theta)*dspmt;
       thetaOfst = (noise(phi+frameCount*.005, cos(this.thetaBase)-frameCount*.005)-.5)*thetaOfstRange;
       theta = this.thetaBase + thetaOfst;
       pos.set(
