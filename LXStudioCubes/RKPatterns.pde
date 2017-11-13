@@ -1,13 +1,13 @@
 public class RKPattern01 extends P3CubeMapPattern {
-  
+
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
   CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
   CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
-  
+
   int ringRes = 40;
-  float l1 = 600, l2 = 600, l3 = 300;
+  float l1 = 600, l2 = 600, l3 = 600;
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, thetaSpeed, thetaSpeedT;
   Ring [] testRings;
 
@@ -19,7 +19,7 @@ public class RKPattern01 extends P3CubeMapPattern {
       float initTheta = i*PI/testRings.length;
       testRings[i] = new Ring(ringRes, initTheta, l1, l2, l3);
     }
-    
+
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
@@ -28,7 +28,7 @@ public class RKPattern01 extends P3CubeMapPattern {
   }
 
   void run(double deltaMs, PGraphics pg) {
-    
+
     rotXT = rX.getValuef();
     rotYT = rY.getValuef();
     rotZT = rZ.getValuef();
@@ -107,7 +107,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     void update() {
       theta += thetaSpeed/720;
       if (theta>PI) theta -= PI;
-      else if(theta<0) theta += PI;
+      else if (theta<0) theta += PI;
 
       weight = sin(theta)*4;
 
@@ -163,8 +163,18 @@ public class RKPattern01 extends P3CubeMapPattern {
 
 public class RKPattern02 extends P3CubeMapPattern {
 
+  CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
+  CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
+  CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  BooleanParameter noise = new BooleanParameter("noise");
+  CompoundParameter speed = new CompoundParameter("speed", .1, 0, .5);
+  CompoundParameter dsp = new CompoundParameter("dsp", 1, 0, 2);
+
   ArrayList <Arc> arcs;
-  float l1 = 600, l2 = 600, l3 = 300;
+  float f, fT, fTIncre;
+  float l1 = 600, l2 = 600, l3 = 600;
+  float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT;
+  boolean autoNoise;
   int switchCount;
 
   public RKPattern02(LX lx) {
@@ -172,7 +182,7 @@ public class RKPattern02 extends P3CubeMapPattern {
     super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
 
     arcs = new ArrayList<Arc>();
-    Arc parentArc = new Arc(0, 16, 0, PI, 0, TWO_PI);
+    Arc parentArc = new Arc(0, 0, 16, 0, PI, 0, TWO_PI);
     arcs.add(parentArc);
 
     for (int i=0; i<8; i++) {
@@ -181,12 +191,33 @@ public class RKPattern02 extends P3CubeMapPattern {
         if (!arc.hasChildren) arc.splitUp();
       }
     }
+
+    addParameter(rX);
+    addParameter(rY);
+    addParameter(rZ);
+    addParameter(noise);
+    addParameter(speed);
+    addParameter(dsp);
   }
 
   void run(double deltaMs, PGraphics pg) {
 
-    if (frameCount%120==0) {
-      switchCount = (switchCount+1)%3;
+    rotXT = rX.getValuef();
+    rotYT = rY.getValuef();
+    rotZT = rZ.getValuef();
+    autoNoise = noise.getValueb();
+    dspmtT = dsp.getValuef();
+    fTIncre = speed.getValuef();
+    rotX = lerp(rotX, rotXT, .1);
+    rotY = lerp(rotY, rotYT, .1);
+    rotZ = lerp(rotZ, rotZT, .1);
+    dspmt = lerp(dspmt, dspmtT, .1);
+    
+    fT += fTIncre*.1;
+    f = lerp(f, fT, .1);
+
+    if (frameCount%90==0 && !autoNoise) {
+      switchCount = (switchCount+1)%2;
       if (switchCount == 0) {
         for (int i=arcs.size()-1; i>-1; i--) {
           Arc arc = arcs.get(i);
@@ -202,7 +233,13 @@ public class RKPattern02 extends P3CubeMapPattern {
 
     for (int i=0; i<arcs.size(); i++) {
       Arc arc = arcs.get(i);
-      if (arc.hasChildren) arc.update();
+      if (arc.hasChildren) {
+        if (autoNoise) {
+          float scalar = map(arc.lv, 0, 8, dspmt, dspmt*1.5);
+          arc.splitRatio = .5+(noise(arc.idx*.1+f)-.5)*scalar;
+        }
+        arc.update();
+      }
     }
     updateCubeMaps();
 
@@ -222,6 +259,9 @@ public class RKPattern02 extends P3CubeMapPattern {
     pg.background(0);
     pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
     pg.frustum(-10, 10, -10, 10, 10, 1000);
+    pg.rotateX(rotX+HALF_PI);
+    pg.rotateY(rotY);
+    pg.rotateZ(rotZ);
     drawScene(pg);
     pg.endDraw();
   }
@@ -236,7 +276,6 @@ public class RKPattern02 extends P3CubeMapPattern {
   }
 
   void drawScene(PGraphics pg) {
-    pg.rotateX(HALF_PI);
     pg.noFill();
     pg.stroke(255);
     pg.strokeWeight(2);
@@ -261,17 +300,18 @@ public class RKPattern02 extends P3CubeMapPattern {
 
     Arc cArc1, cArc2;
     boolean hasChildren;
-    int segAmt, lv;
+    int segAmt, lv, idx;
 
     PVector [] vts;
 
     float splitRatio, splitRatioT;
     float sTheta, eTheta, sPhi, ePhi;
-    float l1 = 600, l2 = 600, l3 = 300;
+    float l1 = 600, l2 = 600, l3 = 600;
 
-    Arc(int lv, int segAmt, float sTheta, float eTheta, float sPhi, float ePhi) {
+    Arc(int lv, int idx, int segAmt, float sTheta, float eTheta, float sPhi, float ePhi) {
 
       this.lv = lv;
+      this.idx = idx;
       this.segAmt = segAmt;
       this.sTheta = sTheta;
       this.eTheta = eTheta;
@@ -280,7 +320,7 @@ public class RKPattern02 extends P3CubeMapPattern {
     }
 
     void update() {
-      splitRatio = lerp(splitRatio, splitRatioT, .125);
+      if (!autoNoise) splitRatio = lerp(splitRatio, splitRatioT, .125);
       if (lv%2==0) {
         for (int i=0; i<segAmt; i++) {
           float phi = sPhi + i*(ePhi-sPhi)/(vts.length-1);
@@ -339,9 +379,9 @@ public class RKPattern02 extends P3CubeMapPattern {
       vts = new PVector[segAmt];
 
       if (lv%2==0) {
-        cArc1 = new Arc(lv+1, segAmt, sTheta, lerp(sTheta, eTheta, splitRatio), sPhi, ePhi);
-        cArc2 = new Arc(lv+1, segAmt, lerp(sTheta, eTheta, splitRatio), eTheta, sPhi, ePhi);
+        cArc1 = new Arc(lv+1, arcs.size(), segAmt, sTheta, lerp(sTheta, eTheta, splitRatio), sPhi, ePhi);
         arcs.add(cArc1);
+        cArc2 = new Arc(lv+1, arcs.size(), segAmt, lerp(sTheta, eTheta, splitRatio), eTheta, sPhi, ePhi);
         arcs.add(cArc2);
 
         for (int i=0; i<segAmt; i++) {
@@ -355,9 +395,9 @@ public class RKPattern02 extends P3CubeMapPattern {
             );
         }
       } else {
-        cArc1 = new Arc(lv+1, segAmt, sTheta, eTheta, sPhi, lerp(sPhi, ePhi, splitRatio));
-        cArc2 = new Arc(lv+1, segAmt, sTheta, eTheta, lerp(sPhi, ePhi, splitRatio), ePhi);
+        cArc1 = new Arc(lv+1, arcs.size(), segAmt, sTheta, eTheta, sPhi, lerp(sPhi, ePhi, splitRatio));
         arcs.add(cArc1);
+        cArc2 = new Arc(lv+1, arcs.size(), segAmt, sTheta, eTheta, lerp(sPhi, ePhi, splitRatio), ePhi);
         arcs.add(cArc2);
 
         for (int i=0; i<segAmt; i++) {
