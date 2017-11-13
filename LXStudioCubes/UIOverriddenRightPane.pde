@@ -17,7 +17,7 @@ public class UIOverriddenRightPane extends UIPane {
   private int macroCount = 1;
 
   public UIOverriddenRightPane(UI ui, final LX lx) {
-    super(ui, lx, new String[] { "MODULATION", "OSC + MIDI", "OUTPUT" }, ui.getWidth() - WIDTH, WIDTH);
+    super(ui, lx, new String[] { "MODULATION", "OSC + MIDI", "MAPPING" }, ui.getWidth() - WIDTH, WIDTH);
     this.ui = ui;
     this.lx = lx;
     this.modulation = this.sections[0];
@@ -35,7 +35,7 @@ public class UIOverriddenRightPane extends UIPane {
     new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
 
     if (((SLModel)model).cubes.size() > 0)
-      new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+      new UIMapping(ui, lx, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
   }
 
   private void buildMidiUI() {

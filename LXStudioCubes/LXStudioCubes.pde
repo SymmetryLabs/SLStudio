@@ -8,7 +8,8 @@ public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
-public MappingMode mappingMode = null;
+
+public MappingMode mappingMode;
 
 
 // public boolean envelopOn = false;
@@ -43,6 +44,10 @@ void setup() {
       //   } 
       // }
 
+      mappingMode = new MappingMode(lx, (SLModel)model);
+      lx.engine.registerComponent("mappingMode", mappingMode);
+      lx.engine.addLoopTask(mappingMode);
+
       // Output
       (dispatcher = new Dispatcher(lx)).start();
       (networkMonitor = new NetworkMonitor(lx)).start();
@@ -53,8 +58,8 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       // Mapping
-      if (((SLModel)model).cubes.size() > 0)
-        mappingMode = new MappingMode(lx);
+      // if (((SLModel)model).cubes.size() > 0)
+      //   mappingMode = new MappingMode(lx);
 
       // Adaptor for mapping osc messages from Essentia to lx osc engine
       try {
@@ -86,6 +91,8 @@ void setup() {
       ui.preview.setPhi(0).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+
+      //new UIMapping(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       

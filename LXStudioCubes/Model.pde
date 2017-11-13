@@ -29,7 +29,7 @@ final static float FEET = 12*INCHES;
  * and points.
  */
 
-public static class SLModel extends LXModel {
+public static class SLModel extends MutableModel {
   public final List<Tower> towers;
   public final List<Cube> cubes;
   public final List<Face> faces;
@@ -126,10 +126,80 @@ public static class Heart extends LXModel {
 
 }
 
+public static class MutableModel extends LXModel {
+
+  public MutableModel(List<LXPoint> points) {
+    super(points);
+  }
+
+  public MutableModel(LXFixture[] fixtures) {
+    super(fixtures);
+  }
+
+  public MutableModel(LXFixture fixture) {
+    super(fixture);
+  }
+
+  private void setPosition(float x, float y, float z, float xRotation, float yRotation, float zRotation) {
+    LXTransform t = new LXTransform();
+    t.translate(cx, cy, cz);
+    t.rotateX(xRotation * PI / 180);
+    t.rotateY(yRotation * PI / 180);
+    t.rotateZ(zRotation * PI / 180);
+
+    for (LXPoint p : points) {
+      t.push();
+      t.translate(
+        (p.x - cx) + x,
+        (p.y - cy) + y,
+        (p.z - cz) + z
+      );
+      p.update(t.x(), t.y(), t.z());
+      t.pop();
+    }
+    update(true, true);
+  }
+
+  public MutableModel translate(float x, float y, float z) {
+    setPosition(x, y, z, 0, 0, 0);
+    return this;
+  }
+
+  public MutableModel translateX(float x) {
+    translate(x, 0, 0);
+    return this;
+  }
+
+  public MutableModel translateY(float y) {
+    translate(0, y, 0);
+    return this;
+  }
+
+  public MutableModel translateZ(float z) {
+    translate(0, 0, z);
+    return this;
+  }
+
+  public MutableModel rotateX(float xRotation) {
+    setPosition(0, 0, 0, xRotation, 0, 0);
+    return this;
+  }
+
+  public MutableModel rotateY(float yRotation) {
+    setPosition(0, 0, 0, 0, yRotation, 0);
+    return this;
+  }
+
+  public MutableModel rotateZ(float zRotation) {
+    setPosition(0, 0, 0, 0, 0, zRotation);
+    return this;
+  }
+}
+
 /**
  * Model of a set of cubes stacked in a tower
  */
-public static class Tower extends LXModel {
+public static class Tower extends MutableModel {
   
   /**
    * Tower id
@@ -188,7 +258,7 @@ public static class Tower extends LXModel {
  * 
  * Dimensions are all specified in real-world inches.
  */
-public static class Cube extends LXModel {
+public static class Cube extends MutableModel {
 
   public enum Type {
 
@@ -341,7 +411,7 @@ public static class Cube extends LXModel {
  * A face is a component of a cube. It is comprised of four strips forming
  * the lights on this side of a cube. A whole cube is formed by four faces.
  */
-public static class Face extends LXModel {
+public static class Face extends MutableModel {
 
   public final static int STRIPS_PER_FACE = 3;
 
@@ -397,7 +467,7 @@ public static class Face extends LXModel {
 /**
  * A strip is a linear run of points along a single edge of one cube.
  */
-public static class Strip extends LXModel {
+public static class Strip extends MutableModel {
 
   public static final float INCHES_PER_METER = 39.3701;
 

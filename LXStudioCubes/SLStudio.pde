@@ -11,6 +11,7 @@ public class SLStudio extends P3LX {
     public final UIOverriddenRightPane rightPane;
     public final UIBottomTray bottomTray;
     public final UIContextualHelpBar helpBar;
+    public final UIAxes axes;
 
     private boolean toggleHelpBar = false;
     private boolean toggleClipView = false;
@@ -46,12 +47,15 @@ public class SLStudio extends P3LX {
       this.rightPane = new UIOverriddenRightPane(this, lx);
       this.bottomTray = new UIBottomTray(this, lx);
       this.helpBar = new UIContextualHelpBar(this);
+      this.axes = new UIAxes();
 
       addLayer(this.preview);
       addLayer(this.leftPane);
       addLayer(this.rightPane);
       addLayer(this.bottomTray);
       addLayer(this.helpBar);
+
+      preview.addComponent(axes);
 
       setTopLevelKeyEventHandler(new UIEventHandler() {
         @Override
