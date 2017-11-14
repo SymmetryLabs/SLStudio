@@ -2,17 +2,14 @@ import java.util.*;
 import java.net.*;
 import java.lang.reflect.*;
 import java.text.DecimalFormat;
+import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
-public SLStudio lx;
+public LXStudio lx;
 public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public MappingMode mappingMode = null;
-
-
-// public boolean envelopOn = false;
-// public Envelop envelop = null;
 
 void setup() {
   long setupStart = System.nanoTime();
@@ -26,23 +23,10 @@ void setup() {
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
 
-  lx = new SLStudio(this, model, true) {
+  lx = new LXStudio(this, model) {
     @Override
-    protected void initialize(SLStudio lx, SLStudio.UI ui) {
-      // if (envelopOn) {
-      //   envelop = new Envelop(lx);
-      //   lx.engine.registerComponent("envelop", envelop);
-      //   lx.engine.addLoopTask(envelop);
-      //   // OSC drivers
-      //   try {
-      //     lx.engine.osc.receiver(3344).addListener(new EnvelopOscControlListener(lx));
-      //     lx.engine.osc.receiver(3355).addListener(new EnvelopOscSourceListener());
-      //     lx.engine.osc.receiver(3366).addListener(new EnvelopOscMeterListener());
-      //   } catch (SocketException sx) {
-      //     throw new RuntimeException(sx);
-      //   } 
-      // }
-
+    protected void initialize(LXStudio lx, LXStudio.UI ui) {
+      
       // Output
       (dispatcher = new Dispatcher(lx)).start();
       (networkMonitor = new NetworkMonitor(lx)).start();
@@ -55,13 +39,6 @@ void setup() {
       // Mapping
       if (((SLModel)model).cubes.size() > 0)
         mappingMode = new MappingMode(lx);
-
-      // Adaptor for mapping osc messages from Essentia to lx osc engine
-      try {
-        lx.engine.osc.receiver(1331).addListener(new EssentiaOSCListener(lx));
-      } catch (SocketException sx) {
-        throw new RuntimeException(sx);
-      } 
         
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
@@ -81,22 +58,15 @@ void setup() {
     } 
     
     @Override
-    protected void onUIReady(SLStudio lx, SLStudio.UI ui) {
+    protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
       ui.preview.setPhi(0).setMinRadius(2*FEET).setMaxRadius(48*FEET).setRadius(30*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
-
       //new UIOutputs(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 3);
       
       // if (((SLModel)model).cubes.size() > 0)
       //   new UIMapping(lx, ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 4);
-
-      // if (envelopOn) {
-      //   new UIEnvelopSource(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 5);
-      //   new UIEnvelopDecode(ui, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 6);
-      // }
-     
     }
   };
 
