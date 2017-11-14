@@ -212,7 +212,7 @@ public class RKPattern02 extends P3CubeMapPattern {
     rotY = lerp(rotY, rotYT, .1);
     rotZ = lerp(rotZ, rotZT, .1);
     dspmt = lerp(dspmt, dspmtT, .1);
-    
+
     fT += fTIncre*.1;
     f = lerp(f, fT, .1);
 
@@ -419,6 +419,246 @@ public class RKPattern02 extends P3CubeMapPattern {
         pg.vertex(vts[i].x, vts[i].y, vts[i].z);
       }
       pg.endShape();
+    }
+  }
+}
+
+public class RKPattern03 extends P3CubeMapPattern {
+
+  Vtx [][] rootVts;
+  int iCSCols = 5, iCSRows = 4;
+  float l1 = 600, l2 = 600, l3 = 600;
+  float gF, thetaF, phiF;
+  ArrayList <Fct> fctList;
+
+  public RKPattern03(LX lx) {
+
+    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+
+    gF = random(100);
+    thetaF = random(100);
+    phiF = random(100);
+
+    initRootVts();
+    initFctList();
+
+    for (int j=0; j<2; j++) {
+      for (int i=fctList.size()-1; i>-1; i--) {
+        Fct fct = fctList.get(i);
+        if (!fct.hasChildren && fct.lv<3) fct.splitUp();
+      }
+    }
+  }
+
+  void run(double deltaMs, PGraphics pg) {
+
+    gF += .0025;
+    for (int i=0; i<fctList.size(); i++) {
+      Fct fct = fctList.get(i);
+      fct.update();
+    }
+
+    updateCubeMaps();
+
+    pg.beginDraw();
+    pg.background(0);
+    pg.image(pgL, 0, 100);
+    pg.image(pgR, 200, 100);
+    pg.image(pgD, 100, 0);
+    pg.image(pgU, 100, 200);
+    pg.image(pgF, 100, 100);
+    pg.image(pgB, 300, 100);
+    pg.endDraw();
+  }
+
+  void updateCubeMaps() {
+    updateCubeMap(pgF, 0, 0, 0, 0, 0, 1, 0, 1, 0);
+    updateCubeMap(pgL, 0, 0, 0, 1, 0, 0, 0, 1, 0);
+    updateCubeMap(pgR, 0, 0, 0, -1, 0, 0, 0, 1, 0);
+    updateCubeMap(pgB, 0, 0, 0, 0, 0, -1, 0, 1, 0);
+    updateCubeMap(pgD, 0, 0, -.001, 0, -1, 0, 0, 1, 0);
+    updateCubeMap(pgU, 0, 0, -.001, 0, 1, 0, 0, 1, 0);
+  }
+
+  void updateCubeMap(PGraphics pg, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+    pg.beginDraw();
+    pg.background(0);
+    pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+    pg.frustum(-10, 10, -10, 10, 10, 1000);
+    //pg.rotateX(rotX);
+    //pg.rotateY(rotY);
+    //pg.rotateZ(rotZ);
+    drawScene(pg);
+    pg.endDraw();
+  }
+
+  void drawScene(PGraphics pg) {
+    pg.beginShape(TRIANGLES);
+    pg.noFill();
+    pg.stroke(255);
+    pg.strokeWeight(2);
+    for (int i=fctList.size()-1; i>-1; i--) {
+      Fct fct = fctList.get(i);
+      if (!fct.hasChildren) fct.display(pg);
+    }
+    pg.endShape();
+  }
+
+  void initFctList() {
+    fctList = new ArrayList<Fct>();
+
+    for (int j=0; j<rootVts[1].length; j++) {
+      int k = (j+1)%rootVts[1].length;
+      Fct fct = new Fct(0, rootVts[0][0], rootVts[1][j], rootVts[1][k]);
+      fctList.add(fct);
+    }
+
+    for (int j=0; j<rootVts[2].length; j++) {
+      int k = (j+1)%rootVts[2].length;
+      Fct fct = new Fct(0, rootVts[3][0], rootVts[2][j], rootVts[2][k]);
+      fctList.add(fct);
+    }
+
+    for (int j=0; j<rootVts[1].length; j++) {
+      int k = (j+1)%rootVts[1].length;
+      Fct fct1 = new Fct(0, rootVts[1][j], rootVts[1][k], rootVts[2][j]);
+      fctList.add(fct1);
+      Fct fct2 = new Fct(0, rootVts[2][j], rootVts[1][k], rootVts[2][k]);
+      fctList.add(fct2);
+    }
+  }
+
+  class Fct {
+
+    int lv;
+    Vtx v1, v2, v3;
+    PVector ctr;
+    boolean hasChildren;
+
+    Fct(int lv, Vtx v1, Vtx v2, Vtx v3) {
+      this.lv = lv;
+      this.v1 = v1;
+      this.v2 = v2;
+      this.v3 = v3;
+
+      ctr = new PVector();
+    }
+
+    void splitUp() {
+      hasChildren = true;
+      Vtx v4 = new Vtx(lv+1, v1, v2);
+      Vtx v5 = new Vtx(lv+1, v2, v3);
+      Vtx v6 = new Vtx(lv+1, v3, v1);
+
+      Fct cFct1 = new Fct(lv+1, v1, v4, v6);
+      Fct cFct2 = new Fct(lv+1, v4, v2, v5);
+      Fct cFct3 = new Fct(lv+1, v6, v5, v3);
+      Fct cFct4 = new Fct(lv+1, v5, v4, v6);
+
+      fctList.add(cFct1);
+      fctList.add(cFct2);
+      fctList.add(cFct3);
+      fctList.add(cFct4);
+    }
+
+    void update() {
+      v1.update();
+      v2.update();
+      v3.update();
+      ctr.set(
+        (v1.pos.x + v2.pos.x + v3.pos.x)/3, 
+        (v1.pos.y + v2.pos.y + v3.pos.y)/3, 
+        (v1.pos.z + v2.pos.z + v3.pos.z)/3
+        );
+    }
+
+    void display(PGraphics pg) {
+      pg.vertex(v1.pos.x, v1.pos.y, v1.pos.z);
+      pg.vertex(v2.pos.x, v2.pos.y, v2.pos.z);
+      pg.vertex(v3.pos.x, v3.pos.y, v3.pos.z);
+    }
+  }
+
+  void initRootVts() {
+
+    rootVts = new Vtx[iCSRows][];
+    rootVts[0] = new Vtx[1];
+    rootVts[1] = new Vtx[iCSCols];
+    rootVts[2] = new Vtx[iCSCols];
+    rootVts[3] = new Vtx[1];
+
+    for (int i=0; i<rootVts.length; i++) {
+      for (int j=0; j<rootVts[i].length; j++) {
+        float phi = (j+i*.5)*TWO_PI/float(rootVts[i].length);
+        float theta;//=i*PI/float(rootVts.length-1);
+        if (i==0)theta = 0;
+        else if (i==1)theta = HALF_PI-atan(.5);
+        else if (i==2)theta = HALF_PI+atan(.5);
+        else theta = PI;
+        float r = 300;
+
+        rootVts[i][j] = new Vtx(0, theta, phi, r);
+      }
+    }
+  }
+
+  class Vtx {
+
+    PVector pos, tgt, ofst;
+    float theta, phi, r;
+    int lv;
+
+    Vtx(int lv, Vtx v1, Vtx v2) {
+
+      this.lv = lv;
+
+      if (abs(v1.phi-v2.phi)>PI) {
+        this.phi = lerp(v1.phi, v2.phi+TWO_PI, .5);
+      } else {
+        this.phi = lerp(v1.phi, v2.phi, .5);
+      }
+      this.theta = lerp(v1.theta, v2.theta, .5);
+
+      if (v1.theta == 0 || v1.theta == PI)this.phi = v2.phi;
+      if (v2.theta == 0 || v2.theta == PI)this.phi = v1.phi;
+
+      this.r = lerp(v1.r, v2.r, .5);
+
+      tgt = new PVector(sin(theta)*cos(phi)*r, cos(theta)*r, sin(theta)*sin(phi)*r);
+      pos = new PVector(lerp(v1.pos.x, v2.pos.x, .5), lerp(v1.pos.y, v2.pos.y, .5), lerp(v1.pos.z, v2.pos.z, .5));
+      ofst = new PVector();
+    }
+
+    Vtx(int lv, float theta, float phi, float r) {
+
+      this.lv = lv;
+      this.theta = theta;
+      this.phi = phi;
+      this.r = r;
+
+      tgt = new PVector(sin(theta)*cos(phi)*r, cos(theta)*r, sin(theta)*sin(phi)*r);
+      pos = new PVector(tgt.x, tgt.y, tgt.z);
+      ofst = new PVector();
+    }
+
+    void update() {
+      updatePos();
+    }
+
+    void updatePos() {
+      float thetaOfst = (noise(gF+tgt.x*.0025+thetaF, -gF+tgt.y*.0025+thetaF, gF+tgt.z*.0025+thetaF)-.5)*TWO_PI*2;
+      float phiOfst = (noise(-gF+tgt.x*.0025+phiF, gF+tgt.y*.0025+phiF, -gF+tgt.z*.0025+phiF)-.5)*TWO_PI*2;
+      float rOfst = noise(tgt.x*.005+gF, tgt.y*.005+gF, tgt.z*.005+gF)*r*.25;
+      ofst.set(sin(thetaOfst)*cos(phiOfst)*rOfst, cos(thetaOfst)*rOfst, sin(thetaOfst)*sin(phiOfst)*rOfst);
+
+      float rDsp = (noise(sin(theta+thetaF)*sin(phi), cos(theta)*cos(phi+phiF))-.5)*r;
+      tgt.set(sin(theta)*cos(phi)*(rDsp+r), cos(theta)*(rDsp+r), sin(theta)*sin(phi)*(rDsp+r));
+
+      pos.set(lerp(pos.x, (tgt.x+ofst.x), .125), lerp(pos.y, (tgt.y+ofst.y), .125), lerp(pos.z, (tgt.z+ofst.z), .125));
+    }
+
+    void display() {
+      vertex(pos.x, pos.y, pos.z);
     }
   }
 }
