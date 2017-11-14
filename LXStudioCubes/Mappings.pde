@@ -53,9 +53,9 @@ static final float INCHES_PER_METER = 39.3701;
 // };
 
 
-static final float frontLeftOffsetX = -430;
+static final float frontLeftOffsetX = -370;
 static final float frontLeftOffsetY = -1.9*12;
-static final float frontLeftOffsetZ = 300;
+static final float frontLeftOffsetZ = 250;
 static final float frontLeftRotationX = 0;
 static final float frontLeftRotationY = 0;
 static final float frontLeftRotationZ = 0;
@@ -65,12 +65,12 @@ static final TowerConfig[] FRONT_LEFT = {
   new TowerConfig( 0.5*SPACING, TOWER_RISER, -1.0*SPACING, new String[] {"", "", "", "", ""}),
   new TowerConfig( 1.5*SPACING,           0, -1.5*SPACING, new String[] {"", "", "", "", ""}),
   new TowerConfig( 2.0*SPACING, TOWER_RISER, -2.5*SPACING, new String[] {"", "", "", "", ""}),
-  new TowerConfig( 2.5*SPACING,           0, -3.0*SPACING, new String[] {"", "", "", "", ""})
+  new TowerConfig( 3.0*SPACING,           0, -3.0*SPACING, new String[] {"", "", "", "", ""})
 };
 
-static final float frontRightOffsetX = 200;
+static final float frontRightOffsetX = 160;
 static final float frontRightOffsetY = -1.9*12;
-static final float frontRightOffsetZ = -340;
+static final float frontRightOffsetZ = -280;
 static final float frontRightRotationX = 0;
 static final float frontRightRotationY = 0;
 static final float frontRightRotationZ = 0;
@@ -80,9 +80,40 @@ static final TowerConfig[] FRONT_RIGHT = {
   new TowerConfig( 0.5*SPACING, TOWER_RISER, -1.0*SPACING, new String[] {"", "", "", "", ""}),
   new TowerConfig( 1.5*SPACING,           0, -1.5*SPACING, new String[] {"", "", "", "", ""}),
   new TowerConfig( 2.0*SPACING, TOWER_RISER, -2.5*SPACING, new String[] {"", "", "", "", ""}),
-  new TowerConfig( 2.5*SPACING,           0, -3.0*SPACING, new String[] {"", "", "", "", ""})
+  new TowerConfig( 3.0*SPACING,           0, -3.0*SPACING, new String[] {"", "", "", "", ""})
 };
 
+static final float backLeftOffsetX = -165;
+static final float backLeftOffsetY = 0;
+static final float backLeftOffsetZ = 305;
+static final float backLeftRotationX = 0;
+static final float backLeftRotationY = 0;
+static final float backLeftRotationZ = 0;
+
+static final TowerConfig[] BACK_LEFT = {
+  new TowerConfig( 0.0*SPACING,         -25,  0.0*SPACING, new String[] {"", "", "", "", "", ""}),
+  new TowerConfig( 0.5*SPACING, -TOWER_RISER, -1.0*SPACING, new String[] {"", "", "", "", "", ""}),
+  new TowerConfig( 1.5*SPACING,           0, -1.5*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 2.0*SPACING, TOWER_RISER, -2.5*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 3.0*SPACING,           0, -3.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 4.0*SPACING, TOWER_RISER, -3.5*SPACING, new String[] {"", "", "", ""})
+};
+
+static final float backRightOffsetX = 210;
+static final float backRightOffsetY = 0;
+static final float backRightOffsetZ = -85;
+static final float backRightRotationX = 0;
+static final float backRightRotationY = 0;
+static final float backRightRotationZ = 0;
+
+static final TowerConfig[] BACK_RIGHT = {
+  new TowerConfig(-0.5*SPACING, TOWER_RISER,  1.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 0.0*SPACING,           0,  0.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 0.5*SPACING, TOWER_RISER, -1.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 1.5*SPACING,           0, -1.5*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 2.0*SPACING, -TOWER_RISER, -2.5*SPACING, new String[] {"", "", "", "", "", ""}),
+  new TowerConfig( 3.0*SPACING,          -25, -3.0*SPACING, new String[] {"", "", "", "", "", ""})
+};
 
 static final StripConfig[] STRIP_CONFIG = {
           // controller id         x   y   z  xRot   yRot   zRot   num leds      pitch in inches
@@ -185,8 +216,8 @@ public SLModel buildModel() {
   // Any global transforms
   LXTransform globalTransform = new LXTransform();
   globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-  globalTransform.rotateY(globalRotationY * PI / 180.);
   globalTransform.rotateX(globalRotationX * PI / 180.);
+  globalTransform.rotateY(globalRotationY * PI / 180.);
   globalTransform.rotateZ(globalRotationZ * PI / 180.);
 
   /* Cubes ----------------------------------------------------------*/
@@ -198,9 +229,59 @@ public SLModel buildModel() {
   // }
 
   globalTransform.push();
+  globalTransform.translate(backRightOffsetX, backRightOffsetY, backRightOffsetZ);
+  globalTransform.rotateX(backRightRotationX * PI / 180.);
+  globalTransform.rotateY(backRightRotationY * PI / 180.);
+  globalTransform.rotateZ(backRightRotationZ * PI / 180.);
+
+  for (TowerConfig config : BACK_RIGHT) {
+    List<Cube> cubes = new ArrayList<Cube>();
+    float x = config.x;
+    float z = config.z;
+    float xRot = config.xRot;
+    float yRot = config.yRot;
+    float zRot = config.zRot;
+    Cube.Type type = config.type;
+
+    for (int i = 0; i < config.ids.length; i++) {
+      float y = config.yValues[i];
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+      cubes.add(cube);
+      allCubes.add(cube);
+    }
+    towers.add(new Tower("", cubes));
+  }
+  globalTransform.pop();
+
+  globalTransform.push();
+  globalTransform.translate(backLeftOffsetX, backLeftOffsetY, backLeftOffsetZ);
+  globalTransform.rotateX(backLeftRotationX * PI / 180.);
+  globalTransform.rotateY(backLeftRotationY * PI / 180.);
+  globalTransform.rotateZ(backLeftRotationZ * PI / 180.);
+
+  for (TowerConfig config : BACK_LEFT) {
+    List<Cube> cubes = new ArrayList<Cube>();
+    float x = config.x;
+    float z = config.z;
+    float xRot = config.xRot;
+    float yRot = config.yRot;
+    float zRot = config.zRot;
+    Cube.Type type = config.type;
+
+    for (int i = 0; i < config.ids.length; i++) {
+      float y = config.yValues[i];
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+      cubes.add(cube);
+      allCubes.add(cube);
+    }
+    towers.add(new Tower("", cubes));
+  }
+  globalTransform.pop();
+
+  globalTransform.push();
   globalTransform.translate(frontLeftOffsetX, frontLeftOffsetY, frontLeftOffsetZ);
-  globalTransform.rotateY(frontLeftRotationY * PI / 180.);
   globalTransform.rotateX(frontLeftRotationX * PI / 180.);
+  globalTransform.rotateY(frontLeftRotationY * PI / 180.);
   globalTransform.rotateZ(frontLeftRotationZ * PI / 180.);
 
   for (TowerConfig config : FRONT_LEFT) {
@@ -224,8 +305,8 @@ public SLModel buildModel() {
 
   globalTransform.push();
   globalTransform.translate(frontRightOffsetX, frontRightOffsetY, frontRightOffsetZ);
-  globalTransform.rotateY(frontRightRotationY * PI / 180.);
   globalTransform.rotateX(frontRightRotationX * PI / 180.);
+  globalTransform.rotateY(frontRightRotationY * PI / 180.);
   globalTransform.rotateZ(frontRightRotationZ * PI / 180.);
 
   for (TowerConfig config : FRONT_RIGHT) {
@@ -256,8 +337,8 @@ public SLModel buildModel() {
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
-    globalTransform.rotateX(stripConfig.yRot * PI / 180.);
+    globalTransform.rotateX(stripConfig.xRot * PI / 180.);
+    globalTransform.rotateY(stripConfig.yRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
     strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
