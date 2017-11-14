@@ -35,6 +35,7 @@ static final float CUBE_HEIGHT = 24;
 static final float TOWER_WIDTH = 24;
 static final float TOWER_HEIGHT = 24;
 static final float CUBE_SPACING = 2.5;
+static final float SPACING = CUBE_HEIGHT;
 
 static final float TOWER_VERTICAL_SPACING = 2.5;
 static final float TOWER_RISER = 14;
@@ -51,15 +52,36 @@ static final float INCHES_PER_METER = 39.3701;
 //     // new BulbConfig("lifx-5", 0, 0, 0),
 // };
 
-static final TowerConfig[] TOWER_CONFIG = {
 
-  new TowerConfig(0, 0, 0, new String[] {""}),
-  new TowerConfig(0, 24, 0, new String[] {""}),
-  new TowerConfig(0, 48, 0, new String[] {""}),
-  new TowerConfig(0, -24, 0, new String[] {"", ""}),
+static final float frontLeftOffsetX = -430;
+static final float frontLeftOffsetY = -1.9*12;
+static final float frontLeftOffsetZ = 300;
+static final float frontLeftRotationX = 0;
+static final float frontLeftRotationY = 0;
+static final float frontLeftRotationZ = 0;
 
+static final TowerConfig[] FRONT_LEFT = {
+  new TowerConfig( 0.0*SPACING,           0,  0.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 0.5*SPACING, TOWER_RISER, -1.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 1.5*SPACING,           0, -1.5*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 2.0*SPACING, TOWER_RISER, -2.5*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 2.5*SPACING,           0, -3.0*SPACING, new String[] {"", "", "", "", ""})
 };
 
+static final float frontRightOffsetX = 200;
+static final float frontRightOffsetY = -1.9*12;
+static final float frontRightOffsetZ = -340;
+static final float frontRightRotationX = 0;
+static final float frontRightRotationY = 0;
+static final float frontRightRotationZ = 0;
+
+static final TowerConfig[] FRONT_RIGHT = {
+  new TowerConfig( 0.0*SPACING,           0,  0.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 0.5*SPACING, TOWER_RISER, -1.0*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 1.5*SPACING,           0, -1.5*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 2.0*SPACING, TOWER_RISER, -2.5*SPACING, new String[] {"", "", "", "", ""}),
+  new TowerConfig( 2.5*SPACING,           0, -3.0*SPACING, new String[] {"", "", "", "", ""})
+};
 
 
 static final StripConfig[] STRIP_CONFIG = {
@@ -171,7 +193,17 @@ public SLModel buildModel() {
   List<Tower> towers = new ArrayList<Tower>();
   List<Cube> allCubes = new ArrayList<Cube>();
 
-  for (TowerConfig config : TOWER_CONFIG) {
+  // for (int i = 0; i < 120; i++) {
+  //   TOWER_CONFIG[i] = new TowerConfig(0, 0, 0, new String[] {""});
+  // }
+
+  globalTransform.push();
+  globalTransform.translate(frontLeftOffsetX, frontLeftOffsetY, frontLeftOffsetZ);
+  globalTransform.rotateY(frontLeftRotationY * PI / 180.);
+  globalTransform.rotateX(frontLeftRotationX * PI / 180.);
+  globalTransform.rotateZ(frontLeftRotationZ * PI / 180.);
+
+  for (TowerConfig config : FRONT_LEFT) {
     List<Cube> cubes = new ArrayList<Cube>();
     float x = config.x;
     float z = config.z;
@@ -188,6 +220,32 @@ public SLModel buildModel() {
     }
     towers.add(new Tower("", cubes));
   }
+  globalTransform.pop();
+
+  globalTransform.push();
+  globalTransform.translate(frontRightOffsetX, frontRightOffsetY, frontRightOffsetZ);
+  globalTransform.rotateY(frontRightRotationY * PI / 180.);
+  globalTransform.rotateX(frontRightRotationX * PI / 180.);
+  globalTransform.rotateZ(frontRightRotationZ * PI / 180.);
+
+  for (TowerConfig config : FRONT_RIGHT) {
+    List<Cube> cubes = new ArrayList<Cube>();
+    float x = config.x;
+    float z = config.z;
+    float xRot = config.xRot;
+    float yRot = config.yRot;
+    float zRot = config.zRot;
+    Cube.Type type = config.type;
+
+    for (int i = 0; i < config.ids.length; i++) {
+      float y = config.yValues[i];
+      Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+      cubes.add(cube);
+      allCubes.add(cube);
+    }
+    towers.add(new Tower("", cubes));
+  }
+  globalTransform.pop();
   /*-----------------------------------------------------------------*/
 
   /* Strips ----------------------------------------------------------*/

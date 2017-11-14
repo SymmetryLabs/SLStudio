@@ -36,6 +36,124 @@ class UIAxes extends UI3dComponent {
     }
 }
 
+public class UIStage extends UI3dComponent {
+    private final int NUM_SIDES = 1000;
+    private final float HEIGHT_BIG = 1.9*12;
+    private final float RADIUS_BIG = 22*12;
+    private final float HEIGHT_MEDIUM = HEIGHT_BIG*2/3;
+    private final float RADIUS_MEDIUM = RADIUS_BIG+24;
+    private final float HEIGHT_SMALL = HEIGHT_BIG*1/3;
+    private final float RADIUS_SMALL = RADIUS_BIG+48;
+
+    public UIStage() {
+        visible.setValue(true);
+    }
+
+    protected void onDraw(UI ui, PGraphics pg) {
+        // pg.stroke(255, 0, 0);
+        // float angle = 360 / NUM_SIDES;
+        // float halfHeight = HEIGHT / 2;
+        // // draw top shape
+        // pg.beginShape();
+        // for (int i = 0; i < NUM_SIDES; i++) {
+        //     float x = cos( radians( i * angle ) ) * RADIUS;
+        //     float y = sin( radians( i * angle ) ) * RADIUS;
+        //     pg.vertex( x, y, -halfHeight );
+        // }
+        // pg.endShape(CLOSE);
+        // // draw bottom shape
+        // pg.beginShape();
+        // for (int i = 0; i < NUM_SIDES; i++) {
+        //     float x = cos( radians( i * angle ) ) * RADIUS;
+        //     float y = sin( radians( i * angle ) ) * RADIUS;
+        //     pg.vertex( x, y, halfHeight );
+        // }
+        // pg.endShape(CLOSE);
+
+        // rect
+        pg.pushMatrix();
+        pg.fill(0);
+        pg.translate(0, -HEIGHT_BIG/2-3, 0);
+        pg.box(RADIUS_SMALL*2 + 8*50, HEIGHT_BIG-1, 12*9);
+
+        pg.pushMatrix();
+        pg.translate(-RADIUS_BIG-13*12, 5*10.5, 0);
+        pg.box(12*16, 10*12, 12*9);
+        pg.popMatrix();
+
+        pg.pushMatrix();
+        pg.translate(2*RADIUS_BIG-7*15.5, 5*12, 0);
+        pg.box(12*16, 10*12, 12*9);
+        pg.popMatrix();
+
+        pg.popMatrix();
+
+        // big
+        pg.translate(0, -HEIGHT_BIG-2, 0);
+        pg.fill(100, 100, 100);
+
+        pg.pushMatrix();
+        pg.translate(0, HEIGHT_BIG, 0);
+        pg.rotateX(PI/2);
+        pg.ellipse(0, 0, RADIUS_BIG*2, RADIUS_BIG*2);
+        pg.popMatrix();
+
+        float angle = 0;
+        float angleIncrement = TWO_PI / NUM_SIDES;
+        pg.beginShape(QUAD_STRIP);
+        for (int i = 0; i < NUM_SIDES + 1; ++i) {
+          pg.vertex(RADIUS_BIG*cos(angle), 0, RADIUS_BIG*sin(angle));
+          pg.vertex(RADIUS_BIG*cos(angle), HEIGHT_BIG, RADIUS_BIG*sin(angle));
+          angle += angleIncrement;
+        }
+        pg.endShape();
+
+        // medium
+        pg.pushMatrix();
+        pg.translate(0, 0, 0);
+
+        pg.pushMatrix();
+        pg.translate(0, HEIGHT_MEDIUM, 0);
+        pg.rotateX(PI/2);
+        pg.ellipse(0, 0, RADIUS_MEDIUM*2, RADIUS_MEDIUM*2);
+        pg.popMatrix();
+
+        angle = 0;
+        angleIncrement = TWO_PI / NUM_SIDES;
+        pg.beginShape(QUAD_STRIP);
+        for (int i = 0; i < NUM_SIDES + 1; ++i) {
+          pg.vertex(RADIUS_MEDIUM*cos(angle), 0, RADIUS_MEDIUM*sin(angle));
+          pg.vertex(RADIUS_MEDIUM*cos(angle), HEIGHT_MEDIUM, RADIUS_MEDIUM*sin(angle));
+          angle += angleIncrement;
+        }
+        pg.endShape();
+
+        // small
+        pg.pushMatrix();
+        pg.translate(0, 0, 0);
+
+        pg.pushMatrix();
+        pg.translate(0, HEIGHT_SMALL, 0);
+        pg.rotateX(PI/2);
+        pg.ellipse(0, 0, RADIUS_SMALL*2, RADIUS_SMALL*2);
+        pg.popMatrix();
+
+        angle = 0;
+        angleIncrement = TWO_PI / NUM_SIDES;
+        pg.beginShape(QUAD_STRIP);
+        for (int i = 0; i < NUM_SIDES + 1; ++i) {
+          pg.vertex(RADIUS_SMALL*cos(angle), 0, RADIUS_SMALL*sin(angle));
+          pg.vertex(RADIUS_SMALL*cos(angle), HEIGHT_SMALL, RADIUS_SMALL*sin(angle));
+          angle += angleIncrement;
+        }
+        pg.endShape();
+
+        pg.popMatrix();
+        pg.popMatrix();
+    }
+}
+
+
 class MappingMode extends LXRunnableComponent {
 
     public ModelMutator modelMutator;
