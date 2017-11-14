@@ -424,12 +424,20 @@ public class RKPattern02 extends P3CubeMapPattern {
 }
 
 public class RKPattern03 extends P3CubeMapPattern {
+  
+  CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
+  CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
+  CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  CompoundParameter speed = new CompoundParameter("speed", .01, 0, .05);
+  CompoundParameter fragment = new CompoundParameter("fragment", .5, 0, 1);
 
   Vtx [][] rootVts;
   int iCSCols = 5, iCSRows = 4;
   float l1 = 600, l2 = 600, l3 = 600;
-  float gF, thetaF, phiF;
+  float gF, thetaF, phiF, fragMid;
   ArrayList <Fct> fctList;
+  
+  float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
 
   public RKPattern03(LX lx) {
 
@@ -448,11 +456,28 @@ public class RKPattern03 extends P3CubeMapPattern {
         if (!fct.hasChildren && fct.lv<3) fct.splitUp();
       }
     }
+    
+    addParameter(rX);
+    addParameter(rY);
+    addParameter(rZ);
+    addParameter(speed);
+    addParameter(fragment);
   }
 
   void run(double deltaMs, PGraphics pg) {
-
-    gF += .0025;
+    
+    rotXT = rX.getValuef();
+    rotYT = rY.getValuef();
+    rotZT = rZ.getValuef();
+    gFIncreT = speed.getValuef();
+    fragMid = fragment.getValuef();
+    
+    rotX = lerp(rotX, rotXT, .1);
+    rotY = lerp(rotY, rotYT, .1);
+    rotZ = lerp(rotZ, rotZT, .1);
+    gFIncre = lerp(gFIncre, gFIncreT, .1);
+    
+    gF += gFIncre;
     for (int i=0; i<fctList.size(); i++) {
       Fct fct = fctList.get(i);
       fct.update();
@@ -485,18 +510,16 @@ public class RKPattern03 extends P3CubeMapPattern {
     pg.background(0);
     pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
     pg.frustum(-10, 10, -10, 10, 10, 1000);
-    //pg.rotateX(rotX);
-    //pg.rotateY(rotY);
-    //pg.rotateZ(rotZ);
+    pg.rotateX(rotX);
+    pg.rotateY(rotY);
+    pg.rotateZ(rotZ);
     drawScene(pg);
     pg.endDraw();
   }
 
   void drawScene(PGraphics pg) {
     pg.beginShape(TRIANGLES);
-    pg.noFill();
-    pg.stroke(255);
-    pg.strokeWeight(2);
+    pg.noStroke();
     for (int i=fctList.size()-1; i>-1; i--) {
       Fct fct = fctList.get(i);
       if (!fct.hasChildren) fct.display(pg);
@@ -532,7 +555,8 @@ public class RKPattern03 extends P3CubeMapPattern {
 
     int lv;
     Vtx v1, v2, v3;
-    PVector ctr;
+    float brt, fragRatio;
+    PVector ctr, nrml;
     boolean hasChildren;
 
     Fct(int lv, Vtx v1, Vtx v2, Vtx v3) {
@@ -570,12 +594,19 @@ public class RKPattern03 extends P3CubeMapPattern {
         (v1.pos.y + v2.pos.y + v3.pos.y)/3, 
         (v1.pos.z + v2.pos.z + v3.pos.z)/3
         );
+
+      nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
+      brt = map(abs(HALF_PI-PVector.angleBetween(nrml, ctr)), 0, HALF_PI, 0, 255);
+
+      fragRatio = (noise(ctr.x*.005, ctr.y*.005, ctr.z*.005)-.5)*2.5+fragMid;
+      fragRatio = constrain(fragRatio, 0, 1);
     }
 
     void display(PGraphics pg) {
-      pg.vertex(v1.pos.x, v1.pos.y, v1.pos.z);
-      pg.vertex(v2.pos.x, v2.pos.y, v2.pos.z);
-      pg.vertex(v3.pos.x, v3.pos.y, v3.pos.z);
+      pg.fill(brt);
+      pg.vertex(lerp(v1.pos.x, ctr.x, fragRatio), lerp(v1.pos.y, ctr.y, fragRatio), lerp(v1.pos.z, ctr.z, fragRatio));
+      pg.vertex(lerp(v2.pos.x, ctr.x, fragRatio), lerp(v2.pos.y, ctr.y, fragRatio), lerp(v2.pos.z, ctr.z, fragRatio));
+      pg.vertex(lerp(v3.pos.x, ctr.x, fragRatio), lerp(v3.pos.y, ctr.y, fragRatio), lerp(v3.pos.z, ctr.z, fragRatio));
     }
   }
 
