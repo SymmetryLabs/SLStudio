@@ -33,13 +33,21 @@ public static class SLModel extends LXModel {
   public final List<Tower> towers;
   public final List<Cube> cubes;
   public final List<Face> faces;
-  public final List<Strip> strips;
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
-
   public final List<LXModel> objModels;
 
+  // Suns
   public final List<Sun> suns;
+  public final Map<String, Sun> sunTable;
+
+  // Slices
+  public final List<Slice> slices;
+  public final Map<String, Slice> sliceTable;
+
+  // Strips
+  public final List<Strip> strips;
+  public final Map<Strip, Strip> stripTable;
 
   public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Sun> suns) {
     super(new Fixture(objModels, cubeArr, suns));
@@ -51,8 +59,19 @@ public static class SLModel extends LXModel {
     List<Tower> towerList = new ArrayList<Tower>();
     List<Cube> cubeList = new ArrayList<Cube>();
     List<Face> faceList = new ArrayList<Face>();
-    List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+
+    // Suns
+    List<Sun> sunList = new ArrayList<Sun>();
+    Map<String, Sun> _sunTable = new HashMap<String, Sun>();
+
+    // Slices
+    List<Slice> sliceList = new ArrayList<Slice>();
+    Map<String, Slice> _sliceTable = new HashMap<String, Slice>();
+
+    // Strips
+    List<Strip> stripList = new ArrayList<Strip>();
+    Map<String, Slice> _stripTable = new HashMap<String, Strip>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -70,17 +89,38 @@ public static class SLModel extends LXModel {
       }
     }
 
-    for (Strip strip : strips) {
-      stripList.add(strip);
+    for (Sun sun : suns) {
+      sunList.add(sun);
+      _sunTable.put(sun.id, sun);
+
+      for (Slice slice : sun.slices) {
+        sliceList.add(slice);
+        _sliceTable.put(slice.id, slice);
+
+        for (Strip strip : slice.strips) {
+          stripList.add(strip);
+          _stripTable.put(strip.id, strip);
+        }
+      }
     }
 
-    this.towers    = Collections.unmodifiableList(towerList);
-    this.cubes     = Collections.unmodifiableList(cubeList);
-    this.faces     = Collections.unmodifiableList(faceList);
-    this.strips    = Collections.unmodifiableList(stripList);
-    this.cubeTable = Collections.unmodifiableMap (_cubeTable);
-    this.objModels = objModels;
-    this.suns = suns;
+    this.towers     = Collections.unmodifiableList(towerList);
+    this.cubes      = Collections.unmodifiableList(cubeList);
+    this.faces      = Collections.unmodifiableList(faceList);
+    this.cubeTable  = Collections.unmodifiableMap (_cubeTable);
+    this.objModels  = objModels;
+    
+    // Suns
+    this.suns       = Collections.unmodifiableList(sunList);
+    this.sunTable   = Collections.unmodifiableMap (_sunTable);
+
+    // Slices
+    this.slice      = Collections.unmodifiableList(sliceList);
+    this.sliceTable = Collections.unmodifiableMap (_sliceTable);
+
+    // Strips
+    this.strip      = Collections.unmodifiableList(stripList);
+    this.stripTable = Collections.unmodifiableMap (_stripTable);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -119,6 +159,18 @@ public static class SLModel extends LXModel {
   public Cube getCubeById(String id) {
     return this.cubeTable.get(id);
   }
+
+  public Sun getSunById(String id) {
+    return this.sunTable.get(id);
+  }
+
+  public Slice getSliceById(String id) {
+    return this.sliceTable.get(id);
+  }
+
+  public Strip getStripById(String id) {
+    return this.stripTable.get(id);
+  }
 }
 
 public static class Sun {
@@ -150,6 +202,8 @@ public static class Sun {
     private Fixture(String id, Sun.Type type, float[] coordinatees, float[] rotations, LXTransform transform) {
       transform.push();
 
+      // create slices...
+
       transform.pop();
     }
   }
@@ -169,7 +223,6 @@ public static class Slice {
   };
 
   private final float STRIP_SPACING = 0.5; // not final
-  private final float CURVE_RATIO = 1./1.5; // height/width 
 
   public final String id;
   public final Type type;
@@ -190,6 +243,8 @@ public static class Slice {
     private Fixture(String id, float[] coordinates, float[] rotations, LXTransform transform) {
       transform.push();
 
+      // create curved strips...
+
       transform.pop();
     }
 
@@ -198,14 +253,35 @@ public static class Slice {
 
 public static class CurvedStrip extends Strip {
 
-  public final int LEDS_PER_METER = 60;
+  public static final int LEDS_PER_METER = 60;
+  public static final float INCHES_PER_METER = 39.3701;
 
-  public final String id;
+  public static class CurvedMetrics {
+    public final Strip.Metrics metrics;
+    public final float arcLength;
+    public final float arcHeight;
 
-  public CurvedStrip(String id, ) {
-
+    public CurvedMetrics(float arcLength, float arcHeight, int numPoints) {
+      this.metrics = new Strip.Metrics(numPoints, LEDS_PER_METER / INCHES_PER_METER);
+      this.arcLength = arcLength;
+      this.arcHeight = arcHeight;
+    }
   }
 
+  public CurvedStrip(String id, CurvedMetrics metrics, float[] coordinates, float[] rotations, LXTransform transform) {
+    super(id, new Fixture(id, metrics, coordinates, rotations, transform));
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+    private Fixture(String id, CurvedMetrics metrics, float[] coordinates, float[] rotations, LXTransform transform) {
+      transform.push();
+      List<LXPoint> points = new ArrayList<LXPoint>();
+
+      // create points for strip...
+
+      transform.pop();
+    }
+  }
 }
 
 /**
@@ -481,6 +557,8 @@ public static class Face extends LXModel {
  */
 public static class Strip extends LXModel {
 
+  public final String id;
+
   public static final float INCHES_PER_METER = 39.3701;
 
   public static class Metrics {
@@ -519,6 +597,18 @@ public static class Strip extends LXModel {
   public final float ry;
 
   public Object obj1 = null, obj2 = null;
+
+  Strip(LXAbstractFixture fixture) {
+    this("", fixture.points);
+  }
+
+  Strip(String id, Metrics metrics, LXAbstractFixture fixture) {
+    super(fixture.points);
+    this.id = id;
+    this.isHorizontal = true;
+    this.metrics = metrics;
+    this.ry = 0;
+  }
 
   Strip(Metrics metrics, float ry, List<LXPoint> points, boolean isHorizontal) {
     super(points);
