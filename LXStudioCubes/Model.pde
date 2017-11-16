@@ -41,8 +41,8 @@ public static class SLModel extends LXModel {
 
   public final List<Sun> suns;
 
-  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips, List<Sun> suns) {
-    super(new Fixture(objModels, cubeArr, strips, suns));
+  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Sun> suns) {
+    super(new Fixture(objModels, cubeArr, suns));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -98,11 +98,6 @@ public static class SLModel extends LXModel {
           } 
         } 
       } 
-      for (Strip strip : strips) {
-        for (LXPoint point : strip.points) {
-          this.points.add(point);
-        }
-      }
       for (Sun sun : suns) {
         for (LXPoint point : sun.points) {
           this.points.add(point);
@@ -126,10 +121,89 @@ public static class SLModel extends LXModel {
   }
 }
 
-public static class Heart extends LXModel {
+public static class Sun {
 
-  public Heart(List<LXPoint> points) {
-    super(points);
+  public enum Type {
+    FULL, TWO_THIRDS, HALF, ONE_THIRD
+  }
+
+  public final String id;
+  public final Type type;
+  public final List<Slice> slices;
+  public final List<Strip> strips;
+
+  public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+    super(new Fixture(id, type, coordinates, rotations, transform));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+
+    this.id = id;
+    this.type = type;
+    this.slices = Collections.unmodifiableList(fixture.slices);
+    this.strips = Collections.unmodifiableList(fixture.strips);
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    private final List<Slice> slices = new ArrayList<Slice>();
+    private final List<Strip> strips = new ArrayList<Strip>();
+
+    private Fixture(String id, Sun.Type type, float[] coordinatees, float[] rotations, LXTransform transform) {
+      transform.push();
+
+      transform.pop();
+    }
+  }
+}
+
+public static class Slice {
+
+  public enum Type {
+    FULL
+  };
+
+  private final int[] NUM_POINTS_PER_STRIP = {
+     9,  25,  35,  43,  48,  55,  59,  65,  69,  73,  77,  81,  85,  89,  91,  95,  97, 101,
+   103, 107, 109, 111, 113, 115, 119, 121, 123, 125, 127, 129, 129, 131, 133, 135, 137, 137,
+   139, 141, 141, 143, 145, 145, 147, 147, 149, 149, 151, 151, 153, 153, 153, 155, 155, 155,
+   157, 157, 157, 157, 159, 159, 159, 159, 159, 161, 161, 161, 161, 161, 161, 161, 161
+  };
+
+  private final float STRIP_SPACING = 0.5; // not final
+  private final float CURVE_RATIO = 1./1.5; // height/width 
+
+  public final String id;
+  public final Type type;
+  public final List<Strip> strips;
+
+  public Slice(String id, float[] coordinates, float[] rotations, LXTransform transform) {
+    super(new Fixture(id, coordinates, rotations, transform));
+    Fixture fixture = (Fixture)this.fixtures.get(0);
+
+    this.id = id;
+    this.strips = Collections.unmodifiableList(fixture.strips);
+  }
+
+  private class Fixture extends LXAbstractFixture {
+
+    private List<Strip> strips = new ArrayList<Strip>();
+
+    private Fixture(String id, float[] coordinates, float[] rotations, LXTransform transform) {
+      transform.push();
+
+      transform.pop();
+    }
+
+  }
+}
+
+public static class CurvedStrip extends Strip {
+
+  public final int LEDS_PER_METER = 60;
+
+  public final String id;
+
+  public CurvedStrip(String id, ) {
+
   }
 
 }
@@ -184,75 +258,6 @@ public static class Tower extends LXModel {
     this.cubes = Collections.unmodifiableList(cubeList);
     this.faces = Collections.unmodifiableList(faceList);
     this.strips = Collections.unmodifiableList(stripList);
-  }
-}
-
-public static class Sun extends LXModel {
-
-  public final static float RADIUS = 8*12;
-  public final static float DIAMETER = Sun.RADIUS*2;
-
-  private final static int NUM_POINTS_ON_WHOLE_SPHERE = 3000000;
-  private final static float Z_SCALING = 0.3;
-
-  public final Type type;
-
-  public enum Type {
-    ONE_QUARTER (0.25),
-    ONE_HALF (0.5),
-    THREE_QUARTERS (0.75);
-
-    public final float size;
-
-    private Type(float size) {
-      this.size = size;
-    }
-  }
-
-  public Sun(LXTransform transform, Type type, float x, float y, float z, float xRot, float yRot, float zRot) {
-    super(new Fixture(transform, type, x, y, z, xRot, yRot, zRot));
-    this.type = type;
-  }
-
-  private static class Fixture extends LXAbstractFixture {
-
-    private Fixture(LXTransform transform, Sun.Type type, float x, float y, float z, float xRot, float yRot, float zRot) {
-      transform.push();
-      transform.translate(x, y, z);
-      transform.rotateX(xRot * PI / 180.);
-      transform.rotateY(yRot * PI / 180.);
-      transform.rotateZ(zRot * PI / 180.);
-
-      double a = 4.0 * Math.PI*(DIAMETER / NUM_POINTS_ON_WHOLE_SPHERE);
-      double d = Math.sqrt(a);
-      int m_theta = (int)Math.round(Math.PI / d);
-      double d_theta = Math.PI / m_theta;
-      double d_phi = a / d_theta;
-
-      for (int m = 0; m < m_theta; m++) {
-        double theta = Math.PI * (m + 0.5) / m_theta;
-        int m_phi = (int)Math.round(2.0 * Math.PI * Math.sin(theta) / d_phi);
-
-        for (int n = 0; n < m_phi; n++) {
-          transform.push();
-
-          double phi = 2.0 * Math.PI * n / m_phi;
-          float px = (float)(RADIUS + RADIUS * Math.sin(theta) * Math.cos(phi));
-          float py = (float)(RADIUS + RADIUS * Math.sin(theta) * Math.sin(phi));
-          float pz = (float)(RADIUS + RADIUS * Math.cos(theta)) * Z_SCALING;
-
-          transform.translate(px, py - ((1 - type.size) * DIAMETER), pz);
-
-          if (py > (1 - type.size) * DIAMETER) {
-            this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-          }
-          transform.pop();
-        }
-      }
-
-      transform.pop();
-    }
-
   }
 }
 
