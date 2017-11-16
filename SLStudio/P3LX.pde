@@ -44,11 +44,12 @@ public class LXStudio extends P3LX {
       this.helpBar = new UIContextualHelpBar(this);
 
       // Cover logo
-      new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
-
-      new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
-      .setDescription("Symmetry Labs")
-      .addToContainer(leftPane);
+      //new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
+      //new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
+      //.setDescription("Symmetry Labs")
+      //.addToContainer(leftPane);
+      
+      // ... or, you know, maybe don't overwrite the logo of the software you're using      
 
       addLayer(this.preview);
       addLayer(this.leftPane);
