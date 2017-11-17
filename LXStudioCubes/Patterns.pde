@@ -26,6 +26,45 @@ public class Ball extends DPat {
   }
 }
 
+public class LightSource extends SLPattern {
+  CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
+  CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
+  CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter falloff = new CompoundParameter("falloff", 100, 0, 400);
+  CompoundParameter gain = new CompoundParameter("gain", 1, 0, 10);
+  
+  public LightSource(LX lx) {
+    super(lx);
+    addParameter(xPos);
+    addParameter(yPos);
+    addParameter(zPos);
+    addParameter(falloff);
+    addParameter(gain);
+  }
+
+  public void run(double deltaMs) {
+    PVector light = new PVector(xPos.getValuef(), yPos.getValuef(), zPos.getValuef());
+    for (LXPoint p : model.points) {
+      if (p instanceof LXPointNormal) {
+        LXPointNormal pn = (LXPointNormal) p;
+        PVector pv = new PVector(p.x, p.y, p.z);
+        PVector toLight = PVector.sub(light, pv);
+        float dist = toLight.mag();
+        if (dist < 1) continue; // avoid division by zero
+        
+        float brightness = falloff.getValuef() * falloff.getValuef() / (dist * dist);
+        if (brightness > 1) brightness = 1;
+        
+        float cosAngle = PVector.dot(toLight.normalize(), pn.normal);
+        if (cosAngle < 0) cosAngle = 0;
+        
+        float value = cosAngle * brightness * gain.getValuef();
+        colors[p.index] = LX.hsb(palette.getHuef(), 100, 100 * (value > 1 ? 1 : value));
+      }
+    }
+  }
+}
+
 public class Noise extends DPat {
   int       CurAnim, iSymm;
   int       XSym=1,YSym=2,RadSym=3;
