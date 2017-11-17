@@ -187,6 +187,27 @@ public static class Tower extends LXModel {
   }
 }
 
+/** A point on a surface, i.e. with a normal vector. */
+public static class LXPointNormal extends LXPoint {
+  /** The normal vector is always a unit vector. */
+  public final PVector normal;
+
+  public LXPointNormal(float x, float y, float z, PVector normal) {
+    super(x, y, z);
+    if (normal.mag() == 0) {
+      // If given the null vector, the normal defaults to up.
+      this.normal = new PVector(0, 1, 0);
+    } else {
+      this.normal = normal;
+      this.normal.normalize();
+    }
+  }
+
+  public LXPointNormal(double x, double y, double z, PVector normal) {
+    this((float) x, (float) y, (float) z, normal);
+  }
+}
+
 public static class Sun extends LXModel {
 
   public final static float RADIUS = 8*12;
@@ -229,6 +250,9 @@ public static class Sun extends LXModel {
       double d_theta = Math.PI / m_theta;
       double d_phi = a / d_theta;
 
+      PVector offset = new PVector(RADIUS, RADIUS, RADIUS);
+      PVector sink = new PVector(0, - (1 - type.size) * DIAMETER, 0);
+
       for (int m = 0; m < m_theta; m++) {
         double theta = Math.PI * (m + 0.5) / m_theta;
         int m_phi = (int)Math.round(2.0 * Math.PI * Math.sin(theta) / d_phi);
@@ -237,15 +261,18 @@ public static class Sun extends LXModel {
           transform.push();
 
           double phi = 2.0 * Math.PI * n / m_phi;
-          float px = (float)(RADIUS + RADIUS * Math.sin(theta) * Math.cos(phi));
-          float py = (float)(RADIUS + RADIUS * Math.sin(theta) * Math.sin(phi));
-          float pz = (float)(RADIUS + RADIUS * Math.cos(theta)) * Z_SCALING;
 
-          transform.translate(px, py - ((1 - type.size) * DIAMETER), pz);
-
-          if (py > (1 - type.size) * DIAMETER) {
-            this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
+          PVector spherePoint = getSpherePoint(theta, phi);
+          PVector sunPoint = PVector.add(
+              sink,
+              zScale(PVector.add(offset, scale(spherePoint, RADIUS)), Z_SCALING));
+          if (sunPoint.y > 0) {
+            transform.translate(sunPoint.x, sunPoint.y, sunPoint.z);
+            this.points.add(
+                new LXPointNormal(transform.x(), transform.y(), transform.z(),
+                                  getSunNormal(spherePoint, Z_SCALING)));
           }
+
           transform.pop();
         }
       }
@@ -253,13 +280,40 @@ public static class Sun extends LXModel {
       transform.pop();
     }
 
+    private PVector scale(PVector vec, float scale) {
+      return new PVector(vec.x * scale, vec.y * scale, vec.z * scale);
+    }
+
+    private PVector zScale(PVector vec, float zScale) {
+      return new PVector(vec.x, vec.y, vec.z * zScale);
+    }
+
+    private PVector getSpherePoint(double theta, double phi) {
+      return new PVector((float) (Math.sin(theta) * Math.cos(phi)),
+                         (float) (Math.sin(theta) * Math.sin(phi)),
+                         (float) (Math.cos(theta)));
+    }
+
+    private PVector getSunNormal(PVector spherePoint, float zScaleFactor) {
+      // First we find the right-vector and up-vector of the corresponding
+      // point on the surface of a sphere.  Then we squish these vectors
+      // using the zScaleFactor to get the right-vector and up-vector on the
+      // surface of the ellipsoid; their cross product is the normal.
+      PVector up = new PVector(0, 1, 0);
+      PVector sphereRight = spherePoint.cross(up);
+      PVector sphereUp = spherePoint.cross(sphereRight);
+
+      PVector sunRight = zScale(sphereRight, zScaleFactor);
+      PVector sunUp = zScale(sphereUp, zScaleFactor);
+      return sunRight.cross(sunUp).normalize();
+    }
   }
 }
 
 /**
- * Model of a single cube, which has an orientation and position on the
- * car. The position is specified in x,y,z coordinates with rotation. The
- * x axis is left->right, y is bottom->top, and z is front->back.
+* Model of a single cube, which has an orientation and position on the
+* car. The position is specified in x,y,z coordinates with rotation. The
+* x axis is left->right, y is bottom->top, and z is front->back.
  * 
  * A cube's x,y,z position is specified as the left, bottom, front corner.
  * 
