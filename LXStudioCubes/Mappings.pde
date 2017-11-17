@@ -156,15 +156,15 @@ public SLModel buildModel() {
   }
 
   // Any global transforms
-  LXTransform globalTransform = new LXTransform();
-  globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-  globalTransform.rotateY(globalRotationY * PI / 180.);
-  globalTransform.rotateX(globalRotationX * PI / 180.);
-  globalTransform.rotateZ(globalRotationZ * PI / 180.);
+  LXTransform transform = new LXTransform();
+  transform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
+  transform.rotateY(globalRotationY * PI / 180.);
+  transform.rotateX(globalRotationX * PI / 180.);
+  transform.rotateZ(globalRotationZ * PI / 180.);
 
   /* Cubes ----------------------------------------------------------*/
   List<Sun> suns = new ArrayList<Sun>();
-  //...
+  suns.add(new Sun("sun1", Sun.Type.FULL, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
   /*-----------------------------------------------------------------*/
 
   /* Cubes ----------------------------------------------------------*/
@@ -182,7 +182,7 @@ public SLModel buildModel() {
 
   //   for (int i = 0; i < config.ids.length; i++) {
   //     float y = config.yValues[i];
-  //     Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+  //     Cube cube = new Cube(config.ids[i], x, y, z, xRot, yRot, zRot, transform, type);
   //     cubes.add(cube);
   //     allCubes.add(cube);
   //   }
@@ -196,15 +196,15 @@ public SLModel buildModel() {
   // for (StripConfig stripConfig : STRIP_CONFIG) {
   //   Strip.Metrics metrics = new Strip.Metrics(stripConfig.numPoints, stripConfig.spacing);
 
-  //   globalTransform.push();
-  //   globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-  //   globalTransform.rotateY(stripConfig.xRot * PI / 180.);
-  //   globalTransform.rotateX(stripConfig.yRot * PI / 180.);
-  //   globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
+  //   transform.push();
+  //   transform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
+  //   transform.rotateY(stripConfig.xRot * PI / 180.);
+  //   transform.rotateX(stripConfig.yRot * PI / 180.);
+  //   transform.rotateZ(stripConfig.zRot * PI / 180.);
 
-  //   strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
+  //   strips.add(new Strip(metrics, stripConfig.yRot, transform, true));
 
-  //   globalTransform.pop();
+  //   transform.pop();
   // }
   /*-----------------------------------------------------------------*/
 
@@ -214,7 +214,7 @@ public SLModel buildModel() {
   }
 
   /* Obj Importer ----------------------------------------------------*/
-  List<LXModel> objModels = new ObjImporter("data", globalTransform).getModels();
+  List<LXModel> objModels = new ObjImporter("data", transform).getModels();
 
   return new SLModel(objModels, towers, allCubesArr, suns);
 }
