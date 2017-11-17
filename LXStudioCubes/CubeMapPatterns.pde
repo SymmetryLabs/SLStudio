@@ -1,5 +1,6 @@
 public abstract class P3CubeMapPattern extends SLPattern {
   private final PGraphics pg;
+  protected final PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
   private final PVector origin;
   private final PVector bboxSize;
   private final int faceRes;
@@ -27,7 +28,13 @@ public abstract class P3CubeMapPattern extends SLPattern {
    */
   protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int faceRes) {
     super(lx);
-    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3); //<>//
+    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>//
+    this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
+    this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
+    this.pgL = lx.applet.createGraphics(faceRes, faceRes, P3D);
+    this.pgR = lx.applet.createGraphics(faceRes, faceRes, P3D);
+    this.pgU = lx.applet.createGraphics(faceRes, faceRes, P3D);
+    this.pgD = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.origin = origin;
     this.bboxSize = bboxSize;
     this.faceRes = faceRes;
@@ -35,9 +42,9 @@ public abstract class P3CubeMapPattern extends SLPattern {
   
   @Override
   final protected void run(double deltaMs) {
-    pg.beginDraw(); //<>//
+    //pg.beginDraw(); //<>//
     run(deltaMs, pg);
-    pg.endDraw();
+    //pg.endDraw();
     pg.loadPixels();
     
     for (LXPoint p : model.points) {
@@ -121,6 +128,7 @@ public class TestCube extends P3CubeMapPattern {
   }
   
   void run(double deltaMs, PGraphics pg) {
+    pg.beginDraw();
     pg.background(0);
     
     pg.rectMode(CORNERS);
@@ -164,5 +172,6 @@ public class TestCube extends P3CubeMapPattern {
     pg.strokeWeight(10);
     pg.line(40, 150, 360, 150);
     pg.line(150, 40, 150, 260);
+    pg.endDraw();
   }  
 }
