@@ -13,7 +13,7 @@ public MappingMode mappingMode = null;
 
 void setup() {
   long setupStart = System.nanoTime();
-  size(1280, 800, P3D);
+  size(displayWidth, displayHeight, P3D);
 
   model = buildModel();
   println("-- Model ----");
