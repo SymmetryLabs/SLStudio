@@ -164,7 +164,10 @@ public SLModel buildModel() {
 
   /* Cubes ----------------------------------------------------------*/
   List<Sun> suns = new ArrayList<Sun>();
-  suns.add(new Sun("sun1", Sun.Type.FULL, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
+  suns.add(new Sun("sun1", Sun.Type.FULL, new float[] {0, 100, 0}, new float[] {0, 0, 0}, transform));
+  suns.add(new Sun("sun2", Sun.Type.TWO_THIRDS, new float[] {300, 33, 0}, new float[] {0, 0, 0}, transform));
+  suns.add(new Sun("sun3", Sun.Type.ONE_HALF, new float[] {600, 0, 0}, new float[] {0, 0, 0}, transform));
+  suns.add(new Sun("sun4", Sun.Type.ONE_THIRD, new float[] {900, -33, 0}, new float[] {0, 0, 0}, transform));
   /*-----------------------------------------------------------------*/
 
   /* Cubes ----------------------------------------------------------*/
@@ -216,7 +219,7 @@ public SLModel buildModel() {
   /* Obj Importer ----------------------------------------------------*/
   List<LXModel> objModels = new ObjImporter("data", transform).getModels();
 
-  return new SLModel(objModels, towers, allCubesArr, suns);
+  return new SLModel(suns);
 }
 
 public SLModel getModel() {

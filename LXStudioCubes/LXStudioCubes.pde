@@ -20,7 +20,9 @@ void setup() {
 
   model = buildModel();
   println("-- Model ----");
-  println("# of cubes: " + model.cubes.size());
+  println("# of suns: " + model.suns.size());
+  println("# of slices: " + model.slices.size());
+  println("# of strips: " + model.strips.size());
   println("# of points: " + model.points.length);
   println("model.xMin: " + model.xMin); println("model.xMax: " + model.xMax); println("model.xRange: " + model.xRange);
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);

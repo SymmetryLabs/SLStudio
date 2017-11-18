@@ -39,21 +39,21 @@ public static class SLModel extends LXModel {
 
   // Suns
   public final List<Sun> suns;
-  public final Map<String, Sun> sunTable;
+  private final Map<String, Sun> sunTable;
 
   // Slices
   public final List<Slice> slices;
-  public final Map<String, Slice> sliceTable;
+  private final Map<String, Slice> sliceTable;
 
   // Strips
   public final List<Strip> strips;
-  public final Map<String, Strip> stripTable;
+  private final Map<String, Strip> stripTable;
 
-  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Sun> suns) {
-    super(new Fixture(objModels, cubeArr, suns));
+  public SLModel(List<Sun> suns) {
+    super(new Fixture(suns));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
-    _cubes = cubeArr;
+    //_cubes = cubeArr;
 
     // Make unmodifiable accessors to the model data
     List<Tower> towerList = new ArrayList<Tower>();
@@ -73,21 +73,21 @@ public static class SLModel extends LXModel {
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Strip> _stripTable = new HashMap<String, Strip>();
     
-    for (Tower tower : towers) {
-      towerList.add(tower);
-      for (Cube cube : tower.cubes) {
-        if (cube != null) {
-          _cubeTable.put(cube.id, cube);
-          cubeList.add(cube);
-          for (Face face : cube.faces) {
-            faceList.add(face);
-            for (Strip strip : face.strips) {
-              stripList.add(strip);
-            }
-          }
-        }
-      }
-    }
+    // for (Tower tower : towers) {
+    //   towerList.add(tower);
+    //   for (Cube cube : tower.cubes) {
+    //     if (cube != null) {
+    //       _cubeTable.put(cube.id, cube);
+    //       cubeList.add(cube);
+    //       for (Face face : cube.faces) {
+    //         faceList.add(face);
+    //         for (Strip strip : face.strips) {
+    //           stripList.add(strip);
+    //         }
+    //       }
+    //     }
+    //   }
+    // }
 
     for (Sun sun : suns) {
       sunList.add(sun);
@@ -108,7 +108,8 @@ public static class SLModel extends LXModel {
     this.cubes      = Collections.unmodifiableList(cubeList);
     this.faces      = Collections.unmodifiableList(faceList);
     this.cubeTable  = Collections.unmodifiableMap (_cubeTable);
-    this.objModels  = objModels;
+    this.objModels  = new ArrayList<LXModel>();
+    this._cubes     = new Cube[cubeList.size()];
     
     // Suns
     this.suns       = Collections.unmodifiableList(sunList);
@@ -124,20 +125,7 @@ public static class SLModel extends LXModel {
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Sun> suns) {
-      println("Number of obj models: " + objModels.size());
-      for (LXModel model : objModels) {
-        for (LXPoint point : model.points) {
-          this.points.add(point);
-        }
-      }
-      for (Cube cube : cubeArr) { 
-        if (cube != null) { 
-          for (LXPoint point : cube.points) { 
-            this.points.add(point); 
-          } 
-        } 
-      } 
+    private Fixture(List<Sun> suns) {
       for (Sun sun : suns) {
         for (LXPoint point : sun.points) {
           this.points.add(point);
@@ -176,13 +164,15 @@ public static class SLModel extends LXModel {
 public static class Sun extends LXModel {
 
   public enum Type {
-    FULL, TWO_THIRDS, HALF, ONE_THIRD
+    FULL, TWO_THIRDS, ONE_HALF, ONE_THIRD
   }
 
   public final String id;
   public final Type type;
   public final List<Slice> slices;
   public final List<Strip> strips;
+  private final Map<String, Slice> sliceTable;
+  private final Map<String, Strip> stripTable;
 
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
     super(new Fixture(id, type, coordinates, rotations, transform));
@@ -192,6 +182,24 @@ public static class Sun extends LXModel {
     this.type = type;
     this.slices = Collections.unmodifiableList(fixture.slices);
     this.strips = Collections.unmodifiableList(fixture.strips);
+    this.sliceTable = new HashMap<String, Slice>();
+    this.stripTable = new HashMap<String, Strip>();
+
+    for (Slice slice : slices) {
+      sliceTable.put(slice.id, slice);
+    }
+
+    for (Strip strip : strips) {
+      stripTable.put(strip.id, strip);
+    }
+  }
+
+  public Slice getSliceById(String id) {
+    return sliceTable.get(id);
+  }
+
+  public Strip getStripById(String id) {
+    return stripTable.get(id);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -207,13 +215,37 @@ public static class Sun extends LXModel {
       transform.rotateZ(rotations[2] * PI / 180);
 
       // create slices...
-      this.slices.add(new Slice(id + "_slice1", Slice.Type.FULL, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
+      if (type != Sun.Type.ONE_THIRD) {
+        slices.add(new Slice(id + "_slice_top_front",    Slice.Type.FULL, new float[] { 0,    0, 0}, new float[] {0,   0,   0}, transform));
+        slices.add(new Slice(id + "_slice_top_back",     Slice.Type.FULL, new float[] {60,    0, 0}, new float[] {0, 180,   0}, transform));
+      }
 
+      switch (type) {
+        case FULL:
+          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.FULL, new float[] {60, -212, 0}, new float[] {0,   0, 180}, transform));
+          slices.add(new Slice(id + "_slice_bottom_back",  Slice.Type.FULL, new float[] { 0, -212, 0}, new float[] {0, 180, 180}, transform));
+          break;
+
+        case TWO_THIRDS:
+          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {60, -212, 0}, new float[] {0,   0, 180}, transform));
+          slices.add(new Slice(id + "_slice_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] { 0, -212, 0}, new float[] {0, 180, 180}, transform));
+
+        case ONE_HALF:
+          // already done
+          break;
+
+        case ONE_THIRD:
+          slices.add(new Slice(id + "_slice_top_front",    Slice.Type.TWO_THIRDS, new float[] { 0,    0, 0}, new float[] {0,   0,   0}, transform));
+          slices.add(new Slice(id + "_slice_top_back",     Slice.Type.TWO_THIRDS, new float[] {60,    0, 0}, new float[] {0, 180,   0}, transform));
+          break;
+      }
+
+      // add pointers to strips
       for (Slice slice : slices) {
         for (Strip strip : slice.strips) {
-          this.strips.add(strip);
-          for (LXPoint point : slice.points) {
-            this.points.add(point);
+          strips.add(strip);
+          for (LXPoint point : strip.points) {
+            points.add(point);
           }
         }
       }
@@ -225,8 +257,10 @@ public static class Sun extends LXModel {
 
 public static class Slice extends LXModel {
 
+  public final static float DIAMETER = 5*12;
+
   public enum Type {
-    FULL
+    FULL, TWO_THIRDS, BOTTOM_ONE_THIRD
   };
 
   private static final int[] NUM_POINTS_PER_STRIP = { // top to bottom
@@ -236,7 +270,7 @@ public static class Slice extends LXModel {
    157, 157, 157, 157, 159, 159, 159, 159, 159, 161, 161, 161, 161, 161, 161, 161, 161
   };
 
-  private static final float STRIP_SPACING = 1; // not final
+  private static final float STRIP_SPACING = 1.5; // not final
 
   public final String id;
   public final Type type;
@@ -263,9 +297,28 @@ public static class Slice extends LXModel {
       transform.rotateZ(rotations[2] * PI / 180);
 
       // create curved strips...
-      for (int i = 0; i < NUM_POINTS_PER_STRIP.length; i++) {
-        CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(20., 15., NUM_POINTS_PER_STRIP[i]);
-        this.strips.add(new CurvedStrip(id + "_strip" + i, metrics, new float[] {0, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
+      if (type != Slice.Type.BOTTOM_ONE_THIRD) {
+        for (int i = 0; i < NUM_POINTS_PER_STRIP.length; i++) {
+          if (type == Slice.Type.TWO_THIRDS && i > 48) {
+            break;
+          }
+
+          int numPoints = NUM_POINTS_PER_STRIP[i];
+          float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH;
+          float stripX = (DIAMETER - stripWidth) / 2;
+
+          CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
+          strips.add(new CurvedStrip(id + "_strip" + i, metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
+        }
+      } else {
+        for (int i = 49; i < NUM_POINTS_PER_STRIP.length; i++) {
+          int numPoints = NUM_POINTS_PER_STRIP[i];
+          float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH;
+          float stripX = (DIAMETER - stripWidth) / 2;
+
+          CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
+          strips.add(new CurvedStrip(id + "_strip" + i, metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
+        }
       }
 
       for (Strip strip : strips) {
@@ -284,20 +337,21 @@ public static class CurvedStrip extends Strip {
 
   public static final int LEDS_PER_METER = 60;
   public static final float INCHES_PER_METER = 39.3701;
+  public static final float PIXEL_PITCH = LEDS_PER_METER / INCHES_PER_METER;
+
+  private static int counter = 0;
 
   public static class CurvedMetrics {
     public final Strip.Metrics metrics;
     public final float pitch;
     public final int numPoints;
-    public final float arcLength;
-    public final float arcHeight;
+    public final float arcWidth;
 
-    public CurvedMetrics(float arcLength, float arcHeight, int numPoints) {
-      this.metrics = new Strip.Metrics(numPoints, LEDS_PER_METER / INCHES_PER_METER);
+    public CurvedMetrics(float arcWidth, int numPoints) {
+      this.metrics = new Strip.Metrics(numPoints, PIXEL_PITCH);
       this.pitch = metrics.POINT_SPACING;
       this.numPoints = metrics.numPoints;
-      this.arcLength = arcLength;
-      this.arcHeight = arcHeight;
+      this.arcWidth = arcWidth;
     }
   }
 
@@ -313,15 +367,24 @@ public static class CurvedStrip extends Strip {
       transform.rotateY(rotations[1] * PI / 180);
       transform.rotateZ(rotations[2] * PI / 180);
 
-      List<LXPoint> points = new ArrayList<LXPoint>();
-
-      // create points for strip...
       for (int i = 0; i < metrics.numPoints; i++) {
-        this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-        transform.translate(metrics.pitch, 0, 0);
+        transform.push();
+
+        float t = i / (float)metrics.numPoints;
+        float x = bezierPoint(0, metrics.arcWidth*0.2, metrics.arcWidth*0.8, metrics.arcWidth, t);
+        float z = bezierPoint(0, metrics.arcWidth*-0.3,metrics.arcWidth*-0.3, 0, t);
+        transform.translate(x, 0, z);
+
+        points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
+        transform.pop();
       }
 
       transform.pop();
+    }
+
+    private float bezierPoint(float a, float b, float c, float d, float t) {
+      float t1 = 1.0f - t;
+      return ((a * t1) + (3 * b * t)) * (t1 * t1) + ((3 * c * t1) + (d * t)) * (t * t);
     }
   }
 }

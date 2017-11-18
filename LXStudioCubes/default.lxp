@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1508883336310,
+  "timestamp": 1510971726244,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 195.7894744873047,
+        "color/hue": 195.7646942138672,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -16728833,
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 7,
         "patterns": [
           {
             "id": 214,
@@ -240,6 +240,34 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 2679,
+            "class": "LXStudioCubes$TestSlices",
+            "modulationColor": -10486016,
+            "parameters": {
+              "label": "TestSlices"
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 2739,
+            "class": "LXStudioCubes$TestLowPowerStrips",
+            "modulationColor": -14221568,
+            "parameters": {
+              "label": "TestLowPowerStrips"
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       }
@@ -309,12 +337,12 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.0,
-          "Band-2": 0.023345035542259862,
-          "Band-3": 0.04050651962993823,
-          "Band-4": 0.05421713272492479,
-          "Band-5": 0.06715107380901664,
-          "Band-6": 0.048660104064813026,
+          "Band-1": 0.138148662998688,
+          "Band-2": 0.17599983638727112,
+          "Band-3": 0.22734649876786273,
+          "Band-4": 0.2557617358216816,
+          "Band-5": 0.20248076519514369,
+          "Band-6": 0.044412698912357995,
           "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
@@ -470,7 +498,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 576.0,
+        "radius": 334.8491395843177,
         "theta": -0.018000000000000207,
         "phi": -0.04200000000000007
       }
