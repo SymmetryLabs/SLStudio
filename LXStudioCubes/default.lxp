@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1509745706248,
+  "timestamp": 1510647052853,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 7,
+        "patternIndex": 8,
         "patterns": [
           {
             "id": 214,
@@ -254,6 +254,45 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 2748,
+            "class": "LXStudioCubes$RKPattern01",
+            "modulationColor": -65494,
+            "parameters": {
+              "label": "RKPattern01",
+              "rX": -0.3769911204951004,
+              "rY": 0.0,
+              "rZ": -0.5026548273268006,
+              "speed": -6.660176579113557,
+              "dsp": 0.031415926707925035
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 2750,
+            "class": "LXStudioCubes$RKPattern02",
+            "modulationColor": -16720385,
+            "parameters": {
+              "label": "RKPattern02",
+              "rX": 0.879645947821901,
+              "rY": 1.1309733614853013,
+              "rZ": 0.31415926707925035,
+              "noise": false,
+              "speed": 0.47499999310821295,
+              "dsp": 0.5200000107288361
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       }
@@ -323,18 +362,18 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.3163907600885756,
-          "Band-2": 0.3586275929282269,
-          "Band-3": 0.3754673044701611,
-          "Band-4": 0.3867811985674122,
-          "Band-5": 0.38575497647510526,
-          "Band-6": 0.344744029128643,
-          "Band-7": 0.37374451562380173,
-          "Band-8": 0.43318953308145036,
-          "Band-9": 0.3663897891178295,
-          "Band-10": 0.22008025446725654,
-          "Band-11": 0.19908522484347957,
-          "Band-12": 0.11032357082311417,
+          "Band-1": 0.18121787312209459,
+          "Band-2": 0.1951391914702154,
+          "Band-3": 0.21382825824807794,
+          "Band-4": 0.23354534852819053,
+          "Band-5": 0.17720686321024592,
+          "Band-6": 0.06621684625817903,
+          "Band-7": 0.03138208599208292,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -484,9 +523,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 576.0,
-        "theta": -0.018000000000000207,
-        "phi": -0.04200000000000007
+        "radius": 285.4948076354536,
+        "theta": 0.22199999999999975,
+        "phi": 0.05399999999999992
       }
     }
   }
