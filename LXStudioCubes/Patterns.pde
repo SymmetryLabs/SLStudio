@@ -27,10 +27,11 @@ public class Ball extends DPat {
 }
 
 public class LightSource extends SLPattern {
+  float range = new PVector(model.xRange, model.yRange, model.zRange).mag();
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
   CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
   CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
-  CompoundParameter falloff = new CompoundParameter("falloff", 0.75, 0, 1);
+  CompoundParameter falloff = new CompoundParameter("falloff", 0.5*range, 0, range);
   CompoundParameter gain = new CompoundParameter("gain", 1, 0, 3);
   
   public LightSource(LX lx) {
@@ -52,7 +53,7 @@ public class LightSource extends SLPattern {
         PVector toLight = PVector.sub(light, pv);
         float dist = toLight.mag();
 
-        dist = (dist / range) / (1 - falloff.getValuef()); /// (1/(1-falloff.getValuef()) - 1); // falloff.getValuef();
+        dist /= falloff.getValue();
         if (dist < 1) dist = 1; // avoid division by zero or excessive brightness
         float brightness = 1.0 / (dist * dist);
         
@@ -63,6 +64,19 @@ public class LightSource extends SLPattern {
         colors[p.index] = LX.hsb(palette.getHuef(), 100, 100 * (value > 1 ? 1 : value));
       }
     }
+  }
+}
+
+public class Flock extends SLPattern {
+  CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
+  CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
+  CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
+
+  public Flock(LX lx) {
+    super(lx);
+  }  
+  
+  public void run(double deltaMs) {
   }
 }
 
