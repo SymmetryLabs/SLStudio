@@ -43,13 +43,6 @@ public class LXStudio extends P3LX {
       this.bottomTray = new UIBottomTray(this, lx);
       this.helpBar = new UIContextualHelpBar(this);
 
-      // Cover logo
-      new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
-
-      new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
-      .setDescription("Symmetry Labs")
-      .addToContainer(leftPane);
-
       addLayer(this.preview);
       addLayer(this.leftPane);
       addLayer(this.rightPane);
