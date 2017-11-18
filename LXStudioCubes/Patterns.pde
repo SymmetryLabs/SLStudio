@@ -30,8 +30,8 @@ public class LightSource extends SLPattern {
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
   CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
   CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
-  CompoundParameter falloff = new CompoundParameter("falloff", 100, 0, 400);
-  CompoundParameter gain = new CompoundParameter("gain", 1, 0, 10);
+  CompoundParameter falloff = new CompoundParameter("falloff", 0.75, 0, 1);
+  CompoundParameter gain = new CompoundParameter("gain", 1, 0, 3);
   
   public LightSource(LX lx) {
     super(lx);
@@ -44,16 +44,17 @@ public class LightSource extends SLPattern {
 
   public void run(double deltaMs) {
     PVector light = new PVector(xPos.getValuef(), yPos.getValuef(), zPos.getValuef());
+    float range = new PVector(model.xRange, model.yRange, model.zRange).mag();
     for (LXPoint p : model.points) {
       if (p instanceof LXPointNormal) {
         LXPointNormal pn = (LXPointNormal) p;
         PVector pv = new PVector(p.x, p.y, p.z);
         PVector toLight = PVector.sub(light, pv);
         float dist = toLight.mag();
-        if (dist < 1) continue; // avoid division by zero
-        
-        float brightness = falloff.getValuef() * falloff.getValuef() / (dist * dist);
-        if (brightness > 1) brightness = 1;
+
+        dist = (dist / range) / (1 - falloff.getValuef()); /// (1/(1-falloff.getValuef()) - 1); // falloff.getValuef();
+        if (dist < 1) dist = 1; // avoid division by zero or excessive brightness
+        float brightness = 1.0 / (dist * dist);
         
         float cosAngle = PVector.dot(toLight.normalize(), pn.normal);
         if (cosAngle < 0) cosAngle = 0;
