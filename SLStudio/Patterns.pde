@@ -66,7 +66,7 @@ public class LightSource extends SLPattern {
         PVector toLight = PVector.sub(light, pv);
         float dist = toLight.mag();
 
-        dist = (dist / range) / (1 - falloff.getValuef()); /// (1/(1-falloff.getValuef()) - 1); // falloff.getValuef();
+        dist /= falloff.getValue();
         if (dist < 1) dist = 1; // avoid division by zero or excessive brightness
         float brightness = 1.0 / (dist * dist);
         
