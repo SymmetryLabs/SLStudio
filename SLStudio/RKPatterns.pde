@@ -13,7 +13,7 @@ public class RKPattern01 extends P3CubeMapPattern {
 
   public RKPattern01(LX lx) {
 
-    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
     testRings = new Ring[20];
     for (int i=0; i<testRings.length; i++) {
       float initTheta = i*PI/testRings.length;
@@ -179,7 +179,7 @@ public class RKPattern02 extends P3CubeMapPattern {
 
   public RKPattern02(LX lx) {
 
-    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
 
     arcs = new ArrayList<Arc>();
     Arc parentArc = new Arc(0, 0, 16, 0, PI, 0, TWO_PI);
@@ -441,7 +441,7 @@ public class RKPattern03 extends P3CubeMapPattern {
 
   public RKPattern03(LX lx) {
 
-    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
 
     gF = random(100);
     thetaF = random(100);
