@@ -36,11 +36,12 @@ public static class SLModel extends LXModel {
   public final List<Strip> strips;
   public final Map<String, Cube> cubeTable;
   private final Cube[] _cubes;
+  public final List<Branch> branches;
 
   public final List<LXModel> objModels;
 
-  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips) {
-    super(new Fixture(objModels, cubeArr, strips));
+  public SLModel(List<LXModel> objModels, List<Tower> towers, Cube[] cubeArr, List<Strip> strips, Branch[] branchArr) {
+    super(new Fixture(objModels, cubeArr, strips, branchArr));
     Fixture fixture = (Fixture) this.fixtures.get(0);
 
     _cubes = cubeArr;
@@ -51,6 +52,7 @@ public static class SLModel extends LXModel {
     List<Face> faceList = new ArrayList<Face>();
     List<Strip> stripList = new ArrayList<Strip>();
     Map<String, Cube> _cubeTable = new HashMap<String, Cube>();
+    List<Branch> branchList = new ArrayList<Branch>();
     
     for (Tower tower : towers) {
       towerList.add(tower);
@@ -72,16 +74,24 @@ public static class SLModel extends LXModel {
       stripList.add(strip);
     }
 
+    for (Branch branch : branchArr) {
+      branchList.add(branch);
+      for (Strip s : branch.strips) {
+        stripList.add(s);
+      }
+    }
+
     this.towers    = Collections.unmodifiableList(towerList);
     this.cubes     = Collections.unmodifiableList(cubeList);
     this.faces     = Collections.unmodifiableList(faceList);
     this.strips    = Collections.unmodifiableList(stripList);
     this.cubeTable = Collections.unmodifiableMap (_cubeTable);
     this.objModels = objModels;
+    this.branches = Collections.unmodifiableList(branchList);
   }
 
   private static class Fixture extends LXAbstractFixture {
-    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips) {
+    private Fixture(List<LXModel> objModels, Cube[] cubeArr, List<Strip> strips, Branch[] branchArr) {
       println("Number of obj models: " + objModels.size());
       for (LXModel model : objModels) {
         for (LXPoint point : model.points) {
@@ -98,6 +108,13 @@ public static class SLModel extends LXModel {
       for (Strip strip : strips) {
         for (LXPoint point : strip.points) {
           this.points.add(point);
+        }
+      }
+      for (Branch branch : branchArr) {
+        if (branch != null) {
+          for (LXPoint point : branch.points) {
+            this.points.add(point);
+          }
         }
       }
     }
@@ -122,6 +139,460 @@ public static class Heart extends LXModel {
 
   public Heart(List<LXPoint> points) {
     super(points);
+  }
+
+}
+
+public static class Branch extends LXModel {
+
+  public final String id;
+
+  public final List<Strip> strips;
+
+  /**
+   * Front left corner x coordinate 
+   */
+  public final float x;
+
+  /**
+   * Front left corner y coordinate 
+   */
+  public final float y;
+
+  /**
+   * Front left corner z coordinate 
+   */
+  public final float z;
+
+  /**
+   * Rotation about the x-axis 
+   */
+  public final float rx;
+
+  /**
+   * Rotation about the y-axis 
+   */
+  public final float ry;
+
+  /**
+   * Rotation about the z-axis 
+   */
+  public final float rz;
+
+  public Branch(String id, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
+    super(new Fixture(x, y, z, rx, ry, rz, t));
+    Fixture fixture = (Fixture) this.fixtures.get(0);
+    this.id = id;
+
+    while (rx < 0) rx += 360;
+    while (ry < 0) ry += 360;
+    while (rz < 0) rz += 360;
+    rx = rx % 360;
+    ry = ry % 360;
+    rz = rz % 360;
+
+    this.x = x; 
+    this.y = y;
+    this.z = z;
+    this.rx = rx;
+    this.ry = ry;
+    this.rz = rz;
+
+    this.strips = Collections.unmodifiableList(fixture.strips);
+  }
+
+  private static class Fixture extends LXAbstractFixture {
+
+    private final List<Strip> strips = new ArrayList<Strip>();
+
+    private Fixture(float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
+      // LXTransform t = new LXTransform();
+      t.push();
+      t.translate(x, y, z);
+      t.rotateX(rx * PI / 180.);
+      t.rotateY(ry * PI / 180.);
+      t.rotateZ(rz * PI / 180.);
+
+      Strip.Metrics metrics = new Strip.Metrics(4, 7, 30);
+
+      // strip 1
+      t.push();
+      t.translate(0, 0, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(135 * PI / 180.);
+
+      List<LXPoint> points1 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points1.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points1.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip1 = new Strip(metrics, 0, points1, false);
+      this.strips.add(strip1);
+      for (LXPoint p : strip1.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 2
+      t.push();
+      t.translate(-1, 1, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(170 * PI / 180.);
+
+      List<LXPoint> points2 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points2.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points2.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip2 = new Strip(metrics, 0, points2, false);
+      this.strips.add(strip2);
+      for (LXPoint p : strip2.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 3
+      t.push();
+      t.translate(-4, 5, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(170 * PI / 180.);
+
+      List<LXPoint> points3 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points3.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points3.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip3 = new Strip(metrics, 0, points3, false);
+      this.strips.add(strip3);
+      for (LXPoint p : strip3.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 4
+      t.push();
+      t.translate(-5, 6, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(225 * PI / 180.);
+
+      List<LXPoint> points4 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points4.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points4.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip4 = new Strip(metrics, 0, points4, false);
+      this.strips.add(strip4);
+      for (LXPoint p : strip4.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 5
+      t.push();
+      t.translate(2, 5, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(225 * PI / 180.);
+
+      List<LXPoint> points5 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points5.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points5.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip5 = new Strip(metrics, 0, points5, false);
+      this.strips.add(strip5);
+      for (LXPoint p : strip5.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 6
+      t.push();
+      t.translate(0, 11, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(170 * PI / 180.);
+
+      List<LXPoint> points6 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points6.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points6.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip6 = new Strip(metrics, 0, points6, false);
+      this.strips.add(strip6);
+      for (LXPoint p : strip6.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 7
+      t.push();
+      t.translate(0, 12, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(225 * PI / 180.);
+
+      List<LXPoint> points7 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points7.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points7.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip7 = new Strip(metrics, 0, points7, false);
+      this.strips.add(strip7);
+      for (LXPoint p : strip7.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 8
+      t.push();
+      t.translate(3, 13, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(-90 * PI / 180.);
+
+      List<LXPoint> points8 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points8.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points8.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip8 = new Strip(metrics, 0, points8, false);
+      this.strips.add(strip8);
+      for (LXPoint p : strip8.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 9
+      t.push();
+      t.translate(6, 13, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(-45 * PI / 180.);
+
+      List<LXPoint> points9 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points9.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points9.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip9 = new Strip(metrics, 0, points9, false);
+      this.strips.add(strip9);
+      for (LXPoint p : strip9.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 10
+      t.push();
+      t.translate(7, 12, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(10 * PI / 180.);
+
+      List<LXPoint> points10 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points10.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points10.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip10 = new Strip(metrics, 0, points10, false);
+      this.strips.add(strip10);
+      for (LXPoint p : strip10.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 11
+      t.push();
+      t.translate(5, 6, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(-45 * PI / 180.);
+ 
+      List<LXPoint> points11 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points11.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points11.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip11 = new Strip(metrics, 0, points11, false);
+      this.strips.add(strip11);
+      for (LXPoint p : strip11.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 12
+      t.push();
+      t.translate(10, 7, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(-45 * PI / 180.);
+
+      List<LXPoint> points12 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points12.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points12.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip12 = new Strip(metrics, 0, points12, false);
+      this.strips.add(strip12);
+      for (LXPoint p : strip12.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 13
+      t.push();
+      t.translate(11, 6, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(20 * PI / 180.);
+
+      List<LXPoint> points13 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points13.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points13.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip13 = new Strip(metrics, 0, points13, false);
+      this.strips.add(strip13);
+      for (LXPoint p : strip13.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 14
+      t.push();
+      t.translate(8.5, 2.5, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(0 * PI / 180.);
+
+      List<LXPoint> points14 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points14.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points14.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip14 = new Strip(metrics, 0, points14, false);
+      this.strips.add(strip14);
+      for (LXPoint p : strip14.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      // strip 15
+      t.push();
+      t.translate(8.5, 1, 0);
+      t.rotateX(0 * PI / 180.);
+      t.rotateY(0 * PI / 180.);
+      t.rotateZ(45 * PI / 180.);
+
+      List<LXPoint> points15 = new ArrayList<LXPoint>();
+      for (int i = 0; i < 4; i++) {
+        points15.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(metrics.POINT_SPACING, 0, 0);
+      }
+      t.translate(-metrics.POINT_SPACING*2, 0, 0);
+      for (int i = 0; i < 3; i++) {
+        points15.add(new LXPoint(t.x(), t.y(), t.z()));
+        t.translate(-metrics.POINT_SPACING, 0, 0);
+      }
+
+      Strip strip15 = new Strip(metrics, 0, points15, false);
+      this.strips.add(strip15);
+      for (LXPoint p : strip15.points) {
+        this.points.add(p);
+      }
+      t.pop();
+
+      t.pop();
+    }
+
   }
 
 }
