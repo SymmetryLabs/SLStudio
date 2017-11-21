@@ -3,26 +3,28 @@ public class RKPattern01 extends P3CubeMapPattern {
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  CompoundParameter amt = new CompoundParameter("amt", 20, 1, 25);
   CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
   CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
 
-  int ringRes = 40;
+  int ringRes = 40, ringAmt = 20, pRingAmt = 20;
   float l1 = 600, l2 = 600, l3 = 600;
+  float gTheta, gThetaSpacing, gWeightScalar;
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, thetaSpeed, thetaSpeedT;
-  Ring [] testRings;
+  ArrayList <Ring> testRings;
 
   public RKPattern01(LX lx) {
-
     super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
-    testRings = new Ring[20];
-    for (int i=0; i<testRings.length; i++) {
-      float initTheta = i*PI/testRings.length;
-      testRings[i] = new Ring(ringRes, initTheta, l1, l2, l3);
+    testRings = new ArrayList<Ring>();
+    for (int i=0; i<ringAmt; i++) {
+      Ring testRing = new Ring(ringRes, l1, l2, l3);
+      testRings.add(testRing);
     }
 
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
+    addParameter(amt);
     addParameter(speed);
     addParameter(dsp);
   }
@@ -32,6 +34,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     rotXT = rX.getValuef();
     rotYT = rY.getValuef();
     rotZT = rZ.getValuef();
+    ringAmt = round(amt.getValuef());
     thetaSpeedT = speed.getValuef();
     dspmtT = dsp.getValuef();
     rotX = lerp(rotX, rotXT, .1);
@@ -39,9 +42,18 @@ public class RKPattern01 extends P3CubeMapPattern {
     rotZ = lerp(rotZ, rotZT, .1);
     thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .1);
     dspmt = lerp(dspmt, dspmtT, .1);
+    
+    replenish();
 
-    for (int i=0; i<testRings.length; i++) {
-      testRings[i].update();
+    gTheta += thetaSpeed/720;
+    if (gTheta>PI) gTheta -= PI;
+    else if (gTheta<0) gTheta += PI;
+    gThetaSpacing = lerp(gThetaSpacing, PI/testRings.size(), .1);
+    gWeightScalar = map(ringAmt, 1, 25, 5, 1);
+
+    for (int i=0; i<testRings.size(); i++) {
+      Ring testRing = testRings.get(i);
+      testRing.update(i);
     }
     updateCubeMaps();
 
@@ -78,9 +90,29 @@ public class RKPattern01 extends P3CubeMapPattern {
   }
 
   void drawScene(PGraphics pg) {
-    for (int i=0; i<testRings.length; i++) {
-      testRings[i].display(pg);
+    for (int i=0; i<testRings.size(); i++) {
+      Ring testRing = testRings.get(i);
+      testRing.display(pg);
     }
+  }
+
+  void replenish() {
+    if (pRingAmt != ringAmt) {
+      if (ringAmt>pRingAmt) {
+        for (int i=0; i<ringAmt-pRingAmt; i++) {
+          Ring testRing = new Ring(ringRes, l1, l2, l3);
+          testRings.add(0, testRing);
+        }
+      }
+      if (ringAmt<pRingAmt) {
+        for (int i=0; i<pRingAmt-ringAmt; i++) {
+          int j = testRings.size()-1-i;
+          j = constrain(j, 1, ringAmt);
+          testRings.remove(j);
+        }
+      }
+    }
+    pRingAmt = ringAmt;
   }
 
   class Ring {
@@ -89,13 +121,14 @@ public class RKPattern01 extends P3CubeMapPattern {
     float l1, l2, l3, theta, weight;
     Vtx [] vts;
 
-    Ring(int amt, float theta, float l1, float l2, float l3) {
+    Ring(int amt, float l1, float l2, float l3) {
 
       this.amt = amt;
       this.l1 = l1;
       this.l2 = l2;
       this.l3 = l3;
-      this.theta = theta;
+
+      theta = 0;
 
       vts = new Vtx[this.amt];
       for (int i=0; i<vts.length; i++) {
@@ -104,12 +137,12 @@ public class RKPattern01 extends P3CubeMapPattern {
       }
     }
 
-    void update() {
-      theta += thetaSpeed/720;
+    void update(int idx) {
+      theta = gTheta+idx*gThetaSpacing;
       if (theta>PI) theta -= PI;
       else if (theta<0) theta += PI;
 
-      weight = sin(theta)*4;
+      weight = sin(theta)*4*gWeightScalar;
 
       for (int i=0; i<vts.length; i++) {
         vts[i].update(theta);
@@ -424,7 +457,7 @@ public class RKPattern02 extends P3CubeMapPattern {
 }
 
 public class RKPattern03 extends P3CubeMapPattern {
-  
+
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -436,7 +469,7 @@ public class RKPattern03 extends P3CubeMapPattern {
   float l1 = 600, l2 = 600, l3 = 600;
   float gF, thetaF, phiF, fragMid;
   ArrayList <Fct> fctList;
-  
+
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
 
   public RKPattern03(LX lx) {
@@ -456,7 +489,7 @@ public class RKPattern03 extends P3CubeMapPattern {
         if (!fct.hasChildren && fct.lv<3) fct.splitUp();
       }
     }
-    
+
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
@@ -465,18 +498,18 @@ public class RKPattern03 extends P3CubeMapPattern {
   }
 
   void run(double deltaMs, PGraphics pg) {
-    
+
     rotXT = rX.getValuef();
     rotYT = rY.getValuef();
     rotZT = rZ.getValuef();
     gFIncreT = speed.getValuef();
     fragMid = fragment.getValuef();
-    
+
     rotX = lerp(rotX, rotXT, .1);
     rotY = lerp(rotY, rotYT, .1);
     rotZ = lerp(rotZ, rotZT, .1);
     gFIncre = lerp(gFIncre, gFIncreT, .1);
-    
+
     gF += gFIncre;
     for (int i=0; i<fctList.size(); i++) {
       Fct fct = fctList.get(i);
@@ -690,6 +723,290 @@ public class RKPattern03 extends P3CubeMapPattern {
 
     void display() {
       vertex(pos.x, pos.y, pos.z);
+    }
+  }
+}
+
+
+public class RKPattern04 extends P3CubeMapPattern {
+
+  Vtx [] rootVts;
+  Mesh rootMesh;
+
+  int mxLv = 2;
+  float rF, rdnsF;
+  float gF;
+  PVector plR, plG, plB;
+
+  public RKPattern04(LX lx) {
+
+    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    initRootVts();
+    initRootMesh();
+
+    plR = new PVector(600, 600, 600);
+    plG = new PVector(600, -600, -600);
+    plB = new PVector(-600, -600, 600);
+  }
+
+  void run(double deltaMs, PGraphics pg) {
+
+    updateRootVts();
+    updateMesh();
+
+    updateCubeMaps();
+
+    pg.beginDraw();
+    pg.background(0);
+    pg.image(pgL, 0, 100);
+    pg.image(pgR, 200, 100);
+    pg.image(pgD, 100, 0);
+    pg.image(pgU, 100, 200);
+    pg.image(pgF, 100, 100);
+    pg.image(pgB, 300, 100);
+    pg.endDraw();
+  }
+
+  void updateCubeMaps() {
+    updateCubeMap(pgF, 0, 0, 0, 0, 0, 1, 0, 1, 0);
+    updateCubeMap(pgL, 0, 0, 0, 1, 0, 0, 0, 1, 0);
+    updateCubeMap(pgR, 0, 0, 0, -1, 0, 0, 0, 1, 0);
+    updateCubeMap(pgB, 0, 0, 0, 0, 0, -1, 0, 1, 0);
+    updateCubeMap(pgD, 0, 0, -.001, 0, -1, 0, 0, 1, 0);
+    updateCubeMap(pgU, 0, 0, -.001, 0, 1, 0, 0, 1, 0);
+  }
+
+  void updateCubeMap(PGraphics pg, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+    pg.beginDraw();
+    //pg.background(0);
+    pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+    pg.frustum(-10, 10, -10, 10, 10, 1000);
+    //pg.rotateX(rotX);
+    //pg.rotateY(rotY);
+    //pg.rotateZ(rotZ);
+    drawScene(pg);
+    pg.endDraw();
+  }
+
+  void drawScene(PGraphics pg) {
+    pg.beginShape(TRIANGLES);
+    pg.noStroke();
+    rootMesh.display(pg);
+    pg.endShape();
+  }
+
+  void initRootMesh() {
+    gF = random(100);
+    rootMesh = new Mesh(15, 0);
+  }
+
+  void updateMesh() {
+
+    rootMesh.update(rootVts, gF);
+    gF += .2;
+  }
+
+  class Mesh {
+
+    Mesh [] children;
+
+    int idx, lv;
+
+    float r, g, b;
+    PVector nrml;
+
+    Vtx [] outers, mids, struts, strutMids, sStruts;
+
+    Mesh(int idx, int lv) {
+
+      this.idx = idx;
+      this.lv = lv;
+
+      outers = new Vtx[3];
+      mids = new Vtx[3];
+      struts = new Vtx[3];
+      strutMids = new Vtx[3];
+      sStruts = new Vtx[3];
+
+      for (int i=0; i<3; i++) {
+        outers[i] = new Vtx();
+        mids[i] = new Vtx();
+        struts[i] = new Vtx();
+        strutMids[i] = new Vtx();
+        sStruts[i] = new Vtx();
+      }
+
+      if (lv<mxLv) {
+        lv ++;
+        children = new Mesh[16];
+        for (int i=0; i<children.length; i++) {
+          children[i] = new Mesh(i, lv);
+        }
+      }
+    }
+
+    void update(Vtx [] outers, float f) {
+      this.outers = outers;
+      for (int i=0; i<mids.length; i++) {
+        float itp = (noise(f)-.5)/(float(lv)+1)+.5;
+        mids[i].interpolate(outers[i], outers[(i+1)%outers.length], itp);
+        f += .1;
+      }
+      for (int i=0; i<struts.length; i++) {
+        float itp = (noise(f)-.5)/(float(lv)+1)+.8;
+        struts[i].protrude(mids[i], outers[(i+2)%outers.length], outers[(i+1)%outers.length], itp, lv);
+        f += .1;
+      }
+      for (int i=0; i<strutMids.length; i++) {
+        float itp = (noise(f)-.5)/(float(lv)+1)+.5;
+        strutMids[i].interpolate(struts[i], struts[(i+1)%struts.length], itp);
+        f += .1;
+      }
+      for (int i=0; i<sStruts.length; i++) {
+        float itp = (noise(f)-.5)/(float(lv)+1)+.5;
+        sStruts[i].protrude(strutMids[i], outers[(i+1)%outers.length], struts[i], itp, lv);
+        f += .1;
+      }
+
+      if (lv<mxLv) {
+        f += .1;
+        children[15].update(struts, f);
+        for (int i=0; i<3; i++) {
+          int j = (i+1)%3;
+
+          Vtx [] g1 = {
+            outers[j], sStruts[i], mids[i]
+          };
+          children[i*5].update(g1, f);
+          f += .1;
+
+          Vtx [] g2 = {
+            sStruts[i], struts[i], mids[i]
+          };
+          children[i*5+1].update(g2, f);
+          f += .1;
+
+          Vtx [] g3 = {
+            sStruts[i], struts[i], struts[j]
+          };
+          children[i*5+2].update(g3, f);
+          f += .1;
+
+          Vtx [] g4 = {
+            sStruts[i], struts[j], mids[j]
+          };
+          children[i*5+3].update(g4, f);
+          f += .1;
+
+          Vtx [] g5 = {
+            outers[j], sStruts[i], mids[j]
+          };
+          children[i*5+4].update(g5, f);
+          f += .1;
+        }
+      }
+    }
+
+    void display(PGraphics pg) {
+      if (lv == mxLv) {
+        for (int i=0; i<3; i++) {
+          int j = (i+1)%3;
+          drawTri(outers[j], sStruts[i], mids[i], pg);
+          drawTri(sStruts[i], struts[i], mids[i], pg);
+          drawTri(sStruts[i], struts[i], struts[j], pg);
+          drawTri(sStruts[i], struts[j], mids[j], pg);
+          drawTri(outers[j], sStruts[i], mids[j], pg);
+        }
+      }
+
+      if (lv<mxLv) {
+        for (int i=0; i<children.length; i++) {
+          children[i].display(pg);
+        }
+      }
+    }
+
+    void drawTri(Vtx v1, Vtx v2, Vtx v3, PGraphics pg) {
+
+      nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
+      r = map(abs(HALF_PI-PVector.angleBetween(nrml, plR)), 0, HALF_PI, 0, 255)*1.5;
+      g = map(abs(HALF_PI-PVector.angleBetween(nrml, plG)), 0, HALF_PI, 0, 255)*1.5;
+      b = map(abs(HALF_PI-PVector.angleBetween(nrml, plB)), 0, HALF_PI, 0, 255)*1.5;
+      pg.fill(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+
+      pg.vertex(v1.pos.x, v1.pos.y, v1.pos.z);
+      pg.vertex(v2.pos.x, v2.pos.y, v2.pos.z);
+      pg.vertex(v3.pos.x, v3.pos.y, v3.pos.z);
+    }
+  }
+
+  void initRootVts() {
+
+    rF = random(100);
+    rdnsF = random(100);
+
+    rootVts = new Vtx[3];
+    for (int i=0; i<rootVts.length; i++) {
+      rootVts[i] = new Vtx();
+    }
+  }
+
+  void updateRootVts() {
+    for (int i=0; i<rootVts.length; i++) {
+      float r = 1200+(noise(rF+i*.1)-0.5)*1200;
+      float rdns = i*(TWO_PI/rootVts.length)+(noise(rdnsF+i*.1)-.5)*PI/3;
+      float x = r*cos(rdns);
+      float y = 600;
+      float z = r*sin(rdns);
+      rootVts[i].setPos(x, y, z);
+    }
+    rF += .2;
+    rdnsF += .2;
+  }
+
+  class Vtx {
+
+    PVector pos;
+
+    Vtx() {
+      pos = new PVector();
+    }
+
+    void setPos(float x, float y, float z) {
+      pos.set(x, y, z);
+    }
+
+    void interpolate(Vtx v1, Vtx v2, float itp) {
+      setPos(
+        lerp(v2.pos.x, v1.pos.x, itp), 
+        lerp(v2.pos.y, v1.pos.y, itp), 
+        lerp(v2.pos.z, v1.pos.z, itp)
+        );
+    }
+
+    void protrude(Vtx mid, Vtx midOp, Vtx outer, float itp, int lv) {
+      PVector strut0 = new PVector(
+        lerp(midOp.pos.x, mid.pos.x, itp), 
+        lerp(midOp.pos.y, mid.pos.y, itp), 
+        lerp(midOp.pos.z, mid.pos.z, itp)
+        );
+      PVector m = new PVector(
+        lerp(midOp.pos.x, mid.pos.x, .5), 
+        lerp(midOp.pos.y, mid.pos.y, .5), 
+        lerp(midOp.pos.z, mid.pos.z, .5)
+        );
+
+      float d1 = dist(midOp.pos.x, midOp.pos.y, midOp.pos.z, mid.pos.x, mid.pos.y, mid.pos.z);
+      float d2 = dist(strut0.x, strut0.y, strut0.z, mid.pos.x, mid.pos.y, mid.pos.z)-
+        dist(m.x, m.y, m.z, mid.pos.x, mid.pos.y, mid.pos.z);
+
+      float mag = sqrt(sq(d1*.5)-sq(d2))/(float(lv)/3+1);
+
+      PVector ofst = PVector.sub(outer.pos, mid.pos).cross(PVector.sub(midOp.pos, mid.pos));
+      ofst.normalize();
+      ofst.mult(mag);
+
+      setPos(strut0.x+ofst.x, strut0.y+ofst.y, strut0.z+ofst.z);
     }
   }
 }
