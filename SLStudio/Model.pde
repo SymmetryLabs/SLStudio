@@ -169,17 +169,17 @@ public static class Sun extends LXModel {
       // create slices...
       if (type != Sun.Type.ONE_THIRD) {
         slices.add(new Slice(id + "_slice_top_front",    Slice.Type.FULL, new float[] { 0,    0, 0}, new float[] {0,   0,   0}, transform));
-        slices.add(new Slice(id + "_slice_top_back",     Slice.Type.FULL, new float[] {60,    0, 0}, new float[] {0, 180,   0}, transform));
+        slices.add(new Slice(id + "_slice_top_back",     Slice.Type.FULL, new float[] {48,    0, 0}, new float[] {0, 180,   0}, transform));
       }
 
       switch (type) {
         case FULL:
-          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.FULL, new float[] {60, -212, 0}, new float[] {0,   0, 180}, transform));
+          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.FULL, new float[] {48, -212, 0}, new float[] {0,   0, 180}, transform));
           slices.add(new Slice(id + "_slice_bottom_back",  Slice.Type.FULL, new float[] { 0, -212, 0}, new float[] {0, 180, 180}, transform));
           break;
 
         case TWO_THIRDS:
-          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {60, -212, 0}, new float[] {0,   0, 180}, transform));
+          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {48, -212, 0}, new float[] {0,   0, 180}, transform));
           slices.add(new Slice(id + "_slice_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] { 0, -212, 0}, new float[] {0, 180, 180}, transform));
 
         case ONE_HALF:
@@ -188,7 +188,7 @@ public static class Sun extends LXModel {
 
         case ONE_THIRD:
           slices.add(new Slice(id + "_slice_top_front",    Slice.Type.TWO_THIRDS, new float[] { 0,    0, 0}, new float[] {0,   0,   0}, transform));
-          slices.add(new Slice(id + "_slice_top_back",     Slice.Type.TWO_THIRDS, new float[] {60,    0, 0}, new float[] {0, 180,   0}, transform));
+          slices.add(new Slice(id + "_slice_top_back",     Slice.Type.TWO_THIRDS, new float[] {48,    0, 0}, new float[] {0, 180,   0}, transform));
           break;
       }
 
