@@ -209,7 +209,7 @@ public static class Sun extends LXModel {
 
 public static class Slice extends LXModel {
 
-  public final static float DIAMETER = 5*12;
+  public final static float DIAMETER = 4*12;
 
   public enum Type {
     FULL, TWO_THIRDS, BOTTOM_ONE_THIRD

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511047117279,
+  "timestamp": 1511295004021,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 5,
+        "patternIndex": 13,
         "patterns": [
           {
             "id": 2773,
@@ -180,7 +180,7 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.30000001192092896,
+              "Dens": 0.6100000031292439,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 6
@@ -353,6 +353,21 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 2899,
+            "class": "SLStudio$ShiftingPlane",
+            "modulationColor": -25856,
+            "parameters": {
+              "label": "ShiftingPlane",
+              "hShift": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       }
@@ -422,13 +437,13 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.03302349760280188,
-          "Band-2": 0.06729684154232718,
-          "Band-3": 0.06344335302992943,
-          "Band-4": 0.06184448460790182,
-          "Band-5": 0.07852142011108931,
-          "Band-6": 0.04644762007048531,
-          "Band-7": 0.006070637445650506,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
@@ -583,12 +598,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 576.0,
-        "theta": -0.018000000000000207,
-        "phi": -0.04200000000000007,
-        "positionX": 476.95196533203125,
-        "positionY": -6.0,
-        "positionZ": 0.0
+        "radius": 1800.0,
+        "theta": -0.05400000000000174,
+        "phi": -0.2099999999999918,
+        "positionX": 1480.9515380859375,
+        "positionY": -25.25000762939453,
+        "positionZ": 16.299665451049805
       }
     }
   }
