@@ -26,6 +26,20 @@ public class Ball extends DPat {
   }
 }
 
+public class SkyGradient extends SLPattern {
+  public SkyGradient(LX lx) {
+    super(lx);
+  }
+  
+  public void run(double deltaMs) {
+    ColorPalette palette = skyPalettes.getPalette("london");
+    for (LXPoint p : model.points) {
+      float altitude = (p.y - model.yMin) / (model.yMax - model.yMin);
+      colors[p.index] = palette.getColor(altitude);
+    }
+  }
+}
+
 public class LightSource extends SLPattern {
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
   CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
