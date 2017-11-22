@@ -27,11 +27,11 @@ void setup() {
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
 
-  // Camera IDs are from http://api.deckchair.com/v1/cameras
   skyPalettes = new SkyPaletteLibrary();
-  skyPalettes.addSky("london", "5568230b7b2853502527fd4e", new ArcPaletteExtractor(0.44));
-  skyPalettes.addSky("paris", "5568862a7b28535025280c72", new ArcPaletteExtractor(0.46));
-  skyPalettes.addSky("sydney", "599d6375096641f2272bacf4", new ArcPaletteExtractor(0.25));
+  skyPalettes.addSky("london", new DeckChairSource("5568230b7b2853502527fd4e"), new ArcPaletteExtractor(0.44));
+  skyPalettes.addSky("paris", new DeckChairSource("5568862a7b28535025280c72"), new ArcPaletteExtractor(0.46));
+  skyPalettes.addSky("sydney", new DeckChairSource("599d6375096641f2272bacf4"), new ArcPaletteExtractor(0.25));
+  skyPalettes.addSky("san francisco", new UrlImageSource("http://icons.wunderground.com/webcamramdisk/a/m/ampledata/1/current.jpg"), new ArcPaletteExtractor(0.65));
   
   lx = new LXStudio(this, model, false) {
     @Override

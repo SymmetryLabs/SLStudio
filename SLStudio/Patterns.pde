@@ -32,7 +32,7 @@ public class SkyGradient extends SLPattern {
   }
   
   public void run(double deltaMs) {
-    ColorPalette palette = skyPalettes.getPalette("london");
+    ColorPalette palette = skyPalettes.getPalette("san francisco");
     for (LXPoint p : model.points) {
       float altitude = (p.y - model.yMin) / (model.yMax - model.yMin);
       colors[p.index] = palette.getColor(altitude);
