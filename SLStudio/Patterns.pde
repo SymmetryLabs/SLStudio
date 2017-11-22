@@ -1096,7 +1096,7 @@ public class ShiftingPlane extends SLPattern {
   }
 }
 
-public class CubeFlash extends SLPattern {
+public class SunFlash extends SLPattern {
   private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
   private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
   private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
@@ -1104,13 +1104,13 @@ public class CubeFlash extends SLPattern {
   private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
   
   class Flash {
-    Cube c;
+    Sun c;
     float value;
     float hue;
     boolean hasPeaked;
     
     Flash() {
-      c = model.cubes.get(floor(random(model.cubes.size())));
+      c = model.suns.get(floor(random(model.suns.size())));
       hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
       boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
       hasPeaked = infiniteAttack;
@@ -1136,7 +1136,7 @@ public class CubeFlash extends SLPattern {
   private float leftoverMs = 0;
   private List<Flash> flashes;
   
-  public CubeFlash(LX lx) {
+  public SunFlash(LX lx) {
     super(lx);
     addParameter(rateParameter);
     addParameter(attackParameter);

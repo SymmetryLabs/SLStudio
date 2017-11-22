@@ -1,6 +1,4 @@
-import heronarts.p3lx.ui.studio.modulation.UIModulator;
-
-public class SLStudio extends P3LX {
+public class LXStudio extends P3LX {
 
   public static final String COPYRIGHT = "Symmetry Labs";
 
@@ -14,7 +12,6 @@ public class SLStudio extends P3LX {
 
     private boolean toggleHelpBar = false;
     private boolean toggleClipView = false;
-
     private boolean clipViewVisible = true;
 
     public class PreviewWindow extends UI3dContext {
@@ -33,10 +30,9 @@ public class SLStudio extends P3LX {
       protected void onResize() {
         this.pointCloud.loadShader();
       }
-
     }
 
-    UI(final SLStudio lx) {
+    UI(final LXStudio lx) {
       super(lx);
       initialize(lx, this);
       setBackgroundColor(this.theme.getDarkBackgroundColor());
@@ -242,11 +238,11 @@ public class SLStudio extends P3LX {
 
   public final UI ui;
 
-  public SLStudio(PApplet applet, LXModel model) {
+  public LXStudio(PApplet applet, SLModel model) {
     this(applet, model, true);
   }
 
-  public SLStudio(PApplet applet, LXModel model, boolean multiThreaded) {
+  public LXStudio(PApplet applet, SLModel model, boolean multiThreaded) {
     super(applet, model);
     this.ui = (UI) super.ui;
     onUIReady(this, this.ui);
@@ -291,8 +287,8 @@ public class SLStudio extends P3LX {
   /**
    * Subclasses may override to register additional components before the UI is built
    */
-  protected void initialize(SLStudio lx, SLStudio.UI ui) {}
+  protected void initialize(LXStudio lx, LXStudio.UI ui) {}
 
-  protected void onUIReady(SLStudio lx, SLStudio.UI ui) {}
+  protected void onUIReady(LXStudio lx, LXStudio.UI ui) {}
 
 }

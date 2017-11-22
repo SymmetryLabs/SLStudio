@@ -30,12 +30,7 @@ public class UIOverriddenRightPane extends UIPane {
   }
 
   private void buildUtilityUI() {
-    //new UIAudioAnalyzer(this.lx, this.ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
-
     new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
-
-    if (((SLModel)model).cubes.size() > 0)
-      new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
   }
 
   private void buildMidiUI() {
@@ -125,23 +120,6 @@ public class UIOverriddenRightPane extends UIPane {
     .setInactiveColor(ui.theme.getDeviceBackgroundColor())
     .setBorderRounding(4)
     .setDescription("Add a new Beat detector to the modulation engine")
-    .addToContainer(bar);
-
-    new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
-      @Override
-      public void onToggle(boolean on) {
-        if (on) {
-          AudioAnalyzerKnobs audioAnalyzerKnobs = new AudioAnalyzerKnobs("Audio Analyzation");
-          lx.engine.modulation.addModulator(audioAnalyzerKnobs);
-          audioAnalyzerKnobs.start();
-        }
-      }
-    }
-    .setLabel("Audio")
-    .setMomentary(true)
-    .setInactiveColor(ui.theme.getDeviceBackgroundColor())
-    .setBorderRounding(4)
-    .setDescription("Map audio analyzation properties")
     .addToContainer(bar);
 
     final UIButton triggerButton = (UIButton) new UIButton(0, 0, 16, 16) {

@@ -3,26 +3,28 @@ public class RKPattern01 extends P3CubeMapPattern {
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  CompoundParameter amt = new CompoundParameter("amt", 20, 1, 25);
   CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
   CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
 
-  int ringRes = 40;
+  int ringRes = 40, ringAmt = 20, pRingAmt = 20;
   float l1 = 600, l2 = 600, l3 = 600;
+  float gTheta, gThetaSpacing, gWeightScalar;
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, thetaSpeed, thetaSpeedT;
-  Ring [] testRings;
+  ArrayList <Ring> testRings;
 
   public RKPattern01(LX lx) {
-
-    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
-    testRings = new Ring[20];
-    for (int i=0; i<testRings.length; i++) {
-      float initTheta = i*PI/testRings.length;
-      testRings[i] = new Ring(ringRes, initTheta, l1, l2, l3);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
+    testRings = new ArrayList<Ring>();
+    for (int i=0; i<ringAmt; i++) {
+      Ring testRing = new Ring(ringRes, l1, l2, l3);
+      testRings.add(testRing);
     }
 
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
+    addParameter(amt);
     addParameter(speed);
     addParameter(dsp);
   }
@@ -32,6 +34,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     rotXT = rX.getValuef();
     rotYT = rY.getValuef();
     rotZT = rZ.getValuef();
+    ringAmt = round(amt.getValuef());
     thetaSpeedT = speed.getValuef();
     dspmtT = dsp.getValuef();
     rotX = lerp(rotX, rotXT, .1);
@@ -39,9 +42,18 @@ public class RKPattern01 extends P3CubeMapPattern {
     rotZ = lerp(rotZ, rotZT, .1);
     thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .1);
     dspmt = lerp(dspmt, dspmtT, .1);
+    
+    replenish();
 
-    for (int i=0; i<testRings.length; i++) {
-      testRings[i].update();
+    gTheta += thetaSpeed/720;
+    if (gTheta>PI) gTheta -= PI;
+    else if (gTheta<0) gTheta += PI;
+    gThetaSpacing = lerp(gThetaSpacing, PI/testRings.size(), .1);
+    gWeightScalar = map(ringAmt, 1, 25, 5, 1);
+
+    for (int i=0; i<testRings.size(); i++) {
+      Ring testRing = testRings.get(i);
+      testRing.update(i);
     }
     updateCubeMaps();
 
@@ -78,9 +90,29 @@ public class RKPattern01 extends P3CubeMapPattern {
   }
 
   void drawScene(PGraphics pg) {
-    for (int i=0; i<testRings.length; i++) {
-      testRings[i].display(pg);
+    for (int i=0; i<testRings.size(); i++) {
+      Ring testRing = testRings.get(i);
+      testRing.display(pg);
     }
+  }
+
+  void replenish() {
+    if (pRingAmt != ringAmt) {
+      if (ringAmt>pRingAmt) {
+        for (int i=0; i<ringAmt-pRingAmt; i++) {
+          Ring testRing = new Ring(ringRes, l1, l2, l3);
+          testRings.add(0, testRing);
+        }
+      }
+      if (ringAmt<pRingAmt) {
+        for (int i=0; i<pRingAmt-ringAmt; i++) {
+          int j = testRings.size()-1-i;
+          j = constrain(j, 1, ringAmt);
+          testRings.remove(j);
+        }
+      }
+    }
+    pRingAmt = ringAmt;
   }
 
   class Ring {
@@ -89,13 +121,14 @@ public class RKPattern01 extends P3CubeMapPattern {
     float l1, l2, l3, theta, weight;
     Vtx [] vts;
 
-    Ring(int amt, float theta, float l1, float l2, float l3) {
+    Ring(int amt, float l1, float l2, float l3) {
 
       this.amt = amt;
       this.l1 = l1;
       this.l2 = l2;
       this.l3 = l3;
-      this.theta = theta;
+
+      theta = 0;
 
       vts = new Vtx[this.amt];
       for (int i=0; i<vts.length; i++) {
@@ -104,12 +137,12 @@ public class RKPattern01 extends P3CubeMapPattern {
       }
     }
 
-    void update() {
-      theta += thetaSpeed/720;
+    void update(int idx) {
+      theta = gTheta+idx*gThetaSpacing;
       if (theta>PI) theta -= PI;
       else if (theta<0) theta += PI;
 
-      weight = sin(theta)*4;
+      weight = sin(theta)*4*gWeightScalar;
 
       for (int i=0; i<vts.length; i++) {
         vts[i].update(theta);
@@ -179,7 +212,7 @@ public class RKPattern02 extends P3CubeMapPattern {
 
   public RKPattern02(LX lx) {
 
-    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
 
     arcs = new ArrayList<Arc>();
     Arc parentArc = new Arc(0, 0, 16, 0, PI, 0, TWO_PI);
@@ -441,7 +474,7 @@ public class RKPattern03 extends P3CubeMapPattern {
 
   public RKPattern03(LX lx) {
 
-    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
 
     gF = random(100);
     thetaF = random(100);
