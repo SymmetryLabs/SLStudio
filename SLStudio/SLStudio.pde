@@ -10,6 +10,7 @@ public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
+public Pixlite[] pixlites;
 
 void setup() {
   long setupStart = System.nanoTime();
@@ -35,9 +36,12 @@ void setup() {
       (networkMonitor = new NetworkMonitor(lx)).start();
       setupGammaCorrection();
       setupGammaCorrection();
-      setupOutputs(lx);
+
       outputControl = new OutputControl(lx);
       lx.engine.registerComponent("outputControl", outputControl);
+
+      pixlites = setupPixlites(lx);
+      setupOutputs(lx);
         
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,

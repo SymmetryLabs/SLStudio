@@ -69,18 +69,17 @@ public class TestLowPowerStrips extends SLPattern {
     setColors(0);
 
     for (Sun sun : model.suns) {
-      float hue = 0;
-
       for (Strip strip : sun.strips) {
         int si = 0;
         for (LXPoint p : strip.points) {
-          if (si < 3 || si > strip.points.length - 3) {
-            colors[p.index] = LXColor.scaleBrightness(lx.hsb(hue, 100, 100), 0.2);
+          if (si < 3) {
+            colors[p.index] =lx.hsb(LXColor.RED, 100, 100);
+          }
+          if (si > strip.points.length - 3) {
+            colors[p.index] =lx.hsb(LXColor.BLUE, 100, 100);
           }
           si++;
         }
-
-        hue += 70;
       }
     }
   }
