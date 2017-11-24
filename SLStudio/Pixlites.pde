@@ -189,7 +189,7 @@ public class Pixlite extends LXOutputGroup {
           indices[i1] = pointsGrouping.getPoint(counter++).index;
         }
 
-        addDatagram(new ArtNetDatagram(ipAddress, indices, universe));
+        addDatagram(new ArtNetDatagram(ipAddress, indices, universe-1));
       }
     }
   }
