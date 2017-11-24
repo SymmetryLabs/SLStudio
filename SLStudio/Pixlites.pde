@@ -1,5 +1,13 @@
 Pixlite[] setupPixlites(LX lx) {
-  return new Pixlite[] {};
+  Pixlite[] pixlites = new Pixlite[35];
+
+  // temporary
+  int counter = 0;
+  for (int i = 10; i < 45; i++) {
+    pixlites[counter++] = new Pixlite(lx, "10.200.1."+i, model.slices.get(0));
+  }
+
+  return pixlites;
 }
  
 public class Pixlite extends LXOutputGroup {
