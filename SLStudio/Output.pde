@@ -13,44 +13,44 @@
  */
 
 void setupOutputs(final LX lx) {
-  final Pixlite testPixlite = setupTestBroadcastPixlite(lx);
-  lx.addOutput(testPixlite);
+  // final Pixlite testPixlite = setupTestBroadcastPixlite(lx);
+  // lx.addOutput(testPixlite);
 
   for (Pixlite pixlite : pixlites) {
     pixlite.enabled.setValue(true);
     lx.addOutput(pixlite);
   }
 
-  outputControl.testBroadcast.addListener(new LXParameterListener() {
-    public void onParameterChanged(LXParameter parameter) {
-      if (((BooleanParameter)parameter).getValueb()) {
-        testPixlite.enabled.setValue(true);
-        for (Pixlite pixlite : pixlites) {
-          pixlite.enabled.setValue(false);
-        }
-      } else {
-        testPixlite.enabled.setValue(false);
-        for (Pixlite pixlite : pixlites) {
-          pixlite.enabled.setValue(true);
-        }
-      }
-    }
-  });
+  // outputControl.testBroadcast.addListener(new LXParameterListener() {
+  //   public void onParameterChanged(LXParameter parameter) {
+  //     if (((BooleanParameter)parameter).getValueb()) {
+  //       testPixlite.enabled.setValue(true);
+  //       for (Pixlite pixlite : pixlites) {
+  //         pixlite.enabled.setValue(false);
+  //       }
+  //     } else {
+  //       testPixlite.enabled.setValue(false);
+  //       for (Pixlite pixlite : pixlites) {
+  //         pixlite.enabled.setValue(true);
+  //       }
+  //     }
+  //   }
+  // });
 }
 
-Pixlite setupTestBroadcastPixlite(LX lx) {
-  Slice slice = null;
+// Pixlite setupTestBroadcastPixlite(LX lx) {
+//   Slice slice = null;
 
-  for (Slice s : model.slices) {
-    if (s.type == Slice.Type.FULL) {
-      s = slice;
-      break;
-    }
-    println("No full slice in model!!! Test Broadcast needs at least one full sun!!!");
-  }
+//   for (Slice s : model.slices) {
+//     if (s.type == Slice.Type.FULL) {
+//       s = slice;
+//       break;
+//     }
+//     println("No full slice in model!!! Test Broadcast needs at least one full sun!!!");
+//   }
 
-  return new Pixlite(lx, "10.200.1.255", slice);
-}
+//   return new Pixlite(lx, "10.200.1.255", slice);
+// }
 
 /*
  * Output Component

@@ -253,7 +253,7 @@ public static class Slice extends LXModel {
           float stripX = (DIAMETER - stripWidth) / 2;
 
           CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
-          strips.add(new CurvedStrip(Integer.toString(i), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
+          strips.add(new CurvedStrip(Integer.toString(i+1), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
         }
       } else {
         for (int i = 49; i < NUM_POINTS_PER_STRIP.length; i++) {
@@ -262,7 +262,7 @@ public static class Slice extends LXModel {
           float stripX = (DIAMETER - stripWidth) / 2;
 
           CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
-          strips.add(new CurvedStrip(Integer.toString(i), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
+          strips.add(new CurvedStrip(Integer.toString(i+1), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
         }
       }
 

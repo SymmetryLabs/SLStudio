@@ -20,17 +20,17 @@ public class Pixlite extends LXOutputGroup {
     this.ipAddress = ipAddress;
     this.slice = slice;
     try {
-      setupOutputs();
+      setupOutputs(lx);
     } catch (Exception e) {
       e.printStackTrace();
     }
   }
 
-  private void setupOutputs() throws SocketException {
+  private void setupOutputs(LX lx) throws SocketException {
     // get slice type and add PixliteOutputs with appropriate points
 
     if (slice.type != Slice.Type.BOTTOM_ONE_THIRD) {
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("1")
           .addPoints(slice.getStripById("1").points,  PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("2").points)
@@ -46,7 +46,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("12").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("2")
           .addPoints(slice.getStripById("13").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("14").points)
@@ -56,7 +56,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("18").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("3")
           .addPoints(slice.getStripById("19").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("20").points)
@@ -65,7 +65,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("23").points, PointsGrouping.REVERSE_ORDERING)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("4")
           .addPoints(slice.getStripById("24").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("25").points)
@@ -74,7 +74,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("28").points, PointsGrouping.REVERSE_ORDERING)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("5")
           .addPoints(slice.getStripById("29").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("30").points)
@@ -82,7 +82,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("32").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("6")
           .addPoints(slice.getStripById("33").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("34").points)
@@ -90,7 +90,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("36").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("7") // input starts on port side for this one
           .addPoints(slice.getStripById("37").points)
           .addPoints(slice.getStripById("38").points, PointsGrouping.REVERSE_ORDERING)
@@ -98,7 +98,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("40").points, PointsGrouping.REVERSE_ORDERING)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("8")
           .addPoints(slice.getStripById("41").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("42").points)
@@ -106,7 +106,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("44").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("9")
           .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("46").points)
@@ -116,7 +116,7 @@ public class Pixlite extends LXOutputGroup {
     }
 
     if (slice.type == Slice.Type.BOTTOM_ONE_THIRD || slice.type == Slice.Type.FULL) {
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("10")
           .addPoints(slice.getStripById("49").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("50").points)
@@ -124,7 +124,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("52").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("11")
           .addPoints(slice.getStripById("53").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("54").points)
@@ -132,35 +132,35 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("56").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("12")
           .addPoints(slice.getStripById("57").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("58").points)
           .addPoints(slice.getStripById("59").points, PointsGrouping.REVERSE_ORDERING)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("13") // input starts on port side for this one
           .addPoints(slice.getStripById("60").points)
           .addPoints(slice.getStripById("61").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("62").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("14")
           .addPoints(slice.getStripById("63").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("64").points)
           .addPoints(slice.getStripById("65").points, PointsGrouping.REVERSE_ORDERING)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("15") // input starts on port side for this one
           .addPoints(slice.getStripById("66").points)
           .addPoints(slice.getStripById("67").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("68").points)
       ));
 
-      addChild(new PixliteOutput(ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("16")
           .addPoints(slice.getStripById("69").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("70").points)
@@ -174,7 +174,7 @@ public class Pixlite extends LXOutputGroup {
     private final int outputIndex;
     private final int firstUniverseOnOutput;
 
-    private PixliteOutput(String ipAddress, PointsGrouping pointsGrouping) throws SocketException {
+    private PixliteOutput(LX lx, String ipAddress, PointsGrouping pointsGrouping) throws SocketException {
       super(lx);
       this.outputIndex = Integer.parseInt(pointsGrouping.id);
       this.firstUniverseOnOutput = outputIndex * 10;
@@ -197,7 +197,7 @@ public class Pixlite extends LXOutputGroup {
           indices[i1] = pointsGrouping.getPoint(counter++).index;
         }
 
-        addDatagram(new ArtNetDatagram(ipAddress, indices, universe));
+        addDatagram(new ArtNetDatagram(ipAddress, indices, universe-1));
       }
     }
   }
@@ -313,6 +313,7 @@ public class ArtNetDatagram extends LXDatagram {
 
   @Override
   public void onSend(int[] colors) {
+    println("-");
     copyPoints(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
 
     if (this.sequenceEnabled) {
