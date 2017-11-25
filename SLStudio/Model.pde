@@ -42,11 +42,10 @@ public static class SLModel extends LXModel {
 
   // Strips
   public final List<Strip> strips;
-  private final Map<String, Strip> stripTable;
 
   public SLModel(List<Sun> suns) {
     super(new Fixture(suns));
-    Fixture fixture = (Fixture) this.fixtures.get(0);
+    Fixture fixture = (Fixture)this.fixtures.get(0);
 
     // Suns
     List<Sun> sunList = new ArrayList<Sun>();
@@ -58,7 +57,6 @@ public static class SLModel extends LXModel {
 
     // Strips
     List<Strip> stripList = new ArrayList<Strip>();
-    Map<String, Strip> _stripTable = new HashMap<String, Strip>();
 
     for (Sun sun : suns) {
       sunList.add(sun);
@@ -70,7 +68,6 @@ public static class SLModel extends LXModel {
 
         for (Strip strip : slice.strips) {
           stripList.add(strip);
-          _stripTable.put(strip.id, strip);
         }
       }
     }
@@ -79,15 +76,14 @@ public static class SLModel extends LXModel {
     
     // Suns
     this.suns       = Collections.unmodifiableList(sunList);
-    this.sunTable   = Collections.unmodifiableMap (_sunTable);
+    this.sunTable   = Collections.unmodifiableMap(_sunTable);
 
     // Slices
     this.slices     = Collections.unmodifiableList(sliceList);
-    this.sliceTable = Collections.unmodifiableMap (_sliceTable);
+    this.sliceTable = Collections.unmodifiableMap(_sliceTable);
 
     // Strips
     this.strips     = Collections.unmodifiableList(stripList);
-    this.stripTable = Collections.unmodifiableMap (_stripTable);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -107,24 +103,19 @@ public static class SLModel extends LXModel {
   public Slice getSliceById(String id) {
     return this.sliceTable.get(id);
   }
-
-  public Strip getStripById(String id) {
-    return this.stripTable.get(id);
-  }
 }
 
 public static class Sun extends LXModel {
 
   public enum Type {
     FULL, TWO_THIRDS, ONE_HALF, ONE_THIRD
-  }
+  };
 
   public final String id;
   public final Type type;
   public final List<Slice> slices;
   public final List<Strip> strips;
   private final Map<String, Slice> sliceTable;
-  private final Map<String, Strip> stripTable;
 
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
     super(new Fixture(id, type, coordinates, rotations, transform));
@@ -135,23 +126,14 @@ public static class Sun extends LXModel {
     this.slices = Collections.unmodifiableList(fixture.slices);
     this.strips = Collections.unmodifiableList(fixture.strips);
     this.sliceTable = new HashMap<String, Slice>();
-    this.stripTable = new HashMap<String, Strip>();
 
     for (Slice slice : slices) {
       sliceTable.put(slice.id, slice);
-    }
-
-    for (Strip strip : strips) {
-      stripTable.put(strip.id, strip);
     }
   }
 
   public Slice getSliceById(String id) {
     return sliceTable.get(id);
-  }
-
-  public Strip getStripById(String id) {
-    return stripTable.get(id);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -168,27 +150,27 @@ public static class Sun extends LXModel {
 
       // create slices...
       if (type != Sun.Type.ONE_THIRD) {
-        slices.add(new Slice(id + "_slice_top_front",    Slice.Type.FULL, new float[] { 0,    0, 0}, new float[] {0,   0,   0}, transform));
-        slices.add(new Slice(id + "_slice_top_back",     Slice.Type.FULL, new float[] {48,    0, 0}, new float[] {0, 180,   0}, transform));
+        slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
+        slices.add(new Slice(id + "_top_back", Slice.Type.FULL, new float[] {48, 0, 0}, new float[] {0, 180, 0}, transform));
       }
 
       switch (type) {
         case FULL:
-          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.FULL, new float[] {48, -212, 0}, new float[] {0,   0, 180}, transform));
-          slices.add(new Slice(id + "_slice_bottom_back",  Slice.Type.FULL, new float[] { 0, -212, 0}, new float[] {0, 180, 180}, transform));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {48, -212, 0}, new float[] {0, 0, 180}, transform));
+          slices.add(new Slice(id + "_bottom_back", Slice.Type.FULL, new float[] {0, -212, 0}, new float[] {0, 180, 180}, transform));
           break;
 
         case TWO_THIRDS:
-          slices.add(new Slice(id + "_slice_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {48, -212, 0}, new float[] {0,   0, 180}, transform));
-          slices.add(new Slice(id + "_slice_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] { 0, -212, 0}, new float[] {0, 180, 180}, transform));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {48, -212, 0}, new float[] {0, 0, 180}, transform));
+          slices.add(new Slice(id + "_bottom_back", Slice.Type.BOTTOM_ONE_THIRD, new float[] {0, -212, 0}, new float[] {0, 180, 180}, transform));
 
         case ONE_HALF:
           // already done
           break;
 
         case ONE_THIRD:
-          slices.add(new Slice(id + "_slice_top_front",    Slice.Type.TWO_THIRDS, new float[] { 0,    0, 0}, new float[] {0,   0,   0}, transform));
-          slices.add(new Slice(id + "_slice_top_back",     Slice.Type.TWO_THIRDS, new float[] {48,    0, 0}, new float[] {0, 180,   0}, transform));
+          slices.add(new Slice(id + "_top_front", Slice.Type.TWO_THIRDS, new float[] { 0, 0, 0}, new float[] {0, 0, 0}, transform));
+          slices.add(new Slice(id + "_top_back", Slice.Type.TWO_THIRDS, new float[] {48, 0, 0}, new float[] {0, 180, 0}, transform));
           break;
       }
 
@@ -227,6 +209,7 @@ public static class Slice extends LXModel {
   public final String id;
   public final Type type;
   public final List<Strip> strips;
+  private final Map<String, Strip> stripMap;
 
   public Slice(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
     super(new Fixture(id, type, coordinates, rotations, transform));
@@ -235,6 +218,16 @@ public static class Slice extends LXModel {
     this.id = id;
     this.type = type;
     this.strips = Collections.unmodifiableList(fixture.strips);
+    this.stripMap = new HashMap<String, Strip>();
+
+    for (Strip strip : strips) {
+      stripMap.put(strip.id, strip);
+    }
+  }
+
+  // These are different than sun and slice ids, which are unique. These ids are all the same slice to slice.
+  public Strip getStripById(String id) {
+    return stripMap.get(id);
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -260,7 +253,7 @@ public static class Slice extends LXModel {
           float stripX = (DIAMETER - stripWidth) / 2;
 
           CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
-          strips.add(new CurvedStrip(id + "_strip" + i, metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
+          strips.add(new CurvedStrip(Integer.toString(i+1), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
         }
       } else {
         for (int i = 49; i < NUM_POINTS_PER_STRIP.length; i++) {
@@ -269,7 +262,7 @@ public static class Slice extends LXModel {
           float stripX = (DIAMETER - stripWidth) / 2;
 
           CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
-          strips.add(new CurvedStrip(id + "_strip" + i, metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
+          strips.add(new CurvedStrip(Integer.toString(i+1), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
         }
       }
 
@@ -281,7 +274,6 @@ public static class Slice extends LXModel {
 
       transform.pop();
     }
-
   }
 }
 
@@ -340,108 +332,6 @@ public static class CurvedStrip extends Strip {
     }
   }
 }
-
-// public static class Sun extends LXModel {
-
-//   public final static float RADIUS = 8*12;
-//   public final static float DIAMETER = Sun.RADIUS*2;
-
-//   private final static int NUM_POINTS_ON_WHOLE_SPHERE = 3000000;
-//   private final static float Z_SCALING = 0.3;
-
-//   public final Type type;
-
-//   public enum Type {
-//     ONE_QUARTER (0.25),
-//     ONE_HALF (0.5),
-//     THREE_QUARTERS (0.75);
-
-//     public final float size;
-
-//     private Type(float size) {
-//       this.size = size;
-//     }
-//   }
-
-//   public Sun(LXTransform transform, Type type, float x, float y, float z, float xRot, float yRot, float zRot) {
-//     super(new Fixture(transform, type, x, y, z, xRot, yRot, zRot));
-//     this.type = type;
-//   }
-
-//   private static class Fixture extends LXAbstractFixture {
-
-//     private Fixture(LXTransform transform, Sun.Type type, float x, float y, float z, float xRot, float yRot, float zRot) {
-//       transform.push();
-//       transform.translate(x, y, z);
-//       transform.rotateX(xRot * PI / 180.);
-//       transform.rotateY(yRot * PI / 180.);
-//       transform.rotateZ(zRot * PI / 180.);
-
-//       double a = 4.0 * Math.PI*(DIAMETER / NUM_POINTS_ON_WHOLE_SPHERE);
-//       double d = Math.sqrt(a);
-//       int m_theta = (int)Math.round(Math.PI / d);
-//       double d_theta = Math.PI / m_theta;
-//       double d_phi = a / d_theta;
-
-//       PVector offset = new PVector(RADIUS, RADIUS, RADIUS);
-//       PVector sink = new PVector(0, - (1 - type.size) * DIAMETER, 0);
-
-//       for (int m = 0; m < m_theta; m++) {
-//         double theta = Math.PI * (m + 0.5) / m_theta;
-//         int m_phi = (int)Math.round(2.0 * Math.PI * Math.sin(theta) / d_phi);
-
-//         for (int n = 0; n < m_phi; n++) {
-//           transform.push();
-
-//           double phi = 2.0 * Math.PI * n / m_phi;
-
-//           PVector spherePoint = getSpherePoint(theta, phi);
-//           PVector sunPoint = PVector.add(
-//               sink,
-//               zScale(PVector.add(offset, scale(spherePoint, RADIUS)), Z_SCALING));
-//           if (sunPoint.y > 0) {
-//             transform.translate(sunPoint.x, sunPoint.y, sunPoint.z);
-//             this.points.add(
-//                 new LXPointNormal(transform.x(), transform.y(), transform.z(),
-//                                   getSunNormal(spherePoint, Z_SCALING)));
-//           }
-
-//           transform.pop();
-//         }
-//       }
-
-//       transform.pop();
-//     }
-
-//     private PVector scale(PVector vec, float scale) {
-//       return new PVector(vec.x * scale, vec.y * scale, vec.z * scale);
-//     }
-
-//     private PVector zScale(PVector vec, float zScale) {
-//       return new PVector(vec.x, vec.y, vec.z * zScale);
-//     }
-
-//     private PVector getSpherePoint(double theta, double phi) {
-//       return new PVector((float) (Math.sin(theta) * Math.cos(phi)),
-//                          (float) (Math.sin(theta) * Math.sin(phi)),
-//                          (float) (Math.cos(theta)));
-//     }
-
-//     private PVector getSunNormal(PVector spherePoint, float zScaleFactor) {
-//       // First we find the right-vector and up-vector of the corresponding
-//       // point on the surface of a sphere.  Then we squish these vectors
-//       // using the zScaleFactor to get the right-vector and up-vector on the
-//       // surface of the ellipsoid; their cross product is the normal.
-//       PVector up = new PVector(0, 1, 0);
-//       PVector sphereRight = spherePoint.cross(up);
-//       PVector sphereUp = spherePoint.cross(sphereRight);
-
-//       PVector sunRight = zScale(sphereRight, zScaleFactor);
-//       PVector sunUp = zScale(sphereUp, zScaleFactor);
-//       return sunRight.cross(sunUp).normalize();
-//     }
-//   }
-// }
 
 /**
  * A strip run of points

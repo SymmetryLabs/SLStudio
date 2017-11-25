@@ -12,39 +12,44 @@
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
  */
 
-public static ListenableList<SLController> controllers = new ListenableList<SLController>();
-
 void setupOutputs(final LX lx) {
-  networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
-    public void itemAdded(int index, NetworkDevice device) {
-      String macAddr = NetworkUtils.macAddrToString(device.macAddress);
-      String physid = macToPhysid.get(macAddr);
-      if (physid == null) {
-        physid = macAddr;
-        println("WARNING: MAC address not in physid_to_mac.json: " + macAddr);
-      }
-      final SLController controller = new SLController(lx, device, physid);
-      controllers.add(index, controller);
-      dispatcher.dispatchEngine(new Runnable() {
-        public void run() {
-          lx.addOutput(controller);
-        }
-      });
-      //controller.enabled.setValue(false);
-    }
-    public void itemRemoved(int index, NetworkDevice device) {
-      final SLController controller = controllers.remove(index);
-      dispatcher.dispatchEngine(new Runnable() {
-        public void run() {
-          //lx.removeOutput(controller);
-        }
-      });
-    }
-  });
+  // final Pixlite testPixlite = setupTestBroadcastPixlite(lx);
+  // lx.addOutput(testPixlite);
 
-  //lx.addOutput(new SLController(lx, "10.200.1.255"));
-  //lx.addOutput(new LIFXOutput());
+  for (Pixlite pixlite : pixlites) {
+    lx.addOutput(pixlite);
+  }
+
+  // outputControl.testBroadcast.addListener(new LXParameterListener() {
+  //   public void onParameterChanged(LXParameter parameter) {
+  //     if (((BooleanParameter)parameter).getValueb()) {
+  //       testPixlite.enabled.setValue(true);
+  //       for (Pixlite pixlite : pixlites) {
+  //         pixlite.enabled.setValue(false);
+  //       }
+  //     } else {
+  //       testPixlite.enabled.setValue(false);
+  //       for (Pixlite pixlite : pixlites) {
+  //         pixlite.enabled.setValue(true);
+  //       }
+  //     }
+  //   }
+  // });
 }
+
+// Pixlite setupTestBroadcastPixlite(LX lx) {
+//   Slice slice = null;
+
+//   for (Slice s : model.slices) {
+//     if (s.type == Slice.Type.FULL) {
+//       s = slice;
+//       break;
+//     }
+//     println("No full slice in model!!! Test Broadcast needs at least one full sun!!!");
+//   }
+
+//   return new Pixlite(lx, "10.200.1.255", slice);
+// }
 
 /*
  * Output Component
@@ -65,273 +70,153 @@ public final class OutputControl extends LXComponent {
     
     enabled.addListener(new LXParameterListener() {
       public void onParameterChanged(LXParameter parameter) {
-        for (SLController c : controllers)
-          c.enabled.setValue(((BooleanParameter)parameter).isOn());
+        for (Pixlite pixlite : pixlites) {
+          pixlite.enabled.setValue(((BooleanParameter)parameter).getValueb());
+        }
       };
     });
   }
 }
 
 /*
- * Controller
- *---------------------------------------------------------------------------*/
-class SLController extends LXOutput {
-  Socket        socket;
-  DatagramSocket dsocket;
-  OutputStream    output;
-  NetworkDevice networkDevice;
-  String        cubeId;
-  InetAddress   host;
-  boolean       isBroadcast;
-
-  final int[] STRIP_ORD = new int[] {
-    6, 7, 8,   // white
-    9, 10, 11, // red
-    0, 1, 2,   // green
-    3, 4, 5    // blue
-  };
-
-  static final int HEADER_LENGTH = 4;
-  static final int BYTES_PER_PIXEL = 3;
-
-  final int numStrips = STRIP_ORD.length;
-  int numPixels;
-  int contentSizeBytes;
-  int packetSizeBytes;
-  byte[] packetData;
-
-  SLController(LX lx, NetworkDevice device, String cubeId) {
-    this(lx, device, device.ipAddress, cubeId, false);
-  }
-
-  SLController(LX lx, String _host, String _cubeId) {
-    this(lx, _host, _cubeId, false);
-  }
-
-  SLController(LX lx, String _host) {
-    this(lx, _host, "", true);
-  }
-
-  private SLController(LX lx, String host, String cubeId, boolean isBroadcast) {
-    this(lx, null, NetworkUtils.ipAddrToInetAddr(host), cubeId, isBroadcast);
-  }
-
-  private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String cubeId, boolean isBroadcast) {
-    super(lx);
-
-    this.networkDevice = networkDevice;
-    this.host = host;
-    this.cubeId = cubeId;
-    this.isBroadcast = isBroadcast;
-
-    enabled.setValue(true);
-  }
-
-  void initPacketData(int numPixels) {
-    this.numPixels = numPixels;
-    contentSizeBytes = BYTES_PER_PIXEL * numPixels;
-    packetSizeBytes = HEADER_LENGTH + contentSizeBytes; // add header length
-    packetData = new byte[packetSizeBytes];
-
-    setHeader();
-  }
-
-  void setHeader() {
-    packetData[0] = 0;  // Channel
-    packetData[1] = 0;  // Command (Set pixel colors)
-    // indices 2,3 = high byte, low byte
-    // 3 bytes * 180 pixels = 540 bytes = 0x021C
-    packetData[2] = (byte)((contentSizeBytes >> 8) & 0xFF);
-    packetData[3] = (byte)((contentSizeBytes >> 0) & 0xFF);
-  }
-
-  void setPixel(int number, color c) {
-    //println("number: "+number);
-    int offset = 4 + number * 3;
-
-    // Extract individual colors
-      int r = c >> 16 & 0xFF;
-      int g = c >> 8 & 0xFF;
-      int b = c & 0xFF;
-
-      // Repack gamma corrected colors
-    packetData[offset + 0] = (byte) redGamma[r];
-    packetData[offset + 1] = (byte) greenGamma[g];
-    packetData[offset + 2] = (byte) blueGamma[b];
-  }
-
-  void onSend(int[] colors) {
-    if (isBroadcast != outputControl.broadcastPacket.isOn()) return;
-
-    // Create data socket connection if needed
-    if (dsocket == null) {
-      try {
-        dsocket = new DatagramSocket();
-        dsocket.connect(new InetSocketAddress(host, 7890));
-        //socket.setTcpNoDelay(true);
-        // output = socket.getOutputStream();
-      }
-      catch (ConnectException e) {  dispose();  }
-      catch (IOException      e) {  dispose();  }
-      if (dsocket == null) return;
-    }
-
-    // won't do anything...
-
-    // Send the cube data to the cube. yay!
-    try { 
-      //println("packetSizeBytes: "+packetSizeBytes);
-      dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));} 
-    catch (Exception e) {dispose();}
-  }  
-
-  void dispose() {
-    if (dsocket != null)  println("Disconnected from OPC server");
-    println("Failed to connect to OPC server " + host);
-    socket = null;
-    dsocket = null;
-  }
-}
-
-/*
  * UIOutput Window
  *---------------------------------------------------------------------------*/
-class UIOutputs extends UICollapsibleSection {
-    UIOutputs(LX lx, UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 124);
+// class UIOutputs extends UICollapsibleSection {
+//     UIOutputs(LX lx, UI ui, float x, float y, float w) {
+//         super(ui, x, y, w, 124);
 
-        final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
-            int compare(SLController o1, SLController o2) {
-                try {
-                    return Integer.parseInt(o1.cubeId) - Integer.parseInt(o2.cubeId);
-                } catch (NumberFormatException e) {
-                    return o1.cubeId.compareTo(o2.cubeId);
-                }
-            }
-        });
+//         final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
+//             int compare(SLController o1, SLController o2) {
+//                 try {
+//                     return Integer.parseInt(o1.cubeId) - Integer.parseInt(o2.cubeId);
+//                 } catch (NumberFormatException e) {
+//                     return o1.cubeId.compareTo(o2.cubeId);
+//                 }
+//             }
+//         });
 
-        final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        for (SLController c : controllers) { sortedControllers.add(c); }
-        for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
-        final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
+//         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
+//         for (SLController c : controllers) { sortedControllers.add(c); }
+//         for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
+//         final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
 
-        outputList.setItems(items).setSingleClickActivate(true);
-        outputList.addToContainer(this);
+//         outputList.setItems(items).setSingleClickActivate(true);
+//         outputList.addToContainer(this);
 
-        setTitle(items.size());
+//         setTitle(items.size());
 
-        controllers.addListener(new ListListener<SLController>() {
-          void itemAdded(final int index, final SLController c) {
-            dispatcher.dispatchUi(new Runnable() {
-                public void run() {
-                    if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
-                    sortedControllers.add(c);
-                    items.clear();
-                        for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
-                    outputList.setItems(items);
-                    setTitle(items.size());
-                    redraw();
-                }
-            });
-          }
-          void itemRemoved(final int index, final SLController c) {
-            dispatcher.dispatchUi(new Runnable() {
-                public void run() {
-                    if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
-                    sortedControllers.remove(c);
-                    items.clear();
-                        for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
-                    outputList.setItems(items);
-                    setTitle(items.size());
-                    redraw();
-                }
-            });
-          }
-        });
+//         controllers.addListener(new ListListener<SLController>() {
+//           void itemAdded(final int index, final SLController c) {
+//             dispatcher.dispatchUi(new Runnable() {
+//                 public void run() {
+//                     if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
+//                     sortedControllers.add(c);
+//                     items.clear();
+//                         for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
+//                     outputList.setItems(items);
+//                     setTitle(items.size());
+//                     redraw();
+//                 }
+//             });
+//           }
+//           void itemRemoved(final int index, final SLController c) {
+//             dispatcher.dispatchUi(new Runnable() {
+//                 public void run() {
+//                     if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
+//                     sortedControllers.remove(c);
+//                     items.clear();
+//                         for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
+//                     outputList.setItems(items);
+//                     setTitle(items.size());
+//                     redraw();
+//                 }
+//             });
+//           }
+//         });
 
-        UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
-          @Override
-          public void onToggle(boolean isOn) { }
-        }.setLabel("Test Broadcast").setParameter(outputControl.testBroadcast);
-        testOutput.addToContainer(this);
+//         UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
+//           @Override
+//           public void onToggle(boolean isOn) { }
+//         }.setLabel("Test Broadcast").setParameter(outputControl.testBroadcast);
+//         testOutput.addToContainer(this);
 
-        UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
-          @Override
-          public void onToggle(boolean isOn) { 
-            outputControl.controllerResetModule.enabled.setValue(isOn);
-          }
-        }.setMomentary(true).setLabel("Reset Controllers");
-        resetCubes.addToContainer(this);
+//         UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
+//           @Override
+//           public void onToggle(boolean isOn) { 
+//             outputControl.controllerResetModule.enabled.setValue(isOn);
+//           }
+//         }.setMomentary(true).setLabel("Reset Controllers");
+//         resetCubes.addToContainer(this);
 
-        addTopLevelComponent(new UIButton(4, 4, 12, 12) {}
-          .setParameter(outputControl.enabled).setBorderRounding(4));
+//         addTopLevelComponent(new UIButton(4, 4, 12, 12) {}
+//           .setParameter(outputControl.enabled).setBorderRounding(4));
 
-        outputControl.enabled.addListener(new LXParameterListener() {
-          public void onParameterChanged(LXParameter parameter) {
-            redraw();
-          };
-        });
-    }
+//         outputControl.enabled.addListener(new LXParameterListener() {
+//           public void onParameterChanged(LXParameter parameter) {
+//             redraw();
+//           };
+//         });
+//     }
 
-    private final IntListener deviceVersionListener = new IntListener() {
-        public void onChange(int version) {
-            dispatcher.dispatchUi(new Runnable() {
-            public void run() { redraw(); }
-            });
-        }
-    };
+//     private final IntListener deviceVersionListener = new IntListener() {
+//         public void onChange(int version) {
+//             dispatcher.dispatchUi(new Runnable() {
+//             public void run() { redraw(); }
+//             });
+//         }
+//     };
 
-    private void setTitle(int count) {
-        setTitle("OUTPUT (" + count + ")");
-        setTitleX(20);
-    }
+//     private void setTitle(int count) {
+//         setTitle("OUTPUT (" + count + ")");
+//         setTitleX(20);
+//     }
 
-    class ControllerItem extends UIItemList.AbstractItem {
-        final SLController controller;
+//     class ControllerItem extends UIItemList.AbstractItem {
+//         final SLController controller;
 
-        ControllerItem(SLController _controller) {
-          this.controller = _controller;
-          controller.enabled.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) { redraw(); }
-          });
-        }
+//         ControllerItem(SLController _controller) {
+//           this.controller = _controller;
+//           controller.enabled.addListener(new LXParameterListener() {
+//             public void onParameterChanged(LXParameter parameter) { redraw(); }
+//           });
+//         }
 
-        String getLabel() {
-            if (controller.networkDevice != null && controller.networkDevice.version.get() != -1) {
-                return controller.cubeId + " (v" + controller.networkDevice.version + ")";
-            } else {
-                return controller.cubeId;
-            }
-        }
+//         String getLabel() {
+//             if (controller.networkDevice != null && controller.networkDevice.version.get() != -1) {
+//                 return controller.cubeId + " (v" + controller.networkDevice.version + ")";
+//             } else {
+//                 return controller.cubeId;
+//             }
+//         }
 
-        boolean isSelected() { 
-            return controller.enabled.isOn();
-        }
+//         boolean isSelected() { 
+//             return controller.enabled.isOn();
+//         }
 
-        @Override
-        boolean isActive() {
-            return controller.enabled.isOn();
-        }
+//         @Override
+//         boolean isActive() {
+//             return controller.enabled.isOn();
+//         }
 
-        @Override
-        public int getActiveColor(UI ui) {
-            return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
-        }
+//         @Override
+//         public int getActiveColor(UI ui) {
+//             return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
+//         }
 
-        @Override
-        public void onActivate() {
-            if (!outputControl.enabled.getValueb())
-                return;
-            controller.enabled.toggle();
-        }
+//         @Override
+//         public void onActivate() {
+//             if (!outputControl.enabled.getValueb())
+//                 return;
+//             controller.enabled.toggle();
+//         }
 
-        // @Override
-        // public void onDeactivate() {
-        //     println("onDeactivate");
-        //     controller.enabled.setValue(false);
-        // }
-    }
-}
+//         // @Override
+//         // public void onDeactivate() {
+//         //     println("onDeactivate");
+//         //     controller.enabled.setValue(false);
+//         // }
+//     }
+// }
 
 /*
  * Gamma Correction
