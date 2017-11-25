@@ -835,14 +835,27 @@ public class RKPattern03 extends P3CubeMapPattern {
 
 
 public class RKPattern04 extends P3CubeMapPattern {
+  
+  CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
+  CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
+  CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  BooleanParameter clrBg = new BooleanParameter("clear bg");
+  CompoundParameter speed = new CompoundParameter("speed", .02, 0, .1);
+  CompoundParameter h1 = new CompoundParameter("hue1", 0, 0, 255);
+  CompoundParameter h2 = new CompoundParameter("hue2", 85, 0, 255);
+  CompoundParameter h3 = new CompoundParameter("hue3", 170, 0, 255);
+  
+  float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
+  boolean clearBg;
 
   Vtx [] rootVts;
   Mesh rootMesh;
 
   int mxLv = 2;
-  float rF, rdnsF;
-  float gF;
-  PVector plR, plG, plB;
+  float rF, rdnsF, gF;
+  PVector lgt1, lgt2, lgt3;
+  float hue1, hue1T, hue2, hue2T, hue3, hue3T;
+  color c1, c2, c3;
 
   public RKPattern04(LX lx) {
 
@@ -850,12 +863,46 @@ public class RKPattern04 extends P3CubeMapPattern {
     initRootVts();
     initRootMesh();
 
-    plR = new PVector(600, 600, 600);
-    plG = new PVector(600, -600, -600);
-    plB = new PVector(-600, -600, 600);
+    lgt1 = new PVector(600, 600, 600);
+    lgt2 = new PVector(600, -600, -600);
+    lgt3 = new PVector(-600, -600, 600);
+    hue1 = hue1T = 0;
+    hue2 = hue2T = 85;
+    hue3 = hue3T = 170;
+    
+    addParameter(rX);
+    addParameter(rY);
+    addParameter(rZ);
+    addParameter(clrBg);
+    addParameter(speed);
+    addParameter(h1);
+    addParameter(h2);
+    addParameter(h3);
   }
 
   void run(double deltaMs, PGraphics pg) {
+    
+    rotXT = rX.getValuef();
+    rotYT = rY.getValuef();
+    rotZT = rZ.getValuef();
+    clearBg = clrBg.getValueb();
+    gFIncreT = speed.getValuef();
+    hue1 = h1.getValuef();
+    hue2 = h2.getValuef();
+    hue3 = h3.getValuef();
+    
+    rotX = lerp(rotX, rotXT, .1);
+    rotY = lerp(rotY, rotYT, .1);
+    rotZ = lerp(rotZ, rotZT, .1);
+    gFIncre = lerp(gFIncre, gFIncreT, .1);
+    hue1 = lerp(hue1, hue1T, .1);
+    hue2 = lerp(hue2, hue2T, .1);
+    hue3 = lerp(hue3, hue3T, .1);
+      
+    colorMode(HSB);
+    c1 = color(hue1, 255, 255);
+    c2 = color(hue2, 255, 255);
+    c3 = color(hue3, 255, 255);
 
     updateRootVts();
     updateMesh();
@@ -884,12 +931,12 @@ public class RKPattern04 extends P3CubeMapPattern {
 
   void updateCubeMap(PGraphics pg, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
     pg.beginDraw();
-    //pg.background(0);
+    if(clearBg) pg.background(0);
     pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
     pg.frustum(-10, 10, -10, 10, 10, 1000);
-    //pg.rotateX(rotX);
-    //pg.rotateY(rotY);
-    //pg.rotateZ(rotZ);
+    pg.rotateX(rotX);
+    pg.rotateY(rotY);
+    pg.rotateZ(rotZ);
     drawScene(pg);
     pg.endDraw();
   }
@@ -909,7 +956,7 @@ public class RKPattern04 extends P3CubeMapPattern {
   void updateMesh() {
 
     rootMesh.update(rootVts, gF);
-    gF += .2;
+    gF += gFIncre;
   }
 
   class Mesh {
@@ -918,7 +965,7 @@ public class RKPattern04 extends P3CubeMapPattern {
 
     int idx, lv;
 
-    float r, g, b;
+    float r1, r2, r3;
     PVector nrml;
 
     Vtx [] outers, mids, struts, strutMids, sStruts;
@@ -956,26 +1003,26 @@ public class RKPattern04 extends P3CubeMapPattern {
       for (int i=0; i<mids.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.5;
         mids[i].interpolate(outers[i], outers[(i+1)%outers.length], itp);
-        f += .1;
+        f += gFIncre;
       }
       for (int i=0; i<struts.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.8;
         struts[i].protrude(mids[i], outers[(i+2)%outers.length], outers[(i+1)%outers.length], itp, lv);
-        f += .1;
+        f += gFIncre;
       }
       for (int i=0; i<strutMids.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.5;
         strutMids[i].interpolate(struts[i], struts[(i+1)%struts.length], itp);
-        f += .1;
+        f += gFIncre;
       }
       for (int i=0; i<sStruts.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.5;
         sStruts[i].protrude(strutMids[i], outers[(i+1)%outers.length], struts[i], itp, lv);
-        f += .1;
+        f += gFIncre;
       }
 
       if (lv<mxLv) {
-        f += .1;
+        f += gFIncre;
         children[15].update(struts, f);
         for (int i=0; i<3; i++) {
           int j = (i+1)%3;
@@ -984,31 +1031,31 @@ public class RKPattern04 extends P3CubeMapPattern {
             outers[j], sStruts[i], mids[i]
           };
           children[i*5].update(g1, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g2 = {
             sStruts[i], struts[i], mids[i]
           };
           children[i*5+1].update(g2, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g3 = {
             sStruts[i], struts[i], struts[j]
           };
           children[i*5+2].update(g3, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g4 = {
             sStruts[i], struts[j], mids[j]
           };
           children[i*5+3].update(g4, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g5 = {
             outers[j], sStruts[i], mids[j]
           };
           children[i*5+4].update(g5, f);
-          f += .1;
+          f += gFIncre;
         }
       }
     }
@@ -1035,10 +1082,12 @@ public class RKPattern04 extends P3CubeMapPattern {
     void drawTri(Vtx v1, Vtx v2, Vtx v3, PGraphics pg) {
 
       nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
-      r = map(abs(HALF_PI-PVector.angleBetween(nrml, plR)), 0, HALF_PI, 0, 255)*1.5;
-      g = map(abs(HALF_PI-PVector.angleBetween(nrml, plG)), 0, HALF_PI, 0, 255)*1.5;
-      b = map(abs(HALF_PI-PVector.angleBetween(nrml, plB)), 0, HALF_PI, 0, 255)*1.5;
-      pg.fill(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+      r1 = map(abs(HALF_PI-PVector.angleBetween(nrml, lgt1)), 0, HALF_PI, 0, 1.5);
+      r2 = map(abs(HALF_PI-PVector.angleBetween(nrml, lgt2)), 0, HALF_PI, 0, 1.5);
+      r3 = map(abs(HALF_PI-PVector.angleBetween(nrml, lgt3)), 0, HALF_PI, 0, 1.5);
+      pg.fill(constrain(r1*red(c1)+r2*red(c2)+r3*red(c3), 0, 255),
+              constrain(r1*green(c1)+r2*green(c2)+r3*green(c3), 0, 255),
+              constrain(r1*blue(c1)+r2*blue(c2)+r3*blue(c3), 0, 255));
 
       pg.vertex(v1.pos.x, v1.pos.y, v1.pos.z);
       pg.vertex(v2.pos.x, v2.pos.y, v2.pos.z);
@@ -1062,12 +1111,12 @@ public class RKPattern04 extends P3CubeMapPattern {
       float r = 1200+(noise(rF+i*.1)-0.5)*1200;
       float rdns = i*(TWO_PI/rootVts.length)+(noise(rdnsF+i*.1)-.5)*PI/3;
       float x = r*cos(rdns);
-      float y = 600;
+      float y = 300;
       float z = r*sin(rdns);
       rootVts[i].setPos(x, y, z);
     }
-    rF += .2;
-    rdnsF += .2;
+    rF += gFIncre;
+    rdnsF += gFIncre;
   }
 
   class Vtx {
