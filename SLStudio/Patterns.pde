@@ -88,7 +88,7 @@ public class Flock extends SLPattern {
   CompoundParameter radius = new CompoundParameter("radius", 100, 0, 1000);  // radius (m) within which to spawn birds
   CompoundParameter triggerMinSpeed = new CompoundParameter("trigMin", range*0.01, 0, range*0.1);  // minimum focus speed (m/s) that spawns birds
   CompoundParameter triggerMaxSpeed = new CompoundParameter("trigMax", range*0.1, 0, range*0.1);
-  CompoundParameter density = new CompoundParameter("density", 10, 0, 100);  // maximum spawn rate (birds/s)
+  CompoundParameter density = new CompoundParameter("density", 5, 0, 10);  // maximum spawn rate (birds/s)
 
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
   CompoundParameter speedFactor = new CompoundParameter("speedFactor", 1, 0, 2);  // (ratio) target bird speed / focus speed
@@ -96,7 +96,8 @@ public class Flock extends SLPattern {
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
-  CompoundParameter size = new CompoundParameter("size", 5, 0, 10);
+  CompoundParameter size = new CompoundParameter("size", 10, 0, 100);
+  CompoundParameter waveNumber = new CompoundParameter("waveNum", 4, 0, 10);
 
   PVector prevFocus = null;
   SortedSet<Bird> birds = new TreeSet<Bird>();
@@ -119,6 +120,7 @@ public class Flock extends SLPattern {
     addParameter(fadeInSec);
     addParameter(fadeOutSec);
     addParameter(size);
+    addParameter(waveNumber);
   }
 
   public void run(double deltaMs) {
@@ -171,7 +173,7 @@ public class Flock extends SLPattern {
   }
 
   void renderBirds() {
-    renderTrails();
+    renderPlasma();
   }
 
   void renderTrails() {
@@ -219,6 +221,27 @@ public class Flock extends SLPattern {
         }
       }
       colors[p.index] = minSqDist > radius ? 0 : LXColor.lerp(0, closestBird.rgb, closestBird.value);
+    }
+  }
+
+  void renderPlasma() {
+    ColorPalette pal = skyPalettes.getPalette("sunset sunset");
+    double waveNum = waveNumber.getValuef();
+    double extent = size.getValuef() * waveNum;
+    for (LXPoint p : model.points) {
+      double sum = 0;
+      for (Bird b : birds) {
+        if (Math.abs(b.pos.x - p.x) < extent && Math.abs(b.pos.y - p.y) < extent) {
+          double dist = Math.sqrt(
+              (b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y) + (b.pos.z - p.z)*(b.pos.z - p.z)
+          ) / extent;
+          if (dist < 1) {
+            double a = (1 - dist*dist);
+            sum += a*a*Math.sin(waveNum * 2 * Math.PI * dist)*b.value;
+          }
+        }
+      }
+      colors[p.index] = pal.getColor(sum + 0.5);
     }
   }
 

@@ -31,8 +31,9 @@ void setup() {
   skyPalettes = new SkyPaletteLibrary();
   skyPalettes.addSky("london", new DeckChairSource("5568230b7b2853502527fd4e"), new ArcPaletteExtractor(0.44));
   skyPalettes.addSky("paris", new DeckChairSource("5568862a7b28535025280c72"), new ArcPaletteExtractor(0.46));
-  skyPalettes.addSky("sydney", new DeckChairSource("599d6375096641f2272bacf4"), new ArcPaletteExtractor(0.25));
+  skyPalettes.addSky("sydney", new DeckChairSource("599d6375096641f2272bacf4"), new ArcPaletteExtractor(1)); //0.25));
   skyPalettes.addSky("san francisco", new UrlImageSource("http://icons.wunderground.com/webcamramdisk/a/m/ampledata/1/current.jpg"), new ArcPaletteExtractor(0.65));
+  skyPalettes.addSky("sunset sunset", new UrlImageSource("https://pbs.twimg.com/media/DO9Ok2JU8AEjXa1.jpg"), new ArcPaletteExtractor(0.622));
   
   lx = new LXStudio(this, model, false) {
     @Override
