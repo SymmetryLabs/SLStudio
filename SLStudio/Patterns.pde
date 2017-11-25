@@ -92,7 +92,7 @@ public class Flock extends SLPattern {
 
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
   CompoundParameter speedFactor = new CompoundParameter("speedFactor", 1, 0, 2);  // (ratio) target bird speed / focus speed
-  CompoundParameter maxSpeed = new CompoundParameter("maxSpeed", range*0.01, 0, range);  // max bird speed (m/s)
+  CompoundParameter maxSpeed = new CompoundParameter("maxSpeed", 10, 0, 100);  // max bird speed (m/s)
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
@@ -133,19 +133,16 @@ public class Flock extends SLPattern {
     }
     renderBirds();
     prevFocus = focus;
-    println("birds: " + birds.size());
+    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
   }
 
   void spawnBirds(float deltaSec, PVector focus, PVector vel) {
     float trigMin = triggerMinSpeed.getValuef(); //<>//
     float trigMax = triggerMaxSpeed.getValuef();
-    float numToAdd = deltaSec * density.getValuef() * (vel.mag() - trigMin) / (trigMax - trigMin);
-    if (numToAdd > 0) {
-      numToSpawn += numToAdd;
-      while (numToSpawn >= 1.0) {
-        spawnBird(focus);
-        numToSpawn--;
-      }
+    numToSpawn += deltaSec * density.getValuef() * (vel.mag() - trigMin) / (trigMax - trigMin);
+    while (numToSpawn >= 1.0) {
+      spawnBird(focus);
+      numToSpawn -= 1.0;
     }
   }
 
@@ -154,16 +151,6 @@ public class Flock extends SLPattern {
     pos.mult(radius.getValuef());
     pos.add(focus);
     birds.add(new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100)));
-  }
-
-  PVector getRandomUnitVector() {
-    PVector pos = new PVector();
-    while (true) {
-      pos.set((float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1);
-      if (pos.mag() < 1) {
-        return pos;
-      }
-    }
   }
 
   void advanceBirds(float deltaSec, PVector vel) {
@@ -184,19 +171,45 @@ public class Flock extends SLPattern {
   }
 
   void renderBirds() {
-    Bird xLow = new Bird(new PVector(0, 0, 0), 0);
-    Bird xHigh = new Bird(new PVector(0, 0, 0), 0);
+    renderTrails();
+  }
+
+  void renderTrails() {
     float radius = size.getValuef();
     float sqRadius = radius*radius;
 
-    // radius = 40;
     for (LXPoint p : model.points) {
       int rgb = 0;
-      xLow.pos.set(p.x - radius, 0, 0);
-      xHigh.pos.set(p.x + radius, 0, 0);
+      for (Bird b : birds) {
+        if (Math.abs(b.pos.x - p.x) < radius) {
+          if ((b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y) < sqRadius) {
+            rgb = LXColor.add(rgb, LXColor.lerp(0, b.rgb, b.value));
+          }
+        }
+      }
+      colors[p.index] = LXColor.add(LXColor.lerp(colors[p.index], 0, 0.1), rgb);
+    }
+  }
+
+  SortedSet<Bird> getSubSet(SortedSet<Bird> birds, float xLow, float xHigh) {
+    Bird low = new Bird(new PVector(xLow, 0, 0), 0);
+    Bird high = new Bird(new PVector(xHigh, 0, 0), 0);
+    // return birds.subSet(low, high);
+    TreeSet<Bird> result = new TreeSet<Bird>();
+    for (Bird b : birds) {
+      if (b.compareTo(low) >= 0 && b.compareTo(high) < 0) result.add(b);
+    }
+    return result;
+  }
+
+  void renderVoronoi() {
+    float radius = size.getValuef();
+
+    radius = 10000;
+    for (LXPoint p : model.points) {
       Bird closestBird = null;
       float minSqDist = 1e6;
-      for (Bird b : birds.subSet(xLow, xHigh)) {
+      for (Bird b : birds) {
         if (Math.abs(b.pos.x - p.x) < radius) {
           float sqDist = (b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y);
           if (sqDist < minSqDist) {
@@ -204,18 +217,25 @@ public class Flock extends SLPattern {
             closestBird = b;
           }
         }
-        if ((b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y) < sqRadius) {
-          rgb = LXColor.add(rgb, LXColor.lerp(0, b.rgb, b.value));
-        }
       }
-      colors[p.index] = closestBird == null ? 0 : LXColor.lerp(0, closestBird.rgb, closestBird.value);
-      colors[p.index] = rgb;
+      colors[p.index] = minSqDist > radius ? 0 : LXColor.lerp(0, closestBird.rgb, closestBird.value);
+    }
+  }
+
+  PVector getRandomUnitVector() {
+    PVector pos = new PVector();
+    while (true) {
+      pos.set((float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1);
+      if (pos.mag() < 1) {
+        return pos;
+      }
     }
   }
 
   public class Bird implements Comparable<Bird> {
     public PVector pos;
     public PVector vel;
+    public PVector prevPos;
     public int rgb;
     public float value;
     public float elapsedSec;
@@ -244,6 +264,7 @@ public class Flock extends SLPattern {
     }
 
     void advance(float deltaSec) {
+      prevPos = pos;
       pos.add(PVector.mult(vel, (float) deltaSec));
     }
 
@@ -261,7 +282,7 @@ public class Flock extends SLPattern {
     }
 
     public int compareTo(Bird other) {
-      return pos.x > other.pos.x ? 1 : pos.x < other.pos.x ? -1 : 0;
+      return Float.compare(pos.x, other.pos.x);
     }
   }
 }
