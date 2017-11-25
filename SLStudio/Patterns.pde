@@ -96,7 +96,7 @@ public class Flock extends SLPattern {
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
-  CompoundParameter size = new CompoundParameter("size", 10, 0, 100);
+  CompoundParameter size = new CompoundParameter("size", 10, 0, 300);
   CompoundParameter waveNumber = new CompoundParameter("waveNum", 4, 0, 10);
 
   PVector prevFocus = null;
@@ -237,7 +237,7 @@ public class Flock extends SLPattern {
           ) / extent;
           if (dist < 1) {
             double a = (1 - dist*dist);
-            sum += a*a*Math.sin(waveNum * 2 * Math.PI * dist)*b.value;
+            sum += a*a*Math.sin(waveNum * 2 * Math.PI * dist)*Math.cos(waveNum * 5/4 * dist)*b.value;
           }
         }
       }
