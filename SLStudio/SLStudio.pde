@@ -34,6 +34,7 @@ void setup() {
   skyPalettes.addSky("sydney", new DeckChairSource("599d6375096641f2272bacf4"), new ArcPaletteExtractor(1)); //0.25));
   skyPalettes.addSky("san francisco", new UrlImageSource("http://icons.wunderground.com/webcamramdisk/a/m/ampledata/1/current.jpg"), new ArcPaletteExtractor(0.65));
   skyPalettes.addSky("sunset sunset", new UrlImageSource("https://pbs.twimg.com/media/DO9Ok2JU8AEjXa1.jpg"), new ArcPaletteExtractor(0.622));
+  skyPalettes.addSky("galaxies", new UrlImageSource("https://apod.nasa.gov/apod/image/1711/BeltStars_nouroozi2000.jpg"), new ArcPaletteExtractor(0.9));
   
   lx = new LXStudio(this, model, false) {
     @Override

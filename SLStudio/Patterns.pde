@@ -80,14 +80,12 @@ public class LightSource extends SLPattern {
 }
 
 public class Flock extends SLPattern {
-  float range = new PVector(model.xRange, model.yRange, model.zRange).mag();
-
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (m)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
   CompoundParameter radius = new CompoundParameter("radius", 100, 0, 1000);  // radius (m) within which to spawn birds
-  CompoundParameter triggerMinSpeed = new CompoundParameter("trigMin", range*0.01, 0, range*0.1);  // minimum focus speed (m/s) that spawns birds
-  CompoundParameter triggerMaxSpeed = new CompoundParameter("trigMax", range*0.1, 0, range*0.1);
+  CompoundParameter triggerMinSpeed = new CompoundParameter("trigMin", 10, 0, 100);  // minimum focus speed (m/s) that spawns birds
+  CompoundParameter triggerMaxSpeed = new CompoundParameter("trigMax", 50, 0, 100);  // maximum focus speed (m/s) that spawns birds
   CompoundParameter density = new CompoundParameter("density", 5, 0, 10);  // maximum spawn rate (birds/s)
 
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
