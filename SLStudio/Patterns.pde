@@ -41,23 +41,23 @@ public class SkyGradient extends SLPattern {
 }
 
 public class LightSource extends SLPattern {
-  CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
-  CompoundParameter yPos = new CompoundParameter("yPos", model.cy, model.yMin, model.yMax);
-  CompoundParameter zPos = new CompoundParameter("zPos", model.cz, model.zMin, model.zMax);
+  CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);
+  CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
+  CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
   CompoundParameter falloff = new CompoundParameter("falloff", 0.75, 0, 1);
   CompoundParameter gain = new CompoundParameter("gain", 1, 0, 3);
   
   public LightSource(LX lx) {
     super(lx);
-    addParameter(xPos);
-    addParameter(yPos);
-    addParameter(zPos);
+    addParameter(x);
+    addParameter(y);
+    addParameter(z);
     addParameter(falloff);
     addParameter(gain);
   }
 
   public void run(double deltaMs) {
-    PVector light = new PVector(xPos.getValuef(), yPos.getValuef(), zPos.getValuef());
+    PVector light = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
     float range = new PVector(model.xRange, model.yRange, model.zRange).mag();
     for (LXPoint p : model.points) {
       if (p instanceof LXPointNormal) {
