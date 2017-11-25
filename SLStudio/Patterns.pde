@@ -58,7 +58,6 @@ public class LightSource extends SLPattern {
 
   public void run(double deltaMs) {
     PVector light = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
-    float range = new PVector(model.xRange, model.yRange, model.zRange).mag();
     for (LXPoint p : model.points) {
       if (p instanceof LXPointNormal) {
         LXPointNormal pn = (LXPointNormal) p;
@@ -74,8 +73,195 @@ public class LightSource extends SLPattern {
         if (cosAngle < 0) cosAngle = 0;
 
         float value = cosAngle * brightness * gain.getValuef();
-        colors[p.index] = LX.hsb(palette.getHuef(), 100, 100 * (value > 1 ? 1 : value));
+        colors[p.index] = LX.hsb(palette.getHuef(), 100f, 100f * (value > 1 ? 1 : value));
       }
+    }
+  }
+}
+
+public class Flock extends SLPattern {
+  float range = new PVector(model.xRange, model.yRange, model.zRange).mag();
+
+  CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (m)
+  CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
+  CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
+  CompoundParameter radius = new CompoundParameter("radius", 100, 0, 1000);  // radius (m) within which to spawn birds
+  CompoundParameter triggerMinSpeed = new CompoundParameter("trigMin", range*0.01, 0, range*0.1);  // minimum focus speed (m/s) that spawns birds
+  CompoundParameter triggerMaxSpeed = new CompoundParameter("trigMax", range*0.1, 0, range*0.1);
+  CompoundParameter density = new CompoundParameter("density", 10, 0, 100);  // maximum spawn rate (birds/s)
+
+  CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
+  CompoundParameter speedFactor = new CompoundParameter("speedFactor", 1, 0, 2);  // (ratio) target bird speed / focus speed
+  CompoundParameter maxSpeed = new CompoundParameter("maxSpeed", range*0.01, 0, range);  // max bird speed (m/s)
+  CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
+  CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
+  CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
+  CompoundParameter size = new CompoundParameter("size", 5, 0, 10);
+
+  PVector prevFocus = null;
+  SortedSet<Bird> birds = new TreeSet<Bird>();
+  float numToSpawn = 0;
+
+  public Flock(LX lx) {
+    super(lx);
+    addParameter(x);
+    addParameter(y);
+    addParameter(z);
+    addParameter(radius);
+    addParameter(triggerMinSpeed);
+    addParameter(triggerMaxSpeed);
+    addParameter(density);
+
+    addParameter(scatter);
+    addParameter(speedFactor);
+    addParameter(maxSpeed);
+    addParameter(turnSec);
+    addParameter(fadeInSec);
+    addParameter(fadeOutSec);
+    addParameter(size);
+  }
+
+  public void run(double deltaMs) {
+    float deltaSec = (float) deltaMs * 0.001;
+    PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+    if (prevFocus != null) {
+      PVector vel = PVector.sub(focus, prevFocus);
+      vel.div(deltaSec);
+      spawnBirds(deltaSec, focus, vel);
+      advanceBirds(deltaSec, vel);
+      removeExpiredBirds();
+    }
+    renderBirds();
+    prevFocus = focus;
+    println("birds: " + birds.size());
+  }
+
+  void spawnBirds(float deltaSec, PVector focus, PVector vel) {
+    float trigMin = triggerMinSpeed.getValuef(); //<>//
+    float trigMax = triggerMaxSpeed.getValuef();
+    float numToAdd = deltaSec * density.getValuef() * (vel.mag() - trigMin) / (trigMax - trigMin);
+    if (numToAdd > 0) {
+      numToSpawn += numToAdd;
+      while (numToSpawn >= 1.0) {
+        spawnBird(focus);
+        numToSpawn--;
+      }
+    }
+  }
+
+  void spawnBird(PVector focus) {
+    PVector pos = getRandomUnitVector();
+    pos.mult(radius.getValuef());
+    pos.add(focus);
+    birds.add(new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100)));
+  }
+
+  PVector getRandomUnitVector() {
+    PVector pos = new PVector();
+    while (true) {
+      pos.set((float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1);
+      if (pos.mag() < 1) {
+        return pos;
+      }
+    }
+  }
+
+  void advanceBirds(float deltaSec, PVector vel) {
+    PVector targetVel = PVector.mult(vel, speedFactor.getValuef());
+    for (Bird b : birds) {
+      b.run(deltaSec, targetVel);
+    }
+  }
+
+  void removeExpiredBirds() {
+    List<Bird> expired = new ArrayList<Bird>();
+    for (Bird b : birds) {
+      if (b.hasExpired) {
+        expired.add(b);
+      }
+    }
+    birds.removeAll(expired);
+  }
+
+  void renderBirds() {
+    Bird xLow = new Bird(new PVector(0, 0, 0), 0);
+    Bird xHigh = new Bird(new PVector(0, 0, 0), 0);
+    float radius = size.getValuef();
+    float sqRadius = radius*radius;
+
+    // radius = 40;
+    for (LXPoint p : model.points) {
+      int rgb = 0;
+      xLow.pos.set(p.x - radius, 0, 0);
+      xHigh.pos.set(p.x + radius, 0, 0);
+      Bird closestBird = null;
+      float minSqDist = 1e6;
+      for (Bird b : birds.subSet(xLow, xHigh)) {
+        if (Math.abs(b.pos.x - p.x) < radius) {
+          float sqDist = (b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y);
+          if (sqDist < minSqDist) {
+            minSqDist = sqDist;
+            closestBird = b;
+          }
+        }
+        if ((b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y) < sqRadius) {
+          rgb = LXColor.add(rgb, LXColor.lerp(0, b.rgb, b.value));
+        }
+      }
+      colors[p.index] = closestBird == null ? 0 : LXColor.lerp(0, closestBird.rgb, closestBird.value);
+      colors[p.index] = rgb;
+    }
+  }
+
+  public class Bird implements Comparable<Bird> {
+    public PVector pos;
+    public PVector vel;
+    public int rgb;
+    public float value;
+    public float elapsedSec;
+    public boolean hasExpired;
+
+    Bird(PVector pos, int rgb) {
+      this.pos = pos;
+      this.vel = PVector.mult(getRandomUnitVector(), scatter.getValuef());
+      this.rgb = rgb;
+      this.value = 0;
+      this.elapsedSec = 0;
+      this.hasExpired = false;
+    }
+
+    void run(float deltaSec, PVector targetVel) {
+      advance(deltaSec);
+      turn(deltaSec, targetVel);
+
+      elapsedSec += deltaSec;
+      if (elapsedSec < fadeInSec.getValuef()) {
+        value = elapsedSec / fadeInSec.getValuef();
+      } else {
+        value = (float) Math.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
+        if (value < 0.001) hasExpired = true;
+      }
+    }
+
+    void advance(float deltaSec) {
+      pos.add(PVector.mult(vel, (float) deltaSec));
+    }
+
+    void turn(float deltaSec, PVector targetVel) {
+      float speed = vel.mag();
+      float targetSpeed = targetVel.mag();
+
+      float frac = (float) Math.pow(0.1, deltaSec / turnSec.getValuef());
+      vel = PVector.add(PVector.mult(vel, frac), PVector.mult(targetVel, 1 - frac));
+      speed = speed * frac + targetSpeed * (1 - frac);
+      if (targetSpeed > maxSpeed.getValuef()) targetSpeed = maxSpeed.getValuef();
+
+      float mag = vel.mag();
+      if (mag > 0 && mag < speed) vel.div(mag / speed);
+    }
+
+    public int compareTo(Bird other) {
+      return pos.x > other.pos.x ? 1 : pos.x < other.pos.x ? -1 : 0;
     }
   }
 }
