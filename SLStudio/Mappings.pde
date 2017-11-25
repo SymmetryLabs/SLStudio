@@ -58,21 +58,26 @@ public SLModel buildModel() {
 
   /* Suns ------------------------------------------------------------*/
   List<Sun> suns = new ArrayList<Sun>();
-  //suns.add(new Sun("sun1", Sun.Type.ONE_HALF, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
-  //suns.add(new Sun("sun2", Sun.Type.FULL, new float[] {400, 120, 60}, new float[] {0, 0, 0}, transform));
-  //suns.add(new Sun("sun3", Sun.Type.TWO_THIRDS, new float[] {620, 30, -70}, new float[] {0, 0, 0}, transform));
-  //suns.add(new Sun("sun4", Sun.Type.ONE_THIRD, new float[] {850, -36, 80}, new float[] {0, 0, 0}, transform));
-
-  //suns.add(new Sun("sun5", Sun.Type.ONE_THIRD, new float[] {1300, -36, -125}, new float[] {0, 0, 0}, transform));
-  //suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, new float[] {1420, 30, 155}, new float[] {0, 0, 0}, transform));
-  suns.add(new Sun("sun7", Sun.Type.FULL, new float[] {1650, 160, 0}, new float[] {0, 0, 0}, transform));
-
-  //suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, new float[] {2000, 30, 120}, new float[] {0, 0, 0}, transform));
-  //suns.add(new Sun("sun9", Sun.Type.ONE_HALF, new float[] {2200, 0, -120}, new float[] {0, 0, 0}, transform));
-
-  //suns.add(new Sun("sun10", Sun.Type.ONE_HALF, new float[] {2600, 0, -80}, new float[] {0, 0, 0}, transform));
-  //suns.add(new Sun("sun11", Sun.Type.ONE_THIRD, new float[] {2900, -36, 30}, new float[] {0, 0, 0}, transform));
-
+  final boolean USE_ONLY_ONE_SUN = false;
+  
+  if (USE_ONLY_ONE_SUN) {
+      suns.add(new Sun("sun7", Sun.Type.FULL, new float[] {1650, 160, 0}, new float[] {0, 0, 0}, transform));
+  } else {
+    suns.add(new Sun("sun1", Sun.Type.ONE_HALF, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
+    suns.add(new Sun("sun2", Sun.Type.FULL, new float[] {400, 120, 60}, new float[] {0, 0, 0}, transform));
+    suns.add(new Sun("sun3", Sun.Type.TWO_THIRDS, new float[] {620, 30, -70}, new float[] {0, 0, 0}, transform));
+    suns.add(new Sun("sun4", Sun.Type.ONE_THIRD, new float[] {850, -36, 80}, new float[] {0, 0, 0}, transform));
+  
+    suns.add(new Sun("sun5", Sun.Type.ONE_THIRD, new float[] {1300, -36, -125}, new float[] {0, 0, 0}, transform));
+    suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, new float[] {1420, 30, 155}, new float[] {0, 0, 0}, transform));
+    suns.add(new Sun("sun7", Sun.Type.FULL, new float[] {1650, 160, 0}, new float[] {0, 0, 0}, transform));
+  
+    suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, new float[] {2000, 30, 120}, new float[] {0, 0, 0}, transform));
+    suns.add(new Sun("sun9", Sun.Type.ONE_HALF, new float[] {2200, 0, -120}, new float[] {0, 0, 0}, transform));
+  
+    suns.add(new Sun("sun10", Sun.Type.ONE_HALF, new float[] {2600, 0, -80}, new float[] {0, 0, 0}, transform));
+    suns.add(new Sun("sun11", Sun.Type.ONE_THIRD, new float[] {2900, -36, 30}, new float[] {0, 0, 0}, transform));
+  }
 
   /* Obj Importer ----------------------------------------------------*/
   List<LXModel> objModels = new ObjImporter("data", transform).getModels();
