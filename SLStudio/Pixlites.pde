@@ -3,11 +3,13 @@ Pixlite[] setupPixlites(LX lx) {
 
   // temporary
   int counter = 0;
-  for (int i = 10; i < 45; i++) {
-    pixlites[counter++] = new Pixlite(lx, "10.200.1."+i, model.slices.get(0));
-  }
+  //for (int i = 10; i < 45; i++) {
+    //  pixlites[counter++] = new Pixlite(lx, "10.200.1."+i, model.slices.get(0));
+  //}
 
-  return pixlites;
+  return new Pixlite[] {
+    new Pixlite(lx, "10.200.1.35", model.slices.get(0))
+  };
 }
  
 public class Pixlite extends LXOutputGroup {
@@ -91,11 +93,11 @@ public class Pixlite extends LXOutputGroup {
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("7") // input starts on port side for this one
-          .addPoints(slice.getStripById("37").points)
-          .addPoints(slice.getStripById("38").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("39").points)
-          .addPoints(slice.getStripById("40").points, PointsGrouping.REVERSE_ORDERING)
+        new PointsGrouping("7")
+          .addPoints(slice.getStripById("37").points, PointsGrouping.REVERSE_ORDERING)
+          .addPoints(slice.getStripById("38").points)
+          .addPoints(slice.getStripById("39").points, PointsGrouping.REVERSE_ORDERING)
+          .addPoints(slice.getStripById("40").points)
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
@@ -140,10 +142,10 @@ public class Pixlite extends LXOutputGroup {
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("13") // input starts on port side for this one
-          .addPoints(slice.getStripById("60").points)
-          .addPoints(slice.getStripById("61").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("62").points)
+        new PointsGrouping("13")
+          .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
+          .addPoints(slice.getStripById("61").points)
+          .addPoints(slice.getStripById("62").points, PointsGrouping.REVERSE_ORDERING)
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
@@ -154,10 +156,10 @@ public class Pixlite extends LXOutputGroup {
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("15") // input starts on port side for this one
-          .addPoints(slice.getStripById("66").points)
-          .addPoints(slice.getStripById("67").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("68").points)
+        new PointsGrouping("15")
+          .addPoints(slice.getStripById("66").points, PointsGrouping.REVERSE_ORDERING)
+          .addPoints(slice.getStripById("67").points)
+          .addPoints(slice.getStripById("68").points, PointsGrouping.REVERSE_ORDERING)
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
@@ -246,10 +248,12 @@ public class PointsGrouping {
   }
 
   public PointsGrouping addPoints(LXPoint[] pointsToAdd, boolean reverseOrdering) {
+    LXPoint[] localPointsToAdd = pointsToAdd.clone();
+
     if (reverseOrdering) {
-      Collections.reverse(Arrays.asList(pointsToAdd));
+      Collections.reverse(Arrays.asList(localPointsToAdd));
     }
-    for (LXPoint p : pointsToAdd) {
+    for (LXPoint p : localPointsToAdd) {
       this.points.add(p);
     }
     return this;
