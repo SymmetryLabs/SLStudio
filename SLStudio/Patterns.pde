@@ -246,11 +246,14 @@ public class Flock extends SLPattern {
       double sum = 0;
       for (Bird b : sortedBirds.subSet(low, high)) {
         if (Math.abs(b.pos.y - p.y) < extent) {
-          double dist = Math.sqrt(
-              (b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y) + (b.pos.z - p.z)*(b.pos.z - p.z)
-          ) / extent;
-          if (dist < 1) {
-            double a = (1 - dist*dist);
+          double sqDist = (
+              (b.pos.x - p.x)*(b.pos.x - p.x) +
+              (b.pos.y - p.y)*(b.pos.y - p.y) +
+              (b.pos.z - p.z)*(b.pos.z - p.z)
+          ) / (extent*extent);
+          if (sqDist < 1) {
+            double dist = Math.sqrt(sqDist);
+            double a = 1 - sqDist;
             sum += a*a*Math.sin(waveNum * 2 * Math.PI * dist)*Math.cos(waveNum * 5/4 * dist)*b.value;
           }
         }
