@@ -69,6 +69,13 @@ class ArrayPalette implements ColorPalette {
   }
 
   public int getColor(double p) {
+    p = Math.abs(p);
+    int floor = (int) Math.floor(p);
+    p = p - floor;
+    if (floor % 2 == 1) {
+      p = 1 - p;
+    }
+    
     double index = p * (colors.length - 1);
     int low = (int) Math.floor(index);
     int high = (low + 1) < colors.length ? low + 1 : low;
@@ -77,12 +84,12 @@ class ArrayPalette implements ColorPalette {
   }
 }
 
-/** Extracts a palette from an image by sampling colours along an arc from
- * rising from a point on the left edge of the image, to the center of the
- * top edge, falling to a point on the right edge of the image.  The "height"
- * parameter specifies how low to start at the left edge and end at the right
- * edge, as a fraction (e.g. height = 0.25 means a quarter of the way down).
- */
+/** Extracts a palette from an image by sampling colours along an arc that
+  * rises from a point on the left edge of the image, to the center of the
+  * top edge, falling to a point on the right edge of the image.  The "height"
+  * parameter specifies how low to start at the left edge and end at the right
+  * edge, as a fraction (e.g. height = 0.25 means a quarter of the way down).
+  */
 class ArcPaletteExtractor implements PaletteExtractor {
   float height;
 
@@ -91,11 +98,11 @@ class ArcPaletteExtractor implements PaletteExtractor {
   }
 
   public ColorPalette getPalette(BufferedImage image) {
-    int[] colors = new int[101];
+    int[] colors = new int[1001];
     double xMax = image.getWidth() - 1;
     double yMax = image.getHeight() - 1;
-    for (int i = 0; i <= 100; i++) {
-      double t = i / 100.0;
+    for (int i = 0; i <= 1000; i++) {
+      double t = i / 1000.0;
       double x = xMax * t;
       double y = yMax * height * (0.5 + Math.cos(2 * Math.PI * t) * 0.5);
       int xl = (int) Math.floor(x);
