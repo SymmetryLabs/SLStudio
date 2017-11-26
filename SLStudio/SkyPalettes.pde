@@ -92,17 +92,19 @@ class ArrayPalette implements ColorPalette {
   */
 class ArcPaletteExtractor implements PaletteExtractor {
   float height;
+  int numStops;
 
-  ArcPaletteExtractor(float height) {  // a fraction of the image's height, from 0 to 1
-    this.height = height;
+  ArcPaletteExtractor(float height, int numStops) {
+    this.height = height;  // a fraction of the image's height, from 0 to 1
+    this.numStops = numStops;  // number of colour stops to sample from the image
   }
 
   public ColorPalette getPalette(BufferedImage image) {
-    int[] colors = new int[1001];
+    int[] colors = new int[numStops + 1];
     double xMax = image.getWidth() - 1;
     double yMax = image.getHeight() - 1;
-    for (int i = 0; i <= 1000; i++) {
-      double t = i / 1000.0;
+    for (int i = 0; i <= numStops; i++) {
+      double t = i / (double) numStops;
       double x = xMax * t;
       double y = yMax * height * (0.5 + Math.cos(2 * Math.PI * t) * 0.5);
       int xl = (int) Math.floor(x);
@@ -135,6 +137,14 @@ class SkyPaletteLibrary {
     extractors = new HashMap<String, PaletteExtractor>();
     lastFetchMillis = new HashMap<String, Long>();
     palettes = new HashMap<String, ColorPalette>();
+  }
+  
+  String[] getNames() {
+    SortedSet<String> names = new TreeSet<String>();
+    for (String name : sources.keySet()) {
+      names.add(name);
+    }
+    return names.toArray(new String[0]);
   }
 
   void addSky(String name, SkyPhotoSource source, PaletteExtractor extractor) {

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511655392438,
+  "timestamp": 1511735618270,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -376,25 +376,28 @@
           },
           {
             "id": 2977,
-            "class": "SLStudio$Flock",
+            "class": "SLStudio$FlockWave",
             "modulationColor": -10878721,
             "parameters": {
-              "label": "Flock",
+              "label": "FlockWave",
               "x": 1565.1300663796278,
               "y": 9.6399888144432,
               "z": 16.371658325195312,
-              "radius": 130.46933645470924,
-              "trigMin": 1.9234658383548442,
-              "trigMax": 19.940804226860433,
-              "density": 0.9999999776482582,
-              "scatter": 399.99998956918716,
-              "speedFactor": 0.29999999329447746,
-              "maxSpeed": 31.744886985758967,
-              "turnSec": 0.6800000071525574,
-              "fadeInSec": 1.0000000074505806,
-              "fadeOutSec": 0.9999999962747097,
-              "size": 99.9999966472387,
-              "waveNum": 4.0
+              "spRad": 130.0,
+              "spMin": 9.0,
+              "spMax": 60.0,
+              "density": 2.0,
+              "scatter": 300.0,
+              "spdMult": 0.5,
+              "maxSpd": 30,
+              "turnSec": 1.0,
+              "fadeInSec": 1.0,
+              "fadeOutSec": 2.0,
+              "size": 360.0,
+              "detail": 4.0,
+              "ripple": 2.4,
+              "palette": 5,
+              "palShift": 0.5
             },
             "modulation": {
               "modulators": [
@@ -780,8 +783,8 @@
       },
       "preview": {
         "radius": 636.5760877879983,
-        "theta": 2.7750000000000052,
-        "phi": 0.5557166738510124,
+        "theta": 2.5260000000000016,
+        "phi": 0.45971667385101234,
         "positionX": 1365.91015625,
         "positionY": 16.749984741210938,
         "positionZ": 45.547061920166016
