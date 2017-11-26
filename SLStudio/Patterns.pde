@@ -79,46 +79,54 @@ public class LightSource extends SLPattern {
   }
 }
 
-public class Flock extends SLPattern {
+public class FlockWave extends SLPattern {
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (m)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
-  CompoundParameter radius = new CompoundParameter("radius", 100, 0, 1000);  // radius (m) within which to spawn birds
-  CompoundParameter triggerMinSpeed = new CompoundParameter("trigMin", 2, 0, 40);  // minimum focus speed (m/s) that spawns birds
-  CompoundParameter triggerMaxSpeed = new CompoundParameter("trigMax", 20, 0, 40);  // maximum focus speed (m/s) that spawns birds
-  CompoundParameter density = new CompoundParameter("density", 5, 0, 10);  // maximum spawn rate (birds/s)
-
+  CompoundParameter spawnRadius = new CompoundParameter("spRad", 100, 0, 1000);  // radius (m) within which to spawn birds
+  CompoundParameter spawnMinSpeed = new CompoundParameter("spMin", 2, 0, 40);  // minimum focus speed (m/s) that spawns birds
+  CompoundParameter spawnMaxSpeed = new CompoundParameter("spMax", 20, 0, 40);  // maximum focus speed (m/s) that spawns birds
+  
+  CompoundParameter density = new CompoundParameter("density", 2, 0, 4);  // maximum spawn rate (birds/s)
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
-  CompoundParameter speedFactor = new CompoundParameter("speedFactor", 1, 0, 2);  // (ratio) target bird speed / focus speed
-  CompoundParameter maxSpeed = new CompoundParameter("maxSpeed", 10, 0, 100);  // max bird speed (m/s)
+  CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
+  CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (m/s)
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
-  CompoundParameter size = new CompoundParameter("size", 10, 0, 300);
-  CompoundParameter waveNumber = new CompoundParameter("waveNum", 4, 0, 10);
+
+  CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (m)
+  CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
+  CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
+  DiscreteParameter palette = new DiscreteParameter("palette", skyPalettes.getNames());  // selected colour palette
+  CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
 
   PVector prevFocus = null;
-  SortedSet<Bird> birds = new TreeSet<Bird>();
+  Set<Bird> birds = new HashSet<Bird>();
   float numToSpawn = 0;
 
-  public Flock(LX lx) {
+  public FlockWave(LX lx) {
     super(lx);
     addParameter(x);
     addParameter(y);
     addParameter(z);
-    addParameter(radius);
-    addParameter(triggerMinSpeed);
-    addParameter(triggerMaxSpeed);
-    addParameter(density);
+    addParameter(spawnRadius);
+    addParameter(spawnMinSpeed);
+    addParameter(spawnMaxSpeed);
 
+    addParameter(density);
     addParameter(scatter);
-    addParameter(speedFactor);
+    addParameter(speedMult);
     addParameter(maxSpeed);
     addParameter(turnSec);
     addParameter(fadeInSec);
     addParameter(fadeOutSec);
+
     addParameter(size);
-    addParameter(waveNumber);
+    addParameter(detail);
+    addParameter(ripple);
+    addParameter(palette);
+    addParameter(palShift);
   }
 
   public void run(double deltaMs) {
@@ -137,11 +145,11 @@ public class Flock extends SLPattern {
   }
 
   void spawnBirds(float deltaSec, PVector focus, PVector vel) {
-    float trigMin = triggerMinSpeed.getValuef(); //<>//
-    float trigMax = triggerMaxSpeed.getValuef();
+    float spawnMin = spawnMinSpeed.getValuef(); //<>//
+    float spawnMax = spawnMaxSpeed.getValuef();
     float speed = vel.mag();
-    if (speed > trigMin) {
-      numToSpawn += deltaSec * density.getValuef() * (speed - trigMin) / (trigMax - trigMin);
+    if (speed > spawnMin) {
+      numToSpawn += deltaSec * density.getValuef() * (speed - spawnMin) / (spawnMax - spawnMin);
       while (numToSpawn >= 1.0) {
         spawnBird(focus);
         numToSpawn -= 1.0;
@@ -151,13 +159,13 @@ public class Flock extends SLPattern {
 
   void spawnBird(PVector focus) {
     PVector pos = getRandomUnitVector();
-    pos.mult(radius.getValuef());
+    pos.mult(spawnRadius.getValuef());
     pos.add(focus);
     birds.add(new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100)));
   }
 
   void advanceBirds(float deltaSec, PVector vel) {
-    PVector targetVel = PVector.mult(vel, speedFactor.getValuef());
+    PVector targetVel = PVector.mult(vel, speedMult.getValuef());
     for (Bird b : birds) {
       b.run(deltaSec, targetVel);
     }
@@ -194,6 +202,14 @@ public class Flock extends SLPattern {
     }
   }
 
+  SortedSet<Bird> getSortedSet(Set<Bird> birds) {
+    SortedSet<Bird> result = new TreeSet<Bird>();
+    for (Bird b : birds) {
+      result.add(b);
+    }
+    return result;
+  }
+
   SortedSet<Bird> getSubSet(SortedSet<Bird> birds, float xLow, float xHigh) {
     Bird low = new Bird(new PVector(xLow, 0, 0), 0);
     Bird high = new Bird(new PVector(xHigh, 0, 0), 0);
@@ -226,23 +242,32 @@ public class Flock extends SLPattern {
   }
 
   void renderPlasma() {
-    ColorPalette pal = skyPalettes.getPalette("sunset sunset");
-    double waveNum = waveNumber.getValuef();
-    double extent = size.getValuef() * waveNum;
+    ColorPalette pal = skyPalettes.getPalette(palette.getOption());
+    float waveNumber = detail.getValuef();
+    float extent = size.getValuef();
+    float rippleSpeed = ripple.getValuef();
+    SortedSet<Bird> sortedBirds = getSortedSet(birds);
+    Bird low = new Bird(new PVector(0, 0, 0), 0);
+    Bird high = new Bird(new PVector(0, 0, 0), 0);
     for (LXPoint p : model.points) {
+      low.pos.x = p.x - extent;
+      high.pos.x = p.x + extent;
       double sum = 0;
-      for (Bird b : birds) {
-        if (Math.abs(b.pos.x - p.x) < extent && Math.abs(b.pos.y - p.y) < extent) {
-          double dist = Math.sqrt(
-              (b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y) + (b.pos.z - p.z)*(b.pos.z - p.z)
-          ) / extent;
-          if (dist < 1) {
-            double a = (1 - dist*dist);
-            sum += a*a*Math.sin(waveNum * 2 * Math.PI * dist)*Math.cos(waveNum * 5/4 * dist)*b.value;
+      for (Bird b : sortedBirds.subSet(low, high)) {
+        if (Math.abs(b.pos.y - p.y) < extent) {
+          double sqDist = (
+              (b.pos.x - p.x)*(b.pos.x - p.x) +
+              (b.pos.y - p.y)*(b.pos.y - p.y) +
+              (b.pos.z - p.z)*(b.pos.z - p.z)
+          ) / (extent*extent);
+          if (sqDist < 1) {
+            double dist = Math.sqrt(sqDist);
+            double a = 1 - sqDist;
+            sum += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*b.value;
           }
         }
       }
-      colors[p.index] = pal.getColor(sum + 0.5);
+      colors[p.index] = pal.getColor(sum + palShift.getValuef());
     }
   }
 
