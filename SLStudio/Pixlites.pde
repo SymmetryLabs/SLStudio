@@ -313,7 +313,6 @@ public class ArtNetDatagram extends LXDatagram {
 
   @Override
   public void onSend(int[] colors) {
-    println("-");
     copyPoints(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
 
     if (this.sequenceEnabled) {
