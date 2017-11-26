@@ -87,7 +87,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter spawnMinSpeed = new CompoundParameter("spMin", 2, 0, 40);  // minimum focus speed (m/s) that spawns birds
   CompoundParameter spawnMaxSpeed = new CompoundParameter("spMax", 20, 0, 40);  // maximum focus speed (m/s) that spawns birds
   
-  CompoundParameter density = new CompoundParameter("density", 5, 0, 10);  // maximum spawn rate (birds/s)
+  CompoundParameter density = new CompoundParameter("density", 2, 0, 4);  // maximum spawn rate (birds/s)
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (m/s)
@@ -96,7 +96,8 @@ public class FlockWave extends SLPattern {
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
 
   CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (m)
-  CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple frequency (number of waves)
+  CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
+  CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
   DiscreteParameter palette = new DiscreteParameter("palette", skyPalettes.getNames());  // selected colour palette
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
 
@@ -112,17 +113,18 @@ public class FlockWave extends SLPattern {
     addParameter(spawnRadius);
     addParameter(spawnMinSpeed);
     addParameter(spawnMaxSpeed);
-    addParameter(density);
 
+    addParameter(density);
     addParameter(scatter);
     addParameter(speedMult);
     addParameter(maxSpeed);
     addParameter(turnSec);
     addParameter(fadeInSec);
     addParameter(fadeOutSec);
+
     addParameter(size);
     addParameter(detail);
-    
+    addParameter(ripple);
     addParameter(palette);
     addParameter(palShift);
   }
@@ -243,6 +245,7 @@ public class FlockWave extends SLPattern {
     ColorPalette pal = skyPalettes.getPalette(palette.getOption());
     float waveNumber = detail.getValuef();
     float extent = size.getValuef();
+    float rippleSpeed = ripple.getValuef();
     SortedSet<Bird> sortedBirds = getSortedSet(birds);
     Bird low = new Bird(new PVector(0, 0, 0), 0);
     Bird high = new Bird(new PVector(0, 0, 0), 0);
@@ -260,7 +263,7 @@ public class FlockWave extends SLPattern {
           if (sqDist < 1) {
             double dist = Math.sqrt(sqDist);
             double a = 1 - sqDist;
-            sum += a*a*Math.sin(waveNumber * 2 * Math.PI * dist)*Math.cos(waveNumber * 5/4 * dist)*b.value;
+            sum += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*b.value;
           }
         }
       }

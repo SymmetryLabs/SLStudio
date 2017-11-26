@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511734496697,
+  "timestamp": 1511735618270,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -383,20 +383,21 @@
               "x": 1565.1300663796278,
               "y": 9.6399888144432,
               "z": 16.371658325195312,
-              "spRad": 130,
-              "spMin": 9,
-              "spMax": 60,
-              "density": 2.6,
-              "scatter": 300,
+              "spRad": 130.0,
+              "spMin": 9.0,
+              "spMax": 60.0,
+              "density": 2.0,
+              "scatter": 300.0,
               "spdMult": 0.5,
               "maxSpd": 30,
-              "turnSec": 0.6800000071525574,
-              "fadeInSec": 1,
-              "fadeOutSec": 2,
-              "size": 360,
+              "turnSec": 1.0,
+              "fadeInSec": 1.0,
+              "fadeOutSec": 2.0,
+              "size": 360.0,
               "detail": 4.0,
+              "ripple": 2.4,
               "palette": 5,
-              "palShift": 0.4899999890476465
+              "palShift": 0.5
             },
             "modulation": {
               "modulators": [
