@@ -58,7 +58,7 @@ public SLModel buildModel() {
 
   /* Suns ------------------------------------------------------------*/
   List<Sun> suns = new ArrayList<Sun>();
-  final boolean USE_ONLY_ONE_SUN = false;
+  final boolean USE_ONLY_ONE_SUN = true;
   
   if (USE_ONLY_ONE_SUN) {
       suns.add(new Sun("sun7", Sun.Type.FULL, new float[] {1650, 160, 0}, new float[] {0, 0, 0}, transform));
