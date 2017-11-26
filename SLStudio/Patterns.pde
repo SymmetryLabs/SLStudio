@@ -84,8 +84,8 @@ public class Flock extends SLPattern {
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
   CompoundParameter radius = new CompoundParameter("radius", 100, 0, 1000);  // radius (m) within which to spawn birds
-  CompoundParameter triggerMinSpeed = new CompoundParameter("trigMin", 10, 0, 100);  // minimum focus speed (m/s) that spawns birds
-  CompoundParameter triggerMaxSpeed = new CompoundParameter("trigMax", 50, 0, 100);  // maximum focus speed (m/s) that spawns birds
+  CompoundParameter triggerMinSpeed = new CompoundParameter("trigMin", 2, 0, 40);  // minimum focus speed (m/s) that spawns birds
+  CompoundParameter triggerMaxSpeed = new CompoundParameter("trigMax", 20, 0, 40);  // maximum focus speed (m/s) that spawns birds
   CompoundParameter density = new CompoundParameter("density", 5, 0, 10);  // maximum spawn rate (birds/s)
 
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
@@ -130,19 +130,22 @@ public class Flock extends SLPattern {
       spawnBirds(deltaSec, focus, vel);
       advanceBirds(deltaSec, vel);
       removeExpiredBirds();
+      println("deltaMs: " + deltaMs + " / speed: " + vel.mag() + " / birds: " + birds.size());
     }
     renderBirds();
     prevFocus = focus;
-    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
   }
 
   void spawnBirds(float deltaSec, PVector focus, PVector vel) {
     float trigMin = triggerMinSpeed.getValuef(); //<>//
     float trigMax = triggerMaxSpeed.getValuef();
-    numToSpawn += deltaSec * density.getValuef() * (vel.mag() - trigMin) / (trigMax - trigMin);
-    while (numToSpawn >= 1.0) {
-      spawnBird(focus);
-      numToSpawn -= 1.0;
+    float speed = vel.mag();
+    if (speed > trigMin) {
+      numToSpawn += deltaSec * density.getValuef() * (speed - trigMin) / (trigMax - trigMin);
+      while (numToSpawn >= 1.0) {
+        spawnBird(focus);
+        numToSpawn -= 1.0;
+      }
     }
   }
 
