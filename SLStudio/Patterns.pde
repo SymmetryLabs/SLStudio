@@ -98,7 +98,7 @@ public class Flock extends SLPattern {
   CompoundParameter waveNumber = new CompoundParameter("waveNum", 4, 0, 10);
 
   PVector prevFocus = null;
-  SortedSet<Bird> birds = new TreeSet<Bird>();
+  Set<Bird> birds = new HashSet<Bird>();
   float numToSpawn = 0;
 
   public Flock(LX lx) {
@@ -194,6 +194,14 @@ public class Flock extends SLPattern {
     }
   }
 
+  SortedSet<Bird> getSortedSet(Set<Bird> birds) {
+    SortedSet<Bird> result = new TreeSet<Bird>();
+    for (Bird b : birds) {
+      result.add(b);
+    }
+    return result;
+  }
+
   SortedSet<Bird> getSubSet(SortedSet<Bird> birds, float xLow, float xHigh) {
     Bird low = new Bird(new PVector(xLow, 0, 0), 0);
     Bird high = new Bird(new PVector(xHigh, 0, 0), 0);
@@ -227,12 +235,17 @@ public class Flock extends SLPattern {
 
   void renderPlasma() {
     ColorPalette pal = skyPalettes.getPalette("sunset sunset");
-    double waveNum = waveNumber.getValuef();
-    double extent = size.getValuef() * waveNum;
+    float waveNum = waveNumber.getValuef();
+    float extent = size.getValuef() * waveNum;
+    SortedSet<Bird> sortedBirds = getSortedSet(birds);
+    Bird low = new Bird(new PVector(0, 0, 0), 0);
+    Bird high = new Bird(new PVector(0, 0, 0), 0);
     for (LXPoint p : model.points) {
+      low.pos.x = p.x - extent;
+      high.pos.x = p.x + extent;
       double sum = 0;
-      for (Bird b : birds) {
-        if (Math.abs(b.pos.x - p.x) < extent && Math.abs(b.pos.y - p.y) < extent) {
+      for (Bird b : sortedBirds.subSet(low, high)) {
+        if (Math.abs(b.pos.y - p.y) < extent) {
           double dist = Math.sqrt(
               (b.pos.x - p.x)*(b.pos.x - p.x) + (b.pos.y - p.y)*(b.pos.y - p.y) + (b.pos.z - p.z)*(b.pos.z - p.z)
           ) / extent;
