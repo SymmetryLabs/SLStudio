@@ -307,3 +307,113 @@ public class LightSource extends SLPattern {
     }
   }
 }
+
+public class FlockWaveThreaded extends FlockWave {
+
+  private SimulationThread simThread;
+  private ModelIndex modelIndex;
+  private float[] colorValues;
+
+  public FlockWaveThreaded(LX lx) {
+    super(lx);
+
+    colorValues = new float[colors.length];
+    modelIndex = new OctreeIndex(lx.model);
+    simThread = new SimulationThread();
+  }
+
+  @Override
+  public void onActive() {
+    simThread.start();
+  }
+
+  @Override
+  public void onInactive() {
+    simThread.shutdown();
+    simThread = new SimulationThread();
+  }
+
+  protected void simulate(double deltaMs) {
+    float deltaSec = (float)deltaMs * 0.001;
+
+    PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+    if (prevFocus != null) {
+      PVector vel = PVector.sub(focus, prevFocus);
+      vel.div(deltaSec);
+
+      spawnBirds(deltaSec, focus, vel);
+      advanceBirds(deltaSec, vel);
+      removeExpiredBirds();
+
+      //println("deltaMs: " + deltaMs + " / speed: " + vel.mag() + " / birds: " + birds.size());
+    }
+
+    prevFocus = focus;
+  }
+
+  @Override
+  public synchronized void run(double deltaMs) {
+    for (int i = 0; i < colorValues.length; ++i) {
+      colorValues[i] = 0f;
+    }
+
+    final float waveNumber = detail.getValuef();
+    final float extent = size.getValuef();
+    final float rippleSpeed = ripple.getValuef();
+
+    birds.parallelStream().forEach(new Consumer<SLStudio.FlockWave.Bird>() {
+      @Override
+      public void accept(final SLStudio.FlockWave.Bird b) {
+        LXPoint bp = new LXPoint(b.pos.x, b.pos.y, b.pos.z);
+
+        List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(bp, extent);
+        for (ModelIndex.PointDist pd : pointDists) {
+          double dist = pd.d / extent;
+          if (dist < 1) {
+            double a = 1f - dist * dist;
+            colorValues[pd.p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*b.value;
+          }
+        }
+      }
+    });
+
+    ColorPalette pal = skyPalettes.getPalette(palette.getOption());
+
+    for (LXPoint p : model.points) {
+      colors[p.index] = pal.getColor(colorValues[p.index] + palShift.getValuef());
+    }
+  }
+
+  private class SimulationThread extends Thread {
+    private final int PERIOD = 8;
+
+    private boolean running = true;
+
+    public void shutdown() {
+      running = false;
+      interrupt();
+    }
+
+    @Override
+    public void run() {
+      long lastTime = System.currentTimeMillis();
+      while (running) {
+        long elapsed = System.currentTimeMillis() - lastTime;
+        if (elapsed < PERIOD) {
+          try {
+            sleep(PERIOD - elapsed);
+          }
+          catch (InterruptedException e) { /* pass */ }
+        }
+
+        long t = System.currentTimeMillis();
+        double deltaMs = t - lastTime;
+        lastTime = t;
+
+        synchronized (FlockWaveThreaded.this) {
+          simulate(deltaMs);
+        }
+      }
+    }
+  }
+}

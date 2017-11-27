@@ -155,7 +155,17 @@ public abstract class ParticlePattern extends ThreadedPattern {
     particleCount.setValue(numParticles);
 
     simThread = new SimulationThread();
+  }
+
+  @Override
+  public void onActive() {
     simThread.start();
+  }
+
+  @Override
+  public void onInactive() {
+    simThread.shutdown();
+    simThread = new SimulationThread();
   }
 
   protected float kernel(float d, float s) {
@@ -178,12 +188,13 @@ public abstract class ParticlePattern extends ThreadedPattern {
       brightnessBuffer[i] = 0f;
     }
 
-    for (Particle particle : particles) {
-      LXPoint pp = particle.toPointInModel(lx.model);
-      float withinDist = particle.size * kernelSize.getValuef();
-      List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(pp, withinDist);
-      for (ModelIndex.PointDist pointDist : pointDists) {
-        if (pointDist.d < withinDist) {
+    particles.parallelStream().forEach(new Consumer<Particle>() {
+      @Override
+      public void accept(final Particle particle) {
+        LXPoint pp = particle.toPointInModel(lx.model);
+        float withinDist = particle.size * kernelSize.getValuef();
+        List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(pp, withinDist);
+        for (ModelIndex.PointDist pointDist : pointDists) {
           brightnessBuffer[pointDist.p.index] += kernel(
             pp.x - pointDist.p.x,
             pp.y - pointDist.p.y,
@@ -192,7 +203,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
           );
         }
       }
-    }
+    });
 
     super.run(deltaMs);
   }
@@ -237,18 +248,20 @@ public abstract class ParticlePattern extends ThreadedPattern {
     public void run() {
       long lastTime = System.currentTimeMillis();
       while (running) {
-        long t = System.currentTimeMillis();
-        synchronized (ParticlePattern.this) {
-          simulate(t - lastTime);
-        }
-        lastTime = t;
-
-        long ellapsed = System.currentTimeMillis() - t;
-        if (ellapsed < PERIOD) {
+        long elapsed = System.currentTimeMillis() - lastTime;
+        if (elapsed < PERIOD) {
           try {
-            sleep(PERIOD - ellapsed);
+            sleep(PERIOD - elapsed);
           }
           catch (InterruptedException e) { /* pass */ }
+        }
+
+        long t = System.currentTimeMillis();
+        double deltaMs = t - lastTime;
+        lastTime = t;
+
+        synchronized (ParticlePattern.this) {
+          simulate(deltaMs);
         }
       }
     }
@@ -290,11 +303,12 @@ public class Wasps extends ParticlePattern {
 
   @Override
   protected void simulate(double deltaMs) {
-    float accelValue = 0.04f * accel.getValuef();
+    float timeBoost = 30;
+    float timeStep = 1;//timeBoost * (float)deltaMs / 1000f;
+
+    float accelValue = 0.04f * accel.getValuef() * timeStep;
     float dampenValue = 0.05f * dampen.getValuef();
     float gravityValue = 0.0005f * gravity.getValuef();
-
-    //System.out.println("accelValue: " + accelValue + ", dampenValue: " + dampenValue + ", gravityValue: " + gravityValue);
 
     for (int i = 0; i < particles.size(); ++i) {
       Particle p = particles.get(i);
@@ -323,9 +337,9 @@ public class Wasps extends ParticlePattern {
       }
       */
 
-      p.pos[0] += p.vel[0];
-      p.pos[1] += p.vel[1];
-      p.pos[2] += p.vel[2];
+      p.pos[0] += p.vel[0] * timeStep;
+      p.pos[1] += p.vel[1] * timeStep;
+      p.pos[2] += p.vel[2] * timeStep;
 
       //p.size = (float)Math.min(1 + 50000 * Math.abs(p.vel[0] * p.vel[1] * p.vel[2]), 10);
       //p.size = (float)Math.min(1 + 1000 * Math.abs(p.vel[0] * p.vel[2]), 10);
