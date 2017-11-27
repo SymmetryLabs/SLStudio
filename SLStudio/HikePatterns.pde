@@ -110,7 +110,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
   public final CompoundParameter kernelSize = new CompoundParameter("size", 100, 0, 400);
 
   public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
-  public final CompoundParameter saturation = new CompoundParameter("saturation", 100, 0, 100);
+  public final CompoundParameter saturation = new CompoundParameter("saturation", 30, 0, 100);
 
   protected List<Particle> particles = new ArrayList<Particle>();
   protected ModelIndex modelIndex;
@@ -258,8 +258,8 @@ public abstract class ParticlePattern extends ThreadedPattern {
 public class Wasps extends ParticlePattern {
   private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
-  public final CompoundParameter accel = new CompoundParameter("accel", 0.5f, 0, 1);
-  public final CompoundParameter dampen = new CompoundParameter("dampen", 0.5f, 0, 1);
+  public final CompoundParameter accel = new CompoundParameter("accel", 0.15f, 0, 1);
+  public final CompoundParameter dampen = new CompoundParameter("dampen", 0.75f, 0, 1);
   public final CompoundParameter gravity = new CompoundParameter("gravity", 0.5f, 0, 1);
   public final CompoundParameter focusX = new CompoundParameter("focusX", 0.5f, 0, 1);
   public final CompoundParameter focusY = new CompoundParameter("focusY", 0.5f, 0, 1);
