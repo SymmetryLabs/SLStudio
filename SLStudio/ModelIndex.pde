@@ -13,11 +13,7 @@ public static abstract class ModelIndex {
     return (float)Math.sqrt(x_diff * x_diff + y_diff * y_diff + z_diff * z_diff);
   }
 
-  public List<PointDist> pointsWithin(LXPoint target, float d) {
-    return pointsWithin(target, d, -1);
-  }
-
-  public abstract List<PointDist> pointsWithin(LXPoint target, float d, int limit);
+  public abstract List<PointDist> pointsWithin(LXPoint target, float d);
   public abstract PointDist nearestPoint(LXPoint target);
 
   public static class PointDist {
@@ -37,18 +33,13 @@ public static class LinearIndex extends ModelIndex {
   }
 
   @Override
-  public List<PointDist> pointsWithin(LXPoint target, float d, int limit) {
+  public List<PointDist> pointsWithin(LXPoint target, float d) {
     List<PointDist> nearbyPoints = new ArrayList<PointDist>();
     for (LXPoint p : fixture.getPoints()) {
-      if (limit == 0)
-        break;
-
       float pd = pointDistance(target, p);
       if (pd <= d) {
         nearbyPoints.add(new PointDist(p, pd));
       }
-
-      --limit;
     }
     return nearbyPoints;
   }
@@ -70,6 +61,7 @@ public static class LinearIndex extends ModelIndex {
 
 public static class KDTreeIndex extends ModelIndex {
   private KDTree<LXPoint> kd;
+
   public KDTreeIndex(LXFixture fixture) {
     super(fixture);
 
@@ -86,7 +78,7 @@ public static class KDTreeIndex extends ModelIndex {
   }
 
   @Override
-  public List<PointDist> pointsWithin(LXPoint target, float d, int limit) {
+  public List<PointDist> pointsWithin(LXPoint target, float d) {
     List<PointDist> nearbyPoints = new ArrayList<PointDist>();
 
     List<LXPoint> nearby = null;
@@ -102,13 +94,8 @@ public static class KDTreeIndex extends ModelIndex {
       return nearbyPoints;
 
     for (LXPoint p : nearby) {
-      if (limit == 0)
-        break;
-
       float pd = pointDistance(target, p);
       nearbyPoints.add(new PointDist(p, pd));
-
-      --limit;
     }
 
     return nearbyPoints;
@@ -119,6 +106,66 @@ public static class KDTreeIndex extends ModelIndex {
     LXPoint nearest = null;
     try {
       nearest = kd.nearest(new double[] {target.x, target.y, target.z});
+    }
+    catch (Exception e) {
+      System.err.println("Exception while finding nearest point: " + e.getMessage());
+    }
+
+    if (nearest == null)
+      return null;
+
+    return new PointDist(nearest, pointDistance(target, nearest));
+  }
+}
+
+public static class OctreeIndex extends ModelIndex {
+  private FixedWidthOctree<LXPoint> ot;
+
+  public OctreeIndex(LXModel model) {
+    super(model);
+
+    ot = new FixedWidthOctree<LXPoint>(model.cx, model.cy, model.cz,
+                max(model.xRange, model.yRange, model.zRange), 5);
+
+    for (LXPoint point : model.getPoints()) {
+      try {
+        ot.insert(point.x, point.y, point.z, point);
+      }
+      catch (Exception e) {
+        System.err.println("Exception while building Octree: " + e.getMessage());
+      }
+    }
+  }
+
+  @Override
+  public List<PointDist> pointsWithin(LXPoint target, float d) {
+    List<PointDist> nearbyPoints = new ArrayList<PointDist>();
+
+    List<LXPoint> nearby = null;
+
+    try {
+      nearby = ot.withinDistance((float)target.x, (float)target.y, (float)target.z, d);
+    }
+    catch (Exception e) {
+      System.err.println("Exception while finding nearest points: " + e.getMessage());
+    }
+
+    if (nearby == null)
+      return nearbyPoints;
+
+    for (LXPoint p : nearby) {
+      float pd = pointDistance(target, p);
+      nearbyPoints.add(new PointDist(p, pd));
+    }
+
+    return nearbyPoints;
+  }
+
+  @Override
+  public PointDist nearestPoint(LXPoint target) {
+    LXPoint nearest = null;
+    try {
+      nearest = ot.nearest((float)target.x, (float)target.y, (float)target.z);
     }
     catch (Exception e) {
       System.err.println("Exception while finding nearest point: " + e.getMessage());
