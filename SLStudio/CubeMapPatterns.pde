@@ -1,9 +1,23 @@
+import heronarts.lx.LX;
+import heronarts.lx.model.LXPoint;
+import heronarts.p3lx.P3LX;
+import processing.core.PGraphics;
+import processing.core.PVector;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 public abstract class P3CubeMapPattern extends SLPattern {
   private final PGraphics pg;
   protected final PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
   private final PVector origin;
   private final PVector bboxSize;
   private final int faceRes;
+
+  private final String id = "" + Math.random();
     
   /**
    * A pattern that projects a cubemap image onto all the LEDs inside a given
@@ -39,52 +53,66 @@ public abstract class P3CubeMapPattern extends SLPattern {
     this.bboxSize = bboxSize;
     this.faceRes = faceRes;
   }
-  
-  @Override
-  final protected void run(double deltaMs) {
-    //pg.beginDraw(); //<>//
-    run(deltaMs, pg);
-    //pg.endDraw();
-    pg.loadPixels();
-    
-    for (LXPoint p : model.points) {
-      PVector v = new PVector(p.x, p.y, p.z).sub(origin);
-      double ax = Math.abs(v.x);
-      double ay = Math.abs(v.y);
-      double az = Math.abs(v.z);
-      
-      // Ignore pixels outside the bounding box.
-      if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) { //<>//
-        continue;
-      }
-      
-      // Avoid division by zero.
-      if (ax == 0 && ay == 0 && az == 0) {
-        colors[p.index] = 0;
-        continue;
-      }
-      
-      // Select the face according to the component with the largest absolute value.
-      if (ax > ay && ax > az) {
-        if (v.x > 0) {  // Right face
-          colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax);
-        } else {  // Left face
-          colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax);
+
+  private Runnable run = new Runnable() {
+    long lastRunAt = System.currentTimeMillis();
+
+    @Override
+    public void run() {
+      double deltaMs = System.currentTimeMillis() - lastRunAt;
+      lastRunAt = System.currentTimeMillis();
+
+      //pg.beginDraw(); //<>//
+      P3CubeMapPattern.this.run(deltaMs, pg);
+      //pg.endDraw();
+      pg.loadPixels();
+
+      for (LXPoint p : model.points) {
+        PVector v = new PVector(p.x, p.y, p.z).sub(origin);
+        double ax = Math.abs(v.x);
+        double ay = Math.abs(v.y);
+        double az = Math.abs(v.z);
+
+        // Ignore pixels outside the bounding box.
+        if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) { //<>//
+          continue;
         }
-      } else if (ay > ax && ay > az) {
-        if (v.y > 0) {  // Up face
-          colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay);
-        } else {  // Down face
-          colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay);
+
+        // Avoid division by zero.
+        if (ax == 0 && ay == 0 && az == 0) {
+          colors[p.index] = 0;
+          continue;
         }
-      } else {
-        if (v.z > 0) {  // Back face
-          colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az);
-        } else {  // Front face
-          colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az);
+
+        // Select the face according to the component with the largest absolute value.
+        if (ax > ay && ax > az) {
+          if (v.x > 0) {  // Right face
+            colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax);
+          } else {  // Left face
+            colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax);
+          }
+        } else if (ay > ax && ay > az) {
+          if (v.y > 0) {  // Up face
+            colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay);
+          } else {  // Down face
+            colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay);
+          }
+        } else {
+          if (v.z > 0) {  // Back face
+            colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az);
+          } else {  // Front face
+            colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az);
+          }
         }
       }
     }
+  };
+
+  private double deltaMsAccumulator = 0;
+  
+  @Override
+  final protected void run(final double deltaMs) {
+    DrawHelper.queueJob(id, this.run);
   }
   
   // Implement this method; it should paint the cubemap image onto pg.
@@ -174,4 +202,34 @@ public class TestCube extends P3CubeMapPattern {
     pg.line(150, 40, 150, 260);
     pg.endDraw();
   }  
+}
+
+/**
+ * A simple job holding class that allows patterns to queue rendering work for the main processing thread, which is
+ * required for using OpenGL and such.
+ *
+ * Simply call DrawHelper.queueJob(id, someRunnable) to have that code executed on the main thread.
+ *
+ * The id should be a unique value per instance of the pattern or other component. Only the latest job added for an id
+ * will be executed.
+ */
+public static class DrawHelper {
+  private static Map<String, Runnable> jobs = Collections.synchronizedMap(new HashMap<String, Runnable>());
+
+  public static void queueJob(String id, Runnable job) {
+    jobs.put(id, job);
+  }
+
+  public static void runAll() {
+    List<Runnable> ourJobs;
+
+    synchronized (jobs) {
+      ourJobs = new ArrayList<Runnable>(jobs.values());
+      jobs.clear();
+    }
+
+    for (Runnable job : ourJobs) {
+      job.run();
+    }
+  }
 }
