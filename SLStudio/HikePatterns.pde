@@ -1,4 +1,5 @@
 import java.util.concurrent.Semaphore;
+import java.util.Collections;
 
 public abstract class ThreadedPattern extends LXPattern {
   private static final int DEFAULT_THREAD_COUNT = 1;
@@ -126,7 +127,8 @@ public abstract class ParticlePattern extends ThreadedPattern {
 
     brightnessBuffer = new float[colors.length];
     //modelIndex = new KDTreeIndex(lx.model);
-    modelIndex = new LinearIndex(lx.model);
+    //modelIndex = new LinearIndex(lx.model);
+    modelIndex = new OctreeIndex(lx.model);
 
     addParameter(particleCount);
     addParameter(kernelSize);
@@ -142,7 +144,9 @@ public abstract class ParticlePattern extends ThreadedPattern {
         }
 
         for (int i = particles.size(); i < numParticles; ++i) {
-          particles.add(new Particle());
+          Particle p = new Particle();
+          initParticle(p);
+          particles.add(p);
         }
       }
     });
@@ -153,14 +157,15 @@ public abstract class ParticlePattern extends ThreadedPattern {
     simThread.start();
   }
 
-  protected float kernel(float x) {
+  protected float kernel(float x, float y, float z) {
+    float d = x * x + y * y + z * z;
     double stddev = kernelSize.getValue() / 4;
     double peak = 1.0f / (2.5f * stddev);
-    float y = (float)(Math.exp(-(x * x) / (2 * stddev * stddev))
+    return (float)(Math.exp(-d / (2 * stddev * stddev))
               / (stddev * SQRT_2PI) / peak);
-    return y;
   }
 
+  protected void initParticle(Particle p) { }
   protected abstract void simulate(double deltaMs);
 
   @Override
@@ -169,12 +174,19 @@ public abstract class ParticlePattern extends ThreadedPattern {
       brightnessBuffer[i] = 0f;
     }
 
-    float withinDist = (float)kernelSize.getValue() * 4f / 10f;
+    float withinDist = (float)kernelSize.getValue();
 
     for (Particle particle : particles) {
-      List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(particle.toPointInModel(lx.model), withinDist);
+      LXPoint pp = particle.toPointInModel(lx.model);
+      List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(pp, withinDist);
       for (ModelIndex.PointDist pointDist : pointDists) {
-        brightnessBuffer[pointDist.p.index] += kernel(pointDist.d);
+        if (pointDist.d < withinDist) {
+          brightnessBuffer[pointDist.p.index] += kernel(
+            pp.x - pointDist.p.x,
+            pp.y - pointDist.p.y,
+            pp.z - pointDist.p.z
+          );
+        }
       }
     }
 
@@ -244,6 +256,7 @@ public class Wasps extends ParticlePattern {
 
   public final BoundedParameter accel = new BoundedParameter("accel", 0.5f, 0, 1);
   public final BoundedParameter dampen = new BoundedParameter("dampen", 0.5f, 0, 1);
+  public final BoundedParameter gravity = new BoundedParameter("gravity", 0.5f, 0, 1);
 
   public Wasps(LX lx) {
     this(lx, 10);
@@ -254,22 +267,35 @@ public class Wasps extends ParticlePattern {
 
     addParameter(accel);
     addParameter(dampen);
+    addParameter(gravity);
+  }
+
+  @Override
+  protected void initParticle(Particle p) {
+    p.pos[0] = (float)(2 * Math.random() - 1);
+    p.pos[1] = (float)(2 * Math.random() - 1);
+    p.pos[2] = (float)(2 * Math.random() - 1);
+    //System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
   }
 
   @Override
   protected void simulate(double deltaMs) {
-    float xGrav = 0.0005f;
-    float yGrav = 0.0005f;//xGrav * (model.yRange + 1) / (model.xRange + 1);
-    float zGrav = 0.0005f;//xGrav * (model.zRange + 1) / (model.xRange + 1);
+    float accelValue = 0.04f * (float)accel.getValue();
+    float dampenValue = 0.05f * (float)dampen.getValue();
+    float gravityValue = 0.0005f * (float)gravity.getValue();
+
+    //System.out.println("accelValue: " + accelValue + ", dampenValue: " + dampenValue + ", gravityValue: " + gravityValue);
+
     for (int i = 0; i < particles.size(); ++i) {
       Particle p = particles.get(i);
+
+      p.vel[0] += (float)(accelValue * (Math.random() - .5) - gravityValue * p.pos[0] - dampenValue * p.vel[0]);
+      p.vel[1] += (float)(accelValue * (Math.random() - .5) - gravityValue * p.pos[1] - dampenValue * p.vel[1]);
+      p.vel[2] += (float)(accelValue * (Math.random() - .5) - gravityValue * p.pos[2] - dampenValue * p.vel[2]);
+
       p.pos[0] += p.vel[0];
       p.pos[1] += p.vel[1];
       p.pos[2] += p.vel[2];
-
-      p.vel[0] += (float)(0.01 * accel.getValue() * (Math.random() - .5) - 0.05 * dampen.getValue() * p.vel[0] - xGrav * p.pos[0]);
-      p.vel[1] += (float)(0.01 * accel.getValue() * (Math.random() - .5) - 0.05 * dampen.getValue() * p.vel[1] - yGrav * p.pos[1]);
-      p.vel[2] += (float)(0.01 * accel.getValue() * (Math.random() - .5) - 0.05 * dampen.getValue() * p.vel[2] - zGrav * p.pos[2]);
 
       //p.size = (float)Math.min(1 + 1000 * Math.abs(p.vel[0] * p.vel[1]), 10);
     }
