@@ -1,3 +1,21 @@
+public class SunOrientation extends SLPattern {
+  public SunOrientation(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    for (Sun sun : this.model.suns) {
+      int i = 0;
+      for (Slice slice : sun.slices) {
+        color col = ((i++ & 1) == 0) ? LXColor.BLUE : LXColor.RED;
+        for (LXPoint p : slice.points) {
+          colors[p.index] = col;
+        }
+      }
+    }
+  }
+}
+
 public class TestSuns extends SLPattern {
 
   public TestSuns(LX lx) {

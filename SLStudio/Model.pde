@@ -150,27 +150,27 @@ public static class Sun extends LXModel {
 
       // create slices...
       if (type != Sun.Type.ONE_THIRD) {
-        slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
-        slices.add(new Slice(id + "_top_back", Slice.Type.FULL, new float[] {48, 0, 0}, new float[] {0, 180, 0}, transform));
+        slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {             0, 0, 0}, new float[] {0,   0, 0}, transform));
+        slices.add(new Slice(id + "_top_back",  Slice.Type.FULL, new float[] {Slice.DIAMETER, 0, 0}, new float[] {0, 180, 0}, transform));
       }
 
       switch (type) {
         case FULL:
-          slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {48, -212, 0}, new float[] {0, 0, 180}, transform));
-          slices.add(new Slice(id + "_bottom_back", Slice.Type.FULL, new float[] {0, -212, 0}, new float[] {0, 180, 180}, transform));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {Slice.DIAMETER, -Slice.DIAMETER, 0}, new float[] {0,   0, 180}, transform));
+          slices.add(new Slice(id + "_bottom_back",  Slice.Type.FULL, new float[] {             0, -Slice.DIAMETER, 0}, new float[] {0, 180, 180}, transform));
           break;
 
         case TWO_THIRDS:
-          slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {48, -212, 0}, new float[] {0, 0, 180}, transform));
-          slices.add(new Slice(id + "_bottom_back", Slice.Type.BOTTOM_ONE_THIRD, new float[] {0, -212, 0}, new float[] {0, 180, 180}, transform));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {Slice.DIAMETER, -Slice.DIAMETER, 0}, new float[] {0,   0, 180}, transform));
+          slices.add(new Slice(id + "_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] {             0, -Slice.DIAMETER, 0}, new float[] {0, 180, 180}, transform));
 
         case ONE_HALF:
           // already done
           break;
 
         case ONE_THIRD:
-          slices.add(new Slice(id + "_top_front", Slice.Type.TWO_THIRDS, new float[] { 0, 0, 0}, new float[] {0, 0, 0}, transform));
-          slices.add(new Slice(id + "_top_back", Slice.Type.TWO_THIRDS, new float[] {48, 0, 0}, new float[] {0, 180, 0}, transform));
+          slices.add(new Slice(id + "_top_front", Slice.Type.TWO_THIRDS, new float[] {             0, 0, 0}, new float[] {0,   0, 0}, transform));
+          slices.add(new Slice(id + "_top_back",  Slice.Type.TWO_THIRDS, new float[] {Slice.DIAMETER, 0, 0}, new float[] {0, 180, 0}, transform));
           break;
       }
 
@@ -191,8 +191,6 @@ public static class Sun extends LXModel {
 
 public static class Slice extends LXModel {
 
-  public final static float DIAMETER = 4*12;
-
   public enum Type {
     FULL, TWO_THIRDS, BOTTOM_ONE_THIRD
   };
@@ -200,11 +198,13 @@ public static class Slice extends LXModel {
   private static final int[] NUM_POINTS_PER_STRIP = { // top to bottom
      9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  77,  81,  85,  89,  91,  95,  97, 101,
    103, 107, 109, 111, 113, 115, 119, 121, 123, 125, 127, 129, 129, 131, 133, 135, 137, 137,
-   139, 141, 141, 143, 145, 145, 147, 147, 149, 149, 151, 151, 153, 153, 153, 155, 155, 155,
-   157, 157, 157, 157, 159, 159, 159, 159, 159, 161, 161, 161, 161, 161, 161, 161, 161
+   139, 141, 141, 143, 145, 145, 147, 147, 149, 149, 151, 151, 153, 153, 154, 155, 155, 155,
+   157, 157, 157, 157, 159, 159, 159, 159, 159, 161, 161, 161, 161, 161, 161
   };
 
-  private static final float STRIP_SPACING = 1.5; // not final
+  private static final int NUM_STRIPS = NUM_POINTS_PER_STRIP.length;
+  private static final float STRIP_SPACING = 0.7;
+  public final static float DIAMETER = 8*FEET;
 
   public final String id;
   public final Type type;
@@ -243,22 +243,22 @@ public static class Slice extends LXModel {
 
       // create curved strips...
       if (type != Slice.Type.BOTTOM_ONE_THIRD) {
-        for (int i = 0; i < NUM_POINTS_PER_STRIP.length; i++) {
+        for (int i = 0; i < NUM_STRIPS; i++) {
           if (type == Slice.Type.TWO_THIRDS && i > 48) {
             break;
           }
 
           int numPoints = NUM_POINTS_PER_STRIP[i];
-          float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH;
+          float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH / 2.6;
           float stripX = (DIAMETER - stripWidth) / 2;
 
           CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
           strips.add(new CurvedStrip(Integer.toString(i+1), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
         }
       } else {
-        for (int i = 49; i < NUM_POINTS_PER_STRIP.length; i++) {
+        for (int i = 49; i < NUM_STRIPS; i++) {
           int numPoints = NUM_POINTS_PER_STRIP[i];
-          float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH;
+          float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH / 2.6;
           float stripX = (DIAMETER - stripWidth) / 2;
 
           CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
@@ -313,7 +313,6 @@ public static class CurvedStrip extends Strip {
 
       for (int i = 0; i < metrics.numPoints; i++) {
         transform.push();
-
         float t = i / (float)metrics.numPoints;
         float x = bezierPoint(0, metrics.arcWidth*0.2, metrics.arcWidth*0.8, metrics.arcWidth, t);
         float z = bezierPoint(0, metrics.arcWidth*-0.3,metrics.arcWidth*-0.3, 0, t);

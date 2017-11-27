@@ -1,14 +1,8 @@
 Pixlite[] setupPixlites(LX lx) {
-  Pixlite[] pixlites = new Pixlite[35];
-
-  // temporary
-  int counter = 0;
-  //for (int i = 10; i < 45; i++) {
-    //  pixlites[counter++] = new Pixlite(lx, "10.200.1."+i, model.slices.get(0));
-  //}
-
   return new Pixlite[] {
-    new Pixlite(lx, "10.200.1.35", model.slices.get(0))
+    // Sun 4 (One Half)
+    new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_front")), // A
+    new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_back")),  // B
   };
 }
  
@@ -126,7 +120,7 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("52").points)
       ));
 
-      addChild(new PixliteOutput(lx, ipAddress,
+      addChild(new PixliteOutput(lx, ipAddress, 
         new PointsGrouping("11")
           .addPoints(slice.getStripById("53").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("54").points)
@@ -164,9 +158,7 @@ public class Pixlite extends LXOutputGroup {
 
       addChild(new PixliteOutput(lx, ipAddress,
         new PointsGrouping("16")
-          .addPoints(slice.getStripById("69").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("70").points)
-          .addPoints(slice.getStripById("71").points, PointsGrouping.REVERSE_ORDERING)
+          .addPoints(slice.getStripById("69").points, PointsGrouping.REVERSE_ORDERING)  
       ));
     }
   }
@@ -253,9 +245,7 @@ public class PointsGrouping {
     if (reverseOrdering) {
       Collections.reverse(Arrays.asList(localPointsToAdd));
     }
-    for (LXPoint p : localPointsToAdd) {
-      this.points.add(p);
-    }
+    addPoints(localPointsToAdd);
     return this;
   }
 }
