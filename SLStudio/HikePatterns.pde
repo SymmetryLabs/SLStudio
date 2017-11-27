@@ -2,7 +2,7 @@ import java.util.concurrent.Semaphore;
 import java.util.Collections;
 
 public abstract class ThreadedPattern extends LXPattern {
-  private static final int DEFAULT_THREAD_COUNT = 1;
+  private static final int DEFAULT_THREAD_COUNT = 4;
 
   private List<RenderThread> renderThreads = new ArrayList<RenderThread>();
 
@@ -106,11 +106,11 @@ public abstract class ParticlePattern extends ThreadedPattern {
   private static final int DEFAULT_PARTICLE_COUNT = 10;
   private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
-  public final BoundedParameter particleCount = new BoundedParameter("count", 0, 0, 50);
-  public final BoundedParameter kernelSize = new BoundedParameter("size", 100, 0, 400);
+  public final BoundedParameter particleCount = new BoundedParameter("count", 0, 0, 100);
+  public final CompoundParameter kernelSize = new CompoundParameter("size", 100, 0, 400);
 
-  public final BoundedParameter hue = new BoundedParameter("hue", 0, 0, 360);
-  public final BoundedParameter saturation = new BoundedParameter("saturation", 100, 0, 100);
+  public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
+  public final CompoundParameter saturation = new CompoundParameter("saturation", 100, 0, 100);
 
   protected List<Particle> particles = new ArrayList<Particle>();
   protected ModelIndex modelIndex;
@@ -126,6 +126,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
     super(lx);
 
     brightnessBuffer = new float[colors.length];
+
     //modelIndex = new KDTreeIndex(lx.model);
     //modelIndex = new LinearIndex(lx.model);
     modelIndex = new OctreeIndex(lx.model);
@@ -157,12 +158,15 @@ public abstract class ParticlePattern extends ThreadedPattern {
     simThread.start();
   }
 
-  protected float kernel(float x, float y, float z) {
-    float d = x * x + y * y + z * z;
-    double stddev = kernelSize.getValue() / 4;
+  protected float kernel(float d, float s) {
+    double stddev = s / 4f;
     double peak = 1.0f / (2.5f * stddev);
-    return (float)(Math.exp(-d / (2 * stddev * stddev))
+    return (float)(Math.exp(-(d * d) / (2 * stddev * stddev))
               / (stddev * SQRT_2PI) / peak);
+  }
+
+  protected float kernel(float x, float y, float z, float s) {
+    return kernel((float)Math.sqrt(x * x + y * y + z * z), s);
   }
 
   protected void initParticle(Particle p) { }
@@ -174,17 +178,17 @@ public abstract class ParticlePattern extends ThreadedPattern {
       brightnessBuffer[i] = 0f;
     }
 
-    float withinDist = (float)kernelSize.getValue();
-
     for (Particle particle : particles) {
       LXPoint pp = particle.toPointInModel(lx.model);
+      float withinDist = particle.size * kernelSize.getValuef();
       List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(pp, withinDist);
       for (ModelIndex.PointDist pointDist : pointDists) {
         if (pointDist.d < withinDist) {
           brightnessBuffer[pointDist.p.index] += kernel(
             pp.x - pointDist.p.x,
             pp.y - pointDist.p.y,
-            pp.z - pointDist.p.z
+            pp.z - pointDist.p.z,
+            withinDist
           );
         }
       }
@@ -254,9 +258,12 @@ public abstract class ParticlePattern extends ThreadedPattern {
 public class Wasps extends ParticlePattern {
   private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
-  public final BoundedParameter accel = new BoundedParameter("accel", 0.5f, 0, 1);
-  public final BoundedParameter dampen = new BoundedParameter("dampen", 0.5f, 0, 1);
-  public final BoundedParameter gravity = new BoundedParameter("gravity", 0.5f, 0, 1);
+  public final CompoundParameter accel = new CompoundParameter("accel", 0.5f, 0, 1);
+  public final CompoundParameter dampen = new CompoundParameter("dampen", 0.5f, 0, 1);
+  public final CompoundParameter gravity = new CompoundParameter("gravity", 0.5f, 0, 1);
+  public final CompoundParameter focusX = new CompoundParameter("focusX", 0.5f, 0, 1);
+  public final CompoundParameter focusY = new CompoundParameter("focusY", 0.5f, 0, 1);
+  public final CompoundParameter focusZ = new CompoundParameter("focusZ", 0.5f, 0, 1);
 
   public Wasps(LX lx) {
     this(lx, 10);
@@ -268,6 +275,9 @@ public class Wasps extends ParticlePattern {
     addParameter(accel);
     addParameter(dampen);
     addParameter(gravity);
+    addParameter(focusX);
+    addParameter(focusY);
+    addParameter(focusZ);
   }
 
   @Override
@@ -280,24 +290,45 @@ public class Wasps extends ParticlePattern {
 
   @Override
   protected void simulate(double deltaMs) {
-    float accelValue = 0.04f * (float)accel.getValue();
-    float dampenValue = 0.05f * (float)dampen.getValue();
-    float gravityValue = 0.0005f * (float)gravity.getValue();
+    float accelValue = 0.04f * accel.getValuef();
+    float dampenValue = 0.05f * dampen.getValuef();
+    float gravityValue = 0.0005f * gravity.getValuef();
 
     //System.out.println("accelValue: " + accelValue + ", dampenValue: " + dampenValue + ", gravityValue: " + gravityValue);
 
     for (int i = 0; i < particles.size(); ++i) {
       Particle p = particles.get(i);
 
-      p.vel[0] += (float)(accelValue * (Math.random() - .5) - gravityValue * p.pos[0] - dampenValue * p.vel[0]);
-      p.vel[1] += (float)(accelValue * (Math.random() - .5) - gravityValue * p.pos[1] - dampenValue * p.vel[1]);
-      p.vel[2] += (float)(accelValue * (Math.random() - .5) - gravityValue * p.pos[2] - dampenValue * p.vel[2]);
+      float fx = gravityValue * (p.pos[0] - 2 * focusX.getValuef() + 1);
+      float fy = gravityValue * (p.pos[1] - 2 * focusY.getValuef() + 1);
+      float fz = gravityValue * (p.pos[2] - 2 * focusZ.getValuef() + 1);
+
+      p.vel[0] += (float)(accelValue * (Math.random() - .5) - fx - dampenValue * p.vel[0]);
+      p.vel[1] += (float)(accelValue * (Math.random() - .5) - fy - dampenValue * p.vel[1]);
+      p.vel[2] += (float)(accelValue * (Math.random() - .5) - fz - dampenValue * p.vel[2]);
+
+      /*
+      if (i > i / 2 && i / 2 < particles.size()) {
+        Particle leader = particles.get(i / 2);
+        p.vel[0] -= gravityValue * (p.pos[0] - leader.pos[0]);
+        p.vel[1] -= gravityValue * (p.pos[1] - leader.pos[1]);
+        p.vel[2] -= gravityValue * (p.pos[2] - leader.pos[2]);
+      }
+
+      if (i > i / 2 + 1 && i / 2 + 1 < particles.size()) {
+        Particle enemy = particles.get(i / 2 + 1);
+        p.vel[0] += gravityValue * (p.pos[0] - enemy.pos[0]);
+        p.vel[1] += gravityValue * (p.pos[1] - enemy.pos[1]);
+        p.vel[2] += gravityValue * (p.pos[2] - enemy.pos[2]);
+      }
+      */
 
       p.pos[0] += p.vel[0];
       p.pos[1] += p.vel[1];
       p.pos[2] += p.vel[2];
 
-      //p.size = (float)Math.min(1 + 1000 * Math.abs(p.vel[0] * p.vel[1]), 10);
+      //p.size = (float)Math.min(1 + 50000 * Math.abs(p.vel[0] * p.vel[1] * p.vel[2]), 10);
+      //p.size = (float)Math.min(1 + 1000 * Math.abs(p.vel[0] * p.vel[2]), 10);
     }
   }
 }

@@ -122,7 +122,7 @@ public class FixedWidthOctree<T> {
 
             for (int i = 0; i < 8; ++i) {
                 if (!eliminatedChildren[i]) {
-                childPoints.addAll(children[i].withinDistance(x, y, z, d));
+                    childPoints.addAll(children[i].withinDistance(x, y, z, d));
                 }
             }
         }
