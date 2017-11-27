@@ -57,7 +57,7 @@ public class FlockWave extends SLPattern {
       spawnBirds(deltaSec, focus, vel);
       advanceBirds(deltaSec, vel);
       removeExpiredBirds();
-      println("deltaMs: " + deltaMs + " / speed: " + vel.mag() + " / birds: " + birds.size());
+     // println("deltaMs: " + deltaMs + " / speed: " + vel.mag() + " / birds: " + birds.size());
     }
     renderBirds();
     prevFocus = focus;
