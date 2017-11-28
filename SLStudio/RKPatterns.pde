@@ -6,15 +6,20 @@ public class RKPattern01 extends P3CubeMapPattern {
   CompoundParameter amt = new CompoundParameter("amt", 20, 1, 25);
   CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
   CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
+  CompoundParameter nDsp = new CompoundParameter("nDsp", 1, .125, 2.5);
+
+  int faceRes = 200;
 
   int ringRes = 40, ringAmt = 20, pRingAmt = 20;
   float l1 = 600, l2 = 600, l3 = 600;
   float gTheta, gThetaSpacing, gWeightScalar;
-  float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, thetaSpeed, thetaSpeedT;
+  float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, nDspmt, nDspmtT, thetaSpeed, thetaSpeedT;
   ArrayList <Ring> testRings;
 
   public RKPattern01(LX lx) {
-    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
+
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 200);
+
     testRings = new ArrayList<Ring>();
     for (int i=0; i<ringAmt; i++) {
       Ring testRing = new Ring(ringRes, l1, l2, l3);
@@ -27,6 +32,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     addParameter(amt);
     addParameter(speed);
     addParameter(dsp);
+    addParameter(nDsp);
   }
 
   void run(double deltaMs, PGraphics pg) {
@@ -37,19 +43,23 @@ public class RKPattern01 extends P3CubeMapPattern {
     ringAmt = round(amt.getValuef());
     thetaSpeedT = speed.getValuef();
     dspmtT = dsp.getValuef();
+    nDspmtT = nDsp.getValuef();
+
     rotX = lerp(rotX, rotXT, .1);
     rotY = lerp(rotY, rotYT, .1);
     rotZ = lerp(rotZ, rotZT, .1);
+
     thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .1);
     dspmt = lerp(dspmt, dspmtT, .1);
-    
+    nDspmt = lerp(nDspmt, nDspmtT, .01);
+
     replenish();
 
     gTheta += thetaSpeed/720;
     if (gTheta>PI) gTheta -= PI;
     else if (gTheta<0) gTheta += PI;
     gThetaSpacing = lerp(gThetaSpacing, PI/testRings.size(), .1);
-    gWeightScalar = map(ringAmt, 1, 25, 5, 1);
+    gWeightScalar = map(ringAmt, 1, 25, 2.5, 1);
 
     for (int i=0; i<testRings.size(); i++) {
       Ring testRing = testRings.get(i);
@@ -59,12 +69,12 @@ public class RKPattern01 extends P3CubeMapPattern {
 
     pg.beginDraw();
     pg.background(0);
-    pg.image(pgL, 0, 100);
-    pg.image(pgR, 200, 100);
-    pg.image(pgD, 100, 0);
-    pg.image(pgU, 100, 200);
-    pg.image(pgF, 100, 100);
-    pg.image(pgB, 300, 100);
+    pg.image(pgL, 0, faceRes);
+    pg.image(pgR, faceRes*2, faceRes);
+    pg.image(pgD, faceRes, 0);
+    pg.image(pgU, faceRes, faceRes*2);
+    pg.image(pgF, faceRes, faceRes);
+    pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
   }
 
@@ -155,12 +165,12 @@ public class RKPattern01 extends P3CubeMapPattern {
       pg.strokeWeight(weight);
       pg.beginShape();
       for (int i=0; i<vts.length; i++) {
-        pg.curveVertex(vts[i].pos.x, vts[i].pos.y, vts[i].pos.z);
+        pg.vertex(vts[i].pos.x, vts[i].pos.y, vts[i].pos.z);
       }
-      pg.curveVertex(vts[0].pos.x, vts[0].pos.y, vts[0].pos.z);
-      pg.curveVertex(vts[1].pos.x, vts[1].pos.y, vts[1].pos.z);
-      pg.curveVertex(vts[2].pos.x, vts[2].pos.y, vts[2].pos.z);
-      pg.endShape();
+      //pg.curveVertex(vts[0].pos.x, vts[0].pos.y, vts[0].pos.z);
+      //pg.curveVertex(vts[1].pos.x, vts[1].pos.y, vts[1].pos.z);
+      //pg.curveVertex(vts[2].pos.x, vts[2].pos.y, vts[2].pos.z);
+      pg.endShape(CLOSE);
     }
   }
 
@@ -183,7 +193,7 @@ public class RKPattern01 extends P3CubeMapPattern {
       this.thetaBase = thetaBase;
 
       thetaOfstRange = sin(theta)*dspmt;
-      thetaOfst = (noise(phi+frameCount*.005, cos(this.thetaBase)-frameCount*.005)-.5)*thetaOfstRange;
+      thetaOfst = (noise(sin(phi)*cos(phi)*nDspmt+frameCount*.005, this.thetaBase*nDspmt*.25-frameCount*.005)-.5)*thetaOfstRange;
       theta = this.thetaBase + thetaOfst;
       pos.set(
         sin(theta)*cos(phi)*.5*l1, 
@@ -202,20 +212,23 @@ public class RKPattern02 extends P3CubeMapPattern {
   BooleanParameter noise = new BooleanParameter("noise");
   CompoundParameter speed = new CompoundParameter("speed", .1, 0, .5);
   CompoundParameter dsp = new CompoundParameter("dsp", 1, 0, 2);
+  BooleanParameter edge = new BooleanParameter("show edge", true);
 
+  int faceRes = 200;
   ArrayList <Arc> arcs;
   float f, fT, fTIncre;
   float l1 = 600, l2 = 600, l3 = 600;
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT;
-  boolean autoNoise;
+  float gWeight = 2, gWeightT = 2;
+  boolean autoNoise, showEdge;
   int switchCount;
 
   public RKPattern02(LX lx) {
 
-    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 200);
 
     arcs = new ArrayList<Arc>();
-    Arc parentArc = new Arc(0, 0, 16, 0, PI, 0, TWO_PI);
+    Arc parentArc = new Arc(0, 0, 12, 0, PI, 0, TWO_PI);
     arcs.add(parentArc);
 
     for (int i=0; i<8; i++) {
@@ -231,6 +244,7 @@ public class RKPattern02 extends P3CubeMapPattern {
     addParameter(noise);
     addParameter(speed);
     addParameter(dsp);
+    addParameter(edge);
   }
 
   void run(double deltaMs, PGraphics pg) {
@@ -241,49 +255,68 @@ public class RKPattern02 extends P3CubeMapPattern {
     autoNoise = noise.getValueb();
     dspmtT = dsp.getValuef();
     fTIncre = speed.getValuef();
+    showEdge = edge.getValueb();
+
     rotX = lerp(rotX, rotXT, .1);
     rotY = lerp(rotY, rotYT, .1);
     rotZ = lerp(rotZ, rotZT, .1);
     dspmt = lerp(dspmt, dspmtT, .1);
 
+    if (showEdge) gWeightT = 2;
+    else gWeightT = 0;
+    if (abs(gWeightT-gWeight)<.005) gWeight = gWeightT;
+    else gWeight = lerp(gWeight, gWeightT, .1);
+
     fT += fTIncre*.1;
     f = lerp(f, fT, .1);
 
     if (frameCount%90==0 && !autoNoise) {
-      switchCount = (switchCount+1)%2;
+      switchCount = (switchCount+1)%3;
       if (switchCount == 0) {
+        resetArcs();
+        for (int j=0; j<8; j++) {
+          for (int i=arcs.size()-1; i>-1; i--) {
+            Arc arc = arcs.get(i);
+            if (!arc.hasChildren) arc.splitUp();
+          }
+        }
         for (int i=arcs.size()-1; i>-1; i--) {
           Arc arc = arcs.get(i);
-          if (arc.hasChildren) arc.reset();
+          arc.reset();
         }
       } else {
+        resetArcs();
+        for (int j=0; j<500; j++) {
+          Arc arc = arcs.get(floor(random(arcs.size())));
+          if (!arc.hasChildren) arc.splitUp();
+        }
         for (int i=arcs.size()-1; i>-1; i--) {
           Arc arc = arcs.get(i);
-          if (arc.hasChildren) arc.randomize();
+          arc.randomize();
         }
       }
     }
 
     for (int i=0; i<arcs.size(); i++) {
       Arc arc = arcs.get(i);
-      if (arc.hasChildren) {
-        if (autoNoise) {
-          float scalar = map(arc.lv, 0, 8, dspmt, dspmt*1.5);
-          arc.splitRatio = .5+(noise(arc.idx*.1+f)-.5)*scalar;
-        }
-        arc.update();
+      if (autoNoise) {
+        float scalar = map(arc.lv, 0, 8, dspmt, dspmt*1.5);
+        arc.splitRatio = .5+(noise(arc.idx*.1+f)-.5)*scalar;
+        arc.fragRatioS = (noise(arc.idx*.1+f*2+2.46)-.5)*1.2+.5;
+        arc.fragRatioE = (noise(arc.idx*.1+f*2+11.27)-.5)*1.2+.5;
       }
+      arc.update();
     }
     updateCubeMaps();
 
     pg.beginDraw();
     pg.background(0);
-    pg.image(pgL, 0, 100);
-    pg.image(pgR, 200, 100);
-    pg.image(pgD, 100, 0);
-    pg.image(pgU, 100, 200);
-    pg.image(pgF, 100, 100);
-    pg.image(pgB, 300, 100);
+    pg.image(pgL, 0, faceRes);
+    pg.image(pgR, faceRes*2, faceRes);
+    pg.image(pgD, faceRes, 0);
+    pg.image(pgU, faceRes, faceRes*2);
+    pg.image(pgF, faceRes, faceRes);
+    pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
   }
 
@@ -309,13 +342,14 @@ public class RKPattern02 extends P3CubeMapPattern {
   }
 
   void drawScene(PGraphics pg) {
-    pg.noFill();
-    pg.stroke(255);
-    pg.strokeWeight(2);
     for (int i=0; i<arcs.size(); i++) {
       Arc arc = arcs.get(i);
-      if (arc.hasChildren) arc.display(pg);
+      if (arc.hasChildren) arc.displayEdge(pg);
+      else arc.displayFragment(pg);
     }
+    pg.noFill();
+    pg.stroke(255);
+    pg.strokeWeight(gWeight);
     pg.beginShape();
     for (int i=0; i<16; i++) {
       float phi = 0;
@@ -329,17 +363,27 @@ public class RKPattern02 extends P3CubeMapPattern {
     pg.endShape();
   }
 
+  void resetArcs() {
+    for (int i=arcs.size()-1; i>-1; i--) {
+      arcs.remove(i);
+    }
+    Arc parentArc = new Arc(0, 0, 12, 0, PI, 0, TWO_PI);
+    arcs.add(parentArc);
+  }
+
   class Arc {
 
     Arc cArc1, cArc2;
     boolean hasChildren;
-    int segAmt, lv, idx;
+    int segAmt, lv, idx, dir;
 
     PVector [] vts;
+    PVector [][] fragVts;
 
-    float splitRatio, splitRatioT;
-    float sTheta, eTheta, sPhi, ePhi;
+    float splitRatio, splitRatioT, splitRatioStp;
+    float sTheta, eTheta, sPhi, ePhi, sThetaFrg, eThetaFrg, sPhiFrg, ePhiFrg;
     float l1 = 600, l2 = 600, l3 = 600;
+    float fragRatioS = 0, fragRatioST = .4, fragRatioE = 1, fragRatioET = .6, fragRatioSStp, fragRatioEStp;
 
     Arc(int lv, int idx, int segAmt, float sTheta, float eTheta, float sPhi, float ePhi) {
 
@@ -350,64 +394,129 @@ public class RKPattern02 extends P3CubeMapPattern {
       this.eTheta = eTheta;
       this.sPhi = sPhi;
       this.ePhi = ePhi;
+
+      splitRatioStp = random(.03125, .25);
+      fragRatioSStp = random(.0625, .25);
+      fragRatioEStp = fragRatioSStp;
+
+      fragVts = new PVector[segAmt/2][segAmt/2];
+      for (int i=0; i<segAmt/2; i++) {
+        for (int j=0; j<segAmt/2; j++) {
+          fragVts[i][j] = new PVector();
+        }
+      }
+
+      dir = floor(random(4));
     }
 
     void update() {
-      if (!autoNoise) splitRatio = lerp(splitRatio, splitRatioT, .125);
-      if (lv%2==0) {
-        for (int i=0; i<segAmt; i++) {
-          float phi = sPhi + i*(ePhi-sPhi)/(vts.length-1);
-          float theta = lerp(sTheta, eTheta, splitRatio);
+      if (!autoNoise) {
+        splitRatio = lerp(splitRatio, splitRatioT, splitRatioStp);
+        fragRatioS = lerp(fragRatioS, fragRatioST, fragRatioSStp);
+        fragRatioE = lerp(fragRatioE, fragRatioET, fragRatioEStp);
+      }
 
-          vts[i].set(
-            sin(theta)*cos(phi)*l1*.5, 
-            cos(theta)*l2*.5, 
-            sin(theta)*sin(phi)*l3*.5
-            );
-        }
-        cArc1.sTheta = sTheta;
-        cArc1.eTheta = lerp(sTheta, eTheta, splitRatio);
-        cArc2.sTheta = lerp(sTheta, eTheta, splitRatio);
-        cArc2.eTheta = eTheta;
-        cArc1.sPhi = sPhi;
-        cArc1.ePhi = ePhi;
-        cArc2.sPhi = sPhi;
-        cArc2.ePhi = ePhi;
+      if (dir == 0) {
+        sThetaFrg = sTheta;
+        eThetaFrg = eTheta;
+        sPhiFrg = lerp(sPhi, ePhi, fragRatioS);
+        ePhiFrg = lerp(sPhi, ePhi, fragRatioE);
+      } else if (dir == 1) {
+        sThetaFrg = lerp(sTheta, eTheta, fragRatioS);
+        eThetaFrg = lerp(sTheta, eTheta, fragRatioE);
+        sPhiFrg = sPhi;
+        ePhiFrg = ePhi;
+      } else if (dir == 2) {
+        sThetaFrg = sTheta;
+        eThetaFrg = eTheta;
+        sPhiFrg = lerp(ePhi, sPhi, fragRatioS);
+        ePhiFrg = lerp(ePhi, sPhi, fragRatioE);
       } else {
-        for (int i=0; i<segAmt; i++) {
-          float phi = lerp(sPhi, ePhi, splitRatio);
-          float theta = sTheta + i*(eTheta-sTheta)/(vts.length-1);
+        sThetaFrg = lerp(eTheta, sTheta, fragRatioS);
+        eThetaFrg = lerp(eTheta, sTheta, fragRatioE);
+        sPhiFrg = sPhi;
+        ePhiFrg = ePhi;
+      }
 
-          vts[i].set(
-            sin(theta)*cos(phi)*l1*.5, 
-            cos(theta)*l2*.5, 
-            sin(theta)*sin(phi)*l3*.5
-            );
+      if (hasChildren) {
+        if (lv%2==0) {
+          for (int i=0; i<segAmt; i++) {
+            float phi = sPhi + i*(ePhi-sPhi)/(vts.length-1);
+            float theta = lerp(sTheta, eTheta, splitRatio);
+
+            vts[i].set(
+              sin(theta)*cos(phi)*l1*.5, 
+              cos(theta)*l2*.5, 
+              sin(theta)*sin(phi)*l3*.5
+              );
+          }
+          cArc1.sTheta = sTheta;
+          cArc1.eTheta = lerp(sTheta, eTheta, splitRatio);
+          cArc2.sTheta = lerp(sTheta, eTheta, splitRatio);
+          cArc2.eTheta = eTheta;
+          cArc1.sPhi = sPhi;
+          cArc1.ePhi = ePhi;
+          cArc2.sPhi = sPhi;
+          cArc2.ePhi = ePhi;
+        } else {
+          for (int i=0; i<segAmt; i++) {
+            float phi = lerp(sPhi, ePhi, splitRatio);
+            float theta = sTheta + i*(eTheta-sTheta)/(vts.length-1);
+
+            vts[i].set(
+              sin(theta)*cos(phi)*l1*.5, 
+              cos(theta)*l2*.5, 
+              sin(theta)*sin(phi)*l3*.5
+              );
+          }
+          cArc1.sTheta = sTheta;
+          cArc1.eTheta = eTheta;
+          cArc2.sTheta = sTheta;
+          cArc2.eTheta = eTheta;
+          cArc1.sPhi = sPhi;
+          cArc1.ePhi = lerp(sPhi, ePhi, splitRatio);
+          cArc2.sPhi = lerp(sPhi, ePhi, splitRatio);
+          cArc2.ePhi = ePhi;
         }
-        cArc1.sTheta = sTheta;
-        cArc1.eTheta = eTheta;
-        cArc2.sTheta = sTheta;
-        cArc2.eTheta = eTheta;
-        cArc1.sPhi = sPhi;
-        cArc1.ePhi = lerp(sPhi, ePhi, splitRatio);
-        cArc2.sPhi = lerp(sPhi, ePhi, splitRatio);
-        cArc2.ePhi = ePhi;
+      } else {
+        for (int i=0; i<segAmt/2; i++) {
+          for (int j=0; j<segAmt/2; j++) {
+            float theta = sThetaFrg + i*(eThetaFrg-sThetaFrg)/(segAmt/2-1);
+            float phi = sPhiFrg + j*(ePhiFrg-sPhiFrg)/(segAmt/2-1);
+
+            fragVts[i][j].set(
+              sin(theta)*cos(phi)*l1*.5, 
+              cos(theta)*l2*.5, 
+              sin(theta)*sin(phi)*l3*.5
+              );
+          }
+        }
       }
     }
 
     void randomize() {
       splitRatioT = random(1);
+      fragRatioS = 0;
+      fragRatioST = 1;
+      fragRatioE = 0;
+      fragRatioET = 1;
+      fragRatioEStp = fragRatioSStp*.5;
     }
 
     void reset() {
       splitRatioT = .5;
+      fragRatioS = .5;
+      fragRatioST = 0;
+      fragRatioE = .5;
+      fragRatioET = 1;
+      fragRatioEStp = fragRatioSStp;
     }
 
     void splitUp() {
 
       hasChildren = true;
-      splitRatio = .5;
-      splitRatioT = random(1);
+      splitRatio = random(1);
+      splitRatioT = .5;
 
       vts = new PVector[segAmt];
 
@@ -446,12 +555,32 @@ public class RKPattern02 extends P3CubeMapPattern {
       }
     }
 
-    void display(PGraphics pg) {
+    void displayEdge(PGraphics pg) {
+      pg.noFill();
+      pg.stroke(255);
+      pg.strokeWeight(gWeight);
       pg.beginShape();
       for (int i=0; i<segAmt; i++) {
         pg.vertex(vts[i].x, vts[i].y, vts[i].z);
       }
       pg.endShape();
+    }
+
+    void displayFragment(PGraphics pg) {
+      pg.noStroke();
+      pg.fill(255);
+      pg.beginShape(TRIANGLES);
+      for (int i=0; i<segAmt/2-1; i++) {
+        for (int j=0; j<segAmt/2-1; j++) {
+          pg.vertex(fragVts[i][j].x, fragVts[i][j].y, fragVts[i][j].z);
+          pg.vertex(fragVts[i][j+1].x, fragVts[i][j+1].y, fragVts[i][j+1].z);
+          pg.vertex(fragVts[i+1][j+1].x, fragVts[i+1][j+1].y, fragVts[i+1][j+1].z);
+          pg.vertex(fragVts[i][j].x, fragVts[i][j].y, fragVts[i][j].z);
+          pg.vertex(fragVts[i+1][j].x, fragVts[i+1][j].y, fragVts[i+1][j].z);
+          pg.vertex(fragVts[i+1][j+1].x, fragVts[i+1][j+1].y, fragVts[i+1][j+1].z);
+        }
+      }
+      pg.endShape(CLOSE);
     }
   }
 }
@@ -461,38 +590,45 @@ public class RKPattern03 extends P3CubeMapPattern {
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  BooleanParameter avg = new BooleanParameter("avg split");
+  BooleanParameter tri = new BooleanParameter("show tri", true);
+  BooleanParameter edge = new BooleanParameter("show edge", false);
   CompoundParameter speed = new CompoundParameter("speed", .01, 0, .05);
   CompoundParameter fragment = new CompoundParameter("fragment", .5, 0, 1);
+
+  int faceRes = 200;
 
   Vtx [][] rootVts;
   int iCSCols = 5, iCSRows = 4;
   float l1 = 600, l2 = 600, l3 = 600;
   float gF, thetaF, phiF, fragMid;
   ArrayList <Fct> fctList;
+  boolean avgSplit, pAvgSplit, showTri, showEdge;
 
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
 
   public RKPattern03(LX lx) {
 
-    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 200);
 
     gF = random(100);
     thetaF = random(100);
     phiF = random(100);
 
     initRootVts();
+
+    fctList = new ArrayList<Fct>();
     initFctList();
 
-    for (int j=0; j<2; j++) {
-      for (int i=fctList.size()-1; i>-1; i--) {
-        Fct fct = fctList.get(i);
-        if (!fct.hasChildren && fct.lv<3) fct.splitUp();
-      }
-    }
+    //avgSplitUp();
+    randomSplitUp(100);
 
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
+    addParameter(avg);
+    addParameter(tri);
+    addParameter(edge);
     addParameter(speed);
     addParameter(fragment);
   }
@@ -504,6 +640,21 @@ public class RKPattern03 extends P3CubeMapPattern {
     rotZT = rZ.getValuef();
     gFIncreT = speed.getValuef();
     fragMid = fragment.getValuef();
+
+    avgSplit = avg.getValueb();
+    if (pAvgSplit != avgSplit) {
+      if (avgSplit) {
+        resetFctList();
+        avgSplitUp();
+      } else {
+        resetFctList();
+        randomSplitUp(100);
+      }
+      pAvgSplit = avgSplit;
+    }
+
+    showTri = tri.getValueb();
+    showEdge = edge.getValueb();
 
     rotX = lerp(rotX, rotXT, .1);
     rotY = lerp(rotY, rotYT, .1);
@@ -520,12 +671,12 @@ public class RKPattern03 extends P3CubeMapPattern {
 
     pg.beginDraw();
     pg.background(0);
-    pg.image(pgL, 0, 100);
-    pg.image(pgR, 200, 100);
-    pg.image(pgD, 100, 0);
-    pg.image(pgU, 100, 200);
-    pg.image(pgF, 100, 100);
-    pg.image(pgB, 300, 100);
+    pg.image(pgL, 0, faceRes);
+    pg.image(pgR, faceRes*2, faceRes);
+    pg.image(pgD, faceRes, 0);
+    pg.image(pgU, faceRes, faceRes*2);
+    pg.image(pgF, faceRes, faceRes);
+    pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
   }
 
@@ -555,13 +706,17 @@ public class RKPattern03 extends P3CubeMapPattern {
     pg.noStroke();
     for (int i=fctList.size()-1; i>-1; i--) {
       Fct fct = fctList.get(i);
-      if (!fct.hasChildren) fct.display(pg);
+      if (!fct.hasChildren) fct.displayTri(pg);
     }
     pg.endShape();
+    pg.stroke(255);
+    for (int i=fctList.size()-1; i>-1; i--) {
+      Fct fct = fctList.get(i);
+      if (!fct.hasChildren) fct.displayEdge(pg);
+    }
   }
 
   void initFctList() {
-    fctList = new ArrayList<Fct>();
 
     for (int j=0; j<rootVts[1].length; j++) {
       int k = (j+1)%rootVts[1].length;
@@ -584,13 +739,44 @@ public class RKPattern03 extends P3CubeMapPattern {
     }
   }
 
+  void resetFctList() {
+    for (int i=fctList.size()-1; i>-1; i--) {
+      fctList.remove(i);
+    }
+    initFctList();
+  }
+
+  void avgSplitUp() {
+    for (int j=0; j<2; j++) {
+      for (int i=fctList.size()-1; i>-1; i--) {
+        Fct fct = fctList.get(i);
+        if (!fct.hasChildren && fct.lv<3) fct.splitUp();
+      }
+    }
+  }
+
+  void randomSplitUp(int times) {
+    for (int i=0; i<times; ) {
+      int randInt = floor(random(fctList.size()));
+      Fct randFct = fctList.get(randInt);
+      if (randFct.hasChildren || randFct.lv>3) {
+        continue;
+      } else {
+        randFct.splitUp();
+        i++;
+      }
+    }
+  }
+
   class Fct {
 
     int lv;
     Vtx v1, v2, v3;
-    float brt, fragRatio;
+    float brt, fragRatio = 1, fragRatioT;
+    float itpS, itpST, itpE, itpET, weight;
     PVector ctr, nrml;
     boolean hasChildren;
+    int itvr, passedItvr;
 
     Fct(int lv, Vtx v1, Vtx v2, Vtx v3) {
       this.lv = lv;
@@ -599,6 +785,13 @@ public class RKPattern03 extends P3CubeMapPattern {
       this.v3 = v3;
 
       ctr = new PVector();
+
+      weight = map(constrain(lv, 0, 4), 0, 4, 2.5, 1);
+
+      itvr = round(random(60, 120));
+
+      itpST = 1;
+      itpET = 1;
     }
 
     void splitUp() {
@@ -631,15 +824,51 @@ public class RKPattern03 extends P3CubeMapPattern {
       nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
       brt = map(abs(HALF_PI-PVector.angleBetween(nrml, ctr)), 0, HALF_PI, 0, 255);
 
-      fragRatio = (noise(ctr.x*.005, ctr.y*.005, ctr.z*.005)-.5)*2.5+fragMid;
-      fragRatio = constrain(fragRatio, 0, 1);
+      if (showTri) fragRatioT = constrain((noise(ctr.x*.005+frameCount*.01, ctr.y*.005-frameCount*.01, ctr.z*.005+frameCount*.01)-.5)*2.5+fragMid, 0, 1);
+      else fragRatioT = 1;
+      fragRatio = lerp(fragRatio, fragRatioT, .1);
+
+      if (abs(itpST-itpS)<.005) itpS = itpST;
+      else itpS = lerp(itpS, itpST, .25);
+      if (abs(itpET-itpE)<.005) itpE = itpET;
+      else itpE = lerp(itpE, itpET, .125);
+
+      if (passedItvr<itvr) {
+        passedItvr++;
+      } else {
+        passedItvr = 0;
+        if (showEdge) {
+          itpS = 0;
+          itpE = 0;
+          itpST = 1;
+          itpET = 1;
+        }
+      }
     }
 
-    void display(PGraphics pg) {
+    void displayTri(PGraphics pg) {
       pg.fill(brt);
       pg.vertex(lerp(v1.pos.x, ctr.x, fragRatio), lerp(v1.pos.y, ctr.y, fragRatio), lerp(v1.pos.z, ctr.z, fragRatio));
       pg.vertex(lerp(v2.pos.x, ctr.x, fragRatio), lerp(v2.pos.y, ctr.y, fragRatio), lerp(v2.pos.z, ctr.z, fragRatio));
       pg.vertex(lerp(v3.pos.x, ctr.x, fragRatio), lerp(v3.pos.y, ctr.y, fragRatio), lerp(v3.pos.z, ctr.z, fragRatio));
+    }
+
+    void displayEdge(PGraphics pg) {
+      pg.strokeWeight(weight);
+      drawLine(pg, v1, v2, itpS, itpE);
+      drawLine(pg, v2, v3, itpS, itpE);
+      drawLine(pg, v3, v1, itpS, itpE);
+    }
+
+    void drawLine(PGraphics pg, Vtx v1, Vtx v2, float itpS, float itpE) {
+      pg.line(
+        lerp(v1.pos.x, v2.pos.x, itpS), 
+        lerp(v1.pos.y, v2.pos.y, itpS), 
+        lerp(v1.pos.z, v2.pos.z, itpS), 
+        lerp(v1.pos.x, v2.pos.x, itpE), 
+        lerp(v1.pos.y, v2.pos.y, itpE), 
+        lerp(v1.pos.z, v2.pos.z, itpE)
+        );
     }
   }
 
@@ -730,26 +959,75 @@ public class RKPattern03 extends P3CubeMapPattern {
 
 public class RKPattern04 extends P3CubeMapPattern {
 
+  CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
+  CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
+  CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  BooleanParameter clrBg = new BooleanParameter("clear bg");
+  CompoundParameter speed = new CompoundParameter("speed", .02, 0, .1);
+  CompoundParameter h1 = new CompoundParameter("hue1", 0, 0, 255);
+  CompoundParameter h2 = new CompoundParameter("hue2", 85, 0, 255);
+  CompoundParameter h3 = new CompoundParameter("hue3", 170, 0, 255);
+  
+  int faceRes = 200;
+
+  float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
+  boolean clearBg;
+
   Vtx [] rootVts;
   Mesh rootMesh;
 
   int mxLv = 2;
-  float rF, rdnsF;
-  float gF;
-  PVector plR, plG, plB;
+  float rF, rdnsF, gF;
+  PVector lgt1, lgt2, lgt3;
+  float hue1, hue1T, hue2, hue2T, hue3, hue3T;
+  color c1, c2, c3;
 
   public RKPattern04(LX lx) {
 
-    super((P3LX) lx, new PVector(55*12 + 8*12, 4*12, 2*12 + 0.3*8*12), new PVector(16*12, 16*12, 16*12*0.3), 100);
+    super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 200);
     initRootVts();
     initRootMesh();
 
-    plR = new PVector(600, 600, 600);
-    plG = new PVector(600, -600, -600);
-    plB = new PVector(-600, -600, 600);
+    lgt1 = new PVector(600, 600, 600);
+    lgt2 = new PVector(600, -600, -600);
+    lgt3 = new PVector(-600, -600, 600);
+    hue1 = hue1T = 0;
+    hue2 = hue2T = 85;
+    hue3 = hue3T = 170;
+
+    addParameter(rX);
+    addParameter(rY);
+    addParameter(rZ);
+    addParameter(clrBg);
+    addParameter(speed);
+    addParameter(h1);
+    addParameter(h2);
+    addParameter(h3);
   }
 
   void run(double deltaMs, PGraphics pg) {
+
+    rotXT = rX.getValuef();
+    rotYT = rY.getValuef();
+    rotZT = rZ.getValuef();
+    clearBg = clrBg.getValueb();
+    gFIncreT = speed.getValuef();
+    hue1 = h1.getValuef();
+    hue2 = h2.getValuef();
+    hue3 = h3.getValuef();
+
+    rotX = lerp(rotX, rotXT, .1);
+    rotY = lerp(rotY, rotYT, .1);
+    rotZ = lerp(rotZ, rotZT, .1);
+    gFIncre = lerp(gFIncre, gFIncreT, .1);
+    hue1 = lerp(hue1, hue1T, .1);
+    hue2 = lerp(hue2, hue2T, .1);
+    hue3 = lerp(hue3, hue3T, .1);
+
+    colorMode(HSB);
+    c1 = color(hue1, 255, 255);
+    c2 = color(hue2, 255, 255);
+    c3 = color(hue3, 255, 255);
 
     updateRootVts();
     updateMesh();
@@ -758,12 +1036,12 @@ public class RKPattern04 extends P3CubeMapPattern {
 
     pg.beginDraw();
     pg.background(0);
-    pg.image(pgL, 0, 100);
-    pg.image(pgR, 200, 100);
-    pg.image(pgD, 100, 0);
-    pg.image(pgU, 100, 200);
-    pg.image(pgF, 100, 100);
-    pg.image(pgB, 300, 100);
+    pg.image(pgL, 0, faceRes);
+    pg.image(pgR, faceRes*2, faceRes);
+    pg.image(pgD, faceRes, 0);
+    pg.image(pgU, faceRes, faceRes*2);
+    pg.image(pgF, faceRes, faceRes);
+    pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
   }
 
@@ -778,12 +1056,12 @@ public class RKPattern04 extends P3CubeMapPattern {
 
   void updateCubeMap(PGraphics pg, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
     pg.beginDraw();
-    //pg.background(0);
+    if (clearBg) pg.background(0);
     pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
     pg.frustum(-10, 10, -10, 10, 10, 1000);
-    //pg.rotateX(rotX);
-    //pg.rotateY(rotY);
-    //pg.rotateZ(rotZ);
+    pg.rotateX(rotX);
+    pg.rotateY(rotY);
+    pg.rotateZ(rotZ);
     drawScene(pg);
     pg.endDraw();
   }
@@ -803,7 +1081,7 @@ public class RKPattern04 extends P3CubeMapPattern {
   void updateMesh() {
 
     rootMesh.update(rootVts, gF);
-    gF += .2;
+    gF += gFIncre;
   }
 
   class Mesh {
@@ -812,7 +1090,7 @@ public class RKPattern04 extends P3CubeMapPattern {
 
     int idx, lv;
 
-    float r, g, b;
+    float r1, r2, r3;
     PVector nrml;
 
     Vtx [] outers, mids, struts, strutMids, sStruts;
@@ -850,26 +1128,26 @@ public class RKPattern04 extends P3CubeMapPattern {
       for (int i=0; i<mids.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.5;
         mids[i].interpolate(outers[i], outers[(i+1)%outers.length], itp);
-        f += .1;
+        f += gFIncre;
       }
       for (int i=0; i<struts.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.8;
         struts[i].protrude(mids[i], outers[(i+2)%outers.length], outers[(i+1)%outers.length], itp, lv);
-        f += .1;
+        f += gFIncre;
       }
       for (int i=0; i<strutMids.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.5;
         strutMids[i].interpolate(struts[i], struts[(i+1)%struts.length], itp);
-        f += .1;
+        f += gFIncre;
       }
       for (int i=0; i<sStruts.length; i++) {
         float itp = (noise(f)-.5)/(float(lv)+1)+.5;
         sStruts[i].protrude(strutMids[i], outers[(i+1)%outers.length], struts[i], itp, lv);
-        f += .1;
+        f += gFIncre;
       }
 
       if (lv<mxLv) {
-        f += .1;
+        f += gFIncre;
         children[15].update(struts, f);
         for (int i=0; i<3; i++) {
           int j = (i+1)%3;
@@ -878,31 +1156,31 @@ public class RKPattern04 extends P3CubeMapPattern {
             outers[j], sStruts[i], mids[i]
           };
           children[i*5].update(g1, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g2 = {
             sStruts[i], struts[i], mids[i]
           };
           children[i*5+1].update(g2, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g3 = {
             sStruts[i], struts[i], struts[j]
           };
           children[i*5+2].update(g3, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g4 = {
             sStruts[i], struts[j], mids[j]
           };
           children[i*5+3].update(g4, f);
-          f += .1;
+          f += gFIncre;
 
           Vtx [] g5 = {
             outers[j], sStruts[i], mids[j]
           };
           children[i*5+4].update(g5, f);
-          f += .1;
+          f += gFIncre;
         }
       }
     }
@@ -929,10 +1207,12 @@ public class RKPattern04 extends P3CubeMapPattern {
     void drawTri(Vtx v1, Vtx v2, Vtx v3, PGraphics pg) {
 
       nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
-      r = map(abs(HALF_PI-PVector.angleBetween(nrml, plR)), 0, HALF_PI, 0, 255)*1.5;
-      g = map(abs(HALF_PI-PVector.angleBetween(nrml, plG)), 0, HALF_PI, 0, 255)*1.5;
-      b = map(abs(HALF_PI-PVector.angleBetween(nrml, plB)), 0, HALF_PI, 0, 255)*1.5;
-      pg.fill(constrain(r, 0, 255), constrain(g, 0, 255), constrain(b, 0, 255));
+      r1 = map(abs(HALF_PI-PVector.angleBetween(nrml, lgt1)), 0, HALF_PI, 0, 1.5);
+      r2 = map(abs(HALF_PI-PVector.angleBetween(nrml, lgt2)), 0, HALF_PI, 0, 1.5);
+      r3 = map(abs(HALF_PI-PVector.angleBetween(nrml, lgt3)), 0, HALF_PI, 0, 1.5);
+      pg.fill(constrain(r1*red(c1)+r2*red(c2)+r3*red(c3), 0, 255), 
+        constrain(r1*green(c1)+r2*green(c2)+r3*green(c3), 0, 255), 
+        constrain(r1*blue(c1)+r2*blue(c2)+r3*blue(c3), 0, 255));
 
       pg.vertex(v1.pos.x, v1.pos.y, v1.pos.z);
       pg.vertex(v2.pos.x, v2.pos.y, v2.pos.z);
@@ -956,12 +1236,12 @@ public class RKPattern04 extends P3CubeMapPattern {
       float r = 1200+(noise(rF+i*.1)-0.5)*1200;
       float rdns = i*(TWO_PI/rootVts.length)+(noise(rdnsF+i*.1)-.5)*PI/3;
       float x = r*cos(rdns);
-      float y = 600;
+      float y = 300;
       float z = r*sin(rdns);
       rootVts[i].setPos(x, y, z);
     }
-    rF += .2;
-    rdnsF += .2;
+    rF += gFIncre;
+    rdnsF += gFIncre;
   }
 
   class Vtx {

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511777157495,
+  "timestamp": 1511777480865,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,11 +15,11 @@
       "crossfader": 0.5344827584922314,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
-      "channelMultithreaded": false,
+      "channelMultithreaded": true,
       "networkMultithreaded": false
     },
     "palette": {
@@ -233,7 +233,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 5,
+        "patternIndex": 7,
         "patterns": [
           {
             "id": 3146,
@@ -463,6 +463,136 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 3765,
+            "class": "SLStudio$RKPattern01",
+            "modulationColor": -65315,
+            "parameters": {
+              "label": "RKPattern01",
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3767,
+            "class": "SLStudio$RKPattern02",
+            "modulationColor": -16711862,
+            "parameters": {
+              "label": "RKPattern02",
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "noise": false,
+              "speed": 0.10000000149011612,
+              "dsp": 1.0,
+              "show edge": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3769,
+            "class": "SLStudio$RKPattern03",
+            "modulationColor": -16711838,
+            "parameters": {
+              "label": "RKPattern03",
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "avg split": false,
+              "show tri": true,
+              "show edge": false,
+              "speed": 0.009999999776482582,
+              "fragment": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3771,
+            "class": "SLStudio$RKPattern04",
+            "modulationColor": -16711882,
+            "parameters": {
+              "label": "RKPattern04",
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "clear bg": false,
+              "speed": 0.019999999552965164,
+              "hue1": 0.0,
+              "hue2": 85.0,
+              "hue3": 170.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 3775,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65397,
+        "parameters": {
+          "label": "Channel-3",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 3773,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -2228480,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       }
@@ -532,14 +662,14 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.18787314464705307,
-          "Band-2": 0.22589589983949454,
-          "Band-3": 0.24905997494753918,
-          "Band-4": 0.26974776825653557,
-          "Band-5": 0.20636805515660728,
-          "Band-6": 0.08318743716014487,
-          "Band-7": 0.02369495213586814,
-          "Band-8": 0.014014472088466512,
+          "Band-1": 0.4123223347381989,
+          "Band-2": 0.4327055168347207,
+          "Band-3": 0.4512593810523938,
+          "Band-4": 0.46358739457806386,
+          "Band-5": 0.39663324467742445,
+          "Band-6": 0.1826601227818242,
+          "Band-7": 0.10708489147045286,
+          "Band-8": 0.016137280773065643,
           "Band-9": 0.0,
           "Band-10": 0.0,
           "Band-11": 0.0,
@@ -582,7 +712,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.585714302957058
+        "brightness": 0.17142857238650322
       }
     },
     "components": {
@@ -694,8 +824,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 97.39052420979587,
-        "theta": 3.089999999999993,
-        "phi": -0.035999999999990914,
+        "theta": 2.5559999999999965,
+        "phi": -0.01499999999999091,
         "positionX": 46.879737854003906,
         "positionY": -25.800003051757812,
         "positionZ": 8.930007934570312
