@@ -88,4 +88,5 @@ void setup() {
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
   DrawHelper.runAll();
+  dispatcher.draw();
 }
