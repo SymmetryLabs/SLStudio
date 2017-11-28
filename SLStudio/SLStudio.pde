@@ -6,7 +6,6 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 public PApplet applet;
 public LXStudio lx;
-public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
@@ -18,7 +17,8 @@ void setup() {
   size(displayWidth, displayHeight, P3D);
   applet = this;
 
-  model = buildModel();
+  SLModel model = buildModel();
+
   println("-- Model ----");
   println("# of suns: " + model.suns.size());
   println("# of slices: " + model.slices.size());

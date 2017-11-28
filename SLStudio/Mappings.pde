@@ -84,7 +84,3 @@ public SLModel buildModel() {
 
   return new SLModel(suns);
 }
-
-public SLModel getModel() {
-  return buildModel();
-}

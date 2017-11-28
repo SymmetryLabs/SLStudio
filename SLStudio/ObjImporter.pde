@@ -220,8 +220,4 @@ class ObjModelBuilder {
     println("Created a fixture with obj file: " + name);
     return new LXModel(points);
   }
-
-  private LXModel getModel() {
-    return model;
-  }
 }
