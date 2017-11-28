@@ -13,7 +13,7 @@ public OutputControl outputControl;
 public Pixlite[] pixlites;
 public SkyPaletteLibrary skyPalettes;
 
-public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 69);
+public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
 
 void setup() {
   long setupStart = System.nanoTime();

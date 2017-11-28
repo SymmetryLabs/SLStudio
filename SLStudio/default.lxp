@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511843058534,
+  "timestamp": 1511853807929,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5344827584922314,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 3,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": false,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.15714284870773554,
+          "fader": 1.0,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -311,7 +311,7 @@
             "modulationColor": -16728577,
             "parameters": {
               "label": "SelectedStrip",
-              "selectedStrip": 34
+              "selectedStrip": 37
             },
             "modulation": {
               "modulators": [],
@@ -335,7 +335,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.15714285895228386,
+          "fader": 0.08571428712457418,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -511,7 +511,7 @@
         "parameters": {
           "label": "Axis",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -578,7 +578,7 @@
         "parameters": {
           "label": "Pattern",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -628,7 +628,7 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.6600000038743019,
+              "Dens": 0.30000001192092896,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 3
@@ -708,12 +708,12 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
+          "Band-1": 0.05133876423563055,
+          "Band-2": 0.08923959067847242,
+          "Band-3": 0.0794560924069635,
+          "Band-4": 0.07302074429841632,
+          "Band-5": 0.13691013177791833,
+          "Band-6": 0.1285263477299875,
           "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
@@ -758,7 +758,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.0999999875202775
+        "brightness": 0.11428570747375488
       }
     },
     "components": {
@@ -869,12 +869,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 97.39052420979587,
+        "radius": 80.38898441270888,
         "theta": 3.1289999999999942,
-        "phi": -0.017999999999990916,
-        "positionX": 46.879737854003906,
-        "positionY": -25.800003051757812,
-        "positionZ": 8.930007934570312
+        "phi": -0.09899999999999093,
+        "positionX": 48.0,
+        "positionY": -35.20000457763672,
+        "positionZ": 1.905485987663269E-6
       }
     }
   }
