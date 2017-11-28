@@ -122,6 +122,10 @@ public static class OctreeIndex extends ModelIndex {
   private FixedWidthOctree<LXPoint> ot;
 
   public OctreeIndex(LXModel model) {
+    this(model, false);
+  }
+
+  public OctreeIndex(LXModel model, boolean flattenZ) {
     super(model);
 
     ot = new FixedWidthOctree<LXPoint>(model.cx, model.cy, model.cz,
@@ -129,7 +133,7 @@ public static class OctreeIndex extends ModelIndex {
 
     for (LXPoint point : model.getPoints()) {
       try {
-        ot.insert(point.x, point.y, point.z, point);
+        ot.insert(point.x, point.y, flattenZ ? 0 : point.z, point);
       }
       catch (Exception e) {
         System.err.println("Exception while building Octree: " + e.getMessage());
