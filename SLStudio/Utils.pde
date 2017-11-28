@@ -1,6 +1,7 @@
 import java.util.regex.Pattern;
 import java.util.regex.Matcher;
 import java.lang.reflect.Field;
+import java.lang.reflect.Modifier;
 
 // See: https://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
 public static final class OsUtils {

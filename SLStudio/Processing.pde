@@ -6,6 +6,8 @@ import java.util.zip.*;
 import processing.core.*;
 import processing.data.*;
 
+import processing.data.Table;
+
 static final class Utils {
 
   // Processing functions

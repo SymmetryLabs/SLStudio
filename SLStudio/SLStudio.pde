@@ -4,6 +4,8 @@ import java.lang.reflect.*;
 import java.text.DecimalFormat;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
+import com.symmetrylabs.util.PackageUtils;
+
 public PApplet applet;
 public LXStudio lx;
 public Dispatcher dispatcher;
@@ -40,7 +42,11 @@ void setup() {
   lx = new LXStudio(this, model, false) {
     @Override
     protected void initialize(LXStudio lx, LXStudio.UI ui) {
-      
+
+      for (Class<? extends LXPattern> c : PackageUtils.getPatternClassesInPackage("com.symmetrylabs")) {
+        lx.registerPattern(c);
+      }
+
       // Output
       (dispatcher = new Dispatcher(lx)).start();
       (networkMonitor = new NetworkMonitor(lx)).start();
