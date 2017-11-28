@@ -1,5 +1,6 @@
 import java.util.concurrent.Semaphore;
 import java.util.Collections;
+import java.util.function.Consumer;
 
 public abstract class ThreadedPattern extends LXPattern {
   private static final int DEFAULT_THREAD_COUNT = 4;
