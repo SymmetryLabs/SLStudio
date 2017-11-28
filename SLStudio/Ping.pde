@@ -1,3 +1,6 @@
+import com.symmetrylabs.util.ModelIndex;
+import com.symmetrylabs.util.OctreeModelIndex;
+
 public class FlockWave extends SLPattern {
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (m)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
@@ -318,7 +321,7 @@ public class FlockWaveThreaded extends FlockWave {
     super(lx);
 
     colorValues = new float[colors.length];
-    modelIndex = new OctreeIndex(lx.model);
+    modelIndex = new OctreeModelIndex(lx.model);
     simThread = new SimulationThread();
   }
 
