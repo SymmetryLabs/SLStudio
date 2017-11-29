@@ -2,6 +2,9 @@ package com.symmetrylabs.util;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.stream.Collectors;
+import java.util.function.Predicate;
+import java.util.function.Supplier;
 
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXFixture;
@@ -12,15 +15,16 @@ public class LinearModelIndex extends ModelIndex {
     }
 
     @Override
-    public List<LXPoint> pointsWithin(LXPoint target, float d) {
-        List<LXPoint> nearbyPoints = new ArrayList<LXPoint>();
-        for (LXPoint p : fixture.getPoints()) {
-            float pd = pointDistance(target, p);
-            if (pd <= d) {
-                nearbyPoints.add(p);
+    public List<LXPoint> pointsWithin(final LXPoint target, final float d) {
+        return fixture.getPoints().parallelStream().filter(new Predicate<LXPoint>() {
+            public boolean test(LXPoint p) {
+                return pointDistance(target, p) < d;
             }
-        }
-        return nearbyPoints;
+        }).collect(Collectors.toCollection(new Supplier<List<LXPoint>>() {
+            public List<LXPoint> get() {
+                return new ArrayList<>();
+            }
+        }));
     }
 
     @Override
