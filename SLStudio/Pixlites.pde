@@ -1,14 +1,14 @@
 Pixlite[] setupPixlites(LX lx) {
   return new Pixlite[] {
     // Sun 1 (One Third)
-    //new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_front")),
-    //new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_back")),
+    //new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
+    //new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
 
     // Sun 4 (One Half)
     // new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
     // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
 
-    // Sun 6 (Two Thirds)
+    // // Sun 6 (Two Thirds)
     new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")),
     new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")),
     new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), 
@@ -39,6 +39,10 @@ public class Pixlite extends LXOutputGroup {
     // if slice needs special output configuration
     if (id.equals("sun1_top_front")) {
       new Sun1FrontOutputConfig(lx, slice, ipAddress, this);
+      return true;
+    }
+    if (id.equals("sun1_top_back")) {
+      new Sun1BackOutputConfig(lx, slice, ipAddress, this);
       return true;
     }
     if (id.equals("sun4_top_back")) {
@@ -100,8 +104,8 @@ public class Pixlite extends LXOutputGroup {
         new PointsGrouping("5")
           .addPoints(slice.getStripById("29").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("30").points)
-          .addPoints(slice.getStripById("31").points, PointsGrouping.REVERSE_ORDERING) //
-          .addPoints(slice.getStripById("32").points) //
+          .addPoints(slice.getStripById("31").points, PointsGrouping.REVERSE_ORDERING) // short
+          .addPoints(slice.getStripById("32").points) // short
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
@@ -266,25 +270,19 @@ public class PixliteOutput extends LXDatagramOutput {
   private void setupDatagrams(String ipAddress, PointsGrouping pointsGrouping) {
     // the points for one pixlite output have to be spread across multiple universes
 
-    println(pointsGrouping);
     int numPoints = pointsGrouping.size();
     int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
-    println("numUniverses: " + numUniverses);
     int counter = 0;
 
     for (int i = 0; i < numUniverses; i++) {
       int universe = firstUniverseOnOutput + i;
       int numIndices = ((i+1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE) : MAX_NUM_POINTS_PER_UNIVERSE;
       int[] indices = new int[numIndices];
-      println(numIndices);
       for (int i1 = 0; i1 < numIndices; i1++) {
-        println(pointsGrouping.getPoint(counter));
         indices[i1] = pointsGrouping.getPoint(counter++).index;
       }
       addDatagram(new ArtNetDatagram(ipAddress, indices, universe-1));
-      println(i);
     }
-    println(pointsGrouping);
   }
 }
 
@@ -340,11 +338,12 @@ public static class PointsGrouping {
     LXPoint[] shiftedPoints = null;
 
     if (shift == PointsGrouping.Shift.LEFT) {
-      shiftedPoints = new LXPoint[localPointsToAdd.length-1];
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
 
-      for (int i = 0; i < shiftedPoints.length; i++) {
+      for (int i = 0; i < shiftedPoints.length-1; i++) {
         shiftedPoints[i] = localPointsToAdd[i+1];
       }
+      shiftedPoints[shiftedPoints.length-1] = localPointsToAdd[shiftedPoints.length-1];
     }
     if (shift == PointsGrouping.Shift.RIGHT) {
       shiftedPoints = new LXPoint[localPointsToAdd.length];
@@ -377,15 +376,16 @@ public static class PointsGrouping {
       Collections.reverse(Arrays.asList(localPointsToAdd));
     }
 
-    if (shift == PointsGrouping.Shift.LEFT) {
-      shiftedPoints = new LXPoint[localPointsToAdd.length-1];
+    if (shift == PointsGrouping.Shift.RIGHT) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
 
-      for (int i = 0; i < shiftedPoints.length; i++) {
+      for (int i = 0; i < shiftedPoints.length-1; i++) {
         shiftedPoints[i] = localPointsToAdd[i+1];
       }
+      shiftedPoints[shiftedPoints.length-1] = localPointsToAdd[shiftedPoints.length-1];
     }
-    if (shift == PointsGrouping.Shift.RIGHT) {
-      shiftedPoints = new LXPoint[localPointsToAdd.length-1];
+    if (shift == PointsGrouping.Shift.LEFT) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
       shiftedPoints[0] = localPointsToAdd[0];
 
       for (int i = 0; i < shiftedPoints.length-1; i++) {

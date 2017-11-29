@@ -238,7 +238,7 @@ public static class Slice extends LXModel {
       int counter = 0;
       if (type != Slice.Type.BOTTOM_ONE_THIRD) {
         for (int i = 0; i < MAX_NUM_STRIPS_PER_SLICE; i++) {
-          if (type == Slice.Type.TWO_THIRDS && i > 44) {
+          if (type == Slice.Type.TWO_THIRDS && i > 45) {
             break;
           }
 
