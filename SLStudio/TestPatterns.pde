@@ -1,4 +1,5 @@
 public class SunOrientation extends SLPattern {
+
   public SunOrientation(LX lx) {
     super(lx);
   }
