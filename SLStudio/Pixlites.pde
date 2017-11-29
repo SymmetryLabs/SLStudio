@@ -49,6 +49,14 @@ public class Pixlite extends LXOutputGroup {
       new Sun4BackOutputConfig(lx, slice, ipAddress, this);
       return true;
     }
+    if (id.equals("sun6_top_front")) {
+      new Sun6FrontTopOutputConfig(lx, slice, ipAddress, this);
+      return true;
+    }
+    if (id.equals("sun6_top_back")) {
+      new Sun6BackTopOutputConfig(lx, slice, ipAddress, this);
+      return true;
+    }
     return false;
   }
 
@@ -372,10 +380,6 @@ public static class PointsGrouping {
     LXPoint[] localPointsToAdd = pointsToAdd.clone();
     LXPoint[] shiftedPoints = null;
 
-    if (reverseOrdering) {
-      Collections.reverse(Arrays.asList(localPointsToAdd));
-    }
-
     if (shift == PointsGrouping.Shift.RIGHT) {
       shiftedPoints = new LXPoint[localPointsToAdd.length];
 
@@ -391,6 +395,10 @@ public static class PointsGrouping {
       for (int i = 0; i < shiftedPoints.length-1; i++) {
         shiftedPoints[i+1] = localPointsToAdd[i];
       }
+    }
+
+    if (reverseOrdering) {
+      Collections.reverse(Arrays.asList(shiftedPoints));
     }
 
     addPoints(shiftedPoints, shift);
