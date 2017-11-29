@@ -12,7 +12,7 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
     // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
 
-    // Sun 3 (One Third)
+    // Sun 5 (One Third)
     new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")),
     new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")),
 
@@ -59,6 +59,14 @@ public class Pixlite extends LXOutputGroup {
     }
     if (id.equals("sun3_top_back")) {
       new Sun3BackTopOutputConfig(lx, slice, ipAddress, this);
+      return true;
+    }
+    // if (id.equals("sun5_top_front")) {
+    //   new Sun5FrontTopOutputConfig(lx, slice, ipAddress, this);
+    //   return true;
+    // }
+    if (id.equals("sun5_top_back")) {
+      new Sun5BackTopOutputConfig(lx, slice, ipAddress, this);
       return true;
     }
     if (id.equals("sun4_top_back")) {
