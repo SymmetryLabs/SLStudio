@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511933623715,
+  "timestamp": 1511936506085,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": false,
@@ -55,13 +55,13 @@
         "parameters": {
           "label": "Test",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.15714284870773554,
+          "fader": 0.08571427688002586,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -187,7 +187,7 @@
             "modulationColor": -19968,
             "parameters": {
               "label": "SelectedStrip",
-              "selectedStrip": 23
+              "selectedStrip": 32
             },
             "modulation": {
               "modulators": [],
@@ -205,7 +205,7 @@
         "parameters": {
           "label": "Axes",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -372,17 +372,17 @@
           "Band-2": 0.0,
           "Band-3": 0.0,
           "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
-          "Band-13": 0.0,
-          "Band-14": 0.0,
-          "Band-15": 0.0,
+          "Band-5": 0.10415153658327736,
+          "Band-6": 0.21389826800936573,
+          "Band-7": 0.1976848576212028,
+          "Band-8": 0.18547410329576064,
+          "Band-9": 0.24747830175834473,
+          "Band-10": 0.11672943378708711,
+          "Band-11": 0.19644311377955148,
+          "Band-12": 0.2746750535957849,
+          "Band-13": 0.4189788208609174,
+          "Band-14": 0.3816751409252449,
+          "Band-15": 0.4956711533439212,
           "Band-16": 0.0
         }
       },
