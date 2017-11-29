@@ -2,6 +2,7 @@ package com.symmetrylabs.util;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXModel;
