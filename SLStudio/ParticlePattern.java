@@ -2,6 +2,8 @@ package com.symmetrylabs.pattern;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.stream.Stream;
 import java.util.function.Consumer;
 import java.nio.IntBuffer;
 
@@ -33,6 +35,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
     protected ModelIndex modelIndex;
 
     private SimulationThread simThread;
+    private float[][] brightnessLayers;
     private float[] brightnessBuffer;
 
     public ParticlePattern(LX lx) {
@@ -43,6 +46,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
         super(lx);
 
         brightnessBuffer = new float[colors.length];
+        brightnessLayers = new float[particles.size()][brightnessBuffer.length];
 
         addParameter(particleCount);
         addParameter(kernelSize);
@@ -65,6 +69,8 @@ public abstract class ParticlePattern extends ThreadedPattern {
                     initParticle(p);
                     particles.add(p);
                 }
+
+                brightnessLayers = new float[particles.size()][brightnessBuffer.length];
             }
         });
 
@@ -108,32 +114,47 @@ public abstract class ParticlePattern extends ThreadedPattern {
     protected void initParticle(Particle p) { }
     protected abstract void simulate(double deltaMs);
 
+    /** Only needed until we can do IntRange.range in Processing */
+    private Stream intRangeStream(final int startInclusive, final int endExclusive) {
+        List<Integer> range = new ArrayList<>(endExclusive - startInclusive);
+        for (int i = 0; i < (endExclusive - startInclusive); ++i) {
+            range.add(i + startInclusive);
+        }
+        return range.parallelStream();
+    }
+
     @Override
     public synchronized void run(double deltaMs) {
-        for (int i = 0; i < brightnessBuffer.length; ++i) {
-            brightnessBuffer[i] = 0f;
-        }
+        intRangeStream(0, particles.size()).forEach(new Consumer<Integer>() {
+            public void accept(Integer i) {
+                Arrays.fill(brightnessLayers[i], 0);
+                renderParticle(particles.get(i), brightnessLayers[i]);
+            }
+        });
 
-        final boolean flattening = flattenZ.isOn();
+        // TODO: only copy part of buffer used by each particle
+        intRangeStream(0, brightnessBuffer.length).forEach(new Consumer<Integer>() {
+            public void accept(Integer i) {
+                brightnessBuffer[i] = 0f;
 
-        particles.parallelStream().forEach(new Consumer<Particle>() {
-            @Override
-            public void accept(final Particle particle) {
-                LXPoint pp = particle.toPointInModel(lx.model);
-                float withinDist = particle.size * kernelSize.getValuef();
-                List<LXPoint> pointDists = modelIndex.pointsWithin(pp, withinDist);
-                for (LXPoint p : pointDists) {
-                    brightnessBuffer[p.index] += kernel(
-                        pp.x - p.x,
-                        pp.y - p.y,
-                        flattening ? 0 : pp.z - p.z,
-                        withinDist
-                    );
+                for (int j = 0; j < brightnessLayers.length; ++j) {
+                    brightnessBuffer[i] += brightnessLayers[j][i];
                 }
             }
         });
 
         super.run(deltaMs);
+    }
+
+    protected void renderParticle(Particle particle, float[] brightness) {
+        LXPoint pp = particle.toPointInModel(lx.model);
+        float withinDist = particle.size * kernelSize.getValuef();
+        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist);
+
+        final boolean flattening = flattenZ.isOn();
+        for (LXPoint p : nearbyPoints) {
+            brightness[p.index] = kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
+        }
     }
 
     @Override
