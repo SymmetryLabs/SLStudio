@@ -127,7 +127,7 @@
           },
           {
             "id": 2784,
-            "class": "SLStudio$Balance",
+            "class": "com.symmetrylabs.pattern.Balance",
             "modulationColor": -4864,
             "parameters": {
               "label": "Balance",
