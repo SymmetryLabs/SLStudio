@@ -316,13 +316,27 @@ public class FlockWaveThreaded extends FlockWave {
   private SimulationThread simThread;
   private ModelIndex modelIndex;
   private float[] colorValues;
+  private float[][] colorLayers;
 
   public FlockWaveThreaded(LX lx) {
     super(lx);
 
     colorValues = new float[colors.length];
+    colorLayers = new float[birds.size()][colors.length];
     modelIndex = new OctreeModelIndex(lx.model);
     simThread = new SimulationThread();
+  }
+
+  void spawnBird(PVector focus) {
+    super.spawnBird(focus);
+
+    colorLayers = new float[birds.size()][colors.length];
+  }
+
+  void removeExpiredBirds() {
+    super.removeExpiredBirds();
+
+    colorLayers = new float[birds.size()][colors.length];
   }
 
   @Override
@@ -354,35 +368,36 @@ public class FlockWaveThreaded extends FlockWave {
     prevFocus = focus;
   }
 
+  /** Only needed until we can do IntRange.range in Processing */
+  private Stream intRangeStream(final int startInclusive, final int endExclusive) {
+    List<Integer> range = new ArrayList<Integer>(endExclusive - startInclusive);
+    for (int i = 0; i < (endExclusive - startInclusive); ++i) {
+      range.add(i + startInclusive);
+    }
+    return range.parallelStream();
+  }
+
   @Override
   public synchronized void run(double deltaMs) {
     for (int i = 0; i < colorValues.length; ++i) {
       colorValues[i] = 0f;
     }
 
-    final float waveNumber = detail.getValuef();
-    final float extent = size.getValuef();
-    final float rippleSpeed = ripple.getValuef();
+    final List<Bird> birdList = new ArrayList<Bird>(birds);
+    intRangeStream(0, birdList.size()).forEach(new Consumer<Integer>() {
+      public void accept(Integer i) {
+        Arrays.fill(colorLayers[i], 0);
+        renderBird(birdList.get(i), colorLayers[i]);
+      }
+    });
 
-    birds.parallelStream().forEach(new Consumer<SLStudio.FlockWave.Bird>() {
-      @Override
-      public void accept(final SLStudio.FlockWave.Bird b) {
-        LXPoint bp = new LXPoint(b.pos.x, b.pos.y, b.pos.z);
+    // TODO: only copy part of buffer used by each particle
+    intRangeStream(0, colorValues.length).forEach(new Consumer<Integer>() {
+      public void accept(Integer i) {
+        colorValues[i] = 0f;
 
-        List<LXPoint> pointDists = modelIndex.pointsWithin(bp, extent);
-        for (LXPoint p : pointDists) {
-
-          double sqDist = (
-              (b.pos.x - p.x)*(b.pos.x - p.x) +
-              (b.pos.y - p.y)*(b.pos.y - p.y) +
-              (b.pos.z - p.z)*(b.pos.z - p.z)
-          ) / (extent*extent);
-
-          if (sqDist < 1) {
-            double dist = Math.sqrt(sqDist);
-            double a = 1f - dist * dist;
-            colorValues[p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*b.value;
-          }
+        for (int j = 0; j < colorLayers.length; ++j) {
+          colorValues[i] += colorLayers[j][i];
         }
       }
     });
@@ -391,6 +406,30 @@ public class FlockWaveThreaded extends FlockWave {
 
     for (LXPoint p : model.points) {
       colors[p.index] = pal.getColor(colorValues[p.index] + palShift.getValuef());
+    }
+  }
+
+  protected void renderBird(Bird bird, float[] colorLayer) {
+    float waveNumber = detail.getValuef();
+    float extent = size.getValuef();
+    float rippleSpeed = ripple.getValuef();
+
+    LXPoint bp = new LXPoint(bird.pos.x, bird.pos.y, bird.pos.z);
+
+    List<LXPoint> pointDists = modelIndex.pointsWithin(bp, extent);
+    for (LXPoint p : pointDists) {
+
+      double sqDist = (
+          (bird.pos.x - p.x)*(bird.pos.x - p.x) +
+          (bird.pos.y - p.y)*(bird.pos.y - p.y) +
+          (bird.pos.z - p.z)*(bird.pos.z - p.z)
+      ) / (extent*extent);
+
+      if (sqDist < 1) {
+        double dist = Math.sqrt(sqDist);
+        double a = 1f - dist * dist;
+        colorLayer[p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - bird.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*bird.value;
+      }
     }
   }
 
