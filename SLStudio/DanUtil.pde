@@ -66,7 +66,7 @@ public class DBool {
     }
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-public class DPat extends SLPattern {
+public class DPat extends LXPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     ArrayList<DBool> bools  = new ArrayList<DBool> ();
     PVector pTrans= new PVector();

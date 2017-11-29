@@ -238,11 +238,11 @@ public class LXStudio extends P3LX {
 
   public final UI ui;
 
-  public LXStudio(PApplet applet, SLModel model) {
+  public LXStudio(PApplet applet, LXModel model) {
     this(applet, model, true);
   }
 
-  public LXStudio(PApplet applet, SLModel model, boolean multiThreaded) {
+  public LXStudio(PApplet applet, LXModel model, boolean multiThreaded) {
     super(applet, model);
     this.ui = (UI) super.ui;
     onUIReady(this, this.ui);

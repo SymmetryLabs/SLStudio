@@ -162,7 +162,7 @@ public class Noise extends DPat {
   }
 }
 
-public class SoundParticles extends SLPattern   {
+public class SoundParticles extends LXPattern   {
     private final int LIMINAL_KEY = 46;
     private final int MAX_VELOCITY = 100;
     private boolean debug = false;
@@ -683,7 +683,7 @@ public class Pong extends DPat {
   }
 }
 
-public class BassPod extends SLPattern {
+public class BassPod extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -733,7 +733,7 @@ public class BassPod extends SLPattern {
   }
 }
 
-public class CubeEQ extends SLPattern {
+public class CubeEQ extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -905,7 +905,7 @@ public class SpaceTime extends SLPattern {
   }
 }
 
-public class Traktor extends SLPattern {
+public class Traktor extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -1074,7 +1074,7 @@ public class AskewPlanes extends DPat {
   }
 }
 
-public class ShiftingPlane extends SLPattern {
+public class ShiftingPlane extends LXPattern {
 
   final CompoundParameter hueShift = new CompoundParameter("hShift", 0.5, 0, 1);
 
@@ -1194,7 +1194,7 @@ public class SunFlash extends SLPattern {
   }
 }
 
-public class Spheres extends SLPattern {
+public class Spheres extends LXPattern {
   private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);
   private CompoundParameter periodParameter = new CompoundParameter("PERIOD", 4000.0, 200.0, 10000.0);
   private CompoundParameter hueVariance = new CompoundParameter("HueVar", 50, 0, 180);
@@ -1273,7 +1273,7 @@ public class Spheres extends SLPattern {
   }
 }
 
-public class Rings extends SLPattern {
+public class Rings extends LXPattern {
   float dx, dy, dz;
   float angleParam, spacingParam;
   float dzParam, centerParam;
@@ -1468,7 +1468,7 @@ public class Rings extends SLPattern {
 //   }
 // }
 
-public class Swim extends SLPattern {
+public class Swim extends LXPattern {
 
   // Projection stuff
   private final LXProjection projection;
@@ -1547,7 +1547,7 @@ public class Swim extends SLPattern {
   }
 }
 
-public class ViolinWave extends SLPattern {
+public class ViolinWave extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -1683,7 +1683,7 @@ public class ViolinWave extends SLPattern {
   }
 }
 
-public class CrossSections extends SLPattern {
+public class CrossSections extends LXPattern {
 
   final SinLFO x = new SinLFO(model.xMin, model.xMax, 5000);
   final SinLFO y = new SinLFO(model.yMin, model.yMax, 6000);
@@ -1770,7 +1770,7 @@ public class CrossSections extends SLPattern {
   }
 }
 
-public class Bubbles extends SLPattern {
+public class Bubbles extends LXPattern {
 
     private final float MAX_VELOCITY = 1.5;
     //private final float MAX_SIZE = 25;
@@ -1945,7 +1945,7 @@ public class Bubbles extends SLPattern {
 
 }
 
-public class Balance extends SLPattern {
+public class Balance extends LXPattern {
 
   final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
 
@@ -2076,7 +2076,7 @@ public class Balance extends SLPattern {
   }
 }
 
-public class TelevisionStatic extends SLPattern {
+public class TelevisionStatic extends LXPattern {
   CompoundParameter brightParameter = new CompoundParameter("BRIGHT", 1.0);
   CompoundParameter saturationParameter = new CompoundParameter("SAT", 1.0);
   CompoundParameter hueParameter = new CompoundParameter("HUE", 1.0);
@@ -2167,7 +2167,7 @@ public class TelevisionStatic extends SLPattern {
 //   }
 // }
 
-public class Test extends SLPattern {
+public class Test extends LXPattern {
 
   final CompoundParameter thing = new CompoundParameter("Thing", 0, model.yRange);
   final SinLFO lfo = new SinLFO("Stuff", 0, 1, 2000);
@@ -2185,7 +2185,7 @@ public class Test extends SLPattern {
   }
 }
 
-public class Palette extends SLPattern {
+public class Palette extends LXPattern {
   public Palette(LX lx) {
     super(lx);
   }
@@ -2197,7 +2197,7 @@ public class Palette extends SLPattern {
   }
 }
 
-public class Blank extends SLPattern {
+public class Blank extends LXPattern {
   public Blank(LX lx) {
     super(lx);
   }

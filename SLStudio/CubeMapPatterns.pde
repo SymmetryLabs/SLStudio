@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public abstract class P3CubeMapPattern extends SLPattern {
+public abstract class P3CubeMapPattern extends LXPattern {
   private final PGraphics pg;
   protected final PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
   private final PVector origin;
