@@ -1,12 +1,12 @@
 Pixlite[] setupPixlites(LX lx) {
   return new Pixlite[] {
     // Sun 4 (One Half)
-    // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_front")), // A
-    // new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_back")),  // B
+     new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_front")), // A
+     new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_back")),  // B
 
     // Sun 6 (Two Thirds)
-    new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_front")),    // A - Top
-    new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_front")), // A - Bottom
+ //   new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_front")),    // A - Top
+   // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_front")), // A - Bottom
     // new Pixlite(lx, "10.200.1.", model.getSliceById("sun6_top_back")),     // B - Top
     // new Pixlite(lx, "10.200.1.", model.getSliceById("sun6_bottom_back")),  // B - Bottom
   };
