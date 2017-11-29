@@ -345,7 +345,7 @@
           },
           {
             "id": 2827,
-            "class": "SLStudio$Swim",
+            "class": "com.symmetrylabs.pattern.Swim",
             "modulationColor": -65442,
             "parameters": {
               "label": "Swim",
