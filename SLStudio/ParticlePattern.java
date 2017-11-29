@@ -120,12 +120,12 @@ public abstract class ParticlePattern extends ThreadedPattern {
             public void accept(final Particle particle) {
                 LXPoint pp = particle.toPointInModel(lx.model);
                 float withinDist = particle.size * kernelSize.getValuef();
-                List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(pp, withinDist);
-                for (ModelIndex.PointDist pointDist : pointDists) {
-                    brightnessBuffer[pointDist.p.index] += kernel(
-                        pp.x - pointDist.p.x,
-                        pp.y - pointDist.p.y,
-                        flattening ? 0 : pp.z - pointDist.p.z,
+                List<LXPoint> pointDists = modelIndex.pointsWithin(pp, withinDist);
+                for (LXPoint p : pointDists) {
+                    brightnessBuffer[p.index] += kernel(
+                        pp.x - p.x,
+                        pp.y - p.y,
+                        flattening ? 0 : pp.z - p.z,
                         withinDist
                     );
                 }

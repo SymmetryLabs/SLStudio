@@ -20,16 +20,6 @@ public abstract class ModelIndex {
         return (float)Math.sqrt(x_diff * x_diff + y_diff * y_diff + z_diff * z_diff);
     }
 
-    public abstract List<PointDist> pointsWithin(LXPoint target, float d);
-    public abstract PointDist nearestPoint(LXPoint target);
-
-    public static class PointDist {
-        public final LXPoint p;
-        public final float d;
-
-        public PointDist(LXPoint p, float d) {
-            this.p = p;
-            this.d = d;
-        }
-    }
+    public abstract List<LXPoint> pointsWithin(LXPoint target, float d);
+    public abstract LXPoint nearestPoint(LXPoint target);
 }

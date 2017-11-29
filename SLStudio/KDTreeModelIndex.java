@@ -5,7 +5,6 @@ import java.util.ArrayList;
 import java.util.Collections;
 
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXFixture;
 
 import edu.wlu.cs.levy.CG.KDTree;
@@ -29,9 +28,7 @@ public class KDTreeModelIndex extends ModelIndex {
     }
 
     @Override
-    public List<PointDist> pointsWithin(LXPoint target, float d) {
-        List<PointDist> nearbyPoints = new ArrayList<PointDist>();
-
+    public List<LXPoint> pointsWithin(LXPoint target, float d) {
         List<LXPoint> nearby = null;
 
         try {
@@ -42,29 +39,20 @@ public class KDTreeModelIndex extends ModelIndex {
         }
 
         if (nearby == null)
-            return nearbyPoints;
+            return Collections.emptyList();
 
-        for (LXPoint p : nearby) {
-            float pd = pointDistance(target, p);
-            nearbyPoints.add(new PointDist(p, pd));
-        }
-
-        return nearbyPoints;
+        return nearby;
     }
 
     @Override
-    public PointDist nearestPoint(LXPoint target) {
-        LXPoint nearest = null;
+    public LXPoint nearestPoint(LXPoint target) {
         try {
-            nearest = kd.nearest(new double[] {target.x, target.y, target.z});
+            return kd.nearest(new double[] {target.x, target.y, target.z});
         }
         catch (Exception e) {
             System.err.println("Exception while finding nearest point: " + e.getMessage());
         }
 
-        if (nearest == null)
-            return null;
-
-        return new PointDist(nearest, pointDistance(target, nearest));
+        return null;
     }
 }

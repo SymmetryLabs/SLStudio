@@ -369,12 +369,19 @@ public class FlockWaveThreaded extends FlockWave {
       public void accept(final SLStudio.FlockWave.Bird b) {
         LXPoint bp = new LXPoint(b.pos.x, b.pos.y, b.pos.z);
 
-        List<ModelIndex.PointDist> pointDists = modelIndex.pointsWithin(bp, extent);
-        for (ModelIndex.PointDist pd : pointDists) {
-          double dist = pd.d / extent;
-          if (dist < 1) {
+        List<LXPoint> pointDists = modelIndex.pointsWithin(bp, extent);
+        for (LXPoint p : pointDists) {
+
+          double sqDist = (
+              (b.pos.x - p.x)*(b.pos.x - p.x) +
+              (b.pos.y - p.y)*(b.pos.y - p.y) +
+              (b.pos.z - p.z)*(b.pos.z - p.z)
+          ) / (extent*extent);
+
+          if (sqDist < 1) {
+            double dist = Math.sqrt(sqDist);
             double a = 1f - dist * dist;
-            colorValues[pd.p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*b.value;
+            colorValues[p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*b.value;
           }
         }
       }

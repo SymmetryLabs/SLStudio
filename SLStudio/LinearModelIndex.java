@@ -12,19 +12,19 @@ public class LinearModelIndex extends ModelIndex {
     }
 
     @Override
-    public List<PointDist> pointsWithin(LXPoint target, float d) {
-        List<PointDist> nearbyPoints = new ArrayList<PointDist>();
+    public List<LXPoint> pointsWithin(LXPoint target, float d) {
+        List<LXPoint> nearbyPoints = new ArrayList<LXPoint>();
         for (LXPoint p : fixture.getPoints()) {
             float pd = pointDistance(target, p);
             if (pd <= d) {
-                nearbyPoints.add(new PointDist(p, pd));
+                nearbyPoints.add(p);
             }
         }
         return nearbyPoints;
     }
 
     @Override
-    public PointDist nearestPoint(LXPoint target) {
+    public LXPoint nearestPoint(LXPoint target) {
         float nearestDist = 0;
         LXPoint nearestPoint = null;
         for (LXPoint p : fixture.getPoints()) {
@@ -34,6 +34,6 @@ public class LinearModelIndex extends ModelIndex {
                 nearestDist = d;
             }
         }
-        return nearestPoint == null ? null : new PointDist(nearestPoint, nearestDist);
+        return nearestPoint;
     }
 }

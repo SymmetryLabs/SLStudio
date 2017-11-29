@@ -2,6 +2,7 @@ package com.symmetrylabs.util;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Collections;
 
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXModel;
@@ -30,42 +31,26 @@ public class OctreeModelIndex extends ModelIndex {
     }
 
     @Override
-    public List<PointDist> pointsWithin(LXPoint target, float d) {
-        List<PointDist> nearbyPoints = new ArrayList<PointDist>();
-
-        List<LXPoint> nearby = null;
-
+    public List<LXPoint> pointsWithin(LXPoint target, float d) {
         try {
-            nearby = ot.withinDistance((float)target.x, (float)target.y, (float)target.z, d);
+            return ot.withinDistance((float)target.x, (float)target.y, (float)target.z, d);
         }
         catch (Exception e) {
             System.err.println("Exception while finding nearest points: " + e.getMessage());
         }
 
-        if (nearby == null)
-            return nearbyPoints;
-
-        for (LXPoint p : nearby) {
-            float pd = pointDistance(target, p);
-            nearbyPoints.add(new PointDist(p, pd));
-        }
-
-        return nearbyPoints;
+        return Collections.emptyList();
     }
 
     @Override
-    public PointDist nearestPoint(LXPoint target) {
-        LXPoint nearest = null;
+    public LXPoint nearestPoint(LXPoint target) {
         try {
-            nearest = ot.nearest((float)target.x, (float)target.y, (float)target.z);
+            return ot.nearest((float)target.x, (float)target.y, (float)target.z);
         }
         catch (Exception e) {
             System.err.println("Exception while finding nearest point: " + e.getMessage());
         }
 
-        if (nearest == null)
-            return null;
-
-        return new PointDist(nearest, pointDistance(target, nearest));
+        return null;
     }
 }
