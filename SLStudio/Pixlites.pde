@@ -1,14 +1,18 @@
 Pixlite[] setupPixlites(LX lx) {
   return new Pixlite[] {
+    // Sun 1 (One Third)
+    //new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_front")),
+    //new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_back")),
+
     // Sun 4 (One Half)
-    // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_front")), // A
-    // new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_back")),  // B
+    // new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
+    // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
 
     // Sun 6 (Two Thirds)
     new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")),
-    // new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")),
-    // new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), 
-    // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")),
+    new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")),
+    new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), 
+    new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")),
   };
 }
  
@@ -18,14 +22,30 @@ public class Pixlite extends LXOutputGroup {
 
   public Pixlite(LX lx, String ipAddress, Slice slice) {
     super(lx);
-    this.slice = slice;
     this.ipAddress = ipAddress;
     this.slice = slice;
+
     try {
-      setupOutputs(lx);
+      if (!specialCase(lx, slice.id)) {
+        setupOutputs(lx);
+        println("");
+      } 
     } catch (Exception e) {
       e.printStackTrace();
     }
+  }
+
+  private boolean specialCase(LX lx, String id) throws SocketException {
+    // if slice needs special output configuration
+    if (id.equals("sun1_top_front")) {
+      new Sun1FrontOutputConfig(lx, slice, ipAddress, this);
+      return true;
+    }
+    if (id.equals("sun4_top_back")) {
+      new Sun4BackOutputConfig(lx, slice, ipAddress, this);
+      return true;
+    }
+    return false;
   }
 
   private void setupOutputs(LX lx) throws SocketException {
@@ -80,8 +100,8 @@ public class Pixlite extends LXOutputGroup {
         new PointsGrouping("5")
           .addPoints(slice.getStripById("29").points, PointsGrouping.REVERSE_ORDERING)
           .addPoints(slice.getStripById("30").points)
-          .addPoints(slice.getStripById("31").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("32").points)
+          .addPoints(slice.getStripById("31").points, PointsGrouping.REVERSE_ORDERING) //
+          .addPoints(slice.getStripById("32").points) //
       ));
 
       addChild(new PixliteOutput(lx, ipAddress,
@@ -108,13 +128,21 @@ public class Pixlite extends LXOutputGroup {
           .addPoints(slice.getStripById("44").points)
       ));
 
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("9")
-          .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("46").points) // even used??
-          .addPoints(slice.getStripById("47").points, PointsGrouping.REVERSE_ORDERING) // even used??
-          .addPoints(slice.getStripById("48").points) // even used??
-      ));
+      if (slice.type == Slice.Type.TWO_THIRDS) {
+        addChild(new PixliteOutput(lx, ipAddress,
+          new PointsGrouping("9")
+            .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING)
+        ));
+      }
+      if (slice.type == Slice.Type.FULL) {
+        addChild(new PixliteOutput(lx, ipAddress,
+          new PointsGrouping("9")
+            .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING)
+            .addPoints(slice.getStripById("46").points) // even used??
+            .addPoints(slice.getStripById("47").points, PointsGrouping.REVERSE_ORDERING) // even used??
+            .addPoints(slice.getStripById("48").points) // even used??
+        ));
+      }
     }
 
     if (slice.type == Slice.Type.FULL) {
@@ -221,43 +249,52 @@ public class Pixlite extends LXOutputGroup {
       ));
     }
   }
+}
 
-  private class PixliteOutput extends LXDatagramOutput {
-    private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
-    private final int outputIndex;
-    private final int firstUniverseOnOutput;
+public class PixliteOutput extends LXDatagramOutput {
+  private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
+  private final int outputIndex;
+  private final int firstUniverseOnOutput;
 
-    private PixliteOutput(LX lx, String ipAddress, PointsGrouping pointsGrouping) throws SocketException {
-      super(lx);
-      this.outputIndex = Integer.parseInt(pointsGrouping.id);
-      this.firstUniverseOnOutput = outputIndex * 10;
-      setupDatagrams(ipAddress, pointsGrouping);
-    }
+  public PixliteOutput(LX lx, String ipAddress, PointsGrouping pointsGrouping) throws SocketException {
+    super(lx);
+    this.outputIndex = Integer.parseInt(pointsGrouping.id);
+    this.firstUniverseOnOutput = outputIndex * 10;
+    setupDatagrams(ipAddress, pointsGrouping);
+  }
 
-    private void setupDatagrams(String ipAddress, PointsGrouping pointsGrouping) {
-      // the points for one pixlite output have to be spread across multiple universes
-      int numPoints = pointsGrouping.size();
-      int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
-      
-      int counter = 0;
+  private void setupDatagrams(String ipAddress, PointsGrouping pointsGrouping) {
+    // the points for one pixlite output have to be spread across multiple universes
 
-      for (int i = 0; i < numUniverses; i++) {
-        int universe = firstUniverseOnOutput + i;
-        int numIndices = ((i+1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE) : MAX_NUM_POINTS_PER_UNIVERSE;
-        int[] indices = new int[numIndices];
+    println(pointsGrouping);
+    int numPoints = pointsGrouping.size();
+    int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
+    println("numUniverses: " + numUniverses);
+    int counter = 0;
 
-        for (int i1 = 0; i1 < numIndices; i1++) {
-          indices[i1] = pointsGrouping.getPoint(counter++).index;
-        }
-
-        addDatagram(new ArtNetDatagram(ipAddress, indices, universe-1));
+    for (int i = 0; i < numUniverses; i++) {
+      int universe = firstUniverseOnOutput + i;
+      int numIndices = ((i+1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE) : MAX_NUM_POINTS_PER_UNIVERSE;
+      int[] indices = new int[numIndices];
+      println(numIndices);
+      for (int i1 = 0; i1 < numIndices; i1++) {
+        println(pointsGrouping.getPoint(counter));
+        indices[i1] = pointsGrouping.getPoint(counter++).index;
       }
+      addDatagram(new ArtNetDatagram(ipAddress, indices, universe-1));
+      println(i);
     }
+    println(pointsGrouping);
   }
 }
 
-public class PointsGrouping {
+public static class PointsGrouping {
   public final static boolean REVERSE_ORDERING = true;
+
+  public enum Shift {
+    LEFT, RIGHT
+  };
+
   public String id;
   private final List<LXPoint> points = new ArrayList<LXPoint>();
 
@@ -298,6 +335,30 @@ public class PointsGrouping {
     return this;
   }
 
+  public PointsGrouping addPoints(LXPoint[] pointsToAdd, PointsGrouping.Shift shift) {
+    LXPoint[] localPointsToAdd = pointsToAdd.clone();
+    LXPoint[] shiftedPoints = null;
+
+    if (shift == PointsGrouping.Shift.LEFT) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length-1];
+
+      for (int i = 0; i < shiftedPoints.length; i++) {
+        shiftedPoints[i] = localPointsToAdd[i+1];
+      }
+    }
+    if (shift == PointsGrouping.Shift.RIGHT) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
+      shiftedPoints[0] = localPointsToAdd[0];
+
+      for (int i = 0; i < shiftedPoints.length-1; i++) {
+        shiftedPoints[i+1] = localPointsToAdd[i];
+      }
+    }
+
+    addPoints(shiftedPoints);
+    return this;
+  }
+
   public PointsGrouping addPoints(LXPoint[] pointsToAdd, boolean reverseOrdering) {
     LXPoint[] localPointsToAdd = pointsToAdd.clone();
 
@@ -305,6 +366,34 @@ public class PointsGrouping {
       Collections.reverse(Arrays.asList(localPointsToAdd));
     }
     addPoints(localPointsToAdd);
+    return this;
+  }
+
+  public PointsGrouping addPoints(LXPoint[] pointsToAdd, boolean reverseOrdering, PointsGrouping.Shift shift) {
+    LXPoint[] localPointsToAdd = pointsToAdd.clone();
+    LXPoint[] shiftedPoints = null;
+
+    if (reverseOrdering) {
+      Collections.reverse(Arrays.asList(localPointsToAdd));
+    }
+
+    if (shift == PointsGrouping.Shift.LEFT) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length-1];
+
+      for (int i = 0; i < shiftedPoints.length; i++) {
+        shiftedPoints[i] = localPointsToAdd[i+1];
+      }
+    }
+    if (shift == PointsGrouping.Shift.RIGHT) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length-1];
+      shiftedPoints[0] = localPointsToAdd[0];
+
+      for (int i = 0; i < shiftedPoints.length-1; i++) {
+        shiftedPoints[i+1] = localPointsToAdd[i];
+      }
+    }
+
+    addPoints(shiftedPoints, shift);
     return this;
   }
 }

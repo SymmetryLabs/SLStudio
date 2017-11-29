@@ -151,17 +151,17 @@ public static class Sun extends LXModel {
       // create slices...
       if (type != Sun.Type.ONE_THIRD) {
         slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {             0, 0, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
-        slices.add(new Slice(id + "_top_back",  Slice.Type.FULL, new float[] {Slice.DIAMETER, 0, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[2]));
+        slices.add(new Slice(id + "_top_back",  Slice.Type.FULL, new float[] {Slice.DIAMETER, 0, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
       }
 
       switch (type) {
         case FULL:
-          slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {Slice.DIAMETER, -Slice.DIAMETER+1.25, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[1]));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {Slice.DIAMETER, -Slice.DIAMETER+1.25, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
           slices.add(new Slice(id + "_bottom_back",  Slice.Type.FULL, new float[] {             0, -Slice.DIAMETER+1.25, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
           break;
 
         case TWO_THIRDS:
-          slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {Slice.DIAMETER, -Slice.DIAMETER+1.25, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[1]));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {Slice.DIAMETER, -Slice.DIAMETER+1.25, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
           slices.add(new Slice(id + "_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] {             0, -Slice.DIAMETER+1.25, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
 
         case ONE_HALF:
@@ -170,7 +170,7 @@ public static class Sun extends LXModel {
 
         case ONE_THIRD:
           slices.add(new Slice(id + "_top_front", Slice.Type.TWO_THIRDS, new float[] {             0, 0, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
-          slices.add(new Slice(id + "_top_back",  Slice.Type.TWO_THIRDS, new float[] {Slice.DIAMETER, 0, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[2]));
+          slices.add(new Slice(id + "_top_back",  Slice.Type.TWO_THIRDS, new float[] {Slice.DIAMETER, 0, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
           break;
       }
 
@@ -238,7 +238,7 @@ public static class Slice extends LXModel {
       int counter = 0;
       if (type != Slice.Type.BOTTOM_ONE_THIRD) {
         for (int i = 0; i < MAX_NUM_STRIPS_PER_SLICE; i++) {
-          if (type == Slice.Type.TWO_THIRDS && i > 45) {
+          if (type == Slice.Type.TWO_THIRDS && i > 44) {
             break;
           }
 
