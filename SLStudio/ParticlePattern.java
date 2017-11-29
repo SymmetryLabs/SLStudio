@@ -3,6 +3,7 @@ package com.symmetrylabs.pattern;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.function.Consumer;
+import java.nio.IntBuffer;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -136,16 +137,14 @@ public abstract class ParticlePattern extends ThreadedPattern {
     }
 
     @Override
-    public int[] render(List<LXPoint> points) {
+    public void render(List<LXPoint> points, IntBuffer pointColors) {
         double h = hue.getValue();
         double s = saturation.getValue();
-        int[] pointColors = new int[points.size()];
         for (int i = 0; i < points.size(); ++i) {
             LXPoint p = points.get(i);
             float b = Math.min(brightnessBuffer[p.index] * 100, 100);
-            pointColors[i] = LXColor.hsb(h, s, b);
+            pointColors.put(i, LXColor.hsb(h, s, b));
         }
-        return pointColors;
     }
 
     protected class Particle {

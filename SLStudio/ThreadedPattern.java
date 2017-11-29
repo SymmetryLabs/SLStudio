@@ -2,7 +2,9 @@ package com.symmetrylabs.pattern;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.concurrent.Semaphore;
+import java.nio.IntBuffer;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
@@ -34,12 +36,10 @@ public abstract class ThreadedPattern extends LXPattern {
         return LXColor.BLACK;
     }
 
-    protected int[] render(List<LXPoint> cs) {
-        int[] pointColors = new int[cs.size()];
-        for (int i = 0; i < cs.size(); ++i) {
-            pointColors[i] = render(cs.get(i));
+    protected void render(List<LXPoint> points, IntBuffer pointColors) {
+        for (int i = 0; i < points.size(); ++i) {
+            pointColors.put(i, render(points.get(i)));
         }
-        return pointColors;
     }
 
     @Override
@@ -92,16 +92,17 @@ public abstract class ThreadedPattern extends LXPattern {
 
                 int numThreads = renderThreads.size();
                 int pointCount = lx.model.points.length;
-                List<LXPoint> points = new ArrayList<LXPoint>();
-                for (int i = pointCount * index / numThreads; i < pointCount * (index + 1) / numThreads; ++i) {
-                    LXPoint p = lx.model.points[i];
-                    points.add(p);
-                }
+                int startInclusive = pointCount * index / numThreads;
+                int endExclusive = pointCount * (index + 1) / numThreads;
 
-                int[] pointColors = render(points);
+                List<LXPoint> points = Arrays.asList(lx.model.points).subList(startInclusive, endExclusive);
+                IntBuffer pointColors = IntBuffer.wrap(colors, startInclusive, endExclusive - startInclusive).slice();
+
+                render(points, pointColors);
+
                 for (int i = 0; i < points.size(); ++i) {
                     LXPoint p = points.get(i);
-                    colors[p.index] = pointColors[i];
+                    colors[p.index] = pointColors.get(i);
                 }
 
                 waitRender.release();
