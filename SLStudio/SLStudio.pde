@@ -13,6 +13,7 @@ public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public Pixlite[] pixlites;
 public SkyPaletteLibrary skyPalettes;
+public BlobTracker blobTracker;
 
 void setup() {
   long setupStart = System.nanoTime();
@@ -86,6 +87,7 @@ void setup() {
   };
 
   lx.engine.audio.enabled.setValue(true);
+  blobTracker = new BlobTracker(lx);
 
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 

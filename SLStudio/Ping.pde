@@ -2,24 +2,29 @@ import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
 
 public class FlockWave extends SLPattern {
+  BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
+  CompoundParameter oscMergeRadius = new CompoundParameter("oscMrgRad", 30, 0, 100);
+  CompoundParameter oscMaxSpeed = new CompoundParameter("oscMaxSpd", 240, 0, 1000);
+  CompoundParameter oscMaxDeltaSec = new CompoundParameter("oscMaxDt", 0.5, 0, 1);
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (m)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
-  CompoundParameter spawnRadius = new CompoundParameter("spRad", 100, 0, 1000);  // radius (m) within which to spawn birds
+
   CompoundParameter spawnMinSpeed = new CompoundParameter("spMin", 2, 0, 40);  // minimum focus speed (m/s) that spawns birds
   CompoundParameter spawnMaxSpeed = new CompoundParameter("spMax", 20, 0, 40);  // maximum focus speed (m/s) that spawns birds
-  
+  CompoundParameter spawnRadius = new CompoundParameter("spRad", 100, 0, 1000);  // radius (m) within which to spawn birds
   CompoundParameter density = new CompoundParameter("density", 2, 0, 4);  // maximum spawn rate (birds/s)
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (m/s)
+
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
-
   CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (m)
   CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
+
   DiscreteParameter palette = new DiscreteParameter("palette", skyPalettes.getNames());  // selected colour palette
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
 
@@ -29,41 +34,58 @@ public class FlockWave extends SLPattern {
 
   public FlockWave(LX lx) {
     super(lx);
+
+    addParameter(oscBlobs);
+    addParameter(oscMergeRadius);
+    addParameter(oscMaxSpeed);
+    addParameter(oscMaxDeltaSec);
     addParameter(x);
     addParameter(y);
     addParameter(z);
+
     addParameter(spawnRadius);
     addParameter(spawnMinSpeed);
     addParameter(spawnMaxSpeed);
-
     addParameter(density);
     addParameter(scatter);
     addParameter(speedMult);
     addParameter(maxSpeed);
+
     addParameter(turnSec);
     addParameter(fadeInSec);
     addParameter(fadeOutSec);
-
     addParameter(size);
     addParameter(detail);
     addParameter(ripple);
+
     addParameter(palette);
     addParameter(palShift);
   }
 
   public void run(double deltaMs) {
     float deltaSec = (float) deltaMs * 0.001;
-    PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
-    if (prevFocus != null) {
-      PVector vel = PVector.sub(focus, prevFocus);
-      vel.div(deltaSec);
-      spawnBirds(deltaSec, focus, vel);
-      advanceBirds(deltaSec, vel);
-      removeExpiredBirds();
-     // println("deltaMs: " + deltaMs + " / speed: " + vel.mag() + " / birds: " + birds.size());
+    if (oscBlobs.isOn()) {
+      blobTracker.setMergeRadius(oscMergeRadius.getValuef());
+      blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
+      blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
+      List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+      for (BlobTracker.Blob b : blobs) {
+        spawnBirds(deltaSec, b.pos, b.vel);
+      }
+      advanceBirdsWithBlobs(deltaSec, blobs);
+    } else {
+      PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+      if (prevFocus != null) {
+        PVector vel = PVector.sub(focus, prevFocus);
+        vel.div(deltaSec);
+        spawnBirds(deltaSec, focus, vel);
+        advanceBirds(deltaSec, vel);
+      }
+      prevFocus = focus;
     }
+    removeExpiredBirds();
+    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     renderBirds();
-    prevFocus = focus;
   }
 
   void spawnBirds(float deltaSec, PVector focus, PVector vel) {
@@ -89,6 +111,24 @@ public class FlockWave extends SLPattern {
   void advanceBirds(float deltaSec, PVector vel) {
     PVector targetVel = PVector.mult(vel, speedMult.getValuef());
     for (Bird b : birds) {
+      b.run(deltaSec, targetVel);
+    }
+  }
+
+  void advanceBirdsWithBlobs(float deltaSec, List<BlobTracker.Blob> blobs) {
+    for (Bird b : birds) {
+      PVector velSum = new PVector(0, 0, 0);
+      float totalWeight = 0;
+      for (BlobTracker.Blob blob : blobs) {
+        float distance = PVector.sub(b.pos, blob.pos).mag();
+        float weight = 1.0/(distance*distance);
+        PVector.add(velSum, PVector.mult(blob.vel, weight), velSum);
+        totalWeight += weight;
+      }
+      if (totalWeight > 0) {
+        velSum.div(totalWeight);
+      }
+      PVector targetVel = PVector.mult(velSum, speedMult.getValuef());
       b.run(deltaSec, targetVel);
     }
   }
