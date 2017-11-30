@@ -30,7 +30,6 @@ public class FlockWave extends SLPattern {
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
-  float numToSpawn = 0;
 
   public FlockWave(LX lx) {
     super(lx);
@@ -63,14 +62,17 @@ public class FlockWave extends SLPattern {
   }
 
   public void run(double deltaMs) {
-    float deltaSec = (float) deltaMs * 0.001;
+    advanceSimulation((float) deltaMs * 0.001);
+    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
+    renderBirds();
+  }
+
+  void advanceSimulation(float deltaSec) {
     if (oscBlobs.isOn()) {
-      blobTracker.setMergeRadius(oscMergeRadius.getValuef());
-      blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
-      blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
+      updateBlobTrackerParameters();
       List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
       for (BlobTracker.Blob b : blobs) {
-        spawnBirds(deltaSec, b.pos, b.vel);
+        spawnBirds(deltaSec, b.pos, b.vel, b.size);
       }
       advanceBirdsWithBlobs(deltaSec, blobs);
     } else {
@@ -78,26 +80,31 @@ public class FlockWave extends SLPattern {
       if (prevFocus != null) {
         PVector vel = PVector.sub(focus, prevFocus);
         vel.div(deltaSec);
-        spawnBirds(deltaSec, focus, vel);
+        spawnBirds(deltaSec, focus, vel, 1);
         advanceBirds(deltaSec, vel);
       }
       prevFocus = focus;
     }
     removeExpiredBirds();
-    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
-    renderBirds();
   }
 
-  void spawnBirds(float deltaSec, PVector focus, PVector vel) {
-    float spawnMin = spawnMinSpeed.getValuef(); //<>//
+  void updateBlobTrackerParameters() {
+    blobTracker.setMergeRadius(oscMergeRadius.getValuef());
+    blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
+    blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
+  } //<>//
+
+  void spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
+    float spawnMin = spawnMinSpeed.getValuef();
     float spawnMax = spawnMaxSpeed.getValuef();
     float speed = vel.mag();
-    if (speed > spawnMin) {
-      numToSpawn += deltaSec * density.getValuef() * (speed - spawnMin) / (spawnMax - spawnMin);
-      while (numToSpawn >= 1.0) {
-        spawnBird(focus);
-        numToSpawn -= 1.0;
-      }
+    float numToSpawn = deltaSec * density.getValuef() * weight * (speed - spawnMin) / (spawnMax - spawnMin);
+    while (numToSpawn >= 1.0) {
+      spawnBird(focus);
+      numToSpawn -= 1.0;
+    }
+    if (Math.random() < numToSpawn) {
+      spawnBird(focus);
     }
   }
 
@@ -390,24 +397,6 @@ public class FlockWaveThreaded extends FlockWave {
     simThread = new SimulationThread();
   }
 
-  protected void simulate(double deltaMs) {
-    float deltaSec = (float)deltaMs * 0.001;
-
-    PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
-    if (prevFocus != null) {
-      PVector vel = PVector.sub(focus, prevFocus);
-      vel.div(deltaSec);
-
-      spawnBirds(deltaSec, focus, vel);
-      advanceBirds(deltaSec, vel);
-      removeExpiredBirds();
-
-      //println("deltaMs: " + deltaMs + " / speed: " + vel.mag() + " / birds: " + birds.size());
-    }
-
-    prevFocus = focus;
-  }
-
   /** Only needed until we can do IntRange.range in Processing */
   private Stream intRangeStream(final int startInclusive, final int endExclusive) {
     List<Integer> range = new ArrayList<Integer>(endExclusive - startInclusive);
@@ -500,7 +489,8 @@ public class FlockWaveThreaded extends FlockWave {
         lastTime = t;
 
         synchronized (FlockWaveThreaded.this) {
-          simulate(deltaMs);
+          advanceSimulation((float) deltaMs * 0.001);
+          println("deltaMs: " + deltaMs + " / birds: " + birds.size());
         }
       }
     }
