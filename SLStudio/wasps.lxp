@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511974996920,
+  "timestamp": 1512008612532,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 16,
+        "patternIndex": 13,
         "patterns": [
           {
             "id": 2773,
@@ -117,23 +117,6 @@
               "TrnY": 1.0,
               "thck": 0.20000000298023224,
               "num": 0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2784,
-            "class": "SLStudio$Balance",
-            "modulationColor": -4864,
-            "parameters": {
-              "label": "Balance",
-              "Hue": 0.4000000059604645,
-              "Spd": 0.5,
-              "Crzy": 0.20000000298023224
             },
             "modulation": {
               "modulators": [],
@@ -344,23 +327,6 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 2827,
-            "class": "SLStudio$Swim",
-            "modulationColor": -65442,
-            "parameters": {
-              "label": "Swim",
-              "HUE": 0.10000000149011612,
-              "Crzy": 0.5,
-              "Spd": 0.5
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
             "id": 2899,
             "class": "SLStudio$ShiftingPlane",
             "modulationColor": -25856,
@@ -472,7 +438,7 @@
               "flattenZ": true,
               "hue": 0.0,
               "saturation": 22.000000000000007,
-              "accel": 0.14,
+              "accel": 0.6599999862164257,
               "dampen": 0.2500000122934578,
               "focusX": 0.1399999959766865,
               "focusY": 0.0,
@@ -698,14 +664,14 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.2849138999357964,
-          "Band-2": 0.25179021579584104,
-          "Band-3": 0.1970961179943047,
-          "Band-4": 0.10435248111830275,
-          "Band-5": 0.02469050680610896,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
+          "Band-1": 0.35857891668232666,
+          "Band-2": 0.33980648852369033,
+          "Band-3": 0.3198560937635183,
+          "Band-4": 0.298762647244325,
+          "Band-5": 0.23028167373837471,
+          "Band-6": 0.10200029643044606,
+          "Band-7": 0.05498073641364698,
+          "Band-8": 0.0072834471223228725,
           "Band-9": 0.0,
           "Band-10": 0.0,
           "Band-11": 0.0,
