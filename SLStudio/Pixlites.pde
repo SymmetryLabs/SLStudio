@@ -15,14 +15,20 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
 
     // Sun 5 (One Third)
-    new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")), // locked
-    new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")),
+    // new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")), // locked
+    // new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")), // locked
 
     // Sun 6 (Two Thirds)
-    // new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")),
-    // new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")),
-    // new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), 
-    // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")),
+    // new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")), // locked
+    // new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")), // locked
+    // new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), // locked
+    // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")), // locked
+
+    // // Sun 8 (Two Thirds)
+    // new Pixlite(lx, "10.200.1.27", model.getSliceById("sun8_top_front")), // locked
+    // new Pixlite(lx, "10.200.1.28", model.getSliceById("sun8_bottom_front")), // locked
+    // new Pixlite(lx, "10.200.1.29", model.getSliceById("sun8_top_back")), // locked
+    // new Pixlite(lx, "10.200.1.30", model.getSliceById("sun8_bottom_back")), // locked
   };
 }
  
@@ -69,8 +75,28 @@ public class Pixlite extends LXOutputGroup {
       if(slice.id.equals("sun6_top_front")) {
         new Sun6FrontTopPixliteConfig(lx, slice, ipAddress, this);
       }
+      if(slice.id.equals("sun6_bottom_front")) {
+        new Sun6FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
       if(slice.id.equals("sun6_top_back")) {
         new Sun6BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun6_bottom_back")) {
+        new Sun6BackBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 6
+      if(slice.id.equals("sun8_top_front")) {
+        new Sun8FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun8_bottom_front")) {
+        new Sun8FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun8_top_back")) {
+        new Sun8BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun8_bottom_back")) {
+        new Sun8BackBottomPixliteConfig(lx, slice, ipAddress, this);
       }
 
     } catch (Exception e) {

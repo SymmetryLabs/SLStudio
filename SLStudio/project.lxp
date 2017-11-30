@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512002198841,
+  "timestamp": 1512017419429,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -73,7 +73,7 @@
         "patternIndex": 2,
         "patterns": [
           {
-            "id": 82,
+            "id": 150,
             "class": "SLStudio$Noise",
             "modulationColor": -11992833,
             "parameters": {
@@ -100,7 +100,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 102,
+            "id": 152,
             "class": "SLStudio$TestSuns",
             "modulationColor": -65292,
             "parameters": {
@@ -114,7 +114,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 104,
+            "id": 154,
             "class": "SLStudio$TestStrips",
             "modulationColor": -16711828,
             "parameters": {
@@ -128,7 +128,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 106,
+            "id": 156,
             "class": "SLStudio$TestSlices",
             "modulationColor": -65447,
             "parameters": {
@@ -142,7 +142,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 108,
+            "id": 158,
             "class": "SLStudio$TestLowPowerStrips",
             "modulationColor": -65410,
             "parameters": {
@@ -158,7 +158,7 @@
         ]
       },
       {
-        "id": 86,
+        "id": 162,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711755,
         "parameters": {
@@ -170,7 +170,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.34285713732242584,
+          "fader": 0.6428571389988065,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -236,12 +236,12 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 100,
+            "id": 163,
             "class": "SLStudio$SelectedStrip",
             "modulationColor": -19968,
             "parameters": {
               "label": "SelectedStrip",
-              "selectedStrip": 32
+              "selectedStrip": 64
             },
             "modulation": {
               "modulators": [],
@@ -253,7 +253,7 @@
         ]
       },
       {
-        "id": 89,
+        "id": 172,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -65458,
         "parameters": {
@@ -265,7 +265,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.18571428675204515,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -277,17 +277,17 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 98,
+            "id": 173,
             "class": "SLStudio$ParamCrossSections",
             "modulationColor": -10496,
             "parameters": {
               "label": "ParamCrossSections",
-              "XPOS": 0.34000000916421413,
+              "XPOS": 0.6100000031292439,
               "YPOS": 0.30000001192092896,
               "ZPOS": 0.30000001192092896,
               "XLEV": 1.0,
               "YLEV": 0.0,
-              "ZLEV": 0.5,
+              "ZLEV": 0.0,
               "XWID": 1.0,
               "YWID": 0.30000001192092896,
               "ZWID": 0.30000001192092896
@@ -302,7 +302,7 @@
         ]
       },
       {
-        "id": 92,
+        "id": 177,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711848,
         "parameters": {
@@ -326,7 +326,7 @@
         "patternIndex": 1,
         "patterns": [
           {
-            "id": 90,
+            "id": 178,
             "class": "heronarts.lx.pattern.SolidColorPattern",
             "modulationColor": -16741377,
             "parameters": {
@@ -344,7 +344,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 96,
+            "id": 180,
             "class": "SLStudio$Noise",
             "modulationColor": -16758785,
             "parameters": {
@@ -353,7 +353,7 @@
               "Wave": 0.0,
               "TrnX": 0.5,
               "TrnY": 0.5,
-              "RotX": 0.5,
+              "RotX": 0.5599999986588955,
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
@@ -425,14 +425,14 @@
           "Band-1": 0.0,
           "Band-2": 0.0,
           "Band-3": 0.0,
-          "Band-4": 0.06805934383838574,
-          "Band-5": 0.03637903597756853,
-          "Band-6": 0.059983090967951735,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
           "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
-          "Band-11": 0.2523859977648616,
+          "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -512,7 +512,7 @@
             "id": 145
           },
           "target": {
-            "componentId": 86,
+            "componentId": 162,
             "parameterPath": "fader"
           },
           "id": 146,
@@ -558,9 +558,9 @@
         "145": true
       },
       "preview": {
-        "radius": 126.61261326904139,
-        "theta": 0.591,
-        "phi": 0.252,
+        "radius": 90.0154008291773,
+        "theta": -0.10799999999999985,
+        "phi": 0.1649999999999992,
         "positionX": 48.0,
         "positionY": -31.625003814697266,
         "positionZ": 1.9073486328125E-6
