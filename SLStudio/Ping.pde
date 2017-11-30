@@ -102,25 +102,32 @@ public class FlockWave extends SLPattern {
     blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
   } //<>//
 
-  void spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
+  List<Bird> spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
     float spawnMin = spawnMinSpeed.getValuef();
     float spawnMax = spawnMaxSpeed.getValuef();
     float speed = vel.mag();
     float numToSpawn = deltaSec * density.getValuef() * weight * (speed - spawnMin) / (spawnMax - spawnMin);
+
+    List<Bird> newBirds = new ArrayList<Bird>();
+
     while (numToSpawn >= 1.0) {
-      spawnBird(focus);
+      newBirds.add(spawnBird(focus));
       numToSpawn -= 1.0;
     }
     if (Math.random() < numToSpawn) {
-      spawnBird(focus);
+      newBirds.add(spawnBird(focus));
     }
+
+    return newBirds;
   }
 
-  void spawnBird(PVector focus) {
+  Bird spawnBird(PVector focus) {
     PVector pos = getRandomUnitVector();
     pos.mult(spawnRadius.getValuef());
     pos.add(focus);
-    birds.add(new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100)));
+    Bird bird = new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100));
+    birds.add(bird);
+    return bird;
   }
 
   void advanceBirds(float deltaSec, PVector vel) {
@@ -148,7 +155,7 @@ public class FlockWave extends SLPattern {
     }
   }
 
-  void removeExpiredBirds() {
+  List<Bird> removeExpiredBirds() {
     List<Bird> expired = new ArrayList<Bird>();
     for (Bird b : birds) {
       if (b.hasExpired) {
@@ -156,6 +163,7 @@ public class FlockWave extends SLPattern {
       }
     }
     birds.removeAll(expired);
+    return expired;
   }
 
   void renderBirds() {
@@ -373,27 +381,28 @@ public class FlockWaveThreaded extends FlockWave {
   private SimulationThread simThread;
   private ModelIndex modelIndex;
   private float[] colorValues;
-  private float[][] colorLayers;
+  private Map<Bird, float[]> birdLayers = new HashMap<Bird, float[]>();
 
   public FlockWaveThreaded(LX lx) {
     super(lx);
 
     colorValues = new float[colors.length];
-    colorLayers = new float[birds.size()][colors.length];
     modelIndex = new OctreeModelIndex(lx.model);
     simThread = new SimulationThread();
   }
 
-  void spawnBird(PVector focus) {
-    super.spawnBird(focus);
-
-    colorLayers = new float[birds.size()][colors.length];
+  Bird spawnBird(PVector focus) {
+    Bird newBird = super.spawnBird(focus);
+    birdLayers.put(newBird, new float[colors.length]);
+    return newBird;
   }
 
-  void removeExpiredBirds() {
-    super.removeExpiredBirds();
-
-    colorLayers = new float[birds.size()][colors.length];
+  List<Bird> removeExpiredBirds() {
+    List<Bird> oldBirds = super.removeExpiredBirds();
+    for (Bird oldBird : oldBirds) {
+      birdLayers.remove(oldBird);
+    }
+    return oldBirds;
   }
 
   @Override
@@ -423,10 +432,15 @@ public class FlockWaveThreaded extends FlockWave {
     }
 
     final List<Bird> birdList = new ArrayList<Bird>(birds);
+
     intRangeStream(0, birdList.size()).forEach(new Consumer<Integer>() {
       public void accept(Integer i) {
-        Arrays.fill(colorLayers[i], 0);
-        renderBird(birdList.get(i), colorLayers[i]);
+        Bird bird = birdList.get(i);
+        if (birdLayers.containsKey(bird)) {
+          float[] birdLayer = birdLayers.get(bird);
+          Arrays.fill(birdLayer, 0);
+          renderBird(bird, birdLayer);
+        }
       }
     });
 
@@ -435,8 +449,11 @@ public class FlockWaveThreaded extends FlockWave {
       public void accept(Integer i) {
         colorValues[i] = 0f;
 
-        for (int j = 0; j < colorLayers.length; ++j) {
-          colorValues[i] += colorLayers[j][i];
+        for (Bird bird : birdList) {
+          if (birdLayers.containsKey(bird)) {
+            float[] birdLayer = birdLayers.get(bird);
+            colorValues[i] += birdLayer[i];
+          }
         }
       }
     });
@@ -502,7 +519,7 @@ public class FlockWaveThreaded extends FlockWave {
 
         synchronized (FlockWaveThreaded.this) {
           advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
-          println("deltaMs: " + deltaMs + " / birds: " + birds.size());
+          //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
         }
       }
     }
