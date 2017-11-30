@@ -29,6 +29,8 @@ static final float objRotationX = 0;
 static final float objRotationY = 0;
 static final float objRotationZ = 0;
 
+static final PVector modelCenter = new PVector(); 
+
 static final float INCHES_PER_METER = 39.3701;
 
 Map<String, String> macToPhysid = new HashMap<String, String>();
@@ -188,7 +190,7 @@ public SLModel buildModel() {
   
   // suns.add(new Sun("sun7", Sun.Type.TWO_THIRDS, new float[] {1420, 30, 155}, new float[] {0, 0, 0}, transform));
 
-  suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform, 
+  suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, new float[] {0, 0, 0 }, new float[] {0, 0, 0}, transform, 
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -227,6 +229,6 @@ public SLModel buildModel() {
 
   /* Obj Importer ----------------------------------------------------*/
   List<LXModel> objModels = new ObjImporter("data", transform).getModels();
-
+  
   return new SLModel(suns);
 }
