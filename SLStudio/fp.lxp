@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512046874356,
+  "timestamp": 1512050612466,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 195.7646942138672,
+        "color/hue": 351.5789489746094,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -16728833,
+        "color": -65500,
         "period": 5000.0,
         "range": 96.37795275590553,
         "spread": 0.0,
@@ -56,12 +56,12 @@
           "label": "L Pattern",
           "arm": false,
           "enabled": true,
-          "cue": true,
+          "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.31428571604192257,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -90,7 +90,7 @@
             "modulationColor": -16384,
             "parameters": {
               "label": "Desaturation",
-              "enabled": true,
+              "enabled": false,
               "amount": 0.0,
               "attack": 100.0,
               "decay": 100.0
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 13,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 2773,
@@ -163,7 +163,7 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.6100000031292439,
+              "Dens": 0.9500000011175871,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 6
@@ -181,12 +181,12 @@
             "modulationColor": -45056,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.6000000238418579,
+              "DEPTH": 0.7800000254064798,
               "BRT": 0.75,
               "SAT": 0.5,
-              "SPD1": 0.20000000298023224,
-              "SPD2": 0.4000000059604645,
-              "SCALE": 0.15000000596046448
+              "SPD1": 0.12000000476837158,
+              "SPD2": 0.07000001333653927,
+              "SCALE": 0.7899999916553497
             },
             "modulation": {
               "modulators": [],
@@ -280,7 +280,7 @@
             "modulationColor": -16711877,
             "parameters": {
               "label": "SpaceTime",
-              "RATE": 0.5,
+              "RATE": 0.2200000062584877,
               "SIZE": 0.5
             },
             "modulation": {
@@ -349,12 +349,12 @@
               "label": "FlockWaveThreaded",
               "timeScale": 0.4300000127404928,
               "oscBlobs": false,
-              "bMrgRad": 13.999999687075615,
-              "bMaxSpd": 170.00000156462193,
-              "x": 95.18536376953125,
-              "y": -63.25000762939453,
+              "bMrgRad": 22.99999948590994,
+              "bMaxSpd": 240.0,
+              "x": 47.05629397615712,
+              "y": -32.25750446591533,
               "z": -2.972562317876566,
-              "zScale": -2.3999998793005943,
+              "zScale": 0.30000006034970284,
               "spnRad": 100.0,
               "spnMin": 0.0,
               "spnMax": 20.0,
@@ -368,9 +368,9 @@
               "size": 200.00000357627857,
               "detail": 6.099999953061342,
               "ripple": 0.2000000491738323,
-              "palette": 3,
-              "palShift": 0.6399999856948853,
-              "palBias": 5.40000032633543
+              "palette": 1,
+              "palShift": 0.12999999709427357,
+              "palBias": 14.400000125169754
             },
             "modulation": {
               "modulators": [
@@ -522,7 +522,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.8857142860069871,
           "crossfadeGroup": 1,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -571,10 +571,10 @@
             "modulationColor": -65449,
             "parameters": {
               "label": "SolidColor",
-              "color/hue": 0.0,
-              "color/brightness": 100.0,
-              "color/saturation": 100.0,
-              "color": -65536
+              "color/hue": 318.3783874511719,
+              "color/brightness": 52.156864166259766,
+              "color/saturation": 83.45864868164062,
+              "color": -8055197
             },
             "modulation": {
               "modulators": [],
@@ -598,7 +598,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -607,7 +607,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 3244,
@@ -832,16 +832,16 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 2,
-          "blendMode": 0,
+          "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 3250,
@@ -961,13 +961,13 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.02319005370476601,
-          "Band-2": 0.053894297164524874,
-          "Band-3": 0.09510842750252924,
-          "Band-4": 0.14205593182840281,
-          "Band-5": 0.06769126110401247,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
+          "Band-1": 0.0175813883689524,
+          "Band-2": 0.03614866335601885,
+          "Band-3": 0.009378469944774759,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.08977081719642399,
+          "Band-7": 0.11792241146319882,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,

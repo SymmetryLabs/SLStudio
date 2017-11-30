@@ -141,6 +141,7 @@ public class Sun8FrontTopPixliteConfig {
 public class Sun8FrontBottomPixliteConfig {
   public Sun8FrontBottomPixliteConfig(LX lx, Slice slice, String ipAddress, Pixlite pixlite) throws SocketException {
 
+    
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
       new PointsGrouping("9")
        .addPoints(slice.getStripById("46").points)
@@ -157,7 +158,7 @@ public class Sun8FrontBottomPixliteConfig {
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
-      new PointsGrouping("11")
+      new PointsGrouping("5")
        .addPoints(slice.getStripById("53").points)
        .addPoints(slice.getStripById("54").points, PointsGrouping.REVERSE_ORDERING)
        .addPoints(slice.getStripById("55").points)
@@ -165,28 +166,28 @@ public class Sun8FrontBottomPixliteConfig {
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
-      new PointsGrouping("12")
+      new PointsGrouping("4")
        .addPoints(slice.getStripById("57").points)
        .addPoints(slice.getStripById("58").points, PointsGrouping.REVERSE_ORDERING)
        .addPoints(slice.getStripById("59").points)
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
-      new PointsGrouping("13")
+      new PointsGrouping("3")
        .addPoints(slice.getStripById("60").points)
        .addPoints(slice.getStripById("61").points, PointsGrouping.REVERSE_ORDERING)
        .addPoints(slice.getStripById("62").points)
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
-      new PointsGrouping("14")
+      new PointsGrouping("2")
        .addPoints(slice.getStripById("63").points)
        .addPoints(slice.getStripById("64").points, PointsGrouping.REVERSE_ORDERING)
        .addPoints(slice.getStripById("65").points)
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
-      new PointsGrouping("15")
+      new PointsGrouping("1")
        .addPoints(slice.getStripById("66").points, PointsGrouping.Shift.LEFT)
        .addPoints(slice.getStripById("67").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
     ));
