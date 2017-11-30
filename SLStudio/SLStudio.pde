@@ -4,14 +4,16 @@ import java.lang.reflect.*;
 import java.text.DecimalFormat;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
+import com.symmetrylabs.util.PackageUtils;
+
 public PApplet applet;
 public LXStudio lx;
-public SLModel model;
 public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public Pixlite[] pixlites;
 public SkyPaletteLibrary skyPalettes;
+public BlobTracker blobTracker;
 
 public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
 
@@ -20,7 +22,8 @@ void setup() {
   size(displayWidth, displayHeight, P3D);
   applet = this;
 
-  model = buildModel();
+  SLModel model = buildModel();
+
   println("-- Model ----");
   println("# of suns: " + model.suns.size());
   println("# of slices: " + model.slices.size());
@@ -42,7 +45,11 @@ void setup() {
   lx = new LXStudio(this, model, false) {
     @Override
     protected void initialize(LXStudio lx, LXStudio.UI ui) {
-      
+
+      for (Class<? extends LXPattern> c : PackageUtils.getPatternClassesInPackage("com.symmetrylabs")) {
+        lx.registerPattern(c);
+      }
+
       // Output
       (dispatcher = new Dispatcher(lx)).start();
       (networkMonitor = new NetworkMonitor(lx)).start();
@@ -82,6 +89,7 @@ void setup() {
   };
 
   lx.engine.audio.enabled.setValue(true);
+  blobTracker = new BlobTracker(lx);
 
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
@@ -90,4 +98,5 @@ void setup() {
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
   DrawHelper.runAll();
+  dispatcher.draw();
 }

@@ -1,5 +1,4 @@
 Pixlite[] setupPixlites(LX lx) {
-  // 10.200.1.26:4 -> 25:8 <-FIX
 
   return new Pixlite[] {
     // Sun 1 (One Third)
@@ -24,11 +23,11 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), // locked
     // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")), // locked
 
-    // // Sun 8 (Two Thirds)
-    // new Pixlite(lx, "10.200.1.27", model.getSliceById("sun8_top_front")), // locked
-    // new Pixlite(lx, "10.200.1.28", model.getSliceById("sun8_bottom_front")), // locked
-    // new Pixlite(lx, "10.200.1.29", model.getSliceById("sun8_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.30", model.getSliceById("sun8_bottom_back")), // locked
+    // Sun 8 (Two Thirds)
+    new Pixlite(lx, "10.200.1.27", model.getSliceById("sun8_top_front")), // locked
+    new Pixlite(lx, "10.200.1.28", model.getSliceById("sun8_bottom_front")), // locked
+    new Pixlite(lx, "10.200.1.29", model.getSliceById("sun8_top_back")), // locked
+    new Pixlite(lx, "10.200.1.30", model.getSliceById("sun8_bottom_back")), // locked
   };
 }
  

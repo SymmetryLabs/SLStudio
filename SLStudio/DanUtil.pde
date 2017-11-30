@@ -25,6 +25,20 @@
 // //     }
 // // }
 
+import heronarts.lx.LX;
+import heronarts.lx.LXUtils;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.midi.LXMidiOutput;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import processing.core.PImage;
+import processing.core.PVector;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.function.Consumer;
+
 public class NDat {
     float   xz, yz, zz, hue, speed, angle, den;
     float   xoff,yoff,zoff;
@@ -52,23 +66,22 @@ public class DBool {
     }
 }
 //----------------------------------------------------------------------------------------------------------------------------------
-public class DPat extends SLPattern {
+public class DPat extends LXPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
-    ArrayList<DBool>  bools  = new ArrayList<DBool> ();
-    PVector pTrans= new PVector(); 
+    ArrayList<DBool> bools  = new ArrayList<DBool> ();
+    PVector pTrans= new PVector();
     PVector     mMax, mCtr, mHalf;
 
-    LXMidiOutput  APCOut;
+    LXMidiOutput APCOut;
     LXMidiOutput MidiFighterTwisterOut; 
     int         nMaxRow     = 53;
     float       LastJog = -1;
     float[]     xWaveNz, yWaveNz;
-    int         nPoint  , nPoints;
     PVector     xyzJog = new PVector(), modmin;
 
     float           NoiseMove   = random(10000);
-    CompoundParameter  pSpark, pWave, pRotX, pRotY, pRotZ, pSpin, pTransX, pTransY;
-    BooleanParameter            pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
+    CompoundParameter pSpark, pWave, pRotX, pRotY, pRotZ, pSpin, pTransX, pTransY;
+    BooleanParameter pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
 
     float       lxh     ()                                  { return palette.getHuef();                                          }
     int         c1c      (float a)                          { return round(100*constrain(a,0,1));                               }
@@ -104,7 +117,7 @@ public class DPat extends SLPattern {
     // }
 
     float random(float max) {
-        return (float)LXUtils.random(0, max);
+        return (float) LXUtils.random(0, max);
     }
 
     float random(float min, float max) {
@@ -193,9 +206,6 @@ public class DPat extends SLPattern {
         // addNonKnobParameter(pJog);
         // addNonKnobParameter(pGrey);
 
-        nPoints     =   model.points.length;
-
-        
         //addMultipleParameterUIRow("Bools",pXsym,pYsym,pRsym,pXdup,pJog,pGrey);
 
         modmin      =   new PVector(model.xMin, model.yMin, model.zMin);
@@ -240,8 +250,6 @@ public class DPat extends SLPattern {
 
     void run(double deltaMs)
     {
-        if (deltaMs > 100) return;
-
         /* pre patternControls UI
           if (this == midiEngine.getFocusedPattern()) {
             String Text1="", Text2="";
@@ -252,9 +260,8 @@ public class DPat extends SLPattern {
 
         NoiseMove       += deltaMs; NoiseMove = NoiseMove % 1e7;
         StartRun        (deltaMs);
-        PVector P       = new PVector(), tP = new PVector(), pSave = new PVector();
+
         pTrans.set(val(pTransX)*200-100, val(pTransY)*100-50,0);
-        nPoint  = 0;
 
         if (pJog.getValueb()) {
             float tRamp = (lx.tempo.rampf() % .25);
@@ -263,7 +270,7 @@ public class DPat extends SLPattern {
         }
 
         // precalculate this stuff
-        float wvAmp = val(pWave), sprk = val(pSpark);
+        final float wvAmp = val(pWave), sprk = val(pSpark);
         if (wvAmp > 0) {
             for (int i=0; i<ceil(mMax.x)+1; i++)
                 yWaveNz[i] = wvAmp * (noise(i/(mMax.x*.3)-(2e3+NoiseMove)/1500.) - .5) * (mMax.y/2.);
@@ -272,25 +279,31 @@ public class DPat extends SLPattern {
                 xWaveNz[i] = wvAmp * (noise(i/(mMax.y*.3)-(1e3+NoiseMove)/1500.) - .5) * (mMax.x/2.);
         }
 
-        for (LXPoint p : model.points) { nPoint++;
-            setVec(P,p);
-            P.sub(modmin);
-            P.sub(pTrans);
-            if (sprk  > 0) {P.y += sprk*randctr(50); P.x += sprk*randctr(50); P.z += sprk*randctr(50); }
-            if (wvAmp > 0)  P.y += interpWv(p.x-modmin.x, yWaveNz);
-            if (wvAmp > 0)  P.x += interpWv(p.y-modmin.y, xWaveNz);
-            if (pJog.getValueb())       P.add(xyzJog);
+        // TODO Threadding: For some reason, using parallelStream here messes up the animations.
+        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
+            @Override
+            public void accept(final LXPoint p) {
+                PVector P       = new PVector(), tP = new PVector();
+
+                setVec(P,p);
+                P.sub(modmin);
+                P.sub(pTrans);
+                if (sprk  > 0) {P.y += sprk*randctr(50); P.x += sprk*randctr(50); P.z += sprk*randctr(50); }
+                if (wvAmp > 0)  P.y += interpWv(p.x-modmin.x, yWaveNz);
+                if (wvAmp > 0)  P.x += interpWv(p.y-modmin.y, xWaveNz);
+                if (pJog.getValueb())       P.add(xyzJog);
 
 
-            color cNew, cOld = colors[p.index];
-                            { tP.set(P);                                    cNew = CalcPoint(tP);                           }
-            if (pXsym.getValueb())  { tP.set(mMax.x-P.x,P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-            if (pYsym.getValueb())  { tP.set(P.x,mMax.y-P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-            if (pRsym.getValueb())  { tP.set(mMax.x-P.x,mMax.y-P.y,mMax.z-P.z);     cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-            if (pXdup.getValueb())  { tP.set((P.x+mMax.x*.5)%mMax.x,P.y,P.z);       cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-            if (pGrey.getValueb())  { cNew = lx.hsb(0, 0, LXColor.b(cNew)); }
-            colors[p.index] = cNew;
-        }
+                color cNew, cOld = colors[p.index];
+                { tP.set(P);                                    cNew = CalcPoint(tP);                           }
+                if (pXsym.getValueb())  { tP.set(mMax.x-P.x,P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                if (pYsym.getValueb())  { tP.set(P.x,mMax.y-P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                if (pRsym.getValueb())  { tP.set(mMax.x-P.x,mMax.y-P.y,mMax.z-P.z);     cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                if (pXdup.getValueb())  { tP.set((P.x+mMax.x*.5)%mMax.x,P.y,P.z);       cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                if (pGrey.getValueb())  { cNew = lx.hsb(0, 0, LXColor.b(cNew)); }
+                colors[p.index] = cNew;
+            }
+        });
     }
 }
 // //----------------------------------------------------------------------------------------------------------------------------------

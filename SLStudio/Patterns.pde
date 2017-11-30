@@ -162,7 +162,7 @@ public class Noise extends DPat {
   }
 }
 
-public class SoundParticles extends SLPattern   {
+public class SoundParticles extends LXPattern   {
     private final int LIMINAL_KEY = 46;
     private final int MAX_VELOCITY = 100;
     private boolean debug = false;
@@ -513,8 +513,6 @@ public class SoundParticles extends SLPattern   {
 
     public void run(final double deltaMs) {
      setColors(0);
-
-
      if (doUpdate) {
      // physics.update();
       }
@@ -683,7 +681,7 @@ public class Pong extends DPat {
   }
 }
 
-public class BassPod extends SLPattern {
+public class BassPod extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -733,7 +731,7 @@ public class BassPod extends SLPattern {
   }
 }
 
-public class CubeEQ extends SLPattern {
+public class CubeEQ extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -905,7 +903,7 @@ public class SpaceTime extends SLPattern {
   }
 }
 
-public class Traktor extends SLPattern {
+public class Traktor extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -1074,7 +1072,7 @@ public class AskewPlanes extends DPat {
   }
 }
 
-public class ShiftingPlane extends SLPattern {
+public class ShiftingPlane extends LXPattern {
 
   final CompoundParameter hueShift = new CompoundParameter("hShift", 0.5, 0, 1);
 
@@ -1194,7 +1192,7 @@ public class SunFlash extends SLPattern {
   }
 }
 
-public class Spheres extends SLPattern {
+public class Spheres extends LXPattern {
   private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);
   private CompoundParameter periodParameter = new CompoundParameter("PERIOD", 4000.0, 200.0, 10000.0);
   private CompoundParameter hueVariance = new CompoundParameter("HueVar", 50, 0, 180);
@@ -1273,7 +1271,7 @@ public class Spheres extends SLPattern {
   }
 }
 
-public class Rings extends SLPattern {
+public class Rings extends LXPattern {
   float dx, dy, dz;
   float angleParam, spacingParam;
   float dzParam, centerParam;
@@ -1468,86 +1466,8 @@ public class Rings extends SLPattern {
 //   }
 // }
 
-public class Swim extends SLPattern {
 
-  // Projection stuff
-  private final LXProjection projection;
-  SinLFO rotationX = new SinLFO(-PI/16, PI/8, 9000);
-  SinLFO rotationY = new SinLFO(-PI/8, PI/8, 7000);
-  SinLFO rotationZ = new SinLFO(-PI/8, PI/16, 11000);
-  SinLFO yPos = new SinLFO(-1, 1, 13234);
-  SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
-  SawLFO phaseLFO = new SawLFO(0, 2 * PI, 15000 - 13000 * 0.5);
-  final CompoundParameter phaseParam = new CompoundParameter("Spd", 0.5);
-  final CompoundParameter crazyParam = new CompoundParameter("Crzy", 0.5);
-
-  final CompoundParameter hueScale = new CompoundParameter("HUE", 0.1, 0.0, 0.2);
-
-  public Swim(LX lx) {
-    super(lx);
-    projection = new LXProjection(model);
-    addParameter(hueScale);
-    addParameter(crazyParam);
-    addParameter(phaseParam);
-
-    addModulator(rotationX).trigger();
-    addModulator(rotationY).trigger();
-    addModulator(rotationZ).trigger();
-    addModulator(yPos).trigger();
-    addModulator(phaseLFO).trigger();
-  }
-
-  public void onParameterChanged(LXParameter parameter) {
-    if (parameter == phaseParam) {
-      phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
-    }
-  }
-
-  int beat = 0;
-  float prevRamp = 0;
-  void run(final double deltaMs) {
-
-    final float phase = phaseLFO.getValuef();
-
-    final float up_down_range = (model.yMax - model.yMin) / 4;
-
-    // Swim around the world
-    final float crazy_factor = crazyParam.getValuef() / 0.2;
-    projection.reset()
-    .rotate(rotationZ.getValuef() * crazy_factor,  0, 1, 0)
-      .rotate(rotationX.getValuef() * crazy_factor, 0, 0, 1)
-        .rotate(rotationY.getValuef() * crazy_factor, 0, 1, 0)
-          .translate(0, up_down_range * yPos.getValuef(), 0);
-
-
-    final float model_height =  model.yMax - model.yMin;
-    final float model_width =  model.xMax - model.xMin;
-    StreamSupport.stream(
-      Spliterators.spliteratorUnknownSize(projection.iterator(), Spliterator.CONCURRENT),
-      true
-    ).forEach(new Consumer<LXVector>() {
-      @Override
-      public void accept(final LXVector p) {
-        float x_percentage = (p.x - model.xMin)/model_width;
-
-        // Multiply by sineHeight to shrink the size of the sin wave to be less than the height of the cubes.
-        float y_in_range = sineHeight.getValuef() * (2*p.y - model.yMax - model.yMin) / model_height;
-        float sin_x =  sin(phase + 2 * PI * x_percentage);
-
-        float size_of_sin_wave = 0.4;
-
-        float v1 = (abs(y_in_range - sin_x) > size_of_sin_wave) ? 0 : abs((y_in_range - sin_x + size_of_sin_wave) / size_of_sin_wave / 2 * 100);
-
-
-        float hue_color = palette.getHuef() + hueScale.getValuef() * (abs(p.x-model.xMax/2.)*.01 + abs(p.y-model.yMax/2)*.6 + abs(p.z - model.zMax/1.));
-        colors[p.index] = lx.hsb(hue_color, 100, v1);
-      }
-    });
-
-  }
-}
-
-public class ViolinWave extends SLPattern {
+public class ViolinWave extends LXPattern {
 
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -1683,7 +1603,7 @@ public class ViolinWave extends SLPattern {
   }
 }
 
-public class CrossSections extends SLPattern {
+public class CrossSections extends LXPattern {
 
   final SinLFO x = new SinLFO(model.xMin, model.xMax, 5000);
   final SinLFO y = new SinLFO(model.yMin, model.yMax, 6000);
@@ -1770,313 +1690,7 @@ public class CrossSections extends SLPattern {
   }
 }
 
-public class Bubbles extends SLPattern {
-
-    private final float MAX_VELOCITY = 1.5;
-    //private final float MAX_SIZE = 25;
-    private final float MAX_SPROUT_TIME = 150;
-    private final Random rand = new Random();
-
-    private final CompoundParameter rate = new CompoundParameter("num", 0.3);
-    private final CompoundParameter speed = new CompoundParameter("spd", 0.01, 0.25, 1.0);
-    private final CompoundParameter saturation  = new CompoundParameter("col", 50, 0, 100);
-    private final CompoundParameter maxBubbleSize = new CompoundParameter("size", 20, 10, 50);
-    private final CompoundParameter transparency  = new CompoundParameter("trns", 9, 0.1, 25);
-    private final CompoundParameter popFrequency  = new CompoundParameter("aPop", 30, 30, 500);
-    private final CompoundParameter zDep = new CompoundParameter("zDep", 2, 0.1, 5);
-
-    private final List<Bubble> bubbles = new LinkedList<Bubble>();
-    float leftoverMs = 0;
-
-    public Bubbles(LX lx) {
-        super(lx);
-        addParameter(rate);
-        addParameter(speed);
-        addParameter(saturation);
-        addParameter(maxBubbleSize);
-        addParameter(transparency);
-        addParameter(popFrequency);
-        addParameter(zDep);
-    }
-
-    public void run(double deltaMs) {
-        leftoverMs += deltaMs;
-        float msPerBubble = 20000 / ((rate.getValuef() + .01) * 100);
-        while (leftoverMs > msPerBubble) {
-          leftoverMs -= msPerBubble;
-          bubbles.add(new Bubble());
-        }
-
-        // if pop frequency is at "normalized zero", we will use sensor data
-        // otherwise use as a frequency parameter for autopopping
-        float popFreqV = popFrequency.getValuef();
-        if (popFreqV > 30) {
-            int indexToPop = (int)(bubbles.size() * popFreqV * rand.nextFloat());
-            if (indexToPop < bubbles.size())
-                bubbles.get(indexToPop).pop();
-        }
-
-        for (Bubble bubble : bubbles) {
-            bubble.run(deltaMs);
-        }
-
-        for (LXPoint point : model.points) {
-            colors[point.index] = 0;
-            for (Bubble bubble : bubbles)
-                bubble.paint(point);
-        }
-
-        Iterator<Bubble> i = bubbles.iterator();
-        while (i.hasNext()) {
-          Bubble bubble = i.next();
-          if (bubble.isDead)
-            i.remove();
-        }
-    }
-
-    private class Bubble {
-        float x = (rand.nextFloat() * model.xRange) + model.xMin;
-        float y = (rand.nextFloat() * model.yRange) + model.yMin;
-        float z = (rand.nextFloat() * model.zRange) + model.zMin;
-
-        float xVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
-        float yVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
-        float zVelocity = rand.nextFloat() * rand.nextFloat() * MAX_VELOCITY;
-
-        float size = rand.nextFloat() * maxBubbleSize.getValuef() + 4.0f;
-        float sproutTime = rand.nextFloat() * MAX_SPROUT_TIME;
-        float hue = rand.nextFloat() * 360;
-
-        boolean hasGrown = false;
-        boolean isPopped = false;
-        boolean isDead = false;
-        float radius = 0;
-        int counter = 0;
-
-        QuadraticEnvelope yMod = new QuadraticEnvelope(-0.2, 0.2, 2000);
-        QuadraticEnvelope pop = new QuadraticEnvelope(0, 15, 200);
-
-        public Bubble() {
-            yMod.setEase(QuadraticEnvelope.Ease.BOTH);
-            pop.setEase(QuadraticEnvelope.Ease.OUT);
-            addModulator(yMod).start();
-            addModulator(pop);
-        }
-
-        public void run(double deltaMs) {
-            float xVel = xVelocity * speed.getValuef();
-            float yVel = yVelocity * speed.getValuef();
-            float zVel = zVelocity * speed.getValuef();
-
-            if (!hasGrown) {
-                x += xVel * 0.2f;
-                y += yVel * 0.2f;
-                z += zVel * 0.2f;
-                radius = (float)counter / sproutTime * size;
-                radius *= radius;
-                if (radius > size)
-                    hasGrown = true;
-            } else {
-                x += xVel;
-                y += yVel + yMod.getValuef();
-                z += zVel;
-                radius = size;
-            }
-            counter++;
-
-            if (isPopped) {
-                if (radius < size*1.5)
-                    radius += pop.getValuef();
-            }
-
-            if (x > model.xMax+radius || x < model.xMin-radius
-             || y > model.yMax+radius || y < model.yMin-radius) {
-                isDead = true;
-            }
-        }
-
-        public float distanceTo(LXPoint p) {
-            return (float)Math.sqrt(Math.pow(Math.abs(x - p.x), 2) + Math.pow(Math.abs(y - p.y), 2) + Math.pow(Math.abs(z - p.z), 2));
-        }
-
-        public void paint(LXPoint p) {
-            if (Math.abs(p.x - x) > radius
-             || Math.abs(p.y - y) > radius
-             || Math.abs(p.z - z) > radius * zDep.getValuef()) {
-                return;
-            }
-
-            float distance = (float)LXUtils.distance((double)p.x, (double)p.y, (double)x, (double)y);
-            //float distance = distanceTo(p);
-            if (distance > radius) return;
-
-            float gradient = 100*pow(distance/radius, 6);
-            float brightness = 0;
-            float edge = size * 0.85;
-            float falloff = pow(Math.abs(distance - edge) / (size - edge), 1) * 100;
-
-            brightness = max(0, min(100 , gradient) - ((pop.getValuef() / 15) * 100))
-                + transparency.getValuef();
-            // if (hasGrown && distance > edge) {
-            //     if (isPopped)
-            //         falloff = pow(falloff, 1);
-            //     brightness -= falloff;
-            // }
-
-            if (brightness < 5) brightness = 0; // ugh, fix this (popped bubbles dont come out to zero)
-
-            colors[p.index] = PImage.blendColor(
-                colors[p.index],
-                lx.hsb(
-                    hue + 1.7*((x-p.x) + (y-p.y)),
-                    saturation.getValuef(), //min(100, gradient*1.2f+5.0f),
-                    brightness
-                ), ADD
-            );
-        }
-
-        public void pop() {
-            if (isPopped) return;
-            isPopped = true;
-            pop.trigger();
-        }
-
-    }
-
-}
-
-public class Balance extends SLPattern {
-
-  final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
-
-  class Sphere {
-    float x, y, z;
-  }
-
-
-  // Projection stuff
-  private final LXProjection projection;
-
-  SinLFO sphere1Z = new SinLFO(0, 0, 15323);
-  SinLFO sphere2Z = new SinLFO(0, 0, 8323);
-  SinLFO rotationX = new SinLFO(-PI/32, PI/32, 9000);
-  SinLFO rotationY = new SinLFO(-PI/16, PI/16, 7000);
-  SinLFO rotationZ = new SinLFO(-PI/16, PI/16, 11000);
-  SawLFO phaseLFO = new SawLFO(0, 2 * PI, 5000 - 4500 * 0.5);
-  final CompoundParameter phaseParam = new CompoundParameter("Spd", 0.5);
-  final CompoundParameter crazyParam = new CompoundParameter("Crzy", 0.2);
-
-
-  private final Sphere[] spheres;
-  private final float centerX, centerY, centerZ, modelHeight, modelWidth, modelDepth;
-  SinLFO heightMod = new SinLFO(0.8, 1.9, 17298);
-
-  public Balance(LX lx) {
-    super(lx);
-
-    projection = new LXProjection(model);
-
-    addParameter(hueScale);
-    addParameter(phaseParam);
-    addParameter(crazyParam);
-
-    spheres = new Sphere[2];
-    centerX = (model.xMax + model.xMin) / 2;
-    centerY = (model.yMax + model.yMin) / 2;
-    centerZ = (model.zMax + model.zMin) / 2;
-    modelHeight = model.yMax - model.yMin;
-    modelWidth = model.xMax - model.xMin;
-    modelDepth = model.zMax - model.zMin;
-
-    spheres[0] = new Sphere();
-    spheres[0].x = 1*modelWidth/2 + model.xMin;
-    spheres[0].y = centerY + 20;
-    spheres[0].z = centerZ;
-
-    spheres[1] = new Sphere();
-    spheres[1].x = model.xMin;
-    spheres[1].y = centerY - 20;
-    spheres[1].z = centerZ;
-
-    addModulator(rotationX).trigger();
-    addModulator(rotationY).trigger();
-    addModulator(rotationZ).trigger();
-
-
-    addModulator(sphere1Z).trigger();
-    addModulator(sphere2Z).trigger();
-    addModulator(phaseLFO).trigger();
-
-    addModulator(heightMod).trigger();
-  }
-
-  public void onParameterChanged(LXParameter parameter) {
-    if (parameter == phaseParam) {
-      phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
-    }
-  }
-
-  int beat = 0;
-  float prevRamp = 0;
-  void run(double deltaMs) {
-
-    // Sync to the beat
-    float ramp = (float)lx.tempo.ramp();
-    if (ramp < prevRamp) {
-      beat = (beat + 1) % 4;
-    }
-    prevRamp = ramp;
-    float phase = phaseLFO.getValuef();
-
-    float crazy_factor = crazyParam.getValuef() / 0.2;
-    projection.reset()
-      .rotate(rotationZ.getValuef() * crazy_factor,  0, 1, 0)
-        .rotate(rotationX.getValuef() * crazy_factor, 0, 0, 1)
-          .rotate(rotationY.getValuef() * crazy_factor, 0, 1, 0);
-
-    for (LXVector p : projection) {
-      float x_percentage = (p.x - model.xMin)/modelWidth;
-
-      float y_in_range = heightMod.getValuef() * (2*p.y - model.yMax - model.yMin) / modelHeight;
-      float sin_x =  sin(PI / 2 + phase + 2 * PI * x_percentage);
-
-      // Color fade near the top of the sin wave
-      float v1 = max(0, 100 * (1 - 4*abs(sin_x - y_in_range)));
-
-      float hue_color = palette.getHuef() + hueScale.getValuef() * (abs(p.x-model.xMax/2.) + abs(p.y-model.yMax/2)*.2 + abs(p.z - model.zMax/2.)*.5);
-      color c = lx.hsb(hue_color, 80, v1);
-
-      // Now draw the spheres
-      for (Sphere s : spheres) {
-        float phase_x = (s.x - phase / (2 * PI) * modelWidth) % modelWidth;
-        float x_dist = LXUtils.wrapdistf(p.x, phase_x, modelWidth);
-
-        float sphere_z = (s == spheres[0]) ? (s.z + sphere1Z.getValuef()) : (s.z - sphere2Z.getValuef());
-
-
-        float d = sqrt(pow(x_dist, 2) + pow(p.y - s.y, 2) + pow(p.z - sphere_z, 2));
-
-        float distance_from_beat =  (beat % 2 == 1) ? 1 - ramp : ramp;
-
-        min(ramp, 1-ramp);
-
-        float r = 40 - pow(distance_from_beat, 0.75) * 20;
-
-        float distance_value = max(0, 1 - max(0, d - r) / 10);
-        float beat_value = 1.0;
-
-        float value = min(beat_value, distance_value);
-
-        float sphere_color = palette.getHuef() - (1 - hueScale.getValuef()) * d/r * 45;
-
-        c = PImage.blendColor(c, lx.hsb(sphere_color + 270, 60, min(1, value) * 100), ADD);
-      }
-      colors[p.index] = c;
-    }
-  }
-}
-
-public class TelevisionStatic extends SLPattern {
+public class TelevisionStatic extends LXPattern {
   CompoundParameter brightParameter = new CompoundParameter("BRIGHT", 1.0);
   CompoundParameter saturationParameter = new CompoundParameter("SAT", 1.0);
   CompoundParameter hueParameter = new CompoundParameter("HUE", 1.0);
@@ -2167,7 +1781,7 @@ public class TelevisionStatic extends SLPattern {
 //   }
 // }
 
-public class Test extends SLPattern {
+public class Test extends LXPattern {
 
   final CompoundParameter thing = new CompoundParameter("Thing", 0, model.yRange);
   final SinLFO lfo = new SinLFO("Stuff", 0, 1, 2000);
@@ -2185,7 +1799,7 @@ public class Test extends SLPattern {
   }
 }
 
-public class Palette extends SLPattern {
+public class Palette extends LXPattern {
   public Palette(LX lx) {
     super(lx);
   }
@@ -2197,7 +1811,7 @@ public class Palette extends SLPattern {
   }
 }
 
-public class Blank extends SLPattern {
+public class Blank extends LXPattern {
   public Blank(LX lx) {
     super(lx);
   }

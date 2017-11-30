@@ -248,7 +248,7 @@ public static class Slice extends LXModel {
 
           CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
           strips.add(new CurvedStrip(Integer.toString(i+1), metrics, new float[] {stripX, -i*STRIP_SPACING, 0}, new float[] {0, 0, 0}, transform));
-        } 
+        }
       } else {
         for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE-2; i++) {
           println(numPointsPerStrip[counter]);
