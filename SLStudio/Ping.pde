@@ -20,7 +20,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
-  
+
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
   CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
@@ -68,7 +68,7 @@ public class FlockWave extends SLPattern {
 
   public void run(double deltaMs) {
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
-    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
+    // println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     renderBirds();
   }
 
@@ -86,7 +86,7 @@ public class FlockWave extends SLPattern {
         PVector vel = PVector.sub(focus, prevFocus);
         if (deltaSec > 0) {
           vel.div(deltaSec);
-        } 
+        }
         spawnBirds(deltaSec, focus, vel, 1);
         advanceBirds(deltaSec, vel);
       }

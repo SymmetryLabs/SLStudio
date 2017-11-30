@@ -5,6 +5,10 @@ Pixlite[] setupPixlites(LX lx) {
     //new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
     //new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
 
+    // Sun 1 (One Third)
+    new Pixlite(lx, "10.200.1.41", ((SLModel)lx.model).getSliceById("sun2_top_back")),
+    new Pixlite(lx, "10.200.1.42", ((SLModel)lx.model).getSliceById("sun2_top_front")),
+
     // Sun 3 (One Third)
     // new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
     // new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
@@ -24,13 +28,13 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")), // locked
 
     // Sun 8 (Two Thirds)
-    new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
-    new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
-    new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
+    // new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
+    // new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
+    // new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
+    // new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
   };
 }
- 
+
 public class Pixlite extends LXOutputGroup {
   private Slice slice;
   public final String ipAddress;
@@ -47,6 +51,14 @@ public class Pixlite extends LXOutputGroup {
       }
       if(slice.id.equals("sun1_top_back")) {
         new Sun1BackPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 1
+      if(slice.id.equals("sun2_top_front")) {
+        new Sun2FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun2_top_back")) {
+        new Sun2BackPixliteConfig(lx, slice, ipAddress, this);
       }
 
       // Sun 3
