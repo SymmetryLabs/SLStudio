@@ -338,10 +338,10 @@ public class Sun8BackBottomPixliteConfig {
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
       new PointsGrouping("1")
-        .addPoints(model.getSliceById("sun8_top_back").getStripById("37").points, PointsGrouping.REVERSE_ORDERING)
-        .addPoints(model.getSliceById("sun8_top_back").getStripById("38").points)
-        .addPoints(model.getSliceById("sun8_top_back").getStripById("39").points, PointsGrouping.REVERSE_ORDERING)
-        .addPoints(model.getSliceById("sun8_top_back").getStripById("40").points)
+        .addPoints(((SLModel)lx.model).getSliceById("sun8_top_back").getStripById("37").points, PointsGrouping.REVERSE_ORDERING)
+        .addPoints(((SLModel)lx.model).getSliceById("sun8_top_back").getStripById("38").points)
+        .addPoints(((SLModel)lx.model).getSliceById("sun8_top_back").getStripById("39").points, PointsGrouping.REVERSE_ORDERING)
+        .addPoints(((SLModel)lx.model).getSliceById("sun8_top_back").getStripById("40").points)
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,

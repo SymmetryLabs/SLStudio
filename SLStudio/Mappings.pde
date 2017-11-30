@@ -57,6 +57,7 @@ public SLModel buildModel() {
   transform.rotateZ(globalRotationZ * PI / 180.);
 
   /* Suns ------------------------------------------------------------*/
+  List<Sun> suns = new ArrayList<Sun>();
 
   suns.add(new Sun("sun1", Sun.Type.ONE_THIRD, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform,
     new int[][] { // completed

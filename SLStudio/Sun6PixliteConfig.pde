@@ -384,11 +384,11 @@ public class Sun6BackBottomPixliteConfig {
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
       new PointsGrouping("16")
-        .addPoints(model.getSliceById("sun6_top_back").getStripById("24").points, PointsGrouping.REVERSE_ORDERING)
-        .addPoints(model.getSliceById("sun6_top_back").getStripById("25").points)
-        .addPoints(model.getSliceById("sun6_top_back").getStripById("26").points, PointsGrouping.REVERSE_ORDERING)
-        .addPoints(model.getSliceById("sun6_top_back").getStripById("27").points)
-        .addPoints(model.getSliceById("sun6_top_back").getStripById("28").points, PointsGrouping.REVERSE_ORDERING)
+        .addPoints(((SLModel)lx.model).getSliceById("sun6_top_back").getStripById("24").points, PointsGrouping.REVERSE_ORDERING)
+        .addPoints(((SLModel)lx.model).getSliceById("sun6_top_back").getStripById("25").points)
+        .addPoints(((SLModel)lx.model).getSliceById("sun6_top_back").getStripById("26").points, PointsGrouping.REVERSE_ORDERING)
+        .addPoints(((SLModel)lx.model).getSliceById("sun6_top_back").getStripById("27").points)
+        .addPoints(((SLModel)lx.model).getSliceById("sun6_top_back").getStripById("28").points, PointsGrouping.REVERSE_ORDERING)
     ));
   }
 }
