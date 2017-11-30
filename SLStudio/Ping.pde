@@ -2,14 +2,15 @@ import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
 
 public class FlockWave extends SLPattern {
+  CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
-  CompoundParameter oscBlobY = new CompoundParameter("blobY", 40, 0, 100);  // blob y-coordinate (in)
   CompoundParameter oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100);  // blob merge radius (in)
   CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000);  // max blob speed (in/s)
   CompoundParameter oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1);  // max interval to calculate blob velocities (s)
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
+  CompoundParameter zScale = new CompoundParameter("zScale", 0, -6, 12);  // z scaling factor (dB)
 
   CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
   CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
@@ -28,6 +29,7 @@ public class FlockWave extends SLPattern {
 
   DiscreteParameter palette = new DiscreteParameter("palette", skyPalettes.getNames());  // selected colour palette
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
+  CompoundParameter palBias = new CompoundParameter("palBias", 0, 0, 20);  // bias colour palette toward zero (dB)
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
@@ -35,14 +37,14 @@ public class FlockWave extends SLPattern {
   public FlockWave(LX lx) {
     super(lx);
 
+    addParameter(timeScale);
     addParameter(oscBlobs);
-    addParameter(oscBlobY);
     addParameter(oscMergeRadius);
     addParameter(oscMaxSpeed);
-    addParameter(oscMaxDeltaSec);
     addParameter(x);
     addParameter(y);
     addParameter(z);
+    addParameter(zScale);
 
     addParameter(spawnRadius);
     addParameter(spawnMinSpeed);
@@ -61,10 +63,11 @@ public class FlockWave extends SLPattern {
 
     addParameter(palette);
     addParameter(palShift);
+    addParameter(palBias);
   }
 
   public void run(double deltaMs) {
-    advanceSimulation((float) deltaMs * 0.001);
+    advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     renderBirds();
   }
@@ -81,7 +84,9 @@ public class FlockWave extends SLPattern {
       PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
       if (prevFocus != null) {
         PVector vel = PVector.sub(focus, prevFocus);
-        vel.div(deltaSec);
+        if (deltaSec > 0) {
+          vel.div(deltaSec);
+        } 
         spawnBirds(deltaSec, focus, vel, 1);
         advanceBirds(deltaSec, vel);
       }
@@ -91,7 +96,7 @@ public class FlockWave extends SLPattern {
   }
 
   void updateBlobTrackerParameters() {
-    blobTracker.setBlobY(oscBlobY.getValuef());
+    blobTracker.setBlobY(y.getValuef());
     blobTracker.setMergeRadius(oscMergeRadius.getValuef());
     blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
     blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
@@ -221,25 +226,27 @@ public class FlockWave extends SLPattern {
     SortedSet<Bird> sortedBirds = getSortedSet(birds);
     Bird low = new Bird(new PVector(0, 0, 0), 0);
     Bird high = new Bird(new PVector(0, 0, 0), 0);
+    double zFactor = Math.pow(10, zScale.getValuef()/10);
+    double bias = Math.pow(0.1, palBias.getValuef()/10);
+
     for (LXPoint p : model.points) {
       low.pos.x = p.x - extent;
       high.pos.x = p.x + extent;
       double sum = 0;
       for (Bird b : sortedBirds.subSet(low, high)) {
-        if (Math.abs(b.pos.y - p.y) < extent) {
-          double sqDist = (
-              (b.pos.x - p.x)*(b.pos.x - p.x) +
-              (b.pos.y - p.y)*(b.pos.y - p.y) +
-              (b.pos.z - p.z)*(b.pos.z - p.z)
-          ) / (extent*extent);
+        double dx = b.pos.x - p.x;
+        double dy = b.pos.y - p.y;
+        double dz = b.pos.z - p.z;
+        if (Math.abs(dy) < extent) {
+          double sqDist = (dx*dx + dy*dy + dz*dz) / (extent*extent);
           if (sqDist < 1) {
-            double dist = Math.sqrt(sqDist);
+            double phase = Math.sqrt(dx*dx + dy*dy + dz*dz*zFactor*zFactor) / extent;
             double a = 1 - sqDist;
-            sum += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*b.value;
+            sum += a*a*Math.sin(waveNumber * 2 * Math.PI * phase - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * phase)*b.value;
           }
         }
       }
-      colors[p.index] = pal.getColor(sum + palShift.getValuef());
+      colors[p.index] = pal.getColor(Math.signum(sum)*Math.pow(Math.abs(sum), bias) + palShift.getValuef());
     }
   }
 
@@ -436,8 +443,10 @@ public class FlockWaveThreaded extends FlockWave {
 
     ColorPalette pal = skyPalettes.getPalette(palette.getOption());
 
+    double bias = Math.pow(0.1, palBias.getValuef()/10);
     for (LXPoint p : model.points) {
-      colors[p.index] = pal.getColor(colorValues[p.index] + palShift.getValuef());
+      double val = colorValues[p.index];
+      colors[p.index] = pal.getColor(Math.signum(val)*Math.pow(Math.abs(val), bias) + palShift.getValuef());
     }
   }
 
@@ -445,22 +454,22 @@ public class FlockWaveThreaded extends FlockWave {
     float waveNumber = detail.getValuef();
     float extent = size.getValuef();
     float rippleSpeed = ripple.getValuef();
+    double zFactor = Math.pow(10, zScale.getValuef()/10);
 
     LXPoint bp = new LXPoint(bird.pos.x, bird.pos.y, bird.pos.z);
 
     List<LXPoint> pointDists = modelIndex.pointsWithin(bp, extent);
     for (LXPoint p : pointDists) {
-
-      double sqDist = (
-          (bird.pos.x - p.x)*(bird.pos.x - p.x) +
-          (bird.pos.y - p.y)*(bird.pos.y - p.y) +
-          (bird.pos.z - p.z)*(bird.pos.z - p.z)
-      ) / (extent*extent);
-
-      if (sqDist < 1) {
-        double dist = Math.sqrt(sqDist);
-        double a = 1f - dist * dist;
-        colorLayer[p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * dist - bird.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * dist)*bird.value;
+      double dx = bird.pos.x - p.x;
+      double dy = bird.pos.y - p.y;
+      double dz = bird.pos.z - p.z;
+      if (Math.abs(dy) < extent) {
+        double sqDist = (dx*dx + dy*dy + dz*dz) / (extent*extent);
+        if (sqDist < 1) {
+          double phase = Math.sqrt(dx*dx + dy*dy + dz*dz*zFactor*zFactor) / extent;
+          double a = 1 - sqDist;
+          colorLayer[p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * phase - bird.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * phase)*bird.value;
+        }
       }
     }
   }
@@ -492,7 +501,7 @@ public class FlockWaveThreaded extends FlockWave {
         lastTime = t;
 
         synchronized (FlockWaveThreaded.this) {
-          advanceSimulation((float) deltaMs * 0.001);
+          advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
           println("deltaMs: " + deltaMs + " / birds: " + birds.size());
         }
       }
