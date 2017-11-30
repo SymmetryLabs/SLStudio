@@ -1,4 +1,6 @@
 Pixlite[] setupPixlites(LX lx) {
+  // 10.200.1.26:4 -> 25:8 <-FIX
+
   return new Pixlite[] {
     // Sun 1 (One Third)
     //new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
@@ -13,7 +15,7 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
 
     // Sun 5 (One Third)
-    new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")),
+    new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")), // locked
     new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")),
 
     // Sun 6 (Two Thirds)
@@ -34,255 +36,45 @@ public class Pixlite extends LXOutputGroup {
     this.slice = slice;
 
     try {
-      if (!specialCase(lx, slice.id)) {
-        setupOutputs(lx);
-        println("");
-      } 
+      // Sun 1
+      if(slice.id.equals("sun1_top_front")) {
+        new Sun1FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun1_top_back")) {
+        new Sun1BackPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 3
+      if(slice.id.equals("sun3_top_front")) {
+        new Sun3FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun3_top_back")) {
+        new Sun3BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 4
+      if(slice.id.equals("sun4_top_back")) {
+        new Sun4BackPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 5
+      if(slice.id.equals("sun5_top_front")) {
+        new Sun5FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun5_top_back")) {
+        new Sun5BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 6
+      if(slice.id.equals("sun6_top_front")) {
+        new Sun6FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun6_top_back")) {
+        new Sun6BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+
     } catch (Exception e) {
       e.printStackTrace();
-    }
-  }
-
-  private boolean specialCase(LX lx, String id) throws SocketException {
-    // if slice needs special output configuration
-    if (id.equals("sun1_top_front")) {
-      new Sun1FrontOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    if (id.equals("sun1_top_back")) {
-      new Sun1BackOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    if (id.equals("sun3_top_front")) {
-      new Sun3FrontTopOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    if (id.equals("sun3_top_back")) {
-      new Sun3BackTopOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    // if (id.equals("sun5_top_front")) {
-    //   new Sun5FrontTopOutputConfig(lx, slice, ipAddress, this);
-    //   return true;
-    // }
-    if (id.equals("sun5_top_back")) {
-      new Sun5BackTopOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    if (id.equals("sun4_top_back")) {
-      new Sun4BackOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    if (id.equals("sun6_top_front")) {
-      new Sun6FrontTopOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    if (id.equals("sun6_top_back")) {
-      new Sun6BackTopOutputConfig(lx, slice, ipAddress, this);
-      return true;
-    }
-    return false;
-  }
-
-  private void setupOutputs(LX lx) throws SocketException {
-    // get slice type and add PixliteOutputs with appropriate points
-
-    if (slice.type != Slice.Type.BOTTOM_ONE_THIRD) {
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("1")
-          .addPoints(slice.getStripById("1").points,  PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("2").points)
-          .addPoints(slice.getStripById("3").points,  PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("4").points)
-          .addPoints(slice.getStripById("5").points,  PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("6").points)
-          .addPoints(slice.getStripById("7").points,  PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("8").points)
-          .addPoints(slice.getStripById("9").points,  PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("10").points)
-          .addPoints(slice.getStripById("11").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("12").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("2")
-          .addPoints(slice.getStripById("13").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("14").points)
-          .addPoints(slice.getStripById("15").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("16").points)
-          .addPoints(slice.getStripById("17").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("18").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("3")
-          .addPoints(slice.getStripById("19").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("20").points)
-          .addPoints(slice.getStripById("21").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("22").points)
-          .addPoints(slice.getStripById("23").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("4")
-          .addPoints(slice.getStripById("24").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("25").points)
-          .addPoints(slice.getStripById("26").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("27").points)
-          .addPoints(slice.getStripById("28").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("5")
-          .addPoints(slice.getStripById("29").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("30").points)
-          .addPoints(slice.getStripById("31").points, PointsGrouping.REVERSE_ORDERING) // short
-          .addPoints(slice.getStripById("32").points) // short
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("6")
-          .addPoints(slice.getStripById("33").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("34").points)
-          .addPoints(slice.getStripById("35").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("36").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("7")
-          .addPoints(slice.getStripById("37").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("38").points)
-          .addPoints(slice.getStripById("39").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("40").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("8")
-          .addPoints(slice.getStripById("41").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("42").points)
-          .addPoints(slice.getStripById("43").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("44").points)
-      ));
-
-      if (slice.type == Slice.Type.TWO_THIRDS) {
-        addChild(new PixliteOutput(lx, ipAddress,
-          new PointsGrouping("9")
-            .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING)
-        ));
-      }
-      if (slice.type == Slice.Type.FULL) {
-        addChild(new PixliteOutput(lx, ipAddress,
-          new PointsGrouping("9")
-            .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING)
-            .addPoints(slice.getStripById("46").points) // even used??
-            .addPoints(slice.getStripById("47").points, PointsGrouping.REVERSE_ORDERING) // even used??
-            .addPoints(slice.getStripById("48").points) // even used??
-        ));
-      }
-    }
-
-    if (slice.type == Slice.Type.FULL) {
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("10")
-          .addPoints(slice.getStripById("49").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("50").points)
-          .addPoints(slice.getStripById("51").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("52").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress, 
-        new PointsGrouping("11")
-          .addPoints(slice.getStripById("53").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("54").points)
-          .addPoints(slice.getStripById("55").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("56").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("12")
-          .addPoints(slice.getStripById("57").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("58").points)
-          .addPoints(slice.getStripById("59").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("13")
-          .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("61").points)
-          .addPoints(slice.getStripById("62").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("14")
-          .addPoints(slice.getStripById("63").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("64").points)
-          .addPoints(slice.getStripById("65").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("15")
-          .addPoints(slice.getStripById("66").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("67").points)
-          .addPoints(slice.getStripById("68").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("16")
-          .addPoints(slice.getStripById("69").points, PointsGrouping.REVERSE_ORDERING)  
-      ));
-    }
-
-    if (slice.type == Slice.Type.BOTTOM_ONE_THIRD) {
-      // 46 to 67
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("9")
-          .addPoints(slice.getStripById("46").points)
-          .addPoints(slice.getStripById("47").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("48").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress, 
-        new PointsGrouping("10")
-          .addPoints(slice.getStripById("49").points)
-          .addPoints(slice.getStripById("50").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("51").points)
-          .addPoints(slice.getStripById("52").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("11")
-          .addPoints(slice.getStripById("53").points)
-          .addPoints(slice.getStripById("54").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("55").points)
-          .addPoints(slice.getStripById("56").points, PointsGrouping.REVERSE_ORDERING)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("12")
-          .addPoints(slice.getStripById("57").points)
-          .addPoints(slice.getStripById("58").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("59").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("13")
-          .addPoints(slice.getStripById("60").points)
-          .addPoints(slice.getStripById("61").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("62").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("14")
-          .addPoints(slice.getStripById("63").points)
-          .addPoints(slice.getStripById("64").points, PointsGrouping.REVERSE_ORDERING)
-          .addPoints(slice.getStripById("65").points)
-      ));
-
-      addChild(new PixliteOutput(lx, ipAddress,
-        new PointsGrouping("15")
-          .addPoints(slice.getStripById("66").points)
-          .addPoints(slice.getStripById("67").points, PointsGrouping.REVERSE_ORDERING)
-      ));
     }
   }
 }
@@ -301,7 +93,6 @@ public class PixliteOutput extends LXDatagramOutput {
 
   private void setupDatagrams(String ipAddress, PointsGrouping pointsGrouping) {
     // the points for one pixlite output have to be spread across multiple universes
-
     int numPoints = pointsGrouping.size();
     int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
     int counter = 0;
@@ -425,7 +216,7 @@ public static class PointsGrouping {
       Collections.reverse(Arrays.asList(shiftedPoints));
     }
 
-    addPoints(shiftedPoints, shift);
+    addPoints(shiftedPoints);
     return this;
   }
 }

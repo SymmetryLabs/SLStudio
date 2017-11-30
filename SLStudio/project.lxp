@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511936506085,
+  "timestamp": 1512002198841,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": false,
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 0.0,
+        "color/hue": 233.64707946777344,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -65536,
+        "color": -16770049,
         "period": 120000.0,
         "range": 0.0,
         "spread": 0.0,
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "Test",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -170,14 +170,68 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.34285713732242584,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 140,
+            "class": "SLStudio$ColorFilter",
+            "modulationColor": -16711720,
+            "parameters": {
+              "label": "ColorFilter",
+              "enabled": true,
+              "hue": 0.0,
+              "sat": 100.0
+            },
+            "modulation": {
+              "modulators": [
+                {
+                  "id": 143,
+                  "class": "heronarts.lx.modulator.VariableLFO",
+                  "modulationColor": -16711832,
+                  "parameters": {
+                    "label": "LFO",
+                    "running": true,
+                    "trigger": false,
+                    "loop": true,
+                    "wave": 0,
+                    "period": 60000.0,
+                    "skew": 0.0,
+                    "shape": 0.0,
+                    "phase": 0.0,
+                    "exp": 0.0
+                  }
+                }
+              ],
+              "modulations": [
+                {
+                  "source": {
+                    "id": 143
+                  },
+                  "target": {
+                    "componentId": 140,
+                    "parameterPath": "hue"
+                  },
+                  "id": 144,
+                  "class": "heronarts.lx.parameter.LXCompoundModulation",
+                  "modulationColor": -16759041,
+                  "parameters": {
+                    "label": "",
+                    "enabled": true,
+                    "Polarity": 0,
+                    "Range": 1.0
+                  }
+                }
+              ],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 0,
         "patterns": [
@@ -205,7 +259,7 @@
         "parameters": {
           "label": "Axes",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -228,7 +282,7 @@
             "modulationColor": -10496,
             "parameters": {
               "label": "ParamCrossSections",
-              "XPOS": 0.6300000045448542,
+              "XPOS": 0.34000000916421413,
               "YPOS": 0.30000001192092896,
               "ZPOS": 0.30000001192092896,
               "XLEV": 1.0,
@@ -371,18 +425,18 @@
           "Band-1": 0.0,
           "Band-2": 0.0,
           "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.10415153658327736,
-          "Band-6": 0.21389826800936573,
-          "Band-7": 0.1976848576212028,
-          "Band-8": 0.18547410329576064,
-          "Band-9": 0.24747830175834473,
-          "Band-10": 0.11672943378708711,
-          "Band-11": 0.19644311377955148,
-          "Band-12": 0.2746750535957849,
-          "Band-13": 0.4189788208609174,
-          "Band-14": 0.3816751409252449,
-          "Band-15": 0.4956711533439212,
+          "Band-4": 0.06805934383838574,
+          "Band-5": 0.03637903597756853,
+          "Band-6": 0.059983090967951735,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
+          "Band-11": 0.2523859977648616,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
+          "Band-14": 0.0,
+          "Band-15": 0.0,
           "Band-16": 0.0
         }
       },
@@ -433,8 +487,45 @@
       }
     },
     "modulation": {
-      "modulators": [],
-      "modulations": [],
+      "modulators": [
+        {
+          "id": 145,
+          "class": "heronarts.lx.modulator.VariableLFO",
+          "modulationColor": -15008000,
+          "parameters": {
+            "label": "LFO 1",
+            "running": true,
+            "trigger": false,
+            "loop": true,
+            "wave": 0,
+            "period": 1000.0,
+            "skew": 0.0,
+            "shape": 0.0,
+            "phase": 0.0,
+            "exp": 0.0
+          }
+        }
+      ],
+      "modulations": [
+        {
+          "source": {
+            "id": 145
+          },
+          "target": {
+            "componentId": 86,
+            "parameterPath": "fader"
+          },
+          "id": 146,
+          "class": "heronarts.lx.parameter.LXCompoundModulation",
+          "modulationColor": -12189952,
+          "parameters": {
+            "label": "",
+            "enabled": true,
+            "Polarity": 0,
+            "Range": 0.5699999872595072
+          }
+        }
+      ],
       "triggers": []
     },
     "osc": {
@@ -463,7 +554,9 @@
       "paletteExpanded": true,
       "engineExpanded": true,
       "clipViewVisible": true,
-      "modulatorExpanded": {},
+      "modulatorExpanded": {
+        "145": true
+      },
       "preview": {
         "radius": 126.61261326904139,
         "theta": 0.591,
