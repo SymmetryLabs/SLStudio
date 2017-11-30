@@ -5,6 +5,8 @@ Pixlite[] setupPixlites(LX lx) {
     //new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
     //new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
 
+    // Sun 2..
+
     // Sun 3 (One Third)
     // new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
     // new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
@@ -23,21 +25,27 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), // locked
     // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")), // locked
     
-    
     // Sun 7 (Two Thirds)
-    new Pixlite(lx, "10.200.1.31", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
-    new Pixlite(lx, "10.200.1.32", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.33", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
-    new Pixlite(lx, "10.200.1.34", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
+    new Pixlite(lx, "10.200.1.33", ((SLModel)lx.model).getSliceById("sun7_top_front")), // locked
+    new Pixlite(lx, "10.200.1.34", ((SLModel)lx.model).getSliceById("sun7_bottom_front")), // locked
+    new Pixlite(lx, "10.200.1.31", ((SLModel)lx.model).getSliceById("sun7_top_back")), // locked
+    new Pixlite(lx, "10.200.1.32", ((SLModel)lx.model).getSliceById("sun7_bottom_back")), // locked
 
-
-
-    
     // Sun 8 (Two Thirds)
-    new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
-    new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
-    new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
+    // new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
+    // new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
+    // new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
+    // new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
+
+    // Sun 9...
+
+    // Sun 10...
+
+    // Sun 10 (Full)
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_back")),
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_back")),
   };
 }
  
@@ -94,7 +102,21 @@ public class Pixlite extends LXOutputGroup {
         new Sun6BackBottomPixliteConfig(lx, slice, ipAddress, this);
       }
 
-      // Sun 6
+      // Sun 7
+      if(slice.id.equals("sun7_top_front")) {
+        new Sun7FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun7_bottom_front")) {
+        new Sun7FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun7_top_back")) {
+        new Sun7BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun7_bottom_back")) {
+        new Sun7BackBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 8
       if(slice.id.equals("sun8_top_front")) {
         new Sun8FrontTopPixliteConfig(lx, slice, ipAddress, this);
       }
@@ -106,6 +128,20 @@ public class Pixlite extends LXOutputGroup {
       }
       if(slice.id.equals("sun8_bottom_back")) {
         new Sun8BackBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
+
+      // Sun 11
+      if(slice.id.equals("sun11_top_front")) {
+        new Sun11FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun11_bottom_front")) {
+        new Sun11FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun11_top_back")) {
+        new Sun11BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun11_bottom_back")) {
+        new Sun11BackBottomPixliteConfig(lx, slice, ipAddress, this);
       }
 
     } catch (Exception e) {
