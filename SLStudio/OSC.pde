@@ -36,7 +36,6 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
     int arg = 0;
     long millis = message.getInt(arg++);
     float deltaSec = (float) (millis - lastMessageMillis)*0.001;
-    System.out.printf("millis: %d, deltaSec: %.3f\n", millis, deltaSec);
     lastMessageMillis = millis;
     
     List<Blob> newBlobs = new ArrayList<Blob>();
@@ -58,10 +57,11 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
       }
     }
     
-    println(blobs.size() + ":");
+    String status = "[" + millis + " ms] " + blobs.size() + " blob" + (blobs.size() == 1 ? "" : "s") + ": ";
     for (Blob b : blobs) {
-      println("  - " + b);
+        status += b + ", ";
     }
+    println(status.substring(0, status.length() - 2));
   }
   
   /** Modifies a list of blobs in place, merging blobs within mergeRadius. */

@@ -3,25 +3,26 @@ import com.symmetrylabs.util.OctreeModelIndex;
 
 public class FlockWave extends SLPattern {
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
-  CompoundParameter oscMergeRadius = new CompoundParameter("oscMrgRad", 30, 0, 100);
-  CompoundParameter oscMaxSpeed = new CompoundParameter("oscMaxSpd", 240, 0, 1000);
-  CompoundParameter oscMaxDeltaSec = new CompoundParameter("oscMaxDt", 0.5, 0, 1);
-  CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (m)
+  CompoundParameter oscBlobY = new CompoundParameter("blobY", 40, 0, 100);  // blob y-coordinate (in)
+  CompoundParameter oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100);  // blob merge radius (in)
+  CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000);  // max blob speed (in/s)
+  CompoundParameter oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1);  // max interval to calculate blob velocities (s)
+  CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
 
-  CompoundParameter spawnMinSpeed = new CompoundParameter("spMin", 2, 0, 40);  // minimum focus speed (m/s) that spawns birds
-  CompoundParameter spawnMaxSpeed = new CompoundParameter("spMax", 20, 0, 40);  // maximum focus speed (m/s) that spawns birds
-  CompoundParameter spawnRadius = new CompoundParameter("spRad", 100, 0, 1000);  // radius (m) within which to spawn birds
+  CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
+  CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
+  CompoundParameter spawnRadius = new CompoundParameter("spnRad", 100, 0, 200);  // radius (in) within which to spawn birds
   CompoundParameter density = new CompoundParameter("density", 2, 0, 4);  // maximum spawn rate (birds/s)
-  CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (m/s)
+  CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (in/s)
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
-  CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (m/s)
-
+  CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
+  
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
-  CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (m)
+  CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
   CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
 
@@ -35,6 +36,7 @@ public class FlockWave extends SLPattern {
     super(lx);
 
     addParameter(oscBlobs);
+    addParameter(oscBlobY);
     addParameter(oscMergeRadius);
     addParameter(oscMaxSpeed);
     addParameter(oscMaxDeltaSec);
@@ -89,6 +91,7 @@ public class FlockWave extends SLPattern {
   }
 
   void updateBlobTrackerParameters() {
+    blobTracker.setBlobY(oscBlobY.getValuef());
     blobTracker.setMergeRadius(oscMergeRadius.getValuef());
     blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
     blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
