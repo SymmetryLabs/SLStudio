@@ -234,6 +234,7 @@ public class FlockWave extends SLPattern {
     SortedSet<Bird> sortedBirds = getSortedSet(birds);
     Bird low = new Bird(new PVector(0, 0, 0), 0);
     Bird high = new Bird(new PVector(0, 0, 0), 0);
+
     double zFactor = Math.pow(10, zScale.getValuef()/10);
     double bias = Math.pow(0.1, palBias.getValuef()/10);
 
@@ -242,6 +243,7 @@ public class FlockWave extends SLPattern {
       high.pos.x = p.x + extent;
       double sum = 0;
       for (Bird b : sortedBirds.subSet(low, high)) {
+
         double dx = b.pos.x - p.x;
         double dy = b.pos.y - p.y;
         double dz = b.pos.z - p.z;
@@ -416,6 +418,7 @@ public class FlockWaveThreaded extends FlockWave {
     simThread = new SimulationThread();
   }
 
+
   /** Only needed until we can do IntRange.range in Processing */
   private Stream intRangeStream(final int startInclusive, final int endExclusive) {
     List<Integer> range = new ArrayList<Integer>(endExclusive - startInclusive);
@@ -431,6 +434,7 @@ public class FlockWaveThreaded extends FlockWave {
     for (int i = 0; i < colorValues.length; ++i) {
       colorValues[i] = 0f;
     }
+
 
     final List<Bird> birdList = new ArrayList<Bird>(birds);
 

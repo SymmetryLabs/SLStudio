@@ -15,6 +15,8 @@ public Pixlite[] pixlites;
 public SkyPaletteLibrary skyPalettes;
 public BlobTracker blobTracker;
 
+public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
+
 void setup() {
   long setupStart = System.nanoTime();
   size(displayWidth, displayHeight, P3D);
@@ -95,6 +97,6 @@ void setup() {
 
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
-  DrawHelper.runAll();
+  //DrawHelper.runAll();
   dispatcher.draw();
 }

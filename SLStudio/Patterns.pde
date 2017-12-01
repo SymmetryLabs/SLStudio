@@ -513,8 +513,6 @@ public class SoundParticles extends LXPattern   {
 
     public void run(final double deltaMs) {
      setColors(0);
-
-
      if (doUpdate) {
      // physics.update();
       }
@@ -1467,6 +1465,7 @@ public class Rings extends LXPattern {
 //     }
 //   }
 // }
+
 
 public class ViolinWave extends LXPattern {
 
