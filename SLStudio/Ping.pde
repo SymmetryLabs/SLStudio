@@ -67,8 +67,8 @@ public class FlockWave extends SLPattern {
   }
 
   public void run(double deltaMs) {
-    advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     println("deltaMs: " + deltaMs + " / birds: " + birds.size());
+    advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     renderBirds();
   }
 
@@ -427,6 +427,7 @@ public class FlockWaveThreaded extends FlockWave {
 
   @Override
   public synchronized void run(double deltaMs) {
+    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     for (int i = 0; i < colorValues.length; ++i) {
       colorValues[i] = 0f;
     }
@@ -480,13 +481,11 @@ public class FlockWaveThreaded extends FlockWave {
       double dx = bird.pos.x - p.x;
       double dy = bird.pos.y - p.y;
       double dz = bird.pos.z - p.z;
-      if (Math.abs(dy) < extent) {
-        double sqDist = (dx*dx + dy*dy + dz*dz) / (extent*extent);
-        if (sqDist < 1) {
-          double phase = Math.sqrt(dx*dx + dy*dy + dz*dz*zFactor*zFactor) / extent;
-          double a = 1 - sqDist;
-          colorLayer[p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * phase - bird.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * phase)*bird.value;
-        }
+      double sqDist = (dx*dx + dy*dy + dz*dz) / (extent*extent);
+      if (sqDist < 1) {
+        double phase = Math.sqrt(dx*dx + dy*dy + dz*dz*zFactor*zFactor) / extent;
+        double a = 1 - sqDist;
+        colorLayer[p.index] += a*a*Math.sin(waveNumber * 2 * Math.PI * phase - bird.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * phase)*bird.value;
       }
     }
   }
@@ -519,7 +518,6 @@ public class FlockWaveThreaded extends FlockWave {
 
         synchronized (FlockWaveThreaded.this) {
           advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
-          //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
         }
       }
     }
