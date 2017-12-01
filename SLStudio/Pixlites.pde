@@ -40,8 +40,8 @@ Pixlite[] setupPixlites(LX lx) {
     // Sun 9 (Full)
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_top_front")),  
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_bottom_front")),
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // locked
+    // new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_top_back")), // locked
+    // new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // lxocked
 
     // Sun 10 (Full)
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
