@@ -36,7 +36,7 @@ public class OctreeModelIndex extends ModelIndex {
             return ot.withinDistance((float)target.x, (float)target.y, (float)target.z, d);
         }
         catch (Exception e) {
-            System.err.println("Exception while finding nearest points: " + e.getMessage());
+            System.err.println("Exception while finding nearby points: " + e.getMessage());
         }
 
         return Collections.emptyList();

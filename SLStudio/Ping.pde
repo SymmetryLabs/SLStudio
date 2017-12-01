@@ -34,8 +34,12 @@ public class FlockWave extends SLPattern {
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
 
+  private BlobTracker blobTracker;
+
   public FlockWave(LX lx) {
     super(lx);
+
+    blobTracker = BlobTracker.getInstance(lx);
 
     addParameter(timeScale);
     addParameter(oscBlobs);
