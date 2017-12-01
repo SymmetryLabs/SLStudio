@@ -386,8 +386,8 @@ public class Sun11BackTopPixliteConfig {
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
       new PointsGrouping("13")
-        .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
-        .addPoints(slice.getStripById("61").points, PointsGrouping.Shift.LEFT)
+        .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
+        .addPoints(slice.getStripById("61").points, PointsGrouping.Shift.LEFT) // go left 2
         .addPoints(slice.getStripById("62").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
     ));
 

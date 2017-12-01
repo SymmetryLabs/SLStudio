@@ -46,14 +46,14 @@ Pixlite[] setupPixlites(LX lx) {
     // Sun 10 (Full)
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_back")),
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_back")),
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_back")), // locked but need trim maybe 
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_back")), // locked but need trim maybe (move whole bottom to the right)
 
     // sun 11
-    //new Pixlite(lx, "10.200.1.21", ((SLModel)lx.model).getSliceById("sun11_top_front")),
-    //new Pixlite(lx, "10.200.1.15", ((SLModel)lx.model).getSliceById("sun11_bottom_front")),
-    new Pixlite(lx, "10.200.1.21", ((SLModel)lx.model).getSliceById("sun11_top_back")), // locked
-    new Pixlite(lx, "10.200.1.15", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_front")),
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_front")),
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_back")), // locked
+    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
   };
 }
  
