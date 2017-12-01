@@ -3,6 +3,8 @@ package com.symmetrylabs.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 
+import com.symmetrylabs.util.BlobTracker;
+
 public class Wasps extends ParticlePattern {
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
