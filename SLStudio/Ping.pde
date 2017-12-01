@@ -20,7 +20,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
-  
+
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
   CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
@@ -86,7 +86,7 @@ public class FlockWave extends SLPattern {
         PVector vel = PVector.sub(focus, prevFocus);
         if (deltaSec > 0) {
           vel.div(deltaSec);
-        } 
+        }
         spawnBirds(deltaSec, focus, vel, 1);
         advanceBirds(deltaSec, vel);
       }
@@ -102,25 +102,32 @@ public class FlockWave extends SLPattern {
     blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
   } //<>//
 
-  void spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
+  List<Bird> spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
     float spawnMin = spawnMinSpeed.getValuef();
     float spawnMax = spawnMaxSpeed.getValuef();
     float speed = vel.mag();
     float numToSpawn = deltaSec * density.getValuef() * weight * (speed - spawnMin) / (spawnMax - spawnMin);
+
+    List<Bird> newBirds = new ArrayList<Bird>();
+
     while (numToSpawn >= 1.0) {
-      spawnBird(focus);
+      newBirds.add(spawnBird(focus));
       numToSpawn -= 1.0;
     }
     if (Math.random() < numToSpawn) {
-      spawnBird(focus);
+      newBirds.add(spawnBird(focus));
     }
+
+    return newBirds;
   }
 
-  void spawnBird(PVector focus) {
+  Bird spawnBird(PVector focus) {
     PVector pos = getRandomUnitVector();
     pos.mult(spawnRadius.getValuef());
     pos.add(focus);
-    birds.add(new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100)));
+    Bird bird = new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100));
+    birds.add(bird);
+    return bird;
   }
 
   void advanceBirds(float deltaSec, PVector vel) {
@@ -148,7 +155,7 @@ public class FlockWave extends SLPattern {
     }
   }
 
-  void removeExpiredBirds() {
+  List<Bird> removeExpiredBirds() {
     List<Bird> expired = new ArrayList<Bird>();
     for (Bird b : birds) {
       if (b.hasExpired) {
@@ -156,6 +163,7 @@ public class FlockWave extends SLPattern {
       }
     }
     birds.removeAll(expired);
+    return expired;
   }
 
   void renderBirds() {
@@ -373,27 +381,28 @@ public class FlockWaveThreaded extends FlockWave {
   private SimulationThread simThread;
   private ModelIndex modelIndex;
   private float[] colorValues;
-  private float[][] colorLayers;
+  private Map<Bird, float[]> birdLayers = new HashMap<Bird, float[]>();
 
   public FlockWaveThreaded(LX lx) {
     super(lx);
 
     colorValues = new float[colors.length];
-    colorLayers = new float[birds.size()][colors.length];
     modelIndex = new OctreeModelIndex(lx.model);
     simThread = new SimulationThread();
   }
 
-  void spawnBird(PVector focus) {
-    super.spawnBird(focus);
-
-    colorLayers = new float[birds.size()][colors.length];
+  Bird spawnBird(PVector focus) {
+    Bird newBird = super.spawnBird(focus);
+    birdLayers.put(newBird, new float[colors.length]);
+    return newBird;
   }
 
-  void removeExpiredBirds() {
-    super.removeExpiredBirds();
-
-    colorLayers = new float[birds.size()][colors.length];
+  List<Bird> removeExpiredBirds() {
+    List<Bird> oldBirds = super.removeExpiredBirds();
+    for (Bird oldBird : oldBirds) {
+      birdLayers.remove(oldBird);
+    }
+    return oldBirds;
   }
 
   @Override
@@ -424,10 +433,15 @@ public class FlockWaveThreaded extends FlockWave {
     }
 
     final List<Bird> birdList = new ArrayList<Bird>(birds);
+
     intRangeStream(0, birdList.size()).forEach(new Consumer<Integer>() {
       public void accept(Integer i) {
-        Arrays.fill(colorLayers[i], 0);
-        renderBird(birdList.get(i), colorLayers[i]);
+        Bird bird = birdList.get(i);
+        if (birdLayers.containsKey(bird)) {
+          float[] birdLayer = birdLayers.get(bird);
+          Arrays.fill(birdLayer, 0);
+          renderBird(bird, birdLayer);
+        }
       }
     });
 
@@ -436,8 +450,11 @@ public class FlockWaveThreaded extends FlockWave {
       public void accept(Integer i) {
         colorValues[i] = 0f;
 
-        for (int j = 0; j < colorLayers.length; ++j) {
-          colorValues[i] += colorLayers[j][i];
+        for (Bird bird : birdList) {
+          if (birdLayers.containsKey(bird)) {
+            float[] birdLayer = birdLayers.get(bird);
+            colorValues[i] += birdLayer[i];
+          }
         }
       }
     });
