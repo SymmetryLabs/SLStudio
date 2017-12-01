@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.util.PackageUtils;
+import com.symmetrylabs.util.BlobTracker;
 
 public PApplet applet;
 public LXStudio lx;
