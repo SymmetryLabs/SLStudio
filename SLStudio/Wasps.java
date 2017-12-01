@@ -18,8 +18,12 @@ public class Wasps extends ParticlePattern {
     public final CompoundParameter twistY = new CompoundParameter("twistY", 0.5f, 0, 1);
     public final CompoundParameter twistZ = new CompoundParameter("twistZ", 0.5f, 0, 1);
 
+    //private BlobTracker blobTracker;
+
     public Wasps(LX lx) {
         this(lx, 10);
+
+        //blobTracker = BlobTracker.getInstance(lx);
     }
 
     public Wasps(LX lx, int countValue) {

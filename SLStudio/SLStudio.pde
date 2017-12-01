@@ -89,7 +89,7 @@ void setup() {
   };
 
   lx.engine.audio.enabled.setValue(true);
-  blobTracker = new BlobTracker(lx);
+  blobTracker = BlobTracker.getInstance(lx);
 
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 

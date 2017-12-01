@@ -1,4 +1,6 @@
-public class BlobTracker extends LXModulatorComponent implements LXOscListener {
+import com.symmetrylabs.util.FixedWidthOctree;
+
+public static class BlobTracker extends LXModulatorComponent implements LXOscListener {
   private static final int OSC_PORT = 4343;
   private List<Blob> blobs = new ArrayList<Blob>();
   private float mergeRadius = 30;  // inches
@@ -6,38 +8,55 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
   private float maxDeltaSec = 0.5;  // don't track movement across large gaps in time
   private float blobY = 40;  // inches off the ground
   private long lastMessageMillis = 0;
-  
-  public BlobTracker(LX lx) {
+
+  private LX lx;
+  private FixedWidthOctree<Blob> blobIndex;
+
+  private static Map<LX, BlobTracker> instanceByLX = new HashMap<LX, BlobTracker>();
+  public static synchronized BlobTracker getInstance(LX lx) {
+    if (!instanceByLX.containsKey(lx)) {
+      instanceByLX.put(lx, new BlobTracker(lx));
+    }
+
+    return instanceByLX.get(lx);
+  }
+
+  private BlobTracker(LX lx) {
     super(lx, "BlobTracker");
+
+    this.lx = lx;
+
     try {
       lx.engine.osc.receiver(OSC_PORT).addListener(this);
     } catch (java.net.SocketException e) {
       throw new RuntimeException(e);
     }
+
+    blobIndex = createBlobIndex(blobs);
   }
-  
+
   public void setMergeRadius(float radius) {
     mergeRadius = radius;
   }
-  
+
   public void setMaxSpeed(float speed) {
     maxSpeed = speed;
   }
-  
+
   public void setMaxDeltaSec(float deltaSec) {
     maxDeltaSec = deltaSec;
   }
-  
+
   public void setBlobY(float y) {
     blobY = y;
   }
-  
+
   public void oscMessage(OscMessage message) {
     int arg = 0;
     long millis = message.getInt(arg++);
     float deltaSec = (float) (millis - lastMessageMillis)*0.001;
     lastMessageMillis = millis;
-    
+
     List<Blob> newBlobs = new ArrayList<Blob>();
     int count = message.getInt(arg++);
     for (int i = 0; i < count; i++) {
@@ -46,26 +65,47 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
       float size = message.getFloat(arg++);
       newBlobs.add(new Blob(new PVector(x, blobY, y), size));
     }
+
     mergeBlobs(newBlobs, mergeRadius);
-    
-    List<Blob> prevBlobs = blobs;    
-    blobs = newBlobs;
-    
+
     if (deltaSec < maxDeltaSec) {
-      for (Blob b : blobs) {
-        b.vel = estimateVelocity(b, prevBlobs, deltaSec, maxSpeed);
+      for (Blob b : newBlobs) {
+        b.vel = estimateNewBlobVelocity(b, deltaSec, maxSpeed);
       }
     }
-    
+
+    List<Blob> prevBlobs = blobs;
+
+    blobIndex = createBlobIndex(newBlobs);
+    blobs = newBlobs;
+
     String status = "[" + millis + " ms] " + blobs.size() + " blob" + (blobs.size() == 1 ? "" : "s") + ": ";
     for (Blob b : blobs) {
         status += b + ", ";
     }
     println(status.substring(0, status.length() - 2));
   }
-  
+
+  private FixedWidthOctree createBlobIndex(List<Blob> newBlobs) {
+    try {
+      FixedWidthOctree<Blob> newBlobIndex = new FixedWidthOctree<Blob>(lx.model.cx, lx.model.cy, lx.model.cz,
+          (float)Math.max(lx.model.xRange, Math.max(lx.model.yRange, lx.model.zRange)), 3);
+
+      for (Blob blob : newBlobs) {
+        newBlobIndex.insert(blob.pos.x, blob.pos.y, blob.pos.z, blob);
+      }
+
+      return newBlobIndex;
+    }
+    catch (Exception e) {
+      System.err.println("Exception while building blob index: " + e.getMessage());
+    }
+
+    return null;
+  }
+
   /** Modifies a list of blobs in place, merging blobs within mergeRadius. */
-  void mergeBlobs(List<Blob> blobs, float mergeRadius) {
+  private void mergeBlobs(List<Blob> blobs, float mergeRadius) {
     boolean mergeFound;
     do {
       mergeFound = false;
@@ -77,25 +117,23 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
             blobs.remove(other);
             blobs.add(new Blob(PVector.div(PVector.add(b.pos, other.pos), 2), b.size + other.size));
             mergeFound = true;
-            break search_for_merges;            
+            break search_for_merges;
           }
         }
       }
     } while (mergeFound);
   }
-  
+
   /** Returns an estimate of the velocity of a blob, given a list of previous blobs. */
-  PVector estimateVelocity(Blob blob, List<Blob> prevBlobs, float deltaSec, float maxSpeed) {
-    PVector minVel = null;
-    for (Blob b : prevBlobs) {
-      PVector vel = PVector.div(PVector.sub(blob.pos, b.pos), deltaSec);
-      if (minVel == null || vel.mag() < minVel.mag()) {
-        minVel = vel;
-      }
-    }
-    if (minVel != null && minVel.mag() < maxSpeed) {
-      return minVel;
-    }
+  private PVector estimateNewBlobVelocity(Blob newBlob, float deltaSec, float maxSpeed) {
+    Blob closestBlob = findClosestBlob(new LXPoint(newBlob.pos.x, newBlob.pos.y, newBlob.pos.z));
+    if (closestBlob == null)
+      return new PVector(0, 0, 0);
+
+    PVector vel = PVector.div(PVector.sub(newBlob.pos, closestBlob.pos), deltaSec);
+    if (vel.mag() < maxSpeed)
+      return vel;
+
     return new PVector(0, 0, 0);
   }
 
@@ -107,7 +145,29 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
     }
     return result;
   }
-  
+
+  public Blob findClosestBlob(LXPoint p) {
+    try {
+      return blobIndex.nearest((float)p.x, (float)p.y, (float)p.z);
+    }
+    catch (Exception e) {
+      System.err.println("Exception while finding nearest blob: " + e.getMessage());
+    }
+
+    return null;
+  }
+
+  public List<Blob> findBlobsWithin(LXPoint p, float d) {
+    try {
+      return blobIndex.withinDistance((float)p.x, (float)p.y, (float)p.z, d);
+    }
+    catch (Exception e) {
+      System.err.println("Exception while finding nearby blobs: " + e.getMessage());
+    }
+
+    return Collections.emptyList();
+  }
+
   public class Blob {
     public PVector pos;
     public PVector vel;
@@ -118,11 +178,11 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
       this.vel = vel;
       this.size = size;
     }
-    
+
     Blob(PVector pos, float size) {
       this(pos, new PVector(0, 0, 0), size);
     }
-    
+
     String toString() {
       return String.format("pos %s vel %s size %.0f", pos.toString(), vel.toString(), size);
     }
