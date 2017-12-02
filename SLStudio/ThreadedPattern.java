@@ -32,13 +32,13 @@ public abstract class ThreadedPattern extends LXPattern {
         }
     }
 
-    protected int render(LXPoint p) {
+    protected int render(double deltaMs, LXPoint p) {
         return LXColor.BLACK;
     }
 
-    protected void render(List<LXPoint> points, IntBuffer pointColors) {
+    protected void render(double deltaMs, List<LXPoint> points, IntBuffer pointColors) {
         for (int i = 0; i < points.size(); ++i) {
-            pointColors.put(i, render(points.get(i)));
+            pointColors.put(i, render(deltaMs, points.get(i)));
         }
     }
 
@@ -82,6 +82,7 @@ public abstract class ThreadedPattern extends LXPattern {
 
         @Override
         public void run() {
+            long lastTime = System.currentTimeMillis();
             while (running) {
                 try {
                     triggerRender.acquire();
@@ -98,7 +99,12 @@ public abstract class ThreadedPattern extends LXPattern {
                 List<LXPoint> points = Arrays.asList(lx.model.points).subList(startInclusive, endExclusive);
                 IntBuffer pointColors = IntBuffer.wrap(colors, startInclusive, endExclusive - startInclusive).slice();
 
-                render(points, pointColors);
+                long t = System.currentTimeMillis();
+                double deltaMs = t - lastTime;
+
+                render(deltaMs, points, pointColors);
+
+                lastTime = t;
 
                 for (int i = 0; i < points.size(); ++i) {
                     LXPoint p = points.get(i);

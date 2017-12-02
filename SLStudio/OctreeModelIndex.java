@@ -28,6 +28,8 @@ public class OctreeModelIndex extends ModelIndex {
                 System.err.println("Exception while building Octree: " + e.getMessage());
             }
         }
+
+        System.out.println(ot.dump());
     }
 
     @Override
