@@ -3,14 +3,16 @@ package com.symmetrylabs.util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.function.Function;
+import java.util.function.Consumer;
 
 public class FixedWidthOctree<T> {
     private final int depth;
     private final float centerX, centerY, centerZ;
     private final float width;
 
+    private final List<Entry<T>> points;
     private final FixedWidthOctree[] children;
-    private final List<T> points;
 
     public FixedWidthOctree(float centerX, float centerY, float centerZ, float width, int depth) {
         this.depth = depth;
@@ -19,41 +21,49 @@ public class FixedWidthOctree<T> {
         this.centerZ = centerZ;
         this.width = width;
 
-        points = new ArrayList<T>();
-
-        if (depth > 0) {
-            children = new FixedWidthOctree[8];
-
-            float step = width * 0.25f;
-            for (int i = 0; i < 8; ++i) {
-                float offsetX = (((i & 1) == 0) ? step : -step);
-                float offsetY = (((i & 2) == 0) ? step : -step);
-                float offsetZ = (((i & 4) == 0) ? step : -step);
-
-                children[i] = new FixedWidthOctree(centerX + offsetX, centerY + offsetY, centerZ + offsetZ, step * 2, depth - 1);
-            }
-        }
-        else {
-            children = null;
-        }
+        points = new ArrayList<Entry<T>>();
+        children = new FixedWidthOctree[8];
     }
 
-    public void insert(float x, float y, float z, T obj) {
+    private FixedWidthOctree ensureChild(int i) {
+        if (children[i] == null) {
+            float step = width * 0.25f;
+            float offsetX = (((i & 1) == 0) ? step : -step);
+            float offsetY = (((i & 2) == 0) ? step : -step);
+            float offsetZ = (((i & 4) == 0) ? step : -step);
+
+            children[i] = new FixedWidthOctree(
+                centerX + offsetX, centerY + offsetY, centerZ + offsetZ,
+                step * 2, depth - 1
+            );
+        }
+
+        return children[i];
+    }
+
+    public void insert(float x, float y, float z, T object) {
         if (depth > 0) {
             int index = 0;
             if (x < centerX) index |= 1;
             if (y < centerY) index |= 2;
             if (z < centerZ) index |= 4;
 
-            children[index].insert(x, y, z, obj);
+            ensureChild(index).insert(x, y, z, object);
         }
         else {
-            points.add(obj);
+            points.add(new Entry(x, y, z, object));
         }
     }
 
-    public List<T> withinDistance(float x, float y, float z, float d) {
-        List<T> childPoints = new ArrayList<>(points);
+    // NOTE: we're using Manhattan distance here
+    public List<T> withinDistance(final float x, final float y, final float z, final float d) {
+        final List<T> objectsWithin = new ArrayList<>(points.size());
+
+        for (Entry<T> p : points) {
+            if (Math.abs(p.x - x) < d && Math.abs(p.y - y) < d && Math.abs(p.z - z) < d) {
+                objectsWithin.add(p.object);
+            }
+        }
 
         if (depth > 0) {
             int cleanCutX = 0;
@@ -122,17 +132,111 @@ public class FixedWidthOctree<T> {
                 eliminatedChildren[7] = true;
             }
 
+            List<FixedWidthOctree> survivingChildren = new ArrayList<>();
             for (int i = 0; i < 8; ++i) {
-                if (!eliminatedChildren[i]) {
-                    childPoints.addAll(children[i].withinDistance(x, y, z, d));
+                if (!eliminatedChildren[i] && children[i] != null) {
+                    survivingChildren.add(children[i]);
                 }
             }
+
+            survivingChildren.parallelStream().map(new Function<FixedWidthOctree, List<T>>() {
+                public List<T> apply(FixedWidthOctree child) {
+                    return child.withinDistance(x, y, z, d);
+                }
+            }).sequential().forEach(new Consumer<List<T>>() {
+                public void accept(List<T> childPoints) {
+                    objectsWithin.addAll(childPoints);
+                }
+            });
         }
 
-        return childPoints;
+        return objectsWithin;
     }
 
     public T nearest(float x, float y, float z) {
         return null;
+    }
+
+    public String dump() {
+        return dump(0);
+    }
+
+    public int totalPointCount() {
+        int total = points.size();
+
+        for (FixedWidthOctree c : children) {
+            if (c == null)
+                continue;
+
+            total += c.totalPointCount();
+        }
+
+        return total;
+    }
+
+    public int childCount() {
+        int total = 0;
+        for (FixedWidthOctree c : children) {
+            if (c == null)
+                continue;
+
+            ++total;
+        }
+
+        return total;
+    }
+
+    private String dump(int level) {
+        StringBuilder s = new StringBuilder();
+
+        String firstPrefix = "";
+        String prefix = level == 0 ? "" : "  ";
+        for (int i = 0; i < level - 1; ++i) {
+            firstPrefix += "  ";
+            prefix += "  ";
+        }
+
+        if (level > 0) {
+            firstPrefix += "- ";
+        }
+
+        s.append(firstPrefix).append("Depth: ").append(depth).append('\n');
+        s.append(prefix).append("Width: ").append(width).append('\n');
+        s.append(prefix).append("Center: (").append(centerX).append(", ")
+            .append(centerY).append(", ").append(centerZ).append(")").append('\n');
+
+        if (points.isEmpty()) {
+            s.append(prefix).append("Total Points: ").append(totalPointCount()).append('\n');
+        }
+        else {
+            s.append(prefix).append("Own Points: ").append(points.size()).append('\n');
+        }
+
+        if (childCount() > 0) {
+            s.append(prefix).append("Children (").append(childCount()).append("):\n");
+
+            for (FixedWidthOctree c : children) {
+                if (c == null)
+                    continue;
+
+                s.append(c.dump(level + 1));
+            }
+        }
+
+        return s.toString();
+    }
+
+    private static class Entry<T> {
+        public float x;
+        public float y;
+        public float z;
+        public T object;
+
+        Entry(float x, float y, float z, T object) {
+            this.x = x;
+            this.y = y;
+            this.z = z;
+            this.object = object;
+        }
     }
 }
