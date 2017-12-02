@@ -132,16 +132,15 @@ public abstract class ParticlePattern extends ThreadedPattern {
 
         simulate(deltaMs);
 
-        final List<Particle> particleList = new ArrayList<>(particles);
-        final Map<Particle, float[]> layersMap = new HashMap<>(brightnessLayers);
-
-        particles.parallelStream().forEach(new Consumer<Particle>() {
-            public void accept(Particle particle) {
-                if (layersMap.containsKey(particle)) {
-                    renderParticle(particle, layersMap.get(particle));
+        synchronized (brightnessLayers) {
+            particles.parallelStream().forEach(new Consumer<Particle>() {
+                public void accept(Particle particle) {
+                    if (brightnessLayers.containsKey(particle)) {
+                        renderParticle(particle, brightnessLayers.get(particle));
+                    }
                 }
-            }
-        });
+            });
+        }
 
         super.run(deltaMs);
     }

@@ -62,7 +62,6 @@ public class FlockWaveThreaded extends ThreadedPattern {
 
   private SimulationThread simThread;
   private ModelIndex modelIndex;
-  private Map<Bird, float[]> colorLayers = new HashMap<Bird, float[]>();
   private float[] colorValues;
 
   public FlockWaveThreaded(LX lx) {
@@ -183,9 +182,6 @@ public class FlockWaveThreaded extends ThreadedPattern {
 
     Bird newBird = new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100));
     birds.add(newBird);
-    synchronized (colorLayers) {
-      colorLayers.put(newBird, new float[colors.length]);
-    }
 
     return newBird;
   }
@@ -228,9 +224,6 @@ public class FlockWaveThreaded extends ThreadedPattern {
     }
 
     birds.removeAll(expired);
-    synchronized (colorLayers) {
-      colorLayers.keySet().removeAll(expired);
-    }
 
     return expired;
   }
@@ -251,14 +244,12 @@ public class FlockWaveThreaded extends ThreadedPattern {
     //fakeSimulate((float)deltaMs * 0.001f * timeScale.getValuef());
     advanceSimulation((float)deltaMs * 0.001f * timeScale.getValuef());
 
-    final List<Bird> birdList = new ArrayList<Bird>(birds);
-    final Map<Bird, float[]> layersMap = new HashMap<Bird, float[]>(colorLayers);
+    Arrays.fill(colorValues, 0);
 
+    final List<Bird> birdList = new ArrayList<Bird>(birds);
     birdList.parallelStream().forEach(new Consumer<Bird>() {
       public void accept(Bird bird) {
-        if (layersMap.containsKey(bird)) {
-          renderBird(bird, layersMap.get(bird));
-        }
+        renderBird(bird);
       }
     });
 
@@ -271,38 +262,16 @@ public class FlockWaveThreaded extends ThreadedPattern {
 
     double bias = FastMath.pow(0.1, palBias.getValuef() / 10);
 
-    final List<Bird> birdList = new ArrayList<Bird>(birds);
-    final List<float[]> layersList = new ArrayList<float[]>(birds.size());
-
-    synchronized (colorLayers) {
-      for (Bird bird : birdList) {
-        if (colorLayers.containsKey(bird)) {
-          layersList.add(colorLayers.get(bird));
-        }
-      }
-    }
-
-    points.parallelStream().forEach(new Consumer<LXPoint>() {
-      public void accept(LXPoint point) {
-        int c = 0;
-        for (float[] layer : layersList) {
-          c += layer[point.index];
-        }
-
-        colorValues[point.index] = c;
-      }
-    });
-
     for (int i = 0; i < points.size(); ++i) {
-      LXPoint point = points.get(i);
+      LXPoint p = points.get(i);
 
-      double val = colorValues[point.index];
+      double val = colorValues[p.index];
       int c = pal.getColor(FastMath.signum(val) * FastMath.pow(FastMath.abs(val), bias) + palShift.getValuef());
       pointColors.put(i, c);
     }
   }
 
-  protected void renderBird(final Bird bird, final float[] colorLayer) {
+  protected void renderBird(final Bird bird) {
     final double waveNumber = detail.getValue();
     final double extent = size.getValue();
     final double rippleSpeed = ripple.getValue();
@@ -313,17 +282,17 @@ public class FlockWaveThreaded extends ThreadedPattern {
     //System.out.println("point count: " + nearbyPoints.size());
 
     nearbyPoints.stream().forEach(new Consumer<LXPoint>() {
-      public void accept(LXPoint point) {
-        double dx = bird.pos.x - point.x;
-        double dy = bird.pos.y - point.y;
-        double dz = bird.pos.z - point.z;
+      public void accept(LXPoint p) {
+        double dx = bird.pos.x - p.x;
+        double dy = bird.pos.y - p.y;
+        double dz = bird.pos.z - p.z;
         double squareDistRatio = (dx * dx + dy * dy + dz * dz) / (extent * extent);
         if (squareDistRatio < 1) {
           double phase = FastMath.sqrt(dx * dx + dy * dy + dz * dz * zFactor * zFactor) / extent;
           double a = 1 - squareDistRatio;
-          colorLayer[point.index] = (float)(a * a * bird.value
+          colorValues[p.index] += a * a * bird.value
               * FastMath.sin(waveNumber * 2 * Math.PI * phase - bird.elapsedSec * rippleSpeed)
-              * FastMath.cos(waveNumber * 5 / 4 * phase));
+              * FastMath.cos(waveNumber * 5 / 4 * phase);
         }
       }
     });
