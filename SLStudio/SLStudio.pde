@@ -13,7 +13,7 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public Pixlite[] pixlites;
-public SkyPaletteLibrary skyPalettes;
+public PaletteLibrary paletteLibrary;
 public BlobTracker blobTracker;
 
 public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
@@ -34,14 +34,7 @@ void setup() {
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
 
-  skyPalettes = new SkyPaletteLibrary();
-  skyPalettes.addSky("london", new DeckChairSource("5568230b7b2853502527fd4e"), new ArcPaletteExtractor(0.44, 100));
-  skyPalettes.addSky("paris", new DeckChairSource("5568862a7b28535025280c72"), new ArcPaletteExtractor(0.46, 100));
-  skyPalettes.addSky("sydney", new DeckChairSource("599d6375096641f2272bacf4"), new ArcPaletteExtractor(1, 100));
-  skyPalettes.addSky("san francisco", new UrlImageSource("http://icons.wunderground.com/webcamramdisk/a/m/ampledata/1/current.jpg"), new ArcPaletteExtractor(0.65, 100));
-  skyPalettes.addSky("sunset sunset", new UrlImageSource("https://pbs.twimg.com/media/DO9Ok2JU8AEjXa1.jpg"), new ArcPaletteExtractor(0.622, 100));
-  skyPalettes.addSky("orange sunset", new UrlImageSource("https://c.pxhere.com/photos/0e/29/sunrise_beach_sea_ocean_water_sunset_sky_sun-1332581.jpg!d"), new ArcPaletteExtractor(0.5, 100));
-  skyPalettes.addSky("galaxies", new UrlImageSource("https://apod.nasa.gov/apod/image/1711/BeltStars_nouroozi2000.jpg"), new ArcPaletteExtractor(0.9, 1000));
+  paletteLibrary = initializePaletteLibrary();
   
   lx = new LXStudio(this, model, false) {
     @Override
@@ -94,6 +87,32 @@ void setup() {
 
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
+}
+
+PaletteLibrary initializePaletteLibrary() {
+  PaletteLibrary pl = new PaletteLibrary();
+
+  /* Images loaded remotely from the Internet */
+  /*
+  pl.set("cities.london", new DeckChairSource("5568230b7b2853502527fd4e"), new ArcPaletteExtractor(0.44, 100));
+  pl.set("cities.paris", new DeckChairSource("5568862a7b28535025280c72"), new ArcPaletteExtractor(0.46, 100));
+  pl.set("cities.sydney", new DeckChairSource("599d6375096641f2272bacf4"), new ArcPaletteExtractor(1, 100));
+  pl.set("cities.san_francisco", new UrlImageSource("http://icons.wunderground.com/webcamramdisk/a/m/ampledata/1/current.jpg"), new ArcPaletteExtractor(0.65, 100));
+  pl.set("sunsets.sunset", new UrlImageSource("https://pbs.twimg.com/media/DO9Ok2JU8AEjXa1.jpg"), new ArcPaletteExtractor(0.622, 100));
+  pl.set("sunsets.orange", new UrlImageSource("https://c.pxhere.com/photos/0e/29/sunrise_beach_sea_ocean_water_sunset_sky_sun-1332581.jpg!d"), new ArcPaletteExtractor(0.5, 100));
+  pl.set("galaxies", new UrlImageSource("https://apod.nasa.gov/apod/image/1711/BeltStars_nouroozi2000.jpg"), new ArcPaletteExtractor(0.9, 1000));
+  */
+
+  pl.set("sky.orange", new ZigzagPalette(new int[] {
+    0x230402, 0x2d0a06, 0x340b05, 0x3a0b05, 0x3a0501, 0x420602, 0x520701,
+    0x7c1103, 0xfe9100, 0xfdc200, 0xfdee00, 0xfdfc00, 0xfefe00, 0xfefb00,
+    0xfff507, 0xfde80a, 0xfcd905, 0xfec601, 0xfdbc00, 0xfeb500, 0xfdb000,
+    0xfeb000, 0xfdac00, 0xfea700, 0xfda800, 0xfea800, 0xfea700, 0xfda600,
+    0xfda100, 0xfe9900, 0xfc8500, 0xfd6a00, 0xfc5000, 0x3b0401, 0x2b0400,
+    0x260402, 0x270907, 0x220905, 0x1e0606, 0x200b08, 0x1d0a07
+  }));
+
+  return pl;
 }
 
 void draw() {

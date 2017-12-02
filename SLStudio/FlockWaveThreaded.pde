@@ -40,7 +40,7 @@ public class FlockWaveThreaded extends ThreadedPattern {
   private CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
   private CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
   private CompoundParameter spawnRadius = new CompoundParameter("spnRad", 100, 0, 200);  // radius (in) within which to spawn birds
-  private CompoundParameter density = new CompoundParameter("density", 1, 0, 2);  // maximum spawn rate (birds/s)
+  private CompoundParameter density = new CompoundParameter("density", 0.2, 0, 0.5);  // maximum spawn rate (birds/s)
   private CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (in/s)
   private CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   private CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
@@ -51,9 +51,11 @@ public class FlockWaveThreaded extends ThreadedPattern {
   private CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   private CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
 
-  private DiscreteParameter palette = new DiscreteParameter("palette", skyPalettes.getNames());  // selected colour palette
+  private DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  private CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
+  private CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   private CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
-  private CompoundParameter palBias = new CompoundParameter("palBias", 0, 0, 20);  // bias colour palette toward zero (dB)
+  private CompoundParameter palBias = new CompoundParameter("palBias", 0, -8, 8);  // bias colour palette toward start or stop
 
   private PVector prevFocus = null;
   private Set<Bird> birds = new HashSet<Bird>();
@@ -92,6 +94,8 @@ public class FlockWaveThreaded extends ThreadedPattern {
     addParameter(ripple);
 
     addParameter(palette);
+    addParameter(palStart);
+    addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
 
@@ -256,18 +260,23 @@ public class FlockWaveThreaded extends ThreadedPattern {
     super.run(deltaMs);
   }
 
+  ColorPalette getPalette() {
+    ColorPalette pal = paletteLibrary.get(palette.getOption());
+    if (pal instanceof ZigzagPalette) {
+      ((ZigzagPalette) pal).setBias(palBias.getValuef());
+      ((ZigzagPalette) pal).setStart(palStart.getValuef());
+      ((ZigzagPalette) pal).setStop(palStop.getValuef());
+    }
+    return pal;
+  }
+
   @Override
   public void render(double deltaMs, List<LXPoint> points, IntBuffer pointColors) {
-    ColorPalette pal = skyPalettes.getPalette(palette.getOption());
-
-    double bias = FastMath.pow(0.1, palBias.getValuef() / 10);
-
+    ColorPalette pal = getPalette();
+    float shift = palShift.getValuef();
     for (int i = 0; i < points.size(); ++i) {
-      LXPoint p = points.get(i);
-
-      double val = colorValues[p.index];
-      int c = pal.getColor(FastMath.signum(val) * FastMath.pow(FastMath.abs(val), bias) + palShift.getValuef());
-      pointColors.put(i, c);
+      double val = colorValues[points.get(i).index];
+      pointColors.put(i, pal.getColor(val + shift));
     }
   }
 

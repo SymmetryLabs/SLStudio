@@ -1,6 +1,36 @@
 import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
 
+public class PaletteViewer extends SLPattern {
+  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
+  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
+  CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
+  CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
+
+  public PaletteViewer(LX lx) {
+    super(lx);
+    addParameter(palette);
+    addParameter(palStart);
+    addParameter(palStop);
+    addParameter(palShift);
+    addParameter(palBias);
+  }
+
+  public void run(double deltaMs) {
+    ColorPalette pal = paletteLibrary.get(palette.getOption());
+    float shift = palShift.getValuef();
+    if (pal instanceof ZigzagPalette) {
+      ((ZigzagPalette) pal).setBias(palBias.getValuef());
+      ((ZigzagPalette) pal).setStart(palStart.getValuef());
+      ((ZigzagPalette) pal).setStop(palStop.getValuef());
+    }
+    for (LXPoint p : model.points) {
+      colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin) + shift);
+    }
+  }
+}
+
 public class FlockWave extends SLPattern {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
@@ -15,7 +45,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
   CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
   CompoundParameter spawnRadius = new CompoundParameter("spnRad", 100, 0, 200);  // radius (in) within which to spawn birds
-  CompoundParameter density = new CompoundParameter("density", 1, 0, 2);  // maximum spawn rate (birds/s)
+  CompoundParameter density = new CompoundParameter("density", 0.2, 0, 0.5);  // maximum spawn rate (birds/s)
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (in/s)
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
@@ -27,9 +57,11 @@ public class FlockWave extends SLPattern {
   CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
 
-  DiscreteParameter palette = new DiscreteParameter("palette", skyPalettes.getNames());  // selected colour palette
+  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
+  CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
-  CompoundParameter palBias = new CompoundParameter("palBias", 0, 0, 20);  // bias colour palette toward zero (dB)
+  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward start or stop
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
@@ -66,6 +98,8 @@ public class FlockWave extends SLPattern {
     addParameter(ripple);
 
     addParameter(palette);
+    addParameter(palStart);
+    addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
   }
@@ -230,8 +264,17 @@ public class FlockWave extends SLPattern {
     }
   }
 
+  ColorPalette getPalette() {
+    ColorPalette pal = paletteLibrary.get(palette.getOption());
+    if (pal instanceof ZigzagPalette) {
+      ((ZigzagPalette) pal).setBias(palBias.getValuef());
+      ((ZigzagPalette) pal).setStart(palStart.getValuef());
+      ((ZigzagPalette) pal).setStop(palStop.getValuef());
+    }
+    return pal;
+  }
+
   void renderPlasma() {
-    ColorPalette pal = skyPalettes.getPalette(palette.getOption());
     float waveNumber = detail.getValuef();
     float extent = size.getValuef();
     float rippleSpeed = ripple.getValuef();
@@ -240,7 +283,8 @@ public class FlockWave extends SLPattern {
     Bird high = new Bird(new PVector(0, 0, 0), 0);
 
     double zFactor = Math.pow(10, zScale.getValuef()/10);
-    double bias = Math.pow(0.1, palBias.getValuef()/10);
+    ColorPalette pal = getPalette();
+    float shift = palShift.getValuef();
 
     for (LXPoint p : model.points) {
       low.pos.x = p.x - extent;
@@ -260,7 +304,7 @@ public class FlockWave extends SLPattern {
           }
         }
       }
-      colors[p.index] = pal.getColor(Math.signum(sum)*Math.pow(Math.abs(sum), bias) + palShift.getValuef());
+      colors[p.index] = pal.getColor(sum + shift);
     }
   }
 
@@ -325,20 +369,6 @@ public class FlockWave extends SLPattern {
 
     public int compareTo(Bird other) {
       return Float.compare(pos.x, other.pos.x);
-    }
-  }
-}
-
-public class SkyGradient extends SLPattern {
-  public SkyGradient(LX lx) {
-    super(lx);
-  }
-
-  public void run(double deltaMs) {
-    ColorPalette palette = skyPalettes.getPalette("san francisco");
-    for (LXPoint p : model.points) {
-      float altitude = (p.y - model.yMin) / (model.yMax - model.yMin);
-      colors[p.index] = palette.getColor(altitude);
     }
   }
 }
