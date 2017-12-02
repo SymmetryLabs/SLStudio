@@ -43,7 +43,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
    */
   protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int faceRes) {
     super(lx);
-    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>//
+    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>// //<>//
     this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgL = lx.applet.createGraphics(faceRes, faceRes, P3D);
@@ -63,7 +63,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
       double deltaMs = System.currentTimeMillis() - lastRunAt;
       lastRunAt = System.currentTimeMillis();
 
-      //pg.beginDraw(); //<>//
+      //pg.beginDraw(); //<>// //<>//
       P3CubeMapPattern.this.run(deltaMs, pg);
       //pg.endDraw();
       pg.loadPixels();
@@ -75,7 +75,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
         double az = Math.abs(v.z);
 
         // Ignore pixels outside the bounding box.
-        if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) { //<>//
+        if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) { //<>// //<>//
           continue;
         }
 
@@ -230,7 +230,10 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
       this.sun = sun;
       this.sunIndex = sunIndex;
 
-      PVector origin = sun.boundingBox.origin;
+      PVector origin = new PVector( //<>//
+      sun.boundingBox.origin.x + sun.boundingBox.size.x*.5,
+      sun.boundingBox.origin.y + sun.boundingBox.size.y*.5,
+      sun.boundingBox.origin.z + sun.boundingBox.size.z*.5);
       PVector bboxSize = sun.boundingBox.size;
 
       this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>//
@@ -248,7 +251,7 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
 
     private Runnable run = new Runnable() {
       long lastRunAt = System.currentTimeMillis();
-
+ //<>//
       @Override
       public void run() {
         double deltaMs = System.currentTimeMillis() - lastRunAt;

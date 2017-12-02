@@ -58,10 +58,12 @@ public SLModel buildModel() {
 
   /* Suns ------------------------------------------------------------*/
   List<Sun> suns = new ArrayList<Sun>();
-  final boolean USE_ONLY_ONE_SUN = false;
+  final boolean USE_SELECTED_SUN = true;
   
-  if (USE_ONLY_ONE_SUN) {
+  if (USE_SELECTED_SUN) {
+      suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, new float[] {1420, 30, 155}, new float[] {0, 0, 0}, transform));
       suns.add(new Sun("sun7", Sun.Type.FULL, new float[] {1650, 160, 0}, new float[] {0, 0, 0}, transform));
+      suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, new float[] {2000, 30, 120}, new float[] {0, 0, 0}, transform));
   } else {
     suns.add(new Sun("sun1", Sun.Type.ONE_HALF, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
     suns.add(new Sun("sun2", Sun.Type.FULL, new float[] {400, 120, 60}, new float[] {0, 0, 0}, transform));
