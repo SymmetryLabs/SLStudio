@@ -2,6 +2,8 @@ package com.symmetrylabs.pattern;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.Arrays;
 import java.util.stream.Stream;
 import java.util.function.Consumer;
@@ -24,7 +26,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
     private static final int DEFAULT_PARTICLE_COUNT = 10;
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
-    public final BoundedParameter particleCount = new BoundedParameter("count", 0, 0, 100);
+    public final BoundedParameter particleCount = new BoundedParameter("count", 0, 0, 200);
     public final CompoundParameter kernelSize = new CompoundParameter("size", 100, 0, 400);
     public final BooleanParameter flattenZ = new BooleanParameter("flattenZ", true);
 
@@ -35,7 +37,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
     protected ModelIndex modelIndex;
 
     private SimulationThread simThread;
-    private float[][] brightnessLayers;
+    private Map<Particle, float[]> brightnessLayers = new HashMap<Particle, float[]>();
     private float[] brightnessBuffer;
 
     public ParticlePattern(LX lx) {
@@ -46,7 +48,6 @@ public abstract class ParticlePattern extends ThreadedPattern {
         super(lx);
 
         brightnessBuffer = new float[colors.length];
-        brightnessLayers = new float[particles.size()][brightnessBuffer.length];
 
         addParameter(particleCount);
         addParameter(kernelSize);
@@ -59,18 +60,20 @@ public abstract class ParticlePattern extends ThreadedPattern {
 
         particleCount.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter particleCount) {
-                int numParticles = (int)particleCount.getValue();
-                while (particles.size() > numParticles) {
-                    particles.remove(particles.size() - 1);
-                }
+                synchronized (brightnessLayers) {
+                    int numParticles = (int)particleCount.getValue();
+                    while (particles.size() > numParticles) {
+                        Particle p = particles.remove(particles.size() - 1);
+                        brightnessLayers.remove(p);
+                    }
 
-                for (int i = particles.size(); i < numParticles; ++i) {
-                    Particle p = new Particle();
-                    initParticle(p);
-                    particles.add(p);
+                    for (int i = particles.size(); i < numParticles; ++i) {
+                        Particle p = new Particle();
+                        brightnessLayers.put(p, new float[brightnessBuffer.length]);
+                        initParticle(p);
+                        particles.add(p);
+                    }
                 }
-
-                brightnessLayers = new float[particles.size()][brightnessBuffer.length];
             }
         });
 
@@ -124,45 +127,62 @@ public abstract class ParticlePattern extends ThreadedPattern {
     }
 
     @Override
-    public synchronized void run(double deltaMs) {
-        System.out.println(deltaMs);
+    public void run(double deltaMs) {
+        //System.out.println(deltaMs);
 
         simulate(deltaMs);
 
-        intRangeStream(0, particles.size()).forEach(new Consumer<Integer>() {
-            public void accept(Integer i) {
-                Arrays.fill(brightnessLayers[i], 0);
-                renderParticle(particles.get(i), brightnessLayers[i]);
-            }
-        });
-
-        // TODO: only copy part of buffer used by each particle
-        intRangeStream(0, brightnessBuffer.length).forEach(new Consumer<Integer>() {
-            public void accept(Integer i) {
-                brightnessBuffer[i] = 0f;
-
-                for (int j = 0; j < brightnessLayers.length; ++j) {
-                    brightnessBuffer[i] += brightnessLayers[j][i];
+        synchronized (brightnessLayers) {
+            particles.parallelStream().forEach(new Consumer<Particle>() {
+                public void accept(Particle particle) {
+                    if (brightnessLayers.containsKey(particle)) {
+                        renderParticle(particle, brightnessLayers.get(particle));
+                    }
                 }
-            }
-        });
+            });
+        }
 
         super.run(deltaMs);
     }
 
-    protected void renderParticle(Particle particle, float[] brightness) {
+    protected void renderParticle(Particle particle, float[] brightnessLayer) {
+        Arrays.fill(brightnessLayer, 0);
+
         LXPoint pp = particle.toPointInModel(lx.model);
         float withinDist = particle.size * kernelSize.getValuef();
         List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist);
 
         final boolean flattening = flattenZ.isOn();
         for (LXPoint p : nearbyPoints) {
-            brightness[p.index] = kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
+            brightnessLayer[p.index] = kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
         }
     }
 
     @Override
     public void render(double deltaMs, List<LXPoint> points, IntBuffer pointColors) {
+        // TODO: make per-particle layer sparse
+        final List<Particle> particleList = new ArrayList<>(particles);
+        final List<float[]> layersList = new ArrayList<>(particles.size());
+
+        synchronized (brightnessLayers) {
+            for (Particle particle : particleList) {
+                if (brightnessLayers.containsKey(particle)) {
+                    layersList.add(brightnessLayers.get(particle));
+                }
+            }
+        }
+
+        points.parallelStream().forEach(new Consumer<LXPoint>() {
+            public void accept(LXPoint point) {
+                float b = 0;
+                for (float[] layer : layersList) {
+                    b += layer[point.index];
+                }
+
+                brightnessBuffer[point.index] = b;
+            }
+        });
+
         double h = hue.getValue();
         double s = saturation.getValue();
         for (int i = 0; i < points.size(); ++i) {

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511751543976,
+  "timestamp": 1512243544372,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 14,
+        "patternIndex": 15,
         "patterns": [
           {
             "id": 2773,
@@ -457,6 +457,44 @@
                   }
                 }
               ],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3153,
+            "class": "SLStudio$FlockWaveThreaded",
+            "modulationColor": -65479,
+            "parameters": {
+              "label": "FlockWaveThreaded",
+              "timeScale": 1.0,
+              "oscBlobs": false,
+              "bMrgRad": 30.0,
+              "bMaxSpd": 240.0,
+              "x": 1565.1300663796278,
+              "y": 9.6399888144432,
+              "z": 78.39824873566795,
+              "zScale": 0.0,
+              "spnRad": 100.0,
+              "spnMin": 2.0,
+              "spnMax": 20.0,
+              "density": 2.0,
+              "scatter": 719.9999906122684,
+              "spdMult": 1.2599999830126762,
+              "maxSpd": 61.99999928474427,
+              "turnSec": 1.5599999874830246,
+              "fadeInSec": 1.61999998614192,
+              "fadeOutSec": 2.0,
+              "size": 1039.9999848008154,
+              "detail": 7.799999915063381,
+              "ripple": 4.399999955296517,
+              "palette": 3,
+              "palShift": 0.6700000073760748,
+              "palBias": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
               "triggers": []
             },
             "autoCycleEnabled": true
