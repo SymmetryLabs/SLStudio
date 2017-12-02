@@ -91,13 +91,13 @@ public abstract class ParticlePattern extends ThreadedPattern {
 
     @Override
     public void onActive() {
-        simThread.start();
+        //simThread.start();
     }
 
     @Override
     public void onInactive() {
-        simThread.shutdown();
-        simThread = new SimulationThread();
+        //simThread.shutdown();
+        //simThread = new SimulationThread();
     }
 
     protected float kernel(float d, float s) {
@@ -125,6 +125,10 @@ public abstract class ParticlePattern extends ThreadedPattern {
 
     @Override
     public synchronized void run(double deltaMs) {
+        System.out.println(deltaMs);
+
+        simulate(deltaMs);
+
         intRangeStream(0, particles.size()).forEach(new Consumer<Integer>() {
             public void accept(Integer i) {
                 Arrays.fill(brightnessLayers[i], 0);
@@ -158,7 +162,7 @@ public abstract class ParticlePattern extends ThreadedPattern {
     }
 
     @Override
-    public void render(List<LXPoint> points, IntBuffer pointColors) {
+    public void render(double deltaMs, List<LXPoint> points, IntBuffer pointColors) {
         double h = hue.getValue();
         double s = saturation.getValue();
         for (int i = 0; i < points.size(); ++i) {
@@ -195,20 +199,21 @@ public abstract class ParticlePattern extends ThreadedPattern {
         public void run() {
             long lastTime = System.currentTimeMillis();
             while (running) {
+                long t = System.currentTimeMillis();
+                double deltaMs = t - lastTime;
+
+                synchronized (ParticlePattern.this) {
+                    simulate(deltaMs);
+                }
+
                 long elapsed = System.currentTimeMillis() - lastTime;
+                lastTime = t;
+
                 if (elapsed < PERIOD) {
                     try {
                         sleep(PERIOD - elapsed);
                     }
                     catch (InterruptedException e) { /* pass */ }
-                }
-
-                long t = System.currentTimeMillis();
-                double deltaMs = t - lastTime;
-                lastTime = t;
-
-                synchronized (ParticlePattern.this) {
-                    simulate(deltaMs);
                 }
             }
         }

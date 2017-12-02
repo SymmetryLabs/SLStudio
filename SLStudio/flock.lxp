@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511751543976,
+  "timestamp": 1512194876584,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -377,7 +377,7 @@
           },
           {
             "id": 2977,
-            "class": "SLStudio$FlockWave",
+            "class": "com.symmetrylabs.pattern.FlockWave",
             "modulationColor": -10878721,
             "parameters": {
               "label": "FlockWave",
