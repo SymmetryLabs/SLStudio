@@ -157,6 +157,7 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
       boolean isNonStaticInnerClass = (subpatternClass.isMemberClass() || subpatternClass.isLocalClass())
           && !Modifier.isStatic(subpatternClass.getModifiers());
 
+      int sunIndex = 0;
       for (Sun sun : model.suns) {
         try {
           Subpattern subpattern;
@@ -166,13 +167,15 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
           else {
             subpattern = subpatternClass.getDeclaredConstructor().newInstance();
           }
-          subpattern.init(this.lx, colors, sun, faceRes);
+          subpattern.init(this.lx, colors, sun, faceRes, sunIndex);
           subpatterns.add(subpattern);
         }
         catch (Exception e) {
           System.err.println("Exception when creating subpattern: " + e.getLocalizedMessage());
           e.printStackTrace();
         }
+
+        ++sunIndex;
       }
     }
   }
@@ -198,6 +201,8 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
 
     private final String id = "" + Math.random();
 
+    protected int sunIndex;
+
     /**
      * A pattern that projects a cubemap image onto all the LEDs inside a given
      * bounding box in world space.  The cubemap image should have resolution 4k x 3k,
@@ -219,10 +224,11 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
      * @param faceRes The width and height, k, in pixels of one square face of the
      *     cubemap image, which will have total width 4k and total height 3k.
      */
-    private void init(P3LX lx, int[] colors, Sun sun, int faceRes) {
+    private void init(P3LX lx, int[] colors, Sun sun, int faceRes, int sunIndex) {
       this.lx = lx;
       this.colors = colors;
       this.sun = sun;
+      this.sunIndex = sunIndex;
 
       PVector origin = sun.boundingBox.origin;
       PVector bboxSize = sun.boundingBox.size;

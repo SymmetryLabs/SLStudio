@@ -206,26 +206,44 @@ public class RKPattern01 extends P3CubeMapPattern {
 
 public class MultiRKPattern01 extends MultiCubeMapPattern {
 
-  CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
-  CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
-  CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
-  CompoundParameter amt = new CompoundParameter("amt", 20, 1, 25);
-  CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
-  CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
-  CompoundParameter nDsp = new CompoundParameter("nDsp", 1, .125, 2.5);
+  List<CompoundParameter> rXList = new ArrayList<CompoundParameter>();
+  List<CompoundParameter> rYList = new ArrayList<CompoundParameter>();
+  List<CompoundParameter> rZList = new ArrayList<CompoundParameter>();
+  List<CompoundParameter> amtList = new ArrayList<CompoundParameter>();
+  List<CompoundParameter> speedList = new ArrayList<CompoundParameter>();
+  List<CompoundParameter> dspList = new ArrayList<CompoundParameter>();
+  List<CompoundParameter> nDspList = new ArrayList<CompoundParameter>();
 
   static final int faceRes = 200;
 
   public MultiRKPattern01(LX lx) {
     super(lx, Subpattern.class, faceRes);
 
-    addParameter(rX);
-    addParameter(rY);
-    addParameter(rZ);
-    addParameter(amt);
-    addParameter(speed);
-    addParameter(dsp);
-    addParameter(nDsp);
+    for (int i = 0; i < model.suns.size(); ++i) {
+      CompoundParameter rX = new CompoundParameter("rX"+i, 0, -PI, PI);
+      CompoundParameter rY = new CompoundParameter("rY"+i, 0, -PI, PI);
+      CompoundParameter rZ = new CompoundParameter("rZ"+i, 0, -PI, PI);
+      CompoundParameter amt = new CompoundParameter("amt"+i, 20, 1, 25);
+      CompoundParameter speed = new CompoundParameter("speed"+i, PI, -TWO_PI*2, TWO_PI*2);
+      CompoundParameter dsp = new CompoundParameter("dsp"+i, HALF_PI, 0, PI);
+      CompoundParameter nDsp = new CompoundParameter("nDsp"+i, 1, .125, 2.5);
+
+      rXList.add(rX);
+      rYList.add(rY);
+      rZList.add(rZ);
+      amtList.add(amt);
+      speedList.add(speed);
+      dspList.add(dsp);
+      nDspList.add(nDsp);
+
+      addParameter(rX);
+      addParameter(rY);
+      addParameter(rZ);
+      addParameter(amt);
+      addParameter(speed);
+      addParameter(dsp);
+      addParameter(nDsp);
+    }
   }
 
   private class Subpattern extends MultiCubeMapPattern.Subpattern {
@@ -247,13 +265,13 @@ public class MultiRKPattern01 extends MultiCubeMapPattern {
 
     @Override
     void run(double deltaMs, PGraphics pg) {
-      rotXT = rX.getValuef();
-      rotYT = rY.getValuef();
-      rotZT = rZ.getValuef();
-      ringAmt = round(amt.getValuef());
-      thetaSpeedT = speed.getValuef();
-      dspmtT = dsp.getValuef();
-      nDspmtT = nDsp.getValuef();
+      rotXT = rXList.get(sunIndex).getValuef();
+      rotYT = rYList.get(sunIndex).getValuef();
+      rotZT = rZList.get(sunIndex).getValuef();
+      ringAmt = round(amtList.get(sunIndex).getValuef());
+      thetaSpeedT = speedList.get(sunIndex).getValuef();
+      dspmtT = dspList.get(sunIndex).getValuef();
+      nDspmtT = nDspList.get(sunIndex).getValuef();
 
       rotX = lerp(rotX, rotXT, .1);
       rotY = lerp(rotY, rotYT, .1);
