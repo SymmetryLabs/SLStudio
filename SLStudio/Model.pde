@@ -105,6 +105,16 @@ public static class SLModel extends LXModel {
   }
 }
 
+public static class BoundingBox {
+  public final PVector origin;
+  public final PVector size;
+
+  public BoundingBox(float x, float y, float z, float xSize, float ySize, float zSize) {
+    origin = new PVector(x, y, z);
+    size = new PVector(xSize, ySize, zSize);
+  }
+}
+
 public static class Sun extends LXModel {
 
   public enum Type {
@@ -116,6 +126,8 @@ public static class Sun extends LXModel {
   public final List<Slice> slices;
   public final List<Strip> strips;
   private final Map<String, Slice> sliceTable;
+
+  public final BoundingBox boundingBox;
 
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
     super(new Fixture(id, type, coordinates, rotations, transform));
@@ -130,6 +142,24 @@ public static class Sun extends LXModel {
     for (Slice slice : slices) {
       sliceTable.put(slice.id, slice);
     }
+
+    float xMin = Float.MAX_VALUE;
+    float xMax = Float.MIN_VALUE;
+    float yMin = Float.MAX_VALUE;
+    float yMax = Float.MIN_VALUE;
+    float zMin = Float.MAX_VALUE;
+    float zMax = Float.MIN_VALUE;
+
+    for (LXPoint p : getPoints()) {
+      if (p.x < xMin) xMin = p.x;
+      if (p.x > xMax) xMax = p.x;
+      if (p.y < yMin) yMin = p.y;
+      if (p.y > yMax) yMax = p.y;
+      if (p.z < zMin) zMin = p.z;
+      if (p.z > zMax) zMax = p.z;
+    }
+
+    boundingBox = new BoundingBox(xMin, yMin, zMin, xMax - xMin, yMax - yMin, zMax - zMin);
   }
 
   public Slice getSliceById(String id) {

@@ -204,6 +204,217 @@ public class RKPattern01 extends P3CubeMapPattern {
   }
 }
 
+public class MultiRKPattern01 extends MultiCubeMapPattern {
+
+  CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
+  CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
+  CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
+  CompoundParameter amt = new CompoundParameter("amt", 20, 1, 25);
+  CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
+  CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
+  CompoundParameter nDsp = new CompoundParameter("nDsp", 1, .125, 2.5);
+
+  static final int faceRes = 200;
+
+  public MultiRKPattern01(LX lx) {
+    super(lx, Subpattern.class, faceRes);
+
+    addParameter(rX);
+    addParameter(rY);
+    addParameter(rZ);
+    addParameter(amt);
+    addParameter(speed);
+    addParameter(dsp);
+    addParameter(nDsp);
+  }
+
+  private class Subpattern extends MultiCubeMapPattern.Subpattern {
+    int ringRes = 40, ringAmt = 20, pRingAmt = 20;
+    float l1 = 600, l2 = 600, l3 = 600;
+    float gTheta, gThetaSpacing, gWeightScalar;
+    float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, nDspmt, nDspmtT, thetaSpeed, thetaSpeedT;
+    ArrayList <Ring> testRings;
+
+    Subpattern() {
+      super();
+
+      testRings = new ArrayList<Ring>();
+      for (int i=0; i<ringAmt; i++) {
+        Ring testRing = new Ring(ringRes, l1, l2, l3);
+        testRings.add(testRing);
+      }
+    }
+
+    @Override
+    void run(double deltaMs, PGraphics pg) {
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      ringAmt = round(amt.getValuef());
+      thetaSpeedT = speed.getValuef();
+      dspmtT = dsp.getValuef();
+      nDspmtT = nDsp.getValuef();
+
+      rotX = lerp(rotX, rotXT, .1);
+      rotY = lerp(rotY, rotYT, .1);
+      rotZ = lerp(rotZ, rotZT, .1);
+
+      thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .1);
+      dspmt = lerp(dspmt, dspmtT, .1);
+      nDspmt = lerp(nDspmt, nDspmtT, .01);
+
+      replenish();
+
+      gTheta += thetaSpeed/720;
+      if (gTheta>PI) gTheta -= PI;
+      else if (gTheta<0) gTheta += PI;
+      gThetaSpacing = lerp(gThetaSpacing, PI/testRings.size(), .1);
+      gWeightScalar = map(ringAmt, 1, 25, 2.5, 1);
+
+      for (int i=0; i<testRings.size(); i++) {
+        Ring testRing = testRings.get(i);
+        testRing.update(i);
+      }
+      updateCubeMaps();
+
+      pg.beginDraw();
+      pg.background(0);
+      pg.image(pgL, 0, faceRes);
+      pg.image(pgR, faceRes*2, faceRes);
+      pg.image(pgD, faceRes, 0);
+      pg.image(pgU, faceRes, faceRes*2);
+      pg.image(pgF, faceRes, faceRes);
+      pg.image(pgB, faceRes*3, faceRes);
+      pg.endDraw();
+    }
+
+    void updateCubeMap(PGraphics pg, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
+      pg.beginDraw();
+      pg.background(0);
+      pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
+      pg.frustum(-10, 10, -10, 10, 10, 1000);
+      pg.rotateX(rotX);
+      pg.rotateY(rotY);
+      pg.rotateZ(rotZ);
+      drawScene(pg);
+      pg.endDraw();
+    }
+
+    void updateCubeMaps() {
+      updateCubeMap(pgF, 0, 0, 0, 0, 0, 1, 0, 1, 0);
+      updateCubeMap(pgL, 0, 0, 0, 1, 0, 0, 0, 1, 0);
+      updateCubeMap(pgR, 0, 0, 0, -1, 0, 0, 0, 1, 0);
+      updateCubeMap(pgB, 0, 0, 0, 0, 0, -1, 0, 1, 0);
+      updateCubeMap(pgD, 0, 0, -.001, 0, -1, 0, 0, 1, 0);
+      updateCubeMap(pgU, 0, 0, -.001, 0, 1, 0, 0, 1, 0);
+    }
+
+    void drawScene(PGraphics pg) {
+      for (int i=0; i<testRings.size(); i++) {
+        Ring testRing = testRings.get(i);
+        testRing.display(pg);
+      }
+    }
+
+    void replenish() {
+      if (pRingAmt != ringAmt) {
+        if (ringAmt>pRingAmt) {
+          for (int i=0; i<ringAmt-pRingAmt; i++) {
+            Ring testRing = new Ring(ringRes, l1, l2, l3);
+            testRings.add(0, testRing);
+          }
+        }
+        if (ringAmt<pRingAmt) {
+          for (int i=0; i<pRingAmt-ringAmt; i++) {
+            int j = testRings.size()-1-i;
+            j = constrain(j, 1, ringAmt);
+            testRings.remove(j);
+          }
+        }
+      }
+      pRingAmt = ringAmt;
+    }
+
+    class Ring {
+
+      int amt;
+      float l1, l2, l3, theta, weight;
+      Vtx [] vts;
+
+      Ring(int amt, float l1, float l2, float l3) {
+
+        this.amt = amt;
+        this.l1 = l1;
+        this.l2 = l2;
+        this.l3 = l3;
+
+        theta = 0;
+
+        vts = new Vtx[this.amt];
+        for (int i=0; i<vts.length; i++) {
+          float initPhi = i*TWO_PI/amt;
+          vts[i] = new Vtx(this.theta, initPhi, this.l1, this.l2, this.l3);
+        }
+      }
+
+      void update(int idx) {
+        theta = gTheta+idx*gThetaSpacing;
+        if (theta>PI) theta -= PI;
+        else if (theta<0) theta += PI;
+
+        weight = sin(theta)*4*gWeightScalar;
+
+        for (int i=0; i<vts.length; i++) {
+          vts[i].update(theta);
+        }
+      }
+
+      void display(PGraphics pg) {
+        pg.noFill();
+        pg.stroke(255);
+        pg.strokeWeight(weight);
+        pg.beginShape();
+        for (int i=0; i<vts.length; i++) {
+          pg.vertex(vts[i].pos.x, vts[i].pos.y, vts[i].pos.z);
+        }
+        //pg.curveVertex(vts[0].pos.x, vts[0].pos.y, vts[0].pos.z);
+        //pg.curveVertex(vts[1].pos.x, vts[1].pos.y, vts[1].pos.z);
+        //pg.curveVertex(vts[2].pos.x, vts[2].pos.y, vts[2].pos.z);
+        pg.endShape(CLOSE);
+      }
+    }
+
+    class Vtx {
+
+      PVector pos;
+      float thetaBase, thetaOfst, thetaOfstRange, theta, phi;
+      float l1, l2, l3;
+
+      Vtx(float theta, float phi, float l1, float l2, float l3) {
+        pos = new PVector();
+        this.theta = thetaBase = theta;
+        this.phi = phi;
+        this.l1 = l1;
+        this.l2 = l2;
+        this.l3 = l3;
+      }
+
+      void update(float thetaBase) {
+        this.thetaBase = thetaBase;
+
+        thetaOfstRange = sin(theta)*dspmt;
+        thetaOfst = (noise(sin(phi)*cos(phi)*nDspmt+frameCount*.005, this.thetaBase*nDspmt*.25-frameCount*.005)-.5)*thetaOfstRange;
+        theta = this.thetaBase + thetaOfst;
+        pos.set(
+          sin(theta)*cos(phi)*.5*l1, 
+          cos(theta)*.5*l2, 
+          sin(theta)*sin(phi)*.5*l3
+          );
+      }
+    }
+  }
+}
+
 public class RKPattern02 extends P3CubeMapPattern {
 
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
