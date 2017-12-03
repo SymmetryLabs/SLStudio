@@ -10,6 +10,7 @@ import java.util.function.Consumer;
 import java.nio.IntBuffer;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.CompoundParameter;
@@ -22,7 +23,7 @@ import heronarts.lx.color.LXColor;
 import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
 
-public abstract class ParticlePattern extends ThreadedPattern {
+public abstract class ParticlePattern extends LXPattern {
     private static final int DEFAULT_PARTICLE_COUNT = 10;
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
@@ -33,10 +34,9 @@ public abstract class ParticlePattern extends ThreadedPattern {
     public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
     public final CompoundParameter saturation = new CompoundParameter("saturation", 30, 0, 100);
 
-    protected List<Particle> particles = new ArrayList<Particle>();
+    protected List<Particle> particles = new ArrayList<>();
     protected ModelIndex modelIndex;
 
-    private SimulationThread simThread;
     private Map<Particle, float[]> brightnessLayers = new HashMap<Particle, float[]>();
     private float[] brightnessBuffer;
 
@@ -84,23 +84,10 @@ public abstract class ParticlePattern extends ThreadedPattern {
         });
 
         particleCount.setValue(numParticles);
-
-        simThread = new SimulationThread();
     }
 
     private ModelIndex createModelIndex() {
         return new OctreeModelIndex(lx.model, flattenZ.isOn());
-    }
-
-    @Override
-    public void onActive() {
-        //simThread.start();
-    }
-
-    @Override
-    public void onInactive() {
-        //simThread.shutdown();
-        //simThread = new SimulationThread();
     }
 
     protected float kernel(float d, float s) {
@@ -132,17 +119,44 @@ public abstract class ParticlePattern extends ThreadedPattern {
 
         simulate(deltaMs);
 
+        final List<Particle> particleList = new ArrayList<>(particles);
+        final Map<Particle, float[]> layersMap = new HashMap<>(brightnessLayers);
+        final List<float[]> layersList = new ArrayList<>(particles.size());
+
         synchronized (brightnessLayers) {
-            particles.parallelStream().forEach(new Consumer<Particle>() {
-                public void accept(Particle particle) {
-                    if (brightnessLayers.containsKey(particle)) {
-                        renderParticle(particle, brightnessLayers.get(particle));
-                    }
+            for (Particle particle : particleList) {
+                if (brightnessLayers.containsKey(particle)) {
+                    layersList.add(brightnessLayers.get(particle));
                 }
-            });
+            }
         }
 
-        super.run(deltaMs);
+        // TODO: make per-particle layer sparse
+        particleList.parallelStream().forEach(new Consumer<Particle>() {
+            public void accept(Particle particle) {
+                if (layersMap.containsKey(particle)) {
+                    renderParticle(particle, layersMap.get(particle));
+                }
+            }
+        });
+
+        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
+            public void accept(LXPoint point) {
+                float b = 0;
+                for (float[] layer : layersList) {
+                    b += layer[point.index];
+                }
+
+                brightnessBuffer[point.index] = b;
+            }
+        });
+
+        double h = hue.getValue();
+        double s = saturation.getValue();
+        for (LXPoint point : model.points) {
+            float b = Math.min(brightnessBuffer[point.index] * 100, 100);
+            colors[point.index] = LXColor.hsb(h, s, b);
+        }
     }
 
     protected void renderParticle(Particle particle, float[] brightnessLayer) {
@@ -158,40 +172,6 @@ public abstract class ParticlePattern extends ThreadedPattern {
         }
     }
 
-    @Override
-    public void render(double deltaMs, List<LXPoint> points, IntBuffer pointColors) {
-        // TODO: make per-particle layer sparse
-        final List<Particle> particleList = new ArrayList<>(particles);
-        final List<float[]> layersList = new ArrayList<>(particles.size());
-
-        synchronized (brightnessLayers) {
-            for (Particle particle : particleList) {
-                if (brightnessLayers.containsKey(particle)) {
-                    layersList.add(brightnessLayers.get(particle));
-                }
-            }
-        }
-
-        points.parallelStream().forEach(new Consumer<LXPoint>() {
-            public void accept(LXPoint point) {
-                float b = 0;
-                for (float[] layer : layersList) {
-                    b += layer[point.index];
-                }
-
-                brightnessBuffer[point.index] = b;
-            }
-        });
-
-        double h = hue.getValue();
-        double s = saturation.getValue();
-        for (int i = 0; i < points.size(); ++i) {
-            LXPoint p = points.get(i);
-            float b = Math.min(brightnessBuffer[p.index] * 100, 100);
-            pointColors.put(i, LXColor.hsb(h, s, b));
-        }
-    }
-
     protected class Particle {
         public float[] pos = new float[3];
         public float[] vel = new float[3];
@@ -202,40 +182,6 @@ public abstract class ParticlePattern extends ThreadedPattern {
             float y = model.cy + pos[1] * model.yRange / 2f;
             float z = model.cz + pos[2] * model.zRange / 2f;
             return new LXPoint(x, y, z);
-        }
-    }
-
-    private class SimulationThread extends Thread {
-        private final int PERIOD = 8;
-
-        private boolean running = true;
-
-        public void shutdown() {
-            running = false;
-            interrupt();
-        }
-
-        @Override
-        public void run() {
-            long lastTime = System.currentTimeMillis();
-            while (running) {
-                long t = System.currentTimeMillis();
-                double deltaMs = t - lastTime;
-
-                synchronized (ParticlePattern.this) {
-                    simulate(deltaMs);
-                }
-
-                long elapsed = System.currentTimeMillis() - lastTime;
-                lastTime = t;
-
-                if (elapsed < PERIOD) {
-                    try {
-                        sleep(PERIOD - elapsed);
-                    }
-                    catch (InterruptedException e) { /* pass */ }
-                }
-            }
         }
     }
 }

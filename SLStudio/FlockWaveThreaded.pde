@@ -27,9 +27,6 @@ import com.symmetrylabs.pattern.ThreadedPattern;
 
 public class FlockWaveThreaded extends FlockWave {
 
-  private PVector prevFocus = null;
-  private Set<Bird> birds = new HashSet<Bird>();
-
   private ModelIndex modelIndex;
   private Map<Bird, float[]> colorLayers = new HashMap<Bird, float[]>();
   private float[] colorValues;
@@ -43,7 +40,7 @@ public class FlockWaveThreaded extends FlockWave {
     //spawnBirds(1, new PVector(0, 0, 0), new PVector(10, 10, 10), 1000);
   }
 
-  private void fakeSimulate(float deltaSec) {
+  void fakeSimulate(float deltaSec) {
     PVector vel = new PVector(1, 1, 1);
     advanceBirds(deltaSec, vel);
   }
