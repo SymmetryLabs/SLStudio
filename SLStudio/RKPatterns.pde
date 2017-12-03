@@ -605,6 +605,7 @@ public class RKPattern03 extends P3CubeMapPattern {
   Vtx [][] rootVts;
   int iCSCols = 5, iCSRows = 4;
   float gF, thetaF, phiF, fragMid;
+  float [] pEQBands = new float[16];
   ArrayList <Fct> fctList;
   boolean audioLinked, avgSplit, pAvgSplit, showTri, showEdge;
   PVector rotDir;
@@ -687,13 +688,20 @@ public class RKPattern03 extends P3CubeMapPattern {
       gFIncreT = speed.getValuef();
       fragMid = fragment.getValuef();
     } else {
-      //println(eq.numBands);
-      //println("eq.getBandf(0)- "+eq.getBandf(0));
-      rotXT += rotDir.x*(.5-eq.getBandf(0))*.1;
-      rotYT += rotDir.z*(.5-eq.getBandf(7))*.1;
-      rotZT += rotDir.y*(.5-eq.getBandf(14))*.1;
-      gFIncreT = 0;
-      fragMid = 0;
+      float totalMag = 0;
+      for(int i=0; i<pEQBands.length; i++){
+        totalMag += eq.getBandf(i);
+      }
+      
+      rotXT += rotDir.x*(eq.getBandf(0)-pEQBands[0])*2;
+      rotYT += rotDir.z*(eq.getBandf(7)-pEQBands[7])*2;
+      rotZT += rotDir.y*eq.getBandf(14)*.1;
+      gFIncreT = map(sq(totalMag), 0, 196, 0, .25);
+      fragMid = map(totalMag, 0, 16, 1, 0);
+      
+      for(int i=0; i<pEQBands.length; i++){
+        pEQBands[i] = eq.getBandf(i);
+      }
     }
 
     rotX = lerp(rotX, rotXT, .25);
