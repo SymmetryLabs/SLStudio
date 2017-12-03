@@ -15,6 +15,7 @@ public OutputControl outputControl;
 public Pixlite[] pixlites;
 public PaletteLibrary paletteLibrary;
 public BlobTracker blobTracker;
+public SLModel model;
 
 public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
 
@@ -23,7 +24,7 @@ void setup() {
   size(displayWidth, displayHeight, P3D);
   applet = this;
 
-  SLModel model = buildModel();
+  model = buildModel();
 
   println("-- Model ----");
   println("# of suns: " + model.suns.size());
@@ -76,8 +77,9 @@ void setup() {
     @Override
     protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
+      ui.preview.setCenter(model.cx, model.cy, model.cz);
       ui.preview.setPhi(0).setMinRadius(0*FEET).setMaxRadius(150*FEET).setRadius(150*FEET);
-      ui.preview.setCenter(0, 0, 0);
+      ui.preview.addComponent(new UIAxes());
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
     }
@@ -132,6 +134,6 @@ PaletteLibrary initializePaletteLibrary() {
 
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
-  //DrawHelper.runAll();
+  DrawHelper.runAll();
   dispatcher.draw();
 }

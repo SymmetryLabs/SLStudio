@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1511751543976,
+  "timestamp": 1512034249415,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,7 +12,7 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.5,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
       "focusedChannel": 0,
@@ -49,7 +49,7 @@
     },
     "channels": [
       {
-        "id": 106,
+        "id": 3067,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -7471360,
         "parameters": {
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 14,
+        "patternIndex": 4,
         "patterns": [
           {
             "id": 2773,
@@ -198,7 +198,7 @@
             "modulationColor": -45056,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.6000000238418579,
+              "DEPTH": 0.7700000200420618,
               "BRT": 0.75,
               "SAT": 0.5,
               "SPD1": 0.20000000298023224,
@@ -381,12 +381,17 @@
             "modulationColor": -10878721,
             "parameters": {
               "label": "FlockWave",
-              "x": 1565.1300663796278,
-              "y": 9.6399888144432,
-              "z": 78.39824873566795,
-              "spRad": 419.9999935179949,
-              "spMin": 9.0,
-              "spMax": 40.0,
+              "timeScale": 1.0,
+              "oscBlobs": false,
+              "bMrgRad": 30.0,
+              "bMaxSpd": 240.0,
+              "x": 95.18536376953125,
+              "y": 0.0,
+              "z": 21.232601165771484,
+              "zScale": 0.0,
+              "spnRad": 100.0,
+              "spnMin": 2.0,
+              "spnMax": 20.0,
               "density": 2.0,
               "scatter": 719.9999906122684,
               "spdMult": 1.2599999830126762,
@@ -398,7 +403,8 @@
               "detail": 7.799999915063381,
               "ripple": 4.399999955296517,
               "palette": 3,
-              "palShift": 0.6700000073760748
+              "palShift": 0.6700000073760748,
+              "palBias": 0.0
             },
             "modulation": {
               "modulators": [
@@ -529,17 +535,17 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.421097961152168,
-          "Band-2": 0.45846176236236613,
-          "Band-3": 0.4564581128131304,
-          "Band-4": 0.4539004905325933,
-          "Band-5": 0.4119354651082592,
-          "Band-6": 0.42224428398859026,
-          "Band-7": 0.358995374411888,
-          "Band-8": 0.1693052130731154,
-          "Band-9": 0.12212002449179027,
-          "Band-10": 0.2018171182304599,
-          "Band-11": 0.09819181746550931,
+          "Band-1": 0.3210442807917788,
+          "Band-2": 0.32959409277428653,
+          "Band-3": 0.3125550734661905,
+          "Band-4": 0.30348315584423335,
+          "Band-5": 0.26671081235534266,
+          "Band-6": 0.18310148301488727,
+          "Band-7": 0.12580215993609445,
+          "Band-8": 0.0780042926929837,
+          "Band-9": 0.0016093064373078336,
+          "Band-10": 0.007530755987136817,
+          "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -575,7 +581,7 @@
       "modulationColor": -2621696,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -708,28 +714,28 @@
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
-          "componentId": 106,
+          "componentId": 3067,
           "parameterPath": "fader",
           "cc": 7
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3067,
           "parameterPath": "enabled",
           "pitch": 50
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3067,
           "parameterPath": "cue",
           "pitch": 49
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3067,
           "parameterPath": "crossfadeGroup",
           "pitch": 48
         },
@@ -783,12 +789,12 @@
         "3062": true
       },
       "preview": {
-        "radius": 1401.5362715272959,
-        "theta": 3.1169999999999987,
-        "phi": 0.04271667385101224,
-        "positionX": 1365.91015625,
-        "positionY": 16.749984741210938,
-        "positionZ": 45.547061920166016
+        "radius": 322.1132075453204,
+        "theta": 2.3819999999999997,
+        "phi": 0.05471667385101227,
+        "positionX": 10.208235740661621,
+        "positionY": -22.625003814697266,
+        "positionZ": 89.33525085449219
       }
     }
   }

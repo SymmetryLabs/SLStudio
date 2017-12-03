@@ -32,7 +32,7 @@ public class PaletteViewer extends SLPattern {
 }
 
 public class BlobViewer extends SLPattern {
-  CompoundParameter tolerance = new CompoundParameter("tolerance", 10, 0, 100); // in
+  CompoundParameter tolerance = new CompoundParameter("tolerance", 2, 0, 12); // in
   private BlobTracker blobTracker;
 
   public BlobViewer(LX lx) {
@@ -143,23 +143,29 @@ public class FlockWave extends SLPattern {
   void advanceSimulation(float deltaSec) {
     if (oscBlobs.isOn()) {
       updateBlobTrackerParameters();
+
       List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
       for (BlobTracker.Blob b : blobs) {
         spawnBirds(deltaSec, b.pos, b.vel, b.size);
       }
+
       advanceBirdsWithBlobs(deltaSec, blobs);
     } else {
       PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+
       if (prevFocus != null) {
         PVector vel = PVector.sub(focus, prevFocus);
         if (deltaSec > 0) {
           vel.div(deltaSec);
         }
+
         spawnBirds(deltaSec, focus, vel, 1);
         advanceBirds(deltaSec, vel);
       }
+
       prevFocus = focus;
     }
+
     removeExpiredBirds();
   }
 
@@ -182,7 +188,7 @@ public class FlockWave extends SLPattern {
       newBirds.add(spawnBird(focus));
       numToSpawn -= 1.0;
     }
-    if (Math.random() < numToSpawn) {
+    if (FastMath.random() < numToSpawn) {
       newBirds.add(spawnBird(focus));
     }
 
@@ -193,8 +199,10 @@ public class FlockWave extends SLPattern {
     PVector pos = getRandomUnitVector();
     pos.mult(spawnRadius.getValuef());
     pos.add(focus);
-    Bird bird = new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100));
+
+    Bird bird = new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100));
     birds.add(bird);
+
     return bird;
   }
 
@@ -211,13 +219,15 @@ public class FlockWave extends SLPattern {
       float totalWeight = 0;
       for (BlobTracker.Blob blob : blobs) {
         float distance = PVector.sub(b.pos, blob.pos).mag();
-        float weight = 1.0/(distance*distance);
+        float weight = 1.0f / (distance * distance);
         PVector.add(velSum, PVector.mult(blob.vel, weight), velSum);
         totalWeight += weight;
       }
+
       if (totalWeight > 0) {
         velSum.div(totalWeight);
       }
+
       PVector targetVel = PVector.mult(velSum, speedMult.getValuef());
       b.run(deltaSec, targetVel);
     }
@@ -230,7 +240,9 @@ public class FlockWave extends SLPattern {
         expired.add(b);
       }
     }
+
     birds.removeAll(expired);
+
     return expired;
   }
 
@@ -341,7 +353,7 @@ public class FlockWave extends SLPattern {
   PVector getRandomUnitVector() {
     PVector pos = new PVector();
     while (true) {
-      pos.set((float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1);
+      pos.set((float)FastMath.random() * 2 - 1, (float)FastMath.random() * 2 - 1, (float)FastMath.random() * 2 - 1);
       if (pos.mag() < 1) {
         return pos;
       }
@@ -374,7 +386,7 @@ public class FlockWave extends SLPattern {
       if (elapsedSec < fadeInSec.getValuef()) {
         value = elapsedSec / fadeInSec.getValuef();
       } else {
-        value = (float) Math.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
+        value = (float)FastMath.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
         if (value < 0.001) hasExpired = true;
       }
     }
@@ -388,7 +400,7 @@ public class FlockWave extends SLPattern {
       float speed = vel.mag();
       float targetSpeed = targetVel.mag();
 
-      float frac = (float) Math.pow(0.1, deltaSec / turnSec.getValuef());
+      float frac = (float)FastMath.pow(0.1, deltaSec / turnSec.getValuef());
       vel = PVector.add(PVector.mult(vel, frac), PVector.mult(targetVel, 1 - frac));
       speed = speed * frac + targetSpeed * (1 - frac);
       if (targetSpeed > maxSpeed.getValuef()) targetSpeed = maxSpeed.getValuef();

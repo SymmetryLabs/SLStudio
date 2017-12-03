@@ -80,31 +80,6 @@ public final class OutputControl extends LXComponent {
 }
 
 /*
- * UIOutput Window
- *---------------------------------------------------------------------------*/
-class UIOutputs extends UICollapsibleSection {
-    UIOutputs(LX lx, UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 124);
-        setTitle();
-
-        UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
-          @Override
-          public void onToggle(boolean isOn) { }
-        }.setLabel("Test Broadcast").setParameter(outputControl.testBroadcast);
-        testOutput.addToContainer(this);
-
-        addTopLevelComponent(new UIButton(4, 4, 12, 12) {}
-          .setParameter(outputControl.enabled).setBorderRounding(4));
-    }
-
-
-    private void setTitle() {
-        setTitle("OUTPUT");
-        setTitleX(20);
-    }
-}
-
-/*
  * Gamma Correction
  *---------------------------------------------------------------------------*/
 static final int redGamma[] = new int[256];
