@@ -2,8 +2,8 @@ Pixlite[] setupPixlites(LX lx) {
 
   return new Pixlite[] {
     // Sun 1 (One Third)
-    //new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
-    //new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
+    // new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
+    // new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
 
     // Sun 2..
 
@@ -56,7 +56,7 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
   };
 }
- 
+
 public class Pixlite extends LXOutputGroup {
   private Slice slice;
   public final String ipAddress;
@@ -151,7 +151,6 @@ public class Pixlite extends LXOutputGroup {
       if(slice.id.equals("sun9_bottom_back")) {
         new Sun9BackBottomPixliteConfig(lx, slice, ipAddress, this);
       }
-
 
       // Sun 10
       if(slice.id.equals("sun10_top_front")) {

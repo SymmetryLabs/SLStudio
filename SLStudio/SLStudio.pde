@@ -5,6 +5,7 @@ import java.text.DecimalFormat;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.util.PackageUtils;
+import com.symmetrylabs.util.BlobTracker;
 
 public PApplet applet;
 public LXStudio lx;
@@ -83,13 +84,14 @@ void setup() {
     protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
       ui.preview.setPhi(0).setMinRadius(0*FEET).setMaxRadius(150*FEET).setRadius(150*FEET);
+      ui.preview.setCenter(model.cx, model.cy, model.cz);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
     }
   };
 
   lx.engine.audio.enabled.setValue(true);
-  blobTracker = new BlobTracker(lx);
+  blobTracker = BlobTracker.getInstance(lx);
 
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 

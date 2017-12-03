@@ -148,7 +148,32 @@ public static class Sun extends LXModel {
       transform.rotateY(rotations[1] * PI / 180);
       transform.rotateZ(rotations[2] * PI / 180);
 
-      // create slices...
+      // // create slices...
+      // if (type != Sun.Type.ONE_THIRD) {
+      //   slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {-Slice.DIAMETER/2, Slice.DIAMETER/2, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
+      //   slices.add(new Slice(id + "_top_back",  Slice.Type.FULL, new float[] {-Slice.DIAMETER/2, Slice.DIAMETER/2, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
+      // }
+
+      // switch (type) {
+      //   case FULL:
+      //     slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {-Slice.DIAMETER/2, -Slice.DIAMETER+1.25, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
+      //     slices.add(new Slice(id + "_bottom_back",  Slice.Type.FULL, new float[] {-Slice.DIAMETER/2, -Slice.DIAMETER+1.25, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
+      //     break;
+
+      //   case TWO_THIRDS:
+      //     slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {-Slice.DIAMETER/2, -Slice.DIAMETER+1.25, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
+      //     slices.add(new Slice(id + "_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] {-Slice.DIAMETER/2, -Slice.DIAMETER+1.25, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
+
+      //   case ONE_HALF:
+      //     // already done
+      //     break;
+
+      //   case ONE_THIRD:
+      //     slices.add(new Slice(id + "_top_front", Slice.Type.TWO_THIRDS, new float[] {-Slice.DIAMETER/2, 0, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
+      //     slices.add(new Slice(id + "_top_back",  Slice.Type.TWO_THIRDS, new float[] {-Slice.DIAMETER/2, 0, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
+      //     break;
+      // }
+
       if (type != Sun.Type.ONE_THIRD) {
         slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {             0, 0, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
         slices.add(new Slice(id + "_top_back",  Slice.Type.FULL, new float[] {Slice.DIAMETER, 0, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
@@ -234,6 +259,9 @@ public static class Slice extends LXModel {
       transform.rotateY(rotations[1] * PI / 180);
       transform.rotateZ(rotations[2] * PI / 180);
 
+      int counter = 0;
+      int numStrips = numPointsPerStrip.length;
+
       // create curved strips...
       int counter = 0;
       if (type != Slice.Type.BOTTOM_ONE_THIRD) {
@@ -302,9 +330,9 @@ public static class CurvedStrip extends Strip {
     private Fixture(String id, CurvedMetrics metrics, float[] coordinates, float[] rotations, LXTransform transform) {
       transform.push();
       transform.translate(coordinates[0], coordinates[1], coordinates[2]);
-      transform.rotateX(rotations[0] * PI / 180);
       transform.rotateY(rotations[1] * PI / 180);
       transform.rotateZ(rotations[2] * PI / 180);
+      transform.rotateX(rotations[0] * PI / 180);
 
       for (int i = 0; i < metrics.numPoints; i++) {
         transform.push();
