@@ -4,3 +4,6 @@ SLStudio/build-tmp/
 *.autosave
 *.swp
 SLStudio/build
+.idea
+*.iml
+
