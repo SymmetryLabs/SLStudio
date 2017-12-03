@@ -1,6 +1,66 @@
 import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
 
+public class PaletteViewer extends SLPattern {
+  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
+  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
+  CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
+  CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
+
+  public PaletteViewer(LX lx) {
+    super(lx);
+    addParameter(palette);
+    addParameter(palStart);
+    addParameter(palStop);
+    addParameter(palShift);
+    addParameter(palBias);
+  }
+
+  public void run(double deltaMs) {
+    ColorPalette pal = paletteLibrary.get(palette.getOption());
+    float shift = palShift.getValuef();
+    if (pal instanceof ZigzagPalette) {
+      ((ZigzagPalette) pal).setBias(palBias.getValuef());
+      ((ZigzagPalette) pal).setStart(palStart.getValuef());
+      ((ZigzagPalette) pal).setStop(palStop.getValuef());
+    }
+    for (LXPoint p : model.points) {
+      colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin) + shift);
+    }
+  }
+}
+
+public class BlobViewer extends SLPattern {
+  CompoundParameter tolerance = new CompoundParameter("tolerance", 10, 0, 100); // in
+  private BlobTracker blobTracker;
+
+  public BlobViewer(LX lx) {
+    super(lx);
+    addParameter(tolerance);
+    blobTracker = BlobTracker.getInstance(lx);
+  }
+
+  public void run(double deltaMs) {
+    List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+    int[] planeColors = {0xffff0000, 0xff00ff00, 0xff0000ff};
+    float tol = tolerance.getValuef();
+
+    for (LXPoint p : model.points) {
+      int c = 0;
+      for (int b = 0; b < blobs.size(); b++) {
+        PVector pos = blobs.get(b).pos;
+        if (Math.abs(p.x - pos.x) < tol ||
+            Math.abs(p.y - pos.y) < tol ||
+            Math.abs(p.z - pos.z) < tol) {
+          c = c | planeColors[b % planeColors.length];
+        }
+      }
+      colors[p.index] = c;
+    }
+  }
+}
+
 public class FlockWave extends SLPattern {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
@@ -15,7 +75,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
   CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
   CompoundParameter spawnRadius = new CompoundParameter("spnRad", 100, 0, 200);  // radius (in) within which to spawn birds
-  CompoundParameter density = new CompoundParameter("density", 1, 0, 2);  // maximum spawn rate (birds/s)
+  CompoundParameter density = new CompoundParameter("density", 0.2, 0, 0.5);  // maximum spawn rate (birds/s)
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (in/s)
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
@@ -27,9 +87,11 @@ public class FlockWave extends SLPattern {
   CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
 
-  DiscreteParameter palette = new DiscreteParameter("palette", skyPalettes.getNames());  // selected colour palette
+  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
+  CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
-  CompoundParameter palBias = new CompoundParameter("palBias", 0, 0, 20);  // bias colour palette toward zero (dB)
+  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward start or stop
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
@@ -66,6 +128,8 @@ public class FlockWave extends SLPattern {
     addParameter(ripple);
 
     addParameter(palette);
+    addParameter(palStart);
+    addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
   }
@@ -79,23 +143,29 @@ public class FlockWave extends SLPattern {
   void advanceSimulation(float deltaSec) {
     if (oscBlobs.isOn()) {
       updateBlobTrackerParameters();
+
       List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
       for (BlobTracker.Blob b : blobs) {
         spawnBirds(deltaSec, b.pos, b.vel, b.size);
       }
+
       advanceBirdsWithBlobs(deltaSec, blobs);
     } else {
       PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+
       if (prevFocus != null) {
         PVector vel = PVector.sub(focus, prevFocus);
         if (deltaSec > 0) {
           vel.div(deltaSec);
         }
+
         spawnBirds(deltaSec, focus, vel, 1);
         advanceBirds(deltaSec, vel);
       }
+
       prevFocus = focus;
     }
+
     removeExpiredBirds();
   }
 
@@ -104,7 +174,7 @@ public class FlockWave extends SLPattern {
     blobTracker.setMergeRadius(oscMergeRadius.getValuef());
     blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
     blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
-  } //<>//
+  }
 
   List<Bird> spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
     float spawnMin = spawnMinSpeed.getValuef();
@@ -118,7 +188,7 @@ public class FlockWave extends SLPattern {
       newBirds.add(spawnBird(focus));
       numToSpawn -= 1.0;
     }
-    if (Math.random() < numToSpawn) {
+    if (FastMath.random() < numToSpawn) {
       newBirds.add(spawnBird(focus));
     }
 
@@ -129,8 +199,10 @@ public class FlockWave extends SLPattern {
     PVector pos = getRandomUnitVector();
     pos.mult(spawnRadius.getValuef());
     pos.add(focus);
-    Bird bird = new Bird(pos, LXColor.hsb(Math.random()*360, Math.random()*100, 100));
+
+    Bird bird = new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100));
     birds.add(bird);
+
     return bird;
   }
 
@@ -147,13 +219,15 @@ public class FlockWave extends SLPattern {
       float totalWeight = 0;
       for (BlobTracker.Blob blob : blobs) {
         float distance = PVector.sub(b.pos, blob.pos).mag();
-        float weight = 1.0/(distance*distance);
+        float weight = 1.0f / (distance * distance);
         PVector.add(velSum, PVector.mult(blob.vel, weight), velSum);
         totalWeight += weight;
       }
+
       if (totalWeight > 0) {
         velSum.div(totalWeight);
       }
+
       PVector targetVel = PVector.mult(velSum, speedMult.getValuef());
       b.run(deltaSec, targetVel);
     }
@@ -166,7 +240,9 @@ public class FlockWave extends SLPattern {
         expired.add(b);
       }
     }
+
     birds.removeAll(expired);
+
     return expired;
   }
 
@@ -230,8 +306,17 @@ public class FlockWave extends SLPattern {
     }
   }
 
+  ColorPalette getPalette() {
+    ColorPalette pal = paletteLibrary.get(palette.getOption());
+    if (pal instanceof ZigzagPalette) {
+      ((ZigzagPalette) pal).setBias(palBias.getValuef());
+      ((ZigzagPalette) pal).setStart(palStart.getValuef());
+      ((ZigzagPalette) pal).setStop(palStop.getValuef());
+    }
+    return pal;
+  }
+
   void renderPlasma() {
-    ColorPalette pal = skyPalettes.getPalette(palette.getOption());
     float waveNumber = detail.getValuef();
     float extent = size.getValuef();
     float rippleSpeed = ripple.getValuef();
@@ -240,7 +325,8 @@ public class FlockWave extends SLPattern {
     Bird high = new Bird(new PVector(0, 0, 0), 0);
 
     double zFactor = Math.pow(10, zScale.getValuef()/10);
-    double bias = Math.pow(0.1, palBias.getValuef()/10);
+    ColorPalette pal = getPalette();
+    float shift = palShift.getValuef();
 
     for (LXPoint p : model.points) {
       low.pos.x = p.x - extent;
@@ -260,14 +346,14 @@ public class FlockWave extends SLPattern {
           }
         }
       }
-      colors[p.index] = pal.getColor(Math.signum(sum)*Math.pow(Math.abs(sum), bias) + palShift.getValuef());
+      colors[p.index] = pal.getColor(sum + shift);
     }
   }
 
   PVector getRandomUnitVector() {
     PVector pos = new PVector();
     while (true) {
-      pos.set((float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1, (float) Math.random() * 2 - 1);
+      pos.set((float)FastMath.random() * 2 - 1, (float)FastMath.random() * 2 - 1, (float)FastMath.random() * 2 - 1);
       if (pos.mag() < 1) {
         return pos;
       }
@@ -300,7 +386,7 @@ public class FlockWave extends SLPattern {
       if (elapsedSec < fadeInSec.getValuef()) {
         value = elapsedSec / fadeInSec.getValuef();
       } else {
-        value = (float) Math.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
+        value = (float)FastMath.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
         if (value < 0.001) hasExpired = true;
       }
     }
@@ -314,7 +400,7 @@ public class FlockWave extends SLPattern {
       float speed = vel.mag();
       float targetSpeed = targetVel.mag();
 
-      float frac = (float) Math.pow(0.1, deltaSec / turnSec.getValuef());
+      float frac = (float)FastMath.pow(0.1, deltaSec / turnSec.getValuef());
       vel = PVector.add(PVector.mult(vel, frac), PVector.mult(targetVel, 1 - frac));
       speed = speed * frac + targetSpeed * (1 - frac);
       if (targetSpeed > maxSpeed.getValuef()) targetSpeed = maxSpeed.getValuef();
@@ -325,20 +411,6 @@ public class FlockWave extends SLPattern {
 
     public int compareTo(Bird other) {
       return Float.compare(pos.x, other.pos.x);
-    }
-  }
-}
-
-public class SkyGradient extends SLPattern {
-  public SkyGradient(LX lx) {
-    super(lx);
-  }
-
-  public void run(double deltaMs) {
-    ColorPalette palette = skyPalettes.getPalette("san francisco");
-    for (LXPoint p : model.points) {
-      float altitude = (p.y - model.yMin) / (model.yMax - model.yMin);
-      colors[p.index] = palette.getColor(altitude);
     }
   }
 }
