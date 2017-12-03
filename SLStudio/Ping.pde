@@ -32,7 +32,7 @@ public class PaletteViewer extends SLPattern {
 }
 
 public class BlobViewer extends SLPattern {
-  CompoundParameter tolerance = new CompoundParameter("tolerance", 10, 0, 100); // in
+  CompoundParameter tolerance = new CompoundParameter("tolerance", 2, 0, 12); // in
   private BlobTracker blobTracker;
 
   public BlobViewer(LX lx) {
