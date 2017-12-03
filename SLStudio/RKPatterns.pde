@@ -586,7 +586,11 @@ public class RKPattern02 extends P3CubeMapPattern {
 }
 
 public class RKPattern03 extends P3CubeMapPattern {
+  
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
 
+  BooleanParameter audioLink = new BooleanParameter("audioLink", false);
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -600,10 +604,10 @@ public class RKPattern03 extends P3CubeMapPattern {
 
   Vtx [][] rootVts;
   int iCSCols = 5, iCSRows = 4;
-  float l1 = 600, l2 = 600, l3 = 600;
   float gF, thetaF, phiF, fragMid;
   ArrayList <Fct> fctList;
-  boolean avgSplit, pAvgSplit, showTri, showEdge;
+  boolean audioLinked, avgSplit, pAvgSplit, showTri, showEdge;
+  PVector rotDir;
 
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
 
@@ -614,6 +618,7 @@ public class RKPattern03 extends P3CubeMapPattern {
     gF = random(100);
     thetaF = random(100);
     phiF = random(100);
+    rotDir = PVector.random3D();
 
     initRootVts();
 
@@ -623,6 +628,7 @@ public class RKPattern03 extends P3CubeMapPattern {
     //avgSplitUp();
     randomSplitUp(100);
 
+    addParameter(audioLink);
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
@@ -631,37 +637,14 @@ public class RKPattern03 extends P3CubeMapPattern {
     addParameter(edge);
     addParameter(speed);
     addParameter(fragment);
+    
+    addModulator(eq).start();
   }
 
   void run(double deltaMs, PGraphics pg) {
 
-    rotXT = rX.getValuef();
-    rotYT = rY.getValuef();
-    rotZT = rZ.getValuef();
-    gFIncreT = speed.getValuef();
-    fragMid = fragment.getValuef();
+    updateParameters();
 
-    avgSplit = avg.getValueb();
-    if (pAvgSplit != avgSplit) {
-      if (avgSplit) {
-        resetFctList();
-        avgSplitUp();
-      } else {
-        resetFctList();
-        randomSplitUp(100);
-      }
-      pAvgSplit = avgSplit;
-    }
-
-    showTri = tri.getValueb();
-    showEdge = edge.getValueb();
-
-    rotX = lerp(rotX, rotXT, .1);
-    rotY = lerp(rotY, rotYT, .1);
-    rotZ = lerp(rotZ, rotZT, .1);
-    gFIncre = lerp(gFIncre, gFIncreT, .1);
-
-    gF += gFIncre;
     for (int i=0; i<fctList.size(); i++) {
       Fct fct = fctList.get(i);
       fct.update();
@@ -678,6 +661,46 @@ public class RKPattern03 extends P3CubeMapPattern {
     pg.image(pgF, faceRes, faceRes);
     pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
+  }
+
+  void updateParameters() {
+    audioLinked = audioLink.getValueb();
+    showTri = tri.getValueb();
+    showEdge = edge.getValueb();
+
+    avgSplit = avg.getValueb();
+    if (pAvgSplit != avgSplit) {
+      if (avgSplit) {
+        resetFctList();
+        avgSplitUp();
+      } else {
+        resetFctList();
+        randomSplitUp(100);
+      }
+      pAvgSplit = avgSplit;
+    }
+
+    if (!audioLinked) {
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      gFIncreT = speed.getValuef();
+      fragMid = fragment.getValuef();
+    } else {
+      //println(eq.numBands);
+      //println("eq.getBandf(0)- "+eq.getBandf(0));
+      rotXT += rotDir.x*(.5-eq.getBandf(0))*.1;
+      rotYT += rotDir.z*(.5-eq.getBandf(7))*.1;
+      rotZT += rotDir.y*(.5-eq.getBandf(14))*.1;
+      gFIncreT = 0;
+      fragMid = 0;
+    }
+
+    rotX = lerp(rotX, rotXT, .25);
+    rotY = lerp(rotY, rotYT, .25);
+    rotZ = lerp(rotZ, rotZT, .25);
+    gFIncre = lerp(gFIncre, gFIncreT, .25);
+    gF += gFIncre;
   }
 
   void updateCubeMaps() {
@@ -1330,7 +1353,7 @@ public class RKPattern05 extends P3CubeMapPattern {
     super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 200);
     initRootVts();
     initRootMesh();
-    
+
     lgt1 = new PVector(600, 600, 600);
     lgt2 = new PVector(600, -600, -600);
     lgt3 = new PVector(-600, -600, 600);
