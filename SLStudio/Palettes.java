@@ -3,6 +3,7 @@
 // named simply Palette, but there is already a Palette class in Patterns.pde.)
 
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Arrays;
@@ -39,6 +40,23 @@ interface PaletteExtractor {
     ColorPalette getPalette(BufferedImage image);
 }
 
+/** Loads images from a directory. */
+class ImageLibrary {
+    File dir;
+    
+    ImageLibrary(String path) {
+        dir = new File(path);
+    }
+    
+    public BufferedImage get(String filename) {
+        try {
+            return ImageIO.read(new File(dir, filename));
+        } catch (IOException e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+}
 
 /** A source that fetches photos from a deckchair.com camera.  Good places to
     * find camera IDs are http://api.deckchair.com/v1/cameras and @webcam_sunsets.
@@ -225,6 +243,8 @@ class LinePaletteExtractor extends ImageUtils implements PaletteExtractor {
     }
 
     public ColorPalette getPalette(BufferedImage image) {
+        if (image == null) return new ConstantPalette(0);
+
         int[] colors = new int[numStops + 1];
         for (int i = 0; i <= numStops; i++) {
             double t = i / (double) numStops;
@@ -254,6 +274,8 @@ class ArcPaletteExtractor extends ImageUtils implements PaletteExtractor {
     }
 
     public ColorPalette getPalette(BufferedImage image) {
+        if (image == null) return new ConstantPalette(0);
+
         int[] colors = new int[numStops + 1];
         for (int i = 0; i <= numStops; i++) {
             double t = i / (double) numStops;
@@ -291,11 +313,11 @@ class PaletteLibrary {
         return names;
     }
 
-    void set(String name, ColorPalette palette) {
+    void put(String name, ColorPalette palette) {
         palettes.put(name, palette);
     }
 
-    void set(String name, ImageSource source, PaletteExtractor extractor) {
+    void put(String name, ImageSource source, PaletteExtractor extractor) {
         palettes.put(name, BLACK);
         sources.put(name, source);
         extractors.put(name, extractor);

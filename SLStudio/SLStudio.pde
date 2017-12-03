@@ -103,7 +103,7 @@ PaletteLibrary initializePaletteLibrary() {
   pl.set("galaxies", new UrlImageSource("https://apod.nasa.gov/apod/image/1711/BeltStars_nouroozi2000.jpg"), new ArcPaletteExtractor(0.9, 1000));
   */
 
-  pl.set("sky.orange", new ZigzagPalette(new int[] {
+  pl.put("sky.orange", new ZigzagPalette(new int[] {
     0x230402, 0x2d0a06, 0x340b05, 0x3a0b05, 0x3a0501, 0x420602, 0x520701,
     0x7c1103, 0xfe9100, 0xfdc200, 0xfdee00, 0xfdfc00, 0xfefe00, 0xfefb00,
     0xfff507, 0xfde80a, 0xfcd905, 0xfec601, 0xfdbc00, 0xfeb500, 0xfdb000,
@@ -111,7 +111,21 @@ PaletteLibrary initializePaletteLibrary() {
     0xfda100, 0xfe9900, 0xfc8500, 0xfd6a00, 0xfc5000, 0x3b0401, 0x2b0400,
     0x260402, 0x270907, 0x220905, 0x1e0606, 0x200b08, 0x1d0a07
   }));
-
+  
+  ImageLibrary il = new ImageLibrary(applet.dataPath("images"));
+  PaletteExtractor horiz = new LinePaletteExtractor(0.5);
+  PaletteExtractor vert = new LinePaletteExtractor(0.5, 1, 0.5, 0);
+  pl.put("sky.purple", new LinePaletteExtractor(0, 0.7, 1, 0.3).getPalette(il.get("maxpixel-pink-beautiful-sunset-1858600-cc0.jpg")));
+  pl.put("sky.red", vert.getPalette(il.get("pexels-cc0-animals-birds-dawn-giraffe-417142.jpg")));
+  pl.put("sky.cloudy", vert.getPalette(il.get("pixnio-cc0-sunset-sky-mountain-landscape-cloud.jpg")));
+  pl.put("sky.green", vert.getPalette(il.get("pexels-cc0-nature-sky-sunset-the-mountains-66997.jpg")));
+  pl.put("sky.pastel", new LinePaletteExtractor(0.11, 0.41, 0.5, 0).getPalette(il.get("maxpixel-cc0-Abendstimmung-Landscape-Mountain-Sky-Nature-Lake-1504197.jpg")));
+  pl.put("sky.dkgn", new LinePaletteExtractor(0, 1, 0, 0).getPalette(il.get("pexels-cc0-sunset-sunrise-sea-horizon-11434.jpg")));
+  pl.put("sky.yellow", new LinePaletteExtractor(0.5, 1, 0.5, 0).getPalette(il.get("pexels-cc0-sunset-sunrise-sea-horizon-11434.jpg")));
+  pl.put("land", new LinePaletteExtractor(1, 0.5, 1, 0).getPalette(il.get("maxpixel-cc0-Abendstimmung-Landscape-Mountain-Sky-Nature-Lake-1504197.jpg")));
+  pl.put("neon", horiz.getPalette(il.get("pixabay-cc0-neon-art-color-colorful-light-1596205.jpg")));
+  pl.put("lake", new LinePaletteExtractor(0, 1, 1, 0).getPalette(il.get("maxpixel-cc0-Sky-Lake-Luener-Lake-Water-Blue-Mirroring-Clouds-475819.jpg")));
+  pl.put("scotland", new LinePaletteExtractor(0, 1, 0.6, 0).getPalette(il.get("maxpixel-cc0-Elgol-Coast-Scotland-Stones-Lake-Isle-Of-Skye-540123.jpg")));
   return pl;
 }
 
