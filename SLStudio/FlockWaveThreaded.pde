@@ -247,7 +247,7 @@ public class FlockWaveThreaded extends ThreadedPattern {
     Arrays.fill(colorValues, 0);
 
     final List<Bird> birdList = new ArrayList<Bird>(birds);
-    birdList.parallelStream().forEach(new Consumer<Bird>() {
+    birdList.stream().forEach(new Consumer<Bird>() {
       public void accept(Bird bird) {
         renderBird(bird);
       }
