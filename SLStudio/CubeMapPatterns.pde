@@ -42,7 +42,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
    */
   protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int faceRes) {
     super(lx);
-    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>//
+    this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D);
     this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgL = lx.applet.createGraphics(faceRes, faceRes, P3D);
@@ -62,7 +62,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
       double deltaMs = System.currentTimeMillis() - lastRunAt;
       lastRunAt = System.currentTimeMillis();
 
-      //pg.beginDraw(); //<>//
+      //pg.beginDraw();
       P3CubeMapPattern.this.run(deltaMs, pg);
       //pg.endDraw();
       pg.loadPixels();
@@ -74,7 +74,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
         double az = Math.abs(v.z);
 
         // Ignore pixels outside the bounding box.
-        if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) { //<>//
+        if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) {
           continue;
         }
 

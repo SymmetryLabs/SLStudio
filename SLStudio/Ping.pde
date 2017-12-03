@@ -31,6 +31,36 @@ public class PaletteViewer extends SLPattern {
   }
 }
 
+public class BlobViewer extends SLPattern {
+  CompoundParameter tolerance = new CompoundParameter("tolerance", 10, 0, 100); // in
+  private BlobTracker blobTracker;
+
+  public BlobViewer(LX lx) {
+    super(lx);
+    addParameter(tolerance);
+    blobTracker = BlobTracker.getInstance(lx);
+  }
+
+  public void run(double deltaMs) {
+    List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+    int[] planeColors = {0xffff0000, 0xff00ff00, 0xff0000ff};
+    float tol = tolerance.getValuef();
+
+    for (LXPoint p : model.points) {
+      int c = 0;
+      for (int b = 0; b < blobs.size(); b++) {
+        PVector pos = blobs.get(b).pos;
+        if (Math.abs(p.x - pos.x) < tol ||
+            Math.abs(p.y - pos.y) < tol ||
+            Math.abs(p.z - pos.z) < tol) {
+          c = c | planeColors[b % planeColors.length];
+        }
+      }
+      colors[p.index] = c;
+    }
+  }
+}
+
 public class FlockWave extends SLPattern {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
@@ -138,7 +168,7 @@ public class FlockWave extends SLPattern {
     blobTracker.setMergeRadius(oscMergeRadius.getValuef());
     blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
     blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
-  } //<>//
+  }
 
   List<Bird> spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
     float spawnMin = spawnMinSpeed.getValuef();
