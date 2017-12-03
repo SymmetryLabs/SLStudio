@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512050612466,
+  "timestamp": 1512084074731,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 351.5789489746094,
+        "color/hue": 351.5294189453125,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -65500,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.31428571604192257,
+          "fader": 1.0,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 14,
         "patterns": [
           {
             "id": 2773,
@@ -163,7 +163,7 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.9500000011175871,
+              "Dens": 0.30000001192092896,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 6
@@ -499,6 +499,66 @@
               "palette": 0,
               "palShift": 0.0,
               "palBias": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3397,
+            "class": "com.symmetrylabs.pattern.Wasps",
+            "modulationColor": -16711767,
+            "parameters": {
+              "label": "Wasps",
+              "count": 23.99999968707561,
+              "size": 15.999999642372131,
+              "flattenZ": false,
+              "hue": 0.0,
+              "saturation": 30.0,
+              "accel": 0.9199999962002039,
+              "dampen": 0.1900000125169754,
+              "focusX": 0.5,
+              "focusY": 0.5,
+              "focusZ": 0.5,
+              "pullX": 0.0,
+              "pullY": 0.5,
+              "pullZ": 0.220000009983778,
+              "twistX": 0.739999994635582,
+              "twistY": 0.5,
+              "twistZ": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3399,
+            "class": "com.symmetrylabs.pattern.Wasps",
+            "modulationColor": -16711859,
+            "parameters": {
+              "label": "Wasps",
+              "count": 10.0,
+              "size": 100.0,
+              "flattenZ": true,
+              "hue": 0.0,
+              "saturation": 30.0,
+              "accel": 0.15000000596046448,
+              "dampen": 0.75,
+              "focusX": 0.5,
+              "focusY": 0.5,
+              "focusZ": 0.5,
+              "pullX": 0.5,
+              "pullY": 0.5,
+              "pullZ": 0.5,
+              "twistX": 0.5,
+              "twistY": 0.5,
+              "twistZ": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -961,13 +1021,13 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.0175813883689524,
-          "Band-2": 0.03614866335601885,
-          "Band-3": 0.009378469944774759,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.08977081719642399,
-          "Band-7": 0.11792241146319882,
+          "Band-1": 0.13682474082623342,
+          "Band-2": 0.15186365642275734,
+          "Band-3": 0.16894842944045774,
+          "Band-4": 0.18457739976766763,
+          "Band-5": 0.10968960122210059,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
@@ -1215,12 +1275,12 @@
         "3062": true
       },
       "preview": {
-        "radius": 75.58237328651401,
-        "theta": 3.3209999999999957,
-        "phi": -0.02928332614898772,
-        "positionX": 47.946014404296875,
-        "positionY": -36.625,
-        "positionZ": -2.431913137435913
+        "radius": 129.47810682539185,
+        "theta": 3.458999999999995,
+        "phi": 0.07571667385101222,
+        "positionX": 48.95004653930664,
+        "positionY": -31.625003814697266,
+        "positionZ": 0.31210649013519287
       }
     }
   }
