@@ -1,14 +1,17 @@
 
 public abstract class ColorSlideshow extends SLPattern {
-  public final CompoundParameter rate = new CompoundParameter("Rate", 3000, 10000, 250);
-  public final CompoundParameter offsetX = new CompoundParameter("OffsetX", 0, 0, 1);
-  public final CompoundParameter offsetY = new CompoundParameter("OffsetY", 0, 0, 1);
-  public final BooleanParameter perSun = new BooleanParameter("PerSun", false);
+  public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
+  public final BooleanParameter perSun = new BooleanParameter("perSun", false);
+  public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
+  public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
+  public final CompoundParameter zoomX = new CompoundParameter("zoomX", 0, 0, 1);
+  public final CompoundParameter zoomY = new CompoundParameter("zoomY", 0, 0, 1);
 
-  private final SawLFO lerp = (SawLFO) startModulator(new SawLFO(0, 1, rate));
+  private final SawLFO lerp = (SawLFO)startModulator(new SawLFO(0, 1, rate));
 
   private int imageIndex = 0;
   private final PImage[] images;
+  private final int[][] imageLayers;
 
   public ColorSlideshow(LX lx) {
     super(lx);
@@ -20,44 +23,118 @@ public abstract class ColorSlideshow extends SLPattern {
       images[i].loadPixels();
     }
 
+    imageLayers = new int[images.length][colors.length];
+
     addParameter("rate", rate);
     addParameter("perSun", perSun);
+    addParameter("offsetX", offsetX);
+    addParameter("offsetY", offsetY);
+    addParameter("zoomX", zoomX);
+    addParameter("zoomY", zoomY);
+
+    LXParameterListener updateRastersListener = new LXParameterListener() {
+      private boolean inProgress = false;
+
+      public void onParameterChanged(LXParameter ignore) {
+        synchronized (this) {
+          if (inProgress)
+            return;
+
+          inProgress = true;
+        }
+
+        updateRasters();
+
+        synchronized (this) {
+          inProgress = false;
+        }
+      }
+    };
+
+    perSun.addListener(updateRastersListener);
+    zoomX.addListener(updateRastersListener);
+    zoomY.addListener(updateRastersListener);
+    offsetX.addListener(updateRastersListener);
+    offsetY.addListener(updateRastersListener);
+
+    updateRasters();
   }
 
   abstract String[] getPaths();
 
-  public void run(double deltaMs) {
-    float lerp = this.lerp.getValuef();
-    if (this.lerp.loop()) {
-      this.imageIndex = (this.imageIndex + 1) % this.images.length;
-    }
-    PImage image1 = this.images[this.imageIndex];
-    PImage image2 = this.images[(this.imageIndex + 1) % this.images.length];
+  private int bilinearInterp(PImage image, double px, double py) {
+    int imgOffsX = (int)(offsetX.getValue() * (image.width - 1) + image.width);
+    int imgOffsY = (int)(offsetY.getValue() * (image.height - 1) + image.height);
 
-    double offsetXValue = offsetX.getValue();
-    double offsetYValue = offsetY.getValue();
+    double zoomXValue = zoomX.getValue() + 1;
+    double zoomYValue = zoomY.getValue() + 1;
 
-    if (perSun.getValueb()) {
-      for (Sun sun : model.suns) {
-        for (LXPoint p : sun.points) {
-          double px = FastMath.min((p.x - sun.xMin) / sun.xRange + offsetXValue, 1);
-          double py = FastMath.min((p.y - sun.yMin) / sun.yRange + offsetYValue, 1);
-          int c1 = image1.get((int)(px * (image1.width-1)), (int)(py * (image1.height-1)));
-          int c2 = image2.get((int)(px * (image2.width-1)), (int)(py * (image2.height-1)));
+    double imgX = px * (image.width - 1) / zoomXValue + imgOffsX;
+    int imgXFloor = (int)Math.floor(imgX);
+    int imgXCeil = (int)Math.ceil(imgX);
+    double xRem = imgXCeil - imgXFloor;
 
-          colors[p.index] = LXColor.lerp(c1, c2, lerp);
+    double imgY = py * (image.height - 1) / zoomYValue + imgOffsY;
+    int imgYFloor = (int)Math.floor(imgY);
+    int imgYCeil = (int)Math.ceil(imgY);
+    double yRem = imgYCeil - imgYFloor;
+
+    imgXFloor %= image.width;
+    imgXCeil %= image.width;
+    imgYFloor %= image.height;
+    imgYCeil %= image.height;
+
+    int q11 = image.get(imgXFloor, imgYFloor);
+    int q12 = image.get(imgXFloor, imgYCeil);
+    int q21 = image.get(imgXCeil, imgYFloor);
+    int q22 = image.get(imgXCeil, imgYCeil);
+
+    int q1 = LXColor.lerp(q11, q21, xRem);
+    int q2 = LXColor.lerp(q12, q22, xRem);
+
+    return LXColor.lerp(q1, q2, yRem);
+  }
+
+  private void updateRasters() {
+    for (int i = 0; i < images.length; ++i) {
+      PImage image = images[i];
+      int[] layer = imageLayers[i];
+
+      if (perSun.getValueb()) {
+        for (Sun sun : model.suns) {
+          for (LXPoint p : sun.points) {
+            double px = (p.x - sun.xMin) / sun.xRange;
+            double py = (p.y - sun.yMin) / sun.yRange;
+
+            layer[p.index] = bilinearInterp(image, px, py);
+          }
+        }
+      }
+      else {
+        for (LXPoint p : model.points) {
+          double px = (p.x - model.xMin) / model.xRange;
+          double py = (p.y - model.yMin) / model.yRange;
+
+          layer[p.index] = bilinearInterp(image, px, py);
         }
       }
     }
-    else {
-      for (LXPoint p : model.points) {
-        double px = FastMath.min((p.x - model.xMin) / model.xRange + offsetXValue, 1);
-        double py = FastMath.min((p.y - model.xMin) / model.xRange + offsetYValue, 1);
-        int c1 = image1.get((int)(px * (image1.width-1)), (int)(py * (image1.height-1)));
-        int c2 = image2.get((int)(px * (image2.width-1)), (int)(py * (image2.height-1)));
+  }
 
-        colors[p.index] = LXColor.lerp(c1, c2, lerp);
-      }
+  public void run(double deltaMs) {
+    double lerpValue = lerp.getValue();
+    if (lerp.loop()) {
+      imageIndex = (imageIndex + 1) % images.length;
+    }
+
+    int image1Index = imageIndex;
+    int image2Index = (imageIndex + 1) % images.length;
+
+    for (LXPoint p : lx.model.points) {
+      int c1 = imageLayers[image1Index][p.index];
+      int c2 = imageLayers[image2Index][p.index];
+
+      colors[p.index] = LXColor.lerp(c1, c2, lerpValue);
     }
   }
 }
