@@ -1,3 +1,16 @@
+import heronarts.lx.LX;
+import heronarts.lx.audio.GraphicMeter;
+import heronarts.lx.audio.LXAudioInput;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.p3lx.P3LX;
+import processing.core.PGraphics;
+import processing.core.PVector;
+
+import java.util.ArrayList;
+import static processing.core.PApplet.*;
+import static processing.core.PConstants.*;
+
 public class RKPatternTest extends P3CubeMapPattern {
 
   int faceRes = 200;
@@ -56,22 +69,22 @@ public class RKPatternTest extends P3CubeMapPattern {
     pg.pushMatrix();
     pg.translate(-100, 0, 0);
     pg.rotateY(-HALF_PI);
-    pg.text("L", 0, 0);
+    pg.text("R", 0, 0);
     pg.popMatrix();
     pg.pushMatrix();
     pg.translate(100, 0, 0);
     pg.rotateY(HALF_PI);
-    pg.text("R", 0, 0);
+    pg.text("L", 0, 0);
     pg.popMatrix();
     pg.pushMatrix();
     pg.translate(0, -100, 0);
     pg.rotateX(HALF_PI);
-    pg.text("U", 0, 0);
+    pg.text("D", 0, 0);
     pg.popMatrix();
     pg.pushMatrix();
     pg.translate(0, 100, 0);
     pg.rotateX(-HALF_PI);
-    pg.text("D", 0, 0);
+    pg.text("U", 0, 0);
     pg.popMatrix();
   }
 }
@@ -96,7 +109,7 @@ public class RKPattern01 extends P3CubeMapPattern {
   float l1 = 600, l2 = 600, l3 = 600;
   float gTheta, gThetaSpacing, gWeightScalar;
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, nDspmt, nDspmtT, thetaSpeed, thetaSpeedT;
-  ArrayList <Ring> testRings;
+  ArrayList<Ring> testRings;
   PVector rotDir;
 
   boolean audioLinked;

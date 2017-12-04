@@ -1,3 +1,27 @@
+import com.google.gson.JsonObject;
+import heronarts.lx.LX;
+import heronarts.lx.LXMappingEngine;
+import heronarts.lx.LXSerializable;
+import heronarts.lx.model.LXModel;
+import heronarts.p3lx.P3LX;
+import heronarts.p3lx.ui.UI3dContext;
+import heronarts.p3lx.ui.UIEventHandler;
+import heronarts.p3lx.ui.UIObject;
+import heronarts.p3lx.ui.component.UIGLPointCloud;
+import heronarts.p3lx.ui.studio.UIBottomTray;
+import heronarts.p3lx.ui.studio.UIContextualHelpBar;
+import heronarts.p3lx.ui.studio.UILeftPane;
+import heronarts.p3lx.ui.studio.clip.UIClipLauncher;
+import heronarts.p3lx.ui.studio.clip.UIClipView;
+import heronarts.p3lx.ui.studio.device.UIDeviceBin;
+import heronarts.p3lx.ui.studio.mixer.UIMixer;
+import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
+import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
+import processing.core.PApplet;
+import processing.event.KeyEvent;
+
+import java.io.File;
+
 public class LXStudio extends P3LX {
 
   public static final String COPYRIGHT = "Symmetry Labs";
@@ -11,6 +35,7 @@ public class LXStudio extends P3LX {
     public final UIContextualHelpBar helpBar;
     public final UIAxes axes;
     public final UIBlobs blobs;
+    public final UICubeMapDebug cubeMapDebug;
 
     private boolean toggleHelpBar = false;
     private boolean toggleClipView = false;
@@ -46,6 +71,8 @@ public class LXStudio extends P3LX {
       this.helpBar = new UIContextualHelpBar(this);
       this.axes = new UIAxes();
       this.blobs = new UIBlobs();
+      this.cubeMapDebug = new UICubeMapDebug(lx);
+      this.preview.addComponent(this.cubeMapDebug);
       this.preview.addComponent(axes);
       this.preview.addComponent(blobs);
 
@@ -78,6 +105,8 @@ public class LXStudio extends P3LX {
             }
           } else if (keyChar == "x".charAt(0)) {
             axes.toggleVisible();
+          } else if (keyChar == "c".charAt(0)) {
+            cubeMapDebug.toggleVisible();
           }
 
         }

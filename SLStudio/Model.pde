@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static processing.core.PApplet.*;
+
 final static float INCHES = 1;
 final static float FEET = 12*INCHES;
   /**
@@ -131,7 +133,7 @@ public static class Sun extends LXModel {
   public final List<Strip> strips;
   private final Map<String, Slice> sliceTable;
 
-  public final BoundingBox boundingBox;
+  public BoundingBox boundingBox;
 
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform, int[][] numPointsPerStrip) {
     super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
@@ -147,23 +149,49 @@ public static class Sun extends LXModel {
       sliceTable.put(slice.id, slice);
     }
 
-    float xMin = Float.MAX_VALUE;
-    float xMax = Float.MIN_VALUE;
-    float yMin = Float.MAX_VALUE;
-    float yMax = Float.MIN_VALUE;
-    float zMin = Float.MAX_VALUE;
-    float zMax = Float.MIN_VALUE;
+    computeBoundingBox();
+  }
 
-    for (LXPoint p : getPoints()) {
-      if (p.x < xMin) xMin = p.x;
-      if (p.x > xMax) xMax = p.x;
-      if (p.y < yMin) yMin = p.y;
-      if (p.y > yMax) yMax = p.y;
-      if (p.z < zMin) zMin = p.z;
-      if (p.z > zMax) zMax = p.z;
+  void computeBoundingBox() {
+    // So, this used to be done using Float.MIN_VALUE and Float.MAX_VALUE and using simple </> checks, rather than null.
+    // In some cases (suns 3, 5 and 8), the xMax value remained at Float.MIN_VALUE, which makes no sense at all, but
+    // I didn't have time (or a debugger >_<) to figure it out. So, I replaced the logic with null-based logic. - Yona
+    Float xMin = null;
+    Float xMax = null;
+
+    Float yMin = null;
+    Float yMax = null;
+
+    Float zMin = null;
+    Float zMax = null;
+
+    LXPoint xMinPt = null;
+    LXPoint xMaxPt = null;
+    LXPoint yMinPt = null;
+    LXPoint yMaxPt = null;
+    LXPoint zMinPt = null;
+    LXPoint zMaxPt = null;
+
+    for (LXPoint p : points) {
+      if (xMin == null || p.x < xMin) { xMin = p.x; xMinPt = p; }
+      if (xMax == null || p.x > xMax) { xMax = p.x; xMaxPt = p; }
+
+      if (yMin == null || p.y < yMin) { yMin = p.y; yMinPt = p; }
+      if (yMax == null || p.y > yMax) { yMax = p.y; yMaxPt = p; }
+
+      if (zMin == null || p.z < zMin) { zMin = p.z; zMinPt = p; }
+      if (zMax == null || p.z > zMax) { zMax = p.z; zMaxPt = p; }
     }
 
+
     boundingBox = new BoundingBox(xMin, yMin, zMin, xMax - xMin, yMax - yMin, zMax - zMin);
+
+//    if (xMinPt == null) println(id + "-xMin: NULL!!"); else println(id + "-xMin: (" + xMinPt.x + ", " + xMinPt.y + ", " + xMinPt.z + ")");
+//    if (xMaxPt == null) println(id + "-xMax: NULL!!"); else println(id + "-xMax: (" + xMaxPt.x + ", " + xMaxPt.y + ", " + xMaxPt.z + ")");
+//    if (yMinPt == null) println(id + "-yMin: NULL!!"); else println(id + "-yMin: (" + yMinPt.x + ", " + yMinPt.y + ", " + yMinPt.z + ")");
+//    if (yMaxPt == null) println(id + "-yMax: NULL!!"); else println(id + "-yMax: (" + yMaxPt.x + ", " + yMaxPt.y + ", " + yMaxPt.z + ")");
+//    if (zMinPt == null) println(id + "-zMin: NULL!!"); else println(id + "-zMin: (" + zMinPt.x + ", " + zMinPt.y + ", " + zMinPt.z + ")");
+//    if (zMaxPt == null) println(id + "-zMax: NULL!!"); else println(id + "-zMax: (" + zMaxPt.x + ", " + zMaxPt.y + ", " + zMaxPt.z + ")");
   }
 
   public Slice getSliceById(String id) {

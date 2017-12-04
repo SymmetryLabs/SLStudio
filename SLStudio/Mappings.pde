@@ -13,6 +13,14 @@
  * when physical changes or tuning is being done to the structure.
  */
 
+import heronarts.lx.model.LXModel;
+import heronarts.lx.transform.LXTransform;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 static final float globalOffsetX = 0;
 static final float globalOffsetY = 0;
 static final float globalOffsetZ = 0;
@@ -42,17 +50,17 @@ public class FultonStreetLayout {
     // in inches but may be ~12 inches off from real-life distances.
     // Please talk to Ping if you need to touch this.
     // Note: y values are set in Sun class by type
-    positions.put("A", new float[] {1456, 0, 200});
-    positions.put("B", new float[] {1243, 0, 96});
-    positions.put("C", new float[] {1104, 0, 269});
-    positions.put("D", new float[] {933, 0, 128});
-    positions.put("E", new float[] {772, 0, 295});
-    positions.put("F", new float[] {395, 0, 58});
-    positions.put("G", new float[] {264, 0, 369});
-    positions.put("H", new float[] {0, 0, 0});  // origin, nearest to power supply
-    positions.put("I", new float[] {-265, 0, 201});
-    positions.put("J", new float[] {-401, 0, 356});
-    positions.put("K", new float[] {-686, 0, 261});
+    positions.put("A" /* 01 */, new float[] {1456, 0, 200});
+    positions.put("B" /* 02 */, new float[] {1243, 0, 96});
+    positions.put("C" /* 03 */, new float[] {1104, 0, 269});
+    positions.put("D" /* 04 */, new float[] {933, 0, 128});
+    positions.put("E" /* 05 */, new float[] {772, 0, 295});
+    positions.put("F" /* 06 */, new float[] {395, 0, 58});
+    positions.put("G" /* 07 */, new float[] {264, 0, 369});
+    positions.put("H" /* 08 */, new float[] {0, 0, 0});  // origin, nearest to power supply
+    positions.put("I" /* 09 */, new float[] {-265, 0, 201});
+    positions.put("J" /* 10 */, new float[] {-401, 0, 356});
+    positions.put("K" /* 11 */, new float[] {-686, 0, 261});
   }
 
   public float[] get(String id) {
