@@ -168,7 +168,7 @@ public class FlockWave extends SLPattern {
   }
 
   public void run(double deltaMs) {
-    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
+    //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     render();
   }
