@@ -139,8 +139,8 @@ public abstract class ColorSlideshow extends SLPattern {
   }
 }
 
-public class ColorSlideshowClouds extends ColorSlideshow {
-  public ColorSlideshowClouds(LX lx) {
+public class TextureClouds extends ColorSlideshow {
+  public TextureClouds(LX lx) {
     super(lx);
   }
 
@@ -154,8 +154,8 @@ public class ColorSlideshowClouds extends ColorSlideshow {
   }
 }
 
-public class ColorSlideshowSunsets extends ColorSlideshow {
-  public ColorSlideshowSunsets(LX lx) {
+public class TextureSunsets extends ColorSlideshow {
+  public TextureSunsets(LX lx) {
     super(lx);
   }
 
@@ -171,8 +171,8 @@ public class ColorSlideshowSunsets extends ColorSlideshow {
   }
 }
 
-public class ColorSlideshowOceans extends ColorSlideshow {
-  public ColorSlideshowOceans(LX lx) {
+public class TextureOceans extends ColorSlideshow {
+  public TextureOceans(LX lx) {
     super(lx);
   }
 
@@ -186,8 +186,8 @@ public class ColorSlideshowOceans extends ColorSlideshow {
   }
 }
 
-public class ColorSlideshowCorals extends ColorSlideshow {
-  public ColorSlideshowCorals(LX lx) {
+public class TextureCorals extends ColorSlideshow {
+  public TextureCorals(LX lx) {
     super(lx);
   }
 
