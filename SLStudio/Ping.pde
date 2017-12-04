@@ -1,5 +1,6 @@
 import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
+import com.symmetrylabs.util.LinearModelIndex;
 
 public class PaletteViewer extends SLPattern {
   DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
@@ -132,7 +133,7 @@ public class FlockWave extends SLPattern {
     super(lx);
 
     blobTracker = BlobTracker.getInstance(lx);
-    modelIndex = new OctreeModelIndex(lx.model);
+    modelIndex = new LinearModelIndex(lx.model);
 
     addParameter(timeScale);
     addParameter(oscBlobs);

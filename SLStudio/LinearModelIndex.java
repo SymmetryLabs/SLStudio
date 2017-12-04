@@ -12,6 +12,10 @@ import heronarts.lx.model.LXFixture;
 public class LinearModelIndex extends ModelIndex {
     private boolean flattenZ;
 
+    public LinearModelIndex(LXFixture fixture) {
+        this(fixture, false);
+    }
+
     public LinearModelIndex(LXFixture fixture, boolean flattenZ) {
         super(fixture);
 
