@@ -134,6 +134,7 @@ public static class Sun extends LXModel {
   private final Map<String, Slice> sliceTable;
 
   public BoundingBox boundingBox;
+  public final PVector center;
 
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform, int[][] numPointsPerStrip) {
     super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
@@ -144,6 +145,7 @@ public static class Sun extends LXModel {
     this.slices = Collections.unmodifiableList(fixture.slices);
     this.strips = Collections.unmodifiableList(fixture.strips);
     this.sliceTable = new HashMap<String, Slice>();
+    this.center = fixture.origin;
 
     for (Slice slice : slices) {
       sliceTable.put(slice.id, slice);
@@ -202,22 +204,25 @@ public static class Sun extends LXModel {
 
     private final List<Slice> slices = new ArrayList<Slice>();
     private final List<Strip> strips = new ArrayList<Strip>();
+    public final PVector origin;
 
     private Fixture(String id, Sun.Type type, float[] coordinates, float[] rotations, LXTransform transform, int[][] numPointsPerStrip) {
       transform.push();
 
-      transform.push();
+      origin = new PVector(coordinates[0], coordinates[1], coordinates[2]);
       if (type == Sun.Type.FULL) {
-        transform.translate(0, Slice.RADIUS+18, 0);
+        origin.y += Slice.RADIUS + 18;
       }
       if (type == Sun.Type.TWO_THIRDS) {
-        transform.translate(0, 22*Slice.STRIP_SPACING, 0);
+        origin.y += 22*Slice.STRIP_SPACING;
       }
       if (type == Sun.Type.ONE_THIRD) {
-        transform.translate(0, -22*Slice.STRIP_SPACING, 0);
+        origin.y -= 22*Slice.STRIP_SPACING;
       }
 
-      transform.translate(coordinates[0], coordinates[1], coordinates[2]);
+      transform.push();
+
+      transform.translate(origin.x, origin.y, origin.z);
       transform.rotateX(rotations[0] * PI / 180);
       transform.rotateY(rotations[1] * PI / 180);
       transform.rotateZ(rotations[2] * PI / 180);
