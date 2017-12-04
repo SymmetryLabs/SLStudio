@@ -123,10 +123,11 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
     /** Returns an estimate of the velocity of a blob, given a list of previous blobs. */
     private PVector estimateNewBlobVelocity(Blob newBlob, List<Blob> prevBlobs, float deltaSec, float maxSpeed) {
         Blob closestBlob = findClosestBlob(newBlob.pos, prevBlobs);
+        final float ACCEL_FACTOR = 0.2f;
         if (closestBlob != null) {
             PVector vel = PVector.div(PVector.sub(newBlob.pos, closestBlob.pos), deltaSec);
             if (vel.mag() < maxSpeed) {
-                return vel;
+                return PVector.add(PVector.mult(vel, ACCEL_FACTOR), PVector.mult(closestBlob.vel, 1 - ACCEL_FACTOR));
             }
         }
         return new PVector(0, 0, 0);

@@ -39,8 +39,8 @@ class UIAxes extends UI3dComponent {
 
 class UIBlobs extends UI3dComponent {
   BlobTracker tracker;
-  final int SIZE_SCALE = 12;
-  final int VELOCITY_SCALE = 1;
+  final float SIZE_SCALE = 12;
+  final float VELOCITY_SCALE = 1;
 
   UIBlobs() { }
 
