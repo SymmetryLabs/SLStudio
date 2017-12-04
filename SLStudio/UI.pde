@@ -60,7 +60,12 @@ class UIFramerate extends UI2dContext {
     pg.clear();
     pg.textSize(16);
     pg.textAlign(LEFT, TOP);
-    pg.text("Engine: " + Math.round(lx.engine.frameRate()*10)/10 + " " + "UI: " + Math.round(lx.applet.frameRate*10)/10, 0, 0);
+    if (lx.engine.isThreaded()) {
+      pg.text(String.format("Engine: %02.1f UI: %02.1f", lx.engine.frameRate(), lx.applet.frameRate), 0, 0);
+    } else {
+      pg.text(String.format("FPS: %02.1f", lx.applet.frameRate), 0, 0);
+    }
+
 
     redraw();
   }
