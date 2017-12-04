@@ -79,7 +79,6 @@ void setup() {
       ui.leftPane.audio.setVisible(true);
       ui.preview.setCenter(model.cx, model.cy, model.cz);
       ui.preview.setPhi(0).setMinRadius(0*FEET).setMaxRadius(150*FEET).setRadius(150*FEET);
-      ui.preview.addComponent(new UIAxes());
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
     }
