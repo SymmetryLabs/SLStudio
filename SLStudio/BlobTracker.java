@@ -4,14 +4,16 @@ import heronarts.lx.LX;
 import heronarts.lx.LXModulatorComponent;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
+import processing.core.PApplet;
 import processing.core.PVector;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class BlobTracker extends LXModulatorComponent implements LXOscListener {
+public class BlobTracker extends LXModulatorComponent implements LXOscListener, MarkerSource {
     private static final int OSC_PORT = 4343;
 
     private float mergeRadius = 30f;  // inches
@@ -153,6 +155,14 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
             }
         }
         return closest;
+    }
+
+    public Collection<Marker> getMarkers() {
+        List<Marker> markers = new ArrayList<Marker>();
+        for (Blob blob : lastKnownBlobs) {
+            markers.add(new OctahedronWithArrow(blob.pos, 12, 0xff0080, blob.vel, 0x8000ff));
+        }
+        return markers;
     }
 
     public class Blob {
