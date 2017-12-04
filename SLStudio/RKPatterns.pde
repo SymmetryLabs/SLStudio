@@ -92,7 +92,7 @@ public class RKPattern01 extends P3CubeMapPattern {
       rotXT += rotDir.x*(eq.getBandf(0)-pEQBands[0])*2;
       rotYT += rotDir.z*(eq.getBandf(7)-pEQBands[7])*2;
       rotZT += rotDir.y*eq.getBandf(14)*.1;
-      thetaSpeedT = map(sq(totalBandMag), 0, 196, 0, TWO_PI*8);
+      thetaSpeedT = map(sq(totalBandMag), 0, 256, 0, TWO_PI*12);
       dspmtT = 0;
       nDspmtT = 0;
 
@@ -102,11 +102,11 @@ public class RKPattern01 extends P3CubeMapPattern {
     }
     ringAmt = round(amt.getValuef());
 
-    rotX = lerp(rotX, rotXT, .1);
-    rotY = lerp(rotY, rotYT, .1);
-    rotZ = lerp(rotZ, rotZT, .1);
+    rotX = lerp(rotX, rotXT, .25);
+    rotY = lerp(rotY, rotYT, .25);
+    rotZ = lerp(rotZ, rotZT, .25);
 
-    thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .1);
+    thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .25);
     dspmt = lerp(dspmt, dspmtT, .1);
     nDspmt = lerp(nDspmt, nDspmtT, .01);
 
@@ -236,7 +236,7 @@ public class RKPattern01 extends P3CubeMapPattern {
       if (!audioLinked) {
         thetaOfstRange = sin(theta)*dspmt;
         thetaOfst = (noise(sin(phi)*cos(phi)*nDspmt+frameCount*.005, this.thetaBase*nDspmt*.25-frameCount*.005)-.5)*thetaOfstRange;
-      }else{
+      } else {
         thetaOfstRange = sin(theta);
         int bandIdx = floor(map(idx, 0, ringRes, 0, 16));
         thetaOfst = avgBandMag - eq.getBandf(bandIdx);
@@ -253,6 +253,10 @@ public class RKPattern01 extends P3CubeMapPattern {
 
 public class RKPattern02 extends P3CubeMapPattern {
 
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
+
+  BooleanParameter audioLink = new BooleanParameter("audioLink", false);
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -269,6 +273,12 @@ public class RKPattern02 extends P3CubeMapPattern {
   float gWeight = 2, gWeightT = 2;
   boolean autoNoise, showEdge;
   int switchCount;
+  PVector rotDir;
+
+  boolean audioLinked;
+
+  float [] pEQBands = new float[16];
+  float totalBandMag, avgBandMag;
 
   public RKPattern02(LX lx) {
 
@@ -285,6 +295,9 @@ public class RKPattern02 extends P3CubeMapPattern {
       }
     }
 
+    rotDir = PVector.random3D();
+    
+    addParameter(audioLink);
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
@@ -292,32 +305,15 @@ public class RKPattern02 extends P3CubeMapPattern {
     addParameter(speed);
     addParameter(dsp);
     addParameter(edge);
+
+    addModulator(eq).start();
   }
 
   void run(double deltaMs, PGraphics pg) {
 
-    rotXT = rX.getValuef();
-    rotYT = rY.getValuef();
-    rotZT = rZ.getValuef();
-    autoNoise = noise.getValueb();
-    dspmtT = dsp.getValuef();
-    fTIncre = speed.getValuef();
-    showEdge = edge.getValueb();
+    updateParameters();
 
-    rotX = lerp(rotX, rotXT, .1);
-    rotY = lerp(rotY, rotYT, .1);
-    rotZ = lerp(rotZ, rotZT, .1);
-    dspmt = lerp(dspmt, dspmtT, .1);
-
-    if (showEdge) gWeightT = 2;
-    else gWeightT = 0;
-    if (abs(gWeightT-gWeight)<.005) gWeight = gWeightT;
-    else gWeight = lerp(gWeight, gWeightT, .1);
-
-    fT += fTIncre*.1;
-    f = lerp(f, fT, .1);
-
-    if (frameCount%90==0 && !autoNoise) {
+    if (frameCount%90==0 && !autoNoise && !audioLinked) {
       switchCount = (switchCount+1)%3;
       if (switchCount == 0) {
         resetArcs();
@@ -346,7 +342,7 @@ public class RKPattern02 extends P3CubeMapPattern {
 
     for (int i=0; i<arcs.size(); i++) {
       Arc arc = arcs.get(i);
-      if (autoNoise) {
+      if (autoNoise || audioLinked) {
         float scalar = map(arc.lv, 0, 8, dspmt, dspmt*1.5);
         arc.splitRatio = .5+(noise(arc.idx*.1+f)-.5)*scalar;
         arc.fragRatioS = (noise(arc.idx*.1+f*2+2.46)-.5)*1.2+.5;
@@ -365,6 +361,50 @@ public class RKPattern02 extends P3CubeMapPattern {
     pg.image(pgF, faceRes, faceRes);
     pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
+  }
+
+  void updateParameters() {
+    audioLinked = audioLink.getValueb();
+    showEdge = edge.getValueb();
+    if (!audioLinked) {
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      autoNoise = noise.getValueb();
+      dspmtT = dsp.getValuef();
+      fTIncre = speed.getValuef();
+    } else {
+      
+      totalBandMag = 0;
+      for (int i=0; i<pEQBands.length; i++) {
+        totalBandMag += eq.getBandf(i);
+      }
+      avgBandMag = totalBandMag/16;
+
+      rotXT += rotDir.x*(eq.getBandf(0)-pEQBands[0])*2;
+      rotYT += rotDir.z*(eq.getBandf(7)-pEQBands[7])*2;
+      rotZT += rotDir.y*eq.getBandf(14)*.1;
+      
+      fTIncre = map(sq(totalBandMag), 0, 256, 0, 3);
+      dspmtT = map(sq(totalBandMag), 0, 256, 0, 3);
+
+      for (int i=0; i<pEQBands.length; i++) {
+        pEQBands[i] = eq.getBandf(i);
+      }
+    }
+
+    rotX = lerp(rotX, rotXT, .25);
+    rotY = lerp(rotY, rotYT, .25);
+    rotZ = lerp(rotZ, rotZT, .25);
+    dspmt = lerp(dspmt, dspmtT, .25);
+
+    if (showEdge) gWeightT = 2;
+    else gWeightT = 0;
+    if (abs(gWeightT-gWeight)<.005) gWeight = gWeightT;
+    else gWeight = lerp(gWeight, gWeightT, .1);
+
+    fT += fTIncre*.1;
+    f = lerp(f, fT, .25);
   }
 
   void updateCubeMap(PGraphics pg, float eyeX, float eyeY, float eyeZ, float centerX, float centerY, float centerZ, float upX, float upY, float upZ) {
@@ -743,7 +783,7 @@ public class RKPattern03 extends P3CubeMapPattern {
       rotXT += rotDir.x*(eq.getBandf(0)-pEQBands[0])*2;
       rotYT += rotDir.z*(eq.getBandf(7)-pEQBands[7])*2;
       rotZT += rotDir.y*eq.getBandf(14)*.1;
-      gFIncreT = map(sq(totalMag), 0, 196, 0, .25);
+      gFIncreT = map(sq(totalMag), 0, 256, 0, .3);
       fragMid = map(totalMag, 0, 16, 1, 0);
 
       for (int i=0; i<pEQBands.length; i++) {
