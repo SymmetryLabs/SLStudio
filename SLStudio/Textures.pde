@@ -1,5 +1,5 @@
 
-public abstract class ColorSlideshow extends SLPattern {
+public abstract class TextureSlideshow extends SLPattern {
   public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
   public final BooleanParameter perSun = new BooleanParameter("perSun", false);
   public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
@@ -13,7 +13,7 @@ public abstract class ColorSlideshow extends SLPattern {
   private final PImage[] images;
   private final int[][] imageLayers;
 
-  public ColorSlideshow(LX lx) {
+  public TextureSlideshow(LX lx) {
     super(lx);
 
     String[] paths = getPaths();
@@ -139,7 +139,7 @@ public abstract class ColorSlideshow extends SLPattern {
   }
 }
 
-public class TextureClouds extends ColorSlideshow {
+public class TextureClouds extends TextureSlideshow {
   public TextureClouds(LX lx) {
     super(lx);
   }
@@ -154,7 +154,7 @@ public class TextureClouds extends ColorSlideshow {
   }
 }
 
-public class TextureSunsets extends ColorSlideshow {
+public class TextureSunsets extends TextureSlideshow {
   public TextureSunsets(LX lx) {
     super(lx);
   }
@@ -171,7 +171,7 @@ public class TextureSunsets extends ColorSlideshow {
   }
 }
 
-public class TextureOceans extends ColorSlideshow {
+public class TextureOceans extends TextureSlideshow {
   public TextureOceans(LX lx) {
     super(lx);
   }
@@ -186,7 +186,7 @@ public class TextureOceans extends ColorSlideshow {
   }
 }
 
-public class TextureCorals extends ColorSlideshow {
+public class TextureCorals extends TextureSlideshow {
   public TextureCorals(LX lx) {
     super(lx);
   }
@@ -202,7 +202,7 @@ public class TextureCorals extends ColorSlideshow {
   }
 }
 
-public class TextureJupiter1 extends ColorSlideshow {
+public class TextureJupiter1 extends TextureSlideshow {
   public TextureJupiter1(LX lx) {
     super(lx);
   }
@@ -214,7 +214,7 @@ public class TextureJupiter1 extends ColorSlideshow {
   }
 }
 
-public class TextureJupiter2 extends ColorSlideshow {
+public class TextureJupiter2 extends TextureSlideshow {
   public TextureJupiter2(LX lx) {
     super(lx);
   }
@@ -226,7 +226,7 @@ public class TextureJupiter2 extends ColorSlideshow {
   }
 }
 
-public class TextureNebula1 extends ColorSlideshow {
+public class TextureNebula1 extends TextureSlideshow {
   public TextureNebula1(LX lx) {
     super(lx);
   }
@@ -238,7 +238,7 @@ public class TextureNebula1 extends ColorSlideshow {
   }
 }
 
-public class TextureNebula2 extends ColorSlideshow {
+public class TextureNebula2 extends TextureSlideshow {
   public TextureNebula2(LX lx) {
     super(lx);
   }
