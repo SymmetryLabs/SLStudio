@@ -37,17 +37,17 @@ public class FultonStreetLayout {
 
   public FultonStreetLayout() {
     // Ping, not sure where these numbers came from but feel free to update.
-    positions.put("1",  new float[] {(-21.38-13.15-21.03)*FEET, 0*FEET, (17.53+13.72-8.31)*FEET});
-    positions.put("2",  new float[] {(21.58+12.61+30.34+13.97+15.10+12.4)*FEET, 0*FEET, (33.83-26.11+22.9-17.21+12.25-14.35)*FEET});
+    positions.put("1",  new float[] {(-21.38-13.15-21.03)*FEET,                       0*FEET, (17.53+13.72-8.31)*FEET});
+    positions.put("2",  new float[] {(21.58+12.61+30.34+13.97+15.10+12.4)*FEET,       0*FEET, (33.83-26.11+22.9-17.21+12.25-14.35)*FEET});
     positions.put("3",  new float[] {(21.58+12.61+30.34+13.97+15.10+12.4+17.52)*FEET, 0*FEET, (33.83-26.11+22.9-17.21+12.25-14.35+9.92)*FEET});
-    positions.put("4",  new float[] {(-21.38-13.15)*FEET, 0*FEET, (17.53+13.72)*FEET});
-    positions.put("5",  new float[] {(21.58+12.61+30.34+13.97+15.10)*FEET, 0*FEET, (33.83-26.11+22.9-17.21+12.25)*FEET});
-    positions.put("6",  new float[] {-21.38*FEET, 0*FEET, 17.53*FEET});
-    positions.put("7",  new float[] {(21.58+12.61+30.34)*FEET, 0*FEET, (33.83-26.11+22.9)*FEET});
-    positions.put("8",  new float[] {(21.58+12.61+30.34+13.97)*FEET, 0*FEET, (33.83-26.11+22.9-17.21)*FEET});
-    positions.put("9",  new float[] {0*FEET, 0*FEET, 0*FEET});
-    positions.put("10", new float[] {21.58*FEET, 0*FEET, 33.83*FEET});
-    positions.put("11", new float[] {(12.61+21.58)*FEET, 0*FEET, (33.83-26.11)*FEET});
+    positions.put("4",  new float[] {(-21.38-13.15)*FEET,                             0*FEET, (17.53+13.72)*FEET});
+    positions.put("5",  new float[] {(21.58+12.61+30.34+13.97+15.10)*FEET,            0*FEET, (33.83-26.11+22.9-17.21+12.25)*FEET});
+    positions.put("6",  new float[] {-21.38*FEET,                                     0*FEET, 17.53*FEET});
+    positions.put("7",  new float[] {(21.58+12.61+30.34)*FEET,                        0*FEET, (33.83-26.11+22.9)*FEET});
+    positions.put("8",  new float[] {(21.58+12.61+30.34+13.97)*FEET,                  0*FEET, (33.83-26.11+22.9-17.21)*FEET});
+    positions.put("9",  new float[] {0*FEET,                                          0*FEET, 0*FEET});
+    positions.put("10", new float[] {21.58*FEET,                                      0*FEET, 33.83*FEET});
+    positions.put("11", new float[] {(12.61+21.58)*FEET,                              0*FEET, (33.83-26.11)*FEET});
   }
 
   public float[] getPosition(String id) {

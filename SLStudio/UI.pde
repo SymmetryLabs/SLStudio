@@ -16,6 +16,9 @@ class UISpeed extends UI2dContainer {
 }
 
 class UIAxes extends UI3dComponent {
+  UIAxes() {
+    setVisible(false);
+  }
   protected void onDraw(UI ui, PGraphics pg) {
     pg.strokeWeight(1);
     pg.stroke(255, 0, 0);

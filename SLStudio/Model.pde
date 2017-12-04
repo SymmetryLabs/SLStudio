@@ -143,6 +143,18 @@ public static class Sun extends LXModel {
 
     private Fixture(String id, Sun.Type type, float[] coordinates, float[] rotations, LXTransform transform, int[][] numPointsPerStrip) {
       transform.push();
+
+      transform.push();
+      if (type == Sun.Type.FULL) {
+        transform.translate(0, Slice.RADIUS+18, 0);
+      }
+      if (type == Sun.Type.TWO_THIRDS) {
+        transform.translate(0, 22*Slice.STRIP_SPACING, 0);
+      }
+      if (type == Sun.Type.ONE_THIRD) {
+        transform.translate(0, -22*Slice.STRIP_SPACING, 0);
+      }
+
       transform.translate(coordinates[0], coordinates[1], coordinates[2]);
       transform.rotateX(rotations[0] * PI / 180);
       transform.rotateY(rotations[1] * PI / 180);
@@ -150,27 +162,27 @@ public static class Sun extends LXModel {
 
       // create slices...
       if (type != Sun.Type.ONE_THIRD) {
-        slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {-Slice.DIAMETER/2, Slice.DIAMETER/2, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
-        slices.add(new Slice(id + "_top_back",  Slice.Type.FULL, new float[] {Slice.DIAMETER/2, Slice.DIAMETER/2, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
+        slices.add(new Slice(id + "_top_front", Slice.Type.FULL, new float[] {-Slice.RADIUS, Slice.RADIUS, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
+        slices.add(new Slice(id + "_top_back",  Slice.Type.FULL, new float[] {Slice.RADIUS, Slice.RADIUS, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
       }
 
       switch (type) {
         case FULL:
-          slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {Slice.DIAMETER/2, -Slice.DIAMETER*0.5, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
-          slices.add(new Slice(id + "_bottom_back",  Slice.Type.FULL, new float[] {-Slice.DIAMETER/2, -Slice.DIAMETER*0.5, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.FULL, new float[] {Slice.RADIUS, -Slice.DIAMETER*0.5, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
+          slices.add(new Slice(id + "_bottom_back",  Slice.Type.FULL, new float[] {-Slice.RADIUS, -Slice.DIAMETER*0.5, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
           break;
 
         case TWO_THIRDS:
-          slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {Slice.DIAMETER/2, -Slice.DIAMETER/2, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
-          slices.add(new Slice(id + "_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] {-Slice.DIAMETER/2, -Slice.DIAMETER/2, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
+          slices.add(new Slice(id + "_bottom_front", Slice.Type.BOTTOM_ONE_THIRD, new float[] {Slice.RADIUS, -Slice.RADIUS+1.5, 0}, new float[] {0,   0, 180}, transform, numPointsPerStrip[2]));
+          slices.add(new Slice(id + "_bottom_back",  Slice.Type.BOTTOM_ONE_THIRD, new float[] {-Slice.RADIUS, -Slice.RADIUS+1.5, 0}, new float[] {0, 180, 180}, transform, numPointsPerStrip[3]));
 
         case ONE_HALF:
           // already done
           break;
 
         case ONE_THIRD:
-          slices.add(new Slice(id + "_top_front", Slice.Type.TWO_THIRDS, new float[] {-Slice.DIAMETER/2, Slice.DIAMETER/2, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
-          slices.add(new Slice(id + "_top_back",  Slice.Type.TWO_THIRDS, new float[] {Slice.DIAMETER/2, Slice.DIAMETER/2, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
+          slices.add(new Slice(id + "_top_front", Slice.Type.TWO_THIRDS, new float[] {-Slice.RADIUS, Slice.RADIUS, 0}, new float[] {0,   0, 0}, transform, numPointsPerStrip[0]));
+          slices.add(new Slice(id + "_top_back",  Slice.Type.TWO_THIRDS, new float[] {Slice.RADIUS, Slice.RADIUS, 0}, new float[] {0, 180, 0}, transform, numPointsPerStrip[1]));
           break;
       }
 
@@ -185,6 +197,7 @@ public static class Sun extends LXModel {
       }
 
       transform.pop();
+      transform.pop();
     }
   }
 }
@@ -198,6 +211,7 @@ public static class Slice extends LXModel {
   private static final int MAX_NUM_STRIPS_PER_SLICE = 69;
   private static final float STRIP_SPACING = 0.7;
   public final static float DIAMETER = 8*FEET;
+  public final static float RADIUS = DIAMETER/2;
 
   public final String id;
   public final Type type;
