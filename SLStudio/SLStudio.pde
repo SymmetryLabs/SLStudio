@@ -117,7 +117,7 @@ PaletteLibrary initializePaletteLibrary() {
   ImageLibrary il = new ImageLibrary(applet.dataPath("images"));
   PaletteExtractor horiz = new LinePaletteExtractor(0.5);
   PaletteExtractor vert = new LinePaletteExtractor(0.5, 1, 0.5, 0);
-  pl.put("sky.purple", new LinePaletteExtractor(0, 0.7, 1, 0.3).getPalette(il.get("maxpixel-pink-beautiful-sunset-1858600-cc0.jpg")));
+  pl.put("sky.purple", new LinePaletteExtractor(0, 0.7, 1, 0.3).getPalette(il.get("maxpixel-cc0-pink-beautiful-sunset-1858600.jpg")));
   pl.put("sky.red", vert.getPalette(il.get("pexels-cc0-animals-birds-dawn-giraffe-417142.jpg")));
   pl.put("sky.cloudy", vert.getPalette(il.get("pixnio-cc0-sunset-sky-mountain-landscape-cloud.jpg")));
   pl.put("sky.green", vert.getPalette(il.get("pexels-cc0-nature-sky-sunset-the-mountains-66997.jpg")));
