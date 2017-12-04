@@ -102,30 +102,37 @@ public abstract class ParticlePattern extends LXPattern {
         renderer.run(deltaMs);
     }
 
-    protected void renderParticle(Particle particle, int[] layer) {
-        Arrays.fill(layer, 0);
+    protected void renderParticle(Particle particle) {
+        Arrays.fill(particle.layer, 0f);
 
         LXPoint pp = particle.toPointInModel();
         float withinDist = particle.size * kernelSize.getValuef();
         List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist);
 
-        double h = hue.getValue();
-        double s = saturation.getValue();
-
         final boolean flattening = flattenZ.isOn();
         for (LXPoint p : nearbyPoints) {
             float b = kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
-            int c = LXColor.hsb(h, s, FastMath.min(b * 100, 100));
-            layer[p.index] = LXColor.blend(layer[p.index], c, LXColor.Blend.ADD);
+            particle.layer[p.index] = b;
         }
+    }
+
+    protected int getPaletteColor(float val) {
+        double h = hue.getValue();
+        double s = saturation.getValue();
+        return LXColor.hsb(h, s, FastMath.min(val * 100, 100));
     }
 
     protected class Particle {
         public float[] pos = new float[3];
         public float[] vel = new float[3];
         public float size = 1;
+        public float[] layer;
 
         private LXPoint point = new LXPoint(0, 0, 0);
+
+        public Particle() {
+            layer = new float[colors.length];
+        }
 
         LXPoint toPointInModel() {
             float x = lx.model.xMin + pos[0] * lx.model.xRange;
@@ -150,7 +157,17 @@ public abstract class ParticlePattern extends LXPattern {
 
             for (int i = startInclusive; i < endExclusive; ++i) {
                 Particle particle = particleList.get(i);
-                renderParticle(particle, layer);
+                renderParticle(particle);
+            }
+
+            for (int j = 0; j < colors.length; ++j) {
+                float s = 0;
+                for (int i = startInclusive; i < endExclusive; ++i) {
+                    Particle particle = particleList.get(i);
+                    s += particle.layer[j];
+                }
+
+                layer[j] = getPaletteColor(s);
             }
         }
     }
