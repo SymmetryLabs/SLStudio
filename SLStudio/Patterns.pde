@@ -7,9 +7,10 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
-import heronarts.lx.modulator.QuadraticEnvelope;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -20,18 +21,10 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.HashSet;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
-import java.util.Random;
-import java.util.Set;
-import java.util.SortedSet;
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.TreeSet;
 import java.util.function.Consumer;
-import java.util.stream.StreamSupport;
 
 import static processing.core.PApplet.map;
 
@@ -1828,5 +1821,22 @@ public static abstract class SLPattern extends LXPattern {
   public SLPattern(LX lx) {
     super(lx);
     this.model = (SLModel)lx.model;
+  }
+
+  protected <T extends LXParameter> T addParam(T param) {
+    addParameter(param);
+    return param;
+  }
+
+  protected BooleanParameter booleanParam(String name) {
+    return addParam(new BooleanParameter(name));
+  }
+
+  protected BooleanParameter booleanParam(String name, boolean value) {
+    return addParam(new BooleanParameter(name, value));
+  }
+
+  protected CompoundParameter compoundParam(String name, double value, double min, double max) {
+    return addParam(new CompoundParameter(name, value, min, max));
   }
 }

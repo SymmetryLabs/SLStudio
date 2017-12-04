@@ -8,7 +8,7 @@ import processing.data.*;
 
 import processing.data.Table;
 
-static final class Utils {
+public static final class Utils {
 
   // Processing functions
   // (duplicated here for easy access)
