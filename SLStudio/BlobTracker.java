@@ -85,9 +85,8 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
         mergeBlobs(allBlobs, mergeRadius);
 
         if (deltaSec < maxDeltaSec) {
-            FixedWidthOctree<Blob> blobIndex = createBlobIndex(lastKnownBlobs);
             for (Blob b : allBlobs) {
-                b.vel = estimateNewBlobVelocity(b, blobIndex, deltaSec, maxSpeed);
+                b.vel = estimateNewBlobVelocity(b, lastKnownBlobs, deltaSec, maxSpeed);
             }
         }
 
@@ -99,21 +98,6 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
                 status += b + ", ";
         }
         System.out.println(status.substring(0, status.length() - 2));
-    }
-
-    private FixedWidthOctree createBlobIndex(List<Blob> newBlobs) {
-        try {
-            FixedWidthOctree<Blob> index = new FixedWidthOctree<Blob>(lx.model.cx, lx.model.cy, lx.model.cz,
-                    (float) Math.max(lx.model.xRange, Math.max(lx.model.yRange, lx.model.zRange)), 3);
-            for (Blob blob : newBlobs) {
-                index.insert(blob.pos.x, blob.pos.y, blob.pos.z, blob);
-            }
-            return index;
-        } catch (Exception e) {
-            System.err.println("Exception while building blob index: " + e.getMessage());
-        }
-
-        return null;
     }
 
     /** Modifies a list of blobs in place, merging blobs within mergeRadius. */
@@ -137,15 +121,14 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
     }
 
     /** Returns an estimate of the velocity of a blob, given a list of previous blobs. */
-    private PVector estimateNewBlobVelocity(Blob newBlob, FixedWidthOctree<Blob> blobIndex, float deltaSec, float maxSpeed) {
-        Blob closestBlob = findClosestBlob(new LXPoint(newBlob.pos.x, newBlob.pos.y, newBlob.pos.z), blobIndex);
-        if (closestBlob == null)
-            return new PVector(0, 0, 0);
-
-        PVector vel = PVector.div(PVector.sub(newBlob.pos, closestBlob.pos), deltaSec);
-        if (vel.mag() < maxSpeed)
-            return vel;
-
+    private PVector estimateNewBlobVelocity(Blob newBlob, List<Blob> prevBlobs, float deltaSec, float maxSpeed) {
+        Blob closestBlob = findClosestBlob(newBlob.pos, prevBlobs);
+        if (closestBlob != null) {
+            PVector vel = PVector.div(PVector.sub(newBlob.pos, closestBlob.pos), deltaSec);
+            if (vel.mag() < maxSpeed) {
+                return vel;
+            }
+        }
         return new PVector(0, 0, 0);
     }
 
@@ -158,13 +141,17 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
         return result;
     }
 
-    public Blob findClosestBlob(LXPoint p, FixedWidthOctree<Blob> blobIndex) {
-        try {
-            return blobIndex.nearest(p.x, (float) p.y, (float) p.z);
-        } catch (Exception e) {
-            System.err.println("Exception while finding nearest blob: " + e.getMessage());
+    public Blob findClosestBlob(PVector p, List<Blob> blobs) {
+        Blob closest = null;
+        float minDist = 0;
+        for (Blob b : blobs) {
+            float dist = PVector.sub(p, b.pos).mag();
+            if (closest == null || dist < minDist) {
+                closest = b;
+                minDist = dist;
+            }
         }
-        return null;
+        return closest;
     }
 
     public class Blob {
