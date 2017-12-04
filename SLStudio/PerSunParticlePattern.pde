@@ -13,8 +13,20 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
   public CompoundParameter hue;
   public CompoundParameter saturation;
 
+  public BooleanParameter enableBlobs;
+  public CompoundParameter blobMaxDist;
+  public CompoundParameter oscMergeRadius;  // blob merge radius (in)
+  public CompoundParameter oscMaxSpeed;  // max blob speed (in/s)
+  public CompoundParameter oscMaxDeltaSec;  // max interval to calculate blob velocities (s)
+
+  protected Map<Sun, BlobTracker.Blob> closestBlobs = new HashMap<Sun, BlobTracker.Blob>();
+
+  private BlobTracker blobTracker;
+
   public PerSunParticlePattern(LX lx, Class<? extends Subpattern> subpatternClass) {
     super(lx, subpatternClass);
+
+    blobTracker = BlobTracker.getInstance(lx);
   }
 
   @Override
@@ -25,6 +37,44 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
     addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
     addParameter(saturation = new CompoundParameter("saturation", 30, 0, 100));
+
+    addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
+    addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
+    addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
+    addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
+    addParameter(oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1));
+  }
+
+  void updateBlobTrackerParameters() {
+    blobTracker.setMergeRadius(oscMergeRadius.getValuef());
+    blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
+    blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
+  }
+
+  @Override
+  void run(double deltaMs) {
+    updateBlobTrackerParameters();
+
+    double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
+    List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+    for (Sun sun : model.suns) {
+      BlobTracker.Blob closestBlob = null;
+      double closestSqrDist = Double.MAX_VALUE;
+      for (BlobTracker.Blob b : blobs) {
+        double dx = b.pos.x - sun.cx;
+        double dy = b.pos.y - sun.cy;
+        double dz = b.pos.z - sun.cz;
+        double sqrDist = dx * dx + dy * dy + dz * dz;
+        if (sqrDistThresh < sqrDist && sqrDist < closestSqrDist) {
+          closestSqrDist = sqrDist;
+          closestBlob = b;
+        }
+      }
+
+      closestBlobs.put(sun, closestBlob);
+    }
+
+    super.run(deltaMs);
   }
 
   protected float kernel(double d, double s) {
@@ -215,6 +265,11 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double twistYValue = 0.005 * twistY.getValue();
       double twistZValue = 0.005 * twistZ.getValue();
 
+      BlobTracker.Blob closestBlob = closestBlobs.get(sun);
+      double focusXValue = closestBlob != null ? closestBlob.pos.x : focusX.getValue();
+      double focusYValue = closestBlob != null ? closestBlob.pos.y : focusY.getValue();
+      double focusZValue = closestBlob != null ? closestBlob.pos.z : focusZ.getValue();
+
       for (int i = 0; i < particles.size(); ++i) {
         Particle p = particles.get(i);
 
@@ -226,9 +281,9 @@ public static class PerSunWasps extends PerSunParticlePattern {
         p.vel[1] += accelValue * (Math.random() - .5);
         p.vel[2] += accelValue * (Math.random() - .5);
 
-        double pullVecX = focusX.getValuef() - p.pos[0];
-        double pullVecY = focusY.getValuef() - p.pos[1];
-        double pullVecZ = focusZ.getValuef() - p.pos[2];
+        double pullVecX = focusXValue - p.pos[0];
+        double pullVecY = focusYValue - p.pos[1];
+        double pullVecZ = focusZValue - p.pos[2];
 
         p.vel[0] += pullXValue * pullVecX;
         p.vel[1] += pullYValue * pullVecY;
