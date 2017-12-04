@@ -263,7 +263,7 @@ public static class Sun extends LXModel {
             PVector pos = new PVector(point.x, point.y, point.z);
             PVector normal = PVector.sub(pos, origin);
             normal.normalize();
-            normal.z += (normal.z > origin.z) ? 1 : -1;
+            normal.z += (normal.z > origin.z) ? 0.3 : -0.3;
             ((LXPointNormal) point).setNormal(normal);
           }
         }
