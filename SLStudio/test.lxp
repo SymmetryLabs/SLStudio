@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512378591131,
+  "timestamp": 1512392008498,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "Channel-1",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -143,7 +143,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 3302,
@@ -337,13 +337,13 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.20435164735314626,
-          "Band-2": 0.2506874664775909,
-          "Band-3": 0.23106320816300852,
-          "Band-4": 0.2112934431055854,
-          "Band-5": 0.15975076840516134,
-          "Band-6": 0.12533566173298816,
-          "Band-7": 6.599008076000334E-4,
+          "Band-1": 0.22222266261076873,
+          "Band-2": 0.23897936543045428,
+          "Band-3": 0.20758875310144942,
+          "Band-4": 0.1788685485022259,
+          "Band-5": 0.119010854155565,
+          "Band-6": 0.05453308467871354,
+          "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
@@ -387,7 +387,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.35714285261929035
+        "brightness": 1.0
       }
     },
     "components": {
