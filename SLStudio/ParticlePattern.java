@@ -82,15 +82,15 @@ public abstract class ParticlePattern extends LXPattern {
         return new OctreeModelIndex(lx.model, flattenZ.isOn());
     }
 
-    protected float kernel(float d, float s) {
+    protected float kernel(double d, double s) {
         double stddev = s / 4f;
         double peak = 1.0f / (2.5f * stddev);
         return (float)(FastMath.exp(-(d * d) / (2 * stddev * stddev))
                             / (stddev * SQRT_2PI) / peak);
     }
 
-    protected float kernel(float x, float y, float z, float s) {
-        return kernel((float)FastMath.sqrt(x * x + y * y + z * z), s);
+    protected float kernel(double x, double y, double z, double s) {
+        return kernel(FastMath.sqrt(x * x + y * y + z * z), s);
     }
 
     protected void initParticle(Particle p) { }
@@ -99,8 +99,9 @@ public abstract class ParticlePattern extends LXPattern {
     @Override
     public void run(double deltaMs) {
         simulate(deltaMs);
-        //renderer.run(deltaMs);
+        renderer.run(deltaMs);
 
+        /*
         particles.parallelStream().forEach(new Consumer<Particle>() {
             public void accept(Particle particle) {
                 renderParticle(particle);
@@ -115,6 +116,7 @@ public abstract class ParticlePattern extends LXPattern {
 
             colors[j] = getPaletteColor(s);
         }
+        */
     }
 
     protected void renderParticle(Particle particle) {
@@ -138,8 +140,8 @@ public abstract class ParticlePattern extends LXPattern {
     }
 
     protected class Particle {
-        public float[] pos = new float[3];
-        public float[] vel = new float[3];
+        public double[] pos = new double[3];
+        public double[] vel = new double[3];
         public float size = 1;
         public float[] layer;
 
@@ -150,9 +152,9 @@ public abstract class ParticlePattern extends LXPattern {
         }
 
         LXPoint toPointInModel() {
-            float x = lx.model.xMin + pos[0] * lx.model.xRange;
-            float y = lx.model.yMin + pos[1] * lx.model.yRange;
-            float z = lx.model.zMin + pos[2] * lx.model.zRange;
+            float x = (float)(lx.model.cx + pos[0] * lx.model.xRange / 2f);
+            float y = (float)(lx.model.cy + pos[1] * lx.model.yRange / 2f);
+            float z = (float)(lx.model.cz + pos[2] * lx.model.zRange / 2f);
             point.update(x, y, z);
             return point;
         }
