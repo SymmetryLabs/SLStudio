@@ -66,7 +66,7 @@ class UICubeMapDebug extends UI3dComponent {
   private final P3LX lx;
 
   UICubeMapDebug(P3LX lx) {
-    setVisible(true);
+    setVisible(false);
     this.lx = lx;
   }
 
