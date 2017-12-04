@@ -29,7 +29,7 @@ public class OctreeModelIndex extends ModelIndex {
             }
         }
 
-        System.out.println(ot.dump());
+        //System.out.println(ot.dump());
     }
 
     @Override

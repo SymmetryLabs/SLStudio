@@ -4,6 +4,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
@@ -30,7 +31,8 @@ public abstract class P3CubeMapPattern extends SLPattern {
 
   private final String id = "" + Math.random();
 
-  CompoundParameter resParam = compoundParam("RES", 200, 64, 512);
+  DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
+  DiscreteParameter kernelSize = discreteParameter("KER", 1, 1, 6);
   BooleanParameter allSunsParams = booleanParam("ALL", false);
   List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
 
@@ -143,28 +145,32 @@ public abstract class P3CubeMapPattern extends SLPattern {
         continue;
       }
 
+      int kernelSize = this.kernelSize.getValuei();
+
       // Select the face according to the component with the largest absolute value.
       if (ax > ay && ax > az) {
         if (v.x > 0) {  // Right face
-          colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax);
+          colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax, kernelSize);
         } else {  // Left face
-          colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax);
+          colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax, kernelSize);
         }
       } else if (ay > ax && ay > az) {
         if (v.y > 0) {  // Up face
-          colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay);
+          colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay, kernelSize);
         } else {  // Down face
-          colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay);
+          colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay, kernelSize);
         }
       } else {
         if (v.z > 0) {  // Back face
-          colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az);
+          colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az, kernelSize);
         } else {  // Front face
-          colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az);
+          colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az, kernelSize);
         }
       }
     }
   }
+
+
 
   private Runnable run = new Runnable() {
     long lastRunAt = System.currentTimeMillis();
@@ -204,220 +210,52 @@ public abstract class P3CubeMapPattern extends SLPattern {
    * @param u A texture coordinate within the face, ranging from -1 to 1.
    * @param v A texture coordinate within the face, ranging from -1 to 1.
    */
-  private int getColor(int faceMinX, int faceMinY, double u, double v) {
-    if (u < -1 || u > 1 || v < -1 || v > 1) {
+  private int getColor(
+    int faceMinX,
+    int faceMinY,
+    double u,
+    double v,
+    int kernelSize
+  ) {
+    if (u < -1 || u > 1 || v < -1 || v > 1 || pg == null || pg.pixels == null) {
       return 0;
     }
     double offsetX = ((u + 1) / 2) * faceRes;
     double offsetY = ((v + 1) / 2) * faceRes;
-    double x = faceMinX + offsetX;
-    double y = faceMinY + offsetY;
-    return pg.pixels[(int) x + ((int) y)*pg.width];
-  }
-}
 
-public abstract static class MultiCubeMapPattern extends SLPattern {
-  private P3LX lx;
-  List<Subpattern> subpatterns;
+    if (kernelSize < 1) kernelSize = 1;
 
-  protected MultiCubeMapPattern(LX lx, Class<? extends Subpattern> subpatternClass, int faceRes) {
-    super(lx);
-
-    subpatterns = new ArrayList<Subpattern>(model.suns.size());
-
-    if (lx instanceof P3LX) {
-      this.lx = (P3LX)lx;
-
-      boolean isNonStaticInnerClass = (subpatternClass.isMemberClass() || subpatternClass.isLocalClass())
-          && !Modifier.isStatic(subpatternClass.getModifiers());
-
-      int sunIndex = 0;
-      for (Sun sun : model.suns) {
-        try {
-          Subpattern subpattern;
-          if (isNonStaticInnerClass) {
-            subpattern = subpatternClass.getDeclaredConstructor(getClass()).newInstance(this);
-          }
-          else {
-            subpattern = subpatternClass.getDeclaredConstructor().newInstance();
-          }
-          subpattern.init(this.lx, colors, sun, faceRes, sunIndex);
-          addParameter(subpattern.enableParam);
-          subpatterns.add(subpattern);
-        }
-        catch (Exception e) {
-          System.err.println("Exception when creating subpattern: " + e.getLocalizedMessage());
-          e.printStackTrace();
-        }
-
-        ++sunIndex;
-      }
-    }
-  }
-
-  @Override
-  public void run(final double deltaMs) {
-    for (Subpattern subpattern : subpatterns) {
-      if (subpattern.enableParam.getValueb()) {
-        subpattern.run(deltaMs);
-      } else {
-        // All black
-        for (LXPoint point : subpattern.sun.points) {
-          colors[point.index] = 0;
-        }
-      }
-    }
-  }
-
-  public abstract static class Subpattern {
-    protected P3LX lx;
-    private int[] colors;
-    private Sun sun;
-
-    private PGraphics pg;
-    protected PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
-
-    PVector origin;
-    PVector bboxSize;
-    private int faceRes;
-
-    private final String id = "" + Math.random();
-
-    protected int sunIndex;
-
-    public BooleanParameter enableParam;
-
-    /**
-     * A pattern that projects a cubemap image onto all the LEDs inside a given
-     * bounding box in world space.  The cubemap image should have resolution 4k x 3k,
-     * where each face of the cube takes up a k x k square, and the six faces are
-     * arranged thus (where R/L are +x/-x of the origin, U/D are +y/-y, F/B are -z/+z):
-     *         +---+
-     *         | U |
-     *     +---+---+---+---+
-     *     | L | F | R | B |
-     *     +---+---+---+---+
-     *         | D |
-     *         +---+
-     * Note that the +z side is the back (B), not the front (F) as you might expect,
-     * because Processing, insanely, uses a left-handed coordinate system.
-     *
-     * @param lx The global P3LX object.
-     * @param origin The center of the bounding box in world space.
-     * @param bboxSize The length, width, and height of the bounding box in world space.
-     * @param faceRes The width and height, k, in pixels of one square face of the
-     *     cubemap image, which will have total width 4k and total height 3k.
-     */
-    private void init(P3LX lx, int[] colors, Sun sun, int faceRes, int sunIndex) {
-      this.lx = lx;
-      this.colors = colors;
-      this.sun = sun;
-      this.sunIndex = sunIndex;
-
-      this.enableParam = new BooleanParameter("SUN" + (sunIndex+1));
-
-      PVector origin = new PVector( //<>// //<>//
-      sun.boundingBox.origin.x + sun.boundingBox.size.x*.5,
-      sun.boundingBox.origin.y + sun.boundingBox.size.y*.5,
-      sun.boundingBox.origin.z + sun.boundingBox.size.z*.5);
-      PVector bboxSize = sun.boundingBox.size;
-
-      this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>// //<>//
-      this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
-      this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
-      this.pgL = lx.applet.createGraphics(faceRes, faceRes, P3D);
-      this.pgR = lx.applet.createGraphics(faceRes, faceRes, P3D);
-      this.pgU = lx.applet.createGraphics(faceRes, faceRes, P3D);
-      this.pgD = lx.applet.createGraphics(faceRes, faceRes, P3D);
-
-      this.origin = origin;
-      this.bboxSize = bboxSize;
-      this.faceRes = faceRes;
-    }
-
-    private Runnable run = new Runnable() {
-      long lastRunAt = System.currentTimeMillis();
- //<>// //<>//
-      @Override
-      public void run() {
-        double deltaMs = System.currentTimeMillis() - lastRunAt;
-        lastRunAt = System.currentTimeMillis();
-
-        //pg.beginDraw(); //<>// //<>//
-        Subpattern.this.run(deltaMs, pg);
-        //pg.endDraw();
-        pg.loadPixels();
-
-        for (LXPoint p : sun.points) {
-          PVector v = new PVector(p.x, p.y, p.z).sub(origin);
-          double ax = Math.abs(v.x);
-          double ay = Math.abs(v.y);
-          double az = Math.abs(v.z);
-
-          // Avoid division by zero.
-          if (ax == 0 && ay == 0 && az == 0) {
-            colors[p.index] = 0;
-            continue;
-          }
-
-          // Select the face according to the component with the largest absolute value.
-          if (ax > ay && ax > az) {
-            if (v.x > 0) {  // Right face
-              colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax);
-            } else {  // Left face
-              colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax);
-            }
-          } else if (ay > ax && ay > az) {
-            if (v.y > 0) {  // Up face
-              colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay);
-            } else {  // Down face
-              colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay);
-            }
-          } else {
-            if (v.z > 0) {  // Back face
-              colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az);
-            } else {  // Front face
-              colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az);
-            }
-          }
-        }
-      }
-    };
-
-    private double deltaMsAccumulator = 0;
-
-    protected final void run(final double deltaMs) {
-      DrawHelper.queueJob(id, this.run);
-    }
-
-    // Implement this method; it should paint the cubemap image onto pg.
-    abstract void run(double deltaMs, PGraphics pg);
-
-    /**
-     * Gets a pixel colour from a selected face in the cubemap image.  The
-     * face is expected to be the square from (faceMinX, faceMinY) to
-     * (faceMinX + faceRes, faceMinY + faceRes), and a point within the
-     * square is located using (u, v), which ranges from (-1, -1) to (1, 1).
-     *
-     * @param faceMinX The minimum x-value of a face in the cubemap image.
-     * @param faceMinY The minimum y-value of a face in the cubemap image.
-     * @param u A texture coordinate within the face, ranging from -1 to 1.
-     * @param v A texture coordinate within the face, ranging from -1 to 1.
-     */
-    private int getColor(int faceMinX, int faceMinY, double u, double v) {
-      if (u < -1 || u > 1 || v < -1 || v > 1) {
-        return 0;
-      }
-      double offsetX = ((u + 1) / 2) * faceRes;
-      double offsetY = ((v + 1) / 2) * faceRes;
+    if (kernelSize == 1) {
       double x = faceMinX + offsetX;
       double y = faceMinY + offsetY;
       return pg.pixels[(int) x + ((int) y)*pg.width];
+    } else {
+      int count = 0;
+      int aSum = 0;
+      int rSum = 0;
+      int gSum = 0;
+      int bSum = 0;
+      for (int kx = 0; kx<kernelSize; kx++) {
+        for (int ky = 0; ky<kernelSize; ky++) {
+          int x = (int) (faceMinX + offsetX + kx - kernelSize/2);
+          int y = (int) (faceMinY + offsetY + ky - kernelSize/2);
+          int index = x + y*pg.width;
+
+          if (x >= 0 && x<pg.width && y >= 0 && y < pg.height && index < pg.pixels.length) {
+            int colorVal = pg.pixels[index];
+            rSum += colorVal & 0xFF;
+            gSum += (colorVal>>8) & 0xFF;
+            bSum += (colorVal>>16) & 0xFF;
+            aSum += (colorVal>>24) & 0xFF;
+            count ++;
+          }
+        }
+      }
+
+      return (rSum/count) | ((gSum/count) << 8) | ((bSum/count) << 16) | ((aSum/count) << 24);
     }
   }
-
 }
-
 
 
 /**

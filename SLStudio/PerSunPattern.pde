@@ -1,11 +1,15 @@
 
 public abstract static class PerSunPattern extends SLPattern {
-  private List<Subpattern> subpatterns;
+  protected List<Subpattern> subpatterns;
 
-  protected PerSunPattern(LX lx, Class<? extends Subpattern> subpatternClass, int faceRes) {
+  protected void createParameters() { }
+
+  protected PerSunPattern(LX lx, Class<? extends Subpattern> subpatternClass) {
     super(lx);
 
     subpatterns = new ArrayList<Subpattern>(model.suns.size());
+
+    createParameters();
 
     boolean isNonStaticInnerClass = (subpatternClass.isMemberClass() || subpatternClass.isLocalClass())
         && !Modifier.isStatic(subpatternClass.getModifiers());
@@ -15,13 +19,13 @@ public abstract static class PerSunPattern extends SLPattern {
       try {
         Subpattern subpattern;
         if (isNonStaticInnerClass) {
-          subpattern = subpatternClass.getDeclaredConstructor(getClass()).newInstance(this);
+          subpattern = subpatternClass.getDeclaredConstructor(getClass(), Sun.class, int.class).newInstance(this, sun, sunIndex);
         }
         else {
-          subpattern = subpatternClass.getDeclaredConstructor().newInstance();
+          subpattern = subpatternClass.getConstructor(Sun.class, int.class).newInstance(sun, sunIndex);
         }
 
-        subpattern.init(lx, colors, sun, faceRes, sunIndex);
+        addParameter(subpattern.enableParam);
 
         subpatterns.add(subpattern);
       }
@@ -50,24 +54,16 @@ public abstract static class PerSunPattern extends SLPattern {
     });
   }
 
-  public abstract static class Subpattern {
-    protected LX lx;
-    private int[] colors;
-    private Sun sun;
+  public static abstract class Subpattern {
+    protected final Sun sun;
+    protected final int sunIndex;
+    protected final BooleanParameter enableParam;
 
-    private PGraphics pg;
-    protected PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
-
-    protected int sunIndex;
-    protected BooleanParameter enableParam;
-
-    private void init(LX lx, int[] colors, Sun sun, int faceRes, int sunIndex) {
-      this.lx = lx;
-      this.colors = colors;
+    Subpattern(Sun sun, int sunIndex) {
       this.sun = sun;
       this.sunIndex = sunIndex;
 
-      enableParam = new BooleanParameter("SUN" + (sunIndex+1));
+      enableParam = new BooleanParameter("SUN" + (sunIndex+1), true);
     }
 
     protected abstract void run(double deltaMs);

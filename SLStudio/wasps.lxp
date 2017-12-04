@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512008612532,
+  "timestamp": 1512389907113,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -18,7 +18,7 @@
       "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
-      "multithreaded": false,
+      "multithreaded": true,
       "channelMultithreaded": false,
       "networkMultithreaded": false
     },
@@ -49,7 +49,7 @@
     },
     "channels": [
       {
-        "id": 106,
+        "id": 3446,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -7471360,
         "parameters": {
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 13,
+        "patternIndex": 14,
         "patterns": [
           {
             "id": 2773,
@@ -201,6 +201,7 @@
             "modulationColor": -4522240,
             "parameters": {
               "label": "RKPattern01",
+              "audioLink": false,
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
@@ -222,6 +223,7 @@
             "modulationColor": -15335680,
             "parameters": {
               "label": "RKPattern02",
+              "audioLink": false,
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
@@ -243,6 +245,7 @@
             "modulationColor": -65438,
             "parameters": {
               "label": "RKPattern03",
+              "audioLink": false,
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
@@ -347,13 +350,18 @@
             "modulationColor": -10878721,
             "parameters": {
               "label": "FlockWave",
-              "x": 1565.1300663796278,
+              "timeScale": 1.0,
+              "oscBlobs": false,
+              "bMrgRad": 30.0,
+              "bMaxSpd": 360.0,
+              "x": 1499.66845703125,
               "y": 9.6399888144432,
               "z": 78.39824873566795,
-              "spRad": 419.9999935179949,
-              "spMin": 9.0,
-              "spMax": 40.0,
-              "density": 2.0,
+              "zScale": 0.0,
+              "spnRad": 100.0,
+              "spnMin": 2.0,
+              "spnMax": 20.0,
+              "density": 0.5,
               "scatter": 719.9999906122684,
               "spdMult": 1.2599999830126762,
               "maxSpd": 61.99999928474427,
@@ -364,7 +372,11 @@
               "detail": 7.799999915063381,
               "ripple": 4.399999955296517,
               "palette": 3,
-              "palShift": 0.6700000073760748
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "palShift": 0.6700000073760748,
+              "palBias": 0.0,
+              "palCutoff": 0.0
             },
             "modulation": {
               "modulators": [
@@ -438,6 +450,7 @@
               "flattenZ": true,
               "hue": 0.0,
               "saturation": 22.000000000000007,
+              "speed": 1.0,
               "accel": 0.6599999862164257,
               "dampen": 0.2500000122934578,
               "focusX": 0.1399999959766865,
@@ -565,29 +578,39 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 3343,
-            "class": "SLStudio$FlockWaveThreaded",
-            "modulationColor": -16741121,
+            "id": 3527,
+            "class": "SLStudio$PerSunWasps",
+            "modulationColor": -65376,
             "parameters": {
-              "label": "FlockWaveThreaded",
-              "x": 1565.1300663796278,
-              "y": 25.749990190081235,
-              "z": 78.39824873566795,
-              "spRad": 419.9999935179949,
-              "spMin": 9.0,
-              "spMax": 40.0,
-              "density": 2.0,
-              "scatter": 719.9999906122684,
-              "spdMult": 1.2599999830126762,
-              "maxSpd": 61.99999928474427,
-              "turnSec": 1.5599999874830246,
-              "fadeInSec": 1.61999998614192,
-              "fadeOutSec": 2.0,
-              "size": 1039.9999848008154,
-              "detail": 7.799999915063381,
-              "ripple": 4.399999955296517,
-              "palette": 3,
-              "palShift": 0.6700000073760748
+              "label": "PerSunWasps",
+              "count": 100.0,
+              "size": 10.0,
+              "flattenZ": true,
+              "hue": 0.0,
+              "saturation": 30.0,
+              "speed": 1.0,
+              "accel": 0.15000000596046448,
+              "dampen": 0.75,
+              "focusX": 0.0,
+              "focusY": 0.0,
+              "focusZ": 0.0,
+              "pullX": 0.5,
+              "pullY": 0.5,
+              "pullZ": 0.5,
+              "twistX": 0.5,
+              "twistY": 0.5,
+              "twistZ": 0.5,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true
             },
             "modulation": {
               "modulators": [],
@@ -664,16 +687,16 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.35857891668232666,
-          "Band-2": 0.33980648852369033,
-          "Band-3": 0.3198560937635183,
-          "Band-4": 0.298762647244325,
-          "Band-5": 0.23028167373837471,
-          "Band-6": 0.10200029643044606,
-          "Band-7": 0.05498073641364698,
-          "Band-8": 0.0072834471223228725,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
+          "Band-1": 0.316453366937564,
+          "Band-2": 0.3599258875953295,
+          "Band-3": 0.3807660729427763,
+          "Band-4": 0.394457207180157,
+          "Band-5": 0.36042787932291287,
+          "Band-6": 0.23240687783177438,
+          "Band-7": 0.11027736726346515,
+          "Band-8": 0.12112148639767983,
+          "Band-9": 0.07742228813232299,
+          "Band-10": 0.004508646171170971,
           "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
@@ -818,42 +841,6 @@
             "Polarity": 0,
             "Range": 0.03999999910593033
           }
-        },
-        {
-          "source": {
-            "id": 3060
-          },
-          "target": {
-            "componentId": 3343,
-            "parameterPath": "x"
-          },
-          "id": 3442,
-          "class": "heronarts.lx.parameter.LXCompoundModulation",
-          "modulationColor": -65374,
-          "parameters": {
-            "label": "",
-            "enabled": true,
-            "Polarity": 0,
-            "Range": 0.0
-          }
-        },
-        {
-          "source": {
-            "id": 3061
-          },
-          "target": {
-            "componentId": 3343,
-            "parameterPath": "y"
-          },
-          "id": 3443,
-          "class": "heronarts.lx.parameter.LXCompoundModulation",
-          "modulationColor": -16711718,
-          "parameters": {
-            "label": "",
-            "enabled": true,
-            "Polarity": 0,
-            "Range": 0.0
-          }
         }
       ],
       "triggers": []
@@ -879,28 +866,28 @@
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
-          "componentId": 106,
+          "componentId": 3446,
           "parameterPath": "fader",
           "cc": 7
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3446,
           "parameterPath": "enabled",
           "pitch": 50
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3446,
           "parameterPath": "cue",
           "pitch": 49
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3446,
           "parameterPath": "crossfadeGroup",
           "pitch": 48
         },
@@ -954,12 +941,12 @@
         "3062": true
       },
       "preview": {
-        "radius": 1597.601617262413,
-        "theta": 2.868000000000016,
-        "phi": 0.1267166738510131,
-        "positionX": 1365.91015625,
-        "positionY": 16.749984741210938,
-        "positionZ": 45.547061920166016
+        "radius": 1800.0,
+        "theta": 0.0,
+        "phi": 0.0,
+        "positionX": 0.0,
+        "positionY": 0.0,
+        "positionZ": 200.0
       }
     }
   }

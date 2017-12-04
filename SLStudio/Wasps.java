@@ -6,11 +6,12 @@ import heronarts.lx.parameter.CompoundParameter;
 public class Wasps extends ParticlePattern {
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
+    public final CompoundParameter speed = new CompoundParameter("speed", 1, 0, 5);
     public final CompoundParameter accel = new CompoundParameter("accel", 0.15f, 0, 1);
     public final CompoundParameter dampen = new CompoundParameter("dampen", 0.75f, 0, 1);
-    public final CompoundParameter focusX = new CompoundParameter("focusX", 0.5f, 0, 1);
-    public final CompoundParameter focusY = new CompoundParameter("focusY", 0.5f, 0, 1);
-    public final CompoundParameter focusZ = new CompoundParameter("focusZ", 0.5f, 0, 1);
+    public final CompoundParameter focusX = new CompoundParameter("focusX", 0f, -1, 1);
+    public final CompoundParameter focusY = new CompoundParameter("focusY", 0f, -1, 1);
+    public final CompoundParameter focusZ = new CompoundParameter("focusZ", 0f, -1, 1);
     public final CompoundParameter pullX = new CompoundParameter("pullX", 0.5f, 0, 1);
     public final CompoundParameter pullY = new CompoundParameter("pullY", 0.5f, 0, 1);
     public final CompoundParameter pullZ = new CompoundParameter("pullZ", 0.5f, 0, 1);
@@ -21,6 +22,7 @@ public class Wasps extends ParticlePattern {
     public Wasps(LX lx) {
         super(lx);
 
+        addParameter(speed);
         addParameter(accel);
         addParameter(dampen);
         addParameter(focusX);
@@ -39,24 +41,25 @@ public class Wasps extends ParticlePattern {
         p.pos[0] = (float)(2 * Math.random() - 1);
         p.pos[1] = (float)(2 * Math.random() - 1);
         p.pos[2] = (float)(2 * Math.random() - 1);
-        System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
+        //System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
     }
 
     @Override
     protected void simulate(double deltaMs) {
-        float timeBoost = 30;
-        float timeStep = timeBoost * (float)deltaMs / 1000f;
+        double timeBoost = 30;
+        double timeStep = timeBoost * deltaMs / 1000f;
 
-        float accelValue = 0.01f * accel.getValuef() * timeStep;
-        float dampenValue = 0.05f * dampen.getValuef();
+        double speedValue = speed.getValuef();
+        double accelValue = 0.01 * accel.getValue() * timeStep;
+        double dampenValue = 0.05 * dampen.getValue();
 
-        float pullXValue = 0.0005f * pullX.getValuef();
-        float pullYValue = 0.0005f * pullY.getValuef();
-        float pullZValue = 0.0005f * pullZ.getValuef();
+        double pullXValue = 0.0005 * pullX.getValue();
+        double pullYValue = 0.0005 * pullY.getValue();
+        double pullZValue = 0.0005 * pullZ.getValue();
 
-        float twistXValue = 0.0001f * twistX.getValuef();
-        float twistYValue = 0.0001f * twistY.getValuef();
-        float twistZValue = 0.0001f * twistZ.getValuef();
+        double twistXValue = 0.0001 * twistX.getValue();
+        double twistYValue = 0.0001 * twistY.getValue();
+        double twistZValue = 0.0001 * twistZ.getValue();
 
         for (int i = 0; i < particles.size(); ++i) {
             Particle p = particles.get(i);
@@ -65,13 +68,13 @@ public class Wasps extends ParticlePattern {
             p.vel[1] -= dampenValue * p.vel[1];
             p.vel[2] -= dampenValue * p.vel[2];
 
-            p.vel[0] += accelValue * (float)(Math.random() - .5);
-            p.vel[1] += accelValue * (float)(Math.random() - .5);
-            p.vel[2] += accelValue * (float)(Math.random() - .5);
+            p.vel[0] += accelValue * (Math.random() - .5);
+            p.vel[1] += accelValue * (Math.random() - .5);
+            p.vel[2] += accelValue * (Math.random() - .5);
 
-            float pullVecX = (2 * focusX.getValuef() - 1) - p.pos[0];
-            float pullVecY = (2 * focusY.getValuef() - 1) - p.pos[1];
-            float pullVecZ = (2 * focusZ.getValuef() - 1) - p.pos[2];
+            double pullVecX = focusX.getValuef() - p.pos[0];
+            double pullVecY = focusY.getValuef() - p.pos[1];
+            double pullVecZ = focusZ.getValuef() - p.pos[2];
 
             p.vel[0] += pullXValue * pullVecX;
             p.vel[1] += pullYValue * pullVecY;
@@ -79,17 +82,17 @@ public class Wasps extends ParticlePattern {
 
             // NOTE: assuming left-handed Z-axis
 
-            float twistXVecX = 0;
-            float twistXVecY = pullVecZ;
-            float twistXVecZ = -pullVecY;
+            double twistXVecX = 0;
+            double twistXVecY = pullVecZ;
+            double twistXVecZ = -pullVecY;
 
-            float twistYVecX = -pullVecZ;
-            float twistYVecY = 0;
-            float twistYVecZ = pullVecX;
+            double twistYVecX = -pullVecZ;
+            double twistYVecY = 0;
+            double twistYVecZ = pullVecX;
 
-            float twistZVecX = -pullVecY;
-            float twistZVecY = pullVecX;
-            float twistZVecZ = 0;
+            double twistZVecX = -pullVecY;
+            double twistZVecY = pullVecX;
+            double twistZVecZ = 0;
 
             p.vel[0] += twistXValue * twistXVecX;
             p.vel[1] += twistXValue * twistXVecY;
@@ -119,12 +122,19 @@ public class Wasps extends ParticlePattern {
             }
             */
 
-            p.pos[0] += p.vel[0] * timeStep;
-            p.pos[1] += p.vel[1] * timeStep;
-            p.pos[2] += p.vel[2] * timeStep;
+            p.pos[0] += p.vel[0] * speedValue * timeStep;
+            p.pos[1] += p.vel[1] * speedValue * timeStep;
+            p.pos[2] += p.vel[2] * speedValue * timeStep;
 
             //p.size = (float)Math.min(1 + 50000 * Math.abs(p.vel[0] * p.vel[1] * p.vel[2]), 10);
             //p.size = (float)Math.min(1 + 1000 * Math.abs(p.vel[0] * p.vel[2]), 10);
+
+            if (p.pos[0] < -1) p.pos[0] = -1;
+            if (p.pos[0] > 1) p.pos[0] = 1;
+            if (p.pos[1] < -1) p.pos[1] = -1;
+            if (p.pos[1] > 1) p.pos[1] = 1;
+            if (p.pos[2] < -1) p.pos[2] = -1;
+            if (p.pos[2] > 1) p.pos[2] = 1;
         }
     }
 }

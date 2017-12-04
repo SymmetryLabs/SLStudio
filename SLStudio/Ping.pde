@@ -1,5 +1,6 @@
 import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
+import com.symmetrylabs.util.LinearModelIndex;
 
 public class PaletteViewer extends SLPattern {
   DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
@@ -132,7 +133,7 @@ public class FlockWave extends SLPattern {
     super(lx);
 
     blobTracker = BlobTracker.getInstance(lx);
-    modelIndex = new OctreeModelIndex(lx.model);
+    modelIndex = new LinearModelIndex(lx.model);
 
     addParameter(timeScale);
     addParameter(oscBlobs);
@@ -461,7 +462,7 @@ public class LightSource extends SLPattern {
         PVector toLight = PVector.sub(light, pv);
         float dist = toLight.mag();
 
-        dist /= falloff.getValue();
+        dist /= (model.xRange * falloff.getValue());
         if (dist < 1) dist = 1; // avoid division by zero or excessive brightness
         float brightness = 1.0 / (dist * dist);
 

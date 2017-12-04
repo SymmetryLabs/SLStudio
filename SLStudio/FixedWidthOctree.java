@@ -3,8 +3,13 @@ package com.symmetrylabs.util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.stream.Collectors;
+import java.util.function.Supplier;
 import java.util.function.Function;
 import java.util.function.Consumer;
+import java.util.function.Predicate;
+
+import org.apache.commons.math3.util.FastMath;
 
 public class FixedWidthOctree<T> {
     private final int depth;
@@ -59,10 +64,16 @@ public class FixedWidthOctree<T> {
     public List<T> withinDistance(final float x, final float y, final float z, final float d) {
         final List<T> objectsWithin = new ArrayList<>(points.size());
 
-        for (Entry<T> p : points) {
-            if (Math.abs(p.x - x) < d && Math.abs(p.y - y) < d && Math.abs(p.z - z) < d) {
-                objectsWithin.add(p.object);
-            }
+        if (!points.isEmpty()) {
+            points.parallelStream().filter(new Predicate<Entry<T>>() {
+                public boolean test(Entry<T> p) {
+                    return FastMath.abs(p.x - x) < d && FastMath.abs(p.y - y) < d && FastMath.abs(p.z - z) < d;
+                }
+            }).sequential().forEach(new Consumer<Entry<T>>() {
+                public void accept(Entry<T> entry) {
+                    objectsWithin.add(entry.object);
+                }
+            });
         }
 
         if (depth > 0) {
@@ -70,21 +81,21 @@ public class FixedWidthOctree<T> {
             int cleanCutY = 0;
             int cleanCutZ = 0;
 
-            if (Math.abs(centerX - x) < d) {
+            if (FastMath.abs(centerX - x) < d) {
                 cleanCutX = -1;
             }
             else if (x < centerX) {
                 cleanCutX = 1;
             }
 
-            if (Math.abs(centerY - y) < d) {
+            if (FastMath.abs(centerY - y) < d) {
                 cleanCutY = -1;
             }
             else if (y < centerY) {
                 cleanCutY = 1;
             }
 
-            if (Math.abs(centerZ - z) < d) {
+            if (FastMath.abs(centerZ - z) < d) {
                 cleanCutZ = -1;
             }
             else if (z < centerZ) {

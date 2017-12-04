@@ -60,6 +60,8 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
 
     @Override
     public void oscMessage(OscMessage message) {
+        if (!message.getAddressPattern().toString().equals("/blobs")) return;
+
         int arg = 0;
         String sourceId = message.getString(arg++);
         long millis = message.getInt(arg++);
@@ -68,6 +70,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener {
         List<Blob> newBlobs = new ArrayList<Blob>();
         int count = message.getInt(arg++);
         for (int i = 0; i < count; i++) {
+            String id = message.getString(arg++);
             float x = message.getFloat(arg++);
             float y = message.getFloat(arg++);
             float size = message.getFloat(arg++);

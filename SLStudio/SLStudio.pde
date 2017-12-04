@@ -37,7 +37,7 @@ void setup() {
 
   paletteLibrary = initializePaletteLibrary();
   
-  lx = new LXStudio(this, model, false) {
+  lx = new LXStudio(this, model, true) {
     @Override
     protected void initialize(LXStudio lx, LXStudio.UI ui) {
 
