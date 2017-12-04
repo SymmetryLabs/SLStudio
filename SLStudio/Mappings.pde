@@ -41,6 +41,7 @@ public class FultonStreetLayout {
     // transforms, NOT as measured in real life.  Measurements are
     // in inches but may be ~12 inches off from real-life distances.
     // Please talk to Ping if you need to touch this.
+    // Note: y values are set in Sun class by type
     positions.put("A", new float[] {1456, 0, 200});
     positions.put("B", new float[] {1243, 0, 96});
     positions.put("C", new float[] {1104, 0, 269});

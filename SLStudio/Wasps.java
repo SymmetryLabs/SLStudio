@@ -49,7 +49,7 @@ public class Wasps extends ParticlePattern {
         p.pos[0] = (float)(2 * Math.random() - 1);
         p.pos[1] = (float)(2 * Math.random() - 1);
         p.pos[2] = (float)(2 * Math.random() - 1);
-        //System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
+        System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
     }
 
     @Override
