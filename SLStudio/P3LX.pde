@@ -10,6 +10,7 @@ public class LXStudio extends P3LX {
     public final UIBottomTray bottomTray;
     public final UIContextualHelpBar helpBar;
     public final UIAxes axes;
+    public final UIBlobs blobs;
 
     private boolean toggleHelpBar = false;
     private boolean toggleClipView = false;
@@ -44,7 +45,9 @@ public class LXStudio extends P3LX {
       this.bottomTray = new UIBottomTray(this, lx);
       this.helpBar = new UIContextualHelpBar(this);
       this.axes = new UIAxes();
+      this.blobs = new UIBlobs();
       this.preview.addComponent(axes);
+      this.preview.addComponent(blobs);
 
       addLayer(this.preview);
       addLayer(this.leftPane);

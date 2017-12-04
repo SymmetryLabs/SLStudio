@@ -122,11 +122,13 @@ public class FlockWave extends SLPattern {
   Set<Bird> birds = new HashSet<Bird>();
 
   private BlobTracker blobTracker;
+  private ModelIndex modelIndex;
 
   public FlockWave(LX lx) {
     super(lx);
 
     blobTracker = BlobTracker.getInstance(lx);
+    modelIndex = new OctreeModelIndex(lx.model);
 
     addParameter(timeScale);
     addParameter(oscBlobs);
@@ -162,7 +164,7 @@ public class FlockWave extends SLPattern {
   public void run(double deltaMs) {
     println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
-    renderBirds();
+    render();
   }
 
   void advanceSimulation(float deltaSec) {
@@ -201,7 +203,7 @@ public class FlockWave extends SLPattern {
     blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
   }
 
-  List<Bird> spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
+  void spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
     float spawnMin = spawnMinSpeed.getValuef();
     float spawnMax = spawnMaxSpeed.getValuef();
     float speed = vel.mag();
@@ -210,25 +212,19 @@ public class FlockWave extends SLPattern {
     List<Bird> newBirds = new ArrayList<Bird>();
 
     while (numToSpawn >= 1.0) {
-      newBirds.add(spawnBird(focus));
+      spawnBird(focus);
       numToSpawn -= 1.0;
     }
     if (FastMath.random() < numToSpawn) {
-      newBirds.add(spawnBird(focus));
+      spawnBird(focus);
     }
-
-    return newBirds;
   }
 
-  Bird spawnBird(PVector focus) {
+  void spawnBird(PVector focus) {
     PVector pos = getRandomUnitVector();
     pos.mult(spawnRadius.getValuef());
     pos.add(focus);
-
-    Bird bird = new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100));
-    birds.add(bird);
-
-    return bird;
+    birds.add(new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100)));
   }
 
   void advanceBirds(float deltaSec, PVector vel) {
@@ -258,20 +254,17 @@ public class FlockWave extends SLPattern {
     }
   }
 
-  List<Bird> removeExpiredBirds() {
+  void removeExpiredBirds() {
     List<Bird> expired = new ArrayList<Bird>();
     for (Bird b : birds) {
       if (b.hasExpired) {
         expired.add(b);
       }
     }
-
     birds.removeAll(expired);
-
-    return expired;
   }
 
-  void renderBirds() {
+  void render() {  // choose a rendering style
     renderPlasma();
   }
 
@@ -290,25 +283,6 @@ public class FlockWave extends SLPattern {
       }
       colors[p.index] = LXColor.add(LXColor.lerp(colors[p.index], 0, 0.1), rgb);
     }
-  }
-
-  SortedSet<Bird> getSortedSet(Set<Bird> birds) {
-    SortedSet<Bird> result = new TreeSet<Bird>();
-    for (Bird b : birds) {
-      result.add(b);
-    }
-    return result;
-  }
-
-  SortedSet<Bird> getSubSet(SortedSet<Bird> birds, float xLow, float xHigh) {
-    Bird low = new Bird(new PVector(xLow, 0, 0), 0);
-    Bird high = new Bird(new PVector(xHigh, 0, 0), 0);
-    // return birds.subSet(low, high);
-    TreeSet<Bird> result = new TreeSet<Bird>();
-    for (Bird b : birds) {
-      if (b.compareTo(low) >= 0 && b.compareTo(high) < 0) result.add(b);
-    }
-    return result;
   }
 
   void renderVoronoi() {
@@ -342,27 +316,34 @@ public class FlockWave extends SLPattern {
   }
 
   void renderPlasma() {
-    float extent = size.getValuef();
-    SortedSet<Bird> sortedBirds = getSortedSet(birds);
-    Bird low = new Bird(new PVector(0, 0, 0), 0);
-    Bird high = new Bird(new PVector(0, 0, 0), 0);
-
-    double zFactor = Math.pow(10, zScale.getValuef()/10);
-    ColorPalette pal = getPalette();
-    float shift = palShift.getValuef();
-
-    for (LXPoint p : model.points) {
-      low.pos.x = p.x - extent;
-      high.pos.x = p.x + extent;
-      double sum = 0;
-      for (Bird b : sortedBirds.subSet(low, high)) {
-        sum += renderPlasma(b, p);
+    birds.parallelStream().forEach(new Consumer<Bird>() {
+      public void accept(Bird bird) {
+        renderPlasmaLayer(bird);
       }
-      colors[p.index] = pal.getColor(sum + shift);
+    });
+
+    final ColorPalette pal = getPalette();
+    final float shift = palShift.getValuef();
+
+    Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
+      public void accept(LXPoint point) {
+        float sum = 0;
+        for (Bird bird : birds) {
+          sum += bird.renderedValues[point.index];
+        }
+        colors[point.index] = pal.getColor(sum + shift);
+      }
+    });
+  }
+
+  void renderPlasmaLayer(final Bird bird) {
+    LXPoint pos = new LXPoint(bird.pos.x, bird.pos.y, bird.pos.z);
+    for (LXPoint point : modelIndex.pointsWithin(pos, size.getValuef())) {
+      bird.renderedValues[point.index] = (float) renderPlasmaFunction(bird, point);
     }
   }
 
-  final double renderPlasma(Bird bird, LXPoint point) {
+  double renderPlasmaFunction(Bird bird, LXPoint point) {
     float waveNumber = detail.getValuef();
     float extent = size.getValuef();
     float rippleSpeed = ripple.getValuef();
@@ -403,6 +384,7 @@ public class FlockWave extends SLPattern {
     public float value;
     public float elapsedSec;
     public boolean hasExpired;
+    public float[] renderedValues;
 
     Bird(PVector pos, int rgb) {
       this.pos = pos;
@@ -411,6 +393,7 @@ public class FlockWave extends SLPattern {
       this.value = 0;
       this.elapsedSec = 0;
       this.hasExpired = false;
+      this.renderedValues = new float[colors.length];
     }
 
     void run(float deltaSec, PVector targetVel) {

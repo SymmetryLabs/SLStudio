@@ -1,43 +1,27 @@
-public class MultiRKPattern01 extends MultiCubeMapPattern {
+import heronarts.lx.LX;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import processing.core.PGraphics;
+import processing.core.PVector;
 
-  List<CompoundParameter> rXList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rYList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rZList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> amtList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> speedList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> dspList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> nDspList = new ArrayList<CompoundParameter>();
+import java.util.ArrayList;
+import java.util.List;
+
+import static processing.core.PApplet.*;
+
+public class MultiRKPattern01 extends MultiCubeMapPattern {
+  CompoundParameter rX = compoundParam("rX", 0, -PI, PI);
+  CompoundParameter rY = compoundParam("rY", 0, -PI, PI);
+  CompoundParameter rZ = compoundParam("rZ", 0, -PI, PI);
+  CompoundParameter amt = compoundParam("amt", 20, 1, 25);
+  CompoundParameter speed = compoundParam("speed", PI, -TWO_PI*2, TWO_PI*2);
+  CompoundParameter dsp = compoundParam("dsp", HALF_PI, 0, PI);
+  CompoundParameter nDsp = compoundParam("nDsp", 1, .125, 2.5);
 
   static final int faceRes = 200;
 
   public MultiRKPattern01(LX lx) {
     super(lx, Subpattern.class, faceRes);
-
-    for (int i = 0; i < model.suns.size(); ++i) {
-      CompoundParameter rX = new CompoundParameter("rX"+i, 0, -PI, PI);
-      CompoundParameter rY = new CompoundParameter("rY"+i, 0, -PI, PI);
-      CompoundParameter rZ = new CompoundParameter("rZ"+i, 0, -PI, PI);
-      CompoundParameter amt = new CompoundParameter("amt"+i, 20, 1, 25);
-      CompoundParameter speed = new CompoundParameter("speed"+i, PI, -TWO_PI*2, TWO_PI*2);
-      CompoundParameter dsp = new CompoundParameter("dsp"+i, HALF_PI, 0, PI);
-      CompoundParameter nDsp = new CompoundParameter("nDsp"+i, 1, .125, 2.5);
-
-      rXList.add(rX);
-      rYList.add(rY);
-      rZList.add(rZ);
-      amtList.add(amt);
-      speedList.add(speed);
-      dspList.add(dsp);
-      nDspList.add(nDsp);
-
-      addParameter(rX);
-      addParameter(rY);
-      addParameter(rZ);
-      addParameter(amt);
-      addParameter(speed);
-      addParameter(dsp);
-      addParameter(nDsp);
-    }
   }
 
   private class Subpattern extends MultiCubeMapPattern.Subpattern {
@@ -45,7 +29,7 @@ public class MultiRKPattern01 extends MultiCubeMapPattern {
     float l1 = 600, l2 = 600, l3 = 600;
     float gTheta, gThetaSpacing, gWeightScalar;
     float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, nDspmt, nDspmtT, thetaSpeed, thetaSpeedT;
-    ArrayList <Ring> testRings;
+    ArrayList<Ring> testRings;
 
     Subpattern() {
       super();
@@ -59,13 +43,13 @@ public class MultiRKPattern01 extends MultiCubeMapPattern {
 
     @Override
       void run(double deltaMs, PGraphics pg) {
-      rotXT = rXList.get(sunIndex).getValuef();
-      rotYT = rYList.get(sunIndex).getValuef();
-      rotZT = rZList.get(sunIndex).getValuef();
-      ringAmt = round(amtList.get(sunIndex).getValuef());
-      thetaSpeedT = speedList.get(sunIndex).getValuef();
-      dspmtT = dspList.get(sunIndex).getValuef();
-      nDspmtT = nDspList.get(sunIndex).getValuef();
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      ringAmt = round(amt.getValuef());
+      thetaSpeedT = speed.getValuef();
+      dspmtT = dsp.getValuef();
+      nDspmtT = nDsp.getValuef();
 
       rotX = lerp(rotX, rotXT, .1);
       rotY = lerp(rotY, rotYT, .1);
@@ -228,44 +212,18 @@ public class MultiRKPattern01 extends MultiCubeMapPattern {
 }
 
 public class MultiRKPattern02 extends MultiCubeMapPattern {
-  List<CompoundParameter> rXList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rYList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rZList = new ArrayList<CompoundParameter>();
-  List<BooleanParameter> noiseList = new ArrayList<BooleanParameter>();
-  List<CompoundParameter> speedList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> dspList = new ArrayList<CompoundParameter>();
-  List<BooleanParameter> edgeList = new ArrayList<BooleanParameter>();
+  CompoundParameter rX = compoundParam("rX", 0, -PI, PI);
+  CompoundParameter rY = compoundParam("rY", 0, -PI, PI);
+  CompoundParameter rZ = compoundParam("rZ", 0, -PI, PI);
+  BooleanParameter noise = booleanParam("noise");
+  CompoundParameter speed = compoundParam("speed", .1, 0, .5);
+  CompoundParameter dsp = compoundParam("dsp", 1, 0, 2);
+  BooleanParameter edge = booleanParam("show edge", true);
 
   static final int faceRes = 200;
 
   public MultiRKPattern02(LX lx) {
     super(lx, Subpattern.class, faceRes);
-
-    for (int i = 0; i < model.suns.size(); ++i) {
-      CompoundParameter rX = new CompoundParameter("rX"+i, 0, -PI, PI);
-      CompoundParameter rY = new CompoundParameter("rY"+i, 0, -PI, PI);
-      CompoundParameter rZ = new CompoundParameter("rZ"+i, 0, -PI, PI);
-      BooleanParameter noise = new BooleanParameter("noise"+i);
-      CompoundParameter speed = new CompoundParameter("speed"+i, .1, 0, .5);
-      CompoundParameter dsp = new CompoundParameter("dsp"+i, 1, 0, 2);
-      BooleanParameter edge = new BooleanParameter("show edge"+i, true);
-
-      rXList.add(rX);
-      rYList.add(rY);
-      rZList.add(rZ);
-      noiseList.add(noise);
-      speedList.add(speed);
-      dspList.add(dsp);
-      edgeList.add(edge);
-
-      addParameter(rX);
-      addParameter(rY);
-      addParameter(rZ);
-      addParameter(noise);
-      addParameter(speed);
-      addParameter(dsp);
-      addParameter(edge);
-    }
   }
 
   private class Subpattern extends MultiCubeMapPattern.Subpattern {
@@ -295,13 +253,13 @@ public class MultiRKPattern02 extends MultiCubeMapPattern {
     @Override
       void run(double deltaMs, PGraphics pg) {
 
-      rotXT = rXList.get(sunIndex).getValuef();
-      rotYT = rYList.get(sunIndex).getValuef();
-      rotZT = rZList.get(sunIndex).getValuef();
-      autoNoise = noiseList.get(sunIndex).getValueb();
-      dspmtT = dspList.get(sunIndex).getValuef();
-      fTIncre = speedList.get(sunIndex).getValuef();
-      showEdge = edgeList.get(sunIndex).getValueb();
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      autoNoise = noise.getValueb();
+      dspmtT = dsp.getValuef();
+      fTIncre = speed.getValuef();
+      showEdge = edge.getValueb();
 
       rotX = lerp(rotX, rotXT, .1);
       rotY = lerp(rotY, rotYT, .1);
@@ -633,48 +591,19 @@ public class MultiRKPattern02 extends MultiCubeMapPattern {
 }
 
 public class MultiRKPattern03 extends MultiCubeMapPattern {
-  List<CompoundParameter> rXList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rYList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rZList = new ArrayList<CompoundParameter>();
-  List<BooleanParameter> avgList = new ArrayList<BooleanParameter>();
-  List<BooleanParameter> triList = new ArrayList<BooleanParameter>();
-  List<BooleanParameter> edgeList = new ArrayList<BooleanParameter>();
-  List<CompoundParameter> speedList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> fragmentList = new ArrayList<CompoundParameter>();
+  CompoundParameter rX = compoundParam("rX", 0, -PI, PI);
+  CompoundParameter rY = compoundParam("rY", 0, -PI, PI);
+  CompoundParameter rZ = compoundParam("rZ", 0, -PI, PI);
+  BooleanParameter avg = booleanParam("avg split");
+  BooleanParameter tri = booleanParam("show tri", true);
+  BooleanParameter edge = booleanParam("show edge", false);
+  CompoundParameter speed = compoundParam("speed", .01, 0, .05);
+  CompoundParameter fragment = compoundParam("fragment", .5, 0, 1);
 
   static final int faceRes = 200;
 
   public MultiRKPattern03(LX lx) {
     super(lx, Subpattern.class, faceRes);
-
-    for (int i = 0; i < model.suns.size(); ++i) {
-      CompoundParameter rX = new CompoundParameter("rX"+i, 0, -PI, PI);
-      CompoundParameter rY = new CompoundParameter("rY"+i, 0, -PI, PI);
-      CompoundParameter rZ = new CompoundParameter("rZ"+i, 0, -PI, PI);
-      BooleanParameter avg = new BooleanParameter("avg split"+i);
-      BooleanParameter tri = new BooleanParameter("show tri"+i, true);
-      BooleanParameter edge = new BooleanParameter("show edge"+i, false);
-      CompoundParameter speed = new CompoundParameter("speed"+i, .01, 0, .05);
-      CompoundParameter fragment = new CompoundParameter("fragment"+i, .5, 0, 1);
-
-      rXList.add(rX);
-      rYList.add(rY);
-      rZList.add(rZ);
-      avgList.add(avg);
-      triList.add(tri);
-      edgeList.add(edge);
-      speedList.add(speed);
-      fragmentList.add(fragment);
-
-      addParameter(rX);
-      addParameter(rY);
-      addParameter(rZ);
-      addParameter(avg);
-      addParameter(tri);
-      addParameter(edge);
-      addParameter(speed);
-      addParameter(fragment);
-    }
   }
   private class Subpattern extends MultiCubeMapPattern.Subpattern {
     Vtx [][] rootVts;
@@ -705,13 +634,13 @@ public class MultiRKPattern03 extends MultiCubeMapPattern {
     @Override
       void run(double deltaMs, PGraphics pg) {
 
-      rotXT = rXList.get(sunIndex).getValuef();
-      rotYT = rYList.get(sunIndex).getValuef();
-      rotZT = rZList.get(sunIndex).getValuef();
-      gFIncreT = speedList.get(sunIndex).getValuef();
-      fragMid = fragmentList.get(sunIndex).getValuef();
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      gFIncreT = speed.getValuef();
+      fragMid = fragment.getValuef();
 
-      avgSplit = avgList.get(sunIndex).getValueb();
+      avgSplit = avg.getValueb();
       if (pAvgSplit != avgSplit) {
         if (avgSplit) {
           resetFctList();
@@ -723,8 +652,8 @@ public class MultiRKPattern03 extends MultiCubeMapPattern {
         pAvgSplit = avgSplit;
       }
 
-      showTri = triList.get(sunIndex).getValueb();
-      showEdge = edgeList.get(sunIndex).getValueb();
+      showTri = tri.getValueb();
+      showEdge = edge.getValueb();
 
       rotX = lerp(rotX, rotXT, .1);
       rotY = lerp(rotY, rotYT, .1);
@@ -1028,48 +957,19 @@ public class MultiRKPattern03 extends MultiCubeMapPattern {
 }
 
 public class MultiRKPattern04 extends MultiCubeMapPattern {
-  List<CompoundParameter> rXList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rYList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rZList = new ArrayList<CompoundParameter>();
-  List<BooleanParameter> clrBgList = new ArrayList<BooleanParameter>();
-  List<CompoundParameter> speedList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> h1List = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> h2List = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> h3List = new ArrayList<CompoundParameter>();
+  CompoundParameter rX = compoundParam("rX", 0, -PI, PI);
+  CompoundParameter rY = compoundParam("rY", 0, -PI, PI);
+  CompoundParameter rZ = compoundParam("rZ", 0, -PI, PI);
+  BooleanParameter clrBg = booleanParam("clear bg");
+  CompoundParameter speed = compoundParam("speed", .02, 0, .1);
+  CompoundParameter h1 = compoundParam("hue1", 0, 0, 255);
+  CompoundParameter h2 = compoundParam("hue2", 85, 0, 255);
+  CompoundParameter h3 = compoundParam("hue3", 170, 0, 255);
 
   static final int faceRes = 200;
 
   public MultiRKPattern04(LX lx) {
     super(lx, Subpattern.class, faceRes);
-
-    for (int i = 0; i < model.suns.size(); ++i) {
-      CompoundParameter rX = new CompoundParameter("rX"+i, 0, -PI, PI);
-      CompoundParameter rY = new CompoundParameter("rY"+i, 0, -PI, PI);
-      CompoundParameter rZ = new CompoundParameter("rZ"+i, 0, -PI, PI);
-      BooleanParameter clrBg = new BooleanParameter("clear bg"+i);
-      CompoundParameter speed = new CompoundParameter("speed"+i, .02, 0, .1);
-      CompoundParameter h1 = new CompoundParameter("hue1"+i, 0, 0, 255);
-      CompoundParameter h2 = new CompoundParameter("hue2"+i, 85, 0, 255);
-      CompoundParameter h3 = new CompoundParameter("hue3"+i, 170, 0, 255);
-
-      rXList.add(rX);
-      rYList.add(rY);
-      rZList.add(rZ);
-      clrBgList.add(clrBg);
-      speedList.add(speed);
-      h1List.add(h1);
-      h2List.add(h2);
-      h3List.add(h3);
-
-      addParameter(rX);
-      addParameter(rY);
-      addParameter(rZ);
-      addParameter(clrBg);
-      addParameter(speed);
-      addParameter(h1);
-      addParameter(h2);
-      addParameter(h3);
-    }
   }
   private class Subpattern extends MultiCubeMapPattern.Subpattern {
     float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
@@ -1101,14 +1001,14 @@ public class MultiRKPattern04 extends MultiCubeMapPattern {
     @Override
       void run(double deltaMs, PGraphics pg) {
 
-      rotXT = rXList.get(sunIndex).getValuef();
-      rotYT = rYList.get(sunIndex).getValuef();
-      rotZT = rZList.get(sunIndex).getValuef();
-      clearBg = clrBgList.get(sunIndex).getValueb();
-      gFIncreT = speedList.get(sunIndex).getValuef();
-      hue1 = h1List.get(sunIndex).getValuef();
-      hue2 = h2List.get(sunIndex).getValuef();
-      hue3 = h3List.get(sunIndex).getValuef();
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      clearBg = clrBg.getValueb();
+      gFIncreT = speed.getValuef();
+      hue1 = h1.getValuef();
+      hue2 = h2.getValuef();
+      hue3 = h3.getValuef();
 
       rotX = lerp(rotX, rotXT, .1);
       rotY = lerp(rotY, rotYT, .1);
@@ -1387,53 +1287,22 @@ public class MultiRKPattern04 extends MultiCubeMapPattern {
 }
 
 public class MultiRKPattern05 extends MultiCubeMapPattern {
-  List<CompoundParameter> rXList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rYList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> rZList = new ArrayList<CompoundParameter>();
-  List<BooleanParameter> clrBgList = new ArrayList<BooleanParameter>();
-  List<CompoundParameter> speedList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> scalarList = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> h1List = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> h2List = new ArrayList<CompoundParameter>();
-  List<CompoundParameter> h3List = new ArrayList<CompoundParameter>();
+  CompoundParameter rX = compoundParam("rX", 0, -PI, PI);
+  CompoundParameter rY = compoundParam("rY", 0, -PI, PI);
+  CompoundParameter rZ = compoundParam("rZ", 0, -PI, PI);
+  BooleanParameter clrBg = booleanParam("clear bg");
+  CompoundParameter speed = compoundParam("speed", .05, .01, .2);
+  CompoundParameter scalar = compoundParam("scalar", 5, 1, 10);
+  CompoundParameter h1 = compoundParam("hue1", 0, 0, 255);
+  CompoundParameter h2 = compoundParam("hue2", 85, 0, 255);
+  CompoundParameter h3 = compoundParam("hue3", 170, 0, 255);
 
   static final int faceRes = 200;
 
   public MultiRKPattern05(LX lx) {
     super(lx, Subpattern.class, faceRes);
-
-    for (int i = 0; i < model.suns.size(); ++i) {
-      CompoundParameter rX = new CompoundParameter("rX"+i, 0, -PI, PI);
-      CompoundParameter rY = new CompoundParameter("rY"+i, 0, -PI, PI);
-      CompoundParameter rZ = new CompoundParameter("rZ"+i, 0, -PI, PI);
-      BooleanParameter clrBg = new BooleanParameter("clear bg"+i);
-      CompoundParameter speed = new CompoundParameter("speed"+i, .05, .01, .2);
-      CompoundParameter scalar = new CompoundParameter("scalar"+i, 5, 1, 10);
-      CompoundParameter h1 = new CompoundParameter("hue1"+i, 0, 0, 255);
-      CompoundParameter h2 = new CompoundParameter("hue2"+i, 85, 0, 255);
-      CompoundParameter h3 = new CompoundParameter("hue3"+i, 170, 0, 255);
-
-      rXList.add(rX);
-      rYList.add(rY);
-      rZList.add(rZ);
-      clrBgList.add(clrBg);
-      speedList.add(speed);
-      scalarList.add(scalar);
-      h1List.add(h1);
-      h2List.add(h2);
-      h3List.add(h3);
-
-      addParameter(rX);
-      addParameter(rY);
-      addParameter(rZ);
-      addParameter(clrBg);
-      addParameter(speed);
-      addParameter(scalar);
-      addParameter(h1);
-      addParameter(h2);
-      addParameter(h3);
-    }
   }
+
   private class Subpattern extends MultiCubeMapPattern.Subpattern {
     boolean clearBg;
 
@@ -1473,15 +1342,15 @@ public class MultiRKPattern05 extends MultiCubeMapPattern {
     @Override
       void run(double deltaMs, PGraphics pg) {
 
-      rotXT = rXList.get(sunIndex).getValuef();
-      rotYT = rYList.get(sunIndex).getValuef();
-      rotZT = rZList.get(sunIndex).getValuef();
-      clearBg = clrBgList.get(sunIndex).getValueb();
-      vOfstSpeedT = speedList.get(sunIndex).getValuef();
-      vOfstScalarT = scalarList.get(sunIndex).getValuef();
-      hue1 = h1List.get(sunIndex).getValuef();
-      hue2 = h2List.get(sunIndex).getValuef();
-      hue3 = h3List.get(sunIndex).getValuef();
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      clearBg = clrBg.getValueb();
+      vOfstSpeedT = speed.getValuef();
+      vOfstScalarT = scalar.getValuef();
+      hue1 = h1.getValuef();
+      hue2 = h2.getValuef();
+      hue3 = h3.getValuef();
 
       rotX = lerp(rotX, rotXT, .1);
       rotY = lerp(rotY, rotYT, .1);
