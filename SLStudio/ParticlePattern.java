@@ -99,7 +99,22 @@ public abstract class ParticlePattern extends LXPattern {
     @Override
     public void run(double deltaMs) {
         simulate(deltaMs);
-        renderer.run(deltaMs);
+        //renderer.run(deltaMs);
+
+        particles.parallelStream().forEach(new Consumer<Particle>() {
+            public void accept(Particle particle) {
+                renderParticle(particle);
+            }
+        });
+
+        for (int j = 0; j < colors.length; ++j) {
+            float s = 0;
+            for (Particle particle : particles) {
+                s += particle.layer[j];
+            }
+
+            colors[j] = getPaletteColor(s);
+        }
     }
 
     protected void renderParticle(Particle particle) {
