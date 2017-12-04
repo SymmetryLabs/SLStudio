@@ -37,6 +37,35 @@ class UIAxes extends UI3dComponent {
   }
 }
 
+class UIBlobs extends UI3dComponent {
+  BlobTracker tracker;
+  final int SIZE_SCALE = 12;
+  final int VELOCITY_SCALE = 1;
+
+  UIBlobs() { }
+
+  protected void onDraw(UI ui, PGraphics pg) {
+    for (BlobTracker.Blob b : BlobTracker.getInstance(lx).getBlobs()) {
+      float x = b.pos.x;
+      float y = b.pos.y;
+      float z = b.pos.z;
+      float size = SIZE_SCALE * b.size;
+      pg.strokeWeight(1);
+      pg.stroke(255, 0, 128);
+      for (int d = -1; d < 2; d += 2) {
+        for (int e = -1; e < 2; e += 2) {
+          pg.line(x + d*size, y, z, x, y + e*size, z);
+          pg.line(x, y + d*size, z, x, y, z + e*size);
+          pg.line(x, y, z + d*size, x + e*size, y, z);
+        }
+      }
+      pg.stroke(128, 0, 255);
+      PVector end = PVector.add(b.pos, PVector.mult(b.vel, VELOCITY_SCALE));
+      pg.line(x, y, z, end.x, end.y, end.z);
+    }
+  }
+}
+
 class UIOutputs extends UICollapsibleSection {
     UIOutputs(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 124);
