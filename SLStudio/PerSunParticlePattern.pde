@@ -171,17 +171,17 @@ public static class PerSunWasps extends PerSunParticlePattern {
     super.createParameters();
 
     addParameter(speed = new CompoundParameter("speed", 1, 0, 5));
-    addParameter(accel = new CompoundParameter("accel", 0.15f, 0, 1));
+    addParameter(accel = new CompoundParameter("accel", 0.15f, 0, 5));
     addParameter(dampen = new CompoundParameter("dampen", 0.75f, 0, 1));
     addParameter(focusX = new CompoundParameter("focusX", 0f, -1, 1));
     addParameter(focusY = new CompoundParameter("focusY", 0f, -1, 1));
     addParameter(focusZ = new CompoundParameter("focusZ", 0f, -1, 1));
-    addParameter(pullX = new CompoundParameter("pullX", 0.5f, 0, 1));
-    addParameter(pullY = new CompoundParameter("pullY", 0.5f, 0, 1));
-    addParameter(pullZ = new CompoundParameter("pullZ", 0.5f, 0, 1));
-    addParameter(twistX = new CompoundParameter("twistX", 0.5f, 0, 1));
-    addParameter(twistY = new CompoundParameter("twistY", 0.5f, 0, 1));
-    addParameter(twistZ = new CompoundParameter("twistZ", 0.5f, 0, 1));
+    addParameter(pullX = new CompoundParameter("pullX", 0f, 0, 1));
+    addParameter(pullY = new CompoundParameter("pullY", 0f, 0, 1));
+    addParameter(pullZ = new CompoundParameter("pullZ", 0f, 0, 1));
+    addParameter(twistX = new CompoundParameter("twistX", 0f, 0, 1));
+    addParameter(twistY = new CompoundParameter("twistY", 0f, 0, 1));
+    addParameter(twistZ = new CompoundParameter("twistZ", 0f, 0, 1));
   }
 
   protected class Subpattern extends PerSunParticlePattern.Subpattern {
@@ -207,13 +207,13 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double accelValue = 0.01 * accel.getValue() * timeStep;
       double dampenValue = 0.05 * dampen.getValue();
 
-      double pullXValue = 0.0005 * pullX.getValue();
-      double pullYValue = 0.0005 * pullY.getValue();
-      double pullZValue = 0.0005 * pullZ.getValue();
+      double pullXValue = 0.01 * pullX.getValue();
+      double pullYValue = 0.01 * pullY.getValue();
+      double pullZValue = 0.01 * pullZ.getValue();
 
-      double twistXValue = 0.0001 * twistX.getValue();
-      double twistYValue = 0.0001 * twistY.getValue();
-      double twistZValue = 0.0001 * twistZ.getValue();
+      double twistXValue = 0.01 * twistX.getValue();
+      double twistYValue = 0.01 * twistY.getValue();
+      double twistZValue = 0.01 * twistZ.getValue();
 
       for (int i = 0; i < particles.size(); ++i) {
         Particle p = particles.get(i);
@@ -236,16 +236,18 @@ public static class PerSunWasps extends PerSunParticlePattern {
 
         // NOTE: assuming left-handed Z-axis
 
+        double pullNorm = Math.sqrt(pullVecX * pullVecX + pullVecY * pullVecY + pullVecZ * pullVecZ);
+
         double twistXVecX = 0;
-        double twistXVecY = pullVecZ;
-        double twistXVecZ = -pullVecY;
+        double twistXVecY = pullVecZ / pullNorm;
+        double twistXVecZ = -pullVecY / pullNorm;
 
-        double twistYVecX = -pullVecZ;
+        double twistYVecX = -pullVecZ / pullNorm;
         double twistYVecY = 0;
-        double twistYVecZ = pullVecX;
+        double twistYVecZ = pullVecX / pullNorm;
 
-        double twistZVecX = -pullVecY;
-        double twistZVecY = pullVecX;
+        double twistZVecX = -pullVecY / pullNorm;
+        double twistZVecY = pullVecX / pullNorm;
         double twistZVecZ = 0;
 
         p.vel[0] += twistXValue * twistXVecX;
