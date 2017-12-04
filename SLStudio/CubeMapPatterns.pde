@@ -217,7 +217,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
     double v,
     int kernelSize
   ) {
-    if (u < -1 || u > 1 || v < -1 || v > 1) {
+    if (u < -1 || u > 1 || v < -1 || v > 1 || pg == null || pg.pixels == null) {
       return 0;
     }
     double offsetX = ((u + 1) / 2) * faceRes;
@@ -239,9 +239,10 @@ public abstract class P3CubeMapPattern extends SLPattern {
         for (int ky = 0; ky<kernelSize; ky++) {
           int x = (int) (faceMinX + offsetX + kx - kernelSize/2);
           int y = (int) (faceMinY + offsetY + ky - kernelSize/2);
+          int index = x + y*pg.width;
 
-          if (x >= 0 && x<pg.width && y >= 0 && y < pg.height && x + y*pg.width < pg.pixels.length) {
-            int colorVal = pg.pixels[x + y*pg.width];
+          if (x >= 0 && x<pg.width && y >= 0 && y < pg.height && index < pg.pixels.length) {
+            int colorVal = pg.pixels[index];
             rSum += colorVal & 0xFF;
             gSum += (colorVal>>8) & 0xFF;
             bSum += (colorVal>>16) & 0xFF;
