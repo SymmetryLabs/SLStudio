@@ -19,11 +19,11 @@ public class PaletteViewer extends SLPattern {
 
   public void run(double deltaMs) {
     ColorPalette pal = paletteLibrary.get(palette.getOption());
-    float shift = palShift.getValuef();
+    double shift = palShift.getValue();
     if (pal instanceof ZigzagPalette) {
-      ((ZigzagPalette) pal).setBias(palBias.getValuef());
-      ((ZigzagPalette) pal).setStart(palStart.getValuef());
-      ((ZigzagPalette) pal).setStop(palStop.getValuef());
+      ((ZigzagPalette) pal).setBias(palBias.getValue());
+      ((ZigzagPalette) pal).setStart(palStart.getValue());
+      ((ZigzagPalette) pal).setStop(palStop.getValue());
     }
     for (LXPoint p : model.points) {
       colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin) + shift);
@@ -90,7 +90,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
   CompoundParameter oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100);  // blob merge radius (in)
-  CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000);  // max blob speed (in/s)
+  CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 360, 0, 1000);  // max blob speed (in/s)
   CompoundParameter oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1);  // max interval to calculate blob velocities (s)
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
@@ -323,11 +323,11 @@ public class FlockWave extends SLPattern {
     });
 
     final ColorPalette pal = getPalette();
-    final float shift = palShift.getValuef();
+    final double shift = palShift.getValue();
 
     Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
       public void accept(LXPoint point) {
-        float sum = 0;
+        double sum = 0;
         for (Bird bird : birds) {
           sum += bird.renderedValues[point.index];
         }
@@ -337,33 +337,30 @@ public class FlockWave extends SLPattern {
   }
 
   void renderPlasmaLayer(final Bird bird) {
+    double waveNumber = detail.getValue();
+    double extent = size.getValue();
+    double rippleSpeed = ripple.getValue();
+    double zFactor = FastMath.pow(10, zScale.getValue()/10);
+    double zSqFactor = zFactor*zFactor - 1;
+    double dx, dy, dz, sqDist, phase, a;
+
     LXPoint pos = new LXPoint(bird.pos.x, bird.pos.y, bird.pos.z);
-    for (LXPoint point : modelIndex.pointsWithin(pos, size.getValuef())) {
-      bird.renderedValues[point.index] = (float) renderPlasmaFunction(bird, point);
-    }
-  }
-
-  double renderPlasmaFunction(Bird bird, LXPoint point) {
-    float waveNumber = detail.getValuef();
-    float extent = size.getValuef();
-    float rippleSpeed = ripple.getValuef();
-    double zFactor = FastMath.pow(10, zScale.getValuef()/10);
-
-    double dx = bird.pos.x - point.x;
-    double dy = bird.pos.y - point.y;
-    double dz = bird.pos.z - point.z;
-    if (FastMath.abs(dy) < extent) {
-      double sqDist = (dx*dx + dy*dy + dz*dz) / (extent*extent);
+    for (LXPoint point : modelIndex.pointsWithin(pos, (float) extent)) {
+      dx = (bird.pos.x - point.x)/extent;
+      dy = (bird.pos.y - point.y)/extent;
+      dz = (bird.pos.z - point.z)/extent;
+      sqDist = dx*dx + dy*dy + dz*dz;
       if (sqDist < 1) {
-        double phase = FastMath.sqrt(dx*dx + dy*dy + dz*dz*zFactor*zFactor) / extent;
-        double a = 1 - sqDist;
-        return a * a * bird.value
-            * FastMath.sin(waveNumber * 2 * FastMath.PI * phase - bird.elapsedSec * rippleSpeed)
-            * FastMath.cos(waveNumber * 5/4 * phase);
+        phase = FastMath.sqrt(sqDist + dz*dz*zSqFactor);
+        a = 1 - sqDist;
+        bird.renderedValues[point.index] =
+            a * a * bird.value
+                * FastMath.sin(waveNumber * 2 * FastMath.PI * phase - bird.elapsedSec * rippleSpeed)
+                * FastMath.cos(waveNumber * 5/4 * phase);
+      } else {
+        bird.renderedValues[point.index] = 0;
       }
     }
-
-    return 0;
   }
 
   PVector getRandomUnitVector() {
@@ -384,7 +381,7 @@ public class FlockWave extends SLPattern {
     public float value;
     public float elapsedSec;
     public boolean hasExpired;
-    public float[] renderedValues;
+    public double[] renderedValues;
 
     Bird(PVector pos, int rgb) {
       this.pos = pos;
@@ -393,7 +390,7 @@ public class FlockWave extends SLPattern {
       this.value = 0;
       this.elapsedSec = 0;
       this.hasExpired = false;
-      this.renderedValues = new float[colors.length];
+      this.renderedValues = new double[colors.length];
     }
 
     void run(float deltaSec, PVector targetVel) {

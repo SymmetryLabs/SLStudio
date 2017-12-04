@@ -189,19 +189,16 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
 
   @Override
   public void run(final double deltaMs) {
-    subpatterns.parallelStream()
-      .filter(new Predicate<Subpattern>() {
-        @Override
-        public boolean test(final Subpattern subpattern) {
-          return subpattern.enableParam.getValueb();
+    for (Subpattern subpattern : subpatterns) {
+      if (subpattern.enableParam.getValueb()) {
+        subpattern.run(deltaMs);
+      } else {
+        // All black
+        for (LXPoint point : subpattern.sun.points) {
+          colors[point.index] = 0;
         }
-      })
-      .forEach(new Consumer<Subpattern>() {
-        @Override
-        public void accept(final Subpattern subpattern) {
-          subpattern.run(deltaMs);
-        }
-      });
+      }
+    }
   }
 
   public abstract static class Subpattern {
