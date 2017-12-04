@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512423652136,
+  "timestamp": 1512428862523,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -308,6 +308,9 @@
         },
         {
           "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -323,12 +326,12 @@
         "3659": true
       },
       "preview": {
-        "radius": 980.3604819197122,
-        "theta": 15.531000000000034,
-        "phi": 0.3877166738510129,
-        "positionX": 255.5394287109375,
-        "positionY": 158.1999969482422,
-        "positionZ": 174.31011962890625
+        "radius": 543.8723925360864,
+        "theta": 18.705000000000066,
+        "phi": 0.41771667385101297,
+        "positionX": 287.966064453125,
+        "positionY": 46.19999694824219,
+        "positionZ": 198.23715209960938
       }
     }
   }

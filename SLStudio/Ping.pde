@@ -1,6 +1,27 @@
 import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
+import com.symmetrylabs.util.Octahedron;
+
+public abstract class SLPatternWithMarkers extends SLPattern implements MarkerSource {
+  public SLPatternWithMarkers(LX lx) {
+    super(lx);
+  }
+  
+  @Override
+  public void onActive() {
+    super.onActive();
+    ((LXStudio) lx).ui.addMarkerSource(this);
+  }
+
+  @Override
+  public void onInactive() {
+    super.onInactive();
+    ((LXStudio) lx).ui.removeMarkerSource(this);
+  }
+}
 
 public class PaletteViewer extends SLPattern {
   DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
@@ -437,7 +458,7 @@ public class FlockWave extends SLPattern {
   }
 }
 
-public class LightSource extends SLPattern {
+public class LightSource extends SLPatternWithMarkers {
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);
   CompoundParameter y = new CompoundParameter("y", model.yMax, 0, 240);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
@@ -457,6 +478,14 @@ public class LightSource extends SLPattern {
     addParameter(gain);
     addParameter(falloff);
     addParameter(ambient);
+  }
+  
+  public List<Marker> getMarkers() {
+    List<Marker> markers = new ArrayList<Marker>();
+    PVector pos = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+    float value = gain.getValuef()*100f;
+    markers.add(new Octahedron(pos, 20, LX.hsb(hue.getValuef(), sat.getValuef()*100f, value > 100 ? 100 : value)));
+    return markers;
   }
 
   public void run(double deltaMs) {

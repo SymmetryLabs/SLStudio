@@ -7,7 +7,7 @@ public class Reticle implements Marker {
     PVector pos;
     float size;
 
-    Reticle(PVector pos, float size) {
+    public Reticle(PVector pos, float size) {
         this.pos = pos;
         this.size = size;
     }

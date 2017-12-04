@@ -7,8 +7,8 @@ public class OctahedronWithArrow extends Octahedron implements Marker {
     PVector arrow;
     int arrowRgb;
 
-    OctahedronWithArrow(PVector pos, float size, int rgb,
-                                            PVector arrow, int arrowRgb) {
+    public OctahedronWithArrow(PVector pos, float size, int rgb,
+                                                         PVector arrow, int arrowRgb) {
         super(pos, size, rgb);
         this.arrow = arrow;
         this.arrowRgb = arrowRgb;
