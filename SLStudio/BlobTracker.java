@@ -1,18 +1,15 @@
 package com.symmetrylabs.util;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.Collections;
-
-import processing.core.PVector;
-
 import heronarts.lx.LX;
 import heronarts.lx.LXModulatorComponent;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
+import processing.core.PVector;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 public class BlobTracker extends LXModulatorComponent implements LXOscListener {
     private static final int OSC_PORT = 4343;

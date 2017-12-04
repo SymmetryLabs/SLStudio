@@ -4,6 +4,8 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -17,14 +19,20 @@ import java.util.Map;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-public abstract class P3CubeMapPattern extends LXPattern {
-  private final PGraphics pg;
-  protected final PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
-  private final PVector origin;
-  private final PVector bboxSize;
-  private final int faceRes;
+import static processing.core.PConstants.P3D;
+
+public abstract class P3CubeMapPattern extends SLPattern {
+  private PGraphics pg;
+  protected  PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
+  final PVector origin;
+  final PVector bboxSize;
+  private int faceRes;
 
   private final String id = "" + Math.random();
+
+  CompoundParameter resParam = compoundParam("RES", 200, 64, 512);
+  BooleanParameter allSunsParams = booleanParam("ALL", false);
+  List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
 
   /**
    * A pattern that projects a cubemap image onto all the LEDs inside a given
@@ -44,11 +52,34 @@ public abstract class P3CubeMapPattern extends LXPattern {
    * @param lx The global P3LX object.
    * @param origin The center of the bounding box in world space.
    * @param bboxSize The length, width, and height of the bounding box in world space.
-   * @param faceRes The width and height, k, in pixels of one square face of the
+   * @param defaultFaceRes The width and height, k, in pixels of one square face of the
    *     cubemap image, which will have total width 4k and total height 3k.
    */
-  protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int faceRes) {
+  protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int defaultFaceRes) {
     super(lx);
+
+    resParam.setValue(defaultFaceRes);
+    resParam.addListener(new LXParameterListener() {
+      @Override
+      public void onParameterChanged(final LXParameter lxParameter) {
+        faceRes = (int) resParam.getValue();
+        updateGraphics();
+      }
+    });
+
+    this.faceRes = defaultFaceRes;
+    this.updateGraphics();
+
+    this.origin = origin;
+    this.bboxSize = bboxSize;
+
+    for (final Sun sun : model.suns) {
+      sunSwitchParams.add(booleanParam("SUN" + (model.suns.indexOf(sun)+1), true));
+    }
+  }
+
+  private void updateGraphics() {
+    P3LX lx = (P3LX) this.lx;
     this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D);
     this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
@@ -56,9 +87,83 @@ public abstract class P3CubeMapPattern extends LXPattern {
     this.pgR = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgU = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgD = lx.applet.createGraphics(faceRes, faceRes, P3D);
-    this.origin = origin;
-    this.bboxSize = bboxSize;
-    this.faceRes = faceRes;
+  }
+
+  PVector originForSun(final Sun sun) {
+    return new PVector(
+      sun.boundingBox.origin.x + sun.boundingBox.size.x * .5f,
+      sun.boundingBox.origin.y + sun.boundingBox.size.y * .5f,
+      sun.boundingBox.origin.z + sun.boundingBox.size.z * .5f
+    );
+  }
+
+  PVector bboxForSun(final Sun sun) {
+    return sun.boundingBox.size;
+  }
+
+  private void projectToLeds() {
+    if (allSunsParams.getValueb()) {
+      projectToLeds(origin, bboxSize);
+    } else {
+      for (final Sun sun : model.suns) {
+        final int sunIndex = model.suns.indexOf(sun);
+        PVector origin = originForSun(sun);
+        PVector bboxSize = bboxForSun(sun);
+
+        if (sunSwitchParams.get(sunIndex).getValueb()) {
+          projectToLeds(origin, bboxSize);
+        } else {
+          for (final LXPoint point : sun.points) {
+            colors[point.index] = 0;
+          }
+        }
+      }
+    }
+  }
+
+
+  private void projectToLeds(
+    PVector origin,
+    PVector bboxSize
+  ) {
+    for (LXPoint p : model.points) {
+      PVector v = new PVector(p.x, p.y, p.z).sub(origin);
+      double ax = Math.abs(v.x);
+      double ay = Math.abs(v.y);
+      double az = Math.abs(v.z);
+
+      // Ignore pixels outside the bounding box.
+      if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) {
+        continue;
+      }
+
+      // Avoid division by zero.
+      if (ax == 0 && ay == 0 && az == 0) {
+        colors[p.index] = 0;
+        continue;
+      }
+
+      // Select the face according to the component with the largest absolute value.
+      if (ax > ay && ax > az) {
+        if (v.x > 0) {  // Right face
+          colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax);
+        } else {  // Left face
+          colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax);
+        }
+      } else if (ay > ax && ay > az) {
+        if (v.y > 0) {  // Up face
+          colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay);
+        } else {  // Down face
+          colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay);
+        }
+      } else {
+        if (v.z > 0) {  // Back face
+          colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az);
+        } else {  // Front face
+          colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az);
+        }
+      }
+    }
   }
 
   private Runnable run = new Runnable() {
@@ -74,44 +179,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
       //pg.endDraw();
       pg.loadPixels();
 
-      for (LXPoint p : model.points) {
-        PVector v = new PVector(p.x, p.y, p.z).sub(origin);
-        double ax = Math.abs(v.x);
-        double ay = Math.abs(v.y);
-        double az = Math.abs(v.z);
-
-        // Ignore pixels outside the bounding box.
-        if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) {
-          continue;
-        }
-
-        // Avoid division by zero.
-        if (ax == 0 && ay == 0 && az == 0) {
-          colors[p.index] = 0;
-          continue;
-        }
-
-        // Select the face according to the component with the largest absolute value.
-        if (ax > ay && ax > az) {
-          if (v.x > 0) {  // Right face
-            colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax);
-          } else {  // Left face
-            colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax);
-          }
-        } else if (ay > ax && ay > az) {
-          if (v.y > 0) {  // Up face
-            colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay);
-          } else {  // Down face
-            colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay);
-          }
-        } else {
-          if (v.z > 0) {  // Back face
-            colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az);
-          } else {  // Front face
-            colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az);
-          }
-        }
-      }
+      projectToLeds();
     }
   };
 
@@ -150,7 +218,7 @@ public abstract class P3CubeMapPattern extends LXPattern {
 
 public abstract static class MultiCubeMapPattern extends SLPattern {
   private P3LX lx;
-  private List<Subpattern> subpatterns;
+  List<Subpattern> subpatterns;
 
   protected MultiCubeMapPattern(LX lx, Class<? extends Subpattern> subpatternClass, int faceRes) {
     super(lx);
@@ -209,8 +277,8 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
     private PGraphics pg;
     protected PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
 
-    private PVector origin;
-    private PVector bboxSize;
+    PVector origin;
+    PVector bboxSize;
     private int faceRes;
 
     private final String id = "" + Math.random();

@@ -3,10 +3,11 @@ import com.symmetrylabs.util.OctreeModelIndex;
 
 public class PaletteViewer extends SLPattern {
   DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
-  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
-  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
   CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
+  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
+  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
+  CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
   public PaletteViewer(LX lx) {
     super(lx);
@@ -15,6 +16,7 @@ public class PaletteViewer extends SLPattern {
     addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
+    addParameter(palCutoff);
   }
 
   public void run(double deltaMs) {
@@ -24,6 +26,7 @@ public class PaletteViewer extends SLPattern {
       ((ZigzagPalette) pal).setBias(palBias.getValue());
       ((ZigzagPalette) pal).setStart(palStart.getValue());
       ((ZigzagPalette) pal).setStop(palStop.getValue());
+      ((ZigzagPalette) pal).setCutoff(palCutoff.getValue());
     }
     for (LXPoint p : model.points) {
       colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin) + shift);
@@ -117,6 +120,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
   CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward start or stop
+  CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
@@ -159,6 +163,7 @@ public class FlockWave extends SLPattern {
     addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
+    addParameter(palCutoff);
   }
 
   public void run(double deltaMs) {
@@ -311,6 +316,7 @@ public class FlockWave extends SLPattern {
       ((ZigzagPalette) pal).setBias(palBias.getValuef());
       ((ZigzagPalette) pal).setStart(palStart.getValuef());
       ((ZigzagPalette) pal).setStop(palStop.getValuef());
+      ((ZigzagPalette) pal).setCutoff(palCutoff.getValue());
     }
     return pal;
   }
@@ -465,6 +471,138 @@ public class LightSource extends SLPattern {
         float value = cosAngle * brightness * gain.getValuef();
         colors[p.index] = LX.hsb(palette.getHuef(), 100f, 100f * (value > 1 ? 1 : value));
       }
+    }
+  }
+}
+
+public class RipplePads extends SLPattern {
+  CompoundParameter intensity = new CompoundParameter("intensity", 0.5, 0, 3);
+  CompoundParameter speed = new CompoundParameter("speed", 100, 0, 500);
+  CompoundParameter decaySec = new CompoundParameter("decaySec", 1, 0, 10);
+  CompoundParameter nextHue = new CompoundParameter("nextHue", 0, 0, 360);
+  CompoundParameter nextSat = new CompoundParameter("nextSat", 0.5, 0, 1);
+
+  Sun[] sunsByNote = new Sun[128];
+  List<Ripple> ripples = new ArrayList<Ripple>();
+
+  public RipplePads(LX lx) {
+    super(lx);
+
+    sunsByNote[60] = getSun("sun1");
+    sunsByNote[92] = getSun("sun2");
+    sunsByNote[59] = getSun("sun4");
+    sunsByNote[91] = getSun("sun6");
+    sunsByNote[58] = getSun("sun7");
+    sunsByNote[90] = getSun("sun9");
+    sunsByNote[57] = getSun("sun10");
+    sunsByNote[89] = getSun("sun11");
+    sunsByNote[76] = getSun("sun8");
+    sunsByNote[44] = getSun("sun5");
+    sunsByNote[43] = getSun("sun3");
+
+    addParameter(intensity);
+    addParameter(speed);
+    addParameter(decaySec);
+    addParameter(nextHue);
+    addParameter(nextSat);
+  }
+
+  Sun getSun(String id) {
+    return model.sunTable.get(id);
+  }
+
+  public void run(double deltaMs) {
+    float deltaSec = (float) deltaMs * 0.001f;
+
+    List<Ripple> expired = new ArrayList<Ripple>();
+    for (Ripple ripple : ripples) {
+      ripple.advance(deltaSec);
+      if (ripple.isExpired()) {
+        expired.add(ripple);
+      } else {
+        ripple.render();
+      }
+    }
+    ripples.removeAll(expired);
+
+    for (LXPoint point : model.points) {
+      int sum = 0xff000000;
+      for (Ripple ripple : ripples) {
+        sum = LXColor.add(sum, ripple.layerColors[point.index]);
+      }
+      colors[point.index] = sum;
+    }
+  }
+
+  public void noteOnReceived(MidiNoteOn note) {
+    Sun sun = sunsByNote[note.getPitch()];
+    if (sun != null) {
+      addRipple(sun);
+    }
+  }
+
+  /** Returns a random number between min and max. */
+  float random(float min, float max) {
+    return min + (float) Math.random()*(max - min);
+  }
+
+  void addRipple(Sun sun) {
+    PVector center = new PVector(
+        sun.boundingBox.origin.x + random(0.2, 0.8)*sun.boundingBox.size.x,
+        sun.boundingBox.origin.y + random(0.2, 0.8)*sun.boundingBox.size.y,
+        sun.boundingBox.origin.z + random(0.0, 1.0)*sun.boundingBox.size.z
+    );
+    ripples.add(new Ripple(
+        center, sun.boundingBox.size.z/2,
+        intensity.getValuef(), speed.getValuef(),
+        decaySec.getValuef(), nextHue.getValuef(), nextSat.getValuef()
+    ));
+  }
+
+  class Ripple {
+    PVector center;
+    float intensity;
+    float speed;
+    float decaySec;
+    float hue;
+    float sat;
+
+    float ageSec;
+    float radius;
+    float value;
+    int[] layerColors;
+
+    Ripple(PVector center, float radius, float intensity, float speed, float decaySec, float hue, float sat) {
+      this.center = center;
+      this.radius = radius;
+      this.intensity = intensity;
+      this.speed = speed;
+      this.decaySec = decaySec;
+      this.hue = hue;
+      this.sat = sat;
+      ageSec = 0;
+      layerColors = new int[colors.length];
+    }
+
+    void advance(float deltaSec) {
+      ageSec += deltaSec;
+      radius += deltaSec * speed;
+      value = intensity / (1f + 10f*ageSec/decaySec);
+    }
+
+    void render() {
+      for (LXPoint point : model.points) {
+        PVector pos = new PVector(point.x, point.y, point.z);
+        if (PVector.sub(pos, center).mag() < radius) {
+          layerColors[point.index] = lx.hsb(hue, sat*100f, value*100f);
+        } else {
+          layerColors[point.index] = 0;
+        }
+      }
+    }
+
+    boolean isExpired() {
+      return ageSec > decaySec*2;
     }
   }
 }
