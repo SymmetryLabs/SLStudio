@@ -1858,4 +1858,8 @@ public static abstract class SLPattern extends LXPattern {
   protected CompoundParameter compoundParam(String name, double value, double min, double max) {
     return addParam(new CompoundParameter(name, value, min, max));
   }
+
+  protected DiscreteParameter discreteParameter(String name, int value, int min, int max) {
+    return addParam(new DiscreteParameter(name, value, min, max));
+  }
 }

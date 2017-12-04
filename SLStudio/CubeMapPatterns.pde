@@ -4,6 +4,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
@@ -30,7 +31,8 @@ public abstract class P3CubeMapPattern extends SLPattern {
 
   private final String id = "" + Math.random();
 
-  CompoundParameter resParam = compoundParam("RES", 200, 64, 512);
+  DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
+  DiscreteParameter kernelSize = discreteParameter("KER", 1, 1, 6);
   BooleanParameter allSunsParams = booleanParam("ALL", false);
   List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
 
@@ -143,28 +145,32 @@ public abstract class P3CubeMapPattern extends SLPattern {
         continue;
       }
 
+      int kernelSize = this.kernelSize.getValuei();
+
       // Select the face according to the component with the largest absolute value.
       if (ax > ay && ax > az) {
         if (v.x > 0) {  // Right face
-          colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax);
+          colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax, kernelSize);
         } else {  // Left face
-          colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax);
+          colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax, kernelSize);
         }
       } else if (ay > ax && ay > az) {
         if (v.y > 0) {  // Up face
-          colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay);
+          colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay, kernelSize);
         } else {  // Down face
-          colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay);
+          colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay, kernelSize);
         }
       } else {
         if (v.z > 0) {  // Back face
-          colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az);
+          colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az, kernelSize);
         } else {  // Front face
-          colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az);
+          colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az, kernelSize);
         }
       }
     }
   }
+
+
 
   private Runnable run = new Runnable() {
     long lastRunAt = System.currentTimeMillis();
@@ -204,15 +210,49 @@ public abstract class P3CubeMapPattern extends SLPattern {
    * @param u A texture coordinate within the face, ranging from -1 to 1.
    * @param v A texture coordinate within the face, ranging from -1 to 1.
    */
-  private int getColor(int faceMinX, int faceMinY, double u, double v) {
+  private int getColor(
+    int faceMinX,
+    int faceMinY,
+    double u,
+    double v,
+    int kernelSize
+  ) {
     if (u < -1 || u > 1 || v < -1 || v > 1) {
       return 0;
     }
     double offsetX = ((u + 1) / 2) * faceRes;
     double offsetY = ((v + 1) / 2) * faceRes;
-    double x = faceMinX + offsetX;
-    double y = faceMinY + offsetY;
-    return pg.pixels[(int) x + ((int) y)*pg.width];
+
+    if (kernelSize < 1) kernelSize = 1;
+
+    if (kernelSize == 1) {
+      double x = faceMinX + offsetX;
+      double y = faceMinY + offsetY;
+      return pg.pixels[(int) x + ((int) y)*pg.width];
+    } else {
+      int count = 0;
+      int aSum = 0;
+      int rSum = 0;
+      int gSum = 0;
+      int bSum = 0;
+      for (int kx = 0; kx<kernelSize; kx++) {
+        for (int ky = 0; ky<kernelSize; ky++) {
+          int x = (int) (faceMinX + offsetX + kx - kernelSize/2);
+          int y = (int) (faceMinY + offsetY + ky - kernelSize/2);
+
+          if (x >= 0 && x<pg.width && y >= 0 && y < pg.height) {
+            int colorVal = pg.pixels[x + y*pg.width];
+            rSum += colorVal & 0xFF;
+            gSum += (colorVal>>8) & 0xFF;
+            bSum += (colorVal>>16) & 0xFF;
+            aSum += (colorVal>>24) & 0xFF;
+            count ++;
+          }
+        }
+      }
+
+      return (rSum/count) | ((gSum/count) << 8) | ((bSum/count) << 16) | ((aSum/count) << 24);
+    }
   }
 }
 
