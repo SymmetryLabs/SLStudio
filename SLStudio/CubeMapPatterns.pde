@@ -240,7 +240,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
           int x = (int) (faceMinX + offsetX + kx - kernelSize/2);
           int y = (int) (faceMinY + offsetY + ky - kernelSize/2);
 
-          if (x >= 0 && x<pg.width && y >= 0 && y < pg.height) {
+          if (x >= 0 && x<pg.width && y >= 0 && y < pg.height && x + y*pg.width < pg.pixels.length) {
             int colorVal = pg.pixels[x + y*pg.width];
             rSum += colorVal & 0xFF;
             gSum += (colorVal>>8) & 0xFF;
