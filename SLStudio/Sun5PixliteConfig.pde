@@ -241,9 +241,9 @@ public class Sun5BackTopPixliteConfig {
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
       new PointsGrouping("12")
-        .addPoints(slice.getStripById("57").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
+        .addPoints(slice.getStripById("57").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
         .addPoints(slice.getStripById("58").points, PointsGrouping.Shift.RIGHT)
-        .addPoints(slice.getStripById("59").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
+        .addPoints(slice.getStripById("59").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
@@ -257,7 +257,7 @@ public class Sun5BackTopPixliteConfig {
       new PointsGrouping("14")
         .addPoints(slice.getStripById("63").points, PointsGrouping.REVERSE_ORDERING)
         .addPoints(slice.getStripById("64").points)
-        .addPoints(slice.getStripById("65").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
+        .addPoints(slice.getStripById("65").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,

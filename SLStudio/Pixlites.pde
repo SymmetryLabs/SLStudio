@@ -14,8 +14,8 @@ Pixlite[] setupPixlites(LX lx) {
 
   return new Pixlite[] {
     // Sun 1 (One Third)
-    new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
-    new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
+    new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")), // trimmed
+    new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")), // trimmed
 
     // Sun 2..
 
@@ -46,14 +46,14 @@ Pixlite[] setupPixlites(LX lx) {
     // Sun 8 (Two Thirds)
     new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
     new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
-    new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
+    new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // trimmed
+    new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // trimmed
 
     // Sun 9 (Full)
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_top_front")),  
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_bottom_front")),
-    new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_top_back")), // locked
-    new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // lxocked
+    new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_top_front")),  
+    new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_bottom_front")),
+    new Pixlite(lx, "10.200.1.13", ((SLModel)lx.model).getSliceById("sun9_top_back")),
+    new Pixlite(lx, "10.200.1.14", ((SLModel)lx.model).getSliceById("sun9_bottom_back")),
 
     // Sun 10 (Full)
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
