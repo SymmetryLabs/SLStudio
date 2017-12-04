@@ -53,25 +53,27 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
   @Override
   void run(double deltaMs) {
-    updateBlobTrackerParameters();
+    if (enableBlobs.getValueb()) {
+      updateBlobTrackerParameters();
 
-    double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
-    List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
-    for (Sun sun : model.suns) {
-      BlobTracker.Blob closestBlob = null;
-      double closestSqrDist = Double.MAX_VALUE;
-      for (BlobTracker.Blob b : blobs) {
-        double dx = b.pos.x - sun.cx;
-        double dy = b.pos.y - sun.cy;
-        double dz = b.pos.z - sun.cz;
-        double sqrDist = dx * dx + dy * dy + dz * dz;
-        if (sqrDistThresh < sqrDist && sqrDist < closestSqrDist) {
-          closestSqrDist = sqrDist;
-          closestBlob = b;
+      double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
+      List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+      for (Sun sun : model.suns) {
+        BlobTracker.Blob closestBlob = null;
+        double closestSqrDist = Double.MAX_VALUE;
+        for (BlobTracker.Blob b : blobs) {
+          double dx = b.pos.x - sun.cx;
+          double dy = b.pos.y - sun.cy;
+          double dz = b.pos.z - sun.cz;
+          double sqrDist = dx * dx + dy * dy + dz * dz;
+          if (sqrDistThresh < sqrDist && sqrDist < closestSqrDist) {
+            closestSqrDist = sqrDist;
+            closestBlob = b;
+          }
         }
-      }
 
-      closestBlobs.put(sun, closestBlob);
+        closestBlobs.put(sun, closestBlob);
+      }
     }
 
     super.run(deltaMs);
@@ -265,10 +267,18 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double twistYValue = 0.005 * twistY.getValue();
       double twistZValue = 0.005 * twistZ.getValue();
 
-      BlobTracker.Blob closestBlob = closestBlobs.get(sun);
-      double focusXValue = closestBlob != null ? closestBlob.pos.x : focusX.getValue();
-      double focusYValue = closestBlob != null ? closestBlob.pos.y : focusY.getValue();
-      double focusZValue = closestBlob != null ? closestBlob.pos.z : focusZ.getValue();
+      double focusXValue = focusX.getValue();
+      double focusYValue = focusY.getValue();
+      double focusZValue = focusZ.getValue();
+
+      if (enableBlobs.getValueb()) {
+        BlobTracker.Blob closestBlob = closestBlobs.get(sun);
+        if (closestBlob != null) {
+          focusXValue = (closestBlob.pos.x - model.cx) * 2f / model.xRange;
+          focusYValue = (closestBlob.pos.y - model.cy) * 2f / model.yRange;
+          focusZValue = (closestBlob.pos.z - model.cz) * 2f / model.zRange;
+        }
+      }
 
       for (int i = 0; i < particles.size(); ++i) {
         Particle p = particles.get(i);
