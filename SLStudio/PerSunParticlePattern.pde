@@ -211,9 +211,9 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double pullYValue = 0.01 * pullY.getValue();
       double pullZValue = 0.01 * pullZ.getValue();
 
-      double twistXValue = 0.01 * twistX.getValue();
-      double twistYValue = 0.01 * twistY.getValue();
-      double twistZValue = 0.01 * twistZ.getValue();
+      double twistXValue = 0.005 * twistX.getValue();
+      double twistYValue = 0.005 * twistY.getValue();
+      double twistZValue = 0.005 * twistZ.getValue();
 
       for (int i = 0; i < particles.size(); ++i) {
         Particle p = particles.get(i);
