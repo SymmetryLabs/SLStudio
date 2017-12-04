@@ -39,7 +39,7 @@ class UIAxes extends UI3dComponent {
 
 class UIOutputs extends UICollapsibleSection {
     UIOutputs(LX lx, UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 124);
+        super(ui, x, y, w, 500);
         setTitle();
 
         UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
@@ -52,10 +52,11 @@ class UIOutputs extends UICollapsibleSection {
           .setParameter(outputControl.enabled).setBorderRounding(4));
 
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
+        final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 454);
 
         for (Pixlite pixlite : pixlites) { 
             items.add(new PixliteItem(pixlite));
+            pixlite.enabled.setValue(false);
         }
 
         outputList.setItems(items).setSingleClickActivate(true);

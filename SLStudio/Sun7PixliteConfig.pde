@@ -206,7 +206,7 @@ public class Sun7BackTopPixliteConfig {
         .addPoints(slice.getStripById("8").points, PointsGrouping.Shift.RIGHT)
         .addPoints(slice.getStripById("9").points,  PointsGrouping.REVERSE_ORDERING)
         .addPoints(slice.getStripById("10").points, PointsGrouping.Shift.RIGHT)
-        .addPoints(slice.getStripById("11").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
+        .addPoints(slice.getStripById("11").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT_TWICE)
         .addPoints(slice.getStripById("12").points)
     ));
 
@@ -234,7 +234,7 @@ public class Sun7BackTopPixliteConfig {
         .addPoints(slice.getStripById("24").points, PointsGrouping.REVERSE_ORDERING)
         .addPoints(slice.getStripById("25").points)
         .addPoints(slice.getStripById("26").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
-        .addPoints(slice.getStripById("27").points)
+        .addPoints(slice.getStripById("27").points, PointsGrouping.Shift.LEFT)
         .addPoints(slice.getStripById("28").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
     ));
 
@@ -283,7 +283,7 @@ public class Sun7BackTopPixliteConfig {
         .addPoints(slice.getStripById("49").points, PointsGrouping.REVERSE_ORDERING)
         .addPoints(slice.getStripById("50").points)
         .addPoints(slice.getStripById("51").points, PointsGrouping.REVERSE_ORDERING)
-        .addPoints(slice.getStripById("52").points, PointsGrouping.Shift.LEFT) // do 2  
+        .addPoints(slice.getStripById("52").points, PointsGrouping.Shift.LEFT_TWICE) // do 2  
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress, 

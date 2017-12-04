@@ -2,46 +2,46 @@ Pixlite[] setupPixlites(LX lx) {
 
   return new Pixlite[] {
     // Sun 1 (One Third)
-    // new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
-    // new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
+    new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
+    new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
 
     // Sun 2..
 
     // Sun 3 (One Third)
-    // new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
-    // new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
+    new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
+    new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
 
     // Sun 4 (One Half)
-    // new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
-    // new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
+    new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
+    new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
 
     // Sun 5 (One Third)
-    // new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")), // locked
+    new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")), // locked
+    new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")), // locked
 
     // Sun 6 (Two Thirds)
-    // new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")), // locked
-    // new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")), // locked
-    // new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")), // locked
+    new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")), // locked
+    new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")), // locked
+    new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), // locked
+    new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")), // locked
     
     // Sun 7 (Two Thirds)
-    // new Pixlite(lx, "10.200.1.33", ((SLModel)lx.model).getSliceById("sun7_top_front")), // locked
-    // new Pixlite(lx, "10.200.1.34", ((SLModel)lx.model).getSliceById("sun7_bottom_front")), // locked
-    // new Pixlite(lx, "10.200.1.31", ((SLModel)lx.model).getSliceById("sun7_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.32", ((SLModel)lx.model).getSliceById("sun7_bottom_back")), // locked
+    new Pixlite(lx, "10.200.1.33", ((SLModel)lx.model).getSliceById("sun7_top_front")), // locked
+    new Pixlite(lx, "10.200.1.34", ((SLModel)lx.model).getSliceById("sun7_bottom_front")), // locked
+    new Pixlite(lx, "10.200.1.31", ((SLModel)lx.model).getSliceById("sun7_top_back")), // locked
+    new Pixlite(lx, "10.200.1.32", ((SLModel)lx.model).getSliceById("sun7_bottom_back")), // locked
 
     // Sun 8 (Two Thirds)
-    // new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
-    // new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
-    // new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
+    new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
+    new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
+    new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // locked
+    new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // locked
 
     // Sun 9 (Full)
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_top_front")),  
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun9_bottom_front")),
-    // new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // lxocked
+    new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_top_back")), // locked
+    new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // lxocked
 
     // Sun 10 (Full)
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
@@ -220,7 +220,7 @@ public static class PointsGrouping {
   public final static boolean REVERSE_ORDERING = true;
 
   public enum Shift {
-    LEFT, RIGHT
+    LEFT_TWICE, LEFT, RIGHT, RIGHT_TWICE
   };
 
   public String id;
@@ -267,6 +267,15 @@ public static class PointsGrouping {
     LXPoint[] localPointsToAdd = pointsToAdd.clone();
     LXPoint[] shiftedPoints = null;
 
+    if (shift == PointsGrouping.Shift.LEFT_TWICE) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
+
+      for (int i = 0; i < shiftedPoints.length-2; i++) {
+        shiftedPoints[i] = localPointsToAdd[i+2];
+      }
+      shiftedPoints[shiftedPoints.length-2] = localPointsToAdd[shiftedPoints.length-1];
+      shiftedPoints[shiftedPoints.length-1] = localPointsToAdd[shiftedPoints.length-1];
+    }
     if (shift == PointsGrouping.Shift.LEFT) {
       shiftedPoints = new LXPoint[localPointsToAdd.length];
 
@@ -281,6 +290,15 @@ public static class PointsGrouping {
 
       for (int i = 0; i < shiftedPoints.length-1; i++) {
         shiftedPoints[i+1] = localPointsToAdd[i];
+      }
+    }
+    if (shift == PointsGrouping.Shift.RIGHT_TWICE) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
+      shiftedPoints[0] = localPointsToAdd[0];
+      shiftedPoints[1] = localPointsToAdd[0];
+
+      for (int i = 0; i < shiftedPoints.length-2; i++) {
+        shiftedPoints[i+2] = localPointsToAdd[i];
       }
     }
 
@@ -302,6 +320,15 @@ public static class PointsGrouping {
     LXPoint[] localPointsToAdd = pointsToAdd.clone();
     LXPoint[] shiftedPoints = null;
 
+    if (shift == PointsGrouping.Shift.RIGHT_TWICE) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
+
+      for (int i = 0; i < shiftedPoints.length-2; i++) {
+        shiftedPoints[i] = localPointsToAdd[i+2];
+      }
+      shiftedPoints[shiftedPoints.length-2] = localPointsToAdd[shiftedPoints.length-2];
+      shiftedPoints[shiftedPoints.length-1] = localPointsToAdd[shiftedPoints.length-1];
+    }
     if (shift == PointsGrouping.Shift.RIGHT) {
       shiftedPoints = new LXPoint[localPointsToAdd.length];
 
@@ -316,6 +343,15 @@ public static class PointsGrouping {
 
       for (int i = 0; i < shiftedPoints.length-1; i++) {
         shiftedPoints[i+1] = localPointsToAdd[i];
+      }
+    }
+    if (shift == PointsGrouping.Shift.LEFT_TWICE) {
+      shiftedPoints = new LXPoint[localPointsToAdd.length];
+      shiftedPoints[0] = localPointsToAdd[0];
+      shiftedPoints[1] = localPointsToAdd[0];
+
+      for (int i = 0; i < shiftedPoints.length-2; i++) {
+        shiftedPoints[i+2] = localPointsToAdd[i];
       }
     }
 
