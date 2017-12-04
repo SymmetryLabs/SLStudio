@@ -251,13 +251,13 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
 
       this.enableParam = new BooleanParameter("SUN" + (sunIndex+1));
 
-      PVector origin = new PVector( //<>//
+      PVector origin = new PVector( //<>// //<>//
       sun.boundingBox.origin.x + sun.boundingBox.size.x*.5,
       sun.boundingBox.origin.y + sun.boundingBox.size.y*.5,
       sun.boundingBox.origin.z + sun.boundingBox.size.z*.5);
       PVector bboxSize = sun.boundingBox.size;
 
-      this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>//
+      this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>// //<>//
       this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
       this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
       this.pgL = lx.applet.createGraphics(faceRes, faceRes, P3D);
@@ -272,13 +272,13 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
 
     private Runnable run = new Runnable() {
       long lastRunAt = System.currentTimeMillis();
- //<>//
+ //<>// //<>//
       @Override
       public void run() {
         double deltaMs = System.currentTimeMillis() - lastRunAt;
         lastRunAt = System.currentTimeMillis();
 
-        //pg.beginDraw(); //<>//
+        //pg.beginDraw(); //<>// //<>//
         Subpattern.this.run(deltaMs, pg);
         //pg.endDraw();
         pg.loadPixels();
