@@ -4,8 +4,8 @@ public abstract class ColorSlideshow extends SLPattern {
   public final BooleanParameter perSun = new BooleanParameter("perSun", false);
   public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
   public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
-  public final CompoundParameter zoomX = new CompoundParameter("zoomX", 0, 0, 1);
-  public final CompoundParameter zoomY = new CompoundParameter("zoomY", 0, 0, 1);
+  public final CompoundParameter zoomX = new CompoundParameter("zoomX", 0, 0, 5);
+  public final CompoundParameter zoomY = new CompoundParameter("zoomY", 0, 0, 5);
 
   private final SawLFO lerp = (SawLFO)startModulator(new SawLFO(0, 1, rate));
 
@@ -198,6 +198,54 @@ public class TextureCorals extends ColorSlideshow {
       "images/coral3.jpeg",
       "images/coral4.jpeg",
       "images/coral5.jpeg",
+    };
+  }
+}
+
+public class TextureJupiter1 extends ColorSlideshow {
+  public TextureJupiter1(LX lx) {
+    super(lx);
+  }
+
+  public String[] getPaths() {
+    return new String[] {
+      "images/junocam-jupiter-blues-pia21972.jpg",
+    };
+  }
+}
+
+public class TextureJupiter2 extends ColorSlideshow {
+  public TextureJupiter2(LX lx) {
+    super(lx);
+  }
+
+  public String[] getPaths() {
+    return new String[] {
+      "images/junocam-jupiter-pj09-90-001.jpg",
+    };
+  }
+}
+
+public class TextureNebula1 extends ColorSlideshow {
+  public TextureNebula1(LX lx) {
+    super(lx);
+  }
+
+  public String[] getPaths() {
+    return new String[] {
+      "images/apod-ccbysa-171004-soul-herschel.jpg",
+    };
+  }
+}
+
+public class TextureNebula2 extends ColorSlideshow {
+  public TextureNebula2(LX lx) {
+    super(lx);
+  }
+
+  public String[] getPaths() {
+    return new String[] {
+      "images/apod-ccbysa-171101-thors-helmet.jpg",
     };
   }
 }
