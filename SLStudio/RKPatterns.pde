@@ -296,7 +296,7 @@ public class RKPattern02 extends P3CubeMapPattern {
     }
 
     rotDir = PVector.random3D();
-    
+
     addParameter(audioLink);
     addParameter(rX);
     addParameter(rY);
@@ -374,7 +374,7 @@ public class RKPattern02 extends P3CubeMapPattern {
       dspmtT = dsp.getValuef();
       fTIncre = speed.getValuef();
     } else {
-      
+
       totalBandMag = 0;
       for (int i=0; i<pEQBands.length; i++) {
         totalBandMag += eq.getBandf(i);
@@ -384,7 +384,7 @@ public class RKPattern02 extends P3CubeMapPattern {
       rotXT += rotDir.x*(eq.getBandf(0)-pEQBands[0])*2;
       rotYT += rotDir.z*(eq.getBandf(7)-pEQBands[7])*2;
       rotZT += rotDir.y*eq.getBandf(14)*.1;
-      
+
       fTIncre = map(sq(totalBandMag), 0, 256, 0, 3);
       dspmtT = map(sq(totalBandMag), 0, 256, 0, 3);
 
@@ -1077,6 +1077,10 @@ public class RKPattern03 extends P3CubeMapPattern {
 
 public class RKPattern04 extends P3CubeMapPattern {
 
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
+
+  BooleanParameter audioLink = new BooleanParameter("audioLink", false);
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -1099,6 +1103,12 @@ public class RKPattern04 extends P3CubeMapPattern {
   PVector lgt1, lgt2, lgt3;
   float hue1, hue1T, hue2, hue2T, hue3, hue3T;
   color c1, c2, c3;
+  PVector rotDir;
+
+  boolean audioLinked;
+
+  float [] pEQBands = new float[16];
+  float totalBandMag, avgBandMag;
 
   public RKPattern04(LX lx) {
 
@@ -1113,6 +1123,9 @@ public class RKPattern04 extends P3CubeMapPattern {
     hue2 = hue2T = 85;
     hue3 = hue3T = 170;
 
+    rotDir = PVector.random3D();
+
+    addParameter(audioLink);
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
@@ -1121,31 +1134,13 @@ public class RKPattern04 extends P3CubeMapPattern {
     addParameter(h1);
     addParameter(h2);
     addParameter(h3);
+
+    addModulator(eq).start();
   }
 
   void run(double deltaMs, PGraphics pg) {
 
-    rotXT = rX.getValuef();
-    rotYT = rY.getValuef();
-    rotZT = rZ.getValuef();
-    clearBg = clrBg.getValueb();
-    gFIncreT = speed.getValuef();
-    hue1 = h1.getValuef();
-    hue2 = h2.getValuef();
-    hue3 = h3.getValuef();
-
-    rotX = lerp(rotX, rotXT, .1);
-    rotY = lerp(rotY, rotYT, .1);
-    rotZ = lerp(rotZ, rotZT, .1);
-    gFIncre = lerp(gFIncre, gFIncreT, .1);
-    hue1 = lerp(hue1, hue1T, .1);
-    hue2 = lerp(hue2, hue2T, .1);
-    hue3 = lerp(hue3, hue3T, .1);
-
-    colorMode(HSB);
-    c1 = color(hue1, 255, 255);
-    c2 = color(hue2, 255, 255);
-    c3 = color(hue3, 255, 255);
+    updateParameters();
 
     updateRootVts();
     updateMesh();
@@ -1161,6 +1156,50 @@ public class RKPattern04 extends P3CubeMapPattern {
     pg.image(pgF, faceRes, faceRes);
     pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
+  }
+
+  void updateParameters() {
+
+    audioLinked = audioLink.getValueb();
+
+    if (!audioLinked) {
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      gFIncreT = speed.getValuef();
+    } else {
+      totalBandMag = 0;
+      for (int i=0; i<pEQBands.length; i++) {
+        totalBandMag += eq.getBandf(i);
+      }
+      avgBandMag = totalBandMag/16;
+
+      rotXT += rotDir.x*(eq.getBandf(0)-pEQBands[0])*2;
+      rotYT += rotDir.z*(eq.getBandf(7)-pEQBands[7])*2;
+      rotZT += rotDir.y*eq.getBandf(14)*.1;
+      gFIncreT = map(sq(totalBandMag), 0, 256, 0, .25);
+
+      for (int i=0; i<pEQBands.length; i++) {
+        pEQBands[i] = eq.getBandf(i);
+      }
+    }
+
+    hue1 = h1.getValuef();
+    hue2 = h2.getValuef();
+    hue3 = h3.getValuef();
+    clearBg = clrBg.getValueb();
+    rotX = lerp(rotX, rotXT, .25);
+    rotY = lerp(rotY, rotYT, .25);
+    rotZ = lerp(rotZ, rotZT, .25);
+    gFIncre = lerp(gFIncre, gFIncreT, .25);
+    hue1 = lerp(hue1, hue1T, .1);
+    hue2 = lerp(hue2, hue2T, .1);
+    hue3 = lerp(hue3, hue3T, .1);
+
+    colorMode(HSB);
+    c1 = color(hue1, 255, 255);
+    c2 = color(hue2, 255, 255);
+    c3 = color(hue3, 255, 255);
   }
 
   void updateCubeMaps() {
@@ -1411,6 +1450,10 @@ public class RKPattern04 extends P3CubeMapPattern {
 
 public class RKPattern05 extends P3CubeMapPattern {
 
+  private LXAudioInput audioInput = lx.engine.audio.getInput();
+  private GraphicMeter eq = new GraphicMeter(audioInput);
+
+  BooleanParameter audioLink = new BooleanParameter("audioLink", false);
   CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
   CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
   CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -1443,6 +1486,13 @@ public class RKPattern05 extends P3CubeMapPattern {
     HALF_PI*.5, HALF_PI*2.5, HALF_PI*1.5, HALF_PI*3.5
   };
 
+  PVector rotDir;
+
+  boolean audioLinked;
+
+  float [] pEQBands = new float[16];
+  float totalBandMag, avgBandMag;
+
   public RKPattern05(LX lx) {
 
     super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 200);
@@ -1456,6 +1506,9 @@ public class RKPattern05 extends P3CubeMapPattern {
     hue2 = hue2T = 85;
     hue3 = hue3T = 170;
 
+    rotDir = PVector.random3D();
+
+    addParameter(audioLink);
     addParameter(rX);
     addParameter(rY);
     addParameter(rZ);
@@ -1465,33 +1518,13 @@ public class RKPattern05 extends P3CubeMapPattern {
     addParameter(h1);
     addParameter(h2);
     addParameter(h3);
+
+    addModulator(eq).start();
   }
 
   void run(double deltaMs, PGraphics pg) {
 
-    rotXT = rX.getValuef();
-    rotYT = rY.getValuef();
-    rotZT = rZ.getValuef();
-    clearBg = clrBg.getValueb();
-    vOfstSpeedT = speed.getValuef();
-    vOfstScalarT = scalar.getValuef();
-    hue1 = h1.getValuef();
-    hue2 = h2.getValuef();
-    hue3 = h3.getValuef();
-
-    rotX = lerp(rotX, rotXT, .1);
-    rotY = lerp(rotY, rotYT, .1);
-    rotZ = lerp(rotZ, rotZT, .1);
-    hue1 = lerp(hue1, hue1T, .1);
-    hue2 = lerp(hue2, hue2T, .1);
-    hue3 = lerp(hue3, hue3T, .1);
-    vOfstScalar = lerp(vOfstScalar, vOfstScalarT, .1);
-    vOfstSpeed = lerp(vOfstSpeed, vOfstSpeedT, .1);
-
-    colorMode(HSB);
-    c1 = color(hue1, 255, 255);
-    c2 = color(hue2, 255, 255);
-    c3 = color(hue3, 255, 255);
+    updateParameters();
 
     updateRootVts();
     updateMesh();
@@ -1507,6 +1540,53 @@ public class RKPattern05 extends P3CubeMapPattern {
     pg.image(pgF, faceRes, faceRes);
     pg.image(pgB, faceRes*3, faceRes);
     pg.endDraw();
+  }
+
+  void updateParameters() {
+    audioLinked = audioLink.getValueb();
+
+    if (!audioLinked) {
+      rotXT = rX.getValuef();
+      rotYT = rY.getValuef();
+      rotZT = rZ.getValuef();
+      vOfstSpeedT = speed.getValuef();
+      vOfstScalarT = scalar.getValuef();
+    } else {
+      totalBandMag = 0;
+      for (int i=0; i<pEQBands.length; i++) {
+        totalBandMag += eq.getBandf(i);
+      }
+      avgBandMag = totalBandMag/16;
+
+      rotXT += rotDir.x*(eq.getBandf(0)-pEQBands[0])*2;
+      rotYT += rotDir.z*(eq.getBandf(7)-pEQBands[7])*2;
+      rotZT += rotDir.y*eq.getBandf(14)*.1;
+      vOfstSpeedT = map(sq(totalBandMag), 0, 256, 0, .02);
+      vOfstScalarT = 5;//map(sq(totalBandMag), 0, 256, 0, 10);
+
+      for (int i=0; i<pEQBands.length; i++) {
+        pEQBands[i] = eq.getBandf(i);
+      }
+    }
+    
+    clearBg = clrBg.getValueb();
+    hue1 = h1.getValuef();
+    hue2 = h2.getValuef();
+    hue3 = h3.getValuef();
+    
+    rotX = lerp(rotX, rotXT, .25);
+    rotY = lerp(rotY, rotYT, .25);
+    rotZ = lerp(rotZ, rotZT, .25);
+    vOfstScalar = lerp(vOfstScalar, vOfstScalarT, .25);
+    vOfstSpeed = lerp(vOfstSpeed, vOfstSpeedT, .25);
+    hue1 = lerp(hue1, hue1T, .1);
+    hue2 = lerp(hue2, hue2T, .1);
+    hue3 = lerp(hue3, hue3T, .1);
+
+    colorMode(HSB);
+    c1 = color(hue1, 255, 255);
+    c2 = color(hue2, 255, 255);
+    c3 = color(hue3, 255, 255);
   }
 
   void updateCubeMaps() {
