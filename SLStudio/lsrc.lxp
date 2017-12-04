@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512428862523,
+  "timestamp": 1512436142215,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -97,13 +97,14 @@
             "parameters": {
               "label": "LightSource",
               "x": 385.0,
-              "y": 114.0,
+              "y": 78.0000008046627,
               "z": 184.5,
               "hue": 0.0,
               "sat": 0.0,
-              "gain": 1.0,
-              "falloff": 0.25,
-              "ambient": 0.0
+              "gain": 0.400000013411045,
+              "falloff": 0.15000000223517418,
+              "ambient": 0.0,
+              "useBlobs": true
             },
             "modulation": {
               "modulators": [],
@@ -326,12 +327,12 @@
         "3659": true
       },
       "preview": {
-        "radius": 543.8723925360864,
-        "theta": 18.705000000000066,
-        "phi": 0.41771667385101297,
-        "positionX": 287.966064453125,
-        "positionY": 46.19999694824219,
-        "positionZ": 198.23715209960938
+        "radius": 438.8004314150729,
+        "theta": 18.705000000000094,
+        "phi": 0.6967166738510119,
+        "positionX": 889.8604125976562,
+        "positionY": 126.19999694824219,
+        "positionZ": 55.82688903808594
       }
     }
   }

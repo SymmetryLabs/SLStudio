@@ -94,12 +94,6 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
 
         lastMessageMillis = millis;
         lastKnownBlobs = allBlobs;
-
-        String status = "[" + millis + " ms] " + allBlobs.size() + " blob" + (allBlobs.size() == 1 ? "" : "s") + ": ";
-        for (Blob b : allBlobs) {
-                status += b + ", ";
-        }
-        System.out.println(status.substring(0, status.length() - 2));
     }
 
     /** Modifies a list of blobs in place, merging blobs within mergeRadius. */
