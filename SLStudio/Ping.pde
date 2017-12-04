@@ -345,17 +345,21 @@ public class FlockWave extends SLPattern {
     double dx, dy, dz, sqDist, phase, a;
 
     LXPoint pos = new LXPoint(bird.pos.x, bird.pos.y, bird.pos.z);
-    for (LXPoint point : modelIndex.pointsWithin(pos, size.getValuef())) {
+    for (LXPoint point : modelIndex.pointsWithin(pos, (float) extent)) {
       dx = (bird.pos.x - point.x)/extent;
       dy = (bird.pos.y - point.y)/extent;
       dz = (bird.pos.z - point.z)/extent;
       sqDist = dx*dx + dy*dy + dz*dz;
-      phase = FastMath.sqrt(sqDist + dz*dz*zSqFactor);
-      a = 1 - sqDist;
-      bird.renderedValues[point.index] =
-          a * a * bird.value
-              * FastMath.sin(waveNumber * 2 * FastMath.PI * phase - bird.elapsedSec * rippleSpeed)
-              * FastMath.cos(waveNumber * 5/4 * phase);
+      if (sqDist < 1) {
+        phase = FastMath.sqrt(sqDist + dz*dz*zSqFactor);
+        a = 1 - sqDist;
+        bird.renderedValues[point.index] =
+            a * a * bird.value
+                * FastMath.sin(waveNumber * 2 * FastMath.PI * phase - bird.elapsedSec * rippleSpeed)
+                * FastMath.cos(waveNumber * 5/4 * phase);
+      } else {
+        bird.renderedValues[point.index] = 0;
+      }
     }
   }
 
