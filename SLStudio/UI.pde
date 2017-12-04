@@ -21,7 +21,9 @@ import processing.core.PVector;
 import processing.event.KeyEvent;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
@@ -29,6 +31,9 @@ import java.util.stream.Collectors;
 
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.*;
+
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
 
 class UISpeed extends UI2dContainer {
   public UISpeed(UI ui, final LX lx, float x, float y, float w) {
@@ -224,31 +229,26 @@ class UICubeMapDebug extends UI3dComponent {
   }
 }
 
-class UIBlobs extends UI3dComponent {
-  com.symmetrylabs.util.BlobTracker tracker;
-  final float SIZE_SCALE = 12;
-  final float VELOCITY_SCALE = 1;
+class UIMarkerPainter extends UI3dComponent {
+  Set<MarkerSource> sources;
 
-  UIBlobs() { }
+  UIMarkerPainter() {
+    sources = new HashSet<MarkerSource>();
+  }
+
+  void addSource(MarkerSource source) {
+    sources.add(source);
+  }
+
+  void removeSource(MarkerSource source) {
+    sources.remove(source);
+  }
 
   protected void onDraw(UI ui, PGraphics pg) {
-    for (com.symmetrylabs.util.BlobTracker.Blob b : com.symmetrylabs.util.BlobTracker.getInstance(lx).getBlobs()) {
-      float x = b.pos.x;
-      float y = b.pos.y;
-      float z = b.pos.z;
-      float size = SIZE_SCALE * b.size;
-      pg.strokeWeight(1);
-      pg.stroke(255, 0, 128);
-      for (int d = -1; d < 2; d += 2) {
-        for (int e = -1; e < 2; e += 2) {
-          pg.line(x + d*size, y, z, x, y + e*size, z);
-          pg.line(x, y + d*size, z, x, y, z + e*size);
-          pg.line(x, y, z + d*size, x + e*size, y, z);
-        }
+    for (MarkerSource source : sources) {
+      for (Marker marker : source.getMarkers()) {
+        marker.draw(pg);
       }
-      pg.stroke(128, 0, 255);
-      PVector end = PVector.add(b.pos, PVector.mult(b.vel, VELOCITY_SCALE));
-      pg.line(x, y, z, end.x, end.y, end.z);
     }
   }
 }

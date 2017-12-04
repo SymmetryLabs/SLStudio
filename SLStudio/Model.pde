@@ -259,6 +259,12 @@ public static class Sun extends LXModel {
           strips.add(strip);
           for (LXPoint point : strip.points) {
             points.add(point);
+            // estimate normals
+            PVector pos = new PVector(point.x, point.y, point.z);
+            PVector normal = PVector.sub(pos, origin);
+            normal.normalize();
+            normal.z += (normal.z > origin.z) ? 0.3 : -0.3;
+            ((LXPointNormal) point).setNormal(normal);
           }
         }
       }
@@ -396,7 +402,8 @@ public static class CurvedStrip extends Strip {
         float z = bezierPoint(0, metrics.arcWidth*-0.3,metrics.arcWidth*-0.3, 0, t);
         transform.translate(x, 0, z);
 
-        points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
+        points.add(new LXPointNormal(
+            transform.x(), transform.y(), transform.z()));
         transform.pop();
       }
 
@@ -471,16 +478,26 @@ public static class LXPointNormal extends LXPoint {
 
   public LXPointNormal(float x, float y, float z, PVector normal) {
     super(x, y, z);
-    if (normal.mag() == 0) {
-      // If given the null vector, the normal defaults to up.
-      this.normal = new PVector(0, 1, 0);
-    } else {
-      this.normal = normal;
-      this.normal.normalize();
-    }
+    this.normal = new PVector(0, 1, 0); // the default normal points up
+    setNormal(normal);
   }
 
   public LXPointNormal(double x, double y, double z, PVector normal) {
     this((float) x, (float) y, (float) z, normal);
+  }
+
+  public LXPointNormal(float x, float y, float z) {
+    this(x, y, z, null);
+  }
+
+  public LXPointNormal(double x, double y, double z) {
+    this(x, y, z, null);
+  }
+
+  public void setNormal(PVector normal) {
+    if (normal != null && normal.mag() > 0) {
+      this.normal.set(normal.x, normal.y, normal.z);
+      this.normal.normalize();
+    }
   }
 }

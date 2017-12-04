@@ -15,7 +15,7 @@ public abstract class LayeredRenderer {
 
     private final LXFixture fixture;
     private final int numThreads;
-    private final List<RenderThread> renderThreads = new ArrayList<RenderThread>();
+    private final List<RenderThread> renderThreads = new ArrayList<>();
 
     private final List<LXPoint> points;
     private final int[] colors;
