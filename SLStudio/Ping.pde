@@ -3,10 +3,11 @@ import com.symmetrylabs.util.OctreeModelIndex;
 
 public class PaletteViewer extends SLPattern {
   DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
-  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
-  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
   CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
+  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
+  CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
+  CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
   public PaletteViewer(LX lx) {
     super(lx);
@@ -15,6 +16,7 @@ public class PaletteViewer extends SLPattern {
     addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
+    addParameter(palCutoff);
   }
 
   public void run(double deltaMs) {
@@ -24,6 +26,7 @@ public class PaletteViewer extends SLPattern {
       ((ZigzagPalette) pal).setBias(palBias.getValue());
       ((ZigzagPalette) pal).setStart(palStart.getValue());
       ((ZigzagPalette) pal).setStop(palStop.getValue());
+      ((ZigzagPalette) pal).setCutoff(palCutoff.getValue());
     }
     for (LXPoint p : model.points) {
       colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin) + shift);
@@ -117,6 +120,7 @@ public class FlockWave extends SLPattern {
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
   CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward start or stop
+  CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
@@ -159,6 +163,7 @@ public class FlockWave extends SLPattern {
     addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
+    addParameter(palCutoff);
   }
 
   public void run(double deltaMs) {
@@ -311,6 +316,7 @@ public class FlockWave extends SLPattern {
       ((ZigzagPalette) pal).setBias(palBias.getValuef());
       ((ZigzagPalette) pal).setStart(palStart.getValuef());
       ((ZigzagPalette) pal).setStop(palStop.getValuef());
+      ((ZigzagPalette) pal).setCutoff(palCutoff.getValue());
     }
     return pal;
   }

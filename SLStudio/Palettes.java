@@ -43,11 +43,11 @@ interface PaletteExtractor {
 /** Loads images from a directory. */
 class ImageLibrary {
     File dir;
-    
+
     ImageLibrary(String path) {
         dir = new File(path);
     }
-    
+
     public BufferedImage get(String filename) {
         try {
             return ImageIO.read(new File(dir, filename));
@@ -112,6 +112,7 @@ class ArrayPalette implements ColorPalette {
     double start;
     double stop;
     double scale;
+    int valueCutoff;
 
     ArrayPalette(int[] colors) {
         this.colors = new int[colors.length];
@@ -135,11 +136,21 @@ class ArrayPalette implements ColorPalette {
         this.stop = clamp(stop, 0, 1);
     }
 
+    // Brightness cutoff (all values below this are clamped to zero).
+    public void setCutoff(double cutoff) {
+        this.valueCutoff = (int) Math.floor((255*3)*cutoff);
+    }
+
+    public int applyCutoff(int c) {
+        int value = ((c >> 16) & 0xff) + ((c >> 8) & 0xff) + (c & 0xff);
+        return value < valueCutoff ? 0 : c;
+    }
+
     public int getColor(double p) {
         double index = (start + clamp(p, 0, 1) * (stop - start)) * (colors.length - 1);
         int low = (int) Math.floor(index);
         int high = (low + 1) < colors.length ? low + 1 : low;
-        return LXColor.lerp(colors[low], colors[high], index - low);
+        return LXColor.lerp(applyCutoff(colors[low]), applyCutoff(colors[high]), index - low);
     }
 }
 
@@ -155,6 +166,7 @@ class ArrayPalette implements ColorPalette {
 class ZigzagPalette implements ColorPalette {
     ColorPalette palette;
     double exponent;
+    double floor;
 
     ZigzagPalette(ColorPalette palette) {
         this.palette = palette;
@@ -174,6 +186,12 @@ class ZigzagPalette implements ColorPalette {
     public void setStop(double stop) {
         if (palette instanceof ArrayPalette) {
             ((ArrayPalette) palette).setStop(stop);
+        }
+    }
+
+    public void setCutoff(double cutoff) {
+        if (palette instanceof ArrayPalette) {
+            ((ArrayPalette) palette).setCutoff(cutoff);
         }
     }
 
