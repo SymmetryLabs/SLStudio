@@ -33,6 +33,7 @@ public class LXStudio extends P3LX {
     public final UIOverriddenRightPane rightPane;
     public final UIBottomTray bottomTray;
     public final UIContextualHelpBar helpBar;
+    public final UIFramerate framerate;
     public final UIAxes axes;
     public final UIBlobs blobs;
     public final UICubeMapDebug cubeMapDebug;
@@ -69,6 +70,7 @@ public class LXStudio extends P3LX {
       this.rightPane = new UIOverriddenRightPane(this, lx);
       this.bottomTray = new UIBottomTray(this, lx);
       this.helpBar = new UIContextualHelpBar(this);
+      this.framerate = new UIFramerate(this, lx, this.leftPane.getX() + this.leftPane.getWidth());
       this.axes = new UIAxes();
       this.blobs = new UIBlobs();
       this.cubeMapDebug = new UICubeMapDebug(lx);
@@ -81,6 +83,7 @@ public class LXStudio extends P3LX {
       addLayer(this.rightPane);
       addLayer(this.bottomTray);
       addLayer(this.helpBar);
+      addLayer(this.framerate);
 
       setTopLevelKeyEventHandler(new UIEventHandler() {
         @Override
@@ -107,6 +110,8 @@ public class LXStudio extends P3LX {
             axes.toggleVisible();
           } else if (keyChar == "c".charAt(0)) {
             cubeMapDebug.toggleVisible();
+          } else if (keyChar == "f".charAt(0)) {
+            framerate.toggleVisible();
           }
 
         }

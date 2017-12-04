@@ -6,7 +6,9 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UI2dContext;
 import heronarts.p3lx.ui.UI3dComponent;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
@@ -26,6 +28,7 @@ import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 import static processing.core.PApplet.println;
+import static processing.core.PConstants.*;
 
 class UISpeed extends UI2dContainer {
   public UISpeed(UI ui, final LX lx, float x, float y, float w) {
@@ -41,6 +44,25 @@ class UISpeed extends UI2dContainer {
     .setParameter(lx.engine.speed)
     .setShowLabel(false)
     .addToContainer(this);
+  }
+}
+
+class UIFramerate extends UI2dContext {
+  private final P3LX lx;
+
+  UIFramerate(UI ui, final P3LX lx, float x) {
+    super(ui, x, 0, 200, 30);
+    this.lx = lx;
+    setVisible(true);
+  }
+
+  protected void onDraw(UI ui, PGraphics pg) {
+    pg.clear();
+    pg.textSize(16);
+    pg.textAlign(LEFT, TOP);
+    pg.text("Engine: " + Math.round(lx.engine.frameRate()*10)/10 + " " + "UI: " + Math.round(lx.applet.frameRate*10)/10, 0, 0);
+
+    redraw();
   }
 }
 
