@@ -16,6 +16,9 @@ class UISpeed extends UI2dContainer {
 }
 
 class UIAxes extends UI3dComponent {
+  UIAxes() {
+    setVisible(false);
+  }
   protected void onDraw(UI ui, PGraphics pg) {
     pg.strokeWeight(1);
     pg.stroke(255, 0, 0);
@@ -24,7 +27,7 @@ class UIAxes extends UI3dComponent {
     pg.line(0, 0, 0, 0, 1000, 0);
     pg.stroke(0, 0, 255);
     pg.line(0, 0, 0, 0, 0, 1000);
-  }
+  } 
 
   void keyPressed(KeyEvent keyEvent) {
     if (keyEvent.getKey() == 'x') {
