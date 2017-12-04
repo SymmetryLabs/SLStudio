@@ -4,6 +4,8 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
@@ -20,14 +22,15 @@ import java.util.function.Predicate;
 import static processing.core.PConstants.P3D;
 
 public abstract class P3CubeMapPattern extends SLPattern {
-  private final PGraphics pg;
-  protected final PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
+  private PGraphics pg;
+  protected  PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
   final PVector origin;
   final PVector bboxSize;
-  private final int faceRes;
+  private int faceRes;
 
   private final String id = "" + Math.random();
 
+  CompoundParameter resParam = compoundParam("RES", 200, 64, 512);
   BooleanParameter allSunsParams = booleanParam("ALL", false);
   List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
 
@@ -49,12 +52,34 @@ public abstract class P3CubeMapPattern extends SLPattern {
    * @param lx The global P3LX object.
    * @param origin The center of the bounding box in world space.
    * @param bboxSize The length, width, and height of the bounding box in world space.
-   * @param faceRes The width and height, k, in pixels of one square face of the
+   * @param defaultFaceRes The width and height, k, in pixels of one square face of the
    *     cubemap image, which will have total width 4k and total height 3k.
    */
-  protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int faceRes) {
+  protected P3CubeMapPattern(P3LX lx, PVector origin, PVector bboxSize, int defaultFaceRes) {
     super(lx);
 
+    resParam.setValue(defaultFaceRes);
+    resParam.addListener(new LXParameterListener() {
+      @Override
+      public void onParameterChanged(final LXParameter lxParameter) {
+        faceRes = (int) resParam.getValue();
+        updateGraphics();
+      }
+    });
+
+    this.faceRes = defaultFaceRes;
+    this.updateGraphics();
+
+    this.origin = origin;
+    this.bboxSize = bboxSize;
+
+    for (final Sun sun : model.suns) {
+      sunSwitchParams.add(booleanParam("SUN" + (model.suns.indexOf(sun)+1), true));
+    }
+  }
+
+  private void updateGraphics() {
+    P3LX lx = (P3LX) this.lx;
     this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D);
     this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
@@ -62,13 +87,6 @@ public abstract class P3CubeMapPattern extends SLPattern {
     this.pgR = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgU = lx.applet.createGraphics(faceRes, faceRes, P3D);
     this.pgD = lx.applet.createGraphics(faceRes, faceRes, P3D);
-    this.origin = origin;
-    this.bboxSize = bboxSize;
-    this.faceRes = faceRes;
-
-    for (final Sun sun : model.suns) {
-      sunSwitchParams.add(booleanParam("SUN" + (model.suns.indexOf(sun)+1), true));
-    }
   }
 
   PVector originForSun(final Sun sun) {
