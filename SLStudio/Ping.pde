@@ -317,9 +317,7 @@ public class FlockWave extends SLPattern {
   }
 
   void renderPlasma() {
-    float waveNumber = detail.getValuef();
     float extent = size.getValuef();
-    float rippleSpeed = ripple.getValuef();
     SortedSet<Bird> sortedBirds = getSortedSet(birds);
     Bird low = new Bird(new PVector(0, 0, 0), 0);
     Bird high = new Bird(new PVector(0, 0, 0), 0);
@@ -333,21 +331,33 @@ public class FlockWave extends SLPattern {
       high.pos.x = p.x + extent;
       double sum = 0;
       for (Bird b : sortedBirds.subSet(low, high)) {
-
-        double dx = b.pos.x - p.x;
-        double dy = b.pos.y - p.y;
-        double dz = b.pos.z - p.z;
-        if (Math.abs(dy) < extent) {
-          double sqDist = (dx*dx + dy*dy + dz*dz) / (extent*extent);
-          if (sqDist < 1) {
-            double phase = Math.sqrt(dx*dx + dy*dy + dz*dz*zFactor*zFactor) / extent;
-            double a = 1 - sqDist;
-            sum += a*a*Math.sin(waveNumber * 2 * Math.PI * phase - b.elapsedSec * rippleSpeed)*Math.cos(waveNumber * 5/4 * phase)*b.value;
-          }
-        }
+        sum += renderPlasma(b, p);
       }
       colors[p.index] = pal.getColor(sum + shift);
     }
+  }
+
+  final double renderPlasma(Bird bird, LXPoint point) {
+    float waveNumber = detail.getValuef();
+    float extent = size.getValuef();
+    float rippleSpeed = ripple.getValuef();
+    double zFactor = FastMath.pow(10, zScale.getValuef()/10);
+
+    double dx = bird.pos.x - point.x;
+    double dy = bird.pos.y - point.y;
+    double dz = bird.pos.z - point.z;
+    if (FastMath.abs(dy) < extent) {
+      double sqDist = (dx*dx + dy*dy + dz*dz) / (extent*extent);
+      if (sqDist < 1) {
+        double phase = FastMath.sqrt(dx*dx + dy*dy + dz*dz*zFactor*zFactor) / extent;
+        double a = 1 - sqDist;
+        return a * a * bird.value
+            * FastMath.sin(waveNumber * 2 * FastMath.PI * phase - bird.elapsedSec * rippleSpeed)
+            * FastMath.cos(waveNumber * 5/4 * phase);
+      }
+    }
+
+    return 0;
   }
 
   PVector getRandomUnitVector() {

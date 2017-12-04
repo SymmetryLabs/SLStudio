@@ -123,7 +123,7 @@ public class FlockWaveThreaded extends FlockWave {
     }
   }
 
-  protected void renderBird(final Bird bird, final float[] colorLayer) {
+  void renderBird(final Bird bird, final float[] colorLayer) {
     final double waveNumber = detail.getValue();
     final double extent = size.getValue();
     final double rippleSpeed = ripple.getValue();
@@ -133,20 +133,8 @@ public class FlockWaveThreaded extends FlockWave {
     List<LXPoint> nearbyPoints = modelIndex.pointsWithin(bp, (float)extent);
     //System.out.println("point count: " + nearbyPoints.size());
 
-    nearbyPoints.stream().forEach(new Consumer<LXPoint>() {
-      public void accept(LXPoint point) {
-        double dx = bird.pos.x - point.x;
-        double dy = bird.pos.y - point.y;
-        double dz = bird.pos.z - point.z;
-        double squareDistRatio = (dx * dx + dy * dy + dz * dz) / (extent * extent);
-        if (squareDistRatio < 1) {
-          double phase = FastMath.sqrt(dx * dx + dy * dy + dz * dz * zFactor * zFactor) / extent;
-          double a = 1 - squareDistRatio;
-          colorLayer[point.index] = (float)(a * a * bird.value
-              * FastMath.sin(waveNumber * 2 * Math.PI * phase - bird.elapsedSec * rippleSpeed)
-              * FastMath.cos(waveNumber * 5 / 4 * phase));
-        }
-      }
-    });
+    for (LXPoint point : nearbyPoints) {
+      colorLayer[point.index] = (float)renderPlasma(bird, point);
+    }
   }
 }
