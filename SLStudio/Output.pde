@@ -12,7 +12,13 @@
  *        EXPERTS ONLY!!              EXPERTS ONLY!!
  */
 
-void setupOutputs(final LX lx) {
+import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;void setupOutputs(final LX lx) {
   // final Pixlite testPixlite = setupTestBroadcastPixlite(lx);
   // lx.addOutput(testPixlite);
 
