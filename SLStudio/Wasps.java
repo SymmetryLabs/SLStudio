@@ -3,8 +3,6 @@ package com.symmetrylabs.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.BlobTracker;
-
 public class Wasps extends ParticlePattern {
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
@@ -20,16 +18,8 @@ public class Wasps extends ParticlePattern {
     public final CompoundParameter twistY = new CompoundParameter("twistY", 0.5f, 0, 1);
     public final CompoundParameter twistZ = new CompoundParameter("twistZ", 0.5f, 0, 1);
 
-    //private BlobTracker blobTracker;
-
     public Wasps(LX lx) {
-        this(lx, 10);
-
-        //blobTracker = BlobTracker.getInstance(lx);
-    }
-
-    public Wasps(LX lx, int countValue) {
-        super(lx, countValue);
+        super(lx);
 
         addParameter(accel);
         addParameter(dampen);
@@ -49,7 +39,7 @@ public class Wasps extends ParticlePattern {
         p.pos[0] = (float)(2 * Math.random() - 1);
         p.pos[1] = (float)(2 * Math.random() - 1);
         p.pos[2] = (float)(2 * Math.random() - 1);
-        //System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
+        System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
     }
 
     @Override

@@ -154,7 +154,34 @@ public class FixedWidthOctree<T> {
     }
 
     public T nearest(float x, float y, float z) {
-        return null;
+        int index = 0;
+        if (x < centerX) index |= 1;
+        if (y < centerY) index |= 2;
+        if (z < centerZ) index |= 4;
+
+        FixedWidthOctree<T> child = children[index];
+        if (child == null || child.totalPointCount() == 0) {
+            Entry<T> nearestEntry = null;
+            float nearestDistSqr = Float.MAX_VALUE;
+            for (Entry<T> p : points) {
+                float dx = p.x - x;
+                float dy = p.y - y;
+                float dz = p.z - z;
+                float dSqr = dx * dx + dy * dy + dz * dz;
+
+                if (dSqr < nearestDistSqr) {
+                    nearestDistSqr = dSqr;
+                    nearestEntry = p;
+                }
+            }
+
+            if (nearestEntry == null)
+                return null;
+
+            return nearestEntry.object;
+        }
+
+        return child.nearest(x, y, z);
     }
 
     public String dump() {

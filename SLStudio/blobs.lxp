@@ -95,8 +95,8 @@
               "label": "BlobViewer",
               "mode": 1,
               "tolerance": 2.0,
-              "radius": 48.00000563263893,
-              "y": -3.814697265625E-6,
+              "radius": 48,
+              "y": 40,
               "bMrgRad": 30.0,
               "bMaxSpd": 240.0
             },

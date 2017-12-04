@@ -1,3 +1,15 @@
+import heronarts.lx.LX;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.LXDatagram;
+import heronarts.lx.output.LXDatagramOutput;
+import heronarts.lx.output.LXOutputGroup;
+
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 Pixlite[] setupPixlites(LX lx) {
 
   return new Pixlite[] {
@@ -421,7 +433,7 @@ public class ArtNetDatagram extends LXDatagram {
 
   @Override
   public void onSend(int[] colors) {
-    copyPoints(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
+    copyPointsGamma(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
 
     if (this.sequenceEnabled) {
       if (++this.sequence == 0) {
@@ -429,5 +441,18 @@ public class ArtNetDatagram extends LXDatagram {
       }
       this.buffer[SEQUENCE_INDEX] = this.sequence;
     }
+  }
+
+  LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
+    int i = offset;
+    int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
+    for (int index : pointIndices) {
+      int colorValue = (index >= 0) ? colors[index] : 0;
+      this.buffer[i + byteOffset[0]] = (byte) redGamma[((colorValue >> 16) & 0xff)]; // R
+      this.buffer[i + byteOffset[1]] = (byte) greenGamma[((colorValue >> 8) & 0xff)]; // G
+      this.buffer[i + byteOffset[2]] = (byte) blueGamma[(colorValue & 0xff)]; // B
+      i += 3;
+    }
+    return this;
   }
 }

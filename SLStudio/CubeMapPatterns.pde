@@ -1,15 +1,21 @@
+import com.google.common.collect.Lists;
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import java.lang.reflect.Modifier;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.lang.reflect.Modifier;
+import java.util.function.Consumer;
+import java.util.function.Predicate;
 
 public abstract class P3CubeMapPattern extends LXPattern {
   private final PGraphics pg;
@@ -168,6 +174,7 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
             subpattern = subpatternClass.getDeclaredConstructor().newInstance();
           }
           subpattern.init(this.lx, colors, sun, faceRes, sunIndex);
+          addParameter(subpattern.enableParam);
           subpatterns.add(subpattern);
         }
         catch (Exception e) {
@@ -181,9 +188,16 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
   }
 
   @Override
-  public void run(double deltaMs) {
+  public void run(final double deltaMs) {
     for (Subpattern subpattern : subpatterns) {
-      subpattern.run(deltaMs);
+      if (subpattern.enableParam.getValueb()) {
+        subpattern.run(deltaMs);
+      } else {
+        // All black
+        for (LXPoint point : subpattern.sun.points) {
+          colors[point.index] = 0;
+        }
+      }
     }
   }
 
@@ -202,6 +216,8 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
     private final String id = "" + Math.random();
 
     protected int sunIndex;
+
+    public BooleanParameter enableParam;
 
     /**
      * A pattern that projects a cubemap image onto all the LEDs inside a given
@@ -230,13 +246,15 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
       this.sun = sun;
       this.sunIndex = sunIndex;
 
-      PVector origin = new PVector( //<>//
+      this.enableParam = new BooleanParameter("SUN" + (sunIndex+1));
+
+      PVector origin = new PVector( //<>// //<>//
       sun.boundingBox.origin.x + sun.boundingBox.size.x*.5,
       sun.boundingBox.origin.y + sun.boundingBox.size.y*.5,
       sun.boundingBox.origin.z + sun.boundingBox.size.z*.5);
       PVector bboxSize = sun.boundingBox.size;
 
-      this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>//
+      this.pg = lx.applet.createGraphics(faceRes*4, faceRes*3, P3D); //<>// //<>//
       this.pgF = lx.applet.createGraphics(faceRes, faceRes, P3D);
       this.pgB = lx.applet.createGraphics(faceRes, faceRes, P3D);
       this.pgL = lx.applet.createGraphics(faceRes, faceRes, P3D);
@@ -251,13 +269,13 @@ public abstract static class MultiCubeMapPattern extends SLPattern {
 
     private Runnable run = new Runnable() {
       long lastRunAt = System.currentTimeMillis();
- //<>//
+ //<>// //<>//
       @Override
       public void run() {
         double deltaMs = System.currentTimeMillis() - lastRunAt;
         lastRunAt = System.currentTimeMillis();
 
-        //pg.beginDraw(); //<>//
+        //pg.beginDraw(); //<>// //<>//
         Subpattern.this.run(deltaMs, pg);
         //pg.endDraw();
         pg.loadPixels();

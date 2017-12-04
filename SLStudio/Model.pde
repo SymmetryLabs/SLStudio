@@ -1,10 +1,14 @@
-import java.util.Arrays;
+import heronarts.lx.model.LXAbstractFixture;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXTransform;
+import processing.core.PVector;
+
+import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
-import java.util.function.Function;
-import java.util.function.IntFunction;
+import java.util.Map;
 
 final static float INCHES = 1;
 final static float FEET = 12*INCHES;

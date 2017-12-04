@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512272067937,
+  "timestamp": 1512357377581,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -201,6 +201,7 @@
             "modulationColor": -4522240,
             "parameters": {
               "label": "RKPattern01",
+              "audioLink": false,
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
@@ -243,6 +244,7 @@
             "modulationColor": -65438,
             "parameters": {
               "label": "RKPattern03",
+              "audioLink": false,
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
@@ -351,8 +353,8 @@
               "oscBlobs": false,
               "bMrgRad": 30.0,
               "bMaxSpd": 240.0,
-              "x": 1565.1300663796278,
-              "y": 0.0,
+              "x": 1499.66845703125,
+              "y": 0.3999920189380646,
               "z": 78.39824873566795,
               "zScale": 6.299999814480545,
               "spnRad": 100.0,
@@ -368,7 +370,7 @@
               "size": 799.9999901652335,
               "detail": 7.999999910593033,
               "ripple": 0.2000000491738323,
-              "palette": 0,
+              "palette": 7,
               "palStart": 0.25000001676380634,
               "palStop": 1.0,
               "palShift": 0.11999999731779099,
@@ -776,12 +778,12 @@
         "3062": true
       },
       "preview": {
-        "radius": 567.8135746045165,
-        "theta": 2.786999999999994,
-        "phi": 0.3487166738510129,
-        "positionX": 990.0377807617188,
-        "positionY": -84.0250015258789,
-        "positionZ": 1.5145423412322998
+        "radius": 548.2742617777084,
+        "theta": 2.7749999999999937,
+        "phi": 0.39371667385101294,
+        "positionX": 926.0613403320312,
+        "positionY": -73.80000305175781,
+        "positionZ": -15.951504707336426
       }
     }
   }
