@@ -133,6 +133,6 @@ PaletteLibrary initializePaletteLibrary() {
 
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
-  //DrawHelper.runAll();
+  DrawHelper.runAll();
   dispatcher.draw();
 }

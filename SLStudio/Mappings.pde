@@ -36,27 +36,33 @@ public class FultonStreetLayout {
   private final Map<String, float[]> positions = new HashMap<String, float[]>();
 
   public FultonStreetLayout() {
-    // Ping, not sure where these numbers came from but feel free to update.
-    positions.put("1",  new float[] {(-21.38-13.15-21.03)*FEET,                       0*FEET, (17.53+13.72-8.31)*FEET});
-    positions.put("2",  new float[] {(21.58+12.61+30.34+13.97+15.10+12.4)*FEET,       0*FEET, (33.83-26.11+22.9-17.21+12.25-14.35)*FEET});
-    positions.put("3",  new float[] {(21.58+12.61+30.34+13.97+15.10+12.4+17.52)*FEET, 0*FEET, (33.83-26.11+22.9-17.21+12.25-14.35+9.92)*FEET});
-    positions.put("4",  new float[] {(-21.38-13.15)*FEET,                             0*FEET, (17.53+13.72)*FEET});
-    positions.put("5",  new float[] {(21.58+12.61+30.34+13.97+15.10)*FEET,            0*FEET, (33.83-26.11+22.9-17.21+12.25)*FEET});
-    positions.put("6",  new float[] {-21.38*FEET,                                     0*FEET, 17.53*FEET});
-    positions.put("7",  new float[] {(21.58+12.61+30.34)*FEET,                        0*FEET, (33.83-26.11+22.9)*FEET});
-    positions.put("8",  new float[] {(21.58+12.61+30.34+13.97)*FEET,                  0*FEET, (33.83-26.11+22.9-17.21)*FEET});
-    positions.put("9",  new float[] {0*FEET,                                          0*FEET, 0*FEET});
-    positions.put("10", new float[] {21.58*FEET,                                      0*FEET, 33.83*FEET});
-    positions.put("11", new float[] {(12.61+21.58)*FEET,                              0*FEET, (33.83-26.11)*FEET});
+    // These are the center positions of the sun stages as measured
+    // photographically using the thermal cameras and perspective
+    // transforms, NOT as measured in real life.  Measurements are
+    // in inches but may be ~12 inches off from real-life distances.
+    // Please talk to Ping if you need to touch this.
+    // Note: y values are set in Sun class by type
+    positions.put("A", new float[] {1456, 0, 200});
+    positions.put("B", new float[] {1243, 0, 96});
+    positions.put("C", new float[] {1104, 0, 269});
+    positions.put("D", new float[] {933, 0, 128});
+    positions.put("E", new float[] {772, 0, 295});
+    positions.put("F", new float[] {395, 0, 58});
+    positions.put("G", new float[] {264, 0, 369});
+    positions.put("H", new float[] {0, 0, 0});  // origin, nearest to power supply
+    positions.put("I", new float[] {-265, 0, 201});
+    positions.put("J", new float[] {-401, 0, 356});
+    positions.put("K", new float[] {-686, 0, 261});
   }
 
-  public float[] getPosition(String id) {
+  public float[] get(String id) {
     return positions.get(id);
   }
 }
 
 public SLModel buildModel() {
   FultonStreetLayout layout = new FultonStreetLayout();
+  final float[] NO_ROTATION = {0, 0, 0};
 
   // Any global transforms
   LXTransform transform = new LXTransform();
@@ -68,7 +74,7 @@ public SLModel buildModel() {
   /* Suns ------------------------------------------------------------*/
   List<Sun> suns = new ArrayList<Sun>();
 
-  suns.add(new Sun("sun1", Sun.Type.ONE_THIRD, layout.getPosition("1"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun1", Sun.Type.ONE_THIRD, layout.get("A"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -91,7 +97,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun2", Sun.Type.ONE_THIRD, layout.getPosition("2"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun2", Sun.Type.ONE_THIRD, layout.get("B"), NO_ROTATION, transform,
     new int[][] { // uncompleted
       { // Top - Front
           0,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -114,7 +120,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun3", Sun.Type.ONE_THIRD, layout.getPosition("3"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun3", Sun.Type.ONE_THIRD, layout.get("K"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -137,7 +143,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun4", Sun.Type.ONE_HALF, layout.getPosition("4"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun4", Sun.Type.ONE_HALF, layout.get("C"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -160,7 +166,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun5", Sun.Type.ONE_HALF, layout.getPosition("5"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun5", Sun.Type.ONE_HALF, layout.get("J"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -183,7 +189,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, layout.getPosition("6"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, layout.get("D"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -216,7 +222,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun7", Sun.Type.TWO_THIRDS, layout.getPosition("7"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun7", Sun.Type.TWO_THIRDS, layout.get("E"), NO_ROTATION, transform,
      new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -249,7 +255,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, layout.getPosition("8"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, layout.get("I"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           0,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -282,7 +288,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun9", Sun.Type.FULL, layout.getPosition("9"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun9", Sun.Type.FULL, layout.get("F"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -323,7 +329,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun10", Sun.Type.FULL, layout.getPosition("10"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun10", Sun.Type.FULL, layout.get("G"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -364,7 +370,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun11", Sun.Type.FULL, layout.getPosition("11"), new float[] {0, 0, 0}, transform,
+  suns.add(new Sun("sun11", Sun.Type.FULL, layout.get("H"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10

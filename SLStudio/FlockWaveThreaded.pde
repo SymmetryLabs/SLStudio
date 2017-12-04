@@ -27,10 +27,8 @@ import com.symmetrylabs.pattern.ThreadedPattern;
 
 public class FlockWaveThreaded extends FlockWave {
 
-  private PVector prevFocus = null;
-  private Set<Bird> birds = new HashSet<Bird>();
-
   private ModelIndex modelIndex;
+  private Map<Bird, float[]> colorLayers = new HashMap<Bird, float[]>();
   private float[] colorValues;
 
   public FlockWaveThreaded(LX lx) {
@@ -48,6 +46,17 @@ public class FlockWaveThreaded extends FlockWave {
   }
 
   @Override
+  Bird spawnBird(PVector focus) {
+    Bird bird = super.spawnBird(focus);
+
+    synchronized (colorLayers) {
+      colorLayers.put(bird, new float[colors.length]);
+    }
+
+    return bird;
+  }
+
+  @Override
   void advanceBirds(final float deltaSec, PVector vel) {
     final PVector targetVel = PVector.mult(vel, speedMult.getValuef());
     birds.parallelStream().forEach(new Consumer<Bird>() {
@@ -58,18 +67,51 @@ public class FlockWaveThreaded extends FlockWave {
   }
 
   @Override
+  List<Bird> removeExpiredBirds() {
+    List<Bird> expired = super.removeExpiredBirds();
+
+    synchronized (colorLayers) {
+      colorLayers.keySet().removeAll(expired);
+    }
+
+    return expired;
+  }
+
+  @Override
   public void run(double deltaMs) {
     System.out.println("deltaMs: " + deltaMs + " / birds: " + birds.size());
 
     //fakeSimulate((float)deltaMs * 0.001f * timeScale.getValuef());
     advanceSimulation((float)deltaMs * 0.001f * timeScale.getValuef());
 
-    Arrays.fill(colorValues, 0);
-
     final List<Bird> birdList = new ArrayList<Bird>(birds);
-    birdList.stream().forEach(new Consumer<Bird>() {
+    final Map<Bird, float[]> layersMap = new HashMap<Bird, float[]>(colorLayers);
+    final List<float[]> layersList = new ArrayList<float[]>(birds.size());
+
+    synchronized (colorLayers) {
+      for (Bird bird : birdList) {
+        if (colorLayers.containsKey(bird)) {
+          layersList.add(colorLayers.get(bird));
+        }
+      }
+    }
+
+    birdList.parallelStream().forEach(new Consumer<Bird>() {
       public void accept(Bird bird) {
-        renderBird(bird);
+        if (layersMap.containsKey(bird)) {
+          renderBird(bird, layersMap.get(bird));
+        }
+      }
+    });
+
+    Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
+      public void accept(LXPoint point) {
+        int c = 0;
+        for (float[] layer : layersList) {
+          c += layer[point.index];
+        }
+
+        colorValues[point.index] = c;
       }
     });
 
@@ -81,7 +123,7 @@ public class FlockWaveThreaded extends FlockWave {
     }
   }
 
-  protected void renderBird(final Bird bird) {
+  void renderBird(final Bird bird, final float[] colorLayer) {
     final double waveNumber = detail.getValue();
     final double extent = size.getValue();
     final double rippleSpeed = ripple.getValue();
@@ -91,20 +133,8 @@ public class FlockWaveThreaded extends FlockWave {
     List<LXPoint> nearbyPoints = modelIndex.pointsWithin(bp, (float)extent);
     //System.out.println("point count: " + nearbyPoints.size());
 
-    nearbyPoints.stream().forEach(new Consumer<LXPoint>() {
-      public void accept(LXPoint p) {
-        double dx = bird.pos.x - p.x;
-        double dy = bird.pos.y - p.y;
-        double dz = bird.pos.z - p.z;
-        double squareDistRatio = (dx * dx + dy * dy + dz * dz) / (extent * extent);
-        if (squareDistRatio < 1) {
-          double phase = FastMath.sqrt(dx * dx + dy * dy + dz * dz * zFactor * zFactor) / extent;
-          double a = 1 - squareDistRatio;
-          colorValues[p.index] += a * a * bird.value
-              * FastMath.sin(waveNumber * 2 * Math.PI * phase - bird.elapsedSec * rippleSpeed)
-              * FastMath.cos(waveNumber * 5 / 4 * phase);
-        }
-      }
-    });
+    for (LXPoint point : nearbyPoints) {
+      colorLayer[point.index] = (float)renderPlasma(bird, point);
+    }
   }
 }

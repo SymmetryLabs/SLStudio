@@ -27,7 +27,7 @@ class UIAxes extends UI3dComponent {
     pg.line(0, 0, 0, 0, 1000, 0);
     pg.stroke(0, 0, 255);
     pg.line(0, 0, 0, 0, 0, 1000);
-  }
+  } 
 
   void keyPressed(KeyEvent keyEvent) {
     if (keyEvent.getKey() == 'x') {
