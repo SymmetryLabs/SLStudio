@@ -106,7 +106,7 @@ public class FlockWaveThreaded extends FlockWave {
 
     Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
       public void accept(LXPoint point) {
-        int c = 0;
+        float c = 0;
         for (float[] layer : layersList) {
           c += layer[point.index];
         }
