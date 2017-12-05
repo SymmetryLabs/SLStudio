@@ -114,7 +114,6 @@ public class BlobViewer extends SLPattern {
 }
 
 public class FlockWave extends SLPatternWithMarkers {
-  // row 1, 9 parameters
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
   BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
@@ -125,7 +124,6 @@ public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter zScale = new CompoundParameter("zScale", 0, -6, 12);  // z scaling factor (dB)
   CompoundParameter maxBirds = new CompoundParameter("maxBirds", 8, 0, 20);  // z scaling factor (dB)
 
-  // row 2, 9 parameters
   CompoundParameter spnRad = new CompoundParameter("spnRad", 100, 0, 400);  // radius (in) within which to spawn birds
   CompoundParameter spnRate = new CompoundParameter("spnRate", 0.2, 0, 2);  // maximum spawn rate (birds/s)
   CompoundParameter spnVary = new CompoundParameter("spnVary", 0, 0, 1);  // vary spawn rate according to focus speed (0 = don't vary, 1 = determine entirely by speed)
@@ -136,7 +134,6 @@ public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
 
-  // row 3, 9 parameters
   CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
   CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
@@ -164,36 +161,39 @@ public class FlockWave extends SLPatternWithMarkers {
     blobFollower = new BlobFollower(blobTracker);
     modelIndex = new LinearModelIndex(lx.model);
 
-    addParameter(timeScale);
     addParameter(oscFollowers);
     addParameter(oscBlobs);
     addParameter(everywhere);
+
+    addParameter(timeScale);
+    addParameter(size);
+    addParameter(detail);
+    addParameter(ripple);
+
     addParameter(x);
     addParameter(y);
     addParameter(z);
     addParameter(zScale);
+
+    addParameter(palette);
+    addParameter(palShift);
+    addParameter(palBias);
+    addParameter(palCutoff);
+
+    addParameter(palStart);
+    addParameter(palStop);
+    addParameter(spnRad);
     addParameter(maxBirds);
 
-    addParameter(spnRad);
     addParameter(spnRate);
     addParameter(spnVary);
     addParameter(scatter);
+
     addParameter(spdMult);
     addParameter(maxSpd);
     addParameter(turnSec);
     addParameter(fadeInSec);
     addParameter(fadeOutSec);
-
-    addParameter(size);
-    addParameter(detail);
-    addParameter(ripple);
-
-    addParameter(palette);
-    addParameter(palStart);
-    addParameter(palStop);
-    addParameter(palShift);
-    addParameter(palBias);
-    addParameter(palCutoff);
   }
 
   public void run(double deltaMs) {
