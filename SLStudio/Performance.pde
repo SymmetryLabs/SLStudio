@@ -51,7 +51,6 @@ class DeckWindow extends UIWindow {
 
     int[] boundCCs = new int[0];
     int[] boundNotes = new int[0];
-    LXMidiRemote remote;
 
 
     DeckWindow(DiscreteParameter sel, int slot, PerformanceManager pm, UI ui, String title, float x, float y, float w, float h) {
@@ -304,8 +303,7 @@ class DeckWindow extends UIWindow {
     }
 
     void bindDeck() {
-        this.remote = apc40Listener.remote;
-        if (remote == null) {
+        if (getRemote() == null) {
             return;
         }
 
@@ -326,9 +324,9 @@ class DeckWindow extends UIWindow {
             UIKnob knob = knobs.get(i);
             LXParameter p = knob.getParameter();
             if (p != null) {
-                remote.sendController(0, knobCCs[i] + 8, 2);
-                remote.bindController(p, 0, knobCCs[i]);
-                // remote.sendController(3, knobCCs[i] + 8, 3);
+                getRemote().sendController(0, knobCCs[i] + 8, 2);
+                getRemote().bindController(p, 0, knobCCs[i]);
+                // getRemote().sendController(3, knobCCs[i] + 8, 3);
             }
         }
 
@@ -336,23 +334,23 @@ class DeckWindow extends UIWindow {
             UISwitch sw = switches.get(i);
             LXParameter p = sw.getParameter();
             if (p != null) {
-                remote.bindNote(p, 0, buttonNotes[i]);
+                getRemote().bindNote(p, 0, buttonNotes[i]);
             }
         }
 
         // for (int i = 0; i < 8; i++) {
-        //     remote.sendController(1, 24 + i, 2);
+        //     getRemote().sendController(1, 24 + i, 2);
         // }
     }
 
     void unbindDeck() {
         for (int cc : boundCCs) {
-            remote.unbindController(0, cc);
-            remote.sendController(0, cc + 8, 0);
+            getRemote().unbindController(0, cc);
+            getRemote().sendController(0, cc + 8, 0);
         }
         for (int note : boundNotes) {
-            remote.unbindNote(0, note);
-            remote.sendNoteOff(0, note);
+            getRemote().unbindNote(0, note);
+            getRemote().sendNoteOff(0, note);
         }
 
     }
@@ -360,6 +358,14 @@ class DeckWindow extends UIWindow {
     void rebindDeck() {
         unbindDeck();
         bindDeck();
+    }
+
+    int getSide() {
+        return slot < 2 ? 0 : 1;
+    }
+
+    LXMidiRemote getRemote() {
+        return apc40Listener.remotes[getSide()];
     }
 }
 
@@ -415,7 +421,8 @@ class PerformanceManager extends LXComponent {
     public DeckWindow[] windows = new DeckWindow[4];
     public UIWindow[] crossfaders = new UIWindow[3];
 
-    int oldDeck = -1;
+    int oldDeckL = -1;
+    int oldDeckR = -1;
 
     UI ui;
 
@@ -620,17 +627,25 @@ class PerformanceManager extends LXComponent {
 
         lFader.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
-                swapDecks();
+                swapDecks(lFader, 0);
+            }
+        });
+
+        rFader.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) {
+                swapDecks(rFader, 1);
             }
         });
 
         if (apc40Listener.hasRemote.isOn()) {
-            bindCommon(apc40Listener.remote);
+            bindCommon(apc40Listener.remotes[0], lFader, 0);
+            bindCommon(apc40Listener.remotes[1], rFader, 1);
         }
         apc40Listener.hasRemote.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
                 if (apc40Listener.hasRemote.isOn()) {
-                    bindCommon(apc40Listener.remote);
+                    bindCommon(apc40Listener.remotes[0], lFader, 0);
+                    bindCommon(apc40Listener.remotes[1], rFader, 1);
                 }
             }
         });
@@ -642,8 +657,9 @@ class PerformanceManager extends LXComponent {
 
     }
 
-    void swapDecks() {
-        int newDeck = lFader.getValuef() < 0.5 ? 0 : 1;
+    void swapDecks(CompoundParameter fader, int side) {
+        int newDeck = getWindowIndex(side);
+        int oldDeck = side == 0 ? oldDeckL : oldDeckR;
         if (newDeck == oldDeck) {
             return;
         }
@@ -652,17 +668,24 @@ class PerformanceManager extends LXComponent {
             windows[oldDeck].unbindDeck();
             windows[oldDeck].setBackgroundColor(ui.theme.getDeviceBackgroundColor());
         }
-        if (apc40Listener.remote != null) {
-            windows[newDeck].bindDeck();
+        windows[newDeck].bindDeck();
+        if (side == 0) {
+            oldDeckL = newDeck;
+        } else {
+            oldDeckR = newDeck;
         }
-        oldDeck = newDeck;
     }
 
-    void bindCommon(LXMidiRemote remote) {
-        remote.bindController(lFader, 0, 15);
+    void bindCommon(LXMidiRemote remote, CompoundParameter fader, int side) {
+        if (remote == null) return;
+        remote.bindController(fader, 0, 15);
         remote.bindController(lx.engine.output.brightness, 0, 14);
-        remote.bindController(lx.engine.masterChannel.getEffect("Blur").getParameter("amount"), 7, 7);
-        swapDecks();
+        LXEffect e = lx.engine.masterChannel.getEffect("Blur");
+        println("REMOTE", remote, lx.engine.masterChannel, e);
+        if (e != null) {
+            remote.bindController(e.getParameter("amount"), 7, 7);
+        }
+        swapDecks(fader, side);
     }
 
     int getWindowIndex(int side) {
