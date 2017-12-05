@@ -15,11 +15,22 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
   public BooleanParameter enableBlobs;
   public CompoundParameter blobMaxDist;
+  public CompoundParameter blobAffinity;
   public CompoundParameter oscMergeRadius;  // blob merge radius (in)
   public CompoundParameter oscMaxSpeed;  // max blob speed (in/s)
   public CompoundParameter oscMaxDeltaSec;  // max interval to calculate blob velocities (s)
 
-  protected Map<Sun, BlobTracker.Blob> closestBlobs = new HashMap<Sun, BlobTracker.Blob>();
+  protected Map<Sun, BlobDist> sunClosestBlobDists = new HashMap<Sun, BlobDist>();
+
+  protected static class BlobDist {
+    public final BlobTracker.Blob blob;
+    public final double dist;
+
+    public BlobDist(BlobTracker.Blob blob, double dist) {
+      this.blob = blob;
+      this.dist = dist;
+    }
+  }
 
   private BlobTracker blobTracker;
 
@@ -40,6 +51,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
     addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
     addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
+    addParameter(blobAffinity = new CompoundParameter("blobAffinity", 100f, 0, 1000f));
     addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
     addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
     addParameter(oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1));
@@ -72,7 +84,12 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
           }
         }
 
-        closestBlobs.put(sun, closestBlob);
+        if (closestBlob == null) {
+          sunClosestBlobDists.put(sun, null);
+        }
+        else {
+          sunClosestBlobDists.put(sun, new BlobDist(closestBlob, FastMath.sqrt(closestSqrDist)));
+        }
       }
     }
 
@@ -272,11 +289,12 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double focusZValue = focusZ.getValue();
 
       if (enableBlobs.getValueb()) {
-        BlobTracker.Blob closestBlob = closestBlobs.get(sun);
+        BlobDist closestBlob = sunClosestBlobDists.get(sun);
         if (closestBlob != null) {
-          focusXValue = (closestBlob.pos.x - model.cx) * 2f / model.xRange;
-          focusYValue = (closestBlob.pos.y - model.cy) * 2f / model.yRange;
-          focusZValue = (closestBlob.pos.z - model.cz) * 2f / model.zRange;
+          double scale = blobAffinity.getValue() / (closestBlob.dist + 1);
+          focusXValue = scale * (closestBlob.blob.pos.x - model.cx) * 2f / model.xRange;
+          focusYValue = scale * (closestBlob.blob.pos.y - model.cy) * 2f / model.yRange;
+          focusZValue = scale * (closestBlob.blob.pos.z - model.cz) * 2f / model.zRange;
         }
       }
 
