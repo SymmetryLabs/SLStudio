@@ -71,6 +71,7 @@ public class FultonStreetLayout {
 public SLModel buildModel() {
   FultonStreetLayout layout = new FultonStreetLayout();
   final float[] NO_ROTATION = {0, 0, 0};
+  final float[] FLIP_180 = {0, 180, 0};
 
   // Any global transforms
   LXTransform transform = new LXTransform();
@@ -105,7 +106,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun2", Sun.Type.ONE_THIRD, layout.get("B"), NO_ROTATION, transform,
+  suns.add(new Sun("sun2", Sun.Type.ONE_THIRD, layout.get("B"), FLIP_180, transform,
     new int[][] { // uncompleted
       { // Top - Front
           0,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -197,7 +198,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, layout.get("D"), NO_ROTATION, transform,
+  suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, layout.get("D"), FLIP_180, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
@@ -230,7 +231,7 @@ public SLModel buildModel() {
     }
   ));
 
-  suns.add(new Sun("sun7", Sun.Type.TWO_THIRDS, layout.get("E"), NO_ROTATION, transform,
+  suns.add(new Sun("sun7", Sun.Type.TWO_THIRDS, layout.get("E"), FLIP_180, transform,
      new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
