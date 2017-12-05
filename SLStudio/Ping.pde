@@ -114,8 +114,9 @@ public class BlobViewer extends SLPattern {
 
 public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
-  BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
-  BooleanParameter oscFollowers = new BooleanParameter("oscFollow");
+  BooleanParameter oscBlobs = new BooleanParameter("blobs");
+  BooleanParameter oscFollowers = new BooleanParameter("folwrs");
+  BooleanParameter spawnFixedRate = new BooleanParameter("spnFix");
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
@@ -124,8 +125,8 @@ public class FlockWave extends SLPatternWithMarkers {
 
   CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
   CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
-  CompoundParameter spawnRadius = new CompoundParameter("spnRad", 100, 0, 200);  // radius (in) within which to spawn birds
-  CompoundParameter density = new CompoundParameter("density", 0.2, 0, 0.5);  // maximum spawn rate (birds/s)
+  CompoundParameter spawnRadius = new CompoundParameter("spnRad", 100, 0, 400);  // radius (in) within which to spawn birds
+  CompoundParameter density = new CompoundParameter("density", 0.2, 0, 2);  // maximum spawn rate (birds/s)
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (in/s)
   CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
   CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
@@ -146,6 +147,7 @@ public class FlockWave extends SLPatternWithMarkers {
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
+  float numToSpawn = 0f;
 
   private BlobTracker blobTracker;
   private BlobFollower blobFollower;
@@ -162,6 +164,7 @@ public class FlockWave extends SLPatternWithMarkers {
     addParameter(timeScale);
     addParameter(oscBlobs);
     addParameter(oscFollowers);
+    addParameter(spawnFixedRate);
     addParameter(x);
     addParameter(y);
     addParameter(z);
@@ -192,7 +195,6 @@ public class FlockWave extends SLPatternWithMarkers {
   }
 
   public void run(double deltaMs) {
-    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     blobFollower.advance((float) deltaMs * 0.001);
     render();
@@ -228,7 +230,22 @@ public class FlockWave extends SLPatternWithMarkers {
   }
   
   Collection<Marker> getMarkers() {
-    return blobFollower.getMarkers();
+    List<Marker> markers = new ArrayList<Marker>();
+    if (oscFollowers.isOn()) {
+      markers.addAll(blobFollower.getMarkers());
+    } else {
+      for (Bird bird : birds) {
+        markers.add(new Octahedron(bird.pos, 1 + bird.value*12, 0x00ffff));
+      }
+      if (oscBlobs.isOn()) {
+        for (BlobTracker.Blob b : blobTracker.getBlobs()) {
+          markers.add(new OctahedronWithArrow(b.pos, spawnRadius.getValuef(), 0xff0080, b.vel, 0x8000ff));
+        }
+      } else {
+        markers.add(new Octahedron(new PVector(x.getValuef(), y.getValuef(), z.getValuef()), spawnRadius.getValuef(), 0x00ff00));
+      }
+    }
+    return markers;
   }
 
   void updateBlobTrackerParameters() {
@@ -239,25 +256,36 @@ public class FlockWave extends SLPatternWithMarkers {
     float spawnMin = spawnMinSpeed.getValuef();
     float spawnMax = spawnMaxSpeed.getValuef();
     float speed = vel.mag();
-    float numToSpawn = deltaSec * density.getValuef() * weight * (speed - spawnMin) / (spawnMax - spawnMin);
-
-    List<Bird> newBirds = new ArrayList<Bird>();
+    
+    if (spawnFixedRate.isOn()) {
+      numToSpawn += deltaSec * density.getValuef();
+    } else {
+      float spawnFactor = (speed - spawnMin) / (spawnMax - spawnMin);
+      if (spawnFactor > 0f) {
+        numToSpawn += deltaSec * density.getValuef() * weight * spawnFactor;
+      }
+    }
 
     while (numToSpawn >= 1.0) {
       spawnBird(focus);
       numToSpawn -= 1.0;
     }
-    if (FastMath.random() < numToSpawn) {
-      spawnBird(focus);
+    
+    if (!spawnFixedRate.isOn()) {
+      if (FastMath.random() < numToSpawn) {
+        spawnBird(focus);
+      }
+      numToSpawn = 0;
     }
   }
 
   void spawnBird(PVector focus) {
-    if (birds.size() >= maxBirds.getValue()) return;
-    PVector pos = getRandomUnitVector();
-    pos.mult(spawnRadius.getValuef());
-    pos.add(focus);
-    birds.add(new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100)));
+    if ((birds.size() + 1) <= maxBirds.getValue()) {
+      PVector pos = getRandomUnitVector();
+      pos.mult(spawnRadius.getValuef());
+      pos.add(focus);
+      birds.add(new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100)));
+    }
   }
 
   void advanceBirds(float deltaSec, PVector vel) {
@@ -290,7 +318,7 @@ public class FlockWave extends SLPatternWithMarkers {
   void removeExpiredBirds() {
     List<Bird> expired = new ArrayList<Bird>();
     for (Bird b : birds) {
-      if (b.hasExpired) {
+      if (b.expired) {
         expired.add(b);
       }
     }
@@ -424,7 +452,7 @@ public class FlockWave extends SLPatternWithMarkers {
     public int rgb;
     public float value;
     public float elapsedSec;
-    public boolean hasExpired;
+    public boolean expired;
     public double[] renderedValues;
 
     Bird(PVector pos, int rgb) {
@@ -433,7 +461,7 @@ public class FlockWave extends SLPatternWithMarkers {
       this.rgb = rgb;
       this.value = 0;
       this.elapsedSec = 0;
-      this.hasExpired = false;
+      this.expired = false;
       this.renderedValues = new double[colors.length];
     }
 
@@ -445,8 +473,8 @@ public class FlockWave extends SLPatternWithMarkers {
       if (elapsedSec < fadeInSec.getValuef()) {
         value = elapsedSec / fadeInSec.getValuef();
       } else {
-        value = (float)FastMath.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
-        if (value < 0.001) hasExpired = true;
+        value = (float) FastMath.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
+        if (value < 0.004) expired = true;
       }
     }
 
