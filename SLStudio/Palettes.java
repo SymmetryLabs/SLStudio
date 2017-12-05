@@ -113,8 +113,16 @@ class ArrayPalette implements ColorPalette {
     ArrayPalette(int[] colors) {
         this.colors = new int[colors.length];
         for (int i = 0; i < colors.length; i++) {
-            this.colors[i] = 0xff000000 | colors[i];
+            this.colors[i] = 0xff000000 | colors[i]; 
         }
+    }
+    
+    public String toString() {
+        String result = "";
+        for (int i = 0; i < colors.length; i++) {
+            result += String.format("0x%06x, ", colors[i] & 0xffffff);
+        }
+        return "ArrayPalette(new int[] {" + result.substring(0, result.length() - 2) + "})";
     }
 
     double clamp(double value, double low, double high) {

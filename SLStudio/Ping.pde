@@ -450,6 +450,15 @@ public class FlockWave extends SLPatternWithMarkers {
     }
   }
 
+  void setPalette(String name) {
+    String[] options = palette.getOptions();
+    for (int i = 0; i < options.length; i++) {
+      if (options[i].equals(name)) {
+        palette.setValue(i);
+      }
+    }
+  }
+
   public class Bird implements Comparable<Bird> {
     public PVector pos;
     public PVector vel;
@@ -522,7 +531,7 @@ public class FlockWaveBlues extends FlockWave {
     parameters.get("palShift").setValue(0);
     parameters.get("palStart").setValue(0);
     parameters.get("palStop").setValue(1);
-    parameters.get("palette").setValue(8);
+    setPalette("jupiter1");
     parameters.get("ripple").setValue(0.600);
     parameters.get("scatter").setValue(300.000);
     parameters.get("size").setValue(620.000);
@@ -557,7 +566,7 @@ public class FlockWaveFiery extends FlockWave {
     parameters.get("palShift").setValue(0);
     parameters.get("palStart").setValue(0.250);
     parameters.get("palStop").setValue(1);
-    parameters.get("palette").setValue(25);
+    setPalette("sky.red");
     parameters.get("ripple").setValue(0.600);
     parameters.get("scatter").setValue(150.000);
     parameters.get("size").setValue(500.000);
@@ -572,6 +581,41 @@ public class FlockWaveFiery extends FlockWave {
     parameters.get("y").setValue(0.400);
     parameters.get("z").setValue(78.398);
     parameters.get("zScale").setValue(5.580);
+  }
+}
+
+public class FlockWaveGalaxies extends FlockWave {
+  public FlockWaveGalaxies(LX lx) {
+    super(lx);
+
+    parameters.get("blobs").setValue(0);
+    parameters.get("density").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("folwrs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.400);
+    parameters.get("palCutoff").setValue(0.320);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    setPalette("galaxies");
+    parameters.get("ripple").setValue(0.400);
+    parameters.get("scatter").setValue(130.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnFix").setValue(1);
+    parameters.get("spnMax").setValue(0);
+    parameters.get("spnMin").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.090);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300.000);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(6.300);
   }
 }
 
@@ -592,7 +636,7 @@ public class FlockWaveMercury extends FlockWave {
     parameters.get("palShift").setValue(0);
     parameters.get("palStart").setValue(0);
     parameters.get("palStop").setValue(1);
-    parameters.get("palette").setValue(10);
+    setPalette("lake");
     parameters.get("ripple").setValue(0.600);
     parameters.get("scatter").setValue(200.000);
     parameters.get("size").setValue(340.000);
@@ -627,7 +671,7 @@ public class FlockWaveOoze extends FlockWave {
     parameters.get("palShift").setValue(0.120);
     parameters.get("palStart").setValue(0.250);
     parameters.get("palStop").setValue(1);
-    parameters.get("palette").setValue(21);
+    setPalette("sky.orange");
     parameters.get("ripple").setValue(0.400);
     parameters.get("scatter").setValue(150.000);
     parameters.get("size").setValue(560.000);
@@ -662,7 +706,7 @@ public class FlockWavePlanets extends FlockWave {
     parameters.get("palShift").setValue(0.080);
     parameters.get("palStart").setValue(0);
     parameters.get("palStop").setValue(0.840);
-    parameters.get("palette").setValue(24);
+    setPalette("sky.purple");
     parameters.get("ripple").setValue(-3.600);
     parameters.get("scatter").setValue(150.000);
     parameters.get("size").setValue(560.000);
@@ -697,7 +741,7 @@ public class FlockWaveTimewarp extends FlockWave {
     parameters.get("palShift").setValue(0.120);
     parameters.get("palStart").setValue(0.250);
     parameters.get("palStop").setValue(1);
-    parameters.get("palette").setValue(28);
+    setPalette("sun2");
     parameters.get("ripple").setValue(0.600);
     parameters.get("scatter").setValue(300.000);
     parameters.get("size").setValue(560.000);

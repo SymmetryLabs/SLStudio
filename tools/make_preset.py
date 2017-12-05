@@ -31,7 +31,9 @@ public class %s extends %s {
 }
 ''' % (name, pattern, name, get_presets(data, pattern).strip().replace('\n', '\n    '))
 
-for path in sys.argv[1:]:
-    print(path)
+args = sys.argv[1:]
+pattern = args.pop(0)
+for path in args:
+    name = pattern + os.path.basename(path).split('.')[0].capitalize()
     data = json.load(open(path))
-    print(get_derived_class(data, 'FlockWave', os.path.basename(path)))
+    print(get_derived_class(data, pattern, name))
