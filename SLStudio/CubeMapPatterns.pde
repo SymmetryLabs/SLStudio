@@ -27,7 +27,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
   protected  PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
   final PVector origin;
   final PVector bboxSize;
-  private int faceRes;
+  protected int faceRes;
 
   private final String id = "" + Math.random();
 

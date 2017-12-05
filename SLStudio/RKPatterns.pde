@@ -13,8 +13,6 @@ import static processing.core.PConstants.*;
 
 public class RKPatternTest extends P3CubeMapPattern {
 
-  int faceRes = 200;
-
   public RKPatternTest(LX lx) {
 
     super((P3LX) lx, new PVector(lx.model.cx, lx.model.cy, lx.model.cz), new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange), 200);
@@ -102,8 +100,6 @@ public class RKPattern01 extends P3CubeMapPattern {
   CompoundParameter speed = new CompoundParameter("speed", PI, -TWO_PI*2, TWO_PI*2);
   CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
   CompoundParameter nDsp = new CompoundParameter("nDsp", 1, .125, 2.5);
-
-  int faceRes = 200;
 
   int ringRes = 40, ringAmt = 20, pRingAmt = 20;
   float l1 = 600, l2 = 600, l3 = 600;
@@ -356,7 +352,6 @@ public class RKPattern02 extends P3CubeMapPattern {
   CompoundParameter dsp = new CompoundParameter("dsp", 1, 0, 2);
   BooleanParameter edge = new BooleanParameter("show edge", true);
 
-  int faceRes = 200;
   ArrayList <Arc> arcs;
   float f, fT, fTIncre;
   float l1 = 600, l2 = 600, l3 = 600;
@@ -778,8 +773,6 @@ public class RKPattern03 extends P3CubeMapPattern {
   CompoundParameter speed = new CompoundParameter("speed", .01, 0, .05);
   CompoundParameter fragment = new CompoundParameter("fragment", .5, 0, 1);
 
-  int faceRes = 200;
-
   Vtx [][] rootVts;
   int iCSCols = 5, iCSRows = 4;
   float gF, thetaF, phiF, fragMid;
@@ -1181,8 +1174,6 @@ public class RKPattern04 extends P3CubeMapPattern {
   CompoundParameter h2 = new CompoundParameter("hue2", 85, 0, 255);
   CompoundParameter h3 = new CompoundParameter("hue3", 170, 0, 255);
 
-  int faceRes = 200;
-
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
   boolean clearBg;
 
@@ -1555,7 +1546,6 @@ public class RKPattern05 extends P3CubeMapPattern {
   CompoundParameter h2 = new CompoundParameter("hue2", 85, 0, 255);
   CompoundParameter h3 = new CompoundParameter("hue3", 170, 0, 255);
 
-  int faceRes = 200;
   boolean clearBg;
 
   float rotX, rotXT, rotY, rotYT, rotZ, rotZT;
