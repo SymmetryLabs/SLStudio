@@ -112,9 +112,10 @@ public class BlobViewer extends SLPattern {
   }
 }
 
-public class FlockWave extends SLPattern {
+public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
+  BooleanParameter oscFollowers = new BooleanParameter("oscFollow");
   CompoundParameter oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100);  // blob merge radius (in)
   CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 360, 0, 1000);  // max blob speed (in/s)
   CompoundParameter oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1);  // max interval to calculate blob velocities (s)
@@ -149,16 +150,19 @@ public class FlockWave extends SLPattern {
   Set<Bird> birds = new HashSet<Bird>();
 
   private BlobTracker blobTracker;
+  private BlobFollower blobFollower;
   private ModelIndex modelIndex;
 
   public FlockWave(LX lx) {
     super(lx);
 
     blobTracker = BlobTracker.getInstance(lx);
+    blobFollower = new BlobFollower(blobTracker);
     modelIndex = new LinearModelIndex(lx.model);
 
     addParameter(timeScale);
     addParameter(oscBlobs);
+    addParameter(oscFollowers);
     addParameter(oscMergeRadius);
     addParameter(oscMaxSpeed);
     addParameter(x);
@@ -192,6 +196,7 @@ public class FlockWave extends SLPattern {
   public void run(double deltaMs) {
     //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
+    blobFollower.advance((float) deltaMs * 0.001);
     render();
   }
 
@@ -222,6 +227,10 @@ public class FlockWave extends SLPattern {
     }
 
     removeExpiredBirds();
+  }
+  
+  Collection<Marker> getMarkers() {
+    return blobFollower.getMarkers();
   }
 
   void updateBlobTrackerParameters() {
@@ -293,7 +302,19 @@ public class FlockWave extends SLPattern {
   }
 
   void render() {  // choose a rendering style
-    renderPlasma();
+    if (oscFollowers.isOn()) {
+      List<Bird> followBirds = new ArrayList<Bird>();
+      for (BlobFollower.Follower f : blobFollower.getFollowers()) {
+        Bird b = new Bird(f.pos, 0);
+        b.vel = f.vel;
+        b.value = f.value;
+        b.elapsedSec = f.ageSec;
+        followBirds.add(b);
+      }
+      renderPlasma(followBirds);
+    } else {
+      renderPlasma(birds);
+    }
   }
 
   void renderTrails() {
@@ -344,7 +365,7 @@ public class FlockWave extends SLPattern {
     return pal;
   }
 
-  void renderPlasma() {
+  void renderPlasma(final Collection<Bird> birds) {
     birds.parallelStream().forEach(new Consumer<Bird>() {
       public void accept(Bird bird) {
         renderPlasmaLayer(bird);
@@ -405,7 +426,6 @@ public class FlockWave extends SLPattern {
   public class Bird implements Comparable<Bird> {
     public PVector pos;
     public PVector vel;
-    public PVector prevPos;
     public int rgb;
     public float value;
     public float elapsedSec;
@@ -436,7 +456,6 @@ public class FlockWave extends SLPattern {
     }
 
     void advance(float deltaSec) {
-      prevPos = pos;
       pos.add(PVector.mult(vel, (float) deltaSec));
     }
 
