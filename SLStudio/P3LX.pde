@@ -177,13 +177,13 @@ public class LXStudio extends P3LX {
 
       if (lx == null || lx.engine == null || lx.engine.midi == null) return;
 
-      lx.engine.midi.whenReady(new Runnable() {
-        public void run() {
-          for (final LXMidiSurface s : lx.engine.midi.surfaces) {
-            s.enabled.setValue(!performanceMode);
-          }
-        }
-      });
+      // lx.engine.midi.whenReady(new Runnable() {
+      //   public void run() {
+      //     for (final LXMidiSurface s : lx.engine.midi.surfaces) {
+      //       s.enabled.setValue(!performanceMode);
+      //     }
+      //   }
+      // });
 
       if (performanceMode) {
         performanceManager.windows[performanceManager.getWindowIndex(0)].rebindDeck();

@@ -10,6 +10,7 @@ class APC40Listener extends LXComponent {
     lx.engine.midi.whenReady(new Runnable() {
       public void run() {
         bind();
+
       }
     });
   }
@@ -53,6 +54,17 @@ class APC40Listener extends LXComponent {
   }
 
   void bind() {
+    for (final LXMidiSurface s : lx.engine.midi.surfaces) {
+      s.enabled.setValue(false);
+      s.enabled.addListener(new LXParameterListener() {
+          public void onParameterChanged(LXParameter parameter) {
+            if (s.enabled.isOn()) {
+              s.enabled.setValue(false);
+            }
+          }
+      });
+    }
+    
     LXMidiInput chosenInput = lx.engine.midi.matchInput("APC40");
     LXMidiOutput chosenOutput = lx.engine.midi.matchOutput("APC40");
 
