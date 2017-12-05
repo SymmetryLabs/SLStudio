@@ -26,12 +26,10 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
   protected class BlobDist {
     public final BlobTracker.Blob blob;
     public final double dist;
-    public final double scale;
 
     public BlobDist(BlobTracker.Blob blob, double dist) {
       this.blob = blob;
       this.dist = dist;
-      this.scale = blobAffinity.getValue() / (dist + 1);
     }
   }
 
@@ -64,9 +62,9 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
         continue;
 
       markers.add(new OctahedronWithArrow(bd.blob.pos, 20, LXColor.WHITE,
-          new PVector((float)(-bd.scale * (bd.blob.pos.x - sun.cx)),
-              (float)(-bd.scale * (bd.blob.pos.y - sun.cy)),
-              (float)(-bd.scale * (bd.blob.pos.z - sun.cz))), LXColor.RED
+          new PVector((float)(-(bd.blob.pos.x - sun.cx)),
+              (float)(-(bd.blob.pos.y - sun.cy)),
+              (float)(-(bd.blob.pos.z - sun.cz))), LXColor.RED
       ));
     }
 
@@ -123,6 +121,11 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
         else {
           sunClosestBlobDists.put(sun, new BlobDist(closestBlob, FastMath.sqrt(closestSqrDist)));
         }
+      }
+    }
+    else {
+      for (Sun sun : model.suns) {
+        sunClosestBlobDists.put(sun, null);
       }
     }
 
@@ -317,16 +320,22 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double twistYValue = 0.005 * twistY.getValue();
       double twistZValue = 0.005 * twistZ.getValue();
 
-      double focusXValue = focusX.getValue();
-      double focusYValue = focusY.getValue();
-      double focusZValue = focusZ.getValue();
+      double focusPosX = focusX.getValue();
+      double focusPosY = focusY.getValue();
+      double focusPosZ = focusZ.getValue();
+
+      double blobPosX = 0;
+      double blobPosY = 0;
+      double blobPosZ = 0;
+      double blobScale = 0;
 
       if (enableBlobs.getValueb()) {
         BlobDist closestBlob = sunClosestBlobDists.get(sun);
         if (closestBlob != null) {
-          focusXValue = closestBlob.scale * (closestBlob.blob.pos.x - sun.cx) * 2f / sun.xRange;
-          focusYValue = closestBlob.scale * (closestBlob.blob.pos.y - sun.cy) * 2f / sun.yRange;
-          focusZValue = closestBlob.scale * (closestBlob.blob.pos.z - sun.cz) * 2f / sun.zRange;
+          blobPosX = (closestBlob.blob.pos.x - sun.cx) * 2f / sun.xRange;
+          blobPosY = (closestBlob.blob.pos.y - sun.cy) * 2f / sun.yRange;
+          blobPosZ = (closestBlob.blob.pos.z - sun.cz) * 2f / sun.zRange;
+          blobScale = 0.01 * blobAffinity.getValue() / (closestBlob.dist + 1);
         }
       }
 
@@ -341,16 +350,23 @@ public static class PerSunWasps extends PerSunParticlePattern {
         p.vel[1] += accelValue * (Math.random() - .5);
         p.vel[2] += accelValue * (Math.random() - .5);
 
-        double pullVecX = focusXValue - p.pos[0];
-        double pullVecY = focusYValue - p.pos[1];
-        double pullVecZ = focusZValue - p.pos[2];
+        double pullVecX = focusPosX - p.pos[0];
+        double pullVecY = focusPosY - p.pos[1];
+        double pullVecZ = focusPosZ - p.pos[2];
 
         p.vel[0] += pullXValue * pullVecX;
         p.vel[1] += pullYValue * pullVecY;
         p.vel[2] += pullZValue * pullVecZ;
 
-        // NOTE: assuming left-handed Z-axis
+        double blobVecX = blobPosX - p.pos[0];
+        double blobVecY = blobPosY - p.pos[1];
+        double blobVecZ = blobPosZ - p.pos[2];
 
+        p.vel[0] += blobScale * blobVecX;
+        p.vel[1] += blobScale * blobVecY;
+        p.vel[2] += blobScale * blobVecZ;
+
+        // NOTE: assuming left-handed Z-axis
         double pullNorm = Math.sqrt(pullVecX * pullVecX + pullVecY * pullVecY + pullVecZ * pullVecZ);
 
         double twistXVecX = 0;
