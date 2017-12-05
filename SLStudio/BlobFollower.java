@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import processing.core.PVector;
-import net.jafama.FastMath;
+import org.apache.commons.math3.util.FastMath;
 
 public class BlobFollower implements MarkerSource {
     BlobTracker tracker;

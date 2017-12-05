@@ -15,7 +15,7 @@ import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
-import net.jafama.FastMath;
+import org.apache.commons.math3.util.FastMath;
 import processing.core.PGraphics;
 import processing.core.PVector;
 import processing.event.KeyEvent;

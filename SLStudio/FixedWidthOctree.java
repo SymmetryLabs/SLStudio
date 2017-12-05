@@ -9,7 +9,7 @@ import java.util.function.Function;
 import java.util.function.Consumer;
 import java.util.function.Predicate;
 
-import net.jafama.FastMath;
+import org.apache.commons.math3.util.FastMath;
 
 public class FixedWidthOctree<T> {
     private final int depth;
