@@ -244,7 +244,7 @@ public static class Sun extends LXModel {
     }
   }
 
-  void copyFromMasterSun() {
+  void copyFromMasterSun(int[] colors) {
     if (masterIndexes != null) {
       for (int i = 0; i < points.length; i++) {
         colors[points[i].index] = colors[masterIndexes[i]];
