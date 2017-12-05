@@ -41,6 +41,7 @@ public static class SLModel extends LXModel {
   // Suns
   public final List<Sun> suns;
   private final Map<String, Sun> sunTable;
+  public final Sun masterSun;
 
   // Slices
   public final List<Slice> slices;
@@ -48,6 +49,12 @@ public static class SLModel extends LXModel {
 
   // Strips
   public final List<Strip> strips;
+
+  public final int NUM_POINT_BATCHES = 16;
+
+  // Array of points stored as contiguous floats for performance
+  private final float[] pointsArray;
+  private final List<PointBatch> pointBatches = new ArrayList<PointBatch>(NUM_POINT_BATCHES);
 
   public SLModel(List<Sun> suns) {
     super(new Fixture(suns));
@@ -78,6 +85,14 @@ public static class SLModel extends LXModel {
       }
     }
 
+    masterSun = _sunTable.get("sun9"); // a full sun
+    for (Sun sun : suns) {
+      if (sun != masterSun) {
+        sun.computeMasterIndexes(masterSun);
+        println("computed master indexes for " + sun.id);
+      }
+    }
+
     this.objModels  = new ArrayList<LXModel>();
     
     // Suns
@@ -90,6 +105,21 @@ public static class SLModel extends LXModel {
 
     // Strips
     this.strips     = Collections.unmodifiableList(stripList);
+
+    this.pointsArray = new float[this.points.length * 3];
+    for (int i = 0; i < this.points.length; i++) {
+      LXPoint point = this.points[i];
+      this.pointsArray[3 * i] = point.x;
+      this.pointsArray[3 * i + 1] = point.y;
+      this.pointsArray[3 * i + 2] = point.z;
+    }
+
+    int batchStride = ceil(this.points.length / NUM_POINT_BATCHES);
+    for (int i = 0; i < NUM_POINT_BATCHES; i++) {
+      int start = i * batchStride;
+      int end = min(start + batchStride, this.points.length - 1);
+      this.pointBatches.add(new PointBatch(start, end));
+    }
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -109,6 +139,27 @@ public static class SLModel extends LXModel {
   public Slice getSliceById(String id) {
     return this.sliceTable.get(id);
   }
+
+  public void forEachPoint(final BatchConsumer consumer) {
+    this.pointBatches.parallelStream().forEach(new Consumer<PointBatch>() {
+      public void accept(PointBatch batch) {
+        consumer.accept(batch.start, batch.end);
+      }
+    });
+  }
+
+  private class PointBatch {
+    int start;
+    int end;
+    PointBatch(int start, int end) {
+      this.start = start;
+      this.end = end;
+    }
+  }
+}
+
+public static interface BatchConsumer {
+  public void accept(int start, int end);
 }
 
 public static class BoundingBox {
@@ -137,6 +188,9 @@ public static class Sun extends LXModel {
   public final PVector center;
   public final float[] distances;
 
+  public Sun masterSun;
+  public int[] masterIndexes;
+
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform, int[][] numPointsPerStrip) {
     super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
     Fixture fixture = (Fixture)this.fixtures.get(0);
@@ -154,6 +208,40 @@ public static class Sun extends LXModel {
 
     computeBoundingBox();
     distances = computeDistances();
+  }
+
+  void computeMasterIndexes(Sun masterSun) {
+    this.masterSun = masterSun;
+    masterIndexes = new int[points.length];
+    float cx = center.x;
+    float cy = center.y;
+    float cz = center.z;
+    float mcx = masterSun.center.x;
+    float mcy = masterSun.center.y;
+    float mcz = masterSun.center.z;
+    for (int i = 0; i < points.length; i++) {
+      float minSqDist = 1e18;
+      masterIndexes[i] = 0;
+      float px = (points[i].x - cx);
+      float py = (points[i].y - cy);
+      float pz = (points[i].z - cz);
+      float xLow = px - 24;
+      float xHigh = px + 24;
+      for (int j = 0; j < masterSun.points.length; j++) {
+        LXPoint masterPoint = masterSun.points[j];
+        float mx = masterPoint.x - mcx;
+        if (mx > xLow && mx < xHigh) {
+          float dx = px - mx;
+          float dy = py - (masterPoint.y - mcy);
+          float dz = pz - (masterPoint.z - mcz);
+          float sqDist = dx*dx + dy*dy + dz*dz;
+          if (sqDist < minSqDist) {
+            minSqDist = sqDist;
+            masterIndexes[i] = masterPoint.index;
+          }
+        }
+      }
+    }
   }
 
   void computeBoundingBox() {
