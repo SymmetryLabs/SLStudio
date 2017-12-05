@@ -885,33 +885,15 @@ public class RipplePads extends SLPattern {
   CompoundParameter nextHue = new CompoundParameter("nextHue", 0, 0, 360);
   CompoundParameter nextSat = new CompoundParameter("nextSat", 0, 0, 1);
 
-  BooleanParameter sunA = new BooleanParameter("sunA");
-  BooleanParameter sunB = new BooleanParameter("sunB");
-  BooleanParameter sunC = new BooleanParameter("sunC");
-  BooleanParameter sunD = new BooleanParameter("sunD");
-  BooleanParameter sunE = new BooleanParameter("sunE");
-  BooleanParameter sunF = new BooleanParameter("sunF");
-  BooleanParameter[] buttons = new BooleanParameter[] { sunA, sunB, sunC, sunD, sunE, sunF };
-  boolean[] lastState = new boolean[buttons.length];
-  int[] buttonPitches = new int[] { 60, 92, 59, 91, 58, 90 };
+  BooleanParameter[] buttons;
+  boolean[] lastState;
+  int[] buttonPitches;
 
   Sun[] sunsByNote = new Sun[128];
   List<Ripple> ripples = new ArrayList<Ripple>();
 
   public RipplePads(LX lx) {
     super(lx);
-
-    sunsByNote[60] = getSun("sun2");
-    sunsByNote[92] = getSun("sun1");
-    sunsByNote[59] = getSun("sun4");
-    sunsByNote[91] = getSun("sun6");
-    sunsByNote[58] = getSun("sun7");
-    sunsByNote[90] = getSun("sun9");
-    sunsByNote[57] = getSun("sun10");
-    sunsByNote[89] = getSun("sun11");
-    sunsByNote[76] = getSun("sun8");
-    sunsByNote[44] = getSun("sun5");
-    sunsByNote[43] = getSun("sun3");
 
     addParameter(intensity);
     addParameter(velocity);
@@ -920,9 +902,20 @@ public class RipplePads extends SLPattern {
     addParameter(nextHue);
     addParameter(nextSat);
 
-    for (BooleanParameter param : buttons) {
+    String[] buttonNames = {"K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"};
+    String[] sunIds = {"sun3", "sun5", "sun8", "sun11", "sun10", "sun9", "sun7", "sun6", "sun4", "sun1", "sun2"};
+
+    buttons = new BooleanParameter[sunIds.length];
+    lastState = new boolean[sunIds.length];
+    buttonPitches = new int[sunIds.length];
+    
+    for (int i = 0; i < sunIds.length; i++) {
+      buttonPitches[i] = 60 + i;
+      sunsByNote[60 + i] = getSun(sunIds[i]);
+      BooleanParameter param = new BooleanParameter(buttonNames[i]);
       param.setMode(BooleanParameter.Mode.MOMENTARY);
       addParameter(param);
+      buttons[i] = param;
     }
   }
 
