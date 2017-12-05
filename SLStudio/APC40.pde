@@ -121,9 +121,17 @@ class FoxListener extends LXComponent {
 
     remote = new LXMidiRemote(chosenInput, chosenOutput);
 
+    final CompoundParameter slowDown = new CompoundParameter("slowDown", 0);
+    slowDown.addListener(new LXParameterListener() {
+        public void onParameterChanged(LXParameter parameter) {
+            float v = slowDown.getValuef();
+            lx.engine.speed.setValue(map(v, 0, 1, 0.5, 0));
+        }
+    });
+
     remote.bindController(lx.engine.crossfader, 112);
     remote.bindController(lx.engine.masterChannel.getEffect("Blur").getParameter("amount"), 32);
     remote.bindController(lx.engine.output.brightness, 33);
-    remote.bindController(lx.engine.speed, 34);
+    remote.bindController(slowDown, 34);
   }
 }
