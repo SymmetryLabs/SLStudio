@@ -878,11 +878,14 @@ public class RipplePads extends SLPattern {
   CompoundParameter nextHue = new CompoundParameter("nextHue", 0, 0, 360);
   CompoundParameter nextSat = new CompoundParameter("nextSat", 0, 0, 1);
 
+  String[] sunIds = {"sun3", "sun5", "sun8", "sun11", "sun10", "sun9", "sun7", "sun6", "sun4", "sun1", "sun2"};
+  String[] buttonNames = {"K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"};
+  int[] buttonPitches = {60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77};
+
   BooleanParameter[] buttons;
   boolean[] lastState;
-  int[] buttonPitches;
 
-  Sun[] sunsByNote = new Sun[128];
+  Sun[] sunsByPitch = new Sun[128];
   Ripple[] lastRipple = new Ripple[128];
   List<Ripple> ripples = new ArrayList<Ripple>();
 
@@ -896,25 +899,17 @@ public class RipplePads extends SLPattern {
     addParameter(nextHue);
     addParameter(nextSat);
 
-    String[] buttonNames = {"K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"};
-    String[] sunIds = {"sun3", "sun5", "sun8", "sun11", "sun10", "sun9", "sun7", "sun6", "sun4", "sun1", "sun2"};
 
     buttons = new BooleanParameter[sunIds.length];
     lastState = new boolean[sunIds.length];
-    buttonPitches = new int[sunIds.length];
 
     for (int i = 0; i < sunIds.length; i++) {
-      buttonPitches[i] = 60 + i;
-      sunsByNote[60 + i] = getSun(sunIds[i]);
+      sunsByPitch[buttonPitches[i]] = model.sunTable.get(sunIds[i]);
       BooleanParameter param = new BooleanParameter(buttonNames[i]);
       param.setMode(BooleanParameter.Mode.MOMENTARY);
       addParameter(param);
       buttons[i] = param;
     }
-  }
-
-  Sun getSun(String id) {
-    return model.sunTable.get(id);
   }
 
   public void run(double deltaMs) {
@@ -941,7 +936,7 @@ public class RipplePads extends SLPattern {
     }
     ripples.removeAll(expired);
 
-    for (Sun sun : sunsByNote) {
+    for (Sun sun : sunsByPitch) {
       if (sun == null) continue;
       for (int i = 0; i < sun.points.length; i++) {
         LXPoint point = sun.points[i];
@@ -957,16 +952,18 @@ public class RipplePads extends SLPattern {
   }
 
   public void noteOnReceived(MidiNoteOn note) {
+    println("note on " + note);
     noteOn(note.getPitch(), note.getVelocity());
   }
 
   public void noteOffReceived(MidiNote note) {
+    println("note off " + note);
     noteOff(note.getPitch());
   }
 
   void noteOn(int pitch, int velocity) {
     if (pitch > 127) return;
-    Sun sun = sunsByNote[pitch];
+    Sun sun = sunsByPitch[pitch];
     if (sun != null) {
       if (lastRipple[pitch] != null) {
         lastRipple[pitch].release();
@@ -1031,7 +1028,8 @@ public class RipplePads extends SLPattern {
 
     int getColor(float distance) {
       if (distance < radius) {
-        return lx.hsb(hue, sat*100f, value*100f);
+        float brightness = value > 1 ? 1 : value;
+        return lx.hsb(hue, sat*100f, brightness*100f);
       } else {
         return 0;
       }
