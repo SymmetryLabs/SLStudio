@@ -1,9 +1,9 @@
 .DS_Store
 LXStudioCubes/build-tmp/
 SLStudio/build-tmp/
+SLStudio/build
 *.autosave
 *.swp
-SLStudio/build
-.idea
 *.iml
-
+.idea
+.lxproject

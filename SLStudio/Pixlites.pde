@@ -12,7 +12,7 @@ import java.util.List;
 
 Pixlite[] setupPixlites(LX lx) {
 
-  return new Pixlite[] {
+  Pixlite[] pixlites = new Pixlite[] {
     // Sun 1 (One Third)
     new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")), // trimmed
     new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")), // trimmed
@@ -69,6 +69,12 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_back")), // locked
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
   };
+
+  for (Pixlite pixlite : pixlites) {
+    lx.addOutput(pixlite);
+  }
+
+  return pixlites;
 }
 
 public class Pixlite extends LXOutputGroup {
@@ -401,7 +407,7 @@ public class ArtNetDatagram extends LXDatagram {
   private byte sequence = 1;
 
   public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
-    this(ipAddress, indices, 3*indices.length, universeNumber);
+    this(ipAddress, indices, 3 * indices.length, universeNumber);
   }
 
   public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
@@ -409,10 +415,10 @@ public class ArtNetDatagram extends LXDatagram {
     this.pointIndices = indices;
 
     try {
-        setAddress(ipAddress);
-        setPort(ARTNET_PORT);
+      setAddress(ipAddress);
+      setPort(ARTNET_PORT);
     } catch (UnknownHostException e) {
-        System.out.println("Pixlite with ip address (" + ipAddress + ") is not on the network.");
+      System.out.println("Pixlite with ip address (" + ipAddress + ") is not on the network.");
     }
 
     this.buffer[0] = 'A';
@@ -435,7 +441,7 @@ public class ArtNetDatagram extends LXDatagram {
     this.buffer[17] = (byte) (dataLength & 0xff);
 
     for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
-     this.buffer[i] = 0;
+      this.buffer[i] = 0;
     }
   }
 
@@ -454,6 +460,10 @@ public class ArtNetDatagram extends LXDatagram {
       }
       this.buffer[SEQUENCE_INDEX] = this.sequence;
     }
+
+    // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
+    // be about right - Yona
+    busySleep(3000);
   }
 
   LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
@@ -467,5 +477,13 @@ public class ArtNetDatagram extends LXDatagram {
       i += 3;
     }
     return this;
+  }
+
+  public void busySleep(long nanos) {
+    long elapsed;
+    final long startTime = System.nanoTime();
+    do {
+      elapsed = System.nanoTime() - startTime;
+    } while (elapsed < nanos);
   }
 }

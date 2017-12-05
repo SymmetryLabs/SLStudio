@@ -135,6 +135,7 @@ public static class Sun extends LXModel {
 
   public BoundingBox boundingBox;
   public final PVector center;
+  public final float[] distances;
 
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform, int[][] numPointsPerStrip) {
     super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
@@ -152,6 +153,7 @@ public static class Sun extends LXModel {
     }
 
     computeBoundingBox();
+    distances = computeDistances();
   }
 
   void computeBoundingBox() {
@@ -194,6 +196,15 @@ public static class Sun extends LXModel {
 //    if (yMaxPt == null) println(id + "-yMax: NULL!!"); else println(id + "-yMax: (" + yMaxPt.x + ", " + yMaxPt.y + ", " + yMaxPt.z + ")");
 //    if (zMinPt == null) println(id + "-zMin: NULL!!"); else println(id + "-zMin: (" + zMinPt.x + ", " + zMinPt.y + ", " + zMinPt.z + ")");
 //    if (zMaxPt == null) println(id + "-zMax: NULL!!"); else println(id + "-zMax: (" + zMaxPt.x + ", " + zMaxPt.y + ", " + zMaxPt.z + ")");
+  }
+
+  float[] computeDistances() {
+    float[] distances = new float[points.length];
+    for (int i = 0; i < points.length; i++) {
+      LXPoint p = points[i];
+      distances[i] = PVector.sub(center, new PVector(p.x, p.y, p.z)).mag();
+    }
+    return distances;
   }
 
   public Slice getSliceById(String id) {
@@ -340,7 +351,6 @@ public static class Slice extends LXModel {
         }
       } else {
         for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE-2; i++) {
-          println(numPointsPerStrip[counter]);
           int numPoints = numPointsPerStrip[counter++];
           float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH / 2.6;
           float stripX = (DIAMETER - stripWidth) / 2;

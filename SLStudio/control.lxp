@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512475716244,
+  "timestamp": 1512445128908,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 3,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -68,9 +68,42 @@
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 5096,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16732417,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.46999998949468136
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 5099,
+            "class": "heronarts.lx.effect.DesaturationEffect",
+            "modulationColor": -11600128,
+            "parameters": {
+              "label": "Desaturation",
+              "enabled": true,
+              "amount": 0.5100000109523535,
+              "attack": 100.0,
+              "decay": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 13,
         "patterns": [
           {
             "id": 3297,
@@ -439,6 +472,54 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 5094,
+            "class": "SLStudio$PerSunWasps",
+            "modulationColor": -8126720,
+            "parameters": {
+              "label": "PerSunWasps",
+              "count": 59.99999865889549,
+              "size": 9.00000002235174,
+              "flattenZ": true,
+              "hue": 273.6000019311905,
+              "saturation": 77.00000051409006,
+              "enableBlobs": true,
+              "blobMaxDist": 490.0000113993883,
+              "blobAffinity": 100.0000008940697,
+              "bMrgRad": 30.0,
+              "bMaxSpd": 240.0,
+              "bMaxDt": 0.5,
+              "speed": 0.40000001341104513,
+              "accel": 2.64999995008111,
+              "dampen": 0.75,
+              "focusX": 0.0,
+              "focusY": 0.0,
+              "focusZ": 0.0,
+              "pullX": 0.5699999872595072,
+              "pullY": 0.5799999870359898,
+              "pullZ": 0.5199999883770943,
+              "twistX": 0.0,
+              "twistY": 0.0,
+              "twistZ": 0.0,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -464,7 +545,7 @@
         },
         "effects": [
           {
-            "id": 5469,
+            "id": 366,
             "class": "heronarts.lx.effect.BlurEffect",
             "modulationColor": -16748545,
             "parameters": {
@@ -497,7 +578,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 16,
         "patterns": [
           {
             "id": 2773,
@@ -980,7 +1061,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 3414,
@@ -1184,7 +1265,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 3396,
@@ -2117,13 +2198,13 @@
         "parameters": {
           "label": "Seaboard",
           "arm": false,
-          "enabled": true,
-          "cue": true,
+          "enabled": false,
+          "cue": false,
           "midiMonitor": true,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.05714285187423229,
           "crossfadeGroup": 1,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -2132,7 +2213,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 4783,
@@ -2153,19 +2234,11 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 5356,
-            "class": "SLStudio$SeaboardSuns",
-            "modulationColor": -65377,
+            "id": 4786,
+            "class": "SLStudio$SeaboardPattern",
+            "modulationColor": -65327,
             "parameters": {
-              "label": "SeaboardSuns",
-              "attack": 50.0,
-              "decay": 500.0,
-              "sustain": 0.5,
-              "release": 500.0,
-              "velocityBrightness": 0.5,
-              "size": 0.5,
-              "falloff": 0.5,
-              "wiggle": false
+              "label": "Seaboard"
             },
             "modulation": {
               "modulators": [],
@@ -2187,7 +2260,7 @@
       },
       "effects": [
         {
-          "id": 5638,
+          "id": 364,
           "class": "heronarts.lx.effect.BlurEffect",
           "modulationColor": -12544,
           "parameters": {
@@ -2296,16 +2369,8 @@
       }
     },
     "components": {
-      "performanceManager": {
-        "id": 378,
-        "class": "SLStudio$PerformanceManager",
-        "modulationColor": -13312,
-        "parameters": {
-          "label": ""
-        }
-      },
       "outputControl": {
-        "id": 31,
+        "id": 29,
         "class": "SLStudio$OutputControl",
         "modulationColor": -65368,
         "parameters": {
@@ -2527,9 +2592,9 @@
         "3062": true
       },
       "preview": {
-        "radius": 841.5337889471593,
-        "theta": 6.174000000000017,
-        "phi": 0.7537166738510134,
+        "radius": 832.9346181586066,
+        "theta": 6.31799999999995,
+        "phi": 0.4297166738510131,
         "positionX": 294.73492431640625,
         "positionY": 136.1999969482422,
         "positionZ": 196.0426788330078
