@@ -660,8 +660,8 @@ class PerformanceManager extends LXComponent {
 
     void bindCommon(LXMidiRemote remote) {
         remote.bindController(lFader, 0, 15);
-        remote.bindController(lBlur, 0, 14);
-        remote.bindController(lColor, 7, 7);
+        remote.bindController(lx.engine.output.brightness, 0, 14);
+        remote.bindController(lBlur, 7, 7);
         swapDecks();
     }
 
