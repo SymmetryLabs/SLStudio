@@ -51,7 +51,7 @@ Pixlite[] setupPixlites(LX lx) {
     new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // trimmed
     new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // trimmed
 
-    // Sun 9 (Full)
+    // Sun 9 (Full) 
     new Pixlite(lx, "10.200.1.13", ((SLModel)lx.model).getSliceById("sun9_top_front")), // 13
     new Pixlite(lx, "10.200.1.14", ((SLModel)lx.model).getSliceById("sun9_bottom_front")), // 14
     new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_top_back")), // NEEDS WORK!
@@ -89,6 +89,14 @@ public class Pixlite extends LXOutputGroup {
         new Sun1BackPixliteConfig(lx, slice, ipAddress, this);
       }
 
+      // Sun 2
+      if(slice.id.equals("sun2_top_front")) {
+        new Sun2FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun2_top_back")) {
+        new Sun2BackPixliteConfig(lx, slice, ipAddress, this);
+      }
+
       // Sun 3
       if(slice.id.equals("sun3_top_front")) {
         new Sun3FrontTopPixliteConfig(lx, slice, ipAddress, this);
@@ -98,6 +106,9 @@ public class Pixlite extends LXOutputGroup {
       }
 
       // Sun 4
+      if(slice.id.equals("sun4_top_front")) {
+        new Sun4FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
       if(slice.id.equals("sun4_top_back")) {
         new Sun4BackPixliteConfig(lx, slice, ipAddress, this);
       }
@@ -166,33 +177,33 @@ public class Pixlite extends LXOutputGroup {
         new Sun9BackBottomPixliteConfig(lx, slice, ipAddress, this);
       }
 
-      // Sun 10
-      if(slice.id.equals("sun10_top_front")) {
-        new Sun10FrontTopPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun10_bottom_front")) {
-        new Sun10FrontBottomPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun10_top_back")) {
-        new Sun10BackTopPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun10_bottom_back")) {
-        new Sun10BackBottomPixliteConfig(lx, slice, ipAddress, this);
-      }
+      // // Sun 10
+      // if(slice.id.equals("sun10_top_front")) {
+      //   new Sun10FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun10_bottom_front")) {
+      //   new Sun10FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun10_top_back")) {
+      //   new Sun10BackTopPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun10_bottom_back")) {
+      //   new Sun10BackBottomPixliteConfig(lx, slice, ipAddress, this);
+      // }
 
-      // Sun 11
-      if(slice.id.equals("sun11_top_front")) {
-        new Sun11FrontTopPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun11_bottom_front")) {
-        new Sun11FrontBottomPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun11_top_back")) {
-        new Sun11BackTopPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun11_bottom_back")) {
-        new Sun11BackBottomPixliteConfig(lx, slice, ipAddress, this);
-      }
+      // // Sun 11
+      // if(slice.id.equals("sun11_top_front")) {
+      //   new Sun11FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun11_bottom_front")) {
+      //   new Sun11FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun11_top_back")) {
+      //   new Sun11BackTopPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun11_bottom_back")) {
+      //   new Sun11BackBottomPixliteConfig(lx, slice, ipAddress, this);
+      // }
 
     } catch (Exception e) {
       e.printStackTrace();
