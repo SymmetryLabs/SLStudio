@@ -4,12 +4,13 @@ import com.symmetrylabs.util.LinearModelIndex;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
 import com.symmetrylabs.util.Octahedron;
+import com.symmetrylabs.util.BlobFollower;
 
 public abstract class SLPatternWithMarkers extends SLPattern implements MarkerSource {
   public SLPatternWithMarkers(LX lx) {
     super(lx);
   }
-  
+
   @Override
   public void onActive() {
     super.onActive();
@@ -111,9 +112,10 @@ public class BlobViewer extends SLPattern {
   }
 }
 
-public class FlockWave extends SLPattern {
+public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
+  BooleanParameter oscFollowers = new BooleanParameter("oscFollow");
   CompoundParameter oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100);  // blob merge radius (in)
   CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 360, 0, 1000);  // max blob speed (in/s)
   CompoundParameter oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1);  // max interval to calculate blob velocities (s)
@@ -148,16 +150,19 @@ public class FlockWave extends SLPattern {
   Set<Bird> birds = new HashSet<Bird>();
 
   private BlobTracker blobTracker;
+  private BlobFollower blobFollower;
   private ModelIndex modelIndex;
 
   public FlockWave(LX lx) {
     super(lx);
 
     blobTracker = BlobTracker.getInstance(lx);
+    blobFollower = new BlobFollower(blobTracker);
     modelIndex = new LinearModelIndex(lx.model);
 
     addParameter(timeScale);
     addParameter(oscBlobs);
+    addParameter(oscFollowers);
     addParameter(oscMergeRadius);
     addParameter(oscMaxSpeed);
     addParameter(x);
@@ -191,6 +196,7 @@ public class FlockWave extends SLPattern {
   public void run(double deltaMs) {
     //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
+    blobFollower.advance((float) deltaMs * 0.001);
     render();
   }
 
@@ -221,6 +227,10 @@ public class FlockWave extends SLPattern {
     }
 
     removeExpiredBirds();
+  }
+  
+  Collection<Marker> getMarkers() {
+    return blobFollower.getMarkers();
   }
 
   void updateBlobTrackerParameters() {
@@ -292,7 +302,19 @@ public class FlockWave extends SLPattern {
   }
 
   void render() {  // choose a rendering style
-    renderPlasma();
+    if (oscFollowers.isOn()) {
+      List<Bird> followBirds = new ArrayList<Bird>();
+      for (BlobFollower.Follower f : blobFollower.getFollowers()) {
+        Bird b = new Bird(f.pos, 0);
+        b.vel = f.vel;
+        b.value = f.value;
+        b.elapsedSec = f.ageSec;
+        followBirds.add(b);
+      }
+      renderPlasma(followBirds);
+    } else {
+      renderPlasma(birds);
+    }
   }
 
   void renderTrails() {
@@ -343,7 +365,7 @@ public class FlockWave extends SLPattern {
     return pal;
   }
 
-  void renderPlasma() {
+  void renderPlasma(final Collection<Bird> birds) {
     birds.parallelStream().forEach(new Consumer<Bird>() {
       public void accept(Bird bird) {
         renderPlasmaLayer(bird);
@@ -404,7 +426,6 @@ public class FlockWave extends SLPattern {
   public class Bird implements Comparable<Bird> {
     public PVector pos;
     public PVector vel;
-    public PVector prevPos;
     public int rgb;
     public float value;
     public float elapsedSec;
@@ -435,7 +456,6 @@ public class FlockWave extends SLPattern {
     }
 
     void advance(float deltaSec) {
-      prevPos = pos;
       pos.add(PVector.mult(vel, (float) deltaSec));
     }
 
@@ -467,6 +487,11 @@ public class LightSource extends SLPatternWithMarkers {
   CompoundParameter gain = new CompoundParameter("gain", 1, 0, 3);
   CompoundParameter falloff = new CompoundParameter("falloff", 0.25, 0, 1);
   CompoundParameter ambient = new CompoundParameter("ambient", 0, 0, 1);
+  BooleanParameter useBlobs = new BooleanParameter("useBlobs");
+
+  List<Light> lights = new ArrayList<Light>();
+  int numActiveLights = 0;
+  BlobFollower bf;
 
   public LightSource(LX lx) {
     super(lx);
@@ -478,39 +503,95 @@ public class LightSource extends SLPatternWithMarkers {
     addParameter(gain);
     addParameter(falloff);
     addParameter(ambient);
+    addParameter(useBlobs);
+    bf = new BlobFollower(BlobTracker.getInstance(lx));
   }
-  
+
   public List<Marker> getMarkers() {
     List<Marker> markers = new ArrayList<Marker>();
     PVector pos = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
     float value = gain.getValuef()*100f;
     markers.add(new Octahedron(pos, 20, LX.hsb(hue.getValuef(), sat.getValuef()*100f, value > 100 ? 100 : value)));
+    markers.addAll(bf.getMarkers());
     return markers;
   }
 
   public void run(double deltaMs) {
-    PVector light = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
-    float h = hue.getValuef();
-    float s = sat.getValuef() * 100f;
-    float g = gain.getValuef();
-    float a = ambient.getValuef();
-    for (LXPoint p : model.points) {
-      if (p instanceof LXPointNormal) {
-        LXPointNormal pn = (LXPointNormal) p;
-        PVector pv = new PVector(p.x, p.y, p.z);
-        PVector toLight = PVector.sub(light, pv);
-        float dist = toLight.mag();
-
-        dist /= (falloff.getValue() * model.xRange);
-        if (dist < 1) dist = 1; // avoid division by zero or excessive brightness
-        float brightness = 1.0 / (dist * dist);
-
-        float cosAngle = PVector.dot(toLight.normalize(), pn.normal);
-        if (cosAngle < 0) cosAngle = 0;
-
-        float value = cosAngle * brightness * g + a;
-        colors[p.index] = LX.hsb(h, s, 100f * (value > 1 ? 1 : value));
+    resetLights();
+    if (useBlobs.isOn()) {
+      for (BlobFollower.Follower f : bf.getFollowers()) {
+        addLight(new PVector(f.pos.x, y.getValuef(), f.pos.z), f.value);
       }
+    } else {
+      addLight(new PVector(x.getValuef(), y.getValuef(), z.getValuef()), 1);
+    }
+    renderLights();
+    bf.advance((float) deltaMs * 0.001);
+  }
+
+  void resetLights() {
+    numActiveLights = 0;
+  }
+
+  void addLight(PVector pos, float value) {
+    int li = numActiveLights;
+    if (li >= lights.size()) {
+      lights.add(new Light(pos, value));
+    } else {
+      Light light = lights.get(li);
+      light.pos = pos;
+      light.value = value;
+    }
+    numActiveLights++;
+  }
+
+  void renderLights() {
+    final float h = hue.getValuef();
+    final float s = sat.getValuef() * 100f;
+    final float g = gain.getValuef();
+    final float a = ambient.getValuef();
+    final List<Light> activeLights = lights.subList(0, numActiveLights);
+
+    activeLights.parallelStream().forEach(new Consumer<Light>() {
+      public void accept(Light light) {
+        for (LXPoint p : model.points) {
+          LXPointNormal pn = (LXPointNormal) p;
+          PVector pv = new PVector(p.x, p.y, p.z);
+          PVector toLight = PVector.sub(light.pos, pv);
+          float dist = toLight.mag();
+
+          float extent = dist / (falloff.getValuef() * model.xRange);
+          if (extent < 1) extent = 1; // avoid division by zero or excessive brightness
+          float brightness = 1.0 / (extent * extent);
+
+          float cosAngle = PVector.dot(toLight, pn.normal)/dist;
+          if (cosAngle < 0) cosAngle = 0;
+
+          light.levels[p.index] = cosAngle * brightness * light.value * g;
+        }
+      }
+    });
+
+    Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
+      public void accept(LXPoint p) {
+        float sum = a;
+        for (Light light : activeLights) {
+          sum += light.levels[p.index];
+        }
+        colors[p.index] = LX.hsb(h, s, (sum > 1 ? 1 : sum)*100f);
+      }
+    });
+  }
+
+  class Light {
+    public PVector pos;
+    public float value;
+    public float[] levels;
+
+    Light(PVector pos, float value) {
+      this.pos = pos;
+      this.value = value;
+      this.levels = new float[colors.length];
     }
   }
 }

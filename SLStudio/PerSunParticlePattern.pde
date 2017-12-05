@@ -2,8 +2,9 @@
 import com.symmetrylabs.util.LayeredRenderer;
 import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
+import com.symmetrylabs.util.OctahedronWithArrow;
 
-public abstract static class PerSunParticlePattern extends PerSunPattern {
+public abstract static class PerSunParticlePattern extends PerSunPattern implements MarkerSource {
   private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
   public BoundedParameter particleCount;
@@ -15,11 +16,22 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
   public BooleanParameter enableBlobs;
   public CompoundParameter blobMaxDist;
+  public CompoundParameter blobAffinity;
   public CompoundParameter oscMergeRadius;  // blob merge radius (in)
   public CompoundParameter oscMaxSpeed;  // max blob speed (in/s)
   public CompoundParameter oscMaxDeltaSec;  // max interval to calculate blob velocities (s)
 
-  protected Map<Sun, BlobTracker.Blob> closestBlobs = new HashMap<Sun, BlobTracker.Blob>();
+  protected Map<Sun, BlobDist> sunClosestBlobDists = new HashMap<Sun, BlobDist>();
+
+  protected class BlobDist {
+    public final BlobTracker.Blob blob;
+    public final double dist;
+
+    public BlobDist(BlobTracker.Blob blob, double dist) {
+      this.blob = blob;
+      this.dist = dist;
+    }
+  }
 
   private BlobTracker blobTracker;
 
@@ -27,6 +39,36 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
     super(lx, subpatternClass);
 
     blobTracker = BlobTracker.getInstance(lx);
+  }
+
+  @Override
+  public void onActive() {
+    super.onActive();
+    ((LXStudio) lx).ui.addMarkerSource(this);
+  }
+
+  @Override
+  public void onInactive() {
+    super.onInactive();
+    ((LXStudio) lx).ui.removeMarkerSource(this);
+  }
+
+  @Override
+  public List<Marker> getMarkers() {
+    List<Marker> markers = new ArrayList<Marker>();
+    for (Sun sun : model.suns) {
+      BlobDist bd = sunClosestBlobDists.get(sun);
+      if (bd == null)
+        continue;
+
+      markers.add(new OctahedronWithArrow(bd.blob.pos, 20, LXColor.WHITE,
+          new PVector((float)(-(bd.blob.pos.x - sun.cx)),
+              (float)(-(bd.blob.pos.y - sun.cy)),
+              (float)(-(bd.blob.pos.z - sun.cz))), LXColor.RED
+      ));
+    }
+
+    return markers;
   }
 
   @Override
@@ -40,6 +82,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
     addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
     addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
+    addParameter(blobAffinity = new CompoundParameter("blobAffinity", 10f, 0, 200f));
     addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
     addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
     addParameter(oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1));
@@ -66,13 +109,23 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
           double dy = b.pos.y - sun.cy;
           double dz = b.pos.z - sun.cz;
           double sqrDist = dx * dx + dy * dy + dz * dz;
-          if (sqrDistThresh < sqrDist && sqrDist < closestSqrDist) {
+          if (sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
             closestSqrDist = sqrDist;
             closestBlob = b;
           }
         }
 
-        closestBlobs.put(sun, closestBlob);
+        if (closestBlob == null) {
+          sunClosestBlobDists.put(sun, null);
+        }
+        else {
+          sunClosestBlobDists.put(sun, new BlobDist(closestBlob, FastMath.sqrt(closestSqrDist)));
+        }
+      }
+    }
+    else {
+      for (Sun sun : model.suns) {
+        sunClosestBlobDists.put(sun, null);
       }
     }
 
@@ -267,16 +320,22 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double twistYValue = 0.005 * twistY.getValue();
       double twistZValue = 0.005 * twistZ.getValue();
 
-      double focusXValue = focusX.getValue();
-      double focusYValue = focusY.getValue();
-      double focusZValue = focusZ.getValue();
+      double focusPosX = focusX.getValue();
+      double focusPosY = focusY.getValue();
+      double focusPosZ = focusZ.getValue();
+
+      double blobPosX = 0;
+      double blobPosY = 0;
+      double blobPosZ = 0;
+      double blobScale = 0;
 
       if (enableBlobs.getValueb()) {
-        BlobTracker.Blob closestBlob = closestBlobs.get(sun);
+        BlobDist closestBlob = sunClosestBlobDists.get(sun);
         if (closestBlob != null) {
-          focusXValue = (closestBlob.pos.x - model.cx) * 2f / model.xRange;
-          focusYValue = (closestBlob.pos.y - model.cy) * 2f / model.yRange;
-          focusZValue = (closestBlob.pos.z - model.cz) * 2f / model.zRange;
+          blobPosX = (closestBlob.blob.pos.x - sun.cx) * 2f / sun.xRange;
+          blobPosY = (closestBlob.blob.pos.y - sun.cy) * 2f / sun.yRange;
+          blobPosZ = (closestBlob.blob.pos.z - sun.cz) * 2f / sun.zRange;
+          blobScale = 0.01 * blobAffinity.getValue() / (closestBlob.dist + 1);
         }
       }
 
@@ -291,16 +350,23 @@ public static class PerSunWasps extends PerSunParticlePattern {
         p.vel[1] += accelValue * (Math.random() - .5);
         p.vel[2] += accelValue * (Math.random() - .5);
 
-        double pullVecX = focusXValue - p.pos[0];
-        double pullVecY = focusYValue - p.pos[1];
-        double pullVecZ = focusZValue - p.pos[2];
+        double pullVecX = focusPosX - p.pos[0];
+        double pullVecY = focusPosY - p.pos[1];
+        double pullVecZ = focusPosZ - p.pos[2];
 
         p.vel[0] += pullXValue * pullVecX;
         p.vel[1] += pullYValue * pullVecY;
         p.vel[2] += pullZValue * pullVecZ;
 
-        // NOTE: assuming left-handed Z-axis
+        double blobVecX = blobPosX - p.pos[0];
+        double blobVecY = blobPosY - p.pos[1];
+        double blobVecZ = blobPosZ - p.pos[2];
 
+        p.vel[0] += blobScale * blobVecX;
+        p.vel[1] += blobScale * blobVecY;
+        p.vel[2] += blobScale * blobVecZ;
+
+        // NOTE: assuming left-handed Z-axis
         double pullNorm = Math.sqrt(pullVecX * pullVecX + pullVecY * pullVecY + pullVecZ * pullVecZ);
 
         double twistXVecX = 0;
