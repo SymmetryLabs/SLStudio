@@ -9,7 +9,7 @@ public class Sun2FrontPixliteConfig {
         .addPoints(slice.getStripById("4").points)
         .addPoints(slice.getStripById("5").points,  PointsGrouping.REVERSE_ORDERING)
         .addPoints(slice.getStripById("6").points)
-        .addPoints(slice.getStripById("7").points,  PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT )
+        .addPoints(slice.getStripById("7").points,  PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
         .addPoints(slice.getStripById("8").points)
         .addPoints(slice.getStripById("9").points,  PointsGrouping.REVERSE_ORDERING)
         .addPoints(slice.getStripById("10").points)

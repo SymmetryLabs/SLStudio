@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512440196555,
+  "timestamp": 1512464365280,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.6833333186805248,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -78,10 +78,10 @@
             "modulationColor": -8519936,
             "parameters": {
               "label": "SolidColor",
-              "color/hue": 0.0,
+              "color/hue": 359.0,
               "color/brightness": 100.0,
               "color/saturation": 100.0,
-              "color": -65536
+              "color": -65532
             },
             "modulation": {
               "modulators": [],
@@ -104,8 +104,8 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.9100000038743019,
-              "Dens": 0.849999999627471,
+              "Fast": 0.550000011920929,
+              "Dens": 0.30000001192092896,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 6
@@ -126,7 +126,7 @@
         "parameters": {
           "label": "Channel-2",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -261,16 +261,16 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.24779518997209926,
-          "Band-2": 0.2896335492295541,
-          "Band-3": 0.3332006394816589,
-          "Band-4": 0.3581695804660543,
-          "Band-5": 0.3187060889224643,
-          "Band-6": 0.24405860220149456,
-          "Band-7": 0.17845000677570977,
-          "Band-8": 0.14453044916094582,
-          "Band-9": 0.08937988923609808,
-          "Band-10": 0.06818644019468789,
+          "Band-1": 0.008497482512319632,
+          "Band-2": 0.04396773098195439,
+          "Band-3": 0.033423830414259115,
+          "Band-4": 0.023198025144417822,
+          "Band-5": 0.0,
+          "Band-6": 0.026464986856894912,
+          "Band-7": 0.001621334005036612,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
           "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
@@ -311,7 +311,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.7999999988824129
+        "brightness": 1.0
       }
     },
     "components": {
@@ -362,9 +362,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 701.0956432258184,
-        "theta": 6.177000000000005,
-        "phi": 0.1957166738510125,
+        "radius": 865.9931900503836,
+        "theta": 6.363000000000012,
+        "phi": 0.0697166738510124,
         "positionX": 294.73492431640625,
         "positionY": 136.1999969482422,
         "positionZ": 196.0426788330078

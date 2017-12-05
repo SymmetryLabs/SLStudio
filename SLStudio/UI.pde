@@ -258,21 +258,14 @@ class UIOutputs extends UICollapsibleSection {
         super(ui, x, y, w, 500);
         setTitle();
 
-        UIButton testOutput = new UIButton(0, 0, w/2 - 8, 19) {
-          @Override
-          public void onToggle(boolean isOn) { }
-        }.setLabel("Test Broadcast").setParameter(outputControl.testBroadcast);
-        testOutput.addToContainer(this);
-
         addTopLevelComponent(new UIButton(4, 4, 12, 12) {}
           .setParameter(outputControl.enabled).setBorderRounding(4));
 
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 454);
+        final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 0, w-8, 476);
 
         for (Pixlite pixlite : pixlites) { 
             items.add(new PixliteItem(pixlite));
-            pixlite.enabled.setValue(false);
         }
 
         outputList.setItems(items).setSingleClickActivate(true);
@@ -296,7 +289,7 @@ class UIOutputs extends UICollapsibleSection {
         }
 
         String getLabel() {
-            return "(" + pixlite.ipAddress + ")" + pixlite.slice.id;
+            return "(" + pixlite.ipAddress + ") " + pixlite.slice.id;
         }
 
         boolean isSelected() {

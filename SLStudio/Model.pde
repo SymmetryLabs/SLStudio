@@ -340,7 +340,6 @@ public static class Slice extends LXModel {
         }
       } else {
         for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE-2; i++) {
-          println(numPointsPerStrip[counter]);
           int numPoints = numPointsPerStrip[counter++];
           float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH / 2.6;
           float stripX = (DIAMETER - stripWidth) / 2;

@@ -55,7 +55,6 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       pixlites = setupPixlites(lx);
-      setupOutputs(lx);
         
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
@@ -85,6 +84,7 @@ void setup() {
   };
 
   lx.engine.audio.enabled.setValue(true);
+  lx.engine.output.enabled.setValue(false);
   blobTracker = BlobTracker.getInstance(lx);
 
   long setupFinish = System.nanoTime();

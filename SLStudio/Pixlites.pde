@@ -12,7 +12,7 @@ import java.util.List;
 
 Pixlite[] setupPixlites(LX lx) {
 
-  return new Pixlite[] {
+  Pixlite[] pixlites = new Pixlite[] {
     // Sun 1 (One Third)
     new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")), // trimmed
     new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")), // trimmed
@@ -69,6 +69,12 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_back")), // locked
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
   };
+
+  for (Pixlite pixlite : pixlites) {
+    lx.addOutput(pixlite);
+  }
+
+  return pixlites;
 }
 
 public class Pixlite extends LXOutputGroup {
@@ -454,6 +460,12 @@ public class ArtNetDatagram extends LXDatagram {
       }
       this.buffer[SEQUENCE_INDEX] = this.sequence;
     }
+
+    long elapsed;
+    final long startTime = System.nanoTime();
+    do {
+      elapsed = System.nanoTime() - startTime;
+    } while (elapsed < 3000);
   }
 
   LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
