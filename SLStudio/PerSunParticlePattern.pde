@@ -64,9 +64,9 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
         continue;
 
       markers.add(new OctahedronWithArrow(bd.blob.pos, 20, LXColor.WHITE,
-          new PVector((float)(bd.scale * bd.blob.pos.x - model.cx),
-              (float)(bd.scale * bd.blob.pos.y - model.cy),
-              (float)(bd.scale * bd.blob.pos.z - model.cz)), LXColor.RED
+          new PVector((float)(-bd.scale * (bd.blob.pos.x - sun.cx)),
+              (float)(-bd.scale * (bd.blob.pos.y - sun.cy)),
+              (float)(-bd.scale * (bd.blob.pos.z - sun.cz))), LXColor.RED
       ));
     }
 
@@ -84,7 +84,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
     addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
     addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
-    addParameter(blobAffinity = new CompoundParameter("blobAffinity", 10f, 0, 100f));
+    addParameter(blobAffinity = new CompoundParameter("blobAffinity", 10f, 0, 200f));
     addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
     addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
     addParameter(oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1));
@@ -111,7 +111,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
           double dy = b.pos.y - sun.cy;
           double dz = b.pos.z - sun.cz;
           double sqrDist = dx * dx + dy * dy + dz * dz;
-          if (sqrDistThresh < sqrDist && sqrDist < closestSqrDist) {
+          if (sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
             closestSqrDist = sqrDist;
             closestBlob = b;
           }
@@ -324,9 +324,9 @@ public static class PerSunWasps extends PerSunParticlePattern {
       if (enableBlobs.getValueb()) {
         BlobDist closestBlob = sunClosestBlobDists.get(sun);
         if (closestBlob != null) {
-          focusXValue = closestBlob.scale * (closestBlob.blob.pos.x - model.cx) * 2f / model.xRange;
-          focusYValue = closestBlob.scale * (closestBlob.blob.pos.y - model.cy) * 2f / model.yRange;
-          focusZValue = closestBlob.scale * (closestBlob.blob.pos.z - model.cz) * 2f / model.zRange;
+          focusXValue = closestBlob.scale * (closestBlob.blob.pos.x - sun.cx) * 2f / sun.xRange;
+          focusYValue = closestBlob.scale * (closestBlob.blob.pos.y - sun.cy) * 2f / sun.yRange;
+          focusZValue = closestBlob.scale * (closestBlob.blob.pos.z - sun.cz) * 2f / sun.zRange;
         }
       }
 

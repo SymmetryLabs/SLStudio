@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512435411950,
+  "timestamp": 1512443218882,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -68,9 +68,42 @@
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 5096,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16732417,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.46999998949468136
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 5099,
+            "class": "heronarts.lx.effect.DesaturationEffect",
+            "modulationColor": -11600128,
+            "parameters": {
+              "label": "Desaturation",
+              "enabled": true,
+              "amount": 0.5100000109523535,
+              "attack": 100.0,
+              "decay": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
-        "patternIndex": 5,
+        "patternIndex": 13,
         "patterns": [
           {
             "id": 3297,
@@ -429,7 +462,56 @@
               "sat": 0.0,
               "gain": 1.0,
               "falloff": 0.75,
-              "ambient": 0.0
+              "ambient": 0.0,
+              "useBlobs": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 5094,
+            "class": "SLStudio$PerSunWasps",
+            "modulationColor": -8126720,
+            "parameters": {
+              "label": "PerSunWasps",
+              "count": 59.99999865889549,
+              "size": 9.00000002235174,
+              "flattenZ": true,
+              "hue": 273.6000019311905,
+              "saturation": 77.00000051409006,
+              "enableBlobs": true,
+              "blobMaxDist": 1000.0,
+              "blobAffinity": 110.00000067055228,
+              "bMrgRad": 30.0,
+              "bMaxSpd": 240.0,
+              "bMaxDt": 0.5,
+              "speed": 0.40000001341104513,
+              "accel": 2.64999995008111,
+              "dampen": 0.75,
+              "focusX": 0.0,
+              "focusY": 0.0,
+              "focusZ": 0.0,
+              "pullX": 0.5699999872595072,
+              "pullY": 0.5799999870359898,
+              "pullZ": 0.5199999883770943,
+              "twistX": 0.0,
+              "twistY": 0.0,
+              "twistZ": 0.0,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true
             },
             "modulation": {
               "modulators": [],
@@ -2507,9 +2589,9 @@
         "3062": true
       },
       "preview": {
-        "radius": 841.5337889471593,
-        "theta": 6.066000000000009,
-        "phi": -0.09828332614898722,
+        "radius": 832.9346181586066,
+        "theta": 5.9280000000000035,
+        "phi": 0.6277166738510133,
         "positionX": 294.73492431640625,
         "positionY": 136.1999969482422,
         "positionZ": 196.0426788330078
