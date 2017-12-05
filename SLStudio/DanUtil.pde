@@ -316,11 +316,7 @@ public class DPat extends LXPattern {
           });
 
           for (Sun sun : slModel.suns) {
-            if (sun != slModel.masterSun) {
-              for (int i = 0; i < sun.points.length; i++) {
-                colors[sun.points[i].index] = colors[sun.masterIndexes[i]];
-              }
-            }
+            copyFromMasterSun();
           }
         } else {
           ((SLModel)model).forEachPoint(new BatchConsumer() {
