@@ -35,7 +35,7 @@ public class LXStudio extends P3LX {
     public final UIContextualHelpBar helpBar;
     public final UIFramerate framerate;
     public final UIAxes axes;
-    public final UIBlobs blobs;
+    public final UIMarkerPainter markerPainter;
     public final UICubeMapDebug cubeMapDebug;
 
     private boolean toggleHelpBar = false;
@@ -72,11 +72,11 @@ public class LXStudio extends P3LX {
       this.helpBar = new UIContextualHelpBar(this);
       this.framerate = new UIFramerate(this, lx, this.leftPane.getX() + this.leftPane.getWidth());
       this.axes = new UIAxes();
-      this.blobs = new UIBlobs();
+      this.markerPainter = new UIMarkerPainter();
       this.cubeMapDebug = new UICubeMapDebug(lx);
       this.preview.addComponent(this.cubeMapDebug);
       this.preview.addComponent(axes);
-      this.preview.addComponent(blobs);
+      this.preview.addComponent(markerPainter);
 
       addLayer(this.preview);
       addLayer(this.leftPane);
@@ -272,6 +272,14 @@ public class LXStudio extends P3LX {
       if (object.has(KEY_PREVIEW)) {
         ui.preview.load(lx, object.getAsJsonObject(KEY_PREVIEW));
       }
+    }
+
+    public void addMarkerSource(MarkerSource source) {
+      markerPainter.addSource(source);
+    }
+
+    public void removeMarkerSource(MarkerSource source) {
+      markerPainter.removeSource(source);
     }
   }
 

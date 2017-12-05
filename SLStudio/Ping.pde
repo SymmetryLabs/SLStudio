@@ -1,6 +1,27 @@
 import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
+import com.symmetrylabs.util.Octahedron;
+
+public abstract class SLPatternWithMarkers extends SLPattern implements MarkerSource {
+  public SLPatternWithMarkers(LX lx) {
+    super(lx);
+  }
+  
+  @Override
+  public void onActive() {
+    super.onActive();
+    ((LXStudio) lx).ui.addMarkerSource(this);
+  }
+
+  @Override
+  public void onInactive() {
+    super.onInactive();
+    ((LXStudio) lx).ui.removeMarkerSource(this);
+  }
+}
 
 public class PaletteViewer extends SLPattern {
   DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
@@ -168,7 +189,7 @@ public class FlockWave extends SLPattern {
   }
 
   public void run(double deltaMs) {
-    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
+    //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     render();
   }
@@ -437,24 +458,42 @@ public class FlockWave extends SLPattern {
   }
 }
 
-public class LightSource extends SLPattern {
+public class LightSource extends SLPatternWithMarkers {
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);
-  CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
+  CompoundParameter y = new CompoundParameter("y", model.yMax, 0, 240);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
-  CompoundParameter falloff = new CompoundParameter("falloff", 0.75, 0, 1);
+  CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
+  CompoundParameter sat = new CompoundParameter("sat", 0, 0, 1);
   CompoundParameter gain = new CompoundParameter("gain", 1, 0, 3);
+  CompoundParameter falloff = new CompoundParameter("falloff", 0.25, 0, 1);
+  CompoundParameter ambient = new CompoundParameter("ambient", 0, 0, 1);
 
   public LightSource(LX lx) {
     super(lx);
     addParameter(x);
     addParameter(y);
     addParameter(z);
-    addParameter(falloff);
+    addParameter(hue);
+    addParameter(sat);
     addParameter(gain);
+    addParameter(falloff);
+    addParameter(ambient);
+  }
+  
+  public List<Marker> getMarkers() {
+    List<Marker> markers = new ArrayList<Marker>();
+    PVector pos = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+    float value = gain.getValuef()*100f;
+    markers.add(new Octahedron(pos, 20, LX.hsb(hue.getValuef(), sat.getValuef()*100f, value > 100 ? 100 : value)));
+    return markers;
   }
 
   public void run(double deltaMs) {
     PVector light = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
+    float h = hue.getValuef();
+    float s = sat.getValuef() * 100f;
+    float g = gain.getValuef();
+    float a = ambient.getValuef();
     for (LXPoint p : model.points) {
       if (p instanceof LXPointNormal) {
         LXPointNormal pn = (LXPointNormal) p;
@@ -462,15 +501,15 @@ public class LightSource extends SLPattern {
         PVector toLight = PVector.sub(light, pv);
         float dist = toLight.mag();
 
-        dist /= (model.xRange * falloff.getValue());
+        dist /= (falloff.getValue() * model.xRange);
         if (dist < 1) dist = 1; // avoid division by zero or excessive brightness
         float brightness = 1.0 / (dist * dist);
 
         float cosAngle = PVector.dot(toLight.normalize(), pn.normal);
         if (cosAngle < 0) cosAngle = 0;
 
-        float value = cosAngle * brightness * gain.getValuef();
-        colors[p.index] = LX.hsb(palette.getHuef(), 100f, 100f * (value > 1 ? 1 : value));
+        float value = cosAngle * brightness * g + a;
+        colors[p.index] = LX.hsb(h, s, 100f * (value > 1 ? 1 : value));
       }
     }
   }
