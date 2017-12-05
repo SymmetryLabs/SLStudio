@@ -49,11 +49,13 @@ import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.script.LXScriptEngine;
 
+import java.util.ArrayDeque;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Queue;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
@@ -231,12 +233,47 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public class Timer {
         public long runNanos = 0;
+        public long runLastNanos = 0;
+        public long runAvgNanos = 0;
+        public long runWorstNanos = 0;
         public long channelNanos = 0;
         public long fxNanos = 0;
         public long inputNanos = 0;
         public long midiNanos = 0;
         public long oscNanos = 0;
         public long outputNanos = 0;
+
+        private class TimerPair {
+            long nanos;
+            long recordedAtNanos;
+            TimerPair(long nanos, long recordedAtNanos) {
+                this.nanos = nanos;
+                this.recordedAtNanos = recordedAtNanos;
+            }
+        }
+
+        private final long KEEP_RUN_TIME_PAIRS_FOR_NANOS = 5000000000l;
+        private final Queue<TimerPair> runTimerPairs = new ArrayDeque<TimerPair>();
+
+        private void addRunTime(long runNanos, long nowNanos) {
+            long expireNanos = nowNanos - KEEP_RUN_TIME_PAIRS_FOR_NANOS;
+            while (!this.runTimerPairs.isEmpty()
+                    && this.runTimerPairs.peek().recordedAtNanos < expireNanos) {
+                this.runTimerPairs.remove();
+            }
+            this.runTimerPairs.add(new TimerPair(runNanos, nowNanos));
+            long accum = 0;
+            long worst = 0;
+            for (TimerPair pair : this.runTimerPairs) {
+                accum += pair.nanos;
+                if (pair.nanos > worst) {
+                    worst = pair.nanos;
+                }
+            }
+            this.runLastNanos = runNanos;
+            this.runAvgNanos = accum / this.runTimerPairs.size();
+            this.runWorstNanos = worst;
+        }
     }
 
     public final Timer timer = new Timer();
@@ -1173,7 +1210,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             long outputEnd = System.nanoTime();
             this.timer.outputNanos = outputEnd - outputStart;
             this.timer.runNanos = outputEnd - runStart;
+            this.timer.addRunTime(this.timer.runNanos, outputEnd);
         }
+
+        long nowNanos = System.nanoTime();
+        this.timer.addRunTime(nowNanos - runStart, nowNanos);
 
         if (this.logTimers) {
             StringBuilder sb = new StringBuilder();

@@ -55,6 +55,8 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     }
 
 
+    public final Timer timer = constructTimer();
+
     /**
      * Arms the channel for clip recording.
      */

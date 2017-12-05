@@ -59,6 +59,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         return new Timer();
     }
 
+    public final LXModulatorComponent.Timer timer = constructTimer();
+
     /**
      * Listener interface for objects which want to be notified when the internal
      * channel state is modified.

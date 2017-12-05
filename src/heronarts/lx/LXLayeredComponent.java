@@ -41,6 +41,8 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      */
     public interface Buffered {}
 
+    public final Timer timer = constructTimer();
+
     protected final LX lx;
 
     private LXBuffer buffer = null;
