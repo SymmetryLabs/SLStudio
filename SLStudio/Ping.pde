@@ -118,6 +118,7 @@ public class FlockWave extends SLPatternWithMarkers {
   BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
   BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
   BooleanParameter everywhere = new BooleanParameter("everywhere");
+  BooleanParameter perSun = new BooleanParameter("perSun");
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
@@ -164,6 +165,7 @@ public class FlockWave extends SLPatternWithMarkers {
     addParameter(oscFollowers);
     addParameter(oscBlobs);
     addParameter(everywhere);
+    addParameter(perSun);
 
     addParameter(timeScale);
     addParameter(size);
@@ -401,8 +403,13 @@ public class FlockWave extends SLPatternWithMarkers {
 
     final ColorPalette pal = getPalette();
     final double shift = palShift.getValue();
+    final SLModel slModel = (SLModel) model;
+    LXPoint[] points = model.points;
+    if (perSun.isOn()) {
+      points = slModel.masterSun.points;
+    }
 
-    Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
+    Arrays.asList(points).parallelStream().forEach(new Consumer<LXPoint>() {
       public void accept(LXPoint point) {
         double sum = 0;
         for (Bird bird : birds) {
@@ -411,6 +418,12 @@ public class FlockWave extends SLPatternWithMarkers {
         colors[point.index] = pal.getColor(sum + shift);
       }
     });
+
+    if (perSun.isOn()) {
+      for (Sun sun : slModel.suns) {
+        sun.copyFromMasterSun(colors);
+      }
+    }
   }
 
   void renderPlasmaLayer(final Bird bird) {

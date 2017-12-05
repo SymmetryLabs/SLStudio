@@ -244,6 +244,14 @@ public static class Sun extends LXModel {
     }
   }
 
+  void copyFromMasterSun(int[] colors) {
+    if (masterIndexes != null) {
+      for (int i = 0; i < points.length; i++) {
+        colors[points[i].index] = colors[masterIndexes[i]];
+      }
+    }
+  }
+
   void computeBoundingBox() {
     // So, this used to be done using Float.MIN_VALUE and Float.MAX_VALUE and using simple </> checks, rather than null.
     // In some cases (suns 3, 5 and 8), the xMax value remained at Float.MIN_VALUE, which makes no sense at all, but
