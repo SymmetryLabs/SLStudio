@@ -1,9 +1,10 @@
 .DS_Store
-LXStudioCubes/build-tmp/
-SLStudio/build-tmp/
-SLStudio/build
+build-tmp/
+build/
 *.autosave
 *.swp
 *.iml
 .idea
 .lxproject
+*.sublime-workspace
+application.macosx
