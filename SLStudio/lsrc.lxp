@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512436142215,
+  "timestamp": 1512445898003,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -96,13 +96,13 @@
             "modulationColor": -7995648,
             "parameters": {
               "label": "LightSource",
-              "x": 385.0,
-              "y": 78.0000008046627,
+              "x": 674.8137923502818,
+              "y": 114.0,
               "z": 184.5,
               "hue": 0.0,
               "sat": 0.0,
-              "gain": 0.400000013411045,
-              "falloff": 0.15000000223517418,
+              "gain": 0.8500000033527613,
+              "falloff": 0.10000000335276127,
               "ambient": 0.0,
               "useBlobs": true
             },
@@ -312,6 +312,9 @@
         },
         {
           "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
         }
       ],
       "mapping": []
@@ -327,12 +330,12 @@
         "3659": true
       },
       "preview": {
-        "radius": 438.8004314150729,
-        "theta": 18.705000000000094,
-        "phi": 0.6967166738510119,
-        "positionX": 889.8604125976562,
-        "positionY": 126.19999694824219,
-        "positionZ": 55.82688903808594
+        "radius": 1181.6588510780434,
+        "theta": 18.795000000000122,
+        "phi": 0.441716673851012,
+        "positionX": 504.375732421875,
+        "positionY": 99.19999694824219,
+        "positionZ": 194.60293579101562
       }
     }
   }

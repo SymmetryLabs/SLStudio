@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512443218882,
+  "timestamp": 1512445128908,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -150,6 +150,7 @@
               "label": "FlockWave",
               "timeScale": 1.0,
               "oscBlobs": false,
+              "oscFollow": false,
               "bMrgRad": 30.0,
               "bMaxSpd": 360.0,
               "x": 385.0,
@@ -484,8 +485,8 @@
               "hue": 273.6000019311905,
               "saturation": 77.00000051409006,
               "enableBlobs": true,
-              "blobMaxDist": 1000.0,
-              "blobAffinity": 110.00000067055228,
+              "blobMaxDist": 490.0000113993883,
+              "blobAffinity": 100.0000008940697,
               "bMrgRad": 30.0,
               "bMaxSpd": 240.0,
               "bMaxDt": 0.5,
@@ -868,6 +869,7 @@
               "label": "FlockWave",
               "timeScale": 0.11999999731779099,
               "oscBlobs": false,
+              "oscFollow": false,
               "bMrgRad": 30.0,
               "bMaxSpd": 240.0,
               "x": 1499.66845703125,
@@ -1291,6 +1293,7 @@
               "label": "FlockWave",
               "timeScale": 1.0,
               "oscBlobs": false,
+              "oscFollow": false,
               "bMrgRad": 30.0,
               "bMaxSpd": 360.0,
               "x": 385.0,
@@ -2590,8 +2593,8 @@
       },
       "preview": {
         "radius": 832.9346181586066,
-        "theta": 5.9280000000000035,
-        "phi": 0.6277166738510133,
+        "theta": 6.31799999999995,
+        "phi": 0.4297166738510131,
         "positionX": 294.73492431640625,
         "positionY": 136.1999969482422,
         "positionZ": 196.0426788330078
