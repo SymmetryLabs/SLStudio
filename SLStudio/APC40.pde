@@ -1,7 +1,8 @@
 
 
 class APC40Listener extends LXComponent {
-  LXMidiRemote remote;
+  LXMidiRemote remotes[] = new LXMidiRemote[2];
+
   public BooleanParameter hasRemote = new BooleanParameter("hasRemote", false);
 
   public APC40Listener(LX lx) {
@@ -16,35 +17,45 @@ class APC40Listener extends LXComponent {
   }
 
   class Listener implements LXMidiListener {
+    BoundedParameter col;
+    int side;
+
+    public Listener(BoundedParameter col, int side) {
+      this.col = col;
+      this.side = side;
+    }
+
     void aftertouchReceived(MidiAftertouch aftertouch){
       // println("AFTER", aftertouch.getChannel());
     } 
+
     void  controlChangeReceived(MidiControlChange cc) {
       if (cc.getCC() == 47) {
         int v = cc.getValue();
         int diff = v > 50 ? -5 : 5;
-        float raw = performanceManager.lColor.getValuef() + diff;
+        float raw = col.getValuef() + diff;
         float mod = raw < 0 ? 360 - raw : raw % 360;
-        performanceManager.lColor.setValue(mod);
+        col.setValue(mod);
       }
-      // println("CC", cc.getCC(), cc.getValue());
     }
+
     void  noteOffReceived(MidiNote note) {
       // println("NOTE OFF", note.getPitch(), note.getVelocity());
     }
+
     void  noteOnReceived(MidiNoteOn note) {
       if (note.getPitch() == 94) {
         println("UP");
-        int i = performanceManager.getWindowIndex(0);
+        int i = performanceManager.getWindowIndex(side);
         performanceManager.windows[i].channel.goPrev();
       }
       if (note.getPitch() == 95) {
         println("DOWN");
-        int i = performanceManager.getWindowIndex(0);
+        int i = performanceManager.getWindowIndex(side);
         performanceManager.windows[i].channel.goNext();
       }
-      // println("NOTE ON", note.getPitch(), note.getVelocity());
     }
+
     void  pitchBendReceived(MidiPitchBend pitchBend) {
       // println("PB", pitchBend.getChannel());
     }
@@ -64,23 +75,49 @@ class APC40Listener extends LXComponent {
           }
       });
     }
-    
-    LXMidiInput chosenInput = lx.engine.midi.matchInput("APC40");
-    LXMidiOutput chosenOutput = lx.engine.midi.matchOutput("APC40");
 
-    if (chosenInput == null || chosenOutput == null) {
-      return;
+    List<LXMidiInput> inputs = lx.engine.midi.getInputs();
+    List<LXMidiOutput> outputs = lx.engine.midi.getOutputs();
+    ArrayList<LXMidiInput> apcInputs = new ArrayList();
+    ArrayList<LXMidiOutput> apcOutputs = new ArrayList();
+    
+
+    for (LXMidiInput i : inputs) {
+      if (i.getName().contains("APC40")) {
+        apcInputs.add(i);
+      }
     }
 
-    chosenInput.open();
-    chosenOutput.open();
+    for (LXMidiOutput o : outputs) {
+      if (o.getName().contains("APC40")) {
+        apcOutputs.add(o);
+      }
+    }
 
-    remote = new LXMidiRemote(chosenInput, chosenOutput);
-    remote.logEvents(true);
+    int n = min(apcInputs.size(), apcOutputs.size(), 2);
 
-    hasRemote.setValue(true);
+    for (int i = 0; i < n; i++) {
+      LXMidiInput input = apcInputs.get(i);
+      LXMidiOutput output = apcOutputs.get(i);
 
-    chosenInput.addListener(new Listener());
+      input.open();
+      output.open();
+
+      remotes[i] = new LXMidiRemote(input, output);
+      remotes[i].logEvents(true);
+
+      if (i == 0) {
+        input.addListener(new Listener(performanceManager.lColor, 0));
+        remotes[i].sendNoteOn(0, 32, 127);
+      } else {
+        input.addListener(new Listener(performanceManager.rColor, 1));
+        remotes[i].sendNoteOn(0, 33, 127);
+      }
+    }
+
+    if (n > 0) {
+      hasRemote.setValue(true);
+    }
   }
 }
 
@@ -97,27 +134,6 @@ class FoxListener extends LXComponent {
     });
   }
 
-  class Listener implements LXMidiListener {
-    void aftertouchReceived(MidiAftertouch aftertouch){
-      println("AFTER", aftertouch.getChannel());
-    } 
-    void  controlChangeReceived(MidiControlChange cc) {
-      println("CC", cc.getCC(), cc.getValue());
-    }
-    void  noteOffReceived(MidiNote note) {
-      println("NOTE OFF", note.getPitch(), note.getVelocity());
-    }
-    void  noteOnReceived(MidiNoteOn note) {
-      println("NOTE ON", note.getPitch(), note.getVelocity());
-    }
-    void  pitchBendReceived(MidiPitchBend pitchBend) {
-      println("PB", pitchBend.getChannel());
-    }
-    void  programChangeReceived(MidiProgramChange pc) {
-      println("PC", pc.getProgram());
-    }
-  }
-
   void bind() {
     LXMidiInput chosenInput = lx.engine.midi.matchInput("Faderfox");
     LXMidiOutput chosenOutput = lx.engine.midi.matchOutput("Faderfox");
@@ -128,8 +144,6 @@ class FoxListener extends LXComponent {
 
     chosenInput.open();
     chosenOutput.open();
-
-    // lx.engine.midi.addListener(new Listener());
 
     remote = new LXMidiRemote(chosenInput, chosenOutput);
 
@@ -142,10 +156,9 @@ class FoxListener extends LXComponent {
     });
 
     remote.bindController(lx.engine.crossfader, 112);
-    if (lx.engine.masterChannel.getEffect("Blur") != null) {
-      remote.bindController(lx.engine.masterChannel.getEffect("Blur").getParameter("amount"), 32);
-    }
-    remote.bindController(lx.engine.output.brightness, 33);
-    remote.bindController(slowDown, 34);
+    // remote.bindController(lx.engine.masterChannel.getEffect("Blur").getParameter("amount"), 32);
+    // remote.bindController(lx.engine.output.brightness, 33);
+    // remote.bindController(slowDown, 34);
+    remote.bindController(slowDown, 32);
   }
 }

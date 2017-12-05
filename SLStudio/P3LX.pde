@@ -188,6 +188,7 @@ public class LXStudio extends P3LX {
 
       if (performanceMode) {
         performanceManager.windows[performanceManager.getWindowIndex(0)].rebindDeck();
+        performanceManager.windows[performanceManager.getWindowIndex(1)].rebindDeck();
       }
       
     }
