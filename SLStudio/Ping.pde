@@ -879,7 +879,7 @@ public class LightSource extends SLPatternWithMarkers {
 
 public class RipplePads extends SLPattern {
   CompoundParameter intensity = new CompoundParameter("intensity", 1, 0, 3);
-  CompoundParameter velocity = new CompoundParameter("velocity", 0, 0, 127);
+  CompoundParameter velocity = new CompoundParameter("velocity", 80, 0, 127);
   CompoundParameter speed = new CompoundParameter("speed", 200, 0, 500);
   CompoundParameter decaySec = new CompoundParameter("decaySec", 1, 0, 10);
   CompoundParameter nextHue = new CompoundParameter("nextHue", 0, 0, 360);
