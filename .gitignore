@@ -8,3 +8,6 @@ build/
 .lxproject
 *.sublime-workspace
 application.macosx
+SLStudio/\.tags
+
+SLStudio/\.tags1
