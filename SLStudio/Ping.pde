@@ -505,6 +505,216 @@ public class FlockWave extends SLPatternWithMarkers {
   }
 }
 
+public class FlockWaveBlues extends FlockWave {
+  public FlockWaveBlues(LX lx) {
+    super(lx);
+
+    parameters.get("blobs").setValue(0);
+    parameters.get("density").setValue(2.000);
+    parameters.get("detail").setValue(2.000);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("folwrs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-0.800);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0);
+    parameters.get("palStop").setValue(1);
+    parameters.get("palette").setValue(8);
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(300.000);
+    parameters.get("size").setValue(620.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnFix").setValue(1);
+    parameters.get("spnMax").setValue(0);
+    parameters.get("spnMin").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.170);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(0.540);
+  }
+}
+
+public class FlockWaveFiery extends FlockWave {
+  public FlockWaveFiery(LX lx) {
+    super(lx);
+
+    parameters.get("blobs").setValue(0);
+    parameters.get("density").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("folwrs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.640);
+    parameters.get("palCutoff").setValue(0.210);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    parameters.get("palette").setValue(25);
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(150.000);
+    parameters.get("size").setValue(500.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnFix").setValue(1);
+    parameters.get("spnMax").setValue(0);
+    parameters.get("spnMin").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.150);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(5.580);
+  }
+}
+
+public class FlockWaveMercury extends FlockWave {
+  public FlockWaveMercury(LX lx) {
+    super(lx);
+
+    parameters.get("blobs").setValue(0);
+    parameters.get("density").setValue(2.000);
+    parameters.get("detail").setValue(10.000);
+    parameters.get("fadeInSec").setValue(2.000);
+    parameters.get("fadeOutSec").setValue(1.500);
+    parameters.get("folwrs").setValue(0);
+    parameters.get("maxBirds").setValue(20.000);
+    parameters.get("maxSpd").setValue(0);
+    parameters.get("palBias").setValue(0);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0);
+    parameters.get("palStop").setValue(1);
+    parameters.get("palette").setValue(10);
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(200.000);
+    parameters.get("size").setValue(340.000);
+    parameters.get("spdMult").setValue(0);
+    parameters.get("spnFix").setValue(1);
+    parameters.get("spnMax").setValue(0);
+    parameters.get("spnMin").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(1);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(3.900);
+  }
+}
+
+public class FlockWaveOoze extends FlockWave {
+  public FlockWaveOoze(LX lx) {
+    super(lx);
+
+    parameters.get("blobs").setValue(0);
+    parameters.get("density").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("folwrs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-2.120);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0.120);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    parameters.get("palette").setValue(21);
+    parameters.get("ripple").setValue(0.400);
+    parameters.get("scatter").setValue(150.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnFix").setValue(1);
+    parameters.get("spnMax").setValue(0);
+    parameters.get("spnMin").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.150);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(6.300);
+  }
+}
+
+public class FlockWavePlanets extends FlockWave {
+  public FlockWavePlanets(LX lx) {
+    super(lx);
+
+    parameters.get("blobs").setValue(0);
+    parameters.get("density").setValue(2.000);
+    parameters.get("detail").setValue(4.400);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("folwrs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.280);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0.080);
+    parameters.get("palStart").setValue(0);
+    parameters.get("palStop").setValue(0.840);
+    parameters.get("palette").setValue(24);
+    parameters.get("ripple").setValue(-3.600);
+    parameters.get("scatter").setValue(150.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0);
+    parameters.get("spnFix").setValue(1);
+    parameters.get("spnMax").setValue(0);
+    parameters.get("spnMin").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.150);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(-0.180);
+  }
+}
+
+public class FlockWaveTimewarp extends FlockWave {
+  public FlockWaveTimewarp(LX lx) {
+    super(lx);
+
+    parameters.get("blobs").setValue(0);
+    parameters.get("density").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("folwrs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.280);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0.120);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    parameters.get("palette").setValue(28);
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(300.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnFix").setValue(1);
+    parameters.get("spnMax").setValue(0);
+    parameters.get("spnMin").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.350);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(5.580);
+  }
+}
+
 public class LightSource extends SLPatternWithMarkers {
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);
   CompoundParameter y = new CompoundParameter("y", model.yMax, 0, 240);
