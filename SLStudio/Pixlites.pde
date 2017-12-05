@@ -58,10 +58,10 @@ Pixlite[] setupPixlites(LX lx) {
     new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // NEEDS WORK!
 
     // Sun 10 (Full)
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_back")), // locked but need trim maybe 
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_back")), // locked but need trim maybe (move whole bottom to the right)
+    new Pixlite(lx, "10.200.1.22", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
+    new Pixlite(lx, "10.200.1.15", ((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
+    new Pixlite(lx, "10.200.1.21", ((SLModel)lx.model).getSliceById("sun10_top_back")), // locked but need trim maybe 
+    new Pixlite(lx, "10.200.1.16", ((SLModel)lx.model).getSliceById("sun10_bottom_back")), // locked but need trim maybe (move whole bottom to the right)
 
     // sun 11
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_front")),
@@ -183,19 +183,19 @@ public class Pixlite extends LXOutputGroup {
         new Sun9BackBottomPixliteConfig(lx, slice, ipAddress, this);
       }
 
-      // // Sun 10
-      // if(slice.id.equals("sun10_top_front")) {
-      //   new Sun10FrontTopPixliteConfig(lx, slice, ipAddress, this);
-      // }
-      // if(slice.id.equals("sun10_bottom_front")) {
-      //   new Sun10FrontBottomPixliteConfig(lx, slice, ipAddress, this);
-      // }
-      // if(slice.id.equals("sun10_top_back")) {
-      //   new Sun10BackTopPixliteConfig(lx, slice, ipAddress, this);
-      // }
-      // if(slice.id.equals("sun10_bottom_back")) {
-      //   new Sun10BackBottomPixliteConfig(lx, slice, ipAddress, this);
-      // }
+      // Sun 10
+      if(slice.id.equals("sun10_top_front")) {
+        new Sun10FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun10_bottom_front")) {
+        new Sun10FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun10_top_back")) {
+        new Sun10BackTopPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun10_bottom_back")) {
+        new Sun10BackBottomPixliteConfig(lx, slice, ipAddress, this);
+      }
 
       // // Sun 11
       // if(slice.id.equals("sun11_top_front")) {

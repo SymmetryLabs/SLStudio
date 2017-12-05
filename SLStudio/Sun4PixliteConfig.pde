@@ -103,9 +103,10 @@ public class Sun4FrontPixliteConfig {
 
 	pixlite.addChild(new PixliteOutput(lx, ipAddress,
 	  new PointsGrouping("12")
-	    .addPoints(slice.getStripById("58").points, PointsGrouping.REVERSE_ORDERING)
-	    .addPoints(slice.getStripById("59").points)
-	    .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
+	    // electrical trouble
+	    // .addPoints(slice.getStripById("58").points, PointsGrouping.REVERSE_ORDERING)
+	    // .addPoints(slice.getStripById("59").points)
+	    // .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
 	));
 
 	pixlite.addChild(new PixliteOutput(lx, ipAddress,
