@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512381725945,
+  "timestamp": 1512435411950,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -70,7 +70,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 3297,
@@ -120,8 +120,8 @@
               "bMrgRad": 30.0,
               "bMaxSpd": 360.0,
               "x": 385.0,
-              "y": 57.19999694824219,
-              "z": 184.5,
+              "y": 15.167995265543617,
+              "z": 303.8249151886208,
               "zScale": 0.0,
               "spnRad": 100.0,
               "spnMin": 2.0,
@@ -161,6 +161,275 @@
               "decaySec": 1.0,
               "nextHue": 0.0,
               "nextSat": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4250,
+            "class": "SLStudio$RKPattern01",
+            "modulationColor": -16711803,
+            "parameters": {
+              "label": "RKPattern01",
+              "RES": 200,
+              "KER": 1,
+              "ALL": true,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4253,
+            "class": "SLStudio$RKPattern02",
+            "modulationColor": -9961728,
+            "parameters": {
+              "label": "RKPattern02",
+              "RES": 247,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": -2.3876105000223724,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "noise": true,
+              "speed": 0.3200000040233135,
+              "dsp": 1.0,
+              "show edge": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4256,
+            "class": "SLStudio$RKPattern03",
+            "modulationColor": -16711892,
+            "parameters": {
+              "label": "RKPattern03",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": true,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "avg split": true,
+              "show tri": true,
+              "show edge": true,
+              "speed": 0.009999999776482582,
+              "fragment": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4259,
+            "class": "SLStudio$RKPattern05",
+            "modulationColor": -65354,
+            "parameters": {
+              "label": "RKPattern05",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "clear bg": false,
+              "speed": 0.05000000074505806,
+              "scalar": 5.0,
+              "hue1": 0.0,
+              "hue2": 85.0,
+              "hue3": 170.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4262,
+            "class": "com.symmetrylabs.pattern.Wasps",
+            "modulationColor": -16756993,
+            "parameters": {
+              "label": "Wasps",
+              "count": 0.0,
+              "size": 100.0,
+              "flattenZ": true,
+              "hue": 0.0,
+              "saturation": 30.0,
+              "speed": 1.0,
+              "accel": 0.15000000596046448,
+              "dampen": 0.75,
+              "focusX": 0.0,
+              "focusY": 0.0,
+              "focusZ": 0.0,
+              "pullX": 0.5,
+              "pullY": 0.5,
+              "pullZ": 0.5,
+              "twistX": 0.5,
+              "twistY": 0.5,
+              "twistZ": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4264,
+            "class": "SLStudio$Traktor",
+            "modulationColor": -36864,
+            "parameters": {
+              "label": "Traktor",
+              "SPD": 0.5,
+              "hueSpread": 0.4000000059604645,
+              "bassG": 1.0,
+              "trebG": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4267,
+            "class": "SLStudio$ViolinWave",
+            "modulationColor": -54016,
+            "parameters": {
+              "label": "ViolinWave",
+              "LVL": 0.44999998807907104,
+              "EDG": 0.5,
+              "RNG": 0.5,
+              "RLS": 0.5,
+              "SPD": 0.5,
+              "AMP": 0.25,
+              "WAVE": 0.5,
+              "PSIZE": 0.5,
+              "PSPD": 0.5,
+              "PDENS": 0.25
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4271,
+            "class": "SLStudio$Noise",
+            "modulationColor": -3669761,
+            "parameters": {
+              "label": "Noise",
+              "Sprk": 0.0,
+              "Wave": 0.0,
+              "TrnX": 0.5,
+              "TrnY": 0.5,
+              "RotX": 0.5,
+              "RotY": 0.5,
+              "RotZ": 0.5,
+              "Spin": 0.5,
+              "Fast": 0.550000011920929,
+              "Dens": 0.30000001192092896,
+              "Shrp": 0.0,
+              "Symm": 0,
+              "Anim": 6
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4273,
+            "class": "SLStudio$LightSource",
+            "modulationColor": -16732417,
+            "parameters": {
+              "label": "LightSource",
+              "x": 385.0,
+              "y": 57.19999694824219,
+              "z": 184.5,
+              "hue": 0.0,
+              "sat": 0.0,
+              "gain": 1.0,
+              "falloff": 0.75,
+              "ambient": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -693,7 +962,7 @@
         "parameters": {
           "label": "L Colors",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -708,7 +977,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 3414,
@@ -912,7 +1181,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 3396,
@@ -991,6 +1260,190 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 4468,
+            "class": "SLStudio$RKPattern01",
+            "modulationColor": -65297,
+            "parameters": {
+              "label": "RKPattern01",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4471,
+            "class": "SLStudio$RKPattern02",
+            "modulationColor": -10878721,
+            "parameters": {
+              "label": "RKPattern02",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "noise": false,
+              "speed": 0.10000000149011612,
+              "dsp": 1.0,
+              "show edge": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4474,
+            "class": "SLStudio$RKPattern03",
+            "modulationColor": -16711786,
+            "parameters": {
+              "label": "RKPattern03",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "avg split": false,
+              "show tri": true,
+              "show edge": false,
+              "speed": 0.009999999776482582,
+              "fragment": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4477,
+            "class": "SLStudio$RKPattern04",
+            "modulationColor": -13893377,
+            "parameters": {
+              "label": "RKPattern04",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "clear bg": false,
+              "speed": 0.019999999552965164,
+              "hue1": 0.0,
+              "hue2": 85.0,
+              "hue3": 170.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4480,
+            "class": "SLStudio$RKPattern05",
+            "modulationColor": -459008,
+            "parameters": {
+              "label": "RKPattern05",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "clear bg": false,
+              "speed": 0.05000000074505806,
+              "scalar": 5.0,
+              "hue1": 0.0,
+              "hue2": 85.0,
+              "hue3": 170.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -1028,6 +1481,297 @@
               "color/brightness": 100.0,
               "color/saturation": 100.0,
               "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4501,
+            "class": "SLStudio$PerSunWasps",
+            "modulationColor": -13959424,
+            "parameters": {
+              "label": "PerSunWasps",
+              "count": 0.0,
+              "size": 10.0,
+              "flattenZ": true,
+              "hue": 0.0,
+              "saturation": 30.0,
+              "enableBlobs": false,
+              "blobMaxDist": 100.0,
+              "blobAffinity": 10.0,
+              "bMrgRad": 30.0,
+              "bMaxSpd": 240.0,
+              "bMaxDt": 0.5,
+              "speed": 1.0,
+              "accel": 0.15000000596046448,
+              "dampen": 0.75,
+              "focusX": 0.0,
+              "focusY": 0.0,
+              "focusZ": 0.0,
+              "pullX": 0.0,
+              "pullY": 0.0,
+              "pullZ": 0.0,
+              "twistX": 0.0,
+              "twistY": 0.0,
+              "twistZ": 0.0,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4503,
+            "class": "SLStudio$Pong",
+            "modulationColor": -45824,
+            "parameters": {
+              "label": "Pong",
+              "Sprk": 0.0,
+              "Wave": 0.0,
+              "TrnX": 0.5,
+              "TrnY": 0.5,
+              "Size": 0.4000000059604645,
+              "Anim": 2
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4511,
+            "class": "SLStudio$Rings",
+            "modulationColor": -65535,
+            "parameters": {
+              "label": "Rings",
+              "DEPTH": 0.6000000238418579,
+              "BRT": 0.75,
+              "SAT": 0.5,
+              "SPD1": 0.20000000298023224,
+              "SPD2": 0.4000000059604645,
+              "SCALE": 0.15000000596046448
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4513,
+            "class": "SLStudio$RipplePads",
+            "modulationColor": -13106945,
+            "parameters": {
+              "label": "RipplePads",
+              "intensity": 0.5,
+              "speed": 100.0,
+              "decaySec": 1.0,
+              "nextHue": 0.0,
+              "nextSat": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4515,
+            "class": "SLStudio$RKPattern01",
+            "modulationColor": -16711780,
+            "parameters": {
+              "label": "RKPattern01",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4518,
+            "class": "SLStudio$RKPattern02",
+            "modulationColor": -16771073,
+            "parameters": {
+              "label": "RKPattern02",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "noise": false,
+              "speed": 0.10000000149011612,
+              "dsp": 1.0,
+              "show edge": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4521,
+            "class": "SLStudio$RKPattern03",
+            "modulationColor": -5832960,
+            "parameters": {
+              "label": "RKPattern03",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "avg split": false,
+              "show tri": true,
+              "show edge": false,
+              "speed": 0.009999999776482582,
+              "fragment": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4524,
+            "class": "SLStudio$RKPattern04",
+            "modulationColor": -8322817,
+            "parameters": {
+              "label": "RKPattern04",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "clear bg": false,
+              "speed": 0.019999999552965164,
+              "hue1": 0.0,
+              "hue2": 85.0,
+              "hue3": 170.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4527,
+            "class": "SLStudio$RKPattern05",
+            "modulationColor": -16711696,
+            "parameters": {
+              "label": "RKPattern05",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "clear bg": false,
+              "speed": 0.05000000074505806,
+              "scalar": 5.0,
+              "hue1": 0.0,
+              "hue2": 85.0,
+              "hue3": 170.0
             },
             "modulation": {
               "modulators": [],
@@ -1239,6 +1983,184 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 4483,
+            "class": "SLStudio$TextureJupiter1",
+            "modulationColor": -8716544,
+            "parameters": {
+              "label": "TextureJupiter1",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4486,
+            "class": "SLStudio$TextureJupiter2",
+            "modulationColor": -16711753,
+            "parameters": {
+              "label": "TextureJupiter2",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4489,
+            "class": "SLStudio$TextureNebula1",
+            "modulationColor": -16711744,
+            "parameters": {
+              "label": "TextureNebula1",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4492,
+            "class": "SLStudio$TextureNebula2",
+            "modulationColor": -16711905,
+            "parameters": {
+              "label": "TextureNebula2",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4495,
+            "class": "SLStudio$TextureOceans",
+            "modulationColor": -10288897,
+            "parameters": {
+              "label": "TextureOceans",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4498,
+            "class": "SLStudio$TextureSunsets",
+            "modulationColor": -10944768,
+            "parameters": {
+              "label": "TextureSunsets",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 4785,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711743,
+        "parameters": {
+          "label": "Seaboard",
+          "arm": false,
+          "enabled": false,
+          "cue": false,
+          "midiMonitor": true,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.05714285187423229,
+          "crossfadeGroup": 1,
+          "blendMode": 1,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 4783,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -8978688,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4786,
+            "class": "SLStudio$SeaboardPattern",
+            "modulationColor": -65327,
+            "parameters": {
+              "label": "Seaboard"
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       }
@@ -1332,7 +2254,7 @@
         "modulationColor": -10486016,
         "parameters": {
           "label": "Audio Input",
-          "device": 0
+          "device": 2
         }
       },
       "output": {
@@ -1483,6 +2405,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - Seaboard RISE",
+          "channel": true,
+          "control": true,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - APC40 mkII",
           "channel": false,
           "control": false,
@@ -1579,9 +2507,9 @@
         "3062": true
       },
       "preview": {
-        "radius": 725.7754041684359,
-        "theta": 5.997000000000003,
-        "phi": 0.4297166738510132,
+        "radius": 841.5337889471593,
+        "theta": 6.066000000000009,
+        "phi": -0.09828332614898722,
         "positionX": 294.73492431640625,
         "positionY": 136.1999969482422,
         "positionZ": 196.0426788330078

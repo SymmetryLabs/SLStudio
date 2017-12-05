@@ -2,8 +2,9 @@
 import com.symmetrylabs.util.LayeredRenderer;
 import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
+import com.symmetrylabs.util.OctahedronWithArrow;
 
-public abstract static class PerSunParticlePattern extends PerSunPattern {
+public abstract static class PerSunParticlePattern extends PerSunPattern implements MarkerSource {
   private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
   public BoundedParameter particleCount;
@@ -15,11 +16,24 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
   public BooleanParameter enableBlobs;
   public CompoundParameter blobMaxDist;
+  public CompoundParameter blobAffinity;
   public CompoundParameter oscMergeRadius;  // blob merge radius (in)
   public CompoundParameter oscMaxSpeed;  // max blob speed (in/s)
   public CompoundParameter oscMaxDeltaSec;  // max interval to calculate blob velocities (s)
 
-  protected Map<Sun, BlobTracker.Blob> closestBlobs = new HashMap<Sun, BlobTracker.Blob>();
+  protected Map<Sun, BlobDist> sunClosestBlobDists = new HashMap<Sun, BlobDist>();
+
+  protected class BlobDist {
+    public final BlobTracker.Blob blob;
+    public final double dist;
+    public final double scale;
+
+    public BlobDist(BlobTracker.Blob blob, double dist) {
+      this.blob = blob;
+      this.dist = dist;
+      this.scale = blobAffinity.getValue() / (dist + 1);
+    }
+  }
 
   private BlobTracker blobTracker;
 
@@ -27,6 +41,36 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
     super(lx, subpatternClass);
 
     blobTracker = BlobTracker.getInstance(lx);
+  }
+
+  @Override
+  public void onActive() {
+    super.onActive();
+    ((LXStudio) lx).ui.addMarkerSource(this);
+  }
+
+  @Override
+  public void onInactive() {
+    super.onInactive();
+    ((LXStudio) lx).ui.removeMarkerSource(this);
+  }
+
+  @Override
+  public List<Marker> getMarkers() {
+    List<Marker> markers = new ArrayList<Marker>();
+    for (Sun sun : model.suns) {
+      BlobDist bd = sunClosestBlobDists.get(sun);
+      if (bd == null)
+        continue;
+
+      markers.add(new OctahedronWithArrow(bd.blob.pos, 20, LXColor.WHITE,
+          new PVector((float)(bd.scale * bd.blob.pos.x - model.cx),
+              (float)(bd.scale * bd.blob.pos.y - model.cy),
+              (float)(bd.scale * bd.blob.pos.z - model.cz)), LXColor.RED
+      ));
+    }
+
+    return markers;
   }
 
   @Override
@@ -40,6 +84,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
 
     addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
     addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
+    addParameter(blobAffinity = new CompoundParameter("blobAffinity", 10f, 0, 100f));
     addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
     addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
     addParameter(oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1));
@@ -72,7 +117,12 @@ public abstract static class PerSunParticlePattern extends PerSunPattern {
           }
         }
 
-        closestBlobs.put(sun, closestBlob);
+        if (closestBlob == null) {
+          sunClosestBlobDists.put(sun, null);
+        }
+        else {
+          sunClosestBlobDists.put(sun, new BlobDist(closestBlob, FastMath.sqrt(closestSqrDist)));
+        }
       }
     }
 
@@ -272,11 +322,11 @@ public static class PerSunWasps extends PerSunParticlePattern {
       double focusZValue = focusZ.getValue();
 
       if (enableBlobs.getValueb()) {
-        BlobTracker.Blob closestBlob = closestBlobs.get(sun);
+        BlobDist closestBlob = sunClosestBlobDists.get(sun);
         if (closestBlob != null) {
-          focusXValue = (closestBlob.pos.x - model.cx) * 2f / model.xRange;
-          focusYValue = (closestBlob.pos.y - model.cy) * 2f / model.yRange;
-          focusZValue = (closestBlob.pos.z - model.cz) * 2f / model.zRange;
+          focusXValue = closestBlob.scale * (closestBlob.blob.pos.x - model.cx) * 2f / model.xRange;
+          focusYValue = closestBlob.scale * (closestBlob.blob.pos.y - model.cy) * 2f / model.yRange;
+          focusZValue = closestBlob.scale * (closestBlob.blob.pos.z - model.cz) * 2f / model.zRange;
         }
       }
 

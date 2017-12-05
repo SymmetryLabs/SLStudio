@@ -17,7 +17,9 @@ Pixlite[] setupPixlites(LX lx) {
     new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")), // trimmed
     new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")), // trimmed
 
-    // Sun 2..
+    // Sun 2
+    new Pixlite(lx, "10.200.1.41", model.getSliceById("sun2_top_back")),
+    new Pixlite(lx, "10.200.1.42", model.getSliceById("sun2_top_front")),
 
     // Sun 3 (One Third)
     new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
