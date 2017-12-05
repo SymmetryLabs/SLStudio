@@ -878,11 +878,22 @@ public class LightSource extends SLPatternWithMarkers {
 }
 
 public class RipplePads extends SLPattern {
-  CompoundParameter intensity = new CompoundParameter("intensity", 0.5, 0, 3);
-  CompoundParameter speed = new CompoundParameter("speed", 100, 0, 500);
+  CompoundParameter intensity = new CompoundParameter("intensity", 1, 0, 3);
+  CompoundParameter velocity = new CompoundParameter("velocity", 0, 0, 127);
+  CompoundParameter speed = new CompoundParameter("speed", 200, 0, 500);
   CompoundParameter decaySec = new CompoundParameter("decaySec", 1, 0, 10);
   CompoundParameter nextHue = new CompoundParameter("nextHue", 0, 0, 360);
-  CompoundParameter nextSat = new CompoundParameter("nextSat", 0.5, 0, 1);
+  CompoundParameter nextSat = new CompoundParameter("nextSat", 0, 0, 1);
+
+  BooleanParameter sunA = new BooleanParameter("sunA");
+  BooleanParameter sunB = new BooleanParameter("sunB");
+  BooleanParameter sunC = new BooleanParameter("sunC");
+  BooleanParameter sunD = new BooleanParameter("sunD");
+  BooleanParameter sunE = new BooleanParameter("sunE");
+  BooleanParameter sunF = new BooleanParameter("sunF");
+  BooleanParameter[] buttons = new BooleanParameter[] { sunA, sunB, sunC, sunD, sunE, sunF };
+  boolean[] lastState = new boolean[buttons.length];
+  int[] buttonPitches = new int[] { 60, 92, 59, 91, 58, 90 };
 
   Sun[] sunsByNote = new Sun[128];
   List<Ripple> ripples = new ArrayList<Ripple>();
@@ -890,8 +901,8 @@ public class RipplePads extends SLPattern {
   public RipplePads(LX lx) {
     super(lx);
 
-    sunsByNote[60] = getSun("sun1");
-    sunsByNote[92] = getSun("sun2");
+    sunsByNote[60] = getSun("sun2");
+    sunsByNote[92] = getSun("sun1");
     sunsByNote[59] = getSun("sun4");
     sunsByNote[91] = getSun("sun6");
     sunsByNote[58] = getSun("sun7");
@@ -903,10 +914,16 @@ public class RipplePads extends SLPattern {
     sunsByNote[43] = getSun("sun3");
 
     addParameter(intensity);
+    addParameter(velocity);
     addParameter(speed);
     addParameter(decaySec);
     addParameter(nextHue);
     addParameter(nextSat);
+
+    for (BooleanParameter param : buttons) {
+      param.setMode(BooleanParameter.Mode.MOMENTARY);
+      addParameter(param);
+    }
   }
 
   Sun getSun(String id) {
@@ -916,53 +933,70 @@ public class RipplePads extends SLPattern {
   public void run(double deltaMs) {
     float deltaSec = (float) deltaMs * 0.001f;
 
+    for (int b = 0; b < buttons.length; b++) {
+      boolean state = buttons[b].isOn();
+      if (state != lastState[b]) {
+        if (state) {
+          noteOn(buttonPitches[b], (int) velocity.getValuef());
+        } else {
+          noteOff(buttonPitches[b]);
+        }
+        lastState[b] = state;
+      }
+    }
+
     List<Ripple> expired = new ArrayList<Ripple>();
     for (Ripple ripple : ripples) {
       ripple.advance(deltaSec);
       if (ripple.isExpired()) {
         expired.add(ripple);
-      } else {
-        ripple.render();
       }
     }
     ripples.removeAll(expired);
 
-    for (LXPoint point : model.points) {
-      int sum = 0xff000000;
-      for (Ripple ripple : ripples) {
-        sum = LXColor.add(sum, ripple.layerColors[point.index]);
+    for (Sun sun : sunsByNote) {
+      if (sun == null) continue;
+      for (int i = 0; i < sun.points.length; i++) {
+        LXPoint point = sun.points[i];
+        int sum = 0xff000000;
+        for (Ripple ripple : ripples) {
+          if (ripple.sun == sun) {
+            sum = LXColor.add(sum, ripple.getColor(sun.distances[i]));
+          }
+        }
+        colors[point.index] = sum;
       }
-      colors[point.index] = sum;
     }
   }
 
   public void noteOnReceived(MidiNoteOn note) {
-    Sun sun = sunsByNote[note.getPitch()];
+    noteOn(note.getPitch(), note.getVelocity());
+  }
+
+  public void noteOffReceived(MidiNote note) {
+    noteOff(note.getPitch());
+  }
+
+  void noteOn(int pitch, int velocity) {
+    Sun sun = sunsByNote[pitch];
     if (sun != null) {
-      addRipple(sun);
+      addRipple(sun, velocity/128f);
     }
   }
 
-  /** Returns a random number between min and max. */
-  float random(float min, float max) {
-    return min + (float) Math.random()*(max - min);
+  void noteOff(int pitch) {
   }
 
-  void addRipple(Sun sun) {
-    PVector center = new PVector(
-        sun.boundingBox.origin.x + random(0.2, 0.8)*sun.boundingBox.size.x,
-        sun.boundingBox.origin.y + random(0.2, 0.8)*sun.boundingBox.size.y,
-        sun.boundingBox.origin.z + random(0.0, 1.0)*sun.boundingBox.size.z
-    );
+  void addRipple(Sun sun, float velocity) {
     ripples.add(new Ripple(
-        center, sun.boundingBox.size.z/2,
-        intensity.getValuef(), speed.getValuef(),
+        sun, sun.boundingBox.size.z/2,
+        intensity.getValuef()*velocity, speed.getValuef()*velocity,
         decaySec.getValuef(), nextHue.getValuef(), nextSat.getValuef()
     ));
   }
 
   class Ripple {
-    PVector center;
+    Sun sun;
     float intensity;
     float speed;
     float decaySec;
@@ -974,8 +1008,8 @@ public class RipplePads extends SLPattern {
     float value;
     int[] layerColors;
 
-    Ripple(PVector center, float radius, float intensity, float speed, float decaySec, float hue, float sat) {
-      this.center = center;
+    Ripple(Sun sun, float radius, float intensity, float speed, float decaySec, float hue, float sat) {
+      this.sun = sun;
       this.radius = radius;
       this.intensity = intensity;
       this.speed = speed;
@@ -983,7 +1017,6 @@ public class RipplePads extends SLPattern {
       this.hue = hue;
       this.sat = sat;
       ageSec = 0;
-      layerColors = new int[colors.length];
     }
 
     void advance(float deltaSec) {
@@ -992,14 +1025,11 @@ public class RipplePads extends SLPattern {
       value = intensity / (1f + 10f*ageSec/decaySec);
     }
 
-    void render() {
-      for (LXPoint point : model.points) {
-        PVector pos = new PVector(point.x, point.y, point.z);
-        if (PVector.sub(pos, center).mag() < radius) {
-          layerColors[point.index] = lx.hsb(hue, sat*100f, value*100f);
-        } else {
-          layerColors[point.index] = 0;
-        }
+    int getColor(float distance) {
+      if (distance < radius) {
+        return lx.hsb(hue, sat*100f, value*100f);
+      } else {
+        return 0;
       }
     }
 
