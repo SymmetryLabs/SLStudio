@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512449322307,
+  "timestamp": 1512465527721,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.5000000018626451,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -54,7 +54,7 @@
         "modulationColor": -7471360,
         "parameters": {
           "label": "L Pattern 1",
-          "arm": false,
+          "arm": true,
           "enabled": true,
           "cue": false,
           "midiMonitor": false,
@@ -70,7 +70,7 @@
         },
         "effects": [
           {
-            "id": 366,
+            "id": 4142,
             "class": "heronarts.lx.effect.BlurEffect",
             "modulationColor": -16748545,
             "parameters": {
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 12,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 2773,
@@ -163,9 +163,9 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.6100000031292439,
-              "Shrp": 0.0,
-              "Symm": 0,
+              "Dens": 0.8399999998509884,
+              "Shrp": 0.5,
+              "Symm": 1,
               "Anim": 6
             },
             "modulation": {
@@ -237,9 +237,9 @@
             "modulationColor": -15335680,
             "parameters": {
               "label": "RKPattern02",
-              "RES": 200,
-              "KER": 1,
-              "ALL": false,
+              "RES": 353,
+              "KER": 2,
+              "ALL": true,
               "SUN1": true,
               "SUN2": true,
               "SUN3": true,
@@ -251,14 +251,14 @@
               "SUN9": true,
               "SUN10": true,
               "SUN11": true,
-              "audioLink": false,
-              "rX": 0.0,
+              "audioLink": true,
+              "rX": 3.1415927410125732,
               "rY": 0.0,
-              "rZ": 0.0,
+              "rZ": -1.1938052149011513,
               "noise": false,
               "speed": 0.10000000149011612,
               "dsp": 1.0,
-              "show edge": true
+              "show edge": false
             },
             "modulation": {
               "modulators": [],
@@ -511,7 +511,7 @@
         "parameters": {
           "label": "L Pattern 2",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -609,7 +609,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 1,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -618,7 +618,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 6,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 4021,
@@ -795,8 +795,8 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
-          "crossfadeGroup": 0,
+          "fader": 1.0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -839,8 +839,8 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
-          "crossfadeGroup": 0,
+          "fader": 1.0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -883,8 +883,8 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
-          "crossfadeGroup": 0,
+          "fader": 1.0,
+          "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
@@ -1063,11 +1063,11 @@
       "modulationColor": -16711822,
       "parameters": {
         "label": "Master",
-        "arm": false
+        "arm": true
       },
       "effects": [
         {
-          "id": 364,
+          "id": 4219,
           "class": "heronarts.lx.effect.BlurEffect",
           "modulationColor": -12544,
           "parameters": {
@@ -1384,8 +1384,8 @@
       },
       "preview": {
         "radius": 548.8225360394861,
-        "theta": 6.462000000000055,
-        "phi": 0.561716673851013,
+        "theta": 6.264000000000047,
+        "phi": -0.005283326148987441,
         "positionX": 926.0613403320312,
         "positionY": -73.80000305175781,
         "positionZ": -15.951504707336426

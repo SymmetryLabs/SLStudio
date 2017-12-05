@@ -83,7 +83,8 @@ void setup() {
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
     }
   };
-
+  lx.engine.isChannelMultithreaded.setValue(true);
+  lx.engine.isNetworkMultithreaded.setValue(true);
   lx.engine.audio.enabled.setValue(true);
   blobTracker = BlobTracker.getInstance(lx);
 
