@@ -125,7 +125,7 @@ class FoxListener extends LXComponent {
     slowDown.addListener(new LXParameterListener() {
         public void onParameterChanged(LXParameter parameter) {
             float v = slowDown.getValuef();
-            lx.engine.speed.setValue(map(v, 0, 1, 0.5, 0));
+            lx.engine.speed.setValue(map(v, 0, 1, 1.0, 0));
         }
     });
 
