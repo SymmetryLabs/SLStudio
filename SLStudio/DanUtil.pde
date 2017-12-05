@@ -84,6 +84,7 @@ public class DPat extends LXPattern {
     float           NoiseMove   = random(10000);
     CompoundParameter pSpark, pWave, pRotX, pRotY, pRotZ, pSpin, pTransX, pTransY;
     BooleanParameter pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
+    BooleanParameter perSun;
 
     float       lxh     ()                                  { return palette.getHuef();                                          }
     int         c1c      (float a)                          { return round(100*constrain(a,0,1));                               }
@@ -193,6 +194,8 @@ public class DPat extends LXPattern {
         pRotZ       =   addParam("RotZ", .5);
         pSpin       =   addParam("Spin", .5);
 
+        perSun = new BooleanParameter("perSun");
+        addParameter(perSun);
 
         pXsym = new BooleanParameter("X-SYM");
         pYsym = new BooleanParameter("Y-SYM");
@@ -200,6 +203,8 @@ public class DPat extends LXPattern {
         pXdup = new BooleanParameter("X-DUP");
         pJog = new BooleanParameter("JOG");
         pGrey = new BooleanParameter("GREY");
+
+
 
         // addNonKnobParameter(pXsym);
         // addNonKnobParameter(pYsym);
@@ -282,7 +287,43 @@ public class DPat extends LXPattern {
         }
 
         // TODO Threadding: For some reason, using parallelStream here messes up the animations.
-        ((SLModel)model).forEachPoint(new BatchConsumer() {
+
+        if (perSun.isOn()) {
+          SLModel slModel = (SLModel) model;
+          Arrays.asList(slModel.masterSun.points).parallelStream().forEach(new Consumer<LXPoint>() {
+              @Override
+              public void accept(final LXPoint p) {
+                  PVector P       = new PVector(), tP = new PVector();
+
+                  setVec(P,p);
+                  P.sub(modmin);
+                  P.sub(pTrans);
+                  if (sprk  > 0) {P.y += sprk*randctr(50); P.x += sprk*randctr(50); P.z += sprk*randctr(50); }
+                  if (wvAmp > 0)  P.y += interpWv(p.x-modmin.x, yWaveNz);
+                  if (wvAmp > 0)  P.x += interpWv(p.y-modmin.y, xWaveNz);
+                  if (pJog.getValueb())       P.add(xyzJog);
+
+
+                  color cNew, cOld = colors[p.index];
+                  { tP.set(P);                                    cNew = CalcPoint(tP);                           }
+                  if (pXsym.getValueb())  { tP.set(mMax.x-P.x,P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pYsym.getValueb())  { tP.set(P.x,mMax.y-P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pRsym.getValueb())  { tP.set(mMax.x-P.x,mMax.y-P.y,mMax.z-P.z);     cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pXdup.getValueb())  { tP.set((P.x+mMax.x*.5)%mMax.x,P.y,P.z);       cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pGrey.getValueb())  { cNew = lx.hsb(0, 0, LXColor.b(cNew)); }
+                  colors[p.index] = cNew;
+              }
+          });
+
+          for (Sun sun : slModel.suns) {
+            if (sun != slModel.masterSun) {
+              for (int i = 0; i < sun.points.length; i++) {
+                colors[sun.points[i].index] = colors[sun.masterIndexes[i]];
+              }
+            }
+          }
+        } else {
+          ((SLModel)model).forEachPoint(new BatchConsumer() {
             @Override
             public void accept(int start, int end) {
                 for (int i = start; i < end; i++) {
@@ -309,6 +350,8 @@ public class DPat extends LXPattern {
                 }
             }
         });
+      }
+
     }
 }
 // //----------------------------------------------------------------------------------------------------------------------------------
