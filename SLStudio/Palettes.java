@@ -109,104 +109,115 @@ class ConstantPalette implements ColorPalette {
     */
 class ArrayPalette implements ColorPalette {
     int[] colors;
-    double start;
-    double stop;
-    double scale;
-    int valueCutoff;
 
     ArrayPalette(int[] colors) {
         this.colors = new int[colors.length];
         for (int i = 0; i < colors.length; i++) {
             this.colors[i] = 0xff000000 | colors[i];
         }
-        this.start = 0;
-        this.stop = 1;
-        this.scale = colors.length - 1;
     }
 
     double clamp(double value, double low, double high) {
         return Math.min(Math.max(value, low), high);
     }
 
-    public void setStart(double start) {
-        this.start = clamp(start, 0, 1);
-    }
-
-    public void setStop(double stop) {
-        this.stop = clamp(stop, 0, 1);
-    }
-
-    // Brightness cutoff (all values below this are clamped to zero).
-    public void setCutoff(double cutoff) {
-        this.valueCutoff = (int) Math.floor((255*3)*cutoff);
-    }
-
-    public int applyCutoff(int c) {
-        int value = ((c >> 16) & 0xff) + ((c >> 8) & 0xff) + (c & 0xff);
-        return value < valueCutoff ? 0 : c;
-    }
-
     public int getColor(double p) {
-        double index = (start + clamp(p, 0, 1) * (stop - start)) * (colors.length - 1);
+        double index = clamp(p, 0, 1) * (colors.length - 1);
         int low = (int) Math.floor(index);
         int high = (low + 1) < colors.length ? low + 1 : low;
-        return LXColor.lerp(applyCutoff(colors[low]), applyCutoff(colors[high]), index - low);
+        return LXColor.lerp(colors[low], colors[high], index - low);
     }
 }
 
-/** A palette that repeats the colors from the [0, 1] range of another palette
+/** A palette that repeats the colors from a subrange of another palette
     * in a zigzag pattern over the number line: in forward order from 0 to 1,
     * then reverse order from 1 to 2, then forward order from 2 to 3, etc.
-    * A bias factor can be applied, which shifts the output more toward the 0 end
-    * or the 1 end of the palette, while keeping p = 0 at 0 and p = 1 at 1.
-    * A bias of -5 causes the output to spend most of its time near 0 (from p = 0
-    * to about p = 0.95), and then shoot quickly up to 1.  A bias of +5 causes the
-    * output to shoot quickly up to 0.95 and then spend most of its time near 1.
+    * Provides several mutable parameters: bottom, top, bias, shift, and cutoff.
     */
 class ZigzagPalette implements ColorPalette {
     ColorPalette palette;
+    double bottom;
+    double top;
+    double bias;
     double exponent;
-    double floor;
+    double shift;
+    double cutoff;
+
+    ZigzagPalette(
+            ColorPalette palette,
+            double bottom, double top, double bias, double cutoff) {
+        this.palette = palette;
+        setBottom(bottom);
+        setTop(top);
+        setBias(bias);
+        setShift(shift);
+        setCutoff(cutoff);
+    }
+
+    ZigzagPalette() {
+        this(new ConstantPalette(0));
+    }
 
     ZigzagPalette(ColorPalette palette) {
-        this.palette = palette;
-        this.exponent = 1;
+        this(palette, 0, 1, 0, 0);
     }
 
     ZigzagPalette(int[] colors) {
         this(new ArrayPalette(colors));
     }
 
-    public void setStart(double start) {
-        if (palette instanceof ArrayPalette) {
-            ((ArrayPalette) palette).setStart(start);
-        }
+    public ZigzagPalette copy() {
+        return new ZigzagPalette(palette, bottom, top, bias, cutoff);
     }
 
-    public void setStop(double stop) {
-        if (palette instanceof ArrayPalette) {
-            ((ArrayPalette) palette).setStop(stop);
-        }
+    public void setPalette(ColorPalette palette) {
+        this.palette = palette;
     }
 
-    public void setCutoff(double cutoff) {
-        if (palette instanceof ArrayPalette) {
-            ((ArrayPalette) palette).setCutoff(cutoff);
-        }
+    public void setBottom(double bottom) {
+        this.bottom = bottom;
     }
 
-    // A negative bias shifts the output toward 0; positive bias shifts toward 1.
+    public void setTop(double top) {
+        this.top = top;
+    }
+
+    /** The bias factor shifts the output more toward the top end or the bottom
+        * end of the palette, while keeping the top and bottom ends in place.
+        * A bias of -5 causes the output to spend most of its time (from p = 0 to
+        * about p = 0.95) near the bottom end, then shoot quickly up to the top.
+        * A bias of +5 causes the output to shoot quickly up to 0.95 of the way
+        * toward the top end and then spend most of its time near the top end.
+        */
     public void setBias(double bias) {
         exponent = Math.exp(bias);
     }
 
+    public void setShift(double shift) {
+        this.shift = shift;
+    }
+
+    public void setCutoff(double cutoff) {
+        this.cutoff = cutoff;
+    }
+
     public int getColor(double p) {
+        p += shift;
         int floor = (int) Math.floor(p);
         p -= floor;
         if (floor % 2 != 0) {
             p = 1 - p;
         }
-        return palette.getColor(Math.pow(p, exponent));
+        if (exponent != 1) p = Math.pow(p, exponent);
+        int c = palette.getColor(bottom + (top - bottom) * p);
+        if (cutoff != 0) {
+            double value =
+                    (((c >> 16) & 0xff) + ((c >> 8) & 0xff) + (c & 0xff))/(255.0*3);
+            if (value < cutoff) return 0;
+            c = LXColor.lerp(0, c, Math.pow(
+                    (value - cutoff)/(1.0 - cutoff), 0.5*cutoff));
+        }
+        return c;
     }
 }
 
@@ -268,7 +279,7 @@ class LinePaletteExtractor extends ImageUtils implements PaletteExtractor {
             double t = i / (double) numStops;
             colors[i] = getImageColor(image, x0 + (x1 - x0)*t, y0 + (y1 - y0)*t);
         }
-        return new ZigzagPalette(colors);
+        return new ArrayPalette(colors);
     }
 }
 
@@ -300,7 +311,7 @@ class ArcPaletteExtractor extends ImageUtils implements PaletteExtractor {
             colors[i] = getImageColor(
                     image, t, height * (0.5 + Math.cos(2 * Math.PI * t) * 0.5));
         }
-        return new ZigzagPalette(colors);
+        return new ArrayPalette(colors);
     }
 }
 
