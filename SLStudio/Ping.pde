@@ -116,13 +116,11 @@ public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
   BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
   BooleanParameter oscFollowers = new BooleanParameter("oscFollow");
-  CompoundParameter oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100);  // blob merge radius (in)
-  CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 360, 0, 1000);  // max blob speed (in/s)
-  CompoundParameter oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1);  // max interval to calculate blob velocities (s)
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
   CompoundParameter zScale = new CompoundParameter("zScale", 0, -6, 12);  // z scaling factor (dB)
+  CompoundParameter maxBirds = new CompoundParameter("maxBirds", 8, 0, 20);  // z scaling factor (dB)
 
   CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
   CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
@@ -164,12 +162,11 @@ public class FlockWave extends SLPatternWithMarkers {
     addParameter(timeScale);
     addParameter(oscBlobs);
     addParameter(oscFollowers);
-    addParameter(oscMergeRadius);
-    addParameter(oscMaxSpeed);
     addParameter(x);
     addParameter(y);
     addParameter(z);
     addParameter(zScale);
+    addParameter(maxBirds);
 
     addParameter(spawnRadius);
     addParameter(spawnMinSpeed);
@@ -195,7 +192,7 @@ public class FlockWave extends SLPatternWithMarkers {
   }
 
   public void run(double deltaMs) {
-    //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
+    println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     blobFollower.advance((float) deltaMs * 0.001);
     render();
@@ -236,9 +233,6 @@ public class FlockWave extends SLPatternWithMarkers {
 
   void updateBlobTrackerParameters() {
     blobTracker.setBlobY(y.getValuef());
-    blobTracker.setMergeRadius(oscMergeRadius.getValuef());
-    blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
-    blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
   }
 
   void spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
@@ -259,6 +253,7 @@ public class FlockWave extends SLPatternWithMarkers {
   }
 
   void spawnBird(PVector focus) {
+    if (birds.size() >= maxBirds.getValue()) return;
     PVector pos = getRandomUnitVector();
     pos.mult(spawnRadius.getValuef());
     pos.add(focus);
