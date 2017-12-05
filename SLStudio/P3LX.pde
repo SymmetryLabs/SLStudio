@@ -41,7 +41,7 @@ public class LXStudio extends P3LX {
 
     private boolean toggleHelpBar = false;
     private boolean toggleClipView = false;
-    private boolean clipViewVisible = false;
+    private boolean clipViewVisible = true;
     private boolean performanceMode = false;
 
     public class PreviewWindow extends UI3dContext {
