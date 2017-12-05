@@ -38,6 +38,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.SplittableRandom;
 
 public class NDat {
     float   xz, yz, zz, hue, speed, angle, den;
@@ -71,6 +72,7 @@ public class DPat extends LXPattern {
     ArrayList<DBool> bools  = new ArrayList<DBool> ();
     PVector pTrans= new PVector();
     PVector     mMax, mCtr, mHalf;
+    SplittableRandom splittableRandom = new SplittableRandom();
 
     LXMidiOutput APCOut;
     LXMidiOutput MidiFighterTwisterOut; 
@@ -117,17 +119,17 @@ public class DPat extends LXPattern {
     // }
 
     float random(float max) {
-        return (float) LXUtils.random(0, max);
+        return (float) splittableRandom.nextDouble((double) max);
     }
 
     float random(float min, float max) {
-        return (float)LXUtils.random(min, max);
+        return (float) splittableRandom.nextDouble((double) min, (double) max)+min;
     }
 
     boolean btwn    (int        a,int    b,int      c)      { return a >= b && a <= c;  }
     boolean btwn    (double     a,double b,double   c)      { return a >= b && a <= c;  }
     float   interp  (float a, float b, float c) { return (1-a)*b + a*c; }
-    float   randctr (float a) { return (float)LXUtils.random(0, a) - a*.5; }
+    float   randctr (float a) { return (float) (splittableRandom.nextDouble((double) a) - a*0.5f); }
     float   min4     (float a, float b, float c, float d) { return min(min(a,b),min(c,d));   }
     float   pointDist(LXPoint p1, LXPoint p2) { return dist(p1.x,p1.y,p1.z,p2.x,p2.y,p2.z);     }
     float   xyDist   (LXPoint p1, LXPoint p2) { return dist(p1.x,p1.y,p2.x,p2.y);               }
