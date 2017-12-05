@@ -142,6 +142,7 @@ public class SeaboardPattern extends SLPattern {
           return;
         }
         int index = pitchToIndex.get(pitch);
+        if (index >= presses.size()) return;
         Press p = presses.get(index);
         channelToPress.put(channel, p);
         p.envelope.engage.setValue(true);
@@ -157,6 +158,7 @@ public class SeaboardPattern extends SLPattern {
           return;
         }
         int index = pitchToIndex.get(pitch);
+        if (index >= presses.size()) return;
         Press p = presses.get(index);
         p.pressure.setValue(0);
         channelToPress.remove(channel);
@@ -200,4 +202,3 @@ public class SeaboardPattern extends SLPattern {
       }
     }
 }
-
