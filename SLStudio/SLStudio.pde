@@ -33,7 +33,7 @@ void setup() {
   println("model.xMin: " + model.xMin); println("model.xMax: " + model.xMax); println("model.xRange: " + model.xRange);
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
-  
+
   lx = new LXStudio(this, model, true) {
     @Override
     protected void initialize(LXStudio lx, LXStudio.UI ui) {
@@ -52,26 +52,26 @@ void setup() {
       lx.engine.registerComponent("outputControl", outputControl);
 
       pixlites = setupPixlites(lx);
-        
+
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
         IteratorTestPattern.class
       });
-      lx.registerEffects(new Class[]{ 
+      lx.registerEffects(new Class[]{
         FlashEffect.class,
         BlurEffect.class,
         DesaturationEffect.class
       });
       lx.paletteLibrary = new PaletteLibrary();
       loadPalettes(lx.paletteLibrary);
-    
+
       ui.theme.setPrimaryColor(#008ba0);
       ui.theme.setSecondaryColor(#00a08b);
       ui.theme.setAttentionColor(#a00044);
       ui.theme.setFocusColor(#0094aa);
       ui.theme.setControlBorderColor(#292929);
-    } 
-    
+    }
+
     @Override
     protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
       ui.leftPane.audio.setVisible(true);
@@ -88,7 +88,7 @@ void setup() {
   blobTracker = BlobTracker.getInstance(lx);
 
   long setupFinish = System.nanoTime();
-  println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
+  println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
 }
 
 void loadPalettes(PaletteLibrary pl) {
@@ -111,20 +111,46 @@ void loadPalettes(PaletteLibrary pl) {
     0xfda100, 0xfe9900, 0xfc8500, 0xfd6a00, 0xfc5000, 0x3b0401, 0x2b0400,
     0x260402, 0x270907, 0x220905, 0x1e0606, 0x200b08, 0x1d0a07
   }));
-  
+
   ImageLibrary il = new ImageLibrary(applet.dataPath("images"));
   PaletteExtractor horiz = new LinePaletteExtractor(0.5);
   PaletteExtractor vert = new LinePaletteExtractor(0.5, 1, 0.5, 0);
-  pl.put("sky.purple", new LinePaletteExtractor(0, 0.7, 1, 0.3).getPalette(il.get("maxpixel-cc0-pink-beautiful-sunset-1858600.jpg")));
+
+  pl.put("astro1", horiz.getPalette(il.get("apod-ccbysa-171004-soul-herschel.jpg")));
+  pl.put("astro2", horiz.getPalette(il.get("apod-ccbysa-171101-thors-helmet.jpg")));
+  pl.put("astro3", horiz.getPalette(il.get("apod-ccbysa-171004-soul-herschel.jpg")));
+
+  pl.put("coral1", horiz.getPalette(il.get("coral1.jpeg")));
+  pl.put("coral2", horiz.getPalette(il.get("coral2.jpeg")));
+  pl.put("coral3", horiz.getPalette(il.get("coral3.jpeg")));
+  pl.put("coral4", horiz.getPalette(il.get("coral4.jpeg")));
+  pl.put("coral5", horiz.getPalette(il.get("coral5.jpeg")));
+
+  pl.put("jupiter1", horiz.getPalette(il.get("junocam-jupiter-blues-pia21972.jpg")));
+  pl.put("jupiter2", horiz.getPalette(il.get("junocam-jupiter-pj09-90-001.jpg")));
+
+  pl.put("ocean1", vert.getPalette(il.get("ocean1.jpeg")));
+  pl.put("ocean2", vert.getPalette(il.get("ocean2.jpeg")));
+  pl.put("ocean3", vert.getPalette(il.get("ocean3.jpeg")));
+  pl.put("ocean4", vert.getPalette(il.get("ocean4.jpeg")));
+
+  pl.put("sun1", vert.getPalette(il.get("sunset1.jpeg")));
+  pl.put("sun2", vert.getPalette(il.get("sunset2.jpeg")));
+  pl.put("sun3", vert.getPalette(il.get("sunset3.jpeg")));
+  pl.put("sun4", vert.getPalette(il.get("sunset4.jpeg")));
+
+  pl.put("sky.pink", new LinePaletteExtractor(0, 0.7, 1, 0.3).getPalette(il.get("maxpixel-cc0-pink-beautiful-sunset-1858600.jpg")));
+  pl.put("sky.purple", vert.getPalette(il.get("pexels-cc0-flight-landscape-nature-sky-36717.jpg")));
   pl.put("sky.red", vert.getPalette(il.get("pexels-cc0-animals-birds-dawn-giraffe-417142.jpg")));
   pl.put("sky.cloudy", vert.getPalette(il.get("pixnio-cc0-sunset-sky-mountain-landscape-cloud.jpg")));
   pl.put("sky.green", vert.getPalette(il.get("pexels-cc0-nature-sky-sunset-the-mountains-66997.jpg")));
   pl.put("sky.pastel", new LinePaletteExtractor(0.11, 0.41, 0.5, 0).getPalette(il.get("maxpixel-cc0-Abendstimmung-Landscape-Mountain-Sky-Nature-Lake-1504197.jpg")));
-  pl.put("sky.dkgn", new LinePaletteExtractor(0, 1, 0, 0).getPalette(il.get("pexels-cc0-sunset-sunrise-sea-horizon-11434.jpg")));
+  pl.put("sky.dark", new LinePaletteExtractor(0, 1, 0, 0).getPalette(il.get("pexels-cc0-sunset-sunrise-sea-horizon-11434.jpg")));
   pl.put("sky.yellow", new LinePaletteExtractor(0.5, 1, 0.5, 0).getPalette(il.get("pexels-cc0-sunset-sunrise-sea-horizon-11434.jpg")));
+
+  pl.put("lake", new LinePaletteExtractor(0, 1, 1, 0).getPalette(il.get("maxpixel-cc0-Sky-Lake-Luener-Lake-Water-Blue-Mirroring-Clouds-475819.jpg")));
   pl.put("land", new LinePaletteExtractor(1, 0.5, 1, 0).getPalette(il.get("maxpixel-cc0-Abendstimmung-Landscape-Mountain-Sky-Nature-Lake-1504197.jpg")));
   pl.put("neon", horiz.getPalette(il.get("pixabay-cc0-neon-art-color-colorful-light-1596205.jpg")));
-  pl.put("lake", new LinePaletteExtractor(0, 1, 1, 0).getPalette(il.get("maxpixel-cc0-Sky-Lake-Luener-Lake-Water-Blue-Mirroring-Clouds-475819.jpg")));
   pl.put("scotland", new LinePaletteExtractor(0, 1, 0.6, 0).getPalette(il.get("maxpixel-cc0-Elgol-Coast-Scotland-Stones-Lake-Isle-Of-Skye-540123.jpg")));
 }
 
