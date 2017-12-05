@@ -142,7 +142,9 @@ class FoxListener extends LXComponent {
     });
 
     remote.bindController(lx.engine.crossfader, 112);
-    remote.bindController(lx.engine.masterChannel.getEffect("Blur").getParameter("amount"), 32);
+    if (lx.engine.masterChannel.getEffect("Blur") != null) {
+      remote.bindController(lx.engine.masterChannel.getEffect("Blur").getParameter("amount"), 32);
+    }
     remote.bindController(lx.engine.output.brightness, 33);
     remote.bindController(slowDown, 34);
   }
