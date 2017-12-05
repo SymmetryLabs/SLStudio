@@ -9,7 +9,7 @@ import java.util.Arrays;
 import java.util.stream.Stream;
 import java.util.function.Consumer;
 
-import org.apache.commons.math3.util.FastMath;
+import net.jafama.FastMath;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
