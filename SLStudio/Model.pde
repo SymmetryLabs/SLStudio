@@ -50,6 +50,12 @@ public static class SLModel extends LXModel {
   // Strips
   public final List<Strip> strips;
 
+  public final int NUM_POINT_BATCHES = 16;
+
+  // Array of points stored as contiguous floats for performance
+  private final float[] pointsArray;
+  private final List<PointBatch> pointBatches = new ArrayList<PointBatch>(NUM_POINT_BATCHES);
+
   public SLModel(List<Sun> suns) {
     super(new Fixture(suns));
     Fixture fixture = (Fixture)this.fixtures.get(0);
@@ -99,6 +105,21 @@ public static class SLModel extends LXModel {
 
     // Strips
     this.strips     = Collections.unmodifiableList(stripList);
+
+    this.pointsArray = new float[this.points.length * 3];
+    for (int i = 0; i < this.points.length; i++) {
+      LXPoint point = this.points[i];
+      this.pointsArray[3 * i] = point.x;
+      this.pointsArray[3 * i + 1] = point.y;
+      this.pointsArray[3 * i + 2] = point.z;
+    }
+
+    int batchStride = ceil(this.points.length / NUM_POINT_BATCHES);
+    for (int i = 0; i < NUM_POINT_BATCHES; i++) {
+      int start = i * batchStride;
+      int end = min(start + batchStride, this.points.length - 1);
+      this.pointBatches.add(new PointBatch(start, end));
+    }
   }
 
   private static class Fixture extends LXAbstractFixture {
@@ -118,6 +139,27 @@ public static class SLModel extends LXModel {
   public Slice getSliceById(String id) {
     return this.sliceTable.get(id);
   }
+
+  public void forEachPoint(final BatchConsumer consumer) {
+    this.pointBatches.parallelStream().forEach(new Consumer<PointBatch>() {
+      public void accept(PointBatch batch) {
+        consumer.accept(batch.start, batch.end);
+      }
+    });
+  }
+
+  private class PointBatch {
+    int start;
+    int end;
+    PointBatch(int start, int end) {
+      this.start = start;
+      this.end = end;
+    }
+  }
+}
+
+public static interface BatchConsumer {
+  public void accept(int start, int end);
 }
 
 public static class BoundingBox {

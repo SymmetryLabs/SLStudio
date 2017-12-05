@@ -38,6 +38,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.function.Consumer;
+import java.util.SplittableRandom;
 
 public class NDat {
     float   xz, yz, zz, hue, speed, angle, den;
@@ -71,6 +72,7 @@ public class DPat extends LXPattern {
     ArrayList<DBool> bools  = new ArrayList<DBool> ();
     PVector pTrans= new PVector();
     PVector     mMax, mCtr, mHalf;
+    SplittableRandom splittableRandom = new SplittableRandom();
 
     LXMidiOutput APCOut;
     LXMidiOutput MidiFighterTwisterOut; 
@@ -118,17 +120,17 @@ public class DPat extends LXPattern {
     // }
 
     float random(float max) {
-        return (float) LXUtils.random(0, max);
+        return (float) splittableRandom.nextDouble((double) max);
     }
 
     float random(float min, float max) {
-        return (float)LXUtils.random(min, max);
+        return (float) splittableRandom.nextDouble((double) min, (double) max)+min;
     }
 
     boolean btwn    (int        a,int    b,int      c)      { return a >= b && a <= c;  }
     boolean btwn    (double     a,double b,double   c)      { return a >= b && a <= c;  }
     float   interp  (float a, float b, float c) { return (1-a)*b + a*c; }
-    float   randctr (float a) { return (float)LXUtils.random(0, a) - a*.5; }
+    float   randctr (float a) { return (float) (splittableRandom.nextDouble((double) a) - a*0.5f); }
     float   min4     (float a, float b, float c, float d) { return min(min(a,b),min(c,d));   }
     float   pointDist(LXPoint p1, LXPoint p2) { return dist(p1.x,p1.y,p1.z,p2.x,p2.y,p2.z);     }
     float   xyDist   (LXPoint p1, LXPoint p2) { return dist(p1.x,p1.y,p2.x,p2.y);               }
@@ -284,39 +286,35 @@ public class DPat extends LXPattern {
                 xWaveNz[i] = wvAmp * (noise(i/(mMax.y*.3)-(1e3+NoiseMove)/1500.) - .5) * (mMax.x/2.);
         }
 
-        LXPoint[] points;
-        SLModel slModel = (SLModel) model;
-        if (perSun.isOn()) {
-          points = slModel.masterSun.points;
-        } else {
-          points = model.points;
-        }
         // TODO Threadding: For some reason, using parallelStream here messes up the animations.
-        Arrays.asList(points).parallelStream().forEach(new Consumer<LXPoint>() {
-            @Override
-            public void accept(final LXPoint p) {
-                PVector P       = new PVector(), tP = new PVector();
 
-                setVec(P,p);
-                P.sub(modmin);
-                P.sub(pTrans);
-                if (sprk  > 0) {P.y += sprk*randctr(50); P.x += sprk*randctr(50); P.z += sprk*randctr(50); }
-                if (wvAmp > 0)  P.y += interpWv(p.x-modmin.x, yWaveNz);
-                if (wvAmp > 0)  P.x += interpWv(p.y-modmin.y, xWaveNz);
-                if (pJog.getValueb())       P.add(xyzJog);
-
-
-                color cNew, cOld = colors[p.index];
-                { tP.set(P);                                    cNew = CalcPoint(tP);                           }
-                if (pXsym.getValueb())  { tP.set(mMax.x-P.x,P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-                if (pYsym.getValueb())  { tP.set(P.x,mMax.y-P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-                if (pRsym.getValueb())  { tP.set(mMax.x-P.x,mMax.y-P.y,mMax.z-P.z);     cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-                if (pXdup.getValueb())  { tP.set((P.x+mMax.x*.5)%mMax.x,P.y,P.z);       cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
-                if (pGrey.getValueb())  { cNew = lx.hsb(0, 0, LXColor.b(cNew)); }
-                colors[p.index] = cNew;
-            }
-        });
         if (perSun.isOn()) {
+          SLModel slModel = (SLModel) model;
+          Arrays.asList(slModel.masterSun.points).parallelStream().forEach(new Consumer<LXPoint>() {
+              @Override
+              public void accept(final LXPoint p) {
+                  PVector P       = new PVector(), tP = new PVector();
+
+                  setVec(P,p);
+                  P.sub(modmin);
+                  P.sub(pTrans);
+                  if (sprk  > 0) {P.y += sprk*randctr(50); P.x += sprk*randctr(50); P.z += sprk*randctr(50); }
+                  if (wvAmp > 0)  P.y += interpWv(p.x-modmin.x, yWaveNz);
+                  if (wvAmp > 0)  P.x += interpWv(p.y-modmin.y, xWaveNz);
+                  if (pJog.getValueb())       P.add(xyzJog);
+
+
+                  color cNew, cOld = colors[p.index];
+                  { tP.set(P);                                    cNew = CalcPoint(tP);                           }
+                  if (pXsym.getValueb())  { tP.set(mMax.x-P.x,P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pYsym.getValueb())  { tP.set(P.x,mMax.y-P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pRsym.getValueb())  { tP.set(mMax.x-P.x,mMax.y-P.y,mMax.z-P.z);     cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pXdup.getValueb())  { tP.set((P.x+mMax.x*.5)%mMax.x,P.y,P.z);       cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                  if (pGrey.getValueb())  { cNew = lx.hsb(0, 0, LXColor.b(cNew)); }
+                  colors[p.index] = cNew;
+              }
+          });
+
           for (Sun sun : slModel.suns) {
             if (sun != slModel.masterSun) {
               for (int i = 0; i < sun.points.length; i++) {
@@ -324,7 +322,36 @@ public class DPat extends LXPattern {
               }
             }
           }
-        }
+        } else {
+          ((SLModel)model).forEachPoint(new BatchConsumer() {
+            @Override
+            public void accept(int start, int end) {
+                for (int i = start; i < end; i++) {
+                    LXPoint p = model.points[i];
+                    PVector P       = new PVector(), tP = new PVector();
+
+                    setVec(P,p);
+                    P.sub(modmin);
+                    P.sub(pTrans);
+                    if (sprk  > 0) {P.y += sprk*randctr(50); P.x += sprk*randctr(50); P.z += sprk*randctr(50); }
+                    if (wvAmp > 0)  P.y += interpWv(p.x-modmin.x, yWaveNz);
+                    if (wvAmp > 0)  P.x += interpWv(p.y-modmin.y, xWaveNz);
+                    if (pJog.getValueb())       P.add(xyzJog);
+
+
+                    color cNew, cOld = colors[p.index];
+                    { tP.set(P);                                    cNew = CalcPoint(tP);                           }
+                    if (pXsym.getValueb())  { tP.set(mMax.x-P.x,P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                    if (pYsym.getValueb())  { tP.set(P.x,mMax.y-P.y,P.z);                   cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                    if (pRsym.getValueb())  { tP.set(mMax.x-P.x,mMax.y-P.y,mMax.z-P.z);     cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                    if (pXdup.getValueb())  { tP.set((P.x+mMax.x*.5)%mMax.x,P.y,P.z);       cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD); }
+                    if (pGrey.getValueb())  { cNew = lx.hsb(0, 0, LXColor.b(cNew)); }
+                    colors[p.index] = cNew;
+                }
+            }
+        });
+      }
+
     }
 }
 // //----------------------------------------------------------------------------------------------------------------------------------

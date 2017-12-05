@@ -1,0 +1,20 @@
+{
+	"folders":
+	[
+		{
+      "file_exclude_patterns":
+      [
+        ".*",
+        "*.sublime-*"
+      ],
+      "folder_exclude_patterns":
+      [
+        "build-tmp",
+        "javadoc",
+        "code",
+        "data"
+      ],
+			"path": "."
+		}
+	]
+}
