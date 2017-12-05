@@ -16,6 +16,8 @@ public Pixlite[] pixlites;
 public PaletteLibrary paletteLibrary;
 public BlobTracker blobTracker;
 public SLModel model;
+public PerformanceManager performanceManager;
+public APC40Listener apc40Listener;
 
 public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
 
@@ -56,6 +58,12 @@ void setup() {
 
       pixlites = setupPixlites(lx);
       setupOutputs(lx);
+
+      apc40Listener = new APC40Listener(lx);
+      new FoxListener(lx);
+
+      performanceManager = new PerformanceManager(lx);
+      lx.engine.registerComponent("performanceManager", performanceManager);
         
       lx.registerPatterns(new Class[]{
         heronarts.p3lx.pattern.SolidColorPattern.class,
@@ -81,12 +89,16 @@ void setup() {
       ui.preview.setPhi(0).setMinRadius(0*FEET).setMaxRadius(150*FEET).setRadius(150*FEET);
 
       new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+
+
     }
   };
 
   lx.engine.audio.enabled.setValue(true);
   blobTracker = BlobTracker.getInstance(lx);
+  performanceManager.start(lx.ui);
 
+  
   long setupFinish = System.nanoTime();
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
 }
