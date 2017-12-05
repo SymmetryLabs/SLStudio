@@ -13,7 +13,6 @@ public Dispatcher dispatcher;
 public NetworkMonitor networkMonitor;
 public OutputControl outputControl;
 public Pixlite[] pixlites;
-public PaletteLibrary paletteLibrary;
 public BlobTracker blobTracker;
 public SLModel model;
 
@@ -34,8 +33,6 @@ void setup() {
   println("model.xMin: " + model.xMin); println("model.xMax: " + model.xMax); println("model.xRange: " + model.xRange);
   println("model.yMin: " + model.yMin); println("model.yMax: " + model.yMax); println("model.yRange: " + model.yRange);
   println("model.zMin: " + model.zMin); println("model.zMax: " + model.zMax); println("model.zRange: " + model.zRange + "\n");
-
-  paletteLibrary = initializePaletteLibrary();
   
   lx = new LXStudio(this, model, true) {
     @Override
@@ -65,6 +62,8 @@ void setup() {
         BlurEffect.class,
         DesaturationEffect.class
       });
+      lx.paletteLibrary = new PaletteLibrary();
+      loadPalettes(lx.paletteLibrary);
     
       ui.theme.setPrimaryColor(#008ba0);
       ui.theme.setSecondaryColor(#00a08b);
@@ -92,9 +91,7 @@ void setup() {
   println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms"); 
 }
 
-PaletteLibrary initializePaletteLibrary() {
-  PaletteLibrary pl = new PaletteLibrary();
-
+void loadPalettes(PaletteLibrary pl) {
   /* Images loaded remotely from the Internet */
   /*
   pl.set("cities.london", new DeckChairSource("5568230b7b2853502527fd4e"), new ArcPaletteExtractor(0.44, 100));
@@ -129,7 +126,6 @@ PaletteLibrary initializePaletteLibrary() {
   pl.put("neon", horiz.getPalette(il.get("pixabay-cc0-neon-art-color-colorful-light-1596205.jpg")));
   pl.put("lake", new LinePaletteExtractor(0, 1, 1, 0).getPalette(il.get("maxpixel-cc0-Sky-Lake-Luener-Lake-Water-Blue-Mirroring-Clouds-475819.jpg")));
   pl.put("scotland", new LinePaletteExtractor(0, 1, 0.6, 0).getPalette(il.get("maxpixel-cc0-Elgol-Coast-Scotland-Stones-Lake-Isle-Of-Skye-540123.jpg")));
-  return pl;
 }
 
 void draw() {

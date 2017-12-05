@@ -25,7 +25,7 @@ public abstract class SLPatternWithMarkers extends SLPattern implements MarkerSo
 }
 
 public class PaletteViewer extends SLPattern {
-  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  DiscreteParameter palette = new DiscreteParameter("palette", ((LXStudio) lx).paletteLibrary.getNames());  // selected colour palette
   CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
@@ -45,7 +45,7 @@ public class PaletteViewer extends SLPattern {
   }
 
   public void run(double deltaMs) {
-    pal.setPalette(paletteLibrary.get(palette.getOption()));
+    pal.setPalette(((LXStudio) lx).paletteLibrary.get(palette.getOption()));
     pal.setBottom(palStart.getValue());
     pal.setTop(palStop.getValue());
     pal.setBias(palBias.getValue());
@@ -139,7 +139,7 @@ public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
 
-  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  DiscreteParameter palette = new DiscreteParameter("palette", ((LXStudio) lx).paletteLibrary.getNames());  // selected colour palette
   CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
@@ -356,7 +356,7 @@ public class FlockWave extends SLPatternWithMarkers {
   }
 
   ColorPalette getPalette() {
-    pal.setPalette(paletteLibrary.get(palette.getOption()));
+    pal.setPalette(((LXStudio) lx).paletteLibrary.get(palette.getOption()));
     pal.setBottom(palStart.getValue());
     pal.setTop(palStop.getValue());
     pal.setBias(palBias.getValue());

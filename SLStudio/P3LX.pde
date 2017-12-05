@@ -25,6 +25,7 @@ import java.io.File;
 public class LXStudio extends P3LX {
 
   public static final String COPYRIGHT = "Symmetry Labs";
+  public PaletteLibrary paletteLibrary;
 
   public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
