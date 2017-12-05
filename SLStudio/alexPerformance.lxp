@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512472204408,
+  "timestamp": 1512474898971,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -1263,7 +1263,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.8142857188358903,
+          "fader": 0.3571428591385484,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1272,7 +1272,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 4826,
@@ -1299,7 +1299,21 @@
             "parameters": {
               "label": "aaaStripSizeAndIndex",
               "index": 65,
-              "length": 83
+              "length": 13
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 5050,
+            "class": "SLStudio$middlePixel",
+            "modulationColor": -65511,
+            "parameters": {
+              "label": "middlePixel"
             },
             "modulation": {
               "modulators": [],
@@ -1647,7 +1661,7 @@
         "3062": true
       },
       "preview": {
-        "radius": 404.577803670827,
+        "radius": 402.5565329636876,
         "theta": 7.488000000000097,
         "phi": 0.4747166738510128,
         "positionX": 311.09033203125,
