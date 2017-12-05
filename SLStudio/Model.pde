@@ -89,7 +89,6 @@ public static class SLModel extends LXModel {
     for (Sun sun : suns) {
       if (sun != masterSun) {
         sun.computeMasterIndexes(masterSun);
-        println("computed master indexes for " + sun.id);
       }
     }
 
@@ -210,37 +209,53 @@ public static class Sun extends LXModel {
     distances = computeDistances();
   }
 
-  void computeMasterIndexes(Sun masterSun) {
+  void computeMasterIndexes(Sun masterSun) {    
     this.masterSun = masterSun;
     masterIndexes = new int[points.length];
-    float cx = center.x;
-    float cy = center.y;
-    float cz = center.z;
-    float mcx = masterSun.center.x;
-    float mcy = masterSun.center.y;
-    float mcz = masterSun.center.z;
-    for (int i = 0; i < points.length; i++) {
-      float minSqDist = 1e18;
-      masterIndexes[i] = 0;
-      float px = (points[i].x - cx);
-      float py = (points[i].y - cy);
-      float pz = (points[i].z - cz);
-      float xLow = px - 24;
-      float xHigh = px + 24;
-      for (int j = 0; j < masterSun.points.length; j++) {
-        LXPoint masterPoint = masterSun.points[j];
-        float mx = masterPoint.x - mcx;
-        if (mx > xLow && mx < xHigh) {
-          float dx = px - mx;
-          float dy = py - (masterPoint.y - mcy);
-          float dz = pz - (masterPoint.z - mcz);
-          float sqDist = dx*dx + dy*dy + dz*dz;
-          if (sqDist < minSqDist) {
-            minSqDist = sqDist;
-            masterIndexes[i] = masterPoint.index;
+    new ComputeMasterIndexThread().start();
+  }
+  
+  class ComputeMasterIndexThread extends Thread {
+    ComputeMasterIndexThread() { }
+    
+    public void run() {
+      try {
+        Thread.sleep((int) (Math.random()*5000));
+      } catch (InterruptedException e) { }
+      float cx = center.x;
+      float cy = center.y;
+      float cz = center.z;
+      float mcx = masterSun.center.x;
+      float mcy = masterSun.center.y;
+      float mcz = masterSun.center.z;
+      
+      for (int i = 0; i < points.length; i++) {
+        float minSqDist = 1e18;
+        masterIndexes[i] = 0;
+        float px = (points[i].x - cx);
+        float py = (points[i].y - cy);
+        float pz = (points[i].z - cz);
+        float xLow = px - 12;
+        float xHigh = px + 12;
+        float yLow = py - 12;
+        float yHigh = py + 12;
+        for (int j = 0; j < masterSun.points.length; j++) {
+          LXPoint masterPoint = masterSun.points[j];
+          float mx = masterPoint.x - mcx;
+          float my = masterPoint.y - mcy;
+          if (mx > xLow && mx < xHigh && my > yLow && my < yHigh) {
+            float dx = px - mx;
+            float dy = py - (masterPoint.y - mcy);
+            float dz = pz - (masterPoint.z - mcz);
+            float sqDist = dx*dx + dy*dy + dz*dz;
+            if (sqDist < minSqDist) {
+              minSqDist = sqDist;
+              masterIndexes[i] = masterPoint.index;
+            }
           }
         }
       }
+      println("computed master indexes for " + id);
     }
   }
 
