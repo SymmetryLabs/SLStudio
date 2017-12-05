@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512495412750,
+  "timestamp": 1512499927933,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.5,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -57,20 +57,51 @@
           "arm": false,
           "enabled": true,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 1.0,
-          "crossfadeGroup": 0,
+          "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
+          "transitionTimeSecs": 0.1,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 3402,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16711685,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 3405,
+            "class": "SLStudio$ColorShiftEffect",
+            "modulationColor": -16187137,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 3361,
@@ -96,7 +127,7 @@
             "modulationColor": -65361,
             "parameters": {
               "label": "RipplePads",
-              "intensity": 1.0099999886006117,
+              "intensity": 0.8299999926239252,
               "velocity": 99.05999991483986,
               "speed": 199.99999776482582,
               "decaySec": 1.0000000558793543,
@@ -127,34 +158,361 @@
             "modulationColor": -8448,
             "parameters": {
               "label": "FlockWaveMercury",
-              "timeScale": 1.0,
-              "blobs": false,
-              "folwrs": false,
-              "spnFix": true,
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.29133858267716534,
+              "size": 340.0,
+              "detail": 10.0,
+              "ripple": 0.6000000238418579,
               "x": 300.0,
               "y": 0.4000000059604645,
               "z": 78.39800262451172,
               "zScale": 3.9000000953674316,
-              "maxBirds": 20.0,
+              "palette": 11,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
               "spnRad": 280.0,
-              "spnMin": 0.0,
-              "spnMax": 0.0,
-              "density": 2.0,
+              "maxBirds": 20.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
               "scatter": 200.0,
               "spdMult": 0.0,
               "maxSpd": 0.0,
               "turnSec": 1.559999942779541,
               "fadeInSec": 2.0,
-              "fadeOutSec": 1.5,
+              "fadeOutSec": 1.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3491,
+            "class": "SLStudio$FlockWave",
+            "modulationColor": -16727553,
+            "parameters": {
+              "label": "FlockWave",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": false,
+              "timeScale": 1.0,
+              "size": 100.0,
+              "detail": 4.0,
+              "ripple": 0.0,
+              "x": 385.0,
+              "y": 57.19999694824219,
+              "z": 184.5,
+              "zScale": 0.0,
+              "palette": 0,
+              "palShift": 0.0,
+              "palBias": 0.0,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "spnRad": 100.0,
+              "maxBirds": 8.0,
+              "spnRate": 0.20000000298023224,
+              "spnVary": 0.0,
+              "scatter": 100.0,
+              "spdMult": 1.0,
+              "maxSpd": 10.0,
+              "turnSec": 1.0,
+              "fadeInSec": 0.5,
+              "fadeOutSec": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3493,
+            "class": "SLStudio$FlockWaveBlues",
+            "modulationColor": -16718849,
+            "parameters": {
+              "label": "FlockWaveBlues",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.17000000178813934,
+              "size": 620.0,
+              "detail": 2.0,
+              "ripple": 0.6000000238418579,
+              "x": 300.0,
+              "y": 0.4000000059604645,
+              "z": 78.39800262451172,
+              "zScale": 0.5400000214576721,
+              "palette": 9,
+              "palShift": 0.0,
+              "palBias": -0.800000011920929,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 300.0,
+              "spdMult": 0.23999999463558197,
+              "maxSpd": 10.0,
+              "turnSec": 1.559999942779541,
+              "fadeInSec": 1.7000000476837158,
+              "fadeOutSec": 0.7799999713897705
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3495,
+            "class": "SLStudio$FlockWaveFiery",
+            "modulationColor": -16749313,
+            "parameters": {
+              "label": "FlockWaveFiery",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.15000000596046448,
+              "size": 500.0,
+              "detail": 6.599999904632568,
+              "ripple": 0.6000000238418579,
+              "x": 300.0,
+              "y": 0.4000000059604645,
+              "z": 78.39800262451172,
+              "zScale": 5.579999923706055,
+              "palette": 26,
+              "palShift": 0.0,
+              "palBias": -1.6399999856948853,
+              "palCutoff": 0.20999999344348907,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 150.0,
+              "spdMult": 0.23999999463558197,
+              "maxSpd": 10.0,
+              "turnSec": 1.559999942779541,
+              "fadeInSec": 1.7000000476837158,
+              "fadeOutSec": 0.7799999713897705
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3497,
+            "class": "SLStudio$FlockWaveGalaxies",
+            "modulationColor": -9436929,
+            "parameters": {
+              "label": "FlockWaveGalaxies",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.09000000357627869,
+              "size": 560.0,
+              "detail": 6.599999904632568,
+              "ripple": 0.4000000059604645,
+              "x": 300.0,
+              "y": 0.4000000059604645,
+              "z": 78.39800262451172,
+              "zScale": 6.300000190734863,
+              "palette": 8,
+              "palShift": 0.0,
+              "palBias": -1.399999976158142,
+              "palCutoff": 0.3199999928474426,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 130.0,
+              "spdMult": 0.23999999463558197,
+              "maxSpd": 10.0,
+              "turnSec": 1.559999942779541,
+              "fadeInSec": 1.7000000476837158,
+              "fadeOutSec": 0.7799999713897705
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3499,
+            "class": "SLStudio$FlockWaveMercury",
+            "modulationColor": -9306368,
+            "parameters": {
+              "label": "FlockWaveMercury",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 1.0,
               "size": 340.0,
               "detail": 10.0,
               "ripple": 0.6000000238418579,
+              "x": 300.0,
+              "y": 0.4000000059604645,
+              "z": 78.39800262451172,
+              "zScale": 3.9000000953674316,
               "palette": 11,
-              "palStart": 0.0,
-              "palStop": 1.0,
               "palShift": 0.0,
               "palBias": 0.0,
-              "palCutoff": 0.0
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 20.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 200.0,
+              "spdMult": 0.0,
+              "maxSpd": 0.0,
+              "turnSec": 1.559999942779541,
+              "fadeInSec": 2.0,
+              "fadeOutSec": 1.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3501,
+            "class": "SLStudio$FlockWaveOoze",
+            "modulationColor": -16514817,
+            "parameters": {
+              "label": "FlockWaveOoze",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.15000000596046448,
+              "size": 560.0,
+              "detail": 6.599999904632568,
+              "ripple": 0.4000000059604645,
+              "x": 300.0,
+              "y": 0.4000000059604645,
+              "z": 78.39800262451172,
+              "zScale": 6.300000190734863,
+              "palette": 22,
+              "palShift": 0.11999999731779099,
+              "palBias": -2.119999885559082,
+              "palCutoff": 0.0,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 150.0,
+              "spdMult": 0.23999999463558197,
+              "maxSpd": 10.0,
+              "turnSec": 1.559999942779541,
+              "fadeInSec": 1.7000000476837158,
+              "fadeOutSec": 0.7799999713897705
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3503,
+            "class": "SLStudio$FlockWavePlanets",
+            "modulationColor": -16719873,
+            "parameters": {
+              "label": "FlockWavePlanets",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.15000000596046448,
+              "size": 560.0,
+              "detail": 4.400000095367432,
+              "ripple": -3.5999999046325684,
+              "x": 300.0,
+              "y": 0.4000000059604645,
+              "z": 78.39800262451172,
+              "zScale": -0.18000000715255737,
+              "palette": 25,
+              "palShift": 0.07999999821186066,
+              "palBias": -1.2799999713897705,
+              "palCutoff": 0.0,
+              "palStart": 0.0,
+              "palStop": 0.8399999737739563,
+              "spnRad": 280.0,
+              "maxBirds": 8.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 150.0,
+              "spdMult": 0.0,
+              "maxSpd": 10.0,
+              "turnSec": 1.559999942779541,
+              "fadeInSec": 1.7000000476837158,
+              "fadeOutSec": 0.7799999713897705
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3505,
+            "class": "SLStudio$FlockWaveTimewarp",
+            "modulationColor": -48128,
+            "parameters": {
+              "label": "FlockWaveTimewarp",
+              "atBlobs": false,
+              "nearBlobs": false,
+              "everywhere": true,
+              "timeScale": 0.3499999940395355,
+              "size": 560.0,
+              "detail": 6.599999904632568,
+              "ripple": 0.6000000238418579,
+              "x": 300.0,
+              "y": 0.4000000059604645,
+              "z": 78.39800262451172,
+              "zScale": 5.579999923706055,
+              "palette": 29,
+              "palShift": 0.11999999731779099,
+              "palBias": -1.2799999713897705,
+              "palCutoff": 0.0,
+              "palStart": 0.25,
+              "palStop": 1.0,
+              "spnRad": 280.0,
+              "maxBirds": 8.0,
+              "spnRate": 2.0,
+              "spnVary": 0.0,
+              "scatter": 300.0,
+              "spdMult": 0.23999999463558197,
+              "maxSpd": 10.0,
+              "turnSec": 1.559999942779541,
+              "fadeInSec": 1.7000000476837158,
+              "fadeOutSec": 0.7799999713897705
             },
             "modulation": {
               "modulators": [],
@@ -178,14 +536,45 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
-          "crossfadeGroup": 0,
-          "blendMode": 0,
+          "fader": 0.0,
+          "crossfadeGroup": 1,
+          "blendMode": 1,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 3419,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16711687,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 3422,
+            "class": "SLStudio$ColorShiftEffect",
+            "modulationColor": -30208,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
         "patternIndex": 1,
         "patterns": [
@@ -230,6 +619,176 @@
               "C": false,
               "B": false,
               "A": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3417,
+            "class": "SLStudio$Rings",
+            "modulationColor": -16128,
+            "parameters": {
+              "label": "Rings",
+              "DEPTH": 0.6000000238418579,
+              "BRT": 0.75,
+              "SAT": 0.5,
+              "SPD1": 0.20000000298023224,
+              "SPD2": 0.4000000059604645,
+              "SCALE": 0.15000000596046448
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 3410,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711879,
+        "parameters": {
+          "label": "Channel-3",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 2,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [
+          {
+            "id": 3425,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -35584,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 3428,
+            "class": "SLStudio$ColorShiftEffect",
+            "modulationColor": -16711726,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 3408,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -16758529,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 3413,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711688,
+        "parameters": {
+          "label": "Channel-4",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 2,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [
+          {
+            "id": 3431,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16711695,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 3434,
+            "class": "SLStudio$ColorShiftEffect",
+            "modulationColor": -16711886,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 3411,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -33024,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
             },
             "modulation": {
               "modulators": [],
@@ -352,14 +911,26 @@
       "modulationColor": -2621696,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
+      "performanceManager": {
+        "id": 380,
+        "class": "SLStudio$PerformanceManager",
+        "modulationColor": -10420480,
+        "parameters": {
+          "label": "",
+          "deckOneChannel": 0,
+          "deckTwoChannel": 1,
+          "deckThreeChannel": 2,
+          "deckFourChannel": 3
+        }
+      },
       "outputControl": {
         "id": 29,
         "class": "SLStudio$OutputControl",
@@ -392,13 +963,23 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - Seaboard RISE",
           "channel": true,
-          "control": false,
+          "control": true,
           "sync": false
         }
       ],
-      "surfaces": [],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
@@ -410,9 +991,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1099.79023532328,
-        "theta": -0.20700000000001811,
-        "phi": 0.39071667385101294,
+        "radius": 1515.8336623042571,
+        "theta": -0.04800000000001811,
+        "phi": 0.20171667385101277,
         "positionX": 269.6098937988281,
         "positionY": 57.19999694824219,
         "positionZ": 196.37989807128906
