@@ -82,6 +82,7 @@ public class DPat extends LXPattern {
     float           NoiseMove   = random(10000);
     CompoundParameter pSpark, pWave, pRotX, pRotY, pRotZ, pSpin, pTransX, pTransY;
     BooleanParameter pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
+    BooleanParameter perSun;
 
     float       lxh     ()                                  { return palette.getHuef();                                          }
     int         c1c      (float a)                          { return round(100*constrain(a,0,1));                               }
@@ -191,6 +192,8 @@ public class DPat extends LXPattern {
         pRotZ       =   addParam("RotZ", .5);
         pSpin       =   addParam("Spin", .5);
 
+        perSun = new BooleanParameter("perSun");
+        addParameter(perSun);
 
         pXsym = new BooleanParameter("X-SYM");
         pYsym = new BooleanParameter("Y-SYM");
@@ -198,6 +201,8 @@ public class DPat extends LXPattern {
         pXdup = new BooleanParameter("X-DUP");
         pJog = new BooleanParameter("JOG");
         pGrey = new BooleanParameter("GREY");
+
+
 
         // addNonKnobParameter(pXsym);
         // addNonKnobParameter(pYsym);
@@ -279,8 +284,15 @@ public class DPat extends LXPattern {
                 xWaveNz[i] = wvAmp * (noise(i/(mMax.y*.3)-(1e3+NoiseMove)/1500.) - .5) * (mMax.x/2.);
         }
 
+        LXPoint[] points;
+        SLModel slModel = (SLModel) model;
+        if (perSun.isOn()) {
+          points = slModel.masterSun.points;
+        } else {
+          points = model.points;
+        }
         // TODO Threadding: For some reason, using parallelStream here messes up the animations.
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
+        Arrays.asList(points).parallelStream().forEach(new Consumer<LXPoint>() {
             @Override
             public void accept(final LXPoint p) {
                 PVector P       = new PVector(), tP = new PVector();
@@ -304,6 +316,15 @@ public class DPat extends LXPattern {
                 colors[p.index] = cNew;
             }
         });
+        if (perSun.isOn()) {
+          for (Sun sun : slModel.suns) {
+            if (sun != slModel.masterSun) {
+              for (int i = 0; i < sun.points.length; i++) {
+                colors[sun.points[i].index] = colors[sun.masterIndexes[i]];
+              }
+            }
+          }
+        }
     }
 }
 // //----------------------------------------------------------------------------------------------------------------------------------

@@ -420,7 +420,6 @@ public SLModel buildModel() {
     }
   ));
 
-
   /* Obj Importer ----------------------------------------------------*/
   List<LXModel> objModels = new ObjImporter("data", transform).getModels();
 

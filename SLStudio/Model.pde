@@ -41,6 +41,7 @@ public static class SLModel extends LXModel {
   // Suns
   public final List<Sun> suns;
   private final Map<String, Sun> sunTable;
+  public final Sun masterSun;
 
   // Slices
   public final List<Slice> slices;
@@ -75,6 +76,14 @@ public static class SLModel extends LXModel {
         for (Strip strip : slice.strips) {
           stripList.add(strip);
         }
+      }
+    }
+
+    masterSun = _sunTable.get("sun9"); // a full sun
+    for (Sun sun : suns) {
+      if (sun != masterSun) {
+        sun.computeMasterIndexes(masterSun);
+        println("computed master indexes for " + sun.id);
       }
     }
 
@@ -137,6 +146,9 @@ public static class Sun extends LXModel {
   public final PVector center;
   public final float[] distances;
 
+  public Sun masterSun;
+  public int[] masterIndexes;
+
   public Sun(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform, int[][] numPointsPerStrip) {
     super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
     Fixture fixture = (Fixture)this.fixtures.get(0);
@@ -154,6 +166,40 @@ public static class Sun extends LXModel {
 
     computeBoundingBox();
     distances = computeDistances();
+  }
+
+  void computeMasterIndexes(Sun masterSun) {
+    this.masterSun = masterSun;
+    masterIndexes = new int[points.length];
+    float cx = center.x;
+    float cy = center.y;
+    float cz = center.z;
+    float mcx = masterSun.center.x;
+    float mcy = masterSun.center.y;
+    float mcz = masterSun.center.z;
+    for (int i = 0; i < points.length; i++) {
+      float minSqDist = 1e18;
+      masterIndexes[i] = 0;
+      float px = (points[i].x - cx);
+      float py = (points[i].y - cy);
+      float pz = (points[i].z - cz);
+      float xLow = px - 24;
+      float xHigh = px + 24;
+      for (int j = 0; j < masterSun.points.length; j++) {
+        LXPoint masterPoint = masterSun.points[j];
+        float mx = masterPoint.x - mcx;
+        if (mx > xLow && mx < xHigh) {
+          float dx = px - mx;
+          float dy = py - (masterPoint.y - mcy);
+          float dz = pz - (masterPoint.z - mcz);
+          float sqDist = dx*dx + dy*dy + dz*dz;
+          if (sqDist < minSqDist) {
+            minSqDist = sqDist;
+            masterIndexes[i] = masterPoint.index;
+          }
+        }
+      }
+    }
   }
 
   void computeBoundingBox() {
