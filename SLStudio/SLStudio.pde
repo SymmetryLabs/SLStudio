@@ -312,6 +312,6 @@ void loadPalettes(PaletteLibrary pl) {
 
 void draw() {
   background(lx.ui.theme.getDarkBackgroundColor());
-  DrawHelper.runAll();
+  //DrawHelper.runAll();
   dispatcher.draw();
 }

@@ -1137,11 +1137,11 @@ public class BassPod extends LXPattern {
   public BassPod(LX lx) {
     super(lx);
     addParameter(clr);
-    addParameter(eq.gain);
-    addParameter(eq.range);
-    addParameter(eq.attack);
-    addParameter(eq.release);
-    addParameter(eq.slope);
+    // addParameter(eq.gain);
+    // addParameter(eq.range);
+    // addParameter(eq.attack);
+    // addParameter(eq.release);
+    // addParameter(eq.slope);
     addModulator(eq).start();
   }
 
@@ -1182,19 +1182,26 @@ public class CubeEQ extends LXPattern {
   private LXAudioInput audioInput = lx.engine.audio.getInput();
   private GraphicMeter eq = new GraphicMeter(audioInput);
 
-  private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
-  private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
-  private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
+  private final ProxyParameter gain = new ProxyParameter(eq.gain);
+  private final ProxyParameter range = new ProxyParameter(eq.range);
+  private final ProxyParameter attack = new ProxyParameter(eq.attack);
+  private final ProxyParameter release = new ProxyParameter(eq.release);
+  private final ProxyParameter slope = new ProxyParameter(eq.slope);
+
+  private final CompoundParameter edge = new CompoundParameter("Edge", 0.5);
+  private final CompoundParameter clr = new CompoundParameter("Clr", 0.1, 0, .5);
+  private final CompoundParameter blockiness = new CompoundParameter("Blk", 0.5);
 
   public CubeEQ(LX lx) {
     super(lx);
-    addParameter(eq.range);
-    addParameter(eq.attack);
-    addParameter(eq.release);
-    addParameter(eq.slope);
     addParameter(edge);
     addParameter(clr);
     addParameter(blockiness);
+    addParameter(gain);
+    addParameter(range);
+    addParameter(attack);
+    addParameter(release);
+    addParameter(slope);
     addModulator(eq).start();
   }
 
@@ -1371,10 +1378,16 @@ public class Traktor extends LXPattern {
       bass[i] = 0;
       treble[i] = 0;
     }
+
     addParameter(speed);
     addParameter(hueSpread);
     addParameter(bassGain);
     addParameter(trebleGain);
+    // addParameter(eq.gain);
+    // addParameter(eq.range);
+    // addParameter(eq.attack);
+    // addParameter(eq.release);
+    // addParameter(eq.slope);
     addModulator(eq).start();
   }
 
