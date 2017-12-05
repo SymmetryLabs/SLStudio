@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512431199803,
+  "timestamp": 1512439886388,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
-      "focusedChannel": 0,
+      "speed": 0.6833333186805248,
+      "focusedChannel": 7,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "LPattern 1",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": true,
           "midiChannel": 16,
@@ -462,7 +462,7 @@
         },
         "effects": [
           {
-            "id": 366,
+            "id": 4895,
             "class": "heronarts.lx.effect.BlurEffect",
             "modulationColor": -16748545,
             "parameters": {
@@ -962,7 +962,7 @@
         "parameters": {
           "label": "L Colors",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -1166,7 +1166,7 @@
         "parameters": {
           "label": "R Pattern 1",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -1788,7 +1788,7 @@
         "parameters": {
           "label": "R Colors",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -2112,7 +2112,7 @@
         "parameters": {
           "label": "Seaboard",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": true,
           "midiChannel": 16,
@@ -2174,7 +2174,7 @@
       },
       "effects": [
         {
-          "id": 364,
+          "id": 5086,
           "class": "heronarts.lx.effect.BlurEffect",
           "modulationColor": -12544,
           "parameters": {
@@ -2229,17 +2229,17 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
+          "Band-1": 0.27749127173074506,
+          "Band-2": 0.29949221864390896,
+          "Band-3": 0.3303065131449131,
+          "Band-4": 0.3497482542644125,
+          "Band-5": 0.2867985888066624,
+          "Band-6": 0.18972289664600706,
+          "Band-7": 0.15124770276203559,
+          "Band-8": 0.09796448853696649,
+          "Band-9": 0.053069220593078725,
+          "Band-10": 0.18573253222790997,
+          "Band-11": 0.04768098811415311,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -2253,7 +2253,7 @@
         "modulationColor": -10486016,
         "parameters": {
           "label": "Audio Input",
-          "device": 2
+          "device": 0
         }
       },
       "output": {
@@ -2279,7 +2279,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.7999999988824129
       }
     },
     "components": {
@@ -2506,7 +2506,7 @@
         "3062": true
       },
       "preview": {
-        "radius": 841.5337889471593,
+        "radius": 701.0956432258184,
         "theta": 6.066000000000009,
         "phi": -0.09828332614898722,
         "positionX": 294.73492431640625,

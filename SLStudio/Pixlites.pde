@@ -89,6 +89,14 @@ public class Pixlite extends LXOutputGroup {
         new Sun1BackPixliteConfig(lx, slice, ipAddress, this);
       }
 
+      // Sun 2
+      if(slice.id.equals("sun2_top_front")) {
+        new Sun2FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun2_top_back")) {
+        new Sun2BackPixliteConfig(lx, slice, ipAddress, this);
+      }
+
       // Sun 3
       if(slice.id.equals("sun3_top_front")) {
         new Sun3FrontTopPixliteConfig(lx, slice, ipAddress, this);
@@ -98,6 +106,9 @@ public class Pixlite extends LXOutputGroup {
       }
 
       // Sun 4
+      if(slice.id.equals("sun4_top_front")) {
+        new Sun4FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
       if(slice.id.equals("sun4_top_back")) {
         new Sun4BackPixliteConfig(lx, slice, ipAddress, this);
       }
