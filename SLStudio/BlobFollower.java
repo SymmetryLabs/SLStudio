@@ -52,15 +52,18 @@ public class BlobFollower implements MarkerSource {
         public PVector pos;
         public PVector vel;
         public float value;
+        public float ageSec;
         boolean expired;
 
         Follower(PVector pos) {
             this.pos = pos;
             this.vel = new PVector(0, 0, 0);
             this.value = 0;
+            this.ageSec = 0;
         }
 
         void advance(float deltaSec, BlobTracker.Blob blob) {
+            ageSec += deltaSec;
             if (blob == null) {
                 if (value < fadedLevel) {
                     expired = true;
