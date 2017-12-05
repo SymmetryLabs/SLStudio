@@ -890,6 +890,7 @@ public class RipplePads extends SLPattern {
   int[] buttonPitches;
 
   Sun[] sunsByNote = new Sun[128];
+  Ripple[] lastRipple = new Ripple[128];
   List<Ripple> ripples = new ArrayList<Ripple>();
 
   public RipplePads(LX lx) {
@@ -971,21 +972,32 @@ public class RipplePads extends SLPattern {
   }
 
   void noteOn(int pitch, int velocity) {
+    if (pitch > 127) return;
     Sun sun = sunsByNote[pitch];
     if (sun != null) {
-      addRipple(sun, velocity/128f);
+      if (lastRipple[pitch] != null) {
+        lastRipple[pitch].release();
+      }
+      lastRipple[pitch] = addRipple(sun, velocity/128f);
     }
   }
 
   void noteOff(int pitch) {
+    if (pitch > 127) return;
+    if (lastRipple[pitch] != null) {
+      lastRipple[pitch].release();
+    }
+    lastRipple[pitch] = null;
   }
 
-  void addRipple(Sun sun, float velocity) {
-    ripples.add(new Ripple(
+  Ripple addRipple(Sun sun, float velocity) {
+    Ripple ripple = new Ripple(
         sun, sun.boundingBox.size.z/2,
         intensity.getValuef()*velocity, speed.getValuef()*velocity,
         decaySec.getValuef(), nextHue.getValuef(), nextSat.getValuef()
-    ));
+    );
+    ripples.add(ripple);
+    return ripple;
   }
 
   class Ripple {
@@ -1000,6 +1012,7 @@ public class RipplePads extends SLPattern {
     float radius;
     float value;
     int[] layerColors;
+    boolean held;
 
     Ripple(Sun sun, float radius, float intensity, float speed, float decaySec, float hue, float sat) {
       this.sun = sun;
@@ -1009,13 +1022,18 @@ public class RipplePads extends SLPattern {
       this.decaySec = decaySec;
       this.hue = hue;
       this.sat = sat;
+      this.held = true;
       ageSec = 0;
     }
 
     void advance(float deltaSec) {
-      ageSec += deltaSec;
+      if (!held) ageSec += deltaSec;
       radius += deltaSec * speed;
       value = intensity / (1f + 10f*ageSec/decaySec);
+    }
+    
+    void release() {
+      held = false;
     }
 
     int getColor(float distance) {
