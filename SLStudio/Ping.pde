@@ -153,6 +153,7 @@ public class FlockWave extends SLPatternWithMarkers {
   private BlobFollower blobFollower;
   private ModelIndex modelIndex;
   private ZigzagPalette pal = new ZigzagPalette();
+  private long lastRun;
 
   public FlockWave(LX lx) {
     super(lx);
@@ -198,6 +199,7 @@ public class FlockWave extends SLPatternWithMarkers {
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     blobFollower.advance((float) deltaMs * 0.001);
     render();
+    lastRun = new Date().getTime();
   }
 
   void advanceSimulation(float deltaSec) {
@@ -231,6 +233,7 @@ public class FlockWave extends SLPatternWithMarkers {
   
   Collection<Marker> getMarkers() {
     List<Marker> markers = new ArrayList<Marker>();
+    if (lastRun + 1000 < new Date().getTime()) return markers; // hack to hide markers if inactive
     if (oscFollowers.isOn()) {
       markers.addAll(blobFollower.getMarkers());
     } else {
