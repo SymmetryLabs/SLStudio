@@ -1,3 +1,22 @@
+public class MiddleStrip extends LXPattern {
+  public MiddleStrip(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    setColors(0);
+    for (Strip strip : ((SLModel)model).strips) {
+      int counter = 0;
+
+      for (LXPoint p : strip.points) {
+        if (counter++ == strip.metrics.numPoints/2+1) {
+          colors[p.index] = LXColor.BLUE;
+        }
+      }
+    }
+  }
+}
+
 public class SunOrientation extends SLPattern {
 
   public SunOrientation(LX lx) {

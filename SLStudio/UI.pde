@@ -54,19 +54,71 @@ class UISpeed extends UI2dContainer {
 
 class UIFramerate extends UI2dContext {
   private final P3LX lx;
+  private final PFont monospacedFont;
+  private final DecimalFormat fpsFormat = new DecimalFormat("0.0");
+  private final DecimalFormat elapsedFormat = new DecimalFormat("0.00");
 
   UIFramerate(UI ui, final P3LX lx, float x) {
-    super(ui, x, 0, 200, 30);
+    super(ui, x, 0, 700, 30);
     this.lx = lx;
+    this.monospacedFont = createFont("Monospaced", 15);
     setVisible(true);
   }
 
+  private long lastDebugPrint = millis();
+
   protected void onDraw(UI ui, PGraphics pg) {
+    pg.textFont(monospacedFont);
     pg.clear();
-    pg.textSize(16);
+    pg.textSize(15);
     pg.textAlign(LEFT, TOP);
     if (lx.engine.isThreaded()) {
-      pg.text(String.format("Engine: %02.1f UI: %02.1f", lx.engine.frameRate(), lx.applet.frameRate), 0, 0);
+      // pg.text(String.format("Engine: %2$.1f UI: %2$.1f",
+      //   lx.engine.frameRate(), lx.applet.frameRate), 0, 0);
+      pg.text(String.format("Engine FPS: %4s UI: %4s  //  Frame: %5sms (avg) %5sms (worst)",
+        fpsFormat.format(lx.engine.frameRate()),
+        fpsFormat.format(lx.applet.frameRate),
+        elapsedFormat.format(lx.engine.timer.runAvgNanos / 1000000.0),
+        elapsedFormat.format(lx.engine.timer.runWorstNanos / 1000000.0)), 0, 0);
+      if (lx.engine.timer.runLastNanos >= 100000000
+          && lx.engine.timer.runLastNanos == lx.engine.timer.runWorstNanos
+          && lastDebugPrint + 500 < millis()) {
+        lastDebugPrint = millis();
+        StringBuilder sb = new StringBuilder();
+        sb.append("LXEngine::run() " + ((int) (lx.engine.timer.runLastNanos / 1000000)) + "ms\n");
+        if (((int) (lx.engine.timer.oscNanos / 1000000)) != 0) {
+          sb.append("LXEngine::run()::osc " + ((int) (lx.engine.timer.oscNanos / 1000000)) + "ms\n");
+        }
+        if (((int) (lx.engine.timer.inputNanos / 1000000)) != 0) {
+          sb.append("LXEngine::run()::inputs " + ((int) (lx.engine.timer.inputNanos / 1000000)) + "ms\n");
+        }
+        if (((int) (lx.engine.timer.channelNanos / 1000000)) != 0) {
+          sb.append("LXEngine::run()::channels " + ((int) (lx.engine.timer.channelNanos / 1000000)) + "ms\n");
+          for (LXChannel channel : lx.engine.channels) {
+            if (((int) (channel.timer.loopNanos / 1000000)) != 0) {
+              sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
+              LXPattern pattern = channel.getActivePattern();
+              if (((int) (pattern.timer.runNanos / 1000000)) != 0) {
+                sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
+              }
+              for (LXEffect effect : channel.getEffects()) {
+                if (((int) (effect.timer.runNanos / 1000000)) != 0) {
+                  sb.append("LXEngine::" + channel.getLabel() + "::" + effect.getLabel() + "::loop() " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
+                }
+              }
+            }
+          }
+        }
+        if (((int) (lx.engine.timer.fxNanos / 1000000)) != 0) {
+          sb.append("LXEngine::run()::effects " + ((int) (lx.engine.timer.fxNanos / 1000000)) + "ms\n");
+          for (LXEffect effect : lx.engine.masterChannel.getEffects()) {
+            if (((int) (effect.timer.runNanos / 1000000)) != 0) {
+              sb.append("LXEngine::" + effect.getLabel() + "::loop() " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
+            }
+          }
+        }
+        System.out.println(sb);
+      }
     } else {
       pg.text(String.format("FPS: %02.1f", lx.applet.frameRate), 0, 0);
     }
