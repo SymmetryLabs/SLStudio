@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512431199803,
+  "timestamp": 1512435411950,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -1502,6 +1502,7 @@
               "saturation": 30.0,
               "enableBlobs": false,
               "blobMaxDist": 100.0,
+              "blobAffinity": 10.0,
               "bMrgRad": 30.0,
               "bMaxSpd": 240.0,
               "bMaxDt": 0.5,
@@ -2112,7 +2113,7 @@
         "parameters": {
           "label": "Seaboard",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": true,
           "midiChannel": 16,
@@ -2404,15 +2405,15 @@
     "midi": {
       "inputs": [
         {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
-        },
-        {
           "name": "CoreMIDI4J - Seaboard RISE",
           "channel": true,
           "control": true,
+          "sync": false
+        },
+        {
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
           "sync": false
         },
         {
