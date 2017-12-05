@@ -120,8 +120,9 @@ public class LXStudio extends P3LX {
             framerate.toggleVisible();
           } else if (keyChar == "p".charAt(0)) {
             togglePerformanceMode();
+          } else if (keyChar == "v".charAt(0)) {
+            lx.ui.preview.toggleVisible();
           }
-
         }
       });
 
