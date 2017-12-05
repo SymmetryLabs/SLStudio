@@ -3,6 +3,7 @@ import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
+import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Octahedron;
 import com.symmetrylabs.util.BlobFollower;
 
@@ -25,12 +26,14 @@ public abstract class SLPatternWithMarkers extends SLPattern implements MarkerSo
 }
 
 public class PaletteViewer extends SLPattern {
-  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  DiscreteParameter palette = new DiscreteParameter("palette", ((LXStudio) lx).paletteLibrary.getNames());  // selected colour palette
   CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
-  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
   CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward zero (dB)
+  CompoundParameter palShift = new CompoundParameter("palShift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
   CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
+
+  ZigzagPalette pal = new ZigzagPalette();
 
   public PaletteViewer(LX lx) {
     super(lx);
@@ -43,16 +46,14 @@ public class PaletteViewer extends SLPattern {
   }
 
   public void run(double deltaMs) {
-    ColorPalette pal = paletteLibrary.get(palette.getOption());
-    double shift = palShift.getValue();
-    if (pal instanceof ZigzagPalette) {
-      ((ZigzagPalette) pal).setBias(palBias.getValue());
-      ((ZigzagPalette) pal).setStart(palStart.getValue());
-      ((ZigzagPalette) pal).setStop(palStop.getValue());
-      ((ZigzagPalette) pal).setCutoff(palCutoff.getValue());
-    }
+    pal.setPalette(((LXStudio) lx).paletteLibrary.get(palette.getOption()));
+    pal.setBottom(palStart.getValue());
+    pal.setTop(palStop.getValue());
+    pal.setBias(palBias.getValue());
+    pal.setShift(palShift.getValue());
+    pal.setCutoff(palCutoff.getValue());
     for (LXPoint p : model.points) {
-      colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin) + shift);
+      colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin));
     }
   }
 }
@@ -114,32 +115,29 @@ public class BlobViewer extends SLPattern {
 
 public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
-  BooleanParameter oscBlobs = new BooleanParameter("oscBlobs");
-  BooleanParameter oscFollowers = new BooleanParameter("oscFollow");
-  CompoundParameter oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100);  // blob merge radius (in)
-  CompoundParameter oscMaxSpeed = new CompoundParameter("bMaxSpd", 360, 0, 1000);  // max blob speed (in/s)
-  CompoundParameter oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1);  // max interval to calculate blob velocities (s)
+  BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
+  BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
+  BooleanParameter everywhere = new BooleanParameter("everywhere");
   CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
   CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
   CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
   CompoundParameter zScale = new CompoundParameter("zScale", 0, -6, 12);  // z scaling factor (dB)
+  CompoundParameter maxBirds = new CompoundParameter("maxBirds", 8, 0, 40);
 
-  CompoundParameter spawnMinSpeed = new CompoundParameter("spnMin", 2, 0, 40);  // minimum focus speed (in/s) that spawns birds
-  CompoundParameter spawnMaxSpeed = new CompoundParameter("spnMax", 20, 0, 40);  // maximum focus speed (in/s) that spawns birds
-  CompoundParameter spawnRadius = new CompoundParameter("spnRad", 100, 0, 200);  // radius (in) within which to spawn birds
-  CompoundParameter density = new CompoundParameter("density", 0.2, 0, 0.5);  // maximum spawn rate (birds/s)
+  CompoundParameter spnRad = new CompoundParameter("spnRad", 100, 0, 400);  // radius (in) within which to spawn birds
+  CompoundParameter spnRate = new CompoundParameter("spnRate", 0.2, 0, 2);  // maximum spawn rate (birds/s)
+  CompoundParameter spnVary = new CompoundParameter("spnVary", 0, 0, 1);  // vary spawn rate according to focus speed (0 = don't vary, 1 = determine entirely by speed)
   CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (in/s)
-  CompoundParameter speedMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) target bird speed / focus speed
-  CompoundParameter maxSpeed = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
+  CompoundParameter spdMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) bird target speed / focus speed
+  CompoundParameter maxSpd = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
   CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
-
   CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
   CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);  // time (s) to fade down to 10% intensity
+
   CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
   CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
   CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
-
-  DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());  // selected colour palette
+  DiscreteParameter palette = new DiscreteParameter("palette", ((LXStudio) lx).paletteLibrary.getNames());  // selected colour palette
   CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
   CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
   CompoundParameter palShift = new CompoundParameter("palShift", 0, 0, 1);  // shift in colour palette (fraction 0 - 1)
@@ -148,10 +146,13 @@ public class FlockWave extends SLPatternWithMarkers {
 
   PVector prevFocus = null;
   Set<Bird> birds = new HashSet<Bird>();
+  float numToSpawn = 0f;
 
   private BlobTracker blobTracker;
   private BlobFollower blobFollower;
   private ModelIndex modelIndex;
+  private ZigzagPalette pal = new ZigzagPalette();
+  private long lastRun;
 
   public FlockWave(LX lx) {
     super(lx);
@@ -160,44 +161,46 @@ public class FlockWave extends SLPatternWithMarkers {
     blobFollower = new BlobFollower(blobTracker);
     modelIndex = new LinearModelIndex(lx.model);
 
-    addParameter(timeScale);
-    addParameter(oscBlobs);
     addParameter(oscFollowers);
-    addParameter(oscMergeRadius);
-    addParameter(oscMaxSpeed);
+    addParameter(oscBlobs);
+    addParameter(everywhere);
+
+    addParameter(timeScale);
+    addParameter(size);
+    addParameter(detail);
+    addParameter(ripple);
+
     addParameter(x);
     addParameter(y);
     addParameter(z);
     addParameter(zScale);
 
-    addParameter(spawnRadius);
-    addParameter(spawnMinSpeed);
-    addParameter(spawnMaxSpeed);
-    addParameter(density);
-    addParameter(scatter);
-    addParameter(speedMult);
-    addParameter(maxSpeed);
-
-    addParameter(turnSec);
-    addParameter(fadeInSec);
-    addParameter(fadeOutSec);
-    addParameter(size);
-    addParameter(detail);
-    addParameter(ripple);
-
     addParameter(palette);
-    addParameter(palStart);
-    addParameter(palStop);
     addParameter(palShift);
     addParameter(palBias);
     addParameter(palCutoff);
+
+    addParameter(palStart);
+    addParameter(palStop);
+    addParameter(spnRad);
+    addParameter(maxBirds);
+
+    addParameter(spnRate);
+    addParameter(spnVary);
+    addParameter(scatter);
+
+    addParameter(spdMult);
+    addParameter(maxSpd);
+    addParameter(turnSec);
+    addParameter(fadeInSec);
+    addParameter(fadeOutSec);
   }
 
   public void run(double deltaMs) {
-    //println("deltaMs: " + deltaMs + " / birds: " + birds.size());
     advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
     blobFollower.advance((float) deltaMs * 0.001);
     render();
+    lastRun = new Date().getTime();
   }
 
   void advanceSimulation(float deltaSec) {
@@ -228,44 +231,69 @@ public class FlockWave extends SLPatternWithMarkers {
 
     removeExpiredBirds();
   }
-  
+
   Collection<Marker> getMarkers() {
-    return blobFollower.getMarkers();
+    List<Marker> markers = new ArrayList<Marker>();
+    if (lastRun + 1000 < new Date().getTime()) return markers; // hack to hide markers if inactive
+    if (oscFollowers.isOn()) {
+      markers.addAll(blobFollower.getMarkers());
+    } else {
+      for (Bird bird : birds) {
+        markers.add(new Octahedron(bird.pos, 1 + bird.value*12, 0x00ffff));
+      }
+      if (oscBlobs.isOn()) {
+        for (BlobTracker.Blob b : blobTracker.getBlobs()) {
+          markers.add(new CubeMarker(b.pos, spnRad.getValuef(), 0x00ff00));
+        }
+      } else if (everywhere.isOn()) {
+        markers.add(new CubeMarker(new PVector(model.cx, model.cy, model.cz), new PVector(model.xRange/2, model.yRange/2, model.zRange/2), 0x00ff00));
+      } else {
+        markers.add(new CubeMarker(new PVector(x.getValuef(), y.getValuef(), z.getValuef()), spnRad.getValuef(), 0x00ff00));
+      }
+    }
+    return markers;
   }
 
   void updateBlobTrackerParameters() {
     blobTracker.setBlobY(y.getValuef());
-    blobTracker.setMergeRadius(oscMergeRadius.getValuef());
-    blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
-    blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
   }
 
   void spawnBirds(float deltaSec, PVector focus, PVector vel, float weight) {
-    float spawnMin = spawnMinSpeed.getValuef();
-    float spawnMax = spawnMaxSpeed.getValuef();
     float speed = vel.mag();
-    float numToSpawn = deltaSec * density.getValuef() * weight * (speed - spawnMin) / (spawnMax - spawnMin);
-
-    List<Bird> newBirds = new ArrayList<Bird>();
+    float vary = spnVary.getValuef();
+    float spawnFactor = vary * (speed / 240.0f) + (1.0f - vary);
+    numToSpawn += deltaSec * spnRate.getValuef() * weight * spawnFactor;
 
     while (numToSpawn >= 1.0) {
       spawnBird(focus);
       numToSpawn -= 1.0;
     }
-    if (FastMath.random() < numToSpawn) {
-      spawnBird(focus);
+
+    if (vary > 0.01) {
+      if (FastMath.random() < numToSpawn) {
+        spawnBird(focus);
+      }
+      numToSpawn = 0;
     }
   }
 
   void spawnBird(PVector focus) {
-    PVector pos = getRandomUnitVector();
-    pos.mult(spawnRadius.getValuef());
-    pos.add(focus);
-    birds.add(new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100)));
+    if ((birds.size() + 1) <= maxBirds.getValue()) {
+      PVector pos = getRandomUnitVector();
+      if (everywhere.isOn()) {
+        pos.x = model.xMin + (float) Math.random() * (model.xMax - model.xMin);
+        pos.y = model.yMin + (float) Math.random() * (model.yMax - model.yMin);
+        pos.z = model.zMin + (float) Math.random() * (model.zMax - model.zMin);
+      } else {
+        pos.mult(spnRad.getValuef());
+        pos.add(focus);
+      }
+      birds.add(new Bird(pos, LXColor.hsb(FastMath.random()*360, FastMath.random()*100, 100)));
+    }
   }
 
   void advanceBirds(float deltaSec, PVector vel) {
-    PVector targetVel = PVector.mult(vel, speedMult.getValuef());
+    PVector targetVel = PVector.mult(vel, spdMult.getValuef());
     for (Bird b : birds) {
       b.run(deltaSec, targetVel);
     }
@@ -286,7 +314,7 @@ public class FlockWave extends SLPatternWithMarkers {
         velSum.div(totalWeight);
       }
 
-      PVector targetVel = PVector.mult(velSum, speedMult.getValuef());
+      PVector targetVel = PVector.mult(velSum, spdMult.getValuef());
       b.run(deltaSec, targetVel);
     }
   }
@@ -294,7 +322,7 @@ public class FlockWave extends SLPatternWithMarkers {
   void removeExpiredBirds() {
     List<Bird> expired = new ArrayList<Bird>();
     for (Bird b : birds) {
-      if (b.hasExpired) {
+      if (b.expired) {
         expired.add(b);
       }
     }
@@ -355,13 +383,12 @@ public class FlockWave extends SLPatternWithMarkers {
   }
 
   ColorPalette getPalette() {
-    ColorPalette pal = paletteLibrary.get(palette.getOption());
-    if (pal instanceof ZigzagPalette) {
-      ((ZigzagPalette) pal).setBias(palBias.getValuef());
-      ((ZigzagPalette) pal).setStart(palStart.getValuef());
-      ((ZigzagPalette) pal).setStop(palStop.getValuef());
-      ((ZigzagPalette) pal).setCutoff(palCutoff.getValue());
-    }
+    pal.setPalette(((LXStudio) lx).paletteLibrary.get(palette.getOption()));
+    pal.setBottom(palStart.getValue());
+    pal.setTop(palStop.getValue());
+    pal.setBias(palBias.getValue());
+    pal.setShift(palShift.getValue());
+    pal.setCutoff(palCutoff.getValue());
     return pal;
   }
 
@@ -423,13 +450,22 @@ public class FlockWave extends SLPatternWithMarkers {
     }
   }
 
+  void setPalette(String name) {
+    String[] options = palette.getOptions();
+    for (int i = 0; i < options.length; i++) {
+      if (options[i].equals(name)) {
+        palette.setValue(i);
+      }
+    }
+  }
+
   public class Bird implements Comparable<Bird> {
     public PVector pos;
     public PVector vel;
     public int rgb;
     public float value;
     public float elapsedSec;
-    public boolean hasExpired;
+    public boolean expired;
     public double[] renderedValues;
 
     Bird(PVector pos, int rgb) {
@@ -438,7 +474,7 @@ public class FlockWave extends SLPatternWithMarkers {
       this.rgb = rgb;
       this.value = 0;
       this.elapsedSec = 0;
-      this.hasExpired = false;
+      this.expired = false;
       this.renderedValues = new double[colors.length];
     }
 
@@ -450,8 +486,8 @@ public class FlockWave extends SLPatternWithMarkers {
       if (elapsedSec < fadeInSec.getValuef()) {
         value = elapsedSec / fadeInSec.getValuef();
       } else {
-        value = (float)FastMath.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
-        if (value < 0.001) hasExpired = true;
+        value = (float) FastMath.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
+        if (value < 0.004) expired = true;
       }
     }
 
@@ -466,7 +502,7 @@ public class FlockWave extends SLPatternWithMarkers {
       float frac = (float)FastMath.pow(0.1, deltaSec / turnSec.getValuef());
       vel = PVector.add(PVector.mult(vel, frac), PVector.mult(targetVel, 1 - frac));
       speed = speed * frac + targetSpeed * (1 - frac);
-      if (targetSpeed > maxSpeed.getValuef()) targetSpeed = maxSpeed.getValuef();
+      if (targetSpeed > maxSpd.getValuef()) targetSpeed = maxSpd.getValuef();
 
       float mag = vel.mag();
       if (mag > 0 && mag < speed) vel.div(mag / speed);
@@ -475,6 +511,244 @@ public class FlockWave extends SLPatternWithMarkers {
     public int compareTo(Bird other) {
       return Float.compare(pos.x, other.pos.x);
     }
+  }
+}
+
+public class FlockWaveBlues extends FlockWave {
+  public FlockWaveBlues(LX lx) {
+    super(lx);
+
+    parameters.get("everywhere").setValue(1);
+    parameters.get("nearBlobs").setValue(0);
+    parameters.get("spnRate").setValue(2.000);
+    parameters.get("detail").setValue(2.000);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("atBlobs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-0.800);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0);
+    parameters.get("palStop").setValue(1);
+    setPalette("jupiter1");
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(300.000);
+    parameters.get("size").setValue(620.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnVary").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.170);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(0.540);
+  }
+}
+
+public class FlockWaveFiery extends FlockWave {
+  public FlockWaveFiery(LX lx) {
+    super(lx);
+
+    parameters.get("everywhere").setValue(1);
+    parameters.get("nearBlobs").setValue(0);
+    parameters.get("spnRate").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("atBlobs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.640);
+    parameters.get("palCutoff").setValue(0.210);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    setPalette("sky.red");
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(150.000);
+    parameters.get("size").setValue(500.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnVary").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.150);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(5.580);
+  }
+}
+
+public class FlockWaveGalaxies extends FlockWave {
+  public FlockWaveGalaxies(LX lx) {
+    super(lx);
+
+    parameters.get("everywhere").setValue(1);
+    parameters.get("nearBlobs").setValue(0);
+    parameters.get("spnRate").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("atBlobs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.400);
+    parameters.get("palCutoff").setValue(0.320);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    setPalette("galaxies");
+    parameters.get("ripple").setValue(0.400);
+    parameters.get("scatter").setValue(130.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnVary").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.090);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300.000);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(6.300);
+  }
+}
+
+public class FlockWaveMercury extends FlockWave {
+  public FlockWaveMercury(LX lx) {
+    super(lx);
+
+    parameters.get("everywhere").setValue(1);
+    parameters.get("nearBlobs").setValue(0);
+    parameters.get("spnRate").setValue(2.000);
+    parameters.get("detail").setValue(10.000);
+    parameters.get("fadeInSec").setValue(2.000);
+    parameters.get("fadeOutSec").setValue(1.500);
+    parameters.get("atBlobs").setValue(0);
+    parameters.get("maxBirds").setValue(20.000);
+    parameters.get("maxSpd").setValue(0);
+    parameters.get("palBias").setValue(0);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0);
+    parameters.get("palStart").setValue(0);
+    parameters.get("palStop").setValue(1);
+    setPalette("lake");
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(200.000);
+    parameters.get("size").setValue(340.000);
+    parameters.get("spdMult").setValue(0);
+    parameters.get("spnVary").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(1);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(3.900);
+  }
+}
+
+public class FlockWaveOoze extends FlockWave {
+  public FlockWaveOoze(LX lx) {
+    super(lx);
+
+    parameters.get("everywhere").setValue(1);
+    parameters.get("nearBlobs").setValue(0);
+    parameters.get("spnRate").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("atBlobs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-2.120);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0.120);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    setPalette("sky.orange");
+    parameters.get("ripple").setValue(0.400);
+    parameters.get("scatter").setValue(150.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnVary").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.150);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(6.300);
+  }
+}
+
+public class FlockWavePlanets extends FlockWave {
+  public FlockWavePlanets(LX lx) {
+    super(lx);
+
+    parameters.get("everywhere").setValue(1);
+    parameters.get("nearBlobs").setValue(0);
+    parameters.get("spnRate").setValue(2.000);
+    parameters.get("detail").setValue(4.400);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("atBlobs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.280);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0.080);
+    parameters.get("palStart").setValue(0);
+    parameters.get("palStop").setValue(0.840);
+    setPalette("sky.purple");
+    parameters.get("ripple").setValue(-3.600);
+    parameters.get("scatter").setValue(150.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0);
+    parameters.get("spnVary").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.150);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(-0.180);
+  }
+}
+
+public class FlockWaveTimewarp extends FlockWave {
+  public FlockWaveTimewarp(LX lx) {
+    super(lx);
+
+    parameters.get("everywhere").setValue(1);
+    parameters.get("nearBlobs").setValue(0);
+    parameters.get("spnRate").setValue(2.000);
+    parameters.get("detail").setValue(6.600);
+    parameters.get("fadeInSec").setValue(1.700);
+    parameters.get("fadeOutSec").setValue(0.780);
+    parameters.get("atBlobs").setValue(0);
+    parameters.get("maxBirds").setValue(8.000);
+    parameters.get("maxSpd").setValue(10.000);
+    parameters.get("palBias").setValue(-1.280);
+    parameters.get("palCutoff").setValue(0);
+    parameters.get("palShift").setValue(0.120);
+    parameters.get("palStart").setValue(0.250);
+    parameters.get("palStop").setValue(1);
+    setPalette("sun2");
+    parameters.get("ripple").setValue(0.600);
+    parameters.get("scatter").setValue(300.000);
+    parameters.get("size").setValue(560.000);
+    parameters.get("spdMult").setValue(0.240);
+    parameters.get("spnVary").setValue(0);
+    parameters.get("spnRad").setValue(280.000);
+    parameters.get("timeScale").setValue(0.350);
+    parameters.get("turnSec").setValue(1.560);
+    parameters.get("x").setValue(300);
+    parameters.get("y").setValue(0.400);
+    parameters.get("z").setValue(78.398);
+    parameters.get("zScale").setValue(5.580);
   }
 }
 
@@ -597,91 +871,127 @@ public class LightSource extends SLPatternWithMarkers {
 }
 
 public class RipplePads extends SLPattern {
-  CompoundParameter intensity = new CompoundParameter("intensity", 0.5, 0, 3);
-  CompoundParameter speed = new CompoundParameter("speed", 100, 0, 500);
+  CompoundParameter intensity = new CompoundParameter("intensity", 1, 0, 3);
+  CompoundParameter velocity = new CompoundParameter("velocity", 80, 0, 127);
+  CompoundParameter speed = new CompoundParameter("speed", 200, 0, 500);
   CompoundParameter decaySec = new CompoundParameter("decaySec", 1, 0, 10);
   CompoundParameter nextHue = new CompoundParameter("nextHue", 0, 0, 360);
-  CompoundParameter nextSat = new CompoundParameter("nextSat", 0.5, 0, 1);
+  CompoundParameter nextSat = new CompoundParameter("nextSat", 0, 0, 1);
 
-  Sun[] sunsByNote = new Sun[128];
+  String[] sunIds = {"sun3", "sun5", "sun8", "sun11", "sun10", "sun9", "sun7", "sun6", "sun4", "sun1", "sun2"};
+  String[] buttonNames = {"K", "J", "I", "H", "G", "F", "E", "D", "C", "B", "A"};
+  int[] buttonPitches = {60, 62, 64, 65, 67, 69, 71, 72, 74, 76, 77};
+
+  BooleanParameter[] buttons;
+  boolean[] lastState;
+
+  Sun[] sunsByPitch = new Sun[128];
+  Ripple[] lastRipple = new Ripple[128];
   List<Ripple> ripples = new ArrayList<Ripple>();
 
   public RipplePads(LX lx) {
     super(lx);
 
-    sunsByNote[60] = getSun("sun1");
-    sunsByNote[92] = getSun("sun2");
-    sunsByNote[59] = getSun("sun4");
-    sunsByNote[91] = getSun("sun6");
-    sunsByNote[58] = getSun("sun7");
-    sunsByNote[90] = getSun("sun9");
-    sunsByNote[57] = getSun("sun10");
-    sunsByNote[89] = getSun("sun11");
-    sunsByNote[76] = getSun("sun8");
-    sunsByNote[44] = getSun("sun5");
-    sunsByNote[43] = getSun("sun3");
-
     addParameter(intensity);
+    addParameter(velocity);
     addParameter(speed);
     addParameter(decaySec);
     addParameter(nextHue);
     addParameter(nextSat);
-  }
 
-  Sun getSun(String id) {
-    return model.sunTable.get(id);
+
+    buttons = new BooleanParameter[sunIds.length];
+    lastState = new boolean[sunIds.length];
+
+    for (int i = 0; i < sunIds.length; i++) {
+      sunsByPitch[buttonPitches[i]] = model.sunTable.get(sunIds[i]);
+      BooleanParameter param = new BooleanParameter(buttonNames[i]);
+      param.setMode(BooleanParameter.Mode.MOMENTARY);
+      addParameter(param);
+      buttons[i] = param;
+    }
   }
 
   public void run(double deltaMs) {
     float deltaSec = (float) deltaMs * 0.001f;
+
+    for (int b = 0; b < buttons.length; b++) {
+      boolean state = buttons[b].isOn();
+      if (state != lastState[b]) {
+        if (state) {
+          noteOn(buttonPitches[b], (int) velocity.getValuef());
+        } else {
+          noteOff(buttonPitches[b]);
+        }
+        lastState[b] = state;
+      }
+    }
 
     List<Ripple> expired = new ArrayList<Ripple>();
     for (Ripple ripple : ripples) {
       ripple.advance(deltaSec);
       if (ripple.isExpired()) {
         expired.add(ripple);
-      } else {
-        ripple.render();
       }
     }
     ripples.removeAll(expired);
 
-    for (LXPoint point : model.points) {
-      int sum = 0xff000000;
-      for (Ripple ripple : ripples) {
-        sum = LXColor.add(sum, ripple.layerColors[point.index]);
+    for (Sun sun : sunsByPitch) {
+      if (sun == null) continue;
+      for (int i = 0; i < sun.points.length; i++) {
+        LXPoint point = sun.points[i];
+        int sum = 0xff000000;
+        for (Ripple ripple : ripples) {
+          if (ripple.sun == sun) {
+            sum = LXColor.add(sum, ripple.getColor(sun.distances[i]));
+          }
+        }
+        colors[point.index] = sum;
       }
-      colors[point.index] = sum;
     }
   }
 
   public void noteOnReceived(MidiNoteOn note) {
-    Sun sun = sunsByNote[note.getPitch()];
+    println("note on " + note);
+    noteOn(note.getPitch(), note.getVelocity());
+  }
+
+  public void noteOffReceived(MidiNote note) {
+    println("note off " + note);
+    noteOff(note.getPitch());
+  }
+
+  void noteOn(int pitch, int velocity) {
+    if (pitch > 127) return;
+    Sun sun = sunsByPitch[pitch];
     if (sun != null) {
-      addRipple(sun);
+      if (lastRipple[pitch] != null) {
+        lastRipple[pitch].release();
+      }
+      lastRipple[pitch] = addRipple(sun, velocity/128f);
     }
   }
 
-  /** Returns a random number between min and max. */
-  float random(float min, float max) {
-    return min + (float) Math.random()*(max - min);
+  void noteOff(int pitch) {
+    if (pitch > 127) return;
+    if (lastRipple[pitch] != null) {
+      lastRipple[pitch].release();
+    }
+    lastRipple[pitch] = null;
   }
 
-  void addRipple(Sun sun) {
-    PVector center = new PVector(
-        sun.boundingBox.origin.x + random(0.2, 0.8)*sun.boundingBox.size.x,
-        sun.boundingBox.origin.y + random(0.2, 0.8)*sun.boundingBox.size.y,
-        sun.boundingBox.origin.z + random(0.0, 1.0)*sun.boundingBox.size.z
-    );
-    ripples.add(new Ripple(
-        center, sun.boundingBox.size.z/2,
-        intensity.getValuef(), speed.getValuef(),
+  Ripple addRipple(Sun sun, float velocity) {
+    Ripple ripple = new Ripple(
+        sun, sun.boundingBox.size.z/2,
+        intensity.getValuef()*velocity, speed.getValuef()*velocity,
         decaySec.getValuef(), nextHue.getValuef(), nextSat.getValuef()
-    ));
+    );
+    ripples.add(ripple);
+    return ripple;
   }
 
   class Ripple {
-    PVector center;
+    Sun sun;
     float intensity;
     float speed;
     float decaySec;
@@ -692,33 +1002,36 @@ public class RipplePads extends SLPattern {
     float radius;
     float value;
     int[] layerColors;
+    boolean held;
 
-    Ripple(PVector center, float radius, float intensity, float speed, float decaySec, float hue, float sat) {
-      this.center = center;
+    Ripple(Sun sun, float radius, float intensity, float speed, float decaySec, float hue, float sat) {
+      this.sun = sun;
       this.radius = radius;
       this.intensity = intensity;
       this.speed = speed;
       this.decaySec = decaySec;
       this.hue = hue;
       this.sat = sat;
+      this.held = true;
       ageSec = 0;
-      layerColors = new int[colors.length];
     }
 
     void advance(float deltaSec) {
-      ageSec += deltaSec;
+      if (!held) ageSec += deltaSec;
       radius += deltaSec * speed;
       value = intensity / (1f + 10f*ageSec/decaySec);
     }
 
-    void render() {
-      for (LXPoint point : model.points) {
-        PVector pos = new PVector(point.x, point.y, point.z);
-        if (PVector.sub(pos, center).mag() < radius) {
-          layerColors[point.index] = lx.hsb(hue, sat*100f, value*100f);
-        } else {
-          layerColors[point.index] = 0;
-        }
+    void release() {
+      held = false;
+    }
+
+    int getColor(float distance) {
+      if (distance < radius) {
+        float brightness = value > 1 ? 1 : value;
+        return lx.hsb(hue, sat*100f, brightness*100f);
+      } else {
+        return 0;
       }
     }
 

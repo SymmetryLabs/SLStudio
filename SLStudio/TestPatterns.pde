@@ -97,6 +97,37 @@ public class TestStrips extends SLPattern {
   }
 }
 
+public class aaaStripSizeAndIndex extends SLPattern {
+  final DiscreteParameter indexp = new DiscreteParameter("index", 100);
+  final DiscreteParameter sizep = new DiscreteParameter("length", 35);
+
+  public aaaStripSizeAndIndex (LX lx) {
+    super(lx);
+    addParameter(indexp);
+    addParameter(sizep);
+  }
+
+  public void run(double deltaMs) {
+    // convert parameters to int values
+    int index = indexp.getValuei();
+    int  size = sizep.getValuei();
+    setColors(0);
+    for (Sun sun : model.suns) {
+      float hue = 0;
+      for (Slice slice : sun.slices){
+        int compare_index = 0;
+        for (Strip strip : slice.strips) {
+          for (LXPoint p : strip.points) {
+            if ( (compare_index++ > index) && (compare_index < index + size) ){
+              colors[p.index] = lx.hsb(120, 100, 100);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 public class TestLowPowerStrips extends SLPattern {
 
   public TestLowPowerStrips(LX lx) {
@@ -166,7 +197,7 @@ public class ParamCrossSections extends SLPattern {
     super(lx);
     addParams();
   }
-  
+
   protected void addParams() {
     addParameter(x);
     addParameter(y);
@@ -178,9 +209,9 @@ public class ParamCrossSections extends SLPattern {
     addParameter(yw);
     addParameter(zw);
   }
-  
+
   float xv, yv, zv;
-  
+
   protected void updateXYZVals() {
     xv = model.xMin + (x.getValuef() * model.xRange);
     yv = model.yMin + (y.getValuef() * model.yRange);
@@ -189,33 +220,96 @@ public class ParamCrossSections extends SLPattern {
 
   public void run(double deltaMs) {
     updateXYZVals();
-    
+
     float xlv = 100*xl.getValuef();
     float ylv = 100*yl.getValuef();
     float zlv = 100*zl.getValuef();
-    
+
     float xwv = 100. / (1 + 1*xw.getValuef());
     float ywv = 100. / (1 + 1*yw.getValuef());
     float zwv = 100. / (1 + 1*zw.getValuef());
-    
+
     for (LXPoint p : model.points) {
       color c = 0;
       c = PImage.blendColor(c, lx.hsb(
-      (palette.getHuef() + p.x/10 + p.y/3) % 360, 
-      constrain(140 - 1.1*abs(p.x - model.xMax/2.), 0, 100), 
+      (palette.getHuef() + p.x/10 + p.y/3) % 360,
+      constrain(140 - 1.1*abs(p.x - model.xMax/2.), 0, 100),
       max(0, xlv - xwv*abs(p.x - xv))
         ), ADD);
       c = PImage.blendColor(c, lx.hsb(
-      (palette.getHuef() + 80 + p.y/10) % 360, 
-      constrain(140 - 2.2*abs(p.y - model.yMax/2.), 0, 100), 
+      (palette.getHuef() + 80 + p.y/10) % 360,
+      constrain(140 - 2.2*abs(p.y - model.yMax/2.), 0, 100),
       max(0, ylv - ywv*abs(p.y - yv))
-        ), ADD); 
+        ), ADD);
       c = PImage.blendColor(c, lx.hsb(
-      (palette.getHuef() + 160 + p.z / 10 + p.y/2) % 360, 
-      constrain(140 - 2.2*abs(p.z - model.zMax/2.), 0, 100), 
+      (palette.getHuef() + 160 + p.z / 10 + p.y/2) % 360,
+      constrain(140 - 2.2*abs(p.z - model.zMax/2.), 0, 100),
       max(0, zlv - zwv*abs(p.z - zv))
-        ), ADD); 
+        ), ADD);
       colors[p.index] = c;
+    }
+  }
+}
+
+
+public class selectColumn extends SLPattern {
+
+  final DiscreteParameter xp = new DiscreteParameter("Column", 161);
+
+  public selectColumn(LX lx) {
+    super(lx);
+    addParameter(xp);
+  }
+
+  public void run(double deltaMs) {
+    int x = xp.getValuei();
+    setColors(0);
+    for (Sun sun : model.suns) {
+      float hue = 0;
+
+      for (Strip strip : sun.strips) {
+        int counter = 0;
+        for (LXPoint p : strip.points) {
+          if (counter++ == x){
+            colors[p.index] = lx.hsb(hue+120, 50, 100);
+          }
+        }
+
+        // hue += 180;
+      }
+    }
+  }
+}
+
+public class middlePixel extends SLPattern {
+
+  public middlePixel(LX lx) {
+    super(lx);
+  }
+
+  public void run(double deltaMs) {
+    for (Sun sun : model.suns) {
+      float hue = 0;
+
+      for (Strip strip : sun.strips) {
+        int counter = 0;
+        for (LXPoint p : strip.points) {
+          colors[p.index] = lx.hsb(hue, 100, 15);
+          // white if middle pixel
+          if ( counter < 2 ) {
+            colors[p.index] = lx.hsb(0, 100, 100);
+          }
+          else if (counter > strip.metrics.numPoints - 3){
+            colors[p.index] = lx.hsb(120, 100, 100);
+          }
+          if ( counter++ == (strip.metrics.numPoints/2) ){
+            // println("middle index:" + strip.metrics.numPoints/2 );
+            colors[p.index] = lx.hsb(240, 0, 100);
+          }
+        }
+
+        hue += 180;
+      }
     }
   }
 }

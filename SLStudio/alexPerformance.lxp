@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512466776326,
+  "timestamp": 1512474898971,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 1.0,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 6,
+      "focusedChannel": 7,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.3142857104539871,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -100,10 +100,25 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 4612,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16754945,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.5899999868124723
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
-        "patternIndex": 12,
+        "patternIndex": 4,
         "patterns": [
           {
             "id": 2773,
@@ -526,7 +541,7 @@
         "parameters": {
           "label": "L Pattern 2",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -673,7 +688,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 6,
         "patterns": [
           {
             "id": 4021,
@@ -834,6 +849,42 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 4609,
+            "class": "SLStudio$RKPattern01",
+            "modulationColor": -4456193,
+            "parameters": {
+              "label": "RKPattern01",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -916,7 +967,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -960,7 +1011,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1189,6 +1240,80 @@
               "size": 0.5,
               "falloff": 0.5,
               "wiggle": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 4828,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -35584,
+        "parameters": {
+          "label": "Channel-8",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.3571428591385484,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 2,
+        "patterns": [
+          {
+            "id": 4826,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -14876417,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4829,
+            "class": "SLStudio$aaaStripSizeAndIndex",
+            "modulationColor": -7143680,
+            "parameters": {
+              "label": "aaaStripSizeAndIndex",
+              "index": 65,
+              "length": 13
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 5050,
+            "class": "SLStudio$middlePixel",
+            "modulationColor": -65511,
+            "parameters": {
+              "label": "middlePixel"
             },
             "modulation": {
               "modulators": [],
@@ -1440,6 +1565,12 @@
     "midi": {
       "inputs": [
         {
+          "name": "CoreMIDI4J - Seaboard RISE",
+          "channel": true,
+          "control": true,
+          "sync": false
+        },
+        {
           "name": "CoreMIDI4J - APC40 mkII",
           "channel": false,
           "control": false,
@@ -1530,12 +1661,12 @@
         "3062": true
       },
       "preview": {
-        "radius": 1046.4684440494937,
-        "theta": 6.522000000000057,
-        "phi": 0.5797166738510129,
-        "positionX": 926.0613403320312,
-        "positionY": -73.80000305175781,
-        "positionZ": -15.951504707336426
+        "radius": 402.5565329636876,
+        "theta": 7.488000000000097,
+        "phi": 0.4747166738510128,
+        "positionX": 311.09033203125,
+        "positionY": 91.19999694824219,
+        "positionZ": 188.13812255859375
       }
     }
   }

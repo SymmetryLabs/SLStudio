@@ -25,6 +25,7 @@ import java.io.File;
 public class LXStudio extends P3LX {
 
   public static final String COPYRIGHT = "Symmetry Labs";
+  public PaletteLibrary paletteLibrary;
 
   public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
@@ -41,6 +42,7 @@ public class LXStudio extends P3LX {
     private boolean toggleHelpBar = false;
     private boolean toggleClipView = false;
     private boolean clipViewVisible = true;
+    private boolean performanceMode = false;
 
     public class PreviewWindow extends UI3dContext {
 
@@ -78,12 +80,16 @@ public class LXStudio extends P3LX {
       this.preview.addComponent(axes);
       this.preview.addComponent(markerPainter);
 
+
       addLayer(this.preview);
       addLayer(this.leftPane);
       addLayer(this.rightPane);
       addLayer(this.bottomTray);
       addLayer(this.helpBar);
       addLayer(this.framerate);
+
+      _toggleClipView();
+      _togglePerformanceMode();
 
       setTopLevelKeyEventHandler(new UIEventHandler() {
         @Override
@@ -112,6 +118,8 @@ public class LXStudio extends P3LX {
             cubeMapDebug.toggleVisible();
           } else if (keyChar == "f".charAt(0)) {
             framerate.toggleVisible();
+          } else if (keyChar == "p".charAt(0)) {
+            togglePerformanceMode();
           }
 
         }
@@ -147,6 +155,43 @@ public class LXStudio extends P3LX {
       return (this.clipViewVisible = !this.clipViewVisible);
     }
 
+    public void togglePerformanceMode() {
+      this.performanceMode = !this.performanceMode;
+      _togglePerformanceMode();
+    }
+
+    private void _togglePerformanceMode() {
+      this.leftPane.setVisible(!performanceMode);
+      this.rightPane.setVisible(!performanceMode);
+      if (performanceManager == null) return;
+      for (UIWindow w : performanceManager.windows) {
+        if (w != null) {
+          w.setVisible(performanceMode);
+        }
+      }
+      for (UIWindow w : performanceManager.crossfaders) {
+        if (w != null) {
+          w.setVisible(performanceMode);
+        }
+      }
+
+      if (lx == null || lx.engine == null || lx.engine.midi == null) return;
+
+      // lx.engine.midi.whenReady(new Runnable() {
+      //   public void run() {
+      //     for (final LXMidiSurface s : lx.engine.midi.surfaces) {
+      //       s.enabled.setValue(!performanceMode);
+      //     }
+      //   }
+      // });
+
+      if (performanceMode) {
+        performanceManager.windows[performanceManager.getWindowIndex(0)].rebindDeck();
+      }
+      
+    }
+
+
     @Override
     protected void onResize() {
       reflow();
@@ -164,15 +209,15 @@ public class LXStudio extends P3LX {
 
       UIMixer mixer = this.bottomTray.mixer;
       for (UIMixerStrip strip : mixer.channelStrips.values()) {
-        strip.clipLauncher.setVisible(this.clipViewVisible);
+        strip.clipLauncher.setVisible(false);
         strip.controls.setY(controlsY);
         strip.setHeight(stripHeight);
       }
       mixer.addChannelButton.setY(controlsY + UIMixer.PADDING);
-      mixer.masterStrip.clipLauncher.setVisible(this.clipViewVisible);
+      mixer.masterStrip.clipLauncher.setVisible(false);
       mixer.masterStrip.controls.setY(controlsY);
       mixer.masterStrip.setHeight(stripHeight);
-      mixer.sceneStrip.sceneLauncher.setVisible(this.clipViewVisible);
+      mixer.sceneStrip.sceneLauncher.setVisible(false);
       mixer.sceneStrip.clipViewToggle.setY(controlsY);
       mixer.sceneStrip.setHeight(stripHeight);
       mixer.setContentHeight(stripHeight + 2*UIMixer.PADDING);

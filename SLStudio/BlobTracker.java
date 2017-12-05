@@ -17,7 +17,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
     private static final int OSC_PORT = 4343;
 
     private float mergeRadius = 30f;  // inches
-    private float maxSpeed = 240f;  // inches per second
+    private float maxSpeed = 360f;  // inches per second
     private float maxDeltaSec = 0.5f;  // don't track movement across large gaps in time
     private float blobY = 40f;  // inches off the ground
     private long lastMessageMillis = 0;
