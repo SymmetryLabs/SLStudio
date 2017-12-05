@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512502904678,
+  "timestamp": 1512505644982,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -56,7 +56,7 @@
           "label": "Channel-1",
           "arm": false,
           "enabled": true,
-          "cue": false,
+          "cue": true,
           "midiMonitor": true,
           "midiChannel": 16,
           "autoCycleEnabled": false,
@@ -75,7 +75,7 @@
             "modulationColor": -16711685,
             "parameters": {
               "label": "Blur",
-              "enabled": true,
+              "enabled": false,
               "amount": 0.0
             },
             "modulation": {
@@ -91,7 +91,7 @@
             "parameters": {
               "label": "ColorShift",
               "enabled": false,
-              "shift": 360.0
+              "shift": 3.5999999195337296
             },
             "modulation": {
               "modulators": [],
@@ -105,7 +105,7 @@
             "modulationColor": -16711696,
             "parameters": {
               "label": "Palette",
-              "enabled": true,
+              "enabled": false,
               "amount": 1.0,
               "palette": 19,
               "bottom": 0.0,
@@ -122,7 +122,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 24,
+        "patternIndex": 20,
         "patterns": [
           {
             "id": 3361,
@@ -829,10 +829,10 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.2900000121444464,
-              "Shrp": 1.0,
+              "Dens": 0.7000000029802322,
+              "Shrp": 0.5,
               "Symm": 0,
-              "Anim": 0
+              "Anim": 5
             },
             "modulation": {
               "modulators": [],
@@ -957,7 +957,7 @@
         "parameters": {
           "label": "Channel-2",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": true,
           "midiChannel": 16,
@@ -1003,7 +1003,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 6,
+        "patternIndex": 7,
         "patterns": [
           {
             "id": 3378,
@@ -1197,6 +1197,26 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 4138,
+            "class": "SLStudio$TextureClouds",
+            "modulationColor": -16737793,
+            "parameters": {
+              "label": "TextureClouds",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -1207,17 +1227,17 @@
         "parameters": {
           "label": "Channel-3",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
           "fader": 0.9999899864196777,
           "crossfadeGroup": 2,
           "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
+          "transitionEnabled": true,
+          "transitionTimeSecs": 1.1,
           "transitionBlendMode": 0
         },
         "effects": [
@@ -1253,7 +1273,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 4,
         "patterns": [
           {
             "id": 3408,
@@ -1272,6 +1292,153 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 4112,
+            "class": "SLStudio$RKPattern01",
+            "modulationColor": -65292,
+            "parameters": {
+              "label": "RKPattern01",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": true,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "amt": 20.0,
+              "speed": 3.1415927410125732,
+              "dsp": 1.5707963705062866,
+              "nDsp": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4115,
+            "class": "SLStudio$RKPattern02",
+            "modulationColor": -5120,
+            "parameters": {
+              "label": "RKPattern02",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": true,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "noise": true,
+              "speed": 0.10000000149011612,
+              "dsp": 1.0,
+              "show edge": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4118,
+            "class": "SLStudio$RKPattern03",
+            "modulationColor": -15466241,
+            "parameters": {
+              "label": "RKPattern03",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": true,
+              "rX": 2.890265257129103,
+              "rY": 2.0106193093072022,
+              "rZ": 0.0,
+              "avg split": false,
+              "show tri": true,
+              "show edge": false,
+              "speed": 0.009999999776482582,
+              "fragment": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4121,
+            "class": "SLStudio$RKPattern05",
+            "modulationColor": -14352129,
+            "parameters": {
+              "label": "RKPattern05",
+              "RES": 200,
+              "KER": 1,
+              "ALL": false,
+              "SUN1": true,
+              "SUN2": true,
+              "SUN3": true,
+              "SUN4": true,
+              "SUN5": true,
+              "SUN6": true,
+              "SUN7": true,
+              "SUN8": true,
+              "SUN9": true,
+              "SUN10": true,
+              "SUN11": true,
+              "audioLink": false,
+              "rX": 0.0,
+              "rY": 0.0,
+              "rZ": 0.0,
+              "clear bg": false,
+              "speed": 0.05000000074505806,
+              "scalar": 5.0,
+              "hue1": 0.0,
+              "hue2": 85.0,
+              "hue3": 170.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -1282,13 +1449,13 @@
         "parameters": {
           "label": "Channel-4",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
-          "midiMonitor": false,
+          "midiMonitor": true,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 9.999999747378752E-6,
+          "fader": 1.0,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1328,7 +1495,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 3411,
@@ -1340,6 +1507,141 @@
               "color/brightness": 100.0,
               "color/saturation": 100.0,
               "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4124,
+            "class": "SLStudio$RipplePads",
+            "modulationColor": -12976384,
+            "parameters": {
+              "label": "RipplePads",
+              "intensity": 1.0,
+              "velocity": 80.0,
+              "speed": 200.0,
+              "decaySec": 1.0,
+              "nextHue": 0.0,
+              "nextSat": 0.0,
+              "K": false,
+              "J": false,
+              "I": false,
+              "H": false,
+              "G": false,
+              "F": false,
+              "E": false,
+              "D": false,
+              "C": false,
+              "B": false,
+              "A": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 4128,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65501,
+        "parameters": {
+          "label": "Channel-5",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 2,
+          "blendMode": 1,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 3,
+        "patterns": [
+          {
+            "id": 4126,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -16711682,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4129,
+            "class": "SLStudio$TextureJupiter2",
+            "modulationColor": -5308161,
+            "parameters": {
+              "label": "TextureJupiter2",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4132,
+            "class": "SLStudio$TextureNebula1",
+            "modulationColor": -24064,
+            "parameters": {
+              "label": "TextureNebula1",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4135,
+            "class": "SLStudio$TextureNebula2",
+            "modulationColor": -2817793,
+            "parameters": {
+              "label": "TextureNebula2",
+              "rate": 3000.0,
+              "perSun": false,
+              "offsetX": 0.0,
+              "offsetY": 0.0,
+              "zoomX": 0.0,
+              "zoomY": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -1416,22 +1718,22 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.7525383747079532,
-          "Band-2": 0.7742657790350764,
-          "Band-3": 0.783327517800884,
-          "Band-4": 0.7901023693783482,
-          "Band-5": 0.8004260988027816,
-          "Band-6": 0.7914976657800843,
-          "Band-7": 0.627320878365017,
-          "Band-8": 0.6267276160971524,
-          "Band-9": 0.5772668154647953,
-          "Band-10": 0.48842607692274553,
-          "Band-11": 0.41368182121118013,
-          "Band-12": 0.30065931673880386,
-          "Band-13": 0.2075797314606309,
-          "Band-14": 0.08785431704263769,
-          "Band-15": 0.020283359981434823,
-          "Band-16": 0.0
+          "Band-1": 0.9148316767171514,
+          "Band-2": 0.9213669547382359,
+          "Band-3": 0.8900461614896413,
+          "Band-4": 0.8528445169861156,
+          "Band-5": 0.8346722174424626,
+          "Band-6": 0.8368187662556823,
+          "Band-7": 0.7983010039533498,
+          "Band-8": 0.7606809840779303,
+          "Band-9": 0.7094964360838256,
+          "Band-10": 0.6641796071383694,
+          "Band-11": 0.5680523022067236,
+          "Band-12": 0.49423503318222295,
+          "Band-13": 0.47932757993784025,
+          "Band-14": 0.4145923981584766,
+          "Band-15": 0.37854037921420336,
+          "Band-16": 0.18446823320566352
         }
       },
       "input": {
@@ -1466,7 +1768,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.9212598425196851
       }
     },
     "components": {
@@ -1515,8 +1817,8 @@
       "inputs": [
         {
           "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
+          "channel": true,
+          "control": true,
           "sync": false
         },
         {
@@ -1545,8 +1847,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 1429.3469139052058,
-        "theta": -0.1920000000000185,
-        "phi": -0.0052833261489872605,
+        "theta": -0.24900000000001854,
+        "phi": -0.05028332614898725,
         "positionX": 269.6098937988281,
         "positionY": 57.19999694824219,
         "positionZ": 196.37989807128906

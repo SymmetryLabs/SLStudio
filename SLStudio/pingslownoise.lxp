@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512502204660,
+  "timestamp": 1512502875462,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -76,7 +76,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.7999999821186066
+              "amount": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -90,7 +90,7 @@
             "modulationColor": -16187137,
             "parameters": {
               "label": "ColorShift",
-              "enabled": true,
+              "enabled": false,
               "shift": 360.0
             },
             "modulation": {
@@ -106,13 +106,13 @@
             "parameters": {
               "label": "Palette",
               "enabled": true,
-              "amount": 0.0,
-              "palette": 0,
+              "amount": 1.0,
+              "palette": 19,
               "bottom": 0.0,
               "top": 1.0,
-              "shift": 0.0,
-              "bias": 0.0,
-              "cutoff": 0.0
+              "shift": 0.6199999861419201,
+              "bias": 0.9600000008940697,
+              "cutoff": 0.23999999463558197
             },
             "modulation": {
               "modulators": [],
@@ -122,7 +122,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 19,
+        "patternIndex": 24,
         "patterns": [
           {
             "id": 3361,
@@ -840,6 +840,113 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 3708,
+            "class": "SLStudio$BassPod",
+            "modulationColor": -13697280,
+            "parameters": {
+              "label": "BassPod",
+              "CLR": 1.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3711,
+            "class": "SLStudio$ShiftingPlane",
+            "modulationColor": -16765953,
+            "parameters": {
+              "label": "ShiftingPlane",
+              "hShift": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3717,
+            "class": "SLStudio$ViolinWave",
+            "modulationColor": -65437,
+            "parameters": {
+              "label": "ViolinWave",
+              "LVL": 0.43999998830258846,
+              "EDG": 0.5,
+              "RNG": 0.5,
+              "RLS": 0.5,
+              "SPD": 0.5,
+              "AMP": 1.2399999778717756,
+              "WAVE": 0.5,
+              "PSIZE": 0.5,
+              "PSPD": 0.5,
+              "PDENS": 0.25
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3781,
+            "class": "SLStudio$SoundParticles",
+            "modulationColor": -65292,
+            "parameters": {
+              "label": "SoundParticles",
+              "Spark": 0.0,
+              "Mag": 0.10000000149011612,
+              "Size": 0.33000001311302185,
+              "Speed": 155.99999687075615,
+              "Spin": 0.5,
+              "Color": 0.0,
+              "wobble": 1.0,
+              "radius": 700.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 3985,
+            "class": "com.symmetrylabs.pattern.Wasps",
+            "modulationColor": -16711709,
+            "parameters": {
+              "label": "Wasps",
+              "count": 59.99999865889549,
+              "size": 135.9999991953373,
+              "flattenZ": true,
+              "hue": 0.0,
+              "saturation": 48.00000116229057,
+              "speed": 1.399999991059303,
+              "accel": 0.15000000596046448,
+              "dampen": 0.4300000071525574,
+              "focusX": 0.41999999061226845,
+              "focusY": 0.0,
+              "focusZ": 0.0,
+              "pullX": 0.6399999968707561,
+              "pullY": 0.5,
+              "pullZ": 0.5,
+              "twistX": 0.5,
+              "twistY": 0.5,
+              "twistZ": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -1260,7 +1367,7 @@
           "parameters": {
             "label": "Blur",
             "enabled": true,
-            "amount": 0.0
+            "amount": 0.13385826771653545
           },
           "modulation": {
             "modulators": [],
@@ -1304,26 +1411,26 @@
           "label": "EQ",
           "running": true,
           "trigger": false,
-          "gain": -7.0,
+          "gain": 23.720000000000013,
           "range": 86.0,
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
-          "Band-13": 0.0,
-          "Band-14": 0.0,
-          "Band-15": 0.0,
+          "Band-1": 0.7159992012162575,
+          "Band-2": 0.7332252396128149,
+          "Band-3": 0.713661391356119,
+          "Band-4": 0.6930442488070644,
+          "Band-5": 0.6989479520220476,
+          "Band-6": 0.6935809904083663,
+          "Band-7": 0.6616543854079405,
+          "Band-8": 0.6765561247286735,
+          "Band-9": 0.6407957379175282,
+          "Band-10": 0.5788666115282683,
+          "Band-11": 0.5040403312896599,
+          "Band-12": 0.34199291413551225,
+          "Band-13": 0.28197661564181964,
+          "Band-14": 0.19642792417184496,
+          "Band-15": 0.059250543557321844,
           "Band-16": 0.0
         }
       },
@@ -1333,7 +1440,7 @@
         "modulationColor": -10486016,
         "parameters": {
           "label": "Audio Input",
-          "device": 0
+          "device": 3
         }
       },
       "output": {
@@ -1437,9 +1544,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 814.085014532583,
-        "theta": -0.021000000000018008,
-        "phi": 0.08171667385101271,
+        "radius": 1429.3469139052058,
+        "theta": -0.1920000000000185,
+        "phi": -0.0052833261489872605,
         "positionX": 269.6098937988281,
         "positionY": 57.19999694824219,
         "positionZ": 196.37989807128906
