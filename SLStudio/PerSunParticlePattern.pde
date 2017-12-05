@@ -1,5 +1,4 @@
 
-import com.symmetrylabs.util.LayeredRenderer;
 import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
 import com.symmetrylabs.util.OctahedronWithArrow;
@@ -73,6 +72,8 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
   @Override
   protected void createParameters() {
+    super.createParameters();
+
     addParameter(particleCount = new BoundedParameter("count", 0, 0, 100));
     addParameter(kernelSize = new CompoundParameter("size", 10, 0, 100));
     addParameter(flattenZ = new BooleanParameter("flattenZ", true));
@@ -132,15 +133,19 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
     super.run(deltaMs);
   }
 
-  protected float kernel(double d, double s) {
-    double stddev = s / 4f;
-    double peak = 1.0f / (2.5f * stddev);
-    return (float)(FastMath.exp(-(d * d) / (2 * stddev * stddev))
-              / (stddev * SQRT_2PI) / peak);
+  private double kernelSqr(double dSqr, double s) {
+    double stddev = s / 4;
+    double peakInv = 2.5 * stddev;
+    return FastMath.exp(-dSqr / (2 * stddev * stddev))
+              / (stddev * SQRT_2PI) * peakInv;
   }
 
-  protected float kernel(double x, double y, double z, double s) {
-    return kernel(FastMath.sqrt(x * x + y * y + z * z), s);
+  protected double kernel(double d, double s) {
+    return kernelSqr(d * d, s);
+  }
+
+  protected double kernel(double x, double y, double z, double s) {
+    return kernelSqr(x * x + y * y + z * z, s);
   }
 
   protected int getPaletteColor(float val) {
@@ -186,16 +191,18 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
       modelIndex = createModelIndex();
 
       particleCount.addListener(new LXParameterListener() {
-        public synchronized void onParameterChanged(LXParameter particleCount) {
-          int numParticles = (int)particleCount.getValue();
-          while (particles.size() > numParticles) {
-            particles.remove(particles.size() - 1);
-          }
+        public void onParameterChanged(LXParameter particleCount) {
+          synchronized (particles) {
+            int numParticles = (int)particleCount.getValue();
+            while (particles.size() > numParticles) {
+              particles.remove(particles.size() - 1);
+            }
 
-          for (int i = particles.size(); i < numParticles; ++i) {
-            Particle p = new Particle(i, colors.length);
-            initParticle(p);
-            particles.add(p);
+            for (int i = particles.size(); i < numParticles; ++i) {
+              Particle p = new Particle(i, colors.length);
+              initParticle(p);
+              particles.add(p);
+            }
           }
         }
       });
@@ -224,28 +231,32 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
       final boolean flattening = flattenZ.isOn();
       for (LXPoint p : nearbyPoints) {
-        float b = kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
+        float b = (float)kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
         particle.layer[p.index] = b;
       }
     }
 
     @Override
-    void run(double deltaMs) {
+    void run(double deltaMs, List<LXPoint> points, int[] layer) {
       simulate(deltaMs);
 
-      particles.parallelStream().forEach(new Consumer<Particle>() {
+      List<Particle> particleList;
+      synchronized (particles) {
+        particleList = new ArrayList<Particle>(particles);
+      }
+      particleList.parallelStream().forEach(new Consumer<Particle>() {
         public void accept(Particle particle) {
           renderParticle(particle);
         }
       });
 
-      for (LXPoint point : sun.getPoints()) {
+      for (LXPoint point : points) {
         float s = 0;
-        for (Particle particle : particles) {
+        for (Particle particle : particleList) {
           s += particle.layer[point.index];
         }
 
-        colors[point.index] = getPaletteColor(s);
+        layer[point.index] = getPaletteColor(s);
       }
     }
   }
@@ -339,8 +350,12 @@ public static class PerSunWasps extends PerSunParticlePattern {
         }
       }
 
-      for (int i = 0; i < particles.size(); ++i) {
-        Particle p = particles.get(i);
+      List<Particle> particleList;
+      synchronized (particles) {
+        particleList = new ArrayList<Particle>(particles);
+      }
+      for (int i = 0; i < particleList.size(); ++i) {
+        Particle p = particleList.get(i);
 
         p.vel[0] -= dampenValue * p.vel[0];
         p.vel[1] -= dampenValue * p.vel[1];
