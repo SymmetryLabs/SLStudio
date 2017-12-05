@@ -3,6 +3,7 @@ import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
+import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Octahedron;
 import com.symmetrylabs.util.BlobFollower;
 
@@ -242,10 +243,10 @@ public class FlockWave extends SLPatternWithMarkers {
       }
       if (oscBlobs.isOn()) {
         for (BlobTracker.Blob b : blobTracker.getBlobs()) {
-          markers.add(new OctahedronWithArrow(b.pos, spawnRadius.getValuef(), 0xff0080, b.vel, 0x8000ff));
+          markers.add(new CubeMarker(b.pos, spawnRadius.getValuef(), 0x00ff00));
         }
       } else {
-        markers.add(new Octahedron(new PVector(x.getValuef(), y.getValuef(), z.getValuef()), spawnRadius.getValuef(), 0x00ff00));
+        markers.add(new CubeMarker(new PVector(x.getValuef(), y.getValuef(), z.getValuef()), spawnRadius.getValuef(), 0x00ff00));
       }
     }
     return markers;
