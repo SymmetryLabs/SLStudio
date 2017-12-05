@@ -82,7 +82,7 @@ public SLModel buildModel() {
   /* Suns ------------------------------------------------------------*/
   List<Sun> suns = new ArrayList<Sun>();
 
-  suns.add(new Sun("sun1", Sun.Type.ONE_THIRD, layout.get("Bx"), NO_ROTATION, transform,
+  suns.add(new Sun("sun1", Sun.Type.ONE_THIRD, layout.get("A"), NO_ROTATION, transform,
     new int[][] {
       { // Top - Front
           9,  25,  35,  43,  49,  55,  59,  65,  69,  73,  //  1 - 10
