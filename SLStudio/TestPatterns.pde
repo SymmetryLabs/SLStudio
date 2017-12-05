@@ -78,6 +78,37 @@ public class TestStrips extends SLPattern {
   }
 }
 
+public class aaaStripSizeAndIndex extends SLPattern {
+  final DiscreteParameter indexp = new DiscreteParameter("index", 100);
+  final DiscreteParameter sizep = new DiscreteParameter("length", 35);
+
+  public aaaStripSizeAndIndex (LX lx) {
+    super(lx);
+    addParameter(indexp);
+    addParameter(sizep);
+  }
+
+  public void run(double deltaMs) {
+    // convert parameters to int values
+    int index = indexp.getValuei();
+    int  size = sizep.getValuei();
+    setColors(0);
+    for (Sun sun : model.suns) {
+      float hue = 0;
+      for (Slice slice : sun.slices){
+        int compare_index = 0;
+        for (Strip strip : slice.strips) {
+          for (LXPoint p : strip.points) {
+            if ( (compare_index++ > index) && (compare_index < index + size) ){
+              colors[p.index] = lx.hsb(120, 100, 100);
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 public class TestLowPowerStrips extends SLPattern {
 
   public TestLowPowerStrips(LX lx) {
