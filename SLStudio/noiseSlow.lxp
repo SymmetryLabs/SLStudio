@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512465527721,
+  "timestamp": 1512465937090,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,7 +12,7 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.0,
+      "crossfader": 0.8503937007874016,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
       "focusedChannel": 0,
@@ -20,7 +20,7 @@
       "cueB": false,
       "multithreaded": true,
       "channelMultithreaded": true,
-      "networkMultithreaded": false
+      "networkMultithreaded": true
     },
     "palette": {
       "id": 2,
@@ -54,7 +54,7 @@
         "modulationColor": -7471360,
         "parameters": {
           "label": "L Pattern 1",
-          "arm": true,
+          "arm": false,
           "enabled": true,
           "cue": false,
           "midiMonitor": false,
@@ -154,19 +154,19 @@
             "modulationColor": -12321024,
             "parameters": {
               "label": "Noise",
-              "Sprk": 0.0,
+              "Sprk": 0.14173228346456693,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "TrnX": 0.6456692913385826,
+              "TrnY": 0.48031496062992124,
+              "RotX": 0.6850393700787402,
+              "RotY": 0.6456692913385826,
+              "RotZ": 0.9448818897637795,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.8399999998509884,
+              "Dens": 0.8700000029057264,
               "Shrp": 0.5,
-              "Symm": 1,
-              "Anim": 6
+              "Symm": 0,
+              "Anim": 7
             },
             "modulation": {
               "modulators": [],
@@ -501,6 +501,21 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 4370,
+            "class": "SLStudio$SelectedStrip",
+            "modulationColor": -65358,
+            "parameters": {
+              "label": "SelectedStrip",
+              "selectedStrip": 1
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -517,7 +532,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -593,6 +608,26 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 4368,
+            "class": "SLStudio$Rings",
+            "modulationColor": -16721665,
+            "parameters": {
+              "label": "Rings",
+              "DEPTH": 0.6000000238418579,
+              "BRT": 0.75,
+              "SAT": 0.5,
+              "SPD1": 0.20000000298023224,
+              "SPD2": 0.4000000059604645,
+              "SCALE": 0.15000000596046448
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -609,7 +644,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 1,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -795,7 +830,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.015748031496062992,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -839,7 +874,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -883,7 +918,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -1063,7 +1098,7 @@
       "modulationColor": -16711822,
       "parameters": {
         "label": "Master",
-        "arm": true
+        "arm": false
       },
       "effects": [
         {
@@ -1295,11 +1330,15 @@
       }
     },
     "midi": {
-      "inputs": [],
-      "surfaces": [
+      "inputs": [
         {
-          "description": "APC40 mkII"
-        },
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
+          "sync": false
+        }
+      ],
+      "surfaces": [
         {
           "description": "APC40 mkII"
         }
