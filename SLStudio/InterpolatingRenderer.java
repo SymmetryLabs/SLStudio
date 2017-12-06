@@ -56,11 +56,21 @@ public class InterpolatingRenderer extends Renderer {
         runLoopStarted = true;
 
         double t = System.nanoTime() / 1000000.0;
-        final double f = (t - lastRenderTimeMillis) / lastRenderElapsedMillis;
+        double f = (t - lastRenderTimeMillis) / lastRenderElapsedMillis;
+        final double fFinal = f > 1 ? 1 : f;
         //System.out.println("Showing: " + frameA + " and " + frameB + " (" + f + ")");
         points.parallelStream().forEach(new Consumer<LXPoint>() {
             public void accept(LXPoint point) {
-                colors[point.index] = LXColor.lerp(frameA[point.index], frameB[point.index], f);
+                int c1 = frameA[point.index];
+                int c2 = frameB[point.index];
+                /*
+                colors[point.index] = LXColor.rgb(
+                        (int)(LXColor.red(c1) * f + LXColor.red(c2) * (1 - f)),
+                        (int)(LXColor.green(c1) * f + LXColor.green(c2) * (1 - f)),
+                        (int)(LXColor.blue(c1) * f + LXColor.blue(c2) * (1 - f))
+                );
+                */
+                colors[point.index] = LXColor.lerp(c1, c2, fFinal);
             }
         });
     }
