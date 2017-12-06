@@ -236,7 +236,8 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
     }
 
     protected ModelIndex createModelIndex() {
-      return new LinearModelIndex(sun, flattenZ.isOn());
+      //return new LinearModelIndex(sun, flattenZ.isOn());
+      return new OctreeModelIndex(sun, flattenZ.isOn());
     }
 
     protected void renderParticle(Particle particle) {

@@ -8,7 +8,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXModel;
 
 public class OctreeModelIndex extends ModelIndex {
-    private FixedWidthOctree<LXPoint> ot;
+    private HashOctree<LXPoint> ot;
 
     public OctreeModelIndex(LXModel model) {
         this(model, false);
@@ -17,8 +17,8 @@ public class OctreeModelIndex extends ModelIndex {
     public OctreeModelIndex(LXModel model, boolean flattenZ) {
         super(model);
 
-        ot = new FixedWidthOctree<LXPoint>(model.cx, model.cy, model.cz,
-                (float)Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 5);
+        ot = new HashOctree<LXPoint>(model.cx, model.cy, model.cz,
+                (float)Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 10);
 
         for (LXPoint point : model.getPoints()) {
             try {
