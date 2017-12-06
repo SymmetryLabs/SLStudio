@@ -6,8 +6,13 @@ import com.symmetrylabs.util.OctahedronWithArrow;
 public abstract static class PerSunParticlePattern extends PerSunPattern implements MarkerSource {
   private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
+  public static enum KernelChoice {
+    GAUSSIAN, LAPLACE
+  }
+
   public BoundedParameter particleCount;
   public CompoundParameter kernelSize;
+  public EnumParameter<KernelChoice> kernelType;
   public BooleanParameter flattenZ;
 
   public CompoundParameter hue;
@@ -76,6 +81,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
     addParameter(particleCount = new BoundedParameter("count", 0, 0, 100));
     addParameter(kernelSize = new CompoundParameter("size", 10, 0, 100));
+    addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
     addParameter(flattenZ = new BooleanParameter("flattenZ", true));
 
     addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
@@ -133,19 +139,34 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
     super.run(deltaMs);
   }
 
-  private double kernelSqr(double dSqr, double s) {
-    double stddev = s / 4;
-    double peakInv = 2.5 * stddev;
-    return FastMath.exp(-dSqr / (2 * stddev * stddev))
-              / (stddev * SQRT_2PI) * peakInv;
+  private double kernelPolySqr(double dSqr, double s) {
+    if (dSqr > s)
+      return 0;
+
+    double c = 1.19 / s;
+    double a2 = -1.414213;
+    double a4 = 0.5;
+    return 1 + a2 * c * dSqr + 0.5 * c * dSqr * dSqr;
   }
 
-  protected double kernel(double d, double s) {
-    return kernelSqr(d * d, s);
+  private double kernelGaussianSqr(double dSqr, double s) {
+    return FastMath.exp(-dSqr * 8 / (s * s)) * 2.5 / SQRT_2PI;
+  }
+
+  private double kernelLaplace(double d, double s) {
+    return FastMath.exp(-FastMath.abs(d * 4 / s));
   }
 
   protected double kernel(double x, double y, double z, double s) {
-    return kernelSqr(x * x + y * y + z * z, s);
+    double dSqr = x * x + y * y + z * z;
+    switch (kernelType.getEnum()) {
+    case GAUSSIAN:
+      return kernelGaussianSqr(dSqr, s);
+    case LAPLACE:
+      return kernelLaplace(FastMath.sqrt(dSqr), s);
+    default:
+      return 0;
+    }
   }
 
   protected int getPaletteColor(float val) {
