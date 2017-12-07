@@ -33,11 +33,10 @@ public SLModel buildModel() {
 
   final List<Wicket> wickets = new ArrayList<Wicket>();
 
-  wickets.add(new Wicket("A", "10.200.1.10", Wicket.Type.INSIDE, new float[] {0, 0,       0}, new float[] {0, 0, 0}, transform));
-  wickets.add(new Wicket("B", "10.200.1.11", Wicket.Type.INSIDE, new float[] {0, 0, 12*FEET}, new float[] {0, 0, 0}, transform));
+  wickets.add(new Wicket("A", "10.200.1.10", Wicket.Type.INSIDE, new float[] {0, 0,  0*FEET}, new float[] {0, 0, 0}, transform));
+  wickets.add(new Wicket("B", "10.200.1.11", Wicket.Type.INSIDE, new float[] {0, 0, 24*FEET}, new float[] {0, 0, 0}, transform)); // actually outside but INSIDE for now
   wickets.add(new Wicket("C", "10.200.1.12", Wicket.Type.INSIDE, new float[] {0, 0, 36*FEET}, new float[] {0, 0, 0}, transform)); // actually outside but INSIDE for now
-  wickets.add(new Wicket("D", "10.200.1.13", Wicket.Type.INSIDE, new float[] {0, 0, 44*FEET}, new float[] {0, 0, 0}, transform)); // actually outside but INSIDE for now
-  wickets.add(new Wicket("E", "10.200.1.14", Wicket.Type.INSIDE, new float[] {0, 0, 68*FEET}, new float[] {0, 0, 0}, transform));
+  wickets.add(new Wicket("D", "10.200.1.13", Wicket.Type.INSIDE, new float[] {0, 0, 56*FEET}, new float[] {0, 0, 0}, transform));
 
   Wicket[] wicketArr = new Wicket[wickets.size()];
   for (int i = 0; i < wicketArr.length; i++) {
