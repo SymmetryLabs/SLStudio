@@ -690,62 +690,62 @@ public class BassPod extends SLPattern {
   }
 }
 
-public class CubeEQ extends SLPattern {
+// public class CubeEQ extends SLPattern {
 
-  private LXAudioInput audioInput = lx.engine.audio.getInput();
-  private GraphicMeter eq = new GraphicMeter(audioInput);
+//   private LXAudioInput audioInput = lx.engine.audio.getInput();
+//   private GraphicMeter eq = new GraphicMeter(audioInput);
 
-  private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
-  private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
-  private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
+//   private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
+//   private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
+//   private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
 
-  public CubeEQ(LX lx) {
-    super(lx);
-    // addParameter(eq.range);
-    // addParameter(eq.attack);
-    // addParameter(eq.release);
-    // addParameter(eq.slope);
-    addParameter(edge);
-    addParameter(clr);
-    addParameter(blockiness);
-    addModulator(eq).start();
-  }
+//   public CubeEQ(LX lx) {
+//     super(lx);
+//     // addParameter(eq.range);
+//     // addParameter(eq.attack);
+//     // addParameter(eq.release);
+//     // addParameter(eq.slope);
+//     addParameter(edge);
+//     addParameter(clr);
+//     addParameter(blockiness);
+//     addModulator(eq).start();
+//   }
 
-  void onActive() {
-    eq.range.setValue(48);
-    eq.release.setValue(300);
-  }
+//   void onActive() {
+//     eq.range.setValue(48);
+//     eq.release.setValue(300);
+//   }
 
-  public void run(double deltaMs) {
-    float edgeConst = 2 + 30*edge.getValuef();
-    float clrConst = 1.1 + clr.getValuef();
+//   public void run(double deltaMs) {
+//     float edgeConst = 2 + 30*edge.getValuef();
+//     float clrConst = 1.1 + clr.getValuef();
 
-    for (LXPoint p : model.points) {
-      float avgIndex = constrain(2 + p.x / model.xMax * (eq.numBands-4), 0, eq.numBands-4);
-      int avgFloor = (int) avgIndex;
+//     for (LXPoint p : model.points) {
+//       float avgIndex = constrain(2 + p.x / model.xMax * (eq.numBands-4), 0, eq.numBands-4);
+//       int avgFloor = (int) avgIndex;
 
-      float leftVal = eq.getBandf(avgFloor);
-      float rightVal = eq.getBandf(avgFloor+1);
-      float smoothValue = lerp(leftVal, rightVal, avgIndex-avgFloor);
+//       float leftVal = eq.getBandf(avgFloor);
+//       float rightVal = eq.getBandf(avgFloor+1);
+//       float smoothValue = lerp(leftVal, rightVal, avgIndex-avgFloor);
       
-      float chunkyValue = (
-        eq.getBandf(avgFloor/4*4) +
-        eq.getBandf(avgFloor/4*4 + 1) +
-        eq.getBandf(avgFloor/4*4 + 2) +
-        eq.getBandf(avgFloor/4*4 + 3)
-      ) / 4.; 
+//       float chunkyValue = (
+//         eq.getBandf(avgFloor/4*4) +
+//         eq.getBandf(avgFloor/4*4 + 1) +
+//         eq.getBandf(avgFloor/4*4 + 2) +
+//         eq.getBandf(avgFloor/4*4 + 3)
+//       ) / 4.; 
       
-      float value = lerp(smoothValue, chunkyValue, blockiness.getValuef());
+//       float value = lerp(smoothValue, chunkyValue, blockiness.getValuef());
 
-      float b = constrain(edgeConst * (value*model.yMax - p.y), 0, 100);
-      colors[p.index] = lx.hsb(
-        480 + palette.getHuef() - min(clrConst*p.y, 120),
-        100, 
-        b
-      );
-    }
-  }
-}
+//       float b = constrain(edgeConst * (value*model.yMax - p.y), 0, 100);
+//       colors[p.index] = lx.hsb(
+//         480 + palette.getHuef() - min(clrConst*p.y, 120),
+//         100, 
+//         b
+//       );
+//     }
+//   }
+// }
 
 public class Swarm extends SLPattern {
   
@@ -1056,7 +1056,7 @@ public class ShiftingPlane extends SLPattern {
   }
 }
 
-public class CubeFlash extends SLPattern {
+public class WicketFlash extends SLPattern {
   private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
   private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
   private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
@@ -1064,13 +1064,13 @@ public class CubeFlash extends SLPattern {
   private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
   
   class Flash {
-    Cube c;
+    Wicket w;
     float value;
     float hue;
     boolean hasPeaked;
     
     Flash() {
-      c = model.cubes.get(floor(random(model.cubes.size())));
+      w = model.wickets.get(floor(random(model.wickets.size())));
       hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
       boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
       hasPeaked = infiniteAttack;
@@ -1096,7 +1096,7 @@ public class CubeFlash extends SLPattern {
   private float leftoverMs = 0;
   private List<Flash> flashes;
   
-  public CubeFlash(LX lx) {
+  public WicketFlash(LX lx) {
     super(lx);
     addParameter(rateParameter);
     addParameter(attackParameter);
@@ -1120,7 +1120,7 @@ public class CubeFlash extends SLPattern {
     
     for (Flash flash : flashes) {
       color c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-      for (LXPoint p : flash.c.points) {
+      for (LXPoint p : flash.w.points) {
         colors[p.index] = c;
       }
     }

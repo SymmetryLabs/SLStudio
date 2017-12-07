@@ -30,10 +30,7 @@ public class UIOverriddenRightPane extends UIPane {
   }
 
   private void buildUtilityUI() {
-    new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
-
-    if (((SLModel)model).cubes.size() > 0)
-      new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+    //new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
   }
 
   private void buildMidiUI() {
