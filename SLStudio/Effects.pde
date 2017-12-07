@@ -1,11 +1,5 @@
 import java.awt.Color;
 
-public static class WashHueShift extends LXEffect {
-
-  public final CompoundParameter shift = new CompoundParameter
-
-}
-
 public static class ColorFilter extends LXEffect {
 
   public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
