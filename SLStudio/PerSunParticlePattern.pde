@@ -308,7 +308,7 @@ public static class PerSunWasps extends PerSunParticlePattern {
   protected void createParameters() {
     super.createParameters();
 
-    addParameter(speed = new CompoundParameter("speed", 1, 0, 5));
+    addParameter(speed = new CompoundParameter("speed", 1, 0, 2));
     addParameter(accel = new CompoundParameter("accel", 0.15f, 0, 5));
     addParameter(dampen = new CompoundParameter("dampen", 0.75f, 0, 1));
     addParameter(focusX = new CompoundParameter("focusX", 0f, -1, 1));
