@@ -18,7 +18,7 @@ public class OctreeModelIndex extends ModelIndex {
         super(model);
 
         ot = new HashOctree<LXPoint>(model.cx, model.cy, model.cz,
-                (float)Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 10);
+                (float)Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 5);
 
         for (LXPoint point : model.getPoints()) {
             try {
