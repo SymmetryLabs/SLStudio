@@ -1,25 +1,37 @@
+import com.google.common.collect.Lists;
+import com.google.common.collect.Sets;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
 import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
+import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dContext;
 import heronarts.p3lx.ui.UI3dComponent;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UIIntegerBox;
 import heronarts.p3lx.ui.component.UIItemList;
+import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UISlider;
+import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import org.apache.commons.math3.util.FastMath;
+import processing.core.PConstants;
+import processing.core.PFont;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import processing.event.KeyEvent;
 
+import java.awt.Color;
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -27,13 +39,9 @@ import java.util.Set;
 import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
-import static processing.core.PApplet.println;
-import static processing.core.PConstants.*;
-
-import com.symmetrylabs.util.Marker;
-import com.symmetrylabs.util.MarkerSource;
+import static processing.core.PConstants.LEFT;
+import static processing.core.PConstants.TOP;
 
 class UISpeed extends UI2dContainer {
   public UISpeed(UI ui, final LX lx, float x, float y, float w) {
@@ -306,15 +314,18 @@ class UIMarkerPainter extends UI3dComponent {
 }
 
 class UIOutputs extends UICollapsibleSection {
+  final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
+  final UIItemList.ScrollList outputList;
+  final Set<Consumer<PixliteItem>> selectionListeners = Sets.newConcurrentHashSet();
+
     UIOutputs(LX lx, UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 500);
+        super(ui, x, y, w, 280);
         setTitle();
 
         addTopLevelComponent(new UIButton(4, 4, 12, 12) {}
           .setParameter(outputControl.enabled).setBorderRounding(4));
 
-        final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 0, w-8, 476);
+        outputList = new UIItemList.ScrollList(ui, 0, 0, w-8, getContentHeight());
 
         for (Pixlite pixlite : pixlites) { 
             items.add(new PixliteItem(pixlite));
@@ -322,6 +333,7 @@ class UIOutputs extends UICollapsibleSection {
 
         outputList.setItems(items).setSingleClickActivate(true);
         outputList.addToContainer(this);
+
     }
 
 
@@ -331,7 +343,7 @@ class UIOutputs extends UICollapsibleSection {
     }
 
     class PixliteItem extends UIItemList.AbstractItem {
-        final Pixlite pixlite;
+        final public Pixlite pixlite;
 
         PixliteItem(Pixlite pixlite) {
           this.pixlite = pixlite;
@@ -364,5 +376,110 @@ class UIOutputs extends UICollapsibleSection {
                 return;
             pixlite.enabled.toggle();
         }
+
+      @Override
+      public void onFocus() {
+        super.onFocus();
+
+        for (final Consumer<PixliteItem> selectionListener : selectionListeners) {
+          selectionListener.accept(this);
+        }
+      }
     }
+}
+
+
+public class UIMappingHelper extends UICollapsibleSection {
+  private static final int HEIGHT = 280;
+
+  Pixlite selectedPixlite;
+  PixliteOutput selectedOutput;
+
+  final UIItemList.ScrollList channelList;
+  final List<PixliteOutputItem> outputItems = Lists.newArrayList();
+
+  final BooleanParameter debugEnabled = new BooleanParameter("ON", false);
+  final CompoundParameter debugColorHue = new CompoundParameter("Hue", 0, 0, 1);
+  final CompoundParameter debugColorBrightness = new CompoundParameter("Bright", .5, 0, 1);
+
+  public UIMappingHelper(UI ui, LX lx, final UIOutputs outputPanel, float x, float y, float w) {
+    super(ui, x, y, w, HEIGHT);
+    setTitle("OSC I/O");
+
+    setLayout(Layout.VERTICAL);
+
+    // Tell the pixlites about us
+    for (Pixlite pixlite : pixlites) {
+      pixlite.addDebugListener(new PixliteDebugListener() {
+        @Override
+        public void onBeforeSend(final Pixlite pixlite, final PixliteOutput output, final ArtNetDatagram datagram) {
+          if (debugEnabled.getValueb() && output == selectedOutput) {
+
+            Color colorValue = Color.getHSBColor(debugColorHue.getValuef(), 1, debugColorBrightness.getValuef());
+            for (int i = 0; i < datagram.getLedCount(); i++) {
+              datagram.setColor(i, colorValue.getRGB());
+            }
+          }
+        }
+      });
+    }
+
+    channelList = new UIItemList.ScrollList(ui, 0, 0, getContentWidth(), 280-60);
+	  channelList.addToContainer(this);
+
+    outputPanel.selectionListeners.add(new Consumer<UIOutputs.PixliteItem>() {
+      @Override
+      public void accept(final UIOutputs.PixliteItem item) {
+        selectedPixlite = item.pixlite;
+        setTitle(item.getLabel());
+
+        outputItems.clear();
+        for (final PixliteOutput output : selectedPixlite.children) {
+          outputItems.add(new PixliteOutputItem(selectedPixlite, output));
+        }
+
+        channelList.setItems(outputItems);
+      }
+    });
+
+
+    UI2dContainer border = (UI2dContainer) new UI2dContainer(0, 0, getContentWidth(), 60)
+      .setBackgroundColor(ui.theme.getDarkBackgroundColor())
+      .setBorderRounding(4)
+      .addToContainer(this);
+
+    float yp = 4;
+    new UILabel(6, yp+2, 36, 12).setLabel("Debug").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+    new UIKnob(46, yp, 64, 16).setParameter(debugColorHue).setMappable(false).addToContainer(border);
+    new UIKnob(114, yp, 70, 16).setParameter(debugColorBrightness).addToContainer(border);
+    new UIButton(188, yp, 16, 16).setParameter(debugEnabled).setMappable(false).setBorderRounding(4).addToContainer(border);
+
+    yp += 20;
+    new UILabel(6, yp+2, 36, 12).setLabel("Output").setTextAlignment(PConstants.LEFT, PConstants.CENTER).addToContainer(border);
+    new UIIntegerBox(46, yp, 64, 16).setParameter(lx.engine.osc.transmitPort).setMappable(false).addToContainer(border);
+    new UITextBox(114, yp, 70, 16).setParameter(lx.engine.osc.transmitHost).addToContainer(border);
+    new UIButton(188, yp, 16, 16).setParameter(lx.engine.osc.transmitActive).setMappable(false).setBorderRounding(4).addToContainer(border);
+  }
+
+
+  class PixliteOutputItem extends UIItemList.AbstractItem {
+    final public Pixlite pixlite;
+    final public PixliteOutput output;
+
+    PixliteOutputItem(Pixlite pixlite, PixliteOutput output) {
+      this.pixlite = pixlite;
+      this.output = output;
+    }
+
+    public String getLabel() {
+      return pixlite.getLabel() + " - " + output.outputIndex;
+    }
+
+    @Override
+    public void onFocus() {
+      super.onFocus();
+
+      selectedOutput = output;
+    }
+  }
 }

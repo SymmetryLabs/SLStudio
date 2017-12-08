@@ -1,90 +1,109 @@
+import com.google.common.collect.Sets;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXDatagram;
 import heronarts.lx.output.LXDatagramOutput;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.LXOutputGroup;
 
+import java.lang.reflect.Field;
 import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
-Pixlite[] setupPixlites(LX lx) {
+Pixlite[]setupPixlites(LX lx){
 
-  Pixlite[] pixlites = new Pixlite[] {
-    // Sun 1 (One Third)
-    new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")), // trimmed
-    new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")), // trimmed
+  Pixlite[]pixlites=new Pixlite[]{
+  // Sun 1 (One Third)
+  new Pixlite(lx,"10.200.1.39",model.getSliceById("sun1_top_back")), // trimmed
+  new Pixlite(lx,"10.200.1.40",model.getSliceById("sun1_top_front")), // trimmed
 
-    // Sun 2
-    new Pixlite(lx, "10.200.1.41", model.getSliceById("sun2_top_back")),
-    new Pixlite(lx, "10.200.1.42", model.getSliceById("sun2_top_front")),
+  // Sun 2
+  new Pixlite(lx,"10.200.1.41",model.getSliceById("sun2_top_back")),
+  new Pixlite(lx,"10.200.1.42",model.getSliceById("sun2_top_front")),
 
-    // Sun 3 (One Third)
-    new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
-    new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
+  // Sun 3 (One Third)
+  new Pixlite(lx,"10.200.1.43",model.getSliceById("sun3_top_back")),
+  new Pixlite(lx,"10.200.1.44",model.getSliceById("sun3_top_front")),
 
-    // Sun 4 (One Half)
-    new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
-    new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
+  // Sun 4 (One Half)
+  new Pixlite(lx,"10.200.1.35",model.getSliceById("sun4_top_front")),
+  new Pixlite(lx,"10.200.1.36",model.getSliceById("sun4_top_back")),
 
-    // Sun 5 (One Third)
-    new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")), // locked
-    new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")), // locked
+  // Sun 5 (One Third)
+  new Pixlite(lx,"10.200.1.38",model.getSliceById("sun5_top_back")), // locked
+  new Pixlite(lx,"10.200.1.37",model.getSliceById("sun5_top_front")), // locked
 
-    // Sun 6 (Two Thirds)
-    new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")), // locked
-    new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")), // locked
-    new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")), // locked
-    
-    // Sun 7 (Two Thirds)
-    new Pixlite(lx, "10.200.1.33", ((SLModel)lx.model).getSliceById("sun7_top_front")), // locked
-    new Pixlite(lx, "10.200.1.34", ((SLModel)lx.model).getSliceById("sun7_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.31", ((SLModel)lx.model).getSliceById("sun7_top_back")), // locked
-    new Pixlite(lx, "10.200.1.32", ((SLModel)lx.model).getSliceById("sun7_bottom_back")), // locked
+  // Sun 6 (Two Thirds)
+  new Pixlite(lx,"10.200.1.24",model.getSliceById("sun6_top_front")), // locked
+  new Pixlite(lx,"10.200.1.23",model.getSliceById("sun6_bottom_front")), // locked
+  new Pixlite(lx,"10.200.1.26",model.getSliceById("sun6_top_back")), // locked
+  new Pixlite(lx,"10.200.1.25",model.getSliceById("sun6_bottom_back")), // locked
 
-    // Sun 8 (Two Thirds)
-    new Pixlite(lx, "10.200.1.27", ((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
-    new Pixlite(lx, "10.200.1.28", ((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // trimmed
-    new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // trimmed
+  // Sun 7 (Two Thirds)
+  new Pixlite(lx,"10.200.1.33",((SLModel)lx.model).getSliceById("sun7_top_front")), // locked
+  new Pixlite(lx,"10.200.1.34",((SLModel)lx.model).getSliceById("sun7_bottom_front")), // locked
+  new Pixlite(lx,"10.200.1.31",((SLModel)lx.model).getSliceById("sun7_top_back")), // locked
+  new Pixlite(lx,"10.200.1.32",((SLModel)lx.model).getSliceById("sun7_bottom_back")), // locked
 
-    // Sun 9 (Full) 
-    new Pixlite(lx, "10.200.1.13", ((SLModel)lx.model).getSliceById("sun9_top_front")), // 13
-    new Pixlite(lx, "10.200.1.14", ((SLModel)lx.model).getSliceById("sun9_bottom_front")), // 14
-    new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_top_back")), // NEEDS WORK!
-    new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // NEEDS WORK!
+  // Sun 8 (Two Thirds)
+  new Pixlite(lx,"10.200.1.27",((SLModel)lx.model).getSliceById("sun8_top_front")), // locked
+  new Pixlite(lx,"10.200.1.28",((SLModel)lx.model).getSliceById("sun8_bottom_front")), // locked
+  new Pixlite(lx,"10.200.1.29",((SLModel)lx.model).getSliceById("sun8_top_back")), // trimmed
+  new Pixlite(lx,"10.200.1.30",((SLModel)lx.model).getSliceById("sun8_bottom_back")), // trimmed
 
-    // Sun 10 (Full)
-    new Pixlite(lx, "10.200.1.22", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
-    new Pixlite(lx, "10.200.1.15", ((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
-    new Pixlite(lx, "10.200.1.21", ((SLModel)lx.model).getSliceById("sun10_top_back")), // locked but need trim maybe 
-    new Pixlite(lx, "10.200.1.16", ((SLModel)lx.model).getSliceById("sun10_bottom_back")), // locked but need trim maybe (move whole bottom to the right)
+  // Sun 9 (Full)
+  new Pixlite(lx,"10.200.1.13",((SLModel)lx.model).getSliceById("sun9_top_front")), // 13
+  new Pixlite(lx,"10.200.1.14",((SLModel)lx.model).getSliceById("sun9_bottom_front")), // 14
+  new Pixlite(lx,"10.200.1.12",((SLModel)lx.model).getSliceById("sun9_top_back")), // NEEDS WORK!
+  new Pixlite(lx,"10.200.1.11",((SLModel)lx.model).getSliceById("sun9_bottom_back")), // NEEDS WORK!
 
-    // sun 11
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_front")),
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_front")),
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_back")), // locked
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
+  // Sun 10 (Full)
+  new Pixlite(lx,"10.200.1.22",((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
+  new Pixlite(lx,"10.200.1.15",((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
+  new Pixlite(lx,"10.200.1.21",((SLModel)lx.model).getSliceById("sun10_top_back")), // locked but need trim maybe
+  new Pixlite(lx,"10.200.1.16",((SLModel)lx.model).getSliceById("sun10_bottom_back")), // locked but need trim maybe (move whole bottom to the right)
+
+  // sun 11
+  // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_front")),
+  // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_front")),
+  // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_back")), // locked
+  // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
   };
 
-  for (Pixlite pixlite : pixlites) {
-    lx.addOutput(pixlite);
+  for(Pixlite pixlite:pixlites){
+  lx.addOutput(pixlite);
   }
 
   return pixlites;
+  }
+
+public interface PixliteDebugListener {
+  void onBeforeSend(Pixlite pixlite, PixliteOutput output, ArtNetDatagram datagram);
 }
 
 public class Pixlite extends LXOutputGroup {
   private Slice slice;
   public final String ipAddress;
+  public final List<PixliteOutput> children;
+  public final Set<PixliteDebugListener> debugListeners = Sets.newHashSet();
 
   public Pixlite(LX lx, String ipAddress, Slice slice) {
     super(lx);
     this.ipAddress = ipAddress;
     this.slice = slice;
+
+    // Hack so we can access the children for debugging UI
+    try {
+      final Field childrenField = LXOutput.class.getDeclaredField("children");
+      childrenField.setAccessible(true);
+      this.children = (List<PixliteOutput>) childrenField.get(this);
+    } catch (Exception e) {
+      throw new RuntimeException(e);
+    }
 
     try {
       // Sun 1
@@ -215,15 +234,21 @@ public class Pixlite extends LXOutputGroup {
       e.printStackTrace();
     }
   }
+
+  public void addDebugListener(final PixliteDebugListener listener) {
+    this.debugListeners.add(listener);
+  }
 }
 
 public class PixliteOutput extends LXDatagramOutput {
-  private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
-  private final int outputIndex;
-  private final int firstUniverseOnOutput;
+  public final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
+  public final int outputIndex;
+  public final int firstUniverseOnOutput;
+  public final Pixlite pixlite;
 
-  public PixliteOutput(LX lx, String ipAddress, PointsGrouping pointsGrouping) throws SocketException {
+  public PixliteOutput(LX lx, Pixlite pixlite, String ipAddress, PointsGrouping pointsGrouping) throws SocketException {
     super(lx);
+    this.pixlite = pixlite;
     this.outputIndex = Integer.parseInt(pointsGrouping.id);
     this.firstUniverseOnOutput = outputIndex * 10;
     setupDatagrams(ipAddress, pointsGrouping);
@@ -242,7 +267,7 @@ public class PixliteOutput extends LXDatagramOutput {
       for (int i1 = 0; i1 < numIndices; i1++) {
         indices[i1] = pointsGrouping.getPoint(counter++).index;
       }
-      addDatagram(new ArtNetDatagram(ipAddress, indices, universe-1));
+      addDatagram(new ArtNetDatagram(ipAddress, pixlite, this, indices, universe-1));
     }
   }
 }
@@ -403,16 +428,36 @@ public class ArtNetDatagram extends LXDatagram {
   private final static int SEQUENCE_INDEX = 12;
 
   private final int[] pointIndices;
+  private final Pixlite pixlite;
+  private final PixliteOutput pixliteOutput;
+  private final int dataLength;
   private boolean sequenceEnabled = false;
   private byte sequence = 1;
 
-  public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
-    this(ipAddress, indices, 3 * indices.length, universeNumber);
+  public ArtNetDatagram(
+    String ipAddress,
+    final Pixlite pixlite,
+    final PixliteOutput pixliteOutput,
+    int[] indices,
+    int universeNumber
+  ) {
+    this(ipAddress, pixlite, pixliteOutput, indices, 3 * indices.length, universeNumber);
   }
 
-  public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
+  public ArtNetDatagram(
+    String ipAddress,
+    final Pixlite pixlite,
+    final PixliteOutput pixliteOutput,
+    int[] indices,
+    int dataLength,
+    int universeNumber
+  ) {
     super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
     this.pointIndices = indices;
+
+    this.dataLength = dataLength;
+    this.pixlite = pixlite;
+    this.pixliteOutput = pixliteOutput;
 
     try {
       setAddress(ipAddress);
@@ -445,6 +490,10 @@ public class ArtNetDatagram extends LXDatagram {
     }
   }
 
+  public int getLedCount() {
+    return this.pointIndices.length;
+  }
+
   public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
     this.sequenceEnabled = sequenceEnabled;
     return this;
@@ -464,6 +513,10 @@ public class ArtNetDatagram extends LXDatagram {
     // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
     // be about right - Yona
     busySleep(3000);
+
+    for (final PixliteDebugListener listener : pixlite.debugListeners) {
+      listener.onBeforeSend(pixlite, pixliteOutput, this);
+    }
   }
 
   LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
@@ -476,6 +529,17 @@ public class ArtNetDatagram extends LXDatagram {
       this.buffer[i + byteOffset[2]] = (byte) blueGamma[(colorValue & 0xff)]; // B
       i += 3;
     }
+    return this;
+  }
+
+  public LXDatagram setColor(int index, int colorValue) {
+    int i = ARTNET_HEADER_LENGTH;
+    int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
+
+    this.buffer[i + byteOffset[0]] = (byte) redGamma[((colorValue >> 16) & 0xff)]; // R
+    this.buffer[i + byteOffset[1]] = (byte) greenGamma[((colorValue >> 8) & 0xff)]; // G
+    this.buffer[i + byteOffset[2]] = (byte) blueGamma[(colorValue & 0xff)]; // B
+
     return this;
   }
 

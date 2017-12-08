@@ -1,3 +1,30 @@
+import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
+import heronarts.lx.LXMappingEngine;
+import heronarts.lx.LXModulationEngine;
+import heronarts.lx.audio.BandGate;
+import heronarts.lx.modulator.LXModulator;
+import heronarts.lx.modulator.MacroKnobs;
+import heronarts.lx.modulator.MultiStageEnvelope;
+import heronarts.lx.modulator.VariableLFO;
+import heronarts.lx.parameter.LXCompoundModulation;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXTriggerModulation;
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.UI2dContainer;
+import heronarts.p3lx.ui.UI2dScrollContext;
+import heronarts.p3lx.ui.UIObject;
+import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.studio.UIPane;
+import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
+import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
+import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
+import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
+import heronarts.p3lx.ui.studio.modulation.UIModulator;
+import heronarts.p3lx.ui.studio.osc.UIOscManager;
+import processing.core.PGraphics;
+
 public class UIOverriddenRightPane extends UIPane {
 
   private final LX lx;
@@ -27,10 +54,14 @@ public class UIOverriddenRightPane extends UIPane {
     buildUtilityUI();
     buildMidiUI();
     buildModulationUI();
+
+    setActiveSection(2);
   }
 
   private void buildUtilityUI() {
-    new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+    UIOutputs outputPanel = new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth());
+    outputPanel.addToContainer(this.utility);
+    new UIMappingHelper(ui, lx, outputPanel, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
   }
 
   private void buildPerformanceUI() {
