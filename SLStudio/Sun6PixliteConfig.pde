@@ -1,4 +1,4 @@
-public class Sun6FrontTopPixliteConfig {
+  public class Sun6FrontTopPixliteConfig {
   public Sun6FrontTopPixliteConfig(LX lx, Slice slice, String ipAddress, Pixlite pixlite) throws SocketException {
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
@@ -155,7 +155,7 @@ public class Sun6FrontBottomPixliteConfig {
     ));
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress,
-      new PointsGrouping("5")
+      new PointsGrouping("11")
        .addPoints(slice.getStripById("53").points, PointsGrouping.Shift.LEFT)
        .addPoints(slice.getStripById("54").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
        .addPoints(slice.getStripById("55").points, PointsGrouping.Shift.LEFT)

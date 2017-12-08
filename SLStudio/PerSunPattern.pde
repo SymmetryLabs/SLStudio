@@ -1,10 +1,42 @@
+import com.symmetrylabs.render.Renderer;
+import com.symmetrylabs.render.Renderable;
+import com.symmetrylabs.render.SequentialRenderer;
+import com.symmetrylabs.render.InterpolatingRenderer;
 
 public abstract static class PerSunPattern extends SLPattern {
   protected List<Subpattern> subpatterns;
 
+  private Object rendererLock = new Object();
+  private Renderer renderer;
+
+  public static enum RendererChoices {
+    SEQUENTIAL, INTERPOLATING
+  };
+
+  EnumParameter<RendererChoices> chooseRenderer;
+
+  private Renderable renderable = new Renderable() {
+    @Override
+    public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
+      System.out.println(1000 / deltaMs);
+      subpatterns.parallelStream().forEach(new Consumer<Subpattern>() {
+        public void accept(Subpattern subpattern) {
+          if (subpattern.enableParam.getValueb()) {
+            subpattern.run(deltaMs, subpattern.sun.getPoints(), layer);
+          }
+          else {
+            for (LXPoint point : subpattern.sun.points) {
+              layer[point.index] = 0;
+            }
+          }
+        }
+      });
+    }
+  };
+
   protected void createParameters() { }
 
-  protected PerSunPattern(LX lx, Class<? extends Subpattern> subpatternClass) {
+  protected PerSunPattern(final LX lx, Class<? extends Subpattern> subpatternClass) {
     super(lx);
 
     subpatterns = new ArrayList<Subpattern>(model.suns.size());
@@ -36,14 +68,57 @@ public abstract static class PerSunPattern extends SLPattern {
 
       ++sunIndex;
     }
+
+    addParameter(chooseRenderer = new EnumParameter<RendererChoices>("renderer", RendererChoices.SEQUENTIAL));
+
+    renderer = new SequentialRenderer(lx.model, colors, renderable);
+
+    chooseRenderer.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter ignore) {
+        synchronized (rendererLock) {
+          renderer.stop();
+
+          switch (chooseRenderer.getEnum()) {
+          case SEQUENTIAL:
+            renderer = new SequentialRenderer(lx.model, colors, renderable);
+            break;
+          case INTERPOLATING:
+            renderer = new InterpolatingRenderer(lx.model, colors, renderable);
+            break;
+          }
+
+          renderer.start();
+        }
+      }
+    });
+  }
+
+  @Override
+  public void onActive() {
+    super.onActive();
+
+    synchronized (rendererLock) {
+      renderer.start();
+    }
+  }
+
+  @Override
+  public void onInactive() {
+    super.onInactive();
+
+    synchronized (rendererLock) {
+      renderer.stop();
+    }
   }
 
   @Override
   public void run(final double deltaMs) {
+    renderer.run(deltaMs);
+    /*
     subpatterns.parallelStream().forEach(new Consumer<Subpattern>() {
       public void accept(Subpattern subpattern) {
         if (subpattern.enableParam.getValueb()) {
-          subpattern.run(deltaMs);
+          subpattern.run(deltaMs, subpattern.sun.getPoints(), colors);
         }
         else {
           for (LXPoint point : subpattern.sun.points) {
@@ -52,6 +127,7 @@ public abstract static class PerSunPattern extends SLPattern {
         }
       }
     });
+    */
   }
 
   public static abstract class Subpattern {
@@ -59,13 +135,13 @@ public abstract static class PerSunPattern extends SLPattern {
     protected final int sunIndex;
     protected final BooleanParameter enableParam;
 
-    Subpattern(Sun sun, int sunIndex) {
+    public Subpattern(Sun sun, int sunIndex) {
       this.sun = sun;
       this.sunIndex = sunIndex;
 
       enableParam = new BooleanParameter("SUN" + (sunIndex+1), true);
     }
 
-    protected abstract void run(double deltaMs);
+    protected abstract void run(double deltaMs, List<LXPoint> points, int[] layer);
   }
 }

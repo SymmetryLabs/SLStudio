@@ -1,9 +1,13 @@
 .DS_Store
-LXStudioCubes/build-tmp/
-SLStudio/build-tmp/
+build-tmp/
+build/
 *.autosave
 *.swp
-SLStudio/build
-.idea
 *.iml
+.idea
+.lxproject
+*.sublime-workspace
+application.macosx
+SLStudio/\.tags
 
+SLStudio/\.tags1

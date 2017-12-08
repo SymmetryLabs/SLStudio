@@ -1,16 +1,15 @@
 package com.symmetrylabs.util;
 
+import org.apache.commons.math3.util.FastMath;
+import processing.core.PVector;
+
 import java.util.ArrayList;
 import java.util.Collection;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import java.util.concurrent.CopyOnWriteArrayList;
 
-import processing.core.PVector;
-import org.apache.commons.math3.util.FastMath;
-
-public class BlobFollower implements MarkerSource {
-    BlobTracker tracker;
+public class BlobFollower implements com.symmetrylabs.util.MarkerSource {
+    com.symmetrylabs.util.BlobTracker tracker;
     List<Follower> followers;
     public float fadeInSec = 2;
     public float fadeOutSec = 2;
@@ -20,15 +19,15 @@ public class BlobFollower implements MarkerSource {
     public float maxAccel = 1800; // in/s^2
     public float maxRange = 48; // in
 
-    public BlobFollower(BlobTracker tracker) {
+    public BlobFollower(com.symmetrylabs.util.BlobTracker tracker) {
         this.tracker = tracker;
-        this.followers = new ArrayList<Follower>();
+        this.followers = new CopyOnWriteArrayList<com.symmetrylabs.util.BlobFollower.Follower>();
     }
 
     public void advance(float deltaSec) {
-        List<BlobTracker.Blob> blobs = tracker.getBlobs();
+        List<com.symmetrylabs.util.BlobTracker.Blob> blobs = tracker.getBlobs();
 
-        for (BlobTracker.Blob b : blobs) {
+        for (com.symmetrylabs.util.BlobTracker.Blob b : blobs) {
             if (findClosestFollower(b.pos, maxRange) == null) {
                 followers.add(new Follower(b.pos));
             }
@@ -38,9 +37,8 @@ public class BlobFollower implements MarkerSource {
             f.advance(deltaSec, findClosestBlob(f.pos, blobs, maxRange));
             if (f.expired) expired.add(f);
         }
-        synchronized (followers) {
-            followers.removeAll(expired);
-        }
+
+        followers.removeAll(expired);
     }
 
     public List<Follower> getFollowers() {
@@ -62,7 +60,7 @@ public class BlobFollower implements MarkerSource {
             this.ageSec = 0;
         }
 
-        void advance(float deltaSec, BlobTracker.Blob blob) {
+        void advance(float deltaSec, com.symmetrylabs.util.BlobTracker.Blob blob) {
             ageSec += deltaSec;
             if (blob == null) {
                 if (value < fadedLevel) {
@@ -90,10 +88,10 @@ public class BlobFollower implements MarkerSource {
         }
     }
 
-    public BlobTracker.Blob findClosestBlob(PVector p, List<BlobTracker.Blob> blobs, float range) {
-        BlobTracker.Blob closest = null;
+    public com.symmetrylabs.util.BlobTracker.Blob findClosestBlob(PVector p, List<com.symmetrylabs.util.BlobTracker.Blob> blobs, float range) {
+        com.symmetrylabs.util.BlobTracker.Blob closest = null;
         float minDist = 0;
-        for (BlobTracker.Blob b : blobs) {
+        for (com.symmetrylabs.util.BlobTracker.Blob b : blobs) {
             float dist = PVector.sub(p, b.pos).mag();
             if (dist < range && (closest == null || dist < minDist)) {
                 closest = b;
@@ -116,13 +114,11 @@ public class BlobFollower implements MarkerSource {
         return closest;
     }
 
-    public Collection<Marker> getMarkers() {
-        List<Marker> markers = new ArrayList<Marker>();
-        synchronized (followers) {
-            for (Follower f : followers) {
-                markers.add(new OctahedronWithArrow(f.pos, f.value*24, 0x0000ff, f.vel, 0xffff00));
-                //markers.add(new Octahedron(f.pos, 6, 0x00ff00));
-            }
+    public Collection<com.symmetrylabs.util.Marker> getMarkers() {
+        List<com.symmetrylabs.util.Marker> markers = new ArrayList<com.symmetrylabs.util.Marker>();
+        for (Follower f : followers) {
+            markers.add(new com.symmetrylabs.util.OctahedronWithArrow(f.pos, f.value*24, 0x0000ff, f.vel, 0xffff00));
+            //markers.add(new Octahedron(f.pos, 6, 0x00ff00));
         }
         return markers;
     }

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512392008498,
+  "timestamp": 1512503712628,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "Channel-1",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -143,7 +143,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 3302,
@@ -178,7 +178,7 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.550000011920929,
-              "Dens": 0.30000001192092896,
+              "Dens": 0.7800000011920929,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 6
@@ -203,71 +203,6 @@
               "triggers": []
             },
             "autoCycleEnabled": true
-          },
-          {
-            "id": 3351,
-            "class": "SLStudio$MultiRKPattern01",
-            "modulationColor": -16733185,
-            "parameters": {
-              "label": "MultiRKPattern01",
-              "SUN1": true,
-              "SUN2": true,
-              "SUN3": true,
-              "SUN4": false,
-              "SUN5": true,
-              "SUN6": false,
-              "SUN7": false,
-              "SUN8": true,
-              "SUN9": true,
-              "SUN10": false,
-              "SUN11": false,
-              "rX": 0.0,
-              "rY": 0.0,
-              "rZ": 0.0,
-              "amt": 20.0,
-              "speed": 3.1415927410125732,
-              "dsp": 1.5707963705062866,
-              "nDsp": 1.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 3353,
-            "class": "SLStudio$MultiRKPattern03",
-            "modulationColor": -28928,
-            "parameters": {
-              "label": "MultiRKPattern03",
-              "SUN1": true,
-              "SUN2": false,
-              "SUN3": true,
-              "SUN4": false,
-              "SUN5": true,
-              "SUN6": false,
-              "SUN7": false,
-              "SUN8": false,
-              "SUN9": true,
-              "SUN10": false,
-              "SUN11": false,
-              "rX": 0.0,
-              "rY": 0.0,
-              "rZ": 0.0,
-              "avg split": false,
-              "show tri": true,
-              "show edge": false,
-              "speed": 0.009999999776482582,
-              "fragment": 0.5
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
           }
         ]
       }
@@ -282,7 +217,7 @@
       },
       "effects": [
         {
-          "id": 364,
+          "id": 3372,
           "class": "heronarts.lx.effect.BlurEffect",
           "modulationColor": -12544,
           "parameters": {
@@ -337,12 +272,12 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.22222266261076873,
-          "Band-2": 0.23897936543045428,
-          "Band-3": 0.20758875310144942,
-          "Band-4": 0.1788685485022259,
-          "Band-5": 0.119010854155565,
-          "Band-6": 0.05453308467871354,
+          "Band-1": 0.12889214284334416,
+          "Band-2": 0.1570547469442779,
+          "Band-3": 0.15585175355686887,
+          "Band-4": 0.16195847044112432,
+          "Band-5": 0.13589313651685053,
+          "Band-6": 0.06123219463873475,
           "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,

@@ -12,7 +12,7 @@ import java.util.List;
 
 Pixlite[] setupPixlites(LX lx) {
 
-  return new Pixlite[] {
+  Pixlite[] pixlites = new Pixlite[] {
     // Sun 1 (One Third)
     new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")), // trimmed
     new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")), // trimmed
@@ -51,17 +51,17 @@ Pixlite[] setupPixlites(LX lx) {
     new Pixlite(lx, "10.200.1.29", ((SLModel)lx.model).getSliceById("sun8_top_back")), // trimmed
     new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // trimmed
 
-    // Sun 9 (Full)
+    // Sun 9 (Full) 
     new Pixlite(lx, "10.200.1.13", ((SLModel)lx.model).getSliceById("sun9_top_front")), // 13
     new Pixlite(lx, "10.200.1.14", ((SLModel)lx.model).getSliceById("sun9_bottom_front")), // 14
     new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_top_back")), // NEEDS WORK!
     new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // NEEDS WORK!
 
     // Sun 10 (Full)
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_top_back")), // locked but need trim maybe 
-    // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun10_bottom_back")), // locked but need trim maybe (move whole bottom to the right)
+    new Pixlite(lx, "10.200.1.22", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
+    new Pixlite(lx, "10.200.1.15", ((SLModel)lx.model).getSliceById("sun10_bottom_front")), // locked
+    new Pixlite(lx, "10.200.1.21", ((SLModel)lx.model).getSliceById("sun10_top_back")), // locked but need trim maybe 
+    new Pixlite(lx, "10.200.1.16", ((SLModel)lx.model).getSliceById("sun10_bottom_back")), // locked but need trim maybe (move whole bottom to the right)
 
     // sun 11
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_front")),
@@ -69,6 +69,12 @@ Pixlite[] setupPixlites(LX lx) {
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_top_back")), // locked
     // new Pixlite(lx, "10.200.1.xx", ((SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
   };
+
+  for (Pixlite pixlite : pixlites) {
+    lx.addOutput(pixlite);
+  }
+
+  return pixlites;
 }
 
 public class Pixlite extends LXOutputGroup {
@@ -89,6 +95,14 @@ public class Pixlite extends LXOutputGroup {
         new Sun1BackPixliteConfig(lx, slice, ipAddress, this);
       }
 
+      // Sun 2
+      if(slice.id.equals("sun2_top_front")) {
+        new Sun2FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
+      if(slice.id.equals("sun2_top_back")) {
+        new Sun2BackPixliteConfig(lx, slice, ipAddress, this);
+      }
+
       // Sun 3
       if(slice.id.equals("sun3_top_front")) {
         new Sun3FrontTopPixliteConfig(lx, slice, ipAddress, this);
@@ -98,6 +112,9 @@ public class Pixlite extends LXOutputGroup {
       }
 
       // Sun 4
+      if(slice.id.equals("sun4_top_front")) {
+        new Sun4FrontPixliteConfig(lx, slice, ipAddress, this);
+      }
       if(slice.id.equals("sun4_top_back")) {
         new Sun4BackPixliteConfig(lx, slice, ipAddress, this);
       }
@@ -180,19 +197,19 @@ public class Pixlite extends LXOutputGroup {
         new Sun10BackBottomPixliteConfig(lx, slice, ipAddress, this);
       }
 
-      // Sun 11
-      if(slice.id.equals("sun11_top_front")) {
-        new Sun11FrontTopPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun11_bottom_front")) {
-        new Sun11FrontBottomPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun11_top_back")) {
-        new Sun11BackTopPixliteConfig(lx, slice, ipAddress, this);
-      }
-      if(slice.id.equals("sun11_bottom_back")) {
-        new Sun11BackBottomPixliteConfig(lx, slice, ipAddress, this);
-      }
+      // // Sun 11
+      // if(slice.id.equals("sun11_top_front")) {
+      //   new Sun11FrontTopPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun11_bottom_front")) {
+      //   new Sun11FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun11_top_back")) {
+      //   new Sun11BackTopPixliteConfig(lx, slice, ipAddress, this);
+      // }
+      // if(slice.id.equals("sun11_bottom_back")) {
+      //   new Sun11BackBottomPixliteConfig(lx, slice, ipAddress, this);
+      // }
 
     } catch (Exception e) {
       e.printStackTrace();
@@ -390,7 +407,7 @@ public class ArtNetDatagram extends LXDatagram {
   private byte sequence = 1;
 
   public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
-    this(ipAddress, indices, 3*indices.length, universeNumber);
+    this(ipAddress, indices, 3 * indices.length, universeNumber);
   }
 
   public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
@@ -398,10 +415,10 @@ public class ArtNetDatagram extends LXDatagram {
     this.pointIndices = indices;
 
     try {
-        setAddress(ipAddress);
-        setPort(ARTNET_PORT);
+      setAddress(ipAddress);
+      setPort(ARTNET_PORT);
     } catch (UnknownHostException e) {
-        System.out.println("Pixlite with ip address (" + ipAddress + ") is not on the network.");
+      System.out.println("Pixlite with ip address (" + ipAddress + ") is not on the network.");
     }
 
     this.buffer[0] = 'A';
@@ -424,7 +441,7 @@ public class ArtNetDatagram extends LXDatagram {
     this.buffer[17] = (byte) (dataLength & 0xff);
 
     for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
-     this.buffer[i] = 0;
+      this.buffer[i] = 0;
     }
   }
 
@@ -443,6 +460,10 @@ public class ArtNetDatagram extends LXDatagram {
       }
       this.buffer[SEQUENCE_INDEX] = this.sequence;
     }
+
+    // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
+    // be about right - Yona
+    busySleep(3000);
   }
 
   LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
@@ -456,5 +477,13 @@ public class ArtNetDatagram extends LXDatagram {
       i += 3;
     }
     return this;
+  }
+
+  public void busySleep(long nanos) {
+    long elapsed;
+    final long startTime = System.nanoTime();
+    do {
+      elapsed = System.nanoTime() - startTime;
+    } while (elapsed < nanos);
   }
 }
