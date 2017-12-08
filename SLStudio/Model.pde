@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static processing.core.PApplet.*;
 
@@ -230,7 +231,7 @@ public static class Sun extends LXModel {
       float mcz = masterSun.center.z;
       
       for (int i = 0; i < points.length; i++) {
-        float minSqDist = 1e18;
+        float minSqDist = 1e18f;
         masterIndexes[i] = 0;
         float px = (points[i].x - cx);
         float py = (points[i].y - cy);
