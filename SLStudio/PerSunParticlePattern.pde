@@ -20,6 +20,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
   public BooleanParameter enableBlobs;
   public CompoundParameter blobMaxDist;
+  public CompoundParameter blobMaxAngle;
   public CompoundParameter blobAffinity;
   public CompoundParameter oscMergeRadius;  // blob merge radius (in)
   public CompoundParameter oscMaxSpeed;  // max blob speed (in/s)
@@ -89,6 +90,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
     addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
     addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
+    addParameter(blobMaxAngle = new CompoundParameter("blobMaxAngle", 75, 0, 90));
     addParameter(blobAffinity = new CompoundParameter("blobAffinity", 10f, 0, 200f));
     addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
     addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
@@ -107,6 +109,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
       updateBlobTrackerParameters();
 
       double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
+      double maxAngleRad = blobMaxAngle.getValue() * Math.PI / 180;
       List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
       for (Sun sun : model.suns) {
         BlobTracker.Blob closestBlob = null;
@@ -116,7 +119,8 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
           double dy = b.pos.y - sun.cy;
           double dz = b.pos.z - sun.cz;
           double sqrDist = dx * dx + dy * dy + dz * dz;
-          if (sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
+          double angleRad = FastMath.abs(FastMath.atan2(dx, dz));
+          if (angleRad < maxAngleRad && sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
             closestSqrDist = sqrDist;
             closestBlob = b;
           }
