@@ -1,5 +1,4 @@
 
-import com.symmetrylabs.util.LayeredRenderer;
 import com.symmetrylabs.util.OctreeModelIndex;
 import com.symmetrylabs.util.LinearModelIndex;
 import com.symmetrylabs.util.OctahedronWithArrow;
@@ -7,8 +6,13 @@ import com.symmetrylabs.util.OctahedronWithArrow;
 public abstract static class PerSunParticlePattern extends PerSunPattern implements MarkerSource {
   private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 
+  public static enum KernelChoice {
+    GAUSSIAN, LAPLACE
+  }
+
   public BoundedParameter particleCount;
   public CompoundParameter kernelSize;
+  public EnumParameter<KernelChoice> kernelType;
   public BooleanParameter flattenZ;
 
   public CompoundParameter hue;
@@ -16,6 +20,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
   public BooleanParameter enableBlobs;
   public CompoundParameter blobMaxDist;
+  public CompoundParameter blobMaxAngle;
   public CompoundParameter blobAffinity;
   public CompoundParameter oscMergeRadius;  // blob merge radius (in)
   public CompoundParameter oscMaxSpeed;  // max blob speed (in/s)
@@ -73,8 +78,11 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
   @Override
   protected void createParameters() {
+    super.createParameters();
+
     addParameter(particleCount = new BoundedParameter("count", 0, 0, 100));
     addParameter(kernelSize = new CompoundParameter("size", 10, 0, 100));
+    addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
     addParameter(flattenZ = new BooleanParameter("flattenZ", true));
 
     addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
@@ -82,6 +90,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
     addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
     addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
+    addParameter(blobMaxAngle = new CompoundParameter("blobMaxAngle", 75, 0, 90));
     addParameter(blobAffinity = new CompoundParameter("blobAffinity", 10f, 0, 200f));
     addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
     addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
@@ -100,6 +109,7 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
       updateBlobTrackerParameters();
 
       double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
+      double maxAngleRad = blobMaxAngle.getValue() * Math.PI / 180;
       List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
       for (Sun sun : model.suns) {
         BlobTracker.Blob closestBlob = null;
@@ -109,7 +119,8 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
           double dy = b.pos.y - sun.cy;
           double dz = b.pos.z - sun.cz;
           double sqrDist = dx * dx + dy * dy + dz * dz;
-          if (sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
+          double angleRad = FastMath.abs(FastMath.atan2(dx, dz));
+          if (angleRad < maxAngleRad && sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
             closestSqrDist = sqrDist;
             closestBlob = b;
           }
@@ -132,15 +143,34 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
     super.run(deltaMs);
   }
 
-  protected float kernel(double d, double s) {
-    double stddev = s / 4f;
-    double peak = 1.0f / (2.5f * stddev);
-    return (float)(FastMath.exp(-(d * d) / (2 * stddev * stddev))
-              / (stddev * SQRT_2PI) / peak);
+  private double kernelPolySqr(double dSqr, double s) {
+    if (dSqr > s)
+      return 0;
+
+    double c = 1.19 / s;
+    double a2 = -1.414213;
+    double a4 = 0.5;
+    return 1 + a2 * c * dSqr + 0.5 * c * dSqr * dSqr;
   }
 
-  protected float kernel(double x, double y, double z, double s) {
-    return kernel(FastMath.sqrt(x * x + y * y + z * z), s);
+  private double kernelGaussianSqr(double dSqr, double s) {
+    return FastMath.exp(-dSqr * 8 / (s * s)) * 2.5 / SQRT_2PI;
+  }
+
+  private double kernelLaplace(double d, double s) {
+    return FastMath.exp(-FastMath.abs(d * 4 / s));
+  }
+
+  protected double kernel(double x, double y, double z, double s) {
+    double dSqr = x * x + y * y + z * z;
+    switch (kernelType.getEnum()) {
+    case GAUSSIAN:
+      return kernelGaussianSqr(dSqr, s);
+    case LAPLACE:
+      return kernelLaplace(FastMath.sqrt(dSqr), s);
+    default:
+      return 0;
+    }
   }
 
   protected int getPaletteColor(float val) {
@@ -186,16 +216,18 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
       modelIndex = createModelIndex();
 
       particleCount.addListener(new LXParameterListener() {
-        public synchronized void onParameterChanged(LXParameter particleCount) {
-          int numParticles = (int)particleCount.getValue();
-          while (particles.size() > numParticles) {
-            particles.remove(particles.size() - 1);
-          }
+        public void onParameterChanged(LXParameter particleCount) {
+          synchronized (particles) {
+            int numParticles = (int)particleCount.getValue();
+            while (particles.size() > numParticles) {
+              particles.remove(particles.size() - 1);
+            }
 
-          for (int i = particles.size(); i < numParticles; ++i) {
-            Particle p = new Particle(i, colors.length);
-            initParticle(p);
-            particles.add(p);
+            for (int i = particles.size(); i < numParticles; ++i) {
+              Particle p = new Particle(i, colors.length);
+              initParticle(p);
+              particles.add(p);
+            }
           }
         }
       });
@@ -208,7 +240,8 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
     }
 
     protected ModelIndex createModelIndex() {
-      return new LinearModelIndex(sun, flattenZ.isOn());
+      //return new LinearModelIndex(sun, flattenZ.isOn());
+      return new OctreeModelIndex(sun, flattenZ.isOn());
     }
 
     protected void renderParticle(Particle particle) {
@@ -224,28 +257,32 @@ public abstract static class PerSunParticlePattern extends PerSunPattern impleme
 
       final boolean flattening = flattenZ.isOn();
       for (LXPoint p : nearbyPoints) {
-        float b = kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
+        float b = (float)kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
         particle.layer[p.index] = b;
       }
     }
 
     @Override
-    void run(double deltaMs) {
+    void run(double deltaMs, List<LXPoint> points, int[] layer) {
       simulate(deltaMs);
 
-      particles.parallelStream().forEach(new Consumer<Particle>() {
+      List<Particle> particleList;
+      synchronized (particles) {
+        particleList = new ArrayList<Particle>(particles);
+      }
+      particleList.parallelStream().forEach(new Consumer<Particle>() {
         public void accept(Particle particle) {
           renderParticle(particle);
         }
       });
 
-      for (LXPoint point : sun.getPoints()) {
+      for (LXPoint point : points) {
         float s = 0;
-        for (Particle particle : particles) {
+        for (Particle particle : particleList) {
           s += particle.layer[point.index];
         }
 
-        colors[point.index] = getPaletteColor(s);
+        layer[point.index] = getPaletteColor(s);
       }
     }
   }
@@ -275,7 +312,7 @@ public static class PerSunWasps extends PerSunParticlePattern {
   protected void createParameters() {
     super.createParameters();
 
-    addParameter(speed = new CompoundParameter("speed", 1, 0, 5));
+    addParameter(speed = new CompoundParameter("speed", 1, 0, 2));
     addParameter(accel = new CompoundParameter("accel", 0.15f, 0, 5));
     addParameter(dampen = new CompoundParameter("dampen", 0.75f, 0, 1));
     addParameter(focusX = new CompoundParameter("focusX", 0f, -1, 1));
@@ -339,8 +376,12 @@ public static class PerSunWasps extends PerSunParticlePattern {
         }
       }
 
-      for (int i = 0; i < particles.size(); ++i) {
-        Particle p = particles.get(i);
+      List<Particle> particleList;
+      synchronized (particles) {
+        particleList = new ArrayList<Particle>(particles);
+      }
+      for (int i = 0; i < particleList.size(); ++i) {
+        Particle p = particleList.get(i);
 
         p.vel[0] -= dampenValue * p.vel[0];
         p.vel[1] -= dampenValue * p.vel[1];
