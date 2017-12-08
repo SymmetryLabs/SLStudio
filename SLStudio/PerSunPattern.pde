@@ -18,7 +18,7 @@ public abstract static class PerSunPattern extends SLPattern {
   private Renderable renderable = new Renderable() {
     @Override
     public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
-      System.out.println(1000 / deltaMs);
+      // System.out.println(1000 / deltaMs);
       subpatterns.parallelStream().forEach(new Consumer<Subpattern>() {
         public void accept(Subpattern subpattern) {
           if (subpattern.enableParam.getValueb()) {
