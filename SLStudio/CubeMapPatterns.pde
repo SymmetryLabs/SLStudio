@@ -1,9 +1,9 @@
 import com.google.common.collect.Lists;
+import com.google.common.collect.Maps;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -11,15 +11,16 @@ import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import java.lang.reflect.Modifier;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
-import java.util.function.Predicate;
 
+import static processing.core.PConstants.CORNERS;
+import static processing.core.PConstants.LINES;
 import static processing.core.PConstants.P3D;
 
 public abstract class P3CubeMapPattern extends SLPattern {
@@ -66,8 +67,18 @@ public abstract class P3CubeMapPattern extends SLPattern {
       public void onParameterChanged(final LXParameter lxParameter) {
         faceRes = (int) resParam.getValue();
         updateGraphics();
+        invalidateProjectionCache();
       }
     });
+
+    final LXParameterListener invalidateProjectionCache = new LXParameterListener() {
+      @Override
+      public void onParameterChanged(final LXParameter lxParameter) {
+        invalidateProjectionCache();
+      }
+    };
+    kernelSize.addListener(invalidateProjectionCache);
+    allSunsParams.addListener(invalidateProjectionCache);
 
     this.faceRes = defaultFaceRes;
     this.updateGraphics();
@@ -103,32 +114,46 @@ public abstract class P3CubeMapPattern extends SLPattern {
     return sun.boundingBox.size;
   }
 
-  private void projectToLeds() {
-    if (allSunsParams.getValueb()) {
-      projectToLeds(origin, bboxSize);
-    } else {
-      for (final Sun sun : model.suns) {
-        final int sunIndex = model.suns.indexOf(sun);
-        PVector origin = originForSun(sun);
-        PVector bboxSize = bboxForSun(sun);
+  Map<Sun, int[][]> perSunProjectionCache;
+  int[][] allProjectionCache;
 
-        if (sunSwitchParams.get(sunIndex).getValueb()) {
-          projectToLeds(origin, bboxSize);
-        } else {
-          for (final LXPoint point : sun.points) {
-            colors[point.index] = 0;
-          }
+  private void invalidateProjectionCache() {
+    perSunProjectionCache = null;
+    allProjectionCache = null;
+  }
+
+  private synchronized void ensureProjectionCache() {
+    int inputPointCount = kernelSize.getValuei() * kernelSize.getValuei();
+
+    if (allSunsParams.getValueb()) {
+      if (allProjectionCache == null) {
+        allProjectionCache = new int[model.points.length][inputPointCount];
+        computeCache(allProjectionCache, origin, bboxSize, model.points);
+      }
+    } else {
+      if (perSunProjectionCache == null) {
+        perSunProjectionCache = Maps.newHashMapWithExpectedSize(model.suns.size());
+
+        for (final Sun sun : model.suns) {
+          int[][] sunCache = new int[sun.points.length][inputPointCount];
+          perSunProjectionCache.put(sun, sunCache);
+
+          computeCache(sunCache, originForSun(sun), bboxForSun(sun), sun.points);
         }
       }
     }
   }
 
-
-  private void projectToLeds(
+  private void computeCache(
+    final int[][] cache,
     PVector origin,
-    PVector bboxSize
+    PVector bboxSize,
+    final LXPoint[] points
   ) {
-    for (LXPoint p : model.points) {
+    int kernelSize = this.kernelSize.getValuei();
+
+    for (int i = 0; i < points.length; i++) {
+      LXPoint p = points[i];
       PVector v = new PVector(p.x, p.y, p.z).sub(origin);
       double ax = Math.abs(v.x);
       double ay = Math.abs(v.y);
@@ -136,40 +161,93 @@ public abstract class P3CubeMapPattern extends SLPattern {
 
       // Ignore pixels outside the bounding box.
       if (ax > bboxSize.x/2 || ay > bboxSize.y/2 || az > bboxSize.z/2) {
+        Arrays.fill(cache[i], -1);
         continue;
       }
 
       // Avoid division by zero.
       if (ax == 0 && ay == 0 && az == 0) {
-        colors[p.index] = 0;
+        Arrays.fill(cache[i], -1);
         continue;
       }
-
-      int kernelSize = this.kernelSize.getValuei();
 
       // Select the face according to the component with the largest absolute value.
       if (ax > ay && ax > az) {
         if (v.x > 0) {  // Right face
-          colors[p.index] = getColor(2*faceRes, faceRes, v.z/ax, -v.y/ax, kernelSize);
+          computePointColorIndexes(2*faceRes, faceRes, v.z/ax, -v.y/ax, kernelSize, cache[i]);
         } else {  // Left face
-          colors[p.index] = getColor(0, faceRes, -v.z/ax, -v.y/ax, kernelSize);
+          computePointColorIndexes(0, faceRes, -v.z/ax, -v.y/ax, kernelSize, cache[i]);
         }
       } else if (ay > ax && ay > az) {
         if (v.y > 0) {  // Up face
-          colors[p.index] = getColor(faceRes, 0, v.x/ay, -v.z/ay, kernelSize);
+          computePointColorIndexes(faceRes, 0, v.x/ay, -v.z/ay, kernelSize, cache[i]);
         } else {  // Down face
-          colors[p.index] = getColor(faceRes, 2*faceRes, v.x/ay, v.z/ay, kernelSize);
+          computePointColorIndexes(faceRes, 2*faceRes, v.x/ay, v.z/ay, kernelSize, cache[i]);
         }
       } else {
         if (v.z > 0) {  // Back face
-          colors[p.index] = getColor(3*faceRes, faceRes, -v.x/az, -v.y/az, kernelSize);
+          computePointColorIndexes(3*faceRes, faceRes, -v.x/az, -v.y/az, kernelSize, cache[i]);
         } else {  // Front face
-          colors[p.index] = getColor(faceRes, faceRes, v.x/az, -v.y/az, kernelSize);
+          computePointColorIndexes(faceRes, faceRes, v.x/az, -v.y/az, kernelSize, cache[i]);
         }
       }
     }
   }
 
+  private void projectToLeds() {
+    ensureProjectionCache();
+
+    if (allSunsParams.getValueb()) {
+      projectToLeds(allProjectionCache, model.points);
+    } else {
+      model.suns.parallelStream().forEach(new Consumer<Sun>() {
+        @Override
+        public void accept(final Sun sun) {
+          final int sunIndex = model.suns.indexOf(sun);
+          PVector origin = originForSun(sun);
+          PVector bboxSize = bboxForSun(sun);
+
+          if (sunSwitchParams.get(sunIndex).getValueb()) {
+            projectToLeds(perSunProjectionCache.get(sun), sun.points);
+          } else {
+            for (final LXPoint point : sun.points) {
+              colors[point.index] = 0;
+            }
+          }
+        }
+      });
+    }
+  }
+
+  private void projectToLeds(final int[][] cache, final LXPoint[] points) {
+    for (int i = 0; i < cache.length; i++) {
+      final int[] kernel = cache[i];
+      final LXPoint pt = points[i];
+
+      int count = 0;
+      int aSum = 0;
+      int rSum = 0;
+      int gSum = 0;
+      int bSum = 0;
+
+      for (final int colorIndex : kernel) {
+        if (colorIndex == -1) break;
+
+        int colorVal = pg.pixels[colorIndex];
+        rSum += colorVal & 0xFF;
+        gSum += (colorVal>>8) & 0xFF;
+        bSum += (colorVal>>16) & 0xFF;
+        aSum += (colorVal>>24) & 0xFF;
+        count ++;
+      }
+
+      if (count > 0) {
+        colors[pt.index] = (rSum / count) | ((gSum / count) << 8) | ((bSum / count) << 16) | ((aSum / count) << 24);
+      } else {
+        colors[pt.index] = 0;
+      }
+    }
+  }
 
 
   private Runnable run = new Runnable() {
@@ -199,27 +277,19 @@ public abstract class P3CubeMapPattern extends SLPattern {
   // Implement this method; it should paint the cubemap image onto pg.
   abstract void run(double deltaMs, PGraphics pg);
 
-  /**
-   * Gets a pixel colour from a selected face in the cubemap image.  The
-   * face is expected to be the square from (faceMinX, faceMinY) to
-   * (faceMinX + faceRes, faceMinY + faceRes), and a point within the
-   * square is located using (u, v), which ranges from (-1, -1) to (1, 1).
-   *
-   * @param faceMinX The minimum x-value of a face in the cubemap image.
-   * @param faceMinY The minimum y-value of a face in the cubemap image.
-   * @param u A texture coordinate within the face, ranging from -1 to 1.
-   * @param v A texture coordinate within the face, ranging from -1 to 1.
-   */
-  private int getColor(
+  private void computePointColorIndexes(
     int faceMinX,
     int faceMinY,
     double u,
     double v,
-    int kernelSize
+    int kernelSize,
+    int[] output
   ) {
     if (u < -1 || u > 1 || v < -1 || v > 1 || pg == null || pg.pixels == null) {
-      return 0;
+      Arrays.fill(output, -1);
+      return;
     }
+
     double offsetX = ((u + 1) / 2) * faceRes;
     double offsetY = ((v + 1) / 2) * faceRes;
 
@@ -228,31 +298,20 @@ public abstract class P3CubeMapPattern extends SLPattern {
     if (kernelSize == 1) {
       double x = faceMinX + offsetX;
       double y = faceMinY + offsetY;
-      return pg.pixels[(int) x + ((int) y)*pg.width];
+      output[0] = (int) x + ((int) y)*pg.width;
     } else {
-      int count = 0;
-      int aSum = 0;
-      int rSum = 0;
-      int gSum = 0;
-      int bSum = 0;
+      int outputIndex = 0;
       for (int kx = 0; kx<kernelSize; kx++) {
         for (int ky = 0; ky<kernelSize; ky++) {
           int x = (int) (faceMinX + offsetX + kx - kernelSize/2);
           int y = (int) (faceMinY + offsetY + ky - kernelSize/2);
-          int index = x + y*pg.width;
 
-          if (x >= 0 && x<pg.width && y >= 0 && y < pg.height && index < pg.pixels.length) {
-            int colorVal = pg.pixels[index];
-            rSum += colorVal & 0xFF;
-            gSum += (colorVal>>8) & 0xFF;
-            bSum += (colorVal>>16) & 0xFF;
-            aSum += (colorVal>>24) & 0xFF;
-            count ++;
+          final int index = x + y * pg.width;
+          if (x >= 0 && x < pg.width && y >= 0 && y < pg.height && index < colors.length) {
+            output[outputIndex++] = index;
           }
         }
       }
-
-      return (rSum/count) | ((gSum/count) << 8) | ((bSum/count) << 16) | ((aSum/count) << 24);
     }
   }
 }
@@ -320,32 +379,3 @@ public class TestCube extends P3CubeMapPattern {
   }
 }
 
-/**
- * A simple job holding class that allows patterns to queue rendering work for the main processing thread, which is
- * required for using OpenGL and such.
- *
- * Simply call DrawHelper.queueJob(id, someRunnable) to have that code executed on the main thread.
- *
- * The id should be a unique value per instance of the pattern or other component. Only the latest job added for an id
- * will be executed.
- */
-public static class DrawHelper {
-  private static Map<String, Runnable> jobs = Collections.synchronizedMap(new HashMap<String, Runnable>());
-
-  public static void queueJob(String id, Runnable job) {
-    jobs.put(id, job);
-  }
-
-  public static void runAll() {
-    List<Runnable> ourJobs;
-
-    synchronized (jobs) {
-      ourJobs = new ArrayList<Runnable>(jobs.values());
-      jobs.clear();
-    }
-
-    for (Runnable job : ourJobs) {
-      job.run();
-    }
-  }
-}
