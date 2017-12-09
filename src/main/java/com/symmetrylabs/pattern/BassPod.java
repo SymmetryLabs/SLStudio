@@ -24,8 +24,9 @@ public class BassPod extends LXPattern {
 
     public BassPod(LX lx) {
         super(lx);
+        eq.start();
         addParameter(clr);
-        addParameter(eq.gain);
+        addParameter(eq.gain);   //to-do can't add these, causes null pointer exception
         addParameter(eq.range);
         addParameter(eq.attack);
         addParameter(eq.release);
