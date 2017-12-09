@@ -105,7 +105,7 @@ public class SeaboardSuns extends SLPattern {
     }
 
     public void run(double deltaMs) {
-        setColors(0x000000);
+        setColors(0xff000000);
     }
 
     class NoteLayer extends LXLayer {

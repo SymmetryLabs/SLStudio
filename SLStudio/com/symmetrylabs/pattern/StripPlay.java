@@ -75,7 +75,7 @@ public class StripPlay extends SLPattern {
     }
 
     public void run(double deltaMs) {
-        setColors(0x000000);
+        setColors(0xff000000);
         float[] bright = new float[model.points.length];
         for (Strip strip : model.strips) {
             LXPoint centerPoint = strip.points[8];

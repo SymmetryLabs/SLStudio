@@ -49,8 +49,13 @@ public class SLStudio extends PApplet {
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
 
-    public static void main(String[] args) {
-        PApplet.main(SLStudio.class, args);
+    static public void main(String[] passedArgs) {
+        String[] appletArgs = new String[] { SLStudio.class.getName() };
+        if (passedArgs != null) {
+            PApplet.main(concat(appletArgs, passedArgs));
+        } else {
+            PApplet.main(appletArgs);
+        }
     }
 
     @Override
@@ -116,11 +121,11 @@ public class SLStudio extends PApplet {
                 lx.paletteLibrary = new PaletteLibrary();
                 loadPalettes(lx.paletteLibrary);
 
-                ui.theme.setPrimaryColor(0x008ba0);
-                ui.theme.setSecondaryColor(0x00a08b);
-                ui.theme.setAttentionColor(0xa00044);
-                ui.theme.setFocusColor(0x0094aa);
-                ui.theme.setControlBorderColor(0x292929);
+                ui.theme.setPrimaryColor(0xff008ba0);
+                ui.theme.setSecondaryColor(0xff00a08b);
+                ui.theme.setAttentionColor(0xffa00044);
+                ui.theme.setFocusColor(0xff0094aa);
+                ui.theme.setControlBorderColor(0xff292929);
             }
 
             @Override
