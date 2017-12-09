@@ -26,6 +26,7 @@ public class CubeEQ extends LXPattern {
 
     public CubeEQ(LX lx) {
         super(lx);
+        eq.start();
         addParameter(eq.range);
         addParameter(eq.attack);
         addParameter(eq.release);
