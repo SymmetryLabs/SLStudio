@@ -1137,11 +1137,11 @@ public class BassPod extends LXPattern {
   public BassPod(LX lx) {
     super(lx);
     addParameter(clr);
-    addParameter(eq.gain);
-    addParameter(eq.range);
-    addParameter(eq.attack);
-    addParameter(eq.release);
-    addParameter(eq.slope);
+    // addParameter(eq.gain);
+    // addParameter(eq.range);
+    // addParameter(eq.attack);
+    // addParameter(eq.release);
+    // addParameter(eq.slope);
     addModulator(eq).start();
   }
 
@@ -1188,10 +1188,10 @@ public class CubeEQ extends LXPattern {
 
   public CubeEQ(LX lx) {
     super(lx);
-    addParameter(eq.range);
-    addParameter(eq.attack);
-    addParameter(eq.release);
-    addParameter(eq.slope);
+    // addParameter(eq.range);
+    // addParameter(eq.attack);
+    // addParameter(eq.release);
+    // addParameter(eq.slope);
     addParameter(edge);
     addParameter(clr);
     addParameter(blockiness);
