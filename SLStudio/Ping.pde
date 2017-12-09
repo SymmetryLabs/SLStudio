@@ -1,11 +1,31 @@
-import com.symmetrylabs.util.ModelIndex;
-import com.symmetrylabs.util.OctreeModelIndex;
+import com.symmetrylabs.util.BlobFollower;
+import com.symmetrylabs.util.BlobTracker;
+import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.LinearModelIndex;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.MarkerSource;
-import com.symmetrylabs.util.CubeMarker;
+import com.symmetrylabs.util.ModelIndex;
 import com.symmetrylabs.util.Octahedron;
-import com.symmetrylabs.util.BlobFollower;
+import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.midi.MidiNote;
+import heronarts.lx.midi.MidiNoteOn;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import org.apache.commons.math3.util.FastMath;
+import processing.core.PVector;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.function.Consumer;
 
 public abstract class SLPatternWithMarkers extends SLPattern implements MarkerSource {
   public SLPatternWithMarkers(LX lx) {
@@ -146,7 +166,7 @@ public class FlockWave extends SLPatternWithMarkers {
   CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
   PVector prevFocus = null;
-  Set<Bird> birds = new HashSet<Bird>();
+  Set<Bird> birds = new CopyOnWriteArraySet<Bird>();
   float numToSpawn = 0f;
 
   private BlobTracker blobTracker;

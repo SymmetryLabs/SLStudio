@@ -52,10 +52,10 @@ Pixlite[] setupPixlites(LX lx) {
     new Pixlite(lx, "10.200.1.30", ((SLModel)lx.model).getSliceById("sun8_bottom_back")), // trimmed
 
     // Sun 9 (Full) 
-    new Pixlite(lx, "10.200.1.13", ((SLModel)lx.model).getSliceById("sun9_top_front")), // 13
-    new Pixlite(lx, "10.200.1.14", ((SLModel)lx.model).getSliceById("sun9_bottom_front")), // 14
-    new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_top_back")), // NEEDS WORK!
-    new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // NEEDS WORK!
+    new Pixlite(lx, "10.200.1.13", ((SLModel)lx.model).getSliceById("sun9_top_back")), // 13
+    new Pixlite(lx, "10.200.1.14", ((SLModel)lx.model).getSliceById("sun9_bottom_back")), // 14
+    new Pixlite(lx, "10.200.1.12", ((SLModel)lx.model).getSliceById("sun9_top_front")), // NEEDS WORK!
+    new Pixlite(lx, "10.200.1.11", ((SLModel)lx.model).getSliceById("sun9_bottom_front")), // NEEDS WORK!
 
     // Sun 10 (Full)
     new Pixlite(lx, "10.200.1.22", ((SLModel)lx.model).getSliceById("sun10_top_front")), // locked
@@ -85,6 +85,13 @@ public class Pixlite extends LXOutputGroup {
     super(lx);
     this.ipAddress = ipAddress;
     this.slice = slice;
+
+    if (slice == null) {
+      IllegalArgumentException e = new IllegalArgumentException("slice is null for " + ipAddress);
+      e.printStackTrace();
+      throw new IllegalArgumentException("slice is null for " + ipAddress);
+    }
+    if (slice.id == null) throw new IllegalArgumentException("slice.id is null for " + ipAddress);
 
     try {
       // Sun 1

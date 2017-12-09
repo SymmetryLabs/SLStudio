@@ -9,6 +9,7 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 
 import static processing.core.PApplet.*;
 
@@ -136,7 +137,17 @@ public static class SLModel extends LXModel {
   }
 
   public Slice getSliceById(String id) {
-    return this.sliceTable.get(id);
+    Slice slice = sliceTable.get(id);
+    if (slice == null) {
+      println("Missing slice id: " + id);
+      print("Valid ids: ");
+      for (String key : sliceTable.keySet()) {
+        print(key + ", ");
+      }
+      println();
+      throw new IllegalArgumentException("Invalid slice id:" + id);
+    }
+    return slice;
   }
 
   public void forEachPoint(final BatchConsumer consumer) {
@@ -230,7 +241,7 @@ public static class Sun extends LXModel {
       float mcz = masterSun.center.z;
       
       for (int i = 0; i < points.length; i++) {
-        float minSqDist = 1e18;
+        float minSqDist = 1e18f;
         masterIndexes[i] = 0;
         float px = (points[i].x - cx);
         float py = (points[i].y - cy);
@@ -319,7 +330,9 @@ public static class Sun extends LXModel {
   }
 
   public Slice getSliceById(String id) {
-    return sliceTable.get(id);
+    Slice slice = sliceTable.get(id);
+    if (slice == null) throw new IllegalArgumentException("Invalid slice id:" + id);
+    return slice;
   }
 
   private static class Fixture extends LXAbstractFixture {

@@ -95,7 +95,7 @@ public class Sun7FrontTopPixliteConfig {
 
     pixlite.addChild(new PixliteOutput(lx, ipAddress, 
       new PointsGrouping("11")
-        .addPoints(slice.getStripById("53").points, PointsGrouping.REVERSE_ORDERING)
+        .addPoints(slice.getStripById("53").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT_TWICE)
         .addPoints(slice.getStripById("54").points)
         .addPoints(slice.getStripById("55").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
         .addPoints(slice.getStripById("56").points, PointsGrouping.Shift.LEFT)
