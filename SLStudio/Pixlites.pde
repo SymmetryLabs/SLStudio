@@ -86,6 +86,13 @@ public class Pixlite extends LXOutputGroup {
     this.ipAddress = ipAddress;
     this.slice = slice;
 
+    if (slice == null) {
+      IllegalArgumentException e = new IllegalArgumentException("slice is null for " + ipAddress);
+      e.printStackTrace();
+      throw new IllegalArgumentException("slice is null for " + ipAddress);
+    }
+    if (slice.id == null) throw new IllegalArgumentException("slice.id is null for " + ipAddress);
+
     try {
       // Sun 1
       if(slice.id.equals("sun1_top_front")) {

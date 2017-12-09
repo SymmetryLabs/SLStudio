@@ -85,35 +85,35 @@ class UIFramerate extends UI2dContext {
           && lastDebugPrint + 500 < millis()) {
         lastDebugPrint = millis();
         StringBuilder sb = new StringBuilder();
-        sb.append("LXEngine::run() " + ((int) (lx.engine.timer.runLastNanos / 1000000)) + "ms\n");
+        sb.append("LXEngine  " + ((int) (lx.engine.timer.runLastNanos / 1000000)) + "ms\n");
         if (((int) (lx.engine.timer.oscNanos / 1000000)) != 0) {
-          sb.append("LXEngine::run()::osc " + ((int) (lx.engine.timer.oscNanos / 1000000)) + "ms\n");
+          sb.append("  osc  " + ((int) (lx.engine.timer.oscNanos / 1000000)) + "ms\n");
         }
         if (((int) (lx.engine.timer.inputNanos / 1000000)) != 0) {
-          sb.append("LXEngine::run()::inputs " + ((int) (lx.engine.timer.inputNanos / 1000000)) + "ms\n");
+          sb.append("  inputs  " + ((int) (lx.engine.timer.inputNanos / 1000000)) + "ms\n");
         }
         if (((int) (lx.engine.timer.channelNanos / 1000000)) != 0) {
-          sb.append("LXEngine::run()::channels " + ((int) (lx.engine.timer.channelNanos / 1000000)) + "ms\n");
+          sb.append("  channels  " + ((int) (lx.engine.timer.channelNanos / 1000000)) + "ms\n");
           for (LXChannel channel : lx.engine.channels) {
             if (((int) (channel.timer.loopNanos / 1000000)) != 0) {
-              sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
+              sb.append("    " + channel.getLabel() + "  " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
               LXPattern pattern = channel.getActivePattern();
               if (((int) (pattern.timer.runNanos / 1000000)) != 0) {
-                sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
+                sb.append("      " + pattern.getLabel() + "  " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
               }
               for (LXEffect effect : channel.getEffects()) {
                 if (((int) (effect.timer.runNanos / 1000000)) != 0) {
-                  sb.append("LXEngine::" + channel.getLabel() + "::" + effect.getLabel() + "::loop() " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
+                  sb.append("      " + effect.getLabel() + "  " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
                 }
               }
             }
           }
         }
         if (((int) (lx.engine.timer.fxNanos / 1000000)) != 0) {
-          sb.append("LXEngine::run()::effects " + ((int) (lx.engine.timer.fxNanos / 1000000)) + "ms\n");
+          sb.append("  effects  " + ((int) (lx.engine.timer.fxNanos / 1000000)) + "ms\n");
           for (LXEffect effect : lx.engine.masterChannel.getEffects()) {
             if (((int) (effect.timer.runNanos / 1000000)) != 0) {
-              sb.append("LXEngine::" + effect.getLabel() + "::loop() " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
+              sb.append("    " + effect.getLabel() + "  " + ((int) (effect.timer.runNanos / 1000000)) + "ms\n");
             }
           }
         }
