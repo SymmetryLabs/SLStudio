@@ -9,7 +9,7 @@ build/
 *.sublime-workspace
 application.macosx
 SLStudio/\.tags
-
+.gradle
 SLStudio/\.tags1
 build
 /out
