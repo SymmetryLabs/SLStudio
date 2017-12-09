@@ -43,31 +43,59 @@ public class Pixlite extends LXOutputGroup {
   private void setupPixliteOutputs(LX lx) throws SocketException {
     if (wicket.type == Wicket.Type.INSIDE) {
 
-      addChild(new PixliteOutput(lx, ipAddress, 1, new PointsGrouping()
-        .addPoints(wicket.getStripById("2").points, PointsGrouping.REVERSE)
-        .addPoints(wicket.getStripById("1").points, PointsGrouping.REVERSE)
-      ));
+      if (wicket.id.equals("C") || wicket.id.equals("D") || wicket.id.equals("E") || wicket.id.equals("F")) {
+        addChild(new PixliteOutput(lx, ipAddress, 1, new PointsGrouping()
+          .addPoints(wicket.getStripById("2").points, PointsGrouping.REVERSE)
+          .addPoints(wicket.getStripById("1").points, PointsGrouping.REVERSE)
+        ));
 
-      addChild(new PixliteOutput(lx, ipAddress, 2, new PointsGrouping()
-        .addPoints(wicket.getStripById("2w").points, PointsGrouping.REVERSE)
-        .addPoints(wicket.getStripById("1w").points, PointsGrouping.REVERSE)
-      ));
+        addChild(new PixliteOutput(lx, ipAddress, 3, new PointsGrouping()
+          .addPoints(wicket.getStripById("3").points)
+          .addPoints(wicket.getStripById("4").points)
+          .addPoints(wicket.getStripById("5").points)
+          .addPoints(wicket.getStripById("6").points)
+          .addPoints(wicket.getStripById("7").points)
+        ));
 
-      addChild(new PixliteOutput(lx, ipAddress, 3, new PointsGrouping()
-        .addPoints(wicket.getStripById("3").points)
-        .addPoints(wicket.getStripById("4").points)
-        .addPoints(wicket.getStripById("5").points)
-        .addPoints(wicket.getStripById("6").points)
-        .addPoints(wicket.getStripById("7").points)
-      ));
+        addChild(new PixliteOutput(lx, ipAddress, 2, new PointsGrouping()
+          .addPoints(wicket.getStripById("2w").points, PointsGrouping.REVERSE)
+          .addPoints(wicket.getStripById("1w").points, PointsGrouping.REVERSE)
+        ));
 
-      addChild(new PixliteOutput(lx, ipAddress, 4, new PointsGrouping()
-        .addPoints(wicket.getStripById("3w").points)
-        .addPoints(wicket.getStripById("4w").points)
-        .addPoints(wicket.getStripById("5w").points)
-        .addPoints(wicket.getStripById("6w").points)
-        .addPoints(wicket.getStripById("7w").points)
-      ));
+        addChild(new PixliteOutput(lx, ipAddress, 4, new PointsGrouping()
+          .addPoints(wicket.getStripById("3w").points)
+          .addPoints(wicket.getStripById("4w").points)
+          .addPoints(wicket.getStripById("5w").points)
+          .addPoints(wicket.getStripById("6w").points)
+          .addPoints(wicket.getStripById("7w").points)
+        ));
+      } else {
+        addChild(new PixliteOutput(lx, ipAddress, 1, new PointsGrouping()
+          .addPoints(wicket.getStripById("2").points, PointsGrouping.REVERSE)
+          .addPoints(wicket.getStripById("1").points, PointsGrouping.REVERSE)
+        ));
+
+        addChild(new PixliteOutput(lx, ipAddress, 2, new PointsGrouping()
+          .addPoints(wicket.getStripById("3").points)
+          .addPoints(wicket.getStripById("4").points)
+          .addPoints(wicket.getStripById("5").points)
+          .addPoints(wicket.getStripById("6").points)
+          .addPoints(wicket.getStripById("7").points)
+        ));
+
+        addChild(new PixliteOutput(lx, ipAddress, 3, new PointsGrouping()
+          .addPoints(wicket.getStripById("2w").points, PointsGrouping.REVERSE)
+          .addPoints(wicket.getStripById("1w").points, PointsGrouping.REVERSE)
+        ));
+
+        addChild(new PixliteOutput(lx, ipAddress, 4, new PointsGrouping()
+          .addPoints(wicket.getStripById("3w").points)
+          .addPoints(wicket.getStripById("4w").points)
+          .addPoints(wicket.getStripById("5w").points)
+          .addPoints(wicket.getStripById("6w").points)
+          .addPoints(wicket.getStripById("7w").points)
+        ));
+      }
     }
   }
 }
@@ -85,6 +113,7 @@ private class PixliteOutput extends LXDatagramOutput {
   }
 
   private void setupDatagrams(String ipAddress, PointsGrouping pointsGrouping) {
+    println("Creating pixlite output with number of points: " + pointsGrouping.size());
     // the points for one pixlite output have to be spread across multiple universes
     int numPoints = pointsGrouping.size();
     int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;

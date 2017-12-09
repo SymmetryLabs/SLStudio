@@ -9,26 +9,6 @@ import java.util.function.IntFunction;
 final static float INCHES = 1;
 final static float FEET = 12*INCHES;
 final static float INCHES_PER_METER = 39.3701;
-  /**
- *     DOUBLE BLACK DIAMOND        DOUBLE BLACK DIAMOND
- *
- *         //\\   //\\                 //\\   //\\  
- *        ///\\\ ///\\\               ///\\\ ///\\\
- *        \\\/// \\\///               \\\/// \\\///
- *         \\//   \\//                 \\//   \\//
- *
- *        EXPERTS ONLY!!              EXPERTS ONLY!!
- *
- * Contains the model definitions for the cube structures.
- */
-
-
-
-/**
- * Top-level model of the entire sculpture. This contains a list of
- * every cube on the sculpture, which forms a hierarchy of faces, strips
- * and points.
- */
 
 public static class SLModel extends LXModel {
   public final List<Wicket> wickets;
@@ -141,9 +121,11 @@ public static class Wicket extends LXModel {
     private Fixture(Type type, float[] coordinates, float[] rotations, LXTransform transform) {
       transform.push();
       transform.translate(coordinates[0], coordinates[1], coordinates[2]);
+      transform.translate(62.13, 0, 0);
       transform.rotateX(rotations[0] * PI / 180);
       transform.rotateY(rotations[1] * PI / 180);
       transform.rotateZ(rotations[2] * PI / 180);
+      transform.translate(-62.13, 0, 0);
 
       // left side
       transform.rotateZ(90 * PI / 180);
@@ -234,7 +216,7 @@ public static class Strip extends LXModel {
   public static final float PIXEL_PITCH = INCHES_PER_METER / LEDS_PER_METER;
 
   public enum Type {
-    SHORT  (30), 
+    SHORT  (30),
     MEDIUM (45),
     LONG   (60);
 

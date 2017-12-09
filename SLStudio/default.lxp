@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1512643735824,
+  "timestamp": 1512837495325,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
+      "speed": 0.33333325013518333,
       "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
@@ -29,7 +29,7 @@
       "parameters": {
         "label": "",
         "cue": false,
-        "hueMode": 0,
+        "hueMode": 2,
         "color/hue": 0.0,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
@@ -49,7 +49,7 @@
     },
     "channels": [
       {
-        "id": 106,
+        "id": 3610,
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -7471360,
         "parameters": {
@@ -59,13 +59,13 @@
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
-          "autoCycleEnabled": false,
-          "autoCycleTimeSecs": 60.0,
+          "autoCycleEnabled": true,
+          "autoCycleTimeSecs": 21.0,
           "fader": 1.0,
           "crossfadeGroup": 1,
           "blendMode": 0,
-          "transitionEnabled": false,
-          "transitionTimeSecs": 5.0,
+          "transitionEnabled": true,
+          "transitionTimeSecs": 2.1,
           "transitionBlendMode": 0
         },
         "effects": [
@@ -76,7 +76,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.699999988079071
+              "amount": 0.7299999874085188
             },
             "modulation": {
               "modulators": [],
@@ -123,7 +123,7 @@
                     "trigger": false,
                     "loop": true,
                     "wave": 0,
-                    "period": 28542.540482248445,
+                    "period": 11473.41266877763,
                     "skew": 0.0,
                     "shape": 0.0,
                     "phase": 0.0,
@@ -155,7 +155,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 7,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 2625,
@@ -185,7 +185,7 @@
               "Wave": 0.0,
               "TrnX": 1.0,
               "TrnY": 0.5,
-              "thck": 0.20000000298023224,
+              "thck": 0.10000000149011612,
               "num": 0
             },
             "modulation": {
@@ -203,7 +203,7 @@
               "label": "Balance",
               "Hue": 0.4000000059604645,
               "Spd": 0.5,
-              "Crzy": 0.20000000298023224
+              "Crzy": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -218,13 +218,13 @@
             "modulationColor": -7405313,
             "parameters": {
               "label": "CrossSections",
-              "XRAT": 0.699999988079071,
+              "XRAT": 0.2299999948590994,
               "YRAT": 0.6000000238418579,
               "ZRAT": 0.5,
-              "XWID": 0.30000001192092896,
+              "XWID": 1.0,
               "XLEV": 1.0,
-              "YLEV": 1.0,
-              "ZLEV": 0.5,
+              "YLEV": 0.0,
+              "ZLEV": 0.0,
               "YWID": 0.30000001192092896,
               "ZWID": 0.30000001192092896
             },
@@ -249,31 +249,11 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.550000011920929,
+              "Fast": 0.4700000137090683,
               "Dens": 0.30000001192092896,
               "Shrp": 0.0,
               "Symm": 0,
-              "Anim": 6
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 2663,
-            "class": "SLStudio$Pong",
-            "modulationColor": -55040,
-            "parameters": {
-              "label": "Pong",
-              "Sprk": 0.0,
-              "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "Size": 0.7100000008940697,
-              "Anim": 2
+              "Anim": 7
             },
             "modulation": {
               "modulators": [],
@@ -318,22 +298,6 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 2679,
-            "class": "SLStudio$SpaceTime",
-            "modulationColor": -4864,
-            "parameters": {
-              "label": "SpaceTime",
-              "RATE": 0.5,
-              "SIZE": 0.5
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
             "id": 2684,
             "class": "SLStudio$StripPlay",
             "modulationColor": -5177089,
@@ -369,23 +333,6 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 3594,
-            "class": "SLStudio$Swim",
-            "modulationColor": -16745473,
-            "parameters": {
-              "label": "Swim",
-              "HUE": 0.10000000149011612,
-              "Crzy": 0.5,
-              "Spd": 0.5
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
             "id": 3601,
             "class": "SLStudio$WicketFlash",
             "modulationColor": -65406,
@@ -396,6 +343,23 @@
               "DECAY": 0.5,
               "H.V.": 0.25,
               "SAT": 0.5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 4599,
+            "class": "SLStudio$Spheres",
+            "modulationColor": -16711863,
+            "parameters": {
+              "label": "Spheres",
+              "RAD": 1.0,
+              "PERIOD": 8922.000024095178,
+              "HueVar": 93.59999790787697
             },
             "modulation": {
               "modulators": [],
@@ -472,17 +436,17 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": -1.5000000335276127,
-          "Band-1": 0.2922970136472237,
-          "Band-2": 0.3240259617263659,
-          "Band-3": 0.33146667767931515,
-          "Band-4": 0.3398717300085047,
-          "Band-5": 0.32345237388923775,
-          "Band-6": 0.3244209393280396,
-          "Band-7": 0.2625300181312574,
-          "Band-8": 0.15101691896874325,
-          "Band-9": 0.09455045432967746,
-          "Band-10": 0.04258970571238496,
-          "Band-11": 3.2918456776398486E-4,
+          "Band-1": 0.2140469413731647,
+          "Band-2": 0.23559291888787537,
+          "Band-3": 0.25655648885193005,
+          "Band-4": 0.2720805972227309,
+          "Band-5": 0.24629013697894075,
+          "Band-6": 0.2401147083678068,
+          "Band-7": 0.2272127635793605,
+          "Band-8": 0.14752812906656632,
+          "Band-9": 0.05797829967537105,
+          "Band-10": 0.06307273389819423,
+          "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -518,7 +482,7 @@
       "modulationColor": -2621696,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -561,28 +525,28 @@
         {
           "channel": 0,
           "type": "CONTROL_CHANGE",
-          "componentId": 106,
+          "componentId": 3610,
           "parameterPath": "fader",
           "cc": 7
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3610,
           "parameterPath": "enabled",
           "pitch": 50
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3610,
           "parameterPath": "cue",
           "pitch": 49
         },
         {
           "channel": 0,
           "type": "NOTE",
-          "componentId": 106,
+          "componentId": 3610,
           "parameterPath": "crossfadeGroup",
           "pitch": 48
         },
@@ -632,9 +596,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 510.3690018765242,
-        "theta": 1.5689999999999968,
-        "phi": 0.0030000000000002325
+        "radius": 840.0,
+        "theta": 0.7679999999999945,
+        "phi": 0.3990000000000003
       }
     }
   }
