@@ -10,9 +10,7 @@ import java.util.function.Consumer;
 
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Swarm extends SLPattern {
 
     SawLFO offset = new SawLFO(0, 1, 1000);

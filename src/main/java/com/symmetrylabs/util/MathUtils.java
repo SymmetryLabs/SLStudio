@@ -1,8 +1,6 @@
 package com.symmetrylabs.util;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public final class MathUtils {
 
     public static byte byteSubtract(int a, int b) {

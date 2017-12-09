@@ -13,9 +13,7 @@ import java.util.function.Consumer;
 import static com.symmetrylabs.util.Utils.random;
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class SunFlash extends SLPattern {
     private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);

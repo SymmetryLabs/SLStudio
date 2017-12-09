@@ -3,9 +3,7 @@ package com.symmetrylabs.network;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class NetworkManager {
 
     private static NetworkManager instance;

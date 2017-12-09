@@ -5,9 +5,7 @@ import java.io.File;
 import java.io.FileReader;
 import java.io.IOException;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ObjConfigReader {
 
     private final String CONFIG_FILENAME = "objConfig.txt";

@@ -3,9 +3,7 @@ package com.symmetrylabs.util.listenable;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ListenableInt {
 
     private int value;

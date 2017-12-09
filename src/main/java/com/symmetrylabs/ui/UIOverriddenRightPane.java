@@ -27,9 +27,7 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class UIOverriddenRightPane extends UIPane {
 
     private final LX lx;

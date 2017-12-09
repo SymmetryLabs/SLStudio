@@ -6,9 +6,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ColorShiftEffect extends LXEffect {
     public BoundedParameter shift = new BoundedParameter("shift", 0, 360);
 

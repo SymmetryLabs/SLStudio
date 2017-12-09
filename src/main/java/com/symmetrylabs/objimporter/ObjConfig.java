@@ -1,8 +1,6 @@
 package com.symmetrylabs.objimporter;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 class ObjConfig {
     boolean enabled = true;
     float x = 0;

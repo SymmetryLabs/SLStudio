@@ -6,9 +6,7 @@ import java.net.InetAddress;
 import java.net.InetSocketAddress;
 import java.net.SocketException;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ControllerCommand {
 
     public final InetAddress addr;

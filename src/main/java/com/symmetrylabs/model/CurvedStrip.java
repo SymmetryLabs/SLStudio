@@ -5,9 +5,7 @@ import heronarts.lx.transform.LXTransform;
 
 import static processing.core.PConstants.PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class CurvedStrip extends Strip {
 
     public static final int LEDS_PER_METER = 60;

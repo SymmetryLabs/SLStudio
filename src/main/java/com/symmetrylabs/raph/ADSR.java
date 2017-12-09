@@ -3,9 +3,7 @@ package com.symmetrylabs.raph;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ADSR {
     final CompoundParameter attack = (CompoundParameter)
         new CompoundParameter("Attack", 50, 25, 1000)

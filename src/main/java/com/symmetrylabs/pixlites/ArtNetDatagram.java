@@ -5,9 +5,7 @@ import heronarts.lx.output.LXDatagram;
 
 import java.net.UnknownHostException;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ArtNetDatagram extends LXDatagram {
 
     private final static int DEFAULT_UNIVERSE = 0;

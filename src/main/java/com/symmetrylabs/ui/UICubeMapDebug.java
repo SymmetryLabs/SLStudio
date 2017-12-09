@@ -16,9 +16,7 @@ import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.function.Predicate;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class UICubeMapDebug extends UI3dComponent {
     private final P3LX lx;
 

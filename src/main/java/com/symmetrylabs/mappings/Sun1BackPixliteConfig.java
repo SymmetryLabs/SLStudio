@@ -8,9 +8,7 @@ import heronarts.lx.LX;
 
 import java.net.SocketException;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Sun1BackPixliteConfig {
     public Sun1BackPixliteConfig(LX lx, Slice slice, String ipAddress, Pixlite pixlite) throws SocketException {
 

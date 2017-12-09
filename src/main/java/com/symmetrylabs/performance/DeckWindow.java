@@ -24,9 +24,7 @@ import java.util.List;
 
 import static processing.core.PApplet.println;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class DeckWindow extends UIWindow {
     final ArrayList<UIKnob> knobs = new ArrayList();
     final ArrayList<UISwitch> switches = new ArrayList();

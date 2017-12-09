@@ -34,9 +34,7 @@ import com.symmetrylabs.model.Slice;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutputGroup;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Pixlite extends LXOutputGroup {
     public Slice slice;
     public final String ipAddress;

@@ -25,9 +25,7 @@ import java.util.List;
 
 import static processing.core.PApplet.println;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class APC40Listener extends LXComponent {
     LXMidiRemote remotes[] = new LXMidiRemote[2];
 

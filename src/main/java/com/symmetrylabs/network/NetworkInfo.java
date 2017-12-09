@@ -8,9 +8,7 @@ import java.util.ArrayList;
 import java.util.Enumeration;
 import java.util.List;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class NetworkInfo {
     static List<InetAddress> getBroadcastAddresses() {
         List<InetAddress> addresses = new ArrayList<InetAddress>();

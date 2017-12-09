@@ -28,9 +28,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.function.Consumer;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public abstract class PerSunParticlePattern extends PerSunPattern implements MarkerSource {
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 

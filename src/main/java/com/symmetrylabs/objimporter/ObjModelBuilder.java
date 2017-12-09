@@ -14,9 +14,7 @@ import static com.symmetrylabs.model.CurvedStrip.INCHES_PER_METER;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 class ObjModelBuilder {
 
     private String name;

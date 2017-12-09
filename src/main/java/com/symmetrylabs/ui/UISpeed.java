@@ -6,9 +6,7 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.component.UISlider;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class UISpeed extends UI2dContainer {
     public UISpeed(UI ui, final LX lx, float x, float y, float w) {
         super(x, y, w, 20);

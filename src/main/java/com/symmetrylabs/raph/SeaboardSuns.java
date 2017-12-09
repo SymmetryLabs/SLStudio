@@ -21,9 +21,7 @@ import java.util.HashMap;
 
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class SeaboardSuns extends SLPattern {
     public String getAuthor() {
         return "Mark C. Slee (with slight modification by Raphael Palefsky-Smith)";

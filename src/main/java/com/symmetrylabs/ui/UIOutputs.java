@@ -13,9 +13,7 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 class UIOutputs extends UICollapsibleSection {
     UIOutputs(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 500);

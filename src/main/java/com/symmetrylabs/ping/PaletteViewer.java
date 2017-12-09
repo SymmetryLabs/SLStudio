@@ -8,9 +8,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class PaletteViewer extends SLPattern {
     DiscreteParameter palette = new DiscreteParameter("palette", ((LXStudio) lx).paletteLibrary.getNames());
         // selected colour palette

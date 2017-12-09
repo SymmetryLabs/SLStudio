@@ -6,9 +6,7 @@ import com.symmetrylabs.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class TestSlices extends SLPattern {
 
      public TestSlices(LX lx) {

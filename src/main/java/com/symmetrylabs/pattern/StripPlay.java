@@ -11,9 +11,7 @@ import heronarts.lx.parameter.LXParameter;
 import static com.symmetrylabs.util.Utils.random;
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class StripPlay extends SLPattern {
     private final int NUM_OSC = 300;
     private final int MAX_PERIOD = 20000;

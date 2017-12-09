@@ -22,9 +22,7 @@ import static com.symmetrylabs.util.Utils.noise;
 import static processing.core.PApplet.*;
 import static processing.core.PVector.angleBetween;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */ //----------------------------------------------------------------------------------------------------------------------------------
+ //----------------------------------------------------------------------------------------------------------------------------------
 public abstract class DPat extends LXPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     public ArrayList<DBool> bools = new ArrayList<DBool>();

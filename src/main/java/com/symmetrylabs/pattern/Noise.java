@@ -11,9 +11,7 @@ import processing.core.PVector;
 import static com.symmetrylabs.util.Utils.noise;
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Noise extends DPat {
     int CurAnim, iSymm;
     int XSym = 1, YSym = 2, RadSym = 3;

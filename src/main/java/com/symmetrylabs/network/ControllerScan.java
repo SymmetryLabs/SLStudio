@@ -6,9 +6,7 @@ import com.symmetrylabs.util.listenable.ListenableList;
 import java.net.InetAddress;
 import java.util.Arrays;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ControllerScan {
 
     public final ListenableList<NetworkDevice> networkDevices = new ListenableList<NetworkDevice>();

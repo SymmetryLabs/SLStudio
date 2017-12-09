@@ -4,9 +4,7 @@ import com.symmetrylabs.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Dispatcher implements LXLoopTask {
 
     LX lx;

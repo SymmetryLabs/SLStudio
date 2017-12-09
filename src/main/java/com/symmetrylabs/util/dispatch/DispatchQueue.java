@@ -2,9 +2,7 @@ package com.symmetrylabs.util.dispatch;
 
 import java.util.concurrent.ConcurrentLinkedQueue;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 class DispatchQueue {
 
     private volatile String threadName;

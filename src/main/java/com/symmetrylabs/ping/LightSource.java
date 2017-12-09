@@ -16,9 +16,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class LightSource extends SLPatternWithMarkers {
     CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);
     CompoundParameter y = new CompoundParameter("y", model.yMax, 0, 240);

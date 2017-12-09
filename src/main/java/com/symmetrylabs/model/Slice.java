@@ -14,9 +14,7 @@ import java.util.Map;
 import static com.symmetrylabs.SLStudio.FEET;
 import static processing.core.PConstants.PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Slice extends LXModel {
 
     public enum Type {

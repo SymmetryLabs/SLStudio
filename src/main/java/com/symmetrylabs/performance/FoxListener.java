@@ -12,9 +12,7 @@ import heronarts.lx.parameter.LXParameterListener;
 
 import static com.symmetrylabs.util.Utils.map;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class FoxListener extends LXComponent {
     LXMidiRemote remote;
 

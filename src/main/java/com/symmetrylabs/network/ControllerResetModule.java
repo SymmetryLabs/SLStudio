@@ -5,9 +5,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ControllerResetModule {
     final BooleanParameter enabled = new BooleanParameter("Controller reset enabled");
 

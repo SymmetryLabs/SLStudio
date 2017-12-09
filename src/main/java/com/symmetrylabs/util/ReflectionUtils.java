@@ -12,9 +12,7 @@ import java.util.Set;
 
 import static processing.core.PApplet.println;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public final class ReflectionUtils {
 
     public static void replaceAllFields(Object start, List oldObjects, List newObjects) {

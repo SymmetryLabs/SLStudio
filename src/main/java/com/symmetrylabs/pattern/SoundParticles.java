@@ -23,9 +23,7 @@ import static processing.core.PApplet.*;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class SoundParticles extends LXPattern {
     private final int LIMINAL_KEY = 46;
     private final int MAX_VELOCITY = 100;

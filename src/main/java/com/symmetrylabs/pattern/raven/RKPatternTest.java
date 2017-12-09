@@ -7,9 +7,7 @@ import processing.core.PVector;
 
 import static processing.core.PConstants.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class RKPatternTest extends P3CubeMapPattern {
 
     public RKPatternTest(LX lx) {

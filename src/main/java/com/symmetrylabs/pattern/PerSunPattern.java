@@ -17,9 +17,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public abstract class PerSunPattern extends SLPattern {
     protected List<Subpattern> subpatterns;
 

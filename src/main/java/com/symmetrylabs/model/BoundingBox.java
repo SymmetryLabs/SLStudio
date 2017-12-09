@@ -2,9 +2,7 @@ package com.symmetrylabs.model;
 
 import processing.core.PVector;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class BoundingBox {
     public final PVector origin;
     public final PVector size;

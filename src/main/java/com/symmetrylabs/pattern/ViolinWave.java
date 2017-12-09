@@ -17,9 +17,7 @@ import java.util.function.Consumer;
 import static com.symmetrylabs.util.Utils.random;
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ViolinWave extends LXPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();

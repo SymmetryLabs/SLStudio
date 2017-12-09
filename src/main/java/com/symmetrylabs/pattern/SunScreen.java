@@ -11,9 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class SunScreen extends SLPattern {
     List<BooleanParameter> params = new ArrayList<BooleanParameter>();
 

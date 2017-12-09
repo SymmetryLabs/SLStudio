@@ -8,9 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */ /* Non-Patterns */
+ /* Non-Patterns */
 public abstract class SLPattern extends LXPattern {
     public final SLModel model;
 

@@ -2,9 +2,7 @@ package com.symmetrylabs.network;
 
 import java.net.InetAddress;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class MacAddrCommand extends ControllerCommand {
     public MacAddrCommand(InetAddress addr, final MacAddrCommandCallback callback) {
         super(addr, new byte[]{(byte) 136, 4}, 6, new ControllerCommandCallback() {

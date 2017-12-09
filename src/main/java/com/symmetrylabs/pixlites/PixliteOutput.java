@@ -5,9 +5,7 @@ import heronarts.lx.output.LXDatagramOutput;
 
 import java.net.SocketException;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class PixliteOutput extends LXDatagramOutput {
     private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
     private final int outputIndex;

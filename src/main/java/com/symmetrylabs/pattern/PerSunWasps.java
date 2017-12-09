@@ -8,9 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.ArrayList;
 import java.util.List;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class PerSunWasps extends PerSunParticlePattern {
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
 

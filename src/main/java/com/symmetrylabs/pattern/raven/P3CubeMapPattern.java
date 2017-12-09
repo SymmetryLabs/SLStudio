@@ -21,9 +21,7 @@ import java.util.function.Consumer;
 
 import static processing.core.PConstants.P3D;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public abstract class P3CubeMapPattern extends SLPattern {
     private PGraphics pg;
     public PGraphics pgF;

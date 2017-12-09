@@ -9,9 +9,7 @@ import processing.core.PVector;
 
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Pong extends DPat {
     SinLFO x, y, z, dx, dy, dz;
     float cRad;

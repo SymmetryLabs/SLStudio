@@ -12,9 +12,7 @@ import java.util.List;
 
 import static processing.core.PApplet.println;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class BlobViewer extends SLPattern {
     DiscreteParameter mode = new DiscreteParameter("mode", new String[]{"planes", "spheres"});
     CompoundParameter tolerance = new CompoundParameter("tolerance", 2, 0, 8); // in

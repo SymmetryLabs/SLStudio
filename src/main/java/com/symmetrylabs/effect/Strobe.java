@@ -14,9 +14,7 @@ import java.awt.Color;
 
 import static processing.core.PApplet.lerp;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Strobe extends LXEffect {
 
     public enum Waveshape {

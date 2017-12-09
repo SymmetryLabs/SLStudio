@@ -8,9 +8,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class PaletteEffect extends LXEffect {
     CompoundParameter amount = new CompoundParameter("amount", 0, 0, 1);
     DiscreteParameter palette = new DiscreteParameter("palette", ((LXStudio) lx).paletteLibrary.getNames());

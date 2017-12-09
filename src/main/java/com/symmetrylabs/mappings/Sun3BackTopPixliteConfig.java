@@ -10,9 +10,7 @@ import java.net.SocketException;
 
 import static processing.core.PApplet.println;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Sun3BackTopPixliteConfig {
     public Sun3BackTopPixliteConfig(LX lx, Slice slice, String ipAddress, Pixlite pixlite) throws SocketException {
         println("Special pixlite configuration for (" + slice.id + ", " + ipAddress + ")");

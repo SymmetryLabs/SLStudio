@@ -3,9 +3,7 @@ package com.symmetrylabs.model;
 import heronarts.lx.model.LXPoint;
 import processing.core.PVector;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class LXPointNormal extends LXPoint {
     /**
      * The normal vector is always a unit vector.

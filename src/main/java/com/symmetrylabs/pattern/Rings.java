@@ -14,9 +14,7 @@ import static com.symmetrylabs.util.Utils.noiseDetail;
 import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Rings extends LXPattern {
     float dx, dy, dz;
     float angleParam, spacingParam;

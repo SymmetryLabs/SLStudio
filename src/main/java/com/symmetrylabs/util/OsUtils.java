@@ -1,8 +1,6 @@
 package com.symmetrylabs.util;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */ // See: https://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
+ // See: https://stackoverflow.com/questions/228477/how-do-i-programmatically-determine-operating-system-in-java
 public final class OsUtils {
 
     private static String osName = null;

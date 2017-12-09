@@ -19,9 +19,7 @@ import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.TWO_PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class RKPattern01 extends P3CubeMapPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();

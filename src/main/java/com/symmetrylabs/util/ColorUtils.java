@@ -3,9 +3,7 @@ package com.symmetrylabs.util;
 import heronarts.lx.color.LXColor;
 import org.apache.commons.math3.util.FastMath;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public final class ColorUtils {
 
     public static int setAlpha(int rgb, int alpha) {

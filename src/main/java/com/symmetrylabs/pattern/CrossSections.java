@@ -10,9 +10,7 @@ import processing.core.PImage;
 
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class CrossSections extends LXPattern {
 
     final SinLFO x = new SinLFO(model.xMin, model.xMax, 5000);

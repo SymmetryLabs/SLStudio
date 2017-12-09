@@ -13,9 +13,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import processing.core.PImage;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public abstract class TextureSlideshow extends SLPattern {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
     public final BooleanParameter perSun = new BooleanParameter("perSun", false);

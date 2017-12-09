@@ -7,9 +7,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.BooleanParameter;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */ /*
+ /*
  * Output Component
  *---------------------------------------------------------------------------*/
 public final class OutputControl extends LXComponent {

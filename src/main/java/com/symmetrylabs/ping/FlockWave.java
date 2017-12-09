@@ -30,9 +30,7 @@ import java.util.Set;
 import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.function.Consumer;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");

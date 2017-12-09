@@ -7,9 +7,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class MiddleStrip extends LXPattern {
      public MiddleStrip(LX lx) {
          super(lx);

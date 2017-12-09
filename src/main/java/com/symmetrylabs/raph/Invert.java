@@ -5,9 +5,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Invert extends LXPattern {
     public Invert(LX lx) {
         super(lx);

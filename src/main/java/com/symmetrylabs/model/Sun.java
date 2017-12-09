@@ -27,9 +27,7 @@ import static com.symmetrylabs.util.Utils.sketchFile;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Sun extends LXModel {
 
     public enum Type {

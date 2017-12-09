@@ -5,9 +5,7 @@ import java.net.UnknownHostException;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public final class NetworkUtils {
 
     private static Pattern macAddressPattern = null;

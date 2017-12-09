@@ -19,9 +19,7 @@ import java.net.URLConnection;
 import java.util.Random;
 import java.util.zip.GZIPInputStream;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public final class Utils {
 
     // Processing functions

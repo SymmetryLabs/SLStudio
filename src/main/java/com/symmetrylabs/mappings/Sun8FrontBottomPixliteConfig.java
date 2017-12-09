@@ -8,9 +8,7 @@ import heronarts.lx.LX;
 
 import java.net.SocketException;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */ // 10.200.1.28
+ // 10.200.1.28
 public class Sun8FrontBottomPixliteConfig {
     public Sun8FrontBottomPixliteConfig(LX lx, Slice slice, String ipAddress, Pixlite pixlite) throws SocketException {
         // shift everyone but the last one more

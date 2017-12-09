@@ -16,9 +16,7 @@ import static com.symmetrylabs.util.Utils.millis;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class UIFramerate extends UI2dContext {
     private final P3LX lx;
     private final PFont monospacedFont;

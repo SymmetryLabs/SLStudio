@@ -11,9 +11,7 @@ import java.util.function.Consumer;
 
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class SpaceTime extends SLPattern {
 
     SinLFO pos = new SinLFO(0, 1, 3000);

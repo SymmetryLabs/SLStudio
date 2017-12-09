@@ -2,9 +2,7 @@ package com.symmetrylabs.pattern.texture;
 
 import heronarts.lx.LX;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class TextureClouds extends TextureSlideshow {
     public TextureClouds(LX lx) {
         super(lx);

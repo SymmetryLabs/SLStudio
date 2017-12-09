@@ -11,9 +11,7 @@ import static com.symmetrylabs.util.Utils.sketchPath;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class ObjImporter {
 
     private final String path;

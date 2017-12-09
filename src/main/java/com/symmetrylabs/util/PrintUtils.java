@@ -1,8 +1,6 @@
 package com.symmetrylabs.util;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 
 import java.io.PrintStream;
 

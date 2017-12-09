@@ -8,9 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 
 import static processing.core.PApplet.*;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Test extends LXPattern {
 
     final CompoundParameter thing = new CompoundParameter("Thing", 0, model.yRange);

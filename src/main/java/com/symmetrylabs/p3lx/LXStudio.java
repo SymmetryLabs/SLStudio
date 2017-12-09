@@ -41,9 +41,7 @@ import java.util.stream.Collectors;
 
 import static java.util.Arrays.asList;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class LXStudio extends P3LX {
 
     public static final String COPYRIGHT = "Symmetry Labs";

@@ -13,9 +13,7 @@ import java.util.Map;
 
 import static processing.core.PConstants.PI;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */ /* Fulton Street Layout of the Suns */
+ /* Fulton Street Layout of the Suns */
 public class FultonStreetLayout {
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;

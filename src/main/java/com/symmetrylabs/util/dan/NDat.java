@@ -2,9 +2,7 @@ package com.symmetrylabs.util.dan;
 
 import static com.symmetrylabs.util.Utils.random;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class NDat {
     public float xz, yz, zz, hue, speed, angle, den;
     public float xoff, yoff, zoff;

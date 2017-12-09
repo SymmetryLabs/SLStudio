@@ -32,9 +32,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.pattern.IteratorTestPattern;
 import processing.core.PApplet;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class SLStudio extends PApplet {
     public static SLStudio applet;
 

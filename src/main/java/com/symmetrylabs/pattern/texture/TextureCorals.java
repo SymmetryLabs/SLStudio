@@ -2,9 +2,7 @@ package com.symmetrylabs.pattern.texture;
 
 import heronarts.lx.LX;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class TextureCorals extends TextureSlideshow {
     public TextureCorals(LX lx) {
         super(lx);

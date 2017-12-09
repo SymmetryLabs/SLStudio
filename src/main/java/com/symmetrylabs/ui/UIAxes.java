@@ -4,9 +4,7 @@ import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PGraphics;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class UIAxes extends UI3dComponent {
     public UIAxes() {
         setVisible(false);

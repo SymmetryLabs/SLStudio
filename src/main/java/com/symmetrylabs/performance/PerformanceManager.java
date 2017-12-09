@@ -21,9 +21,7 @@ import java.util.List;
 import static com.symmetrylabs.SLStudio.*;
 import static processing.core.PApplet.println;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class PerformanceManager extends LXComponent {
     final CompoundParameter lFader = new CompoundParameter("lFader");
     final CompoundParameter rFader = new CompoundParameter("rFader");

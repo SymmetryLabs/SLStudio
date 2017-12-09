@@ -11,9 +11,7 @@ import java.util.function.Consumer;
 
 import static com.symmetrylabs.util.Utils.random;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class TelevisionStatic extends LXPattern {
     CompoundParameter brightParameter = new CompoundParameter("BRIGHT", 1.0);
     CompoundParameter saturationParameter = new CompoundParameter("SAT", 1.0);

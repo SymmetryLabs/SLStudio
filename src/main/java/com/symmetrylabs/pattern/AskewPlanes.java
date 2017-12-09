@@ -10,9 +10,7 @@ import processing.core.PVector;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.MAX_FLOAT;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class AskewPlanes extends DPat {
 
     CompoundParameter thickness = new CompoundParameter("thck", 0.2, 0.1, 0.9);

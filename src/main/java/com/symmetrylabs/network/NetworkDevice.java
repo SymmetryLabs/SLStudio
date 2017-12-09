@@ -4,9 +4,7 @@ import com.symmetrylabs.util.listenable.ListenableInt;
 
 import java.net.InetAddress;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class NetworkDevice {
 
     public final InetAddress ipAddress;

@@ -11,9 +11,7 @@ import java.net.URL;
 import java.net.URLClassLoader;
 import java.util.Arrays;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */ // http://stackoverflow.com/a/60766/216311
+ // http://stackoverflow.com/a/60766/216311
 public class ClassPathHack {
     private static final Class[] parameters = new Class[]{URL.class};
 

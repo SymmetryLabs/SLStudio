@@ -2,9 +2,7 @@ package com.symmetrylabs.ping;
 
 import heronarts.lx.LX;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class FlockWaveFiery extends FlockWave {
     public FlockWaveFiery(LX lx) {
         super(lx);

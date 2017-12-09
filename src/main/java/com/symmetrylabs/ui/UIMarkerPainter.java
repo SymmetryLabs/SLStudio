@@ -9,9 +9,7 @@ import processing.core.PGraphics;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class UIMarkerPainter extends UI3dComponent {
     Set<MarkerSource> sources;
 

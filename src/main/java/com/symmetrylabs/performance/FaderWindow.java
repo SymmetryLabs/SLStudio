@@ -6,9 +6,7 @@ import heronarts.p3lx.ui.UIWindow;
 import heronarts.p3lx.ui.component.UISlider;
 import processing.event.MouseEvent;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 class FaderWindow extends UIWindow {
     final UISlider slider;
 

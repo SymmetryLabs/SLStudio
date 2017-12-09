@@ -15,9 +15,7 @@ import java.util.List;
 
 import static processing.core.PApplet.println;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class RipplePads extends SLPattern {
     CompoundParameter intensity = new CompoundParameter("intensity", 1, 0, 3);
     CompoundParameter velocity = new CompoundParameter("velocity", 80, 0, 127);

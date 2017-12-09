@@ -8,9 +8,7 @@ import heronarts.lx.parameter.BoundedParameter;
 
 import static com.symmetrylabs.util.Utils.noise;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class LSD extends LXEffect {
 
     public final BoundedParameter scale = new BoundedParameter("Scale", 10, 5, 40);

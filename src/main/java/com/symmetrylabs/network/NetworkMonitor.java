@@ -5,9 +5,7 @@ import com.symmetrylabs.util.listenable.AbstractListListener;
 import com.symmetrylabs.util.listenable.ListenableList;
 import heronarts.lx.LX;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class NetworkMonitor {
 
     private final ControllerScan controllerScan = new ControllerScan();

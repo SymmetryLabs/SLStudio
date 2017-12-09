@@ -19,9 +19,7 @@ import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.TRIANGLES;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class RKPattern04 extends P3CubeMapPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
