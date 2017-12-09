@@ -1,6 +1,10 @@
 package com.symmetrylabs.network;
 
+import com.symmetrylabs.SLStudio;
 import com.symmetrylabs.util.listenable.ListenableList;
+
+import java.net.InetAddress;
+import java.util.Arrays;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
@@ -20,7 +24,7 @@ public class ControllerScan {
                     new MacAddrCommand(addr, new MacAddrCommandCallback() {
                         public void onResponse(java.net.DatagramPacket response, byte[] macAddr) {
                             final NetworkDevice networkDevice = new NetworkDevice(response.getAddress(), macAddr);
-                            dispatcher.dispatchEngine(new Runnable() {
+                            SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
                                 public void run() {
                                     tmpNetworkDevices.add(networkDevice);
                                 }
@@ -28,7 +32,7 @@ public class ControllerScan {
                         }
 
                         public void onFinish() {
-                            dispatcher.dispatchEngine(new Runnable() {
+                            SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
                                 public void run() {
                                     if (--instances == 0) {
                                         for (int i = 0; i < networkDevices.size(); i++) {

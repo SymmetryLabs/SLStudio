@@ -1,12 +1,21 @@
 package com.symmetrylabs.util;
 
+import heronarts.lx.LXPattern;
+
 import java.lang.reflect.Field;
 import java.lang.reflect.Modifier;
+import java.util.HashSet;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.ListIterator;
+import java.util.Set;
+
+import static processing.core.PApplet.println;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static final class ReflectionUtils {
+public final class ReflectionUtils {
 
     public static void replaceAllFields(Object start, List oldObjects, List newObjects) {
         Set duplicateCheck = new HashSet();

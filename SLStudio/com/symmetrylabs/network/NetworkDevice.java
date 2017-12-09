@@ -2,10 +2,12 @@ package com.symmetrylabs.network;
 
 import com.symmetrylabs.util.listenable.ListenableInt;
 
+import java.net.InetAddress;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static class NetworkDevice {
+public class NetworkDevice {
 
     public final InetAddress ipAddress;
     public final byte[] macAddress;

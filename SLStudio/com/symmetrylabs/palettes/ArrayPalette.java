@@ -6,10 +6,10 @@ import heronarts.lx.color.LXColor;
  * A palette that samples from an array of color values, interpolating between adjacent values in the array.  By
  * default, the palette extends over the entire array, but can be pointed at an adjustable subrange of the array.
  */
-class ArrayPalette implements ColorPalette {
+public class ArrayPalette implements ColorPalette {
     int[] colors;
 
-    ArrayPalette(int[] colors) {
+    public ArrayPalette(int[] colors) {
         this.colors = new int[colors.length];
         for (int i = 0; i < colors.length; i++) {
             this.colors[i] = 0xff000000 | colors[i];

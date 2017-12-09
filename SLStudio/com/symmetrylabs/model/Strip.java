@@ -10,11 +10,11 @@ import static processing.core.PApplet.floor;
 /**
  * A strip run of points
  */
-public static class Strip extends LXModel {
+public class Strip extends LXModel {
 
     public final String id;
 
-    public static final float INCHES_PER_METER = 39.3701;
+    public static final float INCHES_PER_METER = 39.3701f;
 
     public static class Metrics {
 

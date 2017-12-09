@@ -2,6 +2,7 @@ package com.symmetrylabs.pattern.raven;
 
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
+import com.symmetrylabs.model.Sun;
 import com.symmetrylabs.pattern.SLPattern;
 import com.symmetrylabs.util.DrawHelper;
 import heronarts.lx.model.LXPoint;
@@ -12,7 +13,6 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
-import sun.security.provider.Sun;
 
 import java.util.Arrays;
 import java.util.List;
@@ -26,17 +26,22 @@ import static processing.core.PConstants.P3D;
  */
 public abstract class P3CubeMapPattern extends SLPattern {
     private PGraphics pg;
-    protected PGraphics pgF, pgB, pgL, pgR, pgU, pgD;
-    final PVector origin;
-    final PVector bboxSize;
+    public PGraphics pgF;
+    public PGraphics pgB;
+    public PGraphics pgL;
+    public PGraphics pgR;
+    public PGraphics pgU;
+    public PGraphics pgD;
+    public final PVector origin;
+    public final PVector bboxSize;
     protected int faceRes;
 
     private final String id = "" + Math.random();
 
-    DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
-    DiscreteParameter kernelSize = discreteParameter("KER", 1, 1, 6);
-    BooleanParameter allSunsParams = booleanParam("ALL", false);
-    List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
+    public DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
+    public DiscreteParameter kernelSize = discreteParameter("KER", 1, 1, 6);
+    public BooleanParameter allSunsParams = booleanParam("ALL", false);
+    public List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
 
     /**
      * A pattern that projects a cubemap image onto all the LEDs inside a given bounding box in world space.  The cubemap
@@ -99,7 +104,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
         this.pgD = lx.applet.createGraphics(faceRes, faceRes, P3D);
     }
 
-    PVector originForSun(final Sun sun) {
+    public PVector originForSun(final Sun sun) {
         return new PVector(
             sun.boundingBox.origin.x + sun.boundingBox.size.x * .5f,
             sun.boundingBox.origin.y + sun.boundingBox.size.y * .5f,
@@ -107,7 +112,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
         );
     }
 
-    PVector bboxForSun(final Sun sun) {
+    public PVector bboxForSun(final Sun sun) {
         return sun.boundingBox.size;
     }
 

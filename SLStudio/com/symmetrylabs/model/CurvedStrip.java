@@ -8,10 +8,10 @@ import static processing.core.PConstants.PI;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static class CurvedStrip extends Strip {
+public class CurvedStrip extends Strip {
 
     public static final int LEDS_PER_METER = 60;
-    public static final float INCHES_PER_METER = 39.3701;
+    public static final float INCHES_PER_METER = 39.3701f;
     public static final float PIXEL_PITCH = LEDS_PER_METER / INCHES_PER_METER;
 
     private static int counter = 0;
@@ -45,8 +45,8 @@ public static class CurvedStrip extends Strip {
             for (int i = 0; i < metrics.numPoints; i++) {
                 transform.push();
                 float t = i / (float) metrics.numPoints;
-                float x = bezierPoint(0, metrics.arcWidth * 0.2, metrics.arcWidth * 0.8, metrics.arcWidth, t);
-                float z = bezierPoint(0, metrics.arcWidth * -0.3, metrics.arcWidth * -0.3, 0, t);
+                float x = bezierPoint(0, metrics.arcWidth * 0.2f, metrics.arcWidth * 0.8f, metrics.arcWidth, t);
+                float z = bezierPoint(0, metrics.arcWidth * -0.3f, metrics.arcWidth * -0.3f, 0, t);
                 transform.translate(x, 0, z);
 
                 points.add(new LXPointNormal(

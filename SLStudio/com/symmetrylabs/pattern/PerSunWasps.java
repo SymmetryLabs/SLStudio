@@ -56,7 +56,7 @@ public class PerSunWasps extends PerSunParticlePattern {
         }
 
         @Override
-        protected void run(final double deltaMs, final List<LXPoint> points, final int[] layer) {
+        public void run(final double deltaMs, final List<LXPoint> points, final int[] layer) {
 
         }
 

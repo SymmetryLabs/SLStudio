@@ -3,7 +3,7 @@ package com.symmetrylabs.util;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-static class AudioUtils {
+public class AudioUtils {
 
     static final double LOG_2 = Math.log(2);
 

@@ -11,7 +11,7 @@ import heronarts.lx.parameter.LXParameter;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */ /* Non-Patterns */
-public static abstract class SLPattern extends LXPattern {
+public abstract class SLPattern extends LXPattern {
     public final SLModel model;
 
     public SLPattern(LX lx) {

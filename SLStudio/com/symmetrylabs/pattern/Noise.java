@@ -8,6 +8,9 @@ import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PImage;
 import processing.core.PVector;
 
+import static com.symmetrylabs.util.Utils.noise;
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -39,7 +42,7 @@ public class Noise extends DPat {
         for (int i = 0; i < _ND; i++) N[i] = new NDat();
     }
 
-    void onActive() {
+    public void onActive() {
         zTime = random(500);
         zTheta = 0;
         rtime = 0;
@@ -47,8 +50,8 @@ public class Noise extends DPat {
     }
 
     void StartRun(double deltaMs) {
-        zTime += deltaMs * (1 * val(pSpeed) - .50) * .002;
-        zTheta += deltaMs * (spin() - .5) * .01;
+        zTime += deltaMs * (1 * val(pSpeed) - .50f) * .002f;
+        zTheta += deltaMs * (spin() - .5f) * .01f;
         rtime += deltaMs;
         iSymm = pSymm.getValuei();
         zSin = sin(zTheta);
@@ -87,7 +90,7 @@ public class Noise extends DPat {
                     pSharp.setValue(0);
                     break;  // fire 1
                 case 4:
-                    N[0].set(0, 40, 40, 40, 15, 2.5, 180);
+                    N[0].set(0, 40, 40, 40, 15, 2.5f, 180);
                     N[1].set(20, 40, 40, 40, 15, 4, 0);
                     N[2].set(40, 40, 40, 40, 15, 2, 90);
                     N[3].set(60, 40, 40, 40, 15, 3, -90);
@@ -95,9 +98,9 @@ public class Noise extends DPat {
                     break; // machine
                 case 5:
                     N[0].set(0, 400, 100, 2, 15, 3, 90);
-                    N[1].set(20, 400, 100, 2, 15, 2.5, 0);
+                    N[1].set(20, 400, 100, 2, 15, 2.5f, 0);
                     N[2].set(40, 100, 100, 2, 15, 2, 180);
-                    N[3].set(60, 100, 100, 2, 15, 1.5, 270);
+                    N[3].set(60, 100, 100, 2, 15, 1.5f, 270);
                     pSharp.setValue(.5);
                     break; // spark
             }
@@ -110,16 +113,16 @@ public class Noise extends DPat {
             }
     }
 
-    color CalcPoint(PVector p) {
-        color c = 0;
+    int CalcPoint(PVector p) {
+        int c = 0;
         rotateZ(p, mCtr, zSin, zCos);
         //rotateY(p, mCtr, ySin, yCos);
         //rotateX(p, mCtr, xSin, xCos);
         if (CurAnim == 6 || CurAnim == 7) {
             setNorm(p);
             return lx.hsb(lxh(), 100, 100 * (
-                constrain(1 - 50 * (1 - val(pDensity)) * abs(p.y - sin(zTime * 10 + p.x * (300)) * .5 - .5), 0, 1) +
-                    (CurAnim == 7 ? constrain(1 - 50 * (1 - val(pDensity)) * abs(p.x - sin(zTime * 10 + p.y * (300)) * .5 - .5),
+                constrain(1 - 50 * (1 - val(pDensity)) * abs(p.y - sin(zTime * 10 + p.x * (300)) * .5f - .5f), 0, 1) +
+                    (CurAnim == 7 ? constrain(1 - 50 * (1 - val(pDensity)) * abs(p.x - sin(zTime * 10 + p.y * (300)) * .5f - .5f),
                         0,
                         1) : 0))
             );
@@ -136,7 +139,7 @@ public class Noise extends DPat {
 
                 float b = (iSymm == RadSym ? (zTime * n.speed + n.xoff - p.dist(mCtr) / n.xz)
                     : noise(p.x / n.xz + zx + n.xoff, p.y / n.yz + zy + n.yoff, p.z / n.zz + n.zoff))
-                    * 1.8;
+                    * 1.8f;
 
                 b += n.den / 100 - .4 + val(pDensity) - 1;
                 c = PImage.blendColor(c, lx.hsb(lxh() + n.hue, 100, c1c(b)), ADD);

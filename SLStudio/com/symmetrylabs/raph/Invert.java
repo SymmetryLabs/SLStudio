@@ -1,5 +1,10 @@
 package com.symmetrylabs.raph;
 
+import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXPoint;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */

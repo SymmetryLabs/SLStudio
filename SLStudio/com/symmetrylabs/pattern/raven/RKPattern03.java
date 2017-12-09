@@ -1,5 +1,6 @@
 package com.symmetrylabs.pattern.raven;
 
+import com.symmetrylabs.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -11,6 +12,8 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+import static com.symmetrylabs.util.Utils.noise;
+import static com.symmetrylabs.util.Utils.random;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.TRIANGLES;
@@ -78,7 +81,7 @@ public class RKPattern03 extends P3CubeMapPattern {
         addModulator(eq).start();
     }
 
-    void run(double deltaMs, PGraphics pg) {
+    public void run(double deltaMs, PGraphics pg) {
 
         updateParameters();
 
@@ -132,7 +135,7 @@ public class RKPattern03 extends P3CubeMapPattern {
             rotXT += rotDir.x * (eq.getBandf(0) - pEQBands[0]) * 2;
             rotYT += rotDir.z * (eq.getBandf(7) - pEQBands[7]) * 2;
             rotZT += rotDir.y * eq.getBandf(14) * .1;
-            gFIncreT = map(sq(totalMag), 0, 256, 0, .3);
+            gFIncreT = map(sq(totalMag), 0, 256, 0, .3f);
             fragMid = map(totalMag, 0, 16, 1, 0);
 
             for (int i = 0; i < pEQBands.length; i++) {
@@ -140,10 +143,10 @@ public class RKPattern03 extends P3CubeMapPattern {
             }
         }
 
-        rotX = lerp(rotX, rotXT, .25);
-        rotY = lerp(rotY, rotYT, .25);
-        rotZ = lerp(rotZ, rotZT, .25);
-        gFIncre = lerp(gFIncre, gFIncreT, .25);
+        rotX = lerp(rotX, rotXT, .25f);
+        rotY = lerp(rotY, rotYT, .25f);
+        rotZ = lerp(rotZ, rotZT, .25f);
+        gFIncre = lerp(gFIncre, gFIncreT, .25f);
         gF += gFIncre;
     }
 
@@ -152,8 +155,8 @@ public class RKPattern03 extends P3CubeMapPattern {
         updateCubeMap(pgL, 0, 0, 0, 1, 0, 0, 0, 1, 0);
         updateCubeMap(pgR, 0, 0, 0, -1, 0, 0, 0, 1, 0);
         updateCubeMap(pgB, 0, 0, 0, 0, 0, -1, 0, 1, 0);
-        updateCubeMap(pgD, 0, 0, -.001, 0, -1, 0, 0, 1, 0);
-        updateCubeMap(pgU, 0, 0, -.001, 0, 1, 0, 0, 1, 0);
+        updateCubeMap(pgD, 0, 0, -.001f, 0, -1, 0, 0, 1, 0);
+        updateCubeMap(pgU, 0, 0, -.001f, 0, 1, 0, 0, 1, 0);
     }
 
     void updateCubeMap(
@@ -264,7 +267,7 @@ public class RKPattern03 extends P3CubeMapPattern {
 
             ctr = new PVector();
 
-            weight = map(constrain(lv, 0, 4), 0, 4, 2.5, 1);
+            weight = map(constrain(lv, 0, 4), 0, 4, 2.5f, 1);
 
             itvr = round(random(60, 120));
 
@@ -302,17 +305,17 @@ public class RKPattern03 extends P3CubeMapPattern {
             nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
             brt = map(abs(HALF_PI - PVector.angleBetween(nrml, ctr)), 0, HALF_PI, 0, 255);
 
-            if (showTri) fragRatioT = constrain((noise(ctr.x * .005 + frameCount * .01,
-                ctr.y * .005 - frameCount * .01,
-                ctr.z * .005 + frameCount * .01
-            ) - .5) * 2.5 + fragMid, 0, 1);
+            if (showTri) fragRatioT = constrain((noise(ctr.x * .005f + SLStudio.applet.frameCount * .01f,
+                ctr.y * .005f - SLStudio.applet.frameCount * .01f,
+                ctr.z * .005f + SLStudio.applet.frameCount * .01f
+            ) - .5f) * 2.5f + fragMid, 0, 1);
             else fragRatioT = 1;
-            fragRatio = lerp(fragRatio, fragRatioT, .1);
+            fragRatio = lerp(fragRatio, fragRatioT, .1f);
 
             if (abs(itpST - itpS) < .005) itpS = itpST;
-            else itpS = lerp(itpS, itpST, .25);
+            else itpS = lerp(itpS, itpST, .25f);
             if (abs(itpET - itpE) < .005) itpE = itpET;
-            else itpE = lerp(itpE, itpET, .125);
+            else itpE = lerp(itpE, itpET, .125f);
 
             if (passedItvr < itvr) {
                 passedItvr++;
@@ -363,11 +366,11 @@ public class RKPattern03 extends P3CubeMapPattern {
 
         for (int i = 0; i < rootVts.length; i++) {
             for (int j = 0; j < rootVts[i].length; j++) {
-                float phi = (j + i * .5) * TWO_PI /float(rootVts[i].length);
-                float theta;//=i*PI/float(rootVts.length-1);
+                float phi = (j + i * .5f) * TWO_PI /(float)(rootVts[i].length);
+                float theta;//=i*PI/(float)(rootVts.length-1);
                 if (i == 0) theta = 0;
-                else if (i == 1) theta = HALF_PI - atan(.5);
-                else if (i == 2) theta = HALF_PI + atan(.5);
+                else if (i == 1) theta = HALF_PI - atan(.5f);
+                else if (i == 2) theta = HALF_PI + atan(.5f);
                 else theta = PI;
                 float r = 300;
 
@@ -387,19 +390,19 @@ public class RKPattern03 extends P3CubeMapPattern {
             this.lv = lv;
 
             if (abs(v1.phi - v2.phi) > PI) {
-                this.phi = lerp(v1.phi, v2.phi + TWO_PI, .5);
+                this.phi = lerp(v1.phi, v2.phi + TWO_PI, .5f);
             } else {
-                this.phi = lerp(v1.phi, v2.phi, .5);
+                this.phi = lerp(v1.phi, v2.phi, .5f);
             }
-            this.theta = lerp(v1.theta, v2.theta, .5);
+            this.theta = lerp(v1.theta, v2.theta, .5f);
 
             if (v1.theta == 0 || v1.theta == PI) this.phi = v2.phi;
             if (v2.theta == 0 || v2.theta == PI) this.phi = v1.phi;
 
-            this.r = lerp(v1.r, v2.r, .5);
+            this.r = lerp(v1.r, v2.r, .5f);
 
             tgt = new PVector(sin(theta) * cos(phi) * r, cos(theta) * r, sin(theta) * sin(phi) * r);
-            pos = new PVector(lerp(v1.pos.x, v2.pos.x, .5), lerp(v1.pos.y, v2.pos.y, .5), lerp(v1.pos.z, v2.pos.z, .5));
+            pos = new PVector(lerp(v1.pos.x, v2.pos.x, .5f), lerp(v1.pos.y, v2.pos.y, .5f), lerp(v1.pos.z, v2.pos.z, .5f));
             ofst = new PVector();
         }
 
@@ -420,27 +423,27 @@ public class RKPattern03 extends P3CubeMapPattern {
         }
 
         void updatePos() {
-            float thetaOfst = (noise(gF + tgt.x * .0025 + thetaF,
-                -gF + tgt.y * .0025 + thetaF,
-                gF + tgt.z * .0025 + thetaF
-            ) - .5) * TWO_PI * 2;
+            float thetaOfst = (noise(gF + tgt.x * .0025f + thetaF,
+                -gF + tgt.y * .0025f + thetaF,
+                gF + tgt.z * .0025f + thetaF
+            ) - .5f) * TWO_PI * 2;
             float phiOfst =
-                (noise(-gF + tgt.x * .0025 + phiF, gF + tgt.y * .0025 + phiF, -gF + tgt.z * .0025 + phiF) - .5) * TWO_PI * 2;
-            float rOfst = noise(tgt.x * .005 + gF, tgt.y * .005 + gF, tgt.z * .005 + gF) * r * .25;
+                (noise(-gF + tgt.x * .0025f + phiF, gF + tgt.y * .0025f + phiF, -gF + tgt.z * .0025f + phiF) - .5f) * TWO_PI * 2;
+            float rOfst = noise(tgt.x * .005f + gF, tgt.y * .005f + gF, tgt.z * .005f + gF) * r * .25f;
             ofst.set(sin(thetaOfst) * cos(phiOfst) * rOfst, cos(thetaOfst) * rOfst, sin(thetaOfst) * sin(phiOfst) * rOfst);
 
-            float rDsp = (noise(sin(theta + thetaF) * sin(phi), cos(theta) * cos(phi + phiF)) - .5) * r;
+            float rDsp = (noise(sin(theta + thetaF) * sin(phi), cos(theta) * cos(phi + phiF)) - .5f) * r;
             tgt.set(sin(theta) * cos(phi) * (rDsp + r), cos(theta) * (rDsp + r), sin(theta) * sin(phi) * (rDsp + r));
 
             pos.set(
-                lerp(pos.x, (tgt.x + ofst.x), .125),
-                lerp(pos.y, (tgt.y + ofst.y), .125),
-                lerp(pos.z, (tgt.z + ofst.z), .125)
+                lerp(pos.x, (tgt.x + ofst.x), .125f),
+                lerp(pos.y, (tgt.y + ofst.y), .125f),
+                lerp(pos.z, (tgt.z + ofst.z), .125f)
             );
         }
 
         void display() {
-            vertex(pos.x, pos.y, pos.z);
+            SLStudio.applet.vertex(pos.x, pos.y, pos.z);
         }
     }
 }

@@ -8,6 +8,8 @@ import heronarts.lx.modulator.SinLFO;
 
 import java.util.function.Consumer;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -42,7 +44,7 @@ public class Swarm extends SLPattern {
         }
     }
 
-    void run(double deltaMs) {
+    public void run(double deltaMs) {
         float s = 0;
         model.strips.parallelStream().forEach(new Consumer<Strip>() {
             @Override
@@ -50,10 +52,10 @@ public class Swarm extends SLPattern {
                 float s = model.strips.indexOf(strip);
                 int i = 0;
                 for (LXPoint p : strip.points) {
-                    float fV = max(-1, 1 - dist(p.x / 2., p.y, fX.getValuef() / 2., fY.getValuef()) / 64.);
+                    float fV = max(-1, 1 - dist(p.x / 2f, p.y, fX.getValuef() / 2f, fY.getValuef()) / 64f);
                     // println("fv: " + fV);
                     colors[p.index] = lx.hsb(
-                        palette.getHuef() + 0.3 * abs(p.x - hOffX.getValuef()),
+                        palette.getHuef() + 0.3f * abs(p.x - hOffX.getValuef()),
                         constrain(80 + 40 * fV, 0, 100),
                         constrain(100 -
                             (30 - fV * falloff.getValuef()) * modDist(

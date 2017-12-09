@@ -11,5 +11,5 @@ class ObjConfig {
     float xRotation = 0;
     float yRotation = 0;
     float zRotation = 0;
-    float scale = 1.0;
+    float scale = 1.0f;
 }

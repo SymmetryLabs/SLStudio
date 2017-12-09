@@ -2,6 +2,24 @@ package com.symmetrylabs.raph;
 
 import com.symmetrylabs.model.Sun;
 import com.symmetrylabs.pattern.SLPattern;
+import heronarts.lx.LX;
+import heronarts.lx.LXLayer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.midi.MidiControlChange;
+import heronarts.lx.midi.MidiNote;
+import heronarts.lx.midi.MidiNoteOn;
+import heronarts.lx.midi.MidiPitchBend;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.modulator.ADSREnvelope;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.NormalizedParameter;
+
+import java.util.HashMap;
+
+import static processing.core.PApplet.*;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
@@ -87,7 +105,7 @@ public class SeaboardSuns extends SLPattern {
     }
 
     public void run(double deltaMs) {
-        setColors(#000000);
+        setColors(0x000000);
     }
 
     class NoteLayer extends LXLayer {
@@ -148,7 +166,7 @@ public class SeaboardSuns extends SLPattern {
     public void noteOnReceived(MidiNoteOn note) {
         NoteLayer noteLayer = getNote(note);
         if (noteLayer == null) return;
-        noteLayer.level.setValue(lerp(1, note.getVelocity() / 127., this.velocityBrightness.getNormalizedf()));
+        noteLayer.level.setValue(lerp(1, note.getVelocity() / 127f, this.velocityBrightness.getNormalizedf()));
         noteLayer.envelope.attack();
         noteLayer.damper = false;
         channelToNote.put(note.getChannel(), noteLayer);
@@ -168,7 +186,7 @@ public class SeaboardSuns extends SLPattern {
     @Override
     public void pitchBendReceived(MidiPitchBend pb) {
         int p = pb.getPitchBend();
-        float b = constrain(p / 60.f, -1.0, 1.0);
+        float b = constrain(p / 60f, -1.0f, 1.0f);
         NoteLayer nl = channelToNote.get(pb.getChannel());
         if (nl != null) {
             nl.bend.setValue(b);

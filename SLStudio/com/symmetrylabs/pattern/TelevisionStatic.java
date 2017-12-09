@@ -9,6 +9,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+import static com.symmetrylabs.util.Utils.random;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -26,7 +28,7 @@ public class TelevisionStatic extends LXPattern {
         addParameter(hueParameter);
     }
 
-    void run(double deltaMs) {
+    public void run(double deltaMs) {
         final boolean d = direction.getValuef() > 5.0;
         Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
             @Override

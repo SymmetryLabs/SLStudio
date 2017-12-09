@@ -10,6 +10,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -34,14 +36,14 @@ public class CubeEQ extends LXPattern {
         addModulator(eq).start();
     }
 
-    void onActive() {
+    public void onActive() {
         eq.range.setValue(48);
         eq.release.setValue(300);
     }
 
     public void run(double deltaMs) {
         final float edgeConst = 2 + 30 * edge.getValuef();
-        final float clrConst = 1.1 + clr.getValuef();
+        final float clrConst = 1.1f + clr.getValuef();
 
         Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
             @Override
@@ -58,7 +60,7 @@ public class CubeEQ extends LXPattern {
                         eq.getBandf(avgFloor / 4 * 4 + 1) +
                         eq.getBandf(avgFloor / 4 * 4 + 2) +
                         eq.getBandf(avgFloor / 4 * 4 + 3)
-                ) / 4.;
+                ) / 4f;
 
                 float value = lerp(smoothValue, chunkyValue, blockiness.getValuef());
 

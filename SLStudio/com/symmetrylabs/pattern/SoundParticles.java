@@ -13,11 +13,15 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXProjection;
 import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
+import processing.event.KeyEvent;
 
 import java.util.ArrayList;
 import java.util.function.Consumer;
 
+import static com.symmetrylabs.util.Utils.*;
+import static processing.core.PApplet.*;
 import static processing.core.PApplet.map;
+import static processing.core.PConstants.PI;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
@@ -57,9 +61,9 @@ public class SoundParticles extends LXPattern {
     // private float lastTime = millis();
     // private float lastTransmitEQ = millis();
     private int prints = 0;
-    private float sparkX = 0.;
-    private float sparkY = 0.;
-    private float sparkZ = 0.;
+    private float sparkX = 0f;
+    private float sparkY = 0f;
+    private float sparkZ = 0f;
 
     private float midiToHz(int key) {
         return (float) (440 * pow(2, (key - 69) / 12));
@@ -70,7 +74,7 @@ public class SoundParticles extends LXPattern {
     }
 
     private float randctr(float a) {
-        return random(a) - a * .5;
+        return random(a) - a * .5f;
     }
 
     ArrayList<MidiNoteStamp> lfoNotes = new ArrayList<MidiNoteStamp>();
@@ -82,7 +86,7 @@ public class SoundParticles extends LXPattern {
 
         MidiNoteStamp(MidiNote _note) {
             note = _note;
-            timestamp = millis() * .001;
+            timestamp = millis() * .001f;
         }
     }
 
@@ -105,7 +109,7 @@ public class SoundParticles extends LXPattern {
             life = 1;
             intensity = 1;
             falloff = 1;
-            hue = 220.;
+            hue = 220f;
             i = particles.size();
             float rand = randomGaussian();
             float rand2 = randomGaussian();
@@ -143,7 +147,7 @@ public class SoundParticles extends LXPattern {
             life = 1;
             intensity = 1;
             falloff = 1;
-            this.hue = 220.;
+            this.hue = 220f;
         }
 
         public boolean isActive() {
@@ -169,7 +173,7 @@ public class SoundParticles extends LXPattern {
             this.hue = 120 + randomGaussian() * 30;
         }
 
-        public color calcPoint(LXPoint p) {
+        public int calcPoint(LXPoint p) {
 
             return lx.hsb(0, 0, 0);
         }
@@ -181,7 +185,7 @@ public class SoundParticles extends LXPattern {
 
             float spinNow = spin.getValuef();
             float sparkf = spark.getValuef();
-            float clock = 0.001 * millis();
+            float clock = 0.001f * millis();
 
             if (spinNow != 0) {
                 if (spinNow > 0) {
@@ -192,7 +196,7 @@ public class SoundParticles extends LXPattern {
 
                 spinProjection
                     .center()
-                    .rotate((spinNow - .5) / 100, 0, 0, 1)
+                    .rotate((spinNow - .5f) / 100, 0, 0, 1)
                     .translate(model.cx, model.cy, model.cz);
                 //  .scale(scale.getValuef(),scale.getValuef(),scale.getValuef());
             }
@@ -317,7 +321,7 @@ public class SoundParticles extends LXPattern {
         switch (key) {
             case 'P':
                 particles.add(new Particle(
-                    new PVector(random(.5 * model.cx, 3 * model.cx / 2), random(.5 * model.cy, 3 * model.cy / 2), model.cz),
+                    new PVector(random(.5f * model.cx, 3 * model.cx / 2), random(.5f * model.cy, 3 * model.cy / 2), model.cz),
                     new PVector(random(-1, 1), random(-1, 1), random(-1, 1))
                 ));
                 println("number of active particles:  " + particles.size());
@@ -395,7 +399,7 @@ public class SoundParticles extends LXPattern {
 
         for (int i = 0; i < 100; i++) {
             // particles.add(new Particle(PVector.random3D().setMag(model.xMax/2).add(modelCenter), PVector.random3D().setMag(.1)));
-            particles.add(new Particle(modelCenter.add(randomVector().setMag(50.)), PVector.random3D()));
+            particles.add(new Particle(modelCenter.add(randomVector().setMag(50f)), PVector.random3D()));
 
         }
     }

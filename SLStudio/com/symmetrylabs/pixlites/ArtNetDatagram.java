@@ -1,6 +1,9 @@
 package com.symmetrylabs.pixlites;
 
+import com.symmetrylabs.SLStudio;
 import heronarts.lx.output.LXDatagram;
+
+import java.net.UnknownHostException;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
@@ -81,9 +84,9 @@ public class ArtNetDatagram extends LXDatagram {
         int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
         for (int index : pointIndices) {
             int colorValue = (index >= 0) ? colors[index] : 0;
-            this.buffer[i + byteOffset[0]] = (byte) redGamma[((colorValue >> 16) & 0xff)]; // R
-            this.buffer[i + byteOffset[1]] = (byte) greenGamma[((colorValue >> 8) & 0xff)]; // G
-            this.buffer[i + byteOffset[2]] = (byte) blueGamma[(colorValue & 0xff)]; // B
+            this.buffer[i + byteOffset[0]] = (byte) SLStudio.redGamma[((colorValue >> 16) & 0xff)]; // R
+            this.buffer[i + byteOffset[1]] = (byte) SLStudio.greenGamma[((colorValue >> 8) & 0xff)]; // G
+            this.buffer[i + byteOffset[2]] = (byte) SLStudio.blueGamma[(colorValue & 0xff)]; // B
             i += 3;
         }
         return this;

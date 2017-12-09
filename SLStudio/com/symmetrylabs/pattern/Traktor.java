@@ -11,6 +11,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -84,14 +86,14 @@ public class Traktor extends LXPattern {
                 int pos = (index + FRAME_WIDTH - i) % FRAME_WIDTH;
 
                 colors[p.index] = lx.hsb(
-                    360 + palette.getHuef() + .8 * hueV * abs(p.x - model.cx),
+                    360 + palette.getHuef() + .8f * hueV * abs(p.x - model.cx),
                     100,
                     constrain(9 * bassG * (bass[pos] * model.cy - abs(p.y - model.cy + 5)), 0, 100)
                 );
                 blendColor(p.index, lx.hsb(
-                    400 + palette.getHuef() + .5 * hueV * abs(p.x - model.cx),
+                    400 + palette.getHuef() + .5f * hueV * abs(p.x - model.cx),
                     60,
-                    constrain(7 * trebG * (treble[pos] * .6 * model.cy - abs(p.y - model.cy)), 0, 100)
+                    constrain(7 * trebG * (treble[pos] * .6f * model.cy - abs(p.y - model.cy)), 0, 100)
 
                 ), LXColor.Blend.ADD);
             }

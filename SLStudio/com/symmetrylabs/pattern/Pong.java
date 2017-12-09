@@ -7,6 +7,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PVector;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -29,7 +31,7 @@ public class Pong extends DPat {
         y.setPeriod(dy);
         addModulator(z = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();
         z.setPeriod(dz);
-        pSize = addParam("Size", 0.4);
+        pSize = addParam("Size", 0.4f);
         pChoose = new DiscreteParameter("Anim", new String[]{"Pong", "Ball", "Cone"});
         pChoose.setValue(2);
         addParameter(pChoose);
@@ -46,7 +48,7 @@ public class Pong extends DPat {
         cRad = mMax.x * val(pSize) / 6;
     }
 
-    color CalcPoint(PVector p) {
+    int CalcPoint(PVector p) {
         v.set(x.getValuef(), y.getValuef(), z.getValuef());
         v.z = 0;
         p.z = 0;// ignore z dimension
@@ -54,12 +56,12 @@ public class Pong extends DPat {
             case 0:
                 vMir.set(mMax);
                 vMir.sub(p);
-                return lx.hsb(lxh(), 100, c1c(1 - min(v.dist(p), v.dist(vMir)) * .5 / cRad));   // balls
+                return lx.hsb(lxh(), 100, c1c(1 - min(v.dist(p), v.dist(vMir)) * .5f / cRad));   // balls
             case 1:
-                return lx.hsb(lxh(), 100, c1c(1 - v.dist(p) * .5 / cRad));              // ball
+                return lx.hsb(lxh(), 100, c1c(1 - v.dist(p) * .5f / cRad));              // ball
             case 2:
                 vMir.set(mMax.x / 2, 0, mMax.z / 2);
-                return lx.hsb(lxh(), 100, c1c(1 - calcCone(p, v, vMir) * max(.02, .45 - val(pSize))));   // spot
+                return lx.hsb(lxh(), 100, c1c(1 - calcCone(p, v, vMir) * max(.02f, .45f - val(pSize))));   // spot
         }
         return lx.hsb(0, 0, 0);
     }

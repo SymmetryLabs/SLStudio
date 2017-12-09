@@ -1,11 +1,20 @@
 package com.symmetrylabs.util;
 
+import org.apache.commons.math3.util.FastMath;
+import processing.core.PConstants;
+import processing.core.PVector;
+
+import java.io.File;
+import java.io.IOException;
 import java.lang.reflect.Field;
+import java.net.URL;
+import java.net.URLClassLoader;
+import java.util.Arrays;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */ // http://stackoverflow.com/a/60766/216311
-public static class ClassPathHack {
+public class ClassPathHack {
     private static final Class[] parameters = new Class[]{URL.class};
 
     public static void addFile(String s) throws IOException {
@@ -59,7 +68,7 @@ public static class ClassPathHack {
         newPaths[newPaths.length - 1] = pathToAdd;
         usrPathsField.set(null, newPaths);
     }
-}
+
 
     static public float angleBetween(PVector v1, PVector v2) {
 
@@ -85,3 +94,5 @@ public static class ClassPathHack {
         }
         return (float) FastMath.acos(amt);
     }
+
+}

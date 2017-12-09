@@ -1,5 +1,6 @@
 package com.symmetrylabs.ui;
 
+import com.symmetrylabs.SLStudio;
 import com.symmetrylabs.pixlites.Pixlite;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
@@ -22,12 +23,12 @@ class UIOutputs extends UICollapsibleSection {
 
         addTopLevelComponent(new UIButton(4, 4, 12, 12) {
         }
-            .setParameter(outputControl.enabled).setBorderRounding(4));
+            .setParameter(SLStudio.applet.outputControl.enabled).setBorderRounding(4));
 
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 0, w - 8, 476);
 
-        for (Pixlite pixlite : pixlites) {
+        for (Pixlite pixlite : SLStudio.applet.pixlites) {
             items.add(new PixliteItem(pixlite));
         }
 
@@ -53,16 +54,16 @@ class UIOutputs extends UICollapsibleSection {
             });
         }
 
-        String getLabel() {
+        public String getLabel() {
             return "(" + pixlite.ipAddress + ") " + pixlite.slice.id;
         }
 
-        boolean isSelected() {
+        public boolean isSelected() {
             return pixlite.enabled.isOn();
         }
 
         @Override
-        boolean isActive() {
+        public boolean isActive() {
             return pixlite.enabled.isOn();
         }
 
@@ -73,7 +74,7 @@ class UIOutputs extends UICollapsibleSection {
 
         @Override
         public void onActivate() {
-            if (!outputControl.enabled.getValueb())
+            if (!SLStudio.applet.outputControl.enabled.getValueb())
                 return;
             pixlite.enabled.toggle();
         }

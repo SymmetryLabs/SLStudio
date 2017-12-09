@@ -8,6 +8,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import processing.core.PImage;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -47,7 +49,7 @@ public class CrossSections extends LXPattern {
         addParameter(zw);
     }
 
-    void onParameterChanged(LXParameter p) {
+    public void onParameterChanged(LXParameter p) {
         if (p == xr) {
             x.setPeriod(10000 - 8800 * p.getValuef());
         } else if (p == yr) {
@@ -72,25 +74,25 @@ public class CrossSections extends LXPattern {
         float ylv = 100 * yl.getValuef();
         float zlv = 100 * zl.getValuef();
 
-        float xwv = 100. / (10 + 40 * xw.getValuef());
-        float ywv = 100. / (10 + 40 * yw.getValuef());
-        float zwv = 100. / (10 + 40 * zw.getValuef());
+        float xwv = 100f / (10 + 40 * xw.getValuef());
+        float ywv = 100f / (10 + 40 * yw.getValuef());
+        float zwv = 100f / (10 + 40 * zw.getValuef());
 
         for (LXPoint p : model.points) {
-            color c = 0;
+            int c = 0;
             c = PImage.blendColor(c, lx.hsb(
                 palette.getHuef() + p.x / 10 + p.y / 3,
-                constrain(140 - 1.1 * abs(p.x - model.xMax / 2.), 0, 100),
+                constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
                 max(0, xlv - xwv * abs(p.x - xv))
             ), ADD);
             c = PImage.blendColor(c, lx.hsb(
                 palette.getHuef() + 80 + p.y / 10,
-                constrain(140 - 2.2 * abs(p.y - model.yMax / 2.), 0, 100),
+                constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
                 max(0, ylv - ywv * abs(p.y - yv))
             ), ADD);
             c = PImage.blendColor(c, lx.hsb(
                 palette.getHuef() + 160 + p.z / 10 + p.y / 2,
-                constrain(140 - 2.2 * abs(p.z - model.zMax / 2.), 0, 100),
+                constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
                 max(0, zlv - zwv * abs(p.z - zv))
             ), ADD);
             colors[p.index] = c;

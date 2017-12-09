@@ -18,7 +18,7 @@ import static processing.core.PApplet.*;
  * of faces, strips and points.
  */
 
-public static class SLModel extends LXModel {
+public class SLModel extends LXModel {
     public final List<LXModel> objModels;
 
     // Suns

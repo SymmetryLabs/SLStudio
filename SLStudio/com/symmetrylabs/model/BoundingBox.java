@@ -5,7 +5,7 @@ import processing.core.PVector;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static class BoundingBox {
+public class BoundingBox {
     public final PVector origin;
     public final PVector size;
 

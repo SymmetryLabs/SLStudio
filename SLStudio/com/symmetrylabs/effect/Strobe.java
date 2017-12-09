@@ -12,10 +12,12 @@ import heronarts.lx.parameter.LXParameter;
 
 import java.awt.Color;
 
+import static processing.core.PApplet.lerp;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static class Strobe extends LXEffect {
+public class Strobe extends LXEffect {
 
     public enum Waveshape {
         TRI,
@@ -24,8 +26,6 @@ public static class Strobe extends LXEffect {
         UP,
         DOWN
     }
-
-    ;
 
     public final EnumParameter<Waveshape> mode = new EnumParameter<Waveshape>("Shape", Waveshape.TRI);
 

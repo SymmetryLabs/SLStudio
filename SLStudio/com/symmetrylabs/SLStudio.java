@@ -5,6 +5,7 @@ import com.symmetrylabs.model.SLModel;
 import com.symmetrylabs.network.NetworkMonitor;
 import com.symmetrylabs.output.OutputControl;
 import com.symmetrylabs.p3lx.LXStudio;
+import com.symmetrylabs.palettes.ArrayPalette;
 import com.symmetrylabs.palettes.ImageLibrary;
 import com.symmetrylabs.palettes.LinePaletteExtractor;
 import com.symmetrylabs.palettes.PaletteExtractor;
@@ -42,16 +43,24 @@ public class SLStudio extends PApplet {
     private SLModel model;
     public Dispatcher dispatcher;
     private NetworkMonitor networkMonitor;
-    private OutputControl outputControl;
+    public OutputControl outputControl;
     public Pixlite[] pixlites;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
 
+    public static void main(String[] args) {
+        PApplet.main(SLStudio.class, args);
+    }
+
+    @Override
+    public void settings() {
+        size(displayWidth, displayHeight, P3D);
+    }
+
     @Override
     public void setup() {
         long setupStart = System.nanoTime();
-        size(displayWidth, displayHeight, P3D);
         applet = this;
 
         model = FultonStreetLayout.buildModel();
@@ -470,6 +479,8 @@ public class SLStudio extends PApplet {
     public final static int CHAN_Y = 20;
     public final static int PAD = 5;
 
+    static final float INCHES = 1;
+    public final static float FEET = 12*INCHES;
 
     /*
      * Gamma Correction

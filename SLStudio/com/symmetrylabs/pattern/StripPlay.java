@@ -8,6 +8,9 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
+import static com.symmetrylabs.util.Utils.random;
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -72,7 +75,7 @@ public class StripPlay extends SLPattern {
     }
 
     public void run(double deltaMs) {
-        setColors(#000000);
+        setColors(0x000000);
         float[] bright = new float[model.points.length];
         for (Strip strip : model.strips) {
             LXPoint centerPoint = strip.points[8];

@@ -1,9 +1,12 @@
 package com.symmetrylabs.util;
 
+import heronarts.lx.color.LXColor;
+import org.apache.commons.math3.util.FastMath;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static final class ColorUtils {
+public final class ColorUtils {
 
     public static int setAlpha(int rgb, int alpha) {
         return (rgb & (~LXColor.ALPHA_MASK)) | ((alpha << LXColor.ALPHA_SHIFT) & LXColor.ALPHA_MASK);
@@ -32,8 +35,8 @@ public static final class ColorUtils {
     }
 
     public static int blend(int dst, int src) {
-        float dstA = (dst >> 24 & 0xFF) / 255.0;
-        float srcA = (src >> 24 & 0xFF) / 255.0;
+        float dstA = (dst >> 24 & 0xFF) / 255.0f;
+        float srcA = (src >> 24 & 0xFF) / 255.0f;
         float outA = srcA + dstA * (1 - srcA);
         if (outA == 0) {
             return 0;

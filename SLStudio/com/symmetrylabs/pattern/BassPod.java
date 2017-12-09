@@ -10,6 +10,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -31,7 +33,7 @@ public class BassPod extends LXPattern {
         addModulator(eq).start();
     }
 
-    void onActive() {
+    public void onActive() {
         eq.range.setValue(36);
         eq.release.setValue(300);
         eq.gain.setValue(-6);
@@ -52,10 +54,10 @@ public class BassPod extends LXPattern {
                 }
                 value /= 5.;
 
-                float b = constrain(8 * (value * model.yMax - abs(p.y - model.yMax / 2.)), 0, 100);
+                float b = constrain(8 * (value * model.yMax - abs(p.y - model.yMax / 2f)), 0, 100);
                 colors[p.index] = lx.hsb(
                     palette.getHuef() + abs(p.y - model.cy) + abs(p.x - model.cx),
-                    constrain(satBase - .6 * dist(p.x, p.y, model.cx, model.cy), 0, 100),
+                    constrain(satBase - .6f * dist(p.x, p.y, model.cx, model.cy), 0, 100),
                     b
                 );
             }

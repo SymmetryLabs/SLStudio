@@ -6,6 +6,8 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 
+import static com.symmetrylabs.util.Utils.noise;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -37,11 +39,11 @@ public class LSD extends LXEffect {
             if (++equalCount >= 5) {
                 equalCount = 0;
                 sign = -sign;
-                newAccum = accum + sign * .01;
+                newAccum = accum + sign * .01f;
             }
         }
         accum = newAccum;
-        float sf = scale.getValuef() / 1000.;
+        float sf = scale.getValuef() / 1000f;
         float rf = range.getValuef();
         for (LXPoint p : model.points) {
             LXColor.RGBtoHSB(colors[p.index], hsb);

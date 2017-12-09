@@ -3,7 +3,10 @@ package com.symmetrylabs.util;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static final class PrintUtils {
+
+import java.io.PrintStream;
+
+public final class PrintUtils {
 
     private static final PrintStream defaultOut = System.out;
     private static final PrintStream nullOut = new PrintStream(new NullOutputStream());

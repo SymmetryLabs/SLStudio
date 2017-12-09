@@ -6,7 +6,7 @@ import java.util.concurrent.Executors;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-static class NetworkManager {
+public class NetworkManager {
 
     private static NetworkManager instance;
 

@@ -11,6 +11,6 @@ package com.symmetrylabs.palettes;
  * getColor returns an integer 0xAARRGGBB value, and is responsible for making sure that the top byte is a reasonable
  * alpha value (usually 0xff).
  */
-interface ColorPalette {
+public interface ColorPalette {
     int getColor(double p);
 }

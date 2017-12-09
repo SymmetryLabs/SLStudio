@@ -7,6 +7,9 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PVector;
 
+import static processing.core.PApplet.*;
+import static processing.core.PConstants.MAX_FLOAT;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -24,7 +27,7 @@ public class AskewPlanes extends DPat {
         float av = 1;
         float bv = 1;
         float cv = 1;
-        float denom = 0.1;
+        float denom = 0.1f;
 
         Plane(int i) {
             addModulator(a = new SinLFO(-1, 1, 4000 + 1029 * i)).trigger();
@@ -74,7 +77,7 @@ public class AskewPlanes extends DPat {
         planes[2].run(deltaMs);
     }
 
-    color CalcPoint(PVector p) {
+    int CalcPoint(PVector p) {
         //for (LXPoint p : model.points) {
         float d = MAX_FLOAT;
 
@@ -86,9 +89,9 @@ public class AskewPlanes extends DPat {
             }
         }
         return lx.hsb(
-            huev + abs(p.x - model.cx) * .3 + p.y * .8,
-            max(0, 100 - .15 * abs(p.x - model.cx)),
-            constrain(700. * thickness.getValuef() - 10. * d, 0, 100)
+            huev + abs(p.x - model.cx) * .3f + p.y * .8f,
+            max(0, 100 - .15f * abs(p.x - model.cx)),
+            constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
         );
         //}
     }

@@ -9,6 +9,9 @@ import heronarts.lx.parameter.CompoundParameter;
 import java.util.Arrays;
 import java.util.function.Consumer;
 
+import static com.symmetrylabs.util.Utils.noise;
+import static com.symmetrylabs.util.Utils.noiseDetail;
+import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
 /**

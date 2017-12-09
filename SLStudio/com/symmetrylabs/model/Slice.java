@@ -11,6 +11,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.symmetrylabs.SLStudio.FEET;
 import static processing.core.PConstants.PI;
 
 /**
@@ -25,7 +26,7 @@ public class Slice extends LXModel {
     ;
 
     private static final int MAX_NUM_STRIPS_PER_SLICE = 69;
-    private static final float STRIP_SPACING = 0.7f;
+    public static final float STRIP_SPACING = 0.7f;
     public final static float DIAMETER = 8 * FEET;
     public final static float RADIUS = DIAMETER / 2;
 

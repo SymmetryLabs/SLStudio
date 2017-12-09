@@ -6,6 +6,8 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -38,7 +40,7 @@ public class ShiftingPlane extends LXPattern {
         for (LXPoint p : model.points) {
             float d = abs(av * (p.x - model.cx) + bv * (p.y - model.cy) + cv * (p.z - model.cz) + dv) / denom;
             colors[p.index] = lx.hsb(
-                hv + (abs(p.x - model.cx) * .6 + abs(p.y - model.cy) * .9 + abs(p.z - model.cz)) * hueShift.getValuef(),
+                hv + (abs(p.x - model.cx) * .6f + abs(p.y - model.cy) * .9f + abs(p.z - model.cz)) * hueShift.getValuef(),
                 constrain(110 - d * 6, 0, 100),
                 constrain(130 - 7 * d, 0, 100)
             );

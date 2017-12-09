@@ -14,6 +14,9 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.symmetrylabs.util.Utils.random;
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -119,7 +122,7 @@ public class ViolinWave extends LXPattern {
             centers[i] =
                 model.cy + 30 * amp.getValuef() * sin((float) (accum + (i - centers.length / 2.) / (1. + 9. * period.getValuef())));
         }
-        float zeroDBReference = pow(10, (50 - 190 * level.getValuef()) / 20.);
+        float zeroDBReference = pow(10, (50 - 190 * level.getValuef()) / 20f);
         float dB = (float) (20 * Math.log((eq.getSquaref()) / zeroDBReference) / LOG_10);
         if (dB > dbValue.getValuef()) {
             rising = true;
@@ -140,7 +143,7 @@ public class ViolinWave extends LXPattern {
 
         for (LXPoint p : model.points) {
             int ci = (int) lerp(0, centers.length - 1, (p.x - model.xMin) / (model.xMax - model.xMin));
-            float rFactor = 1.0 - 0.9 * abs(p.x - model.cx) / (model.xMax - model.cx);
+            float rFactor = 1.0f - 0.9f * abs(p.x - model.cx) / (model.xMax - model.cx);
             colors[p.index] = lx.hsb(
                 palette.getHuef() + abs(p.x - model.cx),
                 min(100, 20 + 8 * abs(p.y - centers[ci])),

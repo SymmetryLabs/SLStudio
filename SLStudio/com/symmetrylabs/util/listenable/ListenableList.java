@@ -1,9 +1,13 @@
 package com.symmetrylabs.util.listenable;
 
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static class ListenableList<E> implements Iterable<E> {
+public class ListenableList<E> implements Iterable<E> {
 
     public final List<E> list = new ArrayList<E>();
 

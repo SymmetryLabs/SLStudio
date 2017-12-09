@@ -3,7 +3,7 @@ package com.symmetrylabs.util;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static final class NumberUtils {
+public final class NumberUtils {
 
     public static String normalizeHex(String hex) {
         int value = Integer.parseInt(hex, 16);

@@ -67,7 +67,7 @@ public class LightSource extends SLPatternWithMarkers {
             addLight(new PVector(x.getValuef(), y.getValuef(), z.getValuef()), 1);
         }
         renderLights();
-        bf.advance((float) deltaMs * 0.001);
+        bf.advance((float) deltaMs * 0.001f);
     }
 
     void resetLights() {
@@ -103,7 +103,7 @@ public class LightSource extends SLPatternWithMarkers {
 
                     float extent = dist / (falloff.getValuef() * model.xRange);
                     if (extent < 1) extent = 1; // avoid division by zero or excessive brightness
-                    float brightness = 1.0 / (extent * extent);
+                    float brightness = 1.0f / (extent * extent);
 
                     float cosAngle = PVector.dot(toLight, pn.normal) / dist;
                     if (cosAngle < 0) cosAngle = 0;

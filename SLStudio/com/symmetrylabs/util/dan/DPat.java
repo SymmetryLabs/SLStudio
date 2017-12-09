@@ -1,5 +1,8 @@
 package com.symmetrylabs.util.dan;
 
+import com.symmetrylabs.model.BatchConsumer;
+import com.symmetrylabs.model.SLModel;
+import com.symmetrylabs.model.Sun;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
@@ -15,33 +18,44 @@ import java.util.Arrays;
 import java.util.SplittableRandom;
 import java.util.function.Consumer;
 
+import static com.symmetrylabs.util.Utils.noise;
+import static processing.core.PApplet.*;
+import static processing.core.PVector.angleBetween;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */ //----------------------------------------------------------------------------------------------------------------------------------
 public class DPat extends LXPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
-    ArrayList<DBool> bools = new ArrayList<DBool>();
-    PVector pTrans = new PVector();
-    PVector mMax, mCtr, mHalf;
-    SplittableRandom splittableRandom = new SplittableRandom();
+    public ArrayList<DBool> bools = new ArrayList<DBool>();
+    public PVector pTrans = new PVector();
+    public PVector mMax, mCtr, mHalf;
+    public SplittableRandom splittableRandom = new SplittableRandom();
 
-    LXMidiOutput APCOut;
-    LXMidiOutput MidiFighterTwisterOut;
-    int nMaxRow = 53;
-    float LastJog = -1;
-    float[] xWaveNz, yWaveNz;
-    PVector xyzJog = new PVector(), modmin;
+    public LXMidiOutput APCOut;
+    public LXMidiOutput MidiFighterTwisterOut;
+    public int nMaxRow = 53;
+    public float LastJog = -1;
+    public float[] xWaveNz, yWaveNz;
+    public PVector xyzJog = new PVector(), modmin;
 
-    float NoiseMove = random(10000);
-    CompoundParameter pSpark, pWave, pRotX, pRotY, pRotZ, pSpin, pTransX, pTransY;
-    BooleanParameter pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
-    BooleanParameter perSun;
+    public float NoiseMove = random(10000);
+    public CompoundParameter pSpark;
+    public CompoundParameter pWave;
+    public CompoundParameter pRotX;
+    public CompoundParameter pRotY;
+    public CompoundParameter pRotZ;
+    public CompoundParameter pSpin;
+    public CompoundParameter pTransX;
+    public CompoundParameter pTransY;
+    public BooleanParameter pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
+    public BooleanParameter perSun;
 
-    float lxh() {
+    public float lxh() {
         return palette.getHuef();
     }
 
-    int c1c(float a) {
+    public int c1c(float a) {
         return round(100 * constrain(a, 0, 1));
     }
 
@@ -49,7 +63,7 @@ public class DPat extends LXPattern {
         return interp(i - floor(i), vals[floor(i)], vals[ceil(i)]);
     }
 
-    void setNorm(PVector vec) {
+    public void setNorm(PVector vec) {
         vec.set(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
     }
 
@@ -68,19 +82,19 @@ public class DPat extends LXPattern {
     void StartRun(double deltaMs) {
     }
 
-    float val(CompoundParameter p) {
+    public float val(CompoundParameter p) {
         return p.getValuef();
     }
 
-    color CalcPoint(PVector p) {
+    int CalcPoint(PVector p) {
         return lx.hsb(0, 0, 0);
     }
 
-    color blend3(color c1, color c2, color c3) {
+    int blend3(int c1, int c2, int c3) {
         return PImage.blendColor(c1, PImage.blendColor(c2, c3, ADD), ADD);
     }
 
-    void rotateZ(PVector p, PVector o, float nSin, float nCos) {
+    public void rotateZ(PVector p, PVector o, float nSin, float nCos) {
         p.set(nCos * (p.x - o.x) - nSin * (p.y - o.y) + o.x, nSin * (p.x - o.x) + nCos * (p.y - o.y) + o.y, p.z);
     }
 
@@ -92,7 +106,7 @@ public class DPat extends LXPattern {
         p.set(nSin * (p.z - o.z) + nCos * (p.x - o.x) + o.x, p.y, nCos * (p.z - o.z) - nSin * (p.x - o.x) + o.z);
     }
 
-    CompoundParameter addParam(String label, double value) {
+    public CompoundParameter addParam(String label, double value) {
         CompoundParameter p = new CompoundParameter(label, value);
         addParameter(p);
         return p;
@@ -106,7 +120,7 @@ public class DPat extends LXPattern {
 
     PVector vT1 = new PVector(), vT2 = new PVector();
 
-    float calcCone(PVector v1, PVector v2, PVector c) {
+    public float calcCone(PVector v1, PVector v2, PVector c) {
         vT1.set(v1);
         vT2.set(v2);
         vT1.sub(c);
@@ -125,7 +139,7 @@ public class DPat extends LXPattern {
     //     return (float)LXUtils.lerp(v1, v2, amt);
     // }
 
-    float random(float max) {
+    public float random(float max) {
         return (float) splittableRandom.nextDouble((double) max);
     }
 
@@ -206,7 +220,7 @@ public class DPat extends LXPattern {
 
     // boolean handleNote(LXMidiNote note) {return false;}
 
-    void onInactive() {
+    public void onInactive() {
     }
 
     void onReset() {
@@ -216,7 +230,7 @@ public class DPat extends LXPattern {
         //  updateLights(); now handled by patternControl UI
     }
 
-    DPat(LX lx) {
+    public DPat(LX lx) {
         super(lx);
 
         pSpark = addParam("Sprk", 0);
@@ -253,8 +267,8 @@ public class DPat extends LXPattern {
         mMax.sub(modmin);
         mCtr = new PVector();
         mCtr.set(mMax);
-        mCtr.mult(.5);
-        mHalf = new PVector(.5, .5, .5);
+        mCtr.mult(.5f);
+        mHalf = new PVector(.5f, .5f, .5f);
         xWaveNz = new float[ceil(mMax.y) + 1];
         yWaveNz = new float[ceil(mMax.x) + 1];
         //println (model.xMin + " " + model.yMin + " " +  model.zMin);
@@ -262,14 +276,14 @@ public class DPat extends LXPattern {
         //for (MidiOutputDevice o: RWMidi.getOutputDevices()) { if (o.toString().contains("APC")) { APCOut = o.createOutput(); break;}}
     }
 
-    float spin() {
+    public float spin() {
         float raw = val(pSpin);
-        if (raw <= 0.45) {
-            return raw + 0.05;
-        } else if (raw >= 0.55) {
-            return raw - 0.05;
+        if (raw <= 0.45f) {
+            return raw + 0.05f;
+        } else if (raw >= 0.55f) {
+            return raw - 0.05f;
         }
-        return 0.5;
+        return 0.5f;
     }
 
     // void setAPCOutput(LXMidiOutput output) {
@@ -292,7 +306,7 @@ public class DPat extends LXPattern {
     void updateLights() {
     }
 
-    void run(double deltaMs) {
+    public void run(double deltaMs) {
           /* pre patternControls UI
                     if (this == midiEngine.getFocusedPattern()) {
                         String Text1="", Text2="";
@@ -302,14 +316,14 @@ public class DPat extends LXPattern {
                 }*/
 
         NoiseMove += deltaMs;
-        NoiseMove = NoiseMove % 1e7;
+        NoiseMove = (float) (NoiseMove % 1e7);
         StartRun(deltaMs);
 
         pTrans.set(val(pTransX) * 200 - 100, val(pTransY) * 100 - 50, 0);
 
         if (pJog.getValueb()) {
-            float tRamp = (lx.tempo.rampf() % .25);
-            if (tRamp < LastJog) xyzJog.set(randctr(mMax.x * .2), randctr(mMax.y * .2), randctr(mMax.z * .2));
+            float tRamp = (lx.tempo.rampf() % .25f);
+            if (tRamp < LastJog) xyzJog.set(randctr(mMax.x * .2f), randctr(mMax.y * .2f), randctr(mMax.z * .2f));
             LastJog = tRamp;
         }
 
@@ -317,10 +331,10 @@ public class DPat extends LXPattern {
         final float wvAmp = val(pWave), sprk = val(pSpark);
         if (wvAmp > 0) {
             for (int i = 0; i < ceil(mMax.x) + 1; i++)
-                yWaveNz[i] = wvAmp * (noise(i / (mMax.x * .3) - (2e3 + NoiseMove) / 1500.) - .5) * (mMax.y / 2.);
+                yWaveNz[i] = wvAmp * (noise((float) (i / (mMax.x * .3f) - (2e3 + NoiseMove) / 1500f)) - .5f) * (mMax.y / 2f);
 
             for (int i = 0; i < ceil(mMax.y) + 1; i++)
-                xWaveNz[i] = wvAmp * (noise(i / (mMax.y * .3) - (1e3 + NoiseMove) / 1500.) - .5) * (mMax.x / 2.);
+                xWaveNz[i] = wvAmp * (noise((float) (i / (mMax.y * .3f) - (1e3 + NoiseMove) / 1500f)) - .5f) * (mMax.x / 2f);
         }
 
         // TODO Threadding: For some reason, using parallelStream here messes up the animations.
@@ -345,7 +359,7 @@ public class DPat extends LXPattern {
                     if (pJog.getValueb()) P.add(xyzJog);
 
 
-                    color cNew, cOld = colors[p.index];
+                    int cNew, cOld = colors[p.index];
                     {
                         tP.set(P);
                         cNew = CalcPoint(tP);
@@ -363,7 +377,7 @@ public class DPat extends LXPattern {
                         cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
                     }
                     if (pXdup.getValueb()) {
-                        tP.set((P.x + mMax.x * .5) % mMax.x, P.y, P.z);
+                        tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
                         cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
                     }
                     if (pGrey.getValueb()) {
@@ -397,7 +411,7 @@ public class DPat extends LXPattern {
                         if (pJog.getValueb()) P.add(xyzJog);
 
 
-                        color cNew, cOld = colors[p.index];
+                        int cNew, cOld = colors[p.index];
                         {
                             tP.set(P);
                             cNew = CalcPoint(tP);
@@ -415,7 +429,7 @@ public class DPat extends LXPattern {
                             cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
                         }
                         if (pXdup.getValueb()) {
-                            tP.set((P.x + mMax.x * .5) % mMax.x, P.y, P.z);
+                            tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
                             cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
                         }
                         if (pGrey.getValueb()) {

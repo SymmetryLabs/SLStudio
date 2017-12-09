@@ -3,7 +3,7 @@ package com.symmetrylabs.util;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static final class MathUtils {
+public final class MathUtils {
 
     public static byte byteSubtract(int a, int b) {
         byte res = (byte) (a - b);

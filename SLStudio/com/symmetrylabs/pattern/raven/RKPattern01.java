@@ -1,5 +1,6 @@
 package com.symmetrylabs.pattern.raven;
 
+import com.symmetrylabs.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -11,6 +12,7 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+import static com.symmetrylabs.util.Utils.noise;
 import static processing.core.PApplet.CLOSE;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.HALF_PI;
@@ -75,7 +77,7 @@ public class RKPattern01 extends P3CubeMapPattern {
         addModulator(eq).start();
     }
 
-    void run(double deltaMs, PGraphics pg) {
+    public void run(double deltaMs, PGraphics pg) {
 
         updateParameters();
         replenish();
@@ -127,18 +129,18 @@ public class RKPattern01 extends P3CubeMapPattern {
         }
         ringAmt = round(amt.getValuef());
 
-        rotX = lerp(rotX, rotXT, .25);
-        rotY = lerp(rotY, rotYT, .25);
-        rotZ = lerp(rotZ, rotZT, .25);
+        rotX = lerp(rotX, rotXT, .25f);
+        rotY = lerp(rotY, rotYT, .25f);
+        rotZ = lerp(rotZ, rotZT, .25f);
 
-        thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .25);
-        dspmt = lerp(dspmt, dspmtT, .1);
-        nDspmt = lerp(nDspmt, nDspmtT, .01);
+        thetaSpeed = lerp(thetaSpeed, thetaSpeedT, .25f);
+        dspmt = lerp(dspmt, dspmtT, .1f);
+        nDspmt = lerp(nDspmt, nDspmtT, .01f);
 
         gTheta += thetaSpeed / 720;
         if (gTheta > PI) gTheta -= PI;
         else if (gTheta < 0) gTheta += PI;
-        gThetaSpacing = lerp(gThetaSpacing, PI / testRings.size(), .1);
+        gThetaSpacing = lerp(gThetaSpacing, PI / testRings.size(), .1f);
         gWeightScalar = map(ringAmt, 1, 25, 4, 1);
     }
 
@@ -170,8 +172,8 @@ public class RKPattern01 extends P3CubeMapPattern {
         updateCubeMap(pgL, 0, 0, 0, 1, 0, 0, 0, 1, 0);
         updateCubeMap(pgR, 0, 0, 0, -1, 0, 0, 0, 1, 0);
         updateCubeMap(pgB, 0, 0, 0, 0, 0, -1, 0, 1, 0);
-        updateCubeMap(pgD, 0, 0, -.001, 0, -1, 0, 0, 1, 0);
-        updateCubeMap(pgU, 0, 0, -.001, 0, 1, 0, 0, 1, 0);
+        updateCubeMap(pgD, 0, 0, -.001f, 0, -1, 0, 0, 1, 0);
+        updateCubeMap(pgU, 0, 0, -.001f, 0, 1, 0, 0, 1, 0);
     }
 
     void drawScene(PGraphics pg) {
@@ -272,9 +274,9 @@ public class RKPattern01 extends P3CubeMapPattern {
             if (!audioLinked) {
                 thetaOfstRange = sin(theta) * dspmt;
                 thetaOfst = (noise(
-                    sin(phi) * cos(phi) * nDspmt + frameCount * .005,
-                    this.thetaBase * nDspmt * .25 - frameCount * .005
-                ) - .5) * thetaOfstRange;
+                    sin(phi) * cos(phi) * nDspmt + SLStudio.applet.frameCount * .005f,
+                    this.thetaBase * nDspmt * .25f - SLStudio.applet.frameCount * .005f
+                ) - .5f) * thetaOfstRange;
             } else {
                 thetaOfstRange = sin(theta);
                 int bandIdx = floor(map(idx, 0, ringRes, 0, 16));
@@ -282,9 +284,9 @@ public class RKPattern01 extends P3CubeMapPattern {
             }
             theta = this.thetaBase + thetaOfst;
             pos.set(
-                sin(theta) * cos(phi) * .5 * l1,
-                cos(theta) * .5 * l2,
-                sin(theta) * sin(phi) * .5 * l3
+                sin(theta) * cos(phi) * .5f * l1,
+                cos(theta) * .5f * l2,
+                sin(theta) * sin(phi) * .5f * l3
             );
         }
     }

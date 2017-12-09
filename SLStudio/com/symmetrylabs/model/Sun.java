@@ -18,13 +18,11 @@ import static processing.core.PConstants.PI;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static class Sun extends LXModel {
+public class Sun extends LXModel {
 
     public enum Type {
         FULL, TWO_THIRDS, ONE_HALF, ONE_THIRD
     }
-
-    ;
 
     public final String id;
     public final Type type;
@@ -117,7 +115,7 @@ public static class Sun extends LXModel {
         }
     }
 
-    void copyFromMasterSun(int[] colors) {
+    public void copyFromMasterSun(int[] colors) {
         if (masterIndexes != null) {
             for (int i = 0; i < points.length; i++) {
                 colors[points[i].index] = colors[masterIndexes[i]];
@@ -259,7 +257,7 @@ public static class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_bottom_front",
                         Slice.Type.FULL,
-                        new float[]{Slice.RADIUS, -Slice.DIAMETER * 0.5, 0},
+                        new float[]{Slice.RADIUS, -Slice.DIAMETER * 0.5f, 0},
                         new float[]{0, 0, 180},
                         transform,
                         numPointsPerStrip[2]
@@ -267,7 +265,7 @@ public static class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_bottom_back",
                         Slice.Type.FULL,
-                        new float[]{-Slice.RADIUS, -Slice.DIAMETER * 0.5, 0},
+                        new float[]{-Slice.RADIUS, -Slice.DIAMETER * 0.5f, 0},
                         new float[]{0, 180, 180},
                         transform,
                         numPointsPerStrip[3]
@@ -278,7 +276,7 @@ public static class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_bottom_front",
                         Slice.Type.BOTTOM_ONE_THIRD,
-                        new float[]{Slice.RADIUS, -Slice.RADIUS + 1.5, 0},
+                        new float[]{Slice.RADIUS, -Slice.RADIUS + 1.5f, 0},
                         new float[]{0, 0, 180},
                         transform,
                         numPointsPerStrip[2]
@@ -286,7 +284,7 @@ public static class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_bottom_back",
                         Slice.Type.BOTTOM_ONE_THIRD,
-                        new float[]{-Slice.RADIUS, -Slice.RADIUS + 1.5, 0},
+                        new float[]{-Slice.RADIUS, -Slice.RADIUS + 1.5f, 0},
                         new float[]{0, 180, 180},
                         transform,
                         numPointsPerStrip[3]

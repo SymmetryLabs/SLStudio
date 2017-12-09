@@ -1,5 +1,6 @@
 package com.symmetrylabs.pattern.raven;
 
+import com.symmetrylabs.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -11,6 +12,8 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
+import static com.symmetrylabs.util.Utils.noise;
+import static com.symmetrylabs.util.Utils.random;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.TWO_PI;
@@ -80,11 +83,11 @@ public class RKPattern02 extends P3CubeMapPattern {
         addModulator(eq).start();
     }
 
-    void run(double deltaMs, PGraphics pg) {
+    public void run(double deltaMs, PGraphics pg) {
 
         updateParameters();
 
-        if (frameCount % 90 == 0 && !autoNoise && !audioLinked) {
+        if (SLStudio.applet.frameCount % 90 == 0 && !autoNoise && !audioLinked) {
             switchCount = (switchCount + 1) % 3;
             if (switchCount == 0) {
                 resetArcs();
@@ -114,10 +117,10 @@ public class RKPattern02 extends P3CubeMapPattern {
         for (int i = 0; i < arcs.size(); i++) {
             Arc arc = arcs.get(i);
             if (autoNoise || audioLinked) {
-                float scalar = map(arc.lv, 0, 8, dspmt, dspmt * 1.5);
-                arc.splitRatio = .5 + (noise(arc.idx * .1 + f) - .5) * scalar;
-                arc.fragRatioS = (noise(arc.idx * .1 + f * 2 + 2.46) - .5) * 1.2 + .5;
-                arc.fragRatioE = (noise(arc.idx * .1 + f * 2 + 11.27) - .5) * 1.2 + .5;
+                float scalar = map(arc.lv, 0, 8, dspmt, dspmt * 1.5f);
+                arc.splitRatio = .5f + (noise(arc.idx * .1f + f) - .5f) * scalar;
+                arc.fragRatioS = (noise(arc.idx * .1f + f * 2 + 2.46f) - .5f) * 1.2f + .5f;
+                arc.fragRatioE = (noise(arc.idx * .1f + f * 2 + 11.27f) - .5f) * 1.2f + .5f;
             }
             arc.update();
         }
@@ -164,18 +167,18 @@ public class RKPattern02 extends P3CubeMapPattern {
             }
         }
 
-        rotX = lerp(rotX, rotXT, .25);
-        rotY = lerp(rotY, rotYT, .25);
-        rotZ = lerp(rotZ, rotZT, .25);
-        dspmt = lerp(dspmt, dspmtT, .25);
+        rotX = lerp(rotX, rotXT, .25f);
+        rotY = lerp(rotY, rotYT, .25f);
+        rotZ = lerp(rotZ, rotZT, .25f);
+        dspmt = lerp(dspmt, dspmtT, .25f);
 
         if (showEdge) gWeightT = 2;
         else gWeightT = 0;
         if (abs(gWeightT - gWeight) < .005) gWeight = gWeightT;
-        else gWeight = lerp(gWeight, gWeightT, .1);
+        else gWeight = lerp(gWeight, gWeightT, .1f);
 
         fT += fTIncre * .1;
-        f = lerp(f, fT, .25);
+        f = lerp(f, fT, .25f);
     }
 
     void updateCubeMap(
@@ -206,8 +209,8 @@ public class RKPattern02 extends P3CubeMapPattern {
         updateCubeMap(pgL, 0, 0, 0, 1, 0, 0, 0, 1, 0);
         updateCubeMap(pgR, 0, 0, 0, -1, 0, 0, 0, 1, 0);
         updateCubeMap(pgB, 0, 0, 0, 0, 0, -1, 0, 1, 0);
-        updateCubeMap(pgD, 0, 0, -.001, 0, -1, 0, 0, 1, 0);
-        updateCubeMap(pgU, 0, 0, -.001, 0, 1, 0, 0, 1, 0);
+        updateCubeMap(pgD, 0, 0, -.001f, 0, -1, 0, 0, 1, 0);
+        updateCubeMap(pgU, 0, 0, -.001f, 0, 1, 0, 0, 1, 0);
     }
 
     void drawScene(PGraphics pg) {
@@ -224,9 +227,9 @@ public class RKPattern02 extends P3CubeMapPattern {
             float phi = 0;
             float theta = i * PI / 15;
             pg.vertex(
-                sin(theta) * cos(phi) * l1 * .5,
-                cos(theta) * l2 * .5,
-                sin(theta) * sin(phi) * l3 * .5
+                sin(theta) * cos(phi) * l1 * .5f,
+                cos(theta) * l2 * .5f,
+                sin(theta) * sin(phi) * l3 * .5f
             );
         }
         pg.endShape();
@@ -252,7 +255,7 @@ public class RKPattern02 extends P3CubeMapPattern {
         float splitRatio, splitRatioT, splitRatioStp;
         float sTheta, eTheta, sPhi, ePhi, sThetaFrg, eThetaFrg, sPhiFrg, ePhiFrg;
         float l1 = 600, l2 = 600, l3 = 600;
-        float fragRatioS = 0, fragRatioST = .4, fragRatioE = 1, fragRatioET = .6, fragRatioSStp, fragRatioEStp;
+        float fragRatioS = 0, fragRatioST = .4f, fragRatioE = 1, fragRatioET = .6f, fragRatioSStp, fragRatioEStp;
 
         Arc(int lv, int idx, int segAmt, float sTheta, float eTheta, float sPhi, float ePhi) {
 
@@ -264,8 +267,8 @@ public class RKPattern02 extends P3CubeMapPattern {
             this.sPhi = sPhi;
             this.ePhi = ePhi;
 
-            splitRatioStp = random(.03125, .25);
-            fragRatioSStp = random(.0625, .25);
+            splitRatioStp = random(.03125f, .25f);
+            fragRatioSStp = random(.0625f, .25f);
             fragRatioEStp = fragRatioSStp;
 
             fragVts = new PVector[segAmt / 2][segAmt / 2];
@@ -314,9 +317,9 @@ public class RKPattern02 extends P3CubeMapPattern {
                         float theta = lerp(sTheta, eTheta, splitRatio);
 
                         vts[i].set(
-                            sin(theta) * cos(phi) * l1 * .5,
-                            cos(theta) * l2 * .5,
-                            sin(theta) * sin(phi) * l3 * .5
+                            sin(theta) * cos(phi) * l1 * .5f,
+                            cos(theta) * l2 * .5f,
+                            sin(theta) * sin(phi) * l3 * .5f
                         );
                     }
                     cArc1.sTheta = sTheta;
@@ -333,9 +336,9 @@ public class RKPattern02 extends P3CubeMapPattern {
                         float theta = sTheta + i * (eTheta - sTheta) / (vts.length - 1);
 
                         vts[i].set(
-                            sin(theta) * cos(phi) * l1 * .5,
-                            cos(theta) * l2 * .5,
-                            sin(theta) * sin(phi) * l3 * .5
+                            sin(theta) * cos(phi) * l1 * .5f,
+                            cos(theta) * l2 * .5f,
+                            sin(theta) * sin(phi) * l3 * .5f
                         );
                     }
                     cArc1.sTheta = sTheta;
@@ -354,9 +357,9 @@ public class RKPattern02 extends P3CubeMapPattern {
                         float phi = sPhiFrg + j * (ePhiFrg - sPhiFrg) / (segAmt / 2 - 1);
 
                         fragVts[i][j].set(
-                            sin(theta) * cos(phi) * l1 * .5,
-                            cos(theta) * l2 * .5,
-                            sin(theta) * sin(phi) * l3 * .5
+                            sin(theta) * cos(phi) * l1 * .5f,
+                            cos(theta) * l2 * .5f,
+                            sin(theta) * sin(phi) * l3 * .5f
                         );
                     }
                 }
@@ -369,14 +372,14 @@ public class RKPattern02 extends P3CubeMapPattern {
             fragRatioST = 1;
             fragRatioE = 0;
             fragRatioET = 1;
-            fragRatioEStp = fragRatioSStp * .5;
+            fragRatioEStp = fragRatioSStp * .5f;
         }
 
         void reset() {
-            splitRatioT = .5;
-            fragRatioS = .5;
+            splitRatioT = .5f;
+            fragRatioS = .5f;
             fragRatioST = 0;
-            fragRatioE = .5;
+            fragRatioE = .5f;
             fragRatioET = 1;
             fragRatioEStp = fragRatioSStp;
         }
@@ -385,7 +388,7 @@ public class RKPattern02 extends P3CubeMapPattern {
 
             hasChildren = true;
             splitRatio = random(1);
-            splitRatioT = .5;
+            splitRatioT = .5f;
 
             vts = new PVector[segAmt];
 
@@ -400,9 +403,9 @@ public class RKPattern02 extends P3CubeMapPattern {
                     float theta = lerp(sTheta, eTheta, splitRatio);
 
                     vts[i] = new PVector(
-                        sin(theta) * cos(phi) * l1 * .5,
-                        cos(theta) * l2 * .5,
-                        sin(theta) * sin(phi) * l3 * .5
+                        sin(theta) * cos(phi) * l1 * .5f,
+                        cos(theta) * l2 * .5f,
+                        sin(theta) * sin(phi) * l3 * .5f
                     );
                 }
             } else {
@@ -416,9 +419,9 @@ public class RKPattern02 extends P3CubeMapPattern {
                     float theta = sTheta + i * (eTheta - sTheta) / (vts.length - 1);
 
                     vts[i] = new PVector(
-                        sin(theta) * cos(phi) * l1 * .5,
-                        cos(theta) * l2 * .5,
-                        sin(theta) * sin(phi) * l3 * .5
+                        sin(theta) * cos(phi) * l1 * .5f,
+                        cos(theta) * l2 * .5f,
+                        sin(theta) * sin(phi) * l3 * .5f
                     );
                 }
             }

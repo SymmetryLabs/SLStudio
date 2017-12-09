@@ -1,5 +1,6 @@
 package com.symmetrylabs.pattern.raven;
 
+import com.symmetrylabs.SLStudio;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -9,6 +10,8 @@ import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
+import static com.symmetrylabs.util.Utils.noise;
+import static com.symmetrylabs.util.Utils.random;
 import static processing.core.PApplet.HALF_PI;
 import static processing.core.PApplet.TWO_PI;
 import static processing.core.PApplet.*;
@@ -44,7 +47,7 @@ public class RKPattern04 extends P3CubeMapPattern {
     float rF, rdnsF, gF;
     PVector lgt1, lgt2, lgt3;
     float hue1, hue1T, hue2, hue2T, hue3, hue3T;
-    color c1, c2, c3;
+    int c1, c2, c3;
     PVector rotDir;
 
     boolean audioLinked;
@@ -85,7 +88,7 @@ public class RKPattern04 extends P3CubeMapPattern {
         addModulator(eq).start();
     }
 
-    void run(double deltaMs, PGraphics pg) {
+    public void run(double deltaMs, PGraphics pg) {
 
         updateParameters();
 
@@ -123,8 +126,8 @@ public class RKPattern04 extends P3CubeMapPattern {
 
             rotXT += rotDir.x * (eq.getBandf(0) - pEQBands[0]) * 2;
             rotYT += rotDir.z * (eq.getBandf(7) - pEQBands[7]) * 2;
-            rotZT += rotDir.y * eq.getBandf(14) * .1;
-            gFIncreT = map(sq(totalBandMag), 0, 256, 0, .25);
+            rotZT += rotDir.y * eq.getBandf(14) * .1f;
+            gFIncreT = map(sq(totalBandMag), 0, 256, 0, .25f);
 
             for (int i = 0; i < pEQBands.length; i++) {
                 pEQBands[i] = eq.getBandf(i);
@@ -135,18 +138,18 @@ public class RKPattern04 extends P3CubeMapPattern {
         hue2 = h2.getValuef();
         hue3 = h3.getValuef();
         clearBg = clrBg.getValueb();
-        rotX = lerp(rotX, rotXT, .25);
-        rotY = lerp(rotY, rotYT, .25);
-        rotZ = lerp(rotZ, rotZT, .25);
-        gFIncre = lerp(gFIncre, gFIncreT, .25);
-        hue1 = lerp(hue1, hue1T, .1);
-        hue2 = lerp(hue2, hue2T, .1);
-        hue3 = lerp(hue3, hue3T, .1);
+        rotX = lerp(rotX, rotXT, .25f);
+        rotY = lerp(rotY, rotYT, .25f);
+        rotZ = lerp(rotZ, rotZT, .25f);
+        gFIncre = lerp(gFIncre, gFIncreT, .25f);
+        hue1 = lerp(hue1, hue1T, .1f);
+        hue2 = lerp(hue2, hue2T, .1f);
+        hue3 = lerp(hue3, hue3T, .1f);
 
-        colorMode(HSB);
-        c1 = color(hue1, 255, 255);
-        c2 = color(hue2, 255, 255);
-        c3 = color(hue3, 255, 255);
+        SLStudio.applet.colorMode(HSB);
+        c1 = SLStudio.applet.color(hue1, 255, 255);
+        c2 = SLStudio.applet.color(hue2, 255, 255);
+        c3 = SLStudio.applet.color(hue3, 255, 255);
     }
 
     void updateCubeMaps() {
@@ -154,8 +157,8 @@ public class RKPattern04 extends P3CubeMapPattern {
         updateCubeMap(pgL, 0, 0, 0, 1, 0, 0, 0, 1, 0);
         updateCubeMap(pgR, 0, 0, 0, -1, 0, 0, 0, 1, 0);
         updateCubeMap(pgB, 0, 0, 0, 0, 0, -1, 0, 1, 0);
-        updateCubeMap(pgD, 0, 0, -.001, 0, -1, 0, 0, 1, 0);
-        updateCubeMap(pgU, 0, 0, -.001, 0, 1, 0, 0, 1, 0);
+        updateCubeMap(pgD, 0, 0, -.001f, 0, -1, 0, 0, 1, 0);
+        updateCubeMap(pgU, 0, 0, -.001f, 0, 1, 0, 0, 1, 0);
     }
 
     void updateCubeMap(
@@ -241,22 +244,22 @@ public class RKPattern04 extends P3CubeMapPattern {
         void update(Vtx[] outers, float f) {
             this.outers = outers;
             for (int i = 0; i < mids.length; i++) {
-                float itp = (noise(f) - .5) / (float(lv) + 1)+.5;
+                float itp = (noise(f) - .5f) / ((float)(lv) + 1)+.5f;
                 mids[i].interpolate(outers[i], outers[(i + 1) % outers.length], itp);
                 f += gFIncre;
             }
             for (int i = 0; i < struts.length; i++) {
-                float itp = (noise(f) - .5) / (float(lv) + 1)+.8;
+                float itp = (noise(f) - .5f) / ((float)(lv) + 1)+.8f;
                 struts[i].protrude(mids[i], outers[(i + 2) % outers.length], outers[(i + 1) % outers.length], itp, lv);
                 f += gFIncre;
             }
             for (int i = 0; i < strutMids.length; i++) {
-                float itp = (noise(f) - .5) / (float(lv) + 1)+.5;
+                float itp = (noise(f) - .5f) / ((float)(lv) + 1)+.5f;
                 strutMids[i].interpolate(struts[i], struts[(i + 1) % struts.length], itp);
                 f += gFIncre;
             }
             for (int i = 0; i < sStruts.length; i++) {
-                float itp = (noise(f) - .5) / (float(lv) + 1)+.5;
+                float itp = (noise(f) - .5f) / ((float)(lv) + 1)+.5f;
                 sStruts[i].protrude(strutMids[i], outers[(i + 1) % outers.length], struts[i], itp, lv);
                 f += gFIncre;
             }
@@ -322,13 +325,13 @@ public class RKPattern04 extends P3CubeMapPattern {
         void drawTri(Vtx v1, Vtx v2, Vtx v3, PGraphics pg) {
 
             nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
-            r1 = map(abs(HALF_PI - PVector.angleBetween(nrml, lgt1)), 0, HALF_PI, 0, 1.5);
-            r2 = map(abs(HALF_PI - PVector.angleBetween(nrml, lgt2)), 0, HALF_PI, 0, 1.5);
-            r3 = map(abs(HALF_PI - PVector.angleBetween(nrml, lgt3)), 0, HALF_PI, 0, 1.5);
+            r1 = map(abs(HALF_PI - PVector.angleBetween(nrml, lgt1)), 0, HALF_PI, 0, 1.5f);
+            r2 = map(abs(HALF_PI - PVector.angleBetween(nrml, lgt2)), 0, HALF_PI, 0, 1.5f);
+            r3 = map(abs(HALF_PI - PVector.angleBetween(nrml, lgt3)), 0, HALF_PI, 0, 1.5f);
             pg.fill(
-                constrain(r1 * red(c1) + r2 * red(c2) + r3 * red(c3), 0, 255),
-                constrain(r1 * green(c1) + r2 * green(c2) + r3 * green(c3), 0, 255),
-                constrain(r1 * blue(c1) + r2 * blue(c2) + r3 * blue(c3), 0, 255)
+                constrain(r1 * SLStudio.applet.red(c1) + r2 * SLStudio.applet.red(c2) + r3 * SLStudio.applet.red(c3), 0, 255),
+                constrain(r1 * SLStudio.applet.green(c1) + r2 * SLStudio.applet.green(c2) + r3 * SLStudio.applet.green(c3), 0, 255),
+                constrain(r1 * SLStudio.applet.blue(c1) + r2 * SLStudio.applet.blue(c2) + r3 * SLStudio.applet.blue(c3), 0, 255)
             );
 
             pg.vertex(v1.pos.x, v1.pos.y, v1.pos.z);
@@ -350,8 +353,8 @@ public class RKPattern04 extends P3CubeMapPattern {
 
     void updateRootVts() {
         for (int i = 0; i < rootVts.length; i++) {
-            float r = 1200 + (noise(rF + i * .1) - 0.5) * 1200;
-            float rdns = i * (TWO_PI / rootVts.length) + (noise(rdnsF + i * .1) - .5) * PI / 3;
+            float r = 1200 + (noise(rF + i * .1f) - 0.5f) * 1200;
+            float rdns = i * (TWO_PI / rootVts.length) + (noise(rdnsF + i * .1f) - .5f) * PI / 3;
             float x = r * cos(rdns);
             float y = 300;
             float z = r * sin(rdns);
@@ -388,16 +391,16 @@ public class RKPattern04 extends P3CubeMapPattern {
                 lerp(midOp.pos.z, mid.pos.z, itp)
             );
             PVector m = new PVector(
-                lerp(midOp.pos.x, mid.pos.x, .5),
-                lerp(midOp.pos.y, mid.pos.y, .5),
-                lerp(midOp.pos.z, mid.pos.z, .5)
+                lerp(midOp.pos.x, mid.pos.x, .5f),
+                lerp(midOp.pos.y, mid.pos.y, .5f),
+                lerp(midOp.pos.z, mid.pos.z, .5f)
             );
 
             float d1 = dist(midOp.pos.x, midOp.pos.y, midOp.pos.z, mid.pos.x, mid.pos.y, mid.pos.z);
             float d2 = dist(strut0.x, strut0.y, strut0.z, mid.pos.x, mid.pos.y, mid.pos.z) -
                 dist(m.x, m.y, m.z, mid.pos.x, mid.pos.y, mid.pos.z);
 
-            float mag = sqrt(sq(d1 * .5) - sq(d2)) / (float(lv) / 3 + 1);
+            float mag = sqrt(sq(d1 * .5f) - sq(d2)) / ((float)(lv) / 3 + 1);
 
             PVector ofst = PVector.sub(outer.pos, mid.pos).cross(PVector.sub(midOp.pos, mid.pos));
             ofst.normalize();

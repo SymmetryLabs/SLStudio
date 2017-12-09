@@ -9,6 +9,8 @@ import heronarts.lx.parameter.LXParameter;
 
 import java.util.function.Consumer;
 
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -43,10 +45,10 @@ public class SpaceTime extends SLPattern {
         }
     }
 
-    void run(double deltaMs) {
+    public void run(double deltaMs) {
         angle += deltaMs * 0.0007;
-        final float sVal1 = model.strips.size() * (0.5 + 0.5 * sin(angle));
-        final float sVal2 = model.strips.size() * (0.5 + 0.5 * cos(angle));
+        final float sVal1 = model.strips.size() * (0.5f + 0.5f * sin(angle));
+        final float sVal2 = model.strips.size() * (0.5f + 0.5f * cos(angle));
 
         final float pVal = pos.getValuef();
         final float fVal = falloff.getValuef();
@@ -58,8 +60,8 @@ public class SpaceTime extends SLPattern {
                 int i = 0;
                 for (LXPoint p : strip.points) {
                     colors[p.index] = lx.hsb(
-                        palette.getHuef() + 360 - p.x * .2 + p.y * .3,
-                        constrain(.4 * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
+                        palette.getHuef() + 360 - p.x * .2f + p.y * .3f,
+                        constrain(.4f * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
                         max(0, 100 - fVal * abs(i - pVal * (strip.metrics.numPoints - 1)))
                     );
                     ++i;

@@ -121,8 +121,8 @@ public class FlockWave extends SLPatternWithMarkers {
     }
 
     public void run(double deltaMs) {
-        advanceSimulation((float) deltaMs * 0.001 * timeScale.getValuef());
-        blobFollower.advance((float) deltaMs * 0.001);
+        advanceSimulation((float) deltaMs * 0.001f * timeScale.getValuef());
+        blobFollower.advance((float) deltaMs * 0.001f);
         render();
         lastRun = new Date().getTime();
     }
@@ -156,7 +156,7 @@ public class FlockWave extends SLPatternWithMarkers {
         removeExpiredBirds();
     }
 
-    Collection<Marker> getMarkers() {
+    public Collection<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<Marker>();
         if (lastRun + 1000 < new Date().getTime()) return markers; // hack to hide markers if inactive
         if (oscFollowers.isOn()) {
@@ -300,7 +300,7 @@ public class FlockWave extends SLPatternWithMarkers {
         radius = 10000;
         for (LXPoint p : model.points) {
             Bird closestBird = null;
-            float minSqDist = 1e6;
+            float minSqDist = 1e6f;
             for (Bird b : birds) {
                 if (Math.abs(b.pos.x - p.x) < radius) {
                     float sqDist = (b.pos.x - p.x) * (b.pos.x - p.x) + (b.pos.y - p.y) * (b.pos.y - p.y);

@@ -1,9 +1,15 @@
 package com.symmetrylabs.network;
 
+import java.io.IOException;
+import java.net.DatagramSocket;
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-static class ControllerCommand {
+public class ControllerCommand {
 
     public final InetAddress addr;
     public final byte[] command;

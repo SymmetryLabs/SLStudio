@@ -1,9 +1,17 @@
 package com.symmetrylabs.network;
 
+import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
+import java.util.ArrayList;
+import java.util.Enumeration;
+import java.util.List;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-static class NetworkInfo {
+public class NetworkInfo {
     static List<InetAddress> getBroadcastAddresses() {
         List<InetAddress> addresses = new ArrayList<InetAddress>();
         Enumeration<NetworkInterface> nets = null;

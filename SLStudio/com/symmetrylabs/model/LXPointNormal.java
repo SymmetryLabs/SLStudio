@@ -6,7 +6,7 @@ import processing.core.PVector;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
-public static class LXPointNormal extends LXPoint {
+public class LXPointNormal extends LXPoint {
     /**
      * The normal vector is always a unit vector.
      */

@@ -10,6 +10,9 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import static com.symmetrylabs.util.Utils.random;
+import static processing.core.PApplet.*;
+
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */
@@ -39,7 +42,7 @@ public class SunFlash extends SLPattern {
             if (!hasPeaked) {
                 value = value + (float) (ms / 1000.0f * ((attackParameter.getValuef() + 0.01) * 5));
                 if (value >= 1.0) {
-                    value = 1.0;
+                    value = 1.0f;
                     hasPeaked = true;
                 }
                 return false;
@@ -65,7 +68,7 @@ public class SunFlash extends SLPattern {
 
     public void run(double deltaMs) {
         leftoverMs += deltaMs;
-        float msPerFlash = 1000 / ((rateParameter.getValuef() + .01) * 100);
+        float msPerFlash = 1000 / ((rateParameter.getValuef() + .01f) * 100);
         while (leftoverMs > msPerFlash) {
             leftoverMs -= msPerFlash;
             flashes.add(new Flash());
@@ -78,7 +81,7 @@ public class SunFlash extends SLPattern {
         flashes.parallelStream().forEach(new Consumer<Flash>() {
             @Override
             public void accept(final Flash flash) {
-                color c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+                int c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
                 for (LXPoint p : flash.c.points) {
                     colors[p.index] = c;
                 }

@@ -1,6 +1,14 @@
 package com.symmetrylabs.mappings;
 
 import com.symmetrylabs.model.Slice;
+import com.symmetrylabs.pixlites.Pixlite;
+import com.symmetrylabs.pixlites.PixliteOutput;
+import com.symmetrylabs.pixlites.PointsGrouping;
+import heronarts.lx.LX;
+
+import java.net.SocketException;
+
+import static processing.core.PApplet.println;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
