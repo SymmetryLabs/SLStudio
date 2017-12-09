@@ -8,4 +8,5 @@ application.windows64
 application.macosx
 /bin
 /distribution
-
+.idea
+*.iml
