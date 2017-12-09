@@ -6,7 +6,7 @@ apply plugin: 'java'
 
 task run(type: JavaExec) {
 	classpath sourceSets.main.runtimeClasspath
-	main = "com.symmetrylabs.SLStudio"
+	main = "com.symmetrylabs.slstudio.SLStudio"
 }
 
 repositories {

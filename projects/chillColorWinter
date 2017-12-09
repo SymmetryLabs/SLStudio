@@ -675,7 +675,7 @@
           },
           {
             "id": 6250,
-            "class": "com.symmetrylabs.pattern.Wasps",
+            "class": "com.symmetrylabs.slstudio.pattern.Wasps",
             "modulationColor": -16723457,
             "parameters": {
               "label": "Wasps",
