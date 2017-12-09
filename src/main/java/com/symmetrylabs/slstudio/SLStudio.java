@@ -67,6 +67,7 @@ public class SLStudio extends PApplet {
 
         model = FultonStreetLayout.buildModel();
 
+        println("Hello World");
         println("-- Model ----");
         println("# of suns: " + model.suns.size());
         println("# of slices: " + model.slices.size());
@@ -481,7 +482,7 @@ public class SLStudio extends PApplet {
     public final static int CHAN_Y = 20;
     public final static int PAD = 5;
 
-    static final float INCHES = 1;
+    public static final float INCHES = 1;
     public final static float FEET = 12*INCHES;
 
     /*

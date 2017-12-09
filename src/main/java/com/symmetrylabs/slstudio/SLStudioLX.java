@@ -437,6 +437,7 @@ public class SLStudioLX extends P3LX {
         basePackageName + ".pattern.raven",
         basePackageName + ".pattern.texture",
         basePackageName + ".pattern.test",
+        basePackageName + ".pattern.explosions",
         basePackageName + ".performance",
         basePackageName + ".ping",
         basePackageName + ".pixlites",
