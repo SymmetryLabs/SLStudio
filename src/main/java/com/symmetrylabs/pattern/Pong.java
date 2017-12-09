@@ -44,11 +44,13 @@ public class Pong extends DPat {
         removeParameter(pSpin);
     }
 
-    void StartRun(double deltaMs) {
+    @Override
+    protected void StartRun(double deltaMs) {
         cRad = mMax.x * val(pSize) / 6;
     }
 
-    int CalcPoint(PVector p) {
+    @Override
+    public int CalcPoint(PVector p) {
         v.set(x.getValuef(), y.getValuef(), z.getValuef());
         v.z = 0;
         p.z = 0;// ignore z dimension

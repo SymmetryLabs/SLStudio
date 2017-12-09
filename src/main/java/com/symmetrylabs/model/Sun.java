@@ -1,17 +1,29 @@
 package com.symmetrylabs.model;
 
+import com.symmetrylabs.util.NullOutputStream;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
+import org.jetbrains.annotations.NotNull;
 import processing.core.PVector;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.security.DigestOutputStream;
+import java.security.MessageDigest;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static com.symmetrylabs.util.Utils.sketchFile;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 
@@ -70,14 +82,79 @@ public class Sun extends LXModel {
     }
 
     class ComputeMasterIndexThread extends Thread {
+        private final String pointsHash;
         ComputeMasterIndexThread() {
+            this.pointsHash = computePointsHash();
+        }
+
+        private String computePointsHash() {
+            try {
+                MessageDigest md = MessageDigest.getInstance("SHA-1");
+                ObjectOutputStream stream = new ObjectOutputStream(new DigestOutputStream(new NullOutputStream(), md));
+                for (final LXPoint point : masterSun.points) {
+                    stream.writeFloat(point.x);
+                    stream.writeFloat(point.y);
+                    stream.writeFloat(point.z);
+                }
+                for (final LXPoint point : points) {
+                    stream.writeFloat(point.x);
+                    stream.writeFloat(point.y);
+                    stream.writeFloat(point.z);
+                }
+                return Base64.getEncoder().encodeToString(md.digest());
+            } catch (Exception e) {
+                throw new RuntimeException(e);
+            }
         }
 
         public void run() {
             try {
-                Thread.sleep((int) (Math.random() * 5000));
-            } catch (InterruptedException e) {
+                loadFromCache();
+                println("Loaded master points from cache for " + id);
+            } catch (Exception e) {
+                doCompute();
+                
+                try {
+                    saveToCache();
+                    println("Saved master points from cache for " + id);
+                } catch (Exception x) {
+                    println("Failed to save master points from cache for " + id);
+                    x.printStackTrace();
+                }
             }
+        }
+
+        private void saveToCache() throws IOException {
+            cacheFile().getParentFile().mkdirs();
+            ObjectOutputStream output = new ObjectOutputStream(new FileOutputStream(cacheFile()));
+            output.writeObject(pointsHash);
+
+            for (int i = 0; i < points.length; i++) {
+                output.writeInt(masterIndexes[i]);
+            }
+
+            output.close();
+        }
+
+        private void loadFromCache() throws IOException, ClassNotFoundException {
+            ObjectInputStream input = new ObjectInputStream(new FileInputStream(cacheFile()));
+            if (! input.readObject().equals(pointsHash)) {
+                throw new IOException("Hash values don't match");
+            }
+
+            for (int i = 0; i < points.length; i++) {
+                masterIndexes[i] = input.readInt();
+            }
+
+            input.close();
+        }
+
+        @NotNull
+        private File cacheFile() {
+            return sketchFile("cache/master-indexes/" + id);
+        }
+
+        private void doCompute() {
             float cx = center.x;
             float cy = center.y;
             float cz = center.z;

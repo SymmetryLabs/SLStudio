@@ -25,7 +25,7 @@ import static processing.core.PVector.angleBetween;
 /**
  * @author Yona Appletree (yona@concentricsky.com)
  */ //----------------------------------------------------------------------------------------------------------------------------------
-public class DPat extends LXPattern {
+public abstract class DPat extends LXPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     public ArrayList<DBool> bools = new ArrayList<DBool>();
     public PVector pTrans = new PVector();
@@ -79,16 +79,12 @@ public class DPat extends LXPattern {
         a.set(interp(i, a.x, b.x), interp(i, a.y, b.y), interp(i, a.z, b.z));
     }
 
-    void StartRun(double deltaMs) {
-    }
-
     public float val(CompoundParameter p) {
         return p.getValuef();
     }
 
-    int CalcPoint(PVector p) {
-        return lx.hsb(0, 0, 0);
-    }
+    protected abstract void StartRun(double deltaMs);
+    protected abstract int CalcPoint(PVector p);
 
     int blend3(int c1, int c2, int c3) {
         return PImage.blendColor(c1, PImage.blendColor(c2, c3, ADD), ADD);

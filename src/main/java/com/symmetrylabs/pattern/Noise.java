@@ -49,7 +49,8 @@ public class Noise extends DPat {
         ttime = 0;
     }
 
-    void StartRun(double deltaMs) {
+    @Override
+    protected void StartRun(double deltaMs) {
         zTime += deltaMs * (1 * val(pSpeed) - .50f) * .002f;
         zTheta += deltaMs * (spin() - .5f) * .01f;
         rtime += deltaMs;
@@ -113,7 +114,8 @@ public class Noise extends DPat {
             }
     }
 
-    int CalcPoint(PVector p) {
+    @Override
+    public int CalcPoint(PVector p) {
         int c = 0;
         rotateZ(p, mCtr, zSin, zCos);
         //rotateY(p, mCtr, ySin, yCos);

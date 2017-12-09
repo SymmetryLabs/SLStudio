@@ -62,7 +62,8 @@ public class AskewPlanes extends DPat {
         removeParameter(pSpin);
     }
 
-    void StartRun(double deltaMs) {
+    @Override
+    protected void StartRun(double deltaMs) {
         huev = palette.getHuef();
 
         // This is super fucking bizarre. But if this is a for loop, the framerate
@@ -77,7 +78,8 @@ public class AskewPlanes extends DPat {
         planes[2].run(deltaMs);
     }
 
-    int CalcPoint(PVector p) {
+    @Override
+    public int CalcPoint(PVector p) {
         //for (LXPoint p : model.points) {
         float d = MAX_FLOAT;
 
