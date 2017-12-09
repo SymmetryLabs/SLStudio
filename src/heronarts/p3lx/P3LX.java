@@ -26,10 +26,6 @@
 
 package heronarts.p3lx;
 
-import heronarts.p3lx.ui.UI;
-
-import java.lang.reflect.Modifier;
-
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
@@ -37,9 +33,12 @@ import heronarts.lx.ModelBuffer;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.StripModel;
+import heronarts.p3lx.ui.UI;
 import processing.core.PApplet;
 import processing.core.PConstants;
 import processing.core.PGraphics;
+
+import java.lang.reflect.Modifier;
 
 /**
  * Harness to run LX inside a Processing 2 sketch
