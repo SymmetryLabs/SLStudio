@@ -46,7 +46,7 @@ public class ObjConfigReader {
     public float extractFloat(String line) {
 
         String str = line.replaceAll("[^-+.0123456789]", "");
-        if (str.startsWith(".")) {
+        if (str.startsWith("")) {
             str = str.substring(1);
         }
 
