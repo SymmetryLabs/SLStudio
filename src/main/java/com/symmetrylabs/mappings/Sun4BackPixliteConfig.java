@@ -8,23 +8,21 @@ import heronarts.lx.LX;
 
 import java.net.SocketException;
 
-/**
- * @author Yona Appletree (yona@concentricsky.com)
- */
+
 public class Sun4BackPixliteConfig {
     public Sun4BackPixliteConfig(LX lx, Slice slice, String ipAddress, Pixlite pixlite) throws SocketException {
 
         pixlite.addChild(new PixliteOutput(lx, ipAddress,
             new PointsGrouping("1")
-                .addPoints(slice.getStripById("1").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("1").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("2").points)
-                .addPoints(slice.getStripById("3").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("3").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("4").points)
-                .addPoints(slice.getStripById("5").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("5").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("6").points)
-                .addPoints(slice.getStripById("7").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("7").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("8").points)
-                .addPoints(slice.getStripById("9").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("9").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("10").points)
                 .addPoints(slice.getStripById("11").points, PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("12").points)

@@ -16,15 +16,15 @@ public class Sun4FrontPixliteConfig {
 
         pixlite.addChild(new PixliteOutput(lx, ipAddress,
             new PointsGrouping("1")
-                .addPoints(slice.getStripById("1").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("1").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("2").points)
-                .addPoints(slice.getStripById("3").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("3").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("4").points)
-                .addPoints(slice.getStripById("5").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("5").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("6").points)
-                .addPoints(slice.getStripById("7").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("7").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("8").points)
-                .addPoints(slice.getStripById("9").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("9").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("10").points)
                 .addPoints(slice.getStripById("11").points, PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("12").points)
@@ -116,10 +116,10 @@ public class Sun4FrontPixliteConfig {
 
         pixlite.addChild(new PixliteOutput(lx, ipAddress,
             new PointsGrouping("12")
-            // electrical trouble
-            // .addPoints(slice.getStripById("58").points, com.symmetrylabs.pixlites.PointsGrouping.REVERSE_ORDERING)
-            // .addPoints(slice.getStripById("59").points)
-            // .addPoints(slice.getStripById("60").points, com.symmetrylabs.pixlites.PointsGrouping.REVERSE_ORDERING)
+                // electrical trouble
+                .addPoints(slice.getStripById("58").points, PointsGrouping.REVERSE_ORDERING)
+                .addPoints(slice.getStripById("59").points)
+                .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
         ));
 
         pixlite.addChild(new PixliteOutput(lx, ipAddress,
