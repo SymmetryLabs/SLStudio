@@ -44,5 +44,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.jogamp.jogl/jogl-all-main
 	compile group: 'org.jogamp.jogl', name: 'jogl-all-main', version: '2.3.2'
 
+	// https://mvnrepository.com/artifact/io.github.lukehutch/fast-classpath-scanner
+	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
+
+	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
 	compile fileTree(dir: 'libs', include: '*.jar')
 }

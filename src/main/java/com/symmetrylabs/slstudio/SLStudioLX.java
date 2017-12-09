@@ -30,21 +30,21 @@ import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
+import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
+import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 
 import java.io.File;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import static java.util.Arrays.asList;
 
 
 public class SLStudioLX extends P3LX {
 
     public static final String COPYRIGHT = "Symmetry Labs";
     public PaletteLibrary paletteLibrary;
+    private ScanResult classpathScanner = new FastClasspathScanner(basePackageName).scan();
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
@@ -422,39 +422,7 @@ public class SLStudioLX extends P3LX {
     protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
     }
 
-    private final static String basePackageName = SLStudioLX.class.getPackage().getName();
-    private final static List<String> newClassPackages = asList(
-        basePackageName + ".comments",
-        basePackageName + ".effect",
-        basePackageName + ".mappings",
-        basePackageName + ".model",
-        basePackageName + ".network",
-        basePackageName + ".objimporter",
-        basePackageName + ".output",
-        basePackageName + ".p3lx",
-        basePackageName + ".palettes",
-        basePackageName + ".pattern",
-        basePackageName + ".pattern.raven",
-        basePackageName + ".pattern.texture",
-        basePackageName + ".pattern.test",
-        basePackageName + ".performance",
-        basePackageName + ".ping",
-        basePackageName + ".pixlites",
-        basePackageName + ".raph",
-        basePackageName + ".render",
-        basePackageName + ".ui",
-        basePackageName + ".util"
-    );
-
-    protected List<String> possibleNewClassNameFor(final String oldClassName) {
-        if (classExists(oldClassName)) return Collections.singletonList(oldClassName);
-
-        final String innerClassName = oldClassName.replace("SLStudio$", "");
-
-        return newClassPackages.stream()
-            .map(name -> name + "." + innerClassName)
-            .collect(Collectors.toList());
-    }
+    private final static String basePackageName = SLStudio.class.getPackage().getName();
 
     private boolean classExists(final String name) {
         try {
@@ -466,20 +434,51 @@ public class SLStudioLX extends P3LX {
 
     @Override
     protected LXEffect instantiateEffect(final String className) {
-        return possibleNewClassNameFor(className).stream()
-            .filter(this::classExists)
-            .map(it -> super.instantiateEffect(it))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Unable to find effect: " + className));
+        if (classExists(className)) return super.instantiateEffect(className);
+
+        final String simpleName = className.replaceAll(".*[\\.\\$]", "");
+
+        final List<String> names = classpathScanner.getNamesOfAllClasses()
+            .stream()
+            .filter(it -> it.endsWith("." + simpleName) || it.endsWith("$" + simpleName))
+            .filter(it -> classNameIsAssignableFrom(it, LXEffect.class))
+            .collect(Collectors.toList());
+
+        if (names.size() == 1) {
+            return super.instantiateEffect(names.get(0));
+        } else if (names.isEmpty()) {
+            throw new IllegalArgumentException("No LXEffect found with name " + simpleName + " (from " + className + ")");
+        } else {
+            throw new IllegalArgumentException("Multiple LXEffects found with name " + simpleName + " (from " + className + "): " + names);
+        }
     }
 
+    private boolean classNameIsAssignableFrom(String name, Class<?> superThing) {
+        try {
+            return superThing.isAssignableFrom(Class.forName(name));
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
 
     @Override
     protected LXPattern instantiatePattern(final String className) {
-        return possibleNewClassNameFor(className).stream()
-            .filter(this::classExists)
-            .map(it -> super.instantiatePattern(it))
-            .findFirst()
-            .orElseThrow(() -> new IllegalArgumentException("Unable to find effect: " + className));
+        if (classExists(className)) return super.instantiatePattern(className);
+
+        final String simpleName = className.replaceAll(".*[\\.\\$]", "");
+
+        final List<String> names = classpathScanner.getNamesOfAllClasses()
+            .stream()
+            .filter(it -> it.endsWith("." + simpleName) || it.endsWith("$" + simpleName))
+            .filter(it -> classNameIsAssignableFrom(it, LXPattern.class))
+            .collect(Collectors.toList());
+
+        if (names.size() == 1) {
+            return super.instantiatePattern(names.get(0));
+        } else if (names.isEmpty()) {
+            throw new IllegalArgumentException("No LXPattern found with name " + simpleName + " (from " + className + ")");
+        } else {
+            throw new IllegalArgumentException("Multiple LXPatterns found with name " + simpleName + " (from " + className + "): " + names);
+        }
     }
 }
