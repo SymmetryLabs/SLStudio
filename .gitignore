@@ -13,3 +13,4 @@ SLStudio/\.tags
 SLStudio/\.tags1
 build
 idea-build
+/out
