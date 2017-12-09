@@ -10,7 +10,9 @@ import com.symmetrylabs.ui.UIMarkerPainter;
 import com.symmetrylabs.ui.UIOverriddenRightPane;
 import com.symmetrylabs.util.MarkerSource;
 import heronarts.lx.LX;
+import heronarts.lx.LXEffect;
 import heronarts.lx.LXMappingEngine;
+import heronarts.lx.LXPattern;
 import heronarts.lx.LXSerializable;
 import heronarts.lx.model.LXModel;
 import heronarts.p3lx.P3LX;
@@ -33,6 +35,11 @@ import processing.core.PApplet;
 import processing.event.KeyEvent;
 
 import java.io.File;
+import java.util.Collections;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import static java.util.Arrays.asList;
 
 /**
  * @author Yona Appletree (yona@concentricsky.com)
@@ -418,4 +425,63 @@ public class LXStudio extends P3LX {
     protected void onUIReady(LXStudio lx, LXStudio.UI ui) {
     }
 
+    private final static List<String> newClassPackages = asList(
+        "com.symmetrylabs.comments",
+        "com.symmetrylabs.effect",
+        "com.symmetrylabs.mappings",
+        "com.symmetrylabs.model",
+        "com.symmetrylabs.network",
+        "com.symmetrylabs.objimporter",
+        "com.symmetrylabs.output",
+        "com.symmetrylabs.p3lx",
+        "com.symmetrylabs.palettes",
+        "com.symmetrylabs.pattern",
+        "com.symmetrylabs.pattern.raven",
+        "com.symmetrylabs.pattern.texture",
+        "com.symmetrylabs.pattern.test",
+        "com.symmetrylabs.performance",
+        "com.symmetrylabs.ping",
+        "com.symmetrylabs.pixlites",
+        "com.symmetrylabs.raph",
+        "com.symmetrylabs.render",
+        "com.symmetrylabs.ui",
+        "com.symmetrylabs.util"
+    );
+
+    protected List<String> possibleNewClassNameFor(final String oldClassName) {
+        if (classExists(oldClassName)) return Collections.singletonList(oldClassName);
+
+        final String innerClassName = oldClassName.replace("SLStudio$", "");
+
+        return newClassPackages.stream()
+            .map(name -> name + "." + innerClassName)
+            .collect(Collectors.toList());
+    }
+
+    private boolean classExists(final String name) {
+        try {
+            return Class.forName(name) != null;
+        } catch (ClassNotFoundException e) {
+            return false;
+        }
+    }
+
+    @Override
+    protected LXEffect instantiateEffect(final String className) {
+        return possibleNewClassNameFor(className).stream()
+            .filter(this::classExists)
+            .map(it -> super.instantiateEffect(it))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Unable to find effect: " + className));
+    }
+
+
+    @Override
+    protected LXPattern instantiatePattern(final String className) {
+        return possibleNewClassNameFor(className).stream()
+            .filter(this::classExists)
+            .map(it -> super.instantiatePattern(it))
+            .findFirst()
+            .orElseThrow(() -> new IllegalArgumentException("Unable to find effect: " + className));
+    }
 }
