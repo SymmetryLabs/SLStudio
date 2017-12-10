@@ -20,6 +20,9 @@
 
 package heronarts.lx;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import heronarts.lx.audio.LXAudioEngine;
 import heronarts.lx.blend.AddBlend;
 import heronarts.lx.blend.DarkestBlend;
@@ -56,10 +59,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
 
 /**
  * The engine is the core class that runs the internal animations. An engine is
@@ -1161,7 +1160,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.timer.channelNanos = System.nanoTime() - channelStart;
 
         // Check for edge case of all channels being off, don't leave stale data in blend buffer
-        if ((leftChannelCount + rightChannelCount + mainChannelCount) == 0) {
+        if (((leftOn ? leftChannelCount : 0) + (rightOn ? rightChannelCount : 0) + mainChannelCount) == 0) {
             System.arraycopy(backgroundArray, 0, blendOutputMain, 0, backgroundArray.length);
         }
 
