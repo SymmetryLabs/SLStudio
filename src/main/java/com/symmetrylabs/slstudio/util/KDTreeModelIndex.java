@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.util;
 
-import edu.wlu.cs.levy.CG.KDTree;
+import com.harium.storage.kdtree.KDTree;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
