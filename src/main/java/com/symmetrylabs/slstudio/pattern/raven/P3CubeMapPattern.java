@@ -204,8 +204,6 @@ public abstract class P3CubeMapPattern extends SLPattern {
                 @Override
                 public void accept(final Sun sun) {
                     final int sunIndex = model.suns.indexOf(sun);
-                    PVector origin = originForSun(sun);
-                    PVector bboxSize = bboxForSun(sun);
 
                     if (sunSwitchParams.get(sunIndex).getValueb()) {
                         projectToLeds(perSunProjectionCache.get(sun), sun.points);
@@ -307,7 +305,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
                     int y = (int) (faceMinY + offsetY + ky - kernelSize / 2);
 
                     final int index = x + y * pg.width;
-                    if (x >= 0 && x < pg.width && y >= 0 && y < pg.height && index < colors.length) {
+                    if (x >= 0 && x < pg.width && y >= 0 && y < pg.height && index < pg.pixels.length) {
                         output[outputIndex++] = index;
                     }
                 }

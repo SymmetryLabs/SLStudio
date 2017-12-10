@@ -1,18 +1,14 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
-import java.util.Arrays;
-import java.util.function.Consumer;
-
 import static com.symmetrylabs.slstudio.util.Utils.random;
 
 
-public class TelevisionStatic extends LXPattern {
+public class TelevisionStatic extends SLPattern {
     CompoundParameter brightParameter = new CompoundParameter("BRIGHT", 1.0);
     CompoundParameter saturationParameter = new CompoundParameter("SAT", 1.0);
     CompoundParameter hueParameter = new CompoundParameter("HUE", 1.0);
@@ -28,9 +24,11 @@ public class TelevisionStatic extends LXPattern {
 
     public void run(double deltaMs) {
         final boolean d = direction.getValuef() > 5.0;
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-            @Override
-            public void accept(final LXPoint p) {
+
+        model.forEachPoint((start, end) -> {
+            for (int i=start; i<end; i++) {
+                LXPoint p = model.points[i];
+
                 colors[p.index] = lx.hsb(palette.getHuef() + random(hueParameter.getValuef() * 360),
                     random(saturationParameter.getValuef() * 100),
                     random(brightParameter.getValuef() * 100)

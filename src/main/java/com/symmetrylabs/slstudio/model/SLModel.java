@@ -5,12 +5,13 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 
+import static com.symmetrylabs.slstudio.model.SLModel.PointBatches.NUM_POINT_BATCHES;
 import static processing.core.PApplet.*;
 
 /**
@@ -33,11 +34,10 @@ public class SLModel extends LXModel {
     // Strips
     public final List<Strip> strips;
 
-    public final int NUM_POINT_BATCHES = 16;
-
     // Array of points stored as contiguous floats for performance
     private final float[] pointsArray;
-    private final List<PointBatch> pointBatches = new ArrayList<PointBatch>(NUM_POINT_BATCHES);
+
+    protected final PointBatches pointBatches;
 
     public SLModel(List<Sun> suns) {
         super(new Fixture(suns));
@@ -96,12 +96,7 @@ public class SLModel extends LXModel {
             this.pointsArray[3 * i + 2] = point.z;
         }
 
-        int batchStride = ceil(this.points.length / NUM_POINT_BATCHES);
-        for (int i = 0; i < NUM_POINT_BATCHES; i++) {
-            int start = i * batchStride;
-            int end = min(start + batchStride, this.points.length - 1);
-            this.pointBatches.add(new PointBatch(start, end));
-        }
+        this.pointBatches = new PointBatches(Arrays.asList(points), NUM_POINT_BATCHES);
     }
 
     private static class Fixture extends LXAbstractFixture {
@@ -133,18 +128,42 @@ public class SLModel extends LXModel {
     }
 
     public void forEachPoint(final BatchConsumer consumer) {
-        this.pointBatches.parallelStream().forEach(new Consumer<PointBatch>() {
-            public void accept(PointBatch batch) {
-                consumer.accept(batch.start, batch.end);
-            }
-        });
+        this.pointBatches.forEachPoint(consumer);
     }
 
-    private class PointBatch {
-        int start;
-        int end;
+    public static class PointBatches {
+        private final List<LXPoint> points;
+        private final int batchCount;
+        private final ArrayList<PointBatch> pointBatches;
 
-        PointBatch(int start, int end) {
+        public static final int NUM_POINT_BATCHES = 64;
+
+        public PointBatches(List<LXPoint> points, int batchCount) {
+            this.points = points;
+            this.batchCount = batchCount;
+
+            this.pointBatches = new ArrayList<>(batchCount);
+
+            int batchStride = ceil(points.size() / batchCount);
+            for (int i = 0; i < batchCount; i++) {
+                int start = i * batchStride;
+                int end = min(start + batchStride, points.size() - 1);
+                pointBatches.add(new PointBatch(start, end));
+            }
+        }
+
+        public void forEachPoint(
+            final BatchConsumer consumer
+        ) {
+            pointBatches.parallelStream().forEach(batch -> consumer.accept(batch.start, batch.end));
+        }
+    }
+
+    public static class PointBatch {
+        public final int start;
+        public final int end;
+
+        public PointBatch(int start, int end) {
             this.start = start;
             this.end = end;
         }

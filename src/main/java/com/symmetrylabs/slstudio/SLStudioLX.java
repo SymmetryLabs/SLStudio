@@ -419,7 +419,13 @@ public class SLStudioLX extends P3LX {
     protected void setProject(File file, ProjectListener.Change change) {
         super.setProject(file, change);
         if (file != null) {
-            this.applet.saveStrings(PROJECT_FILE_NAME, new String[]{file.getName()});
+            this.applet.saveStrings(
+                PROJECT_FILE_NAME,
+                new String[]{
+                    // Relative path of the project file WRT the default save file location for the sketch
+                    this.applet.saveFile(PROJECT_FILE_NAME).toPath().getParent().relativize(file.toPath()).toString()
+                }
+            );
         }
     }
 

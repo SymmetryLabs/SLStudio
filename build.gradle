@@ -17,6 +17,9 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.processing/core
 	compile group: 'org.processing', name: 'core', version: '3.3.6'
 
+	// https://mvnrepository.com/artifact/com.harium/kdtree
+	compile group: 'com.harium', name: 'kdtree', version: '1.0.0'
+
 	// https://mvnrepository.com/artifact/org.javassist/javassist
 	compile group: 'org.javassist', name: 'javassist', version: '3.22.0-GA'
 
@@ -45,5 +48,5 @@ dependencies {
 	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
 
 	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
-	compile fileTree(dir: 'libs', include: '*.jar')
+	compile files('libs/P3LX.jar')
 }

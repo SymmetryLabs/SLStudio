@@ -61,6 +61,8 @@ public class FixedWidthOctree<T> {
         final List<T> objectsWithin = new ArrayList<>(points.size());
 
         if (!points.isEmpty()) {
+
+
             points.parallelStream().filter(new Predicate<Entry<T>>() {
                 public boolean test(Entry<T> p) {
                     return FastMath.abs(p.x - x) < d && FastMath.abs(p.y - y) < d && FastMath.abs(p.z - z) < d;

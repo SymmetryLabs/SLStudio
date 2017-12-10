@@ -13,7 +13,6 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXListenableNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UIWindow;
 
 import java.util.List;
@@ -98,46 +97,30 @@ public class PerformanceManager extends LXComponent {
         super(lx);
 
         lFader.setPolarity(LXParameter.Polarity.BIPOLAR);
-        lFader.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                propagateLeftFader();
-            }
-        });
+        lFader.addListener(parameter -> propagateLeftFader());
 
         rFader.setPolarity(LXParameter.Polarity.BIPOLAR);
-        rFader.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                propagateRightFader();
-            }
+        rFader.addListener(parameter -> propagateRightFader());
+
+        lBlur.addListener(parameter -> {
+            if (blurs[0] != null) blurs[0].setValue(lBlur.getValuef());
+            if (blurs[1] != null) blurs[1].setValue(lBlur.getValuef());
         });
 
-        lBlur.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                if (blurs[0] != null) blurs[0].setValue(lBlur.getValuef());
-                if (blurs[1] != null) blurs[1].setValue(lBlur.getValuef());
-            }
+        rBlur.addListener(parameter -> {
+            if (blurs[2] != null) blurs[2].setValue(rBlur.getValuef());
+            if (blurs[3] != null) blurs[3].setValue(rBlur.getValuef());
         });
 
-        rBlur.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                if (blurs[2] != null) blurs[2].setValue(rBlur.getValuef());
-                if (blurs[3] != null) blurs[3].setValue(rBlur.getValuef());
-            }
+        lColor.addListener(parameter -> {
+            println("CHANGED", lColor.getValuef());
+            if (colors[0] != null) colors[0].setValue(lColor.getValuef());
+            if (colors[1] != null) colors[1].setValue(lColor.getValuef());
         });
 
-        lColor.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                println("CHANGED", lColor.getValuef());
-                if (colors[0] != null) colors[0].setValue(lColor.getValuef());
-                if (colors[1] != null) colors[1].setValue(lColor.getValuef());
-            }
-        });
-
-        rColor.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                if (colors[2] != null) colors[2].setValue(rColor.getValuef());
-                if (colors[3] != null) colors[3].setValue(rColor.getValuef());
-            }
+        rColor.addListener(parameter -> {
+            if (colors[2] != null) colors[2].setValue(rColor.getValuef());
+            if (colors[3] != null) colors[3].setValue(rColor.getValuef());
         });
 
         //  lDummy.addListener(new LXParameterListener() {

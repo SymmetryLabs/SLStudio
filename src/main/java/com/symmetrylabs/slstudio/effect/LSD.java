@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.effect;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
@@ -24,14 +25,12 @@ public class LSD extends LXEffect {
         this.enabledDampingRelease.setValue(500);
     }
 
-    final float[] hsb = new float[3];
-
     private float accum = 0;
     private int equalCount = 0;
     private float sign = 1;
 
     @Override
-    public void run(double deltaMs, double amount) {
+    public void run(final double deltaMs, final double amount) {
         float newAccum = (float) (accum + sign * deltaMs * speed.getValuef() / 4000.);
         if (newAccum == accum) {
             if (++equalCount >= 5) {
@@ -41,17 +40,24 @@ public class LSD extends LXEffect {
             }
         }
         accum = newAccum;
-        float sf = scale.getValuef() / 1000f;
-        float rf = range.getValuef();
-        for (LXPoint p : model.points) {
-            LXColor.RGBtoHSB(colors[p.index], hsb);
-            float h = rf * noise(sf * p.x, sf * p.y, sf * p.z + accum);
-            int c2 = LX.hsb(h * 360, 100, hsb[2] * 100);
-            if (amount < 1) {
-                colors[p.index] = LXColor.lerp(colors[p.index], c2, amount);
-            } else {
-                colors[p.index] = c2;
+        final float sf = scale.getValuef() / 1000f;
+        final float rf = range.getValuef();
+
+        ((SLModel) model).forEachPoint((start, end) -> {
+            final float[] hsb = new float[3];
+
+            for (int i=start; i<end; i++) {
+                LXPoint p = model.points[i];
+
+                LXColor.RGBtoHSB(colors[p.index], hsb);
+                float h = rf * noise(sf * p.x, sf * p.y, sf * p.z + accum);
+                int c2 = LX.hsb(h * 360, 100, hsb[2] * 100);
+                if (amount < 1) {
+                    colors[p.index] = LXColor.lerp(colors[p.index], c2, amount);
+                } else {
+                    colors[p.index] = c2;
+                }
             }
-        }
+        });
     }
 }
