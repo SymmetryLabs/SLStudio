@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern.test;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
@@ -21,7 +22,7 @@ public class TestStrips extends SLPattern {
 
             for (Strip strip : sun.strips) {
                 for (LXPoint p : strip.points) {
-                    colors[p.index] = lx.hsb(hue, 100, 100);
+                    colors[p.index] = FastHSB.hsb(hue, 100, 100);
                 }
 
                 hue += 180;

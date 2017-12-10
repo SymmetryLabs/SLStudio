@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
@@ -61,17 +62,17 @@ public class ParamCrossSections extends SLPattern {
 
         for (LXPoint p : model.points) {
             int c = 0;
-            c = PImage.blendColor(c, lx.hsb(
+            c = PImage.blendColor(c, FastHSB.hsb(
             (palette.getHuef() + p.x/10 + p.y/3) % 360,
             constrain(140 - 1.1f*abs(p.x - model.xMax/2f), 0, 100),
             max(0, xlv - xwv*abs(p.x - xv))
                 ), ADD);
-            c = PImage.blendColor(c, lx.hsb(
+            c = PImage.blendColor(c, FastHSB.hsb(
             (palette.getHuef() + 80 + p.y/10) % 360,
             constrain(140 - 2.2f*abs(p.y - model.yMax/2f), 0, 100),
             max(0, ylv - ywv*abs(p.y - yv))
                 ), ADD);
-            c = PImage.blendColor(c, lx.hsb(
+            c = PImage.blendColor(c, FastHSB.hsb(
             (palette.getHuef() + 160 + p.z / 10 + p.y/2) % 360,
             constrain(140 - 2.2f*abs(p.z - model.zMax/2f), 0, 100),
             max(0, zlv - zwv*abs(p.z - zv))

@@ -8,8 +8,6 @@ import heronarts.lx.LX;
 
 import java.net.SocketException;
 
-import static processing.core.PApplet.println;
-
 
 public class Sun11BackTopPixliteConfig {
     public Sun11BackTopPixliteConfig(LX lx, Slice slice, String ipAddress, Pixlite pixlite) throws SocketException {

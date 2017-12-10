@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -50,7 +51,7 @@ public class BassPod extends SLPattern {
                 value /= 5.;
 
                 float b = constrain(8 * (value * model.yMax - abs(p.y - model.yMax / 2f)), 0, 100);
-                colors[p.index] = lx.hsb(
+                colors[p.index] = FastHSB.hsb(
                     palette.getHuef() + abs(p.y - model.cy) + abs(p.x - model.cx),
                     constrain(satBase - .6f * dist(p.x, p.y, model.cx, model.cy), 0, 100),
                     b

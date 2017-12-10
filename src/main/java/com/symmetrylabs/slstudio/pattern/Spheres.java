@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
@@ -78,13 +79,13 @@ public class Spheres extends SLPattern {
 
                 float value = 0;
 
-                int c = lx.hsb(0, 0, 0);
+                int c = FastHSB.hsb(0, 0, 0);
                 for (Sphere s : spheres) {
                     float d = sqrt(pow(p.x - s.x, 2) + pow(p.y - s.y, 2) + pow(p.z - s.z, 2));
                     float r = (s.radius); // * (sinLfoValue + 0.5));
                     value = max(0, 1 - max(0, d - r) / 10);
 
-                    c = PImage.blendColor(c, lx.hsb(s.hue, 100, min(1, value) * 100), ADD);
+                    c = PImage.blendColor(c, FastHSB.hsb(s.hue, 100, min(1, value) * 100), ADD);
                 }
 
                 colors[p.index] = c;

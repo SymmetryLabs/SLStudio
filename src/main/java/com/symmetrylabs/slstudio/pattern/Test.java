@@ -6,7 +6,8 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.abs;
+import static processing.core.PApplet.max;
 
 
 public class Test extends LXPattern {

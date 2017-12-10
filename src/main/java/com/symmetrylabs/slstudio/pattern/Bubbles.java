@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
@@ -175,7 +176,7 @@ public class Bubbles extends LXPattern {
 
             colors[p.index] = LXColor.blend(
                 colors[p.index],
-                lx.hsb(
+                FastHSB.hsb(
                     hue + 1.7f * ((x - p.x) + (y - p.y)),
                     saturation.getValuef(), //Math.min(100, gradient*1.2f+5.0f),
                     brightness

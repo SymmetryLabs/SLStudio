@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
@@ -173,7 +174,7 @@ public class SoundParticles extends LXPattern {
 
         public int calcPoint(LXPoint p) {
 
-            return lx.hsb(0, 0, 0);
+            return FastHSB.hsb(0, 0, 0);
         }
 
         public void run(double deltaMs) {
@@ -251,7 +252,7 @@ public class SoundParticles extends LXPattern {
                 ) + pow(p.z - (position.z + randomX * sparkle), 2)) / ((10 + 6 * avgBass) * size);
 
                 if (b > 0) {
-                    blendColor(p.index, lx.hsb(this.hue + hueShift, map(1 - avgTreble, 0, 1, 0, 100), b), LXColor.Blend.ADD);
+                    blendColor(p.index, FastHSB.hsb(this.hue + hueShift, map(1 - avgTreble, 0, 1, 0, 100), b), LXColor.Blend.ADD);
                 }
                 i++;
             }

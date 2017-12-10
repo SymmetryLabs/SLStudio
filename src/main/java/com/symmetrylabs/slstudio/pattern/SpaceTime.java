@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
@@ -57,7 +58,7 @@ public class SpaceTime extends SLPattern {
                 int s = model.strips.indexOf(strip);
                 int i = 0;
                 for (LXPoint p : strip.points) {
-                    colors[p.index] = lx.hsb(
+                    colors[p.index] = FastHSB.hsb(
                         palette.getHuef() + 360 - p.x * .2f + p.y * .3f,
                         constrain(.4f * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
                         max(0, 100 - fVal * abs(i - pVal * (strip.metrics.numPoints - 1)))

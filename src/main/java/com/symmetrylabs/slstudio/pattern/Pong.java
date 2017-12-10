@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import com.symmetrylabs.slstudio.util.dan.DPat;
 import heronarts.lx.LX;
 import heronarts.lx.modulator.SinLFO;
@@ -7,7 +8,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PVector;
 
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.max;
+import static processing.core.PApplet.min;
 
 
 public class Pong extends DPat {
@@ -56,13 +58,13 @@ public class Pong extends DPat {
             case 0:
                 vMir.set(mMax);
                 vMir.sub(p);
-                return lx.hsb(lxh(), 100, c1c(1 - min(v.dist(p), v.dist(vMir)) * .5f / cRad));   // balls
+                return FastHSB.hsb(lxh(), 100, c1c(1 - min(v.dist(p), v.dist(vMir)) * .5f / cRad));   // balls
             case 1:
-                return lx.hsb(lxh(), 100, c1c(1 - v.dist(p) * .5f / cRad));              // ball
+                return FastHSB.hsb(lxh(), 100, c1c(1 - v.dist(p) * .5f / cRad));              // ball
             case 2:
                 vMir.set(mMax.x / 2, 0, mMax.z / 2);
-                return lx.hsb(lxh(), 100, c1c(1 - calcCone(p, v, vMir) * max(.02f, .45f - val(pSize))));   // spot
+                return FastHSB.hsb(lxh(), 100, c1c(1 - calcCone(p, v, vMir) * max(.02f, .45f - val(pSize))));   // spot
         }
-        return lx.hsb(0, 0, 0);
+        return FastHSB.hsb(0, 0, 0);
     }
 }

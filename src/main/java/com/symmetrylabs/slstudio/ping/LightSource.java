@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.ping;
 import com.symmetrylabs.slstudio.model.LXPointNormal;
 import com.symmetrylabs.slstudio.util.BlobFollower;
 import com.symmetrylabs.slstudio.util.BlobTracker;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.Octahedron;
 import heronarts.lx.LX;
@@ -49,7 +50,7 @@ public class LightSource extends SLPatternWithMarkers {
         List<Marker> markers = new ArrayList<Marker>();
         PVector pos = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
         float value = gain.getValuef() * 100f;
-        markers.add(new Octahedron(pos, 20, LX.hsb(hue.getValuef(), sat.getValuef() * 100f, value > 100 ? 100 : value)));
+        markers.add(new Octahedron(pos, 20, FastHSB.hsb(hue.getValuef(), sat.getValuef() * 100f, value > 100 ? 100 : value)));
         markers.addAll(bf.getMarkers());
         return markers;
     }
@@ -119,7 +120,7 @@ public class LightSource extends SLPatternWithMarkers {
                 for (Light light : activeLights) {
                     sum += light.levels[p.index];
                 }
-                colors[p.index] = LX.hsb(h, s, (sum > 1 ? 1 : sum) * 100f);
+                colors[p.index] = FastHSB.hsb(h, s, (sum > 1 ? 1 : sum) * 100f);
             }
         });
     }

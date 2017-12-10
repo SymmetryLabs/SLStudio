@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -82,12 +83,12 @@ public class Traktor extends SLPattern {
                 int i = (int) constrain((model.xMax - p.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH - 1);
                 int pos = (index + FRAME_WIDTH - i) % FRAME_WIDTH;
 
-                colors[p.index] = lx.hsb(
+                colors[p.index] = FastHSB.hsb(
                     360 + palette.getHuef() + .8f * hueV * abs(p.x - model.cx),
                     100,
                     constrain(9 * bassG * (bass[pos] * model.cy - abs(p.y - model.cy + 5)), 0, 100)
                 );
-                blendColor(p.index, lx.hsb(
+                blendColor(p.index, FastHSB.hsb(
                     400 + palette.getHuef() + .5f * hueV * abs(p.x - model.cx),
                     60,
                     constrain(7 * trebG * (treble[pos] * .6f * model.cy - abs(p.y - model.cy)), 0, 100)

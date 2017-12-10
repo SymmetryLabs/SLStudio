@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import com.symmetrylabs.slstudio.util.dan.DPat;
 import com.symmetrylabs.slstudio.util.dan.NDat;
 import heronarts.lx.LX;
@@ -120,7 +121,7 @@ public class Noise extends DPat {
         //rotateX(p, mCtr, xSin, xCos);
         if (CurAnim == 6 || CurAnim == 7) {
             setNorm(p);
-            return lx.hsb(lxh(), 100, 100 * (
+            return FastHSB.hsb(lxh(), 100, 100 * (
                 constrain(1 - 50 * (1 - val(pDensity)) * abs(p.y - sin(zTime * 10 + p.x * (300)) * .5f - .5f), 0, 1) +
                     (CurAnim == 7 ? constrain(1 - 50 * (1 - val(pDensity)) * abs(p.x - sin(zTime * 10 + p.y * (300)) * .5f - .5f),
                         0,
@@ -142,7 +143,7 @@ public class Noise extends DPat {
                     * 1.8f;
 
                 b += n.den / 100 - .4 + val(pDensity) - 1;
-                c = PImage.blendColor(c, lx.hsb(lxh() + n.hue, 100, c1c(b)), ADD);
+                c = PImage.blendColor(c, FastHSB.hsb(lxh() + n.hue, 100, c1c(b)), ADD);
             }
         return c;
     }

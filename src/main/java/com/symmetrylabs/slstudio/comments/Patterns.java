@@ -294,24 +294,24 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //     switch (pShape.getValuei()) {
 //     case 0:   int j= (int) constrain((model.xMax - Px.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
 //               int pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
-//               ctemp = lx.hsb(
+//               ctemp = FastHSB.hsb(
 //               360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               constrain(10000/(1+abs(Px.y- model.cy)) ,0, 100), 
 //               constrain(9 * (bass[pos]*model.cy*traktortime - .25*abs(Px.y - model.cy*traktortime)*rad), 0, 50)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //               constrain(10000/(1+abs(Px.y- model.cy)) ,0, 100),
 //              constrain(5 * (treble[pos]*.6*model.cy*traktortime - abs(Px.y - model.cy*traktortime)*rad), 0, 50)), ADD);
 //               V.set(Pn.x, yt                , Pn.z);              break;  // bouncing line
 //     case 1:   j= (int) constrain((model.xMax - Px.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
 //               pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
-//               ctemp = lx.hsb(
+//               ctemp = FastHSB.hsb(
 //               360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               100,
 //               constrain(9 * (bass[pos]*model.cy*yt - abs(Px.y - model.cy*map(cos(PI*t * Pn.x),-1,1,0,2)+ 5 )*rad ), 0, 100)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //              60,
 //              constrain(5 * (treble[pos]*.6*model.cy*yt - abs(Px.y - model.cy*map(cos(PI*t * Pn.x),-1,1,0,2) )*rad), 0, 100)), ADD);
@@ -319,12 +319,12 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //                V.set(Pn.x, map(cos(PI*t * Pn.x),-1,1,0,1)  , Pn.z);              break;  // top tap
 //     case 2:    j= (int) constrain((model.xMax - Px.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
 //                pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
-//               ctemp = lx.hsb(
+//               ctemp = FastHSB.hsb(
 //               360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               100,
 //               constrain(9 * (bass[pos]*model.cy*(bnc*map(Pn.x<.5?Pn.x:1-Pn.x,0,.5 ,0,t-.5)+1) - abs(Px.y - model.cy*(bnc*map(Pn.x<.5?Pn.x:1-Pn.x,0,.5 ,0,t-.5)+1))*rad ), 0, 100)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //             60,
 //              constrain(5 * (treble[pos]*.6*model.cy*(bnc*map(Pn.x<.5?Pn.x:1-Pn.x,0,.5 ,0,t-.5)+ 1) - abs(Px.y - model.cy*(bnc*map(Pn.x<.5?Pn.x:1-Pn.x,0,.5 ,0,t-.5)+1))*rad ), 0, 100)), ADD);
@@ -333,12 +333,12 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //               pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
 //               float ptime = Pn.x < cMidNorm.x ? map(Pn.x,0,cMidNorm.x, 1,2*yt) :
 //                         map(Pn.x,cMidNorm.x,1, 2*yt,1); 
-//               ctemp = lx.hsb(
+//               ctemp = FastHSB.hsb(
 //               360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               100,
 //               constrain(9 * (bass[pos]*model.cy*ptime - abs(Px.y - model.cy*ptime )), 0, 100)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //              60,
 //              constrain(5 * (treble[pos]*.6*model.cy*ptime - abs(Px.y - model.cy*ptime)), 0, 100)), ADD);
@@ -352,12 +352,12 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //                             map(Pn.z,cMidNorm.z,1, 2*yt,.5));   
 //               j= (int) constrain((model.xMax - Px.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
 //               pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
-//               ctemp = lx.hsb(
+//               ctemp = FastHSB.hsb(
 //               360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               100,
 //               constrain(9 * (bass[pos]*model.cy*ptime - abs(Px.y - model.cy*ptime)), 0, 100)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //             60,
 //              constrain(5 * (treble[pos]*.6*model.cy*ptime - abs(Px.y - model.cy*ptime)), 0, 100)), ADD);
@@ -371,12 +371,12 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //     case 5:   j= (int) constrain((model.xMax - Px.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
 //               pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
 //               ptime = bnc*map((Pn.x-.5)*(Pn.x-.5),0,.25,0,t-.5)+1;
-//               ctemp = lx.hsb(
+//               ctemp = FastHSB.hsb(
 //               360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               100,
 //               constrain(9 * (bass[pos]*model.cy*ptime - abs(Px.y - model.cy*ptime)), 0, 100)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //             60,
 //              constrain(5 * (treble[pos]*.6*model.cy*ptime - abs(Px.y - model.cy*ptime)), 0, 100)), ADD);
@@ -385,11 +385,11 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //     case 6:    j= (int) constrain((model.xMax - Px.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
 //                pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
 //                ptime = bnc*map((mp  -.5)*(mp  -.5),0,.25,0,t-.5)+1;
-//                ctemp=lx.hsb(360 + palette.getHuef() + .8*abs(Px.x-model.cx),
+//                ctemp=FastHSB.hsb(360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               100,
 //               constrain(9 * (bass[pos]*model.cy*ptime - abs(Px.y - model.cy*ptime)), 0, 100)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //             60,
 //              constrain(5 * (treble[pos]*.6*model.cy*ptime - abs(Px.y - model.cy*ptime)), 0, 100)), ADD);
@@ -401,19 +401,19 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //               int theta = (int) constrain( (model.xMax - Px.x) / (model.xMax * FRAME_WIDTH), 0, FRAME_WIDTH-1 );
 //                pos = (index + FRAME_WIDTH - theta) % FRAME_WIDTH;
 
-//               // ctemp = lx.hsb(
+//               // ctemp = FastHSB.hsb(
 //               // 360 + palette.getHuef() + .8*abs(Px.x-clockRadius.x),
 //               // 100,
 //               // constrain(9 * (bass[pos]*model.cy*traktortime - abs(Px.y - clockRadius.y*traktortime)/rad), 0, 100)
 //               // );
 
-//               // ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               // ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               // 400 + palette.getHuef() + .5*abs(Px.x-clockRadius.x),
 //               // 60,
 //               // constrain(5 * (treble[pos]*.6*clockRadius.y*traktortime - abs(Px.y - clockRadius.y*traktortime)/rad), 0, 100)), ADD);
 
 
-//             // return PImage.blendColor(lx.hsb(lxh(),100, d), ctemp, ADD); // clock
+//             // return PImage.blendColor(FastHSB.hsb(lxh(),100, d), ctemp, ADD); // clock
 //             return #000000; 
 
 //     case 8:   r = amp*200 * map(bnc,0,1,1,sin(PI*t));
@@ -423,16 +423,16 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //             distToSeg(Px.x, Px.y, a3.getX(r),a3.getY(r), a1.getX(r),a1.getY(r))       // triangle
 //             );
 //           d = constrain(30*(rad*40-d),0,100);
-//           return lx.hsb(lxh(),100, d); // clock
+//           return FastHSB.hsb(lxh(),100, d); // clock
 
 //      case 9:  j= (int) constrain((model.xMax - Px.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH-1);
 //               pos = (index + FRAME_WIDTH - j) % FRAME_WIDTH;
-//               ctemp = lx.hsb(
+//               ctemp = FastHSB.hsb(
 //               360 + palette.getHuef() + .8*abs(Px.x-model.cx),
 //               100,
 //               constrain(9 * (bass[pos]*model.cy*yt - abs(Px.y - model.cy*yt+ 5)), 0, 100)
 //               );
-//               ctemp = PImage.blendColor(ctemp, lx.hsb(
+//               ctemp = PImage.blendColor(ctemp, FastHSB.hsb(
 //               400 + palette.getHuef() + .5*abs(Px.x-model.cx),
 //              60,
 //              constrain(5 * (treble[pos]*.6*model.cy*yt - abs(Px.y - model.cy*yt)), 0, 100)), ADD);
@@ -445,17 +445,17 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //     //         distToSeg(Px.x, Px.y, a4.getX(r),a4.getY(r), a1.getX(r),a1.getY(r))       // quad
 //     //       );
 //     //       d = constrain(30*(rad*40-d),0,100);
-//     //       return lx.hsb(lxh(),100, d); // quad
+//     //       return FastHSB.hsb(lxh(),100, d); // quad
 
 //     case 10:
 //           r = map(bnc,0,1,a1.r,amp*200*sin(PI*t));
-//           return lx.hsb(lxh(),100,c1c(.9+2*rad - dist(Px.x,Px.y,a1.getX(r),a1.getY(r))*.03) );    // sphere
+//           return FastHSB.hsb(lxh(),100,c1c(.9+2*rad - dist(Px.x,Px.y,a1.getX(r),a1.getY(r))*.03) );    // sphere
 
 //     case 11:
 //           Px.z=mCtr.z; cMid.z=mCtr.z;
-//           return lx.hsb(lxh(),100,c1c(1 - calcCone(Px,cMid,mCtr) * 0.02 > .5?1:0));         // cone
+//           return FastHSB.hsb(lxh(),100,c1c(1 - calcCone(Px,cMid,mCtr) * 0.02 > .5?1:0));         // cone
 
-//     case 12:  return lx.hsb(lxh() + noise(Pn.x,Pn.y,Pn.z + (NoiseMove+50000)/1000.)*200,
+//     case 12:  return FastHSB.hsb(lxh() + noise(Pn.x,Pn.y,Pn.z + (NoiseMove+50000)/1000.)*200,
 //             85,c1c(Pn.y < noise(Pn.x + NoiseMove/2000.,Pn.z)*(1+amp)-amp/2.-.1 ? 1 : 0)); // noise
 
 //     case 13: 
@@ -463,13 +463,13 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //           V.set(Pn.x, .7+y, Pn.z);
 //           break;
 
-//     default:  return lx.hsb(0,0,0);
+//     default:  return FastHSB.hsb(0,0,0);
 //     }
 
 
 //      return ctemp;
 
-//     //return  PImage.blendColor(lx.hsb(lxh() , 100, c1c(1 - V.dist(Pn)/rad)),ctemp,  OVERLAY);  
+//     //return  PImage.blendColor(FastHSB.hsb(lxh() , 100, c1c(1 - V.dist(Pn)/rad)),ctemp,  OVERLAY);
 
 
 //   }
@@ -543,8 +543,8 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //     for (LXPoint p : model.points) {
 //       color c =
 //         PImage.blendColor(
-//           lx.hsb(210, 20, (float)Math.max(0, 1 - Math.pow((model.yMax - p.y) / 10, 2)) * 50),
-//           lx.hsb(220, 60, (float)Math.max(0, 1 - Math.pow((p.y - model.yMin) / 10, 2)) * 100),
+//           FastHSB.hsb(210, 20, (float)Math.max(0, 1 - Math.pow((model.yMax - p.y) / 10, 2)) * 50),
+//           FastHSB.hsb(220, 60, (float)Math.max(0, 1 - Math.pow((p.y - model.yMin) / 10, 2)) * 100),
 //           ADD);
 //       for (Raindrop raindrop : raindrops) {
 //         if (p.x >= (raindrop.p.x - raindrop.radius) && p.x <= (raindrop.p.x + raindrop.radius) &&
@@ -552,7 +552,7 @@ package com.symmetrylabs.slstudio.comments;// public class TraktorPlay extends c
 //           float d = raindrop.p.distanceTo(p) / raindrop.radius;
 //   //      float value = (float)Math.max(0, 1 - Math.pow(Math.min(0, d - raindrop.radius) / 5, 2));
 //           if (d < 1) {
-//             c = PImage.blendColor(c, lx.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), ADD);
+//             c = PImage.blendColor(c, FastHSB.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), ADD);
 //           }
 //         }
 //       }

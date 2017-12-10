@@ -24,20 +24,20 @@ import static processing.core.PApplet.println;
 
 
 public class PerformanceManager extends LXComponent {
-    final CompoundParameter lFader = new CompoundParameter("lFader");
-    final CompoundParameter rFader = new CompoundParameter("rFader");
+    final CompoundParameter aFader = new CompoundParameter("aFader");
+    final CompoundParameter bFader = new CompoundParameter("bFader");
     public LXListenableNormalizedParameter upL = null;
     public LXListenableNormalizedParameter downL = null;
     public LXListenableNormalizedParameter upR = null;
     public LXListenableNormalizedParameter downR = null;
 
 
-    final CompoundParameter lBlur = new CompoundParameter("lBlur");
-    final CompoundParameter rBlur = new CompoundParameter("rBlur");
+    final CompoundParameter aBlur = new CompoundParameter("aBlur");
+    final CompoundParameter bBlur = new CompoundParameter("bBlur");
     public LXParameter[] blurs = new LXParameter[4];
 
-    final BoundedParameter lColor = new BoundedParameter("lColor", 0, 360);
-    final BoundedParameter rColor = new BoundedParameter("rColor", 0, 360);
+    final BoundedParameter aColor = new BoundedParameter("aColor", 0, 360);
+    final BoundedParameter bColor = new BoundedParameter("bColor", 0, 360);
     public LXParameter[] colors = new LXParameter[4];
 
 
@@ -99,31 +99,31 @@ public class PerformanceManager extends LXComponent {
     public PerformanceManager(LX lx) {
         super(lx);
 
-        lFader.setPolarity(LXParameter.Polarity.BIPOLAR);
-        lFader.addListener(parameter -> propagateLeftFader());
+        aFader.setPolarity(LXParameter.Polarity.BIPOLAR);
+        aFader.addListener(parameter -> propagateLeftFader());
 
-        rFader.setPolarity(LXParameter.Polarity.BIPOLAR);
-        rFader.addListener(parameter -> propagateRightFader());
+        bFader.setPolarity(LXParameter.Polarity.BIPOLAR);
+        bFader.addListener(parameter -> propagateRightFader());
 
-        lBlur.addListener(parameter -> {
-            if (blurs[0] != null) blurs[0].setValue(lBlur.getValuef());
-            if (blurs[1] != null) blurs[1].setValue(lBlur.getValuef());
+        aBlur.addListener(parameter -> {
+            if (blurs[0] != null) blurs[0].setValue(aBlur.getValuef());
+            if (blurs[1] != null) blurs[1].setValue(aBlur.getValuef());
         });
 
-        rBlur.addListener(parameter -> {
-            if (blurs[2] != null) blurs[2].setValue(rBlur.getValuef());
-            if (blurs[3] != null) blurs[3].setValue(rBlur.getValuef());
+        bBlur.addListener(parameter -> {
+            if (blurs[2] != null) blurs[2].setValue(bBlur.getValuef());
+            if (blurs[3] != null) blurs[3].setValue(bBlur.getValuef());
         });
 
-        lColor.addListener(parameter -> {
-            println("CHANGED", lColor.getValuef());
-            if (colors[0] != null) colors[0].setValue(lColor.getValuef());
-            if (colors[1] != null) colors[1].setValue(lColor.getValuef());
+        aColor.addListener(parameter -> {
+            println("CHANGED", aColor.getValuef());
+            if (colors[0] != null) colors[0].setValue(aColor.getValuef());
+            if (colors[1] != null) colors[1].setValue(aColor.getValuef());
         });
 
-        rColor.addListener(parameter -> {
-            if (colors[2] != null) colors[2].setValue(rColor.getValuef());
-            if (colors[3] != null) colors[3].setValue(rColor.getValuef());
+        bColor.addListener(parameter -> {
+            if (colors[2] != null) colors[2].setValue(bColor.getValuef());
+            if (colors[3] != null) colors[3].setValue(bColor.getValuef());
         });
 
         //  lDummy.addListener(new LXParameterListener() {
@@ -132,13 +132,13 @@ public class PerformanceManager extends LXComponent {
         //          float v = lDummy.getValuef();
         //          if (v < 0.1) {
         //              v *= mult;
-        //              lColor.setValue((lColor.getValuef() + v) % 360);
+        //              aColor.setValue((aColor.getValuef() + v) % 360);
         //          }
         //          if (v > 0.9) {
         //              v = mult * (1.0 - v);
-        //              float raw = (lColor.getValuef() - v);
+        //              float raw = (aColor.getValuef() - v);
         //              float mod = raw < 0 ? 360 - raw : raw % 360;
-        //              lColor.setValue(raw);
+        //              aColor.setValue(raw);
         //          }
         //      }
         //  });
@@ -149,13 +149,13 @@ public class PerformanceManager extends LXComponent {
         //          float v = rDummy.getValuef();
         //          if (v < 0.1) {
         //              v *= mult;
-        //              rColor.setValue((rColor.getValuef() + v) % 360);
+        //              bColor.setValue((bColor.getValuef() + v) % 360);
         //          }
         //          if (v > 0.9) {
         //              v = mult * (1.0 - v);
-        //              float raw = (rColor.getValuef() - v);
+        //              float raw = (bColor.getValuef() - v);
         //              float mod = raw < 0 ? 360 - raw : raw % 360;
-        //              rColor.setValue(raw);
+        //              bColor.setValue(raw);
         //          }
         //      }
         //  });
@@ -173,13 +173,13 @@ public class PerformanceManager extends LXComponent {
     }
 
     public void propagateLeftFader() {
-        float v = lFader.getValuef();
+        float v = aFader.getValuef();
         upL.setValue(1.0 - v);
         downL.setValue(v);
     }
 
     public void propagateRightFader() {
-        float v = rFader.getValuef();
+        float v = bFader.getValuef();
         upR.setValue(1.0 - v);
         downR.setValue(v);
     }
@@ -215,11 +215,11 @@ public class PerformanceManager extends LXComponent {
         float h = 50.0f;
         float y = CHAN_Y + CHAN_HEIGHT;
 
-        FaderWindow fL = new FaderWindow(lFader, ui, "", CHAN_WIDTH / 2f, y, w, h);
+        FaderWindow fL = new FaderWindow(aFader, ui, "", CHAN_WIDTH / 2f, y, w, h);
         ui.addLayer(fL);
         fL.setVisible(false);
 
-        FaderWindow fR = new FaderWindow(rFader, ui, "", ui.getWidth() - CHAN_WIDTH - (w / 2), y, w, h);
+        FaderWindow fR = new FaderWindow(bFader, ui, "", ui.getWidth() - CHAN_WIDTH - (w / 2), y, w, h);
         ui.addLayer(fR);
         fR.setVisible(false);
 
@@ -242,27 +242,27 @@ public class PerformanceManager extends LXComponent {
             w.start();
         }
 
-        lFader.addListener(parameter -> swapDecks(lFader, DeckSide.LEFT));
-        rFader.addListener(parameter -> swapDecks(rFader, DeckSide.RIGHT));
+        aFader.addListener(parameter -> swapDecks(aFader, DeckSide.LEFT));
+        bFader.addListener(parameter -> swapDecks(bFader, DeckSide.RIGHT));
         getLX().engine.crossfader.addListener(parameter -> {
-            swapDecks(rFader, DeckSide.RIGHT);
-            swapDecks(rFader, DeckSide.LEFT);
+            swapDecks(bFader, DeckSide.RIGHT);
+            swapDecks(bFader, DeckSide.LEFT);
         });
 
         if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-            bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
-            bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
+            bindCommon(SLStudio.applet.apc40Listener.remotes[0], aFader, DeckSide.LEFT);
+            bindCommon(SLStudio.applet.apc40Listener.remotes[1], bFader, DeckSide.RIGHT);
         }
 
         SLStudio.applet.apc40Listener.hasRemote.addListener(parameter -> {
             if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-                bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
-                bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
+                bindCommon(SLStudio.applet.apc40Listener.remotes[0], aFader, DeckSide.LEFT);
+                bindCommon(SLStudio.applet.apc40Listener.remotes[1], bFader, DeckSide.RIGHT);
             }
         });
 
-        lFader.setValue(0.00001);
-        rFader.setValue(0.00001);
+        aFader.setValue(0.00001);
+        bFader.setValue(0.00001);
         propagateLeftFader();
         propagateRightFader();
 
@@ -271,11 +271,11 @@ public class PerformanceManager extends LXComponent {
     private void updateDeckColors() {
         double crossfade = getLX().engine.crossfader.getValue();
 
-        deckWindows[0].setBackgroundColor(computeDeckColor(lFader.getValue() < .5f, crossfade < .5f));
-        deckWindows[1].setBackgroundColor(computeDeckColor(lFader.getValue() >= .5f, crossfade < .5f));
+        deckWindows[0].setBackgroundColor(computeDeckColor(aFader.getValue() < .5f, crossfade < .5f));
+        deckWindows[1].setBackgroundColor(computeDeckColor(aFader.getValue() >= .5f, crossfade < .5f));
 
-        deckWindows[2].setBackgroundColor(computeDeckColor(rFader.getValue() < .5f, crossfade >= .5f));
-        deckWindows[3].setBackgroundColor(computeDeckColor(rFader.getValue() >= .5f, crossfade >= .5f));
+        deckWindows[2].setBackgroundColor(computeDeckColor(bFader.getValue() < .5f, crossfade >= .5f));
+        deckWindows[3].setBackgroundColor(computeDeckColor(bFader.getValue() >= .5f, crossfade >= .5f));
     }
 
     private int computeDeckColor(boolean groupActive, boolean abActive) {
@@ -325,9 +325,9 @@ public class PerformanceManager extends LXComponent {
 
     public int focusedDeskIndexForSide(DeckSide side) {
         if (side == DeckSide.LEFT) {
-            return lFader.getValuef() < 0.5 ? 0 : 1;
+            return aFader.getValuef() < 0.5 ? 0 : 1;
         } else {
-            return rFader.getValuef() < 0.5 ? 2 : 3;
+            return bFader.getValuef() < 0.5 ? 2 : 3;
         }
     }
 

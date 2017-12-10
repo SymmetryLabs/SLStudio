@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern.test;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -29,7 +30,7 @@ public class selectColumn extends SLPattern {
                 int counter = 0;
                 for (LXPoint p : strip.points) {
                     if (counter++ == x){
-                        colors[p.index] = lx.hsb(hue+120, 50, 100);
+                        colors[p.index] = FastHSB.hsb(hue+120, 50, 100);
                     }
                 }
 

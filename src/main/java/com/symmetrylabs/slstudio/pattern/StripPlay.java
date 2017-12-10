@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
@@ -84,10 +85,10 @@ public class StripPlay extends SLPattern {
                 if (on) {
                     float hv = palette.getHuef() + colorOffset[i];
                     float br = max(0, 100 - avgdist * 2 * (100 - brightParameter.getValuef()));
-                    int colr = lx.hsb(hv, sat[i].getValuef(), br);
+                    int colr = FastHSB.hsb(hv, sat[i].getValuef(), br);
                     for (LXPoint p : strip.points) {
                         if (br > bright[p.index]) {
-                            //colors[p.index] = lx.hsb(hv,sat[i].getValuef(),br);
+                            //colors[p.index] = FastHSB.hsb(hv,sat[i].getValuef(),br);
                             addColor(p.index, colr);
                             bright[p.index] = br;
                         }

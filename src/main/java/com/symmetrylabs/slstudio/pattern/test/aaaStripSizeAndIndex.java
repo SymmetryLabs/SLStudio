@@ -4,6 +4,7 @@ import com.symmetrylabs.slstudio.model.Slice;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -33,7 +34,7 @@ public class aaaStripSizeAndIndex extends SLPattern {
                 for (Strip strip : slice.strips) {
                     for (LXPoint p : strip.points) {
                         if ( (compare_index++ > index) && (compare_index < index + size) ){
-                            colors[p.index] = lx.hsb(120, 100, 100);
+                            colors[p.index] = FastHSB.hsb(120, 100, 100);
                         }
                     }
                 }

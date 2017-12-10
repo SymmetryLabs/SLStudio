@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
@@ -29,7 +30,7 @@ public class TelevisionStatic extends SLPattern {
             for (int i=start; i<end; i++) {
                 LXPoint p = model.points[i];
 
-                colors[p.index] = lx.hsb(palette.getHuef() + random(hueParameter.getValuef() * 360),
+                colors[p.index] = FastHSB.hsb(palette.getHuef() + random(hueParameter.getValuef() * 360),
                     random(saturationParameter.getValuef() * 100),
                     random(brightParameter.getValuef() * 100)
                 );

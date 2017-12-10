@@ -127,10 +127,10 @@ public class APC40Listener extends LXComponent {
             remotes[i].logEvents(true);
 
             if (i == 0) {
-                input.addListener(new Listener(SLStudio.applet.performanceManager.lColor, LEFT));
+                input.addListener(new Listener(SLStudio.applet.performanceManager.aColor, LEFT));
                 remotes[i].sendNoteOn(0, 32, 127);
             } else {
-                input.addListener(new Listener(SLStudio.applet.performanceManager.rColor, RIGHT));
+                input.addListener(new Listener(SLStudio.applet.performanceManager.bColor, RIGHT));
                 remotes[i].sendNoteOn(0, 33, 127);
             }
         }

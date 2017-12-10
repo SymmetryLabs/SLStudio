@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
@@ -37,7 +38,7 @@ public class ShiftingPlane extends LXPattern {
 
         for (LXPoint p : model.points) {
             float d = abs(av * (p.x - model.cx) + bv * (p.y - model.cy) + cv * (p.z - model.cz) + dv) / denom;
-            colors[p.index] = lx.hsb(
+            colors[p.index] = FastHSB.hsb(
                 hv + (abs(p.x - model.cx) * .6f + abs(p.y - model.cy) * .9f + abs(p.z - model.cz)) * hueShift.getValuef(),
                 constrain(110 - d * 6, 0, 100),
                 constrain(130 - 7 * d, 0, 100)

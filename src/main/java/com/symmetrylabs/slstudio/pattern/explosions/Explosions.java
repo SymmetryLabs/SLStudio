@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.explosions;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.audio.BandGate;
@@ -120,10 +121,10 @@ public class Explosions extends LXPattern {
                         }
 
                         if(num_explosions_in > 0) {
-                                c = LX.hsb(hue_value, sat_value, brightness_value);
+                                c = FastHSB.hsb(hue_value, sat_value, brightness_value);
                         } else {
                                 c = colors[p.index];
-                                c = LX.hsb(LXColor.h(c), LXColor.s(c), 0.0f);
+                                c = FastHSB.hsb(LXColor.h(c), LXColor.s(c), 0.0f);
                         }
 
                         colors[p.index] = c;

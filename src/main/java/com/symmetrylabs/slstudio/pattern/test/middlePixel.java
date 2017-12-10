@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern.test;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
@@ -22,17 +23,17 @@ public class middlePixel extends SLPattern {
             for (Strip strip : sun.strips) {
                 int counter = 0;
                 for (LXPoint p : strip.points) {
-                    colors[p.index] = lx.hsb(hue, 100, 15);
+                    colors[p.index] = FastHSB.hsb(hue, 100, 15);
                     // white if middle pixel
                     if ( counter < 2 ) {
-                        colors[p.index] = lx.hsb(0, 100, 100);
+                        colors[p.index] = FastHSB.hsb(0, 100, 100);
                     }
                     else if (counter > strip.metrics.numPoints - 3){
-                        colors[p.index] = lx.hsb(120, 100, 100);
+                        colors[p.index] = FastHSB.hsb(120, 100, 100);
                     }
                     if ( counter++ == (strip.metrics.numPoints/2) ){
                         // println("middle index:" + strip.metrics.numPoints/2 );
-                        colors[p.index] = lx.hsb(240, 0, 100);
+                        colors[p.index] = FastHSB.hsb(240, 0, 100);
                     }
                 }
 

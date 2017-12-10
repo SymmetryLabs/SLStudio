@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.explosions;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.audio.BandGate;
@@ -90,11 +91,11 @@ public class SunriseSunset extends LXPattern {
                 int i = 0;
                 for(LXVector v: projection) {
                         if (model.yMax - v.y < sunRadius.getValuef()) {
-                                setColor(i, LX.hsb(0, 0, 100));
+                                setColor(i, FastHSB.hsb(0, 0, 100));
                         } else if(v.y > yMinParam.getValuef()) {
                                 float yn = (v.y - yMinParam.getValuef()) / model.yRange;
                                 float hue = (350 + ((360 * colorSpread.getValuef() * yn))) % 360;
-                                setColor(i, LX.hsb(hue, 100, 100 * yn));
+                                setColor(i, FastHSB.hsb(hue, 100, 100 * yn));
                         } else {
                                 setColor(i, 0);
                         }

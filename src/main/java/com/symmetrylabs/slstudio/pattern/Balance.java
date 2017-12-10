@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
@@ -114,7 +115,7 @@ public class Balance extends LXPattern {
             float hue_color =
                 palette.getHuef() + hueScale.getValuef() * ((float) Math.abs(p.x - model.xMax / 2f) + (float) Math.abs(p.y - model.yMax / 2f) * .2f + (float) Math
                     .abs(p.z - model.zMax / 2f) * .5f);
-            int c = lx.hsb(hue_color, 80, v1);
+            int c = FastHSB.hsb(hue_color, 80, v1);
 
             // Now draw the spheres
             for (Sphere s : spheres) {
@@ -140,7 +141,7 @@ public class Balance extends LXPattern {
 
                 float sphere_color = palette.getHuef() - (1 - hueScale.getValuef()) * d / r * 45;
 
-                c = LXColor.blend(c, lx.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
+                c = LXColor.blend(c, FastHSB.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
             }
             colors[p.index] = c;
         }

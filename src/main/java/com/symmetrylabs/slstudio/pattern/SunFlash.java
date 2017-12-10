@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
@@ -11,7 +12,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import static com.symmetrylabs.slstudio.util.Utils.random;
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.floor;
 
 
 public class SunFlash extends SLPattern {
@@ -79,7 +80,7 @@ public class SunFlash extends SLPattern {
         flashes.parallelStream().forEach(new Consumer<Flash>() {
             @Override
             public void accept(final Flash flash) {
-                int c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+                int c = FastHSB.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
                 for (LXPoint p : flash.c.points) {
                     colors[p.index] = c;
                 }

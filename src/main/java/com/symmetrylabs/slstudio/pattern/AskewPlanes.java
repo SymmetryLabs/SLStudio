@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import com.symmetrylabs.slstudio.util.dan.DPat;
 import heronarts.lx.LX;
 import heronarts.lx.modulator.SinLFO;
@@ -88,7 +89,7 @@ public class AskewPlanes extends DPat {
                 d = min(d, abs(plane.av * (p.x - model.cx) + plane.bv * (p.y - model.cy) + plane.cv) / plane.denom);
             }
         }
-        return lx.hsb(
+        return FastHSB.hsb(
             huev + abs(p.x - model.cx) * .3f + p.y * .8f,
             max(0, 100 - .15f * abs(p.x - model.cx)),
             constrain(700f * thickness.getValuef() - 10f * d, 0, 100)

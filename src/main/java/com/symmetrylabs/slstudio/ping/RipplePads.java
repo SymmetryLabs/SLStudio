@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.ping;
 
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
@@ -175,7 +176,7 @@ public class RipplePads extends SLPattern {
         int getColor(float distance) {
             if (distance < radius) {
                 float brightness = value > 1 ? 1 : value;
-                return lx.hsb(hue, sat * 100f, brightness * 100f);
+                return FastHSB.hsb(hue, sat * 100f, brightness * 100f);
             } else {
                 return 0;
             }

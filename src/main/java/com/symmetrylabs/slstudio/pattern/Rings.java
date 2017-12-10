@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
@@ -104,7 +105,7 @@ public class Rings extends SLPattern {
                     0.0f, 1.0f, 0.0f, 300.0f
                 );
 
-                colors[p.index] = lx.hsb(
+                colors[p.index] = FastHSB.hsb(
                     palette.getHuef() + m,
                     saturation,
                     brightness

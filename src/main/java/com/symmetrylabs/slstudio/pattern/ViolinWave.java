@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -86,7 +87,7 @@ public class ViolinWave extends SLPattern {
 
                     float b = 100 - pFalloff * (abs(p.x - x.getValuef()) + abs(p.y - y.getValuef()));
                     if (b > 0) {
-                        blendColor(p.index, lx.hsb(
+                        blendColor(p.index, FastHSB.hsb(
                             palette.getHuef(), 20, b
                         ), LXColor.Blend.ADD);
                     }
@@ -140,7 +141,7 @@ public class ViolinWave extends SLPattern {
         for (LXPoint p : model.points) {
             int ci = (int) lerp(0, centers.length - 1, (p.x - model.xMin) / (model.xMax - model.xMin));
             float rFactor = 1.0f - 0.9f * abs(p.x - model.cx) / (model.xMax - model.cx);
-            colors[p.index] = lx.hsb(
+            colors[p.index] = FastHSB.hsb(
                 palette.getHuef() + abs(p.x - model.cx),
                 min(100, 20 + 8 * abs(p.y - centers[ci])),
                 constrain(edg * (val * rFactor - rng * abs(p.y - centers[ci])), 0, 100)

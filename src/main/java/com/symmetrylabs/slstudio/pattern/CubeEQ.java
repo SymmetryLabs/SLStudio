@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -63,7 +64,7 @@ public class CubeEQ extends SLPattern {
                 float value = lerp(smoothValue, chunkyValue, blockiness.getValuef());
 
                 float b = constrain(edgeConst * (value * model.yMax - p.y), 0, 100);
-                colors[p.index] = lx.hsb(
+                colors[p.index] = FastHSB.hsb(
                     480 + palette.getHuef() - min(clrConst * p.y, 120),
                     100,
                     b

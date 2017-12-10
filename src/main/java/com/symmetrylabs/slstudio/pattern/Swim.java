@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.modulator.SawLFO;
@@ -93,7 +94,7 @@ public class Swim extends LXPattern {
                     + (float) Math.abs(p.y - model.yMax / 2) * .6f
                     + (float) Math.abs(p.z - model.zMax));
 
-                colors[p.index] = lx.hsb(hue_color, 100, v1);
+                colors[p.index] = FastHSB.hsb(hue_color, 100, v1);
             }
         });
     }

@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.util.dan;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
@@ -374,7 +375,7 @@ public abstract class DPat extends LXPattern {
                         cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
                     }
                     if (pGrey.getValueb()) {
-                        cNew = lx.hsb(0, 0, LXColor.b(cNew));
+                        cNew = FastHSB.hsb(0, 0, LXColor.b(cNew));
                     }
                     colors[p.index] = cNew;
                 }
@@ -424,7 +425,7 @@ public abstract class DPat extends LXPattern {
                         cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
                     }
                     if (pGrey.getValueb()) {
-                        cNew = lx.hsb(0, 0, LXColor.b(cNew));
+                        cNew = FastHSB.hsb(0, 0, LXColor.b(cNew));
                     }
                     colors[p.index] = cNew;
                 }

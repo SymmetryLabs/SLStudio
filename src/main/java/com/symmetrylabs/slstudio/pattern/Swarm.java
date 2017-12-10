@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.util.FastHSB;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
@@ -51,7 +52,7 @@ public class Swarm extends SLPattern {
                 for (LXPoint p : strip.points) {
                     float fV = max(-1, 1 - dist(p.x / 2f, p.y, fX.getValuef() / 2f, fY.getValuef()) / 64f);
                     // println("fv: " + fV);
-                    colors[p.index] = lx.hsb(
+                    colors[p.index] = FastHSB.hsb(
                         palette.getHuef() + 0.3f * abs(p.x - hOffX.getValuef()),
                         constrain(80 + 40 * fV, 0, 100),
                         constrain(100 -
