@@ -17,18 +17,12 @@ import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
-import com.symmetrylabs.slstudio.util.PackageUtils;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
-import heronarts.lx.effect.BlurEffect;
-import heronarts.lx.effect.DesaturationEffect;
-import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import heronarts.lx.pattern.IteratorTestPattern;
 import processing.core.PApplet;
 
 
@@ -86,10 +80,7 @@ public class SLStudio extends PApplet {
         lx = new SLStudioLX(this, model, true) {
             @Override
             protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
-
-                for (Class<? extends LXPattern> c : PackageUtils.getPatternClassesInPackage("com.symmetrylabs")) {
-                    lx.registerPattern(c);
-                }
+                super.initialize(lx, ui);
 
                 // Output
                 (dispatcher = new Dispatcher(lx)).start();
@@ -107,15 +98,6 @@ public class SLStudio extends PApplet {
                 performanceManager = new PerformanceManager(lx);
                 lx.engine.registerComponent("performanceManager", performanceManager);
 
-                lx.registerPatterns(new Class[]{
-                    heronarts.p3lx.pattern.SolidColorPattern.class,
-                    IteratorTestPattern.class
-                });
-                lx.registerEffects(new Class[]{
-                    FlashEffect.class,
-                    BlurEffect.class,
-                    DesaturationEffect.class
-                });
                 lx.paletteLibrary = new PaletteLibrary();
                 loadPalettes(lx.paletteLibrary);
 
@@ -141,7 +123,6 @@ public class SLStudio extends PApplet {
         lx.engine.output.enabled.setValue(false);
         blobTracker = BlobTracker.getInstance(lx);
         performanceManager.start(lx.ui);
-
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
