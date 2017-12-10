@@ -12,7 +12,6 @@ import heronarts.lx.parameter.CompoundParameter;
 import processing.core.PVector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.function.Consumer;
 
@@ -111,8 +110,11 @@ public class LightSource extends SLPatternWithMarkers {
             }
         });
 
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-            public void accept(LXPoint p) {
+
+        model.forEachPoint((start, end) -> {
+            for (int i=start; i<end; i++) {
+                LXPoint p = model.points[i];
+
                 float sum = a;
                 for (Light light : activeLights) {
                     sum += light.levels[p.index];

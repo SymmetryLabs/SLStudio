@@ -1,20 +1,17 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import java.util.Arrays;
-import java.util.function.Consumer;
-
-import static processing.core.PApplet.*;
+import static processing.core.PApplet.abs;
+import static processing.core.PApplet.constrain;
 
 
-public class Traktor extends LXPattern {
+public class Traktor extends SLPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -77,9 +74,11 @@ public class Traktor extends LXPattern {
         final float bassG = bassGain.getValuef();
         final float trebG = trebleGain.getValuef();
 
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-            @Override
-            public void accept(final LXPoint p) {
+
+        model.forEachPoint((start, end) -> {
+            for (int pi=start; pi<end; pi++) {
+                LXPoint p = model.points[pi];
+
                 int i = (int) constrain((model.xMax - p.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH - 1);
                 int pos = (index + FRAME_WIDTH - i) % FRAME_WIDTH;
 

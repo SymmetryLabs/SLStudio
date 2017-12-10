@@ -17,9 +17,6 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.processing/core
 	compile group: 'org.processing', name: 'core', version: '3.3.6'
 
-	// https://mvnrepository.com/artifact/org.reflections/reflections
-	compile group: 'org.reflections', name: 'reflections', version: '0.9.11'
-
 	// https://mvnrepository.com/artifact/org.javassist/javassist
 	compile group: 'org.javassist', name: 'javassist', version: '3.22.0-GA'
 

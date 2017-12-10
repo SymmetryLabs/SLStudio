@@ -1,19 +1,15 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import java.util.Arrays;
-import java.util.function.Consumer;
-
 import static processing.core.PApplet.*;
 
 
-public class CubeEQ extends LXPattern {
+public class CubeEQ extends SLPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -44,9 +40,12 @@ public class CubeEQ extends LXPattern {
         final float edgeConst = 2 + 30 * edge.getValuef();
         final float clrConst = 1.1f + clr.getValuef();
 
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-            @Override
-            public void accept(final LXPoint p) {
+
+        model.forEachPoint((start, end) -> {
+            for (int i=start; i<end; i++) {
+                LXPoint p = model.points[i];
+
+
                 float avgIndex = constrain(2 + p.x / model.xMax * (eq.numBands - 4), 0, eq.numBands - 4);
                 int avgFloor = (int) avgIndex;
 

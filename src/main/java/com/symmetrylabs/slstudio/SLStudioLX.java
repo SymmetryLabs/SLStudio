@@ -13,7 +13,11 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.LXMappingEngine;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXSerializable;
+import heronarts.lx.effect.BlurEffect;
+import heronarts.lx.effect.DesaturationEffect;
+import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
@@ -37,6 +41,7 @@ import processing.event.KeyEvent;
 
 import java.io.File;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 
@@ -44,7 +49,9 @@ public class SLStudioLX extends P3LX {
 
     public static final String COPYRIGHT = "Symmetry Labs";
     public PaletteLibrary paletteLibrary;
-    private ScanResult classpathScanner = new FastClasspathScanner(basePackageName).scan();
+
+    public static final String basePackageName = SLStudio.class.getPackage().getName();
+    public static final ScanResult classpathScanner = new FastClasspathScanner(basePackageName).scan();
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
@@ -400,11 +407,25 @@ public class SLStudioLX extends P3LX {
         this.engine.setThreaded(multiThreaded);
     }
 
+    private Class<?> classForNameOrNull(String name) {
+        try {
+            return Class.forName(name);
+        } catch (ClassNotFoundException e) {
+            return null;
+        }
+    }
+
     @Override
     protected void setProject(File file, ProjectListener.Change change) {
         super.setProject(file, change);
         if (file != null) {
-            this.applet.saveStrings(PROJECT_FILE_NAME, new String[]{file.getName()});
+            this.applet.saveStrings(
+                PROJECT_FILE_NAME,
+                new String[]{
+                    // Relative path of the project file WRT the default save file location for the sketch
+                    this.applet.saveFile(PROJECT_FILE_NAME).toPath().getParent().relativize(file.toPath()).toString()
+                }
+            );
         }
     }
 
@@ -417,12 +438,26 @@ public class SLStudioLX extends P3LX {
      * Subclasses may override to register additional components before the UI is built
      */
     protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
+        classpathScanner.getNamesOfSubclassesOf(LXEffect.class).stream()
+            .map(this::classForNameOrNull)
+            .filter(Objects::nonNull)
+            .forEach(c -> lx.registerEffect((Class<? extends LXEffect>) c));
+
+        classpathScanner.getNamesOfSubclassesOf(LXPattern.class).stream()
+            .map(this::classForNameOrNull)
+            .filter(Objects::nonNull)
+            .forEach(c -> lx.registerPattern((Class<? extends LXPattern>) c));
+
+        lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
+        lx.registerPattern(IteratorTestPattern.class);
+
+        lx.registerEffect(FlashEffect.class);
+        lx.registerEffect(BlurEffect.class);
+        lx.registerEffect(DesaturationEffect.class);
     }
 
     protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
     }
-
-    private final static String basePackageName = SLStudio.class.getPackage().getName();
 
     private boolean classExists(final String name) {
         try {
@@ -438,10 +473,9 @@ public class SLStudioLX extends P3LX {
 
         final String simpleName = className.replaceAll(".*[\\.\\$]", "");
 
-        final List<String> names = classpathScanner.getNamesOfAllClasses()
+        final List<String> names = classpathScanner.getNamesOfSubclassesOf(LXEffect.class)
             .stream()
             .filter(it -> it.endsWith("." + simpleName) || it.endsWith("$" + simpleName))
-            .filter(it -> classNameIsAssignableFrom(it, LXEffect.class))
             .collect(Collectors.toList());
 
         if (names.size() == 1) {
@@ -453,24 +487,15 @@ public class SLStudioLX extends P3LX {
         }
     }
 
-    private boolean classNameIsAssignableFrom(String name, Class<?> superThing) {
-        try {
-            return superThing.isAssignableFrom(Class.forName(name));
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
     @Override
     protected LXPattern instantiatePattern(final String className) {
         if (classExists(className)) return super.instantiatePattern(className);
 
         final String simpleName = className.replaceAll(".*[\\.\\$]", "");
 
-        final List<String> names = classpathScanner.getNamesOfAllClasses()
+        final List<String> names = classpathScanner.getNamesOfSubclassesOf(LXPattern.class)
             .stream()
             .filter(it -> it.endsWith("." + simpleName) || it.endsWith("$" + simpleName))
-            .filter(it -> classNameIsAssignableFrom(it, LXPattern.class))
             .collect(Collectors.toList());
 
         if (names.size() == 1) {
