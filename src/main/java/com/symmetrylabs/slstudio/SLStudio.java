@@ -444,13 +444,13 @@ public class SLStudio extends PApplet {
             // trimmed
 
             // com.symmetrylabs.slstudio.model.Sun 9 (Full)
-            new Pixlite(lx, "10.200.1.13", ((SLModel) lx.model).getSliceById("sun9_top_front")),
+            new Pixlite(lx, "10.200.1.13", ((SLModel) lx.model).getSliceById("sun9_top_back")),
             // 13
-            new Pixlite(lx, "10.200.1.14", ((SLModel) lx.model).getSliceById("sun9_bottom_front")),
+            new Pixlite(lx, "10.200.1.14", ((SLModel) lx.model).getSliceById("sun9_bottom_back")),
             // 14
-            new Pixlite(lx, "10.200.1.12", ((SLModel) lx.model).getSliceById("sun9_top_back")),
+            new Pixlite(lx, "10.200.1.12", ((SLModel) lx.model).getSliceById("sun9_top_front")),
             // NEEDS WORK!
-            new Pixlite(lx, "10.200.1.11", ((SLModel) lx.model).getSliceById("sun9_bottom_back")),
+            new Pixlite(lx, "10.200.1.11", ((SLModel) lx.model).getSliceById("sun9_bottom_front")),
             // NEEDS WORK!
 
             // com.symmetrylabs.slstudio.model.Sun 10 (Full)
