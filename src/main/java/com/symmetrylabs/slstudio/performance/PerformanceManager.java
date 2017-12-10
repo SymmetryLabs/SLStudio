@@ -18,6 +18,8 @@ import heronarts.p3lx.ui.UIWindow;
 import java.util.List;
 
 import static com.symmetrylabs.slstudio.SLStudio.*;
+import static heronarts.lx.color.LXColor.WHITE;
+import static heronarts.lx.color.LXColor.RED;
 import static processing.core.PApplet.println;
 
 
@@ -49,13 +51,14 @@ public class PerformanceManager extends LXComponent {
     DiscreteParameter deckFourChannel;
 
     DiscreteParameter channelSelections[] = new DiscreteParameter[4];
-    public DeckWindow[] windows = new DeckWindow[4];
+    public DeckWindow[] deckWindows = new DeckWindow[4];
     public UIWindow[] crossfaders = new UIWindow[3];
 
     int oldDeckL = -1;
     int oldDeckR = -1;
 
     SLStudioLX.UI ui;
+    private LXChannel.CrossfadeGroup oldAB = null;
 
     class Listener implements LXEngine.Listener {
         @Override
@@ -86,7 +89,7 @@ public class PerformanceManager extends LXComponent {
 
         for (int i = 0; i < 4; i++) {
             DiscreteParameter param = channelSelections[i];
-            DeckWindow w = windows[i];
+            DeckWindow w = deckWindows[i];
             param.setOptions(options);
             w.dropMenu.setParameter(param);
         }
@@ -205,7 +208,7 @@ public class PerformanceManager extends LXComponent {
             DeckWindow w = new DeckWindow(selection, i, this, ui, "NEVER SEE THIS", x, CHAN_Y, CHAN_WIDTH, CHAN_HEIGHT);
             ui.addLayer(w);
             w.setVisible(false);
-            windows[i] = w;
+            deckWindows[i] = w;
         }
 
         float w = (2 * CHAN_WIDTH + PAD) / 2;
@@ -229,28 +232,32 @@ public class PerformanceManager extends LXComponent {
         crossfaders[2] = fC;
     }
 
-    public void start( SLStudioLX.UI ui) {
+    public void start(SLStudioLX.UI ui) {
         this.ui = ui;
+
         SLStudio.applet.lx.engine.addListener(new Listener());
         addUI();
         setChannelOptions();
-        for (DeckWindow w : windows) {
+        for (DeckWindow w : deckWindows) {
             w.start();
         }
 
-
-        lFader.addListener(parameter -> swapDecks(lFader, 0));
-
-        rFader.addListener(parameter -> swapDecks(rFader, 1));
+        lFader.addListener(parameter -> swapDecks(lFader, DeckSide.LEFT));
+        rFader.addListener(parameter -> swapDecks(rFader, DeckSide.RIGHT));
+        getLX().engine.crossfader.addListener(parameter -> {
+            swapDecks(rFader, DeckSide.RIGHT);
+            swapDecks(rFader, DeckSide.LEFT);
+        });
 
         if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-            bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, 0);
-            bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, 1);
+            bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
+            bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
         }
+
         SLStudio.applet.apc40Listener.hasRemote.addListener(parameter -> {
             if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-                bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, 0);
-                bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, 1);
+                bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
+                bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
             }
         });
 
@@ -261,26 +268,50 @@ public class PerformanceManager extends LXComponent {
 
     }
 
-    void swapDecks(CompoundParameter fader, int side) {
-        int newDeck = getWindowIndex(side);
-        int oldDeck = side == 0 ? oldDeckL : oldDeckR;
-        if (newDeck == oldDeck) {
+    private void updateDeckColors() {
+        double crossfade = getLX().engine.crossfader.getValue();
+
+        deckWindows[0].setBackgroundColor(computeDeckColor(lFader.getValue() < .5f, crossfade < .5f));
+        deckWindows[1].setBackgroundColor(computeDeckColor(lFader.getValue() >= .5f, crossfade < .5f));
+
+        deckWindows[2].setBackgroundColor(computeDeckColor(rFader.getValue() < .5f, crossfade >= .5f));
+        deckWindows[3].setBackgroundColor(computeDeckColor(rFader.getValue() >= .5f, crossfade >= .5f));
+    }
+
+    private int computeDeckColor(boolean groupActive, boolean abActive) {
+        int color = ui.theme.getDeviceBackgroundColor();
+        if (abActive) color = lerpColor(color, WHITE, .2f, RGB);
+        if (groupActive) color = lerpColor(color, RED, abActive ? .2f : .1f, RGB);
+        return color;
+    }
+
+    void swapDecks(CompoundParameter fader, DeckSide side) {
+        int newDeck = focusedDeskIndexForSide(side);
+        int oldDeck = side == DeckSide.LEFT ? oldDeckL : oldDeckR;
+        LXChannel.CrossfadeGroup newAB = getLX().engine.crossfader.getValue() < .5 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
+        if (newDeck != oldDeck || newAB != oldAB)
+            updateDeckColors();
+
+        if (newDeck == oldDeck && newAB == oldAB) {
             return;
         }
-        windows[newDeck].setBackgroundColor(ui.theme.getDeviceFocusedBackgroundColor());
+        oldAB = newAB;
+
+
         if (oldDeck != -1) {
-            windows[oldDeck].unbindDeck();
-            windows[oldDeck].setBackgroundColor(ui.theme.getDeviceBackgroundColor());
+            deckWindows[oldDeck].unbindDeck();
         }
-        windows[newDeck].bindDeck();
-        if (side == 0) {
+
+        deckWindows[newDeck].bindDeck();
+
+        if (side == DeckSide.LEFT) {
             oldDeckL = newDeck;
         } else {
             oldDeckR = newDeck;
         }
     }
 
-    void bindCommon(LXMidiRemote remote, CompoundParameter fader, int side) {
+    void bindCommon(LXMidiRemote remote, CompoundParameter fader, DeckSide side) {
         if (remote == null) return;
         remote.bindController(fader, 0, 15);
         remote.bindController(SLStudio.applet.lx.engine.output.brightness, 0, 14);
@@ -292,12 +323,29 @@ public class PerformanceManager extends LXComponent {
         swapDecks(fader, side);
     }
 
-    public int getWindowIndex(int side) {
-        if (side == 0) {
+    public int focusedDeskIndexForSide(DeckSide side) {
+        if (side == DeckSide.LEFT) {
             return lFader.getValuef() < 0.5 ? 0 : 1;
         } else {
             return rFader.getValuef() < 0.5 ? 2 : 3;
         }
     }
 
+    public enum DeckSide {
+        LEFT {
+            @Override
+            public boolean isActive(final LX lx) {
+                return lx.engine.crossfader.getValue() < .5;
+            }
+        },
+
+        RIGHT {
+            @Override
+            public boolean isActive(final LX lx) {
+                return lx.engine.crossfader.getValue() >= .5;
+            }
+        };
+
+        public abstract boolean isActive(final LX lx);
+    }
 }
