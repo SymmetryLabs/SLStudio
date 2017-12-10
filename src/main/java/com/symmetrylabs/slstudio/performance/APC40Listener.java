@@ -16,8 +16,6 @@ import heronarts.lx.midi.remote.LXMidiRemote;
 import heronarts.lx.midi.surface.LXMidiSurface;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import processing.core.PApplet;
 
 import java.util.ArrayList;
@@ -34,12 +32,7 @@ public class APC40Listener extends LXComponent {
     public APC40Listener(LX lx) {
         super(lx);
 
-        lx.engine.midi.whenReady(new Runnable() {
-            public void run() {
-                bind();
-
-            }
-        });
+        lx.engine.midi.whenReady(this::bind);
     }
 
     class Listener implements LXMidiListener {
@@ -94,19 +87,17 @@ public class APC40Listener extends LXComponent {
     void bind() {
         for (final LXMidiSurface s : SLStudio.applet.lx.engine.midi.surfaces) {
             s.enabled.setValue(false);
-            s.enabled.addListener(new LXParameterListener() {
-                public void onParameterChanged(LXParameter parameter) {
-                    if (s.enabled.isOn()) {
-                        s.enabled.setValue(false);
-                    }
+            s.enabled.addListener(parameter -> {
+                if (s.enabled.isOn()) {
+                    s.enabled.setValue(false);
                 }
             });
         }
 
         List<LXMidiInput> inputs = SLStudio.applet.lx.engine.midi.getInputs();
         List<LXMidiOutput> outputs = SLStudio.applet.lx.engine.midi.getOutputs();
-        ArrayList<LXMidiInput> apcInputs = new ArrayList();
-        ArrayList<LXMidiOutput> apcOutputs = new ArrayList();
+        ArrayList<LXMidiInput> apcInputs = new ArrayList<>();
+        ArrayList<LXMidiOutput> apcOutputs = new ArrayList<>();
 
 
         for (LXMidiInput i : inputs) {

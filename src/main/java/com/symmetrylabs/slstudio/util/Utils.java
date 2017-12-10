@@ -1641,23 +1641,23 @@ public final class Utils {
         return noise(x, y, 0f);
     }
 
-    public static float noise(float x, float y, float z) {
-        if (perlin == null) {
-            if (perlinRandom == null) {
-                perlinRandom = new Random();
-            }
-            perlin = new float[PERLIN_SIZE + 1];
-            for (int i = 0; i < PERLIN_SIZE + 1; i++) {
-                perlin[i] = perlinRandom.nextFloat(); //(float)Math.random();
-            }
-            // [toxi 031112]
-            // noise broke due to recent change of cos table in PGraphics
-            // this will take care of it
-            perlin_cosTable = cosLUT;
-            perlin_TWOPI = perlin_PI = SINCOS_LENGTH;
-            perlin_PI >>= 1;
+    static {
+        if (perlinRandom == null) {
+            perlinRandom = new Random();
         }
+        perlin = new float[PERLIN_SIZE + 1];
+        for (int i = 0; i < PERLIN_SIZE + 1; i++) {
+            perlin[i] = perlinRandom.nextFloat(); //(float)Math.random();
+        }
+        // [toxi 031112]
+        // noise broke due to recent change of cos table in PGraphics
+        // this will take care of it
+        perlin_cosTable = cosLUT;
+        perlin_TWOPI = perlin_PI = SINCOS_LENGTH;
+        perlin_PI >>= 1;
+    }
 
+    public static float noise(float x, float y, float z) {
         if (x < 0) x = -x;
         if (y < 0) y = -y;
         if (z < 0) z = -z;
