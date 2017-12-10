@@ -1,22 +1,18 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import processing.core.PImage;
 
-import java.util.Arrays;
-import java.util.function.Consumer;
-
 import static processing.core.PApplet.*;
 
 /**
  * @author Yo*na Appletree (yona@concentricsky.com)
  */
-public class Spheres extends LXPattern {
+public class Spheres extends SLPattern {
     private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);
     private CompoundParameter periodParameter = new CompoundParameter("PERIOD", 4000.0, 200.0, 10000.0);
     private CompoundParameter hueVariance = new CompoundParameter("HueVar", 50, 0, 180);
@@ -75,9 +71,11 @@ public class Spheres extends LXPattern {
         spheres[0].radius = 100 * hueParameter.getValuef();
         spheres[1].radius = 100 * hueParameter.getValuef();
 
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-            @Override
-            public void accept(final LXPoint p) {
+
+        model.forEachPoint((start, end) -> {
+            for (int i=start; i<end; i++) {
+                LXPoint p = model.points[i];
+
                 float value = 0;
 
                 int c = lx.hsb(0, 0, 0);

@@ -1,13 +1,14 @@
 package com.symmetrylabs.slstudio.render;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
 import java.util.Arrays;
-import java.util.function.Consumer;
 
 public class InterpolatingRenderer extends Renderer {
+    private final SLModel.PointBatches pointBatches;
     private int[] frameA, frameB, active;
     private double lastRenderTimeMillis;
     private double lastRenderElapsedMillis;
@@ -23,6 +24,8 @@ public class InterpolatingRenderer extends Renderer {
         frameA = new int[colors.length];
         frameB = new int[colors.length];
         active = new int[colors.length];
+
+        pointBatches = new SLModel.PointBatches(points, SLModel.PointBatches.NUM_POINT_BATCHES);
     }
 
     @Override
@@ -56,8 +59,11 @@ public class InterpolatingRenderer extends Renderer {
         double f = (t - lastRenderTimeMillis) / lastRenderElapsedMillis;
         final double fFinal = f > 1 ? 1 : f;
         //System.out.println("Showing: " + frameA + " and " + frameB + " (" + f + ")");
-        points.parallelStream().forEach(new Consumer<LXPoint>() {
-            public void accept(LXPoint point) {
+
+        pointBatches.forEachPoint((start, end) -> {
+            for (int i = start; i < end; i++) {
+                final LXPoint point = points.get(i);
+
                 int c1 = frameA[point.index];
                 int c2 = frameB[point.index];
           /*

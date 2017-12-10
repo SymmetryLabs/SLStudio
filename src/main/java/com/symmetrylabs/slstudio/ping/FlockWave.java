@@ -1,8 +1,8 @@
 package com.symmetrylabs.slstudio.ping;
 
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.util.BlobFollower;
@@ -22,7 +22,6 @@ import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.Date;
 import java.util.List;
@@ -337,8 +336,11 @@ public class FlockWave extends SLPatternWithMarkers {
             points = slModel.masterSun.points;
         }
 
-        Arrays.asList(points).parallelStream().forEach(new Consumer<LXPoint>() {
-            public void accept(LXPoint point) {
+
+        model.forEachPoint((start, end) -> {
+            for (int i=start; i<end; i++) {
+                LXPoint point = model.points[i];
+
                 double sum = 0;
                 for (Bird bird : birds) {
                     sum += bird.renderedValues[point.index];

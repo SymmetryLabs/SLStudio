@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.util.dan;
 
-import com.symmetrylabs.slstudio.model.BatchConsumer;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
 import heronarts.lx.LX;
@@ -385,52 +384,49 @@ public abstract class DPat extends LXPattern {
                 sun.copyFromMasterSun(colors);
             }
         } else {
-            ((SLModel) model).forEachPoint(new BatchConsumer() {
-                @Override
-                public void accept(int start, int end) {
-                    for (int i = start; i < end; i++) {
-                        LXPoint p = model.points[i];
-                        PVector P = new PVector(), tP = new PVector();
+            ((SLModel) model).forEachPoint((start, end) -> {
+                for (int i = start; i < end; i++) {
+                    LXPoint p = model.points[i];
+                    PVector P = new PVector(), tP = new PVector();
 
-                        setVec(P, p);
-                        P.sub(modmin);
-                        P.sub(pTrans);
-                        if (sprk > 0) {
-                            P.y += sprk * randctr(50);
-                            P.x += sprk * randctr(50);
-                            P.z += sprk * randctr(50);
-                        }
-                        if (wvAmp > 0) P.y += interpWv(p.x - modmin.x, yWaveNz);
-                        if (wvAmp > 0) P.x += interpWv(p.y - modmin.y, xWaveNz);
-                        if (pJog.getValueb()) P.add(xyzJog);
-
-
-                        int cNew, cOld = colors[p.index];
-                        {
-                            tP.set(P);
-                            cNew = CalcPoint(tP);
-                        }
-                        if (pXsym.getValueb()) {
-                            tP.set(mMax.x - P.x, P.y, P.z);
-                            cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                        }
-                        if (pYsym.getValueb()) {
-                            tP.set(P.x, mMax.y - P.y, P.z);
-                            cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                        }
-                        if (pRsym.getValueb()) {
-                            tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
-                            cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                        }
-                        if (pXdup.getValueb()) {
-                            tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
-                            cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                        }
-                        if (pGrey.getValueb()) {
-                            cNew = lx.hsb(0, 0, LXColor.b(cNew));
-                        }
-                        colors[p.index] = cNew;
+                    setVec(P, p);
+                    P.sub(modmin);
+                    P.sub(pTrans);
+                    if (sprk > 0) {
+                        P.y += sprk * randctr(50);
+                        P.x += sprk * randctr(50);
+                        P.z += sprk * randctr(50);
                     }
+                    if (wvAmp > 0) P.y += interpWv(p.x - modmin.x, yWaveNz);
+                    if (wvAmp > 0) P.x += interpWv(p.y - modmin.y, xWaveNz);
+                    if (pJog.getValueb()) P.add(xyzJog);
+
+
+                    int cNew, cOld = colors[p.index];
+                    {
+                        tP.set(P);
+                        cNew = CalcPoint(tP);
+                    }
+                    if (pXsym.getValueb()) {
+                        tP.set(mMax.x - P.x, P.y, P.z);
+                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                    }
+                    if (pYsym.getValueb()) {
+                        tP.set(P.x, mMax.y - P.y, P.z);
+                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                    }
+                    if (pRsym.getValueb()) {
+                        tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
+                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                    }
+                    if (pXdup.getValueb()) {
+                        tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
+                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                    }
+                    if (pGrey.getValueb()) {
+                        cNew = lx.hsb(0, 0, LXColor.b(cNew));
+                    }
+                    colors[p.index] = cNew;
                 }
             });
         }

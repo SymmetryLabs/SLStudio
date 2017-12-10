@@ -1,19 +1,14 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import java.util.Arrays;
-import java.util.function.Consumer;
-
 import static processing.core.PApplet.*;
 
-
-public class BassPod extends LXPattern {
+public class BassPod extends SLPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -43,9 +38,10 @@ public class BassPod extends LXPattern {
         final float bassLevel = eq.getAveragef(0, 5);
         final float satBase = bassLevel * 480 * clr.getValuef();
 
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-            @Override
-            public void accept(final LXPoint p) {
+        model.forEachPoint((start, end) -> {
+            for (int pi=start; pi<end; pi++) {
+                LXPoint p = model.points[pi];
+
                 int avgIndex = (int) constrain(1 + abs(p.x - model.cx) / (model.cx) * (eq.numBands - 5), 0, eq.numBands - 5);
                 float value = 0;
                 for (int i = avgIndex; i < avgIndex + 5; ++i) {

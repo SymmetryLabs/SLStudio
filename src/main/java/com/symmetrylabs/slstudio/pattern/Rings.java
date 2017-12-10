@@ -1,13 +1,9 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
-
-import java.util.Arrays;
-import java.util.function.Consumer;
 
 import static com.symmetrylabs.slstudio.util.Utils.noise;
 import static com.symmetrylabs.slstudio.util.Utils.noiseDetail;
@@ -15,7 +11,7 @@ import static processing.core.PApplet.constrain;
 import static processing.core.PApplet.map;
 
 
-public class Rings extends LXPattern {
+public class Rings extends SLPattern {
     float dx, dy, dz;
     float angleParam, spacingParam;
     float dzParam, centerParam;
@@ -72,9 +68,12 @@ public class Rings extends LXPattern {
 
         noiseDetail(4);
 
-        Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-            @Override
-            public void accept(final LXPoint p) {
+
+        model.forEachPoint((start, end) -> {
+            for (int i=start; i<end; i++) {
+                LXPoint p = model.points[i];
+
+
                 // Scale while preserving aspect ratio
                 float x = map(p.x, coordMin, coordMax, 0.0f, 1.0f);
                 float y = map(p.y, coordMin, coordMax, 0.0f, 1.0f);

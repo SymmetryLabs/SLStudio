@@ -1,7 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.color.LXColor;
@@ -10,15 +9,13 @@ import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.function.Consumer;
 
 import static com.symmetrylabs.slstudio.util.Utils.random;
 import static processing.core.PApplet.*;
 
 
-public class ViolinWave extends LXPattern {
+public class ViolinWave extends SLPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -83,9 +80,10 @@ public class ViolinWave extends LXPattern {
 
             final float pFalloff = (30 - 27 * pSize.getValuef());
 
-            Arrays.asList(model.points).parallelStream().forEach(new Consumer<LXPoint>() {
-                @Override
-                public void accept(final LXPoint p) {
+            model.forEachPoint((start, end) -> {
+                for (int i=start; i<end; i++) {
+                    LXPoint p = model.points[i];
+
                     float b = 100 - pFalloff * (abs(p.x - x.getValuef()) + abs(p.y - y.getValuef()));
                     if (b > 0) {
                         blendColor(p.index, lx.hsb(
