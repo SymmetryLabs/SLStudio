@@ -74,7 +74,7 @@ public class ArtNetDatagram extends LXDatagram {
 
         // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
         // be about right - Yona
-        busySleep(3000);
+        busySleep(2000);
     }
 
     LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
