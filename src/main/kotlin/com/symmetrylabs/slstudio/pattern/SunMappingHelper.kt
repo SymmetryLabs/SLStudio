@@ -14,10 +14,12 @@ import processing.core.PVector
  * @author Yona Appletree (yona@concentricsky.com)
  */
 class SunMappingHelper(lx: LX) : KPattern(lx) {
+	val enabledParam = booleanParam("ON", false)
 	val sunIndex = discreteParameter("SUN", 0, 0, model.suns.size)
 	val stripIndex = discreteParameter("STRIP", 0, 0, 1)
 
 	val stripRotation = compoundParam("ROT", 0.0, -0.08, 0.08)
+
 
 	val ledPitch = INCHES_PER_METER / 60
 
@@ -25,14 +27,14 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	val selectedStrip get() = selectedSun.strips[stripIndex.valuei] as CurvedStrip
 
 	init {
+		enabledParam.addListener { enableSunOutputs() }
 		sunIndex.addListener {
 			stripIndex.setRange(0, selectedSun.strips.size)
-			lx.engine.output.enabled.setValue(true)
-			SLStudio.applet.pixlites.forEach { it.enabled.setValue(it.slice.id.startsWith(selectedSun.id)) }
-			stripRotation.value = FultonStreetLayout.rotationForStrip(selectedSun, selectedSun.strips.indexOf(selectedStrip)).double
+			enableSunOutputs()
+			updateStripRotationParam()
 		}
 		stripIndex.addListener {
-			stripRotation.value = FultonStreetLayout.rotationForStrip(selectedSun, selectedSun.strips.indexOf(selectedStrip)).double
+			updateStripRotationParam()
 		}
 		stripRotation.addListener {
 			selectedStrip.updateOffset(it.valuef)
@@ -42,20 +44,36 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 		}
 	}
 
-	override fun run(v: Double) {
-		colors.fill(0)
-		selectedSun.points.forEach { point ->
-			val distance = point.x - selectedSun.center.x
+	private fun updateStripRotationParam() {
+		stripRotation.value = FultonStreetLayout.rotationForStrip(
+			selectedSun,
+			selectedSun.strips.indexOf(selectedStrip)
+		).double
+	}
 
-			if (distance.abs < ledPitch) {
-				val brightness = distance / ledPitch
-				point.color = LX.hsb(
-					0f,
-					if (selectedStrip.points.contains(point)) 0f else 100f,
-					brightness*100
-				)
-			} else {
-				point.color = 0xFF001100.toInt()
+	private fun enableSunOutputs() {
+		if (enabledParam.isOn) {
+			lx.engine.output.enabled.setValue(true)
+			SLStudio.applet.pixlites.forEach { it.enabled.setValue(it.slice.id.startsWith(selectedSun.id)) }
+		}
+	}
+
+	override fun run(v: Double) {
+		if (enabledParam.isOn) {
+			colors.fill(0)
+			selectedSun.points.forEach { point ->
+				val distance = point.x - selectedSun.center.x
+
+				if (distance.abs < ledPitch) {
+					val brightness = distance / ledPitch
+					point.color = LX.hsb(
+						0f,
+						if (selectedStrip.points.contains(point)) 0f else 100f,
+						brightness * 100
+					)
+				} else {
+					point.color = 0xFF001100.toInt()
+				}
 			}
 		}
 	}

@@ -468,7 +468,11 @@ public class FultonStreetLayout {
 
         final int stripIndex = sun.strips.indexOf(strip);
 
+        while (stripRots.size() <= stripIndex) {
+            stripRots.add(0d);
+        }
         stripRots.set(stripIndex, (double) rot);
+
         saveRotationData();
     }
 
@@ -478,6 +482,7 @@ public class FultonStreetLayout {
             return 0;
         }
 
+        if (i >= stripRots.size()) return 0;
         final Double rot = stripRots.get(i);
         if (rot == null) return 0;
         return rot.floatValue();
