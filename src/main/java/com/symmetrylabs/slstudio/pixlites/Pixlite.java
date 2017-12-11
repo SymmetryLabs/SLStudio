@@ -162,19 +162,19 @@ public class Pixlite extends LXOutputGroup {
                 new Sun10BackBottomPixliteConfig(lx, slice, ipAddress, this);
             }
 
-            // // com.symmetrylabs.slstudio.model.Sun 11
-            // if(slice.id.equals("sun11_top_front")) {
-            //   new com.symmetrylabs.slstudio.mappings.Sun11FrontTopPixliteConfig(lx, slice, ipAddress, this);
-            // }
-            // if(slice.id.equals("sun11_bottom_front")) {
-            //   new com.symmetrylabs.slstudio.mappings.Sun11FrontBottomPixliteConfig(lx, slice, ipAddress, this);
-            // }
-            // if(slice.id.equals("sun11_top_back")) {
-            //   new com.symmetrylabs.slstudio.mappings.Sun11BackTopPixliteConfig(lx, slice, ipAddress, this);
-            // }
-            // if(slice.id.equals("sun11_bottom_back")) {
-            //   new com.symmetrylabs.slstudio.mappings.Sun11BackBottomPixliteConfig(lx, slice, ipAddress, this);
-            // }
+             // com.symmetrylabs.slstudio.model.Sun 11
+             if(slice.id.equals("sun11_top_front")) {
+               new com.symmetrylabs.slstudio.mappings.Sun11FrontTopPixliteConfig(lx, slice, ipAddress, this);
+             }
+             if(slice.id.equals("sun11_bottom_front")) {
+               new com.symmetrylabs.slstudio.mappings.Sun11FrontBottomPixliteConfig(lx, slice, ipAddress, this);
+             }
+             if(slice.id.equals("sun11_top_back")) {
+               new com.symmetrylabs.slstudio.mappings.Sun11BackTopPixliteConfig(lx, slice, ipAddress, this);
+             }
+             if(slice.id.equals("sun11_bottom_back")) {
+               new com.symmetrylabs.slstudio.mappings.Sun11BackBottomPixliteConfig(lx, slice, ipAddress, this);
+             }
 
         } catch (Exception e) {
             e.printStackTrace();

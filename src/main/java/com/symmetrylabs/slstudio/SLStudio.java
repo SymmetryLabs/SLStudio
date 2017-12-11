@@ -371,84 +371,84 @@ public class SLStudio extends PApplet {
 
         Pixlite[] pixlites = new Pixlite[]{
             // com.symmetrylabs.slstudio.model.Sun 1 (One Third)
-            new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
-            // trimmed
-            new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
-            // trimmed
-
-            // com.symmetrylabs.slstudio.model.Sun 2
-            new Pixlite(lx, "10.200.1.41", model.getSliceById("sun2_top_back")),
-            new Pixlite(lx, "10.200.1.42", model.getSliceById("sun2_top_front")),
-
-            // com.symmetrylabs.slstudio.model.Sun 3 (One Third)
-            new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
-            new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
-
-            // com.symmetrylabs.slstudio.model.Sun 4 (One Half)
-            new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
-            new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
-
-            // com.symmetrylabs.slstudio.model.Sun 5 (One Third)
-            new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")),
-            // locked
-            new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")),
-            // locked
-
-            // com.symmetrylabs.slstudio.model.Sun 6 (Two Thirds)
-            new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")),
-            // locked
-            new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")),
-            // locked
-
-            // com.symmetrylabs.slstudio.model.Sun 7 (Two Thirds)
-            new Pixlite(lx, "10.200.1.33", ((SLModel) lx.model).getSliceById("sun7_top_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.34", ((SLModel) lx.model).getSliceById("sun7_bottom_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.31", ((SLModel) lx.model).getSliceById("sun7_top_back")),
-            // locked
-            new Pixlite(lx, "10.200.1.32", ((SLModel) lx.model).getSliceById("sun7_bottom_back")),
-            // locked
-
-            // com.symmetrylabs.slstudio.model.Sun 8 (Two Thirds)
-            new Pixlite(lx, "10.200.1.27", ((SLModel) lx.model).getSliceById("sun8_top_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.28", ((SLModel) lx.model).getSliceById("sun8_bottom_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.29", ((SLModel) lx.model).getSliceById("sun8_top_back")),
-            // trimmed
-            new Pixlite(lx, "10.200.1.30", ((SLModel) lx.model).getSliceById("sun8_bottom_back")),
-            // trimmed
-
-            // com.symmetrylabs.slstudio.model.Sun 9 (Full)
-            new Pixlite(lx, "10.200.1.13", ((SLModel) lx.model).getSliceById("sun9_top_back")),
-            // 13
-            new Pixlite(lx, "10.200.1.14", ((SLModel) lx.model).getSliceById("sun9_bottom_back")),
-            // 14
-            new Pixlite(lx, "10.200.1.12", ((SLModel) lx.model).getSliceById("sun9_top_front")),
-            // NEEDS WORK!
-            new Pixlite(lx, "10.200.1.11", ((SLModel) lx.model).getSliceById("sun9_bottom_front")),
-            // NEEDS WORK!
-
-            // com.symmetrylabs.slstudio.model.Sun 10 (Full)
-            new Pixlite(lx, "10.200.1.22", ((SLModel) lx.model).getSliceById("sun10_top_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.15", ((SLModel) lx.model).getSliceById("sun10_bottom_front")),
-            // locked
-            new Pixlite(lx, "10.200.1.21", ((SLModel) lx.model).getSliceById("sun10_top_back")),
-            // locked but need trim maybe
-            new Pixlite(lx, "10.200.1.16", ((SLModel) lx.model).getSliceById("sun10_bottom_back")),
-            // locked but need trim maybe (move whole bottom to the right)
+//            new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")),
+//            // trimmed
+//            new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")),
+//            // trimmed
+//
+//            // com.symmetrylabs.slstudio.model.Sun 2
+//            new Pixlite(lx, "10.200.1.41", model.getSliceById("sun2_top_back")),
+//            new Pixlite(lx, "10.200.1.42", model.getSliceById("sun2_top_front")),
+//
+//            // com.symmetrylabs.slstudio.model.Sun 3 (One Third)
+//            new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
+//            new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
+//
+//            // com.symmetrylabs.slstudio.model.Sun 4 (One Half)
+//            new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
+//            new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
+//
+//            // com.symmetrylabs.slstudio.model.Sun 5 (One Third)
+//            new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")),
+//            // locked
+//
+//            // com.symmetrylabs.slstudio.model.Sun 6 (Two Thirds)
+//            new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.23", model.getSliceById("sun6_bottom_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.26", model.getSliceById("sun6_top_back")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.25", model.getSliceById("sun6_bottom_back")),
+//            // locked
+//
+//            // com.symmetrylabs.slstudio.model.Sun 7 (Two Thirds)
+//            new Pixlite(lx, "10.200.1.33", ((SLModel) lx.model).getSliceById("sun7_top_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.34", ((SLModel) lx.model).getSliceById("sun7_bottom_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.31", ((SLModel) lx.model).getSliceById("sun7_top_back")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.32", ((SLModel) lx.model).getSliceById("sun7_bottom_back")),
+//            // locked
+//
+//            // com.symmetrylabs.slstudio.model.Sun 8 (Two Thirds)
+//            new Pixlite(lx, "10.200.1.27", ((SLModel) lx.model).getSliceById("sun8_top_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.28", ((SLModel) lx.model).getSliceById("sun8_bottom_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.29", ((SLModel) lx.model).getSliceById("sun8_top_back")),
+//            // trimmed
+//            new Pixlite(lx, "10.200.1.30", ((SLModel) lx.model).getSliceById("sun8_bottom_back")),
+//            // trimmed
+//
+//            // com.symmetrylabs.slstudio.model.Sun 9 (Full)
+//            new Pixlite(lx, "10.200.1.13", ((SLModel) lx.model).getSliceById("sun9_top_back")),
+//            // 13
+//            new Pixlite(lx, "10.200.1.14", ((SLModel) lx.model).getSliceById("sun9_bottom_back")),
+//            // 14
+//            new Pixlite(lx, "10.200.1.12", ((SLModel) lx.model).getSliceById("sun9_top_front")),
+//            // NEEDS WORK!
+//            new Pixlite(lx, "10.200.1.11", ((SLModel) lx.model).getSliceById("sun9_bottom_front")),
+//            // NEEDS WORK!
+//
+//            // com.symmetrylabs.slstudio.model.Sun 10 (Full)
+//            new Pixlite(lx, "10.200.1.22", ((SLModel) lx.model).getSliceById("sun10_top_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.15", ((SLModel) lx.model).getSliceById("sun10_bottom_front")),
+//            // locked
+//            new Pixlite(lx, "10.200.1.21", ((SLModel) lx.model).getSliceById("sun10_top_back")),
+//            // locked but need trim maybe
+//            new Pixlite(lx, "10.200.1.16", ((SLModel) lx.model).getSliceById("sun10_bottom_back")),
+//            // locked but need trim maybe (move whole bottom to the right)
 
             // sun 11
-            // new Pixlite(lx, "10.200.1.xx", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_front")),
-            // new Pixlite(lx, "10.200.1.xx", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_front")),
-            // new Pixlite(lx, "10.200.1.xx", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_back")), // locked
-            // new Pixlite(lx, "10.200.1.xx", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
+             new Pixlite(lx, "10.200.1.51", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_front")),
+//             new Pixlite(lx, "10.200.1.52", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_front")),
+//             new Pixlite(lx, "10.200.1.53", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_back")), // locked
+//             new Pixlite(lx, "10.200.1.54", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
         };
 
         for (Pixlite pixlite : pixlites) {
