@@ -21,6 +21,8 @@ import processing.core.PApplet;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.symmetrylabs.slstudio.performance.PerformanceManager.DeckSide.LEFT;
+import static com.symmetrylabs.slstudio.performance.PerformanceManager.DeckSide.RIGHT;
 import static processing.core.PApplet.println;
 
 
@@ -37,9 +39,9 @@ public class APC40Listener extends LXComponent {
 
     class Listener implements LXMidiListener {
         BoundedParameter col;
-        int side;
+        PerformanceManager.DeckSide side;
 
-        public Listener(BoundedParameter col, int side) {
+        public Listener(BoundedParameter col, PerformanceManager.DeckSide side) {
             this.col = col;
             this.side = side;
         }
@@ -65,13 +67,13 @@ public class APC40Listener extends LXComponent {
         public void noteOnReceived(MidiNoteOn note) {
             if (note.getPitch() == 94) {
                 println("UP");
-                int i = SLStudio.applet.performanceManager.getWindowIndex(side);
-                SLStudio.applet.performanceManager.windows[i].channel.goPrev();
+                int i = SLStudio.applet.performanceManager.focusedDeskIndexForSide(side);
+                SLStudio.applet.performanceManager.deckWindows[i].channel.goPrev();
             }
             if (note.getPitch() == 95) {
                 println("DOWN");
-                int i = SLStudio.applet.performanceManager.getWindowIndex(side);
-                SLStudio.applet.performanceManager.windows[i].channel.goNext();
+                int i = SLStudio.applet.performanceManager.focusedDeskIndexForSide(side);
+                SLStudio.applet.performanceManager.deckWindows[i].channel.goNext();
             }
         }
 
@@ -125,10 +127,10 @@ public class APC40Listener extends LXComponent {
             remotes[i].logEvents(true);
 
             if (i == 0) {
-                input.addListener(new Listener(SLStudio.applet.performanceManager.lColor, 0));
+                input.addListener(new Listener(SLStudio.applet.performanceManager.lColor, LEFT));
                 remotes[i].sendNoteOn(0, 32, 127);
             } else {
-                input.addListener(new Listener(SLStudio.applet.performanceManager.rColor, 1));
+                input.addListener(new Listener(SLStudio.applet.performanceManager.rColor, RIGHT));
                 remotes[i].sendNoteOn(0, 33, 127);
             }
         }

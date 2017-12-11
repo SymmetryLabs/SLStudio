@@ -2,6 +2,8 @@ package com.symmetrylabs.slstudio;
 
 import com.google.gson.JsonObject;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
+import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
+import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
 import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
 import com.symmetrylabs.slstudio.ui.UIFramerate;
@@ -198,7 +200,7 @@ public class SLStudioLX extends P3LX {
             this.leftPane.setVisible(!performanceMode);
             this.rightPane.setVisible(!performanceMode);
             if (SLStudio.applet.performanceManager == null) return;
-            for (UIWindow w : SLStudio.applet.performanceManager.windows) {
+            for (UIWindow w : SLStudio.applet.performanceManager.deckWindows) {
                 if (w != null) {
                     w.setVisible(performanceMode);
                 }
@@ -221,8 +223,9 @@ public class SLStudioLX extends P3LX {
             // });
 
             if (performanceMode) {
-                SLStudio.applet.performanceManager.windows[SLStudio.applet.performanceManager.getWindowIndex(0)].rebindDeck();
-                SLStudio.applet.performanceManager.windows[SLStudio.applet.performanceManager.getWindowIndex(1)].rebindDeck();
+                SLStudio.applet.performanceManager.deckWindows[SLStudio.applet.performanceManager.focusedDeskIndexForSide(
+                    PerformanceManager.DeckSide.LEFT)].rebindDeck();
+                SLStudio.applet.performanceManager.deckWindows[SLStudio.applet.performanceManager.focusedDeskIndexForSide(PerformanceManager.DeckSide.RIGHT)].rebindDeck();
             }
 
         }
@@ -438,14 +441,17 @@ public class SLStudioLX extends P3LX {
      * Subclasses may override to register additional components before the UI is built
      */
     protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
+        // Add all effects
         classpathScanner.getNamesOfSubclassesOf(LXEffect.class).stream()
             .map(this::classForNameOrNull)
             .filter(Objects::nonNull)
             .forEach(c -> lx.registerEffect((Class<? extends LXEffect>) c));
 
+        // Add all patterns
         classpathScanner.getNamesOfSubclassesOf(LXPattern.class).stream()
             .map(this::classForNameOrNull)
             .filter(Objects::nonNull)
+            .filter(it -> SLStudio.LOAD_TEST_PATTERNS || ! SLTestPattern.class.isAssignableFrom(it))
             .forEach(c -> lx.registerPattern((Class<? extends LXPattern>) c));
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);

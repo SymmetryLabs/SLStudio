@@ -8,7 +8,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
 
-public class SunOrientation extends SLPattern {
+public class SunOrientation extends SLPattern implements SLTestPattern {
 
      public SunOrientation(LX lx) {
          super(lx);

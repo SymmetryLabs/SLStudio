@@ -11,7 +11,7 @@ import static processing.core.PApplet.*;
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class ParamCrossSections extends SLPattern {
+public class ParamCrossSections extends SLPattern implements SLTestPattern {
 
     final CompoundParameter x = new CompoundParameter("XPOS", 0.3);
     final CompoundParameter y = new CompoundParameter("YPOS", 0.3);

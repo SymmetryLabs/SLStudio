@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.model;
 
+import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
 import com.symmetrylabs.slstudio.util.NullOutputStream;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXModel;
@@ -71,6 +72,16 @@ public class Sun extends LXModel {
 
         computeBoundingBox();
         distances = computeDistances();
+        applyStripRotations();
+    }
+
+    private void applyStripRotations() {
+        // Apply the rotations to the strips
+        for (int i = 0, stripsSize = strips.size(); i < stripsSize; i++) {
+            final CurvedStrip strip = (CurvedStrip) strips.get(i);
+
+            strip.updateOffset(FultonStreetLayout.rotationForStrip(this, i));
+        }
     }
 
     void computeMasterIndexes(Sun masterSun) {
@@ -357,7 +368,7 @@ public class Sun extends LXModel {
                         numPointsPerStrip[2]
                     ));
                     slices.add(new Slice(
-                        id + "_bottom_back",
+                         id + "_bottom_back",
                         Slice.Type.BOTTOM_ONE_THIRD,
                         new float[]{-Slice.RADIUS, -Slice.RADIUS + 1.5f, 0},
                         new float[]{0, 180, 180},

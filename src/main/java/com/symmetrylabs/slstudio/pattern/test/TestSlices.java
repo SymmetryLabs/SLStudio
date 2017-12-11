@@ -7,7 +7,7 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 
-public class TestSlices extends SLPattern {
+public class TestSlices extends SLPattern implements SLTestPattern {
 
      public TestSlices(LX lx) {
          super(lx);

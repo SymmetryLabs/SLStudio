@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.ui;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import heronarts.lx.LX;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -15,13 +16,25 @@ import java.util.List;
 
 
 class UIOutputs extends UICollapsibleSection {
+    BooleanParameter clearParam = new BooleanParameter("clear", false);
+
     UIOutputs(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 500);
         setTitle();
 
-        addTopLevelComponent(new UIButton(4, 4, 12, 12) {
-        }
-            .setParameter(SLStudio.applet.outputControl.enabled).setBorderRounding(4));
+        addTopLevelComponent(
+            new UIButton(4, 4, 12, 12)
+                .setParameter(SLStudio.applet.outputControl.enabled).setBorderRounding(4)
+        );
+
+        addTopLevelComponent(new UIButton(80, 4, 30, 12).setParameter(clearParam));
+        clearParam.addListener(it -> {
+            for (final Pixlite pixlite : SLStudio.applet.pixlites) {
+                pixlite.enabled.setValue(false);
+            }
+            clearParam.setValue(false);
+        });
+
 
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 0, w - 8, 476);

@@ -9,7 +9,7 @@ import heronarts.lx.model.LXPoint;
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class middlePixel extends SLPattern {
+public class middlePixel extends SLPattern implements SLTestPattern {
 
     public middlePixel(LX lx) {
         super(lx);

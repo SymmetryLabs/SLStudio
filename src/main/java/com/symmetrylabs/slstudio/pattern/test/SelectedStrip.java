@@ -9,7 +9,7 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
-public class SelectedStrip extends SLPattern {
+public class SelectedStrip extends SLPattern implements SLTestPattern {
 
      public SelectedStrip(LX lx) {
          super(lx);

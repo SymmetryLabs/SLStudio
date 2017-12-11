@@ -8,7 +8,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
 
-public class MiddleStrip extends LXPattern {
+public class MiddleStrip extends LXPattern implements SLTestPattern {
      public MiddleStrip(LX lx) {
          super(lx);
      }
