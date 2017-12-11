@@ -10,7 +10,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class selectColumn extends SLPattern {
+public class selectColumn extends SLPattern implements SLTestPattern {
 
     final DiscreteParameter xp = new DiscreteParameter("Column", 161);
 

@@ -8,7 +8,7 @@ import heronarts.lx.model.LXPoint;
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class TestSuns extends SLPattern {
+public class TestSuns extends SLPattern implements SLTestPattern {
 
     public TestSuns(LX lx) {
         super(lx);

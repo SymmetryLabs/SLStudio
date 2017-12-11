@@ -10,7 +10,7 @@ import heronarts.lx.model.LXPoint;
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class TestLowPowerStrips extends SLPattern {
+public class TestLowPowerStrips extends SLPattern implements SLTestPattern {
 
     public TestLowPowerStrips(LX lx) {
         super(lx);

@@ -27,6 +27,9 @@ import processing.core.PApplet;
 
 
 public class SLStudio extends PApplet {
+    // Enable test patterns by passing -DloadTestPatterns=true as a VM option
+    public static final boolean LOAD_TEST_PATTERNS = Boolean.getBoolean("loadTestPatterns");
+
     public static SLStudio applet;
 
     public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);

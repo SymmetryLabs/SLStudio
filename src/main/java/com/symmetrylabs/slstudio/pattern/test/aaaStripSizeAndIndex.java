@@ -11,7 +11,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class aaaStripSizeAndIndex extends SLPattern {
+public class aaaStripSizeAndIndex extends SLPattern implements SLTestPattern {
     final DiscreteParameter indexp = new DiscreteParameter("index", 100);
     final DiscreteParameter sizep = new DiscreteParameter("length", 35);
 
