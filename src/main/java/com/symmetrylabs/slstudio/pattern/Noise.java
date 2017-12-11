@@ -25,12 +25,12 @@ public class Noise extends DPat {
         super(lx);
         pSpeed = new CompoundParameter("Fast", .55, -2, 2);
         addParameter(pSpeed);
-        pDensity = addParam("Dens", .3);
+        pDensity = addParam("Dens", .6);
         pSharp = addParam("Shrp", 0);
         pSymm = new DiscreteParameter("Symm", new String[]{"None", "X", "Y", "Rad"});
         pChoose =
             new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});
-        pChoose.setValue(6);
+        pChoose.setValue(5);
         addParameter(pSymm);
         addParameter(pChoose);
         //addNonKnobParameter(pSymm);
