@@ -62,7 +62,7 @@ class SnowFlake {
 public class SnowFlakes extends SLPattern {
 
         public final CompoundParameter fallSpeed = new CompoundParameter("FallSpeed", .5, .1, 4);
-        public final CompoundParameter kernelSize = new CompoundParameter("size", .5, .1, 10);
+        public final CompoundParameter kernelSize = new CompoundParameter("size", .5, .1, 2.5);
 
         LXModulator dotSize = new LXModulator("Strike Size") {
                 @Override
@@ -152,7 +152,7 @@ public class SnowFlakes extends SLPattern {
                         }
 
                         // create new SnowFlakes
-                        if (this.dots.size() < numDots.getValuei()) {
+                        while (this.dots.size() < numDots.getValuei()) {
                                 LXPoint new_center_point = spawnPoints.get(pointRandom.nextInt(spawnPoints.size()));
                                 int lifetime = dotLifetime.getValuei(); // lifetime in ms
                                 this.dots.add(new SnowFlake(fallSpeed.getValuef(), dotSize, new_center_point, lifetime )/*snowflake*/);

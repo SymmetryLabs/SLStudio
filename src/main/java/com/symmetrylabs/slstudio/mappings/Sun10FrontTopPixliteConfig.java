@@ -101,7 +101,7 @@ public class Sun10FrontTopPixliteConfig {
                 .addPoints(slice.getStripById("50").points)
                 .addPoints(slice.getStripById("51").points, PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("52").points)
-//        .addPoints(slice.getStripById("2").points,  PointsGrouping.REVERSE_ORDERING)
+                                .addPoints(slice.getStripById("4").points,  PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
                 .addPoints(slice.getStripById("61").points)
                 .addPoints(slice.getStripById("62").points, PointsGrouping.REVERSE_ORDERING)
