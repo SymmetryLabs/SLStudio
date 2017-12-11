@@ -28,6 +28,10 @@ public class Slice extends LXModel {
     public final static float DIAMETER = 8 * FEET;
     public final static float RADIUS = DIAMETER / 2;
 
+    public final static int   LEDS_PER_METER = 60;
+    public final static float INCHES_PER_METER = 39.3701f;
+    public final static float PIXEL_PITCH = LEDS_PER_METER / INCHES_PER_METER;
+
     public final String id;
     public final Type type;
     public final List<Strip> strips;
@@ -88,7 +92,7 @@ public class Slice extends LXModel {
                     }
 
                     int numPoints = numPointsPerStrip[counter++];
-                    float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH / 2.6f;
+                    float stripWidth = numPoints * PIXEL_PITCH / 2.6f;
                     float stripX = (DIAMETER - stripWidth) / 2;
 
                     CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
@@ -103,7 +107,7 @@ public class Slice extends LXModel {
             } else {
                 for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE - 2; i++) {
                     int numPoints = numPointsPerStrip[counter++];
-                    float stripWidth = numPoints * CurvedStrip.PIXEL_PITCH / 2.6f;
+                    float stripWidth = numPoints * PIXEL_PITCH / 2.6f;
                     float stripX = (DIAMETER - stripWidth) / 2;
 
                     CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
