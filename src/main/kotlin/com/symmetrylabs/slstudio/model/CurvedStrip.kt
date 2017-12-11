@@ -23,8 +23,8 @@ class CurvedStrip(
 		transform: LXTransform
 	) : this(id, metrics, coordinates, rotations, transform, Fixture(id, metrics, coordinates, rotations, transform))
 
-	fun updateRotationY(angle: Float) {
-		fixture.updatePoints(0f, angle, 0f)
+	fun updateOffset(offset: Float) {
+		fixture.updatePoints(offset)
 	}
 
 	class CurvedMetrics(val arcWidth: Float, numPoints: Int) {
@@ -54,19 +54,17 @@ class CurvedStrip(
 		}
 
 		fun updatePoints(
-			xRot: Float = 0f,
-			yRot: Float = 0f,
-			zRot: Float = 0f
+			curveOffset: Float = 0f
 		) {
 			transform.push()
 			transform.translate(coordinates[0], coordinates[1], coordinates[2])
-			transform.rotateX(rotations[1].degToRad + xRot)
-			transform.rotateY(rotations[2].degToRad + yRot)
-			transform.rotateZ(rotations[0].degToRad + zRot)
+			transform.rotateX(rotations[1].degToRad)
+			transform.rotateY(rotations[2].degToRad)
+			transform.rotateZ(rotations[0].degToRad)
 
 			for (i in 0 until metrics.numPoints) {
 				transform.push()
-				val t = i / metrics.numPoints.toFloat()
+				val t = (i / metrics.numPoints.toFloat()) + curveOffset
 				val x = bezierPoint(0f, metrics.arcWidth * 0.2f, metrics.arcWidth * 0.8f, metrics.arcWidth, t)
 				val z = bezierPoint(0f, metrics.arcWidth * -0.3f, metrics.arcWidth * -0.3f, 0f, t)
 				transform.translate(x, 0f, z)

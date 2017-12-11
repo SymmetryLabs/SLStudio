@@ -17,7 +17,7 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	val sunIndex = discreteParameter("SUN", 0, 0, model.suns.size)
 	val stripIndex = discreteParameter("STRIP", 0, 0, 1)
 
-	val stripRotation = compoundParam("ROT", 0.0, 0.0, 1.0)
+	val stripRotation = compoundParam("ROT", 0.0, -0.1, 0.1)
 
 	val ledPitch = INCHES_PER_METER / 60
 
@@ -27,7 +27,7 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	init {
 		sunIndex.addListener { stripIndex.setRange(0, selectedSun.strips.size) }
 		stripRotation.addListener {
-			selectedStrip.updateRotationY(it.valuef)
+			selectedStrip.updateOffset(it.valuef)
 		}
 	}
 
