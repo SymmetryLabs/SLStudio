@@ -1,11 +1,11 @@
 package com.symmetrylabs.slstudio.pattern
 
+import com.symmetrylabs.slstudio.SLStudio
+import com.symmetrylabs.slstudio.mappings.FultonStreetLayout
 import com.symmetrylabs.slstudio.model.CurvedStrip
 import com.symmetrylabs.slstudio.model.Strip.INCHES_PER_METER
 import com.symmetrylabs.slstudio.util.abs
 import com.symmetrylabs.slstudio.util.double
-import com.symmetrylabs.slstudio.util.float
-import com.symmetrylabs.slstudio.util.radToDeg
 import heronarts.lx.LX
 import heronarts.lx.model.LXPoint
 import processing.core.PVector
@@ -17,7 +17,7 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	val sunIndex = discreteParameter("SUN", 0, 0, model.suns.size)
 	val stripIndex = discreteParameter("STRIP", 0, 0, 1)
 
-	val stripRotation = compoundParam("ROT", 0.0, -0.1, 0.1)
+	val stripRotation = compoundParam("ROT", 0.0, -0.08, 0.08)
 
 	val ledPitch = INCHES_PER_METER / 60
 
@@ -25,9 +25,20 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	val selectedStrip get() = selectedSun.strips[stripIndex.valuei] as CurvedStrip
 
 	init {
-		sunIndex.addListener { stripIndex.setRange(0, selectedSun.strips.size) }
+		sunIndex.addListener {
+			stripIndex.setRange(0, selectedSun.strips.size)
+			lx.engine.output.enabled.setValue(true)
+			SLStudio.applet.pixlites.forEach { it.enabled.setValue(it.slice.id.startsWith(selectedSun.id)) }
+			stripRotation.value = FultonStreetLayout.rotationForStrip(selectedSun, selectedSun.strips.indexOf(selectedStrip)).double
+		}
+		stripIndex.addListener {
+			stripRotation.value = FultonStreetLayout.rotationForStrip(selectedSun, selectedSun.strips.indexOf(selectedStrip)).double
+		}
 		stripRotation.addListener {
 			selectedStrip.updateOffset(it.valuef)
+
+			SLStudio.applet.lx.ui.preview.pointCloud.updateVertexPositions()
+			FultonStreetLayout.updateRotation(selectedSun, selectedStrip, it.valuef)
 		}
 	}
 
@@ -37,11 +48,12 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 			val distance = point.x - selectedSun.center.x
 
 			if (distance.abs < ledPitch) {
-				val brightness = 1 - distance / ledPitch
-				point.color = LX.hsb(0f, 100f, brightness*100)
-			} else if (selectedStrip.points.contains(point)) {
-				val angle = (point - selectedSun.center).zxAngle
-				point.color = LX.hsb(angle.radToDeg.float, 100f, 100f)
+				val brightness = distance / ledPitch
+				point.color = LX.hsb(
+					0f,
+					if (selectedStrip.points.contains(point)) 0f else 100f,
+					brightness*100
+				)
 			} else {
 				point.color = 0xFF001100.toInt()
 			}

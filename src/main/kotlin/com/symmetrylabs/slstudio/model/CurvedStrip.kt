@@ -44,8 +44,10 @@ class CurvedStrip(
 		val metrics: CurvedMetrics,
 		val coordinates: FloatArray,
 		val rotations: FloatArray,
-		val transform: LXTransform
+		transform: LXTransform
 	) : LXAbstractFixture() {
+		val transform = LXTransform(transform.matrix)
+
 		init {
 			for (i in 0 until metrics.numPoints) {
 				points.add(LXPointNormal(0.0, 0.0, 0.0))
@@ -97,3 +99,4 @@ class CurvedStrip(
 		private val counter = 0
 	}
 }
+

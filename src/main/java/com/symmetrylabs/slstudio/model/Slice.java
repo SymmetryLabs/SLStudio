@@ -121,7 +121,7 @@ public class Slice extends LXModel {
                 }
             }
 
-            for (Strip strip : strips) {
+            for (final Strip strip : strips) {
                 for (LXPoint point : strip.points) {
                     this.points.add(point);
                 }
