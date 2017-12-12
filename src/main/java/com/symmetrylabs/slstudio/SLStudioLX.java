@@ -442,6 +442,16 @@ public class SLStudioLX extends P3LX {
         lx.registerEffect(DesaturationEffect.class);
     }
 
+    @Override
+    protected LXEffect instantiateEffect(final String className) {
+        return super.instantiateEffect(LXClassLoader.guessExistingEffectClassName(className));
+    }
+
+    @Override
+    protected LXPattern instantiatePattern(final String className) {
+        return super.instantiatePattern(LXClassLoader.guessExistingPatternClassName(className));
+    }
+
     protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
     }
 }

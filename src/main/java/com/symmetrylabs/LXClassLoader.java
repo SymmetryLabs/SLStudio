@@ -34,6 +34,33 @@ public class LXClassLoader {
             .collect(Collectors.toList());
     }
 
+    public static String guessExistingPatternClassName(String className) {
+        return guessExistingClassName(className, LXPattern.class);
+    }
+
+    public static String guessExistingEffectClassName(String className) {
+        return guessExistingClassName(className, LXEffect.class);
+    }
+
+    private static <T> String guessExistingClassName(String className, Class<T> parent) {
+        if (classExists(className))
+            return className;
+
+        final String simpleName = className.replaceAll(".*[\\.\\$]", "");
+        final List<String> names = classpathScanner.getNamesOfSubclassesOf(parent)
+                .stream()
+                .filter(it -> it.endsWith("." + simpleName) || it.endsWith("$" + simpleName))
+                .collect(Collectors.toList());
+
+        if (names.size() == 1)
+            return names.get(0);
+
+        if (names.isEmpty())
+            throw new IllegalArgumentException("No class found with name " + simpleName + " (from " + className + ")");
+
+        throw new IllegalArgumentException("Multiple classes found with name " + simpleName + " (from " + className + "): " + names);
+    }
+
     private static <T> Stream<Class<T>> getSubclassStream(Class<T> baseClass) {
         return classpathScanner.getNamesOfSubclassesOf(baseClass).stream()
             .map(LXClassLoader::classForNameOrNull)
@@ -49,6 +76,10 @@ public class LXClassLoader {
         catch (ClassNotFoundException e) {
             return null;
         }
+    }
+
+    private static boolean classExists(String name) {
+        return classForNameOrNull(name) != null;
     }
 
     private static boolean isConstructable(Class c) {
