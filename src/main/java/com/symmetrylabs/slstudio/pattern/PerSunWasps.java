@@ -54,11 +54,6 @@ public class PerSunWasps extends PerSunParticlePattern {
         }
 
         @Override
-        public void run(final double deltaMs, final List<LXPoint> points, final int[] layer) {
-
-        }
-
-        @Override
         protected void initParticle(Particle p) {
             p.pos[0] = (float) (2 * Math.random() - 1);
             p.pos[1] = (float) (2 * Math.random() - 1);
