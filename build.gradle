@@ -1,13 +1,15 @@
 plugins {
-	id "org.jetbrains.kotlin.jvm" version "1.1.61"
+	id 'org.jetbrains.kotlin.jvm' version '1.1.61'
+	id 'com.github.johnrengelman.shadow' version '2.0.1'
+	id 'java'
+	id 'application'
 }
 
-apply plugin: 'java'
+group = 'com.symmetrylabs'
+version = '1.0'
 
-task run(type: JavaExec) {
-	classpath sourceSets.main.runtimeClasspath
-	main = "com.symmetrylabs.slstudio.SLStudio"
-}
+jar.baseName = 'SLStudio'
+mainClassName = "com.symmetrylabs.slstudio.SLStudio"
 
 repositories {
 	mavenCentral()
@@ -41,12 +43,32 @@ dependencies {
 	// https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
 	compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.1.61'
 
-	// https://mvnrepository.com/artifact/org.jogamp.jogl/jogl-all-main
-	compile group: 'org.jogamp.jogl', name: 'jogl-all-main', version: '2.3.2'
-
 	// https://mvnrepository.com/artifact/io.github.lukehutch/fast-classpath-scanner
 	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
 
+	compile files('libs/gluegen-rt-natives-linux-aarch64.jar')
+	compile files('libs/gluegen-rt-natives-linux-amd64.jar')
+	compile files('libs/gluegen-rt-natives-linux-armv6hf.jar')
+	compile files('libs/gluegen-rt-natives-linux-i586.jar')
+	compile files('libs/gluegen-rt-natives-macosx-universal.jar')
+	compile files('libs/gluegen-rt-natives-windows-amd64.jar')
+	compile files('libs/gluegen-rt-natives-windows-i586.jar')
+	compile files('libs/gluegen-rt.jar')
+	compile files('libs/jogl-all-2.3.2-natives-linux-amd64.jar')
+	compile files('libs/jogl-all-natives-linux-aarch64.jar')
+	compile files('libs/jogl-all-natives-linux-amd64.jar')
+	compile files('libs/jogl-all-natives-linux-armv6hf.jar')
+	compile files('libs/jogl-all-natives-linux-i586.jar')
+	compile files('libs/jogl-all-natives-macosx-universal.jar')
+	compile files('libs/jogl-all-natives-windows-amd64.jar')
+	compile files('libs/jogl-all-natives-windows-i586.jar')
+	compile files('libs/jogl-all.jar')
+
 	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
 	compile files('libs/P3LX.jar')
+}
+
+jar {
+	exclude("**/*.swp")
+	exclude("**/*.swo")
 }
