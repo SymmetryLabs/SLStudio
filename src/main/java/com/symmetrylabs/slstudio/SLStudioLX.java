@@ -1,15 +1,12 @@
 package com.symmetrylabs.slstudio;
 
+import java.io.File;
+
 import com.google.gson.JsonObject;
-import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
-import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
-import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.ui.UIAxes;
-import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
-import com.symmetrylabs.slstudio.ui.UIFramerate;
-import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
-import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
-import com.symmetrylabs.slstudio.util.MarkerSource;
+
+import processing.core.PApplet;
+import processing.event.KeyEvent;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXMappingEngine;
@@ -36,24 +33,22 @@ import heronarts.p3lx.ui.studio.mixer.UIMixer;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStrip;
 import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
-import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
-import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
-import processing.core.PApplet;
-import processing.event.KeyEvent;
 
-import java.io.File;
-import java.util.List;
-import java.util.Objects;
-import java.util.stream.Collectors;
-
+import com.symmetrylabs.LXClassLoader;
+import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
+import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
+import com.symmetrylabs.slstudio.performance.PerformanceManager;
+import com.symmetrylabs.slstudio.ui.UIAxes;
+import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
+import com.symmetrylabs.slstudio.ui.UIFramerate;
+import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
+import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
+import com.symmetrylabs.slstudio.util.MarkerSource;
 
 public class SLStudioLX extends P3LX {
 
     public static final String COPYRIGHT = "Symmetry Labs";
     public PaletteLibrary paletteLibrary;
-
-    public static final String basePackageName = SLStudio.class.getPackage().getName();
-    public static final ScanResult classpathScanner = new FastClasspathScanner(basePackageName).scan();
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
@@ -410,14 +405,6 @@ public class SLStudioLX extends P3LX {
         this.engine.setThreaded(multiThreaded);
     }
 
-    private Class<?> classForNameOrNull(String name) {
-        try {
-            return Class.forName(name);
-        } catch (ClassNotFoundException e) {
-            return null;
-        }
-    }
-
     @Override
     protected void setProject(File file, ProjectListener.Change change) {
         super.setProject(file, change);
@@ -442,17 +429,10 @@ public class SLStudioLX extends P3LX {
      */
     protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
         // Add all effects
-        classpathScanner.getNamesOfSubclassesOf(LXEffect.class).stream()
-            .map(this::classForNameOrNull)
-            .filter(Objects::nonNull)
-            .forEach(c -> lx.registerEffect((Class<? extends LXEffect>) c));
+        LXClassLoader.findEffects().stream().forEach(c -> lx.registerEffect(c));
 
         // Add all patterns
-        classpathScanner.getNamesOfSubclassesOf(LXPattern.class).stream()
-            .map(this::classForNameOrNull)
-            .filter(Objects::nonNull)
-            .filter(it -> SLStudio.LOAD_TEST_PATTERNS || ! SLTestPattern.class.isAssignableFrom(it))
-            .forEach(c -> lx.registerPattern((Class<? extends LXPattern>) c));
+        LXClassLoader.findPatterns().stream().forEach(c -> lx.registerPattern(c));
 
         lx.registerPattern(heronarts.p3lx.pattern.SolidColorPattern.class);
         lx.registerPattern(IteratorTestPattern.class);
@@ -463,53 +443,5 @@ public class SLStudioLX extends P3LX {
     }
 
     protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
-    }
-
-    private boolean classExists(final String name) {
-        try {
-            return Class.forName(name) != null;
-        } catch (ClassNotFoundException e) {
-            return false;
-        }
-    }
-
-    @Override
-    protected LXEffect instantiateEffect(final String className) {
-        if (classExists(className)) return super.instantiateEffect(className);
-
-        final String simpleName = className.replaceAll(".*[\\.\\$]", "");
-
-        final List<String> names = classpathScanner.getNamesOfSubclassesOf(LXEffect.class)
-            .stream()
-            .filter(it -> it.endsWith("." + simpleName) || it.endsWith("$" + simpleName))
-            .collect(Collectors.toList());
-
-        if (names.size() == 1) {
-            return super.instantiateEffect(names.get(0));
-        } else if (names.isEmpty()) {
-            throw new IllegalArgumentException("No LXEffect found with name " + simpleName + " (from " + className + ")");
-        } else {
-            throw new IllegalArgumentException("Multiple LXEffects found with name " + simpleName + " (from " + className + "): " + names);
-        }
-    }
-
-    @Override
-    protected LXPattern instantiatePattern(final String className) {
-        if (classExists(className)) return super.instantiatePattern(className);
-
-        final String simpleName = className.replaceAll(".*[\\.\\$]", "");
-
-        final List<String> names = classpathScanner.getNamesOfSubclassesOf(LXPattern.class)
-            .stream()
-            .filter(it -> it.endsWith("." + simpleName) || it.endsWith("$" + simpleName))
-            .collect(Collectors.toList());
-
-        if (names.size() == 1) {
-            return super.instantiatePattern(names.get(0));
-        } else if (names.isEmpty()) {
-            throw new IllegalArgumentException("No LXPattern found with name " + simpleName + " (from " + className + ")");
-        } else {
-            throw new IllegalArgumentException("Multiple LXPatterns found with name " + simpleName + " (from " + className + "): " + names);
-        }
     }
 }
