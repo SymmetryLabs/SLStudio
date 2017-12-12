@@ -165,7 +165,7 @@
           },
           {
             "id": 3305,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -56320,
             "parameters": {
               "label": "Noise",

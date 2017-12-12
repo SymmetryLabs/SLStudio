@@ -425,7 +425,7 @@
           },
           {
             "id": 4271,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -3669761,
             "parameters": {
               "label": "Noise",
@@ -582,7 +582,7 @@
         "patterns": [
           {
             "id": 2773,
-            "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
+            "class": "com.symmetrylabs.pattern.AskewPlanes",
             "modulationColor": -1573120,
             "parameters": {
               "label": "AskewPlanes",
@@ -625,7 +625,7 @@
           },
           {
             "id": 2800,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -12321024,
             "parameters": {
               "label": "Noise",
@@ -1624,7 +1624,7 @@
           },
           {
             "id": 4503,
-            "class": "com.symmetrylabs.slstudio.pattern.Pong",
+            "class": "com.symmetrylabs.pattern.Pong",
             "modulationColor": -45824,
             "parameters": {
               "label": "Pong",

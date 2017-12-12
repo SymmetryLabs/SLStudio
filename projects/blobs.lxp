@@ -224,7 +224,7 @@
         "patterns": [
           {
             "id": 3182,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -16711687,
             "parameters": {
               "label": "Noise",

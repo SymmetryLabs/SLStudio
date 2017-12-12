@@ -643,7 +643,7 @@
           },
           {
             "id": 11069,
-            "class": "com.symmetrylabs.slstudio.pattern.Pong",
+            "class": "com.symmetrylabs.pattern.Pong",
             "modulationColor": -16724737,
             "parameters": {
               "label": "Pong",
@@ -664,7 +664,7 @@
           },
           {
             "id": 11077,
-            "class": "com.symmetrylabs.slstudio.pattern.Pong",
+            "class": "com.symmetrylabs.pattern.Pong",
             "modulationColor": -10240,
             "parameters": {
               "label": "Pong",
@@ -867,7 +867,7 @@
           },
           {
             "id": 11371,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -23040,
             "parameters": {
               "label": "Noise",
@@ -958,7 +958,7 @@
         "patterns": [
           {
             "id": 2773,
-            "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
+            "class": "com.symmetrylabs.pattern.AskewPlanes",
             "modulationColor": -1573120,
             "parameters": {
               "label": "AskewPlanes",
@@ -1002,7 +1002,7 @@
           },
           {
             "id": 2800,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -12321024,
             "parameters": {
               "label": "Noise",
@@ -1372,7 +1372,7 @@
           },
           {
             "id": 5585,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -16751873,
             "parameters": {
               "label": "Noise",
@@ -3216,7 +3216,7 @@
           },
           {
             "id": 11412,
-            "class": "com.symmetrylabs.slstudio.pattern.Pong",
+            "class": "com.symmetrylabs.pattern.Pong",
             "modulationColor": -16711774,
             "parameters": {
               "label": "Pong",
@@ -3237,7 +3237,7 @@
           },
           {
             "id": 11420,
-            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "class": "com.symmetrylabs.pattern.Noise",
             "modulationColor": -55296,
             "parameters": {
               "label": "Noise",
