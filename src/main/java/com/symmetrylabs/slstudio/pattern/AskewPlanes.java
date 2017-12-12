@@ -1,15 +1,14 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.util.dan.DPat;
+import processing.core.PVector;
+
 import heronarts.lx.LX;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import processing.core.PVector;
 
-import static processing.core.PApplet.*;
-import static processing.core.PConstants.MAX_FLOAT;
-
+import com.symmetrylabs.pattern.base.DPat;
+import com.symmetrylabs.util.MathUtils;
 
 public class AskewPlanes extends DPat {
 
@@ -37,7 +36,7 @@ public class AskewPlanes extends DPat {
             av = a.getValuef();
             bv = b.getValuef();
             cv = c.getValuef();
-            denom = sqrt(av * av + bv * bv);
+            denom = MathUtils.sqrt(av * av + bv * bv);
         }
     }
 
@@ -79,19 +78,19 @@ public class AskewPlanes extends DPat {
     @Override
     public int CalcPoint(PVector p) {
         //for (LXPoint p : model.points) {
-        float d = MAX_FLOAT;
+        float d = Float.MAX_VALUE;
 
         int i = 0;
         for (Plane plane : planes) {
             if (i++ <= numPlanes.getValuei() - 1) continue;
             if (plane.denom != 0) {
-                d = min(d, abs(plane.av * (p.x - model.cx) + plane.bv * (p.y - model.cy) + plane.cv) / plane.denom);
+                d = MathUtils.min(d, MathUtils.abs(plane.av * (p.x - model.cx) + plane.bv * (p.y - model.cy) + plane.cv) / plane.denom);
             }
         }
         return lx.hsb(
-            huev + abs(p.x - model.cx) * .3f + p.y * .8f,
-            max(0, 100 - .15f * abs(p.x - model.cx)),
-            constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
+            huev + MathUtils.abs(p.x - model.cx) * .3f + p.y * .8f,
+            MathUtils.max(0, 100 - .15f * MathUtils.abs(p.x - model.cx)),
+            MathUtils.constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
         );
         //}
     }

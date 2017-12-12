@@ -1,8 +1,8 @@
-package com.symmetrylabs.slstudio.util;
+package com.symmetrylabs.util;
 
-import heronarts.lx.color.LXColor;
 import org.apache.commons.math3.util.FastMath;
 
+import heronarts.lx.color.LXColor;
 
 public final class ColorUtils {
 
@@ -36,13 +36,13 @@ public final class ColorUtils {
         float dstA = (dst >> 24 & 0xFF) / 255.0f;
         float srcA = (src >> 24 & 0xFF) / 255.0f;
         float outA = srcA + dstA * (1 - srcA);
-        if (outA == 0) {
+        if (outA == 0)
             return 0;
-        }
+
         int outR = FastMath.round(((src >> 16 & 0xFF) * srcA + (dst >> 16 & 0xFF) * dstA * (1 - srcA)) / outA) & 0xFF;
         int outG = FastMath.round(((src >> 8 & 0xFF) * srcA + (dst >> 8 & 0xFF) * dstA * (1 - srcA)) / outA) & 0xFF;
         int outB = FastMath.round(((src & 0xFF) * srcA + (dst & 0xFF) * dstA * (1 - srcA)) / outA) & 0xFF;
-        return (((int) (outA * 0xFF)) & 0xFF) << 24 | outR << 16 | outG << 8 | outB;
+        return (((int)(outA * 0xFF)) & 0xFF) << 24 | outR << 16 | outG << 8 | outB;
     }
 
     public static int max(int dst, int src) {
@@ -56,5 +56,4 @@ public final class ColorUtils {
     public static int maxAlpha(int dst, int src) {
         return (src >> 24 & 0xFF) > (dst >> 24 & 0xFF) ? src : dst;
     }
-
 }

@@ -1,7 +1,14 @@
-package com.symmetrylabs.slstudio.util.dan;
+package com.symmetrylabs.pattern.base;
 
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.model.Sun;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.SplittableRandom;
+import java.util.function.Consumer;
+
+import processing.core.PImage;
+import processing.core.PVector;
+import static processing.core.PConstants.ADD;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
@@ -9,19 +16,12 @@ import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
-import processing.core.PImage;
-import processing.core.PVector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.SplittableRandom;
-import java.util.function.Consumer;
+import com.symmetrylabs.util.NoiseUtils;
+import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.Sun;
 
-import static com.symmetrylabs.slstudio.util.Utils.noise;
-import static processing.core.PApplet.*;
-import static processing.core.PVector.angleBetween;
-
- //----------------------------------------------------------------------------------------------------------------------------------
 public abstract class DPat extends LXPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     public ArrayList<DBool> bools = new ArrayList<DBool>();
@@ -53,11 +53,11 @@ public abstract class DPat extends LXPattern {
     }
 
     public int c1c(float a) {
-        return round(100 * constrain(a, 0, 1));
+        return MathUtils.round(100 * MathUtils.constrain(a, 0, 1));
     }
 
     float interpWv(float i, float[] vals) {
-        return interp(i - floor(i), vals[floor(i)], vals[ceil(i)]);
+        return interp(i - MathUtils.floor(i), vals[MathUtils.floor(i)], vals[MathUtils.ceil(i)]);
     }
 
     public void setNorm(PVector vec) {
@@ -118,7 +118,7 @@ public abstract class DPat extends LXPattern {
         vT2.set(v2);
         vT1.sub(c);
         vT2.sub(c);
-        return degrees(angleBetween(vT1, vT2));
+        return MathUtils.degrees(PVector.angleBetween(vT1, vT2));
     }
 
     // Pick        addPick(String name, int def, int _max, String[] desc) {
@@ -133,11 +133,11 @@ public abstract class DPat extends LXPattern {
     // }
 
     public float random(float max) {
-        return (float) splittableRandom.nextDouble((double) max);
+        return (float)splittableRandom.nextDouble((double)max);
     }
 
     float random(float min, float max) {
-        return (float) splittableRandom.nextDouble((double) min, (double) max) + min;
+        return (float)splittableRandom.nextDouble((double)min, (double)max) + min;
     }
 
     boolean btwn(int a, int b, int c) {
@@ -157,15 +157,15 @@ public abstract class DPat extends LXPattern {
     }
 
     float min4(float a, float b, float c, float d) {
-        return min(min(a, b), min(c, d));
+        return MathUtils.min(MathUtils.min(a, b), MathUtils.min(c, d));
     }
 
     float pointDist(LXPoint p1, LXPoint p2) {
-        return dist(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
+        return MathUtils.dist(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
     }
 
     float xyDist(LXPoint p1, LXPoint p2) {
-        return dist(p1.x, p1.y, p2.x, p2.y);
+        return MathUtils.dist(p1.x, p1.y, p2.x, p2.y);
     }
 
     float distToSeg(float x, float y, float x1, float y1, float x2, float y2) {
@@ -184,7 +184,7 @@ public abstract class DPat extends LXPattern {
             yy = y1 + param * D;
         }
         float dx = x - xx, dy = y - yy;
-        return sqrt(dx * dx + dy * dy);
+        return MathUtils.sqrt(dx * dx + dy * dy);
     }
 
 /* Pre PatternControls UI
@@ -262,8 +262,8 @@ public abstract class DPat extends LXPattern {
         mCtr.set(mMax);
         mCtr.mult(.5f);
         mHalf = new PVector(.5f, .5f, .5f);
-        xWaveNz = new float[ceil(mMax.y) + 1];
-        yWaveNz = new float[ceil(mMax.x) + 1];
+        xWaveNz = new float[MathUtils.ceil(mMax.y) + 1];
+        yWaveNz = new float[MathUtils.ceil(mMax.x) + 1];
         //println (model.xMin + " " + model.yMin + " " +  model.zMin);
         //println (model.xMax + " " + model.yMax + " " +  model.zMax);
         //for (MidiOutputDevice o: RWMidi.getOutputDevices()) { if (o.toString().contains("APC")) { APCOut = o.createOutput(); break;}}
@@ -323,11 +323,11 @@ public abstract class DPat extends LXPattern {
         // precalculate this stuff
         final float wvAmp = val(pWave), sprk = val(pSpark);
         if (wvAmp > 0) {
-            for (int i = 0; i < ceil(mMax.x) + 1; i++)
-                yWaveNz[i] = wvAmp * (noise((float) (i / (mMax.x * .3f) - (2e3 + NoiseMove) / 1500f)) - .5f) * (mMax.y / 2f);
+            for (int i = 0; i < MathUtils.ceil(mMax.x) + 1; i++)
+                yWaveNz[i] = wvAmp * (NoiseUtils.noise((float) (i / (mMax.x * .3f) - (2e3 + NoiseMove) / 1500f)) - .5f) * (mMax.y / 2f);
 
-            for (int i = 0; i < ceil(mMax.y) + 1; i++)
-                xWaveNz[i] = wvAmp * (noise((float) (i / (mMax.y * .3f) - (1e3 + NoiseMove) / 1500f)) - .5f) * (mMax.x / 2f);
+            for (int i = 0; i < MathUtils.ceil(mMax.y) + 1; i++)
+                xWaveNz[i] = wvAmp * (NoiseUtils.noise((float) (i / (mMax.y * .3f) - (1e3 + NoiseMove) / 1500f)) - .5f) * (mMax.x / 2f);
         }
 
         // TODO Threadding: For some reason, using parallelStream here messes up the animations.
@@ -431,5 +431,65 @@ public abstract class DPat extends LXPattern {
             });
         }
 
+    }
+
+    public static class NDat {
+        public float xz, yz, zz, hue, speed, angle, den;
+        public float xoff, yoff, zoff;
+        public float sinAngle;
+        public float cosAngle;
+        public boolean isActive;
+
+        public NDat() {
+            isActive = false;
+        }
+
+        public boolean Active() {
+            return isActive;
+        }
+
+        public void set(float _hue, float _xz, float _yz, float _zz, float _den, float _speed, float _angle) {
+            isActive = true;
+            hue = _hue;
+            xz = _xz;
+            yz = _yz;
+            zz = _zz;
+            den = _den;
+            speed = _speed;
+            angle = _angle;
+            xoff = MathUtils.random(100e3f);
+            yoff = MathUtils.random(100e3f);
+            zoff = MathUtils.random(100e3f);
+        }
+    }
+
+    public static class DBool {
+        boolean def, b;
+        String tag;
+        int row, col;
+
+        void reset() {
+            b = def;
+        }
+
+        boolean set(int r, int c, boolean val) {
+            if (r != row || c != col) return false;
+            b = val;
+            return true;
+        }
+
+        boolean toggle(int r, int c) {
+            if (r != row || c != col) return false;
+            b = !b;
+            return true;
+        }
+
+        DBool(String _tag, boolean _def, int _row, int _col) {
+            def = _def;
+            b = _def;
+            tag = _tag;
+            row = _row;
+            col = _col;
+        }
     }
 }

@@ -1,16 +1,16 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.util.dan.DPat;
-import com.symmetrylabs.slstudio.util.dan.NDat;
+import processing.core.PImage;
+import processing.core.PVector;
+import static processing.core.PConstants.ADD;
+
 import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import processing.core.PImage;
-import processing.core.PVector;
 
-import static com.symmetrylabs.slstudio.util.Utils.noise;
-import static processing.core.PApplet.*;
-
+import com.symmetrylabs.pattern.base.DPat;
+import com.symmetrylabs.util.NoiseUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public class Noise extends DPat {
     int CurAnim, iSymm;
@@ -53,8 +53,8 @@ public class Noise extends DPat {
         zTheta += deltaMs * (spin() - .5f) * .01f;
         rtime += deltaMs;
         iSymm = pSymm.getValuei();
-        zSin = sin(zTheta);
-        zCos = cos(zTheta);
+        zSin = MathUtils.sin(zTheta);
+        zCos = MathUtils.cos(zTheta);
 
         if (pChoose.getValuei() != CurAnim) {
             CurAnim = pChoose.getValuei();
@@ -107,8 +107,8 @@ public class Noise extends DPat {
 
         for (int i = 0; i < _ND; i++)
             if (N[i].Active()) {
-                N[i].sinAngle = sin(radians(N[i].angle));
-                N[i].cosAngle = cos(radians(N[i].angle));
+                N[i].sinAngle = MathUtils.sin(MathUtils.radians(N[i].angle));
+                N[i].cosAngle = MathUtils.cos(MathUtils.radians(N[i].angle));
             }
     }
 
@@ -120,12 +120,14 @@ public class Noise extends DPat {
         //rotateX(p, mCtr, xSin, xCos);
         if (CurAnim == 6 || CurAnim == 7) {
             setNorm(p);
-            return lx.hsb(lxh(), 100, 100 * (
-                constrain(1 - 50 * (1 - val(pDensity)) * abs(p.y - sin(zTime * 10 + p.x * (300)) * .5f - .5f), 0, 1) +
-                    (CurAnim == 7 ? constrain(1 - 50 * (1 - val(pDensity)) * abs(p.x - sin(zTime * 10 + p.y * (300)) * .5f - .5f),
-                        0,
-                        1) : 0))
-            );
+
+            float b = MathUtils.constrain(1 - 50 * (1 - val(pDensity)) * MathUtils.abs(p.y - MathUtils.sin(zTime * 10 + p.x * (300)) * .5f - .5f), 0, 1);
+
+            if (CurAnim == 7) {
+                b += MathUtils.constrain(1 - 50 * (1 - val(pDensity)) * MathUtils.abs(p.x - MathUtils.sin(zTime * 10 + p.y * (300)) * .5f - .5f), 0, 1);
+            }
+
+            return lx.hsb(lxh(), 100, 100 * b);
         }
 
         if (iSymm == XSym && p.x > mMax.x / 2) p.x = mMax.x - p.x;
@@ -138,7 +140,7 @@ public class Noise extends DPat {
                     zy = zTime * n.speed * n.cosAngle;
 
                 float b = (iSymm == RadSym ? (zTime * n.speed + n.xoff - p.dist(mCtr) / n.xz)
-                    : noise(p.x / n.xz + zx + n.xoff, p.y / n.yz + zy + n.yoff, p.z / n.zz + n.zoff))
+                    : NoiseUtils.noise(p.x / n.xz + zx + n.xoff, p.y / n.yz + zy + n.yoff, p.z / n.zz + n.zoff))
                     * 1.8f;
 
                 b += n.den / 100 - .4 + val(pDensity) - 1;
