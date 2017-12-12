@@ -1,18 +1,18 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.pattern;
+
+import processing.core.PImage;
+import static processing.core.PConstants.ADD;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
-import processing.core.PImage;
 
-import static processing.core.PApplet.*;
+import com.symmetrylabs.util.MathUtils;
 
-/**
- * @author Yo*na Appletree (yona@concentricsky.com)
- */
-public class Spheres extends SLPattern {
+public class Spheres extends LXPattern {
     private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);
     private CompoundParameter periodParameter = new CompoundParameter("PERIOD", 4000.0, 200.0, 10000.0);
     private CompoundParameter hueVariance = new CompoundParameter("HueVar", 50, 0, 180);
@@ -72,23 +72,19 @@ public class Spheres extends SLPattern {
         spheres[1].radius = 100 * hueParameter.getValuef();
 
 
-        model.forEachPoint((start, end) -> {
-            for (int i=start; i<end; i++) {
-                LXPoint p = model.points[i];
+        model.getPoints().parallelStream().forEach(p -> {
+            float value = 0;
 
-                float value = 0;
+            int c = lx.hsb(0, 0, 0);
+            for (Sphere s : spheres) {
+                float d = MathUtils.dist(p.x, p.y, p.z, s.x, s.y, s.z);
+                float r = (s.radius); // * (sinLfoValue + 0.5));
+                value = MathUtils.max(0, 1 - MathUtils.max(0, d - r) / 10);
 
-                int c = lx.hsb(0, 0, 0);
-                for (Sphere s : spheres) {
-                    float d = sqrt(pow(p.x - s.x, 2) + pow(p.y - s.y, 2) + pow(p.z - s.z, 2));
-                    float r = (s.radius); // * (sinLfoValue + 0.5));
-                    value = max(0, 1 - max(0, d - r) / 10);
-
-                    c = PImage.blendColor(c, lx.hsb(s.hue, 100, min(1, value) * 100), ADD);
-                }
-
-                colors[p.index] = c;
+                c = PImage.blendColor(c, lx.hsb(s.hue, 100, MathUtils.min(1, value) * 100), ADD);
             }
+
+            colors[p.index] = c;
         });
     }
 }

@@ -311,7 +311,7 @@
           },
           {
             "id": 2823,
-            "class": "com.symmetrylabs.slstudio.pattern.Spheres",
+            "class": "com.symmetrylabs.pattern.Spheres",
             "modulationColor": -65342,
             "parameters": {
               "label": "Spheres",

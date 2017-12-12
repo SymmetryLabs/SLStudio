@@ -1607,7 +1607,7 @@
           },
           {
             "id": 2823,
-            "class": "com.symmetrylabs.slstudio.pattern.Spheres",
+            "class": "com.symmetrylabs.pattern.Spheres",
             "modulationColor": -65342,
             "parameters": {
               "label": "Spheres",
@@ -2843,7 +2843,7 @@
           },
           {
             "id": 11318,
-            "class": "com.symmetrylabs.slstudio.pattern.Spheres",
+            "class": "com.symmetrylabs.pattern.Spheres",
             "modulationColor": -16711759,
             "parameters": {
               "label": "Spheres",

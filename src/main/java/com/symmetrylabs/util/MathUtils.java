@@ -72,6 +72,8 @@ public final class MathUtils {
     public static float degrees(float rad) { return RAD_TO_DEG_F * rad; }
     public static float abs(float val) { return FastMath.abs(val); }
     public static float sqrt(float val) { return (float)FastMath.sqrt(val); }
+    public static float pow(float val, int exp) { return (float)FastMath.pow(val, exp); }
+    public static float pow(float val, float exp) { return (float)FastMath.pow(val, exp); }
     public static int ceil(float val) { return (int)FastMath.ceil(val); }
     public static int floor(float val) { return (int)FastMath.floor(val); }
     public static int round(float val) { return (int)FastMath.round(val); }
@@ -80,12 +82,17 @@ public final class MathUtils {
         return (a * (1f - f)) + (b * f);
     }
 
-    public static float dist(float x, float y, float z, float x1, float y1, float z1) {
-        return sqrt((x1 - x) * (y1 - y) * (z1 - z));
+    public static float dist(float x0, float y0, float z0, float x1, float y1, float z1) {
+        float dx = x1 - x0;
+        float dy = y1 - y0;
+        float dz = z1 - z0;
+        return sqrt(dx * dx + dy * dy + dz * dz);
     }
 
-    public static float dist(float x, float y, float x1, float y1) {
-        return sqrt((x1 - x) * (y1 - y));
+    public static float dist(float x0, float y0, float x1, float y1) {
+        float dx = x1 - x0;
+        float dy = y1 - y0;
+        return sqrt(dx * dx + dy * dy);
     }
 
     public static final float map(float value, float start1, float stop1, float start2, float stop2) {
