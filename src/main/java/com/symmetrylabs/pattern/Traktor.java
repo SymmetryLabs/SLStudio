@@ -1,17 +1,16 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import static processing.core.PApplet.abs;
-import static processing.core.PApplet.constrain;
+import com.symmetrylabs.util.MathUtils;
 
-
-public class Traktor extends SLPattern {
+public class Traktor extends LXPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -75,25 +74,21 @@ public class Traktor extends SLPattern {
         final float trebG = trebleGain.getValuef();
 
 
-        model.forEachPoint((start, end) -> {
-            for (int pi=start; pi<end; pi++) {
-                LXPoint p = model.points[pi];
+        model.getPoints().parallelStream().forEach(p -> {
+            int i = (int) MathUtils.constrain((model.xMax - p.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH - 1);
+            int pos = (index + FRAME_WIDTH - i) % FRAME_WIDTH;
 
-                int i = (int) constrain((model.xMax - p.x) / model.xMax * FRAME_WIDTH, 0, FRAME_WIDTH - 1);
-                int pos = (index + FRAME_WIDTH - i) % FRAME_WIDTH;
+            int c = lx.hsb(
+                360 + palette.getHuef() + .8f * hueV * MathUtils.abs(p.x - model.cx),
+                100,
+                MathUtils.constrain(9 * bassG * (bass[pos] * model.cy - MathUtils.abs(p.y - model.cy + 5)), 0, 100)
+            );
 
-                colors[p.index] = lx.hsb(
-                    360 + palette.getHuef() + .8f * hueV * abs(p.x - model.cx),
-                    100,
-                    constrain(9 * bassG * (bass[pos] * model.cy - abs(p.y - model.cy + 5)), 0, 100)
-                );
-                blendColor(p.index, lx.hsb(
-                    400 + palette.getHuef() + .5f * hueV * abs(p.x - model.cx),
-                    60,
-                    constrain(7 * trebG * (treble[pos] * .6f * model.cy - abs(p.y - model.cy)), 0, 100)
-
-                ), LXColor.Blend.ADD);
-            }
+            colors[p.index] = LXColor.blend(c, lx.hsb(
+                400 + palette.getHuef() + .5f * hueV * MathUtils.abs(p.x - model.cx),
+                60,
+                MathUtils.constrain(7 * trebG * (treble[pos] * .6f * model.cy - MathUtils.abs(p.y - model.cy)), 0, 100)
+            ), LXColor.Blend.ADD);
         });
     }
 }

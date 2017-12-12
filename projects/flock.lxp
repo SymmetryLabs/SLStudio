@@ -194,7 +194,7 @@
           },
           {
             "id": 2802,
-            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "class": "com.symmetrylabs.pattern.Rings",
             "modulationColor": -45056,
             "parameters": {
               "label": "Rings",

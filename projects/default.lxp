@@ -383,7 +383,7 @@
           },
           {
             "id": 4264,
-            "class": "com.symmetrylabs.slstudio.pattern.Traktor",
+            "class": "com.symmetrylabs.pattern.Traktor",
             "modulationColor": -36864,
             "parameters": {
               "label": "Traktor",
@@ -652,7 +652,7 @@
           },
           {
             "id": 2802,
-            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "class": "com.symmetrylabs.pattern.Rings",
             "modulationColor": -45056,
             "parameters": {
               "label": "Rings",
@@ -1644,7 +1644,7 @@
           },
           {
             "id": 4511,
-            "class": "com.symmetrylabs.slstudio.pattern.Rings",
+            "class": "com.symmetrylabs.pattern.Rings",
             "modulationColor": -65535,
             "parameters": {
               "label": "Rings",
