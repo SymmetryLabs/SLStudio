@@ -107,7 +107,7 @@ public class SLStudioLX extends P3LX {
             this.rightPane = new UIOverriddenRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
             this.helpBar = new UIContextualHelpBar(this);
-            this.framerate = new UIFramerate(this, lx, this.leftPane.getX() + this.leftPane.getWidth());
+            this.framerate = new UIFramerate(this, lx, this.leftPane.getX() + this.leftPane.getWidth() + 6, 6);
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);

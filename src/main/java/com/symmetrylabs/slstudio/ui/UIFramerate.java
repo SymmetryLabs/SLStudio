@@ -19,23 +19,22 @@ import static processing.core.PConstants.TOP;
 
 public class UIFramerate extends UI2dContext {
     private final P3LX lx;
-    private final PFont monospacedFont;
+    private final PFont font;
     private final DecimalFormat fpsFormat = new DecimalFormat("0.0");
     private final DecimalFormat elapsedFormat = new DecimalFormat("0.00");
 
-    public UIFramerate(UI ui, final P3LX lx, float x) {
-        super(ui, x, 0, 700, 30);
+    public UIFramerate(UI ui, final P3LX lx, float x, float y) {
+        super(ui, x, y, 700, 30);
         this.lx = lx;
-        this.monospacedFont = SLStudio.applet.createFont("Monospaced", 15);
+        this.font = SLStudio.applet.loadFont("Menlo-Regular-13.vlw");
         setVisible(true);
     }
 
     private long lastDebugPrint = millis();
 
     protected void onDraw(UI ui, PGraphics pg) {
-        pg.textFont(monospacedFont);
+        pg.textFont(font);
         pg.clear();
-        pg.textSize(15);
         pg.textAlign(LEFT, TOP);
         if (lx.engine.isThreaded()) {
             // pg.text(String.format("Engine: %2$.1f UI: %2$.1f",
