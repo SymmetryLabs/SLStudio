@@ -107,7 +107,7 @@
         "patterns": [
           {
             "id": 2773,
-            "class": "SLStudio$AskewPlanes",
+            "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
             "modulationColor": -1573120,
             "parameters": {
               "label": "AskewPlanes",
@@ -127,7 +127,7 @@
           },
           {
             "id": 2793,
-            "class": "SLStudio$CrossSections",
+            "class": "com.symmetrylabs.slstudio.pattern.CrossSections",
             "modulationColor": -16760065,
             "parameters": {
               "label": "CrossSections",
@@ -150,7 +150,7 @@
           },
           {
             "id": 2800,
-            "class": "SLStudio$Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -12321024,
             "parameters": {
               "label": "Noise",
@@ -177,7 +177,7 @@
           },
           {
             "id": 2802,
-            "class": "SLStudio$Rings",
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
             "modulationColor": -45056,
             "parameters": {
               "label": "Rings",
@@ -197,7 +197,7 @@
           },
           {
             "id": 2804,
-            "class": "SLStudio$RKPattern01",
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern01",
             "modulationColor": -4522240,
             "parameters": {
               "label": "RKPattern01",
@@ -233,7 +233,7 @@
           },
           {
             "id": 2806,
-            "class": "SLStudio$RKPattern02",
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern02",
             "modulationColor": -15335680,
             "parameters": {
               "label": "RKPattern02",
@@ -269,7 +269,7 @@
           },
           {
             "id": 2808,
-            "class": "SLStudio$RKPattern03",
+            "class": "com.symmetrylabs.slstudio.pattern.raven.RKPattern03",
             "modulationColor": -65438,
             "parameters": {
               "label": "RKPattern03",
@@ -306,7 +306,7 @@
           },
           {
             "id": 2810,
-            "class": "SLStudio$ShiftingPlane",
+            "class": "com.symmetrylabs.slstudio.pattern.ShiftingPlane",
             "modulationColor": -16711767,
             "parameters": {
               "label": "ShiftingPlane",
@@ -321,7 +321,7 @@
           },
           {
             "id": 2816,
-            "class": "SLStudio$SpaceTime",
+            "class": "com.symmetrylabs.slstudio.pattern.SpaceTime",
             "modulationColor": -16711877,
             "parameters": {
               "label": "SpaceTime",
@@ -337,7 +337,7 @@
           },
           {
             "id": 2821,
-            "class": "SLStudio$SunFlash",
+            "class": "com.symmetrylabs.slstudio.pattern.SunFlash",
             "modulationColor": -16711805,
             "parameters": {
               "label": "SunFlash",
@@ -356,7 +356,7 @@
           },
           {
             "id": 2823,
-            "class": "SLStudio$Spheres",
+            "class": "com.symmetrylabs.slstudio.pattern.Spheres",
             "modulationColor": -65342,
             "parameters": {
               "label": "Spheres",
@@ -373,7 +373,7 @@
           },
           {
             "id": 2899,
-            "class": "SLStudio$ShiftingPlane",
+            "class": "com.symmetrylabs.slstudio.pattern.ShiftingPlane",
             "modulationColor": -25856,
             "parameters": {
               "label": "ShiftingPlane",
@@ -388,7 +388,7 @@
           },
           {
             "id": 2977,
-            "class": "SLStudio$FlockWave",
+            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
             "modulationColor": -10878721,
             "parameters": {
               "label": "FlockWave",
@@ -484,7 +484,7 @@
           },
           {
             "id": 3213,
-            "class": "SLStudio$PaletteViewer",
+            "class": "com.symmetrylabs.slstudio.ping.PaletteViewer",
             "modulationColor": -16747009,
             "parameters": {
               "label": "PaletteViewer",
@@ -504,7 +504,7 @@
           },
           {
             "id": 4370,
-            "class": "SLStudio$SelectedStrip",
+            "class": "com.symmetrylabs.slstudio.pattern.test.SelectedStrip",
             "modulationColor": -65358,
             "parameters": {
               "label": "SelectedStrip",
@@ -563,7 +563,7 @@
           },
           {
             "id": 4016,
-            "class": "SLStudio$PerSunWasps",
+            "class": "com.symmetrylabs.slstudio.pattern.PerSunWasps",
             "modulationColor": -5897985,
             "parameters": {
               "label": "PerSunWasps",
@@ -611,7 +611,7 @@
           },
           {
             "id": 4368,
-            "class": "SLStudio$Rings",
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
             "modulationColor": -16721665,
             "parameters": {
               "label": "Rings",
@@ -631,7 +631,7 @@
           },
           {
             "id": 4372,
-            "class": "SLStudio$PaletteViewer",
+            "class": "com.symmetrylabs.slstudio.ping.PaletteViewer",
             "modulationColor": -10223361,
             "parameters": {
               "label": "PaletteViewer",
@@ -677,7 +677,7 @@
         "patterns": [
           {
             "id": 4021,
-            "class": "SLStudio$TextureJupiter1",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureJupiter1",
             "modulationColor": -16734721,
             "parameters": {
               "label": "TextureJupiter1",
@@ -697,7 +697,7 @@
           },
           {
             "id": 4024,
-            "class": "SLStudio$TextureJupiter2",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureJupiter2",
             "modulationColor": -16733185,
             "parameters": {
               "label": "TextureJupiter2",
@@ -717,7 +717,7 @@
           },
           {
             "id": 4027,
-            "class": "SLStudio$TextureNebula1",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureNebula1",
             "modulationColor": -15597824,
             "parameters": {
               "label": "TextureNebula1",
@@ -737,7 +737,7 @@
           },
           {
             "id": 4030,
-            "class": "SLStudio$TextureNebula2",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureNebula2",
             "modulationColor": -16766465,
             "parameters": {
               "label": "TextureNebula2",
@@ -757,7 +757,7 @@
           },
           {
             "id": 4033,
-            "class": "SLStudio$TextureOceans",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureOceans",
             "modulationColor": -16745729,
             "parameters": {
               "label": "TextureOceans",
@@ -777,7 +777,7 @@
           },
           {
             "id": 4036,
-            "class": "SLStudio$TextureSunsets",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureSunsets",
             "modulationColor": -14614784,
             "parameters": {
               "label": "TextureSunsets",
@@ -797,7 +797,7 @@
           },
           {
             "id": 4039,
-            "class": "SLStudio$TextureClouds",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureClouds",
             "modulationColor": -16719361,
             "parameters": {
               "label": "TextureClouds",
@@ -817,7 +817,7 @@
           },
           {
             "id": 4042,
-            "class": "SLStudio$TextureCorals",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureCorals",
             "modulationColor": -16187137,
             "parameters": {
               "label": "TextureCorals",
@@ -881,7 +881,7 @@
           },
           {
             "id": 4374,
-            "class": "SLStudio$SeaboardSuns",
+            "class": "com.symmetrylabs.slstudio.raph.SeaboardSuns",
             "modulationColor": -16711737,
             "parameters": {
               "label": "SeaboardSuns",
@@ -973,7 +973,7 @@
         "patterns": [
           {
             "id": 4057,
-            "class": "SLStudio$TextureClouds",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureClouds",
             "modulationColor": -16252673,
             "parameters": {
               "label": "TextureClouds",
@@ -993,7 +993,7 @@
           },
           {
             "id": 4060,
-            "class": "SLStudio$TextureCorals",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureCorals",
             "modulationColor": -16712961,
             "parameters": {
               "label": "TextureCorals",
@@ -1013,7 +1013,7 @@
           },
           {
             "id": 4063,
-            "class": "SLStudio$TextureJupiter1",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureJupiter1",
             "modulationColor": -6422273,
             "parameters": {
               "label": "TextureJupiter1",
@@ -1033,7 +1033,7 @@
           },
           {
             "id": 4066,
-            "class": "SLStudio$TextureJupiter2",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureJupiter2",
             "modulationColor": -48384,
             "parameters": {
               "label": "TextureJupiter2",
@@ -1053,7 +1053,7 @@
           },
           {
             "id": 4069,
-            "class": "SLStudio$TextureNebula1",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureNebula1",
             "modulationColor": -2304,
             "parameters": {
               "label": "TextureNebula1",
@@ -1073,7 +1073,7 @@
           },
           {
             "id": 4072,
-            "class": "SLStudio$TextureNebula2",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureNebula2",
             "modulationColor": -16711790,
             "parameters": {
               "label": "TextureNebula2",
@@ -1093,7 +1093,7 @@
           },
           {
             "id": 4075,
-            "class": "SLStudio$TextureOceans",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureOceans",
             "modulationColor": -16711905,
             "parameters": {
               "label": "TextureOceans",
@@ -1113,7 +1113,7 @@
           },
           {
             "id": 4078,
-            "class": "SLStudio$TextureSunsets",
+            "class": "com.symmetrylabs.slstudio.pattern.texture.TextureSunsets",
             "modulationColor": -16711886,
             "parameters": {
               "label": "TextureSunsets",
@@ -1177,7 +1177,7 @@
           },
           {
             "id": 4401,
-            "class": "SLStudio$SeaboardSuns",
+            "class": "com.symmetrylabs.slstudio.raph.SeaboardSuns",
             "modulationColor": -14848,
             "parameters": {
               "label": "SeaboardSuns",
@@ -1321,7 +1321,7 @@
     "components": {
       "outputControl": {
         "id": 29,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65368,
         "parameters": {
           "label": "Output Control",

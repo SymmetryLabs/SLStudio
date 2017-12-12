@@ -74,7 +74,7 @@
         "patterns": [
           {
             "id": 3165,
-            "class": "SLStudio$SelectedStrip",
+            "class": "com.symmetrylabs.slstudio.pattern.test.SelectedStrip",
             "modulationColor": -65494,
             "parameters": {
               "label": "SelectedStrip",
@@ -89,7 +89,7 @@
           },
           {
             "id": 3215,
-            "class": "SLStudio$BlobViewer",
+            "class": "com.symmetrylabs.slstudio.ping.BlobViewer",
             "modulationColor": -16711703,
             "parameters": {
               "label": "BlobViewer",
@@ -135,7 +135,7 @@
         "patterns": [
           {
             "id": 3170,
-            "class": "SLStudio$TestStrips",
+            "class": "com.symmetrylabs.slstudio.pattern.test.TestStrips",
             "modulationColor": -9044224,
             "parameters": {
               "label": "TestStrips"
@@ -175,7 +175,7 @@
         "patterns": [
           {
             "id": 3177,
-            "class": "SLStudio$ParamCrossSections",
+            "class": "com.symmetrylabs.slstudio.pattern.test.ParamCrossSections",
             "modulationColor": -16711710,
             "parameters": {
               "label": "ParamCrossSections",
@@ -224,7 +224,7 @@
         "patterns": [
           {
             "id": 3182,
-            "class": "SLStudio$Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -16711687,
             "parameters": {
               "label": "Noise",
@@ -251,7 +251,7 @@
           },
           {
             "id": 3184,
-            "class": "SLStudio$ShiftingPlane",
+            "class": "com.symmetrylabs.slstudio.pattern.ShiftingPlane",
             "modulationColor": -65328,
             "parameters": {
               "label": "ShiftingPlane",
@@ -388,7 +388,7 @@
     "components": {
       "outputControl": {
         "id": 29,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65368,
         "parameters": {
           "label": "Output Control",

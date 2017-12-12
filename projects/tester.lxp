@@ -86,7 +86,7 @@
           },
           {
             "id": 385,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -26112,
             "parameters": {
               "label": "ColorShift",
@@ -120,7 +120,7 @@
           },
           {
             "id": 388,
-            "class": "SLStudio$FlockWave",
+            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
             "modulationColor": -16737537,
             "parameters": {
               "label": "FlockWave",
@@ -199,7 +199,7 @@
           },
           {
             "id": 432,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -6029057,
             "parameters": {
               "label": "ColorShift",
@@ -274,7 +274,7 @@
           },
           {
             "id": 438,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -65315,
             "parameters": {
               "label": "ColorShift",
@@ -349,7 +349,7 @@
           },
           {
             "id": 444,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -16711744,
             "parameters": {
               "label": "ColorShift",
@@ -492,7 +492,7 @@
     "components": {
       "performanceManager": {
         "id": 380,
-        "class": "SLStudio$PerformanceManager",
+        "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -4325121,
         "parameters": {
           "label": "",
@@ -504,7 +504,7 @@
       },
       "outputControl": {
         "id": 31,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65467,
         "parameters": {
           "label": "Output Control",

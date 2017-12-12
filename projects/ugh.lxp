@@ -86,7 +86,7 @@
           },
           {
             "id": 5694,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -16764417,
             "parameters": {
               "label": "ColorShift",
@@ -123,7 +123,7 @@
           },
           {
             "id": 5715,
-            "class": "SLStudio$SeaboardSuns",
+            "class": "com.symmetrylabs.slstudio.raph.SeaboardSuns",
             "modulationColor": -16711826,
             "parameters": {
               "label": "SeaboardSuns",
@@ -183,7 +183,7 @@
           },
           {
             "id": 5700,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -5046017,
             "parameters": {
               "label": "ColorShift",
@@ -258,7 +258,7 @@
           },
           {
             "id": 5706,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -4260096,
             "parameters": {
               "label": "ColorShift",
@@ -333,7 +333,7 @@
           },
           {
             "id": 5712,
-            "class": "SLStudio$ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
             "modulationColor": -12583168,
             "parameters": {
               "label": "ColorShift",
@@ -492,7 +492,7 @@
     "components": {
       "performanceManager": {
         "id": 380,
-        "class": "SLStudio$PerformanceManager",
+        "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -13312,
         "parameters": {
           "label": "",
@@ -504,7 +504,7 @@
       },
       "outputControl": {
         "id": 31,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65368,
         "parameters": {
           "label": "Output Control",

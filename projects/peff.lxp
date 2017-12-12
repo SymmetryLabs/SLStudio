@@ -71,7 +71,7 @@
         "effects": [
           {
             "id": 4452,
-            "class": "SLStudio$PaletteEffect",
+            "class": "com.symmetrylabs.slstudio.effect.PaletteEffect",
             "modulationColor": -16711848,
             "parameters": {
               "label": "Palette",
@@ -114,7 +114,7 @@
           },
           {
             "id": 4392,
-            "class": "SLStudio$LightSource",
+            "class": "com.symmetrylabs.slstudio.ping.LightSource",
             "modulationColor": -65489,
             "parameters": {
               "label": "LightSource",
@@ -243,7 +243,7 @@
     "components": {
       "outputControl": {
         "id": 31,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -7012608,
         "parameters": {
           "label": "Output Control",

@@ -92,7 +92,7 @@
           },
           {
             "id": 5097,
-            "class": "SLStudio$FlockWave",
+            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
             "modulationColor": -11337473,
             "parameters": {
               "label": "FlockWave",
@@ -134,7 +134,7 @@
           },
           {
             "id": 5099,
-            "class": "SLStudio$LightSource",
+            "class": "com.symmetrylabs.slstudio.ping.LightSource",
             "modulationColor": -65373,
             "parameters": {
               "label": "LightSource",
@@ -279,7 +279,7 @@
     "components": {
       "outputControl": {
         "id": 29,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65368,
         "parameters": {
           "label": "Output Control",

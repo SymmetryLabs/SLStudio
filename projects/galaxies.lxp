@@ -92,7 +92,7 @@
           },
           {
             "id": 398,
-            "class": "SLStudio$FlockWaveOoze",
+            "class": "com.symmetrylabs.slstudio.ping.FlockWaveOoze",
             "modulationColor": -10682624,
             "parameters": {
               "label": "FlockWaveOoze",
@@ -240,7 +240,7 @@
     "components": {
       "outputControl": {
         "id": 31,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65371,
         "parameters": {
           "label": "Output Control",

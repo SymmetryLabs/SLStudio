@@ -198,7 +198,7 @@
     "components": {
       "performanceManager": {
         "id": 378,
-        "class": "SLStudio$PerformanceManager",
+        "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -16711694,
         "parameters": {
           "label": ""
@@ -206,7 +206,7 @@
       },
       "outputControl": {
         "id": 31,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -9699073,
         "parameters": {
           "label": "Output Control",

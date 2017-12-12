@@ -92,7 +92,7 @@
           },
           {
             "id": 3647,
-            "class": "SLStudio$LightSource",
+            "class": "com.symmetrylabs.slstudio.ping.LightSource",
             "modulationColor": -7995648,
             "parameters": {
               "label": "LightSource",
@@ -237,7 +237,7 @@
     "components": {
       "outputControl": {
         "id": 29,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65368,
         "parameters": {
           "label": "Output Control",

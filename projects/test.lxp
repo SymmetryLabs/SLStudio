@@ -92,7 +92,7 @@
           },
           {
             "id": 3300,
-            "class": "SLStudio$SelectedStrip",
+            "class": "com.symmetrylabs.slstudio.pattern.test.SelectedStrip",
             "modulationColor": -65400,
             "parameters": {
               "label": "SelectedStrip",
@@ -107,7 +107,7 @@
           },
           {
             "id": 3324,
-            "class": "SLStudio$MiddleStrip",
+            "class": "com.symmetrylabs.slstudio.pattern.test.MiddleStrip",
             "modulationColor": -16711824,
             "parameters": {
               "label": "MiddleStrip"
@@ -165,7 +165,7 @@
           },
           {
             "id": 3305,
-            "class": "SLStudio$Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -56320,
             "parameters": {
               "label": "Noise",
@@ -192,7 +192,7 @@
           },
           {
             "id": 3328,
-            "class": "SLStudio$MiddleStrip",
+            "class": "com.symmetrylabs.slstudio.pattern.test.MiddleStrip",
             "modulationColor": -9830145,
             "parameters": {
               "label": "MiddleStrip"
@@ -328,7 +328,7 @@
     "components": {
       "outputControl": {
         "id": 29,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65368,
         "parameters": {
           "label": "Output Control",
