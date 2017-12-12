@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
@@ -43,7 +43,7 @@ public class Bubbles extends LXPattern {
         addParameter(zDep);
     }
 
-    public void run(double deltaMs) {
+    public void run(final double deltaMs) {
         leftoverMs += deltaMs;
 
         float msPerBubble = 20000 / ((rate.getValuef() + .01f) * 100);
@@ -61,15 +61,16 @@ public class Bubbles extends LXPattern {
                 bubbles.get(indexToPop).pop();
         }
 
-        for (Bubble bubble : bubbles) {
+        bubbles.parallelStream().forEach(bubble -> {
             bubble.run(deltaMs);
-        }
+        });
 
-        for (LXPoint point : model.points) {
+        model.getPoints().parallelStream().forEach(point -> {
             colors[point.index] = 0;
-            for (Bubble bubble : bubbles)
+            for (Bubble bubble : bubbles) {
                 bubble.paint(point);
-        }
+            }
+        });
 
         Iterator<Bubble> i = bubbles.iterator();
         while (i.hasNext()) {

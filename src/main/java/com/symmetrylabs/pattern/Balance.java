@@ -1,4 +1,8 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.pattern;
+
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
@@ -18,7 +22,6 @@ public class Balance extends LXPattern {
     class Sphere {
         float x, y, z;
     }
-
 
     // Projection stuff
     private final LXProjection projection;
@@ -102,7 +105,10 @@ public class Balance extends LXPattern {
             .rotate(rotationX.getValuef() * crazy_factor, 0, 0, 1)
             .rotate(rotationY.getValuef() * crazy_factor, 0, 1, 0);
 
-        for (LXVector p : projection) {
+        StreamSupport.stream(
+            Spliterators.spliteratorUnknownSize(projection.iterator(), Spliterator.CONCURRENT),
+            true
+        ).forEach(p -> {
             float x_percentage = (p.x - model.xMin) / modelWidth;
 
             float y_in_range = heightMod.getValuef() * (2 * p.y - model.yMax - model.yMin) / modelHeight;
@@ -142,7 +148,8 @@ public class Balance extends LXPattern {
 
                 c = LXColor.blend(c, lx.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
             }
+
             colors[p.index] = c;
-        }
+        });
     }
 }

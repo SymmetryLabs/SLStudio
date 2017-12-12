@@ -11,7 +11,6 @@ import heronarts.lx.transform.LXVector;
 
 import java.util.Spliterator;
 import java.util.Spliterators;
-import java.util.function.Consumer;
 import java.util.stream.StreamSupport;
 
 public class Swim extends LXPattern {
@@ -73,28 +72,25 @@ public class Swim extends LXPattern {
         StreamSupport.stream(
             Spliterators.spliteratorUnknownSize(projection.iterator(), Spliterator.CONCURRENT),
             true
-        ).forEach(new Consumer<LXVector>() {
-            @Override
-            public void accept(final LXVector p) {
-                float x_percentage = (p.x - model.xMin) / model_width;
+        ).forEach(p -> {
+            float x_percentage = (p.x - model.xMin) / model_width;
 
-                // Multiply by sineHeight to shrink the size of the sin wave to be less than the height of the cubes.
-                float y_in_range = sineHeight.getValuef() * (2 * p.y - model.yMax - model.yMin) / model_height;
-                float sin_x = (float) Math.sin(phase + 2 * Math.PI * x_percentage);
+            // Multiply by sineHeight to shrink the size of the sin wave to be less than the height of the cubes.
+            float y_in_range = sineHeight.getValuef() * (2 * p.y - model.yMax - model.yMin) / model_height;
+            float sin_x = (float) Math.sin(phase + 2 * Math.PI * x_percentage);
 
-                float size_of_sin_wave = 0.4f;
+            float size_of_sin_wave = 0.4f;
 
-                float v1 = ((float) Math.abs(y_in_range - sin_x) > size_of_sin_wave)
-                    ? 0 : (float) Math.abs((y_in_range - sin_x + size_of_sin_wave)
-                    / size_of_sin_wave / 2 * 100);
+            float v1 = ((float) Math.abs(y_in_range - sin_x) > size_of_sin_wave)
+                ? 0 : (float) Math.abs((y_in_range - sin_x + size_of_sin_wave)
+                / size_of_sin_wave / 2 * 100);
 
-                float hue_color = palette.getHuef() + hueScale.getValuef()
-                    * ((float) Math.abs(p.x - model.xMax / 2.) * .01f
-                    + (float) Math.abs(p.y - model.yMax / 2) * .6f
-                    + (float) Math.abs(p.z - model.zMax));
+            float hue_color = palette.getHuef() + hueScale.getValuef()
+                * ((float) Math.abs(p.x - model.xMax / 2.) * .01f
+                + (float) Math.abs(p.y - model.yMax / 2) * .6f
+                + (float) Math.abs(p.z - model.zMax));
 
-                colors[p.index] = lx.hsb(hue_color, 100, v1);
-            }
+            colors[p.index] = lx.hsb(hue_color, 100, v1);
         });
     }
 }
