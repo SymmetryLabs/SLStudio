@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1513034602233,
+  "timestamp": 1513124317839,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 359.0,
+        "color/hue": 4.235293865203857,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -65532,
+        "color": -60928,
         "period": 5000.0,
         "range": 96.37795275590553,
         "spread": 0.0,
@@ -61,11 +61,11 @@
           "midiChannel": 16,
           "autoCycleEnabled": true,
           "autoCycleTimeSecs": 90.0,
-          "fader": 1.0,
+          "fader": 0.4251968264579773,
           "crossfadeGroup": 1,
           "blendMode": 0,
-          "transitionEnabled": true,
-          "transitionTimeSecs": 10.0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
         "effects": [
@@ -75,7 +75,7 @@
             "modulationColor": -65485,
             "parameters": {
               "label": "Blur",
-              "enabled": false,
+              "enabled": true,
               "amount": 0.0
             },
             "modulation": {
@@ -90,8 +90,8 @@
             "modulationColor": -15728385,
             "parameters": {
               "label": "ColorShift",
-              "enabled": false,
-              "shift": 0.0
+              "enabled": true,
+              "shift": 104.4000057131052
             },
             "modulation": {
               "modulators": [],
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 4,
         "patterns": [
           {
             "id": 11884,
@@ -112,9 +112,9 @@
               "atBlobs": false,
               "nearBlobs": true,
               "everywhere": false,
-              "perSun": false,
+              "perSun": true,
               "timeScale": 0.17,
-              "size": 620.0000000000001,
+              "size": 300.0000071525575,
               "detail": 3.699999962002039,
               "ripple": 0.6,
               "x": 300.0,
@@ -127,7 +127,7 @@
               "palCutoff": 0.0,
               "palStart": 0.0,
               "palStop": 1.0,
-              "spnRad": 56.00000202655791,
+              "spnRad": 156.00000053644177,
               "maxBirds": 11.199999928474426,
               "spnRate": 2.0,
               "spnVary": 0.0,
@@ -154,23 +154,23 @@
               "atBlobs": false,
               "nearBlobs": true,
               "everywhere": false,
-              "perSun": false,
+              "perSun": true,
               "timeScale": 0.15,
               "size": 480.0000017881394,
               "detail": 6.6,
               "ripple": 0.4,
-              "x": 300.0,
-              "y": 0.4,
-              "z": 78.398,
+              "x": 830.8673853039782,
+              "y": 35.615993917524776,
+              "z": 139.23882873782526,
               "zScale": 6.3,
-              "palette": 22,
-              "palShift": 0.12,
-              "palBias": -2.12,
-              "palCutoff": 0.0,
+              "palette": 7,
+              "palShift": 0.08000000089406967,
+              "palBias": -3.679999965131283,
+              "palCutoff": 0.37999999336898327,
               "palStart": 0.25,
               "palStop": 1.0,
-              "spnRad": 24.00000497698782,
-              "maxBirds": 12.399999901652336,
+              "spnRad": 124.00000274181365,
+              "maxBirds": 40.0,
               "spnRate": 2.0,
               "spnVary": 0.0,
               "scatter": 399.99999441206455,
@@ -196,22 +196,22 @@
               "atBlobs": false,
               "nearBlobs": true,
               "everywhere": false,
-              "perSun": false,
+              "perSun": true,
               "timeScale": 0.15,
-              "size": 500.0,
-              "detail": 6.6,
+              "size": 400.0000022351742,
+              "detail": 5.900000015646219,
               "ripple": 0.6,
               "x": 300.0,
               "y": 0.4,
               "z": 78.398,
-              "zScale": 5.58,
-              "palette": 26,
+              "zScale": -3.4199997988343243,
+              "palette": 21,
               "palShift": 0.0,
-              "palBias": -1.64,
-              "palCutoff": 0.21,
+              "palBias": -4.159999943673611,
+              "palCutoff": 0.22999999955296513,
               "palStart": 0.25,
               "palStop": 1.0,
-              "spnRad": 280.0,
+              "spnRad": 80.00000447034834,
               "maxBirds": 14.399999856948853,
               "spnRate": 2.0,
               "spnVary": 0.0,
@@ -237,10 +237,10 @@
               "label": "FlockWaveGalaxies",
               "atBlobs": false,
               "nearBlobs": true,
-              "everywhere": false,
-              "perSun": false,
-              "timeScale": 0.09,
-              "size": 719.9999964237213,
+              "everywhere": true,
+              "perSun": true,
+              "timeScale": 0.05000000089406967,
+              "size": 799.999994635582,
               "detail": 7.7999999731779095,
               "ripple": 10.0,
               "x": 300.0,
@@ -253,13 +253,13 @@
               "palCutoff": 0.22000000223517419,
               "palStart": 0.25,
               "palStop": 1.0,
-              "spnRad": 28.000005632638914,
+              "spnRad": 20.000005811452848,
               "maxBirds": 10.39999994635582,
               "spnRate": 2.0,
               "spnVary": 0.0,
               "scatter": 130.0,
               "spdMult": 0.24,
-              "maxSpd": 10.0,
+              "maxSpd": 4.000000134110452,
               "turnSec": 1.56,
               "fadeInSec": 1.7,
               "fadeOutSec": 0.78
@@ -280,7 +280,7 @@
               "atBlobs": false,
               "nearBlobs": true,
               "everywhere": false,
-              "perSun": false,
+              "perSun": true,
               "timeScale": 0.15,
               "size": 560.0,
               "detail": 2.800000035762787,
@@ -295,7 +295,7 @@
               "palCutoff": 0.0,
               "palStart": 0.0,
               "palStop": 0.84,
-              "spnRad": 96.00000411272048,
+              "spnRad": 20.00000357627867,
               "maxBirds": 8.399999991059303,
               "spnRate": 2.0,
               "spnVary": 0.0,
@@ -328,9 +328,9 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.5748031735420227,
           "crossfadeGroup": 1,
-          "blendMode": 1,
+          "blendMode": 0,
           "transitionEnabled": false,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
@@ -342,7 +342,7 @@
             "modulationColor": -16769537,
             "parameters": {
               "label": "Blur",
-              "enabled": false,
+              "enabled": true,
               "amount": 0.0
             },
             "modulation": {
@@ -358,7 +358,7 @@
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
-              "shift": 136.8000043183565
+              "shift": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -1287,10 +1287,10 @@
               "RotX": 0.5,
               "RotY": 0.5,
               "RotZ": 0.5,
-              "Spin": 0.5599999986588955,
+              "Spin": 0.5,
               "perSun": true,
-              "Fast": 0.47000000178813917,
-              "Dens": 0.45000000335276125,
+              "Fast": 0.55,
+              "Dens": 0.6,
               "Shrp": 0.5,
               "Symm": 0,
               "Anim": 4
@@ -1349,12 +1349,12 @@
           "label": "L Pattern 2",
           "arm": false,
           "enabled": false,
-          "cue": true,
+          "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": true,
@@ -1394,7 +1394,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 20,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 2773,
@@ -1494,8 +1494,8 @@
             "modulationColor": -4522240,
             "parameters": {
               "label": "RKPattern01",
-              "RES": 212,
-              "KER": 1,
+              "RES": 284,
+              "KER": 3,
               "ALL": false,
               "SUN1": true,
               "SUN2": true,
@@ -1512,9 +1512,9 @@
               "rX": 0.7539822409902008,
               "rY": 0.6283185341585007,
               "rZ": 0.5026548273268006,
-              "amt": 9.440000236034393,
-              "speed": -12.566370964050293,
-              "dsp": 2.4504423183281876,
+              "amt": 6.800000295042992,
+              "speed": -5.7805307951384854,
+              "dsp": 0.5969026367089381,
               "nDsp": 2.282499971333891
             },
             "modulation": {
@@ -1531,7 +1531,7 @@
             "parameters": {
               "label": "RKPattern02",
               "RES": 353,
-              "KER": 2,
+              "KER": 3,
               "ALL": false,
               "SUN1": true,
               "SUN2": true,
@@ -1548,7 +1548,7 @@
               "rX": 3.1415927410125732,
               "rY": 0.0,
               "rZ": -1.1938052149011513,
-              "noise": false,
+              "noise": true,
               "speed": 0.10000000149011612,
               "dsp": 1.0,
               "show edge": false
@@ -2012,8 +2012,8 @@
             "modulationColor": -65365,
             "parameters": {
               "label": "FlockWavePlanets",
-              "atBlobs": true,
-              "nearBlobs": false,
+              "atBlobs": false,
+              "nearBlobs": true,
               "everywhere": false,
               "perSun": false,
               "timeScale": 0.15,
@@ -2415,14 +2415,45 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.9999900000002526,
           "crossfadeGroup": 1,
           "blendMode": 1,
           "transitionEnabled": true,
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 2
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 12291,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -16711794,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 12294,
+            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
+            "modulationColor": -54784,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [
           {
             "id": 11876,
@@ -2453,7 +2484,7 @@
             ]
           }
         ],
-        "patternIndex": 0,
+        "patternIndex": 28,
         "patterns": [
           {
             "id": 4021,
@@ -3204,6 +3235,34 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 12297,
+            "class": "com.symmetrylabs.pattern.Noise",
+            "modulationColor": -14549248,
+            "parameters": {
+              "label": "Noise",
+              "Sprk": 0.0,
+              "Wave": 0.0,
+              "TrnX": 0.5,
+              "TrnY": 0.5,
+              "RotX": 0.5,
+              "RotY": 0.5,
+              "RotZ": 0.5,
+              "Spin": 0.5,
+              "perSun": false,
+              "Fast": 0.55,
+              "Dens": 0.6,
+              "Shrp": 0.5,
+              "Symm": 0,
+              "Anim": 5
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -3220,7 +3279,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 9.999999747378752E-6,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -3914,8 +3973,8 @@
           "modulationColor": -12544,
           "parameters": {
             "label": "Blur",
-            "enabled": false,
-            "amount": 0.0
+            "enabled": true,
+            "amount": 0.7007874015748031
           },
           "modulation": {
             "modulators": [],
@@ -4014,7 +4073,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.8346456692913385
       }
     },
     "components": {
@@ -4203,22 +4262,9 @@
           "channel": false,
           "control": false,
           "sync": false
-        },
-        {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
         }
       ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        },
-        {
-          "description": "APC40 mkII"
-        }
-      ],
+      "surfaces": [],
       "mapping": [
         {
           "channel": 0,
@@ -4298,9 +4344,9 @@
         "11362": true
       },
       "preview": {
-        "radius": 1399.2457009402294,
-        "theta": 50.16900000000057,
-        "phi": 0.11471667385101397,
+        "radius": 1104.0138599238735,
+        "theta": 50.42400000000078,
+        "phi": 0.6607166738510153,
         "positionX": 174.55101013183594,
         "positionY": 83.19999694824219,
         "positionZ": 299.8742370605469
