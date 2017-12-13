@@ -233,6 +233,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public class Timer {
         public long runNanos = 0;
         public long runLastNanos = 0;
+        public long runCurrentNanos = 0;
         public long runAvgNanos = 0;
         public long runWorstNanos = 0;
         public long channelNanos = 0;
@@ -251,26 +252,35 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             }
         }
 
-        private final long KEEP_RUN_TIME_PAIRS_FOR_NANOS = 5000000000l;
+        private final long KEEP_RUN_TIME_PAIRS_FOR_NANOS = 100000000l;
+        private final long KEEP_RUN_TIME_PAIRS_FOR_AVG_NANOS = 5000000000l;
         private final Queue<TimerPair> runTimerPairs = new ArrayDeque<TimerPair>();
 
         private void addRunTime(long runNanos, long nowNanos) {
             long expireNanos = nowNanos - KEEP_RUN_TIME_PAIRS_FOR_NANOS;
+            long expireAvgNanos = nowNanos - KEEP_RUN_TIME_PAIRS_FOR_AVG_NANOS;
             while (!this.runTimerPairs.isEmpty()
-                    && this.runTimerPairs.peek().recordedAtNanos < expireNanos) {
+                    && this.runTimerPairs.peek().recordedAtNanos < expireAvgNanos) {
                 this.runTimerPairs.remove();
             }
             this.runTimerPairs.add(new TimerPair(runNanos, nowNanos));
             long accum = 0;
+            int count = 0;
+            long accumAvg = 0;
             long worst = 0;
             for (TimerPair pair : this.runTimerPairs) {
-                accum += pair.nanos;
+                if (pair.recordedAtNanos > expireNanos) {
+                    accum += pair.nanos;
+                    count++;
+                }
+                accumAvg += pair.nanos;
                 if (pair.nanos > worst) {
                     worst = pair.nanos;
                 }
             }
             this.runLastNanos = runNanos;
-            this.runAvgNanos = accum / this.runTimerPairs.size();
+            this.runCurrentNanos = count > 0 ? accum / count : runNanos;
+            this.runAvgNanos = accumAvg / this.runTimerPairs.size();
             this.runWorstNanos = worst;
         }
     }
