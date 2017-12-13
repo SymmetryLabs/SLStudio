@@ -13,6 +13,11 @@ mainClassName = "com.symmetrylabs.slstudio.SLStudio"
 
 repositories {
 	mavenCentral()
+
+	maven { url 'https://jitpack.io' }
+
+	// needed for aparapi dependency
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
@@ -45,6 +50,9 @@ dependencies {
 
 	// https://mvnrepository.com/artifact/io.github.lukehutch/fast-classpath-scanner
 	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
+
+	// https://github.com/SymmetryLabs/aparapi
+	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
 
 	compile files('libs/gluegen-rt-natives-linux-aarch64.jar')
 	compile files('libs/gluegen-rt-natives-linux-amd64.jar')

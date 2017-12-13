@@ -42,6 +42,9 @@ public class SLStudio extends PApplet {
     private BlobTracker blobTracker;
 
     static public void main(String[] passedArgs) {
+        System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
+        System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
+
         String[] appletArgs = new String[] { SLStudio.class.getName() };
         if (passedArgs != null) {
             PApplet.main(concat(appletArgs, passedArgs));
