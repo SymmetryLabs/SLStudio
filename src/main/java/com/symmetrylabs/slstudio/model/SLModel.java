@@ -35,7 +35,10 @@ public class SLModel extends LXModel {
     public final List<Strip> strips;
 
     // Array of points stored as contiguous floats for performance
-    private final float[] pointsArray;
+    public final float[] pointsArray;
+    public final float[] pointsX;
+    public final float[] pointsY;
+    public final float[] pointsZ;
 
     protected final PointBatches pointBatches;
 
@@ -89,11 +92,17 @@ public class SLModel extends LXModel {
         this.strips = Collections.unmodifiableList(stripList);
 
         this.pointsArray = new float[this.points.length * 3];
+        this.pointsX = new float[this.points.length];
+        this.pointsY = new float[this.points.length];
+        this.pointsZ = new float[this.points.length];
         for (int i = 0; i < this.points.length; i++) {
             LXPoint point = this.points[i];
             this.pointsArray[3 * i] = point.x;
             this.pointsArray[3 * i + 1] = point.y;
             this.pointsArray[3 * i + 2] = point.z;
+            this.pointsX[i] = point.x;
+            this.pointsY[i] = point.y;
+            this.pointsZ[i] = point.z;
         }
 
         this.pointBatches = new PointBatches(Arrays.asList(points), NUM_POINT_BATCHES);
