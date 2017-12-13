@@ -76,7 +76,7 @@ public class ZigzagPalette implements ColorPalette {
 
     public int getColor(double p) {
         p += shift;
-        int floor = (int) Math.floor(p);
+        int floor = (int) p;
         p -= floor;
         if (floor % 2 != 0) {
             p = 1 - p;
