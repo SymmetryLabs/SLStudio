@@ -1,17 +1,17 @@
 package com.symmetrylabs.slstudio.render;
 
-import com.symmetrylabs.slstudio.model.SLModel;
+import java.util.Arrays;
+
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
-import java.util.Arrays;
+import com.symmetrylabs.util.MathUtils;
 
 public class InterpolatingRenderer extends Renderer {
-    private final SLModel.PointBatches pointBatches;
     private int[] frameA, frameB, active;
-    private double lastRenderTimeMillis;
-    private double lastRenderElapsedMillis;
+    private long lastRenderTimeNanos;
+    private long lastRenderElapsedNanos;
 
     private RenderThread renderThread;
     private int fps = 60;
@@ -24,8 +24,6 @@ public class InterpolatingRenderer extends Renderer {
         frameA = new int[colors.length];
         frameB = new int[colors.length];
         active = new int[colors.length];
-
-        pointBatches = new SLModel.PointBatches(points, SLModel.PointBatches.NUM_POINT_BATCHES);
     }
 
     @Override
@@ -55,26 +53,14 @@ public class InterpolatingRenderer extends Renderer {
     public synchronized void run(double deltaMs) {
         runLoopStarted = true;
 
-        double t = System.nanoTime() / 1000000.0;
-        double f = (t - lastRenderTimeMillis) / lastRenderElapsedMillis;
-        final double fFinal = f > 1 ? 1 : f;
+        double f = (System.nanoTime() - lastRenderTimeNanos) / (double)lastRenderElapsedNanos;
         //System.out.println("Showing: " + frameA + " and " + frameB + " (" + f + ")");
 
-        pointBatches.forEachPoint((start, end) -> {
-            for (int i = start; i < end; i++) {
-                final LXPoint point = points.get(i);
-
-                int c1 = frameA[point.index];
-                int c2 = frameB[point.index];
-          /*
-                colors[point.index] = LXColor.rgb(
-                        (int)(LXColor.red(c1) * f + LXColor.red(c2) * (1 - f)),
-                        (int)(LXColor.green(c1) * f + LXColor.green(c2) * (1 - f)),
-                        (int)(LXColor.blue(c1) * f + LXColor.blue(c2) * (1 - f))
-                );
-                */
-                colors[point.index] = LXColor.lerp(c1, c2, fFinal);
-            }
+        final double fFinal = f > 1 ? 1 : f;
+        points.parallelStream().forEach(point -> {
+            int c1 = frameA[point.index];
+            int c2 = frameB[point.index];
+            colors[point.index] = LXColor.lerp(c1, c2, fFinal);
         });
     }
 
@@ -86,21 +72,31 @@ public class InterpolatingRenderer extends Renderer {
             interrupt();
         }
 
+        private void sleepNanosFromElapsed(long elapsedNanos) {
+            long periodNanos = 1_000_000_000l / fps;
+            if (elapsedNanos >= periodNanos)
+                return;
+
+            try {
+                long nanos = periodNanos - elapsedNanos;
+                long millisPart = nanos / 1_000_000l;
+                sleep(millisPart, (int)(nanos - millisPart * 1_000_000l));
+            }
+            catch (InterruptedException e) { /* pass */ }
+        }
+
         @Override
         public void run() {
             long lastTimeNanos = System.nanoTime();
             while (running) {
                 if (!runLoopStarted) {
-                    try {
-                        sleep(1000 / fps);
-                    } catch (InterruptedException e) { /* pass */ }
-
+                    sleepNanosFromElapsed(0);
                     lastTimeNanos = System.nanoTime();
                     continue;
                 }
 
                 long timeNanos = System.nanoTime();
-                double deltaMs = (timeNanos - lastTimeNanos) / 1000000.0;
+                double deltaMs = (timeNanos - lastTimeNanos) / 1_000_000d;
 
                 Arrays.fill(active, 0);
                 renderable.render(deltaMs, points, active);
@@ -114,18 +110,13 @@ public class InterpolatingRenderer extends Renderer {
                     active = frameA;
                     frameA = temp;
 
-                    lastRenderTimeMillis = lastTimeNanos / 1000000.0;
-                    lastRenderElapsedMillis = elapsedNanos / 1000000.0;
+                    lastRenderTimeNanos = lastTimeNanos;
+                    lastRenderElapsedNanos = elapsedNanos;
                 }
 
                 //System.out.println("Rendering: " + active);
 
-                long periodNanos = 1000000 / fps;
-                if (elapsedNanos < periodNanos) {
-                    try {
-                        sleep((periodNanos - elapsedNanos) / 1000000);
-                    } catch (InterruptedException e) { /* pass */ }
-                }
+                sleepNanosFromElapsed(elapsedNanos);
             }
         }
     }
