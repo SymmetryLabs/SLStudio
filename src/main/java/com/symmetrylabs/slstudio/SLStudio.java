@@ -447,11 +447,11 @@ public class SLStudio extends PApplet {
             new Pixlite(lx, "10.200.1.16", ((SLModel) lx.model).getSliceById("sun10_bottom_back")),
             // locked but need trim maybe (move whole bottom to the right)
 
-            // sun 11
-            new Pixlite(lx, "10.200.1.51", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_front")),
-            new Pixlite(lx, "10.200.1.52", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_front")),
-            new Pixlite(lx, "10.200.1.53", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_back")), // locked
-            new Pixlite(lx, "10.200.1.54", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
+            // sun 11 (FULL)
+            new Pixlite(lx, "10.200.1.17", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_front")),
+            new Pixlite(lx, "10.200.1.18", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_front")),
+            new Pixlite(lx, "10.200.1.19", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_back")), // locked
+            new Pixlite(lx, "10.200.1.20", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_back")), // locked
         };
 
         for (Pixlite pixlite : pixlites) {
