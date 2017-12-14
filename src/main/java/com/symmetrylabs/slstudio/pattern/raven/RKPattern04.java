@@ -10,7 +10,7 @@ import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
-import static com.symmetrylabs.slstudio.util.Utils.noise;
+import static com.symmetrylabs.util.NoiseUtils.noise;
 import static com.symmetrylabs.slstudio.util.Utils.random;
 import static processing.core.PApplet.HALF_PI;
 import static processing.core.PApplet.TWO_PI;
