@@ -21,7 +21,7 @@ public class UIFramerate extends UI2dContext {
     private final P3LX lx;
     private final PFont font;
     private final DecimalFormat fpsFormat = new DecimalFormat("0.0");
-    private final DecimalFormat elapsedFormat = new DecimalFormat("0.00");
+    private final DecimalFormat elapsedFormat = new DecimalFormat("0.0");
 
     public UIFramerate(UI ui, final P3LX lx, float x, float y) {
         super(ui, x, y, 700, 30);
@@ -40,9 +40,10 @@ public class UIFramerate extends UI2dContext {
             // pg.text(String.format("Engine: %2$.1f UI: %2$.1f",
             //   lx.engine.frameRate(), lx.applet.frameRate), 0, 0);
             pg.text(String.format(
-                "Engine FPS: %4s UI: %4s  //  Frame: %5sms (avg) %5sms (worst)",
+                "Engine FPS: %4s UI: %4s  //  Frame:  %4sms   %4sms (avg)   %4sms (worst)",
                 fpsFormat.format(lx.engine.frameRate()),
                 fpsFormat.format(lx.applet.frameRate),
+                elapsedFormat.format(lx.engine.timer.runCurrentNanos / 1000000.0),
                 elapsedFormat.format(lx.engine.timer.runAvgNanos / 1000000.0),
                 elapsedFormat.format(lx.engine.timer.runWorstNanos / 1000000.0)
             ), 0, 0);

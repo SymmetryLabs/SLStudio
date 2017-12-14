@@ -42,7 +42,7 @@ public class BlobFollower implements com.symmetrylabs.slstudio.util.MarkerSource
     }
 
     public List<Follower> getFollowers() {
-        System.out.println("followers: " + followers.size());
+//        System.out.println("followers: " + followers.size());
         return followers;
     }
 
