@@ -12,7 +12,7 @@ import processing.core.PVector;
 
 import java.util.ArrayList;
 
-import static com.symmetrylabs.slstudio.util.Utils.noise;
+import static com.symmetrylabs.util.NoiseUtils.noise;
 import static processing.core.PApplet.CLOSE;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.HALF_PI;

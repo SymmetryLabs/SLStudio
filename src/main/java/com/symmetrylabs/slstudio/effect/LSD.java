@@ -7,7 +7,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 
-import static com.symmetrylabs.slstudio.util.Utils.noise;
+import static com.symmetrylabs.util.NoiseUtils.noise;
 
 
 public class LSD extends LXEffect {
