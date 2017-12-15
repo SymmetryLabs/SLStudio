@@ -33,10 +33,10 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	val selectedStrip get() = selectedSun.strips[stripIndex.valuei] as CurvedStrip
 
 	init {
-		enabledParam.addListener { enableSunOutputs() }
+//		enabledParam.addListener { enableSunOutputs() }
 		sunIndex.addListener {
 			stripIndex.setRange(0, selectedSun.strips.size)
-			enableSunOutputs()
+//			enableSunOutputs()
 			updateStripRotationParam()
 		}
 		stripIndex.addListener {

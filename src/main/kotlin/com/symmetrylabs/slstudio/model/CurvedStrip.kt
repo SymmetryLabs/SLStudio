@@ -73,7 +73,6 @@ class CurvedStrip(
 				// arclength = 1.168
 				// arclength at center = 107 in
 				val arcLength = 1.13f * metrics.arcWidth
-				System.out.println("strip length = " + (metrics.numPoints * PIXEL_PITCH) + ",  arc length = $arcLength")
 				val t = 0.5f + ((i - metrics.numPoints / 2.0f) * PIXEL_PITCH + curveOffset) / arcLength
 				if (t > 1 || t < 0) {
 					throw RuntimeException("Placing pixel off sun: i = $i, arc length = $arcLength")
