@@ -24,10 +24,13 @@ import heronarts.lx.LX;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
+import java.net.InetAddress;
 import java.net.SocketException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * An output stage that functions by sending datagram packets.
@@ -36,6 +39,7 @@ public class LXDatagramOutput extends LXOutput {
 
     private final DatagramSocket socket;
 
+    private final Map<InetAddress, LXDatagramDestination> destinations = new HashMap<InetAddress, LXDatagramDestination>();
     private final List<LXDatagram> datagrams = new ArrayList<LXDatagram>();
 
     private final SimpleDateFormat date = new SimpleDateFormat("[HH:mm:ss]");
@@ -51,6 +55,12 @@ public class LXDatagramOutput extends LXOutput {
 
     public LXDatagramOutput addDatagram(LXDatagram datagram) {
         this.datagrams.add(datagram);
+        LXDatagramDestination destination = this.destinations.get(datagram.getAddress());
+        if (destination == null) {
+            destination = new LXDatagramDestination();
+            this.destinations.put(datagram.getAddress(), destination);
+        }
+        datagram.destination = destination;
         return this;
     }
 
@@ -83,31 +93,31 @@ public class LXDatagramOutput extends LXOutput {
         long now = System.currentTimeMillis();
         beforeSend(colors);
         for (LXDatagram datagram : this.datagrams) {
-            if (datagram.enabled.isOn() && (now > datagram.sendAfter)) {
+            if (datagram.enabled.isOn() && (now > datagram.destination.sendAfter)) {
                 datagram.onSend(colors);
                 try {
                     this.socket.send(datagram.packet);
-                    if (datagram.failureCount > 0) {
+                    if (datagram.destination.failureCount > 0) {
                         System.out.println(this.date.format(now) + " Recovered connectivity to " + datagram.packet.getAddress());
                     }
-                    datagram.error.setValue(false);
-                    datagram.failureCount = 0;
-                    datagram.sendAfter = 0;
+                    datagram.destination.error.setValue(false);
+                    datagram.destination.failureCount = 0;
+                    datagram.destination.sendAfter = 0;
                 } catch (IOException iox) {
-                    if (datagram.failureCount == 0) {
+                    if (datagram.destination.failureCount == 0) {
                         System.out.println(this.date.format(now) + " IOException sending to "
                                 + datagram.packet.getAddress() + " (" + iox.getLocalizedMessage()
                                 + "), will initiate backoff after 3 consecutive failures");
                     }
-                    ++datagram.failureCount;
-                    if (datagram.failureCount >= 3) {
-                        int pow = Math.min(5, datagram.failureCount - 3);
+                    ++datagram.destination.failureCount;
+                    if (datagram.destination.failureCount >= 3) {
+                        int pow = Math.min(5, datagram.destination.failureCount - 3);
                         long waitFor = (long) (50 * Math.pow(2, pow));
                         System.out.println(this.date.format(now) + " Retrying " + datagram.packet.getAddress()
-                                + " in " + waitFor + "ms" + " (" + datagram.failureCount
+                                + " in " + waitFor + "ms" + " (" + datagram.destination.failureCount
                                 + " consecutive failures)");
-                        datagram.sendAfter = now + waitFor;
-                        datagram.error.setValue(true);
+                        datagram.destination.sendAfter = now + waitFor;
+                        datagram.destination.error.setValue(true);
                     }
                 }
             }

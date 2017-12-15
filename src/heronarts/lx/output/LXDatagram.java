@@ -28,9 +28,7 @@ import java.net.UnknownHostException;
 
 public abstract class LXDatagram {
 
-    long sendAfter = 0;
-
-    int failureCount = 0;
+    LXDatagramDestination destination;
 
     /**
      * Various orderings for RGB buffer data
@@ -62,8 +60,6 @@ public abstract class LXDatagram {
      * Whether this datagram is active
      */
     public final BooleanParameter enabled = new BooleanParameter("ON", true);
-
-    public final BooleanParameter error = new BooleanParameter("Error", false);
 
     protected LXDatagram(int bufferSize) {
         this.buffer = new byte[bufferSize];
