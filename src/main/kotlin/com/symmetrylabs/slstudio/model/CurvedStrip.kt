@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.model
 
+import com.symmetrylabs.slstudio.mappings.FultonStreetLayout
 import com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH
 import com.symmetrylabs.slstudio.util.degToRad
 import heronarts.lx.model.LXAbstractFixture
@@ -12,6 +13,7 @@ class CurvedStrip(
 	coordinates: FloatArray,
 	rotations: FloatArray,
 	transform: LXTransform,
+	val sliceId: String,
 	val fixture: Fixture = Fixture(id, metrics, coordinates, rotations, transform)
 ) : Strip(id, metrics.metrics, fixture.points) {
 
@@ -20,8 +22,9 @@ class CurvedStrip(
 		metrics: CurvedMetrics,
 		coordinates: FloatArray,
 		rotations: FloatArray,
-		transform: LXTransform
-	) : this(id, metrics, coordinates, rotations, transform, Fixture(id, metrics, coordinates, rotations, transform))
+		transform: LXTransform,
+		sliceId: String
+	) : this(id, metrics, coordinates, rotations, transform, sliceId, Fixture(id, metrics, coordinates, rotations, transform))
 
 	fun updateOffset(offset: Float) {
 		fixture.updatePoints(offset)

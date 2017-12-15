@@ -20,7 +20,7 @@ public class Slice extends LXModel {
 
     ;
 
-    private static final int MAX_NUM_STRIPS_PER_SLICE = 69;
+    public static final int MAX_NUM_STRIPS_PER_SLICE = 69;
     public static final float STRIP_SPACING = 0.7f;
     public final static float DIAMETER = 8 * FEET;
     public final static float RADIUS = DIAMETER / 2;
@@ -40,7 +40,7 @@ public class Slice extends LXModel {
         float[] coordinates,
         float[] rotations,
         LXTransform transform,
-        int[] numPointsPerStrip
+        List<Double> numPointsPerStrip
     ) {
         super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
         Fixture fixture = (Fixture) this.fixtures.get(0);
@@ -70,7 +70,7 @@ public class Slice extends LXModel {
             float[] coordinates,
             float[] rotations,
             LXTransform transform,
-            int[] numPointsPerStrip
+            List<Double> numPointsPerStrip
         ) {
             transform.push();
             transform.translate(coordinates[0], coordinates[1], coordinates[2]);
@@ -86,13 +86,13 @@ public class Slice extends LXModel {
                         break;
                     }
 
-                    int numPoints = numPointsPerStrip[counter++];
-                    addStrip(i, numPoints, transform);
+                    int numPoints = numPointsPerStrip.get(i + 1).intValue();//[counter++];
+                    addStrip(i, numPoints, transform, id);
                 }
             } else {
                 for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE - 2; i++) {
-                    int numPoints = numPointsPerStrip[counter++];
-                    addStrip(i, numPoints, transform);
+                    int numPoints = numPointsPerStrip.get(i + 1).intValue();//numPointsPerStrip[counter++];
+                    addStrip(i, numPoints, transform, id);
                 }
             }
 
@@ -103,7 +103,7 @@ public class Slice extends LXModel {
             transform.pop();
         }
 
-        private void addStrip(int i, int numPoints, LXTransform transform) {
+        private void addStrip(int i, int numPoints, LXTransform transform, String sliceId) {
             float stripY = Slice.RADIUS - (i + 1) * STRIP_SPACING;
             if (FastMath.abs(stripY) >= Slice.RADIUS) {
                 throw new RuntimeException("Error: trying to place strip off sun: " + i);
@@ -117,7 +117,8 @@ public class Slice extends LXModel {
                 metrics,
                 new float[]{stripX, stripY, 0},
                 new float[]{0, 0, 0},
-                transform
+                transform,
+                sliceId
             ));
         }
     }

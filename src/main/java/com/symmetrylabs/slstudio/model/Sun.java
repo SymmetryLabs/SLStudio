@@ -54,7 +54,7 @@ public class Sun extends LXModel {
         float[] coordinates,
         float[] rotations,
         LXTransform transform,
-        int[][] numPointsPerStrip
+        Map<String, List<Double>> numPointsPerStrip
     ) {
         super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
         Fixture fixture = (Fixture) this.fixtures.get(0);
@@ -290,14 +290,17 @@ public class Sun extends LXModel {
         private final List<Strip> strips = new ArrayList<Strip>();
         public final PVector origin;
 
+        private final Map<String, List<Double>> numPointsPerStrip;
+
         private Fixture(
             String id,
             Sun.Type type,
             float[] coordinates,
             float[] rotations,
             LXTransform transform,
-            int[][] numPointsPerStrip
+            Map<String, List<Double>> numPointsPerStrip
         ) {
+            this.numPointsPerStrip = numPointsPerStrip;
             transform.push();
 
             origin = new PVector(coordinates[0], coordinates[1], coordinates[2]);
@@ -320,60 +323,54 @@ public class Sun extends LXModel {
 
             // create slices...
             if (type != Sun.Type.ONE_THIRD) {
-                slices.add(new Slice(
+                slices.add(createSlice(
                     id + "_top_front",
                     Slice.Type.FULL,
                     new float[]{0, 0, 0},
                     new float[]{0, 0, 0},
-                    transform,
-                    numPointsPerStrip[0]
+                    transform
                 ));
-                slices.add(new Slice(
+                slices.add(createSlice(
                     id + "_top_back",
                     Slice.Type.FULL,
                     new float[]{0, 0, 0},
                     new float[]{0, 180, 0},
-                    transform,
-                    numPointsPerStrip[1]
+                    transform
                 ));
             }
 
             switch (type) {
                 case FULL:
-                    slices.add(new Slice(
+                    slices.add(createSlice(
                         id + "_bottom_front",
                         Slice.Type.FULL,
                         new float[]{0, 0, 0},
                         new float[]{0, 0, 180},
-                        transform,
-                        numPointsPerStrip[2]
+                        transform
                     ));
-                    slices.add(new Slice(
+                    slices.add(createSlice(
                         id + "_bottom_back",
                         Slice.Type.FULL,
                         new float[]{0, 0, 0},
                         new float[]{0, 180, 180},
-                        transform,
-                        numPointsPerStrip[3]
+                        transform
                     ));
                     break;
 
                 case TWO_THIRDS:
-                    slices.add(new Slice(
+                    slices.add(createSlice(
                         id + "_bottom_front",
                         Slice.Type.BOTTOM_ONE_THIRD,
                         new float[]{0, 0, 0},
                         new float[]{0, 0, 180},
-                        transform,
-                        numPointsPerStrip[2]
+                        transform
                     ));
-                    slices.add(new Slice(
+                    slices.add(createSlice(
                          id + "_bottom_back",
                         Slice.Type.BOTTOM_ONE_THIRD,
                         new float[]{0, 0, 0},
                         new float[]{0, 180, 180},
-                        transform,
-                        numPointsPerStrip[3]
+                        transform
                     ));
 
                 case ONE_HALF:
@@ -381,21 +378,19 @@ public class Sun extends LXModel {
                     break;
 
                 case ONE_THIRD:
-                    slices.add(new Slice(
+                    slices.add(createSlice(
                         id + "_top_front",
                         Slice.Type.TWO_THIRDS,
                         new float[]{0, 0, 0},
                         new float[]{0, 0, 0},
-                        transform,
-                        numPointsPerStrip[0]
+                        transform
                     ));
-                    slices.add(new Slice(
+                    slices.add(createSlice(
                         id + "_top_back",
                         Slice.Type.TWO_THIRDS,
                         new float[]{0, 0, 0},
                         new float[]{0, 180, 0},
-                        transform,
-                        numPointsPerStrip[1]
+                        transform
                     ));
                     break;
             }
@@ -418,6 +413,10 @@ public class Sun extends LXModel {
 
             transform.pop();
             transform.pop();
+        }
+
+        private Slice createSlice(String id, Slice.Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+            return new Slice(id, type, coordinates, rotations, transform, numPointsPerStrip.get(id));
         }
     }
 }

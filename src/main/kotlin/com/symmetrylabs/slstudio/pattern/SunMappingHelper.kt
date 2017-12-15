@@ -20,7 +20,8 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	val sunIndex = discreteParameter("SUN", 0, 0, model.suns.size)
 	val stripIndex = discreteParameter("STRIP", 0, 0, 1)
 
-	val stripRotation = compoundParam("ROT", 0.0, -0.08, 0.08)
+	val stripRotationCoarse = compoundParam("ROT FINE", 0.0, -12.0, 12.0)
+	val stripRotationFine = compoundParam("ROT COARSE", 0.0, -2.0, 2.0)
 
 	val stripFirst = discreteParameter("FIRST", 0, 0, 1)
 	val stripLast = discreteParameter("LAST", 0, 0, 1)
@@ -41,15 +42,19 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 		stripIndex.addListener {
 			updateStripRotationParam()
 		}
-		stripRotation.addListener {
-			selectedStrip.updateOffset(it.valuef)
+		val stripRotationListener = LXParameterListener {
+			val offset = stripRotationCoarse.valuef + stripRotationFine.valuef
+			selectedStrip.updateOffset(offset)
 
 			SLStudio.applet.lx.ui.preview.pointCloud.updateVertexPositions()
-			FultonStreetLayout.updateRotation(selectedSun, selectedStrip, it.valuef)
+			FultonStreetLayout.updateRotation(selectedSun, selectedStrip, offset)
 		}
+		stripRotationCoarse.addListener(stripRotationListener)
+		stripRotationFine.addListener(stripRotationListener)
 		val stripLengthListener = LXParameterListener {
 			var length = stripLast.valuei - stripFirst.valuei + 1
 			if (selectedStrip.points.isEmpty()) length = 0
+			FultonStreetLayout.updateStripLength(selectedSun, selectedStrip, length)
 			System.out.println("Sun ${selectedSun.id}, strip ${selectedStrip.fixture.id} length = $length")
 		}
 		stripFirst.addListener(stripLengthListener)
@@ -57,10 +62,11 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	}
 
 	private fun updateStripRotationParam() {
-		stripRotation.value = FultonStreetLayout.rotationForStrip(
+		stripRotationCoarse.value = FultonStreetLayout.rotationForStrip(
 			selectedSun,
 			selectedSun.strips.indexOf(selectedStrip)
 		).double
+		stripRotationFine.value = 0.0
 		stripFirst.range = if (selectedStrip.points.isNotEmpty()) selectedStrip.points.size else 1
 		stripFirst.value = 0.0
 		stripLast.range = if (selectedStrip.points.isNotEmpty()) selectedStrip.points.size else 1
