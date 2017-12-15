@@ -167,7 +167,7 @@ public class FultonStreetLayout {
     }
 
     private static Sun createSun(String id, Sun.Type type, float[] coordinates, float[] rotations, LXTransform transform) {
-        return new Sun(id, type, coordinates, rotations, transform, stripLength(id));
+        return new Sun(id, type, coordinates, rotations, transform, stripLengths(id));
     }
 
     public static void updateRotation(
@@ -220,7 +220,11 @@ public class FultonStreetLayout {
         return rot.floatValue();
     }
 
-    public static Map<String, List<Double>> stripLength(final String id) {
+    public static Map<String, List<Double>> stripLengths(String id) {
         return stripLengths.get(id);
+    }
+
+    public static int stripLength(Sun sun, CurvedStrip strip) {
+        return stripLengths.get(sun.id).get(strip.getSliceId()).get(Integer.parseInt(strip.id)).intValue();
     }
 }

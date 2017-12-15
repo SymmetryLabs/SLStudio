@@ -72,11 +72,11 @@ class CurvedStrip(
 				// arclength of bezier(0, -0.3, -0.3, 0) = 1.122
 				// arclength = 1.168
 				// arclength at center = 107 in
-				val arcLength = 1.13f * metrics.arcWidth
+				val arcLength = 1.3f * metrics.arcWidth
 				val t = 0.5f + ((i - metrics.numPoints / 2.0f) * PIXEL_PITCH + curveOffset) / arcLength
-				if (t > 1 || t < 0) {
-					throw RuntimeException("Placing pixel off sun: i = $i, arc length = $arcLength")
-				}
+//				if (t > 1 || t < 0) {
+//					throw RuntimeException("Placing pixel off sun: i = $i, arc length = $arcLength")
+//				}
 				val x = bezierPoint(0f, metrics.arcWidth * 0.2f, metrics.arcWidth * 0.8f, metrics.arcWidth, t)
 				val z = bezierPoint(0f, metrics.arcWidth * -0.3f, metrics.arcWidth * -0.3f, 0f, t)
 				transform.translate(x, 0f, z)
