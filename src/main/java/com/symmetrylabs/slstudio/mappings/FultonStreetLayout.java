@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.mappings;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.symmetrylabs.slstudio.model.CurvedStrip;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
@@ -94,11 +95,12 @@ public class FultonStreetLayout {
         }
     }
 
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void saveRotationData() {
         try {
             final FileWriter writer = new FileWriter(Utils.sketchFile(stripRotationFilename));
-            new Gson().toJson(stripRotations, writer);
+            gson.toJson(stripRotations, writer);
             writer.close();
         } catch (java.io.IOException e) {
             PApplet.println("Failed to save rotation data");
