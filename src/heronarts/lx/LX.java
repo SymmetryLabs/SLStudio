@@ -587,7 +587,7 @@ public class LX {
     /**
      * Register a pattern class with the engine
      *
-     * @param pattern
+     * @param patterns
      * @return this
      */
     public LX registerPatterns(Class<LXPattern>[] patterns) {
