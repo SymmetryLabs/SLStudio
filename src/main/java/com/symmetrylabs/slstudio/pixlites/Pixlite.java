@@ -37,7 +37,7 @@ import heronarts.lx.output.LXOutputGroup;
 
 
 public class Pixlite extends LXOutputGroup {
-    private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
+    private static final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
 
     public Slice slice;
     public final String ipAddress;

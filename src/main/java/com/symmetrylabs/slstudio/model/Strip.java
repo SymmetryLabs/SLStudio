@@ -18,24 +18,10 @@ public class Strip extends LXModel {
 
     public static class Metrics {
 
-        public final float length;
         public final int numPoints;
-        public final int ledsPerMeter;
 
-        public final float POINT_SPACING;
-
-        public Metrics(float length, int numPoints, int ledsPerMeter) {
-            this.length = length;
+        public Metrics(int numPoints) {
             this.numPoints = numPoints;
-            this.ledsPerMeter = ledsPerMeter;
-            this.POINT_SPACING = INCHES_PER_METER / ledsPerMeter;
-        }
-
-        public Metrics(int numPoints, float spacing) {
-            this.length = numPoints * spacing;
-            this.numPoints = numPoints;
-            this.ledsPerMeter = (int) floor((INCHES_PER_METER / this.length) * numPoints);
-            this.POINT_SPACING = spacing;
         }
     }
 

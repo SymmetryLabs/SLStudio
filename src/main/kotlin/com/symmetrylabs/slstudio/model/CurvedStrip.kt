@@ -29,12 +29,10 @@ class CurvedStrip(
 
 	class CurvedMetrics(val arcWidth: Float, numPoints: Int) {
 		val metrics: Strip.Metrics
-		val pitch: Float
 		val numPoints: Int
 
 		init {
-			this.metrics = Strip.Metrics(numPoints, PIXEL_PITCH)
-			this.pitch = metrics.POINT_SPACING
+			this.metrics = Strip.Metrics(numPoints)
 			this.numPoints = metrics.numPoints
 		}
 	}
@@ -66,7 +64,16 @@ class CurvedStrip(
 
 			for (i in 0 until metrics.numPoints) {
 				transform.push()
-				val t = (i / metrics.numPoints.toFloat()) + curveOffset
+
+				// arclength of bezier(0, 0.2, 0.8, 1) = 1.442
+				// arclength of bezier(0, -0.3, -0.3, 0) = 1.122
+				// arclength = 1.168
+				val arcLength = 1.13f * metrics.arcWidth
+				System.out.println("strip length = " + (metrics.numPoints * PIXEL_PITCH) + ",  arc length = $arcLength")
+				val t = 0.5f + ((i - metrics.numPoints / 2.0f) * PIXEL_PITCH + curveOffset) / arcLength
+				if (t > 1 || t < 0) {
+					throw RuntimeException("Placing pixel off sun: i = $i, arc length = $arcLength")
+				}
 				val x = bezierPoint(0f, metrics.arcWidth * 0.2f, metrics.arcWidth * 0.8f, metrics.arcWidth, t)
 				val z = bezierPoint(0f, metrics.arcWidth * -0.3f, metrics.arcWidth * -0.3f, 0f, t)
 				transform.translate(x, 0f, z)

@@ -122,7 +122,7 @@ public class Sun extends LXModel {
                 println("Loaded master points from cache for " + id);
             } catch (Exception e) {
                 doCompute();
-                
+
                 try {
                     saveToCache();
                     println("Saved master points from cache for " + id);
@@ -323,7 +323,7 @@ public class Sun extends LXModel {
                 slices.add(new Slice(
                     id + "_top_front",
                     Slice.Type.FULL,
-                    new float[]{-Slice.RADIUS, Slice.RADIUS, 0},
+                    new float[]{0, 0, 0},
                     new float[]{0, 0, 0},
                     transform,
                     numPointsPerStrip[0]
@@ -331,7 +331,7 @@ public class Sun extends LXModel {
                 slices.add(new Slice(
                     id + "_top_back",
                     Slice.Type.FULL,
-                    new float[]{Slice.RADIUS, Slice.RADIUS, 0},
+                    new float[]{0, 0, 0},
                     new float[]{0, 180, 0},
                     transform,
                     numPointsPerStrip[1]
@@ -343,7 +343,7 @@ public class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_bottom_front",
                         Slice.Type.FULL,
-                        new float[]{Slice.RADIUS, -Slice.DIAMETER * 0.5f, 0},
+                        new float[]{0, 0, 0},
                         new float[]{0, 0, 180},
                         transform,
                         numPointsPerStrip[2]
@@ -351,7 +351,7 @@ public class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_bottom_back",
                         Slice.Type.FULL,
-                        new float[]{-Slice.RADIUS, -Slice.DIAMETER * 0.5f, 0},
+                        new float[]{0, 0, 0},
                         new float[]{0, 180, 180},
                         transform,
                         numPointsPerStrip[3]
@@ -362,7 +362,7 @@ public class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_bottom_front",
                         Slice.Type.BOTTOM_ONE_THIRD,
-                        new float[]{Slice.RADIUS, -Slice.RADIUS + 1.5f, 0},
+                        new float[]{0, 0, 0},
                         new float[]{0, 0, 180},
                         transform,
                         numPointsPerStrip[2]
@@ -370,7 +370,7 @@ public class Sun extends LXModel {
                     slices.add(new Slice(
                          id + "_bottom_back",
                         Slice.Type.BOTTOM_ONE_THIRD,
-                        new float[]{-Slice.RADIUS, -Slice.RADIUS + 1.5f, 0},
+                        new float[]{0, 0, 0},
                         new float[]{0, 180, 180},
                         transform,
                         numPointsPerStrip[3]
@@ -384,7 +384,7 @@ public class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_top_front",
                         Slice.Type.TWO_THIRDS,
-                        new float[]{-Slice.RADIUS, Slice.RADIUS, 0},
+                        new float[]{0, 0, 0},
                         new float[]{0, 0, 0},
                         transform,
                         numPointsPerStrip[0]
@@ -392,7 +392,7 @@ public class Sun extends LXModel {
                     slices.add(new Slice(
                         id + "_top_back",
                         Slice.Type.TWO_THIRDS,
-                        new float[]{Slice.RADIUS, Slice.RADIUS, 0},
+                        new float[]{0, 0, 0},
                         new float[]{0, 180, 0},
                         transform,
                         numPointsPerStrip[1]

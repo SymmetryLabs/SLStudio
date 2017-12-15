@@ -4,12 +4,9 @@ import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
+import org.apache.commons.math3.util.FastMath;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 import static com.symmetrylabs.slstudio.SLStudio.FEET;
 import static processing.core.PConstants.PI;
@@ -30,7 +27,7 @@ public class Slice extends LXModel {
 
     public final static int   LEDS_PER_METER = 60;
     public final static float INCHES_PER_METER = 39.3701f;
-    public final static float PIXEL_PITCH = LEDS_PER_METER / INCHES_PER_METER;
+    public final static float PIXEL_PITCH = INCHES_PER_METER / LEDS_PER_METER;
 
     public final String id;
     public final Type type;
@@ -81,8 +78,6 @@ public class Slice extends LXModel {
             transform.rotateY(rotations[1] * PI / 180);
             transform.rotateZ(rotations[2] * PI / 180);
 
-            int numStrips = numPointsPerStrip.length;
-
             // create curved strips...
             int counter = 0;
             if (type != Slice.Type.BOTTOM_ONE_THIRD) {
@@ -92,42 +87,38 @@ public class Slice extends LXModel {
                     }
 
                     int numPoints = numPointsPerStrip[counter++];
-                    float stripWidth = numPoints * PIXEL_PITCH / 2.6f;
-                    float stripX = (DIAMETER - stripWidth) / 2;
-
-                    CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
-                    strips.add(new CurvedStrip(
-                        Integer.toString(i + 1),
-                        metrics,
-                        new float[]{stripX, -i * STRIP_SPACING, 0},
-                        new float[]{0, 0, 0},
-                        transform
-                    ));
+                    addStrip(i, numPoints, transform);
                 }
             } else {
                 for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE - 2; i++) {
                     int numPoints = numPointsPerStrip[counter++];
-                    float stripWidth = numPoints * PIXEL_PITCH / 2.6f;
-                    float stripX = (DIAMETER - stripWidth) / 2;
-
-                    CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(stripWidth, numPoints);
-                    strips.add(new CurvedStrip(
-                        Integer.toString(i + 1),
-                        metrics,
-                        new float[]{stripX, -i * STRIP_SPACING, 0},
-                        new float[]{0, 0, 0},
-                        transform
-                    ));
+                    addStrip(i, numPoints, transform);
                 }
             }
 
-            for (final Strip strip : strips) {
-                for (LXPoint point : strip.points) {
-                    this.points.add(point);
-                }
+            for (Strip strip : strips) {
+                this.points.addAll(Arrays.asList(strip.points));
             }
 
             transform.pop();
+        }
+
+        private void addStrip(int i, int numPoints, LXTransform transform) {
+            float stripY = Slice.RADIUS - (i + 1) * STRIP_SPACING;
+            if (FastMath.abs(stripY) >= Slice.RADIUS) {
+                throw new RuntimeException("Error: trying to place strip off sun: " + i);
+            }
+            float stripX = (float) -FastMath.sqrt(Slice.RADIUS * Slice.RADIUS - stripY * stripY);
+            float arcWidth = 2 * FastMath.abs(stripX);
+
+            CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(arcWidth, numPoints);
+            strips.add(new CurvedStrip(
+                Integer.toString(i + 1),
+                metrics,
+                new float[]{stripX, stripY, 0},
+                new float[]{0, 0, 0},
+                transform
+            ));
         }
     }
 }
