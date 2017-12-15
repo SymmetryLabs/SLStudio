@@ -19,11 +19,11 @@ public class BassPod extends SLPattern {
         super(lx);
         eq.start();
         addParameter(clr);
-        addParameter(eq.gain);   //to-do can't add these, causes null pointer exception
-        addParameter(eq.range);
-        addParameter(eq.attack);
-        addParameter(eq.release);
-        addParameter(eq.slope);
+//        addParameter(eq.gain);   //to-do can't add these, causes null pointer exception
+//        addParameter(eq.range);
+//        addParameter(eq.attack);
+//        addParameter(eq.release);
+//        addParameter(eq.slope);
         addModulator(eq).start();
     }
 

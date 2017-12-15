@@ -21,10 +21,10 @@ public class CubeEQ extends SLPattern {
     public CubeEQ(LX lx) {
         super(lx);
         eq.start();
-        addParameter(eq.range);
-        addParameter(eq.attack);
-        addParameter(eq.release);
-        addParameter(eq.slope);
+//        addParameter(eq.range);
+//        addParameter(eq.attack);
+//        addParameter(eq.release);
+//        addParameter(eq.slope);
         addParameter(edge);
         addParameter(clr);
         addParameter(blockiness);
