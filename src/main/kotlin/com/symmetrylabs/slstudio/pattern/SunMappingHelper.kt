@@ -61,10 +61,10 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 			selectedSun,
 			selectedSun.strips.indexOf(selectedStrip)
 		).double
-		stripFirst.range = selectedStrip.points.size
+		stripFirst.range = if (selectedStrip.points.isNotEmpty()) selectedStrip.points.size else 1
 		stripFirst.value = 0.0
-		stripLast.range = selectedStrip.points.size
-		stripLast.value = (selectedStrip.points.size - 1).double
+		stripLast.range = if (selectedStrip.points.isNotEmpty()) selectedStrip.points.size else 1
+		stripLast.value = if (selectedStrip.points.isNotEmpty()) (selectedStrip.points.size - 1).double else 0.0
 	}
 
 	private fun enableSunOutputs() {
