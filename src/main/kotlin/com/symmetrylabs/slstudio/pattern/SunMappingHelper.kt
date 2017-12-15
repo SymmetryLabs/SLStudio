@@ -7,7 +7,9 @@ import com.symmetrylabs.slstudio.model.Strip.INCHES_PER_METER
 import com.symmetrylabs.slstudio.util.abs
 import com.symmetrylabs.slstudio.util.double
 import heronarts.lx.LX
+import heronarts.lx.color.LXColor
 import heronarts.lx.model.LXPoint
+import heronarts.lx.parameter.LXParameterListener
 import processing.core.PVector
 
 /**
@@ -19,6 +21,9 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 	val stripIndex = discreteParameter("STRIP", 0, 0, 1)
 
 	val stripRotation = compoundParam("ROT", 0.0, -0.08, 0.08)
+
+	val stripFirst = discreteParameter("FIRST", 0, 0, 1)
+	val stripLast = discreteParameter("LAST", 0, 0, 1)
 
 
 	val ledPitch = INCHES_PER_METER / 60
@@ -42,6 +47,13 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 			SLStudio.applet.lx.ui.preview.pointCloud.updateVertexPositions()
 			FultonStreetLayout.updateRotation(selectedSun, selectedStrip, it.valuef)
 		}
+		val stripLengthListener = LXParameterListener {
+			var length = stripLast.valuei - stripFirst.valuei + 1
+			if (selectedStrip.points.isEmpty()) length = 0
+			System.out.println("Sun ${selectedSun.id}, strip ${selectedStrip.fixture.id} length = $length")
+		}
+		stripFirst.addListener(stripLengthListener)
+		stripLast.addListener(stripLengthListener)
 	}
 
 	private fun updateStripRotationParam() {
@@ -49,6 +61,10 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 			selectedSun,
 			selectedSun.strips.indexOf(selectedStrip)
 		).double
+		stripFirst.range = selectedStrip.points.size
+		stripFirst.value = 0.0
+		stripLast.range = selectedStrip.points.size
+		stripLast.value = (selectedStrip.points.size - 1).double
 	}
 
 	private fun enableSunOutputs() {
@@ -74,6 +90,16 @@ class SunMappingHelper(lx: LX) : KPattern(lx) {
 				} else {
 					point.color = 0xFF001100.toInt()
 				}
+			}
+			selectedSun.strips.forEach { strip ->
+				if (strip.points.isNotEmpty()) {
+					strip.points.first().color = LXColor.BLUE
+					strip.points.last().color = LXColor.BLUE
+				}
+			}
+			if (selectedStrip.points.isNotEmpty()) {
+				selectedStrip.points[stripFirst.valuei].color = LXColor.GREEN
+				selectedStrip.points[stripLast.valuei].color = LXColor.GREEN
 			}
 		}
 	}
