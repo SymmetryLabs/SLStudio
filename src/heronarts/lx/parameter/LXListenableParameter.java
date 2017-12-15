@@ -51,6 +51,8 @@ public abstract class LXListenableParameter implements LXParameter {
 
     protected String description = null;
 
+    private boolean shouldSerialize = true;
+
     protected LXListenableParameter() {
         this(null, 0);
     }
@@ -207,6 +209,15 @@ public abstract class LXListenableParameter implements LXParameter {
 
     public String getLabel() {
         return this.label;
+    }
+
+    public void setShouldSerialize(boolean shouldSerialize) {
+        this.shouldSerialize = shouldSerialize;
+    }
+
+    @Override
+    public boolean getShouldSerialize() {
+        return this.shouldSerialize;
     }
 
     /**

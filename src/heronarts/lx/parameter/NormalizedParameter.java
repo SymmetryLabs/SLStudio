@@ -34,6 +34,8 @@ public class NormalizedParameter implements LXNormalizedParameter {
     private String description = null;
     private double value = 0;
 
+    private boolean shouldSerialize = true;
+
     public NormalizedParameter(String label) {
         this(label, 0);
     }
@@ -89,6 +91,15 @@ public class NormalizedParameter implements LXNormalizedParameter {
     @Override
     public Polarity getPolarity() {
         return Polarity.UNIPOLAR;
+    }
+
+    public void setShouldSerialize(boolean shouldSerialize) {
+        this.shouldSerialize = shouldSerialize;
+    }
+
+    @Override
+    public boolean getShouldSerialize() {
+        return this.shouldSerialize;
     }
 
     @Override

@@ -199,4 +199,6 @@ public interface LXParameter {
      * @return Label of parameter
      */
     public String getLabel();
+
+    public boolean getShouldSerialize();
 }

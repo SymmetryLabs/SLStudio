@@ -332,6 +332,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
         JsonObject parameters = new JsonObject();
         for (String path : this.parameters.keySet()) {
             LXParameter parameter = this.parameters.get(path);
+            if (!parameter.getShouldSerialize()) {
+                continue;
+            }
             if (parameter instanceof StringParameter) {
                 parameters.addProperty(path, ((StringParameter) parameter).getString());
             } else if (parameter instanceof BooleanParameter) {
@@ -365,6 +368,9 @@ public abstract class LXComponent implements LXParameterListener, LXSerializable
             JsonObject parameters = obj.getAsJsonObject(KEY_PARAMETERS);
             for (String path : this.parameters.keySet()) {
                 LXParameter parameter = this.parameters.get(path);
+                if (!parameter.getShouldSerialize()) {
+                    continue;
+                }
                 if (parameter == this.label && !(this instanceof LXComponent.Renamable)) {
                     continue;
                 }

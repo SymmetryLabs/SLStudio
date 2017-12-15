@@ -34,6 +34,8 @@ public class FixedParameter implements LXParameter {
     private LXComponent component;
     private String path;
 
+    private boolean shouldSerialize = true;
+
     public FixedParameter(double value) {
         this.value = value;
     }
@@ -76,6 +78,15 @@ public class FixedParameter implements LXParameter {
 
     public Polarity getPolarity() {
         return Polarity.UNIPOLAR;
+    }
+
+    public void setShouldSerialize(boolean shouldSerialize) {
+        this.shouldSerialize = shouldSerialize;
+    }
+
+    @Override
+    public boolean getShouldSerialize() {
+        return this.shouldSerialize;
     }
 
     @Override

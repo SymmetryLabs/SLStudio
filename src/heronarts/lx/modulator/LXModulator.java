@@ -42,6 +42,8 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
 
     private String description = null;
 
+    private boolean shouldSerialize = true;
+
     /**
      * The current computed value of this modulator.
      */
@@ -124,6 +126,15 @@ public abstract class LXModulator extends LXRunnableComponent implements LXCompo
 
     public Polarity getPolarity() {
         return this.polarity;
+    }
+
+    public void setShouldSerialize(boolean shouldSerialize) {
+        this.shouldSerialize = shouldSerialize;
+    }
+
+    @Override
+    public boolean getShouldSerialize() {
+        return this.shouldSerialize;
     }
 
     /**

@@ -33,6 +33,8 @@ public abstract class FunctionalParameter implements LXParameter {
     private LXComponent component;
     private String path;
 
+    private boolean shouldSerialize = true;
+
     protected FunctionalParameter() {
         this("FUNC-PARAM");
     }
@@ -81,6 +83,15 @@ public abstract class FunctionalParameter implements LXParameter {
     @Override
     public Units getUnits() {
         return Units.NONE;
+    }
+
+    public void setShouldSerialize(boolean shouldSerialize) {
+        this.shouldSerialize = shouldSerialize;
+    }
+
+    @Override
+    public boolean getShouldSerialize() {
+        return this.shouldSerialize;
     }
 
     @Override
