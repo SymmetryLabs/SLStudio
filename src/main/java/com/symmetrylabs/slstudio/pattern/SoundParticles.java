@@ -19,6 +19,8 @@ import java.util.ArrayList;
 import java.util.function.Consumer;
 
 import static com.symmetrylabs.slstudio.util.Utils.*;
+import static com.symmetrylabs.util.MathUtils.random;
+import static com.symmetrylabs.util.MathUtils.randomGaussian;
 import static processing.core.PApplet.*;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.PI;

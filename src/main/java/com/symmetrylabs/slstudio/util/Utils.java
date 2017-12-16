@@ -1547,59 +1547,6 @@ public final class Utils {
 //    // In some cases, the current working directory won't be set properly.
     }
 
-
-    //////////////////////////////////////////////////////////////
-    // RANDOM NUMBERS
-
-    static Random internalRandom;
-
-    public static final float random(float high) {
-        // avoid an infinite loop when 0 or NaN are passed in
-        if (high == 0 || high != high) {
-            return 0;
-        }
-
-        if (internalRandom == null) {
-            internalRandom = new Random();
-        }
-
-        // for some reason (rounding error?) Math.random() * 3
-        // can sometimes return '3' (once in ~30 million tries)
-        // so a check was added to avoid the inclusion of 'howbig'
-        float value = 0;
-        do {
-            value = internalRandom.nextFloat() * high;
-        } while (value == high);
-        return value;
-    }
-
-    public static final float randomGaussian() {
-        if (internalRandom == null) {
-            internalRandom = new Random();
-        }
-        return (float) internalRandom.nextGaussian();
-    }
-
-    public static final float random(float low, float high) {
-        if (low >= high) return low;
-        float diff = high - low;
-        float value = 0;
-        // because of rounding error, can't just add low, otherwise it may hit high
-        // https://github.com/processing/processing/issues/4551
-        do {
-            value = random(diff) + low;
-        } while (value == high);
-        return value;
-    }
-
-    public static final void randomSeed(long seed) {
-        if (internalRandom == null) {
-            internalRandom = new Random();
-        }
-        internalRandom.setSeed(seed);
-    }
-
-
     //////////////////////////////////////////////////////////////
     // SPLINE UTILITY FUNCTIONS (used by both Bezier and Catmull-Rom)
     protected static void splineForward(int segments, PMatrix3D matrix) {
