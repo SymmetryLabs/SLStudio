@@ -66,8 +66,8 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
 
     private BlobTracker blobTracker;
 
-    public PerSunParticlePattern(LX lx, Class<? extends Subpattern> subpatternClass) {
-        super(lx, subpatternClass);
+    public PerSunParticlePattern(LX lx) {
+        super(lx);
 
         blobTracker = BlobTracker.getInstance(lx);
     }

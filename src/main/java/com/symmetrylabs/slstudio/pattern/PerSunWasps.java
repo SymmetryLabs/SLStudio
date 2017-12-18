@@ -26,7 +26,7 @@ public class PerSunWasps extends PerSunParticlePattern {
     public CompoundParameter twistZ;
 
     public PerSunWasps(LX lx) {
-        super(lx, Subpattern.class);
+        super(lx);
     }
 
     @Override
@@ -45,6 +45,10 @@ public class PerSunWasps extends PerSunParticlePattern {
         addParameter(twistX = new CompoundParameter("twistX", 0f, 0, 1));
         addParameter(twistY = new CompoundParameter("twistY", 0f, 0, 1));
         addParameter(twistZ = new CompoundParameter("twistZ", 0f, 0, 1));
+    }
+
+    protected PerSunPattern.Subpattern createSubpattern(Sun sun, int sunIndex) {
+        return new Subpattern(sun, sunIndex);
     }
 
     protected class Subpattern extends PerSunParticlePattern.Subpattern {
