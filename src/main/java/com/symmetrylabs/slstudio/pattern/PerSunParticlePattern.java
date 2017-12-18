@@ -7,6 +7,7 @@ import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.MarkerSource;
 import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
+import com.symmetrylabs.slstudio.util.LinearModelIndex;
 import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
