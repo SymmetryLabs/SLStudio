@@ -1,9 +1,22 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath 'edu.sc.seis.gradle:launch4j:2.4.2'
+	}
+}
+
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.2.0'
 	id 'com.github.johnrengelman.shadow' version '2.0.1'
 	id 'java'
 	id 'application'
 }
+
+// For building windows executable. See https://github.com/TheBoegl/gradle-launch4j
+apply plugin: 'edu.sc.seis.launch4j'
 
 group = 'com.symmetrylabs'
 version = '1.0'
@@ -80,3 +93,4 @@ jar {
 	exclude("**/*.swp")
 	exclude("**/*.swo")
 }
+
