@@ -42,13 +42,13 @@ public class Sun6BackTopPixliteConfig {
         );
 
         // brian and keegan did this
-        //pixlite.addPointsGroup(new PointsGrouping("4")
-            //.addPoints(slice.getStripById("24").points, PointsGrouping.REVERSE_ORDERING)
-            //.addPoints(slice.getStripById("25").points)
-            //.addPoints(slice.getStripById("26").points, PointsGrouping.REVERSE_ORDERING)
-            //.addPoints(slice.getStripById("27").points)
-            //.addPoints(slice.getStripById("28").points, PointsGrouping.REVERSE_ORDERING)
-        //);
+        pixlite.addPointsGroup(new PointsGrouping("4")
+            .addPoints(slice.getStripById("24").points, PointsGrouping.REVERSE_ORDERING)
+            .addPoints(slice.getStripById("25").points)
+            .addPoints(slice.getStripById("26").points, PointsGrouping.REVERSE_ORDERING)
+            .addPoints(slice.getStripById("27").points)
+            .addPoints(slice.getStripById("28").points, PointsGrouping.REVERSE_ORDERING)
+        );
         // pixlite.addChild(new com.symmetrylabs.slstudio.pixlites.PixliteOutput(lx, ipAddress,
         //   new com.symmetrylabs.slstudio.pixlites.PointsGrouping("4")
         //     .addPoints(slice.getStripById("24").points, com.symmetrylabs.slstudio.pixlites.PointsGrouping.REVERSE_ORDERING)

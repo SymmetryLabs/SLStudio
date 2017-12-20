@@ -53,21 +53,21 @@ public class Sun6BackBottomPixliteConfig {
             .addPoints(slice.getStripById("67").points, PointsGrouping.REVERSE_ORDERING)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("16")
-                .addPoints(
-                    ((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("24").points,
-                    PointsGrouping.REVERSE_ORDERING
-                )
-                .addPoints(((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("25").points)
-                .addPoints(
-                    ((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("26").points,
-                    PointsGrouping.REVERSE_ORDERING
-                )
-                .addPoints(((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("27").points)
-                .addPoints(
-                    ((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("28").points,
-                    PointsGrouping.REVERSE_ORDERING
-                )
-        );
+        // pixlite.addPointsGroup(new PointsGrouping("16")
+        //         .addPoints(
+        //             ((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("24").points,
+        //             PointsGrouping.REVERSE_ORDERING
+        //         )
+        //         .addPoints(((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("25").points)
+        //         .addPoints(
+        //             ((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("26").points,
+        //             PointsGrouping.REVERSE_ORDERING
+        //         )
+        //         .addPoints(((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("27").points)
+        //         .addPoints(
+        //             ((SLModel) lx.model).getSliceById("sun6_top_back").getStripById("28").points,
+        //             PointsGrouping.REVERSE_ORDERING
+        //         )
+        // );
     }
 }
