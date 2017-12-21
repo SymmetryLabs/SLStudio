@@ -7,23 +7,27 @@ import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.util.TripleBuffer;
 
 public class InterpolatingRenderer extends Renderer {
-    private int[] frameA, frameB, active;
+    private final TripleBuffer<RenderFrame> tripleBuffer;
+
+    RenderFrame frameA, frameB;
+
     private long lastRenderTimeNanos;
     private long lastRenderElapsedNanos;
 
     private RenderThread renderThread;
     private int fps = 60;
 
-    private boolean runLoopStarted = false;
+    private volatile boolean runLoopStarted = false;
 
     public InterpolatingRenderer(LXFixture fixture, int[] colors, com.symmetrylabs.slstudio.render.Renderable renderable) {
         super(fixture, colors, renderable);
 
-        frameA = new int[colors.length];
-        frameB = new int[colors.length];
-        active = new int[colors.length];
+        tripleBuffer = new TripleBuffer<>(() -> new RenderFrame(colors.length));
+        frameA = tripleBuffer.getSnapshotBuffer();
+        frameB = frameA;
     }
 
     @Override
@@ -50,18 +54,51 @@ public class InterpolatingRenderer extends Renderer {
     }
 
     @Override
-    public synchronized void run(double deltaMs) {
-        runLoopStarted = true;
+    public void run(double deltaMs) {
+        synchronized (this) {
+            runLoopStarted = true;
+        }
 
-        double f = (System.nanoTime() - lastRenderTimeNanos) / (double)lastRenderElapsedNanos;
-        //System.out.println("Showing: " + frameA + " and " + frameB + " (" + f + ")");
+        RenderFrame frame = tripleBuffer.takeSnapshot();
+        //System.arraycopy(frame, 0, colors, 0, frame.length);
 
-        final double fFinal = f > 1 ? 1 : f;
-        points.parallelStream().forEach(point -> {
-            int c1 = frameA[point.index];
-            int c2 = frameB[point.index];
-            colors[point.index] = LXColor.lerp(c1, c2, fFinal);
-        });
+        if (frame.renderEndNanos != frameB.renderEndNanos) {
+            //System.out.println("SNAPSHOT");
+            frameA = frameB;
+            frameB = frame.copy();
+        }
+
+        double f = (System.nanoTime() - frameB.renderEndNanos) / (double)(frameB.renderEndNanos - frameA.renderEndNanos);
+        //System.out.println(f);
+        //System.out.println(frameA);
+        //System.out.println(frameB);
+
+        final double fFinal = f > 1 ? 1 : f < 0 ? 0 : f;
+        Arrays.parallelSetAll(colors, i -> LXColor.lerp(frameA.buffer[i], frameB.buffer[i], fFinal));
+    }
+
+    private class RenderFrame {
+        public int[] buffer;
+        public volatile long renderStartNanos;
+        public volatile long renderEndNanos;
+
+        public RenderFrame(int n) {
+            buffer = new int[n];
+        }
+
+        public RenderFrame copy() {
+            RenderFrame f = new RenderFrame(buffer.length);
+            System.arraycopy(buffer, 0, f.buffer, 0, buffer.length);
+            f.renderStartNanos = renderStartNanos;
+            f.renderEndNanos = renderEndNanos;
+            return f;
+        }
+
+        public String toString() {
+            return "RenderFrame[ buffer=" + buffer
+                + " renderStartNanos=" + renderStartNanos
+                + " renderEndNanos=" + renderEndNanos + "]";
+        }
     }
 
     private class RenderThread extends Thread {
@@ -98,21 +135,21 @@ public class InterpolatingRenderer extends Renderer {
                 long timeNanos = System.nanoTime();
                 double deltaMs = (timeNanos - lastTimeNanos) / 1_000_000d;
 
-                Arrays.fill(active, 0);
-                renderable.render(deltaMs, points, active);
+                RenderFrame active = tripleBuffer.getWriteBuffer();
 
-                long elapsedNanos = System.nanoTime() - lastTimeNanos;
+                active.renderStartNanos = timeNanos;
+
+                Arrays.fill(active.buffer, 0);
+                renderable.render(deltaMs, points, active.buffer);
+
+                long renderEndNanos = System.nanoTime();
+                active.renderEndNanos = renderEndNanos;
+
+                long elapsedNanos = renderEndNanos - lastTimeNanos;
                 lastTimeNanos = timeNanos;
 
-                synchronized (InterpolatingRenderer.this) {
-                    int[] temp = frameB;
-                    frameB = active;
-                    active = frameA;
-                    frameA = temp;
-
-                    lastRenderTimeNanos = lastTimeNanos;
-                    lastRenderElapsedNanos = elapsedNanos;
-                }
+                tripleBuffer.flipWriteBuffer();
+                //System.out.println("FLIP WRITER");
 
                 //System.out.println("Rendering: " + active);
 
