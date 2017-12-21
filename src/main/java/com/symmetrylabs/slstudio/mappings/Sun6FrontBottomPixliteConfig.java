@@ -9,20 +9,20 @@ import heronarts.lx.LX;
 public class Sun6FrontBottomPixliteConfig {
     public Sun6FrontBottomPixliteConfig(LX lx, Slice slice, Pixlite pixlite) {
 
-        pixlite.addPointsGroup(new PointsGrouping("9")
+        pixlite.addPointsGroup(new PointsGrouping("5")
             .addPoints(slice.getStripById("46").points, PointsGrouping.Shift.LEFT)
             .addPoints(slice.getStripById("47").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
             .addPoints(slice.getStripById("48").points, PointsGrouping.Shift.LEFT)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("10")
+        pixlite.addPointsGroup(new PointsGrouping("9")
             .addPoints(slice.getStripById("49").points, PointsGrouping.Shift.LEFT)
             .addPoints(slice.getStripById("50").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
             .addPoints(slice.getStripById("51").points, PointsGrouping.Shift.LEFT)
             .addPoints(slice.getStripById("52").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("11")
+        pixlite.addPointsGroup(new PointsGrouping("10")
             .addPoints(slice.getStripById("53").points, PointsGrouping.Shift.LEFT)
             .addPoints(slice.getStripById("54").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
             .addPoints(slice.getStripById("55").points, PointsGrouping.Shift.LEFT)
