@@ -10,8 +10,8 @@ public class Sun11FrontBottomPixliteConfig {
     public Sun11FrontBottomPixliteConfig(LX lx, Slice slice, Pixlite pixlite) {
 
         pixlite.addPointsGroup(new PointsGrouping("1")
-            //.addPoints(slice.getStripById("1").points, PointsGrouping.REVERSE_ORDERING)
-            //.addPoints(slice.getStripById("2").points)
+            .addPoints(slice.getStripById("1").points, PointsGrouping.REVERSE_ORDERING)
+            .addPoints(slice.getStripById("2").points)
             .addPoints(slice.getStripById("3").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("4").points)
             .addPoints(slice.getStripById("5").points, PointsGrouping.REVERSE_ORDERING)
