@@ -37,7 +37,7 @@ public class Sun10FrontBottomPixliteConfig {
             .addPoints(slice.getStripById("19").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("20").points)
             .addPoints(slice.getStripById("21").points, PointsGrouping.REVERSE_ORDERING)
-            .addPoints(slice.getStripById("22").points, PointsGrouping.Shift.LEFT)
+            .addPoints(slice.getStripById("22").points)
             .addPoints(slice.getStripById("23").points, PointsGrouping.REVERSE_ORDERING)
         );
 
@@ -64,7 +64,7 @@ public class Sun10FrontBottomPixliteConfig {
         );
 
         pixlite.addPointsGroup(new PointsGrouping("7")
-            .addPoints(slice.getStripById("37").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
+            .addPoints(slice.getStripById("37").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("38").points)
             .addPoints(slice.getStripById("39").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("40").points)
@@ -75,54 +75,57 @@ public class Sun10FrontBottomPixliteConfig {
             .addPoints(slice.getStripById("42").points)
             .addPoints(slice.getStripById("43").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("44").points)
+            .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
+            .addPoints(slice.getStripById("61").points)
+            .addPoints(slice.getStripById("62").points, PointsGrouping.REVERSE_ORDERING)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("9")
-            .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING)
-            .addPoints(slice.getStripById("46").points)
+        pixlite.addPointsGroup(new PointsGrouping("16")
+            .addPoints(slice.getStripById("45").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
+            .addPoints(slice.getStripById("46").points, PointsGrouping.Shift.LEFT)
             .addPoints(slice.getStripById("47").points, PointsGrouping.REVERSE_ORDERING)
-            .addPoints(slice.getStripById("48").points)
+            .addPoints(slice.getStripById("48").points, PointsGrouping.Shift.LEFT)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("10")
+        pixlite.addPointsGroup(new PointsGrouping("15")
             .addPoints(slice.getStripById("49").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("50").points)
             .addPoints(slice.getStripById("51").points, PointsGrouping.REVERSE_ORDERING)
-            .addPoints(slice.getStripById("52").points, PointsGrouping.Shift.LEFT)
+            .addPoints(slice.getStripById("52").points)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("11")
+        pixlite.addPointsGroup(new PointsGrouping("14")
             .addPoints(slice.getStripById("53").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("54").points)
             .addPoints(slice.getStripById("55").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("56").points)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("12")
+        pixlite.addPointsGroup(new PointsGrouping("13")
             .addPoints(slice.getStripById("57").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("58").points)
             .addPoints(slice.getStripById("59").points, PointsGrouping.REVERSE_ORDERING)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("13")
+        pixlite.addPointsGroup(new PointsGrouping("12")
             .addPoints(slice.getStripById("60").points, PointsGrouping.REVERSE_ORDERING)
-            .addPoints(slice.getStripById("61").points, PointsGrouping.Shift.LEFT)
+            .addPoints(slice.getStripById("61").points)
             .addPoints(slice.getStripById("62").points, PointsGrouping.REVERSE_ORDERING)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("14")
-            .addPoints(slice.getStripById("63").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.RIGHT)
+        pixlite.addPointsGroup(new PointsGrouping("11")
+            .addPoints(slice.getStripById("63").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("64").points)
             .addPoints(slice.getStripById("65").points, PointsGrouping.REVERSE_ORDERING)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("15")
+        pixlite.addPointsGroup(new PointsGrouping("10")
             .addPoints(slice.getStripById("66").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("67").points)
             .addPoints(slice.getStripById("68").points, PointsGrouping.REVERSE_ORDERING)
         );
 
-        pixlite.addPointsGroup(new PointsGrouping("16")
+        pixlite.addPointsGroup(new PointsGrouping("9")
             .addPoints(slice.getStripById("69").points, PointsGrouping.REVERSE_ORDERING)
         );
     }

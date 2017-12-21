@@ -10,7 +10,7 @@ public class Sun7FrontTopPixliteConfig {
     public Sun7FrontTopPixliteConfig(LX lx, Slice slice, Pixlite pixlite) {
 
         pixlite.addPointsGroup(new PointsGrouping("1")
-            //.addPoints(slice.getStripById("1").points,  PointsGrouping.REVERSE_ORDERING)
+            .addPoints(slice.getStripById("1").points,  PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("2").points)
             .addPoints(slice.getStripById("3").points,  PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("4").points)
