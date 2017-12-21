@@ -17,7 +17,7 @@ public class TestSuns extends SLPattern implements SLTestPattern {
     public void run(double deltaMs) {
         float hue = 0;
 
-        for (Sun sun : model.suns) {
+        for (Sun sun : model.getSuns()) {
             for (LXPoint p : sun.points) {
                 colors[p.index] = lx.hsb(hue, 100, 100);
             }

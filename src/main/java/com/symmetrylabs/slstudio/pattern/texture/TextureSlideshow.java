@@ -116,7 +116,7 @@ public abstract class TextureSlideshow extends SLPattern {
             int[] layer = imageLayers[i];
 
             if (perSun.getValueb()) {
-                for (Sun sun : model.suns) {
+                for (Sun sun : model.getSuns()) {
                     for (LXPoint p : sun.points) {
                         double px = (p.x - sun.xMin) / sun.xRange;
                         double py = (p.y - sun.yMin) / sun.yRange;

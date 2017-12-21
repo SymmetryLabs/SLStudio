@@ -333,7 +333,7 @@ public class FlockWave extends SLPatternWithMarkers {
         final SLModel slModel = (SLModel) model;
         LXPoint[] points = model.points;
         if (perSun.isOn()) {
-            points = slModel.masterSun.points;
+            points = slModel.getMasterSun().points;
         }
 
 
@@ -350,7 +350,7 @@ public class FlockWave extends SLPatternWithMarkers {
         });
 
         if (perSun.isOn()) {
-            for (Sun sun : slModel.suns) {
+            for (Sun sun : slModel.getSuns()) {
                 sun.copyFromMasterSun(colors);
             }
         }

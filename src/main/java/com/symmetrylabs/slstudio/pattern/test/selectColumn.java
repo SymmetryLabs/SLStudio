@@ -22,10 +22,10 @@ public class selectColumn extends SLPattern implements SLTestPattern {
     public void run(double deltaMs) {
         int x = xp.getValuei();
         setColors(0);
-        for (Sun sun : model.suns) {
+        for (Sun sun : model.getSuns()) {
             float hue = 0;
 
-            for (Strip strip : sun.strips) {
+            for (Strip strip : sun.getStrips()) {
                 int counter = 0;
                 for (LXPoint p : strip.points) {
                     if (counter++ == x){

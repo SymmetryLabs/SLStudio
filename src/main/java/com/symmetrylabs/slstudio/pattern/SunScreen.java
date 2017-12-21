@@ -18,7 +18,7 @@ public class SunScreen extends SLPattern {
     public SunScreen(LX lx) {
         super(lx);
 
-        for (int i = 0; i < model.suns.size(); ++i) {
+        for (int i = 0; i < model.getSuns().size(); ++i) {
             BooleanParameter param = new BooleanParameter("SUN" + i, true);
             params.add(param);
             addParameter(param);
@@ -30,7 +30,7 @@ public class SunScreen extends SLPattern {
             public void onParameterChanged(LXParameter param) {
                 boolean on = ((BooleanParameter) param).isOn();
                 int sunIndex = params.indexOf(param);
-                for (LXPoint p : model.suns.get(sunIndex).getPoints()) {
+                for (LXPoint p : model.getSuns().get(sunIndex).getPoints()) {
                     colors[p.index] = on ? LXColor.WHITE : LXColor.BLACK;
                 }
             }

@@ -15,9 +15,9 @@ public class SunOrientation extends SLPattern implements SLTestPattern {
      }
 
      public void run(double deltaMs) {
-         for (Sun sun : this.model.suns) {
+         for (Sun sun : this.model.getSuns()) {
              int i = 0;
-             for (Slice slice : sun.slices) {
+             for (Slice slice : sun.getSlices()) {
                  int col = ((i++ & 1) == 0) ? LXColor.BLUE : LXColor.RED;
                  for (LXPoint p : slice.points) {
                      colors[p.index] = col;

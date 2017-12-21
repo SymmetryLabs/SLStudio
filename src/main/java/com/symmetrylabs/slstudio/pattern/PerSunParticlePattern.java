@@ -88,7 +88,7 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
     @Override
     public List<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<Marker>();
-        for (Sun sun : model.suns) {
+        for (Sun sun : model.getSuns()) {
             BlobDist bd = sunClosestBlobDists.get(sun);
             if (bd == null)
                 continue;
@@ -140,7 +140,7 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
             double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
             double maxAngleRad = blobMaxAngle.getValue() * Math.PI / 180;
             List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
-            for (Sun sun : model.suns) {
+            for (Sun sun : model.getSuns()) {
                 BlobTracker.Blob closestBlob = null;
                 double closestSqrDist = Double.MAX_VALUE;
                 for (BlobTracker.Blob b : blobs) {
@@ -162,7 +162,7 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
                 }
             }
         } else {
-            for (Sun sun : model.suns) {
+            for (Sun sun : model.getSuns()) {
                 sunClosestBlobDists.put(sun, null);
             }
         }

@@ -334,7 +334,7 @@ public abstract class DPat extends LXPattern {
 
         if (perSun.isOn()) {
             SLModel slModel = (SLModel) model;
-            Arrays.asList(slModel.masterSun.points).parallelStream().forEach(new Consumer<LXPoint>() {
+            Arrays.asList(slModel.getMasterSun().points).parallelStream().forEach(new Consumer<LXPoint>() {
                 @Override
                 public void accept(final LXPoint p) {
                     PVector P = new PVector(), tP = new PVector();
@@ -380,7 +380,7 @@ public abstract class DPat extends LXPattern {
                 }
             });
 
-            for (Sun sun : slModel.suns) {
+            for (Sun sun : slModel.getSuns()) {
                 sun.copyFromMasterSun(colors);
             }
         } else {

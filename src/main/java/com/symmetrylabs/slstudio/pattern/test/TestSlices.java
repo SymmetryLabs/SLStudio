@@ -14,10 +14,10 @@ public class TestSlices extends SLPattern implements SLTestPattern {
      }
 
      public void run(double deltaMs) {
-         for (Sun sun : model.suns) {
+         for (Sun sun : model.getSuns()) {
              float hue = 0;
 
-             for (Slice slice : sun.slices) {
+             for (Slice slice : sun.getSlices()) {
                  for (LXPoint p : slice.points) {
                      colors[p.index] = lx.hsb(hue, 100, 100);
                  }

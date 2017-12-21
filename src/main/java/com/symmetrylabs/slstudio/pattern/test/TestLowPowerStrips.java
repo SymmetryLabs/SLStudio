@@ -19,8 +19,8 @@ public class TestLowPowerStrips extends SLPattern implements SLTestPattern {
     public void run(double deltaMs) {
         setColors(0);
 
-        for (Sun sun : model.suns) {
-            for (Strip strip : sun.strips) {
+        for (Sun sun : model.getSuns()) {
+            for (Strip strip : sun.getStrips()) {
                 int si = 0;
                 for (LXPoint p : strip.points) {
                     if (si < 3) {

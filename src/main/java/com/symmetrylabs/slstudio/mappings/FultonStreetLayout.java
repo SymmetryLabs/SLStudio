@@ -477,11 +477,11 @@ public class FultonStreetLayout {
     ) {
         List<Double> stripRots = stripRotations.get(sun.id);
         if (stripRots == null) {
-            stripRots = new ArrayList<>(sun.strips.size());
+            stripRots = new ArrayList<>(sun.getStrips().size());
             stripRotations.put(sun.id, stripRots);
         }
 
-        final int stripIndex = sun.strips.indexOf(strip);
+        final int stripIndex = sun.getStrips().indexOf(strip);
 
         while (stripRots.size() <= stripIndex) {
             stripRots.add(0d);

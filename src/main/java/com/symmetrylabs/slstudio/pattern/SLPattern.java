@@ -9,12 +9,9 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
  /* Non-Patterns */
-public abstract class SLPattern extends LXPattern {
-    public final SLModel model;
-
+public abstract class SLPattern extends SunsPattern {
     public SLPattern(LX lx) {
         super(lx);
-        this.model = (SLModel) lx.model;
     }
 
     protected <T extends LXParameter> T addParam(T param) {

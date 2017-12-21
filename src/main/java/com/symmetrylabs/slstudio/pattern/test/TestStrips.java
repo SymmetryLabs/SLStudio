@@ -16,10 +16,10 @@ public class TestStrips extends SLPattern implements SLTestPattern {
     }
 
     public void run(double deltaMs) {
-        for (Sun sun : model.suns) {
+        for (Sun sun : model.getSuns()) {
             float hue = 0;
 
-            for (Strip strip : sun.strips) {
+            for (Strip strip : sun.getStrips()) {
                 for (LXPoint p : strip.points) {
                     colors[p.index] = lx.hsb(hue, 100, 100);
                 }

@@ -18,21 +18,20 @@ import static processing.core.PApplet.*;
  * Top-level model of the entire sculpture. This contains a list of every cube on the sculpture, which forms a hierarchy
  * of faces, strips and points.
  */
-
-public class SLModel extends LXModel {
+public class SLModel extends StripsModel<CurvedStrip> {
     public final List<LXModel> objModels;
 
     // Suns
-    public final List<Sun> suns;
-    public final Map<String, Sun> sunTable;
-    public final Sun masterSun;
+    protected final List<Sun> suns = new ArrayList<>();
+    protected final Map<String, Sun> sunTable = new HashMap<>();
+    protected final Sun masterSun;
 
     // Slices
-    public final List<Slice> slices;
-    private final Map<String, Slice> sliceTable;
+    protected final List<Slice> slices = new ArrayList<>();
+    protected final Map<String, Slice> sliceTable = new HashMap<>();
 
-    // Strips
-    public final List<Strip> strips;
+    private final List<Sun> sunsUnmodifiable = Collections.unmodifiableList(suns);
+    private final List<Slice> slicesUnmodifiable = Collections.unmodifiableList(slices);
 
     // Array of points stored as contiguous floats for performance
     public final float[] pointsArray;
@@ -42,36 +41,27 @@ public class SLModel extends LXModel {
 
     protected final PointBatches pointBatches;
 
+    public SLModel() {
+        this(new ArrayList<Sun>());
+    }
+
     public SLModel(List<Sun> suns) {
         super(new Fixture(suns));
+
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
-        // Suns
-        List<Sun> sunList = new ArrayList<Sun>();
-        Map<String, Sun> _sunTable = new HashMap<String, Sun>();
-
-        // Slices
-        List<Slice> sliceList = new ArrayList<Slice>();
-        Map<String, Slice> _sliceTable = new HashMap<String, Slice>();
-
-        // Strips
-        List<Strip> stripList = new ArrayList<Strip>();
-
         for (Sun sun : suns) {
-            sunList.add(sun);
-            _sunTable.put(sun.id, sun);
+            this.suns.add(sun);
+            this.sunTable.put(sun.id, sun);
 
             for (Slice slice : sun.slices) {
-                sliceList.add(slice);
-                _sliceTable.put(slice.id, slice);
-
-                for (Strip strip : slice.strips) {
-                    stripList.add(strip);
-                }
+                this.slices.add(slice);
+                this.sliceTable.put(slice.id, slice);
+                this.strips.addAll(slice.getStrips());
             }
         }
 
-        masterSun = _sunTable.get("sun9"); // a full sun
+        masterSun = this.sunTable.get("sun9"); // a full sun
         for (Sun sun : suns) {
             if (sun != masterSun) {
                 sun.computeMasterIndexes(masterSun);
@@ -79,17 +69,6 @@ public class SLModel extends LXModel {
         }
 
         this.objModels = new ArrayList<LXModel>();
-
-        // Suns
-        this.suns = Collections.unmodifiableList(sunList);
-        this.sunTable = Collections.unmodifiableMap(_sunTable);
-
-        // Slices
-        this.slices = Collections.unmodifiableList(sliceList);
-        this.sliceTable = Collections.unmodifiableMap(_sliceTable);
-
-        // Strips
-        this.strips = Collections.unmodifiableList(stripList);
 
         this.pointsArray = new float[this.points.length * 3];
         this.pointsX = new float[this.points.length];
@@ -108,6 +87,18 @@ public class SLModel extends LXModel {
         this.pointBatches = new PointBatches(Arrays.asList(points), NUM_POINT_BATCHES);
     }
 
+    public List<Sun> getSuns() {
+        return sunsUnmodifiable;
+    }
+
+    public List<Slice> getSlices() {
+        return slicesUnmodifiable;
+    }
+
+    public Sun getMasterSun() {
+        return masterSun;
+    }
+
     private static class Fixture extends LXAbstractFixture {
         private Fixture(List<Sun> suns) {
             for (Sun sun : suns) {
@@ -119,7 +110,7 @@ public class SLModel extends LXModel {
     }
 
     public Sun getSunById(String id) {
-        return this.sunTable.get(id);
+        return sunTable.get(id);
     }
 
     public Slice getSliceById(String id) {

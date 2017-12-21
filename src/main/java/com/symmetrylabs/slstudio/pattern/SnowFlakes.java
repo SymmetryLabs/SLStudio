@@ -5,7 +5,7 @@ import com.symmetrylabs.slstudio.model.Slice;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.util.ModelIndex;
-import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+import com.symmetrylabs.slstudio.util.LinearModelIndex;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LXModulator;
@@ -59,7 +59,7 @@ class SnowFlake {
 
 }
 
-public class SnowFlakes extends SLPattern {
+public class SnowFlakes extends SunsPattern {
 
         public final CompoundParameter fallSpeed = new CompoundParameter("FallSpeed", .5, .1, 4);
         public final CompoundParameter kernelSize = new CompoundParameter("size", .5, .1, 2.5);
@@ -72,7 +72,8 @@ public class SnowFlakes extends SLPattern {
         };
 
         // the octree we use to efficiently find nearby points
-        protected ModelIndex modelIndex = new OctreeModelIndex(lx.model);
+        //protected ModelIndex modelIndex = new OctreeModelIndex(lx.model);
+        protected ModelIndex modelIndex = new LinearModelIndex(lx.model);
 
         private Random pointRandom = new Random();
 
@@ -106,15 +107,15 @@ public class SnowFlakes extends SLPattern {
 
         // get the top pixels so that snow flakes spawn at the top
         private void buildSpawnIndex() {
-                for (Sun sun : model.suns) {
+                for (Sun sun : model.getSuns()) {
                         float hue = 0;
 
                         int slice_num = 0;
-                        for (Slice slice : sun.slices) {
+                        for (Slice slice : sun.getSlices()) {
                                 if (slice_num++ < 2) {
 
                                         int strip_num = 0;
-                                        for (Strip strip : slice.strips) {
+                                        for (Strip strip : slice.getStrips()) {
                                                 strip_num++;
                                                 int stripIndex = SLStudio.applet.selectedStrip.getValuei();
 

@@ -63,9 +63,9 @@ public class SLStudio extends PApplet {
         model = FultonStreetLayout.buildModel();
 
         println("-- Model ----");
-        println("# of suns: " + model.suns.size());
-        println("# of slices: " + model.slices.size());
-        println("# of strips: " + model.strips.size());
+        println("# of suns: " + model.getSuns().size());
+        println("# of slices: " + model.getSlices().size());
+        println("# of strips: " + model.getStrips().size());
         println("# of points: " + model.points.length);
         println("model.xMin: " + model.xMin);
         println("model.xMax: " + model.xMax);

@@ -85,7 +85,7 @@ public class SeaboardSuns extends SLPattern {
         super(lx);
         for (int i = 0; i < this.notes.length; ++i) {
             int si = SUN_ORDER[i];
-            Sun sun = model.suns.get(si);
+            Sun sun = model.getSuns().get(si);
             addLayer(this.notes[i] = new NoteLayer(lx, sun));
         }
         addParameter("attack", this.attack);

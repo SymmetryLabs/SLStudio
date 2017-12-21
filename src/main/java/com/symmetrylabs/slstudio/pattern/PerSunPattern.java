@@ -53,12 +53,12 @@ public abstract class PerSunPattern extends SLPattern {
     protected PerSunPattern(LX lx) {
         super(lx);
 
-        subpatterns = new ArrayList<Subpattern>(model.suns.size());
+        subpatterns = new ArrayList<Subpattern>(model.getSuns().size());
 
         createParameters();
 
         int sunIndex = 0;
-        for (Sun sun : model.suns) {
+        for (Sun sun : model.getSuns()) {
             try {
                 Subpattern subpattern = createSubpattern(sun, sunIndex);
                 addParameter(subpattern.enableParam);

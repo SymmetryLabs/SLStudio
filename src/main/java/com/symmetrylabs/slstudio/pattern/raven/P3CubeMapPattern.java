@@ -86,8 +86,8 @@ public abstract class P3CubeMapPattern extends SLPattern {
         this.origin = origin;
         this.bboxSize = bboxSize;
 
-        for (final Sun sun : model.suns) {
-            sunSwitchParams.add(booleanParam("SUN" + (model.suns.indexOf(sun) + 1), true));
+        for (final Sun sun : model.getSuns()) {
+            sunSwitchParams.add(booleanParam("SUN" + (model.getSuns().indexOf(sun) + 1), true));
         }
     }
 
@@ -132,9 +132,9 @@ public abstract class P3CubeMapPattern extends SLPattern {
             }
         } else {
             if (perSunProjectionCache == null) {
-                perSunProjectionCache = Maps.newHashMapWithExpectedSize(model.suns.size());
+                perSunProjectionCache = Maps.newHashMapWithExpectedSize(model.getSuns().size());
 
-                for (final Sun sun : model.suns) {
+                for (final Sun sun : model.getSuns()) {
                     int[][] sunCache = new int[sun.points.length][inputPointCount];
                     perSunProjectionCache.put(sun, sunCache);
 
@@ -200,10 +200,10 @@ public abstract class P3CubeMapPattern extends SLPattern {
         if (allSunsParams.getValueb()) {
             projectToLeds(allProjectionCache, model.points);
         } else {
-            model.suns.parallelStream().forEach(new Consumer<Sun>() {
+            model.getSuns().parallelStream().forEach(new Consumer<Sun>() {
                 @Override
                 public void accept(final Sun sun) {
-                    final int sunIndex = model.suns.indexOf(sun);
+                    final int sunIndex = model.getSuns().indexOf(sun);
 
                     if (sunSwitchParams.get(sunIndex).getValueb()) {
                         projectToLeds(perSunProjectionCache.get(sun), sun.points);

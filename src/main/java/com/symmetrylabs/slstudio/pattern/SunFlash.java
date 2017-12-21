@@ -28,7 +28,7 @@ public class SunFlash extends SLPattern {
         boolean hasPeaked;
 
         Flash() {
-            c = model.suns.get(floor(random(model.suns.size())));
+            c = model.getSuns().get(floor(random(model.getSuns().size())));
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;

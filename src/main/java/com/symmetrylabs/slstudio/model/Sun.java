@@ -29,7 +29,7 @@ import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 
 
-public class Sun extends LXModel {
+public class Sun extends StripsModel<Strip> {
 
     public enum Type {
         FULL, TWO_THIRDS, ONE_HALF, ONE_THIRD
@@ -37,33 +37,31 @@ public class Sun extends LXModel {
 
     public final String id;
     public final Type type;
-    public final List<Slice> slices;
-    public final List<Strip> strips;
-    private final Map<String, Slice> sliceTable;
+
+    protected final List<Slice> slices = new ArrayList<>();
+    protected final Map<String, Slice> sliceTable = new HashMap<>();
+
+    private final List<Slice> slicesUnmodifiable = Collections.unmodifiableList(slices);
 
     public BoundingBox boundingBox;
     public final PVector center;
     public final float[] distances;
 
-    public Sun masterSun;
-    public int[] masterIndexes;
+    protected Sun masterSun;
+    protected int[] masterIndexes;
 
-    public Sun(
-        String id,
-        Type type,
-        float[] coordinates,
-        float[] rotations,
-        LXTransform transform,
-        int[][] numPointsPerStrip
-    ) {
+    public Sun(String id, Type type, float[] coordinates, float[] rotations,
+            LXTransform transform, int[][] numPointsPerStrip) {
+
         super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
+
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
         this.id = id;
         this.type = type;
-        this.slices = Collections.unmodifiableList(fixture.slices);
-        this.strips = Collections.unmodifiableList(fixture.strips);
-        this.sliceTable = new HashMap<String, Slice>();
+
+        this.slices.addAll(fixture.slices);
+        this.strips.addAll(fixture.strips);
         this.center = fixture.origin;
 
         for (Slice slice : slices) {
@@ -73,6 +71,18 @@ public class Sun extends LXModel {
         computeBoundingBox();
         distances = computeDistances();
         applyStripRotations();
+    }
+
+    public List<Slice> getSlices() {
+        return slicesUnmodifiable;
+    }
+
+    public Sun getMasterSun() {
+        return masterSun;
+    }
+
+    public int[] getMasterIndexes() {
+        return masterIndexes;
     }
 
     private void applyStripRotations() {
@@ -122,7 +132,7 @@ public class Sun extends LXModel {
                 println("Loaded master points from cache for " + id);
             } catch (Exception e) {
                 doCompute();
-                
+
                 try {
                     saveToCache();
                     println("Saved master points from cache for " + id);

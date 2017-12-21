@@ -50,7 +50,7 @@ public class RipplePads extends SLPattern {
         lastState = new boolean[sunIds.length];
 
         for (int i = 0; i < sunIds.length; i++) {
-            sunsByPitch[buttonPitches[i]] = model.sunTable.get(sunIds[i]);
+            sunsByPitch[buttonPitches[i]] = model.getSunById(sunIds[i]);
             BooleanParameter param = new BooleanParameter(buttonNames[i]);
             param.setMode(BooleanParameter.Mode.MOMENTARY);
             addParameter(param);
