@@ -10,8 +10,8 @@ public class Sun9BackBottomPixliteConfig {
     public Sun9BackBottomPixliteConfig(LX lx, Slice slice, Pixlite pixlite) {
 
         pixlite.addPointsGroup(new PointsGrouping("1")
-                // .addPoints(slice.getStripById("1").points,  com.symmetrylabs.slstudio.pixlites.PointsGrouping.REVERSE_ORDERING)
-                // .addPoints(slice.getStripById("2").points,  com.symmetrylabs.slstudio.pixlites.PointsGrouping.Shift.LEFT)
+            .addPoints(slice.getStripById("1").points,  com.symmetrylabs.slstudio.pixlites.PointsGrouping.REVERSE_ORDERING)
+            .addPoints(slice.getStripById("2").points,  com.symmetrylabs.slstudio.pixlites.PointsGrouping.Shift.LEFT)
             .addPoints(slice.getStripById("3").points, PointsGrouping.REVERSE_ORDERING)
             .addPoints(slice.getStripById("4").points, PointsGrouping.Shift.RIGHT)
             .addPoints(slice.getStripById("5").points, PointsGrouping.REVERSE_ORDERING, PointsGrouping.Shift.LEFT)
