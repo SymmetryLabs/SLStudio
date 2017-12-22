@@ -190,8 +190,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 this.LEDS_PER_METER = ledsPerMeter;
 
                 this.FACE_METRICS = new Face.Metrics(
-                    new Strip.Metrics(this.EDGE_WIDTH, POINTS_PER_STRIP, ledsPerMeter),
-                    new Strip.Metrics(this.EDGE_HEIGHT, POINTS_PER_STRIP, ledsPerMeter)
+                    new CubesStrip.Metrics(this.EDGE_WIDTH, POINTS_PER_STRIP, ledsPerMeter),
+                    new CubesStrip.Metrics(this.EDGE_HEIGHT, POINTS_PER_STRIP, ledsPerMeter)
                 );
             }
 
@@ -313,10 +313,10 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         public final static int STRIPS_PER_FACE = 3;
 
         public static class Metrics {
-            final Strip.Metrics horizontal;
-            final Strip.Metrics vertical;
+            final CubesStrip.Metrics horizontal;
+            final CubesStrip.Metrics vertical;
 
-            public Metrics(Strip.Metrics horizontal, Strip.Metrics vertical) {
+            public Metrics(CubesStrip.Metrics horizontal, CubesStrip.Metrics vertical) {
                 this.horizontal = horizontal;
                 this.vertical = vertical;
             }
@@ -337,7 +337,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 transform.push();
                 for (int i = 0; i < STRIPS_PER_FACE; i++) {
                     boolean isHorizontal = (i % 2 == 0);
-                    Strip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
+                    CubesStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
                     CubesStrip strip = new CubesStrip(i+"", stripMetrics, transform);
                     this.strips.add(strip);
                     transform.translate(isHorizontal ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
@@ -355,6 +355,29 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
      * A strip is a linear run of points along a single edge of one cube.
      */
     public static class CubesStrip extends Strip {
+        public static class Metrics extends Strip.Metrics {
+
+            public final float length;
+            public final int ledsPerMeter;
+
+            public final float POINT_SPACING;
+
+            public Metrics(float length, int numPoints, int ledsPerMeter) {
+                super(numPoints);
+
+                this.length = length;
+                this.ledsPerMeter = ledsPerMeter;
+                this.POINT_SPACING = INCHES_PER_METER / ledsPerMeter;
+            }
+
+            public Metrics(int numPoints, float spacing) {
+                super(numPoints);
+
+                this.length = numPoints * spacing;
+                this.ledsPerMeter = floor((INCHES_PER_METER / this.length) * numPoints);
+                this.POINT_SPACING = spacing;
+            }
+        }
 
         public CubesStrip(String id, Metrics metrics, List<LXPoint> points) {
             super(id, metrics, points);

@@ -1,14 +1,15 @@
 package com.symmetrylabs.slstudio.performance;
 
+import com.symmetrylabs.slstudio.effect.SLEffect;
+import com.symmetrylabs.slstudio.kernel.SLKernel;
 import heronarts.lx.LX;
-import heronarts.lx.LXEffect;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 
 
-public class ColorShiftEffect extends LXEffect {
+public class ColorShiftEffect extends SLEffect {
     public BoundedParameter shift = new BoundedParameter("shift", 0, 360);
+
+    private final ColorShiftKernel kernel = new ColorShiftKernel();
 
     public ColorShiftEffect(LX lx) {
         super(lx);
@@ -21,12 +22,21 @@ public class ColorShiftEffect extends LXEffect {
     }
 
     public void run(double deltaMs, double enabledAmount) {
-        for (LXPoint p : model.points) {
-            int o = colors[p.index];
-            float h = LXColor.h(o);
-            float s = LXColor.s(o);
-            float b = LXColor.b(o);
-            colors[p.index] = LXColor.hsb(h + shift.getValuef(), s, b);
-        }
+        kernel.colors = colors;
+        kernel.shiftValue = shift.getValuef();
+        kernel.executeForSize(model.points.length);
     }
+
+    final static class ColorShiftKernel extends SLKernel {
+
+        int[] colors;
+
+        float shiftValue = 0;
+
+        @Override public void run() {
+            int i = getGlobalId();
+            if (i >= colors.length) return;
+            colors[i] = shiftHue(colors[i], shiftValue);
+        }
+    };
 }

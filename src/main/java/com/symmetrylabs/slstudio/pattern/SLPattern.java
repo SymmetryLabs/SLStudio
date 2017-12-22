@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
@@ -10,8 +11,13 @@ import heronarts.lx.parameter.LXParameter;
 
  /* Non-Patterns */
 public abstract class SLPattern extends SunsPattern {
+
+    public final SLStudioLX lx;
+
     public SLPattern(LX lx) {
         super(lx);
+
+        this.lx = (SLStudioLX) lx;
     }
 
     protected <T extends LXParameter> T addParam(T param) {

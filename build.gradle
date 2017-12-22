@@ -1,9 +1,22 @@
+buildscript {
+	repositories {
+		mavenCentral()
+		jcenter()
+	}
+	dependencies {
+		classpath 'edu.sc.seis.gradle:launch4j:2.4.2'
+	}
+}
+
 plugins {
-	id 'org.jetbrains.kotlin.jvm' version '1.2.0'
+	id 'org.jetbrains.kotlin.jvm' version '1.2.10'
 	id 'com.github.johnrengelman.shadow' version '2.0.1'
 	id 'java'
 	id 'application'
 }
+
+// For building windows executable. See https://github.com/TheBoegl/gradle-launch4j
+apply plugin: 'edu.sc.seis.launch4j'
 
 group = 'com.symmetrylabs'
 version = '1.0'
@@ -13,6 +26,11 @@ mainClassName = "com.symmetrylabs.slstudio.SLStudio"
 
 repositories {
 	mavenCentral()
+
+	maven { url 'https://jitpack.io' }
+
+	// needed for aparapi dependency
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
 }
 
 dependencies {
@@ -41,10 +59,13 @@ dependencies {
 	compile group: 'uk.co.xfactory-librarians', name: 'coremidi4j', version: '0.9'
 
 	// https://mvnrepository.com/artifact/org.jetbrains.kotlin/kotlin-stdlib
-	compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.2.0'
+	compile group: 'org.jetbrains.kotlin', name: 'kotlin-stdlib', version: '1.2.10'
 
 	// https://mvnrepository.com/artifact/io.github.lukehutch/fast-classpath-scanner
 	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
+
+	// https://github.com/SymmetryLabs/aparapi
+	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
 
 	compile files('libs/gluegen-rt-natives-linux-aarch64.jar')
 	compile files('libs/gluegen-rt-natives-linux-amd64.jar')
@@ -72,3 +93,4 @@ jar {
 	exclude("**/*.swp")
 	exclude("**/*.swo")
 }
+

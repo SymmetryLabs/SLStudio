@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.mappings;
 
 import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.symmetrylabs.slstudio.model.CurvedStrip;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
@@ -14,11 +15,9 @@ import processing.core.PApplet;
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
+import static com.symmetrylabs.slstudio.model.Slice.MAX_NUM_STRIPS_PER_SLICE;
 import static processing.core.PConstants.PI;
 
 /* Fulton Street Layout of the Suns */
@@ -42,10 +41,12 @@ public class FultonStreetLayout {
     static final float INCHES_PER_METER = 39.3701f;
 
     static final String stripRotationFilename = "data/stripRotations.json";
+    static final String stripLengthFilename = "data/stripLengths.json";
 
     private final Map<String, float[]> positions = new HashMap<String, float[]>();
 
     private static Map<String, List<Double>> stripRotations = new HashMap<>();
+    private static Map<String, Map<String, List<Double>>> stripLengths = new HashMap<>();
 
 
     public FultonStreetLayout() {
@@ -83,25 +84,47 @@ public class FultonStreetLayout {
         // positions.put("K" /* 11 */, new float[]{-615, 0, 250});
 
         loadRotationData();
+        loadStripLengthData();
     }
 
     public static void loadRotationData() {
         try {
             stripRotations = new Gson().fromJson(new FileReader(Utils.sketchFile(stripRotationFilename)), Map.class);
         } catch (FileNotFoundException e) {
-            PApplet.println("Failed to load roation data");
+            PApplet.println("Failed to load rotation data");
             e.printStackTrace();
         }
     }
 
+    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     public static void saveRotationData() {
         try {
             final FileWriter writer = new FileWriter(Utils.sketchFile(stripRotationFilename));
-            new Gson().toJson(stripRotations, writer);
+            gson.toJson(stripRotations, writer);
             writer.close();
         } catch (java.io.IOException e) {
             PApplet.println("Failed to save rotation data");
+            e.printStackTrace();
+        }
+    }
+
+    public static void loadStripLengthData() {
+        try {
+            stripLengths = new Gson().fromJson(new FileReader(Utils.sketchFile(stripLengthFilename)), Map.class);
+        } catch (FileNotFoundException e) {
+            PApplet.println("Failed to load strip length data");
+            e.printStackTrace();
+        }
+    }
+
+    public static void saveStripLengthData() {
+        try {
+            final FileWriter writer = new FileWriter(Utils.sketchFile(stripLengthFilename));
+            gson.toJson(stripLengths, writer);
+            writer.close();
+        } catch (java.io.IOException e) {
+            PApplet.println("Failed to save strip length data");
             e.printStackTrace();
         }
     }
@@ -123,351 +146,28 @@ public class FultonStreetLayout {
         transform.rotateZ(globalRotationZ * PI / 180.);
 
     /* Suns ------------------------------------------------------------*/
-        List<Sun> suns = new ArrayList<Sun>();
+        List<Sun> suns = new ArrayList();
 
-        suns.add(new Sun("sun1", Sun.Type.ONE_THIRD, layout.get("B"), FLIP_Y, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 152, 153, 153,  // 41 - 50
-                    154, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 154, 153,  // 41 - 50
-                    154, 155, 155, 155, 155, 157, 155, 157, 157, 159,  // 51 - 60
-                    158, 159, 159, 159, 161, 161, 161, 161, 161        // 61 - 69
-                },
-            }
-        ));
-
-        suns.add(new Sun("sun2", Sun.Type.ONE_THIRD, layout.get("A"), NO_ROTATION, transform,
-            new int[][]{ // uncompleted
-                { // Top - Front
-                    0, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 152, 153, 153,  // 41 - 50
-                    154, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 154, 153,  // 41 - 50
-                    154, 155, 155, 155, 155, 157, 155, 157, 157, 159,  // 51 - 60
-                    158, 159, 159, 159, 161, 161, 161, 161, 161        // 61 - 69
-                },
-            }
-        ));
-
-        suns.add(new Sun("sun3", Sun.Type.ONE_THIRD, layout.get("K"), NO_ROTATION, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 152, 153, 153,  // 41 - 50
-                    154, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 154, 153,  // 41 - 50
-                    154, 155, 155, 155, 155, 157, 155, 157, 157, 159,  // 51 - 60
-                    158, 159, 159, 159, 161, 161, 161, 161, 161        // 61 - 69
-                },
-            }
-        ));
-
-        suns.add(new Sun("sun4", Sun.Type.ONE_HALF, layout.get("C"), NO_ROTATION, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 152, 153, 153,  // 41 - 50
-                    154, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 154, 153,  // 41 - 50
-                    154, 155, 155, 155, 155, 157, 155, 157, 157, 159,  // 51 - 60
-                    158, 159, 159, 159, 161, 161, 161, 161, 161        // 61 - 69
-                },
-            }
-        ));
-
-        suns.add(new Sun("sun5", Sun.Type.ONE_HALF, layout.get("J"), NO_ROTATION, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 152, 153, 153,  // 41 - 50
-                    154, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 72,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 150, 151, 154, 153,  // 41 - 50
-                    154, 155, 155, 155, 157, 157, 155, 159, 157, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                }
-            }
-        ));
-
-        suns.add(new Sun("sun6", Sun.Type.TWO_THIRDS, layout.get("D"), FLIP_Y, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    153, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 138, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 154, 153,  // 41 - 50
-                    155, 158, 155, 155, 157, 157, 155, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Front
-                    149, 151, 151, 153, 153, 153, 155, 155, 155, 157,  //  1 - 10
-                    157, 157, 157, 159, 159, 159, 159, 159, 159, 161,  // 11 - 20
-                    161, 161                                           // 21 - 22
-                },
-                { // Bottom - Back
-                    149, 151, 151, 153, 154, 153, 154, 155, 155, 157,  //  1 - 10
-                    157, 155, 157, 159, 159, 159, 159, 159, 161, 161,  // 11 - 20
-                    161, 161                                           // 21 - 22
-                },
-            }
-        ));
-
-        suns.add(new Sun("sun7", Sun.Type.TWO_THIRDS, layout.get("E"), FLIP_Y, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 82, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    153, 155, 161, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    25, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 124, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    154, 158, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Front
-                    149, 151, 151, 153, 153, 153, 155, 155, 155, 157,  //  1 - 10
-                    157, 157, 157, 159, 159, 159, 159, 158, 161, 161,  // 11 - 20
-                    161, 161                                           // 21 - 22
-                },
-                { // Bottom - Back
-                    149, 151, 151, 153, 154, 154, 154, 155, 155, 157,  //  1 - 10
-                    157, 157, 157, 159, 159, 159, 159, 159, 161, 161,  // 11 - 20
-                    161, 161                                           // 21 - 22
-                },
-            }
-        ));
-
-        suns.add(new Sun("sun8", Sun.Type.TWO_THIRDS, layout.get("I"), NO_ROTATION, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    153, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    0, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 114, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 154, 154,  // 41 - 50
-                    154, 158, 155, 155, 157, 157, 155, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Front
-                    149, 151, 151, 153, 153, 153, 155, 155, 155, 157,  //  1 - 10
-                    157, 157, 157, 159, 159, 159, 159, 159, 161, 161,  // 11 - 20
-                    161, 161                                           // 21 - 22
-                },
-                { // Bottom - Back
-                    149, 151, 151, 153, 154, 154, 154, 155, 155, 157,  //  1 - 10
-                    157, 157, 157, 159, 159, 159, 159, 159, 161, 161,  // 11 - 20
-                    161, 161                                           // 21 - 22
-                },
-            }
-        ));
-
-        suns.add(new Sun("sun9", Sun.Type.FULL, layout.get("F"), NO_ROTATION, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    143, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    155, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    153, 158, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    147, 145, 145, 147, 151, 149, 151, 153, 153, 153,  // 41 - 50
-                    153, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    153, 158, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                }
-            }
-        ));
-
-        suns.add(new Sun("sun10", Sun.Type.FULL, layout.get("G"), NO_ROTATION, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    143, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    155, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 154,  // 41 - 50
-                    154, 158, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Front
-                    0, 0, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    147, 145, 145, 147, 151, 149, 151, 153, 153, 153,  // 41 - 50
-                    153, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Back
-                    0, 0, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 114, 120, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 135, 137, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    153, 158, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                }
-            }
-        ));
-
-        suns.add(new Sun("sun11", Sun.Type.FULL, layout.get("H"), NO_ROTATION, transform,
-            new int[][]{
-                { // Top - Front
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    143, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    155, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Top - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 114, 119, 122, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 154, 153,  // 41 - 50
-                    153, 158, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Front
-                    9, 0, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 115, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 135, 139, 141, 141, 143,  // 31 - 40
-                    147, 145, 145, 147, 151, 149, 151, 153, 153, 153,  // 41 - 50
-                    153, 155, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                },
-                { // Bottom - Back
-                    9, 25, 35, 43, 49, 55, 59, 65, 69, 73,  //  1 - 10
-                    77, 81, 85, 89, 91, 95, 97, 101, 103, 107,  // 11 - 20
-                    109, 111, 113, 114, 119, 121, 123, 125, 127, 129,  // 21 - 30
-                    129, 131, 133, 135, 137, 137, 139, 141, 141, 143,  // 31 - 40
-                    145, 145, 147, 147, 149, 149, 151, 151, 153, 153,  // 41 - 50
-                    153, 158, 155, 155, 157, 157, 157, 157, 159, 159,  // 51 - 60
-                    159, 159, 159, 161, 161, 161, 161, 161, 161        // 61 - 69
-                }
-            }
-        ));
-
-
+        suns.add(createSun("sun1", Sun.Type.ONE_THIRD, layout.get("B"), FLIP_Y, transform));
+        suns.add(createSun("sun2", Sun.Type.ONE_THIRD, layout.get("A"), NO_ROTATION, transform));
+        suns.add(createSun("sun3", Sun.Type.ONE_THIRD, layout.get("K"), NO_ROTATION, transform));
+        suns.add(createSun("sun4", Sun.Type.ONE_HALF, layout.get("C"), NO_ROTATION, transform));
+        suns.add(createSun("sun5", Sun.Type.ONE_HALF, layout.get("J"), NO_ROTATION, transform));
+        suns.add(createSun("sun6", Sun.Type.TWO_THIRDS, layout.get("D"), FLIP_Y, transform));
+        suns.add(createSun("sun7", Sun.Type.TWO_THIRDS, layout.get("E"), FLIP_Y, transform));
+        suns.add(createSun("sun8", Sun.Type.TWO_THIRDS, layout.get("I"), NO_ROTATION, transform));
+        suns.add(createSun("sun9", Sun.Type.FULL, layout.get("F"), NO_ROTATION, transform));
+        suns.add(createSun("sun10", Sun.Type.FULL, layout.get("G"), NO_ROTATION, transform));
+        suns.add(createSun("sun11", Sun.Type.FULL, layout.get("H"), NO_ROTATION, transform));
 
     /* Obj Importer ----------------------------------------------------*/
         List<LXModel> objModels = new ObjImporter("data", transform).getModels();
 
         return new SLModel(suns);
+    }
+
+    private static Sun createSun(String id, Sun.Type type, float[] coordinates, float[] rotations, LXTransform transform) {
+        return new Sun(id, type, coordinates, rotations, transform, stripLengths(id));
     }
 
     public static void updateRotation(
@@ -491,6 +191,23 @@ public class FultonStreetLayout {
         saveRotationData();
     }
 
+    public static void updateStripLength(
+        @NotNull final Sun sun,
+        @NotNull final CurvedStrip strip,
+        final int length
+    ) {
+        Map<String, List<Double>> stripLensMap = stripLengths.computeIfAbsent(sun.id, k -> new HashMap<>());
+        List<Double> stripLens = stripLensMap.computeIfAbsent(strip.getSliceId(), k -> new ArrayList<>(MAX_NUM_STRIPS_PER_SLICE));
+
+        int pos = Integer.parseInt(strip.id);
+        for (int i = stripLens.size(); i <= pos; i++) {
+            stripLens.add(0d);
+        }
+        stripLens.set(pos, (double) length);
+
+        saveStripLengthData();
+    }
+
     public static float rotationForStrip(final Sun sun, final int i) {
         List<Double> stripRots = stripRotations.get(sun.id);
         if (stripRots == null) {
@@ -501,5 +218,13 @@ public class FultonStreetLayout {
         final Double rot = stripRots.get(i);
         if (rot == null) return 0;
         return rot.floatValue();
+    }
+
+    public static Map<String, List<Double>> stripLengths(String id) {
+        return stripLengths.get(id);
+    }
+
+    public static int stripLength(Sun sun, CurvedStrip strip) {
+        return stripLengths.get(sun.id).get(strip.getSliceId()).get(Integer.parseInt(strip.id)).intValue();
     }
 }
