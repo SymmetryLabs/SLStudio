@@ -10,7 +10,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.symmetrylabs.slstudio.util.Utils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 

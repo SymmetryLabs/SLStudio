@@ -16,7 +16,7 @@ import java.util.List;
 import java.util.Random;
 
 import static com.symmetrylabs.slstudio.SLStudio.INCHES;
-import static com.symmetrylabs.slstudio.util.Utils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 
 public class Explosions extends LXPattern {
         // Used to store info about each explosion.

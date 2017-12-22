@@ -8,7 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
-import static com.symmetrylabs.slstudio.util.Utils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 

@@ -1,13 +1,14 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.util.BlobTracker;
-import com.symmetrylabs.slstudio.util.Marker;
-import com.symmetrylabs.slstudio.util.MarkerSource;
-import com.symmetrylabs.slstudio.util.ModelIndex;
-import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
-import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
+
+import org.apache.commons.math3.util.FastMath;
+import processing.core.PVector;
+
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXModel;
@@ -18,16 +19,16 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import org.apache.commons.math3.util.FastMath;
-import processing.core.PVector;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
-
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.util.BlobTracker;
+import com.symmetrylabs.slstudio.util.Marker;
+import com.symmetrylabs.slstudio.util.MarkerSource;
+import com.symmetrylabs.slstudio.util.ModelIndex;
+import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
+import com.symmetrylabs.slstudio.util.LinearModelIndex;
+import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 
 public abstract class PerSunParticlePattern extends PerSunPattern implements MarkerSource {
     private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
@@ -66,8 +67,8 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
 
     private BlobTracker blobTracker;
 
-    public PerSunParticlePattern(LX lx, Class<? extends Subpattern> subpatternClass) {
-        super(lx, subpatternClass);
+    public PerSunParticlePattern(LX lx) {
+        super(lx);
 
         blobTracker = BlobTracker.getInstance(lx);
     }
@@ -268,8 +269,8 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
         }
 
         protected ModelIndex createModelIndex() {
-            //return new LinearModelIndex(sun, flattenZ.isOn());
-            return new OctreeModelIndex(sun, flattenZ.isOn());
+            return new LinearModelIndex(sun, flattenZ.isOn());
+            //return new OctreeModelIndex(sun, flattenZ.isOn());
         }
 
         protected void renderParticle(Particle particle) {
@@ -298,11 +299,7 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
             synchronized (particles) {
                 particleList = new ArrayList<Particle>(particles);
             }
-            particleList.parallelStream().forEach(new Consumer<Particle>() {
-                public void accept(Particle particle) {
-                    renderParticle(particle);
-                }
-            });
+            particleList.parallelStream().forEach(particle -> renderParticle(particle));
 
             for (LXPoint point : points) {
                 float s = 0;

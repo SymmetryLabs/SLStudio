@@ -28,56 +28,43 @@ public abstract class PerSunPattern extends SLPattern {
         SEQUENTIAL, INTERPOLATING
     }
 
-    ;
-
     EnumParameter<RendererChoices> chooseRenderer;
 
     private Renderable renderable = new Renderable() {
         @Override
         public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
             // System.out.println(1000 / deltaMs);
-            subpatterns.parallelStream().forEach(new Consumer<Subpattern>() {
-                public void accept(Subpattern subpattern) {
-                    if (subpattern.enableParam.getValueb()) {
-                        subpattern.run(deltaMs, subpattern.sun.getPoints(), layer);
-                    } else {
-                        for (LXPoint point : subpattern.sun.points) {
-                            layer[point.index] = 0;
-                        }
+            subpatterns.parallelStream().forEach(subpattern -> {
+                if (subpattern.enableParam.getValueb()) {
+                    subpattern.run(deltaMs, subpattern.sun.getPoints(), layer);
+                }
+                else {
+                    for (LXPoint point : subpattern.sun.points) {
+                        layer[point.index] = 0;
                     }
                 }
             });
         }
     };
 
-    protected void createParameters() {
-    }
+    protected void createParameters() { }
+    protected abstract Subpattern createSubpattern(Sun sun, int sunIndex);
 
-    protected PerSunPattern(final LX lx, Class<? extends Subpattern> subpatternClass) {
+    protected PerSunPattern(LX lx) {
         super(lx);
 
         subpatterns = new ArrayList<Subpattern>(model.suns.size());
 
         createParameters();
 
-        boolean isNonStaticInnerClass = (subpatternClass.isMemberClass() || subpatternClass.isLocalClass())
-            && !Modifier.isStatic(subpatternClass.getModifiers());
-
         int sunIndex = 0;
         for (Sun sun : model.suns) {
             try {
-                Subpattern subpattern;
-                if (isNonStaticInnerClass) {
-                    subpattern =
-                        subpatternClass.getDeclaredConstructor(getClass(), Sun.class, int.class).newInstance(this, sun, sunIndex);
-                } else {
-                    subpattern = subpatternClass.getConstructor(Sun.class, int.class).newInstance(sun, sunIndex);
-                }
-
+                Subpattern subpattern = createSubpattern(sun, sunIndex);
                 addParameter(subpattern.enableParam);
-
                 subpatterns.add(subpattern);
-            } catch (Exception e) {
+            }
+            catch (Exception e) {
                 System.err.println("Exception when creating subpattern: " + e.getLocalizedMessage());
                 e.printStackTrace();
             }

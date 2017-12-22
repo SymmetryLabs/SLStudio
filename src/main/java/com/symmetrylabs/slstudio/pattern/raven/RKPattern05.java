@@ -11,7 +11,7 @@ import processing.core.PGraphics;
 import processing.core.PVector;
 
 import static com.symmetrylabs.util.NoiseUtils.noise;
-import static com.symmetrylabs.slstudio.util.Utils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.HALF_PI;
 import static processing.core.PConstants.PI;
