@@ -33,18 +33,18 @@ public class PerSunWasps extends PerSunParticlePattern {
     protected void createParameters() {
         super.createParameters();
 
-        addParameter(speed = new CompoundParameter("speed", 1, 0, 2));
-        addParameter(accel = new CompoundParameter("accel", 0.15f, 0, 5));
-        addParameter(dampen = new CompoundParameter("dampen", 0.75f, 0, 1));
-        addParameter(focusX = new CompoundParameter("focusX", 0f, -1, 1));
-        addParameter(focusY = new CompoundParameter("focusY", 0f, -1, 1));
-        addParameter(focusZ = new CompoundParameter("focusZ", 0f, -1, 1));
-        addParameter(pullX = new CompoundParameter("pullX", 0f, 0, 1));
-        addParameter(pullY = new CompoundParameter("pullY", 0f, 0, 1));
-        addParameter(pullZ = new CompoundParameter("pullZ", 0f, 0, 1));
-        addParameter(twistX = new CompoundParameter("twistX", 0f, 0, 1));
-        addParameter(twistY = new CompoundParameter("twistY", 0f, 0, 1));
-        addParameter(twistZ = new CompoundParameter("twistZ", 0f, 0, 1));
+        addParameter(speed = new CompoundParameter("speed", 0.2, 0, 2));
+        addParameter(accel = new CompoundParameter("accel", 1.5, 0, 2));
+        addParameter(dampen = new CompoundParameter("dampen", 0.75, 0, 1));
+        addParameter(focusX = new CompoundParameter("focusX", 0, -1, 1));
+        addParameter(focusY = new CompoundParameter("focusY", 0, -1, 1));
+        addParameter(focusZ = new CompoundParameter("focusZ", 0, -1, 1));
+        addParameter(pullX = new CompoundParameter("pullX", 0.5, 0, 1));
+        addParameter(pullY = new CompoundParameter("pullY", 0.5, 0, 1));
+        addParameter(pullZ = new CompoundParameter("pullZ", 0.5, 0, 1));
+        addParameter(twistX = new CompoundParameter("twistX", 0, -1, 1));
+        addParameter(twistY = new CompoundParameter("twistY", 0, -1, 1));
+        addParameter(twistZ = new CompoundParameter("twistZ", 0, -1, 1));
     }
 
     protected PerSunPattern.Subpattern createSubpattern(Sun sun, int sunIndex) {

@@ -49,9 +49,6 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
     public CompoundParameter blobMaxDist;
     public CompoundParameter blobMaxAngle;
     public CompoundParameter blobAffinity;
-    public CompoundParameter oscMergeRadius;  // blob merge radius (in)
-    public CompoundParameter oscMaxSpeed;  // max blob speed (in/s)
-    public CompoundParameter oscMaxDeltaSec;  // max interval to calculate blob velocities (s)
 
     protected Map<Sun, BlobDist> sunClosestBlobDists = new HashMap<Sun, BlobDist>();
 
@@ -110,33 +107,22 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
         super.createParameters();
 
         addParameter(particleCount = new BoundedParameter("count", 0, 0, 100));
-        addParameter(kernelSize = new CompoundParameter("size", 10, 0, 100));
+        addParameter(kernelSize = new CompoundParameter("size", 15, 0, 100));
         addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
         addParameter(flattenZ = new BooleanParameter("flattenZ", false));
 
         addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
         addParameter(saturation = new CompoundParameter("saturation", 30, 0, 100));
 
-        addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
-        addParameter(blobMaxDist = new CompoundParameter("bDistMax", 100f, 0, 1000f));
-        addParameter(blobMaxAngle = new CompoundParameter("bAngleMax", 75, 0, 90));
-        addParameter(blobAffinity = new CompoundParameter("bPull", 10f, 0, 200f));
-        addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
-        addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
-        addParameter(oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1));
-    }
-
-    void updateBlobTrackerParameters() {
-        blobTracker.setMergeRadius(oscMergeRadius.getValuef());
-        blobTracker.setMaxSpeed(oscMaxSpeed.getValuef());
-        blobTracker.setMaxDeltaSec(oscMaxDeltaSec.getValuef());
+        addParameter(enableBlobs = new BooleanParameter("enableBlobs", true));
+        addParameter(blobMaxDist = new CompoundParameter("bMaxDist", 500, 0, 1000));
+        addParameter(blobMaxAngle = new CompoundParameter("bMaxAngle", 60, 0, 90));
+        addParameter(blobAffinity = new CompoundParameter("bPull", 100, 0, 200));
     }
 
     @Override
     public void run(double deltaMs) {
         if (enableBlobs.getValueb()) {
-            updateBlobTrackerParameters();
-
             double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
             double maxAngleRad = blobMaxAngle.getValue() * Math.PI / 180;
             List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
