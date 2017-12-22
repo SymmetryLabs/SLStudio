@@ -4,7 +4,6 @@ import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
 import com.symmetrylabs.slstudio.render.Renderable;
 import com.symmetrylabs.slstudio.render.Renderer;
-import com.symmetrylabs.slstudio.render.SequentialRenderer;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
@@ -21,14 +20,7 @@ import java.util.function.Consumer;
 public abstract class PerSunPattern extends SLPattern {
     protected List<Subpattern> subpatterns;
 
-    private Object rendererLock = new Object();
-    private Renderer renderer;
-
-    public static enum RendererChoices {
-        SEQUENTIAL, INTERPOLATING
-    }
-
-    EnumParameter<RendererChoices> chooseRenderer;
+    private InterpolatingRenderer renderer;
 
     private Renderable renderable = new Renderable() {
         @Override
@@ -72,65 +64,26 @@ public abstract class PerSunPattern extends SLPattern {
             ++sunIndex;
         }
 
-        addParameter(chooseRenderer = new EnumParameter<RendererChoices>("renderer", RendererChoices.SEQUENTIAL));
-
-        renderer = new SequentialRenderer(lx.model, colors, renderable);
-
-        chooseRenderer.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter ignore) {
-                synchronized (rendererLock) {
-                    renderer.stop();
-
-                    switch (chooseRenderer.getEnum()) {
-                        case SEQUENTIAL:
-                            renderer = new SequentialRenderer(lx.model, colors, renderable);
-                            break;
-                        case INTERPOLATING:
-                            renderer = new InterpolatingRenderer(lx.model, colors, renderable);
-                            break;
-                    }
-
-                    renderer.start();
-                }
-            }
-        });
+        renderer = new InterpolatingRenderer(lx.model, colors, renderable);
     }
 
     @Override
     public void onActive() {
         super.onActive();
 
-        synchronized (rendererLock) {
-            renderer.start();
-        }
+        renderer.start();
     }
 
     @Override
     public void onInactive() {
         super.onInactive();
 
-        synchronized (rendererLock) {
-            renderer.stop();
-        }
+        renderer.stop();
     }
 
     @Override
     public void run(final double deltaMs) {
         renderer.run(deltaMs);
-      /*
-        subpatterns.parallelStream().forEach(new Consumer<Subpattern>() {
-            public void accept(Subpattern subpattern) {
-                if (subpattern.enableParam.getValueb()) {
-                    subpattern.run(deltaMs, subpattern.sun.getPoints(), colors);
-                }
-                else {
-                    for (LXPoint point : subpattern.sun.points) {
-                        colors[point.index] = 0;
-                    }
-                }
-            }
-        });
-        */
     }
 
     public static abstract class Subpattern {
