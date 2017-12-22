@@ -112,15 +112,15 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
         addParameter(particleCount = new BoundedParameter("count", 0, 0, 100));
         addParameter(kernelSize = new CompoundParameter("size", 10, 0, 100));
         addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
-        addParameter(flattenZ = new BooleanParameter("flattenZ", true));
+        addParameter(flattenZ = new BooleanParameter("flattenZ", false));
 
         addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
         addParameter(saturation = new CompoundParameter("saturation", 30, 0, 100));
 
         addParameter(enableBlobs = new BooleanParameter("enableBlobs", false));
-        addParameter(blobMaxDist = new CompoundParameter("blobMaxDist", 100f, 0, 1000f));
-        addParameter(blobMaxAngle = new CompoundParameter("blobMaxAngle", 75, 0, 90));
-        addParameter(blobAffinity = new CompoundParameter("blobAffinity", 10f, 0, 200f));
+        addParameter(blobMaxDist = new CompoundParameter("bDistMax", 100f, 0, 1000f));
+        addParameter(blobMaxAngle = new CompoundParameter("bAngleMax", 75, 0, 90));
+        addParameter(blobAffinity = new CompoundParameter("bPull", 10f, 0, 200f));
         addParameter(oscMergeRadius = new CompoundParameter("bMrgRad", 30, 0, 100));
         addParameter(oscMaxSpeed = new CompoundParameter("bMaxSpd", 240, 0, 1000));
         addParameter(oscMaxDeltaSec = new CompoundParameter("bMaxDt", 0.5, 0, 1));
@@ -148,7 +148,7 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
                     double dy = b.pos.y - sun.cy;
                     double dz = b.pos.z - sun.cz;
                     double sqrDist = dx * dx + dy * dy + dz * dz;
-                    double angleRad = FastMath.abs(FastMath.atan2(dx, dz));
+                    double angleRad = FastMath.atan2(FastMath.abs(dx), FastMath.abs(dz));
                     if (angleRad < maxAngleRad && sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
                         closestSqrDist = sqrDist;
                         closestBlob = b;
