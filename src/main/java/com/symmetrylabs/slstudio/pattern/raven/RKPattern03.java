@@ -13,7 +13,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 
 import static com.symmetrylabs.util.NoiseUtils.noise;
-import static com.symmetrylabs.slstudio.util.Utils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.TRIANGLES;

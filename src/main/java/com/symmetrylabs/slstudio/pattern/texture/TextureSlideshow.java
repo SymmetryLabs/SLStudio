@@ -136,6 +136,9 @@ public abstract class TextureSlideshow extends SLPattern {
     }
 
     public void run(double deltaMs) {
+        if (images.length == 0)
+            return;
+
         double lerpValue = lerp.getValue();
         if (lerp.loop()) {
             imageIndex = (imageIndex + 1) % images.length;

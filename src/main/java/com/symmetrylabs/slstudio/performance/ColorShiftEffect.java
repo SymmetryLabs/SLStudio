@@ -35,6 +35,7 @@ public class ColorShiftEffect extends SLEffect {
 
         @Override public void run() {
             int i = getGlobalId();
+            if (i >= colors.length) return;
             colors[i] = shiftHue(colors[i], shiftValue);
         }
     };
