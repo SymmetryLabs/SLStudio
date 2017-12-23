@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.util;
 import com.harium.storage.kdtree.KDTree;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,7 +26,7 @@ public class KDTreeModelIndex extends ModelIndex {
     }
 
     @Override
-    public List<LXPoint> pointsWithin(LXPoint target, float d) {
+    public List<LXPoint> pointsWithin(LXVector target, float d) {
         List<LXPoint> nearby = null;
 
         try {
@@ -41,7 +42,7 @@ public class KDTreeModelIndex extends ModelIndex {
     }
 
     @Override
-    public LXPoint nearestPoint(LXPoint target) {
+    public LXPoint nearestPoint(LXVector target) {
         try {
             return kd.nearest(new double[]{target.x, target.y, target.z});
         } catch (Exception e) {

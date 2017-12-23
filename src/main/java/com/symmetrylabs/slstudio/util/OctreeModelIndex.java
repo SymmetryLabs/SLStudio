@@ -1,14 +1,16 @@
 package com.symmetrylabs.slstudio.util;
 
-import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
-
 import java.util.Collections;
 import java.util.List;
 
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
+
 public class OctreeModelIndex extends ModelIndex {
     private boolean flattenZ;
-    private HashOctree<LXPoint> ot;
+    private FixedWidthOctree<LXPoint> ot;
+    //private HashOctree<LXPoint> ot;
 
     public OctreeModelIndex(LXModel model) {
         this(model, false);
@@ -19,8 +21,9 @@ public class OctreeModelIndex extends ModelIndex {
 
         this.flattenZ = flattenZ;
 
-        ot = new HashOctree<LXPoint>(model.cx, model.cy, model.cz,
-            (float) Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 5
+        ot = new FixedWidthOctree<LXPoint>(model.cx, model.cy, model.cz,
+        //ot = new HashOctree<LXPoint>(model.cx, model.cy, model.cz,
+            (float) Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 3
         );
 
         for (LXPoint point : model.getPoints()) {
@@ -36,9 +39,9 @@ public class OctreeModelIndex extends ModelIndex {
     }
 
     @Override
-    public List<LXPoint> pointsWithin(LXPoint target, float d) {
+    public List<LXPoint> pointsWithin(LXVector target, float d) {
         try {
-            return ot.withinDistance((float)target.x, (float)target.y, flattenZ ? 0 : (float)target.z, d);
+            return ot.withinDistance(target.x, target.y, flattenZ ? 0 : target.z, d);
         } catch (Exception e) {
             System.err.println("Exception while finding nearby points: " + e.getMessage());
         }
@@ -47,9 +50,9 @@ public class OctreeModelIndex extends ModelIndex {
     }
 
     @Override
-    public LXPoint nearestPoint(LXPoint target) {
+    public LXPoint nearestPoint(LXVector target) {
         try {
-            return ot.nearest((float)target.x, (float)target.y, flattenZ ? 0 : (float)target.z);
+            return ot.nearest(target.x, target.y, flattenZ ? 0 : target.z);
         } catch (Exception e) {
             System.err.println("Exception while finding nearest point: " + e.getMessage());
         }

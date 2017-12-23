@@ -1,16 +1,18 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.Sun;
+import java.util.List;
+import java.util.ArrayList;
+
+import org.apache.commons.math3.util.FastMath;
+
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.symmetrylabs.slstudio.model.Sun;
 
 public class PerSunWasps extends PerSunParticlePattern {
-    private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
+    private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 
     public CompoundParameter speed;
     public CompoundParameter accel;
@@ -59,9 +61,9 @@ public class PerSunWasps extends PerSunParticlePattern {
 
         @Override
         protected void initParticle(Particle p) {
-            p.pos[0] = (float) (2 * Math.random() - 1);
-            p.pos[1] = (float) (2 * Math.random() - 1);
-            p.pos[2] = (float) (2 * Math.random() - 1);
+            p.pos[0] = (float)(2 * FastMath.random() - 1);
+            p.pos[1] = (float)(2 * FastMath.random() - 1);
+            p.pos[2] = (float)(2 * FastMath.random() - 1);
             //System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
         }
 
@@ -112,9 +114,9 @@ public class PerSunWasps extends PerSunParticlePattern {
                 p.vel[1] -= dampenValue * p.vel[1];
                 p.vel[2] -= dampenValue * p.vel[2];
 
-                p.vel[0] += accelValue * (Math.random() - .5);
-                p.vel[1] += accelValue * (Math.random() - .5);
-                p.vel[2] += accelValue * (Math.random() - .5);
+                p.vel[0] += accelValue * (FastMath.random() - .5);
+                p.vel[1] += accelValue * (FastMath.random() - .5);
+                p.vel[2] += accelValue * (FastMath.random() - .5);
 
                 double pullVecX = focusPosX - p.pos[0];
                 double pullVecY = focusPosY - p.pos[1];
@@ -133,7 +135,7 @@ public class PerSunWasps extends PerSunParticlePattern {
                 p.vel[2] += blobScale * blobVecZ;
 
                 // NOTE: assuming left-handed Z-axis
-                double pullNorm = Math.sqrt(pullVecX * pullVecX + pullVecY * pullVecY + pullVecZ * pullVecZ);
+                double pullNorm = FastMath.sqrt(pullVecX * pullVecX + pullVecY * pullVecY + pullVecZ * pullVecZ);
 
                 double twistXVecX = 0;
                 double twistXVecY = pullVecZ / pullNorm;

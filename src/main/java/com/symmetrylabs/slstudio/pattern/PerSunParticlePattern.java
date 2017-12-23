@@ -13,6 +13,7 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -25,16 +26,16 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.MarkerSource;
-import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
+import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.LinearModelIndex;
 import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 
 public abstract class PerSunParticlePattern extends PerSunPattern implements MarkerSource {
-    private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
+    private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 
     public static enum KernelChoice {
-        GAUSSIAN, LAPLACE
+        GAUSSIAN, LAPLACE, SPHERE, FLAT
     }
 
     public BoundedParameter particleCount;
@@ -124,7 +125,7 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
     public void run(double deltaMs) {
         if (enableBlobs.getValueb()) {
             double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
-            double maxAngleRad = blobMaxAngle.getValue() * Math.PI / 180;
+            double maxAngleRad = blobMaxAngle.getValue() * FastMath.PI / 180;
             List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
             for (Sun sun : model.getSuns()) {
                 BlobTracker.Blob closestBlob = null;
@@ -174,6 +175,10 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
         return FastMath.exp(-FastMath.abs(d * 4 / s));
     }
 
+    protected double kernelSphere(double dSqr, double s) {
+        return dSqr > s ? 0 : 1;
+    }
+
     protected double kernel(double x, double y, double z, double s) {
         double dSqr = x * x + y * y + z * z;
         switch (kernelType.getEnum()) {
@@ -181,6 +186,10 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
                 return kernelGaussianSqr(dSqr, s);
             case LAPLACE:
                 return kernelLaplace(FastMath.sqrt(dSqr), s);
+            case SPHERE:
+                return kernelSphere(dSqr, s);
+            case FLAT:
+                return 1;
             default:
                 return 0;
         }
@@ -200,7 +209,7 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
         public final float[] layer;
         public final int index;
 
-        private LXPoint point = new LXPoint(0, 0, 0);
+        private LXVector point = new LXVector(0, 0, 0);
 
         public Particle(int index, int pointCount) {
             this.index = index;
@@ -208,21 +217,20 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
             layer = new float[pointCount];
         }
 
-        public synchronized LXPoint toPointInModel(LXModel model) {
-            float x = (float) (model.cx + pos[0] * model.xRange / 2f);
-            float y = (float) (model.cy + pos[1] * model.yRange / 2f);
-            float z = (float) (model.cz + pos[2] * model.zRange / 2f);
-            return point.update(x, y, z);
+        public synchronized LXVector toPointInModel(LXModel model) {
+            return point.set(
+                (float)(model.cx + pos[0] * model.xRange / 2f),
+                (float)(model.cy + pos[1] * model.yRange / 2f),
+                (float)(model.cz + pos[2] * model.zRange / 2f)
+            );
         }
     }
 
     protected abstract class Subpattern extends PerSunPattern.Subpattern {
         protected ModelIndex modelIndex;
-        protected List<Particle> particles = new ArrayList<Particle>();
+        protected List<Particle> particles = new ArrayList<>();
 
-        protected void initParticle(Particle p) {
-        }
-
+        protected void initParticle(Particle p) { }
         protected abstract void simulate(double deltaMs);
 
         public Subpattern(Sun sun, int sunIndex) {
@@ -255,20 +263,16 @@ public abstract class PerSunParticlePattern extends PerSunPattern implements Mar
         }
 
         protected ModelIndex createModelIndex() {
-            return new LinearModelIndex(sun, flattenZ.isOn());
-            //return new OctreeModelIndex(sun, flattenZ.isOn());
+            return new OctreeModelIndex(sun, flattenZ.isOn());
+            //return new LinearModelIndex(sun, flattenZ.isOn());
         }
 
         protected void renderParticle(Particle particle) {
             Arrays.fill(particle.layer, 0f);
 
-            LXPoint pp = particle.toPointInModel(sun);
+            LXVector pp = particle.toPointInModel(sun);
             float withinDist = particle.size * kernelSize.getValuef();
             List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist);
-            //System.out.println(nearbyPoints.size());
-            //System.out.println("pos: {" + particle.pos[0] + ", " + particle.pos[1] + ", " + particle.pos[2] + "}");
-            //System.out.println("pp: {" + pp.x + ", " + pp.y + ", " + pp.z + "}");
-            //System.out.println("center: {" + sun.cx + ", " + sun.cy + ", " + sun.cz + "}");
 
             final boolean flattening = flattenZ.isOn();
             for (LXPoint p : nearbyPoints) {

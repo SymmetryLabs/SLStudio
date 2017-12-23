@@ -2,11 +2,8 @@ package com.symmetrylabs.slstudio.util;
 
 import org.apache.commons.math3.util.FastMath;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Consumer;
-import java.util.function.Function;
-import java.util.function.Predicate;
+import java.util.ArrayList;
 
 public class FixedWidthOctree<T> {
     private final int depth;
@@ -56,22 +53,21 @@ public class FixedWidthOctree<T> {
         }
     }
 
-    // NOTE: we're using Manhattan distance here
+    private boolean fastDistCheck(Entry<T> a, float x, float y, float z, float d, float dSquared) {
+        float x_diff = a.x - x;
+        float y_diff = a.y - y;
+        float z_diff = a.z - z;
+        return FastMath.abs(x_diff) < d && FastMath.abs(y_diff) < d && FastMath.abs(z_diff) < d
+            && (x_diff * x_diff + y_diff * y_diff + z_diff * z_diff) < dSquared;
+    }
+
     public List<T> withinDistance(final float x, final float y, final float z, final float d) {
         final List<T> objectsWithin = new ArrayList<>(points.size());
 
         if (!points.isEmpty()) {
-
-
-            points.parallelStream().filter(new Predicate<Entry<T>>() {
-                public boolean test(Entry<T> p) {
-                    return FastMath.abs(p.x - x) < d && FastMath.abs(p.y - y) < d && FastMath.abs(p.z - z) < d;
-                }
-            }).sequential().forEach(new Consumer<Entry<T>>() {
-                public void accept(Entry<T> entry) {
-                    objectsWithin.add(entry.object);
-                }
-            });
+            float dSquared = d * d;
+            points.parallelStream().filter(p -> fastDistCheck(p, x, y, z, d, dSquared))
+                .sequential().forEach(entry -> objectsWithin.add(entry.object));
         }
 
         if (depth > 0) {
@@ -142,15 +138,8 @@ public class FixedWidthOctree<T> {
                 }
             }
 
-            survivingChildren.parallelStream().map(new Function<FixedWidthOctree, List<T>>() {
-                public List<T> apply(FixedWidthOctree child) {
-                    return child.withinDistance(x, y, z, d);
-                }
-            }).sequential().forEach(new Consumer<List<T>>() {
-                public void accept(List<T> childPoints) {
-                    objectsWithin.addAll(childPoints);
-                }
-            });
+            survivingChildren.parallelStream().map(child -> child.withinDistance(x, y, z, d))
+                .sequential().forEach(childPoints -> objectsWithin.addAll(childPoints));
         }
 
         return objectsWithin;
