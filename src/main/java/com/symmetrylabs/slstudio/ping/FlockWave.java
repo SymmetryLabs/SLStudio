@@ -34,6 +34,7 @@ import com.symmetrylabs.slstudio.util.BlobFollower;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.CubeMarker;
 import com.symmetrylabs.slstudio.util.LinearModelIndex;
+import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.Octahedron;
@@ -87,7 +88,9 @@ public class FlockWave extends SLPatternWithMarkers {
 
         blobTracker = BlobTracker.getInstance(lx);
         blobFollower = new BlobFollower(blobTracker);
-        modelIndex = new LinearModelIndex(lx.model);
+
+        modelIndex = new OctreeModelIndex(lx.model);
+        //modelIndex = new LinearModelIndex(lx.model);
 
         addParameter(oscFollowers);
         addParameter(oscBlobs);

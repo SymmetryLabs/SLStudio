@@ -6,6 +6,7 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.LinearModelIndex;
+import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LXModulator;
@@ -72,8 +73,8 @@ public class SnowFlakes extends SunsPattern {
         };
 
         // the octree we use to efficiently find nearby points
-        //protected ModelIndex modelIndex = new OctreeModelIndex(lx.model);
-        protected ModelIndex modelIndex = new LinearModelIndex(lx.model);
+        protected ModelIndex modelIndex = new OctreeModelIndex(lx.model);
+        //protected ModelIndex modelIndex = new LinearModelIndex(lx.model);
 
         private Random pointRandom = new Random();
 
