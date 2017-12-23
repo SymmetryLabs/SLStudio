@@ -18,7 +18,7 @@ public abstract class SLKernel extends Kernel {
                 Device d = OpenCLDevice.select((a, b) -> b, Device.TYPE.GPU);
 
                 if (d == null) {
-                    d = OpenCLDevice.select((a, b) -> b, Device.TYPE.CPU);
+                    //d = OpenCLDevice.select((a, b) -> b, Device.TYPE.CPU);
                 }
 
                 //System.out.println("DEVICE: " + (d == null ? "(null)" : d.getClass().getName()) + " " + d);
