@@ -5,16 +5,13 @@ import heronarts.lx.LXPattern;
 
 import com.symmetrylabs.slstudio.model.CubesModel;
 
-public abstract class CubesPattern extends LXPattern {
-    public final CubesModel model;
+public abstract class CubesPattern extends ModelSpecificPattern<CubesModel> {
+    @Override
+    protected CubesModel createEmptyModel() {
+        return new CubesModel();
+    }
 
     public CubesPattern(LX lx) {
         super(lx);
-
-        if (lx.model instanceof CubesModel) {
-            this.model = (CubesModel)lx.model;
-        } else {
-            this.model = new CubesModel();
-        }
     }
 }

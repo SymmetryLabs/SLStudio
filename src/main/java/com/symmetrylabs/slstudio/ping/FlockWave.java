@@ -1,11 +1,29 @@
 package com.symmetrylabs.slstudio.ping;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Set;
+import java.util.concurrent.CopyOnWriteArraySet;
+import java.util.Collection;
+import java.util.Arrays;
+import java.util.Date;
+
 import com.aparapi.Kernel;
 import com.aparapi.Range;
 import com.aparapi.device.Device;
 import com.aparapi.device.OpenCLDevice;
 import com.aparapi.internal.kernel.KernelManager;
 import com.aparapi.internal.kernel.KernelPreferences;
+import org.apache.commons.math3.util.FastMath;
+import processing.core.PVector;
+
+import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -19,22 +37,6 @@ import com.symmetrylabs.slstudio.util.LinearModelIndex;
 import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.Octahedron;
-import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import org.apache.commons.math3.util.FastMath;
-import processing.core.PVector;
-
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Date;
-import java.util.List;
-import java.util.Set;
-import java.util.concurrent.CopyOnWriteArraySet;
-
 
 public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
@@ -434,19 +436,12 @@ public class FlockWave extends SLPatternWithMarkers {
             final ColorPalette pal = getPalette();
             final float[] result = kernel.result;
 
-            model.forEachPoint((start, end) -> {
-                for (int j = start; j < end; j++) {
-                    colors[j] = pal.getColor(result[j]);
-                }
+            model.getPoints().parallelStream().forEach(p -> {
+                colors[p.index] = pal.getColor(result[p.index]);
             });
         } else {
-            final ColorPalette pal = getPalette();
-            final int color = pal.getColor(palShift.getValue());
-            model.forEachPoint((start, end) -> {
-                for (int j = start; j < end; j++) {
-                    colors[j] = color;
-                }
-            });
+            int color = getPalette().getColor(palShift.getValue());
+            Arrays.fill(colors, color);
         }
     }
 

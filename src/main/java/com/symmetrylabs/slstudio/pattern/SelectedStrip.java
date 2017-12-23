@@ -1,15 +1,16 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Slice;
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
-public class SelectedStrip extends SLPattern {
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.model.Slice;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
+
+public class SelectedStrip extends SunsPattern {
 
      public SelectedStrip(LX lx) {
          super(lx);

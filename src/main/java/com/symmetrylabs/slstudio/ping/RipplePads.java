@@ -1,7 +1,8 @@
 package com.symmetrylabs.slstudio.ping;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import java.util.List;
+import java.util.ArrayList;
+
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
@@ -10,13 +11,12 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 import static processing.core.PApplet.println;
 
-
-public class RipplePads extends SLPattern {
+public class RipplePads extends SunsPattern {
     CompoundParameter intensity = new CompoundParameter("intensity", 1, 0, 3);
     CompoundParameter velocity = new CompoundParameter("velocity", 80, 0, 127);
     CompoundParameter speed = new CompoundParameter("speed", 200, 0, 500);

@@ -1,8 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.texture;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import processing.core.PImage;
+
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
@@ -11,10 +10,12 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import processing.core.PImage;
 
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
-public abstract class TextureSlideshow extends SLPattern {
+public abstract class TextureSlideshow extends SunsPattern {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
     public final BooleanParameter perSun = new BooleanParameter("perSun", false);
     public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);

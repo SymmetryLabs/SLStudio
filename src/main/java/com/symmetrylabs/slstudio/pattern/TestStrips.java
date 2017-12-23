@@ -1,15 +1,16 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class TestStrips extends SLPattern {
+public class TestStrips extends SunsPattern {
 
     public TestStrips(LX lx) {
         super(lx);

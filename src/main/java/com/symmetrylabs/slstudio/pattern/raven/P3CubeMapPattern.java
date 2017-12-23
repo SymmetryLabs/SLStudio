@@ -1,28 +1,29 @@
 package com.symmetrylabs.slstudio.pattern.raven;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.Map;
+import java.util.function.Consumer;
+
 import com.google.common.collect.Lists;
 import com.google.common.collect.Maps;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
-import com.symmetrylabs.slstudio.util.DrawHelper;
+import processing.core.PGraphics;
+import processing.core.PVector;
+
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
-import processing.core.PGraphics;
-import processing.core.PVector;
 
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.function.Consumer;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
+import com.symmetrylabs.slstudio.util.DrawHelper;
 
 import static processing.core.PConstants.P3D;
 
-
-public abstract class P3CubeMapPattern extends SLPattern {
+public abstract class P3CubeMapPattern extends SunsPattern {
     private PGraphics pg;
     public PGraphics pgF;
     public PGraphics pgB;

@@ -14,7 +14,7 @@ import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 
-public class SunFlash extends SLPattern {
+public class SunFlash extends SunsPattern {
     private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);

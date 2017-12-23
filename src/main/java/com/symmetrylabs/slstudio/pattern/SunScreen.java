@@ -12,7 +12,7 @@ import java.util.Arrays;
 import java.util.List;
 
 
-public class SunScreen extends SLPattern {
+public class SunScreen extends SunsPattern {
     List<BooleanParameter> params = new ArrayList<BooleanParameter>();
 
     public SunScreen(LX lx) {

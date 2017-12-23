@@ -1,14 +1,14 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
-import com.symmetrylabs.slstudio.model.Slice;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
+import com.symmetrylabs.slstudio.model.Slice;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
-public class SunOrientation extends SLPattern implements SLTestPattern {
+public class SunOrientation extends SunsPattern implements SLTestPattern {
 
      public SunOrientation(LX lx) {
          super(lx);

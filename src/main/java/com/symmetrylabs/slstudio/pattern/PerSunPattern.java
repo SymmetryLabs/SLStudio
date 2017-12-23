@@ -1,9 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
-import com.symmetrylabs.slstudio.render.Renderable;
-import com.symmetrylabs.slstudio.render.Renderer;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.function.Consumer;
+import java.lang.reflect.Modifier;
+
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
@@ -11,16 +12,16 @@ import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import java.lang.reflect.Modifier;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.function.Consumer;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.render.Renderer;
+import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
+import com.symmetrylabs.slstudio.render.SequentialRenderer;
+import com.symmetrylabs.slstudio.render.Renderable;
 
-
-public abstract class PerSunPattern extends SLPattern {
+public abstract class PerSunPattern extends SunsPattern {
     protected List<Subpattern> subpatterns;
 
-    private InterpolatingRenderer renderer;
+    private Renderer renderer;
 
     private Renderable renderable = new Renderable() {
         @Override
@@ -65,6 +66,7 @@ public abstract class PerSunPattern extends SLPattern {
         }
 
         renderer = new InterpolatingRenderer(lx.model, colors, renderable);
+        //renderer = new SequentialRenderer(lx.model, colors, renderable);
     }
 
     @Override

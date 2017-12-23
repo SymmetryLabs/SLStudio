@@ -10,14 +10,14 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
  /* Non-Patterns */
-public abstract class SLPattern extends SunsPattern {
+public abstract class SLPattern extends LXPattern {
 
-    public final SLStudioLX lx;
+    protected final SLStudioLX lx;
 
     public SLPattern(LX lx) {
         super(lx);
 
-        this.lx = (SLStudioLX) lx;
+        this.lx = (SLStudioLX)lx;
     }
 
     protected <T extends LXParameter> T addParam(T param) {

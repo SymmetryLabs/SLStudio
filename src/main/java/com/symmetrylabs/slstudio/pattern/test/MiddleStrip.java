@@ -1,12 +1,12 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.pattern.StripsPattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.pattern.StripsPattern;
 
 public class MiddleStrip extends StripsPattern implements SLTestPattern {
      public MiddleStrip(LX lx) {

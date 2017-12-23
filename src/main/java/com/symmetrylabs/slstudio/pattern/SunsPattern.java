@@ -5,16 +5,13 @@ import heronarts.lx.LXPattern;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 
-public abstract class SunsPattern extends LXPattern {
-    public final SLModel model;
+public abstract class SunsPattern extends ModelSpecificPattern<SLModel> {
+    @Override
+    protected SLModel createEmptyModel() {
+        return new SLModel();
+    }
 
     public SunsPattern(LX lx) {
         super(lx);
-
-        if (lx.model instanceof SLModel) {
-            this.model = (SLModel)lx.model;
-        } else {
-            this.model = new SLModel();
-        }
     }
 }

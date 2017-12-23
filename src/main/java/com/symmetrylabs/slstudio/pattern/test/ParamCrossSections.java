@@ -1,17 +1,18 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
-import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import processing.core.PImage;
+
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 import static processing.core.PApplet.*;
 
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class ParamCrossSections extends SLPattern implements SLTestPattern {
+public class ParamCrossSections extends SunsPattern implements SLTestPattern {
 
     final CompoundParameter x = new CompoundParameter("XPOS", 0.3);
     final CompoundParameter y = new CompoundParameter("YPOS", 0.3);

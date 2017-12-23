@@ -8,7 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 
 import static processing.core.PApplet.*;
 
-public class BassPod extends SLPattern {
+public class BassPod extends SunsPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);

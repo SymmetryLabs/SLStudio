@@ -1,15 +1,16 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class middlePixel extends SLPattern implements SLTestPattern {
+public class middlePixel extends SunsPattern implements SLTestPattern {
 
     public middlePixel(LX lx) {
         super(lx);
