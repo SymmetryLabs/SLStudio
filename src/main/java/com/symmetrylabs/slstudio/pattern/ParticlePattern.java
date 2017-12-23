@@ -15,7 +15,7 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -36,7 +36,7 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
         GAUSSIAN, LAPLACE, SPHERE, FLAT
     }
 
-    public BoundedParameter particleCount;
+    public CompoundParameter particleCount;
     public CompoundParameter kernelSize;
     public EnumParameter<KernelChoice> kernelType;
     public BooleanParameter flattenZ;
@@ -95,7 +95,7 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
     protected void createParameters() {
         super.createParameters();
 
-        addParameter(particleCount = new BoundedParameter("count", 0, 0, 100));
+        addParameter(particleCount = new CompoundParameter("count", 0, 0, 100));
         addParameter(kernelSize = new CompoundParameter("size", 15, 0, 100));
         addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
         addParameter(flattenZ = new BooleanParameter("flattenZ", false));

@@ -7,9 +7,13 @@ import java.lang.reflect.Modifier;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
+import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.model.Sun;
@@ -29,7 +33,7 @@ public abstract class PerSunPattern extends SunsPattern {
             // System.out.println(1000 / deltaMs);
             subpatterns.parallelStream().forEach(subpattern -> {
                 if (subpattern.enableParam.getValueb()) {
-                    subpattern.run(deltaMs, subpattern.sun.getPoints(), layer);
+                    subpattern.pattern.render(deltaMs, subpattern.sun.getPoints(), layer);
                 }
                 else {
                     for (LXPoint point : subpattern.sun.points) {
@@ -41,20 +45,80 @@ public abstract class PerSunPattern extends SunsPattern {
     };
 
     protected void createParameters() { }
-    protected abstract Subpattern createSubpattern(Sun sun, int sunIndex);
+    protected abstract SubmodelPattern createSubpattern(Sun sun, int sunIndex);
+
+    private void wrapChildParameter(LXParameter param) {
+        String name = param.getLabel();
+        if (parameters.containsKey(name))
+            return;
+
+        LXListenableParameter wrap;
+
+        if (param instanceof CompoundParameter) {
+            CompoundParameter src = (CompoundParameter)param;
+            CompoundParameter dest = new CompoundParameter(name, param.getValue(),
+                    src.range.min, src.range.max);
+            wrap = dest;
+        }
+        else if (param instanceof BooleanParameter) {
+            BooleanParameter src = (BooleanParameter)param;
+            BooleanParameter dest = new BooleanParameter(name, src.getValueb());
+            dest.setMode(src.getMode());
+            wrap = dest;
+        }
+        else if (param instanceof DiscreteParameter) {
+            DiscreteParameter src = (DiscreteParameter)param;
+            DiscreteParameter dest = new DiscreteParameter(name, src.getValuei(),
+                    src.getMinValue(), src.getMaxValue());
+            if (src.getOptions() != null) {
+                dest.setOptions(src.getOptions());
+            }
+            wrap = dest;
+        }
+        else if (param instanceof EnumParameter) {
+            EnumParameter src = (EnumParameter)param;
+            EnumParameter dest = new EnumParameter(name, src.getEnum());
+            wrap = dest;
+        }
+        else {
+            wrap = new MutableParameter(name);
+        }
+
+        wrap.setDescription(param.getDescription());
+
+        addParameter(wrap);
+    }
+
+    @Override
+    public void onParameterChanged(LXParameter param) {
+        if (subpatterns == null)
+            return;
+
+        for (Subpattern subpattern : subpatterns) {
+            LXParameter childParam = subpattern.pattern.getParameter(param.getLabel());
+            if (childParam == null)
+                continue;
+
+            childParam.setValue(param.getValue());
+        }
+    }
 
     protected PerSunPattern(LX lx) {
         super(lx);
 
-        subpatterns = new ArrayList<Subpattern>(model.getSuns().size());
+        subpatterns = new ArrayList<>(model.getSuns().size());
 
         createParameters();
 
         int sunIndex = 0;
         for (Sun sun : model.getSuns()) {
             try {
-                Subpattern subpattern = createSubpattern(sun, sunIndex);
-                addParameter(subpattern.enableParam);
+                Subpattern subpattern = new Subpattern(sun, sunIndex, createSubpattern(sun, sunIndex));
+
+                for (LXParameter param : subpattern.pattern.getParameters()) {
+                    wrapChildParameter(param);
+                }
+
                 subpatterns.add(subpattern);
             }
             catch (Exception e) {
@@ -63,6 +127,10 @@ public abstract class PerSunPattern extends SunsPattern {
             }
 
             ++sunIndex;
+        }
+
+        for (Subpattern subpattern : subpatterns) {
+            addParameter(subpattern.enableParam);
         }
 
         renderer = new InterpolatingRenderer(lx.model, colors, renderable);
@@ -88,18 +156,18 @@ public abstract class PerSunPattern extends SunsPattern {
         renderer.run(deltaMs);
     }
 
-    public static abstract class Subpattern {
-        protected final Sun sun;
-        protected final int sunIndex;
-        protected final BooleanParameter enableParam;
+    private static class Subpattern {
+        public final Sun sun;
+        public final int sunIndex;
+        public final SubmodelPattern pattern;
+        public final BooleanParameter enableParam;
 
-        public Subpattern(Sun sun, int sunIndex) {
+        public Subpattern(Sun sun, int sunIndex, SubmodelPattern pattern) {
             this.sun = sun;
             this.sunIndex = sunIndex;
+            this.pattern = pattern;
 
             enableParam = new BooleanParameter("SUN" + (sunIndex + 1), true);
         }
-
-        protected abstract void run(double deltaMs, List<LXPoint> points, int[] layer);
     }
 }

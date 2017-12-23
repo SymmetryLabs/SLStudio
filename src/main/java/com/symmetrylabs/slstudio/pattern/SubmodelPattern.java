@@ -1,10 +1,12 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import java.util.List;
+import java.util.Collections;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.LXParameter;
 
 import com.symmetrylabs.slstudio.render.Renderer;
 import com.symmetrylabs.slstudio.render.Renderable;
