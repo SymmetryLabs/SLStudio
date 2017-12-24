@@ -45,7 +45,7 @@ public abstract class PerSunPattern extends SunsPattern {
     };
 
     protected void createParameters() { }
-    protected abstract SubmodelPattern createSubpattern(Sun sun, int sunIndex);
+    protected abstract RenderablePattern createSubpattern(Sun sun, int sunIndex);
 
     private void wrapChildParameter(LXParameter param) {
         String name = param.getLabel();
@@ -167,10 +167,10 @@ public abstract class PerSunPattern extends SunsPattern {
     private static class Subpattern {
         public final Sun sun;
         public final int sunIndex;
-        public final SubmodelPattern pattern;
+        public final RenderablePattern pattern;
         public final BooleanParameter enableParam;
 
-        public Subpattern(Sun sun, int sunIndex, SubmodelPattern pattern) {
+        public Subpattern(Sun sun, int sunIndex, RenderablePattern pattern) {
             this.sun = sun;
             this.sunIndex = sunIndex;
             this.pattern = pattern;

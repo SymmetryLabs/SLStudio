@@ -19,12 +19,7 @@ public abstract class Renderer {
         points = fixture.getPoints();
     }
 
-    public void start() {
-    }
-
-    public void stop() {
-    }
-
-    public void run(double deltaMs) {
-    }
+    public void start() { }
+    public void stop() { }
+    public void run(double deltaMs) { }
 }

@@ -32,7 +32,7 @@ import com.symmetrylabs.slstudio.util.LinearModelIndex;
 import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 import com.symmetrylabs.slstudio.model.LXPointNormal;
 
-public abstract class ParticlePattern extends SubmodelPattern implements MarkerSource {
+public abstract class ParticlePattern extends RenderablePattern implements MarkerSource {
     private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 
     public static enum KernelChoice {

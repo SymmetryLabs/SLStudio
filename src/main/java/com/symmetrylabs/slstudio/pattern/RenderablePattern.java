@@ -13,16 +13,23 @@ import com.symmetrylabs.slstudio.render.Renderable;
 import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
 import com.symmetrylabs.slstudio.render.SequentialRenderer;
 
-public abstract class SubmodelPattern extends SLPattern implements Renderable {
+public abstract class RenderablePattern extends SLPattern implements Renderable {
     private Renderer renderer;
 
-    protected SubmodelPattern(LX lx) {
+    protected RenderablePattern(LX lx) {
         super(lx);
 
         renderer = new InterpolatingRenderer(lx.model, colors, this);
         //renderer = new SequentialRenderer(lx.model, colors, this);
 
         createParameters();
+    }
+
+    public Renderer getRenderer() {
+        return renderer;
+    }
+    public void setRenderer(Renderer renderer) {
+        this.renderer = renderer;
     }
 
     public void onUIStart() { }
