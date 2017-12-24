@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
 
 import com.symmetrylabs.slstudio.model.Sun;
 
@@ -10,9 +11,9 @@ public class PerSunBassPod extends PerSunPattern {
     }
 
     @Override
-    protected RenderablePattern createSubpattern(Sun sun, int sunIndex) {
+    protected RenderablePattern createSubpattern(LXModel model, int sunIndex) {
         BassPod pattern = new BassPod(lx);
-        pattern.setModel(sun);
+        pattern.setModel(model);
         return pattern;
     }
 }

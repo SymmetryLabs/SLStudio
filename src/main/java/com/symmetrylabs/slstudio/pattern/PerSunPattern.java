@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.lang.reflect.Modifier;
 
 import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -16,13 +17,12 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.render.Renderer;
 import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
 import com.symmetrylabs.slstudio.render.SequentialRenderer;
 import com.symmetrylabs.slstudio.render.Renderable;
 
-public abstract class PerSunPattern extends SunsPattern {
+public abstract class PerSunPattern extends SectionalPattern {
     protected List<Subpattern> subpatterns;
 
     private Renderer renderer;
@@ -33,10 +33,10 @@ public abstract class PerSunPattern extends SunsPattern {
             // System.out.println(1000 / deltaMs);
             subpatterns.parallelStream().forEach(subpattern -> {
                 if (subpattern.enableParam.getValueb()) {
-                    subpattern.pattern.render(deltaMs, subpattern.sun.getPoints(), layer);
+                    subpattern.pattern.render(deltaMs, subpattern.section.getPoints(), layer);
                 }
                 else {
-                    for (LXPoint point : subpattern.sun.points) {
+                    for (LXPoint point : subpattern.section.points) {
                         layer[point.index] = 0;
                     }
                 }
@@ -45,7 +45,7 @@ public abstract class PerSunPattern extends SunsPattern {
     };
 
     protected void createParameters() { }
-    protected abstract RenderablePattern createSubpattern(Sun sun, int sunIndex);
+    protected abstract RenderablePattern createSubpattern(LXModel section, int sectionIndex);
 
     private void wrapChildParameter(LXParameter param) {
         String name = param.getLabel();
@@ -106,14 +106,14 @@ public abstract class PerSunPattern extends SunsPattern {
     protected PerSunPattern(LX lx) {
         super(lx);
 
-        subpatterns = new ArrayList<>(model.getSuns().size());
+        subpatterns = new ArrayList<>(getSections().size());
 
         createParameters();
 
-        int sunIndex = 0;
-        for (Sun sun : model.getSuns()) {
+        int sectionIndex = 0;
+        for (LXModel section : getSections()) {
             try {
-                Subpattern subpattern = new Subpattern(sun, sunIndex, createSubpattern(sun, sunIndex));
+                Subpattern subpattern = new Subpattern(section, sectionIndex, createSubpattern(section, sectionIndex));
 
                 for (LXParameter param : subpattern.pattern.getParameters()) {
                     wrapChildParameter(param);
@@ -126,15 +126,15 @@ public abstract class PerSunPattern extends SunsPattern {
                 e.printStackTrace();
             }
 
-            ++sunIndex;
+            ++sectionIndex;
         }
 
         for (Subpattern subpattern : subpatterns) {
             addParameter(subpattern.enableParam);
         }
 
-        renderer = new InterpolatingRenderer(lx.model, colors, renderable);
-        //renderer = new SequentialRenderer(lx.model, colors, renderable);
+        renderer = new InterpolatingRenderer(model, colors, renderable);
+        //renderer = new SequentialRenderer(model, colors, renderable);
     }
 
     @Override
@@ -165,17 +165,17 @@ public abstract class PerSunPattern extends SunsPattern {
     }
 
     private static class Subpattern {
-        public final Sun sun;
-        public final int sunIndex;
+        public final LXModel section;
+        public final int sectionIndex;
         public final RenderablePattern pattern;
         public final BooleanParameter enableParam;
 
-        public Subpattern(Sun sun, int sunIndex, RenderablePattern pattern) {
-            this.sun = sun;
-            this.sunIndex = sunIndex;
+        public Subpattern(LXModel section, int sectionIndex, RenderablePattern pattern) {
+            this.section = section;
+            this.sectionIndex = sectionIndex;
             this.pattern = pattern;
 
-            enableParam = new BooleanParameter("SUN" + (sunIndex + 1), true);
+            enableParam = new BooleanParameter("S" + (sectionIndex + 1), true);
         }
     }
 }

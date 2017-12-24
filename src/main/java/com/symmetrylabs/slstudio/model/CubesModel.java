@@ -19,7 +19,7 @@ import static com.symmetrylabs.slstudio.util.MathUtils.floor;
  * every cube on the sculpture, which forms a hierarchy of faces, strips
  * and points.
  */
-public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
+public class CubesModel extends StripsModel<CubesModel.CubesStrip> implements SectionalModel<CubesModel.Tower> {
     protected final List<Tower> towers = new ArrayList<>();
     protected final List<Cube> cubes = new ArrayList<>();
     protected final List<Face> faces = new ArrayList<>();
@@ -60,6 +60,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 }
             }
         }
+    }
+
+    @Override
+    public List<Tower> getSections() {
+        return getTowers();
     }
 
     public List<Tower> getTowers() {

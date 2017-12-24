@@ -18,7 +18,7 @@ import static processing.core.PApplet.*;
  * Top-level model of the entire sculpture. This contains a list of every cube on the sculpture, which forms a hierarchy
  * of faces, strips and points.
  */
-public class SLModel extends StripsModel<CurvedStrip> {
+public class SLModel extends StripsModel<CurvedStrip> implements SectionalModel<Sun> {
     public final List<LXModel> objModels;
 
     // Suns
@@ -85,6 +85,11 @@ public class SLModel extends StripsModel<CurvedStrip> {
         }
 
         this.pointBatches = new PointBatches(Arrays.asList(points), NUM_POINT_BATCHES);
+    }
+
+    @Override
+    public List<Sun> getSections() {
+        return getSuns();
     }
 
     public List<Sun> getSuns() {
