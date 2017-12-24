@@ -5,7 +5,6 @@ import com.google.gson.GsonBuilder;
 import com.symmetrylabs.slstudio.model.CurvedStrip;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.objimporter.ObjImporter;
 import com.symmetrylabs.slstudio.util.Utils;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXTransform;
@@ -159,9 +158,6 @@ public class FultonStreetLayout {
         suns.add(createSun("sun9", Sun.Type.FULL, layout.get("F"), NO_ROTATION, transform));
         suns.add(createSun("sun10", Sun.Type.FULL, layout.get("G"), NO_ROTATION, transform));
         suns.add(createSun("sun11", Sun.Type.FULL, layout.get("H"), NO_ROTATION, transform));
-
-    /* Obj Importer ----------------------------------------------------*/
-        List<LXModel> objModels = new ObjImporter("data", transform).getModels();
 
         return new SLModel(suns);
     }

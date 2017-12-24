@@ -1,7 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.BooleanParameter;

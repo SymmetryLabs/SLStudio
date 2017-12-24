@@ -1,10 +1,13 @@
 package com.symmetrylabs.slstudio.network;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.util.listenable.AbstractListListener;
-import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import java.util.Map;
+import java.util.HashMap;
+
 import heronarts.lx.LX;
 
+import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
+import com.symmetrylabs.slstudio.util.listenable.AbstractListListener;
+import com.symmetrylabs.slstudio.util.listenable.ListenableList;
 
 public class NetworkMonitor {
 
@@ -17,30 +20,35 @@ public class NetworkMonitor {
 
     private boolean oldVersionWarningGiven = false;
 
-    public NetworkMonitor(LX lx) {
+    private static Map<LX, NetworkMonitor> instanceByLX = new HashMap<>();
+
+    public static synchronized NetworkMonitor getInstance(LX lx) {
+        if (!instanceByLX.containsKey(lx)) {
+            instanceByLX.put(lx, new NetworkMonitor(lx));
+        }
+        return instanceByLX.get(lx);
+    }
+
+    private NetworkMonitor(LX lx) {
+        final Dispatcher dispatcher = Dispatcher.getInstance(lx);
+
         networkDevices.addListener(new AbstractListListener<NetworkDevice>() {
             public void itemAdded(int index, final NetworkDevice result) {
                 new VersionCommand(result.ipAddress, new VersionCommandCallback() {
                     public void onResponse(java.net.DatagramPacket response, final int version) {
-                        SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
-                            public void run() {
-                                result.version.set(version);
-                            }
-                        });
+                        dispatcher.dispatchEngine(() -> result.version.set(version));
                     }
 
                     public void onFinish() {
-                        SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
-                            public void run() {
-                                if (!oldVersionWarningGiven) {
-                                    for (NetworkDevice device : networkDevices) {
-                                        if (device.version.get() != -1
-                                            && (device.version.get() < result.version.get()
-                                            || device.version.get() > result.version.get())) {
-                                            System.out.println("WARNING: One or more cubes have outdated firmware!");
-                                            oldVersionWarningGiven = true;
-                                            return;
-                                        }
+                        dispatcher.dispatchEngine(() -> {
+                            if (!oldVersionWarningGiven) {
+                                for (NetworkDevice device : networkDevices) {
+                                    if (device.version.get() != -1
+                                        && (device.version.get() < result.version.get()
+                                        || device.version.get() > result.version.get())) {
+                                        System.out.println("WARNING: One or more cubes have outdated firmware!");
+                                        oldVersionWarningGiven = true;
+                                        return;
                                     }
                                 }
                             }

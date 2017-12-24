@@ -26,7 +26,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
-import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;

@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.effect;
 
-import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
@@ -10,7 +9,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
 
 
-public class LSD extends LXEffect {
+public class LSD extends SunsEffect {
 
     public final BoundedParameter scale = new BoundedParameter("Scale", 10, 5, 40);
     public final BoundedParameter speed = new BoundedParameter("Speed", 4, 1f, 6);
@@ -43,7 +42,7 @@ public class LSD extends LXEffect {
         final float sf = scale.getValuef() / 1000f;
         final float rf = range.getValuef();
 
-        ((SLModel) model).forEachPoint((start, end) -> {
+        model.forEachPoint((start, end) -> {
             final float[] hsb = new float[3];
 
             for (int i=start; i<end; i++) {

@@ -1,18 +1,28 @@
 package com.symmetrylabs.slstudio.util.dispatch;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import java.util.Map;
+import java.util.HashMap;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 
-
 public class Dispatcher implements LXLoopTask {
 
-    LX lx;
+    private LX lx;
 
     private final DispatchQueue engineQueue = new DispatchQueue();
     private final DispatchQueue uiQueue = new DispatchQueue();
 
-    public Dispatcher(LX lx) {
+    private static Map<LX, Dispatcher> instanceByLX = new HashMap<>();
+
+    public static synchronized Dispatcher getInstance(LX lx) {
+        if (!instanceByLX.containsKey(lx)) {
+            instanceByLX.put(lx, new Dispatcher(lx));
+        }
+        return instanceByLX.get(lx);
+    }
+
+    private Dispatcher(LX lx) {
         this.lx = lx;
 
         uiQueue.setThreadName(Thread.currentThread().getName());
@@ -25,7 +35,6 @@ public class Dispatcher implements LXLoopTask {
 
     public void start() {
         lx.engine.addLoopTask(this);
-        SLStudio.applet.registerMethod("draw", this);
     }
 
     public void loop(double deltaMs) {
@@ -40,7 +49,7 @@ public class Dispatcher implements LXLoopTask {
         engineQueue.queue(runnable);
     }
 
-    void dispatchUi(Runnable runnable) {
+    public void dispatchUi(Runnable runnable) {
         uiQueue.queue(runnable);
     }
 

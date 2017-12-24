@@ -7,7 +7,7 @@ import heronarts.lx.parameter.LXParameterListener;
 
 
 public class ControllerResetModule {
-    final BooleanParameter enabled = new BooleanParameter("Controller reset enabled");
+    public final BooleanParameter enabled = new BooleanParameter("Controller reset enabled");
 
     public ControllerResetModule(LX lx) {
         //moduleRegistrar.modules.add(new Module("Reset all cubes", enabled, true));

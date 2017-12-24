@@ -1,10 +1,12 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.effect;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXModelComponent;
 import heronarts.lx.model.LXModel;
 
-public abstract class ModelSpecificPattern<T extends LXModel> extends SLPattern {
+import com.symmetrylabs.slstudio.model.SLModel;
+
+public abstract class ModelSpecificEffect<T extends LXModel> extends SLEffect {
     protected T model;
 
     protected abstract T createEmptyModel();
@@ -31,7 +33,7 @@ public abstract class ModelSpecificPattern<T extends LXModel> extends SLPattern 
         return super.setModel(model);
     }
 
-    public ModelSpecificPattern(LX lx) {
+    public ModelSpecificEffect(LX lx) {
         super(lx);
 
         setModel(lx.model);

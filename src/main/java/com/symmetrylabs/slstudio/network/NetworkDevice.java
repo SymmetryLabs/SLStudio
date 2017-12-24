@@ -1,9 +1,8 @@
 package com.symmetrylabs.slstudio.network;
 
-import com.symmetrylabs.slstudio.util.listenable.ListenableInt;
-
 import java.net.InetAddress;
 
+import com.symmetrylabs.slstudio.util.listenable.ListenableInt;
 
 public class NetworkDevice {
 
