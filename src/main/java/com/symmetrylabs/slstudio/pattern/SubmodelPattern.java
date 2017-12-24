@@ -19,8 +19,8 @@ public abstract class SubmodelPattern extends SLPattern implements Renderable {
     protected SubmodelPattern(LX lx) {
         super(lx);
 
-        //renderer = new InterpolatingRenderer(lx.model, colors, this);
-        renderer = new SequentialRenderer(lx.model, colors, this);
+        renderer = new InterpolatingRenderer(lx.model, colors, this);
+        //renderer = new SequentialRenderer(lx.model, colors, this);
 
         createParameters();
     }

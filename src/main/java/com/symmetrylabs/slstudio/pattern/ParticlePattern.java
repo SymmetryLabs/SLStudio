@@ -41,6 +41,7 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
 
     public CompoundParameter particleCount;
     public CompoundParameter kernelSize;
+    public CompoundParameter kernelCutoff;
     public EnumParameter<KernelChoice> kernelType;
     public BooleanParameter flattenZ;
 
@@ -98,6 +99,7 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
 
         addParameter(particleCount = new CompoundParameter("count", 0, 0, 100));
         addParameter(kernelSize = new CompoundParameter("size", 15, 0, 100));
+        addParameter(kernelCutoff = new CompoundParameter("edgeCut", 1, 0.25, 1));
         addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
         addParameter(flattenZ = new BooleanParameter("flattenZ", false));
 
@@ -169,8 +171,8 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
         return FastMath.exp(-FastMath.abs(d * 4 / s));
     }
 
-    protected double kernelSphere(double dSqr, double s) {
-        return dSqr > s ? 0 : 1;
+    protected double kernelSphereSqr(double dSqr, double s) {
+        return dSqr > s * s ? 0 : 1;
     }
 
     protected double kernel(double x, double y, double z, double s) {
@@ -181,7 +183,7 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
             case LAPLACE:
                 return kernelLaplace(FastMath.sqrt(dSqr), s);
             case SPHERE:
-                return kernelSphere(dSqr, s);
+                return kernelSphereSqr(dSqr, s);
             case FLAT:
                 return 1;
             default:
@@ -251,7 +253,7 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
 
         LXVector pp = particle.toPointInModel(model);
         float withinDist = particle.size * kernelSize.getValuef();
-        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist);
+        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist * kernelCutoff.getValuef());
 
 
         particle.rebound[0] = 0;

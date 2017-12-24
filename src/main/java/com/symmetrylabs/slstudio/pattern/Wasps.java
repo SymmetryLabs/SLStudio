@@ -148,7 +148,7 @@ public class Wasps extends ParticlePattern {
             p.vel[1] += twistZValue * twistZVecY;
             p.vel[2] += twistZValue * twistZVecZ;
 
-            if (p.contact > 0) {
+            if (false && p.contact > 0) {
                 if (p.rebound[0] * p.vel[0] < 0) p.vel[0] /= (1 + p.contact);
                 if (p.rebound[1] * p.vel[1] < 0) p.vel[1] /= (1 + p.contact);
                 if (p.rebound[2] * p.vel[2] < 0) p.vel[2] /= (1 + p.contact);
