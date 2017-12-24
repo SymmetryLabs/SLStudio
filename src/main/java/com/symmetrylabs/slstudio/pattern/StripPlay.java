@@ -12,7 +12,7 @@ import heronarts.lx.parameter.LXParameter;
 import com.symmetrylabs.slstudio.model.Strip;
 import static com.symmetrylabs.slstudio.util.MathUtils.random;
 
-public class StripPlay extends StripsPattern {
+public class StripPlay extends CubesPattern {
     private final int NUM_OSC = 300;
     private final int MAX_PERIOD = 20000;
     private CompoundParameter brightParameter = new CompoundParameter("bright", 96, 70, 100);
