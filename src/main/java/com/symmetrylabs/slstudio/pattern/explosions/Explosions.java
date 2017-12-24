@@ -1,5 +1,9 @@
 package com.symmetrylabs.slstudio.pattern.explosions;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.audio.BandGate;
@@ -11,12 +15,8 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
 import static com.symmetrylabs.slstudio.SLStudio.INCHES;
-import static com.symmetrylabs.util.MathUtils.random;
+import static com.symmetrylabs.slstudio.util.MathUtils.random;
 
 public class Explosions extends LXPattern {
         // Used to store info about each explosion.

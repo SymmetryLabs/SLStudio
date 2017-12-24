@@ -12,7 +12,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
 
-import static com.symmetrylabs.util.MathUtils.floor;
+import static com.symmetrylabs.slstudio.util.MathUtils.floor;
 
 /**
  * Top-level model of the entire sculpture. This contains a list of

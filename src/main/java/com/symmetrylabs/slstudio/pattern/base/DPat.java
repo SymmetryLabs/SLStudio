@@ -1,4 +1,4 @@
-package com.symmetrylabs.pattern.base;
+package com.symmetrylabs.slstudio.pattern.base;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +17,8 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.NoiseUtils;
-import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.util.NoiseUtils;
+import com.symmetrylabs.slstudio.util.MathUtils;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
 

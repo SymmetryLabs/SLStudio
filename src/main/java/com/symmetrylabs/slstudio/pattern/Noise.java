@@ -1,4 +1,4 @@
-package com.symmetrylabs.pattern;
+package com.symmetrylabs.slstudio.pattern;
 
 import processing.core.PImage;
 import processing.core.PVector;
@@ -8,9 +8,9 @@ import heronarts.lx.LX;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import com.symmetrylabs.pattern.base.DPat;
-import com.symmetrylabs.util.NoiseUtils;
-import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.pattern.base.DPat;
+import com.symmetrylabs.slstudio.util.NoiseUtils;
+import com.symmetrylabs.slstudio.util.MathUtils;
 
 public class Noise extends DPat {
     int CurAnim, iSymm;

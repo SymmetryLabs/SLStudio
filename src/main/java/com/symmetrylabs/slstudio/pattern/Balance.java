@@ -1,4 +1,4 @@
-package com.symmetrylabs.pattern;
+package com.symmetrylabs.slstudio.pattern;
 
 import java.util.Spliterator;
 import java.util.Spliterators;

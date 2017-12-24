@@ -6,8 +6,8 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
-import com.symmetrylabs.util.MathUtils;
-import com.symmetrylabs.util.TripleBuffer;
+import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.slstudio.util.TripleBuffer;
 
 public class TripleBufferedRenderer extends Renderer {
     protected final TripleBuffer<RenderFrame> tripleBuffer;

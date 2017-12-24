@@ -1,4 +1,4 @@
-//package com.symmetrylabs.util;
+package com.symmetrylabs.slstudio.util;
 
 import processing.core.PMatrix3D;
 

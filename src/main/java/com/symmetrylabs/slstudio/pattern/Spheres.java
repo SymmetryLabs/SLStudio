@@ -1,4 +1,4 @@
-package com.symmetrylabs.pattern;
+package com.symmetrylabs.slstudio.pattern;
 
 import processing.core.PImage;
 import static processing.core.PConstants.ADD;
@@ -10,7 +10,7 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.util.MathUtils;
 
 public class Spheres extends LXPattern {
     private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);

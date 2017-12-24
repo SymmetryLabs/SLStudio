@@ -1,4 +1,7 @@
-package com.symmetrylabs.pattern;
+package com.symmetrylabs.slstudio.pattern;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
@@ -9,10 +12,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.util.MathUtils;
 
 public class ViolinWave extends LXPattern {
 

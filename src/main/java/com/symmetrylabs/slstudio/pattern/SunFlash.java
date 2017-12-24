@@ -1,16 +1,17 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.symmetrylabs.util.MathUtils.random;
+import heronarts.lx.LX;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.CompoundParameter;
+
+import com.symmetrylabs.slstudio.model.Sun;
+
+import static com.symmetrylabs.slstudio.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 
