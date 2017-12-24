@@ -86,7 +86,7 @@ public class Wasps extends ParticlePattern {
                 blobPosX = (closestBlobDist.blob.pos.x - model.cx) * 2f / model.xRange;
                 blobPosY = (closestBlobDist.blob.pos.y - model.cy) * 2f / model.yRange;
                 blobPosZ = (closestBlobDist.blob.pos.z - model.cz) * 2f / model.zRange;
-                blobScale = 0.01 * blobAffinity.getValue() / (closestBlobDist.dist + 1);
+                blobScale = 0.001 * blobAffinity.getValue() / (closestBlobDist.dist + 1);
             }
         }
 
@@ -147,6 +147,12 @@ public class Wasps extends ParticlePattern {
             p.vel[0] += twistZValue * twistZVecX;
             p.vel[1] += twistZValue * twistZVecY;
             p.vel[2] += twistZValue * twistZVecZ;
+
+            if (p.contact > 0) {
+                if (p.rebound[0] * p.vel[0] < 0) p.vel[0] /= (1 + p.contact);
+                if (p.rebound[1] * p.vel[1] < 0) p.vel[1] /= (1 + p.contact);
+                if (p.rebound[2] * p.vel[2] < 0) p.vel[2] /= (1 + p.contact);
+            }
 
             p.pos[0] += p.vel[0] * speedValue * timeStep;
             p.pos[1] += p.vel[1] * speedValue * timeStep;

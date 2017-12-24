@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Arrays;
 
 import org.apache.commons.math3.util.FastMath;
@@ -22,12 +23,14 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.util.BlobTracker;
+import com.symmetrylabs.slstudio.util.BlobFollower;
 import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.MarkerSource;
 import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
 import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.LinearModelIndex;
 import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+import com.symmetrylabs.slstudio.model.LXPointNormal;
 
 public abstract class ParticlePattern extends SubmodelPattern implements MarkerSource {
     private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
@@ -52,16 +55,18 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
     protected ModelIndex modelIndex;
     protected List<Particle> particles = new ArrayList<>();
 
-    protected BlobTracker blobTracker = BlobTracker.getInstance(lx);
+    protected BlobFollower blobFollower;
     protected BlobDist closestBlobDist = null;
 
     protected void initParticle(Particle p) { }
     protected abstract void simulate(double deltaMs);
 
-    public ParticlePattern(LX lx, LXModel submodel) {
+    public ParticlePattern(LX lx) {
         super(lx);
 
-        setModel(submodel);
+        blobFollower = new BlobFollower(BlobTracker.getInstance(lx));
+
+        modelIndex = createModelIndex();
 
         particleCount.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter particleCount) {
@@ -85,10 +90,6 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
                 ParticlePattern.this.modelIndex = createModelIndex();
             }
         });
-    }
-
-    public ParticlePattern(LX lx) {
-        this(lx, lx.model);
     }
 
     @Override
@@ -115,14 +116,14 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
     }
 
     @Override
-    public void onActive() {
-        super.onActive();
+    public void onUIStart() {
+        super.onUIStart();
         lx.ui.addMarkerSource(this);
     }
 
     @Override
-    public void onInactive() {
-        super.onInactive();
+    public void onUIEnd() {
+        super.onUIEnd();
         lx.ui.removeMarkerSource(this);
     }
 
@@ -134,7 +135,7 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
             return markers;
 
         PVector blobPos = closestBlobDist.blob.pos;
-        markers.add(new OctahedronWithArrow(blobPos, 20, LXColor.WHITE,
+        markers.add(new OctahedronWithArrow(blobPos, 24, LXColor.WHITE,
             new PVector(
                 (float)(model.cx - blobPos.x),
                 (float)(model.cy - blobPos.y),
@@ -199,11 +200,11 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
         if (enableBlobs.getValueb()) {
             double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
             double maxAngleRad = blobMaxAngle.getValue() * FastMath.PI / 180;
-            List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+            List<BlobFollower.Follower> blob = blobFollower.getFollowers();
 
-            BlobTracker.Blob closestBlob = null;
+            BlobFollower.Follower closestBlob = null;
             double closestSqrDist = Double.MAX_VALUE;
-            for (BlobTracker.Blob b : blobs) {
+            for (BlobFollower.Follower b : blob) {
                 double dx = b.pos.x - model.cx;
                 double dy = b.pos.y - model.cy;
                 double dz = b.pos.z - model.cz;
@@ -220,6 +221,8 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
             } else {
                 closestBlobDist = new BlobDist(closestBlob, FastMath.sqrt(closestSqrDist));
             }
+
+            blobFollower.advance((float)deltaMs * 0.001f);
         } else {
             closestBlobDist = null;
         }
@@ -250,16 +253,39 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
         float withinDist = particle.size * kernelSize.getValuef();
         List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist);
 
+
+        particle.rebound[0] = 0;
+        particle.rebound[1] = 0;
+        particle.rebound[2] = 0;
+        particle.contact = 0;
+
         final boolean flattening = flattenZ.isOn();
         for (LXPoint p : nearbyPoints) {
             float b = (float)kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
+
+            if (p instanceof LXPointNormal) {
+                PVector pointNormal = ((LXPointNormal)p).normal;
+                particle.rebound[0] -= pointNormal.x * b;
+                particle.rebound[1] -= pointNormal.y * b;
+                particle.rebound[2] -= pointNormal.z * b;
+            }
+
+            particle.contact += b;
+
             particle.layer[p.index] = b;
         }
+
+        particle.rebound[0] /= nearbyPoints.size();
+        particle.rebound[1] /= nearbyPoints.size();
+        particle.rebound[2] /= nearbyPoints.size();
+        particle.contact /= nearbyPoints.size();
     }
 
     protected static class Particle {
         public double[] pos = new double[3];
         public double[] vel = new double[3];
+        public double[] rebound = new double[3];
+        public double contact = 0;
         public float size = 1;
 
         public final float[] layer;
@@ -283,10 +309,10 @@ public abstract class ParticlePattern extends SubmodelPattern implements MarkerS
     }
 
     protected class BlobDist {
-        public final BlobTracker.Blob blob;
+        public final BlobFollower.Follower blob;
         public final double dist;
 
-        public BlobDist(BlobTracker.Blob blob, double dist) {
+        public BlobDist(BlobFollower.Follower blob, double dist) {
             this.blob = blob;
             this.dist = dist;
         }

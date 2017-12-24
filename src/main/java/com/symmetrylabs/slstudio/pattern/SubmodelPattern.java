@@ -19,15 +19,20 @@ public abstract class SubmodelPattern extends SLPattern implements Renderable {
     protected SubmodelPattern(LX lx) {
         super(lx);
 
-        renderer = new InterpolatingRenderer(lx.model, colors, this);
-        //renderer = new SequentialRenderer(lx.model, colors, this);
+        //renderer = new InterpolatingRenderer(lx.model, colors, this);
+        renderer = new SequentialRenderer(lx.model, colors, this);
 
         createParameters();
     }
 
+    public void onUIStart() { }
+    public void onUIEnd() { }
+
     @Override
     public void onActive() {
         super.onActive();
+
+        onUIStart();
 
         renderer.start();
     }
@@ -35,6 +40,8 @@ public abstract class SubmodelPattern extends SLPattern implements Renderable {
     @Override
     public void onInactive() {
         super.onInactive();
+
+        onUIEnd();
 
         renderer.stop();
     }

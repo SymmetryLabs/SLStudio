@@ -141,12 +141,20 @@ public abstract class PerSunPattern extends SunsPattern {
     public void onActive() {
         super.onActive();
 
+        for (Subpattern subpattern : subpatterns) {
+            subpattern.pattern.onUIStart();
+        }
+
         renderer.start();
     }
 
     @Override
     public void onInactive() {
         super.onInactive();
+
+        for (Subpattern subpattern : subpatterns) {
+            subpattern.pattern.onUIEnd();
+        }
 
         renderer.stop();
     }
