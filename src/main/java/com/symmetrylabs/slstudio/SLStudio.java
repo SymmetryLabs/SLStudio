@@ -73,8 +73,8 @@ public class SLStudio extends PApplet {
         long setupStart = System.nanoTime();
         applet = this;
 
-        //model = FultonStreetLayout.buildModel();
-        model = CubesLayout.buildModel();
+        model = FultonStreetLayout.buildModel();
+        //model = CubesLayout.buildModel();
 
         println("-- Model ----");
 
