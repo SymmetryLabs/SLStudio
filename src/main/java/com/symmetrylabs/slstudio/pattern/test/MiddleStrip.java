@@ -1,21 +1,21 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.model.Strip;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.pattern.StripsPattern;
 
-public class MiddleStrip extends LXPattern implements SLTestPattern {
+public class MiddleStrip extends StripsPattern implements SLTestPattern {
      public MiddleStrip(LX lx) {
          super(lx);
      }
 
      public void run(double deltaMs) {
          setColors(0);
-         for (Strip strip : ((SLModel)model).strips) {
+         for (Strip strip : model.getStrips()) {
              int counter = 0;
 
              for (LXPoint p : strip.points) {

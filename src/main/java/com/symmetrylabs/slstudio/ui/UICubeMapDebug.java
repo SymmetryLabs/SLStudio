@@ -57,8 +57,8 @@ public class UICubeMapDebug extends UI3dComponent {
 
             renderBox(pattern, pg, pattern.origin, pattern.bboxSize);
         } else {
-            for (final Sun sun : pattern.model.suns) {
-                int sunIndex = pattern.model.suns.indexOf(sun);
+            for (final Sun sun : pattern.getModel().getSuns()) {
+                int sunIndex = pattern.getModel().getSuns().indexOf(sun);
 
                 if (pattern.sunSwitchParams.get(sunIndex).getValueb()) {
                     //sun.computeBoundingBox();

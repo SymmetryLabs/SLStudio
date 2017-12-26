@@ -352,7 +352,7 @@
           },
           {
             "id": 4262,
-            "class": "com.symmetrylabs.pattern.Wasps",
+            "class": "com.symmetrylabs.slstudio.pattern.Wasps",
             "modulationColor": -16756993,
             "parameters": {
               "label": "Wasps",
@@ -383,7 +383,7 @@
           },
           {
             "id": 4264,
-            "class": "com.symmetrylabs.pattern.Traktor",
+            "class": "com.symmetrylabs.slstudio.pattern.Traktor",
             "modulationColor": -36864,
             "parameters": {
               "label": "Traktor",
@@ -425,7 +425,7 @@
           },
           {
             "id": 4271,
-            "class": "com.symmetrylabs.pattern.Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -3669761,
             "parameters": {
               "label": "Noise",
@@ -582,7 +582,7 @@
         "patterns": [
           {
             "id": 2773,
-            "class": "com.symmetrylabs.pattern.AskewPlanes",
+            "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
             "modulationColor": -1573120,
             "parameters": {
               "label": "AskewPlanes",
@@ -625,7 +625,7 @@
           },
           {
             "id": 2800,
-            "class": "com.symmetrylabs.pattern.Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -12321024,
             "parameters": {
               "label": "Noise",
@@ -652,7 +652,7 @@
           },
           {
             "id": 2802,
-            "class": "com.symmetrylabs.pattern.Rings",
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
             "modulationColor": -45056,
             "parameters": {
               "label": "Rings",
@@ -831,7 +831,7 @@
           },
           {
             "id": 2823,
-            "class": "com.symmetrylabs.pattern.Spheres",
+            "class": "com.symmetrylabs.slstudio.pattern.Spheres",
             "modulationColor": -65342,
             "parameters": {
               "label": "Spheres",
@@ -1624,7 +1624,7 @@
           },
           {
             "id": 4503,
-            "class": "com.symmetrylabs.pattern.Pong",
+            "class": "com.symmetrylabs.slstudio.pattern.Pong",
             "modulationColor": -45824,
             "parameters": {
               "label": "Pong",
@@ -1644,7 +1644,7 @@
           },
           {
             "id": 4511,
-            "class": "com.symmetrylabs.pattern.Rings",
+            "class": "com.symmetrylabs.slstudio.pattern.Rings",
             "modulationColor": -65535,
             "parameters": {
               "label": "Rings",

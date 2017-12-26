@@ -11,7 +11,7 @@ import java.util.function.Consumer;
 import static processing.core.PApplet.*;
 
 
-public class Swarm extends SLPattern {
+public class Swarm extends StripsPattern {
     SawLFO offset = new SawLFO(0, 1, 1000);
     SinLFO rate = new SinLFO(350, 1200, 63000);
     SinLFO falloff = new SinLFO(15, 50, 17000);
@@ -43,10 +43,10 @@ public class Swarm extends SLPattern {
 
     public void run(double deltaMs) {
         float s = 0;
-        model.strips.parallelStream().forEach(new Consumer<Strip>() {
+        model.getStrips().parallelStream().forEach(new Consumer<Strip>() {
             @Override
             public void accept(final Strip strip) {
-                float s = model.strips.indexOf(strip);
+                float s = model.getStrips().indexOf(strip);
                 int i = 0;
                 for (LXPoint p : strip.points) {
                     float fV = max(-1, 1 - dist(p.x / 2f, p.y, fX.getValuef() / 2f, fY.getValuef()) / 64f);

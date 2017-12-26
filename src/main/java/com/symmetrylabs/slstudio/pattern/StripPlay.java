@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.Strip;
+import static processing.core.PApplet.*;
+
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
@@ -8,11 +9,10 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
-import static com.symmetrylabs.slstudio.util.Utils.random;
-import static processing.core.PApplet.*;
+import com.symmetrylabs.slstudio.model.Strip;
+import static com.symmetrylabs.slstudio.util.MathUtils.random;
 
-
-public class StripPlay extends SLPattern {
+public class StripPlay extends CubesPattern {
     private final int NUM_OSC = 300;
     private final int MAX_PERIOD = 20000;
     private CompoundParameter brightParameter = new CompoundParameter("bright", 96, 70, 100);
@@ -74,8 +74,9 @@ public class StripPlay extends SLPattern {
 
     public void run(double deltaMs) {
         setColors(0xff000000);
+
         float[] bright = new float[model.points.length];
-        for (Strip strip : model.strips) {
+        for (Strip strip : model.getStrips()) {
             LXPoint centerPoint = strip.points[8];
             for (int i = 0; i < numOsc.getValue(); i++) {
                 float avgdist =

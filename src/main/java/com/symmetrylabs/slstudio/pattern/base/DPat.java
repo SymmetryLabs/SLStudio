@@ -1,4 +1,4 @@
-package com.symmetrylabs.pattern.base;
+package com.symmetrylabs.slstudio.pattern.base;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -17,8 +17,8 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.NoiseUtils;
-import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.util.NoiseUtils;
+import com.symmetrylabs.slstudio.util.MathUtils;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
 
@@ -334,7 +334,7 @@ public abstract class DPat extends LXPattern {
 
         if (perSun.isOn()) {
             SLModel slModel = (SLModel) model;
-            Arrays.asList(slModel.masterSun.points).parallelStream().forEach(new Consumer<LXPoint>() {
+            Arrays.asList(slModel.getMasterSun().points).parallelStream().forEach(new Consumer<LXPoint>() {
                 @Override
                 public void accept(final LXPoint p) {
                     PVector P = new PVector(), tP = new PVector();
@@ -380,7 +380,7 @@ public abstract class DPat extends LXPattern {
                 }
             });
 
-            for (Sun sun : slModel.suns) {
+            for (Sun sun : slModel.getSuns()) {
                 sun.copyFromMasterSun(colors);
             }
         } else {

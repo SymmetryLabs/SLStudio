@@ -1,9 +1,12 @@
 package com.symmetrylabs.slstudio.kernel;
 
+import java.util.List;
+
 import com.aparapi.Kernel;
 import com.aparapi.Range;
 import com.aparapi.device.Device;
 import com.aparapi.device.OpenCLDevice;
+import com.aparapi.internal.kernel.KernelManager;
 import org.apache.commons.math3.util.FastMath;
 
 public abstract class SLKernel extends Kernel {
@@ -11,18 +14,26 @@ public abstract class SLKernel extends Kernel {
         // Generally, the recommended work-group size for kernels is 64-128 work-items.
         public static final int LOCAL_WORKGROUP_SIZE = 128;
 
-        public static Device getGPU() {
-                return OpenCLDevice.select((a, b) -> b, Device.TYPE.GPU);
+        public static Device getGPU(Kernel k) {
+                Device d = OpenCLDevice.select((a, b) -> b, Device.TYPE.GPU);
+
+                if (d == null) {
+                    //d = OpenCLDevice.select((a, b) -> b, Device.TYPE.CPU);
+                }
+
+                //System.out.println("DEVICE: " + (d == null ? "(null)" : d.getClass().getName()) + " " + d);
+                return d;
         }
 
-        public static Range getRangeForSize(int size) {
-                int localSize = LOCAL_WORKGROUP_SIZE;
+        public static Range getRangeForSize(Kernel k, int size) {
+                Device d = getGPU(k);
+                int localSize = d == null ? 1 : LOCAL_WORKGROUP_SIZE;
                 int globalSize = (int) (FastMath.ceil(((float) size) / localSize) * localSize);
-                return Range.create(getGPU(), globalSize, localSize);
+                return Range.create(d, globalSize, localSize);
         }
 
         public void executeForSize(int size) {
-                execute(getRangeForSize(size));
+                execute(getRangeForSize(this, size));
         }
 
 

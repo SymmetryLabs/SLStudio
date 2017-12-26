@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.raph;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import java.util.HashMap;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXLayer;
 import heronarts.lx.color.LXColor;
@@ -17,12 +17,12 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.NormalizedParameter;
 
-import java.util.HashMap;
-
 import static processing.core.PApplet.*;
 
+import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
-public class SeaboardSuns extends SLPattern {
+public class SeaboardSuns extends SunsPattern {
     public String getAuthor() {
         return "Mark C. Slee (with slight modification by Raphael Palefsky-Smith)";
     }
@@ -85,7 +85,7 @@ public class SeaboardSuns extends SLPattern {
         super(lx);
         for (int i = 0; i < this.notes.length; ++i) {
             int si = SUN_ORDER[i];
-            Sun sun = model.suns.get(si);
+            Sun sun = model.getSuns().get(si);
             addLayer(this.notes[i] = new NoteLayer(lx, sun));
         }
         addParameter("attack", this.attack);

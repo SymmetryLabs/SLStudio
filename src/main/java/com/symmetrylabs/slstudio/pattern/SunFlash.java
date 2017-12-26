@@ -1,20 +1,21 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
-
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import static com.symmetrylabs.slstudio.util.Utils.random;
+import heronarts.lx.LX;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.CompoundParameter;
+
+import com.symmetrylabs.slstudio.model.Sun;
+
+import static com.symmetrylabs.slstudio.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 
-public class SunFlash extends SLPattern {
+public class SunFlash extends SunsPattern {
     private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
@@ -28,7 +29,7 @@ public class SunFlash extends SLPattern {
         boolean hasPeaked;
 
         Flash() {
-            c = model.suns.get(floor(random(model.suns.size())));
+            c = model.getSuns().get(floor(random(model.getSuns().size())));
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;

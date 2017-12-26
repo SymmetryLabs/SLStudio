@@ -1,17 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.raven;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import heronarts.lx.LX;
-import heronarts.lx.audio.GraphicMeter;
-import heronarts.lx.audio.LXAudioInput;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.p3lx.P3LX;
 import processing.core.PGraphics;
 import processing.core.PVector;
-
-import static com.symmetrylabs.util.NoiseUtils.noise;
-import static com.symmetrylabs.slstudio.util.Utils.random;
 import static processing.core.PApplet.HALF_PI;
 import static processing.core.PApplet.TWO_PI;
 import static processing.core.PApplet.*;
@@ -19,6 +9,16 @@ import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.PI;
 import static processing.core.PConstants.TRIANGLES;
 
+import heronarts.lx.LX;
+import heronarts.lx.audio.GraphicMeter;
+import heronarts.lx.audio.LXAudioInput;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.p3lx.P3LX;
+
+import com.symmetrylabs.slstudio.SLStudio;
+import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
+import static com.symmetrylabs.slstudio.util.MathUtils.random;
 
 public class RKPattern04 extends P3CubeMapPattern {
 

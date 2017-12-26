@@ -1,5 +1,11 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import java.util.ArrayList;
+import java.util.function.Consumer;
+
+import processing.core.PVector;
+import processing.event.KeyEvent;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
@@ -12,13 +18,11 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXProjection;
 import heronarts.lx.transform.LXVector;
-import processing.core.PVector;
-import processing.event.KeyEvent;
-
-import java.util.ArrayList;
-import java.util.function.Consumer;
 
 import static com.symmetrylabs.slstudio.util.Utils.*;
+import static com.symmetrylabs.slstudio.util.MathUtils.random;
+import static com.symmetrylabs.slstudio.util.MathUtils.randomGaussian;
+
 import static processing.core.PApplet.*;
 import static processing.core.PApplet.map;
 import static processing.core.PConstants.PI;

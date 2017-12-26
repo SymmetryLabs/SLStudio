@@ -1,64 +1,102 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.util.LayeredRenderer;
-import com.symmetrylabs.slstudio.util.ModelIndex;
-import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
+
+import org.apache.commons.math3.util.FastMath;
+import processing.core.PVector;
+
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
-import org.apache.commons.math3.util.FastMath;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Vector;
+import com.symmetrylabs.slstudio.util.BlobTracker;
+import com.symmetrylabs.slstudio.util.BlobFollower;
+import com.symmetrylabs.slstudio.util.Marker;
+import com.symmetrylabs.slstudio.util.MarkerSource;
+import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
+import com.symmetrylabs.slstudio.util.ModelIndex;
+import com.symmetrylabs.slstudio.util.LinearModelIndex;
+import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+import com.symmetrylabs.slstudio.model.LXPointNormal;
 
-public abstract class ParticlePattern extends LXPattern {
-    private final double SQRT_2PI = Math.sqrt(2 * Math.PI);
+public abstract class ParticlePattern extends RenderablePattern implements MarkerSource {
+    private static final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 
-    public final BoundedParameter particleCount = new BoundedParameter("count", 0, 0, 1000);
-    public final CompoundParameter kernelSize = new CompoundParameter("size", 100, 0, 400);
-    public final BooleanParameter flattenZ = new BooleanParameter("flattenZ", true);
+    public static final int PARTICLE_GROUP_COUNT = 16;
 
-    public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
-    public final CompoundParameter saturation = new CompoundParameter("saturation", 30, 0, 100);
+    public static enum KernelChoice {
+        GAUSSIAN, LAPLACE, SPHERE, FLAT
+    }
 
-    protected List<Particle> particles = new Vector<>();
+    public CompoundParameter particleCount;
+    public CompoundParameter kernelSize;
+    public CompoundParameter kernelCutoff;
+    public EnumParameter<KernelChoice> kernelType;
+    public BooleanParameter flattenZ;
+
+    public CompoundParameter hue;
+    public CompoundParameter saturation;
+
+    public BooleanParameter enableBlobs;
+    public CompoundParameter blobMaxDist;
+    public CompoundParameter blobMaxAngle;
+    public CompoundParameter blobAffinity;
+
     protected ModelIndex modelIndex;
+    protected List<Particle> particles = new ArrayList<>();
+    private ParticleGroup[] particleGroups = new ParticleGroup[PARTICLE_GROUP_COUNT];
 
-    private ParticleRenderer renderer;
+    protected BlobFollower blobFollower;
+    protected BlobDist closestBlobDist = null;
+
+    protected Particle spawnParticle(int index, int pointCount) {
+        return new Particle(index, pointCount);
+    }
+
+    protected void initParticle(Particle p) { }
+    protected abstract void simulate(double deltaMs);
 
     public ParticlePattern(LX lx) {
         super(lx);
 
-        renderer = new ParticleRenderer();
-
-        addParameter(particleCount);
-        addParameter(kernelSize);
-        addParameter(flattenZ);
-
-        addParameter(hue);
-        addParameter(saturation);
+        blobFollower = new BlobFollower(BlobTracker.getInstance(lx));
 
         modelIndex = createModelIndex();
 
+        for (int i = 0; i < particleGroups.length; ++i) {
+            particleGroups[i] = new ParticleGroup(colors.length);
+        }
+
         particleCount.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter particleCount) {
-                int numParticles = (int) particleCount.getValue();
-                while (particles.size() > numParticles) {
-                    particles.remove(particles.size() - 1);
-                }
+                synchronized (particles) {
+                    int numParticles = (int) particleCount.getValue();
+                    while (particles.size() > numParticles) {
+                        Particle p = particles.get(particles.size() - 1);
+                        particleGroups[p.index % particleGroups.length].particles.remove(p);
+                        particles.remove(p);
+                    }
 
-                for (int i = particles.size(); i < numParticles; ++i) {
-                    Particle p = new Particle();
-                    initParticle(p);
-                    particles.add(p);
+                    for (int i = particles.size(); i < numParticles; ++i) {
+                        Particle p = spawnParticle(i, colors.length);
+                        initParticle(p);
+                        particleGroups[p.index % particleGroups.length].particles.add(p);
+                        particles.add(p);
+                    }
                 }
             }
         });
@@ -70,60 +108,101 @@ public abstract class ParticlePattern extends LXPattern {
         });
     }
 
-    private ModelIndex createModelIndex() {
-        return new OctreeModelIndex(lx.model, flattenZ.isOn());
-    }
+    @Override
+    protected void createParameters() {
+        super.createParameters();
 
-    protected float kernel(double d, double s) {
-        double stddev = s / 4f;
-        double peak = 1.0f / (2.5f * stddev);
-        return (float) (FastMath.exp(-(d * d) / (2 * stddev * stddev))
-            / (stddev * SQRT_2PI) / peak);
-    }
+        addParameter(particleCount = new CompoundParameter("count", 0, 0, 300));
+        addParameter(kernelSize = new CompoundParameter("size", 15, 0, 100));
+        addParameter(kernelCutoff = new CompoundParameter("edgeCut", 0.85, 0.25, 1));
+        addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
+        addParameter(flattenZ = new BooleanParameter("flattenZ", false));
 
-    protected float kernel(double x, double y, double z, double s) {
-        return kernel(FastMath.sqrt(x * x + y * y + z * z), s);
-    }
+        addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
+        addParameter(saturation = new CompoundParameter("saturation", 30, 0, 100));
 
-    protected void initParticle(Particle p) {
+        addParameter(enableBlobs = new BooleanParameter("enableBlobs", true));
+        addParameter(blobMaxDist = new CompoundParameter("bMaxDist", 500, 0, 1000));
+        addParameter(blobMaxAngle = new CompoundParameter("bMaxAngle", 60, 0, 90));
+        addParameter(blobAffinity = new CompoundParameter("bPull", 100, 0, 200));
     }
-
-    protected abstract void simulate(double deltaMs);
 
     @Override
-    public void run(double deltaMs) {
-        simulate(deltaMs);
-        renderer.run(deltaMs);
-
-        /*
-        particles.parallelStream().forEach(new Consumer<Particle>() {
-            public void accept(Particle particle) {
-                renderParticle(particle);
-            }
-        });
-
-        for (int j = 0; j < colors.length; ++j) {
-            float s = 0;
-            for (Particle particle : particles) {
-                s += particle.layer[j];
-            }
-
-            colors[j] = getPaletteColor(s);
-        }
-        */
+    protected void onModelChanged(LXModel model) {
+        modelIndex = createModelIndex();
     }
 
-    protected void renderParticle(Particle particle) {
-        Arrays.fill(particle.layer, 0f);
+    @Override
+    public void onUIStart() {
+        super.onUIStart();
+        lx.ui.addMarkerSource(this);
+    }
 
-        LXPoint pp = particle.toPointInModel();
-        float withinDist = particle.size * kernelSize.getValuef();
-        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist);
+    @Override
+    public void onUIEnd() {
+        super.onUIEnd();
+        lx.ui.removeMarkerSource(this);
+    }
 
-        final boolean flattening = flattenZ.isOn();
-        for (LXPoint p : nearbyPoints) {
-            float b = kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
-            particle.layer[p.index] = b;
+    @Override
+    public List<Marker> getMarkers() {
+        List<Marker> markers = new ArrayList<Marker>();
+
+        if (closestBlobDist == null)
+            return markers;
+
+        PVector blobPos = closestBlobDist.blob.pos;
+        markers.add(new OctahedronWithArrow(blobPos, 24, LXColor.WHITE,
+            new PVector(
+                (float)(model.cx - blobPos.x),
+                (float)(model.cy - blobPos.y),
+                (float)(model.cz - blobPos.z)
+            ), LXColor.RED
+        ));
+
+        return markers;
+    }
+
+    private ModelIndex createModelIndex() {
+        return new OctreeModelIndex(model, flattenZ.isOn());
+        //return new LinearModelIndex(model, flattenZ.isOn());
+    }
+
+    private double kernelPolySqr(double dSqr, double s) {
+        if (dSqr > s)
+            return 0;
+
+        double c = 1.19 / s;
+        double a2 = -1.414213;
+        double a4 = 0.5;
+        return 1 + a2 * c * dSqr + 0.5 * c * dSqr * dSqr;
+    }
+
+    private double kernelGaussianSqr(double dSqr, double s) {
+        return FastMath.exp(-dSqr * 8 / (s * s)) * 2.5 / SQRT_2PI;
+    }
+
+    private double kernelLaplace(double d, double s) {
+        return FastMath.exp(-FastMath.abs(d * 4 / s));
+    }
+
+    protected double kernelSphereSqr(double dSqr, double s) {
+        return dSqr > s * s ? 0 : 1;
+    }
+
+    protected double kernel(double x, double y, double z, double s) {
+        double dSqr = x * x + y * y + z * z;
+        switch (kernelType.getEnum()) {
+            case GAUSSIAN:
+                return kernelGaussianSqr(dSqr, s);
+            case LAPLACE:
+                return kernelLaplace(FastMath.sqrt(dSqr), s);
+            case SPHERE:
+                return kernelSphereSqr(dSqr, s);
+            case FLAT:
+                return 1;
+            default:
+                return 0;
         }
     }
 
@@ -133,53 +212,132 @@ public abstract class ParticlePattern extends LXPattern {
         return LXColor.hsb(h, s, FastMath.min(val * 100, 100));
     }
 
-    protected class Particle {
-        public double[] pos = new double[3];
-        public double[] vel = new double[3];
-        public float size = 1;
-        public float[] layer;
+    @Override
+    public void render(double deltaMs, List<LXPoint> points, int[] layer) {
+        if (enableBlobs.getValueb()) {
+            double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
+            double maxAngleRad = blobMaxAngle.getValue() * FastMath.PI / 180;
+            List<BlobFollower.Follower> blob = blobFollower.getFollowers();
 
-        private LXPoint point = new LXPoint(0, 0, 0);
+            BlobFollower.Follower closestBlob = null;
+            double closestSqrDist = Double.MAX_VALUE;
+            for (BlobFollower.Follower b : blob) {
+                double dx = b.pos.x - model.cx;
+                double dy = b.pos.y - model.cy;
+                double dz = b.pos.z - model.cz;
+                double sqrDist = dx * dx + dy * dy + dz * dz;
+                double angleRad = FastMath.atan2(FastMath.abs(dx), FastMath.abs(dz));
+                if (angleRad < maxAngleRad && sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
+                    closestSqrDist = sqrDist;
+                    closestBlob = b;
+                }
+            }
 
-        public Particle() {
-            layer = new float[colors.length];
+            if (closestBlob == null) {
+                closestBlobDist = null;
+            } else {
+                closestBlobDist = new BlobDist(closestBlob, FastMath.sqrt(closestSqrDist));
+            }
+
+            blobFollower.advance((float)deltaMs * 0.001f);
+        } else {
+            closestBlobDist = null;
         }
 
-        LXPoint toPointInModel() {
-            float x = (float) (lx.model.cx + pos[0] * lx.model.xRange / 2f);
-            float y = (float) (lx.model.cy + pos[1] * lx.model.yRange / 2f);
-            float z = (float) (lx.model.cz + pos[2] * lx.model.zRange / 2f);
-            point.update(x, y, z);
-            return point;
+        simulate(deltaMs);
+
+        Arrays.asList(particleGroups).parallelStream().forEach(pg -> {
+            Arrays.fill(pg.layer, 0);
+            pg.particles.stream().forEach(this::renderParticle);
+        });
+
+        points.parallelStream().forEach(point -> {
+            float s = 0;
+            for (ParticleGroup pg : particleGroups) {
+                s += pg.layer[point.index];
+            }
+
+            layer[point.index] = getPaletteColor(s);
+        });
+    }
+
+    protected void renderParticle(Particle particle) {
+        float[] particleLayer = particleGroups[particle.index % particleGroups.length].layer;
+
+        LXVector pp = particle.toPointInModel(model);
+        float withinDist = particle.size * kernelSize.getValuef();
+        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist * kernelCutoff.getValuef());
+
+
+        particle.rebound[0] = 0;
+        particle.rebound[1] = 0;
+        particle.rebound[2] = 0;
+        particle.contact = 0;
+
+        final boolean flattening = flattenZ.isOn();
+        for (LXPoint p : nearbyPoints) {
+            float b = (float)kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
+
+            if (p instanceof LXPointNormal) {
+                PVector pointNormal = ((LXPointNormal)p).normal;
+                particle.rebound[0] -= pointNormal.x * b;
+                particle.rebound[1] -= pointNormal.y * b;
+                particle.rebound[2] -= pointNormal.z * b;
+            }
+
+            particle.contact += b;
+
+            particleLayer[p.index] += b;
+        }
+
+        particle.rebound[0] /= nearbyPoints.size();
+        particle.rebound[1] /= nearbyPoints.size();
+        particle.rebound[2] /= nearbyPoints.size();
+        particle.contact /= nearbyPoints.size();
+
+        //particle.size = (float)FastMath.min(0.5 + 1000 * FastMath.abs(particle.vel[0] * particle.vel[1] * particle.vel[2]), 10);
+    }
+
+    private static class ParticleGroup {
+        public final List<Particle> particles = new CopyOnWriteArrayList<>();
+        public final float[] layer;
+
+        public ParticleGroup(int pointCount) {
+            layer = new float[pointCount];
         }
     }
 
-    private class ParticleRenderer extends LayeredRenderer {
-        public ParticleRenderer() {
-            super(lx.model, colors);
+    protected static class Particle {
+        public double[] pos = new double[3];
+        public double[] vel = new double[3];
+        public double[] rebound = new double[3];
+        public double contact = 0;
+        public float size = 1;
+
+        public final int index;
+
+        private LXVector point = new LXVector(0, 0, 0);
+
+        public Particle(int index, int pointCount) {
+            this.index = index;
         }
 
-        @Override
-        protected void render(double deltaMs, List<LXPoint> points, int[] layer, int index, int numThreads) {
-            List<Particle> particleList = new ArrayList<>(particles);
+        public synchronized LXVector toPointInModel(LXModel model) {
+            return point.set(
+                (float)(model.cx + pos[0] * model.xRange / 2f),
+                (float)(model.cy + pos[1] * model.yRange / 2f),
+                (float)(model.cz + pos[2] * model.zRange / 2f)
+            );
+        }
+    }
 
-            int startInclusive = particleList.size() * index / numThreads;
-            int endExclusive = particleList.size() * (index + 1) / numThreads;
+    protected class BlobDist {
+        public final BlobFollower.Follower blob;
+        public final double dist;
 
-            for (int i = startInclusive; i < endExclusive; ++i) {
-                Particle particle = particleList.get(i);
-                renderParticle(particle);
-            }
-
-            for (int j = 0; j < colors.length; ++j) {
-                float s = 0;
-                for (int i = startInclusive; i < endExclusive; ++i) {
-                    Particle particle = particleList.get(i);
-                    s += particle.layer[j];
-                }
-
-                layer[j] = getPaletteColor(s);
-            }
+        public BlobDist(BlobFollower.Follower blob, double dist) {
+            this.blob = blob;
+            this.dist = dist;
         }
     }
 }

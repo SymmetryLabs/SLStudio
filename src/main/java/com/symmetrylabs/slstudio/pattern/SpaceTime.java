@@ -12,7 +12,7 @@ import java.util.function.Consumer;
 import static processing.core.PApplet.*;
 
 
-public class SpaceTime extends SLPattern {
+public class SpaceTime extends StripsPattern {
 
     SinLFO pos = new SinLFO(0, 1, 3000);
     SinLFO rate = new SinLFO(1000, 9000, 13000);
@@ -45,25 +45,24 @@ public class SpaceTime extends SLPattern {
 
     public void run(double deltaMs) {
         angle += deltaMs * 0.0007;
-        final float sVal1 = model.strips.size() * (0.5f + 0.5f * sin(angle));
-        final float sVal2 = model.strips.size() * (0.5f + 0.5f * cos(angle));
+        final float sVal1 = model.getStrips().size() * (0.5f + 0.5f * sin(angle));
+        final float sVal2 = model.getStrips().size() * (0.5f + 0.5f * cos(angle));
 
         final float pVal = pos.getValuef();
         final float fVal = falloff.getValuef();
 
-        model.strips.parallelStream().forEach(new Consumer<Strip>() {
-            @Override
-            public void accept(final Strip strip) {
-                int s = model.strips.indexOf(strip);
-                int i = 0;
-                for (LXPoint p : strip.points) {
-                    colors[p.index] = lx.hsb(
-                        palette.getHuef() + 360 - p.x * .2f + p.y * .3f,
-                        constrain(.4f * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
-                        max(0, 100 - fVal * abs(i - pVal * (strip.metrics.numPoints - 1)))
-                    );
-                    ++i;
-                }
+        model.getStrips().parallelStream().forEach(strip -> {
+            int s = model.getStrips().indexOf(strip);
+
+            int i = 0;
+            for (LXPoint p : strip.points) {
+                colors[p.index] = lx.hsb(
+                    palette.getHuef() + 360 - p.x * .2f + p.y * .3f,
+                    constrain(.4f * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
+                    max(0, 100 - fVal * abs(i - pVal * (strip.metrics.numPoints - 1)))
+                );
+
+                ++i;
             }
         });
     }

@@ -12,13 +12,12 @@ import heronarts.lx.parameter.LXParameter;
  /* Non-Patterns */
 public abstract class SLPattern extends LXPattern {
 
-    public final SLStudioLX lx;
-    public final SLModel model;
+    protected final SLStudioLX lx;
 
     public SLPattern(LX lx) {
         super(lx);
-        this.lx = (SLStudioLX) lx;
-        this.model = (SLModel) lx.model;
+
+        this.lx = (SLStudioLX)lx;
     }
 
     protected <T extends LXParameter> T addParam(T param) {

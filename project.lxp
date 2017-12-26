@@ -119,7 +119,7 @@
           },
           {
             "id": 162,
-            "class": "com.symmetrylabs.pattern.Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -5632,
             "parameters": {
               "label": "Noise",
@@ -147,7 +147,7 @@
           },
           {
             "id": 167,
-            "class": "com.symmetrylabs.pattern.Swim",
+            "class": "com.symmetrylabs.slstudio.pattern.Swim",
             "modulationColor": -30208,
             "parameters": {
               "label": "Swim",
@@ -832,7 +832,7 @@
         "patterns": [
           {
             "id": 136,
-            "class": "com.symmetrylabs.pattern.Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -16711757,
             "parameters": {
               "label": "Noise",
@@ -1248,7 +1248,7 @@
           },
           {
             "id": 278,
-            "class": "com.symmetrylabs.pattern.Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -13893377,
             "parameters": {
               "label": "Noise",

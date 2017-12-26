@@ -9,7 +9,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import static processing.core.PApplet.*;
 
 
-public class CubeEQ extends SLPattern {
+public class CubeEQ extends SunsPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);

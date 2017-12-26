@@ -1,4 +1,4 @@
-package com.symmetrylabs.util;
+package com.symmetrylabs.slstudio.util;
 
 import java.util.Random;
 

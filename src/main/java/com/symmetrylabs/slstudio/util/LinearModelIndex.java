@@ -1,10 +1,13 @@
 package com.symmetrylabs.slstudio.util;
 
-import heronarts.lx.model.LXFixture;
-import heronarts.lx.model.LXPoint;
-
 import java.util.List;
 import java.util.stream.Collectors;
+
+import org.apache.commons.math3.util.FastMath;
+
+import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 
 public class LinearModelIndex extends ModelIndex {
     private boolean flattenZ;
@@ -20,31 +23,39 @@ public class LinearModelIndex extends ModelIndex {
     }
 
     @Override
-    public List<LXPoint> pointsWithin(final LXPoint target, final float d) {
-
+    public List<LXPoint> pointsWithin(LXVector target, float d) {
+        float dSquared = d * d;
         return fixture.getPoints().parallelStream()
-            .filter(p -> pointDistance(target, p) < d)
+            .filter(p -> pointDistCheck(target, p, d, dSquared))
             .collect(Collectors.toList());
     }
 
     @Override
-    public LXPoint nearestPoint(LXPoint target) {
-        float nearestDist = 0;
+    public LXPoint nearestPoint(LXVector target) {
+        float nearestSquaredDist = 0;
         LXPoint nearestPoint = null;
         for (LXPoint p : fixture.getPoints()) {
-            float d = pointDistance(target, p);
-            if (nearestPoint == null || d < nearestDist) {
+            float dSquared = squaredPointDistance(target, p);
+            if (nearestPoint == null || dSquared < nearestSquaredDist) {
                 nearestPoint = p;
-                nearestDist = d;
+                nearestSquaredDist = dSquared;
             }
         }
         return nearestPoint;
     }
 
-    protected float pointDistance(LXPoint a, LXPoint b) {
+    private boolean pointDistCheck(LXVector a, LXPoint b, float d, float dSquared) {
         float x_diff = a.x - b.x;
         float y_diff = a.y - b.y;
         float z_diff = flattenZ ? 0 : a.z - b.z;
-        return (float) Math.sqrt(x_diff * x_diff + y_diff * y_diff + z_diff * z_diff);
+        return FastMath.abs(x_diff) < d && FastMath.abs(y_diff) < d && FastMath.abs(z_diff) < d
+            && (x_diff * x_diff + y_diff * y_diff + z_diff * z_diff) < dSquared;
+    }
+
+    private float squaredPointDistance(LXVector a, LXPoint b) {
+        float x_diff = a.x - b.x;
+        float y_diff = a.y - b.y;
+        float z_diff = flattenZ ? 0 : a.z - b.z;
+        return x_diff * x_diff + y_diff * y_diff + z_diff * z_diff;
     }
 }

@@ -1,4 +1,4 @@
-package com.symmetrylabs.pattern;
+package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
@@ -8,7 +8,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.util.MathUtils;
 
 public class Traktor extends LXPattern {
 

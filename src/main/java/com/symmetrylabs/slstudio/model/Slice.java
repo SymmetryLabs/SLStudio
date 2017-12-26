@@ -12,13 +12,11 @@ import static com.symmetrylabs.slstudio.SLStudio.FEET;
 import static processing.core.PConstants.PI;
 
 
-public class Slice extends LXModel {
+public class Slice extends StripsModel<CurvedStrip> {
 
     public enum Type {
         FULL, TWO_THIRDS, BOTTOM_ONE_THIRD
     }
-
-    ;
 
     public static final int MAX_NUM_STRIPS_PER_SLICE = 69;
     public static final float STRIP_SPACING = 0.7f;
@@ -31,47 +29,39 @@ public class Slice extends LXModel {
 
     public final String id;
     public final Type type;
-    public final List<Strip> strips;
-    private final Map<String, Strip> stripMap;
 
-    public Slice(
-        String id,
-        Type type,
-        float[] coordinates,
-        float[] rotations,
-        LXTransform transform,
-        List<Double> numPointsPerStrip
-    ) {
+    private final Map<String, CurvedStrip> stripMap;
+
+    public Slice(String id, Type type, float[] coordinates, float[] rotations,
+            LXTransform transform, List<Double> numPointsPerStrip) {
+
         super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
+
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
         this.id = id;
         this.type = type;
-        this.strips = Collections.unmodifiableList(fixture.strips);
-        this.stripMap = new HashMap<String, Strip>();
 
-        for (Strip strip : strips) {
+        this.strips.addAll(fixture.strips);
+        this.stripMap = new HashMap<String, CurvedStrip>();
+
+        for (CurvedStrip strip : strips) {
             stripMap.put(strip.id, strip);
         }
     }
 
     // These are different than sun and slice ids, which are unique. These ids are all the same slice to slice.
-    public Strip getStripById(String id) {
+    public CurvedStrip getStripById(String id) {
         return stripMap.get(id);
     }
 
     private static class Fixture extends LXAbstractFixture {
 
-        private List<Strip> strips = new ArrayList<Strip>();
+        private List<CurvedStrip> strips = new ArrayList<>();
 
-        private Fixture(
-            String id,
-            Slice.Type type,
-            float[] coordinates,
-            float[] rotations,
-            LXTransform transform,
-            List<Double> numPointsPerStrip
-        ) {
+        private Fixture(String id, Slice.Type type, float[] coordinates,
+                float[] rotations, LXTransform transform, List<Double> numPointsPerStrip) {
+
             transform.push();
             transform.translate(coordinates[0], coordinates[1], coordinates[2]);
             transform.rotateX(rotations[0] * PI / 180);
@@ -96,8 +86,8 @@ public class Slice extends LXModel {
                 }
             }
 
-            for (Strip strip : strips) {
-                this.points.addAll(Arrays.asList(strip.points));
+            for (CurvedStrip strip : strips) {
+                this.points.addAll(strip.getPoints());
             }
 
             transform.pop();

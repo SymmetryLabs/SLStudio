@@ -1,4 +1,4 @@
-package com.symmetrylabs.pattern;
+package com.symmetrylabs.slstudio.pattern;
 
 import static processing.core.PApplet.map;
 
@@ -8,8 +8,8 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.MathUtils;
-import com.symmetrylabs.util.NoiseUtils;
+import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.slstudio.util.NoiseUtils;
 
 public class Rings extends LXPattern {
     float dx, dy, dz;

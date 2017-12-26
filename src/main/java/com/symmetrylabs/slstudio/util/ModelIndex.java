@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.util;
 
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 
 import java.util.List;
 
@@ -12,14 +13,14 @@ public abstract class ModelIndex {
         this.fixture = fixture;
     }
 
-    protected float pointDistance(LXPoint a, LXPoint b) {
-        float x_diff = a.x - b.x;
-        float y_diff = a.y - b.y;
-        float z_diff = a.z - b.z;
-        return (float) Math.sqrt(x_diff * x_diff + y_diff * y_diff + z_diff * z_diff);
+    public List<LXPoint> pointsWithin(LXPoint target, float d) {
+        return pointsWithin(new LXVector(target), d);
     }
 
-    public abstract List<LXPoint> pointsWithin(LXPoint target, float d);
+    public LXPoint nearestPoint(LXPoint target) {
+        return nearestPoint(new LXVector(target));
+    }
 
-    public abstract LXPoint nearestPoint(LXPoint target);
+    public abstract List<LXPoint> pointsWithin(LXVector target, float d);
+    public abstract LXPoint nearestPoint(LXVector target);
 }
