@@ -37,7 +37,7 @@ public abstract class P3CubeMapPattern extends SLPattern {
     private final String id = "" + Math.random();
 
     public DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
-    public DiscreteParameter kernelSize = discreteParameter("KER", 1, 1, 6);
+    public DiscreteParameter kernelSize = discreteParameter("KER", 3, 1, 6);
     public BooleanParameter allSunsParams = booleanParam("ALL", false);
     public List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
 
