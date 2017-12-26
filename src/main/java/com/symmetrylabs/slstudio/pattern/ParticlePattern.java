@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Arrays;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
@@ -33,7 +34,9 @@ import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 import com.symmetrylabs.slstudio.model.LXPointNormal;
 
 public abstract class ParticlePattern extends RenderablePattern implements MarkerSource {
-    private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
+    private static final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
+
+    public static final int PARTICLE_GROUP_COUNT = 16;
 
     public static enum KernelChoice {
         GAUSSIAN, LAPLACE, SPHERE, FLAT
@@ -55,9 +58,14 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
     protected ModelIndex modelIndex;
     protected List<Particle> particles = new ArrayList<>();
+    private ParticleGroup[] particleGroups = new ParticleGroup[PARTICLE_GROUP_COUNT];
 
     protected BlobFollower blobFollower;
     protected BlobDist closestBlobDist = null;
+
+    protected Particle spawnParticle(int index, int pointCount) {
+        return new Particle(index, pointCount);
+    }
 
     protected void initParticle(Particle p) { }
     protected abstract void simulate(double deltaMs);
@@ -69,17 +77,24 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
         modelIndex = createModelIndex();
 
+        for (int i = 0; i < particleGroups.length; ++i) {
+            particleGroups[i] = new ParticleGroup(colors.length);
+        }
+
         particleCount.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter particleCount) {
                 synchronized (particles) {
                     int numParticles = (int) particleCount.getValue();
                     while (particles.size() > numParticles) {
-                        particles.remove(particles.size() - 1);
+                        Particle p = particles.get(particles.size() - 1);
+                        particleGroups[p.index % particleGroups.length].particles.remove(p);
+                        particles.remove(p);
                     }
 
                     for (int i = particles.size(); i < numParticles; ++i) {
-                        Particle p = new Particle(i, colors.length);
+                        Particle p = spawnParticle(i, colors.length);
                         initParticle(p);
+                        particleGroups[p.index % particleGroups.length].particles.add(p);
                         particles.add(p);
                     }
                 }
@@ -97,9 +112,9 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     protected void createParameters() {
         super.createParameters();
 
-        addParameter(particleCount = new CompoundParameter("count", 0, 0, 100));
+        addParameter(particleCount = new CompoundParameter("count", 0, 0, 300));
         addParameter(kernelSize = new CompoundParameter("size", 15, 0, 100));
-        addParameter(kernelCutoff = new CompoundParameter("edgeCut", 1, 0.25, 1));
+        addParameter(kernelCutoff = new CompoundParameter("edgeCut", 0.85, 0.25, 1));
         addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
         addParameter(flattenZ = new BooleanParameter("flattenZ", false));
 
@@ -231,17 +246,15 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
         simulate(deltaMs);
 
-        List<Particle> particleList;
-        synchronized (particles) {
-            particleList = new ArrayList<Particle>(particles);
-        }
-
-        particleList.parallelStream().forEach(this::renderParticle);
+        Arrays.asList(particleGroups).parallelStream().forEach(pg -> {
+            Arrays.fill(pg.layer, 0);
+            pg.particles.stream().forEach(this::renderParticle);
+        });
 
         points.parallelStream().forEach(point -> {
             float s = 0;
-            for (Particle particle : particleList) {
-                s += particle.layer[point.index];
+            for (ParticleGroup pg : particleGroups) {
+                s += pg.layer[point.index];
             }
 
             layer[point.index] = getPaletteColor(s);
@@ -249,7 +262,7 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     }
 
     protected void renderParticle(Particle particle) {
-        Arrays.fill(particle.layer, 0f);
+        float[] particleLayer = particleGroups[particle.index % particleGroups.length].layer;
 
         LXVector pp = particle.toPointInModel(model);
         float withinDist = particle.size * kernelSize.getValuef();
@@ -274,13 +287,24 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
             particle.contact += b;
 
-            particle.layer[p.index] = b;
+            particleLayer[p.index] += b;
         }
 
         particle.rebound[0] /= nearbyPoints.size();
         particle.rebound[1] /= nearbyPoints.size();
         particle.rebound[2] /= nearbyPoints.size();
         particle.contact /= nearbyPoints.size();
+
+        //particle.size = (float)FastMath.min(0.5 + 1000 * FastMath.abs(particle.vel[0] * particle.vel[1] * particle.vel[2]), 10);
+    }
+
+    private static class ParticleGroup {
+        public final List<Particle> particles = new CopyOnWriteArrayList<>();
+        public final float[] layer;
+
+        public ParticleGroup(int pointCount) {
+            layer = new float[pointCount];
+        }
     }
 
     protected static class Particle {
@@ -290,15 +314,12 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
         public double contact = 0;
         public float size = 1;
 
-        public final float[] layer;
         public final int index;
 
         private LXVector point = new LXVector(0, 0, 0);
 
         public Particle(int index, int pointCount) {
             this.index = index;
-
-            layer = new float[pointCount];
         }
 
         public synchronized LXVector toPointInModel(LXModel model) {
