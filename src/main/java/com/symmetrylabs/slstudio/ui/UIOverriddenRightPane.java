@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ui;
 
+import com.symmetrylabs.slstudio.util.slLogger;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
@@ -25,6 +26,14 @@ import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
+
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+import java.io.IOException;
+//import oscP5.*;
+
 import processing.core.PGraphics;
 
 
@@ -45,6 +54,24 @@ public class UIOverriddenRightPane extends UIPane {
     private int envCount = 1;
     private int beatCount = 1;
     private int macroCount = 1;
+
+    String py="data_generation";
+    String cmd="/Users/aaronopp/Desktop/AI_VJ/";
+    String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+py+ ".py", "aaron_test_12_19_3", "1"};
+    ProcessBuilder pb = new ProcessBuilder(command);
+
+
+    // Initalize command for running logger
+    //String cmd_logger= "pro"
+    String[] commandLogger = new String[] {"processing-java", "--sketch=/Users/aaronopp/Desktop/logger", "--run"};
+    ProcessBuilder pbLogger = new ProcessBuilder(command);
+    // OSC logger
+
+    String LOGFILE = "out.txt";
+
+    //OscP5 oscP5;
+    PrintWriter out;
+
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
@@ -155,6 +182,43 @@ public class UIOverriddenRightPane extends UIPane {
             .setDescription("Add a new Beat detector to the modulation engine")
             .addToContainer(bar);
 
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+              @Override
+              public void onToggle(boolean on) {
+                if (on) {
+                  System.out.println("AI VJ button pressed");
+                  slLogger logger1 = new slLogger();
+                  try {
+
+                  pb.redirectError();
+                  Process p = pb.start();
+                  BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                  //slLogger logger1  = new slLogger();
+
+                  //for (Integer y = 0; y < 20; y++) {
+                       //String ret = in.readLine();
+                       //System.out.println("value is: "+ ret);
+                  //};
+
+                  //String ret2 = in.readLine();
+                  System.out.println("done!");
+                  }
+                  catch(IOException ioe){
+                       System.out.println("error starting AI VJ data generation");
+                       ioe.printStackTrace();
+                  }
+                } //  IF OFF
+                //else if {}
+                // pb.destroy();
+
+              }
+            }
+            .setLabel("AI VJ")
+
+            .setInactiveColor(ui.theme.getDeviceBackgroundColor())
+            .setBorderRounding(4)
+            .setDescription("start generating data for training AI VJ")
+            .addToContainer(bar);
         final UIButton triggerButton = (UIButton) new UIButton(0, 0, 16, 16) {
             @Override
             public void onToggle(boolean on) {
