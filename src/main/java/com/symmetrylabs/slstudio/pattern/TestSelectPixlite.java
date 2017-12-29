@@ -32,11 +32,6 @@ public class TestSelectPixlite extends SLPattern {
         setColors(0);
         Slice slice = (Slice)selectedPixlite.getObject();
 
-        System.out.println(slice);
-        System.out.println("hue: " + hue.getValuef());
-        System.out.println("sat: " + saturation.getValuef());
-        System.out.println("bri: " + brightness.getValuef());
-
         for (LXPoint p : slice.points) {
             colors[p.index] = lx.hsb(
                 hue.getValuef(),
