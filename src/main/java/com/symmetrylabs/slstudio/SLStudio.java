@@ -374,25 +374,25 @@ public class SLStudio extends PApplet {
 
         Pixlite[] pixlites = new Pixlite[]{
 
-// Sun A Position 1
+// Sun02 A Position 1
             // com.symmetrylabs.slstudio.model.Sun 2 A1
             new Pixlite(lx, "10.200.1.26", model.getSliceById("sun2_top_back")),
             new Pixlite(lx, "10.200.1.42", model.getSliceById("sun2_top_front")),
 
 
-// Sun B Position 2
+// Sun01 B Position 2
             // com.symmetrylabs.slstudio.model.Sun 1 (One Third) B1
             new Pixlite(lx, "10.200.1.39", model.getSliceById("sun1_top_back")), // trimmed
             new Pixlite(lx, "10.200.1.40", model.getSliceById("sun1_top_front")), // trimmed
 
 
-// Sun C Position 3 
+// Sun04 C Position 3 
             // com.symmetrylabs.slstudio.model.Sun 4 (One Half) c3
             new Pixlite(lx, "10.200.1.35", model.getSliceById("sun4_top_front")),
             new Pixlite(lx, "10.200.1.36", model.getSliceById("sun4_top_back")),
 
 
-// Sun D Position 4 
+// Sun06 D Position 4 
             // com.symmetrylabs.slstudio.model.Sun 6 (Two Thirds) D4
             new Pixlite(lx, "10.200.1.24", model.getSliceById("sun6_top_front")), //24
             // locked
@@ -404,7 +404,7 @@ public class SLStudio extends PApplet {
             // locked
 
 
-// Sun E Position 5 
+// Sun07 E Position 5 
             // com.symmetrylabs.slstudio.model.Sun 7 (Two Thirds) E5
             new Pixlite(lx, "10.200.1.33", ((SLModel) lx.model).getSliceById("sun7_top_front")),
             // locked
@@ -416,7 +416,7 @@ public class SLStudio extends PApplet {
             // locked
 
 
-// Sun F Position 6
+// Sun09 F Position 6
             // com.symmetrylabs.slstudio.model.Sun 9 (Full) F
             new Pixlite(lx, "10.200.1.13", ((SLModel) lx.model).getSliceById("sun9_top_back")),
             // 13
@@ -428,7 +428,7 @@ public class SLStudio extends PApplet {
             // NEEDS WORK!
 
 
-// Sun G Position 7
+// Sun10 G Position 7
             // com.symmetrylabs.slstudio.model.Sun 10 (Full) G-
             new Pixlite(lx, "10.200.1.22", ((SLModel) lx.model).getSliceById("sun10_top_front")),
             // locked
@@ -440,7 +440,7 @@ public class SLStudio extends PApplet {
             // locked but need trim maybe (move whole bottom to the right)
 
 
-// Sun H Position 8
+// Sun11 H Position 8
             // sun 11 (FULL) H-8
             new Pixlite(lx, "10.200.1.19", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_top_front")),
             new Pixlite(lx, "10.200.1.17", ((com.symmetrylabs.slstudio.model.SLModel)lx.model).getSliceById("sun11_bottom_front")),
@@ -450,7 +450,7 @@ public class SLStudio extends PApplet {
             // locked
 
 
-// Sun I Position 9
+// Sun08 I Position 9
             // com.symmetrylabs.slstudio.model.Sun 8 (Two Thirds) I
             new Pixlite(lx, "10.200.1.27", ((SLModel) lx.model).getSliceById("sun8_top_front")),
             // locked
@@ -462,14 +462,14 @@ public class SLStudio extends PApplet {
             // trimmed
 
 
-// Sun J Postion 10
+// Sun05 J Postion 10
             // com.symmetrylabs.slstudio.model.Sun 5 (One Third) J10
             new Pixlite(lx, "10.200.1.38", model.getSliceById("sun5_top_back")),
             // locked
             new Pixlite(lx, "10.200.1.37", model.getSliceById("sun5_top_front")),
             // locked
 
-// Sun K Position 11
+// Sun03 K Position 11
             // com.symmetrylabs.slstudio.model.Sun 3 (One Third) K11
             new Pixlite(lx, "10.200.1.43", model.getSliceById("sun3_top_back")),
             new Pixlite(lx, "10.200.1.44", model.getSliceById("sun3_top_front")),
