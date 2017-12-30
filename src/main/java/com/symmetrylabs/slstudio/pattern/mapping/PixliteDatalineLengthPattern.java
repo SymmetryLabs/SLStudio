@@ -77,17 +77,10 @@ public class PixliteDatalineLengthPattern extends SLPattern {
                 int currentDatalineIndex = this.datalineIndex.getValuei();
                 int datalineStart = currentDatalineIndex * Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE;
 
-//        Arrays.fill(mappingColors, datalineStart,
-//            datalineStart + Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE, LXColor.gray(0.3));
-
                 int datalineEnd = datalineStart + numPoints.getValuei();
                 int lastPixel = datalineEnd - 1;
                 if (datalineStart <= lastPixel) {
                         Arrays.fill(mappingColors, datalineStart, datalineEnd, LXColor.rgb(0, 0, 127));
-//            mappingColors[lastPixel] = LXColor.BLUE;
-//            if (numPoints.getValuei() < Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE) {
-//                mappingColors[lastPixel + 1] = LXColor.GREEN;
-//            }
                 }
                 Arrays.fill(mappingColors, lastPixel + 1,
                         datalineStart + Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE, LXColor.GREEN);

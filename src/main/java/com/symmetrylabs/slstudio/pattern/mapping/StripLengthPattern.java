@@ -211,6 +211,8 @@ public class StripLengthPattern extends SLPattern {
                         }
                 }
 
+                FultonStreetLayout.saveMappings();
+
                 saveInProgress = false;
 
                 resetOutputData();

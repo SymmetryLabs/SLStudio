@@ -2,10 +2,12 @@ package com.symmetrylabs.slstudio.pattern.mapping;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.mappings.*;
+import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.model.CurvedStrip;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
@@ -55,13 +57,24 @@ public class StripReversalPattern extends SLPattern {
         }
 
         private void clearColorsBuffer() {
-                for (int[] mappingColors : mappingColorsPerPixlite.values()) {
-                        Arrays.fill(mappingColors, LXColor.BLACK);
-                }
-
                 Sun sun = model.getSunById(sunId.getOption());
                 CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
-                StripMapping stripMapping = strip.getMappings();
+                StripMapping currentStripMapping = strip.getMappings();
+
+                PixliteDatalineRef datalineRef = currentStripMapping.getOutputAs(PixliteDatalineRef.class);
+
+                for (String pixliteId : mappings.getOutputIds()) {
+                        PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId, PixliteMapping.class);
+                        if (pixliteMapping == null) continue;
+
+                        for (int datalineIndex = 0; datalineIndex < pixliteMapping.getDatalineMappings().length; datalineIndex++) {
+                                if (datalineRef != null && datalineRef.outputId.equals(pixliteId)) {
+                                        drawDataline(pixliteId, datalineIndex, -1, 100);
+                                } else {
+                                        drawDataline(pixliteId, datalineIndex, -1, 31);
+                                }
+                        }
+                }
         }
 
         private void resetStripData() {
@@ -87,8 +100,52 @@ public class StripReversalPattern extends SLPattern {
 
                 stripMapping.reversed = reversed.isOn();
 
+                FultonStreetLayout.saveMappings();
+
                 resetOutputData();
         }
+
+        private void drawDataline(String pixliteId, int datalineIndex, int datalineOrderIndex, int brightness) {
+                int[] mappingColors = mappingColorsPerPixlite.get(pixliteId);
+
+                PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId, PixliteMapping.class);
+                if (pixliteMapping == null) return;
+                DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex];
+
+                int datalineStart = datalineIndex * Pixlite.MAX_NUM_POINTS_PER_DATALINE;
+                int datalineEnd = datalineStart + Pixlite.MAX_NUM_POINTS_PER_DATALINE;
+
+                if (datalineMapping.mappingItems.size() == 0) {
+                        Arrays.fill(mappingColors, datalineStart, datalineEnd, LXColor.RED);
+                } else {
+                        int mappingItemIndex = 0;
+                        int runningStripStart = datalineStart;
+                        for (MappingItem mappingItem : datalineMapping.mappingItems) {
+                                if (!(mappingItem instanceof StripMapping)) continue;
+                                StripMapping stripMapping = (StripMapping) mappingItem;
+
+                                if (stripMapping.numPoints >= 2) {
+                                        int br = datalineOrderIndex != -1 && datalineOrderIndex == mappingItemIndex ? 255 : brightness;
+
+                                        int green = LXColor.rgb(0, br, 0);
+                                        int blue = LXColor.rgb(0, 0, br);
+
+                                        int leftColor = stripMapping.reversed ? green : blue;
+                                        int rightColor = stripMapping.reversed ? blue : green;
+
+                                        int midPointIndex = runningStripStart + stripMapping.numPoints / 2;
+                                        int stripEnd = runningStripStart + stripMapping.numPoints;
+
+                                        Arrays.fill(mappingColors, runningStripStart, midPointIndex, leftColor);
+                                        Arrays.fill(mappingColors, midPointIndex, stripEnd, rightColor);
+                                }
+
+                                runningStripStart += stripMapping.numPoints;
+                                mappingItemIndex++;
+                        }
+                }
+        }
+
 
         @Override
         protected void run(double deltaMs) {
@@ -96,8 +153,11 @@ public class StripReversalPattern extends SLPattern {
 
                 Sun sun = model.getSunById(sunId.getOption());
                 CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
-                StripMapping stripMapping = strip.getMappings();
+                StripMapping currentStripMapping = strip.getMappings();
 
-//        int[] mappingColors = mappingColorsPerPixlite[this.pixliteId.getValuei()];
+                PixliteDatalineRef datalineRef = currentStripMapping.getOutputAs(PixliteDatalineRef.class);
+                if (datalineRef == null) return;
+
+                drawDataline(datalineRef.outputId, datalineRef.datalineIndex, datalineRef.datalineOrderIndex, 100);
         }
 }

@@ -146,6 +146,8 @@ public class StripPixliteAssignmentPattern extends SLPattern {
                         }
                 }
 
+                FultonStreetLayout.saveMappings();
+
                 saveInProgress = false;
 
                 resetOutputData();
@@ -161,7 +163,7 @@ public class StripPixliteAssignmentPattern extends SLPattern {
                 int currentDatalineIndex = datalineIndex.getValuei();
                 int datalineStart = currentDatalineIndex * Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE;
                 int datalineEnd = datalineStart + Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE;
-                Arrays.fill(mappingColors, datalineStart, datalineEnd, LXColor.gray(0.5));
+                Arrays.fill(mappingColors, datalineStart, datalineEnd, LXColor.gray(0.4));
 
                 PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId.getOption(), PixliteMapping.class);
                 DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex.getValuei()];
