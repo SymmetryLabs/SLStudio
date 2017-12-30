@@ -129,11 +129,15 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 float leftLineCenter = center - 6.3f * PIXEL_PITCH;
                 float rightLineCenter = center + 6.3f * PIXEL_PITCH;
                 for (LXPoint point : points) {
+                        drawPoint(point, center - 55 * PIXEL_PITCH, hue, saturation);
+                        drawPoint(point, center - 45 * PIXEL_PITCH, hue, saturation);
                         drawPoint(point, center - 30 * PIXEL_PITCH, hue, saturation);
                         drawPoint(point, leftLineCenter, hue, saturation);
                         drawPoint(point, center, hue, saturation);
                         drawPoint(point, rightLineCenter, hue, saturation);
                         drawPoint(point, center + 30 * PIXEL_PITCH, hue, saturation);
+                        drawPoint(point, center + 45 * PIXEL_PITCH, hue, saturation);
+                        drawPoint(point, center + 55 * PIXEL_PITCH, hue, saturation);
                 }
         }
 
