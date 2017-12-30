@@ -16,13 +16,14 @@ public class BassPod extends RenderablePattern {
     private GraphicMeter eq = new GraphicMeter(audioInput);
 
     private final CompoundParameter clr = new CompoundParameter("CLR", 0.5);
-
+    private final CompoundParameter gain = new CompoundParameter("Gain", 0.5, 0, 5);
     public BassPod(LX lx) {
         super(lx);
 
         eq.start();
 
         addParameter(clr);
+        addParameter(gain);
 //        addParameter(eq.gain);   //to-do can't add these, causes null pointer exception
 //        addParameter(eq.range);
 //        addParameter(eq.attack);
@@ -48,7 +49,7 @@ public class BassPod extends RenderablePattern {
             int avgIndex = (int) constrain(1 + abs(p.x - model.cx) / (model.cx) * (eq.numBands - 5), 0, eq.numBands - 5);
             float value = 0;
             for (int i = avgIndex; i < avgIndex + 5; ++i) {
-                value += eq.getBandf(i);
+                value += eq.getBandf(i)*gain.getValuef();
             }
             value /= 5.;
 
