@@ -2,7 +2,6 @@ package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 

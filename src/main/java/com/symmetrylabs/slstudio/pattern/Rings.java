@@ -5,7 +5,6 @@ import static processing.core.PApplet.map;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
 import com.symmetrylabs.slstudio.util.MathUtils;
