@@ -113,7 +113,7 @@
       "ipAddress": "10.200.1.21",
       "datalineMappings": [
         {
-          "numPoints": 640
+          "numPoints": 639
         },
         {
           "numPoints": 558
@@ -4236,7 +4236,7 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 143,
+              "numPoints": 144,
               "rotation": -0.2528,
               "reversed": false,
               "output": {
@@ -4697,7 +4697,7 @@
             {
               "type": "StripMapping",
               "numPoints": 69,
-              "rotation": 0.6,
+              "rotation": 0.5,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -4732,8 +4732,8 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 82,
-              "rotation": -0.4,
+              "numPoints": 81,
+              "rotation": -0.5,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -4745,7 +4745,7 @@
             {
               "type": "StripMapping",
               "numPoints": 85,
-              "rotation": 0.28000054,
+              "rotation": -0.21999946,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -4757,7 +4757,7 @@
             {
               "type": "StripMapping",
               "numPoints": 89,
-              "rotation": -0.18000641,
+              "rotation": -0.20000002,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
