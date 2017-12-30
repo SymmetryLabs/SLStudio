@@ -60,17 +60,17 @@ public class FultonStreetLayout {
         // Note: y values are set in Sun class by type
 
         // the old mapping
-        positions.put("A" /* 01 */, new float[]{1456, 0, 200});
-        positions.put("B" /* 02 */, new float[]{1243, 0, 96});
-        positions.put("C" /* 03 */, new float[]{1104, 0, 269});
-        positions.put("D" /* 04 */, new float[]{933, 0, 128});
-        positions.put("E" /* 05 */, new float[]{772, 0, 295});
-        positions.put("F" /* 06 */, new float[]{395, 0, 58});
-        positions.put("G" /* 07 */, new float[]{264, 0, 369});
-        positions.put("H" /* 08 */, new float[]{0, 0, 0});  // origin, nearest to power supply
-        positions.put("I" /* 09 */, new float[]{-265, 0, 201});
-        positions.put("J" /* 10 */, new float[]{-401, 0, 356});
-        positions.put("K" /* 11 */, new float[]{-686, 0, 261});
+        positions.put("A" /* 01 */, new float[]{1456, 0, 200});    // Sun02  closest to Water Street
+        positions.put("B" /* 02 */, new float[]{1243, 0, 96});     // Sun01
+        positions.put("C" /* 03 */, new float[]{1104, 0, 269});    // Sun04
+        positions.put("D" /* 04 */, new float[]{933, 0, 128});     // Sun06
+        positions.put("E" /* 05 */, new float[]{772, 0, 295});     // Sun07
+        positions.put("F" /* 06 */, new float[]{395, 0, 58});      // Sun09
+        positions.put("G" /* 07 */, new float[]{264, 0, 369});     // Sun10
+        positions.put("H" /* 08 */, new float[]{0, 0, 0});         // Sun11  origin, nearest to power supply
+        positions.put("I" /* 09 */, new float[]{-265, 0, 201});    // Sun08
+        positions.put("J" /* 10 */, new float[]{-401, 0, 356});    // Sun05
+        positions.put("K" /* 11 */, new float[]{-686, 0, 261});    // Sun03  closest to the river
 
         // Calibration after the cameras were remounted
         // positions.put("A" /* 01 */, new float[]{1436, 0, 210});
