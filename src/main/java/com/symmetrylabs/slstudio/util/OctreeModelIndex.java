@@ -9,6 +9,7 @@ import heronarts.lx.transform.LXVector;
 
 public class OctreeModelIndex extends ModelIndex {
     private boolean flattenZ;
+    private float centerZ;
     private FixedWidthOctree<LXPoint> ot;
     //private HashOctree<LXPoint> ot;
 
@@ -20,6 +21,7 @@ public class OctreeModelIndex extends ModelIndex {
         super(model);
 
         this.flattenZ = flattenZ;
+        this.centerZ = model.cz;
 
         ot = new FixedWidthOctree<LXPoint>(model.cx, model.cy, model.cz,
         //ot = new HashOctree<LXPoint>(model.cx, model.cy, model.cz,
@@ -28,7 +30,7 @@ public class OctreeModelIndex extends ModelIndex {
 
         for (LXPoint point : model.getPoints()) {
             try {
-                ot.insert(point.x, point.y, flattenZ ? 0 : point.z, point);
+                ot.insert(point.x, point.y, flattenZ ? centerZ : point.z, point);
             }
             catch (Exception e) {
                 System.err.println("Exception while building Octree: " + e.getMessage());
@@ -41,7 +43,7 @@ public class OctreeModelIndex extends ModelIndex {
     @Override
     public List<LXPoint> pointsWithin(LXVector target, float d) {
         try {
-            return ot.withinDistance(target.x, target.y, flattenZ ? 0 : target.z, d);
+            return ot.withinDistance(target.x, target.y, flattenZ ? centerZ : target.z, d);
         } catch (Exception e) {
             System.err.println("Exception while finding nearby points: " + e.getMessage());
         }
@@ -52,7 +54,7 @@ public class OctreeModelIndex extends ModelIndex {
     @Override
     public LXPoint nearestPoint(LXVector target) {
         try {
-            return ot.nearest(target.x, target.y, flattenZ ? 0 : target.z);
+            return ot.nearest(target.x, target.y, flattenZ ? centerZ : target.z);
         } catch (Exception e) {
             System.err.println("Exception while finding nearest point: " + e.getMessage());
         }

@@ -27,6 +27,7 @@ import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.BlobFollower;
 import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.MarkerSource;
+import com.symmetrylabs.slstudio.util.CubeMarker;
 import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
 import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.LinearModelIndex;
@@ -39,14 +40,19 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     public static final int PARTICLE_GROUP_COUNT = 16;
 
     public static enum KernelChoice {
-        GAUSSIAN, LAPLACE, SPHERE, FLAT
+        GAUSSIAN
+            , LAPLACE
+            , SPHERE
+            //, FLAT
     }
 
     public CompoundParameter particleCount;
     public CompoundParameter kernelSize;
-    public CompoundParameter kernelCutoff;
+    public CompoundParameter edgeCutoff;
+    public CompoundParameter peakCutoff;
     public EnumParameter<KernelChoice> kernelType;
     public BooleanParameter flattenZ;
+    public BooleanParameter drawParticles;
 
     public CompoundParameter hue;
     public CompoundParameter saturation;
@@ -54,10 +60,10 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     public BooleanParameter enableBlobs;
     public CompoundParameter blobMaxDist;
     public CompoundParameter blobMaxAngle;
-    public CompoundParameter blobAffinity;
+    public CompoundParameter blobPull;
 
     protected ModelIndex modelIndex;
-    protected List<Particle> particles = new ArrayList<>();
+    protected List<Particle> particles = new CopyOnWriteArrayList<>();
     private ParticleGroup[] particleGroups = new ParticleGroup[PARTICLE_GROUP_COUNT];
 
     protected BlobFollower blobFollower;
@@ -83,20 +89,18 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
         particleCount.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter particleCount) {
-                synchronized (particles) {
-                    int numParticles = (int) particleCount.getValue();
-                    while (particles.size() > numParticles) {
-                        Particle p = particles.get(particles.size() - 1);
-                        particleGroups[p.index % particleGroups.length].particles.remove(p);
-                        particles.remove(p);
-                    }
+                int numParticles = (int) particleCount.getValue();
+                while (particles.size() > numParticles) {
+                    Particle p = particles.get(particles.size() - 1);
+                    particleGroups[p.index % particleGroups.length].particles.remove(p);
+                    particles.remove(p);
+                }
 
-                    for (int i = particles.size(); i < numParticles; ++i) {
-                        Particle p = spawnParticle(i, colors.length);
-                        initParticle(p);
-                        particleGroups[p.index % particleGroups.length].particles.add(p);
-                        particles.add(p);
-                    }
+                for (int i = particles.size(); i < numParticles; ++i) {
+                    Particle p = spawnParticle(i, colors.length);
+                    initParticle(p);
+                    particleGroups[p.index % particleGroups.length].particles.add(p);
+                    particles.add(p);
                 }
             }
         });
@@ -114,9 +118,11 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
         addParameter(particleCount = new CompoundParameter("count", 0, 0, 300));
         addParameter(kernelSize = new CompoundParameter("size", 15, 0, 100));
-        addParameter(kernelCutoff = new CompoundParameter("edgeCut", 0.85, 0.25, 1));
+        addParameter(edgeCutoff = new CompoundParameter("edgeCut", 0.85, 0.25, 1));
+        addParameter(peakCutoff = new CompoundParameter("peakCut", 1, 0, 1));
         addParameter(kernelType = new EnumParameter<KernelChoice>("kernel", KernelChoice.GAUSSIAN));
         addParameter(flattenZ = new BooleanParameter("flattenZ", false));
+        addParameter(drawParticles = new BooleanParameter("drawParticles", false));
 
         addParameter(hue = new CompoundParameter("hue", 0, 0, 360));
         addParameter(saturation = new CompoundParameter("saturation", 30, 0, 100));
@@ -124,7 +130,7 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
         addParameter(enableBlobs = new BooleanParameter("enableBlobs", true));
         addParameter(blobMaxDist = new CompoundParameter("bMaxDist", 500, 0, 1000));
         addParameter(blobMaxAngle = new CompoundParameter("bMaxAngle", 60, 0, 90));
-        addParameter(blobAffinity = new CompoundParameter("bPull", 100, 0, 200));
+        addParameter(blobPull = new CompoundParameter("bPull", 100, 0, 200));
     }
 
     @Override
@@ -147,6 +153,12 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     @Override
     public List<Marker> getMarkers() {
         List<Marker> markers = new ArrayList<Marker>();
+
+        if (drawParticles.isOn()) {
+            for (Particle p : particles) {
+                markers.add(new OctahedronWithArrow(p.posToPVectorInModel(model), p.size, LXColor.GREEN, p.arrowToPVectorInModel(model), LXColor.BLUE));
+            }
+        }
 
         if (closestBlobDist == null)
             return markers;
@@ -199,8 +211,8 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
                 return kernelLaplace(FastMath.sqrt(dSqr), s);
             case SPHERE:
                 return kernelSphereSqr(dSqr, s);
-            case FLAT:
-                return 1;
+            //case FLAT:
+            //    return 1;
             default:
                 return 0;
         }
@@ -217,19 +229,19 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
         if (enableBlobs.getValueb()) {
             double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
             double maxAngleRad = blobMaxAngle.getValue() * FastMath.PI / 180;
-            List<BlobFollower.Follower> blob = blobFollower.getFollowers();
+            List<BlobFollower.Follower> blobs = blobFollower.getFollowers();
 
             BlobFollower.Follower closestBlob = null;
             double closestSqrDist = Double.MAX_VALUE;
-            for (BlobFollower.Follower b : blob) {
-                double dx = b.pos.x - model.cx;
-                double dy = b.pos.y - model.cy;
-                double dz = b.pos.z - model.cz;
+            for (BlobFollower.Follower blob : blobs) {
+                double dx = blob.pos.x - model.cx;
+                double dy = blob.pos.y - model.cy;
+                double dz = blob.pos.z - model.cz;
                 double sqrDist = dx * dx + dy * dy + dz * dz;
                 double angleRad = FastMath.atan2(FastMath.abs(dx), FastMath.abs(dz));
                 if (angleRad < maxAngleRad && sqrDist < sqrDistThresh && sqrDist < closestSqrDist) {
                     closestSqrDist = sqrDist;
-                    closestBlob = b;
+                    closestBlob = blob;
                 }
             }
 
@@ -266,17 +278,19 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
         LXVector pp = particle.toPointInModel(model);
         float withinDist = particle.size * kernelSize.getValuef();
-        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist * kernelCutoff.getValuef());
-
+        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist * edgeCutoff.getValuef());
 
         particle.rebound[0] = 0;
         particle.rebound[1] = 0;
         particle.rebound[2] = 0;
         particle.contact = 0;
 
+        float peakCutoffValue = peakCutoff.getValuef();
+
         final boolean flattening = flattenZ.isOn();
         for (LXPoint p : nearbyPoints) {
             float b = (float)kernel(pp.x - p.x, pp.y - p.y, flattening ? 0 : pp.z - p.z, withinDist);
+            b = FastMath.min(b, peakCutoffValue);
 
             if (p instanceof LXPointNormal) {
                 PVector pointNormal = ((LXPointNormal)p).normal;
@@ -290,10 +304,12 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
             particleLayer[p.index] += b;
         }
 
-        particle.rebound[0] /= nearbyPoints.size();
-        particle.rebound[1] /= nearbyPoints.size();
-        particle.rebound[2] /= nearbyPoints.size();
-        particle.contact /= nearbyPoints.size();
+        if (!nearbyPoints.isEmpty()) {
+            particle.rebound[0] /= nearbyPoints.size();
+            particle.rebound[1] /= nearbyPoints.size();
+            particle.rebound[2] /= nearbyPoints.size();
+            particle.contact /= nearbyPoints.size();
+        }
 
         //particle.size = (float)FastMath.min(0.5 + 1000 * FastMath.abs(particle.vel[0] * particle.vel[1] * particle.vel[2]), 10);
     }
@@ -310,6 +326,7 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     protected static class Particle {
         public double[] pos = new double[3];
         public double[] vel = new double[3];
+        public double[] arrow = new double[3];
         public double[] rebound = new double[3];
         public double contact = 0;
         public float size = 1;
@@ -327,6 +344,22 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
                 (float)(model.cx + pos[0] * model.xRange / 2f),
                 (float)(model.cy + pos[1] * model.yRange / 2f),
                 (float)(model.cz + pos[2] * model.zRange / 2f)
+            );
+        }
+
+        public PVector posToPVectorInModel(LXModel model) {
+            return new PVector(
+                (float)(model.cx + pos[0] * model.xRange / 2f),
+                (float)(model.cy + pos[1] * model.yRange / 2f),
+                (float)(model.cz + pos[2] * model.zRange / 2f)
+            );
+        }
+
+        public PVector arrowToPVectorInModel(LXModel model) {
+            return new PVector(
+                (float)(arrow[0] * model.xRange / 2f),
+                (float)(arrow[1] * model.yRange / 2f),
+                (float)(arrow[2] * model.zRange / 2f)
             );
         }
     }
