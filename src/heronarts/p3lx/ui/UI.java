@@ -66,7 +66,7 @@ public class UI implements LXEngine.Dispatch {
 
     private static UI instance = null;
 
-    private class UIRoot extends UIObject implements UIContainer {
+    public class UIRoot extends UIObject implements UIContainer {
 
         private UIRoot() {
             this.ui = UI.this;
@@ -84,9 +84,6 @@ public class UI implements LXEngine.Dispatch {
 
         @Override
         protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-            if (topLevelKeyEventHandler != null) {
-                topLevelKeyEventHandler.onKeyPressed(keyEvent, keyChar, keyCode);
-            }
             if (!keyEventConsumed()) {
                 if (keyCode == java.awt.event.KeyEvent.VK_TAB) {
                     if (keyEvent.isShiftDown()) {
@@ -99,18 +96,38 @@ public class UI implements LXEngine.Dispatch {
         }
 
         @Override
-        protected void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+        void keyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+            this.keyEventConsumed = false;
             if (topLevelKeyEventHandler != null) {
-                topLevelKeyEventHandler.onKeyReleased(keyEvent, keyChar, keyCode);
+                topLevelKeyEventHandler.onKeyPressed(keyEvent, keyChar, keyCode);
+            }
+            if (!this.keyEventConsumed) {
+                super.keyPressed(keyEvent, keyChar, keyCode);
             }
         }
 
         @Override
-        protected void onKeyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
+        void keyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+            this.keyEventConsumed = false;
+            if (topLevelKeyEventHandler != null) {
+                topLevelKeyEventHandler.onKeyReleased(keyEvent, keyChar, keyCode);
+            }
+            if (!this.keyEventConsumed) {
+                super.keyReleased(keyEvent, keyChar, keyCode);
+            }
+        }
+
+        @Override
+        void keyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
+            this.keyEventConsumed = false;
             if (topLevelKeyEventHandler != null) {
                 topLevelKeyEventHandler.onKeyTyped(keyEvent, keyChar, keyCode);
             }
+            if (!this.keyEventConsumed) {
+                super.keyTyped(keyEvent, keyChar, keyCode);
+            }
         }
+
 
         private void redraw() {
             for (UIObject child : this.mutableChildren) {
@@ -254,7 +271,7 @@ public class UI implements LXEngine.Dispatch {
 
     public final PApplet applet;
 
-    private UIRoot root;
+    public final UIRoot root;
 
     public final StringParameter contextualHelpText = new StringParameter("Contextual Help");
 

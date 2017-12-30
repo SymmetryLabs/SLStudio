@@ -465,7 +465,7 @@ public abstract class UIObject extends UIEventHandler implements LXLoopTask {
         return this;
     }
 
-    private boolean keyEventConsumed = false;
+    public boolean keyEventConsumed = false;
     private boolean mouseWheelEventConsumed = false;
     protected boolean mousePressFocused = false;
 
