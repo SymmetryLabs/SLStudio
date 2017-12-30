@@ -1,9 +1,9 @@
 package com.symmetrylabs.slstudio.model;
 
 import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
+import com.symmetrylabs.slstudio.mappings.MappingGroup;
 import com.symmetrylabs.slstudio.util.NullOutputStream;
 import heronarts.lx.model.LXAbstractFixture;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
 import org.jetbrains.annotations.NotNull;
@@ -50,10 +50,10 @@ public class Sun extends StripsModel<Strip> {
     protected Sun masterSun;
     protected int[] masterIndexes;
 
-    public Sun(String id, Type type, float[] coordinates, float[] rotations,
-            LXTransform transform, Map<String, List<Double>> numPointsPerStrip) {
+    public Sun(MappingGroup mappingGroup, String id, Type type, float[] coordinates, float[] rotations,
+                             LXTransform transform) {
 
-        super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
+        super(new Fixture(mappingGroup, id, type, coordinates, rotations, transform));
 
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -70,8 +70,11 @@ public class Sun extends StripsModel<Strip> {
 
         computeBoundingBox();
         distances = computeDistances();
-        applyStripRotations();
     }
+
+    public String getId() {
+        return id;
+        }
 
     public List<Slice> getSlices() {
         return slicesUnmodifiable;
@@ -83,15 +86,6 @@ public class Sun extends StripsModel<Strip> {
 
     public int[] getMasterIndexes() {
         return masterIndexes;
-    }
-
-    private void applyStripRotations() {
-        // Apply the rotations to the strips
-        for (int i = 0, stripsSize = strips.size(); i < stripsSize; i++) {
-            final CurvedStrip strip = (CurvedStrip) strips.get(i);
-
-            strip.updateOffset(FultonStreetLayout.rotationForStrip(this, i));
-        }
     }
 
     void computeMasterIndexes(Sun masterSun) {
@@ -296,21 +290,22 @@ public class Sun extends StripsModel<Strip> {
 
     private static class Fixture extends LXAbstractFixture {
 
-        private final List<Slice> slices = new ArrayList<Slice>();
-        private final List<Strip> strips = new ArrayList<Strip>();
+        private final MappingGroup mappingGroup;
+        private final String id;
+        private final List<Slice> slices = new ArrayList<>();
+        private final List<Strip> strips = new ArrayList<>();
         public final PVector origin;
 
-        private final Map<String, List<Double>> numPointsPerStrip;
-
         private Fixture(
+                        MappingGroup mappingGroup,
             String id,
             Sun.Type type,
             float[] coordinates,
             float[] rotations,
-            LXTransform transform,
-            Map<String, List<Double>> numPointsPerStrip
+            LXTransform transform
         ) {
-            this.numPointsPerStrip = numPointsPerStrip;
+            this.mappingGroup = mappingGroup;
+            this.id = id;
             transform.push();
 
             origin = new PVector(coordinates[0], coordinates[1], coordinates[2]);
@@ -426,7 +421,8 @@ public class Sun extends StripsModel<Strip> {
         }
 
         private Slice createSlice(String id, Slice.Type type, float[] coordinates, float[] rotations, LXTransform transform) {
-            return new Slice(id, type, coordinates, rotations, transform, numPointsPerStrip.get(id));
+            return new Slice(mappingGroup.getChildById(id), this.id, id, type, coordinates,
+                                rotations, transform);
         }
     }
 }

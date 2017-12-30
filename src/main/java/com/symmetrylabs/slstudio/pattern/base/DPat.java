@@ -19,7 +19,7 @@ import heronarts.lx.parameter.CompoundParameter;
 
 import com.symmetrylabs.slstudio.util.NoiseUtils;
 import com.symmetrylabs.slstudio.util.MathUtils;
-import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.model.Sun;
 
 public abstract class DPat extends LXPattern {
@@ -333,8 +333,8 @@ public abstract class DPat extends LXPattern {
         // TODO Threadding: For some reason, using parallelStream here messes up the animations.
 
         if (perSun.isOn()) {
-            SLModel slModel = (SLModel) model;
-            Arrays.asList(slModel.getMasterSun().points).parallelStream().forEach(new Consumer<LXPoint>() {
+            SunsModel sunsModel = (SunsModel) model;
+            Arrays.asList(sunsModel.getMasterSun().points).parallelStream().forEach(new Consumer<LXPoint>() {
                 @Override
                 public void accept(final LXPoint p) {
                     PVector P = new PVector(), tP = new PVector();
@@ -380,11 +380,11 @@ public abstract class DPat extends LXPattern {
                 }
             });
 
-            for (Sun sun : slModel.getSuns()) {
+            for (Sun sun : sunsModel.getSuns()) {
                 sun.copyFromMasterSun(colors);
             }
         } else {
-            ((SLModel) model).forEachPoint((start, end) -> {
+            ((SunsModel) model).forEachPoint((start, end) -> {
                 for (int i = start; i < end; i++) {
                     LXPoint p = model.points[i];
                     PVector P = new PVector(), tP = new PVector();

@@ -1,15 +1,15 @@
 package com.symmetrylabs.slstudio.model;
 
+import com.symmetrylabs.slstudio.mappings.MappingGroup;
+import com.symmetrylabs.slstudio.mappings.StripMapping;
 import heronarts.lx.model.LXAbstractFixture;
-import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
 import org.apache.commons.math3.util.FastMath;
 
 import java.util.*;
 
-import static com.symmetrylabs.slstudio.SLStudio.FEET;
-import static processing.core.PConstants.PI;
+import static com.symmetrylabs.util.DistanceConstants.*;
+import static com.symmetrylabs.util.MathConstants.*;
 
 
 public class Slice extends StripsModel<CurvedStrip> {
@@ -24,31 +24,35 @@ public class Slice extends StripsModel<CurvedStrip> {
     public final static float RADIUS = DIAMETER / 2;
 
     public final static int   LEDS_PER_METER = 60;
-    public final static float INCHES_PER_METER = 39.3701f;
     public final static float PIXEL_PITCH = INCHES_PER_METER / LEDS_PER_METER;
 
+    public String sunId;
     public final String id;
     public final Type type;
-
     private final Map<String, CurvedStrip> stripMap;
 
-    public Slice(String id, Type type, float[] coordinates, float[] rotations,
-            LXTransform transform, List<Double> numPointsPerStrip) {
+    public Slice(MappingGroup mappingGroup, String sunId, String id, Type type, float[] coordinates,
+                                 float[] rotations, LXTransform transform) {
 
-        super(new Fixture(id, type, coordinates, rotations, transform, numPointsPerStrip));
+        super(new Fixture(mappingGroup, sunId, id, type, coordinates, rotations, transform));
 
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
+        this.sunId = sunId;
         this.id = id;
         this.type = type;
 
         this.strips.addAll(fixture.strips);
-        this.stripMap = new HashMap<String, CurvedStrip>();
+        this.stripMap = new HashMap<>();
 
         for (CurvedStrip strip : strips) {
             stripMap.put(strip.id, strip);
         }
     }
+
+        public String getId() {
+                return id;
+        }
 
     // These are different than sun and slice ids, which are unique. These ids are all the same slice to slice.
     public CurvedStrip getStripById(String id) {
@@ -57,32 +61,33 @@ public class Slice extends StripsModel<CurvedStrip> {
 
     private static class Fixture extends LXAbstractFixture {
 
+        private final MappingGroup mappingGroup;
+        private final String sunId;
         private List<CurvedStrip> strips = new ArrayList<>();
 
-        private Fixture(String id, Slice.Type type, float[] coordinates,
-                float[] rotations, LXTransform transform, List<Double> numPointsPerStrip) {
+        private Fixture(MappingGroup mapppings, String sunId, String id, Slice.Type type, float[] coordinates,
+                                                float[] rotations, LXTransform transform) {
 
+            this.mappingGroup = mapppings;
+            this.sunId = sunId;
             transform.push();
             transform.translate(coordinates[0], coordinates[1], coordinates[2]);
-            transform.rotateX(rotations[0] * PI / 180);
-            transform.rotateY(rotations[1] * PI / 180);
-            transform.rotateZ(rotations[2] * PI / 180);
+            transform.rotateX(rotations[0] * DEG_TO_RAD);
+            transform.rotateY(rotations[1] * DEG_TO_RAD);
+            transform.rotateZ(rotations[2] * DEG_TO_RAD);
 
             // create curved strips...
-            int counter = 0;
             if (type != Slice.Type.BOTTOM_ONE_THIRD) {
                 for (int i = 0; i < MAX_NUM_STRIPS_PER_SLICE; i++) {
-                    if (type == Slice.Type.TWO_THIRDS && i > 45) {
+                    if (type == Slice.Type.TWO_THIRDS && i >= 45) {
                         break;
                     }
 
-                    int numPoints = numPointsPerStrip.get(i + 1).intValue();//[counter++];
-                    addStrip(i, numPoints, transform, id);
+                    addStrip(i, transform, id);
                 }
             } else {
                 for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE - 2; i++) {
-                    int numPoints = numPointsPerStrip.get(i + 1).intValue();//numPointsPerStrip[counter++];
-                    addStrip(i, numPoints, transform, id);
+                    addStrip(i, transform, id);
                 }
             }
 
@@ -93,7 +98,7 @@ public class Slice extends StripsModel<CurvedStrip> {
             transform.pop();
         }
 
-        private void addStrip(int i, int numPoints, LXTransform transform, String sliceId) {
+        private void addStrip(int i, LXTransform transform, String sliceId) {
             float stripY = Slice.RADIUS - (i + 1) * STRIP_SPACING;
             if (FastMath.abs(stripY) >= Slice.RADIUS) {
                 throw new RuntimeException("Error: trying to place strip off sun: " + i);
@@ -101,13 +106,16 @@ public class Slice extends StripsModel<CurvedStrip> {
             float stripX = (float) -FastMath.sqrt(Slice.RADIUS * Slice.RADIUS - stripY * stripY);
             float arcWidth = 2 * FastMath.abs(stripX);
 
-            CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(arcWidth, numPoints);
+            StripMapping stripMapping = mappingGroup.getItemByIndex(i, StripMapping.class);
+            CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(arcWidth, stripMapping.numPoints);
             strips.add(new CurvedStrip(
+                                stripMapping,
                 Integer.toString(i + 1),
                 metrics,
                 new float[]{stripX, stripY, 0},
                 new float[]{0, 0, 0},
                 transform,
+                sunId,
                 sliceId
             ));
         }

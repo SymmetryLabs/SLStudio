@@ -1,18 +1,18 @@
 package com.symmetrylabs.slstudio.model;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
 
-import static com.symmetrylabs.slstudio.util.MathUtils.floor;
+import static com.symmetrylabs.slstudio.util.MathUtils.*;
+import static com.symmetrylabs.util.DistanceConstants.*;
+import static com.symmetrylabs.util.MathConstants.*;
 
 /**
  * Top-level model of the entire sculpture. This contains a list of
@@ -31,10 +31,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
     private final Cube[] _cubes;
 
-    private static final double HALF_PI = Math.PI / 2;
-
     public CubesModel() {
-        this(new ArrayList<Tower>(), new Cube[0], new ArrayList<CubesStrip>());
+        this(new ArrayList<>(), new Cube[0], new ArrayList<>());
     }
 
     public CubesModel(List<Tower> towers, Cube[] cubeArr, List<CubesStrip> strips) {
@@ -180,7 +178,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
             public final Face.Metrics FACE_METRICS;
 
-            private Type(float edgeLength, int ledsPerMeter, int ledsPerStrip) {
+            Type(float edgeLength, int ledsPerMeter, int ledsPerStrip) {
                 this.EDGE_WIDTH = this.EDGE_HEIGHT = edgeLength;
 
                 this.POINTS_PER_STRIP = ledsPerStrip;

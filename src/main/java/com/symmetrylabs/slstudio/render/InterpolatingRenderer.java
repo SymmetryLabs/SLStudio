@@ -4,10 +4,6 @@ import java.util.Arrays;
 
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXFixture;
-import heronarts.lx.model.LXPoint;
-
-import com.symmetrylabs.slstudio.util.MathUtils;
-import com.symmetrylabs.slstudio.util.TripleBuffer;
 
 public class InterpolatingRenderer extends TripleBufferedRenderer {
     private RenderFrame frameA, frameB;

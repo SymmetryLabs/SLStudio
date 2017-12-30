@@ -1,11 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.LXModelComponent;
 import heronarts.lx.model.LXModel;
-
-import com.symmetrylabs.slstudio.model.SLModel;
 
 public abstract class ModelSpecificPattern<T extends LXModel> extends SLPattern {
     protected T model;

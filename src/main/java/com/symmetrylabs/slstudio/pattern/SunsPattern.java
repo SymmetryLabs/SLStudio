@@ -1,14 +1,13 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 
-import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.SunsModel;
 
-public abstract class SunsPattern extends ModelSpecificPattern<SLModel> {
+public abstract class SunsPattern extends ModelSpecificPattern<SunsModel> {
     @Override
-    protected SLModel createEmptyModel() {
-        return new SLModel();
+    protected SunsModel createEmptyModel() {
+        return new SunsModel();
     }
 
     public SunsPattern(LX lx) {

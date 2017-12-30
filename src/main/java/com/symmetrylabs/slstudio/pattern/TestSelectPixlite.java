@@ -1,10 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.model.Slice;
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.*;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.ObjectParameter;
@@ -21,7 +18,7 @@ public class TestSelectPixlite extends SLPattern {
 
     public TestSelectPixlite(LX lx) {
         super(lx);
-        this.selectedPixlite = new ObjectParameter("pixlite", ((SLModel)model).getSlices().toArray());
+        this.selectedPixlite = new ObjectParameter("pixlite", ((SunsModel)model).getSlices().toArray());
         addParameter(selectedPixlite);
         addParameter(hue);
         addParameter(saturation);

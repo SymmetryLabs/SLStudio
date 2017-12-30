@@ -4,13 +4,9 @@ import org.apache.commons.math3.util.FastMath;
 
 import java.util.Random;
 
+import static com.symmetrylabs.util.MathConstants.*;
+
 public final class MathUtils {
-
-    public static final double DEG_TO_RAD = Math.PI / 180d;
-    public static final double RAD_TO_DEG = 180d / Math.PI;
-
-    public static final float DEG_TO_RAD_F = (float)DEG_TO_RAD;
-    public static final float RAD_TO_DEG_F = (float)RAD_TO_DEG;
 
     private static Random internalRandom;
 
@@ -68,8 +64,8 @@ public final class MathUtils {
     public static float min(float a, float b) { return FastMath.min(a, b); }
     public static float sin(float rad) { return (float)FastMath.sin(rad); }
     public static float cos(float rad) { return (float)FastMath.cos(rad); }
-    public static float radians(float deg) { return DEG_TO_RAD_F * deg; }
-    public static float degrees(float rad) { return RAD_TO_DEG_F * rad; }
+    public static float radians(float deg) { return DEG_TO_RAD * deg; }
+    public static float degrees(float rad) { return RAD_TO_DEG * rad; }
     public static float abs(float val) { return FastMath.abs(val); }
     public static float sqrt(float val) { return (float)FastMath.sqrt(val); }
     public static float pow(float val, int exp) { return (float)FastMath.pow(val, exp); }

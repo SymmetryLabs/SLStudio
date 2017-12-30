@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.effect;
 
-import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.SunsModel;
 import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
@@ -43,7 +43,7 @@ public class LSD extends LXEffect {
         final float sf = scale.getValuef() / 1000f;
         final float rf = range.getValuef();
 
-        ((SLModel) model).forEachPoint((start, end) -> {
+        ((SunsModel) model).forEachPoint((start, end) -> {
             final float[] hsb = new float[3];
 
             for (int i=start; i<end; i++) {

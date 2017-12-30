@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.model
 
-import com.symmetrylabs.slstudio.mappings.FultonStreetLayout
+import com.symmetrylabs.slstudio.mappings.StripMapping
 import com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH
 import com.symmetrylabs.slstudio.util.degToRad
 import heronarts.lx.model.LXAbstractFixture
@@ -8,52 +8,48 @@ import heronarts.lx.transform.LXTransform
 
 
 class CurvedStrip(
+    val mappings: StripMapping,
 	id: String,
 	metrics: CurvedMetrics,
-	coordinates: FloatArray,
-	rotations: FloatArray,
-	transform: LXTransform,
+	val sunId: String,
 	val sliceId: String,
-	val fixture: Fixture = Fixture(id, metrics, coordinates, rotations, transform)
-) : Strip(id, metrics.metrics, fixture.points) {
+	val fixture: Fixture
+) : Strip(id, metrics, fixture.points) {
 
 	constructor(
-		id: String,
-		metrics: CurvedMetrics,
-		coordinates: FloatArray,
-		rotations: FloatArray,
-		transform: LXTransform,
-		sliceId: String
-	) : this(id, metrics, coordinates, rotations, transform, sliceId, Fixture(id, metrics, coordinates, rotations, transform))
+        mappings: StripMapping,
+        id: String,
+        metrics: CurvedMetrics,
+        coordinates: FloatArray,
+        rotations: FloatArray,
+        transform: LXTransform,
+        sunId: String,
+        sliceId: String
+	) : this(mappings, id, metrics, sunId, sliceId, Fixture(mappings, metrics, coordinates, rotations, transform))
 
 	fun updateOffset(offset: Float) {
-		fixture.updatePoints(offset)
+        mappings.rotation = offset
+        fixture.updatePoints(offset)
 	}
 
-	class CurvedMetrics(val arcWidth: Float, numPoints: Int) {
-		val metrics: Strip.Metrics
-		val numPoints: Int
+	class CurvedMetrics(val arcWidth: Float, numPoints: Int) : Strip.Metrics(numPoints)
 
-		init {
-			this.metrics = Strip.Metrics(numPoints)
-			this.numPoints = metrics.numPoints
-		}
-	}
-
-	class Fixture constructor(
-		val id: String,
-		val metrics: CurvedMetrics,
-		val coordinates: FloatArray,
-		val rotations: FloatArray,
-		transform: LXTransform
+    class Fixture constructor(
+        private val mappings: StripMapping,
+        private val metrics: CurvedMetrics,
+        private val coordinates: FloatArray,
+        private val rotations: FloatArray,
+        transform: LXTransform
 	) : LXAbstractFixture() {
 		val transform = LXTransform(transform.matrix)
 
 		init {
+//            mappings.numPoints = metrics.numPoints
 			for (i in 0 until metrics.numPoints) {
 				points.add(LXPointNormal(0.0, 0.0, 0.0))
 			}
-			updatePoints()
+            mappings.points = (if (mappings.reversed) points.reversed() else points).toTypedArray()
+			updatePoints(mappings.rotation)
 		}
 
 		fun updatePoints(
@@ -89,7 +85,7 @@ class CurvedStrip(
 			transform.pop()
 		}
 
-		private fun setPoint(i: Int, pt: LXTransform) {
+		private fun setPoint(i: Int, transform: LXTransform) {
 			val point = points[i]
 
 			point.x = transform.x()
@@ -103,10 +99,6 @@ class CurvedStrip(
 			val t1 = 1.0f - t
 			return (a * t1 + 3f * b * t) * (t1 * t1) + (3f * c * t1 + d * t) * (t * t)
 		}
-	}
-
-	companion object {
-		private val counter = 0
 	}
 }
 

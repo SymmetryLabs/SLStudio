@@ -1,59 +1,79 @@
 package com.symmetrylabs.slstudio.pixlites;
 
-import com.symmetrylabs.slstudio.mappings.Sun10BackBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun10BackTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun10FrontBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun10FrontTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun1BackPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun1FrontPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun2BackPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun2FrontPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun3BackTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun3FrontTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun4BackPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun4FrontPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun5BackTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun5FrontTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun6BackBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun6BackTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun6FrontBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun6FrontTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun7BackBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun7BackTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun7FrontBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun7FrontTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun8BackBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun8BackTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun8FrontBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun8FrontTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun9BackBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun9BackTopPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun9FrontBottomPixliteConfig;
-import com.symmetrylabs.slstudio.mappings.Sun9FrontTopPixliteConfig;
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.mappings.*;
+import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.model.Slice;
+import com.symmetrylabs.slstudio.output.SLBypassOutputGroup;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXDatagramOutput;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.LXOutputGroup;
+import org.apache.commons.math3.util.FastMath;
 
 
 public class Pixlite extends LXOutputGroup {
-    private static final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
+    public static final int NUM_DATALINES = 16;
+    public static final int MAX_NUM_POINTS_PER_DATALINE = 1020;
+    public static final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
+    public static final int MAX_NUM_UNIVERSES_PER_DATALINE = (int) FastMath.ceil(1.0 * MAX_NUM_POINTS_PER_DATALINE / MAX_NUM_POINTS_PER_UNIVERSE);
 
+    private static final int[][][] mappingBufferIndices = new int[NUM_DATALINES][][];
+
+    static {
+        int index = 0;
+        for (int datalineIndex = 0; datalineIndex < mappingBufferIndices.length; datalineIndex++) {
+            int[][] datalineIndices = new int[MAX_NUM_UNIVERSES_PER_DATALINE][];
+            for (int universe = 0; universe < datalineIndices.length; universe++) {
+                int[] universeIndices = new int[MAX_NUM_POINTS_PER_UNIVERSE];
+                for (int i = 0; i < universeIndices.length; i++) {
+                    universeIndices[i] = index++;
+                }
+                datalineIndices[universe] = universeIndices;
+            }
+            mappingBufferIndices[datalineIndex] = datalineIndices;
+        }
+    }
+
+    public final MappingGroup mappingGroup;
+        public final PixliteMapping mapping;
     public Slice slice;
     public final String ipAddress;
     private LXDatagramOutput datagramOutput;
+    private LXOutput mappingOutput;
 
-    public Pixlite(LX lx, String ipAddress, Slice slice) {
+    public static final int MAPPING_COLORS_POINTS_PER_DATALINE = MAX_NUM_UNIVERSES_PER_DATALINE * MAX_NUM_POINTS_PER_UNIVERSE;
+    public final int[] mappingColors = new int[NUM_DATALINES * MAPPING_COLORS_POINTS_PER_DATALINE];
+
+    public Pixlite(MappingGroup mappingGroup, PixliteMapping mapping, LX lx, Slice slice) {
         super(lx);
-        this.ipAddress = ipAddress;
+        this.mappingGroup = mappingGroup;
+        this.mapping = mapping;
+        this.ipAddress = mapping.ipAddress;
         this.slice = slice;
+
+        addChild(mappingOutput = new SLBypassOutputGroup(lx, mappingColors));
+
+        LXDatagramOutput mappingDatagramOutput;
         try {
             this.datagramOutput = new LXDatagramOutput(lx);
+            mappingDatagramOutput = new LXDatagramOutput(lx);
         } catch (Exception e) {
             e.printStackTrace();
             return;
         }
         addChild(this.datagramOutput);
+        mappingOutput.addChild(mappingDatagramOutput);
+
+                updateOutputsEnabled();
+        SLStudio.applet.mappingModeEnabled.addListener(param -> updateOutputsEnabled());
+
+        for (int datalineIndex = 0; datalineIndex < NUM_DATALINES; datalineIndex++) {
+            for (int universe = 0; universe < MAX_NUM_UNIVERSES_PER_DATALINE; universe++) {
+                mappingDatagramOutput.addDatagram(new ArtNetDatagram(ipAddress, mappingBufferIndices[datalineIndex][universe],
+                    10 * (datalineIndex + 1) + universe - 1));
+            }
+        }
 
         if (slice == null) {
             IllegalArgumentException e = new IllegalArgumentException("slice is null for " + ipAddress);
@@ -62,137 +82,23 @@ public class Pixlite extends LXOutputGroup {
         }
         if (slice.id == null) throw new IllegalArgumentException("slice.id is null for " + ipAddress);
 
-        // com.symmetrylabs.slstudio.model.Sun 1
-        if (slice.id.equals("sun1_top_front")) {
-            new Sun1FrontPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun1_top_back")) {
-            new Sun1BackPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 2
-        if (slice.id.equals("sun2_top_front")) {
-            new Sun2FrontPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun2_top_back")) {
-            new Sun2BackPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 3
-        if (slice.id.equals("sun3_top_front")) {
-            new Sun3FrontTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun3_top_back")) {
-            new Sun3BackTopPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 4
-        if (slice.id.equals("sun4_top_front")) {
-            new Sun4FrontPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun4_top_back")) {
-            new Sun4BackPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 5
-        if (slice.id.equals("sun5_top_front")) {
-            new Sun5FrontTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun5_top_back")) {
-            new Sun5BackTopPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 6
-        if (slice.id.equals("sun6_top_front")) {
-            new Sun6FrontTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun6_bottom_front")) {
-            new Sun6FrontBottomPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun6_top_back")) {
-            new Sun6BackTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun6_bottom_back")) {
-            new Sun6BackBottomPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 7
-        if (slice.id.equals("sun7_top_front")) {
-            new Sun7FrontTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun7_bottom_front")) {
-            new Sun7FrontBottomPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun7_top_back")) {
-            new Sun7BackTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun7_bottom_back")) {
-            new Sun7BackBottomPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 8
-        if (slice.id.equals("sun8_top_front")) {
-            new Sun8FrontTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun8_bottom_front")) {
-            new Sun8FrontBottomPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun8_top_back")) {
-            new Sun8BackTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun8_bottom_back")) {
-            new Sun8BackBottomPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 9
-        if (slice.id.equals("sun9_top_front")) {
-            new Sun9FrontTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun9_bottom_front")) {
-            new Sun9FrontBottomPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun9_top_back")) {
-            new Sun9BackTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun9_bottom_back")) {
-            new Sun9BackBottomPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 10
-        if (slice.id.equals("sun10_top_front")) {
-            new Sun10FrontTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun10_bottom_front")) {
-            new Sun10FrontBottomPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun10_top_back")) {
-            new Sun10BackTopPixliteConfig(lx, slice, this);
-        }
-        if (slice.id.equals("sun10_bottom_back")) {
-            new Sun10BackBottomPixliteConfig(lx, slice, this);
-        }
-
-        // com.symmetrylabs.slstudio.model.Sun 11
-        if(slice.id.equals("sun11_top_front")) {
-            new com.symmetrylabs.slstudio.mappings.Sun11FrontTopPixliteConfig(lx, slice, this);
-        }
-        if(slice.id.equals("sun11_bottom_front")) {
-            new com.symmetrylabs.slstudio.mappings.Sun11FrontBottomPixliteConfig(lx, slice, this);
-        }
-        if(slice.id.equals("sun11_top_back")) {
-            new com.symmetrylabs.slstudio.mappings.Sun11BackTopPixliteConfig(lx, slice, this);
-        }
-        if(slice.id.equals("sun11_bottom_back")) {
-            new com.symmetrylabs.slstudio.mappings.Sun11BackBottomPixliteConfig(lx, slice, this);
-        }
+        int datalineIndex = 0;
+        for (DatalineMapping datalineMapping : mapping.getDatalineMappings()) {
+            addDatalineMapping(datalineIndex++, datalineMapping);
+                }
     }
 
-    public void addPointsGroup(PointsGrouping pointsGrouping) {
-        int outputIndex = Integer.parseInt(pointsGrouping.id);
-        int firstUniverseOnOutput = outputIndex * 10;
+    private void updateOutputsEnabled() {
+                boolean mappingEnabled = SLStudio.applet.mappingModeEnabled.isOn();
+                mappingOutput.enabled.setValue(mappingEnabled);
+                datagramOutput.enabled.setValue(!mappingEnabled);
+        }
+
+        private void addDatalineMapping(int datalineIndex, DatalineMapping datalineMapping) {
+        int firstUniverseOnOutput = (datalineIndex + 1) * 10;
 
         // the points for one pixlite output have to be spread across multiple universes
-        int numPoints = pointsGrouping.size();
+        int numPoints = Math.min(datalineMapping.numPoints, datalineMapping.points.length);
         int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
         int counter = 0;
 
@@ -203,7 +109,7 @@ public class Pixlite extends LXOutputGroup {
                 : MAX_NUM_POINTS_PER_UNIVERSE;
             int[] indices = new int[numIndices];
             for (int i1 = 0; i1 < numIndices; i1++) {
-                indices[i1] = pointsGrouping.getPoint(counter++).index;
+                indices[i1] = datalineMapping.points[counter++].index;
             }
             datagramOutput.addDatagram(new ArtNetDatagram(ipAddress, indices, universe - 1));
         }

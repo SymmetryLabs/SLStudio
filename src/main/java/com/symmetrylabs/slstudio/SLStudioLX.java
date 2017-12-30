@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.google.gson.JsonObject;
 
+import com.symmetrylabs.slstudio.model.SunsModel;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 
@@ -36,7 +37,6 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
-import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
 import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
@@ -370,6 +370,7 @@ public class SLStudioLX extends P3LX {
     private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
 
+    public final SunsModel model;
     public final UI ui;
 
     public SLStudioLX(PApplet applet, LXModel model) {
@@ -378,6 +379,7 @@ public class SLStudioLX extends P3LX {
 
     public SLStudioLX(PApplet applet, LXModel model, boolean multiThreaded) {
         super(applet, model);
+        this.model = (SunsModel) super.model;
         this.ui = (UI) super.ui;
         onUIReady(this, this.ui);
         registerExternal(KEY_UI, this.ui);
