@@ -13,10 +13,6 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.p3lx.ui.UI;
-import heronarts.p3lx.ui.component.UIButton;
-import heronarts.p3lx.ui.studio.device.UIPattern;
-import heronarts.p3lx.ui.studio.device.UIPatternDevice;
 import processing.event.KeyEvent;
 
 import java.util.Arrays;
