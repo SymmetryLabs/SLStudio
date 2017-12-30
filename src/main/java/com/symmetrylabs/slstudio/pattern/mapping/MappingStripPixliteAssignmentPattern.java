@@ -16,7 +16,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import java.util.Arrays;
 import java.util.Map;
 
-public class StripPixliteAssignmentPattern extends SLPattern {
+public class MappingStripPixliteAssignmentPattern extends SLPattern {
 
         private final SunsModel model;
         private final Mappings mappings;
@@ -35,7 +35,7 @@ public class StripPixliteAssignmentPattern extends SLPattern {
         private boolean saveInProgress = false;
         private boolean resettingInProgress = false;
 
-        public StripPixliteAssignmentPattern(LX lx) {
+        public MappingStripPixliteAssignmentPattern(LX lx) {
                 super(lx);
                 model = (SunsModel) lx.model;
                 mappings = FultonStreetLayout.mappings;

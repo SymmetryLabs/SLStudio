@@ -15,7 +15,7 @@ import processing.event.KeyEvent;
 import static com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH;
 import static com.symmetrylabs.slstudio.util.MathUtils.abs;
 
-public class StripAdjustmentPattern extends SLPattern {
+public class MappingStripAdjustmentPattern extends SLPattern {
 
         private static final float LINE_SIZE = 0.8f * PIXEL_PITCH;
         private static final float BRIGHTNESS_MODIFIER = 100f / LINE_SIZE;
@@ -33,7 +33,7 @@ public class StripAdjustmentPattern extends SLPattern {
         private boolean saveInProgress = false;
         private boolean resettingInProgress = false;
 
-        public StripAdjustmentPattern(LX lx) {
+        public MappingStripAdjustmentPattern(LX lx) {
                 super(lx);
                 model = (SunsModel) lx.model;
                 mappings = FultonStreetLayout.mappings;

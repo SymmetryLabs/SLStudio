@@ -16,7 +16,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import java.util.Arrays;
 import java.util.Map;
 
-public class StripReversalPattern extends SLPattern {
+public class MappingStripReversalPattern extends SLPattern {
 
         private final SunsModel model;
         private final Mappings mappings;
@@ -29,7 +29,7 @@ public class StripReversalPattern extends SLPattern {
 
         private final BooleanParameter reversed = new BooleanParameter("Reversed");
 
-        public StripReversalPattern(LX lx) {
+        public MappingStripReversalPattern(LX lx) {
                 super(lx);
                 model = (SunsModel) lx.model;
                 mappings = FultonStreetLayout.mappings;

@@ -16,7 +16,7 @@ import processing.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Map;
 
-public class PixliteDatalineLengthPattern extends SLPattern {
+public class MappingPixliteDatalineLengthPattern extends SLPattern {
 
         private final Mappings mappings;
         private final Map<String, int[]> mappingColorsPerPixlite;
@@ -27,7 +27,7 @@ public class PixliteDatalineLengthPattern extends SLPattern {
         private final DiscreteParameter datalineIndex;
         private final DiscreteParameter numPoints;
 
-        public PixliteDatalineLengthPattern(LX lx) {
+        public MappingPixliteDatalineLengthPattern(LX lx) {
                 super(lx);
                 mappings = FultonStreetLayout.mappings;
                 mappingColorsPerPixlite = SLStudio.applet.mappingColorsPerPixlite;
