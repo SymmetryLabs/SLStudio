@@ -1679,40 +1679,40 @@
       "ipAddress": "10.200.1.11",
       "datalineMappings": [
         {
-          "numPoints": 559
+          "numPoints": 606
         },
         {
-          "numPoints": 538
+          "numPoints": 558
         },
         {
-          "numPoints": 531
+          "numPoints": 543
         },
         {
-          "numPoints": 591
+          "numPoints": 603
         },
         {
-          "numPoints": 510
+          "numPoints": 516
         },
         {
-          "numPoints": 536
+          "numPoints": 542
         },
         {
-          "numPoints": 556
+          "numPoints": 564
         },
         {
-          "numPoints": 580
+          "numPoints": 584
         },
         {
-          "numPoints": 598
+          "numPoints": 600
         },
         {
-          "numPoints": 612
+          "numPoints": 614
         },
         {
-          "numPoints": 622
+          "numPoints": 624
         },
         {
-          "numPoints": 471
+          "numPoints": 473
         },
         {
           "numPoints": 477
@@ -1724,7 +1724,7 @@
           "numPoints": 483
         },
         {
-          "numPoints": 161
+          "numPoints": 160
         }
       ]
     },
@@ -1802,19 +1802,19 @@
           "numPoints": 516
         },
         {
-          "numPoints": 540
+          "numPoints": 542
         },
         {
           "numPoints": 564
         },
         {
-          "numPoints": 582
+          "numPoints": 584
         },
         {
           "numPoints": 600
         },
         {
-          "numPoints": 616
+          "numPoints": 614
         },
         {
           "numPoints": 624
@@ -26262,7 +26262,7 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 135,
+              "numPoints": 137,
               "rotation": 0.6561683,
               "reversed": false,
               "output": {
@@ -26358,7 +26358,7 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 147,
+              "numPoints": 149,
               "rotation": 0.1761683,
               "reversed": false,
               "output": {
@@ -26454,7 +26454,7 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 155,
+              "numPoints": 153,
               "rotation": 0.22383171,
               "reversed": false,
               "output": {
