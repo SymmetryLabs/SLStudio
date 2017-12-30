@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.util.slLogger;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
@@ -48,7 +48,7 @@ public class UIOverriddenRightPane extends UIPane {
 
     public static final int PADDING = 4;
     public static final int WIDTH = 284;
-    private static final int ADD_BUTTON_WIDTH = 38;
+    private static final int ADD_BUTTON_WIDTH = 30;
 
     private int lfoCount = 1;
     private int envCount = 1;
@@ -56,16 +56,23 @@ public class UIOverriddenRightPane extends UIPane {
     private int macroCount = 1;
 
     String py="data_generation";
-    String cmd="/Users/aaronopp/Desktop/AI_VJ/";
-    String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+py+ ".py", "aaron_test_12_19_3", "1"};
+
+    String pyRun = "run";
+
+    String cmd="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
+    //String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+py+ ".py", "aaron_test_12_19_3", "1"};
+    String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python" ,cmd+py+ ".py", "aaron", "5"};
     ProcessBuilder pb = new ProcessBuilder(command);
 
-
+    //String cmdLogger="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
     // Initalize command for running logger
     //String cmd_logger= "pro"
-    String[] commandLogger = new String[] {"processing-java", "--sketch=/Users/aaronopp/Desktop/logger", "--run"};
-    ProcessBuilder pbLogger = new ProcessBuilder(command);
+    String[] commandLogger = new String[] {"processing-java", "--sketch=/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/logger", "--run"};
+    ProcessBuilder pbLogger = new ProcessBuilder(commandLogger);
     // OSC logger
+
+    String[] commandVjRun = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+pyRun+ ".py","aaron", "5"};
+    ProcessBuilder pbVjRun = new ProcessBuilder(commandVjRun);
 
     String LOGFILE = "out.txt";
 
@@ -187,16 +194,21 @@ public class UIOverriddenRightPane extends UIPane {
               public void onToggle(boolean on) {
                 if (on) {
                   System.out.println("AI VJ button pressed");
-                  slLogger logger1 = new slLogger();
+                  //logger logger1 = new logger();
                   try {
 
                   pb.redirectError();
                   Process p = pb.start();
                   BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                  pbLogger.redirectError();
+                  Process pLogger = pbLogger.start();
+                  BufferedReader inLogger = new BufferedReader(new InputStreamReader(pLogger.getInputStream()));
+
                   //slLogger logger1  = new slLogger();
 
                   //for (Integer y = 0; y < 20; y++) {
-                       //String ret = in.readLine();
+                       //String ret = inLogger.readLine();
                        //System.out.println("value is: "+ ret);
                   //};
 
@@ -219,6 +231,42 @@ public class UIOverriddenRightPane extends UIPane {
             .setBorderRounding(4)
             .setDescription("start generating data for training AI VJ")
             .addToContainer(bar);
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    System.out.println("VJ run button pressed");
+
+                    try {
+
+                        pbVjRun.redirectError();
+                        Process pVjRun = pbVjRun.start();
+                        BufferedReader inVjRun = new BufferedReader(new InputStreamReader(pVjRun.getInputStream()));
+
+
+                        for (Integer y = 0; y < 50; y++) {
+                        String ret = inVjRun.readLine();
+                        System.out.println("value is: "+ ret);
+                        };
+
+                        //String ret2 = in.readLine();
+                        System.out.println("done!");
+                    }
+                    catch(IOException ioe){
+                        ioe.printStackTrace();
+                    }
+                } //  IF OFF
+                //else if {}
+                // pb.destroy();
+
+            }
+        }
+            .setLabel("Run")
+            .setInactiveColor(ui.theme.getDeviceBackgroundColor())
+            .setBorderRounding(4)
+            .setDescription("start generating data for training AI VJ")
+            .addToContainer(bar);
+
         final UIButton triggerButton = (UIButton) new UIButton(0, 0, 16, 16) {
             @Override
             public void onToggle(boolean on) {
