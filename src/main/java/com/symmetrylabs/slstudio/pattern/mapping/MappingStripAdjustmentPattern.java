@@ -24,7 +24,6 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         private final float[] sunCenters;
 
         private final SunsModel model;
-        private final Mappings mappings;
 
         private final BooleanParameter reverseArrows = new BooleanParameter("Rvrs Arr");
         private final DiscreteParameter sunId;
@@ -38,7 +37,6 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         public MappingStripAdjustmentPattern(LX lx) {
                 super(lx);
                 model = (SunsModel) lx.model;
-                mappings = FultonStreetLayout.mappings;
 
                 sunCenters = new float[model.getSuns().size()];
                 for (int i = 0; i < model.getSuns().size(); i++) {
