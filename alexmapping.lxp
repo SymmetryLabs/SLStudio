@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514635332338,
+  "timestamp": 1514636399658,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "Channel-1",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -140,8 +140,9 @@
             "modulationColor": -16717057,
             "parameters": {
               "label": "MappingStripAdjustment",
+              "Rvrs Arr": false,
               "Sun": 9,
-              "Strip": 274
+              "Strip": 234
             },
             "modulation": {
               "modulators": [],
@@ -455,16 +456,16 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.2308390595309927,
-          "Band-2": 0.31357036324563525,
-          "Band-3": 0.29624688222467654,
-          "Band-4": 0.24358311306825764,
-          "Band-5": 0.19365326573214814,
-          "Band-6": 0.10013384301650408,
-          "Band-7": 0.015556833971749229,
-          "Band-8": 0.0775734228720264,
-          "Band-9": 0.018196622603776524,
-          "Band-10": 0.0,
+          "Band-1": 0.031267364717056156,
+          "Band-2": 0.15959952400033772,
+          "Band-3": 0.24239753732719593,
+          "Band-4": 0.3210407010688501,
+          "Band-5": 0.24406786844004402,
+          "Band-6": 0.17444638511455546,
+          "Band-7": 0.1669355687916081,
+          "Band-8": 0.13114351456960882,
+          "Band-9": 0.16235047692684257,
+          "Band-10": 0.09132349942431672,
           "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
