@@ -13,6 +13,11 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.p3lx.ui.UI;
+import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.studio.device.UIPattern;
+import heronarts.p3lx.ui.studio.device.UIPatternDevice;
+import processing.event.KeyEvent;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -61,6 +66,17 @@ public class StripLengthPattern extends SLPattern {
                 stripIndex.addListener(param -> resetOutputData());
 
                 stripLength.addListener(param -> saveOutputData());
+        }
+
+        @Override
+        public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+                        stripLength.decrement();
+                        consumeKeyEvent();
+                } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+                        stripLength.increment();
+                        consumeKeyEvent();
+                }
         }
 
         private void clearColorsBuffer() {

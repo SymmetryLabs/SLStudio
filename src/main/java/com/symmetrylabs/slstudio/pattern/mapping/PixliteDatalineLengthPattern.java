@@ -11,6 +11,7 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import processing.event.KeyEvent;
 
 import java.util.Arrays;
 import java.util.Map;
@@ -46,6 +47,17 @@ public class PixliteDatalineLengthPattern extends SLPattern {
                 resetNumPoints();
 
                 numPoints.addListener(param -> saveNumPoints());
+        }
+
+        @Override
+        public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+                        numPoints.decrement();
+                        consumeKeyEvent();
+                } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+                        numPoints.increment();
+                        consumeKeyEvent();
+                }
         }
 
         private void clearColorsBuffer() {

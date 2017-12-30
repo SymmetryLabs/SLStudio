@@ -10,6 +10,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import processing.event.KeyEvent;
 
 import static com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH;
 import static com.symmetrylabs.slstudio.util.MathUtils.abs;
@@ -27,7 +28,7 @@ public class StripAdjustmentPattern extends SLPattern {
         private final DiscreteParameter sunId;
         private final DiscreteParameter stripIndex = new DiscreteParameter("Strip", 1);
 
-        private final BoundedParameter offset = new BoundedParameter("Offset", 0, -3, 3);
+        private final BoundedParameter offset = new BoundedParameter("Offset", 0, -12, 12);
 
         private boolean saveInProgress = false;
         private boolean resettingInProgress = false;
@@ -56,6 +57,18 @@ public class StripAdjustmentPattern extends SLPattern {
                 stripIndex.addListener(param -> resetOutputData());
 
                 offset.addListener(param -> saveOutputData());
+        }
+
+        @Override
+        public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                float amt = keyEvent.isShiftDown() ? 1 : 0.1f;
+                if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
+                        offset.incrementValue(-amt);
+                        consumeKeyEvent();
+                } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
+                        offset.incrementValue(amt);
+                        consumeKeyEvent();
+                }
         }
 
         private void clearColorsBuffer() {
