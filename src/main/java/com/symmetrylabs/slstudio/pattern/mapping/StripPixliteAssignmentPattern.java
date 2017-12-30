@@ -158,12 +158,12 @@ public class StripPixliteAssignmentPattern extends SLPattern {
                 if (!enabled.isOn()) return;
 
                 int[] mappingColors = mappingColorsPerPixlite.get(this.pixliteId.getOption());
-                Arrays.fill(mappingColors, LXColor.gray(0.1));
+                Arrays.fill(mappingColors, LXColor.gray(10));
 
                 int currentDatalineIndex = datalineIndex.getValuei();
                 int datalineStart = currentDatalineIndex * Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE;
                 int datalineEnd = datalineStart + Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE;
-                Arrays.fill(mappingColors, datalineStart, datalineEnd, LXColor.gray(0.4));
+                Arrays.fill(mappingColors, datalineStart, datalineEnd, LXColor.gray(40));
 
                 PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId.getOption(), PixliteMapping.class);
                 DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex.getValuei()];
