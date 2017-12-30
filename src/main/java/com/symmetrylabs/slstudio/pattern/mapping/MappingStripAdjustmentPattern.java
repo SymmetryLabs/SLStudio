@@ -8,6 +8,7 @@ import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.event.KeyEvent;
@@ -25,6 +26,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         private final SunsModel model;
         private final Mappings mappings;
 
+        private final BooleanParameter reverseArrows = new BooleanParameter("Rvrs Arr");
         private final DiscreteParameter sunId;
         private final DiscreteParameter stripIndex = new DiscreteParameter("Strip", 1);
 
@@ -42,6 +44,8 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 for (int i = 0; i < model.getSuns().size(); i++) {
                         sunCenters[i] = model.getSuns().get(i).cx;
                 }
+
+                addParameter(reverseArrows);
 
                 String[] sunIds = model.getSuns().stream().map(sun -> sun.id).toArray(String[]::new);
                 addParameter(sunId = new DiscreteParameter("Sun", sunIds));
@@ -63,10 +67,10 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
                 float amt = keyEvent.isShiftDown() ? 1 : 0.1f;
                 if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
-                        offset.incrementValue(-amt);
+                        offset.incrementValue(reverseArrows.isOn() ? amt : -amt);
                         consumeKeyEvent();
                 } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-                        offset.incrementValue(amt);
+                        offset.incrementValue(reverseArrows.isOn() ? -amt : amt);
                         consumeKeyEvent();
                 }
         }
@@ -134,7 +138,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         private void drawPoint(LXPoint point, float center, float hue) {
                 float distance = abs(point.x - center);
                 if (distance < LINE_SIZE) {
-                        float brightness = distance * BRIGHTNESS_MODIFIER;
+                        float brightness = (LINE_SIZE - distance) * BRIGHTNESS_MODIFIER;
                         colors[point.index] = LXColor.hsb(hue, 100, brightness);
                 }
         }
