@@ -18,7 +18,7 @@ import static com.symmetrylabs.slstudio.util.MathUtils.abs;
 
 public class MappingStripAdjustmentPattern extends SLPattern {
 
-        private static final float LINE_SIZE = 0.8f * PIXEL_PITCH;
+        private static final float LINE_SIZE = 0.9f * PIXEL_PITCH;
         private static final float BRIGHTNESS_MODIFIER = 100f / LINE_SIZE;
 
         private final float[] sunCenters;
@@ -82,7 +82,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                         for (LXPoint point : sun.points) {
                                 colors[point.index] = sunColor;
                         }
-                        drawPoints(sun.points, sunCenters[sunIndex], 0);
+                        drawPoints(sun.points, sunCenters[sunIndex], 0, 100);
                 }
         }
 
@@ -125,21 +125,23 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 resetOutputData();
         }
 
-        private void drawPoints(LXPoint[] points, float center, float hue) {
+        private void drawPoints(LXPoint[] points, float center, float hue, float saturation) {
                 float leftLineCenter = center - 6.3f * PIXEL_PITCH;
                 float rightLineCenter = center + 6.3f * PIXEL_PITCH;
                 for (LXPoint point : points) {
-                        drawPoint(point, leftLineCenter, hue);
-                        drawPoint(point, center, hue);
-                        drawPoint(point, rightLineCenter, hue);
+                        drawPoint(point, center - 30 * PIXEL_PITCH, hue, saturation);
+                        drawPoint(point, leftLineCenter, hue, saturation);
+                        drawPoint(point, center, hue, saturation);
+                        drawPoint(point, rightLineCenter, hue, saturation);
+                        drawPoint(point, center + 30 * PIXEL_PITCH, hue, saturation);
                 }
         }
 
-        private void drawPoint(LXPoint point, float center, float hue) {
+        private void drawPoint(LXPoint point, float center, float hue, float saturation) {
                 float distance = abs(point.x - center);
                 if (distance < LINE_SIZE) {
                         float brightness = (LINE_SIZE - distance) * BRIGHTNESS_MODIFIER;
-                        colors[point.index] = LXColor.hsb(hue, 100, brightness);
+                        colors[point.index] = LXColor.hsb(hue, saturation, brightness);
                 }
         }
 
@@ -149,6 +151,6 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 Sun sun = model.getSunById(sunId.getOption());
                 CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
 
-                drawPoints(strip.points, sunCenters[sunIndex], 120);
+                drawPoints(strip.points, sunCenters[sunIndex], 120, 0);
         }
 }
