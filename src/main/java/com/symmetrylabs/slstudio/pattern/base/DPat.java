@@ -56,7 +56,7 @@ public abstract class DPat extends LXPattern {
         return MathUtils.round(100 * MathUtils.constrain(a, 0, 1));
     }
 
-    float interpWv(float i, float[] vals) {
+    public float interpWv(float i, float[] vals) {
         return interp(i - MathUtils.floor(i), vals[MathUtils.floor(i)], vals[MathUtils.ceil(i)]);
     }
 
@@ -64,15 +64,15 @@ public abstract class DPat extends LXPattern {
         vec.set(vec.x / mMax.x, vec.y / mMax.y, vec.z / mMax.z);
     }
 
-    void setRand(PVector vec) {
+    public void setRand(PVector vec) {
         vec.set(random(mMax.x), random(mMax.y), random(mMax.z));
     }
 
-    void setVec(PVector vec, LXPoint p) {
+    public void setVec(PVector vec, LXPoint p) {
         vec.set(p.x, p.y, p.z);
     }
 
-    void interpolate(float i, PVector a, PVector b) {
+    public void interpolate(float i, PVector a, PVector b) {
         a.set(interp(i, a.x, b.x), interp(i, a.y, b.y), interp(i, a.z, b.z));
     }
 
@@ -83,7 +83,7 @@ public abstract class DPat extends LXPattern {
     protected abstract void StartRun(double deltaMs);
     protected abstract int CalcPoint(PVector p);
 
-    int blend3(int c1, int c2, int c3) {
+    public int blend3(int c1, int c2, int c3) {
         return PImage.blendColor(c1, PImage.blendColor(c2, c3, ADD), ADD);
     }
 
@@ -91,11 +91,11 @@ public abstract class DPat extends LXPattern {
         p.set(nCos * (p.x - o.x) - nSin * (p.y - o.y) + o.x, nSin * (p.x - o.x) + nCos * (p.y - o.y) + o.y, p.z);
     }
 
-    void rotateX(PVector p, PVector o, float nSin, float nCos) {
+    public void rotateX(PVector p, PVector o, float nSin, float nCos) {
         p.set(p.x, nCos * (p.y - o.y) - nSin * (p.z - o.z) + o.y, nSin * (p.y - o.y) + nCos * (p.z - o.z) + o.z);
     }
 
-    void rotateY(PVector p, PVector o, float nSin, float nCos) {
+    public void rotateY(PVector p, PVector o, float nSin, float nCos) {
         p.set(nSin * (p.z - o.z) + nCos * (p.x - o.x) + o.x, p.y, nCos * (p.z - o.z) - nSin * (p.x - o.x) + o.z);
     }
 
@@ -105,7 +105,7 @@ public abstract class DPat extends LXPattern {
         return p;
     }
 
-    CompoundParameter addParam(String label, double value, double min, double max) {
+    public CompoundParameter addParam(String label, double value, double min, double max) {
         CompoundParameter p2 = new CompoundParameter(label, value, min, max);
         addParameter(p2);
         return p2;
@@ -136,39 +136,39 @@ public abstract class DPat extends LXPattern {
         return (float)splittableRandom.nextDouble((double)max);
     }
 
-    float random(float min, float max) {
+    protected float random(float min, float max) {
         return (float)splittableRandom.nextDouble((double)min, (double)max) + min;
     }
 
-    boolean btwn(int a, int b, int c) {
+    protected boolean btwn(int a, int b, int c) {
         return a >= b && a <= c;
     }
 
-    boolean btwn(double a, double b, double c) {
+    protected boolean btwn(double a, double b, double c) {
         return a >= b && a <= c;
     }
 
-    float interp(float a, float b, float c) {
+    protected float interp(float a, float b, float c) {
         return (1 - a) * b + a * c;
     }
 
-    float randctr(float a) {
+    protected float randctr(float a) {
         return (float) (splittableRandom.nextDouble((double) a) - a * 0.5f);
     }
 
-    float min4(float a, float b, float c, float d) {
+    protected float min4(float a, float b, float c, float d) {
         return MathUtils.min(MathUtils.min(a, b), MathUtils.min(c, d));
     }
 
-    float pointDist(LXPoint p1, LXPoint p2) {
+    protected float pointDist(LXPoint p1, LXPoint p2) {
         return MathUtils.dist(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
     }
 
-    float xyDist(LXPoint p1, LXPoint p2) {
+    protected float xyDist(LXPoint p1, LXPoint p2) {
         return MathUtils.dist(p1.x, p1.y, p2.x, p2.y);
     }
 
-    float distToSeg(float x, float y, float x1, float y1, float x2, float y2) {
+    protected float distToSeg(float x, float y, float x1, float y1, float x2, float y2) {
         float A = x - x1, B = y - y1, C = x2 - x1, D = y2 - y1;
         float dot = A * C + B * D, len_sq = C * C + D * D;
         float xx, yy, param = dot / len_sq;
@@ -216,7 +216,11 @@ public abstract class DPat extends LXPattern {
     public void onInactive() {
     }
 
-    void onReset() {
+    public void onActive() {
+        
+    }
+
+    public void onReset() {
         // for (int i=0; i<bools .size(); i++) bools.get(i).reset();
         // for (int i=0; i<picks .size(); i++) picks.get(i).reset();
         //presetManager.dirty(this);
@@ -296,7 +300,7 @@ public abstract class DPat extends LXPattern {
     //                                             else                    APCOut.sendNoteOff  (bools.get(i).col, bools.get(i).row, 0);
     // }
 
-    void updateLights() {
+    protected void updateLights() {
     }
 
     public void run(double deltaMs) {
