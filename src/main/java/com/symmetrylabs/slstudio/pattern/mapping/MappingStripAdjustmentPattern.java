@@ -63,7 +63,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
         @Override
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-                float amt = keyEvent.isShiftDown() ? 1 : 0.1f;
+                float amt = keyEvent.isShiftDown() ? 0.7f : 0.07f;
                 if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
                         offset.incrementValue(reverseArrows.isOn() ? amt : -amt);
                         consumeKeyEvent();
