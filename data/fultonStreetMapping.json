@@ -7100,7 +7100,7 @@
           "items": [
             {
               "type": "StripMapping",
-              "numPoints": 9,
+              "numPoints": 0,
               "rotation": 0.0,
               "reversed": true,
               "output": {
@@ -7112,7 +7112,7 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 0,
+              "numPoints": 1,
               "rotation": 0.0,
               "reversed": false,
               "output": {
@@ -7124,8 +7124,8 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 26,
-              "rotation": -1.44,
+              "numPoints": 34,
+              "rotation": -1.7200003,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
