@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514717839517,
+  "timestamp": 1514722985961,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -174,7 +174,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 181,
@@ -216,9 +216,9 @@
             "parameters": {
               "label": "MappingStripAdjustment",
               "Rvrs Arr": false,
-              "Sun": 1,
-              "Slice": 0,
-              "Strip": 0
+              "Sun": 8,
+              "Slice": 2,
+              "Strip": 62
             },
             "modulation": {
               "modulators": [],
@@ -634,7 +634,7 @@
       "modulationColor": -4522240,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -675,7 +675,7 @@
             "running": true,
             "trigger": false,
             "loop": true,
-            "wave": 0,
+            "wave": 1,
             "period": 17120.756185908765,
             "skew": 0.0,
             "shape": 0.0,
