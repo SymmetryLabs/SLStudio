@@ -2,13 +2,14 @@ package com.symmetrylabs.slstudio.model
 
 import com.symmetrylabs.slstudio.mappings.StripMapping
 import com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH
+import com.symmetrylabs.slstudio.util.CurveUtils.bezierPoint
 import com.symmetrylabs.slstudio.util.degToRad
 import heronarts.lx.model.LXAbstractFixture
 import heronarts.lx.transform.LXTransform
 
 
 class CurvedStrip(
-    val mappings: StripMapping,
+	val mappings: StripMapping,
 	id: String,
 	metrics: CurvedMetrics,
 	val sunId: String,
@@ -44,11 +45,10 @@ class CurvedStrip(
 		val transform = LXTransform(transform.matrix)
 
 		init {
-//            mappings.numPoints = metrics.numPoints
 			for (i in 0 until metrics.numPoints) {
 				points.add(LXPointNormal(0.0, 0.0, 0.0))
 			}
-            mappings.points = (if (mappings.reversed) points.reversed() else points).toTypedArray()
+			mappings.points = (if (mappings.reversed) points.reversed() else points).toTypedArray()
 			updatePoints(mappings.rotation)
 		}
 
@@ -64,19 +64,7 @@ class CurvedStrip(
 			for (i in 0 until metrics.numPoints) {
 				transform.push()
 
-				// arclength of bezier(0, 0.2, 0.8, 1) = 1.442
-				// arclength of bezier(0, -0.3, -0.3, 0) = 1.122
-				// arclength = 1.168
-				// arclength at center = 107 in
-				val arcLength = 1.3f * metrics.arcWidth
-				val t = 0.5f + ((i - metrics.numPoints / 2.0f) * PIXEL_PITCH + curveOffset) / arcLength
-//				if (t > 1 || t < 0) {
-//					throw RuntimeException("Placing pixel off sun: i = $i, arc length = $arcLength")
-//				}
-				val x = bezierPoint(0f, metrics.arcWidth * 0.2f, metrics.arcWidth * 0.8f, metrics.arcWidth, t)
-				val z = bezierPoint(0f, metrics.arcWidth * -0.3f, metrics.arcWidth * -0.3f, 0f, t)
-				transform.translate(x, 0f, z)
-
+				calculatePointTransform(i, metrics.numPoints, metrics.arcWidth, curveOffset, transform)
 				setPoint(i, transform)
 
 				transform.pop()
@@ -98,6 +86,25 @@ class CurvedStrip(
 		private fun bezierPoint(a: Float, b: Float, c: Float, d: Float, t: Float): Float {
 			val t1 = 1.0f - t
 			return (a * t1 + 3f * b * t) * (t1 * t1) + (3f * c * t1 + d * t) * (t * t)
+		}
+	}
+
+	companion object {
+		fun calculatePointTransform(i: Int, numPoints: Int, arcWidth: Float,
+									curveOffset: Float, transform: LXTransform) {
+			// arclength of bezier(0, 0.2, 0.8, 1) = 1.442
+			// arclength of bezier(0, -0.3, -0.3, 0) = 1.122
+			// arclength = 1.168
+			// arclength at center = 107 in
+			val arcLength = 1.3f * arcWidth
+			val t = 0.5f + ((i - numPoints / 2.0f) * PIXEL_PITCH + curveOffset) / arcLength
+//			if (t > 1 || t < 0) {
+//				throw RuntimeException("Placing pixel off sun: i = $i, arc length = $arcLength")
+//			}
+
+			val x = bezierPoint(0f, arcWidth * 0.2f, arcWidth * 0.8f, arcWidth, t)
+			val z = bezierPoint(0f, arcWidth * -0.3f, arcWidth * -0.3f, 0f, t)
+			transform.translate(x, 0f, z)
 		}
 	}
 }

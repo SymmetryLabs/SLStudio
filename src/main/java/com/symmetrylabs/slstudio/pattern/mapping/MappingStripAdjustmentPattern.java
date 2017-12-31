@@ -1,17 +1,22 @@
 package com.symmetrylabs.slstudio.pattern.mapping;
 
+import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.mappings.*;
+import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.model.CurvedStrip;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.model.SunsModel;
+import com.symmetrylabs.slstudio.model.Slice;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.transform.LXTransform;
 import processing.event.KeyEvent;
+
+import java.util.Arrays;
+import java.util.Map;
 
 import static com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH;
 import static com.symmetrylabs.slstudio.util.MathUtils.abs;
@@ -20,13 +25,16 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
         private static final float LINE_SIZE = 0.9f * PIXEL_PITCH;
         private static final float BRIGHTNESS_MODIFIER = 100f / LINE_SIZE;
+        private static final float SUN_CENTER_X = Slice.RADIUS;
 
-        private final float[] sunCenters;
+        private final Mappings mappings;
+        private final Map<String, int[]> mappingColorsPerPixlite;
 
-        private final SunsModel model;
+        private final BooleanParameter enabled = new BooleanParameter("Enabled");
 
         private final BooleanParameter reverseArrows = new BooleanParameter("Rvrs Arr");
         private final DiscreteParameter sunId;
+        private final DiscreteParameter sliceId;
         private final DiscreteParameter stripIndex = new DiscreteParameter("Strip", 1);
 
         private final BoundedParameter offset = new BoundedParameter("Offset", 0, -12, 12);
@@ -36,26 +44,30 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
         public MappingStripAdjustmentPattern(LX lx) {
                 super(lx);
-                model = (SunsModel) lx.model;
+                mappings = FultonStreetLayout.mappings;
+                mappingColorsPerPixlite = SLStudio.applet.mappingColorsPerPixlite;
 
-                sunCenters = new float[model.getSuns().size()];
-                for (int i = 0; i < model.getSuns().size(); i++) {
-                        sunCenters[i] = model.getSuns().get(i).cx;
-                }
+                addParameter(enabled);
+                enabled.setShouldSerialize(false);
+                enabled.addListener(param -> SLStudio.applet.mappingModeEnabled.setValue(enabled.isOn()));
+                enabled.addListener(param -> resetSliceData());
 
                 addParameter(reverseArrows);
 
-                String[] sunIds = model.getSuns().stream().map(sun -> sun.id).toArray(String[]::new);
+                String[] sunIds = mappings.getChildrenKeySet().toArray(new String[0]);
                 addParameter(sunId = new DiscreteParameter("Sun", sunIds));
+
+                addParameter(sliceId = new DiscreteParameter("Slice", 1));
 
                 addParameter(stripIndex);
 
                 addParameter(offset);
                 offset.setShouldSerialize(false);
 
-                resetStripData();
+                resetSliceData();
 
-                sunId.addListener(param -> resetStripData());
+                sunId.addListener(param -> resetSliceData());
+                sliceId.addListener(param -> resetStripData());
                 stripIndex.addListener(param -> resetOutputData());
 
                 offset.addListener(param -> saveOutputData());
@@ -74,21 +86,45 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         }
 
         private void clearColorsBuffer() {
-                for (int sunIndex = 0; sunIndex < model.getSuns().size(); sunIndex++) {
-                        Sun sun = model.getSuns().get(sunIndex);
-                        int sunColor = sunIndex == sunId.getValuei() ? LXColor.rgb(31, 31, 31) : LXColor.BLACK;
-                        for (LXPoint point : sun.points) {
-                                colors[point.index] = sunColor;
-                        }
-                        drawPoints(sun.points, sunCenters[sunIndex], 0, 100);
+                for (int[] mappingColors : mappingColorsPerPixlite.values()) {
+                        Arrays.fill(mappingColors, LXColor.BLACK);
                 }
+
+                MappingGroup currentSliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
+                StripMapping currentStripMapping = currentSliceMapping.getItemByIndex(stripIndex.getValuei(), StripMapping.class);
+                if (currentStripMapping != null) {
+                        PixliteDatalineRef pixliteDataline = currentStripMapping.getOutputAs(PixliteDatalineRef.class);
+                        if (pixliteDataline != null) {
+                                int[] mappingColors = mappingColorsPerPixlite.get(pixliteDataline.outputId);
+                                Arrays.fill(mappingColors, LXColor.rgb(31, 31, 31));
+                        }
+                }
+
+                for (MappingGroup sunMapping : mappings.getChildrenValues()) {
+                        for (MappingGroup sliceMapping : sunMapping.getChildrenValues()) {
+                                for (int stripIndex = 0; stripIndex < sliceMapping.getItems().size(); stripIndex++) {
+                                        drawStrip(sliceMapping, stripIndex, 0, 100);
+                                }
+                        }
+                }
+        }
+
+        private void resetSliceData() {
+                if (saveInProgress || resettingInProgress) return;
+
+                MappingGroup sunMapping = mappings.getChildByIdIfExists(sunId.getOption());
+
+                String[] sliceIds = sunMapping.getChildrenKeySet().toArray(new String[0]);
+                sliceId.setOptions(sliceIds);
+
+                resetStripData();
         }
 
         private void resetStripData() {
                 if (saveInProgress || resettingInProgress) return;
 
-                Sun sun = model.getSunById(sunId.getOption());
-                stripIndex.setRange(sun.getStrips().size());
+                MappingGroup sliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
+                stripIndex.setRange(sliceMapping.getItems().size());
 
                 resetOutputData();
         }
@@ -97,9 +133,8 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 if (saveInProgress || resettingInProgress) return;
                 resettingInProgress = true;
 
-                Sun sun = model.getSunById(sunId.getOption());
-                CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
-                StripMapping stripMapping = strip.getMappings();
+                MappingGroup sliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
+                StripMapping stripMapping = sliceMapping.getItemByIndex(stripIndex.getValuei(), StripMapping.class);
 
                 offset.setValue(stripMapping.rotation);
 
@@ -112,10 +147,10 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 if (saveInProgress || resettingInProgress) return;
                 saveInProgress = true;
 
-                Sun sun = model.getSunById(sunId.getOption());
-                CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
+                MappingGroup sliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
+                StripMapping stripMapping = sliceMapping.getItemByIndex(stripIndex.getValuei(), StripMapping.class);
 
-                strip.updateOffset(offset.getValuef());
+                stripMapping.rotation = offset.getValuef();
                 FultonStreetLayout.saveMappings();
 
                 saveInProgress = false;
@@ -123,36 +158,76 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 resetOutputData();
         }
 
-        private void drawPoints(LXPoint[] points, float center, float hue, float saturation) {
-                float leftLineCenter = center - 6.3f * PIXEL_PITCH;
-                float rightLineCenter = center + 6.3f * PIXEL_PITCH;
-                for (LXPoint point : points) {
-                        drawPoint(point, center - 55 * PIXEL_PITCH, hue, saturation);
-                        drawPoint(point, center - 45 * PIXEL_PITCH, hue, saturation);
-                        drawPoint(point, center - 30 * PIXEL_PITCH, hue, saturation);
-                        drawPoint(point, leftLineCenter, hue, saturation);
-                        drawPoint(point, center, hue, saturation);
-                        drawPoint(point, rightLineCenter, hue, saturation);
-                        drawPoint(point, center + 30 * PIXEL_PITCH, hue, saturation);
-                        drawPoint(point, center + 45 * PIXEL_PITCH, hue, saturation);
-                        drawPoint(point, center + 55 * PIXEL_PITCH, hue, saturation);
+        private void drawStrip(MappingGroup sliceMapping, int stripIndex, float hue, float saturation) {
+                StripMapping stripMapping = sliceMapping.getItemByIndex(stripIndex, StripMapping.class);
+                if (stripMapping == null || stripMapping.numPoints <= 0) return;
+
+                PixliteDatalineRef pixliteDataline = stripMapping.getOutputAs(PixliteDatalineRef.class);
+                if (pixliteDataline == null) return;
+
+                int datalineIndex = pixliteDataline.datalineIndex;
+
+                PixliteMapping pixliteMapping = mappings.getOutputById(pixliteDataline.outputId, PixliteMapping.class);
+                DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex];
+
+                int numPixelsBefore = 0;
+                for (int i = 0; i <= pixliteDataline.datalineOrderIndex - 1; i++) {
+                        if (!(datalineMapping.mappingItems.get(i) instanceof StripMapping)) continue;
+                        numPixelsBefore += ((StripMapping) datalineMapping.mappingItems.get(i)).numPoints;
+                }
+
+                int datalineStart = datalineIndex * Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE;
+                int stripStart = datalineStart + numPixelsBefore;
+
+                float stripY = Slice.calculateStripY(stripIndex);
+                float stripX = Slice.calculateStripX(stripY);
+                float arcWidth = Slice.calculateArcWidth(stripX);
+
+                int[] mappingColors = mappingColorsPerPixlite.get(pixliteDataline.outputId);
+
+                for (int pointIndex = 0; pointIndex < stripMapping.numPoints; pointIndex++) {
+                        LXTransform transform = new LXTransform().translate(stripX, 0, stripY);
+                        CurvedStrip.Companion.calculatePointTransform(
+                                        pointIndex, stripMapping.numPoints, arcWidth, stripMapping.rotation, transform);
+
+                        int colorIndexOffset = stripMapping.reversed ? stripMapping.numPoints - 1 - pointIndex : pointIndex;
+                        int colorIndex = stripStart + colorIndexOffset;
+                        drawPoint(transform.x(), mappingColors, colorIndex, hue, saturation);
                 }
         }
 
-        private void drawPoint(LXPoint point, float center, float hue, float saturation) {
-                float distance = abs(point.x - center);
-                if (distance < LINE_SIZE) {
-                        float brightness = (LINE_SIZE - distance) * BRIGHTNESS_MODIFIER;
-                        colors[point.index] = LXColor.hsb(hue, saturation, brightness);
+        private void drawPoint(float x, int[] mappingColors, int colorIndex, float hue, float saturation) {
+                float leftLineCenter = SUN_CENTER_X - 6.3f * PIXEL_PITCH;
+                float rightLineCenter = SUN_CENTER_X + 6.3f * PIXEL_PITCH;
+
+                float brightness = 0;
+
+                brightness += getPointDist(x, SUN_CENTER_X - 55 * PIXEL_PITCH);
+                brightness += getPointDist(x, SUN_CENTER_X - 45 * PIXEL_PITCH);
+                brightness += getPointDist(x, SUN_CENTER_X - 30 * PIXEL_PITCH);
+                brightness += getPointDist(x, leftLineCenter);
+                brightness += getPointDist(x, SUN_CENTER_X);
+                brightness += getPointDist(x, rightLineCenter);
+                brightness += getPointDist(x, SUN_CENTER_X + 30 * PIXEL_PITCH);
+                brightness += getPointDist(x, SUN_CENTER_X + 45 * PIXEL_PITCH);
+                brightness += getPointDist(x, SUN_CENTER_X + 55 * PIXEL_PITCH);
+
+                if (brightness > 0) {
+                        if (brightness > 1) brightness = 1;
+                        mappingColors[colorIndex] = LXColor.hsb(hue, saturation, brightness * BRIGHTNESS_MODIFIER);
+                } else {
+                        mappingColors[colorIndex] = LXColor.BLACK;
                 }
+        }
+
+        private float getPointDist(float x, float center) {
+                float distance = abs(x - center);
+                return distance < LINE_SIZE ? LINE_SIZE - distance : 0;
         }
 
         @Override
         protected void run(double deltaMs) {
-                int sunIndex = sunId.getValuei();
-                Sun sun = model.getSunById(sunId.getOption());
-                CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
-
-                drawPoints(strip.points, sunCenters[sunIndex], 120, 0);
+                MappingGroup sliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
+                drawStrip(sliceMapping, stripIndex.getValuei(), 120, 0);
         }
 }

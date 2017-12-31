@@ -11,6 +11,14 @@ public class MappingGroup {
     @Expose private Map<String, MappingGroup> children;
         @Expose private List<MappingItem> items;
 
+        public Set<String> getChildrenKeySet() {
+                return children.keySet();
+        }
+
+        public Collection<MappingGroup> getChildrenValues() {
+                return children.values();
+        }
+
         public Map<String, MappingGroup> getChildren() {
         if (children == null) {
                         children = new TreeMap<>();
@@ -27,8 +35,21 @@ public class MappingGroup {
                 return child;
         }
 
+        public MappingGroup getChildsChildById(String childId, String childsChildId) {
+                MappingGroup child = getChildren().get(childId);
+                if (child == null) {
+                        child = new MappingGroup();
+                        getChildren().put(childId, child);
+                }
+                return child.getChildById(childsChildId);
+        }
+
         public MappingGroup getChildByIdIfExists(String childId) {
         return children != null ? children.get(childId) : null;
+        }
+
+        public MappingGroup getChildsChildByIdIfExists(String childId, String childsChildId) {
+        return children != null ? children.get(childId).getChildByIdIfExists(childsChildId) : null;
         }
 
         public List<MappingItem> getItems() {
@@ -60,6 +81,10 @@ public class MappingGroup {
                                         .flatMap(MappingGroup::getAllDescendantItems));
                 }
                 return stream;
+        }
+
+        public <MappingsItemType extends MappingItem> Stream<MappingsItemType> getAllDescendantItemsAs(Class<MappingsItemType> type) {
+                return getAllDescendantItems().map(item -> ClassUtils.tryCast(item, type)).filter(Objects::nonNull);
         }
 
 }

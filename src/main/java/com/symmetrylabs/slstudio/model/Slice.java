@@ -99,12 +99,13 @@ public class Slice extends StripsModel<CurvedStrip> {
         }
 
         private void addStrip(int i, LXTransform transform, String sliceId) {
-            float stripY = Slice.RADIUS - (i + 1) * STRIP_SPACING;
+            float stripY = calculateStripY(i);
             if (FastMath.abs(stripY) >= Slice.RADIUS) {
                 throw new RuntimeException("Error: trying to place strip off sun: " + i);
             }
-            float stripX = (float) -FastMath.sqrt(Slice.RADIUS * Slice.RADIUS - stripY * stripY);
-            float arcWidth = 2 * FastMath.abs(stripX);
+            float stripX = calculateStripX(stripY);
+            float arcWidth = calculateArcWidth(stripX);
+            float stripXFromCenter = stripX - Slice.RADIUS;
 
             StripMapping stripMapping = mappingGroup.getItemByIndex(i, StripMapping.class);
             CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(arcWidth, stripMapping.numPoints);
@@ -112,12 +113,24 @@ public class Slice extends StripsModel<CurvedStrip> {
                                 stripMapping,
                 Integer.toString(i + 1),
                 metrics,
-                new float[]{stripX, stripY, 0},
+                new float[]{stripXFromCenter, stripY, 0},
                 new float[]{0, 0, 0},
                 transform,
                 sunId,
                 sliceId
             ));
         }
+    }
+
+    public static float calculateStripY(int i) {
+        return Slice.RADIUS - (i + 1) * STRIP_SPACING;
+    }
+
+    public static float calculateStripX(float stripY) {
+        return Slice.RADIUS - (float) FastMath.sqrt(Slice.RADIUS * Slice.RADIUS - stripY * stripY);
+    }
+
+    public static float calculateArcWidth(float stripX) {
+        return 2 * FastMath.abs(stripX - Slice.RADIUS);
     }
 }
