@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.performance;
+package com.symmetrylabs.slstudio.effect;
 
 import com.symmetrylabs.slstudio.effect.SLEffect;
 import com.symmetrylabs.slstudio.kernel.SLKernel;

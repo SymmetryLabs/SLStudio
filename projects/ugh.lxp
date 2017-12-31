@@ -86,7 +86,7 @@
           },
           {
             "id": 5694,
-            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
             "modulationColor": -16764417,
             "parameters": {
               "label": "ColorShift",
@@ -277,7 +277,7 @@
           },
           {
             "id": 5700,
-            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
             "modulationColor": -5046017,
             "parameters": {
               "label": "ColorShift",
@@ -352,7 +352,7 @@
           },
           {
             "id": 5706,
-            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
             "modulationColor": -4260096,
             "parameters": {
               "label": "ColorShift",
@@ -427,7 +427,7 @@
           },
           {
             "id": 5712,
-            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
             "modulationColor": -12583168,
             "parameters": {
               "label": "ColorShift",
