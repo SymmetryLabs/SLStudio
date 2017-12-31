@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514717112129,
+  "timestamp": 1514722741999,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.5857242889869667,
+          "fader": 0.5,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 27,
@@ -140,8 +140,8 @@
             "modulationColor": -16735489,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
-              "Pixlite": 30,
-              "Dataline": 3
+              "Pixlite": 3,
+              "Dataline": 15
             },
             "modulation": {
               "modulators": [],
@@ -156,9 +156,9 @@
             "modulationColor": -65365,
             "parameters": {
               "label": "MappingStripLength",
-              "Sun": 0,
+              "Sun": 9,
               "Slice": 0,
-              "Strip": 0
+              "Strip": 43
             },
             "modulation": {
               "modulators": [],
@@ -297,19 +297,19 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.1671034158785326,
-          "Band-2": 0.2907228957022111,
-          "Band-3": 0.4338298926768318,
-          "Band-4": 0.5501943102857889,
-          "Band-5": 0.544980360034159,
-          "Band-6": 0.43544757307940307,
-          "Band-7": 0.4385708156086565,
-          "Band-8": 0.34068448225025716,
-          "Band-9": 0.29619813055231814,
-          "Band-10": 0.18332545377458798,
-          "Band-11": 0.02516134662554048,
-          "Band-12": 0.0734054659189537,
-          "Band-13": 0.008617858422854119,
+          "Band-1": 0.2215211403879448,
+          "Band-2": 0.32981557850483234,
+          "Band-3": 0.38364887443902107,
+          "Band-4": 0.44264034559112264,
+          "Band-5": 0.41867120972767935,
+          "Band-6": 0.3605195465991803,
+          "Band-7": 0.3221957338491013,
+          "Band-8": 0.4079596965796962,
+          "Band-9": 0.25304820283862284,
+          "Band-10": 0.06541489346770979,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
           "Band-16": 0.0
@@ -406,7 +406,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1800.0,
+        "radius": 1363.5137884961966,
         "theta": 0.0,
         "phi": 0.0,
         "positionX": 384.84381103515625,
