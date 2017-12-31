@@ -119,6 +119,21 @@ public class FultonStreetLayout {
     /* Suns ------------------------------------------------------------*/
         List<Sun> suns = new ArrayList<>();
 
+        /*
+            Position : SunId
+            (1)    A : sun2
+            (2)    B : sun1
+            (3)    C : sun4
+            (4)    D : sun6
+            (5)    E : sun7
+            (6)    F : sun9
+            (7)    G : sun10
+            (8)    H : sun11
+            (9)    I : sun8
+            (10)   J : sun5
+            (11)   K : sun3
+         */
+
         suns.add(createSun("sun1", Sun.Type.ONE_THIRD, layout.get("B"), FLIP_Y, transform));
         suns.add(createSun("sun2", Sun.Type.ONE_THIRD, layout.get("A"), NO_ROTATION, transform));
         suns.add(createSun("sun3", Sun.Type.ONE_THIRD, layout.get("K"), NO_ROTATION, transform));
