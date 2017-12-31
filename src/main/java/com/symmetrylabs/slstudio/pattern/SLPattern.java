@@ -76,6 +76,13 @@ public abstract class SLPattern extends LXPattern implements Renderable {
     }
 
     @Override
+    public void dispose() {
+        super.dispose();
+
+        onInactive();
+    }
+
+    @Override
     protected void run(double deltaMs) {
         if (!isManaged) {
             renderer.run(deltaMs);
