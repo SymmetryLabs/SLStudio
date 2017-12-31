@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514689731333,
+  "timestamp": 1514690407982,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 2428,
@@ -260,11 +260,11 @@
               "SUN9": true,
               "SUN10": true,
               "SUN11": true,
-              "audioLink": true,
+              "audioLink": false,
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
-              "noise": false,
+              "noise": true,
               "speed": 0.1,
               "dsp": 1.0,
               "show edge": true
@@ -663,13 +663,13 @@
         "parameters": {
           "label": "Channel-2",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 1,
           "blendMode": 1,
           "transitionEnabled": false,
@@ -1779,9 +1779,9 @@
         "2423": true
       },
       "preview": {
-        "radius": 1058.287044691702,
-        "theta": -3.108000000000006,
-        "phi": -0.024716673851027594,
+        "radius": 621.0453137209602,
+        "theta": -3.018000000000005,
+        "phi": -0.0457166738510276,
         "positionX": 385.00006103515625,
         "positionY": 56.45000076293945,
         "positionZ": 184.5
