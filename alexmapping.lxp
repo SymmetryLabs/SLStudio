@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514692617080,
+  "timestamp": 1514692933045,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": true,
           "autoCycleTimeSecs": 60.0,
-          "fader": 9.999999747378752E-6,
+          "fader": 0.5714385746214248,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -459,8 +459,8 @@
             "parameters": {
               "label": "MappingStripLength",
               "Sun": 10,
-              "Slice": 2,
-              "Strip": 2
+              "Slice": 3,
+              "Strip": 68
             },
             "modulation": {
               "modulators": [],
@@ -715,12 +715,12 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.2081554603376491,
-          "Band-2": 0.31792461873114863,
-          "Band-3": 0.4099166330764702,
-          "Band-4": 0.49977997366860416,
-          "Band-5": 0.4192939911672916,
-          "Band-6": 0.12541023259355655,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.059913199834852215,
+          "Band-5": 0.01874652311674252,
+          "Band-6": 0.0,
           "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
