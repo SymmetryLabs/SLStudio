@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514692349891,
+  "timestamp": 1514717839517,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.13333329372107983,
-      "focusedChannel": 4,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -55,7 +55,7 @@
         "parameters": {
           "label": "Channel-1",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -117,6 +117,38 @@
               "triggers": []
             },
             "autoCycleEnabled": false
+          },
+          {
+            "id": 348,
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingPixliteDatalineLengthPattern",
+            "modulationColor": -16711895,
+            "parameters": {
+              "label": "MappingPixliteDatalineLength",
+              "Pixlite": 0,
+              "Dataline": 0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 350,
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingPixliteDatalineLengthPattern",
+            "modulationColor": -65409,
+            "parameters": {
+              "label": "MappingPixliteDatalineLength",
+              "Pixlite": 0,
+              "Dataline": 0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -142,7 +174,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 181,
@@ -183,8 +215,41 @@
             "modulationColor": -16728833,
             "parameters": {
               "label": "MappingStripAdjustment",
-              "Rvrs Arr": true,
+              "Rvrs Arr": false,
               "Sun": 1,
+              "Slice": 0,
+              "Strip": 0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 352,
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingStripReversalPattern",
+            "modulationColor": -65465,
+            "parameters": {
+              "label": "MappingStripReversal",
+              "Sun": 6,
+              "Strip": 9
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 354,
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingStripPixliteAssignmentPattern",
+            "modulationColor": -65480,
+            "parameters": {
+              "label": "MappingStripPixliteAssignment",
+              "Sun": 0,
               "Strip": 0
             },
             "modulation": {
@@ -203,7 +268,7 @@
         "parameters": {
           "label": "Channel-3",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -436,7 +501,7 @@
         "parameters": {
           "label": "Channel-4",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -525,16 +590,16 @@
           "slope": 4.5,
           "Band-1": 0.0,
           "Band-2": 0.0,
-          "Band-3": 0.019871964206627513,
-          "Band-4": 0.07388135764984571,
-          "Band-5": 0.09828959612626287,
-          "Band-6": 0.097079616388697,
-          "Band-7": 0.11563679305125862,
-          "Band-8": 0.15556279703825815,
-          "Band-9": 0.08083380053957079,
-          "Band-10": 0.04401882827175552,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
           "Band-11": 0.0,
-          "Band-12": 0.11391439272298987,
+          "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -569,7 +634,7 @@
       "modulationColor": -4522240,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
