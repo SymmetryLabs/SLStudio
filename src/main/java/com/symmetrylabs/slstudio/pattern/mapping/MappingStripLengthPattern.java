@@ -279,11 +279,12 @@ public class MappingStripLengthPattern extends SLPattern {
                 if (stripLength.getValuei() > 0) {
                         int stripStart = datalineStart + numPixelsBefore;
                         int stripEnd = stripStart + stripLength.getValuei();
-                        Arrays.fill(mappingColors, stripStart, stripEnd, LXColor.rgb(0, 0, 127));
+                        int lastIndex = stripEnd - 1;
+
+                        Arrays.fill(mappingColors, stripStart, lastIndex, LXColor.rgb(0, 0, 127));
+                        mappingColors[lastIndex] = LXColor.WHITE;
 
                         if (datalineRef.datalineOrderIndex + 1 < datalineMapping.mappingItems.size()) {
-                                int lastIndex = stripEnd - 1;
-                                mappingColors[lastIndex] = LXColor.WHITE;
                                 mappingColors[lastIndex + 1] = LXColor.GREEN;
                         }
                 }
