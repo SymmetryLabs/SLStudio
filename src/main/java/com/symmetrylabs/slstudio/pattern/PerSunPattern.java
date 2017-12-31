@@ -45,7 +45,6 @@ public abstract class PerSunPattern extends SunsPattern {
         }
     };
 
-    protected void createParameters() { }
     protected abstract SLPattern createSubpattern(Sun sun, int sunIndex);
 
     private void wrapChildParameter(LXParameter param) {
@@ -109,14 +108,12 @@ public abstract class PerSunPattern extends SunsPattern {
 
         subpatterns = new ArrayList<>(model.getSuns().size());
 
-        createParameters();
-
         int sunIndex = 0;
         for (Sun sun : model.getSuns()) {
             try {
                 Subpattern subpattern = new Subpattern(sun, sunIndex, createSubpattern(sun, sunIndex));
 
-                //subpattern.pattern.setManagedMode(true);
+                subpattern.pattern.setManagedMode(true);
 
                 for (LXParameter param : subpattern.pattern.getParameters()) {
                     wrapChildParameter(param);
