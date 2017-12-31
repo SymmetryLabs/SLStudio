@@ -1,7 +1,5 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.BooleanParameter;
@@ -9,7 +7,9 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
- /* Non-Patterns */
+import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.model.SLModel;
+
 public abstract class SLPattern extends LXPattern {
 
     protected final SLStudioLX lx;
@@ -39,5 +39,9 @@ public abstract class SLPattern extends LXPattern {
 
     protected DiscreteParameter discreteParameter(String name, int value, int min, int max) {
         return addParam(new DiscreteParameter(name, value, min, max));
+    }
+
+    public SLPattern setBuffer(int[] buffer) {
+        return (SLPattern)setBuffer(() -> buffer);
     }
 }

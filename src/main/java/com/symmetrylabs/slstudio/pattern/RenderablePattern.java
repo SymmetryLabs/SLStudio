@@ -61,10 +61,6 @@ public abstract class RenderablePattern extends SLPattern implements Renderable 
         renderer.stop();
     }
 
-    public void setLayer(int[] layer) {
-        setBuffer(() -> layer);
-    }
-
     @Override
     public void run(final double deltaMs) {
         if (!isManaged) {
