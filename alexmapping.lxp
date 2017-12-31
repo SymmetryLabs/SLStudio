@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514692933045,
+  "timestamp": 1514693448034,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": true,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.5714385746214248,
+          "fader": 9.999999747378752E-6,
           "crossfadeGroup": 1,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -402,7 +402,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 27,
@@ -441,9 +441,9 @@
             "modulationColor": -16717057,
             "parameters": {
               "label": "MappingStripAdjustment",
-              "Rvrs Arr": false,
-              "Sun": 10,
-              "Strip": 140
+              "Rvrs Arr": true,
+              "Sun": 5,
+              "Strip": 159
             },
             "modulation": {
               "modulators": [],
@@ -716,15 +716,15 @@
           "release": 100.0,
           "slope": 4.5,
           "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.059913199834852215,
-          "Band-5": 0.01874652311674252,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
+          "Band-2": 0.053706058110841504,
+          "Band-3": 0.11661371088947037,
+          "Band-4": 0.17957433670825884,
+          "Band-5": 0.2632705193626843,
+          "Band-6": 0.4881785170387136,
+          "Band-7": 0.4353438180005459,
           "Band-8": 0.0,
           "Band-9": 0.0,
-          "Band-10": 0.0,
+          "Band-10": 0.029251185788343625,
           "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
