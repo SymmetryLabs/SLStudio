@@ -14513,7 +14513,7 @@
             {
               "type": "StripMapping",
               "numPoints": 107,
-              "rotation": 0.0,
+              "rotation": -0.21000001,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -15952,7 +15952,7 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 151,
+              "numPoints": 177,
               "rotation": -12.0,
               "reversed": false,
               "output": {
