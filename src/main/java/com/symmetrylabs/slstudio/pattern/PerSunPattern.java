@@ -32,8 +32,9 @@ public abstract class PerSunPattern extends SunsPattern {
         public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
             // System.out.println(1000 / deltaMs);
             subpatterns.parallelStream().forEach(subpattern -> {
-                if (subpattern.enableParam.getValueb()) {
-                    subpattern.pattern.render(deltaMs, subpattern.sun.getPoints(), layer);
+                if (subpattern.enableParam.isOn()) {
+                    subpattern.pattern.setBuffer(layer);
+                    subpattern.pattern.loop(deltaMs);
                 }
                 else {
                     for (LXPoint point : subpattern.sun.points) {
@@ -44,8 +45,7 @@ public abstract class PerSunPattern extends SunsPattern {
         }
     };
 
-    protected void createParameters() { }
-    protected abstract RenderablePattern createSubpattern(Sun sun, int sunIndex);
+    protected abstract SLPattern createSubpattern(Sun sun, int sunIndex);
 
     private void wrapChildParameter(LXParameter param) {
         String name = param.getLabel();
@@ -108,16 +108,18 @@ public abstract class PerSunPattern extends SunsPattern {
 
         subpatterns = new ArrayList<>(model.getSuns().size());
 
-        createParameters();
-
         int sunIndex = 0;
         for (Sun sun : model.getSuns()) {
             try {
                 Subpattern subpattern = new Subpattern(sun, sunIndex, createSubpattern(sun, sunIndex));
 
+                subpattern.pattern.setManagedMode(true);
+
                 for (LXParameter param : subpattern.pattern.getParameters()) {
                     wrapChildParameter(param);
                 }
+
+                addSubcomponent(subpattern.pattern);
 
                 subpatterns.add(subpattern);
             }
@@ -142,7 +144,10 @@ public abstract class PerSunPattern extends SunsPattern {
         super.onActive();
 
         for (Subpattern subpattern : subpatterns) {
-            subpattern.pattern.onUIStart();
+            if (!subpattern.isActive) {
+                subpattern.pattern.onActive();
+                subpattern.isActive = true;
+            }
         }
 
         renderer.start();
@@ -153,7 +158,10 @@ public abstract class PerSunPattern extends SunsPattern {
         super.onInactive();
 
         for (Subpattern subpattern : subpatterns) {
-            subpattern.pattern.onUIEnd();
+            if (subpattern.isActive) {
+                subpattern.pattern.onInactive();
+                subpattern.isActive = false;
+            }
         }
 
         renderer.stop();
@@ -167,10 +175,12 @@ public abstract class PerSunPattern extends SunsPattern {
     private static class Subpattern {
         public final Sun sun;
         public final int sunIndex;
-        public final RenderablePattern pattern;
+        public final SLPattern pattern;
         public final BooleanParameter enableParam;
 
-        public Subpattern(Sun sun, int sunIndex, RenderablePattern pattern) {
+        public boolean isActive = false;
+
+        public Subpattern(Sun sun, int sunIndex, SLPattern pattern) {
             this.sun = sun;
             this.sunIndex = sunIndex;
             this.pattern = pattern;

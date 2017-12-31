@@ -10,7 +10,7 @@ public class PerSunWasps extends PerSunPattern {
     }
 
     @Override
-    protected RenderablePattern createSubpattern(Sun sun, int sunIndex) {
+    protected SLPattern createSubpattern(Sun sun, int sunIndex) {
         Wasps pattern = new Wasps(lx);
         pattern.setModel(sun);
         return pattern;

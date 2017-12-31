@@ -18,7 +18,11 @@ public class TestSelectPixlite extends SLPattern {
 
     public TestSelectPixlite(LX lx) {
         super(lx);
+
         this.selectedPixlite = new ObjectParameter("pixlite", ((SunsModel)model).getSlices().toArray());
+
+        System.out.println("NUM SLICES: " + ((SunsModel)model).getSlices().size());
+
         addParameter(selectedPixlite);
         addParameter(hue);
         addParameter(saturation);

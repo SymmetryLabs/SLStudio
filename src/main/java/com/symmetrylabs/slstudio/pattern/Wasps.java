@@ -8,6 +8,7 @@ import org.apache.commons.math3.util.FastMath;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.BooleanParameter;
 
 public class Wasps extends ParticlePattern {
     private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
@@ -24,6 +25,7 @@ public class Wasps extends ParticlePattern {
     public CompoundParameter twistX;
     public CompoundParameter twistY;
     public CompoundParameter twistZ;
+    public BooleanParameter edgeRepel;
 
     public Wasps(LX lx) {
         super(lx);
@@ -33,7 +35,7 @@ public class Wasps extends ParticlePattern {
     protected void createParameters() {
         super.createParameters();
 
-        addParameter(speed = new CompoundParameter("speed", 0.2, 0, 2));
+        addParameter(speed = new CompoundParameter("speed", 1, 0, 3));
         addParameter(accel = new CompoundParameter("accel", 1.5, 0, 2));
         addParameter(dampen = new CompoundParameter("dampen", 0.75, 0, 1));
         addParameter(focusX = new CompoundParameter("focusX", 0, -1, 1));
@@ -45,6 +47,7 @@ public class Wasps extends ParticlePattern {
         addParameter(twistX = new CompoundParameter("twistX", 0, -1, 1));
         addParameter(twistY = new CompoundParameter("twistY", 0, -1, 1));
         addParameter(twistZ = new CompoundParameter("twistZ", 0, -1, 1));
+        addParameter(edgeRepel = new BooleanParameter("edgeRepel", false));
     }
 
     @Override
@@ -55,22 +58,28 @@ public class Wasps extends ParticlePattern {
         //System.out.println("[" + p.pos[0] + ", " + p.pos[1] + ", " + p.pos[2] + "]");
     }
 
+    private static final float TIME_BOOST = 10f;
+    private static final float ACCEL_SCALE = 0.03f;
+    private static final float DAMPEN_SCALE = 0.05f;
+    private static final float PULL_SCALE = 0.01f;
+    private static final float TWIST_SCALE = 0.005f;
+    private static final float BLOB_PULL_SCALE = 0.001f;
+
     @Override
     protected void simulate(double deltaMs) {
-        double timeBoost = 30;
-        double timeStep = timeBoost * deltaMs / 1000f;
+        double timeStep = TIME_BOOST * deltaMs / 1000f;
 
-        double speedValue = speed.getValuef();
-        double accelValue = 0.01 * accel.getValue() * timeStep;
-        double dampenValue = 0.05 * dampen.getValue();
+        double speedValue = speed.getValue();
+        double accelValue = ACCEL_SCALE * accel.getValue();
+        double dampenValue = DAMPEN_SCALE * dampen.getValue();
 
-        double pullXValue = 0.01 * pullX.getValue();
-        double pullYValue = 0.01 * pullY.getValue();
-        double pullZValue = 0.01 * pullZ.getValue();
+        double pullXValue = PULL_SCALE * pullX.getValue();
+        double pullYValue = PULL_SCALE * pullY.getValue();
+        double pullZValue = PULL_SCALE * pullZ.getValue();
 
-        double twistXValue = 0.005 * twistX.getValue();
-        double twistYValue = 0.005 * twistY.getValue();
-        double twistZValue = 0.005 * twistZ.getValue();
+        double twistXValue = TWIST_SCALE * twistX.getValue();
+        double twistYValue = TWIST_SCALE * twistY.getValue();
+        double twistZValue = TWIST_SCALE * twistZ.getValue();
 
         double focusPosX = focusX.getValue();
         double focusPosY = focusY.getValue();
@@ -81,29 +90,42 @@ public class Wasps extends ParticlePattern {
         double blobPosZ = 0;
         double blobScale = 0;
 
-        if (enableBlobs.getValueb()) {
-            if (closestBlobDist != null) {
-                blobPosX = (closestBlobDist.blob.pos.x - model.cx) * 2f / model.xRange;
-                blobPosY = (closestBlobDist.blob.pos.y - model.cy) * 2f / model.yRange;
-                blobPosZ = (closestBlobDist.blob.pos.z - model.cz) * 2f / model.zRange;
-                blobScale = 0.001 * blobAffinity.getValue() / (closestBlobDist.dist + 1);
+        if (enableBlobs.isOn()) {
+            switch (blobTrackingMode.getEnum()) {
+                case CLOSEST:
+                    if (closestBlobDist != null) {
+                        blobPosX = (closestBlobDist.blob.pos.x - model.cx) * 2f / model.xRange;
+                        blobPosY = (closestBlobDist.blob.pos.y - model.cy) * 2f / model.yRange;
+                        blobPosZ = (closestBlobDist.blob.pos.z - model.cz) * 2f / model.zRange;
+                        blobScale = BLOB_PULL_SCALE * blobPull.getValue() / (closestBlobDist.dist + 1);
+                    }
+                    break;
+                case AVERAGE:
+                    if (visibleBlobCount > 0) {
+                        blobPosX = (avgBlobPos[0] - model.cx) * 2f / model.xRange;
+                        blobPosY = (avgBlobPos[1] - model.cy) * 2f / model.yRange;
+                        blobPosZ = (avgBlobPos[2] - model.cz) * 2f / model.zRange;
+                        blobScale = BLOB_PULL_SCALE * blobPull.getValue() / (avgBlobDist + 1);
+                    }
+                    break;
             }
         }
 
-        List<Particle> particleList;
-        synchronized (particles) {
-            particleList = new ArrayList<Particle>(particles);
-        }
-        for (int i = 0; i < particleList.size(); ++i) {
-            Particle p = particleList.get(i);
+        final double blobPosXFinal = blobPosX;
+        final double blobPosYFinal = blobPosY;
+        final double blobPosZFinal = blobPosZ;
+        final double blobScaleFinal = blobScale;
 
+        final boolean edgeRepelEnabled = edgeRepel.isOn();
+
+        particles.parallelStream().forEach(p -> {
             p.vel[0] -= dampenValue * p.vel[0];
             p.vel[1] -= dampenValue * p.vel[1];
             p.vel[2] -= dampenValue * p.vel[2];
 
-            p.vel[0] += accelValue * (FastMath.random() - .5);
-            p.vel[1] += accelValue * (FastMath.random() - .5);
-            p.vel[2] += accelValue * (FastMath.random() - .5);
+            p.vel[0] += accelValue * (FastMath.random() - 0.5);
+            p.vel[1] += accelValue * (FastMath.random() - 0.5);
+            p.vel[2] += accelValue * (FastMath.random() - 0.5);
 
             double pullVecX = focusPosX - p.pos[0];
             double pullVecY = focusPosY - p.pos[1];
@@ -113,13 +135,13 @@ public class Wasps extends ParticlePattern {
             p.vel[1] += pullYValue * pullVecY;
             p.vel[2] += pullZValue * pullVecZ;
 
-            double blobVecX = blobPosX - p.pos[0];
-            double blobVecY = blobPosY - p.pos[1];
-            double blobVecZ = blobPosZ - p.pos[2];
+            double blobVecX = blobPosXFinal - p.pos[0];
+            double blobVecY = blobPosYFinal - p.pos[1];
+            double blobVecZ = blobPosZFinal - p.pos[2];
 
-            p.vel[0] += blobScale * blobVecX;
-            p.vel[1] += blobScale * blobVecY;
-            p.vel[2] += blobScale * blobVecZ;
+            p.vel[0] += blobScaleFinal * blobVecX;
+            p.vel[1] += blobScaleFinal * blobVecY;
+            p.vel[2] += blobScaleFinal * blobVecZ;
 
             // NOTE: assuming left-handed Z-axis
             double pullNorm = FastMath.sqrt(pullVecX * pullVecX + pullVecY * pullVecY + pullVecZ * pullVecZ);
@@ -148,10 +170,19 @@ public class Wasps extends ParticlePattern {
             p.vel[1] += twistZValue * twistZVecY;
             p.vel[2] += twistZValue * twistZVecZ;
 
-            if (false && p.contact > 0) {
+            if (edgeRepelEnabled && p.contact > 0) {
                 if (p.rebound[0] * p.vel[0] < 0) p.vel[0] /= (1 + p.contact);
                 if (p.rebound[1] * p.vel[1] < 0) p.vel[1] /= (1 + p.contact);
                 if (p.rebound[2] * p.vel[2] < 0) p.vel[2] /= (1 + p.contact);
+
+                p.arrow[0] = p.rebound[0];
+                p.arrow[1] = p.rebound[1];
+                p.arrow[2] = p.rebound[2];
+            }
+            else {
+                p.arrow[0] = 0;
+                p.arrow[1] = 0;
+                p.arrow[2] = 0;
             }
 
             p.pos[0] += p.vel[0] * speedValue * timeStep;
@@ -164,6 +195,6 @@ public class Wasps extends ParticlePattern {
             if (p.pos[1] > 1) p.pos[1] = 1;
             if (p.pos[2] < -1) p.pos[2] = -1;
             if (p.pos[2] > 1) p.pos[2] = 1;
-        }
+        });
     }
 }

@@ -11,21 +11,17 @@ import java.util.Set;
 
 
 public class UIMarkerPainter extends UI3dComponent {
-    Set<MarkerSource> sources;
+    Set<MarkerSource> sources = new HashSet<>();
 
-    public UIMarkerPainter() {
-        sources = new HashSet<MarkerSource>();
-    }
-
-    public void addSource(MarkerSource source) {
+    public synchronized void addSource(MarkerSource source) {
         sources.add(source);
     }
 
-    public void removeSource(MarkerSource source) {
+    public synchronized void removeSource(MarkerSource source) {
         sources.remove(source);
     }
 
-    protected void onDraw(UI ui, PGraphics pg) {
+    protected synchronized void onDraw(UI ui, PGraphics pg) {
         for (MarkerSource source : sources) {
             for (Marker marker : source.getMarkers()) {
                 marker.draw(pg);
