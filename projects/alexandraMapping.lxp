@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514678609763,
+  "timestamp": 1514682993381,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,7 +14,7 @@
       "scene-5": false,
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
-      "speed": 1.0,
+      "speed": 0.13333329372107983,
       "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
@@ -150,8 +150,8 @@
             "modulationColor": -11008,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
-              "Pixlite": 9,
-              "Dataline": 9
+              "Pixlite": 10,
+              "Dataline": 0
             },
             "modulation": {
               "modulators": [],
@@ -166,9 +166,9 @@
             "modulationColor": -16721665,
             "parameters": {
               "label": "MappingStripLength",
-              "Sun": 0,
-              "Slice": 0,
-              "Strip": 0
+              "Sun": 1,
+              "Slice": 1,
+              "Strip": 31
             },
             "modulation": {
               "modulators": [],
@@ -184,8 +184,8 @@
             "parameters": {
               "label": "MappingStripAdjustment",
               "Rvrs Arr": true,
-              "Sun": 0,
-              "Strip": 31
+              "Sun": 1,
+              "Strip": 0
             },
             "modulation": {
               "modulators": [],
@@ -218,7 +218,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 190,
@@ -403,6 +403,29 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 296,
+            "class": "com.symmetrylabs.slstudio.pattern.CrossSections",
+            "modulationColor": -3931905,
+            "parameters": {
+              "label": "CrossSections",
+              "XRAT": 0.0,
+              "YRAT": 0.0,
+              "ZRAT": 0.0,
+              "XWID": 0.05999999865889549,
+              "XLEV": 1.0,
+              "YLEV": 0.0,
+              "ZLEV": 0.0,
+              "YWID": 0.0,
+              "ZWID": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       },
@@ -502,17 +525,17 @@
           "slope": 4.5,
           "Band-1": 0.0,
           "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.04232373045819038,
-          "Band-5": 0.1482965024577435,
-          "Band-6": 0.28449166083407995,
-          "Band-7": 0.21715374668292675,
-          "Band-8": 0.18787484301636503,
-          "Band-9": 0.17369930925407606,
-          "Band-10": 0.005838451504929787,
+          "Band-3": 0.013422486863152394,
+          "Band-4": 0.04239103833828717,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.042813038871536424,
+          "Band-8": 0.062072475659478044,
+          "Band-9": 0.0684381954533041,
+          "Band-10": 0.0,
           "Band-11": 0.0,
-          "Band-12": 0.012259774235877763,
-          "Band-13": 0.054835421069121204,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
           "Band-16": 0.0
