@@ -149,8 +149,6 @@ public class MappingStripLengthPattern extends SLPattern {
                 resettingInProgress = false;
 
                 needsColorBufferReset = true;
-
-                resetOutputData();
         }
 
         private void checkDatalineConsistency() {
