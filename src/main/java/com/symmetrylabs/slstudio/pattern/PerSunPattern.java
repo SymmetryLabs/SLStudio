@@ -33,7 +33,8 @@ public abstract class PerSunPattern extends SunsPattern {
             // System.out.println(1000 / deltaMs);
             subpatterns.parallelStream().forEach(subpattern -> {
                 if (subpattern.enableParam.getValueb()) {
-                    subpattern.pattern.render(deltaMs, subpattern.sun.getPoints(), layer);
+                    subpattern.pattern.setLayer(layer);
+                    subpattern.pattern.loop(deltaMs);
                 }
                 else {
                     for (LXPoint point : subpattern.sun.points) {
@@ -115,9 +116,13 @@ public abstract class PerSunPattern extends SunsPattern {
             try {
                 Subpattern subpattern = new Subpattern(sun, sunIndex, createSubpattern(sun, sunIndex));
 
+                subpattern.pattern.setManagedMode(true);
+
                 for (LXParameter param : subpattern.pattern.getParameters()) {
                     wrapChildParameter(param);
                 }
+
+                addSubcomponent(subpattern.pattern);
 
                 subpatterns.add(subpattern);
             }
@@ -142,7 +147,7 @@ public abstract class PerSunPattern extends SunsPattern {
         super.onActive();
 
         for (Subpattern subpattern : subpatterns) {
-            subpattern.pattern.onUIStart();
+            subpattern.pattern.onActive();
         }
 
         renderer.start();
@@ -153,7 +158,7 @@ public abstract class PerSunPattern extends SunsPattern {
         super.onInactive();
 
         for (Subpattern subpattern : subpatterns) {
-            subpattern.pattern.onUIEnd();
+            subpattern.pattern.onInactive();
         }
 
         renderer.stop();

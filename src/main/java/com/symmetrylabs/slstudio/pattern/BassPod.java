@@ -10,7 +10,7 @@ import heronarts.lx.parameter.CompoundParameter;
 
 import static processing.core.PApplet.*;
 
-public class BassPod extends RenderablePattern {
+public class BassPod extends CopySunsPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
@@ -33,7 +33,9 @@ public class BassPod extends RenderablePattern {
     }
 
     @Override
-    public void onUIStart() {
+    public void onActive() {
+        super.onActive();
+
         eq.range.setValue(36);
         eq.release.setValue(300);
         eq.gain.setValue(-6);
@@ -41,11 +43,11 @@ public class BassPod extends RenderablePattern {
     }
 
     @Override
-    public void render(double deltaMs, List<LXPoint> points, int[] layer) {
+    public void run(double deltaMs) {
         final float bassLevel = eq.getAveragef(0, 5);
         final float satBase = bassLevel * 480 * clr.getValuef();
 
-        points.parallelStream().forEach(p -> {
+        model.getPoints().parallelStream().forEach(p -> {
             int avgIndex = (int) constrain(1 + abs(p.x - model.cx) / (model.cx) * (eq.numBands - 5), 0, eq.numBands - 5);
             float value = 0;
             for (int i = avgIndex; i < avgIndex + 5; ++i) {
@@ -54,7 +56,7 @@ public class BassPod extends RenderablePattern {
             value /= 5.;
 
             float b = constrain(8 * (value * model.yMax - abs(p.y - model.yMax / 2f)), 0, 100);
-            layer[p.index] = lx.hsb(
+            colors[p.index] = lx.hsb(
                 palette.getHuef() + abs(p.y - model.cy) + abs(p.x - model.cx),
                 constrain(satBase - .6f * dist(p.x, p.y, model.cx, model.cy), 0, 100),
                 b

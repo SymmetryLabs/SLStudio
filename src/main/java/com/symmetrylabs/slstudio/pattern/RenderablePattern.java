@@ -15,6 +15,7 @@ import com.symmetrylabs.slstudio.render.SequentialRenderer;
 
 public abstract class RenderablePattern extends SLPattern implements Renderable {
     private Renderer renderer;
+    private boolean isManaged = false;
 
     protected RenderablePattern(LX lx) {
         super(lx);
@@ -32,30 +33,46 @@ public abstract class RenderablePattern extends SLPattern implements Renderable 
         this.renderer = renderer;
     }
 
-    public void onUIStart() { }
-    public void onUIEnd() { }
+    public void setManagedMode(boolean isManaged) {
+        boolean wasManaged = this.isManaged;
+        this.isManaged = isManaged;
+
+        if (wasManaged && !isManaged) {
+            onActive();
+        }
+        else if (!wasManaged && isManaged) {
+            onInactive();
+        }
+    }
 
     @Override
     public void onActive() {
         super.onActive();
 
-        onUIStart();
-
-        renderer.start();
+        if (!isManaged) {
+            renderer.start();
+        }
     }
 
     @Override
     public void onInactive() {
         super.onInactive();
 
-        onUIEnd();
-
         renderer.stop();
+    }
+
+    public void setLayer(int[] layer) {
+        setBuffer(() -> layer);
     }
 
     @Override
     public void run(final double deltaMs) {
-        renderer.run(deltaMs);
+        if (!isManaged) {
+            renderer.run(deltaMs);
+        }
+        else {
+            render(deltaMs, model.getPoints(), colors);
+        }
     }
 
     protected void createParameters() { }

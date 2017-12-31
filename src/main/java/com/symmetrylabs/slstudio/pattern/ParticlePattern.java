@@ -40,10 +40,11 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     public static final int PARTICLE_GROUP_COUNT = 16;
 
     public static enum KernelChoice {
-        GAUSSIAN
-            , LAPLACE
-            , SPHERE
-            //, FLAT
+        GAUSSIAN, LAPLACE, SPHERE //, FLAT
+    }
+
+    public static enum BlobTrackingMode {
+        CLOSEST, AVERAGE
     }
 
     public CompoundParameter particleCount;
@@ -61,6 +62,7 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     public CompoundParameter blobMaxDist;
     public CompoundParameter blobMaxAngle;
     public CompoundParameter blobPull;
+    public EnumParameter<BlobTrackingMode> blobTrackingMode;
 
     protected ModelIndex modelIndex;
     protected List<Particle> particles = new CopyOnWriteArrayList<>();
@@ -68,6 +70,9 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
 
     protected BlobFollower blobFollower;
     protected BlobDist closestBlobDist = null;
+    protected double[] avgBlobPos = new double[3];
+    protected double avgBlobDist = 0;
+    protected int visibleBlobCount = 0;
 
     protected Particle spawnParticle(int index, int pointCount) {
         return new Particle(index, pointCount);
@@ -131,6 +136,7 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
         addParameter(blobMaxDist = new CompoundParameter("bMaxDist", 500, 0, 1000));
         addParameter(blobMaxAngle = new CompoundParameter("bMaxAngle", 60, 0, 90));
         addParameter(blobPull = new CompoundParameter("bPull", 100, 0, 200));
+        addParameter(blobTrackingMode = new EnumParameter<BlobTrackingMode>("bTrackingMode", BlobTrackingMode.AVERAGE));
     }
 
     @Override
@@ -139,14 +145,16 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
     }
 
     @Override
-    public void onUIStart() {
-        super.onUIStart();
+    public void onActive() {
+        super.onActive();
+
         lx.ui.addMarkerSource(this);
     }
 
     @Override
-    public void onUIEnd() {
-        super.onUIEnd();
+    public void onInactive() {
+        super.onInactive();
+
         lx.ui.removeMarkerSource(this);
     }
 
@@ -171,6 +179,12 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
                 (float)(model.cz - blobPos.z)
             ), LXColor.RED
         ));
+
+        markers.add(new CubeMarker(new PVector(
+                (float)avgBlobPos[0],
+                (float)avgBlobPos[1],
+                (float)avgBlobPos[2]
+            ), 50, LXColor.BLUE));
 
         return markers;
     }
@@ -231,6 +245,10 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
             double maxAngleRad = blobMaxAngle.getValue() * FastMath.PI / 180;
             List<BlobFollower.Follower> blobs = blobFollower.getFollowers();
 
+            double avgBlobPosX = 0;
+            double avgBlobPosY = 0;
+            double avgBlobPosZ = 0;
+
             BlobFollower.Follower closestBlob = null;
             double closestSqrDist = Double.MAX_VALUE;
             for (BlobFollower.Follower blob : blobs) {
@@ -243,7 +261,28 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
                     closestSqrDist = sqrDist;
                     closestBlob = blob;
                 }
+
+                avgBlobPosX += blob.pos.x;
+                avgBlobPosY += blob.pos.y;
+                avgBlobPosZ += blob.pos.z;
             }
+
+            visibleBlobCount = blobs.size();
+
+            if (visibleBlobCount > 0) {
+                avgBlobPosX /= visibleBlobCount;
+                avgBlobPosY /= visibleBlobCount;
+                avgBlobPosZ /= visibleBlobCount;
+            }
+
+            avgBlobPos[0] = avgBlobPosX;
+            avgBlobPos[1] = avgBlobPosY;
+            avgBlobPos[2] = avgBlobPosZ;
+
+            double dx = avgBlobPosX - model.cx;
+            double dy = avgBlobPosY - model.cy;
+            double dz = avgBlobPosZ - model.cz;
+            avgBlobDist = FastMath.sqrt(dx * dx + dy * dy + dz * dz);
 
             if (closestBlob == null) {
                 closestBlobDist = null;
@@ -254,6 +293,7 @@ public abstract class ParticlePattern extends RenderablePattern implements Marke
             blobFollower.advance((float)deltaMs * 0.001f);
         } else {
             closestBlobDist = null;
+            visibleBlobCount = 0;
         }
 
         simulate(deltaMs);

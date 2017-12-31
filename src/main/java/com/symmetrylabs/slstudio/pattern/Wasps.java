@@ -8,6 +8,7 @@ import org.apache.commons.math3.util.FastMath;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.BooleanParameter;
 
 public class Wasps extends ParticlePattern {
     private final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
@@ -24,6 +25,7 @@ public class Wasps extends ParticlePattern {
     public CompoundParameter twistX;
     public CompoundParameter twistY;
     public CompoundParameter twistZ;
+    public BooleanParameter edgeRepel;
 
     public Wasps(LX lx) {
         super(lx);
@@ -45,6 +47,7 @@ public class Wasps extends ParticlePattern {
         addParameter(twistX = new CompoundParameter("twistX", 0, -1, 1));
         addParameter(twistY = new CompoundParameter("twistY", 0, -1, 1));
         addParameter(twistZ = new CompoundParameter("twistZ", 0, -1, 1));
+        addParameter(edgeRepel = new BooleanParameter("edgeRepel", false));
     }
 
     @Override
@@ -87,17 +90,33 @@ public class Wasps extends ParticlePattern {
         double blobPosZ = 0;
         double blobScale = 0;
 
-        if (enableBlobs.isOn() && closestBlobDist != null) {
-            blobPosX = (closestBlobDist.blob.pos.x - model.cx) * 2f / model.xRange;
-            blobPosY = (closestBlobDist.blob.pos.y - model.cy) * 2f / model.yRange;
-            blobPosZ = (closestBlobDist.blob.pos.z - model.cz) * 2f / model.zRange;
-            blobScale = BLOB_PULL_SCALE * blobPull.getValue() / (closestBlobDist.dist + 1);
+        if (enableBlobs.isOn()) {
+            switch (blobTrackingMode.getEnum()) {
+                case CLOSEST:
+                    if (closestBlobDist != null) {
+                        blobPosX = (closestBlobDist.blob.pos.x - model.cx) * 2f / model.xRange;
+                        blobPosY = (closestBlobDist.blob.pos.y - model.cy) * 2f / model.yRange;
+                        blobPosZ = (closestBlobDist.blob.pos.z - model.cz) * 2f / model.zRange;
+                        blobScale = BLOB_PULL_SCALE * blobPull.getValue() / (closestBlobDist.dist + 1);
+                    }
+                    break;
+                case AVERAGE:
+                    if (visibleBlobCount > 0) {
+                        blobPosX = (avgBlobPos[0] - model.cx) * 2f / model.xRange;
+                        blobPosY = (avgBlobPos[1] - model.cy) * 2f / model.yRange;
+                        blobPosZ = (avgBlobPos[2] - model.cz) * 2f / model.zRange;
+                        blobScale = BLOB_PULL_SCALE * blobPull.getValue() / (avgBlobDist + 1);
+                    }
+                    break;
+            }
         }
 
         final double blobPosXFinal = blobPosX;
         final double blobPosYFinal = blobPosY;
         final double blobPosZFinal = blobPosZ;
         final double blobScaleFinal = blobScale;
+
+        final boolean edgeRepelEnabled = edgeRepel.isOn();
 
         particles.parallelStream().forEach(p -> {
             p.vel[0] -= dampenValue * p.vel[0];
@@ -151,10 +170,19 @@ public class Wasps extends ParticlePattern {
             p.vel[1] += twistZValue * twistZVecY;
             p.vel[2] += twistZValue * twistZVecZ;
 
-            if (p.contact > 0) {
+            if (edgeRepelEnabled && p.contact > 0) {
                 if (p.rebound[0] * p.vel[0] < 0) p.vel[0] /= (1 + p.contact);
                 if (p.rebound[1] * p.vel[1] < 0) p.vel[1] /= (1 + p.contact);
                 if (p.rebound[2] * p.vel[2] < 0) p.vel[2] /= (1 + p.contact);
+
+                p.arrow[0] = p.rebound[0];
+                p.arrow[1] = p.rebound[1];
+                p.arrow[2] = p.rebound[2];
+            }
+            else {
+                p.arrow[0] = 0;
+                p.arrow[1] = 0;
+                p.arrow[2] = 0;
             }
 
             p.pos[0] += p.vel[0] * speedValue * timeStep;
@@ -167,10 +195,6 @@ public class Wasps extends ParticlePattern {
             if (p.pos[1] > 1) p.pos[1] = 1;
             if (p.pos[2] < -1) p.pos[2] = -1;
             if (p.pos[2] > 1) p.pos[2] = 1;
-
-            p.arrow[0] = p.rebound[0];
-            p.arrow[1] = p.rebound[1];
-            p.arrow[2] = p.rebound[2];
         });
     }
 }

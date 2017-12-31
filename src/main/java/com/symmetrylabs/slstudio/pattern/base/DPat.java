@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
+import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.SplittableRandom;
@@ -17,12 +18,13 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
+import com.symmetrylabs.slstudio.pattern.CopySunsPattern;
 import com.symmetrylabs.slstudio.util.NoiseUtils;
 import com.symmetrylabs.slstudio.util.MathUtils;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.Sun;
 
-public abstract class DPat extends LXPattern {
+public abstract class DPat extends CopySunsPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     public ArrayList<DBool> bools = new ArrayList<DBool>();
     public PVector pTrans = new PVector();
@@ -46,7 +48,6 @@ public abstract class DPat extends LXPattern {
     public CompoundParameter pTransX;
     public CompoundParameter pTransY;
     public BooleanParameter pXsym, pYsym, pRsym, pXdup, pXtrip, pJog, pGrey;
-    public BooleanParameter perSun;
 
     public float lxh() {
         return palette.getHuef();
@@ -213,13 +214,6 @@ public abstract class DPat extends LXPattern {
 
     // boolean handleNote(LXMidiNote note) {return false;}
 
-    public void onInactive() {
-    }
-
-    public void onActive() {
-        
-    }
-
     public void onReset() {
         // for (int i=0; i<bools .size(); i++) bools.get(i).reset();
         // for (int i=0; i<picks .size(); i++) picks.get(i).reset();
@@ -238,9 +232,6 @@ public abstract class DPat extends LXPattern {
         pRotY = addParam("RotY", .5);
         pRotZ = addParam("RotZ", .5);
         pSpin = addParam("Spin", .5);
-
-        perSun = new BooleanParameter("perSun");
-        addParameter(perSun);
 
         pXsym = new BooleanParameter("X-SYM");
         pYsym = new BooleanParameter("Y-SYM");
@@ -303,6 +294,7 @@ public abstract class DPat extends LXPattern {
     protected void updateLights() {
     }
 
+    @Override
     public void run(double deltaMs) {
           /* pre patternControls UI
                     if (this == midiEngine.getFocusedPattern()) {
@@ -336,105 +328,49 @@ public abstract class DPat extends LXPattern {
 
         // TODO Threadding: For some reason, using parallelStream here messes up the animations.
 
-        if (perSun.isOn()) {
-            SLModel slModel = (SLModel) model;
-            Arrays.asList(slModel.getMasterSun().points).parallelStream().forEach(new Consumer<LXPoint>() {
-                @Override
-                public void accept(final LXPoint p) {
-                    PVector P = new PVector(), tP = new PVector();
+        model.getPoints().parallelStream().forEach(p -> {
+            PVector P = new PVector(), tP = new PVector();
 
-                    setVec(P, p);
-                    P.sub(modmin);
-                    P.sub(pTrans);
-                    if (sprk > 0) {
-                        P.y += sprk * randctr(50);
-                        P.x += sprk * randctr(50);
-                        P.z += sprk * randctr(50);
-                    }
-                    if (wvAmp > 0) P.y += interpWv(p.x - modmin.x, yWaveNz);
-                    if (wvAmp > 0) P.x += interpWv(p.y - modmin.y, xWaveNz);
-                    if (pJog.getValueb()) P.add(xyzJog);
-
-
-                    int cNew, cOld = colors[p.index];
-                    {
-                        tP.set(P);
-                        cNew = CalcPoint(tP);
-                    }
-                    if (pXsym.getValueb()) {
-                        tP.set(mMax.x - P.x, P.y, P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pYsym.getValueb()) {
-                        tP.set(P.x, mMax.y - P.y, P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pRsym.getValueb()) {
-                        tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pXdup.getValueb()) {
-                        tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pGrey.getValueb()) {
-                        cNew = lx.hsb(0, 0, LXColor.b(cNew));
-                    }
-                    colors[p.index] = cNew;
-                }
-            });
-
-            for (Sun sun : slModel.getSuns()) {
-                sun.copyFromMasterSun(colors);
+            setVec(P, p);
+            P.sub(modmin);
+            P.sub(pTrans);
+            if (sprk > 0) {
+                P.y += sprk * randctr(50);
+                P.x += sprk * randctr(50);
+                P.z += sprk * randctr(50);
             }
-        } else {
-            ((SLModel) model).forEachPoint((start, end) -> {
-                for (int i = start; i < end; i++) {
-                    LXPoint p = model.points[i];
-                    PVector P = new PVector(), tP = new PVector();
-
-                    setVec(P, p);
-                    P.sub(modmin);
-                    P.sub(pTrans);
-                    if (sprk > 0) {
-                        P.y += sprk * randctr(50);
-                        P.x += sprk * randctr(50);
-                        P.z += sprk * randctr(50);
-                    }
-                    if (wvAmp > 0) P.y += interpWv(p.x - modmin.x, yWaveNz);
-                    if (wvAmp > 0) P.x += interpWv(p.y - modmin.y, xWaveNz);
-                    if (pJog.getValueb()) P.add(xyzJog);
+            if (wvAmp > 0) P.y += interpWv(p.x - modmin.x, yWaveNz);
+            if (wvAmp > 0) P.x += interpWv(p.y - modmin.y, xWaveNz);
+            if (pJog.getValueb()) P.add(xyzJog);
 
 
-                    int cNew, cOld = colors[p.index];
-                    {
-                        tP.set(P);
-                        cNew = CalcPoint(tP);
-                    }
-                    if (pXsym.getValueb()) {
-                        tP.set(mMax.x - P.x, P.y, P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pYsym.getValueb()) {
-                        tP.set(P.x, mMax.y - P.y, P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pRsym.getValueb()) {
-                        tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pXdup.getValueb()) {
-                        tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
-                        cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                    }
-                    if (pGrey.getValueb()) {
-                        cNew = lx.hsb(0, 0, LXColor.b(cNew));
-                    }
-                    colors[p.index] = cNew;
-                }
-            });
-        }
+            int cNew, cOld = colors[p.index];
+            {
+                tP.set(P);
+                cNew = CalcPoint(tP);
+            }
+            if (pXsym.getValueb()) {
+                tP.set(mMax.x - P.x, P.y, P.z);
+                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+            }
+            if (pYsym.getValueb()) {
+                tP.set(P.x, mMax.y - P.y, P.z);
+                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+            }
+            if (pRsym.getValueb()) {
+                tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
+                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+            }
+            if (pXdup.getValueb()) {
+                tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
+                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+            }
+            if (pGrey.getValueb()) {
+                cNew = lx.hsb(0, 0, LXColor.b(cNew));
+            }
 
+            colors[p.index] = cNew;
+        });
     }
 
     public static class NDat {
