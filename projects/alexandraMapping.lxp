@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514717455739,
+  "timestamp": 1514717839517,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -174,7 +174,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 181,
@@ -215,7 +215,7 @@
             "modulationColor": -16728833,
             "parameters": {
               "label": "MappingStripAdjustment",
-              "Rvrs Arr": true,
+              "Rvrs Arr": false,
               "Sun": 1,
               "Slice": 0,
               "Strip": 0
@@ -233,8 +233,8 @@
             "modulationColor": -65465,
             "parameters": {
               "label": "MappingStripReversal",
-              "Sun": 0,
-              "Strip": 0
+              "Sun": 6,
+              "Strip": 9
             },
             "modulation": {
               "modulators": [],
