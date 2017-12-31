@@ -34,6 +34,7 @@ public class MappingStripPixliteAssignmentPattern extends SLPattern {
 
         private boolean saveInProgress = false;
         private boolean resettingInProgress = false;
+        private boolean needsColorBufferReset = true;
 
         public MappingStripPixliteAssignmentPattern(LX lx) {
                 super(lx);
@@ -75,17 +76,15 @@ public class MappingStripPixliteAssignmentPattern extends SLPattern {
                 datalineOrderIndex.addListener(param -> saveOutputData());
         }
 
-        private void clearColorsBuffer() {
-                for (int[] mappingColors : mappingColorsPerPixlite.values()) {
-                        Arrays.fill(mappingColors, LXColor.BLACK);
-                }
-        }
-
         private void resetStripData() {
                 if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
 
                 Sun sun = model.getSunById(sunId.getOption());
                 stripIndex.setRange(sun.getStrips().size());
+
+                resettingInProgress = false;
+
                 resetOutputData();
         }
 
@@ -113,7 +112,7 @@ public class MappingStripPixliteAssignmentPattern extends SLPattern {
 
                 resettingInProgress = false;
 
-                clearColorsBuffer();
+                needsColorBufferReset = true;
         }
 
         private void saveOutputData() {
@@ -153,9 +152,20 @@ public class MappingStripPixliteAssignmentPattern extends SLPattern {
                 resetOutputData();
         }
 
+        private void clearColorsBuffer() {
+                for (int[] mappingColors : mappingColorsPerPixlite.values()) {
+                        Arrays.fill(mappingColors, LXColor.BLACK);
+                }
+        }
+
         @Override
         protected void run(double deltaMs) {
                 if (!enabled.isOn()) return;
+
+                if (needsColorBufferReset) {
+                        needsColorBufferReset = false;
+                        clearColorsBuffer();
+                }
 
                 int[] mappingColors = mappingColorsPerPixlite.get(this.pixliteId.getOption());
                 Arrays.fill(mappingColors, LXColor.gray(10));

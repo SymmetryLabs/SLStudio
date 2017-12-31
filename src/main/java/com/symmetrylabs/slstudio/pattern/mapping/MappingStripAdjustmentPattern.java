@@ -41,6 +41,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
         private boolean saveInProgress = false;
         private boolean resettingInProgress = false;
+        private boolean needsColorBufferReset = true;
 
         public MappingStripAdjustmentPattern(LX lx) {
                 super(lx);
@@ -85,46 +86,28 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 }
         }
 
-        private void clearColorsBuffer() {
-                for (int[] mappingColors : mappingColorsPerPixlite.values()) {
-                        Arrays.fill(mappingColors, LXColor.BLACK);
-                }
-
-                MappingGroup currentSliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
-                StripMapping currentStripMapping = currentSliceMapping.getItemByIndex(stripIndex.getValuei(), StripMapping.class);
-                if (currentStripMapping != null) {
-                        PixliteDatalineRef pixliteDataline = currentStripMapping.getOutputAs(PixliteDatalineRef.class);
-                        if (pixliteDataline != null) {
-                                int[] mappingColors = mappingColorsPerPixlite.get(pixliteDataline.outputId);
-                                Arrays.fill(mappingColors, LXColor.rgb(31, 31, 31));
-                        }
-                }
-
-                for (MappingGroup sunMapping : mappings.getChildrenValues()) {
-                        for (MappingGroup sliceMapping : sunMapping.getChildrenValues()) {
-                                for (int stripIndex = 0; stripIndex < sliceMapping.getItems().size(); stripIndex++) {
-                                        drawStrip(sliceMapping, stripIndex, 0, 100);
-                                }
-                        }
-                }
-        }
-
         private void resetSliceData() {
                 if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
 
                 MappingGroup sunMapping = mappings.getChildByIdIfExists(sunId.getOption());
 
                 String[] sliceIds = sunMapping.getChildrenKeySet().toArray(new String[0]);
                 sliceId.setOptions(sliceIds);
 
+                resettingInProgress = false;
+
                 resetStripData();
         }
 
         private void resetStripData() {
                 if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
 
                 MappingGroup sliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
                 stripIndex.setRange(sliceMapping.getItems().size());
+
+                resettingInProgress = false;
 
                 resetOutputData();
         }
@@ -140,7 +123,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
                 resettingInProgress = false;
 
-                clearColorsBuffer();
+                needsColorBufferReset = true;
         }
 
         private void saveOutputData() {
@@ -154,11 +137,32 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 FultonStreetLayout.saveMappings();
 
                 saveInProgress = false;
-
-                resetOutputData();
         }
 
-        private void drawStrip(MappingGroup sliceMapping, int stripIndex, float hue, float saturation) {
+        private void clearColorsBuffer() {
+                String currentOutputId = null;
+
+                MappingGroup currentSliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
+                StripMapping currentStripMapping = currentSliceMapping.getItemByIndex(stripIndex.getValuei(), StripMapping.class);
+                if (currentStripMapping != null) {
+                        PixliteDatalineRef pixliteDataline = currentStripMapping.getOutputAs(PixliteDatalineRef.class);
+                        if (pixliteDataline != null) {
+                                currentOutputId = pixliteDataline.outputId;
+                        }
+                }
+
+                for (MappingGroup sunMapping : mappings.getChildrenValues()) {
+                        int backgroundColor = currentOutputId != null && sunMapping.getChildByIdIfExists(currentOutputId) != null ?
+                                        LXColor.BLACK : LXColor.rgb(31, 31, 31);
+                        for (MappingGroup sliceMapping : sunMapping.getChildrenValues()) {
+                                for (int stripIndex = 0; stripIndex < sliceMapping.getItems().size(); stripIndex++) {
+                                        drawStrip(sliceMapping, stripIndex, backgroundColor, 0, 100);
+                                }
+                        }
+                }
+        }
+
+        private void drawStrip(MappingGroup sliceMapping, int stripIndex, int backgroundColor, float hue, float saturation) {
                 StripMapping stripMapping = sliceMapping.getItemByIndex(stripIndex, StripMapping.class);
                 if (stripMapping == null || stripMapping.numPoints <= 0) return;
 
@@ -192,11 +196,11 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
                         int colorIndexOffset = stripMapping.reversed ? stripMapping.numPoints - 1 - pointIndex : pointIndex;
                         int colorIndex = stripStart + colorIndexOffset;
-                        drawPoint(transform.x(), mappingColors, colorIndex, hue, saturation);
+                        drawPoint(transform.x(), mappingColors, colorIndex, backgroundColor, hue, saturation);
                 }
         }
 
-        private void drawPoint(float x, int[] mappingColors, int colorIndex, float hue, float saturation) {
+        private void drawPoint(float x, int[] mappingColors, int colorIndex, int backgroundColor, float hue, float saturation) {
                 float leftLineCenter = SUN_CENTER_X - 6.3f * PIXEL_PITCH;
                 float rightLineCenter = SUN_CENTER_X + 6.3f * PIXEL_PITCH;
 
@@ -212,12 +216,12 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 brightness += getPointDist(x, SUN_CENTER_X + 45 * PIXEL_PITCH);
                 brightness += getPointDist(x, SUN_CENTER_X + 55 * PIXEL_PITCH);
 
+                int color = LXColor.BLACK;
                 if (brightness > 0) {
                         if (brightness > 1) brightness = 1;
-                        mappingColors[colorIndex] = LXColor.hsb(hue, saturation, brightness * BRIGHTNESS_MODIFIER);
-                } else {
-                        mappingColors[colorIndex] = LXColor.BLACK;
+                        color = LXColor.hsb(hue, saturation, brightness * BRIGHTNESS_MODIFIER);
                 }
+                mappingColors[colorIndex] = LXColor.lerp(backgroundColor, color, brightness);
         }
 
         private float getPointDist(float x, float center) {
@@ -227,7 +231,14 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
         @Override
         protected void run(double deltaMs) {
+                if (!enabled.isOn()) return;
+
+                if (needsColorBufferReset) {
+                        needsColorBufferReset = false;
+                        clearColorsBuffer();
+                }
+
                 MappingGroup sliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
-                drawStrip(sliceMapping, stripIndex.getValuei(), 120, 0);
+                drawStrip(sliceMapping, stripIndex.getValuei(), LXColor.BLACK, 120, 0);
         }
 }

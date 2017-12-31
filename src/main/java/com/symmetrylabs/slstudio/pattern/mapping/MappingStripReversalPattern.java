@@ -29,6 +29,10 @@ public class MappingStripReversalPattern extends SLPattern {
 
         private final BooleanParameter reversed = new BooleanParameter("Reversed");
 
+        private boolean saveInProgress = false;
+        private boolean resettingInProgress = false;
+        private boolean needsColorBufferReset = true;
+
         public MappingStripReversalPattern(LX lx) {
                 super(lx);
                 model = (SunsModel) lx.model;
@@ -56,6 +60,48 @@ public class MappingStripReversalPattern extends SLPattern {
                 reversed.addListener(param -> saveOutputData());
         }
 
+        private void resetStripData() {
+                if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
+
+                Sun sun = model.getSunById(sunId.getOption());
+                stripIndex.setRange(sun.getStrips().size());
+
+                resettingInProgress = false;
+
+                resetOutputData();
+        }
+
+        private void resetOutputData() {
+                if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
+
+                Sun sun = model.getSunById(sunId.getOption());
+                CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
+                StripMapping stripMapping = strip.getMappings();
+
+                reversed.setValue(stripMapping.reversed);
+
+                resettingInProgress = false;
+
+                needsColorBufferReset = true;
+        }
+
+        private void saveOutputData() {
+                if (saveInProgress || resettingInProgress) return;
+                saveInProgress = true;
+
+                Sun sun = model.getSunById(sunId.getOption());
+                CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
+                StripMapping stripMapping = strip.getMappings();
+
+                stripMapping.reversed = reversed.isOn();
+
+                FultonStreetLayout.saveMappings();
+
+                saveInProgress = false;
+        }
+
         private void clearColorsBuffer() {
                 Sun sun = model.getSunById(sunId.getOption());
                 CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
@@ -75,34 +121,6 @@ public class MappingStripReversalPattern extends SLPattern {
                                 }
                         }
                 }
-        }
-
-        private void resetStripData() {
-                Sun sun = model.getSunById(sunId.getOption());
-                stripIndex.setRange(sun.getStrips().size());
-                resetOutputData();
-        }
-
-        private void resetOutputData() {
-                Sun sun = model.getSunById(sunId.getOption());
-                CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
-                StripMapping stripMapping = strip.getMappings();
-
-                reversed.setValue(stripMapping.reversed);
-
-                clearColorsBuffer();
-        }
-
-        private void saveOutputData() {
-                Sun sun = model.getSunById(sunId.getOption());
-                CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
-                StripMapping stripMapping = strip.getMappings();
-
-                stripMapping.reversed = reversed.isOn();
-
-                FultonStreetLayout.saveMappings();
-
-                resetOutputData();
         }
 
         private void drawDataline(String pixliteId, int datalineIndex, int datalineOrderIndex, int brightness) {
@@ -150,6 +168,11 @@ public class MappingStripReversalPattern extends SLPattern {
         @Override
         protected void run(double deltaMs) {
                 if (!enabled.isOn()) return;
+
+                if (needsColorBufferReset) {
+                        needsColorBufferReset = false;
+                        clearColorsBuffer();
+                }
 
                 Sun sun = model.getSunById(sunId.getOption());
                 CurvedStrip strip = (CurvedStrip) sun.getStrips().get(stripIndex.getValuei());
