@@ -27,6 +27,9 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         private static final float BRIGHTNESS_MODIFIER = 100f / LINE_SIZE;
         private static final float SUN_CENTER_X = Slice.RADIUS;
 
+        private static final int selectedSunBackgroundColor = LXColor.rgb(0, 31, 0);
+        private static final int notSelectedSunBackgroundColor = LXColor.rgb(63, 63, 63);
+
         private final Mappings mappings;
         private final Map<String, int[]> mappingColorsPerPixlite;
 
@@ -153,7 +156,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
 
                 for (MappingGroup sunMapping : mappings.getChildrenValues()) {
                         int backgroundColor = currentOutputId != null && sunMapping.getChildByIdIfExists(currentOutputId) != null ?
-                                        LXColor.BLACK : LXColor.rgb(31, 31, 31);
+                                        selectedSunBackgroundColor : notSelectedSunBackgroundColor;
                         for (MappingGroup sliceMapping : sunMapping.getChildrenValues()) {
                                 for (int stripIndex = 0; stripIndex < sliceMapping.getItems().size(); stripIndex++) {
                                         drawStrip(sliceMapping, stripIndex, backgroundColor, 0, 100);
@@ -201,27 +204,23 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         }
 
         private void drawPoint(float x, int[] mappingColors, int colorIndex, int backgroundColor, float hue, float saturation) {
-                float leftLineCenter = SUN_CENTER_X - 6.3f * PIXEL_PITCH;
-                float rightLineCenter = SUN_CENTER_X + 6.3f * PIXEL_PITCH;
-
                 float brightness = 0;
-
                 brightness += getPointDist(x, SUN_CENTER_X - 55 * PIXEL_PITCH);
                 brightness += getPointDist(x, SUN_CENTER_X - 45 * PIXEL_PITCH);
                 brightness += getPointDist(x, SUN_CENTER_X - 30 * PIXEL_PITCH);
-                brightness += getPointDist(x, leftLineCenter);
+                brightness += getPointDist(x, SUN_CENTER_X - 10.3f * PIXEL_PITCH);
                 brightness += getPointDist(x, SUN_CENTER_X);
-                brightness += getPointDist(x, rightLineCenter);
+                brightness += getPointDist(x, SUN_CENTER_X + 10.3f * PIXEL_PITCH);
                 brightness += getPointDist(x, SUN_CENTER_X + 30 * PIXEL_PITCH);
                 brightness += getPointDist(x, SUN_CENTER_X + 45 * PIXEL_PITCH);
                 brightness += getPointDist(x, SUN_CENTER_X + 55 * PIXEL_PITCH);
 
-                int color = LXColor.BLACK;
+                int color = backgroundColor;
                 if (brightness > 0) {
                         if (brightness > 1) brightness = 1;
                         color = LXColor.hsb(hue, saturation, brightness * BRIGHTNESS_MODIFIER);
                 }
-                mappingColors[colorIndex] = LXColor.lerp(backgroundColor, color, brightness);
+                mappingColors[colorIndex] = color;
         }
 
         private float getPointDist(float x, float center) {
@@ -239,6 +238,6 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 }
 
                 MappingGroup sliceMapping = mappings.getChildsChildByIdIfExists(sunId.getOption(), sliceId.getOption());
-                drawStrip(sliceMapping, stripIndex.getValuei(), LXColor.BLACK, 120, 0);
+                drawStrip(sliceMapping, stripIndex.getValuei(), selectedSunBackgroundColor, 120, 0);
         }
 }
