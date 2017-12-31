@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514682993381,
+  "timestamp": 1514684798507,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -142,7 +142,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 181,
@@ -150,8 +150,8 @@
             "modulationColor": -11008,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
-              "Pixlite": 10,
-              "Dataline": 0
+              "Pixlite": 19,
+              "Dataline": 2
             },
             "modulation": {
               "modulators": [],
@@ -166,9 +166,9 @@
             "modulationColor": -16721665,
             "parameters": {
               "label": "MappingStripLength",
-              "Sun": 1,
-              "Slice": 1,
-              "Strip": 31
+              "Sun": 5,
+              "Slice": 0,
+              "Strip": 68
             },
             "modulation": {
               "modulators": [],
@@ -218,7 +218,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 5,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 190,
@@ -523,19 +523,19 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.013422486863152394,
-          "Band-4": 0.04239103833828717,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.042813038871536424,
-          "Band-8": 0.062072475659478044,
-          "Band-9": 0.0684381954533041,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
-          "Band-13": 0.0,
+          "Band-1": 0.19772153829890604,
+          "Band-2": 0.3248903548860099,
+          "Band-3": 0.3793056065140742,
+          "Band-4": 0.4337004684648794,
+          "Band-5": 0.356931549920252,
+          "Band-6": 0.17833297518687408,
+          "Band-7": 0.08645556806608845,
+          "Band-8": 0.11650681856010492,
+          "Band-9": 0.24181812366810318,
+          "Band-10": 0.12006371637737556,
+          "Band-11": 0.046208655760412776,
+          "Band-12": 0.06271934992219563,
+          "Band-13": 0.08935013351916388,
           "Band-14": 0.0,
           "Band-15": 0.0,
           "Band-16": 0.0
