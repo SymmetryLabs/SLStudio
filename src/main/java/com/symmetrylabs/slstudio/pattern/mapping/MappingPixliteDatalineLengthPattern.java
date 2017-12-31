@@ -27,6 +27,10 @@ public class MappingPixliteDatalineLengthPattern extends SLPattern {
         private final DiscreteParameter datalineIndex;
         private final DiscreteParameter numPoints;
 
+        private boolean saveInProgress = false;
+        private boolean resettingInProgress = false;
+        private boolean needsColorBufferReset = true;
+
         public MappingPixliteDatalineLengthPattern(LX lx) {
                 super(lx);
                 mappings = FultonStreetLayout.mappings;
@@ -51,13 +55,39 @@ public class MappingPixliteDatalineLengthPattern extends SLPattern {
 
         @Override
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                int amt = keyEvent.isShiftDown() ? 10 : 1;
                 if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
-                        numPoints.decrement();
+                        numPoints.increment(-amt);
                         consumeKeyEvent();
                 } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-                        numPoints.increment();
+                        numPoints.increment(amt);
                         consumeKeyEvent();
                 }
+        }
+
+        private void resetNumPoints() {
+                if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
+
+                PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId.getOption(), PixliteMapping.class);
+                DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex.getValuei()];
+                numPoints.setValue(datalineMapping.numPoints);
+
+                resettingInProgress = false;
+
+                needsColorBufferReset = true;
+        }
+
+        private void saveNumPoints() {
+                if (saveInProgress || resettingInProgress) return;
+                saveInProgress = true;
+
+                PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId.getOption(), PixliteMapping.class);
+                DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex.getValuei()];
+                datalineMapping.numPoints = numPoints.getValuei();
+                FultonStreetLayout.saveMappings();
+
+                saveInProgress = false;
         }
 
         private void clearColorsBuffer() {
@@ -66,23 +96,14 @@ public class MappingPixliteDatalineLengthPattern extends SLPattern {
                 }
         }
 
-        private void resetNumPoints() {
-                clearColorsBuffer();
-                PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId.getOption(), PixliteMapping.class);
-                DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex.getValuei()];
-                numPoints.setValue(datalineMapping.numPoints);
-        }
-
-        private void saveNumPoints() {
-                PixliteMapping pixliteMapping = mappings.getOutputById(pixliteId.getOption(), PixliteMapping.class);
-                DatalineMapping datalineMapping = pixliteMapping.getDatalineMappings()[datalineIndex.getValuei()];
-                datalineMapping.numPoints = numPoints.getValuei();
-                FultonStreetLayout.saveMappings();
-        }
-
         @Override
         protected void run(double deltaMs) {
                 if (!enabled.isOn()) return;
+
+                if (needsColorBufferReset) {
+                        needsColorBufferReset = false;
+                        clearColorsBuffer();
+                }
 
                 int[] mappingColors = mappingColorsPerPixlite.get(this.pixliteId.getOption());
 

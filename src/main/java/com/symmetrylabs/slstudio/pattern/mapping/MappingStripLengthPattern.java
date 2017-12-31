@@ -33,6 +33,7 @@ public class MappingStripLengthPattern extends SLPattern {
 
         private boolean saveInProgress = false;
         private boolean resettingInProgress = false;
+        private boolean needsColorBufferReset = true;
 
         public MappingStripLengthPattern(LX lx) {
                 super(lx);
@@ -66,38 +67,39 @@ public class MappingStripLengthPattern extends SLPattern {
 
         @Override
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                int amt = keyEvent.isShiftDown() ? 10 : 1;
                 if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
-                        stripLength.decrement();
+                        stripLength.increment(-amt);
                         consumeKeyEvent();
                 } else if (keyCode == java.awt.event.KeyEvent.VK_RIGHT) {
-                        stripLength.increment();
+                        stripLength.increment(amt);
                         consumeKeyEvent();
-                }
-        }
-
-        private void clearColorsBuffer() {
-                for (int[] mappingColors : mappingColorsPerPixlite.values()) {
-                        Arrays.fill(mappingColors, LXColor.BLACK);
                 }
         }
 
         private void resetSliceData() {
                 if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
 
                 Sun sun = model.getSunById(sunId.getOption());
 
                 String[] sliceIds = sun.getSlices().stream().map(slice -> slice.id).toArray(String[]::new);
                 sliceId.setOptions(sliceIds);
 
+                resettingInProgress = false;
+
                 resetStripData();
         }
 
         private void resetStripData() {
                 if (saveInProgress || resettingInProgress) return;
+                resettingInProgress = true;
 
                 Sun sun = model.getSunById(sunId.getOption());
                 Slice slice = sun.getSliceById(sliceId.getOption());
                 stripIndex.setRange(slice.getStrips().size());
+
+                resettingInProgress = false;
 
                 resetOutputData();
         }
@@ -146,7 +148,9 @@ public class MappingStripLengthPattern extends SLPattern {
 
                 resettingInProgress = false;
 
-                clearColorsBuffer();
+                needsColorBufferReset = true;
+
+                resetOutputData();
         }
 
         private void checkDatalineConsistency() {
@@ -230,9 +234,20 @@ public class MappingStripLengthPattern extends SLPattern {
                 resetOutputData();
         }
 
+        private void clearColorsBuffer() {
+                for (int[] mappingColors : mappingColorsPerPixlite.values()) {
+                        Arrays.fill(mappingColors, LXColor.BLACK);
+                }
+        }
+
         @Override
         protected void run(double deltaMs) {
                 if (!enabled.isOn()) return;
+
+                if (needsColorBufferReset) {
+                        needsColorBufferReset = false;
+                        clearColorsBuffer();
+                }
 
                 Sun sun = model.getSunById(sunId.getOption());
                 Slice slice = sun.getSliceById(sliceId.getOption());
