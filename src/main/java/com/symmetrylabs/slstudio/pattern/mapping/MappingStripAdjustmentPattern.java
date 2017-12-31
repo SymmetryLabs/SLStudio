@@ -183,7 +183,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
                 int datalineStart = datalineIndex * Pixlite.MAPPING_COLORS_POINTS_PER_DATALINE;
                 int stripStart = datalineStart + numPixelsBefore;
 
-                float stripY = Slice.calculateStripY(stripIndex);
+                float stripY = Slice.calculateStripY(stripIndex, sliceMapping.getItems().size());
                 float stripX = Slice.calculateStripX(stripY);
                 float arcWidth = Slice.calculateArcWidth(stripX);
 

@@ -77,18 +77,18 @@ public class Slice extends StripsModel<CurvedStrip> {
             transform.rotateZ(rotations[2] * DEG_TO_RAD);
 
             // create curved strips...
-            if (type != Slice.Type.BOTTOM_ONE_THIRD) {
-                for (int i = 0; i < MAX_NUM_STRIPS_PER_SLICE; i++) {
-                    if (type == Slice.Type.TWO_THIRDS && i >= 45) {
-                        break;
-                    }
+            int start = 0;
+            int numStripsInSlice = MAX_NUM_STRIPS_PER_SLICE;
 
-                    addStrip(i, transform, id);
-                }
-            } else {
-                for (int i = 45; i < MAX_NUM_STRIPS_PER_SLICE - 2; i++) {
-                    addStrip(i, transform, id);
-                }
+            if (type == Slice.Type.TWO_THIRDS) {
+                numStripsInSlice = 45;
+            } else if (type == Slice.Type.BOTTOM_ONE_THIRD) {
+                start = 45;
+                numStripsInSlice = MAX_NUM_STRIPS_PER_SLICE - 2;
+            }
+
+            for (int i = start; i < numStripsInSlice; i++) {
+                addStrip(i, numStripsInSlice, transform, id);
             }
 
             for (CurvedStrip strip : strips) {
@@ -98,16 +98,16 @@ public class Slice extends StripsModel<CurvedStrip> {
             transform.pop();
         }
 
-        private void addStrip(int i, LXTransform transform, String sliceId) {
-            float stripY = calculateStripY(i);
-            if (FastMath.abs(stripY) >= Slice.RADIUS) {
-                throw new RuntimeException("Error: trying to place strip off sun: " + i);
+        private void addStrip(int i, int numStripsInSlice, LXTransform transform, String sliceId) {
+            StripMapping stripMapping = mappingGroup.getItemByIndex(i, StripMapping.class);
+            float stripY = calculateStripY(i, numStripsInSlice);
+            if (FastMath.abs(stripY) >= Slice.RADIUS && stripMapping.numPoints > 0) {
+                throw new RuntimeException("Error: trying to place strip " + i + " off sun " + sliceId);
             }
             float stripX = calculateStripX(stripY);
             float arcWidth = calculateArcWidth(stripX);
             float stripXFromCenter = stripX - Slice.RADIUS;
 
-            StripMapping stripMapping = mappingGroup.getItemByIndex(i, StripMapping.class);
             CurvedStrip.CurvedMetrics metrics = new CurvedStrip.CurvedMetrics(arcWidth, stripMapping.numPoints);
             strips.add(new CurvedStrip(
                                 stripMapping,
@@ -122,8 +122,8 @@ public class Slice extends StripsModel<CurvedStrip> {
         }
     }
 
-    public static float calculateStripY(int i) {
-        return Slice.RADIUS - (i + 1) * STRIP_SPACING;
+    public static float calculateStripY(int i, int numStripsInSlice) {
+        return STRIP_SPACING / 2f + (numStripsInSlice - i - 1) * STRIP_SPACING;
     }
 
     public static float calculateStripX(float stripY) {
