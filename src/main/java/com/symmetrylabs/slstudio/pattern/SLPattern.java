@@ -77,9 +77,9 @@ public abstract class SLPattern extends LXPattern implements Renderable {
 
     @Override
     public void dispose() {
-        super.dispose();
-
         onInactive();
+
+        super.dispose();
     }
 
     @Override
