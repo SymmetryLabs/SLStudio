@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.texture;
 
+import org.apache.commons.math3.util.FastMath;
 import processing.core.PImage;
 
 import heronarts.lx.LX;
@@ -22,6 +23,7 @@ public abstract class TextureSlideshow extends SunsPattern {
     public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
     public final CompoundParameter zoomX = new CompoundParameter("zoomX", 0, 0, 5);
     public final CompoundParameter zoomY = new CompoundParameter("zoomY", 0, 0, 5);
+    public final BooleanParameter enableInterp = new BooleanParameter("interp", true);
 
     private final SawLFO lerp = (SawLFO) startModulator(new SawLFO(0, 1, rate));
 
@@ -41,12 +43,13 @@ public abstract class TextureSlideshow extends SunsPattern {
 
         imageLayers = new int[images.length][colors.length];
 
-        addParameter("rate", rate);
-        addParameter("perSun", perSun);
-        addParameter("offsetX", offsetX);
-        addParameter("offsetY", offsetY);
-        addParameter("zoomX", zoomX);
-        addParameter("zoomY", zoomY);
+        addParameter(rate);
+        addParameter(perSun);
+        addParameter(offsetX);
+        addParameter(offsetY);
+        addParameter(zoomX);
+        addParameter(zoomY);
+        addParameter(enableInterp);
 
         LXParameterListener updateRastersListener = new LXParameterListener() {
             private boolean inProgress = false;
@@ -72,6 +75,7 @@ public abstract class TextureSlideshow extends SunsPattern {
         zoomY.addListener(updateRastersListener);
         offsetX.addListener(updateRastersListener);
         offsetY.addListener(updateRastersListener);
+        enableInterp.addListener(updateRastersListener);
 
         updateRasters();
     }
@@ -79,26 +83,29 @@ public abstract class TextureSlideshow extends SunsPattern {
     abstract String[] getPaths();
 
     private int bilinearInterp(PImage image, double px, double py) {
-        int imgOffsX = (int) (offsetX.getValue() * (image.width - 1) + image.width);
-        int imgOffsY = (int) (offsetY.getValue() * (image.height - 1) + image.height);
+        int imgOffsX = (int)(offsetX.getValue() * (image.width - 1) + image.width);
+        int imgOffsY = (int)(offsetY.getValue() * (image.height - 1) + image.height);
 
         double zoomXValue = zoomX.getValue() + 1;
         double zoomYValue = zoomY.getValue() + 1;
 
         double imgX = px * (image.width - 1) / zoomXValue + imgOffsX;
-        int imgXFloor = (int) Math.floor(imgX);
-        int imgXCeil = (int) Math.ceil(imgX);
-        double xRem = imgXCeil - imgXFloor;
-
         double imgY = py * (image.height - 1) / zoomYValue + imgOffsY;
-        int imgYFloor = (int) Math.floor(imgY);
-        int imgYCeil = (int) Math.ceil(imgY);
-        double yRem = imgYCeil - imgYFloor;
+
+        int imgXFloor = (int)FastMath.floor(imgX);
+        int imgYFloor = (int)FastMath.floor(imgY);
+
+        double xRem = imgX - imgXFloor;
+        double yRem = imgY - imgYFloor;
 
         imgXFloor %= image.width;
-        imgXCeil %= image.width;
         imgYFloor %= image.height;
-        imgYCeil %= image.height;
+
+        if (!enableInterp.isOn())
+            return image.get(imgXFloor, imgYFloor);
+
+        int imgXCeil = (int)FastMath.ceil(imgX) % image.width;
+        int imgYCeil = (int)FastMath.ceil(imgY) % image.height;
 
         int q11 = image.get(imgXFloor, imgYFloor);
         int q12 = image.get(imgXFloor, imgYCeil);
