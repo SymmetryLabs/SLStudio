@@ -79,15 +79,17 @@ public class Slice extends StripsModel<CurvedStrip> {
             // create curved strips...
             int start = 0;
             int numStripsInSlice = MAX_NUM_STRIPS_PER_SLICE;
+            int stop = numStripsInSlice;
 
             if (type == Slice.Type.TWO_THIRDS) {
-                numStripsInSlice = 45;
+                stop = 45;
             } else if (type == Slice.Type.BOTTOM_ONE_THIRD) {
                 start = 45;
                 numStripsInSlice = MAX_NUM_STRIPS_PER_SLICE - 2;
+                stop = numStripsInSlice;
             }
 
-            for (int i = start; i < numStripsInSlice; i++) {
+            for (int i = start; i < stop; i++) {
                 addStrip(i, numStripsInSlice, transform, id);
             }
 
