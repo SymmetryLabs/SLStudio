@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514689623710,
+  "timestamp": 1514691082172,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 188,
@@ -356,7 +356,7 @@
         "parameters": {
           "label": "Channel-1",
           "arm": false,
-          "enabled": false,
+          "enabled": true,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -402,7 +402,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 27,
@@ -425,7 +425,7 @@
             "modulationColor": -3211520,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
-              "Pixlite": 2,
+              "Pixlite": 5,
               "Dataline": 0
             },
             "modulation": {
@@ -441,9 +441,9 @@
             "modulationColor": -16717057,
             "parameters": {
               "label": "MappingStripAdjustment",
-              "Rvrs Arr": true,
-              "Sun": 9,
-              "Strip": 0
+              "Rvrs Arr": false,
+              "Sun": 10,
+              "Strip": 140
             },
             "modulation": {
               "modulators": [],
@@ -458,9 +458,9 @@
             "modulationColor": -16711868,
             "parameters": {
               "label": "MappingStripLength",
-              "Sun": 9,
-              "Slice": 1,
-              "Strip": 68
+              "Sun": 10,
+              "Slice": 2,
+              "Strip": 11
             },
             "modulation": {
               "modulators": [],
@@ -716,12 +716,12 @@
           "release": 100.0,
           "slope": 4.5,
           "Band-1": 0.0,
-          "Band-2": 1.1170104811097925E-4,
-          "Band-3": 0.17658778448303913,
-          "Band-4": 0.3068908447917639,
-          "Band-5": 0.31918434312440314,
-          "Band-6": 0.25537319998241115,
-          "Band-7": 0.2447567868146493,
+          "Band-2": 0.0,
+          "Band-3": 0.035614129206161915,
+          "Band-4": 0.08442105958239965,
+          "Band-5": 0.005475848964880736,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
@@ -761,11 +761,11 @@
       "modulationColor": -3408128,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.4714285684749484
+        "brightness": 0.5285714259371161
       }
     },
     "components": {
