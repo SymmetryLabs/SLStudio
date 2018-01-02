@@ -329,7 +329,7 @@
       "ipAddress": "10.200.1.18",
       "datalineMappings": [
         {
-          "numPoints": 606
+          "numPoints": 605
         },
         {
           "numPoints": 558
@@ -671,7 +671,7 @@
           "numPoints": 542
         },
         {
-          "numPoints": 564
+          "numPoints": 565
         },
         {
           "numPoints": 584
@@ -707,7 +707,7 @@
       "ipAddress": "10.200.1.44",
       "datalineMappings": [
         {
-          "numPoints": 640
+          "numPoints": 639
         },
         {
           "numPoints": 558
@@ -725,7 +725,7 @@
           "numPoints": 542
         },
         {
-          "numPoints": 564
+          "numPoints": 563
         },
         {
           "numPoints": 584
@@ -869,16 +869,16 @@
       "ipAddress": "10.200.1.38",
       "datalineMappings": [
         {
-          "numPoints": 639
+          "numPoints": 635
         },
         {
           "numPoints": 558
         },
         {
-          "numPoints": 543
+          "numPoints": 542
         },
         {
-          "numPoints": 603
+          "numPoints": 602
         },
         {
           "numPoints": 516
@@ -893,16 +893,16 @@
           "numPoints": 584
         },
         {
-          "numPoints": 599
+          "numPoints": 598
         },
         {
-          "numPoints": 616
+          "numPoints": 614
         },
         {
           "numPoints": 624
         },
         {
-          "numPoints": 471
+          "numPoints": 473
         },
         {
           "numPoints": 477
@@ -935,7 +935,7 @@
           "numPoints": 603
         },
         {
-          "numPoints": 516
+          "numPoints": 515
         },
         {
           "numPoints": 542
@@ -947,7 +947,7 @@
           "numPoints": 584
         },
         {
-          "numPoints": 601
+          "numPoints": 600
         },
         {
           "numPoints": 615
@@ -21440,7 +21440,7 @@
             },
             {
               "type": "StripMapping",
-              "numPoints": 151,
+              "numPoints": 150,
               "rotation": -2.1923366,
               "reversed": false,
               "output": {
