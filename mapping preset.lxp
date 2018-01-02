@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514722741999,
+  "timestamp": 1514884870558,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.5,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 27,
@@ -140,8 +140,8 @@
             "modulationColor": -16735489,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
-              "Pixlite": 3,
-              "Dataline": 15
+              "Pixlite": 26,
+              "Dataline": 0
             },
             "modulation": {
               "modulators": [],
@@ -297,16 +297,16 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.2215211403879448,
-          "Band-2": 0.32981557850483234,
-          "Band-3": 0.38364887443902107,
-          "Band-4": 0.44264034559112264,
-          "Band-5": 0.41867120972767935,
-          "Band-6": 0.3605195465991803,
-          "Band-7": 0.3221957338491013,
-          "Band-8": 0.4079596965796962,
-          "Band-9": 0.25304820283862284,
-          "Band-10": 0.06541489346770979,
+          "Band-1": 0.21506179079631493,
+          "Band-2": 0.3086671253532174,
+          "Band-3": 0.3724442150127202,
+          "Band-4": 0.4493575615708023,
+          "Band-5": 0.44163656171463883,
+          "Band-6": 0.3352854587141235,
+          "Band-7": 0.32786804409896364,
+          "Band-8": 0.2660854377487788,
+          "Band-9": 0.15799469635053354,
+          "Band-10": 0.0,
           "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,
