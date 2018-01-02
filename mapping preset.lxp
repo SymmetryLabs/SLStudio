@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1514887223110,
+  "timestamp": 1514894839951,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 4,
         "patterns": [
           {
             "id": 27,
@@ -156,9 +156,9 @@
             "modulationColor": -65365,
             "parameters": {
               "label": "MappingStripLength",
-              "Sun": 7,
+              "Sun": 8,
               "Slice": 2,
-              "Strip": 4
+              "Strip": 0
             },
             "modulation": {
               "modulators": [],
@@ -174,9 +174,9 @@
             "parameters": {
               "label": "MappingStripAdjustment",
               "Rvrs Arr": false,
-              "Sun": 0,
-              "Slice": 0,
-              "Strip": 0
+              "Sun": 1,
+              "Slice": 2,
+              "Strip": 3
             },
             "modulation": {
               "modulators": [],
@@ -297,17 +297,17 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.23196090774155687,
-          "Band-2": 0.27118045211447217,
-          "Band-3": 0.3814304764930464,
-          "Band-4": 0.47803879998555543,
-          "Band-5": 0.5262491182192761,
-          "Band-6": 0.36203247299988117,
-          "Band-7": 0.29567760031801094,
-          "Band-8": 0.20992441862158895,
-          "Band-9": 0.07798154819414671,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
+          "Band-1": 0.37738307067661336,
+          "Band-2": 0.4239774729796676,
+          "Band-3": 0.45136929693695327,
+          "Band-4": 0.4833826867220751,
+          "Band-5": 0.4517392210785176,
+          "Band-6": 0.32916807660926617,
+          "Band-7": 0.42074772848874853,
+          "Band-8": 0.3972116484093311,
+          "Band-9": 0.2922456761823168,
+          "Band-10": 0.1792968685938222,
+          "Band-11": 0.06668793602236178,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -406,7 +406,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1363.5137884961966,
+        "radius": 1771.1918091410216,
         "theta": 0.0,
         "phi": 0.0,
         "positionX": 384.84381103515625,
