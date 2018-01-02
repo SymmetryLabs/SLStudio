@@ -275,7 +275,7 @@
       "ipAddress": "10.200.1.17",
       "datalineMappings": [
         {
-          "numPoints": 606
+          "numPoints": 607
         },
         {
           "numPoints": 554
@@ -1145,7 +1145,7 @@
           "numPoints": 558
         },
         {
-          "numPoints": 550
+          "numPoints": 543
         },
         {
           "numPoints": 603
@@ -1199,7 +1199,7 @@
           "numPoints": 481
         },
         {
-          "numPoints": 479
+          "numPoints": 477
         },
         {
           "numPoints": 473
@@ -1253,7 +1253,7 @@
           "numPoints": 480
         },
         {
-          "numPoints": 477
+          "numPoints": 475
         },
         {
           "numPoints": 473
@@ -1271,7 +1271,7 @@
           "numPoints": 0
         },
         {
-          "numPoints": 451
+          "numPoints": 450
         },
         {
           "numPoints": 614
@@ -1355,10 +1355,10 @@
       "ipAddress": "10.200.1.33",
       "datalineMappings": [
         {
-          "numPoints": 641
+          "numPoints": 640
         },
         {
-          "numPoints": 558
+          "numPoints": 560
         },
         {
           "numPoints": 543
@@ -1370,7 +1370,7 @@
           "numPoints": 516
         },
         {
-          "numPoints": 540
+          "numPoints": 542
         },
         {
           "numPoints": 564
@@ -1382,10 +1382,10 @@
           "numPoints": 600
         },
         {
-          "numPoints": 614
+          "numPoints": 613
         },
         {
-          "numPoints": 630
+          "numPoints": 628
         },
         {
           "numPoints": 473
