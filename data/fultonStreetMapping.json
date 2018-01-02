@@ -15929,7 +15929,7 @@
             {
               "type": "StripMapping",
               "numPoints": 149,
-              "rotation": -0.6561683,
+              "rotation": -3.7361681,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -15941,7 +15941,7 @@
             {
               "type": "StripMapping",
               "numPoints": 151,
-              "rotation": 1.5361683,
+              "rotation": 8.816169,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -15953,7 +15953,7 @@
             {
               "type": "StripMapping",
               "numPoints": 177,
-              "rotation": -12.0,
+              "rotation": -6.3300004,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -15965,7 +15965,7 @@
             {
               "type": "StripMapping",
               "numPoints": 153,
-              "rotation": -1.7061688,
+              "rotation": -2.3361688,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -15977,7 +15977,7 @@
             {
               "type": "StripMapping",
               "numPoints": 153,
-              "rotation": 5.7661715,
+              "rotation": 5.836171,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -15989,7 +15989,7 @@
             {
               "type": "StripMapping",
               "numPoints": 153,
-              "rotation": -1.0061682,
+              "rotation": -10.25,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -16001,7 +16001,7 @@
             {
               "type": "StripMapping",
               "numPoints": 155,
-              "rotation": 0.6561683,
+              "rotation": -5.5600004,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -16013,7 +16013,7 @@
             {
               "type": "StripMapping",
               "numPoints": 155,
-              "rotation": -1.3561685,
+              "rotation": -1.7761686,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -16025,7 +16025,7 @@
             {
               "type": "StripMapping",
               "numPoints": 155,
-              "rotation": 6.746174,
+              "rotation": 6.5361743,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -16073,7 +16073,7 @@
             {
               "type": "StripMapping",
               "numPoints": 157,
-              "rotation": 0.6561683,
+              "rotation": -0.46383172,
               "reversed": true,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -16085,7 +16085,7 @@
             {
               "type": "StripMapping",
               "numPoints": 159,
-              "rotation": -0.6561683,
+              "rotation": -0.16616827,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
@@ -16097,7 +16097,7 @@
             {
               "type": "StripMapping",
               "numPoints": 159,
-              "rotation": -0.6561683,
+              "rotation": 1.3738317,
               "reversed": false,
               "output": {
                 "type": "PixliteDatalineRef",
