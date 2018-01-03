@@ -88,8 +88,8 @@ public class SLStudio extends PApplet {
         applet = this;
 
         mappings = FultonStreetLayout.loadMappings();
-        model = FultonStreetLayout.buildModel();
-        //model = CubesLayout.buildModel();
+        //model = FultonStreetLayout.buildModel();
+        model = CubesLayout.buildModel();
 
         println("-- Model ----");
 
