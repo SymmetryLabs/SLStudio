@@ -55,13 +55,16 @@ public class UIOverriddenRightPane extends UIPane {
     private int beatCount = 1;
     private int macroCount = 1;
 
+
+    String userName = "aaron";
+    String pythonPath = "/Users/aaronopp/anaconda/bin/python";
+
     String py="data_generation";
 
     String pyRun = "run";
-
     String cmd="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
     //String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+py+ ".py", "aaron_test_12_19_3", "1"};
-    String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python" ,cmd+py+ ".py", "aaron", "5"};
+    String[] command = new String[] {pythonPath ,cmd+py+ ".py", userName, "5"};
     ProcessBuilder pb = new ProcessBuilder(command);
 
     //String cmdLogger="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
@@ -71,7 +74,7 @@ public class UIOverriddenRightPane extends UIPane {
     ProcessBuilder pbLogger = new ProcessBuilder(commandLogger);
     // OSC logger
 
-    String[] commandVjRun = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+pyRun+ ".py","aaron", "5"};
+    String[] commandVjRun = new String[] {pythonPath,cmd+pyRun+ ".py",userName, "5"};
     ProcessBuilder pbVjRun = new ProcessBuilder(commandVjRun);
 
     String LOGFILE = "out.txt";
