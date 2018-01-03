@@ -236,282 +236,282 @@ public final class Utils {
 
     //////////////////////////////////////////////////////////////
     // getting the time
-    static final int second() {
+    static int second() {
         return PApplet.second();
     }
 
-    static final int minute() {
+    static int minute() {
         return PApplet.minute();
     }
 
-    static final int hour() {
+    static int hour() {
         return PApplet.hour();
     }
 
-    static final int day() {
+    static int day() {
         return PApplet.day();
     }
 
-    static final int month() {
+    static int month() {
         return PApplet.month();
     }
 
-    static final int year() {
+    static int year() {
         return PApplet.year();
     }
 
     //////////////////////////////////////////////////////////////
     // printing
-    static final void print(byte what) {
+    static void print(byte what) {
         PApplet.print(what);
     }
 
-    static final void print(boolean what) {
+    static void print(boolean what) {
         PApplet.print(what);
     }
 
-    static final void print(char what) {
+    static void print(char what) {
         PApplet.print(what);
     }
 
-    static final void print(int what) {
+    static void print(int what) {
         PApplet.print(what);
     }
 
-    static final void print(long what) {
+    static void print(long what) {
         PApplet.print(what);
     }
 
-    static final void print(float what) {
+    static void print(float what) {
         PApplet.print(what);
     }
 
-    static final void print(double what) {
+    static void print(double what) {
         PApplet.print(what);
     }
 
-    static final void print(String what) {
+    static void print(String what) {
         PApplet.print(what);
     }
 
-    static final void print(Object... variables) {
+    static void print(Object... variables) {
         PApplet.print(variables);
     }
 
-    static final void println() {
+    static void println() {
         PApplet.println();
     }
 
-    static final void println(byte what) {
+    static void println(byte what) {
         PApplet.println(what);
     }
 
-    static final void println(boolean what) {
+    static void println(boolean what) {
         PApplet.println(what);
     }
 
-    static final void println(char what) {
+    static void println(char what) {
         PApplet.println(what);
     }
 
-    static final void println(int what) {
+    static void println(int what) {
         PApplet.println(what);
     }
 
-    static final void println(long what) {
+    static void println(long what) {
         PApplet.println(what);
     }
 
-    static final void println(float what) {
+    static void println(float what) {
         PApplet.println(what);
     }
 
-    static final void println(double what) {
+    static void println(double what) {
         PApplet.println(what);
     }
 
-    static final void println(String what) {
+    static void println(String what) {
         PApplet.println(what);
     }
 
-    static final void println(Object... variables) {
+    static void println(Object... variables) {
         PApplet.println(variables);
     }
 
-    static final void println(Object what) {
+    static void println(Object what) {
         PApplet.println(what);
     }
 
-    static final void printArray(Object what) {
+    static void printArray(Object what) {
         PApplet.println(what);
     }
 
-    static final void debug(String msg) {
+    static void debug(String msg) {
         PApplet.debug(msg);
     }
 
     //////////////////////////////////////////////////////////////
     // MATH
-    static final float abs(float n) {
+    static float abs(float n) {
         return PApplet.abs(n);
     }
 
-    static final int abs(int n) {
+    static int abs(int n) {
         return PApplet.abs(n);
     }
 
-    static final float sq(float n) {
+    static float sq(float n) {
         return PApplet.sq(n);
     }
 
-    static final float sqrt(float n) {
+    static float sqrt(float n) {
         return PApplet.sqrt(n);
     }
 
-    static final float log(float n) {
+    static float log(float n) {
         return PApplet.log(n);
     }
 
-    static final float exp(float n) {
+    static float exp(float n) {
         return PApplet.exp(n);
     }
 
-    static final float pow(float n, float e) {
+    static float pow(float n, float e) {
         return PApplet.pow(n, e);
     }
 
-    static final int max(int a, int b) {
+    static int max(int a, int b) {
         return PApplet.max(a, b);
     }
 
-    static final float max(float a, float b) {
+    static float max(float a, float b) {
         return PApplet.max(a, b);
     }
 
-    static final int max(int a, int b, int c) {
+    static int max(int a, int b, int c) {
         return PApplet.max(a, b, c);
     }
 
-    static final float max(float a, float b, float c) {
+    static float max(float a, float b, float c) {
         return PApplet.max(a, b, c);
     }
 
-    static final int max(int[] list) {
+    static int max(int[] list) {
         return PApplet.max(list);
     }
 
-    static final float max(float[] list) {
+    static float max(float[] list) {
         return PApplet.max(list);
     }
 
-    static final int min(int a, int b) {
+    static int min(int a, int b) {
         return PApplet.min(a, b);
     }
 
-    static final float min(float a, float b) {
+    static float min(float a, float b) {
         return PApplet.min(a, b);
     }
 
-    static final int min(int a, int b, int c) {
+    static int min(int a, int b, int c) {
         return PApplet.min(a, b, c);
     }
 
-    static final float min(float a, float b, float c) {
+    static float min(float a, float b, float c) {
         return PApplet.min(a, b, c);
     }
 
-    static final int min(int[] list) {
+    static int min(int[] list) {
         return PApplet.min(list);
     }
 
-    static final float min(float[] list) {
+    static float min(float[] list) {
         return PApplet.min(list);
     }
 
-    static final int constrain(int amt, int low, int high) {
+    static int constrain(int amt, int low, int high) {
         return PApplet.constrain(amt, low, high);
     }
 
-    static final float constrain(float amt, float low, float high) {
+    static float constrain(float amt, float low, float high) {
         return PApplet.constrain(amt, low, high);
     }
 
-    static final float sin(float angle) {
+    static float sin(float angle) {
         return PApplet.sin(angle);
     }
 
-    static final float cos(float angle) {
+    static float cos(float angle) {
         return PApplet.cos(angle);
     }
 
-    static final float tan(float angle) {
+    static float tan(float angle) {
         return PApplet.tan(angle);
     }
 
-    static final float asin(float value) {
+    static float asin(float value) {
         return PApplet.asin(value);
     }
 
-    static final float acos(float value) {
+    static float acos(float value) {
         return PApplet.acos(value);
     }
 
-    static final float atan(float value) {
+    static float atan(float value) {
         return PApplet.atan(value);
     }
 
-    static final float atan2(float y, float x) {
+    static float atan2(float y, float x) {
         return PApplet.atan2(y, x);
     }
 
-    static final float degrees(float radians) {
+    static float degrees(float radians) {
         return PApplet.degrees(radians);
     }
 
-    static final float radians(float degrees) {
+    static float radians(float degrees) {
         return PApplet.radians(degrees);
     }
 
-    static final int ceil(float n) {
+    static int ceil(float n) {
         return PApplet.ceil(n);
     }
 
-    static final int floor(float n) {
+    static int floor(float n) {
         return PApplet.floor(n);
     }
 
-    static final int round(float n) {
+    static int round(float n) {
         return PApplet.round(n);
     }
 
-    static final float mag(float a, float b) {
+    static float mag(float a, float b) {
         return PApplet.mag(a, b);
     }
 
-    static final float mag(float a, float b, float c) {
+    static float mag(float a, float b, float c) {
         return PApplet.mag(a, b, c);
     }
 
-    static final float dist(float x1, float y1, float x2, float y2) {
+    static float dist(float x1, float y1, float x2, float y2) {
         return PApplet.dist(x1, y1, x2, y2);
     }
 
-    static final float dist(
+    static float dist(
         float x1, float y1, float z1,
         float x2, float y2, float z2
     ) {
         return PApplet.dist(x1, y1, z1, x2, y2, z2);
     }
 
-    static final float lerp(float start, float stop, float amt) {
+    static float lerp(float start, float stop, float amt) {
         return PApplet.lerp(start, stop, amt);
     }
 
-    static final float norm(float value, float start, float stop) {
+    static float norm(float value, float start, float stop) {
         return PApplet.norm(value, start, stop);
     }
 
-    public static final float map(
+    public static float map(
         float value,
         float start1, float stop1,
         float start2, float stop2
@@ -521,49 +521,49 @@ public final class Utils {
 
     //////////////////////////////////////////////////////////////
     // SORT
-    static final byte[] sort(byte list[]) {
+    static byte[] sort(byte list[]) {
         return PApplet.sort(list);
     }
 
-    static final byte[] sort(byte[] list, int count) {
+    static byte[] sort(byte[] list, int count) {
         return PApplet.sort(list, count);
     }
 
-    static final char[] sort(char list[]) {
+    static char[] sort(char list[]) {
         return PApplet.sort(list);
     }
 
-    static final char[] sort(char[] list, int count) {
+    static char[] sort(char[] list, int count) {
         return PApplet.sort(list, count);
     }
 
-    static final int[] sort(int list[]) {
+    static int[] sort(int list[]) {
         return PApplet.sort(list);
     }
 
-    static final int[] sort(int[] list, int count) {
+    static int[] sort(int[] list, int count) {
         return PApplet.sort(list, count);
     }
 
-    static final float[] sort(float list[]) {
+    static float[] sort(float list[]) {
         return PApplet.sort(list);
     }
 
-    static final float[] sort(float[] list, int count) {
+    static float[] sort(float[] list, int count) {
         return PApplet.sort(list, count);
     }
 
-    static final String[] sort(String list[]) {
+    static String[] sort(String list[]) {
         return PApplet.sort(list);
     }
 
-    static final String[] sort(String[] list, int count) {
+    static String[] sort(String[] list, int count) {
         return PApplet.sort(list, count);
     }
 
     //////////////////////////////////////////////////////////////
     // ARRAY UTILITIES
-    static final void arrayCopy(
+    static void arrayCopy(
         Object src, int srcPosition,
         Object dst, int dstPosition,
         int length
@@ -571,694 +571,694 @@ public final class Utils {
         PApplet.arrayCopy(src, srcPosition, dst, dstPosition, length);
     }
 
-    static final void arrayCopy(Object src, Object dst, int length) {
+    static void arrayCopy(Object src, Object dst, int length) {
         PApplet.arrayCopy(src, dst, length);
     }
 
-    static final void arrayCopy(Object src, Object dst) {
+    static void arrayCopy(Object src, Object dst) {
         PApplet.arrayCopy(src, dst);
     }
 
-    static final boolean[] expand(boolean list[]) {
+    static boolean[] expand(boolean list[]) {
         return PApplet.expand(list);
     }
 
-    static final boolean[] expand(boolean list[], int newSize) {
+    static boolean[] expand(boolean list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final byte[] expand(byte list[]) {
+    static byte[] expand(byte list[]) {
         return PApplet.expand(list);
     }
 
-    static final byte[] expand(byte list[], int newSize) {
+    static byte[] expand(byte list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final char[] expand(char list[]) {
+    static char[] expand(char list[]) {
         return PApplet.expand(list);
     }
 
-    static final char[] expand(char list[], int newSize) {
+    static char[] expand(char list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final int[] expand(int list[]) {
+    static int[] expand(int list[]) {
         return PApplet.expand(list);
     }
 
-    static final int[] expand(int list[], int newSize) {
+    static int[] expand(int list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final long[] expand(long list[]) {
+    static long[] expand(long list[]) {
         return PApplet.expand(list);
     }
 
-    static final long[] expand(long list[], int newSize) {
+    static long[] expand(long list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final float[] expand(float list[]) {
+    static float[] expand(float list[]) {
         return PApplet.expand(list);
     }
 
-    static final float[] expand(float list[], int newSize) {
+    static float[] expand(float list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final double[] expand(double list[]) {
+    static double[] expand(double list[]) {
         return PApplet.expand(list);
     }
 
-    static final double[] expand(double list[], int newSize) {
+    static double[] expand(double list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final String[] expand(String list[]) {
+    static String[] expand(String list[]) {
         return PApplet.expand(list);
     }
 
-    static final String[] expand(String list[], int newSize) {
+    static String[] expand(String list[], int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final Object expand(Object array) {
+    static Object expand(Object array) {
         return PApplet.expand(array);
     }
 
-    static final Object expand(Object list, int newSize) {
+    static Object expand(Object list, int newSize) {
         return PApplet.expand(list, newSize);
     }
 
-    static final byte[] append(byte array[], byte value) {
+    static byte[] append(byte array[], byte value) {
         return PApplet.append(array, value);
     }
 
-    static final char[] append(char array[], char value) {
+    static char[] append(char array[], char value) {
         return PApplet.append(array, value);
     }
 
-    static final int[] append(int array[], int value) {
+    static int[] append(int array[], int value) {
         return PApplet.append(array, value);
     }
 
-    static final float[] append(float array[], float value) {
+    static float[] append(float array[], float value) {
         return PApplet.append(array, value);
     }
 
-    static final String[] append(String array[], String value) {
+    static String[] append(String array[], String value) {
         return PApplet.append(array, value);
     }
 
-    static final Object append(Object array, Object value) {
+    static Object append(Object array, Object value) {
         return PApplet.append(array, value);
     }
 
-    static final boolean[] shorten(boolean list[]) {
+    static boolean[] shorten(boolean list[]) {
         return PApplet.shorten(list);
     }
 
-    static final byte[] shorten(byte list[]) {
+    static byte[] shorten(byte list[]) {
         return PApplet.shorten(list);
     }
 
-    static final char[] shorten(char list[]) {
+    static char[] shorten(char list[]) {
         return PApplet.shorten(list);
     }
 
-    static final int[] shorten(int list[]) {
+    static int[] shorten(int list[]) {
         return PApplet.shorten(list);
     }
 
-    static final float[] shorten(float list[]) {
+    static float[] shorten(float list[]) {
         return PApplet.shorten(list);
     }
 
-    static final String[] shorten(String list[]) {
+    static String[] shorten(String list[]) {
         return PApplet.shorten(list);
     }
 
-    static final Object shorten(Object list) {
+    static Object shorten(Object list) {
         return PApplet.shorten(list);
     }
 
-    static final boolean[] splice(
+    static boolean[] splice(
         boolean list[],
         boolean value, int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final boolean[] splice(
+    static boolean[] splice(
         boolean list[],
         boolean value[], int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final byte[] splice(
+    static byte[] splice(
         byte list[],
         byte value, int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final byte[] splice(
+    static byte[] splice(
         byte list[],
         byte value[], int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final char[] splice(
+    static char[] splice(
         char list[],
         char value, int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final char[] splice(
+    static char[] splice(
         char list[],
         char value[], int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final int[] splice(
+    static int[] splice(
         int list[],
         int value, int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final int[] splice(
+    static int[] splice(
         int list[],
         int value[], int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final float[] splice(
+    static float[] splice(
         float list[],
         float value, int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final float[] splice(
+    static float[] splice(
         float list[],
         float value[], int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final String[] splice(
+    static String[] splice(
         String list[],
         String value, int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final String[] splice(
+    static String[] splice(
         String list[],
         String value[], int index
     ) {
         return PApplet.splice(list, value, index);
     }
 
-    static final Object splice(Object list, Object value, int index) {
+    static Object splice(Object list, Object value, int index) {
         return PApplet.splice(list, value, index);
     }
 
-    static final boolean[] subset(boolean list[], int start) {
+    static boolean[] subset(boolean list[], int start) {
         return PApplet.subset(list, start);
     }
 
-    static final boolean[] subset(boolean list[], int start, int count) {
+    static boolean[] subset(boolean list[], int start, int count) {
         return PApplet.subset(list, start, count);
     }
 
-    static final byte[] subset(byte list[], int start) {
+    static byte[] subset(byte list[], int start) {
         return PApplet.subset(list, start);
     }
 
-    static final byte[] subset(byte list[], int start, int count) {
+    static byte[] subset(byte list[], int start, int count) {
         return PApplet.subset(list, start, count);
     }
 
-    static final char[] subset(char list[], int start) {
+    static char[] subset(char list[], int start) {
         return PApplet.subset(list, start);
     }
 
-    static final char[] subset(char list[], int start, int count) {
+    static char[] subset(char list[], int start, int count) {
         return PApplet.subset(list, start, count);
     }
 
-    static final int[] subset(int list[], int start) {
+    static int[] subset(int list[], int start) {
         return PApplet.subset(list, start);
     }
 
-    static final int[] subset(int list[], int start, int count) {
+    static int[] subset(int list[], int start, int count) {
         return PApplet.subset(list, start, count);
     }
 
-    static final float[] subset(float list[], int start) {
+    static float[] subset(float list[], int start) {
         return PApplet.subset(list, start);
     }
 
-    static final float[] subset(float list[], int start, int count) {
+    static float[] subset(float list[], int start, int count) {
         return PApplet.subset(list, start, count);
     }
 
-    static final String[] subset(String list[], int start) {
+    static String[] subset(String list[], int start) {
         return PApplet.subset(list, start);
     }
 
-    static final String[] subset(String list[], int start, int count) {
+    static String[] subset(String list[], int start, int count) {
         return PApplet.subset(list, start, count);
     }
 
-    static final Object subset(Object list, int start) {
+    static Object subset(Object list, int start) {
         return PApplet.subset(list, start);
     }
 
-    static final Object subset(Object list, int start, int count) {
+    static Object subset(Object list, int start, int count) {
         return PApplet.subset(list, start, count);
     }
 
-    static final boolean[] concat(boolean a[], boolean b[]) {
+    static boolean[] concat(boolean a[], boolean b[]) {
         return PApplet.concat(a, b);
     }
 
-    static final byte[] concat(byte a[], byte b[]) {
+    static byte[] concat(byte a[], byte b[]) {
         return PApplet.concat(a, b);
     }
 
-    static final char[] concat(char a[], char b[]) {
+    static char[] concat(char a[], char b[]) {
         return PApplet.concat(a, b);
     }
 
-    static final int[] concat(int a[], int b[]) {
+    static int[] concat(int a[], int b[]) {
         return PApplet.concat(a, b);
     }
 
-    static final float[] concat(float a[], float b[]) {
+    static float[] concat(float a[], float b[]) {
         return PApplet.concat(a, b);
     }
 
-    static final String[] concat(String a[], String b[]) {
+    static String[] concat(String a[], String b[]) {
         return PApplet.concat(a, b);
     }
 
-    static final Object concat(Object a, Object b) {
+    static Object concat(Object a, Object b) {
         return PApplet.concat(a, b);
     }
 
-    static final boolean[] reverse(boolean list[]) {
+    static boolean[] reverse(boolean list[]) {
         return PApplet.reverse(list);
     }
 
-    static final byte[] reverse(byte list[]) {
+    static byte[] reverse(byte list[]) {
         return PApplet.reverse(list);
     }
 
-    static final char[] reverse(char list[]) {
+    static char[] reverse(char list[]) {
         return PApplet.reverse(list);
     }
 
-    static final int[] reverse(int list[]) {
+    static int[] reverse(int list[]) {
         return PApplet.reverse(list);
     }
 
-    static final float[] reverse(float list[]) {
+    static float[] reverse(float list[]) {
         return PApplet.reverse(list);
     }
 
-    static final String[] reverse(String list[]) {
+    static String[] reverse(String list[]) {
         return PApplet.reverse(list);
     }
 
-    static final Object reverse(Object list) {
+    static Object reverse(Object list) {
         return PApplet.reverse(list);
     }
 
     //////////////////////////////////////////////////////////////
     // STRINGS
-    static final String trim(String str) {
+    static String trim(String str) {
         return PApplet.trim(str);
     }
 
-    static final String[] trim(String[] array) {
+    static String[] trim(String[] array) {
         return PApplet.trim(array);
     }
 
-    static final String join(String[] list, char separator) {
+    static String join(String[] list, char separator) {
         return PApplet.join(list, separator);
     }
 
-    static final String join(String[] list, String separator) {
+    static String join(String[] list, String separator) {
         return PApplet.join(list, separator);
     }
 
-    static final String[] splitTokens(String value) {
+    static String[] splitTokens(String value) {
         return PApplet.splitTokens(value);
     }
 
-    static final String[] splitTokens(String value, String delim) {
+    static String[] splitTokens(String value, String delim) {
         return PApplet.splitTokens(value, delim);
     }
 
-    static final String[] split(String value, char delim) {
+    static String[] split(String value, char delim) {
         return PApplet.split(value, delim);
     }
 
-    static final String[] split(String value, String delim) {
+    static String[] split(String value, String delim) {
         return PApplet.split(value, delim);
     }
 
-    static final String[] match(String str, String regexp) {
+    static String[] match(String str, String regexp) {
         return PApplet.match(str, regexp);
     }
 
-    static final String[][] matchAll(String str, String regexp) {
+    static String[][] matchAll(String str, String regexp) {
         return PApplet.matchAll(str, regexp);
     }
 
     //////////////////////////////////////////////////////////////
     // CASTING FUNCTIONS
-    static final boolean parseBoolean(int what) {
+    static boolean parseBoolean(int what) {
         return PApplet.parseBoolean(what);
     }
 
-    static final boolean parseBoolean(String what) {
-        return PApplet.parseBoolean(what);
-    }
-
-    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final boolean[] parseBoolean(int what[]) {
-        return PApplet.parseBoolean(what);
-    }
-
-    static final boolean[] parseBoolean(String what[]) {
+    static boolean parseBoolean(String what) {
         return PApplet.parseBoolean(what);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final byte parseByte(boolean what) {
+    static boolean[] parseBoolean(int what[]) {
+        return PApplet.parseBoolean(what);
+    }
+
+    static boolean[] parseBoolean(String what[]) {
+        return PApplet.parseBoolean(what);
+    }
+
+    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    static byte parseByte(boolean what) {
         return PApplet.parseByte(what);
     }
 
-    static final byte parseByte(char what) {
+    static byte parseByte(char what) {
         return PApplet.parseByte(what);
     }
 
-    static final byte parseByte(int what) {
+    static byte parseByte(int what) {
         return PApplet.parseByte(what);
     }
 
-    static final byte parseByte(float what) {
+    static byte parseByte(float what) {
         return PApplet.parseByte(what);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final byte[] parseByte(boolean what[]) {
+    static byte[] parseByte(boolean what[]) {
         return PApplet.parseByte(what);
     }
 
-    static final byte[] parseByte(char what[]) {
+    static byte[] parseByte(char what[]) {
         return PApplet.parseByte(what);
     }
 
-    static final byte[] parseByte(int what[]) {
+    static byte[] parseByte(int what[]) {
         return PApplet.parseByte(what);
     }
 
-    static final byte[] parseByte(float what[]) {
+    static byte[] parseByte(float what[]) {
         return PApplet.parseByte(what);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final char parseChar(byte what) {
+    static char parseChar(byte what) {
         return PApplet.parseChar(what);
     }
 
-    static final char parseChar(int what) {
-        return PApplet.parseChar(what);
-    }
-
-    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final char[] parseChar(byte what[]) {
-        return PApplet.parseChar(what);
-    }
-
-    static final char[] parseChar(int what[]) {
+    static char parseChar(int what) {
         return PApplet.parseChar(what);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final int parseInt(boolean what) {
+    static char[] parseChar(byte what[]) {
+        return PApplet.parseChar(what);
+    }
+
+    static char[] parseChar(int what[]) {
+        return PApplet.parseChar(what);
+    }
+
+    // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
+    static int parseInt(boolean what) {
         return PApplet.parseInt(what);
     }
 
-    static final int parseInt(byte what) {
+    static int parseInt(byte what) {
         return PApplet.parseInt(what);
     }
 
-    static final int parseInt(char what) {
+    static int parseInt(char what) {
         return PApplet.parseInt(what);
     }
 
-    static final int parseInt(float what) {
+    static int parseInt(float what) {
         return PApplet.parseInt(what);
     }
 
-    static final int parseInt(String what) {
+    static int parseInt(String what) {
         return PApplet.parseInt(what);
     }
 
-    static final int parseInt(String what, int otherwise) {
+    static int parseInt(String what, int otherwise) {
         return PApplet.parseInt(what, otherwise);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final int[] parseInt(boolean what[]) {
+    static int[] parseInt(boolean what[]) {
         return PApplet.parseInt(what);
     }
 
-    static final int[] parseInt(byte what[]) {
+    static int[] parseInt(byte what[]) {
         return PApplet.parseInt(what);
     }
 
-    static final int[] parseInt(char what[]) {
+    static int[] parseInt(char what[]) {
         return PApplet.parseInt(what);
     }
 
-    static final int[] parseInt(float what[]) {
+    static int[] parseInt(float what[]) {
         return PApplet.parseInt(what);
     }
 
-    static final int[] parseInt(String what[]) {
+    static int[] parseInt(String what[]) {
         return PApplet.parseInt(what);
     }
 
-    static final int[] parseInt(String what[], int missing) {
+    static int[] parseInt(String what[], int missing) {
         return PApplet.parseInt(what, missing);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final float parseFloat(int what) {
+    static float parseFloat(int what) {
         return PApplet.parseFloat(what);
     }
 
-    static final float parseFloat(String what) {
+    static float parseFloat(String what) {
         return PApplet.parseFloat(what);
     }
 
-    static final float parseFloat(String what, float otherwise) {
+    static float parseFloat(String what, float otherwise) {
         return PApplet.parseFloat(what, otherwise);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final float[] parseFloat(byte what[]) {
+    static float[] parseFloat(byte what[]) {
         return PApplet.parseFloat(what);
     }
 
-    static final float[] parseFloat(int what[]) {
+    static float[] parseFloat(int what[]) {
         return PApplet.parseFloat(what);
     }
 
-    static final float[] parseFloat(String what[]) {
+    static float[] parseFloat(String what[]) {
         return PApplet.parseFloat(what);
     }
 
-    static final float[] parseFloat(String what[], float missing) {
+    static float[] parseFloat(String what[], float missing) {
         return PApplet.parseFloat(what, missing);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final String str(boolean x) {
+    static String str(boolean x) {
         return PApplet.str(x);
     }
 
-    static final String str(byte x) {
+    static String str(byte x) {
         return PApplet.str(x);
     }
 
-    static final String str(char x) {
+    static String str(char x) {
         return PApplet.str(x);
     }
 
-    static final String str(int x) {
+    static String str(int x) {
         return PApplet.str(x);
     }
 
-    static final String str(float x) {
+    static String str(float x) {
         return PApplet.str(x);
     }
 
     // . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . . .
-    static final String[] str(boolean x[]) {
+    static String[] str(boolean x[]) {
         return PApplet.str(x);
     }
 
-    static final String[] str(byte x[]) {
+    static String[] str(byte x[]) {
         return PApplet.str(x);
     }
 
-    static final String[] str(char x[]) {
+    static String[] str(char x[]) {
         return PApplet.str(x);
     }
 
-    static final String[] str(float x[]) {
+    static String[] str(float x[]) {
         return PApplet.str(x);
     }
 
     //////////////////////////////////////////////////////////////
     // INT NUMBER FORMATTING
-    static final String nf(float num) {
+    static String nf(float num) {
         return PApplet.nf(num);
     }
 
-    static final String[] nf(float[] num) {
+    static String[] nf(float[] num) {
         return PApplet.nf(num);
     }
 
-    static final String[] nf(int num[], int digits) {
+    static String[] nf(int num[], int digits) {
         return PApplet.nf(num, digits);
     }
 
-    static final String nf(int num, int digits) {
+    static String nf(int num, int digits) {
         return PApplet.nf(num, digits);
     }
 
-    static final String[] nfc(int num[]) {
+    static String[] nfc(int num[]) {
         return PApplet.nfc(num);
     }
 
-    static final String nfc(int num) {
+    static String nfc(int num) {
         return PApplet.nfc(num);
     }
 
-    static final String nfs(int num, int digits) {
+    static String nfs(int num, int digits) {
         return PApplet.nfs(num, digits);
     }
 
-    static final String[] nfs(int num[], int digits) {
+    static String[] nfs(int num[], int digits) {
         return PApplet.nfs(num, digits);
     }
 
-    static final String nfp(int num, int digits) {
+    static String nfp(int num, int digits) {
         return PApplet.nfp(num, digits);
     }
 
-    static final String[] nfp(int num[], int digits) {
+    static String[] nfp(int num[], int digits) {
         return PApplet.nfp(num, digits);
     }
 
     //////////////////////////////////////////////////////////////
     // FLOAT NUMBER FORMATTING
-    static final String[] nf(float num[], int left, int right) {
+    static String[] nf(float num[], int left, int right) {
         return PApplet.nf(num, left, right);
     }
 
-    static final String nf(float num, int left, int right) {
+    static String nf(float num, int left, int right) {
         return PApplet.nf(num, left, right);
     }
 
-    static final String[] nfc(float num[], int right) {
+    static String[] nfc(float num[], int right) {
         return PApplet.nfc(num, right);
     }
 
-    static final String nfc(float num, int right) {
+    static String nfc(float num, int right) {
         return PApplet.nfc(num, right);
     }
 
-    static final String[] nfs(float num[], int left, int right) {
+    static String[] nfs(float num[], int left, int right) {
         return PApplet.nfs(num, left, right);
     }
 
-    static final String nfs(float num, int left, int right) {
+    static String nfs(float num, int left, int right) {
         return PApplet.nfs(num, left, right);
     }
 
-    static final String[] nfp(float num[], int left, int right) {
+    static String[] nfp(float num[], int left, int right) {
         return PApplet.nfp(num, left, right);
     }
 
-    static final String nfp(float num, int left, int right) {
+    static String nfp(float num, int left, int right) {
         return PApplet.nfp(num, left, right);
     }
 
     //////////////////////////////////////////////////////////////
     // HEX/BINARY CONVERSION
-    static final String hex(byte value) {
+    static String hex(byte value) {
         return PApplet.hex(value);
     }
 
-    static final String hex(char value) {
+    static String hex(char value) {
         return PApplet.hex(value);
     }
 
-    static final String hex(int value) {
+    static String hex(int value) {
         return PApplet.hex(value);
     }
 
-    static final String hex(int value, int digits) {
+    static String hex(int value, int digits) {
         return PApplet.hex(value, digits);
     }
 
-    static final int unhex(String value) {
+    static int unhex(String value) {
         return PApplet.unhex(value);
     }
 
-    static final String binary(byte value) {
+    static String binary(byte value) {
         return PApplet.binary(value);
     }
 
-    static final String binary(char value) {
+    static String binary(char value) {
         return PApplet.binary(value);
     }
 
-    static final String binary(int value) {
+    static String binary(int value) {
         return PApplet.binary(value);
     }
 
-    static final String binary(int value, int digits) {
+    static String binary(int value, int digits) {
         return PApplet.binary(value, digits);
     }
 
-    static final int unbinary(String value) {
+    static int unbinary(String value) {
         return PApplet.unbinary(value);
     }
 
     //////////////////////////////////////////////////////////////
     // COLOR FUNCTIONS
-    static final int blendColor(int c1, int c2, int mode) {
+    static int blendColor(int c1, int c2, int mode) {
         return PApplet.blendColor(c1, c2, mode);
     }
 
-    static final int lerpColor(int c1, int c2, float amt, int mode) {
+    static int lerpColor(int c1, int c2, float amt, int mode) {
         return PApplet.lerpColor(c1, c2, amt, mode);
     }
 

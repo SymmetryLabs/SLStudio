@@ -2,12 +2,12 @@ package com.symmetrylabs.slstudio.effect;
 
 import heronarts.lx.LX;
 
-import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.SunsModel;
 
-public abstract class SunsEffect extends ModelSpecificEffect<SLModel> {
+public abstract class SunsEffect extends ModelSpecificEffect<SunsModel> {
     @Override
-    protected SLModel createEmptyModel() {
-        return new SLModel();
+    protected SunsModel createEmptyModel() {
+        return new SunsModel();
     }
 
     public SunsEffect(LX lx) {

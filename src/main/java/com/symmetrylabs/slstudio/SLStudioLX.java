@@ -4,14 +4,13 @@ import java.io.File;
 
 import com.google.gson.JsonObject;
 
+import com.symmetrylabs.slstudio.model.SunsModel;
+import com.symmetrylabs.slstudio.pattern.SLPattern;
+import heronarts.lx.*;
+import heronarts.lx.model.LXPoint;
 import processing.core.PApplet;
 import processing.event.KeyEvent;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXMappingEngine;
-import heronarts.lx.LXPattern;
-import heronarts.lx.LXSerializable;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
@@ -36,7 +35,6 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
-import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
 import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
@@ -44,6 +42,7 @@ import com.symmetrylabs.slstudio.ui.UIFramerate;
 import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.slstudio.util.MarkerSource;
+import processing.event.MouseEvent;
 
 public class SLStudioLX extends P3LX {
 
@@ -152,6 +151,132 @@ public class SLStudioLX extends P3LX {
                         togglePerformanceMode();
                     } else if (keyChar == "v".charAt(0)) {
                         lx.ui.preview.toggleVisible();
+                    }
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            SLPattern pattern = (SLPattern) focusedPattern;
+                            pattern.unconsumeKeyEvent();
+                            pattern.onKeyPressed(keyEvent, keyChar, keyCode);
+                            root.keyEventConsumed = pattern.keyEventConsumed();
+                        }
+                    }
+                }
+
+                @Override
+                public void onMousePressed(MouseEvent mouseEvent, float mx, float my) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMousePressed(mouseEvent, mx, my);
+                        }
+                    }
+                }
+
+                @Override
+                public void onMouseReleased(MouseEvent mouseEvent, float mx, float my) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMouseReleased(mouseEvent, mx, my);
+                        }
+                    }
+                }
+
+                @Override
+                public void onMouseClicked(MouseEvent mouseEvent, float mx, float my) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMouseClicked(mouseEvent, mx, my);
+                        }
+                    }
+                }
+
+                @Override
+                public void onMouseDragged(MouseEvent mouseEvent, float mx, float my, float dx, float dy) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMouseDragged(mouseEvent, mx, my, dx, dy);
+                        }
+                    }
+                }
+
+                @Override
+                public void onMouseMoved(MouseEvent mouseEvent, float mx, float my) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMouseMoved(mouseEvent, mx, my);
+                        }
+                    }
+                }
+
+                @Override
+                public void onMouseOver(MouseEvent mouseEvent) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMouseOver(mouseEvent);
+                        }
+                    }
+                }
+
+                @Override
+                public void onMouseOut(MouseEvent mouseEvent) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMouseOut(mouseEvent);
+                        }
+                    }
+                }
+
+                @Override
+                public void onMouseWheel(MouseEvent mouseEvent, float mx, float my, float delta) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            ((SLPattern) focusedPattern).onMouseWheel(mouseEvent, mx, my, delta);
+                        }
+                    }
+                }
+
+                @Override
+                public void onKeyReleased(KeyEvent keyEvent, char keyChar, int keyCode) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            SLPattern pattern = (SLPattern) focusedPattern;
+                            pattern.unconsumeKeyEvent();
+                            pattern.onKeyReleased(keyEvent, keyChar, keyCode);
+                            root.keyEventConsumed = pattern.keyEventConsumed();
+                        }
+                    }
+                }
+
+                @Override
+                public void onKeyTyped(KeyEvent keyEvent, char keyChar, int keyCode) {
+                    if (engine.getFocusedChannel() instanceof LXChannel) {
+                        LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                        LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                        if (focusedPattern instanceof SLPattern) {
+                            SLPattern pattern = (SLPattern) focusedPattern;
+                            pattern.unconsumeKeyEvent();
+                            pattern.onKeyTyped(keyEvent, keyChar, keyCode);
+                            root.keyEventConsumed = pattern.keyEventConsumed();
+                        }
                     }
                 }
             });
@@ -370,6 +495,7 @@ public class SLStudioLX extends P3LX {
     private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
 
+    public final SunsModel model;
     public final UI ui;
 
     public SLStudioLX(PApplet applet, LXModel model) {
@@ -378,6 +504,7 @@ public class SLStudioLX extends P3LX {
 
     public SLStudioLX(PApplet applet, LXModel model, boolean multiThreaded) {
         super(applet, model);
+        this.model = (SunsModel) super.model;
         this.ui = (UI) super.ui;
         onUIReady(this, this.ui);
         registerExternal(KEY_UI, this.ui);

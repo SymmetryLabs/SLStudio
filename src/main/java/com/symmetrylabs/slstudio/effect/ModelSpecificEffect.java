@@ -4,8 +4,6 @@ import heronarts.lx.LX;
 import heronarts.lx.LXModelComponent;
 import heronarts.lx.model.LXModel;
 
-import com.symmetrylabs.slstudio.model.SLModel;
-
 public abstract class ModelSpecificEffect<T extends LXModel> extends SLEffect {
     protected T model;
 

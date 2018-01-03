@@ -32,8 +32,9 @@ public abstract class PerSunPattern extends SectionalPattern {
         public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
             // System.out.println(1000 / deltaMs);
             subpatterns.parallelStream().forEach(subpattern -> {
-                if (subpattern.enableParam.getValueb()) {
-                    subpattern.pattern.render(deltaMs, subpattern.section.getPoints(), layer);
+                if (subpattern.enableParam.isOn()) {
+                    subpattern.pattern.setBuffer(layer);
+                    subpattern.pattern.loop(deltaMs);
                 }
                 else {
                     for (LXPoint point : subpattern.section.points) {
@@ -44,8 +45,7 @@ public abstract class PerSunPattern extends SectionalPattern {
         }
     };
 
-    protected void createParameters() { }
-    protected abstract RenderablePattern createSubpattern(LXModel section, int sectionIndex);
+    protected abstract SLPattern createSubpattern(LXModel section, int sectionIndex);
 
     private void wrapChildParameter(LXParameter param) {
         String name = param.getLabel();
@@ -108,16 +108,18 @@ public abstract class PerSunPattern extends SectionalPattern {
 
         subpatterns = new ArrayList<>(getSections().size());
 
-        createParameters();
-
         int sectionIndex = 0;
         for (LXModel section : getSections()) {
             try {
                 Subpattern subpattern = new Subpattern(section, sectionIndex, createSubpattern(section, sectionIndex));
 
+                subpattern.pattern.setManagedMode(true);
+
                 for (LXParameter param : subpattern.pattern.getParameters()) {
                     wrapChildParameter(param);
                 }
+
+                addSubcomponent(subpattern.pattern);
 
                 subpatterns.add(subpattern);
             }
@@ -142,7 +144,10 @@ public abstract class PerSunPattern extends SectionalPattern {
         super.onActive();
 
         for (Subpattern subpattern : subpatterns) {
-            subpattern.pattern.onUIStart();
+            if (!subpattern.isActive) {
+                subpattern.pattern.onActive();
+                subpattern.isActive = true;
+            }
         }
 
         renderer.start();
@@ -153,7 +158,10 @@ public abstract class PerSunPattern extends SectionalPattern {
         super.onInactive();
 
         for (Subpattern subpattern : subpatterns) {
-            subpattern.pattern.onUIEnd();
+            if (subpattern.isActive) {
+                subpattern.pattern.onInactive();
+                subpattern.isActive = false;
+            }
         }
 
         renderer.stop();
@@ -167,10 +175,12 @@ public abstract class PerSunPattern extends SectionalPattern {
     private static class Subpattern {
         public final LXModel section;
         public final int sectionIndex;
-        public final RenderablePattern pattern;
+        public final SLPattern pattern;
         public final BooleanParameter enableParam;
 
-        public Subpattern(LXModel section, int sectionIndex, RenderablePattern pattern) {
+        public boolean isActive = false;
+
+        public Subpattern(LXModel section, int sectionIndex, SLPattern pattern) {
             this.section = section;
             this.sectionIndex = sectionIndex;
             this.pattern = pattern;

@@ -137,7 +137,10 @@ public class SLController extends LXOutput {
         // if that cube isn't modelled yet
         // Use the mac address to find the cube if we have it
         // Otherwise use the cube id
-        CubesModel cubesModel = (CubesModel)SLStudio.applet.lx.model;
+        if (!(lx.model instanceof CubesModel))
+            return;
+
+        CubesModel cubesModel = (CubesModel)lx.model;
         CubesModel.Cube cube = null;
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             cube = cubesModel.getCubes().get(0);

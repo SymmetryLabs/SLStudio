@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.objimporter;
 
-import com.symmetrylabs.slstudio.model.CurvedStrip;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
@@ -11,6 +10,7 @@ import java.io.FileReader;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.symmetrylabs.util.DistanceConstants.*;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 
@@ -38,7 +38,7 @@ class ObjModelBuilder {
     }
 
     private void readVertices(File file) {
-        this.vertices = new ArrayList<float[]>();
+        this.vertices = new ArrayList<>();
 
         try {
             BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
@@ -50,9 +50,9 @@ class ObjModelBuilder {
                 if (line.startsWith("v ")) {
                     String[] vertexString = line.substring(2).split("\\s+");
 
-                    float x = Float.parseFloat(vertexString[0]) * CurvedStrip.INCHES_PER_METER;
-                    float y = Float.parseFloat(vertexString[1]) * CurvedStrip.INCHES_PER_METER;
-                    float z = Float.parseFloat(vertexString[2]) * CurvedStrip.INCHES_PER_METER;
+                    float x = Float.parseFloat(vertexString[0]) * INCHES_PER_METER;
+                    float y = Float.parseFloat(vertexString[1]) * INCHES_PER_METER;
+                    float z = Float.parseFloat(vertexString[2]) * INCHES_PER_METER;
 
                     this.vertices.add(new float[]{x, y, z});
                 }
@@ -95,7 +95,7 @@ class ObjModelBuilder {
     }
 
     public LXModel buildModel(LXTransform transform) {
-        List<LXPoint> points = new ArrayList<LXPoint>();
+        List<LXPoint> points = new ArrayList();
 
         for (float[] vertex : this.vertices) {
             transform.push();

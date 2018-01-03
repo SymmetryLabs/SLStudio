@@ -2,16 +2,11 @@ package com.symmetrylabs.slstudio.model;
 
 import java.util.List;
 
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXFixture;
 
-import static com.symmetrylabs.slstudio.util.MathUtils.floor;
 
-
-public class Strip extends LXModel {
-
-    public static final float INCHES_PER_METER = 39.3701f;
+public class Strip extends SLModel {
 
     public final String id;
     public final Metrics metrics;

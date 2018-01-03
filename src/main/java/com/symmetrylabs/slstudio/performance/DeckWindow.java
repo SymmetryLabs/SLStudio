@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.performance;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;

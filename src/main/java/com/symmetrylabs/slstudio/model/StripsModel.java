@@ -4,16 +4,12 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Collections;
 
-import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXFixture;
-
-import static com.symmetrylabs.slstudio.util.MathUtils.floor;
 
 /**
  * A model with strips.
  */
-public abstract class StripsModel<T extends Strip> extends LXModel {
+public abstract class StripsModel<T extends Strip> extends SLModel {
     protected final List<T> strips = new ArrayList<>();
     protected final List<T> stripsUnmodifiable = Collections.unmodifiableList(strips);
 

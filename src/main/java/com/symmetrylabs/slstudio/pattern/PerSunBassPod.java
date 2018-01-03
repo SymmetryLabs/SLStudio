@@ -11,7 +11,7 @@ public class PerSunBassPod extends PerSunPattern {
     }
 
     @Override
-    protected RenderablePattern createSubpattern(LXModel model, int sunIndex) {
+    protected SLPattern createSubpattern(LXModel model, int modelIndex) {
         BassPod pattern = new BassPod(lx);
         pattern.setModel(model);
         return pattern;

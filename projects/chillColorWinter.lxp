@@ -103,7 +103,7 @@
           },
           {
             "id": 7032,
-            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
             "modulationColor": -16770305,
             "parameters": {
               "label": "ColorShift",
@@ -1803,7 +1803,7 @@
           },
           {
             "id": 6497,
-            "class": "com.symmetrylabs.slstudio.performance.ColorShiftEffect",
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
             "modulationColor": -16728833,
             "parameters": {
               "label": "ColorShift",

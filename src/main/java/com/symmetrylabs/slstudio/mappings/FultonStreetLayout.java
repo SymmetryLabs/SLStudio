@@ -2,8 +2,9 @@ package com.symmetrylabs.slstudio.mappings;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.symmetrylabs.slstudio.Environment;
 import com.symmetrylabs.slstudio.model.CurvedStrip;
-import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.util.Utils;
 import heronarts.lx.model.LXModel;
@@ -21,6 +22,14 @@ import static processing.core.PConstants.PI;
 
 /* Fulton Street Layout of the Suns */
 public class FultonStreetLayout {
+
+        public static final Environment environment = new Environment() {
+                @Override
+                public String getMappingsFilename() {
+                        return "data/fultonStreetMapping.json";
+                }
+        };
+
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 0;
@@ -37,15 +46,8 @@ public class FultonStreetLayout {
     static final float objRotationY = 0;
     static final float objRotationZ = 0;
 
-    static final float INCHES_PER_METER = 39.3701f;
-
-    static final String stripRotationFilename = "data/stripRotations.json";
-    static final String stripLengthFilename = "data/stripLengths.json";
-
-    private final Map<String, float[]> positions = new HashMap<String, float[]>();
-
-    private static Map<String, List<Double>> stripRotations = new HashMap<>();
-    private static Map<String, Map<String, List<Double>>> stripLengths = new HashMap<>();
+    private final Map<String, float[]> positions = new HashMap<>();
+    public static Mappings mappings;
 
 
     public FultonStreetLayout() {
@@ -82,57 +84,26 @@ public class FultonStreetLayout {
         // positions.put("J" /* 10 */, new float[]{-401, 0, 356});
         // positions.put("K" /* 11 */, new float[]{-615, 0, 250});
 
-        loadRotationData();
-        loadStripLengthData();
+                if (mappings == null) loadMappings();
     }
 
-    public static void loadRotationData() {
-        try {
-            stripRotations = new Gson().fromJson(new FileReader(Utils.sketchFile(stripRotationFilename)), Map.class);
-        } catch (FileNotFoundException e) {
-            PApplet.println("Failed to load rotation data");
-            e.printStackTrace();
+    public static Mappings loadMappings() {
+        if (mappings == null) {
+                        mappings = Mappings.loadMappingData(environment);
+                        if (mappings == null) mappings = new Mappings();
+                }
+                return mappings;
         }
-    }
 
-    private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
-
-    public static void saveRotationData() {
-        try {
-            final FileWriter writer = new FileWriter(Utils.sketchFile(stripRotationFilename));
-            gson.toJson(stripRotations, writer);
-            writer.close();
-        } catch (java.io.IOException e) {
-            PApplet.println("Failed to save rotation data");
-            e.printStackTrace();
+        public static void saveMappings() {
+                mappings.saveMappingData(environment);
         }
-    }
-
-    public static void loadStripLengthData() {
-        try {
-            stripLengths = new Gson().fromJson(new FileReader(Utils.sketchFile(stripLengthFilename)), Map.class);
-        } catch (FileNotFoundException e) {
-            PApplet.println("Failed to load strip length data");
-            e.printStackTrace();
-        }
-    }
-
-    public static void saveStripLengthData() {
-        try {
-            final FileWriter writer = new FileWriter(Utils.sketchFile(stripLengthFilename));
-            gson.toJson(stripLengths, writer);
-            writer.close();
-        } catch (java.io.IOException e) {
-            PApplet.println("Failed to save strip length data");
-            e.printStackTrace();
-        }
-    }
 
     public float[] get(String id) {
         return positions.get(id);
     }
 
-    public static SLModel buildModel() {
+    public static SunsModel buildModel() {
         FultonStreetLayout layout = new FultonStreetLayout();
         final float[] NO_ROTATION = {0, 0, 0};
         final float[] FLIP_Y = {0, 180, 0};
@@ -145,7 +116,22 @@ public class FultonStreetLayout {
         transform.rotateZ(globalRotationZ * PI / 180.);
 
     /* Suns ------------------------------------------------------------*/
-        List<Sun> suns = new ArrayList();
+        List<Sun> suns = new ArrayList<>();
+
+        /*
+            Position : SunId
+            (1)    A : sun2
+            (2)    B : sun1
+            (3)    C : sun4
+            (4)    D : sun6
+            (5)    E : sun7
+            (6)    F : sun9
+            (7)    G : sun10
+            (8)    H : sun11
+            (9)    I : sun8
+            (10)   J : sun5
+            (11)   K : sun3
+         */
 
         suns.add(createSun("sun1", Sun.Type.ONE_THIRD, layout.get("B"), FLIP_Y, transform));
         suns.add(createSun("sun2", Sun.Type.ONE_THIRD, layout.get("A"), NO_ROTATION, transform));
@@ -159,68 +145,10 @@ public class FultonStreetLayout {
         suns.add(createSun("sun10", Sun.Type.FULL, layout.get("G"), NO_ROTATION, transform));
         suns.add(createSun("sun11", Sun.Type.FULL, layout.get("H"), NO_ROTATION, transform));
 
-        return new SLModel(suns);
+        return new SunsModel(suns);
     }
 
     private static Sun createSun(String id, Sun.Type type, float[] coordinates, float[] rotations, LXTransform transform) {
-        return new Sun(id, type, coordinates, rotations, transform, stripLengths(id));
-    }
-
-    public static void updateRotation(
-        @NotNull final Sun sun,
-        @NotNull final CurvedStrip strip,
-        final float rot
-    ) {
-        List<Double> stripRots = stripRotations.get(sun.id);
-        if (stripRots == null) {
-            stripRots = new ArrayList<>(sun.getStrips().size());
-            stripRotations.put(sun.id, stripRots);
-        }
-
-        final int stripIndex = sun.getStrips().indexOf(strip);
-
-        while (stripRots.size() <= stripIndex) {
-            stripRots.add(0d);
-        }
-        stripRots.set(stripIndex, (double) rot);
-
-        saveRotationData();
-    }
-
-    public static void updateStripLength(
-        @NotNull final Sun sun,
-        @NotNull final CurvedStrip strip,
-        final int length
-    ) {
-        Map<String, List<Double>> stripLensMap = stripLengths.computeIfAbsent(sun.id, k -> new HashMap<>());
-        List<Double> stripLens = stripLensMap.computeIfAbsent(strip.getSliceId(), k -> new ArrayList<>(MAX_NUM_STRIPS_PER_SLICE));
-
-        int pos = Integer.parseInt(strip.id);
-        for (int i = stripLens.size(); i <= pos; i++) {
-            stripLens.add(0d);
-        }
-        stripLens.set(pos, (double) length);
-
-        saveStripLengthData();
-    }
-
-    public static float rotationForStrip(final Sun sun, final int i) {
-        List<Double> stripRots = stripRotations.get(sun.id);
-        if (stripRots == null) {
-            return 0;
-        }
-
-        if (i >= stripRots.size()) return 0;
-        final Double rot = stripRots.get(i);
-        if (rot == null) return 0;
-        return rot.floatValue();
-    }
-
-    public static Map<String, List<Double>> stripLengths(String id) {
-        return stripLengths.get(id);
-    }
-
-    public static int stripLength(Sun sun, CurvedStrip strip) {
-        return stripLengths.get(sun.id).get(strip.getSliceId()).get(Integer.parseInt(strip.id)).intValue();
+        return new Sun(mappings.getChildById(id), id, type, coordinates, rotations, transform);
     }
 }

@@ -15,8 +15,8 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
 
-import static com.symmetrylabs.slstudio.SLStudio.INCHES;
 import static com.symmetrylabs.slstudio.util.MathUtils.random;
+import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class Explosions extends LXPattern {
         // Used to store info about each explosion.

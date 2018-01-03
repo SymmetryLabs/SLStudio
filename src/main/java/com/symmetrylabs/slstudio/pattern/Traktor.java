@@ -5,7 +5,6 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
 import com.symmetrylabs.slstudio.util.MathUtils;
