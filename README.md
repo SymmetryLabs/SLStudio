@@ -9,12 +9,15 @@ Training data for the algorithm consists of audio data and timestamps, recorded 
 ### Prerequisites
 
 Install/update homebrew
+
 Python 2.7
+
 Pip
 ```
 sudo easy_install pip
 ```
 Soundflower
+
 http://manual.audacityteam.org/man/tutorial_recording_computer_playback_on_mac.html - soundflower
 
 Soundflower allows you to record audio through the soundcard. When this output is selected (soundflower 2ch), no music will be played through the speakers. In order to play through speakers/headphones at the same time as soundflower, you need to create a multi-output device with mac
@@ -62,8 +65,11 @@ This bash script will run a calibrating script, you should see graphs of mel spe
 ## About Training Data
 
 - Each training session will create 3 important files in a folder name you pass in as an argument to data_generation.py. 
+
 - X_train_raw.npy is raw audio (spectrogram) data collected every 5 seconds. The size of the spectrogram is 15 seconds.
+
 - Time_test_scaled.npy are the timestamps of the raw audio, and will be used to parse the logger to get current LX parameters at each spectrogram
+
 - Logger_training_output_raw.txt is the logger output from LX
 
 ### Generating Data
@@ -83,7 +89,7 @@ How training data is saved
 Data_generation.py 
 - Run ‘data_generation.py <your_name> <run_time_minutes>
 - Example ‘data_generation.py aaron 5’
-- Runs audio capture for 5 min, and saves to file aaron/<current_date>/
+- Runs audio capture for 5 min, and saves to file <your_name>/<current_date>/
 run.py
 - Runs pretrained AI_VJ model
 
