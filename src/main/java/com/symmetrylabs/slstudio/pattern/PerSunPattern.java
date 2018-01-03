@@ -17,33 +17,8 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.render.Renderer;
-import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
-import com.symmetrylabs.slstudio.render.SequentialRenderer;
-import com.symmetrylabs.slstudio.render.Renderable;
-
 public abstract class PerSunPattern extends SectionalPattern {
     protected List<Subpattern> subpatterns;
-
-    private Renderer renderer;
-
-    private Renderable renderable = new Renderable() {
-        @Override
-        public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
-            // System.out.println(1000 / deltaMs);
-            subpatterns.parallelStream().forEach(subpattern -> {
-                if (subpattern.enableParam.isOn()) {
-                    subpattern.pattern.setBuffer(layer);
-                    subpattern.pattern.loop(deltaMs);
-                }
-                else {
-                    for (LXPoint point : subpattern.section.points) {
-                        layer[point.index] = 0;
-                    }
-                }
-            });
-        }
-    };
 
     protected abstract SLPattern createSubpattern(LXModel section, int sectionIndex);
 
@@ -134,9 +109,6 @@ public abstract class PerSunPattern extends SectionalPattern {
         for (Subpattern subpattern : subpatterns) {
             addParameter(subpattern.enableParam);
         }
-
-        renderer = new InterpolatingRenderer(model, colors, renderable);
-        //renderer = new SequentialRenderer(model, colors, renderable);
     }
 
     @Override
@@ -149,8 +121,6 @@ public abstract class PerSunPattern extends SectionalPattern {
                 subpattern.isActive = true;
             }
         }
-
-        renderer.start();
     }
 
     @Override
@@ -163,14 +133,23 @@ public abstract class PerSunPattern extends SectionalPattern {
                 subpattern.isActive = false;
             }
         }
-
-        renderer.stop();
     }
 
     @Override
-    public void run(final double deltaMs) {
-        renderer.run(deltaMs);
-    }
+    public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
+        // System.out.println(1000 / deltaMs);
+        subpatterns.parallelStream().forEach(subpattern -> {
+            if (subpattern.enableParam.isOn()) {
+                subpattern.pattern.setBuffer(layer);
+                subpattern.pattern.loop(deltaMs);
+            }
+            else {
+                for (LXPoint point : subpattern.section.points) {
+                    layer[point.index] = 0;
+                }
+            }
+        });
+    };
 
     private static class Subpattern {
         public final LXModel section;

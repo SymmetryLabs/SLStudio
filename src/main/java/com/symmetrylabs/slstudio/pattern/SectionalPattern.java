@@ -9,7 +9,7 @@ import heronarts.lx.model.LXModel;
 
 import com.symmetrylabs.slstudio.model.SectionalModel;
 
-public abstract class SectionalPattern extends LXPattern {
+public abstract class SectionalPattern extends SLPattern {
     public SectionalPattern(LX lx) {
         super(lx);
     }

@@ -9,7 +9,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
 
 
-public class LSD extends SunsEffect {
+public class LSD extends SLModelEffect {
 
     public final BoundedParameter scale = new BoundedParameter("Scale", 10, 5, 40);
     public final BoundedParameter speed = new BoundedParameter("Speed", 4, 1f, 6);
