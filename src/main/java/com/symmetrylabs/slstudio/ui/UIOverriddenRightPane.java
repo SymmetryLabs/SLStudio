@@ -30,12 +30,14 @@ import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import java.io.PrintWriter;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
+import java.io.File;
 
 import java.io.IOException;
 //import oscP5.*;
 
 import processing.core.PGraphics;
-
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class UIOverriddenRightPane extends UIPane {
 
@@ -55,33 +57,42 @@ public class UIOverriddenRightPane extends UIPane {
     private int beatCount = 1;
     private int macroCount = 1;
 
+    // get path SLStudio was launched from!
 
-    String userName = "aaron";
-    String pythonPath = "/Users/aaronopp/anaconda/bin/python";
+    Path currentRelativePath = Paths.get("");
+    String slstudioPath = currentRelativePath.toAbsolutePath().toString();
+
+    //String userName = "aaron";
+    String userName = System.getProperty("user.name");
+
+    //String pythonPath = "/Users/aaronopp/anaconda/bin/python";
+
+    // initialize python file script names
 
     String py="data_generation";
-
     String pyRun = "run";
-    String cmd="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
+
+    String cmd= slstudioPath + "/AI_VJ/";
+
     //String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+py+ ".py", "aaron_test_12_19_3", "1"};
-    String[] command = new String[] {pythonPath ,cmd+py+ ".py", userName, "5"};
+    String[] command = new String[] {"python" ,cmd+py+ ".py", userName, "5"};
     ProcessBuilder pb = new ProcessBuilder(command);
 
     //String cmdLogger="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
-    // Initalize command for running logger
-    //String cmd_logger= "pro"
-    String[] commandLogger = new String[] {"processing-java", "--sketch=/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/logger", "--run"};
+
+    // initialize command for running logger
+
+    String[] commandLogger = new String[] {"processing-java", "--sketch=" + slstudioPath + "/AI_VJ/logger", "--run"};
     ProcessBuilder pbLogger = new ProcessBuilder(commandLogger);
     // OSC logger
 
-    String[] commandVjRun = new String[] {pythonPath,cmd+pyRun+ ".py",userName, "5"};
+    String[] commandVjRun = new String[] {"python",cmd+pyRun+ ".py",userName, "5"};
     ProcessBuilder pbVjRun = new ProcessBuilder(commandVjRun);
 
     String LOGFILE = "out.txt";
-
-    //OscP5 oscP5;
     PrintWriter out;
-
+    //Process pLogger = null;
+    //Process p = null;
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
@@ -195,38 +206,52 @@ public class UIOverriddenRightPane extends UIPane {
         new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
               @Override
               public void onToggle(boolean on) {
-                if (on) {
-                  System.out.println("AI VJ button pressed");
-                  //logger logger1 = new logger();
-                  try {
 
-                  pb.redirectError();
-                  Process p = pb.start();
-                  BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-                  pbLogger.redirectError();
-                  Process pLogger = pbLogger.start();
-                  BufferedReader inLogger = new BufferedReader(new InputStreamReader(pLogger.getInputStream()));
+                        if (on) {
+                            System.out.println("AI VJ button pressed");
 
-                  //slLogger logger1  = new slLogger();
+                            System.out.println("Current relative path is: " + slstudioPath);
+                            System.out.println("Current username: " + System.getProperty("user.name"));
 
-                  //for (Integer y = 0; y < 20; y++) {
-                       //String ret = inLogger.readLine();
-                       //System.out.println("value is: "+ ret);
-                  //};
+                            try {
 
-                  //String ret2 = in.readLine();
-                  System.out.println("done!");
-                  }
-                  catch(IOException ioe){
-                       System.out.println("error starting AI VJ data generation");
-                       ioe.printStackTrace();
-                  }
-                } //  IF OFF
-                //else if {}
-                // pb.destroy();
+                                pb.redirectError();
+                                Process p = pb.start();
+                                //BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
-              }
+                                pbLogger.redirectError();
+                                Process pLogger = pbLogger.start();
+                                //BufferedReader inLogger = new BufferedReader(new InputStreamReader(pLogger.getInputStream()));
+
+                                //slLogger logger1  = new slLogger();
+
+                                //for (Integer y = 0; y < 20; y++) {
+                                //String ret = inLogger.readLine();
+                                //System.out.println("value is: "+ ret);
+                                //};
+
+                                //String ret2 = in.readLine();
+                                System.out.println("done!");
+                            } catch (IOException ioe) {
+                                System.out.println("error starting AI VJ data generation");
+                                ioe.printStackTrace();
+                            }
+                        } //  IF OFF
+                        else {
+                            System.out.println("toggled off - aaron");
+
+//                            if (pLogger != null){
+//                                System.out.println("getting inside null");
+//                                pLogger.destroyForcibly();
+//                            }
+//                            if (p != null) {
+//                                p.destroyForcibly();
+//                            }
+                        }
+
+
+                    }
             }
             .setLabel("AI VJ")
 
