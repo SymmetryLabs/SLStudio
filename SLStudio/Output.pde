@@ -44,6 +44,219 @@ void setupOutputs(final LX lx) {
 
   lx.addOutput(new SLController(lx, "10.200.1.255"));
   //lx.addOutput(new LIFXOutput());
+
+  lx.addOutput(new Pixlite(lx, "10.1.10.255"));
+}
+
+/*
+ * Pixlite
+ *---------------------------------------------------------------------------*/
+public class Pixlite extends LXOutputGroup {
+
+  private final int NUM_OUTPUTS = 16;
+
+  public final String ipAddress;
+
+  public Pixlite(LX lx, String ipAddress) {
+    super(lx, "pixlite: " + ipAddress);
+    this.ipAddress = ipAddress;
+
+    try {
+      for (int i = 0; i < NUM_OUTPUTS; i++) {
+        addChild(new PixliteOutput(lx, ipAddress, i, new PointsGrouping()
+          .addPoints(model.strips.get(0).points)
+        ));
+      }
+
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+  }
+}
+
+/*
+ * Pixlite Output
+ *---------------------------------------------------------------------------*/
+ private class PixliteOutput extends LXDatagramOutput {
+   private final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
+   private final int outputIndex;
+   private final int firstUniverseOnOutput;
+
+   public PixliteOutput(LX lx, String ipAddress, int outputIndex, PointsGrouping pointsGrouping) throws SocketException {
+     super(lx);
+     this.outputIndex = outputIndex;
+     this.firstUniverseOnOutput = outputIndex * 10;
+     setupDatagrams(ipAddress, pointsGrouping);
+   }
+
+   private void setupDatagrams(String ipAddress, PointsGrouping pointsGrouping) {
+     // the points for one pixlite output have to be spread across multiple universes
+     int numPoints = pointsGrouping.size();
+     int numUniverses = (numPoints / MAX_NUM_POINTS_PER_UNIVERSE) + 1;
+     int counter = 0;
+
+     for (int i = 0; i < numUniverses; i++) {
+       int universe = firstUniverseOnOutput + i;
+       int numIndices = ((i+1) * MAX_NUM_POINTS_PER_UNIVERSE) > numPoints ? (numPoints % MAX_NUM_POINTS_PER_UNIVERSE) : MAX_NUM_POINTS_PER_UNIVERSE;
+       int[] indices = new int[numIndices];
+       for (int i1 = 0; i1 < numIndices; i1++) {
+         indices[i1] = pointsGrouping.getPoint(counter++).index;
+       }
+       addDatagram(new ArtNetDatagram(ipAddress, indices, universe-1));
+     }
+   }
+ }
+
+/*
+ * Artnet Datagram
+ *---------------------------------------------------------------------------*/
+public class ArtNetDatagram extends LXDatagram {
+
+  private final static int DEFAULT_UNIVERSE = 0;
+  private final static int ARTNET_HEADER_LENGTH = 18;
+  private final static int ARTNET_PORT = 6454;
+  private final static int SEQUENCE_INDEX = 12;
+
+  private final int[] pointIndices;
+  private boolean sequenceEnabled = false;
+  private byte sequence = 1;
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
+    this(ipAddress, indices, 3 * indices.length, universeNumber);
+  }
+
+  public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
+    this.pointIndices = indices;
+
+    try {
+      setAddress(ipAddress);
+      setPort(ARTNET_PORT);
+    } catch (UnknownHostException e) {
+      System.out.println("Pixlite with ip address (" + ipAddress + ") is not on the network.");
+    }
+
+    this.buffer[0] = 'A';
+    this.buffer[1] = 'r';
+    this.buffer[2] = 't';
+    this.buffer[3] = '-';
+    this.buffer[4] = 'N';
+    this.buffer[5] = 'e';
+    this.buffer[6] = 't';
+    this.buffer[7] = 0;
+    this.buffer[8] = 0x00; // ArtDMX opcode
+    this.buffer[9] = 0x50; // ArtDMX opcode
+    this.buffer[10] = 0; // Protcol version
+    this.buffer[11] = 14; // Protcol version
+    this.buffer[12] = 0; // Sequence
+    this.buffer[13] = 0; // Physical
+    this.buffer[14] = (byte) (universeNumber & 0xff); // Universe LSB
+    this.buffer[15] = (byte) ((universeNumber >>> 8) & 0xff); // Universe MSB
+    this.buffer[16] = (byte) ((dataLength >>> 8) & 0xff);
+    this.buffer[17] = (byte) (dataLength & 0xff);
+
+    for (int i = ARTNET_HEADER_LENGTH; i < this.buffer.length; ++i) {
+      this.buffer[i] = 0;
+    }
+  }
+
+  public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    this.sequenceEnabled = sequenceEnabled;
+    return this;
+  }
+
+  @Override
+  public void onSend(int[] colors) {
+    copyPointsGamma(colors, this.pointIndices, ARTNET_HEADER_LENGTH);
+
+    if (this.sequenceEnabled) {
+      if (++this.sequence == 0) {
+        ++this.sequence;
+      }
+      this.buffer[SEQUENCE_INDEX] = this.sequence;
+    }
+
+    // We need to slow down the speed at which we send the packets so that we don't overload our switches. 3us seems to
+    // be about right - Yona
+    busySleep(3000);
+  }
+
+  LXDatagram copyPointsGamma(int[] colors, int[] pointIndices, int offset) {
+    int i = offset;
+    int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
+    for (int index : pointIndices) {
+      int colorValue = (index >= 0) ? colors[index] : 0;
+      this.buffer[i + byteOffset[0]] = (byte) SLStudio.redGamma[((colorValue >> 16) & 0xff)]; // R
+      this.buffer[i + byteOffset[1]] = (byte) SLStudio.greenGamma[((colorValue >> 8) & 0xff)]; // G
+      this.buffer[i + byteOffset[2]] = (byte) SLStudio.blueGamma[(colorValue & 0xff)]; // B
+      i += 3;
+    }
+    return this;
+  }
+
+  public void busySleep(long nanos) {
+    long elapsed;
+    final long startTime = System.nanoTime();
+    do {
+      elapsed = System.nanoTime() - startTime;
+    } while (elapsed < nanos);
+  }
+}
+
+
+/*
+ * Points Grouping
+ *---------------------------------------------------------------------------*/
+public class PointsGrouping {
+
+  public static final boolean REVERSE = true;
+
+  private final int MAX_NUMBER_LEDS_PER_UNVERSE = 170;
+
+  private final List<LXPoint> points = new ArrayList<LXPoint>();
+
+  public List<LXPoint> getPoints() {
+    return points;
+  }
+
+  public LXPoint getPoint(int index) {
+    return points.get(index);
+  }
+
+  public int[] getIndices() {
+    int[] indices = new int[size()];
+
+    for (int i = 0; i < size(); i++) {
+      indices[i] = getPoint(i).index;
+    }
+    return indices;
+  }
+
+  public int size() {
+    return points.size();
+  }
+
+  public PointsGrouping reversePoints() {
+    Collections.reverse(Arrays.asList(points));
+    return this;
+  }
+
+  public PointsGrouping addPoints(LXPoint[] pointsToAdd) {
+    for (LXPoint p : pointsToAdd) {
+      this.points.add(p);
+    }
+    return this;
+  }
+
+  public PointsGrouping addPoints(LXPoint[] pointsToAdd, boolean reverseOrdering) {
+    if (reverseOrdering) {
+      Collections.reverse(Arrays.asList(pointsToAdd));
+    }
+    for (LXPoint p : pointsToAdd) {
+      this.points.add(p);
+    }
+    return this;
+  }
 }
 
 /*
