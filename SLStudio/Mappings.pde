@@ -241,8 +241,8 @@ public SLModel buildModel() {
   // Any global transforms
   LXTransform globalTransform = new LXTransform();
   globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-  globalTransform.rotateY(globalRotationY * PI / 180.);
   globalTransform.rotateX(globalRotationX * PI / 180.);
+  globalTransform.rotateY(globalRotationY * PI / 180.);
   globalTransform.rotateZ(globalRotationZ * PI / 180.);
 
   /* Cubes ----------------------------------------------------------*/
@@ -276,8 +276,8 @@ public SLModel buildModel() {
 
     globalTransform.push();
     globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
     globalTransform.rotateX(stripConfig.yRot * PI / 180.);
+    globalTransform.rotateY(stripConfig.xRot * PI / 180.);
     globalTransform.rotateZ(stripConfig.zRot * PI / 180.);
 
     strips.add(new Strip(metrics, stripConfig.yRot, globalTransform, true));
