@@ -44,10 +44,12 @@ public class NetworkMonitor {
                             if (!oldVersionWarningGiven) {
                                 for (NetworkDevice device : networkDevices) {
                                     if (device.version.get() != -1
-                                        && (device.version.get() < result.version.get()
-                                        || device.version.get() > result.version.get())) {
+                                            && (device.version.get() < result.version.get()
+                                            || device.version.get() > result.version.get())) {
+
                                         System.out.println("WARNING: One or more cubes have outdated firmware!");
                                         oldVersionWarningGiven = true;
+
                                         return;
                                     }
                                 }

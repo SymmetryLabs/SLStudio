@@ -15,7 +15,7 @@ import heronarts.lx.model.LXPoint;
  * Top-level model of the entire sculpture. This contains a list of every cube on the sculpture, which forms a hierarchy
  * of faces, strips and points.
  */
-public class SunsModel extends StripsModel<CurvedStrip> implements SectionalModel<Sun> {
+public class SunsModel extends StripsModel<CurvedStrip> {
 
     // Suns
     protected final List<Sun> suns = new ArrayList<>();
@@ -73,11 +73,6 @@ public class SunsModel extends StripsModel<CurvedStrip> implements SectionalMode
             this.pointsY[i] = point.y;
             this.pointsZ[i] = point.z;
         }
-    }
-
-    @Override
-    public List<Sun> getSections() {
-        return getSuns();
     }
 
     public List<Sun> getSuns() {

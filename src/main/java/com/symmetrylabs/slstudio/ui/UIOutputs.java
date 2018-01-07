@@ -23,10 +23,15 @@ import com.symmetrylabs.slstudio.util.listenable.IntListener;
 import com.symmetrylabs.slstudio.util.listenable.ListListener;
 
 public class UIOutputs extends UICollapsibleSection {
-    BooleanParameter clearParam = new BooleanParameter("clear", false);
+
+    public static final float DEFAULT_HEIGHT = 500;
+    public static final float TOP_MARGIN = 24;
+
+    public final BooleanParameter clearParam = new BooleanParameter("clear", false);
+    public final UIItemList.ScrollList outputList;
 
     public UIOutputs(LX lx, UI ui, float x, float y, float w) {
-        super(ui, x, y, w, 500);
+        super(ui, x, y, w, DEFAULT_HEIGHT);
 
         setTitle();
 
@@ -60,8 +65,8 @@ public class UIOutputs extends UICollapsibleSection {
             clearParam.setValue(false);
         });
 
-        List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-        UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 0, w - 8, 476);
+        final List<UIItemList.Item> items = new ArrayList<>();
+        outputList = new UIItemList.ScrollList(ui, 0, 0, w - 8, DEFAULT_HEIGHT - TOP_MARGIN);
 
         for (Pixlite pixlite : SLStudio.applet.pixlites) {
             items.add(new PixliteItem(pixlite));

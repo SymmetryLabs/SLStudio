@@ -19,7 +19,7 @@ import static com.symmetrylabs.util.MathConstants.*;
  * every cube on the sculpture, which forms a hierarchy of faces, strips
  * and points.
  */
-public class CubesModel extends StripsModel<CubesModel.CubesStrip> implements SectionalModel<CubesModel.Tower> {
+public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     protected final List<Tower> towers = new ArrayList<>();
     protected final List<Cube> cubes = new ArrayList<>();
     protected final List<Face> faces = new ArrayList<>();
@@ -58,11 +58,6 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> implements Se
                 }
             }
         }
-    }
-
-    @Override
-    public List<Tower> getSections() {
-        return getTowers();
     }
 
     public List<Tower> getTowers() {

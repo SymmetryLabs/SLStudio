@@ -17,7 +17,7 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-public abstract class PerSunPattern extends SectionalPattern {
+public abstract class PerSunPattern extends SunsPattern {
     protected List<Subpattern> subpatterns;
 
     protected abstract SLPattern createSubpattern(LXModel section, int sectionIndex);
@@ -81,10 +81,10 @@ public abstract class PerSunPattern extends SectionalPattern {
     protected PerSunPattern(LX lx) {
         super(lx);
 
-        subpatterns = new ArrayList<>(getSections().size());
+        subpatterns = new ArrayList<>(model.getSuns().size());
 
         int sectionIndex = 0;
-        for (LXModel section : getSections()) {
+        for (LXModel section : model.getSuns()) {
             try {
                 Subpattern subpattern = new Subpattern(section, sectionIndex, createSubpattern(section, sectionIndex));
 

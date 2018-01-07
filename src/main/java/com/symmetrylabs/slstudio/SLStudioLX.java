@@ -4,12 +4,16 @@ import java.io.File;
 
 import com.google.gson.JsonObject;
 
-import com.symmetrylabs.slstudio.pattern.SLPattern;
-import heronarts.lx.*;
-import heronarts.lx.model.LXPoint;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 import processing.event.KeyEvent;
 
+import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXPattern;
+import heronarts.lx.LXEffect;
+import heronarts.lx.LXSerializable;
+import heronarts.lx.LXMappingEngine;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
@@ -20,6 +24,7 @@ import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.UIWindow;
+import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.component.UIGLPointCloud;
 import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
@@ -33,15 +38,16 @@ import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.LXClassLoader;
+import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
 import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
 import com.symmetrylabs.slstudio.ui.UIFramerate;
 import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
+import com.symmetrylabs.slstudio.ui.UIOutputs;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.slstudio.util.MarkerSource;
-import processing.event.MouseEvent;
 
 public class SLStudioLX extends P3LX {
 
@@ -412,6 +418,17 @@ public class SLStudioLX extends P3LX {
             this.leftPane.setHeight(bottomTrayY);
             this.rightPane.setHeight(bottomTrayY);
             this.rightPane.setX(uiWidth - this.rightPane.getWidth());
+
+            UI2dScrollContext outputsOuterScrollContext = this.rightPane.utility;
+            float listHeight = outputsOuterScrollContext.getHeight() - UIOutputs.TOP_MARGIN;
+            UI2dScrollContext outputsInnerScrollContext = this.rightPane.uiOutputs.outputList;
+            if (outputsInnerScrollContext.getHeight() != listHeight) {
+                outputsInnerScrollContext.setHeight(listHeight);
+            }
+            UIOutputs outputs = this.rightPane.uiOutputs;
+            if (outputs.getContentTarget().getHeight() != listHeight) {
+                outputs.getContentTarget().setHeight(listHeight);
+            }
 
             this.preview.setSize(
                 Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),

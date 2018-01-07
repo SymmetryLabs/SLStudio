@@ -37,6 +37,8 @@ public class UIOverriddenRightPane extends UIPane {
     public final UI2dScrollContext modulation;
     public final UI2dScrollContext midi;
 
+    public UIOutputs uiOutputs;
+
     public static final int PADDING = 4;
     public static final int WIDTH = 284;
     private static final int ADD_BUTTON_WIDTH = 38;
@@ -60,7 +62,7 @@ public class UIOverriddenRightPane extends UIPane {
     }
 
     private void buildUtilityUI() {
-        new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+        (uiOutputs = new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth())).addToContainer(this.utility);
     }
 
     private void buildPerformanceUI() {
