@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.symmetrylabs.slstudio.automapping.Automapper;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -52,6 +53,7 @@ public class SLStudio extends PApplet {
     private Mappings mappings;
     public Dispatcher dispatcher;
     private NetworkMonitor networkMonitor;
+    private Automapper automapper;
     public OutputControl outputControl;
     public Pixlite[] pixlites;
     public ListenableList<SLController> controllers;
@@ -122,6 +124,7 @@ public class SLStudio extends PApplet {
                 // Output
                 (dispatcher = Dispatcher.getInstance(lx)).start();
                 (networkMonitor = NetworkMonitor.getInstance(lx)).start();
+                (automapper = Automapper.getInstance(lx)).start();
                 setupGammaCorrection();
 
                 outputControl = new OutputControl(lx);

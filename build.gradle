@@ -36,6 +36,7 @@ repositories {
 dependencies {
 	// https://mvnrepository.com/artifact/org.processing/core
 	compile group: 'org.processing', name: 'core', version: '3.3.6'
+	compile group: 'org.processing', name: 'net', version: '3.3.6'
 
 	// https://mvnrepository.com/artifact/com.harium/kdtree
 	compile group: 'com.harium', name: 'kdtree', version: '1.0.0'
@@ -66,6 +67,8 @@ dependencies {
 
 	// https://github.com/SymmetryLabs/aparapi
 	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
+
+	compile group: 'org.jmdns', name: 'jmdns', version: '3.5.3'
 
 	compile files('libs/gluegen-rt-natives-linux-aarch64.jar')
 	compile files('libs/gluegen-rt-natives-linux-amd64.jar')

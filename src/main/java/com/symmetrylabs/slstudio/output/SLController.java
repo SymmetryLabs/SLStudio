@@ -19,6 +19,7 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.util.NetworkUtils;
 import com.symmetrylabs.slstudio.util.CubesMappingMode;
+import com.symmetrylabs.slstudio.automapping.Automapper;
 
 public class SLController extends LXOutput {
     public final String cubeId;
@@ -48,6 +49,7 @@ public class SLController extends LXOutput {
 
     private LX lx;
     private CubesMappingMode mappingMode;
+    private Automapper automapper;
 
     public SLController(LX lx, NetworkDevice device, String cubeId) {
         this(lx, device, device.ipAddress, cubeId, false);
@@ -75,6 +77,7 @@ public class SLController extends LXOutput {
         this.lx = lx;
 
         mappingMode = CubesMappingMode.getInstance(lx);
+        automapper = Automapper.getInstance(lx);
 
         enabled.setValue(true);
     }
@@ -203,6 +206,14 @@ public class SLController extends LXOutput {
             } else {
                 for (int i = 0; i < numPixels; i++)
                     setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+            }
+        }
+
+        if (automapper.isRunning()) {
+            for (int i = 0; i < numPixels; i++) {
+                String mac = NetworkUtils.macAddrToString(networkDevice.macAddress);
+                int c = automapper.getPixelColor(mac, i);
+                setPixel(i, c);
             }
         }
 

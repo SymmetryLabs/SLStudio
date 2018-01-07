@@ -220,8 +220,8 @@ public class CubesLayout {
 
     }
 
-    static Map<String, String> macToPhysid = new HashMap<>();
-    static Map<String, String> physidToMac = new HashMap<>();
+    public static Map<String, String> macToPhysid = new HashMap<>();
+    public static Map<String, String> physidToMac = new HashMap<>();
 
     public static CubesModel buildModel() {
 

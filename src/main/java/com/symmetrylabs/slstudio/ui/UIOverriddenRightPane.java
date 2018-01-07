@@ -65,6 +65,7 @@ public class UIOverriddenRightPane extends UIPane {
         (uiOutputs = new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth())).addToContainer(this.utility);
 
         new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+        new UIAutomapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
     }
 
     private void buildPerformanceUI() {
