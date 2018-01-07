@@ -18,6 +18,7 @@ import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.util.NetworkUtils;
+import com.symmetrylabs.slstudio.util.CubesMappingMode;
 
 public class SLController extends LXOutput {
     public final String cubeId;
@@ -46,6 +47,7 @@ public class SLController extends LXOutput {
     byte[] packetData;
 
     private LX lx;
+    private CubesMappingMode mappingMode;
 
     public SLController(LX lx, NetworkDevice device, String cubeId) {
         this(lx, device, device.ipAddress, cubeId, false);
@@ -71,6 +73,8 @@ public class SLController extends LXOutput {
         this.cubeId = cubeId;
         this.isBroadcast = isBroadcast;
         this.lx = lx;
+
+        mappingMode = CubesMappingMode.getInstance(lx);
 
         enabled.setValue(true);
     }
@@ -173,6 +177,32 @@ public class SLController extends LXOutput {
         } else {
             for (int i = 0; i < numPixels; i++) {
                 setPixel(i, LXColor.BLACK);
+            }
+        }
+
+        // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
+        // TODO: refactor here
+        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+            if (mappingMode.inUnMappedMode()) {
+                if (mappingMode.inDisplayAllMode()) {
+                    int col = mappingMode.getUnMappedColor();
+
+                    for (int i = 0; i < numPixels; i++)
+                        setPixel(i, col);
+                } else {
+                    if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+                        int col = mappingMode.getUnMappedColor();
+
+                        for (int i = 0; i < numPixels; i++)
+                            setPixel(i, col);
+                    } else {
+                        for (int i = 0; i < numPixels; i++)
+                            setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+                    }
+                }
+            } else {
+                for (int i = 0; i < numPixels; i++)
+                    setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
             }
         }
 
