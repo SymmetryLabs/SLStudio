@@ -1,7 +1,0 @@
-global.enabled=true
-global.x=0
-global.y=0
-global.z=0
-global.rotateX=0
-global.rotateY=0
-global.rotateZ=0
