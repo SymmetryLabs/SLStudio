@@ -1,8 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-
-import com.symmetrylabs.slstudio.model.Sun;
+import heronarts.lx.model.LXModel;
 
 public class PerSunWasps extends PerSunPattern {
     public PerSunWasps(LX lx) {
@@ -10,9 +9,9 @@ public class PerSunWasps extends PerSunPattern {
     }
 
     @Override
-    protected SLPattern createSubpattern(Sun sun, int sunIndex) {
+    protected SLPattern createSubpattern(LXModel section, int sectionIndex) {
         Wasps pattern = new Wasps(lx);
-        pattern.setModel(sun);
+        pattern.setModel(section);
         return pattern;
     }
 }

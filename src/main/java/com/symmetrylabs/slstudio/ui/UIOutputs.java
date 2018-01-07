@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
+import java.util.List;
+import java.util.ArrayList;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -11,8 +11,8 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.pixlites.Pixlite;
 
 
 public class UIOutputs extends UICollapsibleSection {
@@ -64,11 +64,7 @@ public class UIOutputs extends UICollapsibleSection {
 
         PixliteItem(Pixlite pixlite) {
             this.pixlite = pixlite;
-            pixlite.enabled.addListener(new LXParameterListener() {
-                public void onParameterChanged(LXParameter parameter) {
-                    redraw();
-                }
-            });
+            pixlite.enabled.addListener(param -> redraw());
         }
 
         public String getLabel() {

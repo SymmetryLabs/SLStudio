@@ -35,7 +35,8 @@ public abstract class SLPattern extends LXPattern implements Renderable {
 
         this.lx = (SLStudioLX)lx;
 
-        renderer = new InterpolatingRenderer(lx.model, colors, this);
+        renderer = new InterpolatingRenderer(model, colors, this);
+        //renderer = new SequentialRenderer(model, colors, this);
 
         createParameters();
     }

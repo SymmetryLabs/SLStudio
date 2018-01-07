@@ -1,9 +1,18 @@
 package com.symmetrylabs.slstudio;
 
+import processing.core.PApplet;
+
+import heronarts.lx.model.LXModel;
+import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+
+import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping;
-import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
@@ -20,8 +29,6 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
-import heronarts.lx.parameter.*;
-import processing.core.PApplet;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -37,7 +44,7 @@ public class SLStudio extends PApplet {
 
     public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
     public SLStudioLX lx;
-    private SunsModel model;
+    private LXModel model;
     private Mappings mappings;
     public Dispatcher dispatcher;
     private NetworkMonitor networkMonitor;
@@ -72,13 +79,17 @@ public class SLStudio extends PApplet {
         long setupStart = System.nanoTime();
         applet = this;
 
-                mappings = FultonStreetLayout.loadMappings();
+        mappings = FultonStreetLayout.loadMappings();
         model = FultonStreetLayout.buildModel();
 
         println("-- Model ----");
-        println("# of suns: " + model.getSuns().size());
-        println("# of slices: " + model.getSlices().size());
-        println("# of strips: " + model.getStrips().size());
+
+        if (model instanceof SunsModel) {
+            println("# of suns: " + ((SunsModel)model).getSuns().size());
+            println("# of slices: " + ((SunsModel)model).getSlices().size());
+            println("# of strips: " + ((SunsModel)model).getStrips().size());
+        }
+
         println("# of points: " + model.points.length);
         println("model.xMin: " + model.xMin);
         println("model.xMax: " + model.xMax);
@@ -97,8 +108,8 @@ public class SLStudio extends PApplet {
                 super.initialize(lx, ui);
 
                 // Output
-                (dispatcher = new Dispatcher(lx)).start();
-                (networkMonitor = new NetworkMonitor(lx)).start();
+                (dispatcher = Dispatcher.getInstance(lx)).start();
+                (networkMonitor = NetworkMonitor.getInstance(lx)).start();
                 setupGammaCorrection();
 
                 outputControl = new OutputControl(lx);
@@ -381,27 +392,31 @@ public class SLStudio extends PApplet {
         dispatcher.draw();
     }
 
-    Pixlite[] setupPixlites() {
+    private Pixlite[] setupPixlites() {
 
-                List<Pixlite> pixlites = new ArrayList<>();
+        if (!(model instanceof SunsModel))
+            return new Pixlite[0];
+
+        List<Pixlite> pixlites = new ArrayList<>();
 
         for (String outputId : mappings.getOutputIds()) {
             PixliteMapping pixliteMapping = mappings.getOutputById(outputId, PixliteMapping.class);
             if (pixliteMapping != null) {
-                                pixlites.add(createPixlite(pixliteMapping, outputId));
-                        }
-                }
+                pixlites.add(createPixlite(pixliteMapping, outputId));
+            }
+        }
 
         this.mappingColorsPerPixlite = new HashMap<>();
         for (Pixlite pixlite : pixlites) {
-                        this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
-                }
+            this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
+        }
 
         return pixlites.toArray(new Pixlite[0]);
     }
 
     private Pixlite createPixlite(PixliteMapping pixliteMapping, String sliceId) {
-        Pixlite pixlite = new Pixlite(mappings, pixliteMapping, lx, model.getSliceById(sliceId));
+        SunsModel sunsModel = (SunsModel)model;
+        Pixlite pixlite = new Pixlite(mappings, pixliteMapping, lx, sunsModel.getSliceById(sliceId));
         lx.addOutput(pixlite);
         return pixlite;
     }

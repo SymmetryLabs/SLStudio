@@ -4,21 +4,27 @@ import java.io.File;
 
 import com.google.gson.JsonObject;
 
-import com.symmetrylabs.slstudio.model.SunsModel;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
-import com.symmetrylabs.slstudio.ui.*;
-import heronarts.lx.*;
-import heronarts.lx.model.LXPoint;
-import heronarts.p3lx.ui.*;
 import processing.core.PApplet;
+import processing.event.MouseEvent;
 import processing.event.KeyEvent;
 
+import heronarts.lx.LX;
+import heronarts.lx.LXChannel;
+import heronarts.lx.LXPattern;
+import heronarts.lx.LXEffect;
+import heronarts.lx.LXSerializable;
+import heronarts.lx.LXMappingEngine;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.p3lx.P3LX;
+import heronarts.p3lx.ui.UI3dContext;
+import heronarts.p3lx.ui.UIEventHandler;
+import heronarts.p3lx.ui.UIObject;
+import heronarts.p3lx.ui.UIWindow;
+import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.component.UIGLPointCloud;
 import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
@@ -32,10 +38,16 @@ import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.LXClassLoader;
+import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
+import com.symmetrylabs.slstudio.ui.UIAxes;
+import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
+import com.symmetrylabs.slstudio.ui.UIFramerate;
+import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
+import com.symmetrylabs.slstudio.ui.UIOutputs;
+import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.slstudio.util.MarkerSource;
-import processing.event.MouseEvent;
 
 public class SLStudioLX extends P3LX {
 
@@ -499,7 +511,6 @@ public class SLStudioLX extends P3LX {
     private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
 
-    public final SunsModel model;
     public final UI ui;
 
     public SLStudioLX(PApplet applet, LXModel model) {
@@ -508,7 +519,6 @@ public class SLStudioLX extends P3LX {
 
     public SLStudioLX(PApplet applet, LXModel model, boolean multiThreaded) {
         super(applet, model);
-        this.model = (SunsModel) super.model;
         this.ui = (UI) super.ui;
         onUIReady(this, this.ui);
         registerExternal(KEY_UI, this.ui);

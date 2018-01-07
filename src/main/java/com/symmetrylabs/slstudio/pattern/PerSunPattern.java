@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import java.lang.reflect.Modifier;
 
 import heronarts.lx.LX;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -16,36 +17,10 @@ import heronarts.lx.parameter.MutableParameter;
 import heronarts.lx.parameter.LXListenableParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.render.Renderer;
-import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
-import com.symmetrylabs.slstudio.render.SequentialRenderer;
-import com.symmetrylabs.slstudio.render.Renderable;
-
 public abstract class PerSunPattern extends SunsPattern {
     protected List<Subpattern> subpatterns;
 
-    private Renderer renderer;
-
-    private Renderable renderable = new Renderable() {
-        @Override
-        public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
-            // System.out.println(1000 / deltaMs);
-            subpatterns.parallelStream().forEach(subpattern -> {
-                if (subpattern.enableParam.isOn()) {
-                    subpattern.pattern.setBuffer(layer);
-                    subpattern.pattern.loop(deltaMs);
-                }
-                else {
-                    for (LXPoint point : subpattern.sun.points) {
-                        layer[point.index] = 0;
-                    }
-                }
-            });
-        }
-    };
-
-    protected abstract SLPattern createSubpattern(Sun sun, int sunIndex);
+    protected abstract SLPattern createSubpattern(LXModel section, int sectionIndex);
 
     private void wrapChildParameter(LXParameter param) {
         String name = param.getLabel();
@@ -108,10 +83,10 @@ public abstract class PerSunPattern extends SunsPattern {
 
         subpatterns = new ArrayList<>(model.getSuns().size());
 
-        int sunIndex = 0;
-        for (Sun sun : model.getSuns()) {
+        int sectionIndex = 0;
+        for (LXModel section : model.getSuns()) {
             try {
-                Subpattern subpattern = new Subpattern(sun, sunIndex, createSubpattern(sun, sunIndex));
+                Subpattern subpattern = new Subpattern(section, sectionIndex, createSubpattern(section, sectionIndex));
 
                 subpattern.pattern.setManagedMode(true);
 
@@ -128,15 +103,12 @@ public abstract class PerSunPattern extends SunsPattern {
                 e.printStackTrace();
             }
 
-            ++sunIndex;
+            ++sectionIndex;
         }
 
         for (Subpattern subpattern : subpatterns) {
             addParameter(subpattern.enableParam);
         }
-
-        renderer = new InterpolatingRenderer(lx.model, colors, renderable);
-        //renderer = new SequentialRenderer(lx.model, colors, renderable);
     }
 
     @Override
@@ -149,8 +121,6 @@ public abstract class PerSunPattern extends SunsPattern {
                 subpattern.isActive = true;
             }
         }
-
-        renderer.start();
     }
 
     @Override
@@ -163,29 +133,38 @@ public abstract class PerSunPattern extends SunsPattern {
                 subpattern.isActive = false;
             }
         }
-
-        renderer.stop();
     }
 
     @Override
-    public void run(final double deltaMs) {
-        renderer.run(deltaMs);
-    }
+    public void render(final double deltaMs, List<LXPoint> ignore, final int[] layer) {
+        // System.out.println(1000 / deltaMs);
+        subpatterns.parallelStream().forEach(subpattern -> {
+            if (subpattern.enableParam.isOn()) {
+                subpattern.pattern.setBuffer(layer);
+                subpattern.pattern.loop(deltaMs);
+            }
+            else {
+                for (LXPoint point : subpattern.section.points) {
+                    layer[point.index] = 0;
+                }
+            }
+        });
+    };
 
     private static class Subpattern {
-        public final Sun sun;
-        public final int sunIndex;
+        public final LXModel section;
+        public final int sectionIndex;
         public final SLPattern pattern;
         public final BooleanParameter enableParam;
 
         public boolean isActive = false;
 
-        public Subpattern(Sun sun, int sunIndex, SLPattern pattern) {
-            this.sun = sun;
-            this.sunIndex = sunIndex;
+        public Subpattern(LXModel section, int sectionIndex, SLPattern pattern) {
+            this.section = section;
+            this.sectionIndex = sectionIndex;
             this.pattern = pattern;
 
-            enableParam = new BooleanParameter("SUN" + (sunIndex + 1), true);
+            enableParam = new BooleanParameter("S" + (sectionIndex + 1), true);
         }
     }
 }

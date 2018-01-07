@@ -1,25 +1,21 @@
 package com.symmetrylabs.slstudio.model;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.Arrays;
+import java.util.Collections;
+
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
-
-import static com.symmetrylabs.slstudio.model.SunsModel.PointBatches.NUM_POINT_BATCHES;
-import static processing.core.PApplet.*;
 
 /**
  * Top-level model of the entire sculpture. This contains a list of every cube on the sculpture, which forms a hierarchy
  * of faces, strips and points.
  */
 public class SunsModel extends StripsModel<CurvedStrip> {
-    public final List<LXModel> objModels;
 
     // Suns
     protected final List<Sun> suns = new ArrayList<>();
@@ -38,8 +34,6 @@ public class SunsModel extends StripsModel<CurvedStrip> {
     public final float[] pointsX;
     public final float[] pointsY;
     public final float[] pointsZ;
-
-    protected final PointBatches pointBatches;
 
     public SunsModel() {
         this(new ArrayList<>());
@@ -66,8 +60,6 @@ public class SunsModel extends StripsModel<CurvedStrip> {
             }
         }
 
-        this.objModels = new ArrayList<>();
-
         this.pointsArray = new float[this.points.length * 3];
         this.pointsX = new float[this.points.length];
         this.pointsY = new float[this.points.length];
@@ -81,8 +73,6 @@ public class SunsModel extends StripsModel<CurvedStrip> {
             this.pointsY[i] = point.y;
             this.pointsZ[i] = point.z;
         }
-
-        this.pointBatches = new PointBatches(Arrays.asList(points), NUM_POINT_BATCHES);
     }
 
     public List<Sun> getSuns() {
@@ -114,56 +104,14 @@ public class SunsModel extends StripsModel<CurvedStrip> {
     public Slice getSliceById(String id) {
         Slice slice = sliceTable.get(id);
         if (slice == null) {
-            println("Missing slice id: " + id);
-            print("Valid ids: ");
+            System.out.println("Missing slice id: " + id);
+            System.out.print("Valid ids: ");
             for (String key : sliceTable.keySet()) {
-                print(key + ", ");
+                System.out.print(key + ", ");
             }
-            println();
+            System.out.println();
             throw new IllegalArgumentException("Invalid slice id:" + id);
         }
         return slice;
-    }
-
-    public void forEachPoint(final BatchConsumer consumer) {
-        this.pointBatches.forEachPoint(consumer);
-    }
-
-    public static class PointBatches {
-        private final List<LXPoint> points;
-        private final int batchCount;
-        private final ArrayList<PointBatch> pointBatches;
-
-        public static final int NUM_POINT_BATCHES = 64;
-
-        public PointBatches(List<LXPoint> points, int batchCount) {
-            this.points = points;
-            this.batchCount = batchCount;
-
-            this.pointBatches = new ArrayList<>(batchCount);
-
-            int batchStride = ceil(points.size() / batchCount);
-            for (int i = 0; i < batchCount; i++) {
-                int start = i * batchStride;
-                int end = min(start + batchStride, points.size() - 1);
-                pointBatches.add(new PointBatch(start, end));
-            }
-        }
-
-        public void forEachPoint(
-            final BatchConsumer consumer
-        ) {
-            pointBatches.parallelStream().forEach(batch -> consumer.accept(batch.start, batch.end));
-        }
-    }
-
-    public static class PointBatch {
-        public final int start;
-        public final int end;
-
-        public PointBatch(int start, int end) {
-            this.start = start;
-            this.end = end;
-        }
     }
 }
