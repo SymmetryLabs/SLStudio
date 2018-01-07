@@ -20,7 +20,7 @@ import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.util.NetworkUtils;
 
 public class SLController extends LXOutput {
-    public final String    cubeId;
+    public final String cubeId;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
@@ -85,8 +85,8 @@ public class SLController extends LXOutput {
     }
 
     private void setHeader() {
-        packetData[0] = 0;  // Channel
-        packetData[1] = 0;  // Command (Set pixel colors)
+        packetData[0] = 0; // Channel
+        packetData[1] = 0; // Command (Set pixel colors)
         // indices 2,3 = high byte, low byte
         // 3 bytes * 180 pixels = 540 bytes = 0x021C
         packetData[2] = (byte)((contentSizeBytes >> 8) & 0xFF);
