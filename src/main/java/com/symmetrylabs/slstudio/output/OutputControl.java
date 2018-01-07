@@ -26,9 +26,15 @@ public final class OutputControl extends LXComponent {
 
         addParameter(testBroadcast);
 
-        enabled.addListener(parameter -> {
+        enabled.addListener(param -> {
+            boolean isEnabled = ((BooleanParameter)param).isOn();
+
             for (Pixlite pixlite : SLStudio.applet.pixlites) {
-                pixlite.enabled.setValue(((BooleanParameter) parameter).getValueb());
+                pixlite.enabled.setValue(isEnabled);
+            }
+
+            for (SLController c : SLStudio.applet.controllers) {
+                c.enabled.setValue(isEnabled);
             }
         });
     }

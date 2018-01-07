@@ -15,10 +15,17 @@ public abstract class ModelSpecificPattern<T extends LXModel> extends SLPattern 
 
     @Override
     public LXModelComponent setModel(LXModel model) {
+        T emptyModel = createEmptyModel();
+
         try {
-            this.model = (T)model;
+            if (emptyModel.getClass().isAssignableFrom(model.getClass())) {
+                this.model = (T)model;
+            }
+            else {
+                this.model = emptyModel;
+            }
         } catch (ClassCastException e) {
-            this.model = createEmptyModel();
+            this.model = emptyModel;
         }
 
         return super.setModel(model);

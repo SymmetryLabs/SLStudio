@@ -10,11 +10,14 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.model.SunsModel;
+import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
+import com.symmetrylabs.slstudio.mappings.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
+import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
 import com.symmetrylabs.slstudio.palettes.ImageLibrary;
 import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
@@ -29,6 +32,7 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
+import com.symmetrylabs.slstudio.util.listenable.ListenableList;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -50,6 +54,7 @@ public class SLStudio extends PApplet {
     private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
     public Pixlite[] pixlites;
+    public ListenableList<SLController> controllers;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
@@ -81,6 +86,7 @@ public class SLStudio extends PApplet {
 
         mappings = FultonStreetLayout.loadMappings();
         model = FultonStreetLayout.buildModel();
+        //model = CubesLayout.buildModel();
 
         println("-- Model ----");
 
@@ -88,6 +94,12 @@ public class SLStudio extends PApplet {
             println("# of suns: " + ((SunsModel)model).getSuns().size());
             println("# of slices: " + ((SunsModel)model).getSlices().size());
             println("# of strips: " + ((SunsModel)model).getStrips().size());
+        }
+        else if (model instanceof CubesModel) {
+            println("# of towers: " + ((CubesModel)model).getTowers().size());
+            println("# of cubes: " + ((CubesModel)model).getCubes().size());
+            println("# of faces: " + ((CubesModel)model).getFaces().size());
+            println("# of strips: " + ((CubesModel)model).getStrips().size());
         }
 
         println("# of points: " + model.points.length);
@@ -115,6 +127,7 @@ public class SLStudio extends PApplet {
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
 
+                controllers = CubesLayout.setupCubesOutputs(lx);
                 pixlites = setupPixlites();
 
                 apc40Listener = new APC40Listener(lx);

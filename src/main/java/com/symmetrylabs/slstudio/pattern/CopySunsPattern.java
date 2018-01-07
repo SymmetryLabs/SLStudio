@@ -26,10 +26,15 @@ public abstract class CopySunsPattern extends SLPattern {
 
     @Override
     protected void createParameters() {
-        addParameter(perSun = new BooleanParameter("perSun"));
+        perSun = new BooleanParameter("perSun");
+
+        if (!(model instanceof SunsModel))
+            return;
+
+        addParameter(perSun);
 
         perSun.addListener(param -> {
-            if (perSun.isOn()) {
+            if (perSun.isOn() && !sunsModel.getSuns().isEmpty()) {
                 setModel(sunsModel.getMasterSun());
             }
             else {
