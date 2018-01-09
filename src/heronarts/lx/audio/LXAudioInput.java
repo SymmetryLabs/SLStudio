@@ -176,6 +176,10 @@ public class LXAudioInput extends LXAudioComponent implements LXOscComponent, Li
         return this.format;
     }
 
+    public boolean isOpen() {
+        return this.line != null;
+    }
+
     void open() {
         if (this.line == null) {
             Device device = this.device.getObject();

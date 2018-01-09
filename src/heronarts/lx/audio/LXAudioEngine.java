@@ -75,10 +75,17 @@ public class LXAudioEngine extends LXModulatorComponent implements LXOscComponen
         if (p == this.enabled) {
             if (this.enabled.isOn()) {
                 this.input.open();
-                this.input.start();
+                if (this.input.isOpen()) {
+                    this.input.start();
+                } else {
+                    this.enabled.setValue(false);
+                    return;
+                }
                 // TODO(mcslee): start/stop output?
             } else {
-                this.input.stop();
+                if (this.input.isOpen()) {
+                    this.input.stop();
+                }
                 // TODO(mcslee): start/stop output?
             }
             this.meter.running.setValue(this.enabled.isOn());
