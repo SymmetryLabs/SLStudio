@@ -17,6 +17,17 @@ to include the location of your Java 8 home, e.g.
     
 You can determine the location to use by running `/usr/libexec/java_home -V` which will list available JVMs
 
+You may need to set the default JDK home for intelliJ products: https://stackoverflow.com/questions/31215452/intellij-idea-importing-gradle-project-getting-java-home-not-defined-yet
+
+### Creating the IntelliJ Project
+
+- Click 'import new project'
+- Select the build.gradle file in the SLStudio folder
+- Go to run/edit configurations and click on gradle or gradle/run
+- Select the project home is the outer SLStudio folder
+- For tasks, type “run” - should autocomplete - you want to call the “run” task
+- Apply changes, compile and run 
+
 
 ## Directories
 
