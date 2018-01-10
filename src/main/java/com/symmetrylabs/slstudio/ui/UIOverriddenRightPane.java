@@ -27,6 +27,17 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
 
+import java.io.PrintWriter;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.io.File;
+
+import java.io.IOException;
+//import oscP5.*;
+
+import processing.core.PGraphics;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 public class UIOverriddenRightPane extends UIPane {
 
@@ -41,12 +52,48 @@ public class UIOverriddenRightPane extends UIPane {
 
     public static final int PADDING = 4;
     public static final int WIDTH = 284;
-    private static final int ADD_BUTTON_WIDTH = 38;
+    private static final int ADD_BUTTON_WIDTH = 30;
 
     private int lfoCount = 1;
     private int envCount = 1;
     private int beatCount = 1;
     private int macroCount = 1;
+
+
+    Path currentRelativePath = Paths.get("");
+    String slstudioPath = currentRelativePath.toAbsolutePath().toString();
+
+    //String userName = "aaron";
+    String userName = System.getProperty("user.name");
+
+    //String pythonPath = "/Users/aaronopp/anaconda/bin/python";
+
+    // initialize python file script names
+
+    String py="data_generation";
+    String pyRun = "run";
+
+    String cmd= slstudioPath + "/AI_VJ/";
+    //String cmd= "/Users/aaronopp/Desktop/AI_VJ/";
+    //String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+py+ ".py", "aaron_test_12_19_3", "1"};
+    String[] command = new String[] {"python" ,cmd+py+ ".py", userName, "5"};
+    ProcessBuilder pb = new ProcessBuilder(command);
+
+    //String cmdLogger="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
+
+    // initialize command for running logger
+
+    String[] commandLogger = new String[] {"processing-java", "--sketch=" + slstudioPath + "/AI_VJ/logger", "--run"};
+    ProcessBuilder pbLogger = new ProcessBuilder(commandLogger);
+    // OSC logger
+
+    String[] commandVjRun = new String[] {"python",cmd+pyRun+ ".py",userName, "5"};
+    ProcessBuilder pbVjRun = new ProcessBuilder(commandVjRun);
+
+    String LOGFILE = "out.txt";
+    PrintWriter out;
+    //Process pLogger = null;
+    //Process p = null;
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
         super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
@@ -155,6 +202,99 @@ public class UIOverriddenRightPane extends UIPane {
             .setInactiveColor(ui.theme.getDeviceBackgroundColor())
             .setBorderRounding(4)
             .setDescription("Add a new Beat detector to the modulation engine")
+            .addToContainer(bar);
+
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onToggle(boolean on) {
+
+
+                if (on) {
+                    System.out.println("AI VJ button pressed");
+
+                    System.out.println("Current relative path is: " + slstudioPath);
+                    System.out.println("Current username: " + System.getProperty("user.name"));
+
+                    try {
+
+                        pb.redirectError();
+                        Process p = pb.start();
+                        //BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+
+                        pbLogger.redirectError();
+                        Process pLogger = pbLogger.start();
+                        //BufferedReader inLogger = new BufferedReader(new InputStreamReader(pLogger.getInputStream()));
+
+                        //slLogger logger1  = new slLogger();
+
+                        //for (Integer y = 0; y < 20; y++) {
+                        //String ret = inLogger.readLine();
+                        //System.out.println("value is: "+ ret);
+                        //};
+
+                        //String ret2 = in.readLine();
+                        System.out.println("done!");
+                    } catch (IOException ioe) {
+                        System.out.println("error starting AI VJ data generation");
+                        ioe.printStackTrace();
+                    }
+                } //  IF OFF
+                else {
+                    System.out.println("toggled off - aaron");
+
+//                            if (pLogger != null){
+//                                System.out.println("getting inside null");
+//                                pLogger.destroyForcibly();
+//                            }
+//                            if (p != null) {
+//                                p.destroyForcibly();
+//                            }
+                }
+
+
+            }
+        }
+            .setLabel("AI VJ")
+
+            .setInactiveColor(ui.theme.getDeviceBackgroundColor())
+            .setBorderRounding(4)
+            .setDescription("start generating data for training AI VJ")
+            .addToContainer(bar);
+
+        new UIButton(0, 0, ADD_BUTTON_WIDTH, 16) {
+            @Override
+            public void onToggle(boolean on) {
+                if (on) {
+                    System.out.println("VJ run button pressed");
+
+                    try {
+
+                        pbVjRun.redirectError();
+                        Process pVjRun = pbVjRun.start();
+                        BufferedReader inVjRun = new BufferedReader(new InputStreamReader(pVjRun.getInputStream()));
+
+
+                        for (Integer y = 0; y < 50; y++) {
+                            String ret = inVjRun.readLine();
+                            System.out.println("value is: "+ ret);
+                        };
+
+                        //String ret2 = in.readLine();
+                        System.out.println("done!");
+                    }
+                    catch(IOException ioe){
+                        ioe.printStackTrace();
+                    }
+                } //  IF OFF
+                //else if {}
+                // pb.destroy();
+
+            }
+        }
+            .setLabel("Run")
+            .setInactiveColor(ui.theme.getDeviceBackgroundColor())
+            .setBorderRounding(4)
+            .setDescription("start generating data for training AI VJ")
             .addToContainer(bar);
 
         final UIButton triggerButton = (UIButton) new UIButton(0, 0, 16, 16) {
