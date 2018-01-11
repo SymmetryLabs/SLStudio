@@ -12,8 +12,8 @@ import javax.imageio.ImageIO;
 import org.apache.commons.math3.util.FastMath;
 
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -22,12 +22,10 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
+import com.symmetrylabs.slstudio.pattern.CopySunsPattern;
 
-public abstract class TextureSlideshow extends SunsPattern {
+public abstract class TextureSlideshow extends CopySunsPattern {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
-    public final BooleanParameter perSun = new BooleanParameter("perSun", false);
     public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
     public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
     public final CompoundParameter zoomX = new CompoundParameter("zoomX", 0, 0, 5);
@@ -62,7 +60,6 @@ public abstract class TextureSlideshow extends SunsPattern {
         imageLayers = new int[images.length][colors.length];
 
         addParameter(rate);
-        addParameter(perSun);
         addParameter(offsetX);
         addParameter(offsetY);
         addParameter(zoomX);
@@ -75,12 +72,12 @@ public abstract class TextureSlideshow extends SunsPattern {
             }
         };
 
-        perSun.addListener(updateRastersListener);
         zoomX.addListener(updateRastersListener);
         zoomY.addListener(updateRastersListener);
         offsetX.addListener(updateRastersListener);
         offsetY.addListener(updateRastersListener);
         enableInterp.addListener(updateRastersListener);
+        perSun.addListener(updateRastersListener);
 
         triggerUpdate();
     }
@@ -170,23 +167,12 @@ public abstract class TextureSlideshow extends SunsPattern {
             int[] layer = imageLayers[i];
 
             final BufferedImage imageFinal = image;
-            if (perSun.isOn()) {
-                for (Sun sun : model.getSuns()) {
-                    sun.getPoints().parallelStream().forEach(p -> {
-                        double px = (p.x - sun.xMin) / sun.xRange;
-                        double py = (p.y - sun.yMin) / sun.yRange;
+            model.getPoints().parallelStream().forEach(p -> {
+                double px = (p.x - model.xMin) / model.xRange;
+                double py = (p.y - model.yMin) / model.yRange;
 
-                        layer[p.index] = bilinearInterp(imageFinal, px, py);
-                    });
-                }
-            } else {
-                model.getPoints().parallelStream().forEach(p -> {
-                    double px = (p.x - model.xMin) / model.xRange;
-                    double py = (p.y - model.yMin) / model.yRange;
-
-                    layer[p.index] = bilinearInterp(imageFinal, px, py);
-                });
-            }
+                layer[p.index] = bilinearInterp(imageFinal, px, py);
+            });
         }
     }
 

@@ -8,6 +8,7 @@ import processing.event.MouseEvent;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXBuffer;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -35,10 +36,14 @@ public abstract class SLPattern extends LXPattern implements Renderable {
 
         this.lx = (SLStudioLX)lx;
 
-        renderer = new InterpolatingRenderer(model, colors, this);
-        //renderer = new SequentialRenderer(model, colors, this);
+        renderer = createRenderer(model, colors, this);
 
         createParameters();
+    }
+
+    protected Renderer createRenderer(LXModel model, int[] colors, Renderable renderable) {
+        return new InterpolatingRenderer(model, colors, renderable);
+        //return new SequentialRenderer(model, colors, renderable);
     }
 
     public Renderer getRenderer() {
