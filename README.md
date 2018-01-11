@@ -21,7 +21,7 @@ Soundflower
 
 https://github.com/mattingalls/Soundflower/releases/download/2.0b2/Soundflower-2.0b2.dmg
 
-Soundflower allows you to record audio through the soundcard. When this output is selected (soundflower 2ch), no music will be played through the speakers. In order to play through speakers/headphones at the same time as soundflower, you need to create a multi-output device with mac
+Soundflower allows you to record audio through the soundcard. When this output is selected (soundflower 2ch), no music will be played through the speakers. In order to play through speakers/headphones at the same time as soundflower, you need to create an Multi-output device with mac
 
 https://lifehacker.com/5933282/how-to-aggregate-and-use-multiple-audio-inputs-and-outputs-in-os-x
 
