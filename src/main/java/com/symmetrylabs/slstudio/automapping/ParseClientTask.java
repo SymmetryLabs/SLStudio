@@ -22,6 +22,8 @@ import heronarts.lx.transform.LXTransform;
 import com.symmetrylabs.slstudio.model.CubesModel;
 
 public class ParseClientTask implements LXLoopTask {
+    public static final int PORT = 8724;
+
     Gson gson = new Gson();
 
     Server server;
@@ -45,11 +47,14 @@ public class ParseClientTask implements LXLoopTask {
     }
 
     public void loop(double deltaMs) {
-        if (server == null) return;
+        if (server == null)
+            return;
+
         if (server.clients == null) {
             stop();
             return;
         }
+
         if (communicator != null) {
             communicator.processPendingResponses();
         }
@@ -58,10 +63,12 @@ public class ParseClientTask implements LXLoopTask {
 
         try {
             Client client = server.available();
-            if (client == null) return;
+            if (client == null)
+                return;
 
             String whatClientSaid = client.readStringUntil('\n');
-            if (whatClientSaid == null) return;
+            if (whatClientSaid == null)
+                return;
 
             System.out.print("Request: " + whatClientSaid);
 
@@ -74,7 +81,8 @@ public class ParseClientTask implements LXLoopTask {
                 return;
             }
 
-            if (message == null) return;
+            if (message == null)
+                return;
 
             String method = (String)message.get("command");
             Object id = message.get("id");
@@ -82,7 +90,8 @@ public class ParseClientTask implements LXLoopTask {
             Map<String, Object> args = (Map)message.get("args");
 
 
-            if (method == null) return;
+            if (method == null)
+                return;
             if (args == null) args = new HashMap<>();
 
             if (method.equals("mapping.startCalibration")) {
@@ -106,9 +115,7 @@ public class ParseClientTask implements LXLoopTask {
                 textCoordZ = (float)(double)args.get("textCoordZ");
 
                 communicator.sendResponse(id);
-
                 return;
-
             }
 
             if (method.equals("mapping.sendCubeTransform")) {
@@ -270,20 +277,25 @@ public class ParseClientTask implements LXLoopTask {
         }
     }
 
-    void start() {
-        if (server != null) {
-            server.stop();
-        }
-        server = new Server(SLStudio.applet, 8724);
+    public synchronized void start() {
+        if (server != null)
+            return;
+
+        System.out.println("Starting ParseClientTask on port " + PORT);
+
+        server = new Server(SLStudio.applet, PORT);
         communicator = new ClientCommunicator(server);
         automapper.communicator = communicator;
     }
 
-    void stop() {
-        if (server != null) {
-            server.stop();
-            server = null;
-            communicator = null;
-        }
+    public synchronized void stop() {
+        if (server == null)
+            return;
+
+        System.out.println("Stopping ParseClientTask");
+
+        server.stop();
+        server = null;
+        communicator = null;
     }
 }

@@ -69,7 +69,6 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
         System.out.println("==================");
     }
 
-
     public CVFixture(Automapper automapper, List<List<Double>> rawMatrix, List<Double> rvec, List<Double> tvec, String id) {
 
         this.automapper = automapper;
@@ -100,7 +99,6 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
 
         LXPoint[] raw = automapper.getRawPointsForId(id);
 
-
         points = new ArrayList<>(Arrays.asList(raw));
 
         minX = points.get(0).x;
@@ -128,7 +126,6 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
         double v_ = v;
         return (float)v_;
     }
-
 
     List<List<Double>> getRawMatrix() {
         List<List<Double>> raw = new ArrayList<>();
@@ -191,9 +188,6 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
         // pg.translate()
     }
 
-
-
-
     @Override
         protected void onDraw(UI ui, PGraphics pg) {
 
@@ -208,7 +202,6 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
 
 
         copy.preApply(inverter);
-
 
 
         pg.applyMatrix(copy);
@@ -295,13 +288,9 @@ public class CVFixture extends UI3dComponent implements Comparable<CVFixture> {
             cDist = target.magSq();
         }
 
-
-
         if (minDist < (cDist - 750)) {
             currentCorner = minCorner;
         }
-
-
 
         pg.translate(currentCorner.x, currentCorner.y, currentCorner.z);
 

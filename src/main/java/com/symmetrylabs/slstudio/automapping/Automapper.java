@@ -105,6 +105,9 @@ public class Automapper extends LXRunnableComponent {
     private static Map<LX, Automapper> instanceByLX = new HashMap<>();
 
     public static synchronized Automapper getInstance(LX lx) {
+        if (lx == null)
+            return null;
+
         if (!instanceByLX.containsKey(lx)) {
             instanceByLX.put(lx, new Automapper(lx));
         }
@@ -138,6 +141,7 @@ public class Automapper extends LXRunnableComponent {
 
     @Override
     public void run(double deltaMs) {
+        parseClientTask.loop(deltaMs);
         updateFrame();
     }
 
@@ -461,9 +465,9 @@ public class Automapper extends LXRunnableComponent {
         return model.points;
     }
 
-    ArrayList<LXPoint> getPointsForId(String id) {
+    List<LXPoint> getPointsForId(String id) {
         LXPoint[] rawPoints = getRawPointsForId(id);
-        ArrayList<LXPoint> points = new ArrayList<LXPoint>();
+        List<LXPoint> points = new ArrayList<LXPoint>();
         int[] po = getPixelOrder();
 
         if (po == null || po.length != rawPoints.length) {
@@ -673,7 +677,6 @@ public class Automapper extends LXRunnableComponent {
         default:
             throw new RuntimeException("Invalid pattern state in Calibration mode");
         }
-
 
         if (frameCounter == 0) {
             patternState = patternState == PatternState.S2_WHITE ? PatternState.S1_BLACK : PatternState.S2_WHITE;

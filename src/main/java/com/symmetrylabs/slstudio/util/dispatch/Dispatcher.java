@@ -16,6 +16,9 @@ public class Dispatcher implements LXLoopTask {
     private static Map<LX, Dispatcher> instanceByLX = new HashMap<>();
 
     public static synchronized Dispatcher getInstance(LX lx) {
+        if (lx == null)
+            return null;
+
         if (!instanceByLX.containsKey(lx)) {
             instanceByLX.put(lx, new Dispatcher(lx));
         }

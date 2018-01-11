@@ -29,14 +29,16 @@ public class UIAutomapping extends UICollapsibleSection {
     private CVFixture previous = null;
     private Automapper automapper;
 
-    public UIAutomapping(LX lx_, UI ui_, float x, float y, float w) {
-        super(ui_, x, y, w, 140);
+    public UIAutomapping(LX lx, UI ui, float x, float y, float w) {
+        super(ui, x, y, w, 140);
+
+        this.ui = ui;
+        this.lx = lx;
+
+        automapper = Automapper.getInstance(lx);
 
         setTitle("AUTOMAPPING");
         setTitleX(20);
-
-        this.ui = ui_;
-        this.lx = lx_;
 
         int yOffset = 0;
         int padding = 3;
@@ -48,17 +50,15 @@ public class UIAutomapping extends UICollapsibleSection {
         yOffset += padding;
         yOffset += buildJSONSaver(yOffset, w);
         yOffset += padding;
-
-        automapper = Automapper.getInstance(lx);
     }
 
     int buildEnabledButton(float yOffset, float w) {
         addTopLevelComponent(new UIButton(4, 4, 12, 12) {
-            @Override
-                public void onToggle(boolean isOn) {
-            }
-        }
-        .setParameter(automapper.running)
+                    @Override
+                    public void onToggle(boolean isOn) {
+                    }
+                }
+            .setParameter(automapper.running)
             .setBorderRounding(4));
 
         return 0;

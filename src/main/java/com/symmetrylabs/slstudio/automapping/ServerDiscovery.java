@@ -14,81 +14,50 @@ import javax.jmdns.JmmDNS;
 import javax.jmdns.ServiceInfo;
 
 public class ServerDiscovery {
+    public static final int PORT = 8723;
 
-    final BooleanParameter enabled = new BooleanParameter("Server discovery enabled");
+    private String hostname = null;
+    private String serviceName = "sugarcubes";
 
-    String hostname = null;
-    String serviceName = "sugarcubes";
-
-    JmDNS jmdns = null;
     JmmDNS jmmdns = null;
 
     ServerDiscovery() {
         java.util.logging.Logger.getLogger("javax.jmdns").setLevel(Level.SEVERE);
     }
 
-    void start() {
+    public synchronized void start() {
+        if (jmmdns != null)
+            return;
 
-        List<InetAddress> addresses = new ArrayList<>();
-
-        try {
-            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
-            for (NetworkInterface netint : Collections.list(nets)) {
-
-                Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
-                for (InetAddress inetAddress : Collections.list(inetAddresses)) {
-                  if (inetAddress != null && inetAddress.isSiteLocalAddress()) {
-                    System.out.printf("Display name: %s\n", netint.getDisplayName());
-                    System.out.printf("Name: %s\n", netint.getName());
-                    System.out.printf("InetAddress: %s %d\n", inetAddress, 1);
-                    addresses.add(inetAddress);
-                  }
-                }
-                System.out.printf("\n");
-            }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-
-        Map<String, String> env = System.getenv();
-        if (env.containsKey("COMPUTERNAME"))
-            hostname = env.get("COMPUTERNAME");
-        else if (env.containsKey("HOSTNAME"))
-            hostname = env.get("HOSTNAME");
-        else if (env.containsKey("LOGNAME"))
-            hostname = env.get("LOGNAME");
-
-        if (hostname == null) {
-            hostname = "Unknown";
-        }
-
-        System.out.println("hostname: "+hostname);
-        if (hostname != null) {
-            serviceName += "@";
-            serviceName += hostname;
-        }
+        jmmdns = JmmDNS.Factory.getInstance();
 
         try {
             String name = hostname != null ? hostname : "Unknown";
             String info = "name=" + name;
 
-            for (InetAddress address : addresses) {
-                JmDNS jmdns = JmDNS.create(address);
-                ServiceInfo serviceInfo = ServiceInfo.create("_sugarcubes._tcp.local.", serviceName, 8723, info);
-                jmdns.registerService(serviceInfo);
-            }
+            ServiceInfo serviceInfo = ServiceInfo.create("_sugarcubes._tcp.local.", serviceName, PORT, info);
+            jmmdns.registerService(serviceInfo);
 
-            System.out.printf("mDNS service registered on %d interfaces", addresses.size());
-        } catch (IOException e) {
+            System.out.printf("mDNS service registered on %d interfaces", jmmdns.getInterfaces().length);
+        }
+        catch (Exception e) {
             e.printStackTrace();
         }
     }
 
-    void stop() {
+    public synchronized void stop() {
         if (jmmdns == null)
             return;
 
-        jmmdns.unregisterAllServices();
+        try {
+            jmmdns.close();
+        }
+        catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        jmmdns = null;
+
         System.out.println("mDNS service unregistered");
     }
 }
