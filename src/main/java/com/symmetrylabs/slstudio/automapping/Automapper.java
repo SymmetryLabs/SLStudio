@@ -67,7 +67,6 @@ public class Automapper extends LXRunnableComponent {
     public final EnumParameter<AutomappingState> state = new EnumParameter<>("State", AutomappingState.RUNNING);
     public final StringParameter saveFile = new StringParameter("Save File", "cube_transforms.json");
 
-    public ClientCommunicator communicator;
     private String[] macAddresses = null;
     private int[] pixelOrder = null;
 
@@ -115,8 +114,8 @@ public class Automapper extends LXRunnableComponent {
         return instanceByLX.get(lx);
     }
 
-    ParseClientTask parseClientTask;
-    ServerDiscovery serverDiscovery;
+    private ClientCommunicator communicator;
+    private ServerDiscovery serverDiscovery;
 
     private Automapper(LX lx) {
         super(lx, "Automapper");
@@ -135,19 +134,19 @@ public class Automapper extends LXRunnableComponent {
 
         knownCubeTypes = loadKnownCubeTypes();
 
-        parseClientTask = new ParseClientTask(this);
+        communicator = new ClientCommunicator(this);
         serverDiscovery = new ServerDiscovery();
     }
 
     @Override
     public void run(double deltaMs) {
-        parseClientTask.loop(deltaMs);
+        communicator.loop(deltaMs);
         updateFrame();
     }
 
     @Override
     protected void onStart() {
-        parseClientTask.start();
+        communicator.start();
         serverDiscovery.start();
         lx.engine.addLoopTask(this);
     }
@@ -156,7 +155,7 @@ public class Automapper extends LXRunnableComponent {
     protected void onStop() {
         lx.engine.removeLoopTask(this);
         serverDiscovery.stop();
-        parseClientTask.stop();
+        communicator.stop();
     }
 
     @Override
@@ -191,6 +190,10 @@ public class Automapper extends LXRunnableComponent {
         }
 
         return types;
+    }
+
+    public void sendStartCommand() {
+        communicator.sendCommand("app.start", null);
     }
 
     void showError(String message, boolean sendToClient) {

@@ -95,7 +95,7 @@ public class UIAutomapping extends UICollapsibleSection {
                 case DISCONNECTED:
                     break;
                 case CONNECTED:
-                    automapper.communicator.sendCommand("app.start", null);
+                    automapper.sendStartCommand();
                     break;
                 case RUNNING:
                     break;
