@@ -25,9 +25,7 @@ import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.util.BlobFollower;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.CubeMarker;
-import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 import com.symmetrylabs.slstudio.util.Marker;
-import com.symmetrylabs.slstudio.util.ModelIndex;
 import com.symmetrylabs.slstudio.util.Octahedron;
 
 public class FlockWave extends SLPatternWithMarkers {
@@ -70,7 +68,6 @@ public class FlockWave extends SLPatternWithMarkers {
 
     private BlobTracker blobTracker;
     private BlobFollower blobFollower;
-    private ModelIndex modelIndex;
     private ZigzagPalette pal = new ZigzagPalette();
     private long lastRun;
 
@@ -79,9 +76,6 @@ public class FlockWave extends SLPatternWithMarkers {
 
         blobTracker = BlobTracker.getInstance(lx);
         blobFollower = new BlobFollower(blobTracker);
-
-        modelIndex = new OctreeModelIndex(lx.model);
-        //modelIndex = new LinearModelIndex(lx.model);
 
         addParameter(oscFollowers);
         addParameter(oscBlobs);

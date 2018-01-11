@@ -9,9 +9,16 @@ import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 
+import com.symmetrylabs.slstudio.util.ModelIndex;
+import com.symmetrylabs.slstudio.util.LinearModelIndex;
+import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+
 public class SLModel extends LXModel {
 
     public static final int NUM_POINT_BATCHES = 64;
+    public static final int OCTREE_INDEX_MIN_POINTS = 1000;
+
+    private ModelIndex modelIndex, modelIndexZFlattened;
 
     protected PointBatches pointBatches;
 
@@ -28,6 +35,27 @@ public class SLModel extends LXModel {
 
     public SLModel(LXFixture[] fixtures) {
         super(fixtures);
+    }
+
+    protected ModelIndex createModelIndex(boolean flattenZ) {
+        if (getPoints().size() < OCTREE_INDEX_MIN_POINTS)
+            return new LinearModelIndex(this, flattenZ);
+
+        return new OctreeModelIndex(this, flattenZ);
+    }
+
+    public ModelIndex getModelIndex() {
+        return getModelIndex(false);
+    }
+
+    public ModelIndex getModelIndex(boolean flattenZ) {
+        if (flattenZ && modelIndexZFlattened == null)
+            return modelIndexZFlattened = createModelIndex(true);
+
+        if (!flattenZ && modelIndex == null)
+            return modelIndex = createModelIndex(false);
+
+        return flattenZ ? modelIndexZFlattened : modelIndex;
     }
 
     public void forEachPoint(final BatchConsumer consumer) {
