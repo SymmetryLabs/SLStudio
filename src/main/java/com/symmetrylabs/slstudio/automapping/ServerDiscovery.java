@@ -1,63 +1,102 @@
 package com.symmetrylabs.slstudio.automapping;
 
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.LXParameterListener;
-
-import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
-import java.net.UnknownHostException;
-import java.util.*;
+import java.util.Map;
+import java.util.HashMap;
 import java.util.logging.Level;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
+import java.net.InetAddress;
 import javax.jmdns.JmDNS;
 import javax.jmdns.JmmDNS;
 import javax.jmdns.ServiceInfo;
 
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.LXParameterListener;
+
 public class ServerDiscovery {
     public static final int PORT = 8723;
+    public static final String SUGARCUBES_SERVICE = "_sugarcubes._tcp.local.";
 
-    private String hostname = null;
-    private String serviceName = "sugarcubes";
+    private final ExecutorService EXEC_QUEUE = Executors.newSingleThreadExecutor();
 
-    JmmDNS jmmdns = null;
+    private JmDNS jmdns = null;
+    //private final JmmDNS jmmdns = JmmDNS.Factory.getInstance();
+    private String hostname;
+    private InetAddress localAddress;
 
     ServerDiscovery() {
-        java.util.logging.Logger.getLogger("javax.jmdns").setLevel(Level.SEVERE);
-    }
-
-    public synchronized void start() {
-        if (jmmdns != null)
-            return;
-
-        jmmdns = JmmDNS.Factory.getInstance();
-
+        //java.util.logging.Logger.getLogger("javax.jmdns").setLevel(Level.SEVERE);
         try {
-            String name = hostname != null ? hostname : "Unknown";
-            String info = "name=" + name;
-
-            ServiceInfo serviceInfo = ServiceInfo.create("_sugarcubes._tcp.local.", serviceName, PORT, info);
-            jmmdns.registerService(serviceInfo);
-
-            System.out.printf("mDNS service registered on %d interfaces", jmmdns.getInterfaces().length);
+            localAddress = InetAddress.getLocalHost();
+            hostname = InetAddress.getLocalHost().getHostName();
+            jmdns = JmDNS.create(localAddress);
         }
         catch (Exception e) {
+            System.err.println("Error reading local address: " + e.getMessage());
             e.printStackTrace();
+            return;
         }
     }
 
-    public synchronized void stop() {
-        if (jmmdns == null)
+    public void start() {
+        if (jmdns == null)
             return;
 
-        try {
-            jmmdns.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
-        }
+        EXEC_QUEUE.submit(() -> {
+            if (hostname == null) {
+                Map<String, String> env = System.getenv();
+                if (env.containsKey("HOSTNAME")) {
+                    hostname = env.get("HOSTNAME");
+                }
+                else if (env.containsKey("COMPUTERNAME")) {
+                    hostname = env.get("COMPUTERNAME");
+                }
+                else if (env.containsKey("LOGNAME")) {
+                    hostname = env.get("LOGNAME");
+                }
+            }
 
-        jmmdns = null;
+            if (hostname == null) {
+                hostname = "Unknown";
+            }
 
-        System.out.println("mDNS service unregistered");
+            String serviceName = "sugarcubes";
+            if (hostname != null) {
+                serviceName += "@" + hostname;
+            }
+
+            try {
+                Map<String, Object> props = new HashMap<>();
+                props.put("name", hostname);
+                ServiceInfo serviceInfo = ServiceInfo.create(SUGARCUBES_SERVICE,
+                        serviceName, PORT, 0, 0, props);
+                jmdns.registerService(serviceInfo);
+                //jmmdns.registerService(serviceInfo);
+
+                System.out.println("mDNS service registered: " + serviceInfo.getQualifiedName());
+            }
+            catch (Exception e) {
+                System.err.println("Error registering services: " + e.getMessage());
+                e.printStackTrace();
+            }
+        });
+    }
+
+    public void stop() {
+        if (jmdns == null)
+            return;
+
+        EXEC_QUEUE.submit(() -> {
+            try {
+                //jmmdns.unregisterAllServices();
+                jmdns.unregisterAllServices();
+            }
+            catch (Exception e) {
+                System.err.println("Error unregistering services: " + e.getMessage());
+                e.printStackTrace();
+            }
+
+            System.out.println("mDNS service unregistered");
+        });
     }
 }
