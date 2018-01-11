@@ -10,7 +10,8 @@ Training data for the algorithm consists of audio data and timestamps, recorded 
 
 Install/update homebrew
 
-Python 2.7
+Create an anaconda environment with Python 2.7
+https://www.anaconda.com/download/
 
 Pip
 ```
@@ -18,7 +19,7 @@ sudo easy_install pip
 ```
 Soundflower
 
-http://manual.audacityteam.org/man/tutorial_recording_computer_playback_on_mac.html - soundflower
+https://github.com/mattingalls/Soundflower/releases/download/2.0b2/Soundflower-2.0b2.dmg
 
 Soundflower allows you to record audio through the soundcard. When this output is selected (soundflower 2ch), no music will be played through the speakers. In order to play through speakers/headphones at the same time as soundflower, you need to create a multi-output device with mac
 
@@ -43,7 +44,7 @@ If you get an error importing the librosa library, you may need to upgrade it
 pip install -—upgrade librosa
 ```
 ** Keras 1.2.1
-Edit the keras.json file (“nano /Users/<USER>/.keras/keras.json”) for mac users to be exactly the config shown below!
+Edit the keras.json file (“nano /$HOME/.keras/keras.json") for mac users to be exactly the config shown below!
 ```
 {
 "image_dim_ordering": "th",
