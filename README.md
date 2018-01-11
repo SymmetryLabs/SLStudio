@@ -24,6 +24,7 @@ You may need to set the default JDK home for intelliJ products: https://stackove
 - Click 'import new project'
 - Select the build.gradle file in the SLStudio folder
 - Go to run/edit configurations and click on gradle or gradle/run
+- Click the '+' icon to add a new configuration, name it 'run'
 - Select the project home is the outer SLStudio folder
 - For tasks, type “run” - should autocomplete - you want to call the “run” task
 - Apply changes, compile and run 
