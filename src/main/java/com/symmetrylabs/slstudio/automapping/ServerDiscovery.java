@@ -16,47 +16,106 @@ import javax.jmdns.ServiceInfo;
 public class ServerDiscovery {
     public static final int PORT = 8723;
 
+    public static final String SUGARCUBES_SERVICE = "_sugarcubes._tcp.local.";
+
     private String hostname = null;
     private String serviceName = "sugarcubes";
 
-    JmmDNS jmmdns = null;
+    List<JmDNS> jmdnsList = new ArrayList<>();
 
     ServerDiscovery() {
         java.util.logging.Logger.getLogger("javax.jmdns").setLevel(Level.SEVERE);
     }
 
     public synchronized void start() {
-        if (jmmdns != null)
-            return;
+        stop();
 
-        jmmdns = JmmDNS.Factory.getInstance();
+        List<InetAddress> addresses = new ArrayList<>();
+
+        System.out.println("Discovering network interfaces for mDNS");
 
         try {
-            String name = hostname != null ? hostname : "Unknown";
-            String info = "name=" + name;
+            Enumeration<NetworkInterface> nets = NetworkInterface.getNetworkInterfaces();
 
-            ServiceInfo serviceInfo = ServiceInfo.create("_sugarcubes._tcp.local.", serviceName, PORT, info);
-            jmmdns.registerService(serviceInfo);
+            for (NetworkInterface netint : Collections.list(nets)) {
+                Enumeration<InetAddress> inetAddresses = netint.getInetAddresses();
 
-            System.out.printf("mDNS service registered on %d interfaces", jmmdns.getInterfaces().length);
+                for (InetAddress inetAddress : Collections.list(inetAddresses)) {
+                  if (inetAddress == null || !inetAddress.isSiteLocalAddress())
+                        continue;
+
+                    System.out.println("Display name: " + netint.getDisplayName());
+                    System.out.println("Name: " + netint.getName());
+                    System.out.println("InetAddress: " + inetAddress);
+
+                    addresses.add(inetAddress);
+                }
+
+                System.out.println();
+            }
         }
         catch (Exception e) {
-            e.printStackTrace();
+            System.err.println("Caught error while enumerating interfaces: " + e.getMessage());
+        }
+
+        Map<String, String> env = System.getenv();
+        if (env.containsKey("HOSTNAME")) {
+            hostname = env.get("HOSTNAME");
+        }
+        else if (env.containsKey("COMPUTERNAME")) {
+            hostname = env.get("COMPUTERNAME");
+        }
+        else if (env.containsKey("LOGNAME")) {
+            hostname = env.get("LOGNAME");
+        }
+
+        if (hostname == null) {
+            hostname = "Unknown";
+        }
+
+        System.out.println("Hostname: " + hostname);
+
+        if (hostname != null) {
+            serviceName += "@" + hostname;
+        }
+
+        try {
+            String info = "name=" + hostname;
+            ServiceInfo serviceInfo = ServiceInfo.create(SUGARCUBES_SERVICE, serviceName, PORT, info);
+
+            for (InetAddress address : addresses) {
+                try {
+                    JmDNS jmdns = JmDNS.create(address);
+                    jmdns.registerService(serviceInfo);
+                    jmdnsList.add(jmdns);
+                }
+                catch (Exception e) {
+                    System.err.println("Caught error while registering mDNS service on address"
+                            + " (" + address + "): " + e.getMessage());
+                }
+            }
+
+            System.out.printf("mDNS service registered on %d interfaces\n", jmdnsList.size());
+        }
+        catch (Exception e) {
+            System.err.println("Caught error while registering mDNS services: " + e.getMessage());
         }
     }
 
     public synchronized void stop() {
-        if (jmmdns == null)
+        if (jmdnsList.isEmpty())
             return;
 
-        try {
-            jmmdns.close();
-        }
-        catch (Exception e) {
-            e.printStackTrace();
+        for (JmDNS jmdns : jmdnsList) {
+            try {
+                jmdns.close();
+            }
+            catch (Exception e) {
+                System.err.println("Caught error while closing JmDNS: " + e.getMessage());
+            }
         }
 
-        jmmdns = null;
+        jmdnsList.clear();
 
         System.out.println("mDNS service unregistered");
     }
