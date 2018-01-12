@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1515708652573,
+  "timestamp": 1515720224276,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.5,
+      "crossfader": 1.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -68,9 +68,40 @@
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 8127,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -4718848,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 8130,
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
+            "modulationColor": -16723969,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 42,
@@ -510,9 +541,40 @@
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 8149,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -7470849,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 8152,
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
+            "modulationColor": -65456,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 1075,
@@ -969,9 +1031,40 @@
           "transitionTimeSecs": 5.0,
           "transitionBlendMode": 0
         },
-        "effects": [],
+        "effects": [
+          {
+            "id": 8143,
+            "class": "heronarts.lx.effect.BlurEffect",
+            "modulationColor": -65477,
+            "parameters": {
+              "label": "Blur",
+              "enabled": true,
+              "amount": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 8146,
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
+            "modulationColor": -11264,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 2082,
@@ -1430,7 +1523,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 5,
         "patterns": [
           {
             "id": 3089,
@@ -1885,8 +1978,8 @@
       "modulationColor": -25856,
       "parameters": {
         "label": "",
-        "period": 500.0,
-        "bpm": 120.0,
+        "period": 2000.0,
+        "bpm": 30.0,
         "tap": false,
         "nudgeUp": false,
         "nudgeDown": false,
@@ -1921,18 +2014,18 @@
           "Band-2": 0.0,
           "Band-3": 0.0,
           "Band-4": 0.0,
-          "Band-5": 0.12135497402514339,
-          "Band-6": 0.3901244888282456,
-          "Band-7": 0.38022602186777876,
-          "Band-8": 0.20970091779962596,
-          "Band-9": 0.20582215280278737,
-          "Band-10": 0.2133708614803651,
-          "Band-11": 0.1374830304166732,
-          "Band-12": 0.15707521776082878,
-          "Band-13": 0.0,
-          "Band-14": 0.0,
-          "Band-15": 0.0,
-          "Band-16": 0.0
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.022979535350489244,
+          "Band-9": 0.2302419448541545,
+          "Band-10": 0.02400825914535132,
+          "Band-11": 0.0,
+          "Band-12": 0.05668188612799929,
+          "Band-13": 0.44790700046915033,
+          "Band-14": 0.467184456387308,
+          "Band-15": 0.5674373997682924,
+          "Band-16": 0.38190984879819767
         }
       },
       "input": {
@@ -1963,7 +2056,7 @@
       "modulationColor": -5897985,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -1978,9 +2071,9 @@
         "parameters": {
           "label": "",
           "deckOneChannel": 0,
-          "deckTwoChannel": 0,
-          "deckThreeChannel": 0,
-          "deckFourChannel": 0
+          "deckTwoChannel": 1,
+          "deckThreeChannel": 2,
+          "deckFourChannel": 3
         }
       },
       "outputControl": {
@@ -2026,8 +2119,8 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1800.0,
-        "theta": 0.0,
+        "radius": 476.064628814708,
+        "theta": 0.003,
         "phi": 0.0,
         "positionX": 0.0,
         "positionY": 38.5,
