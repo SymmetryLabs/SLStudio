@@ -380,6 +380,6 @@ public class DeckWindow extends UIWindow {
     }
 
     LXMidiRemote getRemote() {
-        return SLStudio.applet.apc40Listener.remotes[getSide()];
+        return null;//SLStudio.applet.apc40Listener.remotes[getSide()];
     }
 }

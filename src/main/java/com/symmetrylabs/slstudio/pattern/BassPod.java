@@ -40,8 +40,8 @@ public class BassPod extends SLPattern {
     public void onActive() {
         super.onActive();
 
-        eq.range.setValue(36);
-        eq.release.setValue(300);
+        eq.range.setValue(32);
+        eq.release.setValue(340);
         eq.gain.setValue(-6);
         eq.slope.setValue(6);
     }

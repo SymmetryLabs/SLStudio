@@ -84,6 +84,7 @@ dependencies {
 	compile files('libs/jogl-all-natives-windows-amd64.jar')
 	compile files('libs/jogl-all-natives-windows-i586.jar')
 	compile files('libs/jogl-all.jar')
+	compile files('libs/minim.jar')
 
 	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
 	compile files('libs/P3LX.jar')

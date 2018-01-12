@@ -11,6 +11,9 @@ public class Strip extends SLModel {
     public final String id;
     public final Metrics metrics;
 
+    // for Lattice
+    public Object obj1 = null, obj2 = null;
+
     public Strip(String id, Metrics metrics, List<LXPoint> points) {
         super(points);
 

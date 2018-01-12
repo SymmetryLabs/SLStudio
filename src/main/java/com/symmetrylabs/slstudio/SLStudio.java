@@ -13,6 +13,9 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.osc.LXOscListener;
+import heronarts.lx.osc.OscMessage;
+import heronarts.lx.osc.LXOscEngine;
 
 import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.model.CubesModel;
@@ -29,7 +32,6 @@ import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
 import com.symmetrylabs.slstudio.palettes.PaletteExtractor;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
-import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
@@ -55,7 +57,6 @@ public class SLStudio extends PApplet {
     public OutputControl outputControl;
     public Pixlite[] pixlites;
     public ListenableList<SLController> controllers;
-    public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
 
@@ -130,7 +131,6 @@ public class SLStudio extends PApplet {
                 controllers = CubesLayout.setupCubesOutputs(lx);
                 pixlites = setupPixlites();
 
-                apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
 
                 performanceManager = new PerformanceManager(lx);

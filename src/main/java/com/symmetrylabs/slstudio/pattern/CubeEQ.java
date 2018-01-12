@@ -32,7 +32,8 @@ public class CubeEQ extends SLModelPattern {
     }
 
     public void onActive() {
-        eq.range.setValue(48);
+        eq.gain.setValue(eq.gain.getValuef() * 1.4f);
+        eq.range.setValue(34);
         eq.release.setValue(300);
     }
 

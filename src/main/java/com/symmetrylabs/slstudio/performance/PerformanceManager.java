@@ -249,18 +249,6 @@ public class PerformanceManager extends LXComponent {
             swapDecks(rFader, DeckSide.LEFT);
         });
 
-        if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-            bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
-            bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
-        }
-
-        SLStudio.applet.apc40Listener.hasRemote.addListener(parameter -> {
-            if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-                bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
-                bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
-            }
-        });
-
         lFader.setValue(0.00001);
         rFader.setValue(0.00001);
         propagateLeftFader();
