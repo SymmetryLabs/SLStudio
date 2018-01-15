@@ -1,12 +1,11 @@
 package com.symmetrylabs.slstudio.pattern.texture;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.awt.image.BufferedImage;
-import java.awt.image.Kernel;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.math3.util.FastMath;
@@ -34,6 +33,8 @@ public abstract class TextureSlideshow extends CopySunsPattern {
 
     private final SawLFO lerp = (SawLFO) startModulator(new SawLFO(0, 1, rate));
 
+    private static Map<String, WeakReference<BufferedImage>> imageCache = new HashMap<>();
+
     private int imageIndex = 0;
     private final BufferedImage[] images;
     private final int[][] imageLayers;
@@ -50,7 +51,23 @@ public abstract class TextureSlideshow extends CopySunsPattern {
             //System.out.println("Loading image: " + filePath);
 
             try {
-                images[i] = ImageIO.read(new File(filePath));
+                BufferedImage image = null;
+                synchronized (imageCache) {
+                    WeakReference<BufferedImage> imageWeakRef = imageCache.get(filePath);
+                    if (imageWeakRef != null) {
+                        image = imageWeakRef.get();
+                    }
+                }
+
+                if (image == null) {
+                    image = ImageIO.read(new File(filePath));
+
+                    synchronized (imageCache) {
+                        imageCache.put(filePath, new WeakReference(image));
+                    }
+                }
+
+                images[i] = image;
             }
             catch (IOException e) {
                 System.err.println("Error loading image from '" + filePath + "': " + e.getMessage());
