@@ -8,6 +8,7 @@ import processing.event.MouseEvent;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXBuffer;
+import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -24,7 +25,7 @@ public abstract class SLPattern extends LXPattern implements Renderable {
 
     protected final SLStudioLX lx;
 
-    private Renderer renderer;
+    private volatile Renderer renderer;
     private ReusableBuffer reusableBuffer = new ReusableBuffer();
     private boolean isManaged = false;
 
@@ -35,20 +36,15 @@ public abstract class SLPattern extends LXPattern implements Renderable {
 
         this.lx = (SLStudioLX)lx;
 
-        renderer = new InterpolatingRenderer(model, colors, this);
-        //renderer = new SequentialRenderer(model, colors, this);
-
         createParameters();
     }
 
-    public Renderer getRenderer() {
-        return renderer;
-    }
-    public void setRenderer(Renderer renderer) {
-        this.renderer = renderer;
+    protected Renderer createRenderer(LXModel model, int[] colors, Renderable renderable) {
+        return new InterpolatingRenderer(model, colors, renderable);
+        //return new SequentialRenderer(model, colors, renderable);
     }
 
-    public void setManagedMode(boolean isManaged) {
+    public synchronized void setManagedMode(boolean isManaged) {
         boolean wasManaged = this.isManaged;
         this.isManaged = isManaged;
 
@@ -64,8 +60,11 @@ public abstract class SLPattern extends LXPattern implements Renderable {
     public void onActive() {
         super.onActive();
 
-        if (!isManaged) {
-            renderer.start();
+        synchronized (this) {
+            if (!isManaged && renderer != null) {
+                renderer = createRenderer(model, colors, this);
+                renderer.start();
+            }
         }
     }
 
@@ -73,7 +72,12 @@ public abstract class SLPattern extends LXPattern implements Renderable {
     public void onInactive() {
         super.onInactive();
 
-        renderer.stop();
+        synchronized (this) {
+            if (renderer != null) {
+                renderer.stop();
+                renderer = null;
+            }
+        }
     }
 
     @Override
@@ -85,7 +89,9 @@ public abstract class SLPattern extends LXPattern implements Renderable {
 
     @Override
     protected void run(double deltaMs) {
-        if (!isManaged) {
+        Renderer renderer = this.renderer;
+
+        if (renderer != null) {
             renderer.run(deltaMs);
         }
         else {

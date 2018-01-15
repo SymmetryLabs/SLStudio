@@ -1,5 +1,10 @@
 package com.symmetrylabs.slstudio;
 
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Map;
+import java.util.HashMap;
+
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -33,11 +38,6 @@ import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 

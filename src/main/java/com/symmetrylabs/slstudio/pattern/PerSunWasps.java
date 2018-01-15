@@ -10,7 +10,7 @@ public class PerSunWasps extends PerSunPattern {
 
     @Override
     protected SLPattern createSubpattern(LXModel section, int sectionIndex) {
-        Wasps pattern = new Wasps(lx);
+        Wasps pattern = new Wasps(lx, 2);
         pattern.setModel(section);
         return pattern;
     }

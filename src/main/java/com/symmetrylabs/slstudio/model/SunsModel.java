@@ -30,10 +30,7 @@ public class SunsModel extends StripsModel<CurvedStrip> {
     private final List<Slice> slicesUnmodifiable = Collections.unmodifiableList(slices);
 
     // Array of points stored as contiguous floats for performance
-    public final float[] pointsArray;
-    public final float[] pointsX;
-    public final float[] pointsY;
-    public final float[] pointsZ;
+    public final float[] pointsXYZ;
 
     public SunsModel() {
         this(new ArrayList<>());
@@ -60,18 +57,12 @@ public class SunsModel extends StripsModel<CurvedStrip> {
             }
         }
 
-        this.pointsArray = new float[this.points.length * 3];
-        this.pointsX = new float[this.points.length];
-        this.pointsY = new float[this.points.length];
-        this.pointsZ = new float[this.points.length];
+        this.pointsXYZ = new float[this.points.length * 3];
         for (int i = 0; i < this.points.length; i++) {
             LXPoint point = this.points[i];
-            this.pointsArray[3 * i] = point.x;
-            this.pointsArray[3 * i + 1] = point.y;
-            this.pointsArray[3 * i + 2] = point.z;
-            this.pointsX[i] = point.x;
-            this.pointsY[i] = point.y;
-            this.pointsZ[i] = point.z;
+            this.pointsXYZ[3 * i] = point.x;
+            this.pointsXYZ[3 * i + 1] = point.y;
+            this.pointsXYZ[3 * i + 2] = point.z;
         }
     }
 
