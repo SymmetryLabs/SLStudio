@@ -24,6 +24,10 @@ version = '1.0'
 jar.baseName = 'SLStudio'
 mainClassName = "com.symmetrylabs.slstudio.SLStudio"
 
+run {
+	jvmArgs '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false'
+}
+
 repositories {
 	mavenCentral()
 
