@@ -110,7 +110,7 @@ void  move()      { c     = interp(t,prvA,dstA);
         super(lx);
 
         eq.slope.setValue(6);
-        eq.gain.setValue(6);
+        eq.gain.setValue(12);
         eq.range.setValue(36);
         eq.release.setValue(640);
         // addParameter(eq.gain);

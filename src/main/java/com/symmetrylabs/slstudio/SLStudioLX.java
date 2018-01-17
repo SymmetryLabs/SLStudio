@@ -419,16 +419,16 @@ public class SLStudioLX extends P3LX {
             this.rightPane.setHeight(bottomTrayY);
             this.rightPane.setX(uiWidth - this.rightPane.getWidth());
 
-            UI2dScrollContext outputsOuterScrollContext = this.rightPane.utility;
-            float listHeight = outputsOuterScrollContext.getHeight() - UIOutputs.TOP_MARGIN;
-            UI2dScrollContext outputsInnerScrollContext = this.rightPane.uiOutputs.outputList;
-            if (outputsInnerScrollContext.getHeight() != listHeight) {
-                outputsInnerScrollContext.setHeight(listHeight);
-            }
-            UIOutputs outputs = this.rightPane.uiOutputs;
-            if (outputs.getContentTarget().getHeight() != listHeight) {
-                outputs.getContentTarget().setHeight(listHeight);
-            }
+            // UI2dScrollContext outputsOuterScrollContext = this.rightPane.utility;
+            // float listHeight = outputsOuterScrollContext.getHeight() - UIOutputs.TOP_MARGIN;
+            // UI2dScrollContext outputsInnerScrollContext = this.rightPane.uiOutputs.outputList;
+            // if (outputsInnerScrollContext.getHeight() != listHeight) {
+            //     outputsInnerScrollContext.setHeight(listHeight);
+            // }
+            // UIOutputs outputs = this.rightPane.uiOutputs;
+            // if (outputs.getContentTarget().getHeight() != listHeight) {
+            //     outputs.getContentTarget().setHeight(listHeight);
+            // }
 
             this.preview.setSize(
                 Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),

@@ -21,8 +21,8 @@ public class Pong extends DPat {
         super(lx);
         cRad = mMax.x / 10;
         addModulator(dx = new SinLFO(6000, 500, 30000)).trigger();
-        addModulator(dy = new SinLFO(3000, 500, 22472)).trigger();
-        addModulator(dz = new SinLFO(1000, 500, 18420)).trigger();
+        addModulator(dy = new SinLFO(3000, 2500, 22472)).trigger();
+        addModulator(dz = new SinLFO(25000, 2500, 18420)).trigger();
         addModulator(x = new SinLFO(cRad, mMax.x - cRad, 0)).trigger();
         x.setPeriod(dx);
         addModulator(y = new SinLFO(cRad, mMax.y - cRad, 0)).trigger();

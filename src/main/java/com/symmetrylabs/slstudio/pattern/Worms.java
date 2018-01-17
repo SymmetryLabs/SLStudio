@@ -60,18 +60,6 @@ public class Worms extends SLPattern {
         addParameter(pColor);
 
         middle = new LXVector(1.5f * model.cx, 1.5f * model.cy, 71.f);
-        initLattice(new Runnable() {
-            public void run() {
-                for (int i = 0; i < NUM_CURSORS; i++) {
-                    dCursor c = new dCursor();
-                    reset(c);
-                    cur.add(c);
-                }
-
-                //onParameterChange(pEQ);
-                setNewDest();
-            }
-        });
     }
 
     private boolean isLatticeInited() {
@@ -218,6 +206,19 @@ public class Worms extends SLPattern {
     //     eq.release.setValue(640);
     //     addModulator(eq).start();
     //   }
+
+        initLattice(new Runnable() {
+            public void run() {
+                for (int i = 0; i < NUM_CURSORS; i++) {
+                    dCursor c = new dCursor();
+                    reset(c);
+                    cur.add(c);
+                }
+
+                //onParameterChange(pEQ);
+                setNewDest();
+            }
+        });
     }
 
     private void initLattice(Runnable callback) {

@@ -8,14 +8,15 @@ import java.util.function.Consumer;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.LXPattern;
 
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.CubesModel;
 
 import static com.symmetrylabs.slstudio.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 
-public class SunFlash extends SunsPattern {
+public class CubeFlash extends LXPattern {
     private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
@@ -23,13 +24,13 @@ public class SunFlash extends SunsPattern {
     private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
 
     class Flash {
-        Sun c;
+        CubesModel.Cube c;
         float value;
         float hue;
         boolean hasPeaked;
 
         Flash() {
-            c = model.getSuns().get(floor(random(model.getSuns().size())));
+            c = ((CubesModel)model).getCubes().get(floor(random(((CubesModel)model).getCubes().size())));
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
@@ -55,7 +56,7 @@ public class SunFlash extends SunsPattern {
     private float leftoverMs = 0;
     private List<Flash> flashes;
 
-    public SunFlash(LX lx) {
+    public CubeFlash(LX lx) {
         super(lx);
         addParameter(rateParameter);
         addParameter(attackParameter);

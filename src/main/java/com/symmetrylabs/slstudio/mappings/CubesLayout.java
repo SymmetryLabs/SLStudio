@@ -69,27 +69,47 @@ public class CubesLayout {
 
     static final TowerConfig[] TOWER_CONFIG = {
 
-        // left
-        new TowerConfig(0, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(30, 0, -30, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(60, 0, 0, new String[] {"0", "0", "0"}),
+        // // left
+        // new TowerConfig(0, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
+        // new TowerConfig(30, 0, -30, new String[] {"0", "0", "0", "0"}),
+        // new TowerConfig(60, 0, 0, new String[] {"0", "0", "0"}),
 
-        new TowerConfig(0, 137, 15, new String[] {"0", "0", "0"}),
-        new TowerConfig(30, 109, 15, new String[] {"0", "0", "0", "0", "0", "0", "0"}),
-        new TowerConfig(60, 109, 15, new String[] {"0", "0", "0", "0", "0", "0", "0"}),
+        // new TowerConfig(0, 137, 15, new String[] {"0", "0", "0"}),
+        // new TowerConfig(30, 109, 15, new String[] {"0", "0", "0", "0", "0", "0", "0"}),
+        // new TowerConfig(60, 109, 15, new String[] {"0", "0", "0", "0", "0", "0", "0"}),
 
-        new TowerConfig(12, 150, -15, new String[] {"0"}),
-        new TowerConfig(39, 150, -15, new String[] {"0"}),
+        // new TowerConfig(12, 150, -15, new String[] {"0"}),
+        // new TowerConfig(39, 150, -15, new String[] {"0"}),
 
-        // right
-        new TowerConfig(200, 0, 0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(230, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
-        new TowerConfig(260, 29, 0, new String[] {"0", "0", "0", "0"}),
+        // // right
+        // new TowerConfig(200, 0, 0, new String[] {"0", "0", "0", "0"}),
+        // new TowerConfig(230, 0, 0, new String[] {"0", "0", "0", "0", "0"}),
+        // new TowerConfig(260, 29, 0, new String[] {"0", "0", "0", "0"}),
 
-        new TowerConfig(200, 143, 0, new String[] {"0", "0"}),
-        new TowerConfig(200, 228, 0, new String[] {"0", "0", "0", "0"}),
-        new TowerConfig(230, 143, 0, new String[] {"0", "0", "0", "0", "0", "0"}),
-        new TowerConfig(260, 143, 0, new String[] {"0", "0", "0", "0"}),
+        // new TowerConfig(200, 143, 0, new String[] {"0", "0"}),
+        // new TowerConfig(200, 228, 0, new String[] {"0", "0", "0", "0"}),
+        // new TowerConfig(230, 143, 0, new String[] {"0", "0", "0", "0", "0", "0"}),
+        // new TowerConfig(260, 143, 0, new String[] {"0", "0", "0", "0"}),
+
+        // left stage
+        new TowerConfig(90, 0, 0, -45, new String[] {"86", "127", "44", "184", "71"}),
+        new TowerConfig(130, 0, 0, -45, new String[] {"181", "73", "337", "419"}),
+        new TowerConfig(170, 0, 0, -45, new String[] {"199", "132", "415hp"}),
+
+        // left top
+        new TowerConfig(17, JUMP*4+4, 30, -45, new String[] {"0", "397", "106", "18"}),
+        new TowerConfig(60, JUMP*4+4, 60, 0, new String[] {"0", "55", "367", "15", "135", "157", "74"}),
+        new TowerConfig(90, JUMP*4+4, 60, 0, new String[] {"0", "326", "321", "65", "22", "36", "412"}),
+
+        // right stage
+        new TowerConfig(330, 0, 0, -45, new String[] {"369", "38", "318"}),
+        new TowerConfig(370, 0, 0, -45, new String[] {"69", "205", "406hp", "188"}),
+        new TowerConfig(410, 0, 0, -45, new String[] {"43", "77", "31", "76", "314"}),
+
+        // right top
+        new TowerConfig(438, JUMP*4+4, 60, -90, new String[] {"0", "123", "37", "14", "0", "197", "16"}),
+        new TowerConfig(470, JUMP*4+4, 60, -90, new String[] {"0", "159", "358", "147", "177", "389"}),
+        new TowerConfig(510, JUMP*4+4, 30, -45, new String[] {"0", "29", "398", "352"}),
     };
 
     static final StripConfig[] STRIP_CONFIG = {
@@ -192,8 +212,8 @@ public class CubesLayout {
         // Any global transforms
         LXTransform globalTransform = new LXTransform();
         globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
         globalTransform.rotateX(globalRotationX * Math.PI / 180.);
+        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
         globalTransform.rotateZ(globalRotationZ * Math.PI / 180.);
 
         /* Cubes ----------------------------------------------------------*/
@@ -212,7 +232,7 @@ public class CubesLayout {
 
             for (int i = 0; i < config.ids.length; i++) {
                 float y = config.yValues[i];
-                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot-180, yRot, zRot, globalTransform, type);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
@@ -228,8 +248,8 @@ public class CubesLayout {
 
             globalTransform.push();
             globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-            globalTransform.rotateY(stripConfig.xRot * Math.PI / 180.);
-            globalTransform.rotateX(stripConfig.yRot * Math.PI / 180.);
+            globalTransform.rotateX(stripConfig.xRot * Math.PI / 180.);
+            globalTransform.rotateY(stripConfig.yRot * Math.PI / 180.);
             globalTransform.rotateZ(stripConfig.zRot * Math.PI / 180.);
 
             strips.add(new CubesModel.CubesStrip(stripId+"", metrics, globalTransform));

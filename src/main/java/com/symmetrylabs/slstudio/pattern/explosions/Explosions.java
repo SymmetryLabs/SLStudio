@@ -82,7 +82,7 @@ public class Explosions extends LXPattern {
         public void run(double deltaMs) {
                 initExplosions();
 
-                float base_hue = lx.palette.getHuef();
+                float base_hue = palette.getHuef();
                 float wave_hue_diff = (float) (360.0 / this.explosions.size());
 
                 for(L8onExplosion explosion : this.explosions) {

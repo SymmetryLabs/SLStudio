@@ -17,6 +17,7 @@ public class CubeEQ extends SLModelPattern {
     private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
     private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
     private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
+    private final CompoundParameter gain = new CompoundParameter("Gain", 0.55, 0, 1);
 
     public CubeEQ(LX lx) {
         super(lx);
@@ -25,6 +26,7 @@ public class CubeEQ extends SLModelPattern {
 //        addParameter(eq.attack);
 //        addParameter(eq.release);
 //        addParameter(eq.slope);
+        addParameter(gain);
         addParameter(edge);
         addParameter(clr);
         addParameter(blockiness);
@@ -32,8 +34,8 @@ public class CubeEQ extends SLModelPattern {
     }
 
     public void onActive() {
-        eq.gain.setValue(eq.gain.getValuef() * 1.4f);
-        eq.range.setValue(34);
+        eq.gain.setValue(eq.gain.getValuef() * 305.0f);
+        eq.range.setValue(28);
         eq.release.setValue(300);
     }
 
@@ -41,6 +43,7 @@ public class CubeEQ extends SLModelPattern {
         final float edgeConst = 2 + 30 * edge.getValuef();
         final float clrConst = 1.1f + clr.getValuef();
 
+        eq.gain.setNormalized(gain.getValuef());
 
         model.forEachPoint((start, end) -> {
             for (int i=start; i<end; i++) {

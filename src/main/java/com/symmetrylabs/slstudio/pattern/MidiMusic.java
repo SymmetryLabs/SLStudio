@@ -10,7 +10,10 @@ import java.util.Stack;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.modulator.Accelerator;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.LXLayer;
@@ -38,12 +41,28 @@ public class MidiMusic extends SLPattern {
     private float sparkleBright = 100;
     
     private final CompoundParameter wave = new CompoundParameter("WAVE", 0);
+
+    private final BooleanParameter triggerSweep = new BooleanParameter("SWEEP", false);
     
     public MidiMusic(LX lx) {
         super(lx);
         addParameter(lightSize);
         addParameter(wave);
         addModulator(sparkle).setValue(1);
+        addParameter(triggerSweep);
+        triggerSweep.setMode(BooleanParameter.Mode.MOMENTARY);
+
+        triggerSweep.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) {
+                if (((BooleanParameter)parameter).isOn()) {
+                    float velocity = 135.f;
+                    Sweep s = getSweep();
+                    s.bright = 50 + velocity / 127.f * 50;
+                    s.falloff = 20 - velocity / 127.f * 17;
+                    s.position.trigger();
+                }
+            }
+        });
     }
     
     void onReset() {
@@ -152,9 +171,7 @@ public class MidiMusic extends SLPattern {
         }
         return newSweep;
     }
-    
 
-    //public synchronized boolean noteOn(MidiNote note) {
     public void noteOnReceived(MidiNoteOn note) {
         if (note.getPitch() < 40) {
             LightUp light = getLight();
