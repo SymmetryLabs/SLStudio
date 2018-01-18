@@ -39,7 +39,6 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
-import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
 import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
@@ -49,10 +48,15 @@ import com.symmetrylabs.slstudio.ui.UIOutputs;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.slstudio.util.MarkerSource;
 
+import static com.symmetrylabs.util.DistanceConstants.*;
+
 public class SLStudioLX extends P3LX {
 
     public static final String COPYRIGHT = "Symmetry Labs";
-    public PaletteLibrary paletteLibrary;
+
+    private static final String DEFAULT_PROJECT_FILE = "default.lxp";
+    private static final String PROJECT_FILE_NAME = ".lxproject";
+    private static final String KEY_UI = "ui";
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
 
@@ -77,6 +81,7 @@ public class SLStudioLX extends P3LX {
 
             PreviewWindow(UI ui, P3LX lx, int x, int y, int w, int h) {
                 super(ui, x, y, w, h);
+
                 addComponent(this.pointCloud = (UIGLPointCloud) new UIGLPointCloud(lx).setPointSize(3));
                 setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
                 setRadius(lx.model.rMax * 1.5f);
@@ -91,17 +96,14 @@ public class SLStudioLX extends P3LX {
 
         UI(final SLStudioLX lx) {
             super(lx);
+
             initialize(lx, this);
+
             setBackgroundColor(this.theme.getDarkBackgroundColor());
 
-            this.preview = new PreviewWindow(
-                this,
-                lx,
-                UILeftPane.WIDTH,
-                0,
-                this.applet.width - UILeftPane.WIDTH - UIOverriddenRightPane.WIDTH,
-                this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT
-            );
+            this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0,
+            this.applet.width - UILeftPane.WIDTH - UIOverriddenRightPane.WIDTH,
+            this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
             this.leftPane = new UILeftPane(this, lx);
             this.rightPane = new UIOverriddenRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
@@ -113,7 +115,6 @@ public class SLStudioLX extends P3LX {
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
-
 
             addLayer(this.preview);
             addLayer(this.leftPane);
@@ -509,10 +510,6 @@ public class SLStudioLX extends P3LX {
         }
     }
 
-    private static final String DEFAULT_PROJECT_FILE = "default.lxp";
-    private static final String PROJECT_FILE_NAME = ".lxproject";
-    private static final String KEY_UI = "ui";
-
     public final UI ui;
 
     public SLStudioLX(PApplet applet, LXModel model) {
@@ -521,9 +518,11 @@ public class SLStudioLX extends P3LX {
 
     public SLStudioLX(PApplet applet, LXModel model, boolean multiThreaded) {
         super(applet, model);
-        this.ui = (UI) super.ui;
-        onUIReady(this, this.ui);
-        registerExternal(KEY_UI, this.ui);
+
+        this.ui = (UI)super.ui;
+
+        onUIReady(this, ui);
+        registerExternal(KEY_UI, ui);
 
         try {
             File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
@@ -545,7 +544,7 @@ public class SLStudioLX extends P3LX {
             // ignored
         }
 
-        this.engine.setThreaded(multiThreaded);
+        engine.setThreaded(multiThreaded);
     }
 
     @Override
@@ -563,13 +562,10 @@ public class SLStudioLX extends P3LX {
     }
 
     @Override
-    protected heronarts.p3lx.ui.UI buildUI() {
+    protected UI buildUI() {
         return new UI(this);
     }
 
-    /**
-     * Subclasses may override to register additional components before the UI is built
-     */
     protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
         // Add all effects
         LXClassLoader.findEffects().stream().forEach(c -> lx.registerEffect(c));
@@ -585,6 +581,8 @@ public class SLStudioLX extends P3LX {
         lx.registerEffect(DesaturationEffect.class);
     }
 
+    protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) { }
+
     @Override
     protected LXEffect instantiateEffect(final String className) {
         return super.instantiateEffect(LXClassLoader.guessExistingEffectClassName(className));
@@ -593,8 +591,5 @@ public class SLStudioLX extends P3LX {
     @Override
     protected LXPattern instantiatePattern(final String className) {
         return super.instantiatePattern(LXClassLoader.guessExistingPatternClassName(className));
-    }
-
-    protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
     }
 }

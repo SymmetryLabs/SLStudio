@@ -20,6 +20,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
+import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.util.BlobFollower;
@@ -29,6 +30,9 @@ import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.Octahedron;
 
 public class FlockWave extends SLPatternWithMarkers {
+
+    private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
     BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
@@ -54,7 +58,7 @@ public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
     CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
     CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
-    DiscreteParameter palette = new DiscreteParameter("palette", ((SLStudioLX) lx).paletteLibrary.getNames());
+    DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());
         // selected colour palette
     CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
     CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
@@ -308,7 +312,7 @@ public class FlockWave extends SLPatternWithMarkers {
     }
 
     ColorPalette getPalette() {
-        pal.setPalette(((SLStudioLX) lx).paletteLibrary.get(palette.getOption()));
+        pal.setPalette(paletteLibrary.get(palette.getOption()));
         pal.setBottom(palStart.getValue());
         pal.setTop(palStop.getValue());
         pal.setBias(palBias.getValue());

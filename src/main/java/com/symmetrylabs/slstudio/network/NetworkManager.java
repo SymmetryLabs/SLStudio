@@ -2,19 +2,20 @@ package com.symmetrylabs.slstudio.network;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
-
+import java.lang.ref.WeakReference;
 
 public class NetworkManager {
 
-    private static NetworkManager instance;
-
     private final ExecutorService executor = Executors.newCachedThreadPool();
 
+    private static WeakReference<NetworkManager> instance = new WeakReference<>(null);
+
     public static NetworkManager getInstance() {
-        if (instance == null) {
-            instance = new NetworkManager();
+        NetworkManager ref = instance.get();
+        if (ref == null) {
+            instance = new WeakReference<>(ref = new NetworkManager());
         }
-        return instance;
+        return ref;
     }
 
     public ExecutorService getExecutor() {

@@ -310,7 +310,7 @@ public class CubesLayout {
         if (!(lx.model instanceof CubesModel))
             return controllers;
 
-        final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx);
+        final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
         networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {

@@ -1,7 +1,8 @@
 package com.symmetrylabs.slstudio.util.dispatch;
 
 import java.util.Map;
-import java.util.HashMap;
+import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
@@ -13,13 +14,15 @@ public class Dispatcher implements LXLoopTask {
     private final DispatchQueue engineQueue = new DispatchQueue();
     private final DispatchQueue uiQueue = new DispatchQueue();
 
-    private static Map<LX, Dispatcher> instanceByLX = new HashMap<>();
+    private static Map<LX, WeakReference<Dispatcher>> instanceByLX = new WeakHashMap<>();
 
     public static synchronized Dispatcher getInstance(LX lx) {
-        if (!instanceByLX.containsKey(lx)) {
-            instanceByLX.put(lx, new Dispatcher(lx));
+        WeakReference<Dispatcher> weakRef = instanceByLX.get(lx);
+        Dispatcher ref = weakRef == null ? null : weakRef.get();
+        if (ref == null) {
+            instanceByLX.put(lx, new WeakReference<>(ref = new Dispatcher(lx)));
         }
-        return instanceByLX.get(lx);
+        return ref;
     }
 
     private Dispatcher(LX lx) {
@@ -27,16 +30,15 @@ public class Dispatcher implements LXLoopTask {
 
         uiQueue.setThreadName(Thread.currentThread().getName());
         setEngineThreaded(true);
+
+        lx.engine.addLoopTask(this);
     }
 
     void setEngineThreaded(boolean threaded) {
         engineQueue.setThreadName(threaded ? "LX Engine Thread" : Thread.currentThread().getName());
     }
 
-    public void start() {
-        lx.engine.addLoopTask(this);
-    }
-
+    @Override
     public void loop(double deltaMs) {
         engineQueue.executeAll();
     }

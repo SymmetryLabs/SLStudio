@@ -195,24 +195,24 @@ public class UIOutputs extends UICollapsibleSection {
         }
 
         public boolean isSelected() {
-                return controller.enabled.isOn();
+            return controller.enabled.isOn();
         }
 
         @Override
         public boolean isActive() {
-                return controller.enabled.isOn();
+            return controller.enabled.isOn();
         }
 
         @Override
         public int getActiveColor(UI ui) {
-                return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
+            return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
         }
 
         @Override
         public void onActivate() {
-                if (!SLStudio.applet.outputControl.enabled.getValueb())
-                        return;
-                controller.enabled.toggle();
+            if (!SLStudio.applet.outputControl.enabled.getValueb())
+                    return;
+            controller.enabled.toggle();
         }
     }
 }

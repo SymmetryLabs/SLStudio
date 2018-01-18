@@ -3,7 +3,8 @@ package com.symmetrylabs.slstudio.util;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
@@ -51,13 +52,15 @@ public class CubesMappingMode {
     private LX lx;
     private CubesModel cubesModel;
 
-    private static Map<LX, CubesMappingMode> instanceByLX = new HashMap<>();
+    private static Map<LX, WeakReference<CubesMappingMode>> instanceByLX = new WeakHashMap<>();
 
     public static synchronized CubesMappingMode getInstance(LX lx) {
-        if (!instanceByLX.containsKey(lx)) {
-            instanceByLX.put(lx, new CubesMappingMode(lx));
+        WeakReference<CubesMappingMode> weakRef = instanceByLX.get(lx);
+        CubesMappingMode ref = weakRef == null ? null : weakRef.get();
+        if (ref == null) {
+            instanceByLX.put(lx, new WeakReference<>(ref = new CubesMappingMode(lx)));
         }
-        return instanceByLX.get(lx);
+        return ref;
     }
 
     private CubesMappingMode(LX lx) {
