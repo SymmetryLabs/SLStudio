@@ -1,18 +1,25 @@
 package com.symmetrylabs.layouts.cubes;
 
-import java.util.*;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
-import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.slstudio.SLStudioLX;
+import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 
+import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
@@ -280,10 +287,17 @@ public class CubesLayout implements Layout {
     }
     */
 
-    public void setupLx(SLStudioLX lx) {
-        CubesMappingMode.createInstance(lx, this);
+    private static Map<LX, WeakReference<CubesLayout>> instanceByLX = new WeakHashMap<>();
 
-        final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx);
+    public static CubesLayout getInstance(LX lx) {
+        WeakReference<CubesLayout> weakRef = instanceByLX.get(lx);
+        return weakRef == null ? null : weakRef.get();
+    }
+
+    public void setupLx(SLStudioLX lx) {
+        instanceByLX.put(lx, new WeakReference<>(this));
+
+        final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
         networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {

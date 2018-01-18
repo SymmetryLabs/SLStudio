@@ -44,7 +44,6 @@ public class PerformanceManager extends LXComponent {
     final CompoundParameter lDummy = new CompoundParameter("lDummy");
     final CompoundParameter rDummy = new CompoundParameter("rDummy");
 
-
     DiscreteParameter deckOneChannel;
     DiscreteParameter deckTwoChannel;
     DiscreteParameter deckThreeChannel;
@@ -59,6 +58,8 @@ public class PerformanceManager extends LXComponent {
 
     SLStudioLX.UI ui;
     private LXChannel.CrossfadeGroup oldAB = null;
+
+    private final LX lx;
 
     class Listener implements LXEngine.Listener {
         @Override
@@ -79,7 +80,7 @@ public class PerformanceManager extends LXComponent {
     }
 
     void setChannelOptions() {
-        List<LXChannel> channels = SLStudio.applet.lx.engine.getChannels();
+        List<LXChannel> channels = lx.engine.getChannels();
         if (channels.size() == 0) return;
         String[] options = new String[channels.size()];
         for (int i = 0; i < channels.size(); i++) {
@@ -98,6 +99,8 @@ public class PerformanceManager extends LXComponent {
 
     public PerformanceManager(LX lx) {
         super(lx);
+
+        this.lx = lx;
 
         lFader.setPolarity(LXParameter.Polarity.BIPOLAR);
         lFader.addListener(parameter -> propagateLeftFader());
@@ -205,7 +208,7 @@ public class PerformanceManager extends LXComponent {
         for (int i = 0; i < 4; i++) {
             float x = getWindowX(i);
             DiscreteParameter selection = channelSelections[i];
-            DeckWindow w = new DeckWindow(selection, i, this, ui, "NEVER SEE THIS", x, CHAN_Y, CHAN_WIDTH, CHAN_HEIGHT);
+            DeckWindow w = new DeckWindow(lx, selection, i, this, ui, "NEVER SEE THIS", x, CHAN_Y, CHAN_WIDTH, CHAN_HEIGHT);
             ui.addLayer(w);
             w.setVisible(false);
             deckWindows[i] = w;
@@ -223,7 +226,7 @@ public class PerformanceManager extends LXComponent {
         ui.addLayer(fR);
         fR.setVisible(false);
 
-        FaderWindow fC = new FaderWindow(SLStudio.applet.lx.engine.crossfader, ui, "", ui.getWidth() / 2 - (w / 2), y, w, h);
+        FaderWindow fC = new FaderWindow(lx.engine.crossfader, ui, "", ui.getWidth() / 2 - (w / 2), y, w, h);
         ui.addLayer(fC);
         fC.setVisible(false);
 
@@ -235,7 +238,7 @@ public class PerformanceManager extends LXComponent {
     public void start(SLStudioLX.UI ui) {
         this.ui = ui;
 
-        SLStudio.applet.lx.engine.addListener(new Listener());
+        lx.engine.addListener(new Listener());
         addUI();
         setChannelOptions();
         for (DeckWindow w : deckWindows) {
@@ -314,9 +317,9 @@ public class PerformanceManager extends LXComponent {
     void bindCommon(LXMidiRemote remote, CompoundParameter fader, DeckSide side) {
         if (remote == null) return;
         remote.bindController(fader, 0, 15);
-        remote.bindController(SLStudio.applet.lx.engine.output.brightness, 0, 14);
-        LXEffect e = SLStudio.applet.lx.engine.masterChannel.getEffect("Blur");
-        println("REMOTE", remote, SLStudio.applet.lx.engine.masterChannel, e);
+        remote.bindController(lx.engine.output.brightness, 0, 14);
+        LXEffect e = lx.engine.masterChannel.getEffect("Blur");
+        println("REMOTE", remote, lx.engine.masterChannel, e);
         if (e != null) {
             remote.bindController(e.getParameter("amount"), 7, 7);
         }

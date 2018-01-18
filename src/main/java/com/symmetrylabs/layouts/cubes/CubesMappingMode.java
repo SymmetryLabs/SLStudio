@@ -3,7 +3,8 @@ package com.symmetrylabs.layouts.cubes;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
+import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
 
 import com.symmetrylabs.layouts.cubes.patterns.CubesMappingPattern;
 import heronarts.lx.LX;
@@ -47,17 +48,18 @@ public class CubesMappingMode {
     private LX lx;
     private CubesModel cubesModel;
 
-    private static Map<LX, CubesMappingMode> instanceByLX = new HashMap<>();
+    private static Map<LX, WeakReference<CubesMappingMode>> instanceByLX = new WeakHashMap<>();
 
-    public static synchronized CubesMappingMode getInstance(LX lx) {
-        return instanceByLX.get(lx);
+    public static CubesMappingMode getInstance(LX lx) {
+        WeakReference<CubesMappingMode> weakRef = instanceByLX.get(lx);
+        CubesMappingMode ref = weakRef == null ? null : weakRef.get();
+        if (ref == null) {
+            instanceByLX.put(lx, new WeakReference<>(ref = new CubesMappingMode(lx)));
+        }
+        return ref;
     }
 
-    public static void createInstance(LX lx, CubesLayout layout) {
-        instanceByLX.put(lx, new CubesMappingMode(lx, layout));
-    }
-
-    private CubesMappingMode(LX lx, CubesLayout layout) {
+    private CubesMappingMode(LX lx) {
         this.lx = lx;
 
         this.enabled = new BooleanParameter("enabled", false)
@@ -85,22 +87,29 @@ public class CubesMappingMode {
         selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
 
-        layout.addControllerListListener(new ListListener<CubesController>() {
-            public void itemAdded(final int index, final CubesController c) {
-                if (isFixtureMapped(c.id)) {
-                    fixturesMappedButNotOnNetwork.remove(c.id);
-                    fixturesMappedAndOnTheNetwork.add(c.id);
-                } else {
-                    fixturesOnNetworkButNotMapped.add(c.id);
-                }
+        CubesLayout layout = CubesLayout.getInstance(lx);
 
-                selectedMappedFixture.setOptions(fixturesMappedAndOnTheNetwork.isEmpty() ? emptyOptions
-                        : fixturesMappedAndOnTheNetwork.toArray(new String[0]));
-                selectedUnMappedFixture.setOptions(fixturesOnNetworkButNotMapped.isEmpty() ? emptyOptions
-                        : fixturesOnNetworkButNotMapped.toArray(new String[0]));
-            }
-            public void itemRemoved(final int index, final CubesController c) {}
-        });
+        if (layout != null) {
+            layout.addControllerListListener(new ListListener<CubesController>() {
+                public void itemAdded(final int index, final CubesController c) {
+                    if (isFixtureMapped(c.id)) {
+                        fixturesMappedButNotOnNetwork.remove(c.id);
+                        fixturesMappedAndOnTheNetwork.add(c.id);
+                    } else {
+                        fixturesOnNetworkButNotMapped.add(c.id);
+                    }
+
+                    selectedMappedFixture.setOptions(fixturesMappedAndOnTheNetwork.isEmpty() ? emptyOptions
+                            : fixturesMappedAndOnTheNetwork.toArray(new String[0]));
+                    selectedUnMappedFixture.setOptions(fixturesOnNetworkButNotMapped.isEmpty() ? emptyOptions
+                            : fixturesOnNetworkButNotMapped.toArray(new String[0]));
+                }
+                public void itemRemoved(final int index, final CubesController c) {}
+            });
+        }
+        else {
+            System.err.println("**WARNING** CubesMappingMode used before CubesLayout has been initialized.");
+        }
 
         enabled.addListener(p -> {
             if (((BooleanParameter)p).isOn()) {

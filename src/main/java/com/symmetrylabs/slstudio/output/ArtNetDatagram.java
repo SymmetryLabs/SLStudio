@@ -1,10 +1,12 @@
 package com.symmetrylabs.slstudio.pixlites;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import heronarts.lx.output.LXDatagram;
-
 import java.net.UnknownHostException;
 
+import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.output.LXDatagram;
+
+import com.symmetrylabs.slstudio.component.GammaCorrection;
 
 public class ArtNetDatagram extends LXDatagram {
 
@@ -17,13 +19,18 @@ public class ArtNetDatagram extends LXDatagram {
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
-    public ArtNetDatagram(String ipAddress, int[] indices, int universeNumber) {
-        this(ipAddress, indices, 3 * indices.length, universeNumber);
+    private GammaCorrection gammaCorrection;
+
+    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
+        this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
     }
 
-    public ArtNetDatagram(String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
         super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
+
         this.pointIndices = indices;
+
+        gammaCorrection = GammaCorrection.getInstance(lx);
 
         try {
             setAddress(ipAddress);
@@ -82,9 +89,12 @@ public class ArtNetDatagram extends LXDatagram {
         int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
         for (int index : pointIndices) {
             int colorValue = (index >= 0) ? colors[index] : 0;
-            this.buffer[i + byteOffset[0]] = (byte) SLStudio.redGamma[((colorValue >> 16) & 0xff)]; // R
-            this.buffer[i + byteOffset[1]] = (byte) SLStudio.greenGamma[((colorValue >> 8) & 0xff)]; // G
-            this.buffer[i + byteOffset[2]] = (byte) SLStudio.blueGamma[(colorValue & 0xff)]; // B
+
+            int gammaCorrected = gammaCorrection.getCorrectedColor(colorValue);
+            buffer[i + byteOffset[0]] = (byte)(gammaCorrected >> LXColor.RED_SHIFT & 0xff);
+            buffer[i + byteOffset[1]] = (byte)(gammaCorrected >> LXColor.GREEN_SHIFT & 0xff);
+            buffer[i + byteOffset[2]] = (byte)(gammaCorrected & 0xff); // blue
+
             i += 3;
         }
         return this;

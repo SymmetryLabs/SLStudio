@@ -10,22 +10,26 @@ import com.symmetrylabs.layouts.cubes.CubesController;
 import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.IntListener;
 import com.symmetrylabs.util.listenable.ListListener;
 
 public class UIOutputs extends UICollapsibleSection {
         private final UIItemList.ScrollList outputList;
 
+        private Dispatcher dispatcher;
+
         UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
                 super(ui, x, y, w, 124);
+
+                dispatcher = Dispatcher.getInstance(lx);
+
                 outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
 
                 updateItems(layout);
@@ -34,20 +38,22 @@ public class UIOutputs extends UICollapsibleSection {
 
                 layout.addControllerListListener(new ListListener<CubesController>() {
                     public void itemAdded(final int index, final CubesController c) {
-                        SLStudio.applet.dispatcher.dispatchUi(new Runnable() {
-                                public void run() {
-                                        if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
-                                        updateItems(layout);
-                                }
+                        dispatcher.dispatchUi(() -> {
+                            if (c.networkDevice != null) {
+                                c.networkDevice.version.addListener(deviceVersionListener);
+                            }
+
+                            updateItems(layout);
                         });
                     }
 
                     public void itemRemoved(final int index, final CubesController c) {
-                        SLStudio.applet.dispatcher.dispatchUi(new Runnable() {
-                                public void run() {
-                                        if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
-                                        updateItems(layout);
-                                }
+                        dispatcher.dispatchUi(() -> {
+                            if (c.networkDevice != null) {
+                                c.networkDevice.version.removeListener(deviceVersionListener);
+                            }
+
+                            updateItems(layout);
                         });
                     }
                 });
@@ -69,11 +75,7 @@ public class UIOutputs extends UICollapsibleSection {
                 addTopLevelComponent(new UIButton(4, 4, 12, 12) {}
                     .setParameter(SLStudio.applet.outputControl.enabled).setBorderRounding(4));
 
-                SLStudio.applet.outputControl.enabled.addListener(new LXParameterListener() {
-                    public void onParameterChanged(LXParameter parameter) {
-                        redraw();
-                    };
-                });
+                SLStudio.applet.outputControl.enabled.addListener(param -> redraw());
         }
 
       private void updateItems(CubesLayout layout) {
@@ -84,13 +86,7 @@ public class UIOutputs extends UICollapsibleSection {
             redraw();
       }
 
-        private final IntListener deviceVersionListener = new IntListener() {
-                public void onChange(int version) {
-                        SLStudio.applet.dispatcher.dispatchUi(new Runnable() {
-                        public void run() { redraw(); }
-                        });
-                }
-        };
+        private final IntListener deviceVersionListener = version -> dispatcher.dispatchUi(this::redraw);
 
         private void setTitle(int count) {
                 setTitle("OUTPUT (" + count + ")");
@@ -102,9 +98,7 @@ public class UIOutputs extends UICollapsibleSection {
 
                 ControllerItem(CubesController _controller) {
                     this.controller = _controller;
-                    controller.enabled.addListener(new LXParameterListener() {
-                        public void onParameterChanged(LXParameter parameter) { redraw(); }
-                    });
+                    controller.enabled.addListener(param -> redraw());
                 }
 
                 public String getLabel() {

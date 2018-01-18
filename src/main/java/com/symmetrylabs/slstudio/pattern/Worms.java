@@ -17,6 +17,7 @@ import heronarts.lx.LXUtils;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 
 enum CursorState {
     RUNNING,
@@ -47,8 +48,13 @@ public class Worms extends SLPattern {
     private CompoundParameter pSpawn     = new CompoundParameter("DIR" ,  0);
     private CompoundParameter pColor     = new CompoundParameter("CLR" , .1);
 
+    private Dispatcher dispatcher;
+
     public Worms(LX lx) {
         super(lx);
+
+        dispatcher = Dispatcher.getInstance(lx);
+
         addModulator(moveChase).start();
         addParameter(pBeat);
         addParameter(pSpeed);
@@ -227,7 +233,7 @@ public class Worms extends SLPattern {
             new Thread() {
                 public void run() {
                     final dLattice l = new dLattice(((StripsModel)model));
-                    SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
+                    dispatcher.dispatchEngine(new Runnable() {
                         public void run() {
                             lattice = l;
                             for (Runnable callback : latticeInitedCallbacks) {

@@ -1,6 +1,8 @@
 package com.symmetrylabs.slstudio.performance;
 
-import com.symmetrylabs.slstudio.SLStudio;
+import java.util.ArrayList;
+import java.util.List;
+
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.midi.LXMidiInput;
@@ -18,21 +20,24 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import processing.core.PApplet;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.symmetrylabs.slstudio.SLStudio;
 import static com.symmetrylabs.slstudio.performance.PerformanceManager.DeckSide.LEFT;
 import static com.symmetrylabs.slstudio.performance.PerformanceManager.DeckSide.RIGHT;
 import static processing.core.PApplet.println;
 
 
 public class APC40Listener extends LXComponent {
-    LXMidiRemote remotes[] = new LXMidiRemote[2];
 
     public BooleanParameter hasRemote = new BooleanParameter("hasRemote", false);
 
+    LXMidiRemote remotes[] = new LXMidiRemote[2];
+
+    private final LX lx;
+
     public APC40Listener(LX lx) {
         super(lx);
+
+        this.lx = lx;
 
         lx.engine.midi.whenReady(this::bind);
     }
@@ -87,7 +92,7 @@ public class APC40Listener extends LXComponent {
     }
 
     void bind() {
-        for (final LXMidiSurface s : SLStudio.applet.lx.engine.midi.surfaces) {
+        for (final LXMidiSurface s : lx.engine.midi.surfaces) {
             s.enabled.setValue(false);
             s.enabled.addListener(parameter -> {
                 if (s.enabled.isOn()) {
@@ -96,8 +101,8 @@ public class APC40Listener extends LXComponent {
             });
         }
 
-        List<LXMidiInput> inputs = SLStudio.applet.lx.engine.midi.getInputs();
-        List<LXMidiOutput> outputs = SLStudio.applet.lx.engine.midi.getOutputs();
+        List<LXMidiInput> inputs = lx.engine.midi.getInputs();
+        List<LXMidiOutput> outputs = lx.engine.midi.getOutputs();
         ArrayList<LXMidiInput> apcInputs = new ArrayList<>();
         ArrayList<LXMidiOutput> apcOutputs = new ArrayList<>();
 
