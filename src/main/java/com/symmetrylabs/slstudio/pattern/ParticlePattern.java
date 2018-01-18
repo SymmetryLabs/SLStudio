@@ -29,15 +29,12 @@ import com.symmetrylabs.slstudio.util.Marker;
 import com.symmetrylabs.slstudio.util.MarkerSource;
 import com.symmetrylabs.slstudio.util.CubeMarker;
 import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
-import com.symmetrylabs.slstudio.util.ModelIndex;
-import com.symmetrylabs.slstudio.util.LinearModelIndex;
-import com.symmetrylabs.slstudio.util.OctreeModelIndex;
 import com.symmetrylabs.slstudio.model.LXPointNormal;
 
-public abstract class ParticlePattern extends SLPattern implements MarkerSource {
+public abstract class ParticlePattern extends SLModelPattern implements MarkerSource {
     private static final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 
-    public static final int PARTICLE_GROUP_COUNT = 16;
+    public static final int DEFAULT_PARTICLE_GROUP_COUNT = 16;
 
     public static enum KernelChoice {
         GAUSSIAN, LAPLACE, SPHERE //, FLAT
@@ -64,9 +61,8 @@ public abstract class ParticlePattern extends SLPattern implements MarkerSource 
     public CompoundParameter blobPull;
     public EnumParameter<BlobTrackingMode> blobTrackingMode;
 
-    protected ModelIndex modelIndex;
     protected List<Particle> particles = new CopyOnWriteArrayList<>();
-    private ParticleGroup[] particleGroups = new ParticleGroup[PARTICLE_GROUP_COUNT];
+    private ParticleGroup[] particleGroups;
 
     protected BlobFollower blobFollower;
     protected BlobDist closestBlobDist = null;
@@ -82,11 +78,15 @@ public abstract class ParticlePattern extends SLPattern implements MarkerSource 
     protected abstract void simulate(double deltaMs);
 
     public ParticlePattern(LX lx) {
+        this(lx, DEFAULT_PARTICLE_GROUP_COUNT);
+    }
+
+    public ParticlePattern(LX lx, int particleGroupCount) {
         super(lx);
 
         blobFollower = new BlobFollower(BlobTracker.getInstance(lx));
 
-        modelIndex = createModelIndex();
+        particleGroups = new ParticleGroup[particleGroupCount];
 
         for (int i = 0; i < particleGroups.length; ++i) {
             particleGroups[i] = new ParticleGroup(colors.length);
@@ -107,12 +107,6 @@ public abstract class ParticlePattern extends SLPattern implements MarkerSource 
                     particleGroups[p.index % particleGroups.length].particles.add(p);
                     particles.add(p);
                 }
-            }
-        });
-
-        flattenZ.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter param) {
-                ParticlePattern.this.modelIndex = createModelIndex();
             }
         });
     }
@@ -137,11 +131,6 @@ public abstract class ParticlePattern extends SLPattern implements MarkerSource 
         addParameter(blobMaxAngle = new CompoundParameter("bMaxAngle", 60, 0, 90));
         addParameter(blobPull = new CompoundParameter("bPull", 100, 0, 200));
         addParameter(blobTrackingMode = new EnumParameter<BlobTrackingMode>("bTrackingMode", BlobTrackingMode.AVERAGE));
-    }
-
-    @Override
-    protected void onModelChanged(LXModel model) {
-        modelIndex = createModelIndex();
     }
 
     @Override
@@ -187,11 +176,6 @@ public abstract class ParticlePattern extends SLPattern implements MarkerSource 
             ), 50, LXColor.BLUE));
 
         return markers;
-    }
-
-    private ModelIndex createModelIndex() {
-        return new OctreeModelIndex(model, flattenZ.isOn());
-        //return new LinearModelIndex(model, flattenZ.isOn());
     }
 
     private double kernelPolySqr(double dSqr, double s) {
@@ -318,7 +302,8 @@ public abstract class ParticlePattern extends SLPattern implements MarkerSource 
 
         LXVector pp = particle.toPointInModel(model);
         float withinDist = particle.size * kernelSize.getValuef();
-        List<LXPoint> nearbyPoints = modelIndex.pointsWithin(pp, withinDist * edgeCutoff.getValuef());
+        List<LXPoint> nearbyPoints = model.getModelIndex(flattenZ.isOn())
+                .pointsWithin(pp, withinDist * edgeCutoff.getValuef());
 
         particle.rebound[0] = 0;
         particle.rebound[1] = 0;

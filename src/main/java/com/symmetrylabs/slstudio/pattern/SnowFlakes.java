@@ -1,12 +1,9 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Slice;
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.util.ModelIndex;
-import com.symmetrylabs.slstudio.util.LinearModelIndex;
-import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Random;
+
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LXModulator;
@@ -15,9 +12,10 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.model.Slice;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.Sun;
 
 /**
  * @author Nate Argetsinger (narget@umich.edu)
@@ -71,10 +69,6 @@ public class SnowFlakes extends SunsPattern {
                         return 0;
                 }
         };
-
-        // the octree we use to efficiently find nearby points
-        protected ModelIndex modelIndex = new OctreeModelIndex(lx.model);
-        //protected ModelIndex modelIndex = new LinearModelIndex(lx.model);
 
         private Random pointRandom = new Random();
 
@@ -166,7 +160,7 @@ public class SnowFlakes extends SunsPattern {
 
                         // do something with living dotStrikes
                         for (SnowFlake dot : this.dots) {
-                                List<LXPoint> nearbyPoints = modelIndex.pointsWithin(dot.nucleo, kernelSize.getValuef());
+                                List<LXPoint> nearbyPoints = model.getModelIndex().pointsWithin(dot.nucleo, kernelSize.getValuef());
 
                                 // change the center
                                 if (nearbyPoints.size() > 1){
