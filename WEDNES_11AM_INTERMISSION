@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1516172762058,
+  "timestamp": 1516207155454,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 0.46666669100522995,
-      "focusedChannel": 3,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -519,10 +519,52 @@
               "RotZ": 0.5,
               "Spin": 0.49000000953674316,
               "Fast": 0.7099999964237211,
-              "Dens": 0.6099999997764826,
+              "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 1
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 18654,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16716801,
+        "parameters": {
+          "label": "SoundSpik",
+          "arm": false,
+          "enabled": false,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 18655,
+            "class": "com.symmetrylabs.slstudio.pattern.SoundSpikes",
+            "modulationColor": -65352,
+            "parameters": {
+              "label": "SoundSpikes",
+              "GAIN": 0.37000000290572643,
+              "HUEVAR": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -586,10 +628,10 @@
           "Band-1": 0.0,
           "Band-2": 0.0,
           "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
+          "Band-4": 0.08311737380206463,
+          "Band-5": 0.11614249098366092,
+          "Band-6": 0.14440836682098535,
+          "Band-7": 4.488372796495055E-4,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
@@ -607,7 +649,7 @@
         "modulationColor": -2424577,
         "parameters": {
           "label": "Audio Input",
-          "device": 5
+          "device": 1
         }
       },
       "output": {
