@@ -3,7 +3,6 @@ package com.symmetrylabs.slstudio.pixlites;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.mappings.*;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
-import com.symmetrylabs.slstudio.model.Slice;
 import com.symmetrylabs.slstudio.output.SLBypassOutputGroup;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXDatagramOutput;
@@ -36,8 +35,7 @@ public class Pixlite extends LXOutputGroup {
     }
 
     public final MappingGroup mappingGroup;
-        public final PixliteMapping mapping;
-    public Slice slice;
+    public final PixliteMapping mapping;
     public final String ipAddress;
     private LXDatagramOutput datagramOutput;
     private LXOutput mappingOutput;
@@ -45,12 +43,11 @@ public class Pixlite extends LXOutputGroup {
     public static final int MAPPING_COLORS_POINTS_PER_DATALINE = MAX_NUM_UNIVERSES_PER_DATALINE * MAX_NUM_POINTS_PER_UNIVERSE;
     public final int[] mappingColors = new int[NUM_DATALINES * MAPPING_COLORS_POINTS_PER_DATALINE];
 
-    public Pixlite(MappingGroup mappingGroup, PixliteMapping mapping, LX lx, Slice slice) {
+    public Pixlite(MappingGroup mappingGroup, PixliteMapping mapping, LX lx) {
         super(lx);
         this.mappingGroup = mappingGroup;
         this.mapping = mapping;
         this.ipAddress = mapping.ipAddress;
-        this.slice = slice;
 
         addChild(mappingOutput = new SLBypassOutputGroup(lx, mappingColors));
 
@@ -74,13 +71,6 @@ public class Pixlite extends LXOutputGroup {
                     10 * (datalineIndex + 1) + universe - 1));
             }
         }
-
-        if (slice == null) {
-            IllegalArgumentException e = new IllegalArgumentException("slice is null for " + ipAddress);
-            e.printStackTrace();
-            throw new IllegalArgumentException("slice is null for " + ipAddress);
-        }
-        if (slice.id == null) throw new IllegalArgumentException("slice.id is null for " + ipAddress);
 
         int datalineIndex = 0;
         for (DatalineMapping datalineMapping : mapping.getDatalineMappings()) {

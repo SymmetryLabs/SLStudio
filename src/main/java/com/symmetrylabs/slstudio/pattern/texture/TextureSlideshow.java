@@ -21,9 +21,9 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.pattern.CopySunsPattern;
+import com.symmetrylabs.slstudio.pattern.SLPattern;
 
-public abstract class TextureSlideshow extends CopySunsPattern {
+public abstract class TextureSlideshow extends SLPattern {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
     public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
     public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
@@ -94,7 +94,6 @@ public abstract class TextureSlideshow extends CopySunsPattern {
         offsetX.addListener(updateRastersListener);
         offsetY.addListener(updateRastersListener);
         enableInterp.addListener(updateRastersListener);
-        perSun.addListener(updateRastersListener);
 
         triggerUpdate();
     }

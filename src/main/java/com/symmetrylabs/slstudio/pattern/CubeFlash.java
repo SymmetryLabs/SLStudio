@@ -7,15 +7,14 @@ import java.util.function.Consumer;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.model.LXFixture;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.model.Sun;
-
+import com.symmetrylabs.slstudio.model.CubesModel;
 import static com.symmetrylabs.slstudio.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
-
-public class SunFlash extends SunsPattern {
+public class CubeFlash extends CubesPattern {
     private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
@@ -23,13 +22,14 @@ public class SunFlash extends SunsPattern {
     private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
 
     class Flash {
-        Sun c;
+        CubesModel.Cube cube;
         float value;
         float hue;
         boolean hasPeaked;
 
         Flash() {
-            c = model.getSuns().get(floor(random(model.getSuns().size())));
+            int randomIndex = floor(random(model.getCubes().size()));
+            cube = model.getCubes().get(randomIndex);
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
@@ -55,7 +55,7 @@ public class SunFlash extends SunsPattern {
     private float leftoverMs = 0;
     private List<Flash> flashes;
 
-    public SunFlash(LX lx) {
+    public CubeFlash(LX lx) {
         super(lx);
         addParameter(rateParameter);
         addParameter(attackParameter);
@@ -73,16 +73,14 @@ public class SunFlash extends SunsPattern {
             flashes.add(new Flash());
         }
 
-        for (LXPoint p : model.points) {
-            colors[p.index] = 0;
-        }
+        setColors(0);
 
         flashes.parallelStream().forEach(new Consumer<Flash>() {
             @Override
             public void accept(final Flash flash) {
-                int c = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-                for (LXPoint p : flash.c.points) {
-                    colors[p.index] = c;
+                int col = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+                for (LXPoint p : flash.cube.getPoints()) {
+                    colors[p.index] = col;
                 }
             }
         });

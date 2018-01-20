@@ -18,6 +18,8 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
@@ -33,7 +35,6 @@ public class FlockWave extends SLPatternWithMarkers {
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
     BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
     BooleanParameter everywhere = new BooleanParameter("everywhere");
-    BooleanParameter perSun = new BooleanParameter("perSun");
     CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
     CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
     CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
@@ -80,7 +81,6 @@ public class FlockWave extends SLPatternWithMarkers {
         addParameter(oscFollowers);
         addParameter(oscBlobs);
         addParameter(everywhere);
-        addParameter(perSun);
 
         addParameter(timeScale);
         addParameter(size);
@@ -386,7 +386,7 @@ public class FlockWave extends SLPatternWithMarkers {
         if (birds.size() > 0) {
             if (kernel.result == null || kernel.result.length != colors.length) {
                 kernel.numPoints = colors.length;
-                kernel.put(kernel.pointsXYZ = model.pointsXYZ);
+                kernel.put(kernel.pointsXYZ = ((SLModel)model).pointsXYZ);
                 kernel.result = new float[colors.length];
             }
 

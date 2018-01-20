@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.model;
+    package com.symmetrylabs.slstudio.model;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -22,19 +22,34 @@ public class SLModel extends LXModel {
 
     protected PointBatches pointBatches;
 
+    public float[] pointsXYZ;
+
     public SLModel() {
     }
 
     public SLModel(List<LXPoint> points) {
         super(points);
+        setupPointsArray();
     }
 
     public SLModel(LXFixture fixture) {
         super(fixture);
+        setupPointsArray();
     }
 
     public SLModel(LXFixture[] fixtures) {
         super(fixtures);
+        setupPointsArray();
+    }
+
+    private void setupPointsArray() {
+        this.pointsXYZ = new float[this.points.length * 3];
+        for (int i = 0; i < this.points.length; i++) {
+            LXPoint point = this.points[i];
+            this.pointsXYZ[3 * i] = point.x;
+            this.pointsXYZ[3 * i + 1] = point.y;
+            this.pointsXYZ[3 * i + 2] = point.z;
+        }
     }
 
     protected ModelIndex createModelIndex(boolean flattenZ) {

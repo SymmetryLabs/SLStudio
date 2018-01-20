@@ -21,7 +21,7 @@ import com.symmetrylabs.slstudio.util.NetworkUtils;
 import com.symmetrylabs.slstudio.util.CubesMappingMode;
 
 public class SLController extends LXOutput {
-    public final String cubeId;
+    public final String id;
     public final InetAddress host;
     public final boolean isBroadcast;
     public final NetworkDevice networkDevice;
@@ -49,28 +49,28 @@ public class SLController extends LXOutput {
     private LX lx;
     private CubesMappingMode mappingMode;
 
-    public SLController(LX lx, NetworkDevice device, String cubeId) {
-        this(lx, device, device.ipAddress, cubeId, false);
+    public SLController(LX lx, NetworkDevice device, String id) {
+        this(lx, device, device.ipAddress, id, false);
     }
 
-    public SLController(LX lx, String _host, String _cubeId) {
-        this(lx, _host, _cubeId, false);
+    public SLController(LX lx, String _host, String _id) {
+        this(lx, _host, _id, false);
     }
 
     public SLController(LX lx, String _host) {
         this(lx, _host, "", true);
     }
 
-    private SLController(LX lx, String host, String cubeId, boolean isBroadcast) {
-        this(lx, null, NetworkUtils.ipAddrToInetAddr(host), cubeId, isBroadcast);
+    private SLController(LX lx, String host, String id, boolean isBroadcast) {
+        this(lx, null, NetworkUtils.ipAddrToInetAddr(host), id, isBroadcast);
     }
 
-    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String cubeId, boolean isBroadcast) {
+    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, boolean isBroadcast) {
         super(lx);
 
         this.networkDevice = networkDevice;
         this.host = host;
-        this.cubeId = cubeId;
+        this.id = id;
         this.isBroadcast = isBroadcast;
         this.lx = lx;
 
@@ -146,7 +146,7 @@ public class SLController extends LXOutput {
             cube = cubesModel.getCubes().get(0);
         } else {
             for (CubesModel.Cube c : cubesModel.getCubes()) {
-                if (c.id != null && c.id.equals(cubeId)) {
+                if (c.id != null && c.id.equals(id)) {
                     cube = c;
                     break;
                 }
@@ -182,7 +182,7 @@ public class SLController extends LXOutput {
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
-        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(cubeId)) {
+        if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
             if (mappingMode.inUnMappedMode()) {
                 if (mappingMode.inDisplayAllMode()) {
                     int col = mappingMode.getUnMappedColor();
@@ -190,7 +190,7 @@ public class SLController extends LXOutput {
                     for (int i = 0; i < numPixels; i++)
                         setPixel(i, col);
                 } else {
-                    if (mappingMode.isSelectedUnMappedFixture(cubeId)) {
+                    if (mappingMode.isSelectedUnMappedFixture(id)) {
                         int col = mappingMode.getUnMappedColor();
 
                         for (int i = 0; i < numPixels; i++)

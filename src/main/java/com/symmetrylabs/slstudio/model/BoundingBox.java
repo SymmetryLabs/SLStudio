@@ -2,7 +2,6 @@ package com.symmetrylabs.slstudio.model;
 
 import processing.core.PVector;
 
-
 public class BoundingBox {
     public final PVector origin;
     public final PVector size;

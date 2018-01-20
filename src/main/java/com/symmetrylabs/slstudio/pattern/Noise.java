@@ -13,31 +13,28 @@ import com.symmetrylabs.slstudio.util.NoiseUtils;
 import com.symmetrylabs.slstudio.util.MathUtils;
 
 public class Noise extends DPat {
-    int CurAnim, iSymm;
-    int XSym = 1, YSym = 2, RadSym = 3;
-    float zTime, zTheta = 0, zSin, zCos, rtime, ttime;
-    CompoundParameter pSpeed, pDensity, pSharp;
-    DiscreteParameter pChoose, pSymm;
-    int _ND = 4;
-    NDat N[] = new NDat[_ND];
+    private int currModeIndex, iSymm;
+    public final CompoundParameter speed = new CompoundParameter("Fast", 0.55, -2, 2);
+    public final CompoundParameter density = new CompoundParameter("Dens", 0.6);
+    public final CompoundParameter sharp = new CompoundParameter("Shrp", 0);
+    public final DiscreteParameter mode = new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});
+    public final DiscreteParameter symm = new DiscreteParameter("Symm", new String[]{"None", "X", "Y", "Rad"});
+
+    private int xSym = 1, ySym = 2, radSym = 3;
+    private float zTime, zTheta = 0, zSin, zCos, rtime, ttime;
+    private NDat n[];
+    private int NUM_NDAT = 4;
 
     public Noise(LX lx) {
         super(lx);
-        pSpeed = new CompoundParameter("Fast", .55, -2, 2);
-        addParameter(pSpeed);
-        pDensity = addParam("Dens", .6);
-        pSharp = addParam("Shrp", 0);
-        pSymm = new DiscreteParameter("Symm", new String[]{"None", "X", "Y", "Rad"});
-        pChoose =
-            new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});
-        pChoose.setValue(5);
-        addParameter(pSymm);
-        addParameter(pChoose);
-        //addNonKnobParameter(pSymm);
-        //addNonKnobParameter(pChoose);
-        //addSingleParameterUIRow(pChoose);
-        //addSingleParameterUIRow(pSymm);
-        for (int i = 0; i < _ND; i++) N[i] = new NDat();
+        addParameter(speed);
+        addParameter(symm);
+        addParameter(mode);
+        mode.setValue(5);
+
+        for (int i = 0; i < NUM_NDAT; i++) {
+            this.n[i] = new NDat();
+        }
     }
 
     public void onActive() {
@@ -49,103 +46,111 @@ public class Noise extends DPat {
 
     @Override
     protected void StartRun(double deltaMs) {
-        zTime += deltaMs * (1 * val(pSpeed) - .50f) * .002f;
-        zTheta += deltaMs * (spin() - .5f) * .01f;
+        zTime += deltaMs * (1 * val(speed) - 0.50f) * 0.002f;
+        zTheta += deltaMs * (spin() - 0.5f) * 0.01f;
         rtime += deltaMs;
-        iSymm = pSymm.getValuei();
+        iSymm = symm.getValuei();
         zSin = MathUtils.sin(zTheta);
         zCos = MathUtils.cos(zTheta);
 
-        if (pChoose.getValuei() != CurAnim) {
-            CurAnim = pChoose.getValuei();
+        if (mode.getValuei() != currModeIndex) {
+            currModeIndex = mode.getValuei();
             ttime = rtime;
             pSpin.reset();
             zTheta = 0;
-            pDensity.reset();
-            pSpeed.reset();
-            for (int i = 0; i < _ND; i++) {
-                N[i].isActive = false;
+            density.reset();
+            speed.reset();
+
+            for (int i = 0; i < n.length; i++) {
+                n[i].isActive = false;
             }
 
-            switch (CurAnim) {
-                //               hue xz  yz  zz den mph angle
-                case 0:
-                    N[0].set(0, 75, 75, 150, 45, 3, 0);
-                    N[1].set(20, 25, 50, 50, 25, 1, 0);
-                    N[2].set(80, 25, 50, 50, 15, 2, 0);
-                    pSharp.setValue(1);
-                    break;  // drip
-                case 1:
-                    N[0].set(0, 100, 100, 200, 45, 3, 180);
-                    pSharp.setValue(0);
-                    break;  // clouds
-                case 2:
-                    N[0].set(0, 2, 400, 2, 20, 3, 0);
-                    pSharp.setValue(.5);
-                    break;  // rain
-                case 3:
-                    N[0].set(40, 100, 100, 200, 10, 1, 180);
-                    N[1].set(0, 100, 100, 200, 10, 5, 180);
-                    pSharp.setValue(0);
-                    break;  // fire 1
-                case 4:
-                    N[0].set(0, 40, 40, 40, 15, 2.5f, 180);
-                    N[1].set(20, 40, 40, 40, 15, 4, 0);
-                    N[2].set(40, 40, 40, 40, 15, 2, 90);
-                    N[3].set(60, 40, 40, 40, 15, 3, -90);
-                    pSharp.setValue(.5);
-                    break; // machine
-                case 5:
-                    N[0].set(0, 400, 100, 2, 15, 3, 90);
-                    N[1].set(20, 400, 100, 2, 15, 2.5f, 0);
-                    N[2].set(40, 100, 100, 2, 15, 2, 180);
-                    N[3].set(60, 100, 100, 2, 15, 1.5f, 270);
-                    pSharp.setValue(.5);
-                    break; // spark
+            switch (currModeIndex) {
+                // hue xz  yz  zz den mph angle
+
+                case 0: // drip
+                    n[0].set(0, 75, 75, 150, 45, 3, 0);
+                    n[1].set(20, 25, 50, 50, 25, 1, 0);
+                    n[2].set(80, 25, 50, 50, 15, 2, 0);
+                    sharp.setValue(1);
+                    break;
+
+                case 1: // clouds
+                    n[0].set(0, 100, 100, 200, 45, 3, 180);
+                    sharp.setValue(0);
+                    break;
+
+                case 2: // rain
+                    n[0].set(0, 2, 400, 2, 20, 3, 0);
+                    sharp.setValue(.5);
+                    break;
+
+                case 3: // fire
+                    n[0].set(40, 100, 100, 200, 10, 1, 180);
+                    n[1].set(0, 100, 100, 200, 10, 5, 180);
+                    sharp.setValue(0);
+                    break;
+
+                case 4: // machine
+                    n[0].set(0, 40, 40, 40, 15, 2.5f, 180);
+                    n[1].set(20, 40, 40, 40, 15, 4, 0);
+                    n[2].set(40, 40, 40, 40, 15, 2, 90);
+                    n[3].set(60, 40, 40, 40, 15, 3, -90);
+                    sharp.setValue(.5);
+                    break;
+
+                case 5: // spark
+                    n[0].set(0, 400, 100, 2, 15, 3, 90);
+                    n[1].set(20, 400, 100, 2, 15, 2.5f, 0);
+                    n[2].set(40, 100, 100, 2, 15, 2, 180);
+                    n[3].set(60, 100, 100, 2, 15, 1.5f, 270);
+                    sharp.setValue(0.5);
+                    break;
             }
         }
 
-        for (int i = 0; i < _ND; i++)
-            if (N[i].Active()) {
-                N[i].sinAngle = MathUtils.sin(MathUtils.radians(N[i].angle));
-                N[i].cosAngle = MathUtils.cos(MathUtils.radians(N[i].angle));
+        for (int i = 0; i < n.length; i++) {
+            if (n[i].Active()) {
+                n[i].sinAngle = MathUtils.sin(MathUtils.radians(n[i].angle));
+                n[i].cosAngle = MathUtils.cos(MathUtils.radians(n[i].angle));
             }
+        }
     }
 
     @Override
     public int CalcPoint(PVector p) {
-        int c = 0;
+        int col = 0;
         rotateZ(p, mCtr, zSin, zCos);
         //rotateY(p, mCtr, ySin, yCos);
         //rotateX(p, mCtr, xSin, xCos);
-        if (CurAnim == 6 || CurAnim == 7) {
+        if (currModeIndex == 6 || currModeIndex == 7) {
             setNorm(p);
 
-            float b = MathUtils.constrain(1 - 50 * (1 - val(pDensity)) * MathUtils.abs(p.y - MathUtils.sin(zTime * 10 + p.x * (300)) * .5f - .5f), 0, 1);
+            float bri = MathUtils.constrain(1 - 50 * (1 - val(density)) * MathUtils.abs(p.y - MathUtils.sin(zTime * 10 + p.x * (300)) * .5f - .5f), 0, 1);
 
-            if (CurAnim == 7) {
-                b += MathUtils.constrain(1 - 50 * (1 - val(pDensity)) * MathUtils.abs(p.x - MathUtils.sin(zTime * 10 + p.y * (300)) * .5f - .5f), 0, 1);
+            if (currModeIndex == 7) {
+                bri += MathUtils.constrain(1 - 50 * (1 - val(density)) * MathUtils.abs(p.x - MathUtils.sin(zTime * 10 + p.y * (300)) * .5f - .5f), 0, 1);
             }
 
-            return lx.hsb(lxh(), 100, 100 * b);
+            return lx.hsb(lxh(), 100, 100 * bri);
         }
 
-        if (iSymm == XSym && p.x > mMax.x / 2) p.x = mMax.x - p.x;
-        if (iSymm == YSym && p.y > mMax.y / 2) p.y = mMax.y - p.y;
+        if (iSymm == xSym && p.x > mMax.x / 2) p.x = mMax.x - p.x;
+        if (iSymm == ySym && p.y > mMax.y / 2) p.y = mMax.y - p.y;
 
-        for (int i = 0; i < _ND; i++)
-            if (N[i].Active()) {
-                NDat n = N[i];
-                float zx = zTime * n.speed * n.sinAngle,
-                    zy = zTime * n.speed * n.cosAngle;
+        for (int i = 0; i < n.length; i++)
+            if (n[i].Active()) {
+                NDat nDat = n[i];
+                float zx = zTime * nDat.speed * nDat.sinAngle;
+                float zy = zTime * nDat.speed * nDat.cosAngle;
 
-                float b = (iSymm == RadSym ? (zTime * n.speed + n.xoff - p.dist(mCtr) / n.xz)
-                    : NoiseUtils.noise(p.x / n.xz + zx + n.xoff, p.y / n.yz + zy + n.yoff, p.z / n.zz + n.zoff))
-                    * 1.8f;
+                float bri = (iSymm == radSym ? (zTime * nDat.speed + nDat.xoff - p.dist(mCtr) / nDat.xz)
+                    : NoiseUtils.noise(p.x / nDat.xz + zx + nDat.xoff, p.y / nDat.yz + zy + nDat.yoff, p.z / nDat.zz + nDat.zoff)) * 1.8f;
 
-                b += n.den / 100 - .4 + val(pDensity) - 1;
-                c = PImage.blendColor(c, lx.hsb(lxh() + n.hue, 100, c1c(b)), ADD);
+                bri += nDat.den / 100 - 0.4 + val(density) - 1;
+                col = PImage.blendColor(col, lx.hsb(lxh() + nDat.hue, 100, c1c(bri)), ADD);
             }
-        return c;
+
+        return col;
     }
 }

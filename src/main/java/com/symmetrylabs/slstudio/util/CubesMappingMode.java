@@ -88,13 +88,13 @@ public class CubesMappingMode {
         selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
 
-        SLStudio.applet.controllers.addListener(new ListListener<SLController>() {
+        SLStudio.applet.slControllers.addListener(new ListListener<SLController>() {
             public void itemAdded(final int index, final SLController c) {
-                if (isFixtureMapped(c.cubeId)) {
-                    fixturesMappedButNotOnNetwork.remove(c.cubeId);
-                    fixturesMappedAndOnTheNetwork.add(c.cubeId);
+                if (isFixtureMapped(c.id)) {
+                    fixturesMappedButNotOnNetwork.remove(c.id);
+                    fixturesMappedAndOnTheNetwork.add(c.id);
                 } else {
-                    fixturesOnNetworkButNotMapped.add(c.cubeId);
+                    fixturesOnNetworkButNotMapped.add(c.id);
                 }
 
                 selectedMappedFixture.setOptions(fixturesMappedAndOnTheNetwork.isEmpty() ? emptyOptions

@@ -14,9 +14,6 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.model.SunsModel;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
 import com.symmetrylabs.slstudio.mappings.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping;
@@ -45,8 +42,6 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 public class SLStudio extends PApplet {
 
     public static SLStudio applet;
-
-    public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
     public SLStudioLX lx;
     private LXModel model;
     private Mappings mappings;
@@ -54,7 +49,7 @@ public class SLStudio extends PApplet {
     private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
     public Pixlite[] pixlites;
-    public ListenableList<SLController> controllers;
+    public ListenableList<SLController> slControllers;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
@@ -84,24 +79,9 @@ public class SLStudio extends PApplet {
         long setupStart = System.nanoTime();
         applet = this;
 
-        mappings = FultonStreetLayout.loadMappings();
-        //model = FultonStreetLayout.buildModel();
         model = CubesLayout.buildModel();
 
         println("-- Model ----");
-
-        if (model instanceof SunsModel) {
-            println("# of suns: " + ((SunsModel)model).getSuns().size());
-            println("# of slices: " + ((SunsModel)model).getSlices().size());
-            println("# of strips: " + ((SunsModel)model).getStrips().size());
-        }
-        else if (model instanceof CubesModel) {
-            println("# of towers: " + ((CubesModel)model).getTowers().size());
-            println("# of cubes: " + ((CubesModel)model).getCubes().size());
-            println("# of faces: " + ((CubesModel)model).getFaces().size());
-            println("# of strips: " + ((CubesModel)model).getStrips().size());
-        }
-
         println("# of points: " + model.points.length);
         println("model.xMin: " + model.xMin);
         println("model.xMax: " + model.xMax);
@@ -127,7 +107,7 @@ public class SLStudio extends PApplet {
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
 
-                controllers = CubesLayout.setupCubesOutputs(lx);
+                slControllers = CubesLayout.setupCubesOutputs(lx);
                 pixlites = setupPixlites();
 
                 apc40Listener = new APC40Listener(lx);
@@ -406,32 +386,7 @@ public class SLStudio extends PApplet {
     }
 
     private Pixlite[] setupPixlites() {
-
-        if (!(model instanceof SunsModel))
-            return new Pixlite[0];
-
-        List<Pixlite> pixlites = new ArrayList<>();
-
-        for (String outputId : mappings.getOutputIds()) {
-            PixliteMapping pixliteMapping = mappings.getOutputById(outputId, PixliteMapping.class);
-            if (pixliteMapping != null) {
-                pixlites.add(createPixlite(pixliteMapping, outputId));
-            }
-        }
-
-        this.mappingColorsPerPixlite = new HashMap<>();
-        for (Pixlite pixlite : pixlites) {
-            this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
-        }
-
-        return pixlites.toArray(new Pixlite[0]);
-    }
-
-    private Pixlite createPixlite(PixliteMapping pixliteMapping, String sliceId) {
-        SunsModel sunsModel = (SunsModel)model;
-        Pixlite pixlite = new Pixlite(mappings, pixliteMapping, lx, sunsModel.getSliceById(sliceId));
-        lx.addOutput(pixlite);
-        return pixlite;
+        return new Pixlite[0]; // todo
     }
 
     public final static int CHAN_WIDTH = 200;

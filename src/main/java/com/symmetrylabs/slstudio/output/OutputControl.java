@@ -33,7 +33,7 @@ public final class OutputControl extends LXComponent {
                 pixlite.enabled.setValue(isEnabled);
             }
 
-            for (SLController c : SLStudio.applet.controllers) {
+            for (SLController c : SLStudio.applet.slControllers) {
                 c.enabled.setValue(isEnabled);
             }
         });
