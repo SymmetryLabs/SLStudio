@@ -163,6 +163,13 @@ public class SLStudio extends PApplet {
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
     }
 
+    @Override
+    public void draw() {
+        background(lx.ui.theme.getDarkBackgroundColor());
+        DrawHelper.runAll();
+        dispatcher.draw();
+    }
+
     void loadPalettes(PaletteLibrary pl) {
     /* Images loaded remotely from the Internet */
     /*
@@ -394,12 +401,6 @@ public class SLStudio extends PApplet {
             new LinePaletteExtractor(0, 1, 0.6, 0).getPalette(il.get(
                 "maxpixel-cc0-Elgol-Coast-Scotland-Stones-Lake-Isle-Of-Skye-540123.jpg"))
         );
-    }
-
-    public void draw() {
-        background(lx.ui.theme.getDarkBackgroundColor());
-        DrawHelper.runAll();
-        dispatcher.draw();
     }
 
     private Pixlite[] setupPixlites() {
