@@ -24,7 +24,7 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-mainClassName = "com.symmetrylabs.slstudio.SLStudio"
+mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
 
 run {
 	jvmArgs '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.awt.headless=true'
@@ -48,7 +48,10 @@ repositories {
 
 dependencies {
 	// https://mvnrepository.com/artifact/org.processing/core
-	compile group: 'org.processing', name: 'core', version: '3.3.6'
+	compile(group: 'org.processing', name: 'core', version: '3.3.6') {
+		exclude group: 'org.jogamp.gluegen'
+		exclude group: 'org.jogamp.jogl'
+	}
 
 	// https://mvnrepository.com/artifact/com.harium/kdtree
 	compile group: 'com.harium', name: 'kdtree', version: '1.0.0'
@@ -78,31 +81,15 @@ dependencies {
 	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
 
 	// https://github.com/SymmetryLabs/aparapi
-	//compile 'com.github.SymmetryLabs:aparapi:b6fffad'
+	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
 
-	compile files('libs/gluegen-rt-natives-linux-aarch64.jar')
-	compile files('libs/gluegen-rt-natives-linux-amd64.jar')
-	compile files('libs/gluegen-rt-natives-linux-armv6hf.jar')
-	compile files('libs/gluegen-rt-natives-linux-i586.jar')
-	compile files('libs/gluegen-rt-natives-macosx-universal.jar')
-	compile files('libs/gluegen-rt-natives-windows-amd64.jar')
-	compile files('libs/gluegen-rt-natives-windows-i586.jar')
-	compile files('libs/gluegen-rt.jar')
-	compile files('libs/jogl-all-natives-linux-aarch64.jar')
-	compile files('libs/jogl-all-natives-linux-amd64.jar')
-	compile files('libs/jogl-all-natives-linux-armv6hf.jar')
-	compile files('libs/jogl-all-natives-linux-i586.jar')
-	compile files('libs/jogl-all-natives-macosx-universal.jar')
-	compile files('libs/jogl-all-natives-windows-amd64.jar')
-	compile files('libs/jogl-all-natives-windows-i586.jar')
-	compile files('libs/jogl-all.jar')
+	compile files('libs/jogamp-fat.jar')
 
 	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
 	compile files('libs/P3LX.jar')
 }
 
 jar {
-	exclude("**/*.swp")
-	exclude("**/*.swo")
+	exclude('**/*.swp')
+	exclude('**/*.swo')
 }
-

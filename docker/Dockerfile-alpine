@@ -1,0 +1,36 @@
+FROM openjdk:8-jre-alpine
+
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/main" > /etc/apk/repositories
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/community" >> /etc/apk/repositories
+RUN echo "http://dl-cdn.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories
+RUN apk update
+RUN apk upgrade
+RUN apk add xvfb xhost supervisor
+RUN apk add x11vnc
+RUN apk add ttf-dejavu fontconfig
+RUN apk add libxcursor
+RUN apk add mesa-glapi mesa mesa-gl mesa-gles mesa-egl mesa-glapi mesa-osmesa mesa-dri-swrast mesa-dri-intel
+
+RUN rm -rf /tmp/* /var/cache/apk/*
+
+#RUN rm $JAVA_HOME/lib/accessibility.properties
+
+RUN addgroup symmetry
+RUN adduser -G symmetry -s /bin/sh -D symmetry
+RUN echo "symmetry:sugarcubes" | /usr/sbin/chpasswd
+
+ADD supervisord.conf /etc/supervisord.conf
+
+ADD SLStudio*.tar /home/symmetry/
+RUN mv /home/symmetry/SLStudio* /home/symmetry/SLStudio
+
+ADD data /home/symmetry/SLStudio/data
+ADD projects /home/symmetry/SLStudio/projects
+RUN echo "projects/default.lxp" > /home/symmetry/SLStudio/.lxproject
+RUN chown -R symmetry:symmetry /home/symmetry/SLStudio
+
+#USER symmetry
+WORKDIR /home/symmetry/SLStudio
+EXPOSE 5900
+ENV DISPLAY :1
+CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

@@ -11,6 +11,7 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.model.CubesModel;
@@ -47,7 +48,6 @@ public class SLStudio extends PApplet {
     public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
     public SLStudioLX lx;
     private Dispatcher dispatcher;
-    private LXModel model;
     private Mappings mappings;
     public OutputControl outputControl;
     public Pixlite[] pixlites;
@@ -84,8 +84,8 @@ public class SLStudio extends PApplet {
         Utils.setSketchPath(sketchPath());
 
         mappings = FultonStreetLayout.loadMappings();
-        //model = FultonStreetLayout.buildModel();
-        model = CubesLayout.buildModel();
+        //LXModel model = FultonStreetLayout.buildModel();
+        LXModel model = CubesLayout.buildModel();
 
         println("-- Model ----");
 
@@ -124,6 +124,8 @@ public class SLStudio extends PApplet {
                 SLStudio.this.controllers = CubesLayout.setupCubesOutputs(lx);
                 SLStudio.this.pixlites = setupPixlites();
 
+                lx.addOutput(new OPCOutput(lx, "localhost", 11122));
+
                 SLStudio.this.outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
 
@@ -148,7 +150,7 @@ public class SLStudio extends PApplet {
             @Override
             protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
                 ui.leftPane.audio.setVisible(true);
-                ui.preview.setCenter(model.cx, model.cy, model.cz);
+                ui.preview.setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
 
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
@@ -408,7 +410,7 @@ public class SLStudio extends PApplet {
 
     private Pixlite[] setupPixlites() {
 
-        if (!(model instanceof SunsModel))
+        if (!(lx.model instanceof SunsModel))
             return new Pixlite[0];
 
         List<Pixlite> pixlites = new ArrayList<>();
@@ -429,7 +431,7 @@ public class SLStudio extends PApplet {
     }
 
     private Pixlite createPixlite(PixliteMapping pixliteMapping, String sliceId) {
-        SunsModel sunsModel = (SunsModel)model;
+        SunsModel sunsModel = (SunsModel)lx.model;
         Pixlite pixlite = new Pixlite(mappings, pixliteMapping, lx, sunsModel.getSliceById(sliceId));
         lx.addOutput(pixlite);
         return pixlite;
