@@ -21,7 +21,7 @@ public class ImageLibrary {
 
     public BufferedImage get(String filename) {
         try {
-            InputStream s = getClass().getResourceAsStream(baseDir + "/" + filename);
+            InputStream s = getClass().getResourceAsStream(baseDir + filename);
             if (s != null)
                 return ImageIO.read(s);
         } catch (IOException e) {

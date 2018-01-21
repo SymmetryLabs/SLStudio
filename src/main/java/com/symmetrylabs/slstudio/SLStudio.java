@@ -35,6 +35,7 @@ import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.slstudio.util.Utils;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
@@ -79,6 +80,8 @@ public class SLStudio extends PApplet {
     public void setup() {
         long setupStart = System.nanoTime();
         applet = this;
+
+        Utils.setSketchPath(sketchPath());
 
         mappings = FultonStreetLayout.loadMappings();
         //model = FultonStreetLayout.buildModel();
