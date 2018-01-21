@@ -1,18 +1,25 @@
-FROM openjdk:8-jre-alpine
+FROM openjdk:8-jre-slim
 
-WORKDIR /opt/SymmetryLabs/SLStudio-1.0
+RUN DEBIAN_FRONTEND=noninteractive apt-get update -qq
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y x11vnc xvfb fonts-dejavu fontconfig supervisor
+RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libxcursor1
+RUN DEBIAN_FRONTEND=noninteractive apt-get clean
 
-ADD SLStudio*.tar /opt/SymmetryLabs/
-RUN mv /opt/SymmetryLabs/SLStudio* /opt/SymmetryLabs/SLStudio
+RUN rm $JAVA_HOME/lib/accessibility.properties
 
-RUN echo "http://dl-3.alpinelinux.org/alpine/edge/testing" >> /etc/apk/repositories \
-	&& apk --update --upgrade add xvfb xhost supervisor
+RUN useradd symmetry -p sugarcubes
 
-RUN useradd symmetry
-RUN rm -rf /tmp/* /var/cache/apk/*
+ADD supervisord.conf /etc/supervisord.conf
+
+ADD SLStudio*.tar /home/symmetry/
+RUN mv /home/symmetry/SLStudio* /home/symmetry/SLStudio
+
+ADD data /home/symmetry/SLStudio/data
+ADD projects /home/symmetry/SLStudio/projects
+RUN echo "projects/default.lxp" > /home/symmetry/SLStudio/.lxproject
+RUN chown -R symmetry:symmetry /home/symmetry/SLStudio
 
 USER symmetry
-ENV HOME /home/symmetry
-ENV DISPLAY :1
-CMD ["/opt/SymmetryLabs/SLStudio/bin/SLStudio"]
+WORKDIR /home/symmetry/SLStudio
+EXPOSE 5900
 CMD ["/usr/bin/supervisord", "-c", "/etc/supervisord.conf"]

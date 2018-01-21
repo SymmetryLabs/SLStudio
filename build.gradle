@@ -33,7 +33,7 @@ run {
 docker {
 	name project.name.toLowerCase() + ':latest'
 	tags version
-	files tasks.distTar.outputs
+	files tasks.distTar.outputs, project.files('docker'), project.files('.')
 	dockerfile project.file('docker/Dockerfile')
 }
 
@@ -78,7 +78,7 @@ dependencies {
 	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
 
 	// https://github.com/SymmetryLabs/aparapi
-	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
+	//compile 'com.github.SymmetryLabs:aparapi:b6fffad'
 
 	compile files('libs/gluegen-rt-natives-linux-aarch64.jar')
 	compile files('libs/gluegen-rt-natives-linux-amd64.jar')
@@ -88,7 +88,6 @@ dependencies {
 	compile files('libs/gluegen-rt-natives-windows-amd64.jar')
 	compile files('libs/gluegen-rt-natives-windows-i586.jar')
 	compile files('libs/gluegen-rt.jar')
-	compile files('libs/jogl-all-2.3.2-natives-linux-amd64.jar')
 	compile files('libs/jogl-all-natives-linux-aarch64.jar')
 	compile files('libs/jogl-all-natives-linux-amd64.jar')
 	compile files('libs/jogl-all-natives-linux-armv6hf.jar')
