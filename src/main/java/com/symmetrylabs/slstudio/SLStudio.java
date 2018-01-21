@@ -336,7 +336,7 @@ public class SLStudio extends PApplet {
             0x623e38, 0x643556, 0x684c57, 0x705441, 0x584136, 0x6a4762, 0x834349
         }));
 
-        ImageLibrary il = new ImageLibrary(applet.dataPath("images"));
+        ImageLibrary il = new ImageLibrary("images");
         PaletteExtractor horiz = new LinePaletteExtractor(0.5);
         PaletteExtractor vert = new LinePaletteExtractor(0.5, 1, 0.5, 0);
 

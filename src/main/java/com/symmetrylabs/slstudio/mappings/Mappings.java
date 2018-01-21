@@ -45,6 +45,7 @@ public class Mappings extends MappingGroup {
                         .create();
         }
 
+        /*
         public static Mappings loadMappingData(Environment environment) {
                 try (FileReader reader = new FileReader(Utils.sketchFile(environment.getMappingsFilename()))) {
                         return gson.fromJson(reader, Mappings.class);
@@ -65,6 +66,7 @@ public class Mappings extends MappingGroup {
                         e.printStackTrace();
                 }
         }
+        */
 
         @Expose private Map<String, OutputMapping> outputs;
 

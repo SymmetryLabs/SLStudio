@@ -1266,8 +1266,6 @@ public final class Utils {
 
     static private final long millisOffset = System.currentTimeMillis();
 
-    static String sketchPath;
-
     static public int millis() {
         return (int) (System.currentTimeMillis() - millisOffset);
     }
@@ -1317,11 +1315,6 @@ public final class Utils {
 
     public static InputStream createInputRaw(String filename) {
         if (filename == null) return null;
-
-        if (sketchPath == null) {
-            System.err.println("The sketch path is not set.");
-            throw new RuntimeException("Files must be loaded inside setup() or after it has been called.");
-        }
 
         if (filename.length() == 0) {
             // an error will be called by the parent function
@@ -1374,15 +1367,11 @@ public final class Utils {
         try {
             // First see if it's in a data folder. This may fail by throwing
             // a SecurityException. If so, this whole block will be skipped.
-            File file = new File(dataPath(filename));
-            if (!file.exists()) {
-                // next see if it's just in the sketch folder
-                file = sketchFile(filename);
-            }
+            File file = new File(filename);
 
-            if (file.isDirectory()) {
+            if (file.isDirectory())
                 return null;
-            }
+
             if (file.exists()) {
                 try {
                     // handle case sensitivity check
@@ -1406,7 +1395,8 @@ public final class Utils {
 
             // if this file is ok, may as well just load it
             stream = new FileInputStream(file);
-            if (stream != null) return stream;
+            if (stream != null)
+                return stream;
 
             // have to break these out because a general Exception might
             // catch the RuntimeException being thrown above
@@ -1450,16 +1440,10 @@ public final class Utils {
             // an application, or as a signed applet
             try {  // first try to catch any security exceptions
                 try {
-                    stream = new FileInputStream(dataPath(filename));
+                    stream = new FileInputStream(filename);
                     if (stream != null) return stream;
                 } catch (IOException e2) {
                 }
-
-                try {
-                    stream = new FileInputStream(sketchPath(filename));
-                    if (stream != null) return stream;
-                } catch (Exception e) {
-                }  // ignored
 
                 try {
                     stream = new FileInputStream(filename);
@@ -1480,71 +1464,16 @@ public final class Utils {
 
     //////////////////////////////////////////////////////////////
 
-    public static String sketchPath() {
-        return sketchPath;
-    }
-
-    public static String sketchPath(String where) {
-        if (sketchPath() == null) {
-            return where;
-        }
-        // isAbsolute() could throw an access exception, but so will writing
-        // to the local disk using the sketch path, so this is safe here.
-        // for 0120, added a try/catch anyways.
-        try {
-            if (new File(where).isAbsolute()) return where;
-        } catch (Exception e) {
-        }
-
-        return sketchPath() + File.separator + where;
-    }
-
-    public static File sketchFile(String where) {
-        return new File(sketchPath(where));
-    }
-
+    // TODO: configure save dir
     public static String savePath(String where) {
         if (where == null) return null;
-        String filename = sketchPath(where);
+        String filename = where;
         PApplet.createPath(filename);
         return filename;
     }
 
     public static File saveFile(String where) {
         return new File(savePath(where));
-    }
-
-    public static String dataPath(String where) {
-        return dataFile(where).getAbsolutePath();
-    }
-
-    public static File dataFile(String where) {
-        // isAbsolute() could throw an access exception, but so will writing
-        // to the local disk using the sketch path, so this is safe here.
-        File why = new File(where);
-        if (why.isAbsolute()) return why;
-
-        URL jarURL = Utils.class.getProtectionDomain().getCodeSource().getLocation();
-        // Decode URL
-        String jarPath;
-        try {
-            jarPath = jarURL.toURI().getPath();
-        } catch (URISyntaxException e) {
-            e.printStackTrace();
-            return null;
-        }
-        if (jarPath.contains("Contents/Java/")) {
-            File containingFolder = new File(jarPath).getParentFile();
-            File dataFolder = new File(containingFolder, "data");
-            return new File(dataFolder, where);
-        }
-        // Windows, Linux, or when not using a Mac OS X .app file
-        File workingDirItem =
-            new File(sketchPath + File.separator + "data" + File.separator + where);
-//    if (workingDirItem.exists()) {
-        return workingDirItem;
-//    }
-//    // In some cases, the current working directory won't be set properly.
     }
 
     //////////////////////////////////////////////////////////////

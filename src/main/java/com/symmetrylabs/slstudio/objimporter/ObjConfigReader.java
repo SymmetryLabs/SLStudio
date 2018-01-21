@@ -1,10 +1,10 @@
 package com.symmetrylabs.slstudio.objimporter;
 
 import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.InputStreamReader;
 import java.io.IOException;
 
+import com.symmetrylabs.slstudio.util.Utils;
 
 public class ObjConfigReader {
 
@@ -20,8 +20,8 @@ public class ObjConfigReader {
         ObjConfig config = new ObjConfig();
 
         try {
-            File file = new File(path + "/" + CONFIG_FILENAME);
-            BufferedReader bufferedReader = new BufferedReader(new FileReader(file));
+            BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(
+                    Utils.createInput(path + "/" + CONFIG_FILENAME)));
 
             String line;
             while ((line = bufferedReader.readLine()) != null) {

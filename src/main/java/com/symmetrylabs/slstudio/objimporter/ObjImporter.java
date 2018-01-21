@@ -7,7 +7,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.symmetrylabs.slstudio.util.Utils.sketchPath;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 
@@ -23,7 +22,7 @@ public class ObjImporter {
     private final List<LXModel> models = new ArrayList<LXModel>();
 
     public ObjImporter(String path, LXTransform transform) {
-        this.path = sketchPath("") + path;
+        this.path = path;
         this.configReader = new ObjConfigReader(this.path);
         this.config = configReader.readConfig("global");
 
