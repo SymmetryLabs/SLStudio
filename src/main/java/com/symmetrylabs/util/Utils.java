@@ -1265,7 +1265,11 @@ public final class Utils {
 
     static private final long millisOffset = System.currentTimeMillis();
 
-    static String sketchPath;
+    private static String sketchPath;
+
+    public static void setSketchPath(String newSketchPath) {
+        sketchPath = newSketchPath;
+    }
 
     static public int millis() {
         return (int) (System.currentTimeMillis() - millisOffset);
