@@ -9,6 +9,7 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
@@ -92,6 +93,8 @@ public class SLStudio extends PApplet {
 
                 layout.setupLx(lx);
 
+                lx.addOutput(new OPCOutput(lx, "localhost", 11122));
+
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 pixlites = setupPixlites();
@@ -114,7 +117,7 @@ public class SLStudio extends PApplet {
             @Override
             protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
                 ui.leftPane.audio.setVisible(true);
-                ui.preview.setCenter(model.cx, model.cy, model.cz);
+                ui.preview.setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
