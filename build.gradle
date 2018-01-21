@@ -11,9 +11,12 @@ buildscript {
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.2.10'
 	id 'com.github.johnrengelman.shadow' version '2.0.1'
+	id 'com.palantir.docker' version '0.17.2'
 	id 'java'
 	id 'application'
 }
+
+apply plugin: 'com.palantir.docker'
 
 // For building windows executable. See https://github.com/TheBoegl/gradle-launch4j
 apply plugin: 'edu.sc.seis.launch4j'
@@ -21,8 +24,18 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-jar.baseName = 'SLStudio'
 mainClassName = "com.symmetrylabs.slstudio.SLStudio"
+
+run {
+	jvmArgs '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.awt.headless=true'
+}
+
+docker {
+	name project.name.toLowerCase() + ':latest'
+	tags version
+	files tasks.distTar.outputs
+	dockerfile project.file('docker/Dockerfile')
+}
 
 repositories {
 	mavenCentral()
