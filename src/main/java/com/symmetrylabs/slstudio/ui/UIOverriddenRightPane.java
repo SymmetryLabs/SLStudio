@@ -71,12 +71,14 @@ public class UIOverriddenRightPane extends UIPane {
     // initialize python file script names
 
     String py="data_generation";
+    String pyWithSpotify = "data_generation_w_spotify";
+
     String pyRun = "run";
 
     String cmd= slstudioPath + "/AI_VJ/";
     //String cmd= "/Users/aaronopp/Desktop/AI_VJ/";
     //String[] command = new String[] {"/Users/aaronopp/anaconda/bin/python",cmd+py+ ".py", "aaron_test_12_19_3", "1"};
-    String[] command = new String[] {"python" ,cmd+py+ ".py", userName, "5"};
+    String[] command = new String[] {"python" ,cmd+pyWithSpotify+ ".py", userName, "5" };  //"BQCf6xnOiMqVjBusHtPcI8Hdwitx-pL-NCkl1ObZdpJo7qvJnNKjk5z1HBWl-Et9KtN-qiPXhGnlxJQbczEBOWE3-gHI-Ec-sNzGYn1xXZe8clUy3Io5KUh4ztd-un3jLIywioPRCBFv0rtOQEnBzD8tfrm5c7cqqcJ0"};
     ProcessBuilder pb = new ProcessBuilder(command);
 
     //String cmdLogger="/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/";
@@ -219,16 +221,16 @@ public class UIOverriddenRightPane extends UIPane {
 
                         pb.redirectError();
                         Process p = pb.start();
-                        //BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
+                        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
                         pbLogger.redirectError();
                         Process pLogger = pbLogger.start();
-                        //BufferedReader inLogger = new BufferedReader(new InputStreamReader(pLogger.getInputStream()));
+                        BufferedReader inLogger = new BufferedReader(new InputStreamReader(pLogger.getInputStream()));
 
                         //slLogger logger1  = new slLogger();
 
-                        //for (Integer y = 0; y < 20; y++) {
-                        //String ret = inLogger.readLine();
+                        //for (Integer y = 0; y < 3; y++) {
+                        //String ret = in.readLine();
                         //System.out.println("value is: "+ ret);
                         //};
 
