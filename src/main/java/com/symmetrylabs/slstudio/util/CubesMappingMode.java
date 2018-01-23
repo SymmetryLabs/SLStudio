@@ -80,36 +80,27 @@ public class CubesMappingMode {
             fixturesMappedButNotOnNetwork.add(cube.id);
         }
 
-        // this is dumb
-        String[] stringArr = new String[fixturesMappedButNotOnNetwork.size()];
-        for (int i = 0; i < stringArr.length; i++) {
-            stringArr[i] = fixturesMappedButNotOnNetwork.get(i);
-        }
+        String[] emptyOptions = new String[] {"-"};
 
-        selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", stringArr);
-        selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", new String[] {"-"});
+        String[] initialMappedFixtures = fixturesMappedButNotOnNetwork.isEmpty()
+                ? emptyOptions : fixturesMappedButNotOnNetwork.toArray(new String[0]);
 
-        SLStudio.applet.controllers.addListener(new ListListener<SLController>() {
+        selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
+        selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
+
+        SLStudio.applet.slControllers.addListener(new ListListener<SLController>() {
             public void itemAdded(final int index, final SLController c) {
-                if (isFixtureMapped(c.cubeId)) {
-                    fixturesMappedButNotOnNetwork.remove(c.cubeId);
-                    fixturesMappedAndOnTheNetwork.add(c.cubeId);
+                if (isFixtureMapped(c.id)) {
+                    fixturesMappedButNotOnNetwork.remove(c.id);
+                    fixturesMappedAndOnTheNetwork.add(c.id);
                 } else {
-                    fixturesOnNetworkButNotMapped.add(c.cubeId);
+                    fixturesOnNetworkButNotMapped.add(c.id);
                 }
 
-                String[] stringArr1 = new String[fixturesMappedAndOnTheNetwork.size()];
-                for (int i = 0; i < stringArr1.length; i++) {
-                    stringArr1[i] = fixturesMappedAndOnTheNetwork.get(i);
-                }
-
-                String[] stringArr2 = new String[fixturesOnNetworkButNotMapped.size()];
-                for (int i = 0; i < stringArr2.length; i++) {
-                    stringArr2[i] = fixturesOnNetworkButNotMapped.get(i);
-                }
-
-                selectedMappedFixture.setOptions(stringArr1.length > 0 ? stringArr1 : new String[] {"-"});
-                selectedUnMappedFixture.setOptions(stringArr2.length > 0 ? stringArr2 : new String[] {"-"});
+                selectedMappedFixture.setOptions(fixturesMappedAndOnTheNetwork.isEmpty() ? emptyOptions
+                        : fixturesMappedAndOnTheNetwork.toArray(new String[0]));
+                selectedUnMappedFixture.setOptions(fixturesOnNetworkButNotMapped.isEmpty() ? emptyOptions
+                        : fixturesOnNetworkButNotMapped.toArray(new String[0]));
             }
             public void itemRemoved(final int index, final SLController c) {}
         });

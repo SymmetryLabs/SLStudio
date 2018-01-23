@@ -224,32 +224,12 @@ public class CubesLayout {
         }
         /*-----------------------------------------------------------------*/
 
-        /* Strips ----------------------------------------------------------*/
-        List<CubesModel.CubesStrip> strips = new ArrayList<>();
-
-        for (StripConfig stripConfig : STRIP_CONFIG) {
-            CubesModel.CubesStrip.Metrics metrics = new CubesModel.CubesStrip.Metrics(stripConfig.numPoints, stripConfig.spacing);
-
-            globalTransform.push();
-            globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-            globalTransform.rotateY(stripConfig.xRot * Math.PI / 180.);
-            globalTransform.rotateX(stripConfig.yRot * Math.PI / 180.);
-            globalTransform.rotateZ(stripConfig.zRot * Math.PI / 180.);
-
-            strips.add(new CubesModel.CubesStrip(stripId+"", metrics, globalTransform));
-
-            globalTransform.pop();
-
-            ++stripId;
-        }
-        /*-----------------------------------------------------------------*/
-
         CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
         for (int i = 0; i < allCubesArr.length; i++) {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr, strips);
+        return new CubesModel(towers, allCubesArr);
     }
 
     /*

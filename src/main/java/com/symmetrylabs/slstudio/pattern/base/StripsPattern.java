@@ -1,17 +1,17 @@
-package com.symmetrylabs.slstudio.effect;
+package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 
-public abstract class StripsEffect extends ModelSpecificEffect<StripsModel<Strip>> {
+public abstract class StripsPattern extends ModelSpecificPattern<StripsModel<Strip>> {
     @Override
     protected StripsModel createEmptyModel() {
         return new StripsModel();
     }
 
-    public StripsEffect(LX lx) {
+    public StripsPattern(LX lx) {
         super(lx);
     }
 }

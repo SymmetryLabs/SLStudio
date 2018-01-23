@@ -31,6 +31,10 @@ public class Wasps extends ParticlePattern {
         super(lx);
     }
 
+    public Wasps(LX lx, int particleGroupCount) {
+        super(lx, particleGroupCount);
+    }
+
     @Override
     protected void createParameters() {
         super.createParameters();

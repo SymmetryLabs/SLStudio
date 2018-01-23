@@ -18,13 +18,11 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.pattern.CopySunsPattern;
+import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.util.NoiseUtils;
 import com.symmetrylabs.slstudio.util.MathUtils;
-import com.symmetrylabs.slstudio.model.SunsModel;
-import com.symmetrylabs.slstudio.model.Sun;
 
-public abstract class DPat extends CopySunsPattern {
+public abstract class DPat extends SLPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     public ArrayList<DBool> bools = new ArrayList<DBool>();
     public PVector pTrans = new PVector();

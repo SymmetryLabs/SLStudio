@@ -1,19 +1,18 @@
 package com.symmetrylabs.slstudio.pattern.texture;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.awt.image.BufferedImage;
-import java.awt.image.Kernel;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.math3.util.FastMath;
 
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
@@ -22,12 +21,10 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
+import com.symmetrylabs.slstudio.pattern.SLPattern;
 
-public abstract class TextureSlideshow extends SunsPattern {
+public abstract class TextureSlideshow extends SLPattern {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
-    public final BooleanParameter perSun = new BooleanParameter("perSun", false);
     public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
     public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
     public final CompoundParameter zoomX = new CompoundParameter("zoomX", 0, 0, 5);
@@ -35,6 +32,8 @@ public abstract class TextureSlideshow extends SunsPattern {
     public final BooleanParameter enableInterp = new BooleanParameter("interp", true);
 
     private final SawLFO lerp = (SawLFO) startModulator(new SawLFO(0, 1, rate));
+
+    private static Map<String, WeakReference<BufferedImage>> imageCache = new HashMap<>();
 
     private int imageIndex = 0;
     private final BufferedImage[] images;
@@ -52,7 +51,23 @@ public abstract class TextureSlideshow extends SunsPattern {
             //System.out.println("Loading image: " + filePath);
 
             try {
-                images[i] = ImageIO.read(new File(filePath));
+                BufferedImage image = null;
+                synchronized (imageCache) {
+                    WeakReference<BufferedImage> imageWeakRef = imageCache.get(filePath);
+                    if (imageWeakRef != null) {
+                        image = imageWeakRef.get();
+                    }
+                }
+
+                if (image == null) {
+                    image = ImageIO.read(new File(filePath));
+
+                    synchronized (imageCache) {
+                        imageCache.put(filePath, new WeakReference(image));
+                    }
+                }
+
+                images[i] = image;
             }
             catch (IOException e) {
                 System.err.println("Error loading image from '" + filePath + "': " + e.getMessage());
@@ -62,7 +77,6 @@ public abstract class TextureSlideshow extends SunsPattern {
         imageLayers = new int[images.length][colors.length];
 
         addParameter(rate);
-        addParameter(perSun);
         addParameter(offsetX);
         addParameter(offsetY);
         addParameter(zoomX);
@@ -75,7 +89,6 @@ public abstract class TextureSlideshow extends SunsPattern {
             }
         };
 
-        perSun.addListener(updateRastersListener);
         zoomX.addListener(updateRastersListener);
         zoomY.addListener(updateRastersListener);
         offsetX.addListener(updateRastersListener);
@@ -170,23 +183,12 @@ public abstract class TextureSlideshow extends SunsPattern {
             int[] layer = imageLayers[i];
 
             final BufferedImage imageFinal = image;
-            if (perSun.isOn()) {
-                for (Sun sun : model.getSuns()) {
-                    sun.getPoints().parallelStream().forEach(p -> {
-                        double px = (p.x - sun.xMin) / sun.xRange;
-                        double py = (p.y - sun.yMin) / sun.yRange;
+            model.getPoints().parallelStream().forEach(p -> {
+                double px = (p.x - model.xMin) / model.xRange;
+                double py = (p.y - model.yMin) / model.yRange;
 
-                        layer[p.index] = bilinearInterp(imageFinal, px, py);
-                    });
-                }
-            } else {
-                model.getPoints().parallelStream().forEach(p -> {
-                    double px = (p.x - model.xMin) / model.xRange;
-                    double py = (p.y - model.yMin) / model.yRange;
-
-                    layer[p.index] = bilinearInterp(imageFinal, px, py);
-                });
-            }
+                layer[p.index] = bilinearInterp(imageFinal, px, py);
+            });
         }
     }
 

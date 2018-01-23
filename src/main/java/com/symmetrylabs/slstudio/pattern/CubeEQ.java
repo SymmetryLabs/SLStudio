@@ -40,11 +40,9 @@ public class CubeEQ extends SLModelPattern {
         final float edgeConst = 2 + 30 * edge.getValuef();
         final float clrConst = 1.1f + clr.getValuef();
 
-
         model.forEachPoint((start, end) -> {
-            for (int i=start; i<end; i++) {
+            for (int i = start; i < end; i++) {
                 LXPoint p = model.points[i];
-
 
                 float avgIndex = constrain(2 + p.x / model.xMax * (eq.numBands - 4), 0, eq.numBands - 4);
                 int avgFloor = (int) avgIndex;
