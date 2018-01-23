@@ -9,9 +9,13 @@ import heronarts.lx.model.LXFixture;
 /**
  * A model with strips.
  */
-public abstract class StripsModel<T extends Strip> extends SLModel {
+public class StripsModel<T extends Strip> extends SLModel {
     protected final List<T> strips = new ArrayList<>();
     protected final List<T> stripsUnmodifiable = Collections.unmodifiableList(strips);
+
+    public StripsModel() {
+        super();
+    }
 
     protected StripsModel(LXFixture fixture) {
         super(fixture);
@@ -23,11 +27,5 @@ public abstract class StripsModel<T extends Strip> extends SLModel {
 
     public List<T> getStrips() {
         return stripsUnmodifiable;
-    }
-
-    public static class Empty extends StripsModel {
-        public Empty() {
-            super(new LXFixture[0]);
-        }
     }
 }

@@ -33,7 +33,6 @@ public abstract class ModelSpecificPattern<T extends LXModel> extends SLPattern 
 
     public ModelSpecificPattern(LX lx) {
         super(lx);
-
         setModel(lx.model);
     }
 }

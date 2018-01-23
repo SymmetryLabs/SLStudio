@@ -8,7 +8,7 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 public abstract class StripsEffect extends ModelSpecificEffect<StripsModel<Strip>> {
     @Override
     protected StripsModel createEmptyModel() {
-        return new StripsModel.Empty();
+        return new StripsModel();
     }
 
     public StripsEffect(LX lx) {

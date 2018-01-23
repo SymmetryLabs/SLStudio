@@ -25,6 +25,7 @@ public class SLModel extends LXModel {
     public float[] pointsXYZ;
 
     public SLModel() {
+        super();
     }
 
     public SLModel(List<LXPoint> points) {
