@@ -18,6 +18,7 @@ import heronarts.p3lx.ui.UI2dContainer;
 import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.component.UIButton;
+import heronarts.p3lx.ui.component.UISlider;
 import heronarts.p3lx.ui.studio.UIPane;
 import heronarts.p3lx.ui.studio.midi.UIMidiInputs;
 import heronarts.p3lx.ui.studio.midi.UIMidiMappings;
@@ -47,6 +48,7 @@ public class UIOverriddenRightPane extends UIPane {
     public final UI2dScrollContext utility;
     public final UI2dScrollContext modulation;
     public final UI2dScrollContext midi;
+    public final UI2dScrollContext vj;
 
     public UIOutputs uiOutputs;
 
@@ -98,16 +100,20 @@ public class UIOverriddenRightPane extends UIPane {
     //Process p = null;
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
+
+        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT",  "AI VJ"}, ui.getWidth() - WIDTH, WIDTH);
+
+        //super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT", "AI VJ"}, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
         this.utility = this.sections[2];
-
+        this.vj = this.sections[3];
         buildUtilityUI();
         buildMidiUI();
         buildModulationUI();
+        buildVjUI();
     }
 
     private void buildUtilityUI() {
@@ -123,7 +129,31 @@ public class UIOverriddenRightPane extends UIPane {
         new UIMidiInputs(this.ui, this.lx.engine.midi, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
         new UIMidiMappings(this.ui, this.lx, 0, 0, this.midi.getContentWidth()).addToContainer(this.midi);
     }
+        private void buildVjUI() {
 
+        //new UISlider(0, 0, this.vj.getContentWidth() , 0);
+        //LXListenableNormalizedParameter param;
+        UI2dContainer vjbar = (UI2dContainer) new UI2dContainer(0, 0, this.vj.getContentWidth(), 0) {
+            @Override
+            public void onDraw(UI ui, PGraphics pg) {
+                pg.stroke(0xff333333);
+                pg.line(0, this.height - 1, UIOverriddenRightPane.this.width - 1, this.height - 1);
+            }
+        }
+            .setLayout(UI2dContainer.Layout.HORIZONTAL)
+            .setChildMargin(4)
+            .addToContainer(this.vj);
+
+        float pad = 5;
+
+        UISlider vjslider = new UISlider(UISlider.Direction.HORIZONTAL,  pad, pad, this.vj.getContentWidth() - (2 * pad), 16 - (2 * pad));
+        vjslider.addToContainer(this.vj);
+        //vjslider.setParameter(param);
+
+
+        //vjslider.setParameter(param);
+
+    }
     private void buildModulationUI() {
         this.modulation.setArrowKeyFocus(UI2dContainer.ArrowKeyFocus.VERTICAL);
 
