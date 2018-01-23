@@ -32,16 +32,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     private final Cube[] _cubes;
 
     public CubesModel() {
-        this(new ArrayList<>(), new Cube[0], new ArrayList<>());
+        this(new ArrayList<>(), new Cube[0]);
     }
 
-    public CubesModel(List<Tower> towers, Cube[] cubeArr, List<CubesStrip> strips) {
-        super(new Fixture(cubeArr, strips));
-
-        for (CubesStrip strip : strips) {
-            this.strips.add(strip);
-        }
-
+    public CubesModel(List<Tower> towers, Cube[] cubeArr) {
+        super(new Fixture(cubeArr));
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
         _cubes = cubeArr;
@@ -73,17 +68,12 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     }
 
     private static class Fixture extends LXAbstractFixture {
-        private Fixture(Cube[] cubeArr, List<CubesStrip> strips) {
+        private Fixture(Cube[] cubeArr) {
             for (Cube cube : cubeArr) {
                 if (cube != null) {
                     for (LXPoint point : cube.points) {
                         this.points.add(point);
                     }
-                }
-            }
-            for (CubesStrip strip : strips) {
-                for (LXPoint point : strip.points) {
-                    this.points.add(point);
                 }
             }
         }
