@@ -22,14 +22,15 @@ public class Noise extends DPat {
 
     private int xSym = 1, ySym = 2, radSym = 3;
     private float zTime, zTheta = 0, zSin, zCos, rtime, ttime;
-    private NDat n[];
     private int NUM_NDAT = 4;
+    private NDat n[] = new NDat[NUM_NDAT];
 
     public Noise(LX lx) {
         super(lx);
         addParameter(speed);
         addParameter(symm);
         addParameter(mode);
+        addParameter(density);
         mode.setValue(5);
 
         for (int i = 0; i < NUM_NDAT; i++) {
