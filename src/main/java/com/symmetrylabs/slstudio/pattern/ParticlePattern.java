@@ -219,7 +219,7 @@ public abstract class ParticlePattern extends SLModelPattern implements MarkerSo
     protected int getPaletteColor(float val) {
         double h = hue.getValue();
         double s = saturation.getValue();
-        return LXColor.hsb(h, s, FastMath.min(val * 100, 100));
+        return LXColor.hsb(h, Math.min(s + val * 50, 100), FastMath.min(val * 100, 100));
     }
 
     @Override
