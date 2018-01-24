@@ -112,6 +112,9 @@ public class SLStudio extends PApplet {
         println("model.zMax: " + model.zMax);
         println("model.zRange: " + model.zRange + "\n");
 
+        PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+        loadPalettes(paletteLibrary);
+
         new SLStudioLX(this, model, true) {
 
             @Override
@@ -134,9 +137,6 @@ public class SLStudio extends PApplet {
 
                 SLStudio.this.performanceManager = new PerformanceManager(lx);
                 lx.engine.registerComponent("performanceManager", performanceManager);
-
-                PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
-                loadPalettes(paletteLibrary);
 
                 blobTracker = BlobTracker.getInstance(lx);
 

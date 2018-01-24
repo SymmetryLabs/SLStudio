@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.palettes;
 import javax.imageio.ImageIO;
 import java.awt.image.BufferedImage;
 import java.io.InputStream;
+import java.io.File;
 import java.io.IOException;
 
 /**
@@ -20,13 +21,16 @@ public class ImageLibrary {
     }
 
     public BufferedImage get(String filename) {
+        String filepath = new File(baseDir, filename).toString();
         try {
-            InputStream s = getClass().getResourceAsStream(baseDir + filename);
+            InputStream s = getClass().getClassLoader().getResourceAsStream(filepath);
             if (s != null)
                 return ImageIO.read(s);
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        System.err.println("Could not load image '" + filepath + "'.");
 
         return null;
     }
