@@ -138,7 +138,7 @@ public class SLStudio extends PApplet {
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(true);
-        lx.engine.output.enabled.setValue(false);
+        //lx.engine.output.enabled.setValue(false);
         blobTracker = BlobTracker.getInstance(lx);
         performanceManager.start(lx.ui);
 
