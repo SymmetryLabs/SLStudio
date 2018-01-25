@@ -25,19 +25,8 @@ import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
-import processing.core.PGraphics;
-
-import java.io.PrintWriter;
-import java.io.BufferedReader;
-import java.io.InputStreamReader;
-import java.io.File;
-
-import java.io.IOException;
-//import oscP5.*;
 
 import processing.core.PGraphics;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 public class UIOverriddenRightPane extends UIPane {
 
