@@ -33,7 +33,7 @@ public class UIAiVj extends UICollapsibleSection {
         final UIPlayer player = new UIPlayer();
         player.addToContainer(this);
 
-        final UILabel generateSpotifyDataLabel = new UILabel(23, 77, 110, 14).setLabel("generate Spotify data");
+        final UILabel generateSpotifyDataLabel = new UILabel(23, 77, 110, 14).setLabel("Generate Spotify data");
         generateSpotifyDataLabel.setBackground(false);
         generateSpotifyDataLabel.addToContainer(this);
 
@@ -86,7 +86,7 @@ public class UIAiVj extends UICollapsibleSection {
             runTimeLabel.addToContainer(this);
 
             UIIntegerBox runtimeInput = new UIIntegerBox(97, 50, 50, 17) {
-                // so we can avoid the decimel places from DiscreteParameter
+                // so we can avoid the decimal places from DiscreteParameter
                 protected void onValueChange(int value) {
                     SLStudio.applet.aivj.recorder.runtime.setValue(value);
                 }

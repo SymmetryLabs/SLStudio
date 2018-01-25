@@ -29,15 +29,9 @@ public class AiVj {
         String pyWithSpotify = "data_generation_w_spotify";
         String pyRun = "run";
         String cmd = slstudioPath + "/AI_VJ/";
-        
-        String[] command = new String[] {"python", cmd + pyWithSpotify + ".py", userName, "5" };
-        ProcessBuilder pb = new ProcessBuilder(command);
 
-        String[] commandLogger = new String[] {"processing-java", "--sketch=" + slstudioPath + "/AI_VJ/logger", "--run"};
-        ProcessBuilder pbLogger = new ProcessBuilder(commandLogger);
 
-        String[] commandVjRun = new String[] {"python", cmd + pyRun + ".py", userName, "5"};
-        ProcessBuilder pbVjRun = new ProcessBuilder(commandVjRun);
+
 
         String LOGFILE = "out.txt";
         PrintWriter out;
@@ -45,12 +39,42 @@ public class AiVj {
         recorder.isRunning.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
                 if (((BooleanParameter)parameter).isOn()) {
+
+                    // populate processes that will run scripts natively
+                    System.out.println("script runtime: " );
+                    System.out.println(Integer.toString(recorder.runtime.getValuei()));
+
+                    String[] commandVjRecord = new String[] {"python", cmd + py + ".py", userName, Integer.toString(recorder.runtime.getValuei())};
+                    ProcessBuilder pbVjRecord = new ProcessBuilder(commandVjRecord);
+
+                    String[] commandSpotify = new String[] {"python", cmd + pyWithSpotify + ".py", userName, Integer.toString(recorder.runtime.getValuei())};
+                    ProcessBuilder pbSpotify = new ProcessBuilder(commandSpotify);
+
+                    String[] commandLogger = new String[] {"processing-java", "--sketch=" + slstudioPath + "/AI_VJ/logger", "--run"};
+                    ProcessBuilder pbLogger = new ProcessBuilder(commandLogger);
+
+
+
                     try {
-                        pb.redirectError();
-                        Process p = pb.start();
+
+                        if (recorder.generateSpotifyData.isOn()) {
+
+                            System.out.println("spotify status true");
+                            pbSpotify.redirectError();
+                            Process processSpotify = pbSpotify.start();
+
+
+                        } else {
+
+                            System.out.println("spotify status false");
+                            pbVjRecord.redirectError();
+                            Process processDataGeneration = pbVjRecord.start();
+
+                        }
+
 
                         pbLogger.redirectError();
-                        Process pLogger = pbLogger.start();
+                        Process processLogger = pbLogger.start();
 
                     } catch (Exception e) {
                         System.out.println("There was an error starting AI VJ data generation");
@@ -63,6 +87,13 @@ public class AiVj {
         player.isRunning.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
                 if (((BooleanParameter)parameter).isOn()) {
+
+                    System.out.println("script runtime: " );
+                    System.out.println(Integer.toString(player.runtime.getValuei()));
+
+                    String[] commandVjRun = new String[] {"python", cmd + pyRun + ".py", userName, Integer.toString(player.runtime.getValuei())};
+                    ProcessBuilder pbVjRun = new ProcessBuilder(commandVjRun);
+
                     try {
                         pbVjRun.redirectError();
                         Process pVjRun = pbVjRun.start();
