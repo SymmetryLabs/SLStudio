@@ -5,6 +5,7 @@ import java.util.ArrayList;
 
 import processing.core.PFont;
 import processing.core.PGraphics;
+import processing.core.PConstants;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
@@ -21,28 +22,31 @@ import com.symmetrylabs.slstudio.SLStudio;
 
 public class UIAiVjStatus extends UI2dContext {
 
+    public final static int WIDTH = 500;
+
     private enum Mode {
         RECORDING, PLAYING
     }
 
-    private Timer timer;
+    private final Timer timer;
+
+    private final UILabel status;
+
+    private final PFont font;
 
     private Mode mode;
 
-    private UILabel status;
-
-    private PFont font;
-
     public UIAiVjStatus(UI ui, final P3LX lx, float x, float y) {
-        super(ui, x, y, 500, 80);
+        super(ui, x, y, WIDTH, 80);
         setVisible(false);
 
         this.timer = new Timer();
         lx.engine.addLoopTask(timer);
 
         this.font = SLStudio.applet.createFont("Menlo-Regular-13.vlw", 30);
-        this.status = new UILabel(0, 0, 600, 50).setLabel("");
+        this.status = new UILabel(0, 0, WIDTH, 50).setLabel("");
         status.setBackground(false).setFont(font);
+        status.setTextAlignment(PConstants.CENTER);
         status.addToContainer(this);
 
         SLStudio.applet.aivj.recorder.isRunning.addListener(new LXParameterListener() {
@@ -88,7 +92,6 @@ public class UIAiVjStatus extends UI2dContext {
 
     protected void onDraw(UI ui, PGraphics pg) {
         pg.clear();
-        //pg.textAlign(CENTER, CENTER);
         redraw();
     }
 

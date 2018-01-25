@@ -112,7 +112,7 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
-            this.aivjStatus = new UIAiVjStatus(this, lx, this.leftPane.getX() + this.preview.getWidth()/2, this.preview.getHeight()-150);
+            this.aivjStatus = new UIAiVjStatus(this, lx, this.leftPane.getWidth() + this.preview.getWidth()/2 - UIAiVjStatus.WIDTH/2, this.preview.getHeight()-150);
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
