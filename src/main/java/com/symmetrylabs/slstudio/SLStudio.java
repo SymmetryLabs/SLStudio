@@ -35,6 +35,7 @@ import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.slstudio.aivj.AiVj;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
@@ -53,6 +54,7 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
+    public AiVj aivj;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
@@ -118,6 +120,8 @@ public class SLStudio extends PApplet {
 
                 lx.paletteLibrary = new PaletteLibrary();
                 loadPalettes(lx.paletteLibrary);
+
+                aivj = new AiVj();
 
                 ui.theme.setPrimaryColor(0xff008ba0);
                 ui.theme.setSecondaryColor(0xff00a08b);
