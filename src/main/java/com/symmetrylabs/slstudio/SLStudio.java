@@ -35,6 +35,7 @@ import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.slstudio.aivj.AiVj;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
@@ -53,6 +54,7 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
+    public AiVj aivj;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
@@ -119,6 +121,8 @@ public class SLStudio extends PApplet {
                 lx.paletteLibrary = new PaletteLibrary();
                 loadPalettes(lx.paletteLibrary);
 
+                aivj = new AiVj();
+
                 ui.theme.setPrimaryColor(0xff008ba0);
                 ui.theme.setSecondaryColor(0xff00a08b);
                 ui.theme.setAttentionColor(0xffa00044);
@@ -138,7 +142,7 @@ public class SLStudio extends PApplet {
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(true);
-        lx.engine.output.enabled.setValue(false);
+        //lx.engine.output.enabled.setValue(false);
         blobTracker = BlobTracker.getInstance(lx);
         performanceManager.start(lx.ui);
 

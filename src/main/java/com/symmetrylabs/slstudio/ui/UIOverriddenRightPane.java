@@ -44,15 +44,21 @@ public class UIOverriddenRightPane extends UIPane {
     private final LX lx;
     private final UI ui;
 
-    public final UI2dScrollContext utility;
+    public final UI2dScrollContext aivj;
+    public final UI2dScrollContext output;
     public final UI2dScrollContext modulation;
     public final UI2dScrollContext midi;
 
     public UIOutputs uiOutputs;
 
     public static final int PADDING = 4;
+<<<<<<< HEAD
     public static final int WIDTH = 284;
     private static final int ADD_BUTTON_WIDTH = 30;
+=======
+    public static final int WIDTH = 340;
+    private static final int ADD_BUTTON_WIDTH = 38;
+>>>>>>> working-aivj-branch
 
     private int lfoCount = 1;
     private int envCount = 1;
@@ -98,22 +104,28 @@ public class UIOverriddenRightPane extends UIPane {
     //Process p = null;
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
+        super(ui, lx, new String[]{"MODULATE", "OSC + MIDI", "AI VJ", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
-        this.utility = this.sections[2];
+        this.aivj = this.sections[2];
+        this.output = this.sections[3];
 
-        buildUtilityUI();
+        buildAiVjUI();
+        buildOutputUI();
         buildMidiUI();
         buildModulationUI();
     }
 
-    private void buildUtilityUI() {
-        (uiOutputs = new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth())).addToContainer(this.utility);
+    private void buildAiVjUI() {
+        new UIAiVj(lx, ui, 0, 0, this.aivj.getContentWidth()).addToContainer(this.aivj);
+    }
 
-        new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
+    private void buildOutputUI() {
+        (uiOutputs = new UIOutputs(lx, ui, 0, 0, this.output.getContentWidth())).addToContainer(this.output);
+
+        new UIMapping(lx, ui, 0, 0, this.output.getContentWidth()).addToContainer(this.output);
     }
 
     private void buildPerformanceUI() {

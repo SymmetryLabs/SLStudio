@@ -46,6 +46,7 @@ import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
 import com.symmetrylabs.slstudio.ui.UIFramerate;
 import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
 import com.symmetrylabs.slstudio.ui.UIOutputs;
+import com.symmetrylabs.slstudio.ui.UIAiVjStatus;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.slstudio.util.MarkerSource;
 
@@ -65,6 +66,7 @@ public class SLStudioLX extends P3LX {
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
+        public final UIAiVjStatus aivjStatus;
 
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
@@ -110,10 +112,10 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
+            this.aivjStatus = new UIAiVjStatus(this, lx, this.leftPane.getX() + this.preview.getWidth()/2, this.preview.getHeight()-150);
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
-
 
             addLayer(this.preview);
             addLayer(this.leftPane);
@@ -121,6 +123,7 @@ public class SLStudioLX extends P3LX {
             addLayer(this.bottomTray);
             addLayer(this.helpBar);
             addLayer(this.framerate);
+            addLayer(this.aivjStatus);
 
             _toggleClipView();
             _togglePerformanceMode();
