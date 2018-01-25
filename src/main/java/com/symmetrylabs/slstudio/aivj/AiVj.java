@@ -48,11 +48,9 @@ public class AiVj {
                     try {
                         pb.redirectError();
                         Process p = pb.start();
-                        BufferedReader in = new BufferedReader(new InputStreamReader(p.getInputStream()));
 
                         pbLogger.redirectError();
                         Process pLogger = pbLogger.start();
-                        BufferedReader inLogger = new BufferedReader(new InputStreamReader(pLogger.getInputStream()));
 
                     } catch (Exception e) {
                         System.out.println("There was an error starting AI VJ data generation");
@@ -68,12 +66,6 @@ public class AiVj {
                     try {
                         pbVjRun.redirectError();
                         Process pVjRun = pbVjRun.start();
-                        BufferedReader inVjRun = new BufferedReader(new InputStreamReader(pVjRun.getInputStream()));
-
-                        for (Integer y = 0; y < 50; y++) {
-                            String ret = inVjRun.readLine();
-                            System.out.println("value is: "+ ret);
-                        };
 
                     } catch(Exception e){
                         System.out.println("There was an error starting AI VJ");
