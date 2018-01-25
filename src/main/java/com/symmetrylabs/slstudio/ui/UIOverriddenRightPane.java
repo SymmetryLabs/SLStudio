@@ -52,13 +52,8 @@ public class UIOverriddenRightPane extends UIPane {
     public UIOutputs uiOutputs;
 
     public static final int PADDING = 4;
-<<<<<<< HEAD
-    public static final int WIDTH = 284;
-    private static final int ADD_BUTTON_WIDTH = 30;
-=======
     public static final int WIDTH = 340;
     private static final int ADD_BUTTON_WIDTH = 38;
->>>>>>> working-aivj-branch
 
     private int lfoCount = 1;
     private int envCount = 1;
