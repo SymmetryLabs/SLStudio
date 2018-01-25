@@ -1082,7 +1082,7 @@
     },
     "sun6_top_back": {
       "type": "PixliteMapping",
-      "ipAddress": "10.200.1.41",
+      "ipAddress": "10.200.1.222",
       "datalineMappings": [
         {
           "numPoints": 639
