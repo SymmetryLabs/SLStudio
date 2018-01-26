@@ -1,6 +1,66 @@
 import heronarts.lx.modulator.*;
 import heronarts.p3lx.ui.studio.device.*;
 
+public class Pulse extends SLPattern {
+
+  CompoundParameter size = new CompoundParameter("size", model.xRange*0.1, model.xRange*0.01, model.xRange*0.5);
+  CompoundParameter speed = new CompoundParameter("speed", 1000, 200, 5000);
+  CompoundParameter freq = new CompoundParameter("freq");
+
+  CompoundParameter xPos = new CompoundParameter("xPos", 0.5, 0, 1);
+
+  LinearEnvelope xPosEnv = new LinearEnvelope("xPosEnv", 0, 1, speed);
+
+  float lastTrigger = 0;
+  float elapsedTime = 0;
+  float period = 0;
+  float actualxPos = 0;
+
+  public Pulse(LX lx) {
+    super(lx);
+    addParameter(size);
+    addParameter(freq);
+    addParameter(speed);
+    addModulator(xPosEnv);
+    xPosEnv.setLooping(false);
+
+    freq.addListener(new LXParameterListener() {
+      public void onParameterChanged(LXParameter parameter) {
+        setPeriod();
+      }
+    });
+  }
+
+  private void setPeriod() {
+    period = (float)(Math.random() * (5*60*1000*Math.abs(freq.getValuef())));
+    println("Time until next pulse: " + period + " milliseconds");
+  }
+
+  public void run(double deltaMs) {
+    elapsedTime += deltaMs;
+
+    if ((elapsedTime - lastTrigger) > period) {
+      if (!xPosEnv.running.isOn()) {
+        xPosEnv.trigger();
+        lastTrigger = elapsedTime;
+        setPeriod();
+      }
+    }
+
+    float xSize = size.getValuef();
+    float xStart = model.xMin - xSize;
+    float xRange = model.xRange + xSize*2;
+    float xPos = -xSize;
+
+    for (LXPoint p : model.points) {
+      if (xPosEnv.running.isOn()) {
+        xPos = xStart + (xRange * xPosEnv.getValuef());
+        colors[p.index] = (Math.abs(p.x - xPos) < xSize) ? lx.hsb(palette.getHuef(), 100, 100) : LXColor.BLACK;
+      }
+    }
+  }
+}
+
 public class Ball extends DPat {
 
   CompoundParameter xPos = new CompoundParameter("xPos", model.cx, model.xMin, model.xMax);
