@@ -33,7 +33,7 @@ public class Pulse extends SLPattern {
 
   private void setPeriod() {
     period = (float)(Math.random() * (5*60*1000*Math.abs(freq.getValuef())));
-    println("Time until next pulse: " + period + " milliseconds");
+    //println("Time until next pulse: " + period + " milliseconds");
   }
 
   public void run(double deltaMs) {
