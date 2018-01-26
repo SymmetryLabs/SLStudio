@@ -55,7 +55,14 @@ public class Pulse extends SLPattern {
     for (LXPoint p : model.points) {
       if (xPosEnv.running.isOn()) {
         xPos = xStart + (xRange * xPosEnv.getValuef());
-        colors[p.index] = (Math.abs(p.x - xPos) < xSize) ? lx.hsb(palette.getHuef(), 100, 100) : LXColor.BLACK;
+        float distance = Math.abs(p.x - xPos);
+
+        if (distance < xSize) {
+          float brightness = 100 - (distance / xSize * 100);
+          colors[p.index] = lx.hsb(palette.getHuef(), 100, brightness);
+        } else {
+          colors[p.index] = LXColor.BLACK;
+        }
       }
     }
   }
