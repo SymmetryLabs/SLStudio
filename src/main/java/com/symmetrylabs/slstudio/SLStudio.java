@@ -44,7 +44,7 @@ public class SLStudio extends PApplet {
 
     public static SLStudio applet;
 
-    public SLStudioLX lx;
+    private SLStudioLX lx;
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;

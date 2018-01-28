@@ -75,6 +75,8 @@ public class SLStudioLX extends P3LX {
         private boolean clipViewVisible = true;
         private boolean performanceMode = false;
 
+        private final LX lx;
+
         public class PreviewWindow extends UI3dContext {
 
             public final UIGLPointCloud pointCloud;
@@ -96,6 +98,8 @@ public class SLStudioLX extends P3LX {
 
         UI(final SLStudioLX lx) {
             super(lx);
+
+            this.lx = lx;
 
             initialize(lx, this);
 
@@ -337,7 +341,7 @@ public class SLStudioLX extends P3LX {
                 }
             }
 
-            if (SLStudio.applet.lx == null || SLStudio.applet.lx.engine == null || SLStudio.applet.lx.engine.midi == null)
+            if (lx == null || lx.engine == null || lx.engine.midi == null)
                 return;
 
             // lx.engine.midi.whenReady(new Runnable() {
