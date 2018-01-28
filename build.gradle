@@ -33,8 +33,17 @@ run {
 docker {
 	name project.name.toLowerCase() + ':latest'
 	tags version
-	files tasks.distTar.outputs, project.files('docker'), project.files('.')
 	dockerfile project.file('docker/Dockerfile')
+
+	files tasks.distTar.outputs, project.files('docker'), project.files('.')
+	copySpec.exclude 'build'
+
+	if (System.getProperty("buildArgs") != null) {
+		buildArgs System.getProperty("buildArgs").split(/\s+/).collectEntries {
+			def kvp = it.split('=')
+			[(kvp[0]): kvp[1]]
+		}
+	}
 }
 
 repositories {

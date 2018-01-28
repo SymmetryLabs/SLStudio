@@ -1,16 +1,20 @@
-FROM openjdk:8-jre-slim
+ARG arch=
+FROM $arch${arch:+/}debian:stretch
 
-RUN DEBIAN_FRONTEND=noninteractive apt-get update -qq
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y x11vnc xvfb fonts-dejavu fontconfig supervisor
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libxcursor1
-RUN DEBIAN_FRONTEND=noninteractive apt-get install -y libpulse-java
-RUN DEBIAN_FRONTEND=noninteractive apt-get clean
+ENV DEBIAN_FRONTEND noninteractive
 
-#RUN rm $JAVA_HOME/jre/lib/accessibility.properties
-RUN rm $JAVA_HOME/lib/accessibility.properties
+RUN apt-get update -qq
+RUN apt-get install -y x11vnc xvfb fonts-dejavu fontconfig libxcursor1 supervisor
+RUN apt-get install -y gnupg2
 
-ADD server-jre-8u162-linux-x64.tar.gz /
-ENV JAVA_HOME=/jdk1.8.0_162
+RUN echo "deb http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee /etc/apt/sources.list.d/webupd8team-java.list
+RUN echo "deb-src http://ppa.launchpad.net/webupd8team/java/ubuntu xenial main" | tee -a /etc/apt/sources.list.d/webupd8team-java.list
+RUN apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys EEA14886
+RUN echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections
+
+RUN apt-get update -qq
+RUN apt-get install -y oracle-java8-installer
+RUN apt-get clean
 
 RUN useradd symmetry -p sugarcubes
 
