@@ -83,7 +83,7 @@ public class SLStudio extends PApplet {
 
         Utils.setSketchPath(sketchPath());
 
-        mappings = FultonStreetLayout.loadMappings();
+        //mappings = FultonStreetLayout.loadMappings();
         //LXModel model = FultonStreetLayout.buildModel();
         LXModel model = CubesLayout.buildModel();
 
@@ -410,7 +410,7 @@ public class SLStudio extends PApplet {
 
     private Pixlite[] setupPixlites() {
 
-        if (!(lx.model instanceof SunsModel))
+        if (mappings == null || !(lx.model instanceof SunsModel))
             return new Pixlite[0];
 
         List<Pixlite> pixlites = new ArrayList<>();
