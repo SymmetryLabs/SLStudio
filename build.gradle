@@ -24,7 +24,8 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+//mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
 
 run {
 	jvmArgs '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.awt.headless=true'

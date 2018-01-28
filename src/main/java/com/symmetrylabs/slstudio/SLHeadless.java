@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio;
 
-import java.util.WeakHashMap;
 import java.io.File;
 
 import heronarts.lx.LX;
@@ -13,28 +12,31 @@ import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.model.GridModel;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.pattern.IteratorTestPattern;
+import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.util.Utils;
 
-public class SLHeadlessLX extends LX {
+public class SLHeadless {
 
     public static final String COPYRIGHT = "Symmetry Labs";
 
     private static final String DEFAULT_PROJECT_FILE = "default.lxp";
     private static final String PROJECT_FILE_NAME = ".lxproject";
 
-    public SLHeadlessLX(LXModel model) {
-        this(model, true);
-    }
+    private final LX lx;
 
-    public SLHeadlessLX(LXModel model, boolean startEngineThread) {
-        super(model);
+    public SLHeadless() {
+        Utils.setSketchPath(System.getProperty("user.dir"));
 
-        /*
+        LXModel model = new GridModel(10, 10);
+
+        lx = new LX(model);
+
         try {
             File projectFile = Utils.saveFile(PROJECT_FILE_NAME);
             if (projectFile.exists()) {
@@ -42,40 +44,45 @@ public class SLHeadlessLX extends LX {
                 if (lines != null && lines.length > 0) {
                     File file = Utils.saveFile(lines[0]);
                     if (file.exists()) {
-                        openProject(file);
+                        lx.openProject(file);
                     }
                 }
             } else {
                 File defaultProject = Utils.saveFile(DEFAULT_PROJECT_FILE);
                 if (defaultProject.exists()) {
-                    openProject(defaultProject);
+                    lx.openProject(defaultProject);
                 }
             }
         } catch (Exception x) {
             // ignored
         }
-        */
 
-        initialize(this);
+        lx.addProjectListener((file, change) -> {
+            if (file != null) {
+                Utils.saveStrings(
+                    PROJECT_FILE_NAME,
+                    new String[]{
+                        // Relative path of the project file WRT the default save file location for the sketch
+                        Utils.saveFile(PROJECT_FILE_NAME).toPath().getParent().relativize(file.toPath()).toString()
+                    }
+                );
+            }
+        });
 
-        this.engine.setThreaded(startEngineThread);
+        lx.addOutput(new OPCOutput(lx, "localhost", 11122));
+
+        initialize(lx);
+
+        lx.engine.isChannelMultithreaded.setValue(true);
+        lx.engine.isNetworkMultithreaded.setValue(true);
+        lx.engine.audio.enabled.setValue(true);
+        lx.engine.output.enabled.setValue(true);
+
+        lx.engine.setThreaded(true);
     }
 
-    @Override
-    protected void setProject(File file, ProjectListener.Change change) {
-        super.setProject(file, change);
-
-        if (file != null) {
-            /*
-            Utils.saveStrings(
-                PROJECT_FILE_NAME,
-                new String[]{
-                    // Relative path of the project file WRT the default save file location for the sketch
-                    Utils.saveFile(PROJECT_FILE_NAME).toPath().getParent().relativize(file.toPath()).toString()
-                }
-            );
-            */
-        }
+    public static void main(String[] args) {
+        new SLHeadless();
     }
 
     private static void initialize(LX lx) {
@@ -91,15 +98,5 @@ public class SLHeadlessLX extends LX {
         lx.registerEffect(FlashEffect.class);
         lx.registerEffect(BlurEffect.class);
         lx.registerEffect(DesaturationEffect.class);
-    }
-
-    @Override
-    protected LXEffect instantiateEffect(final String className) {
-        return super.instantiateEffect(LXClassLoader.guessExistingEffectClassName(className));
-    }
-
-    @Override
-    protected LXPattern instantiatePattern(final String className) {
-        return super.instantiatePattern(LXClassLoader.guessExistingPatternClassName(className));
     }
 }
