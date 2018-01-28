@@ -9,7 +9,6 @@ import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.output.OPCOutput;
 
@@ -45,7 +44,6 @@ public class SLStudio extends PApplet {
 
     public static SLStudio applet;
 
-    public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 1, 70);
     public SLStudioLX lx;
     private Dispatcher dispatcher;
     private Mappings mappings;
