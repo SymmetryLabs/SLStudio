@@ -1300,6 +1300,14 @@ public final class Utils {
         }
     }
 
+    public static String[] loadStrings(String filename) {
+        InputStream is = createInput(filename);
+        return PApplet.loadStrings(is);
+    }
+
+    public static void saveStrings(String filename, String data[]) {
+        PApplet.saveStrings(saveFile(filename), data);
+    }
 
     //////////////////////////////////////////////////////////////
     // FILE INPUT
