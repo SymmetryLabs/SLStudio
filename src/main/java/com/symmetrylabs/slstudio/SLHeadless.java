@@ -71,7 +71,11 @@ public class SLHeadless {
 
         lx.addOutput(new OPCOutput(lx, "localhost", 11122));
 
-        initialize(lx);
+        registerPatternsAndEffects(lx);
+
+        LXChannel channel = lx.engine.addChannel(new LXPattern[] { new IteratorTestPattern(lx) });
+        channel.enabled.setValue(true);
+        channel.fader.setValue(1f);
 
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
@@ -79,13 +83,14 @@ public class SLHeadless {
         lx.engine.output.enabled.setValue(true);
 
         lx.engine.setThreaded(true);
+        lx.engine.onDraw();
     }
 
     public static void main(String[] args) {
         new SLHeadless();
     }
 
-    private static void initialize(LX lx) {
+    private static void registerPatternsAndEffects(LX lx) {
         // Add all effects
         LXClassLoader.findEffects().stream().forEach(c -> lx.registerEffect(c));
 
