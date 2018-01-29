@@ -10,23 +10,23 @@ import heronarts.lx.parameter.CompoundParameter;
 
 import com.symmetrylabs.slstudio.util.ColorUtils;
 
-public class LABShift extends LXEffect {
+public class LUVShift extends LXEffect {
     public final CompoundParameter Lboost = new CompoundParameter("Lboost", 1, 0, 4);
     public final CompoundParameter Lshift = new CompoundParameter("Lshift", 0, -100, 100);
-    public final CompoundParameter Ashift = new CompoundParameter("Ashift", 0, -100, 100);
-    public final CompoundParameter Bshift = new CompoundParameter("Bshift", 0, -100, 100);
+    public final CompoundParameter Ushift = new CompoundParameter("Ushift", 0, -100, 100);
+    public final CompoundParameter Vshift = new CompoundParameter("Vshift", 0, -100, 100);
 
-    public LABShift(LX lx) {
+    public LUVShift(LX lx) {
         super(lx);
 
         addParameter(Lboost);
         addParameter(Lshift);
-        addParameter(Ashift);
-        addParameter(Bshift);
+        addParameter(Ushift);
+        addParameter(Vshift);
     }
 
     private final float[] xyz = new float[3];
-    private final float[] lab = new float[3];
+    private final float[] luv = new float[3];
     private final float[] rgb = new float[3];
 
     @Override
@@ -38,13 +38,13 @@ public class LABShift extends LXEffect {
             rgb[2] = (c & LXColor.BLUE_MASK) / 255f;
 
             ColorUtils.rgb2xyz(rgb, xyz);
-            ColorUtils.xyz2lab(xyz, lab);
+            ColorUtils.xyz2luv(xyz, luv);
 
-            lab[0] = Math.max(0, Math.min(100, lab[0] * Lboost.getValuef() + Lshift.getValuef()));
-            lab[1] = Math.max(-110, Math.min(110, lab[1] + Ashift.getValuef()));
-            lab[2] = Math.max(-110, Math.min(110, lab[2] + Bshift.getValuef()));
+            luv[0] = Math.max(0, Math.min(100, luv[0] * Lboost.getValuef() + Lshift.getValuef()));
+            luv[1] = Math.max(-150, Math.min(150, luv[1] + Ushift.getValuef()));
+            luv[2] = Math.max(-150, Math.min(150, luv[2] + Vshift.getValuef()));
 
-            ColorUtils.lab2xyz(lab, xyz);
+            ColorUtils.luv2xyz(luv, xyz);
             ColorUtils.xyz2rgb(xyz, rgb);
 
             colors[p.index] = LXColor.rgb((int)(255 * rgb[0]), (int)(255 * rgb[1]), (int)(255 * rgb[2]));

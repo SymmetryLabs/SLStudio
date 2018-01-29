@@ -30,22 +30,6 @@ public class LCHShift extends LXEffect {
     private final float[] lch = new float[3];
     private final float[] rgb = new float[3];
 
-    private void printRGB() {
-        System.out.println("RGB: " + rgb[0] + ", " + rgb[1] + ", " + rgb[2]);
-    }
-
-    private void printXYZ() {
-        System.out.println("XYZ: " + xyz[0] + ", " + xyz[1] + ", " + xyz[2]);
-    }
-
-    private void printLUV() {
-        System.out.println("LUV: " + luv[0] + ", " + luv[1] + ", " + luv[2]);
-    }
-
-    private void printLCH() {
-        System.out.println("LCH: " + lch[0] + ", " + lch[1] + ", " + lch[2]);
-    }
-
     @Override
     public void run(double deltaMs, double amount) {
         for (LXPoint p : model.points) {
@@ -54,38 +38,17 @@ public class LCHShift extends LXEffect {
             rgb[1] = ((c & LXColor.GREEN_MASK) >>> LXColor.GREEN_SHIFT) / 255f;
             rgb[2] = (c & LXColor.BLUE_MASK) / 255f;
 
-            //System.out.println("=====");
-
-            //printRGB();
             ColorUtils.rgb2xyz(rgb, xyz);
-            //printXYZ();
             ColorUtils.xyz2luv(xyz, luv);
-            //printLUV();
             ColorUtils.luv2lch(luv, lch);
-            //printLCH();
-
-            //printRGB();
-            //rgb2lab(rgb, luv);
-            //printLUV();
-            //luv2lch(luv, lch);
-            //printLCH();
 
             lch[0] = Math.max(0, Math.min(100, lch[0] * Lboost.getValuef() + Lshift.getValuef()));
             lch[1] = Math.max(0, Math.min(140, lch[1] * Cboost.getValuef() + Cshift.getValuef()));
             lch[2] = (lch[2] + Hshift.getValuef() + 360) % 360;
 
-            //printLCH();
-            //lch2luv(lch, luv);
-            //printLUV();
-            //lab2rgb(luv, rgb);
-            //printRGB();
-
             ColorUtils.lch2luv(lch, luv);
-            //printLUV();
             ColorUtils.luv2xyz(luv, xyz);
-            //printXYZ();
             ColorUtils.xyz2rgb(xyz, rgb);
-            //printRGB();
 
             colors[p.index] = LXColor.rgb((int)(255 * rgb[0]), (int)(255 * rgb[1]), (int)(255 * rgb[2]));
         }

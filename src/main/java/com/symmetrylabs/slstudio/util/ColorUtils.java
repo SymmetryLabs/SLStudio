@@ -59,8 +59,10 @@ public final class ColorUtils {
         return (src >> 24 & 0xFF) > (dst >> 24 & 0xFF) ? src : dst;
     }
 
-    private static ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB);
+    //private static ColorSpace cs = ColorSpace.getInstance(ColorSpace.CS_LINEAR_RGB);
 
+    // mostly based on
+    // http://www.brucelindbloom.com/index.html?Eqn_XYZ_to_RGB.html
     public static void xyz2rgb(float[] xyz, float[] rgb) {
 
         /*
