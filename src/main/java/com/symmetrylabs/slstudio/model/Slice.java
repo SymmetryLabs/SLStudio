@@ -23,6 +23,9 @@ public class Slice extends StripsModel<CurvedStrip> {
     public final static float DIAMETER = 8 * FEET;
     public final static float RADIUS = DIAMETER / 2;
 
+    public final static float MAGIC_SLICE_Z_POSITION_OFFSET = 11.f;
+    public final static float CALC_STRIP_X_MAGIC_NUMBER = 0.927f;
+
     public final static int   LEDS_PER_METER = 60;
     public final static float PIXEL_PITCH = INCHES_PER_METER / LEDS_PER_METER;
 
@@ -75,6 +78,10 @@ public class Slice extends StripsModel<CurvedStrip> {
             transform.rotateX(rotations[0] * DEG_TO_RAD);
             transform.rotateY(rotations[1] * DEG_TO_RAD);
             transform.rotateZ(rotations[2] * DEG_TO_RAD);
+
+            if (rotations[1] == 180) {
+                transform.translate(0, 0, MAGIC_SLICE_Z_POSITION_OFFSET);
+            }
 
             // create curved strips...
             int start = 0;
@@ -129,7 +136,7 @@ public class Slice extends StripsModel<CurvedStrip> {
     }
 
     public static float calculateStripX(float stripY) {
-        return Slice.RADIUS - (float) FastMath.sqrt(Slice.RADIUS * Slice.RADIUS - stripY * stripY);
+        return Slice.RADIUS - (float) FastMath.sqrt(Slice.RADIUS * Slice.RADIUS - stripY * stripY * CALC_STRIP_X_MAGIC_NUMBER);
     }
 
     public static float calculateArcWidth(float stripX) {
