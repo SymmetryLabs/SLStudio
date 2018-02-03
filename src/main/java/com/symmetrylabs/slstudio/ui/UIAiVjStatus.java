@@ -109,7 +109,21 @@ public class UIAiVjStatus extends UI2dContext {
                     int minutes = (int)Math.floor(remainingSeconds / 60);
                     int seconds = (int)remainingSeconds % 60;
 
-                    tick(minutes + ":" + ((seconds == 0) ? "00" : seconds));
+                    if (seconds >= 10) {
+                        tick(minutes + ":" + ((seconds == 0) ? "00" : seconds));
+                    }
+                    else {
+                        tick(minutes + ":" + ((seconds == 0) ? "00" : "0" + seconds));
+                    }
+                    if (minutes == 0 && seconds == 0){
+                        System.out.println("hit 0!");
+                        tick(minutes + ":" + ((seconds == 0) ? "00" : "0" + seconds));
+
+                        reset();
+                        SLStudio.applet.aivj.player.isRunning.setValue(false);
+                        SLStudio.applet.aivj.recorder.isRunning.setValue(false);
+                    }
+
                     if (remainingSeconds-- == 0) on = false;
                     elapsedTime = 0;
                 }
