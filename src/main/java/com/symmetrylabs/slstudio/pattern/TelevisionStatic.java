@@ -5,7 +5,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public class TelevisionStatic extends LXPattern {
     CompoundParameter brightParameter = new CompoundParameter("BRIGHT", 1.0);

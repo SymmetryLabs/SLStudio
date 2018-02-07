@@ -12,7 +12,7 @@ import heronarts.p3lx.ui.component.UIToggleSet;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
-import com.symmetrylabs.slstudio.util.CubesMappingMode;
+import com.symmetrylabs.slstudio.mappings.CubesMappingMode;
 import com.symmetrylabs.slstudio.SLStudio;
 
 /**

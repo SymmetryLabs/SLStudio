@@ -10,7 +10,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
 import com.symmetrylabs.slstudio.model.Strip;
-import static com.symmetrylabs.slstudio.util.MathUtils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 
 public class StripPlay extends CubesPattern {
     private final int NUM_OSC = 300;

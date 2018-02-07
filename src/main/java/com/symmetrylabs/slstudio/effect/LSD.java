@@ -1,12 +1,11 @@
 package com.symmetrylabs.slstudio.effect;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 
-import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
+import static com.symmetrylabs.util.NoiseUtils.noise;
 
 
 public class LSD extends SLModelEffect {

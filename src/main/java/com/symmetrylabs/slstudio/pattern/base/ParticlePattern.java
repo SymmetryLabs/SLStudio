@@ -2,9 +2,6 @@ package com.symmetrylabs.slstudio.pattern;
 
 import java.util.List;
 import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.List;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
@@ -18,17 +15,16 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXVector;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.util.BlobTracker;
-import com.symmetrylabs.slstudio.util.BlobFollower;
-import com.symmetrylabs.slstudio.util.Marker;
-import com.symmetrylabs.slstudio.util.MarkerSource;
-import com.symmetrylabs.slstudio.util.CubeMarker;
-import com.symmetrylabs.slstudio.util.OctahedronWithArrow;
+import com.symmetrylabs.util.BlobTracker;
+import com.symmetrylabs.util.BlobFollower;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
+import com.symmetrylabs.util.CubeMarker;
+import com.symmetrylabs.util.OctahedronWithArrow;
 import com.symmetrylabs.slstudio.model.LXPointNormal;
 
 public abstract class ParticlePattern extends SLModelPattern implements MarkerSource {

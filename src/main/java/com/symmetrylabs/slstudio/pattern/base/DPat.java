@@ -1,17 +1,13 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.SplittableRandom;
-import java.util.function.Consumer;
 
 import processing.core.PImage;
 import processing.core.PVector;
 import static processing.core.PConstants.ADD;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.model.LXPoint;
@@ -19,8 +15,8 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
 import com.symmetrylabs.slstudio.pattern.SLPattern;
-import com.symmetrylabs.slstudio.util.NoiseUtils;
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.NoiseUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public abstract class DPat extends SLPattern {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();

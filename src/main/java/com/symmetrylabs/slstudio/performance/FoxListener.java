@@ -10,7 +10,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import static com.symmetrylabs.slstudio.util.Utils.map;
+import static com.symmetrylabs.util.Utils.map;
 
 
 public class FoxListener extends LXComponent {

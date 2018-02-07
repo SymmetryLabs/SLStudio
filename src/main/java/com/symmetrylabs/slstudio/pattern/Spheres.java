@@ -9,7 +9,7 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public class Spheres extends LXPattern {
     private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);

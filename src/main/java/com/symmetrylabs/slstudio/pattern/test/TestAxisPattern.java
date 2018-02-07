@@ -8,7 +8,7 @@ import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.color.LXColor;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 
 
 

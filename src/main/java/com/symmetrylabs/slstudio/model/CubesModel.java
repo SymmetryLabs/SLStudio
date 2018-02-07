@@ -10,7 +10,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
 
-import static com.symmetrylabs.slstudio.util.MathUtils.*;
+import static com.symmetrylabs.util.MathUtils.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
 

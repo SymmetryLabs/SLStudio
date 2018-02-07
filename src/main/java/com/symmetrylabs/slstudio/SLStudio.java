@@ -1,9 +1,6 @@
 package com.symmetrylabs.slstudio;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
 
 import processing.core.PApplet;
 
@@ -16,7 +13,6 @@ import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.mappings.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
-import com.symmetrylabs.slstudio.mappings.PixliteMapping;
 import com.symmetrylabs.slstudio.model.TreeModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
@@ -36,10 +32,10 @@ import com.symmetrylabs.slstudio.ui.UITreeControls;
 import com.symmetrylabs.slstudio.ui.UITreeGround;
 import com.symmetrylabs.slstudio.ui.UITreeLeaves;
 import com.symmetrylabs.slstudio.ui.UITreeStructure;
-import com.symmetrylabs.slstudio.util.BlobTracker;
-import com.symmetrylabs.slstudio.util.DrawHelper;
-import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
-import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.util.BlobTracker;
+import com.symmetrylabs.util.DrawHelper;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.ListenableList;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 

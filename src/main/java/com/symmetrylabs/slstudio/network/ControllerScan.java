@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.network;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.util.listenable.ListenableList;
 
 import java.net.InetAddress;
 import java.util.Arrays;

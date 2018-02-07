@@ -24,7 +24,6 @@ import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.UIWindow;
-import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.component.UIGLPointCloud;
 import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
@@ -45,9 +44,8 @@ import com.symmetrylabs.slstudio.ui.UIAxes;
 import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
 import com.symmetrylabs.slstudio.ui.UIFramerate;
 import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
-import com.symmetrylabs.slstudio.ui.UIOutputs;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
-import com.symmetrylabs.slstudio.util.MarkerSource;
+import com.symmetrylabs.util.MarkerSource;
 
 public class SLStudioLX extends P3LX {
 

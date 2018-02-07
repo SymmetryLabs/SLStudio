@@ -12,7 +12,7 @@ import processing.core.PGraphics;
 
 import java.text.DecimalFormat;
 
-import static com.symmetrylabs.slstudio.util.Utils.millis;
+import static com.symmetrylabs.util.Utils.millis;
 import static processing.core.PConstants.LEFT;
 import static processing.core.PConstants.TOP;
 

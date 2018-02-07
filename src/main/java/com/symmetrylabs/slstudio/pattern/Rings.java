@@ -7,8 +7,8 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
-import com.symmetrylabs.slstudio.util.NoiseUtils;
+import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.util.NoiseUtils;
 
 public class Rings extends LXPattern {
     float dx, dy, dz;
