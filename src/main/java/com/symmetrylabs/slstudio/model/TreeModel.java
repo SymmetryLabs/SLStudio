@@ -530,14 +530,14 @@ public class TreeModel extends LXModel {
         // is the leaf pointing "up", HALF_PI is pointing to the left,
         // -HALF_PI is pointing to the right, etc.
         public static final Leaf.Orientation[] LEAVES = {
-            new Leaf.Orientation(0,  4.5f*INCHES, -1.7f*INCHES, -HALF_PI - QUARTER_PI), // A
-            new Leaf.Orientation(1,  5.5f*INCHES,    0f*INCHES, -HALF_PI), // B
-            new Leaf.Orientation(2,  2.0f*INCHES,  3.5f*INCHES, -HALF_PI + QUARTER_PI), // C
-            new Leaf.Orientation(3,  3.5f*INCHES,  7.5f*INCHES, -HALF_PI), // D
-            new Leaf.Orientation(4,  4.0f*INCHES, 11.2f*INCHES, -HALF_PI), // E
-            new Leaf.Orientation(5,  3.0f*INCHES,  9.5f*INCHES, -HALF_PI + QUARTER_PI), // F
-            new Leaf.Orientation(6,  3.5f*INCHES, 12.7f*INCHES, -HALF_PI + QUARTER_PI), // G
-            new Leaf.Orientation(7,  0.0f*INCHES, 13.5f*INCHES, 0), // H
+            new Leaf.Orientation(0, 4.5f*INCHES, -1.7f*INCHES, -HALF_PI - QUARTER_PI), // A
+            new Leaf.Orientation(1, 5.5f*INCHES, 0f*INCHES, -HALF_PI), // B
+            new Leaf.Orientation(2, 2.0f*INCHES, 3.5f*INCHES, -HALF_PI + QUARTER_PI), // C
+            new Leaf.Orientation(3, 3.5f*INCHES, 7.5f*INCHES, -HALF_PI), // D
+            new Leaf.Orientation(4, 4.0f*INCHES, 11.2f*INCHES, -HALF_PI), // E
+            new Leaf.Orientation(5, 3.0f*INCHES, 9.5f*INCHES, -HALF_PI + QUARTER_PI), // F
+            new Leaf.Orientation(6, 3.5f*INCHES, 12.7f*INCHES, -HALF_PI + QUARTER_PI), // G
+            new Leaf.Orientation(7, 0.0f*INCHES, 13.5f*INCHES, 0), // H
             null, // I
             null, // J
             null, // K
@@ -772,8 +772,8 @@ public class TreeModel extends LXModel {
             .scale(INCHES_PER_METER * INCHES)
             .multiply(
                 // NOTE: stellar indexes matrix vertically
-                m[0], m[4], m[8],  m[12],
-                m[1], m[5], m[9],  m[13],
+                m[0], m[4], m[8], m[12],
+                m[1], m[5], m[9], m[13],
                 m[2], m[6], m[10], m[14],
                 m[3], m[7], m[11], m[15]
             )
