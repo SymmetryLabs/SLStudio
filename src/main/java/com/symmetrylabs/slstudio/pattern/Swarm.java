@@ -1,12 +1,11 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
-
-import java.util.function.Consumer;
 
 import static processing.core.PApplet.*;
 
@@ -45,15 +44,15 @@ public class Swarm extends StripsPattern {
           int i = 0;
           for (LXPoint p : strip.points) {
             float fV = max(-1, 1 - dist(p.x/2.f, p.y, fX.getValuef()/2.f, fY.getValuef()) / 64.f);
-           // println("fv: " + fV); 
+           // println("fv: " + fV);
             colors[p.index] = lx.hsb(
             palette.getHuef() + 0.3f * abs(p.x - hOffX.getValuef()),
-            constrain(80 + 40 * fV, 0, 100), 
-            constrain(100 - 
+            constrain(80 + 40 * fV, 0, 100),
+            constrain(100 -
               (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
               );
             ++i;
-          } 
+          }
           ++s;
         }
     }

@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.ping;
 
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.BlobTracker;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;

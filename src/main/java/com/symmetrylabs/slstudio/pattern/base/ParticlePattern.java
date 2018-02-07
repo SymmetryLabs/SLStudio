@@ -1,10 +1,11 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.base;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
+import com.symmetrylabs.slstudio.pattern.base.SLModelPattern;
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
 

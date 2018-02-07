@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.models.cubes;
 
 import static processing.core.PApplet.*;
 

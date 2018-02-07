@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.mappings;
+package com.symmetrylabs.models.cubes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -14,9 +14,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.pattern.CubesMappingPattern;
-import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.listenable.ListListener;
 
 /**
@@ -86,8 +83,8 @@ public class CubesMappingMode {
         selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
 
-        SLStudio.applet.slControllers.addListener(new ListListener<SLController>() {
-            public void itemAdded(final int index, final SLController c) {
+        SLStudio.applet.cubesControllers.addListener(new ListListener<CubesController>() {
+            public void itemAdded(final int index, final CubesController c) {
                 if (isFixtureMapped(c.id)) {
                     fixturesMappedButNotOnNetwork.remove(c.id);
                     fixturesMappedAndOnTheNetwork.add(c.id);
@@ -100,7 +97,7 @@ public class CubesMappingMode {
                 selectedUnMappedFixture.setOptions(fixturesOnNetworkButNotMapped.isEmpty() ? emptyOptions
                         : fixturesOnNetworkButNotMapped.toArray(new String[0]));
             }
-            public void itemRemoved(final int index, final SLController c) {}
+            public void itemRemoved(final int index, final CubesController c) {}
         });
 
         enabled.addListener(p -> {

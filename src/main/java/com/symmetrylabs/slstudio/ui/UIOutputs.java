@@ -6,6 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Comparator;
 
+import com.symmetrylabs.models.cubes.CubesController;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -15,7 +16,6 @@ import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.listenable.IntListener;
 import com.symmetrylabs.util.listenable.ListListener;
 
@@ -23,8 +23,8 @@ public class UIOutputs extends UICollapsibleSection {
         UIOutputs(LX lx, UI ui, float x, float y, float w) {
                 super(ui, x, y, w, 124);
 
-                final SortedSet<SLController> sortedControllers = new TreeSet<SLController>(new Comparator<SLController>() {
-                        public int compare(SLController o1, SLController o2) {
+                final SortedSet<CubesController> sortedControllers = new TreeSet<CubesController>(new Comparator<CubesController>() {
+                        public int compare(CubesController o1, CubesController o2) {
                                 try {
                                         return Integer.parseInt(o1.id) - Integer.parseInt(o2.id);
                                 } catch (NumberFormatException e) {
@@ -34,8 +34,8 @@ public class UIOutputs extends UICollapsibleSection {
                 });
 
                 final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-                for (SLController c : SLStudio.applet.slControllers) { sortedControllers.add(c); }
-                for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
+                for (CubesController c : SLStudio.applet.cubesControllers) { sortedControllers.add(c); }
+                for (CubesController c : sortedControllers) { items.add(new ControllerItem(c)); }
                 final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
 
                 outputList.setItems(items).setSingleClickActivate(true);
@@ -43,27 +43,27 @@ public class UIOutputs extends UICollapsibleSection {
 
                 setTitle(items.size());
 
-                SLStudio.applet.slControllers.addListener(new ListListener<SLController>() {
-                    public void itemAdded(final int index, final SLController c) {
+                SLStudio.applet.cubesControllers.addListener(new ListListener<CubesController>() {
+                    public void itemAdded(final int index, final CubesController c) {
                         SLStudio.applet.dispatcher.dispatchUi(new Runnable() {
                                 public void run() {
                                         if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
                                         sortedControllers.add(c);
                                         items.clear();
-                                                for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
+                                                for (CubesController c : sortedControllers) { items.add(new ControllerItem(c)); }
                                         outputList.setItems(items);
                                         setTitle(items.size());
                                         redraw();
                                 }
                         });
                     }
-                    public void itemRemoved(final int index, final SLController c) {
+                    public void itemRemoved(final int index, final CubesController c) {
                         SLStudio.applet.dispatcher.dispatchUi(new Runnable() {
                                 public void run() {
                                         if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
                                         sortedControllers.remove(c);
                                         items.clear();
-                                                for (SLController c : sortedControllers) { items.add(new ControllerItem(c)); }
+                                                for (CubesController c : sortedControllers) { items.add(new ControllerItem(c)); }
                                         outputList.setItems(items);
                                         setTitle(items.size());
                                         redraw();
@@ -110,9 +110,9 @@ public class UIOutputs extends UICollapsibleSection {
         }
 
         class ControllerItem extends UIItemList.AbstractItem {
-                final SLController controller;
+                final CubesController controller;
 
-                ControllerItem(SLController _controller) {
+                ControllerItem(CubesController _controller) {
                     this.controller = _controller;
                     controller.enabled.addListener(new LXParameterListener() {
                         public void onParameterChanged(LXParameter parameter) { redraw(); }

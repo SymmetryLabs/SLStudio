@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.models.cubes;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -9,7 +9,7 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.model.CubesModel;
+import com.symmetrylabs.models.cubes.CubesModel;
 import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 

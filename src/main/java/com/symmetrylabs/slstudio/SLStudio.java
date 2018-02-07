@@ -11,11 +11,11 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.mappings.CubesLayout;
+import com.symmetrylabs.models.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.models.cubes.CubesController;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
 import com.symmetrylabs.slstudio.palettes.ImageLibrary;
 import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
@@ -45,7 +45,7 @@ public class SLStudio extends PApplet {
     private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
     public Pixlite[] pixlites;
-    public ListenableList<SLController> slControllers;
+    public ListenableList<CubesController> cubesControllers;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
@@ -103,7 +103,7 @@ public class SLStudio extends PApplet {
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
 
-                slControllers = CubesLayout.setupCubesOutputs(lx);
+                cubesControllers = CubesLayout.setupCubesOutputs(lx);
                 pixlites = setupPixlites();
 
                 apc40Listener = new APC40Listener(lx);

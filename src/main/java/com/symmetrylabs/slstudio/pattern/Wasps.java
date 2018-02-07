@@ -1,12 +1,9 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.util.List;
-import java.util.ArrayList;
-
+import com.symmetrylabs.slstudio.pattern.base.ParticlePattern;
 import org.apache.commons.math3.util.FastMath;
 
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.BooleanParameter;
 

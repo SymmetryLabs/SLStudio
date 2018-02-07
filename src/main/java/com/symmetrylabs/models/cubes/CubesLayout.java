@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.mappings;
+package com.symmetrylabs.models.cubes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -14,8 +14,6 @@ import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
@@ -281,9 +279,9 @@ public class CubesLayout {
     }
     */
 
-    public static ListenableList<SLController> setupCubesOutputs(LX lx) {
+    public static ListenableList<CubesController> setupCubesOutputs(LX lx) {
 
-        ListenableList<SLController> controllers = new ListenableList<>();
+        ListenableList<CubesController> controllers = new ListenableList<>();
 
         if (!(lx.model instanceof CubesModel))
             return controllers;
@@ -299,7 +297,7 @@ public class CubesLayout {
                     physid = macAddr;
                     System.err.println("WARNING: MAC address not in physid_to_mac.json: " + macAddr);
                 }
-                final SLController controller = new SLController(lx, device, physid);
+                final CubesController controller = new CubesController(lx, device, physid);
                 controllers.add(index, controller);
                 dispatcher.dispatchEngine(new Runnable() {
                     public void run() {
@@ -309,7 +307,7 @@ public class CubesLayout {
                 //controller.enabled.setValue(false);
             }
             public void itemRemoved(int index, NetworkDevice device) {
-                final SLController controller = controllers.remove(index);
+                final CubesController controller = controllers.remove(index);
                 dispatcher.dispatchEngine(new Runnable() {
                     public void run() {
                         //lx.removeOutput(controller);
@@ -318,7 +316,7 @@ public class CubesLayout {
             }
         });
 
-        //lx.addOutput(new SLController(lx, "10.200.1.255"));
+        //lx.addOutput(new CubesController(lx, "10.200.1.255"));
         //lx.addOutput(new LIFXOutput());
 
         return controllers;

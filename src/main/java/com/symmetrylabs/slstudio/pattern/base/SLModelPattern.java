@@ -1,5 +1,6 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.base;
 
+import com.symmetrylabs.slstudio.pattern.base.ModelSpecificPattern;
 import heronarts.lx.LX;
 
 import com.symmetrylabs.slstudio.model.SLModel;

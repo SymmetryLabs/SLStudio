@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.ping;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MarkerSource;
 import heronarts.lx.LX;
 

@@ -12,7 +12,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 
 import com.symmetrylabs.util.DrawHelper;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import static processing.core.PConstants.P3D;
 
