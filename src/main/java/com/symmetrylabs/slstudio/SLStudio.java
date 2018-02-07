@@ -17,6 +17,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import com.symmetrylabs.slstudio.mappings.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping;
+import com.symmetrylabs.slstudio.model.TreeModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.slstudio.output.SLController;
@@ -79,7 +80,7 @@ public class SLStudio extends PApplet {
         long setupStart = System.nanoTime();
         applet = this;
 
-        model = CubesLayout.buildModel();
+        model = new TreeModel(TreeModel.ModelMode.MAJOR_LIMBS);
 
         println("-- Model ----");
         println("# of points: " + model.points.length);
