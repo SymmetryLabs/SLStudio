@@ -80,7 +80,7 @@ public class SLStudio extends PApplet {
         long setupStart = System.nanoTime();
         applet = this;
 
-        model = new TreeModel(TreeModel.ModelMode.MAJOR_LIMBS);
+        model = new TreeModel(this, TreeModel.ModelMode.STELLAR_IMPORT);
 
         println("-- Model ----");
         println("# of points: " + model.points.length);

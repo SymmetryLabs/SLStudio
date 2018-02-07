@@ -7,12 +7,12 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
+import processing.core.PApplet;
 import static processing.core.PApplet.*;
 import static processing.core.PConstants.*;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
-import java.io.File;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -38,8 +38,8 @@ public class TreeModel extends LXModel {
     public final List<LeafAssemblage> assemblages;
     public final List<Leaf> leaves;
 
-    public TreeModel(ModelMode mode) {
-        super(new Fixture(mode));
+    public TreeModel(PApplet applet, ModelMode mode) {
+        super(new Fixture(applet, mode));
         Fixture f = (Fixture) this.fixtures.get(0);
         this.branches = Collections.unmodifiableList(f.branches);
         this.limbs = Collections.unmodifiableList(f.limbs);
@@ -67,13 +67,13 @@ public class TreeModel extends LXModel {
         private final List<LeafAssemblage> assemblages = new ArrayList<LeafAssemblage>();
         private final List<Limb> limbs = new ArrayList<Limb>();
 
-        Fixture(ModelMode mode) {
+        Fixture(PApplet applet, ModelMode mode) {
             if (SINGLE_BRANCH_MODE) {
                 addBranch(new Branch.Orientation(0, 10*FEET, 0, HALF_PI, HALF_PI, 0));
             } else if (mode == ModelMode.STELLAR_IMPORT) {
 
                 // Load up the Stellar export file
-                JSONObject assemblages = loadJSONObject(new File(STELLAR_FILE));
+                JSONObject assemblages = applet.loadJSONObject(STELLAR_FILE);
                 JSONArray fixtures = assemblages.getJSONArray("Fixtures");
 
                 // Load up all of the fixtures and index them by ID
