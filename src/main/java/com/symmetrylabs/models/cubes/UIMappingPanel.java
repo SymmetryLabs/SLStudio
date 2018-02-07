@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.models.cubes;
 
 import processing.core.PConstants;
 
@@ -18,10 +18,10 @@ import com.symmetrylabs.slstudio.SLStudio;
 /**
  * Mapping Mode: UI Window
  */
-public class UIMapping extends UICollapsibleSection {
+public class UIMappingPanel extends UICollapsibleSection {
     private CubesMappingMode mappingMode;
 
-    public UIMapping(LX lx, UI ui, float x, float y, float w) {
+    public UIMappingPanel(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 124);
 
         mappingMode = CubesMappingMode.getInstance(lx);
