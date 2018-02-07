@@ -7,11 +7,10 @@ import java.util.function.Consumer;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.model.LXFixture;
 import heronarts.lx.parameter.CompoundParameter;
 
 import com.symmetrylabs.slstudio.model.CubesModel;
-import static com.symmetrylabs.slstudio.util.MathUtils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 public class CubeFlash extends CubesPattern {

@@ -9,8 +9,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 import com.symmetrylabs.slstudio.pattern.base.DPat;
-import com.symmetrylabs.slstudio.util.NoiseUtils;
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.NoiseUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public class Noise extends DPat {
     private int currModeIndex, iSymm;

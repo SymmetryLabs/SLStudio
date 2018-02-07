@@ -4,7 +4,7 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.annotations.Expose;
 import com.symmetrylabs.slstudio.Environment;
-import com.symmetrylabs.slstudio.util.Utils;
+import com.symmetrylabs.util.Utils;
 import com.symmetrylabs.util.ClassUtils;
 import com.symmetrylabs.util.RuntimeTypeAdapterFactory;
 import processing.core.PApplet;

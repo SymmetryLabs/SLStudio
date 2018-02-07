@@ -1,10 +1,10 @@
 // package com.symmetrylabs.slstudio.ping;
 
 // import com.symmetrylabs.slstudio.model.LXPointNormal;
-// import com.symmetrylabs.slstudio.util.BlobFollower;
-// import com.symmetrylabs.slstudio.util.BlobTracker;
-// import com.symmetrylabs.slstudio.util.Marker;
-// import com.symmetrylabs.slstudio.util.Octahedron;
+// import com.symmetrylabs.util.BlobFollower;
+// import com.symmetrylabs.util.BlobTracker;
+// import com.symmetrylabs.util.Marker;
+// import com.symmetrylabs.util.Octahedron;
 // import heronarts.lx.LX;
 // import heronarts.lx.model.LXPoint;
 // import heronarts.lx.parameter.BooleanParameter;

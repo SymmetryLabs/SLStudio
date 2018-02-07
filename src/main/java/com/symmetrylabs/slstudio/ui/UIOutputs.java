@@ -7,7 +7,6 @@ import java.util.TreeSet;
 import java.util.Comparator;
 
 import heronarts.lx.LX;
-import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -16,11 +15,9 @@ import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.output.SLController;
-import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
-import com.symmetrylabs.slstudio.util.listenable.IntListener;
-import com.symmetrylabs.slstudio.util.listenable.ListListener;
+import com.symmetrylabs.util.listenable.IntListener;
+import com.symmetrylabs.util.listenable.ListListener;
 
 public class UIOutputs extends UICollapsibleSection {
         UIOutputs(LX lx, UI ui, float x, float y, float w) {
@@ -83,7 +80,7 @@ public class UIOutputs extends UICollapsibleSection {
 
                 UIButton resetCubes = new UIButton(w/2-6, 0, w/2 - 1, 19) {
                     @Override
-                    public void onToggle(boolean isOn) { 
+                    public void onToggle(boolean isOn) {
                         SLStudio.applet.outputControl.controllerResetModule.enabled.setValue(isOn);
                     }
                 }.setMomentary(true).setLabel("Reset Controllers");
@@ -130,7 +127,7 @@ public class UIOutputs extends UICollapsibleSection {
                         }
                 }
 
-                public boolean isSelected() { 
+                public boolean isSelected() {
                         return controller.enabled.isOn();
                 }
 

@@ -5,9 +5,9 @@ import java.util.HashMap;
 
 import heronarts.lx.LX;
 
-import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
-import com.symmetrylabs.slstudio.util.listenable.AbstractListListener;
-import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.AbstractListListener;
+import com.symmetrylabs.util.listenable.ListenableList;
 
 public class NetworkMonitor {
 

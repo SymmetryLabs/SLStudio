@@ -17,8 +17,8 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.util.NetworkUtils;
-import com.symmetrylabs.slstudio.util.CubesMappingMode;
+import com.symmetrylabs.util.NetworkUtils;
+import com.symmetrylabs.slstudio.mappings.CubesMappingMode;
 
 public class SLController extends LXOutput {
     public final String id;

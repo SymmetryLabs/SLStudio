@@ -8,7 +8,7 @@ import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.util.CubesMappingMode;
+import com.symmetrylabs.slstudio.mappings.CubesMappingMode;
 
 public class CubesMappingPattern extends CubesPattern {
     private final SinLFO pulse = new SinLFO(20, 100, 800);

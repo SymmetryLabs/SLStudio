@@ -18,7 +18,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.p3lx.P3LX;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
+import static com.symmetrylabs.util.NoiseUtils.noise;
 
 public class RKPattern01 extends P3CubeMapPattern {
 

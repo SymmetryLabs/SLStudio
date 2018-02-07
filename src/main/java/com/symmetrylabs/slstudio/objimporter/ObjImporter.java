@@ -7,7 +7,7 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.symmetrylabs.slstudio.util.Utils.sketchPath;
+import static com.symmetrylabs.util.Utils.sketchPath;
 import static processing.core.PApplet.println;
 import static processing.core.PConstants.PI;
 

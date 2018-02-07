@@ -8,7 +8,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
 import com.symmetrylabs.slstudio.pattern.base.DPat;
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public class AskewPlanes extends DPat {
 

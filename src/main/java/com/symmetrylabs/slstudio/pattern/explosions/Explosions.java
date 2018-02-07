@@ -15,7 +15,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
 
-import static com.symmetrylabs.slstudio.util.MathUtils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class Explosions extends LXPattern {
