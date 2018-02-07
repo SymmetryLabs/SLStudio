@@ -2,7 +2,6 @@ package com.symmetrylabs.slstudio.model;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 import heronarts.lx.model.LXAbstractFixture;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
@@ -19,7 +18,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TreeModel extends LXModel {
+public class TreeModel extends SLModel {
 
     public enum ModelMode {
         MAJOR_LIMBS,
@@ -201,7 +200,7 @@ public class TreeModel extends LXModel {
         }
     }
 
-    public static class Limb extends LXModel {
+    public static class Limb extends SLModel {
         public enum Size {
             FULL,
             MEDIUM,
@@ -326,7 +325,7 @@ public class TreeModel extends LXModel {
      * Leaf assemblages shoot off the left and right sides
      * as well as one out the top.
      */
-    public static class Branch extends LXModel {
+    public static class Branch extends SLModel {
         public static final int NUM_ASSEMBLAGES = 8;
         public static final int NUM_LEAVES = NUM_ASSEMBLAGES * LeafAssemblage.NUM_LEAVES;
         public static final int NUM_LEDS = NUM_ASSEMBLAGES * LeafAssemblage.NUM_LEDS;
@@ -490,7 +489,7 @@ public class TreeModel extends LXModel {
     /**
      * An assemblage is a modular fixture with multiple leaves.
      */
-    public static class LeafAssemblage extends LXModel {
+    public static class LeafAssemblage extends SLModel {
 
         public static final int NUM_LEAVES = 15;
         public static final int NUM_LEDS = NUM_LEAVES * Leaf.NUM_LEDS;
@@ -603,7 +602,7 @@ public class TreeModel extends LXModel {
      * The base addressable fixture, a Leaf with LEDs embedded inside.
      * Currently modeled as a single point. Room for improvement!
      */
-    public static class Leaf extends LXModel {
+    public static class Leaf extends SLModel {
         public static final int NUM_LEDS = 7;
         public static final float LED_OFFSET = .75f*INCHES;
         public static final float LED_SPACING = 1.3f*INCHES;
@@ -701,7 +700,7 @@ public class TreeModel extends LXModel {
     // based upon actual mechanical drawings and fabricated dimensions.
     // This one just estimates a cloud of points distributed across
     // a hemisphere. Left here for reference.
-    public static class Hemisphere extends LXModel {
+    public static class Hemisphere extends SLModel {
 
         public static final float NUM_POINTS = 25000;
         public static final float INNER_RADIUS = 33*FEET;

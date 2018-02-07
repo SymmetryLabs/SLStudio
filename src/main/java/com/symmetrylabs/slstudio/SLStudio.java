@@ -32,6 +32,10 @@ import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
+import com.symmetrylabs.slstudio.ui.UITreeControls;
+import com.symmetrylabs.slstudio.ui.UITreeGround;
+import com.symmetrylabs.slstudio.ui.UITreeLeaves;
+import com.symmetrylabs.slstudio.ui.UITreeStructure;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
@@ -134,6 +138,14 @@ public class SLStudio extends PApplet {
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
 
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+
+                // Tree UI elements
+                ui.preview.addComponent(new UITreeGround(applet));
+                UITreeStructure uiTreeStructure = new UITreeStructure((TreeModel) model);
+                ui.preview.addComponent(uiTreeStructure);
+                UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) model);
+                ui.preview.addComponent(uiTreeLeaves);
+                new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
             }
         };
         lx.engine.isChannelMultithreaded.setValue(true);
