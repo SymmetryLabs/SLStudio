@@ -24,14 +24,6 @@ import com.symmetrylabs.util.listenable.ListListener;
 public class UIOutputs extends UICollapsibleSection {
         private final UIItemList.ScrollList outputList;
 
-        private void updateItems(CubesLayout layout) {
-                final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-                for (CubesController c : layout.getSortedControllers()) { items.add(new ControllerItem(c)); }
-                outputList.setItems(items);
-                setTitle(items.size());
-                redraw();
-        }
-
         UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
                 super(ui, x, y, w, 124);
                 outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
@@ -83,6 +75,14 @@ public class UIOutputs extends UICollapsibleSection {
                     };
                 });
         }
+
+      private void updateItems(CubesLayout layout) {
+            final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
+            for (CubesController c : layout.getSortedControllers()) { items.add(new ControllerItem(c)); }
+            outputList.setItems(items);
+            setTitle(items.size());
+            redraw();
+      }
 
         private final IntListener deviceVersionListener = new IntListener() {
                 public void onChange(int version) {
