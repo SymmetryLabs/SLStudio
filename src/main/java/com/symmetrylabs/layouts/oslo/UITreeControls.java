@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.layouts.oslo;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.p3lx.ui.UI2dContainer;

@@ -1,16 +1,13 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.layouts.oslo;
 
-import com.symmetrylabs.slstudio.model.TreeModel;
+import com.symmetrylabs.layouts.oslo.TreeModel;
 import static com.symmetrylabs.util.DistanceConstants.*;
+
+import com.symmetrylabs.slstudio.ui.UICylinder;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 import static processing.core.PConstants.*;
 import processing.core.PGraphics;
-
-import java.nio.ByteBuffer;
-import java.nio.ByteOrder;
-import java.nio.FloatBuffer;
-import java.nio.IntBuffer;
 
 public class UITreeStructure extends UI3dComponent {
 

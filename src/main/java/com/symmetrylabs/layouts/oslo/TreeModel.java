@@ -1,6 +1,8 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.layouts.oslo;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
+
+import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXMatrix;
@@ -8,7 +10,7 @@ import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
 import processing.core.PApplet;
 import static processing.core.PApplet.*;
-import static processing.core.PConstants.*;
+
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 

@@ -1,15 +1,13 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.layouts.oslo;
 
-import com.symmetrylabs.slstudio.model.TreeModel;
+import com.symmetrylabs.layouts.oslo.TreeModel;
 import static com.symmetrylabs.util.DistanceConstants.*;
-import heronarts.p3lx.ui.UI;
+
 import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PApplet;
 import static processing.core.PConstants.*;
 import processing.core.PGraphics;
 import processing.core.PImage;
-
-import java.io.File;
 
 public class UITreeGround extends UI3dComponent {
 

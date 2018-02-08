@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.oslo.OsloLayout;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -12,9 +13,8 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
-import com.symmetrylabs.slstudio.model.TreeModel;
+import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
@@ -28,10 +28,6 @@ import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
-import com.symmetrylabs.slstudio.ui.UITreeControls;
-import com.symmetrylabs.slstudio.ui.UITreeGround;
-import com.symmetrylabs.slstudio.ui.UITreeLeaves;
-import com.symmetrylabs.slstudio.ui.UITreeStructure;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -78,9 +74,9 @@ public class SLStudio extends PApplet {
     public void setup() {
         long setupStart = System.nanoTime();
         applet = this;
-        layout = new CubesLayout();
+        layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
-        model = new TreeModel(this, TreeModel.ModelMode.MAJOR_LIMBS);
+        model = layout.buildModel();
         printModelStats(model);
 
         new SLStudioLX(this, model, true) {
@@ -122,14 +118,6 @@ public class SLStudio extends PApplet {
                 ui.preview.setCenter(model.cx, model.cy, model.cz);
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
-
-                // Tree UI elements
-                ui.preview.addComponent(new UITreeGround(applet));
-                UITreeStructure uiTreeStructure = new UITreeStructure((TreeModel) model);
-                ui.preview.addComponent(uiTreeStructure);
-                UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) model);
-                ui.preview.addComponent(uiTreeLeaves);
-                new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
 
                 layout.setupUi(lx, ui);
             }

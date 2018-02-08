@@ -1,6 +1,6 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.layouts.oslo;
 
-import com.symmetrylabs.slstudio.model.TreeModel;
+import com.symmetrylabs.layouts.oslo.TreeModel;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
@@ -12,7 +12,6 @@ import processing.opengl.PGL;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShapeOpenGL;
 
-import java.io.File;
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
