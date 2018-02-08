@@ -50,13 +50,14 @@ public class CubesMappingMode {
     private static Map<LX, CubesMappingMode> instanceByLX = new HashMap<>();
 
     public static synchronized CubesMappingMode getInstance(LX lx) {
-        if (!instanceByLX.containsKey(lx)) {
-            instanceByLX.put(lx, new CubesMappingMode(lx));
-        }
         return instanceByLX.get(lx);
     }
 
-    private CubesMappingMode(LX lx) {
+    public static void createInstance(LX lx, CubesLayout layout) {
+        instanceByLX.put(lx, new CubesMappingMode(lx, layout));
+    }
+
+    private CubesMappingMode(LX lx, CubesLayout layout) {
         this.lx = lx;
 
         this.enabled = new BooleanParameter("enabled", false)
@@ -84,7 +85,7 @@ public class CubesMappingMode {
         selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
 
-        SLStudio.applet.cubesControllers.addListener(new ListListener<CubesController>() {
+        layout.addControllerListListener(new ListListener<CubesController>() {
             public void itemAdded(final int index, final CubesController c) {
                 if (isFixtureMapped(c.id)) {
                     fixturesMappedButNotOnNetwork.remove(c.id);

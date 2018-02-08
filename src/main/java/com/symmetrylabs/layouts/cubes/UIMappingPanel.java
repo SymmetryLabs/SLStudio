@@ -154,6 +154,5 @@ public class UIMappingPanel extends UICollapsibleSection {
             }.setLabel("+").setMomentary(true);
             incrementSelectedFixture.addToContainer(this);
         }
-
     }
 }

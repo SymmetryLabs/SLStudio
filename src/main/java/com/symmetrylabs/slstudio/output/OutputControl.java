@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.output;
 
-import com.symmetrylabs.layouts.cubes.CubesController;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.BooleanParameter;
@@ -28,14 +27,9 @@ public final class OutputControl extends LXComponent {
         addParameter(testBroadcast);
 
         enabled.addListener(param -> {
-            boolean isEnabled = ((BooleanParameter)param).isOn();
-
+            boolean isEnabled = ((BooleanParameter) param).isOn();
             for (Pixlite pixlite : SLStudio.applet.pixlites) {
                 pixlite.enabled.setValue(isEnabled);
-            }
-
-            for (CubesController c : SLStudio.applet.cubesControllers) {
-                c.enabled.setValue(isEnabled);
             }
         });
     }

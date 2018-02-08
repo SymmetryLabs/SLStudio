@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.layouts.cubes;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -7,6 +7,8 @@ import java.util.TreeSet;
 import java.util.Comparator;
 
 import com.symmetrylabs.layouts.cubes.CubesController;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
@@ -20,53 +22,39 @@ import com.symmetrylabs.util.listenable.IntListener;
 import com.symmetrylabs.util.listenable.ListListener;
 
 public class UIOutputs extends UICollapsibleSection {
-        UIOutputs(LX lx, UI ui, float x, float y, float w) {
-                super(ui, x, y, w, 124);
+        private final UIItemList.ScrollList outputList;
 
-                final SortedSet<CubesController> sortedControllers = new TreeSet<CubesController>(new Comparator<CubesController>() {
-                        public int compare(CubesController o1, CubesController o2) {
-                                try {
-                                        return Integer.parseInt(o1.id) - Integer.parseInt(o2.id);
-                                } catch (NumberFormatException e) {
-                                        return o1.id.compareTo(o2.id);
-                                }
-                        }
-                });
-
+        private void updateItems(CubesLayout layout) {
                 final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
-                for (CubesController c : SLStudio.applet.cubesControllers) { sortedControllers.add(c); }
-                for (CubesController c : sortedControllers) { items.add(new ControllerItem(c)); }
-                final UIItemList.ScrollList outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
+                for (CubesController c : layout.getSortedControllers()) { items.add(new ControllerItem(c)); }
+                outputList.setItems(items);
+                setTitle(items.size());
+                redraw();
+        }
 
-                outputList.setItems(items).setSingleClickActivate(true);
+        UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
+                super(ui, x, y, w, 124);
+                outputList = new UIItemList.ScrollList(ui, 0, 22, w-8, 78);
+
+                updateItems(layout);
+                outputList.setSingleClickActivate(true);
                 outputList.addToContainer(this);
 
-                setTitle(items.size());
-
-                SLStudio.applet.cubesControllers.addListener(new ListListener<CubesController>() {
+                layout.addControllerListListener(new ListListener<CubesController>() {
                     public void itemAdded(final int index, final CubesController c) {
                         SLStudio.applet.dispatcher.dispatchUi(new Runnable() {
                                 public void run() {
                                         if (c.networkDevice != null) c.networkDevice.version.addListener(deviceVersionListener);
-                                        sortedControllers.add(c);
-                                        items.clear();
-                                                for (CubesController c : sortedControllers) { items.add(new ControllerItem(c)); }
-                                        outputList.setItems(items);
-                                        setTitle(items.size());
-                                        redraw();
+                                        updateItems(layout);
                                 }
                         });
                     }
+
                     public void itemRemoved(final int index, final CubesController c) {
                         SLStudio.applet.dispatcher.dispatchUi(new Runnable() {
                                 public void run() {
                                         if (c.networkDevice != null) c.networkDevice.version.removeListener(deviceVersionListener);
-                                        sortedControllers.remove(c);
-                                        items.clear();
-                                                for (CubesController c : sortedControllers) { items.add(new ControllerItem(c)); }
-                                        outputList.setItems(items);
-                                        setTitle(items.size());
-                                        redraw();
+                                        updateItems(layout);
                                 }
                         });
                     }
