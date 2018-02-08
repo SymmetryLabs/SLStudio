@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.raven;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import processing.core.PGraphics;
@@ -20,12 +21,16 @@ import heronarts.p3lx.P3LX;
 import com.symmetrylabs.slstudio.SLStudio;
 import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
 
+import com.symmetrylabs.slstudio.util.BlobTracker;
+import com.symmetrylabs.slstudio.util.BlobFollower;
+
 public class RKPattern01 extends P3CubeMapPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
 
     BooleanParameter audioLink = new BooleanParameter("audioLink", false);
+    BooleanParameter blobsLink = new BooleanParameter("blobsLink", false);
     CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
     CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
     CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -34,6 +39,10 @@ public class RKPattern01 extends P3CubeMapPattern {
     CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
     CompoundParameter nDsp = new CompoundParameter("nDsp", 1, .125, 2.5);
 
+    protected BlobFollower blobFollower;
+    PVector modelPos;
+    PVector [] blobsPos;
+
     int ringRes = 40, ringAmt = 20, pRingAmt = 20;
     float l1 = 600, l2 = 600, l3 = 600;
     float gTheta, gThetaSpacing, gWeightScalar;
@@ -41,7 +50,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     ArrayList<Ring> testRings;
     PVector rotDir;
 
-    boolean audioLinked;
+    boolean audioLinked, blobsLinked;
 
     float[] pEQBands = new float[16];
     float totalBandMag, avgBandMag;
@@ -55,6 +64,9 @@ public class RKPattern01 extends P3CubeMapPattern {
             200
         );
 
+        blobFollower = new BlobFollower(BlobTracker.getInstance(lx));
+        modelPos = new PVector(lx.model.cx, lx.model.cy, lx.model.cz);
+
         rotDir = PVector.random3D();
 
         testRings = new ArrayList<Ring>();
@@ -64,6 +76,7 @@ public class RKPattern01 extends P3CubeMapPattern {
         }
 
         addParameter(audioLink);
+        addParameter(blobsLink);
         addParameter(rX);
         addParameter(rY);
         addParameter(rZ);
@@ -97,9 +110,23 @@ public class RKPattern01 extends P3CubeMapPattern {
         pg.endDraw();
     }
 
+    void updateBlobs(){
+        List<BlobFollower.Follower> blobs = blobFollower.getFollowers();
+        blobsPos = new PVector[blobs.size()];
+        int blobIdx = 0;
+        for (BlobFollower.Follower blob : blobs) {
+            blobsPos[blobIdx].set(blob.pos.x, blob.pos.y, blob.pos.z);
+            blobIdx++;
+        }
+    }
+
     void updateParameters() {
 
         audioLinked = audioLink.getValueb();
+        blobsLinked = blobsLink.getValueb();
+
+        if (blobsLinked) updateBlobs();
+
         if (!audioLinked) {
             rotXT = rX.getValuef();
             rotYT = rY.getValuef();
@@ -162,6 +189,13 @@ public class RKPattern01 extends P3CubeMapPattern {
         pg.rotateY(rotY);
         pg.rotateZ(rotZ);
         drawScene(pg);
+        if(blobsLinked && blobsPos!=null){
+            for(int i=0; i<blobsPos.length; i++){
+                pg.stroke(255, 0, 0);
+                pg.strokeWeight(20);
+                pg.point(blobsPos[i].x, blobsPos[i].y, blobsPos[i].z);
+            }
+        }
         pg.endDraw();
     }
 
