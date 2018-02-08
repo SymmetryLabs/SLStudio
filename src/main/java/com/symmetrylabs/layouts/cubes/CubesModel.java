@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.layouts.cubes;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
@@ -278,7 +280,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 for (int i = 0; i < FACES_PER_CUBE; i++) {
                     Face face = new Face(type.FACE_METRICS, t);
                     this.faces.add(face);
-                    for (CubesStrip s : face.strips) {
+                    for (CubesStrip s : face.getStrips()) {
                         this.strips.add(s);
                     }
                     for (LXPoint p : face.points) {

@@ -1,0 +1,24 @@
+package com.symmetrylabs.layouts;
+
+import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.model.SLModel;
+
+public interface Layout {
+    /**
+     * Constructs the root model object.  This is called early during startup and
+     * should do its work without assuming that anything has been initialized yet.
+     */
+    SLModel buildModel();
+
+    /**
+     * This will be called after the SLStudioLX object is created but before the
+     * UI is built.  Use this to set up non-UI components such as output controllers.
+      */
+    void setupLx(SLStudioLX lx);
+
+    /**
+     * This will be called when the UI is ready.  Use this to add panels to the UI
+     * and register additional 3-D objects to be rendered in the display.
+     */
+    void setupUi(SLStudioLX lx, SLStudioLX.UI ui);
+}

@@ -4,6 +4,7 @@ import java.io.File;
 
 import com.google.gson.JsonObject;
 
+import com.symmetrylabs.layouts.Layout;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.event.KeyEvent;
@@ -37,7 +38,7 @@ import heronarts.p3lx.ui.studio.mixer.UIMixerStripControls;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.LXClassLoader;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
@@ -48,12 +49,10 @@ import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.util.MarkerSource;
 
 public class SLStudioLX extends P3LX {
-
     public static final String COPYRIGHT = "Symmetry Labs";
     public PaletteLibrary paletteLibrary;
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
-
         public final PreviewWindow preview;
         public final UILeftPane leftPane;
         public final UIOverriddenRightPane rightPane;

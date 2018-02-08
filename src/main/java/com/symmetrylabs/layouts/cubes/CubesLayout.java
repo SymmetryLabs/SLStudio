@@ -1,32 +1,31 @@
-package com.symmetrylabs.slstudio.mappings;
+package com.symmetrylabs.layouts.cubes;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Map;
-import java.util.HashMap;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
-import heronarts.lx.LX;
+import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.slstudio.SLStudioLX;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableList;
 import com.symmetrylabs.util.listenable.ListListener;
+import heronarts.p3lx.ui.UI2dScrollContext;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class CubesLayout {
+public class CubesLayout implements Layout {
+    ListenableList<CubesController> controllers = new ListenableList<>();
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
@@ -221,7 +220,7 @@ public class CubesLayout {
     static Map<String, String> macToPhysid = new HashMap<>();
     static Map<String, String> physidToMac = new HashMap<>();
 
-    public static CubesModel buildModel() {
+    public CubesModel buildModel() {
 
         byte[] bytes = SLStudio.applet.loadBytes("physid_to_mac.json");
         if (bytes != null) {
@@ -281,12 +280,8 @@ public class CubesLayout {
     }
     */
 
-    public static ListenableList<SLController> setupCubesOutputs(LX lx) {
-
-        ListenableList<SLController> controllers = new ListenableList<>();
-
-        if (!(lx.model instanceof CubesModel))
-            return controllers;
+    public void setupLx(SLStudioLX lx) {
+        CubesMappingMode.createInstance(lx, this);
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx);
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
@@ -299,7 +294,7 @@ public class CubesLayout {
                     physid = macAddr;
                     System.err.println("WARNING: MAC address not in physid_to_mac.json: " + macAddr);
                 }
-                final SLController controller = new SLController(lx, device, physid);
+                final CubesController controller = new CubesController(lx, device, physid);
                 controllers.add(index, controller);
                 dispatcher.dispatchEngine(new Runnable() {
                     public void run() {
@@ -308,8 +303,9 @@ public class CubesLayout {
                 });
                 //controller.enabled.setValue(false);
             }
+
             public void itemRemoved(int index, NetworkDevice device) {
-                final SLController controller = controllers.remove(index);
+                final CubesController controller = controllers.remove(index);
                 dispatcher.dispatchEngine(new Runnable() {
                     public void run() {
                         //lx.removeOutput(controller);
@@ -318,9 +314,38 @@ public class CubesLayout {
             }
         });
 
-        //lx.addOutput(new SLController(lx, "10.200.1.255"));
+        //lx.addOutput(new CubesController(lx, "10.200.1.255"));
         //lx.addOutput(new LIFXOutput());
 
-        return controllers;
+        lx.engine.output.enabled.addListener(param -> {
+            boolean isEnabled = ((BooleanParameter) param).isOn();
+            for (CubesController controller : controllers) {
+                controller.enabled.setValue(isEnabled);
+            }
+        });
+    }
+
+    public List<CubesController> getSortedControllers() {
+        List<CubesController> sorted = new ArrayList<CubesController>(controllers);
+        sorted.sort(new Comparator<CubesController>() {
+            public int compare(CubesController o1, CubesController o2) {
+                try {
+                    return Integer.parseInt(o1.id) - Integer.parseInt(o2.id);
+                } catch (NumberFormatException e) {
+                    return o1.id.compareTo(o2.id);
+                }
+            }
+        });
+        return sorted;
+    }
+
+    public void addControllerListListener(ListListener<CubesController> listener) {
+        controllers.addListener(listener);
+    }
+
+    public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+        UI2dScrollContext utility = ui.rightPane.utility;
+        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 }

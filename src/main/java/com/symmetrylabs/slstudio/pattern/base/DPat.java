@@ -14,7 +14,6 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.util.NoiseUtils;
 import com.symmetrylabs.util.MathUtils;
 

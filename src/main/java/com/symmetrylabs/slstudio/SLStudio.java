@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio;
 
 import java.util.Map;
 
+import com.symmetrylabs.layouts.Layout;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -11,12 +12,11 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.mappings.CubesLayout;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.model.TreeModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
 import com.symmetrylabs.slstudio.palettes.ImageLibrary;
 import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
@@ -35,7 +35,6 @@ import com.symmetrylabs.slstudio.ui.UITreeStructure;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.listenable.ListenableList;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
@@ -44,13 +43,13 @@ public class SLStudio extends PApplet {
 
     public static SLStudio applet;
     public SLStudioLX lx;
+    public Layout layout;
     private LXModel model;
     private Mappings mappings;
     public Dispatcher dispatcher;
     private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
     public Pixlite[] pixlites;
-    public ListenableList<SLController> slControllers;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
@@ -79,20 +78,10 @@ public class SLStudio extends PApplet {
     public void setup() {
         long setupStart = System.nanoTime();
         applet = this;
+        layout = new CubesLayout();
 
         model = new TreeModel(this, TreeModel.ModelMode.MAJOR_LIMBS);
-
-        println("-- Model ----");
-        println("# of points: " + model.points.length);
-        println("model.xMin: " + model.xMin);
-        println("model.xMax: " + model.xMax);
-        println("model.xRange: " + model.xRange);
-        println("model.yMin: " + model.yMin);
-        println("model.yMax: " + model.yMax);
-        println("model.yRange: " + model.yRange);
-        println("model.zMin: " + model.zMin);
-        println("model.zMax: " + model.zMax);
-        println("model.zRange: " + model.zRange + "\n");
+        printModelStats(model);
 
         new SLStudioLX(this, model, true) {
             @Override
@@ -105,10 +94,10 @@ public class SLStudio extends PApplet {
                 (networkMonitor = NetworkMonitor.getInstance(lx)).start();
                 setupGammaCorrection();
 
+                layout.setupLx(lx);
+
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
-
-                slControllers = CubesLayout.setupCubesOutputs(lx);
                 pixlites = setupPixlites();
 
                 apc40Listener = new APC40Listener(lx);
@@ -132,7 +121,6 @@ public class SLStudio extends PApplet {
                 ui.leftPane.audio.setVisible(true);
                 ui.preview.setCenter(model.cx, model.cy, model.cz);
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
-
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
                 // Tree UI elements
@@ -142,6 +130,8 @@ public class SLStudio extends PApplet {
                 UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) model);
                 ui.preview.addComponent(uiTreeLeaves);
                 new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
+
+                layout.setupUi(lx, ui);
             }
         };
         lx.engine.isChannelMultithreaded.setValue(true);
@@ -153,6 +143,20 @@ public class SLStudio extends PApplet {
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
+    }
+
+    void printModelStats(LXModel model) {
+        println("-- Model ----");
+        println("# of points: " + model.points.length);
+        println("model.xMin: " + model.xMin);
+        println("model.xMax: " + model.xMax);
+        println("model.xRange: " + model.xRange);
+        println("model.yMin: " + model.yMin);
+        println("model.yMax: " + model.yMax);
+        println("model.yRange: " + model.yRange);
+        println("model.zMin: " + model.zMin);
+        println("model.zMax: " + model.zMax);
+        println("model.zRange: " + model.zRange + "\n");
     }
 
     void loadPalettes(PaletteLibrary pl) {

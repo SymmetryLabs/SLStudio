@@ -1,10 +1,11 @@
-package com.symmetrylabs.slstudio.mappings;
+package com.symmetrylabs.layouts.cubes;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.symmetrylabs.layouts.cubes.patterns.CubesMappingPattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXChannel;
@@ -14,9 +15,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.pattern.CubesMappingPattern;
-import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.listenable.ListListener;
 
 /**
@@ -52,13 +50,14 @@ public class CubesMappingMode {
     private static Map<LX, CubesMappingMode> instanceByLX = new HashMap<>();
 
     public static synchronized CubesMappingMode getInstance(LX lx) {
-        if (!instanceByLX.containsKey(lx)) {
-            instanceByLX.put(lx, new CubesMappingMode(lx));
-        }
         return instanceByLX.get(lx);
     }
 
-    private CubesMappingMode(LX lx) {
+    public static void createInstance(LX lx, CubesLayout layout) {
+        instanceByLX.put(lx, new CubesMappingMode(lx, layout));
+    }
+
+    private CubesMappingMode(LX lx, CubesLayout layout) {
         this.lx = lx;
 
         this.enabled = new BooleanParameter("enabled", false)
@@ -86,8 +85,8 @@ public class CubesMappingMode {
         selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
 
-        SLStudio.applet.slControllers.addListener(new ListListener<SLController>() {
-            public void itemAdded(final int index, final SLController c) {
+        layout.addControllerListListener(new ListListener<CubesController>() {
+            public void itemAdded(final int index, final CubesController c) {
                 if (isFixtureMapped(c.id)) {
                     fixturesMappedButNotOnNetwork.remove(c.id);
                     fixturesMappedAndOnTheNetwork.add(c.id);
@@ -100,7 +99,7 @@ public class CubesMappingMode {
                 selectedUnMappedFixture.setOptions(fixturesOnNetworkButNotMapped.isEmpty() ? emptyOptions
                         : fixturesOnNetworkButNotMapped.toArray(new String[0]));
             }
-            public void itemRemoved(final int index, final SLController c) {}
+            public void itemRemoved(final int index, final CubesController c) {}
         });
 
         enabled.addListener(p -> {

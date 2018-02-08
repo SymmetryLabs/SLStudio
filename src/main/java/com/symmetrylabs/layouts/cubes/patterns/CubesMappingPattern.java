@@ -1,14 +1,13 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.layouts.cubes.patterns;
 
+import com.symmetrylabs.layouts.cubes.CubesMappingMode;
+import com.symmetrylabs.layouts.cubes.CubesModel;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
-
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.mappings.CubesMappingMode;
 
 public class CubesMappingPattern extends CubesPattern {
     private final SinLFO pulse = new SinLFO(20, 100, 800);

@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ui;
+package com.symmetrylabs.layouts.cubes;
 
 import processing.core.PConstants;
 
@@ -12,16 +12,15 @@ import heronarts.p3lx.ui.component.UIToggleSet;
 import heronarts.p3lx.ui.component.UILabel;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
-import com.symmetrylabs.slstudio.mappings.CubesMappingMode;
 import com.symmetrylabs.slstudio.SLStudio;
 
 /**
  * Mapping Mode: UI Window
  */
-public class UIMapping extends UICollapsibleSection {
+public class UIMappingPanel extends UICollapsibleSection {
     private CubesMappingMode mappingMode;
 
-    public UIMapping(LX lx, UI ui, float x, float y, float w) {
+    public UIMappingPanel(LX lx, UI ui, float x, float y, float w) {
         super(ui, x, y, w, 124);
 
         mappingMode = CubesMappingMode.getInstance(lx);
@@ -155,6 +154,5 @@ public class UIMapping extends UICollapsibleSection {
             }.setLabel("+").setMomentary(true);
             incrementSelectedFixture.addToContainer(this);
         }
-
     }
 }

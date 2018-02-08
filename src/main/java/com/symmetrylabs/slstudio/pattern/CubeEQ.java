@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.pattern.base.SLModelPattern;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;

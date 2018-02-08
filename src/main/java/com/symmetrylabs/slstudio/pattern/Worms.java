@@ -4,6 +4,7 @@ import java.lang.Math;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;

@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.layouts.cubes.patterns;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -8,6 +8,8 @@ import java.lang.Math;
 
 import java.util.Stack;
 
+import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
@@ -21,15 +23,13 @@ import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
-import heronarts.lx.midi.MidiNoteOff;
 
-import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 
 public class MidiMusic extends SLPattern {
-    
+
     private final Stack<LXLayer> newLayers = new Stack<LXLayer>();
-    
+
     private final Map<Integer, LightUp> lightMap = new HashMap<Integer, LightUp>();
     private final List<LightUp> lights = new ArrayList<LightUp>();
     private final CompoundParameter lightSize = new CompoundParameter("SIZE", 0.5);
@@ -39,10 +39,10 @@ public class MidiMusic extends SLPattern {
     private final LinearEnvelope sparkle = new LinearEnvelope(0, 1, 500);
     private boolean sparkleDirection = true;
     private float sparkleBright = 100;
-    
+
     private final CompoundParameter wave = new CompoundParameter("WAVE", 0);
     private final BooleanParameter triggerSweep = new BooleanParameter("SWEEP", false);
-    
+
     public MidiMusic(LX lx) {
         super(lx);
         addModulator(sparkle).setValue(1);
@@ -63,24 +63,24 @@ public class MidiMusic extends SLPattern {
             }
         });
     }
-    
+
     void onReset() {
         for (LightUp light : lights) {
             light.noteOff(null);
         }
     }
-    
+
     private class Sweep extends LXLayer {
-        
+
         final LinearEnvelope position = new LinearEnvelope(0, 1, 1000);
         float bright = 100;
         float falloff = 10;
-        
+
         Sweep() {
             super(MidiMusic.this.lx, MidiMusic.this);
             addModulator(position);
         }
-        
+
         public void run(double deltaMs) {
             if (!position.isRunning()) {
                 return;
@@ -95,23 +95,23 @@ public class MidiMusic extends SLPattern {
             }
         }
     }
-    
+
     private class LightUp extends LXLayer {
-        
+
         private final LinearEnvelope brt = new LinearEnvelope(0, 0, 0);
         private final Accelerator yPos = new Accelerator(0, 0, 0);
         private float xPos;
-        
+
         LightUp() {
             super(MidiMusic.this.lx, MidiMusic.this);
             addModulator(brt);
             addModulator(yPos);
         }
-        
+
         boolean isAvailable() {
             return brt.getValuef() <= 0;
         }
-        
+
         void noteOn(MidiNote note) {
             xPos = model.xMin + ((note.getPitch() / 30.f) * model.xRange);
             yPos.setValue(LXUtils.lerpf(20, model.yMax*0.72f, note.getVelocity() / 127.f)).stop();
@@ -122,7 +122,7 @@ public class MidiMusic extends SLPattern {
             yPos.setVelocity(0).setAcceleration(-380).start();
             brt.setRangeFromHereTo(0, 1000).start();
         }
-        
+
         public void run(double deltaMs) {
             float bVal = brt.getValuef();
             if (bVal <= 0) {
@@ -142,7 +142,7 @@ public class MidiMusic extends SLPattern {
             }
         }
     }
-    
+
     private LightUp getLight() {
         for (LightUp light : lights) {
             if (light.isAvailable()) {
@@ -156,7 +156,7 @@ public class MidiMusic extends SLPattern {
         }
         return newLight;
     }
-    
+
     private Sweep getSweep() {
         for (Sweep s : sweeps) {
             if (!s.position.isRunning()) {
@@ -176,7 +176,7 @@ public class MidiMusic extends SLPattern {
             LightUp light = getLight();
             lightMap.put(note.getPitch(), light);
             light.noteOn(note);
-        } 
+        }
          else {
             if (note.getVelocity() > 0) {
                 switch (note.getPitch()) {
@@ -194,7 +194,7 @@ public class MidiMusic extends SLPattern {
                     case 43:
                         sparkleBright = note.getVelocity() / 127.f * 100;
                         sparkleDirection = false;
-                        sparkle.trigger();       
+                        sparkle.trigger();
                         break;
                     case 44:
                         //effects.boom.trigger();
@@ -207,7 +207,7 @@ public class MidiMusic extends SLPattern {
         }
         //return true;
     }
-    
+
  // public synchronized boolean noteOff(MidiNote note) {
 
     public void noteOffReceived(MidiNote note) {
@@ -219,10 +219,10 @@ public class MidiMusic extends SLPattern {
         //}
         //return true;
     }
-    
+
     final float[] wval = new float[16];
     float wavoff = 0;
-    
+
     public synchronized void run(double deltaMs) {
         wavoff += deltaMs * .001;
         for (int i = 0; i < wval.length; ++i) {
@@ -244,7 +244,7 @@ public class MidiMusic extends SLPattern {
                 ++i;
             }
         }
-                
+
         if (!newLayers.isEmpty()) {
             synchronized(newLayers) {
                 while (!newLayers.isEmpty()) {

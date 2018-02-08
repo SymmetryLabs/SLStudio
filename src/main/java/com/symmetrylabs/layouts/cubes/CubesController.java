@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.output;
+package com.symmetrylabs.layouts.cubes;
 
 import java.net.Socket;
 import java.net.DatagramSocket;
@@ -14,13 +14,11 @@ import heronarts.lx.output.LXOutput;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
-import com.symmetrylabs.slstudio.mappings.CubesMappingMode;
 
-public class SLController extends LXOutput {
+public class CubesController extends LXOutput {
     public final String id;
     public final InetAddress host;
     public final boolean isBroadcast;
@@ -49,23 +47,23 @@ public class SLController extends LXOutput {
     private LX lx;
     private CubesMappingMode mappingMode;
 
-    public SLController(LX lx, NetworkDevice device, String id) {
+    public CubesController(LX lx, NetworkDevice device, String id) {
         this(lx, device, device.ipAddress, id, false);
     }
 
-    public SLController(LX lx, String _host, String _id) {
+    public CubesController(LX lx, String _host, String _id) {
         this(lx, _host, _id, false);
     }
 
-    public SLController(LX lx, String _host) {
+    public CubesController(LX lx, String _host) {
         this(lx, _host, "", true);
     }
 
-    private SLController(LX lx, String host, String id, boolean isBroadcast) {
+    private CubesController(LX lx, String host, String id, boolean isBroadcast) {
         this(lx, null, NetworkUtils.ipAddrToInetAddr(host), id, isBroadcast);
     }
 
-    private SLController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, boolean isBroadcast) {
+    private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, boolean isBroadcast) {
         super(lx);
 
         this.networkDevice = networkDevice;
