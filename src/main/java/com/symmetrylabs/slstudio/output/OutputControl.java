@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.output;
 
-import com.symmetrylabs.models.cubes.CubesController;
+import com.symmetrylabs.layouts.cubes.CubesController;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.BooleanParameter;

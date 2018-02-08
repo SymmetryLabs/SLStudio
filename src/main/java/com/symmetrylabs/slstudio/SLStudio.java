@@ -11,11 +11,11 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.models.cubes.CubesLayout;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.models.cubes.CubesController;
+import com.symmetrylabs.layouts.cubes.CubesController;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
 import com.symmetrylabs.slstudio.palettes.ImageLibrary;
 import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;

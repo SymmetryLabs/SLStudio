@@ -1,15 +1,15 @@
-package com.symmetrylabs.models.cubes;
+package com.symmetrylabs.layouts.cubes.patterns;
 
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.symmetrylabs.layouts.cubes.CubesModel;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.models.cubes.CubesModel;
 import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 

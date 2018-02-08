@@ -1,5 +1,7 @@
-package com.symmetrylabs.models.cubes;
+package com.symmetrylabs.layouts.cubes.patterns;
 
+import com.symmetrylabs.layouts.cubes.CubesMappingMode;
+import com.symmetrylabs.layouts.cubes.CubesModel;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;

@@ -6,7 +6,7 @@ import java.util.SortedSet;
 import java.util.TreeSet;
 import java.util.Comparator;
 
-import com.symmetrylabs.models.cubes.CubesController;
+import com.symmetrylabs.layouts.cubes.CubesController;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;

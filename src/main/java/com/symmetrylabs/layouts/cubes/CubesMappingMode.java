@@ -1,10 +1,11 @@
-package com.symmetrylabs.models.cubes;
+package com.symmetrylabs.layouts.cubes;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.symmetrylabs.layouts.cubes.patterns.CubesMappingPattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXChannel;

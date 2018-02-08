@@ -1,9 +1,7 @@
-package com.symmetrylabs.models.cubes;
+package com.symmetrylabs.layouts.cubes;
 
 import com.symmetrylabs.slstudio.effect.ModelSpecificEffect;
 import heronarts.lx.LX;
-
-import com.symmetrylabs.models.cubes.CubesModel;
 
 public abstract class CubesEffect extends ModelSpecificEffect<CubesModel> {
     @Override

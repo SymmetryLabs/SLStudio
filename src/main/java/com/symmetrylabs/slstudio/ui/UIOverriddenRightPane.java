@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.models.cubes.UIMappingPanel;
+import com.symmetrylabs.layouts.cubes.UIMappingPanel;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
