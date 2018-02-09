@@ -18,8 +18,9 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+
+import static com.symmetrylabs.util.Utils.createInput;
 
 public abstract class TextureSlideshow extends SLPattern {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
@@ -45,8 +46,7 @@ public abstract class TextureSlideshow extends SLPattern {
         String[] paths = getPaths();
         images = new BufferedImage[paths.length];
         for (int i = 0; i < images.length; ++i) {
-            String filePath = SLStudio.applet.dataPath(paths[i]);
-            //System.out.println("Loading image: " + filePath);
+            String filePath = paths[i];
 
             try {
                 BufferedImage image = null;
@@ -58,7 +58,8 @@ public abstract class TextureSlideshow extends SLPattern {
                 }
 
                 if (image == null) {
-                    image = ImageIO.read(new File(filePath));
+                    System.out.println("Loading image: " + filePath);
+                    image = ImageIO.read(createInput(filePath));
 
                     synchronized (imageCache) {
                         imageCache.put(filePath, new WeakReference(image));

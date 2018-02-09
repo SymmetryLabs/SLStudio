@@ -1,16 +1,19 @@
 package com.symmetrylabs.util;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXModulatorComponent;
-import heronarts.lx.osc.LXOscListener;
-import heronarts.lx.osc.OscMessage;
-import processing.core.PVector;
-
 import java.util.ArrayList;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
+
+import processing.core.PVector;
+
+import heronarts.lx.LX;
+import heronarts.lx.LXModulatorComponent;
+import heronarts.lx.osc.LXOscListener;
+import heronarts.lx.osc.OscMessage;
 
 public class BlobTracker extends LXModulatorComponent implements LXOscListener, MarkerSource {
     private static final int OSC_PORT = 4343;
@@ -25,13 +28,15 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
     private Map<String, List<Blob>> blobsBySource = new HashMap<String, List<Blob>>();
     private List<Blob> lastKnownBlobs = new ArrayList<Blob>();
 
-    private static Map<LX, BlobTracker> instanceByLX = new HashMap<LX, BlobTracker>();
+    private static Map<LX, WeakReference<BlobTracker>> instanceByLX = new WeakHashMap<>();
 
     public static synchronized BlobTracker getInstance(LX lx) {
-        if (!instanceByLX.containsKey(lx)) {
-            instanceByLX.put(lx, new BlobTracker(lx));
+        WeakReference<BlobTracker> weakRef = instanceByLX.get(lx);
+        BlobTracker ref = weakRef == null ? null : weakRef.get();
+        if (ref == null) {
+            instanceByLX.put(lx, new WeakReference<>(ref = new BlobTracker(lx)));
         }
-        return instanceByLX.get(lx);
+        return ref;
     }
 
     private BlobTracker(LX lx) {

@@ -1,7 +1,9 @@
 package com.symmetrylabs.slstudio.performance;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
+import java.util.ArrayList;
+import java.util.List;
+
+import heronarts.lx.LX;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
@@ -20,8 +22,8 @@ import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
 
 import static processing.core.PApplet.println;
 
@@ -48,19 +50,14 @@ public class DeckWindow extends UIWindow {
     int[] boundCCs = new int[0];
     int[] boundNotes = new int[0];
 
+    private final LX lx;
 
-    DeckWindow(
-        DiscreteParameter sel,
-        int slot,
-        PerformanceManager pm,
-        UI ui,
-        String title,
-        float x,
-        float y,
-        float w,
-        float h
-    ) {
+    DeckWindow(LX lx, DiscreteParameter sel, int slot, PerformanceManager pm, UI ui,
+            String title, float x, float y, float w, float h) {
+
         super(ui, title, x, y, w, h);
+
+        this.lx = lx;
         this.ui = ui;
         this.pm = pm;
         this.slot = slot;
@@ -95,7 +92,7 @@ public class DeckWindow extends UIWindow {
 
     void setSelectedChannel() {
         int i = selection.getValuei();
-        List<LXChannel> channels = SLStudio.applet.lx.engine.getChannels();
+        List<LXChannel> channels = lx.engine.getChannels();
         if (i >= channels.size()) {
             setupChannel(null);
         } else {
@@ -140,7 +137,7 @@ public class DeckWindow extends UIWindow {
 
         LXEffect b = channel.getEffect("Blur");
         if (b == null) {
-            b = new BlurEffect(SLStudio.applet.lx);
+            b = new BlurEffect(lx);
             channel.addEffect(b);
         }
         b.enabled.setValue(true);
@@ -148,7 +145,7 @@ public class DeckWindow extends UIWindow {
 
         LXEffect cs = channel.getEffect("ColorShift");
         if (cs == null) {
-            cs = new ColorShiftEffect(SLStudio.applet.lx);
+            cs = new ColorShiftEffect(lx);
             channel.addEffect(cs);
         }
         cs.enabled.setValue(true);

@@ -16,6 +16,7 @@ import heronarts.lx.color.LXColor;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.component.GammaCorrection;
 import com.symmetrylabs.util.NetworkUtils;
 
 public class CubesController extends LXOutput {
@@ -44,8 +45,9 @@ public class CubesController extends LXOutput {
     int packetSizeBytes;
     byte[] packetData;
 
-    private LX lx;
+    private final LX lx;
     private CubesMappingMode mappingMode;
+    private GammaCorrection gammaCorrection;
 
     public CubesController(LX lx, NetworkDevice device, String id) {
         this(lx, device, device.ipAddress, id, false);
@@ -66,13 +68,14 @@ public class CubesController extends LXOutput {
     private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, boolean isBroadcast) {
         super(lx);
 
+        this.lx = lx;
         this.networkDevice = networkDevice;
         this.host = host;
         this.id = id;
         this.isBroadcast = isBroadcast;
-        this.lx = lx;
 
         mappingMode = CubesMappingMode.getInstance(lx);
+        gammaCorrection = GammaCorrection.getInstance(lx);
 
         enabled.setValue(true);
     }
@@ -96,18 +99,12 @@ public class CubesController extends LXOutput {
     }
 
     private void setPixel(int number, int c) {
-        //println("number: "+number);
         int offset = 4 + number * 3;
 
-        // Extract individual colors
-            int r = c >> 16 & 0xFF;
-            int g = c >> 8 & 0xFF;
-            int b = c & 0xFF;
-
-            // Repack gamma corrected colors
-        packetData[offset + 0] = (byte) SLStudio.redGamma[r];
-        packetData[offset + 1] = (byte) SLStudio.greenGamma[g];
-        packetData[offset + 2] = (byte) SLStudio.blueGamma[b];
+        int gammaCorrected = gammaCorrection.getCorrectedColor(c);
+        packetData[offset + 0] = (byte)(gammaCorrected >> LXColor.RED_SHIFT & 0xff);
+        packetData[offset + 1] = (byte)(gammaCorrected >> LXColor.GREEN_SHIFT & 0xff);
+        packetData[offset + 2] = (byte)(gammaCorrected & 0xff); // blue
     }
 
     @Override
@@ -207,7 +204,8 @@ public class CubesController extends LXOutput {
         // Send the cube data to the cube. yay!
         try {
             //println("packetSizeBytes: "+packetSizeBytes);
-            dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));}
+            dsocket.send(new java.net.DatagramPacket(packetData,packetSizeBytes));
+        }
         catch (Exception e) {dispose();}
     }
 

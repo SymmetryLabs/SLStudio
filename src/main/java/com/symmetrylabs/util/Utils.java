@@ -1265,7 +1265,11 @@ public final class Utils {
 
     static private final long millisOffset = System.currentTimeMillis();
 
-    static String sketchPath;
+    private static String sketchPath;
+
+    public static void setSketchPath(String newSketchPath) {
+        sketchPath = newSketchPath;
+    }
 
     static public int millis() {
         return (int) (System.currentTimeMillis() - millisOffset);
@@ -1296,6 +1300,14 @@ public final class Utils {
         }
     }
 
+    public static String[] loadStrings(String filename) {
+        InputStream is = createInput(filename);
+        return PApplet.loadStrings(is);
+    }
+
+    public static void saveStrings(String filename, String data[]) {
+        PApplet.saveStrings(saveFile(filename), data);
+    }
 
     //////////////////////////////////////////////////////////////
     // FILE INPUT

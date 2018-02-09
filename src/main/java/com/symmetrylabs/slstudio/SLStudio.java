@@ -10,12 +10,9 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
-import com.symmetrylabs.layouts.oslo.TreeModel;
-import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
 import com.symmetrylabs.slstudio.palettes.ImageLibrary;
@@ -31,19 +28,17 @@ import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.Utils;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
-
 public class SLStudio extends PApplet {
-
     public static SLStudio applet;
-    public SLStudioLX lx;
-    public Layout layout;
-    private LXModel model;
+
+    private SLStudioLX lx;
+    private Layout layout;
+    private Dispatcher dispatcher;
     private Mappings mappings;
-    public Dispatcher dispatcher;
-    private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
     public Pixlite[] pixlites;
     public APC40Listener apc40Listener;
@@ -74,36 +69,43 @@ public class SLStudio extends PApplet {
     public void setup() {
         long setupStart = System.nanoTime();
         applet = this;
-        layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
-        model = layout.buildModel();
+        Utils.setSketchPath(sketchPath());
+
+        // Instantiate the desired layout here.
+        layout = new CubesLayout();
+        // layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+
+        LXModel model = layout.buildModel();
         printModelStats(model);
 
+        PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+        loadPalettes(paletteLibrary);
+
         new SLStudioLX(this, model, true) {
+
             @Override
             protected void initialize(SLStudioLX lx, SLStudioLX.UI ui) {
                 SLStudio.this.lx = lx;
                 super.initialize(lx, ui);
 
-                // Output
-                (dispatcher = Dispatcher.getInstance(lx)).start();
-                (networkMonitor = NetworkMonitor.getInstance(lx)).start();
-                setupGammaCorrection();
+                SLStudio.this.dispatcher = Dispatcher.getInstance(lx);
 
                 layout.setupLx(lx);
+
+                lx.addOutput(new OPCOutput(lx, "localhost", 11122));
 
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 pixlites = setupPixlites();
 
-                apc40Listener = new APC40Listener(lx);
+                SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
 
-                performanceManager = new PerformanceManager(lx);
+                SLStudio.this.performanceManager = new PerformanceManager(lx);
                 lx.engine.registerComponent("performanceManager", performanceManager);
 
-                lx.paletteLibrary = new PaletteLibrary();
-                loadPalettes(lx.paletteLibrary);
+                blobTracker = BlobTracker.getInstance(lx);
 
                 ui.theme.setPrimaryColor(0xff008ba0);
                 ui.theme.setSecondaryColor(0xff00a08b);
@@ -115,18 +117,19 @@ public class SLStudio extends PApplet {
             @Override
             protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) {
                 ui.leftPane.audio.setVisible(true);
-                ui.preview.setCenter(model.cx, model.cy, model.cz);
+                ui.preview.setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
 
                 layout.setupUi(lx, ui);
             }
         };
+
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(true);
         lx.engine.output.enabled.setValue(false);
-        blobTracker = BlobTracker.getInstance(lx);
+
         performanceManager.start(lx.ui);
 
         long setupFinish = System.nanoTime();
@@ -313,7 +316,7 @@ public class SLStudio extends PApplet {
             0x623e38, 0x643556, 0x684c57, 0x705441, 0x584136, 0x6a4762, 0x834349
         }));
 
-        ImageLibrary il = new ImageLibrary(applet.dataPath("images"));
+        ImageLibrary il = new ImageLibrary("images");
         PaletteExtractor horiz = new LinePaletteExtractor(0.5);
         PaletteExtractor vert = new LinePaletteExtractor(0.5, 1, 0.5, 0);
 
@@ -394,64 +397,4 @@ public class SLStudio extends PApplet {
     public final static int CHAN_HEIGHT = 650;
     public final static int CHAN_Y = 20;
     public final static int PAD = 5;
-
-    /*
-     * Gamma Correction
-     *---------------------------------------------------------------------------*/
-    public static final int redGamma[] = new int[256];
-    public static final int greenGamma[] = new int[256];
-    public static final int blueGamma[] = new int[256];
-
-    final float[][] gammaSet = {
-        {2, 2.1f, 2.8f},
-        {2, 2.2f, 2.8f},
-    };
-
-    final DiscreteParameter gammaSetIndex = new DiscreteParameter("GMA", gammaSet.length + 1);
-    final BoundedParameter redGammaFactor = new BoundedParameter("RGMA", 2, 1, 4);
-    final BoundedParameter greenGammaFactor = new BoundedParameter("GGMA", 2.2, 1, 4);
-    final BoundedParameter blueGammaFactor = new BoundedParameter("BGMA", 2.8, 1, 4);
-
-    void setupGammaCorrection() {
-        final float redGammaOrig = redGammaFactor.getValuef();
-        final float greenGammaOrig = greenGammaFactor.getValuef();
-        final float blueGammaOrig = blueGammaFactor.getValuef();
-        gammaSetIndex.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                if (gammaSetIndex.getValuei() == 0) {
-                    redGammaFactor.reset(redGammaOrig);
-                    greenGammaFactor.reset(greenGammaOrig);
-                    blueGammaFactor.reset(blueGammaOrig);
-                } else {
-                    redGammaFactor.reset(gammaSet[gammaSetIndex.getValuei() - 1][0]);
-                    greenGammaFactor.reset(gammaSet[gammaSetIndex.getValuei() - 1][1]);
-                    blueGammaFactor.reset(gammaSet[gammaSetIndex.getValuei() - 1][2]);
-                }
-            }
-        });
-        redGammaFactor.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                buildGammaCorrection(redGamma, parameter.getValuef());
-            }
-        });
-        buildGammaCorrection(redGamma, redGammaFactor.getValuef());
-        greenGammaFactor.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                buildGammaCorrection(greenGamma, parameter.getValuef());
-            }
-        });
-        buildGammaCorrection(greenGamma, greenGammaFactor.getValuef());
-        blueGammaFactor.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                buildGammaCorrection(blueGamma, parameter.getValuef());
-            }
-        });
-        buildGammaCorrection(blueGamma, blueGammaFactor.getValuef());
-    }
-
-    void buildGammaCorrection(int[] gammaTable, float gammaCorrection) {
-        for (int i = 0; i < 256; i++) {
-            gammaTable[i] = (int) (pow(1.0f * i / 255f, gammaCorrection) * 255f + 0.5f);
-        }
-    }
 }

@@ -37,7 +37,7 @@ public class Wasps extends ParticlePattern {
         super.createParameters();
 
         addParameter(speed = new CompoundParameter("speed", 1, 0, 3));
-        addParameter(accel = new CompoundParameter("accel", 1.5, 0, 2));
+        addParameter(accel = new CompoundParameter("accel", 1.5, 0, 3));
         addParameter(dampen = new CompoundParameter("dampen", 0.75, 0, 1));
         addParameter(focusX = new CompoundParameter("focusX", 0, -1, 1));
         addParameter(focusY = new CompoundParameter("focusY", 0, -1, 1));
