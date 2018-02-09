@@ -36,10 +36,12 @@ import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
+import com.symmetrylabs.slstudio.ui.UIWorkspaces;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.slstudio.workspaces.Workspaces;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
@@ -58,6 +60,7 @@ public class SLStudio extends PApplet {
     public Pixlite[] pixlites;
     public ListenableList<SLController> controllers;
     public PerformanceManager performanceManager;
+    public Workspaces workspaces;
     private BlobTracker blobTracker;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
@@ -125,6 +128,8 @@ public class SLStudio extends PApplet {
                 (networkMonitor = NetworkMonitor.getInstance(lx)).start();
                 setupGammaCorrection();
 
+                workspaces = new Workspaces(lx);
+
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
 
@@ -153,6 +158,7 @@ public class SLStudio extends PApplet {
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
 
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+                new UIWorkspaces(ui, lx, workspaces, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
             }
         };
         lx.engine.isChannelMultithreaded.setValue(true);
