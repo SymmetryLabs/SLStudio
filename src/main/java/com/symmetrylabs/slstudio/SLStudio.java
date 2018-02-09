@@ -3,7 +3,9 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
+import com.symmetrylabs.layouts.oslo.TreeModel;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
