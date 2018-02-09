@@ -47,6 +47,7 @@ import com.symmetrylabs.slstudio.ui.UIFramerate;
 import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
 import com.symmetrylabs.slstudio.ui.UIOutputs;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
+import com.symmetrylabs.slstudio.ui.UIDaughtryStage;
 import com.symmetrylabs.slstudio.util.MarkerSource;
 
 public class SLStudioLX extends P3LX {
@@ -113,7 +114,7 @@ public class SLStudioLX extends P3LX {
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
-
+            this.preview.addComponent(new UIDaughtryStage());
 
             addLayer(this.preview);
             addLayer(this.leftPane);
