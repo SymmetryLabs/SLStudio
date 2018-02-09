@@ -1,36 +1,43 @@
 package com.symmetrylabs.slstudio.network;
 
 import java.util.Map;
-import java.util.HashMap;
+import java.util.WeakHashMap;
+import java.lang.ref.WeakReference;
 
 import heronarts.lx.LX;
 
-import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
-import com.symmetrylabs.slstudio.util.listenable.AbstractListListener;
-import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.AbstractListListener;
+import com.symmetrylabs.util.listenable.ListenableList;
 
 public class NetworkMonitor {
 
-    private final ControllerScan controllerScan = new ControllerScan();
+    private final ControllerScan controllerScan;
 
-    public final ListenableList<NetworkDevice> networkDevices = controllerScan.networkDevices;
+    public final ListenableList<NetworkDevice> networkDevices;
 
     private final java.util.TimerTask scanTask = new ScanTask();
     private final java.util.Timer timer = new java.util.Timer();
 
     private boolean oldVersionWarningGiven = false;
 
-    private static Map<LX, NetworkMonitor> instanceByLX = new HashMap<>();
+    private static Map<LX, WeakReference<NetworkMonitor>> instanceByLX = new WeakHashMap<>();
+
+    private boolean started = false;
 
     public static synchronized NetworkMonitor getInstance(LX lx) {
-        if (!instanceByLX.containsKey(lx)) {
-            instanceByLX.put(lx, new NetworkMonitor(lx));
+        WeakReference<NetworkMonitor> weakRef = instanceByLX.get(lx);
+        NetworkMonitor ref = weakRef == null ? null : weakRef.get();
+        if (ref == null) {
+            instanceByLX.put(lx, new WeakReference<>(ref = new NetworkMonitor(lx)));
         }
-        return instanceByLX.get(lx);
+        return ref;
     }
 
     private NetworkMonitor(LX lx) {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
+        controllerScan = new ControllerScan(dispatcher);
+        networkDevices = controllerScan.networkDevices;
 
         networkDevices.addListener(new AbstractListListener<NetworkDevice>() {
             public void itemAdded(int index, final NetworkDevice result) {
@@ -61,8 +68,13 @@ public class NetworkMonitor {
         });
     }
 
-    public void start() {
+    public synchronized NetworkMonitor start() {
+        if (started)
+            return this;
+
         timer.schedule(scanTask, 0, 500);
+        started = true;
+        return this;
     }
 
     class ScanTask extends java.util.TimerTask {

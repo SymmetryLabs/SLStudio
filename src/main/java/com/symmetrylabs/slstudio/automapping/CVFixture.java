@@ -4,7 +4,6 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.symmetrylabs.slstudio.mappings.CubesLayout;
 import org.apache.commons.math3.util.FastMath;
 
 import processing.core.PGraphics;
@@ -17,9 +16,10 @@ import heronarts.lx.color.LXColor;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
 
-import static com.symmetrylabs.slstudio.util.Utils.millis;
+import static com.symmetrylabs.util.Utils.millis;
 import static processing.core.PConstants.CENTER;
 import static processing.core.PConstants.HSB;
 import static processing.core.PConstants.SHAPE;

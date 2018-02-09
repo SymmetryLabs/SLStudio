@@ -9,9 +9,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.transform.LXVector;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
-
-import static com.symmetrylabs.slstudio.util.MathUtils.map;
+import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 public class Snap extends SLPattern {
     List<LXVector> particles = new ArrayList<>();
@@ -55,7 +54,7 @@ public class Snap extends SLPattern {
                 // float r = radius.getValuef() * 100;
                 float r = sinLfo.getValuef();
                 if (dist < r) {
-                    bright = map(dist, 0, r, 100, 0);
+                    bright = MathUtils.map(dist, 0, r, 100, 0);
                 }
                 if (bright > maxB) {
                     maxB = bright;

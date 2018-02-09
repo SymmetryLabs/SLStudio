@@ -1,6 +1,5 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.pattern.raven.P3CubeMapPattern;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;
@@ -50,28 +49,7 @@ public class UICubeMapDebug extends UI3dComponent {
     }
 
     private void drawCubeFor(final P3CubeMapPattern pattern, final PGraphics pg) {
-        if (pattern.allSunsParams.getValueb()) {
-//      for (final LXPoint point : pattern.model.points) {
-//        drawPoint(pg, point);
-//      }
-
-            renderBox(pattern, pg, pattern.origin, pattern.bboxSize);
-        } else {
-            for (final Sun sun : pattern.getModel().getSuns()) {
-                int sunIndex = pattern.getModel().getSuns().indexOf(sun);
-
-                if (pattern.sunSwitchParams.get(sunIndex).getValueb()) {
-                    //sun.computeBoundingBox();
-                    //println((sunIndex + 1) + ": " + sun.boundingBox.size);
-
-//          for (final LXPoint point : sun.points) {
-//            drawPoint(pg, point);
-//          }
-
-                    renderBox(pattern, pg, pattern.originForSun(sun), pattern.bboxForSun(sun));
-                }
-            }
-        }
+        renderBox(pattern, pg, pattern.origin, pattern.bboxSize);
     }
 
     private void drawPoint(final PGraphics pg, LXPoint v) {

@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.network;
 
 import java.net.InetAddress;
 
-import com.symmetrylabs.slstudio.util.listenable.ListenableInt;
+import com.symmetrylabs.util.listenable.ListenableInt;
 
 public class NetworkDevice {
 

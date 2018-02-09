@@ -1,30 +1,28 @@
 package com.symmetrylabs.slstudio.pattern.texture;
 
+import java.util.Map;
+import java.util.HashMap;
 import java.io.File;
 import java.io.IOException;
+import java.lang.ref.WeakReference;
 import java.awt.image.BufferedImage;
-import java.awt.image.Kernel;
-import java.awt.image.ConvolveOp;
-import java.awt.image.Raster;
-import java.awt.image.WritableRaster;
 import javax.imageio.ImageIO;
 
 import org.apache.commons.math3.util.FastMath;
 
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.pattern.CopySunsPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
-public abstract class TextureSlideshow extends CopySunsPattern {
+import static com.symmetrylabs.util.Utils.createInput;
+
+public abstract class TextureSlideshow extends SLPattern {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
     public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
     public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
@@ -33,6 +31,8 @@ public abstract class TextureSlideshow extends CopySunsPattern {
     public final BooleanParameter enableInterp = new BooleanParameter("interp", true);
 
     private final SawLFO lerp = (SawLFO) startModulator(new SawLFO(0, 1, rate));
+
+    private static Map<String, WeakReference<BufferedImage>> imageCache = new HashMap<>();
 
     private int imageIndex = 0;
     private final BufferedImage[] images;
@@ -46,11 +46,27 @@ public abstract class TextureSlideshow extends CopySunsPattern {
         String[] paths = getPaths();
         images = new BufferedImage[paths.length];
         for (int i = 0; i < images.length; ++i) {
-            String filePath = SLStudio.applet.dataPath(paths[i]);
-            //System.out.println("Loading image: " + filePath);
+            String filePath = paths[i];
 
             try {
-                images[i] = ImageIO.read(new File(filePath));
+                BufferedImage image = null;
+                synchronized (imageCache) {
+                    WeakReference<BufferedImage> imageWeakRef = imageCache.get(filePath);
+                    if (imageWeakRef != null) {
+                        image = imageWeakRef.get();
+                    }
+                }
+
+                if (image == null) {
+                    System.out.println("Loading image: " + filePath);
+                    image = ImageIO.read(createInput(filePath));
+
+                    synchronized (imageCache) {
+                        imageCache.put(filePath, new WeakReference(image));
+                    }
+                }
+
+                images[i] = image;
             }
             catch (IOException e) {
                 System.err.println("Error loading image from '" + filePath + "': " + e.getMessage());
@@ -77,7 +93,6 @@ public abstract class TextureSlideshow extends CopySunsPattern {
         offsetX.addListener(updateRastersListener);
         offsetY.addListener(updateRastersListener);
         enableInterp.addListener(updateRastersListener);
-        perSun.addListener(updateRastersListener);
 
         triggerUpdate();
     }

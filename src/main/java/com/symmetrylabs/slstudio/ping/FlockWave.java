@@ -18,27 +18,31 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
+import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
-import com.symmetrylabs.slstudio.util.BlobFollower;
-import com.symmetrylabs.slstudio.util.BlobTracker;
-import com.symmetrylabs.slstudio.util.CubeMarker;
-import com.symmetrylabs.slstudio.util.Marker;
-import com.symmetrylabs.slstudio.util.Octahedron;
+import com.symmetrylabs.util.BlobFollower;
+import com.symmetrylabs.util.BlobTracker;
+import com.symmetrylabs.util.CubeMarker;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.Octahedron;
 
 public class FlockWave extends SLPatternWithMarkers {
+
+    private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     BooleanParameter oscFollowers = new BooleanParameter("atBlobs");
     BooleanParameter oscBlobs = new BooleanParameter("nearBlobs");
     BooleanParameter everywhere = new BooleanParameter("everywhere");
-    BooleanParameter perSun = new BooleanParameter("perSun");
     CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
     CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
     CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
     CompoundParameter zScale = new CompoundParameter("zScale", 0, -6, 12);  // z scaling factor (dB)
-    CompoundParameter maxBirds = new CompoundParameter("maxBirds", 8, 0, 100);
+    DiscreteParameter maxBirds = new DiscreteParameter("maxBirds", 8, 0, 100);
 
     CompoundParameter spnRad = new CompoundParameter("spnRad", 100, 0, 400);  // radius (in) within which to spawn birds
     CompoundParameter spnRate = new CompoundParameter("spnRate", 0.2, 0, 2);  // maximum spawn rate (birds/s)
@@ -54,7 +58,7 @@ public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
     CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
     CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
-    DiscreteParameter palette = new DiscreteParameter("palette", ((SLStudioLX) lx).paletteLibrary.getNames());
+    DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());
         // selected colour palette
     CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
     CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
@@ -80,7 +84,6 @@ public class FlockWave extends SLPatternWithMarkers {
         addParameter(oscFollowers);
         addParameter(oscBlobs);
         addParameter(everywhere);
-        addParameter(perSun);
 
         addParameter(timeScale);
         addParameter(size);
@@ -308,7 +311,7 @@ public class FlockWave extends SLPatternWithMarkers {
     }
 
     ColorPalette getPalette() {
-        pal.setPalette(((SLStudioLX) lx).paletteLibrary.get(palette.getOption()));
+        pal.setPalette(paletteLibrary.get(palette.getOption()));
         pal.setBottom(palStart.getValue());
         pal.setTop(palStop.getValue());
         pal.setBias(palBias.getValue());
@@ -320,12 +323,11 @@ public class FlockWave extends SLPatternWithMarkers {
     private static class FlockWaveRenderPlasmaKernel extends SLKernel {
 
         int numPoints;
-        float[] pointsX;
-        float[] pointsY;
-        float[] pointsZ;
+        float[] pointsXYZ;
         float[] result;
 
         int numBirds = -1;
+        int numBirdsMax = -1;
         float[] birdPosX;
         float[] birdPosY;
         float[] birdPosZ;
@@ -349,9 +351,9 @@ public class FlockWave extends SLPatternWithMarkers {
             float birdY = birdPosY[birdIndex];
             float birdZ = birdPosZ[birdIndex];
 
-            float pointX = pointsX[i];
-            float pointY = pointsY[i];
-            float pointZ = pointsZ[i];
+            float pointX = pointsXYZ[3 * i];
+            float pointY = pointsXYZ[3 * i + 1];
+            float pointZ = pointsXYZ[3 * i + 2];
 
             float x_diff = birdX - pointX;
             float y_diff = birdY - pointY;
@@ -387,22 +389,30 @@ public class FlockWave extends SLPatternWithMarkers {
         if (birds.size() > 0) {
             if (kernel.result == null || kernel.result.length != colors.length) {
                 kernel.numPoints = colors.length;
-                kernel.put(kernel.pointsX = model.pointsX);
-                kernel.put(kernel.pointsY = model.pointsY);
-                kernel.put(kernel.pointsZ = model.pointsZ);
+                kernel.put(kernel.pointsXYZ = ((SLModel)model).pointsXYZ);
                 kernel.result = new float[colors.length];
             }
 
-            if (kernel.numBirds != birds.size()) {
-                kernel.numBirds = birds.size();
-                kernel.put(kernel.birdPosX = new float[birds.size()]);
-                kernel.put(kernel.birdPosY = new float[birds.size()]);
-                kernel.put(kernel.birdPosZ = new float[birds.size()]);
-                kernel.put(kernel.birdValue = new float[birds.size()]);
-                kernel.put(kernel.birdElapsedSec = new float[birds.size()]);
+            int maxBirdsValue = maxBirds.getValuei();
+            if (kernel.numBirdsMax != maxBirdsValue) {
+                kernel.numBirdsMax = maxBirdsValue;
+                kernel.put(kernel.birdPosX = new float[kernel.numBirdsMax]);
+                kernel.put(kernel.birdPosY = new float[kernel.numBirdsMax]);
+                kernel.put(kernel.birdPosZ = new float[kernel.numBirdsMax]);
+                kernel.put(kernel.birdValue = new float[kernel.numBirdsMax]);
+                kernel.put(kernel.birdElapsedSec = new float[kernel.numBirdsMax]);
             }
+
+            kernel.numBirds = birds.size();
+            if (kernel.numBirds > kernel.numBirdsMax) {
+                kernel.numBirds = kernel.numBirdsMax;
+            }
+
             int i = 0;
             for (Bird bird : birds) {
+                if (i >= kernel.numBirdsMax)
+                    break;
+
                 kernel.birdPosX[i] = bird.pos.x;
                 kernel.birdPosY[i] = bird.pos.y;
                 kernel.birdPosZ[i] = bird.pos.z;

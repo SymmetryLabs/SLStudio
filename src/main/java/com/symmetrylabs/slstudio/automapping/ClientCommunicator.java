@@ -19,7 +19,7 @@ import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
+import com.symmetrylabs.layouts.cubes.CubesModel;
 
 public class ClientCommunicator implements LXLoopTask {
     public static final int PORT = 8724;

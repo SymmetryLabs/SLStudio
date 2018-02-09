@@ -4,7 +4,7 @@ import java.util.Arrays;
 
 import heronarts.lx.model.LXFixture;
 
-import com.symmetrylabs.slstudio.util.TripleBuffer;
+import com.symmetrylabs.util.TripleBuffer;
 
 public class TripleBufferedRenderer extends Renderer {
     protected final TripleBuffer<RenderFrame> tripleBuffer;

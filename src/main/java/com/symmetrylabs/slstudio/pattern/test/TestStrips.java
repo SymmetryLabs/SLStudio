@@ -4,29 +4,26 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
+import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
 
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class TestStrips extends SunsPattern implements SLTestPattern {
+public class TestStrips extends StripsPattern implements SLTestPattern {
 
     public TestStrips(LX lx) {
         super(lx);
     }
 
     public void run(double deltaMs) {
-        for (Sun sun : model.getSuns()) {
+        for (Strip strip : model.getStrips()) {
             float hue = 0;
 
-            for (Strip strip : sun.getStrips()) {
-                for (LXPoint p : strip.points) {
-                    colors[p.index] = lx.hsb(hue, 100, 100);
-                }
-
-                hue += 180;
+            for (LXPoint p : strip.points) {
+                colors[p.index] = lx.hsb(hue, 100, 100);
             }
+
+            hue += 180;
         }
     }
 }

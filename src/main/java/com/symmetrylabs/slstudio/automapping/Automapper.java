@@ -9,15 +9,9 @@ import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 import com.google.gson.reflect.TypeToken;
 
-import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.mappings.CubesLayout;
-import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.network.NetworkMonitor;
-import com.symmetrylabs.slstudio.util.NetworkUtils;
-import heronarts.lx.parameter.*;
-import heronarts.p3lx.ui.UI;
 import processing.core.PMatrix3D;
 import processing.core.PVector;
+
 
 import heronarts.lx.LX;
 import heronarts.lx.LXRunnableComponent;
@@ -26,12 +20,18 @@ import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
+import heronarts.lx.parameter.*;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.slstudio.network.NetworkMonitor;
+import com.symmetrylabs.util.NetworkUtils;
+import com.symmetrylabs.util.listenable.ListenableList;
+import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
 
-import static com.symmetrylabs.slstudio.util.MathUtils.max;
+import static com.symmetrylabs.util.Utils.dataPath;
+import static com.symmetrylabs.util.MathUtils.max;
 import static com.symmetrylabs.util.MathConstants.PI;
 import static processing.core.PApplet.loadBytes;
 import static processing.core.PApplet.saveBytes;
@@ -63,6 +63,7 @@ public class Automapper extends LXRunnableComponent {
     }
 
     public final LX lx;
+    public SLStudioLX.UI ui;
 
     public final EnumParameter<AutomappingState> state = new EnumParameter<>("State", AutomappingState.RUNNING);
     public final StringParameter saveFile = new StringParameter("Save File", "cube_transforms.json");
@@ -122,6 +123,10 @@ public class Automapper extends LXRunnableComponent {
 
         this.lx = lx;
 
+        if (lx instanceof SLStudioLX) {
+            this.ui = ((SLStudioLX)lx).ui;
+        }
+
         addParameter(state);
         addParameter(saveFile);
 
@@ -170,7 +175,7 @@ public class Automapper extends LXRunnableComponent {
     Map<String, CubesModel.Cube.Type> loadKnownCubeTypes() {
         Map<String, CubesModel.Cube.Type> types = new HashMap<>();
 
-        String data = new String(loadBytes(new File(SLStudio.applet.dataPath("physid_to_size.json"))));
+        String data = new String(loadBytes(new File(dataPath("physid_to_size.json"))));
         Map<String, String> map = (new Gson()).fromJson(data, new TypeToken<Map<String, String>>() {}.getType());
 
         for (Map.Entry<String, String> entry : map.entrySet()) {
@@ -289,14 +294,14 @@ public class Automapper extends LXRunnableComponent {
     }
 
     void addCube(List<List<Double>> matrix, List<Double> rvec, List<Double> tvec, String id) {
-        SLStudioLX.UI sUI = SLStudio.applet.lx.ui;
-
         CVFixture c = new CVFixture(this, matrix, rvec, tvec, id);
 
         mappedFixtures.add(c);
         Collections.sort(mappedFixtures.list);
 
-        sUI.preview.addComponent(c);
+        if (ui != null) {
+            ui.preview.addComponent(c);
+        }
     }
 
     public void removeCube(String id) {
@@ -315,8 +320,9 @@ public class Automapper extends LXRunnableComponent {
             return;
         }
 
-        SLStudioLX.UI sUI = SLStudio.applet.lx.ui;
-        sUI.preview.removeComponent(cube);
+        if (ui != null) {
+            ui.preview.removeComponent(cube);
+        }
 
         mappedFixtures.remove(cubeIndex);
     }
@@ -531,11 +537,11 @@ public class Automapper extends LXRunnableComponent {
         Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
 
-        saveBytes(new File(SLStudio.applet.dataPath(saveFile.getString())), gson.toJson(jsonCubes).getBytes());
+        saveBytes(new File(dataPath(saveFile.getString())), gson.toJson(jsonCubes).getBytes());
     }
 
     public void loadJSON() {
-        String data = new String(loadBytes(new File(SLStudio.applet.dataPath(saveFile.getString()))));
+        String data = new String(loadBytes(new File(dataPath(saveFile.getString()))));
         ArrayList<Object> message = (new Gson()).fromJson(data, new TypeToken<ArrayList<Object>>() {
         }
         .getType());

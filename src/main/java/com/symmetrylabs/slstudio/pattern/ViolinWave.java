@@ -12,7 +12,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public class ViolinWave extends LXPattern {
 

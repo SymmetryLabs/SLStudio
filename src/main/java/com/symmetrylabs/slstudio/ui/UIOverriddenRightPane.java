@@ -27,17 +27,17 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
 
+import com.symmetrylabs.slstudio.SLStudioLX;
+
 
 public class UIOverriddenRightPane extends UIPane {
 
-    private final LX lx;
-    private final UI ui;
+    private final SLStudioLX lx;
+    private final SLStudioLX.UI ui;
 
     public final UI2dScrollContext utility;
     public final UI2dScrollContext modulation;
     public final UI2dScrollContext midi;
-
-    public UIOutputs uiOutputs;
 
     public static final int PADDING = 4;
     public static final int WIDTH = 284;
@@ -48,10 +48,12 @@ public class UIOverriddenRightPane extends UIPane {
     private int beatCount = 1;
     private int macroCount = 1;
 
-    public UIOverriddenRightPane(UI ui, final LX lx) {
+    public UIOverriddenRightPane(SLStudioLX.UI ui, SLStudioLX lx) {
         super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
-        this.ui = ui;
+
         this.lx = lx;
+        this.ui = ui;
+
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
         this.utility = this.sections[2];
@@ -62,9 +64,6 @@ public class UIOverriddenRightPane extends UIPane {
     }
 
     private void buildUtilityUI() {
-        (uiOutputs = new UIOutputs(lx, ui, 0, 0, this.utility.getContentWidth())).addToContainer(this.utility);
-
-        new UIMapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
         new UIAutomapping(lx, ui, 0, 0, this.utility.getContentWidth()).addToContainer(this.utility);
     }
 

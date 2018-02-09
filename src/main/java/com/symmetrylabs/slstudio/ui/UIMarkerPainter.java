@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.util.Marker;
-import com.symmetrylabs.slstudio.util.MarkerSource;
+import com.symmetrylabs.util.Marker;
+import com.symmetrylabs.util.MarkerSource;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI3dComponent;
 import processing.core.PGraphics;

@@ -1,15 +1,20 @@
 package com.symmetrylabs.slstudio.network;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.util.listenable.ListenableList;
-
-import java.net.InetAddress;
 import java.util.Arrays;
+import java.net.InetAddress;
 
+import com.symmetrylabs.util.listenable.ListenableList;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 
 public class ControllerScan {
 
     public final ListenableList<NetworkDevice> networkDevices = new ListenableList<NetworkDevice>();
+
+    private final Dispatcher dispatcher;
+
+    public ControllerScan(Dispatcher dispatcher) {
+        this.dispatcher = dispatcher;
+    }
 
     public void scan() {
         new Runnable() {
@@ -22,15 +27,11 @@ public class ControllerScan {
                     new MacAddrCommand(addr, new MacAddrCommandCallback() {
                         public void onResponse(java.net.DatagramPacket response, byte[] macAddr) {
                             final NetworkDevice networkDevice = new NetworkDevice(response.getAddress(), macAddr);
-                            SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
-                                public void run() {
-                                    tmpNetworkDevices.add(networkDevice);
-                                }
-                            });
+                            dispatcher.dispatchEngine(() -> tmpNetworkDevices.add(networkDevice));
                         }
 
                         public void onFinish() {
-                            SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
+                            dispatcher.dispatchEngine(new Runnable() {
                                 public void run() {
                                     if (--instances == 0) {
                                         for (int i = 0; i < networkDevices.size(); i++) {

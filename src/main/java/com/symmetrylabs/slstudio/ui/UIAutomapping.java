@@ -1,11 +1,10 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.automapping.Automapper;
-import com.symmetrylabs.slstudio.automapping.CVFixture;
-import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
-import com.symmetrylabs.slstudio.util.listenable.ListListener;
+import java.util.List;
+import java.util.ArrayList;
+
+import processing.event.KeyEvent;
+
 import heronarts.lx.LX;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -15,25 +14,27 @@ import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
 import heronarts.p3lx.ui.component.UITextBox;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
-import processing.event.KeyEvent;
 
-import java.util.ArrayList;
-import java.util.List;
+import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.automapping.Automapper;
+import com.symmetrylabs.slstudio.automapping.CVFixture;
+import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.ListListener;
 
 import static processing.core.PConstants.BACKSPACE;
 
 public class UIAutomapping extends UICollapsibleSection {
-    UI ui;
-    LX lx;
+    SLStudioLX lx;
+    SLStudioLX.UI ui;
 
     private CVFixture previous = null;
     private Automapper automapper;
 
-    public UIAutomapping(LX lx, UI ui, float x, float y, float w) {
+    public UIAutomapping(SLStudioLX lx, SLStudioLX.UI ui, float x, float y, float w) {
         super(ui, x, y, w, 140);
 
-        this.ui = ui;
         this.lx = lx;
+        this.ui = ui;
 
         automapper = Automapper.getInstance(lx);
 
@@ -65,12 +66,10 @@ public class UIAutomapping extends UICollapsibleSection {
     }
 
     void centerView() {
-        SLStudioLX.UI sUI = SLStudio.applet.lx.ui;
-
-        sUI.preview.setCenter(0, 0, 0);
-        sUI.preview.setPhi(0);
-        sUI.preview.setPerspective(0);
-        sUI.preview.setTheta(0);
+        ui.preview.setCenter(0, 0, 0);
+        ui.preview.setPhi(0);
+        ui.preview.setPerspective(0);
+        ui.preview.setTheta(0);
     }
 
     int buildStartMappingButton(float yOffset, float w) {

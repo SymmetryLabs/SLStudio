@@ -1,16 +1,19 @@
 package com.symmetrylabs.slstudio.ping;
 
-import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
+import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 
 public class PaletteViewer extends SLPattern {
-    DiscreteParameter palette = new DiscreteParameter("palette", ((SLStudioLX) lx).paletteLibrary.getNames());
+
+    private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+
+    DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());
         // selected colour palette
     CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
     CompoundParameter palStop = new CompoundParameter("palStop", 1, 0, 1);  // palette stop point (fraction 0 - 1)
@@ -31,7 +34,7 @@ public class PaletteViewer extends SLPattern {
     }
 
     public void run(double deltaMs) {
-        pal.setPalette(((SLStudioLX) lx).paletteLibrary.get(palette.getOption()));
+        pal.setPalette(paletteLibrary.get(palette.getOption()));
         pal.setBottom(palStart.getValue());
         pal.setTop(palStop.getValue());
         pal.setBias(palBias.getValue());
