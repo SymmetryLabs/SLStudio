@@ -6,7 +6,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-public static class ColorFilter extends LXEffect {
+public class ColorFilter extends LXEffect {
 
     public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
 
