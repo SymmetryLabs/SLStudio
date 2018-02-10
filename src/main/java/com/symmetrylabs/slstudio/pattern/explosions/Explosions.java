@@ -11,7 +11,10 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.QuadraticEnvelope;
 import heronarts.lx.modulator.SinLFO;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
 
@@ -25,6 +28,8 @@ public class Explosions extends LXPattern {
         private final SinLFO saturationModulator = new SinLFO(80.0, 100.0, 200000);
         private BoundedParameter numExplosionsParameter = new BoundedParameter("NUM", 4.0, 1.0, 20.0);
         private BoundedParameter brightnessParameter = new BoundedParameter("BRGT", 50, 10, 80);
+        public BooleanParameter manualMode = new BooleanParameter("manMod", false);
+        public BooleanParameter triggerExplosion = new BooleanParameter("trigger", false);
 
         private static final double GAIN_DEFAULT = 6;
         private static final double MODULATION_RANGE = 1;
@@ -58,6 +63,16 @@ public class Explosions extends LXPattern {
                 addModulator(beatGate).start();
                 addModulator(clapGate).start();
 
+                addParameter(manualMode);
+                addParameter(triggerExplosion);
+                triggerExplosion.setMode(BooleanParameter.Mode.MOMENTARY);
+
+                triggerExplosion.addListener(new LXParameterListener() {
+                        public void onParameterChanged(LXParameter param) {
+
+                        }
+                });
+
                 initExplosions();
         }
 
@@ -85,18 +100,20 @@ public class Explosions extends LXPattern {
                 float base_hue = palette.getHuef();
                 float wave_hue_diff = (float) (360.0 / this.explosions.size());
 
-                for(L8onExplosion explosion : this.explosions) {
-                        if (explosion.isChillin((float)deltaMs)) {
-                                continue;
-                        }
+                if (!manualMode.getValueb()) {
+                        for(L8onExplosion explosion : this.explosions) {
+                                if (explosion.isChillin((float)deltaMs)) {
+                                        continue;
+                                }
 
-                        explosion.hue_value = (float)(base_hue % 360.0);
-                        base_hue += wave_hue_diff;
+                                explosion.hue_value = (float)(base_hue % 360.0);
+                                base_hue += wave_hue_diff;
 
-                        if (!explosion.hasExploded()) {
-                                explosion.explode();
-                        } else if (explosion.isFinished()) {
-                                assignNewCenter(explosion);
+                                if (!explosion.hasExploded()) {
+                                        explosion.explode();
+                                } else if (explosion.isFinished()) {
+                                        assignNewCenter(explosion);
+                                }
                         }
                 }
 

@@ -29,6 +29,7 @@ public class ViolinWave extends LXPattern {
     CompoundParameter pSize = new CompoundParameter("PSIZE", 0.5);
     CompoundParameter pSpeed = new CompoundParameter("PSPD", 0.5);
     CompoundParameter pDensity = new CompoundParameter("PDENS", 0.25);
+    CompoundParameter canTrigger = new CompoundParameter("TRIG");
 
     LinearEnvelope dbValue = new LinearEnvelope(0, 0, 10);
 
@@ -44,6 +45,7 @@ public class ViolinWave extends LXPattern {
         addParameter(pSize);
         addParameter(pSpeed);
         addParameter(pDensity);
+        addParameter(canTrigger);
         addModulator(dbValue);
         addModulator(eq).start();
     }
@@ -108,39 +110,48 @@ public class ViolinWave extends LXPattern {
     final double LOG_10 = Math.log(10);
 
     public void run(double deltaMs) {
-        accum += deltaMs / (1000. - 900. * speed.getValuef());
-        for (int i = 0; i < centers.length; ++i) {
-            centers[i] =
-                model.cy + 30 * amp.getValuef() * MathUtils.sin((float)(accum + (i - centers.length / 2f) / (1f + 9 * period.getValuef())));
-        }
-        float zeroDBReference = MathUtils.pow(10, (50 - 190 * level.getValuef()) / 20f);
-        float dB = (float) (20 * Math.log((eq.getSquaref()) / zeroDBReference) / LOG_10);
-        if (dB > dbValue.getValuef()) {
-            rising = true;
-            dbValue.setRangeFromHereTo(dB, 10).trigger();
-        } else {
-            if (rising) {
-                for (int j = 0; j < pDensity.getValuef() * 3; ++j) {
-                    fireParticle(true);
-                    fireParticle(false);
-                }
-            }
-            rising = false;
-            dbValue.setRangeFromHereTo(MathUtils.max(dB, -96), 50 + 1000 * release.getValuef()).trigger();
-        }
-        float edg = 1 + edge.getValuef() * 40;
-        float rng = (78 - 64 * range.getValuef()) / (model.yMax - model.cy);
-        float val = MathUtils.max(2, dbValue.getValuef());
+              accum += deltaMs / (1000. - 900. * speed.getValuef());
+              for (int i = 0; i < centers.length; ++i) {
+                  centers[i] =
+                      model.cy + 30 * amp.getValuef() * MathUtils.sin((float)(accum + (i - centers.length / 2f) / (1f + 9 * period.getValuef())));
+              }
+            float zeroDBReference = MathUtils.pow(10, (50 - 190 * level.getValuef()) / 20f);
+            float dB = (float) (20 * Math.log((eq.getSquaref()) / zeroDBReference) / LOG_10);
 
-        for (LXPoint p : model.points) {
-            int ci = (int)MathUtils.lerp(0, centers.length - 1, (p.x - model.xMin) / (model.xMax - model.xMin));
-            float rFactor = 1.0f - 0.9f * MathUtils.abs(p.x - model.cx) / (model.xMax - model.cx);
-            colors[p.index] = lx.hsb(
-                palette.getHuef() + MathUtils.abs(p.x - model.cx),
-                MathUtils.min(100, 20 + 8 * MathUtils.abs(p.y - centers[ci])),
-                MathUtils.constrain(edg * (val * rFactor - rng * MathUtils.abs(p.y - centers[ci])), 0, 100)
-            );
-        }
+            if (canTrigger.getValuef() > 0.5) {
+              fireParticle(true);
+              fireParticle(false);
+            } else {
+              //fireParticle(false);
+            }
+
+            // if (dB > dbValue.getValuef()) {
+            //   rising = true;
+            //   dbValue.setRangeFromHereTo(dB, 10).trigger();
+            // } else {
+            //   if (rising) {
+            //     for (int j = 0; j < pDensity.getValuef()*3; ++j) {
+            //       fireParticle(true);
+            //       fireParticle(false);
+            //     }
+            //   }
+            //   rising = false;
+            //   dbValue.setRangeFromHereTo(max(dB, -96), 50 + 1000*release.getValuef()).trigger();
+            // }
+                float edg = 1 + edge.getValuef() * 40;
+                float rng = (78 - 64 * range.getValuef()) / (model.yMax - model.cy);
+                float val = MathUtils.max(2, dbValue.getValuef());
+              
+            setColors(0);
+            // for (LXPoint p : model.points) {
+            //   int ci = (int) lerp(0, centers.length-1, (p.x - model.xMin) / (model.xMax - model.xMin));
+            //   float rFactor = 1.0 -  0.9 * abs(p.x - model.cx) / (model.xMax - model.cx);
+            //   colors[p.index] = lx.hsb(
+            //     palette.getHuef() + abs(p.x - model.cx),
+            //     min(100, 20 + 8*abs(p.y - centers[ci])),
+            //     constrain(edg*(val*rFactor - rng * abs(p.y-centers[ci])), 0, 100)
+            //   );
+            // }
 
         for (Particle p : particles) {
             p.run(deltaMs);
