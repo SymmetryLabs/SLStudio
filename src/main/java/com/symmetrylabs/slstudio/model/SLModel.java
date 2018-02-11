@@ -16,6 +16,7 @@ public class SLModel extends LXModel {
     protected PointBatches pointBatches;
 
     public SLModel() {
+        super();
     }
 
     public SLModel(List<LXPoint> points) {

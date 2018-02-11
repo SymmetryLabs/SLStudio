@@ -8,7 +8,7 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 public abstract class StripsPattern extends ModelSpecificPattern<StripsModel<Strip>> {
     @Override
     protected StripsModel createEmptyModel() {
-        return new StripsModel.Empty();
+        return new StripsModel();
     }
 
     public StripsPattern(LX lx) {

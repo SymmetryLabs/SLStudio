@@ -67,12 +67,6 @@ public class Explosions extends LXPattern {
                 addParameter(triggerExplosion);
                 triggerExplosion.setMode(BooleanParameter.Mode.MOMENTARY);
 
-                triggerExplosion.addListener(new LXParameterListener() {
-                        public void onParameterChanged(LXParameter param) {
-
-                        }
-                });
-
                 initExplosions();
         }
 
