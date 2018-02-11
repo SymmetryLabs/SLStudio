@@ -184,7 +184,7 @@ public class RKPattern01 extends P3CubeMapPattern {
         float upZ
     ) {
         pg.beginDraw();
-        if(blobsPos.length > 0) pg.background(0, 0, 255);
+        if(blobsLinked && blobsPos!=null) pg.background(0, 0, 255);
         else pg.background(0);
         pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
         pg.frustum(-10, 10, -10, 10, 10, 1000);
