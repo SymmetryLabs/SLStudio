@@ -115,7 +115,9 @@ public class RKPattern01 extends P3CubeMapPattern {
         blobsPos = new PVector[blobs.size()];
         int blobIdx = 0;
         for (BlobFollower.Follower blob : blobs) {
-            blobsPos[blobIdx].set(blob.pos.x, blob.pos.y, blob.pos.z);
+            blobsPos[blobIdx].set(blob.pos.x-modelPos.x, blob.pos.y-modelPos.y, blob.pos.z-modelPos.z);
+            blobsPos[blobIdx].normalize();
+            blobsPos[blobIdx].mult(240);
             blobIdx++;
         }
     }
@@ -182,7 +184,8 @@ public class RKPattern01 extends P3CubeMapPattern {
         float upZ
     ) {
         pg.beginDraw();
-        pg.background(0);
+        if(blobsPos.length > 0) pg.background(0, 0, 255);
+        else pg.background(0);
         pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
         pg.frustum(-10, 10, -10, 10, 10, 1000);
         pg.rotateX(rotX);
