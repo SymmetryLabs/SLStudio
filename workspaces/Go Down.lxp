@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1518497303750,
+  "timestamp": 1518554644382,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.5,
+      "crossfader": 0.889763779527559,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 0.0,
+        "color/hue": 0.9411764144897461,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -65536,
+        "color": -64512,
         "period": 120000.0,
         "range": 0.0,
         "spread": 0.0,
@@ -76,7 +76,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.7899999879300594
+              "amount": 0.8799999859184027
             },
             "modulation": {
               "modulators": [],
@@ -115,7 +115,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -16711736,
         "parameters": {
-          "label": "Channel-2",
+          "label": "Voronoi",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -140,10 +140,133 @@
             "modulationColor": -5373697,
             "parameters": {
               "label": "Voronoi",
-              "SPEED": 1.3999999687075615,
-              "WIDTH": 0.5950000090524554,
+              "SPEED": 3.1000001542270184,
+              "WIDTH": 0.33400000985711814,
               "HUE": 0.0,
-              "NUM": 27
+              "NUM": 18
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 31160,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16734209,
+        "parameters": {
+          "label": "SoundRain",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [
+          {
+            "id": 31175,
+            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
+            "modulationColor": -2162433,
+            "parameters": {
+              "label": "ColorFilter",
+              "enabled": true,
+              "hue": 0.0,
+              "sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 31161,
+            "class": "com.symmetrylabs.slstudio.pattern.SoundRain",
+            "modulationColor": -65489,
+            "parameters": {
+              "label": "SoundRain",
+              "GAIN": 0.14199999906122682,
+              "p1": 3.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 31180,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711892,
+        "parameters": {
+          "label": "StripPlay",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [
+          {
+            "id": 32083,
+            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
+            "modulationColor": -65289,
+            "parameters": {
+              "label": "ColorFilter",
+              "enabled": true,
+              "hue": 0.0,
+              "sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          }
+        ],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 33025,
+            "class": "com.symmetrylabs.slstudio.pattern.StripPlay",
+            "modulationColor": -16711695,
+            "parameters": {
+              "label": "StripPlay",
+              "bright": 96.0,
+              "Strips": 278,
+              "hueSpread": 1.0,
+              "speed": 0.5,
+              "xSpeed": 2450.0000290572643,
+              "ySpeed": 2450.0000290572643,
+              "zSpeed": 1000.0
             },
             "modulation": {
               "modulators": [],
@@ -207,19 +330,19 @@
           "Band-1": 0.0,
           "Band-2": 0.0,
           "Band-3": 0.0,
-          "Band-4": 0.027818906010815492,
-          "Band-5": 0.10296802523503168,
-          "Band-6": 0.1381708921541539,
-          "Band-7": 0.21174145857102156,
-          "Band-8": 0.17726521345823143,
-          "Band-9": 0.1346394801080204,
-          "Band-10": 0.28218589630109536,
-          "Band-11": 0.2275392724644677,
-          "Band-12": 0.2295120793342843,
-          "Band-13": 0.3094303424644941,
-          "Band-14": 0.34088281484967775,
-          "Band-15": 0.38436481285687873,
-          "Band-16": 0.3458603398028096
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
+          "Band-14": 0.0,
+          "Band-15": 0.0,
+          "Band-16": 0.0
         }
       },
       "input": {
@@ -228,7 +351,7 @@
         "modulationColor": -7208705,
         "parameters": {
           "label": "Audio Input",
-          "device": 0
+          "device": 7
         }
       },
       "output": {
@@ -300,8 +423,19 @@
       }
     },
     "midi": {
-      "inputs": [],
-      "surfaces": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
+          "sync": false
+        }
+      ],
+      "surfaces": [
+        {
+          "description": "APC40 mkII"
+        }
+      ],
       "mapping": []
     }
   },
@@ -314,7 +448,7 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 234.4487420841839,
-        "theta": 0.0,
+        "theta": -0.069,
         "phi": 0.0,
         "positionX": 135.52943420410156,
         "positionY": 67.0,
