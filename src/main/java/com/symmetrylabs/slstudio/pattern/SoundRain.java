@@ -17,6 +17,8 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 
+import com.symmetrylabs.slstudio.util.MathUtils;
+
 public class SoundRain extends SLPattern {
     private LXAudioBuffer audioBuffer;
     private float[] audioSamples;
@@ -29,6 +31,8 @@ public class SoundRain extends SLPattern {
     public final SawLFO pos = new SawLFO(0, 9, 8000);
     public final SinLFO col1 = new SinLFO(model.xMin, model.xMax, 5000);
     public final CompoundParameter gainParameter = new CompoundParameter("GAIN", 0.1, 0, .3);
+
+    public final CompoundParameter param1 = new CompoundParameter("p1", 3, 1, 10);
     
     public SoundRain(LX lx) {
         super(lx);
@@ -37,6 +41,7 @@ public class SoundRain extends SLPattern {
         addModulator(pos).trigger();
         addModulator(col1).trigger();
         addParameter(gainParameter);
+        addParameter(param1);
     }
 
     public void onParameterChanged(LXParameter parameter) {
@@ -54,7 +59,7 @@ public class SoundRain extends SLPattern {
             this.bandVals = new LinearEnvelope[this.avgSize];
 
             for (int i = 0; i < this.bandVals.length; ++i) {
-                this.addModulator(this.bandVals[i] = (new LinearEnvelope(0, 0, 700 + i * 4))).trigger();
+                this.addModulator(this.bandVals[i] = (new LinearEnvelope(0, 0, 700 + i * param1.getValuef()))).trigger();
             }
 
             lightVals = new float[avgSize];
@@ -71,7 +76,7 @@ public class SoundRain extends SLPattern {
             float lv = Math.min(value * gain, 100);
 
             if (lv > lightVals[i]) {
-                lightVals[i] = Math.min(Math.min(lightVals[i] + 15, lv), 100);
+                lightVals[i] = Math.min(Math.min(lightVals[i] + 40, lv), 100);
             } else {
                 lightVals[i] = Math.max(Math.max(lv, lightVals[i] - 5), 0);
             }
@@ -83,9 +88,10 @@ public class SoundRain extends SLPattern {
 
                 if (j % 4 != 0 && j % 4 != 2) {
                     for (LXPoint p : s.points) {
-                        int seq = ((int)(p.y * avgSize / model.yMax + pos.getValuef() + Math.sin(p.x + p.z) * 2)) % avgSize;
+                        int seq = ((int)(p.y * avgSize / model.yMax + pos.getValuef() + Math.sin(p.x + p.z*0.4) * param1.getValuef())) % avgSize;
                         seq = Math.min(Math.abs(seq - (avgSize / 2)), avgSize - 1);
-                        colors[p.index] = lx.hsb(200, Math.max(0, 100 - Math.abs(p.x - col1.getValuef()) / 2), lightVals[seq]);
+                        float bri = (lightVals[seq] * lightVals[seq]) / 100.f;
+                        colors[p.index] = lx.hsb(palette.getHuef(), Math.max(0, 100 - Math.abs(p.x - col1.getValuef()) / 2), bri);
                     }
                 }
             }

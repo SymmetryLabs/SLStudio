@@ -5,6 +5,9 @@ import processing.core.PVector;
 import static processing.core.PConstants.ADD;
 
 import heronarts.lx.LX;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
@@ -20,7 +23,7 @@ public class Noise extends DPat {
     DiscreteParameter pChoose, pSymm;
     int _ND = 4;
     NDat N[] = new NDat[_ND];
-
+    BooleanParameter reset = new BooleanParameter("reset", false);
     public Noise(LX lx) {
         super(lx);
         pSpeed = new CompoundParameter("Fast", .55, -2, 2);
@@ -30,7 +33,7 @@ public class Noise extends DPat {
         pSymm = new DiscreteParameter("Symm", new String[]{"None", "X", "Y", "Rad"});
         pChoose =
             new DiscreteParameter("Anim", new String[]{"Drip", "Cloud", "Rain", "Fire", "Mach", "Spark", "VWav", "Wave"});
-        pChoose.setValue(5);
+        pChoose.setValue(2);
         addParameter(pSymm);
         addParameter(pChoose);
         //addNonKnobParameter(pSymm);
@@ -38,6 +41,29 @@ public class Noise extends DPat {
         //addSingleParameterUIRow(pChoose);
         //addSingleParameterUIRow(pSymm);
         for (int i = 0; i < _ND; i++) N[i] = new NDat();
+
+        reset.setMode(BooleanParameter.Mode.MOMENTARY);
+
+        reset.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter bool) {
+                if (((BooleanParameter)bool).isOn()) {
+                    for (LXParameter param : getParameters()) {
+                        if (param.getLabel().equals("Anim")) {
+                            param.setValue(2);
+                            continue;
+                        }
+                        if (param.getLabel().equals("Dens")) {
+                            param.setValue(0.05);
+                            continue;
+                        }
+
+                        param.reset();
+                    }
+                    CurAnim = 0;
+                }
+            }
+        });
+        addParameter(reset);
     }
 
     public void onActive() {
@@ -82,6 +108,7 @@ public class Noise extends DPat {
                 case 2:
                     N[0].set(0, 2, 400, 2, 20, 3, 0);
                     pSharp.setValue(.5);
+                    pDensity.setValue(0.05);
                     break;  // rain
                 case 3:
                     N[0].set(40, 100, 100, 200, 10, 1, 180);

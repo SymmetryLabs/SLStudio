@@ -75,7 +75,7 @@ static final TowerConfig[] SMALL_CLUSTER_1 = {
 
     new TowerConfig(40, 0, 0, 45, new String[] {"0"}),
     new TowerConfig(23, 25, 7,  0, new String[] {"0"}),
-    new TowerConfig(40, 50, 0, 45, new String[] {"0"}),
+    //new TowerConfig(40, 50, 0, 45, new String[] {"0"}),
 
     new TowerConfig(20, 0, 25, 45, new String[] {"0"}),
     new TowerConfig( 3, 25, 32,  0, new String[] {"0"}),
@@ -95,7 +95,7 @@ static final TowerConfig[] SMALL_CLUSTER_2 = {
 
     new TowerConfig(0, 0, 0, 45, new String[] {"0"}),
     new TowerConfig(-17, 25, 7,  0, new String[] {"0"}),
-    new TowerConfig(0, 50, 0, 45, new String[] {"0"}),
+    //TowerConfig(0, 50, 0, 45, new String[] {"0"}),
 
     new TowerConfig(40, 0, 0, 45, new String[] {"0"}),
     new TowerConfig(23, 25, 7,  0, new String[] {"0"}),
@@ -109,17 +109,17 @@ static final TowerConfig[] SMALL_CLUSTER_2 = {
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-    new TowerConfig(40, 0, 0, 45, new String[] {"0", "0", "0", "0"}),
-    new TowerConfig(80, 0, 0, 45, new String[] {"0", "0", "0", "0", "0"}),
-    new TowerConfig(120, 0, 0, 45, new String[] {"0", "0", "0", "0", "0", "0"}),
-    new TowerConfig(140, JUMP*6, 0, 45, new String[] {"0"}),
-    new TowerConfig(160, 0, 0, 45, new String[] {"0", "0", "0", "0", "0", "0"}),
-    new TowerConfig(200, 0, 0, 45, new String[] {"0", "0", "0", "0", "0"}),
-    new TowerConfig(240, 0, 0, 45, new String[] {"0", "0", "0", "0"}),
+    new TowerConfig(40, 0, 0, 45, new String[] {"0", "0", "0"}),//, "0"}),
+    new TowerConfig(80, 0, 0, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
+    new TowerConfig(120, 0, 0, 45, new String[] {"0", "0", "0", "0", "0"}),//, "0"}),
+    //new TowerConfig(140, JUMP*6, 0, 45, new String[] {"0"}),
+    new TowerConfig(160, 0, 0, 45, new String[] {"0", "0", "0", "0", "0"}),//, "0"}),
+    new TowerConfig(200, 0, 0, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
+    new TowerConfig(240, 0, 0, 45, new String[] {"0", "0", "0"}),//, "0"}),
 
-    new TowerConfig(100, 0, -25, 45, new String[] {"0", "0", "0", "0", "0"}),
+    new TowerConfig(100, 0, -25, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
     new TowerConfig(140, 0, -25, 45, new String[] {"0", "0", "0", "0", "0"}),
-    new TowerConfig(180, 0, -25, 45, new String[] {"0", "0", "0", "0", "0"}),
+    new TowerConfig(180, 0, -25, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
 
 
     // left truss

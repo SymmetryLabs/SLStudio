@@ -17,13 +17,15 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
+// import com.symmetrylabs.slstudio.model.Sun;
+// import com.symmetrylabs.slstudio.pattern.SunsPattern;
 import com.symmetrylabs.slstudio.util.DrawHelper;
+
+import com.symmetrylabs.slstudio.pattern.SLPattern;
 
 import static processing.core.PConstants.P3D;
 
-public abstract class P3CubeMapPattern extends SunsPattern {
+public abstract class P3CubeMapPattern extends SLPattern {
     private PGraphics pg;
     public PGraphics pgF;
     public PGraphics pgB;
@@ -39,8 +41,8 @@ public abstract class P3CubeMapPattern extends SunsPattern {
 
     public DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
     public DiscreteParameter kernelSize = discreteParameter("KER", 3, 1, 6);
-    public BooleanParameter allSunsParams = booleanParam("ALL", false);
-    public List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
+    // public BooleanParameter allSunsParams = booleanParam("ALL", false);
+    // public List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
 
     /**
      * A pattern that projects a cubemap image onto all the LEDs inside a given bounding box in world space.  The cubemap
@@ -79,7 +81,7 @@ public abstract class P3CubeMapPattern extends SunsPattern {
             }
         };
         kernelSize.addListener(invalidateProjectionCache);
-        allSunsParams.addListener(invalidateProjectionCache);
+        //allSunsParams.addListener(invalidateProjectionCache);
 
         this.faceRes = defaultFaceRes;
         this.updateGraphics();
@@ -87,9 +89,9 @@ public abstract class P3CubeMapPattern extends SunsPattern {
         this.origin = origin;
         this.bboxSize = bboxSize;
 
-        for (final Sun sun : model.getSuns()) {
-            sunSwitchParams.add(booleanParam("SUN" + (model.getSuns().indexOf(sun) + 1), true));
-        }
+        // for (final Sun sun : model.getSuns()) {
+        //     sunSwitchParams.add(booleanParam("SUN" + (model.getSuns().indexOf(sun) + 1), true));
+        // }
     }
 
     private void updateGraphics() {
@@ -103,46 +105,34 @@ public abstract class P3CubeMapPattern extends SunsPattern {
         this.pgD = lx.applet.createGraphics(faceRes, faceRes, P3D);
     }
 
-    public PVector originForSun(final Sun sun) {
-        return new PVector(
-            sun.boundingBox.origin.x + sun.boundingBox.size.x * .5f,
-            sun.boundingBox.origin.y + sun.boundingBox.size.y * .5f,
-            sun.boundingBox.origin.z + sun.boundingBox.size.z * .5f
-        );
-    }
 
-    public PVector bboxForSun(final Sun sun) {
-        return sun.boundingBox.size;
-    }
-
-    Map<Sun, int[][]> perSunProjectionCache;
     int[][] allProjectionCache;
 
     private void invalidateProjectionCache() {
-        perSunProjectionCache = null;
+        //perSunProjectionCache = null;
         allProjectionCache = null;
     }
 
     private synchronized void ensureProjectionCache() {
         int inputPointCount = kernelSize.getValuei() * kernelSize.getValuei();
 
-        if (allSunsParams.getValueb()) {
+        //if (allSunsParams.getValueb()) {
             if (allProjectionCache == null) {
                 allProjectionCache = new int[model.points.length][inputPointCount];
                 computeCache(allProjectionCache, origin, bboxSize, model.points);
             }
-        } else {
-            if (perSunProjectionCache == null) {
-                perSunProjectionCache = Maps.newHashMapWithExpectedSize(model.getSuns().size());
+        // } else {
+        //     if (perSunProjectionCache == null) {
+        //         perSunProjectionCache = Maps.newHashMapWithExpectedSize(model.getSuns().size());
 
-                for (final Sun sun : model.getSuns()) {
-                    int[][] sunCache = new int[sun.points.length][inputPointCount];
-                    perSunProjectionCache.put(sun, sunCache);
+        //         for (final Sun sun : model.getSuns()) {
+        //             int[][] sunCache = new int[sun.points.length][inputPointCount];
+        //             perSunProjectionCache.put(sun, sunCache);
 
-                    computeCache(sunCache, originForSun(sun), bboxForSun(sun), sun.points);
-                }
-            }
-        }
+        //             computeCache(sunCache, originForSun(sun), bboxForSun(sun), sun.points);
+        //         }
+        //     }
+        // }
     }
 
     private void computeCache(
@@ -198,24 +188,24 @@ public abstract class P3CubeMapPattern extends SunsPattern {
     private void projectToLeds() {
         ensureProjectionCache();
 
-        if (allSunsParams.getValueb()) {
+        //if (allSunsParams.getValueb()) {
             projectToLeds(allProjectionCache, model.points);
-        } else {
-            model.getSuns().parallelStream().forEach(new Consumer<Sun>() {
-                @Override
-                public void accept(final Sun sun) {
-                    final int sunIndex = model.getSuns().indexOf(sun);
+        // } else {
+        //     model.getSuns().parallelStream().forEach(new Consumer<Sun>() {
+        //         @Override
+        //         public void accept(final Sun sun) {
+        //             final int sunIndex = model.getSuns().indexOf(sun);
 
-                    if (sunSwitchParams.get(sunIndex).getValueb()) {
-                        projectToLeds(perSunProjectionCache.get(sun), sun.points);
-                    } else {
-                        for (final LXPoint point : sun.points) {
-                            colors[point.index] = 0;
-                        }
-                    }
-                }
-            });
-        }
+        //             if (sunSwitchParams.get(sunIndex).getValueb()) {
+        //                 projectToLeds(perSunProjectionCache.get(sun), sun.points);
+        //             } else {
+        //                 for (final LXPoint point : sun.points) {
+        //                     colors[point.index] = 0;
+        //                 }
+        //             }
+        //         }
+        //     });
+        // }
     }
 
     private void projectToLeds(final int[][] cache, final LXPoint[] points) {

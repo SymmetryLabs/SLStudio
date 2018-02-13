@@ -42,7 +42,7 @@ import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
-import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
+// import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
 import com.symmetrylabs.slstudio.ui.UIFramerate;
 import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
 import com.symmetrylabs.slstudio.ui.UIOutputs;
@@ -65,7 +65,7 @@ public class SLStudioLX extends P3LX {
         public final UIFramerate framerate;
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
-        public final UICubeMapDebug cubeMapDebug;
+        // public final UICubeMapDebug cubeMapDebug;
 
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
@@ -110,8 +110,8 @@ public class SLStudioLX extends P3LX {
             this.framerate = new UIFramerate(this, lx, this.leftPane.getX() + this.leftPane.getWidth() + 6, 6);
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
-            this.cubeMapDebug = new UICubeMapDebug(lx);
-            this.preview.addComponent(this.cubeMapDebug);
+            // this.cubeMapDebug = new UICubeMapDebug(lx);
+            // this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
             this.preview.addComponent(new UIDaughtryStage());
@@ -150,7 +150,7 @@ public class SLStudioLX extends P3LX {
                     } else if (keyChar == "x".charAt(0)) {
                         axes.toggleVisible();
                     } else if (keyChar == "c".charAt(0)) {
-                        cubeMapDebug.toggleVisible();
+                        //cubeMapDebug.toggleVisible();
                     } else if (keyChar == "f".charAt(0)) {
                         framerate.toggleVisible();
                     } else if (keyChar == "p".charAt(0)) {
