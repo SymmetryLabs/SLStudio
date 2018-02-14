@@ -15934,7 +15934,7 @@
               "output": {
                 "type": "PixliteDatalineRef",
                 "datalineIndex": 4,
-                "datalineOrderIndex": 0,
+                "datalineOrderIndex": 2,
                 "outputId": "sun6_bottom_front"
               }
             },
@@ -15946,7 +15946,7 @@
               "output": {
                 "type": "PixliteDatalineRef",
                 "datalineIndex": 4,
-                "datalineOrderIndex": 1,
+                "datalineOrderIndex": 0,
                 "outputId": "sun6_bottom_front"
               }
             },
@@ -15958,7 +15958,7 @@
               "output": {
                 "type": "PixliteDatalineRef",
                 "datalineIndex": 4,
-                "datalineOrderIndex": 2,
+                "datalineOrderIndex": 1,
                 "outputId": "sun6_bottom_front"
               }
             },
