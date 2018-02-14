@@ -113,6 +113,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     void updateBlobs(){
         List<BlobFollower.Follower> blobs = blobFollower.getFollowers();
         blobsPos = new PVector[blobs.size()];
+        println("blobs.size(): " + blobs.size());
         int blobIdx = 0;
         for (BlobFollower.Follower blob : blobs) {
             blobsPos[blobIdx].set(blob.pos.x-modelPos.x, blob.pos.y-modelPos.y, blob.pos.z-modelPos.z);
@@ -184,8 +185,12 @@ public class RKPattern01 extends P3CubeMapPattern {
         float upZ
     ) {
         pg.beginDraw();
-        if(blobsLinked && blobsPos!=null) pg.background(0, 0, 255);
-        else pg.background(0);
+        if(blobsLinked && blobsPos!=null){
+            println("blobsPos.length: " + blobsPos.length + "\n");
+            pg.background(0, 0, 255);
+        }else{
+            pg.background(0);
+        }
         pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
         pg.frustum(-10, 10, -10, 10, 10, 1000);
         pg.rotateX(rotX);
@@ -197,6 +202,7 @@ public class RKPattern01 extends P3CubeMapPattern {
                 pg.stroke(255, 0, 0);
                 pg.strokeWeight(20);
                 pg.point(blobsPos[i].x, blobsPos[i].y, blobsPos[i].z);
+                println(blobsPos[i].x+", "+blobsPos[i].y +", "+blobsPos[i].z);
             }
         }
         pg.endDraw();
