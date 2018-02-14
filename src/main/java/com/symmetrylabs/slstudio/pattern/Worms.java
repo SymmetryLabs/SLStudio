@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.modulator.Click;
 import heronarts.lx.transform.LXVector;
@@ -60,6 +61,18 @@ public class Worms extends SLPattern {
         addParameter(pColor);
 
         middle = new LXVector(1.5f * model.cx, 1.5f * model.cy, 71.f);
+
+        pSpawn.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter parameter) {
+                System.out.println("param change");
+                for (int i = 0; i < NUM_CURSORS; i++) {
+                    if (parameter == pSpawn) {
+                        System.out.println("call reset");
+                        reset(cur.get(i));
+                    }
+                }
+            }
+        });
     }
 
     private boolean isLatticeInited() {
@@ -67,7 +80,9 @@ public class Worms extends SLPattern {
     }
 
     private int animNum() {
-        return (int)Math.floor(pSpawn.getValuef() * (4 - 0.01f));
+        int aninNum = (int)Math.floor(pSpawn.getValuef() * (4 - 0.01f));
+        System.out.println(aninNum);
+        return aninNum;
     }
 
     private float randX() {
@@ -87,9 +102,10 @@ public class Worms extends SLPattern {
     public void onParameterChange(LXParameter parameter) {
         onParameterChanged(parameter);
         nConfusion = 1 - pConfusion.getValuef();
-
+        System.out.println("param change");
         for (int i = 0; i < NUM_CURSORS; i++) {
             if (parameter == pSpawn) {
+                System.out.println("call reset");
                 reset(cur.get(i));
             }
             cur.get(i).destSpeed = nConfusion;
