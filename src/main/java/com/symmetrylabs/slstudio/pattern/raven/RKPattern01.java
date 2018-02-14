@@ -119,7 +119,7 @@ public class RKPattern01 extends P3CubeMapPattern {
         println("blobTracker.getBlobs().size(): " + blobs.size());
         int blobIdx = 0;
         for (BlobTracker.Blob b : blobs) {
-            blobsPos[blobIdx].set(b.pos.x-modelPos.x, b.pos.y-modelPos.y, b.pos.z-modelPos.z);
+            blobsPos[blobIdx] = new PVector(b.pos.x-modelPos.x, b.pos.y-modelPos.y, b.pos.z-modelPos.z);
             blobsPos[blobIdx].normalize();
             blobsPos[blobIdx].mult(240);
             blobIdx++;
