@@ -39,7 +39,8 @@ public class RKPattern01 extends P3CubeMapPattern {
     CompoundParameter dsp = new CompoundParameter("dsp", HALF_PI, 0, PI);
     CompoundParameter nDsp = new CompoundParameter("nDsp", 1, .125, 2.5);
 
-    protected BlobFollower blobFollower;
+    private BlobTracker blobTracker;
+    private BlobFollower blobFollower;
     PVector modelPos;
     PVector [] blobsPos;
 
@@ -64,7 +65,8 @@ public class RKPattern01 extends P3CubeMapPattern {
             200
         );
 
-        blobFollower = new BlobFollower(BlobTracker.getInstance(lx));
+        blobTracker = BlobTracker.getInstance(lx);
+        blobFollower = new BlobFollower(blobTracker);
         modelPos = new PVector(lx.model.cx, lx.model.cy, lx.model.cz);
 
         rotDir = PVector.random3D();
@@ -90,6 +92,7 @@ public class RKPattern01 extends P3CubeMapPattern {
 
     public void run(double deltaMs, PGraphics pg) {
 
+        blobFollower.advance((float) deltaMs * 0.001f);
         updateParameters();
         replenish();
 
@@ -111,12 +114,12 @@ public class RKPattern01 extends P3CubeMapPattern {
     }
 
     void updateBlobs(){
-        List<BlobFollower.Follower> blobs = blobFollower.getFollowers();
+        List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
         blobsPos = new PVector[blobs.size()];
-        println("blobs.size(): " + blobs.size());
+        println("blobTracker.getBlobs().size(): " + blobs.size());
         int blobIdx = 0;
-        for (BlobFollower.Follower blob : blobs) {
-            blobsPos[blobIdx].set(blob.pos.x-modelPos.x, blob.pos.y-modelPos.y, blob.pos.z-modelPos.z);
+        for (BlobTracker.Blob b : blobs) {
+            blobsPos[blobIdx].set(b.pos.x-modelPos.x, b.pos.y-modelPos.y, b.pos.z-modelPos.z);
             blobsPos[blobIdx].normalize();
             blobsPos[blobIdx].mult(240);
             blobIdx++;
@@ -186,7 +189,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     ) {
         pg.beginDraw();
         if(blobsLinked && blobsPos!=null){
-            println("blobsPos.length: " + blobsPos.length + "\n");
+            println("blobsPos.length: " + blobsPos.length);
             pg.background(0, 0, 255);
         }else{
             pg.background(0);
@@ -205,6 +208,7 @@ public class RKPattern01 extends P3CubeMapPattern {
                 println(blobsPos[i].x+", "+blobsPos[i].y +", "+blobsPos[i].z);
             }
         }
+        println("\n");
         pg.endDraw();
     }
 
