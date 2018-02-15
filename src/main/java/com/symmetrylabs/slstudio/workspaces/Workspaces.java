@@ -9,9 +9,13 @@ import static com.symmetrylabs.slstudio.util.Utils.sketchPath;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.ObjectParameter;
 
 public class Workspaces extends LXComponent {
+
+    private final LX lx;
 
     private final String path = sketchPath("workspaces");
 
@@ -21,12 +25,23 @@ public class Workspaces extends LXComponent {
 
     public Workspaces(LX lx) {
         super(lx, "workspaces");
+        this.lx = lx;
         addParameter(active);
 
         // only happens on intial load for now (won't change on removing or creating new project files)
         loadProjectFiles();
         removeEmtpyWorkspaces();
         setParameterWorkspaces();
+
+        active.addListener(new LXParameterListener() {
+            public void onParameterChanged(LXParameter param) {
+                openWorkspace((Workspace)(((ObjectParameter)param).getObject()));
+            }
+        });
+    }
+
+    public void openWorkspace(Workspace workspace) {
+        lx.openProject(workspace.getFile());
     }
 
     private void loadProjectFiles() {

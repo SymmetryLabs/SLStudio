@@ -8,6 +8,7 @@ import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import heronarts.p3lx.ui.component.UIItemList;
+import heronarts.p3lx.ui.component.UIKnob;
 
 import com.symmetrylabs.slstudio.workspaces.Workspaces;
 import com.symmetrylabs.slstudio.workspaces.Workspace;
@@ -16,7 +17,7 @@ public class UIWorkspaces extends UICollapsibleSection {
     private final Workspaces workspaces;
 
     public UIWorkspaces(UI ui, LX lx, Workspaces workspaces, float x, float y, float w) {
-        super(ui, x, y, w, 180);
+        super(ui, x, y, w, 280);
         this.workspaces = workspaces;
 
         setTitle("Workspaces");
@@ -24,7 +25,10 @@ public class UIWorkspaces extends UICollapsibleSection {
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (Workspace workspace : this.workspaces.getAll()) { items.add(new WorkspaceItem(lx, workspace)); }
 
-        final UIItemList.ScrollList list = new UIItemList.ScrollList(ui, 0, 0, w-8, 155);
+        final UIKnob active = new UIKnob(workspaces.active);
+        active.addToContainer(this);
+
+        final UIItemList.ScrollList list = new UIItemList.ScrollList(ui, 50, 0, w-8, 200);
         list.setItems(items).setSingleClickActivate(true);
         list.addToContainer(this);
     }
@@ -71,7 +75,7 @@ public class UIWorkspaces extends UICollapsibleSection {
 
             @Override
             public void onActivate() {
-                lx.openProject(workspace.getFile());
+                workspaces.openWorkspace(workspace);
             }
 
             // @Override

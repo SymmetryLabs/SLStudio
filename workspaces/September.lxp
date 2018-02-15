@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1518131296312,
+  "timestamp": 1518653791680,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,7 +12,7 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.7480314960629921,
+      "crossfader": 0.5238935658634882,
       "crossfaderBlendMode": 0,
       "speed": 0.6833333764225245,
       "focusedChannel": 0,
@@ -74,7 +74,7 @@
         "patterns": [
           {
             "id": 10891,
-            "class": "SLStudio$Noise",
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -11796225,
             "parameters": {
               "label": "Noise",
@@ -86,11 +86,12 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.7999999523162842,
-              "Dens": 0.46000000834465027,
+              "Fast": 0.55,
+              "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
-              "Anim": 3
+              "Anim": 3,
+              "reset": false
             },
             "modulation": {
               "modulators": [],
@@ -156,7 +157,7 @@
           },
           {
             "id": 10346,
-            "class": "SLStudio$ColorFilter",
+            "class": "com.symmetrylabs.slstudio.effect.ColorFilter",
             "modulationColor": -7274752,
             "parameters": {
               "label": "ColorFilter",
@@ -176,7 +177,7 @@
         "patterns": [
           {
             "id": 10040,
-            "class": "SLStudio$ViolinWave",
+            "class": "com.symmetrylabs.slstudio.pattern.ViolinWave",
             "modulationColor": -65481,
             "parameters": {
               "label": "ViolinWave",
@@ -278,14 +279,13 @@
           },
           {
             "id": 9937,
-            "class": "SLStudio$Raindrops",
+            "class": "com.symmetrylabs.slstudio.pattern.Raindrops",
             "modulationColor": -8847105,
             "parameters": {
               "label": "Raindrops",
               "NUM": -48.799999356269836,
               "SIZE": 0.10899999758601189,
               "SPD": -3386.000067833811,
-              "SPDVAR": 0.6999999843537807,
               "HUE": 0.5
             },
             "modulation": {
@@ -341,7 +341,7 @@
         "patterns": [
           {
             "id": 10980,
-            "class": "SLStudio$ZPlanes",
+            "class": "com.symmetrylabs.slstudio.pattern.ZPlanes",
             "modulationColor": -65512,
             "parameters": {
               "label": "ZPlanes",
@@ -385,7 +385,7 @@
         "patterns": [
           {
             "id": 11011,
-            "class": "SLStudio$Sparkle",
+            "class": "com.symmetrylabs.slstudio.pattern.Sparkle",
             "modulationColor": -16711890,
             "parameters": {
               "label": "Sparkle",
@@ -466,7 +466,7 @@
           "Band-9": 0.0,
           "Band-10": 0.0,
           "Band-11": 0.0,
-          "Band-12": 0.0,
+          "Band-12": 0.05088802958766914,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -509,18 +509,21 @@
       }
     },
     "components": {
-      "workspaces": {
+      "performanceManager": {
         "id": 34,
-        "class": "SLStudio$Workspaces",
-        "modulationColor": -1310976,
+        "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
+        "modulationColor": -16758785,
         "parameters": {
-          "label": "workspaces",
-          "active": 0
+          "label": "",
+          "deckOneChannel": 0,
+          "deckTwoChannel": 0,
+          "deckThreeChannel": 0,
+          "deckFourChannel": 0
         }
       },
       "outputControl": {
         "id": 32,
-        "class": "SLStudio$OutputControl",
+        "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16774401,
         "parameters": {
           "label": "Output Control",
@@ -557,6 +560,1122 @@
         }
       ],
       "surfaces": [
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
+        {
+          "description": "APC40 mkII"
+        },
         {
           "description": "APC40 mkII"
         }

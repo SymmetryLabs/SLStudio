@@ -129,6 +129,7 @@ public class SLStudio extends PApplet {
                 setupGammaCorrection();
 
                 workspaces = new Workspaces(lx);
+                lx.engine.registerComponent("workspaces", workspaces);
 
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
