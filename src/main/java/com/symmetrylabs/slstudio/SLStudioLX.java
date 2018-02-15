@@ -25,7 +25,9 @@ import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.UIWindow;
 import heronarts.p3lx.ui.UI2dScrollContext;
+import heronarts.p3lx.ui.UI2dComponent;
 import heronarts.p3lx.ui.component.UIGLPointCloud;
+import heronarts.p3lx.ui.component.UIImage;
 import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
 import heronarts.p3lx.ui.studio.UILeftPane;
@@ -114,6 +116,11 @@ public class SLStudioLX extends P3LX {
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
 
+            new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
+            
+            new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
+            .setDescription("Symmetry Labs")
+            .addToContainer(leftPane);
 
             addLayer(this.preview);
             addLayer(this.leftPane);
