@@ -138,6 +138,9 @@ void  move()      { c     = interp(t,prvA,dstA);
         //addNonKnobParameter(pTempoMult);
         //addNonKnobParameter(pTimePattern);
         //addNonKnobParameter(pShape);
+        addParameter(pShape);
+        addParameter(pTimePattern);
+        addParameter(pTempoMult);
 
         //addSingleParameterUIRow(pShape);
         for (int i = 0; i < FRAME_WIDTH; ++i) {

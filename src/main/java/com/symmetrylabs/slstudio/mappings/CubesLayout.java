@@ -59,33 +59,36 @@ public class CubesLayout {
 
     static final float INCHES_PER_METER = 39.3701f;
 
-    static final float smallCluster1_OffsetX = 15;
+    static final float smallCluster1_OffsetX = 0;
 static final float smallCluster1_OffsetY = 0;
-static final float smallCluster1_OffsetZ = -160;
+static final float smallCluster1_OffsetZ = -175;
 
 static final float smallCluster1_RotationX = 0;
 static final float smallCluster1_RotationY = 0;
 static final float smallCluster1_RotationZ = 0;
 
 static final TowerConfig[] SMALL_CLUSTER_1 = {
+    // test cubes setup
+    new TowerConfig(0, 0, 0, new String[] {"174", "205", "321", "92"}),
+    // test cubes setup
 
-    new TowerConfig(0, 0, 0, 45, new String[] {"0"}),
-    new TowerConfig(-17, 25, 7,  0, new String[] {"0"}),
-    new TowerConfig(0, 50, 0, 45, new String[] {"0"}),
+    new TowerConfig(    0,     0,     0,    45, new String[] {"323"}),
+    new TowerConfig(41-24,    25,    -7,     0, new String[] {"335"}), // square
+    new TowerConfig(    0,    50,     0,    45, new String[] {"185"}),
 
-    new TowerConfig(40, 0, 0, 45, new String[] {"0"}),
-    new TowerConfig(23, 25, 7,  0, new String[] {"0"}),
-    //new TowerConfig(40, 50, 0, 45, new String[] {"0"}),
+    new TowerConfig(43,     0,     0,    45, new String[] {"181"}),
+    new TowerConfig(43+17, 25,    -7,     0, new String[] {"157"}), // square
+    new TowerConfig(43,    50,     0,    45, new String[] {"15"}),
 
-    new TowerConfig(20, 0, 25, 45, new String[] {"0"}),
-    new TowerConfig( 3, 25, 32,  0, new String[] {"0"}),
-    new TowerConfig(20, 50, 25, 45, new String[] {"0"}),
+    new TowerConfig(21,     0,    27,    45, new String[] {"113"}),
+    new TowerConfig(21+17, 25,  27-7,     0, new String[] {"131"}), // square
+    new TowerConfig(21,    50,    27,    45, new String[] {"356"}),
 
 };
 
-static final float smallCluster2_OffsetX = 220;
+static final float smallCluster2_OffsetX = 240;
 static final float smallCluster2_OffsetY = 0;
-static final float smallCluster2_OffsetZ = -160;
+static final float smallCluster2_OffsetZ = -175;
 
 static final float smallCluster2_RotationX = 0;
 static final float smallCluster2_RotationY = 0;
@@ -93,45 +96,51 @@ static final float smallCluster2_RotationZ = 0;
 
 static final TowerConfig[] SMALL_CLUSTER_2 = {
 
-    new TowerConfig(0, 0, 0, 45, new String[] {"0"}),
-    new TowerConfig(-17, 25, 7,  0, new String[] {"0"}),
-    //TowerConfig(0, 50, 0, 45, new String[] {"0"}),
+    new TowerConfig(0,     0,     0,  45, new String[] {"308"}),
+    new TowerConfig(0-7,  25,    17,  90, new String[] {"318"}), // square
+    new TowerConfig(0,    50,     0,  45, new String[] {"71"}),
 
-    new TowerConfig(40, 0, 0, 45, new String[] {"0"}),
-    new TowerConfig(23, 25, 7,  0, new String[] {"0"}),
-    new TowerConfig(40, 50, 0, 45, new String[] {"0"}),
+    new TowerConfig(43,    0,     0,  45, new String[] {"188"}),
+    new TowerConfig(43-7, 25,    17,  90, new String[] {"415hp"}), // square
+    new TowerConfig(43,   50,     0,  45, new String[] {"14"}),
 
-    new TowerConfig(20, 0, 25, 45, new String[] {"0"}),
-    new TowerConfig( 3, 25, 32,  0, new String[] {"0"}),
-    new TowerConfig(20, 50, 25, 45, new String[] {"0"}),
+    new TowerConfig(21,    0,    27,  45, new String[] {"341"}),
+    new TowerConfig(21-7, 25, 27+17,  90, new String[] {"2"}), // square
+    new TowerConfig(21,   50,    27,  45, new String[] {"11"}),
 
 };
 
 static final TowerConfig[] TOWER_CONFIG = {
 
-    new TowerConfig(40, 0, 0, 45, new String[] {"0", "0", "0"}),//, "0"}),
-    new TowerConfig(80, 0, 0, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
-    new TowerConfig(120, 0, 0, 45, new String[] {"0", "0", "0", "0", "0"}),//, "0"}),
-    //new TowerConfig(140, JUMP*6, 0, 45, new String[] {"0"}),
-    new TowerConfig(160, 0, 0, 45, new String[] {"0", "0", "0", "0", "0"}),//, "0"}),
-    new TowerConfig(200, 0, 0, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
-    new TowerConfig(240, 0, 0, 45, new String[] {"0", "0", "0"}),//, "0"}),
+    // back row
+    new TowerConfig(40, 0, 0, 45, new String[] {"352", "367", "132", "9"}),
+    new TowerConfig(80, 0, 0, 45, new String[] {"357", "320", "46", "55", "163"}),
+    new TowerConfig(120, 0, 0, 45, new String[] {"37", "66", "44", "123", "197", "70"}),
+    new TowerConfig(160, 0, 0, 45, new String[] {"184", "61", "128", "337", "205", "4"}),
+    new TowerConfig(200, 0, 0, 45, new String[] {"31", "330", "34", "52", "91"}),
+    new TowerConfig(240, 0, 0, 45, new String[] {"73", "159", "25", "39"}),
 
-    new TowerConfig(100, 0, -25, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
-    new TowerConfig(140, 0, -25, 45, new String[] {"0", "0", "0", "0", "0"}),
-    new TowerConfig(180, 0, -25, 45, new String[] {"0", "0", "0", "0"}),//, "0"}),
+    // front row 
+    new TowerConfig(100, 0, -25, 45, new String[] {"174", "189", "76", "51", "156"}),
+    new TowerConfig(140, 0, -25, 45, new String[] {"134", "358", "77", "86", "69"}),
+    new TowerConfig(180, 0, -25, 45, new String[] {"23", "191", "22", "81", "362"}),
 
+    // front single tower
+    new TowerConfig(140, 0, -67, 45, new String[] {"354", "408", "202", "121"}),
 
     // left truss
-    new TowerConfig(-20, JUMP*2, -130, 45, new String[] {"0"}),
-    new TowerConfig(-68, JUMP*3, -130, 45, new String[] {"0"}),
+    new TowerConfig(-7, JUMP*3, -144, 0, new String[] {"412"}),
+    new TowerConfig(-50, JUMP*2-5, -160, 0, new String[] {"68"}),
 
     // right truss
-    new TowerConfig(298, JUMP*2, -130, 45, new String[] {"0"}),
-    new TowerConfig(349, JUMP*3, -130, 45, new String[] {"0"}),
+    new TowerConfig(296, JUMP*3, -124, 90, new String[] {"5"}),
+    new TowerConfig(340, JUMP*2-5, -140, 90, new String[] {"314"}),
 
-    new TowerConfig(-68, 0, -300, 45, new String[] {"0"}),
-    new TowerConfig(349, 0, -300, 45, new String[] {"0"}),
+    // floor left
+    new TowerConfig(-58, 0, -270, 45, new String[] {"43"}),
+
+    // floor right
+    new TowerConfig(319, 0, -270, 45, new String[] {"389"}),
 
 };
 
@@ -198,12 +207,12 @@ static final TowerConfig[] TOWER_CONFIG = {
 
         TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
             this.type = type;
-            this.x = x;
+            this.x = x-33.f;
             this.y = y;
             this.z = z;
             this.xRot = xRot;
-            this.yRot = yRot;
-            this.zRot = zRot;
+            this.yRot = yRot-180.f;
+            this.zRot = zRot-180.f;
             this.ids = ids;
 
             this.yValues = new float[ids.length];

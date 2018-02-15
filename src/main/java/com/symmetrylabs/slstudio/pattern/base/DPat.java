@@ -227,7 +227,7 @@ public abstract class DPat extends CopySunsPattern {
         pSpark = addParam("Sprk", 0);
         pWave = addParam("Wave", 0);
         pTransX = addParam("TrnX", .5);
-        pTransY = addParam("TrnY", .5);
+        pTransY = addParam("TrnY", .5, -0.5, 1.5);
         pRotX = addParam("RotX", .5);
         pRotY = addParam("RotY", .5);
         pRotZ = addParam("RotZ", .5);

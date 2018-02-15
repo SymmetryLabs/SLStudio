@@ -5,6 +5,10 @@ import java.io.FilenameFilter;
 import java.util.List;
 import java.util.ArrayList;
 
+import java.net.InetAddress;
+import java.net.InetSocketAddress;
+import java.net.SocketException;
+
 import static com.symmetrylabs.slstudio.util.Utils.sketchPath;
 
 import heronarts.lx.LX;
@@ -12,6 +16,9 @@ import heronarts.lx.LXComponent;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.ObjectParameter;
+import heronarts.lx.osc.LXOscEngine;
+import heronarts.lx.osc.LXOscListener;
+import heronarts.lx.osc.OscMessage;
 
 public class Workspaces extends LXComponent {
 
@@ -21,27 +28,28 @@ public class Workspaces extends LXComponent {
 
     private final List<Workspace> workspaces = new ArrayList<Workspace>();
 
-    public final ObjectParameter<Workspace> active = new ObjectParameter<Workspace>("active", new Workspace[] {new Workspace.Emtpy()});
+    private int currentWorkspaceIndex = 0;
 
     public Workspaces(LX lx) {
         super(lx, "workspaces");
         this.lx = lx;
-        addParameter(active);
 
-        // only happens on intial load for now (won't change on removing or creating new project files)
+        // not dynamic at runtime
         loadProjectFiles();
-        removeEmtpyWorkspaces();
-        setParameterWorkspaces();
-
-        active.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter param) {
-                openWorkspace((Workspace)(((ObjectParameter)param).getObject()));
-            }
-        });
+        //openWorkspace(workspaces.get(5));
     }
 
     public void openWorkspace(Workspace workspace) {
+        int newWorkspaceIndex = workspaces.indexOf(workspace);
+
+        if (currentWorkspaceIndex == newWorkspaceIndex) {
+            return;
+        }
+
         lx.openProject(workspace.getFile());
+        currentWorkspaceIndex = newWorkspaceIndex;
+
+        System.out.println("Open new workspace: " + workspace.getLabel());
     }
 
     private void loadProjectFiles() {
@@ -57,7 +65,7 @@ public class Workspaces extends LXComponent {
             for (int i = 0; i < filesArr.length; i++) {
                 Workspace workspace = new Workspace(filesArr[i]);
                 this.workspaces.add(workspace);
-                System.out.println(i+1 + ") " + workspace.getName());
+                System.out.println(i+1 + ") " + workspace.getLabel());
             }
             System.out.print("\n");
         } catch (Exception e) {
@@ -65,22 +73,12 @@ public class Workspaces extends LXComponent {
         }
     }
 
-    private void removeEmtpyWorkspaces() {
-        for (Workspace workspace : workspaces) {
-            if (workspace.getName() == null) {
-                workspaces.remove(workspace);
-            }
-        }
-    }
-
-    private void setParameterWorkspaces() {
-        Workspace[] workspacesArr = new Workspace[workspaces.size()];
-
-        for (int i = 0; i < workspacesArr.length; i++) {
-            workspacesArr[i] = workspaces.get(i);
-        }
-
-        active.setObjects(workspacesArr);
+    public void attachOscListener() {
+        try {
+            lx.engine.osc.receiver(3232).addListener(new SwitchProjectOscListener());
+        } catch (SocketException sx) {
+            throw new RuntimeException(sx);
+        } 
     }
 
     public List<Workspace> getAll() {
@@ -89,10 +87,34 @@ public class Workspaces extends LXComponent {
 
     public Workspace get(String name) {
         for (Workspace workspace : workspaces) {
-            if (name.equals(workspace.getName())) {
+            if (name.equals(workspace.getLabel())) {
                 return workspace;
             }
         }
         return null;
+    }
+
+    private class SwitchProjectOscListener implements LXOscListener {
+        public void oscMessage(OscMessage message) {
+            if (message.matches("/lx/golive")) {
+                if (message.getFloat() > 0.5) {
+                    if (!lx.engine.output.enabled.isOn()) {
+                        lx.engine.output.enabled.setValue(true);
+                    }
+                }
+            }
+
+            // TEMP PLACE FOR THIS
+            if (message.matches("/lx/tempo/tap")) {
+                float val = message.getFloat();
+                System.out.println(val);
+                lx.tempo.tap.setValue(val);
+            }
+
+            if (message.matches("/lx/workspaces/active")) {
+                Workspace workspace = workspaces.get(message.getInt()-1);
+                openWorkspace(workspace);
+            }
+        }
     }
 }

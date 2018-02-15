@@ -17,7 +17,7 @@ import static com.symmetrylabs.slstudio.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 
-public class CubeFlash extends LXPattern {
+public class TowerFlash extends LXPattern {
     private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
@@ -27,13 +27,13 @@ public class CubeFlash extends LXPattern {
     private List<Flash> checkedFlashes = new ArrayList<Flash>();
 
     class Flash {
-        CubesModel.Cube c;
+        CubesModel.Tower c;
         float value;
         float hue;
         boolean hasPeaked;
         boolean checked = false;
 
-        Flash(CubesModel.Cube c) {
+        Flash(CubesModel.Tower c) {
             this.c = c;
             hue = palette.getHuef() + (random(1) * 120 * hueVarianceParameter.getValuef());
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
@@ -60,7 +60,7 @@ public class CubeFlash extends LXPattern {
     private float leftoverMs = 0;
     private List<Flash> flashes;
 
-    public CubeFlash(LX lx) {
+    public TowerFlash(LX lx) {
         super(lx);
         addParameter(rateParameter);
         addParameter(attackParameter);
@@ -76,7 +76,7 @@ public class CubeFlash extends LXPattern {
         while (leftoverMs > msPerFlash) {
             leftoverMs -= msPerFlash;
 
-            CubesModel.Cube c = ((CubesModel)model).getCubes().get(floor(random(((CubesModel)model).getCubes().size())));
+            CubesModel.Tower c = ((CubesModel)model).getTowers().get(floor(random(((CubesModel)model).getTowers().size())));
 
             //System.out.println("iterate");
             for (Flash flash : flashes) {
@@ -90,17 +90,17 @@ public class CubeFlash extends LXPattern {
             flashes.add(new Flash(c));
         }
         // for (Flash f1 : flashes) {
-        //     boolean foundFirstSelf = false;
+        //  boolean foundFirstSelf = false;
 
-        //     for (Flash f2 : flashes) {
-        //         if (foundFirstSelf && f1.c.id.equals(f2.c.id)) {
-        //             flashes.remove(f1);
-        //         }
+        //  for (Flash f2 : flashes) {
+        //    if (foundFirstSelf && f1.c.id.equals(f2.c.id)) {
+        //      flashes.remove(f1);
+        //    }
 
-        //         if (f1.c.id.equals(f2.c.id)) {
-        //             foundFirstSelf = true;
-        //         }
-        //     }
+        //    if (f1.c.id.equals(f2.c.id)) {
+        //      foundFirstSelf = true;
+        //    }
+        //  }
         // }
 
         for (LXPoint p : model.points) {
@@ -108,8 +108,8 @@ public class CubeFlash extends LXPattern {
         }
 
         // checkedFlashes.parallelStream().forEach(new Consumer<Flash>() {
-        //     @Override
-        //     public void accept(final Flash flash) {
+        //  @Override
+        //  public void accept(final Flash flash) {
 
         for (Flash flash : flashes) {
                 //System.out.println("drawing flash");
@@ -118,7 +118,7 @@ public class CubeFlash extends LXPattern {
                     colors[p.index] = c;
                 }
         }
-        //     }
+        //  }
         // });
 
         Iterator<Flash> i = flashes.iterator();

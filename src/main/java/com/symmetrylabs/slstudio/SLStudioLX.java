@@ -43,6 +43,8 @@ import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UIAxes;
 // import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
+import heronarts.p3lx.ui.component.UIImage;
+import heronarts.p3lx.ui.UI2dComponent;
 import com.symmetrylabs.slstudio.ui.UIFramerate;
 import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
 import com.symmetrylabs.slstudio.ui.UIOutputs;
@@ -122,6 +124,13 @@ public class SLStudioLX extends P3LX {
             addLayer(this.bottomTray);
             addLayer(this.helpBar);
             addLayer(this.framerate);
+
+            new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
+            
+            new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
+            .setDescription("Symmetry Labs")
+            .addToContainer(leftPane);
+
 
             _toggleClipView();
             _togglePerformanceMode();

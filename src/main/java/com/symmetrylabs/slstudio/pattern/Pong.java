@@ -11,7 +11,8 @@ import com.symmetrylabs.slstudio.pattern.base.DPat;
 import com.symmetrylabs.slstudio.util.MathUtils;
 
 public class Pong extends DPat {
-    SinLFO x, y, z, dx, dy, dz;
+    SinLFO x, y, z, dz;
+    CompoundParameter dx, dy;
     float cRad;
     CompoundParameter pSize;
     DiscreteParameter pChoose;
@@ -20,12 +21,12 @@ public class Pong extends DPat {
     public Pong(LX lx) {
         super(lx);
         cRad = mMax.x / 10;
-        addModulator(dx = new SinLFO(6000, 500, 30000)).trigger();
-        addModulator(dy = new SinLFO(3000, 2500, 22472)).trigger();
+        addParameter(dx = new CompoundParameter("xSpd", 3000, 2500, 22472));
+        addParameter(dy = new CompoundParameter("ySpd", 25000, 2500, 18420));
         addModulator(dz = new SinLFO(25000, 2500, 18420)).trigger();
-        addModulator(x = new SinLFO(cRad, mMax.x - cRad, 0)).trigger();
+        addModulator(x = new SinLFO(cRad-30, mMax.x - cRad + 30, 0)).trigger();
         x.setPeriod(dx);
-        addModulator(y = new SinLFO(cRad, mMax.y - cRad, 0)).trigger();
+        addModulator(y = new SinLFO(cRad-30, mMax.y - cRad + 30, 0)).trigger();
         y.setPeriod(dy);
         addModulator(z = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();
         z.setPeriod(dz);

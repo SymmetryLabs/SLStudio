@@ -16,20 +16,20 @@ public class UIDaughtryStage extends UI3dComponent {
         new float[] {-120, 0, -200, 70},
         new float[] {390, 0, -200, 70},
 
-        new float[] {-50, 0, -130, 120},
-        new float[] {320, 0, -130, 120},
+        new float[] {-50, 0, -120, 120},
+        new float[] {320, 0, -120, 120},
     };
 
     protected void onDraw(UI ui, PGraphics pg) {
         pg.pushMatrix();
-        pg.translate(132, 1, -140);
+        pg.translate(137, 1, -125);
         pg.stroke(15);
         pg.fill(28);
-        pg.box(120, 50, 120);
+        pg.box(100, 65, 100);
         pg.popMatrix();
 
         pg.pushMatrix();
-        pg.translate(130, -5, -170);
+        pg.translate(140, -5, -170);
         pg.fill(34);
         pg.box(610, 5, 580);
         pg.popMatrix();

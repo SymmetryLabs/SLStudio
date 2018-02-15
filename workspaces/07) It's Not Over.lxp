@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1518454590188,
+  "timestamp": 1519281122695,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.4776758551597595,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -130,7 +130,7 @@
             "parameters": {
               "label": "Swarm",
               "RATE": 1500.0,
-              "HUEOFF": -90.47145080566406
+              "HUEOFF": -56.530330657958984
             },
             "modulation": {
               "modulators": [],
@@ -154,7 +154,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -198,7 +198,10 @@
               "Spin": 0.5,
               "Rad": 2.559999942779541,
               "Bnc": 0.0,
-              "Amp": 1.0
+              "Amp": 1.0,
+              "Shape": 0,
+              "TPat": 0,
+              "TMult": 0
             },
             "modulation": {
               "modulators": [],
@@ -465,7 +468,8 @@
               "Dens": 0.0,
               "Shrp": 0.5,
               "Symm": 0,
-              "Anim": 7
+              "Anim": 7,
+              "reset": false
             },
             "modulation": {
               "modulators": [],
@@ -660,10 +664,10 @@
           "Band-1": 0.0,
           "Band-2": 0.0,
           "Band-3": 0.0,
-          "Band-4": 0.3473083174021647,
-          "Band-5": 0.2593934411153871,
-          "Band-6": 0.03193668706761299,
-          "Band-7": 0.14633113651274465,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
@@ -703,7 +707,7 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -721,6 +725,14 @@
           "deckTwoChannel": 0,
           "deckThreeChannel": 0,
           "deckFourChannel": 0
+        }
+      },
+      "workspaces": {
+        "id": 31,
+        "class": "com.symmetrylabs.slstudio.workspaces.Workspaces",
+        "modulationColor": -2359552,
+        "parameters": {
+          "label": "workspaces"
         }
       },
       "outputControl": {
@@ -749,7 +761,7 @@
         "receiveActive": true,
         "transmitHost": "127.0.0.1",
         "transmitPort": 3032,
-        "transmitActive": true
+        "transmitActive": false
       }
     },
     "midi": {
@@ -761,11 +773,7 @@
           "sync": false
         }
       ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        }
-      ],
+      "surfaces": [],
       "mapping": []
     }
   },

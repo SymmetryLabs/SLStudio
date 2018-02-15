@@ -23,6 +23,8 @@ public class Rings extends LXPattern {
     CompoundParameter pSpeed2 = new CompoundParameter("SPD2", 0.4);
     CompoundParameter pScale = new CompoundParameter("SCALE", 0.15);
 
+    CompoundParameter hueVar = new CompoundParameter("hueVar", 0.5);
+
     public Rings(LX lx) {
         super(lx);
         addParameter(pDepth);
@@ -32,6 +34,8 @@ public class Rings extends LXPattern {
         addParameter(pSpeed1);
         addParameter(pSpeed2);
         addParameter(pScale);
+
+        addParameter(hueVar);
     }
 
     public void run(double deltaMs) {
@@ -98,7 +102,7 @@ public class Rings extends LXPattern {
                 0.0f, 1.0f, 0.0f, 300.0f
             );
 
-            colors[p.index] = lx.hsb(palette.getHuef() + m, saturation, brightness);
+            colors[p.index] = lx.hsb(palette.getHuef() + (m * hueVar.getValuef()), saturation, brightness);
         });
 
         NoiseUtils.noiseDetail(1);

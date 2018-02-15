@@ -4,12 +4,12 @@ import java.io.File;
 
 public class Workspace {
     private File file = null;
-    private String name = null;
+    private String label = null;
 
     public Workspace(File file) {
-        if (file != null) {
+        if (file.exists()) {
             this.file = file;
-            this.name = file.getName().substring(0, file.getName().lastIndexOf('.'));
+            this.label = file.getName().substring(0, file.getName().lastIndexOf('.'));
         }
     }
 
@@ -17,13 +17,29 @@ public class Workspace {
         return file;
     }
 
-    public String getName() {
-        return name;
+    public String getFileName() {
+        return file.getName();
     }
 
-    public static class Emtpy extends Workspace {
-        public Emtpy() {
-            super(null);
+    public String getLabel() {
+        return label;
+    }
+
+    public boolean matches(String label) {
+        if (!hasLoaded()) {
+            return false;
         }
+        return label.equals(label);
+    }
+
+    public boolean matches(File file) {
+        if (!hasLoaded()) {
+            return false;
+        }
+        return getFileName().equals(file.getName());
+    }
+
+    public boolean hasLoaded() {
+        return (file != null) && file.exists();
     }
 }
