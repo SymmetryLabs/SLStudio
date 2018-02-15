@@ -1,13 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.util.List;
-
-import org.apache.commons.math3.util.FastMath;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
 import static processing.core.PApplet.*;

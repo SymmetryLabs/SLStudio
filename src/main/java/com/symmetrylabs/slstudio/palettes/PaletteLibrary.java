@@ -6,6 +6,7 @@ import java.util.Arrays;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
+import java.lang.ref.WeakReference;
 
 /**
  * A collection of named palettes (either com.symmetrylabs.slstudio.palettes.ColorPalette instances or palettes extracted from
@@ -21,7 +22,17 @@ public class PaletteLibrary {
     final int CACHE_TTL_SEC = 60;  // length of time to cache retrieved photos
     final ColorPalette BLACK = new ConstantPalette(0);
 
-    public PaletteLibrary() {
+    private static WeakReference<PaletteLibrary> instance = new WeakReference<>(null);
+
+    public static PaletteLibrary getInstance() {
+        PaletteLibrary ref = instance.get();
+        if (ref == null) {
+            instance = new WeakReference<>(ref = new PaletteLibrary());
+        }
+        return ref;
+    }
+
+    private PaletteLibrary() {
         palettes = new HashMap<String, ColorPalette>();
         sources = new HashMap<String, ImageSource>();
         extractors = new HashMap<String, PaletteExtractor>();

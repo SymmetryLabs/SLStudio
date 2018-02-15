@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.base;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXModelComponent;

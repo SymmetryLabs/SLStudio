@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pattern;
+package com.symmetrylabs.slstudio.pattern.base;
 
 import java.util.List;
 
@@ -18,7 +18,6 @@ import heronarts.lx.parameter.LXParameter;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.render.Renderer;
 import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
-import com.symmetrylabs.slstudio.render.SequentialRenderer;
 import com.symmetrylabs.slstudio.render.Renderable;
 
 public abstract class SLPattern extends LXPattern implements Renderable {

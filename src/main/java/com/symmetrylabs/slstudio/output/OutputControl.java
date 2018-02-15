@@ -12,29 +12,25 @@ import com.symmetrylabs.slstudio.pixlites.Pixlite;
  * Output Component
  *---------------------------------------------------------------------------*/
 public final class OutputControl extends LXComponent {
+    public final ControllerResetModule controllerResetModule;
+
     public final BooleanParameter enabled;
-
-    public final ControllerResetModule controllerResetModule = new ControllerResetModule(SLStudio.applet.lx);
-
     public final BooleanParameter broadcastPacket = new BooleanParameter("Broadcast packet enabled", false);
     public final BooleanParameter testBroadcast = new BooleanParameter("Test broadcast enabled", false);
 
     public OutputControl(LX lx) {
         super(lx, "Output Control");
 
-        this.enabled = lx.engine.output.enabled;
+        controllerResetModule = new ControllerResetModule(lx);
 
+        enabled = lx.engine.output.enabled;
+        addParameter(broadcastPacket);
         addParameter(testBroadcast);
 
         enabled.addListener(param -> {
-            boolean isEnabled = ((BooleanParameter)param).isOn();
-
+            boolean isEnabled = ((BooleanParameter) param).isOn();
             for (Pixlite pixlite : SLStudio.applet.pixlites) {
                 pixlite.enabled.setValue(isEnabled);
-            }
-
-            for (SLController c : SLStudio.applet.slControllers) {
-                c.enabled.setValue(isEnabled);
             }
         });
     }

@@ -1,12 +1,9 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.util.List;
-import java.util.ArrayList;
-
+import com.symmetrylabs.slstudio.pattern.base.ParticlePattern;
 import org.apache.commons.math3.util.FastMath;
 
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.BooleanParameter;
 
@@ -40,7 +37,7 @@ public class Wasps extends ParticlePattern {
         super.createParameters();
 
         addParameter(speed = new CompoundParameter("speed", 1, 0, 3));
-        addParameter(accel = new CompoundParameter("accel", 1.5, 0, 2));
+        addParameter(accel = new CompoundParameter("accel", 1.5, 0, 3));
         addParameter(dampen = new CompoundParameter("dampen", 0.75, 0, 1));
         addParameter(focusX = new CompoundParameter("focusX", 0, -1, 1));
         addParameter(focusY = new CompoundParameter("focusY", 0, -1, 1));

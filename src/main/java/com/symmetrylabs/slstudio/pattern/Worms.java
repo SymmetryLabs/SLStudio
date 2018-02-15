@@ -4,6 +4,7 @@ import java.lang.Math;
 import java.util.List;
 import java.util.ArrayList;
 
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
@@ -16,7 +17,7 @@ import heronarts.lx.LXUtils;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 
 enum CursorState {
     RUNNING,
@@ -47,8 +48,13 @@ public class Worms extends SLPattern {
     private CompoundParameter pSpawn     = new CompoundParameter("DIR" ,  0);
     private CompoundParameter pColor     = new CompoundParameter("CLR" , .1);
 
+    private Dispatcher dispatcher;
+
     public Worms(LX lx) {
         super(lx);
+
+        dispatcher = Dispatcher.getInstance(lx);
+
         addModulator(moveChase).start();
         addParameter(pBeat);
         addParameter(pSpeed);
@@ -78,8 +84,8 @@ public class Worms extends SLPattern {
         return (float)LXUtils.random(0, model.yMax - model.yMin) + model.yMin;
     }
 
-    private LXVector randEdge() { 
-        return (LXUtils.random(0, 2) < 1) ? 
+    private LXVector randEdge() {
+        return (LXUtils.random(0, 2) < 1) ?
             new LXVector(((float)LXUtils.random(0, 2) < 1) ? model.xMin : model.xMax, randY(), Z_MID_LATE) :
             new LXVector(randX(), (float)LXUtils.random(0, 2) < 1 ? model.yMin:model.yMax, Z_MID_LATE);
     }
@@ -96,7 +102,7 @@ public class Worms extends SLPattern {
         }
     }
 
-    private float getClr() { 
+    private float getClr() {
         return palette.getHuef() + (float)LXUtils.random(0, pColor.getValuef() * 300);
     }
 
@@ -197,7 +203,7 @@ public class Worms extends SLPattern {
         }
     }
 
-    public void onActive() { 
+    public void onActive() {
     //   if (eq == null) {
     //     eq = new GraphicEQ(lx.audioInput());
     //     eq.slope.setValue(6);
@@ -227,7 +233,7 @@ public class Worms extends SLPattern {
             new Thread() {
                 public void run() {
                     final dLattice l = new dLattice(((StripsModel)model));
-                    SLStudio.applet.dispatcher.dispatchEngine(new Runnable() {
+                    dispatcher.dispatchEngine(new Runnable() {
                         public void run() {
                             lattice = l;
                             for (Runnable callback : latticeInitedCallbacks) {
@@ -312,7 +318,7 @@ class dCursor {
     boolean bRandEval;
 
     void evaluate(dVertex v, int p, int s) {
-        if (v == null) return; 
+        if (v == null) return;
         ++nTurns;
 
         if (bRandEval) {
@@ -337,7 +343,7 @@ class dCursor {
         }
     }
 
-    void evalTurn(dTurn t) { 
+    void evalTurn(dTurn t) {
         if (t == null || t.pos0<< 12 <= pos) return;
         evaluate(t.v, t.pos1, t.pos0);
         evaluate(t.v.opp, 16 - t.pos1, t.pos0);
@@ -375,12 +381,12 @@ class dCursor {
         // if (dDebug) {
         //   p1 = v.getPoint(nFrom);
         //   float d = (p2 == null ? 0 : pointDist(p1, p2));
-        //   if (d>5) { 
+        //   if (d>5) {
         //     System.out.print("too wide! quitting: " + d);
         //     exit();
         //   }
         // }
-        
+
         for (int i = nFrom; i <= nTo; i++) {
             pat.getColors()[v.ci + v.dir*i] = clr;
         }
@@ -397,7 +403,7 @@ class dCursor {
 
         pos += nMv;
         return nAmount - nMv;
-    } 
+    }
 }
 
 class dVertex {
@@ -429,13 +435,13 @@ class dVertex {
         return s.points[dir > 0 ? i : 14 - i];
     }
 
-    void setOpp(dVertex _opp) { 
+    void setOpp(dVertex _opp) {
         opp = _opp;
         dir = (ci < opp.ci ? 1 : -1);
     }
 }
 
-class dTurn { 
+class dTurn {
     dVertex v;
     int pos0, pos1;
 
@@ -459,25 +465,25 @@ class dPixel {
 class dLattice {
     StripsModel model;
 
-    void addTurn(dVertex v0, int pos0, dVertex v1, int pos1) { 
-        dTurn t = new dTurn(pos0, v1, pos1); 
+    void addTurn(dVertex v0, int pos0, dVertex v1, int pos1) {
+        dTurn t = new dTurn(pos0, v1, pos1);
         if (v0.t0 == null) { v0.t0=t; return; }
         if (v0.t1 == null) { v0.t1=t; return; }
         if (v0.t2 == null) { v0.t2=t; return; }
         if (v0.t3 == null) { v0.t3=t; return; }
     }
 
-    float dist2(Strip s1, int pos1, Strip s2, int pos2) { 
+    float dist2(Strip s1, int pos1, Strip s2, int pos2) {
         LXPoint p1 = s1.points[pos1];
         LXPoint p2 = s2.points[pos2];
-        return dist3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);  
+        return dist3d(p1.x, p1.y, p1.z, p2.x, p2.y, p2.z);
     }
 
     float dist3d(float x1, float y1, float z1, float x2, float y2, float z2) {
         return (float)Math.sqrt(Math.pow(x2 - x1, 2) + Math.pow(y2 - y1, 2) + Math.pow(z2 - z1, 2));
     }
 
-    float pd2 (LXPoint p1, float x, float y, float z) { 
+    float pd2 (LXPoint p1, float x, float y, float z) {
         return dist3d(p1.x, p1.y, p1.z, x, y, z);
     }
 
@@ -487,7 +493,7 @@ class dLattice {
     }
 
     // same strut, opp direction
-    boolean sameOpp(Strip s1, Strip s2) { 
+    boolean sameOpp(Strip s1, Strip s2) {
         return Math.max(dist2(s1, 0, s2, 14), dist2(s1, 14, s2, 0)) < 5;
     }
 
@@ -543,7 +549,7 @@ class dLattice {
     }
 
     public dLattice(StripsModel model) {
-        this.model = model; 
+        this.model = model;
 
         List<Strip> strips = model.getStrips();
 
@@ -558,7 +564,7 @@ class dLattice {
             vrtx1.setOpp(vrtx0);
         }
 
-        for (Strip s1 : strips) { 
+        for (Strip s1 : strips) {
             for (Strip s2 : strips) {
                 if (s1.points[0].index < s2.points[0].index) continue;
                 int c = 0;

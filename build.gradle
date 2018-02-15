@@ -11,9 +11,12 @@ buildscript {
 plugins {
 	id 'org.jetbrains.kotlin.jvm' version '1.2.10'
 	id 'com.github.johnrengelman.shadow' version '2.0.1'
+	id 'com.palantir.docker' version '0.17.2'
 	id 'java'
 	id 'application'
 }
+
+apply plugin: 'com.palantir.docker'
 
 // For building windows executable. See https://github.com/TheBoegl/gradle-launch4j
 apply plugin: 'edu.sc.seis.launch4j'
@@ -21,8 +24,28 @@ apply plugin: 'edu.sc.seis.launch4j'
 group = 'com.symmetrylabs'
 version = '1.0'
 
-jar.baseName = 'SLStudio'
-mainClassName = "com.symmetrylabs.slstudio.SLStudio"
+mainClassName = 'com.symmetrylabs.slstudio.SLStudio'
+//mainClassName = 'com.symmetrylabs.slstudio.SLHeadless'
+
+run {
+	jvmArgs '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false -Djava.awt.headless=true'
+}
+
+docker {
+	name project.name.toLowerCase() + ':latest'
+	tags version
+	dockerfile project.file('docker/Dockerfile')
+
+	files tasks.distTar.outputs, project.files('docker'), project.files('.')
+	copySpec.exclude 'build'
+
+	if (System.getProperty("buildArgs") != null) {
+		buildArgs System.getProperty("buildArgs").split(/\s+/).collectEntries {
+			def kvp = it.split('=')
+			[(kvp[0]): kvp[1]]
+		}
+	}
+}
 
 repositories {
 	mavenCentral()
@@ -35,7 +58,10 @@ repositories {
 
 dependencies {
 	// https://mvnrepository.com/artifact/org.processing/core
-	compile group: 'org.processing', name: 'core', version: '3.3.6'
+	compile(group: 'org.processing', name: 'core', version: '3.3.6') {
+		exclude group: 'org.jogamp.gluegen'
+		exclude group: 'org.jogamp.jogl'
+	}
 
 	// https://mvnrepository.com/artifact/com.harium/kdtree
 	compile group: 'com.harium', name: 'kdtree', version: '1.0.0'
@@ -67,30 +93,13 @@ dependencies {
 	// https://github.com/SymmetryLabs/aparapi
 	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
 
-	compile files('libs/gluegen-rt-natives-linux-aarch64.jar')
-	compile files('libs/gluegen-rt-natives-linux-amd64.jar')
-	compile files('libs/gluegen-rt-natives-linux-armv6hf.jar')
-	compile files('libs/gluegen-rt-natives-linux-i586.jar')
-	compile files('libs/gluegen-rt-natives-macosx-universal.jar')
-	compile files('libs/gluegen-rt-natives-windows-amd64.jar')
-	compile files('libs/gluegen-rt-natives-windows-i586.jar')
-	compile files('libs/gluegen-rt.jar')
-	compile files('libs/jogl-all-2.3.2-natives-linux-amd64.jar')
-	compile files('libs/jogl-all-natives-linux-aarch64.jar')
-	compile files('libs/jogl-all-natives-linux-amd64.jar')
-	compile files('libs/jogl-all-natives-linux-armv6hf.jar')
-	compile files('libs/jogl-all-natives-linux-i586.jar')
-	compile files('libs/jogl-all-natives-macosx-universal.jar')
-	compile files('libs/jogl-all-natives-windows-amd64.jar')
-	compile files('libs/jogl-all-natives-windows-i586.jar')
-	compile files('libs/jogl-all.jar')
+	compile files('libs/jogamp-fat.jar')
 
 	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
 	compile files('libs/P3LX.jar')
 }
 
 jar {
-	exclude("**/*.swp")
-	exclude("**/*.swo")
+	exclude('**/*.swp')
+	exclude('**/*.swo')
 }
-

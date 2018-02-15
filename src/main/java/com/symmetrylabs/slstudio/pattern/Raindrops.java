@@ -1,9 +1,9 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
 import heronarts.lx.transform.LXVector;
 
@@ -14,7 +14,7 @@ import java.util.Iterator;
 
 import java.lang.Math;
 import static processing.core.PApplet.*;
-import static com.symmetrylabs.slstudio.util.MathUtils.random;
+import static com.symmetrylabs.util.MathUtils.random;
 
 public class Raindrops extends SLPattern {
 
@@ -33,7 +33,7 @@ public class Raindrops extends SLPattern {
         float radius;
         float hue;
         float speed;
-        
+
         Raindrop() {
             this.radius = (float)((model.yRange*0.4f)*size.getValuef());
 
@@ -48,18 +48,18 @@ public class Raindrops extends SLPattern {
             this.hue = (random(0, 50) * hueV.getValuef()) + palette.getHuef();
             this.speed = abs(speedP.getValuef());
         }
-        
+
         // returns TRUE when this should die
         boolean age(double ms) {
             p.add(new LXVector(v).mult((float) (ms / this.speed)));
             return this.p.y < (0 - this.radius);
         }
     }
-    
+
     public Raindrops(LX lx) {
         super(lx);
         addParameter(numRainDrops);
-        addParameter(size); 
+        addParameter(size);
         addParameter(speedP);
         addParameter(hueV);
         raindrops = new LinkedList<Raindrop>();
@@ -72,7 +72,7 @@ public class Raindrops extends SLPattern {
             random(model.zMax - model.zMin) + model.zMin
         );
     }
-    
+
     public void run(double deltaMs) {
         leftoverMs += deltaMs;
         float msPerRaindrop = Math.abs(numRainDrops.getValuef());
@@ -80,13 +80,13 @@ public class Raindrops extends SLPattern {
             leftoverMs -= msPerRaindrop;
             raindrops.add(new Raindrop());
         }
-        
+
         for (LXPoint p : model.points) {
             int c = 0;
             for (Raindrop raindrop : raindrops) {
                 if (p.x >= (raindrop.p.x - raindrop.radius) && p.x <= (raindrop.p.x + raindrop.radius) &&
                         p.y >= (raindrop.p.y - raindrop.radius) && p.y <= (raindrop.p.y + raindrop.radius)) {
-                    
+
                     float d = ((float)LXUtils.distance(raindrop.p.x, raindrop.p.y, p.x, p.y)) / raindrop.radius;
                     if (d < 1) {
                         c = PImage.blendColor(c, lx.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), ADD);
@@ -104,5 +104,5 @@ public class Raindrops extends SLPattern {
                 i.remove();
             }
         }
-    } 
+    }
 }

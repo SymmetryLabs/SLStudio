@@ -7,7 +7,7 @@ import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 
 public class Traktor extends LXPattern {
 

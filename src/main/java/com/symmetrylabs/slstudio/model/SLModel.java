@@ -9,9 +9,9 @@ import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 
-import com.symmetrylabs.slstudio.util.ModelIndex;
-import com.symmetrylabs.slstudio.util.LinearModelIndex;
-import com.symmetrylabs.slstudio.util.OctreeModelIndex;
+import com.symmetrylabs.util.ModelIndex;
+import com.symmetrylabs.util.LinearModelIndex;
+import com.symmetrylabs.util.OctreeModelIndex;
 
 public class SLModel extends LXModel {
 

@@ -4,7 +4,7 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.pattern.StripsPattern;
+import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
 
 /**
 * @author Yona Appletree (yona@concentricsky.com)
