@@ -102,9 +102,9 @@ public class CubesController extends LXOutput {
         int offset = 4 + number * 3;
 
         int gammaCorrected = gammaCorrection.getCorrectedColor(c);
-        packetData[offset + 0] = (byte)(gammaCorrected >> LXColor.RED_SHIFT & 0xff);
-        packetData[offset + 1] = (byte)(gammaCorrected >> LXColor.GREEN_SHIFT & 0xff);
-        packetData[offset + 2] = (byte)(gammaCorrected & 0xff); // blue
+        packetData[offset + 0] = LXColor.red(gammaCorrected);
+        packetData[offset + 1] = LXColor.green(gammaCorrected);
+        packetData[offset + 2] = LXColor.blue(gammaCorrected);
     }
 
     @Override

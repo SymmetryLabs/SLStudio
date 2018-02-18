@@ -91,9 +91,9 @@ public class ArtNetDatagram extends LXDatagram {
             int colorValue = (index >= 0) ? colors[index] : 0;
 
             int gammaCorrected = gammaCorrection.getCorrectedColor(colorValue);
-            buffer[i + byteOffset[0]] = (byte)(gammaCorrected >> LXColor.RED_SHIFT & 0xff);
-            buffer[i + byteOffset[1]] = (byte)(gammaCorrected >> LXColor.GREEN_SHIFT & 0xff);
-            buffer[i + byteOffset[2]] = (byte)(gammaCorrected & 0xff); // blue
+            buffer[i + byteOffset[0]] = LXColor.red(gammaCorrected);
+            buffer[i + byteOffset[1]] = LXColor.green(gammaCorrected);
+            buffer[i + byteOffset[2]] = LXColor.blue(gammaCorrected);
 
             i += 3;
         }
