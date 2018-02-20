@@ -394,6 +394,11 @@ public class FlockWave extends SLPatternWithMarkers {
             }
 
             int maxBirdsValue = maxBirds.getValuei();
+            kernel.numBirds = birds.size();
+            if (kernel.numBirds > maxBirdsValue) {
+                maxBirdsValue = kernel.numBirds;
+            }
+
             if (kernel.numBirdsMax != maxBirdsValue) {
                 kernel.numBirdsMax = maxBirdsValue;
                 kernel.put(kernel.birdPosX = new float[kernel.numBirdsMax]);
@@ -401,11 +406,6 @@ public class FlockWave extends SLPatternWithMarkers {
                 kernel.put(kernel.birdPosZ = new float[kernel.numBirdsMax]);
                 kernel.put(kernel.birdValue = new float[kernel.numBirdsMax]);
                 kernel.put(kernel.birdElapsedSec = new float[kernel.numBirdsMax]);
-            }
-
-            kernel.numBirds = birds.size();
-            if (kernel.numBirds > kernel.numBirdsMax) {
-                kernel.numBirds = kernel.numBirdsMax;
             }
 
             int i = 0;
