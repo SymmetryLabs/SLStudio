@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ping;
 
+import com.symmetrylabs.util.ParameterUtils;
 import heronarts.lx.LX;
 
 
@@ -7,13 +8,11 @@ public class FlockWavePlanets extends FlockWave {
     public FlockWavePlanets(LX lx) {
         super(lx);
 
-        parameters.get("everywhere").setValue(1);
-        parameters.get("nearBlobs").setValue(0);
+        ParameterUtils.setDiscreteParameter(birdMode, "everywhere");
         parameters.get("spnRate").setValue(2.000);
         parameters.get("detail").setValue(4.400);
         parameters.get("fadeInSec").setValue(1.700);
         parameters.get("fadeOutSec").setValue(0.780);
-        parameters.get("atBlobs").setValue(0);
         parameters.get("maxBirds").setValue(8.000);
         parameters.get("maxSpd").setValue(10.000);
         parameters.get("palBias").setValue(-1.280);
@@ -21,7 +20,7 @@ public class FlockWavePlanets extends FlockWave {
         parameters.get("palShift").setValue(0.080);
         parameters.get("palStart").setValue(0);
         parameters.get("palStop").setValue(0.840);
-        setPalette("sky.purple");
+        ParameterUtils.setDiscreteParameter(palette, "sky.purple");
         parameters.get("ripple").setValue(-3.600);
         parameters.get("scatter").setValue(150.000);
         parameters.get("size").setValue(560.000);
