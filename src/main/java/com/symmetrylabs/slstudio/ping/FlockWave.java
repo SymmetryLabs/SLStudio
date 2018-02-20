@@ -1,12 +1,8 @@
 package com.symmetrylabs.slstudio.ping;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Set;
+import java.util.*;
+import java.util.concurrent.CopyOnWriteArrayList;
 import java.util.concurrent.CopyOnWriteArraySet;
-import java.util.Collection;
-import java.util.Arrays;
-import java.util.Date;
 
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
@@ -31,7 +27,7 @@ import com.symmetrylabs.slstudio.util.Octahedron;
 public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor
     DiscreteParameter birdMode = new DiscreteParameter("birdMode", new String[] {
-        "everywhere", "nearXyz", "nearBlobs", "atBlobs"
+        "everywhere", "nearXyz", "nearBlobs", "atBlobs", "blobPull"
     });
     BooleanParameter perSun = new BooleanParameter("perSun");
     CompoundParameter x = new CompoundParameter("x", model.cx, model.xMin, model.xMax);  // focus coordinates (in)
@@ -45,11 +41,13 @@ public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter spnVary = new CompoundParameter("spnVary", 0, 0, 1);
         // vary spawn rate according to focus speed (0 = don't vary, 1 = determine entirely by speed)
     CompoundParameter scatter = new CompoundParameter("scatter", 100, 0, 1000);  // initial velocity randomness (in/s)
-    CompoundParameter spdMult = new CompoundParameter("spdMult", 1, 0, 2);  // (ratio) bird target speed / focus speed
+    CompoundParameter spdMult = new CompoundParameter("spdMult", 1, 0, 8);  // (ratio) bird target speed / focus speed
     CompoundParameter maxSpd = new CompoundParameter("maxSpd", 10, 0, 100);  // max bird speed (in/s)
     CompoundParameter turnSec = new CompoundParameter("turnSec", 1, 0, 2);  // time (s) to complete 90% of a turn
     CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
     CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);// time (s) to fade down to 10% intensity
+    CompoundParameter pushRad = new CompoundParameter("pushRad", 400, 0, 1000);  // radius (in) of the "push" field around blobs in blobPull mode
+    DiscreteParameter maxPushers = new DiscreteParameter("maxPushers", 4, 0, 10);
 
     CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
     CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
@@ -62,8 +60,9 @@ public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter palBias = new CompoundParameter("palBias", 0, -6, 6);  // bias colour palette toward start or stop
     CompoundParameter palCutoff = new CompoundParameter("palCutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
+    PVector ZERO = new PVector(0, 0, 0);
     PVector prevFocus = null;
-    Set<Bird> birds = new CopyOnWriteArraySet<>();
+    List<Bird> birds = new CopyOnWriteArrayList<>();
     float numToSpawn = 0f;
 
     private BlobTracker blobTracker;
@@ -109,6 +108,8 @@ public class FlockWave extends SLPatternWithMarkers {
         addParameter(turnSec);
         addParameter(fadeInSec);
         addParameter(fadeOutSec);
+        addParameter(pushRad);
+        addParameter(maxPushers);
     }
 
     public void run(double deltaMs) {
@@ -128,6 +129,9 @@ public class FlockWave extends SLPatternWithMarkers {
             }
 
             advanceBirdsWithBlobs(deltaSec, blobs);
+        } else if (birdMode.getOption().equals("blobPull")) {
+            spawnBirds(deltaSec, ZERO, ZERO, 1);
+            advanceBirdsWithPull(deltaSec, blobFollower.getFollowers());
         } else {  // spawn birds near xyz, or everywhere (spawnBirds will decide)
             PVector focus = new PVector(x.getValuef(), y.getValuef(), z.getValuef());
 
@@ -151,30 +155,34 @@ public class FlockWave extends SLPatternWithMarkers {
         List<Marker> markers = new ArrayList<Marker>();
         if (lastRun + 1000 < new Date().getTime()) return markers; // hack to hide markers if inactive
 
-        if (birdMode.getOption().equals("atBlobs")) {
+        if (birdMode.getOption().equals("atBlobs") ||
+              birdMode.getOption().equals("blobPull")) {
             markers.addAll(blobFollower.getMarkers());
-        } else {
+        }
+        if (!birdMode.getOption().equals("atBlobs")) {
             for (Bird bird : birds) {
                 markers.add(new Octahedron(bird.pos, 1 + bird.value * 12, 0x00ffff));
             }
-            if (birdMode.getOption().equals("nearBlobs") ||
-                  birdMode.getOption().equals("blobPull")) {
-                for (BlobTracker.Blob b : blobTracker.getBlobs()) {
-                    markers.add(new CubeMarker(b.pos, spnRad.getValuef(), 0x00ff00));
-                }
-            } else if (birdMode.getOption().equals("everywhere")) {
-                markers.add(new CubeMarker(
-                    new PVector(model.cx, model.cy, model.cz),
-                    new PVector(model.xRange / 2, model.yRange / 2, model.zRange / 2),
-                    0x00ff00
-                ));
-            } else if (birdMode.getOption().equals("nearXyz")) {
-                markers.add(new CubeMarker(
-                    new PVector(x.getValuef(), y.getValuef(), z.getValuef()),
-                    spnRad.getValuef(),
-                    0x00ff00
-                ));
+        }
+        if (birdMode.getOption().equals("nearBlobs")) {
+            for (BlobTracker.Blob b : blobTracker.getBlobs()) {
+                markers.add(new CubeMarker(b.pos, spnRad.getValuef(), 0x00ff00));
             }
+        }
+        if (birdMode.getOption().equals("everywhere") ||
+              birdMode.getOption().equals("blobPull")) {
+            markers.add(new CubeMarker(
+                new PVector(model.cx, model.cy, model.cz),
+                new PVector(model.xRange / 2, model.yRange / 2, model.zRange / 2),
+                0x00ff00
+            ));
+        }
+        if (birdMode.getOption().equals("nearXyz")) {
+            markers.add(new CubeMarker(
+                new PVector(x.getValuef(), y.getValuef(), z.getValuef()),
+                spnRad.getValuef(),
+                0x00ff00
+            ));
         }
         return markers;
     }
@@ -204,17 +212,52 @@ public class FlockWave extends SLPatternWithMarkers {
 
     void spawnBird(PVector focus) {
         if ((birds.size() + 1) <= maxBirds.getValue()) {
-            PVector pos = getRandomUnitVector();
-            if (birdMode.getOption().equals("everywhere")) {  // spawn throughout the model volume
-                pos.x = model.xMin + (float) Math.random() * (model.xMax - model.xMin);
-                pos.y = model.yMin + (float) Math.random() * (model.yMax - model.yMin);
-                pos.z = model.zMin + (float) Math.random() * (model.zMax - model.zMin);
+            PVector pos;
+            if (birdMode.getOption().equals("everywhere") ||
+                     birdMode.getOption().equals("blobPull")) {  // spawn throughout the model volume
+                pos = chooseSpawnPosition();
             } else {  // spawn near the given focus coordinates
+                pos = getRandomUnitVector();
                 pos.mult(spnRad.getValuef());
                 pos.add(focus);
             }
-            birds.add(new Bird(pos, LXColor.hsb(FastMath.random() * 360, FastMath.random() * 100, 100)));
+            int rgb = LXColor.hsb(FastMath.random() * 360, FastMath.random() * 100, 100);
+            birds.add(new Bird(pos, rgb, !birdMode.getOption().equals("blobPull")));
         }
+    }
+
+    /**
+     * Chooses the position for a new bird, anywhere within the model's bounding box,
+     * preferring regions where there aren't already a lot of birds.
+     */
+    PVector chooseSpawnPosition() {
+        PVector pos = new PVector();
+        PVector best = new PVector();
+        float bestMinDist = 0;
+        for (int sample = 0; sample < 20; sample++) {
+            pos.x = model.xMin + (float) Math.random() * (model.xMax - model.xMin);
+            pos.y = model.yMin + (float) Math.random() * (model.yMax - model.yMin);
+            pos.z = model.zMin + (float) Math.random() * (model.zMax - model.zMin);
+            float minDist = Float.POSITIVE_INFINITY;
+            for (Bird b : birds) {
+                float dist = PVector.sub(pos, b.pos).mag();
+                if (dist < minDist) {
+                    minDist = dist;
+                }
+            }
+            System.out.println("- minDist " + minDist);
+            if (minDist > bestMinDist) {
+                best.set(pos);
+                bestMinDist = minDist;
+            }
+        }
+        System.out.println("best: " + bestMinDist);
+        for (Bird b : birds) {
+            float dist = PVector.sub(best, b.pos).mag();
+            System.out.println("  - to bird: " + dist);
+        }
+        System.out.println();
+        return best;
     }
 
     void advanceBirds(float deltaSec, PVector vel) {
@@ -241,6 +284,40 @@ public class FlockWave extends SLPatternWithMarkers {
 
             PVector targetVel = PVector.mult(velSum, spdMult.getValuef());
             b.run(deltaSec, targetVel);
+        }
+    }
+
+    void advanceBirdsWithPull(float deltaSec, List<BlobFollower.Follower> followers) {
+        List<BlobFollower.Follower> sortedFollowers = new ArrayList<>();
+        sortedFollowers.addAll(followers);
+        sortedFollowers.sort(new Comparator<BlobFollower.Follower>() {
+            public int compare(BlobFollower.Follower a, BlobFollower.Follower b) {
+                return Float.compare(-a.vel.mag(), -b.vel.mag());
+            }
+        });
+
+        int numPushers = Math.min(sortedFollowers.size(), maxPushers.getValuei());
+        float pushRadius = pushRad.getValuef();
+        for (Bird b : birds) {
+            PVector targetVel = new PVector(0, 0, 0);
+            for (int i = 0; i < numPushers; i++) {
+                BlobFollower.Follower f = sortedFollowers.get(i);
+                float dist = PVector.sub(f.pos, b.pos).mag() / pushRadius;
+                if (dist < 1.0f) {
+                    float factor = (dist < 0.5f) ? 1.0f : 1.0f - (dist - 0.5f)*2;
+                    targetVel.add(PVector.mult(f.vel, factor));
+                }
+            }
+            targetVel.mult(spdMult.getValuef());
+            b.run(deltaSec, targetVel);
+            if (b.pos.x < model.xMin || b.pos.x > model.xMax ||
+                  b.pos.y < model.yMin || b.pos.y > model.yMax ||
+                  b.pos.z < model.zMin || b.pos.z > model.zMax) {
+                b.startFadeOut();
+            }
+        }
+        for (int i = maxBirds.getValuei(); i < birds.size(); i++) {
+            birds.get(i).startFadeOut();
         }
     }
 
@@ -456,17 +533,23 @@ public class FlockWave extends SLPatternWithMarkers {
         public int rgb;
         public float value;
         public float elapsedSec;
+        public float fadeOutStartSec;
         public boolean expired;
         public double[] renderedValues;
 
-        Bird(PVector pos, int rgb) {
+        Bird(PVector pos, int rgb, boolean fadeOut) {
             this.pos = pos;
             this.vel = PVector.mult(getRandomUnitVector(), scatter.getValuef());
             this.rgb = rgb;
             this.value = 0;
             this.elapsedSec = 0;
+            this.fadeOutStartSec = fadeOut ? fadeInSec.getValuef() : Float.POSITIVE_INFINITY;
             this.expired = false;
             this.renderedValues = new double[colors.length];
+        }
+
+        Bird(PVector pos, int rgb) {
+            this(pos, rgb, true);
         }
 
         void run(float deltaSec, PVector targetVel) {
@@ -476,9 +559,18 @@ public class FlockWave extends SLPatternWithMarkers {
             elapsedSec += deltaSec;
             if (elapsedSec < fadeInSec.getValuef()) {
                 value = elapsedSec / fadeInSec.getValuef();
+            } else if (elapsedSec < fadeOutStartSec) {
+                value = 1.0f;
             } else {
-                value = (float) FastMath.pow(0.1, (elapsedSec - fadeInSec.getValuef()) / fadeOutSec.getValuef());
+                // in blobPull mode, only start expiring after the bird has left the model volume
+                value = (float) FastMath.pow(0.1, (elapsedSec - fadeOutStartSec) / fadeOutSec.getValuef());
                 if (value < 0.004) expired = true;
+            }
+        }
+
+        void startFadeOut() {
+            if (fadeOutStartSec > elapsedSec) {
+                fadeOutStartSec = elapsedSec;
             }
         }
 
@@ -487,16 +579,18 @@ public class FlockWave extends SLPatternWithMarkers {
         }
 
         void turn(float deltaSec, PVector targetVel) {
-            float speed = vel.mag();
-            float targetSpeed = targetVel.mag();
-
             float frac = (float) FastMath.pow(0.1, deltaSec / turnSec.getValuef());
             vel = PVector.add(PVector.mult(vel, frac), PVector.mult(targetVel, 1 - frac));
-            speed = speed * frac + targetSpeed * (1 - frac);
-            if (targetSpeed > maxSpd.getValuef()) targetSpeed = maxSpd.getValuef();
+            if (!birdMode.getOption().equals("blobPull")) {
+                float speed = vel.mag();
+                float targetSpeed = targetVel.mag();
 
-            float mag = vel.mag();
-            if (mag > 0 && mag < speed) vel.div(mag / speed);
+                speed = speed * frac + targetSpeed * (1 - frac);
+                if (targetSpeed > maxSpd.getValuef()) targetSpeed = maxSpd.getValuef();
+
+                float mag = vel.mag();
+                if (mag > 0 && mag < speed) vel.div(mag / speed);
+            }
         }
 
         public int compareTo(Bird other) {
