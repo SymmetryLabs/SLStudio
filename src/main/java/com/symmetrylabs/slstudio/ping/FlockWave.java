@@ -302,6 +302,7 @@ public class FlockWave extends SLPatternWithMarkers {
                 }
             }
             targetVel.mult(spdMult.getValuef());
+            targetVel.z *= 1.0f/zScale.getValuef();
             b.run(deltaSec, targetVel);
             if (b.pos.x < model.xMin || b.pos.x > model.xMax ||
                   b.pos.y < model.yMin || b.pos.y > model.yMax ||
