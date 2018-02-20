@@ -245,18 +245,11 @@ public class FlockWave extends SLPatternWithMarkers {
                     minDist = dist;
                 }
             }
-            System.out.println("- minDist " + minDist);
             if (minDist > bestMinDist) {
                 best.set(pos);
                 bestMinDist = minDist;
             }
         }
-        System.out.println("best: " + bestMinDist);
-        for (Bird b : birds) {
-            float dist = PVector.sub(best, b.pos).mag();
-            System.out.println("  - to bird: " + dist);
-        }
-        System.out.println();
         return best;
     }
 
