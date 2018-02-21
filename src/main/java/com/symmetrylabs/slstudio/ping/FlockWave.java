@@ -51,7 +51,7 @@ public class FlockWave extends SLPatternWithMarkers {
 
     CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
     CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
-    CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
+    CompoundParameter ripple = new CompoundParameter("ripple", 0, -5, 5);  // ripple movement (waves/s)
     DiscreteParameter palette = new DiscreteParameter("palette", ((SLStudioLX) lx).paletteLibrary.getNames());
         // selected colour palette
     CompoundParameter palStart = new CompoundParameter("palStart", 0, 0, 1);  // palette start point (fraction 0 - 1)
@@ -296,10 +296,8 @@ public class FlockWave extends SLPatternWithMarkers {
             for (int i = 0; i < numPushers; i++) {
                 BlobFollower.Follower f = sortedFollowers.get(i);
                 float dist = PVector.sub(f.pos, b.pos).mag() / pushRadius;
-                if (dist < 1.0f) {
-                    float factor = (dist < 0.5f) ? 1.0f : 1.0f - (dist - 0.5f)*2;
-                    targetVel.add(PVector.mult(f.vel, factor));
-                }
+                float factor = 1 / (1 + dist*dist);
+                targetVel.add(PVector.mult(f.vel, factor));
             }
             targetVel.mult(spdMult.getValuef());
             targetVel.z *= 1.0f/zScale.getValuef();
