@@ -296,10 +296,8 @@ public class FlockWave extends SLPatternWithMarkers {
             for (int i = 0; i < numPushers; i++) {
                 BlobFollower.Follower f = sortedFollowers.get(i);
                 float dist = PVector.sub(f.pos, b.pos).mag() / pushRadius;
-                if (dist < 1.0f) {
-                    float factor = (dist < 0.5f) ? 1.0f : 1.0f - (dist - 0.5f)*2;
-                    targetVel.add(PVector.mult(f.vel, factor));
-                }
+                float factor = 1 / (1 + dist*dist);
+                targetVel.add(PVector.mult(f.vel, factor));
             }
             targetVel.mult(spdMult.getValuef());
             targetVel.z *= 1.0f/zScale.getValuef();
