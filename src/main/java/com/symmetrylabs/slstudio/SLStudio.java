@@ -16,8 +16,10 @@ import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.model.CubesModel;
+import com.symmetrylabs.slstudio.model.NissanModel;
 import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
 import com.symmetrylabs.slstudio.mappings.CubesLayout;
+import com.symmetrylabs.slstudio.mappings.NissanLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
@@ -84,9 +86,10 @@ public class SLStudio extends PApplet {
         long setupStart = System.nanoTime();
         applet = this;
 
-        mappings = FultonStreetLayout.loadMappings();
-        model = FultonStreetLayout.buildModel();
+        // mappings = FultonStreetLayout.loadMappings();
+        // model = FultonStreetLayout.buildModel();
         //model = CubesLayout.buildModel();
+        model = NissanLayout.buildModel();
 
         println("-- Model ----");
 
@@ -100,6 +103,10 @@ public class SLStudio extends PApplet {
             println("# of cubes: " + ((CubesModel)model).getCubes().size());
             println("# of faces: " + ((CubesModel)model).getFaces().size());
             println("# of strips: " + ((CubesModel)model).getStrips().size());
+        } else if (model instanceof NissanModel) {
+            println("# of cars: " + ((NissanModel)model).getCars().size());
+            println("# of windows: " + ((NissanModel)model).getWindows().size());
+            println("# of strips: " + ((NissanModel)model).getStrips().size());
         }
 
         println("# of points: " + model.points.length);
