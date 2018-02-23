@@ -25,6 +25,9 @@ public class NissanModel extends StripsModel<Strip> {
     private final List<NissanCar> carsUnmodifiable = Collections.unmodifiableList(cars);
     private final List<NissanWindow> windowsUnmodifiable = Collections.unmodifiableList(windows);
 
+    // Strips
+    protected final Map<String, Strip> stripTable = new HashMap<>();
+
     // Array of points stored as contiguous floats for performance
     public final float[] pointsXYZ;
 
@@ -43,6 +46,10 @@ public class NissanModel extends StripsModel<Strip> {
                 this.windows.add(window);
                 this.windowTable.put(window.id, window);
                 this.strips.addAll(window.getStrips());
+
+                for (Strip strip : window.getStrips()) {
+                    this.stripTable.put(strip.id, strip);
+                }
             }
         }
 
@@ -100,5 +107,20 @@ public class NissanModel extends StripsModel<Strip> {
             throw new IllegalArgumentException("Invalid window id:" + id);
         }
         return window;
+    }
+
+
+    public Strip getStripById(String id) {
+        Strip strip = stripTable.get(id);
+        if (strip == null) {
+            System.out.println("Missing strip id: " + id);
+            System.out.print("Valid ids: ");
+            for (String key : stripTable.keySet()) {
+                System.out.print(key + ", ");
+            }
+            System.out.println();
+            throw new IllegalArgumentException("Invalid strip id:" + id);
+        }
+        return strip;
     }
 }

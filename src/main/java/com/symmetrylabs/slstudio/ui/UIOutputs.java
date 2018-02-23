@@ -16,7 +16,7 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
+import com.symmetrylabs.slstudio.pixlites.NissanPixlite;
 import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.IntListener;
@@ -59,7 +59,7 @@ public class UIOutputs extends UICollapsibleSection {
         addTopLevelComponent(new UIButton(80, 4, 30, 12).setParameter(clearParam));
 
         clearParam.addListener(it -> {
-            for (final Pixlite pixlite : SLStudio.applet.pixlites) {
+            for (final NissanPixlite pixlite : SLStudio.applet.pixlites) {
                 pixlite.enabled.setValue(false);
             }
             clearParam.setValue(false);
@@ -68,7 +68,7 @@ public class UIOutputs extends UICollapsibleSection {
         final List<UIItemList.Item> items = new ArrayList<>();
         outputList = new UIItemList.ScrollList(ui, 0, 0, w - 8, DEFAULT_HEIGHT - TOP_MARGIN);
 
-        for (Pixlite pixlite : SLStudio.applet.pixlites) {
+        for (NissanPixlite pixlite : SLStudio.applet.pixlites) {
             items.add(new PixliteItem(pixlite));
         }
 
@@ -146,15 +146,15 @@ public class UIOutputs extends UICollapsibleSection {
     }
 
     class PixliteItem extends UIItemList.AbstractItem {
-        final Pixlite pixlite;
+        final NissanPixlite pixlite;
 
-        PixliteItem(Pixlite pixlite) {
+        PixliteItem(NissanPixlite pixlite) {
             this.pixlite = pixlite;
             pixlite.enabled.addListener(param -> redraw());
         }
 
         public String getLabel() {
-            return "(" + pixlite.ipAddress + ") " + pixlite.slice.id;
+            return "(" + pixlite.ipAddress + ") unknown output channel";
         }
 
         public boolean isSelected() {

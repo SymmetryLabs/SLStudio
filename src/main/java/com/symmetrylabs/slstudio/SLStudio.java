@@ -35,6 +35,8 @@ import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
+import com.symmetrylabs.slstudio.pixlites.NissanPixlite;
+import com.symmetrylabs.slstudio.pixlites.NissanPixliteConfigs;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
@@ -55,7 +57,7 @@ public class SLStudio extends PApplet {
     public Dispatcher dispatcher;
     private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
-    public Pixlite[] pixlites;
+    public NissanPixlite[] pixlites;
     public ListenableList<SLController> controllers;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
@@ -135,7 +137,7 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
 
                 controllers = CubesLayout.setupCubesOutputs(lx);
-                pixlites = setupPixlites();
+                pixlites = new NissanPixliteConfigs().setupPixlites(lx);
 
                 apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
@@ -412,34 +414,34 @@ public class SLStudio extends PApplet {
         dispatcher.draw();
     }
 
-    private Pixlite[] setupPixlites() {
+    // private Pixlite[] setupPixlites() {
 
-        if (!(model instanceof SunsModel))
-            return new Pixlite[0];
+    //     if (!(model instanceof SunsModel))
+    //         return new Pixlite[0];
 
-        List<Pixlite> pixlites = new ArrayList<>();
+    //     List<Pixlite> pixlites = new ArrayList<>();
 
-        for (String outputId : mappings.getOutputIds()) {
-            PixliteMapping pixliteMapping = mappings.getOutputById(outputId, PixliteMapping.class);
-            if (pixliteMapping != null) {
-                pixlites.add(createPixlite(pixliteMapping, outputId));
-            }
-        }
+    //     for (String outputId : mappings.getOutputIds()) {
+    //         PixliteMapping pixliteMapping = mappings.getOutputById(outputId, PixliteMapping.class);
+    //         if (pixliteMapping != null) {
+    //             pixlites.add(createPixlite(pixliteMapping, outputId));
+    //         }
+    //     }
 
-        this.mappingColorsPerPixlite = new HashMap<>();
-        for (Pixlite pixlite : pixlites) {
-            this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
-        }
+    //     this.mappingColorsPerPixlite = new HashMap<>();
+    //     for (Pixlite pixlite : pixlites) {
+    //         this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
+    //     }
 
-        return pixlites.toArray(new Pixlite[0]);
-    }
+    //     return pixlites.toArray(new Pixlite[0]);
+    // }
 
-    private Pixlite createPixlite(PixliteMapping pixliteMapping, String sliceId) {
-        SunsModel sunsModel = (SunsModel)model;
-        Pixlite pixlite = new Pixlite(mappings, pixliteMapping, lx, sunsModel.getSliceById(sliceId));
-        lx.addOutput(pixlite);
-        return pixlite;
-    }
+    // private Pixlite createPixlite(PixliteMapping pixliteMapping, String sliceId) {
+    //     SunsModel sunsModel = (SunsModel)model;
+    //     Pixlite pixlite = new Pixlite(mappings, pixliteMapping, lx, sunsModel.getSliceById(sliceId));
+    //     lx.addOutput(pixlite);
+    //     return pixlite;
+    // }
 
     public final static int CHAN_WIDTH = 200;
     public final static int CHAN_HEIGHT = 650;

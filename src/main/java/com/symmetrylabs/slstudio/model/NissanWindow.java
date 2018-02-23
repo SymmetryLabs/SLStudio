@@ -54,10 +54,12 @@ public class NissanWindow extends StripsModel<Strip> {
 
     private static class Fixture extends LXAbstractFixture {
         private final String carId;
+        private final String id;
         private List<Strip> strips = new ArrayList<>();
 
         private Fixture(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
             this.carId = carId;
+            this.id = carId + "-" + id;
             transform.push();
             transform.translate(coordinates[0], coordinates[1], coordinates[2]);
 
@@ -232,7 +234,7 @@ public class NissanWindow extends StripsModel<Strip> {
             }
 
             Strip.Metrics metrics = new Strip.Metrics(config.numPoints);
-            String stripId = carId + "-strip" + Integer.toString(stripIndex);
+            String stripId = id + "-strip" + Integer.toString(stripIndex);
             this.strips.add(new Strip(stripId, metrics, points));
             transform.pop();
         }
