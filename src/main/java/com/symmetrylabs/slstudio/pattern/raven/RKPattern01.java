@@ -119,11 +119,14 @@ public class RKPattern01 extends P3CubeMapPattern {
         println("blobTracker.getBlobs().size(): " + blobs.size());
         int blobIdx = 0;
         for (BlobTracker.Blob b : blobs) {
-            blobsPos[blobIdx] = new PVector(b.pos.x-modelPos.x, b.pos.y-modelPos.y, b.pos.z-modelPos.z);
-            blobsPos[blobIdx].normalize();
-            blobsPos[blobIdx].mult(240);
+            float mappedX = (b.pos.x-(-401))*3;
+            float mappedZ = -(b.pos.z-356)*3;
+            blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
+            println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
+            println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
             blobIdx++;
         }
+        println("\n");
     }
 
     void updateParameters() {
@@ -188,12 +191,7 @@ public class RKPattern01 extends P3CubeMapPattern {
         float upZ
     ) {
         pg.beginDraw();
-        if(blobsLinked && blobsPos!=null){
-            println("blobsPos.length: " + blobsPos.length);
-            pg.background(0, 0, 255);
-        }else{
-            pg.background(0);
-        }
+        pg.background(0);
         pg.camera(eyeX, eyeY, eyeZ, centerX, centerY, centerZ, upX, upY, upZ);
         pg.frustum(-10, 10, -10, 10, 10, 1000);
         pg.rotateX(rotX);
@@ -205,10 +203,8 @@ public class RKPattern01 extends P3CubeMapPattern {
                 pg.stroke(255, 0, 0);
                 pg.strokeWeight(20);
                 pg.point(blobsPos[i].x, blobsPos[i].y, blobsPos[i].z);
-                println(blobsPos[i].x+", "+blobsPos[i].y +", "+blobsPos[i].z);
             }
         }
-        println("\n");
         pg.endDraw();
     }
 
@@ -277,6 +273,15 @@ public class RKPattern01 extends P3CubeMapPattern {
             weight = sin(theta) * 4 * gWeightScalar;
 
             for (int i = 0; i < vts.length; i++) {
+                if(blobsLinked){
+                    for (int j = 0; j < blobsPos.length; j++) {
+                        float d = dist(vts[i].pos.x, vts[i].pos.y, vts[i].pos.z,
+                                        blobsPos[j].x, blobsPos[j].y, blobsPos[j].z);
+                                if (d<200) {
+                                        vts[i].updateScalar((200-d)/200);
+                                }
+                    }
+                }
                 vts[i].update(theta);
             }
         }
@@ -301,6 +306,7 @@ public class RKPattern01 extends P3CubeMapPattern {
         int idx;
         PVector pos;
         float thetaBase, thetaOfst, thetaOfstRange, theta, phi;
+        float thetaOfstScalar;
         float l1, l2, l3;
 
         Vtx(int idx, float theta, float phi, float l1, float l2, float l3) {
@@ -313,19 +319,31 @@ public class RKPattern01 extends P3CubeMapPattern {
             this.l3 = l3;
         }
 
+        void updateScalar(float incre){
+            thetaOfstScalar += incre;
+        }
+
         void update(float thetaBase) {
             this.thetaBase = thetaBase;
 
-            if (!audioLinked) {
+            if (audioLinked) {
+                thetaOfstRange = sin(theta);
+                int bandIdx = floor(map(idx, 0, ringRes, 0, 16));
+                thetaOfst = avgBandMag - eq.getBandf(bandIdx);
+            } else if(blobsLinked){
+                thetaOfstScalar = constrain(thetaOfstScalar, 0, 1);
+                thetaOfstRange = sin(theta) * dspmt;
+                thetaOfst = (noise(
+                    sin(phi) * cos(phi) * nDspmt + SLStudio.applet.frameCount * .005f,
+                    this.thetaBase * nDspmt * .25f - SLStudio.applet.frameCount * .005f
+                ) - .5f) * thetaOfstRange * thetaOfstScalar;
+                thetaOfstScalar = 0;
+            } else {
                 thetaOfstRange = sin(theta) * dspmt;
                 thetaOfst = (noise(
                     sin(phi) * cos(phi) * nDspmt + SLStudio.applet.frameCount * .005f,
                     this.thetaBase * nDspmt * .25f - SLStudio.applet.frameCount * .005f
                 ) - .5f) * thetaOfstRange;
-            } else {
-                thetaOfstRange = sin(theta);
-                int bandIdx = floor(map(idx, 0, ringRes, 0, 16));
-                thetaOfst = avgBandMag - eq.getBandf(bandIdx);
             }
             theta = this.thetaBase + thetaOfst;
             pos.set(
