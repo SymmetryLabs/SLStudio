@@ -60,8 +60,8 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
         blobY = y;
     }
 
-    @Override
-    public void oscMessage(OscMessage message) {
+    public void processThermal(OscMessage message){
+
         if (!message.getAddressPattern().toString().equals("/blobs")) return;
 
         int arg = 0;
@@ -94,6 +94,53 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
 
         lastMessageMillis = millis;
         lastKnownBlobs = allBlobs;
+    }
+
+    public void processTouch(OscMessage message){
+        // is this for me?
+        if (!message.getAddressPattern().toString().contains("blob")) return;
+        if (!(message.getAddressPattern().toString().contains(":u") || message.getAddressPattern().toString().contains(":v") ) ) return;
+
+        int arg = 0;
+
+        int count = message.getInt(arg++);
+//        long millis = message.getInt(arg++);
+        long millis = System.currentTimeMillis() % 1000;
+        float deltaSec = (float) (millis - lastMessageMillis) * 0.001f;
+
+        List<Blob> newBlobs = new ArrayList<Blob>();
+        for (int i = 0; i < count/4; i++) { // each data elt has 4
+            float x = message.getFloat(arg++);
+            float y = message.getFloat(arg++);
+            float size0 = message.getFloat(arg++);
+            float size1 = message.getFloat(arg++);
+            float size = size0*size1;
+            newBlobs.add(new Blob(new PVector(x, blobY, y), size));
+        }
+//        blobsBySource.put(sourceId, newBlobs);
+        blobsBySource.put("hello", newBlobs);
+
+        List<Blob> allBlobs = new ArrayList<Blob>();
+        for (String id : blobsBySource.keySet()) {
+            allBlobs.addAll(blobsBySource.get(id));
+        }
+        mergeBlobs(allBlobs, mergeRadius);
+
+        if (deltaSec < maxDeltaSec) {
+            for (Blob b : allBlobs) {
+                b.vel = estimateNewBlobVelocity(b, lastKnownBlobs, deltaSec, maxSpeed);
+            }
+        }
+
+        lastMessageMillis = millis;
+        lastKnownBlobs = allBlobs;
+    }
+
+    @Override
+    public void oscMessage(OscMessage message) {
+        // call handlers
+        this.processTouch(message);
+        this.processThermal(message);
     }
 
     /**
