@@ -52,9 +52,10 @@ public class PointsGrouping {
     }
 
     public PointsGrouping addPoints(List<LXPoint> pointsToAdd, boolean reverseOrdering) {
+        System.out.println("caught!");
         if (reverseOrdering) {
-            Collections.reverse(Arrays.asList(pointsToAdd));
-        }
+        Collections.reverse(Arrays.asList(pointsToAdd));
+         }
         addPoints(pointsToAdd);
         return this;
     }

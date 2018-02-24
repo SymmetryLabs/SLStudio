@@ -96,7 +96,7 @@ public class NissanWindow extends StripsModel<Strip> {
         private void createWindshield(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at the windshield from the outside front of car
             StripConfig[] stripConfigs = new StripConfig[] {
-                new StripConfig(PIXEL_PITCH*21, PIXEL_PITCH*0, 36),
+                new StripConfig(PIXEL_PITCH*21, PIXEL_PITCH*0, 35),
                 new StripConfig(PIXEL_PITCH*18, PIXEL_PITCH*1, 43),
                 new StripConfig(PIXEL_PITCH*16, PIXEL_PITCH*2, 49),
                 new StripConfig(PIXEL_PITCH*13, PIXEL_PITCH*3, 53),
@@ -122,31 +122,42 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*22, 75),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*23, 75),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*24, 73),
+
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*25, 71),
+                // CH 7 (27th strip)
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*26, 71),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*27, 71),
 
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*28, 71),
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*29, 71),
+                // CH 8
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*30, 71),
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*31, 71),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*32, 71),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*32, 69),
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*33, 69),
+                // CH 9
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*34, 69),
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*35, 69),
                 new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*36, 69),
 
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*37, 69),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*37, 67),
+                // CH 10
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*38, 67),
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*39, 67),
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*40, 67),
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*41, 67),
+                // CH 11
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*42, 67),
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*43, 67),
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*44, 67),
                 new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*45, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*46, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*47, 54),
+                // CH 12
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*46, 54),
+                //new StripConfig(PIXEL_PITCH*54, PIXEL_PITCH*46, 27),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*47, 15),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*48, 9),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*49, 6)
+
             };
             createWindow(stripConfigs, coordinates, rotations, transform);
         }
@@ -154,6 +165,7 @@ public class NissanWindow extends StripsModel<Strip> {
         private void createFrontWindow(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at passenger side from outside passenger side (drivers side would be a reflection)
             StripConfig[] stripConfigs = new StripConfig[] {
+                // ch 1
                 new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*0, 50),
                 new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*1, 50),
                 new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*2, 50),
@@ -162,6 +174,7 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*5, 50),
                 new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*6, 50),
                 new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*7, 51),
+                // ch 2
                 new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*8, 50),
                 new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*9, 50),
                 new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*10, 50),
@@ -170,6 +183,7 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*13, 50),
                 new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*14, 50),
                 new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*15, 50),
+                // ch 3
                 new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*16, 48),
                 new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*17, 46),
                 new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*18, 43),

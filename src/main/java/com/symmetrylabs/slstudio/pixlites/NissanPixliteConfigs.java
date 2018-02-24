@@ -107,6 +107,8 @@ public class NissanPixliteConfigs {
                 .addPoints(model.getStripById("car1-passenger-side-front-strip14").getPoints())
                 .addPoints(model.getStripById("car1-passenger-side-front-strip15").getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(model.getStripById("car1-passenger-side-front-strip16").getPoints())
+//                    .addPoints(model.getStripById("car1-passenger-side-front-strip17").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                    .addPoints(model.getStripById("car1-passenger-side-front-strip18").getPoints())
             )
                 .addPixliteOutput(new PointsGrouping("3") // <- output index on pixlite
                 .addPoints(model.getStripById("car1-passenger-side-front-strip17").getPoints(), PointsGrouping.REVERSE_ORDERING)
@@ -171,74 +173,74 @@ public class NissanPixliteConfigs {
                 .addPoints(model.getStripById("car1-windshield-strip9").getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(model.getStripById("car1-windshield-strip10").getPoints())
             )
-                .addPixliteOutput(new PointsGrouping("3") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip11").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip12").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip13").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip14").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("4") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip15").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip16").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip17").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip18").getPoints())
-            )
-                .addPixliteOutput(new PointsGrouping("5") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip19").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip20").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip21").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip22").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("6") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip23").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip24").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip25").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip26").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("7") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip27").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip28").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip29").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip30").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("8") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip31").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip32").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip33").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip34").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("9") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip35").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip36").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip37").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip38").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("10") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip39").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip40").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip41").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip42").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("11") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip43").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip44").getPoints())
-                .addPoints(model.getStripById("car1-windshield-strip45").getPoints(), PointsGrouping.REVERSE_ORDERING)
-                .addPoints(model.getStripById("car1-windshield-strip46").getPoints())
-            )
-
-                .addPixliteOutput(new PointsGrouping("12") // <- output index on pixlite
-                .addPoints(model.getStripById("car1-windshield-strip47").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPixliteOutput(new PointsGrouping("3") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip11").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip12").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip13").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip14").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("4") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip15").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip16").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip17").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip18").getPoints())
+//            )
+//                .addPixliteOutput(new PointsGrouping("5") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip19").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip20").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip21").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip22").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("6") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip23").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip24").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip25").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip26").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("7") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip27").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip28").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip29").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip30").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("8") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip31").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip32").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip33").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip34").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("9") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip35").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip36").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip37").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip38").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("10") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip39").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip40").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip41").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip42").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("11") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip43").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip44").getPoints())
+//                .addPoints(model.getStripById("car1-windshield-strip45").getPoints(), PointsGrouping.REVERSE_ORDERING)
+//                .addPoints(model.getStripById("car1-windshield-strip46").getPoints())
+//            )
+//
+//                .addPixliteOutput(new PointsGrouping("12") // <- output index on pixlite
+//                .addPoints(model.getStripById("car1-windshield-strip47").getPoints(), PointsGrouping.REVERSE_ORDERING)
 //                .addPoints(model.getStripById("car1-windshield-strip48").getPoints())
 //                .addPoints(model.getStripById("car1-windshield-strip49").getPoints(), PointsGrouping.REVERSE_ORDERING)
 //                .addPoints(model.getStripById("car1-windshield-strip50").getPoints())
-            )
+//            )
         };
 
 

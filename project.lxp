@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519451020010,
+  "timestamp": 1519512226976,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,10 +30,10 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 0.0,
+        "color/hue": 172.63157653808594,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
-        "color": -65536,
+        "color": -16711712,
         "period": 120000.0,
         "range": 0.0,
         "spread": 0.0,
@@ -143,8 +143,8 @@
               "ZRAT": 0.0,
               "XWID": 0.3,
               "XLEV": 0.0,
-              "YLEV": 0.5100000109523535,
-              "ZLEV": 0.0,
+              "YLEV": 0.0,
+              "ZLEV": 0.18999999575316906,
               "YWID": 0.0,
               "ZWID": 0.3
             },
@@ -317,8 +317,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 360.9422497390202,
-        "theta": 0.0,
-        "phi": 0.0,
+        "theta": 1.2569999999999995,
+        "phi": 0.3990000000000001,
         "positionX": 3.3280792236328125,
         "positionY": 8.273935317993164,
         "positionZ": 26.0
