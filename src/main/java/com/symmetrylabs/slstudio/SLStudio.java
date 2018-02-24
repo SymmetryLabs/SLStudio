@@ -139,6 +139,12 @@ public class SLStudio extends PApplet {
                 controllers = CubesLayout.setupCubesOutputs(lx);
                 pixlites = new NissanPixliteConfigs().setupPixlites(lx);
 
+                // Code added by aaron
+                for (NissanPixlite pl: pixlites) {
+                    lx.addOutput(pl);
+                    }
+
+                // end added code
                 apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
 

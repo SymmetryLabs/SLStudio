@@ -216,7 +216,7 @@ public class NissanWindow extends StripsModel<Strip> {
         }
 
         private void createWindow(StripConfig[] stripConfigs, float[] coordinates, float[] rotations, LXTransform transform) {
-            int stripIndex = 0;
+            int stripIndex = 1;
             for (StripConfig config : stripConfigs) {
                 createStrip(config, stripIndex++, transform);
             }

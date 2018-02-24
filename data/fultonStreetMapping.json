@@ -2,7 +2,11 @@
   "outputs": {
     "sun10_bottom_back": {
       "type": "PixliteMapping",
-      "ipAddress": "10.200.1.16",
+<<<<<<< Updated upstream
+      "ipAddress": "10.200.1.5",
+=======
+      "ipAddress": "10.200.1.6",
+>>>>>>> Stashed changes
       "datalineMappings": [
         {
           "numPoints": 606
@@ -56,7 +60,11 @@
     },
     "sun10_bottom_front": {
       "type": "PixliteMapping",
-      "ipAddress": "10.200.1.15",
+<<<<<<< Updated upstream
+      "ipAddress": "10.200.1.6",
+=======
+      "ipAddress": "10.200.1.5",
+>>>>>>> Stashed changes
       "datalineMappings": [
         {
           "numPoints": 606
@@ -110,7 +118,7 @@
     },
     "sun10_top_back": {
       "type": "PixliteMapping",
-      "ipAddress": "10.200.1.21",
+      "ipAddress": "10.200.1.7",
       "datalineMappings": [
         {
           "numPoints": 639
