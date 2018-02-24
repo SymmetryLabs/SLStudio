@@ -153,6 +153,11 @@ public class SLStudio extends PApplet {
                 ui.theme.setAttentionColor(0xffa00044);
                 ui.theme.setFocusColor(0xff0094aa);
                 ui.theme.setControlBorderColor(0xff292929);
+
+                // Add the pixlites
+                for (NissanPixlite pl: pixlites){
+                    lx.addOutput(pl);
+                }
             }
 
             @Override
@@ -414,27 +419,24 @@ public class SLStudio extends PApplet {
         dispatcher.draw();
     }
 
-    // private Pixlite[] setupPixlites() {
-
-    //     if (!(model instanceof SunsModel))
-    //         return new Pixlite[0];
-
-    //     List<Pixlite> pixlites = new ArrayList<>();
-
-    //     for (String outputId : mappings.getOutputIds()) {
-    //         PixliteMapping pixliteMapping = mappings.getOutputById(outputId, PixliteMapping.class);
-    //         if (pixliteMapping != null) {
-    //             pixlites.add(createPixlite(pixliteMapping, outputId));
-    //         }
-    //     }
-
-    //     this.mappingColorsPerPixlite = new HashMap<>();
-    //     for (Pixlite pixlite : pixlites) {
-    //         this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
-    //     }
-
-    //     return pixlites.toArray(new Pixlite[0]);
-    // }
+//     private Pixlite[] setupPixlites() {
+//
+//         List<Pixlite> pixlites = new ArrayList<>();
+//
+//         for (String outputId : mappings.getOutputIds()) {
+//             PixliteMapping pixliteMapping = mappings.getOutputById(outputId, PixliteMapping.class);
+//             if (pixliteMapping != null) {
+//                 pixlites.add(createPixlite(pixliteMapping, outputId));
+//             }
+//         }
+//
+//         this.mappingColorsPerPixlite = new HashMap<>();
+//         for (Pixlite pixlite : pixlites) {
+//             this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
+//         }
+//
+//         return pixlites.toArray(new Pixlite[0]);
+//     }
 
     // private Pixlite createPixlite(PixliteMapping pixliteMapping, String sliceId) {
     //     SunsModel sunsModel = (SunsModel)model;

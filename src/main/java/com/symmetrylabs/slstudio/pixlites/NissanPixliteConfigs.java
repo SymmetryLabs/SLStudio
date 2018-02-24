@@ -6,7 +6,7 @@ import com.symmetrylabs.slstudio.pixlites.PointsGrouping;
 import com.symmetrylabs.slstudio.model.NissanModel;
 
 public class NissanPixliteConfigs {
-    
+
     public static NissanPixlite[] setupPixlites(LX lx) {
         NissanModel model = ((NissanModel)lx.model);
 
@@ -18,14 +18,38 @@ public class NissanPixliteConfigs {
          */
         return new NissanPixlite[] {
 
-            new NissanPixlite(lx, "10.200.1.10")
+            new NissanPixlite(lx, "10.200.1.5")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                     .addPoints(model.getStripById("car1-driver-side-front-strip1").getPoints(), PointsGrouping.REVERSE_ORDERING)
                     .addPoints(model.getStripById("car1-driver-side-front-strip2").getPoints())
                     .addPoints(model.getStripById("car1-driver-side-front-strip3").getPoints(), PointsGrouping.REVERSE_ORDERING)
                     .addPoints(model.getStripById("car1-driver-side-front-strip4").getPoints())
-                ),
+                )
+            .addPixliteOutput(new PointsGrouping("2") // <- output index on pixlite
+                .addPoints(model.getStripById("car1-driver-side-front-strip9").getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(model.getStripById("car1-driver-side-front-strip10").getPoints())
+                .addPoints(model.getStripById("car1-driver-side-front-strip11").getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(model.getStripById("car1-driver-side-front-strip12").getPoints())
+            ),
+
+            new NissanPixlite(lx, "10.200.1.6")
+                // don't forget strips start at the bottom of windows
+                .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
+                .addPoints(model.getStripById("car1-driver-side-front-strip1").getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(model.getStripById("car1-driver-side-front-strip2").getPoints())
+                .addPoints(model.getStripById("car1-driver-side-front-strip3").getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(model.getStripById("car1-driver-side-front-strip4").getPoints())
+            ),
+
+            new NissanPixlite(lx, "10.200.1.7")
+                // don't forget strips start at the bottom of windows
+                .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
+                .addPoints(model.getStripById("car1-driver-side-front-strip1").getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(model.getStripById("car1-driver-side-front-strip2").getPoints())
+                .addPoints(model.getStripById("car1-driver-side-front-strip3").getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(model.getStripById("car1-driver-side-front-strip4").getPoints())
+            ),
 
 
         };

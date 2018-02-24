@@ -27,9 +27,16 @@ public class Strip extends SLModel {
 
     public static class Metrics {
         public final int numPoints;
+        public final boolean reversed;
 
+
+        public Metrics(int numPoints, boolean reversed) {
+            this.numPoints = numPoints;
+            this.reversed = reversed;
+        }
         public Metrics(int numPoints) {
             this.numPoints = numPoints;
+            this.reversed = false;
         }
     }
 }

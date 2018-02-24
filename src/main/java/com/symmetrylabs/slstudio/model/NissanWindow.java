@@ -1,10 +1,12 @@
 package com.symmetrylabs.slstudio.model;
 
 import com.symmetrylabs.slstudio.mappings.StripMapping;
+import com.symmetrylabs.slstudio.util.*;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
 import org.apache.commons.math3.util.FastMath;
 import heronarts.lx.model.LXPoint;
+import processing.core.PVector;
 
 import java.util.*;
 
@@ -12,7 +14,12 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
 
 
-public class NissanWindow extends StripsModel<Strip> {
+public class NissanWindow extends StripsModel<Strip> implements MarkerSource {
+
+
+    // local UV coordinate system
+    // this could be done with a quadtree but I'm not going to bother.
+    UVspace uvspace;
 
     public enum Type {
         WINDSHIELD, FRONT, BACK
@@ -26,8 +33,11 @@ public class NissanWindow extends StripsModel<Strip> {
     public final Type type;
     private final Map<String, Strip> stripMap;
 
+
     public NissanWindow(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
         super(new Fixture(carId, id, type, coordinates, rotations, transform));
+
+        this.uvspace = new UVspace(transform);
 
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
@@ -43,8 +53,15 @@ public class NissanWindow extends StripsModel<Strip> {
         }
     }
 
-        public String getId() {
-            return id;
+    public Collection<Marker> getMarkers() {
+        List<Marker> markers = new ArrayList<Marker>();
+        markers.add(this.uvspace);
+        return markers;
+    }
+
+
+    public String getId() {
+        return id;
         }
 
     // These are different than sun and slice ids, which are unique. These ids are all the same slice to slice.
@@ -95,6 +112,10 @@ public class NissanWindow extends StripsModel<Strip> {
 
         private void createWindshield(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at the windshield from the outside front of car
+//            StripRun[] stripRuns = new StripRun[]{
+//                new StripRun()
+//            };
+
             StripConfig[] stripConfigs = new StripConfig[] {
                 new StripConfig(PIXEL_PITCH*21, PIXEL_PITCH*0, 36),
                 new StripConfig(PIXEL_PITCH*18, PIXEL_PITCH*1, 43),
@@ -233,7 +254,7 @@ public class NissanWindow extends StripsModel<Strip> {
                 points.add(new LXPointNormal(transform.x(), transform.y(), transform.z()));
             }
 
-            Strip.Metrics metrics = new Strip.Metrics(config.numPoints);
+            Strip.Metrics metrics = new Strip.Metrics(config.numPoints, config.directionReversed);
             String stripId = id + "-strip" + Integer.toString(stripIndex);
             this.strips.add(new Strip(stripId, metrics, points));
             transform.pop();
@@ -243,11 +264,19 @@ public class NissanWindow extends StripsModel<Strip> {
             float xOffset;
             float yOffset;
             int numPoints;
+            boolean directionReversed;
 
             StripConfig(float xOffset, float yOffset, int numPoints) {
                 this.xOffset = xOffset;
                 this.yOffset = yOffset;
                 this.numPoints = numPoints;
+                this.directionReversed = false;
+            }
+            StripConfig(float xOffset, float yOffset, int numPoints, boolean directionReversed) {
+                this.xOffset = xOffset;
+                this.yOffset = yOffset;
+                this.numPoints = numPoints;
+                this.directionReversed = directionReversed;
             }
         }
     }
