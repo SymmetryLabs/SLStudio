@@ -17,13 +17,13 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
+import com.symmetrylabs.slstudio.model.NissanCar;
+import com.symmetrylabs.slstudio.pattern.NissanPattern;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 
 import static processing.core.PConstants.P3D;
 
-public abstract class P3CubeMapPattern extends SunsPattern {
+public abstract class P3CubeMapPattern extends NissanPattern {
     private PGraphics pg;
     public PGraphics pgF;
     public PGraphics pgB;
@@ -39,8 +39,8 @@ public abstract class P3CubeMapPattern extends SunsPattern {
 
     public DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
     public DiscreteParameter kernelSize = discreteParameter("KER", 3, 1, 6);
-    public BooleanParameter allSunsParams = booleanParam("ALL", false);
-    public List<BooleanParameter> sunSwitchParams = Lists.newArrayList();
+    public BooleanParameter allCarsParams = booleanParam("ALL", false);
+    public List<BooleanParameter> carSwitchParams = Lists.newArrayList();
 
     /**
      * A pattern that projects a cubemap image onto all the LEDs inside a given bounding box in world space.  The cubemap
@@ -79,7 +79,7 @@ public abstract class P3CubeMapPattern extends SunsPattern {
             }
         };
         kernelSize.addListener(invalidateProjectionCache);
-        allSunsParams.addListener(invalidateProjectionCache);
+        allCarsParams.addListener(invalidateProjectionCache);
 
         this.faceRes = defaultFaceRes;
         this.updateGraphics();
@@ -87,8 +87,8 @@ public abstract class P3CubeMapPattern extends SunsPattern {
         this.origin = origin;
         this.bboxSize = bboxSize;
 
-        for (final Sun sun : model.getSuns()) {
-            sunSwitchParams.add(booleanParam("SUN" + (model.getSuns().indexOf(sun) + 1), true));
+        for (final NissanCar car : model.getCars()) {
+            carSwitchParams.add(booleanParam("CAR" + (model.getCars().indexOf(car) + 1), true));
         }
     }
 
@@ -103,43 +103,43 @@ public abstract class P3CubeMapPattern extends SunsPattern {
         this.pgD = lx.applet.createGraphics(faceRes, faceRes, P3D);
     }
 
-    public PVector originForSun(final Sun sun) {
+    public PVector originForCar(final NissanCar car) {
         return new PVector(
-            sun.boundingBox.origin.x + sun.boundingBox.size.x * .5f,
-            sun.boundingBox.origin.y + sun.boundingBox.size.y * .5f,
-            sun.boundingBox.origin.z + sun.boundingBox.size.z * .5f
+            car.boundingBox.origin.x + car.boundingBox.size.x * .5f,
+            car.boundingBox.origin.y + car.boundingBox.size.y * .5f,
+            car.boundingBox.origin.z + car.boundingBox.size.z * .5f
         );
     }
 
-    public PVector bboxForSun(final Sun sun) {
-        return sun.boundingBox.size;
+    public PVector bboxForCar(final NissanCar car) {
+        return car.boundingBox.size;
     }
 
-    Map<Sun, int[][]> perSunProjectionCache;
+    Map<NissanCar, int[][]> perCarProjectionCache;
     int[][] allProjectionCache;
 
     private void invalidateProjectionCache() {
-        perSunProjectionCache = null;
+        perCarProjectionCache = null;
         allProjectionCache = null;
     }
 
     private synchronized void ensureProjectionCache() {
         int inputPointCount = kernelSize.getValuei() * kernelSize.getValuei();
 
-        if (allSunsParams.getValueb()) {
+        if (allCarsParams.getValueb()) {
             if (allProjectionCache == null) {
                 allProjectionCache = new int[model.points.length][inputPointCount];
                 computeCache(allProjectionCache, origin, bboxSize, model.points);
             }
         } else {
-            if (perSunProjectionCache == null) {
-                perSunProjectionCache = Maps.newHashMapWithExpectedSize(model.getSuns().size());
+            if (perCarProjectionCache == null) {
+                perCarProjectionCache = Maps.newHashMapWithExpectedSize(model.getCars().size());
 
-                for (final Sun sun : model.getSuns()) {
-                    int[][] sunCache = new int[sun.points.length][inputPointCount];
-                    perSunProjectionCache.put(sun, sunCache);
+                for (final NissanCar car : model.getCars()) {
+                    int[][] carCache = new int[car.points.length][inputPointCount];
+                    perCarProjectionCache.put(car, carCache);
 
-                    computeCache(sunCache, originForSun(sun), bboxForSun(sun), sun.points);
+                    computeCache(carCache, originForCar(car), bboxForCar(car), car.points);
                 }
             }
         }
@@ -198,18 +198,18 @@ public abstract class P3CubeMapPattern extends SunsPattern {
     private void projectToLeds() {
         ensureProjectionCache();
 
-        if (allSunsParams.getValueb()) {
+        if (allCarsParams.getValueb()) {
             projectToLeds(allProjectionCache, model.points);
         } else {
-            model.getSuns().parallelStream().forEach(new Consumer<Sun>() {
+            model.getCars().parallelStream().forEach(new Consumer<NissanCar>() {
                 @Override
-                public void accept(final Sun sun) {
-                    final int sunIndex = model.getSuns().indexOf(sun);
+                public void accept(final NissanCar car) {
+                    final int carIndex = model.getCars().indexOf(car);
 
-                    if (sunSwitchParams.get(sunIndex).getValueb()) {
-                        projectToLeds(perSunProjectionCache.get(sun), sun.points);
+                    if (carSwitchParams.get(carIndex).getValueb()) {
+                        projectToLeds(perCarProjectionCache.get(car), car.points);
                     } else {
-                        for (final LXPoint point : sun.points) {
+                        for (final LXPoint point : car.points) {
                             colors[point.index] = 0;
                         }
                     }
