@@ -20,5 +20,9 @@ public class PanelPoint extends LXPointNormal {
     public int getPanel_x(){
         return this.panel_x;
     }
+
+    public int getPanel_y() {
+        return this.panel_y;
+    }
 }
 

@@ -27,6 +27,13 @@ public class NissanWindow extends StripsModel<Strip> {
     public final Type type;
     private final Map<String, Strip> stripMap;
 
+    public int min_x;
+    public int max_x;
+    public int range_x;
+    public int min_y;
+    public int max_y;
+    public int range_y;
+
     public NissanWindow(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
         super(new Fixture(carId, id, type, coordinates, rotations, transform));
 
@@ -38,6 +45,13 @@ public class NissanWindow extends StripsModel<Strip> {
 
         this.strips.addAll(fixture.strips);
         this.stripMap = new HashMap<>();
+
+        this.min_x = fixture.min_x;
+        this.max_x = fixture.max_x;
+        this.min_y = fixture.min_y;
+        this.max_y = fixture.max_y;
+        this.range_x = this.max_x - this.min_x;
+        this.range_y = this.max_y - this.min_y;
 
         for (Strip strip : strips) {
             stripMap.put(strip.id, strip);
@@ -57,6 +71,13 @@ public class NissanWindow extends StripsModel<Strip> {
         private final String carId;
         private final String id;
         private List<Strip> strips = new ArrayList<>();
+
+        public int min_x;
+        public int max_x;
+        public int range_x;
+        public int min_y;
+        public int max_y;
+        public int range_y;
 
         private Fixture(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
             this.carId = carId;
@@ -260,6 +281,10 @@ public class NissanWindow extends StripsModel<Strip> {
 
         private void createWindow(StripConfig[] stripConfigs, float[] coordinates, float[] rotations, LXTransform transform) {
             int stripIndex = 1;
+
+            // initialize coordinate telemetry
+            this.min_x = this.max_x = stripConfigs[0].panel_x;
+            this.min_y = this.max_y = stripConfigs[0].panel_y;
             for (StripConfig config : stripConfigs) {
                 createStrip(config, stripIndex++, transform);
             }
@@ -278,6 +303,7 @@ public class NissanWindow extends StripsModel<Strip> {
                 transform.translate(PIXEL_PITCH, 0, 0);
                 panel_index_offset++;
                 // :0DOT
+                updateTelemetry(config);
 
 //        points.add(new LXPointNormal(transform.x(), transform.y(), transform.z()));
                 points.add(new PanelPoint(transform.x(), transform.y(), transform.z(), config.panel_x + panel_index_offset, config.panel_y));
@@ -287,6 +313,21 @@ public class NissanWindow extends StripsModel<Strip> {
             String stripId = id + "-strip" + Integer.toString(stripIndex);
             this.strips.add(new Strip(stripId, metrics, points));
             transform.pop();
+        }
+
+        private void updateTelemetry(StripConfig config) {
+            if (config.panel_x < this.min_x){
+                this.min_x = config.panel_x;
+            }
+            if (config.panel_x > this.max_x){
+                this.max_x = config.panel_x;
+            }
+            if (config.panel_y < this.min_y){
+                this.min_y = config.panel_y;
+            }
+            if (config.panel_y > this.max_y){
+                this.max_y = config.panel_y;
+            }
         }
 
         private class StripConfig {
