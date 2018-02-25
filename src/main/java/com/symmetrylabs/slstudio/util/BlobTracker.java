@@ -115,7 +115,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
             float size0 = message.getFloat(arg++);
             float size1 = message.getFloat(arg++);
             float size = size0*size1;
-            newBlobs.add(new Blob(new PVector(x, blobY, y), size));
+            newBlobs.add(new Blob(new PVector(x/7, y/7, 0), size));
         }
 //        blobsBySource.put(sourceId, newBlobs);
         blobsBySource.put("hello", newBlobs);

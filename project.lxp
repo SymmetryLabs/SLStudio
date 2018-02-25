@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519546865375,
+  "timestamp": 1519550442019,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 27,
@@ -124,7 +124,75 @@
             "modulationColor": -13958913,
             "parameters": {
               "label": "SelectedStrip",
-              "selectedStrip": 1
+              "selectedStrip": 36,
+              "column": 18
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 87,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -16711699,
+        "parameters": {
+          "label": "Channel-2",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 85,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -16730881,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 88,
+            "class": "com.symmetrylabs.slstudio.ping.LightSource",
+            "modulationColor": -4653312,
+            "parameters": {
+              "label": "LightSource",
+              "x": 3.328083038330078,
+              "y": 16.996715545654297,
+              "z": 26.0,
+              "hue": 360.0,
+              "sat": 0.7200000043958426,
+              "gain": 1.0,
+              "falloff": 0.25,
+              "ambient": 0.0,
+              "useBlobs": true
             },
             "modulation": {
               "modulators": [],
@@ -185,19 +253,19 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.016005770311727452,
-          "Band-2": 0.12326370699291112,
-          "Band-3": 0.16881197034650752,
-          "Band-4": 0.21537554731564013,
-          "Band-5": 0.1942805352518825,
-          "Band-6": 0.03766112542880806,
-          "Band-7": 0.15450972674201102,
-          "Band-8": 0.07354533555534915,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.03614341954416467,
+          "Band-6": 0.1375724150274067,
+          "Band-7": 0.06250036942138693,
+          "Band-8": 0.0,
           "Band-9": 0.0,
-          "Band-10": 0.03761751284196413,
-          "Band-11": 0.18211954904001626,
-          "Band-12": 0.14963618162955206,
-          "Band-13": 0.35319080358644983,
+          "Band-10": 0.1323045595861183,
+          "Band-11": 0.20792163238368566,
+          "Band-12": 0.17102725596571078,
+          "Band-13": 0.2692141390356765,
           "Band-14": 0.0,
           "Band-15": 0.0,
           "Band-16": 0.0
@@ -294,9 +362,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 100.40859626560709,
-        "theta": 0.8550000000000004,
-        "phi": 0.3390000000000002,
+        "radius": 213.88383092322158,
+        "theta": 0.18900000000000006,
+        "phi": 0.2939999999999999,
         "positionX": 3.328083038330078,
         "positionY": 8.498357772827148,
         "positionZ": 26.0
