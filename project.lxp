@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519512226976,
+  "timestamp": 1519538828369,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 172.63157653808594,
+        "color/hue": 172.7058868408203,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -16711712,
@@ -154,6 +154,21 @@
               "triggers": []
             },
             "autoCycleEnabled": true
+          },
+          {
+            "id": 220,
+            "class": "com.symmetrylabs.slstudio.pattern.SelectedStrip",
+            "modulationColor": -16711901,
+            "parameters": {
+              "label": "SelectedStrip",
+              "selectedStrip": 1
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
           }
         ]
       }
@@ -214,9 +229,9 @@
           "Band-5": 0.0,
           "Band-6": 0.0,
           "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
+          "Band-8": 0.07006874695265253,
+          "Band-9": 0.32356081803276815,
+          "Band-10": 0.0748598336017835,
           "Band-11": 0.0,
           "Band-12": 0.0,
           "Band-13": 0.0,

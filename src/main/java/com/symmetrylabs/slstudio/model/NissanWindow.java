@@ -118,16 +118,16 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(PIXEL_PITCH*17, PIXEL_PITCH*1, 43),
                 new StripConfig(PIXEL_PITCH*14, PIXEL_PITCH*2, 49),
                 new StripConfig(PIXEL_PITCH*12, PIXEL_PITCH*3, 53),
-                new StripConfig(PIXEL_PITCH*9, PIXEL_PITCH*4, 59), // keegan switched to 5 - 6:30 PM
-                new StripConfig(PIXEL_PITCH*7,  PIXEL_PITCH*5, 63),
+                new StripConfig(PIXEL_PITCH*10, PIXEL_PITCH*4, 58), // keegan switched to 5 - 6:30 PM
+                new StripConfig(PIXEL_PITCH*8,  PIXEL_PITCH*5, 62),
                 // CH 2
-                new StripConfig(PIXEL_PITCH*10,  PIXEL_PITCH*6,58), //67),
-                new StripConfig(PIXEL_PITCH*8,  PIXEL_PITCH*7, 62),
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*8, 66),
+                new StripConfig(PIXEL_PITCH*6,  PIXEL_PITCH*6,66), //67),
+                new StripConfig(PIXEL_PITCH*5,  PIXEL_PITCH*7, 68),
+                new StripConfig(PIXEL_PITCH*4,  PIXEL_PITCH*8, 70),
 
 
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*9, 73),
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*10, 75),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*9, 72),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*10, 74),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*11, 75),
                 new StripConfig(PIXEL_PITCH*0,  PIXEL_PITCH*12, 77),
                 new StripConfig(PIXEL_PITCH*0,  PIXEL_PITCH*13, 77),
@@ -135,49 +135,57 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(PIXEL_PITCH*0,  PIXEL_PITCH*15, 77),
                 new StripConfig(PIXEL_PITCH*0,  PIXEL_PITCH*16, 77),
 
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*17, 75),
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*18, 75),
+                new StripConfig(PIXEL_PITCH*0,  PIXEL_PITCH*17, 76),
+                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*18, 75),//79),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*19, 75),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*20, 75),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*21, 75),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*22, 75),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*23, 75),
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*24, 73),
+                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*24, 74),
 
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*25, 71),
+                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*25, 74),
                 // CH 7 (27th strip)
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*26, 71),
-                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*27, 71),
+                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*26, 74),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*27, 73),
 
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*28, 71),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*29, 71),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*28, 73),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*29, 73),
                 // CH 8
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*30, 71),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*31, 71),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*32, 69),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*33, 69),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*30, 73),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*31, 72),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*32, 72),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*33, 72),
                 // CH 9
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*34, 69),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*35, 69),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*36, 69),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*34, 72),
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*35, 72),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*36, 70),
 
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*37, 67),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*37, 70),
                 // CH 10
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*38, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*39, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*40, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*41, 67),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*38, 70),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*39, 70),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*40, 70),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*41, 70),
                 // CH 11
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*42, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*43, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*44, 67),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*45, 67),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*42, 70),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*43, 70),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*44, 70),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*45, 70),
                 // CH 12
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*46, 54),
-                //new StripConfig(PIXEL_PITCH*54, PIXEL_PITCH*46, 27),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*47, 15),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*48, 9),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*49, 6)
+                new StripConfig(PIXEL_PITCH*46,  PIXEL_PITCH*46, 27),
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*46, 27),
+
+                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*47, 19),
+                new StripConfig(PIXEL_PITCH*58,  PIXEL_PITCH*47, 15),
+
+                new StripConfig(PIXEL_PITCH*63,  PIXEL_PITCH*48, 9),
+                new StripConfig(PIXEL_PITCH*4,  PIXEL_PITCH*48, 11),
+
+                new StripConfig(PIXEL_PITCH*4,  PIXEL_PITCH*49, 7),
+                new StripConfig(PIXEL_PITCH*66,  PIXEL_PITCH*49, 6),
+
+
 
             };
             createWindow(stripConfigs, coordinates, rotations, transform);
