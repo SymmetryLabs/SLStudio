@@ -15,6 +15,7 @@ import static com.symmetrylabs.util.MathConstants.*;
 public class NissanWindow extends StripsModel<Strip> {
 
     public enum Type {
+        //WINDSHIELD, FRONT_RIGHT, FRONT_LEFT, BACK_RIGHT, BACK_LEFT
         WINDSHIELD, FRONT, BACK
     }
 
@@ -78,14 +79,29 @@ public class NissanWindow extends StripsModel<Strip> {
                     createWindshield(coordinates, rotations, transform);
                     transform.pop();
                     break;
-                case FRONT:
-                    System.out.println("front rotations" + rotations);
+                case FRONT: // _RIGHT
+                    System.out.println("front right rotations");
+                    System.out.println(Arrays.toString(rotations));
+
                     createFrontWindow(coordinates, rotations, transform);
                     break;
-                case BACK:
-                    System.out.println("rotations" + rotations);
+                case BACK: // _RIGHT
+                    System.out.println("back right rotations");
+                    System.out.println(Arrays.toString(rotations));
+
                     createBackWindow(coordinates, rotations, transform);
                     break;
+//                case FRONT_LEFT:
+//                    rotations[0] = rotations[0] + 180;
+//                    createFrontWindow(coordinates, rotations, transform);
+//                    System.out.println("front left rotations");
+//                    System.out.println(Arrays.toString(rotations));
+//                    break;
+//                case BACK_LEFT:
+//                    rotations[0] = rotations[0] + 180;
+//                    createBackWindow(coordinates, rotations, transform);
+//                    System.out.println("back left rotations");
+//                    System.out.println(Arrays.toString(rotations));
             }
 
             for (Strip strip : strips) {
@@ -98,17 +114,20 @@ public class NissanWindow extends StripsModel<Strip> {
         private void createWindshield(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at the windshield from the outside front of car
             StripConfig[] stripConfigs = new StripConfig[] {
-                new StripConfig(PIXEL_PITCH*21, PIXEL_PITCH*0, 35),
-                new StripConfig(PIXEL_PITCH*18, PIXEL_PITCH*1, 43),
-                new StripConfig(PIXEL_PITCH*16, PIXEL_PITCH*2, 49),
-                new StripConfig(PIXEL_PITCH*13, PIXEL_PITCH*3, 53),
-                new StripConfig(PIXEL_PITCH*11, PIXEL_PITCH*4, 59),
-                new StripConfig(PIXEL_PITCH*9,  PIXEL_PITCH*5, 63),
-                new StripConfig(PIXEL_PITCH*7,  PIXEL_PITCH*6, 67),
-                new StripConfig(PIXEL_PITCH*5,  PIXEL_PITCH*7, 69),
-                new StripConfig(PIXEL_PITCH*4,  PIXEL_PITCH*8, 71),
-                new StripConfig(PIXEL_PITCH*3,  PIXEL_PITCH*9, 73),
-                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*10, 75),
+                new StripConfig(PIXEL_PITCH*20, PIXEL_PITCH*0, 35),
+                new StripConfig(PIXEL_PITCH*17, PIXEL_PITCH*1, 43),
+                new StripConfig(PIXEL_PITCH*14, PIXEL_PITCH*2, 49),
+                new StripConfig(PIXEL_PITCH*12, PIXEL_PITCH*3, 53),
+                new StripConfig(PIXEL_PITCH*9, PIXEL_PITCH*4, 59), // keegan switched to 5 - 6:30 PM
+                new StripConfig(PIXEL_PITCH*7,  PIXEL_PITCH*5, 63),
+                // CH 2
+                new StripConfig(PIXEL_PITCH*10,  PIXEL_PITCH*6,58), //67),
+                new StripConfig(PIXEL_PITCH*8,  PIXEL_PITCH*7, 62),
+                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*8, 66),
+
+
+                new StripConfig(PIXEL_PITCH*2,  PIXEL_PITCH*9, 73),
+                new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*10, 75),
                 new StripConfig(PIXEL_PITCH*1,  PIXEL_PITCH*11, 75),
                 new StripConfig(PIXEL_PITCH*0,  PIXEL_PITCH*12, 77),
                 new StripConfig(PIXEL_PITCH*0,  PIXEL_PITCH*13, 77),
