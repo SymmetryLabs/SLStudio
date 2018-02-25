@@ -1,9 +1,7 @@
 package com.symmetrylabs.slstudio.model;
 
-import com.symmetrylabs.slstudio.mappings.StripMapping;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
-import org.apache.commons.math3.util.FastMath;
 import heronarts.lx.model.LXPoint;
 
 import java.util.*;
@@ -35,8 +33,12 @@ public class NissanWindow extends StripsModel<Strip> {
         this.id = carId + "-" + id;
         this.type = type;
 
+        // add strips
         this.strips.addAll(fixture.strips);
         this.stripMap = new HashMap<>();
+
+        // add channels
+        this.dataChannels.addAll(fixture.channels);
 
         for (Strip strip : strips) {
             stripMap.put(strip.id, strip);
@@ -56,6 +58,7 @@ public class NissanWindow extends StripsModel<Strip> {
         private final String carId;
         private final String id;
         private List<Strip> strips = new ArrayList<>();
+        List<DataChannel> channels = new ArrayList<>();
 
         private Fixture(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
             this.carId = carId;
