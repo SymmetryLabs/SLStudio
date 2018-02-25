@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519512226976,
+  "timestamp": 1519530962880,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 172.63157653808594,
+        "color/hue": 172.7058868408203,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -16711712,
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 27,
@@ -147,6 +147,21 @@
               "ZLEV": 0.18999999575316906,
               "YWID": 0.0,
               "ZWID": 0.3
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 220,
+            "class": "com.symmetrylabs.slstudio.pattern.SelectedStrip",
+            "modulationColor": -16771329,
+            "parameters": {
+              "label": "SelectedStrip",
+              "selectedStrip": 25
             },
             "modulation": {
               "modulators": [],
@@ -253,7 +268,7 @@
       "modulationColor": -65318,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -316,9 +331,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 360.9422497390202,
+        "radius": 342.4757228183783,
         "theta": 1.2569999999999995,
-        "phi": 0.3990000000000001,
+        "phi": 0.4020000000000001,
         "positionX": 3.3280792236328125,
         "positionY": 8.273935317993164,
         "positionZ": 26.0
