@@ -51,9 +51,22 @@ public class SelectedStrip extends NissanPattern {
             int stripIndex = SLStudio.applet.selectedStrip.getValuei();
             Strip strip = car.getStrips().get(stripIndex);
 
+            int n = 0;
+            int end = strip.points.length;
+
             for (LXPoint p : strip.points) {
-                colors[p.index] = LXColor.RED;
+                if (n == 0 || n == end - 1) {
+                    if (n == 0) {
+                        colors[p.index] = LXColor.GREEN;
+                    } else {
+                        colors[p.index] = LXColor.WHITE;
+                    }
+                } else {
+                    colors[p.index] = LXColor.RED;
+                }
+                n++;
             }
+
         }
     }
 }
