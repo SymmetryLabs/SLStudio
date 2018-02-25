@@ -9,6 +9,8 @@ import heronarts.lx.model.LXPoint;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
+import java.util.List;
+
 //public class SelectedStrip extends SunsPattern {
 //
 //   public SelectedStrip(LX lx) {
@@ -43,14 +45,26 @@ public class SelectedStrip extends NissanPattern {
     public SelectedStrip(LX lx) {
         super(lx);
         addParameter(SLStudio.applet.selectedStrip);
+        addParameter(SLStudio.applet.selectedColumn);
     }
 
     public void run(double deltaMs) {
+        int x = SLStudio.applet.selectedColumn.getValuei();
+        int y = SLStudio.applet.selectedStrip.getValuei();
+
         setColors(0);
         for (NissanCar car : this.model.getCars()) {
             int stripIndex = SLStudio.applet.selectedStrip.getValuei();
-            Strip strip = car.getStrips().get(stripIndex);
+            List<Strip> strips = car.getStrips();
+            Strip strip = strips.get(stripIndex);
 
+            for (Strip stripx : strips){
+                for (LXPoint p : stripx.points) {
+                    if ( ((PanelPoint) p).getPanel_x() == x ){
+                        colors[p.index] = LXColor.GREEN;
+                    }
+                }
+            }
             int n = 0;
             int end = strip.points.length;
 
@@ -64,6 +78,7 @@ public class SelectedStrip extends NissanPattern {
                 } else {
                     colors[p.index] = LXColor.RED;
                 }
+
                 n++;
             }
 

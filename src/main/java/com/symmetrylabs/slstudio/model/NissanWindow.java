@@ -271,10 +271,16 @@ public class NissanWindow extends StripsModel<Strip> {
 
             List<LXPoint> points = new ArrayList<>();
 
+            int panel_index_offset = 0;
             for (int i = 0; i < config.numPoints; i++) {
+
+                // TODO: make function, consolidate operation
                 transform.translate(PIXEL_PITCH, 0, 0);
+                panel_index_offset++;
+                // :0DOT
+
 //        points.add(new LXPointNormal(transform.x(), transform.y(), transform.z()));
-                points.add(new PanelPoint(transform.x(), transform.y(), transform.z()));
+                points.add(new PanelPoint(transform.x(), transform.y(), transform.z(), config.panel_x + panel_index_offset, config.panel_y));
             }
 
             Strip.Metrics metrics = new Strip.Metrics(config.numPoints);

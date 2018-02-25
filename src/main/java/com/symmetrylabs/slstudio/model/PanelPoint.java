@@ -4,35 +4,21 @@ import heronarts.lx.model.LXPoint;
 import processing.core.PVector;
 
 
-public class PanelPoint extends LXPoint {
+public class PanelPoint extends LXPointNormal {
     /**
      * The normal vector is always a unit vector.
      */
-    public final PVector normal;
+    public int panel_x;
+    public int panel_y;
 
-    public PanelPoint(float x, float y, float z, PVector normal) {
+    public PanelPoint(float x, float y, float z, int panel_x, int panel_y) {
         super(x, y, z);
-        this.normal = new PVector(0, 1, 0); // the default normal points up
-        setNormal(normal);
+        this.panel_x = panel_x;
+        this.panel_y = panel_y;
     }
 
-    public PanelPoint(double x, double y, double z, PVector normal) {
-        this((float) x, (float) y, (float) z, normal);
-    }
-
-    public PanelPoint(float x, float y, float z) {
-        this(x, y, z, null);
-    }
-
-    public PanelPoint(double x, double y, double z) {
-        this(x, y, z, null);
-    }
-
-    public void setNormal(PVector normal) {
-        if (normal != null && normal.mag() > 0) {
-            this.normal.set(normal.x, normal.y, normal.z);
-            this.normal.normalize();
-        }
+    public int getPanel_x(){
+        return this.panel_x;
     }
 }
 
