@@ -1,12 +1,9 @@
 package com.symmetrylabs.slstudio.model;
 
-import com.symmetrylabs.slstudio.mappings.StripMapping;
 import com.symmetrylabs.slstudio.util.*;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
-import org.apache.commons.math3.util.FastMath;
 import heronarts.lx.model.LXPoint;
-import processing.core.PVector;
 
 import java.util.*;
 
@@ -73,6 +70,7 @@ public class NissanWindow extends StripsModel<Strip> implements MarkerSource {
         private final String carId;
         private final String id;
         private List<Strip> strips = new ArrayList<>();
+        private List<DataChannel> dataChannels = new ArrayList<>();
 
         private Fixture(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
             this.carId = carId;
@@ -110,6 +108,13 @@ public class NissanWindow extends StripsModel<Strip> implements MarkerSource {
             transform.pop();
         }
 
+
+        /*
+        Creates the heirarchy of objects which composes a window.
+        Window:
+        + OutputGroups
+            + Strips
+         */
         private void createWindshield(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at the windshield from the outside front of car
 //            StripRun[] stripRuns = new StripRun[]{
@@ -174,34 +179,78 @@ public class NissanWindow extends StripsModel<Strip> implements MarkerSource {
 
         private void createFrontWindow(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at passenger side from outside passenger side (drivers side would be a reflection)
-            StripConfig[] stripConfigs = new StripConfig[] {
-                new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*0, 50),
-                new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*1, 50),
-                new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*2, 50),
-                new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*3, 50),
-                new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*4, 50),
-                new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*5, 50),
-                new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*6, 50),
-                new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*7, 51),
-                new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*8, 50),
-                new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*9, 50),
-                new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*10, 50),
-                new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*11, 50),
-                new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*12, 50),
-                new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*13, 50),
-                new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*14, 50),
-                new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*15, 50),
-                new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*16, 48),
-                new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*17, 46),
-                new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*18, 43),
-                new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*19, 42),
-                new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*20, 40),
-                new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*21, 36),
-                new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*22, 34),
-                new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*23, 30),
-                new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*24, 24),
-            };
-            createWindow(stripConfigs, coordinates, rotations, transform);
+
+            // create all the objects
+
+            // Pixlite output 0
+            List<StripConfig> stripConfigs0 = new ArrayList<StripConfig>();
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*0, 50));
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*1, 50));
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*2, 50));
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*3, 50));
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*4, 50));
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*5, 50));
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*6, 50));
+            stripConfigs0.add(new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*7, 51));
+            List<Strip> strips0 = panelStripConfigsToStripList(stripConfigs0, transform, true);
+            dataChannels.add(new DataChannel(strips0));
+
+            // Pixlite output 1
+            List<StripConfig> stripConfigs1 = new ArrayList<StripConfig>();
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*8, 50));
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*9, 50));
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*10, 50));
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*11, 50));
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*12, 50));
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*13, 50));
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*14, 50));
+            stripConfigs1.add(new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*15, 50));
+            List<Strip> strips1 = panelStripConfigsToStripList(stripConfigs1, transform, true);
+            dataChannels.add(new DataChannel(strips1));
+
+            // Pixlite output 2
+            List<StripConfig> stripConfigs2 = new ArrayList<StripConfig>();
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*16, 48));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*17, 46));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*18, 43));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*19, 42));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*20, 40));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*21, 36));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*22, 34));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*23, 30));
+            stripConfigs2.add(new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*24, 24));
+            List<Strip> strips2 = panelStripConfigsToStripList(stripConfigs2, transform, true);
+            dataChannels.add(new DataChannel(strips2));
+
+//
+//      StripConfig[] stripConfigs = new StripConfig[] {
+//        new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*0, 50),
+//        new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*1, 50),
+//        new StripConfig(-PIXEL_PITCH*0, PIXEL_PITCH*2, 50),
+//        new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*3, 50),
+//        new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*4, 50),
+//        new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*5, 50),
+//        new StripConfig(-PIXEL_PITCH*1, PIXEL_PITCH*6, 50),
+//        new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*7, 51),
+//        new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*8, 50),
+//        new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*9, 50),
+//        new StripConfig(-PIXEL_PITCH*2, PIXEL_PITCH*10, 50),
+//        new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*11, 50),
+//        new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*12, 50),
+//        new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*13, 50),
+//        new StripConfig(-PIXEL_PITCH*3, PIXEL_PITCH*14, 50),
+//        new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*15, 50),
+//        new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*16, 48),
+//        new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*17, 46),
+//        new StripConfig(-PIXEL_PITCH*4, PIXEL_PITCH*18, 43),
+//        new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*19, 42),
+//        new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*20, 40),
+//        new StripConfig(-PIXEL_PITCH*5, PIXEL_PITCH*21, 36),
+//        new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*22, 34),
+//        new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*23, 30),
+//        new StripConfig(-PIXEL_PITCH*6, PIXEL_PITCH*24, 24),
+//      };
+//      createWindow(stripConfigs, coordinates, rotations, transform);
         }
 
         private void createBackWindow(float[] coordinates, float[] rotations, LXTransform transform) {
@@ -243,7 +292,22 @@ public class NissanWindow extends StripsModel<Strip> implements MarkerSource {
             }
         }
 
-        private void createStrip(StripConfig config, int stripIndex, LXTransform transform) {
+        /*
+        Instantiates a list of strips from their configs
+         */
+        private List<Strip> panelStripConfigsToStripList(List<StripConfig> stripConfigs1, LXTransform transform, boolean initialReversed) {
+            List<Strip> stripSequence = new ArrayList<Strip>();
+            int stripIndex = 0;
+            boolean reverseFlipFlop = initialReversed;
+            for (StripConfig config : stripConfigs1){
+                config.directionReversed = reverseFlipFlop;
+                reverseFlipFlop = !reverseFlipFlop;
+                stripSequence.add(createStrip(config, stripIndex, transform));
+            }
+            return stripSequence;
+        }
+
+        private Strip createStrip(StripConfig config, int stripIndex, LXTransform transform) {
             transform.push();
             transform.translate(config.xOffset, config.yOffset, 0);
 
@@ -254,10 +318,18 @@ public class NissanWindow extends StripsModel<Strip> implements MarkerSource {
                 points.add(new LXPointNormal(transform.x(), transform.y(), transform.z()));
             }
 
+            // this reverses the LOGICAL INDICES of the points.
+            // i.e. where they are in the shift register.
+            if (config.directionReversed){
+                Collections.reverse(points);
+            }
+
             Strip.Metrics metrics = new Strip.Metrics(config.numPoints, config.directionReversed);
             String stripId = id + "-strip" + Integer.toString(stripIndex);
+            Strip producedStrip = new Strip(stripId, metrics, points);
             this.strips.add(new Strip(stripId, metrics, points));
             transform.pop();
+            return producedStrip;
         }
 
         private class StripConfig {
