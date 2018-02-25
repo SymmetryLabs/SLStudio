@@ -56,8 +56,8 @@ public class NissanLayout {
         List<NissanCar> cars = new ArrayList<>();
 
         cars.add(createCar("car1", layout.get("A"), new float[] {0, 0, 0}, transform));
-        //cars.add(createCar("car2", layout.get("B"), new float[] {0, 0, 0}, transform));
-        //cars.add(createCar("car3", layout.get("C"), new float[] {0, 0, 0}, transform));
+        cars.add(createCar("car2", layout.get("B"), new float[] {0, 0, 0}, transform));
+        cars.add(createCar("car3", layout.get("C"), new float[] {0, 0, 0}, transform));
 
         return new NissanModel(cars);
     }
