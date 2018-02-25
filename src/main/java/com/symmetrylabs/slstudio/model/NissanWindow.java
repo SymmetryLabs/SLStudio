@@ -79,9 +79,11 @@ public class NissanWindow extends StripsModel<Strip> {
                     transform.pop();
                     break;
                 case FRONT:
+                    System.out.println("front rotations" + rotations);
                     createFrontWindow(coordinates, rotations, transform);
                     break;
                 case BACK:
+                    System.out.println("rotations" + rotations);
                     createBackWindow(coordinates, rotations, transform);
                     break;
             }
