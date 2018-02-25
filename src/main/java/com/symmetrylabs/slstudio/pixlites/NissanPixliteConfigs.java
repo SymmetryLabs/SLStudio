@@ -261,7 +261,7 @@ public class NissanPixliteConfigs {
 
                 // CAR 3
 
-
+/*
             new NissanPixlite(lx, "10.200.1.10")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
@@ -399,7 +399,7 @@ public class NissanPixliteConfigs {
                 .addPoints(model.getStripById("car3-passenger-side-back-strip25").getPoints(), PointsGrouping.REVERSE_ORDERING)
 
             ),
-
+*/
             new NissanPixlite(lx, "10.200.1.8")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
