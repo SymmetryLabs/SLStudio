@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519582980332,
+  "timestamp": 1519593258485,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -270,7 +270,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 1.0,
+          "fader": 0.25714284740388393,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -365,6 +365,68 @@
             "autoCycleEnabled": true
           }
         ]
+      },
+      {
+        "id": 224,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -34560,
+        "parameters": {
+          "label": "Channel-3",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.7142857182770967,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 222,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -48896,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 225,
+            "class": "com.symmetrylabs.slstudio.pattern.explosions.CapExplosions",
+            "modulationColor": -8388353,
+            "parameters": {
+              "label": "CapExplosions",
+              "NUM": 4.0,
+              "BRGT": 50.0,
+              "RATE": 8000.0,
+              "BLUR": 0.69
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
       }
     ],
     "master": {
@@ -416,19 +478,19 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.08956417580511034,
-          "Band-2": 0.17301975822183457,
-          "Band-3": 0.1697115851148273,
-          "Band-4": 0.14130970160607237,
-          "Band-5": 0.10123658372787869,
-          "Band-6": 0.07774187764849394,
-          "Band-7": 0.08647785621414983,
-          "Band-8": 0.23976172705896526,
-          "Band-9": 0.21144134348104282,
-          "Band-10": 0.07291408911867292,
-          "Band-11": 0.09836953794775738,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.05726774576255245,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
           "Band-12": 0.0,
-          "Band-13": 0.06619362303013576,
+          "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
           "Band-16": 0.0

@@ -108,8 +108,12 @@ public class CapacitivePat extends SLPatternWithMarkers {
 
 
 
-    private int scale(float x, int min, int range) {
+    private int scale(float x, int min, int max, int range) {
         int scaled_value = min + (int)(x*range);
+
+
+        // invert for demo FIXME
+        scaled_value = max - (int)(x*range);
         return scaled_value;
     }
 
@@ -128,17 +132,13 @@ public class CapacitivePat extends SLPatternWithMarkers {
                 setColors(0);
                 for (NissanCar car : this.model.getCars()) {
                     for (NissanWindow window : car.getWindows()) {
-
-                        int stripIndex = SLStudio.applet.selectedStrip.getValuei();
                         List<Strip> strips = car.getStrips();
-                        Strip strip = strips.get(stripIndex);
-
                         for (Strip stripx : strips) {
                             for (LXPoint p : stripx.points) {
-                                if (((PanelPoint) p).getPanel_x() == scale(b.pos.x, window.min_x, window.range_x)) {
+                                if (((PanelPoint) p).getPanel_x() == scale(b.pos.x, window.min_x, window.max_x, window.range_x)) {
                                     colors[p.index] = LXColor.RED;
                                 }
-                                if (((PanelPoint) p).getPanel_y() == scale(b.pos.y, window.min_y, window.range_y)) {
+                                if (((PanelPoint) p).getPanel_y() == scale(b.pos.y, window.min_y, window.max_y, window.range_y)) {
                                     colors[p.index] = LXColor.GREEN;
                                 }
                             }
