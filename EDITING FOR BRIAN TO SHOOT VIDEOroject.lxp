@@ -164,7 +164,7 @@
           },
           {
             "id": 174,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveBlues",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveBlues",
             "modulationColor": -11010304,
             "parameters": {
               "label": "FlockWaveBlues",

@@ -140,7 +140,7 @@
           },
           {
             "id": 191,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveMercury",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveMercury",
             "modulationColor": -16753665,
             "parameters": {
               "label": "FlockWaveMercury",

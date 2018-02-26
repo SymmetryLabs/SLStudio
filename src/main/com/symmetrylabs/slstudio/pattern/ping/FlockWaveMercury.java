@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ping;
+package com.symmetrylabs.slstudio.pattern.ping;
 
 import heronarts.lx.LX;
 

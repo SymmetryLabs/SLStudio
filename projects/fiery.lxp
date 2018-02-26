@@ -89,7 +89,7 @@
           },
           {
             "id": 379,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWave",
             "modulationColor": -65396,
             "parameters": {
               "label": "FlockWaveFiery",

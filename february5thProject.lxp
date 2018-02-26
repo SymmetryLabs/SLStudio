@@ -146,7 +146,7 @@
         "patterns": [
           {
             "id": 201,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveFiery",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveFiery",
             "modulationColor": -15401216,
             "parameters": {
               "label": "FlockWaveFiery",
@@ -188,7 +188,7 @@
           },
           {
             "id": 203,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveBlues",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveBlues",
             "modulationColor": -14745856,
             "parameters": {
               "label": "FlockWaveBlues",
@@ -230,7 +230,7 @@
           },
           {
             "id": 205,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveGalaxies",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveGalaxies",
             "modulationColor": -15139072,
             "parameters": {
               "label": "FlockWaveGalaxies",
@@ -272,7 +272,7 @@
           },
           {
             "id": 207,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveMercury",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveMercury",
             "modulationColor": -16726017,
             "parameters": {
               "label": "FlockWaveMercury",
@@ -314,7 +314,7 @@
           },
           {
             "id": 209,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveOoze",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveOoze",
             "modulationColor": -14336,
             "parameters": {
               "label": "FlockWaveOoze",
@@ -356,7 +356,7 @@
           },
           {
             "id": 211,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWavePlanets",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWavePlanets",
             "modulationColor": -23552,
             "parameters": {
               "label": "FlockWavePlanets",
@@ -398,7 +398,7 @@
           },
           {
             "id": 213,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveTimewarp",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveTimewarp",
             "modulationColor": -16711742,
             "parameters": {
               "label": "FlockWaveTimewarp",
@@ -484,7 +484,7 @@
           },
           {
             "id": 187,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveBlues",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveBlues",
             "modulationColor": -6553345,
             "parameters": {
               "label": "FlockWaveBlues",
@@ -526,7 +526,7 @@
           },
           {
             "id": 189,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveFiery",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveFiery",
             "modulationColor": -63488,
             "parameters": {
               "label": "FlockWaveFiery",
@@ -568,7 +568,7 @@
           },
           {
             "id": 191,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveGalaxies",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveGalaxies",
             "modulationColor": -16763137,
             "parameters": {
               "label": "FlockWaveGalaxies",
@@ -610,7 +610,7 @@
           },
           {
             "id": 193,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveMercury",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveMercury",
             "modulationColor": -44544,
             "parameters": {
               "label": "FlockWaveMercury",
@@ -652,7 +652,7 @@
           },
           {
             "id": 195,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveOoze",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveOoze",
             "modulationColor": -65466,
             "parameters": {
               "label": "FlockWaveOoze",
@@ -694,7 +694,7 @@
           },
           {
             "id": 197,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWavePlanets",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWavePlanets",
             "modulationColor": -2818304,
             "parameters": {
               "label": "FlockWavePlanets",
@@ -736,7 +736,7 @@
           },
           {
             "id": 199,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWaveTimewarp",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWaveTimewarp",
             "modulationColor": -16734977,
             "parameters": {
               "label": "FlockWaveTimewarp",

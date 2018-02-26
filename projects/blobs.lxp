@@ -89,7 +89,7 @@
           },
           {
             "id": 3215,
-            "class": "com.symmetrylabs.slstudio.ping.BlobViewer",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.BlobViewer",
             "modulationColor": -16711703,
             "parameters": {
               "label": "BlobViewer",

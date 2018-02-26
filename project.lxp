@@ -301,7 +301,7 @@
           },
           {
             "id": 88,
-            "class": "com.symmetrylabs.slstudio.ping.LightSource",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.LightSource",
             "modulationColor": -4653312,
             "parameters": {
               "label": "LightSource",

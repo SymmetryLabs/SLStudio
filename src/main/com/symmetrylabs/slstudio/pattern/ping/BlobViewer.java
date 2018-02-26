@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ping;
+package com.symmetrylabs.slstudio.pattern.ping;
 
 import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.util.BlobTracker;

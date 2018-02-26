@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.ping;
+package com.symmetrylabs.slstudio.pattern.ping;
 
 import com.symmetrylabs.slstudio.model.LXPointNormal;
 import com.symmetrylabs.slstudio.util.BlobFollower;

@@ -1,8 +1,7 @@
-package com.symmetrylabs.slstudio.ping;
+package com.symmetrylabs.slstudio.pattern.ping;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.pattern.NissanPattern;
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
 import com.symmetrylabs.slstudio.util.MarkerSource;
 import heronarts.lx.LX;
 

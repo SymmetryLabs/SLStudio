@@ -7,8 +7,7 @@ import com.symmetrylabs.slstudio.model.NissanWindow;
 import com.symmetrylabs.slstudio.model.PanelPoint;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
-import com.symmetrylabs.slstudio.ping.FlockWave;
-import com.symmetrylabs.slstudio.ping.SLPatternWithMarkers;
+import com.symmetrylabs.slstudio.pattern.ping.SLPatternWithMarkers;
 import com.symmetrylabs.slstudio.util.*;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -19,7 +18,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PVector;
 
 import java.util.*;
-import java.util.concurrent.CopyOnWriteArraySet;
 
 public class CapacitivePat extends SLPatternWithMarkers {
     CompoundParameter timeScale = new CompoundParameter("timeScale", 1, 0, 1);  // time scaling factor

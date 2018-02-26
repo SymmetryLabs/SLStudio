@@ -92,7 +92,7 @@
           },
           {
             "id": 3300,
-            "class": "com.symmetrylabs.slstudio.ping.RipplePads",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.RipplePads",
             "modulationColor": -1048832,
             "parameters": {
               "label": "RipplePads",
@@ -309,7 +309,7 @@
           },
           {
             "id": 3468,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWave",
             "modulationColor": -4608,
             "parameters": {
               "label": "FlockWave",
@@ -350,7 +350,7 @@
           },
           {
             "id": 3474,
-            "class": "com.symmetrylabs.slstudio.ping.RipplePads",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.RipplePads",
             "modulationColor": -13631233,
             "parameters": {
               "label": "RipplePads",
@@ -706,7 +706,7 @@
           },
           {
             "id": 2977,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWave",
             "modulationColor": -10878721,
             "parameters": {
               "label": "FlockWave",
@@ -801,7 +801,7 @@
           },
           {
             "id": 3213,
-            "class": "com.symmetrylabs.slstudio.ping.PaletteViewer",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.PaletteViewer",
             "modulationColor": -16747009,
             "parameters": {
               "label": "PaletteViewer",
@@ -1129,7 +1129,7 @@
           },
           {
             "id": 3470,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWave",
             "modulationColor": -65513,
             "parameters": {
               "label": "FlockWave",
@@ -1170,7 +1170,7 @@
           },
           {
             "id": 3472,
-            "class": "com.symmetrylabs.slstudio.ping.RipplePads",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.RipplePads",
             "modulationColor": -16711719,
             "parameters": {
               "label": "RipplePads",

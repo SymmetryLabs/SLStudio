@@ -388,7 +388,7 @@
           },
           {
             "id": 2977,
-            "class": "com.symmetrylabs.slstudio.ping.FlockWave",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.FlockWave",
             "modulationColor": -10878721,
             "parameters": {
               "label": "FlockWave",
@@ -484,7 +484,7 @@
           },
           {
             "id": 3213,
-            "class": "com.symmetrylabs.slstudio.ping.PaletteViewer",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.PaletteViewer",
             "modulationColor": -16747009,
             "parameters": {
               "label": "PaletteViewer",
@@ -631,7 +631,7 @@
           },
           {
             "id": 4372,
-            "class": "com.symmetrylabs.slstudio.ping.PaletteViewer",
+            "class": "com.symmetrylabs.slstudio.pattern.ping.PaletteViewer",
             "modulationColor": -10223361,
             "parameters": {
               "label": "PaletteViewer",
