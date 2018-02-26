@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519328931541,
+  "timestamp": 1519609564134,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,7 +12,7 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 0.023622047244094488,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.6833333764225245,
       "focusedChannel": 1,
@@ -98,7 +98,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -13041409,
         "parameters": {
-          "label": "StripPlay",
+          "label": "StripBounce",
           "arm": false,
           "enabled": true,
           "cue": false,
