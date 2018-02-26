@@ -51,7 +51,7 @@ public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter fadeInSec = new CompoundParameter("fadeInSec", 0.5, 0, 2);  // time (s) to fade up to 100% intensity
     CompoundParameter fadeOutSec = new CompoundParameter("fadeOutSec", 1, 0, 2);// time (s) to fade down to 10% intensity
 
-    CompoundParameter size = new CompoundParameter("size", 100, 0, 2000);  // render radius of each bird (in)
+    CompoundParameter size = new CompoundParameter("size", 10, 0, 100);  // render radius of each bird (in)
     CompoundParameter detail = new CompoundParameter("detail", 4, 0, 10);  // ripple spatial frequency (number of waves)
     CompoundParameter ripple = new CompoundParameter("ripple", 0, -10, 10);  // ripple movement (waves/s)
     DiscreteParameter palette = new DiscreteParameter("palette", ((SLStudioLX) lx).paletteLibrary.getNames());

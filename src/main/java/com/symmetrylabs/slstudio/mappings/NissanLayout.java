@@ -35,8 +35,8 @@ public class NissanLayout {
     public NissanLayout() {
         // This needs to be calibrated with thermal camera coordinate system
         positions.put("A", new float[]{0, 0, 0}); // origin
-        positions.put("B", new float[]{200, 0, 0});
-        positions.put("C", new float[]{-200, 0, 0});
+        positions.put("B", new float[]{0, 0, 0});
+        positions.put("C", new float[]{0, 0, 0});
     }
 
     public float[] get(String id) {

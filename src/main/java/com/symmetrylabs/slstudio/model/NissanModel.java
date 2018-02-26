@@ -53,7 +53,7 @@ public class NissanModel extends StripsModel<Strip> {
             }
         }
 
-        masterCar = this.carTable.get("car1"); // (TODO) Change if needed!
+        masterCar = this.carTable.get("car3"); // (TODO) Change if needed!
         for (NissanCar car : cars) {
             if (car != masterCar) {
                 car.computeMasterIndexes(masterCar);
