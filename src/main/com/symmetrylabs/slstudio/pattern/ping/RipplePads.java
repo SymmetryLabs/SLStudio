@@ -11,7 +11,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 import static processing.core.PApplet.println;

@@ -1,9 +1,9 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Slice;
+import com.symmetrylabs.slstudio.model.suns.Slice;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;

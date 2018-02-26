@@ -8,15 +8,13 @@ import java.util.HashMap;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXChannel;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
+import com.symmetrylabs.slstudio.model.cubes.CubesModel;
 import com.symmetrylabs.slstudio.pattern.CubesMappingPattern;
 import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.util.listenable.ListListener;

@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.layout;
 
-import com.symmetrylabs.slstudio.model.NissanModel;
-import com.symmetrylabs.slstudio.model.NissanCar;
+import com.symmetrylabs.slstudio.model.nissan.NissanModel;
+import com.symmetrylabs.slstudio.model.nissan.NissanCar;
 import heronarts.lx.transform.LXTransform;
 
 import java.util.*;

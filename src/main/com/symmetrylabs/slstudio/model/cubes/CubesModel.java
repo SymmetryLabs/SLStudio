@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model.cubes;
 
 import java.util.Collections;
 import java.util.List;
@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;

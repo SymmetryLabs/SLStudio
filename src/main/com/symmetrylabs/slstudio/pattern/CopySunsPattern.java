@@ -1,11 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 import heronarts.lx.parameter.BooleanParameter;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.model.SunsModel;
+import com.symmetrylabs.slstudio.model.suns.Sun;
+import com.symmetrylabs.slstudio.model.suns.SunsModel;
 
 public abstract class CopySunsPattern extends SLPattern {
     public BooleanParameter perSun;

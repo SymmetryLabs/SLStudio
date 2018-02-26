@@ -5,7 +5,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 /**

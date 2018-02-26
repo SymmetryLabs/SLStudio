@@ -1,7 +1,8 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model.suns;
 
 import com.symmetrylabs.slstudio.mappings.MappingGroup;
 import com.symmetrylabs.slstudio.mappings.StripMapping;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
 import org.apache.commons.math3.util.FastMath;

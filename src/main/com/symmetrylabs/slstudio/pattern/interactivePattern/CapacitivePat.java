@@ -2,9 +2,9 @@ package com.symmetrylabs.slstudio.pattern.interactivePattern;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.slstudio.model.NissanCar;
-import com.symmetrylabs.slstudio.model.NissanWindow;
-import com.symmetrylabs.slstudio.model.PanelPoint;
+import com.symmetrylabs.slstudio.model.nissan.NissanCar;
+import com.symmetrylabs.slstudio.model.nissan.NissanWindow;
+import com.symmetrylabs.slstudio.model.nissan.PanelPoint;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.pattern.ping.SLPatternWithMarkers;

@@ -14,7 +14,7 @@ import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
+import com.symmetrylabs.slstudio.model.cubes.CubesModel;
 import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;

@@ -1,10 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
 
-    import com.symmetrylabs.slstudio.model.NissanModel;
+    import com.symmetrylabs.slstudio.model.nissan.NissanModel;
     import heronarts.lx.LX;
-
-    import com.symmetrylabs.slstudio.model.SunsModel;
 
 public abstract class NissanPattern extends ModelSpecificPattern<NissanModel> {
     @Override

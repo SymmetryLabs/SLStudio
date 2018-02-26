@@ -7,7 +7,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
 
-import com.symmetrylabs.slstudio.model.CubesModel;
+import com.symmetrylabs.slstudio.model.cubes.CubesModel;
 import com.symmetrylabs.slstudio.util.CubesMappingMode;
 
 public class CubesMappingPattern extends CubesPattern {

@@ -9,7 +9,7 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 
 import static com.symmetrylabs.slstudio.util.MathUtils.random;
 import static processing.core.PApplet.*;

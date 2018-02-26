@@ -2,8 +2,8 @@ package com.symmetrylabs.slstudio.layout;
 
 import com.symmetrylabs.slstudio.Environment;
 import com.symmetrylabs.slstudio.mappings.Mappings;
-import com.symmetrylabs.slstudio.model.SunsModel;
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.SunsModel;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import heronarts.lx.transform.LXTransform;
 
 import java.util.*;

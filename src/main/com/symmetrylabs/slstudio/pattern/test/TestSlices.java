@@ -3,8 +3,8 @@ package com.symmetrylabs.slstudio.pattern.test;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
-import com.symmetrylabs.slstudio.model.Slice;
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Slice;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 public class TestSlices extends SunsPattern implements SLTestPattern {

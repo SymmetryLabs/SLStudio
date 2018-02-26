@@ -2,7 +2,7 @@ package com.symmetrylabs.slstudio.effect;
 
 import heronarts.lx.LX;
 
-import com.symmetrylabs.slstudio.model.SunsModel;
+import com.symmetrylabs.slstudio.model.suns.SunsModel;
 
 public abstract class SunsEffect extends ModelSpecificEffect<SunsModel> {
     @Override

@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.output.pixlites;
 
 import heronarts.lx.LX;
-import com.symmetrylabs.slstudio.model.NissanModel;
+import com.symmetrylabs.slstudio.model.nissan.NissanModel;
 
 public class NissanPixliteConfigs {
 

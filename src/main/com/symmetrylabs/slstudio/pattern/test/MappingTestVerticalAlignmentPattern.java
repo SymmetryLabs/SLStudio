@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
-import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.model.SunsModel;
+import com.symmetrylabs.slstudio.model.suns.Sun;
+import com.symmetrylabs.slstudio.model.suns.SunsModel;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
@@ -10,7 +10,7 @@ import heronarts.lx.modulator.TriangleLFO;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.FunctionalParameter;
 
-import static com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH;
+import static com.symmetrylabs.slstudio.model.suns.Slice.PIXEL_PITCH;
 import static com.symmetrylabs.slstudio.util.MathUtils.abs;
 
 public class MappingTestVerticalAlignmentPattern extends SLPattern implements SLTestPattern {

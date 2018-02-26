@@ -1,14 +1,14 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model.nissan;
 
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
-import java.util.Arrays;
 import java.util.Collections;
 
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXAbstractFixture;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 
 public class NissanModel extends StripsModel<Strip> {

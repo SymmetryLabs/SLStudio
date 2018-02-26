@@ -1,7 +1,9 @@
-package com.symmetrylabs.slstudio.model
+package com.symmetrylabs.slstudio.model.suns
 
 import com.symmetrylabs.slstudio.mappings.StripMapping
-import com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH
+import com.symmetrylabs.slstudio.model.LXPointNormal
+import com.symmetrylabs.slstudio.model.Strip
+import com.symmetrylabs.slstudio.model.suns.Slice.PIXEL_PITCH
 import com.symmetrylabs.slstudio.util.CurveUtils.bezierPoint
 import com.symmetrylabs.slstudio.util.degToRad
 import heronarts.lx.model.LXAbstractFixture
@@ -9,23 +11,23 @@ import heronarts.lx.transform.LXTransform
 
 
 class CurvedStrip(
-	val mappings: StripMapping,
-	id: String,
-	metrics: CurvedMetrics,
-	val sunId: String,
-	val sliceId: String,
-	val fixture: Fixture
+		val mappings: StripMapping,
+		id: String,
+		metrics: CurvedMetrics,
+		val sunId: String,
+		val sliceId: String,
+		val fixture: Fixture
 ) : Strip(id, metrics, fixture.points) {
 
 	constructor(
-        mappings: StripMapping,
-        id: String,
-        metrics: CurvedMetrics,
-        coordinates: FloatArray,
-        rotations: FloatArray,
-        transform: LXTransform,
-        sunId: String,
-        sliceId: String
+			mappings: StripMapping,
+			id: String,
+			metrics: CurvedMetrics,
+			coordinates: FloatArray,
+			rotations: FloatArray,
+			transform: LXTransform,
+			sunId: String,
+			sliceId: String
 	) : this(mappings, id, metrics, sunId, sliceId, Fixture(mappings, metrics, coordinates, rotations, transform))
 
 	fun updateOffset(offset: Float) {
@@ -33,14 +35,14 @@ class CurvedStrip(
         fixture.updatePoints(offset)
 	}
 
-	class CurvedMetrics(val arcWidth: Float, numPoints: Int) : Strip.Metrics(numPoints)
+	class CurvedMetrics(val arcWidth: Float, numPoints: Int) : Metrics(numPoints)
 
     class Fixture constructor(
-        private val mappings: StripMapping,
-        private val metrics: CurvedMetrics,
-        private val coordinates: FloatArray,
-        private val rotations: FloatArray,
-        transform: LXTransform
+			private val mappings: StripMapping,
+			private val metrics: CurvedMetrics,
+			private val coordinates: FloatArray,
+			private val rotations: FloatArray,
+			transform: LXTransform
 	) : LXAbstractFixture() {
 		val transform = LXTransform(transform.matrix)
 

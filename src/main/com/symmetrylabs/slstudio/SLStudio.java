@@ -11,9 +11,9 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 
-import com.symmetrylabs.slstudio.model.SunsModel;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.model.NissanModel;
+import com.symmetrylabs.slstudio.model.suns.SunsModel;
+import com.symmetrylabs.slstudio.model.cubes.CubesModel;
+import com.symmetrylabs.slstudio.model.nissan.NissanModel;
 import com.symmetrylabs.slstudio.layout.CubesLayout;
 import com.symmetrylabs.slstudio.layout.NissanLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;

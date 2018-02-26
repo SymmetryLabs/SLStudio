@@ -1,9 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
 
-import com.symmetrylabs.slstudio.model.CubesModel;
+import com.symmetrylabs.slstudio.model.cubes.CubesModel;
 
 public abstract class CubesPattern extends ModelSpecificPattern<CubesModel> {
     @Override

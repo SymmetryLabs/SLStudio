@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.ui;
 
-import com.symmetrylabs.slstudio.model.NissanCar;
+import com.symmetrylabs.slstudio.model.nissan.NissanCar;
 import com.symmetrylabs.slstudio.pattern.raven.P3CubeMapPattern;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXPattern;

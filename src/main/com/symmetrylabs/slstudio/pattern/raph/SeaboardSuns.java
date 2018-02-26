@@ -19,7 +19,7 @@ import heronarts.lx.parameter.NormalizedParameter;
 
 import static processing.core.PApplet.*;
 
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 public class SeaboardSuns extends SunsPattern {

@@ -4,9 +4,9 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import com.symmetrylabs.slstudio.model.Slice;
+import com.symmetrylabs.slstudio.model.suns.Slice;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 /**

@@ -6,8 +6,8 @@ import com.symmetrylabs.slstudio.mappings.*;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteDatalineRef;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping.DatalineMapping;
-import com.symmetrylabs.slstudio.model.CurvedStrip;
-import com.symmetrylabs.slstudio.model.Slice;
+import com.symmetrylabs.slstudio.model.suns.CurvedStrip;
+import com.symmetrylabs.slstudio.model.suns.Slice;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.output.pixlites.Pixlite;
 import heronarts.lx.LX;
@@ -20,7 +20,7 @@ import processing.event.KeyEvent;
 
 import java.util.Map;
 
-import static com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH;
+import static com.symmetrylabs.slstudio.model.suns.Slice.PIXEL_PITCH;
 import static com.symmetrylabs.slstudio.util.MathUtils.abs;
 
 public class Mapping5StripAdjustmentPattern extends SLPattern {

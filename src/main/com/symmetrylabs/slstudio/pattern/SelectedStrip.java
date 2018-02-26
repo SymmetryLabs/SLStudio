@@ -1,6 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.*;
+import com.symmetrylabs.slstudio.model.nissan.NissanCar;
+import com.symmetrylabs.slstudio.model.nissan.PanelPoint;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;

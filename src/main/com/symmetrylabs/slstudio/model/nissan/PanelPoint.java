@@ -1,5 +1,6 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model.nissan;
 
+import com.symmetrylabs.slstudio.model.LXPointNormal;
 import heronarts.lx.model.LXPoint;
 import processing.core.PVector;
 

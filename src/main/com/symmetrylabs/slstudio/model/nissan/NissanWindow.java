@@ -1,9 +1,9 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model.nissan;
 
-import com.symmetrylabs.slstudio.mappings.StripMapping;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
-import org.apache.commons.math3.util.FastMath;
 import heronarts.lx.model.LXPoint;
 
 import java.util.*;

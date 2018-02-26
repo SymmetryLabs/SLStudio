@@ -17,7 +17,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.P3LX;
 
-import com.symmetrylabs.slstudio.model.NissanCar;
+import com.symmetrylabs.slstudio.model.nissan.NissanCar;
 import com.symmetrylabs.slstudio.pattern.NissanPattern;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 

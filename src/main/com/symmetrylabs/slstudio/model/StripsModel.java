@@ -10,7 +10,7 @@ import heronarts.lx.model.LXFixture;
  * A model with strips.
  */
 public abstract class StripsModel<T extends Strip> extends SLModel {
-    protected final List<T> strips = new ArrayList<>();
+    public final List<T> strips = new ArrayList<>();
     protected final List<T> stripsUnmodifiable = Collections.unmodifiableList(strips);
 
     protected StripsModel(LXFixture fixture) {

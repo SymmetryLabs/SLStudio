@@ -1,12 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.*;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.model.suns.Slice;
+import com.symmetrylabs.slstudio.model.suns.SunsModel;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
 public class TestSelectPixlite extends SLPattern {

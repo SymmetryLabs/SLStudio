@@ -1,5 +1,9 @@
-package com.symmetrylabs.slstudio.model;
+package com.symmetrylabs.slstudio.model.nissan;
 
+import com.symmetrylabs.slstudio.model.BoundingBox;
+import com.symmetrylabs.slstudio.model.LXPointNormal;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.util.NullOutputStream;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;

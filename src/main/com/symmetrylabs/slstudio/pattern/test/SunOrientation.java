@@ -4,8 +4,8 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
-import com.symmetrylabs.slstudio.model.Slice;
-import com.symmetrylabs.slstudio.model.Sun;
+import com.symmetrylabs.slstudio.model.suns.Slice;
+import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 public class SunOrientation extends SunsPattern implements SLTestPattern {

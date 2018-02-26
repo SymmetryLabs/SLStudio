@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.pattern
 
-import com.symmetrylabs.slstudio.model.SunsModel
+import com.symmetrylabs.slstudio.model.suns.SunsModel
 import heronarts.lx.LX
 import heronarts.lx.model.LXPoint
 
