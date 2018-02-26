@@ -24,6 +24,11 @@ version = '1.0'
 jar.baseName = 'SLStudio'
 mainClassName = "com.symmetrylabs.slstudio.SLStudio"
 
+sourceSets {
+	main.kotlin.srcDirs += 'src/main'
+	main.java.srcDirs += 'src/main'
+}
+
 run {
 	jvmArgs '-Dcom.sun.management.jmxremote -Dcom.sun.management.jmxremote.port=12345 -Dcom.sun.management.jmxremote.authenticate=false -Dcom.sun.management.jmxremote.ssl=false'
 }
