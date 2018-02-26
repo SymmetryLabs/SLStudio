@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.raph;
+package com.symmetrylabs.slstudio.pattern.raph;
 
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;

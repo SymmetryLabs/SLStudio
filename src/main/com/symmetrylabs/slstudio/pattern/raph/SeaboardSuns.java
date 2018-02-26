@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.raph;
+package com.symmetrylabs.slstudio.pattern.raph;
 
 import java.util.HashMap;
 

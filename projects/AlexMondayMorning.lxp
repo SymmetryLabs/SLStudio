@@ -3772,7 +3772,7 @@
           },
           {
             "id": 4401,
-            "class": "com.symmetrylabs.slstudio.raph.SeaboardSuns",
+            "class": "com.symmetrylabs.slstudio.pattern.raph.SeaboardSuns",
             "modulationColor": -14848,
             "parameters": {
               "label": "SeaboardSuns",
