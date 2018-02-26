@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519645657099,
+  "timestamp": 1519673549770,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -83,6 +83,21 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 315,
+            "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
+            "modulationColor": -16755969,
+            "parameters": {
+              "label": "ColorShift",
+              "enabled": true,
+              "shift": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
@@ -114,7 +129,7 @@
               "everywhere": true,
               "perSun": false,
               "timeScale": 0.7399999868124724,
-              "size": 1240.0000132620335,
+              "size": 100.0,
               "detail": 6.6,
               "ripple": 0.6,
               "x": 79.9686279296875,
@@ -156,7 +171,7 @@
               "everywhere": true,
               "perSun": false,
               "timeScale": 0.09,
-              "size": 1119.9999874830246,
+              "size": 100.0,
               "detail": 6.6,
               "ripple": 0.4,
               "x": 79.9686279296875,
@@ -198,7 +213,7 @@
               "everywhere": true,
               "perSun": false,
               "timeScale": 0.3000000137835741,
-              "size": 340.0,
+              "size": 100.0,
               "detail": 10.0,
               "ripple": 0.6,
               "x": 79.9686279296875,
@@ -240,7 +255,7 @@
               "everywhere": true,
               "perSun": false,
               "timeScale": 0.15,
-              "size": 560.0,
+              "size": 100.0,
               "detail": 6.6,
               "ripple": 0.4,
               "x": 79.9686279296875,
@@ -282,7 +297,7 @@
               "everywhere": true,
               "perSun": false,
               "timeScale": 0.15,
-              "size": 739.9999834597111,
+              "size": 100.0,
               "detail": 4.4,
               "ripple": -3.6,
               "x": 79.9686279296875,
@@ -324,7 +339,7 @@
               "everywhere": true,
               "perSun": false,
               "timeScale": 0.2200000029057264,
-              "size": 560.0,
+              "size": 100.0,
               "detail": 8.99999994635582,
               "ripple": 4.799999906122686,
               "x": 79.9686279296875,
@@ -361,7 +376,7 @@
             "modulationColor": -1442048,
             "parameters": {
               "label": "SelectedStrip",
-              "selectedStrip": 59,
+              "selectedStrip": 129,
               "column": 0
             },
             "modulation": {
@@ -743,19 +758,19 @@
           "slope": 4.5,
           "Band-1": 0.0,
           "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.0,
-          "Band-5": 0.0,
-          "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
-          "Band-13": 0.0,
-          "Band-14": 0.0,
-          "Band-15": 0.0,
+          "Band-3": 0.05846485314063321,
+          "Band-4": 0.17291220645618777,
+          "Band-5": 0.3824041936260315,
+          "Band-6": 0.5626473593904096,
+          "Band-7": 0.6008370728951198,
+          "Band-8": 0.42489033821237365,
+          "Band-9": 0.2318266442473873,
+          "Band-10": 0.23948264993239432,
+          "Band-11": 0.21966632535221242,
+          "Band-12": 0.24895184137909743,
+          "Band-13": 0.1599715177706873,
+          "Band-14": 0.11498974712646104,
+          "Band-15": 0.09578488212803471,
           "Band-16": 0.0
         }
       },
