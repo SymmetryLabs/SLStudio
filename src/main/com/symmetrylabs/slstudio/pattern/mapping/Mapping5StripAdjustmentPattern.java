@@ -23,7 +23,7 @@ import java.util.Map;
 import static com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH;
 import static com.symmetrylabs.slstudio.util.MathUtils.abs;
 
-public class MappingStripAdjustmentPattern extends SLPattern {
+public class Mapping5StripAdjustmentPattern extends SLPattern {
 
         private static final float LINE_SIZE = 0.9f * PIXEL_PITCH;
         private static final float BRIGHTNESS_MODIFIER = 100f / LINE_SIZE;
@@ -48,7 +48,7 @@ public class MappingStripAdjustmentPattern extends SLPattern {
         private boolean resettingInProgress = false;
         private boolean needsColorBufferReset = true;
 
-        public MappingStripAdjustmentPattern(LX lx) {
+        public Mapping5StripAdjustmentPattern(LX lx) {
                 super(lx);
                 mappings = FultonStreetLayout.mappings;
                 mappingColorsPerPixlite = SLStudio.applet.mappingColorsPerPixlite;

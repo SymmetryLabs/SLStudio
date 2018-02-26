@@ -21,7 +21,7 @@ import processing.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Map;
 
-public class MappingStripLengthPattern extends SLPattern {
+public class Mapping3StripLengthPattern extends SLPattern {
 
         private final SunsModel model;
         private final Mappings mappings;
@@ -38,7 +38,7 @@ public class MappingStripLengthPattern extends SLPattern {
         private boolean resettingInProgress = false;
         private boolean needsColorBufferReset = true;
 
-        public MappingStripLengthPattern(LX lx) {
+        public Mapping3StripLengthPattern(LX lx) {
                 super(lx);
                 model = (SunsModel) lx.model;
                 mappings = FultonStreetLayout.mappings;

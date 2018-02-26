@@ -120,7 +120,7 @@
           },
           {
             "id": 348,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingPixliteDatalineLengthPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping1PixliteDatalineLengthPattern",
             "modulationColor": -16711895,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
@@ -136,7 +136,7 @@
           },
           {
             "id": 350,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingPixliteDatalineLengthPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping1PixliteDatalineLengthPattern",
             "modulationColor": -65409,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
@@ -178,7 +178,7 @@
         "patterns": [
           {
             "id": 181,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingPixliteDatalineLengthPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping1PixliteDatalineLengthPattern",
             "modulationColor": -11008,
             "parameters": {
               "label": "MappingPixliteDatalineLength",
@@ -194,7 +194,7 @@
           },
           {
             "id": 183,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingStripLengthPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping3StripLengthPattern",
             "modulationColor": -16721665,
             "parameters": {
               "label": "MappingStripLength",
@@ -211,7 +211,7 @@
           },
           {
             "id": 185,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingStripAdjustmentPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping5StripAdjustmentPattern",
             "modulationColor": -16728833,
             "parameters": {
               "label": "MappingStripAdjustment",
@@ -229,7 +229,7 @@
           },
           {
             "id": 352,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingStripReversalPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping4StripReversalPattern",
             "modulationColor": -65465,
             "parameters": {
               "label": "MappingStripReversal",
@@ -245,7 +245,7 @@
           },
           {
             "id": 354,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingStripPixliteAssignmentPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping2StripPixliteAssignmentPattern",
             "modulationColor": -65480,
             "parameters": {
               "label": "MappingStripPixliteAssignment",

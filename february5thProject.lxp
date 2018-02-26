@@ -1037,7 +1037,7 @@
           },
           {
             "id": 391,
-            "class": "com.symmetrylabs.slstudio.pattern.mapping.MappingStripAdjustmentPattern",
+            "class": "com.symmetrylabs.slstudio.pattern.mapping.Mapping5StripAdjustmentPattern",
             "modulationColor": -28416,
             "parameters": {
               "label": "MappingStripAdjustment",

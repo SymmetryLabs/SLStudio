@@ -16,7 +16,7 @@ import processing.event.KeyEvent;
 import java.util.Arrays;
 import java.util.Map;
 
-public class MappingPixliteDatalineLengthPattern extends SLPattern {
+public class Mapping1PixliteDatalineLengthPattern extends SLPattern {
 
         private final Mappings mappings;
         private final Map<String, int[]> mappingColorsPerPixlite;
@@ -31,7 +31,7 @@ public class MappingPixliteDatalineLengthPattern extends SLPattern {
         private boolean resettingInProgress = false;
         private boolean needsColorBufferReset = true;
 
-        public MappingPixliteDatalineLengthPattern(LX lx) {
+        public Mapping1PixliteDatalineLengthPattern(LX lx) {
                 super(lx);
                 mappings = FultonStreetLayout.mappings;
                 mappingColorsPerPixlite = SLStudio.applet.mappingColorsPerPixlite;

@@ -19,7 +19,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import java.util.Arrays;
 import java.util.Map;
 
-public class MappingStripPixliteAssignmentPattern extends SLPattern {
+public class Mapping2StripPixliteAssignmentPattern extends SLPattern {
 
         private final SunsModel model;
         private final Mappings mappings;
@@ -39,7 +39,7 @@ public class MappingStripPixliteAssignmentPattern extends SLPattern {
         private boolean resettingInProgress = false;
         private boolean needsColorBufferReset = true;
 
-        public MappingStripPixliteAssignmentPattern(LX lx) {
+        public Mapping2StripPixliteAssignmentPattern(LX lx) {
                 super(lx);
                 model = (SunsModel) lx.model;
                 mappings = FultonStreetLayout.mappings;
