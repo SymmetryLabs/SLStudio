@@ -16,7 +16,7 @@ public class NissanWindow extends StripsModel<Strip> {
 
     public enum Type {
         //WINDSHIELD, FRONT_RIGHT, FRONT_LEFT, BACK_RIGHT, BACK_LEFT
-        WINDSHIELD, FRONT, BACK
+        WINDSHIELD, FRONT, BACK_DRIVER, BACK_PASSENGER
     }
 
     public final static int LEDS_PER_METER = 60;
@@ -108,7 +108,8 @@ public class NissanWindow extends StripsModel<Strip> {
                     if (carId == "car3") {
                         createWindshield3(coordinates, rotations, transform);
                     } else {
-                        createWindshield1(coordinates, rotations, transform);
+                        System.out.println("cant find car id");
+                        //createWindshield1(coordinates, rotations, transform);
                     }
 
                     transform.pop();
@@ -119,11 +120,11 @@ public class NissanWindow extends StripsModel<Strip> {
 
                     createFrontWindow(coordinates, rotations, transform);
                     break;
-                case BACK: // _RIGHT
+                case BACK_DRIVER: // _RIGHT
                     System.out.println("back right rotations");
                     System.out.println(Arrays.toString(rotations));
 
-                    createBackWindow(coordinates, rotations, transform);
+                    createBackDriverWindow(coordinates, rotations, transform);
                     break;
 //                case FRONT_LEFT:
 //                    rotations[0] = rotations[0] + 180;
@@ -131,11 +132,11 @@ public class NissanWindow extends StripsModel<Strip> {
 //                    System.out.println("front left rotations");
 //                    System.out.println(Arrays.toString(rotations));
 //                    break;
-//                case BACK_LEFT:
-//                    rotations[0] = rotations[0] + 180;
-//                    createBackWindow(coordinates, rotations, transform);
-//                    System.out.println("back left rotations");
-//                    System.out.println(Arrays.toString(rotations));
+                case BACK_PASSENGER:
+                    //rotations[0] = rotations[0] + 180;
+                    createBackPassengerWindow(coordinates, rotations, transform);
+                    System.out.println("back left rotations");
+                    System.out.println(Arrays.toString(rotations));
             }
 
             for (Strip strip : strips) {
@@ -228,16 +229,16 @@ public class NissanWindow extends StripsModel<Strip> {
         private void createWindshield2(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at the windshield from the outside front of car
             StripConfig[] stripConfigs = new StripConfig[] {
-                new StripConfig(20, 0, 36), // 36
-                new StripConfig(17, 1, 43),
-                new StripConfig(15, 2, 48),
+                new StripConfig(19, 0, 36), // 36
+                new StripConfig(18, 1, 43),
+                new StripConfig(14, 2, 48),
                 new StripConfig(12, 3, 53),
                 new StripConfig(10, 4, 58), // keegan switched to 5 - 6:30 PM
                 new StripConfig(8,  5, 62),
                 // CH 2
                 new StripConfig(6,  6,66), //67),
                 new StripConfig(5,  7, 68),
-                new StripConfig(4,  8, 70),
+                new StripConfig(4,  8, 71), //71
 
 
                 new StripConfig(3,  9, 72),
@@ -247,9 +248,9 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(0,  13, 77),
                 new StripConfig(0,  14, 77),
                 new StripConfig(0,  15, 77),
-                new StripConfig(1,  16, 76),
+                new StripConfig(0,  16, 77),
 
-                new StripConfig(0,  17, 76),
+                new StripConfig(0,  17, 77),
                 new StripConfig(1,  18, 75),//79),
                 new StripConfig(1,  19, 75),
                 new StripConfig(1,  20, 75),
@@ -263,10 +264,10 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(1,  26, 74),
                 new StripConfig(1,  27, 74),
 
-                new StripConfig(2,  28, 73),
+                new StripConfig(1,  28, 74),
                 new StripConfig(2,  29, 73),
                 // CH 8
-                new StripConfig(2,  30, 72),
+                new StripConfig(2,  30, 73),
                 new StripConfig(2,  31, 72),
                 new StripConfig(2,  32, 72),
                 new StripConfig(2,  33, 72),
@@ -287,17 +288,17 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(3,  44, 70),
                 new StripConfig(3,  45, 70),
                 // CH 12
-                new StripConfig(47,  46, 26),
-                new StripConfig(3,  46, 27),
+                new StripConfig(48,  46, 25),
+                new StripConfig(3,  46, 26),
 
                 new StripConfig(3,  47, 18),
-                new StripConfig(58,  47, 15),
+                new StripConfig(59,  47, 14),
 
-                new StripConfig(63,  48, 9),
+                new StripConfig(64,  48, 8),
                 new StripConfig(4,  48, 11),
 
                 new StripConfig(4,  49, 7), // 36 driver 1, 27 driver 1, 16 p 1
-                new StripConfig(67,  49, 4),
+                new StripConfig(67,  49, 5),
 
 
 
@@ -420,7 +421,39 @@ public class NissanWindow extends StripsModel<Strip> {
             createWindow(stripConfigs, coordinates, rotations, transform);
         }
 
-        private void createBackWindow(float[] coordinates, float[] rotations, LXTransform transform) {
+        private void createBackDriverWindow(float[] coordinates, float[] rotations, LXTransform transform) {
+            // Perspective is from looking at passenger side from outside passenger side (drivers side would be a reflection)
+            StripConfig[] stripConfigs = new StripConfig[] {
+                new StripConfig(2, 0, 45),
+                new StripConfig(1, 1, 46),
+                new StripConfig(1, 2, 46),
+                new StripConfig(1, 3, 46),
+                new StripConfig(1, 4, 46),
+                new StripConfig(1, 5, 45),
+                new StripConfig(1, 6, 45),
+                new StripConfig(1, 7, 45),
+                new StripConfig(1, 8, 45),
+                new StripConfig(0, 9, 45),
+                new StripConfig(0, 10, 45),
+                new StripConfig(0, 11, 45),
+                new StripConfig(0, 12, 44),
+                new StripConfig(0, 13, 44),
+                new StripConfig(0, 14, 44),
+                new StripConfig(0, 15, 44),
+                new StripConfig(1, 16, 43),
+                new StripConfig(5, 17, 38),
+                new StripConfig(9, 18, 34),
+                new StripConfig(13, 19, 30),
+                new StripConfig(19, 20, 24),
+                new StripConfig(24, 21, 19),
+                new StripConfig(29, 22, 14),
+                new StripConfig(34, 23, 9),
+                new StripConfig(39, 24, 3),
+            };
+            createWindow(stripConfigs, coordinates, rotations, transform);
+        }
+
+        private void createBackPassengerWindow(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at passenger side from outside passenger side (drivers side would be a reflection)
             StripConfig[] stripConfigs = new StripConfig[] {
                 new StripConfig(2, 0, 45),

@@ -44,7 +44,7 @@ public class SLStudio extends PApplet {
 
     public static SLStudio applet;
 
-    public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 0, 100);
+    public DiscreteParameter selectedStrip = new DiscreteParameter("selectedStrip", 0, 150);
     public DiscreteParameter selectedColumn = new DiscreteParameter("column", 0, 100);
     public SLStudioLX lx;
     private LXModel model;
