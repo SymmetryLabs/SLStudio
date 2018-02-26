@@ -16,7 +16,7 @@ public class FultonStreetLayout {
         public static final Environment environment = new Environment() {
                 @Override
                 public String getMappingsFilename() {
-                        return "data/fultonStreetMapping.json";
+                        return "data/fultonStreetMappings.json";
                 }
         };
 
