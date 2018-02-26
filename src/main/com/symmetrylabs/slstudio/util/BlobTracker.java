@@ -103,6 +103,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
 
         int arg = 0;
 
+        String window_id = message.getString(arg++);
         int count = message.getInt(arg++);
 //        long millis = message.getInt(arg++);
         long millis = System.currentTimeMillis() % 1000;
@@ -217,14 +218,30 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
         public PVector vel;
         public float size;
 
+        String ID;
+
         private Blob(PVector pos, PVector vel, float size) {
             this.pos = pos;
             this.vel = vel;
             this.size = size;
+            this.ID = "NOTINITIALIZED";
+        }
+
+        private Blob(PVector pos, PVector vel, float size, String ID) {
+            this.pos = pos;
+            this.vel = vel;
+            this.size = size;
+            this.ID = ID;
+        }
+
+        private Blob(PVector pos, float size, String ID) {
+            this(pos, new PVector(0, 0, 0), size);
+            this.ID = ID;
         }
 
         private Blob(PVector pos, float size) {
             this(pos, new PVector(0, 0, 0), size);
+            this.ID = "NOTINITIALIZED";
         }
 
         public String toString() {

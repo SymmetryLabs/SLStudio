@@ -127,6 +127,8 @@ public class CapacitivePat extends SLPatternWithMarkers {
                 for (NissanCar car : this.model.getCars()) {
                     for (NissanWindow window : car.getWindows()) {
 
+
+                        String window_id = window.getId();
                         int stripIndex = SLStudio.applet.selectedStrip.getValuei();
                         List<Strip> strips = car.getStrips();
                         Strip strip = strips.get(stripIndex);
