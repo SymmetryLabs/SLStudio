@@ -6,7 +6,7 @@ import heronarts.lx.parameter.BooleanParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.network.ControllerResetModule;
-import com.symmetrylabs.slstudio.pixlites.NissanPixlite;
+import com.symmetrylabs.slstudio.output.pixlites.NissanPixlite;
 
  /*
  * Output Component

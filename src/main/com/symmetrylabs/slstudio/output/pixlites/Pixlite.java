@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output.pixlites;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.mappings.*;

@@ -1,9 +1,9 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output.pixlites;
 
 import heronarts.lx.LX;
 import heronarts.lx.output.LXOutputGroup;
 import heronarts.lx.output.LXDatagramOutput;
-import heronarts.lx.output.LXDatagramOutput;
+
 import java.net.SocketException;
 
 public class NissanPixlite extends LXOutputGroup {

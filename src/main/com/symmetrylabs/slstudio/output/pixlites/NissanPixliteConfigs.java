@@ -1,8 +1,6 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output.pixlites;
 
 import heronarts.lx.LX;
-import com.symmetrylabs.slstudio.pixlites.NissanPixlite;
-import com.symmetrylabs.slstudio.pixlites.PointsGrouping;
 import com.symmetrylabs.slstudio.model.NissanModel;
 
 public class NissanPixliteConfigs {

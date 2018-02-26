@@ -7,8 +7,6 @@ import java.util.TreeSet;
 
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
 import heronarts.p3lx.ui.component.UIItemList;
@@ -16,7 +14,7 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.pixlites.NissanPixlite;
+import com.symmetrylabs.slstudio.output.pixlites.NissanPixlite;
 import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.IntListener;

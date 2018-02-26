@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output.pixlites;
 
 import heronarts.lx.model.LXPoint;
 

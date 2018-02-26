@@ -1,13 +1,11 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.*;
-import com.symmetrylabs.slstudio.pixlites.NissanPixlite;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
 
 import java.util.List;
 

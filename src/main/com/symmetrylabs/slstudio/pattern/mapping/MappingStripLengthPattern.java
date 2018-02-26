@@ -11,7 +11,7 @@ import com.symmetrylabs.slstudio.model.Slice;
 import com.symmetrylabs.slstudio.model.Sun;
 import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
+import com.symmetrylabs.slstudio.output.pixlites.Pixlite;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;

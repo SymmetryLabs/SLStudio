@@ -6,7 +6,7 @@ import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
+import com.symmetrylabs.slstudio.output.pixlites.Pixlite;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.BooleanParameter;
