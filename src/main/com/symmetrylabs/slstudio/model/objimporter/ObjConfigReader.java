@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.objimporter;
+package com.symmetrylabs.slstudio.model.objimporter;
 
 import java.io.BufferedReader;
 import java.io.File;

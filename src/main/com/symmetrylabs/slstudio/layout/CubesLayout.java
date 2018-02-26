@@ -11,7 +11,6 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
 import heronarts.lx.LX;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.slstudio.SLStudio;
@@ -23,7 +22,6 @@ import com.symmetrylabs.slstudio.util.NetworkUtils;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
 import com.symmetrylabs.slstudio.util.listenable.ListListener;
-import com.symmetrylabs.slstudio.objimporter.ObjImporter;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
