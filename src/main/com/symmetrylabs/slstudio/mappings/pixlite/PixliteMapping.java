@@ -1,6 +1,9 @@
-package com.symmetrylabs.slstudio.mappings;
+package com.symmetrylabs.slstudio.mappings.pixlite;
 
 import com.google.gson.annotations.Expose;
+import com.symmetrylabs.slstudio.mappings.MappingItem;
+import com.symmetrylabs.slstudio.mappings.OutputMapping;
+import com.symmetrylabs.slstudio.mappings.OutputMappingItem;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import heronarts.lx.model.LXPoint;
 

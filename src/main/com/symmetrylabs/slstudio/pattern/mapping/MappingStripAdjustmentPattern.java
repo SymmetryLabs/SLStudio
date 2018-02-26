@@ -1,8 +1,11 @@
 package com.symmetrylabs.slstudio.pattern.mapping;
 
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.layout.FultonStreetLayout;
 import com.symmetrylabs.slstudio.mappings.*;
-import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
+import com.symmetrylabs.slstudio.mappings.pixlite.PixliteDatalineRef;
+import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping;
+import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.model.CurvedStrip;
 import com.symmetrylabs.slstudio.model.Slice;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
@@ -15,7 +18,6 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.transform.LXTransform;
 import processing.event.KeyEvent;
 
-import java.util.Arrays;
 import java.util.Map;
 
 import static com.symmetrylabs.slstudio.model.Slice.PIXEL_PITCH;

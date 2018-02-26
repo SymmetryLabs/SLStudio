@@ -1,7 +1,5 @@
 package com.symmetrylabs.slstudio.model;
 
-import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
-import com.symmetrylabs.slstudio.mappings.MappingGroup;
 import com.symmetrylabs.slstudio.util.NullOutputStream;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXPoint;

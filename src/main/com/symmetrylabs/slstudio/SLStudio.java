@@ -1,9 +1,6 @@
 package com.symmetrylabs.slstudio;
 
-import java.util.List;
-import java.util.ArrayList;
 import java.util.Map;
-import java.util.HashMap;
 
 import processing.core.PApplet;
 
@@ -17,11 +14,9 @@ import heronarts.lx.parameter.LXParameterListener;
 import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.model.NissanModel;
-import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
-import com.symmetrylabs.slstudio.mappings.CubesLayout;
-import com.symmetrylabs.slstudio.mappings.NissanLayout;
+import com.symmetrylabs.slstudio.layout.CubesLayout;
+import com.symmetrylabs.slstudio.layout.NissanLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
-import com.symmetrylabs.slstudio.mappings.PixliteMapping;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.slstudio.output.SLController;
@@ -34,7 +29,6 @@ import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.pixlites.NissanPixlite;
 import com.symmetrylabs.slstudio.pixlites.NissanPixliteConfigs;
 import com.symmetrylabs.slstudio.ui.UISpeed;

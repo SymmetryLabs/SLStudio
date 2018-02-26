@@ -1,23 +1,13 @@
-package com.symmetrylabs.slstudio.mappings;
+package com.symmetrylabs.slstudio.layout;
 
-import com.google.gson.Gson;
-import com.google.gson.GsonBuilder;
 import com.symmetrylabs.slstudio.Environment;
-import com.symmetrylabs.slstudio.model.CurvedStrip;
+import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.model.SunsModel;
 import com.symmetrylabs.slstudio.model.Sun;
-import com.symmetrylabs.slstudio.util.Utils;
-import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXTransform;
-import org.jetbrains.annotations.NotNull;
-import processing.core.PApplet;
 
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.FileWriter;
 import java.util.*;
 
-import static com.symmetrylabs.slstudio.model.Slice.MAX_NUM_STRIPS_PER_SLICE;
 import static processing.core.PConstants.PI;
 
 /* Fulton Street Layout of the Suns */

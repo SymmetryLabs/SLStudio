@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.mappings;
+package com.symmetrylabs.slstudio.layout;
 
 import java.util.List;
 import java.util.ArrayList;

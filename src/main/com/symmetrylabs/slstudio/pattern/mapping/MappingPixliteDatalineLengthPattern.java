@@ -1,10 +1,10 @@
 package com.symmetrylabs.slstudio.pattern.mapping;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.mappings.FultonStreetLayout;
+import com.symmetrylabs.slstudio.layout.FultonStreetLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
-import com.symmetrylabs.slstudio.mappings.PixliteMapping;
-import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
+import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping;
+import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import heronarts.lx.LX;

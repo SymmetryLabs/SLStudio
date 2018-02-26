@@ -2,7 +2,8 @@ package com.symmetrylabs.slstudio.pixlites;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.mappings.*;
-import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
+import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping;
+import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.model.Slice;
 import com.symmetrylabs.slstudio.output.SLBypassOutputGroup;
 import heronarts.lx.LX;
