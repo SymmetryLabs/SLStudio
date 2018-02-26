@@ -102,11 +102,13 @@ public class NissanWindow extends StripsModel<Strip> {
                     if (carId == "car1") {
                         createWindshield1(coordinates, rotations, transform);
                     }
-//                    if (carId == "car2") {
-//                        createWindshield2(coordinates, rotations, transform);
-//                    }
+                    if (carId == "car2") {
+                        createWindshield2(coordinates, rotations, transform);
+                    }
                     if (carId == "car3") {
                         createWindshield3(coordinates, rotations, transform);
+                    } else {
+                        createWindshield1(coordinates, rotations, transform);
                     }
 
                     transform.pop();
@@ -223,13 +225,12 @@ public class NissanWindow extends StripsModel<Strip> {
             createWindow(stripConfigs, coordinates, rotations, transform);
         }
 
-
-        private void createWindshield3(float[] coordinates, float[] rotations, LXTransform transform) {
+        private void createWindshield2(float[] coordinates, float[] rotations, LXTransform transform) {
             // Perspective is from looking at the windshield from the outside front of car
             StripConfig[] stripConfigs = new StripConfig[] {
-                new StripConfig(20, 0, 35),
+                new StripConfig(20, 0, 36), // 36
                 new StripConfig(17, 1, 43),
-                new StripConfig(14, 2, 49),
+                new StripConfig(15, 2, 48),
                 new StripConfig(12, 3, 53),
                 new StripConfig(10, 4, 58), // keegan switched to 5 - 6:30 PM
                 new StripConfig(8,  5, 62),
@@ -246,7 +247,7 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(0,  13, 77),
                 new StripConfig(0,  14, 77),
                 new StripConfig(0,  15, 77),
-                new StripConfig(0,  16, 77),
+                new StripConfig(1,  16, 76),
 
                 new StripConfig(0,  17, 76),
                 new StripConfig(1,  18, 75),//79),
@@ -254,25 +255,25 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(1,  20, 75),
                 new StripConfig(1,  21, 75),
                 new StripConfig(1,  22, 75),
-                new StripConfig(1,  23, 75),
+                new StripConfig(1,  23, 74),
                 new StripConfig(1,  24, 74),
 
                 new StripConfig(1,  25, 74),
                 // CH 7 (27th strip)
                 new StripConfig(1,  26, 74),
-                new StripConfig(2,  27, 73),
+                new StripConfig(1,  27, 74),
 
                 new StripConfig(2,  28, 73),
                 new StripConfig(2,  29, 73),
                 // CH 8
-                new StripConfig(2,  30, 73),
+                new StripConfig(2,  30, 72),
                 new StripConfig(2,  31, 72),
                 new StripConfig(2,  32, 72),
                 new StripConfig(2,  33, 72),
                 // CH 9
                 new StripConfig(2,  34, 72),
                 new StripConfig(2,  35, 72),
-                new StripConfig(3,  36, 70),
+                new StripConfig(2,  36, 72),
 
                 new StripConfig(3,  37, 70),
                 // CH 10
@@ -286,17 +287,97 @@ public class NissanWindow extends StripsModel<Strip> {
                 new StripConfig(3,  44, 70),
                 new StripConfig(3,  45, 70),
                 // CH 12
-                new StripConfig(46,  46, 27),
+                new StripConfig(47,  46, 26),
                 new StripConfig(3,  46, 27),
 
-                new StripConfig(3,  47, 19),
+                new StripConfig(3,  47, 18),
                 new StripConfig(58,  47, 15),
 
                 new StripConfig(63,  48, 9),
                 new StripConfig(4,  48, 11),
 
-                new StripConfig(4,  49, 7),
-                new StripConfig(66,  49, 6),
+                new StripConfig(4,  49, 7), // 36 driver 1, 27 driver 1, 16 p 1
+                new StripConfig(67,  49, 4),
+
+
+
+            };
+            createWindow(stripConfigs, coordinates, rotations, transform);
+        }
+
+        private void createWindshield3(float[] coordinates, float[] rotations, LXTransform transform) {
+            // Perspective is from looking at the windshield from the outside front of car
+            StripConfig[] stripConfigs = new StripConfig[] {
+                new StripConfig(20, 0, 36), // 36
+                new StripConfig(17, 1, 43),
+                new StripConfig(15, 2, 48),
+                new StripConfig(12, 3, 53),
+                new StripConfig(10, 4, 58), // keegan switched to 5 - 6:30 PM
+                new StripConfig(8,  5, 62),
+                // CH 2
+                new StripConfig(6,  6,66), //67),
+                new StripConfig(5,  7, 68),
+                new StripConfig(4,  8, 70),
+
+
+                new StripConfig(3,  9, 72),
+                new StripConfig(2,  10, 74),
+                new StripConfig(1,  11, 75),
+                new StripConfig(0,  12, 77),
+                new StripConfig(0,  13, 77),
+                new StripConfig(0,  14, 77),
+                new StripConfig(0,  15, 77),
+                new StripConfig(1,  16, 76),
+
+                new StripConfig(0,  17, 76),
+                new StripConfig(1,  18, 75),//79),
+                new StripConfig(1,  19, 75),
+                new StripConfig(1,  20, 75),
+                new StripConfig(1,  21, 75),
+                new StripConfig(1,  22, 75),
+                new StripConfig(1,  23, 74),
+                new StripConfig(1,  24, 74),
+
+                new StripConfig(1,  25, 74),
+                // CH 7 (27th strip)
+                new StripConfig(1,  26, 74),
+                new StripConfig(1,  27, 74),
+
+                new StripConfig(2,  28, 73),
+                new StripConfig(2,  29, 73),
+                // CH 8
+                new StripConfig(2,  30, 72),
+                new StripConfig(2,  31, 72),
+                new StripConfig(2,  32, 72),
+                new StripConfig(2,  33, 72),
+                // CH 9
+                new StripConfig(2,  34, 72),
+                new StripConfig(2,  35, 72),
+                new StripConfig(2,  36, 72),
+
+                new StripConfig(3,  37, 70),
+                // CH 10
+                new StripConfig(3,  38, 70),
+                new StripConfig(3,  39, 70),
+                new StripConfig(3,  40, 70),
+                new StripConfig(3,  41, 70),
+                // CH 11
+                new StripConfig(3,  42, 70),
+                new StripConfig(3,  43, 70),
+                new StripConfig(3,  44, 70),
+                new StripConfig(3,  45, 70),
+                // CH 12
+                new StripConfig(47,  46, 26),
+                new StripConfig(3,  46, 27),
+
+                new StripConfig(3,  47, 18),
+                new StripConfig(58,  47, 15),
+
+                new StripConfig(63,  48, 9),
+                new StripConfig(4,  48, 11),
+
+                new StripConfig(4,  49, 7), // 36 driver 1, 27 driver 1, 16 p 1
+                new StripConfig(67,  49, 4),
 
 
 

@@ -35,8 +35,8 @@ public class NissanLayout {
     public NissanLayout() {
         // This needs to be calibrated with thermal camera coordinate system
         positions.put("A", new float[]{0, 0, 0}); // origin
-        positions.put("B", new float[]{200, 0, 0});
-        positions.put("C", new float[]{-200, 0, 0});
+        positions.put("B", new float[]{20, 0, 100}); // 200, 0, 0
+        positions.put("C", new float[]{40, 0, -100}); // -200, 0, 0
     }
 
     public float[] get(String id) {
@@ -56,8 +56,8 @@ public class NissanLayout {
         List<NissanCar> cars = new ArrayList<>();
 
         cars.add(createCar("car1", layout.get("A"), new float[] {0, 0, 0}, transform));
-        cars.add(createCar("car2", layout.get("B"), new float[] {0, 0, 0}, transform));
-        cars.add(createCar("car3", layout.get("C"), new float[] {0, 0, 0}, transform));
+        cars.add(createCar("car2", layout.get("B"), new float[] {0, 45, 0}, transform));
+        cars.add(createCar("car3", layout.get("C"), new float[] {0, -45, 0}, transform));
 
         return new NissanModel(cars);
     }
