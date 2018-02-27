@@ -48,6 +48,9 @@ import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
 import com.symmetrylabs.slstudio.ui.UIOutputs;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.slstudio.util.MarkerSource;
+import heronarts.p3lx.ui.UI2dComponent;
+import heronarts.p3lx.ui.component.UIImage;
+
 
 public class SLStudioLX extends P3LX {
 
@@ -114,6 +117,11 @@ public class SLStudioLX extends P3LX {
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
 
+            new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
+
+            new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
+                    .setDescription("Symmetry Labs")
+                    .addToContainer(leftPane);
 
             addLayer(this.preview);
             addLayer(this.leftPane);
