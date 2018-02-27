@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519696372031,
+  "timestamp": 1519696496709,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 1,
       "speed": 1.0,
-      "focusedChannel": 2,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -314,7 +314,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 10,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 27,
@@ -774,7 +774,7 @@
               "CAR1": true,
               "CAR2": true,
               "CAR3": true,
-              "audioLink": false,
+              "audioLink": true,
               "rX": 0.0,
               "rY": 0.0,
               "rZ": 0.0,
@@ -801,7 +801,7 @@
         "parameters": {
           "label": "Channel-6",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -825,7 +825,7 @@
             "parameters": {
               "label": "BassPod",
               "CLR": 0.5,
-              "Gain": 0.9499999899417161
+              "Gain": 1.1499999854713678
             },
             "modulation": {
               "modulators": [],
@@ -1186,22 +1186,22 @@
           "attack": 2.000000178813932,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.7834445703521503,
-          "Band-2": 0.9257222658980684,
+          "Band-1": 0.9778870000827752,
+          "Band-2": 1.0,
           "Band-3": 1.0,
           "Band-4": 1.0,
           "Band-5": 1.0,
-          "Band-6": 0.9473835067095505,
-          "Band-7": 0.9237641006237628,
+          "Band-6": 1.0,
+          "Band-7": 1.0,
           "Band-8": 1.0,
           "Band-9": 1.0,
           "Band-10": 1.0,
-          "Band-11": 0.8586885179219877,
-          "Band-12": 0.7528485106436643,
-          "Band-13": 0.7893054783919182,
-          "Band-14": 0.7297380329673115,
-          "Band-15": 0.4110999922028262,
-          "Band-16": 0.28615516737187774
+          "Band-11": 1.0,
+          "Band-12": 1.0,
+          "Band-13": 0.6668831770706454,
+          "Band-14": 0.7646861836397657,
+          "Band-15": 0.6214812050167542,
+          "Band-16": 0.638486938443356
         }
       },
       "input": {
@@ -1334,7 +1334,7 @@
         "1038": true
       },
       "preview": {
-        "radius": 178.44411499433204,
+        "radius": 178.08740520845836,
         "theta": 1.0169999999999988,
         "phi": 0.24071667385101264,
         "positionX": -0.2675628662109375,
