@@ -42,6 +42,7 @@ import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
 import com.symmetrylabs.slstudio.workspaces.Workspaces;
+import com.symmetrylabs.slstudio.performance.APC40Listener;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
@@ -138,6 +139,8 @@ public class SLStudio extends PApplet {
                 pixlites = setupPixlites();
 
                 new FoxListener(lx);
+
+                new APC40Listener(lx, workspaces);
 
                 performanceManager = new PerformanceManager(lx);
                 lx.engine.registerComponent("performanceManager", performanceManager);

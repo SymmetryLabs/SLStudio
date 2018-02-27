@@ -39,6 +39,13 @@ public class Workspaces extends LXComponent {
         //openWorkspace(workspaces.get(5));
     }
 
+    public void goIndex(int i) {
+        if (i < 0 || i > workspaces.size() - 1) {
+            return;
+        }
+        openWorkspace(workspaces.get(i));
+    }
+
     public void openWorkspace(Workspace workspace) {
         int newWorkspaceIndex = workspaces.indexOf(workspace);
 

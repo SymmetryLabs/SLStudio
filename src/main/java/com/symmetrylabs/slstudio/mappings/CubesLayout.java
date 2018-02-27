@@ -122,7 +122,7 @@ static final TowerConfig[] TOWER_CONFIG = {
 
     // front row 
     new TowerConfig(100, 0, -25, 45, new String[] {"174", "189", "76", "51", "156"}),
-    new TowerConfig(140, 0, -25, 45, new String[] {"134", "358", "77", "86", "69"}),
+    new TowerConfig(140, 0, -25, 45, new String[] {"134", "358", "86", "77", "69"}), // 86 and 77 are switch for rehearsal
     new TowerConfig(180, 0, -25, 45, new String[] {"23", "191", "22", "81", "362"}),
 
     // front single tower

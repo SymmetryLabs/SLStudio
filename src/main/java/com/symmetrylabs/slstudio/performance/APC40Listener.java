@@ -25,14 +25,19 @@ import static com.symmetrylabs.slstudio.performance.PerformanceManager.DeckSide.
 import static com.symmetrylabs.slstudio.performance.PerformanceManager.DeckSide.RIGHT;
 import static processing.core.PApplet.println;
 
+import com.symmetrylabs.slstudio.workspaces.Workspaces;
+
 
 public class APC40Listener extends LXComponent {
     LXMidiRemote remotes[] = new LXMidiRemote[2];
 
+    private final Workspaces workspaces;
+
     public BooleanParameter hasRemote = new BooleanParameter("hasRemote", false);
 
-    public APC40Listener(LX lx) {
+    public APC40Listener(LX lx, Workspaces workspaces) {
         super(lx);
+        this.workspaces = workspaces;
 
         lx.engine.midi.whenReady(this::bind);
     }
@@ -51,13 +56,14 @@ public class APC40Listener extends LXComponent {
         }
 
         public void controlChangeReceived(MidiControlChange cc) {
-            if (cc.getCC() == 47) {
-                int v = cc.getValue();
-                int diff = v > 50 ? -5 : 5;
-                float raw = col.getValuef() + diff;
-                float mod = raw < 0 ? 360 - raw : raw % 360;
-                col.setValue(mod);
-            }
+            System.out.println("control");
+            // if (cc.getCC() == 47) {
+            //     int v = cc.getValue();
+            //     int diff = v > 50 ? -5 : 5;
+            //     float raw = col.getValuef() + diff;
+            //     float mod = raw < 0 ? 360 - raw : raw % 360;
+            //     col.setValue(mod);
+            // }
         }
 
         public void noteOffReceived(MidiNote note) {
@@ -65,16 +71,100 @@ public class APC40Listener extends LXComponent {
         }
 
         public void noteOnReceived(MidiNoteOn note) {
-            if (note.getPitch() == 94) {
-                println("UP");
-                int i = SLStudio.applet.performanceManager.focusedDeskIndexForSide(side);
-                SLStudio.applet.performanceManager.deckWindows[i].channel.goPrev();
-            }
-            if (note.getPitch() == 95) {
-                println("DOWN");
-                int i = SLStudio.applet.performanceManager.focusedDeskIndexForSide(side);
-                SLStudio.applet.performanceManager.deckWindows[i].channel.goNext();
-            }
+            // System.out.println("note on");
+
+            switch (note.getPitch()) {
+                case 32: // 1
+                    workspaces.goIndex(0);
+                    break;
+
+                case 24: // 2
+                    workspaces.goIndex(1);
+                    break;
+
+                case 16: // 3
+                    workspaces.goIndex(2);
+                    break;
+
+                case 8: // 4
+                    workspaces.goIndex(3);
+                    break;
+
+                case 0: // 5
+                    workspaces.goIndex(4);
+                    break;
+
+                case 33: // 6
+                    workspaces.goIndex(5);
+                    break;
+
+                case 25: // 7
+                    workspaces.goIndex(6);
+                    break;
+
+                case 17: // 8
+                    workspaces.goIndex(7);
+                    break;
+
+                case 9: // 9
+                    workspaces.goIndex(8);
+                    break;
+
+                case 1: // 10
+                    workspaces.goIndex(9);
+                    break;
+
+                case 34: // 11
+                    workspaces.goIndex(10);
+                    break;
+
+                case 26: // 12
+                    workspaces.goIndex(11);
+                    break;
+
+                case 18: // 13
+                    workspaces.goIndex(12);
+                    break;
+
+                case 10: // 14
+                    workspaces.goIndex(13);
+                    break;
+
+                case 2: // 15
+                    workspaces.goIndex(14);
+                    break;
+
+                case 35: // 16
+                    workspaces.goIndex(15);
+                    break;
+
+                case 27: // 17
+                    workspaces.goIndex(16);
+                    break;
+
+                case 19: // 18
+                    workspaces.goIndex(17);
+                    break;
+
+                case 11: // 19
+                    workspaces.goIndex(18);
+                    break;
+
+                case 3: // 20
+                    workspaces.goIndex(19);
+                    break;
+        }
+
+            // if (note.getPitch() == 94) {
+            //     println("UP");
+            //     int i = SLStudio.applet.performanceManager.focusedDeskIndexForSide(side);
+            //     SLStudio.applet.performanceManager.deckWindows[i].channel.goPrev();
+            // }
+            // if (note.getPitch() == 95) {
+            //     println("DOWN");
+            //     int i = SLStudio.applet.performanceManager.focusedDeskIndexForSide(side);
+            //     SLStudio.applet.performanceManager.deckWindows[i].channel.goNext();
+            // }
         }
 
         public void pitchBendReceived(MidiPitchBend pitchBend) {
@@ -83,6 +173,7 @@ public class APC40Listener extends LXComponent {
 
         public void programChangeReceived(MidiProgramChange pc) {
             // println("PC", pc.getProgram());
+            System.out.println("program");
         }
     }
 

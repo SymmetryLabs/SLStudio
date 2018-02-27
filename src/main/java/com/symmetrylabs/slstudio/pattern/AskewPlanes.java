@@ -89,7 +89,7 @@ public class AskewPlanes extends DPat {
         }
         return lx.hsb(
             huev + MathUtils.abs(p.x - model.cx) * .3f + p.y * .8f,
-            MathUtils.max(0, 100 - .15f * MathUtils.abs(p.x - model.cx)) - (100*MathUtils.abs(p.y / model.yRange)),
+            MathUtils.max(0, 100 - (100*MathUtils.abs(p.y / model.yRange)*MathUtils.abs(p.y / model.yRange))),
             MathUtils.constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
         );
         //}

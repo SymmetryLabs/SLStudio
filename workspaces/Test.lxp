@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519335659693,
+  "timestamp": 1519697096769,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 1.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -101,7 +101,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 125,
@@ -133,12 +133,32 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.7499999955296515,
+              "Fast": 0.55,
               "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 3,
               "reset": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 73972,
+            "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
+            "modulationColor": -65391,
+            "parameters": {
+              "label": "AskewPlanes",
+              "Sprk": 0.0,
+              "Wave": 0.0,
+              "TrnX": 1.0,
+              "TrnY": 0.5,
+              "thck": 0.2,
+              "num": 0
             },
             "modulation": {
               "modulators": [],
@@ -199,22 +219,22 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.190605723738274,
-          "Band-2": 0.30595291208176933,
-          "Band-3": 0.34699028586734404,
-          "Band-4": 0.38859338316177794,
-          "Band-5": 0.38649500217350286,
-          "Band-6": 0.3412196386615344,
-          "Band-7": 0.4345258760856171,
-          "Band-8": 0.3112539328355478,
-          "Band-9": 0.1935471715967988,
-          "Band-10": 0.26301368055734187,
-          "Band-11": 0.1720501601880725,
-          "Band-12": 0.1351684325105902,
-          "Band-13": 0.09587861220956861,
-          "Band-14": 0.04043029594140235,
-          "Band-15": 0.0644992416677953,
-          "Band-16": 0.0
+          "Band-1": 0.20516839565741563,
+          "Band-2": 0.3580732130692622,
+          "Band-3": 0.5278612000367999,
+          "Band-4": 0.650923537691966,
+          "Band-5": 0.7014172254835496,
+          "Band-6": 0.822630217134096,
+          "Band-7": 0.647756248914179,
+          "Band-8": 0.7397750186093164,
+          "Band-9": 0.7570423474615467,
+          "Band-10": 0.39734962975165156,
+          "Band-11": 0.3771380915399223,
+          "Band-12": 0.3213723342179361,
+          "Band-13": 0.18371114971981672,
+          "Band-14": 0.08207180230646871,
+          "Band-15": 0.10938999161343066,
+          "Band-16": 0.07808611793705467
         }
       },
       "input": {
@@ -254,7 +274,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 34,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -54272,
         "parameters": {
