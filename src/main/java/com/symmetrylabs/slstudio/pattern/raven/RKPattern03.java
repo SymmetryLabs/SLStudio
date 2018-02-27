@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.raven;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import processing.core.PGraphics;
@@ -19,12 +20,16 @@ import com.symmetrylabs.slstudio.SLStudio;
 import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
 import static com.symmetrylabs.slstudio.util.MathUtils.random;
 
+import com.symmetrylabs.slstudio.util.BlobTracker;
+import com.symmetrylabs.slstudio.util.BlobFollower;
+
 public class RKPattern03 extends P3CubeMapPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
 
     BooleanParameter audioLink = new BooleanParameter("audioLink", false);
+    BooleanParameter blobsLink = new BooleanParameter("blobsLink", false);
     CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
     CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
     CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -34,12 +39,17 @@ public class RKPattern03 extends P3CubeMapPattern {
     CompoundParameter speed = new CompoundParameter("speed", .01, 0, .05);
     CompoundParameter fragment = new CompoundParameter("fragment", .5, 0, 1);
 
+    private BlobTracker blobTracker;
+    private BlobFollower blobFollower;
+    PVector modelPos;
+    PVector [] blobsPos;
+
     Vtx[][] rootVts;
     int iCSCols = 5, iCSRows = 4;
     float gF, thetaF, phiF, fragMid;
     float[] pEQBands = new float[16];
     ArrayList<Fct> fctList;
-    boolean audioLinked, avgSplit, pAvgSplit, showTri, showEdge;
+    boolean audioLinked, blobsLinked, avgSplit, pAvgSplit, showTri, showEdge;
     PVector rotDir;
 
     float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
@@ -52,6 +62,10 @@ public class RKPattern03 extends P3CubeMapPattern {
             new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange),
             200
         );
+
+        blobTracker = BlobTracker.getInstance(lx);
+        blobFollower = new BlobFollower(blobTracker);
+        modelPos = new PVector(lx.model.cx, lx.model.cy, lx.model.cz);
 
         gF = random(100);
         thetaF = random(100);
@@ -67,6 +81,7 @@ public class RKPattern03 extends P3CubeMapPattern {
         randomSplitUp(100);
 
         addParameter(audioLink);
+        addParameter(blobsLink);
         addParameter(rX);
         addParameter(rY);
         addParameter(rZ);
@@ -80,7 +95,8 @@ public class RKPattern03 extends P3CubeMapPattern {
     }
 
     public void run(double deltaMs, PGraphics pg) {
-
+        
+        blobFollower.advance((float) deltaMs * 0.001f);
         updateParameters();
 
         for (int i = 0; i < fctList.size(); i++) {
@@ -101,12 +117,30 @@ public class RKPattern03 extends P3CubeMapPattern {
         pg.endDraw();
     }
 
+    void updateBlobs(){
+        List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+        blobsPos = new PVector[blobs.size()];
+        println("blobTracker.getBlobs().size(): " + blobs.size());
+        int blobIdx = 0;
+        for (BlobTracker.Blob b : blobs) {
+            float mappedX = (b.pos.x-(-401))*2;
+            float mappedZ = -(b.pos.z-356)*2;
+            blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
+            println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
+            println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
+            blobIdx++;
+        }
+        println("\n");
+    }
+
     void updateParameters() {
         audioLinked = audioLink.getValueb();
+        blobsLinked = blobsLink.getValueb();
         showTri = tri.getValueb();
         showEdge = edge.getValueb();
-
         avgSplit = avg.getValueb();
+
+        if (blobsLinked) updateBlobs();
         if (pAvgSplit != avgSplit) {
             if (avgSplit) {
                 resetFctList();
@@ -177,6 +211,13 @@ public class RKPattern03 extends P3CubeMapPattern {
         pg.rotateY(rotY);
         pg.rotateZ(rotZ);
         drawScene(pg);
+        if(blobsLinked && blobsPos!=null){
+            for(int i=0; i<blobsPos.length; i++){
+                pg.stroke(255, 0, 0);
+                pg.strokeWeight(20);
+                pg.point(blobsPos[i].x, blobsPos[i].y, blobsPos[i].z);
+            }
+        }
         pg.endDraw();
     }
 
@@ -303,11 +344,20 @@ public class RKPattern03 extends P3CubeMapPattern {
             nrml = PVector.sub(v1.pos, v2.pos).cross(PVector.sub(v3.pos, v2.pos));
             brt = map(abs(HALF_PI - PVector.angleBetween(nrml, ctr)), 0, HALF_PI, 0, 255);
 
-            if (showTri) fragRatioT = constrain((noise(ctr.x * .005f + SLStudio.applet.frameCount * .01f,
-                ctr.y * .005f - SLStudio.applet.frameCount * .01f,
-                ctr.z * .005f + SLStudio.applet.frameCount * .01f
-            ) - .5f) * 2.5f + fragMid, 0, 1);
-            else fragRatioT = 1;
+            if (showTri){
+                if(!blobsLinked){
+                fragRatioT = constrain((noise(ctr.x * .005f + SLStudio.applet.frameCount * .01f,
+                ctr.y * .005f - SLStudio.applet.frameCount * .01f, ctr.z * .005f + SLStudio.applet.frameCount * .01f
+                ) - .5f) * 2.5f + fragMid, 0, 1);
+                }else{
+                    for (int j = 0; j < blobsPos.length; j++) {
+                        float d = dist(ctr.x, ctr.y,ctr.z,blobsPos[j].x, blobsPos[j].y, blobsPos[j].z);
+                                fragRatioT = map(constrain(d, 50, 300), 50, 300, 0, .95f);
+                    }
+                }
+            }else{
+                fragRatioT = 1;
+            }
             fragRatio = lerp(fragRatio, fragRatioT, .1f);
 
             if (abs(itpST - itpS) < .005) itpS = itpST;

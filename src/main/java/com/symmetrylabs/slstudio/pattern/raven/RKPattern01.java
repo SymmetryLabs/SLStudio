@@ -119,8 +119,8 @@ public class RKPattern01 extends P3CubeMapPattern {
         println("blobTracker.getBlobs().size(): " + blobs.size());
         int blobIdx = 0;
         for (BlobTracker.Blob b : blobs) {
-            float mappedX = (b.pos.x-(-401))*3;
-            float mappedZ = -(b.pos.z-356)*3;
+            float mappedX = (b.pos.x-(-401))*2;
+            float mappedZ = -(b.pos.z-356)*2;
             blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
             println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
             println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
@@ -277,8 +277,8 @@ public class RKPattern01 extends P3CubeMapPattern {
                     for (int j = 0; j < blobsPos.length; j++) {
                         float d = dist(vts[i].pos.x, vts[i].pos.y, vts[i].pos.z,
                                         blobsPos[j].x, blobsPos[j].y, blobsPos[j].z);
-                                if (d<200) {
-                                        vts[i].updateScalar((200-d)/200);
+                                if (d<300) {
+                                        vts[i].updateScalar((300-d)/300);
                                 }
                     }
                 }

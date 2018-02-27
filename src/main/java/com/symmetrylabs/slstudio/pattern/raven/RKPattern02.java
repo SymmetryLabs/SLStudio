@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern.raven;
 
+import java.util.List;
 import java.util.ArrayList;
 
 import processing.core.PGraphics;
@@ -19,6 +20,8 @@ import com.symmetrylabs.slstudio.SLStudio;
 import static com.symmetrylabs.slstudio.util.NoiseUtils.noise;
 import static com.symmetrylabs.slstudio.util.MathUtils.random;
 
+import com.symmetrylabs.slstudio.util.BlobTracker;
+import com.symmetrylabs.slstudio.util.BlobFollower;
 
 public class RKPattern02 extends P3CubeMapPattern {
 
@@ -26,6 +29,7 @@ public class RKPattern02 extends P3CubeMapPattern {
     private GraphicMeter eq = new GraphicMeter(audioInput);
 
     BooleanParameter audioLink = new BooleanParameter("audioLink", false);
+    BooleanParameter blobsLink = new BooleanParameter("blobsLink", false);
     CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
     CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
     CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -33,6 +37,11 @@ public class RKPattern02 extends P3CubeMapPattern {
     CompoundParameter speed = new CompoundParameter("speed", .1, 0, .5);
     CompoundParameter dsp = new CompoundParameter("dsp", 1, 0, 2);
     BooleanParameter edge = new BooleanParameter("show edge", true);
+
+    private BlobTracker blobTracker;
+    private BlobFollower blobFollower;
+    PVector modelPos;
+    PVector [] blobsPos;
 
     ArrayList<Arc> arcs;
     float f, fT, fTIncre;
@@ -43,7 +52,7 @@ public class RKPattern02 extends P3CubeMapPattern {
     int switchCount;
     PVector rotDir;
 
-    boolean audioLinked;
+    boolean audioLinked, blobsLinked;
 
     float[] pEQBands = new float[16];
     float totalBandMag, avgBandMag;
@@ -56,6 +65,10 @@ public class RKPattern02 extends P3CubeMapPattern {
             new PVector(lx.model.xRange, lx.model.yRange, lx.model.zRange),
             200
         );
+
+        blobTracker = BlobTracker.getInstance(lx);
+        blobFollower = new BlobFollower(blobTracker);
+        modelPos = new PVector(lx.model.cx, lx.model.cy, lx.model.cz);
 
         arcs = new ArrayList<Arc>();
         Arc parentArc = new Arc(0, 0, 12, 0, PI, 0, TWO_PI);
@@ -71,6 +84,7 @@ public class RKPattern02 extends P3CubeMapPattern {
         rotDir = PVector.random3D();
 
         addParameter(audioLink);
+        addParameter(blobsLink);
         addParameter(rX);
         addParameter(rY);
         addParameter(rZ);
@@ -84,6 +98,7 @@ public class RKPattern02 extends P3CubeMapPattern {
 
     public void run(double deltaMs, PGraphics pg) {
 
+        blobFollower.advance((float) deltaMs * 0.001f);
         updateParameters();
 
         if (SLStudio.applet.frameCount % 90 == 0 && !autoNoise && !audioLinked) {
@@ -136,9 +151,29 @@ public class RKPattern02 extends P3CubeMapPattern {
         pg.endDraw();
     }
 
+    void updateBlobs(){
+        List<BlobTracker.Blob> blobs = blobTracker.getBlobs();
+        blobsPos = new PVector[blobs.size()];
+        println("blobTracker.getBlobs().size(): " + blobs.size());
+        int blobIdx = 0;
+        for (BlobTracker.Blob b : blobs) {
+            float mappedX = (b.pos.x-(-401))*2;
+            float mappedZ = -(b.pos.z-356)*2;
+            blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
+            println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
+            println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
+            blobIdx++;
+        }
+        println("\n");
+    }
+
     void updateParameters() {
+
         audioLinked = audioLink.getValueb();
+        blobsLinked = blobsLink.getValueb();
         showEdge = edge.getValueb();
+
+        if (blobsLinked) updateBlobs();
         if (!audioLinked) {
             rotXT = rX.getValuef();
             rotYT = rY.getValuef();
