@@ -1,5 +1,8 @@
 package com.symmetrylabs.slstudio.util;
 
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.nissan.NissanModel;
+import com.symmetrylabs.slstudio.model.nissan.NissanWindow;
 import heronarts.lx.LX;
 import heronarts.lx.LXModulatorComponent;
 import heronarts.lx.osc.LXOscListener;
@@ -103,11 +106,15 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
 
         int arg = 0;
 
-        String window_id = message.getString(arg++);
+        String windowId = message.getString(arg++);
+
         int count = message.getInt(arg++);
 //        long millis = message.getInt(arg++);
         long millis = System.currentTimeMillis() % 1000;
         float deltaSec = (float) (millis - lastMessageMillis) * 0.001f;
+
+        NissanWindow window = ((NissanModel) lx.model).tryGetWindowById(windowId);
+        if (window == null) return;
 
         List<Blob> newBlobs = new ArrayList<Blob>();
         for (int i = 0; i < count/4; i++) { // each data elt has 4
@@ -116,10 +123,10 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
             float size0 = message.getFloat(arg++);
             float size1 = message.getFloat(arg++);
             float size = size0*size1;
-            newBlobs.add(new Blob(new PVector(x, y, 0), size));
+//            newBlobs.add(new Blob(new PVector(x, y, 0), size));
+            newBlobs.add(new Blob(new PVector(window.cx, window.cy, window.cz), size));
         }
-//        blobsBySource.put(sourceId, newBlobs);
-        blobsBySource.put("hello", newBlobs);
+        blobsBySource.put(windowId, newBlobs);
 
         List<Blob> allBlobs = new ArrayList<Blob>();
         for (String id : blobsBySource.keySet()) {
