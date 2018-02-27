@@ -96,7 +96,7 @@ public class NissanModel extends StripsModel<Strip> {
     }
 
     public NissanWindow getWindowById(String id) {
-        NissanWindow window = windowTable.get(id);
+        NissanWindow window = tryGetWindowById(id);
         if (window == null) {
             System.out.println("Missing window id: " + id);
             System.out.print("Valid ids: ");
@@ -104,9 +104,13 @@ public class NissanModel extends StripsModel<Strip> {
                 System.out.print(key + ", ");
             }
             System.out.println();
-            throw new IllegalArgumentException("Invalid window id:" + id);
+            throw new IllegalArgumentException("Invalid window id: " + id);
         }
         return window;
+    }
+
+    public NissanWindow tryGetWindowById(String id) {
+        return windowTable.get(id);
     }
 
 
