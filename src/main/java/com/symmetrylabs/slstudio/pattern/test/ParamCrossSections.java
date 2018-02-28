@@ -1,18 +1,20 @@
-package com.symmetrylabs.slstudio.pattern.test;
+package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.parameter.LXParameter;
 import processing.core.PImage;
 
-import com.symmetrylabs.slstudio.pattern.SunsPattern;
-
 import static processing.core.PApplet.*;
+
 
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class ParamCrossSections extends SunsPattern implements SLTestPattern {
+public class ParamCrossSections extends LXPattern {
 
     final CompoundParameter x = new CompoundParameter("XPOS", 0.3);
     final CompoundParameter y = new CompoundParameter("YPOS", 0.3);
@@ -56,9 +58,9 @@ public class ParamCrossSections extends SunsPattern implements SLTestPattern {
         float ylv = 100*yl.getValuef();
         float zlv = 100*zl.getValuef();
 
-        float xwv = 100f / (1 + 1*xw.getValuef());
-        float ywv = 100f / (1 + 1*yw.getValuef());
-        float zwv = 100f / (1 + 1*zw.getValuef());
+        float xwv = 100f / (1 + 200 *xw.getValuef());
+        float ywv = 100f / (1 + 200 *yw.getValuef());
+        float zwv = 100f / (1 + 200 *zw.getValuef());
 
         for (LXPoint p : model.points) {
             int c = 0;

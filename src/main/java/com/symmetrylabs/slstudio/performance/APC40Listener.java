@@ -68,10 +68,17 @@ public class APC40Listener extends LXComponent {
 
         public void noteOffReceived(MidiNote note) {
             // println("NOTE OFF", note.getPitch(), note.getVelocity());
+            if (note.getPitch() == 91) {
+                SLStudio.applet.lx.engine.output.enabled.setValue(false);
+            }
         }
 
         public void noteOnReceived(MidiNoteOn note) {
-            // System.out.println("note on");
+            System.out.println(note.getPitch());
+
+            if (note.getPitch() == 91) {
+                SLStudio.applet.lx.engine.output.enabled.setValue(true);
+            }
 
             switch (note.getPitch()) {
                 case 32: // 1

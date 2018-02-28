@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519611536409,
+  "timestamp": 1519786966053,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.007874015748031496,
       "crossfaderBlendMode": 0,
       "speed": 0.20000001043081284,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0197305865585804,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -108,7 +108,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.014516129158437252,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -124,7 +124,7 @@
               "label": "ColorFilter",
               "enabled": true,
               "hue": 0.0,
-              "sat": 59.00000091642141
+              "sat": 0.0
             },
             "modulation": {
               "modulators": [],

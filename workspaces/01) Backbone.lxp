@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519609112686,
+  "timestamp": 1519795595404,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 1.0,
+      "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 1.0833332855254412,
-      "focusedChannel": 3,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -119,7 +119,7 @@
         "parameters": {
           "label": "Front",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -180,7 +180,7 @@
         "parameters": {
           "label": "Middle",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -241,7 +241,7 @@
         "parameters": {
           "label": "Back",
           "arm": false,
-          "enabled": true,
+          "enabled": false,
           "cue": false,
           "midiMonitor": false,
           "midiChannel": 16,
@@ -328,6 +328,94 @@
               "SIZE": 0.5,
               "WAVE": 0.0,
               "SWEEP": false
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 71185,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -65504,
+        "parameters": {
+          "label": "Front",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0013162994291633368,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 71189,
+            "class": "com.symmetrylabs.slstudio.pattern.ZPlanes2",
+            "modulationColor": -65450,
+            "parameters": {
+              "label": "ZPlanes2",
+              "zPos1": 0.5199999883770943,
+              "wid1": 0.6699999924749136,
+              "zPos2": 0.0,
+              "wid2": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 71188,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -27392,
+        "parameters": {
+          "label": "Back",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 71191,
+            "class": "com.symmetrylabs.slstudio.pattern.ZPlanes2",
+            "modulationColor": -16753665,
+            "parameters": {
+              "label": "ZPlanes2",
+              "zPos1": 1.0,
+              "wid1": 0.2200000174343586,
+              "zPos2": 0.0,
+              "wid2": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -451,11 +539,11 @@
       "modulationColor": -15360,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.7571428557857871
       }
     },
     "components": {
@@ -534,8 +622,8 @@
       "modulatorExpanded": {},
       "preview": {
         "radius": 328.22861395031737,
-        "theta": -0.0839999999999985,
-        "phi": 0.18299999999999983,
+        "theta": -0.020999999999998485,
+        "phi": 0.044999999999999776,
         "positionX": 135.52943420410156,
         "positionY": 91.5,
         "positionZ": -154.97055053710938

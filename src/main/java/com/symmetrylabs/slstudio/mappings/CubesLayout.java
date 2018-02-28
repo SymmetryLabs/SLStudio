@@ -325,19 +325,7 @@ static final TowerConfig[] TOWER_CONFIG = {
         List<CubesModel.CubesStrip> strips = new ArrayList<>();
 
         for (StripConfig stripConfig : STRIP_CONFIG) {
-            CubesModel.CubesStrip.Metrics metrics = new CubesModel.CubesStrip.Metrics(stripConfig.numPoints, stripConfig.spacing);
 
-            globalTransform.push();
-            globalTransform.translate(stripConfig.x, stripConfig.y, stripConfig.z);
-            globalTransform.rotateX(stripConfig.xRot * Math.PI / 180.);
-            globalTransform.rotateY(stripConfig.yRot * Math.PI / 180.);
-            globalTransform.rotateZ(stripConfig.zRot * Math.PI / 180.);
-
-            strips.add(new CubesModel.CubesStrip(stripId+"", metrics, globalTransform));
-
-            globalTransform.pop();
-
-            ++stripId;
         }
         /*-----------------------------------------------------------------*/
 

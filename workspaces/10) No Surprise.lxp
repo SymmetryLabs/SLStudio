@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519281140316,
+  "timestamp": 1519796037037,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5306815108592351,
       "crossfaderBlendMode": 1,
       "speed": 0.483333358541131,
-      "focusedChannel": 2,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -101,6 +101,21 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 53900,
+            "class": "com.symmetrylabs.slstudio.effect.MaskCubeStrips",
+            "modulationColor": -16762625,
+            "parameters": {
+              "label": "MaskCubeStrips",
+              "enabled": true,
+              "type": 360.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
@@ -115,7 +130,7 @@
               "Sprk": 1.0,
               "Wave": 1.0,
               "TrnX": 0.0,
-              "TrnY": 0.24000000953674316,
+              "TrnY": -0.26000000536441803,
               "RotX": 0.5,
               "RotY": 0.5,
               "RotZ": 0.8899999912828207,
@@ -259,7 +274,7 @@
             "modulationColor": -6553856,
             "parameters": {
               "label": "ZPlanes2",
-              "zPos1": 1.0,
+              "zPos1": 0.7939643263816833,
               "wid1": 0.009999999776482582,
               "zPos2": 0.0,
               "wid2": 0.0
@@ -346,7 +361,7 @@
             "modulationColor": -16775425,
             "parameters": {
               "label": "Explosions",
-              "NUM": 1.0,
+              "NUM": 1.8658671788871288,
               "BRGT": 77.29999991133809,
               "RATE": 8000.0,
               "BLUR": 0.4000000096857548,
@@ -375,7 +390,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.019158443436026573,
           "crossfadeGroup": 2,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -565,22 +580,22 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.04111644927522595,
-          "Band-2": 0.30618832384812156,
-          "Band-3": 0.4438673991969384,
-          "Band-4": 0.580676393260957,
-          "Band-5": 0.5773566339570987,
-          "Band-6": 0.6724312384031008,
-          "Band-7": 0.6251399061055063,
-          "Band-8": 0.24684703797097596,
-          "Band-9": 0.20301795602626926,
-          "Band-10": 0.3653433223968463,
-          "Band-11": 0.19927827728325032,
-          "Band-12": 0.2565269903099411,
-          "Band-13": 0.0,
-          "Band-14": 0.0,
-          "Band-15": 0.0,
-          "Band-16": 0.10945523865919382
+          "Band-1": 0.0,
+          "Band-2": 0.2596358852119257,
+          "Band-3": 0.2983545290443549,
+          "Band-4": 0.3587280838405503,
+          "Band-5": 0.3795724704581319,
+          "Band-6": 0.45788570373905235,
+          "Band-7": 0.32854589472449724,
+          "Band-8": 0.19934737855859153,
+          "Band-9": 0.28780030172316706,
+          "Band-10": 0.6612725481291943,
+          "Band-11": 0.5604825048058729,
+          "Band-12": 0.7443310792109645,
+          "Band-13": 0.4024470640867789,
+          "Band-14": 0.2591600944901773,
+          "Band-15": 0.35982167804302323,
+          "Band-16": 0.1002450906914798
         }
       },
       "input": {
@@ -611,7 +626,7 @@
       "modulationColor": -65429,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519609564134,
+  "timestamp": 1519791303534,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.6833333764225245,
-      "focusedChannel": 1,
+      "focusedChannel": 5,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -355,6 +355,21 @@
               "modulations": [],
               "triggers": []
             }
+          },
+          {
+            "id": 57094,
+            "class": "com.symmetrylabs.slstudio.effect.MaskCubeStrips",
+            "modulationColor": -9502465,
+            "parameters": {
+              "label": "MaskCubeStrips",
+              "enabled": true,
+              "type": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
           }
         ],
         "clips": [],
@@ -476,7 +491,7 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,

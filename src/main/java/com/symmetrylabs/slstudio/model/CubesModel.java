@@ -336,7 +336,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                 for (int i = 0; i < STRIPS_PER_FACE; i++) {
                     boolean isHorizontal = (i % 2 == 0);
                     CubesStrip.Metrics stripMetrics = isHorizontal ? metrics.horizontal : metrics.vertical;
-                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, transform);
+                    CubesStrip strip = new CubesStrip(i+"", stripMetrics, isHorizontal, transform);
                     this.strips.add(strip);
                     transform.translate(isHorizontal ? metrics.horizontal.length : metrics.vertical.length, 0, 0);
                     transform.rotateZ(HALF_PI);
@@ -353,6 +353,8 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
      * A strip is a linear run of points along a single edge of one cube.
      */
     public static class CubesStrip extends Strip {
+        public boolean isHorizontal = false;
+
         public static class Metrics extends Strip.Metrics {
 
             public final float length;
@@ -377,12 +379,13 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             }
         }
 
-        public CubesStrip(String id, Metrics metrics, List<LXPoint> points) {
+        public CubesStrip(String id, Metrics metrics, boolean isHorizontal, List<LXPoint> points) {
             super(id, metrics, points);
         }
 
-        public CubesStrip(String id, Metrics metrics, LXTransform transform) {
+        public CubesStrip(String id, Metrics metrics, boolean isHorizontal, LXTransform transform) {
             super(id, metrics, new Fixture(metrics, transform));
+            this.isHorizontal = isHorizontal;
         }
 
         private static class Fixture extends LXAbstractFixture {
