@@ -32,7 +32,7 @@ run {
 }
 
 docker {
-	name project.name.toLowerCase() + ':latest'
+	name 'symmetrylabs/' + project.name.toLowerCase() + ':latest'
 	tags version
 	dockerfile project.file('docker/Dockerfile')
 
