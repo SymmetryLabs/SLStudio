@@ -20,6 +20,9 @@ import heronarts.lx.osc.LXOscEngine;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
 
+import java.util.Collections;
+import java.util.Comparator;
+
 public class Workspaces extends LXComponent {
 
     private final LX lx;
@@ -36,6 +39,16 @@ public class Workspaces extends LXComponent {
 
         // not dynamic at runtime
         loadProjectFiles();
+
+        if (workspaces.size() > 0) {
+            Collections.sort(workspaces, new Comparator<Workspace>() {
+                    @Override
+                    public int compare(final Workspace w1, final Workspace w2) {
+                            return w1.getLabel().compareTo(w2.getLabel());
+                    }
+            });
+        }
+
         //openWorkspace(workspaces.get(5));
     }
 
