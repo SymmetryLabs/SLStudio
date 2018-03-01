@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519609407835,
+  "timestamp": 1519926099092,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -131,7 +131,7 @@
         "class": "heronarts.lx.LXChannel",
         "modulationColor": -917760,
         "parameters": {
-          "label": "StirpPlay",
+          "label": "Rings",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -180,24 +180,8 @@
           }
         ],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
-          {
-            "id": 60095,
-            "class": "com.symmetrylabs.slstudio.pattern.StripBounce",
-            "modulationColor": -16711800,
-            "parameters": {
-              "label": "StripBounce",
-              "size": 30.0,
-              "hueVar": 0.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
           {
             "id": 61432,
             "class": "com.symmetrylabs.slstudio.pattern.Rings",
@@ -561,7 +545,7 @@
         "modulationColor": -16383745,
         "parameters": {
           "label": "Audio Input",
-          "device": 6
+          "device": 5
         }
       },
       "output": {
@@ -592,7 +576,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 34,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -11927297,
         "parameters": {

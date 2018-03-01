@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519281184226,
+  "timestamp": 1519927611289,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -14,8 +14,8 @@
       "scene-5": false,
       "crossfader": 0.482758617028594,
       "crossfaderBlendMode": 0,
-      "speed": 0.5799999833106995,
-      "focusedChannel": 3,
+      "speed": 0.6399999856948853,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": false,
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.0,
+          "fader": 0.016768768429756165,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -90,17 +90,15 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 35329,
-            "class": "com.symmetrylabs.slstudio.pattern.explosions.Explosions",
-            "modulationColor": -2883840,
+            "id": 72328,
+            "class": "com.symmetrylabs.slstudio.pattern.explosions.ExplosionsTriggerable",
+            "modulationColor": -2359041,
             "parameters": {
-              "label": "Explosions",
-              "NUM": 1.0,
+              "label": "ExplosionsTriggerable",
               "BRGT": 50.0,
-              "RATE": 8000.0,
-              "BLUR": 0.759999998435378,
-              "manMod": false,
-              "trigger": true
+              "RATE": 4722.500073257834,
+              "BLUR": 0.6100000017881393,
+              "trigger": false
             },
             "modulation": {
               "modulators": [],
@@ -238,7 +236,8 @@
               "SAT": 0.5,
               "SPD1": 0.09000000245869161,
               "SPD2": 0.0800000071525574,
-              "SCALE": 0.7299999944865704
+              "SCALE": 0.7299999944865704,
+              "hueVar": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -396,7 +395,7 @@
         "modulationColor": -65380,
         "parameters": {
           "label": "Audio Input",
-          "device": 6
+          "device": 5
         }
       },
       "output": {
@@ -418,7 +417,7 @@
       "modulationColor": -15360,
       "parameters": {
         "label": "Output",
-        "enabled": false,
+        "enabled": true,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -427,7 +426,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 34,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -16758785,
         "parameters": {
@@ -496,9 +495,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 256.1987424420339,
-        "theta": 0.20700000000000152,
-        "phi": -0.07200000000000006,
+        "radius": 487.4723843695332,
+        "theta": -0.014999999999998605,
+        "phi": 0.023999999999999935,
         "positionX": 141.5426483154297,
         "positionY": 51.0,
         "positionZ": -153.85523986816406

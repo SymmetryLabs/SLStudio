@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519609400232,
+  "timestamp": 1519843707714,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -351,7 +351,7 @@
         "modulationColor": -7208705,
         "parameters": {
           "label": "Audio Input",
-          "device": 7
+          "device": 5
         }
       },
       "output": {
@@ -382,7 +382,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 34,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -16711717,
         "parameters": {

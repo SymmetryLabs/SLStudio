@@ -19,14 +19,14 @@ public class UIWorkspaces extends UICollapsibleSection {
     private final Workspaces workspaces;
 
     public UIWorkspaces(UI ui, LX lx, Workspaces workspaces, float x, float y, float w) {
-        super(ui, x, y, w, 280);
+        super(ui, x, y, w, 400);
         this.workspaces = workspaces;
         setTitle("Workspaces");
 
         final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
         for (Workspace workspace : this.workspaces.getAll()) { items.add(new WorkspaceItem(lx, workspace)); }
 
-        final UIItemList.ScrollList list = new UIItemList.ScrollList(ui, 0, 0, w-8, 255);
+        final UIItemList.ScrollList list = new UIItemList.ScrollList(ui, 0, 0, w-8, 375);
         list.setItems(items).setSingleClickActivate(true);
         list.addToContainer(this);
     }

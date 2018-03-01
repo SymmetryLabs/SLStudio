@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519281133119,
+  "timestamp": 1519843762473,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -184,7 +184,7 @@
         "modulationColor": -14745345,
         "parameters": {
           "label": "Audio Input",
-          "device": 6
+          "device": 5
         }
       },
       "output": {
@@ -215,7 +215,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 34,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -16758785,
         "parameters": {
@@ -264,7 +264,14 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }

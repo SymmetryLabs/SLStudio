@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519779581357,
+  "timestamp": 1519843688457,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -86,8 +86,8 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 1.0,
-              "Dens": 0.8999999761581421,
+              "Fast": 0.55,
+              "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 3,
@@ -176,7 +176,7 @@
         "modulationColor": -65380,
         "parameters": {
           "label": "Audio Input",
-          "device": 7
+          "device": 5
         }
       },
       "output": {
@@ -198,7 +198,7 @@
       "modulationColor": -15360,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,

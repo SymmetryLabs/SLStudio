@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519782473002,
+  "timestamp": 1519870647445,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 263.15789794921875,
+        "color/hue": 263.0588073730469,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -10354433,
@@ -76,7 +76,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.0
+              "amount": 0.7499999832361937
             },
             "modulation": {
               "modulators": [],
@@ -91,8 +91,23 @@
             "parameters": {
               "label": "ColorFilter",
               "enabled": true,
-              "hue": 323.99999275803566,
+              "hue": 295.1999934017658,
               "sat": 100.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 70813,
+            "class": "com.symmetrylabs.slstudio.effect.MaskCubeStrips",
+            "modulationColor": -65296,
+            "parameters": {
+              "label": "MaskCubeStrips",
+              "enabled": true,
+              "type": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -102,7 +117,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 70794,
@@ -114,6 +129,25 @@
               "SIZE": 0.1340000048279762,
               "SPD": -5153.999907150866,
               "HUE": 0.0
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 70811,
+            "class": "com.symmetrylabs.slstudio.pattern.DaughtryRaindrops",
+            "modulationColor": -10419969,
+            "parameters": {
+              "label": "DaughtryRaindrops",
+              "NUM": -5.0,
+              "SIZE": 0.029799999557435515,
+              "SPD": -2138.999974541366,
+              "SPDVr": 1.0,
+              "HUE": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -198,7 +232,7 @@
         "modulationColor": -16724737,
         "parameters": {
           "label": "Audio Input",
-          "device": 6
+          "device": 5
         }
       },
       "output": {
@@ -224,7 +258,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
@@ -278,7 +312,14 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }
@@ -291,9 +332,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 199.42094353916352,
-        "theta": -6.3089999999999975,
-        "phi": 0.2190000000000013,
+        "radius": 94.20548769519353,
+        "theta": -6.344999999999999,
+        "phi": 0.030000000000001217,
         "positionX": 135.9148712158203,
         "positionY": 64.5,
         "positionZ": -157.2446746826172

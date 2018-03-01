@@ -56,7 +56,12 @@ public class APC40Listener extends LXComponent {
         }
 
         public void controlChangeReceived(MidiControlChange cc) {
-            System.out.println("control");
+            if (cc.getCC() == 14) {
+                System.out.println("control: " + cc.getCC() + ", value: " + cc.getNormalized());
+                System.out.println("old value: " + SLStudio.applet.lx.engine.output.brightness.getValuef());
+                SLStudio.applet.lx.engine.output.brightness.setValue(cc.getNormalized());
+            }
+
             // if (cc.getCC() == 47) {
             //     int v = cc.getValue();
             //     int diff = v > 50 ? -5 : 5;
@@ -85,79 +90,79 @@ public class APC40Listener extends LXComponent {
                     workspaces.goIndex(0);
                     break;
 
-                case 24: // 2
+                case 33: // 2
                     workspaces.goIndex(1);
                     break;
 
-                case 16: // 3
+                case 34: // 3
                     workspaces.goIndex(2);
                     break;
 
-                case 8: // 4
+                case 35: // 4
                     workspaces.goIndex(3);
                     break;
 
-                case 0: // 5
+                case 36: // 5
                     workspaces.goIndex(4);
                     break;
 
-                case 33: // 6
+                case 37: // 6
                     workspaces.goIndex(5);
                     break;
 
-                case 25: // 7
+                case 38: // 7
                     workspaces.goIndex(6);
                     break;
 
-                case 17: // 8
+                case 39: // 8
                     workspaces.goIndex(7);
                     break;
 
-                case 9: // 9
+                case 24: // 9
                     workspaces.goIndex(8);
                     break;
 
-                case 1: // 10
+                case 25: // 10
                     workspaces.goIndex(9);
                     break;
 
-                case 34: // 11
+                case 26: // 11
                     workspaces.goIndex(10);
                     break;
 
-                case 26: // 12
+                case 27: // 12
                     workspaces.goIndex(11);
                     break;
 
-                case 18: // 13
+                case 28: // 13
                     workspaces.goIndex(12);
                     break;
 
-                case 10: // 14
+                case 29: // 14
                     workspaces.goIndex(13);
                     break;
 
-                case 2: // 15
+                case 30: // 15
                     workspaces.goIndex(14);
                     break;
 
-                case 35: // 16
+                case 31: // 16
                     workspaces.goIndex(15);
                     break;
 
-                case 27: // 17
+                case 16: // 17
                     workspaces.goIndex(16);
                     break;
 
-                case 19: // 18
+                case 17: // 18
                     workspaces.goIndex(17);
                     break;
 
-                case 11: // 19
+                case 18: // 19
                     workspaces.goIndex(18);
                     break;
 
-                case 3: // 20
+                case 19: // 20
                     workspaces.goIndex(19);
                     break;
         }

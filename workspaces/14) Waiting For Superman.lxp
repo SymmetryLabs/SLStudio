@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519787948150,
+  "timestamp": 1519843830955,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -118,8 +118,8 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.5499999999999998,
-              "Dens": 0.07079087942838669,
+              "Fast": 0.55,
+              "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 7,
@@ -501,22 +501,22 @@
           "attack": 100.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.25528478570499746,
-          "Band-2": 0.21395911330115036,
-          "Band-3": 0.1753603803720325,
-          "Band-4": 0.04253980084247888,
-          "Band-5": 0.0024746003477986722,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
           "Band-6": 0.0,
-          "Band-7": 0.9592858330908932,
-          "Band-8": 1.0,
-          "Band-9": 1.0,
-          "Band-10": 1.0,
-          "Band-11": 1.0,
-          "Band-12": 1.0,
-          "Band-13": 1.0,
-          "Band-14": 1.0,
-          "Band-15": 1.0,
-          "Band-16": 1.0
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
+          "Band-14": 0.0,
+          "Band-15": 0.0,
+          "Band-16": 0.0
         }
       },
       "input": {
@@ -525,7 +525,7 @@
         "modulationColor": -16724737,
         "parameters": {
           "label": "Audio Input",
-          "device": 0
+          "device": 5
         }
       },
       "output": {
@@ -547,7 +547,7 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -556,7 +556,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 34,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -16711717,
         "parameters": {
@@ -605,7 +605,14 @@
       }
     },
     "midi": {
-      "inputs": [],
+      "inputs": [
+        {
+          "name": "CoreMIDI4J - APC40 mkII",
+          "channel": false,
+          "control": false,
+          "sync": false
+        }
+      ],
       "surfaces": [],
       "mapping": []
     }

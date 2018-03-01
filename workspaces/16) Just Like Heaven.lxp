@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519794648044,
+  "timestamp": 1519925921200,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -180,8 +180,8 @@
               "RotY": 0.6614173228346457,
               "RotZ": 0.2047244094488189,
               "Spin": 0.5,
-              "Fast": 0.6299999982118605,
-              "Dens": 0.44999998807907104,
+              "Fast": 0.55,
+              "Dens": 0.699999988079071,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 3,
@@ -266,7 +266,7 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.7499999955296515,
+              "Fast": 0.55,
               "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
@@ -453,7 +453,7 @@
         "modulationColor": -16724737,
         "parameters": {
           "label": "Audio Input",
-          "device": 6
+          "device": 5
         }
       },
       "output": {
@@ -475,7 +475,7 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -484,7 +484,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 34,
+        "id": 35,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -16758785,
         "parameters": {
@@ -541,11 +541,7 @@
           "sync": false
         }
       ],
-      "surfaces": [
-        {
-          "description": "APC40 mkII"
-        }
-      ],
+      "surfaces": [],
       "mapping": []
     }
   },
