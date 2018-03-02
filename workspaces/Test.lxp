@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519843900859,
+  "timestamp": 1520003276845,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -70,7 +70,7 @@
         },
         "effects": [
           {
-            "id": 36,
+            "id": 77434,
             "class": "heronarts.lx.effect.BlurEffect",
             "modulationColor": -33024,
             "parameters": {
@@ -155,7 +155,7 @@
       "modulationColor": -4260096,
       "parameters": {
         "label": "Audio",
-        "enabled": true,
+        "enabled": false,
         "mode": 0
       },
       "meter": {
@@ -164,28 +164,28 @@
         "modulationColor": -27392,
         "parameters": {
           "label": "Meter",
-          "running": true,
+          "running": false,
           "trigger": false,
           "gain": 0.0,
           "range": 48.0,
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.15625714984685712,
-          "Band-2": 0.22628015392598477,
-          "Band-3": 0.28068544260834527,
-          "Band-4": 0.3580350384912653,
-          "Band-5": 0.3683811691417702,
-          "Band-6": 0.31191518512469363,
-          "Band-7": 0.38554013991785807,
-          "Band-8": 0.28893371769830756,
-          "Band-9": 0.230136958159321,
-          "Band-10": 0.16289527523220093,
-          "Band-11": 0.06621627753386206,
-          "Band-12": 0.07354195937798524,
-          "Band-13": 0.0558092438075809,
-          "Band-14": 0.02870241270214624,
-          "Band-15": 0.008401598028785706,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.0,
+          "Band-8": 0.0,
+          "Band-9": 0.0,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
+          "Band-14": 0.0,
+          "Band-15": 0.0,
           "Band-16": 0.0
         }
       },
@@ -221,7 +221,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.0
       }
     },
     "components": {
@@ -289,7 +289,7 @@
   },
   "externals": {
     "ui": {
-      "audioExpanded": true,
+      "audioExpanded": false,
       "paletteExpanded": true,
       "engineExpanded": true,
       "clipViewVisible": true,

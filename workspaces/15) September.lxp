@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519960050216,
+  "timestamp": 1520003207671,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -439,7 +439,7 @@
       "modulationColor": -65453,
       "parameters": {
         "label": "Audio",
-        "enabled": true,
+        "enabled": false,
         "mode": 0
       },
       "meter": {
@@ -448,7 +448,7 @@
         "modulationColor": -7733504,
         "parameters": {
           "label": "Meter",
-          "running": true,
+          "running": false,
           "trigger": false,
           "gain": 8.639999999999965,
           "range": 29.999999999999986,
@@ -573,7 +573,7 @@
   },
   "externals": {
     "ui": {
-      "audioExpanded": true,
+      "audioExpanded": false,
       "paletteExpanded": true,
       "engineExpanded": true,
       "clipViewVisible": true,

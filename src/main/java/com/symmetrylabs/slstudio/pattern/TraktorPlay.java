@@ -303,13 +303,13 @@ void  move()      { c     = interp(t,prvA,dstA);
      
      //to-do  make this a parameter, as well as speed a parameter, after HeronLX has been modified to allow more knobs
         // in-progress:  trying to average the lost FFT data in the case that stepTimer has not been called. Currently all that data is being ignored
-        float avgBass = eq.getAveragef(0,4);
-        float avgTreble = eq.getAveragef(eq.numBands-7, 7); 
+        float avgBass = 0.5f; //(0,4);
+        float avgTreble = 0.5f; //eq.getAveragef(eq.numBands-7, 7); 
         
         if (stepTimer.click())
         {
-            float rawBass = eq.getAveragef(0, 4);
-            float rawTreble = eq.getAveragef(eq.numBands-7, 7);
+            float rawBass = 0.5f; //eq.getAveragef(0, 4);
+            float rawTreble = 0.5f; //eq.getAveragef(eq.numBands-7, 7);
          index = (index + 1) % FRAME_WIDTH;
          bass[index] = rawBass * rawBass * rawBass * rawBass;
          treble[index] = rawTreble * rawTreble;

@@ -114,7 +114,7 @@ public class ViolinWaveOriginal extends LXPattern {
                 model.cy + 30 * amp.getValuef() * MathUtils.sin((float)(accum + (i - centers.length / 2f) / (1f + 9 * period.getValuef())));
         }
         float zeroDBReference = MathUtils.pow(10, (50 - 190 * level.getValuef()) / 20f);
-        float dB = (float) (20 * Math.log((eq.getSquaref()) / zeroDBReference) / LOG_10);
+        float dB = (float) (20 * Math.log((0.5f) / zeroDBReference) / LOG_10);
         if (dB > dbValue.getValuef()) {
             rising = true;
             dbValue.setRangeFromHereTo(dB, 10).trigger();

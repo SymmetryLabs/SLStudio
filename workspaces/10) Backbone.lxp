@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519962273041,
+  "timestamp": 1520003174439,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -230,7 +230,7 @@
       "modulationColor": -29952,
       "parameters": {
         "label": "Audio",
-        "enabled": true,
+        "enabled": false,
         "mode": 0
       },
       "meter": {
@@ -239,29 +239,29 @@
         "modulationColor": -64000,
         "parameters": {
           "label": "Meter",
-          "running": true,
+          "running": false,
           "trigger": false,
           "gain": 20.160000000000018,
           "range": 24.900000000000006,
           "attack": 10.0,
           "release": 650.0031960397508,
           "slope": 4.5,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.1259504786978255,
-          "Band-5": 0.12191918562128379,
-          "Band-6": 0.3217309170140955,
-          "Band-7": 0.3481188220947772,
-          "Band-8": 0.4726898008568474,
-          "Band-9": 0.5114124981014949,
-          "Band-10": 0.7170280204198214,
-          "Band-11": 0.6437068755827233,
-          "Band-12": 0.7617992712068677,
-          "Band-13": 0.862628190420611,
-          "Band-14": 0.941800318966436,
-          "Band-15": 1.0,
-          "Band-16": 1.0
+          "Band-1": 0.40040380521299823,
+          "Band-2": 0.5677508440827193,
+          "Band-3": 0.665189096819425,
+          "Band-4": 0.7625871046850663,
+          "Band-5": 0.6231135062336686,
+          "Band-6": 0.29007735755550557,
+          "Band-7": 0.5640500951508685,
+          "Band-8": 0.5383760581318593,
+          "Band-9": 0.5587944446937143,
+          "Band-10": 0.5984076784617849,
+          "Band-11": 0.4233569504898109,
+          "Band-12": 0.3298229312695935,
+          "Band-13": 0.3447348412062824,
+          "Band-14": 0.23056119524276475,
+          "Band-15": 0.0989751066209762,
+          "Band-16": 0.0
         }
       },
       "input": {
@@ -270,7 +270,7 @@
         "modulationColor": -65380,
         "parameters": {
           "label": "Audio Input",
-          "device": 3
+          "device": 0
         }
       },
       "output": {
@@ -364,7 +364,7 @@
   },
   "externals": {
     "ui": {
-      "audioExpanded": true,
+      "audioExpanded": false,
       "paletteExpanded": true,
       "engineExpanded": true,
       "clipViewVisible": true,
