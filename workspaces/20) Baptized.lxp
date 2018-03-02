@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519873124101,
+  "timestamp": 1519957761920,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -369,7 +369,7 @@
         "modulationColor": -7208705,
         "parameters": {
           "label": "Audio Input",
-          "device": 6
+          "device": 1
         }
       },
       "output": {
@@ -391,7 +391,7 @@
       "modulationColor": -16711774,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,

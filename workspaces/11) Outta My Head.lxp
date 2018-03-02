@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519926635180,
+  "timestamp": 1519957735191,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -256,11 +256,11 @@
           "Band-4": 0.0,
           "Band-5": 0.0,
           "Band-6": 0.0,
-          "Band-7": 0.0,
-          "Band-8": 0.0,
-          "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
+          "Band-7": 0.14261967177575618,
+          "Band-8": 0.2848163877205253,
+          "Band-9": 0.20591348045378466,
+          "Band-10": 0.30668866787651183,
+          "Band-11": 0.09146797501926152,
           "Band-12": 0.0,
           "Band-13": 0.0,
           "Band-14": 0.0,
@@ -274,7 +274,7 @@
         "modulationColor": -7208705,
         "parameters": {
           "label": "Audio Input",
-          "device": 5
+          "device": 0
         }
       },
       "output": {
@@ -296,7 +296,7 @@
       "modulationColor": -16711774,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
