@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519843830955,
+  "timestamp": 1519953343716,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -196,7 +196,7 @@
             "modulationColor": -16711859,
             "parameters": {
               "label": "Pong",
-              "Sprk": 1.0,
+              "Sprk": 0.0,
               "Wave": 0.0,
               "TrnX": 0.5,
               "TrnY": 0.5,
@@ -525,7 +525,7 @@
         "modulationColor": -16724737,
         "parameters": {
           "label": "Audio Input",
-          "device": 5
+          "device": 3
         }
       },
       "output": {
@@ -627,7 +627,7 @@
       "preview": {
         "radius": 256.39222411254644,
         "theta": 0.02100000000000226,
-        "phi": 0.050999999999999934,
+        "phi": 0.05399999999999994,
         "positionX": 128.5470733642578,
         "positionY": 55.0,
         "positionZ": -154.47593688964844

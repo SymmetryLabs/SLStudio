@@ -118,8 +118,10 @@ public class ExplosionsTriggerable extends LXPattern {
 
                         for(L8onExplosion explosion : this.explosions) {
                                 if(explosion.onExplosion(p.x, p.y, p.z)) {
-                                        num_explosions_in++;
-                                        hue_value = L8onUtil.natural_hue_blend(explosion.hue_value, hue_value, num_explosions_in);
+            if (!explosion.isFinished()) {
+                                            num_explosions_in++;
+                                            hue_value = L8onUtil.natural_hue_blend(explosion.hue_value, hue_value, num_explosions_in);
+            }
                                 }
                         }
 

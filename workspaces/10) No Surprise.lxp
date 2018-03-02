@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519924960189,
+  "timestamp": 1519956964082,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5306815108592351,
       "crossfaderBlendMode": 1,
       "speed": 0.483333358541131,
-      "focusedChannel": 3,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -602,7 +602,7 @@
         "modulationColor": -16383745,
         "parameters": {
           "label": "Audio Input",
-          "device": 5
+          "device": 3
         }
       },
       "output": {
@@ -702,7 +702,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 385.76911038470604,
+        "radius": 490.07006483976295,
         "theta": -0.050999999999999976,
         "phi": 0.024000000000000226,
         "positionX": 154.04908752441406,

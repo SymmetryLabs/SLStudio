@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1519877699638,
+  "timestamp": 1519952716501,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -96,7 +96,7 @@
             "parameters": {
               "label": "BassPod",
               "CLR": 0.5,
-              "Gain": 3.249999973922968,
+              "Gain": 1.4500000793486834,
               "Gain-proxy": 0.0,
               "Range-proxy": 1.0,
               "Attack-proxy": 0.8100000042468309,
@@ -488,10 +488,10 @@
           "label": "Meter",
           "running": true,
           "trigger": false,
-          "gain": 16.320000000000014,
+          "gain": 11.52000000000001,
           "range": 24.900000000000006,
           "attack": 10.0,
-          "release": 100.0,
+          "release": 650.0031960397508,
           "slope": 4.5,
           "Band-1": 0.0,
           "Band-2": 0.0,
@@ -517,7 +517,7 @@
         "modulationColor": -65380,
         "parameters": {
           "label": "Audio Input",
-          "device": 6
+          "device": 3
         }
       },
       "output": {
@@ -617,7 +617,7 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 328.22861395031737,
+        "radius": 325.61032511037325,
         "theta": -0.020999999999998485,
         "phi": 0.044999999999999776,
         "positionX": 135.52943420410156,
