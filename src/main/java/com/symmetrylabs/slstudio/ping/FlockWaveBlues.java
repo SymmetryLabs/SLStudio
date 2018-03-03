@@ -14,7 +14,7 @@ public class FlockWaveBlues extends FlockWave {
         parameters.get("fadeInSec").setValue(1.700);
         parameters.get("fadeOutSec").setValue(0.780);
         parameters.get("maxBirds").setValue(8.000);
-        parameters.get("maxSpd").setValue(10.000);
+        parameters.get("maxSpd").setValue(50.000);
         parameters.get("palBias").setValue(-0.800);
         parameters.get("palCutoff").setValue(0);
         parameters.get("palShift").setValue(0);

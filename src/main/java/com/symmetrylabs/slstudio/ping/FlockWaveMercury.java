@@ -13,7 +13,7 @@ public class FlockWaveMercury extends FlockWave {
         parameters.get("detail").setValue(10.000);
         parameters.get("fadeInSec").setValue(2.000);
         parameters.get("fadeOutSec").setValue(1.500);
-        parameters.get("maxBirds").setValue(20.000);
+        parameters.get("maxBirds").setValue(50.000);
         parameters.get("maxSpd").setValue(0);
         parameters.get("palBias").setValue(0);
         parameters.get("palCutoff").setValue(0);

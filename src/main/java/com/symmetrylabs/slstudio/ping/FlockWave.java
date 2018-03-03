@@ -34,7 +34,7 @@ public class FlockWave extends SLPatternWithMarkers {
     CompoundParameter y = new CompoundParameter("y", model.cy, model.yMin, model.yMax);
     CompoundParameter z = new CompoundParameter("z", model.cz, model.zMin, model.zMax);
     CompoundParameter zScale = new CompoundParameter("zScale", 0, -6, 12);  // z scaling factor (dB)
-    DiscreteParameter maxBirds = new DiscreteParameter("maxBirds", 8, 0, 100);
+    DiscreteParameter maxBirds = new DiscreteParameter("maxBirds", 50, 0, 100);
 
     CompoundParameter spnRad = new CompoundParameter("spnRad", 100, 0, 400);  // radius (in) within which to spawn birds
     CompoundParameter spnRate = new CompoundParameter("spnRate", 0.2, 0, 2);  // maximum spawn rate (birds/s)

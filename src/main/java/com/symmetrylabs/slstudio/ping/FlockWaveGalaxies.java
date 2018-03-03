@@ -13,7 +13,7 @@ public class FlockWaveGalaxies extends FlockWave {
         parameters.get("detail").setValue(6.600);
         parameters.get("fadeInSec").setValue(1.700);
         parameters.get("fadeOutSec").setValue(0.780);
-        parameters.get("maxBirds").setValue(8.000);
+        parameters.get("maxBirds").setValue(50.000);
         parameters.get("maxSpd").setValue(10.000);
         parameters.get("palBias").setValue(-1.400);
         parameters.get("palCutoff").setValue(0.320);
