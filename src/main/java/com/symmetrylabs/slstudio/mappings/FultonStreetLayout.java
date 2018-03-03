@@ -58,19 +58,6 @@ public class FultonStreetLayout {
         // Please talk to Ping if you need to touch this.
         // Note: y values are set in Sun class by type
 
-        // the old mapping
-        positions.put("A" /* 01 */, new float[]{1456, 0, 200});    // Sun02  closest to Water Street
-        positions.put("B" /* 02 */, new float[]{1243, 0, 96});     // Sun01
-        positions.put("C" /* 03 */, new float[]{1104, 0, 269});    // Sun04
-        positions.put("D" /* 04 */, new float[]{933, 0, 128});     // Sun06
-        positions.put("E" /* 05 */, new float[]{772, 0, 295});     // Sun07
-        positions.put("F" /* 06 */, new float[]{395, 0, 58});      // Sun09
-        positions.put("G" /* 07 */, new float[]{264, 0, 369});     // Sun10
-        positions.put("H" /* 08 */, new float[]{0, 0, 0});         // Sun11  origin, nearest to power supply
-        positions.put("I" /* 09 */, new float[]{-265, 0, 201});    // Sun08
-        positions.put("J" /* 10 */, new float[]{-401, 0, 356});    // Sun05
-        positions.put("K" /* 11 */, new float[]{-686, 0, 261});    // Sun03  closest to the river
-
         // Calibration after the cameras were remounted
         // positions.put("A" /* 01 */, new float[]{1436, 0, 210});
         // positions.put("B" /* 02 */, new float[]{1243, 0, 90});
@@ -84,7 +71,33 @@ public class FultonStreetLayout {
         // positions.put("J" /* 10 */, new float[]{-401, 0, 356});
         // positions.put("K" /* 11 */, new float[]{-615, 0, 250});
 
-                if (mappings == null) loadMappings();
+        // model coordinates that were in use prior to and until 2018-02-21
+        // positions.put("A" /* 01 */, new float[]{1456, 0, 200});    // Sun02  closest to Water Street
+        // positions.put("B" /* 02 */, new float[]{1243, 0, 96});     // Sun01
+        // positions.put("C" /* 03 */, new float[]{1104, 0, 269});    // Sun04
+        // positions.put("D" /* 04 */, new float[]{933, 0, 128});     // Sun06
+        // positions.put("E" /* 05 */, new float[]{772, 0, 295});     // Sun07
+        // positions.put("F" /* 06 */, new float[]{395, 0, 58});      // Sun09
+        // positions.put("G" /* 07 */, new float[]{264, 0, 369});     // Sun10
+        // positions.put("H" /* 08 */, new float[]{0, 0, 0});         // Sun11  origin, nearest to power supply
+        // positions.put("I" /* 09 */, new float[]{-265, 0, 201});    // Sun08
+        // positions.put("J" /* 10 */, new float[]{-401, 0, 356});    // Sun05
+        // positions.put("K" /* 11 */, new float[]{-686, 0, 261});    // Sun03  closest to the river
+
+        // calibrated according to camera images taken on 2018-02-21
+        positions.put("A" /* 01 */, new float[]{1441, 0, 195});    // Sun02  closest to Water Street
+        positions.put("B" /* 02 */, new float[]{1247, 0, 88});     // Sun01
+        positions.put("C" /* 03 */, new float[]{1106, 0, 270});    // Sun04
+        positions.put("D" /* 04 */, new float[]{935, 0, 111});     // Sun06
+        positions.put("E" /* 05 */, new float[]{766, 0, 299});     // Sun07
+        positions.put("F" /* 06 */, new float[]{387, 0, 61});      // Sun09
+        positions.put("G" /* 07 */, new float[]{240, 0, 378});     // Sun10
+        positions.put("H" /* 08 */, new float[]{0, 0, 0});         // Sun11  origin, nearest to power supply
+        positions.put("I" /* 09 */, new float[]{-248, 0, 185});    // Sun08
+        positions.put("J" /* 10 */, new float[]{-393, 0, 325});    // Sun05
+        positions.put("K" /* 11 */, new float[]{-638, 0, 228});    // Sun03  closest to the river
+
+        if (mappings == null) loadMappings();
     }
 
     public static Mappings loadMappings() {
