@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520001881927,
+  "timestamp": 1520008840543,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.46402389189507076,
       "crossfaderBlendMode": 0,
       "speed": 0.44999994337558746,
-      "focusedChannel": 0,
+      "focusedChannel": 1,
       "cueA": false,
       "cueB": false,
       "multithreaded": false,
@@ -154,7 +154,7 @@
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.7999999821186066
+              "amount": 0.5399999879300594
             },
             "modulation": {
               "modulators": [],
@@ -181,7 +181,7 @@
               "RotZ": 0.2047244094488189,
               "Spin": 0.5,
               "Fast": 0.55,
-              "Dens": 0.6,
+              "Dens": 0.2000000089406967,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 3,

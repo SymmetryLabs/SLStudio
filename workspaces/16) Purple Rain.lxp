@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520003218448,
+  "timestamp": 1520014014954,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -145,7 +145,7 @@
               "label": "DaughtryRaindrops",
               "NUM": -5.0,
               "SIZE": 0.029799999557435515,
-              "SPD": -2138.999974541366,
+              "SPD": -3210.999950580299,
               "SPDVr": 1.0,
               "HUE": 0.5
             },
