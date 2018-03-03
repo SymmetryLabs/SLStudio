@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ping;
 
+import com.symmetrylabs.util.ParameterUtils;
 import heronarts.lx.LX;
 
 
@@ -7,21 +8,19 @@ public class FlockWaveGalaxies extends FlockWave {
     public FlockWaveGalaxies(LX lx) {
         super(lx);
 
-        parameters.get("everywhere").setValue(1);
-        parameters.get("nearBlobs").setValue(0);
+        ParameterUtils.setDiscreteParameter(birdMode, "everywhere");
         parameters.get("spnRate").setValue(2.000);
         parameters.get("detail").setValue(6.600);
         parameters.get("fadeInSec").setValue(1.700);
         parameters.get("fadeOutSec").setValue(0.780);
-        parameters.get("atBlobs").setValue(0);
-        parameters.get("maxBirds").setValue(8.000);
+        parameters.get("maxBirds").setValue(50.000);
         parameters.get("maxSpd").setValue(10.000);
         parameters.get("palBias").setValue(-1.400);
         parameters.get("palCutoff").setValue(0.320);
         parameters.get("palShift").setValue(0);
         parameters.get("palStart").setValue(0.250);
         parameters.get("palStop").setValue(1);
-        setPalette("galaxies");
+        ParameterUtils.setDiscreteParameter(palette, "galaxies");
         parameters.get("ripple").setValue(0.400);
         parameters.get("scatter").setValue(130.000);
         parameters.get("size").setValue(560.000);
