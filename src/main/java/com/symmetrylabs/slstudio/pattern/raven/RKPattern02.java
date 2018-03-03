@@ -30,6 +30,9 @@ public class RKPattern02 extends P3CubeMapPattern {
 
     BooleanParameter audioLink = new BooleanParameter("audioLink", false);
     BooleanParameter blobsLink = new BooleanParameter("blobsLink", false);
+    CompoundParameter thres = new CompoundParameter("thres", 450, 150, 900);
+    BooleanParameter flipX = new BooleanParameter("flipX", true);
+    BooleanParameter flipZ = new BooleanParameter("flipZ", false);
     CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
     CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
     CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -46,7 +49,8 @@ public class RKPattern02 extends P3CubeMapPattern {
     ArrayList<Arc> arcs;
     float f, fT, fTIncre;
     float l1 = 600, l2 = 600, l3 = 600;
-    float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT;
+    float rotX, rotXT, rotY, rotYT, rotZ, rotZT, threshd, dspmt, dspmtT;
+    boolean flipXAxis, flipZAxis;
     float gWeight = 2, gWeightT = 2;
     boolean autoNoise, showEdge;
     int switchCount;
@@ -85,6 +89,9 @@ public class RKPattern02 extends P3CubeMapPattern {
 
         addParameter(audioLink);
         addParameter(blobsLink);
+        addParameter(thres);
+        addParameter(flipX);
+        addParameter(flipZ);
         addParameter(rX);
         addParameter(rY);
         addParameter(rZ);
@@ -133,8 +140,16 @@ public class RKPattern02 extends P3CubeMapPattern {
             if (autoNoise || audioLinked) {
                 float scalar = map(arc.lv, 0, 8, dspmt, dspmt * 1.5f);
                 arc.splitRatio = .5f + (noise(arc.idx * .1f + f) - .5f) * scalar;
-                arc.fragRatioS = (noise(arc.idx * .1f + f * 2 + 2.46f) - .5f) * 1.2f + .5f;
-                arc.fragRatioE = (noise(arc.idx * .1f + f * 2 + 11.27f) - .5f) * 1.2f + .5f;
+                if(!blobsLinked){
+                    arc.fragRatioS = (noise(arc.idx * .1f + f * 2 + 2.46f) - .5f) * 1.2f + .5f;
+                    arc.fragRatioE = (noise(arc.idx * .1f + f * 2 + 11.27f) - .5f) * 1.2f + .5f;
+                }else{
+                    for (int j = 0; j < blobsPos.length; j++) {
+                        float d = dist(arc.ctr.x, arc.ctr.y, arc.ctr.z,blobsPos[j].x, blobsPos[j].y, blobsPos[j].z);
+                                arc.fragRatioS = map(constrain(d, threshd/6f, threshd), threshd/6f, threshd, 0, .5f);
+                                arc.fragRatioE = map(constrain(d, threshd/6f, threshd), threshd/6f, threshd, 1.0f, .5f);
+                    }
+                }
             }
             arc.update();
         }
@@ -156,9 +171,12 @@ public class RKPattern02 extends P3CubeMapPattern {
         blobsPos = new PVector[blobs.size()];
         println("blobTracker.getBlobs().size(): " + blobs.size());
         int blobIdx = 0;
+        float mappedX = 0, mappedZ = 0;
         for (BlobTracker.Blob b : blobs) {
-            float mappedX = (b.pos.x-(-401))*2;
-            float mappedZ = -(b.pos.z-356)*2;
+            if(flipXAxis) mappedX = -(b.pos.x-240)*2;
+            else mappedX = (b.pos.x-240)*2;
+            if(flipZAxis) mappedZ = (b.pos.z-378)*2;
+            else mappedZ = -(b.pos.z-378)*2;
             blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
             println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
             println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
@@ -178,6 +196,9 @@ public class RKPattern02 extends P3CubeMapPattern {
             rotXT = rX.getValuef();
             rotYT = rY.getValuef();
             rotZT = rZ.getValuef();
+            threshd = thres.getValuef();
+            flipXAxis = flipX.getValueb();
+            flipZAxis = flipZ.getValueb();
             autoNoise = noise.getValueb();
             dspmtT = dsp.getValuef();
             fTIncre = speed.getValuef();
@@ -285,6 +306,7 @@ public class RKPattern02 extends P3CubeMapPattern {
 
         PVector[] vts;
         PVector[][] fragVts;
+        PVector ctr;
 
         float splitRatio, splitRatioT, splitRatioStp;
         float sTheta, eTheta, sPhi, ePhi, sThetaFrg, eThetaFrg, sPhiFrg, ePhiFrg;
@@ -313,6 +335,8 @@ public class RKPattern02 extends P3CubeMapPattern {
             }
 
             dir = floor(random(4));
+
+            ctr = new PVector();
         }
 
         void update() {
@@ -343,6 +367,12 @@ public class RKPattern02 extends P3CubeMapPattern {
                 sPhiFrg = sPhi;
                 ePhiFrg = ePhi;
             }
+
+            ctr.set(
+                sin((sTheta+eTheta)*.5f) * cos((sPhi+ePhi)*.5f) * l1 * .5f,
+                cos((sTheta+eTheta)*.5f) * l2 * .5f,
+                sin((sTheta+eTheta)*.5f) * sin((sPhi+ePhi)*.5f) * l3 * .5f
+            );
 
             if (hasChildren) {
                 if (lv % 2 == 0) {

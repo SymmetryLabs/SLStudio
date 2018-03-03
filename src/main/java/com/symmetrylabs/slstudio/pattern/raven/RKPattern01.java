@@ -32,7 +32,7 @@ public class RKPattern01 extends P3CubeMapPattern {
     BooleanParameter audioLink = new BooleanParameter("audioLink", false);
     BooleanParameter blobsLink = new BooleanParameter("blobsLink", false);
     CompoundParameter thres = new CompoundParameter("thres", 450, 150, 900);
-    BooleanParameter flipX = new BooleanParameter("flipX", false);
+    BooleanParameter flipX = new BooleanParameter("flipX", true);
     BooleanParameter flipZ = new BooleanParameter("flipZ", false);
     CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
     CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
@@ -127,10 +127,10 @@ public class RKPattern01 extends P3CubeMapPattern {
         int blobIdx = 0;
         float mappedX = 0, mappedZ = 0;
         for (BlobTracker.Blob b : blobs) {
-            if(flipXAxis) mappedX = -(b.pos.x-395)*2;
-            else mappedX = (b.pos.x-395)*2;
-            if(flipZAxis) mappedZ = (b.pos.z-58)*2;
-            else mappedZ = -(b.pos.z-58)*2;
+            if(flipXAxis) mappedX = -(b.pos.x-387)*2;
+            else mappedX = (b.pos.x-387)*2;
+            if(flipZAxis) mappedZ = (b.pos.z-61)*2;
+            else mappedZ = -(b.pos.z-61)*2;
             blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
             println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
             println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
@@ -211,13 +211,13 @@ public class RKPattern01 extends P3CubeMapPattern {
         pg.rotateY(rotY);
         pg.rotateZ(rotZ);
         drawScene(pg);
-        if(blobsLinked && blobsPos!=null){
+        /*if(blobsLinked && blobsPos!=null){
             for(int i=0; i<blobsPos.length; i++){
                 pg.stroke(255, 0, 0);
                 pg.strokeWeight(20);
                 pg.point(blobsPos[i].x, blobsPos[i].y, blobsPos[i].z);
             }
-        }
+        }*/
         pg.endDraw();
     }
 

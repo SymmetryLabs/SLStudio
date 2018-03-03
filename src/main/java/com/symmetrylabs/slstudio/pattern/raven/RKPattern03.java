@@ -30,6 +30,9 @@ public class RKPattern03 extends P3CubeMapPattern {
 
     BooleanParameter audioLink = new BooleanParameter("audioLink", false);
     BooleanParameter blobsLink = new BooleanParameter("blobsLink", false);
+    CompoundParameter thres = new CompoundParameter("thres", 450, 150, 900);
+    BooleanParameter flipX = new BooleanParameter("flipX", true);
+    BooleanParameter flipZ = new BooleanParameter("flipZ", false);
     CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
     CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
     CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -52,7 +55,8 @@ public class RKPattern03 extends P3CubeMapPattern {
     boolean audioLinked, blobsLinked, avgSplit, pAvgSplit, showTri, showEdge;
     PVector rotDir;
 
-    float rotX, rotXT, rotY, rotYT, rotZ, rotZT, gFIncre, gFIncreT;
+    float rotX, rotXT, rotY, rotYT, rotZ, rotZT, threshd, gFIncre, gFIncreT;
+    boolean flipXAxis, flipZAxis;
 
     public RKPattern03(LX lx) {
 
@@ -82,6 +86,9 @@ public class RKPattern03 extends P3CubeMapPattern {
 
         addParameter(audioLink);
         addParameter(blobsLink);
+        addParameter(thres);
+        addParameter(flipX);
+        addParameter(flipZ);
         addParameter(rX);
         addParameter(rY);
         addParameter(rZ);
@@ -122,9 +129,12 @@ public class RKPattern03 extends P3CubeMapPattern {
         blobsPos = new PVector[blobs.size()];
         println("blobTracker.getBlobs().size(): " + blobs.size());
         int blobIdx = 0;
+        float mappedX = 0, mappedZ = 0;
         for (BlobTracker.Blob b : blobs) {
-            float mappedX = (b.pos.x-(-401))*2;
-            float mappedZ = -(b.pos.z-356)*2;
+            if(flipXAxis) mappedX = -(b.pos.x-0)*2;
+            else mappedX = (b.pos.x-0)*2;
+            if(flipZAxis) mappedZ = (b.pos.z-0)*2;
+            else mappedZ = -(b.pos.z-0)*2;
             blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
             println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
             println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
@@ -156,6 +166,9 @@ public class RKPattern03 extends P3CubeMapPattern {
             rotXT = rX.getValuef();
             rotYT = rY.getValuef();
             rotZT = rZ.getValuef();
+            threshd = thres.getValuef();
+            flipXAxis = flipX.getValueb();
+            flipZAxis = flipZ.getValueb();
             gFIncreT = speed.getValuef();
             fragMid = fragment.getValuef();
         } else {
@@ -211,13 +224,13 @@ public class RKPattern03 extends P3CubeMapPattern {
         pg.rotateY(rotY);
         pg.rotateZ(rotZ);
         drawScene(pg);
-        if(blobsLinked && blobsPos!=null){
+        /*if(blobsLinked && blobsPos!=null){
             for(int i=0; i<blobsPos.length; i++){
                 pg.stroke(255, 0, 0);
                 pg.strokeWeight(20);
                 pg.point(blobsPos[i].x, blobsPos[i].y, blobsPos[i].z);
             }
-        }
+        }*/
         pg.endDraw();
     }
 
@@ -352,7 +365,7 @@ public class RKPattern03 extends P3CubeMapPattern {
                 }else{
                     for (int j = 0; j < blobsPos.length; j++) {
                         float d = dist(ctr.x, ctr.y,ctr.z,blobsPos[j].x, blobsPos[j].y, blobsPos[j].z);
-                                fragRatioT = map(constrain(d, 50, 300), 50, 300, 0, .95f);
+                                fragRatioT = map(constrain(d, threshd/6f, threshd), threshd/6f, threshd, 0, .9f);
                     }
                 }
             }else{
