@@ -31,6 +31,9 @@ public class RKPattern01 extends P3CubeMapPattern {
 
     BooleanParameter audioLink = new BooleanParameter("audioLink", false);
     BooleanParameter blobsLink = new BooleanParameter("blobsLink", false);
+    CompoundParameter thres = new CompoundParameter("thres", 450, 150, 900);
+    BooleanParameter flipX = new BooleanParameter("flipX", false);
+    BooleanParameter flipZ = new BooleanParameter("flipZ", false);
     CompoundParameter rX = new CompoundParameter("rX", 0, -PI, PI);
     CompoundParameter rY = new CompoundParameter("rY", 0, -PI, PI);
     CompoundParameter rZ = new CompoundParameter("rZ", 0, -PI, PI);
@@ -47,7 +50,8 @@ public class RKPattern01 extends P3CubeMapPattern {
     int ringRes = 40, ringAmt = 20, pRingAmt = 20;
     float l1 = 600, l2 = 600, l3 = 600;
     float gTheta, gThetaSpacing, gWeightScalar;
-    float rotX, rotXT, rotY, rotYT, rotZ, rotZT, dspmt, dspmtT, nDspmt, nDspmtT, thetaSpeed, thetaSpeedT;
+    float rotX, rotXT, rotY, rotYT, rotZ, rotZT, threshd, dspmt, dspmtT, nDspmt, nDspmtT, thetaSpeed, thetaSpeedT;
+    boolean flipXAxis, flipZAxis;
     ArrayList<Ring> testRings;
     PVector rotDir;
 
@@ -79,6 +83,9 @@ public class RKPattern01 extends P3CubeMapPattern {
 
         addParameter(audioLink);
         addParameter(blobsLink);
+        addParameter(thres);
+        addParameter(flipX);
+        addParameter(flipZ);
         addParameter(rX);
         addParameter(rY);
         addParameter(rZ);
@@ -118,9 +125,12 @@ public class RKPattern01 extends P3CubeMapPattern {
         blobsPos = new PVector[blobs.size()];
         println("blobTracker.getBlobs().size(): " + blobs.size());
         int blobIdx = 0;
+        float mappedX = 0, mappedZ = 0;
         for (BlobTracker.Blob b : blobs) {
-            float mappedX = (b.pos.x-(-401))*2;
-            float mappedZ = -(b.pos.z-356)*2;
+            if(flipXAxis) mappedX = -(b.pos.x-395)*2;
+            else mappedX = (b.pos.x-395)*2;
+            if(flipZAxis) mappedZ = (b.pos.z-58)*2;
+            else mappedZ = -(b.pos.z-58)*2;
             blobsPos[blobIdx] = new PVector(mappedX, 0, mappedZ);
             println("blob no." + blobIdx + "  x: " + b.pos.x + " y: " + b.pos.y + " z: " + b.pos.z);
             println("  mapped x: " + blobsPos[blobIdx].x + " y: " + blobsPos[blobIdx].y + " z: " + blobsPos[blobIdx].z);
@@ -140,6 +150,9 @@ public class RKPattern01 extends P3CubeMapPattern {
             rotXT = rX.getValuef();
             rotYT = rY.getValuef();
             rotZT = rZ.getValuef();
+            threshd = thres.getValuef();
+            flipXAxis = flipX.getValueb();
+            flipZAxis = flipZ.getValueb();
             thetaSpeedT = speed.getValuef();
             dspmtT = dsp.getValuef();
             nDspmtT = nDsp.getValuef();
@@ -277,8 +290,8 @@ public class RKPattern01 extends P3CubeMapPattern {
                     for (int j = 0; j < blobsPos.length; j++) {
                         float d = dist(vts[i].pos.x, vts[i].pos.y, vts[i].pos.z,
                                         blobsPos[j].x, blobsPos[j].y, blobsPos[j].z);
-                                if (d<300) {
-                                        vts[i].updateScalar((300-d)/300);
+                                if (d<threshd) {
+                                        vts[i].updateScalar((threshd-d)/threshd);
                                 }
                     }
                 }
