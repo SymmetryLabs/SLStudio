@@ -47,8 +47,8 @@ public class LXHeadless {
         );
     }
 
-    public static void addFadeCandyOutput(LX lx) throws Exception {
-        lx.engine.addOutput(new FadecandyOutput(lx, "localhost", 9090, lx.model));
+    public static void addFadecandyOutput(LX lx) throws Exception {
+        lx.engine.addOutput(new FadecandyOutput(lx, "localhost", 7890, lx.model));
     }
 
     public static void main(String[] args) {
@@ -58,7 +58,7 @@ public class LXHeadless {
 
             // TODO: add your own output code here
             // addArtNetOutput(lx);
-            // addFadecandyOutput(lx);
+             addFadecandyOutput(lx);
 
             // On the CLI you specify an argument with an .lxp file
             if (args.length > 0) {
@@ -66,6 +66,7 @@ public class LXHeadless {
             }
 
             lx.engine.start();
+            lx.engine.onDraw();
         } catch (Exception x) {
             System.err.println(x.getLocalizedMessage());
         }
