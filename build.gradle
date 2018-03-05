@@ -73,6 +73,10 @@ dependencies {
 	// https://mvnrepository.com/artifact/io.github.lukehutch/fast-classpath-scanner
 	compile group: 'io.github.lukehutch', name: 'fast-classpath-scanner', version: '2.9.3'
 
+	// lock aparapi-jni snapshot version
+	// https://oss.sonatype.org/content/repositories/snapshots/com/aparapi/aparapi-jni/
+	compile "com.aparapi:aparapi-jni:1.1.3-20180211.063116-7"
+
 	// https://github.com/SymmetryLabs/aparapi
 	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
 
