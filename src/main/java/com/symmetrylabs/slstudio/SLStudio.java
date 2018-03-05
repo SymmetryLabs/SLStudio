@@ -4,8 +4,11 @@ import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.output.Pixlite;
+import heronarts.lx.LX;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -25,7 +28,6 @@ import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
@@ -46,6 +48,7 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
+    public LX lx_OG;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
@@ -75,8 +78,9 @@ public class SLStudio extends PApplet {
         Utils.setSketchPath(sketchPath());
 
         // Instantiate the desired layout here.
-        layout = new CubesLayout();
-        // layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+//        layout = new CubesLayout();
+        layout = new DynamicLayout();
+//         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
         printModelStats(model);

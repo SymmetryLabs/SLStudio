@@ -13,7 +13,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
+import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 
@@ -227,7 +229,7 @@ public class CubesLayout implements Layout {
     static Map<String, String> macToPhysid = new HashMap<>();
     static Map<String, String> physidToMac = new HashMap<>();
 
-    public CubesModel buildModel() {
+    public SLModel buildModel() {
 
         byte[] bytes = SLStudio.applet.loadBytes("physid_to_mac.json");
         if (bytes != null) {
@@ -278,6 +280,8 @@ public class CubesLayout implements Layout {
             allCubesArr[i] = allCubes.get(i);
         }
 
+
+
         return new CubesModel(towers, allCubesArr);
     }
 
@@ -294,11 +298,43 @@ public class CubesLayout implements Layout {
         return weakRef == null ? null : weakRef.get();
     }
 
+    public static void addFadecandyOutput(LX lx) throws Exception {
+//    lx.engine.addOutput(new FadecandyOutput(lx, "localhost", 7890, lx.model));
+        lx.engine.addOutput(new FadecandyOutput(lx, "192.168.0.113", 1234, lx.model));
+    }
     public void setupLx(SLStudioLX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
+
+
+
+        TowerConfig config = new TowerConfig(SP*3.0f, (JUMP*2)+3          , -SP*5.5f, new String[] {"188"});
+        List<CubesModel.Cube> cubes = new ArrayList<>();
+        float x = config.x;
+        float z = config.z;
+        float xRot = config.xRot;
+        float yRot = config.yRot;
+        float zRot = config.zRot;
+        CubesModel.Cube.Type type = config.type;
+
+        LXTransform globalTransform = new LXTransform();
+        globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
+        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
+        globalTransform.rotateX(globalRotationX * Math.PI / 180.);
+        globalTransform.rotateZ(globalRotationZ * Math.PI / 180.);
+        for (int i = 0; i < config.ids.length; i++) {
+            float y = config.yValues[i];
+            CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+        }
+
+        try {
+            addFadecandyOutput(lx);
+        } catch (Exception e) {
+            System.out.println("OOPS! FADECANDY DONE FUCKED UP");
+            e.printStackTrace();
+        }
 
         networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
             public void itemAdded(int index, NetworkDevice device) {
@@ -359,7 +395,7 @@ public class CubesLayout implements Layout {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UI2dScrollContext utility = ui.rightPane.utility;
-        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+//        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 }

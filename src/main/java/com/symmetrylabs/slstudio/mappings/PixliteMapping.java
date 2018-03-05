@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.mappings;
 
 import com.google.gson.annotations.Expose;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
+import com.symmetrylabs.slstudio.output.Pixlite;
 import heronarts.lx.model.LXPoint;
 
 import java.util.ArrayList;
