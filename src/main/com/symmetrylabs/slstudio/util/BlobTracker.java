@@ -7,6 +7,8 @@ import heronarts.lx.LX;
 import heronarts.lx.LXModulatorComponent;
 import heronarts.lx.osc.LXOscListener;
 import heronarts.lx.osc.OscMessage;
+import heronarts.lx.transform.LXMatrix;
+import heronarts.lx.transform.LXTransform;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -114,21 +116,25 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
         float deltaSec = (float) (millis - lastMessageMillis) * 0.001f;
 
         NissanWindow window = ((NissanModel) lx.model).tryGetWindowById(windowId);
-        if (window == null) return;
+        if (window == null || window.uvTransform == null) return;
 
-        List<Blob> newBlobs = new ArrayList<Blob>();
+        LXTransform transform = new LXTransform(new LXMatrix(window.uvTransform.getMatrix()));
+
+        List<Blob> newBlobs = new ArrayList<>();
         for (int i = 0; i < count/4; i++) { // each data elt has 4
             float x = message.getFloat(arg++);
             float y = message.getFloat(arg++);
             float size0 = message.getFloat(arg++);
             float size1 = message.getFloat(arg++);
             float size = size0*size1;
-//            newBlobs.add(new Blob(new PVector(x, y, 0), size));
-            newBlobs.add(new Blob(new PVector(window.cx, window.cy, window.cz), size));
+            transform.push();
+            transform.translate(x, y);
+            newBlobs.add(new Blob(new PVector(transform.x(), transform.y(), transform.z()), size));
+            transform.pop();
         }
         blobsBySource.put(windowId, newBlobs);
 
-        List<Blob> allBlobs = new ArrayList<Blob>();
+        List<Blob> allBlobs = new ArrayList<>();
         for (String id : blobsBySource.keySet()) {
             allBlobs.addAll(blobsBySource.get(id));
         }

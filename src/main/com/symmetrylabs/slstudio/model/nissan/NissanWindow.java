@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.model.nissan;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXAbstractFixture;
+import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.model.LXPoint;
 
@@ -34,6 +35,12 @@ public class NissanWindow extends StripsModel<Strip> {
     public int max_y;
     public int range_y;
 
+    /**
+     * uvTransform is the transform between a 2d point in uv space
+     * on this window and its 3d coordinates in world space.
+     */
+    public LXTransform uvTransform;
+
     public NissanWindow(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
         super(new Fixture(carId, id, type, coordinates, rotations, transform));
 
@@ -52,6 +59,8 @@ public class NissanWindow extends StripsModel<Strip> {
         this.max_y = fixture.max_y;
         this.range_x = this.max_x - this.min_x;
         this.range_y = this.max_y - this.min_y;
+
+        uvTransform = fixture.uvTransform;
 
         for (Strip strip : strips) {
             stripMap.put(strip.id, strip);
@@ -78,6 +87,7 @@ public class NissanWindow extends StripsModel<Strip> {
         public int min_y;
         public int max_y;
         public int range_y;
+        public LXTransform uvTransform;
 
         private Fixture(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
             this.carId = carId;
@@ -138,6 +148,13 @@ public class NissanWindow extends StripsModel<Strip> {
                     System.out.println("back left rotations");
                     System.out.println(Arrays.toString(rotations));
             }
+
+            uvTransform = new LXTransform(new LXMatrix(transform.getMatrix()));
+            uvTransform.scale(PIXEL_PITCH);
+            uvTransform.translate(min_x, min_y);
+            uvTransform.scale(max_x - min_x, max_y - min_y, 1);
+            uvTransform.scale(-1, 1, 1);
+            uvTransform.translate(-1, 0, 0);
 
             for (Strip strip : strips) {
                 this.points.addAll(strip.getPoints());
@@ -509,10 +526,11 @@ public class NissanWindow extends StripsModel<Strip> {
                 transform.translate(PIXEL_PITCH, 0, 0);
                 panel_index_offset++;
                 // :0DOT
-                updateTelemetry(config);
 
 //        points.add(new LXPointNormal(transform.x(), transform.y(), transform.z()));
-                points.add(new PanelPoint(transform.x(), transform.y(), transform.z(), config.panel_x + panel_index_offset, config.panel_y));
+                PanelPoint point = new PanelPoint(transform.x(), transform.y(), transform.z(), config.panel_x + panel_index_offset, config.panel_y);
+                points.add(point);
+                updateTelemetry(point.panel_x, point.panel_y);
             }
 
             Strip.Metrics metrics = new Strip.Metrics(config.numPoints);
@@ -521,18 +539,18 @@ public class NissanWindow extends StripsModel<Strip> {
             transform.pop();
         }
 
-        private void updateTelemetry(StripConfig config) {
-            if (config.panel_x < this.min_x){
-                this.min_x = config.panel_x;
+        private void updateTelemetry(int x, int y) {
+            if (x < this.min_x){
+                this.min_x = x;
             }
-            if (config.panel_x > this.max_x){
-                this.max_x = config.panel_x;
+            if (x > this.max_x){
+                this.max_x = x;
             }
-            if (config.panel_y < this.min_y){
-                this.min_y = config.panel_y;
+            if (y < this.min_y){
+                this.min_y = y;
             }
-            if (config.panel_y > this.max_y){
-                this.max_y = config.panel_y;
+            if (y > this.max_y){
+                this.max_y = y;
             }
         }
 
