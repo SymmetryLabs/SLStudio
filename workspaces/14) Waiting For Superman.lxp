@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520003202169,
+  "timestamp": 1520275300851,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -119,7 +119,7 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.55,
-              "Dens": 0.6,
+              "Dens": 0.0,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 7,
@@ -625,9 +625,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 256.39222411254644,
-        "theta": 0.02100000000000226,
-        "phi": 0.05399999999999994,
+        "radius": 74.63422585968169,
+        "theta": 0.02700000000000226,
+        "phi": 0.05999999999999994,
         "positionX": 128.5470733642578,
         "positionY": 55.0,
         "positionZ": -154.47593688964844

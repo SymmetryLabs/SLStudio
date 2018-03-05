@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520275577073,
+  "timestamp": 1520110862162,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -49,11 +49,55 @@
     },
     "channels": [
       {
-        "id": 77452,
+        "id": 82366,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -14336,
+        "modulationColor": -16759297,
         "parameters": {
-          "label": "Solid",
+          "label": "Flash",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 1.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 0,
+        "patterns": [
+          {
+            "id": 82364,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -2621185,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 82369,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -13500672,
+        "parameters": {
+          "label": "Swarm",
           "arm": false,
           "enabled": true,
           "cue": false,
@@ -73,15 +117,15 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 77450,
+            "id": 82367,
             "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -11992833,
+            "modulationColor": -4063488,
             "parameters": {
               "label": "SolidColor",
               "color/hue": 0.0,
               "color/brightness": 100.0,
-              "color/saturation": 0.0,
-              "color": -1
+              "color/saturation": 100.0,
+              "color": -65536
             },
             "modulation": {
               "modulators": [],
@@ -192,7 +236,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.3857142822816968
+        "brightness": 0.7142857126891613
       }
     },
     "components": {

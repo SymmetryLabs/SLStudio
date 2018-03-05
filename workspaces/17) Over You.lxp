@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520003227296,
+  "timestamp": 1520275356590,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -495,7 +495,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.5571428546682
       }
     },
     "components": {

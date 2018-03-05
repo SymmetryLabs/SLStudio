@@ -56,9 +56,26 @@ public class APC40Listener extends LXComponent {
         }
 
         public void controlChangeReceived(MidiControlChange cc) {
+                //System.out.println("control: " + cc.getCC() + ", value: " + cc.getNormalized());
+
+            if (cc.getCC() == 7) {
+                int numChannels = SLStudio.applet.lx.engine.getChannels().size();
+
+                switch (cc.getChannel()) {
+                    case 0: if (numChannels > 0) SLStudio.applet.lx.engine.getChannel(0).fader.setValue(cc.getNormalized()); break;
+                    case 1: if (numChannels > 1) SLStudio.applet.lx.engine.getChannel(1).fader.setValue(cc.getNormalized()); break;
+                    case 2: if (numChannels > 2) SLStudio.applet.lx.engine.getChannel(2).fader.setValue(cc.getNormalized()); break;
+                    case 3: if (numChannels > 3) SLStudio.applet.lx.engine.getChannel(3).fader.setValue(cc.getNormalized()); break;
+                    case 4: if (numChannels > 4) SLStudio.applet.lx.engine.getChannel(4).fader.setValue(cc.getNormalized()); break;
+                    case 5: if (numChannels > 5) SLStudio.applet.lx.engine.getChannel(5).fader.setValue(cc.getNormalized()); break;
+                    case 6: if (numChannels > 6) SLStudio.applet.lx.engine.getChannel(6).fader.setValue(cc.getNormalized()); break;
+                    case 7: if (numChannels > 7) SLStudio.applet.lx.engine.getChannel(7).fader.setValue(cc.getNormalized()); break;
+                }
+            }
+
             if (cc.getCC() == 14) {
-                System.out.println("control: " + cc.getCC() + ", value: " + cc.getNormalized());
-                System.out.println("old value: " + SLStudio.applet.lx.engine.output.brightness.getValuef());
+                //System.out.println("control: " + cc.getCC() + ", value: " + cc.getNormalized());
+                //System.out.println("old value: " + SLStudio.applet.lx.engine.output.brightness.getValuef());
                 SLStudio.applet.lx.engine.output.brightness.setValue(cc.getNormalized());
             }
 
@@ -79,7 +96,7 @@ public class APC40Listener extends LXComponent {
         }
 
         public void noteOnReceived(MidiNoteOn note) {
-            System.out.println(note.getPitch());
+            //System.out.println(note.getPitch());
 
             if (note.getPitch() == 91) {
                 SLStudio.applet.lx.engine.output.enabled.setValue(true);
