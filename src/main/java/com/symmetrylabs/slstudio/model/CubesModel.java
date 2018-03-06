@@ -6,6 +6,8 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import com.symmetrylabs.slstudio.output.SimplePixlite;
+import com.symmetrylabs.slstudio.output.SimplePixliteConfigs;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
@@ -26,9 +28,13 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     protected final List<Face> faces = new ArrayList<>();
     protected final Map<String, Cube> cubeTable = new HashMap<>();
 
+    public final List<LXFixture> bars = new ArrayList<>();
+
     private final List<Tower> towersUnmodifiable = Collections.unmodifiableList(towers);
     private final List<Cube> cubesUnmodifiable = Collections.unmodifiableList(cubes);
     private final List<Face> facesUnmodifiable = Collections.unmodifiableList(faces);
+
+    private final List<LXFixture> barsUnmodifiable = Collections.unmodifiableList(bars);
 
     private final Cube[] _cubes;
 
@@ -52,6 +58,10 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
                     this.faces.addAll(cube.getFaces());
                     this.strips.addAll(cube.getStrips());
                 }
+            }
+
+            for(LXFixture bar : dynamicAllBars){
+                this.bars.add(bar);
             }
         }
     }
@@ -100,9 +110,10 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         return this.cubeTable.get(id);
     }
 
-    /**
-     * Model of a set of cubes stacked in a tower
-     */
+
+        /**
+             * Model of a set of cubes stacked in a tower
+             */
     public static class Tower extends StripsModel<CubesStrip> {
 
         /**
