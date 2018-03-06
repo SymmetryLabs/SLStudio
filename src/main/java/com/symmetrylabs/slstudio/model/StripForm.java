@@ -55,6 +55,12 @@ public class StripForm extends LXAbstractFixture {
             // 1.0 default pitch i guess...
             this(numPoints, 1.0);
         }
+
+        /*
+        Metrics - Enough metadata to fully specify the form of a thing.
+        note: this intentionally does not specify the location/orientation of the form
+        TODO?> Factor in 'FormMetrics' which are metrics specific to form?
+         */
         public Metrics(int numPoints, double pitch) {
             this.numPoints = numPoints;
             this.pixelPitch = pitch;
