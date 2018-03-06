@@ -31,7 +31,7 @@
 	
   <target name="compile" depends="clean">
     <mkdir dir="../tmp"/>
-    <javac srcdir="../src" destdir="../tmp" includeAntRuntime="false">
+    <javac srcdir="../src" destdir="../tmp" debug="true" includeAntRuntime="false">
       <classpath refid="lib.path" />
     </javac>
     <mkdir dir="../bin"/>
