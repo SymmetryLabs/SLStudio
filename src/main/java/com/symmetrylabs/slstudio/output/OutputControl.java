@@ -28,8 +28,8 @@ public final class OutputControl extends LXComponent {
 
         enabled.addListener(param -> {
             boolean isEnabled = ((BooleanParameter) param).isOn();
-            for (Pixlite pixlite : SLStudio.applet.pixlites) {
-                pixlite.enabled.setValue(isEnabled);
+            for (MappingPixlite mappingPixlite : SLStudio.applet.mappingPixlites) {
+                mappingPixlite.enabled.setValue(isEnabled);
             }
         });
     }
