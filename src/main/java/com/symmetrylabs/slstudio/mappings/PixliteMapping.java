@@ -1,7 +1,6 @@
 package com.symmetrylabs.slstudio.mappings;
 
 import com.google.gson.annotations.Expose;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import heronarts.lx.model.LXPoint;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ import java.util.stream.Stream;
 
 public class PixliteMapping implements OutputMapping {
 
-        public static final int NUM_DATALINES = Pixlite.NUM_DATALINES;
+        public static final int NUM_DATALINES = PixliteMapping.NUM_DATALINES;
 
         @Expose public String ipAddress;
         @Expose private DatalineMapping[] datalineMappings;

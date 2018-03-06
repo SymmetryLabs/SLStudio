@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.output.LXDatagram;
@@ -29,7 +29,7 @@ public class ArtNetDatagram extends LXDatagram {
             setAddress(ipAddress);
             setPort(ARTNET_PORT);
         } catch (UnknownHostException e) {
-            System.out.println("Pixlite with ip address (" + ipAddress + ") is not on the network.");
+            System.out.println("MappingPixlite with ip address (" + ipAddress + ") is not on the network.");
         }
 
         this.buffer[0] = 'A';

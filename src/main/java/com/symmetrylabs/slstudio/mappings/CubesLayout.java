@@ -10,7 +10,11 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
+import com.symmetrylabs.slstudio.model.CandyBar;
+import com.symmetrylabs.slstudio.model.LocatedForm;
+import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
+import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.transform.LXTransform;
 
@@ -274,7 +278,23 @@ public class CubesLayout {
             allCubesArr[i] = allCubes.get(i);
         }
 
-        return new CubesModel(towers, allCubesArr);
+        List<LXFixture> dynamicAllBars = new ArrayList<>();
+        CandyBar candy = new CandyBar();
+        dynamicAllBars.add(candy);
+
+
+        for (int i = 0; i < 20; i ++){
+            LocatedForm located = new LocatedForm(globalTransform, candy);
+            globalTransform.translate(0,5,0);
+            dynamicAllBars.add(located);
+        }
+
+        LXFixture[] allFixtures =  new LXFixture[dynamicAllBars.size()];
+        allFixtures = dynamicAllBars.toArray(allFixtures);
+
+
+
+        return new CubesModel(towers, allCubesArr, allFixtures);
     }
 
     /*

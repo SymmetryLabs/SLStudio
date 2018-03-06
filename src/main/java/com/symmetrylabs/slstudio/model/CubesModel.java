@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.ArrayList;
 import java.util.HashMap;
 
+import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
@@ -32,11 +33,11 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     private final Cube[] _cubes;
 
     public CubesModel() {
-        this(new ArrayList<>(), new Cube[0]);
+        this(new ArrayList<>(), new Cube[0], null);
     }
 
-    public CubesModel(List<Tower> towers, Cube[] cubeArr) {
-        super(new Fixture(cubeArr));
+    public CubesModel(List<Tower> towers, Cube[] cubeArr, LXFixture[] dynamicAllBars) {
+        super(new Fixture(cubeArr, dynamicAllBars));
         Fixture fixture = (Fixture) this.fixtures.get(0);
 
         _cubes = cubeArr;
@@ -55,6 +56,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         }
     }
 
+
     public List<Tower> getTowers() {
         return towersUnmodifiable;
     }
@@ -68,12 +70,17 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     }
 
     private static class Fixture extends LXAbstractFixture {
-        private Fixture(Cube[] cubeArr) {
+        private Fixture(Cube[] cubeArr, LXFixture[] bars) {
             for (Cube cube : cubeArr) {
                 if (cube != null) {
                     for (LXPoint point : cube.points) {
                         this.points.add(point);
                     }
+                }
+            }
+            for (LXFixture bar : bars){
+                for (LXPoint point : bar.getPoints()){
+                    this.points.add(point);
                 }
             }
         }

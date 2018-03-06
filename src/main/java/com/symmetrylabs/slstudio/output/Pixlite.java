@@ -1,8 +1,9 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.mappings.*;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
+import com.symmetrylabs.slstudio.output.ArtNetDatagram;
 import com.symmetrylabs.slstudio.output.SLBypassOutputGroup;
 import heronarts.lx.LX;
 import heronarts.lx.output.LXDatagramOutput;

@@ -5,21 +5,22 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.HashMap;
 
+import com.symmetrylabs.slstudio.model.CandyBar;
+import com.symmetrylabs.slstudio.model.LocatedForm;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.*;
+import heronarts.lx.LX;
+import heronarts.lx.model.LXFixture;
+import heronarts.lx.parameter.*;
+import heronarts.lx.transform.LXTransform;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
-import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
 
 import com.symmetrylabs.slstudio.mappings.CubesLayout;
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
-import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.slstudio.palettes.ArrayPalette;
 import com.symmetrylabs.slstudio.palettes.ImageLibrary;
 import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
@@ -29,12 +30,12 @@ import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
 import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
 import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import sun.java2d.pipe.SpanShapeRenderer;
 
 import static com.symmetrylabs.util.DistanceConstants.*;
 
@@ -48,7 +49,7 @@ public class SLStudio extends PApplet {
     public Dispatcher dispatcher;
     private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
-    public Pixlite[] pixlites;
+    public SimplePixlite[] pixlites;
     public ListenableList<SLController> slControllers;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
@@ -81,17 +82,8 @@ public class SLStudio extends PApplet {
 
         model = CubesLayout.buildModel();
 
-        println("-- Model ----");
-        println("# of points: " + model.points.length);
-        println("model.xMin: " + model.xMin);
-        println("model.xMax: " + model.xMax);
-        println("model.xRange: " + model.xRange);
-        println("model.yMin: " + model.yMin);
-        println("model.yMax: " + model.yMax);
-        println("model.yRange: " + model.yRange);
-        println("model.zMin: " + model.zMin);
-        println("model.zMax: " + model.zMax);
-        println("model.zRange: " + model.zRange + "\n");
+
+
 
         new SLStudioLX(this, model, true) {
             @Override
@@ -108,7 +100,13 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
 
                 slControllers = CubesLayout.setupCubesOutputs(lx);
-                pixlites = setupPixlites();
+
+                pixlites = new SimplePixliteConfigs().setupPixlites(lx);
+
+                // Code added by aaron
+                for (SimplePixlite pl: pixlites) {
+                    lx.addOutput(pl);
+                }
 
                 apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
@@ -137,13 +135,27 @@ public class SLStudio extends PApplet {
         };
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
-        lx.engine.audio.enabled.setValue(true);
-        lx.engine.output.enabled.setValue(false);
-        blobTracker = BlobTracker.getInstance(lx);
+        lx.engine.audio.enabled.setValue(false);
+        lx.engine.output.enabled.setValue(true);
+
         performanceManager.start(lx.ui);
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
+    }
+
+    void printModelStats(LXModel model) {
+        println("-- Model ----");
+        println("# of points: " + model.points.length);
+        println("model.xMin: " + model.xMin);
+        println("model.xMax: " + model.xMax);
+        println("model.xRange: " + model.xRange);
+        println("model.yMin: " + model.yMin);
+        println("model.yMax: " + model.yMax);
+        println("model.yRange: " + model.yRange);
+        println("model.zMin: " + model.zMin);
+        println("model.zMax: " + model.zMax);
+        println("model.zRange: " + model.zRange + "\n");
     }
 
     void loadPalettes(PaletteLibrary pl) {
@@ -383,10 +395,6 @@ public class SLStudio extends PApplet {
         background(lx.ui.theme.getDarkBackgroundColor());
         DrawHelper.runAll();
         dispatcher.draw();
-    }
-
-    private Pixlite[] setupPixlites() {
-        return new Pixlite[0]; // todo
     }
 
     public final static int CHAN_WIDTH = 200;
