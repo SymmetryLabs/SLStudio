@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.output.LXDatagram;
