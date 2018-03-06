@@ -78,15 +78,15 @@ public class SLStudio extends PApplet {
         Utils.setSketchPath(sketchPath());
 
         // Instantiate the desired layout here.
-//        layout = new CubesLayout();
-        layout = new DynamicLayout();
+        layout = new CubesLayout();
+//    layout = new DynamicLayout();
 //         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
         printModelStats(model);
 
-        PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
-        loadPalettes(paletteLibrary);
+//        PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+//        loadPalettes(paletteLibrary);
 
         new SLStudioLX(this, model, true) {
 

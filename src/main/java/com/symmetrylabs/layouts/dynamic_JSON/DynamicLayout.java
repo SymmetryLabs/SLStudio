@@ -6,22 +6,30 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesController;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.layouts.cubes.UIMappingPanel;
+import com.symmetrylabs.layouts.cubes.UIOutputs;
+import com.symmetrylabs.slstudio.model.CandyBar;
+import com.symmetrylabs.slstudio.model.LocatedForm;
 import com.symmetrylabs.slstudio.model.StripForm;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
+import com.symmetrylabs.slstudio.output.ArtNetDatagram;
 import com.symmetrylabs.slstudio.output.Pixlite;
 import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListListener;
 import com.symmetrylabs.util.listenable.ListenableList;
 import heronarts.lx.LX;
+import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.output.LXDatagramOutput;
 import heronarts.lx.output.OPCDatagram;
 import heronarts.lx.output.OPCOutput;
@@ -34,7 +42,7 @@ import java.net.SocketException;
 import java.net.UnknownHostException;
 import java.util.*;
 
-public class DynamicLayout implements Layout {
+public class DynamicLayout extends CubesLayout implements Layout {
     ListenableList<CubesController> controllers = new ListenableList<>();
     public Pixlite[] pixlites;
 
@@ -80,7 +88,6 @@ public class DynamicLayout implements Layout {
     static Map<String, String> macToPhysid = new HashMap<>();
     static Map<String, String> physidToMac = new HashMap<>();
 
-    LXFixture[] fixtures = new LXFixture[2];
     List<LXFixture> dynamicfixtures = new ArrayList<>();
 
     public SLModel buildModel() {
@@ -107,14 +114,14 @@ public class DynamicLayout implements Layout {
 
         /* Cubes ----------------------------------------------------------*/
         // Read in the JSON and begin constructing model and assigning outputs.
+        CandyBar candy = new CandyBar();
+        dynamicfixtures.add(candy);
 
-        StripForm strip = new StripForm("testStrip", new StripForm.Metrics(30, 2.5));
-        fixtures[0] = strip;
-        dynamicfixtures.add(strip);
-
-        StripForm strip2 = new StripForm("testStrip", new StripForm.Metrics(50, 10.5));
-        fixtures[1] = strip2;
-        dynamicfixtures.add(strip2);
+        for (int i = 0; i < 20; i ++){
+            LocatedForm located = new LocatedForm(globalTransform, candy);
+            globalTransform.translate(0,5,0);
+            dynamicfixtures.add(located);
+        }
 
         LXFixture[] yeee =  new LXFixture[dynamicfixtures.size()];
         yeee = dynamicfixtures.toArray(yeee);
@@ -137,31 +144,59 @@ public class DynamicLayout implements Layout {
         return weakRef == null ? null : weakRef.get();
     }
 
+    public static void addArtNetOutput(LX lx, LXAbstractFixture mapOutput) throws Exception {
+        int[] indices = new int[mapOutput.getPoints().size()];
+        int idx = 0;
+        for (LXPoint p : mapOutput.getPoints()){
+            indices[idx++] = p.index;
+        }
+        lx.engine.addOutput(
+            new LXDatagramOutput(lx).addDatagram(
+                new ArtNetDatagram(lx, "192.168.0.113", indices, 10)
+//        .setAddress("10.200.1.128")
+            )
+        );
+    }
+
+    public static void addDatagramOPCOutput(LX lx, String ip_addr) throws Exception {
+        lx.engine.addOutput(
+            new LXDatagramOutput(lx).addDatagram(
+                new OPCDatagram(lx.model)
+                    .setAddress(ip_addr)
+                    .setPort(7890)
+
+            )
+        );
+    }
+    public static void addFadecandyOutput(LX lx) throws Exception {
+//    lx.engine.addOutput(new FadecandyOutput(lx, "localhost", 7890, lx.model));
+        lx.engine.addOutput(new FadecandyOutput(lx, "192.168.0.113", 1234, lx.model));
+    }
     public void setupLx(SLStudioLX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
 
+//        try {
+//            addArtNetOutput(lx, (LXAbstractFixture) dynamicfixtures.get(0));
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
+//        for (int i = 0; i < dynamicfixtures.size(); i++){
+//        }
 
-        lx.engine.addOutput(
-            new OPCOutput(lx, "localhost", 7890, dynamicfixtures.get(0))
-        );
-
-//        lx.engine.addOutput(
-//            new OPCOutput(lx, "localhost", 7890, fixtures[0])
-//        );
         try {
-            lx.engine.addOutput(
-                                new LXDatagramOutput(lx).addDatagram(
-                                        new OPCDatagram(fixtures[1])
-                                                .setAddress("localhost")
-                                                .setPort(7890)
-
-                                )
-                        );
-        } catch (SocketException e) {
-            e.printStackTrace();
-        } catch (UnknownHostException e) {
+            addFadecandyOutput(lx);
+        } catch (Exception e) {
             e.printStackTrace();
         }
+//        try {
+//            addDatagramOPCOutput(lx, "10.200.1.192");
+//            addDatagramOPCOutput(lx, "10.200.1.193");
+//            addDatagramOPCOutput(lx, "10.200.1.194");
+//            addDatagramOPCOutput(lx, "10.200.1.195");
+//            addDatagramOPCOutput(lx, "10.200.1.196");
+//        } catch (Exception e) {
+//            e.printStackTrace();
+//        }
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
@@ -182,20 +217,20 @@ public class DynamicLayout implements Layout {
                         lx.addOutput(controller);
                     }
                 });
-                //controller.enabled.setValue(false);
+//                controller.enabled.setValue(false);
             }
 
             public void itemRemoved(int index, NetworkDevice device) {
                 final CubesController controller = controllers.remove(index);
                 dispatcher.dispatchEngine(new Runnable() {
                     public void run() {
-                        //lx.removeOutput(controller);
+//                        lx.removeOutput(controller);
                     }
                 });
             }
         });
 
-        //lx.addOutput(new CubesController(lx, "10.200.1.255"));
+        lx.addOutput(new CubesController(lx, "10.200.1.255"));
         //lx.addOutput(new LIFXOutput());
 
         lx.engine.output.enabled.addListener(param -> {
@@ -226,7 +261,7 @@ public class DynamicLayout implements Layout {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UI2dScrollContext utility = ui.rightPane.utility;
-//        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 }

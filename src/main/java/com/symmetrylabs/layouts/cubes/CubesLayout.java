@@ -76,7 +76,8 @@ public class CubesLayout implements Layout {
     static final TowerConfig[] TOWER_CONFIG = {
 
         // left
-        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "22", "204" }),
+//        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "22", "204" }),
+        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "static0", "static1", "static2", "static3" }),
 
         new TowerConfig(-SP*4.5f, (JUMP*0)+TOWER_RISER, -SP*3.0f, new String[] { "86" }),
         new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "5" }),
@@ -364,7 +365,7 @@ public class CubesLayout implements Layout {
             }
         });
 
-        //lx.addOutput(new CubesController(lx, "10.200.1.255"));
+        lx.addOutput(new CubesController(lx, "10.200.1.255"));
         //lx.addOutput(new LIFXOutput());
 
         lx.engine.output.enabled.addListener(param -> {
@@ -395,7 +396,7 @@ public class CubesLayout implements Layout {
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UI2dScrollContext utility = ui.rightPane.utility;
-//        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 }

@@ -25,7 +25,7 @@ public class UIOutputs extends UICollapsibleSection {
 
         private Dispatcher dispatcher;
 
-        UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
+        public UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
                 super(ui, x, y, w, 124);
 
                 dispatcher = Dispatcher.getInstance(lx);
