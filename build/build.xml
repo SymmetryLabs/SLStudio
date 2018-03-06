@@ -109,7 +109,7 @@ ${line}
 	</target>
 		
 	<target name="compile">
-		<javac srcdir="${project.tmp}/${project.name}/src" destdir="${project.bin}" source="${java.target.version}" target="${java.target.version}" includeantruntime="false">
+		<javac srcdir="${project.tmp}/${project.name}/src" destdir="${project.bin}" source="${java.target.version}" target="${java.target.version}" debug="true" includeantruntime="false">
 			<classpath>
 				<path refid="classpath"/>
 			</classpath>
@@ -124,6 +124,7 @@ ${line}
 		<jar jarfile="${project.tmp}/${project.name}/${folder}/${project.jar.name}" basedir="${project.bin}">
 			<zipgroupfileset dir="${project.lib}" includes="coremidi4j-0.9.jar" />
 			<zipgroupfileset dir="${project.lib}" includes="gson-2.8.0.jar" />
+			<fileset dir="${project.tmp}/${project.name}/src" includes="**/*.java"/>
 		</jar>
 	</target>
 	
