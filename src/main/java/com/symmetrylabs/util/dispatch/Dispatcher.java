@@ -7,14 +7,18 @@ import java.lang.ref.WeakReference;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 
-public class Dispatcher implements LXLoopTask {
+public class Dispatcher {
 
     private LX lx;
 
     private final DispatchQueue engineQueue = new DispatchQueue();
     private final DispatchQueue uiQueue = new DispatchQueue();
+    private final DispatchQueue networkQueue = new DispatchQueue();
 
     private static Map<LX, WeakReference<Dispatcher>> instanceByLX = new WeakHashMap<>();
+
+    private final LXLoopTask engineLoopTask = deltaMs -> engineQueue.executeAll();
+    private final Runnable networkTask = () -> networkQueue.executeAll();
 
     public static synchronized Dispatcher getInstance(LX lx) {
         WeakReference<Dispatcher> weakRef = instanceByLX.get(lx);
@@ -31,16 +35,12 @@ public class Dispatcher implements LXLoopTask {
         uiQueue.setThreadName(Thread.currentThread().getName());
         setEngineThreaded(true);
 
-        lx.engine.addLoopTask(this);
+        lx.engine.addLoopTask(engineLoopTask);
+        lx.engine.addNetworkTask(networkTask);
     }
 
     void setEngineThreaded(boolean threaded) {
         engineQueue.setThreadName(threaded ? "LX Engine Thread" : Thread.currentThread().getName());
-    }
-
-    @Override
-    public void loop(double deltaMs) {
-        engineQueue.executeAll();
     }
 
     public void draw() {
@@ -55,12 +55,20 @@ public class Dispatcher implements LXLoopTask {
         uiQueue.queue(runnable);
     }
 
+    public void dispatchNetwork(Runnable runnable) {
+        networkQueue.queue(runnable);
+    }
+
     DispatchQueue getEngineQueue() {
         return engineQueue;
     }
 
     DispatchQueue getUiQueue() {
         return uiQueue;
+    }
+
+    DispatchQueue getNetworkQueue() {
+        return networkQueue;
     }
 
 }

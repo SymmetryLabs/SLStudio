@@ -310,20 +310,14 @@ public class CubesLayout implements Layout {
                 }
                 final CubesController controller = new CubesController(lx, device, physid);
                 controllers.add(index, controller);
-                dispatcher.dispatchEngine(new Runnable() {
-                    public void run() {
-                        lx.addOutput(controller);
-                    }
-                });
+                dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
                 //controller.enabled.setValue(false);
             }
 
             public void itemRemoved(int index, NetworkDevice device) {
                 final CubesController controller = controllers.remove(index);
-                dispatcher.dispatchEngine(new Runnable() {
-                    public void run() {
-                        //lx.removeOutput(controller);
-                    }
+                dispatcher.dispatchNetwork(() -> {
+                    //lx.removeOutput(controller);
                 });
             }
         });

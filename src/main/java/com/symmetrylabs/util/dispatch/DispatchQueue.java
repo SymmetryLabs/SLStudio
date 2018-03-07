@@ -6,7 +6,7 @@ import java.util.concurrent.ConcurrentLinkedQueue;
 class DispatchQueue {
 
     private volatile String threadName;
-    private final ConcurrentLinkedQueue<Runnable> queuedRunnables = new ConcurrentLinkedQueue<Runnable>();
+    private final ConcurrentLinkedQueue<Runnable> queuedRunnables = new ConcurrentLinkedQueue<>();
 
     DispatchQueue() {
         this(null);
