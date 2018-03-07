@@ -101,12 +101,13 @@ public class SLStudio extends PApplet {
 
                 slControllers = CubesLayout.setupCubesOutputs(lx);
 
-                pixlites = new SimplePixliteConfigs().setupPixlites(lx);
+//                pixlites = new SimplePixliteConfigs().setupPixlites(lx);
+                lx.addOutput(new SimplePixliteConfigs().setupPixlites(lx));
 
                 // Code added by aaron
-                for (SimplePixlite pl: pixlites) {
-                    lx.addOutput(pl);
-                }
+//                for (SimplePixlite pl: pixlites) {
+//                    lx.addOutput(pl);
+//                }
 
                 apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);

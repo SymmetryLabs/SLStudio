@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520384464602,
+  "timestamp": 1520452641494,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -61,7 +61,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.757142853923142,
+          "fader": 0.5285814399067021,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,

@@ -7,7 +7,7 @@ import heronarts.lx.model.LXFixture;
 
 public class SimplePixliteConfigs {
 
-    public static SimplePixlite[] setupPixlites(LX lx) {
+    public static SimplePixlite setupPixlites(LX lx) {
 //    NissanModel model = ((NissanModel)lx.model);
         CubesModel model = ((CubesModel) lx.model);
 
@@ -17,34 +17,39 @@ public class SimplePixliteConfigs {
          * EXAMPLE
          * EXAMPLE
          */
-        int i = 0;
         int pix_index = 0;
-        SimplePixlite[] fixtures = new SimplePixlite[2];
+        int pix_base_host_address = 129;
 
-        SimplePixlite currentPixlite = new SimplePixlite(lx, "10.200.1.130");
-        for (i = 0; i < 16; i ++){
+        int NUM_PIX = 3;
+//        SimplePixlite[] pixlites = new SimplePixlite[NUM_PIX];
+
+        SimplePixlite chain;
+        SimplePixlite currentPixlite;
+
+        currentPixlite = chain = new SimplePixlite(lx, "10.200.1.129");
+        for (int i = pix_index*16; i < (pix_index + 1)*16; i ++){
             currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
                     .addPoints(model.bars.get(i).getPoints()));
         }
+//        pixlites[pix_index++] = currentPixlite;
 
-        fixtures[pix_index++] = currentPixlite;
-
-        fixtures[pix_index] = new SimplePixlite(lx, "10.200.1.128");
-        for (; i < 32; i ++){
-            fixtures[pix_index].addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+        currentPixlite = new SimplePixlite(lx, "10.200.1.130");
+        for (int i = pix_index*16; i < (pix_index + 1)*16; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
                 .addPoints(model.bars.get(i).getPoints()));
         }
-        return fixtures;
-        // CAR 1
-//        int BASE_HOST = 130;
-//        int OFFSET = 0;
-//        for (LXFixture bar : model.bars) {
-//            fixtures[i++] = new SimplePixlite(lx, "10.200.1.".concat(Integer.toString(BASE_HOST + (OFFSET++ /16) )))
-//                // don't forget strips start at the bottom of windows
-//                .addPixliteOutput(new PointsGrouping(Integer.toString(OFFSET)) // <- output index on pixlite
-//                    .addPoints(bar.getPoints()));
-//        }
-//        return fixtures;
+        chain.addChild(currentPixlite);
+//        pixlites[pix_index++] = currentPixlite;
+
+        currentPixlite = new SimplePixlite(lx, "10.200.1.131");
+        for (int i = pix_index*16; i < (pix_index + 1)*16; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+                .addPoints(model.bars.get(i).getPoints()));
+        }
+        chain.addChild(currentPixlite);
+//        pixlites[pix_index++] = currentPixlite;
+
+        return chain;
     }
 
     public static SimplePixlite setupPixlite(LX lx, LXFixture fixture, String ip, int output) {
