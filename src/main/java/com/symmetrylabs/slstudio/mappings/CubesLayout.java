@@ -71,32 +71,32 @@ public class CubesLayout {
     //     // new BulbConfig("lifx-5", 0, 0, 0),
     // };
 
-    static final float group0_x = 20;
+    static final float group0_x = SP*6;
     static final float group0_y = 0;
     static final float group0_z = 0;
 
     static final TowerConfig[] TOWER_CONFIG = {
 
         // left
-        new TowerConfig(group0_x+SP*6.5f, 0, +SP*2.5f, new String[] { "1", "29" }),
+        new TowerConfig(group0_x+SP*6, 0, +SP*2, new String[] { "1", "29" }),
 
-        new TowerConfig(group0_x+SP*6.5f, (JUMP*0)+TOWER_RISER, +SP*3.0f, new String[] { "38" }),
-        new TowerConfig(group0_x+SP*8.5f, (JUMP*0)+0, +SP*3.5f, new String[] { "50", "56" }),
+        new TowerConfig(group0_x+SP*6, (JUMP*0)+TOWER_RISER, +SP*3, new String[] { "38" }),
+        new TowerConfig(group0_x+SP*7, (JUMP*0)+0, +SP*2, new String[] { "50", "56" }),
 
-        new TowerConfig(group0_x+SP*8.0f, 0, +SP*1.0f, new String[] { "82", "120", "135" }),
+        new TowerConfig(group0_x+SP*8, 0, +SP*1, new String[] { "82", "120", "135" }),
 
-        new TowerConfig(group0_x+SP*8.5f, (JUMP*0)+TOWER_RISER, +SP*2.0f, new String[] { "150" }),
-        new TowerConfig(group0_x+SP*9.0f, (JUMP*0)+TOWER_RISER, +SP*0.5f, new String[] { "171" }),
-        new TowerConfig(group0_x+SP*11.0f, (JUMP*2)+TOWER_RISER, +SP*0.5f, new String[] { "182" }),
+        new TowerConfig(group0_x+SP*8, (JUMP*0)+TOWER_RISER, +SP*2, new String[] { "150" }),
+        new TowerConfig(group0_x+SP*9, (JUMP*0)+TOWER_RISER, +SP*1, new String[] { "171" }),
+        new TowerConfig(group0_x+SP*9, (JUMP*2)+TOWER_RISER, -SP*1, new String[] { "182" }),
 
         // left tower of 5
-        new TowerConfig(group0_x+SP*5, 0, 0, new String[] {
+        new TowerConfig(group0_x+SP*10, 0, 0, new String[] {
             "196", "198", "203", "340", "351"
         }),
 
-        new TowerConfig(group0_x+SP*11.0f, (JUMP*0)+TOWER_RISER, +SP*10.5f, new String[] {"360"}),
-        new TowerConfig(group0_x+SP*11.0f, (JUMP*2)+TOWER_RISER, +SP*10.5f, new String[] {"361"}),
-        new TowerConfig(group0_x+SP*11.0f, (JUMP*1)+TOWER_RISER, +SP*10.5f, new String[] {"397"}),
+        new TowerConfig(group0_x+SP*11.0f, (JUMP*0)+TOWER_RISER, +SP*0, new String[] {"360"}),
+        new TowerConfig(group0_x+SP*11.0f, (JUMP*2)+TOWER_RISER, +SP*0, new String[] {"361"}),
+        new TowerConfig(group0_x+SP*11.0f, (JUMP*1)+TOWER_RISER, +SP*0, new String[] {"397"}),
     };
 
     static final StripConfig[] STRIP_CONFIG = {

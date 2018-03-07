@@ -18,6 +18,7 @@ public class SimplePixliteConfigs {
          * EXAMPLE
          */
         int pix_index = 0;
+        int bar_index = 1; // burn one for the bar 'form' which has to be part of the model
         int pix_base_host_address = 129;
 
         int NUM_PIX = 3;
@@ -28,30 +29,43 @@ public class SimplePixliteConfigs {
         SimplePixlite currentPixlite;
 
         currentPixlite = chain = new SimplePixlite(lx, "10.200.1.130");
-        for (int i = pix_index*OUTPUT_CHANNELS_PER_PIX; i < (pix_index + 1)*OUTPUT_CHANNELS_PER_PIX; i ++){
-            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i%6)) // <- output index on pixlite
-                    .addPoints(model.bars.get(i).getPoints()));
+        for (int i = 1; i <= 5; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+                    .addPoints(model.bars.get(bar_index++).getPoints()));
         }
         pix_index++;
 //        pixlites[pix_index++] = currentPixlite;
 
         currentPixlite = new SimplePixlite(lx, "10.200.1.129");
-        for (int i = pix_index*OUTPUT_CHANNELS_PER_PIX; i < (pix_index + 1)*OUTPUT_CHANNELS_PER_PIX; i ++){
-            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i%6)) // <- output index on pixlite
-                .addPoints(model.bars.get(i).getPoints()));
+        for (int i = 1; i <= 6; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+                .addPoints(model.bars.get(bar_index++).getPoints()));
+        }
+        pix_index++;
+        for (int i = 14; i >= 9; i--){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+                .addPoints(model.bars.get(bar_index++).getPoints()));
         }
         pix_index++;
         chain.addChild(currentPixlite);
 //        pixlites[pix_index++] = currentPixlite;
 
-        currentPixlite = new SimplePixlite(lx, "10.200.1.131");
-        for (int i = pix_index*OUTPUT_CHANNELS_PER_PIX; i < (pix_index + 1)*OUTPUT_CHANNELS_PER_PIX; i ++){
-            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i%6)) // <- output index on pixlite
-                .addPoints(model.bars.get(i).getPoints()));
+        currentPixlite = new SimplePixlite(lx, "10.200.1.128");
+        for (int i = 1; i <= 6; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+                .addPoints(model.bars.get(bar_index++).getPoints()));
         }
         pix_index++;
         chain.addChild(currentPixlite);
 //        pixlites[pix_index++] = currentPixlite;
+
+        currentPixlite = new SimplePixlite(lx, "10.200.1.132");
+        for (int i = 1; i <= 6; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+                .addPoints(model.bars.get(bar_index++).getPoints()));
+        }
+        pix_index++;
+        chain.addChild(currentPixlite);
 
         return chain;
     }
