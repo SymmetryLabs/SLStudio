@@ -40,7 +40,7 @@ public class StripForm extends LXAbstractFixture implements Form {
         for (int i = 0; i < this.metrics.numPoints; i++){
             LXPoint point = new LXPoint(transform.x(), transform.y(), transform.z());
             points.add(point);
-            transform.translate((float)metrics.pixelPitch, 0, 0);
+            transform.translate(0, (float)metrics.pixelPitch,  0);
         }
     }
 
