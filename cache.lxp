@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520460200763,
+  "timestamp": 1520461929485,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -549,44 +549,7 @@
           }
         }
       ],
-      "modulations": [
-        {
-          "source": {
-            "id": 1765
-          },
-          "target": {
-            "componentId": 1761,
-            "parameterPath": "XPOS"
-          },
-          "id": 1766,
-          "class": "heronarts.lx.parameter.LXCompoundModulation",
-          "modulationColor": -29952,
-          "parameters": {
-            "label": "",
-            "enabled": true,
-            "Polarity": 0,
-            "Range": 0.6199999861419201
-          }
-        },
-        {
-          "source": {
-            "id": 1765
-          },
-          "target": {
-            "componentId": 1761,
-            "parameterPath": "YPOS"
-          },
-          "id": 1767,
-          "class": "heronarts.lx.parameter.LXCompoundModulation",
-          "modulationColor": -9109249,
-          "parameters": {
-            "label": "",
-            "enabled": true,
-            "Polarity": 0,
-            "Range": 0.669999985024333
-          }
-        }
-      ],
+      "modulations": [],
       "triggers": []
     },
     "osc": {
