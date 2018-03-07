@@ -20,7 +20,7 @@ public class CandyBar extends LXAbstractFixture{
 
         // the second strip
         // we can use the same strip form from above and just translate it and reflect it.
-        t.translate(5,0,0); // translate
+        t.translate(1.0f,0,0); // translate
         LocatedForm locateStrip1 = new LocatedForm(t, strip0);
         List<LXPoint> reverse_these = Lists.reverse(locateStrip1.getPoints()); // reflect
         points.addAll(reverse_these);
