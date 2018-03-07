@@ -102,6 +102,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     private Dispatch inputDispatch = null;
 
     private final List<LXLoopTask> loopTasks = new ArrayList<LXLoopTask>();
+    private final List<Runnable> networkTaskQueue = new ArrayList<Runnable>();
     private final List<Runnable> threadSafeTaskQueue = Collections.synchronizedList(new ArrayList<Runnable>());
     private final List<Runnable> engineThreadTaskQueue = new ArrayList<Runnable>();
     private final Map<String, LXComponent> components = new HashMap<String, LXComponent>();
@@ -749,6 +750,31 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     }
 
     /**
+     * Add a task to be run on every loop of the network thread.
+     *
+     * @param runnable
+     * @return
+     */
+    public LXEngine addNetworkTask(Runnable runnable) {
+        if (this.networkTaskQueue.contains(runnable)) {
+            throw new IllegalStateException("Cannot add task to engine twice: " + runnable);
+        }
+        this.networkTaskQueue.add(runnable);
+        return this;
+    }
+
+    /**
+     * Remove a task from the list run on every network loop invocation
+     *
+     * @param runnable
+     * @return
+     */
+    public LXEngine removeNetworkTask(Runnable runnable) {
+        this.networkTaskQueue.remove(runnable);
+        return this;
+    }
+
+    /**
      * Sets the output driver
      *
      * @param output Output driver, or null for no output
@@ -1213,6 +1239,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 this.network.notify();
             }
         } else {
+            for (Runnable runnable : LXEngine.this.networkTaskQueue) {
+                runnable.run();
+            }
             // Otherwise do it ourself here
             long outputStart = System.nanoTime();
             this.output.send(blendOutputMain);
@@ -1271,6 +1300,10 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 } catch (InterruptedException ix) {
                     System.out.println("LXEngine Network Thread interrupted");
                     break;
+                }
+
+                for (Runnable runnable : LXEngine.this.networkTaskQueue) {
+                    runnable.run();
                 }
 
                 if (output.enabled.isOn()) {
