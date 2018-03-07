@@ -10,17 +10,22 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class LocatedForm extends LXAbstractFixture {
-    LXFixture form;
     LXModel global_space_points;
     LXTransform placement;
 
-    public LocatedForm(LXTransform t, LXFixture f){
+    //unique id
+    public final String uid;
+
+    // used to create unique ids
+    private static int uid_counter = 0;
+
+    public LocatedForm(LXTransform t, Form f){
+        // creates a unique (to this model) identifier as the name of the Form concatenated with an incrementing id
+        this.uid = f.name.concat(String.valueOf(uid_counter++));
         this.placement = t;
-        this.form = f;
-        System.out.println(f.getPoints());
 
         for (LXPoint p : f.getPoints()){
-            this.points.add(new LXPoint(p.x + t.x(), p.y + t.y(), p.z + t.z()));
+            addPoint(new LXPoint(p.x + t.x(), p.y + t.y(), p.z + t.z()));
         }
     }
 }

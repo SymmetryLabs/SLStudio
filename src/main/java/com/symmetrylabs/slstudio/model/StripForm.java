@@ -11,7 +11,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class StripForm extends LXAbstractFixture implements Form {
+public class StripForm extends Form {
     public final String id;
 
     // local coordinate system
@@ -22,12 +22,14 @@ public class StripForm extends LXAbstractFixture implements Form {
     public Object obj1 = null, obj2 = null;
 
     public StripForm(String id, int numLeds, double pitch) {
+        super(id);
         this.metrics = new Metrics(numLeds, pitch);
         this.id = id;
         createPointsFromMetrics();
     }
 
     public StripForm(String id, Metrics metrics) {
+        super(id);
         this.id = id;
         this.metrics = metrics;
 

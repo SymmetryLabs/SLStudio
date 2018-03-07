@@ -28,7 +28,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
     protected final List<Face> faces = new ArrayList<>();
     protected final Map<String, Cube> cubeTable = new HashMap<>();
 
-    public final List<LXFixture> bars = new ArrayList<>();
+    public final List<LocatedForm> bars = new ArrayList<>();
 
     private final List<Tower> towersUnmodifiable = Collections.unmodifiableList(towers);
     private final List<Cube> cubesUnmodifiable = Collections.unmodifiableList(cubes);
@@ -61,7 +61,9 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             }
 
             for(LXFixture bar : dynamicAllBars){
-                this.bars.add(bar);
+                if (bar instanceof LocatedForm){
+                    this.bars.add((LocatedForm) bar);
+                }
             }
         }
     }

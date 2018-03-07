@@ -39,7 +39,7 @@ public class CubesLayout {
     static final float globalOffsetZ = 0;
 
     static final float globalRotationX = 0;
-    static final float globalRotationY = -45;
+    static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
 
     static final float objOffsetX = 0;
@@ -283,20 +283,21 @@ public class CubesLayout {
         }
 
         List<LXFixture> dynamicAllBars = new ArrayList<>();
-        CandyBar candy = new CandyBar();
+
+        // base form
+        CandyBar candy = new CandyBar("CandyBar");
         dynamicAllBars.add(candy);
 
-
+        // instantiations of base form
         for (int i = 0; i < 32; i ++){
             LocatedForm located = new LocatedForm(globalTransform, candy);
             globalTransform.translate(20,0,0);
             dynamicAllBars.add(located);
         }
 
+        // instantiate "classic" array from dynamic ArrayList
         LXFixture[] allFixtures =  new LXFixture[dynamicAllBars.size()];
         allFixtures = dynamicAllBars.toArray(allFixtures);
-
-
 
         return new CubesModel(towers, allCubesArr, allFixtures);
     }

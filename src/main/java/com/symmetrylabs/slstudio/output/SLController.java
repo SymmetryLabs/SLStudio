@@ -8,14 +8,14 @@ import java.net.ConnectException;
 import java.io.OutputStream;
 import java.io.IOException;
 
+import com.symmetrylabs.slstudio.model.*;
 import heronarts.lx.LX;
+import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.CubesModel;
-import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.slstudio.util.NetworkUtils;
 import com.symmetrylabs.slstudio.util.CubesMappingMode;
@@ -144,7 +144,8 @@ public class SLController extends LXOutput {
         CubesModel.Cube cube = null;
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
             cube = cubesModel.getCubes().get(0);
-        } else {
+        }
+        else {
             for (CubesModel.Cube c : cubesModel.getCubes()) {
                 if (c.id != null && c.id.equals(id)) {
                     cube = c;
@@ -152,6 +153,13 @@ public class SLController extends LXOutput {
                 }
             }
         }
+
+//        for (LocatedForm candyBar : cubesModel.bars) {
+//            if (candyBar.uid != null && candyBar.uid.equals(id)) {
+////                cube = candyBar;
+//                break;
+//            }
+//        }
 
         // Initialize packet data base on cube type.
         // If we don't know the cube type, default to
