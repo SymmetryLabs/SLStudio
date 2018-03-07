@@ -21,31 +21,35 @@ public class SimplePixliteConfigs {
         int pix_base_host_address = 129;
 
         int NUM_PIX = 3;
+        int OUTPUT_CHANNELS_PER_PIX = 6;
 //        SimplePixlite[] pixlites = new SimplePixlite[NUM_PIX];
 
         SimplePixlite chain;
         SimplePixlite currentPixlite;
 
-        currentPixlite = chain = new SimplePixlite(lx, "10.200.1.129");
-        for (int i = pix_index*16; i < (pix_index + 1)*16; i ++){
-            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+        currentPixlite = chain = new SimplePixlite(lx, "10.200.1.130");
+        for (int i = pix_index*OUTPUT_CHANNELS_PER_PIX; i < (pix_index + 1)*OUTPUT_CHANNELS_PER_PIX; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i%6)) // <- output index on pixlite
                     .addPoints(model.bars.get(i).getPoints()));
         }
+        pix_index++;
 //        pixlites[pix_index++] = currentPixlite;
 
-        currentPixlite = new SimplePixlite(lx, "10.200.1.130");
-        for (int i = pix_index*16; i < (pix_index + 1)*16; i ++){
-            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+        currentPixlite = new SimplePixlite(lx, "10.200.1.129");
+        for (int i = pix_index*OUTPUT_CHANNELS_PER_PIX; i < (pix_index + 1)*OUTPUT_CHANNELS_PER_PIX; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i%6)) // <- output index on pixlite
                 .addPoints(model.bars.get(i).getPoints()));
         }
+        pix_index++;
         chain.addChild(currentPixlite);
 //        pixlites[pix_index++] = currentPixlite;
 
         currentPixlite = new SimplePixlite(lx, "10.200.1.131");
-        for (int i = pix_index*16; i < (pix_index + 1)*16; i ++){
-            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i)) // <- output index on pixlite
+        for (int i = pix_index*OUTPUT_CHANNELS_PER_PIX; i < (pix_index + 1)*OUTPUT_CHANNELS_PER_PIX; i ++){
+            currentPixlite.addPixliteOutput(new PointsGrouping(Integer.toString(i%6)) // <- output index on pixlite
                 .addPoints(model.bars.get(i).getPoints()));
         }
+        pix_index++;
         chain.addChild(currentPixlite);
 //        pixlites[pix_index++] = currentPixlite;
 
