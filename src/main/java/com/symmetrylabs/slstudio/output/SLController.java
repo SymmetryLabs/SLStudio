@@ -140,6 +140,8 @@ public class SLController extends LXOutput {
         if (!(lx.model instanceof CubesModel))
             return;
 
+        boolean this_is_a_cube_not_a_bar = true;
+
         CubesModel cubesModel = (CubesModel)lx.model;
         CubesModel.Cube cube = null;
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
@@ -154,37 +156,53 @@ public class SLController extends LXOutput {
             }
         }
 
-//        for (LocatedForm candyBar : cubesModel.bars) {
-//            if (candyBar.uid != null && candyBar.uid.equals(id)) {
-////                cube = candyBar;
-//                break;
-//            }
-//        }
+        LocatedForm bar = null;
+        for (LocatedForm candyBar : cubesModel.bars) {
+            if (candyBar.uid != null && candyBar.uid.equals(id)) {
+                bar = candyBar;
+                this_is_a_cube_not_a_bar = false;
+                break;
+            }
+        }
 
         // Initialize packet data base on cube type.
         // If we don't know the cube type, default to
         // using the cube type with the most pixels
-        CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
-        int numPixels = cubeType.POINTS_PER_CUBE;
-        if (packetData == null || packetData.length != numPixels) {
-            initPacketData(numPixels);
+        if (this_is_a_cube_not_a_bar){
+            CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
+            int numPixels = cubeType.POINTS_PER_CUBE;
+            if (packetData == null || packetData.length != numPixels) {
+                initPacketData(numPixels);
+            }
+        }
+        else{
+            initPacketData(bar.numPoints());
         }
 
         // Fill the datagram with pixel data
         // Fill with all black if we don't have cube data
-        if (cube != null) {
-            for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-                int stripId = STRIP_ORD[stripNum];
-                Strip strip = cube.getStrips().get(stripId);
+        if (this_is_a_cube_not_a_bar){
+            if (cube != null) {
+                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+                    int stripId = STRIP_ORD[stripNum];
+                    Strip strip = cube.getStrips().get(stripId);
 
-                for (int i = 0; i < strip.metrics.numPoints; i++) {
-                    LXPoint point = strip.getPoints().get(i);
-                    setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+                    for (int i = 0; i < strip.metrics.numPoints; i++) {
+                        LXPoint point = strip.getPoints().get(i);
+                        setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
+                    }
+                }
+            } else {
+                for (int i = 0; i < numPixels; i++) {
+                    setPixel(i, LXColor.BLACK);
                 }
             }
-        } else {
-            for (int i = 0; i < numPixels; i++) {
-                setPixel(i, LXColor.BLACK);
+        }
+        // bar logic
+        else {
+            for (int i = 0; i < bar.numPoints(); i++) {
+                LXPoint point = bar.getPoints().get(i);
+                setPixel(i, colors[point.index]);
             }
         }
 

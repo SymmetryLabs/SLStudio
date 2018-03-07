@@ -28,4 +28,8 @@ public class LocatedForm extends LXAbstractFixture {
             addPoint(new LXPoint(p.x + t.x(), p.y + t.y(), p.z + t.z()));
         }
     }
+
+    public int numPoints(){
+        return this.points.size();
+    }
 }
