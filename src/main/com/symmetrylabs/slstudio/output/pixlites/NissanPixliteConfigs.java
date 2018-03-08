@@ -18,7 +18,7 @@ public class NissanPixliteConfigs {
 
             // CAR 1
 
-            new NissanPixlite(lx, "10.200.1.6")
+            new NissanPixlite(lx, "10.200.1.12")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                 .addPoints(model.getStripById("car1-driver-side-front-strip1").getPoints())
@@ -85,7 +85,7 @@ public class NissanPixliteConfigs {
 
             ),
 
-            new NissanPixlite(lx, "10.200.1.5")
+            new NissanPixlite(lx, "10.200.1.13")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                 .addPoints(model.getStripById("car1-passenger-side-front-strip1").getPoints())
@@ -156,7 +156,7 @@ public class NissanPixliteConfigs {
 
             ),
 
-            new NissanPixlite(lx, "10.200.1.7")
+            new NissanPixlite(lx, "10.200.1.11")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                      .addPoints(model.getStripById("car1-windshield-strip1").getPoints(), PointsGrouping.REVERSE_ORDERING)
@@ -259,7 +259,7 @@ public class NissanPixliteConfigs {
 
 // CAR 2
 
-            new NissanPixlite(lx, "10.200.1.12")
+            new NissanPixlite(lx, "10.200.1.6")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                     .addPoints(model.getStripById("car2-driver-side-front-strip1").getPoints())
@@ -326,7 +326,7 @@ public class NissanPixliteConfigs {
 
             ),
 
-            new NissanPixlite(lx, "10.200.1.13")
+            new NissanPixlite(lx, "10.200.1.5")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                     .addPoints(model.getStripById("car2-passenger-side-front-strip1").getPoints())
@@ -400,7 +400,7 @@ public class NissanPixliteConfigs {
 
 ////// CAR 2 WINDSHIELD NEW MAPPINGS FROM CAR 3
 ////
-            new NissanPixlite(lx, "10.200.1.11")
+            new NissanPixlite(lx, "10.200.1.7")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                     .addPoints(model.getStripById("car2-windshield-strip1").getPoints(), PointsGrouping.REVERSE_ORDERING)
