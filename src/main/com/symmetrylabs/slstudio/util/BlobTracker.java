@@ -81,7 +81,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
             float x = message.getFloat(arg++);
             float y = message.getFloat(arg++);
             float size = message.getFloat(arg++);
-            newBlobs.add(new Blob(new PVector(x, blobY, y), size));
+            newBlobs.add(new Blob(new PVector(x, blobY, y), size, id));
         }
         blobsBySource.put(sourceId, newBlobs);
 
@@ -129,7 +129,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
             float size = size0*size1;
             transform.push();
             transform.translate(x, y);
-            newBlobs.add(new Blob(new PVector(transform.x(), transform.y(), transform.z()), size));
+            newBlobs.add(new Blob(new PVector(transform.x(), transform.y(), transform.z()), size, windowId));
             transform.pop();
         }
         blobsBySource.put(windowId, newBlobs);
@@ -170,7 +170,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
                     if (b != other && PVector.sub(b.pos, other.pos).mag() < mergeRadius) {
                         blobs.remove(b);
                         blobs.remove(other);
-                        blobs.add(new Blob(PVector.div(PVector.add(b.pos, other.pos), 2), b.size + other.size));
+                        blobs.add(new Blob(PVector.div(PVector.add(b.pos, other.pos), 2), b.size + other.size, b.id));
                         mergeFound = true;
                         break search_for_merges;
                     }
@@ -200,7 +200,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
     public List<Blob> getBlobs() {
         List<Blob> result = new ArrayList<Blob>();
         for (Blob b : lastKnownBlobs) {
-            result.add(new Blob(b.pos, b.vel, b.size));
+            result.add(new Blob(b.pos, b.vel, b.size, b.id));
         }
         return result;
     }
@@ -230,31 +230,26 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
         public PVector pos;
         public PVector vel;
         public float size;
+        public String id;
 
-        String ID;
+        private Blob(PVector pos, PVector vel, float size, String id) {
+            this(pos, vel, size);
+            this.id = id;
+        }
 
         private Blob(PVector pos, PVector vel, float size) {
             this.pos = pos;
             this.vel = vel;
             this.size = size;
-            this.ID = "NOTINITIALIZED";
         }
 
-        private Blob(PVector pos, PVector vel, float size, String ID) {
-            this.pos = pos;
-            this.vel = vel;
-            this.size = size;
-            this.ID = ID;
-        }
-
-        private Blob(PVector pos, float size, String ID) {
+        private Blob(PVector pos, float size, String id) {
             this(pos, new PVector(0, 0, 0), size);
-            this.ID = ID;
+            this.id = id;
         }
 
         private Blob(PVector pos, float size) {
             this(pos, new PVector(0, 0, 0), size);
-            this.ID = "NOTINITIALIZED";
         }
 
         public String toString() {
