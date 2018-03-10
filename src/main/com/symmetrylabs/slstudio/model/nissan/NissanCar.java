@@ -302,10 +302,10 @@ public class NissanCar extends StripsModel<Strip> {
             // (TODO) create windows... AND create more x distance for windshield
             this.windows.add(new NissanWindow(id, "windshield", NissanWindow.Type.WINDSHIELD, new float[] {40, 6, 0}, new float[] {70, -90, 0}, transform));
 
-            this.windows.add(new NissanWindow(id, "driver-side-front", NissanWindow.Type.FRONT, new float[] {0, 0, 52}, new float[] {0, 0, 0}, transform));
+            this.windows.add(new NissanWindow(id, "driver-side-front", NissanWindow.Type.FRONT_DRIVER, new float[] {0, 0, 52}, new float[] {0, 0, 0}, transform));
             this.windows.add(new NissanWindow(id, "driver-side-back", NissanWindow.Type.BACK_DRIVER, new float[] {-34, 0, 52}, new float[] {0, 0, 0}, transform));
 
-            this.windows.add(new NissanWindow(id, "passenger-side-front", NissanWindow.Type.FRONT, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
+            this.windows.add(new NissanWindow(id, "passenger-side-front", NissanWindow.Type.FRONT_PASSENGER, new float[] {0, 0, 0}, new float[] {0, 0, 0}, transform));
             this.windows.add(new NissanWindow(id, "passenger-side-back", NissanWindow.Type.BACK_PASSENGER, new float[] {-34, 0, 0}, new float[] {0, 0, 0}, transform));
 
             // add pointers to strips

@@ -17,7 +17,7 @@ public class NissanWindow extends StripsModel<Strip> {
 
     public enum Type {
         //WINDSHIELD, FRONT_RIGHT, FRONT_LEFT, BACK_RIGHT, BACK_LEFT
-        WINDSHIELD, FRONT, BACK_DRIVER, BACK_PASSENGER
+        WINDSHIELD, FRONT_DRIVER, FRONT_PASSENGER, BACK_DRIVER, BACK_PASSENGER
     }
 
     public final static int LEDS_PER_METER = 60;
@@ -92,7 +92,8 @@ public class NissanWindow extends StripsModel<Strip> {
         private Fixture(String carId, String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
             this.carId = carId;
             this.id = carId + "-" + id;
-            System.out.println("car ID:" + carId);
+            System.out.println("car ID: " + carId);
+            System.out.println("rotations: " + Arrays.toString(rotations));
 
             transform.push();
             transform.translate(coordinates[0], coordinates[1], coordinates[2]);
@@ -109,13 +110,13 @@ public class NissanWindow extends StripsModel<Strip> {
                     transform.push();
                     transform.translate(coordinates[0] * DEG_TO_RAD, 0, 0);
                     transform.rotateX(rotations[0] * DEG_TO_RAD);
-                    if (carId == "car1") {
+                    if (carId.equals("car1")) {
                         createWindshield1(coordinates, rotations, transform);
                     }
-                    if (carId == "car2") {
+                    if (carId.equals("car2")) {
                         createWindshield2(coordinates, rotations, transform);
                     }
-                    if (carId == "car3") {
+                    if (carId.equals("car3")) {
                         createWindshield3(coordinates, rotations, transform);
                     } else {
                         System.out.println("cant find car id");
@@ -124,16 +125,11 @@ public class NissanWindow extends StripsModel<Strip> {
 
                     transform.pop();
                     break;
-                case FRONT: // _RIGHT
-                    System.out.println("front right rotations");
-                    System.out.println(Arrays.toString(rotations));
-
+                case FRONT_DRIVER:
+                case FRONT_PASSENGER:
                     createFrontWindow(coordinates, rotations, transform);
                     break;
-                case BACK_DRIVER: // _RIGHT
-                    System.out.println("back right rotations");
-                    System.out.println(Arrays.toString(rotations));
-
+                case BACK_DRIVER:
                     createBackDriverWindow(coordinates, rotations, transform);
                     break;
 //                case FRONT_LEFT:
@@ -145,16 +141,16 @@ public class NissanWindow extends StripsModel<Strip> {
           case BACK_PASSENGER:
                     //rotations[0] = rotations[0] + 180;
               createBackPassengerWindow(coordinates, rotations, transform);
-                    System.out.println("back left rotations");
-                    System.out.println(Arrays.toString(rotations));
             }
 
             uvTransform = new LXTransform(new LXMatrix(transform.getMatrix()));
             uvTransform.scale(PIXEL_PITCH);
             uvTransform.translate(min_x, min_y);
             uvTransform.scale(max_x - min_x, max_y - min_y, 1);
-            uvTransform.scale(-1, 1, 1);
-            uvTransform.translate(-1, 0, 0);
+            if (type == Type.FRONT_DRIVER || type == Type.BACK_DRIVER) {
+                uvTransform.scale(-1, 1, 1);
+                uvTransform.translate(-1, 0, 0);
+            }
 
             for (Strip strip : strips) {
                 this.points.addAll(strip.getPoints());
