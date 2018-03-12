@@ -27,11 +27,11 @@ public final class OutputControl extends LXComponent {
         addParameter(broadcastPacket);
         addParameter(testBroadcast);
 
-        enabled.addListener(param -> {
-            boolean isEnabled = ((BooleanParameter) param).isOn();
-            for (Pixlite pixlite : SLStudio.applet.pixlites) {
-                pixlite.enabled.setValue(isEnabled);
-            }
-        });
+        // enabled.addListener(param -> {
+        //     boolean isEnabled = ((BooleanParameter) param).isOn();
+        //     for (Pixlite pixlite : SLStudio.applet.pixlites) {
+        //         pixlite.enabled.setValue(isEnabled);
+        //     }
+        // });
     }
 }

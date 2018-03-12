@@ -6,6 +6,8 @@ import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.layouts.butterflies.ButterflyLayout;
+import com.symmetrylabs.layouts.butterflies.ButterflyModel;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -26,6 +28,7 @@ import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.pixlites.Pixlite;
+import com.symmetrylabs.layouts.butterflies.ButterflyPixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
@@ -42,7 +45,7 @@ public class SLStudio extends PApplet {
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;
-    public Pixlite[] pixlites;
+    public ButterflyPixlite[] pixlites;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
@@ -75,7 +78,7 @@ public class SLStudio extends PApplet {
         Utils.setSketchPath(sketchPath());
 
         // Instantiate the desired layout here.
-        layout = new CubesLayout();
+        layout = new ButterflyLayout();
         // layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
@@ -97,7 +100,7 @@ public class SLStudio extends PApplet {
 
                 lx.addOutput(new OPCOutput(lx, "localhost", 11122));
 
-                outputControl = new OutputControl(lx);
+                outputControl = null;//new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 pixlites = setupPixlites();
 
@@ -391,8 +394,8 @@ public class SLStudio extends PApplet {
         dispatcher.draw();
     }
 
-    private Pixlite[] setupPixlites() {
-        return new Pixlite[0]; // todo
+    private ButterflyPixlite[] setupPixlites() {
+        return new ButterflyPixlite[] {new ButterflyPixlite(lx, "10.200.1.39")};
     }
 
     public final static int CHAN_WIDTH = 200;
