@@ -3,9 +3,11 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.layouts.cubes.CubesLayout;
+//import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.layouts.icicles.IcicleModel;
+import com.symmetrylabs.layouts.icicles.IcicleLayout;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -75,7 +77,7 @@ public class SLStudio extends PApplet {
         Utils.setSketchPath(sketchPath());
 
         // Instantiate the desired layout here.
-        layout = new CubesLayout();
+        layout = new IcicleLayout();
         // layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
@@ -99,7 +101,7 @@ public class SLStudio extends PApplet {
 
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
-                pixlites = setupPixlites();
+                //pixlites = setupPixlites();
 
                 SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);

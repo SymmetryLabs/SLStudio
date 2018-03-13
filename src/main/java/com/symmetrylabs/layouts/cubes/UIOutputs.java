@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.cubes;
+package com.symmetrylabs.layouts.icicles;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -7,7 +7,7 @@ import java.util.TreeSet;
 import java.util.Comparator;
 
 import com.symmetrylabs.layouts.cubes.CubesController;
-import com.symmetrylabs.layouts.cubes.CubesLayout;
+//import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
@@ -20,12 +20,14 @@ import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.IntListener;
 import com.symmetrylabs.util.listenable.ListListener;
 
+import com.symmetrylabs.layouts.icicles.IcicleLayout;
+
 public class UIOutputs extends UICollapsibleSection {
         private final UIItemList.ScrollList outputList;
 
         private Dispatcher dispatcher;
 
-        UIOutputs(LX lx, UI ui, CubesLayout layout, float x, float y, float w) {
+        UIOutputs(LX lx, UI ui, IcicleLayout layout, float x, float y, float w) {
                 super(ui, x, y, w, 124);
 
                 dispatcher = Dispatcher.getInstance(lx);
@@ -78,7 +80,7 @@ public class UIOutputs extends UICollapsibleSection {
                 SLStudio.applet.outputControl.enabled.addListener(param -> redraw());
         }
 
-      private void updateItems(CubesLayout layout) {
+      private void updateItems(IcicleLayout layout) {
             final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
             for (CubesController c : layout.getSortedControllers()) { items.add(new ControllerItem(c)); }
             outputList.setItems(items);

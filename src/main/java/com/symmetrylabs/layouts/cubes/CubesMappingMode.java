@@ -18,6 +18,9 @@ import heronarts.lx.color.LXColor;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.util.listenable.ListListener;
 
+import com.symmetrylabs.layouts.icicles.IcicleModel;
+import com.symmetrylabs.layouts.icicles.IcicleLayout;
+
 /**
  * Mapping Mode
  * (TODO)
@@ -46,7 +49,7 @@ public class CubesMappingMode {
     public final List<String> fixturesOnNetworkButNotMapped = new ArrayList<String>();
 
     private LX lx;
-    private CubesModel cubesModel;
+    private IcicleModel cubesModel;
 
     private static Map<LX, WeakReference<CubesMappingMode>> instanceByLX = new WeakHashMap<>();
 
@@ -74,8 +77,8 @@ public class CubesMappingMode {
         //this.displayOrientation = new BooleanParameter("displayOrientation", false)
         //        .setDescription("Mapping Mode: display colors on strips to indicate it's orientation");
 
-        cubesModel = lx.model instanceof CubesModel ? (CubesModel)lx.model : new CubesModel();
-        for (CubesModel.Cube cube : cubesModel.getCubes()) {
+        cubesModel = lx.model instanceof IcicleModel ? (IcicleModel)lx.model : new IcicleModel();
+        for (IcicleModel.Icicle cube : cubesModel.getIcicles()) {
             fixturesMappedButNotOnNetwork.add(cube.id);
         }
 
@@ -87,7 +90,7 @@ public class CubesMappingMode {
         selectedMappedFixture = new DiscreteParameter("selectedMappedFixture", initialMappedFixtures);
         selectedUnMappedFixture = new DiscreteParameter("selectedUnMappedFixture", emptyOptions);
 
-        CubesLayout layout = CubesLayout.getInstance(lx);
+        IcicleLayout layout = IcicleLayout.getInstance(lx);
 
         if (layout != null) {
             layout.addControllerListListener(new ListListener<CubesController>() {
@@ -122,7 +125,7 @@ public class CubesMappingMode {
     }
 
     public boolean isFixtureMapped(String id) {
-        for (CubesModel.Cube fixture : cubesModel.getCubes()) {
+        for (IcicleModel.Icicle fixture : cubesModel.getIcicles()) {
             if (fixture.id.equals(id))
                 return true;
         }
