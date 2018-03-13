@@ -49,25 +49,26 @@ public class IcicleLayout implements Layout {
 
     static final float INCHES_PER_METER = 39.3701f;
 
-    static final float SPACING = 10f;
+    static final float SPACING = 30f;
 
     static final IcicleConfig[] ICICLES_CONFIG = {
 
         // left
-        new IcicleConfig("425", SPACING*0, 0, 0, 0, 0, 90),
-        new IcicleConfig("0",   SPACING*1, 0, 0, 0, 0, 90),
-        new IcicleConfig("0",   SPACING*2, 0, 0, 0, 0, 90),
-        new IcicleConfig("0",   SPACING*3, 0, 0, 0, 0, 90),
-        new IcicleConfig("0",   SPACING*4, 0, 0, 0, 0, 90),
-        new IcicleConfig("0",   SPACING*5, 0, 0, 0, 0, 90),
-        new IcicleConfig("0",   SPACING*6, 0, 0, 0, 0, 90),
-        new IcicleConfig("0",   SPACING*7, 0, 0, 0, 0, 90),
+        new IcicleConfig("d8:80:39:9a:d5:6b", 72, SPACING*-1, 0, 0, 0, 0, 90), // pos 1
+        new IcicleConfig("d8:80:39:9a:94:aa", 72, SPACING*0, 0, 0, 0, 0, 90), // pos 2
+        new IcicleConfig(              "425", 72, SPACING*2, 0, 0, 0, 0, 90), // pos 3
+        new IcicleConfig(              "325", 60, SPACING*3, 0, 0, 0, 0, 90), // pos 4
+        new IcicleConfig(              "167", 60, SPACING*4, 0, 0, 0, 0, 90), // pos 5
+        new IcicleConfig("d8:80:39:9a:c9:df", 60, SPACING*5, 0, 0, 0, 0, 90), // pos 6
+        new IcicleConfig(              "381", 72, SPACING*6, 0, 0, 0, 0, 90), // pos 7
+        new IcicleConfig("d8:80:39:9a:f4:34", 72, SPACING*7, 0, 0, 0, 0, 90), // pos 8
 
     };
 
     static class IcicleConfig {
 
         final String id;
+        final int numPoints;
         final float x;
         final float y;
         final float z;
@@ -75,8 +76,9 @@ public class IcicleLayout implements Layout {
         final float yRot;
         final float zRot;
 
-        IcicleConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot) {
+        IcicleConfig(String id, int numPoints, float x, float y, float z, float xRot, float yRot, float zRot) {
             this.id = id;
+            this.numPoints = numPoints;
             this.x = x;
             this.y = y;
             this.z = z;
@@ -117,6 +119,7 @@ public class IcicleLayout implements Layout {
 
         for (IcicleConfig config : ICICLES_CONFIG) {
             String id = config.id;
+            int numPoints = config.numPoints;
             float x = config.x;
             float y = config.y;
             float z = config.z;
@@ -124,7 +127,7 @@ public class IcicleLayout implements Layout {
             float yRot = config.yRot;
             float zRot = config.zRot;
 
-            icicles.add(new IcicleModel.Icicle(id, x, y, z, xRot, yRot, zRot, globalTransform));
+            icicles.add(new IcicleModel.Icicle(id, numPoints, x, y, z, xRot, yRot, zRot, globalTransform));
         }
         /*-----------------------------------------------------------------*/
 

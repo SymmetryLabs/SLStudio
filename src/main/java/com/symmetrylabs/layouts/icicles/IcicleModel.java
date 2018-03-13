@@ -79,8 +79,7 @@ public class IcicleModel extends StripsModel<Strip> {
 
     public static class Icicle extends Strip {
 
-        public static final int NUM_POINTS_PER_STRIP = 60;
-        public static final float PIXEL_PITCH = 1;
+        public int numPoints = 0;
 
         public final String id;
         public final float x;
@@ -90,10 +89,12 @@ public class IcicleModel extends StripsModel<Strip> {
         public final float ry;
         public final float rz;
 
-        public Icicle(String id, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
-            super(id, new Metrics(NUM_POINTS_PER_STRIP*2), new Fixture(x, y, z, rx, ry, rz, t));
+        public Icicle(String id, int numPoints, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
+            super(id, new Metrics(numPoints), new Fixture(numPoints, x, y, z, rx, ry, rz, t));
             Fixture fixture = (Fixture) this.fixtures.get(0);
             this.id = id;
+
+            this.numPoints = numPoints;
 
             while (rx < 0) rx += 360;
             while (ry < 0) ry += 360;
@@ -112,18 +113,20 @@ public class IcicleModel extends StripsModel<Strip> {
 
         private static class Fixture extends LXAbstractFixture {
 
-            private Fixture(float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
+            private Fixture(int numPoints, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
                 // LXTransform t = new LXTransform();
+                float pixel_pitch = 60f / numPoints;
+
                 t.push();
                 t.translate(x, y, z);
                 t.rotateX(rx * Math.PI / 180.);
                 t.rotateY(ry * Math.PI / 180.);
                 t.rotateZ(rz * Math.PI / 180.);
 
-                    for (int i = 0; i < NUM_POINTS_PER_STRIP; i++) {
+                    for (int i = 0; i < numPoints; i++) {
                         LXPoint point = new LXPoint(t.x(), t.y(), t.z());
                         this.points.add(point);
-                        t.translate(PIXEL_PITCH, 0, 0);
+                        t.translate(pixel_pitch, 0, 0);
                     }
                     // t.rotateZ(PI);
                     // t.translate(0, 1f, 0);

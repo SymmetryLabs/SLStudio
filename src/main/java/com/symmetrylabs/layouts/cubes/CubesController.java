@@ -140,24 +140,24 @@ public class CubesController extends LXOutput {
 
         IcicleModel cubesModel = (IcicleModel)lx.model;
         IcicleModel.Icicle cube = null;
-        if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getIcicles().size() > 0) {
-            cube = cubesModel.getIcicles().get(0);
-        } else {
+        //if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getIcicles().size() > 0) {
+            //cube = cubesModel.getIcicles().get(0);
+        //} else {
             for (IcicleModel.Icicle c : cubesModel.getIcicles()) {
                 if (c.id != null && c.id.equals(id)) {
                     cube = c;
                     break;
                 }
             }
-        }
+        //}
 
         // Initialize packet data base on cube type.
         // If we don't know the cube type, default to
         // using the cube type with the most pixels
         // IcicleModel.Cube.Type cubeType = cube != null ? cube.type : 144;
-        int numPixels = cube.getPoints().size()*2;
+        int numPixels = cube.getPoints().size();
         if (packetData == null || packetData.length != numPixels) {
-            initPacketData(numPixels);
+            initPacketData(numPixels*2);
         }
 
         // Fill the datagram with pixel data
@@ -168,7 +168,7 @@ public class CubesController extends LXOutput {
                 LXPoint point = cube.getPoints().get(i);
                 setPixel(pi++, colors[point.index]);
             }
-            for (int i = numPixels-1; i < -1; i--) {
+            for (int i = numPixels-1; i > -1; i--) {
                 LXPoint point = cube.getPoints().get(i);
                 setPixel(pi++, colors[point.index]);
             }
