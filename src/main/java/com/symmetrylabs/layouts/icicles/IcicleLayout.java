@@ -54,12 +54,14 @@ public class IcicleLayout implements Layout {
     static final IcicleConfig[] ICICLES_CONFIG = {
 
         // left
-        new IcicleConfig("0", SPACING*0, 0, 0, 0, 0, 90),
-        new IcicleConfig("0", SPACING*1, 0, 0, 0, 0, 90),
-        new IcicleConfig("0", SPACING*2, 0, 0, 0, 0, 90),
-        new IcicleConfig("0", SPACING*3, 0, 0, 0, 0, 90),
-        new IcicleConfig("0", SPACING*4, 0, 0, 0, 0, 90),
-        new IcicleConfig("0", SPACING*5, 0, 0, 0, 0, 90),
+        new IcicleConfig("425", SPACING*0, 0, 0, 0, 0, 90),
+        new IcicleConfig("0",   SPACING*1, 0, 0, 0, 0, 90),
+        new IcicleConfig("0",   SPACING*2, 0, 0, 0, 0, 90),
+        new IcicleConfig("0",   SPACING*3, 0, 0, 0, 0, 90),
+        new IcicleConfig("0",   SPACING*4, 0, 0, 0, 0, 90),
+        new IcicleConfig("0",   SPACING*5, 0, 0, 0, 0, 90),
+        new IcicleConfig("0",   SPACING*6, 0, 0, 0, 0, 90),
+        new IcicleConfig("0",   SPACING*7, 0, 0, 0, 0, 90),
 
     };
 

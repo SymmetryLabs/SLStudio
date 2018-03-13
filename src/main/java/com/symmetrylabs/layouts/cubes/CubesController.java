@@ -155,7 +155,7 @@ public class CubesController extends LXOutput {
         // If we don't know the cube type, default to
         // using the cube type with the most pixels
         // IcicleModel.Cube.Type cubeType = cube != null ? cube.type : 144;
-        int numPixels = 144;
+        int numPixels = cube.getPoints().size()*2;
         if (packetData == null || packetData.length != numPixels) {
             initPacketData(numPixels);
         }
@@ -165,6 +165,10 @@ public class CubesController extends LXOutput {
         int pi = 0;
         if (cube != null) {
             for (int i = 0; i < numPixels; i++) {
+                LXPoint point = cube.getPoints().get(i);
+                setPixel(pi++, colors[point.index]);
+            }
+            for (int i = numPixels-1; i < -1; i--) {
                 LXPoint point = cube.getPoints().get(i);
                 setPixel(pi++, colors[point.index]);
             }

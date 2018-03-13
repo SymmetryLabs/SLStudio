@@ -79,7 +79,7 @@ public class IcicleModel extends StripsModel<Strip> {
 
     public static class Icicle extends Strip {
 
-        public static final float NUM_POINTS = 72;
+        public static final int NUM_POINTS_PER_STRIP = 60;
         public static final float PIXEL_PITCH = 1;
 
         public final String id;
@@ -91,7 +91,7 @@ public class IcicleModel extends StripsModel<Strip> {
         public final float rz;
 
         public Icicle(String id, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
-            super(id, new Metrics(144), new Fixture(x, y, z, rx, ry, rz, t));
+            super(id, new Metrics(NUM_POINTS_PER_STRIP*2), new Fixture(x, y, z, rx, ry, rz, t));
             Fixture fixture = (Fixture) this.fixtures.get(0);
             this.id = id;
 
@@ -120,15 +120,18 @@ public class IcicleModel extends StripsModel<Strip> {
                 t.rotateY(ry * Math.PI / 180.);
                 t.rotateZ(rz * Math.PI / 180.);
 
-                for (int i1 = 0; i1 < 2; i1++) {
-                    for (int i = 0; i < NUM_POINTS; i++) {
+                    for (int i = 0; i < NUM_POINTS_PER_STRIP; i++) {
                         LXPoint point = new LXPoint(t.x(), t.y(), t.z());
                         this.points.add(point);
                         t.translate(PIXEL_PITCH, 0, 0);
                     }
-                    t.rotateZ(PI);
-                    t.translate(0, 0.25f, 0);
-                }
+                    // t.rotateZ(PI);
+                    // t.translate(0, 1f, 0);
+                    // for (int i = 0; i < NUM_POINTS_PER_STRIP; i++) {
+                    //   LXPoint point = new LXPoint(t.x(), t.y(), t.z());
+                    //   this.points.add(point);
+                    //   t.translate(PIXEL_PITCH, 0, 0);
+                    // }
 
                 t.pop();
             }
