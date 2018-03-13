@@ -104,6 +104,10 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
                 pixlites = setupPixlites();
 
+                for (ButterflyPixlite pixlite : pixlites) {
+                    lx.addOutput(pixlite);
+                }
+
                 SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
 
@@ -395,7 +399,7 @@ public class SLStudio extends PApplet {
     }
 
     private ButterflyPixlite[] setupPixlites() {
-        return new ButterflyPixlite[] {new ButterflyPixlite(lx, "10.200.1.39")};
+        return new ButterflyPixlite[] {new ButterflyPixlite(lx, "10.200.1.128")};
     }
 
     public final static int CHAN_WIDTH = 200;

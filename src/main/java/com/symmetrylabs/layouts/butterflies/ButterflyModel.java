@@ -49,6 +49,10 @@ public class ButterflyModel extends StripsModel<ButterflyModel.Wing> {
                 this.butterflies.add(butterfly);
                 this.wings.addAll(butterfly.getWings());
                 this.strips.addAll(butterfly.getWings());
+
+                for (Wing wing : butterfly.getWings()) {
+                    this.wingTable.put(wing.id, wing);
+                }
             }
         }
     }
