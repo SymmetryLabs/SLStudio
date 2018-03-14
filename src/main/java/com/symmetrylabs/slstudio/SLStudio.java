@@ -9,6 +9,7 @@ import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
+import com.symmetrylabs.layouts.LayoutRegistry;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -51,16 +52,10 @@ public class SLStudio extends PApplet {
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
 
-    static public void main(String[] passedArgs) {
+    static public void main(String[] args) {
         System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
         System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
-
-        String[] appletArgs = new String[] { SLStudio.class.getName() };
-        if (passedArgs != null) {
-            PApplet.main(concat(appletArgs, passedArgs));
-        } else {
-            PApplet.main(appletArgs);
-        }
+        PApplet.main(concat(new String[] { SLStudio.class.getName() }, args));
     }
 
     @Override
@@ -75,11 +70,7 @@ public class SLStudio extends PApplet {
 
         Utils.setSketchPath(sketchPath());
 
-        // Instantiate the desired layout here.
-        layout = new CubesLayout();
-//    layout = new DynamicLayout();
-//         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
-
+        layout = LayoutRegistry.getLayout(this, args.length > 0 ? args[0] : null);
         LXModel model = layout.buildModel();
         printModelStats(model);
 
