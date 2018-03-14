@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.pixlites;
+package com.symmetrylabs.slstudio.output;
 
 import org.apache.commons.math3.util.FastMath;
 
@@ -12,7 +12,7 @@ import com.symmetrylabs.slstudio.mappings.*;
 import com.symmetrylabs.slstudio.mappings.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.output.SLBypassOutputGroup;
 
-public class Pixlite extends LXOutputGroup {
+public class MappingPixlite extends LXOutputGroup {
     public static final int NUM_DATALINES = 16;
     public static final int MAX_NUM_POINTS_PER_DATALINE = 1020;
     public static final int MAX_NUM_POINTS_PER_UNIVERSE = 170;
@@ -46,7 +46,7 @@ public class Pixlite extends LXOutputGroup {
     public static final int MAPPING_COLORS_POINTS_PER_DATALINE = MAX_NUM_UNIVERSES_PER_DATALINE * MAX_NUM_POINTS_PER_UNIVERSE;
     public final int[] mappingColors = new int[NUM_DATALINES * MAPPING_COLORS_POINTS_PER_DATALINE];
 
-    public Pixlite(MappingGroup mappingGroup, PixliteMapping mapping, LX lx) {
+    public MappingPixlite(MappingGroup mappingGroup, PixliteMapping mapping, LX lx) {
         super(lx);
 
         this.lx = lx;

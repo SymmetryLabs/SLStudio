@@ -4,13 +4,14 @@ import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.output.MappingPixlite;
+import heronarts.lx.LX;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
-import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.output.OPCOutput;
 
@@ -25,7 +26,6 @@ import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.pixlites.Pixlite;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
@@ -42,10 +42,11 @@ public class SLStudio extends PApplet {
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;
-    public Pixlite[] pixlites;
+    public MappingPixlite[] mappingPixlites;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
+    public LX lx_OG;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
@@ -76,13 +77,14 @@ public class SLStudio extends PApplet {
 
         // Instantiate the desired layout here.
         layout = new CubesLayout();
-        // layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+//    layout = new DynamicLayout();
+//         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
         printModelStats(model);
 
-        PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
-        loadPalettes(paletteLibrary);
+//        PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
+//        loadPalettes(paletteLibrary);
 
         new SLStudioLX(this, model, true) {
 
@@ -99,7 +101,7 @@ public class SLStudio extends PApplet {
 
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
-                pixlites = setupPixlites();
+                mappingPixlites = setupPixlites();
 
                 SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
@@ -129,8 +131,8 @@ public class SLStudio extends PApplet {
 
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
-        lx.engine.audio.enabled.setValue(true);
-        lx.engine.output.enabled.setValue(false);
+        lx.engine.audio.enabled.setValue(false);
+        lx.engine.output.enabled.setValue(true);
 
         performanceManager.start(lx.ui);
 
@@ -391,8 +393,8 @@ public class SLStudio extends PApplet {
         dispatcher.draw();
     }
 
-    private Pixlite[] setupPixlites() {
-        return new Pixlite[0]; // todo
+    private MappingPixlite[] setupPixlites() {
+        return new MappingPixlite[0]; // todo
     }
 
     public final static int CHAN_WIDTH = 200;

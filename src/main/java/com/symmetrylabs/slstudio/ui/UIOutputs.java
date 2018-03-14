@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.cubes;
+package com.symmetrylabs.slstudio.ui;
 
 import java.util.List;
 import java.util.ArrayList;

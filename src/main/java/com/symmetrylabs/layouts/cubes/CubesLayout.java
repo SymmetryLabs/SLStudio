@@ -13,7 +13,9 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
+import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 
@@ -74,75 +76,76 @@ public class CubesLayout implements Layout {
     static final TowerConfig[] TOWER_CONFIG = {
 
         // left
-        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "22", "204" }),
-
+//        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "22", "204" }),
+//        new TowerConfig(-SP*3.5f, 0, -SP*2.5f, new String[] { "static0", "static1", "static2", "static3" }),
+//
         new TowerConfig(-SP*4.5f, (JUMP*0)+TOWER_RISER, -SP*3.0f, new String[] { "86" }),
-        new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "5" }),
-
-        new TowerConfig(-SP*2.0f, 0, -SP*1.0f, new String[] { "25", "199", "177" }),
-
-        new TowerConfig(-SP*1.5f, (JUMP*0)+TOWER_RISER, -SP*2.0f, new String[] { "94" }),
-        new TowerConfig(-SP*1.0f, (JUMP*0)+TOWER_RISER, -SP*0.5f, new String[] { "90" }),
-        new TowerConfig(-SP*1.0f, (JUMP*2)+TOWER_RISER, -SP*0.5f, new String[] { "64" }),
-
-        // left tower of 5
-        new TowerConfig(0, 0, 0, new String[] {
-            "19", "190", "121", "1", "103"
-        }),
-
-        new TowerConfig(SP*1.0f, (JUMP*0)+TOWER_RISER, -SP*0.5f, new String[] {"76"}),
-        new TowerConfig(SP*1.0f, (JUMP*2)+TOWER_RISER, -SP*0.5f, new String[] {"18"}),
-        new TowerConfig(SP*1.0f, (JUMP*1)+TOWER_RISER, +SP*0.5f, new String[] {"157"}),
-        new TowerConfig(SP*0.5f, (JUMP*3)+TOWER_RISER, -SP*1.0f, new String[] {"4"}),
-        new TowerConfig(SP*1.5f, (JUMP*2)+0          , -SP*1.5f, new String[] {"126"}),
-
-        new TowerConfig(SP*2.0f, 0, 0, new String[] {
-            "6", "132", "61", "54"
-        }),
-
-        new TowerConfig(SP*2.5f, (JUMP*1)+TOWER_RISER, -SP*1.0f, new String[] {"4"}),
-        new TowerConfig(SP*2.5f, (JUMP*3)+TOWER_RISER, -SP*1.0f, new String[] {"151"}),
-
-        // middle tower of 5
-        new TowerConfig(SP*3.5f, 0, -SP*1.5f, new String[] {
-            "111", "166", "187", "158", "101"
-        }),
-
-        new TowerConfig(SP*4.5f, (JUMP*3)+TOWER_RISER, -SP*2.0f, new String[] {"11"}),
-        new TowerConfig(SP*3.0f, (JUMP*2)+TOWER_RISER, -SP*2.5f, new String[] {"163"}),
-        new TowerConfig(SP*2.0f, (JUMP*3)+0          , -SP*2.0f, new String[] {"34"}),
-        new TowerConfig(SP*4.0f, (JUMP*0)+TOWER_RISER, -SP*2.5f, new String[] {"17", "44"}),
-
-        new TowerConfig(SP*4.5f, 0, -SP*3.5f, new String[] {
-            "102", "156", "13", "82"
-        }),
-
-        new TowerConfig(SP*5.5f, (JUMP*2)+TOWER_RISER, -SP*3.5f, new String[] {"412"}),
-        new TowerConfig(SP*5.0f, (JUMP*0)+TOWER_RISER, -SP*4.0f, new String[] {"73"}),
-        new TowerConfig(SP*4.0f, (JUMP*1)+TOWER_RISER, -SP*4.0f, new String[] {"47"}),
-        new TowerConfig(SP*4.0f, (JUMP*3)+TOWER_RISER, -SP*4.0f, new String[] {"32"}),
-        new TowerConfig(SP*3.0f, (JUMP*3)+0          , -SP*3.5f, new String[] {"175"}),
-
-        // right tower of 5
-        new TowerConfig(SP*4.5f, 0, -SP*5.0f, new String[] {
-            "183", "180", "57", "51", "108"
-        }),
-
-        new TowerConfig(SP*3.5f, (JUMP*0)+TOWER_RISER, -SP*5.5f, new String[] {"104"}),
-        new TowerConfig(SP*4.0f, (JUMP*2)+TOWER_RISER, -SP*6.0f, new String[] {"168"}),
-        new TowerConfig(SP*3.0f, (JUMP*2)+3          , -SP*5.5f, new String[] {"188"}),
-
-        new TowerConfig(SP*3.0f - 10, 0, -SP*6.5f - 12, new String[] {
-            "100", "85", "110zAQ  AZQ"
-        }),
-
-        new TowerConfig((SP*3.0f - 10)-(SP*0.5f), (JUMP*0)+TOWER_RISER, (-SP*6.5f - 12)-(SP*1.0f), new String[] {"87"}),
-        new TowerConfig((SP*3.0f - 10)-(SP*0.0f), (JUMP*0)+0          , (-SP*6.5f - 12)-(SP*2.0f), new String[] {"33"}),
-
-        // table cubes
-        new TowerConfig(SP*-0.5f, 0, -SP*4.0f, new String[] {"74"}),
-        new TowerConfig(0, 0, -SP*5.0f, new String[] {"171"}),
-        new TowerConfig(SP*1.0f, 0, -SP*5.5f, new String[] {"9"}),
+        new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
+//
+//        new TowerConfig(-SP*2.0f, 0, -SP*1.0f, new String[] { "25", "199", "177" }),
+//
+//        new TowerConfig(-SP*1.5f, (JUMP*0)+TOWER_RISER, -SP*2.0f, new String[] { "94" }),
+//        new TowerConfig(-SP*1.0f, (JUMP*0)+TOWER_RISER, -SP*0.5f, new String[] { "90" }),
+//        new TowerConfig(-SP*1.0f, (JUMP*2)+TOWER_RISER, -SP*0.5f, new String[] { "64" }),
+//
+//        // left tower of 5
+//        new TowerConfig(0, 0, 0, new String[] {
+//            "19", "190", "121", "1", "103"
+//        }),
+//
+//        new TowerConfig(SP*1.0f, (JUMP*0)+TOWER_RISER, -SP*0.5f, new String[] {"76"}),
+//        new TowerConfig(SP*1.0f, (JUMP*2)+TOWER_RISER, -SP*0.5f, new String[] {"18"}),
+//        new TowerConfig(SP*1.0f, (JUMP*1)+TOWER_RISER, +SP*0.5f, new String[] {"157"}),
+//        new TowerConfig(SP*0.5f, (JUMP*3)+TOWER_RISER, -SP*1.0f, new String[] {"4"}),
+//        new TowerConfig(SP*1.5f, (JUMP*2)+0          , -SP*1.5f, new String[] {"126"}),
+//
+//        new TowerConfig(SP*2.0f, 0, 0, new String[] {
+//            "6", "132", "61", "54"
+//        }),
+//
+//        new TowerConfig(SP*2.5f, (JUMP*1)+TOWER_RISER, -SP*1.0f, new String[] {"4"}),
+//        new TowerConfig(SP*2.5f, (JUMP*3)+TOWER_RISER, -SP*1.0f, new String[] {"151"}),
+//
+//        // middle tower of 5
+//        new TowerConfig(SP*3.5f, 0, -SP*1.5f, new String[] {
+//            "111", "166", "187", "158", "101"
+//        }),
+//
+//        new TowerConfig(SP*4.5f, (JUMP*3)+TOWER_RISER, -SP*2.0f, new String[] {"11"}),
+//        new TowerConfig(SP*3.0f, (JUMP*2)+TOWER_RISER, -SP*2.5f, new String[] {"163"}),
+//        new TowerConfig(SP*2.0f, (JUMP*3)+0          , -SP*2.0f, new String[] {"34"}),
+//        new TowerConfig(SP*4.0f, (JUMP*0)+TOWER_RISER, -SP*2.5f, new String[] {"17", "44"}),
+//
+//        new TowerConfig(SP*4.5f, 0, -SP*3.5f, new String[] {
+//            "102", "156", "13", "82"
+//        }),
+//
+//        new TowerConfig(SP*5.5f, (JUMP*2)+TOWER_RISER, -SP*3.5f, new String[] {"412"}),
+//        new TowerConfig(SP*5.0f, (JUMP*0)+TOWER_RISER, -SP*4.0f, new String[] {"73"}),
+//        new TowerConfig(SP*4.0f, (JUMP*1)+TOWER_RISER, -SP*4.0f, new String[] {"47"}),
+//        new TowerConfig(SP*4.0f, (JUMP*3)+TOWER_RISER, -SP*4.0f, new String[] {"32"}),
+//        new TowerConfig(SP*3.0f, (JUMP*3)+0          , -SP*3.5f, new String[] {"175"}),
+//
+//        // right tower of 5
+//        new TowerConfig(SP*4.5f, 0, -SP*5.0f, new String[] {
+//            "183", "180", "57", "51", "108"
+//        }),
+//
+//        new TowerConfig(SP*3.5f, (JUMP*0)+TOWER_RISER, -SP*5.5f, new String[] {"104"}),
+//        new TowerConfig(SP*4.0f, (JUMP*2)+TOWER_RISER, -SP*6.0f, new String[] {"168"}),
+//        new TowerConfig(SP*3.0f, (JUMP*2)+3          , -SP*5.5f, new String[] {"188"}),
+//
+//        new TowerConfig(SP*3.0f - 10, 0, -SP*6.5f - 12, new String[] {
+//            "100", "85", "110zAQ  AZQ"
+//        }),
+//
+//        new TowerConfig((SP*3.0f - 10)-(SP*0.5f), (JUMP*0)+TOWER_RISER, (-SP*6.5f - 12)-(SP*1.0f), new String[] {"87"}),
+//        new TowerConfig((SP*3.0f - 10)-(SP*0.0f), (JUMP*0)+0          , (-SP*6.5f - 12)-(SP*2.0f), new String[] {"33"}),
+//
+//        // table cubes
+//        new TowerConfig(SP*-0.5f, 0, -SP*4.0f, new String[] {"74"}),
+//        new TowerConfig(0, 0, -SP*5.0f, new String[] {"171"}),
+//        new TowerConfig(SP*1.0f, 0, -SP*5.5f, new String[] {"9"}),
     };
 
     static final StripConfig[] STRIP_CONFIG = {
@@ -227,7 +230,7 @@ public class CubesLayout implements Layout {
     static Map<String, String> macToPhysid = new HashMap<>();
     static Map<String, String> physidToMac = new HashMap<>();
 
-    public CubesModel buildModel() {
+    public SLModel buildModel() {
 
         byte[] bytes = SLStudio.applet.loadBytes("physid_to_mac.json");
         if (bytes != null) {
@@ -278,6 +281,8 @@ public class CubesLayout implements Layout {
             allCubesArr[i] = allCubes.get(i);
         }
 
+
+
         return new CubesModel(towers, allCubesArr);
     }
 
@@ -294,11 +299,40 @@ public class CubesLayout implements Layout {
         return weakRef == null ? null : weakRef.get();
     }
 
+    public static void addFadecandyOutput(LX lx) throws Exception {
+        lx.engine.addOutput(new FadecandyOutput(lx, "localhost", 7890, lx.model));
+//        lx.engine.addOutput(new FadecandyOutput(lx, "192.168.0.113", 1234, lx.model));
+    }
     public void setupLx(SLStudioLX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
 
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
+
+
+        CubesController local_debug = new CubesController(lx, "localhost", "localdebug");
+        controllers.add(local_debug);
+        lx.addOutput(local_debug);
+
+
+        TowerConfig config = new TowerConfig(SP*3.0f, (JUMP*2)+3          , -SP*5.5f, new String[] {"188"});
+        List<CubesModel.Cube> cubes = new ArrayList<>();
+        float x = config.x;
+        float z = config.z;
+        float xRot = config.xRot;
+        float yRot = config.yRot;
+        float zRot = config.zRot;
+        CubesModel.Cube.Type type = config.type;
+
+        LXTransform globalTransform = new LXTransform();
+        globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
+        globalTransform.rotateY(globalRotationY * Math.PI / 180.);
+        globalTransform.rotateX(globalRotationX * Math.PI / 180.);
+        globalTransform.rotateZ(globalRotationZ * Math.PI / 180.);
+        for (int i = 0; i < config.ids.length; i++) {
+            float y = config.yValues[i];
+            CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
+        }
 
         networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
             public void itemAdded(int index, NetworkDevice device) {
@@ -322,7 +356,7 @@ public class CubesLayout implements Layout {
             }
         });
 
-        //lx.addOutput(new CubesController(lx, "10.200.1.255"));
+//        lx.addOutput(new CubesController(lx, "10.200.1.255"));
         //lx.addOutput(new LIFXOutput());
 
         lx.engine.output.enabled.addListener(param -> {
