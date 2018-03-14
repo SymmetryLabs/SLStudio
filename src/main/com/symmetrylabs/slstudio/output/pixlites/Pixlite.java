@@ -115,4 +115,9 @@ public class Pixlite extends LXOutputGroup {
             datagramOutput.addDatagram(new ArtNetDatagram(ipAddress, indices, universe - 1));
         }
     }
+
+    @Override
+    public String getLabel() {
+        return "(" + ipAddress + ") unknown output channel";
+    }
 }

@@ -1,12 +1,13 @@
 package com.symmetrylabs.slstudio.output;
 
+import com.symmetrylabs.slstudio.Installation;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.network.ControllerResetModule;
-import com.symmetrylabs.slstudio.output.pixlites.NissanPixlite;
 
  /*
  * Output Component
@@ -29,8 +30,8 @@ public final class OutputControl extends LXComponent {
         enabled.addListener(param -> {
             boolean isEnabled = ((BooleanParameter)param).isOn();
 
-            for (NissanPixlite pixlite : SLStudio.applet.pixlites) {
-                pixlite.enabled.setValue(isEnabled);
+            for (LXOutput output : Installation.getOutputs()) {
+                output.enabled.setValue(isEnabled);
             }
 
             for (SLController c : SLStudio.applet.controllers) {

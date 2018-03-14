@@ -10,6 +10,8 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
+import com.symmetrylabs.slstudio.Environment;
+import com.symmetrylabs.slstudio.layout.Layout;
 import heronarts.lx.LX;
 import heronarts.lx.transform.LXTransform;
 
@@ -27,6 +29,16 @@ import com.symmetrylabs.slstudio.util.listenable.ListListener;
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class CubesLayout {
+
+//    @Override
+    public Environment getEnvironment() {
+        return new Environment() {
+            @Override
+            public String getMappingsFilename() {
+                return "data/cubesMappings.json";
+            }
+        };
+    }
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
@@ -144,6 +156,10 @@ public class CubesLayout {
         //new StripConfig("206", 0, 0, 0, 0, 0, 0, 10, 0.25),
     };
 
+//    public CubesLayout() {
+//        setIsMappable(false);
+//    }
+
     static class StripConfig {
         String id;
         int numPoints;
@@ -221,8 +237,7 @@ public class CubesLayout {
     static Map<String, String> macToPhysid = new HashMap<>();
     static Map<String, String> physidToMac = new HashMap<>();
 
-    public static CubesModel buildModel() {
-
+    public CubesModel createModel() {
         byte[] bytes = SLStudio.applet.loadBytes("physid_to_mac.json");
         if (bytes != null) {
             try {

@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.mapping;
 
+import com.symmetrylabs.slstudio.Installation;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.layout.FultonStreetLayout;
 import com.symmetrylabs.slstudio.mappings.*;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteDatalineRef;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping;
@@ -9,6 +9,7 @@ import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping.DatalineMapping
 import com.symmetrylabs.slstudio.model.suns.CurvedStrip;
 import com.symmetrylabs.slstudio.model.suns.Sun;
 import com.symmetrylabs.slstudio.model.suns.SunsModel;
+import com.symmetrylabs.slstudio.output.pixlites.PixliteHardware;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.output.pixlites.Pixlite;
 import heronarts.lx.LX;
@@ -21,17 +22,17 @@ import java.util.Map;
 
 public class Mapping2StripPixliteAssignmentPattern extends SLPattern {
 
-        private final SunsModel model;
-        private final Mappings mappings;
-        private final Map<String, int[]> mappingColorsPerPixlite;
+        private SunsModel model;
+        private Mappings mappings;
+        private Map<String, int[]> mappingColorsPerPixlite;
 
         private final BooleanParameter enabled = new BooleanParameter("Enabled");
-        private final DiscreteParameter sunId;
+        private final DiscreteParameter sunId = new DiscreteParameter("Sun", 1);
         private final DiscreteParameter stripIndex = new DiscreteParameter("Strip", 1);
 
         private final BooleanParameter outputAssigned = new BooleanParameter("Assigned");
 
-        private final DiscreteParameter pixliteId;
+        private final DiscreteParameter pixliteId = new DiscreteParameter("Pixlite", 1);
         private final DiscreteParameter datalineIndex = new DiscreteParameter("Dataline", PixliteMapping.NUM_DATALINES);
         private final DiscreteParameter datalineOrderIndex = new DiscreteParameter("Order", 1);
 
@@ -41,24 +42,29 @@ public class Mapping2StripPixliteAssignmentPattern extends SLPattern {
 
         public Mapping2StripPixliteAssignmentPattern(LX lx) {
                 super(lx);
+                if (!Installation.getLayout().isMappable()) return;
+                if (!(Installation.getHardware() instanceof PixliteHardware)) return;
+                PixliteHardware hardware = (PixliteHardware) Installation.getHardware();
+
                 model = (SunsModel) lx.model;
-                mappings = FultonStreetLayout.mappings;
-                mappingColorsPerPixlite = SLStudio.applet.mappingColorsPerPixlite;
+                mappings = Installation.getMappings();
+                mappingColorsPerPixlite = hardware.mappingColorsPerPixlite;
 
                 addParameter(enabled);
                 enabled.setShouldSerialize(false);
                 enabled.addListener(param -> SLStudio.applet.mappingModeEnabled.setValue(enabled.isOn()));
                 enabled.addListener(param -> resetStripData());
 
-                String[] sunIds = model.getSuns().stream().map(sun -> sun.id).toArray(String[]::new);
-                addParameter(sunId = new DiscreteParameter("Sun", sunIds));
+                sunId.setOptions(model.getSuns().stream().map(sun -> sun.id).toArray(String[]::new));
+                addParameter(sunId);
 
                 addParameter(stripIndex);
 
                 addParameter(outputAssigned);
                 outputAssigned.setShouldSerialize(false);
 
-                addParameter(pixliteId = new DiscreteParameter("Pixlite", mappings.getOutputIds().toArray(new String[0])));
+                pixliteId.setOptions(mappings.getOutputIds().toArray(new String[0]));
+                addParameter(pixliteId);
                 pixliteId.setShouldSerialize(false);
 
                 addParameter(datalineIndex);
@@ -148,7 +154,7 @@ public class Mapping2StripPixliteAssignmentPattern extends SLPattern {
                         }
                 }
 
-                FultonStreetLayout.saveMappings();
+                Installation.getHardware().saveMappings();
 
                 saveInProgress = false;
 
@@ -163,7 +169,7 @@ public class Mapping2StripPixliteAssignmentPattern extends SLPattern {
 
         @Override
         protected void run(double deltaMs) {
-                if (!enabled.isOn()) return;
+                if (mappings == null || !enabled.isOn()) return;
 
                 if (needsColorBufferReset) {
                         needsColorBufferReset = false;

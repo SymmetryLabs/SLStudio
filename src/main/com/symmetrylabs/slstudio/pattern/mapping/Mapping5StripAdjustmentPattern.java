@@ -1,13 +1,14 @@
 package com.symmetrylabs.slstudio.pattern.mapping;
 
+import com.symmetrylabs.slstudio.Installation;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.layout.FultonStreetLayout;
 import com.symmetrylabs.slstudio.mappings.*;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteDatalineRef;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping;
 import com.symmetrylabs.slstudio.mappings.pixlite.PixliteMapping.DatalineMapping;
 import com.symmetrylabs.slstudio.model.suns.CurvedStrip;
 import com.symmetrylabs.slstudio.model.suns.Slice;
+import com.symmetrylabs.slstudio.output.pixlites.PixliteHardware;
 import com.symmetrylabs.slstudio.pattern.SLPattern;
 import com.symmetrylabs.slstudio.output.pixlites.Pixlite;
 import heronarts.lx.LX;
@@ -32,14 +33,14 @@ public class Mapping5StripAdjustmentPattern extends SLPattern {
         private static final int selectedSunBackgroundColor = LXColor.rgb(0, 31, 0);
         private static final int notSelectedSunBackgroundColor = LXColor.rgb(63, 63, 63);
 
-        private final Mappings mappings;
-        private final Map<String, int[]> mappingColorsPerPixlite;
+        private Mappings mappings;
+        private Map<String, int[]> mappingColorsPerPixlite;
 
         private final BooleanParameter enabled = new BooleanParameter("Enabled");
 
         private final BooleanParameter reverseArrows = new BooleanParameter("Rvrs Arr");
-        private final DiscreteParameter sunId;
-        private final DiscreteParameter sliceId;
+        private final DiscreteParameter sunId = new DiscreteParameter("Sun", 1);
+        private final DiscreteParameter sliceId = new DiscreteParameter("Slice", 1);
         private final DiscreteParameter stripIndex = new DiscreteParameter("Strip", 1);
 
         private final BoundedParameter offset = new BoundedParameter("Offset", 0, -12, 12);
@@ -50,8 +51,12 @@ public class Mapping5StripAdjustmentPattern extends SLPattern {
 
         public Mapping5StripAdjustmentPattern(LX lx) {
                 super(lx);
-                mappings = FultonStreetLayout.mappings;
-                mappingColorsPerPixlite = SLStudio.applet.mappingColorsPerPixlite;
+                if (!Installation.getLayout().isMappable()) return;
+                if (!(Installation.getHardware() instanceof PixliteHardware)) return;
+                PixliteHardware hardware = (PixliteHardware) Installation.getHardware();
+
+                mappings = Installation.getMappings();
+                mappingColorsPerPixlite = hardware.mappingColorsPerPixlite;
 
                 addParameter(enabled);
                 enabled.setShouldSerialize(false);
@@ -60,10 +65,9 @@ public class Mapping5StripAdjustmentPattern extends SLPattern {
 
                 addParameter(reverseArrows);
 
-                String[] sunIds = mappings.getChildrenKeySet().toArray(new String[0]);
-                addParameter(sunId = new DiscreteParameter("Sun", sunIds));
-
-                addParameter(sliceId = new DiscreteParameter("Slice", 1));
+                sunId.setOptions(mappings.getChildrenKeySet().toArray(new String[0]));
+                addParameter(sunId);
+                addParameter(sliceId);
 
                 addParameter(stripIndex);
 
@@ -81,6 +85,7 @@ public class Mapping5StripAdjustmentPattern extends SLPattern {
 
         @Override
         public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                if (mappings == null) return;
                 float amt = keyEvent.isShiftDown() ? 0.7f : 0.07f;
                 if (keyCode == java.awt.event.KeyEvent.VK_LEFT) {
                         offset.incrementValue(reverseArrows.isOn() ? amt : -amt);
@@ -139,7 +144,7 @@ public class Mapping5StripAdjustmentPattern extends SLPattern {
                 StripMapping stripMapping = sliceMapping.getItemByIndex(stripIndex.getValuei(), StripMapping.class);
 
                 stripMapping.rotation = offset.getValuef();
-                FultonStreetLayout.saveMappings();
+                Installation.getHardware().saveMappings();
 
                 saveInProgress = false;
         }
@@ -232,7 +237,7 @@ public class Mapping5StripAdjustmentPattern extends SLPattern {
 
         @Override
         protected void run(double deltaMs) {
-                if (!enabled.isOn()) return;
+                if (mappings == null || !enabled.isOn()) return;
 
                 if (needsColorBufferReset) {
                         needsColorBufferReset = false;

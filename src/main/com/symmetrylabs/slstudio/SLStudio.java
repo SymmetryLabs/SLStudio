@@ -1,7 +1,8 @@
 package com.symmetrylabs.slstudio;
 
-import java.util.Map;
-
+import com.symmetrylabs.slstudio.layout.CubesLayout;
+import com.symmetrylabs.slstudio.layout.NissanLayout;
+import heronarts.lx.output.LXOutput;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -14,9 +15,6 @@ import heronarts.lx.parameter.LXParameterListener;
 import com.symmetrylabs.slstudio.model.suns.SunsModel;
 import com.symmetrylabs.slstudio.model.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.nissan.NissanModel;
-import com.symmetrylabs.slstudio.layout.CubesLayout;
-import com.symmetrylabs.slstudio.layout.NissanLayout;
-import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.OutputControl;
 import com.symmetrylabs.slstudio.output.SLController;
@@ -29,8 +27,6 @@ import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.output.pixlites.NissanPixlite;
-import com.symmetrylabs.slstudio.output.pixlites.NissanPixliteConfigs;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.util.BlobTracker;
 import com.symmetrylabs.slstudio.util.DrawHelper;
@@ -48,18 +44,15 @@ public class SLStudio extends PApplet {
     public DiscreteParameter selectedColumn = new DiscreteParameter("column", 0, 100);
     public SLStudioLX lx;
     private LXModel model;
-    private Mappings mappings;
     public Dispatcher dispatcher;
     private NetworkMonitor networkMonitor;
     public OutputControl outputControl;
-    public NissanPixlite[] pixlites;
     public ListenableList<SLController> controllers;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
-    public Map<String, int[]> mappingColorsPerPixlite;
 
     static public void main(String[] passedArgs) {
         System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
@@ -83,10 +76,15 @@ public class SLStudio extends PApplet {
         long setupStart = System.nanoTime();
         applet = this;
 
+//        Installation.setCurrentLayout(new FultonStreetLayout());
+//        Installation.setCurrentLayout(new CubesLayout());
+        Installation.setCurrentLayout(new NissanLayout());
+
         // mappings = FultonStreetLayout.loadMappings();
-        // model = FultonStreetLayout.buildModel();
-        //model = CubesLayout.buildModel();
-        model = NissanLayout.buildModel();
+        // model = FultonStreetLayout.createModel();
+        //model = CubesLayout.createModel();
+//        model = NissanLayout.createModel();
+        model = Installation.getModel();
 
         println("-- Model ----");
 
@@ -132,12 +130,10 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
 
                 controllers = CubesLayout.setupCubesOutputs(lx);
-                pixlites = new NissanPixliteConfigs().setupPixlites(lx);
 
-                // Code added by aaron
-                for (NissanPixlite pl: pixlites) {
-                    lx.addOutput(pl);
-                    }
+                for (LXOutput output: Installation.getHardware().setupOutputs(lx)) {
+                    lx.addOutput(output);
+                }
 
                 // end added code
                 apc40Listener = new APC40Listener(lx);
@@ -414,35 +410,6 @@ public class SLStudio extends PApplet {
         DrawHelper.runAll();
         dispatcher.draw();
     }
-
-    // private Pixlite[] setupPixlites() {
-
-    //     if (!(model instanceof SunsModel))
-    //         return new Pixlite[0];
-
-    //     List<Pixlite> pixlites = new ArrayList<>();
-
-    //     for (String outputId : mappings.getOutputIds()) {
-    //         PixliteMapping pixliteMapping = mappings.getOutputById(outputId, PixliteMapping.class);
-    //         if (pixliteMapping != null) {
-    //             pixlites.add(createPixlite(pixliteMapping, outputId));
-    //         }
-    //     }
-
-    //     this.mappingColorsPerPixlite = new HashMap<>();
-    //     for (Pixlite pixlite : pixlites) {
-    //         this.mappingColorsPerPixlite.put(pixlite.slice.id, pixlite.mappingColors);
-    //     }
-
-    //     return pixlites.toArray(new Pixlite[0]);
-    // }
-
-    // private Pixlite createPixlite(PixliteMapping pixliteMapping, String sliceId) {
-    //     SunsModel sunsModel = (SunsModel)model;
-    //     Pixlite pixlite = new Pixlite(mappings, pixliteMapping, lx, sunsModel.getSliceById(sliceId));
-    //     lx.addOutput(pixlite);
-    //     return pixlite;
-    // }
 
     public final static int CHAN_WIDTH = 200;
     public final static int CHAN_HEIGHT = 650;

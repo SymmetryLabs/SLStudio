@@ -16,7 +16,7 @@ import static processing.core.PConstants.LINES;
 public class TestCube extends P3CubeMapPattern {
     public TestCube(LX lx) {
         // These parameters project this cubemap onto one of the 3/4-height suns.
-        // See buildModel() in Mappings.pde for the sun positions.
+        // See createModel() in Mappings.pde for the sun positions.
         super(
             (P3LX) lx,
             new PVector(55 * 12 + 8 * 12, 4 * 12, 2 * 12 + 0.3f * 8 * 12),

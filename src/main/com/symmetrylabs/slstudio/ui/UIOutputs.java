@@ -5,7 +5,9 @@ import java.util.ArrayList;
 import java.util.SortedSet;
 import java.util.TreeSet;
 
+import com.symmetrylabs.slstudio.Installation;
 import heronarts.lx.LX;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
@@ -57,8 +59,8 @@ public class UIOutputs extends UICollapsibleSection {
         addTopLevelComponent(new UIButton(80, 4, 30, 12).setParameter(clearParam));
 
         clearParam.addListener(it -> {
-            for (final NissanPixlite pixlite : SLStudio.applet.pixlites) {
-                pixlite.enabled.setValue(false);
+            for (final LXOutput output : Installation.getOutputs()) {
+                output.enabled.setValue(false);
             }
             clearParam.setValue(false);
         });
@@ -66,8 +68,8 @@ public class UIOutputs extends UICollapsibleSection {
         final List<UIItemList.Item> items = new ArrayList<>();
         outputList = new UIItemList.ScrollList(ui, 0, 0, w - 8, DEFAULT_HEIGHT - TOP_MARGIN);
 
-        for (NissanPixlite pixlite : SLStudio.applet.pixlites) {
-            items.add(new PixliteItem(pixlite));
+        for (LXOutput output : Installation.getOutputs()) {
+            items.add(new OutputListItem(output));
         }
 
         SortedSet<SLController> sortedControllers = new TreeSet<>((o1, o2) -> {
@@ -82,7 +84,7 @@ public class UIOutputs extends UICollapsibleSection {
             sortedControllers.add(c);
         }
         for (SLController c : sortedControllers) {
-            items.add(new ControllerItem(c));
+            items.add(new OutputListItem(c));
         }
 
         outputList.setItems(items).setSingleClickActivate(true);
@@ -108,7 +110,7 @@ public class UIOutputs extends UICollapsibleSection {
                         items.clear();
 
                         for (SLController controller : sortedControllers) {
-                            items.add(new ControllerItem(controller));
+                            items.add(new OutputListItem(controller));
                         }
 
                         outputList.setItems(items);
@@ -126,7 +128,7 @@ public class UIOutputs extends UICollapsibleSection {
                         items.clear();
 
                         for (SLController controller : sortedControllers) {
-                            items.add(new ControllerItem(controller));
+                            items.add(new OutputListItem(controller));
                         }
 
                         outputList.setItems(items);
@@ -143,25 +145,25 @@ public class UIOutputs extends UICollapsibleSection {
         setTitleX(20);
     }
 
-    class PixliteItem extends UIItemList.AbstractItem {
-        final NissanPixlite pixlite;
+    class OutputListItem extends UIItemList.AbstractItem {
+        final LXOutput output;
 
-        PixliteItem(NissanPixlite pixlite) {
-            this.pixlite = pixlite;
-            pixlite.enabled.addListener(param -> redraw());
+        OutputListItem(LXOutput output) {
+            this.output = output;
+            output.enabled.addListener(param -> redraw());
         }
 
         public String getLabel() {
-            return "(" + pixlite.ipAddress + ") unknown output channel";
+            return output.getLabel();
         }
 
         public boolean isSelected() {
-            return pixlite.enabled.isOn();
+            return output.enabled.isOn();
         }
 
         @Override
         public boolean isActive() {
-            return pixlite.enabled.isOn();
+            return output.enabled.isOn();
         }
 
         @Override
@@ -173,44 +175,7 @@ public class UIOutputs extends UICollapsibleSection {
         public void onActivate() {
             if (!SLStudio.applet.outputControl.enabled.getValueb())
                 return;
-            pixlite.enabled.toggle();
-        }
-    }
-
-    class ControllerItem extends UIItemList.AbstractItem {
-        final SLController controller;
-
-        ControllerItem(SLController controller) {
-            this.controller = controller;
-            controller.enabled.addListener(param -> redraw());
-        }
-
-        public String getLabel() {
-            if (controller.networkDevice != null && controller.networkDevice.version.get() != -1)
-                return controller.cubeId + " (v" + controller.networkDevice.version + ")";
-
-            return controller.cubeId;
-        }
-
-        public boolean isSelected() {
-                return controller.enabled.isOn();
-        }
-
-        @Override
-        public boolean isActive() {
-                return controller.enabled.isOn();
-        }
-
-        @Override
-        public int getActiveColor(UI ui) {
-                return isSelected() ? ui.theme.getPrimaryColor() : ui.theme.getSecondaryColor();
-        }
-
-        @Override
-        public void onActivate() {
-                if (!SLStudio.applet.outputControl.enabled.getValueb())
-                        return;
-                controller.enabled.toggle();
+            output.enabled.toggle();
         }
     }
 }

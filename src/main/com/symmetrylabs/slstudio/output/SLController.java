@@ -79,6 +79,13 @@ public class SLController extends LXOutput {
         enabled.setValue(true);
     }
 
+    public String getLabel() {
+        if (networkDevice != null && networkDevice.version.get() != -1)
+            return cubeId + " (v" + networkDevice.version + ")";
+
+        return cubeId;
+    }
+
     private void initPacketData(int numPixels) {
         this.numPixels = numPixels;
         contentSizeBytes = BYTES_PER_PIXEL * numPixels;
