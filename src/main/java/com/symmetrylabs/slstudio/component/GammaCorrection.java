@@ -65,33 +65,39 @@ public class GammaCorrection extends LXComponent {
         int b = c & 0xFF;
 
         int alpha = LXColor.alpha(c);
-        int red = redGamma[r];
-        int green = greenGamma[g];
-        int blue = blueGamma[b];
+        int red = redGamma[r] & 0xFF;
+        int green = greenGamma[g] & 0xFF;
+        int blue = blueGamma[b] & 0xFF;
 
         return alpha << LXColor.ALPHA_SHIFT | red << LXColor.RED_SHIFT
                 | green << LXColor.GREEN_SHIFT | blue;
     }
 
     public byte getCorrectedRed(int c) {
-        if (!enabled.isOn())
-            return LXColor.red(c);
+        byte r = (byte)(c >> 16 & 0xFF);
 
-        return redGamma[LXColor.red(c)];
+        if (!enabled.isOn())
+            return r;
+
+        return redGamma[r];
     }
 
     public byte getCorrectedGreen(int c) {
-        if (!enabled.isOn())
-            return LXColor.green(c);
+        byte g = (byte)(c >> 8 & 0xFF);
 
-        return greenGamma[LXColor.green(c)];
+        if (!enabled.isOn())
+            return g;
+
+        return greenGamma[g];
     }
 
     public byte getCorrectedBlue(int c) {
-        if (!enabled.isOn())
-            return LXColor.blue(c);
+        byte b = (byte)(c & 0xFF);
 
-        return blueGamma[LXColor.blue(c)];
+        if (!enabled.isOn())
+            return b;
+
+        return blueGamma[b];
     }
 
     private void setupGammaCorrection() {
