@@ -7,6 +7,7 @@ import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.layouts.dollywood.DollywoodLayout;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import processing.core.PApplet;
@@ -76,9 +77,10 @@ public class SLStudio extends PApplet {
         Utils.setSketchPath(sketchPath());
 
         // Instantiate the desired layout here.
-        layout = new CubesLayout();
-//    layout = new DynamicLayout();
-//         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+        //layout = new CubesLayout();
+        //layout = new DynamicLayout();
+      //layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+      layout = new DollywoodLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
         printModelStats(model);

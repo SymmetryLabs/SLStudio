@@ -678,22 +678,22 @@ public class TreeModel extends SLModel {
 
         private static class Fixture extends LXAbstractFixture {
             Fixture(LXTransform t, Orientation orientation) {
-                t.push();
-                t.translate(.1f*INCHES, LED_OFFSET, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(-.1f*INCHES, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(-.1f*INCHES, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.pop();
+                // t.push();
+                // t.translate(.1f*INCHES, LED_OFFSET, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(-.1f*INCHES, LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(-.1f*INCHES, -LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, -LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, -LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.pop();
             }
         }
     }
