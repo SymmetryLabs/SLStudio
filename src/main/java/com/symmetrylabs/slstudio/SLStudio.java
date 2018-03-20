@@ -80,7 +80,7 @@ public class SLStudio extends PApplet {
         //layout = new CubesLayout();
         //layout = new DynamicLayout();
       //layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
-      layout = new DollywoodLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+      layout = new DollywoodLayout(this);
 
         LXModel model = layout.buildModel();
         printModelStats(model);

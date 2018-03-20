@@ -22,7 +22,8 @@ public class UITreeGround extends UI3dComponent {
 
     @Override
     protected void onDraw(heronarts.p3lx.ui.UI ui, PGraphics pg) {
-        pg.tint(DUST_FILL);
+        //pg.tint(DUST_FILL);
+        pg.tint(0xff3a3f27);
         pg.textureMode(NORMAL);
         pg.beginShape();
         pg.texture(this.dust);
@@ -39,7 +40,7 @@ public class UITreeGround extends UI3dComponent {
     }
 
     void drawPerson(PGraphics pg, float personX, float personY, float personZ, float personXW, float personZW) {
-        pg.tint(0xFF393939);
+        pg.tint(0xFF111111);
         pg.noStroke();
         pg.beginShape();
         pg.texture(this.person);

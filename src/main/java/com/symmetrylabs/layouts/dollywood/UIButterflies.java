@@ -1,4 +1,8 @@
-package com.symmetrylabs.layouts.oslo;
+package com.symmetrylabs.layouts.dollywood;
+
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import heronarts.p3lx.P3LX;
@@ -12,22 +16,25 @@ import processing.opengl.PGL;
 import processing.opengl.PGraphicsOpenGL;
 import processing.opengl.PShapeOpenGL;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXPoint;
 
 import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.IntBuffer;
 
-public class UITreeLeaves extends UI3dComponent {
+public class UIButterflies extends UI3dComponent {
 
     private final P3LX lx;
-    private final TreeModel tree;
-    protected final PImage texImage;
-    private LeafShape shape;
+    // protected final PImage texImage;
+    private ButterflyShape shape;
+    private List<DollywoodModel.Butterfly> butterflies;
+    private List<DollywoodModel.Butterfly.Wing> wings;
 
-    public UITreeLeaves(P3LX lx, PApplet applet, TreeModel tree) {
+    public UIButterflies(P3LX lx, PApplet applet, List<DollywoodModel.Butterfly> butterflies) {
         this.lx = lx;
-        this.tree = tree;
-        this.texImage = applet.loadImage("leaf.png");
+        this.butterflies = butterflies;
+        this.wings = ((DollywoodModel)lx.model).getWings();
+        //this.texImage = applet.loadImage("leaf.png");
     }
 
     // Uses PShape functionality to render with a faster shader using VBOs.
@@ -35,19 +42,19 @@ public class UITreeLeaves extends UI3dComponent {
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
         if (this.shape == null) {
-            this.shape = new LeafShape(pg);
+            this.shape = new ButterflyShape(pg);
         }
         this.shape.updateColors(pg, lx.getColors());
         pg.shape(this.shape);
     }
 
-    class LeafShape extends PShapeOpenGL {
+    class ButterflyShape extends PShapeOpenGL {
 
         private final IntBuffer tintBuffer;
         private final boolean BIG_ENDIAN =
             ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN;
 
-        LeafShape(PGraphics pg) {
+        ButterflyShape(PGraphics pg) {
             super((PGraphicsOpenGL) pg, PShape.GEOMETRY);
             set3D(true);
 
@@ -56,11 +63,11 @@ public class UITreeLeaves extends UI3dComponent {
             setStroke(false);
             setFill(false);
             beginShape(QUADS);
-            for (TreeModel.Leaf leaf : tree.leaves) {
-                vertex(leaf.coords[0].x, leaf.coords[0].y, leaf.coords[0].z, 0, 1);
-                vertex(leaf.coords[1].x, leaf.coords[1].y, leaf.coords[1].z, 0, 0);
-                vertex(leaf.coords[2].x, leaf.coords[2].y, leaf.coords[2].z, 1, 0);
-                vertex(leaf.coords[3].x, leaf.coords[3].y, leaf.coords[3].z, 1, 1);
+            for (DollywoodModel.Butterfly.Wing wing : wings) {
+                vertex(wing.coords[0].x, wing.coords[0].y, wing.coords[0].z, 0, 1);
+                vertex(wing.coords[1].x, wing.coords[1].y, wing.coords[1].z, 0, 0);
+                vertex(wing.coords[2].x, wing.coords[2].y, wing.coords[2].z, 1, 0);
+                vertex(wing.coords[3].x, wing.coords[3].y, wing.coords[3].z, 1, 1);
             }
             endShape(CLOSE);
             markForTessellation();
@@ -68,7 +75,7 @@ public class UITreeLeaves extends UI3dComponent {
             initBuffers();
 
             this.tintBuffer = ByteBuffer
-            .allocateDirect(tree.leaves.size() * 4 * Integer.SIZE / 8)
+            .allocateDirect(wings.size() * 4 * Integer.SIZE / 8)
             .order(ByteOrder.nativeOrder())
             .asIntBuffer();
         }
@@ -78,13 +85,7 @@ public class UITreeLeaves extends UI3dComponent {
             // This reaches inside the PShapeOpenGL guts and updates ONLY the
             // vertex color buffer object with new data on each rendering pass.
 
-            this.tintBuffer.rewind();
-
-            // (TEMPORARY) just set all the leaves green
-            while (this.tintBuffer.hasRemaining()) {
-                this.tintBuffer.put(0xff071901);
-            }
-
+            // this.tintBuffer.rewind();
             // if (BIG_ENDIAN) {
             //   for (int i = 0; i < colors.length; i += TreeModel.Leaf.NUM_LEDS) {
             //     int nativeARGB = (colors[i] >>> 24) | (colors[i] << 8);
@@ -103,11 +104,10 @@ public class UITreeLeaves extends UI3dComponent {
             //     this.tintBuffer.put(nativeARGB);
             //   }
             // }
-
-            this.tintBuffer.position(0);
-            pgl.bindBuffer(PGL.ARRAY_BUFFER, bufPolyColor.glId);
-            pgl.bufferData(PGL.ARRAY_BUFFER, tree.leaves.size() * 4 * Integer.SIZE/8, this.tintBuffer, PGL.STREAM_DRAW);
-            pgl.bindBuffer(PGL.ARRAY_BUFFER, 0);
+            // this.tintBuffer.position(0);
+            // pgl.bindBuffer(PGL.ARRAY_BUFFER, bufPolyColor.glId);
+            // pgl.bufferData(PGL.ARRAY_BUFFER, wings.size() * 4 * Integer.SIZE/8, this.tintBuffer, PGL.STREAM_DRAW);
+            // pgl.bindBuffer(PGL.ARRAY_BUFFER, 0);
         }
     }
 }

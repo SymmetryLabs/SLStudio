@@ -660,7 +660,7 @@ public class TreeModel extends SLModel {
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
-            this.point = this.points[0];
+            this.point = null;//this.points[0];
 
             // Precompute boundary coordinates for faster rendering, these
             // can be dumped into a VBO for a shader.
@@ -678,6 +678,7 @@ public class TreeModel extends SLModel {
 
         private static class Fixture extends LXAbstractFixture {
             Fixture(LXTransform t, Orientation orientation) {
+                // (TEMPORARY) commented these out so we only have dollywood buttefly points (just wanted tree for rendering)
                 // t.push();
                 // t.translate(.1f*INCHES, LED_OFFSET, 0);
                 // addPoint(new LXPoint(t));

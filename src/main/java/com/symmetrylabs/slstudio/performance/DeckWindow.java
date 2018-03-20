@@ -23,7 +23,6 @@ import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
 
 import static processing.core.PApplet.println;
 
@@ -143,15 +142,7 @@ public class DeckWindow extends UIWindow {
         b.enabled.setValue(true);
 
 
-        LXEffect cs = channel.getEffect("ColorShift");
-        if (cs == null) {
-            cs = new ColorShiftEffect(lx);
-            channel.addEffect(cs);
-        }
-        cs.enabled.setValue(true);
-
         pm.blurs[slot] = b.getParameter("amount");
-        pm.colors[slot] = cs.getParameter("shift");
 
         for (int i = 0; i < 4; i++) {
             println(i, pm.blurs[i], pm.colors[i]);
