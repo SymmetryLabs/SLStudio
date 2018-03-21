@@ -11,6 +11,7 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.transform.LXTransform;
+import heronarts.lx.transform.LXVector;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import processing.core.PApplet;
@@ -104,12 +105,15 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
     public static class Butterfly extends StripsModel<Wing> {
 
+        public static final int LARGE_NUM_LEDS = 40;
+
         public static enum Type {
             SMALL, LARGE
         }
 
         public final String id;
         public final Type type;
+        public final LXVector[] coords;
 
         protected final List<Wing> wings = new ArrayList<>();
         private final List<Wing> wingsUnmodifiable = Collections.unmodifiableList(wings);
@@ -126,6 +130,7 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
             Fixture fixture = (Fixture)this.fixtures.get(0);
             this.id = id;
             this.type = type;
+            this.coords = fixture.coords;
 
             while (rx < 0) rx += 360;
             while (ry < 0) ry += 360;
@@ -150,6 +155,8 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
         private static class Fixture extends LXAbstractFixture {
 
+            public final LXVector[] coords = new LXVector[4];
+
             private final List<Wing> wings = new ArrayList<>();
 
             private Fixture(String id, Butterfly.Type type, float x, float y, float z, float rx, float ry, float rz, LXTransform transform) {
@@ -160,6 +167,19 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                 transform.rotateY(ry * Math.PI / 180.);
                 transform.rotateZ(rz * Math.PI / 180.);
                 //t.translate(-type.EDGE_WIDTH/2, -type.EDGE_HEIGHT/2, -type.EDGE_WIDTH/2);
+
+                // Precompute boundary coordinates for faster rendering, these
+                // can be dumped into a VBO for a shader.
+                transform.push();
+                transform.translate(-10.5f, -8);
+                this.coords[0] = transform.vector();
+                transform.translate(0, 16);
+                this.coords[1] = transform.vector();
+                transform.translate(18, 0);
+                this.coords[2] = transform.vector();
+                transform.translate(0, -16);
+                this.coords[3] = transform.vector();
+                transform.pop();
 
                 this.wings.add(new Wing(
                     id+"_upper_left_wing",
@@ -206,6 +226,9 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
     public static class Wing extends Strip {
 
+        public static final int LARGE_UPPER_NUM_LEDS = 12;
+        public static final int LARGE_LOWER_NUM_LEDS = 8;
+
         public enum Type { 
             LARGE_UPPER, LARGE_LOWER, SMALL_UPPER, SMALL_LOWER
         }
@@ -227,25 +250,14 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
         public final String id;
 
-        public final LXVector[] coords = new LXVector[4];
+        public final LXVector[] coords;
 
         public Wing(String id, Type type, float[] coordinates, float[] rotations, LXTransform transform) {
             super(id, new Strip.Metrics(Wing.getNumPointsOnWing(type)), new Fixture(type, coordinates, rotations, transform));
+            Fixture fixture = (Fixture)this.fixtures.get(0);
             this.id = id;
             this.type = type;
-
-            // Precompute boundary coordinates for faster rendering, these
-            // can be dumped into a VBO for a shader.
-            t.push();
-            t.translate(-WIDTH/2, 0);
-            this.coords[0] = t.vector();
-            t.translate(0, LENGTH);
-            this.coords[1] = t.vector();
-            t.translate(WIDTH, 0);
-            this.coords[2] = t.vector();
-            t.translate(0, -LENGTH);
-            this.coords[3] = t.vector();
-            t.pop();
+            this.coords = fixture.coords;
         }
 
         private static int getNumPointsOnWing(Type type) {
@@ -259,12 +271,42 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
         }
 
         private static class Fixture extends LXAbstractFixture {
+            private final LXVector[] coords = new LXVector[4];
+
             private Fixture(Type type, float[] coordinates, float[] rotations, LXTransform transform) {
                 transform.push();
                 transform.translate(coordinates[0], coordinates[1], coordinates[2]);
                 transform.rotateX(rotations[0] * PI / 180.);
                 transform.rotateY(rotations[1] * PI / 180.);
                 transform.rotateZ(rotations[2] * PI / 180.);
+
+                // Precompute boundary coordinates for faster rendering, these
+                // can be dumped into a VBO for a shader.
+                if (type == Wing.Type.LARGE_UPPER || type == Wing.Type.SMALL_UPPER) {
+                    transform.push();
+                    transform.rotateZ(-Math.PI / 4f);
+                    transform.translate(-1, -1); //tweak
+                    this.coords[0] = transform.vector();
+                    transform.translate(0, 8);
+                    this.coords[1] = transform.vector();
+                    transform.translate(9, 0);
+                    this.coords[2] = transform.vector();
+                    transform.translate(0, -8);
+                    this.coords[3] = transform.vector();
+                    transform.pop();
+                } else {
+                    transform.push();
+                    transform.rotateZ(-Math.PI / 6.5f);
+                    transform.translate(-0.75f, -2f); //tweak
+                    this.coords[0] = transform.vector();
+                    transform.translate(0, 6);
+                    this.coords[1] = transform.vector();
+                    transform.translate(5, 0);
+                    this.coords[2] = transform.vector();
+                    transform.translate(0, -6);
+                    this.coords[3] = transform.vector();
+                    transform.pop();
+                }
 
                 ButterflyMetrics metrics = null;
                 switch (type) {
@@ -273,8 +315,6 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                     case SMALL_UPPER: metrics = new ButterflyMetrics(4,  7); break; // adjust
                     case SMALL_LOWER: metrics = new ButterflyMetrics(3,  4); break; // adjust
                 }
-
-                System.out.println("Wing type: " + type);
 
                 // calculate positions
                 List<float[]> positions = new ArrayList<float[]>();

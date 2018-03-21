@@ -31,7 +31,7 @@ public class DollywoodLayout implements Layout {
 
     static final ButterflyConfig[] BUTTERFLY_CONFIG = {
         new ButterflyConfig("butterfly1_", DollywoodModel.Butterfly.Type.LARGE, new float[] {-30, 70, 210}, new float[] {0, 0, 0}),
-        new ButterflyConfig("butterfly2_", DollywoodModel.Butterfly.Type.SMALL, new float[] {-60, 70, 210}, new float[] {0, 0, 0})
+        new ButterflyConfig("butterfly2_", DollywoodModel.Butterfly.Type.LARGE, new float[] {-60, 70, 210}, new float[] {0, 0, 0})
     };
 
     public DollywoodLayout(PApplet applet) {

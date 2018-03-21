@@ -611,6 +611,8 @@ public class TreeModel extends SLModel {
         public static final float WIDTH = 4.75f*INCHES;
         public static final float LENGTH = 6.5f*INCHES;
 
+        public final LXTransform transform;
+
         // Orientation of a leaf relative to leaf assemblage
         public static class Orientation {
 
@@ -661,6 +663,8 @@ public class TreeModel extends SLModel {
             this.y = t.y();
             this.z = t.z();
             this.point = null;//this.points[0];
+
+            this.transform = t;
 
             // Precompute boundary coordinates for faster rendering, these
             // can be dumped into a VBO for a shader.
