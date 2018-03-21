@@ -169,11 +169,11 @@ public class TreeModel extends SLModel {
                 addLimb(5.0f*FEET, 4.6f * TWO_PI/6f, Limb.Size.MEDIUM);
 
                 // We probably don't have this many...
-                // addLimb(6.3*FEET, 5.3 * TWO_PI/6, Limb.Size.MEDIUM);
+                //addLimb(6.3*FEET, 5.3 * TWO_PI/6, Limb.Size.MEDIUM);
 
                 // A couple small top limbs
-                // addLimb(7*FEET, .3 * TWO_PI/6, Limb.Size.SMALL);
-                // addLimb(7*FEET, 3.1 * TWO_PI/6, Limb.Size.SMALL);
+                addLimb(7f*FEET, 0.3f * TWO_PI/6f, Limb.Size.SMALL);
+                addLimb(7f*FEET, 3.1f * TWO_PI/6f, Limb.Size.SMALL);
             }
         }
 
