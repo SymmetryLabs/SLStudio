@@ -148,18 +148,25 @@ public class TreeModel extends SLModel {
             } else {
                 // Lowest layer of major limbs
                 addLimb(0.0f*FEET, 0.1f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(0.0f*FEET, 0.7f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(1.0f*FEET, 1.2f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(-1.3f*FEET, 1.6f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(3.0f*FEET, 1.9f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(1.7f*FEET, 2.1f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(3.0f*FEET, 2.5f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(1.2f*FEET, 2.9f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(1.0f*FEET, 4.5f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(0.8f*FEET, 4.1f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(2.4f*FEET, 4.9f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(1.5f*FEET, 5.5f * TWO_PI/6f, Limb.Size.FULL);
+
 
                 // Medium layer of limbs
                 addLimb(6.0f*FEET, 0.4f * TWO_PI/6f, Limb.Size.MEDIUM);
                 addLimb(5.4f*FEET, 1.5f * TWO_PI/6f, Limb.Size.MEDIUM);
                 addLimb(4.2f*FEET, 3.4f * TWO_PI/6f, Limb.Size.MEDIUM);
                 addLimb(5.9f*FEET, 4.9f * TWO_PI/6f, Limb.Size.MEDIUM);
+                addLimb(5.0f*FEET, 4.6f * TWO_PI/6f, Limb.Size.MEDIUM);
 
                 // We probably don't have this many...
                 // addLimb(6.3*FEET, 5.3 * TWO_PI/6, Limb.Size.MEDIUM);
@@ -499,6 +506,8 @@ public class TreeModel extends SLModel {
         public static final float LENGTH = 26*INCHES;
         public static final float WIDTH = 24*INCHES;
 
+        public final LXMatrix transform;
+
         // Orientation of a leaf assemblage, relative to parent branch
         public static class Orientation {
 
@@ -572,6 +581,7 @@ public class TreeModel extends SLModel {
         public LeafAssemblage(int channel, LXTransform t, Orientation orientation) {
             super(new Fixture(t));
             Fixture f = (Fixture) this.fixtures.get(0);
+            this.transform = t.getMatrix();
             this.channel = channel;
             this.leaves = Collections.unmodifiableList(f.leaves);
             this.orientation = orientation;
@@ -610,8 +620,6 @@ public class TreeModel extends SLModel {
         public static final float LED_SPACING = 1.3f*INCHES;
         public static final float WIDTH = 4.75f*INCHES;
         public static final float LENGTH = 6.5f*INCHES;
-
-        public final LXTransform transform;
 
         // Orientation of a leaf relative to leaf assemblage
         public static class Orientation {
@@ -663,8 +671,6 @@ public class TreeModel extends SLModel {
             this.y = t.y();
             this.z = t.z();
             this.point = null;//this.points[0];
-
-            this.transform = t;
 
             // Precompute boundary coordinates for faster rendering, these
             // can be dumped into a VBO for a shader.

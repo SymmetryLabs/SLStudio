@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import heronarts.lx.transform.LXTransform;
+import heronarts.lx.transform.LXMatrix;
 
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -17,6 +18,8 @@ import com.symmetrylabs.layouts.oslo.UITreeGround;
 import com.symmetrylabs.layouts.oslo.UITreeLeaves;
 import com.symmetrylabs.layouts.oslo.UITreeStructure;
 import com.symmetrylabs.layouts.dollywood.UIButterflies;
+
+import static com.symmetrylabs.util.MathUtils.*;
 
 public class DollywoodLayout implements Layout {
     private final PApplet applet;
@@ -60,17 +63,20 @@ public class DollywoodLayout implements Layout {
         }
     }
 
+    // private LXMatrix getRandomButterflyTransform(TreeModel treeModel) {
+    //   return treeModel.leaves.get((int)random(treeModel.leaves.size()-1)).transform;
+    // }
+
     @Override
     public SLModel buildModel() {
         List<DollywoodModel.Butterfly> butterflies = new ArrayList<>();
 
         // Any global transforms
         LXTransform transform = new LXTransform();
-        transform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
-        transform.rotateY(globalRotationY * Math.PI / 180.);
-        transform.rotateX(globalRotationX * Math.PI / 180.);
-        transform.rotateZ(globalRotationZ * Math.PI / 180.);
 
+        TreeModel treeModel = new TreeModel(applet, TreeModel.ModelMode.MAJOR_LIMBS);
+
+        // add the "hardcoded" mappings
         for (ButterflyConfig config : BUTTERFLY_CONFIG) {
             String id = config.id;
             DollywoodModel.Butterfly.Type type = config.type;
@@ -81,16 +87,32 @@ public class DollywoodLayout implements Layout {
             float yRot = config.yRot;
             float zRot = config.zRot;
 
-            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly(id, type, x, y, z, xRot, yRot, zRot, transform);
+            transform.push();
+            transform.translate(x, y, z);
+            transform.rotateX(xRot * Math.PI / 180.);
+            transform.rotateY(yRot * Math.PI / 180.);
+            transform.rotateZ(zRot * Math.PI / 180.);
+
+            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly(id, type, transform);
+            butterflies.add(butterfly);
+            transform.pop();
+        }
+
+        // generate random mappings
+        // for (int i = 0; i < 1000; i++) {
+        //     LXTransform transform1 = new LXTransform(getRandomButterflyTransform(treeModel));
+        //     DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
+        //     butterflies.add(butterfly);
+        // }
+
+        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
+            LXTransform transform1 = new LXTransform(assemblage.transform);
+            transform1.translate(0, 14, 0);
+            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
             butterflies.add(butterfly);
         }
 
-        DollywoodModel.Butterfly[] butterfliesArr = new DollywoodModel.Butterfly[butterflies.size()];
-        for (int i = 0; i < butterfliesArr.length; i++) {
-            butterfliesArr[i] = butterflies.get(i);
-        }
-
-        return new DollywoodModel(applet, butterflies, butterfliesArr);
+        return new DollywoodModel(applet, treeModel, butterflies);
     }
 
     @Override

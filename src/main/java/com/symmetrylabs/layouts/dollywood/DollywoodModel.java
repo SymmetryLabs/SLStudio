@@ -43,17 +43,18 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
     //   this(new ArrayList<>(), new Butterfly[0]);
     // }
 
-    public DollywoodModel(PApplet applet, List<Butterfly> butterflies, Butterfly[] butterflyArr) {
-        super(new Fixture(applet, butterflyArr));
+    public DollywoodModel(PApplet applet, TreeModel treeModel, List<Butterfly> butterflies) {
+        super(new Fixture(applet, treeModel, butterflies));
         Fixture fixture = (Fixture) this.fixtures.get(0);
-        this.treeModel = fixture.treeModel;
+        this.treeModel = treeModel;
 
-        _butterflies = butterflyArr;
-
+        int i = 0;
+        this._butterflies = new Butterfly[butterflies.size()]; 
         for (Butterfly butterfly : butterflies) {
             if (butterfly != null) {
                 this.butterflyTable.put(butterfly.id, butterfly);
                 this.butterflies.add(butterfly);
+                this._butterflies[i++] = butterfly;
                 this.wings.addAll(butterfly.getWings());
                 this.strips.addAll(butterfly.getWings());
 
@@ -73,15 +74,12 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
     }
 
     private static class Fixture extends LXAbstractFixture {
-        private final TreeModel treeModel;
-
-        private Fixture(PApplet applet, Butterfly[] butterflyArr) {
-            this.treeModel = new TreeModel(applet, TreeModel.ModelMode.MAJOR_LIMBS);
+        private Fixture(PApplet applet, TreeModel treeModel, List<Butterfly> butterflies) {
             for (LXPoint p : treeModel.points) {
                 this.points.add(p);
             }
 
-            for (Butterfly butterfly : butterflyArr) {
+            for (Butterfly butterfly : butterflies) {
                 if (butterfly != null) {
                     for (LXPoint point : butterfly.points) {
                         this.points.add(point);
@@ -118,33 +116,33 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
         protected final List<Wing> wings = new ArrayList<>();
         private final List<Wing> wingsUnmodifiable = Collections.unmodifiableList(wings);
 
-        public final float x;
-        public final float y;
-        public final float z;
-        public final float rx;
-        public final float ry;
-        public final float rz;
+        // public final float x;
+        // public final float y;
+        // public final float z;
+        // public final float rx;
+        // public final float ry;
+        // public final float rz;
 
-        public Butterfly(String id, Type type, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
-            super(new Fixture(id, type, x, y, z, rx, ry, rz, t));
+        public Butterfly(String id, Type type, LXTransform transform) {
+            super(new Fixture(id, type, transform));
             Fixture fixture = (Fixture)this.fixtures.get(0);
             this.id = id;
             this.type = type;
             this.coords = fixture.coords;
 
-            while (rx < 0) rx += 360;
-            while (ry < 0) ry += 360;
-            while (rz < 0) rz += 360;
-            rx = rx % 360;
-            ry = ry % 360;
-            rz = rz % 360;
+            // while (rx < 0) rx += 360;
+            // while (ry < 0) ry += 360;
+            // while (rz < 0) rz += 360;
+            // rx = rx % 360;
+            // ry = ry % 360;
+            // rz = rz % 360;
 
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.rx = rx;
-            this.ry = ry;
-            this.rz = rz;
+            // this.x = x;
+            // this.y = y;
+            // this.z = z;
+            // this.rx = rx;
+            // this.ry = ry;
+            // this.rz = rz;
 
             this.wings.addAll(fixture.wings);
         }
@@ -159,14 +157,8 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
             private final List<Wing> wings = new ArrayList<>();
 
-            private Fixture(String id, Butterfly.Type type, float x, float y, float z, float rx, float ry, float rz, LXTransform transform) {
+            private Fixture(String id, Butterfly.Type type, LXTransform transform) {
                 transform.push();
-                transform.translate(x, y, z);
-                //t.translate(type.EDGE_WIDTH/2, type.EDGE_HEIGHT/2, type.EDGE_WIDTH/2);
-                transform.rotateX(rx * Math.PI / 180.);
-                transform.rotateY(ry * Math.PI / 180.);
-                transform.rotateZ(rz * Math.PI / 180.);
-                //t.translate(-type.EDGE_WIDTH/2, -type.EDGE_HEIGHT/2, -type.EDGE_WIDTH/2);
 
                 // Precompute boundary coordinates for faster rendering, these
                 // can be dumped into a VBO for a shader.
@@ -318,7 +310,6 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
                 // calculate positions
                 List<float[]> positions = new ArrayList<float[]>();
-
                 for (int i = 0; i < metrics.numPoints; i++) {
                     float t = i / (float)metrics.numPoints;
                     float x = bezierPoint(0, metrics.arcWidth*0.35f, metrics.arcWidth*0.5f, metrics.arcWidth, t);
@@ -341,59 +332,6 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                     transform.pop();
                 }
 
-                // switch (type) {
-                //   case LARGE_UPPER:
-                //     ButterflyMetrics upperMetrics = new ButterflyMetrics(6, 10);
-
-                //     for (int i = 0; i < upperMetrics.numPoints; i++) {
-                //       float t = i / (float)upperMetrics.numPoints;
-                //       float x = bezierPoint(0, upperMetrics.arcWidth*0.35f, upperMetrics.arcWidth*0.5f, upperMetrics.arcWidth, t);
-                //       float y = bezierPoint(0, upperMetrics.arcWidth*-0.2f, upperMetrics.arcWidth*-0.2f, 0, t);
-                //       positions.add(new float[] {x, y});
-                //     }
-
-                //     for (int i = 0; i < upperMetrics.numPoints; i++) {
-                //       transform.push();
-                //       transform.translate(positions.get(i)[0], positions.get(i)[1], 0);
-                //       this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-                //       transform.pop();
-                //     }
-
-                //     for (int i = upperMetrics.numPoints-1; i > -1; i--) {
-                //       transform.push();
-                //       transform.translate(positions.get(i)[0]+(-0.025f*i)+0.1f, positions.get(i)[1]+0.25f, 0);
-                //       this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-                //       transform.pop();
-                //     }
-                //     break;
-
-                //   case LARGE_LOWER:
-                //     ButterflyMetrics lowerMetrics = new ButterflyMetrics(4, 6);
-
-                //     for (int i = 0; i < lowerMetrics.numPoints; i++) {
-                //       float t = i / (float)lowerMetrics.numPoints;
-                //       float x = bezierPoint(0, lowerMetrics.arcWidth*0.35f, lowerMetrics.arcWidth*0.5f, lowerMetrics.arcWidth, t);
-                //       float y = bezierPoint(0, lowerMetrics.arcWidth*-0.25f, lowerMetrics.arcWidth*-0.25f, 0, t);
-                //       positions.add(new float[] {x, y});
-                //     }
-
-                //     for (int i = 0; i < lowerMetrics.numPoints; i++) {
-                //       transform.push();
-                //       transform.translate(positions.get(i)[0], positions.get(i)[1], 0);
-                //       this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-                //       transform.pop();
-                //     }
-
-                //     for (int i = lowerMetrics.numPoints-1; i > -1; i--) {
-                //       transform.push();
-                //       transform.translate(positions.get(i)[0]+(-0.025f*i)+0.1f, positions.get(i)[1]+0.25f, 0);
-                //       this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-                //       transform.pop();
-                //     }
-                //     break;
-                // }
-
-
                 transform.pop();
             }
 
@@ -403,59 +341,4 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
             }
         }
     }
-
-    // public static class ButterflyStrip extends Strip {
-    //   public static class Metrics extends Strip.Metrics {
-    //     public final int LEDS_PER_METER = 30;
-    //     public final float POINT_SPACING = INCHES_PER_METER / LEDS_PER_METER;
-    //     public final float length;
-    //     public final float arcWidth;
-
-    //     public Metrics(int numPoints, float arcWidth) {
-    //       super(numPoints);
-    //       this.length = numPoints * POINT_SPACING;
-    //       this.arcWidth = arcWidth;
-    //     }
-    //   }
-
-    //   public ButterflyStrip(Metrics metrics, LXTransform transform) {
-    //     super("", metrics, new Fixture(metrics, transform));
-    //   }
-
-    //   private static class Fixture extends LXAbstractFixture {
-    //     private Fixture(Metrics metrics, LXTransform transform) {
-    //       transform.push();
-
-    //       List<float[]> positions = new ArrayList<float[]>();
-
-    //       switch ()
-    //         for (int i = 0; i < metrics.numPoints; i++) {
-    //           float t = i / (float)metrics.numPoints;
-    //           float x = bezierPoint(0, metrics.arcWidth*0.35f, metrics.arcWidth*0.5f, metrics.arcWidth, t);
-    //           float y = bezierPoint(0, metrics.arcWidth*-0.15f, metrics.arcWidth*-0.15f, 0, t);
-    //           positions.add(new float[] {x, y});
-    //         }
-
-    //         for (int i = 0; i < metrics.numPoints; i++) {
-    //           transform.push();
-    //           transform.translate(positions.get(i)[0], positions.get(i)[1], 0);
-    //           this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-    //           transform.pop();
-    //         }
-
-    //         for (int i = metrics.numPoints-2; i > -1; i--) {
-    //           transform.push();
-    //           transform.translate(positions.get(i)[0]+(-0.025f*i)+0.1f, positions.get(i)[1]+0.25f, 0);
-    //           this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-    //           transform.pop();
-    //         }
-    //       transform.pop();
-    //     }
-
-    //     private float bezierPoint(float a, float b, float c, float d, float t) {
-    //       float t1 = 1.0f - t;
-    //       return ((a * t1) + (3 * b * t)) * (t1 * t1) + ((3 * c * t1) + (d * t)) * (t * t);
-    //     }
-    //   }
-    // }
 }

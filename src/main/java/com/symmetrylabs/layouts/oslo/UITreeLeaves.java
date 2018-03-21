@@ -34,43 +34,43 @@ public class UITreeLeaves extends UI3dComponent {
     // Only the color buffer is pushed to the GPU on each frame.
     @Override
     protected void onDraw(UI ui, PGraphics pg) {
-        if (this.shape == null) {
-            this.shape = new LeafShape(pg);
-        }
-        this.shape.updateColors(pg, lx.getColors());
-        pg.shape(this.shape);
+        // if (this.shape == null) {
+        //   this.shape = new LeafShape(pg);
+        // }
+        // this.shape.updateColors(pg, lx.getColors());
+        // pg.shape(this.shape);
     }
 
     class LeafShape extends PShapeOpenGL {
 
-        private final IntBuffer tintBuffer;
-        private final boolean BIG_ENDIAN =
-            ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN;
+        // private final IntBuffer tintBuffer;
+        // private final boolean BIG_ENDIAN =
+        //   ByteOrder.nativeOrder() == ByteOrder.BIG_ENDIAN;
 
         LeafShape(PGraphics pg) {
             super((PGraphicsOpenGL) pg, PShape.GEOMETRY);
-            set3D(true);
+            // set3D(true);
 
-            setTexture(texImage);
-            setTextureMode(NORMAL);
-            setStroke(false);
-            setFill(false);
-            beginShape(QUADS);
-            for (TreeModel.Leaf leaf : tree.leaves) {
-                vertex(leaf.coords[0].x, leaf.coords[0].y, leaf.coords[0].z, 0, 1);
-                vertex(leaf.coords[1].x, leaf.coords[1].y, leaf.coords[1].z, 0, 0);
-                vertex(leaf.coords[2].x, leaf.coords[2].y, leaf.coords[2].z, 1, 0);
-                vertex(leaf.coords[3].x, leaf.coords[3].y, leaf.coords[3].z, 1, 1);
-            }
-            endShape(CLOSE);
-            markForTessellation();
-            updateTessellation();
-            initBuffers();
+            // setTexture(texImage);
+            // setTextureMode(NORMAL);
+            // setStroke(false);
+            // setFill(false);
+            // beginShape(QUADS);
+            // for (TreeModel.Leaf leaf : tree.leaves) {
+            //   vertex(leaf.coords[0].x, leaf.coords[0].y, leaf.coords[0].z, 0, 1);
+            //   vertex(leaf.coords[1].x, leaf.coords[1].y, leaf.coords[1].z, 0, 0);
+            //   vertex(leaf.coords[2].x, leaf.coords[2].y, leaf.coords[2].z, 1, 0);
+            //   vertex(leaf.coords[3].x, leaf.coords[3].y, leaf.coords[3].z, 1, 1);
+            // }
+            // endShape(CLOSE);
+            // markForTessellation();
+            // updateTessellation();
+            // initBuffers();
 
-            this.tintBuffer = ByteBuffer
-            .allocateDirect(tree.leaves.size() * 4 * Integer.SIZE / 8)
-            .order(ByteOrder.nativeOrder())
-            .asIntBuffer();
+            // this.tintBuffer = ByteBuffer
+            // .allocateDirect(tree.leaves.size() * 4 * Integer.SIZE / 8)
+            // .order(ByteOrder.nativeOrder())
+            // .asIntBuffer();
         }
 
         void updateColors(PGraphics pg, int[] colors) {
@@ -78,12 +78,12 @@ public class UITreeLeaves extends UI3dComponent {
             // This reaches inside the PShapeOpenGL guts and updates ONLY the
             // vertex color buffer object with new data on each rendering pass.
 
-            this.tintBuffer.rewind();
+            //this.tintBuffer.rewind();
 
             // (TEMPORARY) just set all the leaves green
-            while (this.tintBuffer.hasRemaining()) {
-                this.tintBuffer.put(0xff071901);
-            }
+            // while (this.tintBuffer.hasRemaining()) {
+            //   this.tintBuffer.put(0xff071901);
+            // }
 
             // if (BIG_ENDIAN) {
             //   for (int i = 0; i < colors.length; i += TreeModel.Leaf.NUM_LEDS) {
@@ -104,10 +104,10 @@ public class UITreeLeaves extends UI3dComponent {
             //   }
             // }
 
-            this.tintBuffer.position(0);
-            pgl.bindBuffer(PGL.ARRAY_BUFFER, bufPolyColor.glId);
-            pgl.bufferData(PGL.ARRAY_BUFFER, tree.leaves.size() * 4 * Integer.SIZE/8, this.tintBuffer, PGL.STREAM_DRAW);
-            pgl.bindBuffer(PGL.ARRAY_BUFFER, 0);
+            // this.tintBuffer.position(0);
+            // pgl.bindBuffer(PGL.ARRAY_BUFFER, bufPolyColor.glId);
+            // pgl.bufferData(PGL.ARRAY_BUFFER, tree.leaves.size() * 4 * Integer.SIZE/8, this.tintBuffer, PGL.STREAM_DRAW);
+            // pgl.bindBuffer(PGL.ARRAY_BUFFER, 0);
         }
     }
 }
