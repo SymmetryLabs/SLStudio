@@ -32,4 +32,9 @@ public class OsloLayout implements Layout {
         ui.preview.addComponent(uiTreeLeaves);
         new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
     }
+
+    @Override
+    public float getScaleInMeters() {
+        return 1f;
+    }
 }

@@ -21,4 +21,7 @@ public interface Layout {
      * and register additional 3-D objects to be rendered in the display.
      */
     void setupUi(SLStudioLX lx, SLStudioLX.UI ui);
+
+    /** Gets the length, in meters, of a unit vector in this layout's coordinate space. */
+    float getScaleInMeters();
 }

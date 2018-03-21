@@ -362,4 +362,9 @@ public class CubesLayout implements Layout {
         new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
         new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
+
+    @Override
+    public float getScaleInMeters() {
+        return 12 * 2.54f * 0.01f;  // a unit vector is 1 foot long in physical space
+    }
 }
