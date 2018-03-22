@@ -396,7 +396,7 @@ public class SLStudio extends PApplet {
     }
 
     private MappingPixlite[] setupPixlites() {
-        return new MappingPixlite[0]; // todo
+        return new Pixlite[new Pixlite("10.200.1.10")];
     }
 
     public final static int CHAN_WIDTH = 200;
