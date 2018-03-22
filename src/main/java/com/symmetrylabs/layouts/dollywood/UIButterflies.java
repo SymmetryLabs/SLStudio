@@ -127,7 +127,6 @@ public class UIButterflies extends UI3dComponent {
             // This reaches inside the PShapeOpenGL guts and updates ONLY the
             // vertex color buffer object with new data on each rendering pass.
             // ^ from Mark's original Tenere implementation
-
             this.tintBuffer.rewind();
             if (BIG_ENDIAN) {
                 for (DollywoodModel.Wing wing : wings) {
