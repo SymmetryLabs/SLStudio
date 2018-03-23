@@ -20,6 +20,7 @@ public class ButterflyPixliteOutput extends LXDatagramOutput {
         this.lx = lx;
         this.outputIndex = Integer.parseInt(pointsGrouping.id);
         this.firstUniverseOnOutput = outputIndex * 10;
+        enabled.setValue(true);
         setupDatagrams(ipAddress, pointsGrouping);
     }
 

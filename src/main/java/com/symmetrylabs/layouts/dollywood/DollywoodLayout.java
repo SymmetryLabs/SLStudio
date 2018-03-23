@@ -33,9 +33,11 @@ public class DollywoodLayout implements Layout {
     static final float globalRotationZ = 0;
 
     static final ButterflyConfig[] BUTTERFLY_CONFIG = {
-        new ButterflyConfig("butterfly1_", DollywoodModel.Butterfly.Type.LARGE, new float[] {-30, 70, 110}, new float[] {0, 0, 45}),
-        new ButterflyConfig("butterfly2_", DollywoodModel.Butterfly.Type.SMALL, new float[] {-20, 82, 110}, new float[] {0, 0, 0}),
-        new ButterflyConfig("butterfly3_", DollywoodModel.Butterfly.Type.LARGE, new float[] {-10, 70, 110}, new float[] {0, 0, -45}),
+        new ButterflyConfig("butterfly1_", DollywoodModel.Butterfly.Type.LARGE, new float[] {-30, 70, 410}, new float[] {0, 0, 45}),
+        new ButterflyConfig("butterfly2_", DollywoodModel.Butterfly.Type.SMALL, new float[] {-20, 82, 410}, new float[] {0, 0, 0}),
+        new ButterflyConfig("butterfly3_", DollywoodModel.Butterfly.Type.LARGE, new float[] {-10, 70, 410}, new float[] {0, 0, -45}),
+
+        new ButterflyConfig("butterfly4_", DollywoodModel.Butterfly.Type.SHARP_CURVY, new float[] {-60, 70, 410}, new float[] {0, 0, 0}),
     };
 
     public DollywoodLayout(PApplet applet) {
@@ -106,12 +108,12 @@ public class DollywoodLayout implements Layout {
         //     butterflies.add(butterfly);
         // }
 
-        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
-            LXTransform transform1 = new LXTransform(assemblage.transform);
-            transform1.translate(0, 14, 0);
-            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
-            butterflies.add(butterfly);
-        }
+        // for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
+        //     LXTransform transform1 = new LXTransform(assemblage.transform);
+        //     transform1.translate(0, 14, 0);
+        //     DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
+        //     butterflies.add(butterfly);
+        // }
 
         return new DollywoodModel(applet, treeModel, butterflies);
     }

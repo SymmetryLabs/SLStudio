@@ -50,7 +50,11 @@ public class UIButterflies extends UI3dComponent {
         // Upper left wings
         if (this.shapeUpperLeft == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
-            for (DollywoodModel.Butterfly butterfly : butterflies) wings.add(butterfly.wings.get(0));
+            for (DollywoodModel.Butterfly butterfly : butterflies) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                    wings.add(butterfly.wings.get(0));
+                }
+            }
             this.shapeUpperLeft = new ButterflyShape(pg, texImageUpper, wings);
         }
         this.shapeUpperLeft.updateColors(pg, lx.getColors());
@@ -59,7 +63,11 @@ public class UIButterflies extends UI3dComponent {
         // Upper right wings
         if (this.shapeUpperRight == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
-            for (DollywoodModel.Butterfly butterfly : butterflies) wings.add(butterfly.wings.get(1));
+            for (DollywoodModel.Butterfly butterfly : butterflies) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                    wings.add(butterfly.wings.get(1));
+                }
+            }
             this.shapeUpperRight = new ButterflyShape(pg, texImageUpper, wings);
         }
         this.shapeUpperRight.updateColors(pg, lx.getColors());
@@ -68,7 +76,11 @@ public class UIButterflies extends UI3dComponent {
         // Lower left wings
         if (this.shapeLowerLeft == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
-            for (DollywoodModel.Butterfly butterfly : butterflies) wings.add(butterfly.wings.get(2));
+            for (DollywoodModel.Butterfly butterfly : butterflies) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                    wings.add(butterfly.wings.get(2));
+                }
+            }
             this.shapeLowerLeft = new ButterflyShape(pg, texImageLower, wings);
         }
         this.shapeLowerLeft.updateColors(pg, lx.getColors());
@@ -77,7 +89,11 @@ public class UIButterflies extends UI3dComponent {
         // Lower right wings
         if (this.shapeLowerRight == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
-            for (DollywoodModel.Butterfly butterfly : butterflies) wings.add(butterfly.wings.get(3));
+            for (DollywoodModel.Butterfly butterfly : butterflies) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                    wings.add(butterfly.wings.get(3));
+                }
+            }
             this.shapeLowerRight = new ButterflyShape(pg, texImageLower, wings);
         }
         this.shapeLowerRight.updateColors(pg, lx.getColors());

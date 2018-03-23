@@ -8,6 +8,7 @@ import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.layouts.dollywood.DollywoodLayout;
+import com.symmetrylabs.layouts.dollywood.ButterflyPixlite;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import processing.core.PApplet;
@@ -43,7 +44,7 @@ public class SLStudio extends PApplet {
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;
-    public MappingPixlite[] mappingPixlites;
+    public ButterflyPixlite[] mappingPixlites;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
@@ -104,6 +105,10 @@ public class SLStudio extends PApplet {
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
+                for (ButterflyPixlite pixlite : mappingPixlites) {
+                    System.out.println("ADD PIXLITE");
+                    lx.addOutput(pixlite);
+                }
 
                 SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
@@ -395,8 +400,8 @@ public class SLStudio extends PApplet {
         dispatcher.draw();
     }
 
-    private MappingPixlite[] setupPixlites() {
-        return new Pixlite[new Pixlite("10.200.1.10")];
+    private ButterflyPixlite[] setupPixlites() {
+        return new ButterflyPixlite[] {new ButterflyPixlite(lx, "10.200.1.10")};
     }
 
     public final static int CHAN_WIDTH = 200;
