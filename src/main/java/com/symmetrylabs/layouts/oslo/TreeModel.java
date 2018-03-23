@@ -28,8 +28,8 @@ public class TreeModel extends SLModel {
         UNIFORM_BRANCHES
     }
 
-    public static final float TRUNK_DIAMETER = 3*FEET;
-    public static final float LIMB_HEIGHT = 10*FEET;
+    public static final float TRUNK_DIAMETER = 9*FEET;
+    public static final float LIMB_HEIGHT = 25*FEET;
     public static final int NUM_LIMBS = 12;
     public static final boolean SINGLE_BRANCH_MODE = false;
     public static final String STELLAR_FILE = "TenereExportTestMondayWithID.json";
