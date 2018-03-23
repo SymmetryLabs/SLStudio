@@ -101,8 +101,8 @@ public class OfficeCornerBranchModel extends SLModel {
 
 
 
-            addBranch(new Branch.Orientation(0, 0*FEET, 0, HALF_PI, HALF_PI, 0));
-            addBranch(new Branch.Orientation(5*FEET, 0*FEET, HALF_PI * 0.5f, 0, HALF_PI, 0));
+            addBranch(new Branch.Orientation(0*FEET, 0*FEET, 0, HALF_PI, HALF_PI, 0));
+            addBranch(new Branch.Orientation(5*FEET, 0*FEET, 0, HALF_PI*1.2f, HALF_PI*1.15f, PI*0.05f));
         }
 
         private void addLimb(float y, float azimuth, Limb.Size size) {
@@ -344,18 +344,25 @@ public class OfficeCornerBranchModel extends SLModel {
 
         };
         public static final LeafAssemblage.Orientation[] ASSEMBLAGES2 = {
-            // Right side bottom to top
-            new LeafAssemblage.Orientation(2*RIGHT_OFFSET,2* 2*INCHES, 2*RIGHT_THETA),
-            new LeafAssemblage.Orientation(2*RIGHT_OFFSET, 2*14*INCHES, 2*RIGHT_THETA),
-            new LeafAssemblage.Orientation(2*RIGHT_OFFSET, 2*26*INCHES, 2*RIGHT_THETA),
-            new LeafAssemblage.Orientation(2*RIGHT_OFFSET, 2*38*INCHES, 2*RIGHT_THETA),
+            //8
+            new LeafAssemblage.Orientation(RIGHT_OFFSET, 2*INCHES, RIGHT_THETA),
+            //9
+            new LeafAssemblage.Orientation(RIGHT_OFFSET, 14*INCHES, RIGHT_THETA),
+            //10
+            new LeafAssemblage.Orientation(LEFT_OFFSET - 36*INCHES, 15*INCHES, -QUARTER_PI*0.5f, PI),
+            //11
+            new LeafAssemblage.Orientation(0, 36*INCHES, RIGHT_THETA),
 
             // End node
-            new LeafAssemblage.Orientation(0, 44*INCHES, 0),
+            //12
+            new LeafAssemblage.Orientation(12*INCHES, 44*INCHES, QUARTER_PI),
 
             // Left side top to bottom
-            new LeafAssemblage.Orientation(LEFT_OFFSET, 32*INCHES, LEFT_THETA),
+            //13
+            new LeafAssemblage.Orientation(5*INCHES, 30*INCHES, 0, QUARTER_PI),
+            //14
             new LeafAssemblage.Orientation(LEFT_OFFSET, 20*INCHES, LEFT_THETA),
+            //15
             new LeafAssemblage.Orientation(LEFT_OFFSET, 8*INCHES, LEFT_THETA)
         };
 

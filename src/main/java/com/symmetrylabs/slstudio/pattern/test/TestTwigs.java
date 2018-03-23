@@ -10,10 +10,12 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
 public class TestTwigs extends LXPattern implements SLTestPattern{
-    public BooleanParameter[] b = new BooleanParameter[8];
+    private int num_Twigs = 16;
+    public BooleanParameter[] b = new BooleanParameter[num_Twigs];
+
 
     protected void createParameters() {
-        for (int i = 0; i < 8; i ++){
+        for (int i = 0; i < num_Twigs; i ++){
             addParameter(b[i] = new BooleanParameter(Integer.toString(i), true));
         }
     }
@@ -30,7 +32,7 @@ public class TestTwigs extends LXPattern implements SLTestPattern{
         float hue = 0;
         int color;
         for (OfficeCornerBranchModel.LeafAssemblage assemblage : branchModel.assemblages ) {
-            if (twigIndex == 8){
+            if (twigIndex == num_Twigs){
                 break;
             }
             if (b[twigIndex++].isOn()){
