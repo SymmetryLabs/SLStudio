@@ -41,11 +41,11 @@ public class ButterflyPixlite extends LXOutputGroup {
                     .addPoints(((DollywoodModel)lx.model).getWingById("butterfly4__right_wing").points)
             ));
 
-            // addChild(new ButterflyPixliteOutput(lx, ipAddress,
-            //   new ButterflyPointsGrouping("3")
-            //     .addPoints(((DollywoodModel)lx.model).getWingById("butterfly5__left_wing").points)
-            //     .addPoints(((DollywoodModel)lx.model).getWingById("butterfly5__right_wing").points)
-            // ));
+            addChild(new ButterflyPixliteOutput(lx, ipAddress,
+                new ButterflyPointsGrouping("3")
+                    .addPoints(((DollywoodModel)lx.model).getWingById("butterfly5__left_wing").points)
+                    .addPoints(((DollywoodModel)lx.model).getWingById("butterfly5__right_wing").points)
+            ));
         } catch (Exception e) {
             e.printStackTrace();
         }

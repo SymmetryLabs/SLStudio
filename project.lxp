@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1521785435642,
+  "timestamp": 1521792896333,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -70,13 +70,30 @@
         },
         "effects": [
           {
-            "id": 41,
+            "id": 69,
             "class": "heronarts.lx.effect.BlurEffect",
             "modulationColor": -16766721,
             "parameters": {
               "label": "Blur",
               "enabled": true,
-              "amount": 0.0
+              "amount": 0.549999987706542
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            }
+          },
+          {
+            "id": 58,
+            "class": "com.symmetrylabs.slstudio.effect.LSD",
+            "modulationColor": -65370,
+            "parameters": {
+              "label": "LSD",
+              "enabled": false,
+              "Scale": 39.65000000782311,
+              "Speed": 4.0,
+              "Range": 2.0
             },
             "modulation": {
               "modulators": [],
@@ -86,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 27,
@@ -115,6 +132,73 @@
               "SPD1": 0.2,
               "SPD2": 0.4,
               "SCALE": 0.15
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 56,
+            "class": "com.symmetrylabs.slstudio.pattern.Noise",
+            "modulationColor": -16734977,
+            "parameters": {
+              "label": "Noise",
+              "Sprk": 0.0,
+              "Wave": 0.0,
+              "TrnX": 0.5,
+              "TrnY": 0.5,
+              "RotX": 0.5,
+              "RotY": 0.5,
+              "RotZ": 0.5,
+              "Spin": 0.5,
+              "Fast": 0.55,
+              "Symm": 0,
+              "Anim": 7,
+              "Dens": 0.6
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 75,
+            "class": "com.symmetrylabs.slstudio.pattern.Wasps",
+            "modulationColor": -16742657,
+            "parameters": {
+              "label": "Wasps",
+              "count": 11.999999731779099,
+              "size": 9.00000013411045,
+              "edgeCut": 0.85,
+              "peakCut": 1.0,
+              "kernel": 0,
+              "flattenZ": false,
+              "drawParticles": false,
+              "hue": 226.800002977252,
+              "saturation": 100.0,
+              "enableBlobs": true,
+              "bMaxDist": 500.0,
+              "bMaxAngle": 60.0,
+              "bPull": 100.0,
+              "bTrackingMode": 1,
+              "speed": 1.479999989271164,
+              "accel": 2.189999984577298,
+              "dampen": 0.75,
+              "focusX": 0.0,
+              "focusY": 0.0,
+              "focusZ": 0.0,
+              "pullX": 0.5,
+              "pullY": 0.5,
+              "pullZ": 0.5,
+              "twistX": 0.0,
+              "twistY": 0.0,
+              "twistZ": 0.0,
+              "edgeRepel": false
             },
             "modulation": {
               "modulators": [],
@@ -230,7 +314,7 @@
     },
     "components": {
       "performanceManager": {
-        "id": 39,
+        "id": 40,
         "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
         "modulationColor": -65428,
         "parameters": {
@@ -298,9 +382,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 1800.0,
-        "theta": 0.0,
-        "phi": 0.0,
+        "radius": 211.2430302478244,
+        "theta": -3.099000000000005,
+        "phi": -0.19200000000000014,
         "positionX": -2.242950439453125,
         "positionY": 109.75314331054688,
         "positionZ": 5.394439697265625

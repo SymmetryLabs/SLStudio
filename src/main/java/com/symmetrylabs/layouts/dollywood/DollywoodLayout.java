@@ -38,7 +38,7 @@ public class DollywoodLayout implements Layout {
         new ButterflyConfig("butterfly3_", DollywoodModel.Butterfly.Type.LARGE, new float[] {-10, 70, 110}, new float[] {0, 0, -45}),
 
         new ButterflyConfig("butterfly4_", DollywoodModel.Butterfly.Type.SHARP_CURVY, new float[] {-60, 70, 110}, new float[] {0, 0, 0}),
-        // new ButterflyConfig("butterfly5_", DollywoodModel.Butterfly.Type.CURVY, new float[] {-90, 70, 110}, new float[] {0, 0, 0}),
+        new ButterflyConfig("butterfly5_", DollywoodModel.Butterfly.Type.CURVY, new float[] {-90, 70, 110}, new float[] {0, 0, 0}),
     };
 
     public DollywoodLayout(PApplet applet) {
@@ -109,12 +109,12 @@ public class DollywoodLayout implements Layout {
         //     butterflies.add(butterfly);
         // }
 
-        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
-            LXTransform transform1 = new LXTransform(assemblage.transform);
-            transform1.translate(0, 14, 0);
-            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
-            butterflies.add(butterfly);
-        }
+        // for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
+        //     LXTransform transform1 = new LXTransform(assemblage.transform);
+        //     transform1.translate(0, 14, 0);
+        //     DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
+        //     butterflies.add(butterfly);
+        // }
 
         return new DollywoodModel(applet, treeModel, butterflies);
     }

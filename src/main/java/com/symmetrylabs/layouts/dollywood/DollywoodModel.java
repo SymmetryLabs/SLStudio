@@ -101,6 +101,92 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
         return this.wingTable.get(id);
     }
 
+    // public static class Cluster extends SLModel {
+
+    //   public static final int NUM_BUTTERFLIES = 3;
+    //   public static final int NUM_LEDS = NUM_BUTTERFLIES * (12+12+8+8);
+
+    //   public static final float LENGTH = 24*INCHES;
+    //   public static final float WIDTH = 24*INCHES;
+
+    //   public final LXMatrix transform;
+
+    //   // Orientation of a leaf assemblage, relative to parent branch
+    //   public static class Orientation {
+
+    //     // Offset from base of branch, y-axis points "up" the branch
+    //     public final float x;
+    //     public final float y;
+
+    //     // Rotation in the x-y plane, relative to the branch
+    //     // wwhere y is pointing "up" the branch
+    //     public final float theta;
+
+    //     // Tilt of the leaf assemblage about the axis of its normal
+    //     // e.g. a "barrel roll" on the leaf assemblage
+    //     public final float tilt;
+
+    //     Orientation(float x, float y, float theta) {
+    //       this.x = x;
+    //       this.y = y;
+    //       this.theta = theta;
+    //       this.tilt = -QUARTER_PI + HALF_PI * (float) Math.random();
+    //     }
+    //   }
+
+    //   // These positions indicate how a leaf is positioned on an assemblage,
+    //   // assuming the assemblage is facing "up", the main stem is at (0, 0)
+    //   // Positive x-values move to the right, and positive y-values move
+    //   // up the branch, away from the base stem.
+    //   //
+    //   // Third argument is the rotation of the leaf on the x-y plane, 0
+    //   // is the leaf pointing "up", HALF_PI is pointing to the left,
+    //   // -HALF_PI is pointing to the right, etc.
+    //   public static final Cluster.Orientation[] LEAVES = {
+    //     new Cluster.Orientation(0, 4.5f*INCHES, -1.7f*INCHES, -HALF_PI - QUARTER_PI), // A
+    //     new Cluster.Orientation(1, 5.5f*INCHES, 0f*INCHES, -HALF_PI), // B
+    //     new Cluster.Orientation(2, 2.0f*INCHES, 3.5f*INCHES, -HALF_PI + QUARTER_PI), // C
+    //   };
+
+    //   public final Orientation orientation;
+    //   public final List<Butterfly> butterflies;
+    //   public final int channel;
+
+    //   public Cluster(int channel, LXTransform t) {
+    //     this(channel, t, new Orientation(0, 0, 0));
+    //   }
+
+    //   public Cluster(int channel, LXTransform t, Orientation orientation) {
+    //     super(new Fixture(t));
+    //     Fixture f = (Fixture) this.fixtures.get(0);
+    //     this.transform = t.getMatrix();
+    //     this.channel = channel;
+    //     this.butterflies = Collections.unmodifiableList(f.butterflies);
+    //     this.orientation = orientation;
+    //   }
+
+    //   private static class Fixture extends LXAbstractFixture {
+
+    //     private final List<Butterfly> butterflies = new ArrayList<Butterfly>();
+
+    //     Fixture(LXTransform t) {
+    //       t.push();
+    //       t.translate(0, 5*INCHES, 0);
+    //       for (int i = 0; i < NUM_BUTTERFLIES; ++i) {
+    //         Butterfly.Orientation leafOrientation = LEAVES[i];
+    //         t.push();
+    //         t.translate(butterflyOrientation.x, butterflyOrientation.y, (i % 3) * (.1f*INCHES));
+    //         t.rotateZ(butterflyOrientation.theta);
+    //         Butterfly butterfly = new Butterfly(t, butterflyOrientation);
+    //         this.butterflies.add(leaf);
+    //         addPoints(leaf);
+    //         t.pop();
+    //       }
+    //       t.pop();
+    //     }
+    //   }
+    // }
+
     public static class Butterfly extends StripsModel<Wing> {
 
         public static final int LARGE_NUM_LEDS = 40;
