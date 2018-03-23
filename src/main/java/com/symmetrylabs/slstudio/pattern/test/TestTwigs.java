@@ -1,0 +1,49 @@
+package com.symmetrylabs.slstudio.pattern.test;
+
+import com.symmetrylabs.layouts.officeTenere.OfficeCornerBranchModel;
+import com.symmetrylabs.layouts.officeTenere.TreeModel;
+import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
+import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.CompoundParameter;
+
+public class TestTwigs extends LXPattern implements SLTestPattern{
+    public BooleanParameter[] b = new BooleanParameter[8];
+
+    protected void createParameters() {
+        for (int i = 0; i < 8; i ++){
+            addParameter(b[i] = new BooleanParameter(Integer.toString(i), true));
+        }
+    }
+
+    public TestTwigs(LX lx) {
+        super(lx);
+        createParameters();
+    }
+
+    public void run(double deltaMs) {
+        OfficeCornerBranchModel branchModel = (OfficeCornerBranchModel) lx.model;
+
+        int twigIndex = 0;
+        float hue = 0;
+        int color;
+        for (OfficeCornerBranchModel.LeafAssemblage assemblage : branchModel.assemblages ) {
+            if (twigIndex == 8){
+                break;
+            }
+            if (b[twigIndex++].isOn()){
+                color = lx.hsb(hue, 100, 100);
+            }
+            else {
+                color = LX.rgb(0,0,0);
+            }
+
+            for (LXPoint p : assemblage.points) {
+                colors[p.index] = color;
+            }
+            hue += 90;
+        }
+    }
+}

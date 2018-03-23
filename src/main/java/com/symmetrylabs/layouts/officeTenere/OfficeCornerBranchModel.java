@@ -1,5 +1,15 @@
-package com.symmetrylabs.layouts.oslo;
+package com.symmetrylabs.layouts.officeTenere;
 
+import com.symmetrylabs.slstudio.model.SLModel;
+import heronarts.lx.LX;
+import heronarts.lx.model.LXAbstractFixture;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXMatrix;
+import heronarts.lx.transform.LXTransform;
+import heronarts.lx.transform.LXVector;
+import processing.core.PApplet;
+import processing.data.JSONArray;
+import processing.data.JSONObject;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -20,7 +30,16 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class TreeModel extends SLModel {
+import java.util.*;
+
+import static com.symmetrylabs.util.DistanceConstants.FEET;
+import static com.symmetrylabs.util.DistanceConstants.INCHES;
+import static com.symmetrylabs.util.MathConstants.HALF_PI;
+import static com.symmetrylabs.util.MathConstants.PI;
+import static com.symmetrylabs.util.MathUtils.cos;
+import static com.symmetrylabs.util.MathUtils.sin;
+
+public class OfficeCornerBranchModel extends SLModel {
 
     public enum ModelMode {
         MAJOR_LIMBS,
@@ -39,7 +58,7 @@ public class TreeModel extends SLModel {
     public final List<LeafAssemblage> assemblages;
     public final List<Leaf> leaves;
 
-    public TreeModel(PApplet applet, ModelMode mode) {
+    public OfficeCornerBranchModel(PApplet applet, ModelMode mode) {
         super(new Fixture(applet, mode));
         Fixture f = (Fixture) this.fixtures.get(0);
         this.branches = Collections.unmodifiableList(f.branches);
@@ -69,105 +88,21 @@ public class TreeModel extends SLModel {
         private final List<Limb> limbs = new ArrayList<Limb>();
 
         Fixture(PApplet applet, ModelMode mode) {
-            if (SINGLE_BRANCH_MODE) {
-                addBranch(new Branch.Orientation(0, 10*FEET, 0, HALF_PI, HALF_PI, 0));
-            } else if (mode == ModelMode.STELLAR_IMPORT) {
+            // build the two branches
 
-                // Load up the Stellar export file
-                JSONObject assemblages = applet.loadJSONObject(STELLAR_FILE);
-                JSONArray fixtures = assemblages.getJSONArray("Fixtures");
+            // This list describes where each of the Twigs will be relative to the branch
+            List<LXTransform> twigTransforms = new ArrayList<LXTransform>();
 
-                // Load up all of the fixtures and index them by ID
-                Map<Integer, StellarFixtureConfig> fixtureMap = new HashMap<Integer, StellarFixtureConfig>();
-                for (int fi = 0; fi < fixtures.size(); ++fi) {
-                    JSONObject fixtureObj = fixtures.getJSONObject(fi);
-                    String fixtureType = fixtureObj.getString("FixtureType");
-                    if (!fixtureType.equals(StellarFixtureConfig.CHANNEL_ZERO) && !fixtureType.equals(StellarFixtureConfig.CHANNEL_FOUR)) {
-                        System.out.println("Skipping unknown Stellar Fixture type: " + fixtureType);
-                        continue;
-                    }
-                    // Make a fixture object, add to the list
-                    StellarFixtureConfig fixture = new StellarFixtureConfig(fixtureObj, fixtureType);
-                    fixtureMap.put(fixture.fixtureId, fixture);
-                }
+            LXTransform t = new LXTransform();
+            t.translate(0,0,0);
 
-                // Now, take a pass and construct a map of branches
-                Map<String, StellarBranchConfig> branchMap = new HashMap<String, StellarBranchConfig>();
-                for (StellarFixtureConfig fixture : fixtureMap.values()) {
-                    if (fixture.ip != null) {
-                        // Find the branch for this IP address
-                        StellarBranchConfig branch = branchMap.get(fixture.ip);
-                        if (branch == null) {
-                            // First time we've seen it, construct one
-                            branch = new StellarBranchConfig(fixture.ip);
-                            branchMap.put(fixture.ip, branch);
-                        }
-                        // Load the base channel for this branch
-                        int channel = fixture.channel;
-                        branch.channels[channel] = fixture.matrix;
+            twigTransforms.add(t);
+            twigTransforms.add(new LXTransform().translate(10*FEET, 0, 0));
 
-                        // Traverse next fixture ID for other fixtures in this chain and
-                        // assemble them up into branches
-                        int nextFixtureId = fixture.nextFixtureId;
-                        while (nextFixtureId != StellarFixtureConfig.NO_FIXTURE_ID) {
-                            StellarFixtureConfig nextFixture = fixtureMap.get(nextFixtureId);
-                            if (nextFixture == null) {
-                                System.out.println("No fixture found for NextFixtureId: " + nextFixtureId);
-                                break;
-                            }
-                            if (++channel >= branch.channels.length) {
-                                System.out.println("Too many channels were found in fixture chain: " + branch.ip);
-                                break;
-                            }
-                            branch.channels[channel] = nextFixture.matrix;
-                            nextFixtureId = nextFixture.nextFixtureId;
-                        }
-                    }
-                }
 
-                // Okay, we've built up the whole set of branch controllers and we have
-                // them organized by their IP addresses, now we finally add them to the model
-                for (StellarBranchConfig branchConfig : branchMap.values()) {
-                    addBranch(branchConfig);
-                }
 
-                System.out.println("Stellar import done.");
-
-            } else if (mode == ModelMode.UNIFORM_BRANCHES) {
-                for (int ai = 0; ai < 14; ++ai) {
-                    for (int ei = 0; ei < 14; ++ ei) {
-                        float azimuth = (ai + (ei % 2) * 0.5f) * TWO_PI / 13f;
-                        float elevation = ei * HALF_PI / 13f;
-                        float radius = 12f*FEET;
-                        float x = radius * cos(azimuth) * cos(elevation);
-                        float z = radius * sin(azimuth) * cos(elevation);
-                        float y = radius * sin(elevation);
-                        addBranch(new Branch.Orientation(x, y, z, azimuth, elevation, TWO_PI * (float) Math.random()));
-                    }
-                }
-            } else {
-                // Lowest layer of major limbs
-                addLimb(0.0f*FEET, 0.1f * TWO_PI/6f, Limb.Size.FULL);
-//                addLimb(1.0f*FEET, 1.2f * TWO_PI/6f, Limb.Size.FULL);
-//                addLimb(3.0f*FEET, 1.9f * TWO_PI/6f, Limb.Size.FULL);
-//                addLimb(1.7f*FEET, 2.1f * TWO_PI/6f, Limb.Size.FULL);
-//                addLimb(1.2f*FEET, 2.9f * TWO_PI/6f, Limb.Size.FULL);
-//                addLimb(0.8f*FEET, 4.1f * TWO_PI/6f, Limb.Size.FULL);
-//                addLimb(2.4f*FEET, 4.9f * TWO_PI/6f, Limb.Size.FULL);
-//
-//                // Medium layer of limbs
-//                addLimb(6.0f*FEET, 0.4f * TWO_PI/6f, Limb.Size.MEDIUM);
-//                addLimb(5.4f*FEET, 1.5f * TWO_PI/6f, Limb.Size.MEDIUM);
-//                addLimb(4.2f*FEET, 3.4f * TWO_PI/6f, Limb.Size.MEDIUM);
-//                addLimb(5.9f*FEET, 4.9f * TWO_PI/6f, Limb.Size.MEDIUM);
-
-                // We probably don't have this many...
-                // addLimb(6.3*FEET, 5.3 * TWO_PI/6, Limb.Size.MEDIUM);
-
-                // A couple small top limbs
-                // addLimb(7*FEET, .3 * TWO_PI/6, Limb.Size.SMALL);
-                // addLimb(7*FEET, 3.1 * TWO_PI/6, Limb.Size.SMALL);
-            }
+            addBranch(new Branch.Orientation(0, 0*FEET, 0, HALF_PI, HALF_PI, 0));
+            addBranch(new Branch.Orientation(5*FEET, 0*FEET, HALF_PI * 0.5f, 0, HALF_PI, 0));
         }
 
         private void addLimb(float y, float azimuth, Limb.Size size) {
@@ -310,7 +245,7 @@ public class TreeModel extends SLModel {
                     t.z(),
                     azimuth + offset,
                     baseElevation + HALF_PI * (float) Math.random(),
-                    TWO_PI * (float) Math.random()
+                    (float) (LX.TWO_PI * (float) Math.random())
                 ));
                 addPoints(branch);
                 this.branches.add(branch);
@@ -385,11 +320,35 @@ public class TreeModel extends SLModel {
         // Assemblage positions are relative to an assemblage
         // facing upwards. Each leaf assemblage
         public static final LeafAssemblage.Orientation[] ASSEMBLAGES = {
+            // Left side top to bottom
+            //0
+            new LeafAssemblage.Orientation(0, 36*INCHES, 0, QUARTER_PI),
+            //1
+            new LeafAssemblage.Orientation(RIGHT_OFFSET, 16*INCHES, RIGHT_THETA),
+            //2
+            new LeafAssemblage.Orientation(LEFT_OFFSET, 14*INCHES, HALF_PI, PI),
+            //3
+            new LeafAssemblage.Orientation(LEFT_OFFSET + 6*INCHES, 21*INCHES, QUARTER_PI*0.5f, PI),
+//            new LeafAssemblage.Orientation(RIGHT_OFFSET, 2*INCHES, RIGHT_THETA, PI),
+            //4
+            new LeafAssemblage.Orientation(LEFT_OFFSET, 8*INCHES, HALF_PI*1.2f, PI),
+            //5
+            new LeafAssemblage.Orientation(RIGHT_OFFSET - FEET, 32*INCHES, RIGHT_THETA),
+            //6
+            new LeafAssemblage.Orientation(RIGHT_OFFSET, 30*INCHES, RIGHT_THETA),
+
+            // End node
+            //7
+            new LeafAssemblage.Orientation(LEFT_OFFSET + 4*INCHES, 20*INCHES, HALF_PI, QUARTER_PI),
+//            new LeafAssemblage.Orientation(0, 44*INCHES, 0),
+
+        };
+        public static final LeafAssemblage.Orientation[] ASSEMBLAGES2 = {
             // Right side bottom to top
-            new LeafAssemblage.Orientation(RIGHT_OFFSET, 2*INCHES, RIGHT_THETA),
-            new LeafAssemblage.Orientation(RIGHT_OFFSET, 14*INCHES, RIGHT_THETA),
-            new LeafAssemblage.Orientation(RIGHT_OFFSET, 26*INCHES, RIGHT_THETA),
-            new LeafAssemblage.Orientation(RIGHT_OFFSET, 38*INCHES, RIGHT_THETA),
+            new LeafAssemblage.Orientation(2*RIGHT_OFFSET,2* 2*INCHES, 2*RIGHT_THETA),
+            new LeafAssemblage.Orientation(2*RIGHT_OFFSET, 2*14*INCHES, 2*RIGHT_THETA),
+            new LeafAssemblage.Orientation(2*RIGHT_OFFSET, 2*26*INCHES, 2*RIGHT_THETA),
+            new LeafAssemblage.Orientation(2*RIGHT_OFFSET, 2*38*INCHES, 2*RIGHT_THETA),
 
             // End node
             new LeafAssemblage.Orientation(0, 44*INCHES, 0),
@@ -459,6 +418,9 @@ public class TreeModel extends SLModel {
 
         private static class Fixture extends LXAbstractFixture {
 
+            // this just used to switch the mapping for the second branch in the office.. sort of a hack.
+            private static int twigIndex = 0;
+
             private final List<LeafAssemblage> assemblages = new ArrayList<LeafAssemblage>();
 
             Fixture(StellarBranchConfig branchConfig) {
@@ -474,16 +436,33 @@ public class TreeModel extends SLModel {
 
             Fixture(LXTransform t) {
                 int channel = 0;
-                for (LeafAssemblage.Orientation assemblage : ASSEMBLAGES) {
-                    t.push();
-                    t.translate(assemblage.x, assemblage.y, 0);
-                    t.rotateZ(assemblage.theta);
-                    t.rotateY(assemblage.tilt);
-                    LeafAssemblage leafAssemblage = new LeafAssemblage(channel++, t, assemblage);
-                    this.assemblages.add(leafAssemblage);
-                    addPoints(leafAssemblage);
-                    t.pop();
+                switch (twigIndex){
+                    case 0:
+                        for (LeafAssemblage.Orientation assemblage : ASSEMBLAGES) {
+                            t.push();
+                            t.translate(assemblage.x, assemblage.y, 0);
+                            t.rotateZ(assemblage.theta);
+                            t.rotateY(assemblage.tilt);
+                            LeafAssemblage leafAssemblage = new LeafAssemblage(channel++, t, assemblage);
+                            this.assemblages.add(leafAssemblage);
+                            addPoints(leafAssemblage);
+                            t.pop();
+                        }
+                        break;
+                    case 1:
+                        for (LeafAssemblage.Orientation assemblage : ASSEMBLAGES2) {
+                            t.push();
+                            t.translate(assemblage.x, assemblage.y, 0);
+                            t.rotateZ(assemblage.theta);
+                            t.rotateY(assemblage.tilt);
+                            LeafAssemblage leafAssemblage = new LeafAssemblage(channel++, t, assemblage);
+                            this.assemblages.add(leafAssemblage);
+                            addPoints(leafAssemblage);
+                            t.pop();
+                        }
+                        break;
                 }
+                twigIndex++;
             }
         }
     }
@@ -514,6 +493,12 @@ public class TreeModel extends SLModel {
             // e.g. a "barrel roll" on the leaf assemblage
             public final float tilt;
 
+            Orientation(float x, float y, float theta, float tilt) {
+                this.x = x;
+                this.y = y;
+                this.theta = theta;
+                this.tilt = tilt;
+            }
             Orientation(float x, float y, float theta) {
                 this.x = x;
                 this.y = y;
@@ -769,17 +754,17 @@ public class TreeModel extends SLModel {
 
             // Construct matrix converted into LX space
             this.matrix = new LXMatrix()
-            .scaleX(-1)
-            .scale(INCHES_PER_METER * INCHES)
-            .multiply(
-                // NOTE: stellar indexes matrix vertically
-                m[0], m[4], m[8], m[12],
-                m[1], m[5], m[9], m[13],
-                m[2], m[6], m[10], m[14],
-                m[3], m[7], m[11], m[15]
-            )
-            .scale(METERS_PER_INCH / INCHES)
-            .translate(0, ASSEMBLAGE_Y_OFFSET, 0);
+                .scaleX(-1)
+                .scale(INCHES_PER_METER * INCHES)
+                .multiply(
+                    // NOTE: stellar indexes matrix vertically
+                    m[0], m[4], m[8], m[12],
+                    m[1], m[5], m[9], m[13],
+                    m[2], m[6], m[10], m[14],
+                    m[3], m[7], m[11], m[15]
+                )
+                .scale(METERS_PER_INCH / INCHES)
+                .translate(0, ASSEMBLAGE_Y_OFFSET, 0);
         }
     }
 }

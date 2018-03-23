@@ -18,7 +18,8 @@ import com.symmetrylabs.slstudio.pattern.test.SLTestPattern;
 
 public class LXClassLoader {
     // Enable test patterns by passing -DloadTestPatterns=true as a VM option
-    public static final boolean LOAD_TEST_PATTERNS = Boolean.getBoolean("loadTestPatterns");
+//    public static final boolean LOAD_TEST_PATTERNS = Boolean.getBoolean("loadTestPatterns");
+    public static final boolean LOAD_TEST_PATTERNS = true;
 
     private static final String basePackageName = LXClassLoader.class.getPackage().getName();
     private static final ScanResult classpathScanner = new FastClasspathScanner(basePackageName).scan();

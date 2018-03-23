@@ -1,22 +1,12 @@
 package com.symmetrylabs.slstudio;
 
-import java.net.SocketException;
-import java.net.UnknownHostException;
-import java.util.List;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.layouts.cubes.CubesLayout;
-import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
-import com.symmetrylabs.layouts.oslo.OsloLayout;
-import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.layouts.officeTenere.OfficeCornerBranchModel;
+import com.symmetrylabs.layouts.officeTenere.SingleBranchLayout;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
-import com.symmetrylabs.slstudio.output.TenereDatagram;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXFixture;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.output.LXDatagramOutput;
-import heronarts.lx.output.LXOutput;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -25,12 +15,6 @@ import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.palettes.ArrayPalette;
-import com.symmetrylabs.slstudio.palettes.ImageLibrary;
-import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
-import com.symmetrylabs.slstudio.palettes.PaletteExtractor;
-import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
-import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
@@ -86,7 +70,8 @@ public class SLStudio extends PApplet {
         // Instantiate the desired layout here.
 //        layout = new CubesLayout();
 //    layout = new DynamicLayout();
-         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+//         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+        layout = new SingleBranchLayout(this, OfficeCornerBranchModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
         printModelStats(model);

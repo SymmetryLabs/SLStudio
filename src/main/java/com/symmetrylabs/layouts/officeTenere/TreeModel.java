@@ -1,6 +1,4 @@
-package com.symmetrylabs.layouts.oslo;
-
-import static com.symmetrylabs.util.DistanceConstants.*;
+package com.symmetrylabs.layouts.officeTenere;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.model.LXAbstractFixture;
@@ -9,16 +7,13 @@ import heronarts.lx.transform.LXMatrix;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.transform.LXVector;
 import processing.core.PApplet;
-import static processing.core.PApplet.*;
-
 import processing.data.JSONArray;
 import processing.data.JSONObject;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+
+import static com.symmetrylabs.util.DistanceConstants.*;
+import static processing.core.PApplet.*;
 
 public class TreeModel extends SLModel {
 

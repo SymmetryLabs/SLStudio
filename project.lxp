@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1521059111279,
+  "timestamp": 1521798174552,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.5,
       "crossfaderBlendMode": 0,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 2,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -142,7 +142,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 2,
         "patterns": [
           {
             "id": 67,
@@ -168,6 +168,95 @@
             "modulationColor": -46336,
             "parameters": {
               "label": "Swarm"
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 113,
+            "class": "com.symmetrylabs.slstudio.pattern.test.TestTwigs",
+            "modulationColor": -15924993,
+            "parameters": {
+              "label": "TestTwigs",
+              "0": true,
+              "1": true,
+              "2": true,
+              "3": true,
+              "4": true,
+              "5": true,
+              "6": true,
+              "7": true
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          }
+        ]
+      },
+      {
+        "id": 143,
+        "class": "heronarts.lx.LXChannel",
+        "modulationColor": -6356737,
+        "parameters": {
+          "label": "Channel-3",
+          "arm": false,
+          "enabled": true,
+          "cue": false,
+          "midiMonitor": false,
+          "midiChannel": 16,
+          "autoCycleEnabled": false,
+          "autoCycleTimeSecs": 60.0,
+          "fader": 0.0,
+          "crossfadeGroup": 0,
+          "blendMode": 0,
+          "transitionEnabled": false,
+          "transitionTimeSecs": 5.0,
+          "transitionBlendMode": 0
+        },
+        "effects": [],
+        "clips": [],
+        "patternIndex": 1,
+        "patterns": [
+          {
+            "id": 141,
+            "class": "heronarts.lx.pattern.SolidColorPattern",
+            "modulationColor": -16711743,
+            "parameters": {
+              "label": "SolidColor",
+              "color/hue": 0.0,
+              "color/brightness": 100.0,
+              "color/saturation": 100.0,
+              "color": -65536
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 144,
+            "class": "com.symmetrylabs.slstudio.pattern.CrossSections",
+            "modulationColor": -42240,
+            "parameters": {
+              "label": "CrossSections",
+              "XRAT": 0.7,
+              "YRAT": 0.6,
+              "ZRAT": 0.5,
+              "XWID": 0.0,
+              "XLEV": 0.570000009611249,
+              "YLEV": 2.2351741790771484E-8,
+              "ZLEV": 0.0,
+              "YWID": 0.3,
+              "ZWID": 0.3
             },
             "modulation": {
               "modulators": [],
@@ -303,19 +392,6 @@
           "Broadcast packet enabled": false,
           "Test broadcast enabled": false
         }
-      },
-      "gammaCorrection": {
-        "id": 32,
-        "class": "com.symmetrylabs.slstudio.component.GammaCorrection",
-        "modulationColor": -65345,
-        "parameters": {
-          "label": "GammaCorrection",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
-        }
       }
     },
     "modulation": {
@@ -351,12 +427,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 380.3889223959673,
+        "radius": 129.5963227732108,
         "theta": -0.35399999999999887,
         "phi": 0.02100000000000001,
-        "positionX": 99.5,
-        "positionY": 48.5,
-        "positionZ": 0.0
+        "positionX": 6.320916175842285,
+        "positionY": 33.071590423583984,
+        "positionZ": -2.835890293121338
       }
     }
   }
