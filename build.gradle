@@ -101,6 +101,8 @@ dependencies {
 
 	// TODO: Add gradle to LX and P3LX so our cross-project dependencies work better
 	compile files('libs/P3LX.jar')
+
+	compile files('libs/minim.jar')
 }
 
 jar {
