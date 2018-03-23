@@ -237,6 +237,30 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                     }
                 }
 
+                if (type == Butterfly.Type.CURVY) {
+                    this.wings.add(new Wing(
+                        id+"_left_wing",
+                        Wing.Type.CURVY,
+                        new float[] {0, 0, 0},
+                        new float[] {0, 0, 0},
+                        transform
+                    ));
+
+                    this.wings.add(new Wing(
+                        id+"_right_wing",
+                        Wing.Type.CURVY,
+                        new float[] {0, 0, 0},
+                        new float[] {0, 180, 0},
+                        transform
+                    ));
+
+                    for (Wing wing : wings) {
+                        for (LXPoint point : wing.points) {
+                            this.points.add(point);
+                        }
+                    }
+                }
+
                 transform.pop();
             }
         }
@@ -248,7 +272,7 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
         public static final int LARGE_LOWER_NUM_LEDS = 8;
 
         public enum Type { 
-            LARGE_UPPER, LARGE_LOWER, SMALL_UPPER, SMALL_LOWER, SHARP_CURVY
+            LARGE_UPPER, LARGE_LOWER, SMALL_UPPER, SMALL_LOWER, SHARP_CURVY, CURVY
         }
 
         public static class ButterflyMetrics extends Strip.Metrics {
@@ -285,6 +309,7 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                 case SMALL_UPPER: return 8;
                 case SMALL_LOWER: return 6;
                 case SHARP_CURVY: return 46;
+                case CURVY: return 60;
             }
             return 0;
         }
@@ -399,6 +424,43 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                     }
                 }
 
+                if (type == Wing.Type.CURVY) {
+                    transform.push();
+                    transform.rotateZ(-Math.PI / 4f);
+                    transform.translate(-1, -1); //tweak
+                    this.coords[0] = transform.vector();
+                    transform.translate(0, 8);
+                    this.coords[1] = transform.vector();
+                    transform.translate(9, 0);
+                    this.coords[2] = transform.vector();
+                    transform.translate(0, -8);
+                    this.coords[3] = transform.vector();
+                    transform.pop();
+
+                    final float[][] positions = new float[][] {
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
+                        new float[] {0f, 3.1f},new float[] {0f, 4f},new float[] {0f, 4.85f},new float[] {0f, 5.5f},
+                        new float[] {0f, 6.3f},new float[] {0.2f, 7f},new float[] {0.7f, 7.6f},new float[] {1.2f, 8f},
+                        new float[] {1.8f, 8.5f},new float[] {2.3f, 8.9f,},new float[] {3f, 9.4f},new float[] {9.5f, 9.9f},
+                        new float[] {4f, 10.2f},new float[] {4.7f, 10.5f},new float[] {5.5f, 10.8f},new float[] {6f, 10.9f},
+                        new float[] {6.8f, 10.8f},new float[] {7.2f, 10.2f},new float[] {7.4f, 9.5f},new float[] {7.3f, 8.9f},
+                        new float[] {7.2f, 8.2f},new float[] {7.1f, 7.5f},new float[] {7f, 6.8f},new float[] {6f, 7f},
+                        new float[] {6.8f, 5.2f},new float[] {6.5f, 4.7f},new float[] {5.9f, 4.4f},new float[] {5.2f, 4.1f},
+                        new float[] {4.5f, 4f},new float[] {3.7f, 4f},new float[] {2.9f, 4f},new float[] {2.1f, 4f},
+                        new float[] {1.3f, 4.2f},new float[] {0.4f, 4f},new float[] {0.7f, 2.3f},new float[] {1.6f, 2.3f},
+                        new float[] {2.2f, 2.3f},new float[] {3f, 2.3f},new float[] {4f, 2.2f},new float[] {4.7f, 2f},
+                        new float[] {5.4f, 1.9f},new float[] {6f, 1.6f},new float[] {6.4f, 1f},new float[] {6.8f, 0.2f},
+                        new float[] {4.9f, -3.6f},new float[] {4f, -3.9f},new float[] {3.3f, -3.8f},new float[] {2.7f, -2.5f},
+                        new float[] {2f, -3f},new float[] {1.4f, -2.3f},new float[] {1f, -0.8f},new float[] {0.5f, -1f}
+                    };
+
+                    for (int i = 0; i < positions.length; i++) {
+                        transform.push();
+                        transform.translate(positions[i][0], positions[i][1], 0);
+                        this.points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
+                        transform.pop();
+                    }
+                }
 
                 transform.pop();
             }

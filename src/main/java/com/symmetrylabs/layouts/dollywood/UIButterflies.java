@@ -51,7 +51,8 @@ public class UIButterflies extends UI3dComponent {
         if (this.shapeUpperLeft == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
             for (DollywoodModel.Butterfly butterfly : butterflies) {
-                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY
+                 && butterfly.type != DollywoodModel.Butterfly.Type.CURVY) {
                     wings.add(butterfly.wings.get(0));
                 }
             }
@@ -64,7 +65,8 @@ public class UIButterflies extends UI3dComponent {
         if (this.shapeUpperRight == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
             for (DollywoodModel.Butterfly butterfly : butterflies) {
-                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY
+                 && butterfly.type != DollywoodModel.Butterfly.Type.CURVY) {
                     wings.add(butterfly.wings.get(1));
                 }
             }
@@ -77,7 +79,8 @@ public class UIButterflies extends UI3dComponent {
         if (this.shapeLowerLeft == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
             for (DollywoodModel.Butterfly butterfly : butterflies) {
-                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY
+                 && butterfly.type != DollywoodModel.Butterfly.Type.CURVY) {
                     wings.add(butterfly.wings.get(2));
                 }
             }
@@ -90,7 +93,8 @@ public class UIButterflies extends UI3dComponent {
         if (this.shapeLowerRight == null) {
             List<DollywoodModel.Wing> wings = new ArrayList<>();
             for (DollywoodModel.Butterfly butterfly : butterflies) {
-                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY) {
+                if (butterfly.type != DollywoodModel.Butterfly.Type.SHARP_CURVY
+                 && butterfly.type != DollywoodModel.Butterfly.Type.CURVY) {
                     wings.add(butterfly.wings.get(3));
                 }
             }
