@@ -247,8 +247,8 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
             private Fixture(String id, Butterfly.Type type, LXTransform transform) {
                 transform.push();
-                if (transform.y() > 80) {
-                    transform.translate(0, 100, 0);
+                if (transform.y() < 100) {
+                    transform.translate(0, -30, 0);
                 }
                 // Precompute boundary coordinates for faster rendering, these
                 // can be dumped into a VBO for a shader.

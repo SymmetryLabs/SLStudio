@@ -28,7 +28,7 @@ public class TreeModel extends SLModel {
         UNIFORM_BRANCHES
     }
 
-    public static final float TRUNK_DIAMETER = 9*FEET;
+    public static final float TRUNK_DIAMETER = 4*FEET;
     public static final float LIMB_HEIGHT = 25*FEET;
     public static final int NUM_LIMBS = 12;
     public static final boolean SINGLE_BRANCH_MODE = false;

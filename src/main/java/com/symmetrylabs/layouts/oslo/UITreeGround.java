@@ -27,14 +27,14 @@ public class UITreeGround extends UI3dComponent {
         pg.textureMode(NORMAL);
         pg.beginShape();
         pg.texture(this.dust);
-        pg.vertex(-100*FEET, -TreeModel.LIMB_HEIGHT - 1*FEET, -100*FEET, 0, 0);
-        pg.vertex(100*FEET, -TreeModel.LIMB_HEIGHT - 1*FEET, -100*FEET, 0, 1);
-        pg.vertex(100*FEET, -TreeModel.LIMB_HEIGHT - 1*FEET, 100*FEET, 1, 1);
-        pg.vertex(-100*FEET, -TreeModel.LIMB_HEIGHT - 1*FEET, 100*FEET, 1, 0);
+        pg.vertex(-100*FEET, -TreeModel.LIMB_HEIGHT - 0.5f*FEET, -100*FEET, 0, 0);
+        pg.vertex(100*FEET, -TreeModel.LIMB_HEIGHT - 0.5f*FEET, -100*FEET, 0, 1);
+        pg.vertex(100*FEET, -TreeModel.LIMB_HEIGHT - 0.5f*FEET, 100*FEET, 1, 1);
+        pg.vertex(-100*FEET, -TreeModel.LIMB_HEIGHT - 0.5f*FEET, 100*FEET, 1, 0);
         pg.endShape(CLOSE);
 
         float personY = -TreeModel.LIMB_HEIGHT - 1*FEET;
-        drawPerson(pg, -10*FEET, personY, 10*FEET, 1.5f*FEET, 1.5f*FEET);
+        //drawPerson(pg, -10*FEET, personY, 10*FEET, 1.5f*FEET, 1.5f*FEET);
         drawPerson(pg, 8*FEET, personY, 12*FEET, -1.5f*FEET, 1.5f*FEET);
         drawPerson(pg, 2*FEET, personY, 8*FEET, -2*FEET, 1*FEET);
     }
@@ -45,9 +45,9 @@ public class UITreeGround extends UI3dComponent {
         pg.beginShape();
         pg.texture(this.person);
         pg.vertex(personX, personY, personZ, 0, 1);
-        pg.vertex(personX + personXW, personY, personZ + personZW, 1, 1);
-        pg.vertex(personX + personXW, personY + 5*FEET, personZ + personZW, 1, 0);
-        pg.vertex(personX, personY + 5*FEET, personZ, 0, 0);
+        pg.vertex(personX + personXW+12, personY, personZ + personZW, 1, 1);
+        pg.vertex(personX + personXW+12, personY + 3*FEET, personZ + personZW, 1, 0);
+        pg.vertex(personX, personY + 3*FEET, personZ, 0, 0);
         pg.endShape(CLOSE);
     }
 }
