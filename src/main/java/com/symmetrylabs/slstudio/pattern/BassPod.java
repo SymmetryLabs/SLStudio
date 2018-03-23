@@ -15,7 +15,12 @@ public class BassPod extends SLPattern {
     private GraphicMeter eq = new GraphicMeter(audioInput);
 
     private final CompoundParameter clr = new CompoundParameter("CLR", 0.5);
-    private final CompoundParameter gain = new CompoundParameter("Gain", 0.5, 0, 5);
+
+      private final CompoundParameter gain = new CompoundParameter("GAIN", 0.5);
+        private final CompoundParameter range = new CompoundParameter("RANG", 0.2);
+        private final CompoundParameter attack = new CompoundParameter("ATTK", 0.4);
+        private final CompoundParameter release = new CompoundParameter("RLS", 0.4);
+        private final CompoundParameter slope = new CompoundParameter("SLOP", 0.5);
 
     public BassPod(LX lx) {
         super(lx);
@@ -24,24 +29,17 @@ public class BassPod extends SLPattern {
 
         addParameter(clr);
         addParameter(gain);
-
-//        addParameter(eq.gain);   //to-do can't add these, causes null pointer exception
-//        addParameter(eq.range);
-//        addParameter(eq.attack);
-//        addParameter(eq.release);
-//        addParameter(eq.slope);
+        addParameter(range);
+        addParameter(attack);
+        addParameter(release);
+        addParameter(slope);
         addModulator(eq).start();
     }
 
-    @Override
-    public void onActive() {
-        super.onActive();
-
-        eq.range.setValue(36);
-        eq.release.setValue(300);
-        eq.gain.setValue(-6);
-        eq.slope.setValue(6);
-    }
+    // @Override
+    // public void onActive() {
+    //     super.onActive();
+    // }
 
     public static final float HUE_RATE = 100;
     public static final float BRTNESS_RATE = 800;
@@ -49,6 +47,12 @@ public class BassPod extends SLPattern {
 
     @Override
     public void run(double deltaMs) {
+        eq.gain.setNormalized(gain.getValuef());
+        eq.range.setNormalized(range.getValuef());
+        eq.attack.setNormalized(attack.getValuef());
+        eq.release.setNormalized(release.getValuef());
+        eq.slope.setNormalized(release.getValuef());
+
         final float bassLevel = eq.getAveragef(0, 5);
         final float satBase = bassLevel * 480 * clr.getValuef();
 

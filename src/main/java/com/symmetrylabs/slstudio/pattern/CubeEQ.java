@@ -19,13 +19,21 @@ public class CubeEQ extends SLModelPattern {
     private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
     private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
 
+    private final CompoundParameter gain = new CompoundParameter("GAIN", 0.5);
+    private final CompoundParameter range = new CompoundParameter("RANG", 0.2);
+    private final CompoundParameter attack = new CompoundParameter("ATTK", 0.4);
+    private final CompoundParameter release = new CompoundParameter("RLS", 0.4);
+    private final CompoundParameter slope = new CompoundParameter("SLOP", 0.5);
+
     public CubeEQ(LX lx) {
         super(lx);
         eq.start();
-//        addParameter(eq.range);
-//        addParameter(eq.attack);
-//        addParameter(eq.release);
-//        addParameter(eq.slope);
+        addParameter(gain);
+        addParameter(range);
+        addParameter(attack);
+        addParameter(release);
+        addParameter(slope);
+
         addParameter(edge);
         addParameter(clr);
         addParameter(blockiness);
@@ -33,11 +41,17 @@ public class CubeEQ extends SLModelPattern {
     }
 
     public void onActive() {
-        eq.range.setValue(48);
-        eq.release.setValue(300);
+        // eq.range.setValue(48);
+        // eq.release.setValue(300);
     }
 
     public void run(double deltaMs) {
+        eq.gain.setNormalized(gain.getValuef());
+        eq.range.setNormalized(range.getValuef());
+        eq.attack.setNormalized(attack.getValuef());
+        eq.release.setNormalized(release.getValuef());
+        eq.slope.setNormalized(release.getValuef());
+
         final float edgeConst = 2 + 30 * edge.getValuef();
         final float clrConst = 1.1f + clr.getValuef();
 

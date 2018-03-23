@@ -39,7 +39,7 @@ public class APC40Listener extends LXComponent {
 
         this.lx = lx;
 
-        lx.engine.midi.whenReady(this::bind);
+        //lx.engine.midi.whenReady(this::bind);
     }
 
     class Listener implements LXMidiListener {
