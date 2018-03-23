@@ -18,10 +18,10 @@
 //     .setDescription("Speed of the loop motion");    
     
 //   public final CompoundParameter size =
-//     new CompoundParameter("Size", 3, 1, Leaf.NUM_LEDS)
+//     new CompoundParameter("Size", 3, 1, 12) // arbitrarily made 12 since wings have varying sizes
 //     .setDescription("Size of the thread");
     
-//   public LXModulator pos = startModulator(new SawLFO(0, Leaf.NUM_LEDS, speed)); 
+//   public LXModulator pos = startModulator(new SawLFO(0, 12, speed)); // arbitrarily made 12 since wings have varying sizes
     
 //   private final int[] leafMask = new int[Leaf.NUM_LEDS];
     
