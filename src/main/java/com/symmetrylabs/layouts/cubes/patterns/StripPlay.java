@@ -1,5 +1,6 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
+import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
 import static processing.core.PApplet.*;
 
 import heronarts.lx.LX;
@@ -12,7 +13,7 @@ import heronarts.lx.parameter.LXParameter;
 import com.symmetrylabs.slstudio.model.Strip;
 import static com.symmetrylabs.util.MathUtils.random;
 
-public class StripPlay extends CubesPattern {
+public class StripPlay extends StripsPattern  {
     private final int NUM_OSC = 300;
     private final int MAX_PERIOD = 20000;
     private CompoundParameter brightParameter = new CompoundParameter("bright", 96, 70, 100);
@@ -67,7 +68,7 @@ public class StripPlay extends CubesPattern {
             }
         } else if (parameter == hueSpread) {
             for (int i = 0; i < NUM_OSC; i++) {
-                colorOffset[i] = colorOffset[i] * hueSpread.getValuef();
+                //colorOffset[i] = colorOffset[i] * hueSpread.getValuef();
             }
         }
     }
@@ -77,13 +78,13 @@ public class StripPlay extends CubesPattern {
 
         float[] bright = new float[model.points.length];
         for (Strip strip : model.getStrips()) {
-            LXPoint centerPoint = strip.points[8];
+            LXPoint centerPoint = strip.points[(int)strip.points.length/2];
             for (int i = 0; i < numOsc.getValue(); i++) {
                 float avgdist =
                     dist(centerPoint.x, centerPoint.y, centerPoint.z, fX[i].getValuef(), fY[i].getValuef(), fZ[i].getValuef());
                 boolean on = avgdist < 30;
                 if (on) {
-                    float hv = palette.getHuef() + colorOffset[i];
+                    float hv = palette.getHuef(); // + colorOffset[i];
                     float br = max(0, 100 - avgdist * 2 * (100 - brightParameter.getValuef()));
                     int colr = lx.hsb(hv, sat[i].getValuef(), br);
                     for (LXPoint p : strip.points) {
