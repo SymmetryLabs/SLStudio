@@ -1,5 +1,8 @@
 package com.symmetrylabs.slstudio;
 
+import java.net.SocketException;
+import java.net.UnknownHostException;
+import java.util.List;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
@@ -8,7 +11,12 @@ import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
+import com.symmetrylabs.slstudio.output.TenereDatagram;
 import heronarts.lx.LX;
+import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.LXDatagramOutput;
+import heronarts.lx.output.LXOutput;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -76,9 +84,9 @@ public class SLStudio extends PApplet {
         Utils.setSketchPath(sketchPath());
 
         // Instantiate the desired layout here.
-        layout = new CubesLayout();
+//        layout = new CubesLayout();
 //    layout = new DynamicLayout();
-//         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
 
         LXModel model = layout.buildModel();
         printModelStats(model);
