@@ -46,6 +46,34 @@ public class ButterflyPixlite extends LXOutputGroup {
                     .addPoints(((DollywoodModel)lx.model).getWingById("butterfly5__left_wing").points)
                     .addPoints(((DollywoodModel)lx.model).getWingById("butterfly5__right_wing").points)
             ));
+
+            addChild(new ButterflyPixliteOutput(lx, ipAddress,
+                new ButterflyPointsGrouping("4")
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__lower_right_wing").points)
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__upper_right_wing").points)
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__upper_left_wing").points)
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__lower_left_wing").points)
+            ));
+
+            addChild(new ButterflyPixliteOutput(lx, ipAddress,
+                new ButterflyPointsGrouping("5")
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__upper_left_wing").points)
+            ));
+
+            addChild(new ButterflyPixliteOutput(lx, ipAddress,
+                new ButterflyPointsGrouping("6")
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__upper_right_wing").points)
+            ));
+
+            addChild(new ButterflyPixliteOutput(lx, ipAddress,
+                new ButterflyPointsGrouping("7")
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__upper_left_wing").points)
+            ));
+
+            addChild(new ButterflyPixliteOutput(lx, ipAddress,
+                new ButterflyPointsGrouping("8")
+                .addPoints(((DollywoodModel)lx.model).getWingById("butterfly1__upper_right_wing").points)
+            ));
         } catch (Exception e) {
             e.printStackTrace();
         }

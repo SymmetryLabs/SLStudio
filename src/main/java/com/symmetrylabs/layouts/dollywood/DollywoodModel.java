@@ -247,7 +247,9 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
 
             private Fixture(String id, Butterfly.Type type, LXTransform transform) {
                 transform.push();
-
+                if (transform.y() > 80) {
+                    transform.translate(0, 100, 0);
+                }
                 // Precompute boundary coordinates for faster rendering, these
                 // can be dumped into a VBO for a shader.
                 transform.push();
@@ -526,6 +528,13 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                     transform.pop();
 
                     final float[][] positions = new float[][] {
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
+                        new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
                         new float[] {0f, 0f},new float[] {0f, 0.8f,},new float[] {0f, 1.6f},new float[] {0f, 2.5f},
                         new float[] {0f, 3.1f},new float[] {0f, 4f},new float[] {0f, 4.85f},new float[] {0f, 5.5f},
                         new float[] {0f, 6.3f},new float[] {0.2f, 7f},new float[] {0.7f, 7.6f},new float[] {1.2f, 8f},
