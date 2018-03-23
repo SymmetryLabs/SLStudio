@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern;
 
 import java.lang.Math;
 
+import com.symmetrylabs.layouts.dollywood.DollywoodModel;
 import ddf.minim.analysis.FFT;
 
 import heronarts.lx.LX;
@@ -14,9 +15,11 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.modulator.LinearEnvelope;
 
+
 import com.symmetrylabs.slstudio.SLStudioLX;
-import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
+
 
 public class SoundRain extends LXPattern {
     private LXAudioBuffer audioBuffer;
@@ -30,7 +33,7 @@ public class SoundRain extends LXPattern {
     public final SawLFO pos = new SawLFO(0, 9, 8000);
     public final SinLFO col1 = new SinLFO(model.xMin, model.xMax, 5000);
     public final CompoundParameter gainParameter = new CompoundParameter("GAIN", 0.1, 0, .3);
-    
+
     public SoundRain(LX lx) {
         super(lx);
         audioBuffer = lx.engine.audio.getInput().mix;
@@ -61,7 +64,7 @@ public class SoundRain extends LXPattern {
             lightVals = new float[avgSize];
         }
     }
-    
+
     public void run(double deltaMs) {
         audioBuffer.getSamples(audioSamples);
         this.fft.forward(audioSamples);
@@ -78,9 +81,9 @@ public class SoundRain extends LXPattern {
             }
         }
 
-        for (CubesModel.Cube c : ((CubesModel)model).getCubes()) {
-            for (int j = 0; j < c.getStrips().size(); j++) {
-                Strip s = c.getStrips().get(j);
+        //for (CubesModel.Cube c : ((CubesModel)model).getCubes()) {
+            for (int j = 0; j < ((StripsModel)model).getStrips().size(); j++) {
+                Strip s = (Strip)((StripsModel)model).getStrips().get(j);
 
                 if (j % 4 != 0 && j % 4 != 2) {
                     for (LXPoint p : s.points) {
@@ -90,6 +93,6 @@ public class SoundRain extends LXPattern {
                     }
                 }
             }
-        }
-    }  
+        //}
+    }
 }

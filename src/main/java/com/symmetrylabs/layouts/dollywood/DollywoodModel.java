@@ -49,7 +49,7 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
         this.treeModel = treeModel;
 
         int i = 0;
-        this._butterflies = new Butterfly[butterflies.size()]; 
+        this._butterflies = new Butterfly[butterflies.size()];
         for (Butterfly butterfly : butterflies) {
             if (butterfly != null) {
                 this.butterflyTable.put(butterfly.id, butterfly);
@@ -104,7 +104,8 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
     public static class Butterfly extends StripsModel<Wing> {
 
         public static final int LARGE_NUM_LEDS = 40;
-
+        public static final int NUM_WINGS = 4;
+        public final LXPoint point;
         public static enum Type {
             SMALL, LARGE, SHARP_CURVY, CURVY
         }
@@ -129,6 +130,7 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
             this.id = id;
             this.type = type;
             this.coords = fixture.coords;
+            this.point = this.points[0];
 
             // while (rx < 0) rx += 360;
             // while (ry < 0) ry += 360;
@@ -271,7 +273,7 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
         public static final int LARGE_UPPER_NUM_LEDS = 12;
         public static final int LARGE_LOWER_NUM_LEDS = 8;
 
-        public enum Type { 
+        public enum Type {
             LARGE_UPPER, LARGE_LOWER, SMALL_UPPER, SMALL_LOWER, SHARP_CURVY, CURVY
         }
 
@@ -324,7 +326,7 @@ public class DollywoodModel extends StripsModel<DollywoodModel.Wing> {
                 transform.rotateY(rotations[1] * PI / 180.);
                 transform.rotateZ(rotations[2] * PI / 180.);
 
-                if (type == Wing.Type.LARGE_UPPER || type == Wing.Type.SMALL_UPPER 
+                if (type == Wing.Type.LARGE_UPPER || type == Wing.Type.SMALL_UPPER
                  || type == Wing.Type.LARGE_LOWER || type == Wing.Type.SMALL_LOWER) {
                     // Precompute boundary coordinates for faster rendering, these
                     // can be dumped into a VBO for a shader.
