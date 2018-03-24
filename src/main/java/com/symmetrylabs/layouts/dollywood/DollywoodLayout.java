@@ -109,19 +109,19 @@ public class DollywoodLayout implements Layout {
         //     butterflies.add(butterfly);
         // }
 
-        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
-            LXTransform transform1 = new LXTransform(assemblage.transform);
-            transform1.translate(0, 14, 0);
-            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
-            butterflies.add(butterfly);
-        }
+//        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
+//            LXTransform transform1 = new LXTransform(assemblage.transform);
+//            transform1.translate(0, 14, 0);
+//            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
+//            butterflies.add(butterfly);
+//        }
 
-        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
-            LXTransform transform1 = new LXTransform(assemblage.transform);
-            transform1.translate(MathUtils.random(30), MathUtils.random(30), MathUtils.random(30));
-            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
-            butterflies.add(butterfly);
-        }
+//        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
+//            LXTransform transform1 = new LXTransform(assemblage.transform);
+//            transform1.translate(MathUtils.random(30), MathUtils.random(30), MathUtils.random(30));
+//            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
+//            butterflies.add(butterfly);
+//        }
 
 
         // for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
@@ -138,12 +138,12 @@ public class DollywoodLayout implements Layout {
         //     butterflies.add(butterfly);
         // }
 
-        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
-            LXTransform transform1 = new LXTransform(assemblage.transform);
-            transform1.translate(20, 20, 20);
-            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
-            butterflies.add(butterfly);
-        }
+//        for (TreeModel.LeafAssemblage assemblage : treeModel.assemblages) {
+//            LXTransform transform1 = new LXTransform(assemblage.transform);
+//            transform1.translate(20, 20, 20);
+//            DollywoodModel.Butterfly butterfly = new DollywoodModel.Butterfly("0", DollywoodModel.Butterfly.Type.LARGE, transform1);
+//            butterflies.add(butterfly);
+//        }
 
         return new DollywoodModel(applet, treeModel, butterflies);
     }
