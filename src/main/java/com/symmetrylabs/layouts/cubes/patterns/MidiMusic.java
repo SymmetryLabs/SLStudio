@@ -26,7 +26,7 @@ import heronarts.lx.midi.MidiNoteOn;
 
 import com.symmetrylabs.slstudio.model.Strip;
 
-public class MidiMusic extends SLPattern {
+public class MidiMusic extends CubesPattern {
 
     private final Stack<LXLayer> newLayers = new Stack<LXLayer>();
 
@@ -228,7 +228,7 @@ public class MidiMusic extends SLPattern {
         for (int i = 0; i < wval.length; ++i) {
             wval[i] = model.cy + 0.2f * model.yMax/2.0f * (float)Math.sin(wavoff + i / 1.9f);
         }
-        for (Strip s : ((CubesModel)model).getStrips()) {
+        for (Strip s : model.getStrips()) {
             float sparklePos = (sparkleDirection ? sparkle.getValuef() : (1 - sparkle.getValuef())) * (s.points.length)/2.f;
             float maxBright = sparkleBright * (1 - sparkle.getValuef());
 

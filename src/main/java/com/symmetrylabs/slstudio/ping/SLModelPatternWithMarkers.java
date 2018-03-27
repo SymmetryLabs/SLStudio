@@ -1,12 +1,13 @@
 package com.symmetrylabs.slstudio.ping;
 
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.pattern.base.SLModelPattern;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.MarkerSource;
 import heronarts.lx.LX;
 
-public abstract class SLPatternWithMarkers extends SLPattern implements MarkerSource {
-    public SLPatternWithMarkers(LX lx) {
+public abstract class SLModelPatternWithMarkers extends SLModelPattern implements MarkerSource {
+    public SLModelPatternWithMarkers(LX lx) {
         super(lx);
     }
 

@@ -19,7 +19,7 @@ public abstract class ModelSpecificEffect<T extends LXModel> extends SLEffect {
 
         try {
             if (emptyModel.getClass().isAssignableFrom(model.getClass())) {
-                this.model = (T)model;
+                this.model = (T) model;
             }
             else {
                 this.model = emptyModel;

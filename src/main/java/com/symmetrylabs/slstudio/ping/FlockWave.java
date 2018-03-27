@@ -18,8 +18,6 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.kernel.SLKernel;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ColorPalette;
@@ -30,7 +28,7 @@ import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.Octahedron;
 
-public class FlockWave extends SLPatternWithMarkers {
+public class FlockWave extends SLModelPatternWithMarkers {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
@@ -389,7 +387,7 @@ public class FlockWave extends SLPatternWithMarkers {
         if (birds.size() > 0) {
             if (kernel.result == null || kernel.result.length != colors.length) {
                 kernel.numPoints = colors.length;
-                kernel.put(kernel.pointsXYZ = ((SLModel)model).pointsXYZ);
+                kernel.put(kernel.pointsXYZ = model.pointsXYZ);
                 kernel.result = new float[colors.length];
             }
 

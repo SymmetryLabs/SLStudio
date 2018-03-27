@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
@@ -25,7 +26,7 @@ enum CursorState {
     STOPPED
 }
 
-public class Worms extends SLPattern {
+public class Worms extends StripsPattern {
     private final float STRIPS_PER_SECOND = 10;
     private final float TRAIL_TIME = 3000;
     private final float Z_MID_LATE = 82.0f;
@@ -232,7 +233,7 @@ public class Worms extends SLPattern {
             //latticeInited = true;
             new Thread() {
                 public void run() {
-                    final dLattice l = new dLattice(((StripsModel)model));
+                    final dLattice l = new dLattice(model);
                     dispatcher.dispatchEngine(new Runnable() {
                         public void run() {
                             lattice = l;
@@ -523,7 +524,7 @@ class dLattice {
         int pos = 0;
         float d = 2500;
 
-        List<Strip> strips = ((StripsModel)model).getStrips();
+        List<Strip> strips = model.getStrips();
         for (Strip s : strips) {
             float nd = pd2(s.points[0], p.x, p.y, p.z);
 

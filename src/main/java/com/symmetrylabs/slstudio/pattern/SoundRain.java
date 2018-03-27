@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern;
 
 import java.lang.Math;
 
+import com.symmetrylabs.layouts.cubes.patterns.CubesPattern;
 import ddf.minim.analysis.FFT;
 
 import heronarts.lx.LX;
@@ -18,7 +19,7 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 
-public class SoundRain extends LXPattern {
+public class SoundRain extends CubesPattern {
     private LXAudioBuffer audioBuffer;
     private float[] audioSamples;
     private ddf.minim.analysis.FFT fft = null;
@@ -30,7 +31,7 @@ public class SoundRain extends LXPattern {
     public final SawLFO pos = new SawLFO(0, 9, 8000);
     public final SinLFO col1 = new SinLFO(model.xMin, model.xMax, 5000);
     public final CompoundParameter gainParameter = new CompoundParameter("GAIN", 0.1, 0, .3);
-    
+
     public SoundRain(LX lx) {
         super(lx);
         audioBuffer = lx.engine.audio.getInput().mix;
@@ -61,7 +62,7 @@ public class SoundRain extends LXPattern {
             lightVals = new float[avgSize];
         }
     }
-    
+
     public void run(double deltaMs) {
         audioBuffer.getSamples(audioSamples);
         this.fft.forward(audioSamples);
@@ -78,7 +79,7 @@ public class SoundRain extends LXPattern {
             }
         }
 
-        for (CubesModel.Cube c : ((CubesModel)model).getCubes()) {
+        for (CubesModel.Cube c : model.getCubes()) {
             for (int j = 0; j < c.getStrips().size(); j++) {
                 Strip s = c.getStrips().get(j);
 
@@ -91,5 +92,5 @@ public class SoundRain extends LXPattern {
                 }
             }
         }
-    }  
+    }
 }
