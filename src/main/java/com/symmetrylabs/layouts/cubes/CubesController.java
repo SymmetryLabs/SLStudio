@@ -8,6 +8,7 @@ import java.net.ConnectException;
 import java.io.OutputStream;
 import java.io.IOException;
 
+import com.symmetrylabs.slstudio.component.GammaCorrector;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
@@ -16,7 +17,6 @@ import heronarts.lx.color.LXColor;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.component.GammaCorrection;
 import com.symmetrylabs.util.NetworkUtils;
 
 public class CubesController extends LXOutput {
@@ -47,7 +47,7 @@ public class CubesController extends LXOutput {
 
     private final LX lx;
     private CubesMappingMode mappingMode;
-    private GammaCorrection gammaCorrection;
+    private GammaCorrector gammaCorrector;
 
     public CubesController(LX lx, NetworkDevice device, String id) {
         this(lx, device, device.ipAddress, id, false);
@@ -75,7 +75,7 @@ public class CubesController extends LXOutput {
         this.isBroadcast = isBroadcast;
 
         mappingMode = CubesMappingMode.getInstance(lx);
-        gammaCorrection = GammaCorrection.getInstance(lx);
+        gammaCorrector = GammaCorrector.getInstance(lx);
 
         enabled.setValue(true);
     }
@@ -101,7 +101,7 @@ public class CubesController extends LXOutput {
     private void setPixel(int number, int c) {
         int offset = 4 + number * 3;
 
-        int gammaCorrected = gammaCorrection.getCorrectedColor(c);
+        int gammaCorrected = gammaCorrector.getCorrectedColor(c);
         packetData[offset + 0] = LXColor.red(gammaCorrected);
         packetData[offset + 1] = LXColor.green(gammaCorrected);
         packetData[offset + 2] = LXColor.blue(gammaCorrected);
