@@ -50,8 +50,13 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
         return super.setModel(model);
     }
 
+    /** Gets the model class, M. */
+    public Class getModelClass() {
+        return getEmptyModel().getClass();
+    }
+
     /** Gets an empty instance of the model class, M. */
-    public M getEmptyModel() {
+    private M getEmptyModel() {
         String modelClassName = new TypeToken<M>(getClass()) {}.getType().getTypeName();
         M emptyModel;
         try {
