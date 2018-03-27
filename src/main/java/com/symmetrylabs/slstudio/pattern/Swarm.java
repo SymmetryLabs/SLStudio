@@ -1,7 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
@@ -9,7 +10,7 @@ import heronarts.lx.modulator.SinLFO;
 
 import static processing.core.PApplet.*;
 
-public class Swarm extends StripsPattern {
+public class Swarm extends SLPattern<StripsModel<Strip>> {
     private final SawLFO offset = new SawLFO(0, 1, 1000);
     private final SinLFO rate = new SinLFO(350, 1200, 63000);
     private final SinLFO falloff = new SinLFO(15, 50, 17000);

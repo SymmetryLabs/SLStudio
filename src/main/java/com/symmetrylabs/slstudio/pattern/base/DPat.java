@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern.base;
 import java.util.ArrayList;
 import java.util.SplittableRandom;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import processing.core.PImage;
 import processing.core.PVector;
 import static processing.core.PConstants.ADD;
@@ -17,7 +18,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import com.symmetrylabs.util.NoiseUtils;
 import com.symmetrylabs.util.MathUtils;
 
-public abstract class DPat extends SLPattern {
+public abstract class DPat extends SLPattern<SLModel> {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
     public ArrayList<DBool> bools = new ArrayList<DBool>();
     public PVector pTrans = new PVector();

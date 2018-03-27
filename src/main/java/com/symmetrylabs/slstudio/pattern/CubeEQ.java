@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.pattern.base.SLModelPattern;
+import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
@@ -10,7 +11,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import static processing.core.PApplet.*;
 
 
-public class CubeEQ extends SLModelPattern {
+public class CubeEQ extends SLPattern<SLModel> {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);

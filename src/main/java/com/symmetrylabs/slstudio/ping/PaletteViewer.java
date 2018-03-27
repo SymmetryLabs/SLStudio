@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ping;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
@@ -9,7 +10,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 
-public class PaletteViewer extends SLPattern {
+public class PaletteViewer extends SLPattern<SLModel> {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 

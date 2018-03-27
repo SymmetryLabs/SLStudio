@@ -5,7 +5,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import com.symmetrylabs.slstudio.pattern.base.SLModelPattern;
+import com.symmetrylabs.slstudio.model.SLModel;
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
 
@@ -28,7 +28,7 @@ import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.OctahedronWithArrow;
 import com.symmetrylabs.slstudio.model.LXPointNormal;
 
-public abstract class ParticlePattern extends SLModelPattern implements MarkerSource {
+public abstract class ParticlePattern extends SLPattern<SLModel> implements MarkerSource {
     private static final double SQRT_2PI = FastMath.sqrt(2 * FastMath.PI);
 
     public static final int DEFAULT_PARTICLE_GROUP_COUNT = 16;

@@ -28,7 +28,7 @@ import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.Octahedron;
 
-public class FlockWave extends SLModelPatternWithMarkers {
+public class FlockWave extends SLPatternWithMarkers {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 

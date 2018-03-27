@@ -1,7 +1,12 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
+import java.lang.reflect.InvocationHandler;
+import java.lang.reflect.InvocationTargetException;
 import java.util.List;
 
+import com.google.common.reflect.TypeToken;
+import com.symmetrylabs.slstudio.model.SLModel;
+import heronarts.lx.LXModelComponent;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -20,23 +25,56 @@ import com.symmetrylabs.slstudio.render.Renderer;
 import com.symmetrylabs.slstudio.render.InterpolatingRenderer;
 import com.symmetrylabs.slstudio.render.Renderable;
 
-public abstract class SLPattern extends LXPattern implements Renderable {
+public abstract class SLPattern<M extends SLModel> extends LXPattern implements Renderable {
 
     protected final SLStudioLX lx;
+    protected M model;  // overrides LXPattern's model field with a more specific type
 
     private volatile Renderer renderer;
     private ReusableBuffer reusableBuffer = new ReusableBuffer();
     private boolean isManaged = false;
 
-    protected void createParameters() { }
-
     public SLPattern(LX lx) {
         super(lx);
-
-        this.lx = (SLStudioLX)lx;
-
+        this.lx = (SLStudioLX) lx;
+        setModel(lx.model);
         createParameters();
     }
+
+    @Override public M getModel() {  // overrides LXPattern's getModel() to return a more specific type
+        return model;
+    }
+
+    @Override public LXModelComponent setModel(LXModel model) {
+        this.model = asSpecializedModel(model);
+        return super.setModel(model);
+    }
+
+    /** Gets an empty instance of the model class, M. */
+    public M getEmptyModel() {
+        String modelClassName = new TypeToken<M>(getClass()) {}.getType().getTypeName();
+        M emptyModel;
+        try {
+            emptyModel = (M) Class.forName(modelClassName).getConstructor().newInstance();
+        } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
+            InstantiationException | InvocationTargetException | ClassCastException e) {
+            throw new RuntimeException(
+                "Could not find a public default constructor for " + modelClassName + ": " + e);
+        }
+        return emptyModel;
+    }
+
+    /** Casts the given model to the M type if possible, otherwise instantiates an empty M instance. */
+    private M asSpecializedModel(LXModel model) {
+        try {
+            if (getEmptyModel().getClass().isAssignableFrom(model.getClass())) {
+                return (M) model;
+            }
+        } catch (ClassCastException e) { }
+        return getEmptyModel();
+    }
+
+    protected void createParameters() { }
 
     protected Renderer createRenderer(LXModel model, int[] colors, Renderable renderable) {
         return new InterpolatingRenderer(model, colors, renderable);

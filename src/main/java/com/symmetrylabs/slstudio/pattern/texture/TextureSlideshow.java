@@ -8,6 +8,7 @@ import java.lang.ref.WeakReference;
 import java.awt.image.BufferedImage;
 import javax.imageio.ImageIO;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import org.apache.commons.math3.util.FastMath;
 
 import heronarts.lx.LX;
@@ -22,7 +23,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import static com.symmetrylabs.util.Utils.createInput;
 
-public abstract class TextureSlideshow extends SLPattern {
+public abstract class TextureSlideshow extends SLPattern<SLModel> {
     public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
     public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
     public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);

@@ -2,6 +2,7 @@ package com.symmetrylabs.layouts.cubes.patterns;
 
 import com.symmetrylabs.layouts.cubes.CubesMappingMode;
 import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
@@ -9,7 +10,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
 
-public class CubesMappingPattern extends CubesPattern {
+public class CubesMappingPattern extends SLPattern<CubesModel> {
     private final SinLFO pulse = new SinLFO(20, 100, 800);
 
     public int mappedAndOnNetworkColor = LXColor.GREEN;

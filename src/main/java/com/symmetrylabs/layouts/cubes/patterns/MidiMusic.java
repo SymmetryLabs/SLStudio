@@ -26,7 +26,7 @@ import heronarts.lx.midi.MidiNoteOn;
 
 import com.symmetrylabs.slstudio.model.Strip;
 
-public class MidiMusic extends CubesPattern {
+public class MidiMusic extends SLPattern<CubesModel> {
 
     private final Stack<LXLayer> newLayers = new Stack<LXLayer>();
 

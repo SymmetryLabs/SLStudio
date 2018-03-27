@@ -1,22 +1,26 @@
 package com.symmetrylabs.slstudio.pattern.test;
 
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
+
+import java.util.List;
 
 /**
 * @author Yona Appletree (yona@concentricsky.com)
 */
-public class TestStrips extends StripsPattern implements SLTestPattern {
+public class TestStrips extends SLPattern<StripsModel<Strip>> implements SLTestPattern {
 
     public TestStrips(LX lx) {
         super(lx);
     }
 
     public void run(double deltaMs) {
-        for (Strip strip : model.getStrips()) {
+        List<Strip> strips = model.getStrips();
+        for (Strip strip : strips) {
             float hue = 0;
 
             for (LXPoint p : strip.points) {

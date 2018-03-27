@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.ping;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.util.BlobTracker;
 import heronarts.lx.LX;
@@ -13,7 +14,7 @@ import java.util.List;
 import static processing.core.PApplet.println;
 
 
-public class BlobViewer extends SLPattern {
+public class BlobViewer extends SLPattern<SLModel> {
     DiscreteParameter mode = new DiscreteParameter("mode", new String[]{"planes", "spheres"});
     CompoundParameter tolerance = new CompoundParameter("tolerance", 2, 0, 8); // in
     CompoundParameter radius = new CompoundParameter("radius", 12, 0, 240); // in

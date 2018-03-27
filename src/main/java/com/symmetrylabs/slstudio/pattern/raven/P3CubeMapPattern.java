@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern.raven;
 
 import java.util.Arrays;
 
+import com.symmetrylabs.slstudio.model.SLModel;
 import processing.core.PGraphics;
 import processing.core.PVector;
 
@@ -16,7 +17,7 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import static processing.core.PConstants.P3D;
 
-public abstract class P3CubeMapPattern extends SLPattern {
+public abstract class P3CubeMapPattern extends SLPattern<SLModel> {
     private PGraphics pg;
     public PGraphics pgF;
     public PGraphics pgB;

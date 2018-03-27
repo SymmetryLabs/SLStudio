@@ -5,7 +5,6 @@ import java.util.List;
 import java.util.ArrayList;
 
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.LXParameter;
@@ -15,7 +14,6 @@ import heronarts.lx.transform.LXVector;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.LXUtils;
 
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -26,7 +24,7 @@ enum CursorState {
     STOPPED
 }
 
-public class Worms extends StripsPattern {
+public class Worms extends SLPattern<StripsModel<Strip>> {
     private final float STRIPS_PER_SECOND = 10;
     private final float TRAIL_TIME = 3000;
     private final float Z_MID_LATE = 82.0f;
@@ -464,7 +462,7 @@ class dPixel {
 }
 
 class dLattice {
-    StripsModel model;
+    StripsModel<Strip> model;
 
     void addTurn(dVertex v0, int pos0, dVertex v1, int pos1) {
         dTurn t = new dTurn(pos0, v1, pos1);
@@ -524,8 +522,7 @@ class dLattice {
         int pos = 0;
         float d = 2500;
 
-        List<Strip> strips = model.getStrips();
-        for (Strip s : strips) {
+        for (Strip s : model.getStrips()) {
             float nd = pd2(s.points[0], p.x, p.y, p.z);
 
             if (nd < d) { v=v0(s);
@@ -549,7 +546,7 @@ class dLattice {
         return LXUtils.random(0, 2) < 1 ? new dPixel(v, pos) : new dPixel(v.opp, 14 - pos);
     }
 
-    public dLattice(StripsModel model) {
+    public dLattice(StripsModel<Strip> model) {
         this.model = model;
 
         List<Strip> strips = model.getStrips();

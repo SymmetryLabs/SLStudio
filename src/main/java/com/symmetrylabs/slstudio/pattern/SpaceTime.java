@@ -1,6 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
@@ -9,7 +11,7 @@ import heronarts.lx.parameter.LXParameter;
 
 import static processing.core.PApplet.*;
 
-public class SpaceTime extends StripsPattern {
+public class SpaceTime extends SLPattern<StripsModel<Strip>> {
 
     SinLFO pos = new SinLFO(0, 1, 3000);
     SinLFO rate = new SinLFO(1000, 9000, 13000);

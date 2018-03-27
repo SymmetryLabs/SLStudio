@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.function.Consumer;
 
 import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
@@ -13,7 +14,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
-public class CubeFlash extends CubesPattern {
+public class CubeFlash extends SLPattern<CubesModel> {
     private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
     private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
     private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);

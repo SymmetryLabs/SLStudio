@@ -2,12 +2,10 @@ package com.symmetrylabs.slstudio.pattern;
 
 import java.lang.Math;
 
-import com.symmetrylabs.layouts.cubes.patterns.CubesPattern;
-import ddf.minim.analysis.FFT;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.LXPattern;
 import heronarts.lx.audio.LXAudioBuffer;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
@@ -15,11 +13,10 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.modulator.LinearEnvelope;
 
-import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
 
-public class SoundRain extends CubesPattern {
+public class SoundRain extends SLPattern<CubesModel> {
     private LXAudioBuffer audioBuffer;
     private float[] audioSamples;
     private ddf.minim.analysis.FFT fft = null;
