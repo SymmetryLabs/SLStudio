@@ -29,6 +29,7 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
 
     protected final SLStudioLX lx;
     protected M model;  // overrides LXPattern's model field with a more specific type
+    protected boolean isModelCompatible;  // false if lx.model is of an incompatible type
 
     private volatile Renderer renderer;
     private ReusableBuffer reusableBuffer = new ReusableBuffer();
@@ -47,6 +48,10 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
 
     @Override public LXModelComponent setModel(LXModel model) {
         this.model = asSpecializedModel(model);
+        isModelCompatible = (this.model != null);
+        if (!isModelCompatible) {
+            this.model = getEmptyModel();
+        }
         return super.setModel(model);
     }
 
@@ -69,14 +74,14 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
         return emptyModel;
     }
 
-    /** Casts the given model to the M type if possible, otherwise instantiates an empty M instance. */
+    /** Casts the given model to the M type if possible, otherwise returns null. */
     private M asSpecializedModel(LXModel model) {
         try {
             if (getEmptyModel().getClass().isAssignableFrom(model.getClass())) {
                 return (M) model;
             }
         } catch (ClassCastException e) { }
-        return getEmptyModel();
+        return null;
     }
 
     protected void createParameters() { }
@@ -124,6 +129,9 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
 
     @Override
     public void loop(double deltaMs) {
+        // Don't run the pattern at all if it requires a different model type.
+        if (!isModelCompatible) return;
+
         try {
             super.loop(deltaMs);
         } catch (Exception e) {
