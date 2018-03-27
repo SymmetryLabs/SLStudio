@@ -123,6 +123,16 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     }
 
     @Override
+    public void loop(double deltaMs) {
+        try {
+            super.loop(deltaMs);
+        } catch (Exception e) {
+            System.err.print("\nException in " + getClass().getSimpleName() + " pattern: ");
+            e.printStackTrace(System.err);
+        }
+    }
+
+    @Override
     public void dispose() {
         onInactive();
 
