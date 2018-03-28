@@ -6,7 +6,7 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXDatagram;
 
-import com.symmetrylabs.slstudio.component.GammaCorrector;
+import com.symmetrylabs.slstudio.component.GammaExpander;
 
 public class ArtNetDatagram extends LXDatagram {
 
@@ -19,7 +19,7 @@ public class ArtNetDatagram extends LXDatagram {
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
-    private GammaCorrector gammaCorrector;
+    private GammaExpander GammaExpander;
 
     public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
         this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
@@ -30,7 +30,7 @@ public class ArtNetDatagram extends LXDatagram {
 
         this.pointIndices = indices;
 
-        gammaCorrector = GammaCorrector.getInstance(lx);
+        GammaExpander = GammaExpander.getInstance(lx);
 
         try {
             setAddress(ipAddress);
@@ -90,10 +90,10 @@ public class ArtNetDatagram extends LXDatagram {
         for (int index : pointIndices) {
             int colorValue = (index >= 0) ? colors[index] : 0;
 
-            int gammaCorrected = gammaCorrector.getCorrectedColor(colorValue);
-            buffer[i + byteOffset[0]] = LXColor.red(gammaCorrected);
-            buffer[i + byteOffset[1]] = LXColor.green(gammaCorrected);
-            buffer[i + byteOffset[2]] = LXColor.blue(gammaCorrected);
+            int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
+            buffer[i + byteOffset[0]] = LXColor.red(gammaExpanded);
+            buffer[i + byteOffset[1]] = LXColor.green(gammaExpanded);
+            buffer[i + byteOffset[2]] = LXColor.blue(gammaExpanded);
 
             i += 3;
         }

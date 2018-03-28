@@ -8,7 +8,7 @@ import java.net.ConnectException;
 import java.io.OutputStream;
 import java.io.IOException;
 
-import com.symmetrylabs.slstudio.component.GammaCorrector;
+import com.symmetrylabs.slstudio.component.GammaExpander;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
@@ -47,7 +47,7 @@ public class CubesController extends LXOutput {
 
     private final LX lx;
     private CubesMappingMode mappingMode;
-    private GammaCorrector gammaCorrector;
+    private GammaExpander GammaExpander;
 
     public CubesController(LX lx, NetworkDevice device, String id) {
         this(lx, device, device.ipAddress, id, false);
@@ -75,7 +75,7 @@ public class CubesController extends LXOutput {
         this.isBroadcast = isBroadcast;
 
         mappingMode = CubesMappingMode.getInstance(lx);
-        gammaCorrector = GammaCorrector.getInstance(lx);
+        GammaExpander = GammaExpander.getInstance(lx);
 
         enabled.setValue(true);
     }
@@ -101,10 +101,10 @@ public class CubesController extends LXOutput {
     private void setPixel(int number, int c) {
         int offset = 4 + number * 3;
 
-        int gammaCorrected = gammaCorrector.getCorrectedColor(c);
-        packetData[offset + 0] = LXColor.red(gammaCorrected);
-        packetData[offset + 1] = LXColor.green(gammaCorrected);
-        packetData[offset + 2] = LXColor.blue(gammaCorrected);
+        int gammaExpanded = GammaExpander.getExpandedColor(c);
+        packetData[offset + 0] = LXColor.red(gammaExpanded);
+        packetData[offset + 1] = LXColor.green(gammaExpanded);
+        packetData[offset + 2] = LXColor.blue(gammaExpanded);
     }
 
     @Override

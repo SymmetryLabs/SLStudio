@@ -13,7 +13,7 @@ import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
 
-public class GammaCorrector extends LXComponent {
+public class GammaExpander extends LXComponent {
 
     private final float[][] gammaSet = {
         {2, 2.1f, 2.8f},
@@ -30,19 +30,19 @@ public class GammaCorrector extends LXComponent {
     private final byte greenGamma[] = new byte[256];
     private final byte blueGamma[] = new byte[256];
 
-    private static Map<LX, WeakReference<GammaCorrector>> instanceByLX = new WeakHashMap<>();
+    private static Map<LX, WeakReference<GammaExpander>> instanceByLX = new WeakHashMap<>();
 
-    public static synchronized GammaCorrector getInstance(LX lx) {
-        WeakReference<GammaCorrector> weakRef = instanceByLX.get(lx);
-        GammaCorrector ref = weakRef == null ? null : weakRef.get();
+    public static synchronized GammaExpander getInstance(LX lx) {
+        WeakReference<GammaExpander> weakRef = instanceByLX.get(lx);
+        GammaExpander ref = weakRef == null ? null : weakRef.get();
         if (ref == null) {
-            instanceByLX.put(lx, new WeakReference<>(ref = new GammaCorrector(lx)));
+            instanceByLX.put(lx, new WeakReference<>(ref = new GammaExpander(lx)));
         }
         return ref;
     }
 
-    private GammaCorrector(LX lx) {
-        super(lx, "GammaCorrector");
+    private GammaExpander(LX lx) {
+        super(lx, "GammaExpander");
 
         addParameter(enabled);
         addParameter(gammaSetIndex);
@@ -52,10 +52,10 @@ public class GammaCorrector extends LXComponent {
 
         initialize();
 
-        lx.engine.registerComponent("gammaCorrector", this);
+        lx.engine.registerComponent("GammaExpander", this);
     }
 
-    public int getCorrectedColor(int c) {
+    public int getExpandedColor(int c) {
         if (!enabled.isOn())
             return c;
 
@@ -72,7 +72,7 @@ public class GammaCorrector extends LXComponent {
                 | green << LXColor.GREEN_SHIFT | blue;
     }
 
-    public byte getCorrectedRed(int c) {
+    public byte getExpandedRed(int c) {
         byte r = (byte)(c >> 16 & 0xFF);
 
         if (!enabled.isOn())
@@ -81,7 +81,7 @@ public class GammaCorrector extends LXComponent {
         return redGamma[r];
     }
 
-    public byte getCorrectedGreen(int c) {
+    public byte getExpandedGreen(int c) {
         byte g = (byte)(c >> 8 & 0xFF);
 
         if (!enabled.isOn())
@@ -90,7 +90,7 @@ public class GammaCorrector extends LXComponent {
         return greenGamma[g];
     }
 
-    public byte getCorrectedBlue(int c) {
+    public byte getExpandedBlue(int c) {
         byte b = (byte)(c & 0xFF);
 
         if (!enabled.isOn())
