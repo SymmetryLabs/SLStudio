@@ -32,6 +32,14 @@ run {
 
 	// To select a layout from the command line, "gradlew run -Playout=cubes"
 	systemProperty 'com.symmetrylabs.layout', findProperty('layout')
+
+	doLast {
+		while (file(".restart").exists()) {
+			file(".restart").delete()
+			println 'Restarting...'
+			run.exec()
+		}
+	}
 }
 
 docker {

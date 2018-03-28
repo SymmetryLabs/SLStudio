@@ -28,6 +28,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 public class SLStudio extends PApplet {
     public static SLStudio applet;
     static final String LAYOUT_FILE_NAME = ".layout";
+    static final String RESTART_FILE_NAME = ".restart";
 
     private SLStudioLX lx;
     private Layout layout;
@@ -57,8 +58,7 @@ public class SLStudio extends PApplet {
     /** Gets the layout name from the -Playout= argument or .layout file. */
     public String getSelectedLayoutName() {
         String layoutName = System.getProperty("com.symmetrylabs.layout");
-        if (layoutName != null) return layoutName;
-        if (args != null && args.length > 0) return args[0];
+        if (layoutName != null && !layoutName.isEmpty()) return layoutName;
         String[] lines = loadStrings(LAYOUT_FILE_NAME);
         if (lines != null && lines.length > 0) return lines[0].trim();
         return null;
@@ -80,6 +80,8 @@ public class SLStudio extends PApplet {
 
         String layoutName = getSelectedLayoutName();
         saveSelectedLayoutName(layoutName);
+        println("\n---- Layout: " + layoutName + " ----");
+
         layout = LayoutRegistry.getLayout(this, layoutName);
         LXModel model = layout.buildModel();
         printModelStats(model);
@@ -139,7 +141,6 @@ public class SLStudio extends PApplet {
     }
 
     void printModelStats(LXModel model) {
-        println("-- Model ----");
         println("# of points: " + model.points.length);
         println("model.xMin: " + model.xMin);
         println("model.xMax: " + model.xMax);
