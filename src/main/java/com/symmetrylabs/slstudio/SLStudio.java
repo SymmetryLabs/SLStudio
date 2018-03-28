@@ -3,10 +3,6 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.layouts.cubes.CubesLayout;
-import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
-import com.symmetrylabs.layouts.oslo.OsloLayout;
-import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
@@ -18,12 +14,6 @@ import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.palettes.ArrayPalette;
-import com.symmetrylabs.slstudio.palettes.ImageLibrary;
-import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
-import com.symmetrylabs.slstudio.palettes.PaletteExtractor;
-import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
-import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
@@ -37,6 +27,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudio extends PApplet {
     public static SLStudio applet;
+    static final String LAYOUT_FILE_NAME = ".layout";
 
     private SLStudioLX lx;
     private Layout layout;
@@ -63,6 +54,23 @@ public class SLStudio extends PApplet {
         size(displayWidth, displayHeight, P3D);
     }
 
+    /** Gets the layout name from the -Playout= argument or .layout file. */
+    public String getSelectedLayoutName() {
+        String layoutName = System.getProperty("com.symmetrylabs.layout");
+        if (layoutName != null) return layoutName;
+        if (args != null && args.length > 0) return args[0];
+        String[] lines = loadStrings(LAYOUT_FILE_NAME);
+        if (lines != null && lines.length > 0) return lines[0].trim();
+        return null;
+    }
+
+    /** Writes out a layout name as the default layout on next startup. */
+    public void saveSelectedLayoutName(String layoutName) {
+        if (layoutName != null) {
+            saveStrings(LAYOUT_FILE_NAME, new String[] {layoutName});
+        }
+    }
+
     @Override
     public void setup() {
         long setupStart = System.nanoTime();
@@ -70,7 +78,9 @@ public class SLStudio extends PApplet {
 
         Utils.setSketchPath(sketchPath());
 
-        layout = LayoutRegistry.getLayout(this, args.length > 0 ? args[0] : null);
+        String layoutName = getSelectedLayoutName();
+        saveSelectedLayoutName(layoutName);
+        layout = LayoutRegistry.getLayout(this, layoutName);
         LXModel model = layout.buildModel();
         printModelStats(model);
 
