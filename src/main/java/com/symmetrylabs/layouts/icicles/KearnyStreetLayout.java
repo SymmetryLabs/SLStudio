@@ -43,6 +43,8 @@ public class KearnyStreetLayout implements Layout {
 
     static final float INCHES_PER_METER = 39.3701f;
 
+    static final float SPACING = 60f*12f;
+
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 0;
@@ -52,7 +54,12 @@ public class KearnyStreetLayout implements Layout {
     static final float globalRotationZ = 0;
 
     static IcicleConfig[] ICICLE_CONFIG = {
-        new IcicleConfig("0", 0, 0, 0, 0, 0, 0, new Icicle.Metrics(70, 0.5f)),
+        new IcicleConfig("0", SPACING*0, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
+        new IcicleConfig("0", SPACING*1, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
+        new IcicleConfig("0", SPACING*2, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
+        new IcicleConfig("0", SPACING*3, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
+        new IcicleConfig("0", SPACING*4, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
+        new IcicleConfig("0", SPACING*5, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
     };
 
     static class IcicleConfig {
