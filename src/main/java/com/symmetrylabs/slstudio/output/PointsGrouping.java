@@ -7,7 +7,6 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
-
 public class PointsGrouping {
     public final static boolean REVERSE_ORDERING = true;
 
@@ -52,23 +51,29 @@ public class PointsGrouping {
     }
 
     public PointsGrouping addPoints(List<LXPoint> pointsToAdd, boolean reverseOrdering) {
-// Aaron - actually flip the array by creating a copy and flipping it- i think the orig is immutable?
-        //    System.out.println(pointsToAdd);
-    //    System.out.println(Arrays.toString(pointsToAdd.toArray()));
+        if (reverseOrdering) {
+          pointsToAdd = new ArrayList<LXPoint>(pointsToAdd);
+            Collections.reverse(pointsToAdd);
+        }
 
-    //    if (reverseOrdering) {
-            List<LXPoint> revPoints = new ArrayList<LXPoint>(pointsToAdd);
+        addPoints(pointsToAdd);
+        return this;
+    }
 
-            Collections.reverse((revPoints));
-    //    System.out.println("caught!");
+    public PointsGrouping addPoints(LXPoint[] pointsToAdd) {
+        for (LXPoint p : pointsToAdd) {
+            this.points.add(p);
+        }
+        return this;
+    }
 
-    //    }
+    public PointsGrouping addPoints(LXPoint[] pointsToAdd, boolean reverseOrdering) {
+        if (reverseOrdering) {
+            pointsToAdd = pointsToAdd.clone();
+            Collections.reverse(pointsToAdd);
+        }
 
-//        System.out.println(pointsToAdd);
-
-//        System.out.println(Arrays.toString(revPoints.toArray()));
-
-        addPoints(revPoints);
+        addPoints(pointsToAdd);
         return this;
     }
 }

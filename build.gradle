@@ -106,6 +106,9 @@ dependencies {
 	compile files('libs/P3LX.jar')
 
 	compile files('libs/minim.jar')
+
+	// pixelpusher
+	compile files('libs/core.jar')
 }
 
 jar {
