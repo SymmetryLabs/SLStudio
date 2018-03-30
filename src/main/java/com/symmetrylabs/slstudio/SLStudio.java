@@ -106,8 +106,8 @@ public class SLStudio extends PApplet {
                 SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
 
-                SLStudio.this.performanceManager = new PerformanceManager(lx);
-                lx.engine.registerComponent("performanceManager", performanceManager);
+                // SLStudio.this.performanceManager = new PerformanceManager(lx);
+                // lx.engine.registerComponent("performanceManager", performanceManager);
 
                 blobTracker = BlobTracker.getInstance(lx);
 
@@ -134,7 +134,7 @@ public class SLStudio extends PApplet {
         lx.engine.audio.enabled.setValue(false);
         lx.engine.output.enabled.setValue(true);
 
-        performanceManager.start(lx.ui);
+    //performanceManager.start(lx.ui);
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
