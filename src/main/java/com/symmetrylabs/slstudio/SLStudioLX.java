@@ -5,6 +5,7 @@ import java.io.File;
 import com.google.gson.JsonObject;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.LayoutRegistry;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.event.KeyEvent;
@@ -50,6 +51,8 @@ import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
 import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.util.MarkerSource;
 
+import javax.swing.*;
+
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudioLX extends P3LX {
@@ -58,6 +61,7 @@ public class SLStudioLX extends P3LX {
     private static final String DEFAULT_PROJECT_FILE = "default.lxp";
     private static final String PROJECT_FILE_NAME = ".lxproject";
     private static final String KEY_UI = "ui";
+    private static final int RESTART_EXIT_CODE = 999;
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
         public final PreviewWindow preview;
@@ -121,7 +125,7 @@ public class SLStudioLX extends P3LX {
             this.preview.addComponent(markerPainter);
 
             new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
-            
+
             new UIImage(applet.loadImage("symmetry-labs-logo.png"), 4, 4)
             .setDescription("Symmetry Labs")
             .addToContainer(leftPane);
@@ -167,6 +171,22 @@ public class SLStudioLX extends P3LX {
                         togglePerformanceMode();
                     } else if (keyChar == "v".charAt(0)) {
                         lx.ui.preview.toggleVisible();
+                    } else if (keyChar == 'l') {
+                        /*
+                        JOptionPane pane = new JOptionPane("Available layouts are:", JOptionPane.QUESTION_MESSAGE);
+                        pane.setOptions(LayoutRegistry.getNames().toArray());
+                        pane.createDialog("Select layout").show();
+                        String result = (String) pane.getValue();
+                        String names = String.join(", ", LayoutRegistry.getNames());
+                        */
+                        String layoutName = (String) JOptionPane.showInputDialog(
+                            null, "Select a layout and click OK to restart.", "Select layout",
+                            JOptionPane.QUESTION_MESSAGE, null, LayoutRegistry.getNames().toArray(), null);
+                        if (layoutName != null) {
+                            applet.saveStrings(SLStudio.LAYOUT_FILE_NAME, new String[]{layoutName});
+                            applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
+                            applet.exit();
+                        }
                     }
                     if (engine.getFocusedChannel() instanceof LXChannel) {
                         LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();

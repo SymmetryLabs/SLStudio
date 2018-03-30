@@ -5,6 +5,7 @@ build/
 *.swp
 *.iml
 .idea
+.layout
 .lxproject
 *.sublime-workspace
 application.macosx

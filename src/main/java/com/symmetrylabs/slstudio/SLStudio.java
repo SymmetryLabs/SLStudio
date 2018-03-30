@@ -3,12 +3,9 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.layouts.cubes.CubesLayout;
-import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
-import com.symmetrylabs.layouts.oslo.OsloLayout;
-import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
+import com.symmetrylabs.layouts.LayoutRegistry;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -17,12 +14,6 @@ import heronarts.lx.output.OPCOutput;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.palettes.ArrayPalette;
-import com.symmetrylabs.slstudio.palettes.ImageLibrary;
-import com.symmetrylabs.slstudio.palettes.LinePaletteExtractor;
-import com.symmetrylabs.slstudio.palettes.PaletteExtractor;
-import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
-import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
 import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
@@ -36,6 +27,8 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudio extends PApplet {
     public static SLStudio applet;
+    static final String LAYOUT_FILE_NAME = ".layout";
+    static final String RESTART_FILE_NAME = ".restart";
 
     private SLStudioLX lx;
     private Layout layout;
@@ -51,21 +44,31 @@ public class SLStudio extends PApplet {
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
 
-    static public void main(String[] passedArgs) {
+    static public void main(String[] args) {
         System.setProperty("com.aparapi.enableShowGeneratedOpenCL", "true");
         System.setProperty("com.aparapi.dumpProfilesOnExit", "true");
-
-        String[] appletArgs = new String[] { SLStudio.class.getName() };
-        if (passedArgs != null) {
-            PApplet.main(concat(appletArgs, passedArgs));
-        } else {
-            PApplet.main(appletArgs);
-        }
+        PApplet.main(concat(new String[] { SLStudio.class.getName() }, args));
     }
 
     @Override
     public void settings() {
         size(displayWidth, displayHeight, P3D);
+    }
+
+    /** Gets the layout name from the -Playout= argument or .layout file. */
+    public String getSelectedLayoutName() {
+        String layoutName = System.getProperty("com.symmetrylabs.layout");
+        if (layoutName != null && !layoutName.isEmpty()) return layoutName;
+        String[] lines = loadStrings(LAYOUT_FILE_NAME);
+        if (lines != null && lines.length > 0) return lines[0].trim();
+        return null;
+    }
+
+    /** Writes out a layout name as the default layout on next startup. */
+    public void saveSelectedLayoutName(String layoutName) {
+        if (layoutName != null) {
+            saveStrings(LAYOUT_FILE_NAME, new String[] {layoutName});
+        }
     }
 
     @Override
@@ -75,11 +78,11 @@ public class SLStudio extends PApplet {
 
         Utils.setSketchPath(sketchPath());
 
-        // Instantiate the desired layout here.
-        layout = new CubesLayout();
-//    layout = new DynamicLayout();
-//         layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+        String layoutName = getSelectedLayoutName();
+        saveSelectedLayoutName(layoutName);
+        println("\n---- Layout: " + layoutName + " ----");
 
+        layout = LayoutRegistry.getLayout(this, layoutName);
         LXModel model = layout.buildModel();
         printModelStats(model);
 
@@ -103,8 +106,8 @@ public class SLStudio extends PApplet {
                 SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
 
-                SLStudio.this.performanceManager = new PerformanceManager(lx);
-                lx.engine.registerComponent("performanceManager", performanceManager);
+                // SLStudio.this.performanceManager = new PerformanceManager(lx);
+                // lx.engine.registerComponent("performanceManager", performanceManager);
 
                 blobTracker = BlobTracker.getInstance(lx);
 
@@ -131,14 +134,13 @@ public class SLStudio extends PApplet {
         lx.engine.audio.enabled.setValue(false);
         lx.engine.output.enabled.setValue(true);
 
-        performanceManager.start(lx.ui);
+    //performanceManager.start(lx.ui);
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
     }
 
     void printModelStats(LXModel model) {
-        println("-- Model ----");
         println("# of points: " + model.points.length);
         println("model.xMin: " + model.xMin);
         println("model.xMax: " + model.xMax);
