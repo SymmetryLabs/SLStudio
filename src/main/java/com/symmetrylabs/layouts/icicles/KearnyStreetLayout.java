@@ -43,7 +43,7 @@ public class KearnyStreetLayout implements Layout {
 
     static final float INCHES_PER_METER = 39.3701f;
 
-    static final float SPACING = 60f*12f;
+    static final float SPACING = 6f*12f;
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;

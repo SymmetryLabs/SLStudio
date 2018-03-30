@@ -23,7 +23,7 @@ public class SLPixelPusherManager {
         registry.startPushing();
     }
 
-    public void createDataline(PointsGrouping pointsGrouping) {
+    public void addDataline(PointsGrouping pointsGrouping) {
         lx.addOutput(new PixelPusherDataline(lx, pointsGrouping));
     }
 
@@ -50,7 +50,7 @@ public class SLPixelPusherManager {
 
         @Override
         protected void onSend(int[] colors) {
-            Strip strip = registry.getStrips(pointsGrouping.id).get(0);
+            Strip strip = registry.getStrips(Integer.parseInt(pointsGrouping.id)).get(0);
 
             if (strip != null) {
                 int i = 0;

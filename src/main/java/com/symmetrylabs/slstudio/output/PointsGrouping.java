@@ -61,19 +61,10 @@ public class PointsGrouping {
     }
 
     public PointsGrouping addPoints(LXPoint[] pointsToAdd) {
-        for (LXPoint p : pointsToAdd) {
-            this.points.add(p);
-        }
-        return this;
+        return addPoints(new ArrayList<>(Arrays.asList(pointsToAdd)));
     }
 
     public PointsGrouping addPoints(LXPoint[] pointsToAdd, boolean reverseOrdering) {
-        if (reverseOrdering) {
-            pointsToAdd = pointsToAdd.clone();
-            Collections.reverse(pointsToAdd);
-        }
-
-        addPoints(pointsToAdd);
-        return this;
+        return addPoints(new ArrayList<>(Arrays.asList(pointsToAdd)), reverseOrdering);
     }
 }

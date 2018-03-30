@@ -14,7 +14,7 @@ public class Strip {
     }
 
     private long pushedAt;
-    private int stripNumber;
+    public int stripNumber;
     private boolean touched;
     private double powerScale;
     private boolean isRGBOW;
