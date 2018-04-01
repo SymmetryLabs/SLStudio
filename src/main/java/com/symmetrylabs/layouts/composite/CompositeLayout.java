@@ -1,6 +1,7 @@
 package com.symmetrylabs.layouts.composite;
 
 import java.util.List;
+import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
@@ -141,16 +142,16 @@ public class CompositeLayout implements Layout {
         for (LeafAssemblageConfig config : LEAF_ASSEMBLAGE_CONFIG) {
             transform.push();
             transform.translate(config.x, config.y, config.z);
-            transform.rotateX(config.rx * PI / 180f);
-            transform.rotateY(config.ry * PI / 180f);
-            transform.rotateZ(config.rz * PI / 180f);
+            transform.rotateX(config.rx * Math.PI / 180f);
+            transform.rotateY(config.ry * Math.PI / 180f);
+            transform.rotateZ(config.rz * Math.PI / 180f);
 
-            TreeModel.LeafAssembage leafAssemblage = new TreeModel.LeafAssemblage(channel, transform);
+            TreeModel.LeafAssemblage leafAssemblage = new TreeModel.LeafAssemblage(config.channel, transform);
             for (int i = 0; i < leafAssemblage.leaves.size(); i++) {
                 strips.add(new Strip(
                     config.id+"_strip"+i,
                     new Strip.Metrics(leafAssemblage.leaves.size()),
-                    leafAssemblage.leaves.get(i).points
+                    new ArrayList<>(Arrays.asList(leafAssemblage.leaves.get(i).points))
                 ));
             }
             transform.pop();
@@ -164,16 +165,16 @@ public class CompositeLayout implements Layout {
         for (BranchConfig config : BRANCH_CONFIG) {
             transform.push();
             transform.translate(config.x, config.y, config.z);
-            transform.rotateX(config.rx * PI / 180f);
-            transform.rotateY(config.ry * PI / 180f);
-            transform.rotateZ(config.rz * PI / 180f);
+            transform.rotateX(config.rx * Math.PI / 180f);
+            transform.rotateY(config.ry * Math.PI / 180f);
+            transform.rotateZ(config.rz * Math.PI / 180f);
 
             TreeModel.Branch branch = new TreeModel.Branch(transform);
             for (int i = 0; i < branch.leaves.size(); i++) {
                 strips.add(new Strip(
                     config.id+"_strip"+i,
                     new Strip.Metrics(branch.leaves.size()),
-                    branch.leaves.get(i).points
+                    new ArrayList<>(Arrays.asList(branch.leaves.get(i).points))
                 ));
             }
             transform.pop();
@@ -182,7 +183,7 @@ public class CompositeLayout implements Layout {
          * TO FINISH....
          */
 
-        return new CompositeModel(strips);
+        return new CompositeModel(); //new CompositeModel(strips);
     }
 
     /*
@@ -270,9 +271,9 @@ public class CompositeLayout implements Layout {
         final float x;
         final float y;
         final float z;
-        final float xr;
-        final float xy;
-        final float zr;
+        final float rx;
+        final float ry;
+        final float rz;
         final int channel;
 
         LeafAssemblageConfig(String id, float[] coordinates, float[] rotations) {
@@ -284,9 +285,9 @@ public class CompositeLayout implements Layout {
             this.x = coordinates[0];
             this.y = coordinates[1];
             this.z = coordinates[2];
-            this.xr = rotations[0];
-            this.yr = rotations[1];
-            this.zr = rotations[2];
+            this.rx = rotations[0];
+            this.ry = rotations[1];
+            this.rz = rotations[2];
             this.channel = channel;
         }
     }
@@ -296,18 +297,18 @@ public class CompositeLayout implements Layout {
         final float x;
         final float y;
         final float z;
-        final float xr;
-        final float xy;
-        final float zr;
+        final float rx;
+        final float ry;
+        final float rz;
 
      BranchConfig(String id, float[] coordinates, float[] rotations) {
             this.id = id;
             this.x = coordinates[0];
             this.y = coordinates[1];
             this.z = coordinates[2];
-            this.xr = rotations[0];
-            this.yr = rotations[1];
-            this.zr = rotations[2];
+            this.rx = rotations[0];
+            this.ry = rotations[1];
+            this.rz = rotations[2];
         }
     }
 }

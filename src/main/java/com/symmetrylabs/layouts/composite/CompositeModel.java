@@ -2,14 +2,13 @@ package com.symmetrylabs.layouts.composite;
 
 import java.util.List;
 
-import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.model.StripsModel;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
 
+import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
+
 public class CompositeModel extends StripsModel<Strip> {
- 
-    private final Map<String, Strip> stripTable = new HashMap<>();
 
     public CompositeModel() {
         this(new ArrayList<>(), new Strip[0]);
@@ -23,10 +22,6 @@ public class CompositeModel extends StripsModel<Strip> {
             this.strips.add(strip);
             this.stripTable.put(strip.id, strip);
         }
-    }
-
-    public Strip getStripById(String id) {
-        return this.stripTable.get(id);
     }
 
     private static class Fixture extends LXAbstractFixture {
