@@ -54,12 +54,50 @@ public class KearnyStreetLayout implements Layout {
     static final float globalRotationZ = 0;
 
     static IcicleConfig[] ICICLE_CONFIG = {
-        new IcicleConfig("0", SPACING*0, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
-        new IcicleConfig("0", SPACING*1, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
-        new IcicleConfig("0", SPACING*2, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
-        new IcicleConfig("0", SPACING*3, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
-        new IcicleConfig("0", SPACING*4, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
-        new IcicleConfig("0", SPACING*5, 0, 0, 0, 0, 90, new Icicle.Metrics(70, 0.5f)),
+        // row 1
+        new IcicleConfig("row1_icicle1", SPACING*0f+SPACING*0.5f, 0, SPACING*6, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row1_icicle2", SPACING*1f+SPACING*0.5f, 0, SPACING*6, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row1_icicle3", SPACING*2f+SPACING*0.5f, 0, SPACING*6, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row1_icicle4", SPACING*3f+SPACING*0.5f, 0, SPACING*6, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+
+        // row 2
+        new IcicleConfig("row2_icicle1", SPACING*0f, 0, SPACING*5f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row2_icicle2", SPACING*1f, 0, SPACING*5f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row2_icicle3", SPACING*2f, 0, SPACING*5f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row2_icicle4", SPACING*3f, 0, SPACING*5f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row2_icicle5", SPACING*4f, 0, SPACING*5f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+
+        // row 3
+        new IcicleConfig("row3_icicle1", SPACING*0f+SPACING*0.5f, 0, SPACING*4, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row3_icicle2", SPACING*1f+SPACING*0.5f, 0, SPACING*4, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row3_icicle3", SPACING*2f+SPACING*0.5f, 0, SPACING*4, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row3_icicle4", SPACING*3f+SPACING*0.5f, 0, SPACING*4, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+
+        // row 4
+        new IcicleConfig("row4_icicle1", SPACING*0f, 0, SPACING*3f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row4_icicle2", SPACING*1f, 0, SPACING*3f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row4_icicle3", SPACING*2f, 0, SPACING*3f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row4_icicle4", SPACING*3f, 0, SPACING*3f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row4_icicle5", SPACING*4f, 0, SPACING*3f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+
+        // row 5
+        new IcicleConfig("row5_icicle1", SPACING*0f+SPACING*0.5f, 0, SPACING*2f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row5_icicle2", SPACING*1f+SPACING*0.5f, 0, SPACING*2f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row5_icicle3", SPACING*2f+SPACING*0.5f, 0, SPACING*2f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row5_icicle4", SPACING*3f+SPACING*0.5f, 0, SPACING*2f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+
+        // row 6
+        new IcicleConfig("row6_icicle1", SPACING*0f, 0, SPACING*1f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row6_icicle2", SPACING*1f, 0, SPACING*1f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row6_icicle3", SPACING*2f, 0, SPACING*1f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row6_icicle4", SPACING*3f, 0, SPACING*1f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row6_icicle5", SPACING*4f, 0, SPACING*1f, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+
+        // row 7
+        new IcicleConfig("row7_icicle1", SPACING*0f+SPACING*0.5f, 0, SPACING*0, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row7_icicle2", SPACING*1f+SPACING*0.5f, 0, SPACING*0, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row7_icicle3", SPACING*2f+SPACING*0.5f, 0, SPACING*0, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
+        new IcicleConfig("row7_icicle4", SPACING*3f+SPACING*0.5f, 0, SPACING*0, 0, 0, -90, new Icicle.Metrics(72, 0.54f)),
     };
 
     static class IcicleConfig {
@@ -138,10 +176,67 @@ public class KearnyStreetLayout implements Layout {
     }
 
     public void setupLx(SLStudioLX lx) {
+        IciclesModel model = (IciclesModel)(lx.model);
         SLPixelPusherManager manager = new SLPixelPusherManager(lx);
-        manager.addDataline(new PointsGrouping("1")
-            .addPoints(((IciclesModel)lx.model).getIcicleByRawIndex(0).points)
-        );
+
+        manager.addDataline("1", new PointsGrouping[] {
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row1_icicle1").points)
+                .addPoints(model.getIcicleById("row1_icicle2").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row1_icicle3").points)
+                .addPoints(model.getIcicleById("row1_icicle4").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row2_icicle1").points)
+                .addPoints(model.getIcicleById("row2_icicle2").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row2_icicle3").points)
+                .addPoints(model.getIcicleById("row2_icicle4").points)
+                .addPoints(model.getIcicleById("row2_icicle5").points)
+        });
+
+        manager.addDataline("2", new PointsGrouping[] {
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row3_icicle1").points)
+                .addPoints(model.getIcicleById("row3_icicle2").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row3_icicle3").points)
+                .addPoints(model.getIcicleById("row3_icicle4").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row4_icicle1").points)
+                .addPoints(model.getIcicleById("row4_icicle2").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row4_icicle3").points)
+                .addPoints(model.getIcicleById("row4_icicle4").points)
+                .addPoints(model.getIcicleById("row4_icicle5").points)
+        });
+
+        manager.addDataline("3", new PointsGrouping[] {
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row5_icicle1").points)
+                .addPoints(model.getIcicleById("row5_icicle2").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row5_icicle3").points)
+                .addPoints(model.getIcicleById("row5_icicle4").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row6_icicle1").points)
+                .addPoints(model.getIcicleById("row6_icicle2").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row6_icicle3").points)
+                .addPoints(model.getIcicleById("row6_icicle4").points)
+                .addPoints(model.getIcicleById("row6_icicle5").points)
+        });
+
+        manager.addDataline("4", new PointsGrouping[] {
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row7_icicle1").points)
+                .addPoints(model.getIcicleById("row7_icicle2").points),
+            new PointsGrouping()
+                .addPoints(model.getIcicleById("row7_icicle3").points)
+                .addPoints(model.getIcicleById("row7_icicle4").points),
+            new PointsGrouping(),
+            new PointsGrouping()
+        });
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

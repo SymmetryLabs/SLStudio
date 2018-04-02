@@ -15,50 +15,41 @@ import com.symmetrylabs.slstudio.output.PointsGrouping;
 public class SLPixelPusherManager {
     private final LX lx;
     private final DeviceRegistry registry = new DeviceRegistry();
-    //private final Observer observer = new Observer();
 
     public SLPixelPusherManager(LX lx) {
         this.lx = lx;
-        //registry.addObserver(observer);
         registry.startPushing();
     }
 
-    public void addDataline(PointsGrouping pointsGrouping) {
-        lx.addOutput(new PixelPusherDataline(lx, pointsGrouping));
+    public void addDataline(String id, PointsGrouping[] pointsGroupings) {
+        lx.addOutput(new PixelPusherDataline(lx, id, pointsGroupings));
     }
 
-    // // Pixel Pushers 'datalines' are referred to as 'strips'
-    // public List<Strip> getStrip(String id) {
-    //   return registry.getStrips(id);
-    // }
-
-    // private static class Observer implements Observer {
-    //   public void update(Observable registry, Object updatedDevice) {
-    //     if (updatedDevice != null) {
-    //       println("Device change: " + updatedDevice);
-    //     }
-    //   };
-    // }
-
     public class PixelPusherDataline extends LXOutput {
-        private final PointsGrouping pointsGrouping;
+        private final String groupId;
+        private final PointsGrouping[] pointsGroupings;
 
-        public PixelPusherDataline(LX lx, PointsGrouping pointsGrouping) {
+        public PixelPusherDataline(LX lx, String groupId, PointsGrouping[] pointsGroupings) {
             super(lx);
-            this.pointsGrouping = pointsGrouping;
+            this.groupId = groupId;
+            this.pointsGroupings = pointsGroupings;
         }
 
         @Override
         protected void onSend(int[] colors) {
-            Strip strip = registry.getStrips(Integer.parseInt(pointsGrouping.id)).get(0);
+            List<Strip> strips = registry.getStrips(Integer.parseInt(groupId));
 
-            if (strip != null) {
-                int i = 0;
-                for (LXPoint point : pointsGrouping.getPoints()) {
-                    strip.setPixel(colors[point.index], i++);
+            // TODO: figure out better way to query individual strips (right now we get back an array of strips per controller)
+            for (int i = 0; i < pointsGroupings.length; i++) {
+                if (i >= strips.size()) {
+                    System.out.println("Number of pointsgroupings doesn't match number of strips on the network");
+                } else {
+                    Strip strip = strips.get(i);
+                    int pi = 0;
+                    for (LXPoint point : pointsGroupings[i].getPoints()) {
+                        strip.setPixel(colors[point.index], pi++);
+                    }
                 }
-            } else {
-                System.out.println("PixelPusher Strip (" + pointsGrouping.id + ") is not currently on the network");
             }
         }
     }
