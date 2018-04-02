@@ -13,6 +13,10 @@ public class PointsGrouping {
     public String id;
     private final List<LXPoint> points = new ArrayList<LXPoint>();
 
+    public PointsGrouping() {
+        this("no-id");
+    }
+
     public PointsGrouping(String id) {
         this.id = id;
     }
