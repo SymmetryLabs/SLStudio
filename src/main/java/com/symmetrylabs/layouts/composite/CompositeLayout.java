@@ -53,39 +53,61 @@ public class CompositeLayout implements Layout {
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
 
+    static final float CUBES_SPACING = 24f+9f;;
+    static final float CUBES_Y_JUMP = 24f+12f;
+
     /**
      * Cubes
      *--------------------------------------------------------------------------------------*/
     static final TowerConfig[] TOWER_CONFIG = {
-        new TowerConfig(0, 0, 0, new String[] {"0"}),
+        new TowerConfig(0, 0, 0, -45, new String[] { "326", "198", "6","50" }),
+        new TowerConfig(CUBES_SPACING * 1, 0, 0, -45, new String[] { "418", "203", "54" }),
+        new TowerConfig(CUBES_SPACING * 2, 0, 0, -45, new String[] { "150", "312", "129" }),
+        new TowerConfig(CUBES_SPACING * 3, 0, 0, -45, new String[] { "172", "79", "111", "177" }),
+        new TowerConfig(CUBES_SPACING * 1.5f, CUBES_Y_JUMP * 3, 0, -45, new String[] {"87"}),   
+        new TowerConfig(CUBES_SPACING * 0.5f, 0, -24*2, -45, new String[] {"340", "135", "391", "390"}),
+        new TowerConfig(CUBES_SPACING * 1.5f, 0, -24*2, -45, new String[] {"182", "398", "94" }),
+        new TowerConfig(CUBES_SPACING * 2.5f, 0, -24*2, -45, new String[] {"29", "30", "199", "27"}),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 2.5f + 6, 0, -24*2, -45, new String[] { "143"}),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * .5f + 6, 0, -24*2, -45, new String[] { "393"}),
+        new TowerConfig(CUBES_SPACING * 1, 0, -24*4, -45, new String[] { "383", "211", "d8:80:39:9b:23:ad"}),
+        new TowerConfig(CUBES_SPACING * 2, 0, -24*4, -45, new String[] { "196", "18", "361"}),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 1+6, 0, -24*4, -45, new String[] { "210"}),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 2+6, 0, -24*4, -45, new String[] { "345"}),
+        new TowerConfig(CubesModel.Cube.Type.SMALL, CUBES_SPACING * 1+12, 0, -24*4, -45, new String[] { "82"}),
+        new TowerConfig(CubesModel.Cube.Type.SMALL, CUBES_SPACING * 2+12, 0, -24*4, -45, new String[] { ""}),
+        new TowerConfig(43.5f, 0, -24*6, -45, new String[] { "74", "63", "33"}),
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, CUBES_SPACING * 1.5f, 0, -24*6, -45, new String[] { "334"}),
+        new TowerConfig(CubesModel.Cube.Type.SMALL, CUBES_SPACING * 1.75f, 0, -24*6, -45, new String[] { "384"})
     };
 
     /**
      * Leaf Assemblages
      *--------------------------------------------------------------------------------------*/
     static final LeafAssemblageConfig[] LEAF_ASSEMBLAGE_CONFIG = {
-        new LeafAssemblageConfig("0", new float[] {100, 0, 0}, new float[] {0, 0, 0})
+        //new LeafAssemblageConfig("0", new float[] {100, 0, 0}, new float[] {0, 0, 0})
     };
 
     /**
      * Branches
      *--------------------------------------------------------------------------------------*/
     static final BranchConfig[] BRANCH_CONFIG = {
-        new BranchConfig("0", new float[] {200, 0, 0}, new float[] {0, 0, 0})
+        new BranchConfig("0", new float[] {300, 50, 0}, new float[] {-30, 0, 40}),
+        new BranchConfig("0", new float[] {300, 45, -5}, new float[] {-45, 0, 0})
     };
 
     /**
      * Icicles
      *--------------------------------------------------------------------------------------*/
     static final IcicleConfig[] ICICLE_CONFIG = {
-        new IcicleConfig("0", new float[] {300, 0, 0}, new float[] {0, 0, 0}, 72)
+        //new IcicleConfig("0", new float[] {300, 0, 0}, new float[] {0, 0, 0}, 72)
     };
 
     /**
      * Butterflies
      *--------------------------------------------------------------------------------------*/
     static final ButterflyConfig[] BUTTERFLY_CONFIG = {
-        new ButterflyConfig("0", new float[] {400, 0, 0}, new float[] {0, 0, 0}, ButterfliesModel.Butterfly.Type.LARGE)
+        //new ButterflyConfig("0", new float[] {400, 0, 0}, new float[] {0, 0, 0}, ButterfliesModel.Butterfly.Type.LARGE)
     };
 
     // /**
@@ -243,6 +265,8 @@ public class CompositeLayout implements Layout {
 
     public void setupLx(SLStudioLX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
+
+
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
@@ -258,8 +282,6 @@ public class CompositeLayout implements Layout {
 
         static final float TOWER_VERTICAL_SPACING = 2.5f;
         static final float TOWER_RISER = 14;
-        static final float SP = 24;
-        static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
         final CubesModel.Cube.Type type;
         final float x;
