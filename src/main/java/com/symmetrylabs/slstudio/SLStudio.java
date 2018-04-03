@@ -3,9 +3,15 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.officeTenere.OfficeCornerBranchModel;
+import com.symmetrylabs.layouts.officeTenere.SingleBranchLayout;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
+import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.LXDatagramOutput;
+import heronarts.lx.output.LXOutput;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;

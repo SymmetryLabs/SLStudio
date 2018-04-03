@@ -1,4 +1,4 @@
-package com.symmetrylabs.layouts.oslo;
+package com.symmetrylabs.layouts.officeTenere;
 
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.SLStudioLX;
@@ -12,22 +12,21 @@ import processing.core.PApplet;
 
 import java.net.SocketException;
 import java.net.UnknownHostException;
-import java.util.List;
 
 import static com.symmetrylabs.util.GetIndices.getIndices;
 
-public class OsloLayout implements Layout {
+public class SingleBranchLayout implements Layout {
     private final PApplet applet;
-    private final TreeModel.ModelMode modelMode;
+    private final OfficeCornerBranchModel.ModelMode modelMode;
 
-    public OsloLayout(PApplet applet, TreeModel.ModelMode modelMode) {
+    public SingleBranchLayout(PApplet applet, OfficeCornerBranchModel.ModelMode modelMode) {
         this.applet = applet;
         this.modelMode = modelMode;
     }
 
     @Override
     public SLModel buildModel() {
-        return new TreeModel(applet, modelMode);
+        return new OfficeCornerBranchModel(applet, modelMode);
     }
 
     public static void addTenereOutput(LX lx, LXFixture fixture, String ip) throws SocketException, UnknownHostException {
@@ -50,14 +49,18 @@ public class OsloLayout implements Layout {
     @Override
     public void setupLx(SLStudioLX lx) {
 
-        String[] ips = new String[]{"10.200.1.64", "10.200.1.67"};
+        // That last 79 host is the lamp
+//        String[] ips = new String[]{"10.200.1.64", "10.200.1.67", "10.200.1.79" };
+
+//        String[] ips = new String[]{"10.200.1.64", "10.200.1.67"};
+        String[] ips = new String[]{"192.168.1.106", "192.168.1.142"};
         int ipidx = 0;
         try {
-            TreeModel tree = (TreeModel) lx.model;
+            OfficeCornerBranchModel tree = (OfficeCornerBranchModel) lx.model;
 
 
-            for (TreeModel.Branch branch : tree.branches) {
-                int pointsPerPacket = TreeModel.Branch.NUM_LEDS / 2;
+            for (OfficeCornerBranchModel.Branch branch : tree.branches) {
+                int pointsPerPacket = OfficeCornerBranchModel.Branch.NUM_LEDS / 2;
                 int[] channels14 = new int[pointsPerPacket];
                 int[] channels58 = new int[pointsPerPacket];
                 for (int i = 0; i < pointsPerPacket; ++i) {
@@ -69,11 +72,11 @@ public class OsloLayout implements Layout {
                 final int[] LEAF_ORDER = {
                     0, 1, 3, 5, 2, 4, 6, 7, 8, 10, 12, 9, 11, 13, 14
                 };
-                for (TreeModel.LeafAssemblage assemblage : branch.assemblages) {
+                for (OfficeCornerBranchModel.LeafAssemblage assemblage : branch.assemblages) {
                     int[] buffer = (assemblage.channel < 4) ? channels14 : channels58;
-                    int pi = (assemblage.channel % 4) * TreeModel.LeafAssemblage.NUM_LEDS;
+                    int pi = (assemblage.channel % 4) * OfficeCornerBranchModel.LeafAssemblage.NUM_LEDS;
                     for (int li : LEAF_ORDER) {
-                        TreeModel.Leaf leaf = assemblage.leaves.get(li);
+                        OfficeCornerBranchModel.Leaf leaf = assemblage.leaves.get(li);
                         for (LXPoint p : leaf.points) {
                             buffer[pi++] = p.index;
                         }
@@ -92,13 +95,13 @@ public class OsloLayout implements Layout {
         }
     }
 
-        @Override
+    @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        ui.preview.addComponent(new UITreeGround(applet));
-        UITreeStructure uiTreeStructure = new UITreeStructure((TreeModel) lx.model);
-        ui.preview.addComponent(uiTreeStructure);
-        UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
-        ui.preview.addComponent(uiTreeLeaves);
-        new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
+//        ui.preview.addComponent(new UITreeGround(applet));
+//        UITreeStructure uiTreeStructure = new UITreeStructure((OfficeCornerBranchModel) lx.model);
+//        ui.preview.addComponent(uiTreeStructure);
+//        UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (OfficeCornerBranchModel) lx.model);
+//        ui.preview.addComponent(uiTreeLeaves);
+//        new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
     }
 }
