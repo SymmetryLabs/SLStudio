@@ -27,6 +27,7 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.layouts.icicles.Icicle;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
@@ -62,22 +63,22 @@ public class CompositeLayout implements Layout {
      * Leaf Assemblages
      *--------------------------------------------------------------------------------------*/
     static final LeafAssemblageConfig[] LEAF_ASSEMBLAGE_CONFIG = {
-        new LeafAssemblageConfig("0", new float[] {0, 0, 0}, new float[] {0, 0, 0})
+        new LeafAssemblageConfig("0", new float[] {100, 0, 0}, new float[] {0, 0, 0})
     };
 
     /**
      * Branches
      *--------------------------------------------------------------------------------------*/
     static final BranchConfig[] BRANCH_CONFIG = {
-        new BranchConfig("0", new float[] {0, 0, 0}, new float[] {0, 0, 0})
+        new BranchConfig("0", new float[] {200, 0, 0}, new float[] {0, 0, 0})
     };
 
-    // /**
-    //  * Icicles
-    //  *--------------------------------------------------------------------------------------*/
-    // static final IcicleConfig[] ICICLE_CONFIG = {
-    //   new IcicleConfig(0, 0, 0, new String[] {"0"}),
-    // };
+    /**
+     * Icicles
+     *--------------------------------------------------------------------------------------*/
+    static final IcicleConfig[] ICICLE_CONFIG = {
+        new IcicleConfig("0", new float[] {300, 0, 0}, new float[] {0, 0, 0}, 72)
+    };
 
     // /**
     //  * Bars
@@ -179,18 +180,31 @@ public class CompositeLayout implements Layout {
             }
             transform.pop();
         }
+
         /**
-         * TO FINISH....
+         * Icicles
+         *--------------------------------------------------------------------------------------*/
+        for (IcicleConfig config : ICICLE_CONFIG) {
+            String id = config.id;
+            float x = config.x;
+            float y = config.y;
+            float z = config.z;
+            float rx = config.rx;
+            float ry = config.ry;
+            float rz = config.rz;
+            Icicle.Metrics metrics = new Icicle.Metrics(config.numPoints, config.pixelPitch);
+
+            Icicle icicle = new Icicle(id, x, y, z, rx, ry, rz, transform, metrics);
+            strips.addAll(icicle.getStrips());
+            transform.pop();
+        }
+
+        /**
+         * TODO: add bars and butterflies
          */
 
-        return new CompositeModel(); //new CompositeModel(strips);
+        return new CompositeModel(strips);
     }
-
-    /*
-    public static LXModel importObjModel() {
-        return new LXModel(new ObjImporter("data", globalTransform).getModels().toArray(new LXModel[0]));
-    }
-    */
 
     private static Map<LX, WeakReference<CompositeLayout>> instanceByLX = new WeakHashMap<>();
 
@@ -309,6 +323,34 @@ public class CompositeLayout implements Layout {
             this.rx = rotations[0];
             this.ry = rotations[1];
             this.rz = rotations[2];
+        }
+    }
+
+    static class IcicleConfig {
+        final String id;
+        final float x;
+        final float y;
+        final float z;
+        final float rx;
+        final float ry;
+        final float rz;
+        final int numPoints;
+        final float pixelPitch;
+
+        IcicleConfig(String id, float[] coordinates, float[] rotations, int numPoints) {
+            this(id, coordinates, rotations, numPoints, 0.54f);
+        }
+
+        IcicleConfig(String id, float[] coordinates, float[] rotations, int numPoints, float pixelPitch) {
+            this.id = id;
+            this.x = coordinates[0];
+            this.y = coordinates[1];
+            this.z = coordinates[2];
+            this.rx = rotations[0];
+            this.ry = rotations[1];
+            this.rz = rotations[2];
+            this.numPoints = numPoints;
+            this.pixelPitch = pixelPitch;
         }
     }
 }

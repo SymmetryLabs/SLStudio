@@ -1,6 +1,8 @@
 package com.symmetrylabs.layouts.composite;
 
 import java.util.List;
+import java.util.Arrays;
+import java.util.ArrayList;
 
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.model.LXAbstractFixture;
@@ -11,7 +13,7 @@ import com.symmetrylabs.slstudio.model.StripsModel;
 public class CompositeModel extends StripsModel<Strip> {
 
     public CompositeModel() {
-        this(new ArrayList<>(), new Strip[0]);
+        this(new ArrayList<>());
     }
 
     public CompositeModel(List<Strip> strips) {
