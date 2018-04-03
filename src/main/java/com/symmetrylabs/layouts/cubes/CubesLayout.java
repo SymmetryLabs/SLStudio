@@ -81,7 +81,7 @@ public class CubesLayout implements Layout {
                 //backrow left to right
         new TowerConfig(0, 0,0, -45, new String[] { "326", "198", "6","50" }),
         new TowerConfig((SP) * 1, 0,0, -45, new String[] { "418", "203", "54" }),
-        new TowerConfig((SP) * 2, 0,0, -45, new String[] { "397", "196", "372" }),
+        new TowerConfig((SP) * 2, 0,0, -45, new String[] { "150", "312", "129" }),
         new TowerConfig((SP) * 3, 0,0, -45, new String[] { "172", "79", "111", "177" }),
         
         // //Back Row Top Center
@@ -92,7 +92,7 @@ public class CubesLayout implements Layout {
 
         //middle 3
         new TowerConfig (SP*.5f, 0, -24*2, -45, new String[] {"340", "135", "391", "390"}),
-        new TowerConfig (SP * 1.5f, 0, -24*2, -45, new String[] {"96", "126", "65" }),
+        new TowerConfig (SP * 1.5f, 0, -24*2, -45, new String[] {"182", "398", "94" }),
         new TowerConfig (SP * 2.5f, 0, -24*2, -45, new String[] {"29", "30", "199", "27"}),
         new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 2.5f + 6, 0, -24*2, -45, new String[] { "143"}),
         new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * .5f + 6, 0, -24*2, -45, new String[] { "393"}),
@@ -100,14 +100,14 @@ public class CubesLayout implements Layout {
         //medium (actual) 345
 
         //middle 2
-        new TowerConfig (SP * 1, 0, -24*4, -45, new String[] { "406hp", "361", "56"}),
-        new TowerConfig (SP * 2, 0, -24*4, -45, new String[] { "82", "186", "383"}),
+        new TowerConfig (SP * 1, 0, -24*4, -45, new String[] { "383", "211", "d8:80:39:9b:23:ad"}),
+        new TowerConfig (SP * 2, 0, -24*4, -45, new String[] { "196", "18", "361"}),
         new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1+6, 0, -24*4, -45, new String[] { "210"}),
         new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 2+6, 0, -24*4, -45, new String[] { "345"}),
         new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1+12, 0, -24*4, -45, new String[] { "82"}),
         new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 2+12, 0, -24*4, -45, new String[] { ""}),
         // front 1
-        new TowerConfig (43.5f, 0, -24*6, -45, new String[] { "419", "343"}),
+        new TowerConfig (43.5f, 0, -24*6, -45, new String[] { "74", "63", "33"}),
         new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1.5f, 0, -24*6, -45, new String[] { "334"}),
         new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1.75f, 0, -24*6, -45, new String[] { "384"}),
 
