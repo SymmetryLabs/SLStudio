@@ -28,6 +28,7 @@ import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.layouts.icicles.Icicle;
+import com.symmetrylabs.layouts.butterflies.ButterfliesModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
@@ -78,6 +79,13 @@ public class CompositeLayout implements Layout {
      *--------------------------------------------------------------------------------------*/
     static final IcicleConfig[] ICICLE_CONFIG = {
         new IcicleConfig("0", new float[] {300, 0, 0}, new float[] {0, 0, 0}, 72)
+    };
+
+    /**
+     * Butterflies
+     *--------------------------------------------------------------------------------------*/
+    static final ButterflyConfig[] BUTTERFLY_CONFIG = {
+        new ButterflyConfig("0", new float[] {400, 0, 0}, new float[] {0, 0, 0}, ButterfliesModel.Butterfly.Type.LARGE)
     };
 
     // /**
@@ -185,6 +193,7 @@ public class CompositeLayout implements Layout {
          * Icicles
          *--------------------------------------------------------------------------------------*/
         for (IcicleConfig config : ICICLE_CONFIG) {
+            transform.push();
             String id = config.id;
             float x = config.x;
             float y = config.y;
@@ -196,6 +205,25 @@ public class CompositeLayout implements Layout {
 
             Icicle icicle = new Icicle(id, x, y, z, rx, ry, rz, transform, metrics);
             strips.addAll(icicle.getStrips());
+            transform.pop();
+        }
+
+        /**
+         * Butterflies
+         *--------------------------------------------------------------------------------------*/
+        for (ButterflyConfig config : BUTTERFLY_CONFIG) {
+            transform.push();
+            String id = config.id;
+            float x = config.x;
+            float y = config.y;
+            float z = config.z;
+            float rx = config.rx;
+            float ry = config.ry;
+            float rz = config.rz;
+            ButterfliesModel.Butterfly.Type type = config.type;
+
+            ButterfliesModel.Butterfly butterfly = new ButterfliesModel.Butterfly(id, x, y, z, rx, ry, rz, type, transform);
+            strips.addAll(butterfly.getStrips());
             transform.pop();
         }
 
@@ -351,6 +379,28 @@ public class CompositeLayout implements Layout {
             this.rz = rotations[2];
             this.numPoints = numPoints;
             this.pixelPitch = pixelPitch;
+        }
+    }
+
+    static class ButterflyConfig {
+        final String id;
+        final float x;
+        final float y;
+        final float z;
+        final float rx;
+        final float ry;
+        final float rz;
+        final ButterfliesModel.Butterfly.Type type;
+
+        ButterflyConfig(String id, float[] coordinates, float[] rotations, ButterfliesModel.Butterfly.Type type) {
+            this.id = id;
+            this.x = coordinates[0];
+            this.y = coordinates[1];
+            this.z = coordinates[2];
+            this.rx = rotations[0];
+            this.ry = rotations[1];
+            this.rz = rotations[2];
+            this.type = type;
         }
     }
 }
