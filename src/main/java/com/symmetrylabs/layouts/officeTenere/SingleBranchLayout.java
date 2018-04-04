@@ -52,7 +52,7 @@ public class SingleBranchLayout implements Layout {
         // That last 79 host is the lamp
 //        String[] ips = new String[]{"10.200.1.64", "10.200.1.67", "10.200.1.79" };
 
-        String[] ips = new String[]{"10.200.1.66", "10.200.1.64", "10.200.1.67"};
+        String[] ips = new String[]{"10.200.1.64", "10.200.1.67"};
         int ipidx = 0;
         try {
             OfficeCornerBranchModel tree = (OfficeCornerBranchModel) lx.model;
