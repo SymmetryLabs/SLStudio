@@ -14,6 +14,10 @@ public class PointsGrouping {
     public String id;
     private final List<LXPoint> points = new ArrayList<LXPoint>();
 
+    public PointsGrouping() {
+        this("no-id");
+    }
+
     public PointsGrouping(String id) {
         this.id = id;
     }
@@ -45,30 +49,26 @@ public class PointsGrouping {
     }
 
     public PointsGrouping addPoints(List<LXPoint> pointsToAdd) {
-        for (LXPoint p : pointsToAdd) {
-            this.points.add(p);
-        }
+        this.points.addAll(pointsToAdd);
+        return this;
+    }
+
+    public PointsGrouping addPoints(LXPoint[] pointsToAdd) {
+        this.points.addAll(Arrays.asList(pointsToAdd));
         return this;
     }
 
     public PointsGrouping addPoints(List<LXPoint> pointsToAdd, boolean reverseOrdering) {
-// Aaron - actually flip the array by creating a copy and flipping it- i think the orig is immutable?
-        //    System.out.println(pointsToAdd);
-    //    System.out.println(Arrays.toString(pointsToAdd.toArray()));
+        List<LXPoint> adjustedPoints = new ArrayList<LXPoint>(pointsToAdd);
+        if (reverseOrdering) {
+            Collections.reverse(adjustedPoints);
+        }
+        addPoints(adjustedPoints);
+        return this;
+    }
 
-    //    if (reverseOrdering) {
-            List<LXPoint> revPoints = new ArrayList<LXPoint>(pointsToAdd);
-
-            Collections.reverse((revPoints));
-    //    System.out.println("caught!");
-
-    //    }
-
-//        System.out.println(pointsToAdd);
-
-//        System.out.println(Arrays.toString(revPoints.toArray()));
-
-        addPoints(revPoints);
+    public PointsGrouping addPoint(LXPoint[] pointsToAdd, boolean reverseOrdering) {
+        addPoints(Arrays.asList(pointsToAdd), reverseOrdering);
         return this;
     }
 }
