@@ -24,6 +24,9 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.layouts.oslo.TreeModel;
@@ -37,7 +40,9 @@ import com.symmetrylabs.util.listenable.ListenableList;
 import com.symmetrylabs.util.listenable.ListListener;
 
 public class CompositeLayout implements Layout {
-    //ListenableList<CubesController> controllers = new ListenableList<>();
+    ListenableList<SLController> controllers = new ListenableList<>();
+
+    List<CubesModel.Cube> cubes = new ArrayList<>();
 
     // for SLController mac address lookup
     static Map<String, String> macToPhysid = new HashMap<>();
@@ -144,8 +149,6 @@ public class CompositeLayout implements Layout {
         /**
          * Cubes
          *--------------------------------------------------------------------------------------*/
-        List<CubesModel.Cube> cubes = new ArrayList<>();
-
         for (TowerConfig config : TOWER_CONFIG) {
             float x = config.x;
             float z = config.z;
@@ -156,8 +159,7 @@ public class CompositeLayout implements Layout {
 
             for (int i = 0; i < config.ids.length; i++) {
                 float y = config.yValues[i];
-                CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, transform, type);
-                cubes.add(cube);
+                cubes.add(new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, transform, type));
             }
         }
 
@@ -266,7 +268,62 @@ public class CompositeLayout implements Layout {
     public void setupLx(SLStudioLX lx) {
         instanceByLX.put(lx, new WeakReference<>(this));
 
+        final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
+        final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
+        networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
+            public void itemAdded(int index, NetworkDevice device) {
+                String macAddr = NetworkUtils.macAddrToString(device.macAddress);
+                String physid = macToPhysid.get(macAddr);
+                if (physid == null) {
+                    physid = macAddr;
+                    System.err.println("WARNING: MAC address not in physid_to_mac.json: " + macAddr);
+                }
+
+                final PointsGrouping points = new PointsGrouping(physid);
+
+                for (CubesModel.Cube cube : cubes) {
+                    if (cube.id.equals(physid)) {
+                        // this should live somewhere
+                        List<Strip> strips = ((StripsModel)cube).getStrips();
+
+                        points.addPoints(strips.get(6).points)
+                                    .addPoints(strips.get(7).points)
+                                    .addPoints(strips.get(8).points)
+                                    .addPoints(strips.get(9).points)
+                                    .addPoints(strips.get(10).points)
+                                    .addPoints(strips.get(11).points)
+                                    .addPoints(strips.get(0).points)
+                                    .addPoints(strips.get(1).points)
+                                    .addPoints(strips.get(2).points)
+                                    .addPoints(strips.get(3).points)
+                                    .addPoints(strips.get(4).points)
+                                    .addPoints(strips.get(5).points);
+                    }
+                }
+
+                final SLController controller = new SLController(lx, device, points);
+                controllers.add(index, controller);
+                dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+            }
+
+            public void itemRemoved(int index, NetworkDevice device) {
+                final SLController controller = controllers.remove(index);
+                dispatcher.dispatchNetwork(() -> {
+                    //lx.removeOutput(controller);
+                });
+            }
+        });
+
+//    lx.addOutput(new SLController(lx, "10.200.1.255"));
+        //lx.addOutput(new LIFXOutput());
+
+        lx.engine.output.enabled.addListener(param -> {
+            boolean isEnabled = ((BooleanParameter) param).isOn();
+            for (SLController controller : controllers) {
+                controller.enabled.setValue(isEnabled);
+            }
+        });
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
