@@ -63,9 +63,10 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
     /** Gets an empty instance of the model class, M. */
     private M getEmptyModel() {
         String modelClassName = new TypeToken<M>(getClass()) {}.getType().getTypeName();
+        String rawModelClassName = modelClassName.replaceAll("<.*", "");
         M emptyModel;
         try {
-            emptyModel = (M) Class.forName(modelClassName).getConstructor().newInstance();
+            emptyModel = (M) Class.forName(rawModelClassName).getConstructor().newInstance();
         } catch (ClassNotFoundException | NoSuchMethodException | IllegalAccessException |
             InstantiationException | InvocationTargetException | ClassCastException e) {
             throw new RuntimeException(
