@@ -8,6 +8,8 @@ import java.util.Map;
 import java.util.HashMap;
 import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
+import java.net.SocketException;
+import java.net.UnknownHostException;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -15,10 +17,12 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
 import heronarts.lx.LX;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 import heronarts.p3lx.ui.UI2dScrollContext;
+import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.SLStudio;
@@ -27,6 +31,7 @@ import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.output.PointsGrouping;
 import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.slstudio.output.SimplePixlite;
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.layouts.oslo.TreeModel;
@@ -38,11 +43,14 @@ import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableList;
 import com.symmetrylabs.util.listenable.ListListener;
+import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 public class CompositeLayout implements Layout {
     ListenableList<SLController> controllers = new ListenableList<>();
 
     List<CubesModel.Cube> cubes = new ArrayList<>();
+    List<TreeModel.Branch> branches = new ArrayList<>();
+    List<ButterfliesModel.Butterfly> butterflies = new ArrayList<>();
 
     // for SLController mac address lookup
     static Map<String, String> macToPhysid = new HashMap<>();
@@ -97,8 +105,8 @@ public class CompositeLayout implements Layout {
      * Branches
      *--------------------------------------------------------------------------------------*/
     static final BranchConfig[] BRANCH_CONFIG = {
-        new BranchConfig("0", new float[] {300, 50, 0}, new float[] {-30, 0, 40}),
-        new BranchConfig("0", new float[] {300, 45, -5}, new float[] {-45, 0, 0})
+        new BranchConfig("branch1", new float[] {300, 50, 0}, new float[] {-30, 0, 40}),
+        new BranchConfig("branch2", new float[] {300, 45, -5}, new float[] {-45, 0, 0})
     };
 
     /**
@@ -112,7 +120,8 @@ public class CompositeLayout implements Layout {
      * Butterflies
      *--------------------------------------------------------------------------------------*/
     static final ButterflyConfig[] BUTTERFLY_CONFIG = {
-        //new ButterflyConfig("0", new float[] {400, 0, 0}, new float[] {0, 0, 0}, ButterfliesModel.Butterfly.Type.LARGE)
+        new ButterflyConfig("butterfly1", new float[] {270, 50, -25}, new float[] {0, 80, -40}, ButterfliesModel.Butterfly.Type.SHARP_CURVY),
+        new ButterflyConfig("butterfly2", new float[] {300, 50, -30}, new float[] {0, 70, -5}, ButterfliesModel.Butterfly.Type.CURVY)
     };
 
     // /**
@@ -193,8 +202,6 @@ public class CompositeLayout implements Layout {
         /**
          * Branches
          *--------------------------------------------------------------------------------------*/
-        List<TreeModel.Branch> branches = new ArrayList<>();
-
         for (BranchConfig config : BRANCH_CONFIG) {
             transform.push();
             transform.translate(config.x, config.y, config.z);
@@ -203,6 +210,7 @@ public class CompositeLayout implements Layout {
             transform.rotateZ(config.rz * Math.PI / 180f);
 
             TreeModel.Branch branch = new TreeModel.Branch(transform);
+            branches.add(branch);
             for (int i = 0; i < branch.leaves.size(); i++) {
                 strips.add(new Strip(
                     config.id+"_strip"+i,
@@ -247,6 +255,7 @@ public class CompositeLayout implements Layout {
             ButterfliesModel.Butterfly.Type type = config.type;
 
             ButterfliesModel.Butterfly butterfly = new ButterfliesModel.Butterfly(id, x, y, z, rx, ry, rz, type, transform);
+            butterflies.add(butterfly);
             strips.addAll(butterfly.getStrips());
             transform.pop();
         }
@@ -271,6 +280,7 @@ public class CompositeLayout implements Layout {
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
+        // Put cubes on SLControllers
         networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
             public void itemAdded(int index, NetworkDevice device) {
                 String macAddr = NetworkUtils.macAddrToString(device.macAddress);
@@ -315,18 +325,37 @@ public class CompositeLayout implements Layout {
             }
         });
 
-//    lx.addOutput(new SLController(lx, "10.200.1.255"));
-        //lx.addOutput(new LIFXOutput());
-
         lx.engine.output.enabled.addListener(param -> {
             boolean isEnabled = ((BooleanParameter) param).isOn();
             for (SLController controller : controllers) {
                 controller.enabled.setValue(isEnabled);
             }
         });
+
+        // Put branches on TenereDatagrams
+        try {
+            addTenereDatagram(lx, new PointsGrouping(branches.get(0).points).getIndicesInRange(0, 420),   (byte) 0x00, "10.200.1.67");
+            addTenereDatagram(lx, new PointsGrouping(branches.get(0).points).getIndicesInRange(420, 840), (byte) 0x04, "10.200.1.67");
+            addTenereDatagram(lx, new PointsGrouping(branches.get(1).points).getIndicesInRange(0, 420),   (byte) 0x00, "10.200.1.81");
+            addTenereDatagram(lx, new PointsGrouping(branches.get(1).points).getIndicesInRange(420, 840), (byte) 0x04, "10.200.1.81");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        // Put the butterflies on Pixlite
+        lx.addOutput(new SimplePixlite(lx, "10.200.1.10")
+            .addPixliteOutput(new PointsGrouping("1", butterflies.get(0).points))
+            .addPixliteOutput(new PointsGrouping("2", butterflies.get(1).points))
+        );
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
+    }
+
+    public static void addTenereDatagram(LX lx, int[] indices, byte channel, String ip) throws SocketException, UnknownHostException {
+        lx.addOutput(
+            new LXDatagramOutput(lx).addDatagram(new TenereDatagram(lx, indices, channel).setAddress(ip).setPort(1337))
+        );
     }
 
     static class TowerConfig {
