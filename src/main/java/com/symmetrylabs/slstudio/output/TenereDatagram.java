@@ -26,12 +26,6 @@ public class TenereDatagram extends OPCDatagram {
         public TenereDatagram(LX lx, int[] indices, byte channel) {
                 super(indices, channel);
                 this.brightness = lx.engine.output.brightness;
-
-                System.out.println("indices length: " + indices.length);
-                for (int i = 0; i < indices.length; i++) {
-                        System.out.print(indices[i] + ", ");
-                }
-                System.out.println("");
         }
 
         @Override
