@@ -135,27 +135,27 @@ public class DeckWindow extends UIWindow {
                 break;
         }
 
-        LXEffect b = channel.getEffect("Blur");
-        if (b == null) {
-            b = new BlurEffect(lx);
-            channel.addEffect(b);
-        }
-        b.enabled.setValue(true);
+        // LXEffect b = channel.getEffect("Blur");
+        // if (b == null) {
+        //     b = new BlurEffect(lx);
+        //     channel.addEffect(b);
+        // }
+        // b.enabled.setValue(true);
 
 
-        LXEffect cs = channel.getEffect("ColorShift");
-        if (cs == null) {
-            cs = new ColorShiftEffect(lx);
-            channel.addEffect(cs);
-        }
-        cs.enabled.setValue(true);
+        // LXEffect cs = channel.getEffect("ColorShift");
+        // if (cs == null) {
+        //     cs = new ColorShiftEffect(lx);
+        //     channel.addEffect(cs);
+        // }
+        // cs.enabled.setValue(true);
 
-        pm.blurs[slot] = b.getParameter("amount");
-        pm.colors[slot] = cs.getParameter("shift");
+        // pm.blurs[slot] = b.getParameter("amount");
+        // pm.colors[slot] = cs.getParameter("shift");
 
-        for (int i = 0; i < 4; i++) {
-            println(i, pm.blurs[i], pm.colors[i]);
-        }
+        // for (int i = 0; i < 4; i++) {
+        //     println(i, pm.blurs[i], pm.colors[i]);
+        // }
 
 
     }
