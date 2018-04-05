@@ -280,6 +280,10 @@ public class CompositeLayout implements Layout {
         final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
+        /**
+         * TODO: We need to workout a slick way of arbitrarily mapping points to controllers...
+         */
+
         // Put cubes on SLControllers
         networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
             public void itemAdded(int index, NetworkDevice device) {
