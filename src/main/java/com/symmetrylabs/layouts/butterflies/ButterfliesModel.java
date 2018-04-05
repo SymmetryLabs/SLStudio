@@ -126,9 +126,9 @@ public class ButterfliesModel extends StripsModel<ButterfliesModel.Wing> {
             private Fixture(String id, float x, float y, float z, float rx, float ry, float rz, Butterfly.Type type, LXTransform transform) {
                 transform.push();
                 transform.translate(x, y, z);
-                transform.rotateX(rx / PI * 180f);
-                transform.rotateY(ry / PI * 180f);
-                transform.rotateZ(rz / PI * 180f);
+                transform.rotateX(rx * PI / 180f);
+                transform.rotateY(ry * PI / 180f);
+                transform.rotateZ(rz * PI / 180f);
 
                 // Precompute boundary coordinates for faster rendering, these
                 // can be dumped into a VBO for a shader.
