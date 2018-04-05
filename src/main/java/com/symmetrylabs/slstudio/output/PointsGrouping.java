@@ -22,12 +22,34 @@ public class PointsGrouping {
         this.id = id;
     }
 
+    public PointsGrouping(List<LXPoint> points) {
+        this("no-id", points);
+    }
+
+    public PointsGrouping(LXPoint[] points) {
+        this("ni-id", points);
+    }
+
+    public PointsGrouping(String id, List<LXPoint> points) {
+        this.id = id;
+        addPoints(points);
+    }
+
+    public PointsGrouping(String id, LXPoint[] points) {
+        this.id = id;
+        addPoints(points);
+    }
+
     public List<LXPoint> getPoints() {
         return points;
     }
 
     public LXPoint getPoint(int i) {
         return points.get(i);
+    }
+
+    public List<LXPoint> getPointsInRange(int fromIndex, int toIndex) {
+        return points.subList(fromIndex, toIndex);
     }
 
     public int size() {
@@ -41,6 +63,10 @@ public class PointsGrouping {
             indices[i] = points.get(i).index;
         }
         return indices;
+    }
+
+    public int[] getIndicesInRange(int fromIndex, int toIndex) {
+        return Arrays.copyOfRange(getIndices(), fromIndex, toIndex);
     }
 
     public PointsGrouping reversePoints() {
