@@ -7,7 +7,7 @@ import heronarts.lx.parameter.BoundedParameter;
 
 
 public class ColorShiftEffect extends SLEffect {
-    public BoundedParameter shift = new BoundedParameter("shift", 0, 360);
+    public BoundedParameter shift = new BoundedParameter("Shift", 0, 360);
 
     private final ColorShiftKernel kernel = new ColorShiftKernel();
 

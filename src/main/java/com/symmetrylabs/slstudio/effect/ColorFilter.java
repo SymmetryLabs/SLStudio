@@ -9,9 +9,9 @@ import heronarts.lx.parameter.CompoundParameter;
 
 public class ColorFilter extends LXEffect {
 
-    public final CompoundParameter hue = new CompoundParameter("hue", 0, 0, 360);
+    public final CompoundParameter hue = new CompoundParameter("Hue", 0, 0, 360);
 
-    public final CompoundParameter saturation = new CompoundParameter("sat", 100, 0, 100);
+    public final CompoundParameter saturation = new CompoundParameter("Sat", 100, 0, 100);
 
     public ColorFilter(LX lx) {
         super(lx);

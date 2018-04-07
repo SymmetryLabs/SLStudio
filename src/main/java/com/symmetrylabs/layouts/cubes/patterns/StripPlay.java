@@ -17,9 +17,9 @@ import static com.symmetrylabs.util.MathUtils.random;
 public class StripPlay extends SLPattern<CubesModel> {
     private final int NUM_OSC = 300;
     private final int MAX_PERIOD = 20000;
-    private CompoundParameter brightParameter = new CompoundParameter("bright", 96, 70, 100);
-    private CompoundParameter hueSpread = new CompoundParameter("hueSpread", 1);
-    private CompoundParameter speed = new CompoundParameter("speed", .5);
+    private CompoundParameter brightParameter = new CompoundParameter("Bright", 96, 70, 100);
+    private CompoundParameter hueSpread = new CompoundParameter("HueVar", 1);
+    private CompoundParameter speed = new CompoundParameter("Speed", .5);
     private CompoundParameter xSpeed = new CompoundParameter("xSpeed", 2000, 500, MAX_PERIOD);
     private CompoundParameter ySpeed = new CompoundParameter("ySpeed", 1600, 500, MAX_PERIOD);
     private CompoundParameter zSpeed = new CompoundParameter("zSpeed", 1000, 500, MAX_PERIOD);
