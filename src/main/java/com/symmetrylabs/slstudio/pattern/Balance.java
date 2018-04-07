@@ -17,7 +17,7 @@ import heronarts.lx.transform.LXVector;
 
 public class Balance extends LXPattern {
 
-    final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
+
 
     class Sphere {
         float x, y, z;
@@ -32,10 +32,11 @@ public class Balance extends LXPattern {
     SinLFO rotationY = new SinLFO(-Math.PI / 16, Math.PI / 16, 7000);
     SinLFO rotationZ = new SinLFO(-Math.PI / 16, Math.PI / 16, 11000);
     SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 5000 - 4500 * 0.5f);
-    final CompoundParameter phaseParam = new CompoundParameter("Spd", 0.5f);
-    final CompoundParameter crazyParam = new CompoundParameter("Crzy", 0.2f);
-
-
+    
+    
+        final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.2f);
+        final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
+        final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5f);
     private final Sphere[] spheres;
     private final float centerX, centerY, centerZ, modelHeight, modelWidth, modelDepth;
     SinLFO heightMod = new SinLFO(0.8, 1.9, 17298);

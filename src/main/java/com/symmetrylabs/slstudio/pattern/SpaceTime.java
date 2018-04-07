@@ -18,8 +18,8 @@ public class SpaceTime extends SLPattern<StripsModel<Strip>> {
     SinLFO falloff = new SinLFO(10, 70, 5000);
     float angle = 0;
 
-    CompoundParameter rateParameter = new CompoundParameter("RATE", 0.5);
-    CompoundParameter sizeParameter = new CompoundParameter("SIZE", 0.5);
+    CompoundParameter rateParameter = new CompoundParameter("Speed", 0.5);
+    CompoundParameter sizeParameter = new CompoundParameter("Size", 0.5);
 
     public SpaceTime(LX lx) {
         super(lx);

@@ -218,13 +218,13 @@ public abstract class DPat extends SLPattern<SLModel> {
     public DPat(LX lx) {
         super(lx);
 
-        pSpark = addParam("Sprk", 0);
+        pSpark = addParam("Spark", 0);
         pWave = addParam("Wave", 0);
-        pTransX = addParam("TrnX", .5);
-        pTransY = addParam("TrnY", .5);
-        pRotX = addParam("RotX", .5);
-        pRotY = addParam("RotY", .5);
-        pRotZ = addParam("RotZ", .5);
+        pTransX = addParam("xPos", .5);
+        pTransY = addParam("yPos", .5);
+        pRotX = addParam("xRot", .5);
+        pRotY = addParam("yRot", .5);
+        pRotZ = addParam("zRot", .5);
         pSpin = addParam("Spin", .5);
 
         pXsym = new BooleanParameter("X-SYM");

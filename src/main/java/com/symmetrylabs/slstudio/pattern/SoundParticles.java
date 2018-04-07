@@ -40,13 +40,13 @@ public class SoundParticles extends LXPattern {
     public GraphicMeter eq = null;
     public CompoundParameter spark = new CompoundParameter("Spark", 0);
     public CompoundParameter magnitude = new CompoundParameter("Mag", 0.1, 1);
-    public CompoundParameter scale = new CompoundParameter("scale", 1, .8, 1.2);
+    public CompoundParameter scale = new CompoundParameter("Scale", 1, .8, 1.2);
     public CompoundParameter spin = new CompoundParameter("Spin", .5, 0, 1);
     public CompoundParameter sizeV = new CompoundParameter("Size", .33, 0, 1);
     public CompoundParameter speed = new CompoundParameter("Speed", 16, 0, 500);
     public CompoundParameter colorWheel = new CompoundParameter("Color", 0, 0, 360);
-    public CompoundParameter wobble = new CompoundParameter("wobble", 1, 0, 10);
-    public CompoundParameter radius = new CompoundParameter("radius", 700, 0, 1500);
+    public CompoundParameter wobble = new CompoundParameter("Wobble", 1, 0, 10);
+    public CompoundParameter radius = new CompoundParameter("Radius", 700, 0, 1500);
     private ArrayList<Particle> particles = new ArrayList<Particle>();
     public ArrayList<SinLFO> xPos = new ArrayList<SinLFO>();
     public ArrayList<SinLFO> yPos = new ArrayList<SinLFO>();

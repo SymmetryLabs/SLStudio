@@ -19,10 +19,10 @@ import static com.symmetrylabs.util.MathUtils.random;
 
 public class Raindrops extends SLPattern<SLModel> {
 
-    public final CompoundParameter numRainDrops = new CompoundParameter("NUM", -40, -500, -20);
-    public final CompoundParameter size = new CompoundParameter("SIZE", 0.35, 0.1, 1.0);
-    public final CompoundParameter speedP = new CompoundParameter("SPD", -1000, -7000, -300);
-    public final CompoundParameter hueV = new CompoundParameter("HUE", 0.5);
+    public final CompoundParameter numRainDrops = new CompoundParameter("Number", -40, -500, -20);
+    public final CompoundParameter size = new CompoundParameter("Size", 0.35, 0.1, 1.0);
+    public final CompoundParameter speedP = new CompoundParameter("Speed", -1000, -7000, -300);
+    public final CompoundParameter hueV = new CompoundParameter("HueVar", 0.5);
 
     private float leftoverMs = 0;
     private float msPerRaindrop = 40;

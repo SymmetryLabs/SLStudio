@@ -19,16 +19,16 @@ public class ViolinWave extends LXPattern {
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
 
-    CompoundParameter level = new CompoundParameter("LVL", 0.45);
-    CompoundParameter range = new CompoundParameter("RNG", 0.5);
-    CompoundParameter edge = new CompoundParameter("EDG", 0.5);
-    CompoundParameter release = new CompoundParameter("RLS", 0.5);
-    CompoundParameter speed = new CompoundParameter("SPD", 0.5);
-    CompoundParameter amp = new CompoundParameter("AMP", 0.25, 0, 3);
-    CompoundParameter period = new CompoundParameter("WAVE", 0.5);
-    CompoundParameter pSize = new CompoundParameter("PSIZE", 0.5);
-    CompoundParameter pSpeed = new CompoundParameter("PSPD", 0.5);
-    CompoundParameter pDensity = new CompoundParameter("PDENS", 0.25);
+    CompoundParameter level = new CompoundParameter("Level", 0.45);
+    CompoundParameter range = new CompoundParameter("Range", 0.5);
+    CompoundParameter edge = new CompoundParameter("Egde", 0.5);
+    CompoundParameter release = new CompoundParameter("Rls", 0.5);
+    CompoundParameter speed = new CompoundParameter("Speed", 0.5);
+    CompoundParameter amp = new CompoundParameter("Amp", 0.25, 0, 3);
+    CompoundParameter period = new CompoundParameter("Wave", 0.5);
+    CompoundParameter pSize = new CompoundParameter("pSize", 0.5);
+    CompoundParameter pSpeed = new CompoundParameter("pSpeed", 0.5);
+    CompoundParameter pDensity = new CompoundParameter("pDens", 0.25);
 
     LinearEnvelope dbValue = new LinearEnvelope(0, 0, 10);
 

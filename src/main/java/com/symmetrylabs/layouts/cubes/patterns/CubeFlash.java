@@ -15,11 +15,11 @@ import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
 
 public class CubeFlash extends SLPattern<CubesModel> {
-    private CompoundParameter rateParameter = new CompoundParameter("RATE", 0.125);
-    private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.5);
-    private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.5);
-    private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
-    private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+    private CompoundParameter rateParameter = new CompoundParameter("Speed", 0.125);
+    private CompoundParameter attackParameter = new CompoundParameter("Attack", 0.5);
+    private CompoundParameter decayParameter = new CompoundParameter("Decay", 0.5);
+    private CompoundParameter hueVarianceParameter = new CompoundParameter("HueVar", 0.25);
+    private CompoundParameter saturationParameter = new CompoundParameter("Sat", 0.5);
 
     class Flash {
         CubesModel.Cube cube;

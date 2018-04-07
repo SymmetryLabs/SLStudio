@@ -24,12 +24,12 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import static com.symmetrylabs.util.Utils.createInput;
 
 public abstract class TextureSlideshow extends SLPattern<SLModel> {
-    public final CompoundParameter rate = new CompoundParameter("rate", 3000, 10000, 250);
-    public final CompoundParameter offsetX = new CompoundParameter("offsetX", 0, -1, 1);
-    public final CompoundParameter offsetY = new CompoundParameter("offsetY", 0, -1, 1);
-    public final CompoundParameter zoomX = new CompoundParameter("zoomX", 0, 0, 5);
-    public final CompoundParameter zoomY = new CompoundParameter("zoomY", 0, 0, 5);
-    public final BooleanParameter enableInterp = new BooleanParameter("interp", true);
+    public final CompoundParameter rate = new CompoundParameter("Rate", 3000, 10000, 250);
+    public final CompoundParameter offsetX = new CompoundParameter("xOffset", 0, -1, 1);
+    public final CompoundParameter offsetY = new CompoundParameter("yOffset", 0, -1, 1);
+    public final CompoundParameter zoomX = new CompoundParameter("xZoom", 0, 0, 5);
+    public final CompoundParameter zoomY = new CompoundParameter("yZoom", 0, 0, 5);
+    public final BooleanParameter enableInterp = new BooleanParameter("Interp", true);
 
     private final SawLFO lerp = (SawLFO) startModulator(new SawLFO(0, 1, rate));
 

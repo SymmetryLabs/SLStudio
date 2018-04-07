@@ -11,7 +11,7 @@ import static processing.core.PApplet.*;
 
 public class ShiftingPlane extends LXPattern {
 
-    final CompoundParameter hueShift = new CompoundParameter("hShift", 0.5, 0, 1);
+    final CompoundParameter hueShift = new CompoundParameter("HueVar", 0.5, 0, 1);
 
     final SinLFO a = new SinLFO(-.2, .2, 5300);
     final SinLFO b = new SinLFO(1, -1, 13300);

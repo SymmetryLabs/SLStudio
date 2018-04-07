@@ -13,12 +13,12 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
 
 public class Sparkle extends LXPattern {
-    private CompoundParameter densityParameter = new CompoundParameter("DENS", 0.15);
-    private CompoundParameter attackParameter = new CompoundParameter("ATTK", 0.4);
-    private CompoundParameter decayParameter = new CompoundParameter("DECAY", 0.3);
-    private CompoundParameter hueParameter = new CompoundParameter("HUE", 0.5);
-    private CompoundParameter hueVarianceParameter = new CompoundParameter("H.V.", 0.25);
-    private CompoundParameter saturationParameter = new CompoundParameter("SAT", 0.5);
+    private CompoundParameter densityParameter = new CompoundParameter("Dens", 0.15);
+    private CompoundParameter attackParameter = new CompoundParameter("Attack", 0.4);
+    private CompoundParameter decayParameter = new CompoundParameter("Decay", 0.3);
+    private CompoundParameter hueParameter = new CompoundParameter("Hue", 0.5);
+    private CompoundParameter hueVarianceParameter = new CompoundParameter("HueVar", 0.25);
+    private CompoundParameter saturationParameter = new CompoundParameter("Sat", 0.5);
     
     class Spark {
         LXPoint point;

@@ -29,8 +29,8 @@ public class Pong extends DPat {
         y.setPeriod(dy);
         addModulator(z = new SinLFO(cRad, mMax.z - cRad, 0)).trigger();
         z.setPeriod(dz);
-        pSize = addParam("Size", 0.4f);
         pChoose = new DiscreteParameter("Anim", new String[]{"Pong", "Ball", "Cone"});
+        pSize = addParam("Size", 0.4f);
         pChoose.setValue(2);
         addParameter(pChoose);
         //addNonKnobParameter(pChoose);

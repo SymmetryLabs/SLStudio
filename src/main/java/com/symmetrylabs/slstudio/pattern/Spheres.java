@@ -12,8 +12,8 @@ import heronarts.lx.parameter.CompoundParameter;
 import com.symmetrylabs.util.MathUtils;
 
 public class Spheres extends LXPattern {
-    private CompoundParameter hueParameter = new CompoundParameter("RAD", 1.0);
-    private CompoundParameter periodParameter = new CompoundParameter("PERIOD", 4000.0, 200.0, 10000.0);
+    private CompoundParameter hueParameter = new CompoundParameter("Size", 1.0);
+    private CompoundParameter periodParameter = new CompoundParameter("Period", 4000.0, 200.0, 10000.0);
     private CompoundParameter hueVariance = new CompoundParameter("HueVar", 50, 0, 180);
     private final SawLFO lfo = new SawLFO(0, 1, 10000);
     private final SinLFO sinLfo = new SinLFO(0, 1, periodParameter);

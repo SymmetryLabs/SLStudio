@@ -23,22 +23,22 @@ public class Explosions extends LXPattern {
         // See com.symmetrylabs.slstudio.pattern.explosions.L8onUtil.pde for the definition.
         private List<L8onExplosion> explosions = new ArrayList<L8onExplosion>();
         private final SinLFO saturationModulator = new SinLFO(80.0, 100.0, 200000);
-        private BoundedParameter numExplosionsParameter = new BoundedParameter("NUM", 4.0, 1.0, 20.0);
-        private BoundedParameter brightnessParameter = new BoundedParameter("BRGT", 50, 10, 80);
+        private BoundedParameter numExplosionsParameter = new BoundedParameter("Num", 4.0, 1.0, 20.0);
+        private BoundedParameter brightnessParameter = new BoundedParameter("Bright", 50, 10, 80);
 
         private static final double GAIN_DEFAULT = 6;
         private static final double MODULATION_RANGE = 1;
 
         private BandGate audioModulatorFull;
-        private CompoundParameter rateParameter = new CompoundParameter("RATE", 8000.0, 8000.0, 750.0);
+        private CompoundParameter rateParameter = new CompoundParameter("Rate", 8000.0, 8000.0, 750.0);
 
-        private BoundedParameter blurParameter = new BoundedParameter("BLUR", 0.69);
+        private BoundedParameter blurParameter = new BoundedParameter("Blur", 0.69);
         private L8onBlurLayer blurLayer = new L8onBlurLayer(lx, this, blurParameter);
 
         private Random pointRandom = new Random();
 
-        private L8onAudioBeatGate beatGate = new L8onAudioBeatGate("XBEAT", lx);
-        private L8onAudioClapGate clapGate = new L8onAudioClapGate("XCLAP", lx);
+        private L8onAudioBeatGate beatGate = new L8onAudioBeatGate("xBeat", lx);
+        private L8onAudioClapGate clapGate = new L8onAudioClapGate("xClap", lx);
 
         public Explosions(LX lx) {
                 super(lx);

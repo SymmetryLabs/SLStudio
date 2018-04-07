@@ -12,11 +12,12 @@ import com.symmetrylabs.util.MathUtils;
 
 public class AskewPlanes extends DPat {
 
-    CompoundParameter thickness = new CompoundParameter("thck", 0.2, 0.1, 0.9);
+
     float huev = 0;
 
-    DiscreteParameter numPlanes = new DiscreteParameter("num", new String[]{"3", "2", "1"});
+    DiscreteParameter numPlanes = new DiscreteParameter("Number", new String[]{"3", "2", "1"});
 
+    CompoundParameter thickness = new CompoundParameter("Thick", 0.2, 0.1, 0.9);
     class Plane {
         private final SinLFO a;
         private final SinLFO b;

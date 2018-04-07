@@ -36,19 +36,19 @@ public class Wasps extends ParticlePattern {
     protected void createParameters() {
         super.createParameters();
 
-        addParameter(speed = new CompoundParameter("speed", 1, 0, 3));
-        addParameter(accel = new CompoundParameter("accel", 1.5, 0, 3));
-        addParameter(dampen = new CompoundParameter("dampen", 0.75, 0, 1));
-        addParameter(focusX = new CompoundParameter("focusX", 0, -1, 1));
-        addParameter(focusY = new CompoundParameter("focusY", 0, -1, 1));
-        addParameter(focusZ = new CompoundParameter("focusZ", 0, -1, 1));
-        addParameter(pullX = new CompoundParameter("pullX", 0.5, 0, 1));
-        addParameter(pullY = new CompoundParameter("pullY", 0.5, 0, 1));
-        addParameter(pullZ = new CompoundParameter("pullZ", 0.5, 0, 1));
-        addParameter(twistX = new CompoundParameter("twistX", 0, -1, 1));
-        addParameter(twistY = new CompoundParameter("twistY", 0, -1, 1));
-        addParameter(twistZ = new CompoundParameter("twistZ", 0, -1, 1));
-        addParameter(edgeRepel = new BooleanParameter("edgeRepel", false));
+        addParameter(speed = new CompoundParameter("Speed", 1, 0, 3));
+        addParameter(accel = new CompoundParameter("Accel", 1.5, 0, 3));
+        addParameter(dampen = new CompoundParameter("Dampen", 0.75, 0, 1));
+        addParameter(focusX = new CompoundParameter("FocusX", 0, -1, 1));
+        addParameter(focusY = new CompoundParameter("FocusY", 0, -1, 1));
+        addParameter(focusZ = new CompoundParameter("FocusZ", 0, -1, 1));
+        addParameter(pullX = new CompoundParameter("PullX", 0.5, 0, 1));
+        addParameter(pullY = new CompoundParameter("PullY", 0.5, 0, 1));
+        addParameter(pullZ = new CompoundParameter("PullZ", 0.5, 0, 1));
+        addParameter(twistX = new CompoundParameter("TwistX", 0, -1, 1));
+        addParameter(twistY = new CompoundParameter("TwistY", 0, -1, 1));
+        addParameter(twistZ = new CompoundParameter("TwistZ", 0, -1, 1));
+        addParameter(edgeRepel = new BooleanParameter("EdgeRepel", false));
     }
 
     @Override

@@ -59,7 +59,7 @@ void  move()      { c     = interp(t,prvA,dstA);
     final int FRAME_WIDTH = 60;
     int currentdeltaMs;
 
-    CompoundParameter speed = new CompoundParameter("SPD", 0.4);
+    CompoundParameter speed = new CompoundParameter("Speed", 0.4);
     Click stepTimer = new Click("Step", speed.getValuef()*30);
     private float[] bass = new float[FRAME_WIDTH];
     private float[] treble = new float[FRAME_WIDTH];
@@ -105,7 +105,7 @@ void  move()      { c     = interp(t,prvA,dstA);
      // lx.addKeyEventHandler(parent);
         //leap= new LeapMotion(parent).withGestures();
         pRadius   = addParam("Rad"  , 1.4f  , 0, 4  );
-        pBounce   = addParam("Bnc"  , 0.0f  );
+        pBounce   = addParam("Bounce"  , 0.0f  );
         pAmp      = addParam("Amp"  , 0.2f  );
 
         pTempoMult  = new DiscreteParameter ("TMult" , new String[] {"1x", "2x", "4x", "8x", "16x", "Rand" } );

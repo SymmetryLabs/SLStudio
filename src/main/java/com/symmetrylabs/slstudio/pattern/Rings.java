@@ -15,13 +15,13 @@ public class Rings extends LXPattern {
     float angleParam, spacingParam;
     float dzParam, centerParam;
 
-    CompoundParameter pDepth = new CompoundParameter("DEPTH", 0.6);
-    CompoundParameter pBright = new CompoundParameter("BRT", 0.75);
-    CompoundParameter pSaturation = new CompoundParameter("SAT", 0.5);
+    CompoundParameter pDepth = new CompoundParameter("Depth", 0.6);
+    CompoundParameter pBright = new CompoundParameter("Bright", 0.75);
+    CompoundParameter pSaturation = new CompoundParameter("Sat", 0.5);
 
-    CompoundParameter pSpeed1 = new CompoundParameter("SPD1", 0.2);
-    CompoundParameter pSpeed2 = new CompoundParameter("SPD2", 0.4);
-    CompoundParameter pScale = new CompoundParameter("SCALE", 0.15);
+    CompoundParameter pSpeed1 = new CompoundParameter("Speed1", 0.2);
+    CompoundParameter pSpeed2 = new CompoundParameter("Speed2", 0.4);
+    CompoundParameter pScale = new CompoundParameter("Scale", 0.15);
 
     public Rings(LX lx) {
         super(lx);

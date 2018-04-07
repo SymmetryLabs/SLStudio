@@ -14,15 +14,15 @@ import com.symmetrylabs.util.MathUtils;
 
 public class TestAxisPattern extends LXPattern {
 
-    final CompoundParameter x = new CompoundParameter("XPOS", 0.3);
-    final CompoundParameter y = new CompoundParameter("YPOS", 0.3);
-    final CompoundParameter z = new CompoundParameter("ZPOS", 0.3);
-    final CompoundParameter xw = new CompoundParameter("XWID", 0.3);
-    final CompoundParameter yw = new CompoundParameter("YWID", 0.3);
-    final CompoundParameter zw = new CompoundParameter("ZWID", 0.3);
-    final CompoundParameter xl = new CompoundParameter("XLEV", 1);
-    final CompoundParameter yl = new CompoundParameter("YLEV", 1);
-    final CompoundParameter zl = new CompoundParameter("ZLEV", 0.5);
+    final CompoundParameter x = new CompoundParameter("xPos", 0.3);
+    final CompoundParameter y = new CompoundParameter("yPos", 0.3);
+    final CompoundParameter z = new CompoundParameter("zPos", 0.3);
+    final CompoundParameter xw = new CompoundParameter("xSize", 0.3);
+    final CompoundParameter yw = new CompoundParameter("ySize", 0.3);
+    final CompoundParameter zw = new CompoundParameter("zSize", 0.3);
+    final CompoundParameter xl = new CompoundParameter("xLvl", 1);
+    final CompoundParameter yl = new CompoundParameter("yLvl", 1);
+    final CompoundParameter zl = new CompoundParameter("zLvl", 0.5);
     float xv, yv, zv;
 
     final SinLFO lfo = new SinLFO("Stuff", 0, 1, 2000);

@@ -25,10 +25,11 @@ public class Swim extends LXPattern {
     SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
     SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 15000 - 13000 * 0.5);
 
-    final CompoundParameter phaseParam = new CompoundParameter("Spd", 0.5);
-    final CompoundParameter crazyParam = new CompoundParameter("Crzy", 0.5);
 
-    final CompoundParameter hueScale = new CompoundParameter("HUE", 0.1, 0.0, 0.2);
+    final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.5);
+
+    final CompoundParameter hueScale = new CompoundParameter("HueVar", 0.1, 0.0, 0.2);
+    final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5);
 
     public Swim(LX lx) {
         super(lx);

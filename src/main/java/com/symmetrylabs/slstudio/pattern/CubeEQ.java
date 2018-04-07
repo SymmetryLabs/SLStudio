@@ -16,15 +16,16 @@ public class CubeEQ extends SLPattern<SLModel> {
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
 
-    private final CompoundParameter edge = new CompoundParameter("EDGE", 0.5);
-    private final CompoundParameter clr = new CompoundParameter("CLR", 0.1, 0, .5);
-    private final CompoundParameter blockiness = new CompoundParameter("BLK", 0.5);
+    private final CompoundParameter attack = new CompoundParameter("Attack", 0.4);
+    private final CompoundParameter blockiness = new CompoundParameter("Block", 0.5);
+    private final CompoundParameter clr = new CompoundParameter("Clr", 0.1, 0, .5);
 
-    private final CompoundParameter gain = new CompoundParameter("GAIN", 0.5);
-    private final CompoundParameter range = new CompoundParameter("RANG", 0.2);
-    private final CompoundParameter attack = new CompoundParameter("ATTK", 0.4);
-    private final CompoundParameter release = new CompoundParameter("RLS", 0.4);
-    private final CompoundParameter slope = new CompoundParameter("SLOP", 0.5);
+    private final CompoundParameter edge = new CompoundParameter("Edge", 0.5);
+        private final CompoundParameter gain = new CompoundParameter("Gain", 0.5);
+    private final CompoundParameter range = new CompoundParameter("Range", 0.2);
+
+    private final CompoundParameter release = new CompoundParameter("Rls", 0.4);
+    private final CompoundParameter slope = new CompoundParameter("Slope", 0.5);
 
     public CubeEQ(LX lx) {
         super(lx);

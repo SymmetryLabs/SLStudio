@@ -27,7 +27,7 @@ public class SoundRain extends SLPattern<CubesModel> {
 
     public final SawLFO pos = new SawLFO(0, 9, 8000);
     public final SinLFO col1 = new SinLFO(model.xMin, model.xMax, 5000);
-    public final CompoundParameter gainParameter = new CompoundParameter("GAIN", 0.1, 0, .3);
+    public final CompoundParameter gainParameter = new CompoundParameter("Gain", 0.1, 0, .3);
 
     public SoundRain(LX lx) {
         super(lx);

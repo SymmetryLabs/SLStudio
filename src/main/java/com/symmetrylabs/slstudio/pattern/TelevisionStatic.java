@@ -8,9 +8,9 @@ import heronarts.lx.parameter.CompoundParameter;
 import com.symmetrylabs.util.MathUtils;
 
 public class TelevisionStatic extends LXPattern {
-    CompoundParameter brightParameter = new CompoundParameter("BRIGHT", 1.0);
-    CompoundParameter saturationParameter = new CompoundParameter("SAT", 1.0);
-    CompoundParameter hueParameter = new CompoundParameter("HUE", 1.0);
+    CompoundParameter brightParameter = new CompoundParameter("Bright", 1.0);
+    CompoundParameter saturationParameter = new CompoundParameter("Sat", 1.0);
+    CompoundParameter hueParameter = new CompoundParameter("Hue", 1.0);
     SinLFO direction = new SinLFO(0, 10, 3000);
 
     public TelevisionStatic(LX lx) {

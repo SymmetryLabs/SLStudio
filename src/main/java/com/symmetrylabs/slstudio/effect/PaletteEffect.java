@@ -13,14 +13,14 @@ public class PaletteEffect extends SLEffect {
 
     private final PaletteLibrary paletteLibrary = PaletteLibrary.getInstance();
 
-    CompoundParameter amount = new CompoundParameter("amount", 0, 0, 1);
-    DiscreteParameter palette = new DiscreteParameter("palette", paletteLibrary.getNames());
+    CompoundParameter amount = new CompoundParameter("Amount", 0, 0, 1);
+    DiscreteParameter palette = new DiscreteParameter("Palette", paletteLibrary.getNames());
         // selected colour palette
-    CompoundParameter bottom = new CompoundParameter("bottom", 0, 0, 1);  // palette start point (fraction 0 - 1)
-    CompoundParameter top = new CompoundParameter("top", 1, 0, 1);  // palette stop point (fraction 0 - 1)
-    CompoundParameter bias = new CompoundParameter("bias", 0, -6, 6);  // bias colour palette toward zero (dB)
-    CompoundParameter shift = new CompoundParameter("shift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
-    CompoundParameter cutoff = new CompoundParameter("cutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
+    CompoundParameter bottom = new CompoundParameter("Bottom", 0, 0, 1);  // palette start point (fraction 0 - 1)
+    CompoundParameter top = new CompoundParameter("Top", 1, 0, 1);  // palette stop point (fraction 0 - 1)
+    CompoundParameter bias = new CompoundParameter("Bias", 0, -6, 6);  // bias colour palette toward zero (dB)
+    CompoundParameter shift = new CompoundParameter("Shift", 0, -1, 1);  // shift in colour palette (fraction 0 - 1)
+    CompoundParameter cutoff = new CompoundParameter("Cutoff", 0, 0, 1);  // palette value cutoff (fraction 0 - 1)
 
     ZigzagPalette pal = new ZigzagPalette();
 

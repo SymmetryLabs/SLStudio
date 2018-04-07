@@ -38,14 +38,14 @@ public class Worms extends SLPattern<StripsModel<Strip>> {
     //private GraphicEQ eq = null;
     private float nConfusion;
 
-    private CompoundParameter pBeat      = new CompoundParameter("BEAT",  0);
-    private CompoundParameter pSpeed     = new CompoundParameter("FAST", .2);
-    private CompoundParameter pBlur      = new CompoundParameter("BLUR", .3);
-    private CompoundParameter pWorms     = new CompoundParameter("WRMS", .3);
-    private CompoundParameter pConfusion = new CompoundParameter("CONF", .1);
+    private CompoundParameter pBeat      = new CompoundParameter("Beat",  0);
+    private CompoundParameter pSpeed     = new CompoundParameter("Fast", .2);
+    private CompoundParameter pBlur      = new CompoundParameter("Blur", .3);
+    private CompoundParameter pWorms     = new CompoundParameter("Worms", .3);
+    private CompoundParameter pConfusion = new CompoundParameter("Conf", .1);
     //private CompoundParameter pEQ        = new CompoundParameter("EQ"  ,  0);
-    private CompoundParameter pSpawn     = new CompoundParameter("DIR" ,  0);
-    private CompoundParameter pColor     = new CompoundParameter("CLR" , .1);
+    private CompoundParameter pSpawn     = new CompoundParameter("Spawn" ,  0);
+    private CompoundParameter pColor     = new CompoundParameter("Color" , .1);
 
     private Dispatcher dispatcher;
 

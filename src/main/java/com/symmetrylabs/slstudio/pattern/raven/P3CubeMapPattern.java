@@ -29,8 +29,8 @@ public abstract class P3CubeMapPattern extends SLPattern<SLModel> {
     public final PVector bboxSize;
     protected int faceRes;
 
-    public DiscreteParameter resParam = discreteParameter("RES", 200, 64, 512);
-    public DiscreteParameter kernelSize = discreteParameter("KER", 3, 1, 6);
+    public DiscreteParameter resParam = discreteParameter("Res", 200, 64, 512);
+    public DiscreteParameter kernelSize = discreteParameter("Kernel", 3, 1, 6);
 
     private final String id = "" + Math.random();
 

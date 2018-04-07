@@ -32,7 +32,7 @@ public class MidiMusic extends SLPattern<CubesModel> {
 
     private final Map<Integer, LightUp> lightMap = new HashMap<Integer, LightUp>();
     private final List<LightUp> lights = new ArrayList<LightUp>();
-    private final CompoundParameter lightSize = new CompoundParameter("SIZE", 0.5);
+    private final CompoundParameter lightSize = new CompoundParameter("Size", 0.5);
 
     private final List<Sweep> sweeps = new ArrayList<Sweep>();
 
@@ -40,8 +40,8 @@ public class MidiMusic extends SLPattern<CubesModel> {
     private boolean sparkleDirection = true;
     private float sparkleBright = 100;
 
-    private final CompoundParameter wave = new CompoundParameter("WAVE", 0);
-    private final BooleanParameter triggerSweep = new BooleanParameter("SWEEP", false);
+    private final CompoundParameter wave = new CompoundParameter("Wave", 0);
+    private final BooleanParameter triggerSweep = new BooleanParameter("Sweep", false);
 
     public MidiMusic(LX lx) {
         super(lx);

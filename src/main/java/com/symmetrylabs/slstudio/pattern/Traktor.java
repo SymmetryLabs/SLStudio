@@ -16,8 +16,8 @@ public class Traktor extends LXPattern {
 
     final int FRAME_WIDTH = 120;
 
-    final CompoundParameter speed = new CompoundParameter("SPD", 0.5);
-    final CompoundParameter hueSpread = new CompoundParameter("hueSpread", .4, 0, 1);
+    final CompoundParameter speed = new CompoundParameter("Speed", 0.5);
+    final CompoundParameter hueSpread = new CompoundParameter("HueVar", .4, 0, 1);
     final CompoundParameter trebleGain = new CompoundParameter("trebG", 1, 0, 10);
     final CompoundParameter bassGain = new CompoundParameter("bassG", 1, 0, 10);
     private float[] bass = new float[FRAME_WIDTH];
