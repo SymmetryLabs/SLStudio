@@ -23,7 +23,7 @@ public class Explosions extends LXPattern {
         // See com.symmetrylabs.slstudio.pattern.explosions.L8onUtil.pde for the definition.
         private List<L8onExplosion> explosions = new ArrayList<L8onExplosion>();
         private final SinLFO saturationModulator = new SinLFO(80.0, 100.0, 200000);
-        private BoundedParameter numExplosionsParameter = new BoundedParameter("Num", 4.0, 1.0, 20.0);
+        private BoundedParameter numExplosionsParameter = new BoundedParameter("Number", 4.0, 1.0, 20.0);
         private BoundedParameter brightnessParameter = new BoundedParameter("Bright", 50, 10, 80);
 
         private static final double GAIN_DEFAULT = 6;

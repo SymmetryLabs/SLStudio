@@ -84,7 +84,7 @@ public class SoundRain extends SLPattern<CubesModel> {
                     for (LXPoint p : s.points) {
                         int seq = ((int)(p.y * avgSize / model.yMax + pos.getValuef() + Math.sin(p.x + p.z) * 2)) % avgSize;
                         seq = Math.min(Math.abs(seq - (avgSize / 2)), avgSize - 1);
-                        colors[p.index] = lx.hsb(200, Math.max(0, 100 - Math.abs(p.x - col1.getValuef()) / 2), lightVals[seq]);
+                        colors[p.index] = lx.hsb(palette.getHuef(), Math.max(0, 100 - Math.abs(p.x - col1.getValuef()) / 2), lightVals[seq]);
                     }
                 }
             }

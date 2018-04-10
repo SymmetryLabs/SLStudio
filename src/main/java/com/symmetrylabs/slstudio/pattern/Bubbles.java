@@ -20,7 +20,7 @@ public class Bubbles extends LXPattern {
     private final float MAX_SPROUT_TIME = 150;
     private final Random rand = new Random();
 
-    private final CompoundParameter rate = new CompoundParameter("Num", 0.3);
+    private final CompoundParameter rate = new CompoundParameter("Number", 0.3);
     private final CompoundParameter popFrequency = new CompoundParameter("PopFrq", 30, 30, 500);
     private final CompoundParameter speed = new CompoundParameter("Speed", 0.01, 0.25, 1.0);
     private final CompoundParameter saturation = new CompoundParameter("Sat", 50, 0, 100);

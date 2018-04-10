@@ -112,6 +112,7 @@ public class SoundParticles extends LXPattern {
             intensity = 1;
             falloff = 1;
             hue = 220f;
+
             i = particles.size();
             float rand = randomGaussian();
             float rand2 = randomGaussian();
@@ -150,6 +151,7 @@ public class SoundParticles extends LXPattern {
             intensity = 1;
             falloff = 1;
             this.hue = 220f;
+            //this.hue = palette.getHuef();
         }
 
         public boolean isActive() {
