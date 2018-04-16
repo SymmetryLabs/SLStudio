@@ -65,7 +65,7 @@ public class ObjLayout implements Layout {
     static final float globalOffsetZ = 0;
 
     static final float globalRotationX = 0;
-    static final float globalRotationY = 0;
+    static final float globalRotationY = 180;
     static final float globalRotationZ = 0;
 
     static final float CUBES_SPACING = 24f+9f;;
