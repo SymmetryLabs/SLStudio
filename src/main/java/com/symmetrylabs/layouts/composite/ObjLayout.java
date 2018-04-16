@@ -60,9 +60,9 @@ public class ObjLayout implements Layout {
 
     static final float INCHES_PER_METER = 39.3701f;
 
-    static final float globalOffsetX = 0;
-    static final float globalOffsetY = 0;
-    static final float globalOffsetZ = 0;
+    static final float globalOffsetX = 1315;
+    static final float globalOffsetY = 598;
+    static final float globalOffsetZ = 466;
 
     static final float globalRotationX = 0;
     static final float globalRotationY = 180;
