@@ -9,6 +9,7 @@ buildscript {
 }
 
 plugins {
+	id "edu.sc.seis.macAppBundle" version "2.2.1"
 	id 'org.jetbrains.kotlin.jvm' version '1.2.30'
 	id 'com.github.johnrengelman.shadow' version '2.0.1'
 	id 'com.palantir.docker' version '0.17.2'
@@ -108,4 +109,12 @@ dependencies {
 jar {
 	exclude('**/*.swp')
 	exclude('**/*.swo')
+}
+
+macAppBundle {
+	// See https://github.com/crotwell/gradle-macappbundle
+	// And https://github.com/crotwell/gradle-macappbundle/blob/master/src/main/groovy/edu/sc/seis/macAppBundle/MacAppBundlePluginExtension.groovy
+	mainClassName = "com.symmetrylabs.slstudio.SLStudio"
+	icon = "myIcon.icns"
+	bundleJRE = true
 }
