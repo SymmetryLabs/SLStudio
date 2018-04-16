@@ -1,6 +1,7 @@
 package com.symmetrylabs.layouts;
 
 import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.layouts.cubes.GlowMotionLayout;
 import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
@@ -35,6 +36,7 @@ public class LayoutRegistry {
         map.put("oslo", () -> new OsloLayout(applet, TreeModel.ModelMode.MAJOR_LIMBS));
         map.put("dynamic_json", () -> new DynamicLayout());
         map.put("composite", () -> new CompositeLayout());
+        map.put("glowmotion", () -> new GlowMotionLayout());
     }
 
     static interface LayoutBuilder {
