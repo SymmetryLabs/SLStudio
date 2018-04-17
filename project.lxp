@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1523924699954,
+  "timestamp": 1523925009899,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -12,10 +12,10 @@
       "scene-3": false,
       "scene-4": false,
       "scene-5": false,
-      "crossfader": 1.0,
-      "crossfaderBlendMode": 0,
+      "crossfader": 0.4655172433704138,
+      "crossfaderBlendMode": 2,
       "speed": 1.0,
-      "focusedChannel": 1,
+      "focusedChannel": 0,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -86,7 +86,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 3,
+        "patternIndex": 10,
         "patterns": [
           {
             "id": 27,
@@ -250,7 +250,7 @@
               "palStart": 0.0,
               "palStop": 1.0,
               "spnRad": 280.0,
-              "maxBirds": 20,
+              "maxBirds": 61,
               "spnRate": 2.0,
               "spnVary": 0.0,
               "scatter": 200.0,
@@ -437,7 +437,7 @@
             "parameters": {
               "label": "BassPod",
               "CLR": 0.5,
-              "GAIN": 0.5,
+              "GAIN": 0.8299999944865704,
               "RANG": 0.2,
               "ATTK": 0.4,
               "RLS": 0.4,
@@ -584,26 +584,8 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 0,
+        "patternIndex": 6,
         "patterns": [
-          {
-            "id": 100,
-            "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -4390657,
-            "parameters": {
-              "label": "SolidColor",
-              "color/hue": 0.0,
-              "color/brightness": 100.0,
-              "color/saturation": 100.0,
-              "color": -65536
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
           {
             "id": 103,
             "class": "com.symmetrylabs.slstudio.pattern.Wasps",
@@ -870,7 +852,7 @@
               "palette": 25,
               "palShift": 0.08,
               "palBias": -1.28,
-              "palCutoff": 0.0,
+              "palCutoff": 0.30999999307096004,
               "palStart": 0.0,
               "palStop": 0.84,
               "spnRad": 280.0,
@@ -901,7 +883,7 @@
               "nearBlobs": false,
               "everywhere": true,
               "timeScale": 0.35,
-              "size": 560.0,
+              "size": 280.00000625848776,
               "detail": 6.6,
               "ripple": 0.6,
               "x": 286.55780029296875,
@@ -924,6 +906,24 @@
               "turnSec": 1.56,
               "fadeInSec": 1.7,
               "fadeOutSec": 0.78
+            },
+            "modulation": {
+              "modulators": [],
+              "modulations": [],
+              "triggers": []
+            },
+            "autoCycleEnabled": true
+          },
+          {
+            "id": 121,
+            "class": "com.symmetrylabs.slstudio.pattern.explosions.Explosions",
+            "modulationColor": -16765441,
+            "parameters": {
+              "label": "Explosions",
+              "NUM": 8.749999893829226,
+              "BRGT": 50.0,
+              "RATE": 5245.000061579049,
+              "BLUR": 0.47000000119209284
             },
             "modulation": {
               "modulators": [],
@@ -990,12 +990,12 @@
           "Band-4": 0.0,
           "Band-5": 0.0,
           "Band-6": 0.0,
-          "Band-7": 0.0,
+          "Band-7": 0.01974573483668518,
           "Band-8": 0.0,
           "Band-9": 0.0,
-          "Band-10": 0.0,
-          "Band-11": 0.0,
-          "Band-12": 0.0,
+          "Band-10": 0.01855090921933089,
+          "Band-11": 0.07375478089542131,
+          "Band-12": 0.04488847915527128,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -1107,9 +1107,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 302.1977005388285,
-        "theta": -0.5010000000000002,
-        "phi": -0.8130000000000004,
+        "radius": 279.6176734205215,
+        "theta": -0.49199999999999644,
+        "phi": -0.7050000000000006,
         "positionX": -3.2291259765625,
         "positionY": -69.41363525390625,
         "positionZ": -0.7742919921875
