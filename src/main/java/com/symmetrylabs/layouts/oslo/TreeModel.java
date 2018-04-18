@@ -28,8 +28,8 @@ public class TreeModel extends SLModel {
         UNIFORM_BRANCHES
     }
 
-    public static final float TRUNK_DIAMETER = 3*FEET;
-    public static final float LIMB_HEIGHT = 10*FEET;
+    public static final float TRUNK_DIAMETER = 4*FEET;
+    public static final float LIMB_HEIGHT = 25*FEET;
     public static final int NUM_LIMBS = 12;
     public static final boolean SINGLE_BRANCH_MODE = false;
     public static final String STELLAR_FILE = "TenereExportTestMondayWithID.json";
@@ -148,25 +148,32 @@ public class TreeModel extends SLModel {
             } else {
                 // Lowest layer of major limbs
                 addLimb(0.0f*FEET, 0.1f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(0.0f*FEET, 0.7f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(1.0f*FEET, 1.2f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(-1.3f*FEET, 1.6f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(3.0f*FEET, 1.9f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(1.7f*FEET, 2.1f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(3.0f*FEET, 2.5f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(1.2f*FEET, 2.9f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(1.0f*FEET, 4.5f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(0.8f*FEET, 4.1f * TWO_PI/6f, Limb.Size.FULL);
                 addLimb(2.4f*FEET, 4.9f * TWO_PI/6f, Limb.Size.FULL);
+                addLimb(1.5f*FEET, 5.5f * TWO_PI/6f, Limb.Size.FULL);
+
 
                 // Medium layer of limbs
                 addLimb(6.0f*FEET, 0.4f * TWO_PI/6f, Limb.Size.MEDIUM);
                 addLimb(5.4f*FEET, 1.5f * TWO_PI/6f, Limb.Size.MEDIUM);
                 addLimb(4.2f*FEET, 3.4f * TWO_PI/6f, Limb.Size.MEDIUM);
                 addLimb(5.9f*FEET, 4.9f * TWO_PI/6f, Limb.Size.MEDIUM);
+                addLimb(5.0f*FEET, 4.6f * TWO_PI/6f, Limb.Size.MEDIUM);
 
                 // We probably don't have this many...
-                // addLimb(6.3*FEET, 5.3 * TWO_PI/6, Limb.Size.MEDIUM);
+                //addLimb(6.3*FEET, 5.3 * TWO_PI/6, Limb.Size.MEDIUM);
 
                 // A couple small top limbs
-                // addLimb(7*FEET, .3 * TWO_PI/6, Limb.Size.SMALL);
-                // addLimb(7*FEET, 3.1 * TWO_PI/6, Limb.Size.SMALL);
+                addLimb(7f*FEET, 0.3f * TWO_PI/6f, Limb.Size.SMALL);
+                addLimb(7f*FEET, 3.1f * TWO_PI/6f, Limb.Size.SMALL);
             }
         }
 
@@ -499,6 +506,8 @@ public class TreeModel extends SLModel {
         public static final float LENGTH = 26*INCHES;
         public static final float WIDTH = 24*INCHES;
 
+        public final LXMatrix transform;
+
         // Orientation of a leaf assemblage, relative to parent branch
         public static class Orientation {
 
@@ -572,6 +581,7 @@ public class TreeModel extends SLModel {
         public LeafAssemblage(int channel, LXTransform t, Orientation orientation) {
             super(new Fixture(t));
             Fixture f = (Fixture) this.fixtures.get(0);
+            this.transform = t.getMatrix();
             this.channel = channel;
             this.leaves = Collections.unmodifiableList(f.leaves);
             this.orientation = orientation;
@@ -660,7 +670,7 @@ public class TreeModel extends SLModel {
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
-            this.point = this.points[0];
+            this.point = null;//this.points[0];
 
             // Precompute boundary coordinates for faster rendering, these
             // can be dumped into a VBO for a shader.
@@ -678,22 +688,23 @@ public class TreeModel extends SLModel {
 
         private static class Fixture extends LXAbstractFixture {
             Fixture(LXTransform t, Orientation orientation) {
-                t.push();
-                t.translate(.1f*INCHES, LED_OFFSET, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(-.1f*INCHES, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(-.1f*INCHES, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.pop();
+                // (TEMPORARY) commented these out so we only have dollywood buttefly points (just wanted tree for rendering)
+                // t.push();
+                // t.translate(.1f*INCHES, LED_OFFSET, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(-.1f*INCHES, LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(-.1f*INCHES, -LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, -LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.translate(0, -LED_SPACING, 0);
+                // addPoint(new LXPoint(t));
+                // t.pop();
             }
         }
     }

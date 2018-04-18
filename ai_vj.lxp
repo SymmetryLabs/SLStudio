@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1521144168754,
+  "timestamp": 1524092367758,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -30,7 +30,7 @@
         "label": "",
         "cue": false,
         "hueMode": 0,
-        "color/hue": 272.8399965763092,
+        "color/hue": 272.9411926269531,
         "color/brightness": 100.0,
         "color/saturation": 100.0,
         "color": -7601921,
@@ -111,12 +111,12 @@
             "modulationColor": -26368,
             "parameters": {
               "label": "AskewPlanes",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 1.0,
-              "TrnY": 0.5,
-              "thck": 0.2,
-              "num": 0
+              "xPos": 1.0,
+              "yPos": 0.5,
+              "Thick": 0.2,
+              "Number": 0
             },
             "modulation": {
               "modulators": [],
@@ -132,8 +132,8 @@
             "parameters": {
               "label": "Balance",
               "Hue": 0.4,
-              "Spd": 0.5,
-              "Crzy": 0.20000000298023224
+              "Speed": 0.5,
+              "Crazy": 0.20000000298023224
             },
             "modulation": {
               "modulators": [],
@@ -162,8 +162,12 @@
             "modulationColor": -65412,
             "parameters": {
               "label": "BassPod",
-              "CLR": 0.5,
-              "Gain": 0.5
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -192,12 +196,12 @@
             "modulationColor": -13568,
             "parameters": {
               "label": "Bubbles",
-              "num": 0.3,
-              "spd": 0.25,
-              "col": 50.0,
-              "size": 20.0,
-              "trns": 9.0,
-              "aPop": 30.0,
+              "Number": 0.3,
+              "Speed": 0.25,
+              "Sat": 50.0,
+              "Size": 20.0,
+              "Trans": 9.0,
+              "PopFrq": 30.0,
               "zDep": 2.0
             },
             "modulation": {
@@ -213,15 +217,15 @@
             "modulationColor": -65490,
             "parameters": {
               "label": "CrossSections",
-              "XRAT": 0.7,
-              "YRAT": 0.6,
-              "ZRAT": 0.5,
-              "XWID": 0.3,
-              "XLEV": 1.0,
-              "YLEV": 1.0,
-              "ZLEV": 0.5,
-              "YWID": 0.3,
-              "ZWID": 0.3
+              "xSpd": 0.7,
+              "ySpd": 0.6,
+              "zSpd": 0.5,
+              "xSize": 0.3,
+              "xLvl": 1.0,
+              "yLvl": 1.0,
+              "zLvl": 0.5,
+              "ySize": 0.3,
+              "zSize": 0.3
             },
             "modulation": {
               "modulators": [],
@@ -236,9 +240,14 @@
             "modulationColor": -65471,
             "parameters": {
               "label": "CubeEQ",
-              "EDGE": 0.5,
-              "CLR": 0.1,
-              "BLK": 0.5
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attack": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5,
+              "Edge": 0.5,
+              "Clr": 0.1,
+              "Block": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -249,15 +258,15 @@
           },
           {
             "id": 16826,
-            "class": "com.symmetrylabs.slstudio.pattern.CubeFlash",
+            "class": "com.symmetrylabs.layouts.cubes.patterns.CubeFlash",
             "modulationColor": -65284,
             "parameters": {
               "label": "CubeFlash",
-              "RATE": 0.05000000074505806,
-              "ATTK": 0.5,
-              "DECAY": 0.5,
-              "H.V.": 0.25,
-              "SAT": 0.5
+              "Speed": 0.125,
+              "Attack": 0.5,
+              "Decay": 0.5,
+              "HueVar": 0.25,
+              "Sat": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -272,15 +281,15 @@
             "modulationColor": -9634048,
             "parameters": {
               "label": "Noise",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
-              "Fast": 0.55,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 6,
               "Dens": 0.6
@@ -312,10 +321,10 @@
             "modulationColor": -16711736,
             "parameters": {
               "label": "Pong",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
               "Size": 0.4000000059604645,
               "Anim": 2
             },
@@ -332,12 +341,12 @@
             "modulationColor": -3997952,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.6,
-              "BRT": 0.75,
-              "SAT": 0.5,
-              "SPD1": 0.2,
-              "SPD2": 0.4,
-              "SCALE": 0.15
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.15
             },
             "modulation": {
               "modulators": [],
@@ -352,7 +361,7 @@
             "modulationColor": -25344,
             "parameters": {
               "label": "ShiftingPlane",
-              "hShift": 0.5
+              "HueVar": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -373,8 +382,8 @@
               "Speed": 16.0,
               "Spin": 0.5,
               "Color": 0.0,
-              "wobble": 1.0,
-              "radius": 700.0
+              "Wobble": 1.0,
+              "Radius": 700.0
             },
             "modulation": {
               "modulators": [],
@@ -389,8 +398,8 @@
             "modulationColor": -16753409,
             "parameters": {
               "label": "SpaceTime",
-              "RATE": 0.5,
-              "SIZE": 0.5
+              "Speed": 0.5,
+              "Size": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -405,8 +414,8 @@
             "modulationColor": -9502976,
             "parameters": {
               "label": "Spheres",
-              "RAD": 1.0,
-              "PERIOD": 4000.0,
+              "Size": 1.0,
+              "Period": 4000.0,
               "HueVar": 50.0
             },
             "modulation": {
@@ -418,14 +427,14 @@
           },
           {
             "id": 16860,
-            "class": "com.symmetrylabs.slstudio.pattern.StripPlay",
+            "class": "com.symmetrylabs.layouts.cubes.patterns.StripPlay",
             "modulationColor": -7143680,
             "parameters": {
               "label": "StripPlay",
-              "bright": 96.0,
+              "Bright": 96.0,
               "Strips": 179,
-              "hueSpread": 1.0,
-              "speed": 0.5,
+              "HueVar": 1.0,
+              "Speed": 0.5,
               "xSpeed": 2000.0,
               "ySpeed": 1600.0,
               "zSpeed": 1000.0
@@ -457,9 +466,9 @@
             "modulationColor": -10354433,
             "parameters": {
               "label": "Swim",
-              "HUE": 0.1,
-              "Crzy": 0.5,
-              "Spd": 0.5
+              "HueVar": 0.1,
+              "Crazy": 0.5,
+              "Speed": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -474,9 +483,9 @@
             "modulationColor": -27648,
             "parameters": {
               "label": "TelevisionStatic",
-              "BRIGHT": 1.0,
-              "SAT": 1.0,
-              "HUE": 1.0
+              "Bright": 1.0,
+              "Sat": 1.0,
+              "Hue": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -491,8 +500,8 @@
             "modulationColor": -65441,
             "parameters": {
               "label": "Traktor",
-              "SPD": 0.5,
-              "hueSpread": 0.4,
+              "Speed": 0.5,
+              "HueVar": 0.4,
               "bassG": 1.0,
               "trebG": 1.0
             },
@@ -509,16 +518,16 @@
             "modulationColor": -62976,
             "parameters": {
               "label": "ViolinWave",
-              "LVL": 0.45,
-              "EDG": 0.5,
-              "RNG": 0.5,
-              "RLS": 0.5,
-              "SPD": 0.5,
-              "AMP": 0.25,
-              "WAVE": 0.5,
-              "PSIZE": 0.5,
-              "PSPD": 0.5,
-              "PDENS": 0.25
+              "Level": 0.45,
+              "Egde": 0.5,
+              "Range": 0.5,
+              "Rls": 0.5,
+              "Speed": 0.5,
+              "Amp": 0.25,
+              "Wave": 0.5,
+              "pSize": 0.5,
+              "pSpeed": 0.5,
+              "pDens": 0.25
             },
             "modulation": {
               "modulators": [],
@@ -572,7 +581,7 @@
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
-              "shift": 0.0
+              "Shift": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -590,12 +599,12 @@
             "modulationColor": -36096,
             "parameters": {
               "label": "AskewPlanes",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 1.0,
-              "TrnY": 0.5,
-              "thck": 0.2,
-              "num": 0
+              "xPos": 1.0,
+              "yPos": 0.5,
+              "Thick": 0.2,
+              "Number": 0
             },
             "modulation": {
               "modulators": [],
@@ -611,8 +620,8 @@
             "parameters": {
               "label": "Balance",
               "Hue": 0.4,
-              "Spd": 0.5,
-              "Crzy": 0.20000000298023224
+              "Speed": 0.5,
+              "Crazy": 0.20000000298023224
             },
             "modulation": {
               "modulators": [],
@@ -627,8 +636,12 @@
             "modulationColor": -12255488,
             "parameters": {
               "label": "BassPod",
-              "CLR": 0.5,
-              "Gain": 0.5
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -657,12 +670,12 @@
             "modulationColor": -16761345,
             "parameters": {
               "label": "Bubbles",
-              "num": 0.3,
-              "spd": 0.25,
-              "col": 50.0,
-              "size": 20.0,
-              "trns": 9.0,
-              "aPop": 30.0,
+              "Number": 0.3,
+              "Speed": 0.25,
+              "Sat": 50.0,
+              "Size": 20.0,
+              "Trans": 9.0,
+              "PopFrq": 30.0,
               "zDep": 2.0
             },
             "modulation": {
@@ -678,15 +691,15 @@
             "modulationColor": -16711800,
             "parameters": {
               "label": "CrossSections",
-              "XRAT": 0.7,
-              "YRAT": 0.6,
-              "ZRAT": 0.5,
-              "XWID": 0.3,
-              "XLEV": 1.0,
-              "YLEV": 1.0,
-              "ZLEV": 0.5,
-              "YWID": 0.3,
-              "ZWID": 0.3
+              "xSpd": 0.7,
+              "ySpd": 0.6,
+              "zSpd": 0.5,
+              "xSize": 0.3,
+              "xLvl": 1.0,
+              "yLvl": 1.0,
+              "zLvl": 0.5,
+              "ySize": 0.3,
+              "zSize": 0.3
             },
             "modulation": {
               "modulators": [],
@@ -701,9 +714,14 @@
             "modulationColor": -2293505,
             "parameters": {
               "label": "CubeEQ",
-              "EDGE": 0.5,
-              "CLR": 0.1,
-              "BLK": 0.5
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attack": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5,
+              "Edge": 0.5,
+              "Clr": 0.1,
+              "Block": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -718,10 +736,10 @@
             "modulationColor": -65400,
             "parameters": {
               "label": "Explosions",
-              "NUM": 4.0,
-              "BRGT": 50.0,
-              "RATE": 8000.0,
-              "BLUR": 0.69
+              "Number": 4.0,
+              "Bright": 50.0,
+              "Rate": 8000.0,
+              "Blur": 0.69
             },
             "modulation": {
               "modulators": [],
@@ -736,15 +754,15 @@
             "modulationColor": -16723457,
             "parameters": {
               "label": "Noise",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
-              "Fast": 0.55,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 5,
               "Dens": 0.6
@@ -776,10 +794,10 @@
             "modulationColor": -392961,
             "parameters": {
               "label": "Pong",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
               "Size": 0.4000000059604645,
               "Anim": 2
             },
@@ -796,12 +814,12 @@
             "modulationColor": -720641,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.6,
-              "BRT": 0.75,
-              "SAT": 0.5,
-              "SPD1": 0.2,
-              "SPD2": 0.4,
-              "SCALE": 0.15
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.15
             },
             "modulation": {
               "modulators": [],
@@ -816,7 +834,7 @@
             "modulationColor": -6291201,
             "parameters": {
               "label": "ShiftingPlane",
-              "hShift": 0.5
+              "HueVar": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -837,8 +855,8 @@
               "Speed": 16.0,
               "Spin": 0.5,
               "Color": 0.0,
-              "wobble": 1.0,
-              "radius": 700.0
+              "Wobble": 1.0,
+              "Radius": 700.0
             },
             "modulation": {
               "modulators": [],
@@ -853,8 +871,8 @@
             "modulationColor": -65448,
             "parameters": {
               "label": "SpaceTime",
-              "RATE": 0.5,
-              "SIZE": 0.5
+              "Speed": 0.5,
+              "Size": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -869,8 +887,8 @@
             "modulationColor": -19712,
             "parameters": {
               "label": "Spheres",
-              "RAD": 1.0,
-              "PERIOD": 4000.0,
+              "Size": 1.0,
+              "Period": 4000.0,
               "HueVar": 50.0
             },
             "modulation": {
@@ -882,14 +900,14 @@
           },
           {
             "id": 1151,
-            "class": "com.symmetrylabs.slstudio.pattern.StripPlay",
+            "class": "com.symmetrylabs.layouts.cubes.patterns.StripPlay",
             "modulationColor": -65533,
             "parameters": {
               "label": "StripPlay",
-              "bright": 96.0,
+              "Bright": 96.0,
               "Strips": 179,
-              "hueSpread": 1.0,
-              "speed": 0.5,
+              "HueVar": 1.0,
+              "Speed": 0.5,
               "xSpeed": 2000.0,
               "ySpeed": 1600.0,
               "zSpeed": 1000.0
@@ -921,9 +939,9 @@
             "modulationColor": -65331,
             "parameters": {
               "label": "Swim",
-              "HUE": 0.1,
-              "Crzy": 0.5,
-              "Spd": 0.5
+              "HueVar": 0.1,
+              "Crazy": 0.5,
+              "Speed": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -938,9 +956,9 @@
             "modulationColor": -14352129,
             "parameters": {
               "label": "TelevisionStatic",
-              "BRIGHT": 1.0,
-              "SAT": 1.0,
-              "HUE": 1.0
+              "Bright": 1.0,
+              "Sat": 1.0,
+              "Hue": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -955,8 +973,8 @@
             "modulationColor": -9306368,
             "parameters": {
               "label": "Traktor",
-              "SPD": 0.5,
-              "hueSpread": 0.4,
+              "Speed": 0.5,
+              "HueVar": 0.4,
               "bassG": 1.0,
               "trebG": 1.0
             },
@@ -973,16 +991,16 @@
             "modulationColor": -16711840,
             "parameters": {
               "label": "TraktorPlay",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
               "Rad": 1.399999976158142,
-              "Bnc": 0.0,
+              "Bounce": 0.0,
               "Amp": 0.20000000298023224
             },
             "modulation": {
@@ -998,16 +1016,16 @@
             "modulationColor": -4653312,
             "parameters": {
               "label": "ViolinWave",
-              "LVL": 0.45,
-              "EDG": 0.5,
-              "RNG": 0.5,
-              "RLS": 0.5,
-              "SPD": 0.5,
-              "AMP": 0.25,
-              "WAVE": 0.5,
-              "PSIZE": 0.5,
-              "PSPD": 0.5,
-              "PDENS": 0.25
+              "Level": 0.45,
+              "Egde": 0.5,
+              "Range": 0.5,
+              "Rls": 0.5,
+              "Speed": 0.5,
+              "Amp": 0.25,
+              "Wave": 0.5,
+              "pSize": 0.5,
+              "pSpeed": 0.5,
+              "pDens": 0.25
             },
             "modulation": {
               "modulators": [],
@@ -1061,7 +1079,7 @@
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
-              "shift": 0.0
+              "Shift": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -1079,12 +1097,12 @@
             "modulationColor": -65472,
             "parameters": {
               "label": "AskewPlanes",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 1.0,
-              "TrnY": 0.5,
-              "thck": 0.2,
-              "num": 0
+              "xPos": 1.0,
+              "yPos": 0.5,
+              "Thick": 0.2,
+              "Number": 0
             },
             "modulation": {
               "modulators": [],
@@ -1100,8 +1118,8 @@
             "parameters": {
               "label": "Balance",
               "Hue": 0.4,
-              "Spd": 0.5,
-              "Crzy": 0.20000000298023224
+              "Speed": 0.5,
+              "Crazy": 0.20000000298023224
             },
             "modulation": {
               "modulators": [],
@@ -1116,8 +1134,12 @@
             "modulationColor": -33024,
             "parameters": {
               "label": "BassPod",
-              "CLR": 0.5,
-              "Gain": 0.5
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1146,12 +1168,12 @@
             "modulationColor": -16711879,
             "parameters": {
               "label": "Bubbles",
-              "num": 0.3,
-              "spd": 0.25,
-              "col": 50.0,
-              "size": 20.0,
-              "trns": 9.0,
-              "aPop": 30.0,
+              "Number": 0.3,
+              "Speed": 0.25,
+              "Sat": 50.0,
+              "Size": 20.0,
+              "Trans": 9.0,
+              "PopFrq": 30.0,
               "zDep": 2.0
             },
             "modulation": {
@@ -1167,15 +1189,15 @@
             "modulationColor": -5439233,
             "parameters": {
               "label": "CrossSections",
-              "XRAT": 0.7,
-              "YRAT": 0.6,
-              "ZRAT": 0.5,
-              "XWID": 0.3,
-              "XLEV": 1.0,
-              "YLEV": 1.0,
-              "ZLEV": 0.5,
-              "YWID": 0.3,
-              "ZWID": 0.3
+              "xSpd": 0.7,
+              "ySpd": 0.6,
+              "zSpd": 0.5,
+              "xSize": 0.3,
+              "xLvl": 1.0,
+              "yLvl": 1.0,
+              "zLvl": 0.5,
+              "ySize": 0.3,
+              "zSize": 0.3
             },
             "modulation": {
               "modulators": [],
@@ -1190,9 +1212,14 @@
             "modulationColor": -3277056,
             "parameters": {
               "label": "CubeEQ",
-              "EDGE": 0.5,
-              "CLR": 0.1,
-              "BLK": 0.5
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attack": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5,
+              "Edge": 0.5,
+              "Clr": 0.1,
+              "Block": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1207,10 +1234,10 @@
             "modulationColor": -29696,
             "parameters": {
               "label": "Explosions",
-              "NUM": 4.0,
-              "BRGT": 50.0,
-              "RATE": 8000.0,
-              "BLUR": 0.69
+              "Number": 4.0,
+              "Bright": 50.0,
+              "Rate": 8000.0,
+              "Blur": 0.69
             },
             "modulation": {
               "modulators": [],
@@ -1225,15 +1252,15 @@
             "modulationColor": -16735489,
             "parameters": {
               "label": "Noise",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
-              "Fast": 0.55,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 5,
               "Dens": 0.6
@@ -1265,10 +1292,10 @@
             "modulationColor": -16720385,
             "parameters": {
               "label": "Pong",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
               "Size": 0.4000000059604645,
               "Anim": 2
             },
@@ -1285,12 +1312,12 @@
             "modulationColor": -34048,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.6,
-              "BRT": 0.75,
-              "SAT": 0.5,
-              "SPD1": 0.2,
-              "SPD2": 0.4,
-              "SCALE": 0.15
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.15
             },
             "modulation": {
               "modulators": [],
@@ -1305,7 +1332,7 @@
             "modulationColor": -7680,
             "parameters": {
               "label": "ShiftingPlane",
-              "hShift": 0.5
+              "HueVar": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1326,8 +1353,8 @@
               "Speed": 16.0,
               "Spin": 0.5,
               "Color": 0.0,
-              "wobble": 1.0,
-              "radius": 700.0
+              "Wobble": 1.0,
+              "Radius": 700.0
             },
             "modulation": {
               "modulators": [],
@@ -1342,8 +1369,8 @@
             "modulationColor": -3932416,
             "parameters": {
               "label": "SpaceTime",
-              "RATE": 0.5,
-              "SIZE": 0.5
+              "Speed": 0.5,
+              "Size": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1358,8 +1385,8 @@
             "modulationColor": -16711751,
             "parameters": {
               "label": "Spheres",
-              "RAD": 1.0,
-              "PERIOD": 4000.0,
+              "Size": 1.0,
+              "Period": 4000.0,
               "HueVar": 50.0
             },
             "modulation": {
@@ -1371,14 +1398,14 @@
           },
           {
             "id": 2158,
-            "class": "com.symmetrylabs.slstudio.pattern.StripPlay",
+            "class": "com.symmetrylabs.layouts.cubes.patterns.StripPlay",
             "modulationColor": -2031361,
             "parameters": {
               "label": "StripPlay",
-              "bright": 96.0,
+              "Bright": 96.0,
               "Strips": 179,
-              "hueSpread": 1.0,
-              "speed": 0.5,
+              "HueVar": 1.0,
+              "Speed": 0.5,
               "xSpeed": 2000.0,
               "ySpeed": 1600.0,
               "zSpeed": 1000.0
@@ -1410,9 +1437,9 @@
             "modulationColor": -54016,
             "parameters": {
               "label": "Swim",
-              "HUE": 0.1,
-              "Crzy": 0.5,
-              "Spd": 0.5
+              "HueVar": 0.1,
+              "Crazy": 0.5,
+              "Speed": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1427,9 +1454,9 @@
             "modulationColor": -2687232,
             "parameters": {
               "label": "TelevisionStatic",
-              "BRIGHT": 1.0,
-              "SAT": 1.0,
-              "HUE": 1.0
+              "Bright": 1.0,
+              "Sat": 1.0,
+              "Hue": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -1444,8 +1471,8 @@
             "modulationColor": -16711763,
             "parameters": {
               "label": "Traktor",
-              "SPD": 0.5,
-              "hueSpread": 0.4,
+              "Speed": 0.5,
+              "HueVar": 0.4,
               "bassG": 1.0,
               "trebG": 1.0
             },
@@ -1462,16 +1489,16 @@
             "modulationColor": -16449281,
             "parameters": {
               "label": "TraktorPlay",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
               "Rad": 1.399999976158142,
-              "Bnc": 0.0,
+              "Bounce": 0.0,
               "Amp": 0.20000000298023224
             },
             "modulation": {
@@ -1487,16 +1514,16 @@
             "modulationColor": -59392,
             "parameters": {
               "label": "ViolinWave",
-              "LVL": 0.45,
-              "EDG": 0.5,
-              "RNG": 0.5,
-              "RLS": 0.5,
-              "SPD": 0.5,
-              "AMP": 0.25,
-              "WAVE": 0.5,
-              "PSIZE": 0.5,
-              "PSPD": 0.5,
-              "PDENS": 0.25
+              "Level": 0.45,
+              "Egde": 0.5,
+              "Range": 0.5,
+              "Rls": 0.5,
+              "Speed": 0.5,
+              "Amp": 0.25,
+              "Wave": 0.5,
+              "pSize": 0.5,
+              "pSpeed": 0.5,
+              "pDens": 0.25
             },
             "modulation": {
               "modulators": [],
@@ -1550,7 +1577,7 @@
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
-              "shift": 0.0
+              "Shift": 0.0
             },
             "modulation": {
               "modulators": [],
@@ -1568,12 +1595,12 @@
             "modulationColor": -65370,
             "parameters": {
               "label": "AskewPlanes",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 1.0,
-              "TrnY": 0.5,
-              "thck": 0.2,
-              "num": 0
+              "xPos": 1.0,
+              "yPos": 0.5,
+              "Thick": 0.2,
+              "Number": 0
             },
             "modulation": {
               "modulators": [],
@@ -1589,8 +1616,8 @@
             "parameters": {
               "label": "Balance",
               "Hue": 0.4,
-              "Spd": 0.5,
-              "Crzy": 0.20000000298023224
+              "Speed": 0.5,
+              "Crazy": 0.20000000298023224
             },
             "modulation": {
               "modulators": [],
@@ -1605,8 +1632,12 @@
             "modulationColor": -16766977,
             "parameters": {
               "label": "BassPod",
-              "CLR": 0.5,
-              "Gain": 0.5
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1635,12 +1666,12 @@
             "modulationColor": -47104,
             "parameters": {
               "label": "Bubbles",
-              "num": 0.3,
-              "spd": 0.25,
-              "col": 50.0,
-              "size": 20.0,
-              "trns": 9.0,
-              "aPop": 30.0,
+              "Number": 0.3,
+              "Speed": 0.25,
+              "Sat": 50.0,
+              "Size": 20.0,
+              "Trans": 9.0,
+              "PopFrq": 30.0,
               "zDep": 2.0
             },
             "modulation": {
@@ -1656,15 +1687,15 @@
             "modulationColor": -16711819,
             "parameters": {
               "label": "CrossSections",
-              "XRAT": 0.7,
-              "YRAT": 0.6,
-              "ZRAT": 0.5,
-              "XWID": 0.3,
-              "XLEV": 1.0,
-              "YLEV": 1.0,
-              "ZLEV": 0.5,
-              "YWID": 0.3,
-              "ZWID": 0.3
+              "xSpd": 0.7,
+              "ySpd": 0.6,
+              "zSpd": 0.5,
+              "xSize": 0.3,
+              "xLvl": 1.0,
+              "yLvl": 1.0,
+              "zLvl": 0.5,
+              "ySize": 0.3,
+              "zSize": 0.3
             },
             "modulation": {
               "modulators": [],
@@ -1679,9 +1710,14 @@
             "modulationColor": -65328,
             "parameters": {
               "label": "CubeEQ",
-              "EDGE": 0.5,
-              "CLR": 0.1,
-              "BLK": 0.5
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attack": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5,
+              "Edge": 0.5,
+              "Clr": 0.1,
+              "Block": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1696,10 +1732,10 @@
             "modulationColor": -2883329,
             "parameters": {
               "label": "Explosions",
-              "NUM": 4.0,
-              "BRGT": 50.0,
-              "RATE": 8000.0,
-              "BLUR": 0.69
+              "Number": 4.0,
+              "Bright": 50.0,
+              "Rate": 8000.0,
+              "Blur": 0.69
             },
             "modulation": {
               "modulators": [],
@@ -1714,15 +1750,15 @@
             "modulationColor": -16730881,
             "parameters": {
               "label": "Noise",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
-              "Fast": 0.55,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 5,
               "Dens": 0.6
@@ -1754,10 +1790,10 @@
             "modulationColor": -32256,
             "parameters": {
               "label": "Pong",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
               "Size": 0.4000000059604645,
               "Anim": 2
             },
@@ -1774,12 +1810,12 @@
             "modulationColor": -16711826,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.6,
-              "BRT": 0.75,
-              "SAT": 0.5,
-              "SPD1": 0.2,
-              "SPD2": 0.4,
-              "SCALE": 0.15
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.15
             },
             "modulation": {
               "modulators": [],
@@ -1794,7 +1830,7 @@
             "modulationColor": -5570305,
             "parameters": {
               "label": "ShiftingPlane",
-              "hShift": 0.5
+              "HueVar": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1815,8 +1851,8 @@
               "Speed": 16.0,
               "Spin": 0.5,
               "Color": 0.0,
-              "wobble": 1.0,
-              "radius": 700.0
+              "Wobble": 1.0,
+              "Radius": 700.0
             },
             "modulation": {
               "modulators": [],
@@ -1831,8 +1867,8 @@
             "modulationColor": -49664,
             "parameters": {
               "label": "SpaceTime",
-              "RATE": 0.5,
-              "SIZE": 0.5
+              "Speed": 0.5,
+              "Size": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1847,8 +1883,8 @@
             "modulationColor": -65310,
             "parameters": {
               "label": "Spheres",
-              "RAD": 1.0,
-              "PERIOD": 4000.0,
+              "Size": 1.0,
+              "Period": 4000.0,
               "HueVar": 50.0
             },
             "modulation": {
@@ -1860,14 +1896,14 @@
           },
           {
             "id": 3165,
-            "class": "com.symmetrylabs.slstudio.pattern.StripPlay",
+            "class": "com.symmetrylabs.layouts.cubes.patterns.StripPlay",
             "modulationColor": -4915456,
             "parameters": {
               "label": "StripPlay",
-              "bright": 96.0,
+              "Bright": 96.0,
               "Strips": 179,
-              "hueSpread": 1.0,
-              "speed": 0.5,
+              "HueVar": 1.0,
+              "Speed": 0.5,
               "xSpeed": 2000.0,
               "ySpeed": 1600.0,
               "zSpeed": 1000.0
@@ -1899,9 +1935,9 @@
             "modulationColor": -29696,
             "parameters": {
               "label": "Swim",
-              "HUE": 0.1,
-              "Crzy": 0.5,
-              "Spd": 0.5
+              "HueVar": 0.1,
+              "Crazy": 0.5,
+              "Speed": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -1916,9 +1952,9 @@
             "modulationColor": -16711923,
             "parameters": {
               "label": "TelevisionStatic",
-              "BRIGHT": 1.0,
-              "SAT": 1.0,
-              "HUE": 1.0
+              "Bright": 1.0,
+              "Sat": 1.0,
+              "Hue": 1.0
             },
             "modulation": {
               "modulators": [],
@@ -1933,8 +1969,8 @@
             "modulationColor": -7078144,
             "parameters": {
               "label": "Traktor",
-              "SPD": 0.5,
-              "hueSpread": 0.4,
+              "Speed": 0.5,
+              "HueVar": 0.4,
               "bassG": 1.0,
               "trebG": 1.0
             },
@@ -1951,16 +1987,16 @@
             "modulationColor": -16640,
             "parameters": {
               "label": "TraktorPlay",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
               "Rad": 1.399999976158142,
-              "Bnc": 0.0,
+              "Bounce": 0.0,
               "Amp": 0.20000000298023224
             },
             "modulation": {
@@ -1976,16 +2012,16 @@
             "modulationColor": -3276545,
             "parameters": {
               "label": "ViolinWave",
-              "LVL": 0.45,
-              "EDG": 0.5,
-              "RNG": 0.5,
-              "RLS": 0.5,
-              "SPD": 0.5,
-              "AMP": 0.25,
-              "WAVE": 0.5,
-              "PSIZE": 0.5,
-              "PSPD": 0.5,
-              "PDENS": 0.25
+              "Level": 0.45,
+              "Egde": 0.5,
+              "Range": 0.5,
+              "Rls": 0.5,
+              "Speed": 0.5,
+              "Amp": 0.25,
+              "Wave": 0.5,
+              "pSize": 0.5,
+              "pSpeed": 0.5,
+              "pDens": 0.25
             },
             "modulation": {
               "modulators": [],
@@ -2046,21 +2082,21 @@
           "attack": 10.0,
           "release": 100.0,
           "slope": 4.5,
-          "Band-1": 0.0,
-          "Band-2": 0.0,
-          "Band-3": 0.0,
-          "Band-4": 0.129321438289002,
-          "Band-5": 0.3710676445614226,
-          "Band-6": 0.3383506617398445,
-          "Band-7": 0.17488357440219005,
-          "Band-8": 0.14851950581690643,
-          "Band-9": 0.07169625764979826,
-          "Band-10": 0.16778593954906684,
-          "Band-11": 0.03787783482277385,
-          "Band-12": 0.1411365431796604,
-          "Band-13": 0.24753982138235864,
-          "Band-14": 0.3567286201447786,
-          "Band-15": 0.23056761477727206,
+          "Band-1": 0.15080629963139647,
+          "Band-2": 0.2856499974410803,
+          "Band-3": 0.35200083010215255,
+          "Band-4": 0.4263170277479075,
+          "Band-5": 0.4151545567966689,
+          "Band-6": 0.30426041364438816,
+          "Band-7": 0.22619977313976136,
+          "Band-8": 0.12516195050097068,
+          "Band-9": 0.05902948934461616,
+          "Band-10": 0.0,
+          "Band-11": 0.0,
+          "Band-12": 0.0,
+          "Band-13": 0.0,
+          "Band-14": 0.0,
+          "Band-15": 0.0,
           "Band-16": 0.0
         }
       },
@@ -2100,24 +2136,26 @@
       }
     },
     "components": {
-      "performanceManager": {
-        "id": 34,
-        "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
-        "modulationColor": -8126720,
+      "GammaExpander": {
+        "id": 32,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16121601,
         "parameters": {
-          "label": "",
-          "deckOneChannel": 0,
-          "deckTwoChannel": 1,
-          "deckThreeChannel": 2,
-          "deckFourChannel": 3
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
         }
       },
       "outputControl": {
-        "id": 31,
+        "id": 34,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16711877,
         "parameters": {
           "label": "Output Control",
+          "Broadcast packet enabled": false,
           "Test broadcast enabled": false
         }
       }

@@ -6,6 +6,7 @@ import heronarts.lx.parameter.BooleanParameter;
 
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.network.ControllerResetModule;
+import com.symmetrylabs.layouts.dollywood.ButterflyPixlite;
 
  /*
  * Output Component
@@ -28,7 +29,7 @@ public final class OutputControl extends LXComponent {
 
         enabled.addListener(param -> {
             boolean isEnabled = ((BooleanParameter) param).isOn();
-            for (MappingPixlite mappingPixlite : SLStudio.applet.mappingPixlites) {
+            for (ButterflyPixlite mappingPixlite : SLStudio.applet.mappingPixlites) {
                 mappingPixlite.enabled.setValue(isEnabled);
             }
         });

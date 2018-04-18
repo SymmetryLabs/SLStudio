@@ -3,6 +3,15 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
+
+
+import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
+import com.symmetrylabs.layouts.oslo.OsloLayout;
+import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.layouts.dollywood.DollywoodLayout;
+import com.symmetrylabs.layouts.dollywood.ButterflyPixlite;
+
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
@@ -35,7 +44,7 @@ public class SLStudio extends PApplet {
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;
-    public MappingPixlite[] mappingPixlites;
+    public ButterflyPixlite[] mappingPixlites;
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
@@ -78,9 +87,20 @@ public class SLStudio extends PApplet {
 
         Utils.setSketchPath(sketchPath());
 
+// NEW layout code
         String layoutName = getSelectedLayoutName();
         saveSelectedLayoutName(layoutName);
         println("\n---- Layout: " + layoutName + " ----");
+
+// OLD layout code
+
+        // Instantiate the desired layout here.
+        //layout = new CubesLayout();
+        //layout = new DynamicLayout();
+      //layout = new OsloLayout(this, TreeModel.ModelMode.MAJOR_LIMBS);
+      
+      //OLD dollywood layout!!
+      //layout = new DollywoodLayout(this);
 
         layout = LayoutRegistry.getLayout(this, layoutName);
         LXModel model = layout.buildModel();
@@ -102,6 +122,11 @@ public class SLStudio extends PApplet {
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
+                
+                for (ButterflyPixlite pixlite : mappingPixlites) {
+                    System.out.println("ADD PIXLITE");
+                    lx.addOutput(pixlite);
+                }
 
                 SLStudio.this.apc40Listener = new APC40Listener(lx);
                 new FoxListener(lx);
@@ -161,8 +186,8 @@ public class SLStudio extends PApplet {
         dispatcher.draw();
     }
 
-    private MappingPixlite[] setupPixlites() {
-        return new MappingPixlite[0]; // todo
+    private ButterflyPixlite[] setupPixlites() {
+        return new ButterflyPixlite[] {new ButterflyPixlite(lx, "10.200.1.10")};
     }
 
     public final static int CHAN_WIDTH = 200;
