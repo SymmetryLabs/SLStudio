@@ -55,8 +55,9 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 public class SLStudioLX extends P3LX {
     public static final String COPYRIGHT = "Symmetry Labs";
 
-    private static final String DEFAULT_PROJECT_FILE = "default.lxp";
+    private static final String DEFAULT_PROJECT_FILE = "AlexProject.lxp";
     private static final String PROJECT_FILE_NAME = ".lxproject";
+    //private static final String PROJECT_FILE_NAME = "project.lxp";
     private static final String KEY_UI = "ui";
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
@@ -534,6 +535,7 @@ public class SLStudioLX extends P3LX {
         onUIReady(this, ui);
         registerExternal(KEY_UI, ui);
 
+        // Orig
         try {
             File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
             if (projectFile.exists()) {
@@ -541,16 +543,20 @@ public class SLStudioLX extends P3LX {
                 if (lines != null && lines.length > 0) {
                     File file = this.applet.saveFile(lines[0]);
                     if (file.exists()) {
+                        System.out.println("file opened through project file name");
                         openProject(file);
                     }
                 }
             } else {
                 File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
                 if (defaultProject.exists()) {
+                    System.out.println("file opened thru default");
                     openProject(defaultProject);
                 }
+
             }
         } catch (Exception x) {
+            x.printStackTrace();
             // ignored
         }
 

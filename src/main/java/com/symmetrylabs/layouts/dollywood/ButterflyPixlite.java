@@ -12,9 +12,9 @@ public class ButterflyPixlite extends LXOutputGroup {
         super(lx);
         this.ipAddress = ipAddress;
 
-        for (DollywoodModel.Wing wing : ((DollywoodModel)lx.model).getWings()) {
-            System.out.println(wing.id);
-        }
+        // for (DollywoodModel.Wing wing : ((DollywoodModel)lx.model).getWings()) {
+        //   System.out.println(wing.id);
+        // }
 
         try {
             addChild(new ButterflyPixliteOutput(lx, ipAddress,

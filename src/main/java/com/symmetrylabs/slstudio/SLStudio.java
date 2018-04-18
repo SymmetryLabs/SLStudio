@@ -102,6 +102,7 @@ public class SLStudio extends PApplet {
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
+                
                 for (ButterflyPixlite pixlite : mappingPixlites) {
                     System.out.println("ADD PIXLITE");
                     lx.addOutput(pixlite);
