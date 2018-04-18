@@ -535,31 +535,54 @@ public class SLStudioLX extends P3LX {
         onUIReady(this, ui);
         registerExternal(KEY_UI, ui);
 
-        // Orig
-        try {
-            File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
-            if (projectFile.exists()) {
-                String[] lines = this.applet.loadStrings(PROJECT_FILE_NAME);
-                if (lines != null && lines.length > 0) {
-                    File file = this.applet.saveFile(lines[0]);
-                    if (file.exists()) {
-                        System.out.println("file opened through project file name");
-                        openProject(file);
-                    }
-                }
-            } else {
-                File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
+        File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
                 if (defaultProject.exists()) {
                     System.out.println("file opened thru default");
                     openProject(defaultProject);
                 }
+                else{
 
-            }
-        } catch (Exception x) {
-            x.printStackTrace();
-            // ignored
+                    try {
+                            File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
+                            if (projectFile.exists()) {
+                                String[] lines = this.applet.loadStrings(PROJECT_FILE_NAME);
+                                if (lines != null && lines.length > 0) {
+                                    File file = this.applet.saveFile(lines[0]);
+                                    if (file.exists()) {
+                                        System.out.println("file opened through project file name");
+                                        openProject(file);
+                                    }
+                                }
+                            }
+                } catch (Exception x) {
+    
+                }
         }
 
+        // Orig
+        // try {
+        //     File projectFile = this.applet.saveFile(PROJECT_FILE_NAME);
+        //     if (projectFile.exists()) {
+        //         String[] lines = this.applet.loadStrings(PROJECT_FILE_NAME);
+        //         if (lines != null && lines.length > 0) {
+        //             File file = this.applet.saveFile(lines[0]);
+        //             if (file.exists()) {
+        //                 System.out.println("file opened through project file name");
+        //                 openProject(file);
+        //             }
+        //         }
+        //     } else {
+        //         File defaultProject = this.applet.saveFile(DEFAULT_PROJECT_FILE);
+        //         if (defaultProject.exists()) {
+        //             System.out.println("file opened thru default");
+        //             openProject(defaultProject);
+        //         }
+
+        //     }
+        // } catch (Exception x) {
+        //     x.printStackTrace();
+        //     // ignored
+        
         engine.setThreaded(multiThreaded);
     }
 
