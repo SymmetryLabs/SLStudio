@@ -116,6 +116,7 @@ public class SLStudio extends PApplet {
                 ui.theme.setAttentionColor(0xffa00044);
                 ui.theme.setFocusColor(0xff0094aa);
                 ui.theme.setControlBorderColor(0xff292929);
+                ui.theme.setDeviceFocusedBackgroundColor(0xff3E585A);
             }
 
             @Override
