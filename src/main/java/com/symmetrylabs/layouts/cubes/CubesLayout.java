@@ -60,7 +60,7 @@ public class CubesLayout implements Layout {
 
     static final float TOWER_VERTICAL_SPACING = 2.5f;
     static final float TOWER_RISER = 14;
-    static final float SP = 24+9;
+    static final float SP = 24+15; //24+9;
     static final float JUMP = TOWER_HEIGHT+TOWER_VERTICAL_SPACING;
 
     static final float INCHES_PER_METER = 39.3701f;
