@@ -5,6 +5,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.LXComponent;
 
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -14,12 +15,14 @@ import java.io.InputStreamReader;
 import java.io.File;
 import java.io.IOException;
 
-public class AiVj {
+public class AiVj extends LXComponent {
 
     public final Recorder recorder;
     public final Player player;
+    private final BooleanParameter enabled;
 
-    public AiVj() {
+    public AiVj(LX lx) {
+        super(lx, "AI VJ");
         this.recorder = new Recorder();
         this.player = new Player();
 
@@ -30,14 +33,25 @@ public class AiVj {
         String pyRun = "run";
         String cmd = slstudioPath + "/AI_VJ/";
 
-
-
+        //this.enabled = lx.engine.output.enabled;
+        this.enabled = new BooleanParameter("enabled", false)
+            .setDescription("AI VJ Mode: toggle on/off");
 
         String LOGFILE = "out.txt";
         PrintWriter out;
+    /*    enabled.addListener(p -> {
+            if (((BooleanParameter)p).isOn()) {
+                addChannel();
+            }
+            else {
+                removeChannel();
+            }
+        });*/
 
         recorder.isRunning.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
+
+
                 if (((BooleanParameter)parameter).isOn()) {
 
                     // populate processes that will run scripts natively

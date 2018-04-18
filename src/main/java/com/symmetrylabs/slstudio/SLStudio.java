@@ -121,7 +121,7 @@ public class SLStudio extends PApplet {
                 lx.paletteLibrary = new PaletteLibrary();
                 loadPalettes(lx.paletteLibrary);
 
-                aivj = new AiVj();
+                aivj = new AiVj(lx);
 
                 ui.theme.setPrimaryColor(0xff008ba0);
                 ui.theme.setSecondaryColor(0xff00a08b);
