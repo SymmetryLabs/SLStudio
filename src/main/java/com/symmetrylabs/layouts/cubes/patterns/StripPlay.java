@@ -1,6 +1,6 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
-import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
+//import com.symmetrylabs.slstudio.pattern.base.StripsPattern;
 import static processing.core.PApplet.*;
 
 import com.symmetrylabs.layouts.cubes.CubesModel;

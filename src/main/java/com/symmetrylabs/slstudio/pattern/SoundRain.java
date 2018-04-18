@@ -1,4 +1,3 @@
-<<<<<<< HEAD
 package com.symmetrylabs.slstudio.pattern;
 
 import java.lang.Math;

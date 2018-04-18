@@ -36,7 +36,7 @@ public class LayoutRegistry {
         map.put("oslo", () -> new OsloLayout(applet, TreeModel.ModelMode.MAJOR_LIMBS));
         map.put("dynamic_json", () -> new DynamicLayout());
         map.put("composite", () -> new CompositeLayout());
-        map.put("dollywood", () -> new DollywoodLayout());
+        map.put("dollywood", () -> new DollywoodLayout(applet));
     }
 
     static interface LayoutBuilder {

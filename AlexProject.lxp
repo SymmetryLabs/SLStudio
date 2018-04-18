@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1524092224796,
+  "timestamp": 1524095108162,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -133,7 +133,7 @@
               "size": 620.0,
               "detail": 2.0,
               "ripple": 0.6,
-              "x": -3.8759169578552246,
+              "x": 11.249994277954102,
               "y": 57.86503219604492,
               "z": 110.0,
               "zScale": 0.54,
@@ -174,7 +174,7 @@
               "size": 140.0000093877316,
               "detail": 6.6,
               "ripple": 0.6,
-              "x": -3.8759169578552246,
+              "x": 11.249994277954102,
               "y": 57.86503219604492,
               "z": 110.0,
               "zScale": 5.58,
@@ -208,15 +208,15 @@
             "modulationColor": -65364,
             "parameters": {
               "label": "Noise",
-              "Sprk": 0.0,
+              "Spark": 0.0,
               "Wave": 0.0,
-              "TrnX": 0.5,
-              "TrnY": 0.5,
-              "RotX": 0.5,
-              "RotY": 0.5,
-              "RotZ": 0.5,
+              "xPos": 0.5,
+              "yPos": 0.5,
+              "xRot": 0.5,
+              "yRot": 0.5,
+              "zRot": 0.5,
               "Spin": 0.5,
-              "Fast": 0.55,
+              "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
               "Dens": 0.0
@@ -248,10 +248,10 @@
             "modulationColor": -16711753,
             "parameters": {
               "label": "StripPlay",
-              "bright": 96.0,
+              "Bright": 96.0,
               "Strips": 179,
-              "hueSpread": 1.0,
-              "speed": 0.5,
+              "HueVar": 1.0,
+              "Speed": 0.5,
               "xSpeed": 2000.0,
               "ySpeed": 1600.0,
               "zSpeed": 1000.0
@@ -269,12 +269,12 @@
             "modulationColor": -16711729,
             "parameters": {
               "label": "BassPod",
-              "CLR": 0.5,
-              "GAIN": 0.6699999962002039,
-              "RANG": 0.2,
-              "ATTK": 0.4,
-              "RLS": 0.4,
-              "SLOP": 0.5
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -391,8 +391,8 @@
             "modulationColor": -1310465,
             "parameters": {
               "label": "SpaceTime",
-              "RATE": 0.5,
-              "SIZE": 0.5
+              "Speed": 0.5,
+              "Size": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -421,19 +421,19 @@
               "bMaxAngle": 60.0,
               "bPull": 100.0,
               "bTrackingMode": 1,
-              "speed": 1.0,
-              "accel": 1.5,
-              "dampen": 0.75,
-              "focusX": 0.0,
-              "focusY": 0.0,
-              "focusZ": 0.0,
-              "pullX": 0.5,
-              "pullY": 0.5,
-              "pullZ": 0.5,
-              "twistX": 0.0,
-              "twistY": 0.0,
-              "twistZ": 0.0,
-              "edgeRepel": false
+              "Speed": 1.0,
+              "Accel": 1.5,
+              "Dampen": 0.75,
+              "FocusX": 0.0,
+              "FocusY": 0.0,
+              "FocusZ": 0.0,
+              "PullX": 0.5,
+              "PullY": 0.5,
+              "PullZ": 0.5,
+              "TwistX": 0.0,
+              "TwistY": 0.0,
+              "TwistZ": 0.0,
+              "EdgeRepel": false
             },
             "modulation": {
               "modulators": [],
@@ -448,12 +448,12 @@
             "modulationColor": -6356737,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.6999999977648258,
-              "BRT": 0.75,
-              "SAT": 0.5,
-              "SPD1": 0.2,
-              "SPD2": 0.4,
-              "SCALE": 0.8299999848008156
+              "Depth": 0.6,
+              "Bright": 0.75,
+              "Sat": 0.5,
+              "Speed1": 0.2,
+              "Speed2": 0.4,
+              "Scale": 0.15
             },
             "modulation": {
               "modulators": [],
@@ -468,12 +468,12 @@
             "modulationColor": -16769281,
             "parameters": {
               "label": "BassPod",
-              "CLR": 0.5,
-              "GAIN": 0.80999999307096,
-              "RANG": 0.2,
-              "ATTK": 0.4,
-              "RLS": 0.4,
-              "SLOP": 0.5
+              "Clr": 0.5,
+              "Gain": 0.5,
+              "Range": 0.2,
+              "Attk": 0.4,
+              "Rls": 0.4,
+              "Slope": 0.5
             },
             "modulation": {
               "modulators": [],
@@ -506,7 +506,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 2,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 972,
@@ -518,52 +518,6 @@
               "color/brightness": 100.0,
               "color/saturation": 100.0,
               "color": -65536
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 983,
-            "class": "com.symmetrylabs.layouts.dollywood.TextureLoop",
-            "modulationColor": -65281,
-            "parameters": {
-              "label": "TextureLoop",
-              "rate": 500.0,
-              "size": 3.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 986,
-            "class": "com.symmetrylabs.layouts.dollywood.TextureSparkle",
-            "modulationColor": -16775169,
-            "parameters": {
-              "label": "TextureSparkle",
-              "speed": 537.1757918944759,
-              "bright": 60.0
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 1000,
-            "class": "com.symmetrylabs.layouts.dollywood.TextureNone",
-            "modulationColor": -16753921,
-            "parameters": {
-              "label": "TextureNone"
             },
             "modulation": {
               "modulators": [],
@@ -596,7 +550,7 @@
         },
         "effects": [],
         "clips": [],
-        "patternIndex": 1,
+        "patternIndex": 0,
         "patterns": [
           {
             "id": 1989,
@@ -608,36 +562,6 @@
               "color/brightness": 100.0,
               "color/saturation": 100.0,
               "color": -65536
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 1992,
-            "class": "com.symmetrylabs.layouts.dollywood.TextureNone",
-            "modulationColor": -12189441,
-            "parameters": {
-              "label": "TextureNone"
-            },
-            "modulation": {
-              "modulators": [],
-              "modulations": [],
-              "triggers": []
-            },
-            "autoCycleEnabled": true
-          },
-          {
-            "id": 1994,
-            "class": "com.symmetrylabs.layouts.dollywood.TextureSparkle",
-            "modulationColor": -65533,
-            "parameters": {
-              "label": "TextureSparkle",
-              "speed": 1000.0,
-              "bright": 60.0
             },
             "modulation": {
               "modulators": [],
@@ -700,16 +624,16 @@
           "slope": 4.5,
           "Band-1": 0.0,
           "Band-2": 0.0,
-          "Band-3": 0.048519470132064035,
-          "Band-4": 0.19299244544679317,
-          "Band-5": 0.16960095659455643,
-          "Band-6": 0.025700523469775916,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
           "Band-7": 0.0,
           "Band-8": 0.0,
           "Band-9": 0.0,
           "Band-10": 0.0,
           "Band-11": 0.0,
-          "Band-12": 0.0,
+          "Band-12": 0.0798861775352302,
           "Band-13": 0.0,
           "Band-14": 0.0,
           "Band-15": 0.0,
@@ -752,39 +676,27 @@
       }
     },
     "components": {
-      "performanceManager": {
-        "id": 45,
-        "class": "com.symmetrylabs.slstudio.performance.PerformanceManager",
-        "modulationColor": -16711833,
+      "GammaExpander": {
+        "id": 32,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16711732,
         "parameters": {
-          "label": "",
-          "deckOneChannel": 0,
-          "deckTwoChannel": 0,
-          "deckThreeChannel": 0,
-          "deckFourChannel": 0
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
         }
       },
       "outputControl": {
-        "id": 32,
+        "id": 34,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -16771585,
         "parameters": {
           "label": "Output Control",
           "Broadcast packet enabled": false,
           "Test broadcast enabled": false
-        }
-      },
-      "gammaCorrection": {
-        "id": 35,
-        "class": "com.symmetrylabs.slstudio.component.GammaCorrection",
-        "modulationColor": -8322817,
-        "parameters": {
-          "label": "GammaCorrection",
-          "ON": true,
-          "GMA": 0,
-          "RGMA": 2.0,
-          "GGMA": 2.2,
-          "BGMA": 2.8
         }
       }
     },
@@ -821,9 +733,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 955.426074493543,
-        "theta": 6.336000000000007,
-        "phi": -0.234,
+        "radius": 1241.0832580708152,
+        "theta": 6.30900000000001,
+        "phi": -0.13800000000000026,
         "positionX": -50.91798782348633,
         "positionY": 74.17401885986328,
         "positionZ": 110.0
