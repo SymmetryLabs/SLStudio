@@ -22,11 +22,8 @@ package heronarts.lx.color;
 
 import java.awt.Color;
 
-/**
- * Various utilities that operate on color values
- */
+/** Various utilities that operate on 32-bit integers representing RGBA colors */
 public class LXColor {
-
     /**
      * Color blending modes
      */
@@ -69,6 +66,20 @@ public class LXColor {
 
     public static byte blue(int argb) {
         return (byte) (argb & BLUE_MASK);
+    }
+
+    public static long toLong(int argb) {
+        // If we were to shift left by 8, then 0xff would become 0xff00.
+        // Instead, we multiply by 0x0101, so that 0xff becomes 0xffff.
+        return LXColor16.rgba(
+                (int) red(argb) * 0x0101,
+                (int) green(argb) * 0x0101,
+                (int) blue(argb) * 0x0101,
+                (int) alpha(argb) * 0x0101);
+    }
+
+    public static void intsToLongs(int[] ints, long[] longs) {
+        for (int i = 0; i < ints.length; i++) longs[i] = toLong(ints[i]);
     }
 
     /**
@@ -589,5 +600,4 @@ public class LXColor {
         int am = a & mask, bm = b & mask;
         return (am + (((alpha+1)*(bm-am)) >>> 8)) & mask;
     }
-
 }
