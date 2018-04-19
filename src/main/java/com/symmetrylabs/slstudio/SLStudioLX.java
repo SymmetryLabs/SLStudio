@@ -58,7 +58,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 public class SLStudioLX extends P3LX {
     public static final String COPYRIGHT = "Symmetry Labs";
 
-    private static final String DEFAULT_PROJECT_FILE = "AlexProject.lxp";
+    private static final String DEFAULT_PROJECT_FILE = "ai_vj.lxp";
     private static final String PROJECT_FILE_NAME = ".lxproject";
     //private static final String PROJECT_FILE_NAME = "project.lxp";
     private static final String KEY_UI = "ui";

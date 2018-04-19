@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1524097924627,
+  "timestamp": 1524097852059,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -103,7 +103,7 @@
           }
         ],
         "clips": [],
-        "patternIndex": 19,
+        "patternIndex": 3,
         "patterns": [
           {
             "id": 17791,
@@ -164,7 +164,7 @@
               "label": "BassPod",
               "Clr": 0.5,
               "Gain": 0.5,
-              "Range": 0.2,
+              "Range": 0.5599999975413084,
               "Attk": 0.4,
               "Rls": 0.4,
               "Slope": 0.5
