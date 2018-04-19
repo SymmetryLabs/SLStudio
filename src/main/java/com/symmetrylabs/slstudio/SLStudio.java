@@ -155,9 +155,10 @@ public class SLStudio extends PApplet {
             }
         };
 
+        System.out.println(lx.engine.audio.enabled.getValue());
         lx.engine.isChannelMultithreaded.setValue(true);
         lx.engine.isNetworkMultithreaded.setValue(true);
-        lx.engine.audio.enabled.setValue(false);
+        //lx.engine.audio.enabled.setValue(lx.engine.audio.enabled.getValue());
         lx.engine.output.enabled.setValue(true);
         lx.engine.framesPerSecond.setValue(120);
 
