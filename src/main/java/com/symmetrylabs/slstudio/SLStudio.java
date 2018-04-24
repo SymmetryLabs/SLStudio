@@ -18,6 +18,7 @@ import com.symmetrylabs.slstudio.performance.APC40Listener;
 import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UISpeed;
+import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -124,7 +125,8 @@ public class SLStudio extends PApplet {
                 ui.leftPane.audio.setVisible(true);
                 ui.preview.setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
-                new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+                new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+                new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
 
                 layout.setupUi(lx, ui);
             }
