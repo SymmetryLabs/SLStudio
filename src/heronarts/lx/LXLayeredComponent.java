@@ -62,7 +62,7 @@ import java.util.List;
  *         a PolyBuffer and makes it the buffer that onLoop() will read from
  *         and write into.
  */
-public abstract class LXLayeredComponent extends LXModelComponent implements LXLoopTask {
+public abstract class LXLayeredComponent extends LXModelComponent implements LXLoopTask, PolyBufferProvider {
     /** Marker interface for subclasses that want to own their own buffers. */
     public interface Buffered {}
 
@@ -90,7 +90,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     }
 
     /** Gets this component's combined color buffer. */
-    protected PolyBuffer getPolyBuffer() {
+    public PolyBuffer getPolyBuffer() {
         return polyBuffer;
     }
 
@@ -124,7 +124,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     /** Gets the 8-bit color buffer.  Maintained for compatibility. */
     @Deprecated
     protected LXBuffer getBuffer() {
-        return (LXBuffer) polyBuffer.getBuffer();
+        return (LXBuffer) polyBuffer.getBuffer(PolyBuffer.Space.RGB8);
     }
 
     /** Gets the 8-bit color buffer's array.  Maintained for compatibility. */
@@ -162,12 +162,6 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
             layer.loop(deltaMs);
         }
         afterLayers(deltaMs);
-
-        if (!(this instanceof Buffered)) {
-            // The buffers are external; we need to make the output from onLoop() and
-            // afterLayers() visible in the external buffers, converting if needed.
-            polyBuffer.sync();
-        }
 
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }

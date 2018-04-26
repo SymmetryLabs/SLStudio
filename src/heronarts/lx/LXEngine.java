@@ -35,6 +35,7 @@ import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.clip.LXClip;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
@@ -45,6 +46,7 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
@@ -54,11 +56,15 @@ import heronarts.lx.script.LXScriptEngine;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Queue;
+
+import static heronarts.lx.LXChannel.CrossfadeGroup.A;
+import static heronarts.lx.LXChannel.CrossfadeGroup.B;
 
 /**
  * The engine is the core class that runs the internal animations. An engine is
@@ -145,6 +151,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         new BoundedParameter("Speed", 1, 0, 2)
         .setDescription("Overall speed adjustement to the entire engine (does not apply to master tempo and audio)");
 
+    /** The color space that the engine renders to. */
+    public final EnumParameter<PolyBuffer.Space> colorSpace =
+            new EnumParameter<>("Color Space", PolyBuffer.Space.RGB8)
+                    .setDescription("Selects the color space for the engine");
+
     private final BooleanParameter[] scenes = new BooleanParameter[MAX_SCENES];
 
     public final LXModulationEngine modulation;
@@ -185,6 +196,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         public String getOscAddress() {
             return "/lx/output";
         }
+
+        public void onSend(PolyBuffer src) { }
     }
 
     public interface Dispatch {
@@ -290,7 +303,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public final Timer timer = new Timer();
 
     class EngineBuffer {
-
         boolean cueOn;
         DoubleBuffer main;
         DoubleBuffer cue;
@@ -301,8 +313,9 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         }
 
         void sync() {
-            System.arraycopy(this.main.render.getArray(), 0, this.main.copy.getArray(), 0, this.main.copy.getArray().length);
-            System.arraycopy(this.cue.render.getArray(), 0, this.cue.copy.getArray(), 0, this.cue.copy.getArray().length);
+            PolyBuffer.Space space = colorSpace.getEnum();
+            main.frozen.copyFrom(main.render, space);
+            cue.frozen.copyFrom(cue.render, space);
         }
 
         void flip() {
@@ -311,32 +324,30 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         }
 
         class DoubleBuffer {
-
-            ModelBuffer render;
-            ModelBuffer copy;
+            PolyBuffer render;
+            PolyBuffer frozen;
 
             DoubleBuffer(LX lx) {
-                this.render = new ModelBuffer(lx);
-                this.copy = new ModelBuffer(lx);
+                this.render = new PolyBuffer(lx);
+                this.frozen = new PolyBuffer(lx);
             }
 
             void flip() {
-                ModelBuffer tmp = this.copy;
-                this.copy = this.render;
+                PolyBuffer tmp = this.frozen;
+                this.frozen = this.render;
                 this.render = tmp;
             }
 
-            void copy(int[] destination) {
-                System.arraycopy(this.copy.getArray(), 0, destination, 0, destination.length);
+            void copyTo(PolyBuffer dest, PolyBuffer.Space space) {
+                dest.copyFrom(frozen, space);
             }
         }
     }
 
-    private final EngineBuffer buffer;
-
-    private final ModelBuffer background;
-    private final ModelBuffer blendBufferLeft;
-    private final ModelBuffer blendBufferRight;
+    private final PolyBuffer black;  // always black, read-only
+    private final BlendTarget groupA;  // working area for blending group A
+    private final BlendTarget groupB;  // working area for blending group B
+    private final EngineBuffer buffer;  // destination buffers for final output
 
     public final BooleanParameter isMultithreaded = new BooleanParameter("Threaded", false)
         .setDescription("Whether the engine and UI are on separate threads");
@@ -367,20 +378,19 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         LX.initTimer.log("Engine: Init");
         this.lx = lx;
 
-        // Background and blending buffers
-        this.buffer = new EngineBuffer(lx);
-        this.background = new ModelBuffer(lx);
-        this.blendBufferLeft = new ModelBuffer(lx);
-        this.blendBufferRight = new ModelBuffer(lx);
+        // An all-black buffer is used as the initial base for blending.
+        // It is initialized to black and then never modified.
+        black = new PolyBuffer(lx);
+        Arrays.fill((int[]) black.getArray(PolyBuffer.Space.RGB8), LXColor.BLACK);
+
+        // Blending buffers
+        groupA = new BlendTarget(lx);
+        groupB = new BlendTarget(lx);
+        buffer = new EngineBuffer(lx);
 
         // Initialize network thread (don't start it yet)
         this.network = new NetworkThread(lx);
 
-        // Initialize UI and background to black
-        int[] backgroundArray = this.background.getArray();
-        for (int i = 0; i < backgroundArray.length; ++i) {
-            backgroundArray[i] = LXColor.BLACK;
-        }
         LX.initTimer.log("Engine: Buffers");
 
         // Channel blend modes
@@ -1033,29 +1043,34 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             }
         }
 
-        // Run and blend all of our channels
+        // The main work: run patterns, blend channels, send to outputs.
         long channelStart = System.nanoTime();
-        int[] backgroundArray = this.background.getArray();
-        int[] blendOutputMain = this.buffer.main.render.getArray();
-        int[] blendOutputCue = this.buffer.cue.render.getArray();
-        int[] blendOutputLeft = this.blendBufferLeft.getArray();
-        int[] blendOutputRight = this.blendBufferRight.getArray();
-        int[] blendDestinationCue = backgroundArray;
+        loopAllChannels(deltaMs);
+        blendChannels(deltaMs, channelStart, colorSpace.getEnum());
+        sendToOutputs(runStart);
+        long nowNanos = System.nanoTime();
+        this.timer.addRunTime(nowNanos - runStart, nowNanos);
 
-        double crossfadeValue = this.crossfader.getValue();
+        if (this.logTimers) {
+            StringBuilder sb = new StringBuilder();
+            sb.append("LXEngine::run() " + ((int) (this.timer.runNanos / 1000000)) + "ms\n");
+            sb.append("LXEngine::run()::channels " + ((int) (this.timer.channelNanos / 1000000)) + "ms\n");
+            for (LXChannel channel : this.channels) {
+                sb.append("LXEngine::" + channel.getLabel() + "::loop() " + ((int) (channel.timer.loopNanos / 1000000)) + "ms\n");
+                LXPattern pattern = channel.getActivePattern();
+                sb.append("LXEngine::" + channel.getLabel() + "::" + pattern.getLabel() + "::run() " + ((int) (pattern.timer.runNanos / 1000000)) + "ms\n");
+            }
+            System.out.println(sb);
+            this.logTimers = false;
+        }
 
-        boolean leftOn = crossfadeValue < 1.;
-        boolean rightOn = crossfadeValue > 0.;
-        boolean cueOn = false;
+        conversionsPerFrame = PolyBuffer.getConversionCount() - initialConversionCount;
+    }
 
-        int leftChannelCount = 0;
-        int rightChannelCount = 0;
-        int mainChannelCount = 0;
-
-        boolean isChannelMultithreaded = this.isChannelMultithreaded.isOn();
-
+    /** Runs loop() on all enabled or cue-enabled channels. */
+    void loopAllChannels(double deltaMs) {
         // If we are in super-threaded mode, run the channels on their own threads!
-        if (isChannelMultithreaded) {
+        if (isChannelMultithreaded.isOn()) {
             // Kick off threads per channel
             for (LXChannel channel : this.mutableChannels) {
                 if (channel.enabled.isOn() || channel.cueActive.isOn()) {
@@ -1088,145 +1103,159 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                     }
                 }
             }
-        }
-
-        for (LXChannel channel : this.mutableChannels) {
-            boolean channelIsEnabled = channel.enabled.isOn();
-            boolean channelIsCue = channel.cueActive.isOn();
-            if (channelIsEnabled || channelIsCue) {
-                if (!isChannelMultithreaded) {
+        } else {
+            for (LXChannel channel : this.mutableChannels) {
+                if (channel.enabled.isOn() || channel.cueActive.isOn()) {
                     // TODO(mcslee): should clips still run even if channel is disabled??
                     channel.loop(deltaMs);
                 }
-                long blendStart = System.nanoTime();
-                if (channelIsEnabled) {
-                    boolean doBlend = false;
-                    int[] blendDestination;
-                    int[] blendOutput;
-                    switch (channel.crossfadeGroup.getEnum()) {
-                    case A:
-                        blendDestination = (leftChannelCount++ > 0) ? blendOutputLeft : backgroundArray;
-                        blendOutput = blendOutputLeft;
-                        doBlend = leftOn || this.cueA.isOn();
-                        break;
-                    case B:
-                        blendDestination = (rightChannelCount++ > 0) ? blendOutputRight: backgroundArray;
-                        blendOutput = blendOutputRight;
-                        doBlend = rightOn || this.cueB.isOn();
-                        break;
-                    default:
-                    case BYPASS:
-                        blendDestination = (mainChannelCount++ > 0) ? blendOutputMain : backgroundArray;
-                        blendOutput = blendOutputMain;
-                        doBlend = channelIsEnabled;
-                        break;
-                    }
-                    if (doBlend) {
-                        double alpha = channel.fader.getValue();
-                        if (alpha > 0) {
-                            LXBlend blend = channel.blendMode.getObject();
-                            blend.blend(blendDestination, channel.getColors(), alpha, blendOutput);
-                        } else if (blendDestination != blendOutput) {
-                            // Edge-case: copy the blank buffer into the destination blend buffer when
-                            // the channel fader is set to 0
-                            System.arraycopy(blendDestination, 0, blendOutput, 0, blendDestination.length);
-                        }
-                    }
-                }
+            }
+        }
+    }
 
-                if (channelIsCue) {
-                    cueOn = true;
-                    this.addBlend.blend(blendDestinationCue, channel.getColors(), 1, blendOutputCue);
-                    blendDestinationCue = blendOutputCue;
-                }
+    /**
+     * A target for blending or copying color data.  Maintains a reference to the
+     * PolyBuffer where the blend or copy was last written, and uses that as the
+     * base for the next blend.  You can provide a destination buffer to the
+     * constructor, or let it allocate a new destination buffer automatically.
+     */
+    class BlendTarget implements PolyBufferProvider {
+        private PolyBuffer lastResult = black;
+        private final PolyBuffer dest;
 
-                ((LXChannel.Timer)channel.timer).blendNanos = System.nanoTime() - blendStart;
+        public BlendTarget(LX lx) {
+            this(new PolyBuffer(lx));
+        }
+
+        public BlendTarget(PolyBuffer dest) {
+            this.dest = dest;
+        }
+
+        public void reset() {
+            lastResult = black;
+        }
+
+        public PolyBuffer getPolyBuffer() {
+            return lastResult;
+        }
+
+        public boolean isBlack() {
+            return lastResult == black;
+        }
+
+        /** Copies a given buffer into the current destination buffer. */
+        public void copyFrom(PolyBufferProvider src, PolyBuffer.Space space) {
+            dest.copyFrom(src.getPolyBuffer(), space);
+            lastResult = dest;
+        }
+
+        /** Blends an overlay buffer on top of the current destination buffer. */
+        public void blendFrom(PolyBufferProvider overlay, double alpha, LXBlend blend, PolyBuffer.Space space) {
+            blend.blend(lastResult, overlay, alpha, dest, space);
+            lastResult = dest;
+        }
+
+        /** Ensures that the result is written to the destination buffer. */
+        public void finish(PolyBuffer.Space space) {
+            copyFrom(lastResult, space);
+        }
+    }
+
+    void blendChannels(double deltaMs, long channelStart, PolyBuffer.Space space) {
+        groupA.reset();
+        groupB.reset();
+        BlendTarget main = new BlendTarget(buffer.main.render);
+        BlendTarget cue = new BlendTarget(buffer.cue.render);
+        boolean cueOn = false;
+
+        for (LXChannel channel : mutableChannels) {
+            long blendStart = System.nanoTime();
+            double alpha = channel.fader.getValue();
+
+            if (channel.enabled.isOn() && alpha > 0) {
+                LXChannel.CrossfadeGroup group = channel.crossfadeGroup.getEnum();
+                LXBlend blend = channel.blendMode.getObject();
+                (group == A ? groupA : group == B ? groupB : main).blendFrom(channel, alpha, blend, space);
+            }
+            if (channel.cueActive.isOn()) {
+                cue.copyFrom(channel, space);
+                cueOn = true;
+            }
+            if (channel.enabled.isOn() || channel.cueActive.isOn()) {
+                ((LXChannel.Timer) channel.timer).blendNanos = System.nanoTime() - blendStart;
             }
         }
 
         // Run the master channel (may have clips)
         this.masterChannel.loop(deltaMs);
 
-        if (cueA.isOn() || cueB.isOn()) {
+        if (cueA.isOn()) {
+            cue.copyFrom(groupA, space);
+            cueOn = true;
+        } else if (cueB.isOn()) {
+            cue.copyFrom(groupB, space);
             cueOn = true;
         }
 
-        boolean leftContent = leftOn && (leftChannelCount > 0);
-        boolean rightContent = rightOn && (rightChannelCount > 0);
+        // Crossfade between the A and B groups, and add that to the main buffer
+        double crossfadeValue = crossfader.getValue();
+        boolean useGroupA = crossfadeValue < 1 && !groupA.isBlack();
+        boolean useGroupB = crossfadeValue > 0 && !groupB.isBlack();
+        double fadeTowardB = Math.min(1, 2 * crossfadeValue);
+        double fadeTowardA = Math.min(1, 2 * (1 - crossfadeValue));
 
-        if (leftContent && rightContent) {
-            // There are left and right channels assigned!
-            int[] crossfadeSource, crossfadeDestination;
-            double crossfadeAlpha;
+        if (useGroupA && useGroupB) {
+            LXBlend blend = crossfaderBlendMode.getObject();
             if (crossfadeValue <= 0.5) {
-                crossfadeDestination = blendOutputLeft;
-                crossfadeSource = blendOutputRight;
-                crossfadeAlpha = Math.min(1, 2. * crossfadeValue);
+                groupA.blendFrom(groupB, fadeTowardB, blend, space);
+                main.blendFrom(groupA, 1, addBlend, space);
             } else {
-                crossfadeDestination = blendOutputRight;
-                crossfadeSource = blendOutputLeft;
-                crossfadeAlpha = Math.min(1, 2. * (1-crossfadeValue));
+                groupB.blendFrom(groupA, fadeTowardA, blend, space);
+                main.blendFrom(groupB, 1, addBlend, space);
             }
-
-            // Compute the crossfade mix
-            LXBlend blend = this.crossfaderBlendMode.getObject();
-            blend.blend(crossfadeDestination, crossfadeSource, crossfadeAlpha, crossfadeDestination);
-
-            // Add the crossfaded groups to the main buffer
-            int[] blendDestination = (mainChannelCount > 0) ? blendOutputMain : backgroundArray;
-            addBlend.blend(blendDestination, crossfadeDestination, 1., blendOutputMain);
-
-        } else if (leftContent) {
-            // Add the left group to the main buffer
-            int[] blendDestination = (mainChannelCount > 0) ? blendOutputMain : backgroundArray;
-            double blendAlpha = Math.min(1, 2. * (1-crossfadeValue));
-            addBlend.blend(blendDestination, blendOutputLeft, blendAlpha, blendOutputMain);
-        } else if (rightContent) {
-            // Add the right group to the main buffer
-            int[] blendDestination = (mainChannelCount > 0) ? blendOutputMain : backgroundArray;
-            double blendAlpha = Math.min(1, 2. * crossfadeValue);
-            addBlend.blend(blendDestination, blendOutputRight, blendAlpha, blendOutputMain);
+        } else if (useGroupA) {
+            main.blendFrom(groupA, fadeTowardA, addBlend, space);
+        } else if (useGroupB) {
+            main.blendFrom(groupB, fadeTowardB, addBlend, space);
         }
         this.timer.channelNanos = System.nanoTime() - channelStart;
 
-        // Check for edge case of all channels being off, don't leave stale data in blend buffer
-        if (((leftOn ? leftChannelCount : 0) + (rightOn ? rightChannelCount : 0) + mainChannelCount) == 0) {
-            System.arraycopy(backgroundArray, 0, blendOutputMain, 0, backgroundArray.length);
-        }
+        // Ensure the main buffer is written even if nothing was blended up to this point
+        main.finish(space);
 
         // Time to apply master FX to the main blended output
         long fxStart = System.nanoTime();
-        for (LXEffect effect : this.masterChannel.getEffects()) {
-            effect.setBuffer(this.buffer.main.render);
+        for (LXEffect effect : masterChannel.getEffects()) {
+            effect.setPolyBuffer(buffer.main.render);
             effect.loop(deltaMs);
         }
         this.timer.fxNanos = System.nanoTime() - fxStart;
 
         // If cue-ing the palette!
         if (lx.palette.cue.isOn()) {
+            int[] colors = (int[]) buffer.cue.render.getArray(PolyBuffer.Space.RGB8);
             for (LXPoint p : this.lx.model.points) {
-                blendOutputCue[p.index] = lx.palette.getColor(p);
+                colors[p.index] = lx.palette.getColor(p);
             }
+            buffer.cue.render.markModified(PolyBuffer.Space.RGB8);
             cueOn = true;
         }
 
-        // Check for separate network output thread
-        boolean isNetworkMultithreaded = this.isNetworkMultithreaded.isOn();
-
         // Frame is now ready
-        if (this.isEngineThreadRunning || isNetworkMultithreaded) {
+        if (isEngineThreadRunning || isNetworkMultithreaded.isOn()) {
             // If multi-threading UI, lock the double buffer and clip it
-            synchronized (this.buffer) {
-                this.buffer.cueOn = cueOn;
-                this.buffer.flip();
+            synchronized (buffer) {
+                buffer.cueOn = cueOn;
+                buffer.flip();
             }
         } else {
             // Otherwise lock-free!
-            this.buffer.cueOn = cueOn;
+            buffer.cueOn = cueOn;
         }
+    }
 
-        // Send to outputs
-        if (isNetworkMultithreaded) {
+    void sendToOutputs(long runStart) {
+        if (isNetworkMultithreaded.isOn()) {
             // Just notify the network thread!
             synchronized (this.network) {
                 this.network.notify();
@@ -1237,7 +1266,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             }
             // Otherwise do it ourself here
             long outputStart = System.nanoTime();
-            this.output.send(blendOutputMain);
+            output.send(buffer.main.render);
             long outputEnd = System.nanoTime();
             this.timer.outputNanos = outputEnd - outputStart;
             this.timer.runNanos = outputEnd - runStart;
@@ -1259,8 +1288,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             System.out.println(sb);
             this.logTimers = false;
         }
-
-        conversionsPerFrame = PolyBuffer.getConversionCount() - initialConversionCount;
     }
 
     public class NetworkThread extends Thread {
@@ -1276,11 +1303,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         public final Timer timer = new Timer();
 
-        private final ModelBuffer networkBuffer;
+        private final PolyBuffer networkBuffer;
 
         NetworkThread(LX lx) {
             super("LXEngine Network Thread");
-            this.networkBuffer = new ModelBuffer(lx);
+            this.networkBuffer = new PolyBuffer(lx);
         }
 
         @Override
@@ -1303,13 +1330,13 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
                 if (output.enabled.isOn()) {
                     // Copy from the double-buffer into our local storage and send from here
                     long copyStart = System.nanoTime();
-                    int[] networkArray = networkBuffer.getArray();
                     synchronized (buffer) {
-                        System.arraycopy(buffer.main.copy.getArray(), 0, networkArray, 0, networkArray.length);
+                        networkBuffer.copyFrom(buffer.main.frozen, colorSpace.getEnum());
                     }
                     long copyEnd = System.nanoTime();
                     this.timer.copyNanos = copyEnd- copyStart;
-                    output.send(networkArray);
+
+                    output.send(networkBuffer);
                     this.timer.sendNanos = System.nanoTime() - copyEnd;
                 }
 
@@ -1328,19 +1355,13 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     }
 
     /**
-     * This should be used when in threaded mode. It synchronizes on the
-     * double-buffer and duplicates the internal copy buffer into the provided
-     * buffer.
-     *
-     * @param copy Buffer to copy into
+     * This should be used when in threaded mode. It safely copies the
+     * frozen internal buffer to the provided buffer.
+     * @param dest Buffer to copy into
      */
-    public void copyUIBuffer(int[] copy) {
-        synchronized (this.buffer) {
-            if (this.buffer.cueOn) {
-                this.buffer.cue.copy(copy);
-            } else {
-                this.buffer.main.copy(copy);
-            }
+    public void copyUIBuffer(PolyBuffer dest, PolyBuffer.Space space) {
+        synchronized (buffer) {
+            (buffer.cueOn ? buffer.cue : buffer.main).copyTo(dest, space);
         }
     }
 
@@ -1350,8 +1371,26 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      *
      * @return The internal render buffer
      */
+    public PolyBuffer getUIPolyBufferNonThreadSafe() {
+        return buffer.cueOn ? buffer.cue.render : buffer.main.render;
+    }
+
+    /**
+     * This method is deprecated; use copyUIBuffer(PolyBuffer...) instead.
+     * @param array Array to copy into
+     */
+    @Deprecated
+    public void copyUIBuffer(int[] array) {
+        copyUIBuffer(PolyBuffer.wrapArray(lx, array), PolyBuffer.Space.RGB8);
+    }
+
+    /**
+     * This method is deprecated; use getUIPolyBufferNonThreadSafe instead.
+     * @param array Array to copy into
+     */
+    @Deprecated
     public int[] getUIBufferNonThreadSafe() {
-        return this.buffer.cueOn ? this.buffer.cue.render.getArray() : this.buffer.main.render.getArray();
+        return (int[]) getUIPolyBufferNonThreadSafe().getArray(PolyBuffer.Space.RGB8);
     }
 
     private static final String KEY_PALETTE = "palette";

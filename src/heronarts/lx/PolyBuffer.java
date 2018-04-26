@@ -15,8 +15,9 @@ import java.util.Set;
  * after writing into any buffer; then getBuffer() will convert the data when necessary.
  * Buffers are allocated on demand; if only one is used, no memory is wasted on any others.
  */
-public class PolyBuffer {
+public class PolyBuffer implements PolyBufferProvider {
     public enum Space {RGB8, RGB16};
+
     private LX lx = null;
     private Map<Space, Buffer> buffers = new EnumMap<>(Space.class);
     private Set<Space> freshSpaces = EnumSet.noneOf(Space.class);
@@ -24,6 +25,10 @@ public class PolyBuffer {
 
     public PolyBuffer(LX lx) {
         this.lx = lx;
+    }
+
+    public PolyBuffer getPolyBuffer() {
+        return this;
     }
 
     public Buffer getBuffer(Space space) {
@@ -44,7 +49,7 @@ public class PolyBuffer {
         for (Space space : freshSpaces) {
             return space;
         }
-        return DEFAULT_SPACE;
+        return Space.RGB8;
     }
 
     public boolean isFresh(Space space) {
@@ -90,19 +95,16 @@ public class PolyBuffer {
         return conversionCount;
     }
 
-    public void copyFrom(PolyBuffer src, Space space) {
+    public void copyFrom(PolyBufferProvider src, Space space) {
         if (src != this) {
             Object dest = getArray(space);
-            System.arraycopy(src.getArray(space), 0, dest, 0, Array.getLength(dest));
+            System.arraycopy(src.getPolyBuffer().getArray(space), 0, dest, 0, Array.getLength(dest));
             markModified(space);
         }
     }
 
     // The methods below provide support for old-style use of the PolyBuffer
     // as if it were only an RGB8 buffer.
-
-    @Deprecated
-    private static final Space DEFAULT_SPACE = Space.RGB8;
 
     @Deprecated
     public static PolyBuffer wrapArray(LX lx, final int[] array) {
@@ -114,35 +116,21 @@ public class PolyBuffer {
     }
 
     @Deprecated
-    public Buffer getBuffer() {
-        return getBuffer(DEFAULT_SPACE);
-    }
-
-    @Deprecated
     public int[] getArray() {
-        return (int[]) getBuffer(DEFAULT_SPACE).getArray();
+        return (int[]) getBuffer(Space.RGB8).getArray();
     }
 
     @Deprecated
     public void setBuffer(Buffer buffer) {
         buffers.clear();
-        buffers.put(DEFAULT_SPACE, buffer);
+        buffers.put(Space.RGB8, buffer);
         if (buffer != null) {
-            markModified(DEFAULT_SPACE);
+            markModified(Space.RGB8);
         }
     }
 
     @Deprecated
     public void markModified() {
-        markModified(DEFAULT_SPACE);
-    }
-
-    @Deprecated
-    public void sync() {
-        for (Space space : Space.values()) {
-            if (buffers.get(space) != null && !isFresh(space)) {
-                updateBuffer(space);
-            }
-        }
+        markModified(Space.RGB8);
     }
 }

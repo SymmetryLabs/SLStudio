@@ -48,7 +48,7 @@ import com.google.gson.JsonObject;
  * which it plays and rotates. It also has a fader to control how this channel
  * is blended with the channels before it.
  */
-public class LXChannel extends LXBus implements LXComponent.Renamable {
+public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBufferProvider {
 
     public class Timer extends LXModulatorComponent.Timer {
         public long blendNanos;
@@ -743,17 +743,15 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
             this.transition.loop(deltaMs);
 
             if (transitionProgress < 0.5) {
-                transition.blend(
-                        getActivePattern().getPolyBuffer(), getNextPattern().getPolyBuffer(),
+                transition.blend(getActivePattern(), getNextPattern(),
                         transitionProgress * 2, polyBuffer, space);
             } else {
-                transition.blend(
-                        getNextPattern().getPolyBuffer(), getActivePattern().getPolyBuffer(),
+                transition.blend(getNextPattern(), getActivePattern(),
                         (1 - transitionProgress) * 2, polyBuffer, space);
             }
         } else {
             this.transitionProgress = 0;
-            polyBuffer.copyFrom(getActivePattern().getPolyBuffer(), space);
+            polyBuffer.copyFrom(getActivePattern(), space);
         }
 
         // Apply effects
@@ -765,6 +763,10 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         }
 
         this.timer.loopNanos = System.nanoTime() - loopStart;
+    }
+
+    public PolyBuffer getPolyBuffer() {
+        return polyBuffer;
     }
 
     @Deprecated
