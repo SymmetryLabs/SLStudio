@@ -1145,15 +1145,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // Run the master channel (may have clips)
         this.masterChannel.loop(deltaMs);
 
-        if (this.cueA.isOn()) {
-            if (leftChannelCount > 0) {
-                blendDestinationCue = blendOutputLeft;
-            }
-            cueOn = true;
-        } else if (this.cueB.isOn()) {
-            if (rightChannelCount > 0) {
-                blendDestinationCue = blendOutputRight;
-            }
+        if (cueA.isOn() || cueB.isOn()) {
             cueOn = true;
         }
 
@@ -1213,7 +1205,6 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             for (LXPoint p : this.lx.model.points) {
                 blendOutputCue[p.index] = lx.palette.getColor(p);
             }
-            blendDestinationCue = blendOutputCue;
             cueOn = true;
         }
 
