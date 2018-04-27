@@ -8,5 +8,6 @@ application.windows64
 application.macosx
 /bin
 /distribution
+/examples/LXStudioDemo/code/*.jar
 .idea
 *.iml
