@@ -3,6 +3,7 @@ package heronarts.lx;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
 
+import java.lang.reflect.Array;
 import java.util.EnumMap;
 import java.util.EnumSet;
 import java.util.Map;
@@ -87,6 +88,14 @@ public class PolyBuffer {
 
     public static int getConversionCount() {
         return conversionCount;
+    }
+
+    public void copyFrom(PolyBuffer src, Space space) {
+        if (src != this) {
+            Object dest = getArray(space);
+            System.arraycopy(src.getArray(space), 0, dest, 0, Array.getLength(dest));
+            markModified(space);
+        }
     }
 
     // The methods below provide support for old-style use of the PolyBuffer

@@ -149,6 +149,13 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         .setDescription("Sets whether this channel is on or off");
 
     /**
+     * The color space that this channel renders to.
+     */
+    public final EnumParameter<PolyBuffer.Space> colorSpace =
+            new EnumParameter<>("Color Space", PolyBuffer.Space.RGB8)
+                    .setDescription("Selects the color space for this channel");
+
+    /**
      * Crossfade group this channel belongs to
      */
     public final EnumParameter<CrossfadeGroup> crossfadeGroup =
@@ -219,12 +226,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
-    /**
-     * This is a local buffer used for transition blending on this channel
-     */
-    private final ModelBuffer blendBuffer;
-
-    private int[] colors;
+    /** A local buffer used for transition blending and effects on this channel */
+    private final PolyBuffer polyBuffer;
 
     private double autoCycleProgress = 0;
     private double transitionProgress = 0;
@@ -283,7 +286,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         super(lx, "Channel-" + (index+1));
         this.index = index;
         this.label.setDescription("The name of this channel");
-        this.blendBuffer = new ModelBuffer(lx);
+        this.polyBuffer = new PolyBuffer(lx);
 
         this.focusedPattern =
             new DiscreteParameter("Focused Pattern", 0, patterns.length)
@@ -297,7 +300,6 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
 
         this.transitionMillis = lx.engine.nowMillis;
         _updatePatterns(patterns);
-        this.colors = this.getActivePattern().getColors();
 
         addParameter("enabled", this.enabled);
         addParameter("cue", this.cueActive);
@@ -640,7 +642,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
     /**
      * Enable automatic transition from pattern to pattern on this channel
      *
-     * @param autoTransitionThresholdTransition time in seconds
+     * @param autoTransitionThreshold time in seconds
      * @return
      */
     public LXBus enableAutoTransition(double autoTransitionThreshold) {
@@ -728,59 +730,46 @@ public class LXChannel extends LXBus implements LXComponent.Renamable {
         }
 
         // Run active pattern
-        LXPattern activePattern = getActivePattern();
-        activePattern.loop(deltaMs);
-        int[] colors = activePattern.getColors();
+        PolyBuffer.Space space = colorSpace.getEnum();
+        getActivePattern().loop(deltaMs);
 
         // Run transition!
         if (this.transition != null) {
-            this.autoCycleProgress = 1.;
+            this.autoCycleProgress = 1;
             this.transitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.transitionTimeSecs.getValue());
             getNextPattern().loop(deltaMs);;
             // TODO(mcslee): this is incorrect. the blend objects are shared, so the same one may be run on multiple
             // channels. either they need to be per-channel instances, or they are not loopable with modulators etc.
             this.transition.loop(deltaMs);
-            colors = this.blendBuffer.getArray();
-            if (this.transitionProgress < .5) {
-                double alpha = Math.min(1, this.transitionProgress*2.);
-                this.transition.blend(
-                    getActivePattern().getColors(),
-                    getNextPattern().getColors(),
-                    alpha,
-                    colors
-                );
+
+            if (transitionProgress < 0.5) {
+                transition.blend(
+                        getActivePattern().getPolyBuffer(), getNextPattern().getPolyBuffer(),
+                        transitionProgress * 2, polyBuffer, space);
             } else {
-                double alpha = Math.max(0, (1-this.transitionProgress)*2.);
-                this.transition.blend(
-                    getNextPattern().getColors(),
-                    getActivePattern().getColors(),
-                    alpha,
-                    colors
-                );
+                transition.blend(
+                        getNextPattern().getPolyBuffer(), getActivePattern().getPolyBuffer(),
+                        (1 - transitionProgress) * 2, polyBuffer, space);
             }
         } else {
             this.transitionProgress = 0;
+            polyBuffer.copyFrom(getActivePattern().getPolyBuffer(), space);
         }
 
         // Apply effects
         if (this.mutableEffects.size() > 0) {
-            int[] array = this.blendBuffer.getArray();
-            if (colors != array) {
-                System.arraycopy(colors, 0, array, 0, colors.length);
-            }
-            colors = array;
             for (LXEffect effect : this.mutableEffects) {
-                effect.setBuffer(this.blendBuffer);
+                effect.setPolyBuffer(polyBuffer);
                 effect.loop(deltaMs);
             }
         }
 
-        this.colors = colors;
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
+    @Deprecated
     int[] getColors() {
-        return this.colors;
+        return polyBuffer.getArray();
     }
 
     @Override
