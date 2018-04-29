@@ -170,7 +170,7 @@ public class CubesController extends LXOutput {
                     int col = colors[point.index];
 
                     if (cube.type == CubesModel.Cube.Type.MEDIUM) {
-                        LXColor.scaleBrightness(col, 0.65f);
+                        col = LXColor.scaleBrightness(col, 0.65f);
                     }
 
                     setPixel(stripNum * strip.metrics.numPoints + i, col);
