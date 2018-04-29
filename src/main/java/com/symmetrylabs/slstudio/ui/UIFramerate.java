@@ -24,9 +24,9 @@ public class UIFramerate extends UI2dContext {
     private final DecimalFormat elapsedFormat = new DecimalFormat("0.0");
 
     public UIFramerate(UI ui, final P3LX lx, float x, float y) {
-        super(ui, x, y, 700, 30);
+        super(ui, x, y, 800, 30);
         this.lx = lx;
-        this.font = SLStudio.applet.loadFont("Menlo-Regular-13.vlw");
+        this.font = SLStudio.applet.loadFont("Inconsolata-Bold-14.vlw");
         setVisible(true);
     }
 
@@ -36,6 +36,7 @@ public class UIFramerate extends UI2dContext {
         pg.textFont(font);
         pg.clear();
         pg.textAlign(LEFT, TOP);
+        pg.fill(0xa0ffffff);
         if (lx.engine.isThreaded()) {
             // pg.text(String.format("Engine: %2$.1f UI: %2$.1f",
             //   lx.engine.frameRate(), lx.applet.frameRate), 0, 0);
@@ -89,8 +90,6 @@ public class UIFramerate extends UI2dContext {
         } else {
             pg.text(String.format("FPS: %02.1f", lx.applet.frameRate), 0, 0);
         }
-
-
         redraw();
     }
 }
