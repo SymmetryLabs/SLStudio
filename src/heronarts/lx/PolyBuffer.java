@@ -16,10 +16,10 @@ import java.util.Set;
  */
 public class PolyBuffer {
     public enum Space {RGB8, RGB16};
-
     private LX lx = null;
     private Map<Space, Buffer> buffers = new EnumMap<>(Space.class);
     private Set<Space> freshSpaces = EnumSet.noneOf(Space.class);
+    private static int conversionCount = 0;
 
     public PolyBuffer(LX lx) {
         this.lx = lx;
@@ -70,19 +70,23 @@ public class PolyBuffer {
             switch (space) {
                 case RGB8:
                     if (isFresh(Space.RGB16)) {
-                        LXColor16.longsToInts((long[]) getArray(Space.RGB16),
-                                (int[]) buffer.getArray());
+                        LXColor16.longsToInts((long[]) getArray(Space.RGB16), (int[]) buffer.getArray());
+                        conversionCount++;
                     }
                     break;
                 case RGB16:
                     if (isFresh(Space.RGB8)) {
-                        LXColor.intsToLongs((int[]) getArray(Space.RGB8),
-                                (long[]) buffer.getArray());
+                        LXColor.intsToLongs((int[]) getArray(Space.RGB8), (long[]) buffer.getArray());
+                        conversionCount++;
                     }
                     break;
             }
             freshSpaces.add(space);
         }
+    }
+
+    public static int getConversionCount() {
+        return conversionCount;
     }
 
     // The methods below provide support for old-style use of the PolyBuffer

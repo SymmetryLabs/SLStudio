@@ -120,6 +120,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
     public final DiscreteParameter focusedChannel = new DiscreteParameter("Channel", 1);
 
     public final BoundedParameter framesPerSecond = new BoundedParameter("FPS", 60, 0, 300);
+    public int conversionsPerFrame = 0;
 
     LXBlend[] channelBlends;
     private final AddBlend addBlend;
@@ -966,6 +967,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     public void run() {
         this.hasStarted = true;
+        int initialConversionCount = PolyBuffer.getConversionCount();
 
         long runStart = System.nanoTime();
 
@@ -1258,6 +1260,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
             this.logTimers = false;
         }
 
+        conversionsPerFrame = PolyBuffer.getConversionCount() - initialConversionCount;
     }
 
     public class NetworkThread extends Thread {
