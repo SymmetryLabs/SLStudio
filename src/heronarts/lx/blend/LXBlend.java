@@ -23,6 +23,9 @@ package heronarts.lx.blend;
 import heronarts.lx.LX;
 import heronarts.lx.LXBuffer;
 import heronarts.lx.LXModulatorComponent;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 
 /**
  * An LXBlend is a loop-based implementation of a compositing algorithm.
@@ -80,34 +83,57 @@ public abstract class LXBlend extends LXModulatorComponent {
         return this.name;
     }
 
-    /**
-     * Gets the name of this blend.
-     *
-     */
+    /** Gets the name of this blend. */
     @Override
     public String getLabel() {
         return getName();
     }
 
-    /**
-     * Name of the blend
-     */
+    /** Name of the blend */
     @Override
     public String toString() {
         return getName();
     }
 
+    @Deprecated
     public void blend(int[] dst, int[] src, double alpha, LXBuffer buffer) {
         blend(dst, src, alpha, buffer.getArray());
     }
 
     /**
-     * Blends the src buffer onto the destination buffer at the specified alpha amount.
+     * Old-style subclasses override this method to implement the blend.
+     * New-style subclasses should override the PolyBuffer-based blend()
+     * method below, instead.
      *
-     * @param dst Destination buffer (lower layer)
-     * @param src Source buffer (top layer)
-     * @param alpha Alpha blend, from 0-1
-     * @param output Output buffer, which may be the same as src or dst
+     * @param base Base source (when amount = 0, the result equals the base)
+     * @param overlay Overlay source (to be blended on top of the base)
+     * @param alpha Amount of blending (from 0 to 1)
+     * @param dest Destination array, which may be the same as overlay or base
      */
-    public abstract void blend(int[] dst, int[] src, double alpha, int[] output);
+    @Deprecated
+    public /* abstract */ void blend(int[] base, int[] overlay, double alpha, int[] dest) { }
+
+    /**
+     * Takes the base buffer, blends the overlay buffer onto it by a
+     * specified amount, and writes the result into the destination buffer.
+     *
+     * @param base Base source (when amount = 0, the result equals the base)
+     * @param overlay Overlay source (to be blended on top of the base)
+     * @param alpha Amount of blending (from 0 to 1)
+     * @param dest Destination buffer, which may be the same as overlay or base
+     * @param preferredSpace A hint as to which color space to operate in for
+     *     the greatest efficiency (performing the blend in a different color
+     *     space will still work, but will necessitate color space conversion)
+     */
+    public void blend(PolyBuffer base, PolyBuffer overlay, double alpha, PolyBuffer dest, PolyBuffer.Space preferredSpace) {
+        // For compatibility, this invokes the method that previous subclasses were
+        // supposed to implement, and then marks the destination as modified.
+        blend(base.getArray(), overlay.getArray(), alpha, dest.getArray());
+        dest.markModified();
+
+        // New subclasses should override and replace this method with one that
+        // reads color arrays from base.getArray(space) and overlay.getArray(space),
+        // writes the result into dest.getArray(space), and finally marks the
+        // destination buffer modified with a call to dest.markModified(space).
+    }
 }
