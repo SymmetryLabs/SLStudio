@@ -20,6 +20,7 @@
 
 package heronarts.lx.output;
 
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXFixture;
 
 /**
@@ -27,7 +28,10 @@ import heronarts.lx.model.LXFixture;
  */
 public class OPCDatagram extends LXDatagram implements OPCConstants {
 
-    private final int[] indices;
+    protected final int[] indices;
+    protected byte channel = CHANNEL_BROADCAST;
+    protected boolean is16BitColorEnabled = false;
+    protected byte[] buffer16;
 
     public OPCDatagram(LXFixture fixture) {
         this(fixture, CHANNEL_BROADCAST);
@@ -42,8 +46,10 @@ public class OPCDatagram extends LXDatagram implements OPCConstants {
     }
 
     public OPCDatagram(int[] indices, byte channel) {
-        super(OPCOutput.HEADER_LEN + OPCOutput.BYTES_PER_PIXEL * indices.length);
+        super(HEADER_LEN + BYTES_PER_PIXEL * indices.length);
         this.indices = indices;
+        this.channel = channel;
+
         int dataLength = BYTES_PER_PIXEL * indices.length;
         this.buffer[INDEX_CHANNEL] = channel;
         this.buffer[INDEX_COMMAND] = COMMAND_SET_PIXEL_COLORS;
@@ -51,18 +57,40 @@ public class OPCDatagram extends LXDatagram implements OPCConstants {
         this.buffer[INDEX_DATA_LEN_LSB] = (byte)(dataLength & 0xFF);
     }
 
+    public void set16BitColorEnabled(boolean enable) {
+        is16BitColorEnabled = enable;
+    }
+
     public OPCDatagram setChannel(byte channel) {
-        this.buffer[INDEX_CHANNEL] = channel;
+        this.channel = channel;
         return this;
     }
 
     public byte getChannel() {
-        return this.buffer[INDEX_CHANNEL];
+        return channel;
     }
 
     @Override
-    public void onSend(int[] colors) {
-        copyPoints(colors, this.indices, INDEX_DATA);
+    public void onSend(PolyBuffer src) {
+        if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
+            long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+            int dataLength = BYTES_PER_16BIT_PIXEL * indices.length;
+            if (buffer16 == null) {
+                buffer16 = new byte[HEADER_LEN + dataLength];
+            }
+            buffer16[INDEX_CHANNEL] = channel;
+            buffer16[INDEX_COMMAND] = COMMAND_SET_16BIT_PIXEL_COLORS;
+            buffer16[INDEX_DATA_LEN_MSB] = (byte) (dataLength >>> 8);
+            buffer16[INDEX_DATA_LEN_LSB] = (byte) (dataLength & 0xFF);
+            copyPoints16(srcLongs, indices, buffer16, INDEX_DATA);
+            packet.setData(buffer16);
+            packet.setLength(buffer16.length);
+        } else {
+            int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+            buffer[INDEX_CHANNEL] = channel;
+            copyPoints(srcInts, indices, INDEX_DATA);
+            packet.setData(buffer);
+            packet.setLength(buffer.length);
+        }
     }
-
 }

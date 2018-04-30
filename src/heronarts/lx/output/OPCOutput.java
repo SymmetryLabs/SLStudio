@@ -21,6 +21,9 @@
 package heronarts.lx.output;
 
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXFixture;
 
 /**
@@ -28,15 +31,12 @@ import heronarts.lx.model.LXFixture;
  */
 public class OPCOutput extends LXSocketOutput implements OPCConstants {
 
-    static final int OFFSET_R = 0;
-    static final int OFFSET_G = 1;
-    static final int OFFSET_B = 2;
+    protected final int[] pointIndices;
+    protected byte[] packetData;
+    protected byte channel = CHANNEL_BROADCAST;
+    protected boolean is16BitColorEnabled = false;
 
-    private final byte[] packetData;
-
-    private final int[] pointIndices;
-
-    private static int[] allPoints(LX lx) {
+    protected static int[] allPoints(LX lx) {
         int[] points = new int[lx.total];
         for (int i = 0; i < points.length; ++i) {
             points[i] = i;
@@ -55,30 +55,57 @@ public class OPCOutput extends LXSocketOutput implements OPCConstants {
     public OPCOutput(LX lx, String host, int port, int[] pointIndices) {
         super(lx, host, port);
         this.pointIndices = pointIndices;
+        }
 
-        int dataLength = BYTES_PER_PIXEL * pointIndices.length;
-        this.packetData = new byte[HEADER_LEN + dataLength];
-        this.packetData[INDEX_CHANNEL] = CHANNEL_BROADCAST;
-        this.packetData[INDEX_COMMAND] = COMMAND_SET_PIXEL_COLORS;
-        this.packetData[INDEX_DATA_LEN_MSB] = (byte)(dataLength >>> 8);
-        this.packetData[INDEX_DATA_LEN_LSB] = (byte)(dataLength & 0xFF);
+    public void set16BitColorEnabled(boolean enable) {
+        is16BitColorEnabled = enable;
     }
 
     @Override
-    protected byte[] getPacketData(int[] colors) {
-        for (int i = 0; i < this.pointIndices.length; ++i) {
-            int dataOffset = INDEX_DATA + i * BYTES_PER_PIXEL;
-            int c = colors[this.pointIndices[i]];
-            this.packetData[dataOffset + OFFSET_R] = (byte) (0xFF & (c >> 16));
-            this.packetData[dataOffset + OFFSET_G] = (byte) (0xFF & (c >> 8));
-            this.packetData[dataOffset + OFFSET_B] = (byte) (0xFF & c);
+    protected byte[] getPacketData(PolyBuffer src) {
+        boolean send16 = is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16);
+        byte command = send16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
+        int dataLength = (send16 ? BYTES_PER_16BIT_PIXEL : BYTES_PER_PIXEL) * pointIndices.length;
+        if (packetData == null || packetData.length != HEADER_LEN + dataLength) {
+            packetData = new byte[HEADER_LEN + dataLength];
         }
-        return this.packetData;
+        fillPacketHeader(channel, command, dataLength);
+        int p = INDEX_DATA;
+        if (send16) {
+            long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+            for (int index : pointIndices) {
+                long c = srcLongs[index];
+                int red = LXColor16.red(c);
+                int green = LXColor16.green(c);
+                int blue = LXColor16.blue(c);
+                packetData[p++] = (byte) (red >>> 8);
+                packetData[p++] = (byte) (red & 0xff);
+                packetData[p++] = (byte) (green >>> 8);
+                packetData[p++] = (byte) (green & 0xff);
+                packetData[p++] = (byte) (blue >>> 8);
+                packetData[p++] = (byte) (blue & 0xff);
+            }
+        } else {
+            int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+            for (int index : pointIndices) {
+                int c = srcInts[index];
+                packetData[p++] = LXColor.red(c);
+                packetData[p++] = LXColor.green(c);
+                packetData[p++] = LXColor.blue(c);
+            }
+        }
+        return packetData;
+    }
+
+    protected void fillPacketHeader(byte channel, byte command, int dataLength) {
+        packetData[INDEX_CHANNEL] = channel;
+        packetData[INDEX_COMMAND] = command;
+        packetData[INDEX_DATA_LEN_MSB] = (byte) (dataLength >>> 8);
+        packetData[INDEX_DATA_LEN_LSB] = (byte) (dataLength & 0xFF);
     }
 
     public OPCOutput setChannel(byte channel) {
-        this.packetData[INDEX_CHANNEL] = channel;
+        this.channel = channel;
         return this;
     }
-
 }

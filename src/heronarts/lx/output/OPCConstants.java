@@ -25,6 +25,7 @@ public interface OPCConstants {
     public static final int HEADER_LEN = 4;
 
     public static final int BYTES_PER_PIXEL = 3;
+    public static final int BYTES_PER_16BIT_PIXEL = 6;
 
     public static final int INDEX_CHANNEL = 0;
     public static final int INDEX_COMMAND = 1;
@@ -35,6 +36,6 @@ public interface OPCConstants {
     public static final byte CHANNEL_BROADCAST = 0;
 
     public static final byte COMMAND_SET_PIXEL_COLORS = 0;
+    public static final byte COMMAND_SET_16BIT_PIXEL_COLORS = 2;
     public static final byte COMMAND_SYSTEM_EXCLUSIVE = (byte) 0xff;
-
 }

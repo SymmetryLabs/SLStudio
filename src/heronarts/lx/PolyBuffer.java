@@ -105,6 +105,15 @@ public class PolyBuffer {
     private static final Space DEFAULT_SPACE = Space.RGB8;
 
     @Deprecated
+    public static PolyBuffer wrapArray(LX lx, final int[] array) {
+        PolyBuffer buffer = new PolyBuffer(lx);
+        buffer.setBuffer(new Buffer() {
+            public Object getArray() { return array; }
+        });
+        return buffer;
+    }
+
+    @Deprecated
     public Buffer getBuffer() {
         return getBuffer(DEFAULT_SPACE);
     }

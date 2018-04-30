@@ -27,6 +27,8 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor16;
 
 public abstract class LXSocketOutput extends LXOutput {
 
@@ -76,17 +78,38 @@ public abstract class LXSocketOutput extends LXOutput {
     }
 
     @Override
-    protected void onSend(int[] colors) {
+    protected void onSend(PolyBuffer src) {
         connect();
         if (isConnected()) {
             try {
-                this.output.write(getPacketData(colors));
+                this.output.write(getPacketData(src));
             } catch (IOException iox) {
                 dispose(iox);
             }
         }
     }
 
-    protected abstract byte[] getPacketData(int[] colors);
+    /**
+     * Old-style subclasses override this method to produce 8-bit color data.
+     * New-style subclasses should override getPacketData(PolyBuffer) instead.
+     * @param colors 8-bit color values
+     */
+    protected /* abstract */ byte[] getPacketData(int[] colors) {
+        throw new RuntimeException("getPacketData() not implemented");
+    }
 
+    /**
+     * Assembles a packet of data to send.  Subclasses should override this method.
+     * @param src The color data to send.
+     */
+    protected /* abstract */ byte[] getPacketData(PolyBuffer src) {
+        // For compatibility, this invokes the method that previous subclasses
+        // were supposed to implement.  Implementations of getPacketData(int[])
+        // know only how to send 8-bit color data, so that's what we pass to them.
+        return getPacketData((int[]) src.getArray(PolyBuffer.Space.RGB8));
+
+        // New subclasses should override and replace this method with one that
+        // obtains a color array in the desired space using src.getArray(space),
+        // and generates the packet data from that array.
+    }
 }

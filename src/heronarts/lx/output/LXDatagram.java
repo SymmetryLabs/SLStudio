@@ -20,6 +20,8 @@
 
 package heronarts.lx.output;
 
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.parameter.BooleanParameter;
 
 import java.net.DatagramPacket;
@@ -125,7 +127,7 @@ public abstract class LXDatagram {
 
     /**
      * Helper for subclasses to copy a list of points into the data buffer at a
-     * specified offset. For many subclasses which wrap RGB buffers, onSend() will
+     * specified offset. For many subclasses that wrap RGB buffers, onSend() will
      * be a simple call to this method with the right parameters.
      *
      * @param colors Array of color values
@@ -147,11 +149,58 @@ public abstract class LXDatagram {
     }
 
     /**
-     * Invoked by engine to send this packet when new color data is available. The
-     * LXDatagram should update the packet object accordingly to contain the
-     * appropriate buffer.
+     * Helper for subclasses to copy 16-bit colors into the data buffer at a
+     * specified offset. For many subclasses that wrap RGB buffers, onSend() will
+     * be a simple call to this method with the right parameters.
      *
-     * @param colors Color buffer
+     * @param colors16 Array of color values
+     * @param pointIndices Array of point indices
+     * @param dest Destination buffer to write into
+     * @param offset Offset in destination buffer to write
+     * @return this
      */
-    public abstract void onSend(int[] colors);
+    protected LXDatagram copyPoints16(long[] colors16, int[] pointIndices, byte[] dest, int offset) {
+        int i = offset;
+        int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
+        for (int index : pointIndices) {
+            long c = (index >= 0) ? colors16[index] : 0;
+            int red = LXColor16.red(c);
+            int green = LXColor16.green(c);
+            int blue = LXColor16.blue(c);
+            dest[i + byteOffset[0]] = (byte) (red >>> 8);
+            dest[i + byteOffset[0] + 1] = (byte) (red & 0xff);
+            dest[i + byteOffset[1]] = (byte) (green >>> 8);
+            dest[i + byteOffset[1] + 1] = (byte) (green & 0xff);
+            dest[i + byteOffset[2]] = (byte) (blue >>> 8);
+            dest[i + byteOffset[2] + 1] = (byte) (blue & 0xff);
+            i += 6;
+        }
+        return this;
+    }
+
+    /**
+     * Old-style subclasses override this method to populate the datagram
+     * packet with 8-bit color data.  New-style subclasses should override
+     * onSend(PolyBuffer) instead.
+     * @param colors 8-bit color values
+     */
+    @Deprecated
+    protected /* abstract */ void onSend(int[] colors) { }
+
+    /**
+     * Invoked by engine to send this packet when new color data is available.
+     * Implementations of this method should update the datagram packet
+     * accordingly to contain the data to send on the wire.
+     * @param src The color data to send.
+     */
+    public /* abstract */ void onSend(PolyBuffer src) {
+        // For compatibility, this invokes the method that previous subclasses
+        // were supposed to implement.  Implementations of onSend(int[]) know
+        // only how to send 8-bit color data, so that's what we pass to them.
+        onSend((int[]) src.getArray(PolyBuffer.Space.RGB8));
+
+        // New subclasses should override and replace this method with one that
+        // obtains a color array in the desired space using src.getArray(space),
+        // and populates the packed with data based on that array.
+    }
 }

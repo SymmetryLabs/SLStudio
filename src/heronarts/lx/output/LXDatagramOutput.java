@@ -21,6 +21,7 @@
 package heronarts.lx.output;
 
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 
 import java.io.IOException;
 import java.net.DatagramSocket;
@@ -72,29 +73,59 @@ public class LXDatagramOutput extends LXOutput {
     }
 
     /**
-     * Subclasses may override. Invoked before datagrams are sent.
-     *
+     * Old-style subclasses override this method if they want to do
+     * something before datagrams are sent.  New-style subclasses should
+     * override beforeSend(PolyBuffer) insteaad.
      * @param colors Color values
      */
-    protected /* abstract */ void beforeSend(int[] colors) {}
+    @Deprecated
+    protected /* abstract */ void beforeSend(int[] colors) { }
+
+    /**
+     * Old-style subclasses override this method if they want to do
+     * something after datagrams are sent.  New-style subclasses should
+     * override afterSend(PolyBuffer) insteaad.
+     * @param colors Color values
+     */
+    @Deprecated
+    protected /* abstract */ void afterSend(int[] colors) { }
+
+    /**
+     * Subclasses may override. Invoked before datagrams are sent.
+     * @param src The color data to be sent.
+     */
+    protected /* abstract */ void beforeSend(PolyBuffer src) {
+        // For compatibility, this invokes the method that previous subclasses
+        // were supposed to implement.  Implementations of beforeSend(int[])
+        // know only how to handle 8-bit color data, so that's what we pass to them.
+        beforeSend((int[]) src.getArray(PolyBuffer.Space.RGB8));
+
+        // New subclasses that want to use this hook should override and
+        // replace this method.
+    }
 
     /**
      * Subclasses may override. Invoked after datagrams are sent.
-     *
-     * @param colors Color values
+     * @param src The color data that was just sent.
      */
-    protected /* abstract */ void afterSend(int[] colors) {}
+    protected /* abstract */ void afterSend(PolyBuffer src) {
+        // For compatibility, this invokes the method that previous subclasses
+        // were supposed to implement.  Implementations of beforeSend(int[])
+        // know only how to handle 8-bit color data, so that's what we pass to them.
+        afterSend((int[]) src.getArray(PolyBuffer.Space.RGB8));
 
-    /**
-     * Core method which sends the datagrams.
-     */
+        // New subclasses that want to use this hook should override and
+        // replace this method.
+    }
+
+    /** Populates the datagrams with packet data and sends them out. */
     @Override
-    protected final void onSend(int[] colors) {
+    protected void onSend(PolyBuffer src) {
         long now = System.currentTimeMillis();
-        beforeSend(colors);
+        beforeSend(src);
         for (LXDatagram datagram : this.datagrams) {
             if (datagram.enabled.isOn() && (now > datagram.destination.sendAfter)) {
-                datagram.onSend(colors);
+                datagram.onSend(src);
                 try {
                     this.socket.send(datagram.packet);
                     if (datagram.destination.failureCount > 0) {
@@ -122,6 +153,6 @@ public class LXDatagramOutput extends LXOutput {
                 }
             }
         }
-        afterSend(colors);
+        afterSend(src);
     }
 }
