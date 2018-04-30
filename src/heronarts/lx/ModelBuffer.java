@@ -22,7 +22,7 @@ package heronarts.lx;
 
 import heronarts.lx.model.LXModel;
 
-public class ModelBuffer implements LXBuffer {
+public class ModelBuffer implements Buffer, LXBuffer {
 
     private int[] array;
 

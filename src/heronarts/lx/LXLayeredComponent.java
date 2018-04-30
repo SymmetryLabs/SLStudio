@@ -30,24 +30,47 @@ import java.util.Collections;
 import java.util.List;
 
 /**
- * Base class for system components that run in the engine, which have common
- * attributes, such as parameters, modulators, and layers. For instance,
- * patterns, transitions, and effects are all LXComponents.
+ * Base class for system components that have a color buffer and run in the
+ * engine, with common attributes such as parameters, modulators, and layers.
+ * Patterns, transitions, and effects are all LXLayeredComponents.  Subclasses
+ * do their work mainly by implementing onLoop() to write into the color buffer.
+ *
+ * The color buffer is actually a PolyBuffer, which manages a set of buffers,
+ * one for each color space.  Subclasses should implement onLoop() so that it
+ * writes to just one of the color spaces in the PolyBuffer; the data will be
+ * automatically converted to other color spaces as needed.
+ *
+ * LXLayeredComponent subclasses can be marked as LXLayeredComponent.Buffered
+ * (which means they own their own buffers), or not (which means they operate
+ * on external buffers passed in via setBuffer()).
+ *
+ * For subclasses marked Buffered:
+ *     Internal API:
+ *         The implementation of onLoop() should fetch the array for a color
+ *         space with polyBuffer.getArray(space), write colors into the array,
+ *         and finally mark it modified with polyBuffer.markModified(space).
+ *     External API:
+ *         getPolyBuffer().getArray(space) gets the array for the requested
+ *         color space, converting from the space in which the colors were
+ *         written, if different.  setPolyBuffer() is illegal to call.
+ *
+ * For subclasses not marked Buffered:
+ *     Internal API:
+ *         Same as above.
+ *     External API:
+ *         getPolyBuffer() is the same as above.  setPolyBuffer(buffer) takes
+ *         a PolyBuffer and makes it the buffer that onLoop() will read from
+ *         and write into.
  */
 public abstract class LXLayeredComponent extends LXModelComponent implements LXLoopTask {
-
-    /**
-     * Marker interface for instances which own their own buffer.
-     */
+    /** Marker interface for subclasses that want to own their own buffers. */
     public interface Buffered {}
 
     public final Timer timer = constructTimer();
-
     protected final LX lx;
 
-    private LXBuffer buffer = null;
-
-    protected int[] colors = null;
+    /** The PolyBuffer contains the color buffers for each of the color spaces. */
+    protected PolyBuffer polyBuffer = null;
 
     private final List<LXLayer> mutableLayers = new ArrayList<LXLayer>();
     protected final List<LXLayer> layers = Collections.unmodifiableList(mutableLayers);
@@ -55,47 +78,71 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected final LXPalette palette;
 
     protected LXLayeredComponent(LX lx) {
-        this(lx, (LXBuffer) null);
+        super(lx);
+        this.lx = lx;
+        palette = lx.palette;
+        polyBuffer = new PolyBuffer(lx);
     }
 
     protected LXLayeredComponent(LX lx, LXDeviceComponent component) {
-        this(lx, component.getBuffer());
+        this(lx);
+        setBuffer(component);
     }
 
-    protected LXLayeredComponent(LX lx, LXBuffer buffer) {
-        super(lx);
-        if (this instanceof Buffered) {
-            if (buffer != null) {
-                throw new IllegalArgumentException("Cannot pass existing buffer to LXLayeredComponent.Buffered, has its own");
-            }
-            buffer = new ModelBuffer(lx);
-        }
-        this.lx = lx;
-        this.palette = lx.palette;
-        if (buffer != null) {
-            this.buffer = buffer;
-            this.colors = buffer.getArray();
-        }
+    /** Gets this component's combined color buffer. */
+    protected PolyBuffer getPolyBuffer() {
+        return polyBuffer;
     }
 
-    protected LXBuffer getBuffer() {
-        return this.buffer;
-    }
-
-    public int[] getColors() {
-        return getBuffer().getArray();
-    }
-
+    /** Sets the buffer of another component as the buffer to read from and write to. */
     protected LXLayeredComponent setBuffer(LXDeviceComponent component) {
-        if (this instanceof Buffered) {
-            throw new UnsupportedOperationException("Cannot setBuffer on LXLayerdComponent.Buffered, owns its own buffer");
-        }
-        return setBuffer(component.getBuffer());
+        setPolyBuffer(component.polyBuffer);
+        return this;
     }
 
-    protected LXLayeredComponent setBuffer(LXBuffer buffer) {
-        this.buffer = buffer;
-        this.colors = buffer.getArray();
+    /** Sets an external buffer as the buffer to read from and write to. */
+    protected LXLayeredComponent setPolyBuffer(PolyBuffer externalBuffer) {
+        if (this instanceof Buffered) {
+            throw new UnsupportedOperationException("Cannot set an external buffer in a Buffered LXLayeredComponent");
+        }
+        polyBuffer = externalBuffer;
+        return this;
+    }
+
+    /**
+     * Constructor that optionally sets an external 8-bit color buffer as the
+     * buffer to read from and write to.  Maintained for compatibility.
+     */
+    @Deprecated
+    protected LXLayeredComponent(LX lx, /* nullable */ LXBuffer externalBuffer) {
+        this(lx);
+        if (externalBuffer != null) {
+            setBuffer(externalBuffer);
+        }
+    }
+
+    /** Gets the 8-bit color buffer.  Maintained for compatibility. */
+    @Deprecated
+    protected LXBuffer getBuffer() {
+        return (LXBuffer) polyBuffer.getBuffer();
+    }
+
+    /** Gets the 8-bit color buffer's array.  Maintained for compatibility. */
+    @Deprecated
+    public int[] getColors() {
+        return polyBuffer.getArray();
+ }
+
+    /**
+     * Sets an external 8-bit color buffer as the buffer to read from and write to.
+     * Maintained for compatibility.
+     */
+    @Deprecated
+    protected LXLayeredComponent setBuffer(LXBuffer externalBuffer) {
+        if (this instanceof Buffered) {
+            throw new UnsupportedOperationException("Cannot set an external buffer in a Buffered LXLayeredComponent");
+        }
+        polyBuffer.setBuffer(externalBuffer);
         return this;
     }
 
@@ -103,16 +150,11 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
 
-        // This protects against subclasses from inappropriately nuking the colors buffer
-        // reference. Even if a doofus assigns colors to something else, we'll reset it
-        // here on each pass of the loop. Better than subclasses having to call getColors()
-        // all the time.
-        this.colors = this.buffer.getArray();
-
         super.loop(deltaMs);
         onLoop(deltaMs);
+
         for (LXLayer layer : this.mutableLayers) {
-            layer.setBuffer(this.buffer);
+            layer.setPolyBuffer(polyBuffer);
 
             // TODO(mcslee): is this best here or should it be in addLayer?
             layer.setModel(this.model);
@@ -121,12 +163,22 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         }
         afterLayers(deltaMs);
 
+        if (!(this instanceof Buffered)) {
+            // The buffers are external; we need to make the output from onLoop() and
+            // afterLayers() visible in the external buffers, converting if needed.
+            polyBuffer.sync();
+        }
+
         this.timer.loopNanos = System.nanoTime() - loopStart;
     }
 
-    protected /* abstract */ void onLoop(double deltaMs) {}
+    protected /* abstract */ void onLoop(double deltaMs) {
+            // Implementations should call markModified() if they modify the color buffer.
+    }
 
-    protected /* abstract */ void afterLayers(double deltaMs) {}
+    protected /* abstract */ void afterLayers(double deltaMs) {
+            // Implementations should call markModified() if they modify the color buffer.
+    }
 
     protected final LXLayer addLayer(LXLayer layer) {
         if (this.mutableLayers.contains(layer)) {
@@ -156,6 +208,26 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         super.dispose();
     }
 
+    protected void setColors(PolyBuffer.Space space, Object color) {
+        switch (space) {
+            case RGB8:
+                int[] intArray = (int[]) polyBuffer.getArray(space);
+                int intColor = (int) color;
+                for (int i = 0; i < intArray.length; i++) {
+                    intArray[i] = intColor;
+                }
+                break;
+            case RGB16:
+                long[] longArray = (long[]) polyBuffer.getArray(space);
+                long longColor = (long) color;
+                for (int i = 0; i < longArray.length; i++) {
+                    longArray[i] = longColor;
+                }
+                break;
+        }
+        polyBuffer.markModified(space);
+    }
+
     /**
      * Sets the color of point i
      *
@@ -163,8 +235,10 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param c color
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent setColor(int i, int c) {
-        this.colors[i] = c;
+        getColors()[i] = c;
+        polyBuffer.markModified();
         return this;
     }
 
@@ -177,15 +251,21 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      *
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent blendColor(int i, int c, LXColor.Blend blendMode) {
-        this.colors[i] = LXColor.blend(this.colors[i], c, blendMode);
+        int[] colors = getColors();
+        colors[i] = LXColor.blend(colors[i], c, blendMode);
+        polyBuffer.markModified();
         return this;
     }
 
+    @Deprecated
     protected final LXLayeredComponent blendColor(LXFixture f, int c, LXColor.Blend blendMode) {
+        int[] colors = getColors();
         for (LXPoint p : f.getPoints()) {
-            this.colors[p.index] = LXColor.blend(this.colors[p.index], c, blendMode);
+            colors[p.index] = LXColor.blend(colors[p.index], c, blendMode);
         }
+        polyBuffer.markModified();
         return this;
     }
 
@@ -196,8 +276,11 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param c color
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent addColor(int i, int c) {
-        this.colors[i] = LXColor.add(this.colors[i], c);
+        int[] colors = getColors();
+        colors[i] = LXColor.add(colors[i], c);
+        polyBuffer.markModified();
         return this;
     }
 
@@ -209,6 +292,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param c color
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent addColor(int x, int y, int c) {
         return addColor(x + y * this.lx.width, c);
     }
@@ -220,10 +304,13 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param c New color
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent addColor(LXFixture f, int c) {
+        int[] colors = getColors();
         for (LXPoint p : f.getPoints()) {
-            this.colors[p.index] = LXColor.add(this.colors[p.index], c);
+            colors[p.index] = LXColor.add(colors[p.index], c);
         }
+        polyBuffer.markModified();
         return this;
     }
 
@@ -235,8 +322,10 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param c color
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent setColor(int x, int y, int c) {
-        this.colors[x + y * this.lx.width] = c;
+        getColors()[x + y * this.lx.width] = c;
+        polyBuffer.markModified();
         return this;
     }
 
@@ -247,8 +336,9 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param y y-index
      * @return Color value
      */
+    @Deprecated
     protected final int getColor(int x, int y) {
-        return this.colors[x + y * this.lx.width];
+        return getColors()[x + y * this.lx.width];
     }
 
     /**
@@ -257,10 +347,13 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param c Color
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent setColors(int c) {
+        int[] colors = getColors();
         for (int i = 0; i < colors.length; ++i) {
-            this.colors[i] = c;
+            colors[i] = c;
         }
+        polyBuffer.markModified();
         return this;
     }
 
@@ -271,10 +364,13 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      * @param c color
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent setColor(LXFixture f, int c) {
+        int[] colors = getColors();
         for (LXPoint p : f.getPoints()) {
-            this.colors[p.index] = c;
+            colors[p.index] = c;
         }
+        polyBuffer.markModified();
         return this;
     }
 
@@ -283,8 +379,8 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
      *
      * @return this
      */
+    @Deprecated
     protected final LXLayeredComponent clearColors() {
         return setColors(0);
     }
-
 }

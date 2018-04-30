@@ -20,6 +20,6 @@
 
 package heronarts.lx;
 
-public interface LXBuffer {
+public interface LXBuffer extends Buffer {
     public int[] getArray();
 }

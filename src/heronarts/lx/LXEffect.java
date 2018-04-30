@@ -57,6 +57,12 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
 
     private int index = -1;
 
+    // An alias for the 8-bit color buffer array, for compatibility with old-style
+    // implementations of run(deltaMs, amount) that directly read from and write
+    // into the "colors" array.  Newer subclasses should instead implement
+    // run(deltaMs, amount, preferredSpace) and use polyBuffer.getArray(space).
+    protected int[] colors = null;
+
     protected LXEffect(LX lx) {
         super(lx);
         this.label.setDescription("The name of this effect");
@@ -171,21 +177,46 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
     @Override
     public final void onLoop(double deltaMs) {
         long runStart = System.nanoTime();
-        double enabledDamped = this.enabledDamped.getValue();
-        if (enabledDamped > 0) {
-            run(deltaMs, enabledDamped);
+        if (enabledDamped.getValue() > 0) {
+            run(deltaMs, enabledDamped.getValue(), polyBuffer.getFreshSpace());
         }
         this.timer.runNanos = System.nanoTime() - runStart;
     }
 
     /**
-     * Implementation of the effect. Subclasses need to override this to implement
-     * their functionality.
+     * Old-style subclasses override this method to implement the effect
+     * by reading and modifying the "colors" array.  New-style subclasses
+     * should override the other run() method instead; see below.
      *
      * @param deltaMs Number of milliseconds elapsed since last invocation
      * @param enabledAmount The amount of the effect to apply, scaled from 0-1
      */
-    protected abstract void run(double deltaMs, double enabledAmount);
+    @Deprecated
+    protected /* abstract */ void run(double deltaMs, double enabledAmount) { }
+
+    /**
+     * Implements the effect.  Subclasses should override this method to
+     * apply their effect to an array obtained from the polyBuffer.
+     *
+     * @param deltaMs Number of milliseconds elapsed since last invocation
+     * @param enabledAmount The amount of the effect to apply, scaled from 0-1
+     * @param preferredSpace A hint as to which color space to operate in for
+     *     the greatest efficiency (performing the effect in a different color
+     *     space will still work, but will necessitate color space conversion)
+     */
+    protected void run(double deltaMs, double enabledAmount, PolyBuffer.Space preferredSpace) {
+        // For compatibility, this invokes the method that previous subclasses were
+        // supposed to implement.  Implementations of run(deltaMs, enabledAmount)
+        // are assumed to operate only on the "colors" array, and are not expected
+        // to have marked the buffer, so we mark the buffer modified here.
+        colors = polyBuffer.getArray();
+        run(deltaMs, enabledAmount);
+        polyBuffer.markModified();
+
+        // New subclasses should override and replace this method with one that
+        // obtains a color array using polyBuffer.getArray(space), writes into
+        // that buffer, and then calls polyBuffer.markModified(space).
+    }
 
     @Override
     public void noteOnReceived(MidiNoteOn note) {

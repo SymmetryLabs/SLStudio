@@ -38,17 +38,21 @@ import heronarts.lx.parameter.BooleanParameter;
  * colors for all the points.
  */
 public abstract class LXPattern extends LXDeviceComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent {
-
     private int index = -1;
-
     private int intervalBegin = -1;
-
     private int intervalEnd = -1;
-
-    public final BooleanParameter autoCycleEligible = new BooleanParameter("Cycle", true);
-
     protected double runMs = 0;
 
+    /** The requested color space.  See setPreferredSpace(). */
+    protected PolyBuffer.Space preferredSpace = PolyBuffer.Space.RGB8;
+
+    // An alias for the 8-bit color buffer array, for compatibility with old-style
+    // implementations of run(deltaMs) that directly read from and write
+    // into the "colors" array.  Newer subclasses should instead implement
+    // run(deltaMs, preferredSpace) and use polyBuffer.getArray(space).
+    protected int[] colors = null;
+
+    public final BooleanParameter autoCycleEligible = new BooleanParameter("Cycle", true);
     public final Timer timer = new Timer();
 
     public class Timer {
@@ -188,35 +192,72 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
         return this.autoCycleEligible.isOn() && (!this.hasInterval() || this.isInInterval());
     }
 
+    /**
+     * Sets the color space in which this pattern is requested to operate.
+     * This is a request for the run() method to operate in a particular
+     * color space, for efficiency.  The run() method is not required to honor
+     * this request; this merely provides the information that using a
+     * different color space will necessitate an additional conversion.
+     * @param space
+     */
+    public void setPreferredSpace(PolyBuffer.Space space) {
+        preferredSpace = space;
+    }
+
     @Override
     protected final void onLoop(double deltaMs) {
         long runStart = System.nanoTime();
         this.runMs += deltaMs;
-        this.run(deltaMs);
+        this.run(deltaMs, preferredSpace);
         this.timer.runNanos = System.nanoTime() - runStart;
     }
 
     /**
-     * Main pattern loop function. Invoked in a render loop. Subclasses must
-     * implement this function.
+     * Old-style subclasses override this method to implement the pattern
+     * by writing colors into the "colors" array.  New-style subclasses
+     * should override the other run() method instead; see below.
      *
      * @param deltaMs Number of milliseconds elapsed since last invocation
      */
-    protected abstract void run(double deltaMs);
+    @Deprecated
+    protected /* abstract */ void run(double deltaMs) { }
+
+    /**
+     * Implements the pattern.  Subclasses should override this method to
+     * write colors into an array obtained from the polyBuffer.
+     *
+     * @param deltaMs Number of milliseconds elapsed since last invocation
+     * @param preferredSpace A hint as to which color space to operate in for
+     *     the greatest efficiency (writing the pattern in a different color
+     *     space will still work, but will necessitate color space conversion)
+     */
+    protected void run(double deltaMs, PolyBuffer.Space preferredSpace) {
+        // For compatibility, this invokes the method that previous subclasses
+        // were supposed to implement.  Implementations of run(deltaMs) are
+        // assumed to operate only on the "colors" array, and are not expected
+        // to have marked the buffer, so we mark the buffer modified here.
+        colors = polyBuffer.getArray();
+        run(deltaMs);
+        polyBuffer.markModified();
+
+        // New subclasses should override and replace this method with one that
+        // obtains a color array using polyBuffer.getArray(space), writes into
+        // that buffer, and then calls polyBuffer.markModified(space).
+    }
 
     /**
      * Subclasses may override this method. It will be invoked when the pattern is
      * about to become active. Patterns may take care of any initialization needed
      * or reset parameters if desired.
      */
-    public/* abstract */void onActive() {
+    public /* abstract */ void onActive() {
     }
 
     /**
      * Subclasses may override this method. It will be invoked when the pattern is
      * no longer active. Resources may be freed if desired.
      */
-    public/* abstract */void onInactive() {
+    public /* abstract */ void onInactive() {
     }
 
     /**
@@ -225,14 +266,14 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
      * is not invoked on an already-running pattern. It is only called on the new
      * pattern.
      */
-    public/* abstract */void onTransitionStart() {
+    public /* abstract */ void onTransitionStart() {
     }
 
     /**
      * Subclasses may override this method. It will be invoked when the transition
      * into this pattern is complete.
      */
-    public/* abstract */void onTransitionEnd() {
+    public /* abstract */ void onTransitionEnd() {
     }
 
     @Override
