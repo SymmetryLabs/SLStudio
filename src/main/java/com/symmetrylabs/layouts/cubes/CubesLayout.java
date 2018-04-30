@@ -75,18 +75,18 @@ public class CubesLayout implements Layout {
 
     static final TowerConfig[] TOWER_CONFIG = {
 // OFFICE MAPPINGS APRIL
-    
+
 //         // left
 //         // new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
-                
+
                 //backrow left to right
         new TowerConfig(0, 0,0, -45, new String[] { "326", "198", "6","50" }),
         new TowerConfig((SP) * 1, 0,0, -45, new String[] { "418", "203", "54" }),
         new TowerConfig((SP) * 2, 0,0, -45, new String[] { "150", "312", "129" }),
         new TowerConfig((SP) * 3, 0,0, -45, new String[] { "172", "79", "111", "177" }),
-        
+
         // //Back Row Top Center
-        new TowerConfig((SP) * 1.5f, JUMP * 3,0, -45, new String[] {"87"}),        
+        new TowerConfig((SP) * 1.5f, JUMP * 3,0, -45, new String[] {"87"}),
 
 
 
@@ -112,7 +112,7 @@ public class CubesLayout implements Layout {
         new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1.5f, 0, -24*6, -45, new String[] { "334"}),
         new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1.75f, 0, -24*6, -45, new String[] { "384"}),
 
-        
+
 
 
 // STOCK CONFIG
@@ -390,6 +390,9 @@ public class CubesLayout implements Layout {
                 final CubesController controller = new CubesController(lx, device, physid);
                 controllers.add(index, controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
+                device.version.addListener((value) -> {
+                    if (value >= 6) controller.set16BitColorEnabled(true);
+                });
                 //controller.enabled.setValue(false);
             }
 
