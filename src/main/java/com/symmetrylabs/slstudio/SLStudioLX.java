@@ -171,6 +171,16 @@ public class SLStudioLX extends P3LX {
                         togglePerformanceMode();
                     } else if (keyChar == "v".charAt(0)) {
                         lx.ui.preview.toggleVisible();
+                    } else if (keyChar == '0') {
+                        lx.engine.colorSpace.increment(true);
+                        System.err.println("Engine: color space is now " + lx.engine.colorSpace.getEnum());
+                    } else if (keyChar >= '1' && keyChar <= '9') {
+                        int index = Integer.parseInt("" + keyChar) - 1;
+                        if (lx.engine.channels.size() > index) {
+                            LXChannel channel = lx.engine.channels.get(index);
+                            channel.colorSpace.increment(true);
+                            System.err.println(channel.getLabel() + ": color space is now " + channel.colorSpace.getEnum());
+                        }
                     } else if (keyChar == 'l') {
                         /*
                         JOptionPane pane = new JOptionPane("Available layouts are:", JOptionPane.QUESTION_MESSAGE);

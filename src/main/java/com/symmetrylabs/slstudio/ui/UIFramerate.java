@@ -4,6 +4,9 @@ import com.symmetrylabs.slstudio.SLStudio;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.p3lx.P3LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UI2dContext;
@@ -24,7 +27,7 @@ public class UIFramerate extends UI2dContext {
     private final DecimalFormat elapsedFormat = new DecimalFormat("0.0");
 
     public UIFramerate(UI ui, final P3LX lx, float x, float y) {
-        super(ui, x, y, 800, 30);
+        super(ui, x, y, 840, 30);
         this.lx = lx;
         this.font = SLStudio.applet.loadFont("Inconsolata-Bold-14.vlw");
         setVisible(true);
@@ -40,13 +43,24 @@ public class UIFramerate extends UI2dContext {
         if (lx.engine.isThreaded()) {
             // pg.text(String.format("Engine: %2$.1f UI: %2$.1f",
             //   lx.engine.frameRate(), lx.applet.frameRate), 0, 0);
+            String using16bit = "";
+            for (int i = 0; i < 8 && i < lx.engine.getChannels().size(); i++) {
+                if (lx.engine.getChannel(i).colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
+                    using16bit += (i + 1);
+                }
+            }
+            if (lx.engine.colorSpace.getEnum() == PolyBuffer.Space.RGB16) {
+                using16bit += "E";
+            }
             pg.text(String.format(
-                "Engine FPS: %4s UI: %4s  //  Frame:  %4sms   %4sms (avg)   %4sms (worst)",
-                fpsFormat.format(lx.engine.frameRate()),
-                fpsFormat.format(lx.applet.frameRate),
-                elapsedFormat.format(lx.engine.timer.runCurrentNanos / 1000000.0),
-                elapsedFormat.format(lx.engine.timer.runAvgNanos / 1000000.0),
-                elapsedFormat.format(lx.engine.timer.runWorstNanos / 1000000.0)
+                "Engine: %5.1f fps    UI: %5.1f fps    Frame: %4.1fms (avg %4.1fms, worst %4.1fms)  //  16-bit: %-8s  Conversions: %2d",
+                lx.engine.frameRate(),
+                lx.applet.frameRate,
+                lx.engine.timer.runCurrentNanos / 1e6,
+                lx.engine.timer.runAvgNanos / 1e6,
+                lx.engine.timer.runWorstNanos / 1e6,
+                "[" + using16bit + "]",
+                lx.engine.conversionsPerFrame
             ), 0, 0);
             if (lx.engine.timer.runLastNanos >= 100000000
                 && lx.engine.timer.runLastNanos == lx.engine.timer.runWorstNanos
