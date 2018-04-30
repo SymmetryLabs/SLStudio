@@ -72,6 +72,9 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     /** The PolyBuffer contains the color buffers for each of the color spaces. */
     protected PolyBuffer polyBuffer = null;
 
+    /** The requested color space.  See setPreferredSpace(). */
+    protected PolyBuffer.Space preferredSpace = PolyBuffer.Space.RGB8;
+
     private final List<LXLayer> mutableLayers = new ArrayList<LXLayer>();
     protected final List<LXLayer> layers = Collections.unmodifiableList(mutableLayers);
 
@@ -107,6 +110,19 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         }
         polyBuffer = externalBuffer;
         return this;
+    }
+
+    /**
+     * Sets the color space in which this layer is requested to operate.
+     * Implementations of onLoop(), run(), etc. remain free to use any space,
+     * though ignoring this request may sacrifice quality or efficiency.
+     * @param space An optimization hint as to the color space to use.
+     */
+    public void setPreferredSpace(PolyBuffer.Space space) {
+        preferredSpace = space;
+        for (LXLayer layer : mutableLayers) {
+            layer.setPreferredSpace(space);
+        }
     }
 
     /**

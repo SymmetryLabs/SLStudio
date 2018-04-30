@@ -731,13 +731,15 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         // Run active pattern
         PolyBuffer.Space space = colorSpace.getEnum();
+        getActivePattern().setPreferredSpace(space);
         getActivePattern().loop(deltaMs);
 
         // Run transition!
         if (this.transition != null) {
             this.autoCycleProgress = 1;
             this.transitionProgress = (this.lx.engine.nowMillis - this.transitionMillis) / (1000 * this.transitionTimeSecs.getValue());
-            getNextPattern().loop(deltaMs);;
+            getNextPattern().setPreferredSpace(space);
+            getNextPattern().loop(deltaMs);
             // TODO(mcslee): this is incorrect. the blend objects are shared, so the same one may be run on multiple
             // channels. either they need to be per-channel instances, or they are not loopable with modulators etc.
             this.transition.loop(deltaMs);

@@ -124,9 +124,7 @@ public class PolyBuffer implements PolyBufferProvider {
     public void setBuffer(Buffer buffer) {
         buffers.clear();
         buffers.put(Space.RGB8, buffer);
-        if (buffer != null) {
-            markModified(Space.RGB8);
-        }
+        markModified(Space.RGB8);
     }
 
     @Deprecated

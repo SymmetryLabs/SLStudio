@@ -130,16 +130,16 @@ public abstract class LXBlend extends LXModulatorComponent {
     /**
      * Takes the base buffer, blends the overlay buffer onto it by a
      * specified amount, and writes the result into the destination buffer.
+     * Subclasses should override this method.
      *
      * @param base Base source (when amount = 0, the result equals the base)
      * @param overlay Overlay source (to be blended on top of the base)
      * @param alpha Amount of blending (from 0 to 1)
      * @param dest Destination buffer, which may be the same as overlay or base
-     * @param preferredSpace A hint as to which color space to operate in for
-     *     the greatest efficiency (performing the blend in a different color
-     *     space will still work, but will necessitate color space conversion)
+     * @param preferredSpace A hint as to which color space to use (the implementation
+     *     is free to use any space, though doing so may sacrifice quality or efficiency)
      */
-    public void blend(PolyBuffer base, PolyBuffer overlay, double alpha, PolyBuffer dest, PolyBuffer.Space preferredSpace) {
+    public /* abstract */ void blend(PolyBuffer base, PolyBuffer overlay, double alpha, PolyBuffer dest, PolyBuffer.Space preferredSpace) {
         // For compatibility, this invokes the method that previous subclasses were
         // supposed to implement, and then marks the destination as modified.
         blend(base.getArray(), overlay.getArray(), alpha, dest.getArray());
@@ -151,7 +151,8 @@ public abstract class LXBlend extends LXModulatorComponent {
         // destination buffer modified with a call to dest.markModified(space).
     }
 
-    public void blend(PolyBufferProvider base, PolyBufferProvider overlay, double alpha, PolyBufferProvider dest, PolyBuffer.Space preferredSpace) {
+    public void blend(PolyBufferProvider base, PolyBufferProvider overlay, double alpha,
+                                        PolyBufferProvider dest, PolyBuffer.Space preferredSpace) {
         blend(base.getPolyBuffer(), overlay.getPolyBuffer(), alpha, dest.getPolyBuffer(), preferredSpace);
     }
 }

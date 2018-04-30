@@ -178,7 +178,7 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
     public final void onLoop(double deltaMs) {
         long runStart = System.nanoTime();
         if (enabledDamped.getValue() > 0) {
-            run(deltaMs, enabledDamped.getValue(), polyBuffer.getFreshSpace());
+            run(deltaMs, enabledDamped.getValue(), preferredSpace);
         }
         this.timer.runNanos = System.nanoTime() - runStart;
     }
@@ -200,11 +200,10 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
      *
      * @param deltaMs Number of milliseconds elapsed since last invocation
      * @param enabledAmount The amount of the effect to apply, scaled from 0-1
-     * @param preferredSpace A hint as to which color space to operate in for
-     *     the greatest efficiency (performing the effect in a different color
-     *     space will still work, but will necessitate color space conversion)
+     * @param preferredSpace A hint as to which color space to use (the implementation
+     *     is free to use any space, though doing so may sacrifice quality or efficiency)
      */
-    protected void run(double deltaMs, double enabledAmount, PolyBuffer.Space preferredSpace) {
+    protected /* abstract */ void run(double deltaMs, double enabledAmount, PolyBuffer.Space preferredSpace) {
         // For compatibility, this invokes the method that previous subclasses were
         // supposed to implement.  Implementations of run(deltaMs, enabledAmount)
         // are assumed to operate only on the "colors" array, and are not expected
