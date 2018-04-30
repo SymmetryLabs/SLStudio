@@ -10,6 +10,8 @@ import java.io.IOException;
 
 import com.symmetrylabs.slstudio.component.GammaExpander;
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.LXOutput;
 import heronarts.lx.color.LXColor;
@@ -18,8 +20,9 @@ import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
+import heronarts.lx.output.OPCConstants;
 
-public class CubesController extends LXOutput {
+public class CubesController extends LXOutput implements OPCConstants {
     public final String id;
     public final InetAddress host;
     public final boolean isBroadcast;
@@ -28,6 +31,7 @@ public class CubesController extends LXOutput {
     private Socket socket;
     private DatagramSocket dsocket;
     private OutputStream output;
+    protected boolean is16BitColorEnabled = false;
 
     final int[] STRIP_ORD = new int[] {
         6, 7, 8,   // white
@@ -35,9 +39,6 @@ public class CubesController extends LXOutput {
         0, 1, 2,   // green
         3, 4, 5    // blue
     };
-
-    static final int HEADER_LENGTH = 4;
-    static final int BYTES_PER_PIXEL = 3;
 
     final int numStrips = STRIP_ORD.length;
     int numPixels;
@@ -47,7 +48,7 @@ public class CubesController extends LXOutput {
 
     private final LX lx;
     private CubesMappingMode mappingMode;
-    private GammaExpander GammaExpander;
+    private GammaExpander gammaExpander;
 
     public CubesController(LX lx, NetworkDevice device, String id) {
         this(lx, device, device.ipAddress, id, false);
@@ -75,40 +76,52 @@ public class CubesController extends LXOutput {
         this.isBroadcast = isBroadcast;
 
         mappingMode = CubesMappingMode.getInstance(lx);
-        GammaExpander = GammaExpander.getInstance(lx);
+        gammaExpander = gammaExpander.getInstance(lx);
 
         enabled.setValue(true);
     }
 
-    private void initPacketData(int numPixels) {
-        this.numPixels = numPixels;
-        contentSizeBytes = BYTES_PER_PIXEL * numPixels;
-        packetSizeBytes = HEADER_LENGTH + contentSizeBytes; // add header length
-        packetData = new byte[packetSizeBytes];
-
-        setHeader();
+    public void set16BitColorEnabled(boolean enable) {
+        this.is16BitColorEnabled = enable;
     }
 
-    private void setHeader() {
+    private void initPacketData(int numPixels, boolean use16) {
+        this.numPixels = numPixels;
+        contentSizeBytes = (use16 ? BYTES_PER_16BIT_PIXEL : BYTES_PER_PIXEL) * numPixels;
+        packetSizeBytes = HEADER_LEN + contentSizeBytes;
+        if (packetData == null || packetData.length != packetSizeBytes) {
+            packetData = new byte[packetSizeBytes];
+        }
         packetData[0] = 0; // Channel
-        packetData[1] = 0; // Command (Set pixel colors)
-        // indices 2,3 = high byte, low byte
-        // 3 bytes * 180 pixels = 540 bytes = 0x021C
-        packetData[2] = (byte)((contentSizeBytes >> 8) & 0xFF);
-        packetData[3] = (byte)((contentSizeBytes >> 0) & 0xFF);
+        packetData[1] = use16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
+        packetData[2] = (byte) ((contentSizeBytes >> 8) & 0xFF);
+        packetData[3] = (byte) (contentSizeBytes & 0xFF);
     }
 
     private void setPixel(int number, int c) {
-        int offset = 4 + number * 3;
+        int index = 4 + number * 3;
+        int gammaExpanded = gammaExpander.getExpandedColor(c);
+        packetData[index++] = LXColor.red(gammaExpanded);
+        packetData[index++] = LXColor.green(gammaExpanded);
+        packetData[index++] = LXColor.blue(gammaExpanded);
+    }
 
-        int gammaExpanded = GammaExpander.getExpandedColor(c);
-        packetData[offset + 0] = LXColor.red(gammaExpanded);
-        packetData[offset + 1] = LXColor.green(gammaExpanded);
-        packetData[offset + 2] = LXColor.blue(gammaExpanded);
+    private void setPixel(int number, long c) {
+        int index = 4 + number * 6;
+        long gammaExpanded = gammaExpander.getExpandedColor16(c);
+        int red = LXColor16.red(gammaExpanded);
+        int green = LXColor16.green(gammaExpanded);
+        int blue = LXColor16.blue(gammaExpanded);
+        packetData[index++] = (byte) (red >>> 8);
+        packetData[index++] = (byte) (red & 0xff);
+        packetData[index++] = (byte) (green >>> 8);
+        packetData[index++] = (byte) (green & 0xff);
+        packetData[index++] = (byte) (blue >>> 8);
+        packetData[index++] = (byte) (blue & 0xff);
     }
 
     @Override
-    protected void onSend(int[] colors) {
+    protected void onSend(PolyBuffer src) {
         if (isBroadcast != SLStudio.applet.outputControl.broadcastPacket.isOn())
             return;
 
@@ -153,31 +166,11 @@ public class CubesController extends LXOutput {
         // using the cube type with the most pixels
         CubesModel.Cube.Type cubeType = cube != null ? cube.type : CubesModel.Cube.CUBE_TYPE_WITH_MOST_PIXELS;
         int numPixels = cubeType.POINTS_PER_CUBE;
-        if (packetData == null || packetData.length != numPixels) {
-            initPacketData(numPixels);
-        }
-
-        // Fill the datagram with pixel data
-        // Fill with all black if we don't have cube data
-        if (cube != null) {
-            for (int stripNum = 0; stripNum < numStrips; stripNum++) {
-                int stripId = STRIP_ORD[stripNum];
-                Strip strip = cube.getStrips().get(stripId);
-
-                for (int i = 0; i < strip.metrics.numPoints; i++) {
-                    LXPoint point = strip.getPoints().get(i);
-                    setPixel(stripNum * strip.metrics.numPoints + i, colors[point.index]);
-                }
-            }
-        } else {
-            for (int i = 0; i < numPixels; i++) {
-                setPixel(i, LXColor.BLACK);
-            }
-        }
 
         // Mapping Mode: manually get color to animate "unmapped" fixtures that are not network
         // TODO: refactor here
         if (mappingMode.enabled.isOn() && !mappingMode.isFixtureMapped(id)) {
+            initPacketData(numPixels, false);
             if (mappingMode.inUnMappedMode()) {
                 if (mappingMode.inDisplayAllMode()) {
                     int col = mappingMode.getUnMappedColor();
@@ -198,6 +191,35 @@ public class CubesController extends LXOutput {
             } else {
                 for (int i = 0; i < numPixels; i++)
                     setPixel(i, (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.RED, 0.2f) : LXColor.BLACK);
+            }
+        } else if (cube != null) {
+            // Fill the datagram with pixel data
+            if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
+                initPacketData(numPixels, true);
+                long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
+                    for (int i = 0; i < strip.metrics.numPoints; i++) {
+                        LXPoint point = strip.getPoints().get(i);
+                        setPixel(stripNum * strip.metrics.numPoints + i, srcLongs[point.index]);
+                    }
+                }
+            } else {
+                initPacketData(numPixels, false);
+                int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+                for (int stripNum = 0; stripNum < numStrips; stripNum++) {
+                    Strip strip = cube.getStrips().get(STRIP_ORD[stripNum]);
+                    for (int i = 0; i < strip.metrics.numPoints; i++) {
+                        LXPoint point = strip.getPoints().get(i);
+                        setPixel(stripNum * strip.metrics.numPoints + i, srcInts[point.index]);
+                    }
+                }
+            }
+        } else {
+            // Fill with all black if we don't have cube data
+            initPacketData(numPixels, false);
+            for (int i = 0; i < numPixels; i++) {
+                setPixel(i, LXColor.BLACK);
             }
         }
 
