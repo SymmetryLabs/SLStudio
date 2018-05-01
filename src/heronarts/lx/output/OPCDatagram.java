@@ -23,6 +23,9 @@ package heronarts.lx.output;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.LXFixture;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * UDP implementation of http://openpixelcontrol.org/
  */
@@ -72,8 +75,7 @@ public class OPCDatagram extends LXDatagram implements OPCConstants {
 
     @Override
     public void onSend(PolyBuffer src) {
-        if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
-            long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+        if (is16BitColorEnabled && src.isFresh(RGB16)) {
             int dataLength = BYTES_PER_16BIT_PIXEL * indices.length;
             if (buffer16 == null) {
                 buffer16 = new byte[HEADER_LEN + dataLength];
@@ -82,13 +84,12 @@ public class OPCDatagram extends LXDatagram implements OPCConstants {
             buffer16[INDEX_COMMAND] = COMMAND_SET_16BIT_PIXEL_COLORS;
             buffer16[INDEX_DATA_LEN_MSB] = (byte) (dataLength >>> 8);
             buffer16[INDEX_DATA_LEN_LSB] = (byte) (dataLength & 0xFF);
-            copyPoints16(srcLongs, indices, buffer16, INDEX_DATA);
+            copyPoints16((long[]) src.getArray(RGB16), indices, buffer16, INDEX_DATA);
             packet.setData(buffer16);
             packet.setLength(buffer16.length);
         } else {
-            int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
             buffer[INDEX_CHANNEL] = channel;
-            copyPoints(srcInts, indices, INDEX_DATA);
+            copyPoints((int[]) src.getArray(RGB8), indices, INDEX_DATA);
             packet.setData(buffer);
             packet.setLength(buffer.length);
         }

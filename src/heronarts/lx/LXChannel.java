@@ -43,6 +43,8 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * A channel is a single component of the engine that has a set of patterns from
  * which it plays and rotates. It also has a fader to control how this channel
@@ -152,7 +154,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      * The color space that this channel renders to.
      */
     public final EnumParameter<PolyBuffer.Space> colorSpace =
-            new EnumParameter<>("Color Space", PolyBuffer.Space.RGB8)
+            new EnumParameter<>("Color Space", RGB8)
                     .setDescription("Selects the color space for this channel");
 
     /**
@@ -773,7 +775,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     @Deprecated
     int[] getColors() {
-        return polyBuffer.getArray();
+        return (int[]) polyBuffer.getArray(RGB8);
     }
 
     @Override

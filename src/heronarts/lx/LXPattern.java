@@ -33,6 +33,8 @@ import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
@@ -46,7 +48,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     // An alias for the 8-bit color buffer array, for compatibility with old-style
     // implementations of run(deltaMs) that directly read from and write
     // into the "colors" array.  Newer subclasses should instead implement
-    // run(deltaMs, preferredSpace) and use polyBuffer.getArray(space).
+    // run(deltaMs, preferredSpace) and use getArray(space) to get the array.
     protected int[] colors = null;
 
     public final BooleanParameter autoCycleEligible = new BooleanParameter("Cycle", true);
@@ -220,13 +222,13 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
         // were supposed to implement.  Implementations of run(deltaMs) are
         // assumed to operate only on the "colors" array, and are not expected
         // to have marked the buffer, so we mark the buffer modified here.
-        colors = polyBuffer.getArray();
+        colors = (int[]) getArray(RGB8);
         run(deltaMs);
-        polyBuffer.markModified();
+        markModified(RGB8);
 
         // New subclasses should override and replace this method with one that
-        // obtains a color array using polyBuffer.getArray(space), writes into
-        // that buffer, and then calls polyBuffer.markModified(space).
+        // obtains a color array using getArray(space), writes into that array,
+        // and then calls markModified(space).
     }
 
     /**

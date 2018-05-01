@@ -30,6 +30,8 @@ import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor16;
 
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 public abstract class LXSocketOutput extends LXOutput {
 
     public final String host;
@@ -106,7 +108,7 @@ public abstract class LXSocketOutput extends LXOutput {
         // For compatibility, this invokes the method that previous subclasses
         // were supposed to implement.  Implementations of getPacketData(int[])
         // know only how to send 8-bit color data, so that's what we pass to them.
-        return getPacketData((int[]) src.getArray(PolyBuffer.Space.RGB8));
+        return getPacketData((int[]) src.getArray(RGB8));
 
         // New subclasses should override and replace this method with one that
         // obtains a color array in the desired space using src.getArray(space),

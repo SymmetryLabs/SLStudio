@@ -28,6 +28,8 @@ import java.net.DatagramPacket;
 import java.net.InetAddress;
 import java.net.UnknownHostException;
 
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 public abstract class LXDatagram {
 
     LXDatagramDestination destination;
@@ -197,7 +199,7 @@ public abstract class LXDatagram {
         // For compatibility, this invokes the method that previous subclasses
         // were supposed to implement.  Implementations of onSend(int[]) know
         // only how to send 8-bit color data, so that's what we pass to them.
-        onSend((int[]) src.getArray(PolyBuffer.Space.RGB8));
+        onSend((int[]) src.getArray(RGB8));
 
         // New subclasses should override and replace this method with one that
         // obtains a color array in the desired space using src.getArray(space),

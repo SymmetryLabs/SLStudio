@@ -65,6 +65,7 @@ import java.util.Queue;
 
 import static heronarts.lx.LXChannel.CrossfadeGroup.A;
 import static heronarts.lx.LXChannel.CrossfadeGroup.B;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
 
 /**
  * The engine is the core class that runs the internal animations. An engine is
@@ -153,7 +154,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     /** The color space that the engine renders to. */
     public final EnumParameter<PolyBuffer.Space> colorSpace =
-            new EnumParameter<>("Color Space", PolyBuffer.Space.RGB8)
+            new EnumParameter<>("Color Space", RGB8)
                     .setDescription("Selects the color space for the engine");
 
     private final BooleanParameter[] scenes = new BooleanParameter[MAX_SCENES];
@@ -381,7 +382,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         // An all-black buffer is used as the initial base for blending.
         // It is initialized to black and then never modified.
         black = new PolyBuffer(lx);
-        Arrays.fill((int[]) black.getArray(PolyBuffer.Space.RGB8), LXColor.BLACK);
+        Arrays.fill((int[]) black.getArray(RGB8), LXColor.BLACK);
 
         // Blending buffers
         groupA = new BlendTarget(lx);
@@ -1233,11 +1234,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         // If cue-ing the palette!
         if (lx.palette.cue.isOn()) {
-            int[] colors = (int[]) buffer.cue.render.getArray(PolyBuffer.Space.RGB8);
+            int[] colors = (int[]) buffer.cue.render.getArray(RGB8);
             for (LXPoint p : this.lx.model.points) {
                 colors[p.index] = lx.palette.getColor(p);
             }
-            buffer.cue.render.markModified(PolyBuffer.Space.RGB8);
+            buffer.cue.render.markModified(RGB8);
             cueOn = true;
         }
 
@@ -1381,7 +1382,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      */
     @Deprecated
     public void copyUIBuffer(int[] array) {
-        copyUIBuffer(PolyBuffer.wrapArray(lx, array), PolyBuffer.Space.RGB8);
+        copyUIBuffer(PolyBuffer.wrapArray(lx, array), RGB8);
     }
 
     /**
@@ -1390,7 +1391,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      */
     @Deprecated
     public int[] getUIBufferNonThreadSafe() {
-        return (int[]) getUIPolyBufferNonThreadSafe().getArray(PolyBuffer.Space.RGB8);
+        return (int[]) getUIPolyBufferNonThreadSafe().getArray(RGB8);
     }
 
     private static final String KEY_PALETTE = "palette";

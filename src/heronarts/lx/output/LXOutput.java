@@ -37,6 +37,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * This class represents the output stage from the LX engine to real devices.
  * Outputs may have their own brightness, be enabled/disabled, be throttled,
@@ -183,24 +186,24 @@ public abstract class LXOutput extends LXComponent {
     protected PolyBuffer processOutput(PolyBuffer src, PolyBuffer.Space space) {
         switch (mode.getEnum()) {
             case WHITE:
-                if (space == PolyBuffer.Space.RGB16) {
+                if (space == RGB16) {
                     Arrays.fill((long[]) buffer.getArray(space),
                             LXColor16.gray(100 * brightness.getValue()));
                     buffer.markModified(space);
                 } else {
-                    Arrays.fill((int[]) buffer.getArray(PolyBuffer.Space.RGB8),
+                    Arrays.fill((int[]) buffer.getArray(RGB8),
                             LXColor.gray(100 * brightness.getValue()));
-                    buffer.markModified(PolyBuffer.Space.RGB8);
+                    buffer.markModified(RGB8);
                 }
                 return buffer;
 
             case OFF:
-                if (space == PolyBuffer.Space.RGB16) {
+                if (space == RGB16) {
                     Arrays.fill((long[]) buffer.getArray(space), 0);
                     buffer.markModified(space);
                 } else {
-                    Arrays.fill((int[]) buffer.getArray(PolyBuffer.Space.RGB8), 0);
-                    buffer.markModified(PolyBuffer.Space.RGB8);
+                    Arrays.fill((int[]) buffer.getArray(RGB8), 0);
+                    buffer.markModified(RGB8);
                 }
                 return buffer;
 
@@ -208,7 +211,7 @@ public abstract class LXOutput extends LXComponent {
                 int gamma = gammaCorrection.getValuei();
                 float brt = brightness.getValuef();
                 if (gamma > 0 || brt < 1) {
-                    if (space == PolyBuffer.Space.RGB16) {
+                    if (space == RGB16) {
                         long[] srcLongs = (long[]) src.getArray(space);
                         long[] outLongs = (long[]) buffer.getArray(space);
                         for (int i = 0; i < srcLongs.length; ++i) {
@@ -221,8 +224,8 @@ public abstract class LXOutput extends LXComponent {
                         }
                         buffer.markModified(space);
                     } else {
-                        int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
-                        int[] outInts = (int[]) buffer.getArray(PolyBuffer.Space.RGB8);
+                        int[] srcInts = (int[]) src.getArray(RGB8);
+                        int[] outInts = (int[]) buffer.getArray(RGB8);
                         for (int i = 0; i < srcInts.length; ++i) {
                             LXColor.RGBtoHSB(srcInts[i], hsb);
                             float newBrightness = brt * hsb[2];
@@ -231,7 +234,7 @@ public abstract class LXOutput extends LXComponent {
                             }
                             outInts[i] = Color.HSBtoRGB(hsb[0], hsb[1], newBrightness);
                         }
-                        buffer.markModified(PolyBuffer.Space.RGB8);
+                        buffer.markModified(RGB8);
                     }
                     return buffer;
                 }
@@ -256,7 +259,7 @@ public abstract class LXOutput extends LXComponent {
         // For compatibility, this invokes the method that previous subclasses
         // were supposed to implement.  Implementations of onSend(int[]) know
         // only how to send 8-bit color data, so that's what we pass to them.
-        onSend((int[]) src.getArray(PolyBuffer.Space.RGB8));
+        onSend((int[]) src.getArray(RGB8));
 
         // New subclasses should override and replace this method with one that
         // obtains a color array in the desired space using src.getArray(space),

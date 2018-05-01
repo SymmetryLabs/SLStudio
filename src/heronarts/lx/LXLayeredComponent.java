@@ -26,8 +26,12 @@ import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
+
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
 
 /**
  * Base class for system components that have a color buffer and run in the
@@ -47,18 +51,18 @@ import java.util.List;
  * For subclasses marked Buffered:
  *     Internal API:
  *         The implementation of onLoop() should fetch the array for a color
- *         space with polyBuffer.getArray(space), write colors into the array,
- *         and finally mark it modified with polyBuffer.markModified(space).
+ *         space with getArray(space), write colors into the array, and
+ *         finally mark it modified with markModified(space).
  *     External API:
- *         getPolyBuffer().getArray(space) gets the array for the requested
- *         color space, converting from the space in which the colors were
- *         written, if different.  setPolyBuffer() is illegal to call.
+ *         getArray(space) gets the array for the requested color space,
+ *         converting from the space in which the colors were written, if
+ *         different.  setPolyBuffer() is illegal to call.
  *
  * For subclasses not marked Buffered:
  *     Internal API:
  *         Same as above.
  *     External API:
- *         getPolyBuffer() is the same as above.  setPolyBuffer(buffer) takes
+ *         getArray() is the same as above.  setPolyBuffer(buffer) takes
  *         a PolyBuffer and makes it the buffer that onLoop() will read from
  *         and write into.
  */
@@ -73,7 +77,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected PolyBuffer polyBuffer = null;
 
     /** The requested color space.  See setPreferredSpace(). */
-    protected PolyBuffer.Space preferredSpace = PolyBuffer.Space.RGB8;
+    protected PolyBuffer.Space preferredSpace = RGB8;
 
     private final List<LXLayer> mutableLayers = new ArrayList<LXLayer>();
     protected final List<LXLayer> layers = Collections.unmodifiableList(mutableLayers);
@@ -112,6 +116,16 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         return this;
     }
 
+    /** Convenience method for subclasses. */
+    protected Object getArray(PolyBuffer.Space space) {
+        return polyBuffer.getArray(space);
+    }
+
+    /** Convenience method for subclasses. */
+    protected void markModified(PolyBuffer.Space space) {
+        polyBuffer.markModified(space);
+    }
+
     /**
      * Sets the color space in which this layer is requested to operate.
      * Implementations of onLoop(), run(), etc. remain free to use any space,
@@ -140,13 +154,13 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     /** Gets the 8-bit color buffer.  Maintained for compatibility. */
     @Deprecated
     protected LXBuffer getBuffer() {
-        return (LXBuffer) polyBuffer.getBuffer(PolyBuffer.Space.RGB8);
+        return (LXBuffer) polyBuffer.getBuffer(RGB8);
     }
 
     /** Gets the 8-bit color buffer's array.  Maintained for compatibility. */
     @Deprecated
     public int[] getColors() {
-        return polyBuffer.getArray();
+        return (int[]) getArray(RGB8);
  }
 
     /**
@@ -219,23 +233,13 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     }
 
     protected void setColors(PolyBuffer.Space space, Object color) {
-        switch (space) {
-            case RGB8:
-                int[] intArray = (int[]) polyBuffer.getArray(space);
-                int intColor = (int) color;
-                for (int i = 0; i < intArray.length; i++) {
-                    intArray[i] = intColor;
-                }
-                break;
-            case RGB16:
-                long[] longArray = (long[]) polyBuffer.getArray(space);
-                long longColor = (long) color;
-                for (int i = 0; i < longArray.length; i++) {
-                    longArray[i] = longColor;
-                }
-                break;
+        if (space == RGB8) {
+            Arrays.fill((int[]) getArray(space), (int) color);
         }
-        polyBuffer.markModified(space);
+        if (space == RGB16) {
+            Arrays.fill((long[]) getArray(space), (long) color);
+        }
+        markModified(space);
     }
 
     /**
@@ -248,7 +252,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     @Deprecated
     protected final LXLayeredComponent setColor(int i, int c) {
         getColors()[i] = c;
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 
@@ -265,7 +269,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected final LXLayeredComponent blendColor(int i, int c, LXColor.Blend blendMode) {
         int[] colors = getColors();
         colors[i] = LXColor.blend(colors[i], c, blendMode);
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 
@@ -275,7 +279,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (LXPoint p : f.getPoints()) {
             colors[p.index] = LXColor.blend(colors[p.index], c, blendMode);
         }
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 
@@ -290,7 +294,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected final LXLayeredComponent addColor(int i, int c) {
         int[] colors = getColors();
         colors[i] = LXColor.add(colors[i], c);
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 
@@ -320,7 +324,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (LXPoint p : f.getPoints()) {
             colors[p.index] = LXColor.add(colors[p.index], c);
         }
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 
@@ -335,7 +339,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     @Deprecated
     protected final LXLayeredComponent setColor(int x, int y, int c) {
         getColors()[x + y * this.lx.width] = c;
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 
@@ -363,7 +367,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (int i = 0; i < colors.length; ++i) {
             colors[i] = c;
         }
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 
@@ -380,7 +384,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (LXPoint p : f.getPoints()) {
             colors[p.index] = c;
         }
-        polyBuffer.markModified();
+        markModified(RGB8);
         return this;
     }
 

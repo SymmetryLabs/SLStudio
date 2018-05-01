@@ -27,6 +27,8 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.PolyBufferProvider;
 import heronarts.lx.color.LXColor16;
 
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * An LXBlend is a loop-based implementation of a compositing algorithm.
  * Two color buffers are blended together using some logic, typically
@@ -142,8 +144,8 @@ public abstract class LXBlend extends LXModulatorComponent {
     public /* abstract */ void blend(PolyBuffer base, PolyBuffer overlay, double alpha, PolyBuffer dest, PolyBuffer.Space preferredSpace) {
         // For compatibility, this invokes the method that previous subclasses were
         // supposed to implement, and then marks the destination as modified.
-        blend(base.getArray(), overlay.getArray(), alpha, dest.getArray());
-        dest.markModified();
+        blend((int[]) base.getArray(RGB8), (int[]) overlay.getArray(RGB8), alpha, (int[]) dest.getArray(RGB8));
+        dest.markModified(RGB8);
 
         // New subclasses should override and replace this method with one that
         // reads color arrays from base.getArray(space) and overlay.getArray(space),

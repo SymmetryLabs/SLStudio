@@ -26,6 +26,9 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXFixture;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * TCP/IP streaming socket implementation of http://openpixelcontrol.org/
  */
@@ -63,7 +66,7 @@ public class OPCOutput extends LXSocketOutput implements OPCConstants {
 
     @Override
     protected byte[] getPacketData(PolyBuffer src) {
-        boolean send16 = is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16);
+        boolean send16 = is16BitColorEnabled && src.isFresh(RGB16);
         byte command = send16 ? COMMAND_SET_16BIT_PIXEL_COLORS : COMMAND_SET_PIXEL_COLORS;
         int dataLength = (send16 ? BYTES_PER_16BIT_PIXEL : BYTES_PER_PIXEL) * pointIndices.length;
         if (packetData == null || packetData.length != HEADER_LEN + dataLength) {
@@ -72,7 +75,7 @@ public class OPCOutput extends LXSocketOutput implements OPCConstants {
         fillPacketHeader(channel, command, dataLength);
         int p = INDEX_DATA;
         if (send16) {
-            long[] srcLongs = (long[]) src.getArray(PolyBuffer.Space.RGB16);
+            long[] srcLongs = (long[]) src.getArray(RGB16);
             for (int index : pointIndices) {
                 long c = srcLongs[index];
                 int red = LXColor16.red(c);
@@ -86,7 +89,7 @@ public class OPCOutput extends LXSocketOutput implements OPCConstants {
                 packetData[p++] = (byte) (blue & 0xff);
             }
         } else {
-            int[] srcInts = (int[]) src.getArray(PolyBuffer.Space.RGB8);
+            int[] srcInts = (int[]) src.getArray(RGB8);
             for (int index : pointIndices) {
                 int c = srcInts[index];
                 packetData[p++] = LXColor.red(c);

@@ -34,6 +34,8 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
 
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * Class to represent an effect that may be applied to the color array. Effects
  * may be stateless or stateful, though typically they operate on a single
@@ -60,7 +62,7 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
     // An alias for the 8-bit color buffer array, for compatibility with old-style
     // implementations of run(deltaMs, amount) that directly read from and write
     // into the "colors" array.  Newer subclasses should instead implement
-    // run(deltaMs, amount, preferredSpace) and use polyBuffer.getArray(space).
+    // run(deltaMs, amount, preferredSpace) and use getArray(space) to get the array.
     protected int[] colors = null;
 
     protected LXEffect(LX lx) {
@@ -208,13 +210,13 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         // supposed to implement.  Implementations of run(deltaMs, enabledAmount)
         // are assumed to operate only on the "colors" array, and are not expected
         // to have marked the buffer, so we mark the buffer modified here.
-        colors = polyBuffer.getArray();
+        colors = (int[]) getArray(RGB8);
         run(deltaMs, enabledAmount);
-        polyBuffer.markModified();
+        markModified(RGB8);
 
         // New subclasses should override and replace this method with one that
-        // obtains a color array using polyBuffer.getArray(space), writes into
-        // that buffer, and then calls polyBuffer.markModified(space).
+        // obtains a color array using getArray(space), writes into that array,
+        // and then calls markModified(space).
     }
 
     @Override

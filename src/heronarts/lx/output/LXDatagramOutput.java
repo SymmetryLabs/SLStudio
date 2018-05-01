@@ -33,6 +33,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 /**
  * An output stage that functions by sending datagram packets.
  */
@@ -98,7 +100,7 @@ public class LXDatagramOutput extends LXOutput {
         // For compatibility, this invokes the method that previous subclasses
         // were supposed to implement.  Implementations of beforeSend(int[])
         // know only how to handle 8-bit color data, so that's what we pass to them.
-        beforeSend((int[]) src.getArray(PolyBuffer.Space.RGB8));
+        beforeSend((int[]) src.getArray(RGB8));
 
         // New subclasses that want to use this hook should override and
         // replace this method.
@@ -112,7 +114,7 @@ public class LXDatagramOutput extends LXOutput {
         // For compatibility, this invokes the method that previous subclasses
         // were supposed to implement.  Implementations of beforeSend(int[])
         // know only how to handle 8-bit color data, so that's what we pass to them.
-        afterSend((int[]) src.getArray(PolyBuffer.Space.RGB8));
+        afterSend((int[]) src.getArray(RGB8));
 
         // New subclasses that want to use this hook should override and
         // replace this method.

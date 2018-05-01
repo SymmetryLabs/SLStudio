@@ -72,17 +72,16 @@ public class PolyBuffer implements PolyBufferProvider {
             if (buffers.get(space) == null) {
                 buffers.put(space, createBuffer(space));
             }
-            Buffer buffer = buffers.get(space);
             switch (space) {
                 case RGB8:
                     if (isFresh(Space.RGB16)) {
-                        LXColor16.longsToInts((long[]) getArray(Space.RGB16), (int[]) buffer.getArray());
+                        LXColor16.longsToInts((long[]) getArray(Space.RGB16), (int[]) getArray(Space.RGB8));
                         conversionCount++;
                     }
                     break;
                 case RGB16:
                     if (isFresh(Space.RGB8)) {
-                        LXColor.intsToLongs((int[]) getArray(Space.RGB8), (long[]) buffer.getArray());
+                        LXColor.intsToLongs((int[]) getArray(Space.RGB8), (long[]) getArray(Space.RGB16));
                         conversionCount++;
                     }
                     break;
@@ -116,19 +115,9 @@ public class PolyBuffer implements PolyBufferProvider {
     }
 
     @Deprecated
-    public int[] getArray() {
-        return (int[]) getBuffer(Space.RGB8).getArray();
-    }
-
-    @Deprecated
     public void setBuffer(Buffer buffer) {
         buffers.clear();
         buffers.put(Space.RGB8, buffer);
-        markModified(Space.RGB8);
-    }
-
-    @Deprecated
-    public void markModified() {
         markModified(Space.RGB8);
     }
 }

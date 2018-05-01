@@ -29,6 +29,8 @@ import heronarts.lx.parameter.LXParameter;
 
 import java.util.Arrays;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+
 public class SolidColorPattern extends LXPattern {
 
     public final ColorParameter color = new ColorParameter("Color");
@@ -48,9 +50,8 @@ public class SolidColorPattern extends LXPattern {
     public void onParameterChanged(LXParameter p) {
         if (p == this.color) {
             //setColors(this.color.getColor());
-            long[] colors = (long[]) polyBuffer.getArray(PolyBuffer.Space.RGB16);
-            Arrays.fill(colors, LXColor.toLong(color.getColor()));
-            polyBuffer.markModified(PolyBuffer.Space.RGB16);
+            Arrays.fill((long[]) getArray(RGB16), LXColor.toLong(color.getColor()));
+            markModified(RGB16);
         }
     }
 
