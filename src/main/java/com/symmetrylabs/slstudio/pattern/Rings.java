@@ -6,6 +6,10 @@ import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.PolyBuffer;
 
 import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.NoiseUtils;
@@ -34,7 +38,11 @@ public class Rings extends LXPattern {
         addParameter(pScale);
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+
+        Object array = polyBuffer.getArray(space);
+        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
+        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
 
         final float xyspeed = pSpeed1.getValuef() * 0.01f;
         final float zspeed = pSpeed1.getValuef() * 0.08f;
@@ -86,7 +94,12 @@ public class Rings extends LXPattern {
 
             float brightness = 100.0f * MathUtils.constrain(MathUtils.pow(br * n, gamma), 0.0f, 1.0f);
             if (brightness == 0) {
-                colors[p.index] = LXColor.BLACK;
+               if (intColors != null) {
+                    intColors[p.index] = LXColor.BLACK;
+                }
+                if (longColors != null){
+                  longColors[p.index] = LXColor16.BLACK;
+                }
                 return;
             }
 
@@ -98,9 +111,19 @@ public class Rings extends LXPattern {
                 0.0f, 1.0f, 0.0f, 300.0f
             );
 
-            colors[p.index] = lx.hsb(palette.getHuef() + m, saturation, brightness);
+
+            if (space == PolyBuffer.Space.RGB8) {
+                    intColors[p.index] = LXColor.hsb(palette.getHuef() + m, saturation, brightness);
+                }
+                else if (space == PolyBuffer.Space.RGB16) {
+                    longColors[p.index] = LXColor16.hsb(palette.getHuef() + m, saturation, brightness);
+                }
+              
+
+            //colors[p.index] = lx.hsb(palette.getHuef() + m, saturation, brightness);
         });
 
         NoiseUtils.noiseDetail(1);
+        polyBuffer.markModified(space);
     }
 }
