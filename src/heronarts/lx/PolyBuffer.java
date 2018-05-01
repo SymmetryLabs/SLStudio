@@ -72,16 +72,17 @@ public class PolyBuffer implements PolyBufferProvider {
             if (buffers.get(space) == null) {
                 buffers.put(space, createBuffer(space));
             }
+            Object dest = buffers.get(space).getArray();
             switch (space) {
                 case RGB8:
                     if (isFresh(Space.RGB16)) {
-                        LXColor16.longsToInts((long[]) getArray(Space.RGB16), (int[]) getArray(Space.RGB8));
+                        LXColor16.longsToInts((long[]) getArray(Space.RGB16), (int[]) dest);
                         conversionCount++;
                     }
                     break;
                 case RGB16:
                     if (isFresh(Space.RGB8)) {
-                        LXColor.intsToLongs((int[]) getArray(Space.RGB8), (long[]) getArray(Space.RGB16));
+                        LXColor.intsToLongs((int[]) getArray(Space.RGB8), (long[]) dest);
                         conversionCount++;
                     }
                     break;
