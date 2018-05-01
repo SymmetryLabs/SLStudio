@@ -112,7 +112,7 @@ public class LXColor16 {
          * @param rgb Color value
          * @return Brightness from 0-100
          */
-        public static float b(int rgb) {
+        public static float b(long rgb) {
                 int r = red(rgb);
                 int g = green(rgb);
                 int b = blue(rgb);
@@ -484,9 +484,9 @@ public class LXColor16 {
                 long c2a = alpha(c2);
                 return
                         (min(0xffffL, (long) (c1a + c2a)) << ALPHA_SHIFT) |
-                                (min(RED_MASK, (c1 & RED_MASK) + (((c2 & RED_MASK) * (c2a + 1)) >>> 8)) & RED_MASK) |
-                                (min(GREEN_MASK, (c1 & GREEN_MASK) + (((c2 & GREEN_MASK) * (c2a + 1)) >>> 8)) & GREEN_MASK) |
-                                (min(BLUE_MASK, (c1 & BLUE_MASK) + (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8)) & BLUE_MASK);
+                                (min(RED_MASK, (c1 & RED_MASK) + (((c2 & RED_MASK) * (c2a + 1)) >>> 16)) & RED_MASK) |
+                                (min(GREEN_MASK, (c1 & GREEN_MASK) + (((c2 & GREEN_MASK) * (c2a + 1)) >>> 16)) & GREEN_MASK) |
+                                (min(BLUE_MASK, (c1 & BLUE_MASK) + (((c2 & BLUE_MASK) * (c2a + 1)) >>> 16)) & BLUE_MASK);
         }
 
         /**
@@ -501,9 +501,9 @@ public class LXColor16 {
                 long c2a = alpha(c2);
                 return
                         (min(0xffffL, (long) c1a + c2a) << ALPHA_SHIFT) |
-                                (max(GREEN_MASK, (c1 & RED_MASK) - (((c2 & RED_MASK) * (c2a + 1)) >>> 8)) & RED_MASK) |
-                                (max(BLUE_MASK, (c1 & GREEN_MASK) - (((c2 & GREEN_MASK) * (c2a + 1)) >>> 8)) & GREEN_MASK) |
-                                max(0, (c1 & BLUE_MASK) - (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
+                                (max(GREEN_MASK, (c1 & RED_MASK) - (((c2 & RED_MASK) * (c2a + 1)) >>> 16)) & RED_MASK) |
+                                (max(BLUE_MASK, (c1 & GREEN_MASK) - (((c2 & GREEN_MASK) * (c2a + 1)) >>> 16)) & GREEN_MASK) |
+                                max(0, (c1 & BLUE_MASK) - (((c2 & BLUE_MASK) * (c2a + 1)) >>> 16));
         }
 
         /**
