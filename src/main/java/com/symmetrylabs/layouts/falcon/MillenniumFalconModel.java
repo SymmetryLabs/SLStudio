@@ -10,29 +10,30 @@ import java.util.ArrayList;
 import java.util.List;
 
 import static com.symmetrylabs.util.MathConstants.HALF_PI;
+import static com.symmetrylabs.util.MathConstants.PI;
 
 public class MillenniumFalconModel extends StripsModel<Strip> {
+    String id;
+    float x;
+    float y;
+    float z;
+    float xRot;
+    float yRot;
+    float zRot;
+    FalconStrip.Metrics metrics;
 
-    protected final List<FalconStrip> falconstrips = new ArrayList<>();
+    public MillenniumFalconModel(String id, float x, float y, float z, float xRot, float yRot, float zRot, FalconStrip.Metrics metrics, LXTransform transform) {
 
+        super(new Fixture(id, x, y, z, xRot, yRot, zRot, metrics, transform));
 
-    //protected final Strip[] stripsArr = new Strip[0];
-
-
-//    public final Metrics metrics;
-//
-//    public static class Metrics {
-//        final Strip.Metrics numPoints;
-//        final Strip.Metrics spacing;
-//        public Metrics(Strip.Metrics numPoints, Strip.Metrics spacing)
-//            this.numPoints = numPoints;
-//          this.spacing = spacing;
-//    }
-
-    public MillenniumFalconModel(List<FalconStrip> falconstrips, LXTransform transform) {
-
-        super(new Fixture(falconstrips, transform));
-
+        this.id = id;
+        this.metrics = metrics;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.xRot = xRot;
+        this.yRot = yRot;
+        this.zRot = zRot;
         Fixture fixture = (Fixture) this.fixtures.get(0);
         for (int i = 0; i < strips.size(); i++) {
             //stripsArr[i] = strips.get(i);
@@ -53,16 +54,40 @@ public class MillenniumFalconModel extends StripsModel<Strip> {
         private static class Fixture extends LXAbstractFixture {
 //            private final List<Strip> strips = new ArrayList<>();
 
-            private Fixture(List<FalconStrip> falconstrips, LXTransform transform) {
+            private final List<FalconStrip> falconstrips = new ArrayList<>();
+
+            private Fixture(String id, float x, float y, float z, float xRot, float yRot, float zRot, FalconStrip.Metrics metrics, LXTransform transform) {
                 //transform.push();
 
-                for (FalconStrip strip : falconstrips) {
-                    if (strip != null) {
+
+                transform.push();
+                transform.translate(x, y, z);
+                transform.rotateX(xRot * PI / 180f);
+                transform.rotateY(yRot * PI / 180f);
+                transform.rotateZ(zRot * PI / 180f);
+
+                for (int iStrip = 0; iStrip < metrics.NUM_STRIPS; iStrip++) {
+
+                    // /if (strip != null) {
 //                        transform.translate(strip.);
 //                        transform.rotateZ(HALF_PI);
+//            FalconStrip.Metrics metrics = config.metrics;
+//            //int numPoints = config.numPoints;
+//            //float spacing = config.spacing;
+//
+                    FalconStrip falconstrip = new FalconStrip(Integer.toString(iStrip), transform, metrics);
+                    falconstrips.add(falconstrip);
 
+//            FalconStrip.Metrics metrics = config.metrics;
+//            //int numPoints = config.numPoints;
+//            //float spacing = config.spacing;
+//
+//            FalconStrip falconstrip = new FalconStrip(id, x, y, z, xRot, yRot, zRot, globalTransform, metrics);
+//            falconstrips.add(falconstrip);
+                    transform.translate(falconstrip.metrics.length, 0, falconstrip.metrics.POINT_SPACING ); //0.5f
 
-                        for (LXPoint point : strip.points) {
+                    transform.rotateZ(PI);
+                        for (LXPoint point : falconstrip.points) {
 
                             this.points.add(point);
 
@@ -70,7 +95,7 @@ public class MillenniumFalconModel extends StripsModel<Strip> {
                     }
                 }
             }
-        }
+
 
     }
 

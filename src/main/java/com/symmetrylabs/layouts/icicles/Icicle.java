@@ -62,7 +62,7 @@ public class Icicle extends StripsModel<Strip> {
                 for (LXPoint point : strip.points) {
                     this.points.add(point);
                 }
-                
+
                 t.translate(0, 0, 0.5f);
                 t.rotateZ(PI);
             }

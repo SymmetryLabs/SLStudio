@@ -40,43 +40,45 @@ public class FalconLayout implements Layout {
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 0;
 
-    static final float globalRotationX = 0;
+    static final float globalRotationX = 90;
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
     static final float PIXEL_PITCH_INCHES = 0.65616f;
+    static final int NUM_STRIPS = 10;
 
-    static StripConfig[] STRIPS_CONFIG = {
 
-        new StripConfig("205", 0, 0, 0, 0, 0, 0, new FalconStrip.Metrics(100, PIXEL_PITCH_INCHES)),
+//    static StripConfig[] STRIPS_CONFIG = {
+
+
 //        new StripConfig("206", 5, 5, 5, 0, 0, 0, new FalconStrip.Metrics(100, 0.25f)),
 //        new StripConfig("207", 10, 10, 10, 0, 0, 0,new FalconStrip.Metrics(100, 0.25f)),
     //    new StripConfig("208", 15, 15, 15, 0, 0, 0, new FalconStrip.Metrics(100, 0.25f)),
 
-    };
-
-    static class StripConfig {
-        String id;
-        //int numPoints;
-        //float spacing;
-        float x;
-        float y;
-        float z;
-        float xRot;
-        float yRot;
-        float zRot;
-        final FalconStrip.Metrics metrics;
-
-        StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, FalconStrip.Metrics metrics) {
-            this.id = id;
-        this.metrics = metrics;
-            this.x = x;
-            this.y = y;
-            this.z = z;
-            this.xRot = xRot;
-            this.yRot = yRot;
-            this.zRot = zRot;
-        }
-    }
+//  };
+//
+//    static class StripConfig {
+//        String id;
+//        //int numPoints;
+//        //float spacing;
+//        float x;
+//        float y;
+//        float z;
+//        float xRot;
+//        float yRot;
+//        float zRot;
+//        final FalconStrip.Metrics metrics;
+//
+//        StripConfig(String id, float x, float y, float z, float xRot, float yRot, float zRot, FalconStrip.Metrics metrics) {
+//            this.id = id;
+//        this.metrics = metrics;
+//            this.x = x;
+//            this.y = y;
+//            this.z = z;
+//            this.xRot = xRot;
+//            this.yRot = yRot;
+//            this.zRot = zRot;
+//        }
+//    }
 
     static Map<String, String> macToPhysid = new HashMap<>();
     static Map<String, String> physidToMac = new HashMap<>();
@@ -106,33 +108,33 @@ public class FalconLayout implements Layout {
 
         //List<CubesModel.Tower> towers = new ArrayList<>();
         //List<CubesModel.Cube> allCubes = new ArrayList<>();
-        int stripId = 0;
+//        int stripId = 0;
 
-        Strip[] allStripsArr = new Strip[STRIPS_CONFIG.length];
+//        Strip[] allStripsArr = new Strip[STRIPS_CONFIG.length];
 
-    List<FalconStrip> falconstrips = new ArrayList<>();
-        for (StripConfig config : STRIPS_CONFIG) {
+//    List<FalconStrip> falconstrips = new ArrayList<>();
+//        for (StripConfig config : STRIPS_CONFIG) {
+//
+//            //List<Strip> strips = new ArrayList<>();
+//            String id = config.id;
+//            float x = config.x;
+//            float z = config.z;
+//            float y = config.y;
+//
+//            float xRot = config.xRot;
+//            float yRot = config.yRot;
+//            float zRot = config.zRot;
+//            FalconStrip.Metrics metrics = config.metrics;
+//            //int numPoints = config.numPoints;
+//            //float spacing = config.spacing;
+//
+//            FalconStrip falconstrip = new FalconStrip(id, x, y, z, xRot, yRot, zRot, globalTransform, metrics);
+//            falconstrips.add(falconstrip);
+//
+//            }
 
-            //List<Strip> strips = new ArrayList<>();
-            String id = config.id;
-            float x = config.x;
-            float z = config.z;
-            float y = config.y;
-
-            float xRot = config.xRot;
-            float yRot = config.yRot;
-            float zRot = config.zRot;
-            FalconStrip.Metrics metrics = config.metrics;
-            //int numPoints = config.numPoints;
-            //float spacing = config.spacing;
-
-            FalconStrip falconstrip = new FalconStrip(id, x, y, z, xRot, yRot, zRot, globalTransform, metrics);
-            falconstrips.add(falconstrip);
-
-            }
-
-        return new MillenniumFalconModel(falconstrips, globalTransform); // what is argument?
-
+        return new MillenniumFalconModel("1", 0, 0, 0, 0, 0, 0, new FalconStrip.Metrics(100, PIXEL_PITCH_INCHES, NUM_STRIPS), globalTransform); // what is argument?
+        //new StripConfig(),
     }
 
 
