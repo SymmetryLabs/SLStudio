@@ -114,6 +114,9 @@ dependencies {
 	compile files('libs/P3LX.jar')
 
 	compile files('libs/minim.jar')
+
+	// https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+	testCompile group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.1.1'
 }
 
 jar {
