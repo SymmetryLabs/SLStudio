@@ -80,37 +80,88 @@ public class CubesLayout implements Layout {
 //         // new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
                 
                 //backrow left to right
-        new TowerConfig(0, 0,0, -45, new String[] { "326", "198", "6","50" }),
-        new TowerConfig((SP) * 1, 0,0, -45, new String[] { "418", "203", "54" }),
-        new TowerConfig((SP) * 2, 0,0, -45, new String[] { "150", "312", "129" }),
-        new TowerConfig((SP) * 3, 0,0, -45, new String[] { "172", "79", "111", "177" }),
+        new TowerConfig(0, 0,0, 0, 0, -180, new String[] { "68", "336","199", "82" }),
+        new TowerConfig((SP) * -1, 0,0, 0, 0, -180, new String[] { "397", "16", "50" }),
+        new TowerConfig((SP) * -1 , 0 , SP*1, 0, 0, -180, new String[] {"76", "87", "420", "186"}), 
+
+                new TowerConfig((SP) * -1.5f , SP*3.0f , SP*0.5f, -45, -45, -45, new String[] {"4"}),
+        
+        new TowerConfig((SP) * -2, 0,0, 0, 0, -180, new String[] {"203",  "418", "65" }),
+        new TowerConfig((SP) * -2 , 0 , SP*1, 0, 0, -180, new String[] {"17", "419", "1", "57"}),
+        new TowerConfig((SP) * -3 , 0 , SP*0.5f, 0, 0, -180, new String[] {"108", "340", "30"}),
+        new TowerConfig((SP) * -4 , 0 , SP*0.75f, 0, 0, -180, new String[] {"372", "6", "211"}),
+
+        // one in front
+        new TowerConfig((SP) * -4 , 0 , SP*-0.5f, 0, 0, -180, new String[] {"398"}),
+                new TowerConfig((SP) * -4.3f , SP*0.8f , SP*-0.65f, -45, -45, -45, new String[] {"21"}),
+
+        // angled
+        new TowerConfig((SP) * -4.7f , SP*1.25f , SP*0.75f, 0, 0, -215, new String[] {"156"}),
+        new TowerConfig((SP) * -5.1f , SP*0.75f , SP*0.75f, 0, 0, -215, new String[] {"27"}),
+        new TowerConfig((SP) * -5.5f , SP*0.2f , SP*.75f, 0, 0, -215, new String[] {"138"}), //138
+        
+        new TowerConfig((SP) * -5.7f , SP*1.25f , SP*0.75f, 0, 0, -215, new String[] {"353"}),
+        new TowerConfig((SP) * -6.1f , SP*0.75f , SP*0.75f, 0, 0, -215, new String[] {"189"}),
+        new TowerConfig((SP) * -6.5f , SP*0.2f , SP*.75f, 0, 0, -215, new String[] {"7"}),
+        
+        new TowerConfig((SP) * -6.7f , SP*1.25f , SP*0.75f, 0, 0, -215, new String[] {"184"}),
+        new TowerConfig((SP) * -7.1f , SP*0.75f , SP*0.75f, 0, 0, -215, new String[] {"79"}),
+        new TowerConfig((SP) * -7.5f , SP*0.2f , SP*.75f, 0, 0, -215, new String[] {"351"}),
+        
+        
+        // new TowerConfig((SP) * -12 , 0 , SP*0.5f, 0, 0, -45, new String[] {"14", "15", "16"}),
+
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, (SP) * -12 , 0 , SP*-0.5f, 0, 0, -180, new String[] {"100"}),
+                new TowerConfig(CubesModel.Cube.Type.MEDIUM, (SP) * -12.3f , SP*0.8f , SP*-0.65f, -45, -45, -45, new String[] {"210"}),
+
+
+        new TowerConfig((SP) * -13 , 0 , SP*-1.5f, 0, 0, -180, new String[] {"44"}),
+                new TowerConfig((SP) * -13.3f , SP*0.8f , SP*-1.65f, -45, -45, -45, new String[] {"36"}),
+
+        new TowerConfig((SP) * -11.5f , 0 , SP*2.5f, 0, 0, -180, new String[] {"398"}),
+                new TowerConfig((SP) * -11.8f , SP*0.8f , SP*2.65f, -45, -45, -45, new String[] {"21"}),
+
+
+        new TowerConfig(CubesModel.Cube.Type.MEDIUM, (SP) * -11.5f , 0 , SP*1.2f, 0, 0, -180, new String[] {"213"}),
+                new TowerConfig(CubesModel.Cube.Type.MEDIUM, (SP) * -11.8f , SP*0.8f , SP*1.05f, -45, -45, -45, new String[] {"393"}),
+
+
+        new TowerConfig((SP) * -11.5f , 0 , SP*0.4f, 0, 0, -180, new String[] {"159"}),
+                new TowerConfig((SP) * -11.8f , SP*0.8f , SP*0.25f, -45, -45, -45, new String[] {"367"}),
+
+        // new TowerConfig((SP) * -7 , 0 , SP*0.5f, 0, 0, -45, new String[] {"14", "15", "16"}),
+        // new TowerConfig((SP) * 3 , 0 , SP*0.5f, new String[] {"18", "19", "20", "21"}),
+        // new TowerConfig((SP) * 4 , 0 , SP*0.5f, new String[] {"22", "23", "24", "25"}),
+        
+        // new TowerConfig((SP) * 3, 0,0, 0, new String[] { "172", "79", "111", "177" }),
         
         // //Back Row Top Center
-        new TowerConfig((SP) * 1.5f, JUMP * 3,0, -45, new String[] {"87"}),        
+        // new TowerConfig((SP) * 1.5f, JUMP * 3,0, 0, new String[] {"87"}),        
 
 
 
 
-        //middle 3
-        new TowerConfig (SP*.5f, 0, -24*2, -45, new String[] {"340", "135", "391", "390"}),
-        new TowerConfig (SP * 1.5f, 0, -24*2, -45, new String[] {"182", "398", "94" }),
-        new TowerConfig (SP * 2.5f, 0, -24*2, -45, new String[] {"29", "30", "199", "27"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 2.5f + 6, 0, -24*2, -45, new String[] { "143"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * .5f + 6, 0, -24*2, -45, new String[] { "393"}),
-        //medium 393
-        //medium (actual) 345
+        // //middle 3
+        // new TowerConfig (SP*.5f, 0, -24*2, -45, new String[] {"340", "135", "391", "390"}),
+        // new TowerConfig (SP * 1.5f, 0, -24*2, -45, new String[] {"182", "398", "94" }),
+        // new TowerConfig (SP * 2.5f, 0, -24*2, -45, new String[] {"29", "30", "199", "27"}),
+        new TowerConfig (CubesModel.Cube.Type.MEDIUM, (SP) * -11.5f , 0 , SP*1.2f, 0, 0, -180, new String[] { "143"}),
+        new TowerConfig (CubesModel.Cube.Type.MEDIUM, (SP) * -11.5f , 0 , SP*1.2f, 0, 0, -180, new String[] { "100"}),
 
-        //middle 2
-        new TowerConfig (SP * 1, 0, -24*4, -45, new String[] { "383", "211", "d8:80:39:9b:23:ad"}),
-        new TowerConfig (SP * 2, 0, -24*4, -45, new String[] { "196", "18", "361"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1+6, 0, -24*4, -45, new String[] { "210"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 2+6, 0, -24*4, -45, new String[] { "345"}),
-        new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1+12, 0, -24*4, -45, new String[] { "82"}),
-        new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 2+12, 0, -24*4, -45, new String[] { ""}),
-        // front 1
-        new TowerConfig (43.5f, 0, -24*6, -45, new String[] { "74", "63", "33"}),
-        new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1.5f, 0, -24*6, -45, new String[] { "334"}),
-        new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1.75f, 0, -24*6, -45, new String[] { "384"}),
+        // //medium 393
+        // //medium (actual) 345
+
+        // //middle 2
+        // new TowerConfig (SP * 1, 0, -24*4, -45, new String[] { "383", "211", "d8:80:39:9b:23:ad"}),
+        // new TowerConfig (SP * 2, 0, -24*4, -45, new String[] { "196", "18", "361"}),
+        // new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1+6, 0, -24*4, -45, new String[] { "210"}),
+        new TowerConfig (CubesModel.Cube.Type.SMALL, (SP) * -11.5f , 0 , SP*1.2f, 0, 0, -180, new String[] { "345"}),
+        // new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1+12, 0, -24*4, -45, new String[] { "82"}),
+        // new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 2+12, 0, -24*4, -45, new String[] { ""}),
+        // // front 1
+        // new TowerConfig (43.5f, 0, -24*6, -45, new String[] { "74", "63", "33"}),
+        // new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1.5f, 0, -24*6, -45, new String[] { "334"}),
+        // new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1.75f, 0, -24*6, -45, new String[] { "384"}),
 
         
 
