@@ -100,18 +100,16 @@ public class CubesController extends LXOutput implements OPCConstants {
 
     private void setPixel(int number, int c) {
         int index = 4 + number * 3;
-        int gammaExpanded = gammaExpander.getExpandedColor(c);
-        packetData[index++] = LXColor.red(gammaExpanded);
-        packetData[index++] = LXColor.green(gammaExpanded);
-        packetData[index++] = LXColor.blue(gammaExpanded);
+        packetData[index++] = LXColor.red(c);
+        packetData[index++] = LXColor.green(c);
+        packetData[index++] = LXColor.blue(c);
     }
 
     private void setPixel(int number, long c) {
         int index = 4 + number * 6;
-        long gammaExpanded = gammaExpander.getExpandedColor16(c);
-        int red = LXColor16.red(gammaExpanded);
-        int green = LXColor16.green(gammaExpanded);
-        int blue = LXColor16.blue(gammaExpanded);
+        int red = LXColor16.red(c);
+        int green = LXColor16.green(c);
+        int blue = LXColor16.blue(c);
         packetData[index++] = (byte) (red >>> 8);
         packetData[index++] = (byte) (red & 0xff);
         packetData[index++] = (byte) (green >>> 8);

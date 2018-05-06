@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.palettes;
 
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 
 /**
  * A palette that repeats the colors from a subrange of another palette in a zigzag pattern over the number line: in
@@ -88,6 +89,24 @@ public class ZigzagPalette implements ColorPalette {
                 (((c >> 16) & 0xff) + ((c >> 8) & 0xff) + (c & 0xff)) / (255.0 * 3);
             if (value < cutoff) return 0;
             c = LXColor.lerp(0, c, Math.pow(
+                (value - cutoff) / (1.0 - cutoff), 0.5 * cutoff));
+        }
+        return c;
+    }
+
+    public long getColor16(double p) {
+        p += shift;
+        int floor = (int) p;
+        p -= floor;
+        if (floor % 2 != 0) {
+            p = 1 - p;
+        }
+        if (exponent != 1) p = Math.pow(p, exponent);
+        long c = palette.getColor16(bottom + (top - bottom) * p);
+        if (cutoff != 0) {
+            double value = (LXColor16.red(c) + LXColor16.green(c) + LXColor16.blue(c)) / (65535.0 * 3);
+            if (value < cutoff) return 0;
+            c = LXColor16.lerp(0, c, Math.pow(
                 (value - cutoff) / (1.0 - cutoff), 0.5 * cutoff));
         }
         return c;
