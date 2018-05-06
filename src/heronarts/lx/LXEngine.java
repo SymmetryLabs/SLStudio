@@ -65,6 +65,7 @@ import java.util.Queue;
 
 import static heronarts.lx.LXChannel.CrossfadeGroup.A;
 import static heronarts.lx.LXChannel.CrossfadeGroup.B;
+import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.RGB8;
 
 /**
@@ -154,7 +155,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
     /** The color space that the engine renders to. */
     public final EnumParameter<PolyBuffer.Space> colorSpace =
-            new EnumParameter<>("Color Space", RGB8)
+            new EnumParameter<>("Color Space", RGB16)
                     .setDescription("Selects the color space for the engine");
 
     private final BooleanParameter[] scenes = new BooleanParameter[MAX_SCENES];
@@ -1171,7 +1172,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         for (LXChannel channel : mutableChannels) {
             long blendStart = System.nanoTime();
-            double alpha = channel.fader.getValue();
+            double alpha = LXUtils.cie_lightness_to_luminance(channel.fader.getValue());
 
             if (channel.enabled.isOn() && alpha > 0) {
                 LXChannel.CrossfadeGroup group = channel.crossfadeGroup.getEnum();

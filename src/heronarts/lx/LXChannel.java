@@ -43,6 +43,7 @@ import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.RGB8;
 
 /**
@@ -154,7 +155,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      * The color space that this channel renders to.
      */
     public final EnumParameter<PolyBuffer.Space> colorSpace =
-            new EnumParameter<>("Color Space", RGB8)
+            new EnumParameter<>("Color Space", RGB16)
                     .setDescription("Selects the color space for this channel");
 
     /**

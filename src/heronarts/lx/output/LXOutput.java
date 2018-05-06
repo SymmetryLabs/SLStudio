@@ -22,6 +22,7 @@ package heronarts.lx.output;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
+import heronarts.lx.LXUtils;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
@@ -184,15 +185,17 @@ public abstract class LXOutput extends LXComponent {
     }
 
     protected PolyBuffer processOutput(PolyBuffer src, PolyBuffer.Space space) {
+        double lum = LXUtils.cie_lightness_to_luminance(brightness.getValue());
+
         switch (mode.getEnum()) {
             case WHITE:
                 if (space == RGB16) {
                     Arrays.fill((long[]) buffer.getArray(space),
-                            LXColor16.gray(100 * brightness.getValue()));
+                            LXColor16.gray(100 * lum));
                     buffer.markModified(space);
                 } else {
                     Arrays.fill((int[]) buffer.getArray(RGB8),
-                            LXColor.gray(100 * brightness.getValue()));
+                            LXColor.gray(100 * lum));
                     buffer.markModified(RGB8);
                 }
                 return buffer;
@@ -209,14 +212,13 @@ public abstract class LXOutput extends LXComponent {
 
             case NORMAL:
                 int gamma = gammaCorrection.getValuei();
-                float brt = brightness.getValuef();
-                if (gamma > 0 || brt < 1) {
+                if (gamma > 0 || lum < 1) {
                     if (space == RGB16) {
                         long[] srcLongs = (long[]) src.getArray(space);
                         long[] outLongs = (long[]) buffer.getArray(space);
                         for (int i = 0; i < srcLongs.length; ++i) {
                             LXColor16.RGBtoHSB(srcLongs[i], hsb);
-                            float newBrightness = brightness.getValuef()*hsb[2];
+                            float newBrightness = (float) lum * hsb[2];
                             for (int x = 0; x < gamma; x++) {
                                 newBrightness *= hsb[2];
                             }
@@ -228,7 +230,7 @@ public abstract class LXOutput extends LXComponent {
                         int[] outInts = (int[]) buffer.getArray(RGB8);
                         for (int i = 0; i < srcInts.length; ++i) {
                             LXColor.RGBtoHSB(srcInts[i], hsb);
-                            float newBrightness = brt * hsb[2];
+                            float newBrightness = (float) lum * hsb[2];
                             for (int x = 0; x < gamma; x++) {
                                 newBrightness *= hsb[2];
                             }
