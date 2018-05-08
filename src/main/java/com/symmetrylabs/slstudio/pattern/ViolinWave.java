@@ -178,5 +178,6 @@ public class ViolinWave extends LXPattern {
                 p.run(deltaMs, longColors);
             }
         }
+        markModified(space);
     }
 }
