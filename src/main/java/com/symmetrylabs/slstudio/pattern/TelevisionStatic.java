@@ -54,6 +54,9 @@ public class TelevisionStatic extends LXPattern {
                 }
 
         });
+
+        markModified(space);
+
     }
 }
 
