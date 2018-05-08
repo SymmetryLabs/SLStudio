@@ -6,9 +6,11 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
-import processing.core.PImage;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.PolyBuffer;
 
-import static processing.core.PApplet.*;
+import static com.symmetrylabs.util.MathUtils.*;
 
 
 public class CrossSections extends LXPattern {
@@ -68,7 +70,11 @@ public class CrossSections extends LXPattern {
         zv = z.getValuef();
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        Object array = getArray(space);
+        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
+        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+
         updateXYZVals();
 
         float xlv = 100 * xl.getValuef();
@@ -80,23 +86,45 @@ public class CrossSections extends LXPattern {
         float zwv = 100f / (10 + 40 * zw.getValuef());
 
         for (LXPoint p : model.points) {
-            int c = 0;
-            c = PImage.blendColor(c, lx.hsb(
-                palette.getHuef() + p.x / 10 + p.y / 3,
-                constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
-                max(0, xlv - xwv * abs(p.x - xv))
-            ), ADD);
-            c = PImage.blendColor(c, lx.hsb(
-                palette.getHuef() + 80 + p.y / 10,
-                constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
-                max(0, ylv - ywv * abs(p.y - yv))
-            ), ADD);
-            c = PImage.blendColor(c, lx.hsb(
-                palette.getHuef() + 160 + p.z / 10 + p.y / 2,
-                constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
-                max(0, zlv - zwv * abs(p.z - zv))
-            ), ADD);
-            colors[p.index] = c;
+            if (space == PolyBuffer.Space.RGB8) {
+                int col8 = 0;
+                col8 = LXColor.blend(col8, LXColor.hsb(
+                    palette.getHuef() + p.x / 10 + p.y / 3,
+                    constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
+                    max(0, xlv - xwv * abs(p.x - xv))
+                ), LXColor.Blend.ADD);
+                col8 = LXColor.blend(col8, LXColor.hsb(
+                    palette.getHuef() + 80 + p.y / 10,
+                    constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
+                    max(0, ylv - ywv * abs(p.y - yv))
+                ), LXColor.Blend.ADD);
+                col8 = LXColor.blend(col8, LXColor.hsb(
+                    palette.getHuef() + 160 + p.z / 10 + p.y / 2,
+                    constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
+                    max(0, zlv - zwv * abs(p.z - zv))
+                ), LXColor.Blend.ADD);
+                intColors[p.index] = col8;
+            }
+            else if (space == PolyBuffer.Space.RGB16) {
+                long col16 = 0;
+                col16 = LXColor16.blend(col16, LXColor16.hsb(
+                    palette.getHuef() + p.x / 10 + p.y / 3,
+                    constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
+                    max(0, xlv - xwv * abs(p.x - xv))
+                ), LXColor.Blend.ADD);
+                col16 = LXColor16.blend(col16, LXColor16.hsb(
+                    palette.getHuef() + 80 + p.y / 10,
+                    constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
+                    max(0, ylv - ywv * abs(p.y - yv))
+                ), LXColor.Blend.ADD);
+                col16 = LXColor16.blend(col16, LXColor16.hsb(
+                    palette.getHuef() + 160 + p.z / 10 + p.y / 2,
+                    constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
+                    max(0, zlv - zwv * abs(p.z - zv))
+                ), LXColor.Blend.ADD);
+                longColors[p.index] = col16;
+            }
         }
+        markModified(space);
     }
 }
