@@ -9,6 +9,10 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.PolyBuffer;
+
 import com.symmetrylabs.util.MathUtils;
 
 public class Spheres extends LXPattern {
@@ -55,8 +59,12 @@ public class Spheres extends LXPattern {
         spheres[1].radius = 50;
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
         // Access the core master hue via this method call
+        Object array = getArray(space);
+        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
+        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+
         float hv = hueParameter.getValuef();
         float lfoValue = lfo.getValuef();
         float sinLfoValue = sinLfo.getValuef();
@@ -74,16 +82,35 @@ public class Spheres extends LXPattern {
         model.getPoints().parallelStream().forEach(p -> {
             float value = 0;
 
-            int c = lx.hsb(0, 0, 0);
-            for (Sphere s : spheres) {
-                float d = MathUtils.dist(p.x, p.y, p.z, s.x, s.y, s.z);
-                float r = (s.radius); // * (sinLfoValue + 0.5));
-                value = MathUtils.max(0, 1 - MathUtils.max(0, d - r) / 10);
+            if (space == PolyBuffer.Space.RGB8) {
 
-                c = PImage.blendColor(c, lx.hsb(s.hue, 100, MathUtils.min(1, value) * 100), ADD);
+                int col8 = LXColor.hsb(0, 0, 0);
+                for (Sphere s : spheres) {
+                    float d = MathUtils.dist(p.x, p.y, p.z, s.x, s.y, s.z);
+                    float r = (s.radius); // * (sinLfoValue + 0.5));
+                    value = MathUtils.max(0, 1 - MathUtils.max(0, d - r) / 10);
+
+                    col8 = LXColor.blend(col8, LXColor.hsb(s.hue, 100, MathUtils.min(1, value) * 100), LXColor.Blend.ADD);
+                }
+                intColors[p.index] = col8;
             }
 
-            colors[p.index] = c;
+            else if (space == PolyBuffer.Space.RGB16) {
+
+
+                long col16 = LXColor16.hsb(0, 0, 0);
+                for (Sphere s : spheres) {
+                    float d = MathUtils.dist(p.x, p.y, p.z, s.x, s.y, s.z);
+                    float r = (s.radius); // * (sinLfoValue + 0.5));
+                    value = MathUtils.max(0, 1 - MathUtils.max(0, d - r) / 10);
+
+                    col16 = LXColor16.blend(col16, LXColor16.hsb(s.hue, 100, MathUtils.min(1, value) * 100), LXColor.Blend.ADD);
+                }
+
+                longColors[p.index] = col16;
+
+            }
         });
+        markModified(space);
     }
 }
