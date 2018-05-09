@@ -10,6 +10,9 @@ import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.PolyBuffer;
 
 import static com.symmetrylabs.util.MathUtils.random;
 import static processing.core.PApplet.*;
@@ -65,7 +68,11 @@ public class CubeFlash extends SLPattern<CubesModel> {
         flashes = new LinkedList<Flash>();
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        Object array = getArray(space);
+        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
+        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+
         leftoverMs += deltaMs;
         float msPerFlash = 1000 / ((rateParameter.getValuef() + .01f) * 100);
         while (leftoverMs > msPerFlash) {
@@ -78,10 +85,19 @@ public class CubeFlash extends SLPattern<CubesModel> {
         flashes.parallelStream().forEach(new Consumer<Flash>() {
             @Override
             public void accept(final Flash flash) {
-                int col = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-                for (LXPoint p : flash.cube.getPoints()) {
-                    colors[p.index] = col;
-                }
+             if (space == PolyBuffer.Space.RGB8) {
+
+                 int col8 = LXColor.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+                 for (LXPoint p : flash.cube.getPoints()) {
+                     intColors[p.index] = col8;
+                 }
+             } else if (space == PolyBuffer.Space.RGB16) {
+
+                 long col16 = LXColor16.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+                 for (LXPoint p : flash.cube.getPoints()) {
+                     longColors[p.index] = col16;
+                 }
+             }
             }
         });
 
@@ -93,5 +109,7 @@ public class CubeFlash extends SLPattern<CubesModel> {
                 i.remove();
             }
         }
+    markModified(space);
+
     }
 }
