@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520275300851,
+  "timestamp": 1523386083662,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -15,7 +15,7 @@
       "crossfader": 0.0,
       "crossfaderBlendMode": 0,
       "speed": 0.4333333633840084,
-      "focusedChannel": 0,
+      "focusedChannel": 3,
       "cueA": false,
       "cueB": false,
       "multithreaded": true,
@@ -119,7 +119,7 @@
               "RotZ": 0.5,
               "Spin": 0.5,
               "Fast": 0.55,
-              "Dens": 0.0,
+              "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 7,
@@ -372,23 +372,23 @@
               "label": "Superman",
               "Sprk": 0.0,
               "Wave": 0.07999999821186066,
-              "TrnX": 1.0,
-              "TrnY": 0.8400000035762787,
+              "TrnX": 0.9600000008940697,
+              "TrnY": 0.8000000044703484,
               "RotX": 0.0,
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "xSizeB": 2.0,
+              "xSizeB": 1.6800000071525574,
               "ySizeB": 2.0,
-              "xTrB": -0.8399999812245369,
-              "yTrB": -0.11999999731779099,
-              "xSizeR": 0.5199999883770943,
+              "xTrB": -0.41999999061226845,
+              "yTrB": -0.03999999910593033,
+              "xSizeR": 0.6199999861419201,
               "ySizeR": 0.9099999982863665,
               "xTrR": 0.0,
               "yTrR": -0.09999999776482582,
-              "xSizeY": 0.24000000581145287,
+              "xSizeY": 0.26000000536441803,
               "ySizeY": 1.3799999691545963,
-              "xTrY": 0.14999999664723873,
+              "xTrY": 0.1699999962002039,
               "yTrY": -0.05999999865889549
             },
             "modulation": {
@@ -551,7 +551,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 1.0
+        "brightness": 0.905511811023622
       }
     },
     "components": {
