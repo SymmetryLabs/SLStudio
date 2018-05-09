@@ -21,6 +21,7 @@
 package heronarts.lx.blend;
 
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 
 public class SubtractBlend extends LXBlend {
 
@@ -28,13 +29,33 @@ public class SubtractBlend extends LXBlend {
         super(lx);
     }
 
+    public void blend(PolyBuffer dst, PolyBuffer src,
+                                        double alpha, PolyBuffer output, PolyBuffer.Space space) {
+
+        switch (space) {
+                case RGB8:
+                        blend((int[]) dst.getArray(space), (int[]) src.getArray(space),
+                                                alpha, (int[]) output.getArray(space));
+                        output.markModified(space);
+                        break;
+                case RGB16:
+                        blend16((long[]) dst.getArray(space), (long[]) src.getArray(space),
+                                                alpha, (long[]) output.getArray(space));
+                        output.markModified(space);
+                        break;
+                    }
+    }
+
+
+
+
     @Override
-    public void blend(int[] dst, int[] src, double alpha, int[] output) {
+        public void blend(int[] dst, int[] src, double alpha, int[] output) {
         int alphaAdjust = (int) (alpha * 0x100);
         for (int i = 0; i < src.length; ++i) {
             int a = (((src[i] >>> ALPHA_SHIFT) * alphaAdjust) >> 8) & 0xff;
 
-            int srcAlpha = a + (a >= 0x7F ? 1 : 0);
+            int srcAlpha = a + (a >= 0x7f ? 1 : 0);
 
             int rb = (src[i] & RB_MASK) * srcAlpha >>> 8;
             int gn = (src[i] & G_MASK) * srcAlpha >>> 8;
@@ -43,6 +64,25 @@ public class SubtractBlend extends LXBlend {
                 max((dst[i] & R_MASK) - (rb & R_MASK), 0) |
                 max((dst[i] & G_MASK) - (gn & G_MASK), 0) |
                 max((dst[i] & B_MASK) - (rb & B_MASK), 0);
+
+        }
+    }
+
+    public void blend16(long[] dst, long[] src, double alpha, long[] output) {
+        int alphaAdjust = (int) (alpha * 0x10000); // should be long?
+        for (int i = 0; i < src.length; ++i) {
+            long a = (((src[i] >>> ALPHA_SHIFT16) * alphaAdjust) >> 16) & 0xffff;
+
+            long srcAlpha = a + (a >= 0x7fff ? 1 : 0);
+
+            long rb = (src[i] & RB_MASK16) * srcAlpha >>> 16;
+            long gn = (src[i] & G_MASK16) * srcAlpha >>> 16;
+
+            output[i] = min((dst[i] >>> ALPHA_SHIFT16) + a, 0xffff) << ALPHA_SHIFT16 |
+                            max((dst[i] & R_MASK16) - (rb & R_MASK16), 0) |
+                            max((dst[i] & G_MASK16) - (gn & G_MASK16), 0) |
+                            max((dst[i] & B_MASK16) - (rb & B_MASK16), 0);
+
         }
     }
 }
