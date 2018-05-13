@@ -1,11 +1,12 @@
 package com.symmetrylabs.slstudio;
 
+import java.awt.*;
 import java.io.File;
 
 import com.google.gson.JsonObject;
 
-import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.LayoutRegistry;
+import com.symmetrylabs.slstudio.ui.*;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.event.KeyEvent;
@@ -22,13 +23,10 @@ import heronarts.lx.effect.FlashEffect;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.pattern.IteratorTestPattern;
 import heronarts.p3lx.P3LX;
-import heronarts.p3lx.ui.UI3dContext;
 import heronarts.p3lx.ui.UIEventHandler;
 import heronarts.p3lx.ui.UIObject;
 import heronarts.p3lx.ui.UIWindow;
-import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.p3lx.ui.UI2dComponent;
-import heronarts.p3lx.ui.component.UIGLPointCloud;
 import heronarts.p3lx.ui.component.UIImage;
 import heronarts.p3lx.ui.studio.UIBottomTray;
 import heronarts.p3lx.ui.studio.UIContextualHelpBar;
@@ -44,16 +42,9 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
-import com.symmetrylabs.slstudio.ui.UIAxes;
-import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
-import com.symmetrylabs.slstudio.ui.UIFramerate;
-import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
-import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
 import com.symmetrylabs.util.MarkerSource;
 
 import javax.swing.*;
-
-import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudioLX extends P3LX {
     public static final String COPYRIGHT = "Symmetry Labs";
@@ -64,12 +55,13 @@ public class SLStudioLX extends P3LX {
     private static final int RESTART_EXIT_CODE = 999;
 
     public class UI extends heronarts.p3lx.ui.UI implements LXSerializable {
-        public final PreviewWindow preview;
+        public final UIPreviewWindow preview;
         public final UILeftPane leftPane;
         public final UIOverriddenRightPane rightPane;
         public final UIBottomTray bottomTray;
         public final UIContextualHelpBar helpBar;
         public final UIFramerate framerate;
+        public final UIHelpText helpText;
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
@@ -81,24 +73,22 @@ public class SLStudioLX extends P3LX {
 
         private final LX lx;
 
-        public class PreviewWindow extends UI3dContext {
-
-            public final UIGLPointCloud pointCloud;
-
-            PreviewWindow(UI ui, P3LX lx, int x, int y, int w, int h) {
-                super(ui, x, y, w, h);
-
-                addComponent(this.pointCloud = (UIGLPointCloud) new UIGLPointCloud(lx).setPointSize(3));
-                setCenter(lx.model.cx, lx.model.cy, lx.model.cz);
-                setRadius(lx.model.rMax * 1.5f);
-                setDescription("Preview Window: Displays the main output, or the channels/groups with CUE enabled");
-            }
-
-            @Override
-            protected void onResize() {
-                this.pointCloud.loadShader();
-            }
-        }
+        /**
+         * Help text to display when "?" is pressed.  "@" will be replaced with
+         * "Cmd" or "Ctrl", as appropriate for the operating system.
+         */
+        private static final String HELP_TEXT =
+              "@-C    Toggle P3CubeMap debugging\n" +
+                "@-F    Toggle frame rate status line\n" +
+                "@-L    Select another layout\n" +
+                "@-M    Modulation source\n" +
+                "@-P    Performance mode\n" +
+                "@-R    Rename channel or pattern\n" +
+                "@-V    Toggle preview display\n" +
+                "@-X    Toggle axes\n" +
+                "@-/    Toggle help caption line\n" +
+                "@-\\    Toggle 16-bit color (all)\n" +
+                "@-|    Toggle 16-bit color (selected channel)";
 
         UI(final SLStudioLX lx) {
             super(lx);
@@ -109,14 +99,18 @@ public class SLStudioLX extends P3LX {
 
             setBackgroundColor(this.theme.getDarkBackgroundColor());
 
-            this.preview = new PreviewWindow(this, lx, UILeftPane.WIDTH, 0,
+            this.preview = new UIPreviewWindow(this, lx, UILeftPane.WIDTH, 0,
             this.applet.width - UILeftPane.WIDTH - UIOverriddenRightPane.WIDTH,
             this.applet.height - UIBottomTray.HEIGHT - UIContextualHelpBar.VISIBLE_HEIGHT);
             this.leftPane = new UILeftPane(this, lx);
             this.rightPane = new UIOverriddenRightPane(this, lx);
             this.bottomTray = new UIBottomTray(this, lx);
             this.helpBar = new UIContextualHelpBar(this);
-            this.framerate = new UIFramerate(this, lx, this.leftPane.getX() + this.leftPane.getWidth() + 6, 6);
+            float previewLeft = leftPane.getX() + leftPane.getWidth();
+            this.framerate = new UIFramerate(this, lx, previewLeft + 6, 6);
+            int mask = Toolkit.getDefaultToolkit().getMenuShortcutKeyMask();
+            this.helpText = new UIHelpText(this, previewLeft + 6, 40,
+                  HELP_TEXT.replaceAll("@", mask == KeyEvent.CTRL ? "Ctrl" : "Cmd"));
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
@@ -136,6 +130,7 @@ public class SLStudioLX extends P3LX {
             addLayer(this.bottomTray);
             addLayer(this.helpBar);
             addLayer(this.framerate);
+            addLayer(this.helpText);
 
             _toggleClipView();
             _togglePerformanceMode();
@@ -143,59 +138,65 @@ public class SLStudioLX extends P3LX {
             setTopLevelKeyEventHandler(new UIEventHandler() {
                 @Override
                 protected void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
-                    if (keyCode == java.awt.event.KeyEvent.VK_ESCAPE) {
+                    if (keyChar == '?') {
+                        helpText.toggleVisible();
+                    }
+                    if (keyChar == 27) {
                         lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-                    } else if (keyChar == '?' && keyEvent.isShiftDown()) {
-                        toggleHelpBar = true;
-                    } else if (keyCode == java.awt.event.KeyEvent.VK_M && (keyEvent.isMetaDown() || keyEvent.isControlDown())) {
-                        if (keyEvent.isShiftDown()) {
-                            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MIDI) {
-                                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-                            } else {
-                                lx.engine.mapping.setMode(LXMappingEngine.Mode.MIDI);
-                            }
-                        } else {
-                            if (lx.engine.mapping.getMode() == LXMappingEngine.Mode.MODULATION_SOURCE) {
-                                lx.engine.mapping.setMode(LXMappingEngine.Mode.OFF);
-                            } else {
-                                lx.engine.mapping.setMode(LXMappingEngine.Mode.MODULATION_SOURCE);
-                            }
-                        }
-                    } else if (keyChar == "x".charAt(0)) {
-                        axes.toggleVisible();
-                    } else if (keyChar == "c".charAt(0)) {
-                        cubeMapDebug.toggleVisible();
-                    } else if (keyChar == "f".charAt(0)) {
-                        framerate.toggleVisible();
-                    } else if (keyChar == "p".charAt(0)) {
-                        togglePerformanceMode();
-                    } else if (keyChar == "v".charAt(0)) {
-                        lx.ui.preview.toggleVisible();
-                    } else if (keyChar == '0') {
-                        lx.engine.colorSpace.increment(true);
-                        System.err.println("Engine: color space is now " + lx.engine.colorSpace.getEnum());
-                    } else if (keyChar >= '1' && keyChar <= '9') {
-                        int index = Integer.parseInt("" + keyChar) - 1;
-                        if (lx.engine.channels.size() > index) {
-                            LXChannel channel = lx.engine.channels.get(index);
-                            channel.colorSpace.increment(true);
-                            System.err.println(channel.getLabel() + ": color space is now " + channel.colorSpace.getEnum());
-                        }
-                    } else if (keyChar == 'l') {
-                        /*
-                        JOptionPane pane = new JOptionPane("Available layouts are:", JOptionPane.QUESTION_MESSAGE);
-                        pane.setOptions(LayoutRegistry.getNames().toArray());
-                        pane.createDialog("Select layout").show();
-                        String result = (String) pane.getValue();
-                        String names = String.join(", ", LayoutRegistry.getNames());
-                        */
-                        String layoutName = (String) JOptionPane.showInputDialog(
-                            null, "Select a layout and click OK to restart.", "Select layout",
-                            JOptionPane.QUESTION_MESSAGE, null, LayoutRegistry.getNames().toArray(), null);
-                        if (layoutName != null) {
-                            applet.saveStrings(SLStudio.LAYOUT_FILE_NAME, new String[]{layoutName});
-                            applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
-                            applet.exit();
+                    }
+
+                    // Remember to update HELP_TEXT above when adding/changing any hotkeys!
+
+                    if (keyEvent.isMetaDown() || keyEvent.isControlDown()) {
+                        switch (keyChar) {
+                            case 'c':
+                                cubeMapDebug.toggleVisible();
+                                break;
+                            case 'f':
+                                framerate.toggleVisible();
+                                break;
+                            case 'l':
+                                String layoutName = (String) JOptionPane.showInputDialog(
+                                    null, "Select a layout and click OK to restart.", "Select layout",
+                                    JOptionPane.QUESTION_MESSAGE, null, LayoutRegistry.getNames().toArray(), null);
+                                if (layoutName != null) {
+                                    applet.saveStrings(SLStudio.LAYOUT_FILE_NAME, new String[] {layoutName});
+                                    applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
+                                    applet.exit();
+                                }
+                                break;
+                            case 'm':
+                            case 'M':
+                                LXMappingEngine.Mode mode = keyEvent.isShiftDown() ?
+                                      LXMappingEngine.Mode.MIDI : LXMappingEngine.Mode.MODULATION_SOURCE;
+                                lx.engine.mapping.setMode(
+                                        lx.engine.mapping.getMode() == mode ?
+                                        LXMappingEngine.Mode.OFF : mode);
+                                break;
+                            case 'p':
+                                togglePerformanceMode();
+                                break;
+                            case 'v':
+                                lx.ui.preview.toggleVisible();
+                                break;
+                            case 'x':
+                                axes.toggleVisible();
+                                break;
+                            case '/':
+                                toggleHelpBar = true;
+                                break;
+                            case '\\':
+                                lx.engine.colorSpace.increment(true);
+                                for (LXChannel channel : lx.engine.channels) {
+                                    channel.colorSpace.setValue(lx.engine.colorSpace.getValue());
+                                }
+                                break;
+                            case '|':
+                                if (engine.getFocusedChannel() instanceof LXChannel) {
+                                    LXChannel channel = (LXChannel) engine.getFocusedChannel();
+                                    channel.colorSpace.increment(true);
+                                }
+                                break;
                         }
                     }
                     if (engine.getFocusedChannel() instanceof LXChannel) {
@@ -328,6 +329,17 @@ public class SLStudioLX extends P3LX {
             });
 
             setResizable(true);
+        }
+
+        protected SLPattern getFocusedSLPattern() {
+            if (engine.getFocusedChannel() instanceof LXChannel) {
+                LXChannel focusedChannel = (LXChannel) engine.getFocusedChannel();
+                LXPattern focusedPattern = focusedChannel.getFocusedPattern();
+                if (focusedPattern instanceof SLPattern) {
+                    return (SLPattern) focusedPattern;
+                }
+            }
+            return null;
         }
 
         @Override
