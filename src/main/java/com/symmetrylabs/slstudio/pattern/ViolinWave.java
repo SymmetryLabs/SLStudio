@@ -11,6 +11,9 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.PolyBuffer;
 
 import com.symmetrylabs.util.MathUtils;
 
@@ -72,17 +75,28 @@ public class ViolinWave extends LXPattern {
             return x.isRunning() || y.isRunning();
         }
 
-        public void run(final double deltaMs) {
-            if (!isActive()) {
-                return;
-            }
-
+        public void run(double deltaMs, int[] colors) {
+            if (!isActive()) return;
             final float pFalloff = (30 - 27 * pSize.getValuef());
 
             model.getPoints().parallelStream().forEach(p -> {
                 float b = 100 - pFalloff * (MathUtils.abs(p.x - x.getValuef()) + MathUtils.abs(p.y - y.getValuef()));
                 if (b > 0) {
-                    blendColor(p.index, lx.hsb(
+                    LXColor.blend(p.index, LXColor.hsb(
+                        palette.getHuef(), 20, b
+                    ), LXColor.Blend.ADD);
+                }
+            });
+        }
+
+        public void run(double deltaMs, long[] colors) {
+            if (!isActive()) return;
+            final float pFalloff = (30 - 27 * pSize.getValuef());
+
+            model.getPoints().parallelStream().forEach(p -> {
+                float b = 100 - pFalloff * (MathUtils.abs(p.x - x.getValuef()) + MathUtils.abs(p.y - y.getValuef()));
+                if (b > 0) {
+                    LXColor16.blend(p.index, LXColor16.hsb(
                         palette.getHuef(), 20, b
                     ), LXColor.Blend.ADD);
                 }
@@ -107,7 +121,11 @@ public class ViolinWave extends LXPattern {
 
     final double LOG_10 = Math.log(10);
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        Object array = getArray(space);
+        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
+        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+
         accum += deltaMs / (1000. - 900. * speed.getValuef());
         for (int i = 0; i < centers.length; ++i) {
             centers[i] =
@@ -135,15 +153,31 @@ public class ViolinWave extends LXPattern {
         for (LXPoint p : model.points) {
             int ci = (int)MathUtils.lerp(0, centers.length - 1, (p.x - model.xMin) / (model.xMax - model.xMin));
             float rFactor = 1.0f - 0.9f * MathUtils.abs(p.x - model.cx) / (model.xMax - model.cx);
-            colors[p.index] = lx.hsb(
-                palette.getHuef() + MathUtils.abs(p.x - model.cx),
-                MathUtils.min(100, 20 + 8 * MathUtils.abs(p.y - centers[ci])),
-                MathUtils.constrain(edg * (val * rFactor - rng * MathUtils.abs(p.y - centers[ci])), 0, 100)
-            );
+
+            if (space == PolyBuffer.Space.RGB8) {
+                intColors[p.index] = LXColor.hsb(
+                    palette.getHuef() + MathUtils.abs(p.x - model.cx),
+                    MathUtils.min(100, 20 + 8 * MathUtils.abs(p.y - centers[ci])),
+                    MathUtils.constrain(edg * (val * rFactor - rng * MathUtils.abs(p.y - centers[ci])), 0, 100)
+                );
+            }
+            else if (space == PolyBuffer.Space.RGB16) {
+                longColors[p.index] = LXColor16.hsb(
+                    palette.getHuef() + MathUtils.abs(p.x - model.cx),
+                    MathUtils.min(100, 20 + 8 * MathUtils.abs(p.y - centers[ci])),
+                    MathUtils.constrain(edg * (val * rFactor - rng * MathUtils.abs(p.y - centers[ci])), 0, 100)
+                );
+            }
         }
 
         for (Particle p : particles) {
-            p.run(deltaMs);
+            if (space == PolyBuffer.Space.RGB8) {
+                p.run(deltaMs, intColors);
+            }
+            else if (space == PolyBuffer.Space.RGB16) {
+                p.run(deltaMs, longColors);
+            }
         }
+        markModified(space);
     }
 }

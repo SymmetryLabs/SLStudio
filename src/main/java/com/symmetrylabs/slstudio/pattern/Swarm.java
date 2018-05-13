@@ -7,6 +7,9 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.PolyBuffer;
 
 import static processing.core.PApplet.*;
 
@@ -39,22 +42,37 @@ public class Swarm extends SLPattern<StripsModel<Strip>> {
         }
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        Object array = getArray(space);
+        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
+        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+
         float s = 0;
         for (Strip strip : model.getStrips()) {
           int i = 0;
           for (LXPoint p : strip.points) {
             float fV = max(-1, 1 - dist(p.x/2.f, p.y, fX.getValuef()/2.f, fY.getValuef()) / 64.f);
-           // println("fv: " + fV);
-            colors[p.index] = lx.hsb(
-            palette.getHuef() + 0.3f * abs(p.x - hOffX.getValuef()),
-            constrain(80 + 40 * fV, 0, 100),
-            constrain(100 -
-              (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
-              );
+               // println("fv: " + fV);
+
+                float hue = palette.getHuef() + 0.3f * abs(p.x - hOffX.getValuef());
+                float sat = constrain(80 + 40 * fV, 0, 100);
+                float brt = constrain(100 -
+                    (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100);
+
+
+                if (space == PolyBuffer.Space.RGB8) {
+                    intColors[p.index] = LXColor.hsb(hue, sat, brt);
+                }
+
+                else if (space == PolyBuffer.Space.RGB16) {
+                    longColors[p.index] = LXColor16.hsb(hue, sat, brt);
+                }
             ++i;
           }
           ++s;
         }
+
+        markModified(space);
+
     }
 }

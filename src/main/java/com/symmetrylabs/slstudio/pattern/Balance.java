@@ -8,16 +8,16 @@ import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXProjection;
 import heronarts.lx.transform.LXVector;
+import heronarts.lx.PolyBuffer;
 
 public class Balance extends LXPattern {
-
-
 
     class Sphere {
         float x, y, z;
@@ -26,20 +26,20 @@ public class Balance extends LXPattern {
     // Projection stuff
     private final LXProjection projection;
 
-    SinLFO sphere1Z = new SinLFO(0, 0, 15323);
-    SinLFO sphere2Z = new SinLFO(0, 0, 8323);
-    SinLFO rotationX = new SinLFO(-Math.PI / 32, Math.PI / 32, 9000);
-    SinLFO rotationY = new SinLFO(-Math.PI / 16, Math.PI / 16, 7000);
-    SinLFO rotationZ = new SinLFO(-Math.PI / 16, Math.PI / 16, 11000);
-    SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 5000 - 4500 * 0.5f);
-    
-    
-        final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.2f);
-        final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
-        final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5f);
+    private final SinLFO sphere1Z = new SinLFO(0, 0, 15323);
+    private final SinLFO sphere2Z = new SinLFO(0, 0, 8323);
+    private final SinLFO rotationX = new SinLFO(-Math.PI / 32, Math.PI / 32, 9000);
+    private final SinLFO rotationY = new SinLFO(-Math.PI / 16, Math.PI / 16, 7000);
+    private final SinLFO rotationZ = new SinLFO(-Math.PI / 16, Math.PI / 16, 11000);
+    private final SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 5000 - 4500 * 0.5f);
+    private final SinLFO heightMod = new SinLFO(0.8, 1.9, 17298);
+
+    private final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.2f);
+    private final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
+    private final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5f);
+
     private final Sphere[] spheres;
     private final float centerX, centerY, centerZ, modelHeight, modelWidth, modelDepth;
-    SinLFO heightMod = new SinLFO(0.8, 1.9, 17298);
 
     public Balance(LX lx) {
         super(lx);
@@ -71,12 +71,9 @@ public class Balance extends LXPattern {
         addModulator(rotationX).trigger();
         addModulator(rotationY).trigger();
         addModulator(rotationZ).trigger();
-
-
         addModulator(sphere1Z).trigger();
         addModulator(sphere2Z).trigger();
         addModulator(phaseLFO).trigger();
-
         addModulator(heightMod).trigger();
     }
 
@@ -90,7 +87,10 @@ public class Balance extends LXPattern {
     float prevRamp = 0;
 
     @Override
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        Object array = getArray(space);
+        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
+        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
 
         // Sync to the beat
         float ramp = (float) lx.tempo.ramp();
@@ -111,7 +111,6 @@ public class Balance extends LXPattern {
             true
         ).forEach(p -> {
             float x_percentage = (p.x - model.xMin) / modelWidth;
-
             float y_in_range = heightMod.getValuef() * (2 * p.y - model.yMax - model.yMin) / modelHeight;
             float sin_x = (float) Math.sin(Math.PI / 2 + phase + 2 * Math.PI * x_percentage);
 
@@ -121,7 +120,16 @@ public class Balance extends LXPattern {
             float hue_color =
                 palette.getHuef() + hueScale.getValuef() * ((float) Math.abs(p.x - model.xMax / 2f) + (float) Math.abs(p.y - model.yMax / 2f) * .2f + (float) Math
                     .abs(p.z - model.zMax / 2f) * .5f);
-            int c = lx.hsb(hue_color, 80, v1);
+
+            int col8 = 0;
+            long col16 = 0;
+
+            if (space == PolyBuffer.Space.RGB8) {
+                col8 = LXColor.hsb(hue_color, 100, v1);
+            }
+            else if (space == PolyBuffer.Space.RGB16) {
+                col16 = LXColor16.hsb(hue_color, 100, v1);
+            }
 
             // Now draw the spheres
             for (Sphere s : spheres) {
@@ -147,10 +155,21 @@ public class Balance extends LXPattern {
 
                 float sphere_color = palette.getHuef() - (1 - hueScale.getValuef()) * d / r * 45;
 
-                c = LXColor.blend(c, lx.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
+                if (space == PolyBuffer.Space.RGB8) {
+                    col8 = LXColor.blend(col8, LXColor.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
+                }
+                else if (space == PolyBuffer.Space.RGB16) {
+                    col16 = LXColor16.blend(col16, LXColor16.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
+                }
             }
 
-            colors[p.index] = c;
+            if (space == PolyBuffer.Space.RGB8) {
+                intColors[p.index] = col8;
+            }
+            else if (space == PolyBuffer.Space.RGB16) {
+                longColors[p.index] = col16;
+            }
         });
+        markModified(space);
     }
 }
