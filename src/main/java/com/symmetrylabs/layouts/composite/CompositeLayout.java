@@ -3,7 +3,6 @@ package com.symmetrylabs.layouts.composite;
 import java.util.List;
 import java.util.Arrays;
 import java.util.ArrayList;
-import java.util.Comparator;
 import java.util.Map;
 import java.util.HashMap;
 import java.util.WeakHashMap;
@@ -16,12 +15,10 @@ import com.google.gson.JsonObject;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonSyntaxException;
 
+import com.symmetrylabs.util.DeviceIdMap;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
-import heronarts.p3lx.ui.UI2dScrollContext;
 import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.model.Strip;
@@ -47,6 +44,7 @@ import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 public class CompositeLayout implements Layout {
     ListenableList<SLController> controllers = new ListenableList<>();
+    DeviceIdMap deviceIdMap;
 
     List<CubesModel.Cube> cubes = new ArrayList<>();
     List<TreeModel.Branch> branches = new ArrayList<>();
@@ -77,7 +75,7 @@ public class CompositeLayout implements Layout {
         new TowerConfig(CUBES_SPACING * 1, 0, 0, -45, new String[] { "418", "203", "54" }),
         new TowerConfig(CUBES_SPACING * 2, 0, 0, -45, new String[] { "150", "312", "129" }),
         new TowerConfig(CUBES_SPACING * 3, 0, 0, -45, new String[] { "172", "79", "111", "177" }),
-        new TowerConfig(CUBES_SPACING * 1.5f, CUBES_Y_JUMP * 3, 0, -45, new String[] {"87"}),   
+        new TowerConfig(CUBES_SPACING * 1.5f, CUBES_Y_JUMP * 3, 0, -45, new String[] {"87"}),
         new TowerConfig(CUBES_SPACING * 0.5f, 0, -24*2, -45, new String[] {"340", "135", "391", "390"}),
         new TowerConfig(CUBES_SPACING * 1.5f, 0, -24*2, -45, new String[] {"182", "398", "94" }),
         new TowerConfig(CUBES_SPACING * 2.5f, 0, -24*2, -45, new String[] {"29", "30", "199", "27"}),
@@ -132,19 +130,7 @@ public class CompositeLayout implements Layout {
     // };
 
     public SLModel buildModel() {
-
-        byte[] bytes = SLStudio.applet.loadBytes("physid_to_mac.json");
-        if (bytes != null) {
-            try {
-                JsonObject json = new Gson().fromJson(new String(bytes), JsonObject.class);
-                for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                    macToPhysid.put(entry.getValue().getAsString(), entry.getKey());
-                    physidToMac.put(entry.getKey(), entry.getValue().getAsString());
-                }
-            }  catch (JsonSyntaxException e) {
-                e.printStackTrace();
-            }
-        }
+        deviceIdMap = new DeviceIdMap("physid_to_mac.json");
 
         // Any global transforms
         LXTransform transform = new LXTransform();
@@ -285,19 +271,13 @@ public class CompositeLayout implements Layout {
          */
 
         // Put cubes on SLControllers
-        networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
+        networkMonitor.deviceList.addListener(new ListListener<NetworkDevice>() {
             public void itemAdded(int index, NetworkDevice device) {
-                String macAddr = NetworkUtils.macAddrToString(device.macAddress);
-                String physid = macToPhysid.get(macAddr);
-                if (physid == null) {
-                    physid = macAddr;
-                    System.err.println("WARNING: MAC address not in physid_to_mac.json: " + macAddr);
-                }
-
-                final PointsGrouping points = new PointsGrouping(physid);
+                String physicalId = deviceIdMap.getPhysicalId(device.deviceId);
+                final PointsGrouping points = new PointsGrouping(physicalId);
 
                 for (CubesModel.Cube cube : cubes) {
-                    if (cube.id.equals(physid)) {
+                    if (cube.id.equals(physicalId)) {
                         // this should live somewhere
                         List<Strip> strips = ((StripsModel)cube).getStrips();
 

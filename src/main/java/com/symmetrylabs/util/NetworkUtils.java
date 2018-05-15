@@ -1,13 +1,17 @@
 package com.symmetrylabs.util;
 
 import java.net.InetAddress;
+import java.net.InterfaceAddress;
+import java.net.NetworkInterface;
+import java.net.SocketException;
 import java.net.UnknownHostException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
 public final class NetworkUtils {
-
     private static Pattern macAddressPattern = null;
 
     private static void initMacAddressPattern() {
@@ -69,4 +73,35 @@ public final class NetworkUtils {
             && macAddr[3] != (byte) 0xff && macAddr[4] != (byte) 0xff && macAddr[5] != (byte) 0xff;
     }
 
+    public static List<InetAddress> getBroadcastAddresses() {
+        List<InetAddress> addresses = new ArrayList<InetAddress>();
+        try {
+            for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                for (InterfaceAddress addr : iface.getInterfaceAddresses()) {
+                    if (addr.getBroadcast() != null) {
+                        addresses.add(addr.getBroadcast());
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return addresses;
+    }
+
+    public static List<InetAddress> getInetAddresses() {
+        List<InetAddress> addresses = new ArrayList<InetAddress>();
+        try {
+            for (NetworkInterface iface : Collections.list(NetworkInterface.getNetworkInterfaces())) {
+                for (InterfaceAddress addr : iface.getInterfaceAddresses()) {
+                    if (addr.getAddress() != null) {
+                        addresses.add(addr.getAddress());
+                    }
+                }
+            }
+        } catch (SocketException e) {
+            e.printStackTrace();
+        }
+        return addresses;
+    }
 }

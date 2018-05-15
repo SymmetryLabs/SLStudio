@@ -1,6 +1,8 @@
 package com.symmetrylabs.slstudio.network;
 
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
 
@@ -11,19 +13,15 @@ import com.symmetrylabs.util.listenable.AbstractListListener;
 import com.symmetrylabs.util.listenable.ListenableList;
 
 public class NetworkMonitor {
+    public final ListenableList<NetworkDevice> deviceList;
 
-    private final ControllerScan controllerScan;
+    private final NetworkScanner networkScanner;
+    private final Timer timer = new Timer();
 
-    public final ListenableList<NetworkDevice> networkDevices;
-
-    private final java.util.TimerTask scanTask = new ScanTask();
-    private final java.util.Timer timer = new java.util.Timer();
-
+    private boolean started = false;
     private boolean oldVersionWarningGiven = false;
 
     private static Map<LX, WeakReference<NetworkMonitor>> instanceByLX = new WeakHashMap<>();
-
-    private boolean started = false;
 
     public static synchronized NetworkMonitor getInstance(LX lx) {
         WeakReference<NetworkMonitor> weakRef = instanceByLX.get(lx);
@@ -36,29 +34,25 @@ public class NetworkMonitor {
 
     private NetworkMonitor(LX lx) {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
-        controllerScan = new ControllerScan(dispatcher);
-        networkDevices = controllerScan.networkDevices;
+        networkScanner = new NetworkScanner(dispatcher);
+        deviceList = networkScanner.deviceList;
 
-        networkDevices.addListener(new AbstractListListener<NetworkDevice>() {
-            public void itemAdded(int index, final NetworkDevice result) {
-                new VersionCommand(result.ipAddress, new VersionCommandCallback() {
+        deviceList.addListener(new AbstractListListener<NetworkDevice>() {
+            public void itemAdded(int index, final NetworkDevice newDevice) {
+                if (newDevice.versionId.isEmpty()) {
+                    warnOldVersion();
+                }
+                new VersionCommand(newDevice.ipAddress, new VersionCommandCallback() {
                     public void onResponse(java.net.DatagramPacket response, final int version) {
-                        dispatcher.dispatchEngine(() -> result.version.set(version));
+                        dispatcher.dispatchEngine(() -> newDevice.versionNumber.set(version));
                     }
 
                     public void onFinish() {
                         dispatcher.dispatchEngine(() -> {
-                            if (!oldVersionWarningGiven) {
-                                for (NetworkDevice device : networkDevices) {
-                                    if (device.version.get() != -1
-                                            && (device.version.get() < result.version.get()
-                                            || device.version.get() > result.version.get())) {
-
-                                        System.out.println("WARNING: One or more cubes have outdated firmware!");
-                                        oldVersionWarningGiven = true;
-
-                                        return;
-                                    }
+                            for (NetworkDevice device : deviceList) {
+                                if (device.versionNumber.get() != -1 &&
+                                      device.versionNumber.get() != newDevice.versionNumber.get()) {
+                                    warnOldVersion();
                                 }
                             }
                         });
@@ -68,19 +62,22 @@ public class NetworkMonitor {
         });
     }
 
-    public synchronized NetworkMonitor start() {
-        if (started)
-            return this;
-
-        timer.schedule(scanTask, 0, 500);
-        started = true;
-        return this;
-    }
-
-    class ScanTask extends java.util.TimerTask {
-        public void run() {
-            controllerScan.scan();
+    private void warnOldVersion() {
+        if (!oldVersionWarningGiven) {
+            System.out.println("WARNING: One or more cubes have outdated firmware!");
+            oldVersionWarningGiven = true;
         }
     }
 
+    public synchronized NetworkMonitor start() {
+        if (!started) {
+            timer.schedule(new TimerTask() {
+                public void run() {
+                    networkScanner.scan();
+                }
+            }, 0, 500);
+            started = true;
+        }
+        return this;
+    }
 }

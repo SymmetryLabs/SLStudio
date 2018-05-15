@@ -209,7 +209,7 @@ public class DynamicLayout extends CubesLayout implements Layout {
 //        final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 //
 //
-//        networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
+//        networkMonitor.deviceList.addListener(new ListListener<NetworkDevice>() {
 //            public void itemAdded(int index, NetworkDevice device) {
 //                String macAddr = NetworkUtils.macAddrToString(device.macAddress);
 //                String physid = macToPhysid.get(macAddr);
