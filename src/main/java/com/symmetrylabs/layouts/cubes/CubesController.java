@@ -21,8 +21,9 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
 import heronarts.lx.output.OPCConstants;
+import org.jetbrains.annotations.NotNull;
 
-public class CubesController extends LXOutput implements OPCConstants {
+public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
     public final String id;
     public final InetAddress host;
     public final boolean isBroadcast;
@@ -63,7 +64,7 @@ public class CubesController extends LXOutput implements OPCConstants {
     }
 
     private CubesController(LX lx, String host, String id, boolean isBroadcast) {
-        this(lx, null, NetworkUtils.ipAddrToInetAddr(host), id, isBroadcast);
+        this(lx, null, NetworkUtils.toInetAddress(host), id, isBroadcast);
     }
 
     private CubesController(LX lx, NetworkDevice networkDevice, InetAddress host, String id, boolean isBroadcast) {
@@ -237,5 +238,21 @@ public class CubesController extends LXOutput implements OPCConstants {
         System.err.println("Failed to connect to OPC server " + host);
         socket = null;
         dsocket = null;
+    }
+
+    @Override
+    public int compareTo(@NotNull CubesController other) {
+        int idInt, otherIdInt;
+        try {
+            idInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            idInt = Integer.MAX_VALUE;
+        }
+        try {
+            otherIdInt = Integer.parseInt(id);
+        } catch (NumberFormatException e) {
+            otherIdInt = Integer.MAX_VALUE;
+        }
+        return idInt != otherIdInt ? Integer.compare(idInt, otherIdInt) : id.compareTo(other.id);
     }
 }

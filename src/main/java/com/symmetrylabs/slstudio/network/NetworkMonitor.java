@@ -43,6 +43,7 @@ public class NetworkMonitor {
                     warnOldVersion();
                 }
                 try (OpcSocket socket = new OpcSocket(newDevice.ipAddress)) {
+                    // @Deprecated: Remove this after all controllers are updated to Aura.
                     socket.send(new OpcMessage(0x88, 3));
                     socket.listen(1000, (src, reply) -> {
                         if (reply.bytes.length == 1) {

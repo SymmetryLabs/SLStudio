@@ -4,6 +4,7 @@ import java.io.Closeable;
 import java.io.IOException;
 import java.net.*;
 import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 public class OpcSocket implements Closeable {
     public static final int DEFAULT_PORT = 7890;
@@ -13,8 +14,8 @@ public class OpcSocket implements Closeable {
         void receive(InetAddress src, OpcMessage reply);
     }
 
+    protected static final ExecutorService executor = Executors.newCachedThreadPool();
     protected DatagramSocket socket = null;
-    protected static ExecutorService executor = NetworkManager.getInstance().getExecutor();
     protected final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
 
     public OpcSocket(InetAddress host, int port) {
@@ -37,13 +38,11 @@ public class OpcSocket implements Closeable {
         }
         final DatagramSocket s = socket;
         final DatagramPacket packet = new DatagramPacket(message.bytes, message.bytes.length, address);
-        executor.submit(new Runnable() {
-            public void run() {
-                try {
-                    s.send(packet);
-                } catch (IOException e) {
-                    e.printStackTrace();
-                }
+        executor.submit(() -> {
+            try {
+                s.send(packet);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }

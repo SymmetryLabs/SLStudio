@@ -43,6 +43,7 @@ public class NetworkDevice {
         return false;
     }
 
+    @Deprecated // Remove this after all controllers are updated to Aura.
     public static NetworkDevice fromMacAddress(InetAddress ipAddress, byte[] mac) {
         String deviceId = String.format(
             "%02x%02x%02x%02x%02x%02x", mac[0], mac[1], mac[2], mac[3], mac[4], mac[5]);
@@ -50,6 +51,7 @@ public class NetworkDevice {
             ipAddress, null, null, deviceId, new String[0]);
     }
 
+    /** Parses a SYMMETRY_LABS_IDENTIFY response like "aura/r1 (rgb16) [d88034ab34f5]". */
     public static NetworkDevice fromIdentifier(InetAddress ipAddress, byte[] identifier) {
         String idStr = "";
         try {

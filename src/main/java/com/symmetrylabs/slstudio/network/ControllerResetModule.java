@@ -18,6 +18,7 @@ public class ControllerResetModule {
             if (enabled.isOn()) {
                 for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
                     try (OpcSocket socket = new OpcSocket(broadcast)) {
+                        // @Deprecated: Switch to SYMMETRY_LABS_RESET sysex after all controllers are updated to Aura.
                         socket.send(new OpcMessage(0x88, 2));
                     }
                 }

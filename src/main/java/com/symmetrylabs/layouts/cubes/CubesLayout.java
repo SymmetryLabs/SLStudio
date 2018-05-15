@@ -1,10 +1,6 @@
 package com.symmetrylabs.layouts.cubes;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.lang.ref.WeakReference;
 
 import com.symmetrylabs.slstudio.model.SLModel;
@@ -435,18 +431,8 @@ public class CubesLayout implements Layout {
         });
     }
 
-    public List<CubesController> getSortedControllers() {
-        List<CubesController> sorted = new ArrayList<CubesController>(controllers);
-        sorted.sort(new Comparator<CubesController>() {
-            public int compare(CubesController o1, CubesController o2) {
-                try {
-                    return Integer.parseInt(o1.id) - Integer.parseInt(o2.id);
-                } catch (NumberFormatException e) {
-                    return o1.id.compareTo(o2.id);
-                }
-            }
-        });
-        return sorted;
+    public Collection<CubesController> getSortedControllers() {
+        return new TreeSet<CubesController>(controllers);
     }
 
     public void addControllerListListener(ListListener<CubesController> listener) {
