@@ -17,7 +17,7 @@ public class NetworkDevice {
     public final String versionId;
     public final String deviceId;
     public final Set<String> featureIds = new HashSet<String>();
-    public final ListenableInt versionNumber = new ListenableInt(-1);
+    public final ListenableInt version = new ListenableInt(-1);
 
     protected final static Pattern PRODUCT_VERSION = Pattern.compile("^(\\w+)/([\\w+]+)");
     protected final static Pattern FEATURE_LIST = Pattern.compile("\\(([\\w,]+)\\)");

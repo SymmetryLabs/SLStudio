@@ -9,6 +9,7 @@ import java.util.Comparator;
 import com.symmetrylabs.layouts.cubes.CubesController;
 import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.network.NetworkDevice;
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
@@ -102,8 +103,11 @@ public class UIOutputs extends UICollapsibleSection {
                 }
 
                 public String getLabel() {
-                        if (controller.networkDevice != null && controller.networkDevice.version.get() != -1) {
-                                return controller.id + " (v" + controller.networkDevice.version + ")";
+                        NetworkDevice device = controller.networkDevice;
+                        if (device != null && !device.versionId.isEmpty()) {
+                                return controller.id + " (" + device.versionId + ")";
+                        } else if (device != null && device.version.get() >= 0) {
+                                return controller.id + " (v" + device.version + ")";
                         } else {
                                 return controller.id;
                         }

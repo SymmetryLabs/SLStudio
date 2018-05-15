@@ -10,19 +10,13 @@ import java.lang.ref.WeakReference;
 import java.net.SocketException;
 import java.net.UnknownHostException;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
-
-import com.symmetrylabs.util.DeviceIdMap;
+import com.symmetrylabs.util.CubePhysicalIdMap;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 import heronarts.lx.output.LXDatagramOutput;
 
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.model.StripsModel;
@@ -36,7 +30,6 @@ import com.symmetrylabs.layouts.icicles.Icicle;
 import com.symmetrylabs.layouts.butterflies.ButterfliesModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableList;
 import com.symmetrylabs.util.listenable.ListListener;
@@ -44,7 +37,7 @@ import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 public class CompositeLayout implements Layout {
     ListenableList<SLController> controllers = new ListenableList<>();
-    DeviceIdMap deviceIdMap;
+    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
 
     List<CubesModel.Cube> cubes = new ArrayList<>();
     List<TreeModel.Branch> branches = new ArrayList<>();
@@ -130,8 +123,6 @@ public class CompositeLayout implements Layout {
     // };
 
     public SLModel buildModel() {
-        deviceIdMap = new DeviceIdMap("physid_to_mac.json");
-
         // Any global transforms
         LXTransform transform = new LXTransform();
         transform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
@@ -273,7 +264,7 @@ public class CompositeLayout implements Layout {
         // Put cubes on SLControllers
         networkMonitor.deviceList.addListener(new ListListener<NetworkDevice>() {
             public void itemAdded(int index, NetworkDevice device) {
-                String physicalId = deviceIdMap.getPhysicalId(device.deviceId);
+                String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
                 final PointsGrouping points = new PointsGrouping(physicalId);
 
                 for (CubesModel.Cube cube : cubes) {

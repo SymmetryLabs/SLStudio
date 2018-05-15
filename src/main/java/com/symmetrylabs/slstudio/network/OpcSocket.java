@@ -9,15 +9,15 @@ public class OpcSocket implements Closeable {
     public static final int DEFAULT_PORT = 7890;
     public final InetSocketAddress address;
 
-    public static abstract class Callback {
-        void receive(InetAddress src, OpcMessage reply) { }
+    interface Callback {
+        void receive(InetAddress src, OpcMessage reply);
     }
 
     protected DatagramSocket socket = null;
     protected static ExecutorService executor = NetworkManager.getInstance().getExecutor();
     protected final DatagramPacket reply = new DatagramPacket(new byte[65535], 65535);
 
-    OpcSocket(InetAddress host, int port) {
+    public OpcSocket(InetAddress host, int port) {
         address = new InetSocketAddress(host, port);
         try {
             socket = new DatagramSocket();

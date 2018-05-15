@@ -1,9 +1,12 @@
 package com.symmetrylabs.slstudio.network;
 
+import com.symmetrylabs.util.NetworkUtils;
 import heronarts.lx.LX;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
+
+import java.net.InetAddress;
 
 
 public class ControllerResetModule {
@@ -11,9 +14,13 @@ public class ControllerResetModule {
 
     public ControllerResetModule(LX lx) {
         //moduleRegistrar.modules.add(new Module("Reset all cubes", enabled, true));
-        enabled.addListener(new LXParameterListener() {
-            public void onParameterChanged(LXParameter parameter) {
-                if (enabled.isOn()) new CubeResetter().run();
+        enabled.addListener(parameter -> {
+            if (enabled.isOn()) {
+                for (InetAddress broadcast : NetworkUtils.getBroadcastAddresses()) {
+                    try (OpcSocket socket = new OpcSocket(broadcast)) {
+                        socket.send(new OpcMessage(0x88, 2));
+                    }
+                }
             }
         });
     }

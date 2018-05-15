@@ -42,22 +42,23 @@ public class NetworkMonitor {
                 if (newDevice.versionId.isEmpty()) {
                     warnOldVersion();
                 }
-                new VersionCommand(newDevice.ipAddress, new VersionCommandCallback() {
-                    public void onResponse(java.net.DatagramPacket response, final int version) {
-                        dispatcher.dispatchEngine(() -> newDevice.versionNumber.set(version));
-                    }
-
-                    public void onFinish() {
-                        dispatcher.dispatchEngine(() -> {
-                            for (NetworkDevice device : deviceList) {
-                                if (device.versionNumber.get() != -1 &&
-                                      device.versionNumber.get() != newDevice.versionNumber.get()) {
-                                    warnOldVersion();
+                try (OpcSocket socket = new OpcSocket(newDevice.ipAddress)) {
+                    socket.send(new OpcMessage(0x88, 3));
+                    socket.listen(1000, (src, reply) -> {
+                        if (reply.bytes.length == 1) {
+                            int version = Byte.toUnsignedInt(reply.bytes[0]);
+                            dispatcher.dispatchEngine(() -> {
+                                newDevice.version.set(version);
+                                for (NetworkDevice device : deviceList) {
+                                    if (device.version.get() != -1 &&
+                                        device.version.get() != version) {
+                                        warnOldVersion();
+                                    }
                                 }
-                            }
-                        });
-                    }
+                            });
+                        }
                 });
+                }
             }
         });
     }

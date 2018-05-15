@@ -37,7 +37,7 @@ public class UIOutputs extends UICollapsibleSection {
                     public void itemAdded(final int index, final CubesController c) {
                         dispatcher.dispatchUi(() -> {
                             if (c.networkDevice != null) {
-                                c.networkDevice.versionNumber.addListener(deviceVersionListener);
+                                c.networkDevice.version.addListener(deviceVersionListener);
                             }
 
                             updateItems(layout);
@@ -47,7 +47,7 @@ public class UIOutputs extends UICollapsibleSection {
                     public void itemRemoved(final int index, final CubesController c) {
                         dispatcher.dispatchUi(() -> {
                             if (c.networkDevice != null) {
-                                c.networkDevice.versionNumber.removeListener(deviceVersionListener);
+                                c.networkDevice.version.removeListener(deviceVersionListener);
                             }
 
                             updateItems(layout);
@@ -102,8 +102,8 @@ public class UIOutputs extends UICollapsibleSection {
                         NetworkDevice device = controller.networkDevice;
                         if (device != null && !device.versionId.isEmpty()) {
                                 return controller.id + " (" + device.versionId + ")";
-                        } else if (device != null && device.versionNumber.get() >= 0) {
-                                return controller.id + " (v" + device.versionNumber + ")";
+                        } else if (device != null && device.version.get() >= 0) {
+                                return controller.id + " (v" + device.version + ")";
                         } else {
                                 return controller.id;
                         }

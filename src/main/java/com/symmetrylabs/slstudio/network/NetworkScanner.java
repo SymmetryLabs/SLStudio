@@ -32,13 +32,11 @@ public class NetworkScanner {
             try (OpcSocket socket = new OpcSocket(broadcast)) {
                 socket.send(new OpcMessage(0x88, 4));
                 socket.send(new OpcMessage(0, SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY));
-                socket.listenMultiple(1000, new OpcSocket.Callback() {
-                    public void receive(InetAddress src, OpcMessage reply) {
-                        if (reply.bytes.length == 6) {
-                            updateDevice(NetworkDevice.fromMacAddress(src, reply.bytes));
-                        } else if (reply.isSysex(SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY_REPLY)) {
-                            updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
-                        }
+                socket.listenMultiple(1000, (src, reply) -> {
+                    if (reply.bytes.length == 6) {
+                        updateDevice(NetworkDevice.fromMacAddress(src, reply.bytes));
+                    } else if (reply.isSysex(SYMMETRY_LABS, SYMMETRY_LABS_IDENTIFY_REPLY)) {
+                        updateDevice(NetworkDevice.fromIdentifier(src, reply.getSysexContent()));
                     }
                 });
             }

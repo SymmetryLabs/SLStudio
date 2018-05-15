@@ -4,28 +4,20 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Map;
-import java.util.HashMap;
 import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
-
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.util.DeviceIdMap;
+import com.symmetrylabs.util.CubePhysicalIdMap;
 import heronarts.lx.LX;
 import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.ListenableList;
 import com.symmetrylabs.util.listenable.ListListener;
@@ -36,7 +28,7 @@ import heronarts.p3lx.ui.UI2dScrollContext;
  */
 public class CubesLayout implements Layout {
     ListenableList<CubesController> controllers = new ListenableList<>();
-    DeviceIdMap deviceIdMap;
+    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
@@ -325,8 +317,6 @@ public class CubesLayout implements Layout {
     }
 
     public SLModel buildModel() {
-        deviceIdMap = new DeviceIdMap("physid_to_mac.json");
-
         // Any global transforms
         LXTransform globalTransform = new LXTransform();
         globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
@@ -418,7 +408,7 @@ public class CubesLayout implements Layout {
 
         networkMonitor.deviceList.addListener(new ListListener<NetworkDevice>() {
             public void itemAdded(int index, NetworkDevice device) {
-                String physicalId = deviceIdMap.getPhysicalId(device.deviceId);
+                String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
                 final CubesController controller = new CubesController(lx, device, physicalId);
                 controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
                 controllers.add(index, controller);

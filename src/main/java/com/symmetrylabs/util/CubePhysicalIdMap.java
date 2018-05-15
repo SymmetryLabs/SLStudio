@@ -1,7 +1,6 @@
 package com.symmetrylabs.util;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.slstudio.SLStudio;
@@ -9,13 +8,12 @@ import com.symmetrylabs.slstudio.SLStudio;
 import java.util.HashMap;
 import java.util.Map;
 
-public class DeviceIdMap {
+public class CubePhysicalIdMap {
     protected final Map<String, String> physicalIds = new HashMap<>();
-    protected final String filename;
+    protected final static String FILENAME = "physid_to_mac.json";
 
-    public DeviceIdMap(String filename) {
-        this.filename = filename;
-        byte[] bytes = SLStudio.applet.loadBytes(filename);
+    public CubePhysicalIdMap() {
+        byte[] bytes = SLStudio.applet.loadBytes(FILENAME);
         if (bytes != null) {
             try {
                 JsonObject json = new Gson().fromJson(new String(bytes), JsonObject.class);
@@ -31,7 +29,7 @@ public class DeviceIdMap {
 
     public String getPhysicalId(String deviceId) {
         if (!physicalIds.containsKey(deviceId)) {
-            System.err.println("WARNING: Device ID " + deviceId + " not in " + filename);
+            System.err.println("WARNING: Device ID " + deviceId + " not in " + FILENAME);
         }
         return physicalIds.getOrDefault(deviceId, deviceId);
     }
