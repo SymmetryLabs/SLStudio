@@ -56,11 +56,37 @@ public class Workspaces extends LXComponent {
         if (i < 0 || i > workspaces.size() - 1) {
             return;
         }
+        System.out.println("goIndex(" + i + ")");
+        System.out.println("workspace: " + workspaces.get(i).getLabel());
         openWorkspace(workspaces.get(i));
+    }
+
+    public void goPrev() {
+        int index = currentWorkspaceIndex-1;
+        if (index == -1) {
+            index = workspaces.size()-1;
+        }
+        goIndex(index);
+        System.out.println("goPrev()");
+    }
+
+    public void goNext() {
+        int index = currentWorkspaceIndex+1;
+        if (index == workspaces.size()) {
+            index = 0;
+        }
+        goIndex(index);
+        System.out.println("goNext()");
+    }
+
+    public int size() {
+        return workspaces.size();
     }
 
     public void openWorkspace(Workspace workspace) {
         int newWorkspaceIndex = workspaces.indexOf(workspace);
+        System.out.println("newWorkspaceIndex: " + newWorkspaceIndex);
+        System.out.println("currentWorkspaceIndex: " + currentWorkspaceIndex);
 
         if (currentWorkspaceIndex == newWorkspaceIndex) {
             return;

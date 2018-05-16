@@ -164,6 +164,8 @@ public class SLStudio extends PApplet {
 
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UIWorkspaces(ui, lx, workspaces, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
+                
+                workspaces.goIndex(0);
             }
         };
         lx.engine.isChannelMultithreaded.setValue(true);

@@ -58,6 +58,8 @@ public class APC40Listener extends LXComponent {
         public void controlChangeReceived(MidiControlChange cc) {
                 //System.out.println("control: " + cc.getCC() + ", value: " + cc.getNormalized());
 
+          //System.out.println(cc.getCC() + "\n");
+
             if (cc.getCC() == 7) {
                 int numChannels = SLStudio.applet.lx.engine.getChannels().size();
 
@@ -96,7 +98,16 @@ public class APC40Listener extends LXComponent {
         }
 
         public void noteOnReceived(MidiNoteOn note) {
-            //System.out.println(note.getPitch());
+
+            if (note.getPitch() == 94) {
+                 workspaces.goPrev();
+                 //System.out.println("goPrev()");
+            }
+
+            if (note.getPitch() == 95) {
+                 workspaces.goNext();
+                 //System.out.println("goNext()");
+            }
 
             if (note.getPitch() == 91) {
                 SLStudio.applet.lx.engine.output.enabled.setValue(true);
