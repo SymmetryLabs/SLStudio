@@ -23,6 +23,9 @@ package heronarts.lx.blend;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 public class LightestBlend extends LXBlend {
 
     public LightestBlend(LX lx) {
@@ -31,20 +34,16 @@ public class LightestBlend extends LXBlend {
 
 
     @Override
-    public void blend(PolyBuffer dst, PolyBuffer src,
-                                        double alpha, PolyBuffer output, PolyBuffer.Space space) {
-
-        switch (space) {
-            case RGB8:
-                blend((int[]) dst.getArray(space), (int[]) src.getArray(space),
-                                alpha, (int[]) output.getArray(space));
-                output.markModified(space);
-                break;
-            case RGB16:
-                blend16((long[]) dst.getArray(space), (long[]) src.getArray(space),
-                                alpha, (long[]) output.getArray(space));
-                output.markModified(space);
-                break;
+    public void blend(PolyBuffer base, PolyBuffer overlay,
+                                        double alpha, PolyBuffer dest, PolyBuffer.Space space) {
+        if (space == RGB8) {
+            blend((int[]) base.getArray(RGB8), (int[]) overlay.getArray(RGB8),
+                    alpha, (int[]) dest.getArray(RGB8));
+            dest.markModified(RGB8);
+        } else {
+            blend16((long[]) base.getArray(RGB16), (long[]) overlay.getArray(RGB16),
+                    alpha, (long[]) dest.getArray(RGB16));
+            dest.markModified(RGB16);
         }
     }
 
@@ -68,7 +67,6 @@ public class LightestBlend extends LXBlend {
         }
     }
 
-    @Override
     public void blend16(long[] dst, long[] src, double alpha, long[] output) {
         int alphaAdjust = (int) (alpha * 0x10000);
         for (int i = 0; i < src.length; ++i) {

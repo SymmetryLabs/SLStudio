@@ -33,7 +33,7 @@ import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 
-import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
  * A pattern is the core object that the animation engine uses to generate
@@ -222,9 +222,9 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
         // were supposed to implement.  Implementations of run(deltaMs) are
         // assumed to operate only on the "colors" array, and are not expected
         // to have marked the buffer, so we mark the buffer modified here.
-        colors = (int[]) getArray(RGB8);
+        colors = (int[]) getArray(SRGB8);
         run(deltaMs);
-        markModified(RGB8);
+        markModified(SRGB8);
 
         // New subclasses should override and replace this method with one that
         // obtains a color array using getArray(space), writes into that array,

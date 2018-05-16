@@ -23,6 +23,9 @@ package heronarts.lx.blend;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 public class MultiplyBlend extends LXBlend {
 
     public MultiplyBlend(LX lx) {
@@ -36,20 +39,16 @@ public class MultiplyBlend extends LXBlend {
 
     //override?
     @Override
-    public void blend(PolyBuffer dst, PolyBuffer src, // is this method called blend or multiply?
-                                        double alpha, PolyBuffer output, PolyBuffer.Space space) {
-
-        switch (space) {
-            case RGB8:
-                multiply((int[]) dst.getArray(space), (int[]) src.getArray(space),
-                                alpha, (int[]) output.getArray(space));
-                output.markModified(space);
-                break;
-            case RGB16:
-                multiply16((long[]) dst.getArray(space), (long[]) src.getArray(space),
-                                alpha, (long[]) output.getArray(space));
-                output.markModified(space);
-                break;
+    public void blend(PolyBuffer base, PolyBuffer overlay,
+                                        double alpha, PolyBuffer dest, PolyBuffer.Space space) {
+        if (space == RGB8) {
+            multiply((int[]) base.getArray(RGB8), (int[]) overlay.getArray(RGB8),
+                    alpha, (int[]) dest.getArray(RGB8));
+            dest.markModified(RGB8);
+        } else {
+            multiply16((long[]) base.getArray(RGB16), (long[]) overlay.getArray(RGB16),
+                    alpha, (long[]) dest.getArray(RGB16));
+            dest.markModified(RGB16);
         }
     }
 

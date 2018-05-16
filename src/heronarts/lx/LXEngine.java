@@ -67,6 +67,7 @@ import static heronarts.lx.LXChannel.CrossfadeGroup.A;
 import static heronarts.lx.LXChannel.CrossfadeGroup.B;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
  * The engine is the core class that runs the internal animations. An engine is
@@ -1235,11 +1236,11 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         // If cue-ing the palette!
         if (lx.palette.cue.isOn()) {
-            int[] colors = (int[]) buffer.cue.render.getArray(RGB8);
+            int[] colors = (int[]) buffer.cue.render.getArray(SRGB8);
             for (LXPoint p : this.lx.model.points) {
                 colors[p.index] = lx.palette.getColor(p);
             }
-            buffer.cue.render.markModified(RGB8);
+            buffer.cue.render.markModified(SRGB8);
             cueOn = true;
         }
 
@@ -1383,7 +1384,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      */
     @Deprecated
     public void copyUIBuffer(int[] array) {
-        copyUIBuffer(PolyBuffer.wrapArray(lx, array), RGB8);
+        copyUIBuffer(PolyBuffer.wrapArray(lx, array), SRGB8);
     }
 
     /**
@@ -1392,7 +1393,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
      */
     @Deprecated
     public int[] getUIBufferNonThreadSafe() {
-        return (int[]) getUIPolyBufferNonThreadSafe().getArray(RGB8);
+        return (int[]) getUIPolyBufferNonThreadSafe().getArray(SRGB8);
     }
 
     private static final String KEY_PALETTE = "palette";

@@ -20,6 +20,8 @@
 
 package heronarts.lx.color;
 
+import heronarts.lx.LXUtils;
+
 import java.awt.Color;
 
 /** Various utilities that operate on 32-bit integers representing RGBA colors */
@@ -52,6 +54,8 @@ public class LXColor {
     public static final int RED_SHIFT = 16;
     public static final int GREEN_SHIFT = 8;
 
+    protected static int[] srgbIntensities = null;
+
     public static byte alpha(int argb) {
         return (byte) ((argb & ALPHA_MASK) >>> ALPHA_SHIFT);
     }
@@ -68,18 +72,80 @@ public class LXColor {
         return (byte) (argb & BLUE_MASK);
     }
 
-    public static long toLong(int argb) {
+    public static int alphaInt(int argb) {
+        return (argb & ALPHA_MASK) >>> ALPHA_SHIFT;
+    }
+
+    public static int redInt(int argb) {
+        return (argb & RED_MASK) >>> RED_SHIFT;
+    }
+
+    public static int greenInt(int argb) {
+        return (argb & GREEN_MASK) >>> GREEN_SHIFT;
+    }
+
+    public static int blueInt(int argb) {
+        return argb & BLUE_MASK;
+    }
+
+    public static long rgb8ToRgb16(int rgb8) {
         // If we were to shift left by 8, then 0xff would become 0xff00.
         // Instead, we multiply by 0x0101, so that 0xff becomes 0xffff.
         return LXColor16.rgba(
-                (int) red(argb) * 0x0101,
-                (int) green(argb) * 0x0101,
-                (int) blue(argb) * 0x0101,
-                (int) alpha(argb) * 0x0101);
+                redInt(rgb8) * 0x0101,
+                greenInt(rgb8) * 0x0101,
+                blueInt(rgb8) * 0x0101,
+                alphaInt(rgb8) * 0x0101
+        );
     }
 
-    public static void intsToLongs(int[] ints, long[] longs) {
-        for (int i = 0; i < ints.length; i++) longs[i] = toLong(ints[i]);
+    public static void rgb8ToRgb16(int[] rgb8s, long[] rgb16s) {
+        for (int i = 0; i < rgb8s.length; i++) rgb16s[i] = rgb8ToRgb16(rgb8s[i]);
+    }
+
+    public static long srgb8ToRgb16(int srgb8) {
+        if (srgbIntensities == null) {
+            srgbIntensities = new int[256];
+            for (int i = 0; i < 256; i++) {
+                // For these values of i, 0.0 <= i/255.0 <= 1.0.
+                // For these inputs, srgb_value_to_intensity is guaranteed to return 0.0 <= v <= 1.0.
+                // 65535.99999999999 is the largest double-precision number less than 65536,
+                // so (int) (v * 65535.99999999999) will always return a value from 0 to 65535.
+                srgbIntensities[i] = (int) (LXUtils.srgb_value_to_intensity(i/255.0) * 65535.99999999999);
+            }
+        }
+        // We remap the alpha channel too, so that blending (0, 0, 0, 0) + (1, 1, 1, 0.5) in
+        // RGB16 space gives the same result as blending their analogues in SRGB8 space.
+        return LXColor16.rgba(
+                srgbIntensities[redInt(srgb8)], srgbIntensities[greenInt(srgb8)],
+                srgbIntensities[blueInt(srgb8)], srgbIntensities[alphaInt(srgb8)]
+        );
+    }
+
+    public static void srgb8ToRgb16(int[] srgb8s, long[] rgb16s) {
+        for (int i = 0; i < srgb8s.length; i++) {
+            rgb16s[i] = srgb8ToRgb16(srgb8s[i]);
+        }
+    }
+
+    public static int srgb8ToRgb8(int srgb8) {
+        return LXColor16.toRgb8(srgb8ToRgb16(srgb8));
+    }
+
+    public static void srgb8ToRgb8(int[] srgb8s, int[] rgb8s) {
+        for (int i = 0; i < srgb8s.length; i++) {
+            rgb8s[i] = srgb8ToRgb8(srgb8s[i]);
+        }
+    }
+
+    public static int rgb8ToSrgb8(int rgb8) {
+        return LXColor16.toSrgb8(rgb8ToRgb16(rgb8));
+    }
+
+    public static void rgb8ToSrgb8(int[] rgb8s, int[] srgb8s) {
+        for (int i = 0; i < rgb8s.length; i++) {
+            srgb8s[i] = rgb8ToSrgb8(rgb8s[i]);
+        }
     }
 
     /**

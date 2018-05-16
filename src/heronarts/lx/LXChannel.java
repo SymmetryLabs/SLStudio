@@ -44,7 +44,7 @@ import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
-import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
  * A channel is a single component of the engine that has a set of patterns from
@@ -776,7 +776,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
     @Deprecated
     int[] getColors() {
-        return (int[]) polyBuffer.getArray(RGB8);
+        return (int[]) polyBuffer.getArray(SRGB8);
     }
 
     @Override

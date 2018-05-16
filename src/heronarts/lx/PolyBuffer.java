@@ -16,7 +16,7 @@ import java.util.Set;
  * Buffers are allocated on demand; if only one is used, no memory is wasted on any others.
  */
 public class PolyBuffer implements PolyBufferProvider {
-    public enum Space {RGB8, RGB16};
+    public enum Space {RGB8, RGB16, SRGB8};
 
     private LX lx = null;
     private Map<Space, Buffer> buffers = new EnumMap<>(Space.class);
@@ -49,6 +49,7 @@ public class PolyBuffer implements PolyBufferProvider {
         for (Space space : freshSpaces) {
             return space;
         }
+        // There should always be at least one fresh space, so we should never get here.
         return Space.RGB8;
     }
 
@@ -59,6 +60,7 @@ public class PolyBuffer implements PolyBufferProvider {
     protected Buffer createBuffer(Space space) {
         switch (space) {
             case RGB8:
+            case SRGB8:
                 return new ModelBuffer(lx);
             case RGB16:
                 return new ModelLongBuffer(lx);
@@ -73,20 +75,33 @@ public class PolyBuffer implements PolyBufferProvider {
                 buffers.put(space, createBuffer(space));
             }
             Object dest = buffers.get(space).getArray();
+            // For the conversion source, choose the most expressive color space
+            // that has fresh data in its buffer; RGB16 is preferred over SRGB8,
+            // which is preferred over RGB8.
             switch (space) {
                 case RGB8:
                     if (isFresh(Space.RGB16)) {
-                        LXColor16.longsToInts((long[]) getArray(Space.RGB16), (int[]) dest);
-                        conversionCount++;
+                        LXColor16.toRgb8((long[]) getArray(Space.RGB16), (int[]) dest);
+                    } else if (isFresh(Space.SRGB8)) {
+                        LXColor.srgb8ToRgb8((int[]) getArray(Space.SRGB8), (int[]) dest);
                     }
                     break;
                 case RGB16:
-                    if (isFresh(Space.RGB8)) {
-                        LXColor.intsToLongs((int[]) getArray(Space.RGB8), (long[]) dest);
-                        conversionCount++;
+                    if (isFresh(Space.SRGB8)) {
+                        LXColor.srgb8ToRgb16((int[]) getArray(Space.SRGB8), (long[]) dest);
+                    } else if (isFresh(Space.RGB8)) {
+                        LXColor.rgb8ToRgb16((int[]) getArray(Space.RGB8), (long[]) dest);
+                    }
+                    break;
+                case SRGB8:
+                    if (isFresh(Space.RGB16)) {
+                        LXColor16.toSrgb8((long[]) getArray(Space.RGB16), (int[]) dest);
+                    } else if (isFresh(Space.RGB8)) {
+                        LXColor.rgb8ToSrgb8((int[]) getArray(Space.RGB8), (int[]) dest);
                     }
                     break;
             }
+            conversionCount++;
             freshSpaces.add(space);
         }
     }

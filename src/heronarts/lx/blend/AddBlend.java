@@ -23,6 +23,9 @@ package heronarts.lx.blend;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+
 public class AddBlend extends LXBlend {
 
     public AddBlend(LX lx) {
@@ -31,17 +34,14 @@ public class AddBlend extends LXBlend {
 
     public void blend(PolyBuffer base, PolyBuffer overlay,
                                         double alpha, PolyBuffer dest, PolyBuffer.Space space) {
-        switch (space) {
-            case RGB8:
-                blend((int[]) base.getArray(space), (int[]) overlay.getArray(space),
-                        alpha, (int[]) dest.getArray(space));
-                dest.markModified(space);
-                break;
-            case RGB16:
-                blend16((long[]) base.getArray(space), (long[]) overlay.getArray(space),
-                        alpha, (long[]) dest.getArray(space));
-                dest.markModified(space);
-                break;
+        if (space == RGB8) {
+            blend((int[]) base.getArray(RGB8), (int[]) overlay.getArray(RGB8),
+                    alpha, (int[]) dest.getArray(RGB8));
+            dest.markModified(RGB8);
+        } else {
+            blend16((long[]) base.getArray(RGB16), (long[]) overlay.getArray(RGB16),
+                    alpha, (long[]) dest.getArray(RGB16));
+            dest.markModified(RGB16);
         }
     }
 

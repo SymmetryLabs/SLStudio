@@ -1,8 +1,9 @@
 package heronarts.lx.color;
 
+import heronarts.lx.LXUtils;
+
 /** Various utilities that operate on 64-bit integers representing RGBA colors */
 public class LXColor16 {
-
         public static final long ALPHA_MASK = 0xffff000000000000L;
         public static final long RED_MASK = 0x0000ffff00000000L;
         public static final long GREEN_MASK = 0x00000000ffff0000L;
@@ -17,6 +18,8 @@ public class LXColor16 {
         public static final int ALPHA_SHIFT = 48;
         public static final int RED_SHIFT = 32;
         public static final int GREEN_SHIFT = 16;
+
+        protected static byte[] srgbValues = null;
 
         public static int alpha(long argb) {
                 return (int) ((argb & ALPHA_MASK) >>> ALPHA_SHIFT);
@@ -34,15 +37,43 @@ public class LXColor16 {
                 return (int) (argb & BLUE_MASK);
         }
 
-        public static int toInt(long argb) {
-                return LXColor.rgba(red(argb) >> 8, green(argb) >> 8, blue(argb) >> 8, alpha(argb) >> 8);
+        public static int toRgb8(long rgb16) {
+                return LXColor.rgba(red(rgb16) >> 8, green(rgb16) >> 8, blue(rgb16) >> 8, alpha(rgb16) >> 8);
         }
 
-        public static void longsToInts(long[] longs, int[] ints) {
-                for (int i = 0; i < longs.length; i++) ints[i] = toInt(longs[i]);
+        public static void toRgb8(long[] rgb16s, int[] rgb8s) {
+                for (int i = 0; i < rgb16s.length; i++) {
+                        rgb8s[i] = toRgb8(rgb16s[i]);
+                }
         }
 
-        /**
+        public static int toSrgb8(long rgb16) {
+                if (srgbValues == null) {
+                        srgbValues = new byte[65536];
+                        for (int i = 0; i < 65536; i++) {
+                                // For these values of i, 0.0 <= i/65535.0 <= 1.0.
+                                // For these inputs, srgb_intensity_to_value is guaranteed to return 0.0 <= v <= 1.0.
+                                // 255.99999999999997 is the largest double-precision number less than 256,
+                                // so (byte) (v * 255.99999999999997) will always return a value from 0 to 255.
+                                srgbValues[i] = (byte) (LXUtils.srgb_intensity_to_value(i/65535.0) * 255.99999999999997);
+                        }
+                }
+                // We remap the alpha channel too, so that blending (0, 0, 0, 0) + (1, 1, 1, 0.5) in
+                // SRGB8 space gives the same result as blending their analogues in RGB16 space.
+                return LXColor.rgba(
+                        srgbValues[red(rgb16)], srgbValues[green(rgb16)],
+                        srgbValues[blue(rgb16)], srgbValues[alpha(rgb16)]
+                );
+        }
+
+        public static void toSrgb8(long[] rgb16s, int[] srgb8s) {
+                for (int i = 0; i < rgb16s.length; i++) {
+                        srgb8s[i] = toSrgb8(rgb16s[i]);
+                }
+        }
+
+
+                /**
          * Hue of a color from 0-360
          *
          * @param rgb Color value

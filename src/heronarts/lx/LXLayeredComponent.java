@@ -32,6 +32,7 @@ import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
  * Base class for system components that have a color buffer and run in the
@@ -77,7 +78,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected PolyBuffer polyBuffer = null;
 
     /** The requested color space.  See setPreferredSpace(). */
-    protected PolyBuffer.Space preferredSpace = RGB8;
+    protected PolyBuffer.Space preferredSpace = SRGB8;
 
     private final List<LXLayer> mutableLayers = new ArrayList<LXLayer>();
     protected final List<LXLayer> layers = Collections.unmodifiableList(mutableLayers);
@@ -154,13 +155,13 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     /** Gets the 8-bit color buffer.  Maintained for compatibility. */
     @Deprecated
     protected LXBuffer getBuffer() {
-        return (LXBuffer) polyBuffer.getBuffer(RGB8);
+        return (LXBuffer) polyBuffer.getBuffer(SRGB8);
     }
 
     /** Gets the 8-bit color buffer's array.  Maintained for compatibility. */
     @Deprecated
     public int[] getColors() {
-        return (int[]) getArray(RGB8);
+        return (int[]) getArray(SRGB8);
  }
 
     /**
@@ -233,7 +234,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     }
 
     protected void setColors(PolyBuffer.Space space, Object color) {
-        if (space == RGB8) {
+        if (space == RGB8 || space == SRGB8) {
             Arrays.fill((int[]) getArray(space), (int) color);
         }
         if (space == RGB16) {
@@ -252,7 +253,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     @Deprecated
     protected final LXLayeredComponent setColor(int i, int c) {
         getColors()[i] = c;
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 
@@ -269,7 +270,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected final LXLayeredComponent blendColor(int i, int c, LXColor.Blend blendMode) {
         int[] colors = getColors();
         colors[i] = LXColor.blend(colors[i], c, blendMode);
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 
@@ -279,7 +280,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (LXPoint p : f.getPoints()) {
             colors[p.index] = LXColor.blend(colors[p.index], c, blendMode);
         }
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 
@@ -294,7 +295,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     protected final LXLayeredComponent addColor(int i, int c) {
         int[] colors = getColors();
         colors[i] = LXColor.add(colors[i], c);
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 
@@ -324,7 +325,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (LXPoint p : f.getPoints()) {
             colors[p.index] = LXColor.add(colors[p.index], c);
         }
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 
@@ -339,7 +340,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
     @Deprecated
     protected final LXLayeredComponent setColor(int x, int y, int c) {
         getColors()[x + y * this.lx.width] = c;
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 
@@ -367,7 +368,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (int i = 0; i < colors.length; ++i) {
             colors[i] = c;
         }
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 
@@ -384,7 +385,7 @@ public abstract class LXLayeredComponent extends LXModelComponent implements LXL
         for (LXPoint p : f.getPoints()) {
             colors[p.index] = c;
         }
-        markModified(RGB8);
+        markModified(SRGB8);
         return this;
     }
 

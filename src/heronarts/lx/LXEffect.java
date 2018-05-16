@@ -34,7 +34,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
 
-import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
  * Class to represent an effect that may be applied to the color array. Effects
@@ -210,9 +210,9 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         // supposed to implement.  Implementations of run(deltaMs, enabledAmount)
         // are assumed to operate only on the "colors" array, and are not expected
         // to have marked the buffer, so we mark the buffer modified here.
-        colors = (int[]) getArray(RGB8);
+        colors = (int[]) getArray(SRGB8);
         run(deltaMs, enabledAmount);
-        markModified(RGB8);
+        markModified(SRGB8);
 
         // New subclasses should override and replace this method with one that
         // obtains a color array using getArray(space), writes into that array,
