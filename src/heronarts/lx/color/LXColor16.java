@@ -516,12 +516,12 @@ public class LXColor16 {
         public static long multiply(long c1, long c2) {
                 int c1a = alpha(c1);
                 int c2a = alpha(c2);
-                int c1r = red(c1);
-                int c2r = red(c2);
-                int c1g = green(c1);
-                int c2g = green(c2);
-                int c1b = blue(c1);
-                int c2b = blue(c2);
+                long c1r = red(c1);
+                long c2r = red(c2);
+                long c1g = green(c1);
+                long c2g = green(c2);
+                long c1b = blue(c1);
+                long c2b = blue(c2);
                 return
                         (min(0xffffL, (long) c1a + c2a) << ALPHA_SHIFT) |
                                 lerp(c1, (c1r * (c2r+1)) << 16, c2a, RED_MASK) |
@@ -612,4 +612,46 @@ public class LXColor16 {
                 return (am + (((alpha + 1)*(bm - am)) >>> 16)) & mask;
         }
 
+        // Java silently allows ints to be passed for arguments declared as long.
+        // To prevent accidental use of 8-bit-per-channel color values where
+        // 16-bit-per-channel color values are expected, we define an overloaded
+        // method for every method that takes a long, and make it show up as
+        // deprecated and throw exceptions at runtime.
+        @Deprecated public static void alpha(int argb) { rejectInt(); }
+        @Deprecated public static void red(int argb) { rejectInt(); }
+        @Deprecated public static void green(int argb) { rejectInt(); }
+        @Deprecated public static void blue(int argb) { rejectInt(); }
+        @Deprecated public static void toInt(int argb) { rejectInt(); }
+        @Deprecated public static void h(int rgb) { rejectInt(); }
+        @Deprecated public static void s(int rgb) { rejectInt(); }
+        @Deprecated public static void b(int rgb) { rejectInt(); }
+        @Deprecated public static void RGBtoHSB(int rgb, float[] hsb) { rejectInt(); }
+        @Deprecated public static void blend(int c1, long c2, LXColor.Blend blendMode) { rejectInt(); }
+        @Deprecated public static void blend(long c1, int c2, LXColor.Blend blendMode) { rejectInt(); }
+        @Deprecated public static void lerp(int c1, long c2) { rejectInt(); }
+        @Deprecated public static void lerp(long c1, int c2) { rejectInt(); }
+        @Deprecated public static void lerp(int c1, long c2, float amount) { rejectInt(); }
+        @Deprecated public static void lerp(long c1, int c2, float amount) { rejectInt(); }
+        @Deprecated public static void lerp(int c1, long c2, double amount) { rejectInt(); }
+        @Deprecated public static void lerp(long c1, int c2, double amount) { rejectInt(); }
+        @Deprecated public static void lerp(int c1, long c2, int alpha) { rejectInt(); }
+        @Deprecated public static void lerp(long c1, int c2, int alpha) { rejectInt(); }
+        @Deprecated public static void add(int c1, long c2) { rejectInt(); }
+        @Deprecated public static void add(long c1, int c2) { rejectInt(); }
+        @Deprecated public static void subtract(int c1, long c2) { rejectInt(); }
+        @Deprecated public static void subtract(long c1, int c2) { rejectInt(); }
+        @Deprecated public static void multiply(int c1, long c2) { rejectInt(); }
+        @Deprecated public static void multiply(long c1, int c2) { rejectInt(); }
+        @Deprecated public static void screen(int c1, long c2) { rejectInt(); }
+        @Deprecated public static void screen(long c1, int c2) { rejectInt(); }
+        @Deprecated public static void lightest(int c1, long c2) { rejectInt(); }
+        @Deprecated public static void lightest(long c1, int c2) { rejectInt(); }
+        @Deprecated public static void darkest(int c1, long c2) { rejectInt(); }
+        @Deprecated public static void darkest(long c1, int c2) { rejectInt(); }
+        @Deprecated public static void lerp(int c1, long c2, int alpha, long mask) { rejectInt(); }
+        @Deprecated public static void lerp(long c1, int c2, int alpha, long mask) { rejectInt(); }
+
+        private static void rejectInt() {
+                throw new UnsupportedOperationException("LXColor16 does not accept ints");
+        }
 }
