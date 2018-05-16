@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Map;
 
 import com.symmetrylabs.util.NetworkUtils;
-import com.symmetrylabs.util.listenable.ListenableList;
+import com.symmetrylabs.util.listenable.ListenableSet;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 
 import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS;
@@ -15,7 +15,7 @@ import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIF
 import static com.symmetrylabs.slstudio.network.OpcMessage.SYMMETRY_LABS_IDENTIFY_REPLY;
 
 public class NetworkScanner {
-    public final ListenableList<NetworkDevice> deviceList = new ListenableList<NetworkDevice>();
+    public final ListenableSet<NetworkDevice> deviceList = new ListenableSet<NetworkDevice>();
 
     protected Map<String, NetworkDevice> deviceMap = new HashMap<>();
     protected Map<String, Long> lastReplyMillis = new HashMap<>();

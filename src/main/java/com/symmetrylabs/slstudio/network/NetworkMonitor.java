@@ -6,14 +6,14 @@ import java.util.TimerTask;
 import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
 
+import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 
 import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.listenable.AbstractListListener;
-import com.symmetrylabs.util.listenable.ListenableList;
+import com.symmetrylabs.util.listenable.ListenableSet;
 
 public class NetworkMonitor {
-    public final ListenableList<NetworkDevice> deviceList;
+    public final ListenableSet<NetworkDevice> deviceList;
 
     private final NetworkScanner networkScanner;
     private final Timer timer = new Timer();
@@ -37,8 +37,8 @@ public class NetworkMonitor {
         networkScanner = new NetworkScanner(dispatcher);
         deviceList = networkScanner.deviceList;
 
-        deviceList.addListener(new AbstractListListener<NetworkDevice>() {
-            public void itemAdded(int index, final NetworkDevice newDevice) {
+        deviceList.addListener(new SetListener<NetworkDevice>() {
+            public void onItemAdded(final NetworkDevice newDevice) {
                 if (newDevice.versionId.isEmpty()) {
                     warnOldVersion();
                 }
@@ -61,6 +61,7 @@ public class NetworkMonitor {
                 });
                 }
             }
+            public void onItemRemoved(final NetworkDevice device) { }
         });
     }
 

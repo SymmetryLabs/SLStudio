@@ -19,7 +19,7 @@ public class LayoutRegistry {
         return builders.getOrDefault(name, DEFAULT_BUILDER).build();
     }
 
-    /** Returns a sorted list of the names of available layouts. */
+    /** Returns a sorted set of the names of available layouts. */
     public static List<String> getNames() {
         Map<String, LayoutBuilder> builders = new HashMap<>();
         registerLayouts(null, builders);

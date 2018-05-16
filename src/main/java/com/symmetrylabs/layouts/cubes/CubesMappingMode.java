@@ -7,6 +7,7 @@ import java.util.WeakHashMap;
 import java.lang.ref.WeakReference;
 
 import com.symmetrylabs.layouts.cubes.patterns.CubesMappingPattern;
+import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXChannel;
@@ -14,9 +15,6 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.color.LXColor;
-
-import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.util.listenable.ListListener;
 
 /**
  * Mapping Mode
@@ -90,8 +88,8 @@ public class CubesMappingMode {
         CubesLayout layout = CubesLayout.getInstance(lx);
 
         if (layout != null) {
-            layout.addControllerListListener(new ListListener<CubesController>() {
-                public void itemAdded(final int index, final CubesController c) {
+            layout.addControllerSetListener(new SetListener<CubesController>() {
+                public void onItemAdded(final CubesController c) {
                     if (isFixtureMapped(c.id)) {
                         fixturesMappedButNotOnNetwork.remove(c.id);
                         fixturesMappedAndOnTheNetwork.add(c.id);
@@ -104,7 +102,7 @@ public class CubesMappingMode {
                     selectedUnMappedFixture.setOptions(fixturesOnNetworkButNotMapped.isEmpty() ? emptyOptions
                             : fixturesOnNetworkButNotMapped.toArray(new String[0]));
                 }
-                public void itemRemoved(final int index, final CubesController c) {}
+                public void onItemRemoved(final CubesController c) {}
             });
         }
         else {

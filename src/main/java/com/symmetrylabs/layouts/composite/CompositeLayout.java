@@ -31,12 +31,12 @@ import com.symmetrylabs.layouts.butterflies.ButterfliesModel;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.listenable.ListenableList;
-import com.symmetrylabs.util.listenable.ListListener;
+import com.symmetrylabs.util.listenable.ListenableSet;
+import com.symmetrylabs.util.listenable.SetListener;
 import com.symmetrylabs.slstudio.output.TenereDatagram;
 
 public class CompositeLayout implements Layout {
-    ListenableList<SLController> controllers = new ListenableList<>();
+    ListenableSet<SLController> controllers = new ListenableSet<>();
     CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
 
     List<CubesModel.Cube> cubes = new ArrayList<>();
@@ -262,8 +262,8 @@ public class CompositeLayout implements Layout {
          */
 
         // Put cubes on SLControllers
-        networkMonitor.deviceList.addListener(new ListListener<NetworkDevice>() {
-            public void itemAdded(int index, NetworkDevice device) {
+        networkMonitor.deviceList.addListener(new SetListener<NetworkDevice>() {
+            public void onItemAdded(NetworkDevice device) {
                 String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
                 final PointsGrouping points = new PointsGrouping(physicalId);
 
@@ -288,12 +288,13 @@ public class CompositeLayout implements Layout {
                 }
 
                 final SLController controller = new SLController(lx, device, points);
-                controllers.add(index, controller);
+                controllers.add(controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
             }
 
-            public void itemRemoved(int index, NetworkDevice device) {
-                final SLController controller = controllers.remove(index);
+            public void onItemRemoved(NetworkDevice device) {
+                final SLController controller = getControllerByDevice(device);
+                controllers.remove(controller);
                 dispatcher.dispatchNetwork(() -> {
                     //lx.removeOutput(controller);
                 });
@@ -322,6 +323,15 @@ public class CompositeLayout implements Layout {
             .addPixliteOutput(new PointsGrouping("1", butterflies.get(0).points))
             .addPixliteOutput(new PointsGrouping("2", butterflies.get(1).points))
         );
+    }
+
+    public SLController getControllerByDevice(NetworkDevice device) {
+        for (SLController controller : controllers) {
+            if (controller.networkDevice == device) {
+                return controller;
+            }
+        }
+        return null;
     }
 
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {

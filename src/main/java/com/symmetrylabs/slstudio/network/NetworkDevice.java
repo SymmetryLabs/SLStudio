@@ -17,6 +17,8 @@ public class NetworkDevice {
     public final String versionId;
     public final String deviceId;
     public final Set<String> featureIds = new HashSet<String>();
+
+    @Deprecated // Remove this field after all controllers are updated to Aura.
     public final ListenableInt version = new ListenableInt(-1);
 
     protected final static Pattern PRODUCT_VERSION = Pattern.compile("^(\\w+)/([\\w+]+)");

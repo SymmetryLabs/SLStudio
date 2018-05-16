@@ -4,7 +4,9 @@ import java.util.*;
 import java.lang.ref.WeakReference;
 
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.SLController;
 import com.symmetrylabs.util.CubePhysicalIdMap;
+import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.parameter.BooleanParameter;
@@ -15,15 +17,14 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.listenable.ListenableList;
-import com.symmetrylabs.util.listenable.ListListener;
+import com.symmetrylabs.util.listenable.ListenableSet;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class CubesLayout implements Layout {
-    ListenableList<CubesController> controllers = new ListenableList<>();
+    ListenableSet<CubesController> controllers = new ListenableSet<>();
     CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
 
     static final float globalOffsetX = 0;
@@ -157,7 +158,7 @@ public class CubesLayout implements Layout {
 
 
 // STOCK CONFIG
-    /*    // left
+/*    // left
 
         new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
 
@@ -402,18 +403,19 @@ public class CubesLayout implements Layout {
             CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
         }
 
-        networkMonitor.deviceList.addListener(new ListListener<NetworkDevice>() {
-            public void itemAdded(int index, NetworkDevice device) {
+        networkMonitor.deviceList.addListener(new SetListener<NetworkDevice>() {
+            public void onItemAdded(NetworkDevice device) {
                 String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
                 final CubesController controller = new CubesController(lx, device, physicalId);
                 controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
-                controllers.add(index, controller);
+                controllers.add(controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
                 //controller.enabled.setValue(false);
             }
 
-            public void itemRemoved(int index, NetworkDevice device) {
-                final CubesController controller = controllers.remove(index);
+            public void onItemRemoved(NetworkDevice device) {
+                final CubesController controller = getControllerByDevice(device);
+                controllers.remove(controller);
                 dispatcher.dispatchNetwork(() -> {
                     //lx.removeOutput(controller);
                 });
@@ -431,11 +433,20 @@ public class CubesLayout implements Layout {
         });
     }
 
+    public CubesController getControllerByDevice(NetworkDevice device) {
+        for (CubesController controller : controllers) {
+            if (controller.networkDevice == device) {
+                return controller;
+            }
+        }
+        return null;
+    }
+
     public Collection<CubesController> getSortedControllers() {
         return new TreeSet<CubesController>(controllers);
     }
 
-    public void addControllerListListener(ListListener<CubesController> listener) {
+    public void addControllerSetListener(SetListener<CubesController> listener) {
         controllers.addListener(listener);
     }
 

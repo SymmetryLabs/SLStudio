@@ -102,7 +102,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
     }
 
     /**
-     * Modifies a list of blobs in place, merging blobs within mergeRadius.
+     * Modifies a set of blobs in place, merging blobs within mergeRadius.
      */
     private void mergeBlobs(List<Blob> blobs, float mergeRadius) {
         boolean mergeFound;
@@ -124,7 +124,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
     }
 
     /**
-     * Returns an estimate of the velocity of a blob, given a list of previous blobs.
+     * Returns an estimate of the velocity of a blob, given a set of previous blobs.
      */
     private PVector estimateNewBlobVelocity(Blob newBlob, List<Blob> prevBlobs, float deltaSec, float maxSpeed) {
         Blob closestBlob = findClosestBlob(newBlob.pos, prevBlobs);
@@ -139,7 +139,7 @@ public class BlobTracker extends LXModulatorComponent implements LXOscListener, 
     }
 
     /**
-     * Returns a copy of the current list of blobs.
+     * Returns a copy of the current set of blobs.
      */
     public List<Blob> getBlobs() {
         List<Blob> result = new ArrayList<Blob>();

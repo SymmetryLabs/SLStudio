@@ -6,6 +6,7 @@ import java.util.ArrayList;
 import com.symmetrylabs.layouts.cubes.CubesController;
 import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
+import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.component.UIButton;
@@ -15,7 +16,6 @@ import heronarts.p3lx.ui.studio.UICollapsibleSection;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.listenable.IntListener;
-import com.symmetrylabs.util.listenable.ListListener;
 
 public class UIOutputs extends UICollapsibleSection {
         private final UIItemList.ScrollList outputList;
@@ -33,23 +33,21 @@ public class UIOutputs extends UICollapsibleSection {
                 outputList.setSingleClickActivate(true);
                 outputList.addToContainer(this);
 
-                layout.addControllerListListener(new ListListener<CubesController>() {
-                    public void itemAdded(final int index, final CubesController c) {
+                layout.addControllerSetListener(new SetListener<CubesController>() {
+                    public void onItemAdded(final CubesController c) {
                         dispatcher.dispatchUi(() -> {
                             if (c.networkDevice != null) {
                                 c.networkDevice.version.addListener(deviceVersionListener);
                             }
-
                             updateItems(layout);
                         });
                     }
 
-                    public void itemRemoved(final int index, final CubesController c) {
+                    public void onItemRemoved(final CubesController c) {
                         dispatcher.dispatchUi(() -> {
                             if (c.networkDevice != null) {
                                 c.networkDevice.version.removeListener(deviceVersionListener);
                             }
-
                             updateItems(layout);
                         });
                     }
