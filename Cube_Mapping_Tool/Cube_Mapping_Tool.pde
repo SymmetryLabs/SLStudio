@@ -417,47 +417,92 @@ addButtonColor = color(60);
 
  //saves the mapping x y coordinates to a text file that can later be used in the cube software for mapping
  
+int Cube1MappingXint = int(Cube1MappingX);
+int Cube1MappingYint = int(Cube1MappingY);
+int Cube2MappingXint = int(Cube2MappingX);
+int Cube2MappingYint = int(Cube2MappingY);
+int Cube3MappingXint = int(Cube3MappingX);
+int Cube3MappingYint = int(Cube3MappingY);
+int Cube4MappingXint = int(Cube4MappingX);
+int Cube4MappingYint = int(Cube4MappingY);
+int Cube5MappingXint = int(Cube5MappingX);
+int Cube5MappingYint = int(Cube5MappingY);
+int Cube6MappingXint = int(Cube6MappingX);
+int Cube6MappingYint = int(Cube6MappingY);
+int Cube7MappingXint = int(Cube7MappingX);
+int Cube7MappingYint = int(Cube7MappingY);
+int Cube8MappingXint = int(Cube8MappingX);
+int Cube8MappingYint = int(Cube8MappingY);
+int Cube9MappingXint = int(Cube9MappingX);
+int Cube9MappingYint = int(Cube9MappingY);
+int Cube10MappingXint = int(Cube10MappingX);
+int Cube10MappingYint = int(Cube10MappingY);
+int Cube11MappingXint = int(Cube11MappingX);
+int Cube11MappingYint = int(Cube11MappingY);
+int Cube12MappingXint = int(Cube12MappingX);
+int Cube12MappingYint = int(Cube12MappingY);
+int Cube13MappingXint = int(Cube13MappingX);
+int Cube13MappingYint = int(Cube13MappingY);
+int Cube14MappingXint = int(Cube14MappingX);
+int Cube14MappingYint = int(Cube14MappingY);
+int Cube15MappingXint = int(Cube15MappingX);
+int Cube15MappingYint = int(Cube15MappingY);
+int Cube16MappingXint = int(Cube16MappingX);
+int Cube16MappingYint = int(Cube16MappingY);
+int Cube17MappingXint = int(Cube17MappingX);
+int Cube17MappingYint = int(Cube17MappingY);
+int Cube18MappingXint = int(Cube18MappingX);
+int Cube18MappingYint = int(Cube18MappingY);
+int Cube19MappingXint = int(Cube19MappingX);
+int Cube19MappingYint = int(Cube19MappingY);
+int Cube20MappingXint = int(Cube20MappingX);
+int Cube20MappingYint = int(Cube20MappingY);
 
- String Cube1MappingXString = str(Cube1MappingX) + " ";
- String Cube1MappingYString = str(Cube1MappingY) + " ";
- String Cube2MappingXString = str(Cube2MappingX) + " ";
- String Cube2MappingYString = str(Cube2MappingY) + " ";
- String Cube3MappingXString = str(Cube3MappingX) + " ";
- String Cube3MappingYString = str(Cube3MappingY) + " ";
- String Cube4MappingXString = str(Cube4MappingX) + " ";
- String Cube4MappingYString = str(Cube4MappingY) + " ";
- String Cube5MappingXString = str(Cube5MappingX) + " ";
- String Cube5MappingYString = str(Cube5MappingY) + " ";
- String Cube6MappingXString = str(Cube6MappingX) + " ";
- String Cube6MappingYString = str(Cube6MappingY) + " ";
- String Cube7MappingXString = str(Cube7MappingX) + " ";
- String Cube7MappingYString = str(Cube7MappingY) + " ";
- String Cube8MappingXString = str(Cube8MappingX) + " ";
- String Cube8MappingYString = str(Cube8MappingY) + " ";
- String Cube9MappingXString = str(Cube9MappingX) + " ";
- String Cube9MappingYString = str(Cube9MappingY) + " ";
- String Cube10MappingXString = str(Cube10MappingX) + " ";
- String Cube10MappingYString = str(Cube10MappingY) + " ";
- String Cube11MappingXString = str(Cube11MappingX) + " ";
- String Cube11MappingYString = str(Cube11MappingY) + " ";
- String Cube12MappingXString = str(Cube12MappingX) + " ";
- String Cube12MappingYString = str(Cube12MappingY) + " ";
- String Cube13MappingXString = str(Cube13MappingX) + " ";
- String Cube13MappingYString = str(Cube13MappingY) + " ";
- String Cube14MappingXString = str(Cube14MappingX) + " ";
- String Cube14MappingYString = str(Cube14MappingY) + " ";
- String Cube15MappingXString = str(Cube15MappingX) + " ";
- String Cube15MappingYString = str(Cube15MappingY) + " ";
- String Cube16MappingXString = str(Cube16MappingX) + " ";
- String Cube16MappingYString = str(Cube16MappingY) + " ";
- String Cube17MappingXString = str(Cube17MappingX) + " ";
- String Cube17MappingYString = str(Cube17MappingY) + " ";
- String Cube18MappingXString = str(Cube18MappingX) + " ";
- String Cube18MappingYString = str(Cube18MappingY) + " ";
- String Cube19MappingXString = str(Cube19MappingX) + " ";
- String Cube19MappingYString = str(Cube19MappingY) + " ";
- String Cube20MappingXString = str(Cube20MappingX) + " ";
- String Cube20MappingYString = str(Cube20MappingY) + " ";
+
+
+
+
+
+ String Cube1MappingXString = str(Cube1MappingXint) + " ";
+ String Cube1MappingYString = str(Cube1MappingYint) + " ";
+ String Cube2MappingXString = str(Cube2MappingXint) + " ";
+ String Cube2MappingYString = str(Cube2MappingYint) + " ";
+ String Cube3MappingXString = str(Cube3MappingXint) + " ";
+ String Cube3MappingYString = str(Cube3MappingYint) + " ";
+ String Cube4MappingXString = str(Cube4MappingXint) + " ";
+ String Cube4MappingYString = str(Cube4MappingYint) + " ";
+ String Cube5MappingXString = str(Cube5MappingXint) + " ";
+ String Cube5MappingYString = str(Cube5MappingYint) + " ";
+ String Cube6MappingXString = str(Cube6MappingXint) + " ";
+ String Cube6MappingYString = str(Cube6MappingYint) + " ";
+ String Cube7MappingXString = str(Cube7MappingXint) + " ";
+ String Cube7MappingYString = str(Cube7MappingYint) + " ";
+ String Cube8MappingXString = str(Cube8MappingXint) + " ";
+ String Cube8MappingYString = str(Cube8MappingYint) + " ";
+ String Cube9MappingXString = str(Cube9MappingXint) + " ";
+ String Cube9MappingYString = str(Cube9MappingYint) + " ";
+ String Cube10MappingXString = str(Cube10MappingXint)  + " ";
+ String Cube10MappingYString = str(Cube10MappingYint)  + " ";
+ String Cube11MappingXString = str(Cube11MappingXint)  + " ";
+ String Cube11MappingYString = str(Cube11MappingYint)  + " ";
+ String Cube12MappingXString = str(Cube12MappingXint)  + " ";
+ String Cube12MappingYString = str(Cube12MappingYint)  + " ";
+ String Cube13MappingXString = str(Cube13MappingXint)  + " ";
+ String Cube13MappingYString = str(Cube13MappingYint)  + " ";
+ String Cube14MappingXString = str(Cube14MappingXint)  + " ";
+ String Cube14MappingYString = str(Cube14MappingYint)  + " ";
+ String Cube15MappingXString = str(Cube15MappingX)  + " ";
+ String Cube15MappingYString = str(Cube15MappingY)  + " ";
+ String Cube16MappingXString = str(Cube16MappingX)  + " ";
+ String Cube16MappingYString = str(Cube16MappingY)  + " ";
+ String Cube17MappingXString = str(Cube17MappingX)  + " ";
+ String Cube17MappingYString = str(Cube17MappingY)  + " ";
+ String Cube18MappingXString = str(Cube18MappingX)  + " ";
+ String Cube18MappingYString = str(Cube18MappingY)  + " ";
+ String Cube19MappingXString = str(Cube19MappingX)  + " ";
+ String Cube19MappingYString = str(Cube19MappingY)  + " ";
+ String Cube20MappingXString = str(Cube20MappingX)  + " ";
+ String Cube20MappingYString = str(Cube20MappingY)  + " ";
 
 
 //converts the floats of the x y data into strings (saveStrings can only save data into a txt if its a string)
@@ -1183,6 +1228,8 @@ public void mouseDragged() {
     square10Y += delta10Y;
    }
  
+
+
 
 if (mouseinSquare11) {
     float delta11X = mouseX - pmouseX;
