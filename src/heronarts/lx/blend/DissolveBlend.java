@@ -21,11 +21,28 @@
 package heronarts.lx.blend;
 
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 
 public class DissolveBlend extends LXBlend {
 
     public DissolveBlend(LX lx) {
         super(lx);
+    }
+
+    public void blend(PolyBuffer base, PolyBuffer overlay,
+                                        double alpha, PolyBuffer dest, PolyBuffer.Space space) {
+        switch (space) {
+            case RGB8:
+                blend((int[]) base.getArray(space), (int[]) overlay.getArray(space),
+                                alpha, (int[]) dest.getArray(space));
+                dest.markModified(space);
+                break;
+            case RGB16:
+                blend16((long[]) base.getArray(space), (long[]) overlay.getArray(space),
+                                alpha, (long[]) dest.getArray(space));
+                dest.markModified(space);
+                break;
+        }
     }
 
     @Override
@@ -37,6 +54,18 @@ public class DissolveBlend extends LXBlend {
             output[i] = 0xff << ALPHA_SHIFT |
                     ((dst[i] & RB_MASK) * dstAlpha + (src[i] & RB_MASK) * srcAlpha) >>> 8 & RB_MASK |
                     ((dst[i] & G_MASK) * dstAlpha + (src[i] & G_MASK) * srcAlpha) >>> 8 & G_MASK;
+        }
+    }
+
+    @Override
+    public void blend16(long[] dst, long[] src, double alpha, long[] output) {
+        int srcAlpha = (int) (alpha * 0x8000);
+        for (int i = 0; i < src.length; ++i) {
+            long dstAlpha = 0x10000 - srcAlpha;
+
+            output[i] = 0xffff << ALPHA_SHIFT16 |
+                            ((dst[i] & RB_MASK16) * dstAlpha + (src[i] & RB_MASK16) * srcAlpha) >>> 16 & RB_MASK16 |
+                            ((dst[i] & G_MASK16) * dstAlpha + (src[i] & G_MASK16) * srcAlpha) >>> 16 & G_MASK16;
         }
     }
 }
