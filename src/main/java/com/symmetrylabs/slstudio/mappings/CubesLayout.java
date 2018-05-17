@@ -71,19 +71,21 @@ static final float smallCluster1_RotationZ = 0;
 static final TowerConfig[] SMALL_CLUSTER_1 = {
     
     // 500
-    new TowerConfig(    0-15,     0,     0,    45, new String[] {"323"}),
-    new TowerConfig(41-24-15,    25,    -7,     0, new String[] {"335"}), // square
-    new TowerConfig(    0-15,    50,     0,    45, new String[] {"185"}),
+    new TowerConfig(    0-15,     0,     0,    45, new String[] {"318"}),
+    new TowerConfig(41-24-15,    25,    -7,     0, new String[] {"341"}), // square
+    new TowerConfig(    0-15,    50,     0,    45, new String[] {"354"}),
+
+        // 400
+    new TowerConfig(21+9,     0,    27,    45, new String[] {"181"}),
+    new TowerConfig(21+17+9, 25,  27-7,     0, new String[] {"18"}), // square
+    new TowerConfig(21+9,    50,    27,    45, new String[] {"121"}),
 
     // 510
-    new TowerConfig(43+18,     0,     0,    45, new String[] {"181"}),
-    new TowerConfig(43+17+18, 25,    -7,     0, new String[] {"157"}), // square
-    new TowerConfig(43+18,    50,     0,    45, new String[] {"15"}),
+    new TowerConfig(43+18,     0,     0,    45, new String[] {"308"}),
+    new TowerConfig(43+17+18, 25,    -7,     0, new String[] {"51"}), // square
+    new TowerConfig(43+18,    50,     0,    45, new String[] {"70"}),
 
-    // 400
-    new TowerConfig(21+9,     0,    27,    45, new String[] {"113"}),
-    new TowerConfig(21+17+9, 25,  27-7,     0, new String[] {"131"}), // square
-    new TowerConfig(21+9,    50,    27,    45, new String[] {"356"}),
+
 
 };
 
@@ -100,53 +102,56 @@ static final float smallCluster2_RotationZ = 0;
 static final TowerConfig[] SMALL_CLUSTER_2 = {
 
     // 520
-    new TowerConfig(0-18,     0,     0,  45, new String[] {"308"}),
-    new TowerConfig(0-7-18,  25,    17,  90, new String[] {"318"}), // square
-    new TowerConfig(0-18,    50,     0,  45, new String[] {"71"}),
+    new TowerConfig(0-18,     0,     0,  45, new String[] {"120"}),
+    new TowerConfig(0-7-18,  25,    17,  90, new String[] {"197"}), // square
+    new TowerConfig(0-18,    50,     0,  45, new String[] {"85"}),
+
+ //410
+    new TowerConfig(21-9,    0,    27,  45, new String[] {"55"}),
+    new TowerConfig(21-7-9, 25, 27+17,  90, new String[] {"39"}), // square
+    new TowerConfig(21-9,   50,    27,  45, new String[] {"111"}),
 
     // 530
-    new TowerConfig(43,    0,     0,  45, new String[] {"137"}),
-    new TowerConfig(43-7, 25,    17,  90, new String[] {"91"}), // square
-    new TowerConfig(43,   50,     0,  45, new String[] {"14"}),
+    new TowerConfig(43,    0,     0,  45, new String[] {"14"}),
+    new TowerConfig(43-7, 25,    17,  90, new String[] {"35"}), // square
+    new TowerConfig(43,   50,     0,  45, new String[] {"326"}),
 
-    //410
-    new TowerConfig(21-9,    0,    27,  45, new String[] {"341"}),
-    new TowerConfig(21-7-9, 25, 27+17,  90, new String[] {"36"}), // square
-    new TowerConfig(21-9,   50,    27,  45, new String[] {"11"}),
+ 
 
 };
 
 static final TowerConfig[] TOWER_CONFIG = {
-
+//d8:80:39:9b:8:33
+//335? 
     // back row (HOUSE LEFT TO HOUSE RIGHT)
-    new TowerConfig(40, 0, 0, 45, new String[] {"352", "367", "132", "9"}),  // 100
-    new TowerConfig(80, 0, 0, 45, new String[] {"357", "320", "46", "55", "163"}),  // 110
-    new TowerConfig(120, 0, 0, 45, new String[] {"37", "66", "44", "123", "105", "70"}),  // 120
-    new TowerConfig(160, 0, 0, 45, new String[] {"184", "61", "128", "337", "205", "4"}),  // 130
-    new TowerConfig(200, 0, 0, 45, new String[] {"122", "330", "34", "52", "321"}),  // 140
-    new TowerConfig(240, 0, 0, 45, new String[] {"73", "159", "25", "39"}),  // 150
+    new TowerConfig(40, 0, 0, 45, new String[] {"135", "362", "182", "46"}),  // 100   1 46
+    new TowerConfig(80, 0, 0, 45, new String[] {"d8:80:39:9b:23:ad", "314", "198", "132", "56"}),  // 110 2
+    new TowerConfig(120, 0, 0, 45, new String[] {"25", "205", "335", "66", "356", "365"}),  // 120 3 
+    new TowerConfig(160, 0, 0, 45, new String[] {"105", "113", "123", "202", "384", "389"}),  // 130 4
+    new TowerConfig(200, 0, 0, 45, new String[] {"122", "330", "34", "52", "329"}),  // 140 5
+    new TowerConfig(240, 0, 0, 45, new String[] {"94", "157", "391", "37"}),  // 150 6
 
     // front row (HOUSE LEFT TO HOUSE RIGHT)
-    new TowerConfig(100, 0, -25, 45, new String[] {"174", "365", "76", "51", "31"}),  // 200
-    new TowerConfig(140, 0, -25, 45, new String[] {"134", "358", "77", "86", "69"}),  // 210
-    new TowerConfig(180, 0, -25, 45, new String[] {"23", "191", "22", "81", "362"}),  // 220
+    new TowerConfig(100, 0, -25, 45, new String[] {"174", "9", "d8:80:39:9b:8:33", "73", "31"}),  // 200
+    new TowerConfig(140, 0, -25, 45, new String[] {"86", "358", "77", "408", "69"}),  // 210
+    new TowerConfig(180, 0, -25, 45, new String[] {"81", "320", "22", "191", "23"}),  // 220
 
     // front single tower (behind drummer)
     //new TowerConfig(140, 0, -67, 45, new String[] {"354", "408", "202", "121"}),  // 300
 
     // HOUSE LEFT truss
     new TowerConfig(12, JUMP*3, -144, 0, new String[] {"412"}),  // 601
-    new TowerConfig(-14, JUMP*2, -160, 0, new String[] {"408"}),  // 602
+    new TowerConfig(-14, JUMP*2, -160, 0, new String[] {"163"}),  // 602
 
     // HOUSE RIGHT truss
-    new TowerConfig(296-16-20, JUMP*3, -124, 90, new String[] {"5"}),  // 603
-    new TowerConfig(340-12-48, JUMP*2, -140, 90, new String[] {"314"}),  // 604
+    new TowerConfig(296-16-20, JUMP*3, -124, 90, new String[] {"126"}),  // 603
+    new TowerConfig(340-12-48, JUMP*2, -140, 90, new String[] {"71"}),  // 604
 
     // HOUSE LEFT floor
-    new TowerConfig(-58-24, 0, -270, 45, new String[] {"43"}),  // 605
+    new TowerConfig(-58-24, 0, -270, 45, new String[] {"61"}),  // 605
 
     // HOUSE RIGHT floor
-    new TowerConfig(319+48, 0, -270, 45, new String[] {"389"}),  // 606
+    new TowerConfig(319+48, 0, -270, 45, new String[] {"5"}),  // 606
 
 };
 
