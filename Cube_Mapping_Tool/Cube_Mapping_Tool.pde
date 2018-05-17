@@ -491,18 +491,18 @@ int Cube20MappingYint = int(Cube20MappingY);
  String Cube13MappingYString = str(Cube13MappingYint)  + " ";
  String Cube14MappingXString = str(Cube14MappingXint)  + " ";
  String Cube14MappingYString = str(Cube14MappingYint)  + " ";
- String Cube15MappingXString = str(Cube15MappingX)  + " ";
- String Cube15MappingYString = str(Cube15MappingY)  + " ";
- String Cube16MappingXString = str(Cube16MappingX)  + " ";
- String Cube16MappingYString = str(Cube16MappingY)  + " ";
- String Cube17MappingXString = str(Cube17MappingX)  + " ";
- String Cube17MappingYString = str(Cube17MappingY)  + " ";
- String Cube18MappingXString = str(Cube18MappingX)  + " ";
- String Cube18MappingYString = str(Cube18MappingY)  + " ";
- String Cube19MappingXString = str(Cube19MappingX)  + " ";
- String Cube19MappingYString = str(Cube19MappingY)  + " ";
- String Cube20MappingXString = str(Cube20MappingX)  + " ";
- String Cube20MappingYString = str(Cube20MappingY)  + " ";
+ String Cube15MappingXString = str(Cube15MappingXint)  + " ";
+ String Cube15MappingYString = str(Cube15MappingYint)  + " ";
+ String Cube16MappingXString = str(Cube16MappingXint)  + " ";
+ String Cube16MappingYString = str(Cube16MappingYint)  + " ";
+ String Cube17MappingXString = str(Cube17MappingXint)  + " ";
+ String Cube17MappingYString = str(Cube17MappingYint)  + " ";
+ String Cube18MappingXString = str(Cube18MappingXint)  + " ";
+ String Cube18MappingYString = str(Cube18MappingYint)  + " ";
+ String Cube19MappingXString = str(Cube19MappingXint)  + " ";
+ String Cube19MappingYString = str(Cube19MappingYint)  + " ";
+ String Cube20MappingXString = str(Cube20MappingXint)  + " ";
+ String Cube20MappingYString = str(Cube20MappingYint)  + " ";
 
 
 //converts the floats of the x y data into strings (saveStrings can only save data into a txt if its a string)
