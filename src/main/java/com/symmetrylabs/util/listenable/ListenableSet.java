@@ -6,7 +6,7 @@ import java.util.*;
 
 /** A set that can be monitored for item addition or item removal. */
 public class ListenableSet<E> implements Collection<E> {
-    public final Set<E> set = new HashSet<E>();
+    public final Set<E> set = Collections.synchronizedSet(new HashSet<E>());
     private final List<SetListener<E>> listeners = new ArrayList<SetListener<E>>();
 
     public int size() {
@@ -97,12 +97,17 @@ public class ListenableSet<E> implements Collection<E> {
 
     @NotNull
     public Iterator<E> iterator() {
-        // There's no way to implement iterator().remove() in such a way that
-        // the listeners are notified, so prevent it from being called.
+        // Make a copy, to avoid ConcurrentModificationException.
+        final List<E> list;
+        synchronized (set) {
+            list = new ArrayList<>(set);
+        }
         return new Iterator<E>() {
-            Iterator<E> it = set.iterator();
+            Iterator<E> it = list.iterator();
             public boolean hasNext() { return it.hasNext(); }
             public E next() { return it.next(); }
+            // There's no way to implement iterator().remove() in such a way that
+            // the listeners are notified, so prevent it from being called.
             public void remove() {
                 throw new UnsupportedOperationException();
             }

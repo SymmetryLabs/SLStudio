@@ -46,16 +46,15 @@ public class NetworkScanner {
     public void expireDevices() {
         dispatcher.dispatchEngine(new Runnable() {
             public void run() {
-                List<NetworkDevice> expiredDevices = new ArrayList<>();
                 long now = System.currentTimeMillis();
-                for (String addr : deviceMap.keySet()) {
+                List<String> addrs = new ArrayList<>(deviceMap.keySet());  // avoid ConcurrentModificationException
+                for (String addr : addrs) {
                     if (now > lastReplyMillis.get(addr) + MAX_MILLIS_WITHOUT_REPLY) {
-                        expiredDevices.add(deviceMap.get(addr));
+                        deviceList.remove(deviceMap.get(addr));
                         deviceMap.remove(addr);
                         lastReplyMillis.remove(addr);
                     }
                 }
-                deviceList.removeAll(expiredDevices);
             }
         });
     }
@@ -68,7 +67,7 @@ public class NetworkScanner {
 
                 NetworkDevice existing = deviceMap.get(addr);
                 if (!newDevice.equals(existing)) {
-                    // Some controllers reply to both commands, once with a product ID
+                    // Some controllers reply to both commands,     once with a product ID
                     // and once without.  Keep the reply with the product ID.
                     if (existing != null && newDevice.deviceId.equals(existing.deviceId) &&
                         !existing.productId.isEmpty()) {
