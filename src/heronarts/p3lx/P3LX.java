@@ -30,6 +30,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
 import heronarts.lx.ModelBuffer;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.model.GridModel;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.StripModel;
@@ -39,6 +40,9 @@ import processing.core.PConstants;
 import processing.core.PGraphics;
 
 import java.lang.reflect.Modifier;
+
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
  * Harness to run LX inside a Processing 2 sketch
@@ -71,7 +75,10 @@ public class P3LX extends LX {
     /**
      * Internal buffer for colors, owned by Processing animation thread.
      */
-    private final ModelBuffer buffer;
+    private final PolyBuffer buffer;
+
+    /** Color space for preview rendering.  Must be RGB8 or SRGB8. */
+    private final PolyBuffer.Space UI_COLOR_SPACE = SRGB8;
 
     /**
      * The current frame's colors, either from the engine or the buffer. Note that
@@ -123,8 +130,8 @@ public class P3LX extends LX {
             }
         }
 
-        this.buffer = new ModelBuffer(this);
-        this.colors = this.engine.getUIBufferNonThreadSafe();
+        this.buffer = new PolyBuffer(this);
+        this.colors = (int[]) buffer.getArray(UI_COLOR_SPACE);
         LX.initTimer.log("P3LX: ModelBuffer");
 
         this.ui = buildUI();
@@ -200,7 +207,7 @@ public class P3LX extends LX {
             // triggered by some action on the engine thread itself. It's okay
             // if this happens, worst side effect is the UI getting the last frame
             // from the copy buffer.
-            this.engine.copyUIBuffer(this.colors = this.buffer.getArray());
+            this.engine.copyUIBuffer(this.buffer, UI_COLOR_SPACE);
             if (this.flags.showFramerate) {
                 frameRateStr =
                     "Engine: " + this.engine.frameRate() + " " +
@@ -215,7 +222,7 @@ public class P3LX extends LX {
             // We don't need to worry about lock contention because we are
             // currently on the only thread that *could* start the engine.
             this.engine.run();
-            this.colors = this.engine.getUIBufferNonThreadSafe();
+            this.colors = (int[]) this.engine.getUIPolyBufferNonThreadSafe().getArray(UI_COLOR_SPACE);
             if (this.flags.showFramerate) {
                 frameRateStr = "Framerate: " + this.applet.frameRate;
                 if (this.engine.isNetworkMultithreaded.isOn()) {
