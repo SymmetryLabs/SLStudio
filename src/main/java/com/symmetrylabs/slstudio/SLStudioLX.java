@@ -7,16 +7,11 @@ import com.google.gson.JsonObject;
 
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.slstudio.ui.*;
+import heronarts.lx.*;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.event.KeyEvent;
 
-import heronarts.lx.LX;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXPattern;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXSerializable;
-import heronarts.lx.LXMappingEngine;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.effect.FlashEffect;
@@ -45,6 +40,9 @@ import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.util.MarkerSource;
 
 import javax.swing.*;
+
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
 
 public class SLStudioLX extends P3LX {
     public static final String COPYRIGHT = "Symmetry Labs";
@@ -186,15 +184,17 @@ public class SLStudioLX extends P3LX {
                                 toggleHelpBar = true;
                                 break;
                             case '\\':
-                                lx.engine.colorSpace.increment(true);
+                                PolyBuffer.Space space = lx.engine.colorSpace.getEnum() == RGB16 ? RGB8 : RGB16;
+                                lx.engine.colorSpace.setValue(space);
                                 for (LXChannel channel : lx.engine.channels) {
-                                    channel.colorSpace.setValue(lx.engine.colorSpace.getValue());
+                                    channel.colorSpace.setValue(space);
                                 }
                                 break;
                             case '|':
                                 if (engine.getFocusedChannel() instanceof LXChannel) {
                                     LXChannel channel = (LXChannel) engine.getFocusedChannel();
-                                    channel.colorSpace.increment(true);
+                                    space = channel.colorSpace.getEnum() == RGB16 ? RGB8 : RGB16;
+                                    channel.colorSpace.setValue(space);
                                 }
                                 break;
                         }
