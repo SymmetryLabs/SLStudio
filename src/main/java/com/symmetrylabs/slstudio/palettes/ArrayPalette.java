@@ -40,6 +40,6 @@ public class ArrayPalette implements ColorPalette {
         double index = clamp(p, 0, 1) * (colors.length - 1);
         int low = (int) Math.floor(index);
         int high = (low + 1) < colors.length ? low + 1 : low;
-        return LXColor16.lerp(LXColor.toLong(colors[low]), LXColor.toLong(colors[high]), index - low);
+        return LXColor16.lerp(LXColor.rgb8ToRgb16(colors[low]), LXColor.rgb8ToRgb16(colors[high]), index - low);
     }
 }

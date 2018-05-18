@@ -87,7 +87,7 @@ public abstract class DPat extends SLPattern<SLModel> {
 
     /** To write a pattern that generates 16-bit colors, implement CalcPoint16. */
     protected long CalcPoint16(PVector p) {
-        return LXColor.toLong(CalcPoint(p));
+        return LXColor.rgb8ToRgb16(CalcPoint(p));
     }
 
     public int blend3(int c1, int c2, int c3) {

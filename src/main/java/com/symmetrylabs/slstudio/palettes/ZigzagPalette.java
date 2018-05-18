@@ -106,7 +106,7 @@ public class ZigzagPalette implements ColorPalette {
         if (cutoff != 0) {
             double value = (LXColor16.red(c) + LXColor16.green(c) + LXColor16.blue(c)) / (65535.0 * 3);
             if (value < cutoff) return 0;
-            c = LXColor16.lerp(0, c, Math.pow(
+            c = LXColor16.lerp(0L, c, Math.pow(
                 (value - cutoff) / (1.0 - cutoff), 0.5 * cutoff));
         }
         return c;

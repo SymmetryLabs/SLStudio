@@ -14,11 +14,11 @@ class ConstantPalette implements ColorPalette {
     }
 
     ConstantPalette(int c) {
-        this(LXColor.toLong(c));
+        this(LXColor.rgb8ToRgb16(c));
     }
 
     public int getColor(double p) {
-        return LXColor16.toInt(c);
+        return LXColor16.toRgb8(c);
     }
 
     public long getColor16(double p) {
