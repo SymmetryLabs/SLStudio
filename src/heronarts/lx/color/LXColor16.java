@@ -1,6 +1,10 @@
 package heronarts.lx.color;
 
-/** Various utilities that operate on 64-bit integers representing RGBA colors */
+/**
+ * Various utilities that operate on 64-bit integers representing RGBA colors.
+ * Deprecated: Soon to be replaced by Ops16.
+ */
+@Deprecated
 public class LXColor16 {
     private LXColor16() {
         throw new UnsupportedOperationException("This is a static utility class");

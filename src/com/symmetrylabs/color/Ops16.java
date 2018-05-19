@@ -3,9 +3,9 @@ package com.symmetrylabs.color;
 /**
  * Operations on 16-bit-per-channel color values packed into 64-bit integers.
  * Unlike LXColor16, all routines in Ops16 follow these consistent rules:
- *   - Integer components are always in the range from 0 to 65535.
- *   - Double components are always in the range from 0.0 to 1.0 (never 0 to 100 or 0 to 360).
- *   - All floating-point numbers are doubles (no single-precision floats).
+ *   - Integer components are always ints in the range from 0 to 65535.
+ *   - Double components are always doubles in the range from 0.0 to 1.0
+ *         (no single-precision floats, and never 0 to 100 or 0 to 360).
  *   - Floating-point numbers are rounded always to the nearest integer (never truncated).
  */
 public class Ops16 {
@@ -18,30 +18,19 @@ public class Ops16 {
         long apply(long base, long overlay, double alpha);
     }
 
-    private static int min(int a, int b) { return a < b ? a : b; }
-    private static int max(int a, int b) { return a > b ? a : b; }
-    private static long clamp(int x) { return (x < 0 ? 0 : x > 65535 ? 65535 : x); }
-
-    public static int alpha(long argb) { return (int) ((argb & 0xffff000000000000L) >>> 48); }
-    public static int red(long argb) { return (int) ((argb & 0x0000ffff00000000L) >>> 32); }
-    public static int green(long argb) { return (int) ((argb & 0x00000000ffff0000L) >>> 16); }
-    public static int blue(long argb) { return (int) (argb & 0x000000000000ffffL); }
+    public static final int MAX = 0xffff;
+    public static final long BLACK = rgba(0, 0, 0, MAX);
+    public static final long WHITE = rgba(MAX, MAX, MAX, MAX);
 
     public static long rgba(int r, int g, int b, int a) {
         return (clamp(a) << 48) | (clamp(r) << 32) | (clamp(g) << 16) | clamp(b);
     }
+    public static long gray(double level) { return multiply(WHITE, level); }
 
-    /** Returns the brightest channel as a level from 0.0 to 1.0. */
-    public static double level(long argb) {
-        int value = max(max(red(argb), green(argb)), blue(argb));
-        return (double) value / 65535;
-    }
-
-    /** Returns a gray color value, given a brightness from 0.0 to 1.0. */
-    public static long gray(double v) {
-        int value = (int) (65535 * v + 0.5);
-        return rgba(value, value, value, 0xffff);
-    }
+    public static int alpha(long argb) { return (int) ((argb & 0xffff_0000_0000_0000L) >>> 48); }
+    public static int red(long argb) { return (int) ((argb & 0x0000_ffff_0000_0000L) >>> 32); }
+    public static int green(long argb) { return (int) ((argb & 0x0000_0000_ffff_0000L) >>> 16); }
+    public static int blue(long argb) { return (int) (argb & 0x0000_0000_0000_ffffL); }
 
     /** Multiplies the R, G, and B components by a factor from 0.0 to 1.0. */
     public static long multiply(long argb, double v) {
@@ -51,6 +40,17 @@ public class Ops16 {
                 (int) (blue(argb) * v + 0.5),
                 alpha(argb)
         );
+    }
+
+    /** Returns the maximum of the R, G, and B channels as a level from 0.0 to 1.0. */
+    public static double level(long argb) {
+        int value = max(max(red(argb), green(argb)), blue(argb));
+        return (double) value / MAX;
+    }
+
+    /** Returns the average of the R, G, and B channels as a level from 0.0 to 1.0. */
+    public static double mean(long argb) {
+        return (double) (red(argb) + green(argb) + blue(argb)) / 3 / MAX;
     }
 
     /**
@@ -229,7 +229,11 @@ public class Ops16 {
                 (red(c1) * ia + red(c2) * xa) >>> 16,
                 (green(c1) * ia + green(c2) * xa) >>> 16,
                 (blue(c1) * ia + blue(c2) * xa) >>> 16,
-                0xffff
+                MAX
         );
     }
+
+    private static int min(int a, int b) { return a < b ? a : b; }
+    private static int max(int a, int b) { return a > b ? a : b; }
+    private static long clamp(int x) { return (x < 0 ? 0 : x > MAX ? MAX : x); }
 }

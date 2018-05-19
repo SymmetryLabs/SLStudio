@@ -20,6 +20,8 @@ public class LXStaticBlend extends LXBlend {
 
     public void blend(PolyBuffer base, PolyBuffer overlay,
                                         double alpha, PolyBuffer dest, PolyBuffer.Space space) {
+        // Always blend in a linear color space.  Do a lower-quality 8-bit blend
+        // only if specifically requested; otherwise do a high-quality 16-bit blend.
         if (space == RGB8) {
             blend8((int[]) base.getArray(RGB8), (int[]) overlay.getArray(RGB8),
                     alpha, (int[]) dest.getArray(RGB8));

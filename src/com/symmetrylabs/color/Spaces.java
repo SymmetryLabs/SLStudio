@@ -7,7 +7,7 @@ public class Spaces {
     }
 
     // Lookup tables for srgbIntensityToValue and srgbValueToIntensity.
-    private static byte[] srgbValues = null;
+    private static int[] srgbValues = null;
     private static int[] srgbIntensities = null;
 
     // Using a cutoff of 0.0031308 as recommended by https://en.wikipedia.org/wiki/SRGB
@@ -52,9 +52,9 @@ public class Spaces {
 
     private static void initSrgbValues() {
         if (srgbValues == null) {
-            srgbValues = new byte[65536];
+            srgbValues = new int[65536];
             for (int i = 0; i < 65536; i++) {
-                srgbValues[i] = (byte) (srgbIntensityToValue(i/65535.0) * 255 + 0.5);
+                srgbValues[i] = (int) (srgbIntensityToValue(i/65535.0) * 255 + 0.5);
             }
         }
     }

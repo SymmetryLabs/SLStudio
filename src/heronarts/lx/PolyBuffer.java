@@ -50,8 +50,8 @@ public class PolyBuffer implements PolyBufferProvider {
         if (isFresh(Space.SRGB8)) return Space.SRGB8;
         if (isFresh(Space.RGB8)) return Space.RGB8;
 
-        // There should always be at least one fresh space, so we should never get here.
-        throw new IllegalStateException("Execution should never reach this point");
+        // None of the color buffers have been written to yet.
+        return null;
     }
 
     public boolean isFresh(Space space) {
@@ -75,10 +75,16 @@ public class PolyBuffer implements PolyBufferProvider {
             if (buffers.get(space) == null) {
                 buffers.put(space, createBuffer(space));
             }
-            Object dest = getArray(space);
+            // Let's be careful not to invoke getBuffer() and cause recursion!
+            Object dest = buffers.get(space).getArray();
             Space srcSpace = getBestFreshSpace();
-            Object src = getArray(srcSpace);
+            if (srcSpace == null) {
+                // The requested buffer is the first one to be touched.
+                freshSpaces.add(space);
+                return;
+            }
 
+            Object src = buffers.get(srcSpace).getArray();
             if (srcSpace == Space.RGB16 && space == Space.SRGB8) {
                 Spaces.rgb16ToSrgb8((long[]) src, (int[]) dest);
             } else if (srcSpace == Space.RGB16 && space == Space.RGB8) {
@@ -91,8 +97,7 @@ public class PolyBuffer implements PolyBufferProvider {
                 Spaces.rgb8ToRgb16((int[]) src, (long[]) dest);
             } else if (srcSpace == Space.RGB8 && space == Space.SRGB8) {
                 Spaces.rgb8ToSrgb8((int[]) src, (int[]) dest);
-            } else {
-                // There should always be at least one fresh space, so we should never get here.
+            } else {  // the case of no fresh space was already handled above
                 throw new IllegalStateException("Execution should never reach this point");
             }
             conversionCount++;

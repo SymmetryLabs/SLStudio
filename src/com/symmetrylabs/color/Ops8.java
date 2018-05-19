@@ -3,9 +3,9 @@ package com.symmetrylabs.color;
 /**
  * Operations on 8-bit-per-channel color values packed into 32-bit integers.
  * Unlike LXColor, all routines in Ops8 follow these consistent rules:
- *   - Integer components are always in the range from 0 to 255 (never negative).
- *   - Double components are always in the range from 0.0 to 1.0 (never 0 to 100 or 0 to 360).
- *   - All floating-point numbers are doubles (no single-precision floats).
+ *   - Integer components are always ints in the range from 0 to 255 (never bytes, never negative).
+ *   - Double components are always doubles in the range from 0.0 to 1.0
+ *         (no single-precision floats, and never 0 to 100 or 0 to 360).
  *   - Floating-point numbers are rounded always to the nearest integer (never truncated).
  */
 public class Ops8 {
@@ -18,30 +18,19 @@ public class Ops8 {
         int apply(int base, int overlay, double alpha);
     }
 
-    private static int min(int a, int b) { return a < b ? a : b; }
-    private static int max(int a, int b) { return a > b ? a : b; }
-    private static int clamp(int x) { return (x < 0 ? 0 : x > 255 ? 255 : x); }
+    public static final int MAX = 0xff;
+    public static final int BLACK = rgba(0, 0, 0, MAX);
+    public static final int WHITE = rgba(MAX, MAX, MAX, MAX);
+
+    public static int rgba(int r, int g, int b, int a) {
+        return (clamp(a) << 24) | (clamp(r) << 16) | (clamp(g) << 8) | clamp(b);
+    }
+    public static int gray(double level) { return multiply(WHITE, level); }
 
     public static int alpha(int argb) { return (argb & 0xff000000) >>> 24; }
     public static int red(int argb) { return (argb & 0x00ff0000) >>> 16; }
     public static int green(int argb) { return (argb & 0x0000ff00) >>> 8; }
     public static int blue(int argb) { return argb & 0x000000ff; }
-
-    public static int rgba(int r, int g, int b, int a) {
-        return (clamp(a) << 24) | (clamp(r) << 16) | (clamp(g) << 8) | clamp(b);
-    }
-
-    /** Returns the brightest channel as a level from 0.0 to 1.0. */
-    public static double level(int argb) {
-        int value = max(max(red(argb), green(argb)), blue(argb));
-        return (double) value / 255;
-    }
-
-    /** Returns a gray color value, given a gray level from 0.0 to 1.0. */
-    public static int gray(double level) {
-        int value = (int) (255 * level + 0.5);
-        return rgba(value, value, value, 0xff);
-    }
 
     /** Multiplies the R, G, and B components by a fraction from 0.0 to 1.0. */
     public static int multiply(int argb, double f) {
@@ -51,6 +40,17 @@ public class Ops8 {
                 (int) (blue(argb) * f + 0.5),
                 alpha(argb)
         );
+    }
+
+    /** Returns the maximum of the R, G, and B channels as a level from 0.0 to 1.0. */
+    public static double level(int argb) {
+        int value = max(max(red(argb), green(argb)), blue(argb));
+        return (double) value / MAX;
+    }
+
+    /** Returns the average of the R, G, and B channels as a level from 0.0 to 1.0. */
+    public static double mean(int argb) {
+        return (double) (red(argb) + green(argb) + blue(argb)) / 3 / MAX;
     }
 
     /**
@@ -229,7 +229,20 @@ public class Ops8 {
                 (red(c1) * ia + red(c2) * xa) >>> 8,
                 (green(c1) * ia + green(c2) * xa) >>> 8,
                 (blue(c1) * ia + blue(c2) * xa) >>> 8,
-                0xff
+                MAX
         );
+    }
+
+    private static int min(int a, int b) { return a < b ? a : b; }
+    private static int max(int a, int b) { return a > b ? a : b; }
+    private static int clamp(int x) { return (x < 0 ? 0 : x > MAX ? MAX : x); }
+
+    // These void-typed methods prevent accidentally calling rgba() with a byte.
+    public static void rgba(byte r, int g, int b, int a) { rejectByte(); }
+    public static void rgba(int r, byte g, int b, int a) { rejectByte(); }
+    public static void rgba(int r, int g, byte b, int a) { rejectByte(); }
+    public static void rgba(int r, int g, int b, byte a) { rejectByte(); }
+    private static void rejectByte() {
+        throw new UnsupportedOperationException("Ops8 does not accept bytes");
     }
 }
