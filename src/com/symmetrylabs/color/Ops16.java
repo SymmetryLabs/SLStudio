@@ -1,0 +1,235 @@
+package com.symmetrylabs.color;
+
+/**
+ * Operations on 16-bit-per-channel color values packed into 64-bit integers.
+ * Unlike LXColor16, all routines in Ops16 follow these consistent rules:
+ *   - Integer components are always in the range from 0 to 65535.
+ *   - Double components are always in the range from 0.0 to 1.0 (never 0 to 100 or 0 to 360).
+ *   - All floating-point numbers are doubles (no single-precision floats).
+ *   - Floating-point numbers are rounded always to the nearest integer (never truncated).
+ */
+public class Ops16 {
+    private Ops16() {
+        throw new UnsupportedOperationException("This is a static utility class");
+    }
+
+    /** A function that blends a base color with an overlay color. */
+    public interface BlendFunc {
+        long apply(long base, long overlay, double alpha);
+    }
+
+    private static int min(int a, int b) { return a < b ? a : b; }
+    private static int max(int a, int b) { return a > b ? a : b; }
+    private static long clamp(int x) { return (x < 0 ? 0 : x > 65535 ? 65535 : x); }
+
+    public static int alpha(long argb) { return (int) ((argb & 0xffff000000000000L) >>> 48); }
+    public static int red(long argb) { return (int) ((argb & 0x0000ffff00000000L) >>> 32); }
+    public static int green(long argb) { return (int) ((argb & 0x00000000ffff0000L) >>> 16); }
+    public static int blue(long argb) { return (int) (argb & 0x000000000000ffffL); }
+
+    public static long rgba(int r, int g, int b, int a) {
+        return (clamp(a) << 48) | (clamp(r) << 32) | (clamp(g) << 16) | clamp(b);
+    }
+
+    /** Returns the brightest channel as a level from 0.0 to 1.0. */
+    public static double level(long argb) {
+        int value = max(max(red(argb), green(argb)), blue(argb));
+        return (double) value / 65535;
+    }
+
+    /** Returns a gray color value, given a brightness from 0.0 to 1.0. */
+    public static long gray(double v) {
+        int value = (int) (65535 * v + 0.5);
+        return rgba(value, value, value, 0xffff);
+    }
+
+    /** Multiplies the R, G, and B components by a factor from 0.0 to 1.0. */
+    public static long multiply(long argb, double v) {
+        return rgba(
+                (int) (red(argb) * v + 0.5),
+                (int) (green(argb) * v + 0.5),
+                (int) (blue(argb) * v + 0.5),
+                alpha(argb)
+        );
+    }
+
+    /**
+     * Adjusts an integer alpha value in the range from 0 to 0xffff to fall in the
+     * range from 0 to 0x10000, such that 0x7fff yields an effective alpha of exactly
+     * 0.5, and 0xffff yields an effective alpha of exactly 1.0.  Methods that take
+     * an extended alpha argument are named with a trailing "X", like blendX().
+     */
+    private static int extendAlpha(int alpha) {
+        return alpha + (alpha >= 0x7fff ? 1 : 0);
+    }
+
+    /** Blends c1 toward c2, by the alpha of c2. */
+    public static long blend(long c1, long c2) { return blendX(c1, c2, 0x10000); }
+
+    /** Blends c1 toward c2, by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long blend(long c1, long c2, double f) { return blendX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Blends c1 toward c2, by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long blendX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a), ia = 0x10000 - xa;
+        return rgba(
+                (red(c1) * ia + red(c2) * xa) >>> 16,
+                (green(c1) * ia + green(c2) * xa) >>> 16,
+                (blue(c1) * ia + blue(c2) * xa) >>> 16,
+                alpha(c1) + a
+        );
+    }
+
+    /** Adds c2 to c1, channel by channel, using the alpha of c2. */
+    public static long add(long c1, long c2) { return addX(c1, c2, 0x10000); }
+
+    /** Adds c2 to c1, blending by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long add(long c1, long c2, double f) { return addX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Adds c2 to c1, blending by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long addX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a);
+        return rgba(
+                red(c1) + (red(c2) * xa >>> 16),
+                green(c1) + (green(c2) * xa >>> 16),
+                blue(c1) + (blue(c2) * xa >>> 16),
+                alpha(c1) + a
+        );
+    }
+
+    /** Subtracts c2 from c1, channel by channel, using the alpha of c2. */
+    public static long subtract(long c1, long c2) { return subtractX(c1, c2, 0x10000); }
+
+    /** Subtracts c2 from c1, blending by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long subtract(long c1, long c2, double f) { return subtractX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Subtracts c2 from c1, blending by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long subtractX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a);
+        return rgba(
+                red(c1) - (red(c2) * xa >>> 16),
+                green(c1) - (green(c2) * xa >>> 16),
+                blue(c1) - (blue(c2) * xa >>> 16),
+                alpha(c1) + a
+        );
+    }
+
+    /** Blends c1 toward the per-channel product of c1 and c2, by the alpha of c2. */
+    public static long multiply(long c1, long c2) { return multiplyX(c1, c2, 0x10000); }
+
+    /** Blends c1 toward the per-channel product of c1 and c2, by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long multiply(long c1, long c2, double f) { return multiplyX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Blends c1 toward the per-channel product of c1 and c2, by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long multiplyX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a), ia = 0x10000 - xa;
+        int rProd = (red(c1) + 1) * red(c2) >>> 16;
+        int gProd = (green(c1) + 1) * green(c2) >>> 16;
+        int bProd = (blue(c1) + 1) * blue(c2) >>> 16;
+        return rgba(
+                (red(c1) * ia + rProd * xa) >>> 16,
+                (green(c1) * ia + gProd * xa) >>> 16,
+                (blue(c1) * ia + bProd * xa) >>> 16,
+                alpha(c1) + a
+        );
+    }
+
+    /** Blends c1 toward the per-channel inverse product of c1 and c2, by the alpha of c2. */
+    public static long screen(long c1, long c2) { return screenX(c1, c2, 0x10000); }
+
+    /** Blends c1 toward the per-channel inverse product of c1 and c2, by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long screen(long c1, long c2, double f) { return screenX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Blends c1 toward the per-channel inverse product of c1 and c2, by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long screenX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a), ia = 0x10000 - xa;
+        int rProd = (red(c1) + 1) * red(c2) >>> 16;
+        int gProd = (green(c1) + 1) * green(c2) >>> 16;
+        int bProd = (blue(c1) + 1) * blue(c2) >>> 16;
+        return rgba(
+                (red(c1) * ia + (red(c1) + red(c2) - rProd) * xa) >>> 16,
+                (green(c1) * ia + (green(c1) + green(c2) - gProd) * xa) >>> 16,
+                (blue(c1) * ia + (blue(c1) + blue(c2) - bProd) * xa) >>> 16,
+                alpha(c1) + a
+        );
+    }
+
+    /** Blends c1 toward the per-channel lightest of c1 and c2, by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long lightest(long c1, long c2, double f) { return lightestX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Blends c1 toward the per-channel lightest of c1 and c2, by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long lightestX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a), ia = 0x10000 - xa;
+        return rgba(
+                (red(c1) * ia + max(red(c1), red(c2)) * xa) >>> 16,
+                (green(c1) * ia + max(green(c1), green(c2)) * xa) >>> 16,
+                (blue(c1) * ia + max(blue(c1), blue(c2)) * xa) >>> 16,
+                alpha(c1) + a
+        );
+    }
+
+    /** Blends c1 toward the per-channel darkest of c1 and c2, by the alpha of c2. */
+    public static long darkest(long c1, long c2) { return darkestX(c1, c2, 0x10000); }
+
+    /** Blends c1 toward the per-channel darkest of c1 and c2, by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long darkest(long c1, long c2, double f) { return darkestX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Blends c1 toward the per-channel darkest of c1 and c2, by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long darkestX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a), ia = 0x10000 - xa;
+        return rgba(
+                (red(c1) * ia + min(red(c1), red(c2)) * xa) >>> 16,
+                (green(c1) * ia + min(green(c1), green(c2)) * xa) >>> 16,
+                (blue(c1) * ia + min(blue(c1), blue(c2)) * xa) >>> 16,
+                alpha(c1) + a
+        );
+    }
+
+    /** Blends c1 toward the absolute difference between c1 and c2, by the alpha of c2. */
+    public static long difference(long c1, long c2) { return differenceX(c1, c2, 0x10000); }
+
+    /** Blends c1 toward the absolute difference between of c1 and c2, by a fraction (0.0 to 1.0) of the alpha of c2. */
+    public static long difference(long c1, long c2, double f) { return differenceX(c1, c2, (int) (f * 0x10000)); }
+
+    /** Blends c1 toward the absolute difference between of c1 and c2, by a fraction (0 to 0x10000) of the alpha of c2. */
+    private static long differenceX(long c1, long c2, int f) {
+        int a = (f * alpha(c2)) >>> 16;
+        int xa = extendAlpha(a), ia = 0x10000 - xa;
+        int rDiff = Math.abs(red(c1) - red(c2));
+        int gDiff = Math.abs(green(c1) - green(c2));
+        int bDiff = Math.abs(blue(c1) - blue(c2));
+        return rgba(
+                (red(c1) * ia + rDiff * xa) >>> 16,
+                (green(c1) * ia + gDiff * xa) >>> 16,
+                (blue(c1) * ia + bDiff * xa) >>> 16,
+                alpha(c1) + a
+        );
+    }
+
+    /**
+     * Blends c1 toward the halfway point between c1 and c2, by the specified
+     * fraction (0.0 to 1.0).  The alpha of the result is always 0xffff.
+     */
+    public static long dissolve(long c1, long c2, double f) { return dissolveX(c1, c2, (int) (f * 0x10000)); }
+
+    /**
+     * Blends c1 toward the halfway point between c1 and c2, by the specified
+     * fraction (0 to 0x10000).  The alpha of the result is always 0xffff.
+     */
+    private static long dissolveX(long c1, long c2, int f) {
+        int xa = f/2, ia = 0x10000 - xa;
+        return rgba(
+                (red(c1) * ia + red(c2) * xa) >>> 16,
+                (green(c1) * ia + green(c2) * xa) >>> 16,
+                (blue(c1) * ia + blue(c2) * xa) >>> 16,
+                0xffff
+        );
+    }
+}

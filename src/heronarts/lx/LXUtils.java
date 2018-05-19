@@ -109,61 +109,6 @@ public class LXUtils {
         }
     }
 
-    // Using a cutoff of 0.0031308 as recommended by https://en.wikipedia.org/wiki/SRGB
-    // creates a discontinuity at the cutoff point of up to 3e-08.  Using 0.003130668442501
-    // ensures that the discontinuity is less than 1e-16.
-    protected static double SRGB_TRANSFER_CUTOFF = 0.003130668442501;
-
-    /**
-     * Converts an sRGB colour channel value (v, ranging from 0 to 1)
-     * to a linear intensity (also ranging from 0 to 1).
-     *
-     * Tuned to guarantee that:
-     *     f(0.0) gives 0.0 exactly
-     *     f(1.0) gives 1.0 exactly
-     *     0.0 <= f(v) <= 1.0 for all double-precision values 0.0 <= v <= 1.0
-     *     f(v) > f(w) for all double-precision values of v > w
-     */
-    public static double srgb_value_to_intensity(double v) {
-        // See https://en.wikipedia.org/wiki/SRGB#The_reverse_transformation
-        return v <= (12.92 * SRGB_TRANSFER_CUTOFF) ? v / 12.92 :
-                Math.pow((v + 0.055) / 1.055, 2.4);
-    }
-
-    /**
-     * Converts an sRGB colour channel value (v, ranging from 0 to 1)
-     * to a linear intensity (also ranging from 0 to 1).
-     *
-     * Tuned to guarantee that:
-     *     f(0.0) gives 0.0 exactly
-     *     f(1.0) gives 1.0 exactly
-     *     0.0 <= f(i) <= 1.0 for all double-precision values 0.0 <= i <= 1.0
-     *     f(i) > f(j) - 1e16 for all double-precision values of i > j
-     */
-    public static double srgb_intensity_to_value(double i) {
-        // See https://en.wikipedia.org/wiki/SRGB#The_forward_transformation_(CIE_XYZ_to_sRGB)
-        // Due to floating-point error, 1.055 - 0.055 does not yield 1.0;
-        // subtracting 0.05499999999999999 instead of 0.055 ensures that
-        // srgb_intensity_to_value(1.0) returns exactly 1.0.
-        return i <= SRGB_TRANSFER_CUTOFF ? 12.92 * i :
-                1.055 * Math.pow(i, 1.0/2.4) - 0.05499999999999999;
-    }
-
-    /**
-     * Converts a CIELAB perceived lightness value (L, ranging from 0 to 1)
-     * to a CIEXYZ linear luminance value (Y, also ranging from 0 to 1).
-     */
-    public static double cie_lightness_to_luminance(double l) {
-        // See https://en.wikipedia.org/wiki/CIELAB_color_space#Reverse_transformation
-        // The values of t and delta have been scaled up by 29 to avoid
-        // floating-point error.  This formulation is designed to yield
-        // exactly 0.0 and 1.0 for inputs of 0.0 and 1.0, and to make it
-        // easy to see that both parts have the same value and same first
-        // derivative at the crossover point where t = 6 (l = 0.08).
-        double t = l * 25 + 4;  // t ranges from 4 to 29
-        return (t > 6 ? t * t * t : 3*(t - 4) * 6 * 6) / (29 * 29 * 29);
-    }
-
     public static class LookupTable {
 
         public interface Function {

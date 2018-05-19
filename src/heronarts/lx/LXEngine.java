@@ -23,6 +23,7 @@ package heronarts.lx;
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import com.symmetrylabs.color.Spaces;
 import heronarts.lx.audio.LXAudioEngine;
 import heronarts.lx.blend.AddBlend;
 import heronarts.lx.blend.DarkestBlend;
@@ -34,8 +35,6 @@ import heronarts.lx.blend.MultiplyBlend;
 import heronarts.lx.blend.NormalBlend;
 import heronarts.lx.blend.SubtractBlend;
 import heronarts.lx.clip.LXClip;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
@@ -56,7 +55,6 @@ import heronarts.lx.script.LXScriptEngine;
 
 import java.util.ArrayDeque;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
@@ -66,7 +64,6 @@ import java.util.Queue;
 import static heronarts.lx.LXChannel.CrossfadeGroup.A;
 import static heronarts.lx.LXChannel.CrossfadeGroup.B;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
-import static heronarts.lx.PolyBuffer.Space.RGB8;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 /**
@@ -382,9 +379,8 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
         this.lx = lx;
 
         // An all-black buffer is used as the initial base for blending.
-        // It is initialized to black and then never modified.
+        // Its arrays are filled with zeroes on allocation and then never modified.
         black = new PolyBuffer(lx);
-        Arrays.fill((int[]) black.getArray(RGB8), LXColor.BLACK);
 
         // Blending buffers
         groupA = new BlendTarget(lx);
@@ -1173,7 +1169,7 @@ public class LXEngine extends LXComponent implements LXOscComponent, LXModulatio
 
         for (LXChannel channel : mutableChannels) {
             long blendStart = System.nanoTime();
-            double alpha = LXUtils.cie_lightness_to_luminance(channel.fader.getValue());
+            double alpha = Spaces.cie_lightness_to_luminance(channel.fader.getValue());
 
             if (channel.enabled.isOn() && alpha > 0) {
                 LXChannel.CrossfadeGroup group = channel.crossfadeGroup.getEnum();

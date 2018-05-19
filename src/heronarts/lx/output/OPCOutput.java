@@ -20,10 +20,10 @@
 
 package heronarts.lx.output;
 
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXFixture;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
@@ -78,9 +78,9 @@ public class OPCOutput extends LXSocketOutput implements OPCConstants {
             long[] srcLongs = (long[]) src.getArray(RGB16);
             for (int index : pointIndices) {
                 long c = srcLongs[index];
-                int red = LXColor16.red(c);
-                int green = LXColor16.green(c);
-                int blue = LXColor16.blue(c);
+                int red = Ops16.red(c);
+                int green = Ops16.green(c);
+                int blue = Ops16.blue(c);
                 packetData[p++] = (byte) (red >>> 8);
                 packetData[p++] = (byte) (red & 0xff);
                 packetData[p++] = (byte) (green >>> 8);
@@ -92,9 +92,9 @@ public class OPCOutput extends LXSocketOutput implements OPCConstants {
             int[] srcInts = (int[]) src.getArray(RGB8);
             for (int index : pointIndices) {
                 int c = srcInts[index];
-                packetData[p++] = LXColor.red(c);
-                packetData[p++] = LXColor.green(c);
-                packetData[p++] = LXColor.blue(c);
+                packetData[p++] = (byte) Ops8.red(c);
+                packetData[p++] = (byte) Ops8.green(c);
+                packetData[p++] = (byte) Ops8.blue(c);
             }
         }
         return packetData;

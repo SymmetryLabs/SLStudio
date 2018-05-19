@@ -1,7 +1,6 @@
 package heronarts.lx;
 
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
+import com.symmetrylabs.color.Spaces;
 
 import java.lang.reflect.Array;
 import java.util.EnumMap;
@@ -45,12 +44,14 @@ public class PolyBuffer implements PolyBufferProvider {
         freshSpaces = EnumSet.of(space);
     }
 
-    public Space getFreshSpace() {
-        for (Space space : freshSpaces) {
-            return space;
-        }
+    /** Returns the most expressive color space whose buffer contains fresh data. */
+    public Space getBestFreshSpace() {
+        if (isFresh(Space.RGB16)) return Space.RGB16;
+        if (isFresh(Space.SRGB8)) return Space.SRGB8;
+        if (isFresh(Space.RGB8)) return Space.RGB8;
+
         // There should always be at least one fresh space, so we should never get here.
-        return Space.RGB8;
+        throw new IllegalStateException("Execution should never reach this point");
     }
 
     public boolean isFresh(Space space) {
@@ -74,32 +75,25 @@ public class PolyBuffer implements PolyBufferProvider {
             if (buffers.get(space) == null) {
                 buffers.put(space, createBuffer(space));
             }
-            Object dest = buffers.get(space).getArray();
-            // For the conversion source, choose the most expressive color space
-            // that has fresh data in its buffer; RGB16 is preferred over SRGB8,
-            // which is preferred over RGB8.
-            switch (space) {
-                case RGB8:
-                    if (isFresh(Space.RGB16)) {
-                        LXColor16.toRgb8((long[]) getArray(Space.RGB16), (int[]) dest);
-                    } else if (isFresh(Space.SRGB8)) {
-                        LXColor.srgb8ToRgb8((int[]) getArray(Space.SRGB8), (int[]) dest);
-                    }
-                    break;
-                case RGB16:
-                    if (isFresh(Space.SRGB8)) {
-                        LXColor.srgb8ToRgb16((int[]) getArray(Space.SRGB8), (long[]) dest);
-                    } else if (isFresh(Space.RGB8)) {
-                        LXColor.rgb8ToRgb16((int[]) getArray(Space.RGB8), (long[]) dest);
-                    }
-                    break;
-                case SRGB8:
-                    if (isFresh(Space.RGB16)) {
-                        LXColor16.toSrgb8((long[]) getArray(Space.RGB16), (int[]) dest);
-                    } else if (isFresh(Space.RGB8)) {
-                        LXColor.rgb8ToSrgb8((int[]) getArray(Space.RGB8), (int[]) dest);
-                    }
-                    break;
+            Object dest = getArray(space);
+            Space srcSpace = getBestFreshSpace();
+            Object src = getArray(srcSpace);
+
+            if (srcSpace == Space.RGB16 && space == Space.SRGB8) {
+                Spaces.rgb16ToSrgb8((long[]) src, (int[]) dest);
+            } else if (srcSpace == Space.RGB16 && space == Space.RGB8) {
+                Spaces.rgb16ToRgb8((long[]) src, (int[]) dest);
+            } else if (srcSpace == Space.SRGB8 && space == Space.RGB16) {
+                Spaces.srgb8ToRgb16((int[]) src, (long[]) dest);
+            } else if (srcSpace == Space.SRGB8 && space == Space.RGB8) {
+                Spaces.srgb8ToRgb8((int[]) src, (int[]) dest);
+            } else if (srcSpace == Space.RGB8 && space == Space.RGB16) {
+                Spaces.rgb8ToRgb16((int[]) src, (long[]) dest);
+            } else if (srcSpace == Space.RGB8 && space == Space.SRGB8) {
+                Spaces.rgb8ToSrgb8((int[]) src, (int[]) dest);
+            } else {
+                // There should always be at least one fresh space, so we should never get here.
+                throw new IllegalStateException("Execution should never reach this point");
             }
             conversionCount++;
             freshSpaces.add(space);
@@ -112,14 +106,15 @@ public class PolyBuffer implements PolyBufferProvider {
 
     public void copyFrom(PolyBufferProvider src, Space space) {
         if (src != this) {
-            Object dest = getArray(space);
-            System.arraycopy(src.getPolyBuffer().getArray(space), 0, dest, 0, Array.getLength(dest));
+            Object srcArray = src.getPolyBuffer().getArray(space);
+            Object destArray = getArray(space);
+            System.arraycopy(srcArray, 0, destArray, 0, Array.getLength(destArray));
             markModified(space);
         }
     }
 
     // The methods below provide support for old-style use of the PolyBuffer
-    // as if it were only an RGB8 buffer.
+    // as if it were only an SRGB8 buffer.
 
     @Deprecated
     public static PolyBuffer wrapArray(LX lx, final int[] array) {
@@ -133,7 +128,7 @@ public class PolyBuffer implements PolyBufferProvider {
     @Deprecated
     public void setBuffer(Buffer buffer) {
         buffers.clear();
-        buffers.put(Space.RGB8, buffer);
-        markModified(Space.RGB8);
+        buffers.put(Space.SRGB8, buffer);
+        markModified(Space.SRGB8);
     }
 }

@@ -390,15 +390,8 @@ public class LX {
         return LXColor.hsba(h, s, 100, a);
     }
 
-    /**
-     * Shorthand for LXColor.rgb()
-     *
-     * @param r Red 0-255
-     * @param g Green 0-255
-     * @param b Blue 0-255
-     * @return color
-     */
-    public static int rgb(int r, int g, int b) {
+    /** Alias for LXColor.rgb(). */
+    public static int rgb(byte r, byte g, byte b) {
         return LXColor.rgb(r, g, b);
     }
 

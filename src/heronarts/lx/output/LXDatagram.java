@@ -21,7 +21,6 @@
 package heronarts.lx.output;
 
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.parameter.BooleanParameter;
 
 import java.net.DatagramPacket;
@@ -166,9 +165,9 @@ public abstract class LXDatagram {
         int[] byteOffset = BYTE_ORDERING[this.byteOrder.ordinal()];
         for (int index : pointIndices) {
             long c = (index >= 0) ? colors16[index] : 0;
-            int red = LXColor16.red(c);
-            int green = LXColor16.green(c);
-            int blue = LXColor16.blue(c);
+            int red = (int) ((c >> 32) & 0xffff);
+            int green = (int) ((c >> 16) & 0xffff);
+            int blue = (int) (c & 0xffff);
             dest[i + byteOffset[0]] = (byte) (red >>> 8);
             dest[i + byteOffset[0] + 1] = (byte) (red & 0xff);
             dest[i + byteOffset[1]] = (byte) (green >>> 8);

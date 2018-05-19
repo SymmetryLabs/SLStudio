@@ -20,15 +20,16 @@
 
 package heronarts.lx.color;
 
-import heronarts.lx.LXUtils;
-
 import java.awt.Color;
 
 /** Various utilities that operate on 32-bit integers representing RGBA colors */
-public class LXColor {
-    /**
-     * Color blending modes
-     */
+public final class LXColor {
+    private LXColor() {
+        throw new UnsupportedOperationException("This is a static utility class");
+    }
+
+    /** Color blending modes */
+    @Deprecated
     public enum Blend {
         LERP,
         ADD,
@@ -39,113 +40,43 @@ public class LXColor {
         DARKEST
     }
 
-    public static final int BLACK = 0xff000000;
-    public static final int WHITE = 0xffffffff;
-    public static final int RED = 0xffff0000;
-    public static final int GREEN = 0xff00ff00;
-    public static final int BLUE = 0xff0000ff;
-
     public static final int ALPHA_MASK = 0xff000000;
     public static final int RED_MASK = 0x00ff0000;
     public static final int GREEN_MASK = 0x0000ff00;
     public static final int BLUE_MASK = 0x000000ff;
 
+    public static final int BLACK = ALPHA_MASK;
+    public static final int WHITE = ALPHA_MASK | RED_MASK | GREEN_MASK | BLUE_MASK;
+    public static final int RED = ALPHA_MASK | RED_MASK;
+    public static final int GREEN = ALPHA_MASK | GREEN_MASK;
+    public static final int BLUE = ALPHA_MASK | BLUE_MASK;
+
     public static final int ALPHA_SHIFT = 24;
     public static final int RED_SHIFT = 16;
     public static final int GREEN_SHIFT = 8;
 
-    protected static int[] srgbIntensities = null;
-
+    /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
+    @Deprecated
     public static byte alpha(int argb) {
         return (byte) ((argb & ALPHA_MASK) >>> ALPHA_SHIFT);
     }
 
+    /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
+    @Deprecated
     public static byte red(int argb) {
         return (byte) ((argb & RED_MASK) >>> RED_SHIFT);
     }
 
+    /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
+    @Deprecated
     public static byte green(int argb) {
         return (byte) ((argb & GREEN_MASK) >>> GREEN_SHIFT);
     }
 
+    /** Deprecated: Result is signed (-128 to 127) and dangerous in color arithmetic. */
+    @Deprecated
     public static byte blue(int argb) {
         return (byte) (argb & BLUE_MASK);
-    }
-
-    public static int alphaInt(int argb) {
-        return (argb & ALPHA_MASK) >>> ALPHA_SHIFT;
-    }
-
-    public static int redInt(int argb) {
-        return (argb & RED_MASK) >>> RED_SHIFT;
-    }
-
-    public static int greenInt(int argb) {
-        return (argb & GREEN_MASK) >>> GREEN_SHIFT;
-    }
-
-    public static int blueInt(int argb) {
-        return argb & BLUE_MASK;
-    }
-
-    public static long rgb8ToRgb16(int rgb8) {
-        // If we were to shift left by 8, then 0xff would become 0xff00.
-        // Instead, we multiply by 0x0101, so that 0xff becomes 0xffff.
-        return LXColor16.rgba(
-                redInt(rgb8) * 0x0101,
-                greenInt(rgb8) * 0x0101,
-                blueInt(rgb8) * 0x0101,
-                alphaInt(rgb8) * 0x0101
-        );
-    }
-
-    public static void rgb8ToRgb16(int[] rgb8s, long[] rgb16s) {
-        for (int i = 0; i < rgb8s.length; i++) rgb16s[i] = rgb8ToRgb16(rgb8s[i]);
-    }
-
-    public static long srgb8ToRgb16(int srgb8) {
-        if (srgbIntensities == null) {
-            srgbIntensities = new int[256];
-            for (int i = 0; i < 256; i++) {
-                // For these values of i, 0.0 <= i/255.0 <= 1.0.
-                // For these inputs, srgb_value_to_intensity is guaranteed to return 0.0 <= v <= 1.0.
-                // 65535.99999999999 is the largest double-precision number less than 65536,
-                // so (int) (v * 65535.99999999999) will always return a value from 0 to 65535.
-                srgbIntensities[i] = (int) (LXUtils.srgb_value_to_intensity(i/255.0) * 65535.99999999999);
-            }
-        }
-        // We remap the alpha channel too, so that blending (0, 0, 0, 0) + (1, 1, 1, 0.5) in
-        // RGB16 space gives the same result as blending their analogues in SRGB8 space.
-        return LXColor16.rgba(
-                srgbIntensities[redInt(srgb8)], srgbIntensities[greenInt(srgb8)],
-                srgbIntensities[blueInt(srgb8)], srgbIntensities[alphaInt(srgb8)]
-        );
-    }
-
-    public static void srgb8ToRgb16(int[] srgb8s, long[] rgb16s) {
-        for (int i = 0; i < srgb8s.length; i++) {
-            rgb16s[i] = srgb8ToRgb16(srgb8s[i]);
-        }
-    }
-
-    public static int srgb8ToRgb8(int srgb8) {
-        return LXColor16.toRgb8(srgb8ToRgb16(srgb8));
-    }
-
-    public static void srgb8ToRgb8(int[] srgb8s, int[] rgb8s) {
-        for (int i = 0; i < srgb8s.length; i++) {
-            rgb8s[i] = srgb8ToRgb8(srgb8s[i]);
-        }
-    }
-
-    public static int rgb8ToSrgb8(int rgb8) {
-        return LXColor16.toSrgb8(rgb8ToRgb16(rgb8));
-    }
-
-    public static void rgb8ToSrgb8(int[] rgb8s, int[] srgb8s) {
-        for (int i = 0; i < rgb8s.length; i++) {
-            srgb8s[i] = rgb8ToSrgb8(rgb8s[i]);
-        }
     }
 
     /**
@@ -229,8 +160,9 @@ public class LXColor {
         return 100.f * max / 255.f;
     }
 
+    /** Converts a brightness value (0 to 100) to a gray ARGB color value. */
     public static int gray(double brightness) {
-        int b = 0xff & (int) (255 * (brightness / 100.));
+        int b = 0xff & (int) (255 * (brightness / 100));
         return
             0xff000000 |
             ((b & 0xff) << RED_SHIFT) |
@@ -247,57 +179,33 @@ public class LXColor {
             (b & 0xff);
     }
 
-    /**
-     * Computes an RGB color value
-     *
-     * @param r Red 0-255
-     * @param g Green 0-255
-     * @param b Blue 0-255
-     * @return Color
-     */
-    public static final int rgb(int r, int g, int b) {
+    /** Packs R, G, and B values from 0 to 255 into an ARGB color value. */
+    public static int rgb(int r, int g, int b) {
         return rgba(r, g, b, 255);
     }
 
-    /**
-     * Computes an RGB color value
-     *
-     * @param r Red 0-255
-     * @param g Green 0-255
-     * @param b Blue 0-255
-     * @param a Alpha 0-255
-     * @return Color
-     */
-    public static final int rgba(int r, int g, int b, int a) {
+    /** Packs R, G, B, and A values from 0 to 255 into an ARGB color value. */
+    public static int rgba(int r, int g, int b, int a) {
         return
-            ((a & 0xff) << ALPHA_SHIFT) |
-            ((r & 0xff) << RED_SHIFT) |
-            ((g & 0xff) << GREEN_SHIFT) |
-            (b & 0xff);
+                ((a & 0xff) << ALPHA_SHIFT) |
+                        ((r & 0xff) << RED_SHIFT) |
+                        ((g & 0xff) << GREEN_SHIFT) |
+                        (b & 0xff);
     }
 
     /**
-     * Utility to create a color from double values
-     *
-     * @param h Hue
-     * @param s Saturation
-     * @param b Brightness
-     * @return Color value
+     * Computes an ARGB color value from a hue (0 to 360), saturation (0 to 100),
+     * and brightness (0 to 100).
      */
-    public static final int hsb(double h, double s, double b) {
+    public static int hsb(double h, double s, double b) {
         return hsb((float) h, (float) s, (float) b);
     }
 
     /**
-     * Utility to create a color from double values
-     *
-     * @param h Hue
-     * @param s Saturation
-     * @param b Brightness
-     * @param a Alpha
-     * @return Color value
+     * Computes an ARGB color value from a hue (0 to 360), saturation (0 to 100),
+     * brightness (0 to 100), and alpha (0.0 to 1.0).
      */
-    public static final int hsba(double h, double s, double b, double a) {
+    public static int hsba(double h, double s, double b, double a) {
         return hsba((float) h, (float) s, (float) b, (float) a);
     }
 
@@ -306,17 +214,17 @@ public class LXColor {
     private static final float B_COEFF = 1 / 100.f;
 
     /**
-     * Create a color from HSB
-     *
-     * @param h Hue from 0-360
-     * @param s Saturation from 0-100
-     * @param b Brightness from 0-100
-     * @return rgb color value
+     * Computes an ARGB color value from a hue (0 to 360), saturation (0 to 100),
+     * and brightness (0 to 100).
      */
     public static int hsb(float h, float s, float b) {
         return _hsbImpl(h * H_COEFF, s * S_COEFF, b * B_COEFF);
     }
 
+    /**
+     * Computes an ARGB color value from a hue (0.0 to 1.0), saturation (0.0 to 1.0),
+     * and brightness (0.0 to 1.0).
+     */
     public static int _hsbImpl(float hue, float saturation, float brightness) {
         int r = 0, g = 0, b = 0;
         if (saturation == 0) {
@@ -364,25 +272,16 @@ public class LXColor {
     }
 
     /**
-     * Create a color from HSA, where brightness is always full
-     *
-     * @param h Hue from 0-360
-     * @param s Saturation from 0-100
-     * @param a Alpha mask from 0-1
-     * @return argb color value
+     * Computes an ARGB color value from a hue (0 to 360), saturation (0 to 100),
+     * and alpha (0.0 to 1.0).  Brightness is assumed to be 100%.
      */
-    public static final int hsa(float h, float s, float a) {
+    public static int hsa(float h, float s, float a) {
         return hsba(h, s, 100, a);
     }
 
     /**
-     * Create a color from HSB
-     *
-     * @param h Hue from 0-360
-     * @param s Saturation from 0-100
-     * @param b Brightness from 0-100
-     * @param a Alpha from 0-1
-     * @return argb color value
+     * Computes an ARGB color value from a hue (0 to 360), saturation (0 to 100),
+     * brightness (0 to 100), and alpha (0.0 to 1.0).
      */
     public static int hsba(float h, float s, float b, float a) {
         return
@@ -460,13 +359,10 @@ public class LXColor {
     }
 
     /**
-     * Blends the two colors using specified blend based on the alpha channel of c2
-     *
-     * @param c1 First color
-     * @param c2 Second color to be blended
-     * @param blendMode Type of blending
-     * @return Blended color
+     * Blends two colors using a given blend mode, based on the alpha channel of c2.
+     * Deprecated: Use the LXBlend subclasses or lx.blend.Ops{8,16} instead.
      */
+    @Deprecated
     public static int blend(int c1, int c2, Blend blendMode) {
         switch (blendMode) {
         case ADD:
@@ -487,49 +383,22 @@ public class LXColor {
         throw new RuntimeException("Unimplemented blend mode: " + blendMode);
     }
 
-    /**
-     * Interpolates each of the RGB channels between c1 and c2
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @return Interpolated color based on alpha of c2
-     */
+    /** Interpolates from c1 toward c2, by an amount according to the alpha of c2. */
     public static int lerp(int c1, int c2) {
         return lerp(c1, c2, (c2 & ALPHA_MASK) >>> ALPHA_SHIFT);
     }
 
-    /**
-     * Interpolates each of the RGB channels between c1 and c2 and specified amount
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @param amount Float from 0-1 for amount of interpolation
-     * @return Interpolated color
-     */
+    /** Interpolates from c1 toward c2, by an amount from 0.0 to 1.0. */
     public static int lerp(int c1, int c2, float amount) {
         return lerp(c1, c2, (int) (amount * 0xff));
     }
 
-    /**
-     * Interpolates each of the RGB channels between c1 and c2 and specified amount
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @param amount Double from 0-1 for amount of interpolation
-     * @return Interpolated color
-     */
+    /** Interpolates from c1 toward c2, by an amount from 0.0 to 1.0. */
     public static int lerp(int c1, int c2, double amount) {
         return lerp(c1, c2, (int) (amount * 0xff));
     }
 
-    /**
-     * Interpolates each of the RGB channels between c1 and c2 and specified alpha
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @param alpha Single byte (0-255) alpha channel
-     * @return Interpolated color
-     */
+    /** Interpolates from c1 toward c2, by an amount from 0 to 0xff. */
     public static int lerp(int c1, int c2, int alpha) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -540,13 +409,8 @@ public class LXColor {
             lerp(c1, c2, alpha, BLUE_MASK);
     }
 
-    /**
-     * Adds the specified colors
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @return Summed RGB channels with 255 clip
-     */
+    /** Adds the specified colors. */
+    @Deprecated
     public static int add(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -557,13 +421,8 @@ public class LXColor {
             min(BLUE_MASK, (c1 & BLUE_MASK) + (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
-    /**
-     * Subtracts the specified colors
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @return Color that is [c1 - c2] per RGB with 0-clip
-     */
+    /** Subtracts the specified colors. */
+    @Deprecated
     public static int subtract(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -574,13 +433,8 @@ public class LXColor {
             max(0, (c1 & BLUE_MASK) - (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
-    /**
-     * Multiplies the specified colors
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @return RGB channels multiplied with 255 clip
-     */
+    /** Multiplies the specified colors. */
+    @Deprecated
     public static int multiply(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -597,13 +451,8 @@ public class LXColor {
             lerp(c1, (c1b * (c2b+1)) >> 8, c2a, BLUE_MASK);
     }
 
-    /**
-     * Inverse multiplies the specified colors
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @return RGB channels multiplied as 255 - [255-c1]*[255-c2] with clip
-     */
+    /** Inverse multiplies the specified colors. */
+    @Deprecated
     public static int screen(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -620,13 +469,8 @@ public class LXColor {
             lerp(c1, BLUE_MASK - (((0xff - c1b) * (0xff - c2b + 1)) >> 8), c2a, BLUE_MASK);
     }
 
-    /**
-     * Returns the lightest color by RGB channel
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @return Lightest of each RGB channel
-     */
+    /** Returns the lightest color by RGB channel. */
+    @Deprecated
     public static int lightest(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;
@@ -637,13 +481,8 @@ public class LXColor {
             max(c1 & BLUE_MASK, (((c2 & BLUE_MASK) * (c2a + 1)) >>> 8));
     }
 
-    /**
-     * Returns the darkest color by RGB channel
-     *
-     * @param c1 First color
-     * @param c2 Second color
-     * @return Darkest of each RGB channel
-     */
+    /** Returns the darkest color by RGB channel. */
+    @Deprecated
     public static int darkest(int c1, int c2) {
         int c1a = (c1 & ALPHA_MASK) >>> ALPHA_SHIFT;
         int c2a = (c2 & ALPHA_MASK) >>> ALPHA_SHIFT;

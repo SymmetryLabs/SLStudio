@@ -25,7 +25,6 @@ import heronarts.lx.LXBuffer;
 import heronarts.lx.LXModulatorComponent;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.PolyBufferProvider;
-import heronarts.lx.color.LXColor16;
 
 import static heronarts.lx.PolyBuffer.Space.RGB8;
 
@@ -45,12 +44,6 @@ public abstract class LXBlend extends LXModulatorComponent {
     protected static final int G_MASK = 0x0000ff00;
     protected static final int B_MASK = 0x000000ff;
     protected static final int RB_MASK = R_MASK | B_MASK;
-
-    protected static final long ALPHA_SHIFT16 = LXColor16.ALPHA_SHIFT;
-    protected static final long R_MASK16 = LXColor16.RED_MASK;
-    protected static final long G_MASK16 = LXColor16.GREEN_MASK;
-    protected static final long B_MASK16 = LXColor16.BLUE_MASK;
-    protected static final long RB_MASK16 = LXColor16.RED_MASK | LXColor16.BLUE_MASK;
 
     protected static int min(int a, int b) {
         return (a < b) ? a : b;

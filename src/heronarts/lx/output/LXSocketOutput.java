@@ -28,7 +28,6 @@ import java.net.Socket;
 
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor16;
 
 import static heronarts.lx.PolyBuffer.Space.RGB8;
 

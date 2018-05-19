@@ -20,20 +20,19 @@
 
 package heronarts.lx.output;
 
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.color.Spaces;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
-import heronarts.lx.LXUtils;
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXFixture;
 import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.EnumParameter;
 
-import java.awt.Color;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -174,7 +173,7 @@ public abstract class LXOutput extends LXComponent {
         long now = System.currentTimeMillis();
         double fps = framesPerSecond.getValue();
         if (enabled.isOn() && (fps == 0 || now > lastFrameMillis + 1000/fps)) {
-            PolyBuffer out = processOutput(src, src.getFreshSpace());
+            PolyBuffer out = processOutput(src, src.getBestFreshSpace());
             onSend(out);
             for (LXOutput child : children) {
                 child.send(out);
@@ -185,27 +184,18 @@ public abstract class LXOutput extends LXComponent {
     }
 
     protected PolyBuffer processOutput(PolyBuffer src, PolyBuffer.Space space) {
-        double lum = LXUtils.cie_lightness_to_luminance(brightness.getValue());
+        double lum = Spaces.cie_lightness_to_luminance(brightness.getValue());
 
         switch (mode.getEnum()) {
+            case OFF:
+                lum = 0;
+                // fall through
             case WHITE:
                 if (space == RGB16) {
-                    Arrays.fill((long[]) buffer.getArray(space),
-                            LXColor16.gray(100 * lum));
-                    buffer.markModified(space);
+                    Arrays.fill((long[]) buffer.getArray(space), Ops16.gray(lum));
+                    buffer.markModified(RGB16);
                 } else {
-                    Arrays.fill((int[]) buffer.getArray(RGB8),
-                            LXColor.gray(100 * lum));
-                    buffer.markModified(RGB8);
-                }
-                return buffer;
-
-            case OFF:
-                if (space == RGB16) {
-                    Arrays.fill((long[]) buffer.getArray(space), 0);
-                    buffer.markModified(space);
-                } else {
-                    Arrays.fill((int[]) buffer.getArray(RGB8), 0);
+                    Arrays.fill((int[]) buffer.getArray(RGB8), Ops8.gray(lum));
                     buffer.markModified(RGB8);
                 }
                 return buffer;
@@ -214,27 +204,25 @@ public abstract class LXOutput extends LXComponent {
                 int gamma = gammaCorrection.getValuei();
                 if (gamma > 0 || lum < 1) {
                     if (space == RGB16) {
-                        long[] srcLongs = (long[]) src.getArray(space);
-                        long[] outLongs = (long[]) buffer.getArray(space);
+                        long[] srcLongs = (long[]) src.getArray(RGB16);
+                        long[] outLongs = (long[]) buffer.getArray(RGB16);
                         for (int i = 0; i < srcLongs.length; ++i) {
-                            LXColor16.RGBtoHSB(srcLongs[i], hsb);
-                            float newBrightness = (float) lum * hsb[2];
-                            for (int x = 0; x < gamma; x++) {
-                                newBrightness *= hsb[2];
+                            double factor = lum;
+                            for (int g = 0; g < gamma; g++) {
+                                factor *= Ops16.level(srcLongs[i]);
                             }
-                            outLongs[i] = LXColor16.scaledHsbToRgb(hsb[0], hsb[1], newBrightness);
+                            outLongs[i] = Ops16.multiply(srcLongs[i], factor);
                         }
-                        buffer.markModified(space);
+                        buffer.markModified(RGB16);
                     } else {
                         int[] srcInts = (int[]) src.getArray(RGB8);
                         int[] outInts = (int[]) buffer.getArray(RGB8);
                         for (int i = 0; i < srcInts.length; ++i) {
-                            LXColor.RGBtoHSB(srcInts[i], hsb);
-                            float newBrightness = (float) lum * hsb[2];
-                            for (int x = 0; x < gamma; x++) {
-                                newBrightness *= hsb[2];
+                            double factor = lum;
+                            for (int g = 0; g < gamma; g++) {
+                                factor *= Ops8.level(srcInts[i]);
                             }
-                            outInts[i] = Color.HSBtoRGB(hsb[0], hsb[1], newBrightness);
+                            outInts[i] = Ops8.multiply(srcInts[i], factor);
                         }
                         buffer.markModified(RGB8);
                     }
