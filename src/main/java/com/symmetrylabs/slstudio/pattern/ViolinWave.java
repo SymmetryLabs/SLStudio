@@ -7,6 +7,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
@@ -96,9 +97,9 @@ public class ViolinWave extends LXPattern {
             model.getPoints().parallelStream().forEach(p -> {
                 float b = 100 - pFalloff * (MathUtils.abs(p.x - x.getValuef()) + MathUtils.abs(p.y - y.getValuef()));
                 if (b > 0) {
-                    LXColor16.blend(p.index, LXColor16.hsb(
+                    Ops16.add(p.index, LXColor16.hsb(
                         palette.getHuef(), 20, b
-                    ), LXColor.Blend.ADD);
+                    ));
                 }
             });
         }

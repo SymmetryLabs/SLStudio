@@ -7,6 +7,7 @@ import java.util.stream.StreamSupport;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
 import heronarts.lx.modulator.SawLFO;
@@ -159,7 +160,7 @@ public class Balance extends LXPattern {
                     col8 = LXColor.blend(col8, LXColor.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
                 }
                 else if (space == PolyBuffer.Space.RGB16) {
-                    col16 = LXColor16.blend(col16, LXColor16.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
+                    col16 = Ops16.add(col16, LXColor16.hsb(sphere_color + 270, 60, Math.min(1, value) * 100));
                 }
             }
 

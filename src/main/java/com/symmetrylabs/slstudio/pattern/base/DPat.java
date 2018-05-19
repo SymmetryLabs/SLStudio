@@ -5,7 +5,9 @@ import java.util.SplittableRandom;
 
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor16;
+import heronarts.lx.color.Spaces;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -87,7 +89,7 @@ public abstract class DPat extends SLPattern<SLModel> {
 
     /** To write a pattern that generates 16-bit colors, implement CalcPoint16. */
     protected long CalcPoint16(PVector p) {
-        return LXColor.rgb8ToRgb16(CalcPoint(p));
+        return Spaces.rgb8ToRgb16(CalcPoint(p));
     }
 
     public int blend3(int c1, int c2, int c3) {
@@ -389,19 +391,19 @@ public abstract class DPat extends SLPattern<SLModel> {
                 }
                 if (pXsym.getValueb()) {
                     tP.set(mMax.x - P.x, P.y, P.z);
-                    cNew = LXColor16.add(cNew, CalcPoint16(tP));
+                    cNew = Ops16.add(cNew, CalcPoint16(tP));
                 }
                 if (pYsym.getValueb()) {
                     tP.set(P.x, mMax.y - P.y, P.z);
-                    cNew = LXColor16.add(cNew, CalcPoint16(tP));
+                    cNew = Ops16.add(cNew, CalcPoint16(tP));
                 }
                 if (pRsym.getValueb()) {
                     tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
-                    cNew = LXColor16.add(cNew, CalcPoint16(tP));
+                    cNew = Ops16.add(cNew, CalcPoint16(tP));
                 }
                 if (pXdup.getValueb()) {
                     tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
-                    cNew = LXColor16.add(cNew, CalcPoint16(tP));
+                    cNew = Ops16.add(cNew, CalcPoint16(tP));
                 }
                 if (pGrey.getValueb()) {
                     cNew = lx.hsb(0, 0, LXColor16.b(cNew));

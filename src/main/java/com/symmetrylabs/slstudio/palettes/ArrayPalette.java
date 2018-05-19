@@ -1,7 +1,9 @@
 package com.symmetrylabs.slstudio.palettes;
 
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
+import heronarts.lx.color.Spaces;
 
 /**
  * A palette that samples from an array of color values, interpolating between adjacent values in the array.  By
@@ -40,6 +42,6 @@ public class ArrayPalette implements ColorPalette {
         double index = clamp(p, 0, 1) * (colors.length - 1);
         int low = (int) Math.floor(index);
         int high = (low + 1) < colors.length ? low + 1 : low;
-        return LXColor16.lerp(LXColor.rgb8ToRgb16(colors[low]), LXColor.rgb8ToRgb16(colors[high]), index - low);
+        return Ops16.blend(Spaces.rgb8ToRgb16(colors[low]), Spaces.rgb8ToRgb16(colors[high]), index - low);
     }
 }

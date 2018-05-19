@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import heronarts.lx.blend.Ops16;
 import processing.core.PImage;
 import static processing.core.PConstants.ADD;
 
@@ -104,7 +105,7 @@ public class Spheres extends LXPattern {
                     float r = (s.radius); // * (sinLfoValue + 0.5));
                     value = MathUtils.max(0, 1 - MathUtils.max(0, d - r) / 10);
 
-                    col16 = LXColor16.blend(col16, LXColor16.hsb(s.hue, 100, MathUtils.min(1, value) * 100), LXColor.Blend.ADD);
+                    col16 = Ops16.add(col16, LXColor16.hsb(s.hue, 100, MathUtils.min(1, value) * 100));
                 }
 
                 longColors[p.index] = col16;

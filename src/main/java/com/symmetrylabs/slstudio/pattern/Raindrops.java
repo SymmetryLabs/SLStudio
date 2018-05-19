@@ -8,6 +8,7 @@ import java.util.Iterator;
 import static processing.core.PApplet.*;
 
 import heronarts.lx.LX;
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
@@ -112,7 +113,7 @@ public class Raindrops extends SLPattern<SLModel> {
                             intColors[p.index] = LXColor.blend(col8, LXColor.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), LXColor.Blend.ADD);
                         }
                         else if (space == PolyBuffer.Space.RGB16) {
-                            longColors[p.index] = LXColor16.blend(col16, LXColor16.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), LXColor.Blend.ADD);
+                            longColors[p.index] = Ops16.add(col16, LXColor16.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100));
                         }
                     }
                 }

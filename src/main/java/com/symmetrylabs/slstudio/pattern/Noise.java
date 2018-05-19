@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor16;
 import processing.core.PImage;
 import processing.core.PVector;
@@ -187,7 +188,7 @@ public class Noise extends DPat {
                     : NoiseUtils.noise(p.x / nDat.xz + zx + nDat.xoff, p.y / nDat.yz + zy + nDat.yoff, p.z / nDat.zz + nDat.zoff)) * 1.8f;
 
                 bri += nDat.den / 100 - 0.4 + val(density) - 1;
-                col = LXColor16.add(col, LXColor16.hsb(lxh() + nDat.hue, 100, c1c(bri)));
+                col = Ops16.add(col, LXColor16.hsb(lxh() + nDat.hue, 100, c1c(bri)));
             }
 
         return col;

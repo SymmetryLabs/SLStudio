@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.palettes;
 
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
+import heronarts.lx.color.Spaces;
 
 /**
  * A palette that returns a constant color.
@@ -14,11 +15,11 @@ class ConstantPalette implements ColorPalette {
     }
 
     ConstantPalette(int c) {
-        this(LXColor.rgb8ToRgb16(c));
+        this(Spaces.rgb8ToRgb16(c));
     }
 
     public int getColor(double p) {
-        return LXColor16.toRgb8(c);
+        return Spaces.rgb16ToRgb8(c);
     }
 
     public long getColor16(double p) {

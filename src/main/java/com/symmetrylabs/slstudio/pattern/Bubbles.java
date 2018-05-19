@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
 import heronarts.lx.PolyBuffer;
@@ -236,13 +237,13 @@ public class Bubbles extends LXPattern {
             if (brightness < 5) brightness = 0; // ugh, fix this (popped bubbles dont come out to zero)
 
 
-            longColors[p.index] = LXColor16.blend(
+            longColors[p.index] = Ops16.add(
                 longColors[p.index],
                 LXColor16.hsb(
                     hue + 1.7f * ((x - p.x) + (y - p.y)),
                     saturation.getValuef(), //Math.min(100, gradient*1.2f+5.0f),
                     brightness
-                ), LXColor.Blend.ADD
+                )
             );
 
 

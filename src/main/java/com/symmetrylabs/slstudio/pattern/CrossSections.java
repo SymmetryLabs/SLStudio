@@ -2,6 +2,7 @@ package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
@@ -30,7 +31,7 @@ public class CrossSections extends LXPattern {
     final CompoundParameter xw = new CompoundParameter("xSize", 0.3);
     final CompoundParameter yw = new CompoundParameter("ySize", 0.3);
     final CompoundParameter zw = new CompoundParameter("zSize", 0.3);
-    
+
 
     public CrossSections(LX lx) {
         super(lx);
@@ -107,21 +108,21 @@ public class CrossSections extends LXPattern {
             }
             else if (space == PolyBuffer.Space.RGB16) {
                 long col16 = 0;
-                col16 = LXColor16.blend(col16, LXColor16.hsb(
+                col16 = Ops16.add(col16, LXColor16.hsb(
                     palette.getHuef() + p.x / 10 + p.y / 3,
                     constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
                     max(0, xlv - xwv * abs(p.x - xv))
-                ), LXColor.Blend.ADD);
-                col16 = LXColor16.blend(col16, LXColor16.hsb(
+                ));
+                col16 = Ops16.add(col16, LXColor16.hsb(
                     palette.getHuef() + 80 + p.y / 10,
                     constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
                     max(0, ylv - ywv * abs(p.y - yv))
-                ), LXColor.Blend.ADD);
-                col16 = LXColor16.blend(col16, LXColor16.hsb(
+                ));
+                col16 = Ops16.add(col16, LXColor16.hsb(
                     palette.getHuef() + 160 + p.z / 10 + p.y / 2,
                     constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
                     max(0, zlv - zwv * abs(p.z - zv))
-                ), LXColor.Blend.ADD);
+                ));
                 longColors[p.index] = col16;
             }
         }

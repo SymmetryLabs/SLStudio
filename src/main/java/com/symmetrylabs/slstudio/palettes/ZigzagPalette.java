@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.palettes;
 
+import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
 
@@ -106,7 +107,7 @@ public class ZigzagPalette implements ColorPalette {
         if (cutoff != 0) {
             double value = (LXColor16.red(c) + LXColor16.green(c) + LXColor16.blue(c)) / (65535.0 * 3);
             if (value < cutoff) return 0;
-            c = LXColor16.lerp(0L, c, Math.pow(
+            c = Ops16.blend(0L, c, Math.pow(
                 (value - cutoff) / (1.0 - cutoff), 0.5 * cutoff));
         }
         return c;
