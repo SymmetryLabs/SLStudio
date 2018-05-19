@@ -1,22 +1,20 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
-import heronarts.lx.blend.Ops16;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.PolyBuffer;
 
-import com.symmetrylabs.util.MathUtils;
+import java.util.ArrayList;
+import java.util.List;
 
 public class ViolinWave extends LXPattern {
 

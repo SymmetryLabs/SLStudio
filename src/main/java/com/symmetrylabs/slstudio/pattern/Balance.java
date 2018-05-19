@@ -1,13 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.stream.StreamSupport;
-
+import com.symmetrylabs.color.Ops16;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
-import heronarts.lx.blend.Ops16;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.color.LXColor16;
 import heronarts.lx.modulator.SawLFO;
@@ -15,8 +12,10 @@ import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXProjection;
-import heronarts.lx.transform.LXVector;
-import heronarts.lx.PolyBuffer;
+
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
 
 public class Balance extends LXPattern {
 

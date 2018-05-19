@@ -1,23 +1,15 @@
 package com.symmetrylabs.slstudio.output;
 
-import java.net.Socket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ConnectException;
-import java.io.OutputStream;
-import java.io.IOException;
-
-import com.symmetrylabs.slstudio.component.GammaExpander;
-import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.output.LXOutput;
-import heronarts.lx.color.LXColor;
-
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.NetworkUtils;
+import heronarts.lx.LX;
+import heronarts.lx.output.LXOutput;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.*;
 
 public class SLController extends LXOutput {
     public final InetAddress host;
@@ -77,9 +69,9 @@ public class SLController extends LXOutput {
     private void setPixel(int number, int c) {
         int offset = 4 + number * 3;
         int gammaExpanded = GammaExpander.getExpandedColor(c);
-        packetData[offset + 0] = LXColor.red(gammaExpanded);
-        packetData[offset + 1] = LXColor.green(gammaExpanded);
-        packetData[offset + 2] = LXColor.blue(gammaExpanded);
+        packetData[offset + 0] = (byte) Ops8.red(gammaExpanded);
+        packetData[offset + 1] = (byte) Ops8.green(gammaExpanded);
+        packetData[offset + 2] = (byte) Ops8.blue(gammaExpanded);
     }
 
     @Override

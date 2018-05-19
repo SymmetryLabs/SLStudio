@@ -1,9 +1,8 @@
 package com.symmetrylabs.slstudio.palettes;
 
-import heronarts.lx.blend.Ops16;
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Spaces;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.color.Spaces;
 
 /**
  * A palette that samples from an array of color values, interpolating between adjacent values in the array.  By

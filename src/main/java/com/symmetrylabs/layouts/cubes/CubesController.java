@@ -1,27 +1,22 @@
 package com.symmetrylabs.layouts.cubes;
 
-import java.net.Socket;
-import java.net.DatagramSocket;
-import java.net.InetAddress;
-import java.net.InetSocketAddress;
-import java.net.ConnectException;
-import java.io.OutputStream;
-import java.io.IOException;
-
-import com.symmetrylabs.slstudio.component.GammaExpander;
-import heronarts.lx.LX;
-import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.output.LXOutput;
-import heronarts.lx.color.LXColor;
-
+import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.slstudio.component.GammaExpander;
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
 import com.symmetrylabs.util.NetworkUtils;
+import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.output.LXOutput;
 import heronarts.lx.output.OPCConstants;
 import org.jetbrains.annotations.NotNull;
+
+import java.io.IOException;
+import java.io.OutputStream;
+import java.net.*;
 
 public class CubesController extends LXOutput implements Comparable<CubesController>, OPCConstants {
     public final String id;
@@ -108,9 +103,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 
     private void setPixel(int number, long c) {
         int index = 4 + number * 6;
-        int red = LXColor16.red(c);
-        int green = LXColor16.green(c);
-        int blue = LXColor16.blue(c);
+        int red = Ops16.red(c);
+        int green = Ops16.green(c);
+        int blue = Ops16.blue(c);
         packetData[index++] = (byte) (red >>> 8);
         packetData[index++] = (byte) (red & 0xff);
         packetData[index++] = (byte) (green >>> 8);

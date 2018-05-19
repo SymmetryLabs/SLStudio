@@ -1,20 +1,15 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import heronarts.lx.blend.Ops16;
-import processing.core.PImage;
-import static processing.core.PConstants.ADD;
-
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
-
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.PolyBuffer;
-
-import com.symmetrylabs.util.MathUtils;
 
 public class Spheres extends LXPattern {
     private CompoundParameter hueParameter = new CompoundParameter("Size", 1.0);

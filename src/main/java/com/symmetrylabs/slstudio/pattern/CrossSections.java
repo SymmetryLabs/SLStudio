@@ -1,18 +1,17 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.color.Ops16;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
-import heronarts.lx.blend.Ops16;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.PolyBuffer;
 
 import static com.symmetrylabs.util.MathUtils.*;
-
 
 public class CrossSections extends LXPattern {
 

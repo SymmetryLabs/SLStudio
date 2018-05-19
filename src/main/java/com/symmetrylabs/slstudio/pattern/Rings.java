@@ -1,18 +1,15 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import static processing.core.PApplet.map;
-
-import heronarts.lx.LX;
-import heronarts.lx.LXPattern;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.PolyBuffer;
-
 import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.NoiseUtils;
+import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.parameter.CompoundParameter;
+
+import static processing.core.PApplet.map;
 
 public class Rings extends LXPattern {
     float dx, dy, dz;
@@ -113,12 +110,10 @@ public class Rings extends LXPattern {
 
 
             if (space == PolyBuffer.Space.RGB8) {
-                    intColors[p.index] = LXColor.hsb(palette.getHuef() + m, saturation, brightness);
-                }
-                else if (space == PolyBuffer.Space.RGB16) {
-                    longColors[p.index] = LXColor16.hsb(palette.getHuef() + m, saturation, brightness);
-                }
-              
+                intColors[p.index] = LXColor.hsb(palette.getHuef() + m, saturation, brightness);
+            } else if (space == PolyBuffer.Space.RGB16) {
+                longColors[p.index] = LXColor16.hsb(palette.getHuef() + m, saturation, brightness);
+            }
 
             //colors[p.index] = lx.hsb(palette.getHuef() + m, saturation, brightness);
         });

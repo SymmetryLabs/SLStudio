@@ -1,29 +1,27 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
-import java.util.ArrayList;
-import java.util.SplittableRandom;
-
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Spaces;
 import com.symmetrylabs.slstudio.model.SLModel;
-import heronarts.lx.PolyBuffer;
-import heronarts.lx.blend.Ops16;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.color.Spaces;
-import processing.core.PImage;
-import processing.core.PVector;
-
-import static heronarts.lx.PolyBuffer.Space.RGB16;
-import static heronarts.lx.PolyBuffer.Space.RGB8;
-import static processing.core.PConstants.ADD;
-
+import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.util.NoiseUtils;
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
 import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import processing.core.PImage;
+import processing.core.PVector;
 
-import com.symmetrylabs.util.NoiseUtils;
-import com.symmetrylabs.util.MathUtils;
+import java.util.ArrayList;
+import java.util.SplittableRandom;
+
+import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static processing.core.PConstants.ADD;
 
 public abstract class DPat extends SLPattern<SLModel> {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();

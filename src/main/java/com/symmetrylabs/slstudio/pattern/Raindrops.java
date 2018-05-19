@@ -1,26 +1,22 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.lang.Math;
-import java.util.List;
-import java.util.LinkedList;
-import java.util.Iterator;
-
-import static processing.core.PApplet.*;
-
-import heronarts.lx.LX;
-import heronarts.lx.blend.Ops16;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.LXUtils;
-import heronarts.lx.transform.LXVector;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.PolyBuffer;
-
+import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import static com.symmetrylabs.util.MathUtils.random;
+import heronarts.lx.LX;
+import heronarts.lx.LXUtils;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.color.LXColor16;
+import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
 
+import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
+
+import static com.symmetrylabs.util.MathUtils.random;
+import static processing.core.PApplet.abs;
 
 public class Raindrops extends SLPattern<SLModel> {
 
