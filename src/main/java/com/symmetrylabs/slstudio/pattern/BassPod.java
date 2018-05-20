@@ -1,16 +1,15 @@
 package com.symmetrylabs.slstudio.pattern;
 
-
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.PolyBuffer;
+import heronarts.lx.parameter.CompoundParameter;
 
 import static com.symmetrylabs.util.MathUtils.*;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class BassPod extends LXPattern {
 
@@ -49,9 +48,7 @@ public class BassPod extends LXPattern {
 
     @Override
     public void run(double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+        int[] colors = (int[]) getArray(SRGB8);
 
         eq.gain.setNormalized(gain.getValuef());
         eq.range.setNormalized(range.getValuef());
@@ -74,14 +71,9 @@ public class BassPod extends LXPattern {
             float b = constrain(BRTNESS_RATE * (value * model.yRange - abs(p.y - model.cy)) / model.yRange, 0, 100);
             float s = constrain(satBase - DESAT_RATE * dist(p.x, p.y, model.cx, model.cy) * 2f / (model.xRange + model.yRange), 0, 100);
 
-            if (space == PolyBuffer.Space.RGB8) {
-                intColors[p.index] = LXColor.hsb(h, s, b);
-            }
-            else if (space == PolyBuffer.Space.RGB16) {
-                longColors[p.index] = LXColor16.hsb(h, s, b);
-            }
+            colors[p.index] = LXColor.hsb(h, s, b);
         });
 
-        markModified(space);
+        markModified(SRGB8);
     }
 }

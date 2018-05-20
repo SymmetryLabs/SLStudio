@@ -1,17 +1,17 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 
 import static com.symmetrylabs.util.MathUtils.*;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class CrossSections extends LXPattern {
 
@@ -71,9 +71,7 @@ public class CrossSections extends LXPattern {
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+        int[] colors = (int[]) getArray(SRGB8);
 
         updateXYZVals();
 
@@ -86,45 +84,24 @@ public class CrossSections extends LXPattern {
         float zwv = 100f / (10 + 40 * zw.getValuef());
 
         for (LXPoint p : model.points) {
-            if (space == PolyBuffer.Space.RGB8) {
-                int col8 = 0;
-                col8 = LXColor.blend(col8, LXColor.hsb(
-                    palette.getHuef() + p.x / 10 + p.y / 3,
-                    constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
-                    max(0, xlv - xwv * abs(p.x - xv))
-                ), LXColor.Blend.ADD);
-                col8 = LXColor.blend(col8, LXColor.hsb(
-                    palette.getHuef() + 80 + p.y / 10,
-                    constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
-                    max(0, ylv - ywv * abs(p.y - yv))
-                ), LXColor.Blend.ADD);
-                col8 = LXColor.blend(col8, LXColor.hsb(
-                    palette.getHuef() + 160 + p.z / 10 + p.y / 2,
-                    constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
-                    max(0, zlv - zwv * abs(p.z - zv))
-                ), LXColor.Blend.ADD);
-                intColors[p.index] = col8;
-            }
-            else if (space == PolyBuffer.Space.RGB16) {
-                long col16 = 0;
-                col16 = Ops16.add(col16, LXColor16.hsb(
-                    palette.getHuef() + p.x / 10 + p.y / 3,
-                    constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
-                    max(0, xlv - xwv * abs(p.x - xv))
-                ));
-                col16 = Ops16.add(col16, LXColor16.hsb(
-                    palette.getHuef() + 80 + p.y / 10,
-                    constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
-                    max(0, ylv - ywv * abs(p.y - yv))
-                ));
-                col16 = Ops16.add(col16, LXColor16.hsb(
-                    palette.getHuef() + 160 + p.z / 10 + p.y / 2,
-                    constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
-                    max(0, zlv - zwv * abs(p.z - zv))
-                ));
-                longColors[p.index] = col16;
-            }
+                        int c = 0;
+                        c = Ops8.add(c, LXColor.hsb(
+                                palette.getHuef() + p.x / 10 + p.y / 3,
+                                constrain(140 - 1.1f * abs(p.x - model.xMax / 2f), 0, 100),
+                                max(0, xlv - xwv * abs(p.x - xv))
+                        ));
+                        c = Ops8.add(c, LXColor.hsb(
+                                palette.getHuef() + 80 + p.y / 10,
+                                constrain(140 - 2.2f * abs(p.y - model.yMax / 2f), 0, 100),
+                                max(0, ylv - ywv * abs(p.y - yv))
+                        ));
+                        c = Ops8.add(c, LXColor.hsb(
+                                palette.getHuef() + 160 + p.z / 10 + p.y / 2,
+                                constrain(140 - 2.2f * abs(p.z - model.zMax / 2f), 0, 100),
+                                max(0, zlv - zwv * abs(p.z - zv))
+                        ));
+                        colors[p.index] = c;
         }
-        markModified(space);
+        markModified(SRGB8);
     }
 }

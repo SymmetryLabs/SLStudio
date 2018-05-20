@@ -3,17 +3,14 @@ package com.symmetrylabs.slstudio.pattern;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.LXLayeredComponent;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 
-import static heronarts.lx.PolyBuffer.Space.RGB16;
-import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.*;
 
 
@@ -54,9 +51,7 @@ public class CubeEQ extends SLPattern<SLModel> {
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == RGB16) ? (long[]) array : null;
+        int[] colors = (int[]) getArray(SRGB8);
 
         eq.gain.setNormalized(gain.getValuef());
         eq.range.setNormalized(range.getValuef());
@@ -89,14 +84,9 @@ public class CubeEQ extends SLPattern<SLModel> {
 
                 float h = 480 + palette.getHuef() - min(clrConst * p.y, 120);
                 float b = constrain(edgeConst * (value * model.yMax - p.y), 0, 100);
-                if (space == RGB8) {
-                    intColors[p.index] = LXColor.hsb(h, 100, b);
-                }
-                if (space == RGB16) {
-                    longColors[p.index] = LXColor16.hsb(h, 100, b);
-                }
+                colors[p.index] = LXColor.hsb(h, 100, b);
             }
         });
-        markModified(space);
+        markModified(SRGB8);
     }
 }

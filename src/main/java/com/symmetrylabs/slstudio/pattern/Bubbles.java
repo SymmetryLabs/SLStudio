@@ -1,12 +1,11 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.QuadraticEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
@@ -15,6 +14,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class Bubbles extends LXPattern {
 
@@ -48,9 +49,7 @@ public class Bubbles extends LXPattern {
     }
 
     public void run(final double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+        int[] colors = (int[]) getArray(SRGB8);
 
         leftoverMs += deltaMs;
         float msPerBubble = 20000 / ((rate.getValuef() + .01f) * 100);
@@ -73,22 +72,10 @@ public class Bubbles extends LXPattern {
         });
 
         model.getPoints().parallelStream().forEach(point -> {
-            if (space == PolyBuffer.Space.RGB8) {
-                 intColors[point.index] = 0;
-                for (Bubble bubble : bubbles) {
-
-                    bubble.paint(point, intColors);
-                }
-            }
-            else if (space == PolyBuffer.Space.RGB16) {
-                 longColors[point.index] = 0;
-                for (Bubble bubble : bubbles) {
-
-                    bubble.paint(point, longColors);
-                }
-            }
-
-
+            colors[point.index] = 0;
+                        for (Bubble bubble : bubbles) {
+                                bubble.paint(point, colors);
+                        }
         });
 
         Iterator<Bubble> i = bubbles.iterator();
@@ -97,7 +84,7 @@ public class Bubbles extends LXPattern {
             if (bubble.isDead)
                 i.remove();
         }
-        markModified(space);
+        markModified(SRGB8);
     }
 
     private class Bubble {
@@ -168,7 +155,7 @@ public class Bubbles extends LXPattern {
             ) + Math.pow(Math.abs(z - p.z), 2));
         }
 
-        public void paint(LXPoint p, int[] intColors) {
+        public void paint(LXPoint p, int[] colors) {
             if (Math.abs(p.x - x) > radius
                 || Math.abs(p.y - y) > radius
                 || Math.abs(p.z - z) > radius * zDep.getValuef()) {
@@ -194,59 +181,14 @@ public class Bubbles extends LXPattern {
 
             if (brightness < 5) brightness = 0; // ugh, fix this (popped bubbles dont come out to zero)
 
-
-                intColors[p.index] = LXColor.blend(
-                    intColors[p.index],
-                    LXColor.hsb(
-                        hue + 1.7f * ((x - p.x) + (y - p.y)),
-                        saturation.getValuef(), //Math.min(100, gradient*1.2f+5.0f),
-                        brightness
-                    ), LXColor.Blend.ADD
-                );
-
-
-
-
-        }
-
-        public void paint(LXPoint p, long[] longColors) {
-            if (Math.abs(p.x - x) > radius
-                || Math.abs(p.y - y) > radius
-                || Math.abs(p.z - z) > radius * zDep.getValuef()) {
-                return;
-            }
-
-            float distance = (float) LXUtils.distance((double) p.x, (double) p.y, (double) x, (double) y);
-            //float distance = distanceTo(p);
-            if (distance > radius) return;
-
-            float gradient = 100 * (float) Math.pow(distance / radius, 6);
-            float brightness = 0;
-            float edge = size * 0.85f;
-            float falloff = (float) Math.pow(Math.abs(distance - edge) / (size - edge), 1) * 100;
-
-            brightness = Math.max(0, Math.min(100, gradient) - ((pop.getValuef() / 15) * 100))
-                + transparency.getValuef();
-            // if (hasGrown && distance > edge) {
-            //   if (isPopped)
-            //     falloff = (float)Math.pow(falloff, 1);
-            //   brightness -= falloff;
-            // }
-
-            if (brightness < 5) brightness = 0; // ugh, fix this (popped bubbles dont come out to zero)
-
-
-            longColors[p.index] = Ops16.add(
-                longColors[p.index],
-                LXColor16.hsb(
-                    hue + 1.7f * ((x - p.x) + (y - p.y)),
-                    saturation.getValuef(), //Math.min(100, gradient*1.2f+5.0f),
-                    brightness
-                )
-            );
-
-
-
+            colors[p.index] = Ops8.add(
+                colors[p.index],
+                                LXColor.hsb(
+                                        hue + 1.7f * ((x - p.x) + (y - p.y)),
+                                        saturation.getValuef(), //Math.min(100, gradient*1.2f+5.0f),
+                                        brightness
+                                )
+                        );
         }
 
         public void pop() {

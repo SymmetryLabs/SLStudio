@@ -1,12 +1,11 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
@@ -16,6 +15,8 @@ import heronarts.lx.transform.LXProjection;
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class Balance extends LXPattern {
 
@@ -37,7 +38,6 @@ public class Balance extends LXPattern {
     private final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.2f);
     private final CompoundParameter hueScale = new CompoundParameter("Hue", 0.4);
     private final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5f);
-
     private final Sphere[] spheres;
     private final float centerX, centerY, centerZ, modelHeight, modelWidth, modelDepth;
 
@@ -87,10 +87,8 @@ public class Balance extends LXPattern {
     float prevRamp = 0;
 
     @Override
-    public void run(double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+    public void run(double deltaMs, PolyBuffer.Space reqSpace) {
+        int[] colors = (int[]) getArray(SRGB8);
 
         // Sync to the beat
         float ramp = (float) lx.tempo.ramp();
@@ -121,15 +119,7 @@ public class Balance extends LXPattern {
                 palette.getHuef() + hueScale.getValuef() * ((float) Math.abs(p.x - model.xMax / 2f) + (float) Math.abs(p.y - model.yMax / 2f) * .2f + (float) Math
                     .abs(p.z - model.zMax / 2f) * .5f);
 
-            int col8 = 0;
-            long col16 = 0;
-
-            if (space == PolyBuffer.Space.RGB8) {
-                col8 = LXColor.hsb(hue_color, 100, v1);
-            }
-            else if (space == PolyBuffer.Space.RGB16) {
-                col16 = LXColor16.hsb(hue_color, 100, v1);
-            }
+            int color = LXColor.hsb(hue_color, 100, v1);
 
             // Now draw the spheres
             for (Sphere s : spheres) {
@@ -155,21 +145,10 @@ public class Balance extends LXPattern {
 
                 float sphere_color = palette.getHuef() - (1 - hueScale.getValuef()) * d / r * 45;
 
-                if (space == PolyBuffer.Space.RGB8) {
-                    col8 = LXColor.blend(col8, LXColor.hsb(sphere_color + 270, 60, Math.min(1, value) * 100), LXColor.Blend.ADD);
-                }
-                else if (space == PolyBuffer.Space.RGB16) {
-                    col16 = Ops16.add(col16, LXColor16.hsb(sphere_color + 270, 60, Math.min(1, value) * 100));
-                }
+                color = Ops8.add(color, LXColor.hsb(sphere_color + 270, 60, Math.min(1, value) * 100));
             }
-
-            if (space == PolyBuffer.Space.RGB8) {
-                intColors[p.index] = col8;
-            }
-            else if (space == PolyBuffer.Space.RGB16) {
-                longColors[p.index] = col16;
-            }
+            colors[p.index] = color;
         });
-        markModified(space);
+        markModified(SRGB8);
     }
 }
