@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
@@ -16,6 +17,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 import static com.symmetrylabs.util.MathUtils.random;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.abs;
 
 public class Raindrops extends SLPattern<SLModel> {
@@ -76,9 +78,7 @@ public class Raindrops extends SLPattern<SLModel> {
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
+        int[] colors = (int[]) getArray(SRGB8);
 
         leftoverMs += deltaMs;
         float msPerRaindrop = Math.abs(numRainDrops.getValuef());
@@ -88,32 +88,18 @@ public class Raindrops extends SLPattern<SLModel> {
         }
 
         model.getPoints().parallelStream().forEach(p -> {
-            if (space == PolyBuffer.Space.RGB8) {
-                intColors[p.index] = 0;
-            } else if (space == PolyBuffer.Space.RGB16) {
-                longColors[p.index] = 0;
-            }
-        });
-
-        model.getPoints().parallelStream().forEach(p -> {
-            int col8 = 0;
-            long col16 = 0;
-
+            int c = 0;
             for (Raindrop raindrop : raindrops) {
                 if (p.x >= (raindrop.p.x - raindrop.radius) && p.x <= (raindrop.p.x + raindrop.radius) &&
                         p.y >= (raindrop.p.y - raindrop.radius) && p.y <= (raindrop.p.y + raindrop.radius)) {
 
                     float d = ((float)LXUtils.distance(raindrop.p.x, raindrop.p.y, p.x, p.y)) / raindrop.radius;
                     if (d < 1) {
-                        if (space == PolyBuffer.Space.RGB8) {
-                            intColors[p.index] = LXColor.blend(col8, LXColor.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), LXColor.Blend.ADD);
-                        }
-                        else if (space == PolyBuffer.Space.RGB16) {
-                            longColors[p.index] = Ops16.add(col16, LXColor16.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100));
-                        }
+                        c = Ops8.add(c, LXColor.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100));
                     }
                 }
             }
+            colors[p.index] = c;
         });
 
         Iterator<Raindrop> i = raindrops.iterator();
@@ -124,7 +110,7 @@ public class Raindrops extends SLPattern<SLModel> {
                 i.remove();
             }
         }
-        markModified(space);
+        markModified(SRGB8);
     }
 }
 

@@ -29,7 +29,7 @@ import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.Octahedron;
 
-import static heronarts.lx.PolyBuffer.Space.RGB16;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class FlockWave extends SLPatternWithMarkers {
 
@@ -387,7 +387,7 @@ public class FlockWave extends SLPatternWithMarkers {
     private final FlockWaveRenderPlasmaKernel kernel = new FlockWaveRenderPlasmaKernel();
 
     void renderPlasma(final Collection<Bird> birds) {
-        final long[] colors = (long[]) getArray(RGB16);
+        final int[] colors = (int[]) getArray(SRGB8);
 
         if (birds.size() > 0) {
             if (kernel.result == null || kernel.result.length != colors.length) {
@@ -438,14 +438,13 @@ public class FlockWave extends SLPatternWithMarkers {
             final float[] result = kernel.result;
 
             model.getPoints().parallelStream().forEach(p -> {
-                colors[p.index] = pal.getColor16(result[p.index]);
+                colors[p.index] = pal.getColor(result[p.index]);
             });
         } else {
-            long color = getPalette().getColor16(palShift.getValue());
-            Arrays.fill(colors, color);
+            Arrays.fill(colors, getPalette().getColor(palShift.getValue()));
         }
 
-        markModified(RGB16);
+        markModified(SRGB8);
     }
 
     PVector getRandomUnitVector() {
@@ -483,7 +482,7 @@ public class FlockWave extends SLPatternWithMarkers {
             this.value = 0;
             this.elapsedSec = 0;
             this.expired = false;
-            this.renderedValues = new double[((long[]) getArray(RGB16)).length];
+            this.renderedValues = new double[((long[]) getArray(SRGB8)).length];
         }
 
         void run(float deltaSec, PVector targetVel) {

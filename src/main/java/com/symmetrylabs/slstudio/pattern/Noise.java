@@ -155,41 +155,4 @@ public class Noise extends DPat {
 
         return col;
     }
-
-    @Override
-    public long CalcPoint16(PVector p) {
-        long col = 0;
-        rotateZ(p, mCtr, zSin, zCos);
-        //rotateY(p, mCtr, ySin, yCos);
-        //rotateX(p, mCtr, xSin, xCos);
-        if (currModeIndex == 6 || currModeIndex == 7) {
-            setNorm(p);
-
-            float bri = MathUtils.constrain(1 - 50 * (1 - val(density)) * MathUtils.abs(p.y - MathUtils.sin(zTime * 10 + p.x * (300)) * .5f - .5f), 0, 1);
-
-            if (currModeIndex == 7) {
-                bri += MathUtils.constrain(1 - 50 * (1 - val(density)) * MathUtils.abs(p.x - MathUtils.sin(zTime * 10 + p.y * (300)) * .5f - .5f), 0, 1);
-            }
-
-            return LXColor16.hsb(lxh(), 100, 100 * bri);
-        }
-
-        if (iSymm == xSym && p.x > mMax.x / 2) p.x = mMax.x - p.x;
-        if (iSymm == ySym && p.y > mMax.y / 2) p.y = mMax.y - p.y;
-
-        for (int i = 0; i < n.length; i++)
-            if (n[i].Active()) {
-                NDat nDat = n[i];
-                float zx = zTime * nDat.speed * nDat.sinAngle;
-                float zy = zTime * nDat.speed * nDat.cosAngle;
-
-                float bri = (iSymm == radSym ? (zTime * nDat.speed + nDat.xoff - p.dist(mCtr) / nDat.xz)
-                    : NoiseUtils.noise(p.x / nDat.xz + zx + nDat.xoff, p.y / nDat.yz + zy + nDat.yoff, p.z / nDat.zz + nDat.zoff)) * 1.8f;
-
-                bri += nDat.den / 100 - 0.4 + val(density) - 1;
-                col = Ops16.add(col, LXColor16.hsb(lxh() + nDat.hue, 100, c1c(bri)));
-            }
-
-        return col;
-    }
 }

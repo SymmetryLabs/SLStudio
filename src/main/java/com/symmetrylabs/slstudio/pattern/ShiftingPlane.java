@@ -2,15 +2,14 @@ package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.PolyBuffer;
 
 import static com.symmetrylabs.util.MathUtils.*;
-
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class ShiftingPlane extends LXPattern {
 
@@ -31,10 +30,8 @@ public class ShiftingPlane extends LXPattern {
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
-        
+        int[] colors = (int[]) getArray(SRGB8);
+
         float hv = palette.getHuef();
         float av = a.getValuef();
         float bv = b.getValuef();
@@ -44,22 +41,12 @@ public class ShiftingPlane extends LXPattern {
 
         for (LXPoint p : model.points) {
             float d = abs(av * (p.x - model.cx) + bv * (p.y - model.cy) + cv * (p.z - model.cz) + dv) / denom;
-
-            if (space == PolyBuffer.Space.RGB8) {
-                intColors[p.index] = LXColor.hsb(
-                    hv + (abs(p.x - model.cx) * .6f + abs(p.y - model.cy) * .9f + abs(p.z - model.cz)) * hueShift.getValuef(),
-                    constrain(110 - d * 6, 0, 100),
-                    constrain(130 - 7 * d, 0, 100)
-                );
-            }
-            else if (space == PolyBuffer.Space.RGB16) {
-                longColors[p.index] = LXColor16.hsb(
-                    hv + (abs(p.x - model.cx) * .6f + abs(p.y - model.cy) * .9f + abs(p.z - model.cz)) * hueShift.getValuef(),
-                    constrain(110 - d * 6, 0, 100),
-                    constrain(130 - 7 * d, 0, 100)
-                );
-            }
+            colors[p.index] = LXColor.hsb(
+                hv + (abs(p.x - model.cx) * .6f + abs(p.y - model.cy) * .9f + abs(p.z - model.cz)) * hueShift.getValuef(),
+                constrain(110 - d * 6, 0, 100),
+                constrain(130 - 7 * d, 0, 100)
+            );
         }
-        markModified(space);
+        markModified(SRGB8);
     }
 }

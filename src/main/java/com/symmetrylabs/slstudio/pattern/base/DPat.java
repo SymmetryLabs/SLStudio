@@ -1,14 +1,11 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
-import com.symmetrylabs.color.Ops16;
-import com.symmetrylabs.color.Spaces;
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.NoiseUtils;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
@@ -19,8 +16,7 @@ import processing.core.PVector;
 import java.util.ArrayList;
 import java.util.SplittableRandom;
 
-import static heronarts.lx.PolyBuffer.Space.RGB16;
-import static heronarts.lx.PolyBuffer.Space.RGB8;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PConstants.ADD;
 
 public abstract class DPat extends SLPattern<SLModel> {
@@ -81,14 +77,7 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     protected abstract void StartRun(double deltaMs);
-
-    /** To write a pattern that generates 8-bit colors, implement CalcPoint. */
     protected abstract int CalcPoint(PVector p);
-
-    /** To write a pattern that generates 16-bit colors, implement CalcPoint16. */
-    protected long CalcPoint16(PVector p) {
-        return Spaces.rgb8ToRgb16(CalcPoint(p));
-    }
 
     public int blend3(int c1, int c2, int c3) {
         return PImage.blendColor(c1, PImage.blendColor(c2, c3, ADD), ADD);
@@ -333,9 +322,7 @@ public abstract class DPat extends SLPattern<SLModel> {
         }
 
         // TODO Threading: For some reason, using parallelStream here messes up the animations.
-        Object array = getArray(space);
-        final int[] intColors = (space == RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == RGB16) ? (long[]) array : null;
+        int[] colors = (int[]) getArray(SRGB8);
 
         model.getPoints().parallelStream().forEach(p -> {
             PVector P = new PVector(), tP = new PVector();
@@ -352,64 +339,34 @@ public abstract class DPat extends SLPattern<SLModel> {
             if (wvAmp > 0) P.x += interpWv(p.y - modmin.y, xWaveNz);
             if (pJog.getValueb()) P.add(xyzJog);
 
-            if (intColors != null) {
-                int cNew, cOld = intColors[p.index];
-                {
-                    tP.set(P);
-                    cNew = CalcPoint(tP);
-                }
-                if (pXsym.getValueb()) {
-                    tP.set(mMax.x - P.x, P.y, P.z);
-                    cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                }
-                if (pYsym.getValueb()) {
-                    tP.set(P.x, mMax.y - P.y, P.z);
-                    cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                }
-                if (pRsym.getValueb()) {
-                    tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
-                    cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                }
-                if (pXdup.getValueb()) {
-                    tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
-                    cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
-                }
-                if (pGrey.getValueb()) {
-                    cNew = lx.hsb(0, 0, LXColor.b(cNew));
-                }
-
-                intColors[p.index] = cNew;
+            int cNew, cOld = colors[p.index];
+            {
+                tP.set(P);
+                cNew = CalcPoint(tP);
             }
-
-            if (longColors != null) {
-                long cNew, cOld = longColors[p.index];
-                {
-                    tP.set(P);
-                    cNew = CalcPoint16(tP);
-                }
-                if (pXsym.getValueb()) {
-                    tP.set(mMax.x - P.x, P.y, P.z);
-                    cNew = Ops16.add(cNew, CalcPoint16(tP));
-                }
-                if (pYsym.getValueb()) {
-                    tP.set(P.x, mMax.y - P.y, P.z);
-                    cNew = Ops16.add(cNew, CalcPoint16(tP));
-                }
-                if (pRsym.getValueb()) {
-                    tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
-                    cNew = Ops16.add(cNew, CalcPoint16(tP));
-                }
-                if (pXdup.getValueb()) {
-                    tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
-                    cNew = Ops16.add(cNew, CalcPoint16(tP));
-                }
-                if (pGrey.getValueb()) {
-                    cNew = lx.hsb(0, 0, LXColor16.b(cNew));
-                }
-
-                longColors[p.index] = cNew;
+            if (pXsym.getValueb()) {
+                tP.set(mMax.x - P.x, P.y, P.z);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
             }
+            if (pYsym.getValueb()) {
+                tP.set(P.x, mMax.y - P.y, P.z);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
+            }
+            if (pRsym.getValueb()) {
+                tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
+            }
+            if (pXdup.getValueb()) {
+                tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
+            }
+            if (pGrey.getValueb()) {
+                cNew = Ops8.gray(Ops8.level(cNew));
+            }
+            colors[p.index] = cNew;
         });
+
+        markModified(SRGB8);
     }
 
     public static class NDat {

@@ -67,23 +67,4 @@ public class Pong extends DPat {
         }
         return LXColor.hsb(0, 0, 0);
     }
-
-    @Override
-    public long CalcPoint16(PVector p) {
-        v.set(x.getValuef(), y.getValuef(), z.getValuef());
-        v.z = 0;
-        p.z = 0;// ignore z dimension
-        switch (pChoose.getValuei()) {
-            case 0:
-                vMir.set(mMax);
-                vMir.sub(p);
-                return LXColor16.hsb(lxh(), 100, c1c(1 - MathUtils.min(v.dist(p), v.dist(vMir)) * .5f / cRad));   // balls
-            case 1:
-                return LXColor16.hsb(lxh(), 100, c1c(1 - v.dist(p) * .5f / cRad));              // ball
-            case 2:
-                vMir.set(mMax.x / 2, 0, mMax.z / 2);
-                return LXColor16.hsb(lxh(), 100, c1c(1 - calcCone(p, v, vMir) * MathUtils.max(.02f, .45f - val(pSize))));   // spot
-        }
-        return LXColor16.hsb(0, 0, 0);
-    }
 }

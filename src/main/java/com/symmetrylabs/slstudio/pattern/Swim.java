@@ -1,21 +1,20 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.util.Spliterator;
-import java.util.Spliterators;
-import java.util.stream.StreamSupport;
-
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXProjection;
-import heronarts.lx.transform.LXVector;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-import heronarts.lx.PolyBuffer;
 
+import java.util.Spliterator;
+import java.util.Spliterators;
+import java.util.stream.StreamSupport;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class Swim extends LXPattern {
 
@@ -57,10 +56,7 @@ public class Swim extends LXPattern {
 
     @Override
     public void run(double deltaMs, PolyBuffer.Space space) {
-        Object array = getArray(space);
-        final int[] intColors = (space == PolyBuffer.Space.RGB8) ? (int[]) array : null;
-        final long[] longColors = (space == PolyBuffer.Space.RGB16) ? (long[]) array : null;
-
+        int[] colors = (int[]) getArray(SRGB8);
         final float phase = phaseLFO.getValuef();
         final float upDownRange = (model.yMax - model.yMin) / 4;
 
@@ -96,13 +92,8 @@ public class Swim extends LXPattern {
                 + (float) Math.abs(p.y - model.yMax / 2) * .6f
                 + (float) Math.abs(p.z - model.zMax));
 
-            if (space == PolyBuffer.Space.RGB8) {
-                intColors[p.index] = LXColor.hsb(hue_color, palette.getSaturationf(), v1);
-            }
-            else if (space == PolyBuffer.Space.RGB16) {
-                longColors[p.index] = LXColor16.hsb(hue_color, palette.getSaturationf(), v1);
-            }
+            colors[p.index] = LXColor.hsb(hue_color, palette.getSaturationf(), v1);
         });
-        markModified(space);
+        markModified(SRGB8);
     }
 }
