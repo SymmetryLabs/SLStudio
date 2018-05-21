@@ -1,16 +1,13 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import processing.core.PVector;
-
+import com.symmetrylabs.slstudio.pattern.base.DPat;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.color.LXColor;
-import heronarts.lx.color.LXColor16;
-
-import com.symmetrylabs.slstudio.pattern.base.DPat;
-import com.symmetrylabs.util.MathUtils;
+import processing.core.PVector;
 
 public class Pong extends DPat {
     SinLFO x, y, z, dx, dy, dz;

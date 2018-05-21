@@ -1,11 +1,9 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.color.Ops16;
 import com.symmetrylabs.slstudio.pattern.base.DPat;
 import com.symmetrylabs.util.MathUtils;
 import com.symmetrylabs.util.NoiseUtils;
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor16;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
 import processing.core.PImage;

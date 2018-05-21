@@ -1,15 +1,12 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import heronarts.lx.color.LXColor16;
-import processing.core.PVector;
-
+import com.symmetrylabs.slstudio.pattern.base.DPat;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-
-import com.symmetrylabs.slstudio.pattern.base.DPat;
-import com.symmetrylabs.util.MathUtils;
+import processing.core.PVector;
 
 public class AskewPlanes extends DPat {
 
@@ -89,23 +86,6 @@ public class AskewPlanes extends DPat {
             }
         }
         return lx.hsb(
-            huev + MathUtils.abs(p.x - model.cx) * .3f + p.y * .8f,
-            MathUtils.max(0, 100 - .15f * MathUtils.abs(p.x - model.cx)),
-            MathUtils.constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
-        );
-    }
-
-    public long CalcPoint16(PVector p) {
-        float d = Float.MAX_VALUE;
-
-        int i = 0;
-        for (Plane plane : planes) {
-            if (i++ <= numPlanes.getValuei() - 1) continue;
-            if (plane.denom != 0) {
-                d = MathUtils.min(d, MathUtils.abs(plane.av * (p.x - model.cx) + plane.bv * (p.y - model.cy) + plane.cv) / plane.denom);
-            }
-        }
-        return LXColor16.hsb(
             huev + MathUtils.abs(p.x - model.cx) * .3f + p.y * .8f,
             MathUtils.max(0, 100 - .15f * MathUtils.abs(p.x - model.cx)),
             MathUtils.constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
