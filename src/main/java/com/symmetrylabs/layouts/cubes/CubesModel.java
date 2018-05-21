@@ -17,7 +17,7 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 import static com.symmetrylabs.util.MathConstants.*;
 
 /**
- * Top-level model of the entire sculpture. This contains a list of
+ * Top-level model of the entire sculpture. This contains a set of
  * every cube on the sculpture, which forms a hierarchy of faces, strips
  * and points.
  */

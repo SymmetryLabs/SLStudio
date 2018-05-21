@@ -18,3 +18,4 @@ build
 /classes
 dynamic.json
 /project.lxp
+*.lxp

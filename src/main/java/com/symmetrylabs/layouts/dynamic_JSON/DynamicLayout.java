@@ -1,29 +1,15 @@
 package com.symmetrylabs.layouts.dynamic_JSON;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonSyntaxException;
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.cubes.CubesController;
 import com.symmetrylabs.layouts.cubes.CubesLayout;
-import com.symmetrylabs.layouts.cubes.UIMappingPanel;
-import com.symmetrylabs.layouts.cubes.UIOutputs;
-import com.symmetrylabs.slstudio.model.CandyBar;
-import com.symmetrylabs.slstudio.model.LocatedForm;
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.output.ArtNetDatagram;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import com.symmetrylabs.slstudio.output.SimplePixlite;
-import com.symmetrylabs.slstudio.output.SimplePixliteConfigs;
-import com.symmetrylabs.util.NetworkUtils;
-import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.listenable.ListListener;
-import com.symmetrylabs.util.listenable.ListenableList;
+import com.symmetrylabs.util.listenable.SetListener;
+import com.symmetrylabs.util.listenable.ListenableSet;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXAbstractFixture;
 import heronarts.lx.model.LXFixture;
@@ -31,15 +17,12 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.output.LXDatagramOutput;
 import heronarts.lx.output.OPCDatagram;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.transform.LXTransform;
-import heronarts.p3lx.ui.UI2dScrollContext;
 
 import java.lang.ref.WeakReference;
 import java.util.*;
 
 public class DynamicLayout extends CubesLayout implements Layout {
-    ListenableList<CubesController> controllers = new ListenableList<>();
+    ListenableSet<CubesController> controllers = new ListenableSet<>();
     public MappingPixlite[] mappingPixlites;
     SimplePixlite[] pixlites;
 
@@ -209,8 +192,8 @@ public class DynamicLayout extends CubesLayout implements Layout {
 //        final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 //
 //
-//        networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
-//            public void itemAdded(int index, NetworkDevice device) {
+//        networkMonitor.deviceList.addListener(new SetListener<NetworkDevice>() {
+//            public void onItemAdded(int index, NetworkDevice device) {
 //                String macAddr = NetworkUtils.macAddrToString(device.macAddress);
 //                String physid = macToPhysid.get(macAddr);
 //                if (physid == null) {
@@ -227,7 +210,7 @@ public class DynamicLayout extends CubesLayout implements Layout {
 ////                controller.enabled.setValue(false);
 //            }
 //
-//            public void itemRemoved(int index, NetworkDevice device) {
+//            public void onItemRemoved(int index, NetworkDevice device) {
 //                final CubesController controller = controllers.remove(index);
 //                dispatcher.dispatchEngine(new Runnable() {
 //                    public void run() {
@@ -248,7 +231,7 @@ public class DynamicLayout extends CubesLayout implements Layout {
 //        });
     }
 
-    public void addControllerListListener(ListListener<CubesController> listener) {
+    public void addControllerSetListener(SetListener<CubesController> listener) {
         controllers.addListener(listener);
     }
 

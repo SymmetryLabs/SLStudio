@@ -8,6 +8,7 @@ import java.util.Collection;
 import java.util.Arrays;
 import java.util.Date;
 
+import heronarts.lx.PolyBuffer;
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
 
@@ -27,6 +28,8 @@ import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.Octahedron;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class FlockWave extends SLPatternWithMarkers {
 
@@ -114,7 +117,7 @@ public class FlockWave extends SLPatternWithMarkers {
         addParameter(fadeOutSec);
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space preferredSpace) {
         advanceSimulation((float) deltaMs * 0.001f * timeScale.getValuef());
         blobFollower.advance((float) deltaMs * 0.001f);
         render();
@@ -384,6 +387,8 @@ public class FlockWave extends SLPatternWithMarkers {
     private final FlockWaveRenderPlasmaKernel kernel = new FlockWaveRenderPlasmaKernel();
 
     void renderPlasma(final Collection<Bird> birds) {
+        final int[] colors = (int[]) getArray(SRGB8);
+
         if (birds.size() > 0) {
             if (kernel.result == null || kernel.result.length != colors.length) {
                 kernel.numPoints = colors.length;
@@ -436,9 +441,10 @@ public class FlockWave extends SLPatternWithMarkers {
                 colors[p.index] = pal.getColor(result[p.index]);
             });
         } else {
-            int color = getPalette().getColor(palShift.getValue());
-            Arrays.fill(colors, color);
+            Arrays.fill(colors, getPalette().getColor(palShift.getValue()));
         }
+
+        markModified(SRGB8);
     }
 
     PVector getRandomUnitVector() {
@@ -476,7 +482,7 @@ public class FlockWave extends SLPatternWithMarkers {
             this.value = 0;
             this.elapsedSec = 0;
             this.expired = false;
-            this.renderedValues = new double[colors.length];
+            this.renderedValues = new double[((long[]) getArray(SRGB8)).length];
         }
 
         void run(float deltaSec, PVector targetVel) {

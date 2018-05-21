@@ -1,5 +1,7 @@
 package com.symmetrylabs.slstudio.palettes;
 
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Spaces;
 import heronarts.lx.color.LXColor;
 
 /**
@@ -33,5 +35,12 @@ public class ArrayPalette implements ColorPalette {
         int low = (int) Math.floor(index);
         int high = (low + 1) < colors.length ? low + 1 : low;
         return LXColor.lerp(colors[low], colors[high], index - low);
+    }
+
+    public long getColor16(double p) {
+        double index = clamp(p, 0, 1) * (colors.length - 1);
+        int low = (int) Math.floor(index);
+        int high = (low + 1) < colors.length ? low + 1 : low;
+        return Ops16.blend(Spaces.rgb8ToRgb16(colors[low]), Spaces.rgb8ToRgb16(colors[high]), index - low);
     }
 }

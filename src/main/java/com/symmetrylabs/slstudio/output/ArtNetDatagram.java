@@ -1,12 +1,11 @@
 package com.symmetrylabs.slstudio.output;
 
-import java.net.UnknownHostException;
-
+import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.slstudio.component.GammaExpander;
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
 import heronarts.lx.output.LXDatagram;
 
-import com.symmetrylabs.slstudio.component.GammaExpander;
+import java.net.UnknownHostException;
 
 public class ArtNetDatagram extends LXDatagram {
 
@@ -91,9 +90,9 @@ public class ArtNetDatagram extends LXDatagram {
             int colorValue = (index >= 0) ? colors[index] : 0;
 
             int gammaExpanded = GammaExpander.getExpandedColor(colorValue);
-            buffer[i + byteOffset[0]] = LXColor.red(gammaExpanded);
-            buffer[i + byteOffset[1]] = LXColor.green(gammaExpanded);
-            buffer[i + byteOffset[2]] = LXColor.blue(gammaExpanded);
+            buffer[i + byteOffset[0]] = (byte) Ops8.red(gammaExpanded);
+            buffer[i + byteOffset[1]] = (byte) Ops8.green(gammaExpanded);
+            buffer[i + byteOffset[2]] = (byte) Ops8.blue(gammaExpanded);
 
             i += 3;
         }

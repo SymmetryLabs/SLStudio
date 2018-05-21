@@ -1,14 +1,15 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import static processing.core.PApplet.map;
-
+import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.util.NoiseUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.MathUtils;
-import com.symmetrylabs.util.NoiseUtils;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
+import static processing.core.PApplet.map;
 
 public class Rings extends LXPattern {
     float dx, dy, dz;
@@ -34,7 +35,8 @@ public class Rings extends LXPattern {
         addParameter(pScale);
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
 
         final float xyspeed = pSpeed1.getValuef() * 0.01f;
         final float zspeed = pSpeed1.getValuef() * 0.08f;
@@ -98,9 +100,10 @@ public class Rings extends LXPattern {
                 0.0f, 1.0f, 0.0f, 300.0f
             );
 
-            colors[p.index] = lx.hsb(palette.getHuef() + m, saturation, brightness);
+            colors[p.index] = LXColor.hsb(palette.getHuef() + m, saturation, brightness);
         });
 
         NoiseUtils.noiseDetail(1);
+        polyBuffer.markModified(SRGB8);
     }
 }

@@ -86,7 +86,7 @@ public class TreeModel extends SLModel {
                         System.out.println("Skipping unknown Stellar Fixture type: " + fixtureType);
                         continue;
                     }
-                    // Make a fixture object, add to the list
+                    // Make a fixture object, add to the set
                     StellarFixtureConfig fixture = new StellarFixtureConfig(fixtureObj, fixtureType);
                     fixtureMap.put(fixture.fixtureId, fixture);
                 }

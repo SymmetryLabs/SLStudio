@@ -1,40 +1,31 @@
 package com.symmetrylabs.layouts.cubes;
 
-import java.util.List;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.WeakHashMap;
+import java.util.*;
 import java.lang.ref.WeakReference;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonSyntaxException;
-
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.SLController;
+import com.symmetrylabs.util.CubePhysicalIdMap;
+import com.symmetrylabs.util.listenable.SetListener;
 import heronarts.lx.LX;
 import heronarts.lx.output.FadecandyOutput;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.network.NetworkMonitor;
 import com.symmetrylabs.slstudio.network.NetworkDevice;
-import com.symmetrylabs.util.NetworkUtils;
 import com.symmetrylabs.util.dispatch.Dispatcher;
-import com.symmetrylabs.util.listenable.ListenableList;
-import com.symmetrylabs.util.listenable.ListListener;
+import com.symmetrylabs.util.listenable.ListenableSet;
 import heronarts.p3lx.ui.UI2dScrollContext;
 
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
 public class CubesLayout implements Layout {
-    ListenableList<CubesController> controllers = new ListenableList<>();
+    ListenableSet<CubesController> controllers = new ListenableSet<>();
+    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
 
     static final float globalOffsetX = 0;
     static final float globalOffsetY = 0;
@@ -75,17 +66,17 @@ public class CubesLayout implements Layout {
 
     static final TowerConfig[] TOWER_CONFIG = {
 // OFFICE MAPPINGS APRIL
-    
+
 //         // left
 //         // new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
-                
+
                 //backrow left to right
         new TowerConfig(0, 0,0, 0, 0, -180, new String[] { "68", "336","199", "82" }),
         new TowerConfig((SP) * -1, 0,0, 0, 0, -180, new String[] { "397", "16", "50" }),
-        new TowerConfig((SP) * -1 , 0 , SP*1, 0, 0, -180, new String[] {"76", "87", "420", "186"}), 
+        new TowerConfig((SP) * -1 , 0 , SP*1, 0, 0, -180, new String[] {"76", "87", "420", "186"}),
 
                 new TowerConfig((SP) * -1.5f , SP*3.0f , SP*0.5f, -45, -45, -45, new String[] {"4"}),
-        
+
         new TowerConfig((SP) * -2, 0,0, 0, 0, -180, new String[] {"203",  "418", "65" }),
         new TowerConfig((SP) * -2 , 0 , SP*1, 0, 0, -180, new String[] {"17", "419", "1", "57"}),
         new TowerConfig((SP) * -3 , 0 , SP*0.5f, 0, 0, -180, new String[] {"108", "340", "30"}),
@@ -99,16 +90,16 @@ public class CubesLayout implements Layout {
         new TowerConfig((SP) * -4.7f , SP*1.25f , SP*0.75f, 0, 0, -215, new String[] {"156"}),
         new TowerConfig((SP) * -5.1f , SP*0.75f , SP*0.75f, 0, 0, -215, new String[] {"27"}),
         new TowerConfig((SP) * -5.5f , SP*0.2f , SP*.75f, 0, 0, -215, new String[] {"138"}), //138
-        
+
         new TowerConfig((SP) * -5.7f , SP*1.25f , SP*0.75f, 0, 0, -215, new String[] {"353"}),
         new TowerConfig((SP) * -6.1f , SP*0.75f , SP*0.75f, 0, 0, -215, new String[] {"189"}),
         new TowerConfig((SP) * -6.5f , SP*0.2f , SP*.75f, 0, 0, -215, new String[] {"7"}),
-        
+
         new TowerConfig((SP) * -6.7f , SP*1.25f , SP*0.75f, 0, 0, -215, new String[] {"184"}),
         new TowerConfig((SP) * -7.1f , SP*0.75f , SP*0.75f, 0, 0, -215, new String[] {"79"}),
         new TowerConfig((SP) * -7.5f , SP*0.2f , SP*.75f, 0, 0, -215, new String[] {"351"}),
-        
-        
+
+
         // new TowerConfig((SP) * -12 , 0 , SP*0.5f, 0, 0, -45, new String[] {"14", "15", "16"}),
 
         new TowerConfig(CubesModel.Cube.Type.MEDIUM, (SP) * -12 , 0 , SP*-0.5f, 0, 0, -180, new String[] {"100"}),
@@ -132,11 +123,11 @@ public class CubesLayout implements Layout {
         // new TowerConfig((SP) * -7 , 0 , SP*0.5f, 0, 0, -45, new String[] {"14", "15", "16"}),
         // new TowerConfig((SP) * 3 , 0 , SP*0.5f, new String[] {"18", "19", "20", "21"}),
         // new TowerConfig((SP) * 4 , 0 , SP*0.5f, new String[] {"22", "23", "24", "25"}),
-        
+
         // new TowerConfig((SP) * 3, 0,0, 0, new String[] { "172", "79", "111", "177" }),
-        
+
         // //Back Row Top Center
-        // new TowerConfig((SP) * 1.5f, JUMP * 3,0, 0, new String[] {"87"}),        
+        // new TowerConfig((SP) * 1.5f, JUMP * 3,0, 0, new String[] {"87"}),
 
 
 
@@ -163,11 +154,11 @@ public class CubesLayout implements Layout {
         // new TowerConfig (CubesModel.Cube.Type.MEDIUM, SP * 1.5f, 0, -24*6, -45, new String[] { "334"}),
         // new TowerConfig (CubesModel.Cube.Type.SMALL, SP * 1.75f, 0, -24*6, -45, new String[] { "384"}),
 
-        
+
 
 
 // STOCK CONFIG
-    /*    // left
+/*    // left
 
         new TowerConfig(-SP*5.5f, (JUMP*0)+0, -SP*3.5f, new String[] { "localdebug" }),
 
@@ -320,27 +311,9 @@ public class CubesLayout implements Layout {
                 yValues[i] = y + i * (CUBE_HEIGHT + CUBE_SPACING);
             }
         }
-
     }
 
-    static Map<String, String> macToPhysid = new HashMap<>();
-    static Map<String, String> physidToMac = new HashMap<>();
-
     public SLModel buildModel() {
-
-        byte[] bytes = SLStudio.applet.loadBytes("physid_to_mac.json");
-        if (bytes != null) {
-            try {
-                JsonObject json = new Gson().fromJson(new String(bytes), JsonObject.class);
-                for (Map.Entry<String, JsonElement> entry : json.entrySet()) {
-                    macToPhysid.put(entry.getValue().getAsString(), entry.getKey());
-                    physidToMac.put(entry.getKey(), entry.getValue().getAsString());
-                }
-            }  catch (JsonSyntaxException e) {
-                e.printStackTrace();
-            }
-        }
-
         // Any global transforms
         LXTransform globalTransform = new LXTransform();
         globalTransform.translate(globalOffsetX, globalOffsetY, globalOffsetZ);
@@ -430,22 +403,19 @@ public class CubesLayout implements Layout {
             CubesModel.Cube cube = new CubesModel.Cube(config.ids[i], x, y, z, xRot, yRot, zRot, globalTransform, type);
         }
 
-        networkMonitor.networkDevices.addListener(new ListListener<NetworkDevice>() {
-            public void itemAdded(int index, NetworkDevice device) {
-                String macAddr = NetworkUtils.macAddrToString(device.macAddress);
-                String physid = macToPhysid.get(macAddr);
-                if (physid == null) {
-                    physid = macAddr;
-                    System.err.println("WARNING: MAC address not in physid_to_mac.json: " + macAddr);
-                }
-                final CubesController controller = new CubesController(lx, device, physid);
-                controllers.add(index, controller);
+        networkMonitor.deviceList.addListener(new SetListener<NetworkDevice>() {
+            public void onItemAdded(NetworkDevice device) {
+                String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
+                final CubesController controller = new CubesController(lx, device, physicalId);
+                controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
+                controllers.add(controller);
                 dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
                 //controller.enabled.setValue(false);
             }
 
-            public void itemRemoved(int index, NetworkDevice device) {
-                final CubesController controller = controllers.remove(index);
+            public void onItemRemoved(NetworkDevice device) {
+                final CubesController controller = getControllerByDevice(device);
+                controllers.remove(controller);
                 dispatcher.dispatchNetwork(() -> {
                     //lx.removeOutput(controller);
                 });
@@ -463,21 +433,20 @@ public class CubesLayout implements Layout {
         });
     }
 
-    public List<CubesController> getSortedControllers() {
-        List<CubesController> sorted = new ArrayList<CubesController>(controllers);
-        sorted.sort(new Comparator<CubesController>() {
-            public int compare(CubesController o1, CubesController o2) {
-                try {
-                    return Integer.parseInt(o1.id) - Integer.parseInt(o2.id);
-                } catch (NumberFormatException e) {
-                    return o1.id.compareTo(o2.id);
-                }
+    public CubesController getControllerByDevice(NetworkDevice device) {
+        for (CubesController controller : controllers) {
+            if (controller.networkDevice == device) {
+                return controller;
             }
-        });
-        return sorted;
+        }
+        return null;
     }
 
-    public void addControllerListListener(ListListener<CubesController> listener) {
+    public Collection<CubesController> getSortedControllers() {
+        return new TreeSet<CubesController>(controllers);
+    }
+
+    public void addControllerSetListener(SetListener<CubesController> listener) {
         controllers.addListener(listener);
     }
 

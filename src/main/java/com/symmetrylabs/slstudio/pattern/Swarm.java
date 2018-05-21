@@ -4,10 +4,13 @@ import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 import static processing.core.PApplet.*;
 
 public class Swarm extends SLPattern<StripsModel<Strip>> {
@@ -39,22 +42,25 @@ public class Swarm extends SLPattern<StripsModel<Strip>> {
         }
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
+
         float s = 0;
         for (Strip strip : model.getStrips()) {
           int i = 0;
           for (LXPoint p : strip.points) {
             float fV = max(-1, 1 - dist(p.x/2.f, p.y, fX.getValuef()/2.f, fY.getValuef()) / 64.f);
-           // println("fv: " + fV);
-            colors[p.index] = lx.hsb(
-            palette.getHuef() + 0.3f * abs(p.x - hOffX.getValuef()),
-            constrain(80 + 40 * fV, 0, 100),
-            constrain(100 -
-              (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
-              );
+                        // println("fv: " + fV);
+                colors[p.index] = LXColor.hsb(
+                        palette.getHuef() + 0.3f * abs(p.x - hOffX.getValuef()),
+                        constrain(80 + 40 * fV, 0, 100),
+                        constrain(100 -
+                                (30 - fV * falloff.getValuef()) * modDist(i + (s*63)%61, offset.getValuef() * strip.metrics.numPoints, strip.metrics.numPoints), 0, 100)
+                );
             ++i;
           }
           ++s;
         }
+        markModified(SRGB8);
     }
 }

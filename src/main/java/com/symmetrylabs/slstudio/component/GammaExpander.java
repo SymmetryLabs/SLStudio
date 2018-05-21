@@ -1,17 +1,17 @@
 package com.symmetrylabs.slstudio.component;
 
-import java.util.Map;
-import java.util.WeakHashMap;
-import java.lang.ref.WeakReference;
-
-import org.apache.commons.math3.util.FastMath;
-
+import com.symmetrylabs.color.Ops16;
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
-import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.BooleanParameter;
+import org.apache.commons.math3.util.FastMath;
+
+import java.lang.ref.WeakReference;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 public class GammaExpander extends LXComponent {
 
@@ -26,9 +26,12 @@ public class GammaExpander extends LXComponent {
     public final BoundedParameter greenGammaFactor = new BoundedParameter("GGMA", 2.2, 1, 4);
     public final BoundedParameter blueGammaFactor = new BoundedParameter("BGMA", 2.8, 1, 4);
 
-    private final byte redGamma[] = new byte[256];
-    private final byte greenGamma[] = new byte[256];
-    private final byte blueGamma[] = new byte[256];
+    private final int redGamma[] = new int[256];
+    private final int greenGamma[] = new int[256];
+    private final int blueGamma[] = new int[256];
+    private final int redGamma16[] = new int[65536];
+    private final int greenGamma16[] = new int[65536];
+    private final int blueGamma16[] = new int[65536];
 
     private static Map<LX, WeakReference<GammaExpander>> instanceByLX = new WeakHashMap<>();
 
@@ -59,44 +62,37 @@ public class GammaExpander extends LXComponent {
         if (!enabled.isOn())
             return c;
 
-        int r = c >> 16 & 0xFF;
-        int g = c >> 8 & 0xFF;
-        int b = c & 0xFF;
-
-        int alpha = LXColor.alpha(c);
-        int red = redGamma[r] & 0xFF;
-        int green = greenGamma[g] & 0xFF;
-        int blue = blueGamma[b] & 0xFF;
-
-        return alpha << LXColor.ALPHA_SHIFT | red << LXColor.RED_SHIFT
-                | green << LXColor.GREEN_SHIFT | blue;
+        int r = Ops8.red(c);
+        int g = Ops8.green(c);
+        int b = Ops8.blue(c);
+        int a = Ops8.alpha(c);
+        return Ops8.rgba(redGamma[r], greenGamma[g], blueGamma[b], a);
     }
 
-    public byte getExpandedRed(int c) {
-        byte r = (byte)(c >> 16 & 0xFF);
-
+    public long getExpandedColor16(long c) {
         if (!enabled.isOn())
-            return r;
+            return c;
 
-        return redGamma[r];
+        int r = Ops16.red(c);
+        int g = Ops16.green(c);
+        int b = Ops16.blue(c);
+        int a = Ops16.alpha(c);
+        return Ops16.rgba(redGamma16[r], greenGamma16[g], blueGamma16[b], a);
     }
 
-    public byte getExpandedGreen(int c) {
-        byte g = (byte)(c >> 8 & 0xFF);
-
-        if (!enabled.isOn())
-            return g;
-
-        return greenGamma[g];
+    public int getExpandedRed(int c) {
+        int r = Ops8.red(c);
+        return enabled.isOn() ? redGamma[r] : r;
     }
 
-    public byte getExpandedBlue(int c) {
-        byte b = (byte)(c & 0xFF);
+    public int getExpandedGreen(int c) {
+        int g = Ops8.green(c);
+        return enabled.isOn() ? greenGamma[g] : g;
+    }
 
-        if (!enabled.isOn())
-            return b;
-
-        return blueGamma[b];
+    public int getExpandedBlue(int c) {
+        int b = Ops8.blue(c);
+        return enabled.isOn() ? blueGamma[b] : b;
     }
 
     private void initialize() {
@@ -117,24 +113,27 @@ public class GammaExpander extends LXComponent {
         });
 
         redGammaFactor.addListener(param -> {
-            prepareGammaTable(redGamma, param.getValuef());
+            prepareGammaTables(redGamma, redGamma16, param.getValuef());
         });
-        prepareGammaTable(redGamma, redGammaFactor.getValuef());
+        prepareGammaTables(redGamma, redGamma16, redGammaFactor.getValuef());
 
         greenGammaFactor.addListener(param -> {
-            prepareGammaTable(greenGamma, param.getValuef());
+            prepareGammaTables(greenGamma, greenGamma16, param.getValuef());
         });
-        prepareGammaTable(greenGamma, greenGammaFactor.getValuef());
+        prepareGammaTables(greenGamma, greenGamma16, greenGammaFactor.getValuef());
 
         blueGammaFactor.addListener(param -> {
-            prepareGammaTable(blueGamma, param.getValuef());
+            prepareGammaTables(blueGamma, blueGamma16, param.getValuef());
         });
-        prepareGammaTable(blueGamma, blueGammaFactor.getValuef());
+        prepareGammaTables(blueGamma, blueGamma16, blueGammaFactor.getValuef());
     }
 
-    private void prepareGammaTable(byte[] gammaTable, float gamma) {
+    private void prepareGammaTables(int[] gammaTable8, int[] gammaTable16, float gamma) {
         for (int i = 0; i < 256; i++) {
-            gammaTable[i] = (byte)(FastMath.pow(1.0f * i / 255f, gamma) * 255f + 0.5f);
+            gammaTable8[i] = (int) (FastMath.pow(i / 255.0, gamma) * 255 + 0.5);
+        }
+        for (int i = 0; i < 65536; i++) {
+            gammaTable16[i] = (int) (FastMath.pow(i / 65535.0, gamma) * 65335 + 0.5);
         }
     }
 }

@@ -1,10 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.color.LXColor;
@@ -12,7 +12,10 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.MathUtils;
+import java.util.ArrayList;
+import java.util.List;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class ViolinWave extends LXPattern {
 
@@ -72,19 +75,14 @@ public class ViolinWave extends LXPattern {
             return x.isRunning() || y.isRunning();
         }
 
-        public void run(final double deltaMs) {
-            if (!isActive()) {
-                return;
-            }
-
+        public void run(double deltaMs, int[] colors) {
+            if (!isActive()) return;
             final float pFalloff = (30 - 27 * pSize.getValuef());
 
             model.getPoints().parallelStream().forEach(p -> {
                 float b = 100 - pFalloff * (MathUtils.abs(p.x - x.getValuef()) + MathUtils.abs(p.y - y.getValuef()));
                 if (b > 0) {
-                    blendColor(p.index, lx.hsb(
-                        palette.getHuef(), 20, b
-                    ), LXColor.Blend.ADD);
+                    Ops8.add(p.index, LXColor.hsb(palette.getHuef(), 20, b));
                 }
             });
         }
@@ -107,7 +105,9 @@ public class ViolinWave extends LXPattern {
 
     final double LOG_10 = Math.log(10);
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
+
         accum += deltaMs / (1000. - 900. * speed.getValuef());
         for (int i = 0; i < centers.length; ++i) {
             centers[i] =
@@ -135,7 +135,7 @@ public class ViolinWave extends LXPattern {
         for (LXPoint p : model.points) {
             int ci = (int)MathUtils.lerp(0, centers.length - 1, (p.x - model.xMin) / (model.xMax - model.xMin));
             float rFactor = 1.0f - 0.9f * MathUtils.abs(p.x - model.cx) / (model.xMax - model.cx);
-            colors[p.index] = lx.hsb(
+            colors[p.index] = LXColor.hsb(
                 palette.getHuef() + MathUtils.abs(p.x - model.cx),
                 MathUtils.min(100, 20 + 8 * MathUtils.abs(p.y - centers[ci])),
                 MathUtils.constrain(edg * (val * rFactor - rng * MathUtils.abs(p.y - centers[ci])), 0, 100)
@@ -143,7 +143,8 @@ public class ViolinWave extends LXPattern {
         }
 
         for (Particle p : particles) {
-            p.run(deltaMs);
+            p.run(deltaMs, colors);
         }
+        markModified(SRGB8);
     }
 }

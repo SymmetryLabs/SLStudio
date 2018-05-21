@@ -1,14 +1,12 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import processing.core.PVector;
-
+import com.symmetrylabs.slstudio.pattern.base.DPat;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
-
-import com.symmetrylabs.slstudio.pattern.base.DPat;
-import com.symmetrylabs.util.MathUtils;
+import processing.core.PVector;
 
 public class AskewPlanes extends DPat {
 
@@ -78,7 +76,6 @@ public class AskewPlanes extends DPat {
 
     @Override
     public int CalcPoint(PVector p) {
-        //for (LXPoint p : model.points) {
         float d = Float.MAX_VALUE;
 
         int i = 0;
@@ -93,6 +90,5 @@ public class AskewPlanes extends DPat {
             MathUtils.max(0, 100 - .15f * MathUtils.abs(p.x - model.cx)),
             MathUtils.constrain(700f * thickness.getValuef() - 10f * d, 0, 100)
         );
-        //}
     }
 }

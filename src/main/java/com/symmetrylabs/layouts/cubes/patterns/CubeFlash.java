@@ -1,18 +1,21 @@
 package com.symmetrylabs.layouts.cubes.patterns;
 
+import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import heronarts.lx.LX;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.parameter.CompoundParameter;
+
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Consumer;
 
-import com.symmetrylabs.layouts.cubes.CubesModel;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
-
 import static com.symmetrylabs.util.MathUtils.random;
-import static processing.core.PApplet.*;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
+import static processing.core.PApplet.floor;
 
 public class CubeFlash extends SLPattern<CubesModel> {
     private CompoundParameter rateParameter = new CompoundParameter("Speed", 0.125);
@@ -65,7 +68,9 @@ public class CubeFlash extends SLPattern<CubesModel> {
         flashes = new LinkedList<Flash>();
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
+
         leftoverMs += deltaMs;
         float msPerFlash = 1000 / ((rateParameter.getValuef() + .01f) * 100);
         while (leftoverMs > msPerFlash) {
@@ -78,10 +83,10 @@ public class CubeFlash extends SLPattern<CubesModel> {
         flashes.parallelStream().forEach(new Consumer<Flash>() {
             @Override
             public void accept(final Flash flash) {
-                int col = lx.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-                for (LXPoint p : flash.cube.getPoints()) {
-                    colors[p.index] = col;
-                }
+             int col = LXColor.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
+             for (LXPoint p : flash.cube.getPoints()) {
+                 colors[p.index] = col;
+             }
             }
         });
 
@@ -93,5 +98,6 @@ public class CubeFlash extends SLPattern<CubesModel> {
                 i.remove();
             }
         }
+    markModified(SRGB8);
     }
 }

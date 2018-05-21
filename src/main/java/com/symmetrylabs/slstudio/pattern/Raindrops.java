@@ -1,21 +1,22 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
-import heronarts.lx.model.LXPoint;
-import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.transform.LXVector;
 
-import java.util.List;
-import java.util.LinkedList;
-import processing.core.PImage;
 import java.util.Iterator;
+import java.util.LinkedList;
+import java.util.List;
 
-import java.lang.Math;
-import static processing.core.PApplet.*;
 import static com.symmetrylabs.util.MathUtils.random;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
+import static processing.core.PApplet.abs;
 
 public class Raindrops extends SLPattern<SLModel> {
 
@@ -74,7 +75,9 @@ public class Raindrops extends SLPattern<SLModel> {
         );
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
+
         leftoverMs += deltaMs;
         float msPerRaindrop = Math.abs(numRainDrops.getValuef());
         while (leftoverMs > msPerRaindrop) {
@@ -82,7 +85,7 @@ public class Raindrops extends SLPattern<SLModel> {
             raindrops.add(new Raindrop());
         }
 
-        for (LXPoint p : model.points) {
+        model.getPoints().parallelStream().forEach(p -> {
             int c = 0;
             for (Raindrop raindrop : raindrops) {
                 if (p.x >= (raindrop.p.x - raindrop.radius) && p.x <= (raindrop.p.x + raindrop.radius) &&
@@ -90,12 +93,12 @@ public class Raindrops extends SLPattern<SLModel> {
 
                     float d = ((float)LXUtils.distance(raindrop.p.x, raindrop.p.y, p.x, p.y)) / raindrop.radius;
                     if (d < 1) {
-                        c = PImage.blendColor(c, lx.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100), ADD);
+                        c = Ops8.add(c, LXColor.hsb(raindrop.hue, 80, (float)Math.pow(1 - d, 0.01) * 100));
                     }
                 }
             }
             colors[p.index] = c;
-        }
+        });
 
         Iterator<Raindrop> i = raindrops.iterator();
         while (i.hasNext()) {
@@ -105,5 +108,8 @@ public class Raindrops extends SLPattern<SLModel> {
                 i.remove();
             }
         }
+        markModified(SRGB8);
     }
 }
+
+

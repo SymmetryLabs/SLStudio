@@ -1,15 +1,16 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import processing.core.PImage;
-import static processing.core.PConstants.ADD;
-
+import com.symmetrylabs.color.Ops8;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
-import com.symmetrylabs.util.MathUtils;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class Spheres extends LXPattern {
     private CompoundParameter hueParameter = new CompoundParameter("Size", 1.0);
@@ -55,7 +56,9 @@ public class Spheres extends LXPattern {
         spheres[1].radius = 50;
     }
 
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
+
         // Access the core master hue via this method call
         float hv = hueParameter.getValuef();
         float lfoValue = lfo.getValuef();
@@ -70,20 +73,19 @@ public class Spheres extends LXPattern {
         spheres[0].radius = 100 * hueParameter.getValuef();
         spheres[1].radius = 100 * hueParameter.getValuef();
 
-
         model.getPoints().parallelStream().forEach(p -> {
             float value = 0;
 
-            int c = lx.hsb(0, 0, 0);
+            int c = Ops8.BLACK;
             for (Sphere s : spheres) {
                 float d = MathUtils.dist(p.x, p.y, p.z, s.x, s.y, s.z);
                 float r = (s.radius); // * (sinLfoValue + 0.5));
                 value = MathUtils.max(0, 1 - MathUtils.max(0, d - r) / 10);
 
-                c = PImage.blendColor(c, lx.hsb(s.hue, 100, MathUtils.min(1, value) * 100), ADD);
+                c = Ops8.add(c, LXColor.hsb(s.hue, 100, MathUtils.min(1, value) * 100));
             }
-
             colors[p.index] = c;
         });
+        markModified(SRGB8);
     }
 }

@@ -1,22 +1,23 @@
 package com.symmetrylabs.slstudio.pattern.base;
 
-import java.util.ArrayList;
-import java.util.SplittableRandom;
-
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.model.SLModel;
-import processing.core.PImage;
-import processing.core.PVector;
-import static processing.core.PConstants.ADD;
-
+import com.symmetrylabs.util.MathUtils;
+import com.symmetrylabs.util.NoiseUtils;
 import heronarts.lx.LX;
-import heronarts.lx.color.LXColor;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import processing.core.PImage;
+import processing.core.PVector;
 
-import com.symmetrylabs.util.NoiseUtils;
-import com.symmetrylabs.util.MathUtils;
+import java.util.ArrayList;
+import java.util.SplittableRandom;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
+import static processing.core.PConstants.ADD;
 
 public abstract class DPat extends SLPattern<SLModel> {
     //ArrayList<Pick>   picks  = new ArrayList<Pick>  ();
@@ -289,7 +290,7 @@ public abstract class DPat extends SLPattern<SLModel> {
     }
 
     @Override
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
           /* pre patternControls UI
                     if (this == midiEngine.getFocusedPattern()) {
                         String Text1="", Text2="";
@@ -320,7 +321,8 @@ public abstract class DPat extends SLPattern<SLModel> {
                 xWaveNz[i] = wvAmp * (NoiseUtils.noise((float) (i / (mMax.y * .3f) - (1e3 + NoiseMove) / 1500f)) - .5f) * (mMax.x / 2f);
         }
 
-        // TODO Threadding: For some reason, using parallelStream here messes up the animations.
+        // TODO Threading: For some reason, using parallelStream here messes up the animations.
+        int[] colors = (int[]) getArray(SRGB8);
 
         model.getPoints().parallelStream().forEach(p -> {
             PVector P = new PVector(), tP = new PVector();
@@ -337,7 +339,6 @@ public abstract class DPat extends SLPattern<SLModel> {
             if (wvAmp > 0) P.x += interpWv(p.y - modmin.y, xWaveNz);
             if (pJog.getValueb()) P.add(xyzJog);
 
-
             int cNew, cOld = colors[p.index];
             {
                 tP.set(P);
@@ -345,26 +346,27 @@ public abstract class DPat extends SLPattern<SLModel> {
             }
             if (pXsym.getValueb()) {
                 tP.set(mMax.x - P.x, P.y, P.z);
-                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
             }
             if (pYsym.getValueb()) {
                 tP.set(P.x, mMax.y - P.y, P.z);
-                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
             }
             if (pRsym.getValueb()) {
                 tP.set(mMax.x - P.x, mMax.y - P.y, mMax.z - P.z);
-                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
             }
             if (pXdup.getValueb()) {
                 tP.set((P.x + mMax.x * .5f) % mMax.x, P.y, P.z);
-                cNew = PImage.blendColor(cNew, CalcPoint(tP), ADD);
+                cNew = Ops8.add(cNew, CalcPoint(tP));
             }
             if (pGrey.getValueb()) {
-                cNew = lx.hsb(0, 0, LXColor.b(cNew));
+                cNew = Ops8.gray(Ops8.level(cNew));
             }
-
             colors[p.index] = cNew;
         });
+
+        markModified(SRGB8);
     }
 
     public static class NDat {

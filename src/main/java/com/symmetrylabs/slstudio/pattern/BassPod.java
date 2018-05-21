@@ -1,34 +1,33 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.model.SLModel;
-import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.audio.GraphicMeter;
 import heronarts.lx.audio.LXAudioInput;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
 
-import static processing.core.PApplet.*;
+import static com.symmetrylabs.util.MathUtils.*;
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
-public class BassPod extends SLPattern<SLModel> {
+public class BassPod extends LXPattern {
 
     private LXAudioInput audioInput = lx.engine.audio.getInput();
     private GraphicMeter eq = new GraphicMeter(audioInput);
-        
-        private final CompoundParameter attack = new CompoundParameter("Attk", 0.4);
+
+    private final CompoundParameter attack = new CompoundParameter("Attk", 0.4);
     private final CompoundParameter clr = new CompoundParameter("Clr", 0.5);
 
-      private final CompoundParameter gain = new CompoundParameter("Gain", 0.5);
-        private final CompoundParameter range = new CompoundParameter("Range", 0.2);
-        
-        private final CompoundParameter release = new CompoundParameter("Rls", 0.4);
-        private final CompoundParameter slope = new CompoundParameter("Slope", 0.5);
+    private final CompoundParameter gain = new CompoundParameter("Gain", 0.5);
+    private final CompoundParameter range = new CompoundParameter("Range", 0.2);
+
+    private final CompoundParameter release = new CompoundParameter("Rls", 0.4);
+    private final CompoundParameter slope = new CompoundParameter("Slope", 0.5);
 
     public BassPod(LX lx) {
         super(lx);
-
         eq.start();
-
         addParameter(clr);
         addParameter(gain);
         addParameter(range);
@@ -48,7 +47,9 @@ public class BassPod extends SLPattern<SLModel> {
     public static final float DESAT_RATE = 50;
 
     @Override
-    public void run(double deltaMs) {
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
+
         eq.gain.setNormalized(gain.getValuef());
         eq.range.setNormalized(range.getValuef());
         eq.attack.setNormalized(attack.getValuef());
@@ -70,7 +71,9 @@ public class BassPod extends SLPattern<SLModel> {
             float b = constrain(BRTNESS_RATE * (value * model.yRange - abs(p.y - model.cy)) / model.yRange, 0, 100);
             float s = constrain(satBase - DESAT_RATE * dist(p.x, p.y, model.cx, model.cy) * 2f / (model.xRange + model.yRange), 0, 100);
 
-            colors[p.index] = lx.hsb(h, s, b);
+            colors[p.index] = LXColor.hsb(h, s, b);
         });
+
+        markModified(SRGB8);
     }
 }

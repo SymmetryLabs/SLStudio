@@ -1,8 +1,10 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.color.Ops8;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.LXUtils;
+import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.QuadraticEnvelope;
@@ -12,6 +14,8 @@ import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import java.util.Random;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class Bubbles extends LXPattern {
 
@@ -26,7 +30,7 @@ public class Bubbles extends LXPattern {
     private final CompoundParameter saturation = new CompoundParameter("Sat", 50, 0, 100);
     private final CompoundParameter maxBubbleSize = new CompoundParameter("Size", 20, 10, 50);
     private final CompoundParameter transparency = new CompoundParameter("Trans", 9, 0.1, 25);
-    
+
     private final CompoundParameter zDep = new CompoundParameter("zDep", 2, 0.1, 5);
 
     private final List<Bubble> bubbles = new LinkedList<Bubble>();
@@ -44,9 +48,10 @@ public class Bubbles extends LXPattern {
         addParameter(zDep);
     }
 
-    public void run(final double deltaMs) {
-        leftoverMs += deltaMs;
+    public void run(final double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
 
+        leftoverMs += deltaMs;
         float msPerBubble = 20000 / ((rate.getValuef() + .01f) * 100);
         while (leftoverMs > msPerBubble) {
             leftoverMs -= msPerBubble;
@@ -68,9 +73,9 @@ public class Bubbles extends LXPattern {
 
         model.getPoints().parallelStream().forEach(point -> {
             colors[point.index] = 0;
-            for (Bubble bubble : bubbles) {
-                bubble.paint(point);
-            }
+                        for (Bubble bubble : bubbles) {
+                                bubble.paint(point, colors);
+                        }
         });
 
         Iterator<Bubble> i = bubbles.iterator();
@@ -79,6 +84,7 @@ public class Bubbles extends LXPattern {
             if (bubble.isDead)
                 i.remove();
         }
+        markModified(SRGB8);
     }
 
     private class Bubble {
@@ -149,7 +155,7 @@ public class Bubbles extends LXPattern {
             ) + Math.pow(Math.abs(z - p.z), 2));
         }
 
-        public void paint(LXPoint p) {
+        public void paint(LXPoint p, int[] colors) {
             if (Math.abs(p.x - x) > radius
                 || Math.abs(p.y - y) > radius
                 || Math.abs(p.z - z) > radius * zDep.getValuef()) {
@@ -175,14 +181,14 @@ public class Bubbles extends LXPattern {
 
             if (brightness < 5) brightness = 0; // ugh, fix this (popped bubbles dont come out to zero)
 
-            colors[p.index] = LXColor.blend(
+            colors[p.index] = Ops8.add(
                 colors[p.index],
-                lx.hsb(
-                    hue + 1.7f * ((x - p.x) + (y - p.y)),
-                    saturation.getValuef(), //Math.min(100, gradient*1.2f+5.0f),
-                    brightness
-                ), LXColor.Blend.ADD
-            );
+                                LXColor.hsb(
+                                        hue + 1.7f * ((x - p.x) + (y - p.y)),
+                                        saturation.getValuef(), //Math.min(100, gradient*1.2f+5.0f),
+                                        brightness
+                                )
+                        );
         }
 
         public void pop() {

@@ -2,34 +2,35 @@ package com.symmetrylabs.slstudio.pattern;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
+import heronarts.lx.PolyBuffer;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.transform.LXProjection;
-import heronarts.lx.transform.LXVector;
 
 import java.util.Spliterator;
 import java.util.Spliterators;
 import java.util.stream.StreamSupport;
+
+import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class Swim extends LXPattern {
 
     // Projection stuff
     private final LXProjection projection;
 
-    SinLFO rotationX = new SinLFO(-Math.PI / 16, Math.PI / 8, 9000);
-    SinLFO rotationY = new SinLFO(-Math.PI / 8, Math.PI / 8, 7000);
-    SinLFO rotationZ = new SinLFO(-Math.PI / 8, Math.PI / 16, 11000);
-    SinLFO yPos = new SinLFO(-1, 1, 13234);
-    SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
-    SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 15000 - 13000 * 0.5);
+    private final SinLFO rotationX = new SinLFO(-Math.PI / 16, Math.PI / 8, 9000);
+    private final SinLFO rotationY = new SinLFO(-Math.PI / 8, Math.PI / 8, 7000);
+    private final SinLFO rotationZ = new SinLFO(-Math.PI / 8, Math.PI / 16, 11000);
+    private final SinLFO yPos = new SinLFO(-1, 1, 13234);
+    private final SinLFO sineHeight = new SinLFO(1, 2.5, 13234);
+    private final SawLFO phaseLFO = new SawLFO(0, 2 * Math.PI, 15000 - 13000 * 0.5);
 
-
-    final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.5);
-
-    final CompoundParameter hueScale = new CompoundParameter("HueVar", 0.1, 0.0, 0.2);
-    final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5);
+    private final CompoundParameter crazyParam = new CompoundParameter("Crazy", 0.5);
+    private final CompoundParameter hueScale = new CompoundParameter("HueVar", 0.1, 0.0, 0.2);
+    private final CompoundParameter phaseParam = new CompoundParameter("Speed", 0.5);
 
     public Swim(LX lx) {
         super(lx);
@@ -54,8 +55,8 @@ public class Swim extends LXPattern {
     }
 
     @Override
-    public void run(final double deltaMs) {
-
+    public void run(double deltaMs, PolyBuffer.Space space) {
+        int[] colors = (int[]) getArray(SRGB8);
         final float phase = phaseLFO.getValuef();
         final float upDownRange = (model.yMax - model.yMin) / 4;
 
@@ -91,7 +92,8 @@ public class Swim extends LXPattern {
                 + (float) Math.abs(p.y - model.yMax / 2) * .6f
                 + (float) Math.abs(p.z - model.zMax));
 
-            colors[p.index] = lx.hsb(hue_color, 100, v1);
+            colors[p.index] = LXColor.hsb(hue_color, palette.getSaturationf(), v1);
         });
+        markModified(SRGB8);
     }
 }
