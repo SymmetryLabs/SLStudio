@@ -23,7 +23,7 @@ public class Spaces {
      *     f(0.0) gives 0.0 exactly
      *     f(1.0) gives 1.0 exactly
      *     0.0 <= f(v) <= 1.0 for all double-precision values 0.0 <= v <= 1.0
-     *     f(v) > f(w) for all double-precision values of v > w
+     *     f(v2) >= f(v1) for all double-precision values v1 and v2 > v1
      */
     public static double srgbValueToIntensity(double v) {
         // See https://en.wikipedia.org/wiki/SRGB#The_reverse_transformation
@@ -39,15 +39,15 @@ public class Spaces {
      *     f(0.0) gives 0.0 exactly
      *     f(1.0) gives 1.0 exactly
      *     0.0 <= f(i) <= 1.0 for all double-precision values 0.0 <= i <= 1.0
-     *     f(i) > f(j) - 1e16 for all double-precision values of i > j
+     *     f(i2) > f(i1) - 1e16 for all double-precision values i1 and i2 > i1
      */
     public static double srgbIntensityToValue(double i) {
         // See https://en.wikipedia.org/wiki/SRGB#The_forward_transformation_(CIE_XYZ_to_sRGB)
-        // Due to floating-point error, 1.055 - 0.055 does not yield 1.0;
-        // subtracting 0.05499999999999999 instead of 0.055 ensures that
-        // srgbIntensityToValue(1.0) returns exactly 1.0.
+        // Due to floating-point error, 1.055 - 1.0 does not yield 0.055; we define
+        // OFFSET this way so that 1.055 - OFFSET yields exactly 1.0.
+        final double OFFSET = 1.055 - 1.0;
         return i <= SRGB_TRANSFER_CUTOFF ? 12.92 * i :
-                1.055 * Math.pow(i, 1.0/2.4) - 0.05499999999999999;
+                1.055 * Math.pow(i, 1.0 / 2.4) - OFFSET;
     }
 
     private static void initSrgbValues() {
@@ -71,6 +71,12 @@ public class Spaces {
     /**
      * Converts a CIELAB perceived lightness value (L, ranging from 0 to 1)
      * to a CIEXYZ linear luminance value (Y, also ranging from 0 to 1).
+     *
+     * Tuned to guarantee that:
+     *     f(0.0) gives 0.0 exactly
+     *     f(1.0) gives 1.0 exactly
+     *     0.0 <= f(l) <= 1.0 for all double-precision values 0.0 <= l <= 1.0
+     *     f(l2) >= f(l1) for all double-precision values l1 and l2 > l1
      */
     public static double cie_lightness_to_luminance(double l) {
         // See https://en.wikipedia.org/wiki/CIELAB_color_space#Reverse_transformation
