@@ -66,7 +66,8 @@ public class CubeEQ extends SLPattern<SLModel> {
             for (int i = start; i < end; i++) {
                 LXPoint p = model.points[i];
 
-                float avgIndex = constrain(2 + p.x / model.xMax * (eq.numBands - 4), 0, eq.numBands - 4);
+                float normalizedX = (p.x - model.xMin) / model.xRange;
+                float avgIndex = constrain(2 + normalizedX * (eq.numBands - 4), 0, eq.numBands - 4);
                 int avgFloor = (int) avgIndex;
 
                 float leftVal = eq.getBandf(avgFloor);
