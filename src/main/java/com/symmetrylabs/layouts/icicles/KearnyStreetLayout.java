@@ -46,7 +46,7 @@ public class KearnyStreetLayout implements Layout {
     static final float SPACING = 6f*12f;
 
     static final float globalOffsetX = 0;
-    static final float globalOffsetY = 0;
+    static final float globalOffsetY = -38.88004f;
     static final float globalOffsetZ = 0;
 
     static final float globalRotationX = 0;

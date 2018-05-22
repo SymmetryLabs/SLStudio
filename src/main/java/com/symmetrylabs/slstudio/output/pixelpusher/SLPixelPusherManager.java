@@ -42,7 +42,7 @@ public class SLPixelPusherManager {
             // TODO: figure out better way to query individual strips (right now we get back an array of strips per controller)
             for (int i = 0; i < pointsGroupings.length; i++) {
                 if (i >= strips.size()) {
-                    System.out.println("Number of pointsgroupings doesn't match number of strips on the network");
+                    //System.out.println("Number of pointsgroupings doesn't match number of strips on the network");
                 } else {
                     Strip strip = strips.get(i);
                     int pi = 0;

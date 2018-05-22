@@ -47,7 +47,7 @@ public class Explosions extends LXPattern {
                 addParameter(brightnessParameter);
 
                 createAudioModulator();
-                modulateRateParam();
+                //modulateRateParam();
 
                 addParameter(rateParameter);
                 addParameter(blurParameter);

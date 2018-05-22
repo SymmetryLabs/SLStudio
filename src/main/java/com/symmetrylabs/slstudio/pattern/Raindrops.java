@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
+import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
@@ -17,7 +18,7 @@ import java.lang.Math;
 import static processing.core.PApplet.*;
 import static com.symmetrylabs.util.MathUtils.random;
 
-public class Raindrops extends SLPattern<SLModel> {
+public class Raindrops extends LXPattern {
 
     public final CompoundParameter numRainDrops = new CompoundParameter("NUM", -40, -500, -20);
     public final CompoundParameter size = new CompoundParameter("SIZE", 0.35, 0.1, 1.0);
@@ -81,7 +82,7 @@ public class Raindrops extends SLPattern<SLModel> {
             leftoverMs -= msPerRaindrop;
             raindrops.add(new Raindrop());
         }
-
+        System.out.println(raindrops.size());
         for (LXPoint p : model.points) {
             int c = 0;
             for (Raindrop raindrop : raindrops) {

@@ -13,10 +13,10 @@ import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.modulator.LinearEnvelope;
 
-import com.symmetrylabs.layouts.cubes.CubesModel;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.model.Strip;
 
-public class SoundRain extends SLPattern<CubesModel> {
+public class SoundRain extends SLPattern<StripsModel<Strip>> {
     private LXAudioBuffer audioBuffer;
     private float[] audioSamples;
     private ddf.minim.analysis.FFT fft = null;
@@ -76,18 +76,19 @@ public class SoundRain extends SLPattern<CubesModel> {
             }
         }
 
-        for (CubesModel.Cube c : model.getCubes()) {
-            for (int j = 0; j < c.getStrips().size(); j++) {
-                Strip s = c.getStrips().get(j);
+        //System.out.println(model.getStrips().size());
+        //for (StripsModel.Strip c : model.getStrips()) {
+            for (int j = 0; j < model.getStrips().size(); j++) {
+                Strip s = (Strip)model.getStrips().get(j);
 
-                if (j % 4 != 0 && j % 4 != 2) {
+                //if (j % 4 != 0 && j % 4 != 2) {
                     for (LXPoint p : s.points) {
                         int seq = ((int)(p.y * avgSize / model.yMax + pos.getValuef() + Math.sin(p.x + p.z) * 2)) % avgSize;
                         seq = Math.min(Math.abs(seq - (avgSize / 2)), avgSize - 1);
                         colors[p.index] = lx.hsb(200, Math.max(0, 100 - Math.abs(p.x - col1.getValuef()) / 2), lightVals[seq]);
                     }
-                }
+                //}
             }
-        }
+        //}
     }
 }

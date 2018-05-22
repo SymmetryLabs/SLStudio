@@ -50,8 +50,8 @@ public class Pong extends DPat {
     @Override
     public int CalcPoint(PVector p) {
         v.set(x.getValuef(), y.getValuef(), z.getValuef());
-        v.z = 0;
-        p.z = 0;// ignore z dimension
+        //v.z = 0;
+        //p.z = 0;// ignore z dimension
         switch (pChoose.getValuei()) {
             case 0:
                 vMir.set(mMax);
