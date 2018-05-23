@@ -379,9 +379,11 @@ public class CubesLayout implements Layout {
         final Dispatcher dispatcher = Dispatcher.getInstance(lx);
 
 
+        /*
         CubesController local_debug = new CubesController(lx, "localhost", "localdebug");
         controllers.add(local_debug);
         lx.addOutput(local_debug);
+        */
 
 
         TowerConfig config = new TowerConfig(SP*3.0f, (JUMP*2)+3          , -SP*5.5f, new String[] {"188"});
