@@ -86,7 +86,7 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
         particleGroups = new ParticleGroup[particleGroupCount];
 
         for (int i = 0; i < particleGroups.length; ++i) {
-            particleGroups[i] = new ParticleGroup(colors.length);
+            particleGroups[i] = new ParticleGroup(model.points.length);
         }
 
         particleCount.addListener(new LXParameterListener() {
@@ -99,7 +99,7 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
                 }
 
                 for (int i = particles.size(); i < numParticles; ++i) {
-                    Particle p = spawnParticle(i, colors.length);
+                    Particle p = spawnParticle(i, model.points.length);
                     initParticle(p);
                     particleGroups[p.index % particleGroups.length].particles.add(p);
                     particles.add(p);
