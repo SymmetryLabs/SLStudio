@@ -14,11 +14,11 @@ public interface Layout {
      * This will be called after the SLStudioLX object is created but before the
      * UI is built.  Use this to set up non-UI components such as output controllers.
       */
-    void setupLx(SLStudioLX lx);
+    default void setupLx(SLStudioLX lx) {}
 
     /**
      * This will be called when the UI is ready.  Use this to add panels to the UI
      * and register additional 3-D objects to be rendered in the display.
      */
-    void setupUi(SLStudioLX lx, SLStudioLX.UI ui);
+    default void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {}
 }
