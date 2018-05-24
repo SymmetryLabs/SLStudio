@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.util.MathUtils;
-import com.symmetrylabs.util.NoiseUtils;
+import com.symmetrylabs.util.NoiseHelper;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.PolyBuffer;
@@ -15,6 +15,8 @@ public class Rings extends LXPattern {
     float dx, dy, dz;
     float angleParam, spacingParam;
     float dzParam, centerParam;
+
+    private NoiseHelper noiseHelper = new NoiseHelper();
 
     CompoundParameter pDepth = new CompoundParameter("Depth", 0.6);
     CompoundParameter pBright = new CompoundParameter("Bright", 0.75);
@@ -54,20 +56,20 @@ public class Rings extends LXPattern {
         dzParam += (float) deltaMs * 0.000014f;
         centerParam += (float) deltaMs * pSpeed2.getValuef() * 0.001f;
 
-        final float spacing = NoiseUtils.noise(spacingParam) * 50.0f;
+        final float spacing = noiseHelper.noise(spacingParam) * 50.0f;
 
         dx += MathUtils.cos(angle) * xyspeed;
         dy += MathUtils.sin(angle) * xyspeed;
-        dz += (MathUtils.pow(NoiseUtils.noise(dzParam), 1.8f) - 0.5f) * zspeed;
+        dz += (MathUtils.pow(noiseHelper.noise(dzParam), 1.8f) - 0.5f) * zspeed;
 
-        final float centerx = map(NoiseUtils.noise(centerParam, 100.0f), 0.0f, 1.0f, -0.1f, 1.1f);
-        final float centery = map(NoiseUtils.noise(centerParam, 200.0f), 0.0f, 1.0f, -0.1f, 1.1f);
-        final float centerz = map(NoiseUtils.noise(centerParam, 300.0f), 0.0f, 1.0f, -0.1f, 1.1f);
+        final float centerx = map(noiseHelper.noise(centerParam, 100.0f), 0.0f, 1.0f, -0.1f, 1.1f);
+        final float centery = map(noiseHelper.noise(centerParam, 200.0f), 0.0f, 1.0f, -0.1f, 1.1f);
+        final float centerz = map(noiseHelper.noise(centerParam, 300.0f), 0.0f, 1.0f, -0.1f, 1.1f);
 
         final float coordMin = MathUtils.min(model.xMin, MathUtils.min(model.yMin, model.zMin));
         final float coordMax = MathUtils.max(model.xMax, MathUtils.max(model.yMax, model.zMax));
 
-        NoiseUtils.noiseDetail(4);
+        noiseHelper.noiseDetail(4);
 
         model.getPoints().parallelStream().forEach(p -> {
             // Scale while preserving aspect ratio
@@ -78,7 +80,7 @@ public class Rings extends LXPattern {
             float dist = MathUtils.dist(x, y, z, centerx, centery, centerz);
             float pulse = (MathUtils.sin(dz + dist * spacing) - 0.3f) * 0.6f;
 
-            float n = map(NoiseUtils.noise(
+            float n = map(noiseHelper.noise(
                     dx + (x - centerx) * scale + centerx + pulse,
                     dy + (y - centery) * scale + centery,
                     dz + (z - centerz) * scale + centerz
@@ -92,7 +94,7 @@ public class Rings extends LXPattern {
                 return;
             }
 
-            float m = map(NoiseUtils.noise(
+            float m = map(noiseHelper.noise(
                     dx + (x - centerx) * scale + centerx,
                     dy + (y - centery) * scale + centery,
                     dz + (z - centerz) * scale + centerz
@@ -103,7 +105,7 @@ public class Rings extends LXPattern {
             colors[p.index] = LXColor.hsb(palette.getHuef() + m, saturation, brightness);
         });
 
-        NoiseUtils.noiseDetail(1);
+        noiseHelper.noiseDetail(1);
         polyBuffer.markModified(SRGB8);
     }
 }
