@@ -28,14 +28,13 @@ public class NoiseHelper {
         }
     }
 
-    int perlin_octaves = 4; // default to medium smooth
-    float perlin_amp_falloff = 0.5f; // 50% reduction/octave
+    private int perlin_octaves = 4; // default to medium smooth
+    private float perlin_amp_falloff = 0.5f; // 50% reduction/octave
 
     // [toxi 031112]
     // new vars needed due to recent change of cos table in PGraphics
-    int perlin_TWOPI, perlin_PI;
-    float[] perlin_cosTable;
-    float[] perlin;
+    private final int perlin_TWOPI, perlin_PI;
+    private final float[] perlin;
 
     Random perlinRandom;
 
@@ -45,12 +44,8 @@ public class NoiseHelper {
         for (int i = 0; i < PERLIN_SIZE + 1; i++) {
             perlin[i] = perlinRandom.nextFloat(); //(float)Math.random();
         }
-        // [toxi 031112]
-        // noise broke due to recent change of cos table in PGraphics
-        // this will take care of it
-        perlin_cosTable = cosLUT;
-        perlin_TWOPI = perlin_PI = SINCOS_LENGTH;
-        perlin_PI >>= 1;
+        perlin_TWOPI = SINCOS_LENGTH;
+        perlin_PI = SINCOS_LENGTH >> 1;
     }
 
     public float noise(float x) {
@@ -85,16 +80,16 @@ public class NoiseHelper {
             rxf=noise_fsc(xf);
             ryf=noise_fsc(yf);
 
-            n1  = perlin[of&PERLIN_SIZE];
+            n1    = perlin[of&PERLIN_SIZE];
             n1 += rxf*(perlin[(of+1)&PERLIN_SIZE]-n1);
-            n2  = perlin[(of+PERLIN_YWRAP)&PERLIN_SIZE];
+            n2    = perlin[(of+PERLIN_YWRAP)&PERLIN_SIZE];
             n2 += rxf*(perlin[(of+PERLIN_YWRAP+1)&PERLIN_SIZE]-n2);
             n1 += ryf*(n2-n1);
 
             of += PERLIN_ZWRAP;
-            n2  = perlin[of&PERLIN_SIZE];
+            n2    = perlin[of&PERLIN_SIZE];
             n2 += rxf*(perlin[(of+1)&PERLIN_SIZE]-n2);
-            n3  = perlin[(of+PERLIN_YWRAP)&PERLIN_SIZE];
+            n3    = perlin[(of+PERLIN_YWRAP)&PERLIN_SIZE];
             n3 += rxf*(perlin[(of+PERLIN_YWRAP+1)&PERLIN_SIZE]-n3);
             n2 += ryf*(n3-n2);
 
@@ -115,7 +110,7 @@ public class NoiseHelper {
 
     private float noise_fsc(float i) {
         // using bagel's cosine table instead
-        return 0.5f*(1.0f-perlin_cosTable[(int)(i*perlin_PI)%perlin_TWOPI]);
+        return 0.5f*(1.0f-cosLUT[(int)(i*perlin_PI)%perlin_TWOPI]);
     }
 
     public void noiseDetail(int lod) {
@@ -125,12 +120,5 @@ public class NoiseHelper {
     public void noiseDetail(int lod, float falloff) {
         if (lod>0) perlin_octaves=lod;
         if (falloff>0) perlin_amp_falloff=falloff;
-    }
-
-    public void noiseSeed(long seed) {
-        if (perlinRandom == null) perlinRandom = new Random();
-        perlinRandom.setSeed(seed);
-        // force table reset after changing the random number seed [0122]
-        perlin = null;
     }
 }
