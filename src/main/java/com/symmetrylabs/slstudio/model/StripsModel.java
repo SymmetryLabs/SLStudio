@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 import heronarts.lx.model.LXFixture;
+import heronarts.lx.model.LXAbstractFixture;
 
 /**
  * A model with strips.
@@ -17,7 +18,12 @@ public class StripsModel<T extends Strip> extends SLModel {
     protected final Map<String, Strip> stripTable = new HashMap<>();
 
     public StripsModel() {
-        super();
+    }
+
+    public StripsModel(List<T> strips) {
+        super(new Fixture<T>(strips));
+
+        this.strips.addAll(strips);
     }
 
     protected StripsModel(LXFixture fixture) {
@@ -34,5 +40,13 @@ public class StripsModel<T extends Strip> extends SLModel {
 
     public Strip getStripById(String id) {
       return this.stripTable.get(id);
+    }
+
+    private static class Fixture<T extends Strip> extends LXAbstractFixture {
+        public Fixture(List<T> strips) {
+            for (T strip : strips) {
+                points.addAll(strip.getPoints());
+            }
+        }
     }
 }
