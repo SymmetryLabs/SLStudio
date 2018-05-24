@@ -41,6 +41,7 @@ import com.symmetrylabs.util.MarkerSource;
 
 import javax.swing.*;
 
+import static java.awt.event.KeyEvent.*;
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.RGB8;
 
@@ -144,16 +145,15 @@ public class SLStudioLX extends P3LX {
                     }
 
                     // Remember to update HELP_TEXT above when adding/changing any hotkeys!
-
                     if (keyEvent.isMetaDown() || keyEvent.isControlDown()) {
-                        switch (keyChar) {
-                            case 'c':
+                        switch (keyCode) {
+                            case VK_C:
                                 cubeMapDebug.toggleVisible();
                                 break;
-                            case 'f':
+                            case VK_F:
                                 framerate.toggleVisible();
                                 break;
-                            case 'l':
+                            case VK_L:
                                 String layoutName = (String) JOptionPane.showInputDialog(
                                     null, "Select a layout and click OK to restart.", "Select layout",
                                     JOptionPane.QUESTION_MESSAGE, null, LayoutRegistry.getNames().toArray(), null);
@@ -163,38 +163,42 @@ public class SLStudioLX extends P3LX {
                                     applet.exit();
                                 }
                                 break;
-                            case 'm':
-                            case 'M':
+                            case VK_M:
                                 LXMappingEngine.Mode mode = keyEvent.isShiftDown() ?
-                                      LXMappingEngine.Mode.MIDI : LXMappingEngine.Mode.MODULATION_SOURCE;
+                                        LXMappingEngine.Mode.MIDI : LXMappingEngine.Mode.MODULATION_SOURCE;
                                 lx.engine.mapping.setMode(
                                         lx.engine.mapping.getMode() == mode ?
                                         LXMappingEngine.Mode.OFF : mode);
                                 break;
-                            case 'p':
+                            case VK_P:
                                 togglePerformanceMode();
                                 break;
-                            case 'v':
+                            case VK_V:
                                 lx.ui.preview.toggleVisible();
                                 break;
-                            case 'x':
+                            case VK_X:
                                 axes.toggleVisible();
                                 break;
-                            case '/':
+                            case VK_SLASH:
                                 toggleHelpBar = true;
                                 break;
-                            case '\\':
-                                PolyBuffer.Space space = lx.engine.colorSpace.getEnum() == RGB16 ? RGB8 : RGB16;
-                                lx.engine.colorSpace.setValue(space);
-                                for (LXChannel channel : lx.engine.channels) {
-                                    channel.colorSpace.setValue(space);
-                                }
-                                break;
-                            case '|':
-                                if (engine.getFocusedChannel() instanceof LXChannel) {
-                                    LXChannel channel = (LXChannel) engine.getFocusedChannel();
-                                    space = channel.colorSpace.getEnum() == RGB16 ? RGB8 : RGB16;
-                                    channel.colorSpace.setValue(space);
+
+                            case VK_BACK_SLASH:
+                                switch (keyChar) {
+                                    case '\\':
+                                        PolyBuffer.Space space = lx.engine.colorSpace.getEnum() == RGB16 ? RGB8 : RGB16;
+                                        lx.engine.colorSpace.setValue(space);
+                                        for (LXChannel channel : lx.engine.channels) {
+                                            channel.colorSpace.setValue(space);
+                                        }
+                                        break;
+                                    case '|':
+                                        if (engine.getFocusedChannel() instanceof LXChannel) {
+                                            LXChannel channel = (LXChannel) engine.getFocusedChannel();
+                                            space = channel.colorSpace.getEnum() == RGB16 ? RGB8 : RGB16;
+                                            channel.colorSpace.setValue(space);
+                                        }
+                                        break;
                                 }
                                 break;
                         }
