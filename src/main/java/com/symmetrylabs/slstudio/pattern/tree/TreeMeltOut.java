@@ -11,6 +11,6 @@ public class TreeMeltOut extends TreeMelt {
     }
 
     protected float getDist(TreeModel.Leaf leaf) {
-        return 2*abs(leaf.point.yn - .5);
+        return 2f*abs(leaf.point.yn - .5f);
     }
 }

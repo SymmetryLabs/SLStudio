@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
@@ -79,7 +80,7 @@ public class TreeSwarm extends TreePattern {
         float floor = this.floor.getValuef();
 
         int i = 0;
-        for (TreeModel.LeafAssemblage assemblage : tree.assemblages) {
+        for (TreeModel.LeafAssemblage assemblage : model.assemblages) {
             float pos = this.pos[i++ % NUM_GROUPS].getValuef();
             for (TreeModel.Leaf leaf : assemblage.leaves) {
                 float falloff = min(100, base + 40 * dist(leaf.point.xn, leaf.point.yn, leaf.point.zn, swarmX, swarmY, swarmZ));

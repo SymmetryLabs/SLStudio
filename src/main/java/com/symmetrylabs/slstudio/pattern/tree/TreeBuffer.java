@@ -1,12 +1,13 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.CompoundParameter;
 
-public class TreeBuffer extends TreePattern {
+public abstract class TreeBuffer extends TreePattern {
 
     public String getAuthor() {
         return "Mark C. Slee";
@@ -23,11 +24,11 @@ public class TreeBuffer extends TreePattern {
     protected int[] history = new int[BUFFER_SIZE];
     protected int cursor = 0;
 
-    public BufferPattern(LX lx) {
+    public TreeBuffer(LX lx) {
         super(lx);
         addParameter("speed", this.speedRaw);
         for (int i = 0; i < this.history.length; ++i) {
-            this.history[i] = #000000;
+            this.history[i] = 0;
         }
     }
 

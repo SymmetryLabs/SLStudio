@@ -1,11 +1,19 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
+import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
+import heronarts.lx.LX;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
 import static com.symmetrylabs.util.DistanceConstants.FEET;
 import static com.symmetrylabs.util.DistanceConstants.INCHES;
+import static com.symmetrylabs.util.MathUtils.abs;
+import static com.symmetrylabs.util.MathUtils.max;
+import static com.symmetrylabs.util.MathUtils.min;
 import static heronarts.lx.LX.TWO_PI;
 
 public class TreeWaves extends TreePattern {
@@ -95,10 +103,10 @@ public class TreeWaves extends TreePattern {
         for (int i = 0; i < bins.length; ++i) {
             bins[i] = model.cy + model.yRange/2 * Math.sin(i * TWO_PI / bins.length + phaseValue);
         }
-        for (Leaf leaf : tree.leaves) {
+        for (TreeModel.Leaf leaf : model.leaves) {
             int idx = Math.round((bins.length-1) * (len1 * leaf.point.xn)) % bins.length;
-            int idx2 = Math.round((bins.length-1) * (len2 * (.2 + leaf.point.xn))) % bins.length;
-            int idx3 = Math.round((bins.length-1) * (len3 * (1.7 - leaf.point.xn))) % bins.length;
+            int idx2 = (int) Math.round((bins.length-1) * (len2 * (.2 + leaf.point.xn))) % bins.length;
+            int idx3 = (int) Math.round((bins.length-1) * (len3 * (1.7 - leaf.point.xn))) % bins.length;
 
             float y1 = (float) bins[idx];
             float y2 = (float) bins[idx2];
@@ -109,7 +117,7 @@ public class TreeWaves extends TreePattern {
             float d3 = abs(leaf.y*amp3 - y3);
 
             float b = max(0, 100 - falloff * min(min(d1, d2), d3));
-            setColor(leaf, b > 0 ? LXColor.gray(b) : #000000);
+            setColor(leaf, b > 0 ? LXColor.gray(b) : 0);
         }
     }
 }

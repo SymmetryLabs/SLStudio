@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.CompoundParameter;
@@ -76,7 +77,7 @@ public class TreeClouds extends TreePattern {
         float xScale = this.xScale.getValuef();
         float yScale = this.yScale.getValuef();
         float zScale = this.zScale.getValuef();
-        for (TreeModel.Leaf leaf : tree.leaves) {
+        for (TreeModel.Leaf leaf : model.leaves) {
             float nv = noise(
                 (scale + leaf.point.xn * xScale) * leaf.point.xn + this.xBasis,
                 (scale + leaf.point.yn * yScale) * leaf.point.yn + this.yBasis,

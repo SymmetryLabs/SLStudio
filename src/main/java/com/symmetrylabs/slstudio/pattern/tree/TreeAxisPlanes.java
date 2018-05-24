@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.LXModulator;

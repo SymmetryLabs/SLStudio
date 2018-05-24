@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
@@ -53,9 +54,9 @@ public class TreeBorealis extends TreePattern {
         this.yBasis -= deltaMs * .0005 * this.speed.getValuef();
         float scale = this.scale.getValuef();
         float spread = this.spread.getValuef();
-        float base = .01 * this.base.getValuef();
+        float base = .01f * this.base.getValuef();
         float contrast = this.contrast.getValuef();
-        for (TreeModel.Leaf leaf : tree.leaves) {
+        for (TreeModel.Leaf leaf : model.leaves) {
             float nv = noise(
                 scale * (base * leaf.point.rxz - spread * leaf.point.yn),
                 leaf.point.yn + this.yBasis

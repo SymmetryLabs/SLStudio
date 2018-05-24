@@ -1,9 +1,17 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
+import com.symmetrylabs.layouts.oslo.TreeModel;
+import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.modulator.DampedParameter;
+import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.parameter.CompoundParameter;
 
+import static com.jogamp.opengl.math.FloatUtil.QUARTER_PI;
+import static com.symmetrylabs.util.MathConstants.HALF_PI;
 import static com.symmetrylabs.util.MathConstants.PI;
+import static heronarts.lx.LX.TWO_PI;
 import static java.lang.Math.max;
 import static java.lang.StrictMath.abs;
 
@@ -33,9 +41,9 @@ public class TreeChevron extends TreeSpinningPattern {
         float azimuth = this.azimuth.getValuef();
         float slope = this.slopeDamped.getValuef();
         float sharp = this.sharpDamped.getValuef();
-        for (LeafAssemblage assemblage : model.assemblages) {
+        for (TreeModel.LeafAssemblage assemblage : model.assemblages) {
             LXPoint p = assemblage.points[0];
-            float az = (TWO_PI + p.azimuth + azimuth + abs(p.yn - .5) * slope) % QUARTER_PI;
+            float az = (float) (TWO_PI + p.azimuth + azimuth + abs(p.yn - .5) * slope) % QUARTER_PI;
             setColor(assemblage, LXColor.gray(max(0, 100 - sharp * abs(az - PI/8.))));
         }
     }

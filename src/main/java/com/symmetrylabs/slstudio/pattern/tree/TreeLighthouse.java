@@ -41,8 +41,8 @@ public class TreeLighthouse extends TreeSpinningPattern {
             float falloff = 100 / this.sizeDamped.getValuef();
             float slope = PI * this.slopeDamped.getValuef();
             for (TreeModel.Leaf leaf : model.leaves) {
-                float az = (TWO_PI + leaf.point.azimuth + abs(leaf.point.yn - .5) * slope) % TWO_PI;
-                float b = max(0, 100 - falloff * LXUtils.wrapdistf(az, azimuth, TWO_PI));
+                float az = (float) (TWO_PI + leaf.point.azimuth + abs(leaf.point.yn - .5f) * slope) % (float) TWO_PI;
+                float b = max(0, 100 - falloff * LXUtils.wrapdistf(az, azimuth, (float) TWO_PI));
                 setColor(leaf, LXColor.gray(b));
             }
         }

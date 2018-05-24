@@ -14,7 +14,7 @@ public class TreeAudioWaves extends TreeWave {
         new CompoundParameter("Level", 0)
             .setDescription("Manual input level");
 
-    public PatternAudioWaves(LX lx) {
+    public TreeAudioWaves(LX lx) {
         super(lx);
         addParameter("manual", this.manual);
         addParameter("level", this.level);

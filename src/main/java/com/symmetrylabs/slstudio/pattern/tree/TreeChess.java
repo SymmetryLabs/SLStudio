@@ -38,11 +38,11 @@ public class TreeChess extends TreeSpinningPattern {
             if (az > TWO_PI) {
                 az -= TWO_PI;
             }
-            float d = LXUtils.wrapdistf(az, 0, TWO_PI);
+            float d = LXUtils.wrapdistf(az, 0, (float) TWO_PI);
             d = abs(d - PI) / PI;
             int add = ((int) (numSpots * p.yn)) % 2;
-            float basis = (numSpots * d + .5 * add) % 1;
-            float d2 = 2*abs(.5 - basis);
+            float basis = (numSpots * d + .5f * add) % 1f;
+            float d2 = 2*abs(.5f - basis);
             setColor(assemblage, LXColor.gray(100 * (1-d2)*(1-d2)));
         }
     }

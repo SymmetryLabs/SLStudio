@@ -1,13 +1,18 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
 import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+
+import static com.symmetrylabs.util.MathUtils.abs;
+import static com.symmetrylabs.util.MathUtils.max;
 
 public class TreeEmanation extends TreePattern {
     public String getAuthor() {

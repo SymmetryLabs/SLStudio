@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
@@ -24,7 +25,7 @@ public class TreeStarlight extends TreePattern {
 
     final LXUtils.LookupTable flicker = new LXUtils.LookupTable(360, new LXUtils.LookupTable.Function() {
         public float compute(int i, int tableSize) {
-            return .5 - .5 * cos(i * TWO_PI / tableSize);
+            return .5f - .5f * (float) cos(i * TWO_PI / tableSize);
         }
     });
 
@@ -58,7 +59,7 @@ public class TreeStarlight extends TreePattern {
     }
 
     public void run(double deltaMs) {
-        setColors(#000000);
+        setColors(0);
         float numStars = this.numStars.getValuef();
         float speed = this.speed.getValuef();
         float variance = this.variance.getValuef();

@@ -4,7 +4,7 @@ import com.symmetrylabs.layouts.oslo.TreeModel;
 import heronarts.lx.LX;
 
 public class TreeAudioMeltUp extends TreeAudioMelt {
-    public PatternAudioMeltUp(LX lx) {
+    public TreeAudioMeltUp(LX lx) {
         super(lx);
     }
 

@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
@@ -48,9 +49,9 @@ public class PatternScanner extends TreePattern {
         float sharp = this.sharp.getValuef();
         float xSlope = this.xSlope.getValuef();
         float zSlope = this.zSlope.getValuef();
-        this.basis = (float) (this.basis - .001 * speed * deltaMs) % 1.;
+        this.basis = (float) (this.basis - .001f * speed * deltaMs) % 1.0f;
         for (TreeModel.Leaf leaf : model.leaves) {
-            setColor(leaf, LXColor.gray(max(0, 50 - sharp + (50 + sharp) * LXUtils.trif(leaf.point.yn + this.basis + (leaf.point.xn-.5) * xSlope + (leaf.point.zn-.5) * zSlope))))  ;
+            setColor(leaf, LXColor.gray(max(0, 50 - sharp + (50 + sharp) * LXUtils.trif(leaf.point.yn + this.basis + (leaf.point.xn-.5f) * xSlope + (leaf.point.zn-.5f) * zSlope))))  ;
         }
     }
 }

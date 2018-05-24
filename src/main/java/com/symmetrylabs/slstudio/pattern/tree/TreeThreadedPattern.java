@@ -1,12 +1,13 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 
 import java.util.ArrayList;
 import java.util.List;
 
-public class TreeThreadedPattern extends TreePattern {
+public abstract class TreeThreadedPattern extends TreePattern {
 
     private static final int DEFAULT_NUM_THREADS = 8;
 

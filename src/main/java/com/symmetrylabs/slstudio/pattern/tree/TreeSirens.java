@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXUtils;
 import heronarts.lx.color.LXColor;
@@ -64,10 +65,10 @@ public class TreeSirens extends TreePattern {
         for (TreeModel.Leaf leaf : model.leaves) {
             float azim = leaf.point.azimuth;
             float dist = max(max(max(
-                100 - falloff1 * LXUtils.wrapdistf(azim, azim1, TWO_PI),
-                100 - falloff2 * LXUtils.wrapdistf(azim, azim2, TWO_PI)),
-                100 - falloff3 * LXUtils.wrapdistf(azim, azim3, TWO_PI)),
-                100 - falloff4 * LXUtils.wrapdistf(azim, azim4, TWO_PI)
+                100 - falloff1 * LXUtils.wrapdistf(azim, azim1, (float) TWO_PI),
+                100 - falloff2 * LXUtils.wrapdistf(azim, azim2, (float) TWO_PI)),
+                100 - falloff3 * LXUtils.wrapdistf(azim, azim3, (float) TWO_PI)),
+                100 - falloff4 * LXUtils.wrapdistf(azim, azim4, (float) TWO_PI)
             );
             setColor(leaf, LXColor.gray(max(0, dist)));
         }

@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern.tree;
 
 import com.symmetrylabs.layouts.oslo.TreeModel;
+import com.symmetrylabs.slstudio.pattern.base.TreePattern;
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.modulator.DampedParameter;
@@ -11,6 +12,7 @@ import heronarts.lx.parameter.LXParameter;
 
 import static com.symmetrylabs.util.DistanceConstants.FEET;
 import static com.symmetrylabs.util.MathUtils.abs;
+import static com.symmetrylabs.util.MathUtils.dist;
 
 public class TreeVortex extends TreePattern {
 
@@ -61,7 +63,7 @@ public class TreeVortex extends TreePattern {
     private final LXModulator ySlopeDamped = startModulator(new DampedParameter(this.ySlope, 3, 6));
     private final LXModulator zSlopeDamped = startModulator(new DampedParameter(this.zSlope, 3, 6));
 
-    public PatternVortex(LX lx) {
+    public TreeVortex(LX lx) {
         super(lx);
         addParameter("speed", this.speed);
         addParameter("size", this.size);
@@ -83,13 +85,13 @@ public class TreeVortex extends TreePattern {
         final float zSlope = this.zSlopeDamped.getValuef();
 
         float dMult = 2 / size;
-        for (TreeModel.Leaf leaf : tree.leaves) {
+        for (TreeModel.Leaf leaf : model.leaves) {
             float radix = abs((xSlope*abs(leaf.x-model.cx) + ySlope*abs(leaf.y-model.cy) + zSlope*abs(leaf.z-model.cz)));
             float dist = dist(leaf.x, leaf.y, xPos, yPos);
             //float falloff = 100 / max(20*INCHES, 2*size - .5*dist);
             //float b = 100 - falloff * LXUtils.wrapdistf(radix, pos * size, size);
             float b = abs(((dist + radix + pos * size) % size) * dMult - 1);
-            setColor(leaf, (b > 0) ? LXColor.gray(b*b*100) : #000000);
+            setColor(leaf, (b > 0) ? LXColor.gray(b*b*100) : 0);
         }
     }
 }

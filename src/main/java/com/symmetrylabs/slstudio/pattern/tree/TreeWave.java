@@ -21,7 +21,7 @@ public class TreeWave extends TreeBuffer {
 
     private final LXModulator modeDamped = startModulator(new DampedParameter(this.mode, 1, 8));
 
-    protected WavePattern(LX lx) {
+    protected TreeWave(LX lx) {
         super(lx);
         addParameter("mode", this.mode);
     }
@@ -32,9 +32,9 @@ public class TreeWave extends TreeBuffer {
         float lerp = mode % 1;
         int floor = (int) (mode - lerp);
         for (TreeModel.Leaf leaf : model.leaves) {
-            dm[0] = abs(leaf.point.yn - .5);
-            dm[1] = .5 * abs(leaf.point.xn - .5) + .5 * abs(leaf.point.yn - .5);
-            dm[2] = abs(leaf.point.xn - .5);
+            dm[0] = abs(leaf.point.yn - .5f);
+            dm[1] = .5f * abs(leaf.point.xn - .5f) + .5f * abs(leaf.point.yn - .5f);
+            dm[2] = abs(leaf.point.xn - .5f);
             dm[3] = leaf.point.yn;
             dm[4] = 1 - leaf.point.yn;
 

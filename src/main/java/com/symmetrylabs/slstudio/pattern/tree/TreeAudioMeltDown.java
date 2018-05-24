@@ -5,7 +5,7 @@ import heronarts.lx.LX;
 
 public class TreeAudioMeltDown extends TreeAudioMelt {
 
-    public PatternAudioMeltDown(LX lx) {
+    public TreeAudioMeltDown(LX lx) {
         super(lx);
     }
 

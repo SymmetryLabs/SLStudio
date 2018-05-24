@@ -6,10 +6,10 @@ import heronarts.lx.modulator.*;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 
-import static com.symmetrylabs.util.MathUtils.lerp;
+import static com.symmetrylabs.util.MathUtils.*;
 import static heronarts.lx.LX.TWO_PI;
 
-public class TreeMelt extends TreeBuffer {
+public abstract class TreeMelt extends TreeBuffer {
 
 
     private final float[] multipliers = new float[32];
@@ -36,7 +36,7 @@ public class TreeMelt extends TreeBuffer {
         addParameter("auto", this.auto);
         addParameter("melt", this.melt);
         for (int i = 0; i < this.multipliers.length; ++i) {
-            float r = random(.6, 1);
+            float r = random(.6f, 1f);
             this.multipliers[i] = r * r * r;
         }
     }
@@ -47,7 +47,7 @@ public class TreeMelt extends TreeBuffer {
         float melt = this.meltDamped.getValuef();
         for (TreeModel.Leaf leaf : model.leaves) {
             float az = leaf.point.azimuth;
-            float maz = (az / TWO_PI + rot) * this.multipliers.length;
+            float maz = (float) (az / TWO_PI + rot) * this.multipliers.length;
             float lerp = maz % 1;
             int floor = (int) (maz - lerp);
             float m = lerp(1, lerp(this.multipliers[floor % this.multipliers.length], this.multipliers[(floor + 1) % this.multipliers.length], lerp), melt);
@@ -57,13 +57,13 @@ public class TreeMelt extends TreeBuffer {
         }
     }
 
-    protected abstract float getDist(Leaf leaf);
+    protected abstract float getDist(TreeModel.Leaf leaf);
 
     public float getLevel() {
         if (this.auto.isOn()) {
             float autoLevel = this.autoLevel.getValuef();
             if (autoLevel > 0) {
-                return pow(autoLevel, .5);
+                return pow(autoLevel, .5f);
             }
             return 0;
         }

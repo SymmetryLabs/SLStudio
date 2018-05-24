@@ -6,12 +6,12 @@ import heronarts.lx.LX;
 import static java.lang.StrictMath.abs;
 
 public class TreeAudioMeltOut extends TreeAudioMelt {
-    public PatternAudioMeltOut(LX lx) {
+    public TreeAudioMeltOut(LX lx) {
         super(lx);
     }
 
     public float getDist(TreeModel.Leaf leaf) {
-        return 2 * abs(leaf.point.yn - .5);
+        return 2f * abs(leaf.point.yn - .5f);
     }
 
 }

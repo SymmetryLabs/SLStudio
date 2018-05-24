@@ -7,11 +7,12 @@ import heronarts.lx.modulator.LXModulator;
 import heronarts.lx.modulator.SawLFO;
 import heronarts.lx.parameter.CompoundParameter;
 
+import static com.symmetrylabs.util.MathUtils.random;
 import static com.symmetrylabs.util.MathUtils.round;
 import static heronarts.lx.LX.TWO_PI;
 import static heronarts.lx.LXUtils.lerp;
 
-public class TreeAudioMelt extends TreeBuffer {
+public abstract class TreeAudioMelt extends TreeBuffer {
     public String getAuthor() {
         return "Mark C. Slee";
     }
@@ -29,7 +30,7 @@ public class TreeAudioMelt extends TreeBuffer {
         super(lx);
         addParameter("melt", this.melt);
         for (int i = 0; i < this.multipliers.length; ++i) {
-            float r = random(.6, 1);
+            float r = random(.6f, 1f);
             this.multipliers[i] = r * r * r;
         }
     }
@@ -40,10 +41,10 @@ public class TreeAudioMelt extends TreeBuffer {
         float melt = this.meltDamped.getValuef();
         for (TreeModel.Leaf leaf : model.leaves) {
             float az = leaf.point.azimuth;
-            float maz = (az / TWO_PI + rot) * this.multipliers.length;
+            float maz = (float) (az / TWO_PI + rot) * this.multipliers.length;
             float lerp = maz % 1;
             int floor = (int) (maz - lerp);
-            float m = lerp(1, lerp(this.multipliers[floor % this.multipliers.length], this.multipliers[(floor + 1) % this.multipliers.length], lerp), melt);
+            float m = ((float) lerp(1f, lerp(this.multipliers[floor % this.multipliers.length], this.multipliers[(floor + 1) % this.multipliers.length], lerp), melt));
             float d = getDist(leaf);
             int offset = round(d * speed * m);
             setColor(leaf, this.history[(this.cursor + offset) % this.history.length]);
