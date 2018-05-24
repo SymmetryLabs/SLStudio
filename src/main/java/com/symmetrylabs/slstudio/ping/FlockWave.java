@@ -482,7 +482,7 @@ public class FlockWave extends SLPatternWithMarkers {
             this.value = 0;
             this.elapsedSec = 0;
             this.expired = false;
-            this.renderedValues = new double[((long[]) getArray(SRGB8)).length];
+            this.renderedValues = new double[((int[]) getArray(SRGB8)).length];
         }
 
         void run(float deltaSec, PVector targetVel) {
