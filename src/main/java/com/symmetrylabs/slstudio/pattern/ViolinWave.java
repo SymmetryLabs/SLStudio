@@ -82,7 +82,8 @@ public class ViolinWave extends LXPattern {
             model.getPoints().parallelStream().forEach(p -> {
                 float b = 100 - pFalloff * (MathUtils.abs(p.x - x.getValuef()) + MathUtils.abs(p.y - y.getValuef()));
                 if (b > 0) {
-                    Ops8.add(p.index, LXColor.hsb(palette.getHuef(), 20, b));
+                    colors[p.index] = Ops8.add(colors[p.index],
+                        LXColor.hsb(palette.getHuef(), 20, b));
                 }
             });
         }
