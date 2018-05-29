@@ -42,6 +42,10 @@ public class StripsModel<T extends Strip> extends SLModel {
       return this.stripTable.get(id);
     }
 
+    public Strip getStripByIndex(int i) {
+        return strips.get(i);
+    }
+
     private static class Fixture<T extends Strip> extends LXAbstractFixture {
         public Fixture(List<T> strips) {
             for (T strip : strips) {
