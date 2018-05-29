@@ -30,10 +30,10 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
     protected boolean is16BitColorEnabled = false;
 
     final int[] STRIP_ORD = new int[] {
-        6, 7, 8,   // white
-        9, 10, 11, // red
-        0, 1, 2,   // green
-        3, 4, 5    // blue
+        0, 1, 2, // red
+        3, 4, 5, // green
+        6, 7, 8, // blue
+        9, 10, 11 // white
     };
 
     final int numStrips = STRIP_ORD.length;
