@@ -6,6 +6,7 @@ import java.io.IOException;
 
 import com.symmetrylabs.util.Utils;
 
+
 public class ObjConfigReader {
 
     private final String CONFIG_FILENAME = "objConfig.txt";

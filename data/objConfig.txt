@@ -1,4 +1,4 @@
-global.enabled=false
+global.enabled=true
 global.x=0
 global.y=0
 global.z=0

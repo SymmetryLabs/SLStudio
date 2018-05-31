@@ -35,14 +35,6 @@ public class CubesLayout implements Layout {
     static final float globalRotationY = -45;
     static final float globalRotationZ = 0;
 
-    static final float objOffsetX = 0;
-    static final float objOffsetY = 0;
-    static final float objOffsetZ = 0;
-
-    static final float objRotationX = 0;
-    static final float objRotationY = 0;
-    static final float objRotationZ = 0;
-
     static final float CUBE_WIDTH = 24;
     static final float CUBE_HEIGHT = 24;
     static final float TOWER_WIDTH = 24;

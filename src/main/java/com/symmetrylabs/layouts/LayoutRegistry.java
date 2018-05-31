@@ -1,13 +1,16 @@
 package com.symmetrylabs.layouts;
 
+import java.util.*;
+
+import processing.core.PApplet;
+
 import com.symmetrylabs.layouts.cubes.CubesLayout;
 import com.symmetrylabs.layouts.dynamic_JSON.DynamicLayout;
 import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.layouts.composite.CompositeLayout;
-import processing.core.PApplet;
+import com.symmetrylabs.layouts.obj.ObjLayout;
 
-import java.util.*;
 
 public class LayoutRegistry {
     static LayoutBuilder DEFAULT_BUILDER = () -> new CubesLayout();
@@ -35,6 +38,7 @@ public class LayoutRegistry {
         map.put("oslo", () -> new OsloLayout(applet, TreeModel.ModelMode.MAJOR_LIMBS));
         map.put("dynamic_json", () -> new DynamicLayout());
         map.put("composite", () -> new CompositeLayout());
+        map.put("obj", () -> new ObjLayout());
     }
 
     static interface LayoutBuilder {

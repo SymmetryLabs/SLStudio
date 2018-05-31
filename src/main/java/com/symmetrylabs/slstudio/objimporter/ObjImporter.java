@@ -1,14 +1,13 @@
 package com.symmetrylabs.slstudio.objimporter;
 
-import heronarts.lx.model.LXModel;
+import java.io.*;
+import java.util.*;
+
 import heronarts.lx.transform.LXTransform;
 
-import java.io.File;
-import java.util.ArrayList;
-import java.util.List;
+import com.symmetrylabs.slstudio.model.SLModel;
+import static com.symmetrylabs.util.MathConstants.*;
 
-import static processing.core.PApplet.println;
-import static processing.core.PConstants.PI;
 
 public class ObjImporter {
 
@@ -18,7 +17,7 @@ public class ObjImporter {
 
     private final ObjConfig config;
 
-    private final List<LXModel> models = new ArrayList<LXModel>();
+    private final List<SLModel> models = new ArrayList<SLModel>();
 
     public ObjImporter(String path, LXTransform transform) {
         this.path = path;
@@ -30,8 +29,8 @@ public class ObjImporter {
         }
     }
 
-    public List<LXModel> getModels() {
-        return models;
+    public SLModel[] getModels() {
+        return (SLModel[]) models.toArray(new SLModel[models.size()]);
     }
 
     private void buildModels(LXTransform transform) {
@@ -49,7 +48,7 @@ public class ObjImporter {
                     this.models.add(objModelBuilder.buildModel(transform));
                 }
             } catch (Exception e) {
-                println("Problem with obj file: " + file.getName());
+                System.out.println("Problem with obj file: " + file.getName());
             }
         }
 

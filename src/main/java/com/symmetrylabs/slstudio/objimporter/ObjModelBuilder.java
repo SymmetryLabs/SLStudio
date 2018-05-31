@@ -1,18 +1,14 @@
 package com.symmetrylabs.slstudio.objimporter;
 
-import heronarts.lx.model.LXModel;
+import java.io.*;
+import java.util.*;
+
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
-import java.util.ArrayList;
-import java.util.List;
-
+import com.symmetrylabs.slstudio.model.SLModel;
+import static com.symmetrylabs.util.MathConstants.*;
 import static com.symmetrylabs.util.DistanceConstants.*;
-import static processing.core.PApplet.println;
-import static processing.core.PConstants.PI;
 
 
 class ObjModelBuilder {
@@ -58,7 +54,7 @@ class ObjModelBuilder {
                 }
             }
         } catch (Exception e) {
-            println("Problem reading vertices in obj file: " + name);
+            System.out.println("Problem reading vertices in obj file: " + name);
         }
     }
 
@@ -94,7 +90,7 @@ class ObjModelBuilder {
         }
     }
 
-    public LXModel buildModel(LXTransform transform) {
+    public SLModel buildModel(LXTransform transform) {
         List<LXPoint> points = new ArrayList();
 
         for (float[] vertex : this.vertices) {
@@ -112,7 +108,7 @@ class ObjModelBuilder {
             transform.pop();
         }
 
-        println("Created a fixture with obj file: " + name);
-        return new LXModel(points);
+        System.out.println("Created a fixture with obj file: " + name);
+        return new SLModel(points);
     }
 }
