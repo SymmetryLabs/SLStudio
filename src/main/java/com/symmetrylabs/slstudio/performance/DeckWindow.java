@@ -23,7 +23,7 @@ import heronarts.p3lx.ui.component.UIKnob;
 import heronarts.p3lx.ui.component.UISwitch;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
+//import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
 
 import static processing.core.PApplet.println;
 

@@ -3,6 +3,8 @@ package com.symmetrylabs.slstudio;
 import java.util.Map;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.crystals.CrystalLayout;
+import com.symmetrylabs.layouts.crystals.CrystalModel;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
@@ -85,6 +87,9 @@ public class SLStudio extends PApplet {
 
         layout = LayoutRegistry.getLayout(this, layoutName);
         LXModel model = layout.buildModel();
+//        LXModel model = CrystalLayout.buildModel();
+
+
         printModelStats(model);
 
         new SLStudioLX(this, model, true) {
