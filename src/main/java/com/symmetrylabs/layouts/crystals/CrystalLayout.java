@@ -85,7 +85,7 @@ public class CrystalLayout implements Layout {
 
         CrystalModel model = (CrystalModel) lx.model;
 
-        lx.addOutput(new SimplePixlite(lx, "10.200.1.10")
+        lx.addOutput(new SimplePixlite(lx, "10.200.1.128")
             .addPixliteOutput(
                     new PointsGrouping("1")
                         // panel 1, sub-panel 1
