@@ -42,13 +42,26 @@ public class SubPanel extends SLModel {
             t.rotateX(xr * PI / 180f);
             t.rotateY(yr * PI / 180f);
             t.rotateZ(zr * PI / 180f);
+            System.out.println("zr: " + zr);
+            System.out.println("yr: " + yr);
+            System.out.println("xr: " + xr);
 
             // do transforms1
-            List<LXPoint> points = new ArrayList<>();
-            LXPoint crystal1 = new LXPoint(CRYSTAL_SPACING, CRYSTAL_SPACING, stringLengths[0]);
-            LXPoint crystal2 = new LXPoint(CRYSTAL_SPACING*3, CRYSTAL_SPACING*2, stringLengths[1]);
-            LXPoint crystal3 = new LXPoint(CRYSTAL_SPACING, CRYSTAL_SPACING*3, stringLengths[2]);
 
+            List<LXPoint> points = new ArrayList<>();
+            t.push();
+            t.translate(CRYSTAL_SPACING, CRYSTAL_SPACING, stringLengths[0]);
+            LXPoint crystal1 = new LXPoint(t.x() ,t.y() , t.z());
+            t.pop();
+            t.push();
+            t.translate(CRYSTAL_SPACING*3, CRYSTAL_SPACING*2, stringLengths[1]);
+            LXPoint crystal2 = new LXPoint(t.x(), t.y(), t.z());
+            t.pop();
+
+            t.push();
+            t.translate(CRYSTAL_SPACING, CRYSTAL_SPACING*3, stringLengths[2]);
+            LXPoint crystal3 = new LXPoint(t.x(), t.y() , t.z());
+            t.pop();
 
 //            for (int iPoint = 0; iPoint< 3; iPoint++) {
 

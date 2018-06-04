@@ -16,13 +16,14 @@ public class CrystalLayout implements Layout {
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 0;
 
-    static final float globalRotationX = 0;
+    static final float globalRotationX = 90;
     static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
 
 //    @Override
     public SLModel buildModel() {
         CrystalLayout layout = new CrystalLayout();
+        float PANEL_LENGTH = 44.0f;
 
         // global transforms
         LXTransform transform = new LXTransform();
@@ -51,10 +52,15 @@ public class CrystalLayout implements Layout {
 
             //subpanels.add(subpanel);
 //        }
-        panels.add(createPanel("panel1", 0, 0, 0, 0, 0, 0, transform));
-        panels.add(createPanel("panel2", 44, 0, 0, 0, 0, 0, transform));
-        panels.add(createPanel("panel3", 88, 0, 0, 0, 0, 0, transform));
-
+        panels.add(createPanel("panel_1", 0, 0, 0, 0, 0, 0, transform));
+        panels.add(createPanel("panel_2", PANEL_LENGTH, 0, 0, 0, 0, 0, transform));
+        panels.add(createPanel("panel_3", PANEL_LENGTH*2, 0, 0, 0, 0, 0, transform));
+        panels.add(createPanel("panel_4", PANEL_LENGTH*1, PANEL_LENGTH, 0, 0, 180, 0, transform));
+        panels.add(createPanel("panel_5", PANEL_LENGTH*2, PANEL_LENGTH, 0, 0, 180, 0, transform));
+        panels.add(createPanel("panel_6", PANEL_LENGTH*3, PANEL_LENGTH, 0, 0, 180, 0, transform));
+        panels.add(createPanel("panel_7", 0, PANEL_LENGTH*2, 0, 0, 0, 0, transform));
+        panels.add(createPanel("panel_8", PANEL_LENGTH, PANEL_LENGTH*2, 0, 0, 0, 0, transform));
+        panels.add(createPanel("panel_9", PANEL_LENGTH*2, PANEL_LENGTH*2, 0, 0, 0, 0, transform));
         return new CrystalModel(panels);
 
     }
