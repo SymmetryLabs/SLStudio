@@ -103,7 +103,6 @@ public class CrystalLayout implements Layout {
                         .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(1))
                         .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(2))
                     )
-            )
         );
 
     }
