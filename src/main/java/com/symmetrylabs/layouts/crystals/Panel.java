@@ -30,6 +30,11 @@ public class Panel extends SLModel {
 
 
     }
+    public SubPanel getSubPanelByIndex(int i) {
+
+        return subpanels.get(i);
+
+    }
 
     private static class Fixture extends LXAbstractFixture {
         private final String id;

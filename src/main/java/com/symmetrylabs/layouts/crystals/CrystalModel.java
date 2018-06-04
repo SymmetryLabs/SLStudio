@@ -30,6 +30,11 @@ public class CrystalModel extends SLModel {
 //        this(new ArrayList<>());
 
     }
+    public Panel getPanelByIndex(int i) {
+
+        return panels.get(i);
+
+    }
 
     private static class Fixture extends LXAbstractFixture {
         private Fixture(List<Panel> panels) {

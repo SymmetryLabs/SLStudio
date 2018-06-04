@@ -30,6 +30,10 @@ public class SubPanel extends SLModel {
 
     }
 
+    public LXPoint getPointByIndex(int i) {
+
+        return points[i];
+    }
 
     private static class Fixture extends LXAbstractFixture {
 

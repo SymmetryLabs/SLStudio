@@ -74,6 +74,11 @@ public class PointsGrouping {
         return this;
     }
 
+    public PointsGrouping addPoint(LXPoint pointToAdd) {
+        this.points.add(pointToAdd);
+        return this;
+    }
+
     public PointsGrouping addPoints(List<LXPoint> pointsToAdd) {
         this.points.addAll(pointsToAdd);
         return this;

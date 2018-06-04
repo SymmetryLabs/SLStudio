@@ -1,12 +1,20 @@
 package com.symmetrylabs.layouts.crystals;
 
 import com.symmetrylabs.layouts.Layout;
+import com.symmetrylabs.layouts.cubes.CubesLayout;
+import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
+import com.symmetrylabs.slstudio.output.SimplePixlite;
+import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.transform.LXTransform;
 
+import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
+import java.util.WeakHashMap;
 
 import static com.symmetrylabs.util.MathConstants.PI;
 
@@ -63,10 +71,49 @@ public class CrystalLayout implements Layout {
         panels.add(createPanel("panel_9", PANEL_LENGTH*2, PANEL_LENGTH*2, 0, 0, 0, 0, transform));
         return new CrystalModel(panels);
 
+
+
     }
     private static Panel createPanel(String id, float x, float y, float z, float rx, float ry, float rz, LXTransform transform) {
 
         return new Panel(id, x, y, z, rx, ry, rz, transform);
 
     }
+
+    public void setupLx(SLStudioLX lx) {
+        instanceByLX.put(lx, new WeakReference<>(this));
+
+        CrystalModel model = (CrystalModel) lx.model;
+
+        lx.addOutput(new SimplePixlite(lx, "10.200.1.10")
+            .addPixliteOutput(
+                    new PointsGrouping("1")
+                        // panel 1, sub-panel 1
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(2))
+
+                        // panel 1, sub-panel 2
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(2))
+
+                        // panel 1, sub-panel 3
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(2))
+                    )
+            )
+        );
+
+    }
+
+    private static Map<LX, WeakReference<CubesLayout>> instanceByLX = new WeakHashMap<>();
+
+    public static CubesLayout getInstance(LX lx) {
+        WeakReference<CubesLayout> weakRef = instanceByLX.get(lx);
+        return weakRef == null ? null : weakRef.get();
+    }
+
+
 }
