@@ -88,21 +88,353 @@ public class CrystalLayout implements Layout {
         lx.addOutput(new SimplePixlite(lx, "10.200.1.128")
             .addPixliteOutput(
                     new PointsGrouping("1")
-                        // panel 1, sub-panel 1
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(1))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(2))
+                        // panel 1, sub-panel 1 (panel c)
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(1))
 
-                        // panel 1, sub-panel 2
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(1))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(1))
 
-                        // panel 1, sub-panel 3
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(1))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(2))
-                    )
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(5).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(5).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(5).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(4).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(4).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(4).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(3).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(3).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(3).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(1))
+
+                        // panel 2 (b)
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(0).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(0).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(0).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(1).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(1).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(1).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(2).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(2).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(2).getPointByIndex(1))
+
+                    // Panel 3 (a)
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(5).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(5).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(5).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(4).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(4).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(4).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(3).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(3).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(3).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(1))
+
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(1))
+
+
+
+            )
+            // panel 4 (f) channel 2 in
+            .addPixliteOutput(
+                new PointsGrouping("2")
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(5).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(5).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(4).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(4).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(3).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(3).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(0))
+
+                // panel 5 (e)
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(0).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(0).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(1).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(1).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(2).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(2).getPointByIndex(0))
+
+                // Panel 6 (d)
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(0).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(0).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(1).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(1).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(2).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(2).getPointByIndex(0))
+            )
+            .addPixliteOutput(
+                new PointsGrouping("3")
+                    // panel 7 (i)
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(5).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(5).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(4).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(4).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(3).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(3).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(1))
+
+                    // panel 8 (h)
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(5).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(5).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(4).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(4).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(3).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(3).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(1))
+
+                    // panel 9 (g)
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(5).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(5).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(4).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(4).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(3).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(3).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(1))
+            )
         );
 
     }
