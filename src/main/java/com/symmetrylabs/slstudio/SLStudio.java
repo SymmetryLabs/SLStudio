@@ -6,6 +6,7 @@ import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
+import com.symmetrylabs.layouts.tree.config.TreeConfigLoader;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -40,6 +41,7 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
+    public TreeConfigLoader treeConfigLoader = null;
     public LX lx_OG;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
@@ -97,6 +99,11 @@ public class SLStudio extends PApplet {
                 SLStudio.this.dispatcher = Dispatcher.getInstance(lx);
 
                 layout.setupLx(lx);
+
+                if (TreeConfigLoader.isTreeLayout(layout)) {
+                    treeConfigLoader = new TreeConfigLoader(lx);
+                    lx.engine.registerComponent("treeConfigLoader", treeConfigLoader);
+                }
 
                 lx.addOutput(new OPCOutput(lx, "localhost", 11122));
 

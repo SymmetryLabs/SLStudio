@@ -11,6 +11,8 @@ import com.symmetrylabs.layouts.oslo.OsloLayout;
 import com.symmetrylabs.layouts.oslo.TreeModel;
 import com.symmetrylabs.layouts.composite.CompositeLayout;
 import com.symmetrylabs.layouts.obj.ObjLayout;
+import com.symmetrylabs.layouts.tree.*;
+import processing.core.PApplet;
 
 
 public class LayoutRegistry {
@@ -41,6 +43,7 @@ public class LayoutRegistry {
         map.put("composite", () -> new CompositeLayout());
         map.put("obj", () -> new ObjLayout());
         map.put("office", () -> new OfficeLayout());
+        map.put("kalpa", () -> new KalpaLayout());
     }
 
     static interface LayoutBuilder {

@@ -6,6 +6,7 @@ public class MathConstants {
 
         public static final float PI = (float) FastMath.PI;
 
+        public static final float QUARTER_PI = PI / 4f;
         public static final float HALF_PI = PI / 2f;
         public static final float TWO_PI = PI * 2f;
 
