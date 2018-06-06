@@ -58,6 +58,7 @@ public class CubesLayout implements Layout {
 
         new TowerConfig(0, 0, -264+168, 0, 45, 0, new String[] { "397", "16", "50", "398", "44"}),
         new TowerConfig(36, 0, -264+168, 0, 45, 0, new String[] { "76", "87", "420", "186"}),
+        new TowerConfig(54, SP*4, -264+168, 0, 45, 0, new String[] {"367"}),
         new TowerConfig(72, 0, -264+168, 0, 45, 0, new String[] { "68", "336", "199", "82"}),
         new TowerConfig(108, 0, -264+168, 0, 45, 0, new String[] { "17", "419", "1", "57", "415hp"}),
 //        new TowerConfig(144, 0, -264+168, 0, 45, 0, new String[] { "0"}),
