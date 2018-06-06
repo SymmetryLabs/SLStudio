@@ -15,10 +15,10 @@ public class UIGlowMotionStage extends UI3dComponent {
     }
 
     public void onDraw(UI ui, PGraphics pg) {
-        // pg.pushMatrix();
-        // pg.fill(0xff222222);
-        // pg.translate(287, -26, -165);
-        // pg.box(630, 50, 344);
-        // pg.popMatrix();
+        pg.pushMatrix();
+        pg.fill(0xff222222);
+        pg.translate(287, -26, -165);
+        pg.box(630, 50, 344);
+        pg.popMatrix();
     }
 }
