@@ -56,15 +56,15 @@ public class Panel extends SLModel {
             int rotY = 0;
 
 
-            SubPanel subpanel1 = new SubPanel("subpanel_1", 0            , 0,0 ,0, 0, 0, stringLengths[0],  t);
-            SubPanel subpanel2 = new SubPanel("subpanel_2" , SUBPANEL_LENGTH, 0, 0, 0, 0, rotY, stringLengths[1],  t);
-            SubPanel subpanel3 = new SubPanel("subpanel_3", SUBPANEL_LENGTH*2, 0, 0, 0, 0, rotY, stringLengths[2],  t);
-            SubPanel subpanel4 = new SubPanel("subpanel_4", SUBPANEL_LENGTH, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[3],  t);
-            SubPanel subpanel5 = new SubPanel("subpanel_5", SUBPANEL_LENGTH*2, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[4],  t);
-            SubPanel subpanel6 = new SubPanel("subpanel_6", SUBPANEL_LENGTH*3, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[5],  t);
-            SubPanel subpanel7 = new SubPanel("subpanel_7", 0, SUBPANEL_LENGTH*2, 0, 0f, 0f, 0f, stringLengths[6],  t);
-            SubPanel subpanel8 = new SubPanel("subpanel_8", SUBPANEL_LENGTH, SUBPANEL_LENGTH*2, 0, 0f, 0, 0f, stringLengths[7],  t);
-            SubPanel subpanel9 = new SubPanel("subpanel_9", SUBPANEL_LENGTH*2, SUBPANEL_LENGTH*2, 0, 0f, 0, 0f, stringLengths[8],  t);
+            SubPanel subpanel1 = new SubPanel("subpanel_1", 0            , 0,0 ,0, 180, 0, stringLengths[0],  t);
+            SubPanel subpanel2 = new SubPanel("subpanel_2" , SUBPANEL_LENGTH, 0, 0, 0, 180, rotY, stringLengths[1],  t);
+            SubPanel subpanel3 = new SubPanel("subpanel_3", SUBPANEL_LENGTH*2, 0, 0, 0, 180, rotY, stringLengths[2],  t);
+            SubPanel subpanel4 = new SubPanel("subpanel_4", SUBPANEL_LENGTH*-1, SUBPANEL_LENGTH, 0, 0f, 0, 0f, stringLengths[3],  t);
+            SubPanel subpanel5 = new SubPanel("subpanel_5", SUBPANEL_LENGTH*0, SUBPANEL_LENGTH, 0, 0f, 0, 0f, stringLengths[4],  t);
+            SubPanel subpanel6 = new SubPanel("subpanel_6", SUBPANEL_LENGTH*1, SUBPANEL_LENGTH, 0, 0f, 0, 0f, stringLengths[5],  t);
+            SubPanel subpanel7 = new SubPanel("subpanel_7", 0, SUBPANEL_LENGTH*2, 0, 0f, 180f, 0f, stringLengths[6],  t);
+            SubPanel subpanel8 = new SubPanel("subpanel_8", SUBPANEL_LENGTH, SUBPANEL_LENGTH*2, 0, 0f, 180, 0f, stringLengths[7],  t);
+            SubPanel subpanel9 = new SubPanel("subpanel_9", SUBPANEL_LENGTH*2, SUBPANEL_LENGTH*2, 0, 0f, 180, 0f, stringLengths[8],  t);
 
 
 
