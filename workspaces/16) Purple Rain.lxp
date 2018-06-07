@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520305819443,
+  "timestamp": 1526521594883,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -258,7 +258,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.031496062992125984
+        "brightness": 1.0
       }
     },
     "components": {
@@ -312,14 +312,7 @@
       }
     },
     "midi": {
-      "inputs": [
-        {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
-        }
-      ],
+      "inputs": [],
       "surfaces": [],
       "mapping": []
     }
