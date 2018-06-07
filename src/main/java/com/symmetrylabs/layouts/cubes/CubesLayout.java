@@ -56,17 +56,27 @@ public class CubesLayout implements Layout {
 //        new TowerConfig(SP*4.f, 0, -SP*4.f, new String[] {"0", "0", "0", "0", "0"}),
 //        new TowerConfig(SP*5.f, 0, -SP*5.f, new String[] {"0", "0", "0", "0", "0"}),
 
-        new TowerConfig(0, 0, -264+168, 0, 45, 0, new String[] { "397", "16", "50", "398", "44"}),
-        new TowerConfig(36, 0, -264+168, 0, 45, 0, new String[] { "76", "87", "420", "186"}),
+// back row right to left
+
+        new TowerConfig(0, 0, -264+168, 0, 45, 0, new String[] { "d880399b2000", "d880396305af", "d8803962b00e", "398", "44"}), //397, 16, 50
+        new TowerConfig(36, 0, -264+168, 0, 45, 0, new String[] { "d8803962f603", "87", "d880399b2b08", "001ec0f543f4"}),  //76, 420,  186
         new TowerConfig(54, SP*4, -264+168, 0, 45, 0, new String[] {"367"}),
-        new TowerConfig(72, 0, -264+168, 0, 45, 0, new String[] { "68", "336", "199", "82"}),
-        new TowerConfig(108, 0, -264+168, 0, 45, 0, new String[] { "17", "419", "1", "57", "415hp"}),
+        new TowerConfig(72, 0, -264+168, 0, 45, 0, new String[] { "d8803963520d", "336", "001ec0f56380", "82"}),//68, 199
+        new TowerConfig(108, 0, -264+168, 0, 45, 0, new String[] { "d8803962cc02", "419", "1", "57", "415hp"}), //17
+
+// 2nd to back row right to left
+
 //        new TowerConfig(144, 0, -264+168, 0, 45, 0, new String[] { "0"}),
-        new TowerConfig(24, 0, -228+168, 0, 45, 0, new String[] { "372", "6", "211", "4"}),
-        new TowerConfig(90 , 0, -228+168, 0, 45, 0, new String[] { "138", "27", "156", "21"}),
-        new TowerConfig(40, 0, -192+164, 0, 45, 0, new String[] { "203", "348", "65"}),
-        new TowerConfig(74, 0, -192+164, 0, 45, 0, new String[] { "351", "79", "184"}),
-        new TowerConfig(54, 0, -168+164, 0, 45, 0, new String[] { "312", "189", "353"}),
+        new TowerConfig(24, 0, -228+168, 0, 45, 0, new String[] { "372", "6", "001ec0f43d1d", "4"}), // 211
+        new TowerConfig(90 , 0, -228+168, 0, 45, 0, new String[] { "001ec0f4ea81", "d8803963052f", "001ec0f4abc2", "21"}), // 138, 27, 156
+
+// 3rd from back r to l
+                new TowerConfig(40, 0, -192+164, 0, 45, 0, new String[] { "001ec0f5270f", "418", "65"}),        //348
+        new TowerConfig(74, 0, -192+164, 0, 45, 0, new String[] { "351", "79", "001ec0f54cd7"}),   //184
+
+// front
+
+        new TowerConfig(54, 0, -168+164, 0, 45, 0, new String[] { "d880399b2b0a", "001ec0f56df8", "353"}),     // 312, 189
     };
 
     static class TowerConfig {
