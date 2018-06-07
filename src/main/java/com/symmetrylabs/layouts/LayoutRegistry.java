@@ -2,6 +2,7 @@ package com.symmetrylabs.layouts;
 
 import java.util.*;
 
+import com.symmetrylabs.layouts.cubes.OfficeLayout;
 import processing.core.PApplet;
 
 import com.symmetrylabs.layouts.cubes.CubesLayout;
@@ -39,6 +40,7 @@ public class LayoutRegistry {
         map.put("dynamic_json", () -> new DynamicLayout());
         map.put("composite", () -> new CompositeLayout());
         map.put("obj", () -> new ObjLayout());
+        map.put("office", () -> new OfficeLayout());
     }
 
     static interface LayoutBuilder {
