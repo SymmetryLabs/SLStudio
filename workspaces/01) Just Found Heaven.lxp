@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1523386434447,
+  "timestamp": 1526520897664,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -181,7 +181,7 @@
               "RotZ": 0.2047244094488189,
               "Spin": 0.5,
               "Fast": 0.55,
-              "Dens": 0.6141732283464567,
+              "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 3,
@@ -475,7 +475,7 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,

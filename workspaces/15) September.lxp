@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1521311722526,
+  "timestamp": 1526521740427,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -86,8 +86,8 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.440000057220459,
-              "Dens": 0.5699999928474426,
+              "Fast": 0.55,
+              "Dens": 0.6,
               "Shrp": 0.0,
               "Symm": 0,
               "Anim": 3,
@@ -501,7 +501,7 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -559,14 +559,7 @@
       }
     },
     "midi": {
-      "inputs": [
-        {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
-        }
-      ],
+      "inputs": [],
       "surfaces": [],
       "mapping": []
     }
