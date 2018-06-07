@@ -59,8 +59,15 @@ public class TreeModel extends SLModel {
         private final List<Limb> limbs = new ArrayList<Limb>();
 
         private Fixture(TreeConfig config) {
+            LXTransform t = new LXTransform();
+
             for (LimbConfig limbConfig : config.getLimbs()) {
-                // create a limb!
+                Limb limb = new Limb(t, limbConfig);
+                limbs.add(limb);
+
+                for (LXPoint p : limb.points) {
+                    this.points.add(p);
+                }
             }
         }
     }
@@ -107,7 +114,22 @@ public class TreeModel extends SLModel {
             private final List<Leaf> leaves = new ArrayList<Leaf>();
 
             private Fixture(LXTransform t, LimbConfig config) {
+                t.push();
+                t.translate(0, config.y, 0);
+                t.rotateX(config.elevation * PI / 180.);
+                t.rotateY(config.azimuth * PI / 180.);
+                t.rotateZ(config.tilt * PI / 180.);
 
+                for (BranchConfig branchConfig : config.getBranches()) {
+                    Branch branch = new Branch(t, branchConfig);
+                    branches.add(branch);
+
+                    for (LXPoint p : branch.points) {
+                        this.points.add(p);
+                    }
+                }
+
+                t.pop();
             }
         }
     }
@@ -149,7 +171,22 @@ public class TreeModel extends SLModel {
             private final List<Leaf> leaves = new ArrayList<Leaf>();
 
             private Fixture(LXTransform t, BranchConfig config) {
-                
+                t.push();
+                t.translate(config.x, config.y, config.z);
+                t.rotateX(config.elevation * PI / 180.);
+                t.rotateY(config.azimuth * PI / 180.);
+                t.rotateZ(config.tilt * PI / 180.);
+
+                for (TwigConfig twigConfig : config.getTwigs()) {
+                    Twig twig = new Twig(t, twigConfig);
+                    twigs.add(twig);
+
+                    for (LXPoint p : twig.points) {
+                        this.points.add(p);
+                    }
+                }
+
+                t.pop();
             }
         }
     }
@@ -186,7 +223,15 @@ public class TreeModel extends SLModel {
             private final List<Leaf> leaves = new ArrayList<Leaf>();
 
             private Fixture(LXTransform t, TwigConfig config) {
-                
+                t.push();
+                t.translate(config.x, config.y, config.z);
+                t.rotateX(config.tilt);
+                t.rotateZ(config.theta);
+
+                // (todo) model a twig
+                leaves.add(new Leaf(t));
+
+                t.pop();
             }
         }
     }

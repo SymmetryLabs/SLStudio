@@ -2,26 +2,26 @@ package com.symmetrylabs.layouts.tree.config;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.ArrayList;
+import java.util.Arrays;
 
 
 public class TreeConfig {
 
-    private List<LimbConfig> limbs;
+    private LimbConfig[] limbs;
 
     public TreeConfig() {
-        this(new ArrayList<LimbConfig>());
+        this(new LimbConfig[0]);
     }
 
-    public TreeConfig(List<LimbConfig> limbs) {
-        this.limbs = Collections.unmodifiableList(limbs);
+    public TreeConfig(LimbConfig[] limbs) {
+        this.limbs = limbs;
     }
 
     public List<LimbConfig> getLimbs() {
-        return limbs;
+        return Collections.unmodifiableList(Arrays.asList(limbs));
     }
 
     public LimbConfig getLimbAtIndex(int i) {
-        return limbs.get(i);
+        return limbs[i];
     }
 }
