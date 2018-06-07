@@ -18,7 +18,7 @@ public class SimplePixliteConfigs {
 
             // CAR 1
 
-            new SimplePixlite(lx, "10.200.1.128")
+            new SimplePixlite(lx, "10.200.1.127")
                 // don't forget strips start at the bottom of windows
                 .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
                 .addPoints(lx.model.getPoints())

@@ -56,7 +56,18 @@ public class Panel extends SLModel {
             int rotY = 0;
 
 
-            SubPanel subpanel1 = new SubPanel("subpanel_1", 0, 0,0 ,0, 0, 0, stringLengths[0],  t);
+            SubPanel subpanel1 = new SubPanel("subpanel_1", 0            , 0,0 ,0, 0, 0, stringLengths[0],  t);
+            SubPanel subpanel2 = new SubPanel("subpanel_2" , SUBPANEL_LENGTH, 0, 0, 0, 0, rotY, stringLengths[1],  t);
+            SubPanel subpanel3 = new SubPanel("subpanel_3", SUBPANEL_LENGTH*2, 0, 0, 0, 0, rotY, stringLengths[2],  t);
+            SubPanel subpanel4 = new SubPanel("subpanel_4", SUBPANEL_LENGTH, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[3],  t);
+            SubPanel subpanel5 = new SubPanel("subpanel_5", SUBPANEL_LENGTH*2, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[4],  t);
+            SubPanel subpanel6 = new SubPanel("subpanel_6", SUBPANEL_LENGTH*3, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[5],  t);
+            SubPanel subpanel7 = new SubPanel("subpanel_7", 0, SUBPANEL_LENGTH*2, 0, 0f, 0f, 0f, stringLengths[6],  t);
+            SubPanel subpanel8 = new SubPanel("subpanel_8", SUBPANEL_LENGTH, SUBPANEL_LENGTH*2, 0, 0f, 0, 0f, stringLengths[7],  t);
+            SubPanel subpanel9 = new SubPanel("subpanel_9", SUBPANEL_LENGTH*2, SUBPANEL_LENGTH*2, 0, 0f, 0, 0f, stringLengths[8],  t);
+
+
+
             subpanels.add(subpanel1);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel1.points){
@@ -66,7 +77,6 @@ public class Panel extends SLModel {
 
             }
 
-            SubPanel subpanel2 = new SubPanel("subpanel_2" , SUBPANEL_LENGTH, 0, 0, 0, 0, rotY, stringLengths[1],  t);
             subpanels.add(subpanel2);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel2.points){
@@ -76,7 +86,6 @@ public class Panel extends SLModel {
 
             }
 
-            SubPanel subpanel3 = new SubPanel("subpanel_3", SUBPANEL_LENGTH*2, 0, 0, 0, 0, rotY, stringLengths[2],  t);
             subpanels.add(subpanel3);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel3.points){
@@ -88,7 +97,6 @@ public class Panel extends SLModel {
 //            t.translate(SUBPANEL_LENGTH, 0, 0);
 //            t.rotateY(PI);
 
-            SubPanel subpanel4 = new SubPanel("subpanel_4", SUBPANEL_LENGTH, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[3],  t);
             subpanels.add(subpanel4);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel4.points){
@@ -98,7 +106,6 @@ public class Panel extends SLModel {
 
             }
 
-            SubPanel subpanel5 = new SubPanel("subpanel_5", SUBPANEL_LENGTH*2, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[4],  t);
             subpanels.add(subpanel5);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel5.points){
@@ -108,7 +115,6 @@ public class Panel extends SLModel {
 
             }
 
-            SubPanel subpanel6 = new SubPanel("subpanel_6", SUBPANEL_LENGTH*3, SUBPANEL_LENGTH, 0, 0f, 180, 0f, stringLengths[5],  t);
             subpanels.add(subpanel6);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel6.points){
@@ -118,7 +124,6 @@ public class Panel extends SLModel {
 
             }
 
-            SubPanel subpanel7 = new SubPanel("subpanel_7", 0, SUBPANEL_LENGTH*2, 0, 0f, 0f, 0f, stringLengths[6],  t);
             subpanels.add(subpanel7);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel7.points){
@@ -128,7 +133,6 @@ public class Panel extends SLModel {
 
             }
 
-            SubPanel subpanel8 = new SubPanel("subpanel_8", SUBPANEL_LENGTH, SUBPANEL_LENGTH*2, 0, 0f, 0, 0f, stringLengths[7],  t);
             subpanels.add(subpanel8);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel8.points){
@@ -137,7 +141,6 @@ public class Panel extends SLModel {
                 this.points.add(point);
 
             }
-            SubPanel subpanel9 = new SubPanel("subpanel_9", SUBPANEL_LENGTH*2, SUBPANEL_LENGTH*2, 0, 0f, 0, 0f, stringLengths[8],  t);
             subpanels.add(subpanel9);
             System.out.println("adding subpanel");
             for (LXPoint point : subpanel9.points){

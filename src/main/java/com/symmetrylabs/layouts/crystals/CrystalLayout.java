@@ -62,20 +62,20 @@ public class CrystalLayout implements Layout {
 //        }
 
         float[][] stringLengths_p1 = new float[][]{
-            {10, 5, 10},
-            {10, 5, 10},
-            {0, 5, 0},
-            {-15, -15, -15},     // negative lengths
-            {-20, -20, -10},       // negative lengths
+            {15, 15, 15},
+            {15, 15, 15},
+            {15, 15, 15},
+            {0, 0, 0},     // negative lengths
+            {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
             {0, 0, 0},
             {0, 0, 0},
             {0, 0, 0}
         };
         float[][] stringLengths_p2 = new float[][]{
-            {0, 0, 0},
-            {0, 0, 0},
-            {0, 0, 0},
+            {15,15, 15},
+            {15, 15, 15},
+            {15, 15, 15},
             {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
@@ -84,9 +84,9 @@ public class CrystalLayout implements Layout {
             {0, 0, 0}
         };
         float[][] stringLengths_p3 = new float[][]{
-            {0, 0, 0},
-            {0, 0, 0},
-            {0, 0, 0},
+            {15, 15, 15},
+            {15, 15, 15},
+            {15, 15, 15},
             {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
@@ -163,15 +163,15 @@ public class CrystalLayout implements Layout {
 
 
 
-        panels.add(createPanel("panel_1", 0, 0, 0, 0, 0, 0, stringLengths_p1, transform));
-        panels.add(createPanel("panel_2", PANEL_LENGTH, 0, 0, 0, 0, 0, stringLengths_p2, transform));
-        panels.add(createPanel("panel_3", PANEL_LENGTH*2, 0, 0, 0, 0, 0, stringLengths_p3, transform));
-        panels.add(createPanel("panel_4", PANEL_LENGTH*1, PANEL_LENGTH, 0, 0, 180, 0, stringLengths_p4, transform));
-        panels.add(createPanel("panel_5", PANEL_LENGTH*2, PANEL_LENGTH, 0, 0, 180, 0, stringLengths_p5, transform));
-        panels.add(createPanel("panel_6", PANEL_LENGTH*3, PANEL_LENGTH, 0, 0, 180, 0, stringLengths_p6, transform));
-        panels.add(createPanel("panel_7", 0, PANEL_LENGTH*2, 0, 0, 0, 0, stringLengths_p7, transform));
-        panels.add(createPanel("panel_8", PANEL_LENGTH, PANEL_LENGTH*2, 0, 0, 0, 0, stringLengths_p8, transform));
-        panels.add(createPanel("panel_9", PANEL_LENGTH*2, PANEL_LENGTH*2, 0, 0, 0, 0, stringLengths_p9, transform));
+        panels.add(createPanel("panel_1", 0, 0, 0, 180, 0, 0, stringLengths_p1, transform));
+        panels.add(createPanel("panel_2", PANEL_LENGTH, 0, 0, 180, 0, 0, stringLengths_p2, transform));
+        panels.add(createPanel("panel_3", PANEL_LENGTH*2, 0, 0, 180, 0, 0, stringLengths_p3, transform));
+        panels.add(createPanel("panel_4", PANEL_LENGTH*0, PANEL_LENGTH, 0, 180, 0, 0, stringLengths_p4, transform));
+        panels.add(createPanel("panel_5", PANEL_LENGTH*1, PANEL_LENGTH, 0, 180, 0, 0, stringLengths_p5, transform));
+        panels.add(createPanel("panel_6", PANEL_LENGTH*2, PANEL_LENGTH, 0, 180, 0, 0, stringLengths_p6, transform));
+        panels.add(createPanel("panel_7", 0, PANEL_LENGTH*2, 0, 180, 0, 0, stringLengths_p7, transform));
+        panels.add(createPanel("panel_8", PANEL_LENGTH, PANEL_LENGTH*2, 0, 180, 0, 0, stringLengths_p8, transform));
+        panels.add(createPanel("panel_9", PANEL_LENGTH*2, PANEL_LENGTH*2, 0, 180, 0, 0, stringLengths_p9, transform));
         return new CrystalModel(panels);
 
 
@@ -188,7 +188,7 @@ public class CrystalLayout implements Layout {
 
         CrystalModel model = (CrystalModel) lx.model;
 
-        lx.addOutput(new SimplePixlite(lx, "10.200.1.128")
+        lx.addOutput(new SimplePixlite(lx, "10.200.1.127")
             .addPixliteOutput(
                     new PointsGrouping("1")
                         // panel 1, sub-panel 1 (panel c)
@@ -307,7 +307,7 @@ public class CrystalLayout implements Layout {
 
 
             )
-            // panel 4 (f) channel 2 in
+//            // panel 4 (f) channel 2 in
             .addPixliteOutput(
                 new PointsGrouping("2")
                     .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(1))
