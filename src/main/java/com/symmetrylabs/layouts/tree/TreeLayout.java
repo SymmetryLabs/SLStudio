@@ -1,5 +1,5 @@
 package com.symmetrylabs.layouts.tree;
 
-public abstract class TreeLayout extends Layout {
-    
+
+public abstract class TreeLayout  {
 }

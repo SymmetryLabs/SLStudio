@@ -1,11 +1,16 @@
 package com.symmetrylabs.layouts.tree.config;
 
-private class TreeConfig {
+import java.util.Collections;
+import java.util.List;
+import java.util.ArrayList;
+
+
+public class TreeConfig {
 
     private List<LimbConfig> limbs;
 
     public TreeConfig() {
-        this(new Arraylist<LimbConfig>());
+        this(new ArrayList<LimbConfig>());
     }
 
     public TreeConfig(List<LimbConfig> limbs) {

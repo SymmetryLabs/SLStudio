@@ -1,13 +1,17 @@
 package com.symmetrylabs.layouts.tree.config;
 
+import java.util.Collections;
+import java.util.List;
+
+
 public class BranchConfig {
-    String ipAddress;
-    float x;
-    float y;
-    float z;
-    float azimuth;
-    float elevation;
-    float tilt;
+    public String ipAddress;
+    public float x;
+    public float y;
+    public float z;
+    public float azimuth;
+    public float elevation;
+    public float tilt;
     private List<TwigConfig> twigs;
 
     public BranchConfig(String ipAddress, float x, float y, float z, float azimuth, float elevation, float tilt, List<TwigConfig> twigs) {

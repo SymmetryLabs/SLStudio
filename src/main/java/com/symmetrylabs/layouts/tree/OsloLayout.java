@@ -5,18 +5,15 @@ import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import processing.core.PApplet;
 
-public class OsloLayout extends TreeLayout implements Layout {
-    private final PApplet applet;
-    private final TreeModel.ModelMode modelMode;
 
-    public OsloLayout(PApplet applet, TreeModel.ModelMode modelMode) {
-        this.applet = applet;
-        this.modelMode = modelMode;
+public class OsloLayout extends TreeLayout implements Layout {
+
+    public OsloLayout() {
     }
 
     @Override
     public SLModel buildModel() {
-        return new TreeModel(applet, modelMode);
+        return new SLModel(); //new TreeModel();
     }
 
     @Override
@@ -25,11 +22,11 @@ public class OsloLayout extends TreeLayout implements Layout {
 
     @Override
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
-        ui.preview.addComponent(new UITreeGround(applet));
-        UITreeStructure uiTreeStructure = new UITreeStructure((TreeModel) lx.model);
-        ui.preview.addComponent(uiTreeStructure);
-        UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
-        ui.preview.addComponent(uiTreeLeaves);
-        new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
+        // ui.preview.addComponent(new UITreeGround(applet));
+        // UITreeStructure uiTreeStructure = new UITreeStructure((TreeModel) lx.model);
+        // ui.preview.addComponent(uiTreeStructure);
+        // UITreeLeaves uiTreeLeaves = new UITreeLeaves(lx, applet, (TreeModel) lx.model);
+        // ui.preview.addComponent(uiTreeLeaves);
+        // new UITreeControls(ui, uiTreeStructure, uiTreeLeaves).setExpanded(false).addToContainer(ui.leftPane.global);
     }
 }

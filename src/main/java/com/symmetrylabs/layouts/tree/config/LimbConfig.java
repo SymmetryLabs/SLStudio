@@ -1,16 +1,20 @@
 package com.symmetrylabs.layouts.tree.config;
 
+import java.util.Collections;
+import java.util.List;
+
+
 public class LimbConfig {
-    float y;
-    float length;
-    float azimuth;
-    float elevation;
-    float tilt;
+    public float y;
+    public float length;
+    public float azimuth;
+    public float elevation;
+    public float tilt;
     private List<BranchConfig> branches;
 
     public LimbConfig(float y, float length, float azimuth, float elevation, float tilt, List<BranchConfig> branches) {
         this.y = y;
-        this.length = lenght;
+        this.length = length;
         this.azimuth = azimuth;
         this.elevation = elevation;
         this.tilt = tilt;
