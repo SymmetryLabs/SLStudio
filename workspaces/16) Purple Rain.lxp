@@ -1,6 +1,10 @@
 {
   "version": "0.1",
+<<<<<<< HEAD
   "timestamp": 1526521594883,
+=======
+  "timestamp": 1526521745483,
+>>>>>>> cec70a3a10482bb779f8127f793ca5c0f8d4fb97
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -254,11 +258,15 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
+<<<<<<< HEAD
         "brightness": 1.0
+=======
+        "brightness": 0.8029246452506484
+>>>>>>> cec70a3a10482bb779f8127f793ca5c0f8d4fb97
       }
     },
     "components": {

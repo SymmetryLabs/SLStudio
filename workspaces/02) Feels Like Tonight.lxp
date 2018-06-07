@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520275391273,
+  "timestamp": 1526521683421,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -311,7 +311,7 @@
         "effects": [],
         "clips": [
           {
-            "id": 83529,
+            "id": 87509,
             "class": "heronarts.lx.clip.LXChannelClip",
             "modulationColor": -16751873,
             "parameters": {
@@ -519,7 +519,7 @@
       "modulationColor": -15360,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -581,8 +581,8 @@
         {
           "name": "CoreMIDI4J - APC40 mkII",
           "channel": false,
-          "control": false,
-          "sync": false
+          "control": true,
+          "sync": true
         }
       ],
       "surfaces": [],

@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1520003193850,
+  "timestamp": 1526521733448,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -567,7 +567,7 @@
       "modulationColor": -65429,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -625,14 +625,7 @@
       }
     },
     "midi": {
-      "inputs": [
-        {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
-        }
-      ],
+      "inputs": [],
       "surfaces": [],
       "mapping": []
     }

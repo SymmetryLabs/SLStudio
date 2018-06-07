@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1523130012635,
+  "timestamp": 1526521710219,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -189,22 +189,22 @@
           "attack": 6.9999998435378075,
           "release": 12.100001917779522,
           "slope": 6.299999875947833,
-          "Band-1": 0.6007128345237109,
-          "Band-2": 0.7388915689855511,
-          "Band-3": 0.763996791896546,
-          "Band-4": 0.7626562191176454,
-          "Band-5": 0.648685632643796,
-          "Band-6": 0.2902614960158334,
-          "Band-7": 0.37546957408239323,
-          "Band-8": 0.5596553409795598,
-          "Band-9": 0.8662102284303463,
+          "Band-1": 0.0,
+          "Band-2": 0.0,
+          "Band-3": 0.0,
+          "Band-4": 0.0,
+          "Band-5": 0.0,
+          "Band-6": 0.0,
+          "Band-7": 0.686737512513452,
+          "Band-8": 0.8965142254336604,
+          "Band-9": 1.0,
           "Band-10": 1.0,
           "Band-11": 1.0,
           "Band-12": 1.0,
           "Band-13": 1.0,
           "Band-14": 1.0,
-          "Band-15": 0.9850236191129368,
-          "Band-16": 0.8988589675871319
+          "Band-15": 1.0,
+          "Band-16": 1.0
         }
       },
       "input": {
@@ -235,7 +235,7 @@
       "modulationColor": -50176,
       "parameters": {
         "label": "Output",
-        "enabled": true,
+        "enabled": false,
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
@@ -293,14 +293,7 @@
       }
     },
     "midi": {
-      "inputs": [
-        {
-          "name": "CoreMIDI4J - APC40 mkII",
-          "channel": false,
-          "control": false,
-          "sync": false
-        }
-      ],
+      "inputs": [],
       "surfaces": [],
       "mapping": []
     }
