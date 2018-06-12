@@ -35,6 +35,7 @@ public class TreeConfigLoader extends LXComponent {
     public TreeConfigLoader(LX lx) {
         super(lx);
         this.tree = (TreeModel)lx.model;
+        System.out.println("/* -- TreeConfigLoader -----------------*/");
         loadConfig();
         reconfigureTree(config);
     }
@@ -70,7 +71,7 @@ public class TreeConfigLoader extends LXComponent {
     }
 
     private String getConfigFilePath() {
-        return "data/" + SLStudio.applet.getSelectedLayoutName() + ".json";
+        return "data/" + SLStudio.applet.getSelectedLayoutName() + "-tree-config.json";
     }
 
     private void reconfigureTree(TreeConfig config) {
@@ -97,6 +98,6 @@ public class TreeConfigLoader extends LXComponent {
     }
 
     public static boolean isTreeLayout(Layout layout) {
-        return layout.getClass().isAssignableFrom(TreeLayout.class);
+        return layout instanceof TreeLayout;
     }
 }

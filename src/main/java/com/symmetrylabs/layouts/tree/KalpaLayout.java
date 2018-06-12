@@ -4,6 +4,7 @@ import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.model.SLModel;
 import com.symmetrylabs.layouts.tree.config.*;
+import static com.symmetrylabs.util.DistanceConstants.*;
 
 
 public class KalpaLayout extends TreeLayout implements Layout {
@@ -11,26 +12,16 @@ public class KalpaLayout extends TreeLayout implements Layout {
     @Override
     public SLModel buildModel() {
         TreeConfig config = new TreeConfig(new LimbConfig[] {
-            new LimbConfig(10, 8, 0, 0, 0, new BranchConfig[] {
-                new BranchConfig("10.200.1.10", 0, 0, 0, 0, 0, 0, new TwigConfig[] {
+            new LimbConfig(6*FEET, 0, 0, new BranchConfig[] {
+                new BranchConfig("10.200.1.11", 0, 0, 0, 0, 0, 0, new TwigConfig[] {
                     new TwigConfig(0, 0, 0, 0, 0),
                     new TwigConfig(0, 0, 0, 0, 0),
                     new TwigConfig(0, 0, 0, 0, 0),
                     new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0) 
-                }),
-                new BranchConfig("10.200.1.11", 0, 50, 0, 0, 0, 0, new TwigConfig[] {
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0),
-                    new TwigConfig(0, 0, 0, 0, 0) 
+                    new TwigConfig(0, 30, 0, 0, 0),
+                    new TwigConfig(0, 30, 0, 0, 0),
+                    new TwigConfig(0, 30, 0, 0, 0),
+                    new TwigConfig(0, 30, 0, 0, 0) 
                 })
             })
         });
