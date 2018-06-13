@@ -35,9 +35,7 @@ public class TreeConfigLoader extends LXComponent {
     public TreeConfigLoader(LX lx) {
         super(lx);
         this.tree = (TreeModel)lx.model;
-        System.out.println("/* -- TreeConfigLoader -----------------*/");
-        loadConfig();
-        reconfigureTree(config);
+        //loadConfig();
     }
 
     private void loadConfig() {
@@ -50,6 +48,7 @@ public class TreeConfigLoader extends LXComponent {
         try {
             this.file = file;
             this.config = new Gson().fromJson(new FileReader(file), TreeConfig.class);
+            reconfigureTree(config);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -59,11 +58,12 @@ public class TreeConfigLoader extends LXComponent {
         File file = new File(getConfigFilePath());
 
         try {
-            if (file.createNewFile()) {
-                System.out.println("TreeConfig: " + getConfigFilePath() + " already exists");
-            } else {
-                writeConfig(file);
-            }
+            writeConfig(file);
+            // if (file.createNewFile()) {
+            //   System.out.println("TreeConfig: " + getConfigFilePath() + " already exists");
+            // } else {
+            //   writeConfig(file);
+            // }
         } catch (Exception e) {
             e.printStackTrace();
         }

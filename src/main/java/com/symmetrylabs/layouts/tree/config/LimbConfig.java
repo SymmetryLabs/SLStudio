@@ -6,12 +6,14 @@ import java.util.Arrays;
 
 
 public class LimbConfig {
+    public float length;
     public float height;
     public float azimuth;
     public float elevation;
     private BranchConfig[] branches;
 
-    public LimbConfig(float height, float azimuth, float elevation, BranchConfig[] branches) {
+    public LimbConfig(float length, float height, float azimuth, float elevation, BranchConfig[] branches) {
+        this.length = length;
         this.height = height;
         this.azimuth = azimuth;
         this.elevation = elevation;

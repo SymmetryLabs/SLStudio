@@ -96,6 +96,7 @@ public class TreeModel extends SLModel {
         public float y;
         public float z;
 
+        public float length;
         public float height;
         public float azimuth;
         public float elevation;
@@ -107,6 +108,7 @@ public class TreeModel extends SLModel {
         public Limb(LXTransform t, LimbConfig config) {
             super(new Fixture(t, config));
             this.config = config;
+            this.length = length;
             this.height = config.height;
             this.azimuth = config.azimuth;
             this.elevation = elevation;
@@ -119,7 +121,7 @@ public class TreeModel extends SLModel {
 
         public void reconfigure(LXTransform t, LimbConfig config) {
             t.push();
-            t.translate(0, config.height, 0);
+            t.translate(0, config.height, config.length);
             t.rotateY(config.azimuth * PI / 180.);
             t.rotateZ(config.elevation * PI / 180.);
 
@@ -138,13 +140,13 @@ public class TreeModel extends SLModel {
             private final List<Branch> branches = new ArrayList<Branch>();
             private final List<Twig> twigs = new ArrayList<Twig>();
             private final List<Leaf> leaves = new ArrayList<Leaf>();
+            private final float x, y, z;
 
             private Fixture(LXTransform t, LimbConfig config) {
                 t.push();
-                t.translate(0, config.height, 0);
+                t.translate(config.length, config.height, 0);
                 t.rotateY(config.azimuth * PI / 180.);
-                t.rotateZ(config.elevation * PI / 180.);
-
+                t.rotateX(config.elevation * PI / 180.);
                 this.x = t.x();
                 this.y = t.y();
                 this.z = t.z();
@@ -190,6 +192,9 @@ public class TreeModel extends SLModel {
             Fixture f = (Fixture) this.fixtures.get(0);
             this.twigs   = Collections.unmodifiableList(f.twigs);
             this.leaves  = Collections.unmodifiableList(f.leaves);
+            this.x = f.x;
+            this.y = f.y;
+            this.z = f.z;
         }
 
         public void reconfigure(LXTransform t, BranchConfig config) {
@@ -213,6 +218,7 @@ public class TreeModel extends SLModel {
         private static class Fixture extends LXAbstractFixture {
             private final List<Twig> twigs = new ArrayList<Twig>();
             private final List<Leaf> leaves = new ArrayList<Leaf>();
+            private final float x, y, z;
 
             private Fixture(LXTransform t, BranchConfig config) {
                 t.push();
@@ -244,7 +250,7 @@ public class TreeModel extends SLModel {
      *--------------------------------------------------------------*/
     public static class Twig extends SLModel {
 
-        public static final int NUM_LEAVES = 15;
+        public static final int NUM_LEAVES = 16;
 
         public TwigConfig config;
 
@@ -256,15 +262,15 @@ public class TreeModel extends SLModel {
 
         public final List<Leaf> leaves;
 
-        public static final Leaf.Orientation[] LEAVES = {
-          new Leaf.Orientation(0,  4.5f*INCHES, -1.7f*INCHES, -HALF_PI - QUARTER_PI), // A
-          new Leaf.Orientation(1,  5.5f*INCHES,    0f*INCHES, -HALF_PI), // B
-          new Leaf.Orientation(2,  2.0f*INCHES,  3.5f*INCHES, -HALF_PI + QUARTER_PI), // C
-          new Leaf.Orientation(3,  3.5f*INCHES,  7.5f*INCHES, -HALF_PI), // D
-          new Leaf.Orientation(4,  4.0f*INCHES, 11.2f*INCHES, -HALF_PI), // E
-          new Leaf.Orientation(5,  3.0f*INCHES,  9.5f*INCHES, -HALF_PI + QUARTER_PI), // F
-          new Leaf.Orientation(6,  3.5f*INCHES, 12.7f*INCHES, -HALF_PI + QUARTER_PI), // G
-          new Leaf.Orientation(7,  0.0f*INCHES, 13.5f*INCHES, 0), // H
+        public static final Leaf.Config[] LEAVES = {
+          new Leaf.Config(Leaf.Size.LARGE, 0, -5.0f*INCHES,  1.5f*INCHES,  95), // A
+          new Leaf.Config(Leaf.Size.LARGE, 1, -7.0f*INCHES,  5.0f*INCHES,  75), // B
+          new Leaf.Config(Leaf.Size.SMALL, 2, -3.5f*INCHES,  5.5f*INCHES,  25), // C
+          new Leaf.Config(Leaf.Size.SMALL, 3, -7.0f*INCHES,  8.5f*INCHES, 105), // D
+          new Leaf.Config(Leaf.Size.LARGE, 4, -8.0f*INCHES, 11.0f*INCHES,  60), // E
+          new Leaf.Config(Leaf.Size.SMALL, 5, -3.5f*INCHES, 11.0f*INCHES,  35), // F
+          new Leaf.Config(Leaf.Size.LARGE, 6, -3.0f*INCHES, 14.0f*INCHES,  45), // G
+          new Leaf.Config(Leaf.Size.SMALL, 7, -2.5f*INCHES, 17.5f*INCHES,  20), // H
           null, // I
           null, // J
           null, // K
@@ -272,32 +278,29 @@ public class TreeModel extends SLModel {
           null, // M
           null, // N
           null, // O
+          null, // P
         };
 
         static {
-          // Make sure we didn't bork that array editing manually!
-          assert(LEAVES.length == NUM_LEAVES);
-          
-          // The last seven leaves are just inverse of the first about
-          // the y-axis.
-          for (int i = 0; i < 7; ++i) {
-            Leaf.Orientation thisLeaf = LEAVES[i];
+          // The last eight leaves are just inverse of the first about the y-axis.
+          for (int i = 0; i < 8; ++i) {
+            Leaf.Config thisLeaf = LEAVES[i];
             int index = LEAVES.length - 1 - i; 
-            LEAVES[index] = new Leaf.Orientation(index, -thisLeaf.x, thisLeaf.y, -thisLeaf.theta);
+            LEAVES[index] = new Leaf.Config(thisLeaf.size, index, -thisLeaf.x, thisLeaf.y, -thisLeaf.theta);
           }
         }
 
         public Twig(LXTransform t, TwigConfig config) {
             super(new Fixture(t, config));
             this.config = config;
-            this.x = config.x;
-            this.y = config.y;
-            this.z = config.z;
-            this.theta = theta;
-            this.tilt = tilt;
+            this.theta = config.theta;
+            this.tilt = config.tilt;
 
             Fixture f = (Fixture) this.fixtures.get(0);
             this.leaves = Collections.unmodifiableList(f.leaves);
+            this.x = f.x;
+            this.y = f.y;
+            this.z = f.z;
         }
 
         public void reconfigure(LXTransform t, TwigConfig config) {
@@ -305,6 +308,10 @@ public class TreeModel extends SLModel {
             t.translate(config.x, config.y, config.z);
             t.rotateY(config.tilt * PI / 180.);
             t.rotateZ(config.theta * PI / 180.);
+
+            this.x = t.x();
+            this.y = t.y();
+            this.z = t.z();
 
             for (Leaf leaf : leaves) {
               leaf.reconfigure(t);
@@ -315,6 +322,7 @@ public class TreeModel extends SLModel {
 
         private static class Fixture extends LXAbstractFixture {
             private final List<Leaf> leaves = new ArrayList<Leaf>();
+            private final float x, y, z;
 
             private Fixture(LXTransform t, TwigConfig config) {
                 t.push();
@@ -322,12 +330,16 @@ public class TreeModel extends SLModel {
                 t.rotateY(config.tilt * PI / 180.);
                 t.rotateZ(config.theta * PI / 180.);
 
+                this.x = t.x();
+                this.y = t.y();
+                this.z = t.z();
+
                 for (int i = 0; i < NUM_LEAVES; ++i) {
-                  Leaf.Orientation leafOrientation = LEAVES[i];
+                  Leaf.Config leafConfig = LEAVES[i];
                   t.push();
-                  t.translate(leafOrientation.x, leafOrientation.y, (i % 3) * (.1f*INCHES));
-                  t.rotateZ(leafOrientation.theta);
-                  Leaf leaf = new Leaf(t, leafOrientation);
+                  t.translate(leafConfig.x, leafConfig.y, (i % 3) * (.1f*INCHES));
+                  t.rotateZ(leafConfig.theta * PI / 180.);
+                  Leaf leaf = new Leaf(t, leafConfig);
                   this.leaves.add(leaf);
                   addPoints(leaf);
                   t.pop();
@@ -342,14 +354,17 @@ public class TreeModel extends SLModel {
      * Leaf
      *--------------------------------------------------------------*/
     public static class Leaf extends SLModel {
-        public static final int NUM_LEDS = 7;
-        public static final float LED_OFFSET = .75f*INCHES;
+
+        public enum Size {
+            SMALL, LARGE
+        }
+
         public static final float LED_SPACING = 1.3f*INCHES;
         public static final float WIDTH = 4.75f*INCHES;
         public static final float LENGTH = 6.5f*INCHES;
 
-        // Orientation of a leaf relative to twig
-        public static class Orientation {
+        // Config of a leaf relative to twig
+        public static class Config {
           
           public final int index;
           
@@ -363,25 +378,30 @@ public class TreeModel extends SLModel {
           
           // Tilt of the individual leaf
           public final float tilt;
-          
-          Orientation(int index, float x, float y, float theta) {
+
+          public final Leaf.Size size;
+
+          Config(Leaf.Size size, int index, float x, float y, float theta) {
             this.index = index;
             this.x = x;
             this.y = y;
             this.theta = theta;
             this.tilt = -QUARTER_PI + HALF_PI * (float) Math.random();
+            this.size = size;
           }
         }
 
-        public final Orientation orientation;
+        public final Config config;
+        public final Size size;
 
         public float x;
         public float y;
         public float z;
 
-        public Leaf(LXTransform t, Orientation orientation) {
-            super(new Fixture(t));
-            this.orientation = orientation;
+        public Leaf(LXTransform t, Config config) {
+            super(new Fixture(t, config));
+            this.config = config;
+            this.size = config.size;
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
@@ -393,44 +413,85 @@ public class TreeModel extends SLModel {
             this.z = t.z();
 
             t.push();
-            t.translate(orientation.x, orientation.y, 0);
-            t.rotateZ(orientation.theta);
-            t.rotateY(orientation.tilt);
+            t.translate(config.x, config.y, 0);
+            t.rotateZ(config.theta * PI / 180.);
+            t.rotateY(config.tilt * PI / 180.);
 
-            t.translate(.1f*INCHES, LED_OFFSET, 0);
-            points[0].update(t.x(), t.y(), t.z());
-            t.translate(0, LED_SPACING, 0);
-            points[1].update(t.x(), t.y(), t.z());
-            t.translate(0, LED_SPACING, 0);
-            points[2].update(t.x(), t.y(), t.z());
-            t.translate(-.1f*INCHES, LED_SPACING, 0);
-            points[3].update(t.x(), t.y(), t.z());
-            t.translate(-.1f*INCHES, -LED_SPACING, 0);
-            points[4].update(t.x(), t.y(), t.z());
-            t.translate(0, -LED_SPACING, 0);
-            points[5].update(t.x(), t.y(), t.z());
-            t.translate(0, -LED_SPACING, 0);
-            points[6].update(t.x(), t.y(), t.z());
+            int i = 0;
+            if (config.size == Size.LARGE) {
+                t.translate(-.05f*INCHES, 0, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+
+                t.translate(.1f*INCHES, 0, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+            }
+            else if (config.size == Size.SMALL) {
+                t.translate(-.05f*INCHES, 0, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+
+                t.translate(.1f*INCHES, 0, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+                t.translate(0, -LED_SPACING, 0);
+                points[i++].update(t.x(), t.y(), t.z());
+            }
             t.pop();
         }
 
         private static class Fixture extends LXAbstractFixture {
-            private Fixture(LXTransform t) {
+            private Fixture(LXTransform t, Config config) {
                 t.push();
-                t.translate(.1f*INCHES, LED_OFFSET, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(-.1f*INCHES, LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(-.1f*INCHES, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
-                t.translate(0, -LED_SPACING, 0);
-                addPoint(new LXPoint(t));
+                if (config.size == Size.LARGE) {
+                    t.translate(-.05f*INCHES, 0, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+
+                    t.translate(.1f*INCHES, 0, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                }
+                else if (config.size == Size.SMALL) {
+                    t.translate(-.05f*INCHES, 0, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+
+                    t.translate(.1f*INCHES, 0, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                    t.translate(0, -LED_SPACING, 0);
+                    addPoint(new LXPoint(t));
+                }
                 t.pop();
             }
         }
