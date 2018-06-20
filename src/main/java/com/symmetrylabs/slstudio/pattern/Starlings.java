@@ -1,9 +1,11 @@
 package com.symmetrylabs.slstudio.pattern;
 
+import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.ping.SLPatternWithMarkers;
 import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.OctahedronWithArrow;
+import com.symmetrylabs.util.OctreeModelIndex;
 import heronarts.lx.LX;
 import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
@@ -52,9 +54,11 @@ public class Starlings extends SLPatternWithMarkers {
     private CompoundParameter falcRngParam = new CompoundParameter("FalcRng", 100, 0, 500);
 
     private Random random = new Random(0);
+    private OctreeModelIndex modelIndex;
 
     public Starlings(LX lx) {
         super(lx);
+        modelIndex = new OctreeModelIndex(lx.model);
         addParameter(tmSclParam);
         addParameter(clrModeParam);
         addParameter(satParam);
@@ -202,14 +206,10 @@ public class Starlings extends SLPatternWithMarkers {
         float rad = radiusParam.getValuef();
         for (LXPoint p : model.points) {
             colors[p.index] = 0;
-            for (Bird b : starlings) {
-                if (Math.abs(b.pos.x - p.x) < rad &&
-                      Math.abs(b.pos.y - p.y) < rad &&
-                      Math.abs(b.pos.z - p.z) < rad &&
-                      b.pos.dist(new PVector(p.x, p.y, p.z)) < rad) {
-                    colors[p.index] = b.color;
-                    break;
-                }
+        }
+        for (Bird b : starlings) {
+            for (LXPoint p : modelIndex.pointsWithin(b.asLXPoint(), rad)) {
+                colors[p.index] = Ops8.add(colors[p.index], b.color);
             }
         }
     }
@@ -336,6 +336,10 @@ public class Starlings extends SLPatternWithMarkers {
 
         public Bird(LXPoint point) {
             this(point.x, point.y, point.z);
+        }
+
+        public LXPoint asLXPoint() {
+            return new LXPoint(pos.x, pos.y, pos.z);
         }
     }
 
