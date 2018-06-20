@@ -52,7 +52,6 @@ public class Starlings extends SLPatternWithMarkers {
     private CompoundParameter falcRngParam = new CompoundParameter("FalcRng", 100, 0, 500);
 
     private Random random = new Random(0);
-    private float t = 0;
 
     public Starlings(LX lx) {
         super(lx);
@@ -174,8 +173,7 @@ public class Starlings extends SLPatternWithMarkers {
         float minSpeed = minSpdParam.getValuef();
         float maxSpeed = maxSpdParam.getValuef();
         float takeOffAccel = tkOffParam.getValuef();
-        t += deltaSec;
-        int i = 0;
+
         for (Bird b : starlings) {
             List<Bird> neighbours = getNearbyStarlings(b, rangeParam.getValuef());
             PVector accel = new PVector();
@@ -194,12 +192,6 @@ public class Starlings extends SLPatternWithMarkers {
                 limitMagnitude(b.vel, minSpeed, maxSpeed);
             }
             b.pos.add(b.vel.copy().mult(deltaSec));
-
-            if (i++ == 0) {
-                System.out.println(String.format(
-                    "%5.2f: pos %s, vel %s, acc %s", t, format(b.pos), format(b.vel), format(accel)
-                ));
-            }
         }
         for (Bird b : falcons) {
             b.pos.add(b.vel.copy().mult(deltaSec));
