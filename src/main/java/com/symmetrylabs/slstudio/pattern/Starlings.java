@@ -151,9 +151,9 @@ public class Starlings extends SLPatternWithMarkers {
         Iterator<Bird> iter = birds.iterator();
         while (iter.hasNext()) {
             Bird b = iter.next();
-            if (Math.abs(b.pos.x - model.cx) > model.xRange * 2 + 100 ||
-                Math.abs(b.pos.y - model.cy) > model.yRange * 2 + 100 ||
-                Math.abs(b.pos.z - model.cz) > model.zRange * 2 + 100) {
+            if (Math.abs(b.pos.x - model.cx) > model.xRange * 3 + 100 ||
+                Math.abs(b.pos.y - model.cy) > model.yRange * 3 + 100 ||
+                Math.abs(b.pos.z - model.cz) > model.zRange * 3 + 100) {
                 iter.remove();
             }
         }

@@ -92,7 +92,7 @@ public class TreeConfigLoader extends LXComponent {
             FileWriter writer = new FileWriter(file);
             writer.write(new Gson().toJson(tree.getConfig()));
             writer.close();
-        } catch (IOException e) {
+        } catch (IOException | NullPointerException e) {
             e.printStackTrace();
         }
     }
