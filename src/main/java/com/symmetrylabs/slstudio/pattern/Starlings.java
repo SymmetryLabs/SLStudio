@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.ping.SLPatternWithMarkers;
+import com.symmetrylabs.util.CubeMarker;
 import com.symmetrylabs.util.Marker;
 import com.symmetrylabs.util.OctahedronWithArrow;
 import heronarts.lx.LX;
@@ -9,6 +10,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
+import heronarts.lx.parameter.EnumParameter;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -19,13 +21,18 @@ import java.util.Random;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
 public class Starlings extends SLPatternWithMarkers {
+    public enum ColorMode {RANDOM, PALETTE, GREYSCALE};
+
     private List<Bird> falcons = new ArrayList<>();
     private List<Bird> starlings = new ArrayList<>();
     private CompoundParameter tmSclParam = new CompoundParameter("TmScl", 1, 0, 20);
-    private DiscreteParameter countParam = new DiscreteParameter("Count", 10, 0, 100);
+    private EnumParameter<ColorMode> clrModeParam = new EnumParameter<>("ClrMode", ColorMode.RANDOM);
+    private CompoundParameter satParam = new CompoundParameter("Sat", 0.6, 0, 1);
+    private CompoundParameter brtParam = new CompoundParameter("Brt", 0.6, 0, 1);
+    private DiscreteParameter numStarParam = new DiscreteParameter("# Star", 10, 0, 500);
     private CompoundParameter rangeParam = new CompoundParameter("Range", 10, 0, 100);
     private CompoundParameter sepRngParam = new CompoundParameter("SepRng", 5, 0, 100);
-    private CompoundParameter sepFrcParam = new CompoundParameter("SepFrc", 100, 0, 1000);
+    private CompoundParameter sepFrcParam = new CompoundParameter("SepFrc", 100, 0, 500);
     private CompoundParameter cohWtParam = new CompoundParameter("CohWt", 0.5, 0, 1);
     private CompoundParameter cohMaxParam = new CompoundParameter("CohMax", 1, 0, 10);
     private CompoundParameter alnWtParam = new CompoundParameter("AlnWt", 0.5, 0, 1);
@@ -34,22 +41,26 @@ public class Starlings extends SLPatternWithMarkers {
     private CompoundParameter sepMaxParam = new CompoundParameter("SepMax", 1, 0, 10);
     private CompoundParameter grvWtParam = new CompoundParameter("GrvWt", 0.5, 0, 1);
     private CompoundParameter grvMaxParam = new CompoundParameter("GrvMax", 1, 0, 10);
-    private CompoundParameter escWtParam = new CompoundParameter("EscWt", 0.5, 0, 1);
-    private CompoundParameter escMaxParam = new CompoundParameter("EscMax", 1, 0, 10);
+    private CompoundParameter escWtParam = new CompoundParameter("EscWt", 1, 0, 500);
+    private CompoundParameter escMaxParam = new CompoundParameter("EscMax", 1, 0, 500);
     private CompoundParameter tkOffParam = new CompoundParameter("TkOff", 0.5, 0, 10);
-    private CompoundParameter minSpdParam = new CompoundParameter("MinSpd", 1, 0, 10);
-    private CompoundParameter maxSpdParam = new CompoundParameter("MaxSpd", 10, 0, 10);
+    private CompoundParameter minSpdParam = new CompoundParameter("MinSpd", 1, 0, 20);
+    private CompoundParameter maxSpdParam = new CompoundParameter("MaxSpd", 10, 0, 20);
     private CompoundParameter radiusParam = new CompoundParameter("Radius", 10, 0, 20);
-    private DiscreteParameter falcParam = new DiscreteParameter("Falc", 1, 0, 10);
+    private DiscreteParameter numFalcParam = new DiscreteParameter("# Falc", 1, 0, 10);
+    private CompoundParameter falcSpdParam = new CompoundParameter("FalcSpd", 1, 0, 20);
+    private CompoundParameter falcRngParam = new CompoundParameter("FalcRng", 100, 0, 500);
 
     private Random random = new Random(0);
     private float t = 0;
-    private int nextHue = 0;
 
     public Starlings(LX lx) {
         super(lx);
         addParameter(tmSclParam);
-        addParameter(countParam);
+        addParameter(clrModeParam);
+        addParameter(satParam);
+        addParameter(brtParam);
+        addParameter(numStarParam);
         addParameter(rangeParam);
         addParameter(sepRngParam);
         addParameter(sepFrcParam);
@@ -67,12 +78,14 @@ public class Starlings extends SLPatternWithMarkers {
         addParameter(minSpdParam);
         addParameter(maxSpdParam);
         addParameter(radiusParam);
-        addParameter(falcParam);
+        addParameter(numFalcParam);
+        addParameter(falcSpdParam);
+        addParameter(falcRngParam);
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
-        updateStarlingCount(countParam.getValuei());
-        updateFalconCount(falcParam.getValuei());
+        updateStarlingCount(numStarParam.getValuei());
+        updateFalconCount(numFalcParam.getValuei());
         advanceBirds(deltaMs * tmSclParam.getValue());
         int[] colors = (int[]) getArray(SRGB8);
         drawBirds(colors);
@@ -83,7 +96,13 @@ public class Starlings extends SLPatternWithMarkers {
         List<Marker> markers = new ArrayList<>();
         synchronized (starlings) {
             for (Bird b : starlings) {
-                markers.add(new OctahedronWithArrow(b.pos, 2, b.color, b.vel, b.color));
+                int c = b.color & 0xffffff | 0x40000000;
+                markers.add(new OctahedronWithArrow(b.pos, 1, c, b.vel, c));
+            }
+        }
+        synchronized (falcons) {
+            for (Bird b : falcons) {
+                markers.add(new CubeMarker(b.pos, falcRngParam.getValuef(), 0xff0000));
             }
         }
         return markers;
@@ -104,9 +123,16 @@ public class Starlings extends SLPatternWithMarkers {
         synchronized (falcons) {
             trimList(falcons, count);
             removeFarawayBirds(falcons);
-            LXPoint[] points = model.points;
+            float range = (model.xRange + model.yRange + model.zRange) / 3;
             while (falcons.size() < count) {
-                falcons.add(new Bird(points[random.nextInt(points.length)]));
+                float x = randomFloat(range*2, range*3) * (random.nextBoolean() ? 1 : -1);
+                float y = randomFloat(range*2, range*3) * (random.nextBoolean() ? 1 : -1);
+                float z = randomFloat(range*2, range*3) * (random.nextBoolean() ? 1 : -1);
+                PVector pos = new PVector(model.cx + x, model.cy + y, model.cz + z);
+                PVector vel = new PVector(-x, -y, -z);
+                vel.div(vel.mag());
+                vel.mult(falcSpdParam.getValuef());
+                falcons.add(new Bird(pos, vel));
             }
         }
     }
@@ -115,6 +141,10 @@ public class Starlings extends SLPatternWithMarkers {
         while (list.size() > count) {
             list.remove(list.size() - 1);
         }
+    }
+
+    private float randomFloat(float min, float max) {
+        return min + (max - min) * random.nextFloat();
     }
 
     private void removeFarawayBirds(List<Bird> birds) {
@@ -139,6 +169,8 @@ public class Starlings extends SLPatternWithMarkers {
         float separationMax = sepMaxParam.getValuef();
         float gravityWeight = grvWtParam.getValuef();
         float gravityMax = grvMaxParam.getValuef();
+        float escapeWeight = escWtParam.getValuef();
+        float escapeMax = escMaxParam.getValuef();
         float minSpeed = minSpdParam.getValuef();
         float maxSpeed = maxSpdParam.getValuef();
         float takeOffAccel = tkOffParam.getValuef();
@@ -148,11 +180,11 @@ public class Starlings extends SLPatternWithMarkers {
             List<Bird> neighbours = getNearbyStarlings(b, rangeParam.getValuef());
             PVector accel = new PVector();
             if (!neighbours.isEmpty()) {
-                accel.add(limitMagnitude(getCohesionAccel(b, neighbours).mult(cohesionWeight), cohesionMax));
-                accel.add(limitMagnitude(getAlignmentAccel(b, neighbours).mult(alignmentWeight), alignmentMax));
-                accel.add(limitMagnitude(getSeparationAccel(b, neighbours).mult(separationWeight), separationMax));
-                accel.add(limitMagnitude(getGravityAccel(b).mult(gravityWeight), gravityMax));
-                //accel.add(getEscapeAccel(b).mult(escWtParam.getValuef()));
+                accel.add(getCohesionAccel(b, neighbours).mult(cohesionWeight).limit(cohesionMax));
+                accel.add(getAlignmentAccel(b, neighbours).mult(alignmentWeight).limit(alignmentMax));
+                accel.add(getSeparationAccel(b, neighbours).mult(separationWeight).limit(separationMax));
+                accel.add(getGravityAccel(b).mult(gravityWeight).limit(gravityMax));
+                accel.add(getEscapeAccel(b, falcons).mult(escapeWeight).limit(escapeMax));
             }
             if (!b.inFlight && accel.mag() > takeOffAccel) {
                 b.inFlight = true;
@@ -168,6 +200,9 @@ public class Starlings extends SLPatternWithMarkers {
                     "%5.2f: pos %s, vel %s, acc %s", t, format(b.pos), format(b.vel), format(accel)
                 ));
             }
+        }
+        for (Bird b : falcons) {
+            b.pos.add(b.vel.copy().mult(deltaSec));
         }
     }
 
@@ -230,7 +265,7 @@ public class Starlings extends SLPatternWithMarkers {
         float sepForce = sepFrcParam.getValuef();
         int count = 0;
         for (Bird n : neighbours) {
-            float d = n.pos.dist(b.pos);
+            float d = b.pos.dist(n.pos);
             if (d < sepRange) {
                 float mag = sepForce / (d < 1 ? 1 : d);
                 accel.add(b.pos.copy().sub(n.pos).mult(mag / d));
@@ -249,18 +284,62 @@ public class Starlings extends SLPatternWithMarkers {
         ).div((model.xRange + model.yRange + model.zRange)/3);
     }
 
+    private PVector getEscapeAccel(Bird b, List<Bird> falcons) {
+        float falconRange = falcRngParam.getValuef();
+        PVector accel = new PVector();
+        int count = 0;
+        for (Bird f : falcons) {
+            float d = b.pos.dist(f.pos) + 0.1f;
+            if (d < falconRange) {
+                accel.add(b.pos.copy().sub(f.pos).div(d * d));
+                count++;
+            }
+        }
+        if (count > 0) {
+            accel.div(count);
+        }
+        return accel;
+    }
+
+    private int nextHue = 0;
+
     class Bird {
         public boolean inFlight;
         public PVector pos;
         public PVector vel;
         public int color;
 
+        public Bird(PVector pos, PVector vel) {
+            this.pos = pos.copy();
+            this.vel = vel.copy();
+            inFlight = vel.x != 0 || vel.y != 0 || vel.z != 0;
+            color = selectColor(pos.x, pos.y, pos.z);
+        }
+
+        private int selectColor(float x, float y, float z) {
+            float sat = satParam.getValuef() * 100;
+            float brt = brtParam.getValuef() * 100;
+            switch (clrModeParam.getEnum()) {
+                case RANDOM:
+                    return LXColor.hsb(nextHue += 10, sat, brt);
+                case PALETTE:
+                    return lx.palette.getColor(new LXPoint(x, y, z), sat, brt);
+                case GREYSCALE:
+                    return LXColor.hsb(0, 0, lx.palette.getHue(new LXPoint(x, y, z)) * 100 / 360);
+            }
+            return 0;
+        }
+
+        public Bird(PVector pos) {
+            this(pos, new PVector());
+        }
+
+        public Bird(float x, float y, float z, float vx, float vy, float vz) {
+            this(new PVector(x, y, z), new PVector(vx, vy, vz));
+        }
+
         public Bird(float x, float y, float z) {
-            inFlight = false;
-            pos = new PVector(x, y, z);
-            vel = new PVector(0, 0, 0);
-            color = LXColor.hsb(nextHue, 60, 100);
-            nextHue += 10;
+            this(x, y, z, 0, 0, 0);
         }
 
         public Bird(LXPoint point) {
@@ -277,14 +356,6 @@ public class Starlings extends SLPatternWithMarkers {
         if (mag < minMag) {
             v.mult(minMag / mag);
         } else if (mag > maxMag) {
-            v.mult(maxMag / mag);
-        }
-        return v;
-    }
-
-    public static PVector limitMagnitude(PVector v, float maxMag) {
-        float mag = v.mag();
-        if (mag > maxMag) {
             v.mult(maxMag / mag);
         }
         return v;
