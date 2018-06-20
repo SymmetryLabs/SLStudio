@@ -60,118 +60,128 @@ public class CrystalLayout implements Layout {
 
             //subpanels.add(subpanel);
 //        }
-
-        float[][] stringLengths_p1 = new float[][]{
+        float[][] stringLengths_zeros = new float[][]{
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0}
+        };
+        float[][] stringLengths_p1 = new float[][]{ //panel
+              {15, 15, 15}, //subpanel     // negative lengths
+              {0, 0, 0},     // negative lengths
+              {0, 0, 0},     // negative lengths
               {15, 15, 15},
               {0, 0, 0},
               {0, 0, 0},
-              {-15, -15, -15},     // negative lengths
-              {-8, -8, -8},       // negative lengths
-              {-8, -8, -8},       // negative lengths
-              {15, 15, 15},
-              {15, 15, 15},
-              {15, 15, 15}
+              {15, 15, 15},  // negative lengths
+              {0, 0, 0},     // negative lengths
+              {0, 0, 0}      // negative lengths
         };
         float[][] stringLengths_p2 = new float[][]{
-              {0, 0, 0},
-              {0, 0, 0},
-              {0, 0, 0},
-              {-8, -8, -8},       // negative lengths
-              {-8, -8, -8},       // negative lengths
-              {-8, -8, -8},       // negative lengths
-              {15, 15, 15},
-              {15, 15, 15},
-              {15, 15, 15}
+              {0, 0, 0},       // negative lengths
+              {0, 0, 0},       // negative lengths
+              {0, 0, 0},       // negative lengths
+              {-8, -8, -8},
+              {-8, -8, -8},
+              {-8, -8, -8},
+              {15, 15, 15},    // negative lengths
+              {15, 15, 15},    // negative lengths
+              {15, 15, 15}     // negative lengths
         };
         float[][] stringLengths_p3 = new float[][]{
-            {0, 0, 0},
-            {0, 0, 0},
-            {15, 15, 15},
-            {-8, -8, -8},       // negative lengths
-            {-8, -8, -8},       // negative lengths
-            {-15, -15, -15},       // negative lengths
-            {15, 15, 15},
-            {15, 15, 15},
-            {15, 15, 15}
+            {0, 0, 0},                // negative lengths
+            {0, 0, 0},                // negative lengths
+            {15, 15, 15},      // negative lengths
+            {-8, -8, -8},
+            {-8, -8, -8},
+            {-15, -15, -15},
+            {15, 15, 15},       // negative lengths
+            {15, 15, 15},       // negative lengths
+            {15, 15, 15}           // negative lengths
         };
         float[][] stringLengths_p4 = new float[][]{
-            {-15, -15, -15},
+            {-15, -15, -15},    // negative lengths
+            {0, 0, 0},          // negative lengths
+            {0, 0, 0},          // negative lengths
+            {15, 15, 15},
             {0, 0, 0},
             {0, 0, 0},
-            {15, 15, 15},       // negative lengths
-            {0, 0, 0},       // negative lengths
-            {0, 0, 0},       // negative lengths
-            {-15, -15, -15},
-            {0, 0, 0},
-            {0, 0, 0}
+            {-15, -15, -15},    // negative lengths
+            {0, 0, 0},          // negative lengths
+            {0, 0, 0}           // negative lengths
         };
         float[][] stringLengths_p5 = new float[][]{
-            {0, 0, 0},
-            {0, 0, 0},
-            {0, 0, 0},
             {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
             {0, 0, 0},
             {0, 0, 0},
-            {0, 0, 0}
+            {0, 0, 0},
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0}        // negative lengths
         };
         float[][] stringLengths_p6 = new float[][]{
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},       // negative lengths
+            {-15, -15, -15}, // negative lengths
+            {0, 0, 0},
+            {0, 0, 0},
+            {15, 15, 15},
+            {0, 0, 0},       // negative lengths
+            {0, 0, 0},       // negative lengths
+            {-15, -15, -15}  // negative lengths
+        };
+        float[][] stringLengths_p7 = new float[][]{
+            {15, 15, 15},      // negative lengths
+            {15, 15, 15},      // negative lengths
+            {15, 15, 15},      // negative lengths
+            {-15, -15, -15},
+            {0, 0, 0},
+            {0, 0, 0},
+            {15, 15, 15},      // negative lengths
+            {0, 0, 0},         // negative lengths
+              {0, 0, 0}        // negative lengths
+        };
+        float[][] stringLengths_p8 = new float[][]{
+            {15, 15, 15},   // negative lengths
+            {15, 15, 15},   // negative lengths
+            {15, 15, 15},   // negative lengths
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},
+            {0, 0, 0},      // negative lengths
+            {0, 0, 0},      // negative lengths
+            {0, 0, 0}       // negative lengths
+        };
+        float[][] stringLengths_p9 = new float[][]{
+            {15, 15, 15},   // negative lengths
+            {15, 15, 15},   // negative lengths
+            {15, 15, 15},   // negative lengths
             {0, 0, 0},
             {0, 0, 0},
             {-15, -15, -15},
             {0, 0, 0},       // negative lengths
             {0, 0, 0},       // negative lengths
-            {15, 15, 15},       // negative lengths
-            {0, 0, 0},
-            {0, 0, 0},
-            {-15, -15, -15}
-        };
-        float[][] stringLengths_p7 = new float[][]{
-            {15, 15, 15},
-            {15, 15, 15},
-            {15, 15, 15},
-            {-15, -15, -15},       // negative lengths
-            {0, 0, 0},       // negative lengths
-            {0, 0, 0},       // negative lengths
-            {15, 15, 15},
-            {0, 0, 0},
-              {0, 0, 0}
-        };
-        float[][] stringLengths_p8 = new float[][]{
-            {15, 15, 15},
-            {15, 15, 15},
-            {15, 15, 15},
-            {0, 0, 0},      // negative lengths
-            {0, 0, 0},      // negative lengths
-            {0, 0, 0},      // negative lengths
-            {0, 0, 0},
-            {0, 0, 0},
-            {0, 0, 0}
-        };
-        float[][] stringLengths_p9 = new float[][]{
-            {15, 15, 15},
-            {15, 15, 15},
-            {15, 15, 15},
-            {0, 0, 0},      // negative lengths
-            {0, 0, 0},      // negative lengths
-            {-15, -15, -15},      // negative lengths
-            {0, 0, 0},
-            {0, 0, 0},
-            {15, 15, 15}
+            {15, 15, 15}     // negative lengths
         };
 
 
 
-        panels.add(createPanel("panel_1", 0, 0, 0, 180, 0, 0, stringLengths_p1, transform));
-        panels.add(createPanel("panel_2", PANEL_LENGTH, 0, 0, 180, 0, 0, stringLengths_p2, transform));
-        panels.add(createPanel("panel_3", PANEL_LENGTH*2, 0, 0, 180, 0, 0, stringLengths_p3, transform));
-        panels.add(createPanel("panel_4", PANEL_LENGTH*0, PANEL_LENGTH*0, 0, 0, 0, 0, stringLengths_p4, transform));
-        panels.add(createPanel("panel_5", PANEL_LENGTH*1, PANEL_LENGTH*0, 0, 0, 0, 0, stringLengths_p5, transform));
-        panels.add(createPanel("panel_6", PANEL_LENGTH*2, PANEL_LENGTH*0, 0, 0, 0, 0, stringLengths_p6, transform));
-        panels.add(createPanel("panel_7", 0, PANEL_LENGTH*2, 0, 180, 0, 0, stringLengths_p7, transform));
-        panels.add(createPanel("panel_8", PANEL_LENGTH, PANEL_LENGTH*2, 0, 180, 0, 0, stringLengths_p8, transform));
-        panels.add(createPanel("panel_9", PANEL_LENGTH*2, PANEL_LENGTH*2, 0, 180, 0, 0, stringLengths_p9, transform));
+        panels.add(createPanel("panel_1", 0, -PANEL_LENGTH, 0, 0, 0, 0, stringLengths_p1, transform));
+        panels.add(createPanel("panel_2", PANEL_LENGTH, -PANEL_LENGTH, 0, 0, 0, 0, stringLengths_zeros, transform));
+        panels.add(createPanel("panel_3", PANEL_LENGTH*2, -PANEL_LENGTH, 0, 0, 0, 0, stringLengths_zeros, transform));
+        panels.add(createPanel("panel_4", PANEL_LENGTH*0, PANEL_LENGTH*0, 0, 0, 0, 0, stringLengths_zeros, transform));
+        panels.add(createPanel("panel_5", PANEL_LENGTH*1, PANEL_LENGTH*0, 0, 0, 0, 0, stringLengths_zeros, transform));
+        panels.add(createPanel("panel_6", PANEL_LENGTH*2, PANEL_LENGTH*0, 0, 0, 0, 0, stringLengths_zeros, transform));
+        panels.add(createPanel("panel_7", 0, PANEL_LENGTH*1, 0, 0, 0, 0, stringLengths_zeros, transform));
+        panels.add(createPanel("panel_8", PANEL_LENGTH, PANEL_LENGTH*1, 0, 0, 0, 0, stringLengths_zeros, transform));
+        panels.add(createPanel("panel_9", PANEL_LENGTH*2, PANEL_LENGTH*1, 0, 0, 0, 0, stringLengths_zeros, transform));
         return new CrystalModel(panels);
 
 
@@ -192,17 +202,17 @@ public class CrystalLayout implements Layout {
             .addPixliteOutput(
                     new PointsGrouping("1")
                         // panel 1, sub-panel 1 (panel c)
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(1))
 
                         .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(3).getPointByIndex(2))
                         .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(3).getPointByIndex(0))
@@ -216,31 +226,34 @@ public class CrystalLayout implements Layout {
                         .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(5).getPointByIndex(0))
                         .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(5).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(2).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(8).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(1).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(7).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(0).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(0).getSubPanelByIndex(6).getPointByIndex(1))
+
+
+
+
 
 //                         panel 2 (b)
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(1))
-
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(1))
 
                         .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(3).getPointByIndex(2))
                         .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(3).getPointByIndex(0))
@@ -254,31 +267,33 @@ public class CrystalLayout implements Layout {
                         .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(5).getPointByIndex(0))
                         .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(5).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(2).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(8).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(1).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(7).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(0).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(1).getSubPanelByIndex(6).getPointByIndex(1))
+
+
+
 
                     // Panel 3 (a)
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(1))
-
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(1))
 
                         .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(3).getPointByIndex(2))
                         .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(3).getPointByIndex(0))
@@ -292,17 +307,21 @@ public class CrystalLayout implements Layout {
                         .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(5).getPointByIndex(0))
                         .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(5).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(2).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(8).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(1).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(7).getPointByIndex(1))
 
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(2))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(0))
-                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(0).getPointByIndex(1))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(2))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(0))
+                        .addPoint(model.getPanelByIndex(2).getSubPanelByIndex(6).getPointByIndex(1))
+
+
+
+
 //
 //
 //
@@ -310,29 +329,6 @@ public class CrystalLayout implements Layout {
 //            // panel 4 (f) channel 2 in
             .addPixliteOutput(
                 new PointsGrouping("2")
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(0))
 
                     .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(2).getPointByIndex(1))
                     .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(2).getPointByIndex(2))
@@ -346,31 +342,31 @@ public class CrystalLayout implements Layout {
                     .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(0).getPointByIndex(2))
                     .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(0).getPointByIndex(0))
 
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(3).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(4).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(5).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(8).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(7).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(3).getSubPanelByIndex(6).getPointByIndex(0))
+
                 // panel 5 (e)
-
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(0))
-
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(0))
 
                     .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(2).getPointByIndex(1))
                     .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(2).getPointByIndex(2))
@@ -384,19 +380,42 @@ public class CrystalLayout implements Layout {
                     .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(0).getPointByIndex(2))
                     .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(0).getPointByIndex(0))
 
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(3).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(4).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(5).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(8).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(7).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(4).getSubPanelByIndex(6).getPointByIndex(0))
                 // Panel 6 (d)
 
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(0))
 
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(0))
 
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(0))
 
                     .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(3).getPointByIndex(1))
                     .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(3).getPointByIndex(2))
@@ -410,33 +429,34 @@ public class CrystalLayout implements Layout {
                     .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(5).getPointByIndex(2))
                     .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(5).getPointByIndex(0))
 
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(2).getPointByIndex(0))
 
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(1).getPointByIndex(0))
 
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(1))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(0).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(8).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(7).getPointByIndex(0))
+
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(5).getSubPanelByIndex(6).getPointByIndex(0))
             )
             .addPixliteOutput(
                 new PointsGrouping("3")
                     // panel 7 (i)
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(1))
-
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(1))
 
                     .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(3).getPointByIndex(2))
                     .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(3).getPointByIndex(0))
@@ -450,43 +470,23 @@ public class CrystalLayout implements Layout {
                     .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(5).getPointByIndex(0))
                     .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(5).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(2).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(8).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(1).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(7).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(0).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(6).getSubPanelByIndex(6).getPointByIndex(1))
+
+
+
+
 
                     // panel 8 (h)
-
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(1))
-
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(1))
-
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(1))
-
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(1))
-
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(1))
-
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(1))
 
                     .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(2).getPointByIndex(2))
                     .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(2).getPointByIndex(0))
@@ -500,19 +500,47 @@ public class CrystalLayout implements Layout {
                     .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(0).getPointByIndex(0))
                     .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(0).getPointByIndex(1))
 
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(3).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(4).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(5).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(8).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(7).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(7).getSubPanelByIndex(6).getPointByIndex(1))
+
+
+
+
                     // panel 9 (g)
 
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(1))
+
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(1))
 
                     .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(3).getPointByIndex(2))
                     .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(3).getPointByIndex(0))
@@ -526,17 +554,20 @@ public class CrystalLayout implements Layout {
                     .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(5).getPointByIndex(0))
                     .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(5).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(2).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(8).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(1).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(7).getPointByIndex(1))
 
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(2))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(0))
-                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(0).getPointByIndex(1))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(2))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(0))
+                    .addPoint(model.getPanelByIndex(8).getSubPanelByIndex(6).getPointByIndex(1))
+
+
+
             )
         );
 

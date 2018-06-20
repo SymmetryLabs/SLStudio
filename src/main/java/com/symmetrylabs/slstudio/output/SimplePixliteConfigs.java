@@ -16,7 +16,7 @@ public class SimplePixliteConfigs {
          */
         return new SimplePixlite[] {
 
-            // CAR 1
+            // Pixlite for 9 panels
 
             new SimplePixlite(lx, "10.200.1.127")
                 // don't forget strips start at the bottom of windows
@@ -24,11 +24,11 @@ public class SimplePixliteConfigs {
                 .addPoints(lx.model.getPoints())
             ),
 
-            new SimplePixlite(lx, "10.200.1.153")
-                // don't forget strips start at the bottom of windows
-                .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
-                .addPoints(lx.model.getPoints())
-            ),
+//            new SimplePixlite(lx, "10.200.1.153")
+//                // don't forget strips start at the bottom of windows
+//                .addPixliteOutput(new PointsGrouping("1") // <- output index on pixlite
+//                .addPoints(lx.model.getPoints())
+//            ),
 
         };
 
