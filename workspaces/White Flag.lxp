@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1529532947435,
+  "timestamp": 1529537382133,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -120,7 +120,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.024993322789669037,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -206,7 +206,7 @@
               "RotY": 0.5,
               "RotZ": 0.5,
               "Spin": 0.5,
-              "Fast": 0.46999999999999975,
+              "Fast": 0.55,
               "Dens": 0.6,
               "Shrp": 0.5,
               "Symm": 0,
@@ -235,7 +235,7 @@
           "midiChannel": 16,
           "autoCycleEnabled": false,
           "autoCycleTimeSecs": 60.0,
-          "fader": 0.002237720414996147,
+          "fader": 0.0,
           "crossfadeGroup": 0,
           "blendMode": 0,
           "transitionEnabled": false,
@@ -330,7 +330,7 @@
             "modulationColor": -16711862,
             "parameters": {
               "label": "Rings",
-              "DEPTH": 0.9723655581474304,
+              "DEPTH": 0.7099999785423279,
               "BRT": 0.75,
               "SAT": 0.5,
               "SPD1": 0.2,
@@ -505,7 +505,7 @@
         "mode": 0,
         "fps": 0.0,
         "gamma": 0,
-        "brightness": 0.6000000024214387
+        "brightness": 1.0
       }
     },
     "components": {
@@ -579,9 +579,9 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 328.8162451426042,
-        "theta": -0.032999999999999995,
-        "phi": 0.0,
+        "radius": 395.78969726364915,
+        "theta": -0.035999999999999935,
+        "phi": 0.03299999999999981,
         "positionX": 169.47055053710938,
         "positionY": 80.75,
         "positionZ": -121.02943420410156

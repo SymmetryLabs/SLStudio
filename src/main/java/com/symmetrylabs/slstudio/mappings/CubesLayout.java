@@ -144,12 +144,12 @@ static final TowerConfig[] TOWER_CONFIG = {
     // new TowerConfig(140, 0, -67, 45, new String[] {"321", "323", "185", "70"}),  // 300
 
     // HOUSE LEFT truss
-    new TowerConfig(0, JUMP*3, -144, 0, new String[] {"163"}),  // 601
-    new TowerConfig(-26, JUMP*2, -160, 0, new String[] {"412"}),  // 602
+    // new TowerConfig(0, JUMP*3, -144, 0, new String[] {"163"}),  // 601
+    // new TowerConfig(-26, JUMP*2, -160, 0, new String[] {"412"}),  // 602
 
-    // HOUSE RIGHT truss
-    new TowerConfig(296-16-20, JUMP*3, -124, 90, new String[] {"122"}),  // 603
-    new TowerConfig(340-12-48, JUMP*2, -140, 90, new String[] {"71"}),  // 604
+    // // HOUSE RIGHT truss
+    // new TowerConfig(296-16-20, JUMP*3, -124, 90, new String[] {"122"}),  // 603
+    // new TowerConfig(340-12-48, JUMP*2, -140, 90, new String[] {"71"}),  // 604
 
     // HOUSE LEFT floor
     new TowerConfig(-58-24, 0, -270, 45, new String[] {"318"}),  // 605
