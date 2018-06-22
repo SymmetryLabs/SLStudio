@@ -19,26 +19,28 @@ public class CirclesLayout implements Layout {
         CirclesBuilder<DoubleStrip> builder = new CirclesBuilder<>(
                 (String id, LXTransform t) -> new DoubleStrip(id, stripMetrics, t));
 
+        float scale = 1.0f;
+
         // circle radii in meters
-        double[] innerCircleRadii = { 1.6, 1.9, 2.2 };
-        double[] outerCircleRadii = { 3.6, 3.9 };
-        double[] wallRadii = { 2.48, 2.76, 3.04, 3.32 };
+        double[] innerCircleRadii = { 2, 2.2, 2.4 };
+        double[] outerCircleRadii = { 3.9, 4.1, 4.3 };
+        double[] wallRadii = { 2.775, 3.15, 3.525 };
 
         for (double radius : innerCircleRadii) {
-            builder.addCircle().withRadius(radius * METER)
+            builder.addCircle().withRadius(radius * METER * scale)
                 .addStrips(8).withDegreeOffset(55).withDegreeSweep(70)
                 .addStrips(24).withDegreeOffset(155).withDegreeSweep(230)
                 .build();
         }
 
         for (double radius : outerCircleRadii) {
-            builder.addCircle().withRadius(radius * METER)
+            builder.addCircle().withRadius(radius * METER * scale)
                 .addStrips(48).withDegreeOffset(-75).withDegreeSweep(330)
                 .build();
         }
 
         for (double radius : wallRadii) {
-            builder.addCircle().withRadius(radius * METER)
+            builder.addCircle().withRadius(radius * METER * scale)
                 .addStrips(2).withDegreeOffset(55).withDegreeSpacing(5)
                 .addStrips(2).withDegreeOffset(125).withDegreeSpacing(-5)
                 .build();
