@@ -79,6 +79,7 @@ public class SLStudioLX extends P3LX {
         private static final String HELP_TEXT =
               "@-C    Toggle P3CubeMap debugging\n" +
                 "@-F    Toggle frame rate status line\n" +
+                "@-G    Toggle UI geometry\n" +
                 "@-L    Select another layout\n" +
                 "@-M    Modulation source\n" +
                 "@-P    Performance mode\n" +
@@ -152,6 +153,9 @@ public class SLStudioLX extends P3LX {
                                 break;
                             case VK_F:
                                 framerate.toggleVisible();
+                                break;
+                            case VK_G:
+                                markerPainter.toggleVisible();
                                 break;
                             case VK_L:
                                 String layoutName = (String) JOptionPane.showInputDialog(

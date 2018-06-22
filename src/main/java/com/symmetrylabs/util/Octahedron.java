@@ -9,7 +9,7 @@ public class Octahedron implements Marker {
     int rgb;
 
     public Octahedron(PVector pos, float size, int rgb) {
-        this.pos = pos;
+        this.pos = pos.copy();
         this.size = size;
         this.rgb = rgb;
     }
