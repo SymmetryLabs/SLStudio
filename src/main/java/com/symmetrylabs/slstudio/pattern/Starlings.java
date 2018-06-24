@@ -32,6 +32,8 @@ public class Starlings extends SLPatternWithMarkers {
     private EnumParameter<ColorMode> clrModeParam = new EnumParameter<>("ClrMode", ColorMode.RANDOM);
     private CompoundParameter satParam = new CompoundParameter("Sat", 0.6, 0, 1);
     private CompoundParameter brtParam = new CompoundParameter("Brt", 0.6, 0, 1);
+    private CompoundParameter fltrSecParam = new CompoundParameter("FltrSec", 8, 0, 20);
+    private CompoundParameter fltrHzParam = new CompoundParameter("FltrHz", 1, 0, 4);
 
     private DiscreteParameter numStarParam = new DiscreteParameter("# Star", 10, 0, 500);
     private CompoundParameter rangeParam = new CompoundParameter("Range", 10, 0, 100);
@@ -59,6 +61,12 @@ public class Starlings extends SLPatternWithMarkers {
     private DiscreteParameter numFalcParam = new DiscreteParameter("# Falc", 1, 0, 10);
     private CompoundParameter falcSpdParam = new CompoundParameter("FalcSpd", 1, 0, 20);
     private CompoundParameter falcRngParam = new CompoundParameter("FalcRng", 100, 0, 500);
+    private CompoundParameter falcDlyParam = new CompoundParameter("FalcDly", 4, 0, 480);
+
+    private CompoundParameter landSecParam = new CompoundParameter("LandSec", 2, 0, 240);
+    private CompoundParameter landDrgParam = new CompoundParameter("LandDrg", 0.1, 0, 1);
+    private CompoundParameter landSpdParam = new CompoundParameter("LandSpd", 1, 0, 4);
+    private CompoundParameter landRngParam = new CompoundParameter("LandRng", 6, 0, 24);
 
     private Random random = new Random(0);
     private OctreeModelIndex modelIndex;
@@ -70,6 +78,8 @@ public class Starlings extends SLPatternWithMarkers {
         addParameter(clrModeParam);
         addParameter(satParam);
         addParameter(brtParam);
+        addParameter(fltrSecParam);
+        addParameter(fltrHzParam);
 
         addParameter(numStarParam);
         addParameter(rangeParam);
@@ -97,6 +107,11 @@ public class Starlings extends SLPatternWithMarkers {
         addParameter(numFalcParam);
         addParameter(falcSpdParam);
         addParameter(falcRngParam);
+        addParameter(falcDlyParam);
+
+        addParameter(landSecParam);
+        addParameter(landSpdParam);
+        addParameter(landRngParam);
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {
@@ -148,7 +163,7 @@ public class Starlings extends SLPatternWithMarkers {
                 PVector vel = new PVector(-x, -y, -z);
                 vel.div(vel.mag());
                 vel.mult(falcSpdParam.getValuef());
-                falcons.add(new Bird(pos, vel));
+                falcons.add(new Bird(pos, vel, falcDlyParam.getValuef()));
             }
         }
     }
@@ -192,6 +207,14 @@ public class Starlings extends SLPatternWithMarkers {
         float takeOffAccel = tkOffParam.getValuef();
 
         for (Bird b : starlings) {
+            b.safeSec += deltaSec;
+            if (b.inFlight) {
+                b.inFlightSec += deltaSec;
+                b.landedSec = 0;
+            } else {
+                b.landedSec += deltaSec;
+                b.inFlightSec = 0;
+            }
             List<Bird> neighbours = getNearbyStarlings(b, rangeParam.getValuef());
             PVector accel = new PVector();
             if (!neighbours.isEmpty()) {
@@ -203,26 +226,45 @@ public class Starlings extends SLPatternWithMarkers {
             }
             if (!b.inFlight && accel.mag() > takeOffAccel) {
                 b.inFlight = true;
+                b.inFlightSec = 0;
+                b.landedSec = 0;
             }
             if (b.inFlight) {
                 b.vel.add(accel.copy().mult(deltaSec));
-                adjustVelocity(deltaSec, b.vel);
+                adjustVelocity(b, deltaSec);
             }
             b.pos.add(b.vel.copy().mult(deltaSec));
         }
         for (Bird b : falcons) {
-            b.pos.add(b.vel.copy().mult(deltaSec));
+            if (b.delaySec > 0) {
+                b.delaySec -= deltaSec;
+            } else {
+                b.pos.add(b.vel.copy().mult(deltaSec));
+            }
         }
     }
 
     private void drawBirds(int[] colors) {
         float rad = radiusParam.getValuef();
+        float flutterSec = fltrSecParam.getValuef();
+        float flutterHertz = fltrHzParam.getValuef();
+        final double TAU = Math.PI * 2;
+
         for (LXPoint p : model.points) {
             colors[p.index] = 0;
         }
         for (Bird b : starlings) {
             for (LXPoint p : modelIndex.pointsWithin(b.asLXPoint(), rad)) {
-                colors[p.index] = Ops8.add(colors[p.index], b.color);
+                int c = b.color;
+                int alpha = 255;
+                float sec = b.inFlight ? b.inFlightSec : b.landedSec;
+                if (!b.inFlight && sec < flutterSec) {
+                    double t = sec * flutterHertz;
+                    double wave = Math.sin(t * TAU) * Math.sin(t * TAU) * 1 / (1 + sec / flutterSec);
+                    alpha = (int) (0.5 + 255 * (1 - wave) / 2);
+                }
+                c = Ops8.rgba(Ops8.red(c), Ops8.green(c), Ops8.blue(c), alpha);
+                colors[p.index] = Ops8.add(colors[p.index], c);
             }
         }
     }
@@ -298,6 +340,7 @@ public class Starlings extends SLPatternWithMarkers {
             if (d < falconRange) {
                 accel.add(b.pos.copy().sub(f.pos).div(d * d));
                 count++;
+                b.safeSec = 0;
             }
         }
         if (count > 0) {
@@ -306,25 +349,43 @@ public class Starlings extends SLPatternWithMarkers {
         return accel;
     }
 
-    private void adjustVelocity(float deltaSec, PVector vel) {
-        float speed = vel.mag();
+    private void adjustVelocity(Bird bird, float deltaSec) {
+        float speed = bird.vel.mag();
         float minSpeed = minSpdParam.getValuef();
         float maxSpeed = maxSpdParam.getValuef();
         float drag = dragParam.getValuef();
         float yDrag = yDragParam.getValuef();
+        boolean canLand = bird.inFlight && bird.safeSec >= landSecParam.getValuef();
+
+        if (canLand) {
+            int count = modelIndex.pointsWithin(bird.asLXPoint(), landRngParam.getValuef()).size();
+            drag += landDrgParam.getValuef() * count;
+            minSpeed = landSpdParam.getValuef() * 0.9f;
+        }
 
         float dragAccel = drag * speed;
         float newSpeed = speed - dragAccel * deltaSec;
         if (newSpeed < minSpeed) newSpeed = minSpeed;
         if (newSpeed > maxSpeed) newSpeed = maxSpeed;
-        vel.mult(newSpeed / speed);
+        bird.vel.mult(newSpeed / speed);
 
         if (yDrag > 0) {
-            speed = Math.abs(vel.y);
+            speed = Math.abs(bird.vel.y);
             dragAccel = yDrag * speed;
             newSpeed = speed - dragAccel * deltaSec;
             if (newSpeed < 0) newSpeed = 0;
-            vel.y *= newSpeed / speed;
+            bird.vel.y *= newSpeed / speed;
+        }
+
+        if (canLand && bird.vel.mag() < landSpdParam.getValuef()) {
+            LXPoint point = modelIndex.nearestPoint(bird.asLXPoint());
+            if (point != null) {
+                bird.pos = new PVector(point.x, point.y, point.z);
+                bird.vel = new PVector(0, 0, 0);
+                bird.inFlight = false;
+                bird.inFlightSec = 0;
+                bird.landedSec = 0;
+            }
         }
     }
 
@@ -335,12 +396,24 @@ public class Starlings extends SLPatternWithMarkers {
         public PVector pos;
         public PVector vel;
         public int color;
+        public float delaySec;
+        public float safeSec;
+        public float inFlightSec;
+        public float landedSec;
 
-        public Bird(PVector pos, PVector vel) {
+        public Bird(PVector pos, PVector vel, float delaySec) {
             this.pos = pos.copy();
             this.vel = vel.copy();
             inFlight = vel.x != 0 || vel.y != 0 || vel.z != 0;
             color = selectColor(pos.x, pos.y, pos.z);
+            this.delaySec = delaySec;
+            safeSec = 0;
+            inFlightSec = 0;
+            landedSec = 0;
+        }
+
+        public Bird(PVector pos, PVector vel) {
+            this(pos, vel, 0);
         }
 
         private int selectColor(float x, float y, float z) {
