@@ -8,6 +8,7 @@ import java.lang.reflect.Modifier;
 
 
 import com.symmetrylabs.layouts.Layout;
+import heronarts.lx.warp.LXWarp;
 import io.github.lukehutch.fastclasspathscanner.FastClasspathScanner;
 import io.github.lukehutch.fastclasspathscanner.scanner.ScanResult;
 
@@ -31,8 +32,11 @@ public class LXClassLoader {
     }
 
     public static List<Class<LXEffect>> findEffects() {
-        return getSubclassStream(LXEffect.class)
-            .collect(Collectors.toList());
+        return getSubclassStream(LXEffect.class).collect(Collectors.toList());
+    }
+
+    public static List<Class<LXWarp>> findWarps() {
+        return getSubclassStream(LXWarp.class).collect(Collectors.toList());
     }
 
     public static List<Class<Layout>> findLayouts() {
