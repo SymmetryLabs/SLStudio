@@ -34,6 +34,7 @@ import heronarts.p3lx.ui.studio.global.UITempo;
 import heronarts.p3lx.ui.studio.project.UIEffectManager;
 import heronarts.p3lx.ui.studio.project.UIPatternManager;
 import heronarts.p3lx.ui.studio.project.UIProjectManager;
+import heronarts.p3lx.ui.studio.project.UIWarpManager;
 
 public class UILeftPane extends UIPane {
 
@@ -74,6 +75,7 @@ public class UILeftPane extends UIPane {
         // Project elements
         new UIProjectManager(ui, lx, 0, 0, this.browser.getContentWidth()).addToContainer(this.browser);
         new UIPatternManager(ui, lx, 0, 0, this.browser.getContentWidth()).addToContainer(this.browser);
+        new UIWarpManager(ui, lx, 0, 0, this.browser.getContentWidth()).addToContainer(this.browser);
         new UIEffectManager(ui, lx, 0, 9, this.browser.getContentWidth()).addToContainer(this.browser);
     }
 }
