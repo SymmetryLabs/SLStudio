@@ -8,6 +8,7 @@ import com.google.gson.JsonObject;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.slstudio.ui.*;
 import heronarts.lx.*;
+import heronarts.lx.warp.LXWarp;
 import processing.core.PApplet;
 import processing.event.MouseEvent;
 import processing.event.KeyEvent;
@@ -180,6 +181,20 @@ public class SLStudioLX extends P3LX {
                                 break;
                             case VK_V:
                                 lx.ui.preview.toggleVisible();
+                                break;
+                            case VK_W:
+                                if (engine.getFocusedChannel() instanceof LXChannel) {
+                                    LXChannel channel = (LXChannel) engine.getFocusedChannel();
+                                    boolean enable = false;
+                                    for (LXWarp warp : channel.getWarps()) {
+                                        enable = warp.isEnabled();
+                                    }
+                                    enable = !enable;
+                                    for (LXWarp warp : channel.getWarps()) {
+                                        System.out.println("Channel " + channel + " - " + warp + " enable: " + enable);
+                                        warp.enabled.setValue(enable);
+                                    }
+                                }
                                 break;
                             case VK_X:
                                 axes.toggleVisible();

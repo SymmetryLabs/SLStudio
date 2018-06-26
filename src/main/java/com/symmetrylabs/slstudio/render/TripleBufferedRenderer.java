@@ -120,7 +120,7 @@ public class TripleBufferedRenderer extends Renderer {
                 active.renderStartNanos = timeNanos;
 
                 Arrays.fill(active.buffer, 0);
-                renderable.render(deltaMs, points, active.buffer);
+                renderable.render(deltaMs, vectors, active.buffer);
 
                 long renderEndNanos = System.nanoTime();
                 active.renderEndNanos = renderEndNanos;

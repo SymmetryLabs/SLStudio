@@ -7,6 +7,7 @@ import java.util.List;
 import com.google.common.reflect.TypeToken;
 import com.symmetrylabs.slstudio.model.SLModel;
 import heronarts.lx.LXModelComponent;
+import heronarts.lx.transform.LXVector;
 import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
@@ -156,12 +157,12 @@ public abstract class SLPattern<M extends SLModel> extends LXPattern implements 
             renderer.run(deltaMs);
         }
         else {
-            render(deltaMs, model.getPoints(), colors);
+            render(deltaMs, getVectorList(), colors);
         }
     }
 
     @Override
-    public void render(double deltaMs, List<LXPoint> points, int[] layer) { }
+    public void render(double deltaMs, List<LXVector> points, int[] layer) { }
 
     protected <T extends LXParameter> T addParam(T param) {
         addParameter(param);

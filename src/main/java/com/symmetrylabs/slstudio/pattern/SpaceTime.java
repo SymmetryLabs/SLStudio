@@ -8,6 +8,7 @@ import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.transform.LXVector;
 
 import static processing.core.PApplet.*;
 
@@ -54,13 +55,12 @@ public class SpaceTime extends SLPattern<StripsModel<Strip>> {
             int s = model.getStrips().indexOf(strip);
 
             int i = 0;
-            for (LXPoint p : strip.points) {
-                colors[p.index] = lx.hsb(
-                    palette.getHuef() + 360 - p.x * .2f + p.y * .3f,
+            for (LXVector v : getVectorList(strip.points)) {
+                colors[v.index] = lx.hsb(
+                    palette.getHuef() + 360 - v.x * .2f + v.y * .3f,
                     constrain(.4f * min(abs(s - sVal1), abs(s - sVal2)), 20, 100),
                     max(0, 100 - fVal * abs(i - pVal * (strip.metrics.numPoints - 1)))
                 );
-
                 ++i;
             }
         });

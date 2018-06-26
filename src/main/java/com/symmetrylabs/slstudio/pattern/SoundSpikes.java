@@ -16,11 +16,12 @@ import heronarts.lx.LXUtils;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
+import heronarts.lx.transform.LXVector;
 
 public class SoundSpikes extends SLPattern<CubesModel> {
     private LXAudioBuffer audioBuffer;
     private float[] audioSamples;
-    private ddf.minim.analysis.FFT fft = null; 
+    private ddf.minim.analysis.FFT fft = null;
     private LinearEnvelope[] bandVals = null;
     private float[] lightVals = null;
     private int avgSize;
@@ -60,7 +61,7 @@ public class SoundSpikes extends SLPattern<CubesModel> {
             lightVals = new float[avgSize];
         }
     }
-    
+
     public void run(double deltaMs) {
         audioBuffer.getSamples(audioSamples);
         this.fft.forward(audioSamples);
@@ -83,13 +84,13 @@ public class SoundSpikes extends SLPattern<CubesModel> {
                 Strip s = c.getStrips().get(j);
 
                 if (j % 4 != 0 && j % 4 != 2) {
-                    for (LXPoint p : s.points) {
-                        float dis = (Math.abs(p.x - model.xMax / 2) + pos.getValuef()) % model.xRange / 2;
+                    for (LXVector v : getVectorList(s.points)) {
+                        float dis = (Math.abs(v.x - model.xMax / 2) + pos.getValuef()) % model.xRange / 2;
                         int seq = (int)((dis * avgSize * 2) / model.xRange);
                         if (seq > avgSize) seq = avgSize - seq;
                         seq = LXUtils.constrain(seq, 0, avgSize - 1);
-                        float br = Math.max(0, lightVals[seq] - p.y);
-                        colors[p.index] = lx.hsb(
+                        float br = Math.max(0, lightVals[seq] - v.y);
+                        colors[v.index] = lx.hsb(
                             ((dis * avgSize) * hueVariance.getValuef()) / model.xRange + palette.getHuef(),
                             palette.getSaturationf(),
                             br);
@@ -97,5 +98,5 @@ public class SoundSpikes extends SLPattern<CubesModel> {
                 }
             }
         }
-    }  
+    }
 }

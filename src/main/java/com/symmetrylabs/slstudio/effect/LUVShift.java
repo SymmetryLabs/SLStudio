@@ -1,5 +1,6 @@
 package com.symmetrylabs.slstudio.effect;
 
+import heronarts.lx.transform.LXVector;
 import org.apache.commons.math3.util.FastMath;
 
 import heronarts.lx.LX;
@@ -31,7 +32,7 @@ public class LUVShift extends LXEffect {
 
     @Override
     public void run(double deltaMs, double amount) {
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectorList()) {
             int c = colors[p.index];
             rgb[0] = ((c & LXColor.RED_MASK) >>> LXColor.RED_SHIFT) / 255f;
             rgb[1] = ((c & LXColor.GREEN_MASK) >>> LXColor.GREEN_SHIFT) / 255f;

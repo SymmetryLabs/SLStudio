@@ -25,6 +25,7 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import heronarts.lx.transform.LXVector;
 
 public class MidiMusic extends SLPattern<CubesModel> {
 
@@ -86,7 +87,7 @@ public class MidiMusic extends SLPattern<CubesModel> {
                 return;
             }
             float posf = position.getValuef();
-            for (LXPoint p : model.points) {
+            for (LXVector p : getVectorList()) {
                 blendColor(p.index, lx.hsb(
                     palette.getHuef() + 0.2f*Math.abs(p.x - model.cx) + 0.2f*Math.abs(p.y - model.cy),
                     100,
@@ -129,7 +130,7 @@ public class MidiMusic extends SLPattern<CubesModel> {
                 return;
             }
             float yVal = yPos.getValuef();
-            for (LXPoint p : model.points) {
+            for (LXVector p : getVectorList()) {
                 float falloff = 6 - 7*lightSize.getValuef();
                 float b = (float)Math.max(0, bVal - falloff*LXUtils.distance(p.x, p.y, xPos, yVal));
                 if (b > 0) {
@@ -229,19 +230,21 @@ public class MidiMusic extends SLPattern<CubesModel> {
             wval[i] = model.cy + 0.2f * model.yMax/2.0f * (float)Math.sin(wavoff + i / 1.9f);
         }
         for (Strip s : model.getStrips()) {
-            float sparklePos = (sparkleDirection ? sparkle.getValuef() : (1 - sparkle.getValuef())) * (s.points.length)/2.f;
+            int length = s.points.length;
+
+            float sparklePos = (sparkleDirection ? sparkle.getValuef() : (1 - sparkle.getValuef())) * length/2f;
             float maxBright = sparkleBright * (1 - sparkle.getValuef());
 
             int i = 0;
-            for (LXPoint p : s.points) {
-                int wavi = (int)LXUtils.constrain(p.x / model.xMax * wval.length, 0, wval.length-1);
-                float wavb = (float)Math.max(0, wave.getValuef()*100. - 8.*Math.abs(p.y - wval[wavi]));
+            for (LXVector p : getVectorList(s.points)) {
+                int wavi = (int) LXUtils.constrain(p.x / model.xMax * wval.length, 0, wval.length - 1);
+                float wavb = (float) Math.max(0, wave.getValuef() * 100. - 8. * Math.abs(p.y - wval[wavi]));
                 colors[p.index] = lx.hsb(
-                    palette.getHuef() + 0.2f*Math.abs(p.x - model.cx) + 0.2f*Math.abs(p.y - model.cy),
+                    palette.getHuef() + 0.2f * Math.abs(p.x - model.cx) + 0.2f * Math.abs(p.y - model.cy),
                     100,
-                    (float)LXUtils.constrain(wavb + Math.max(0, maxBright - 40.*Math.abs(sparklePos - Math.abs(i - (s.points.length-1)/2.f))), 0, 100)
+                    (float) LXUtils.constrain(wavb + Math.max(0, maxBright - 40. * Math.abs(sparklePos - Math.abs(i - (length - 1) / 2.f))), 0, 100)
                 );
-                ++i;
+              ++i;
             }
         }
 

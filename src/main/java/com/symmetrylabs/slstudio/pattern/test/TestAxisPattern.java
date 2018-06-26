@@ -9,7 +9,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.util.MathUtils;
-
+import heronarts.lx.transform.LXVector;
 
 
 public class TestAxisPattern extends LXPattern {
@@ -59,7 +59,7 @@ public class TestAxisPattern extends LXPattern {
         float ywv = 100.0f / (10 + 40*yw.getValuef());
         float zwv = 100.0f / (10 + 40*zw.getValuef());
 
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectorList()) {
             int c = 0;
             c = LXColor.blend(c, lx.hsb(
                 (lx.palette.getHuef() + p.x/10 + p.y/3) % 360,

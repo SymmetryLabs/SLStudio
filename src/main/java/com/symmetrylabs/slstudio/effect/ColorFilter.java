@@ -5,6 +5,7 @@ import heronarts.lx.LXEffect;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
 
 
 public class ColorFilter extends LXEffect {
@@ -21,9 +22,9 @@ public class ColorFilter extends LXEffect {
 
     @Override
     public void run(double deltaMs, double amount) {
-        for (LXPoint p : model.points) {
-            float brightness = LXColor.b(colors[p.index]);
-            colors[p.index] = lx.hsb(
+        for (LXVector v : getVectorList()) {
+            float brightness = LXColor.b(colors[v.index]);
+            colors[v.index] = lx.hsb(
                 hue.getValuef(),
                 saturation.getValuef(),
                 brightness

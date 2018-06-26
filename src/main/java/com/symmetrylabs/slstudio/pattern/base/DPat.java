@@ -10,6 +10,7 @@ import heronarts.lx.midi.LXMidiOutput;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
 import processing.core.PImage;
 import processing.core.PVector;
 
@@ -64,8 +65,8 @@ public abstract class DPat extends SLPattern<SLModel> {
         vec.set(random(mMax.x), random(mMax.y), random(mMax.z));
     }
 
-    public void setVec(PVector vec, LXPoint p) {
-        vec.set(p.x, p.y, p.z);
+    public void setVec(PVector vec, LXVector v) {
+        vec.set(v.x, v.y, v.z);
     }
 
     public void interpolate(float i, PVector a, PVector b) {
@@ -324,7 +325,7 @@ public abstract class DPat extends SLPattern<SLModel> {
         // TODO Threading: For some reason, using parallelStream here messes up the animations.
         int[] colors = (int[]) getArray(SRGB8);
 
-        model.getPoints().parallelStream().forEach(p -> {
+        getVectorList().parallelStream().forEach(p -> {
             PVector P = new PVector(), tP = new PVector();
 
             setVec(P, p);

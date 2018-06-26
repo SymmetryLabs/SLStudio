@@ -6,6 +6,7 @@ import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import heronarts.lx.transform.LXVector;
 
 import java.util.List;
 
@@ -23,8 +24,8 @@ public class TestStrips extends SLPattern<StripsModel<Strip>> implements SLTestP
         for (Strip strip : strips) {
             float hue = 0;
 
-            for (LXPoint p : strip.points) {
-                colors[p.index] = lx.hsb(hue, 100, 100);
+            for (LXVector v : getVectorList(strip.points)) {
+                colors[v.index] = lx.hsb(hue, 100, 100);
             }
 
             hue += 180;

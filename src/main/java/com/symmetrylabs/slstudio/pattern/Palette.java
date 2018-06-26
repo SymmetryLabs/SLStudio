@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.pattern;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 
 
 public class Palette extends LXPattern {
@@ -11,8 +12,8 @@ public class Palette extends LXPattern {
     }
 
     public void run(double deltaMs) {
-        for (LXPoint p : model.points) {
-            colors[p.index] = palette.getColor(p);
+        for (LXVector v : getVectorList()) {
+            colors[v.index] = palette.getColor(v);
         }
     }
 }

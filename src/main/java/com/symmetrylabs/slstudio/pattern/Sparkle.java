@@ -1,8 +1,8 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import java.lang.Math;
+import java.util.Arrays;
 import java.util.List;
-import java.util.ArrayList;
 import java.util.LinkedList;
 import java.util.Iterator;
 
@@ -11,6 +11,7 @@ import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
+import heronarts.lx.transform.LXVector;
 
 public class Sparkle extends LXPattern {
     private CompoundParameter densityParameter = new CompoundParameter("Dens", 0.15);
@@ -19,21 +20,22 @@ public class Sparkle extends LXPattern {
     private CompoundParameter hueParameter = new CompoundParameter("Hue", 0.5);
     private CompoundParameter hueVarianceParameter = new CompoundParameter("HueVar", 0.25);
     private CompoundParameter saturationParameter = new CompoundParameter("Sat", 0.5);
-    
+
     class Spark {
-        LXPoint point;
+        LXVector vector;
         float value;
         float hue;
         boolean hasPeaked;
-        
+
         Spark() {
-            point = model.points[(int)Math.floor((float)LXUtils.random(0, model.points.length))];
-            hue = (float)LXUtils.random(0, 1);
+            List<LXVector> vectors = getVectorList();
+            vector = vectors.get((int) Math.floor(LXUtils.random(0, vectors.size())));
+            hue = (float) LXUtils.random(0, 1);
             boolean infiniteAttack = (attackParameter.getValuef() > 0.999);
             hasPeaked = infiniteAttack;
             value = (infiniteAttack ? 1 : 0);
         }
-        
+
         // returns TRUE if this should die
         boolean age(double ms) {
             if (!hasPeaked) {
@@ -49,10 +51,10 @@ public class Sparkle extends LXPattern {
             }
         }
     }
-    
+
     private float leftoverMs = 0;
     private List<Spark> sparks;
-    
+
     public Sparkle(LX lx) {
         super(lx);
         addParameter(densityParameter);
@@ -63,7 +65,7 @@ public class Sparkle extends LXPattern {
         addParameter(saturationParameter);
         sparks = new LinkedList<Spark>();
     }
-    
+
     public void run(double deltaMs) {
         leftoverMs += deltaMs;
         float msPerSpark = 1000.f / (float)((densityParameter.getValuef() + .01) * (model.xRange*10));
@@ -71,17 +73,15 @@ public class Sparkle extends LXPattern {
             leftoverMs -= msPerSpark;
             sparks.add(new Spark());
         }
-        
-        for (LXPoint p : model.points) {
-            colors[p.index] = 0;
-        }
-        
+
+        Arrays.fill(colors, 0);
+
         for (Spark spark : sparks) {
             float hue = ((float)(hueParameter.getValuef() + (hueVarianceParameter.getValuef() * spark.hue))) % 1.0f;
             int c = lx.hsb(hue * 360, saturationParameter.getValuef() * 100, (spark.value) * 100);
-            colors[spark.point.index] = c;
+            colors[spark.vector.index] = c;
         }
-        
+
         Iterator<Spark> i = sparks.iterator();
         while (i.hasNext()) {
             Spark spark = i.next();
@@ -90,5 +90,5 @@ public class Sparkle extends LXPattern {
                 i.remove();
             }
         }
-    } 
+    }
 }

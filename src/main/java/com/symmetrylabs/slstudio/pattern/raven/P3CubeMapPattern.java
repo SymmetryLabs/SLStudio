@@ -158,7 +158,7 @@ public abstract class P3CubeMapPattern extends SLPattern<SLModel> {
 
     private void projectToLeds() {
         ensureProjectionCache();
-        projectToLeds(allProjectionCache, model.points);
+        projectToLeds(allProjectionCache, model.points);     // TODO(ping): mask out null vectors
     }
 
     private void projectToLeds(final int[][] cache, final LXPoint[] points) {

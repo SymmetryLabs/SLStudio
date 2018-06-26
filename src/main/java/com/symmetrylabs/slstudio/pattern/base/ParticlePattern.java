@@ -67,8 +67,8 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
     protected double avgBlobDist = 0;
     protected int visibleBlobCount = 0;
 
-    protected Particle spawnParticle(int index, int pointCount) {
-        return new Particle(index, pointCount);
+    protected Particle spawnParticle(int index) {
+        return new Particle(index);
     }
 
     protected void initParticle(Particle p) { }
@@ -99,7 +99,7 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
                 }
 
                 for (int i = particles.size(); i < numParticles; ++i) {
-                    Particle p = spawnParticle(i, model.points.length);
+                    Particle p = spawnParticle(i);
                     initParticle(p);
                     particleGroups[p.index % particleGroups.length].particles.add(p);
                     particles.add(p);
@@ -220,7 +220,7 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
     }
 
     @Override
-    public void render(double deltaMs, List<LXPoint> points, int[] layer) {
+    public void render(double deltaMs, List<LXVector> points, int[] layer) {
         if (enableBlobs.getValueb()) {
             double sqrDistThresh = blobMaxDist.getValue() * blobMaxDist.getValue();
             double maxAngleRad = blobMaxAngle.getValue() * FastMath.PI / 180;
@@ -357,7 +357,7 @@ public abstract class ParticlePattern extends SLPattern<SLModel> implements Mark
 
         private LXVector point = new LXVector(0, 0, 0);
 
-        public Particle(int index, int pointCount) {
+        public Particle(int index) {
             this.index = index;
         }
 

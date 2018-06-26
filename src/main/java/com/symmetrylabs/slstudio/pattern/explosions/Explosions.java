@@ -14,6 +14,7 @@ import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.LXCompoundModulation;
+import heronarts.lx.transform.LXVector;
 
 import static com.symmetrylabs.util.MathUtils.random;
 import static com.symmetrylabs.util.DistanceConstants.*;
@@ -105,7 +106,7 @@ public class Explosions extends LXPattern {
                 float sat_value = saturationModulator.getValuef();
                 float brightness_value = brightnessParameter.getValuef();
 
-                for (LXPoint p : model.points) {
+                for (LXVector v : getVectorList()) {
                         int num_explosions_in = 0;
 
                         for(L8onExplosion explosion : this.explosions) {
@@ -113,7 +114,7 @@ public class Explosions extends LXPattern {
                                         continue;
                                 }
 
-                                if(explosion.onExplosion(p.x, p.y, p.z)) {
+                                if(explosion.onExplosion(v.x, v.y, v.z)) {
                                         num_explosions_in++;
                                         hue_value = L8onUtil.natural_hue_blend(explosion.hue_value, hue_value, num_explosions_in);
                                 }
@@ -122,11 +123,11 @@ public class Explosions extends LXPattern {
                         if(num_explosions_in > 0) {
                                 c = LX.hsb(hue_value, sat_value, brightness_value);
                         } else {
-                                c = colors[p.index];
+                                c = colors[v.index];
                                 c = LX.hsb(LXColor.h(c), LXColor.s(c), 0.0f);
                         }
 
-                        colors[p.index] = c;
+                        colors[v.index] = c;
                 }
         }
 
@@ -142,11 +143,12 @@ public class Explosions extends LXPattern {
                                 float stroke_width = this.new_stroke_width();
                                 QuadraticEnvelope new_radius_env = new QuadraticEnvelope(0.0, model.xRange, rateParameter);
                                 new_radius_env.setEase(QuadraticEnvelope.Ease.OUT);
-                                LXPoint new_center_point = model.points[pointRandom.nextInt(model.points.length)];
+                                List<LXVector> vectors = getVectorList();
+                                LXVector center = vectors.get(pointRandom.nextInt(vectors.size()));
                                 addModulator(new_radius_env);
                                 BandGate explosionGate = (this.explosions.size() % 2 == 1) ? this.beatGate : this.clapGate;
                                 this.explosions.add(
-                                                new L8onExplosion(new_radius_env, explosionGate.gate, stroke_width, new_center_point.x, new_center_point.y, new_center_point.z)
+                                                new L8onExplosion(new_radius_env, explosionGate.gate, stroke_width, center.x, center.y, center.z)
                                 );
                         }
                 } else {
@@ -159,12 +161,13 @@ public class Explosions extends LXPattern {
 
         private void assignNewCenter(L8onExplosion explosion) {
                 float stroke_width = this.new_stroke_width();
-                LXPoint new_center_point = model.points[pointRandom.nextInt(model.points.length)];
+                List<LXVector> vectors = getVectorList();
+                LXVector center = vectors.get(pointRandom.nextInt(vectors.size()));
                 float chill_time = (15.0f + random(15)) * 1000;
                 QuadraticEnvelope new_radius_env = new QuadraticEnvelope(0.0, model.xRange, rateParameter);
                 new_radius_env.setEase(QuadraticEnvelope.Ease.OUT);
 
-                explosion.setCenter(new_center_point.x, new_center_point.y, new_center_point.z);
+                explosion.setCenter(center.x, center.y, center.z);
                 addModulator(new_radius_env);
                 explosion.setRadiusModulator(new_radius_env, stroke_width);
                 explosion.setChillTime(chill_time);

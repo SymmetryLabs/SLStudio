@@ -7,6 +7,7 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -84,8 +85,8 @@ public class CubeFlash extends SLPattern<CubesModel> {
             @Override
             public void accept(final Flash flash) {
              int col = LXColor.hsb(flash.hue, saturationParameter.getValuef() * 100, (flash.value) * 100);
-             for (LXPoint p : flash.cube.getPoints()) {
-                 colors[p.index] = col;
+             for (LXVector v : getVectorList(flash.cube.getPoints())) {
+                 colors[v.index] = col;
              }
             }
         });

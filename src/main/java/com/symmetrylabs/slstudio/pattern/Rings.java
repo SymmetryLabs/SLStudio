@@ -71,7 +71,7 @@ public class Rings extends LXPattern {
 
         noiseHelper.noiseDetail(4);
 
-        model.getPoints().parallelStream().forEach(p -> {
+        getVectorList().parallelStream().forEach(p -> {
             // Scale while preserving aspect ratio
             float x = map(p.x, coordMin, coordMax, 0.0f, 1.0f);
             float y = map(p.y, coordMin, coordMax, 0.0f, 1.0f);

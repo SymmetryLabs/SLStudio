@@ -57,7 +57,7 @@ public class SoundParticles extends LXPattern {
     public PVector startVelocity = new PVector();
     private PVector modelCenter = new PVector();
     public SawLFO angle = new SawLFO(0, TWO_PI, 1000);
-    private float[] randomFloat = new float[model.points.length];
+    private float[] randomFloats = new float[model.points.length];
     private float[] freqBuckets;
     // private float lastParticleBirth = millis();
     // private float lastTime = millis();
@@ -240,7 +240,7 @@ public class SoundParticles extends LXPattern {
             //for (LXPoint p : model.points) {
             int i = 0;
             for (LXVector p : spinProjection) {
-                float randomX = randomFloat[i];
+                float randomX = randomFloats[i];
                 //float randomY = randctr(20);
                 //float randomZ = randctr(20);
                 float sparkle = randomX * sparkf;
@@ -267,12 +267,14 @@ public class SoundParticles extends LXPattern {
 
     public SoundParticles(LX lx) {
         super(lx);
-        for (int i = 0; i < model.points.length; i++) {
-            randomFloat[i] = randomGaussian() * 10;
+        for (int i = 0; i < randomFloats.length; i++) {
+            randomFloats[i] = randomGaussian() * 10;
         }
         //physics=new VerletPhysics();
         //physics.addBehavior(new GravityBehavior(new Vec3D(0,0,0.5)));
         //physics.setWorldBounds(new AABB(new Vec3D(model.cx, model.cy, model.cz),model.xMax));
+
+        // TODO(ping): mask out null vectors
         spinProjection = new LXProjection(model);
         scaleProjection = new LXProjection(model);
         // leap= new LeapMotion(parent).withGestures();

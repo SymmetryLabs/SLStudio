@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.Date;
 
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.transform.LXVector;
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
 
@@ -278,7 +279,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
         float sqRadius = radius * radius;
 
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectorList()) {
             int rgb = 0;
             for (Bird b : birds) {
                 if (Math.abs(b.pos.x - p.x) < radius) {
@@ -295,7 +296,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
 
         radius = 10000;
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectorList()) {
             Bird closestBird = null;
             float minSqDist = 1e6f;
             for (Bird b : birds) {
@@ -437,7 +438,7 @@ public class FlockWave extends SLPatternWithMarkers {
             final ColorPalette pal = getPalette();
             final float[] result = kernel.result;
 
-            model.getPoints().parallelStream().forEach(p -> {
+            getVectorList().parallelStream().forEach(p -> {
                 colors[p.index] = pal.getColor(result[p.index]);
             });
         } else {

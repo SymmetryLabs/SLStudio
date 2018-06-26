@@ -4,6 +4,7 @@ import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
+import heronarts.lx.transform.LXVector;
 
 import static com.symmetrylabs.util.NoiseUtils.noise;
 
@@ -43,17 +44,14 @@ public class LSD extends SLModelEffect {
 
         model.forEachPoint((start, end) -> {
             final float[] hsb = new float[3];
-
-            for (int i=start; i<end; i++) {
-                LXPoint p = model.points[i];
-
-                LXColor.RGBtoHSB(colors[p.index], hsb);
-                float h = rf * noise(sf * p.x, sf * p.y, sf * p.z + accum);
+            for (LXVector v : getVectorList(start, end)) {
+                LXColor.RGBtoHSB(colors[v.index], hsb);
+                float h = rf * noise(sf * v.x, sf * v.y, sf * v.z + accum);
                 int c2 = LX.hsb(h * 360, 100, hsb[2] * 100);
                 if (amount < 1) {
-                    colors[p.index] = LXColor.lerp(colors[p.index], c2, amount);
+                    colors[v.index] = LXColor.lerp(colors[v.index], c2, amount);
                 } else {
-                    colors[p.index] = c2;
+                    colors[v.index] = c2;
                 }
             }
         });
