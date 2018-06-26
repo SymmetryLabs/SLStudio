@@ -20,6 +20,9 @@
 
 package heronarts.lx;
 
+import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
+
 /**
  * Helper class of useful utilities, many just mirror Processing built-ins but
  * reduce the awkwardness of calling through applet in the library code.
@@ -190,6 +193,22 @@ public class LXUtils {
 
         public float get(double basis) {
             return this.values[(int) Math.round(basis * this.tableSize)];
+        }
+    }
+
+    /** Interface for an object with an index field for tracking its index in an array or list. */
+    public static interface IndexedElement {
+        int getIndex();
+        void setIndex(int index);
+    }
+
+    public static void updateIndexes(Iterable<? extends IndexedElement> iterable) {
+        int index = 0;
+        for (IndexedElement e : iterable) {
+            if (e.getIndex() != index) {
+                e.setIndex(index);
+            }
+            index++;
         }
     }
 }

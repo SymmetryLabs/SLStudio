@@ -20,6 +20,8 @@
 
 package heronarts.lx.model;
 
+import heronarts.lx.transform.LXVector;
+
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -37,10 +39,11 @@ public class LXModel implements LXFixture {
         public void onModelUpdated(LXModel model);
     }
 
-    /**
-     * An immutable list of all the points in this model
-     */
+    /** An immutable list of all the points in this model */
     public final LXPoint[] points;
+
+    /** A cached copy of points, converted to LXVectors */
+    public LXVector[] vectors = null;
 
     private final List<LXPoint> pointList;
 
@@ -338,6 +341,15 @@ public class LXModel implements LXFixture {
         return this.pointList;
     }
 
+    public LXVector[] getVectors() {
+        if (vectors == null) {
+            vectors = new LXVector[points.length];
+            for (int i = 0; i < points.length; i++) {
+                vectors[i] = new LXVector(points[i]);
+            }
+        }
+        return vectors;
+    }
     private final static class BasicFixture implements LXFixture {
         private final List<LXPoint> points;
 

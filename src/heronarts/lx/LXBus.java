@@ -26,12 +26,15 @@ import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import heronarts.lx.transform.LXVector;
+import heronarts.lx.warp.LXWarp;
 
 /**
  * Abstract representation of a channel, which could be a normal channel with patterns
@@ -44,6 +47,9 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
      * channel state is modified.
      */
     public interface Listener {
+        public void warpAdded(LXBus channel, LXWarp warp);
+        public void warpRemoved(LXBus channel, LXWarp warp);
+        public void warpMoved(LXBus channel, LXWarp warp);
         public void effectAdded(LXBus channel, LXEffect effect);
         public void effectRemoved(LXBus channel, LXEffect effect);
         public void effectMoved(LXBus channel, LXEffect effect);
@@ -66,14 +72,21 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
 
     protected final LX lx;
 
-    protected final List<LXEffect> mutableEffects = new ArrayList<LXEffect>();
+    protected final List<LXWarp> mutableWarps = new ArrayList<>();
+    public final List<LXWarp> warps = Collections.unmodifiableList(mutableWarps);
+
+    protected final List<LXEffect> mutableEffects = new ArrayList<>();
     public final List<LXEffect> effects = Collections.unmodifiableList(mutableEffects);
 
-    private final List<LXClip> mutableClips = new ArrayList<LXClip>();
+    private final List<LXClip> mutableClips = new ArrayList<>();
     public final List<LXClip> clips = Collections.unmodifiableList(this.mutableClips);
 
-    private final List<Listener> listeners = new ArrayList<Listener>();
-    private final List<ClipListener> clipListeners = new ArrayList<ClipListener>();
+    private final List<Listener> listeners = new ArrayList<>();
+    private final List<ClipListener> clipListeners = new ArrayList<>();
+
+    /** The (possibly warped) coordinates of the model points, for use by patterns and effects */
+    protected LXVector[] vectors = null;
+    protected List<LXVector> vectorList = null;
 
     LXBus(LX lx) {
         this(lx, null);
@@ -110,44 +123,81 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         return this;
     }
 
-    public final LXBus addEffect(LXEffect effect) {
+    public final void addWarp(LXWarp warp) {
+        mutableWarps.add(warp);
+        warp.setBus(this);
+        LXUtils.updateIndexes(mutableWarps);
+        for (Listener listener : listeners) {
+            listener.warpAdded(this, warp);
+        }
+    }
+
+    public final void removeWarp(LXWarp warp) {
+        int index = mutableWarps.indexOf(warp);
+        if (index >= 0) {
+            warp.setIndex(-1);
+            mutableWarps.remove(index);
+            LXUtils.updateIndexes(mutableWarps);
+            for (Listener listener : listeners) {
+                listener.warpRemoved(this, warp);
+            }
+            warp.dispose();
+        }
+    }
+
+    public final void moveWarp(LXWarp warp, int index) {
+        mutableWarps.remove(warp);
+        mutableWarps.add(index, warp);
+        LXUtils.updateIndexes(mutableWarps);
+        for (Listener listener : this.listeners) {
+            listener.warpMoved(this, warp);
+        }
+    }
+
+    public final List<LXWarp> getWarps() { return warps; }
+
+    public LXWarp getWarp(int i) {
+        return warps.get(i);
+    }
+
+    public LXWarp getWarp(String label) {
+        for (LXWarp warp : warps) {
+            if (warp.getLabel().equals(label)) {
+                return warp;
+            }
+        }
+        return null;
+    }
+
+    public final void addEffect(LXEffect effect) {
         this.mutableEffects.add(effect);
         effect.setBus(this);
-        effect.setIndex(this.mutableEffects.size() - 1);
+        LXUtils.updateIndexes(mutableEffects);
         for (Listener listener : this.listeners) {
             listener.effectAdded(this, effect);
         }
-        return this;
     }
 
-    public final LXBus removeEffect(LXEffect effect) {
+    public final void removeEffect(LXEffect effect) {
         int index = this.mutableEffects.indexOf(effect);
         if (index >= 0) {
             effect.setIndex(-1);
             this.mutableEffects.remove(index);
-            while (index < this.mutableEffects.size()) {
-                this.mutableEffects.get(index).setIndex(index);
-                ++index;
-            }
+            LXUtils.updateIndexes(mutableEffects);
             for (Listener listener : this.listeners) {
                 listener.effectRemoved(this, effect);
             }
             effect.dispose();
         }
-        return this;
     }
 
-    public LXBus moveEffect(LXEffect effect, int index) {
+    public final void moveEffect(LXEffect effect, int index) {
         this.mutableEffects.remove(effect);
         this.mutableEffects.add(index, effect);
-        int i = 0;
-        for (LXEffect e : this.mutableEffects) {
-             e.setIndex(i++);
-        }
+        LXUtils.updateIndexes(mutableEffects);
         for (Listener listener : this.listeners) {
             listener.effectMoved(this, effect);
         }
-        return this;
     }
 
     public final List<LXEffect> getEffects() {
@@ -226,6 +276,17 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         clip.dispose();
     }
 
+    protected LXVector[] getVectors() {
+        return vectors != null ? vectors : model.getVectors();
+    }
+
+    protected List<LXVector> getVectorList() {
+        if (vectorList == null) {
+            vectorList = Arrays.asList(getVectors());
+        }
+        return vectorList;
+    }
+
     @Override
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
@@ -253,13 +314,15 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         super.dispose();
     }
 
+    private static final String KEY_WARPS = "warps";
     private static final String KEY_EFFECTS = "effects";
     private static final String KEY_CLIPS = "clips";
 
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);;
-        obj.add(KEY_EFFECTS, LXSerializable.Utils.toArray(lx, this.mutableEffects));
+        obj.add(KEY_WARPS, LXSerializable.Utils.toArray(lx, warps));
+        obj.add(KEY_EFFECTS, LXSerializable.Utils.toArray(lx, effects));
         JsonArray clipsArr = new JsonArray();
         for (LXClip clip : this.clips) {
             if (clip != null) {
@@ -277,9 +340,21 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
                 removeClip(clip);
             }
         }
-        // Remove effects
-        for (int i = this.mutableEffects.size() - 1; i >= 0; --i) {
-            removeEffect(this.mutableEffects.get(i));
+        // Clear warps
+        while (warps.size() > 0) {
+            removeWarp(warps.get(0));
+        }
+        // Add warps
+        for (JsonElement warpElement : obj.getAsJsonArray(KEY_WARPS)) {
+            JsonObject warpObject = (JsonObject) warpElement;
+            LXWarp warp = lx.instantiateWarp(warpObject.get("class").getAsString());
+            warp.load(lx, warpObject);
+            addWarp(warp);
+        }
+
+        // Clear effects
+        while (effects.size() > 0) {
+            removeEffect(effects.get(0));
         }
         // Add the effects
         JsonArray effectsArray = obj.getAsJsonArray(KEY_EFFECTS);

@@ -56,6 +56,7 @@ import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.LXTriggerModulation;
 import heronarts.lx.parameter.LXCompoundModulation;
 import heronarts.lx.parameter.StringParameter;
+import heronarts.lx.warp.LXWarp;
 
 public class LXOscEngine extends LXComponent {
 
@@ -449,6 +450,19 @@ public class LXOscEngine extends LXComponent {
                 System.err.println("[OSC] Failed to transmit: " + iox.getLocalizedMessage());
             }
         }
+
+        @Override
+        public void warpAdded(LXBus channel, LXWarp warp) {
+            registerComponent(warp);
+        }
+
+        @Override
+        public void warpRemoved(LXBus channel, LXWarp warp) {
+            unregisterComponent(warp);
+        }
+
+        @Override
+        public void warpMoved(LXBus channel, LXWarp warp) {}
 
         @Override
         public void effectAdded(LXBus channel, LXEffect effect) {

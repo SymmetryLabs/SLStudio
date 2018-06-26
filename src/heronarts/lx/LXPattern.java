@@ -32,6 +32,9 @@ import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.transform.LXVector;
+
+import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
@@ -39,7 +42,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
  * A pattern is the core object that the animation engine uses to generate
  * colors for all the points.
  */
-public abstract class LXPattern extends LXDeviceComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent {
+public abstract class LXPattern extends LXDeviceComponent implements LXComponent.Renamable, LXLayeredComponent.Buffered, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
     private int index = -1;
     private int intervalBegin = -1;
     private int intervalEnd = -1;
@@ -68,6 +71,14 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
         this.label.setValue(simple);
     }
 
+    public LXVector[] getVectors() {
+        return getChannel().getVectors();
+    }
+
+    public List<LXVector> getVectorList() {
+        return getChannel().getVectorList();
+    }
+
     public String getOscAddress() {
         LXChannel channel = getChannel();
         if (channel != null) {
@@ -76,7 +87,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
         return null;
     }
 
-    void setIndex(int index) {
+    public void setIndex(int index) {
         this.index = index;
     }
 

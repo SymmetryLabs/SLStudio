@@ -33,6 +33,9 @@ import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.transform.LXVector;
+
+import java.util.List;
 
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
 
@@ -41,7 +44,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
  * may be stateless or stateful, though typically they operate on a single
  * frame. Only the current frame is provided at runtime.
  */
-public abstract class LXEffect extends LXDeviceComponent implements LXComponent.Renamable, LXMidiListener, LXOscComponent {
+public abstract class LXEffect extends LXDeviceComponent implements LXComponent.Renamable, LXMidiListener, LXOscComponent, LXUtils.IndexedElement {
 
     public final BooleanParameter enabled =
         new BooleanParameter("Enabled", false)
@@ -98,25 +101,12 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         return null;
     }
 
-    /**
-     * Called by the engine to assign index on this effect. Should never
-     * be called otherwise.
-     *
-     * @param index
-     * @return
-     */
-    final LXEffect setIndex(int index) {
+    public final void setIndex(int index) {
         this.index = index;
-        return this;
     }
 
-    /**
-     * Gets the index of this effect in the channel FX bus.
-     *
-     * @return index of this effect in the channel FX bus
-     */
     public final int getIndex() {
-        return this.index;
+        return index;
     }
 
     public LXEffect setBus(LXBus bus) {
@@ -126,6 +116,14 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
 
     public LXBus getBus() {
         return (LXBus) getParent();
+    }
+
+    public LXVector[] getVectors() {
+        return getBus().getVectors();
+    }
+
+    public List<LXVector> getVectorList() {
+        return getBus().getVectorList();
     }
 
     /**

@@ -40,6 +40,7 @@ import com.google.gson.GsonBuilder;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
 import com.google.gson.stream.JsonWriter;
+import heronarts.lx.warp.LXWarp;
 
 /**
  * Core controller for a LX instance. Each instance drives a grid of nodes with
@@ -164,17 +165,15 @@ public class LX {
      */
     public final Tempo tempo;
 
-    /**
-     * The list of globally registered pattern classes
-     */
-    private final List<Class<? extends LXPattern>> registeredPatterns =
-        new ArrayList<Class<? extends LXPattern>>();
+    /** The list of globally registered pattern classes */
+    private final List<Class<? extends LXPattern>> registeredPatterns = new ArrayList<Class<? extends LXPattern>>();
 
-    /**
-     * The list of globally registered effects
-     */
-    private final List<Class<? extends LXEffect>> registeredEffects =
-        new ArrayList<Class<? extends LXEffect>>();
+    /** The list of globally registered warps */
+    private final List<Class<? extends LXWarp>> registeredWarps = new ArrayList<Class<? extends LXWarp>>();
+
+    /** The list of globally registered effects */
+    private final List<Class<? extends LXEffect>> registeredEffects = new ArrayList<Class<? extends LXEffect>>();
+
 
     /**
      * Creates an LX instance with no nodes.
@@ -599,6 +598,12 @@ public class LX {
         return this.registeredPatterns;
     }
 
+    public void registerWarp(Class<? extends LXWarp> warp) {
+        registeredWarps.add(warp);
+    }
+
+    public List<Class<? extends LXWarp>> getRegisteredWarps() { return registeredWarps; }
+
     /**
      * Register an effect class with the engine
      *
@@ -767,5 +772,8 @@ public class LX {
         return instantiateComponent(className, LXEffect.class);
     }
 
+    protected LXWarp instantiateWarp(String className) {
+        return instantiateComponent(className, LXWarp.class);
+    }
 }
 

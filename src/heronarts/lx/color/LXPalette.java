@@ -34,6 +34,7 @@ import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.EnumParameter;
 import heronarts.lx.parameter.FunctionalParameter;
 import heronarts.lx.parameter.LXParameter;
+import heronarts.lx.transform.LXVector;
 
 /**
  * A palette is an object that is used to compute color values and set modes
@@ -228,21 +229,30 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
     }
 
     public double getHue(LXPoint point) {
-        double dx = point.x - this.model.cx - this.offsetX.getValue() * model.xRange;
-        double dy = point.y - this.model.cy - this.offsetY.getValue() * model.yRange;
-        double dz = point.z - this.model.cz - this.offsetZ.getValue() * model.zRange;
+        return getHue(point.x, point.y, point.z);
+    }
+
+    public double getHue(LXVector vector) {
+        return getHue(vector.x, vector.y, vector.z);
+    }
+
+    public double getHue(float x, float y, float z) {
+        double dx = x - this.model.cx - this.offsetX.getValue() * model.xRange;
+        double dy = y - this.model.cy - this.offsetY.getValue() * model.yRange;
+        double dz = z - this.model.cz - this.offsetZ.getValue() * model.zRange;
         double spread = this.spread.getValue();
         if (this.mirror.isOn()) {
             dx = Math.abs(dx);
             dy = Math.abs(dy);
             dz = Math.abs(dz);
         }
+        double r = Math.sqrt(x*x + y*y + z*z);
         return (
             this.hue.getValue() +
             spread * this.spreadX.getValue() * this.xMult * dx +
             spread * this.spreadY.getValue() * this.yMult * dy +
             spread * this.spreadZ.getValue() * this.zMult * dz +
-            spread * this.spreadR.getValue() * this.rMult * (point.r - model.rMin)
+            spread * this.spreadR.getValue() * this.rMult * (r - model.rMin)
          );
     }
 
@@ -280,9 +290,20 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         return getColor(point, getSaturation(), 100);
     }
 
+    public int getColor(LXVector vector) {
+        return getColor(vector, getSaturation(), 100);
+    }
+
     public int getColor(LXPoint point, double brightness) {
         if (brightness > 0) {
             return getColor(point, getSaturation(point), brightness);
+        }
+        return LXColor.BLACK;
+    }
+
+    public int getColor(LXVector vector, double brightness) {
+        if (brightness > 0) {
+            return getColor(vector, getSaturation(), brightness);
         }
         return LXColor.BLACK;
     }
@@ -294,4 +315,10 @@ public class LXPalette extends LXModelComponent implements LXOscComponent {
         return LXColor.BLACK;
     }
 
+    public int getColor(LXVector vector, double saturation, double brightness) {
+        if (brightness > 0) {
+            return LXColor.hsb(getHue(vector), saturation, brightness);
+        }
+        return LXColor.BLACK;
+    }
 }

@@ -309,7 +309,7 @@ public class APC40Mk2 extends LXMidiSurface {
 
     }
 
-    private class ChannelListener implements LXChannel.Listener, LXBus.ClipListener, LXParameterListener {
+    private class ChannelListener extends LXChannel.AbstractListener implements LXBus.ClipListener, LXParameterListener {
 
         private final LXChannel channel;
 

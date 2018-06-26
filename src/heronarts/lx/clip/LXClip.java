@@ -47,6 +47,7 @@ import heronarts.lx.parameter.LXNormalizedParameter;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.MutableParameter;
+import heronarts.lx.warp.LXWarp;
 
 public abstract class LXClip extends LXRunnableComponent implements LXComponent.Renamable, LXBus.Listener {
 
@@ -283,6 +284,20 @@ public abstract class LXClip extends LXRunnableComponent implements LXComponent.
         }
         this.cursor = nextCursor;
     }
+
+
+    @Override
+    public void warpAdded(LXBus channel, LXWarp warp) {
+        registerComponent(warp);
+    }
+
+    @Override
+    public void warpRemoved(LXBus channel, LXWarp warp) {
+        unregisterComponent(warp);
+    }
+
+    @Override
+    public void warpMoved(LXBus channel, LXWarp warp) {}
 
     @Override
     public void effectAdded(LXBus channel, LXEffect effect) {

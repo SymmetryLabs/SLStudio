@@ -26,6 +26,7 @@ import heronarts.lx.clip.LXClip;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -36,12 +37,15 @@ import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.parameter.BooleanParameter;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
 import com.google.gson.JsonArray;
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
+import heronarts.lx.transform.LXVector;
+import heronarts.lx.warp.LXWarp;
 
 import static heronarts.lx.PolyBuffer.Space.RGB16;
 import static heronarts.lx.PolyBuffer.Space.SRGB8;
@@ -70,10 +74,15 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      */
     public interface Listener extends LXBus.Listener {
         public void indexChanged(LXChannel channel);
+
         public void patternAdded(LXChannel channel, LXPattern pattern);
+
         public void patternRemoved(LXChannel channel, LXPattern pattern);
+
         public void patternMoved(LXChannel channel, LXPattern pattern);
+
         public void patternWillChange(LXChannel channel, LXPattern pattern, LXPattern nextPattern);
+
         public void patternDidChange(LXChannel channel, LXPattern pattern);
     }
 
@@ -88,6 +97,18 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         @Override
         public void indexChanged(LXChannel channel) {
+        }
+
+        @Override
+        public void warpAdded(LXBus channel, LXWarp warp) {
+        }
+
+        @Override
+        public void warpRemoved(LXBus channel, LXWarp warp) {
+        }
+
+        @Override
+        public void warpMoved(LXBus channel, LXWarp warp) {
         }
 
         @Override
@@ -116,7 +137,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         @Override
         public void patternWillChange(LXChannel channel, LXPattern pattern,
-                LXPattern nextPattern) {
+                                                                    LXPattern nextPattern) {
         }
 
         @Override
@@ -132,7 +153,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         BYPASS,
         A,
         B
-    };
+    }
+
+    ;
 
     /**
      * The index of this channel in the engine.
@@ -148,8 +171,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      * Whether this channel is enabled.
      */
     public final BooleanParameter enabled =
-        new BooleanParameter("On", true)
-        .setDescription("Sets whether this channel is on or off");
+            new BooleanParameter("On", true)
+                    .setDescription("Sets whether this channel is on or off");
 
     /**
      * The color space that this channel renders to.
@@ -162,74 +185,76 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
      * Crossfade group this channel belongs to
      */
     public final EnumParameter<CrossfadeGroup> crossfadeGroup =
-        new EnumParameter<CrossfadeGroup>("Group", CrossfadeGroup.BYPASS)
-        .setDescription("Assigns this channel to crossfader group A or B");
+            new EnumParameter<CrossfadeGroup>("Group", CrossfadeGroup.BYPASS)
+                    .setDescription("Assigns this channel to crossfader group A or B");
 
     /**
      * Whether this channel should listen to MIDI events
      */
     public final BooleanParameter midiMonitor =
-        new BooleanParameter("MIDI Monitor", false)
-        .setDescription("Enables or disables monitoring of live MIDI input on this channel");
+            new BooleanParameter("MIDI Monitor", false)
+                    .setDescription("Enables or disables monitoring of live MIDI input on this channel");
 
     /**
      * Which channel MIDI messages this channel observes
      */
     public final EnumParameter<LXMidiEngine.Channel> midiChannel =
-        new EnumParameter<LXMidiEngine.Channel>("MIDI Channel", LXMidiEngine.Channel.OMNI)
-        .setDescription("Determines which MIDI channel is responded to");
+            new EnumParameter<LXMidiEngine.Channel>("MIDI Channel", LXMidiEngine.Channel.OMNI)
+                    .setDescription("Determines which MIDI channel is responded to");
 
     /**
      * Whether this channel should show in the cue UI.
      */
     public final BooleanParameter cueActive =
-        new BooleanParameter("Cue", false)
-        .setDescription("Toggles the channel CUE state, determining whether it is shown in the preview window");
+            new BooleanParameter("Cue", false)
+                    .setDescription("Toggles the channel CUE state, determining whether it is shown in the preview window");
 
     /**
      * Whether auto pattern transition is enabled on this channel
      */
     public final BooleanParameter autoCycleEnabled =
-        new BooleanParameter("Auto-Cycle", false)
-        .setDescription("When enabled, this channel will automatically cycle between its patterns");
+            new BooleanParameter("Auto-Cycle", false)
+                    .setDescription("When enabled, this channel will automatically cycle between its patterns");
 
     /**
      * Time in milliseconds after which transition thru the pattern set is automatically initiated.
      */
     public final BoundedParameter autoCycleTimeSecs = (BoundedParameter)
-        new BoundedParameter("Cycle Time", 60, .1, 60*60*4)
-        .setDescription("Sets the number of seconds after which the channel cycles to the next pattern")
-        .setUnits(LXParameter.Units.SECONDS);
+            new BoundedParameter("Cycle Time", 60, .1, 60 * 60 * 4)
+                    .setDescription("Sets the number of seconds after which the channel cycles to the next pattern")
+                    .setUnits(LXParameter.Units.SECONDS);
 
     public final BoundedParameter transitionTimeSecs = (BoundedParameter)
-        new BoundedParameter("Transition Time", 5, .1, 180)
-        .setDescription("Sets the duration of blending transitions between patterns")
-        .setUnits(LXParameter.Units.SECONDS);
+            new BoundedParameter("Transition Time", 5, .1, 180)
+                    .setDescription("Sets the duration of blending transitions between patterns")
+                    .setUnits(LXParameter.Units.SECONDS);
 
     public final BooleanParameter transitionEnabled =
-        new BooleanParameter("Transitions", false)
-        .setDescription("When enabled, transitions between patterns use a blend");
+            new BooleanParameter("Transitions", false)
+                    .setDescription("When enabled, transitions between patterns use a blend");
 
     public final ObjectParameter<LXBlend> transitionBlendMode;
 
     public final CompoundParameter fader =
-        new CompoundParameter("Fader", 0)
-        .setDescription("Sets the alpha level of the output of this channel");
+            new CompoundParameter("Fader", 0)
+                    .setDescription("Sets the alpha level of the output of this channel");
 
     public final ObjectParameter<LXBlend> blendMode;
 
     public final MutableParameter controlSurfaceFocusIndex = (MutableParameter)
-        new MutableParameter("SurfaceFocusIndex", 0)
-        .setDescription("Control surface focus index");
+            new MutableParameter("SurfaceFocusIndex", 0)
+                    .setDescription("Control surface focus index");
 
     public final MutableParameter controlSurfaceFocusLength = (MutableParameter)
-        new MutableParameter("SurfaceFocusLength", 0)
-        .setDescription("Control surface focus length");
+            new MutableParameter("SurfaceFocusLength", 0)
+                    .setDescription("Control surface focus length");
 
     private final List<LXPattern> mutablePatterns = new ArrayList<LXPattern>();
     public final List<LXPattern> patterns = Collections.unmodifiableList(mutablePatterns);
 
-    /** A local buffer used for transition blending and effects on this channel */
+    /**
+     * A local buffer used for transition blending and effects on this channel
+     */
     private final PolyBuffer polyBuffer;
 
     private double autoCycleProgress = 0;
@@ -283,23 +308,25 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
             System.out.println("LXEngine Channel thread finished [" + getLabel() + "]");
         }
-    };
+    }
+
+    ;
 
     LXChannel(LX lx, int index, LXPattern[] patterns) {
-        super(lx, "Channel-" + (index+1));
+        super(lx, "Channel-" + (index + 1));
         this.index = index;
         this.label.setDescription("The name of this channel");
         this.polyBuffer = new PolyBuffer(lx);
 
         this.focusedPattern =
-            new DiscreteParameter("Focused Pattern", 0, patterns.length)
-            .setDescription("Which pattern has focus in the UI");
+                new DiscreteParameter("Focused Pattern", 0, patterns.length)
+                        .setDescription("Which pattern has focus in the UI");
 
         this.blendMode = new ObjectParameter<LXBlend>("Blend", lx.engine.channelBlends)
-            .setDescription("Specifies the blending function used for the channel fader");
+                .setDescription("Specifies the blending function used for the channel fader");
 
         this.transitionBlendMode = new ObjectParameter<LXBlend>("Transition Blend", lx.engine.crossfaderBlends)
-            .setDescription("Specifies the blending function used for transitions between patterns on the channel");
+                .setDescription("Specifies the blending function used for transitions between patterns on the channel");
 
         this.transitionMillis = lx.engine.nowMillis;
         _updatePatterns(patterns);
@@ -441,8 +468,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
     public final LXChannel addPattern(LXPattern pattern) {
         pattern.setChannel(this);
         pattern.setModel(this.model);
-        pattern.setIndex(this.mutablePatterns.size());
         this.mutablePatterns.add(pattern);
+        LXUtils.updateIndexes(mutablePatterns);
         this.focusedPattern.setRange(this.mutablePatterns.size());
         this.listenerSnapshot.clear();
         this.listenerSnapshot.addAll(this.listeners);
@@ -474,9 +501,8 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
                 finishTransition();
             }
             this.mutablePatterns.remove(index);
-            for (int i = index; i < this.mutablePatterns.size(); ++i) {
-                this.mutablePatterns.get(i).setIndex(i);
-            }
+            LXUtils.updateIndexes(mutablePatterns);
+
             if (this.activePatternIndex > index) {
                 --this.activePatternIndex;
             } else if (this.activePatternIndex >= this.mutablePatterns.size()) {
@@ -546,10 +572,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         LXPattern nextPattern = getNextPattern();
         this.mutablePatterns.remove(pattern);
         this.mutablePatterns.add(index, pattern);
-        int i = 0;
-        for (LXPattern p : this.mutablePatterns) {
-             p.setIndex(i++);
-        }
+        LXUtils.updateIndexes(mutablePatterns);
         this.activePatternIndex = activePattern.getIndex();
         this.nextPatternIndex = nextPattern.getIndex();
         for (Listener listener : this.listeners) {
@@ -732,6 +755,21 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
             }
         }
 
+        // Apply warps
+        LXVector[] inputVectors = null;
+        LXVector[] lastResult = null;
+        for (LXWarp warp : warps) {
+            if (warp.isEnabled()) {
+                inputVectors = warp.applyWarp(deltaMs, inputVectors);
+                lastResult = warp.getWarpedVectors();
+            }
+        }
+        LXVector[] newVectors = lastResult != null ? lastResult : model.getVectors();
+        if (newVectors != vectors) {
+            vectors = newVectors;
+            vectorList = null;
+        }
+
         // Run active pattern
         PolyBuffer.Space space = colorSpace.getEnum();
         getActivePattern().setPreferredSpace(space);
@@ -760,11 +798,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         }
 
         // Apply effects
-        if (this.mutableEffects.size() > 0) {
-            for (LXEffect effect : this.mutableEffects) {
-                effect.setPolyBuffer(polyBuffer);
-                effect.loop(deltaMs);
-            }
+        for (LXEffect effect : effects) {
+            effect.setPolyBuffer(polyBuffer);
+            effect.loop(deltaMs);
         }
 
         this.timer.loopNanos = System.nanoTime() - loopStart;
