@@ -343,6 +343,7 @@ public class LXModel implements LXFixture {
 
     public LXVector[] getVectors() {
         if (vectors == null) {
+            System.out.println("Copying model points to vectors (LXVector[" + points.length + "])...");
             vectors = new LXVector[points.length];
             for (int i = 0; i < points.length; i++) {
                 vectors[i] = new LXVector(points[i]);

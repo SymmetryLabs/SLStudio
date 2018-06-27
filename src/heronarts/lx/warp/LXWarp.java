@@ -3,15 +3,11 @@ package heronarts.lx.warp;
 import heronarts.lx.LX;
 import heronarts.lx.LXBus;
 import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
 import heronarts.lx.LXModelComponent;
 import heronarts.lx.LXUtils;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXVector;
-
-import java.util.Arrays;
 
 public abstract class LXWarp extends LXModelComponent implements LXComponent.Renamable, LXOscComponent, LXUtils.IndexedElement {
     public final BooleanParameter enabled = new BooleanParameter("Enabled", false)
@@ -78,7 +74,11 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
                 vectorsDirty = true;
             }
             if (warpedVectors == null) {
-                warpedVectors = Arrays.copyOf(vectors, vectors.length);
+                System.out.println("Copying warp vectors to warpedVectors (LXVector[" + vectors.length + "])...");
+                warpedVectors = new LXVector[vectors.length];
+                for (int i = 0; i < vectors.length; i++) {
+                    warpedVectors[i] = new LXVector(vectors[i]);
+                }
             }
         }
         warpedVectorsUpdated = run(deltaMs, vectorsDirty);
@@ -93,8 +93,10 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     /**
      * Applies the warp to the coordinates in this.vectors and writes the results
      * to this.warpedVectors.  The dirty flag indicates whether this.vectors has
-     * changed since the last call to run().  This method should return a boolean
-     * indicating whether any changes were written to warpedVectors.
+     * changed since the last call to run(); a typical implementation would recompute
+     * warpedVectors when the dirty flag is true OR any of the warp's parameters have
+     * changed.  This method should treat vectors as read-only and should return a
+     * flag indicating whether any changes were written to warpedVectors.
      */
     public abstract boolean run(double deltaMs, boolean dirty);
 

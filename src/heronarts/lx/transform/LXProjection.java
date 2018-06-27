@@ -47,6 +47,7 @@ public class LXProjection implements Iterable<LXVector> {
      * @param model Model
      */
     public LXProjection(LXModel model) {
+        System.out.println("Copying model points to LXProjection vectors (LXVector[" + model.points.length + "])...");
         this.vectors = new LXVector[model.points.length];
         int i = 0;
         for (LXPoint point : model.points) {

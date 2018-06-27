@@ -30,6 +30,7 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXVector;
@@ -64,19 +65,27 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     protected LXPattern(LX lx) {
         super(lx);
         this.label.setDescription("The name of this pattern");
-        String simple = getClass().getSimpleName();
-        if (simple.endsWith("Pattern")) {
-            simple = simple.substring(0, simple.length() - "Pattern".length());
-        }
-        this.label.setValue(simple);
+        this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
     }
 
-    public LXVector[] getVectors() {
-        return getChannel().getVectors();
+    protected LXVector[] getVectors() {
+        return LXBus.getVectors(getChannel(), model);
     }
 
-    public List<LXVector> getVectorList() {
-        return getChannel().getVectorList();
+    protected List<LXVector> getVectorList() {
+        return LXBus.getVectorList(getChannel(), model);
+    }
+
+    protected List<LXVector> getVectorList(Iterable<LXPoint> points) {
+        return LXBus.getVectorList(getChannel(), model, points);
+    }
+
+    protected List<LXVector> getVectorList(LXPoint[] points) {
+        return LXBus.getVectorList(getChannel(), model, points);
+    }
+
+    protected List<LXVector> getVectorList(int start, int stop) {
+        return LXBus.getVectorList(getChannel(), model, start, stop);
     }
 
     public String getOscAddress() {
@@ -272,6 +281,8 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
      */
     public /* abstract */ void onTransitionEnd() {
     }
+
+    public /* abstract */ void onVectorsUpdated() { }
 
     @Override
     public void noteOnReceived(MidiNoteOn note) {

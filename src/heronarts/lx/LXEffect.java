@@ -27,6 +27,7 @@ import heronarts.lx.midi.MidiNote;
 import heronarts.lx.midi.MidiNoteOn;
 import heronarts.lx.midi.MidiPitchBend;
 import heronarts.lx.midi.MidiProgramChange;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
@@ -71,11 +72,7 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
     protected LXEffect(LX lx) {
         super(lx);
         this.label.setDescription("The name of this effect");
-        String simple = getClass().getSimpleName();
-        if (simple.endsWith("Effect")) {
-            simple = simple.substring(0, simple.length() - "Effect".length());
-        }
-        this.label.setValue(simple);
+        this.label.setValue(getClass().getSimpleName().replaceAll("Effect$", ""));
 
         this.enabled.addListener(new LXParameterListener() {
             public void onParameterChanged(LXParameter parameter) {
@@ -118,12 +115,24 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         return (LXBus) getParent();
     }
 
-    public LXVector[] getVectors() {
-        return getBus().getVectors();
+    protected LXVector[] getVectors() {
+        return LXBus.getVectors(getBus(), model);
     }
 
-    public List<LXVector> getVectorList() {
-        return getBus().getVectorList();
+    protected List<LXVector> getVectorList() {
+        return LXBus.getVectorList(getBus(), model);
+    }
+
+    protected List<LXVector> getVectorList(Iterable<LXPoint> points) {
+        return LXBus.getVectorList(getBus(), model, points);
+    }
+
+    protected List<LXVector> getVectorList(LXPoint[] points) {
+        return LXBus.getVectorList(getBus(), model, points);
+    }
+
+    protected List<LXVector> getVectorList(int start, int stop) {
+        return LXBus.getVectorList(getBus(), model, start, stop);
     }
 
     /**
@@ -216,6 +225,8 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         // obtains a color array using getArray(space), writes into that array,
         // and then calls markModified(space).
     }
+
+    public /* abstract */ void onVectorsUpdated() { }
 
     @Override
     public void noteOnReceived(MidiNoteOn note) {

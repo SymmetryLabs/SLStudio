@@ -20,21 +20,21 @@
 
 package heronarts.lx;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import heronarts.lx.clip.LXClip;
 import heronarts.lx.model.LXModel;
+import heronarts.lx.model.LXPoint;
 import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
+import heronarts.lx.transform.LXVector;
+import heronarts.lx.warp.LXWarp;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
-
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
-import heronarts.lx.transform.LXVector;
-import heronarts.lx.warp.LXWarp;
 
 /**
  * Abstract representation of a channel, which could be a normal channel with patterns
@@ -276,17 +276,63 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         clip.dispose();
     }
 
-    protected LXVector[] getVectors() {
-        return vectors != null ? vectors : model.getVectors();
+    protected static LXVector[] getVectors(LXBus bus, LXModel model) {
+        return (bus != null && bus.vectors != null) ? bus.vectors : model.getVectors();
     }
 
-    protected List<LXVector> getVectorList() {
-        if (vectorList == null) {
-            vectorList = Arrays.asList(getVectors());
+    protected static List<LXVector> getVectorList(LXBus bus, LXModel model) {
+        if (bus == null) {
+            return Arrays.asList(getVectors(bus, model));
         }
-        return vectorList;
+        if (bus.vectorList == null) {
+            bus.vectorList = Arrays.asList(getVectors(bus, model));
+        }
+        return bus.vectorList;
     }
 
+    protected static List<LXVector> getVectorList(LXBus bus, LXModel model, Iterable<LXPoint> points) {
+        LXVector[] vectors = getVectors(bus, model);
+        List<LXVector> result = new ArrayList<>();
+        for (LXPoint p : points) {
+            if (vectors[p.index] != null) {
+                result.add(vectors[p.index]);
+            }
+        }
+        return result;
+    }
+
+    protected static List<LXVector> getVectorList(LXBus bus, LXModel model, LXPoint[] points) {
+        LXVector[] vectors = getVectors(bus, model);
+        List<LXVector> result = new ArrayList<>();
+        for (LXPoint p : points) {
+            if (vectors[p.index] != null) {
+                result.add(vectors[p.index]);
+            }
+        }
+        return result;
+    }
+
+    protected static List<LXVector> getVectorList(LXBus bus, LXModel model, int start, int stop) {
+        LXVector[] vectors = getVectors(bus, model);
+        List<LXVector> result = new ArrayList<>();
+        for (int i = start; i < stop; i++) {
+            if (vectors[i] != null) {
+                result.add(vectors[i]);
+            }
+        }
+        return result;
+    }
+
+    protected void setVectors(LXVector[] newVectors) {
+        if (newVectors != vectors) {
+            vectors = newVectors;
+            vectorList = null;
+            for (LXEffect effect : effects) {
+                effect.onVectorsUpdated();
+            }
+        }
+    }
+    
     @Override
     public void loop(double deltaMs) {
         long loopStart = System.nanoTime();
