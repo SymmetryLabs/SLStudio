@@ -14,10 +14,12 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
             .setDescription("Whether the warp is enabled");
 
     private int index = -1;
-    protected LXVector[] vectors = null;
-    protected LXVector[] warpedVectors = null;
-    protected boolean vectorsDirty = false;
-    protected boolean warpedVectorsUpdated = false;
+
+    protected LXWarp inputSource = null;
+    protected LXVector[] inputVectors = null;  // externally provided, treated as read-only
+    protected LXVector[] outputVectors = null;  // solely owned and written by this LXWarp
+    protected boolean inputVectorsChanged = false;
+    protected boolean outputVectorsChanged = false;
 
     protected LXWarp(LX lx) {
         super(lx);
@@ -59,46 +61,55 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     protected /* abstract */ void onDisable() { }
 
     /**
-     * Takes an array of input vectors (which can be null to indicate "no change
-     * since the last call"), applies the warp to it, and returns the array of
-     * warped vectors (which can be null to indicate "no change since last call").
+     * Sets the vector array to be used as input.  This array is assumed to be owned
+     * by the caller, and this LXWarp object will treat the array as read-only.
      */
-    public final LXVector[] applyWarp(double deltaMs, LXVector[] inputVectors) {
-        if (isEnabled()) {
-            if (inputVectors != null) {
-                vectors = inputVectors;
-                vectorsDirty = true;
-            }
-            if (vectors == null) {
-                vectors = model.getVectors();
-                vectorsDirty = true;
-            }
-            if (warpedVectors == null) {
-                System.out.println("Copying warp vectors to warpedVectors (LXVector[" + vectors.length + "])...");
-                warpedVectors = new LXVector[vectors.length];
-                for (int i = 0; i < vectors.length; i++) {
-                    warpedVectors[i] = new LXVector(vectors[i]);
+    public void setInputVectors(LXWarp source, LXVector[] vectors, boolean changed) {
+        if (source != inputSource || vectors != inputVectors || changed) {
+            if (vectors != inputVectors) {
+                inputVectors = vectors;
+                System.out.println("Copying inputVectors to outputVectors (LXVector[" + this.inputVectors.length + "])...");
+                outputVectors = new LXVector[inputVectors.length];
+                for (int i = 0; i < inputVectors.length; i++) {
+                    outputVectors[i] = new LXVector(inputVectors[i]);
                 }
             }
+            inputSource = source;
+            inputVectorsChanged = true;
         }
-        warpedVectorsUpdated = run(deltaMs, vectorsDirty);
-        vectorsDirty = false;
-        return warpedVectorsUpdated ? warpedVectors : null;
-    }
-
-    public LXVector[] getWarpedVectors() {
-        return warpedVectors;
     }
 
     /**
-     * Applies the warp to the coordinates in this.vectors and writes the results
-     * to this.warpedVectors.  The dirty flag indicates whether this.vectors has
-     * changed since the last call to run(); a typical implementation would recompute
-     * warpedVectors when the dirty flag is true OR any of the warp's parameters have
-     * changed.  This method should treat vectors as read-only and should return a
-     * flag indicating whether any changes were written to warpedVectors.
+     * Returns the output of this warp.  This vector array is owned by the LXWarp
+     * object, and callers should treat this array as read-only.
      */
-    public abstract boolean run(double deltaMs, boolean dirty);
+    public LXVector[] getOutputVectors() {
+        return outputVectors;
+    }
+
+    /**
+     * Performs the warp, operating on the input vectors that were passed in with
+     * setInputVectors(), and producing output retrievable by getOutputVectors().
+     */
+    public final boolean applyWarp(double deltaMs) {
+        boolean outputVectorsChanged = false;
+        if (isEnabled()) {
+            outputVectorsChanged = run(deltaMs, inputVectorsChanged);
+            inputVectorsChanged = false;
+        }
+        return outputVectorsChanged;
+    }
+
+    /**
+     * Applies the warp to the coordinates in inputVectors and writes the results
+     * to outputVectors.  The inputVectorsChanged flag indicates whether inputVectors
+     * has changed since the last call to run(); a typical implementation would
+     * recompute outputVectors when inputVectorsChanged is true OR any of the warp's
+     * parameters has changed.  This method should treat inputVectors as read-only;
+     * it is also the sole writer to outputVectors, and it should return a flag
+     * indicating whether any changes were written to outputVectors.
+     */
+    protected abstract boolean run(double deltaMs, boolean inputVectorsChanged);
 
     public String getOscAddress() {
         LXBus bus = getBus();

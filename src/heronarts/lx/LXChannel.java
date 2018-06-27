@@ -26,7 +26,6 @@ import heronarts.lx.clip.LXClip;
 import heronarts.lx.midi.LXMidiEngine;
 import heronarts.lx.midi.LXShortMessage;
 import heronarts.lx.model.LXModel;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BoundedParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -37,7 +36,6 @@ import heronarts.lx.parameter.ObjectParameter;
 import heronarts.lx.pattern.SolidColorPattern;
 import heronarts.lx.parameter.BooleanParameter;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -765,15 +763,18 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         }
 
         // Apply warps
-        LXVector[] inputVectors = null;
-        LXVector[] lastResult = null;
+        LXWarp nextInputSource = null;
+        LXVector[] nextInputVectors = model.getVectors();
+        boolean nextInputChanged = false;
         for (LXWarp warp : warps) {
             if (warp.isEnabled()) {
-                inputVectors = warp.applyWarp(deltaMs, inputVectors);
-                lastResult = warp.getWarpedVectors();
+                warp.setInputVectors(nextInputSource, nextInputVectors, nextInputChanged);
+                nextInputChanged = warp.applyWarp(deltaMs);
+                nextInputSource = warp;
+                nextInputVectors = warp.getOutputVectors();
             }
         }
-        setVectors(lastResult != null ? lastResult : model.getVectors());
+        setVectors(nextInputVectors);
 
         // Run active pattern
         PolyBuffer.Space space = colorSpace.getEnum();

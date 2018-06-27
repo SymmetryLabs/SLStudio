@@ -282,6 +282,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     public /* abstract */ void onTransitionEnd() {
     }
 
+    /** This method is invoked whenever the output of getVectors()/getVectorList() changes. */
     public /* abstract */ void onVectorsUpdated() { }
 
     @Override

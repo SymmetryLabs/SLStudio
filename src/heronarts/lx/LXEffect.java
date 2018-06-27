@@ -226,6 +226,7 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         // and then calls markModified(space).
     }
 
+    /** This method is invoked whenever the output of getVectors()/getVectorList() changes. */
     public /* abstract */ void onVectorsUpdated() { }
 
     @Override
