@@ -87,6 +87,7 @@ public class SLStudioLX extends P3LX {
                 "@-R    Rename channel or pattern\n" +
                 "@-S    Save current project\n" +
                 "@-V    Toggle preview display\n" +
+                "@-W    Toggle all warps (selected channel)\n" +
                 "@-X    Toggle axes\n" +
                 "@-/    Toggle help caption line\n" +
                 "@-\\    Toggle 16-bit color (all)\n" +
