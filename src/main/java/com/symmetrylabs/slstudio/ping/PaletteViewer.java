@@ -9,6 +9,7 @@ import heronarts.lx.parameter.DiscreteParameter;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.palettes.PaletteLibrary;
 import com.symmetrylabs.slstudio.palettes.ZigzagPalette;
+import heronarts.lx.transform.LXVector;
 
 public class PaletteViewer extends SLPattern<SLModel> {
 
@@ -41,8 +42,8 @@ public class PaletteViewer extends SLPattern<SLModel> {
         pal.setBias(palBias.getValue());
         pal.setShift(palShift.getValue());
         pal.setCutoff(palCutoff.getValue());
-        for (LXPoint p : model.points) {
-            colors[p.index] = pal.getColor((p.y - model.yMin) / (model.yMax - model.yMin));
+        for (LXVector v : getVectorList()) {
+            colors[v.index] = pal.getColor((v.y - model.yMin) / (model.yMax - model.yMin));
         }
     }
 }

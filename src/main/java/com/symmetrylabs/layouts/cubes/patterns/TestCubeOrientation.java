@@ -6,6 +6,7 @@ import heronarts.lx.color.LXColor;
 
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import heronarts.lx.transform.LXVector;
 
 public class TestCubeOrientation extends SLPattern<CubesModel> {
 
@@ -23,13 +24,13 @@ public class TestCubeOrientation extends SLPattern<CubesModel> {
 
             for (CubesModel.Face face : cube.getFaces()) {
                 int col = cols[i++];
-                for (LXPoint p : face.points) {
-                    colors[p.index] = col;
+                for (LXVector v : getVectorList(face.points)) {
+                    colors[v.index] = col;
                 }
 
                 // make bottom of cube yellow
-                for (LXPoint p : face.getStripByIndex(2).points) {
-                    colors[p.index] = cols[4];
+                for (LXVector v : getVectorList(face.getStripByIndex(2).points)) {
+                    colors[v.index] = cols[4];
                 }
             }
         }

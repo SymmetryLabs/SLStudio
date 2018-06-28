@@ -15,6 +15,7 @@ import heronarts.lx.modulator.LinearEnvelope;
 
 import com.symmetrylabs.layouts.cubes.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
+import heronarts.lx.transform.LXVector;
 
 public class SoundRain extends SLPattern<CubesModel> {
     private LXAudioBuffer audioBuffer;
@@ -81,10 +82,10 @@ public class SoundRain extends SLPattern<CubesModel> {
                 Strip s = c.getStrips().get(j);
 
                 if (j % 4 != 0 && j % 4 != 2) {
-                    for (LXPoint p : s.points) {
-                        int seq = ((int)(p.y * avgSize / model.yMax + pos.getValuef() + Math.sin(p.x + p.z) * 2)) % avgSize;
+                    for (LXVector v : getVectorList(s.points)) {
+                        int seq = ((int) (v.y * avgSize / model.yMax + pos.getValuef() + Math.sin(v.x + v.z) * 2)) % avgSize;
                         seq = Math.min(Math.abs(seq - (avgSize / 2)), avgSize - 1);
-                        colors[p.index] = lx.hsb(palette.getHuef(), Math.max(0, 100 - Math.abs(p.x - col1.getValuef()) / 2), lightVals[seq]);
+                        colors[v.index] = lx.hsb(palette.getHuef(), Math.max(0, 100 - Math.abs(v.x - col1.getValuef()) / 2), lightVals[seq]);
                     }
                 }
             }

@@ -24,13 +24,35 @@ public class OctreeModelIndex extends ModelIndex {
         this.centerZ = model.cz;
 
         ot = new FixedWidthOctree<LXPoint>(model.cx, model.cy, model.cz,
-        //ot = new HashOctree<LXPoint>(model.cx, model.cy, model.cz,
+            //ot = new HashOctree<LXPoint>(model.cx, model.cy, model.cz,
             (float) Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 3
         );
 
         for (LXPoint point : model.getPoints()) {
             try {
                 ot.insert(point.x, point.y, flattenZ ? centerZ : point.z, point);
+            }
+            catch (Exception e) {
+                System.err.println("Exception while building Octree: " + e.getMessage());
+            }
+        }
+
+        //System.out.println(ot.dump());
+    }
+
+    public OctreeModelIndex(LXModel model, LXVector[] vectors) {
+        super(model);
+
+        this.flattenZ = flattenZ;
+        this.centerZ = model.cz;
+
+        ot = new FixedWidthOctree<LXPoint>(model.cx, model.cy, model.cz,
+            (float) Math.max(model.xRange, Math.max(model.yRange, model.zRange)), 3
+        );
+
+        for (LXVector vector : vectors) {
+            try {
+                ot.insert(vector.x, vector.y, flattenZ ? centerZ : vector.z, model.points[vector.index]);
             }
             catch (Exception e) {
                 System.err.println("Exception while building Octree: " + e.getMessage());

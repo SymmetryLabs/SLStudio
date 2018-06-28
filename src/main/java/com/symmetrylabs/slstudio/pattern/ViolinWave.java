@@ -11,6 +11,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.LinearEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -79,7 +80,7 @@ public class ViolinWave extends LXPattern {
             if (!isActive()) return;
             final float pFalloff = (30 - 27 * pSize.getValuef());
 
-            model.getPoints().parallelStream().forEach(p -> {
+            getVectorList().parallelStream().forEach(p -> {
                 float b = 100 - pFalloff * (MathUtils.abs(p.x - x.getValuef()) + MathUtils.abs(p.y - y.getValuef()));
                 if (b > 0) {
                     colors[p.index] = Ops8.add(colors[p.index],
@@ -133,13 +134,13 @@ public class ViolinWave extends LXPattern {
         float rng = (78 - 64 * range.getValuef()) / (model.yMax - model.cy);
         float val = MathUtils.max(2, dbValue.getValuef());
 
-        for (LXPoint p : model.points) {
-            int ci = (int)MathUtils.lerp(0, centers.length - 1, (p.x - model.xMin) / (model.xMax - model.xMin));
-            float rFactor = 1.0f - 0.9f * MathUtils.abs(p.x - model.cx) / (model.xMax - model.cx);
-            colors[p.index] = LXColor.hsb(
-                palette.getHuef() + MathUtils.abs(p.x - model.cx),
-                MathUtils.min(100, 20 + 8 * MathUtils.abs(p.y - centers[ci])),
-                MathUtils.constrain(edg * (val * rFactor - rng * MathUtils.abs(p.y - centers[ci])), 0, 100)
+        for (LXVector v : getVectorList()) {
+            int ci = (int)MathUtils.lerp(0, centers.length - 1, (v.point.x - model.xMin) / (model.xMax - model.xMin));
+            float rFactor = 1.0f - 0.9f * MathUtils.abs(v.x - model.cx) / (model.xMax - model.cx);
+            colors[v.index] = LXColor.hsb(
+                palette.getHuef() + MathUtils.abs(v.x - model.cx),
+                MathUtils.min(100, 20 + 8 * MathUtils.abs(v.y - centers[ci])),
+                MathUtils.constrain(edg * (val * rFactor - rng * MathUtils.abs(v.y - centers[ci])), 0, 100)
             );
         }
 

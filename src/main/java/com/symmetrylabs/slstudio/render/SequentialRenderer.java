@@ -22,7 +22,7 @@ public class SequentialRenderer extends Renderer {
     @Override
     public void run(double deltaMs) {
         if (isRunning) {
-            renderable.render(deltaMs, points, colors);
+            renderable.render(deltaMs, vectors, colors);
         }
     }
 }

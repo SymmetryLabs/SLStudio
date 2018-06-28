@@ -165,7 +165,7 @@ public class Worms extends SLPattern<StripsModel<Strip>> {
         // }
 
         if (pBlur.getValuef() < 1) { // trails
-            for (int i = 0, s = model.points.length; i < s; i++) {
+            for (int i = 0, s = model.points.length; i < s; i++) { // TODO(ping): mask out null vectors
                 int c = colors[i];
                 float b = LXColor.b(c);
 

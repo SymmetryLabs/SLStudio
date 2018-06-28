@@ -12,6 +12,8 @@ import heronarts.lx.parameter.DiscreteParameter;
 import heronarts.lx.parameter.LXParameter;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import heronarts.lx.transform.LXVector;
+
 import static com.symmetrylabs.util.MathUtils.random;
 
 public class StripPlay extends SLPattern<CubesModel> {
@@ -88,11 +90,11 @@ public class StripPlay extends SLPattern<CubesModel> {
                     float hv = palette.getHuef() + colorOffset[i];
                     float br = max(0, 100 - avgdist * 2 * (100 - brightParameter.getValuef()));
                     int colr = lx.hsb(hv, sat[i].getValuef(), br);
-                    for (LXPoint p : strip.points) {
-                        if (br > bright[p.index]) {
+                    for (LXVector v : getVectorList(strip.points)) {
+                        if (br > bright[v.index]) {
                             //colors[p.index] = lx.hsb(hv,sat[i].getValuef(),br);
-                            addColor(p.index, colr);
-                            bright[p.index] = br;
+                            addColor(v.index, colr);
+                            bright[v.index] = br;
                         }
                     }
                 }

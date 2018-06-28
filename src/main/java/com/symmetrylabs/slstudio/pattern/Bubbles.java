@@ -9,6 +9,7 @@ import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.QuadraticEnvelope;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
 
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -71,10 +72,10 @@ public class Bubbles extends LXPattern {
             bubble.run(deltaMs);
         });
 
-        model.getPoints().parallelStream().forEach(point -> {
-            colors[point.index] = 0;
+        getVectorList().parallelStream().forEach(v -> {
+            colors[v.index] = 0;
                         for (Bubble bubble : bubbles) {
-                                bubble.paint(point, colors);
+                                bubble.paint(v, colors);
                         }
         });
 
@@ -155,7 +156,7 @@ public class Bubbles extends LXPattern {
             ) + Math.pow(Math.abs(z - p.z), 2));
         }
 
-        public void paint(LXPoint p, int[] colors) {
+        public void paint(LXVector p, int[] colors) {
             if (Math.abs(p.x - x) > radius
                 || Math.abs(p.y - y) > radius
                 || Math.abs(p.z - z) > radius * zDep.getValuef()) {

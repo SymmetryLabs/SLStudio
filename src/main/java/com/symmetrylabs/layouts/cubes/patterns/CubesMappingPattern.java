@@ -9,6 +9,7 @@ import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.transform.LXVector;
 
 public class CubesMappingPattern extends SLPattern<CubesModel> {
     private final SinLFO pulse = new SinLFO(20, 100, 800);
@@ -94,12 +95,12 @@ public class CubesMappingPattern extends SLPattern<CubesModel> {
             if (!c.id.equals(id))
                 continue;
 
-            LXPoint[] points = c.points;
-            for (int i = 0; i < points.length; i++) {
-                if (dotted)
-                    col = (i % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
-
-                setColor(points[i].index, col);
+            int i = 0;
+            for (LXVector v : getVectorList(c.points)) {
+                if (dotted) {
+                    col = (i++ % 2 == 0) ? LXColor.scaleBrightness(LXColor.GREEN, 0.2f) : LXColor.BLACK;
+                }
+                setColor(v.index, col);
             }
         }
     }

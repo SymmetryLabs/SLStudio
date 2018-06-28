@@ -25,7 +25,7 @@ public class Balance extends LXPattern {
     }
 
     // Projection stuff
-    private final LXProjection projection;
+    private LXProjection projection;
 
     private final SinLFO sphere1Z = new SinLFO(0, 0, 15323);
     private final SinLFO sphere2Z = new SinLFO(0, 0, 8323);
@@ -43,8 +43,7 @@ public class Balance extends LXPattern {
 
     public Balance(LX lx) {
         super(lx);
-
-        projection = new LXProjection(model);
+        onVectorsChanged();
 
         addParameter(hueScale);
         addParameter(phaseParam);
@@ -77,10 +76,16 @@ public class Balance extends LXPattern {
         addModulator(heightMod).trigger();
     }
 
+    @Override
     public void onParameterChanged(LXParameter parameter) {
         if (parameter == phaseParam) {
             phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
         }
+    }
+
+    @Override
+    public void onVectorsChanged() {
+        projection = new LXProjection(model, getVectorList());
     }
 
     int beat = 0;

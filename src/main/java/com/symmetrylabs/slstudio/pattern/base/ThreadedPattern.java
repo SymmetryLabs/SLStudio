@@ -4,6 +4,7 @@ import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.model.LXPoint;
+import heronarts.lx.transform.LXVector;
 
 import java.nio.IntBuffer;
 import java.util.ArrayList;
@@ -32,13 +33,14 @@ public abstract class ThreadedPattern extends LXPattern {
         }
     }
 
-    protected int render(double deltaMs, LXPoint p) {
+    protected int render(double deltaMs, LXVector v) {
         return LXColor.BLACK;
     }
 
-    protected void render(double deltaMs, List<LXPoint> points, IntBuffer pointColors) {
-        for (int i = 0; i < points.size(); ++i) {
-            pointColors.put(i, render(deltaMs, points.get(i)));
+    protected void render(double deltaMs, List<LXVector> vectors, int[] colors) {
+        for (int i = 0; i < vectors.size(); ++i) {
+            LXVector v = vectors.get(i);
+            colors[v.index] = render(deltaMs, v);
         }
     }
 
@@ -90,24 +92,16 @@ public abstract class ThreadedPattern extends LXPattern {
                 }
 
                 int numThreads = renderThreads.size();
-                int pointCount = lx.model.points.length;
+                List<LXVector> vectors = getVectorList();
+                int pointCount = vectors.size();
                 int startInclusive = pointCount * index / numThreads;
                 int endExclusive = pointCount * (index + 1) / numThreads;
-
-                List<LXPoint> points = Arrays.asList(lx.model.points).subList(startInclusive, endExclusive);
-                IntBuffer pointColors = IntBuffer.wrap(colors, startInclusive, endExclusive - startInclusive).slice();
+                List<LXVector> slice = vectors.subList(startInclusive, endExclusive);
 
                 long t = System.currentTimeMillis();
                 double deltaMs = t - lastTime;
-
-                render(deltaMs, points, pointColors);
-
+                render(deltaMs, slice, colors);
                 lastTime = t;
-
-                for (int i = 0; i < points.size(); ++i) {
-                    LXPoint p = points.get(i);
-                    colors[p.index] = pointColors.get(i);
-                }
 
                 waitRender.release();
             }

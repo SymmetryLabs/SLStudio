@@ -7,14 +7,15 @@ import java.util.concurrent.CopyOnWriteArraySet;
 import java.util.Collection;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.stream.IntStream;
 
 import heronarts.lx.PolyBuffer;
+import heronarts.lx.transform.LXVector;
 import org.apache.commons.math3.util.FastMath;
 import processing.core.PVector;
 
 import heronarts.lx.LX;
 import heronarts.lx.color.LXColor;
-import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -70,6 +71,8 @@ public class FlockWave extends SLPatternWithMarkers {
     PVector prevFocus = null;
     Set<Bird> birds = new CopyOnWriteArraySet<>();
     float numToSpawn = 0f;
+    float[] coords = null;
+    boolean coordsUpdated = false;  // true if coords needs to be pushed to the kernel
 
     private BlobTracker blobTracker;
     private BlobFollower blobFollower;
@@ -79,6 +82,7 @@ public class FlockWave extends SLPatternWithMarkers {
     public FlockWave(LX lx) {
         super(lx);
 
+        onVectorsChanged();
         blobTracker = BlobTracker.getInstance(lx);
         blobFollower = new BlobFollower(blobTracker);
 
@@ -278,7 +282,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
         float sqRadius = radius * radius;
 
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectorList()) {
             int rgb = 0;
             for (Bird b : birds) {
                 if (Math.abs(b.pos.x - p.x) < radius) {
@@ -295,7 +299,7 @@ public class FlockWave extends SLPatternWithMarkers {
         float radius = size.getValuef();
 
         radius = 10000;
-        for (LXPoint p : model.points) {
+        for (LXVector p : getVectorList()) {
             Bird closestBird = null;
             float minSqDist = 1e6f;
             for (Bird b : birds) {
@@ -322,9 +326,9 @@ public class FlockWave extends SLPatternWithMarkers {
     }
 
     private static class FlockWaveRenderPlasmaKernel extends SLKernel {
-
         int numPoints;
-        float[] pointsXYZ;
+        List<LXVector> vectorList;
+        float[] coords;
         float[] result;
 
         int numBirds = -1;
@@ -348,13 +352,14 @@ public class FlockWave extends SLPatternWithMarkers {
         private float calcPlasmaLayer(int birdIndex) {
             int i = getGlobalId();
 
+            float pointX = coords[3 * i];
+            float pointY = coords[3 * i + 1];
+            float pointZ = coords[3 * i + 2];
+            if (pointX == Float.MAX_VALUE) return 0;  // point has been masked out, avoid wasting work
+
             float birdX = birdPosX[birdIndex];
             float birdY = birdPosY[birdIndex];
             float birdZ = birdPosZ[birdIndex];
-
-            float pointX = pointsXYZ[3 * i];
-            float pointY = pointsXYZ[3 * i + 1];
-            float pointZ = pointsXYZ[3 * i + 2];
 
             float x_diff = birdX - pointX;
             float y_diff = birdY - pointY;
@@ -386,62 +391,91 @@ public class FlockWave extends SLPatternWithMarkers {
 
     private final FlockWaveRenderPlasmaKernel kernel = new FlockWaveRenderPlasmaKernel();
 
+    @Override
+    public void onVectorsChanged() {
+        List<LXVector> vectorList = getVectorList();
+        coords = new float[vectorList.size()*3];
+        int i = 0;
+        for (LXVector vector : vectorList) {
+            coords[i++] = vector.x;
+            coords[i++] = vector.y;
+            coords[i++] = vector.z;
+        }
+        synchronized (kernel) {
+            kernel.numPoints = vectorList.size();
+            kernel.vectorList = vectorList;
+            kernel.put(kernel.coords = coords);
+            kernel.result = new float[vectorList.size()];
+        }
+    }
+
     void renderPlasma(final Collection<Bird> birds) {
         final int[] colors = (int[]) getArray(SRGB8);
 
-        if (birds.size() > 0) {
-            if (kernel.result == null || kernel.result.length != colors.length) {
-                kernel.numPoints = colors.length;
-                kernel.put(kernel.pointsXYZ = model.pointsXYZ);
-                kernel.result = new float[colors.length];
+        synchronized (kernel) {
+            if (birds.size() > 0) {
+                if (kernel.coords == null || kernel.result == null) {
+                    kernel.numPoints = model.points.length;
+                    kernel.vectorList = null;
+                    kernel.put(kernel.coords = model.pointsXYZ);
+                    kernel.result = new float[model.points.length];
+                }
+
+                int maxBirdsValue = maxBirds.getValuei();
+                kernel.numBirds = birds.size();
+                if (kernel.numBirds > maxBirdsValue) {
+                    maxBirdsValue = kernel.numBirds;
+                }
+
+                if (kernel.numBirdsMax != maxBirdsValue) {
+                    kernel.numBirdsMax = maxBirdsValue;
+                    kernel.put(kernel.birdPosX = new float[kernel.numBirdsMax]);
+                    kernel.put(kernel.birdPosY = new float[kernel.numBirdsMax]);
+                    kernel.put(kernel.birdPosZ = new float[kernel.numBirdsMax]);
+                    kernel.put(kernel.birdValue = new float[kernel.numBirdsMax]);
+                    kernel.put(kernel.birdElapsedSec = new float[kernel.numBirdsMax]);
+                }
+
+                int i = 0;
+                for (Bird bird : birds) {
+                    if (i >= kernel.numBirdsMax)
+                        break;
+
+                    kernel.birdPosX[i] = bird.pos.x;
+                    kernel.birdPosY[i] = bird.pos.y;
+                    kernel.birdPosZ[i] = bird.pos.z;
+                    kernel.birdValue[i] = bird.value;
+                    kernel.birdElapsedSec[i] = bird.elapsedSec;
+                    i++;
+                }
+
+                kernel.waveNumber = detail.getValuef();
+                kernel.extent = size.getValuef();
+                kernel.rippleSpeed = ripple.getValuef();
+                float zFactor = (float) FastMath.pow(10, zScale.getValuef()/10);
+                kernel.zSqFactor = zFactor*zFactor - 1;
+                kernel.shift = palShift.getValuef();
+
+                kernel.executeForSize(model.points.length);
+                kernel.get(kernel.result);
+
+                final ColorPalette pal = getPalette();
+                final float[] result = kernel.result;
+
+                if (kernel.vectorList != null) {
+                    // The result array corresponds to just the vectors in the vector list.
+                    IntStream.range(0, kernel.vectorList.size()).parallel().forEach(vi -> {
+                        colors[kernel.vectorList.get(vi).index] = pal.getColor(result[vi]);
+                    });
+                } else {
+                    // The result array corresponds to all the points in the model.
+                    model.getPoints().parallelStream().forEach(p -> {
+                        colors[p.index] = pal.getColor(result[p.index]);
+                    });
+                }
+            } else {
+                Arrays.fill(colors, getPalette().getColor(palShift.getValue()));
             }
-
-            int maxBirdsValue = maxBirds.getValuei();
-            kernel.numBirds = birds.size();
-            if (kernel.numBirds > maxBirdsValue) {
-                maxBirdsValue = kernel.numBirds;
-            }
-
-            if (kernel.numBirdsMax != maxBirdsValue) {
-                kernel.numBirdsMax = maxBirdsValue;
-                kernel.put(kernel.birdPosX = new float[kernel.numBirdsMax]);
-                kernel.put(kernel.birdPosY = new float[kernel.numBirdsMax]);
-                kernel.put(kernel.birdPosZ = new float[kernel.numBirdsMax]);
-                kernel.put(kernel.birdValue = new float[kernel.numBirdsMax]);
-                kernel.put(kernel.birdElapsedSec = new float[kernel.numBirdsMax]);
-            }
-
-            int i = 0;
-            for (Bird bird : birds) {
-                if (i >= kernel.numBirdsMax)
-                    break;
-
-                kernel.birdPosX[i] = bird.pos.x;
-                kernel.birdPosY[i] = bird.pos.y;
-                kernel.birdPosZ[i] = bird.pos.z;
-                kernel.birdValue[i] = bird.value;
-                kernel.birdElapsedSec[i] = bird.elapsedSec;
-                i++;
-            }
-
-            kernel.waveNumber = detail.getValuef();
-            kernel.extent = size.getValuef();
-            kernel.rippleSpeed = ripple.getValuef();
-            float zFactor = (float) FastMath.pow(10, zScale.getValuef() / 10);
-            kernel.zSqFactor = zFactor * zFactor - 1;
-            kernel.shift = palShift.getValuef();
-
-            kernel.executeForSize(model.points.length);
-            kernel.get(kernel.result);
-
-            final ColorPalette pal = getPalette();
-            final float[] result = kernel.result;
-
-            model.getPoints().parallelStream().forEach(p -> {
-                colors[p.index] = pal.getColor(result[p.index]);
-            });
-        } else {
-            Arrays.fill(colors, getPalette().getColor(palShift.getValue()));
         }
 
         markModified(SRGB8);

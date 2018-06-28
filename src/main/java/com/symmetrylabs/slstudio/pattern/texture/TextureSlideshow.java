@@ -183,7 +183,7 @@ public abstract class TextureSlideshow extends SLPattern<SLModel> {
             int[] layer = imageLayers[i];
 
             final BufferedImage imageFinal = image;
-            model.getPoints().parallelStream().forEach(p -> {
+            getVectorList().parallelStream().forEach(p -> {
                 double px = (p.x - model.xMin) / model.xRange;
                 double py = (p.y - model.yMin) / model.yRange;
 
@@ -204,7 +204,7 @@ public abstract class TextureSlideshow extends SLPattern<SLModel> {
         int image1Index = imageIndex;
         int image2Index = (imageIndex + 1) % images.length;
 
-        model.getPoints().parallelStream().forEach(p -> {
+        getVectorList().parallelStream().forEach(p -> {
             int c1 = imageLayers[image1Index][p.index];
             int c2 = imageLayers[image2Index][p.index];
 

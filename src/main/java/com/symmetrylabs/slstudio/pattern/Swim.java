@@ -19,7 +19,7 @@ import static heronarts.lx.PolyBuffer.Space.SRGB8;
 public class Swim extends LXPattern {
 
     // Projection stuff
-    private final LXProjection projection;
+    private LXProjection projection;
 
     private final SinLFO rotationX = new SinLFO(-Math.PI / 16, Math.PI / 8, 9000);
     private final SinLFO rotationY = new SinLFO(-Math.PI / 8, Math.PI / 8, 7000);
@@ -34,8 +34,7 @@ public class Swim extends LXPattern {
 
     public Swim(LX lx) {
         super(lx);
-
-        projection = new LXProjection(model);
+        onVectorsChanged();
 
         addParameter(hueScale);
         addParameter(crazyParam);
@@ -52,6 +51,10 @@ public class Swim extends LXPattern {
         if (parameter == phaseParam) {
             phaseLFO.setPeriod(5000 - 4500 * parameter.getValuef());
         }
+    }
+
+    public void onVectorsChanged() {
+        projection = new LXProjection(model, getVectorList());
     }
 
     @Override

@@ -11,6 +11,7 @@ import heronarts.lx.PolyBuffer;
 import heronarts.lx.audio.LXAudioBuffer;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.parameter.CompoundParameter;
+import heronarts.lx.transform.LXVector;
 import processing.core.PVector;
 
 import java.util.ArrayList;
@@ -97,14 +98,14 @@ public class FlowMotion extends SLPatternWithMarkers {
         long[] colors = (long[]) getArray(RGB16);
         float xScale = xSclParam.getValuef();
         float xOffset = xOffParam.getValuef();
-        for (LXPoint p : model.points) {
-            float x = Math.abs(p.x - xOffset - model.cx) / (model.xRange / 2);
+        for (LXVector v : getVectorList()) {
+            float x = Math.abs(v.x - xOffset - model.cx) / (model.xRange / 2);
             float pos = (x / xScale) * STREAM_LENGTH;
             int index = (int) pos;
             double frac = pos - index;
             long left = index >= STREAM_LENGTH ? Ops16.BLACK : stream[index];
             long right = index + 1 >= STREAM_LENGTH ? Ops16.BLACK : stream[index + 1];
-            colors[p.index] = Ops16.blend(left, right, frac);
+            colors[v.index] = Ops16.blend(left, right, frac);
         }
         markModified(RGB16);
     }

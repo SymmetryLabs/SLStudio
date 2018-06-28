@@ -29,12 +29,13 @@ public class Spiral extends LXPattern {
     final CompoundParameter blur = new CompoundParameter("blur", 0.5, 0.4, 0.9);
 
     final private BlurLayer blurLayer = new BlurLayer(lx, this, blur);
-    final private LXProjection spiral;
+    private LXProjection spiral;
     private float rotated = 0;
 
     public Spiral(LX lx) {
         super(lx);
-        this.spiral = new LXProjection(model);
+
+        onVectorsChanged();
         addParameter(speed);
         addParameter(xTrans);
         addParameter(yTrans);
@@ -42,6 +43,10 @@ public class Spiral extends LXPattern {
         addParameter(thick);
         addParameter(blur);
         addLayer(blurLayer);
+    }
+
+    public void onVectorsChanged() {
+        this.spiral = new LXProjection(model, getVectorList());
     }
 
     public void run(double deltaMs) {
