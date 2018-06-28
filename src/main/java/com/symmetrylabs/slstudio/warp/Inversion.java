@@ -10,12 +10,14 @@ import heronarts.lx.warp.LXWarp;
 
 public class Inversion extends LXWarp {
     private CompoundParameter radiusParam;
+    private boolean parametersChanged = false;
 
     public Inversion(LX lx) {
         super(lx);
 
         float maxRadius = getMaxRadius(model);
         radiusParam = new CompoundParameter("Radius", Math.sqrt(maxRadius), 1, maxRadius);
+        addParameter(radiusParam);
     }
 
     public static float getMaxRadius(LXModel model) {
@@ -32,23 +34,26 @@ public class Inversion extends LXWarp {
         return (float) Math.sqrt(maxSqRadius);
     }
 
-    public boolean run(double deltaMs, boolean dirty) {
-        if (dirty) {
-            System.out.println("Recomputing Inversion warp (" + vectors.length + " vectors)...");
+    public boolean run(double deltaMs, boolean inputVectorsChanged) {
+        if (inputVectorsChanged || parametersChanged) {
+            parametersChanged = false;
+
+            System.out.println("Recomputing Inversion warp (" + inputVectors.length + " inputVectors)...");
             float ox = model.cx;
             float oy = model.cy;
             float oz = model.cz;
             float radius = radiusParam.getValuef();
             float sqRadius = radius * radius;
-            for (int i = 0; i < vectors.length; i++) {
-                float dx = vectors[i].x - ox;
-                float dy = vectors[i].y - oy;
-                float dz = vectors[i].z - oz;
+            for (int i = 0; i < inputVectors.length; i++) {
+                float dx = inputVectors[i].x - ox;
+                float dy = inputVectors[i].y - oy;
+                float dz = inputVectors[i].z - oz;
                 float r = (float) Math.sqrt(dx * dx + dy * dy + dz * dz) + 1e-6f;
                 float nr = sqRadius / r;
-                warpedVectors[i].set(ox + dx * nr / r, oy + dy * nr / r, oz + dz * nr / r);
+                outputVectors[i].set(ox + dx * nr / r, oy + dy * nr / r, oz + dz * nr / r);
             }
+            return true;
         }
-        return dirty;
+        return false;
     }
 }

@@ -9,17 +9,18 @@ public class Mirror extends LXWarp {
     }
 
     @Override
-    public boolean run(double deltaMs, boolean dirty) {
-        if (dirty) {
-            System.out.println("Recomputing Mirror warp (" + vectors.length + " vectors)...");
-            for (int i = 0; i < warpedVectors.length; i++) {
-                warpedVectors[i].set(
-                    Math.abs(vectors[i].x - model.cx) + model.cx,
-                    vectors[i].y,
-                    vectors[i].z
+    public boolean run(double deltaMs, boolean inputVectorsChanged) {
+        if (inputVectorsChanged) {
+            System.out.println("Recomputing Mirror warp (" + inputVectors.length + " vectors)...");
+            for (int i = 0; i < outputVectors.length; i++) {
+                outputVectors[i].set(
+                    Math.abs(inputVectors[i].x - model.cx) + model.cx,
+                    inputVectors[i].y,
+                    inputVectors[i].z
                 );
             }
+            return true;
         }
-        return dirty;
+        return false;
     }
 }
