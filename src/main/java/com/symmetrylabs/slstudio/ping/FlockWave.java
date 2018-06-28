@@ -82,7 +82,7 @@ public class FlockWave extends SLPatternWithMarkers {
     public FlockWave(LX lx) {
         super(lx);
 
-        onVectorsUpdated();
+        onVectorsChanged();
         blobTracker = BlobTracker.getInstance(lx);
         blobFollower = new BlobFollower(blobTracker);
 
@@ -391,7 +391,8 @@ public class FlockWave extends SLPatternWithMarkers {
 
     private final FlockWaveRenderPlasmaKernel kernel = new FlockWaveRenderPlasmaKernel();
 
-    public void onVectorsUpdated() {
+    @Override
+    public void onVectorsChanged() {
         List<LXVector> vectorList = getVectorList();
         coords = new float[vectorList.size()*3];
         int i = 0;

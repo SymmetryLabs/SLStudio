@@ -275,8 +275,7 @@ public class SoundParticles extends LXPattern {
         //physics.setWorldBounds(new AABB(new Vec3D(model.cx, model.cy, model.cz),model.xMax));
 
         // TODO(ping): mask out null vectors
-        spinProjection = new LXProjection(model);
-        scaleProjection = new LXProjection(model);
+        onVectorsChanged();
         // leap= new LeapMotion(parent).withGestures();
         addParameter(spark);
         addParameter(magnitude);
@@ -297,6 +296,11 @@ public class SoundParticles extends LXPattern {
         // println("modelCenter = " + modelCenter);
         // println("model.cx:  " + model.cx + "model.cy:  " + model.cy + "model.cz:  " + model.cz);
 
+    }
+
+    public void onVectorsChanged() {
+        spinProjection = new LXProjection(model, getVectorList());
+        scaleProjection = new LXProjection(model, getVectorList());
     }
 
     public boolean noteOn(MidiNote note) {
