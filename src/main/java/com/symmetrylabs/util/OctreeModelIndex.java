@@ -40,7 +40,7 @@ public class OctreeModelIndex extends ModelIndex {
         //System.out.println(ot.dump());
     }
 
-    public OctreeModelIndex(LXModel model, LXVector[] vectors) {
+    public OctreeModelIndex(LXModel model, List<LXVector> vectors) {
         super(model);
 
         this.flattenZ = flattenZ;

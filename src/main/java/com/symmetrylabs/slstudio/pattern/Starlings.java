@@ -73,7 +73,8 @@ public class Starlings extends SLPatternWithMarkers {
 
     public Starlings(LX lx) {
         super(lx);
-        modelIndex = new OctreeModelIndex(lx.model);
+        onVectorsChanged();
+
         addParameter(tmSclParam);
         addParameter(clrModeParam);
         addParameter(satParam);
@@ -112,6 +113,10 @@ public class Starlings extends SLPatternWithMarkers {
         addParameter(landSecParam);
         addParameter(landSpdParam);
         addParameter(landRngParam);
+    }
+
+    public void onVectorsChanged() {
+        modelIndex = new OctreeModelIndex(model, getVectorList());
     }
 
     public void run(double deltaMs, PolyBuffer.Space space) {

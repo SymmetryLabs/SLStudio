@@ -16,7 +16,7 @@ public class Inversion extends LXWarp {
         super(lx);
 
         float maxRadius = getMaxRadius(model);
-        radiusParam = new CompoundParameter("Radius", Math.sqrt(maxRadius), 1, maxRadius);
+        radiusParam = new CompoundParameter("Radius", maxRadius/2, 1, maxRadius);
         addParameter(radiusParam);
     }
 
