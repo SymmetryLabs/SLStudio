@@ -283,7 +283,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     }
 
     /** This method is invoked whenever the output of getVectors()/getVectorList() changes. */
-    public /* abstract */ void onVectorsUpdated() { }
+    public /* abstract */ void onVectorsChanged() { }
 
     @Override
     public void noteOnReceived(MidiNoteOn note) {

@@ -23,8 +23,10 @@ package heronarts.lx.transform;
 import heronarts.lx.model.LXModel;
 import heronarts.lx.model.LXPoint;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Iterator;
+import java.util.List;
 
 /**
  * Class to compute projections of an entire model. These are applied cheaply by
@@ -32,28 +34,33 @@ import java.util.Iterator;
  * is available.
  */
 public class LXProjection implements Iterable<LXVector> {
-
-    private final LXVector[] vectors;
-
-    private final LXModel model;
+    protected final List<LXVector> inputVectors;
+    protected final List<LXVector> vectors = new ArrayList<>();
+    protected float cx = 0;
+    protected float cy = 0;
+    protected float cz = 0;
 
     public Iterator<LXVector> iterator() {
-        return Arrays.asList(this.vectors).iterator();
+        return vectors.iterator();
     }
 
-    /**
-     * Constructs a projection view of the given model
-     *
-     * @param model Model
-     */
+    /** Constructs a projection view of the given array of vectors. */
+    public LXProjection(List<LXVector> inputVectors) {
+        this.inputVectors = inputVectors;
+        reset();
+    }
+
+    /** Constructs a projection of the given vectors, using the given model's center point. */
+    public LXProjection(LXModel model, List<LXVector> inputVectors) {
+        this(inputVectors);
+        cx = model.cx;
+        cy = model.cy;
+        cz = model.cz;
+    }
+
+    /** Constructs a projection view of the given model. */
     public LXProjection(LXModel model) {
-        System.out.println("Copying model points to LXProjection vectors (LXVector[" + model.points.length + "])...");
-        this.vectors = new LXVector[model.points.length];
-        int i = 0;
-        for (LXPoint point : model.points) {
-            this.vectors[i++] = new LXVector(point);
-        }
-        this.model = model;
+        this(model, Arrays.asList(model.getVectors()));
     }
 
     /**
@@ -62,12 +69,14 @@ public class LXProjection implements Iterable<LXVector> {
      * @return this, for method chaining
      */
     public LXProjection reset() {
-        int i = 0;
-        for (LXPoint point : this.model.points) {
-            this.vectors[i].x = point.x;
-            this.vectors[i].y = point.y;
-            this.vectors[i].z = point.z;
-            ++i;
+        for (int i = 0; i < vectors.size() && i < inputVectors.size(); i++) {
+            vectors.get(i).set(inputVectors.get(i));
+        }
+        if (vectors.size() < inputVectors.size()) {
+            System.out.println("Allocating " + (inputVectors.size() - vectors.size()) + " LXVectors for projection");
+            for (int i = vectors.size(); i < inputVectors.size(); i++) {
+                vectors.add(new LXVector(inputVectors.get(i)));
+            }
         }
         return this;
     }
@@ -113,7 +122,7 @@ public class LXProjection implements Iterable<LXVector> {
      * @return this, for method chaining
      */
     public LXProjection center() {
-        return translate(-this.model.cx, -this.model.cy, -this.model.cz);
+        return translate(-cx, -cy, -cz);
     }
 
     /**
@@ -125,8 +134,7 @@ public class LXProjection implements Iterable<LXVector> {
      * @return this, for method chaining
      */
     public LXProjection translateCenter(float tx, float ty, float tz) {
-        return translate(-this.model.cx + tx, -this.model.cy + ty, -this.model.cz
-                + tz);
+        return translate(tx - cx, ty - cy, tz - cz);
     }
 
     /**

@@ -730,7 +730,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         if (newVectors != vectors) {
             super.setVectors(newVectors);
             for (LXPattern pattern : patterns) {
-                pattern.onVectorsUpdated();
+                pattern.onVectorsChanged();
             }
         }
     }

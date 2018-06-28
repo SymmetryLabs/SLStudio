@@ -328,7 +328,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
             vectors = newVectors;
             vectorList = null;
             for (LXEffect effect : effects) {
-                effect.onVectorsUpdated();
+                effect.onVectorsChanged();
             }
         }
     }
