@@ -391,11 +391,14 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
             removeWarp(warps.get(0));
         }
         // Add warps
-        for (JsonElement warpElement : obj.getAsJsonArray(KEY_WARPS)) {
-            JsonObject warpObject = (JsonObject) warpElement;
-            LXWarp warp = lx.instantiateWarp(warpObject.get("class").getAsString());
-            warp.load(lx, warpObject);
-            addWarp(warp);
+        JsonArray warpsArray = obj.getAsJsonArray(KEY_WARPS);
+        if (warpsArray != null) {
+            for (JsonElement warpElement : warpsArray) {
+                JsonObject warpObject = (JsonObject) warpElement;
+                LXWarp warp = lx.instantiateWarp(warpObject.get("class").getAsString());
+                warp.load(lx, warpObject);
+                addWarp(warp);
+            }
         }
 
         // Clear effects
@@ -404,11 +407,13 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         }
         // Add the effects
         JsonArray effectsArray = obj.getAsJsonArray(KEY_EFFECTS);
-        for (JsonElement effectElement : effectsArray) {
-            JsonObject effectObj = (JsonObject) effectElement;
-            LXEffect effect = this.lx.instantiateEffect(effectObj.get("class").getAsString());
-            effect.load(lx, effectObj);
-            addEffect(effect);
+        if (effectsArray != null) {
+            for (JsonElement effectElement : effectsArray) {
+                JsonObject effectObj = (JsonObject) effectElement;
+                LXEffect effect = this.lx.instantiateEffect(effectObj.get("class").getAsString());
+                effect.load(lx, effectObj);
+                addEffect(effect);
+            }
         }
         // Add the new clips
         if (obj.has(KEY_CLIPS)) {
