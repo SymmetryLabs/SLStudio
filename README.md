@@ -17,6 +17,10 @@ to include the location of your Java 8 home, e.g.
     
 You can determine the location to use by running `/usr/libexec/java_home -V` which will list available JVMs
 
+It may also be helpful to set your default Java if executing from the shell:
+
+    export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
+
 You may need to set the default JDK home for intelliJ products: https://stackoverflow.com/questions/31215452/intellij-idea-importing-gradle-project-getting-java-home-not-defined-yet
 
 ### Creating the IntelliJ Project
