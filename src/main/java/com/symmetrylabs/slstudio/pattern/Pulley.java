@@ -1,6 +1,6 @@
 package com.symmetrylabs.slstudio.pattern;
 
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
@@ -8,7 +8,7 @@ import heronarts.lx.modulator.Accelerator;
 import heronarts.lx.modulator.Click;
 import heronarts.lx.parameter.CompoundParameter;
 
-import static com.symmetrylabs.slstudio.util.MathUtils.constrain;
+//import static com.symmetrylabs.slstudio.util.MathUtils.constrain;
 
 public class Pulley extends LXPattern {
     final int NUM_DIVISIONS = 16;
@@ -102,10 +102,10 @@ public class Pulley extends LXPattern {
         }
         float falloff = 100f / (3f + sz.getValuef() * 36f + fPos * beatAmount.getValuef()*48f);
         for (LXPoint p : model.points) {
-            int gi = (int) constrain((p.x - model.xMin) * NUM_DIVISIONS / (model.xMax - model.xMin), 0, NUM_DIVISIONS-1);
+            int gi = (int) MathUtils.constrain((p.x - model.xMin) * NUM_DIVISIONS / (model.xMax - model.xMin), 0, NUM_DIVISIONS-1);
             colors[p.index] = lx.hsb(
                 palette.getHuef() + MathUtils.abs(p.x - model.cx)*.8f + p.y*.4f,
-                constrain(130 - p.y*.8f, 0, 100),
+                MathUtils.constrain(130 - p.y*.8f, 0, 100),
                 MathUtils.max(0, 100 - MathUtils.abs(p.y - gravity[gi].getValuef())*falloff)
             );
         }

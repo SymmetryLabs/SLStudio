@@ -2,19 +2,20 @@ package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
 import com.symmetrylabs.slstudio.model.StripsModel;
-import com.symmetrylabs.slstudio.pattern.SLPattern;
-import com.symmetrylabs.slstudio.util.MathUtils;
+//import com.symmetrylabs.slstudio.pattern.SLPattern;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.modulator.TriangleLFO;
 
-import static com.symmetrylabs.slstudio.util.MathUtils.constrain;
+//import static com.symmetrylabs.slstudio.util.MathUtils.constrain;
 
 //import static com.symmetrylabs.util.MathUtils.*;
 
-public class Psychedelia extends CubesPattern {
+public class Psychedelia extends SLPattern<StripsModel<Strip>> {
 
 
     final int NUM = 3;
@@ -40,7 +41,7 @@ public class Psychedelia extends CubesPattern {
         for (Strip strip : model.getStrips()) {
             for (LXPoint p : strip.points) {
                 colors[p.index] = lx.hsb(
-                    huev + i*constrain(cv, 0, 2f) + p.z/2f + p.x/4f,
+                    huev + i*MathUtils.constrain(cv, 0, 2f) + p.z/2f + p.x/4f,
                     MathUtils.min(100, MathUtils.abs(p.y-sv)),
                     MathUtils.max(0, 100 - 50*MathUtils.abs((i%NUM) - mv))
                 );

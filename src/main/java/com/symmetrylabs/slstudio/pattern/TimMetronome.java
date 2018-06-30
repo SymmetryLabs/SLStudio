@@ -1,7 +1,7 @@
 package com.symmetrylabs.slstudio.pattern;
 
 //import com.symmetrylabs.util.MathUtils;
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.util.MathUtils;
 
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;

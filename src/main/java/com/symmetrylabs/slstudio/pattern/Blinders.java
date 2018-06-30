@@ -1,15 +1,17 @@
 package com.symmetrylabs.slstudio.pattern;
 
 import com.symmetrylabs.slstudio.model.Strip;
+import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.pattern.base.DPat;
-import com.symmetrylabs.slstudio.util.MathUtils;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
+import com.symmetrylabs.util.MathUtils;
 import heronarts.lx.LX;
 import heronarts.lx.LXPattern;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.modulator.TriangleLFO;
 
-public class Blinders extends CubesPattern {
+public class Blinders extends SLPattern<StripsModel<Strip>> {
     final SinLFO[] m;
     final TriangleLFO r;
     final SinLFO s;

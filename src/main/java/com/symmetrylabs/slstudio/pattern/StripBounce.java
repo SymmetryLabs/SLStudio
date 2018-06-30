@@ -2,17 +2,19 @@ package com.symmetrylabs.slstudio.pattern;
 
 import java.lang.Math;
 
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import heronarts.lx.LX;
 import heronarts.lx.model.LXPoint;
 import heronarts.lx.modulator.SinLFO;
 import heronarts.lx.parameter.CompoundParameter;
 import heronarts.lx.LXUtils;
 
-import com.symmetrylabs.slstudio.model.CubesModel;
+//import com.symmetrylabs.slstudio.model.CubesModel;
 import com.symmetrylabs.slstudio.model.Strip;
-import com.symmetrylabs.slstudio.util.Utils;
+//import com.symmetrylabs.slstudio.util.Utils;
 
-public class StripBounce extends SLPattern {
+public class StripBounce extends SLPattern<StripsModel<Strip>> {
     private final int numOsc = 30;
     SinLFO[] fX = new SinLFO[numOsc];
     SinLFO[] fY = new SinLFO[numOsc];
@@ -22,7 +24,7 @@ public class StripBounce extends SLPattern {
 
     public final CompoundParameter size = new CompoundParameter("size", 30, 10, 100);
     public final CompoundParameter hueVariance = new CompoundParameter("hueVar");
-    
+
     public StripBounce(LX lx) {
         super(lx);
         for (int i = 0; i < numOsc; i++) {
@@ -39,11 +41,11 @@ public class StripBounce extends SLPattern {
         addParameter(size);
         addParameter(hueVariance);
     }
-    
+
     public void run(double deltaMs) {
         float[] bright = new float[model.points.length];
 
-        for (Strip strip : ((CubesModel)model).getStrips()) {
+        for (Strip strip : model.getStrips()) {
             for (int i = 0; i < numOsc; i++) {
                 float avgdist = (float)LXUtils.distance(strip.cx, strip.cy, fX[i].getValuef(), fY[i].getValuef());
                 float hv = palette.getHuef() + colorOffset[i]*hueVariance.getValuef();
