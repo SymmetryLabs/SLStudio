@@ -79,7 +79,7 @@ public class TreeSphericalWave extends TreePattern {
         inputHist.addValue(inputVal);
 
         float speed = (float)waveSpeed.getValue();
-        int leafColor = LX.rgb(0, 0, 0);
+        int leafColor = 0;
 
 //    println("input val is "+inputVal);
         float offsetVal = (float)offset.getValue();
