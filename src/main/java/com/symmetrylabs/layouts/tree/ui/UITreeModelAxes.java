@@ -23,6 +23,7 @@ public class UITreeModelAxes extends UI3dComponent {
 
     public UITreeModelAxes() {
         this.modelingTool = SLStudio.applet.treeModelingTool;
+        visible.setValue(false);
     }
 
     @Override

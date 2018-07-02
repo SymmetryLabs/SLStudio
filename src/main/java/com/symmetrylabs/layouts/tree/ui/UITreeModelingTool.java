@@ -48,7 +48,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
         super(ui, x, y, w, 613);
         this.ui = ui;
         this.modelingTool = modelingTool;
-        setTitle("TREE MODEL");
+        setTitle("TREE MODEL           (Use 'TreeModelingPattern')");
         setPadding(5);
 
         this.limbControls = new LimbControls(ui,4, 20, getContentWidth(), 180, modelingTool.limbManipulator);
