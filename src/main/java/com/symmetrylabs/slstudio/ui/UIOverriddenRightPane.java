@@ -26,6 +26,9 @@ import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
 import processing.core.PGraphics;
+import com.symmetrylabs.layouts.tree.TreeModelingTool;
+import com.symmetrylabs.layouts.tree.ui.*;
+import com.symmetrylabs.slstudio.SLStudio;
 
 
 public class UIOverriddenRightPane extends UIPane {
@@ -47,7 +50,7 @@ public class UIOverriddenRightPane extends UIPane {
     private int macroCount = 1;
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "OUTPUT"}, ui.getWidth() - WIDTH, WIDTH);
+        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
@@ -60,6 +63,10 @@ public class UIOverriddenRightPane extends UIPane {
     }
 
     private void buildUtilityUI() {
+        if (TreeModelingTool.isTreeLayout()) {
+            SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, SLStudio.applet.treeModelingTool, 0, 0, this.utility.getContentWidth());
+            SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
+        }
     }
 
     private void buildPerformanceUI() {

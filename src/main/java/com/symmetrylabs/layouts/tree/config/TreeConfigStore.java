@@ -1,30 +1,18 @@
 package com.symmetrylabs.layouts.tree.config;
 
-import java.io.File;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.io.FileWriter;
-import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
-import java.util.ArrayList;
-import java.io.IOException;
-import java.io.FileNotFoundException;
+import java.io.*;
+import java.util.*;
 
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
 
 import heronarts.lx.LX;
-import heronarts.lx.LXComponent;
 
 import com.symmetrylabs.slstudio.SLStudio;
-import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.layouts.tree.*;
+import com.symmetrylabs.layouts.tree.TreeModel;
 
 
-public class TreeConfigLoader extends LXComponent {
-
-    private static final String KEY = "treeConfiguration";
+public class TreeConfigStore {
 
     private final TreeModel tree;
 
@@ -32,10 +20,9 @@ public class TreeConfigLoader extends LXComponent {
 
     private TreeConfig config = null;
 
-    public TreeConfigLoader(LX lx) {
-        super(lx);
+    public TreeConfigStore(LX lx) {
         this.tree = (TreeModel)lx.model;
-        //loadConfig();
+        loadConfig();
     }
 
     private void loadConfig() {
@@ -59,11 +46,6 @@ public class TreeConfigLoader extends LXComponent {
 
         try {
             writeConfig(file);
-            // if (file.createNewFile()) {
-            //   System.out.println("TreeConfig: " + getConfigFilePath() + " already exists");
-            // } else {
-            //   writeConfig(file);
-            // }
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -78,12 +60,7 @@ public class TreeConfigLoader extends LXComponent {
         tree.reconfigure(config);
     }
 
-    @Override
-    public void save(LX lx, JsonObject obj) {
-        writeConfig();
-    }
-
-    private void writeConfig() {
+    public void writeConfig() {
         writeConfig(file);
     }
 
@@ -92,12 +69,8 @@ public class TreeConfigLoader extends LXComponent {
             FileWriter writer = new FileWriter(file);
             writer.write(new Gson().toJson(tree.getConfig()));
             writer.close();
-        } catch (IOException | NullPointerException e) {
+        } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public static boolean isTreeLayout(Layout layout) {
-        return layout instanceof TreeLayout;
     }
 }

@@ -1,10 +1,7 @@
 package com.symmetrylabs.layouts.tree;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.lang.Integer;
 
 import processing.core.PApplet;
 import processing.data.JSONArray;
@@ -29,6 +26,10 @@ public class TreeModel extends SLModel {
     public final List<Branch> branches;
     public final List<Twig> twigs;
     public final List<Leaf> leaves;
+
+    public TreeModel() {
+        this(new TreeConfig());
+    }
 
     public TreeModel(TreeConfig config) {
         super(new Fixture(config));
@@ -56,7 +57,7 @@ public class TreeModel extends SLModel {
     }
 
     private static class Fixture extends LXAbstractFixture {
-        private final List<Limb> limbs = new ArrayList<Limb>();
+        private final List<Limb> limbs = new ArrayList<>();
 
         private Fixture(TreeConfig config) {
             LXTransform t = new LXTransform();
@@ -72,17 +73,51 @@ public class TreeModel extends SLModel {
         }
     }
 
-    public void reconfigure(TreeConfig config) {
-        LXTransform t = new LXTransform();
+    public void reconfigure() {
+        reconfigure(config);
+    }
 
+    public void reconfigure(TreeConfig config) {
+        this.config = config;
+
+        LXTransform t = new LXTransform();
         int i = 0;
         for (Limb limb : limbs) {
             limb.reconfigure(t, config.getLimbs().get(i++));
         }
+        update(true, true);
     }
 
     public TreeConfig getConfig() {
-        return config; // (todo) return copy instead?
+        return config;
+    }
+
+    public List<Limb> getLimbs() {
+        return limbs;
+    }
+    public Limb[] getLimbsArray() {
+        return limbs.toArray(new Limb[limbs.size()]);
+    }
+
+    public List<Branch> getBranches() {
+        return branches;
+    }
+    public Branch[] getBranchesArray() {
+        return branches.toArray(new Branch[branches.size()]);
+    }
+
+    public List<Twig> getTwigs() {
+        return twigs;
+    }
+    public Twig[] getTwigsArray() {
+        return twigs.toArray(new Twig[twigs.size()]);
+    }
+
+    public List<Leaf> getLeaves() {
+        return leaves;
+    }
+    public Leaf[] getLeavesArray() {
+        return leaves.toArray(new Leaf[leaves.size()]);
     }
 
     /**
@@ -90,7 +125,7 @@ public class TreeModel extends SLModel {
      *--------------------------------------------------------------*/
     public static class Limb extends SLModel {
 
-        public final LimbConfig config;
+        private LimbConfig config;
 
         public float x;
         public float y;
@@ -115,15 +150,19 @@ public class TreeModel extends SLModel {
 
             Fixture f = (Fixture) this.fixtures.get(0);
             this.branches = Collections.unmodifiableList(f.branches);
-            this.twigs    = Collections.unmodifiableList(f.twigs);
-            this.leaves   = Collections.unmodifiableList(f.leaves);
+            this.twigs = Collections.unmodifiableList(f.twigs);
+            this.leaves = Collections.unmodifiableList(f.leaves);
         }
 
         public void reconfigure(LXTransform t, LimbConfig config) {
+            this.config = config;
+
             t.push();
-            t.translate(0, config.height, config.length);
             t.rotateY(config.azimuth * PI / 180.);
-            t.rotateZ(config.elevation * PI / 180.);
+            t.translate(0, config.height, 0);
+            t.rotateX(config.elevation * PI / 180.);
+            t.rotateZ(config.tilt * PI / 180.);
+            t.translate(0, config.length, 0);
 
             this.x = t.x();
             this.y = t.y();
@@ -136,6 +175,31 @@ public class TreeModel extends SLModel {
             t.pop();
         }
 
+        public LimbConfig getConfig() {
+            return config;
+        }
+
+        public List<Branch> getBranches() {
+            return branches;
+        }
+        public Branch[] getBranchesArray() {
+            return branches.toArray(new Branch[branches.size()]);
+        }
+
+        public List<Twig> getTwigs() {
+            return twigs;
+        }
+        public Twig[] getTwigsArray() {
+            return twigs.toArray(new Twig[twigs.size()]);
+        }
+
+        public List<Leaf> getLeaves() {
+            return leaves;
+        }
+        public Leaf[] getLeavesArray() {
+            return leaves.toArray(new Leaf[leaves.size()]);
+        }
+
         private static class Fixture extends LXAbstractFixture {
             private final List<Branch> branches = new ArrayList<Branch>();
             private final List<Twig> twigs = new ArrayList<Twig>();
@@ -144,9 +208,12 @@ public class TreeModel extends SLModel {
 
             private Fixture(LXTransform t, LimbConfig config) {
                 t.push();
-                t.translate(config.length, config.height, 0);
                 t.rotateY(config.azimuth * PI / 180.);
+                t.translate(0, config.height, 0);
                 t.rotateX(config.elevation * PI / 180.);
+                t.rotateZ(config.tilt * PI / 180.);
+                t.translate(0, config.length, 0);
+
                 this.x = t.x();
                 this.y = t.y();
                 this.z = t.z();
@@ -170,7 +237,9 @@ public class TreeModel extends SLModel {
      *--------------------------------------------------------------*/
     public static class Branch extends SLModel {
 
-        public BranchConfig config;
+        public static final int NUM_TWIGS = 8; // needs to be remmoved (we need to refactor patterns for arbitrary lengths
+
+        private BranchConfig config;
 
         public float x;
         public float y;
@@ -190,19 +259,22 @@ public class TreeModel extends SLModel {
             this.tilt = config.tilt;
 
             Fixture f = (Fixture) this.fixtures.get(0);
-            this.twigs   = Collections.unmodifiableList(f.twigs);
-            this.leaves  = Collections.unmodifiableList(f.leaves);
+            this.twigs = Collections.unmodifiableList(f.twigs);
+            this.leaves = Collections.unmodifiableList(f.leaves);
             this.x = f.x;
             this.y = f.y;
             this.z = f.z;
+
         }
 
         public void reconfigure(LXTransform t, BranchConfig config) {
+            this.config = config;
+
             t.push();
             t.translate(config.x, config.y, config.z);
-            t.rotateX(config.tilt * PI / 180.);
-            t.rotateY(config.azimuth * PI / 180.);
-            t.rotateZ(config.elevation * PI / 180.);
+            t.rotateX(config.elevation * PI / 180.);
+            t.rotateY(config.tilt * PI / 180.);
+            t.rotateZ(config.azimuth * PI / 180.);
 
             this.x = t.x();
             this.y = t.y();
@@ -215,6 +287,24 @@ public class TreeModel extends SLModel {
             t.pop();
         }
 
+        public BranchConfig getConfig() {
+            return config;
+        }
+
+        public List<Twig> getTwigs() {
+            return twigs;
+        }
+        public Twig[] getTwigsArray() {
+            return twigs.toArray(new Twig[twigs.size()]);
+        }
+
+        public List<Leaf> getLeaves() {
+            return leaves;
+        }
+        public Leaf[] getLeavesArray() {
+            return leaves.toArray(new Leaf[leaves.size()]);
+        }
+
         private static class Fixture extends LXAbstractFixture {
             private final List<Twig> twigs = new ArrayList<Twig>();
             private final List<Leaf> leaves = new ArrayList<Leaf>();
@@ -223,16 +313,17 @@ public class TreeModel extends SLModel {
             private Fixture(LXTransform t, BranchConfig config) {
                 t.push();
                 t.translate(config.x, config.y, config.z);
-                t.rotateX(config.tilt * PI / 180.);
-                t.rotateY(config.azimuth * PI / 180.);
-                t.rotateZ(config.elevation * PI / 180.);
+                t.rotateX(config.elevation * PI / 180.);
+                t.rotateY(config.tilt * PI / 180.);
+                t.rotateZ(config.azimuth * PI / 180.);
 
                 this.x = t.x();
                 this.y = t.y();
                 this.z = t.z();
 
+                int i = 1;
                 for (TwigConfig twigConfig : config.getTwigs()) {
-                    Twig twig = new Twig(t, twigConfig);
+                    Twig twig = new Twig(i++, t, twigConfig);
                     twigs.add(twig);
 
                     for (LXPoint p : twig.points) {
@@ -252,13 +343,15 @@ public class TreeModel extends SLModel {
 
         public static final int NUM_LEAVES = 16;
 
-        public TwigConfig config;
+        private TwigConfig config;
 
         public float x;
         public float y;
         public float z;
-        public float theta;
+        public float azimuth;
+        public float elevation;
         public float tilt;
+        public int index;
 
         public final List<Leaf> leaves;
 
@@ -285,16 +378,18 @@ public class TreeModel extends SLModel {
           // The last eight leaves are just inverse of the first about the y-axis.
           for (int i = 0; i < 8; ++i) {
             Leaf.Config thisLeaf = LEAVES[i];
-            int index = LEAVES.length - 1 - i; 
+            int index = LEAVES.length - 1 - i;
             LEAVES[index] = new Leaf.Config(thisLeaf.size, index, -thisLeaf.x, thisLeaf.y, -thisLeaf.theta);
           }
         }
 
-        public Twig(LXTransform t, TwigConfig config) {
+        public Twig(int index, LXTransform t, TwigConfig config) {
             super(new Fixture(t, config));
             this.config = config;
-            this.theta = config.theta;
+            this.azimuth = config.azimuth;
+            this.elevation = config.elevation;
             this.tilt = config.tilt;
+            this.index = index;
 
             Fixture f = (Fixture) this.fixtures.get(0);
             this.leaves = Collections.unmodifiableList(f.leaves);
@@ -303,11 +398,18 @@ public class TreeModel extends SLModel {
             this.z = f.z;
         }
 
+        public String toString() {
+            return Integer.toString(index);
+        }
+
         public void reconfigure(LXTransform t, TwigConfig config) {
+            this.config = config;
+
             t.push();
             t.translate(config.x, config.y, config.z);
+            t.rotateX(config.elevation * PI / 180.);
             t.rotateY(config.tilt * PI / 180.);
-            t.rotateZ(config.theta * PI / 180.);
+            t.rotateZ(config.azimuth * PI / 180.);
 
             this.x = t.x();
             this.y = t.y();
@@ -320,6 +422,17 @@ public class TreeModel extends SLModel {
             t.pop();
         }
 
+        public TwigConfig getConfig() {
+            return config;
+        }
+
+        public List<Leaf> getLeaves() {
+            return leaves;
+        }
+        public Leaf[] getLeavesArray() {
+            return leaves.toArray(new Leaf[leaves.size()]);
+        }
+
         private static class Fixture extends LXAbstractFixture {
             private final List<Leaf> leaves = new ArrayList<Leaf>();
             private final float x, y, z;
@@ -327,8 +440,9 @@ public class TreeModel extends SLModel {
             private Fixture(LXTransform t, TwigConfig config) {
                 t.push();
                 t.translate(config.x, config.y + 5*INCHES, config.z);
+                t.rotateX(config.elevation * PI / 180.);
                 t.rotateY(config.tilt * PI / 180.);
-                t.rotateZ(config.theta * PI / 180.);
+                t.rotateZ(config.azimuth * PI / 180.);
 
                 this.x = t.x();
                 this.y = t.y();
@@ -365,17 +479,17 @@ public class TreeModel extends SLModel {
 
         // Config of a leaf relative to twig
         public static class Config {
-          
+
           public final int index;
-          
+
           // X-Y position relative to leaf assemblage base
-          // y-axis pointing "up" the leaf assemblage 
+          // y-axis pointing "up" the leaf assemblage
           public final float x;
           public final float y;
-          
+
           // Rotation about X-Y plane relative to parent assemblage
           public final float theta;
-          
+
           // Tilt of the individual leaf
           public final float tilt;
 
@@ -393,6 +507,7 @@ public class TreeModel extends SLModel {
 
         public final Config config;
         public final Size size;
+        public final LXPoint point;
 
         public float x;
         public float y;
@@ -405,6 +520,7 @@ public class TreeModel extends SLModel {
             this.x = t.x();
             this.y = t.y();
             this.z = t.z();
+            this.point = points[0];
         }
 
         public void reconfigure(LXTransform t) {

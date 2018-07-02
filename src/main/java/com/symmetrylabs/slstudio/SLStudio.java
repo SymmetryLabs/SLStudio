@@ -6,7 +6,8 @@ import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
-import com.symmetrylabs.layouts.tree.config.TreeConfigLoader;
+import com.symmetrylabs.layouts.tree.TreeModelingTool;
+import com.symmetrylabs.layouts.tree.ui.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -20,6 +21,8 @@ import com.symmetrylabs.slstudio.performance.FoxListener;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
+import com.symmetrylabs.layouts.tree.ui.UITreeModelingTool;
+import com.symmetrylabs.layouts.tree.ui.UITreeModelAxes;
 import com.symmetrylabs.util.BlobTracker;
 import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
@@ -33,7 +36,7 @@ public class SLStudio extends PApplet {
     static final String RESTART_FILE_NAME = ".restart";
 
     private SLStudioLX lx;
-    private Layout layout;
+    public Layout layout;
     private Dispatcher dispatcher;
     private Mappings mappings;
     public OutputControl outputControl;
@@ -41,7 +44,9 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
-    public TreeConfigLoader treeConfigLoader = null;
+    public TreeModelingTool treeModelingTool;
+    public UITreeModelingTool uiTreeModelingTool = null;
+    public UITreeModelAxes uiTreeModelAxes = null;
     public LX lx_OG;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
@@ -100,9 +105,9 @@ public class SLStudio extends PApplet {
 
                 layout.setupLx(lx);
 
-                if (TreeConfigLoader.isTreeLayout(layout)) {
-                    treeConfigLoader = new TreeConfigLoader(lx);
-                    lx.engine.registerComponent("treeConfigLoader", treeConfigLoader);
+                if (TreeModelingTool.isTreeLayout()) {
+                    treeModelingTool = new TreeModelingTool(lx);
+                    lx.engine.registerComponent("treeModelingTool", treeModelingTool);
                 }
 
                 lx.addOutput(new OPCOutput(lx, "localhost", 11122));
@@ -134,6 +139,12 @@ public class SLStudio extends PApplet {
                 ui.preview.setPhi(0).setMinRadius(0 * FEET).setMaxRadius(150 * FEET).setRadius(150 * FEET);
                 new UIFramerateControl(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 1);
                 new UISpeed(ui, lx, 0, 0, ui.leftPane.global.getContentWidth()).addToContainer(ui.leftPane.global, 2);
+
+                if (TreeModelingTool.isTreeLayout()) {
+                    ui.preview.addComponent(new UITreeTrunk(applet));
+                    uiTreeModelAxes = new UITreeModelAxes();
+                    ui.preview.addComponent(uiTreeModelAxes);
+                }
 
                 layout.setupUi(lx, ui);
             }
