@@ -138,7 +138,7 @@ public class SummerStageLayout implements Layout {
                 float y = metersToInches(Float.parseFloat(vals[2]));
                 float z = metersToInches(Float.parseFloat(vals[1]));
 
-                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.LARGE);
+                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.LARGE_DOUBLE);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
