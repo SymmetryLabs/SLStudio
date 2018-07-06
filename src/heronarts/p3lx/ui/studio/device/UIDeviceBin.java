@@ -35,6 +35,7 @@ import heronarts.lx.LXBus;
 import heronarts.lx.LXChannel;
 import heronarts.lx.LXEffect;
 import heronarts.lx.LXPattern;
+import heronarts.lx.warp.LXWarp;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.p3lx.ui.UI;
@@ -125,6 +126,47 @@ public class UIDeviceBin extends UI2dScrollContext {
         }
 
         bus.addListener(new LXChannel.AbstractListener() {
+            @Override
+            public void warpAdded(LXBus channel, LXWarp warp) {
+                addDevice(new UIWarpDevice(ui, bus, warp), -1);
+            }
+
+            @Override
+            public void warpRemoved(LXBus bus, LXWarp warp) {
+                UIDevice warpDevice = findWarpDevice(warp);
+                if (warpDevice != null) {
+                    int index = devices.indexOf(warpDevice);
+                    removeDevice(warpDevice);
+                    if (index >= devices.size()) {
+                        index = devices.size() - 1;
+                    }
+                    if (index >= 0) {
+                        devices.get(index).focus();
+                    }
+                }
+            }
+
+            @Override
+            public void warpMoved(LXBus bus, LXWarp warp) {
+                UIWarpDevice warpDevice = findWarpDevice(warp);
+                if (warpDevice != null) {
+                    devices.remove(warpDevice);
+                    devices.add(warp.getIndex() + effectDeviceOffset, warpDevice);
+                    warpDevice.setContainerIndex(warp.getIndex() + effectContainerOffset);
+                }
+            }
+
+            private UIWarpDevice findWarpDevice(LXWarp warp) {
+                for (UIDevice device : devices) {
+                    if (device instanceof UIWarpDevice) {
+                        if (((UIWarpDevice) device).warp == warp) {
+                            return (UIWarpDevice) device;
+                        }
+                    }
+                }
+                return null;
+            }
+
             @Override
             public void effectAdded(LXBus bus, LXEffect effect) {
                 addDevice(new UIEffectDevice(ui, bus, effect), -1);
