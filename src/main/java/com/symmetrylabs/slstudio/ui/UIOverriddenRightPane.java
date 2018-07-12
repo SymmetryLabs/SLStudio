@@ -29,6 +29,7 @@ import processing.core.PGraphics;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
 import com.symmetrylabs.layouts.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.layouts.tree.anemometer.*;
 
 
 public class UIOverriddenRightPane extends UIPane {
@@ -64,6 +65,7 @@ public class UIOverriddenRightPane extends UIPane {
 
     private void buildUtilityUI() {
         if (TreeModelingTool.isTreeLayout()) {
+            new UIAnemometer(ui, lx, SLStudio.applet.anemometer, 0, 0, this.utility.getContentWidth(), 500).addToContainer(this.utility);
             SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, SLStudio.applet.treeModelingTool, 0, 0, this.utility.getContentWidth());
             SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
         }
