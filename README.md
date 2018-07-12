@@ -1,46 +1,64 @@
-# SLStudio
+# AI VJ extension of SLStudio
 
-## Running
+This branch adds AI VJ functionality to SLStudio. You can run the algorithm, which will generate patterns automatically based on high level features of the music it is hearing. You can also generate new training data to be fed into the algorithm to make it more robust. 
 
-From the root of the project, execute
+Training data for the algorithm consists of audio data and timestamps, recorded through a macbook soundcard, and OSC messages that are sent out when any parameter (color, speed, pattern, effects, etc.) is changed in the UI.
 
-    ./gradlew run
+A lot of the installation process is automated by a bash script called setup_ai_vj_env.sh 
+However, you will have to install soundflower manually and create a multi output device by yourself
 
-### Java 9
-Processing won't run on Java 9 on macOS. You'll see an error like `java.lang.NoClassDefFoundError: com/apple/eawt/QuitHandler`
-See https://github.com/processing/processing/wiki/Supported-Platforms for more info
+### Prerequisites
 
-To fix this, install Java 8, and modify your `~/.gradle/gradle.properties` or the project specific `./gradle.properties`
-to include the location of your Java 8 home, e.g. 
+run the setup script!
+```
+chmod +x setup_ai_vj_env.sh
+./setup_ai_vj_env.sh
 
-    org.gradle.java.home=/Library/Java/JavaVirtualMachines/jdk1.8.0_152.jdk/Contents/Home
-    
-You can determine the location to use by running `/usr/libexec/java_home -V` which will list available JVMs
+```
+Soundflower
 
+<<<<<<< HEAD
 It may also be helpful to set your default Java if executing from the shell:
 
     export JAVA_HOME=`/usr/libexec/java_home -v 1.8`
 
 You may need to set the default JDK home for intelliJ products: https://stackoverflow.com/questions/31215452/intellij-idea-importing-gradle-project-getting-java-home-not-defined-yet
+=======
+The setup script automatically downloads the dmg for Soundflower from this link
+https://github.com/mattingalls/Soundflower/releases/download/2.0b2/Soundflower-2.0b2.dmg
+>>>>>>> master-ai-vj-py3
 
-### Creating the IntelliJ Project
+You'll have to install it manually after that. 
 
-- Click 'import new project'
-- Select the build.gradle file in the SLStudio folder
-- Go to run/edit configurations and click on gradle or gradle/run
-- Click the '+' icon to add a new configuration, name it 'run'
-- Select the project home is the outer SLStudio folder
-- For tasks, type “run” - should autocomplete - you want to call the “run” task
-- Apply changes, compile and run 
+Soundflower allows you to record audio through the soundcard. When this output is selected (soundflower 2ch), no music will be played through the speakers. In order to play through speakers/headphones at the same time as soundflower, you need to create a multi-output device with mac
+
+https://lifehacker.com/5933282/how-to-aggregate-and-use-multiple-audio-inputs-and-outputs-in-os-x
+
+Add soundflower (2ch) and built in output
 
 
-## Directories
 
-    cache    # Holds various runtime caches for SLStudio
-    data     # Holds various data files needed for the project
-    gradle   # Holds the gradle wrapper
-    libs     # Holds old JAR-based libraries for the project
-    projects # Holds LXStudio project files (*.lxp)
-    src      # Holds the Java and Kotlin source files for the project
-    tools    # Holds any extra scripts and such
-    
+### Testing
+
+This bash script will run a calibrating script, you should see graphs of mel spectrograms of audio if it works right. You can also check the saved files in the training_data/test_calibration folder
+
+```
+./test_script.sh
+```
+
+## About Training Data
+
+- Each training session will create 3 important files in a folder name you pass in as an argument to data_generation.py. 
+
+- X_train_raw.npy is raw audio (spectrogram) data collected every 5 seconds. The size of the spectrogram is 15 seconds.
+
+- Time_test_scaled.npy are the timestamps of the raw audio, and will be used to parse the logger to get current LX parameters at each spectrogram
+
+- Logger_training_output_raw.txt is the logger output from LX
+
+### Generating Data
+
+1. 	Make sure your sound output is a multi output device that includes soundflower(2ch) 
+2.  On the AI VJ tab - record generates training data, and run starts the AI VJ - you can select how long it runs for in the UI.
+
+

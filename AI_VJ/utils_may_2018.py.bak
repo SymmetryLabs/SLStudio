@@ -1,0 +1,166 @@
+
+## patterns 1_5
+def create_Y_pattern(dataframe, channel, patterns_full):
+    pattern_list = []
+    route = '/lx/channel/' + str(channel) + '/activePattern' 
+    if route in dataframe.columns:
+
+        for i in dataframe[route]:
+            pattern_list.append(i)
+    else:
+        print 'patterns not in dataframe, moving on'
+
+    pattern_labels = get_unique_tags(pattern_list)
+    Y_pattern = np.zeros((len(pattern_list), len(patterns_full)))
+    
+    for index, label in enumerate(pattern_list):
+        #print type(i)
+        #print 'ind' , index
+        #print label
+        Y_pattern[index] = encode_class(label, patterns_full)
+        
+    return Y_pattern
+def create_Y_global(Y_logger_df):
+
+######################################################################
+#                   Raw values to labels
+######################################################################
+    
+    print 'converting dataframe to labels'
+    print 'dataframe length: ', len(Y_logger_df)
+    print 'dataframe columns: ', Y_logger_df.columns
+    
+    color_labels = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'magenta', 'red']
+    color_labels_encoding = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'magenta']
+    speed_range_scaled = [0, 34, 67, 101]
+    speed_labels = ['slow', 'medium', 'fast']
+
+
+
+
+######################################################################
+#         create individual lists and pattern label array
+######################################################################
+    color_list = []
+    speed_list = []
+    
+    
+    if '/lx/palette/color/hue' in Y_logger_df.columns:
+        print 'hue is in dataframe, making labels'
+
+        for i in Y_logger_df['/lx/palette/color/hue']:
+            #print type(i)
+            color_list.append(hue_to_color(float(i)))
+    else:
+        print 'hue is not in dataframe, moving on'
+
+    if '/lx/engine/speed' in Y_logger_df.columns:
+
+        for i in Y_logger_df['/lx/engine/speed']:
+            speed_list.append(speed_to_label(float(i)))
+    else:
+        print 'speed not in dataframe, moving on'
+        
+ 
+
+
+    Y_color = np.zeros((len(color_list), len(color_labels_encoding)))
+    Y_speed = np.zeros((len(speed_list), len(speed_labels)))
+    
+    
+    #Y_pattern = np.zeros((len(pattern_list), len(pattern_labels)))
+
+    for index, label in enumerate(color_list):
+        #print type(i)
+        #print 'ind' , index
+        #print label
+        Y_color[index] = encode_class(label, color_labels_encoding)
+
+    for index, label in enumerate(speed_list):
+        #print type(i)
+        #print 'ind' , index
+        #print label
+        Y_speed[index] = encode_class(label, speed_labels)
+
+
+
+    return Y_color, Y_speed
+def create_Y_effect_by_channel(dataframe, effect_number, channel):
+    
+    global effect_labels_full
+    Y_effect = [None] * len(dataframe)
+    
+    i = 0
+    
+    for index, row in dataframe.iterrows():
+        #print 'row:', row['/lx/channel/1/effect/1/enabled'], 
+        if row['/lx/channel/' + str(channel) + '/effect/' + str(effect_number) + '/enabled'] == '1':
+            #print float(row['/lx/channel/1/effect/' + str(effect_number) + '/amount'])
+            #print i
+            if row['/lx/channel/' + str(channel) + '/effect/' + str(effect_number) + '/amount'] != '0':
+                #print '0value although its on! - at row: ', i
+                #continue
+                Y_effect[i] = effect_to_label(float(row['/lx/channel/' + str(channel) + '/effect/' + str(effect_number) + '/amount']))
+            else: 
+                print '0 value although its on! - at row: ', i
+            #print 'effect on at: ', row['/lx/channel/1/effect/' + str(effect_number) + '/amount']
+        else:
+            print 'blur off'
+        i += 1    
+    #for index, label in enumerate(Y_blur):
+        #Y_pattern[index] = encode_class(label, patterns_full)
+
+    Y_effect_encoded = np.zeros((len(Y_effect), len(effect_labels_full)))
+    
+    for index, label in enumerate(Y_effect):
+        Y_effect_encoded[index] = encode_class(label, effect_labels_full)
+    return Y_effect, Y_effect_encoded
+
+def logger_to_training_data_all_channels(data_file):
+    datan = pd.read_csv(data_file, sep="]", header=None, error_bad_lines=False)
+    datan_2 = pd.DataFrame(datan[0].str.rsplit(',',1).tolist(), columns = ['lx_route','data'])
+    datan_ts = pd.DataFrame(datan[1].str.rsplit(',',1).tolist(), columns = ['raw','timestamps'])
+    timestamps2 = datan_ts['timestamps'].str.extract('(\d+)').fillna(0).astype(int)
+    #datan_2.set_index(timestamps2)
+    for col in datan_2:
+        datan_2 = datan_2.replace('{"route":"', '', regex= True)
+        datan_2 = datan_2.replace('"data":', '', regex= True)
+        datan_2 = datan_2.replace('"', '', regex= True)
+        if col == 'lx_route':
+            datan_2[col] = datan_2[col].str.split(',').str[0]
+        else: 
+            datan_2[col] = datan_2[col].str.split('[').str[-1]  
+
+
+    datan_3 = datan_2.set_index(timestamps2)
+    datan_3 = datan_3[datan_3.lx_route != '/lx/channel/1/nextPattern']
+    datan_3 = datan_3[datan_3.lx_route != '/lx/channel/2/nextPattern']
+    datan_3 = datan_3[datan_3.lx_route != '/lx/channel/3/nextPattern']
+    datan_3 = datan_3[datan_3.lx_route != '/lx/channel/4/nextPattern']
+    datan_3 = datan_3[~datan_3.index.duplicated(keep='last')]
+
+    training_data_pivoted = datan_3.pivot(columns = 'lx_route', values = 'data')
+    td_p = training_data_pivoted
+    
+    placeholder = 0 
+    j = 0 
+    for col in td_p:
+        i = 0
+        placeholder = 0
+        if 'activePattern' in col or 'hue' in col or 'speed' in col or 'enabled':
+            for row in td_p[col]:
+                #print row
+                if row != None:
+                    placeholder = row
+                    #print row
+                else:
+                    #print placeholder /lx/output/enabled
+                    #td_p.loc[col, row] = placeholder
+                    #td_p.loc[i, col] = placeholder
+                    td_p.iloc[i, td_p.columns.get_loc(col)] = placeholder
+
+                    #print row , '=',  placeholder
+                i += 1
+            j += 1
+     
+    return td_p

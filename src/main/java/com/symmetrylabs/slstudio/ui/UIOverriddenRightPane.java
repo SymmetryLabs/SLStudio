@@ -25,24 +25,28 @@ import heronarts.p3lx.ui.studio.midi.UIMidiSurfaces;
 import heronarts.p3lx.ui.studio.modulation.UIComponentModulator;
 import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import heronarts.p3lx.ui.studio.osc.UIOscManager;
+
 import processing.core.PGraphics;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
 import com.symmetrylabs.layouts.tree.ui.*;
 import com.symmetrylabs.slstudio.SLStudio;
 
+import processing.core.PGraphics;
 
 public class UIOverriddenRightPane extends UIPane {
 
     private final LX lx;
     private final UI ui;
 
-    public final UI2dScrollContext utility;
+    public final UI2dScrollContext utility= null;
+    public final UI2dScrollContext aivj;
+    //public final UI2dScrollContext output;
     public final UI2dScrollContext modulation;
     public final UI2dScrollContext midi;
 
     public static final int PADDING = 4;
-    public static final int WIDTH = 284;
-    private static final int ADD_BUTTON_WIDTH = 38;
+    public static final int WIDTH = 340;
+    private static final int ADD_BUTTON_WIDTH = 48;
 
     private int lfoCount = 1;
     private int envCount = 1;
@@ -50,17 +54,24 @@ public class UIOverriddenRightPane extends UIPane {
     private int macroCount = 1;
 
     public UIOverriddenRightPane(UI ui, final LX lx) {
-        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
+
+//        super(ui, lx, new String[]{"MODULATION", "OSC + MIDI", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
+
+        super(ui, lx, new String[]{"MODULATE", "OSC + MIDI", "AI VJ", "UTILITY"}, ui.getWidth() - WIDTH, WIDTH);
+
         this.ui = ui;
         this.lx = lx;
         this.modulation = this.sections[0];
         this.midi = this.sections[1];
-        this.utility = this.sections[2];
+        this.aivj = this.sections[2];
+//        this.output = this.sections[3];
 
+        buildAiVjUI();
         buildUtilityUI();
         buildMidiUI();
         buildModulationUI();
     }
+
 
     private void buildUtilityUI() {
         if (TreeModelingTool.isTreeLayout()) {
@@ -68,6 +79,17 @@ public class UIOverriddenRightPane extends UIPane {
             SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
         }
     }
+//=======
+    private void buildAiVjUI() {
+        new UIAiVj(lx, ui, 0, 0, this.aivj.getContentWidth()).addToContainer(this.aivj);
+    }
+
+//    private void buildOutputUI() {
+//        (uiOutputs = new UIOutputs(lx, ui, 0, 0, this.output.getContentWidth())).addToContainer(this.output);
+//
+//        new UIMapping(lx, ui, 0, 0, this.output.getContentWidth()).addToContainer(this.output);
+//>>>>>>> master-ai-vj-py3
+//    }
 
     private void buildPerformanceUI() {
     }

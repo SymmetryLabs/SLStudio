@@ -28,6 +28,13 @@ import com.symmetrylabs.util.DrawHelper;
 import com.symmetrylabs.util.dispatch.Dispatcher;
 import com.symmetrylabs.util.Utils;
 
+//import com.symmetrylabs.slstudio.util.BlobTracker;
+//import com.symmetrylabs.slstudio.util.DrawHelper;
+//import com.symmetrylabs.slstudio.util.dispatch.Dispatcher;
+//import com.symmetrylabs.slstudio.util.listenable.ListenableList;
+import com.symmetrylabs.slstudio.aivj.AiVj;
+
+
 import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudio extends PApplet {
@@ -44,10 +51,14 @@ public class SLStudio extends PApplet {
     public APC40Listener apc40Listener;
     public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
+
     public TreeModelingTool treeModelingTool;
     public UITreeModelingTool uiTreeModelingTool = null;
     public UITreeModelAxes uiTreeModelAxes = null;
     public LX lx_OG;
+
+    public AiVj aivj;
+
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
@@ -123,6 +134,8 @@ public class SLStudio extends PApplet {
                 // lx.engine.registerComponent("performanceManager", performanceManager);
 
                 blobTracker = BlobTracker.getInstance(lx);
+
+                aivj = new AiVj(lx);
 
                 ui.theme.setPrimaryColor(0xff008ba0);
                 ui.theme.setSecondaryColor(0xff00a08b);

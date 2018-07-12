@@ -38,7 +38,18 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
 import com.symmetrylabs.slstudio.performance.PerformanceManager;
+
 import com.symmetrylabs.util.MarkerSource;
+
+import com.symmetrylabs.slstudio.ui.UIAxes;
+import com.symmetrylabs.slstudio.ui.UICubeMapDebug;
+import com.symmetrylabs.slstudio.ui.UIFramerate;
+import com.symmetrylabs.slstudio.ui.UIMarkerPainter;
+import com.symmetrylabs.slstudio.ui.UIOutputs;
+import com.symmetrylabs.slstudio.ui.UIAiVjStatus;
+import com.symmetrylabs.slstudio.ui.UIOverriddenRightPane;
+//import com.symmetrylabs.slstudio.util.MarkerSource;
+
 
 import javax.swing.*;
 
@@ -65,6 +76,7 @@ public class SLStudioLX extends P3LX {
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
+        public final UIAiVjStatus aivjStatus;
 
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
@@ -117,9 +129,11 @@ public class SLStudioLX extends P3LX {
             this.axes = new UIAxes();
             this.markerPainter = new UIMarkerPainter();
             this.cubeMapDebug = new UICubeMapDebug(lx);
+            this.aivjStatus = new UIAiVjStatus(this, lx, this.leftPane.getWidth() + this.preview.getWidth()/2 - UIAiVjStatus.WIDTH/2, this.preview.getHeight()-150);
             this.preview.addComponent(this.cubeMapDebug);
             this.preview.addComponent(axes);
             this.preview.addComponent(markerPainter);
+
 
             new UI2dComponent(0, 0, leftPane.getWidth(), 30) {}.setBackgroundColor(0).addToContainer(leftPane);
 
@@ -127,13 +141,19 @@ public class SLStudioLX extends P3LX {
             .setDescription("Symmetry Labs")
             .addToContainer(leftPane);
 
+
+//>>>>>>> master-ai-vj-py3
             addLayer(this.preview);
             addLayer(this.leftPane);
             addLayer(this.rightPane);
             addLayer(this.bottomTray);
             addLayer(this.helpBar);
             addLayer(this.framerate);
+//<<<<<<< HEAD
             addLayer(this.helpText);
+//=======
+            addLayer(this.aivjStatus);
+//>>>>>>> master-ai-vj-py3
 
             _toggleClipView();
             _togglePerformanceMode();
