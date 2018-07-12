@@ -3,8 +3,10 @@ package com.symmetrylabs.layouts.circles;
 import heronarts.lx.transform.LXTransform;
 
 import com.symmetrylabs.layouts.Layout;
-import com.symmetrylabs.slstudio.model.StripsModel;
 import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.model.StripsModel;
+import com.symmetrylabs.slstudio.output.SimplePixlite;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
 
 public class CirclesLayout implements Layout {
     private static final float METER = 39.37008f;
@@ -50,5 +52,14 @@ public class CirclesLayout implements Layout {
     }
 
     public void setupLx(SLStudioLX lx) {
+        SimplePixlite pixlite = new SimplePixlite(lx, "10.200.1.128");
+
+        int i = 0;
+        for (CirclesModel.Circle<DoubleStrip> circle : ((CirclesModel<DoubleStrip>)lx.model).getCircles()) {
+            pixlite.addPixliteOutput(new PointsGrouping(i+"").addPoints(circle.getPoints()));
+            ++i;
+        }
+
+        lx.addOutput(pixlite);
     }
 }
