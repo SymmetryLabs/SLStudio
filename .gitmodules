@@ -1,0 +1,6 @@
+[submodule "submodules/submodules/openpixelcontrol"]
+	path = submodules/submodules/openpixelcontrol
+	url = https://github.com/SymmetryLabs/openpixelcontrol.git
+[submodule "submodules/openpixelcontrol"]
+	path = submodules/openpixelcontrol
+	url = https://github.com/SymmetryLabs/openpixelcontrol.git
