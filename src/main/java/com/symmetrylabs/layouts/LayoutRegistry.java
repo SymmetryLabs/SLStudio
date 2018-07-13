@@ -45,6 +45,7 @@ public class LayoutRegistry {
         map.put("office", () -> new OfficeLayout());
         map.put("kalpa", () -> new KalpaLayout());
         map.put("summer_stage", () -> new SummerStageLayout());
+        map.put("21_pilots", () -> new TwentyOnePilotsLayout());
     }
 
     static interface LayoutBuilder {
