@@ -36,7 +36,10 @@ block_length  = 1024    # samples
 # Set sounddevice!
 #############################
 
-set_sounddevices(sd)
+audio_input_device = sys.argv[3]
+print('aud input: ' + audio_input_device)
+
+set_sounddevices(sd, input_name=audio_input_device)
 print(sd.query_devices())
 sd.default.channels = 1
 
@@ -98,8 +101,8 @@ output_on_osc_route = '/lx/output/enabled'
 # Generate data with mel spec size of 15 sec and sample rate of 5 sec
 
 print(len(sys.argv))
-if (len(sys.argv) < 3 or  len(sys.argv) > 3):
-    print('need 2 args, first is your name, second is run time in min!')
+if (len(sys.argv) < 4 or  len(sys.argv) > 4):
+    print('need 3 args, first is your name, second is run time in min, 3rd is audio input device')
     sys.exit(1)
 
 AI_VJ_FOLDER = sys.argv[0][:-18]
@@ -108,7 +111,7 @@ AI_VJ_FOLDER = sys.argv[0][:-18]
 
 WEIGHTS_FOLDER = AI_VJ_FOLDER + 'model_weights/v2/'
 TRAINING_DATA_FOLDER = AI_VJ_FOLDER + 'training_data/'
-PROCESSING_OUTPUT = AI_VJ_FOLDER + 'logger/data/out.txt'
+PROCESSING_OUTPUT = AI_VJ_FOLDER + 'logger/data/out.json'
 DATA_FOLDER = TRAINING_DATA_FOLDER + sys.argv[1] + '/'+ str(now.month) + '_'+ str(now.day) + '/'
 
 if not os.path.exists(DATA_FOLDER):
@@ -121,7 +124,7 @@ run_time = run_time_min*60
 run_test = False
 X_size = int(run_time//2.5) - 3
 
-mel_size = 938
+mel_size = 626 # 938 is 15 seconds, 626 is 10 sec
 RATE = 16000
 
 ############################
@@ -226,7 +229,7 @@ with sd.InputStream(samplerate=16000, dtype= np.float32, channels=1, callback=ca
     if os.path.isfile(PROCESSING_OUTPUT):
         copy(PROCESSING_OUTPUT, DATA_FOLDER)
 
-    os.rename(DATA_FOLDER + 'out.txt', DATA_FOLDER + 'logger_training_output_raw_' + str(now_end.hour) + '_' + str(now_end.minute) + '.json')
+    os.rename(DATA_FOLDER + 'out.json', DATA_FOLDER + 'logger_training_output_raw_' + str(now_end.hour) + '_' + str(now_end.minute) + '.json')
 
 
 #

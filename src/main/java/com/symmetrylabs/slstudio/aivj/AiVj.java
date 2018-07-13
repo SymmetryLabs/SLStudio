@@ -1,6 +1,7 @@
 package com.symmetrylabs.slstudio.aivj;
 
 import heronarts.lx.LX;
+import heronarts.lx.audio.LXAudioInput;
 import heronarts.lx.parameter.LXParameter;
 import heronarts.lx.parameter.LXParameterListener;
 import heronarts.lx.parameter.DiscreteParameter;
@@ -52,11 +53,15 @@ public class AiVj extends LXComponent {
                     // populate processes that will run scripts natively
                     System.out.println("script runtime: " );
                     System.out.println(Integer.toString(recorder.runtime.getValuei()));
-                    System.out.println("/Users/aaronopp/anaconda/envs/py36/bin/python" + cmd + py + ".py" + userName + Integer.toString(recorder.runtime.getValuei()));
-                    String[] commandVjRecord = new String[] {"/Users/aaronopp/anaconda/envs/py36/bin/python", cmd + py + ".py", userName, Integer.toString(recorder.runtime.getValuei())};
+
+                    System.out.println("audio device z: " + lx.engine.audio.input.device.getObject().toString());
+                    String audio_device = lx.engine.audio.input.device.getObject().toString();
+
+                    System.out.println("/Users/aaronopp/anaconda/envs/py36/bin/python " + cmd + py + ".py " + userName + " " + Integer.toString(recorder.runtime.getValuei()) + " " + audio_device);
+                    String[] commandVjRecord = new String[] {"/Users/aaronopp/anaconda/envs/py36/bin/python", cmd + py + ".py", userName, Integer.toString(recorder.runtime.getValuei()), audio_device};
                     ProcessBuilder pbVjRecord = new ProcessBuilder(commandVjRecord);
 
-                    String[] commandSpotify = new String[] {"/Users/aaronopp/anaconda/envs/py36/bin/python", cmd + pyWithSpotify + ".py", userName, Integer.toString(recorder.runtime.getValuei())};
+                    String[] commandSpotify = new String[] {"/Users/aaronopp/anaconda/envs/py36/bin/python", cmd + pyWithSpotify + ".py", userName, Integer.toString(recorder.runtime.getValuei()), audio_device};
                     ProcessBuilder pbSpotify = new ProcessBuilder(commandSpotify);
 
                     String[] commandLogger = new String[] {"processing-java", "--sketch=" + slstudioPath + "/AI_VJ/logger", "--run"};
@@ -72,16 +77,17 @@ public class AiVj extends LXComponent {
                             pbSpotify.redirectError();
                             Process processSpotify = pbSpotify.start();
 
-                            InputStream is = processSpotify.getInputStream();
-                            InputStreamReader isr = new InputStreamReader(is);
-                            BufferedReader br = new BufferedReader(isr);
-                            String line;
-                            while ((line = br.readLine()) != null) {
-                                System.out.println(line);
-                            }
+//                            InputStream is = processSpotify.getInputStream();
+//                            InputStreamReader isr = new InputStreamReader(is);
+//                            BufferedReader br = new BufferedReader(isr);
+//                            String line;
+//                            while ((line = br.readLine()) != null) {
+//                                System.out.println(line);
+//                            }
 
 
-
+// NOT WORKING DEBUG
+                            
 //                            BufferedReader reader =
 //                                new BufferedReader(new InputStreamReader(processSpotify.getInputStream()));
 //                            StringBuilder builder = new StringBuilder();
@@ -107,6 +113,7 @@ public class AiVj extends LXComponent {
 //                            while ((line = br.readLine()) != null) {
 //                                System.out.println(line);
 //                            }
+
 //                            BufferedReader reader =
 //                                new BufferedReader(new InputStreamReader(processDataGeneration.getInputStream()));
 //                            StringBuilder builder = new StringBuilder();

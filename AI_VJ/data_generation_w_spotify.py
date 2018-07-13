@@ -59,17 +59,19 @@ if module_path not in sys.path:
 #############################
 
 
+audio_input_device = sys.argv[3]
+print('aud input: ' + audio_input_device)
 
-sd = set_sounddevices(sd)
-# spotify imports
-sys.path.append('/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/Spotify')
-
-
-scope = 'user-read-playback-state user-read-recently-played'
+set_sounddevices(sd, input_name=audio_input_device)
+print(sd.query_devices())
+sd.default.channels = 1
 
 #############################
 # Initalize spotify web API
 #############################
+
+sys.path.append('/Users/aaronopp/Desktop/SymmetryLabs/winter_sun/SLStudio/AI_VJ/Spotify')
+scope = 'user-read-playback-state user-read-recently-played'
 
 print('\n trying to create spotify data and marry it \n')
 username = sys.argv[1]
@@ -98,9 +100,7 @@ attack_coeff  = 0.5     # attack time factor
 dtype         = float32 # default data type
 block_length  = 1024    # samples
 
-set_sounddevices(sd)
-sd.query_devices()
-sd.default.channels = 1
+
 
 print('default devices', sd.default.device)
 
@@ -169,7 +169,7 @@ AI_VJ_FOLDER = sys.argv[0][:-28]
 
 WEIGHTS_FOLDER = AI_VJ_FOLDER + 'model_weights/v2/'
 TRAINING_DATA_FOLDER = AI_VJ_FOLDER + 'training_data/'
-PROCESSING_OUTPUT = AI_VJ_FOLDER + 'logger/data/out.txt'
+PROCESSING_OUTPUT = AI_VJ_FOLDER + 'logger/data/out.json'
 DATA_FOLDER = TRAINING_DATA_FOLDER + sys.argv[1] + '/'+ str(now.month) + '_'+ str(now.day) + '/'
 
 print(DATA_FOLDER)
@@ -184,7 +184,7 @@ run_test = False
 X_size = int(run_time//2.5) - 3
 #X_size_final = (run_time//5) - 3
 
-mel_size = 938
+mel_size = 626 # 938 is 15 seconds, 626 is 10 sec
 RATE = 16000
 
 i = 0
@@ -287,7 +287,7 @@ with sd.InputStream(samplerate=16000, dtype= np.float32, channels=1, callback=ca
     if os.path.isfile(PROCESSING_OUTPUT):
         copy(PROCESSING_OUTPUT, DATA_FOLDER)
 
-    os.rename(DATA_FOLDER + 'out.txt', DATA_FOLDER + 'logger_training_output_raw_' + time_tag + '.json')
+    os.rename(DATA_FOLDER + 'out.json', DATA_FOLDER + 'logger_training_output_raw_' + time_tag + '.json')
 
 # Call spotify web api and get song metadata!
     if token:

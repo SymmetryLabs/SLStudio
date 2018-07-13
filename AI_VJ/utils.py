@@ -147,22 +147,21 @@ def explore_music_data(X_data, start_row, end_row, vertical_mean=False):
         print('vert mean:', X_data[i].mean(axis=2))
 
 
-def set_sounddevices(sd):
+def set_sounddevices(sd, input_name='Soundflower (2ch)', output_name='Built-in Output'):
     for index, device in enumerate(sd.query_devices()):
     #print device['name']
     #print index
-        if device['name'] == 'Soundflower (2ch)':
-            print('Soundflower 2ch found at index: ', index)
+        if device['name'] == input_name:
+            print(input_name + 'found at index: ', index)
             sd.default.device[0] = index
-        if device['name'] == 'Built-in Output':
-            print('Built-in output found at index: ', index)
+        if device['name'] == output_name:
+            print(output_name + 'found at index: ', index)
             sd.default.device[1] = index
 
     print('\n \n \n')
     print(sd.default.device)
     print(sd.query_devices())
     return sd
-
 
 def encode_classes(class_name, class_names):
     # makes a "one-hot" vector for each class - Multi-class implementation
