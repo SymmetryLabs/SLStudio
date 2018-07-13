@@ -3,31 +3,7 @@
 
 # from utils import *
 from spotify_utils import *
-
-# #import time
-# import time as _time
-# from time import sleep
-# import datetime
-# import os
-# from os.path import isfile
-# import ast
-# from shutil import copyfile, copy
-# import sys
-# from timeit import default_timer as timer
-
-# import numpy as np
-# from numpy import array, random, arange, float32, float64, zeros
-# import pandas as pd
-
-# import librosa
-# import librosa.display
-# from librosa.feature import melspectrogram
-# #import pyaudio
-# #from pyaudio import PyAudio, paContinue, paFloat32
-# import sounddevice as sd
-# function to generate training data for AI VJ
-from utils import *
-
+from utils_slim import set_sounddevices, Buffer, get_mel_spectrogram, send_osc
 
 import time as _time
 import datetime
@@ -39,14 +15,8 @@ import numpy as np
 from numpy import array, random, arange, float32, float64, zeros
 import sounddevice as sd
 
-from collections import Counter
-import pythonosc
 import spotipy
-import spotipy.util as util
-
 from server import block_until_token
-from numpy import nan as Nan
-
 
 import webbrowser
 
@@ -100,54 +70,10 @@ attack_coeff  = 0.5     # attack time factor
 dtype         = float32 # default data type
 block_length  = 1024    # samples
 
-
-
 print('default devices', sd.default.device)
 
 print('current time', _time.time())
 now = datetime.datetime.now()
-
-best_threshold = [ 0.2,  0.1,  0.2,  0.1,  0.4,  0.1 , 0.1,  0.1,  0.1,  0.1 , 0.2 , 0.2,  0.1,  0.2,  0.1,
-  0.1 , 0.3,  0.2 , 0.2 , 0.2 , 0.3 , 0.2 , 0.1 , 0.1 , 0.2 , 0.1 , 0.1,  0.1 , 0.2,  0.6,
-  0.2,  0.2 , 0.1 , 0.2 , 0.1,  0.1,  0.1,  0.1,  0.1,  0.1,  0.1,  0.1,  0.3,  0.2,  0.2,
-  0.5,  0.2,  0.1  ,0.2,  0.1]
-
-top_50 = ['rock', 'pop', 'alternative', 'indie', 'electronic', 'female vocalists',
-    'dance', '00s', 'alternative rock', 'jazz', 'beautiful', 'metal',
-    'chillout', 'male vocalists', 'classic rock', 'soul', 'indie rock',
-    'Mellow', 'electronica', '80s', 'folk', '90s', 'chill', 'instrumental',
-    'punk', 'oldies', 'blues', 'hard rock', 'ambient', 'acoustic', 'experimental',
-    'female vocalist', 'guitar', 'Hip-Hop', '70s', 'party', 'country', 'easy listening',
-    'sexy', 'catchy', 'funk', 'electro' ,'heavy metal', 'Progressive rock',
-    '60s', 'rnb', 'indie pop', 'sad', 'House', 'happy']
-
-color_labels = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'magenta', 'red']
-color_labels_encoding = ['red', 'orange', 'yellow', 'green', 'teal', 'blue', 'purple', 'magenta']
-
-speed_range_scaled = [0, 34, 67, 101]
-speed_labels = ['slow', 'medium', 'fast']
-
-
-speed_unencode = [0.2, 0.5, 0.8]
-color_unencode = [0.0, 0.08, 0.15, 0.35, 0.48, 0.67, 0.76, 0.84]
-
-boundary_range_scaled = np.array([0, 20, 45, 75, 150, 200, 255, 285, 330, 361])
-boundary_range = boundary_range_scaled/360.
-
-patterns_full = ['AskewPlanes', 'Balance', 'Ball', 'BassPod', 'Blank', 'Bubbles', 'CrossSections', 'CubeEQ',
-                 'CubeFlash', 'Noise', 'Palette', 'Pong', 'Rings', 'ShiftingPlane', 'SoundParticles', 'SpaceTime',
-                'Spheres', 'StripPlay', 'Swarm', 'Swim', 'TelevisionStatic', 'Traktor', 'ViolinWave']
-patterns_reduced =  ['AskewPlanes', 'Balance', 'CrossSections', 'CubeEQ',
-                 'CubeFlash', 'Noise', 'Pong', 'Rings', 'ShiftingPlane', 'SoundParticles', 'SpaceTime',
-                'Spheres', 'StripPlay', 'Swarm', 'Swim', 'Traktor', 'ViolinWave']
-
-
-effect_labels = ['low', 'medium', 'high']
-effect_labels_full = [None, 'low', 'medium', 'high']
-brightness_labels = ['off', 'half', 'full']
-
-param_labels = ['Faster', 'Hue Variation', 'Sparkle', 'Crazy', 'Larger']
-param_labels_full = [None, 'Faster', 'Hue Variation', 'Sparkle', 'Crazy', 'Larger']
 
 output_on_osc_route = '/lx/output/enabled'
 
@@ -159,13 +85,13 @@ output_on_osc_route = '/lx/output/enabled'
 
 # Generate data with mel spec size of 15 sec and sample rate of 5 sec
 
-if (len(sys.argv) < 3 or  len(sys.argv) > 3):
+if len(sys.argv) < 3 or  len(sys.argv) > 3:
     print('need 3 args, first is your name, second is run time in min, third is spotify token!')
     sys.exit(1)
 
 AI_VJ_FOLDER = sys.argv[0][:-28]
 
-#print 'ai vj folder: ', AI_VJ_FOLDER
+# print 'ai vj folder: ', AI_VJ_FOLDER
 
 WEIGHTS_FOLDER = AI_VJ_FOLDER + 'model_weights/v2/'
 TRAINING_DATA_FOLDER = AI_VJ_FOLDER + 'training_data/'
@@ -182,7 +108,7 @@ run_time_min = int(sys.argv[2]) # run_time/60
 run_time = run_time_min*60
 run_test = False
 X_size = int(run_time//2.5) - 3
-#X_size_final = (run_time//5) - 3
+# X_size_final = (run_time//5) - 3
 
 mel_size = 626 # 938 is 15 seconds, 626 is 10 sec
 RATE = 16000
@@ -198,13 +124,12 @@ if run_time_min == 1:
     ''')
     run_test = True
 
-
 print('starting to generate training data, running for ', run_time_min , ' minutes!')
-print('x size:' , X_size)
+print('x size:', X_size)
 
 start = _time.time()
 
-x = np.array([],ndmin = 2)
+# x = np.array([],ndmin = 2)
 b = Buffer(duration * RATE)
 print('b read', b.read())
 
@@ -212,8 +137,7 @@ X_test = np.zeros((X_size, 1, 96, mel_size))  # or could be run_time/5 sec
 time_test = np.zeros((X_size))
 
 
-def callback(indata, frames, time, status): #outdata is 5th - when no inputstream
-
+def callback(indata, frames, time, status):  # outdata is 5th - when no inputstream
 
     global i
     global z
@@ -222,11 +146,10 @@ def callback(indata, frames, time, status): #outdata is 5th - when no inputstrea
     if status:
         print(status)
 
-
     b.extend(indata.squeeze())
-    elapsed_time = _time.time()- start
+    elapsed_time = _time.time() - start
 
-    #time.read()
+    # time.read()
 
     if elapsed_time > duration and i % 25 == 0:
         print(i)
@@ -242,6 +165,8 @@ def callback(indata, frames, time, status): #outdata is 5th - when no inputstrea
         z += 1
 
     i += 1
+
+
 with sd.InputStream(samplerate=16000, dtype= np.float32, channels=1, callback=callback):
 
     sd.sleep(int(run_time*1000))
@@ -263,8 +188,6 @@ with sd.InputStream(samplerate=16000, dtype= np.float32, channels=1, callback=ca
         np.save(TRAINING_DATA_FOLDER + 'test/' + 'time_test_scaled_raw_' + str(now.month) + '_'+ str(now.day) + '.npy', time_test_scaled)
 
         sys.exit(1)
-
-
 
     time_tag = str(now_end.hour) + '_' + str(now_end.minute)
 
@@ -295,9 +218,9 @@ with sd.InputStream(samplerate=16000, dtype= np.float32, channels=1, callback=ca
         sp.trace=False
         print(sp.current_user())
         ranges = ['short_term', 'medium_term', 'long_term']
-        #esults = sp.current_user_playing_track()
-        #curr_results = sp.current_playback()
-        #save_spotify_df(token, scope, 'fullspotifytest')
+        # esults = sp.current_user_playing_track()
+        # curr_results = sp.current_playback()
+        # save_spotify_df(token, scope, 'fullspotifytest')
         print('\n \n \n \n \n run time min:', run_time)
         spotify_pipeline(token, scope, time_test_scaled, DATA_FOLDER + 'spotify_data_' + time_tag, data_gen_run_time=run_time_min)
 
@@ -305,8 +228,3 @@ with sd.InputStream(samplerate=16000, dtype= np.float32, channels=1, callback=ca
 
     else:
         print("Can't get token for", username)
-
-
-
-
-#

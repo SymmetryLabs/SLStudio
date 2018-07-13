@@ -87,7 +87,7 @@ public class AiVj extends LXComponent {
 
 
 // NOT WORKING DEBUG
-                            
+
 //                            BufferedReader reader =
 //                                new BufferedReader(new InputStreamReader(processSpotify.getInputStream()));
 //                            StringBuilder builder = new StringBuilder();
