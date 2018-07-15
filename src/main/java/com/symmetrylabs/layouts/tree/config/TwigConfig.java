@@ -40,14 +40,16 @@ public class TwigConfig {
     public float azimuth;
     public float elevation;
     public float tilt;
+    public int index;
 
-    public TwigConfig(float x, float y, float z, float azimuth, float elevation, float tilt) {
+    public TwigConfig(float x, float y, float z, float azimuth, float elevation, float tilt, int index) {
         this.x = x;
         this.y = y;
         this.z = z;
         this.azimuth = azimuth;
         this.elevation = elevation;
         this.tilt = tilt;
+        this.index = index;
     }
 
     public static void setXEnabled(boolean enabled) {
@@ -99,6 +101,6 @@ public class TwigConfig {
     }
 
     public TwigConfig getCopy() {
-        return new TwigConfig(x, y, z, azimuth, elevation, tilt);
+        return new TwigConfig(x, y, z, azimuth, elevation, tilt, index);
     }
 }

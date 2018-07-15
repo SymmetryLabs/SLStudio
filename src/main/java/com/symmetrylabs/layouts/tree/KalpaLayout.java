@@ -28,35 +28,35 @@ public class KalpaLayout extends TreeLayout implements Layout {
     //public final Map<TreeModel.Branch, PixliteOutput> pixliteOutputs = new HashMap<>();
 
     final TwigConfig[] BRANCH_TYPE_A = new TwigConfig[]{
-        new TwigConfig(  16.3f,  0.0f, 0.0f, -61.2f, 0.0f, 0.0f),
-        new TwigConfig(  24.5f, 16.3f, 0.0f, -36.0f, 0.0f, 0.0f),
-        new TwigConfig(  14.4f, 19.2f, 0.0f,  18.0f, 0.0f, 0.0f),
-        new TwigConfig(  -5.7f,  9.5f, 0.0f,  14.4f, 0.0f, 0.0f),
-        new TwigConfig( -37.4f, 10.5f, 0.0f,  28.8f, 0.0f, 0.0f),
-        new TwigConfig( -29.8f, 25.9f, 0.0f,  28.8f, 0.0f, 0.0f),
-        new TwigConfig( -16.3f, 36.5f, 0.0f,   6.8f, 0.0f, 0.0f),
-        new TwigConfig(  0.0f,  37.4f, 0.0f, -32.4f, 0.0f, 0.0f)
+        new TwigConfig( 16.3f,  0.0f, 0.0f, -61.2f, 0.0f, 0.0f, 0),
+        new TwigConfig( 24.5f, 16.3f, 0.0f, -36.0f, 0.0f, 0.0f, 1),
+        new TwigConfig( 14.4f, 19.2f, 0.0f,  18.0f, 0.0f, 0.0f, 2),
+        new TwigConfig( -5.7f,  9.5f, 0.0f,  14.4f, 0.0f, 0.0f, 3),
+        new TwigConfig(-37.4f, 10.5f, 0.0f,  28.8f, 0.0f, 0.0f, 4),
+        new TwigConfig(-29.8f, 25.9f, 0.0f,  28.8f, 0.0f, 0.0f, 5),
+        new TwigConfig(-16.3f, 36.5f, 0.0f,   6.8f, 0.0f, 0.0f, 6),
+        new TwigConfig( 0.0f,  37.4f, 0.0f, -32.4f, 0.0f, 0.0f, 7)
     };
 
     final TwigConfig[] BRANCH_TYPE_B = new TwigConfig[] {
-        new TwigConfig( 14.2f,  3.8f, 0.0f, -57.0f, 0.0f, 0.0f),
-        new TwigConfig(  4.0f, 15.4f, 0.0f,  50.4f, 0.0f, 0.0f),
-        new TwigConfig( 20.2f, 19.3f, 0.0f, -28.8f, 0.0f, 0.0f),
-        new TwigConfig( 11.5f, 24.0f, 0.0f, -28.8f, 0.0f, 0.0f),
-        new TwigConfig(-32.0f,  9.5f, 0.0f,  34.5f, 0.0f, 0.0f),
-        new TwigConfig(-25.0f, 13.4f, 0.0f,   7.2f, 0.0f, 0.0f),
-        new TwigConfig(-18.4f, 34.5f, 0.0f,  39.5f, 0.0f, 0.0f),
-        new TwigConfig(  0.0f, 37.5f, 0.0f,   0.0f, 0.0f, 0.0f)
+        new TwigConfig( 14.2f,  3.8f, 0.0f, -57.0f, 0.0f, 0.0f, 0),
+        new TwigConfig(  4.0f, 15.4f, 0.0f,  50.4f, 0.0f, 0.0f, 1),
+        new TwigConfig( 20.2f, 19.3f, 0.0f, -28.8f, 0.0f, 0.0f, 2),
+        new TwigConfig( 11.5f, 24.0f, 0.0f, -28.8f, 0.0f, 0.0f, 3),
+        new TwigConfig(-32.0f,  9.5f, 0.0f,  34.5f, 0.0f, 0.0f, 4),
+        new TwigConfig(-25.0f, 13.4f, 0.0f,   7.2f, 0.0f, 0.0f, 5),
+        new TwigConfig(-18.4f, 34.5f, 0.0f,  39.5f, 0.0f, 0.0f, 6),
+        new TwigConfig(  0.0f, 37.5f, 0.0f,   0.0f, 0.0f, 0.0f, 7)
     };
 
     final BranchConfig[] LIMB_TYPE_A = new BranchConfig[] {
-        new BranchConfig(-46.8f, 33.0f, -10.8f,  32.4f,  0.0f, -10.8f, BRANCH_TYPE_A),
-        new BranchConfig(-72.0f,  0.0f,   0.0f,  46.8f,  0.0f, -14.4f, BRANCH_TYPE_B),
-        new BranchConfig(  0.0f, 57.0f, -14.4f,  21.6f,  0.0f, -14.4f, BRANCH_TYPE_A),
-        new BranchConfig( 50.4f, 61.5f, -17.3f, -21.6f,  0.0f, -14.4f, BRANCH_TYPE_B),
-        new BranchConfig(104.4f, 45.0f, -14.4f, -36.0f, -7.2f, -14.4f, BRANCH_TYPE_A),
-        new BranchConfig(  0.0f,  9.0f,   0.0f,  25.2f,  0.0f,   7.2f, BRANCH_TYPE_B),
-        new BranchConfig( 46.8f,  9.0f,   0.0f, -18.0f,  0.0f,  14.4f, BRANCH_TYPE_A)
+        new BranchConfig(false, -46.8f, 33.0f, -10.8f,  32.4f,  0.0f, -10.8f, BRANCH_TYPE_A),
+        new BranchConfig(false, -72.0f,  0.0f,   0.0f,  46.8f,  0.0f, -14.4f, BRANCH_TYPE_B),
+        new BranchConfig(false,   0.0f, 57.0f, -14.4f,  21.6f,  0.0f, -14.4f, BRANCH_TYPE_A),
+        new BranchConfig(false,  50.4f, 61.5f, -17.3f, -21.6f,  0.0f, -14.4f, BRANCH_TYPE_B),
+        new BranchConfig(false, 104.4f, 45.0f, -14.4f, -36.0f, -7.2f, -14.4f, BRANCH_TYPE_A),
+        new BranchConfig(false,   0.0f,  9.0f,   0.0f,  25.2f,  0.0f,   7.2f, BRANCH_TYPE_B),
+        new BranchConfig(false,  46.8f,  9.0f,   0.0f, -18.0f,  0.0f,  14.4f, BRANCH_TYPE_A)
     };
 
     @Override
@@ -71,13 +71,13 @@ public class KalpaLayout extends TreeLayout implements Layout {
 
         TreeConfig config = new TreeConfig(new LimbConfig[] {
             // bottom
-            new LimbConfig(0, 6*FEET, 1*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 2*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 3*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 4*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 5*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 6*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 7*45, -90, 0, LIMB_TYPE_A)
+            new LimbConfig(false, 0, 6*FEET, 1*45, -90, 0, LIMB_TYPE_A),
+            new LimbConfig(false, 0, 6*FEET, 2*45, -90, 0, LIMB_TYPE_A),
+            new LimbConfig(false, 0, 6*FEET, 3*45, -90, 0, LIMB_TYPE_A),
+            new LimbConfig(false, 0, 6*FEET, 4*45, -90, 0, LIMB_TYPE_A),
+            new LimbConfig(false, 0, 6*FEET, 5*45, -90, 0, LIMB_TYPE_A),
+            new LimbConfig(false, 0, 6*FEET, 6*45, -90, 0, LIMB_TYPE_A),
+            new LimbConfig(false, 0, 6*FEET, 7*45, -90, 0, LIMB_TYPE_A)
             // // middle
             // new LimbConfig(0, 6*FEET, 0*120, -65, LIMB_TYPE_A),
             // new LimbConfig(0, 6*FEET, 1*120, -65, LIMB_TYPE_A),

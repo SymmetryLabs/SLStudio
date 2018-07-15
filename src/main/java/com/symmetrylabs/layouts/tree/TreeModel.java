@@ -321,9 +321,8 @@ public class TreeModel extends SLModel {
                 this.y = t.y();
                 this.z = t.z();
 
-                int i = 1;
                 for (TwigConfig twigConfig : config.getTwigs()) {
-                    Twig twig = new Twig(i++, t, twigConfig);
+                    Twig twig = new Twig(t, twigConfig);
                     twigs.add(twig);
 
                     for (LXPoint p : twig.points) {
@@ -383,13 +382,13 @@ public class TreeModel extends SLModel {
           }
         }
 
-        public Twig(int index, LXTransform t, TwigConfig config) {
+        public Twig(LXTransform t, TwigConfig config) {
             super(new Fixture(t, config));
             this.config = config;
             this.azimuth = config.azimuth;
             this.elevation = config.elevation;
             this.tilt = config.tilt;
-            this.index = index;
+            this.index = config.index;
 
             Fixture f = (Fixture) this.fixtures.get(0);
             this.leaves = Collections.unmodifiableList(f.leaves);

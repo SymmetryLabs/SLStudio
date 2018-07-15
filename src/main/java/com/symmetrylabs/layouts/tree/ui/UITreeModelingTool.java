@@ -45,7 +45,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
     private final TwigControls twigControls;
 
     public UITreeModelingTool(UI ui, TreeModelingTool modelingTool, float x, float y, float w) {
-        super(ui, x, y, w, 613);
+        super(ui, x, y, w, 700);
         this.ui = ui;
         this.modelingTool = modelingTool;
         setTitle("TREE MODEL           (Use 'TreeModelingPattern')");
@@ -57,7 +57,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
         this.branchControls = new BranchControls(ui,4, 200, getContentWidth(), 285, modelingTool.branchManipulator);
         addTopLevelComponent(branchControls);
 
-        this.twigControls = new TwigControls(ui,4, 485, getContentWidth(), 125, modelingTool.twigManipulator);
+        this.twigControls = new TwigControls(ui,4, 485, getContentWidth(), 175, modelingTool.twigManipulator);
         addTopLevelComponent(twigControls);
 
         modelingTool.selectedLimb.addListener(parameter -> {
@@ -72,6 +72,10 @@ public class UITreeModelingTool extends UICollapsibleSection {
         });
     }
 
+    private void redrawWindow() {
+        redraw();
+    }
+
     private void updateBranchControl() {
         List<BranchItem> items = modelingTool.getSelectedLimb().getBranches().stream()
             .map(branch -> new BranchItem(branch)).collect(Collectors.toList());
@@ -80,6 +84,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
 
     private class LimbControls extends UI2dContainer {
         public final UIItemList.ScrollList limbs;
+        private final UIKnobsPanel knobsPanel;
 
         private LimbControls(UI ui, float x, float y, float w, float h, TreeModelingTool.LimbManipulator manipulator) {
             super(x, y, w, h);
@@ -90,8 +95,16 @@ public class UITreeModelingTool extends UICollapsibleSection {
             setChildMargin(5);
             setPadding(5);
 
-            new UILabel(0, 0, w, 15).setLabel("Limbs")
-                .setPadding(0, 5).addToContainer(this);
+            new UILabel(0, 0, w, 15)
+                .setLabel("Limbs")
+                .setPadding(0, 5)
+                .addToContainer(this);
+
+            new UIButton(getContentWidth()-40, 5, 35, 15)
+                .setParameter(manipulator.locked)
+                .setActiveColor((LXColor.scaleBrightness(LXColor.RED, 0.35f)))
+                .setLabel("lock")
+                .addToContainer(this);
 
             this.limbs = new UIItemList.ScrollList(ui, 0, 25, w, 100);
             limbs.setSingleClickActivate(true);
@@ -100,19 +113,37 @@ public class UITreeModelingTool extends UICollapsibleSection {
                 .map(limb -> new LimbItem(limb)).collect(Collectors.toList())
             );
 
-            new UIKnobsPanel(6, LIST_HEIGHT-20, getContentWidth()-12, KNOB_HEIGHT, manipulator).addToContainer(this);
+            this.knobsPanel = new UIKnobsPanel(6, LIST_HEIGHT-20, getContentWidth()-12, KNOB_HEIGHT, manipulator);
+            knobsPanel.addToContainer(this);
+
+            manipulator.locked.addListener(parameter -> {
+                boolean locked = ((BooleanParameter)parameter).isOn();
+                knobsPanel.length.setEnabled(!locked);
+                knobsPanel.height.setEnabled(!locked);
+                knobsPanel.azimuth.setEnabled(!locked);
+                knobsPanel.elevation.setEnabled(!locked);
+                modelingTool.branchManipulator.locked.setValue(locked);
+                redrawWindow();
+            });
         }
 
         private class UIKnobsPanel extends UI2dContainer {
+            protected final UIKnob length;
+            protected final UIKnob height;
+            protected final UIKnob azimuth;
+            protected final UIKnob elevation;
+
             UIKnobsPanel(float x, float y, float w, float h, TreeModelingTool.LimbManipulator manipulator) {
                 super(x, y, w, h);
 
-                new UIKnob(manipulator.length)
+                this.length = new UIKnob(manipulator.length);
+                length.setEnabled(!manipulator.locked.isOn())
                     .setPosition(KNOB_WIDTH*0, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.height)
+                this.height = new UIKnob(manipulator.height);
+                height.setEnabled(!manipulator.locked.isOn())
                     .setPosition(KNOB_WIDTH*1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
@@ -121,12 +152,14 @@ public class UITreeModelingTool extends UICollapsibleSection {
                     .setBackgroundColor(ui.theme.getDarkBackgroundColor())
                     .addToContainer(this);
 
-                new UIKnob(manipulator.azimuth)
+                this.azimuth = new UIKnob(manipulator.azimuth);
+                azimuth.setEnabled(!manipulator.locked.isOn())
                     .setPosition(KNOB_WIDTH*2+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.elevation)
+                this.elevation = new UIKnob(manipulator.elevation);
+                elevation.setEnabled(!manipulator.locked.isOn())
                     .setPosition(KNOB_WIDTH*3+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
@@ -137,6 +170,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
     private class BranchControls extends UI2dContainer {
         private final TreeModelingTool.BranchManipulator manipulator;
         public final UIItemList.ScrollList branches;
+        private final UIKnobsPanel knobsPanel;
 
         private BranchControls(UI ui, float x, float y, float w, float h, TreeModelingTool.BranchManipulator manipulator) {
             super(x, y, w, h);
@@ -152,6 +186,12 @@ public class UITreeModelingTool extends UICollapsibleSection {
             new UILabel(0, 0, w, 15).setLabel("Branches")
                 .setPadding(0, 5).addToContainer(this);
 
+            new UIButton(getContentWidth()-40, 5, 35, 15)
+                .setParameter(manipulator.locked)
+                .setActiveColor((LXColor.scaleBrightness(LXColor.RED, 0.35f)))
+                .setLabel("lock")
+                .addToContainer(this);
+
             this.branches = new UIItemList.ScrollList(ui, 0, 23, w, 100);
             branches.setSingleClickActivate(true);
             branches.addToContainer(this);
@@ -165,9 +205,23 @@ public class UITreeModelingTool extends UICollapsibleSection {
 
             new UILabel(7, 202, getContentWidth(), 18)
                 .setLabel("Configuration").addToContainer(this);
-            new UIKnobsPanel(5, 235, getContentWidth()-12, KNOB_HEIGHT).addToContainer(this);
+
+            this.knobsPanel = new UIKnobsPanel(5, 235, getContentWidth()-12, KNOB_HEIGHT);
+            knobsPanel.addToContainer(this);
 
             new UIDropMenu(130, 207, 110, 18, manipulator.type).addToContainer(this);
+
+            manipulator.locked.addListener(parameter -> {
+                boolean locked = ((BooleanParameter)parameter).isOn();
+                knobsPanel.xPosition.setEnabled(!locked);
+                knobsPanel.yPosition.setEnabled(!locked);
+                knobsPanel.zPosition.setEnabled(!locked);
+                knobsPanel.azimuth.setEnabled(!locked);
+                knobsPanel.elevation.setEnabled(!locked);
+                knobsPanel.tilt.setEnabled(!locked);
+                modelingTool.twigManipulator.locked.setValue(locked);
+                redrawWindow();
+            });
         }
 
         private class UINetworkPanel extends UI2dContainer {
@@ -202,23 +256,30 @@ public class UITreeModelingTool extends UICollapsibleSection {
         }
 
         private class UIKnobsPanel extends UI2dContainer {
+            protected final UIKnob xPosition;
+            protected final UIKnob yPosition;
+            protected final UIKnob zPosition;
+            protected final UIKnob azimuth;
+            protected final UIKnob elevation;
+            protected final UIKnob tilt;
+
             UIKnobsPanel(float x, float y, float w, float h) {
                 super(x, y, w, h);
 
-                new UIKnob(manipulator.xPosition)
-                    .setEnabled(BranchConfig.isXEnabled())
+                this.xPosition = new UIKnob(manipulator.xPosition);
+                xPosition.setEnabled(BranchConfig.isXEnabled())
                     .setPosition(KNOB_WIDTH*0, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.yPosition)
-                    .setEnabled(BranchConfig.isYEnabled())
+                this.yPosition = new UIKnob(manipulator.yPosition);
+                yPosition.setEnabled(BranchConfig.isYEnabled())
                     .setPosition(KNOB_WIDTH*1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.zPosition)
-                    .setEnabled(BranchConfig.isZEnabled())
+                this.zPosition = new UIKnob(manipulator.zPosition);
+                zPosition.setEnabled(BranchConfig.isZEnabled())
                     .setPosition(KNOB_WIDTH*2, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
@@ -227,20 +288,20 @@ public class UITreeModelingTool extends UICollapsibleSection {
                     .setBackgroundColor(ui.theme.getDarkBackgroundColor())
                     .addToContainer(this);
 
-                new UIKnob(manipulator.azimuth)
-                    .setEnabled(BranchConfig.isAzimuthEnabled())
+                this.azimuth = new UIKnob(manipulator.azimuth);
+                azimuth.setEnabled(BranchConfig.isAzimuthEnabled())
                     .setPosition(KNOB_WIDTH*3+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.elevation)
-                    .setEnabled(BranchConfig.isElevationEnabled())
+                this.elevation = new UIKnob(manipulator.elevation);
+                elevation.setEnabled(BranchConfig.isElevationEnabled())
                     .setPosition(KNOB_WIDTH*4+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.tilt)
-                    .setEnabled(BranchConfig.isTiltEnabled())
+                this.tilt = new UIKnob(manipulator.tilt);
+                tilt.setEnabled(BranchConfig.isTiltEnabled())
                     .setPosition(KNOB_WIDTH*5+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
@@ -250,6 +311,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
 
     private class TwigControls extends UI2dContainer {
         private final TreeModelingTool.TwigManipulator manipulator;
+        private final UIKnobsPanel knobsPanel;
 
         private TwigControls(UI ui, float x, float y, float w, float h, TreeModelingTool.TwigManipulator manipulator) {
             super(x, y, w, h);
@@ -272,43 +334,69 @@ public class UITreeModelingTool extends UICollapsibleSection {
                 .setPadding(0, 5)
                 .addToContainer(this);
 
-            new UILabel(0, 23, getContentWidth()/2, 14)
+            new UIToggleSet(0, 23, getContentWidth(), 30)
+                .setParameter(modelingTool.selectedTwig)
+                .addToContainer(this);
+
+            new UILabel(0, 60, 50, 15).setLabel("Index")
+                .setPadding(0, 5)
+                .addToContainer(this);
+
+            new UILabel(0, 79, getContentWidth()/2, 14)
                 .setLabel("A")
                 .setTextAlignment(CENTER, CENTER)
                 .setBackgroundColor(LXColor.scaleBrightness(LXColor.RED, 0.35f))
                 .addToContainer(this);
 
-            new UILabel(getContentWidth()/2, 23, getContentWidth()/2, 14)
+            new UILabel(getContentWidth()/2, 79, getContentWidth()/2, 14)
                 .setLabel("B")
                 .setTextAlignment(CENTER, CENTER)
                 .setBackgroundColor(LXColor.scaleBrightness(LXColor.BLUE, 0.35f))
                 .addToContainer(this);
 
-            new UIToggleSet(0, 37, getContentWidth(), 30)
-                .setParameter(modelingTool.selectedTwig)
+            new UIToggleSet(0, 92, getContentWidth(), 30)
+                .setParameter(manipulator.index)
                 .addToContainer(this);
 
-            new UIKnobsPanel(6, 75, getContentWidth()-12, KNOB_HEIGHT).addToContainer(this);
+            this.knobsPanel = new UIKnobsPanel(6, 130, getContentWidth()-12, KNOB_HEIGHT);
+            knobsPanel.addToContainer(this);
+
+            manipulator.locked.addListener(parameter -> {
+                boolean locked = ((BooleanParameter) parameter).isOn();
+                knobsPanel.xPosition.setEnabled(!locked);
+                knobsPanel.yPosition.setEnabled(!locked);
+                knobsPanel.zPosition.setEnabled(!locked);
+                knobsPanel.azimuth.setEnabled(!locked);
+                knobsPanel.elevation.setEnabled(!locked);
+                knobsPanel.tilt.setEnabled(!locked);
+            });
         }
 
         private class UIKnobsPanel extends UI2dContainer {
+            protected final UIKnob xPosition;
+            protected final UIKnob yPosition;
+            protected final UIKnob zPosition;
+            protected final UIKnob azimuth;
+            protected final UIKnob elevation;
+            protected final UIKnob tilt;
+
             UIKnobsPanel(float x, float y, float w, float h) {
                 super(x, y, w, h);
 
-                new UIKnob(manipulator.xPosition)
-                    .setEnabled(TwigConfig.isXEnabled())
+                this.xPosition = new UIKnob(manipulator.xPosition);
+                xPosition.setEnabled(TwigConfig.isXEnabled())
                     .setPosition(KNOB_WIDTH*0, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.yPosition)
-                    .setEnabled(TwigConfig.isYEnabled())
+                this.yPosition = new UIKnob(manipulator.yPosition);
+                yPosition.setEnabled(TwigConfig.isYEnabled())
                     .setPosition(KNOB_WIDTH*1 * 1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.zPosition)
-                    .setEnabled(TwigConfig.isZEnabled())
+                this.zPosition = new UIKnob(manipulator.zPosition);
+                zPosition.setEnabled(TwigConfig.isZEnabled())
                     .setPosition(KNOB_WIDTH*2, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
@@ -317,20 +405,20 @@ public class UITreeModelingTool extends UICollapsibleSection {
                     .setBackgroundColor(ui.theme.getDarkBackgroundColor())
                     .addToContainer(this);
 
-                new UIKnob(manipulator.azimuth)
-                    .setEnabled(TwigConfig.isAzimuthEnabled())
+                this.azimuth = new UIKnob(manipulator.azimuth);
+                azimuth.setEnabled(TwigConfig.isAzimuthEnabled())
                     .setPosition(KNOB_WIDTH*3+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.elevation)
-                    .setEnabled(TwigConfig.isElevationEnabled())
+                this.elevation = new UIKnob(manipulator.elevation);
+                elevation.setEnabled(TwigConfig.isElevationEnabled())
                     .setPosition(KNOB_WIDTH*4+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
 
-                new UIKnob(manipulator.tilt)
-                    .setEnabled(TwigConfig.isTiltEnabled())
+                this.tilt = new UIKnob(manipulator.tilt);
+                tilt.setEnabled(TwigConfig.isTiltEnabled())
                     .setPosition(KNOB_WIDTH*5+1, 0)
                     .setSize(KNOB_WIDTH, KNOB_HEIGHT)
                     .addToContainer(this);
@@ -347,7 +435,8 @@ public class UITreeModelingTool extends UICollapsibleSection {
         }
 
         public String getLabel() {
-            return "Limb #" + modelingTool.tree.getLimbs().indexOf(limb);
+            String isLocked = limb.getConfig().locked ? " (LOCKED)" : "";
+            return "Limb #" + modelingTool.tree.getLimbs().indexOf(limb) + isLocked;
         }
 
         public boolean isSelected() {
@@ -380,10 +469,11 @@ public class UITreeModelingTool extends UICollapsibleSection {
         }
 
         public String getLabel() {
+            String isLocked = branch.getConfig().locked ? " (LOCKED)" : "";
             int index = modelingTool.getSelectedLimb().getBranches().indexOf(branch);
             String ipAddress = branch.getConfig().ipAddress;
             int output = branch.getConfig().channel;
-            return (index+1) + "/  (ip: " + ipAddress + ")  [ch: " + output + "]";//  {type: custom}";
+            return (index+1) + "/  (ip: " + ipAddress + ")  [ch: " + output + "]" + isLocked;
         }
 
         public boolean isSelected() {

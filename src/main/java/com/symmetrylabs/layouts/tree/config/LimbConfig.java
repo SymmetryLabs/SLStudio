@@ -28,6 +28,7 @@ public class LimbConfig {
     public static final float MAX_ELEVATION =  180;
     public static boolean elevationEnabled = true;
 
+    public boolean locked;
     public float length;
     public float height;
     public float azimuth;
@@ -35,7 +36,8 @@ public class LimbConfig {
     public float tilt;
     private BranchConfig[] branches;
 
-    public LimbConfig(float length, float height, float azimuth, float elevation, float tilt, BranchConfig[] branches) {
+    public LimbConfig(boolean locked, float length, float height, float azimuth, float elevation, float tilt, BranchConfig[] branches) {
+        this.locked = locked;
         this.length = length;
         this.height = height;
         this.azimuth = azimuth;
