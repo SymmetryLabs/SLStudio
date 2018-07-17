@@ -189,8 +189,10 @@ public class SLStudioLX extends P3LX {
                                 axes.toggleVisible();
                                 break;
                             case VK_I:
-                                toggleSidebars();
-                                performanceManager.gui.moveWindows(sidebarsVisible);
+                                if (performanceManager.performanceModeInitialized.getValueb()) {
+                                    toggleSidebars();
+                                    performanceManager.gui.moveWindows(sidebarsVisible);
+                                }
                                 break;
                             case VK_SLASH:
                                 toggleHelpBar = true;

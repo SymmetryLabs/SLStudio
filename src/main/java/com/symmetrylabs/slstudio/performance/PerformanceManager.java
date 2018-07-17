@@ -62,9 +62,11 @@ public class PerformanceManager extends LXComponent {
             for (Class<? extends LXPattern> c : available) {
                 if (!inUse.contains(c.getCanonicalName())) {
                     LXPattern pat = lx.instantiatePattern(c);
-                    if (pat != null) {
+                    // stupid hack below
+                    if (pat != null && !pat.getLabel().equals("SolidColor")) {
                         try {
                             pat.onInactive();
+
                             channel.addPattern(pat);
                         } catch (Exception e) {
                             System.err.printf("Pattern %s was not safe to add\n", pat.getLabel());
@@ -189,7 +191,8 @@ public class PerformanceManager extends LXComponent {
     }
 
     private void addEffects(LXBus c) {
-        for (int i = 0; i < c.effects.size(); i++) {
+        int nExisting = c.effects.size();
+        for (int i = 0; i < nExisting; i++) {
             c.removeEffect(c.effects.get(0));
         }
 
@@ -272,9 +275,9 @@ public class PerformanceManager extends LXComponent {
             }
         }
 
-        gui.createFaderWindow(decks[0].crossfade, 0);
-        gui.createFaderWindow(lx.engine.crossfader, 1);
-        gui.createFaderWindow(decks[1].crossfade, 2);
+        gui.createFaderWindow(decks[0].crossfade, decks[0].blendMode, 0);
+        gui.createFaderWindow(lx.engine.crossfader, globalParams.blendMode, 1);
+        gui.createFaderWindow(decks[1].crossfade, decks[1].blendMode, 2);
 
         cueState.addListener(new LXParameterListener() {
             @Override
@@ -289,6 +292,21 @@ public class PerformanceManager extends LXComponent {
     }
 
     static private String HIDDEN_PATTERNS_KEY = "hiddenPatterns";
+
+    public boolean isHidden(LXPattern pattern) {
+        return hiddenPatterns.contains(pattern.getLabel());
+    }
+
+    public void toggleHidden(LXPattern pattern) {
+        String k = pattern.getLabel();
+        if (hiddenPatterns.contains(k)) {
+            hiddenPatterns.remove(k);
+        } else {
+            hiddenPatterns.add(k);
+        }
+
+        gui.updateAllPatternLists();
+    }
 
     @Override
     public void save(LX lx, JsonObject obj) {

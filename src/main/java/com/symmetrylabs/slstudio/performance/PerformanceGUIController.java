@@ -1,17 +1,18 @@
 package com.symmetrylabs.slstudio.performance;
 
+import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 
 import java.awt.*;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 import heronarts.lx.LX;
+import heronarts.lx.blend.LXBlend;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.LXPattern;
-import heronarts.lx.parameter.BooleanParameter;
-import heronarts.lx.parameter.LXListenableNormalizedParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.lx.parameter.LXParameterListener;
+import heronarts.lx.parameter.*;
 import heronarts.p3lx.ui.UI;
 import heronarts.p3lx.ui.UIWindow;
 import heronarts.p3lx.ui.component.*;
@@ -22,6 +23,7 @@ import static processing.core.PApplet.println;
 
 import com.symmetrylabs.slstudio.*;
 
+import processing.event.KeyEvent;
 import processing.event.MouseEvent;
 
 public class PerformanceGUIController extends LXComponent{
@@ -76,33 +78,35 @@ public class PerformanceGUIController extends LXComponent{
     }
 
     private Rectangle getFaderCoordinates(int index, boolean sidebarsVisible) {
-        int pad = CHANNEL_WIDTH/2 + 10;
+        float w = CHANNEL_WIDTH * 1.7f;
+        float pad = CHANNEL_WIDTH + 10 - w/2;
         Rectangle rect;
         if (index == 0) {
             rect = getWindowCoordinates(0, sidebarsVisible);
             rect.x += pad;
         } else if (index == 2) {
-            rect = getWindowCoordinates(3, sidebarsVisible);
-            rect.x -= pad;
+            rect = getWindowCoordinates(2, sidebarsVisible);
+            rect.x += pad;
         } else {
             rect = getWindowCoordinates(0, sidebarsVisible);
-            rect.x = ui.applet.width / 2 - (rect.width / 2);
+            rect.x = (int)(ui.applet.width / 2 - (w / 2));
         }
+        rect.width = (int)w;
         rect.y += rect.height + 30;
-        rect.height = 50;
+        rect.height = 73;
         return rect;
     }
 
     public void createGlobalWindow(PerformanceManager pm) {
         int x = ui.applet.width / 2 - CHANNEL_WIDTH / 2;
-        GlobalWindow window = new GlobalWindow(pm, ui, x, 700, CHANNEL_WIDTH, 225);
+        GlobalWindow window = new GlobalWindow(pm, ui, x, 710, CHANNEL_WIDTH, 210);
         ui.addLayer(window);
     }
 
-    public void createFaderWindow(LXListenableNormalizedParameter param, int index) {
+    public void createFaderWindow(LXListenableNormalizedParameter param, ObjectParameter<LXBlend> blendParam, int index) {
         Rectangle rect = getFaderCoordinates(index, false);
 
-        FaderWindow window = new FaderWindow(param, ui, "HI", rect.x, rect.y, rect.width, rect.height);
+        FaderWindow window = new FaderWindow(param, blendParam, ui, "HI", rect.x, rect.y, rect.width, rect.height);
         ui.addLayer(window);
         faderWindows[index] = window;
     }
@@ -140,14 +144,20 @@ public class PerformanceGUIController extends LXComponent{
         }
     }
 
+    public void updateAllPatternLists() {
+        for (ChannelWindow w : channelWindows) {
+            w.updatePatternList();
+        }
+    }
+
+
     public class ChannelWindow extends UIWindow {
         final ArrayList<OverrideLabeledKnob> knobs = new ArrayList();
         final ArrayList<UISwitch> switches = new ArrayList();
         final PerformanceManager pm;
         final PerformanceManager.PerformanceChannel channel;
 
-        UIItemList.ScrollList patternList = null;
-        UIDropMenu dropMenu;
+        PatternList patternList = null;
 
 //        final Listener listener = new Listener();
 
@@ -180,6 +190,7 @@ public class PerformanceGUIController extends LXComponent{
             float afterSwitches = buildSwitches(afterKnobs + 30);
 
             refreshPattern();
+            updatePatternList();
 
 
         }
@@ -187,6 +198,27 @@ public class PerformanceGUIController extends LXComponent{
 
 
 
+        class PatternList extends UIItemList.ScrollList {
+
+            public PatternList(UI ui, float x, float y, float w, float h) {
+                super(ui, x, y, w, h);
+            }
+
+            @Override
+            public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
+                super.onKeyPressed(keyEvent, keyChar, keyCode);
+
+                if (keyChar == 'h') {
+                    PatternItem item = (PatternItem)getFocusedItem();
+                    item.window.pm.toggleHidden(item.pattern);
+                    if (item.isHidden()) {
+                        PatternItem newTop = (PatternItem)(getItems().get(0));
+                        newTop.onActivate();
+                    }
+
+                }
+            }
+        }
 
         class PatternItem extends UIItemList.AbstractItem {
             final LXPattern pattern;
@@ -203,25 +235,37 @@ public class PerformanceGUIController extends LXComponent{
                 return pattern.getLabel();
             }
 
+
+
+
             boolean isSelected() {
                 return false;
             }
 
+            private boolean isHidden() {
+                return channel.manager.isHidden(pattern);
+            }
+
             @Override
             public boolean isActive() {
+                if (isHidden()) {
+                    return true;
+                }
                 return pattern == channel.channel.getActivePattern();
             }
 
             @Override
             public int getActiveColor(UI ui) {
-                return ui.theme.getPrimaryColor();
+                return isHidden() ? LXColor.hsb(0, 100, 20) : ui.theme.getPrimaryColor();
             }
+
 
             @Override
             public void onActivate() {
                 channel.channel.goPattern(pattern);
                 window.refreshPattern();
             }
+
         }
 
 
@@ -274,21 +318,49 @@ public class PerformanceGUIController extends LXComponent{
             return sy + UISwitch.WIDTH;
         }
 
+
         float buildPatternList(float yStart) {
             float w = getWidth();
             int h = 142;
-            patternList = new UIItemList.ScrollList(ui, 4, yStart, w - 8, h);
+            patternList = new PatternList(ui, 4, yStart, w - 8, h);
             patternList.addToContainer(this);
             patternList.setSingleClickActivate(true);
 
+            return yStart + h;
+        }
+
+        void updatePatternList() {
             final List<UIItemList.Item> items = new ArrayList<UIItemList.Item>();
+            ArrayList<LXPattern> visible = new ArrayList<LXPattern>();
+            ArrayList<LXPattern> hidden = new ArrayList<LXPattern>();
+
             for (LXPattern pattern : channel.channel.getPatterns()) {
+                if (channel.manager.isHidden(pattern)) {
+                    hidden.add(pattern);
+                } else {
+                    visible.add(pattern);
+                }
+            }
+
+            Comparator<LXPattern> labelSort = new Comparator<LXPattern>() {
+                @Override
+                public int compare(LXPattern o1, LXPattern o2) {
+                    return o1.getLabel().compareTo(o2.getLabel());
+                }
+            };
+
+            visible.sort(labelSort);
+            hidden.sort(labelSort);
+
+            for (LXPattern pattern : visible) {
+                items.add(new PatternItem(pattern, this));
+            }
+            for (LXPattern pattern : hidden) {
                 items.add(new PatternItem(pattern, this));
             }
             patternList.setItems(items);
-
-            return yStart + h;
         }
+
 
 
 
@@ -334,7 +406,7 @@ public class PerformanceGUIController extends LXComponent{
             OverrideLabeledKnob blurKnob = knobs.get(PARAM_KNOBS + 0);
             OverrideLabeledKnob desatKnob = knobs.get(PARAM_KNOBS + 1);
             OverrideLabeledKnob hueKnob = knobs.get(PARAM_KNOBS + 2);
-            OverrideLabeledKnob cueKnob = knobs.get(PARAM_KNOBS + 3);
+//            OverrideLabeledKnob cueKnob = knobs.get(PARAM_KNOBS + 3);
 
 
 
@@ -347,8 +419,8 @@ public class PerformanceGUIController extends LXComponent{
             hueKnob.setParameter(channel.effectParams.hueShift);
             hueKnob.setOverrideLabel("Hue");
 
-            cueKnob.setParameter(channel.manager.cueState);
-            cueKnob.setOverrideLabel("Cue");
+//            cueKnob.setParameter(channel.manager.cueState);
+//            cueKnob.setOverrideLabel("Cue");
 
         }
 
@@ -380,8 +452,8 @@ public class PerformanceGUIController extends LXComponent{
     class OverrideLabelSlider extends UISlider {
         private String overrideLabel = null;
 
-        OverrideLabelSlider(float x, float y, float w, float h) {
-            super(x, y, w, h);
+        OverrideLabelSlider(UISlider.Direction direction, float x, float y, float w, float h) {
+            super(direction, x, y, w, h);
         }
 
         @Override
@@ -407,14 +479,14 @@ public class PerformanceGUIController extends LXComponent{
         final PerformanceManager pm;
 
         GlobalWindow(PerformanceManager pm, UI ui, float x, float y, float w, float h) {
-            super(ui, "Global Params", x, y, w, h);
+            super(ui, "", x, y, w, h);
 
             this.pm = pm;
 
             int nQ = 7;
             cueButtons = new UIButton[nQ];
 
-            int toggleY = 30;
+            int toggleY = 35;
             int togglePad = 5;
             float toggleWidth = (w - (togglePad * 3)) / 2;
             liveButton = new UIButton(togglePad, toggleY, toggleWidth, 15);
@@ -453,11 +525,17 @@ public class PerformanceGUIController extends LXComponent{
             };
 
             for (int i = 0; i < nSliders; i++) {
-                float sw = w - togglePad*2;
-                float sh = 20;
-                float sx = togglePad;
-                float sy = 50 + i * (sh + 15);
-                OverrideLabelSlider slider = new OverrideLabelSlider(sx, sy, sw, sh);
+//                float sw = w - togglePad*2;
+//                float sh = 20;
+//                float sx = togglePad;
+//                float sy = 50 + i * (sh + 15);
+                float sw = (w - (togglePad * (nSliders + 1))) / nSliders;
+                float sh = 125;
+                float sy = 66;
+
+                float sx =     (togglePad * (i + 1)) + (sw * i);
+
+                OverrideLabelSlider slider = new OverrideLabelSlider(UISlider.Direction.VERTICAL, sx, sy, sw, sh);
                 slider.setOverrideLabel(labels[i]);
                 slider.setParameter(params[i]);
                 slider.addToContainer(this);
@@ -487,14 +565,13 @@ public class PerformanceGUIController extends LXComponent{
             float cueSpacing = (w - (nQ * queueWidth)) / (nQ + 1);
             for (int i = 0; i < nQ; i++) {
                 float qx = (queueWidth * i) + (cueSpacing * (i + 1));
-                float qy = h - queueWidth - 3;
+                float qy = 5; //h - queueWidth - 3;
                 final int j = i;
                 UIButton q = new UIButton(qx, qy, queueWidth, queueWidth) {
                     public void onToggle(boolean on) {
                         if (!on) {
                             return;
                         }
-                        int nEffects = lx.engine.masterChannel.effects.size();
                         pm.cueState.setValue(j);
                     }
                 };
@@ -522,15 +599,24 @@ public class PerformanceGUIController extends LXComponent{
 
     class FaderWindow extends UIWindow {
         final UISlider slider;
+//        final UIDropMenu blendMenu;
+        final UIButtonGroup blendGroup;
 
-        FaderWindow(LXListenableNormalizedParameter param, UI ui, String title, float x, float y, float w, float h) {
+        FaderWindow(LXListenableNormalizedParameter param, ObjectParameter<LXBlend> blendParam, UI ui, String title, float x, float y, float w, float h) {
             super(ui, title, x, y, w, h);
 
             float pad = 5;
-            slider = new UISlider(UISlider.Direction.HORIZONTAL, pad, pad, w - (2 * pad), h - (2 * pad));
+            float sw = w - (2 * pad);
+            float sh = 30;
+            slider = new UISlider(UISlider.Direction.HORIZONTAL, pad, pad, sw, sh);
+            slider.setShowLabel(false);
             slider.addToContainer(this);
-
             slider.setParameter(param);
+
+//            blendMenu = new UIDropMenu(pad, h - (2 * pad) - 20, w - (2 * pad), 20, blendParam);
+             blendGroup = new UIButtonGroup(blendParam, pad, pad + sh + 10, sw, 20);
+            blendGroup.addToContainer(this);
+
 
         }
 
