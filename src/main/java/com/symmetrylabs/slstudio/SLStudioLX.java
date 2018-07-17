@@ -6,6 +6,7 @@ import java.io.File;
 import com.google.gson.JsonObject;
 
 import com.symmetrylabs.layouts.LayoutRegistry;
+import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.*;
 import heronarts.lx.*;
 import heronarts.lx.warp.LXWarp;
@@ -37,7 +38,6 @@ import heronarts.p3lx.ui.studio.modulation.UIModulator;
 
 import com.symmetrylabs.LXClassLoader;
 import com.symmetrylabs.slstudio.pattern.base.SLPattern;
-import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.util.MarkerSource;
 
 import javax.swing.*;
@@ -65,11 +65,14 @@ public class SLStudioLX extends P3LX {
         public final UIAxes axes;
         public final UIMarkerPainter markerPainter;
         public final UICubeMapDebug cubeMapDebug;
+        public PerformanceManager performanceManager = null;
 
         private boolean toggleHelpBar = false;
         private boolean toggleClipView = false;
+        private boolean toggleSidebars = false;
         private boolean clipViewVisible = true;
-        private boolean performanceMode = false;
+        private boolean sidebarsVisible = true;
+
 
         private final LX lx;
 
@@ -85,7 +88,6 @@ public class SLStudioLX extends P3LX {
                 "@-L           Layout selection\n" +
                 "@-M           Modulation source\n" +
                 "@-N           New channel\n" +
-                "@-P           Performance mode\n" +
                 "@-R           Rename channel or pattern\n" +
                 "@-S           Save current project\n" +
                 "@-V           Toggle preview display\n" +
@@ -140,7 +142,6 @@ public class SLStudioLX extends P3LX {
             addLayer(this.helpText);
 
             _toggleClipView();
-            _togglePerformanceMode();
 
             setTopLevelKeyEventHandler(new UIEventHandler() {
                 @Override
@@ -181,14 +182,15 @@ public class SLStudioLX extends P3LX {
                                         lx.engine.mapping.getMode() == mode ?
                                         LXMappingEngine.Mode.OFF : mode);
                                 break;
-                            case VK_P:
-                                togglePerformanceMode();
-                                break;
                             case VK_V:
                                 lx.ui.preview.toggleVisible();
                                 break;
                             case VK_X:
                                 axes.toggleVisible();
+                                break;
+                            case VK_I:
+                                toggleSidebars();
+                                performanceManager.gui.moveWindows(sidebarsVisible);
                                 break;
                             case VK_SLASH:
                                 toggleHelpBar = true;
@@ -367,6 +369,10 @@ public class SLStudioLX extends P3LX {
                 this.toggleClipView = false;
                 _toggleClipView();
             }
+            if (this.toggleSidebars) {
+                this.toggleSidebars = false;
+                _toggleSidebars();
+            }
         }
 
         public boolean isClipViewVisible() {
@@ -384,45 +390,20 @@ public class SLStudioLX extends P3LX {
             return (this.clipViewVisible = !this.clipViewVisible);
         }
 
-        public void togglePerformanceMode() {
-            this.performanceMode = !this.performanceMode;
-            _togglePerformanceMode();
+        public boolean areSidebarsVisible() {
+            return this.sidebarsVisible;
         }
 
-        private void _togglePerformanceMode() {
-            this.leftPane.setVisible(!performanceMode);
-            this.rightPane.setVisible(!performanceMode);
-            if (SLStudio.applet.performanceManager == null) return;
-            for (UIWindow w : SLStudio.applet.performanceManager.deckWindows) {
-                if (w != null) {
-                    w.setVisible(performanceMode);
-                }
+        private void setSidebarsVisible(boolean visible) {
+            if (this.sidebarsVisible != visible) {
+                toggleSidebars();
             }
-            for (UIWindow w : SLStudio.applet.performanceManager.crossfaders) {
-                if (w != null) {
-                    w.setVisible(performanceMode);
-                }
-            }
-
-            if (lx == null || lx.engine == null || lx.engine.midi == null)
-                return;
-
-            // lx.engine.midi.whenReady(new Runnable() {
-            //   public void run() {
-            //     for (final LXMidiSurface s : lx.engine.midi.surfaces) {
-            //       s.enabled.setValue(!performanceMode);
-            //     }
-            //   }
-            // });
-
-            if (performanceMode) {
-                SLStudio.applet.performanceManager.deckWindows[SLStudio.applet.performanceManager.focusedDeskIndexForSide(
-                    PerformanceManager.DeckSide.LEFT)].rebindDeck();
-                SLStudio.applet.performanceManager.deckWindows[SLStudio.applet.performanceManager.focusedDeskIndexForSide(PerformanceManager.DeckSide.RIGHT)].rebindDeck();
-            }
-
         }
 
+        public void toggleSidebars() {
+            this.toggleSidebars = true;
+            sidebarsVisible = !sidebarsVisible;
+        }
 
         @Override
         protected void onResize() {
@@ -471,16 +452,27 @@ public class SLStudioLX extends P3LX {
             reflow();
         }
 
+        private void _toggleSidebars() {
+            leftPane.setVisible(sidebarsVisible);
+            rightPane.setVisible(sidebarsVisible);
+        }
+
         @Override
         public void reflow() {
             float uiWidth = getWidth();
             float uiHeight = getHeight();
             float helpBarHeight = this.helpBar.isVisible() ? UIContextualHelpBar.VISIBLE_HEIGHT : 0;
             float bottomTrayHeight = this.bottomTray.getHeight();
-            float bottomTrayY = Math.max(100, uiHeight - bottomTrayHeight - helpBarHeight);
+
+            float bottomTrayY  = Math.max(100, uiHeight - bottomTrayHeight - helpBarHeight);
+            if (!this.bottomTray.visible.getValueb()) {
+                bottomTrayY += bottomTrayHeight;
+            }
+
             this.bottomTray.setY(bottomTrayY);
             this.bottomTray.setWidth(uiWidth);
             this.bottomTray.reflow();
+
             this.helpBar.setY(uiHeight - helpBarHeight);
             this.helpBar.setWidth(uiWidth);
             this.leftPane.setHeight(bottomTrayY);
@@ -502,7 +494,7 @@ public class SLStudioLX extends P3LX {
 
             this.preview.setSize(
                 Math.max(100, uiWidth - this.leftPane.getWidth() - this.rightPane.getWidth()),
-                Math.max(100, bottomTrayY)
+                Math.max(100, bottomTrayY - 10)
             );
         }
 
@@ -654,12 +646,16 @@ public class SLStudioLX extends P3LX {
     protected void onUIReady(SLStudioLX lx, SLStudioLX.UI ui) { }
 
     @Override
-    protected LXEffect instantiateEffect(final String className) {
+    public LXEffect instantiateEffect(final String className) {
         return super.instantiateEffect(LXClassLoader.guessExistingEffectClassName(className));
     }
 
     @Override
-    protected LXPattern instantiatePattern(final String className) {
+    public LXPattern instantiatePattern(final String className) {
         return super.instantiatePattern(LXClassLoader.guessExistingPatternClassName(className));
+    }
+
+    public LXPattern instantiatePattern(final Class<? extends LXPattern> c) {
+        return super.instantiatePattern(c.getName());
     }
 }

@@ -1,5 +1,8 @@
 package com.symmetrylabs.slstudio.ui;
 
+import com.symmetrylabs.slstudio.SLStudioLX;
+import com.symmetrylabs.slstudio.performance.PerformanceManager;
+import com.symmetrylabs.slstudio.performance.UIStartPerformanceMode;
 import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.LXMappingEngine;
@@ -64,14 +67,18 @@ public class UIOverriddenRightPane extends UIPane {
     }
 
     private void buildUtilityUI() {
+        int yOffset = 0;
+
+        PerformanceManager pm = ((SLStudioLX.UI)ui).performanceManager;
+        UIStartPerformanceMode startPerformance = new UIStartPerformanceMode(ui, pm, 0, yOffset, this.utility.getContentWidth());
+        startPerformance.addToContainer(this.utility);
+        yOffset += startPerformance.getHeight();
+
         if (TreeModelingTool.isTreeLayout()) {
             new UIAnemometer(ui, lx, SLStudio.applet.anemometer, 0, 0, this.utility.getContentWidth(), 500).addToContainer(this.utility);
             SLStudio.applet.uiTreeModelingTool = new UITreeModelingTool(ui, SLStudio.applet.treeModelingTool, 0, 0, this.utility.getContentWidth());
             SLStudio.applet.uiTreeModelingTool.addToContainer(this.utility);
         }
-    }
-
-    private void buildPerformanceUI() {
     }
 
     private void buildMidiUI() {

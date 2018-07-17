@@ -1,354 +1,350 @@
 package com.symmetrylabs.slstudio.performance;
 
+import com.google.gson.JsonArray;
+import com.google.gson.JsonElement;
+import com.google.gson.JsonObject;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
-import heronarts.lx.LX;
-import heronarts.lx.LXChannel;
-import heronarts.lx.LXComponent;
-import heronarts.lx.LXEffect;
-import heronarts.lx.LXEngine;
-import heronarts.lx.midi.remote.LXMidiRemote;
-import heronarts.lx.parameter.BoundedParameter;
-import heronarts.lx.parameter.CompoundParameter;
-import heronarts.lx.parameter.DiscreteParameter;
-import heronarts.lx.parameter.LXListenableNormalizedParameter;
-import heronarts.lx.parameter.LXParameter;
-import heronarts.p3lx.ui.UIWindow;
+import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
+import heronarts.lx.*;
 
-import java.util.List;
 
-import static com.symmetrylabs.slstudio.SLStudio.*;
-import static heronarts.lx.color.LXColor.WHITE;
-import static heronarts.lx.color.LXColor.RED;
-import static processing.core.PApplet.println;
+import heronarts.lx.blend.LXBlend;
+import heronarts.lx.effect.BlurEffect;
+import heronarts.lx.effect.DesaturationEffect;
+import heronarts.lx.parameter.*;
+
+import java.util.*;
+import java.io.*;
 
 
 public class PerformanceManager extends LXComponent {
-    final CompoundParameter lFader = new CompoundParameter("lFader");
-    final CompoundParameter rFader = new CompoundParameter("rFader");
-    public LXListenableNormalizedParameter upL = null;
-    public LXListenableNormalizedParameter downL = null;
-    public LXListenableNormalizedParameter upR = null;
-    public LXListenableNormalizedParameter downR = null;
+
+    public static int CHANNELS_PER_DECK = 2;
+    public static int N_DECKS = 2;
+    public static int N_CHANNELS = CHANNELS_PER_DECK * N_DECKS;
 
 
-    final CompoundParameter lBlur = new CompoundParameter("lBlur");
-    final CompoundParameter rBlur = new CompoundParameter("rBlur");
-    public LXParameter[] blurs = new LXParameter[4];
+    public class PerformanceChannel extends LXComponent {
+        public PerformanceEffectParams effectParams;
+        public int globalIndex;
+        public int indexInDeck;
 
-    final BoundedParameter lColor = new BoundedParameter("lColor", 0, 360);
-    final BoundedParameter rColor = new BoundedParameter("rColor", 0, 360);
-    public LXParameter[] colors = new LXParameter[4];
+        public LXChannel channel;
 
+        public PerformanceDeck deck;
+        public PerformanceManager manager;
 
-    final CompoundParameter lDummy = new CompoundParameter("lDummy");
-    final CompoundParameter rDummy = new CompoundParameter("rDummy");
+        PerformanceChannel(LX lx, PerformanceDeck deck_, int indexInDeck_) {
+            super(lx);
 
-    DiscreteParameter deckOneChannel;
-    DiscreteParameter deckTwoChannel;
-    DiscreteParameter deckThreeChannel;
-    DiscreteParameter deckFourChannel;
+            deck = deck_;
+            manager = deck.manager;
+            globalIndex = (deck.globalIndex * CHANNELS_PER_DECK) + indexInDeck_;
+            indexInDeck = indexInDeck_;
 
-    DiscreteParameter channelSelections[] = new DiscreteParameter[4];
-    public DeckWindow[] deckWindows = new DeckWindow[4];
-    public UIWindow[] crossfaders = new UIWindow[3];
+            int nPatterns = 1;
 
-    int oldDeckL = -1;
-    int oldDeckR = -1;
+            channel = lx.engine.channels.get(globalIndex);
+            effectParams = new PerformanceEffectParams(lx, channel);
 
-    SLStudioLX.UI ui;
-    private LXChannel.CrossfadeGroup oldAB = null;
-
-    private final LX lx;
-
-    class Listener implements LXEngine.Listener {
-        @Override
-        public void channelAdded(LXEngine engine, LXChannel channel) {
-            println("CHANNEL ADDED");
-            setChannelOptions();
+            addNewPatterns();
         }
 
-        @Override
-        public void channelMoved(LXEngine engine, LXChannel channel) {
-            setChannelOptions();
-        }
-
-        @Override
-        public void channelRemoved(LXEngine engine, LXChannel channel) {
-            setChannelOptions();
-        }
-    }
-
-    void setChannelOptions() {
-        List<LXChannel> channels = lx.engine.getChannels();
-        if (channels.size() == 0) return;
-        String[] options = new String[channels.size()];
-        for (int i = 0; i < channels.size(); i++) {
-            options[i] = channels.get(i).getLabel();
-        }
-
-
-        for (int i = 0; i < 4; i++) {
-            DiscreteParameter param = channelSelections[i];
-            DeckWindow w = deckWindows[i];
-            param.setOptions(options);
-            w.dropMenu.setParameter(param);
-        }
-    }
-
-
-    public PerformanceManager(LX lx) {
-        super(lx);
-
-        this.lx = lx;
-
-        lFader.setPolarity(LXParameter.Polarity.BIPOLAR);
-        lFader.addListener(parameter -> propagateLeftFader());
-
-        rFader.setPolarity(LXParameter.Polarity.BIPOLAR);
-        rFader.addListener(parameter -> propagateRightFader());
-
-        lBlur.addListener(parameter -> {
-            if (blurs[0] != null) blurs[0].setValue(lBlur.getValuef());
-            if (blurs[1] != null) blurs[1].setValue(lBlur.getValuef());
-        });
-
-        rBlur.addListener(parameter -> {
-            if (blurs[2] != null) blurs[2].setValue(rBlur.getValuef());
-            if (blurs[3] != null) blurs[3].setValue(rBlur.getValuef());
-        });
-
-        lColor.addListener(parameter -> {
-            println("CHANGED", lColor.getValuef());
-            if (colors[0] != null) colors[0].setValue(lColor.getValuef());
-            if (colors[1] != null) colors[1].setValue(lColor.getValuef());
-        });
-
-        rColor.addListener(parameter -> {
-            if (colors[2] != null) colors[2].setValue(rColor.getValuef());
-            if (colors[3] != null) colors[3].setValue(rColor.getValuef());
-        });
-
-        //  lDummy.addListener(new LXParameterListener() {
-        //      public void onParameterChanged(LXParameter parameter) {
-        //          int mult = 10;
-        //          float v = lDummy.getValuef();
-        //          if (v < 0.1) {
-        //              v *= mult;
-        //              lColor.setValue((lColor.getValuef() + v) % 360);
-        //          }
-        //          if (v > 0.9) {
-        //              v = mult * (1.0 - v);
-        //              float raw = (lColor.getValuef() - v);
-        //              float mod = raw < 0 ? 360 - raw : raw % 360;
-        //              lColor.setValue(raw);
-        //          }
-        //      }
-        //  });
-
-        // rDummy.addListener(new LXParameterListener() {
-        //      public void onParameterChanged(LXParameter parameter) {
-        //          int mult = 10;
-        //          float v = rDummy.getValuef();
-        //          if (v < 0.1) {
-        //              v *= mult;
-        //              rColor.setValue((rColor.getValuef() + v) % 360);
-        //          }
-        //          if (v > 0.9) {
-        //              v = mult * (1.0 - v);
-        //              float raw = (rColor.getValuef() - v);
-        //              float mod = raw < 0 ? 360 - raw : raw % 360;
-        //              rColor.setValue(raw);
-        //          }
-        //      }
-        //  });
-
-
-        channelSelections[0] = deckOneChannel = new DiscreteParameter("deckOneChannel", 100000);
-        channelSelections[1] = deckTwoChannel = new DiscreteParameter("deckTwoChannel", 100000);
-        channelSelections[2] = deckThreeChannel = new DiscreteParameter("deckThreeChannel", 100000);
-        channelSelections[3] = deckFourChannel = new DiscreteParameter("deckFourChannel", 100000);
-
-        for (DiscreteParameter param : channelSelections) {
-            addParameter(param);
-        }
-
-    }
-
-    public void propagateLeftFader() {
-        float v = lFader.getValuef();
-        upL.setValue(1.0 - v);
-        downL.setValue(v);
-    }
-
-    public void propagateRightFader() {
-        float v = rFader.getValuef();
-        upR.setValue(1.0 - v);
-        downR.setValue(v);
-    }
-
-    float getWindowX(int i) {
-        switch (i) {
-            case 0:
-                return 0;
-            case 1:
-                return CHAN_WIDTH + PAD;
-            case 2:
-                return ui.getWidth() - (2 * (CHAN_WIDTH + PAD));
-            case 3:
-                return ui.getWidth() - (CHAN_WIDTH + PAD);
-            default:
-                return 0;
-        }
-    }
-
-
-    void addUI() {
-
-        for (int i = 0; i < 4; i++) {
-            float x = getWindowX(i);
-            DiscreteParameter selection = channelSelections[i];
-            DeckWindow w = new DeckWindow(lx, selection, i, this, ui, "NEVER SEE THIS", x, CHAN_Y, CHAN_WIDTH, CHAN_HEIGHT);
-            ui.addLayer(w);
-            w.setVisible(false);
-            deckWindows[i] = w;
-        }
-
-        float w = (2 * CHAN_WIDTH + PAD) / 2;
-        float h = 50.0f;
-        float y = CHAN_Y + CHAN_HEIGHT;
-
-        FaderWindow fL = new FaderWindow(lFader, ui, "", CHAN_WIDTH / 2f, y, w, h);
-        ui.addLayer(fL);
-        fL.setVisible(false);
-
-        FaderWindow fR = new FaderWindow(rFader, ui, "", ui.getWidth() - CHAN_WIDTH - (w / 2), y, w, h);
-        ui.addLayer(fR);
-        fR.setVisible(false);
-
-        FaderWindow fC = new FaderWindow(lx.engine.crossfader, ui, "", ui.getWidth() / 2 - (w / 2), y, w, h);
-        ui.addLayer(fC);
-        fC.setVisible(false);
-
-        crossfaders[0] = fL;
-        crossfaders[1] = fR;
-        crossfaders[2] = fC;
-    }
-
-    public void start(SLStudioLX.UI ui) {
-        this.ui = ui;
-
-        lx.engine.addListener(new Listener());
-        addUI();
-        setChannelOptions();
-        for (DeckWindow w : deckWindows) {
-            w.start();
-        }
-
-        lFader.addListener(parameter -> swapDecks(lFader, DeckSide.LEFT));
-        rFader.addListener(parameter -> swapDecks(rFader, DeckSide.RIGHT));
-        getLX().engine.crossfader.addListener(parameter -> {
-            swapDecks(rFader, DeckSide.RIGHT);
-            swapDecks(rFader, DeckSide.LEFT);
-        });
-
-        if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-            bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
-            bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
-        }
-
-        SLStudio.applet.apc40Listener.hasRemote.addListener(parameter -> {
-            if (SLStudio.applet.apc40Listener.hasRemote.isOn()) {
-                bindCommon(SLStudio.applet.apc40Listener.remotes[0], lFader, DeckSide.LEFT);
-                bindCommon(SLStudio.applet.apc40Listener.remotes[1], rFader, DeckSide.RIGHT);
+        private void addNewPatterns() {
+            HashSet<String> inUse = new HashSet<String>();
+            for (LXPattern p : channel.patterns) {
+                inUse.add(p.getClass().getCanonicalName());
             }
-        });
 
-        lFader.setValue(0.00001);
-        rFader.setValue(0.00001);
-        propagateLeftFader();
-        propagateRightFader();
+
+            List<Class<? extends LXPattern>> available = lx.getRegisteredPatterns();
+            for (Class<? extends LXPattern> c : available) {
+                if (!inUse.contains(c.getCanonicalName())) {
+                    LXPattern pat = lx.instantiatePattern(c);
+                    if (pat != null) {
+                        try {
+                            pat.onInactive();
+                            channel.addPattern(pat);
+                        } catch (Exception e) {
+                            System.err.printf("Pattern %s was not safe to add\n", pat.getLabel());
+                        }
+
+                    }
+                }
+            }
+        }
+    }
+
+    public class PerformanceDeck extends LXComponent {
+        public PerformanceChannel[] channels;
+        public CompoundParameter crossfade;
+        public ObjectParameter<LXBlend> blendMode;
+        public int globalIndex;
+        public PerformanceManager manager;
+        private float lastCrossfade;
+
+
+        PerformanceDeck(LX lx, PerformanceManager manager_, int globalIndex_) {
+            manager = manager_;
+            globalIndex = globalIndex_;
+
+            channels = new PerformanceChannel[CHANNELS_PER_DECK];
+            for (int i = 0; i < CHANNELS_PER_DECK; i++) {
+                channels[i] = new PerformanceChannel(lx, this, i);
+            }
+
+            crossfade = new CompoundParameter("crossfade", 0);
+            crossfade.setPolarity(LXParameter.Polarity.BIPOLAR);
+            blendMode = channels[CHANNELS_PER_DECK - 1].channel.blendMode;
+            lastCrossfade = crossfade.getValuef();
+
+            lx.engine.addLoopTask(new LXLoopTask() {
+                @Override
+                public void loop(double v) {
+                    if (crossfade.getValuef() != lastCrossfade) {
+                        setChannelFaders();
+                        lastCrossfade = crossfade.getValuef();
+                    }
+                }
+            });
+            setChannelFaders();
+        }
+
+        public void setChannelFaders() {
+            for (int i = 0; i < CHANNELS_PER_DECK; i++) {
+                float cf = crossfade.getValuef();
+                float val = i == 0 ? (1.0f - cf) : cf;
+                channels[i].channel.fader.setValue(val);
+            }
+        }
+    }
+
+    public class PerformanceEffectParams extends LXComponent {
+        public CompoundParameter blur;
+        public CompoundParameter desaturation;
+        public BoundedParameter hueShift;
+
+        PerformanceEffectParams(LX lx, LXBus b) {
+            super(lx);
+
+            blur = new CompoundParameter("Blur", 0);
+            desaturation = new CompoundParameter("Desat", 0);
+//            hueShift = new CompoundParameter("Hue", 0, 0, 360);
+
+            List<LXEffect> effects = b.getEffects();
+            for (LXEffect e : effects) {
+                if (e instanceof BlurEffect) {
+                    blur = ((BlurEffect)e).amount;
+//                    addLink(((BlurEffect)e).amount, blur);
+                }
+                if (e instanceof DesaturationEffect) {
+                    desaturation = (CompoundParameter)((DesaturationEffect)e).getParameter("amount");
+//                    addLink((CompoundParameter)((DesaturationEffect)e).getParameter("amount"), desaturation);
+                }
+                if (e instanceof ColorShiftEffect) {
+                    hueShift = ((ColorShiftEffect)e).shift;
+//                    addLink(((ColorShiftEffect)e).shift, hueShift);
+                }
+            }
+        }
 
     }
 
-    private void updateDeckColors() {
-        double crossfade = getLX().engine.crossfader.getValue();
+    public class PerformanceGlobalParams extends LXComponent {
+        public CompoundParameter crossfade;
+        public ObjectParameter<LXBlend> blendMode;
+        public BoundedParameter brightness;
+        public BoundedParameter speed;
+        public PerformanceEffectParams effectParams;
 
-        deckWindows[0].setBackgroundColor(computeDeckColor(lFader.getValue() < .5f, crossfade < .5f));
-        deckWindows[1].setBackgroundColor(computeDeckColor(lFader.getValue() >= .5f, crossfade < .5f));
 
-        deckWindows[2].setBackgroundColor(computeDeckColor(rFader.getValue() < .5f, crossfade >= .5f));
-        deckWindows[3].setBackgroundColor(computeDeckColor(rFader.getValue() >= .5f, crossfade >= .5f));
+        PerformanceGlobalParams(LX lx) {
+            super(lx);
+            crossfade = lx.engine.crossfader;
+            blendMode = lx.engine.crossfaderBlendMode;
+            brightness = lx.engine.output.brightness;
+            speed = lx.engine.speed;
+            effectParams = new PerformanceEffectParams(lx, lx.engine.masterChannel);
+        }
     }
 
-    private int computeDeckColor(boolean groupActive, boolean abActive) {
-        int color = ui.theme.getDeviceBackgroundColor();
-        if (abActive) color = lerpColor(color, WHITE, .2f, RGB);
-        if (groupActive) color = lerpColor(color, RED, abActive ? .2f : .1f, RGB);
-        return color;
+    public BooleanParameter performanceModeInitialized;
+    public DiscreteParameter cueState;
+    public PerformanceGlobalParams globalParams;
+    public PerformanceDeck[] decks;
+    public PerformanceGUIController gui;
+    private final SLStudioLX lx;
+    public HashSet<String> hiddenPatterns;
+
+    private void setupDecks() {
+        decks = new PerformanceDeck[N_DECKS];
+        for (int i = 0; i < N_DECKS; i++) {
+            decks[i] = new PerformanceDeck(lx, this, i);
+        }
+
+        globalParams = new PerformanceGlobalParams(lx);
+
+
     }
 
-    void swapDecks(CompoundParameter fader, DeckSide side) {
-        int newDeck = focusedDeskIndexForSide(side);
-        int oldDeck = side == DeckSide.LEFT ? oldDeckL : oldDeckR;
-        LXChannel.CrossfadeGroup newAB = getLX().engine.crossfader.getValue() < .5 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
-        if (newDeck != oldDeck || newAB != oldAB)
-            updateDeckColors();
+    private void addEffects(LXBus c) {
+        for (int i = 0; i < c.effects.size(); i++) {
+            c.removeEffect(c.effects.get(0));
+        }
 
-        if (newDeck == oldDeck && newAB == oldAB) {
+        ColorShiftEffect colorShift = new ColorShiftEffect(lx);
+        DesaturationEffect desaturation = new DesaturationEffect(lx);
+        BlurEffect blur = new BlurEffect(lx);
+
+        colorShift.shift.setValue(0);
+        desaturation.getParameter("amount").setValue(0);
+        blur.amount.setValue(0);
+
+        colorShift.enabled.setValue(true);
+        desaturation.enabled.setValue(true);
+        blur.enabled.setValue(true);
+
+        c.addEffect(colorShift);
+        c.addEffect(desaturation);
+        c.addEffect(blur);
+    }
+
+    public void teardownPerformanceMode() {
+        performanceModeInitialized.setValue(false);
+        saveAndRestart();
+    }
+
+    public void initializePerformanceMode() {
+
+        // we need to remove all the existing channels. however, LX won't let us remove the last channel
+        // so, we keep track of how many channels existed before initialization, and remove them after
+        int nExistingChannels = lx.engine.channels.size();
+
+        for (int deckIndex = 0; deckIndex < N_DECKS; deckIndex++) {
+            for (int chanIndex = 0; chanIndex < CHANNELS_PER_DECK; chanIndex++) {
+                LXChannel c = lx.engine.addChannel();
+                addEffects(c);
+
+                c.label.setValue(String.format("D %d C %d", deckIndex + 1, chanIndex + 1));
+
+
+                LXChannel.CrossfadeGroup group = deckIndex == 0 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
+                c.crossfadeGroup.setValue(group);
+
+            }
+        }
+
+        for (int i = 0; i < nExistingChannels; i++) {
+            lx.engine.removeChannel(lx.engine.channels.get(0));
+        }
+
+        addEffects(lx.engine.masterChannel);
+
+        performanceModeInitialized.setValue(true);
+
+        saveAndRestart();
+    }
+
+    private void saveAndRestart() {
+        File proj = lx.getProject();
+        lx.saveProject(proj);
+        lx.applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
+        lx.applet.exit();
+    }
+
+
+    public void start() {
+        if (!performanceModeInitialized.getValueb()) {
             return;
         }
-        oldAB = newAB;
 
+        setupDecks();
+        lx.ui.toggleSidebars();
+        lx.ui.bottomTray.setVisible(false);
+        lx.ui.reflow();
 
-        if (oldDeck != -1) {
-            deckWindows[oldDeck].unbindDeck();
-        }
+        gui = new PerformanceGUIController(lx, lx.ui, this);
 
-        deckWindows[newDeck].bindDeck();
-
-        if (side == DeckSide.LEFT) {
-            oldDeckL = newDeck;
-        } else {
-            oldDeckR = newDeck;
-        }
-    }
-
-    void bindCommon(LXMidiRemote remote, CompoundParameter fader, DeckSide side) {
-        if (remote == null) return;
-        remote.bindController(fader, 0, 15);
-        remote.bindController(lx.engine.output.brightness, 0, 14);
-        LXEffect e = lx.engine.masterChannel.getEffect("Blur");
-        println("REMOTE", remote, lx.engine.masterChannel, e);
-        if (e != null) {
-            remote.bindController(e.getParameter("amount"), 7, 7);
-        }
-        swapDecks(fader, side);
-    }
-
-    public int focusedDeskIndexForSide(DeckSide side) {
-        if (side == DeckSide.LEFT) {
-            return lFader.getValuef() < 0.5 ? 0 : 1;
-        } else {
-            return rFader.getValuef() < 0.5 ? 2 : 3;
-        }
-    }
-
-    public enum DeckSide {
-        LEFT {
-            @Override
-            public boolean isActive(final LX lx) {
-                return lx.engine.crossfader.getValue() < .5;
+        for (PerformanceDeck deck : decks) {
+            for (PerformanceChannel chan : deck.channels) {
+                gui.createChannelWindow(chan);
             }
-        },
+        }
 
-        RIGHT {
+        gui.createFaderWindow(decks[0].crossfade, 0);
+        gui.createFaderWindow(lx.engine.crossfader, 1);
+        gui.createFaderWindow(decks[1].crossfade, 2);
+
+        cueState.addListener(new LXParameterListener() {
             @Override
-            public boolean isActive(final LX lx) {
-                return lx.engine.crossfader.getValue() >= .5;
+            public void onParameterChanged(LXParameter lxParameter) {
+                setCue();
             }
+        });
+        setCue();
+
+        gui.createGlobalWindow(this);
+
+    }
+
+    static private String HIDDEN_PATTERNS_KEY = "hiddenPatterns";
+
+    @Override
+    public void save(LX lx, JsonObject obj) {
+        super.save(lx, obj);
+        JsonArray hidden = new JsonArray();
+        for (String p : hiddenPatterns) {
+            hidden.add(p);
+        }
+
+        obj.add(HIDDEN_PATTERNS_KEY, hidden);
+    }
+
+    @Override
+    public void load(LX lx, JsonObject obj) {
+        super.load(lx, obj);
+
+        if (obj.has(HIDDEN_PATTERNS_KEY)) {
+            for (JsonElement e : obj.getAsJsonArray(HIDDEN_PATTERNS_KEY)) {
+                hiddenPatterns.add(e.getAsString());
+            }
+        }
+    }
+
+    private void setCue() {
+        int cueI = cueState.getValuei();
+        BooleanParameter[] cues = new BooleanParameter[]{
+            decks[0].channels[0].channel.cueActive,
+            lx.engine.cueA,
+            decks[0].channels[1].channel.cueActive,
+            null,
+            decks[1].channels[0].channel.cueActive,
+            lx.engine.cueB,
+            decks[1].channels[1].channel.cueActive,
         };
-
-        public abstract boolean isActive(final LX lx);
+        for (BooleanParameter cue : cues) {
+            if (cue != null) {
+                cue.setValue(false);
+            }
+        }
+        if (cues[cueI] != null) {
+            cues[cueI].setValue(true);
+        }
     }
+
+    public PerformanceManager(SLStudioLX lx_) {
+        super(lx_);
+        lx = lx_;
+
+        performanceModeInitialized = new BooleanParameter("performanceModeInitialized", false);
+        cueState = new DiscreteParameter("cueState", 3, 0, 7);
+
+        addParameter(performanceModeInitialized);
+        addParameter(cueState);
+
+        hiddenPatterns = new HashSet<String>();
+
+    }
+
 }

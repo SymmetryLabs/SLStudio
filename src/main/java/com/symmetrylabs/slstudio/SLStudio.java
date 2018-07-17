@@ -5,6 +5,7 @@ import java.util.Map;
 import com.symmetrylabs.layouts.Layout;
 import com.symmetrylabs.layouts.tree.Anemometer;
 import com.symmetrylabs.slstudio.output.MappingPixlite;
+import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
@@ -16,9 +17,6 @@ import heronarts.lx.parameter.BooleanParameter;
 
 import com.symmetrylabs.slstudio.mappings.Mappings;
 import com.symmetrylabs.slstudio.output.OutputControl;
-import com.symmetrylabs.slstudio.performance.APC40Listener;
-import com.symmetrylabs.slstudio.performance.FoxListener;
-import com.symmetrylabs.slstudio.performance.PerformanceManager;
 import com.symmetrylabs.slstudio.ui.UISpeed;
 import com.symmetrylabs.slstudio.ui.UIFramerateControl;
 import com.symmetrylabs.layouts.tree.ui.UITreeModelingTool;
@@ -32,8 +30,8 @@ import static com.symmetrylabs.util.DistanceConstants.*;
 
 public class SLStudio extends PApplet {
     public static SLStudio applet;
-    static final String LAYOUT_FILE_NAME = ".layout";
-    static final String RESTART_FILE_NAME = ".restart";
+    public static final String LAYOUT_FILE_NAME = ".layout";
+    public static final String RESTART_FILE_NAME = ".restart";
 
     private SLStudioLX lx;
     public Layout layout;
@@ -41,14 +39,13 @@ public class SLStudio extends PApplet {
     private Mappings mappings;
     public OutputControl outputControl;
     public MappingPixlite[] mappingPixlites;
-    public APC40Listener apc40Listener;
-    public PerformanceManager performanceManager;
     private BlobTracker blobTracker;
     public TreeModelingTool treeModelingTool;
     public UITreeModelingTool uiTreeModelingTool = null;
     public UITreeModelAxes uiTreeModelAxes = null;
     public Anemometer anemometer;
     public LX lx_OG;
+    public PerformanceManager performanceManager;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
     public Map<String, int[]> mappingColorsPerPixlite;
@@ -122,13 +119,11 @@ public class SLStudio extends PApplet {
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
 
-                SLStudio.this.apc40Listener = new APC40Listener(lx);
-                new FoxListener(lx);
-
-                // SLStudio.this.performanceManager = new PerformanceManager(lx);
-                // lx.engine.registerComponent("performanceManager", performanceManager);
-
                 blobTracker = BlobTracker.getInstance(lx);
+
+                performanceManager = new PerformanceManager(lx);
+                lx.engine.registerComponent("performanceManager", performanceManager);
+                ui.performanceManager = performanceManager;
 
                 ui.theme.setPrimaryColor(0xff008ba0);
                 ui.theme.setSecondaryColor(0xff00a08b);
@@ -153,6 +148,7 @@ public class SLStudio extends PApplet {
                 }
 
                 layout.setupUi(lx, ui);
+
             }
         };
 
@@ -162,7 +158,7 @@ public class SLStudio extends PApplet {
         lx.engine.output.enabled.setValue(true);
         lx.engine.framesPerSecond.setValue(120);
 
-    //performanceManager.start(lx.ui);
+        performanceManager.start();
 
         long setupFinish = System.nanoTime();
         println("Initialization time: " + ((setupFinish - setupStart) / 1000000) + "ms");
