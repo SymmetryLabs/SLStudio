@@ -13,7 +13,9 @@ import heronarts.lx.blend.LXBlend;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.parameter.*;
+import heronarts.p3lx.ui.studio.project.UIProjectManager;
 
+import javax.swing.*;
 import java.util.*;
 import java.io.*;
 
@@ -249,11 +251,20 @@ public class PerformanceManager extends LXComponent {
         saveAndRestart();
     }
 
-    private void saveAndRestart() {
-        File proj = lx.getProject();
-        lx.saveProject(proj);
+    public void saveToFileAndRestart(final File file) {
+        lx.saveProject(file);
         lx.applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
         lx.applet.exit();
+    }
+
+    private void saveAndRestart() {
+        File proj = lx.getProject();
+        if (proj == null) {
+            lx.applet.selectOutput("Select a file to save to:", "saveToFileAndRestart", lx.applet.saveFile("project.lxp"), PerformanceManager.this);
+            return;
+        }
+        saveToFileAndRestart(proj);
+
     }
 
 

@@ -660,4 +660,13 @@ public class SLStudioLX extends P3LX {
     public LXPattern instantiatePattern(final Class<? extends LXPattern> c) {
         return super.instantiatePattern(c.getName());
     }
+
+    @Override
+    public void newProject() {
+        boolean inPerformance = ui.performanceManager.performanceModeInitialized.getValueb();
+        super.newProject();
+        if (inPerformance) {
+            ui.performanceManager.teardownPerformanceMode();
+        }
+    }
 }

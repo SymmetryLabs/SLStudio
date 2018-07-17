@@ -70,7 +70,7 @@ public class UIOverriddenRightPane extends UIPane {
         int yOffset = 0;
 
         PerformanceManager pm = ((SLStudioLX.UI)ui).performanceManager;
-        UIStartPerformanceMode startPerformance = new UIStartPerformanceMode(ui, pm, 0, yOffset, this.utility.getContentWidth());
+        UIStartPerformanceMode startPerformance = new UIStartPerformanceMode(ui, lx, pm, 0, yOffset, this.utility.getContentWidth());
         startPerformance.addToContainer(this.utility);
         yOffset += startPerformance.getHeight();
 
