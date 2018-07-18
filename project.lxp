@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1531514442065,
+  "timestamp": 1531790447948,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -71,7 +71,7 @@
         "warps": [],
         "effects": [],
         "clips": [],
-        "patternIndex": 5,
+        "patternIndex": 1,
         "patterns": [
           {
             "id": 27,
@@ -89,7 +89,7 @@
             "autoCycleEnabled": false
           },
           {
-            "id": 39,
+            "id": 291,
             "class": "com.symmetrylabs.slstudio.pattern.Noise",
             "modulationColor": -15270144,
             "parameters": {
@@ -105,7 +105,7 @@
               "Speed": 0.55,
               "Symm": 0,
               "Anim": 7,
-              "Dens": 1.0
+              "Dens": 0.6
             },
             "modulation": {
               "modulators": [],
@@ -115,7 +115,7 @@
             "autoCycleEnabled": true
           },
           {
-            "id": 41,
+            "id": 293,
             "class": "com.symmetrylabs.slstudio.pattern.AskewPlanes",
             "modulationColor": -16725761,
             "parameters": {
@@ -310,8 +310,36 @@
       }
     },
     "components": {
+      "GammaExpander": {
+        "id": 33,
+        "class": "com.symmetrylabs.slstudio.component.GammaExpander",
+        "modulationColor": -16711818,
+        "parameters": {
+          "label": "GammaExpander",
+          "ON": true,
+          "GMA": 0,
+          "RGMA": 2.0,
+          "GGMA": 2.2,
+          "BGMA": 2.8
+        }
+      },
+      "treeModelingTool": {},
+      "anemomter": {
+        "id": -1,
+        "class": "com.symmetrylabs.layouts.tree.anemometer.Anemometer",
+        "modulationColor": -15007489,
+        "parameters": {
+          "label": "",
+          "running": true,
+          "trigger": false,
+          "floor": 0.0,
+          "ceil": 60.0,
+          "max": 60.0,
+          "north": 0.0
+        }
+      },
       "outputControl": {
-        "id": 32,
+        "id": 48,
         "class": "com.symmetrylabs.slstudio.output.OutputControl",
         "modulationColor": -65339,
         "parameters": {
@@ -354,12 +382,12 @@
       "clipViewVisible": true,
       "modulatorExpanded": {},
       "preview": {
-        "radius": 453.121487954997,
-        "theta": 0.0,
-        "phi": 0.10800000000000004,
-        "positionX": 312.0,
-        "positionY": 45.75,
-        "positionZ": 71.99998474121094
+        "radius": 253.25969268657562,
+        "theta": -0.01800000000000001,
+        "phi": 0.8100000000000004,
+        "positionX": -47.238067626953125,
+        "positionY": 51.126808166503906,
+        "positionZ": -18.401870727539062
       }
     }
   }

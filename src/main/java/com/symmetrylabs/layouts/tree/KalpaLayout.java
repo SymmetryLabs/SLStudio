@@ -22,6 +22,9 @@ import com.symmetrylabs.layouts.tree.config.*;
 import com.symmetrylabs.slstudio.output.ArtNetDatagram;
 import static com.symmetrylabs.util.DistanceConstants.*;
 
+import com.symmetrylabs.slstudio.output.SimplePixlite;
+import com.symmetrylabs.slstudio.output.PointsGrouping;
+
 
 public class KalpaLayout extends TreeLayout implements Layout {
 
@@ -51,12 +54,12 @@ public class KalpaLayout extends TreeLayout implements Layout {
 
     final BranchConfig[] LIMB_TYPE_A = new BranchConfig[] {
         new BranchConfig(-46.8f, 33.0f, -10.8f,  32.4f,  0.0f, -10.8f, BRANCH_TYPE_A),
-        new BranchConfig(-72.0f,  0.0f,   0.0f,  46.8f,  0.0f, -14.4f, BRANCH_TYPE_B),
-        new BranchConfig(  0.0f, 57.0f, -14.4f,  21.6f,  0.0f, -14.4f, BRANCH_TYPE_A),
-        new BranchConfig( 50.4f, 61.5f, -17.3f, -21.6f,  0.0f, -14.4f, BRANCH_TYPE_B),
-        new BranchConfig(104.4f, 45.0f, -14.4f, -36.0f, -7.2f, -14.4f, BRANCH_TYPE_A),
-        new BranchConfig(  0.0f,  9.0f,   0.0f,  25.2f,  0.0f,   7.2f, BRANCH_TYPE_B),
-        new BranchConfig( 46.8f,  9.0f,   0.0f, -18.0f,  0.0f,  14.4f, BRANCH_TYPE_A)
+//        new BranchConfig(-72.0f,  0.0f,   0.0f,  46.8f,  0.0f, -14.4f, BRANCH_TYPE_B),
+//        new BranchConfig(  0.0f, 57.0f, -14.4f,  21.6f,  0.0f, -14.4f, BRANCH_TYPE_A),
+//        new BranchConfig( 50.4f, 61.5f, -17.3f, -21.6f,  0.0f, -14.4f, BRANCH_TYPE_B),
+//        new BranchConfig(104.4f, 45.0f, -14.4f, -36.0f, -7.2f, -14.4f, BRANCH_TYPE_A),
+//        new BranchConfig(  0.0f,  9.0f,   0.0f,  25.2f,  0.0f,   7.2f, BRANCH_TYPE_B),
+//        new BranchConfig( 46.8f,  9.0f,   0.0f, -18.0f,  0.0f,  14.4f, BRANCH_TYPE_A)
     };
 
     @Override
@@ -72,25 +75,25 @@ public class KalpaLayout extends TreeLayout implements Layout {
         TreeConfig config = new TreeConfig(new LimbConfig[] {
             // bottom
             new LimbConfig(0, 6*FEET, 1*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 2*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 3*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 4*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 5*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 6*45, -90, 0, LIMB_TYPE_A),
-            new LimbConfig(0, 6*FEET, 7*45, -90, 0, LIMB_TYPE_A)
-            // // middle
-            // new LimbConfig(0, 6*FEET, 0*120, -65, LIMB_TYPE_A),
-            // new LimbConfig(0, 6*FEET, 1*120, -65, LIMB_TYPE_A),
-            // new LimbConfig(0, 6*FEET, 2*120, -65, LIMB_TYPE_A),
+//            new LimbConfig(0, 6*FEET, 2*45, -90, 0, LIMB_TYPE_A),
+//            new LimbConfig(0, 6*FEET, 3*45, -90, 0, LIMB_TYPE_A),
+//            new LimbConfig(0, 6*FEET, 4*45, -90, 0, LIMB_TYPE_A),
+//            new LimbConfig(0, 6*FEET, 5*45, -90, 0, LIMB_TYPE_A),
+//            new LimbConfig(0, 6*FEET, 6*45, -90, 0, LIMB_TYPE_A),
+//            new LimbConfig(0, 6*FEET, 7*45, -90, 0, LIMB_TYPE_A)
+                // // middle
+                // new LimbConfig(0, 6*FEET, 0*120, -65, LIMB_TYPE_A),
+                // new LimbConfig(0, 6*FEET, 1*120, -65, LIMB_TYPE_A),
+                // new LimbConfig(0, 6*FEET, 2*120, -65, LIMB_TYPE_A),
 
-            // // top
-            // new LimbConfig(0, 5*FEET, 0*120+60, -35, LIMB_TYPE_B),
-            // new LimbConfig(0, 5*FEET, 1*120+60, -35, LIMB_TYPE_B),
-            // new LimbConfig(0, 5*FEET, 2*120+60, -35, LIMB_TYPE_B),
+                // // top
+                // new LimbConfig(0, 5*FEET, 0*120+60, -35, LIMB_TYPE_B),
+                // new LimbConfig(0, 5*FEET, 1*120+60, -35, LIMB_TYPE_B),
+                // new LimbConfig(0, 5*FEET, 2*120+60, -35, LIMB_TYPE_B),
 
-            // new LimbConfig(0, 5*FEET, 0*120, -25, LIMB_TYPE_B),
-            // new LimbConfig(0, 5*FEET, 1*120, -25, LIMB_TYPE_B),
-            // new LimbConfig(0, 5*FEET, 2*120, -25, LIMB_TYPE_B),
+                // new LimbConfig(0, 5*FEET, 0*120, -25, LIMB_TYPE_B),
+                // new LimbConfig(0, 5*FEET, 1*120, -25, LIMB_TYPE_B),
+                // new LimbConfig(0, 5*FEET, 2*120, -25, LIMB_TYPE_B),
         });
 
         return new TreeModel(config);
@@ -109,6 +112,53 @@ public class KalpaLayout extends TreeLayout implements Layout {
 //                e.printStackTrace();
 //            }
 //        }
+
+        TreeModel.Branch branch = ((TreeModel)lx.model).getBranches().get(0);
+
+        List<LXPoint> pointsA = new ArrayList<>();
+        pointsA.addAll(branch.getTwigs().get(0).getPoints());
+        pointsA.addAll(branch.getTwigs().get(1).getPoints());
+        pointsA.addAll(branch.getTwigs().get(2).getPoints());
+        pointsA.addAll(branch.getTwigs().get(3).getPoints());
+
+        List<LXPoint> pointsB = new ArrayList<>();
+        pointsB.addAll(branch.getTwigs().get(4).getPoints());
+        pointsB.addAll(branch.getTwigs().get(5).getPoints());
+        pointsB.addAll(branch.getTwigs().get(6).getPoints());
+        pointsB.addAll(branch.getTwigs().get(7).getPoints());
+
+        String[] ips = new String[] {
+            //"10.200.1.10",
+            "10.200.1.100", "10.200.1.101", "10.200.1.102", "10.200.1.103", "10.200.1.104",
+            "10.200.1.105", "10.200.1.106", "10.200.1.107", "10.200.1.108", "10.200.1.109"
+        };
+
+        PointsGrouping[] pointsGroupings = new PointsGrouping[] {
+            new PointsGrouping("1",  pointsA),
+            new PointsGrouping("2",  pointsB),
+            new PointsGrouping("3",  pointsA),
+            new PointsGrouping("4",  pointsB),
+            new PointsGrouping("5",  pointsA),
+            new PointsGrouping("6",  pointsB),
+            new PointsGrouping("7",  pointsA),
+            new PointsGrouping("8",  pointsB),
+            new PointsGrouping("9",  pointsA),
+            new PointsGrouping("10", pointsB),
+            new PointsGrouping("11", pointsA),
+            new PointsGrouping("12", pointsB),
+            new PointsGrouping("13", pointsA),
+            new PointsGrouping("14", pointsB),
+            new PointsGrouping("15", pointsA),
+            new PointsGrouping("16", pointsB)
+        };
+
+        for (int i = 0; i < ips.length; i++) {
+            SimplePixlite pixlite = new SimplePixlite(lx, ips[i]);
+            for (int j = 0; j < pointsGroupings.length; j++) {
+                pixlite.addPixliteOutput(pointsGroupings[j]);
+            }
+            lx.addOutput(pixlite);
+        }
     }
 
     @Override
