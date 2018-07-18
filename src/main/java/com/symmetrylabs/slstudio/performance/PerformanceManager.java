@@ -180,6 +180,7 @@ public class PerformanceManager extends LXComponent {
     public PerformanceGUIController gui;
     private final SLStudioLX lx;
     public HashSet<String> hiddenPatterns;
+    public PaletteListener palette;
 
     private void setupDecks() {
         decks = new PerformanceDeck[N_DECKS];
@@ -373,6 +374,10 @@ public class PerformanceManager extends LXComponent {
         addParameter(cueState);
 
         hiddenPatterns = new HashSet<String>();
+
+        palette = new PaletteListener(lx);
+
+
 
     }
 

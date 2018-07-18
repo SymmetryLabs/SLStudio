@@ -105,6 +105,9 @@ dependencies {
 	// https://oss.sonatype.org/content/repositories/snapshots/com/aparapi/aparapi-jni/
 	compile "com.aparapi:aparapi-jni:1.1.3-20180211.063116-7"
 
+	// https://github.com/nyholku/purejavacomm
+	compile "com.github.purejavacomm:purejavacomm:1.0.1.RELEASE"
+
 	// https://github.com/SymmetryLabs/aparapi
 	compile 'com.github.SymmetryLabs:aparapi:b6fffad'
 
