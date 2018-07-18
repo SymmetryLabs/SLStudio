@@ -34,10 +34,10 @@ public class DoubleStrip extends Strip {
         private Fixture(Metrics metrics, LXTransform transform) {
 
             transform.push();
-            transform.translate(0, (float)(metrics.numPoints * metrics.pixelPitch), (float)-metrics.gap / 2);
+            transform.translate(0, 0, (float)-metrics.gap / 2);
 
             for (int i = 0; i < metrics.numPoints; i++) {
-                transform.translate(0, (float)-metrics.pixelPitch, 0);
+                transform.translate(0, (float)metrics.pixelPitch, 0);
                 points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
             }
 
@@ -45,7 +45,7 @@ public class DoubleStrip extends Strip {
 
             for (int i = 0; i < metrics.numPoints; i++) {
                 points.add(new LXPoint(transform.x(), transform.y(), transform.z()));
-                transform.translate(0, (float)metrics.pixelPitch, 0);
+                transform.translate(0, (float)-metrics.pixelPitch, 0);
             }
 
             transform.pop();
