@@ -20,7 +20,6 @@ import static com.symmetrylabs.util.MathConstants.PI;
 //import static com.symmetrylabs.util.MathUtils.cos;
 //import static com.symmetrylabs.util.MathUtils.sin;
 import static java.lang.Math.pow;
-import static jdk.nashorn.internal.objects.NativeMath.random;
 
 import static processing.core.PConstants.ADD;
 
@@ -115,7 +114,7 @@ public class TimPlanes extends LXPattern {//SLPattern<StripsModel<Strip>>  {
         LXVector normalizedPoint = new LXVector(0, 0, 0);
 
         for (LXPoint p : model.points) {
-            if (random(1.0) < derez) {
+            if (MathUtils.random(1.0f) < derez) {
                 continue;
             }
 

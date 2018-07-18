@@ -8,6 +8,7 @@ import heronarts.lx.LX;
 import com.symmetrylabs.layouts.LayoutRegistry;
 import com.symmetrylabs.layouts.tree.TreeModelingTool;
 import com.symmetrylabs.layouts.tree.ui.*;
+import com.symmetrylabs.layouts.tree.anemometer.*;
 import processing.core.PApplet;
 
 import heronarts.lx.model.LXModel;
@@ -47,6 +48,7 @@ public class SLStudio extends PApplet {
     public TreeModelingTool treeModelingTool;
     public UITreeModelingTool uiTreeModelingTool = null;
     public UITreeModelAxes uiTreeModelAxes = null;
+    public Anemometer anemometer;
     public LX lx_OG;
 
     public final BooleanParameter mappingModeEnabled = new BooleanParameter("Mappings");
@@ -108,6 +110,13 @@ public class SLStudio extends PApplet {
                 if (TreeModelingTool.isTreeLayout()) {
                     treeModelingTool = new TreeModelingTool(lx);
                     lx.engine.registerComponent("treeModelingTool", treeModelingTool);
+
+                    anemometer = new Anemometer();
+                    lx.engine.modulation.addModulator(anemometer.speedModulator);
+                    lx.engine.modulation.addModulator(anemometer.directionModulator);
+                    lx.engine.registerComponent("anemomter", anemometer);
+                    lx.engine.addLoopTask(anemometer);
+                    anemometer.start();
                 }
 
                 lx.addOutput(new OPCOutput(lx, "localhost", 11122));

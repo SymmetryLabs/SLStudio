@@ -255,7 +255,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
             super(x, y, w, h);
             this.manipulator = manipulator;
 
-            setBorderColor(0xff888888);
+            setBorderColor(0xff666666);
             setBorderRounding(5);
             setBorderWeight(1);
             setBorder(true);
