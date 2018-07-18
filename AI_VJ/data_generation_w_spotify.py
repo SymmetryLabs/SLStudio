@@ -29,7 +29,16 @@ if module_path not in sys.path:
 #############################
 
 
-audio_input_device = sys.argv[3]
+if len(sys.argv) == 4:
+    audio_input_device = sys.argv[3]
+    print ('audio input device arg found: ', audio_input_device)
+if len(sys.argv) == 3:
+    print ('no audio input device arg found, setting to default (soundflower)')
+    audio_input_device = 'Soundflower (2ch)'
+if len(sys.argv) < 3 or  len(sys.argv) > 4:
+    print('need 2-3 args, first is your name, second is run time in min, third is spotify token!')
+    sys.exit(1)
+
 print('aud input: ' + audio_input_device)
 
 set_sounddevices(sd, input_name=audio_input_device)
@@ -85,9 +94,6 @@ output_on_osc_route = '/lx/output/enabled'
 
 # Generate data with mel spec size of 15 sec and sample rate of 5 sec
 
-if len(sys.argv) < 3 or  len(sys.argv) > 3:
-    print('need 3 args, first is your name, second is run time in min, third is spotify token!')
-    sys.exit(1)
 
 AI_VJ_FOLDER = sys.argv[0][:-28]
 

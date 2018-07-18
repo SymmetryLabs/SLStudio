@@ -13,6 +13,7 @@ import numpy as np
 import librosa
 import librosa.display
 # import sounddevice as sd
+import pythonosc
 from pythonosc import udp_client
 
 from numpy import array, random, arange, float32, float64, zeros
