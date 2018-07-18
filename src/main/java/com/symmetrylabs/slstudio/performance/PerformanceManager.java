@@ -375,7 +375,14 @@ public class PerformanceManager extends LXComponent {
 
         hiddenPatterns = new HashSet<String>();
 
-        palette = new PaletteListener(lx);
+//        Runnable run = new Runnable() {
+//            @Override
+//            public void run() {
+//                palette = new PaletteListener(lx);
+//
+//            }
+//        };
+//        new Thread(run).start();
 
 
 

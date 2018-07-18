@@ -3,6 +3,7 @@ package com.symmetrylabs.slstudio.performance;
 import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.gson.*;
+import com.symmetrylabs.util.dispatch.Dispatcher;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
 import heronarts.lx.parameter.*;
@@ -122,7 +123,13 @@ public class PaletteListener {
                 avg += x;
             }
             avg /= valueQueue.size();
-            smoothValue.setValue(avg);
+            final float s = avg;
+            Dispatcher.getInstance(listener.lx).dispatchEngine(new Runnable() {
+                @Override
+                public void run() {
+                    smoothValue.setValue(s);
+                }
+            });
         }
 
         public void setValues(int[] values) {

@@ -22,9 +22,13 @@ public class ColorShiftEffect extends SLEffect {
     }
 
     public void run(double deltaMs, double enabledAmount) {
-        kernel.colors = colors;
-        kernel.shiftValue = shift.getValuef();
-        kernel.executeForSize(model.points.length);
+//        kernel.colors = colors;
+//        kernel.shiftValue = shift.getValuef();
+//        kernel.executeForSize(model.points.length);
+        float shiftValue = shift.getValuef();
+        for (int i = 0; i < colors.length; i++) {
+            colors[i] = kernel.shiftHue(colors[i], shiftValue);
+        }
     }
 
     final static class ColorShiftKernel extends SLKernel {
