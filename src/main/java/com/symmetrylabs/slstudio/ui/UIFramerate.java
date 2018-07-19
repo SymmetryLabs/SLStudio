@@ -45,9 +45,10 @@ public class UIFramerate extends UI2dContext {
                 using16bit += "E";
             }
             pg.text(String.format(
-                "Engine: %5.1f fps    UI: %5.1f fps    Frame: %4.1fms, avg %4.1fms, max %4.1fms    16-bit: %-8s  Conversions:%2d    (? for help)",
+                "Engine: %5.1f fps    UI: %5.1f fps    Net: %5.1f fps    Frame: %4.1fms, avg %4.1fms, max %4.1fms    16-bit: %-8s  Conversions:%2d    (? for help)",
                 lx.engine.frameRate(),
                 lx.applet.frameRate,
+                lx.engine.network.frameRate(),
                 lx.engine.timer.runCurrentNanos / 1e6,
                 lx.engine.timer.runAvgNanos / 1e6,
                 lx.engine.timer.runWorstNanos / 1e6,
