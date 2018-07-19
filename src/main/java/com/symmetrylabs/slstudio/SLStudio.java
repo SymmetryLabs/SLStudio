@@ -119,15 +119,6 @@ public class SLStudio extends PApplet {
                     anemometer.start();
                 }
 
-                /* Enabling this line will mess up the LX network loop on Windows,
-                 * because Windows takes about 100ms to fail to connect to a
-                 * closed port over UDP. LX will attempt to connect to each output
-                 * on each frame, so that's 100ms spent on each frame to send a
-                 * message to nowhere. If you add this back in, it should go
-                 * behind a check to make sure something's actually listening.
-                lx.addOutput(new OPCOutput(lx, "localhost", 11122));
-                 */
-
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();
