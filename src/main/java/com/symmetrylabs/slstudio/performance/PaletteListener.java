@@ -115,7 +115,7 @@ public class PaletteListener {
         void smoothValue() {
             float v = value.getValuef();
             valueQueue.add(v);
-            if (valueQueue.size() > 5) {
+            if (valueQueue.size() > 2) {
                 valueQueue.removeFirst();
             }
             float avg = 0;
@@ -162,8 +162,15 @@ public class PaletteListener {
 
         @Override
         public void serialEvent(SerialPortEvent event) {
+            long millis = System.currentTimeMillis();
             JsonElement raw = listener.readSerialJSON(serialIndex);
             JsonObject j = raw.getAsJsonObject();
+            long elapsed = System.currentTimeMillis() - millis;
+            System.out.printf("PARSE TOOK %d ms\n", elapsed);
+            if (elapsed > 10) {
+                System.out.println(j.toString());
+            }
+
             if (j.has("in")) {
                 listener.pendingInputs.put(serialIndex, j.get("in").getAsJsonArray());
             } else if (j.has("l")) {
@@ -230,6 +237,7 @@ public class PaletteListener {
             InputStream stream = serials[serialIndex].getInputStream();
             while (true) {
                 char c = (char)stream.read();
+                System.out.print(c);
                 if (objectCount == 0 && c != '{') {
                     continue;
                 }
@@ -280,10 +288,6 @@ public class PaletteListener {
                 traversePalette(serialIndex, el.getAsJsonObject(), found);
             }
         }
-
-    }
-
-    void sendStart() {
 
     }
 
@@ -338,6 +342,9 @@ public class PaletteListener {
             onInput(entry.getKey(), entry.getValue());
         }
         pendingInputs.clear();
+        if (modules == null) {
+            return;
+        }
         for (Module mod : modules.values()) {
             mod.smoothValue();
         }
@@ -369,17 +376,20 @@ public class PaletteListener {
 
             while (true) {
 
-                // Sleep for a while
-                try {
-                    readLoop(serialIndex);
-                    Thread.sleep(10);
-                } catch (InterruptedException e) {
-                    // Interrupted exception will occur if
-                    // the Worker object's interrupt() method
-                    // is called. interrupt() is inherited
-                    // from the Thread class.
-                    break;
-                }
+                readLoop(serialIndex);
+
+
+//                // Sleep for a while
+//                try {
+//                    readLoop(serialIndex);
+////                    Thread.sleep(10);
+//                } catch (InterruptedException e) {
+//                    // Interrupted exception will occur if
+//                    // the Worker object's interrupt() method
+//                    // is called. interrupt() is inherited
+//                    // from the Thread class.
+//                    break;
+//                }
             }
         }
 
@@ -398,7 +408,7 @@ public class PaletteListener {
         pendingInputs = new HashMap<Integer, JsonArray>();
 
         openPorts();
-        //startListeners();
+//        startListeners();
         writeStart();
 
 

@@ -662,6 +662,15 @@ public class SLStudioLX extends P3LX {
     }
 
     @Override
+    public void openProject(File file) {
+        boolean inPerformance = ui.performanceManager.performanceModeInitialized.getValueb();
+        super.openProject(file);
+        if (inPerformance) {
+            ui.performanceManager.restart();
+        }
+    }
+
+    @Override
     public void newProject() {
         boolean inPerformance = ui.performanceManager.performanceModeInitialized.getValueb();
         super.newProject();

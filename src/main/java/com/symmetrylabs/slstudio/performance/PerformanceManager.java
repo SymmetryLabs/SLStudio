@@ -1,24 +1,18 @@
 package com.symmetrylabs.slstudio.performance;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonElement;
-import com.google.gson.JsonObject;
+import com.google.gson.*;
 import com.symmetrylabs.slstudio.SLStudio;
 import com.symmetrylabs.slstudio.SLStudioLX;
 import com.symmetrylabs.slstudio.effect.ColorShiftEffect;
 import heronarts.lx.*;
 
-
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.effect.BlurEffect;
 import heronarts.lx.effect.DesaturationEffect;
 import heronarts.lx.parameter.*;
-import heronarts.p3lx.ui.studio.project.UIProjectManager;
 
-import javax.swing.*;
 import java.util.*;
 import java.io.*;
-
 
 public class PerformanceManager extends LXComponent {
 
@@ -26,6 +20,18 @@ public class PerformanceManager extends LXComponent {
     public static int N_DECKS = 2;
     public static int N_CHANNELS = CHANNELS_PER_DECK * N_DECKS;
 
+    public BooleanParameter performanceModeInitialized;
+    public DiscreteParameter cueState;
+    public PerformanceGlobalParams globalParams;
+    public PerformanceDeck[] decks;
+    public PerformanceGUIController gui;
+    private final SLStudioLX lx;
+    public HashSet<String> hiddenPatterns;
+    public ArrayList<Preset> presets;
+    public PaletteListener palette;
+    public BooleanParameter presetsLoaded;
+
+    public CompoundParameter[] deckCrossfaders;
 
     public class PerformanceChannel extends LXComponent {
         public PerformanceEffectParams effectParams;
@@ -59,7 +65,6 @@ public class PerformanceManager extends LXComponent {
                 inUse.add(p.getClass().getCanonicalName());
             }
 
-
             List<Class<? extends LXPattern>> available = lx.getRegisteredPatterns();
             for (Class<? extends LXPattern> c : available) {
                 if (!inUse.contains(c.getCanonicalName())) {
@@ -73,10 +78,48 @@ public class PerformanceManager extends LXComponent {
                         } catch (Exception e) {
                             System.err.printf("Pattern %s was not safe to add\n", pat.getLabel());
                         }
-
                     }
                 }
             }
+        }
+
+        public ArrayList<LXListenableNormalizedParameter> getKnobParameters() {
+            int maxKnobs = 16;
+            ArrayList<LXListenableNormalizedParameter> params =
+                    new ArrayList<LXListenableNormalizedParameter>();
+
+            Collection<LXParameter> parameters = channel.getActivePattern().getParameters();
+            for (LXParameter param : parameters) {
+                if (!(param instanceof LXListenableNormalizedParameter)) continue;
+
+                if (!(param instanceof BooleanParameter)) {
+                    params.add((LXListenableNormalizedParameter) param);
+                }
+
+                if (params.size() >= maxKnobs) {
+                    break;
+                }
+            }
+            return params;
+        }
+
+        public ArrayList<BooleanParameter> getButtonParameters() {
+            int maxButtons = 16;
+            ArrayList<BooleanParameter> params = new ArrayList<BooleanParameter>();
+
+            Collection<LXParameter> parameters = channel.getActivePattern().getParameters();
+            for (LXParameter param : parameters) {
+                if (!(param instanceof LXListenableNormalizedParameter)) continue;
+
+                if ((param instanceof BooleanParameter)) {
+                    params.add((BooleanParameter) param);
+                }
+
+                if (params.size() >= maxButtons) {
+                    break;
+                }
+            }
+            return params;
         }
     }
 
@@ -84,10 +127,10 @@ public class PerformanceManager extends LXComponent {
         public PerformanceChannel[] channels;
         public CompoundParameter crossfade;
         public ObjectParameter<LXBlend> blendMode;
+        public DiscreteParameter activeChannel;
         public int globalIndex;
         public PerformanceManager manager;
         private float lastCrossfade;
-
 
         PerformanceDeck(LX lx, PerformanceManager manager_, int globalIndex_) {
             manager = manager_;
@@ -98,21 +141,31 @@ public class PerformanceManager extends LXComponent {
                 channels[i] = new PerformanceChannel(lx, this, i);
             }
 
-            crossfade = new CompoundParameter("crossfade", 0);
-            crossfade.setPolarity(LXParameter.Polarity.BIPOLAR);
+            crossfade = manager.deckCrossfaders[globalIndex];
             blendMode = channels[CHANNELS_PER_DECK - 1].channel.blendMode;
             lastCrossfade = crossfade.getValuef();
 
-            lx.engine.addLoopTask(new LXLoopTask() {
-                @Override
-                public void loop(double v) {
-                    if (crossfade.getValuef() != lastCrossfade) {
-                        setChannelFaders();
-                        lastCrossfade = crossfade.getValuef();
-                    }
-                }
-            });
+            activeChannel = new DiscreteParameter("activeChannel", 0, 0, 2);
+
+            lx.engine.addLoopTask(
+                    new LXLoopTask() {
+                        @Override
+                        public void loop(double v) {
+                            if (crossfade.getValuef() != lastCrossfade) {
+                                setChannelFaders();
+                                lastCrossfade = crossfade.getValuef();
+                                setActiveChannel();
+                            }
+                        }
+                    });
             setChannelFaders();
+
+            setActiveChannel();
+        }
+
+        void setActiveChannel() {
+            float val = crossfade.getValuef();
+            activeChannel.setValue(val <= 0.5 ? 0 : 1);
         }
 
         public void setChannelFaders() {
@@ -134,25 +187,25 @@ public class PerformanceManager extends LXComponent {
 
             blur = new CompoundParameter("Blur", 0);
             desaturation = new CompoundParameter("Desat", 0);
-//            hueShift = new CompoundParameter("Hue", 0, 0, 360);
+            //            hueShift = new CompoundParameter("Hue", 0, 0, 360);
 
             List<LXEffect> effects = b.getEffects();
             for (LXEffect e : effects) {
                 if (e instanceof BlurEffect) {
-                    blur = ((BlurEffect)e).amount;
-//                    addLink(((BlurEffect)e).amount, blur);
+                    blur = ((BlurEffect) e).amount;
+                    //                    addLink(((BlurEffect)e).amount, blur);
                 }
                 if (e instanceof DesaturationEffect) {
-                    desaturation = (CompoundParameter)((DesaturationEffect)e).getParameter("amount");
-//                    addLink((CompoundParameter)((DesaturationEffect)e).getParameter("amount"), desaturation);
+                    desaturation = (CompoundParameter) ((DesaturationEffect) e).getParameter("amount");
+                    //                    addLink((CompoundParameter)((DesaturationEffect)e).getParameter("amount"),
+                    // desaturation);
                 }
                 if (e instanceof ColorShiftEffect) {
-                    hueShift = ((ColorShiftEffect)e).shift;
-//                    addLink(((ColorShiftEffect)e).shift, hueShift);
+                    hueShift = ((ColorShiftEffect) e).shift;
+                    //                    addLink(((ColorShiftEffect)e).shift, hueShift);
                 }
             }
         }
-
     }
 
     public class PerformanceGlobalParams extends LXComponent {
@@ -161,7 +214,6 @@ public class PerformanceManager extends LXComponent {
         public BoundedParameter brightness;
         public BoundedParameter speed;
         public PerformanceEffectParams effectParams;
-
 
         PerformanceGlobalParams(LX lx) {
             super(lx);
@@ -173,15 +225,6 @@ public class PerformanceManager extends LXComponent {
         }
     }
 
-    public BooleanParameter performanceModeInitialized;
-    public DiscreteParameter cueState;
-    public PerformanceGlobalParams globalParams;
-    public PerformanceDeck[] decks;
-    public PerformanceGUIController gui;
-    private final SLStudioLX lx;
-    public HashSet<String> hiddenPatterns;
-    public PaletteListener palette;
-
     private void setupDecks() {
         decks = new PerformanceDeck[N_DECKS];
         for (int i = 0; i < N_DECKS; i++) {
@@ -189,8 +232,6 @@ public class PerformanceManager extends LXComponent {
         }
 
         globalParams = new PerformanceGlobalParams(lx);
-
-
     }
 
     private void addEffects(LXBus c) {
@@ -234,10 +275,9 @@ public class PerformanceManager extends LXComponent {
 
                 c.label.setValue(String.format("D %d C %d", deckIndex + 1, chanIndex + 1));
 
-
-                LXChannel.CrossfadeGroup group = deckIndex == 0 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
+                LXChannel.CrossfadeGroup group =
+                        deckIndex == 0 ? LXChannel.CrossfadeGroup.A : LXChannel.CrossfadeGroup.B;
                 c.crossfadeGroup.setValue(group);
-
             }
         }
 
@@ -252,22 +292,28 @@ public class PerformanceManager extends LXComponent {
         saveAndRestart();
     }
 
-    public void saveToFileAndRestart(final File file) {
-        lx.saveProject(file);
+    public void restart() {
         lx.applet.saveStrings(SLStudio.RESTART_FILE_NAME, new String[0]);
         lx.applet.exit();
+    }
+
+    public void saveToFileAndRestart(final File file) {
+        lx.saveProject(file);
+        restart();
     }
 
     private void saveAndRestart() {
         File proj = lx.getProject();
         if (proj == null) {
-            lx.applet.selectOutput("Select a file to save to:", "saveToFileAndRestart", lx.applet.saveFile("project.lxp"), PerformanceManager.this);
+            lx.applet.selectOutput(
+                    "Select a file to save to:",
+                    "saveToFileAndRestart",
+                    lx.applet.saveFile("project.lxp"),
+                    PerformanceManager.this);
             return;
         }
         saveToFileAndRestart(proj);
-
     }
-
 
     public void start() {
         if (!performanceModeInitialized.getValueb()) {
@@ -291,19 +337,20 @@ public class PerformanceManager extends LXComponent {
         gui.createFaderWindow(lx.engine.crossfader, globalParams.blendMode, 1);
         gui.createFaderWindow(decks[1].crossfade, decks[1].blendMode, 2);
 
-        cueState.addListener(new LXParameterListener() {
-            @Override
-            public void onParameterChanged(LXParameter lxParameter) {
-                setCue();
-            }
-        });
+        cueState.addListener(
+                new LXParameterListener() {
+                    @Override
+                    public void onParameterChanged(LXParameter lxParameter) {
+                        setCue();
+                    }
+                });
         setCue();
 
         gui.createGlobalWindow(this);
-
     }
 
-    static private String HIDDEN_PATTERNS_KEY = "hiddenPatterns";
+    private static String HIDDEN_PATTERNS_KEY = "hiddenPatterns";
+    private static String PRESETS_KEY = "presets";
 
     public boolean isHidden(LXPattern pattern) {
         return hiddenPatterns.contains(pattern.getLabel());
@@ -323,12 +370,18 @@ public class PerformanceManager extends LXComponent {
     @Override
     public void save(LX lx, JsonObject obj) {
         super.save(lx, obj);
+
         JsonArray hidden = new JsonArray();
         for (String p : hiddenPatterns) {
             hidden.add(p);
         }
-
         obj.add(HIDDEN_PATTERNS_KEY, hidden);
+
+        JsonArray presetArr = new JsonArray();
+        for (Preset p : presets) {
+            presetArr.add(p.toJSON());
+        }
+        obj.add(PRESETS_KEY, presetArr);
     }
 
     @Override
@@ -336,23 +389,38 @@ public class PerformanceManager extends LXComponent {
         super.load(lx, obj);
 
         if (obj.has(HIDDEN_PATTERNS_KEY)) {
-            for (JsonElement e : obj.getAsJsonArray(HIDDEN_PATTERNS_KEY)) {
+            for (JsonElement e : obj.get(HIDDEN_PATTERNS_KEY).getAsJsonArray()) {
                 hiddenPatterns.add(e.getAsString());
             }
         }
+
+        if (obj.has(PRESETS_KEY)) {
+            JsonArray presetArr = obj.get(PRESETS_KEY).getAsJsonArray();
+            int n = presetArr.size();
+             for (int i = 0; i < n; i++) {
+                 JsonObject po = presetArr.get(i).getAsJsonObject();
+                presets.add(new Preset(po));
+            }
+        } else {
+            for (int i = 0; i < Preset.MAX_PRESETS; i++) {
+                presets.add(new Preset(i));
+            }
+        }
+        presetsLoaded.setValue(true);
     }
 
     private void setCue() {
         int cueI = cueState.getValuei();
-        BooleanParameter[] cues = new BooleanParameter[]{
-            decks[0].channels[0].channel.cueActive,
-            lx.engine.cueA,
-            decks[0].channels[1].channel.cueActive,
-            null,
-            decks[1].channels[0].channel.cueActive,
-            lx.engine.cueB,
-            decks[1].channels[1].channel.cueActive,
-        };
+        BooleanParameter[] cues =
+                new BooleanParameter[] {
+                    decks[0].channels[0].channel.cueActive,
+                    lx.engine.cueA,
+                    decks[0].channels[1].channel.cueActive,
+                    null,
+                    decks[1].channels[0].channel.cueActive,
+                    lx.engine.cueB,
+                    decks[1].channels[1].channel.cueActive,
+                };
         for (BooleanParameter cue : cues) {
             if (cue != null) {
                 cue.setValue(false);
@@ -360,6 +428,95 @@ public class PerformanceManager extends LXComponent {
         }
         if (cues[cueI] != null) {
             cues[cueI].setValue(true);
+        }
+    }
+
+    static class Preset {
+        int index;
+        String name;
+        float hue;
+        String patternName;
+        HashMap<String, Float> parameterValues;
+
+        static int MAX_PRESETS = 7;
+
+        public Preset(int index) {
+            this.index = index;
+
+            float[] hues =
+                    new float[] {
+                        0.0f, 45.0f, 60.0f, 135.0f, 180.0f, 225.0f, 280.0f,
+                    };
+
+            String names[] =
+                    new String[] {"Red", "Orange", "Yellow", "Green", "Blue", "Indigo", "Violet"};
+
+            hue = hues[index];
+            name = names[index];
+
+            patternName = null;
+            parameterValues = new HashMap<String, Float>();
+        }
+
+        public Preset(JsonObject obj) {
+            index = obj.get("index").getAsInt();
+            name = obj.get("name").getAsString();
+            hue = obj.get("hue").getAsFloat();
+            parameterValues = new HashMap<String, Float>();
+
+            // LX doesn't serialize nulls, hence this ridiculous boolean hack
+            JsonPrimitive patName = obj.get("patternName").getAsJsonPrimitive();
+            if (patName.isBoolean()) {
+                patternName = null;
+            } else {
+                patternName = patName.getAsString();
+            }
+
+
+
+            JsonObject values = obj.get("parameterValues").getAsJsonObject();
+            for (Map.Entry<String, JsonElement> e : values.entrySet()) {
+                parameterValues.put(e.getKey(), e.getValue().getAsFloat());
+            }
+        }
+
+        public JsonObject toJSON() {
+            JsonObject obj = new JsonObject();
+            obj.addProperty("index", index);
+            obj.addProperty("name", name);
+            obj.addProperty("hue", hue);
+
+            if (patternName == null) {
+                obj.addProperty("patternName", false);
+            } else {
+                obj.addProperty("patternName", patternName);
+
+            }
+
+
+            JsonObject values = new JsonObject();
+            for (Map.Entry<String, Float> e : parameterValues.entrySet()) {
+                values.addProperty(e.getKey(), e.getValue());
+            }
+            obj.add("parameterValues", values);
+
+            return obj;
+        }
+
+        void loadFrom(LXChannel channel) {
+            LXPattern pat = channel.getActivePattern();
+            patternName = pat.getLabel();
+            parameterValues.clear();
+            for (LXParameter param : pat.getParameters()) {
+                parameterValues.put(param.getPath(), param.getValuef());
+            }
+        }
+
+        void applyTo(LXChannel channel) {
+            LXPattern pat = channel.getPattern(patternName);
+            for (Map.Entry<String, Float> e : parameterValues.entrySet()) {
+                pat.getParameter(e.getKey()).setValue(e.getValue());
+            }
         }
     }
 
@@ -373,19 +530,27 @@ public class PerformanceManager extends LXComponent {
         addParameter(performanceModeInitialized);
         addParameter(cueState);
 
+        deckCrossfaders = new CompoundParameter[N_DECKS];
+        for (int i = 0; i < N_DECKS; i++) {
+            String name = String.format("crossfader-%d", i);
+            deckCrossfaders[i] = new CompoundParameter(name, 0);
+            deckCrossfaders[i].setPolarity(LXParameter.Polarity.BIPOLAR);
+            addParameter(deckCrossfaders[i]);
+        }
+
         hiddenPatterns = new HashSet<String>();
+        presets = new ArrayList<Preset>();
+        presetsLoaded = new BooleanParameter("presetsLoaded", false);
 
-//        Runnable run = new Runnable() {
-//            @Override
-//            public void run() {
-//                palette = new PaletteListener(lx);
-//
-//            }
-//        };
-//        new Thread(run).start();
-
-
-
+        Runnable run =
+                new Runnable() {
+                    @Override
+                    public void run() {
+                        palette = new PaletteListener(lx);
+                    }
+                };
+        Thread paletteThread = new Thread(run);
+        paletteThread.setName("HOWDY");
+        paletteThread.start();
     }
-
 }
