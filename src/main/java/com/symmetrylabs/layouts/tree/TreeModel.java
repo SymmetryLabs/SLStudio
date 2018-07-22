@@ -2,6 +2,7 @@ package com.symmetrylabs.layouts.tree;
 
 import java.util.*;
 import java.lang.Integer;
+import java.util.Arrays;
 
 import processing.core.PApplet;
 import processing.data.JSONArray;
@@ -291,6 +292,13 @@ public class TreeModel extends SLModel {
             return config;
         }
 
+        public Twig getTwigByWiringIndex(int index) {
+            for (Twig twig : twigs) {
+                if (index == twig.getConfig().index) return twig;
+            }
+            return null;
+        }
+
         public List<Twig> getTwigs() {
             return twigs;
         }
@@ -407,8 +415,8 @@ public class TreeModel extends SLModel {
             t.push();
             t.translate(config.x, config.y, config.z);
             t.rotateX(config.elevation * PI / 180.);
-            t.rotateY(config.tilt * PI / 180.);
             t.rotateZ(config.azimuth * PI / 180.);
+            t.rotateY(config.tilt * PI / 180.);
 
             this.x = t.x();
             this.y = t.y();
@@ -432,6 +440,10 @@ public class TreeModel extends SLModel {
             return leaves.toArray(new Leaf[leaves.size()]);
         }
 
+        public List<LXPoint> getPoints() {
+            return Arrays.asList(points);
+        }
+
         private static class Fixture extends LXAbstractFixture {
             private final List<Leaf> leaves = new ArrayList<Leaf>();
             private final float x, y, z;
@@ -440,8 +452,8 @@ public class TreeModel extends SLModel {
                 t.push();
                 t.translate(config.x, config.y + 5*INCHES, config.z);
                 t.rotateX(config.elevation * PI / 180.);
-                t.rotateY(config.tilt * PI / 180.);
                 t.rotateZ(config.azimuth * PI / 180.);
+                t.rotateY(config.tilt * PI / 180.);
 
                 this.x = t.x();
                 this.y = t.y();

@@ -45,7 +45,7 @@ public class TreeConfigStore {
         File file = new File(getConfigFilePath());
 
         try {
-            writeConfig(file);
+            //writeConfig(file);
         } catch (Exception e) {
             e.printStackTrace();
         }

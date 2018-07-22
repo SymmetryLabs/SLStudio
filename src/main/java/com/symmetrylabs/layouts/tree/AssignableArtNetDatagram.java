@@ -1,4 +1,4 @@
-package com.symmetrylabs.slstudio.output;
+package com.symmetrylabs.layouts.tree;
 
 import com.symmetrylabs.color.Ops8;
 import com.symmetrylabs.slstudio.component.GammaExpander;
@@ -8,27 +8,32 @@ import heronarts.lx.model.LXPoint;
 
 import java.net.UnknownHostException;
 
-public class ArtNetDatagram extends LXDatagram {
+public class AssignableArtNetDatagram extends LXDatagram {
 
     private final static int DEFAULT_UNIVERSE = 0;
     private final static int ARTNET_HEADER_LENGTH = 18;
     private final static int ARTNET_PORT = 6454;
     private final static int SEQUENCE_INDEX = 12;
 
+    public String ipAddress;
     private int[] pointIndices;
+    public int universe = 0;
     private boolean sequenceEnabled = false;
     private byte sequence = 1;
 
     private GammaExpander GammaExpander;
 
-    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
+    public AssignableArtNetDatagram(LX lx, String ipAddress, int[] indices, int universeNumber) {
         this(lx, ipAddress, indices, 3 * indices.length, universeNumber);
     }
 
-    public ArtNetDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
+    public AssignableArtNetDatagram(LX lx, String ipAddress, int[] indices, int dataLength, int universeNumber) {
         super(ARTNET_HEADER_LENGTH + dataLength + (dataLength % 2));
-
+        this.ipAddress = ipAddress;
         this.pointIndices = indices;
+        System.out.println("A: " + universeNumber +  ", " + this.universe);
+        this.universe = universeNumber;
+        System.out.println("B: " + universeNumber +  ", " + this.universe);
 
         GammaExpander = GammaExpander.getInstance(lx);
 
@@ -63,23 +68,12 @@ public class ArtNetDatagram extends LXDatagram {
         }
     }
 
-    public ArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
+    public AssignableArtNetDatagram setSequenceEnabled(boolean sequenceEnabled) {
         this.sequenceEnabled = sequenceEnabled;
         return this;
     }
 
-    public void setUniverse(int universe) {
-        this.buffer[14] = (byte) (universe & 0xff); // Universe LSB
-        this.buffer[15] = (byte) ((universe >>> 8) & 0xff); // Universe MSB
-    }
-
-    public void updatePoints(LXPoint[] points) {
-        // FINISH - need to refactor and have datagram buffer adapt size
-        int[] indices = new int[points.length];
-        int i = 0;
-        for (LXPoint p : points) {
-            indices[i++] = p.index;
-        }
+    public void setIndices(int[] indices) {
         this.pointIndices = indices;
     }
 

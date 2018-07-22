@@ -58,18 +58,21 @@ public class TreeModelingTool extends LXComponent {
         this.selectedBranch = new ObjectParameter<TreeModel.Branch>("selectedBranch", getSelectedLimb().getBranchesArray());
         this.selectedTwig   = new ObjectParameter<TreeModel.Twig>("selectedTwig", getSelectedBranch().getTwigsArray());
 
+        selectedTwig.setOptions(new String[] {"1", "2", "3", "4", "5", "6", "7", "8"});
+
         selectedLimb.addListener(parameter -> {
             mode.setValue(Mode.LIMB);
             limbManipulator.repurposeParameters();
             updateBranches();
             updateTwigs();
-            System.out.println("selectedLimb listener");
+            mode.setValue(Mode.LIMB);
         });
 
         selectedBranch.addListener(parameter -> {
             mode.setValue(Mode.BRANCH);
             branchManipulator.repurposeParameters();
             updateTwigs();
+            mode.setValue(Mode.BRANCH);
         });
 
         selectedTwig.addListener(parameter -> {
@@ -300,7 +303,7 @@ public class TreeModelingTool extends LXComponent {
                 config.azimuth = azimuth.getValuef();
                 config.elevation = elevation.getValuef();
                 config.tilt = tilt.getValuef();
-                config.index = index.getValuei();
+                config.index = index.getValuei()+1;
                 tree.reconfigure();
                 branchManipulator.type.setValue(0); // Custom
             }
@@ -318,7 +321,9 @@ public class TreeModelingTool extends LXComponent {
             azimuth.setValue(config.azimuth);
             elevation.setValue(config.elevation);
             tilt.setValue(config.tilt);
-            index.setValue(config.index);
+            index.setValue(config.index-1);
+
+            System.out.println("config: " + config.index + ", param: " + index.getValuei());
             disableParameters = false;
         }
     }

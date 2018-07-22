@@ -57,7 +57,7 @@ public class UITreeModelingTool extends UICollapsibleSection {
         this.branchControls = new BranchControls(ui,4, 200, getContentWidth(), 285, modelingTool.branchManipulator);
         addTopLevelComponent(branchControls);
 
-        this.twigControls = new TwigControls(ui,4, 485, getContentWidth(), 175, modelingTool.twigManipulator);
+        this.twigControls = new TwigControls(ui,4, 485, getContentWidth(), 200, modelingTool.twigManipulator);
         addTopLevelComponent(twigControls);
 
         modelingTool.selectedLimb.addListener(parameter -> {
@@ -324,12 +324,6 @@ public class UITreeModelingTool extends UICollapsibleSection {
             setChildMargin(5);
             setPadding(5);
 
-            new UIButton(getContentWidth()-83, 5, 80, 15)
-                .setParameter(displayTwigIndices)
-                .setLabel("display indices")
-                .setBorderRounding(8)
-                .addToContainer(this);
-
             new UILabel(0, 0, 50, 15).setLabel("Twigs")
                 .setPadding(0, 5)
                 .addToContainer(this);
@@ -361,14 +355,35 @@ public class UITreeModelingTool extends UICollapsibleSection {
             this.knobsPanel = new UIKnobsPanel(6, 130, getContentWidth()-12, KNOB_HEIGHT);
             knobsPanel.addToContainer(this);
 
+            final UIButton flip = new UIButton(5, 130+KNOB_HEIGHT+10, getContentWidth()/4, 15) {
+                protected void onToggle(boolean active) {
+                    if (active) {
+                        float value = (manipulator.tilt.getNormalizedf() + 0.5f) % 1;
+                        manipulator.tilt.setNormalized(value);
+                    }
+                }
+            };
+            flip.setMomentary(true)
+                .setLabel("flip")
+                .setTextAlignment(CENTER, CENTER)
+                .setBorderRounding(8)
+                .addToContainer(this);
+
+            new UIButton(getContentWidth()-83, 130+KNOB_HEIGHT+10, 80, 15)
+                .setParameter(displayTwigIndices)
+                .setLabel("display indices")
+                .setBorderRounding(8)
+                .addToContainer(this);
+
             manipulator.locked.addListener(parameter -> {
                 boolean locked = ((BooleanParameter) parameter).isOn();
-                knobsPanel.xPosition.setEnabled(!locked);
-                knobsPanel.yPosition.setEnabled(!locked);
-                knobsPanel.zPosition.setEnabled(!locked);
-                knobsPanel.azimuth.setEnabled(!locked);
-                knobsPanel.elevation.setEnabled(!locked);
-                knobsPanel.tilt.setEnabled(!locked);
+                knobsPanel.xPosition.setEnabled(TwigConfig.isXEnabled() && !locked);
+                knobsPanel.yPosition.setEnabled(TwigConfig.isYEnabled() && !locked);
+                knobsPanel.zPosition.setEnabled(TwigConfig.isZEnabled() && !locked);
+                knobsPanel.azimuth.setEnabled(TwigConfig.isAzimuthEnabled() && !locked);
+                knobsPanel.elevation.setEnabled(TwigConfig.isElevationEnabled() && !locked);
+                knobsPanel.tilt.setEnabled(TwigConfig.isTiltEnabled() && !locked);
+                flip.setEnabled(!locked);
             });
         }
 

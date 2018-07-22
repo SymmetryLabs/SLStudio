@@ -105,8 +105,6 @@ public class SLStudio extends PApplet {
 
                 SLStudio.this.dispatcher = Dispatcher.getInstance(lx);
 
-                layout.setupLx(lx);
-
                 if (TreeModelingTool.isTreeLayout()) {
                     treeModelingTool = new TreeModelingTool(lx);
                     lx.engine.registerComponent("treeModelingTool", treeModelingTool);
@@ -118,6 +116,8 @@ public class SLStudio extends PApplet {
                     lx.engine.addLoopTask(anemometer);
                     anemometer.start();
                 }
+
+                layout.setupLx(lx);
 
                 lx.addOutput(new OPCOutput(lx, "localhost", 11122));
 
@@ -163,7 +163,7 @@ public class SLStudio extends PApplet {
         lx.engine.isNetworkMultithreaded.setValue(true);
         lx.engine.audio.enabled.setValue(false);
         lx.engine.output.enabled.setValue(true);
-        lx.engine.framesPerSecond.setValue(120);
+        //lx.engine.framesPerSecond.setValue(120);
 
     //performanceManager.start(lx.ui);
 
