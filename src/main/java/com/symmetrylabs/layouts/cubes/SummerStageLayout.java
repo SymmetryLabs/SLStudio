@@ -138,7 +138,7 @@ public class SummerStageLayout implements Layout {
                 float y = metersToInches(Float.parseFloat(vals[2]));
                 float z = metersToInches(Float.parseFloat(vals[1]));
 
-                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.LARGE_DOUBLE);
+                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.HD);
                 cubes.add(cube);
                 allCubes.add(cube);
             }
@@ -147,6 +147,14 @@ public class SummerStageLayout implements Layout {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
+        List<CubesModel.Cube> additionalCubes = new ArrayList<>();
+
+        CubesModel.Cube cube1 = new CubesModel.DoubleControllerCube("0", "0", 0, 0, 0, 0, 0, 0, globalTransform);
+        additionalCubes.add(cube1);
+        allCubes.add(cube1);
+
+        towers.add(new CubesModel.Tower("", additionalCubes));
 
         CubesModel.Cube[] allCubesArr = new CubesModel.Cube[allCubes.size()];
         for (int i = 0; i < allCubesArr.length; i++) {
