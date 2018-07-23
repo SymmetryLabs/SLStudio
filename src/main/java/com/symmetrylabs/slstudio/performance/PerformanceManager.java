@@ -25,10 +25,10 @@ public class PerformanceManager extends LXComponent {
     public PerformanceGlobalParams globalParams;
     public PerformanceDeck[] decks;
     public PerformanceGUIController gui;
+    public PerformanceHardwareController hardware;
     private final SLStudioLX lx;
     public HashSet<String> hiddenPatterns;
     public ArrayList<Preset> presets;
-    public PaletteListener palette;
     public BooleanParameter presetsLoaded;
 
     public CompoundParameter[] deckCrossfaders;
@@ -99,12 +99,17 @@ public class PerformanceManager extends LXComponent {
                 if (params.size() >= maxKnobs) {
                     break;
                 }
+
+
+            }
+            for (LXParameter p : params) {
+                System.out.println(p.getPath());
             }
             return params;
         }
 
         public ArrayList<BooleanParameter> getButtonParameters() {
-            int maxButtons = 16;
+            int maxButtons = 8;
             ArrayList<BooleanParameter> params = new ArrayList<BooleanParameter>();
 
             Collection<LXParameter> parameters = channel.getActivePattern().getParameters();
@@ -347,6 +352,8 @@ public class PerformanceManager extends LXComponent {
         setCue();
 
         gui.createGlobalWindow(this);
+
+        hardware = new PerformanceHardwareController(lx, this);
     }
 
     private static String HIDDEN_PATTERNS_KEY = "hiddenPatterns";
@@ -394,12 +401,9 @@ public class PerformanceManager extends LXComponent {
             }
         }
 
-        if (obj.has(PRESETS_KEY)) {
-            JsonArray presetArr = obj.get(PRESETS_KEY).getAsJsonArray();
-            int n = presetArr.size();
-             for (int i = 0; i < n; i++) {
-                 JsonObject po = presetArr.get(i).getAsJsonObject();
-                presets.add(new Preset(po));
+        if (obj.has(PRESETS_KEY) && obj.getAsJsonArray(PRESETS_KEY).size() > 0)  {
+             for (JsonElement e : obj.getAsJsonArray(PRESETS_KEY)) {
+                presets.add(new Preset(e.getAsJsonObject()));
             }
         } else {
             for (int i = 0; i < Preset.MAX_PRESETS; i++) {
@@ -445,7 +449,7 @@ public class PerformanceManager extends LXComponent {
 
             float[] hues =
                     new float[] {
-                        0.0f, 45.0f, 60.0f, 135.0f, 180.0f, 225.0f, 280.0f,
+                        0.0f, 25.0f, 60.0f, 115.0f, 180.0f, 225.0f, 280.0f,
                     };
 
             String names[] =
@@ -512,11 +516,12 @@ public class PerformanceManager extends LXComponent {
             }
         }
 
-        void applyTo(LXChannel channel) {
+        LXPattern applyTo(LXChannel channel) {
             LXPattern pat = channel.getPattern(patternName);
             for (Map.Entry<String, Float> e : parameterValues.entrySet()) {
                 pat.getParameter(e.getKey()).setValue(e.getValue());
             }
+            return pat;
         }
     }
 
@@ -526,6 +531,9 @@ public class PerformanceManager extends LXComponent {
 
         performanceModeInitialized = new BooleanParameter("performanceModeInitialized", false);
         cueState = new DiscreteParameter("cueState", 3, 0, 7);
+        String[] cueLabels = new String[] {"1", "L", "2", "All", "3", "R", "4"};
+        cueState.setOptions(cueLabels);
+
 
         addParameter(performanceModeInitialized);
         addParameter(cueState);
@@ -542,15 +550,5 @@ public class PerformanceManager extends LXComponent {
         presets = new ArrayList<Preset>();
         presetsLoaded = new BooleanParameter("presetsLoaded", false);
 
-        Runnable run =
-                new Runnable() {
-                    @Override
-                    public void run() {
-                        palette = new PaletteListener(lx);
-                    }
-                };
-        Thread paletteThread = new Thread(run);
-        paletteThread.setName("HOWDY");
-        paletteThread.start();
     }
 }

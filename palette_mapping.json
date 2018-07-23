@@ -1,0 +1,40 @@
+{
+	"mappings": {
+		"center-crossfader": "TODO",
+		"brightness": "Hwz",
+		"speed": "TODO",
+		"blur": "TODO",
+		"desaturation": "TODO",
+		"deck-crossfader": {
+			"left": "TODO",
+			"right": "TODO"
+		},
+		"pattern-scroll": {
+			"left": "H&M",
+			"right": "TODO"
+		},
+		"preset-scroll": {
+			"left": "Hlf",
+			"right": "TODO"
+		},
+		"preset-save": {
+			"left": "Hlf",
+			"right": "TODO"
+		},
+		"preset-fire": {
+			"left": "TODO",
+			"right": "TODO"
+		},
+		"blendmode-scroll": {
+			"left": "TODO",
+			"right": "TODO"
+		},
+		"cue-buttons": [
+			"GRp",
+			"G8|",
+			"GKA",
+			"GFi"
+		]
+	},
+	"upside-down": ["Hwz"]
+}

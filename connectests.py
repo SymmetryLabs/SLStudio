@@ -3,7 +3,7 @@ import json
 import random
 from pprint import pprint
 
-device = "/dev/tty.usbmodem14121"
+device = "/dev/tty.usbmodem14621"
 ser = serial.Serial(device, 1152000)
 
 class Module(object):

@@ -1,4 +1,448 @@
 package com.symmetrylabs.slstudio.performance;
 
-public class PerformanceHardwareController {
+import com.google.gson.*;
+import com.symmetrylabs.slstudio.SLStudio;
+import com.symmetrylabs.util.listenable.SetListener;
+import heronarts.lx.LX;
+import heronarts.lx.LXComponent;
+import heronarts.lx.color.ColorParameter;
+import heronarts.lx.color.LXColor;
+import heronarts.lx.parameter.*;
+import heronarts.p3lx.ui.component.UIItemList;
+
+import java.util.*;
+
+
+
+public class PerformanceHardwareController extends LXComponent {
+    final LX lx;
+    final PerformanceManager pm;
+    PaletteListener palette = null;
+    HashMap<String, ArrayList<LXParameter>> uuidToParameter;
+    HashMap<String, ArrayList<DeckDependentMapping>> uuidToDeckDependentMapping;
+    HashMap<String, ArrayList<Integer>> uuidToDeckIndex;
+    HashMap<String, Boolean> uuidToUpsideDown;
+    HashMap<String, ColorParameter> uuidToColorParameter;
+
+
+    final BooleanParameter[] cuesPressed;
+
+
+
+    final static String MAPPING_FILENAME = "palette_mapping.json";
+    final static String MAPPINGS_KEY = "mappings";
+    final static String UPSIDE_DOWN_KEY = "upside-down";
+
+    final static String CENTER_CROSSFADER = "center-crossfader";
+    final static String BRIGHTNESS = "brightness";
+    final static String SPEED = "speed";
+    final static String BLUR = "blur";
+    final static String DESATURATION = "desaturation";
+    final static String DECK_CROSSFADER = "deck-crossfader";
+    final static String PATTERN_SCROLL = "pattern-scroll";
+    final static String PRESET_SCROLL = "preset-scroll";
+    final static String PRESET_SAVE = "preset-save";
+    final static String PRESET_FIRE = "preset-fire";
+    final static String BLENDMODE_SCROLL = "blendmode-scroll";
+    final static String CUE_BUTTONS = "cue-buttons";
+
+
+    static abstract class DeckDependentMapping {
+        abstract     LXParameter getParameter(int deckI, int channelI);
+        abstract ColorParameter getColorParameter(int deckI, int channelI);
+
+
+    }
+
+
+
+    public PerformanceHardwareController(LX lx, PerformanceManager pm) {
+        super(lx);
+
+        this.lx = lx;
+        this.pm = pm;
+
+        LXParameterListener cueListener = new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter lxParameter) {
+                boolean press = lxParameter.getValue() == 1.0;
+                if (!press) {
+                    return;
+                }
+
+                boolean allPressed = true;
+                int anyPressed = -1;
+                int nPressed = 0;
+                boolean[] p = new boolean[4];
+                for (int i = 0; i < cuesPressed.length; i++) {
+                    p[i] = cuesPressed[i].isOn();
+                    if (!p[i]) {
+                        allPressed = false;
+                    } else {
+                        nPressed++;
+                    }
+
+                    if (cuesPressed[i] == lxParameter) {
+                        anyPressed = i;
+                    }
+                }
+
+                int chanVal = anyPressed * 2;
+
+
+                if (nPressed == 1 && pm.cueState.getValuei()  == chanVal) {
+                    pm.cueState.setValue(3);
+                    return;
+                }
+
+
+                if (allPressed) {
+                    pm.cueState.setValue(3);
+                } else if (p[0] && p[1]) {
+                    pm.cueState.setValue(1);
+                } else if (p[2] && p[3]) {
+                    pm.cueState.setValue(5);
+                } else if (anyPressed != -1) {
+                    pm.cueState.setValue(chanVal);
+                } else {
+                }
+            }
+        };
+
+        cuesPressed = new BooleanParameter[4];
+        for (int i = 0; i < cuesPressed.length; i++) {
+            String name = String.format("cuePressed-%d", i);
+            cuesPressed[i] = new BooleanParameter(name, false);
+            cuesPressed[i].addListener(cueListener);
+        }
+
+
+        uuidToParameter = new HashMap<String, ArrayList<LXParameter>>();
+        uuidToColorParameter = new HashMap<String, ColorParameter>();
+        uuidToDeckDependentMapping = new HashMap<String, ArrayList<DeckDependentMapping>>();
+        uuidToDeckIndex = new HashMap<String, ArrayList<Integer>>();
+        uuidToUpsideDown = new HashMap<String, Boolean>();
+
+        setupColorParameters();
+        loadMapping();
+
+        palette = new PaletteListener(lx);
+        palette.moduleSet.addListener(new SetListener<PaletteListener.Module>() {
+            @Override
+            public void onItemAdded(PaletteListener.Module element) {
+                mapModule(element);
+            }
+
+            @Override
+            public void onItemRemoved(PaletteListener.Module element) {
+            }
+        });
+
+        for (PerformanceManager.PerformanceDeck d : pm.decks) {
+            d.activeChannel.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    for (PaletteListener.Module m : palette.moduleSet) {
+                        if (uuidToDeckDependentMapping.containsKey(m.uuid)) {
+                            mapDeckDepdendentModule(m);
+                        }
+                    }
+                }
+            });
+        }
+
+
+//        startPaletteThread();
+
+    }
+
+
+    void mapDeckDepdendentModule(PaletteListener.Module module) {
+        ArrayList<DeckDependentMapping> mappings = uuidToDeckDependentMapping.get(module.uuid);
+        for (int i = 0; i < mappings.size(); i++) {
+            DeckDependentMapping mapping = mappings.get(i);
+            int deckI =  uuidToDeckIndex.get(module.uuid).get(i);
+            int channelI = pm.decks[deckI].activeChannel.getValuei();
+            LXParameter param = mapping.getParameter(deckI, channelI);
+            ColorParameter colorParam = mapping.getColorParameter(deckI, channelI);
+            module.mapParameter(param);
+            module.mapColor(colorParam);
+        }
+
+    }
+
+    void mapDeckIndependentModule(PaletteListener.Module module) {
+        for (LXParameter param : uuidToParameter.get(module.uuid)) {
+            module.mapParameter(param);
+        }
+        module.mapColor(uuidToColorParameter.get(module.uuid));
+    }
+
+    void mapModule(PaletteListener.Module module) {
+        if (uuidToParameter.containsKey(module.uuid)) {
+            mapDeckIndependentModule(module);
+        } else if (uuidToDeckDependentMapping.containsKey(module.uuid)) {
+            mapDeckDepdendentModule(module);
+        }
+        boolean upsideDown = uuidToUpsideDown.containsKey(module.uuid);
+        module.setUpsideDown(upsideDown);
+
+    }
+
+    String[] getUUIDs(JsonObject obj, String key) {
+        JsonElement v = obj.get(key);
+        String[] uuids = null;
+        if (v.isJsonPrimitive()) {
+            uuids = new String[] {v.getAsString()};
+        } else if (v.isJsonObject()) {
+            uuids = new String[2];
+            JsonObject lr = v.getAsJsonObject();
+            uuids[0] = lr.get("left").getAsString();
+            uuids[1] =  lr.get("right").getAsString();
+        } else if (v.isJsonArray()) {
+            JsonArray els = v.getAsJsonArray();
+            uuids = new String[els.size()];
+            for (int i = 0; i < els.size(); i++) {
+                uuids[i] = els.get(i).getAsString();
+            }
+        }
+        return uuids;
+    }
+
+    void setParameterMappings(JsonObject obj, String key, LXParameter[] params, ColorParameter[] colorParams) {
+        String[] uuids = getUUIDs(obj, key);
+        for (int i = 0; i < uuids.length; i++) {
+            if (!uuidToParameter.containsKey(uuids[i])) {
+                uuidToParameter.put(uuids[i], new ArrayList<>());
+            }
+            uuidToParameter.get(uuids[i]).add(params[i]);
+            uuidToColorParameter.put(uuids[i], colorParams[i]);
+        }
+    }
+
+    void setParameterMappings(JsonObject obj, String key, LXParameter param, ColorParameter colorParam) {
+        setParameterMappings(obj, key, new LXParameter[] {param}, new ColorParameter[] {colorParam});
+    }
+
+    void setParameterMappings(JsonObject obj, String key, DeckDependentMapping mapping) {
+        String[] uuids = getUUIDs(obj, key);
+
+        for (int i = 0; i < uuids.length; i++) {
+            if (!uuidToDeckDependentMapping.containsKey(uuids[i])) {
+                uuidToDeckDependentMapping.put(uuids[i], new ArrayList<>());
+                uuidToDeckIndex.put(uuids[i], new ArrayList<>());
+
+            }
+            uuidToDeckDependentMapping.get(uuids[i]).add(mapping);
+            uuidToDeckIndex.get(uuids[i]).add(i);
+        }
+    }
+
+
+    ColorParameter thresholdColor(LXListenableNormalizedParameter p, float t, float below, float equal, float above) {
+        String name = String.format("color-%s", p.getLabel());
+        ColorParameter cp = new ColorParameter(name);
+        LXParameterListener listener = new LXParameterListener() {
+            @Override
+            public void onParameterChanged(LXParameter lxParameter) {
+                float v = p.getNormalizedf();
+                float hue;
+                if (v < t) {
+                    hue = below;
+                } else if (v > t) {
+                    hue = above;
+                } else {
+                    hue = equal;
+                }
+                cp.setColor(LXColor.hsb(hue, 100, 100));
+            }
+        };
+        p.addListener(listener);
+        listener.onParameterChanged(p);
+        return cp;
+    }
+
+    ColorParameter[] crossfaderColors;
+    ColorParameter brightnessColor;
+    ColorParameter speedColor;
+    ColorParameter desaturationColor;
+    ColorParameter blurColor;
+
+    ColorParameter[] patternColors;
+    ColorParameter[] presetColors;
+    ColorParameter[] blendModeColors;
+    ColorParameter[] cueColors;
+
+
+
+    void addImmediateListener(LXListenableParameter param, LXParameterListener listener) {
+        param.addListener(listener);
+        listener.onParameterChanged(param);
+    }
+
+    void setupColorParameters() {
+        crossfaderColors = new ColorParameter[3];
+        for (int i = 0; i < 3; i++) {
+            String name = String.format("crossfader-%d", i);
+
+            final CompoundParameter fader;
+            if (i < 2) {
+                fader = pm.deckCrossfaders[i];
+            } else {
+                fader = lx.engine.crossfader;
+            }
+            crossfaderColors[i] = thresholdColor(fader, 0.5f, 181, 181, 316);
+        }
+
+        brightnessColor = thresholdColor(pm.globalParams.brightness, 1.0f, 181, 130, 130);
+        speedColor = thresholdColor(pm.globalParams.brightness, 0.5f, 181, 130, 316);
+        blurColor = thresholdColor(pm.globalParams.effectParams.blur, 0.0f, 130, 130, 316);
+        desaturationColor = thresholdColor(pm.globalParams.effectParams.desaturation, 0.0f, 130, 316, 316);
+
+        patternColors = new ColorParameter[4];
+        presetColors = new ColorParameter[4];
+        blendModeColors = new ColorParameter[2];
+        cueColors = new ColorParameter[4];
+
+        for (int i = 0; i < 4; i++) {
+            String name = String.format("pattern-%d", i);
+            patternColors[i] = new ColorParameter(name);
+            final PerformanceGUIController.ChannelWindow window = pm.gui.channelWindows[i];
+            final DiscreteParameter active = window.activePatternIndex;
+            final int k = i;
+            LXParameterListener listener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    UIItemList.Item activeItem = window.patternList.getItems().get(active.getValuei());
+                    String label = activeItem.getLabel();
+                    int hue = label.hashCode() % 360;
+                    patternColors[k].setColor(LXColor.hsb(hue, 100, 100));
+                }
+            };
+            addImmediateListener(active, listener);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            String name = String.format("preset-%d", i);
+            presetColors[i] = new ColorParameter(name);
+            final PerformanceGUIController.ChannelWindow window = pm.gui.channelWindows[i];
+            final DiscreteParameter active = window.selectedPreset;
+            final int k = i;
+            LXParameterListener listener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    float hue = pm.presets.get(active.getValuei()).hue;
+                    presetColors[k].setColor(LXColor.hsb(hue, 100, 100));
+                }
+            };
+            addImmediateListener(active, listener);
+        }
+    }
+
+    void loadMapping() {
+        byte[] bytes = SLStudio.applet.loadBytes(MAPPING_FILENAME);
+        if (bytes == null) {
+            return;
+        }
+        try {
+            JsonObject json = new Gson().fromJson(new String(bytes), JsonObject.class);
+
+            JsonObject mappingsObj = json.getAsJsonObject(MAPPINGS_KEY);
+            JsonArray upsideDown = json.getAsJsonArray(UPSIDE_DOWN_KEY);
+
+
+            setParameterMappings(mappingsObj, CENTER_CROSSFADER, pm.globalParams.crossfade, crossfaderColors[2]);
+            setParameterMappings(mappingsObj, DECK_CROSSFADER, pm.deckCrossfaders, crossfaderColors);
+
+            setParameterMappings(mappingsObj, BRIGHTNESS, pm.globalParams.brightness, brightnessColor);
+            setParameterMappings(mappingsObj, SPEED, pm.globalParams.speed, speedColor);
+            setParameterMappings(mappingsObj, BLUR, pm.globalParams.effectParams.blur, blurColor);
+            setParameterMappings(mappingsObj, DESATURATION, pm.globalParams.effectParams.desaturation, desaturationColor);
+
+
+            setParameterMappings(mappingsObj, PATTERN_SCROLL, new DeckDependentMapping() {
+                @Override
+                LXParameter getParameter(int deckI, int channelI) {
+                    int wI = deckI * 2 + channelI;
+                    return pm.gui.channelWindows[wI].activePatternIndex;
+                }
+
+                @Override
+                ColorParameter getColorParameter(int deckI, int channelI) {
+                    int wI = deckI * 2 + channelI;
+                    return patternColors[wI];
+                }
+            });
+
+
+            setParameterMappings(mappingsObj, PRESET_SCROLL, new DeckDependentMapping() {
+                @Override
+                LXParameter getParameter(int deckI, int channelI) {
+                    int wI = deckI * 2 + channelI;
+                    return pm.gui.channelWindows[wI].selectedPreset;
+                }
+                @Override
+                ColorParameter getColorParameter(int deckI, int channelI) {
+                    int wI = deckI * 2 + channelI;
+                    return presetColors[wI];
+                }
+            });
+
+            setParameterMappings(mappingsObj, PRESET_SAVE, new DeckDependentMapping() {
+                @Override
+                LXParameter getParameter(int deckI, int channelI) {
+                    int wI = deckI * 2 + channelI;
+                    return pm.gui.channelWindows[wI].savePushed;
+                }
+                @Override
+                ColorParameter getColorParameter(int deckI, int channelI) {
+                    int wI = deckI * 2 + channelI;
+                    return presetColors[wI];
+                }
+            });
+
+            setParameterMappings(mappingsObj, PRESET_FIRE, new DeckDependentMapping() {
+                @Override
+                LXParameter getParameter(int deckI, int channelI) {
+                    int wI = deckI * 2 + channelI;
+                    return pm.gui.channelWindows[wI].firePushed;
+                }
+                @Override
+                ColorParameter getColorParameter(int deckI, int channelI) {
+                    return null;
+                }
+            });
+
+            setParameterMappings(mappingsObj, BLENDMODE_SCROLL, new LXParameter[]{pm.decks[0].blendMode, pm.decks[1].blendMode}, crossfaderColors);
+
+            ColorParameter[] cues = new ColorParameter[4];
+            for (int i = 0; i < 4; i++) {
+                cues[i] = new ColorParameter("no");
+                cues[i].setColor(LXColor.GREEN);
+            }
+
+            setParameterMappings(mappingsObj, CUE_BUTTONS, cuesPressed, cues);
+
+            for (JsonElement el : upsideDown) {
+                String uuid = el.getAsString();
+                uuidToUpsideDown.put(uuid, true);
+            }
+
+        } catch (JsonSyntaxException e) {
+            e.printStackTrace();
+        }
+    }
+
+    void startPaletteThread() {
+//        Runnable run =
+//            new Runnable() {
+//                @Override
+//                public void run() {
+//
+//                }
+//            };
+//        Thread paletteThread = new Thread(run);
+//        paletteThread.setName("HOWDY");
+//        paletteThread.start();
+    }
 }

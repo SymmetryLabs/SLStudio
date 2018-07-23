@@ -4,8 +4,11 @@ import com.google.common.collect.HashBasedTable;
 import com.google.common.collect.Table;
 import com.google.gson.*;
 import com.symmetrylabs.util.dispatch.Dispatcher;
+import com.symmetrylabs.util.listenable.ListenableSet;
 import heronarts.lx.LX;
 import heronarts.lx.LXLoopTask;
+import heronarts.lx.color.ColorParameter;
+import heronarts.lx.color.LXColor;
 import heronarts.lx.parameter.*;
 import processing.data.JSONArray;
 import processing.data.JSONObject;
@@ -31,13 +34,29 @@ public class PaletteListener {
         public String uuid;
         int serialIndex;
 
-        BooleanParameter pressed;
-        BoundedParameter value;
-        BoundedParameter smoothValue;
+        BooleanParameter pressed = null;
+        LXListenableNormalizedParameter value = null;
+        DiscreteParameter discrete = null;
+        ColorParameter color = null;
+        int clickCounter;
+        boolean upsideDown;
+//        BoundedParameter smoothValue;
 
 
         PaletteListener listener;
         LinkedList<Float> valueQueue;
+
+        final LXParameterListener pressedListener;
+        final LXParameterListener valueListener;
+        final LXParameterListener discreteListener;
+        final LXParameterListener colorListener;
+
+        int lastR;
+        int lastG;
+        int lastB;
+
+
+
 
 
 
@@ -49,59 +68,184 @@ public class PaletteListener {
             this.uuid = uuid;
             this.listener = listener;
 
+            upsideDown = false;
 
-            pressed = new BooleanParameter("pressed", false);
-            value = new BoundedParameter("value", 0, 0, 1);
-            if (type == Type.FADER) {
-                smoothValue = listener.lx.engine.crossfader; //new BoundedParameter("value", 0, 0, 1);
+            clickCounter = 0;
 
-            } else {
-                smoothValue = new BoundedParameter("value", 0, 0, 1);
-            }
 
-            pressed.addListener(new LXParameterListener() {
-                @Override
-                public void onParameterChanged(LXParameter lxParameter) {
-                    setLEDForState();
-                }
-            });
+//            pressed = new BooleanParameter("pressed", false);
+//            value = new BoundedParameter("value", 0, 0, 1);
+//            if (type == Type.FADER) {
+//                smoothValue = listener.lx.engine.crossfader; //new BoundedParameter("value", 0, 0, 1);
+//
+//            } else {
+//                smoothValue = new BoundedParameter("value", 0, 0, 1);
+//            }
 
-            value.addListener(new LXParameterListener() {
-                @Override
-                public void onParameterChanged(LXParameter lxParameter) {
+//            pressed.addListener(new LXParameterListener() {
+//                @Override
+//                public void onParameterChanged(LXParameter lxParameter) {
 //                    setLEDForState();
-                }
-            });
+//                }
+//            });
 
-            valueQueue = new LinkedList<Float>();
+//            value.addListener(new LXParameterListener() {
+//                @Override
+//                public void onParameterChanged(LXParameter lxParameter) {
+////                    setLEDForState();
+//                }
+//            });
+
+//            valueQueue = new LinkedList<Float>();
 
             //setLEDForState();
+
+            pressedListener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+
+                }
+            };
+
+            valueListener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+
+                }
+            };
+
+            discreteListener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+
+                }
+            };
+
+            colorListener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+//                    LXColor.
+                    int c = color.getColor();
+                    int r = LXColor.red(c);
+                    int g = LXColor.green(c);
+                    int b = LXColor.blue(c);
+
+                    r = r == -1 ? 255 : r;
+                    g = g == -1 ? 255 : g;
+                    b = b == -1 ? 255 : b;
+                    setLED(r, g, b);
+                }
+            };
         }
+
+        public void setUpsideDown(boolean ud) {
+            upsideDown = ud;
+        }
+
+        public void removeListeners() {
+            if (discrete != null) {
+                discrete.removeListener(discreteListener);
+            }
+            discrete = null;
+
+            if (value != null) {
+                value.removeListener(valueListener);
+            }
+            value = null;
+
+            if (pressed != null) {
+                pressed.removeListener(pressedListener);
+            }
+            pressed = null;
+
+            if (color != null) {
+                color.removeListener(colorListener);
+            }
+            color = null;
+        }
+
+        void mapParameter(DiscreteParameter param) {
+            if (discrete != null) {
+                discrete.removeListener(discreteListener);
+            }
+            discrete = param;
+            discrete.addListener(discreteListener);
+        }
+
+        void mapParameter(LXListenableNormalizedParameter param) {
+            if (value != null) {
+                value.removeListener(valueListener);
+            }
+            value = param;
+            value.addListener(valueListener);
+        }
+
+        void mapParameter(BooleanParameter param) {
+            if (pressed != null) {
+                pressed.removeListener(pressedListener);
+            }
+            pressed = param;
+            pressed.addListener(pressedListener);
+        }
+
+        void mapParameter(LXParameter param) {
+            if (param instanceof  DiscreteParameter) {
+                mapParameter((DiscreteParameter)param);
+                return;
+            }
+
+            if (param instanceof  BooleanParameter) {
+                mapParameter((BooleanParameter) param);
+                return;
+            }
+
+            if (param instanceof  LXListenableNormalizedParameter) {
+                mapParameter((LXListenableNormalizedParameter) param);
+                return;
+            }
+        }
+
+        void mapColor(ColorParameter c) {
+
+            if (color != null) {
+                color.removeListener(colorListener);
+            }
+            lastR = -1;
+            lastG = -1;
+            lastB = -1;
+
+            if (c == null) {
+                return;
+            }
+
+            color = c;
+            color.addListener(colorListener);
+            colorListener.onParameterChanged(color);
+        }
+
+
 
         private void send(JsonElement json) {
             listener.writeSerialJSON(serialIndex, json);
         }
 
-        private void setLEDForState() {
-            if (type == Type.BUTTON) {
-                setLED(pressed.isOn() ? 1 : 0, 0, 0);
-            }
-            if (type == Type.DIAL || type == Type.FADER) {
-//                setLED(0, 0, value.getValuef());
-            }
-        }
 
-        public void setLED(float r, float g, float b) {
-            int rByte = (int)(r * 255);
-            int gByte = (int)(g * 255);
-            int bByte = (int)(b * 255);
+        public void setLED(int r, int g, int b) {
+
+            if (lastR == r && lastG == g && lastB == b) {
+                return;
+            }
+
+            lastR = r;
+            lastG = g;
+            lastB = b;
 
             JsonObject led = new JsonObject();
             led.add("i", new JsonPrimitive(id));
             led.add("m", new JsonPrimitive(0));
-            led.add("r", new JsonPrimitive(rByte));
-            led.add("g", new JsonPrimitive(gByte));
-            led.add("b", new JsonPrimitive(bByte));
+            led.add("r", new JsonPrimitive(r));
+            led.add("g", new JsonPrimitive(g));
+            led.add("b", new JsonPrimitive(b));
 
             JsonArray ledArr = new JsonArray();
             ledArr.add(led);
@@ -112,39 +256,75 @@ public class PaletteListener {
             send(wrapper);
         }
 
-        void smoothValue() {
-            float v = value.getValuef();
-            valueQueue.add(v);
-            if (valueQueue.size() > 2) {
-                valueQueue.removeFirst();
+//        void smoothValue() {
+//            float v = value.getValuef();
+//            valueQueue.add(v);
+//            if (valueQueue.size() > 2) {
+//                valueQueue.removeFirst();
+//            }
+//            float avg = 0;
+//            for (float x : valueQueue) {
+//                avg += x;
+//            }
+//            avg /= valueQueue.size();
+//            final float s = avg;
+//            Dispatcher.getInstance(listener.lx).dispatchEngine(new Runnable() {
+//                @Override
+//                public void run() {
+//                    smoothValue.setValue(s);
+//                }
+//            });
+//        }
+
+        void setPressed(boolean p) {
+            if (pressed != null) {
+                boolean current = pressed.getValueb();
+                pressed.setValue(p);
             }
-            float avg = 0;
-            for (float x : valueQueue) {
-                avg += x;
+        }
+
+        void setValue(float v) {
+            if (value != null) {
+                float val = upsideDown ? (1.0f - v) : v;
+                value.setNormalized(val);
             }
-            avg /= valueQueue.size();
-            final float s = avg;
-            Dispatcher.getInstance(listener.lx).dispatchEngine(new Runnable() {
-                @Override
-                public void run() {
-                    smoothValue.setValue(s);
+        }
+
+        void setDiscrete(int clicks) {
+            int clicksPerSlot = 3;
+            if (clickCounter > 0 && clicks < 0) {
+                clickCounter = 0;
+            }
+            if (clickCounter < 0 && clicks > 0) {
+                clickCounter = 0;
+            }
+            clickCounter += clicks;
+            if (Math.abs(clickCounter) >= clicksPerSlot) {
+                int dir = clickCounter / clicksPerSlot;
+                clickCounter = 0;
+                if (discrete != null) {
+                    int val = Math.max(discrete.getMinValue(), Math.min(discrete.getMaxValue(), discrete.getValuei() + dir));
+                    discrete.setValue(val);
                 }
-            });
+            }
         }
 
         public void setValues(int[] values) {
+            int clicks = 0;
             switch (type) {
                 case HUB:
                     break;
                 case BUTTON:
-                    pressed.setValue(values[0] == 1);
+                    setPressed(values[0] == 1);
                     break;
                 case DIAL:
-                    pressed.setValue(values[0] == 1);
-                    value.setValue((float)values[3] / 255.0f);
+                    setPressed(values[0] == 1);
+                    setValue((float)values[3] / 255.0f);
+                    clicks = values[1] > 0 ? -1 * values[1] : values[2];
+                    setDiscrete(clicks);
                     break;
                 case FADER:
-                    value.setValue((float)values[0] / 255.0f);
+                    setValue((float)values[0] / 255.0f);
                     break;
             }
         }
@@ -166,10 +346,6 @@ public class PaletteListener {
             JsonElement raw = listener.readSerialJSON(serialIndex);
             JsonObject j = raw.getAsJsonObject();
             long elapsed = System.currentTimeMillis() - millis;
-            System.out.printf("PARSE TOOK %d ms\n", elapsed);
-            if (elapsed > 10) {
-                System.out.println(j.toString());
-            }
 
             if (j.has("in")) {
                 listener.pendingInputs.put(serialIndex, j.get("in").getAsJsonArray());
@@ -184,7 +360,8 @@ public class PaletteListener {
     int nSerials;
     SerialPort[] serials;
     BufferedReader[] serialInputs;
-    Table<Integer, Integer, Module> modules = null;
+    private Table<Integer, Integer, Module> modules = null;
+    public ListenableSet<Module> moduleSet;
     JsonParser parser;
     HashMap<Integer, JsonArray> pendingInputs;
     final LX lx;
@@ -237,7 +414,7 @@ public class PaletteListener {
             InputStream stream = serials[serialIndex].getInputStream();
             while (true) {
                 char c = (char)stream.read();
-                System.out.print(c);
+//                System.out.print(c);
                 if (objectCount == 0 && c != '{') {
                     continue;
                 }
@@ -264,6 +441,7 @@ public class PaletteListener {
         try {
             OutputStream outputStream = serials[serialIndex].getOutputStream();
             String data = json.toString() + "\n";
+            System.out.print(data);
             outputStream.write(data.getBytes());
         } catch (IOException e) {
             e.printStackTrace();
@@ -273,12 +451,13 @@ public class PaletteListener {
 
     void traversePalette(int serialIndex, JsonObject node, HashSet<Integer> found) {
         int id = node.get("i").getAsInt();
-        String uuid = node.get("u").getAsString();
+        String uuid = node.get("u").getAsString().substring(2);
         Module.Type type = Module.Type.values()[node.get("t").getAsInt()];
 
         if (!modules.contains(serialIndex, id)) {
             Module module = new Module(this, serialIndex, id, uuid, type);
             modules.put(serialIndex, id, module);
+            moduleSet.add(module);
         }
 
         found.add(id);
@@ -305,7 +484,11 @@ public class PaletteListener {
             }
         }
         for (Integer id : toRemove) {
+            Module mod = modules.get(serialIndex, id);
+            mod.removeListeners();
+            moduleSet.remove(mod);
             modules.remove(serialIndex, id);
+
         }
     }
 
@@ -346,7 +529,7 @@ public class PaletteListener {
             return;
         }
         for (Module mod : modules.values()) {
-            mod.smoothValue();
+//            mod.smoothValue();
         }
     }
 
@@ -404,6 +587,8 @@ public class PaletteListener {
     PaletteListener(LX lx) {
         this.lx = lx;
         parser = new JsonParser();
+
+        moduleSet = new ListenableSet<Module>();
 
         pendingInputs = new HashMap<Integer, JsonArray>();
 

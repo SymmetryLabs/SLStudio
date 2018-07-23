@@ -1,9 +1,10 @@
 import serial
 import json
 import random
+from sys import argv
 from pprint import pprint
 
-device = "/dev/tty.usbmodem14121"
+device = argv[1]
 ser = serial.Serial(device, 1152000)
 
 id_to_uuid = dict()

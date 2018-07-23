@@ -1,15 +1,14 @@
 package com.symmetrylabs.slstudio.performance;
 
-import heronarts.lx.LXChannel;
 import heronarts.lx.LXComponent;
 
 import java.awt.*;
-import java.lang.reflect.Array;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 
 import heronarts.lx.LX;
+import heronarts.lx.LXLoopTask;
 import heronarts.lx.blend.LXBlend;
 import heronarts.lx.color.LXColor;
 import heronarts.lx.LXPattern;
@@ -49,7 +48,7 @@ public class PerformanceGUIController extends LXComponent {
     private Rectangle getWindowCoordinates(int i, boolean sidebarsVisible) {
         int channelSpacing = 20;
         int w = CHANNEL_WIDTH;
-        int h = 560;
+        int h = 620;
         int xMargin = 10;
         int yMargin = 30;
 
@@ -91,14 +90,15 @@ public class PerformanceGUIController extends LXComponent {
             rect.x = (int) (ui.applet.width / 2 - (w / 2));
         }
         rect.width = (int) w;
-        rect.y += rect.height + 30;
+        rect.y += rect.height + 10;
         rect.height = 73;
         return rect;
     }
 
     public void createGlobalWindow(PerformanceManager pm) {
+        Rectangle rect = getFaderCoordinates(0, false);
         int x = ui.applet.width / 2 - CHANNEL_WIDTH / 2;
-        GlobalWindow window = new GlobalWindow(pm, ui, x, 710, CHANNEL_WIDTH, 210);
+        GlobalWindow window = new GlobalWindow(pm, ui, x, rect.y + rect.height + 5, CHANNEL_WIDTH, 210);
         ui.addLayer(window);
     }
 
@@ -152,6 +152,12 @@ public class PerformanceGUIController extends LXComponent {
         }
     }
 
+    public void updateAllPresetUIs() {
+        for (ChannelWindow w : channelWindows) {
+            w.updatePresetUI();
+        }
+    }
+
     public class ChannelWindow extends UIWindow {
         final ArrayList<OverrideLabeledKnob> knobs = new ArrayList();
         final ArrayList<UISwitch> switches = new ArrayList();
@@ -159,6 +165,16 @@ public class PerformanceGUIController extends LXComponent {
         final PerformanceManager.PerformanceChannel channel;
         final PerformanceManager.PerformanceDeck deck;
         final DiscreteParameter selectedPreset;
+
+        UIButtonGroup presetGroup;
+        UIButton fireButton;
+        UIButton saveButton;
+
+        public BooleanParameter firePushed;
+        public BooleanParameter savePushed;
+
+        public DiscreteParameter activePatternIndex;
+
 
 
         PatternList patternList = null;
@@ -185,6 +201,9 @@ public class PerformanceGUIController extends LXComponent {
             deck = channel.deck;
 
             selectedPreset = new DiscreteParameter("selectedPreset", 0, 0, PerformanceManager.Preset.MAX_PRESETS);
+
+            activePatternIndex = new DiscreteParameter("activePatternIndex", 0, 0, 1);
+
 
 
             setTitle(String.format("Channel %d", channel.globalIndex + 1));
@@ -226,6 +245,15 @@ public class PerformanceGUIController extends LXComponent {
 
             setBackground();
 
+            activePatternIndex.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    int i = activePatternIndex.getValuei();
+//                    System.out.println(i);
+                    patternList.getItems().get(i).onActivate();
+                }
+            });
+
         }
 
         private void setBackground() {
@@ -244,9 +272,12 @@ public class PerformanceGUIController extends LXComponent {
 
         class PatternList extends UIItemList.ScrollList {
 
+
             public PatternList(UI ui, float x, float y, float w, float h) {
                 super(ui, x, y, w, h);
+
             }
+
 
             @Override
             public void onKeyPressed(KeyEvent keyEvent, char keyChar, int keyCode) {
@@ -310,6 +341,26 @@ public class PerformanceGUIController extends LXComponent {
             return pm.presets.get(selectedPreset.getValuei());
         }
 
+        void savePreset() {
+            PerformanceManager.Preset preset = getActivePreset();
+            preset.loadFrom(channel.channel);
+            updateAllPresetUIs();
+        }
+
+        void firePreset() {
+            PerformanceManager.Preset preset = getActivePreset();
+            LXPattern pattern = preset.applyTo(channel.channel);
+            List<? extends UIItemList.Item> items = patternList.getItems();
+            for (int i = 0; i < items.size(); i++) {
+                PatternItem pi = (PatternItem)items.get(i);
+                if (pi.pattern == pattern) {
+                    pi.onActivate();
+                    patternList.setFocusIndex(i);
+                    break;
+                }
+            }
+        }
+
         float buildPresetSelector(float yStart) {
             float pad = 5;
             float w = getWidth();
@@ -326,26 +377,84 @@ public class PerformanceGUIController extends LXComponent {
                 options[i] = options[i] = name;
             }
             selectedPreset.setOptions(options);
-            final UIButtonGroup presetGroup = new UIButtonGroup(selectedPreset, pad, yStart, w - (pad *2), h);
-            for (int i = 0; i < n; i++) {
-                float hue = pm.presets.get(i).hue;
-                presetGroup.buttons[i].setActiveColor(LXColor.hsb(hue, 100, 70));
-                presetGroup.buttons[i].setInactiveColor(LXColor.hsb(hue, 100, 30));
-                presetGroup.buttons[i].setFontColor(LXColor.gray(50));
-            }
+
+            presetGroup = new UIButtonGroup(selectedPreset, pad, yStart, w - (pad *2), h);
             presetGroup.addToContainer(window);
 
+            firePushed = new BooleanParameter("firePushed", false);
+            savePushed = new BooleanParameter("savePushed", false);
+
             float fireStart = yStart + h + 5;
-            UIButton loadButton = new UIButton(pad,  fireStart, w - (pad *2), h) {
-                public void onToggle(boolean on) {
-                    if (!on) {
-                        return;
-                    }
-//                    Preset p = pm.presets.get(selectedPreset.getValuei());
+            float bWidth = (w - pad * 3) / 2;
+            saveButton = new UIButton(pad, fireStart, bWidth, h);
+//            saveButton = new UIButton(pad, fireStart, bWidth, h) {
+//                public void onToggle(boolean on) {
+//                    if (!on) {
+//                        return;
+//                    }
+//                    savePreset();
+//                }
+//            };
+            saveButton.setLabel("Save");
+            saveButton.setMomentary(true);
+            saveButton.setParameter(savePushed);
+            saveButton.addToContainer(this);
+
+            fireButton = new UIButton(bWidth + 2 * pad, fireStart, bWidth, h);
+//            fireButton = new UIButton(bWidth + 2 * pad, fireStart, bWidth, h) {
+//                public void onToggle(boolean on) {
+//                    if (!on) {
+//                        return;
+//                    }
+//                    firePreset();
+//                }
+//            };
+            fireButton.setLabel("Fire");
+            fireButton.setMomentary(true);
+            fireButton.setParameter(firePushed);
+
+            fireButton.addToContainer(this);
+
+            selectedPreset.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    updatePresetUI();
                 }
-            };
-            loadButton.setMomentary(true);
-            loadButton.addToContainer(this);
+            });
+
+            firePushed.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    if (firePushed.isOn()) {
+                        firePreset();
+                        firePushed.setValue(false);
+                    }
+                }
+            });
+
+            savePushed.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    if (savePushed.isOn()) {
+                        savePreset();
+                        savePushed.setValue(false);
+                    }
+                }
+            });
+
+            updatePresetUI();
+
+            lx.engine.addLoopTask(new LXLoopTask() {
+                @Override
+                public void loop(double v) {
+                    int i = selectedPreset.getValuei();
+                    if (!presetGroup.buttons[i].isActive()) {
+                        presetGroup.buttons[i].setActive(true);
+                    }
+                }
+            });
+
+
 
 
 
@@ -367,6 +476,22 @@ public class PerformanceGUIController extends LXComponent {
 //            });
 
             return fireStart + h;
+        }
+
+        void updatePresetUI() {
+            PerformanceManager.Preset p = getActivePreset();
+            fireButton.setEnabled(p.patternName != null);
+
+            for (int i = 0; i < pm.presets.size(); i++) {
+                PerformanceManager.Preset preset = pm.presets.get(i);
+                float hue = preset.hue;
+                boolean saved = preset.patternName != null;
+                UIButton b = presetGroup.buttons[i];
+                b.setActiveColor(LXColor.hsb(hue, 100, 70));
+                b.setInactiveColor(LXColor.hsb(hue, saved ? 100 : 0, 30));
+                b.setFontColor(LXColor.gray(50));
+            }
+
         }
 
         float buildKnobs(float yStart) {
@@ -457,12 +582,32 @@ public class PerformanceGUIController extends LXComponent {
             for (LXPattern pattern : hidden) {
                 items.add(new PatternItem(pattern, this));
             }
+
+            activePatternIndex.setRange(0, items.size());
+
+
+
             patternList.setItems(items);
+        }
+
+        void setActivePatternIndex() {
+            List<? extends UIItemList.Item> items = patternList.getItems();
+            for (int i = 0; i < items.size(); i++) {
+                PatternItem pi = (PatternItem)items.get(i);
+                if (pi.isActive()) {
+                    patternList.setFocusIndex(i);
+                    activePatternIndex.setValue(i);
+                    break;
+                }
+            }
         }
 
         void refreshPattern() {
 
             LXPattern pattern = channel.channel.getActivePattern();
+
+            setActivePatternIndex();
+
 
             for (UIKnob knob : knobs) {
                 knob.setParameter(null);
@@ -554,7 +699,9 @@ public class PerformanceGUIController extends LXComponent {
     }
 
     class GlobalWindow extends UIWindow {
-        final UIButton[] cueButtons;
+        UIToggleSet cueToggle;
+
+//    final UIButton[] cueButtons;
         final UIButton liveButton;
         final UIButton sidebarToggle;
         final UISlider globalSliders[];
@@ -566,7 +713,7 @@ public class PerformanceGUIController extends LXComponent {
             this.pm = pm;
 
             int nQ = 7;
-            cueButtons = new UIButton[nQ];
+//      cueButtons = new UIButton[nQ];
 
             int toggleY = 35;
             int togglePad = 5;
@@ -626,53 +773,66 @@ public class PerformanceGUIController extends LXComponent {
 
         void buildCues() {
             float w = getWidth();
-            float h = getHeight();
-            int nQ = cueButtons.length;
+            float cueH = 20;
+            float cueY = 5;
+            float pad = 5;
 
-            String[] labels = new String[] {"1", "L", "2", "All", "3", "R", "4"};
+            cueToggle = new UIToggleSet(pad, cueY, w - (pad * 2), cueH);
+            cueToggle.setParameter(pm.cueState);
+            cueToggle.setEvenSpacing();
 
-            float queueWidth = 20;
-            float cueSpacing = (w - (nQ * queueWidth)) / (nQ + 1);
-            for (int i = 0; i < nQ; i++) {
-                float qx = (queueWidth * i) + (cueSpacing * (i + 1));
-                float qy = 5; // h - queueWidth - 3;
-                final int j = i;
-                UIButton q =
-                        new UIButton(qx, qy, queueWidth, queueWidth) {
-                            public void onToggle(boolean on) {
-                                if (!on) {
-                                    return;
-                                }
-                                pm.cueState.setValue(j);
-                            }
-                        };
-                q.setLabel(labels[i]);
-                cueButtons[i] = q;
-                q.addToContainer(this);
-            }
+            cueToggle.addToContainer(this);
 
-            pm.cueState.addListener(
-                    new LXParameterListener() {
-                        @Override
-                        public void onParameterChanged(LXParameter lxParameter) {
-                            updateCues();
-                        }
-                    });
-            updateCues();
         }
 
-        void updateCues() {
-            int c = pm.cueState.getValuei();
-            for (int i = 0; i < cueButtons.length; i++) {
-                cueButtons[i].setActive(i == c);
-            }
-        }
+//    void buildCues() {
+//      float w = getWidth();
+//      float h = getHeight();
+//      int nQ = cueButtons.length;
+//
+//      String[] labels = new String[] {"1", "L", "2", "All", "3", "R", "4"};
+//
+//      float queueWidth = 20;
+//      float cueSpacing = (w - (nQ * queueWidth)) / (nQ + 1);
+//      for (int i = 0; i < nQ; i++) {
+//        float qx = (queueWidth * i) + (cueSpacing * (i + 1));
+//        float qy = 5; // h - queueWidth - 3;
+//        final int j = i;
+//        UIButton q =
+//            new UIButton(qx, qy, queueWidth, queueWidth) {
+//              public void onToggle(boolean on) {
+//                if (!on) {
+//                  return;
+//                }
+//                pm.cueState.setValue(j);
+//              }
+//            };
+//        q.setLabel(labels[i]);
+//        cueButtons[i] = q;
+//        q.addToContainer(this);
+//      }
+//
+//      pm.cueState.addListener(
+//          new LXParameterListener() {
+//            @Override
+//            public void onParameterChanged(LXParameter lxParameter) {
+//              updateCues();
+//            }
+//          });
+//      updateCues();
+//    }
+//
+//    void updateCues() {
+//      int c = pm.cueState.getValuei();
+//      for (int i = 0; i < cueButtons.length; i++) {
+//        cueButtons[i].setActive(i == c);
+//      }
+//    }
     }
 
     class FaderWindow extends UIWindow {
         final UISlider slider;
-        //        final UIDropMenu blendMenu;
-        final UIButtonGroup blendGroup;
+        final UIToggleSet blendToggle;
 
         FaderWindow(
                 LXListenableNormalizedParameter param,
@@ -694,8 +854,10 @@ public class PerformanceGUIController extends LXComponent {
             slider.setParameter(param);
 
             //            blendMenu = new UIDropMenu(pad, h - (2 * pad) - 20, w - (2 * pad), 20, blendParam);
-            blendGroup = new UIButtonGroup(blendParam, pad, pad + sh + 10, sw, 20);
-            blendGroup.addToContainer(this);
+            blendToggle = new UIToggleSet(pad, pad + sh + 10, sw, 20);
+            blendToggle.setParameter(blendParam);
+            blendToggle.setEvenSpacing();
+            blendToggle.addToContainer(this);
         }
 
         @Override
