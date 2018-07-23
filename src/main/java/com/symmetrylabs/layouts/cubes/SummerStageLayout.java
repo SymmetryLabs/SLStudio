@@ -33,16 +33,14 @@ import static com.symmetrylabs.util.DistanceUtils.*;
 /**
  * This file implements the mapping functions needed to lay out the cubes.
  */
-public class SummerStageLayout implements Layout {
-    ListenableSet<CubesController> controllers = new ListenableSet<>();
-    CubePhysicalIdMap cubePhysicalIdMap = new CubePhysicalIdMap();
+public class SummerStageLayout extends CubesLayout {
 
     static final float globalOffsetX = 1368;
     static final float globalOffsetY = 0;
     static final float globalOffsetZ = 5;
 
     static final float globalRotationX = 0;
-    static final float globalRotationY = 180;
+    static final float globalRotationY = 0;
     static final float globalRotationZ = 0;
 
     static final float CUBE_WIDTH = 24;
@@ -138,9 +136,9 @@ public class SummerStageLayout implements Layout {
                 float y = metersToInches(Float.parseFloat(vals[2]));
                 float z = metersToInches(Float.parseFloat(vals[1]));
 
-                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.HD);
-                cubes.add(cube);
-                allCubes.add(cube);
+                //CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.HD);
+                //cubes.add(cube);
+                //allCubes.add(cube);
             }
             towers.add(new CubesModel.Tower("", cubes));
 
@@ -150,9 +148,21 @@ public class SummerStageLayout implements Layout {
 
         List<CubesModel.Cube> additionalCubes = new ArrayList<>();
 
-        CubesModel.Cube cube1 = new CubesModel.DoubleControllerCube("0", "0", 0, 0, 0, 0, 0, 0, globalTransform);
+        CubesModel.Cube cube1 = new CubesModel.DoubleControllerCube("807", "806", 0, 0, 0, 0, -90, 0, globalTransform);
         additionalCubes.add(cube1);
         allCubes.add(cube1);
+
+        CubesModel.Cube cube2 = new CubesModel.DoubleControllerCube("0", "0", 50, 0, 0, 0, -90, 0, globalTransform);
+        additionalCubes.add(cube2);
+        allCubes.add(cube2);
+
+        CubesModel.Cube cube3 = new CubesModel.DoubleControllerCube("0", "0", 0, 50, 0, 0, -90, 0, globalTransform);
+        additionalCubes.add(cube3);
+        allCubes.add(cube3);
+
+        CubesModel.Cube cube4 = new CubesModel.DoubleControllerCube("0", "0", 50, 50, 0, 0, -90, 0, globalTransform);
+        additionalCubes.add(cube4);
+        allCubes.add(cube4);
 
         towers.add(new CubesModel.Tower("", additionalCubes));
 
@@ -164,84 +174,9 @@ public class SummerStageLayout implements Layout {
         return new CubesModel(towers, allCubesArr);
     }
 
-    /*
-    public static LXModel importObjModel() {
-        return new LXModel(new ObjImporter("data", globalTransform).getModels().toArray(new LXModel[0]));
-    }
-    */
-
-    private static Map<LX, WeakReference<OfficeLayout>> instanceByLX = new WeakHashMap<>();
-
-    public static OfficeLayout getInstance(LX lx) {
-        WeakReference<OfficeLayout> weakRef = instanceByLX.get(lx);
-        return weakRef == null ? null : weakRef.get();
-    }
-
-    public static void addFadecandyOutput(LX lx) throws Exception {
-        lx.engine.addOutput(new FadecandyOutput(lx, "localhost", 7890, lx.model));
-//        lx.engine.addOutput(new FadecandyOutput(lx, "192.168.0.113", 1234, lx.model));
-    }
-    public void setupLx(SLStudioLX lx) {
-//        instanceByLX.put(lx, new WeakReference<>(this));
-
-        final NetworkMonitor networkMonitor = NetworkMonitor.getInstance(lx).start();
-        final Dispatcher dispatcher = Dispatcher.getInstance(lx);
-
-        /*
-        CubesController local_debug = new CubesController(lx, "localhost", "localdebug");
-        controllers.add(local_debug);
-        lx.addOutput(local_debug);
-        */
-
-        networkMonitor.deviceList.addListener(new SetListener<NetworkDevice>() {
-            public void onItemAdded(NetworkDevice device) {
-                String physicalId = cubePhysicalIdMap.getPhysicalId(device.deviceId);
-                final CubesController controller = new CubesController(lx, device, physicalId);
-                controller.set16BitColorEnabled(device.featureIds.contains("rgb16"));
-                controllers.add(controller);
-                dispatcher.dispatchNetwork(() -> lx.addOutput(controller));
-                //controller.enabled.setValue(false);
-            }
-
-            public void onItemRemoved(NetworkDevice device) {
-                final CubesController controller = getControllerByDevice(device);
-                controllers.remove(controller);
-                dispatcher.dispatchNetwork(() -> {
-                    //lx.removeOutput(controller);
-                });
-            }
-        });
-
-        //lx.addOutput(new CubesController(lx, "10.200.1.255"));
-
-        lx.engine.output.enabled.addListener(param -> {
-            boolean isEnabled = ((BooleanParameter) param).isOn();
-            for (CubesController controller : controllers) {
-                controller.enabled.setValue(isEnabled);
-            }
-        });
-    }
-
-    public CubesController getControllerByDevice(NetworkDevice device) {
-        for (CubesController controller : controllers) {
-            if (controller.networkDevice == device) {
-                return controller;
-            }
-        }
-        return null;
-    }
-
-    public Collection<CubesController> getSortedControllers() {
-        return new TreeSet<CubesController>(controllers);
-    }
-
-    public void addControllerSetListener(SetListener<CubesController> listener) {
-        controllers.addListener(listener);
-    }
-
     public void setupUi(SLStudioLX lx, SLStudioLX.UI ui) {
         UI2dScrollContext utility = ui.rightPane.utility;
-//        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
-//        new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIOutputs(lx, ui, this, 0, 0, utility.getContentWidth()).addToContainer(utility);
+        new UIMappingPanel(lx, ui, 0, 0, utility.getContentWidth()).addToContainer(utility);
     }
 }

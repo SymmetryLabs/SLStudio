@@ -143,18 +143,21 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
         if (!(lx.model instanceof CubesModel))
             return;
 
-        final PointsGrouping points = null;
+        PointsGrouping points = null;
+        CubesModel cubesModel = (CubesModel)lx.model;
 
         if ((SLStudio.applet.outputControl.testBroadcast.isOn() || isBroadcast) && cubesModel.getCubes().size() > 0) {
-            points = cubesModel.getCubes().get(0).getPointsA();
+            points = ((CubesModel.DoubleControllerCube)cubesModel.getCubes().get(0)).getPointsA();
+            System.out.println("frame");
         } else {
-            for (CubesModel.DoubleControllerCube c : cubesModel.getCubes()) {
-                if (c.idA != null && cube.idB != null) {
-                    if (c.idA.equals(id)) {
-                        points = c.getPointsA();
+            for (CubesModel.Cube c : cubesModel.getCubes()) {
+                CubesModel.DoubleControllerCube c2 = (CubesModel.DoubleControllerCube) c;
+                if (c2.idA != null && c2.idB != null) {
+                    if (c2.idA.equals(id)) {
+                        points = c2.getPointsA();
                     }
-                    if (c.idB.equals(id)) {
-                        points = c.getPointsB();
+                    if (c2.idB.equals(id)) {
+                        points = c2.getPointsB();
                     }
                 }
             }
@@ -235,9 +238,9 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //            }
 //        }
 
-        int numPixels = points.size();
-
         if (points != null) {
+            int numPixels = points.size();
+
             // Fill the datagram with pixel data
             if (is16BitColorEnabled && src.isFresh(PolyBuffer.Space.RGB16)) {
                 initPacketData(numPixels, true);
@@ -250,7 +253,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //                    }
 //                }
                 for (int i = 0; i < numPixels; i++) {
-                    LXPoint point = points.get(i);
+                    LXPoint point = points.getPoint(i);
                     setPixel(i, srcLongs[point.index]);
                 }
             } else {
@@ -264,7 +267,7 @@ public class CubesController extends LXOutput implements Comparable<CubesControl
 //                    }
 //                }
                 for (int i = 0; i < numPixels; i++) {
-                    LXPoint point = points.get(i);
+                    LXPoint point = points.getPoint(i);
                     setPixel(i, srcInts[point.index]);
                 }
             }

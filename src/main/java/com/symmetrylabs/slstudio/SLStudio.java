@@ -119,8 +119,6 @@ public class SLStudio extends PApplet {
                     anemometer.start();
                 }
 
-                lx.addOutput(new OPCOutput(lx, "localhost", 11122));
-
                 outputControl = new OutputControl(lx);
                 lx.engine.registerComponent("outputControl", outputControl);
                 mappingPixlites = setupPixlites();

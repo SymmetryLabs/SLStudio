@@ -75,7 +75,7 @@ public class WarpSpeed extends SLPattern<CubesModel> {
                 case "up":   yPos = model.yMin-length;
             }
 
-            System.out.println(yPos);
+            //System.out.println(yPos);
 
             return new LXVector(
                 verticalStrip.getPoints().get(0).x,

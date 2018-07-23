@@ -151,22 +151,22 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
 
         public PointsGrouping getPointsA() {
             return new PointsGrouping()
-                .addPoints(getStrips().get(12).getPoints())
-                .addPoints(getStrips().get(9).getPoints())
-                .addPoints(getStrips().get(7).getPoints())
+                .addPoints(getStrips().get(11).getPoints())
                 .addPoints(getStrips().get(8).getPoints())
-                .addPoints(getStrips().get(10).getPoints())
-                .addPoints(getStrips().get(11).getPoints());
+                .addPoints(getStrips().get(6).getPoints())
+                .addPoints(getStrips().get(7).getPoints())
+                .addPoints(getStrips().get(9).getPoints())
+                .addPoints(getStrips().get(10).getPoints());
         }
 
         public PointsGrouping getPointsB() {
             return new PointsGrouping()
-                .addPoints(getStrips().get(1).getPoints())
+                .addPoints(getStrips().get(0).getPoints())
+                .addPoints(getStrips().get(3).getPoints())
                 .addPoints(getStrips().get(4).getPoints())
                 .addPoints(getStrips().get(5).getPoints())
-                .addPoints(getStrips().get(6).getPoints())
-                .addPoints(getStrips().get(2).getPoints())
-                .addPoints(getStrips().get(3).getPoints());
+                .addPoints(getStrips().get(1).getPoints())
+                .addPoints(getStrips().get(2).getPoints());
         }
     }
 
