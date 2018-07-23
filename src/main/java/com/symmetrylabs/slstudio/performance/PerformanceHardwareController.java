@@ -7,6 +7,9 @@ import heronarts.lx.LX;
 import heronarts.lx.LXComponent;
 import heronarts.lx.color.ColorParameter;
 import heronarts.lx.color.LXColor;
+import heronarts.lx.midi.*;
+import heronarts.lx.midi.remote.LXMidiRemote;
+import heronarts.lx.midi.surface.LXMidiSurface;
 import heronarts.lx.parameter.*;
 import heronarts.p3lx.ui.component.UIItemList;
 
@@ -16,7 +19,7 @@ import java.util.*;
 
 public class PerformanceHardwareController extends LXComponent {
     final LX lx;
-    final PerformanceManager pm;
+    public final PerformanceManager pm;
     PaletteListener palette = null;
     HashMap<String, ArrayList<LXParameter>> uuidToParameter;
     HashMap<String, ArrayList<DeckDependentMapping>> uuidToDeckDependentMapping;
@@ -26,7 +29,6 @@ public class PerformanceHardwareController extends LXComponent {
 
 
     final BooleanParameter[] cuesPressed;
-
 
 
     final static String MAPPING_FILENAME = "palette_mapping.json";
@@ -45,6 +47,251 @@ public class PerformanceHardwareController extends LXComponent {
     final static String PRESET_FIRE = "preset-fire";
     final static String BLENDMODE_SCROLL = "blendmode-scroll";
     final static String CUE_BUTTONS = "cue-buttons";
+
+    final LXMidiRemote[] twisters;
+    final LXMidiRemote[] fighters;
+
+    final TwisterListener[] twisterListeners;
+    final FighterListener[] fighterListeners;
+
+    static class FighterListener implements LXMidiListener {
+        int i;
+
+        FighterListener(int i) {
+            this.i = i;
+        }
+
+        @Override
+        public void noteOnReceived(MidiNoteOn midiNoteOn) {
+
+        }
+
+        @Override
+        public void noteOffReceived(MidiNote midiNote) {
+
+        }
+
+        @Override
+        public void controlChangeReceived(MidiControlChange midiControlChange) {
+
+        }
+
+        @Override
+        public void programChangeReceived(MidiProgramChange midiProgramChange) {
+
+        }
+
+        @Override
+        public void pitchBendReceived(MidiPitchBend midiPitchBend) {
+
+        }
+
+        @Override
+        public void aftertouchReceived(MidiAftertouch midiAftertouch) {
+
+        }
+    }
+
+    class TwisterListener implements LXMidiListener {
+        int deckI;
+
+        LXParameterListener[] writeListeners;
+
+        ArrayList<LXListenableNormalizedParameter> params = null;
+
+        TwisterListener(int deckI) {
+            this.deckI = deckI;
+
+            writeListeners = new LXParameterListener[16];
+            for (int i = 0; i < writeListeners.length; i++) {
+                final int k = i;
+                writeListeners[i] = new LXParameterListener() {
+                    @Override
+                    public void onParameterChanged(LXParameter lxParameter) {
+                        writeParamState(k);
+                    }
+                };
+            }
+
+
+            getAndWriteParams();
+            pm.decks[deckI].activeChannel.addListener(new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    getAndWriteParams();
+                }
+            });
+
+            for (int j = 0; j < 2; j++) {
+                final int k = j;
+                int wI = (deckI * 2) + j;
+                DiscreteParameter active = pm.gui.channelWindows[wI].activePatternIndex;
+                active.addListener(new LXParameterListener() {
+                    @Override
+                    public void onParameterChanged(LXParameter lxParameter) {
+                        if (pm.decks[deckI].activeChannel.getValuei() != k) {
+                            return;
+                        }
+                        getAndWriteParams();
+                    }
+                });
+            }
+
+
+
+        }
+
+
+        void getAndWriteParams() {
+            getParams();
+            writeParamStates();
+        }
+
+        void getParams() {
+            if (params != null) {
+                for (int i = 0; i < params.size(); i++) {
+                    if (params.get(i) != null) {
+                        params.get(i).removeListener(writeListeners[i]);
+                    }
+                }
+            }
+            int maxParamKnobs = 12;
+            int active = pm.decks[deckI].activeChannel.getValuei();
+            PerformanceManager.PerformanceChannel activeChannel = pm.decks[deckI].channels[active];
+            params = activeChannel.getKnobParameters();
+            while (params.size() < maxParamKnobs) {
+                params.add(null);
+            }
+            params.addAll(activeChannel.getEffectParameters());
+            for (int i = 0; i < params.size(); i++) {
+                if (params.get(i) != null) {
+                    params.get(i).addListener(writeListeners[i]);
+                }
+            }
+        }
+
+        void writeParamState(int knobI) {
+            int RGB_OFF = 17;
+            int RGB_MED = 32;
+            int RGB_MAX = 47;
+            LXMidiOutput out = twisters[deckI].getOutput();
+
+            int v;
+            if (knobI < params.size() && params.get(knobI) != null) {
+                float raw = params.get(knobI).getNormalizedf();
+                v = (int)(raw * 127);
+                out.sendControlChange(2, knobI, RGB_MAX);
+            } else {
+                v = 0;
+                out.sendControlChange(2, knobI, RGB_OFF);
+
+            }
+            out.sendControlChange(0, knobI, v);
+        }
+
+        void writeParamStates() {
+            for (int i = 0; i < 16; i++) {
+                writeParamState(i);
+            }
+        }
+
+        @Override
+        public void noteOnReceived(MidiNoteOn midiNoteOn) {
+
+        }
+
+        @Override
+        public void noteOffReceived(MidiNote midiNote) {
+
+        }
+
+        @Override
+        public void controlChangeReceived(MidiControlChange midiControlChange) {
+            int channel = midiControlChange.getChannel();
+            int cc = midiControlChange.getCC();
+            double v = midiControlChange.getNormalized();
+            if (cc >= params.size() | params.get(cc) == null) {
+                return;
+            }
+            if (channel == 0) {
+                params.get(cc).setNormalized(v);
+                float yo = params.get(cc).getValuef();
+                System.out.printf("%s: %.2f %.2f", params.get(cc).getLabel(), v, yo);
+            }
+        }
+
+        @Override
+        public void programChangeReceived(MidiProgramChange midiProgramChange) {
+
+        }
+
+        @Override
+        public void pitchBendReceived(MidiPitchBend midiPitchBend) {
+
+        }
+
+        @Override
+        public void aftertouchReceived(MidiAftertouch midiAftertouch) {
+
+        }
+    }
+
+
+
+    void bindMidi() {
+        ArrayList<LXMidiInput> fighterInputs = new ArrayList<LXMidiInput>();
+        ArrayList<LXMidiInput> twisterInputs = new ArrayList<LXMidiInput>();
+        ArrayList<LXMidiOutput> fighterOutputs = new ArrayList<LXMidiOutput>();
+        ArrayList<LXMidiOutput> twisterOutputs = new ArrayList<LXMidiOutput>();
+
+        List<LXMidiSurface> surfaces = lx.engine.midi.surfaces;
+
+        for (LXMidiInput in : lx.engine.midi.inputs) {
+            String name = in.getName();
+            if (name.contains("Twister")) {
+                twisterInputs.add(in);
+            } else if (name.contains("Fighter")) {
+                fighterInputs.add(in);
+            }
+        }
+
+        for (LXMidiOutput out : lx.engine.midi.outputs) {
+            String name = out.getName();
+            if (name.contains("Twister")) {
+                twisterOutputs.add(out);
+            } else if (name.contains("Fighter")) {
+                twisterOutputs.add(out);
+            }
+        }
+
+        for (int i = 0; i < Math.min(2, twisterInputs.size()); i++) {
+            LXMidiInput in = twisterInputs.get(i);
+            LXMidiOutput out = twisterOutputs.get(i);
+            in.open();
+            out.open();
+            twisters[i] = new LXMidiRemote(in, out);
+            twisterListeners[i] = new TwisterListener(i);
+            in.addListener(twisterListeners[i]);
+        }
+
+        for (int i = 0; i < Math.min(2, fighterInputs.size()); i++) {
+            LXMidiInput in = fighterInputs.get(i);
+            LXMidiOutput out = fighterOutputs.get(i);
+            in.open();
+            out.open();
+            fighters[i] = new LXMidiRemote(in, out);
+            fighterListeners[i] = new FighterListener(i);
+            in.addListener(fighterListeners[i]);
+        }
+
+//        for (LXMidiRemote twister : twisters) {
+//            for (int deckI = 0; deckI < 16; deckI++) {
+//                LXParameter p = pm.decks[0].channels[0].getKnobParameters().get(deckI);
+//                twister.bindController(p, 0, deckI);
+//            }
+//        }
+//        System.out.println("AYE");
+    }
 
 
     static abstract class DeckDependentMapping {
@@ -151,8 +398,22 @@ public class PerformanceHardwareController extends LXComponent {
             });
         }
 
+        twisters = new LXMidiRemote[2];
+        fighters = new LXMidiRemote[2];
+        twisterListeners = new TwisterListener[2];
+        fighterListeners = new FighterListener[2];
+
+
+
+        lx.engine.midi.whenReady(new Runnable() {
+            public void run() {
+                bindMidi();
+            }
+        });
+
 
 //        startPaletteThread();
+
 
     }
 
@@ -337,6 +598,52 @@ public class PerformanceHardwareController extends LXComponent {
             };
             addImmediateListener(active, listener);
         }
+
+        for (int i = 0; i < 2; i++) {
+            String name = String.format("blend-%d", i);
+            blendModeColors[i] = new ColorParameter(name);
+            final DiscreteParameter blend = pm.decks[i].blendMode;
+            final int k = i;
+            LXParameterListener listener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    // RAPHTODO
+                    float[] hues =
+                        new float[] {
+                            0.0f, 25.0f, 60.0f, 115.0f, 180.0f, 225.0f, 280.0f,
+                        };
+                    float hue = hues[blend.getValuei()];
+                    blendModeColors[k].setColor(LXColor.hsb(hue, 100, 100));
+                }
+            };
+            addImmediateListener(blend, listener);
+        }
+
+        for (int i = 0; i < 4; i++) {
+            String name = String.format("cue-%d", i);
+            cueColors[i] = new ColorParameter(name);
+            final DiscreteParameter cueState = pm.cueState;
+            final int k = i;
+            LXParameterListener listener = new LXParameterListener() {
+                @Override
+                public void onParameterChanged(LXParameter lxParameter) {
+                    int s = cueState.getValuei();
+                    boolean on = false;
+                    if (s == 3) {
+                        on = false;
+                    } else if (s == 1 && (k == 0 || k == 1)) {
+                        on = true;
+                    } else if (s == 5 && (k == 2 || k == 3)) {
+                        on = true;
+                    } else if ((s / 2) == k) {
+                        on = true;
+                    }
+
+                    cueColors[k].setColor(on ? LXColor.RED : LXColor.BLACK);
+                }
+            };
+            addImmediateListener(cueState, listener);
+        }
     }
 
     void loadMapping() {
@@ -413,15 +720,10 @@ public class PerformanceHardwareController extends LXComponent {
                 }
             });
 
-            setParameterMappings(mappingsObj, BLENDMODE_SCROLL, new LXParameter[]{pm.decks[0].blendMode, pm.decks[1].blendMode}, crossfaderColors);
+            setParameterMappings(mappingsObj, BLENDMODE_SCROLL, new LXParameter[]{pm.decks[0].blendMode, pm.decks[1].blendMode}, blendModeColors);
 
-            ColorParameter[] cues = new ColorParameter[4];
-            for (int i = 0; i < 4; i++) {
-                cues[i] = new ColorParameter("no");
-                cues[i].setColor(LXColor.GREEN);
-            }
 
-            setParameterMappings(mappingsObj, CUE_BUTTONS, cuesPressed, cues);
+            setParameterMappings(mappingsObj, CUE_BUTTONS, cuesPressed, cueColors);
 
             for (JsonElement el : upsideDown) {
                 String uuid = el.getAsString();

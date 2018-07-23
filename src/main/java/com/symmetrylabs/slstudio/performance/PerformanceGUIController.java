@@ -249,7 +249,7 @@ public class PerformanceGUIController extends LXComponent {
                 @Override
                 public void onParameterChanged(LXParameter lxParameter) {
                     int i = activePatternIndex.getValuei();
-//                    System.out.println(i);
+//                    System.out.println(deckI);
                     patternList.getItems().get(i).onActivate();
                 }
             });
@@ -463,9 +463,9 @@ public class PerformanceGUIController extends LXComponent {
 //                public void onParameterChanged(LXParameter lxParameter) {
 //                    if (pm.presetsLoaded.isOn()) {
 //                        String[] options = new String[n];
-//                        for (int i = 0; i < n; i++) {
-//                            String name = pm.presets.get(i).name.substring(0, 1);
-//                            options[i] = options[i] = name;
+//                        for (int deckI = 0; deckI < n; deckI++) {
+//                            String name = pm.presets.get(deckI).name.substring(0, 1);
+//                            options[deckI] = options[deckI] = name;
 //                        }
 //                        selectedPreset.setOptions(options);
 //                        final UIButtonGroup group = new UIButtonGroup(selectedPreset, pad, yStart, w - (pad *2), h);
@@ -624,6 +624,9 @@ public class PerformanceGUIController extends LXComponent {
 
             ArrayList<BooleanParameter> buttonParams = channel.getButtonParameters();
             ArrayList<LXListenableNormalizedParameter> knobParams = channel.getKnobParameters();
+            ArrayList<LXListenableNormalizedParameter> fxParams = channel.getEffectParameters();
+            ArrayList<String> fxLabels = channel.getEffectLabels();
+
 
             for (int i = 0; i < buttonParams.size(); i++) {
                 switches.get(i).setParameter(buttonParams.get(i));
@@ -636,22 +639,15 @@ public class PerformanceGUIController extends LXComponent {
 
             redraw();
 
-            OverrideLabeledKnob blurKnob = knobs.get(PARAM_KNOBS + 0);
-            OverrideLabeledKnob desatKnob = knobs.get(PARAM_KNOBS + 1);
-            OverrideLabeledKnob hueKnob = knobs.get(PARAM_KNOBS + 2);
-            //            OverrideLabeledKnob cueKnob = knobs.get(PARAM_KNOBS + 3);
 
-            blurKnob.setParameter(channel.effectParams.blur);
-            blurKnob.setOverrideLabel("Blur");
 
-            desatKnob.setParameter(channel.effectParams.desaturation);
-            desatKnob.setOverrideLabel("Desat");
-
-            hueKnob.setParameter(channel.effectParams.hueShift);
-            hueKnob.setOverrideLabel("Hue");
-
-            //            cueKnob.setParameter(channel.manager.cueState);
-            //            cueKnob.setOverrideLabel("Cue");
+            for (int i = 0; i < fxParams.size(); i++) {
+                OverrideLabeledKnob knob = knobs.get(PARAM_KNOBS + i);
+                LXListenableNormalizedParameter param = fxParams.get(i);
+                String label = fxLabels.get(i);
+                knob.setParameter(param);
+                knob.setOverrideLabel(label);
+            }
 
         }
     }
@@ -753,7 +749,7 @@ public class PerformanceGUIController extends LXComponent {
                 //                float sw = w - togglePad*2;
                 //                float sh = 20;
                 //                float sx = togglePad;
-                //                float sy = 50 + i * (sh + 15);
+                //                float sy = 50 + deckI * (sh + 15);
                 float sw = (w - (togglePad * (nSliders + 1))) / nSliders;
                 float sh = 125;
                 float sy = 66;
@@ -794,10 +790,10 @@ public class PerformanceGUIController extends LXComponent {
 //
 //      float queueWidth = 20;
 //      float cueSpacing = (w - (nQ * queueWidth)) / (nQ + 1);
-//      for (int i = 0; i < nQ; i++) {
-//        float qx = (queueWidth * i) + (cueSpacing * (i + 1));
+//      for (int deckI = 0; deckI < nQ; deckI++) {
+//        float qx = (queueWidth * deckI) + (cueSpacing * (deckI + 1));
 //        float qy = 5; // h - queueWidth - 3;
-//        final int j = i;
+//        final int j = deckI;
 //        UIButton q =
 //            new UIButton(qx, qy, queueWidth, queueWidth) {
 //              public void onToggle(boolean on) {
@@ -807,8 +803,8 @@ public class PerformanceGUIController extends LXComponent {
 //                pm.cueState.setValue(j);
 //              }
 //            };
-//        q.setLabel(labels[i]);
-//        cueButtons[i] = q;
+//        q.setLabel(labels[deckI]);
+//        cueButtons[deckI] = q;
 //        q.addToContainer(this);
 //      }
 //
@@ -824,8 +820,8 @@ public class PerformanceGUIController extends LXComponent {
 //
 //    void updateCues() {
 //      int c = pm.cueState.getValuei();
-//      for (int i = 0; i < cueButtons.length; i++) {
-//        cueButtons[i].setActive(i == c);
+//      for (int deckI = 0; deckI < cueButtons.length; deckI++) {
+//        cueButtons[deckI].setActive(deckI == c);
 //      }
 //    }
     }

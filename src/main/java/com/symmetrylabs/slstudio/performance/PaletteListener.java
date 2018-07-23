@@ -43,7 +43,6 @@ public class PaletteListener {
 //        BoundedParameter smoothValue;
 
 
-        PaletteListener listener;
         LinkedList<Float> valueQueue;
 
         final LXParameterListener pressedListener;
@@ -54,6 +53,9 @@ public class PaletteListener {
         int lastR;
         int lastG;
         int lastB;
+
+        PaletteListener listener;
+
 
 
 
@@ -130,9 +132,9 @@ public class PaletteListener {
                     int g = LXColor.green(c);
                     int b = LXColor.blue(c);
 
-                    r = r == -1 ? 255 : r;
-                    g = g == -1 ? 255 : g;
-                    b = b == -1 ? 255 : b;
+                    r = r < 0 ? 256 + r : r;
+                    g = g < 0 ? 255 + g : g;
+                    b = b < 0 ? 255 + b : b;
                     setLED(r, g, b);
                 }
             };
@@ -344,6 +346,9 @@ public class PaletteListener {
         public void serialEvent(SerialPortEvent event) {
             long millis = System.currentTimeMillis();
             JsonElement raw = listener.readSerialJSON(serialIndex);
+            if (raw == null) {
+                return;
+            }
             JsonObject j = raw.getAsJsonObject();
             long elapsed = System.currentTimeMillis() - millis;
 
@@ -365,6 +370,8 @@ public class PaletteListener {
     JsonParser parser;
     HashMap<Integer, JsonArray> pendingInputs;
     final LX lx;
+    StringBuilder[] builders;
+
 
     boolean isPalettePort(String portName) {
         return portName.contains("tty.usbmodem");
@@ -392,6 +399,7 @@ public class PaletteListener {
         ArrayList<CommPortIdentifier> palettePorts = getPalettePorts();
         nSerials = palettePorts.size();
         serials = new SerialPort[nSerials];
+        builders = new StringBuilder[nSerials];
         for (int i = 0; i < nSerials; i++) {
             try {
                 SerialPort port = (SerialPort) palettePorts.get(i).open("SLStudio", 1000);
@@ -400,6 +408,8 @@ public class PaletteListener {
 
                 port.addEventListener(new PortListener(this, i));
                 port.notifyOnDataAvailable(true);
+
+                builders[i] = new StringBuilder();
 
             } catch (PortInUseException | UnsupportedCommOperationException | TooManyListenersException e) {
                 e.printStackTrace();
@@ -410,11 +420,11 @@ public class PaletteListener {
     JsonElement readSerialJSON(int serialIndex) {
         try {
             int objectCount = 0;
-            StringBuilder builder = new StringBuilder();
+            StringBuilder builder = builders[serialIndex];
             InputStream stream = serials[serialIndex].getInputStream();
-            while (true) {
+            boolean found = false;
+            while (stream.available() > 0) {
                 char c = (char)stream.read();
-//                System.out.print(c);
                 if (objectCount == 0 && c != '{') {
                     continue;
                 }
@@ -425,12 +435,19 @@ public class PaletteListener {
                 if (c == '}') {
                     objectCount--;
                     if (objectCount == 0) {
+                        found = true;
                         break;
                     }
                 }
             }
-            String line = builder.toString();
-            return parser.parse(line);
+            if (found) {
+                String line = builder.toString();
+                builder.setLength(0);
+                return parser.parse(line);
+            } else {
+                return null;
+            }
+
         } catch (IOException e) {
             e.printStackTrace();
             return null;

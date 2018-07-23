@@ -1,6 +1,6 @@
 {
   "version": "0.1",
-  "timestamp": 1532139308911,
+  "timestamp": 1532378639631,
   "engine": {
     "id": 1,
     "class": "heronarts.lx.LXEngine",
@@ -49,9 +49,9 @@
     },
     "channels": [
       {
-        "id": 10672,
+        "id": 21307,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -1441537,
+        "modulationColor": -16711890,
         "parameters": {
           "label": "D 1 C 1",
           "arm": false,
@@ -71,9 +71,9 @@
         "warps": [],
         "effects": [
           {
-            "id": 10673,
+            "id": 21308,
             "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
-            "modulationColor": -16714241,
+            "modulationColor": -65447,
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
@@ -86,9 +86,9 @@
             }
           },
           {
-            "id": 10676,
+            "id": 21311,
             "class": "heronarts.lx.effect.DesaturationEffect",
-            "modulationColor": -8519425,
+            "modulationColor": -7602432,
             "parameters": {
               "label": "Desaturation",
               "enabled": true,
@@ -103,9 +103,9 @@
             }
           },
           {
-            "id": 10679,
+            "id": 21314,
             "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -16711794,
+            "modulationColor": -15859457,
             "parameters": {
               "label": "Blur",
               "enabled": true,
@@ -122,9 +122,9 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 10670,
+            "id": 21305,
             "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16711869,
+            "modulationColor": -26880,
             "parameters": {
               "label": "SolidColor",
               "color/hue": 0.0,
@@ -142,9 +142,9 @@
         ]
       },
       {
-        "id": 10684,
+        "id": 21319,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -16758273,
+        "modulationColor": -16742657,
         "parameters": {
           "label": "D 1 C 2",
           "arm": false,
@@ -164,9 +164,9 @@
         "warps": [],
         "effects": [
           {
-            "id": 10685,
+            "id": 21320,
             "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
-            "modulationColor": -12910848,
+            "modulationColor": -16711907,
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
@@ -179,9 +179,9 @@
             }
           },
           {
-            "id": 10688,
+            "id": 21323,
             "class": "heronarts.lx.effect.DesaturationEffect",
-            "modulationColor": -65362,
+            "modulationColor": -1048832,
             "parameters": {
               "label": "Desaturation",
               "enabled": true,
@@ -196,9 +196,9 @@
             }
           },
           {
-            "id": 10691,
+            "id": 21326,
             "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -2227969,
+            "modulationColor": -24576,
             "parameters": {
               "label": "Blur",
               "enabled": true,
@@ -215,9 +215,9 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 10682,
+            "id": 21317,
             "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16721665,
+            "modulationColor": -16765441,
             "parameters": {
               "label": "SolidColor",
               "color/hue": 0.0,
@@ -235,9 +235,9 @@
         ]
       },
       {
-        "id": 10696,
+        "id": 21331,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -3840,
+        "modulationColor": -5177089,
         "parameters": {
           "label": "D 2 C 1",
           "arm": false,
@@ -257,9 +257,9 @@
         "warps": [],
         "effects": [
           {
-            "id": 10697,
+            "id": 21332,
             "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
-            "modulationColor": -20480,
+            "modulationColor": -2227969,
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
@@ -272,9 +272,9 @@
             }
           },
           {
-            "id": 10700,
+            "id": 21335,
             "class": "heronarts.lx.effect.DesaturationEffect",
-            "modulationColor": -8192256,
+            "modulationColor": -10420480,
             "parameters": {
               "label": "Desaturation",
               "enabled": true,
@@ -289,9 +289,9 @@
             }
           },
           {
-            "id": 10703,
+            "id": 21338,
             "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -16515328,
+            "modulationColor": -65385,
             "parameters": {
               "label": "Blur",
               "enabled": true,
@@ -308,9 +308,9 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 10694,
+            "id": 21329,
             "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -16711759,
+            "modulationColor": -6160640,
             "parameters": {
               "label": "SolidColor",
               "color/hue": 0.0,
@@ -328,9 +328,9 @@
         ]
       },
       {
-        "id": 10708,
+        "id": 21343,
         "class": "heronarts.lx.LXChannel",
-        "modulationColor": -46848,
+        "modulationColor": -2096897,
         "parameters": {
           "label": "D 2 C 2",
           "arm": false,
@@ -350,9 +350,9 @@
         "warps": [],
         "effects": [
           {
-            "id": 10709,
+            "id": 21344,
             "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
-            "modulationColor": -26880,
+            "modulationColor": -16711800,
             "parameters": {
               "label": "ColorShift",
               "enabled": true,
@@ -365,9 +365,9 @@
             }
           },
           {
-            "id": 10712,
+            "id": 21347,
             "class": "heronarts.lx.effect.DesaturationEffect",
-            "modulationColor": -10223872,
+            "modulationColor": -13107456,
             "parameters": {
               "label": "Desaturation",
               "enabled": true,
@@ -382,9 +382,9 @@
             }
           },
           {
-            "id": 10715,
+            "id": 21350,
             "class": "heronarts.lx.effect.BlurEffect",
-            "modulationColor": -65452,
+            "modulationColor": -5635841,
             "parameters": {
               "label": "Blur",
               "enabled": true,
@@ -401,9 +401,9 @@
         "patternIndex": 0,
         "patterns": [
           {
-            "id": 10706,
+            "id": 21341,
             "class": "heronarts.lx.pattern.SolidColorPattern",
-            "modulationColor": -65386,
+            "modulationColor": -3840,
             "parameters": {
               "label": "SolidColor",
               "color/hue": 0.0,
@@ -432,9 +432,9 @@
       "warps": [],
       "effects": [
         {
-          "id": 10718,
+          "id": 21353,
           "class": "com.symmetrylabs.slstudio.effect.ColorShiftEffect",
-          "modulationColor": -65351,
+          "modulationColor": -65356,
           "parameters": {
             "label": "ColorShift",
             "enabled": true,
@@ -447,9 +447,9 @@
           }
         },
         {
-          "id": 10721,
+          "id": 21356,
           "class": "heronarts.lx.effect.DesaturationEffect",
-          "modulationColor": -1769728,
+          "modulationColor": -29696,
           "parameters": {
             "label": "Desaturation",
             "enabled": true,
@@ -464,9 +464,9 @@
           }
         },
         {
-          "id": 10724,
+          "id": 21359,
           "class": "heronarts.lx.effect.BlurEffect",
-          "modulationColor": -15008000,
+          "modulationColor": -196864,
           "parameters": {
             "label": "Blur",
             "enabled": true,

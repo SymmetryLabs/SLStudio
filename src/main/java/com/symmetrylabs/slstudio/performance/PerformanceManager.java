@@ -56,6 +56,7 @@ public class PerformanceManager extends LXComponent {
             channel = lx.engine.channels.get(globalIndex);
             effectParams = new PerformanceEffectParams(lx, channel);
 
+
             addNewPatterns();
         }
 
@@ -126,9 +127,33 @@ public class PerformanceManager extends LXComponent {
             }
             return params;
         }
+
+        public ArrayList<LXListenableNormalizedParameter> getEffectParameters() {
+            ArrayList<LXListenableNormalizedParameter> params = new ArrayList<LXListenableNormalizedParameter>();
+
+
+            params.add(effectParams.blur);
+
+            params.add(effectParams.desaturation);
+
+            params.add(effectParams.hueShift);
+
+            return params;
+        }
+
+        public ArrayList<String> getEffectLabels() {
+            ArrayList<String> labels = new ArrayList<String>();
+            labels.add("Blur");
+            labels.add("Desat");
+            labels.add("Hue");
+            return labels;
+        }
     }
 
-    public class PerformanceDeck extends LXComponent {
+
+
+
+        public class PerformanceDeck extends LXComponent {
         public PerformanceChannel[] channels;
         public CompoundParameter crossfade;
         public ObjectParameter<LXBlend> blendMode;

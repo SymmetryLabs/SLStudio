@@ -1,20 +1,20 @@
 /*
 //one square on the grid = one foot
 //one cube = approx 2 feet by 2 feet
-*WARNING DOUBLE HOT COFFEE* *WARNING DOUBLE HOT COFFEE* 
- ┊┊┊┊╭╯╭╯┊┊┊ ┊┊┊┊╭╯╭╯┊┊┊     ┊┊┊┊╭╯╭╯┊┊┊ ┊┊┊┊╭╯╭╯┊┊┊    
- ┊╱▔╭╯╭╯▔╲┊┊ ┊╱▔╭╯╭╯▔╲┊┊     ┊╱▔╭╯╭╯▔╲┊┊ ┊╱▔╭╯╭╯▔╲┊┊    
- ▕╲▂▂▂▂▂▂╱▏┊ ▕╲▂▂▂▂▂▂╱▏┊     ▕╲▂▂▂▂▂▂╱▏┊ ▕╲▂▂▂▂▂▂╱▏┊     
- ┊▏┈╱╲╱╲┈▕━╮ ┊▏┈╱╲╱╲┈▕━╮     ┊▏┈╱╲╱╲┈▕━╮ ┊▏┈╱╲╱╲┈▕━╮  
- ┊▏┈╲┈┈╱┈▕┊┃ ┊▏┈╲┈┈╱┈▕┊┃     ┊▏┈╲┈┈╱┈▕┊┃ ┊▏┈╲┈┈╱┈▕┊┃  
- ┊▏┈┈╲╱┈┈▕━╯ ┊▏┈┈╲╱┈┈▕━╯     ┊▏┈┈╲╱┈┈▕━╯ ┊▏┈┈╲╱┈┈▕━╯  
- ┊╲▂▂▂▂▂▂╱┊┊ ┊╲▂▂▂▂▂▂╱┊┊     ┊╲▂▂▂▂▂▂╱┊┊ ┊╲▂▂▂▂▂▂╱┊┊  
+*WARNING DOUBLE HOT COFFEE* *WARNING DOUBLE HOT COFFEE*
+ ┊┊┊┊╭╯╭╯┊┊┊ ┊┊┊┊╭╯╭╯┊┊┊     ┊┊┊┊╭╯╭╯┊┊┊ ┊┊┊┊╭╯╭╯┊┊┊
+ ┊╱▔╭╯╭╯▔╲┊┊ ┊╱▔╭╯╭╯▔╲┊┊     ┊╱▔╭╯╭╯▔╲┊┊ ┊╱▔╭╯╭╯▔╲┊┊
+ ▕╲▂▂▂▂▂▂╱▏┊ ▕╲▂▂▂▂▂▂╱▏┊     ▕╲▂▂▂▂▂▂╱▏┊ ▕╲▂▂▂▂▂▂╱▏┊
+ ┊▏┈╱╲╱╲┈▕━╮ ┊▏┈╱╲╱╲┈▕━╮     ┊▏┈╱╲╱╲┈▕━╮ ┊▏┈╱╲╱╲┈▕━╮
+ ┊▏┈╲┈┈╱┈▕┊┃ ┊▏┈╲┈┈╱┈▕┊┃     ┊▏┈╲┈┈╱┈▕┊┃ ┊▏┈╲┈┈╱┈▕┊┃
+ ┊▏┈┈╲╱┈┈▕━╯ ┊▏┈┈╲╱┈┈▕━╯     ┊▏┈┈╲╱┈┈▕━╯ ┊▏┈┈╲╱┈┈▕━╯
+ ┊╲▂▂▂▂▂▂╱┊┊ ┊╲▂▂▂▂▂▂╱┊┊     ┊╲▂▂▂▂▂▂╱┊┊ ┊╲▂▂▂▂▂▂╱┊┊
 *BEGINNER PROGRAMMERS ONLY*  *BEGINNER PROGRAMMERS ONLY*
-This code will allow you to map cubes by dragging the cubes to their 
-placement on a stage and hitting the black box at the bottom to get the 
+This code will allow you to map cubes by dragging the cubes to their
+placement on a stage and hitting the black box at the bottom to get the
 x y coordinates to use as the paramaters for the mapping in whatever software.
 Someone should make this software better by making it so you can select the number of cubes
-and rotate the cubes. 
+and rotate the cubes.
 */
 
 
@@ -56,14 +56,14 @@ Cube sugarCube;
 
 void setup() {
   size(841, 577);
-  for (int i = 0; i < squareX.length; i++){
-  squareX[i] = 48;
-  squareY[i] = 528;
-  squarewidth[i] = 48;
-  squareheight[i] = 48;
+  for (int deckI = 0; deckI < squareX.length; deckI++){
+  squareX[deckI] = 48;
+  squareY[deckI] = 528;
+  squarewidth[deckI] = 48;
+  squareheight[deckI] = 48;
 
 }
-   
+
 }
 
 
@@ -74,7 +74,7 @@ int nbOfVerticalLines = 35;
 //grid numbers for the x y number grid
 int xCoordinateGridNmbr = 8;
 int yCoordinateGridNmbr = 21;
-void draw() { 
+void draw() {
 
 jake = loadImage("jake.jpg");
 
@@ -83,55 +83,55 @@ jake = loadImage("jake.jpg");
 //draws the cubes and sets the text at the bottom of the screen
 
   background(51);
- sugarCube = new Cube(squareX[19], squareY[19], 246, 0, 255, "20"); 
- sugarCube = new Cube(squareX[18], squareY[18], 0, 114, 255, "19");  
+ sugarCube = new Cube(squareX[19], squareY[19], 246, 0, 255, "20");
+ sugarCube = new Cube(squareX[18], squareY[18], 0, 114, 255, "19");
  sugarCube = new Cube(squareX[17], squareY[17], 101, 244, 66, "18");
  sugarCube = new Cube(squareX[16], squareY[16], 244, 66, 66, "17");
- sugarCube = new Cube(squareX[15], squareY[15], 246, 0, 255, "16");   
- sugarCube = new Cube(squareX[14], squareY[14], 0, 114, 255, "15"); 
- sugarCube = new Cube(squareX[13], squareY[13], 101, 244, 66, "14");  
+ sugarCube = new Cube(squareX[15], squareY[15], 246, 0, 255, "16");
+ sugarCube = new Cube(squareX[14], squareY[14], 0, 114, 255, "15");
+ sugarCube = new Cube(squareX[13], squareY[13], 101, 244, 66, "14");
  sugarCube = new Cube(squareX[12], squareY[12], 244, 66, 66, "13");
- sugarCube = new Cube(squareX[11], squareY[11], 246, 0, 255, "12"); 
- sugarCube = new Cube(squareX[10], squareY[10], 0, 114, 255, "11"); 
+ sugarCube = new Cube(squareX[11], squareY[11], 246, 0, 255, "12");
+ sugarCube = new Cube(squareX[10], squareY[10], 0, 114, 255, "11");
  sugarCube = new Cube(squareX[9], squareY[9], 101, 244, 66, "10");
  sugarCube = new Cube(squareX[8], squareY[8], 244, 66, 66, "9");
- sugarCube = new Cube(squareX[7], squareY[7], 246, 0, 255, "8"); 
- sugarCube = new Cube(squareX[6], squareY[6], 0, 114, 255, "7");  
+ sugarCube = new Cube(squareX[7], squareY[7], 246, 0, 255, "8");
+ sugarCube = new Cube(squareX[6], squareY[6], 0, 114, 255, "7");
  sugarCube = new Cube(squareX[5], squareY[5], 101, 244, 66, "6");
  sugarCube = new Cube(squareX[4], squareY[4], 244, 66, 66, "5");
- sugarCube = new Cube(squareX[3], squareY[3], 246, 0, 255, "4");   
- sugarCube = new Cube(squareX[2], squareY[2], 0, 114, 255, "3"); 
- sugarCube = new Cube(squareX[1], squareY[1], 101, 244, 66, "2");  
+ sugarCube = new Cube(squareX[3], squareY[3], 246, 0, 255, "4");
+ sugarCube = new Cube(squareX[2], squareY[2], 0, 114, 255, "3");
+ sugarCube = new Cube(squareX[1], squareY[1], 101, 244, 66, "2");
  sugarCube = new Cube(squareX[0], squareY[0], 244, 66, 66, "1");
 
 
- 
 
 
 
 
- 
 
 
 
-  
+
+
+
   //draws a grid to the screen (each line represents 1 foot)
   stroke(19, 193, 176);
 
   float distanceBetweenHorizontalLines = (float)height/nbOfHorizontalLines;
   float distanceBetweenVerticalLines = (float)width/nbOfVerticalLines;
 
-  for(int i = 0; i < nbOfHorizontalLines; i++)
+  for(int deckI = 0; deckI < nbOfHorizontalLines; deckI++)
   {
-    line(0, i*distanceBetweenHorizontalLines, width, i*distanceBetweenHorizontalLines);
+    line(0, deckI*distanceBetweenHorizontalLines, width, deckI*distanceBetweenHorizontalLines);
 
   }
 
-  for(int i = 0; i < nbOfVerticalLines; i++)
+  for(int deckI = 0; deckI < nbOfVerticalLines; deckI++)
   {
-    line (i*distanceBetweenVerticalLines,0,i*distanceBetweenVerticalLines, height);
+    line (deckI*distanceBetweenVerticalLines,0,deckI*distanceBetweenVerticalLines, height);
   }
-  
+
   //draws jake
  rectHighlight = color(0);
  int jakex = 24;
@@ -143,7 +143,7 @@ jake = loadImage("jake.jpg");
 // fill(51);
 // rect(48, 529, 408, 48);
 
-  
+
 //  fill(244, 65, 104);
 //  textSize(24);
 //  text ("Audience",344, 502);
@@ -160,12 +160,12 @@ jake = loadImage("jake.jpg");
 //    fill(246, 0, 255);
 //    text("Cube D X " + squareX[3], 350, 20+525);
 //    text("Cube D Z " + squareY[3], 350, 40+525);
-  
 
 
-  
 
- 
+
+
+
 //makes the number grid
 textSize(12);
 fill (255, 255, 255);
@@ -279,11 +279,11 @@ addButtonColor = color(60);
 
 
 
- 
+
  //check if mouse is pressed on the save button, if it is send the values to the variable that stores the coordinates of the mapping x y values
  if(mousePressed){
   if(mouseX>x && mouseX <x+w && mouseY>y && mouseY <y+h){
-    
+
 
     Cube1MappingX = squareX[0]/2;
     Cube1MappingY = -squareY[0]/2;
@@ -324,10 +324,10 @@ addButtonColor = color(60);
     Cube19MappingX = squareX[18]/2;
     Cube19MappingY = -squareY[18]/2;
     Cube20MappingX = squareX[19]/2;
-    Cube20MappingY = -squareY[19]/2;    
+    Cube20MappingY = -squareY[19]/2;
 
  //saves the mapping x y coordinates to a text file that can later be used in the cube software for mapping
- 
+
 int Cube1MappingXint = int(Cube1MappingX);
 int Cube1MappingYint = int(Cube1MappingY);
 int Cube2MappingXint = int(Cube2MappingX);
@@ -418,8 +418,8 @@ int Cube20MappingYint = int(Cube20MappingY);
 
 //converts the floats of the x y data into strings (saveStrings can only save data into a txt if its a string)
 
-String Cube1MappingData = Cube1MappingXString + Cube1MappingYString + Cube2MappingXString + Cube2MappingYString + Cube3MappingXString + Cube3MappingYString 
-+ Cube4MappingXString + Cube4MappingYString + Cube5MappingXString + Cube5MappingYString + Cube6MappingXString + Cube6MappingYString + Cube7MappingXString 
+String Cube1MappingData = Cube1MappingXString + Cube1MappingYString + Cube2MappingXString + Cube2MappingYString + Cube3MappingXString + Cube3MappingYString
++ Cube4MappingXString + Cube4MappingYString + Cube5MappingXString + Cube5MappingYString + Cube6MappingXString + Cube6MappingYString + Cube7MappingXString
 + Cube7MappingYString + Cube8MappingXString + Cube8MappingYString + Cube9MappingXString + Cube9MappingYString + Cube10MappingXString + Cube10MappingYString
 + Cube11MappingXString + Cube11MappingYString + Cube12MappingXString + Cube12MappingYString + Cube13MappingXString + Cube13MappingYString + Cube14MappingXString
 + Cube14MappingYString + Cube15MappingXString + Cube15MappingYString + Cube16MappingXString + Cube16MappingYString + Cube17MappingXString + Cube17MappingYString
@@ -430,28 +430,28 @@ String[] list = split(data, ' ');
 
 
 
-    
-    
+
+
 // Writes the strings to a file, each on a separate line
 saveStrings("mappingfile.txt", list);
- 
+
 //closes the window after the mapping text file is saved
 
- showMessageDialog(null,"Mapping File Succesfully Saved!", 
+ showMessageDialog(null,"Mapping File Succesfully Saved!",
    "Congratulations", INFORMATION_MESSAGE);
-  }   
+  }
  else {
 
- } 
+ }
 
   }
-  
- } 
 
-  
+ }
 
 
-  
+
+
+
 
 
 
@@ -601,7 +601,7 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare7 = false;
     mouseinSquare8 = false;
     mouseinSquare9 = false;
-    mouseinSquare10 = false;   
+    mouseinSquare10 = false;
     mouseinSquare11= false;
     mouseinSquare12= false;
     mouseinSquare13= false;
@@ -627,7 +627,7 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare7 = false;
     mouseinSquare8 = false;
     mouseinSquare9 = false;
-    mouseinSquare10 = false;   
+    mouseinSquare10 = false;
     mouseinSquare11= false;
     mouseinSquare12= false;
     mouseinSquare13= false;
@@ -662,7 +662,7 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare17= false;
     mouseinSquare18= false;
     mouseinSquare19= false;
-    mouseinSquare20= false;  
+    mouseinSquare20= false;
  }
     else {
     mouseinSquare14 = false;
@@ -679,7 +679,7 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare7 = false;
     mouseinSquare8 = false;
     mouseinSquare9 = false;
-    mouseinSquare10= false;   
+    mouseinSquare10= false;
     mouseinSquare11= false;
     mouseinSquare12= false;
     mouseinSquare14= false;
@@ -706,7 +706,7 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare7 = false;
     mouseinSquare8 = false;
     mouseinSquare9 = false;
-    mouseinSquare10= false;   
+    mouseinSquare10= false;
     mouseinSquare11= false;
     mouseinSquare13= false;
     mouseinSquare14= false;
@@ -741,7 +741,7 @@ if  (mouseX > squareX[17] && mouseX < squareX[17] + squarewidth[1] && mouseY > s
     mouseinSquare17= false;
     mouseinSquare18= false;
     mouseinSquare19= false;
-    mouseinSquare20= false;   
+    mouseinSquare20= false;
  }
     else {
     mouseinSquare11 = false;
@@ -924,7 +924,7 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
     else {
     mouseinSquare4 = false;
 }
-  
+
   if  (mouseX > squareX[2] && mouseX < squareX[2] + squarewidth[1] && mouseY > squareY[2] && mouseY < squareY[2] + squareheight[1]) {
     mouseinSquare3 = true;
     mouseinSquare1 = false;
@@ -1001,7 +1001,7 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
     mouseinSquare19= false;
     mouseinSquare20= false;
 
-  
+
 }
     else {
     mouseinSquare1 = false;
@@ -1014,13 +1014,13 @@ if (mouseX > squareX[5] && mouseX < squareX[5] + squarewidth[1] && mouseY > squa
 void mouseReleased() {
     squareX[0]-=squareX[0]%24;
     squareY[0]-=squareY[0]%24;
-    
+
     squareX[1]-=squareX[1]%24;
     squareY[1]-=squareY[1]%24;
-    
+
     squareX[2]-=squareX[2]%24;
     squareY[2]-=squareY[2]%24;
-    
+
     squareX[3]-=squareX[3]%24;
     squareY[3]-=squareY[3]%24;
 
@@ -1032,13 +1032,13 @@ void mouseReleased() {
 
     squareX[6]-=squareX[6]%24;
     squareY[6]-=squareY[6]%24;
-    
+
     squareX[7]-=squareX[7]%24;
     squareY[7]-=squareY[7]%24;
-    
+
     squareX[8]-=squareX[8]%24;
     squareY[8]-=squareY[8]%24;
-    
+
     squareX[9]-=squareX[9]%24;
     squareY[9]-=squareY[9]%24;
 
@@ -1047,7 +1047,7 @@ void mouseReleased() {
 
     squareX[11]-=squareX[11]%24;
     squareY[11]-=squareY[11]%24;
- 
+
     squareX[12]-=squareX[12]%24;
     squareY[12]-=squareY[12]%24;
 
@@ -1056,13 +1056,13 @@ void mouseReleased() {
 
     squareX[14]-=squareX[14]%24;
     squareY[14]-=squareY[14]%24;
-    
+
     squareX[15]-=squareX[15]%24;
     squareY[15]-=squareY[15]%24;
-    
+
     squareX[16]-=squareX[16]%24;
     squareY[16]-=squareY[16]%24;
-    
+
     squareX[17]-=squareX[17]%24;
     squareY[17]-=squareY[17]%24;
 
@@ -1084,61 +1084,61 @@ public void mouseDragged() {
      squareX[0] += deltaX;
      squareY[0] += deltaY;
   }
-  if (mouseinSquare2) {  
+  if (mouseinSquare2) {
     float delta2X = mouseX - pmouseX;
     float delta2Y = mouseY - pmouseY;
     squareX[1] += delta2X;
     squareY[1] += delta2Y;
   }
-  if (mouseinSquare3) {  
+  if (mouseinSquare3) {
     float delta3X = mouseX - pmouseX;
     float delta3Y = mouseY - pmouseY;
     squareX[2] += delta3X;
     squareY[2] += delta3Y;
   }
-  if (mouseinSquare4) {  
+  if (mouseinSquare4) {
     float delta4X = mouseX - pmouseX;
     float delta4Y = mouseY - pmouseY;
     squareX[3] += delta4X;
     squareY[3] += delta4Y;
   }
-  if (mouseinSquare5) {  
+  if (mouseinSquare5) {
   float delta5X = mouseX - pmouseX;
   float delta5Y = mouseY - pmouseY;
   squareX[4] += delta5X;
   squareY[4] += delta5Y;
  }
-  if (mouseinSquare6) {   
+  if (mouseinSquare6) {
   float delta6X = mouseX - pmouseX;
   float delta6Y = mouseY - pmouseY;
      squareX[5] += delta6X;
      squareY[5] += delta6Y;
   }
-  if (mouseinSquare7) {  
+  if (mouseinSquare7) {
     float delta7X = mouseX - pmouseX;
     float delta7Y = mouseY - pmouseY;
     squareX[6] += delta7X;
     squareY[6] += delta7Y;
   }
-  if (mouseinSquare8) {  
+  if (mouseinSquare8) {
     float delta8X = mouseX - pmouseX;
     float delta8Y = mouseY - pmouseY;
     squareX[7] += delta8X;
     squareY[7] += delta8Y;
   }
-  if (mouseinSquare9) {  
+  if (mouseinSquare9) {
     float delta9X = mouseX - pmouseX;
     float delta9Y = mouseY - pmouseY;
     squareX[8] += delta9X;
     squareY[8] += delta9Y;
   }
-  if (mouseinSquare10) {  
+  if (mouseinSquare10) {
     float delta10X = mouseX - pmouseX;
     float delta10Y = mouseY - pmouseY;
     squareX[9] += delta10X;
     squareY[9] += delta10Y;
    }
- 
+
 
 
 
@@ -1148,55 +1148,55 @@ if (mouseinSquare11) {
      squareX[10] += delta11X;
      squareY[10] += delta11Y;
   }
-  if (mouseinSquare12) {  
+  if (mouseinSquare12) {
     float delta12X = mouseX - pmouseX;
     float delta12Y = mouseY - pmouseY;
     squareX[11] += delta12X;
     squareY[11] += delta12Y;
   }
-  if (mouseinSquare13) {  
+  if (mouseinSquare13) {
     float delta13X = mouseX - pmouseX;
     float delta13Y = mouseY - pmouseY;
     squareX[12] += delta13X;
     squareY[12] += delta13Y;
   }
-  if (mouseinSquare14) {  
+  if (mouseinSquare14) {
     float delta14X = mouseX - pmouseX;
     float delta14Y = mouseY - pmouseY;
     squareX[13] += delta14X;
     squareY[13] += delta14Y;
   }
-  if (mouseinSquare15) {  
+  if (mouseinSquare15) {
   float delta15X = mouseX - pmouseX;
   float delta15Y = mouseY - pmouseY;
   squareX[14] += delta15X;
   squareY[14] += delta15Y;
  }
-  if (mouseinSquare16) {   
+  if (mouseinSquare16) {
   float delta16X = mouseX - pmouseX;
   float delta16Y = mouseY - pmouseY;
      squareX[15] += delta16X;
      squareY[15] += delta16Y;
   }
-  if (mouseinSquare17) {  
+  if (mouseinSquare17) {
     float delta17X = mouseX - pmouseX;
     float delta17Y = mouseY - pmouseY;
     squareX[16] += delta17X;
     squareY[16] += delta17Y;
   }
-  if (mouseinSquare18) {  
+  if (mouseinSquare18) {
     float delta18X = mouseX - pmouseX;
     float delta18Y = mouseY - pmouseY;
     squareX[17] += delta18X;
     squareY[17] += delta18Y;
   }
-  if (mouseinSquare19) {  
+  if (mouseinSquare19) {
     float delta19X = mouseX - pmouseX;
     float delta19Y = mouseY - pmouseY;
     squareX[18] += delta19X;
     squareY[18] += delta19Y;
   }
-  if (mouseinSquare20) {  
+  if (mouseinSquare20) {
     float delta20X = mouseX - pmouseX;
     float delta20Y = mouseY - pmouseY;
     squareX[19] += delta20X;
@@ -1269,4 +1269,3 @@ float Cube19MappingY = squareY[18]/24;
 float Cube20MappingX = squareX[19]/24;
 float Cube20MappingY = squareY[19]/24;
 
- 

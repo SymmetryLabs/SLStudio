@@ -1,24 +1,24 @@
 {
 	"mappings": {
-		"center-crossfader": "TODO",
-		"brightness": "Hwz",
-		"speed": "TODO",
-		"blur": "TODO",
-		"desaturation": "TODO",
+		"center-crossfader": "HxP",
+		"brightness": "TODO",
+		"speed": "H#Q",
+		"blur": "F@%",
+		"desaturation": "Hwz",
 		"deck-crossfader": {
+			"left": "F?y",
+			"right": "Hyq"
+		},
+		"pattern-scroll": {
+			"left": "H%?",
+			"right": "Hnb"
+		},
+		"preset-scroll": {
 			"left": "TODO",
 			"right": "TODO"
 		},
-		"pattern-scroll": {
-			"left": "H&M",
-			"right": "TODO"
-		},
-		"preset-scroll": {
-			"left": "Hlf",
-			"right": "TODO"
-		},
 		"preset-save": {
-			"left": "Hlf",
+			"left": "TODO",
 			"right": "TODO"
 		},
 		"preset-fire": {
@@ -26,15 +26,15 @@
 			"right": "TODO"
 		},
 		"blendmode-scroll": {
-			"left": "TODO",
-			"right": "TODO"
+			"left": "Gyu",
+			"right": "H*l"
 		},
 		"cue-buttons": [
 			"GRp",
-			"G8|",
+			"G8O",
 			"GKA",
 			"GFi"
 		]
 	},
-	"upside-down": ["Hwz"]
+	"upside-down": ["HxP", "F?y", "Hyq"]
 }
