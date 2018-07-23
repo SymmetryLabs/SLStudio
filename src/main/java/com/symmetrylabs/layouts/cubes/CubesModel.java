@@ -144,7 +144,7 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
         public final String idB;
 
         public DoubleControllerCube(String idA, String idB, float x, float y, float z, float rx, float ry, float rz, LXTransform t) {
-            super(idA, x, y, z, rx, ry, rz, t, CubesModel.Cube.Type.HD);
+            super(idA, x, y, z, rx, ry, rz+180, t, CubesModel.Cube.Type.HD);
             this.idA = idA;
             this.idB = idB;
         }
@@ -153,20 +153,20 @@ public class CubesModel extends StripsModel<CubesModel.CubesStrip> {
             return new PointsGrouping()
                 .addPoints(getStrips().get(11).getPoints())
                 .addPoints(getStrips().get(8).getPoints())
+                .addPoints(getStrips().get(4).getPoints(), PointsGrouping.REVERSE_ORDERING)
                 .addPoints(getStrips().get(6).getPoints())
-                .addPoints(getStrips().get(7).getPoints())
-                .addPoints(getStrips().get(9).getPoints())
-                .addPoints(getStrips().get(10).getPoints());
+                .addPoints(getStrips().get(7).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(getStrips().get(9).getPoints());
         }
 
         public PointsGrouping getPointsB() {
             return new PointsGrouping()
                 .addPoints(getStrips().get(0).getPoints())
                 .addPoints(getStrips().get(3).getPoints())
-                .addPoints(getStrips().get(4).getPoints())
                 .addPoints(getStrips().get(5).getPoints())
-                .addPoints(getStrips().get(1).getPoints())
-                .addPoints(getStrips().get(2).getPoints());
+                .addPoints(getStrips().get(1).getPoints(), PointsGrouping.REVERSE_ORDERING)
+                .addPoints(getStrips().get(2).getPoints())
+                .addPoints(getStrips().get(10).getPoints(), PointsGrouping.REVERSE_ORDERING);
         }
     }
 
