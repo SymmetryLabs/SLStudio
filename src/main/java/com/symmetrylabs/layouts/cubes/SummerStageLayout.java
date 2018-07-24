@@ -136,9 +136,9 @@ public class SummerStageLayout extends CubesLayout {
                 float y = metersToInches(Float.parseFloat(vals[2]));
                 float z = metersToInches(Float.parseFloat(vals[1]));
 
-                //CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.HD);
-                //cubes.add(cube);
-                //allCubes.add(cube);
+                CubesModel.Cube cube = new CubesModel.Cube("0", x, y, z, 0, 0, 0, globalTransform, CubesModel.Cube.Type.HD);
+                cubes.add(cube);
+                allCubes.add(cube);
             }
             towers.add(new CubesModel.Tower("", cubes));
 
@@ -149,21 +149,21 @@ public class SummerStageLayout extends CubesLayout {
         List<CubesModel.Cube> additionalCubes = new ArrayList<>();
 
         // controller order: (back-left), (front-right)
-        CubesModel.Cube cube1 = new CubesModel.DoubleControllerCube("5410ecf58ce2", "5410ecf5f105", 0, 0, 0, 0, 0, 0, globalTransform);
-        additionalCubes.add(cube1);
-        allCubes.add(cube1);
-
-        CubesModel.Cube cube2 = new CubesModel.DoubleControllerCube("0", "0", 50, 0, 0, 0, 0, 0, globalTransform);
-        additionalCubes.add(cube2);
-        allCubes.add(cube2);
-
-        CubesModel.Cube cube3 = new CubesModel.DoubleControllerCube("0", "0", 0, 50, 0, 0, 0, 0, globalTransform);
-        additionalCubes.add(cube3);
-        allCubes.add(cube3);
-
-        CubesModel.Cube cube4 = new CubesModel.DoubleControllerCube("0", "0", 50, 50, 0, 0, 0, 0, globalTransform);
-        additionalCubes.add(cube4);
-        allCubes.add(cube4);
+//        CubesModel.Cube cube1 = new CubesModel.DoubleControllerCube("5410ecf58ce2", "5410ecf5f105", 0, 0, 0, 0, 0, 0, globalTransform);
+//        additionalCubes.add(cube1);
+//        allCubes.add(cube1);
+//
+//        CubesModel.Cube cube2 = new CubesModel.DoubleControllerCube("0", "0", 50, 0, 0, 0, 0, 0, globalTransform);
+//        additionalCubes.add(cube2);
+//        allCubes.add(cube2);
+//
+//        CubesModel.Cube cube3 = new CubesModel.DoubleControllerCube("0", "0", 0, 50, 0, 0, 0, 0, globalTransform);
+//        additionalCubes.add(cube3);
+//        allCubes.add(cube3);
+//
+//        CubesModel.Cube cube4 = new CubesModel.DoubleControllerCube("0", "0", 50, 50, 0, 0, 0, 0, globalTransform);
+//        additionalCubes.add(cube4);
+//        allCubes.add(cube4);
 
         towers.add(new CubesModel.Tower("", additionalCubes));
 
