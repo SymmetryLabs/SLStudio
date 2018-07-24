@@ -56,9 +56,61 @@ public class SummerStageLayout extends CubesLayout {
 
     static final float INCHES_PER_METER = 39.3701f;
 
-    static final TowerConfig[] TOWER_CONFIG = {
-//        new TowerConfig(SP*0.f, 0, -SP*0.f, new String[] {"0", "0", "0", "0", "0"}),
+    static final TowerConfig[] CLUSTER_A = {
+        new TowerConfig(SP*0, SP*0,  SP*1, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*0, SP*1,  SP*0, new String[] {{"0", "0"}}),
+        new TowerConfig(SP*1, SP*1,  SP*0, new String[] {{"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*2, SP*1,  SP*0, new String[] {{"0", "0"}}),
+        new TowerConfig(SP*0, SP*1,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}})
+    };
 
+    static final TowerConfig[] CLUSTER_B = {
+        new TowerConfig(SP*0, SP*2,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*1, SP*2,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*2, SP*1,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*2, SP*0,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}})
+    };
+
+    static final TowerConfig[] CLUSTER_D = {
+        new TowerConfig(SP*0, SP*0,  SP*0, new String[] {{"0", "0"}}),
+        new TowerConfig(SP*0, SP*1,  SP*1, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*0, SP*1,  SP*1, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*1, SP*0,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*1, SP*1,  SP*1, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*2, SP*0,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+    };
+
+    static final TowerConfig[] CLUSTER_F = {
+        new TowerConfig(SP*0, SP*0,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*1, SP*0,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}})
+    };
+
+    static final TowerConfig[] CLUSTER_G = {
+        new TowerConfig(SP*0, SP*1,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(SP*1, SP*0,  SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+        new TowerConfig(   SP*2,     SP*0,     SP*0, new String[] {{"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}, {"0", "0"}}),
+    };
+
+    static final TowerConfig[] CLUSTER_H = {
+        new TowerConfig( SP*0, SP*0, SP*0,new String[]{{"0","0"}, {"0","0"}}),
+        new TowerConfig( SP*0, SP*4, SP*0,new String[]{{"0","0"}, {"0","0"}}),
+        new TowerConfig( SP*0, SP*7, SP*0,new String[]{{"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}}),
+        new TowerConfig( SP*1, SP*7, SP*0,new String[]{{"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}}),
+        new TowerConfig( SP*2, SP*2, SP*0,new String[]{{"0","0"}, {"0","0"}, {"0","0"}}),
+        new TowerConfig( SP*2, SP*6, SP*0,new String[]{{"0","0"}, {"0","0"}, {"0","0"}}),
+        new TowerConfig( SP*3, SP*4, SP*0,new String[]{{"0","0"}, {"0","0"}, {"0","0"}}),
+        new TowerConfig( SP*4, SP*8, SP*0,new String[]{{"0","0"}, {"0","0"}, {"0","0"}}),
+    };
+
+    static final TowerConfig[] CLUSTER_I ={
+        new TowerConfig(SP*0, SP*5, SP*0, new String[]{{"0","0"}}),
+        new TowerConfig(SP*0, SP*8, SP*0, new String[]{{"0","0"}}),
+        new TowerConfig(SP*1, SP*0, SP*0, new String[]{{"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}, {"0","0"}}),
+        new TowerConfig(SP*2, SP*9, SP*0, new String[]{{"0","0"}}),
+        new TowerConfig(SP*3, SP*9, SP*0, new String[]{{"0","0"}}),
+        new TowerConfig(SP*4, SP*9, SP*0, new String[]{{"0","0"}, {"0","0"}}),
+        new TowerConfig(SP*5, SP*9, SP*0, new String[]{{"0","0"}, {"0","0"}}),
+        new TowerConfig(SP*6, SP*9, SP*0, new String[]{{"0","0"}}),
     };
 
     static class TowerConfig {
@@ -70,30 +122,30 @@ public class SummerStageLayout extends CubesLayout {
         final float xRot;
         final float yRot;
         final float zRot;
-        final String[] ids;
+        final String[][] ids;
         final float[] yValues;
 
-        TowerConfig(float x, float y, float z, String[] ids) {
+        TowerConfig(float x, float y, float z, String[][] ids) {
             this(CubesModel.Cube.Type.LARGE, x, y, z, ids);
         }
 
-        TowerConfig(float x, float y, float z, float yRot, String[] ids) {
+        TowerConfig(float x, float y, float z, float yRot, String[][] ids) {
             this(x, y, z, 0, yRot, 0, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[] ids) {
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, String[][] ids) {
             this(type, x, y, z, 0, 0, 0, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[] ids) {
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float yRot, String[][] ids) {
             this(type, x, y, z, 0, yRot, 0, ids);
         }
 
-        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+        TowerConfig(float x, float y, float z, float xRot, float yRot, float zRot, String[][] ids) {
             this(CubesModel.Cube.Type.LARGE, x, y, z, xRot, yRot, zRot, ids);
         }
 
-        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[] ids) {
+        TowerConfig(CubesModel.Cube.Type type, float x, float y, float z, float xRot, float yRot, float zRot, String[][] ids) {
             this.type = type;
             this.x = x;
             this.y = y;
@@ -132,7 +184,7 @@ public class SummerStageLayout extends CubesLayout {
                 line = line.replaceAll(" ","").replaceAll("\"","");
                 String[] vals = line.split(",");
 
-                float x = metersToInches(Float.parseFloat(vals[0]));
+                float x = metersToInches(Float.parseFloat(vals[0]));    
                 float y = metersToInches(Float.parseFloat(vals[2]));
                 float z = metersToInches(Float.parseFloat(vals[1]));
 
@@ -143,6 +195,7 @@ public class SummerStageLayout extends CubesLayout {
             towers.add(new CubesModel.Tower("", cubes));
 
         } catch (IOException e) {
+
             e.printStackTrace();
         }
 
