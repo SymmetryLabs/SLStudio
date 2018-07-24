@@ -281,6 +281,11 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     /** This method is invoked whenever the output of getVectors() changes. */
     public /* abstract */ void onVectorsChanged() { }
 
+    @Override public void dispose() {
+        onInactive();
+        super.dispose();
+    }
+
     @Override
     public void noteOnReceived(MidiNoteOn note) {
 

@@ -174,6 +174,11 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
     protected/* abstract */void onDisable() {
     }
 
+    public void dispose() {
+        onDisable();
+        super.dispose();
+    }
+
     /**
      * Applies this effect to the current frame
      *

@@ -77,6 +77,11 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
 
     protected /* abstract */ void onDisable() { }
 
+    public void dispose() {
+        onDisable();
+        super.dispose();
+    }
+
     /**
      * Sets the vector list to be used as input, and keeps track of which warp
      * produced this vector list as output.  The "changed" flag should indicate
