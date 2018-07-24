@@ -115,24 +115,20 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         return (LXBus) getParent();
     }
 
-    protected LXVector[] getVectors() {
+    protected List<LXVector> getVectors() {
         return LXBus.getVectors(getBus(), model);
     }
 
-    protected List<LXVector> getVectorList() {
-        return LXBus.getVectorList(getBus(), model);
+    protected List<LXVector> getVectors(Iterable<LXPoint> points) {
+        return LXBus.getVectors(getBus(), model, points);
     }
 
-    protected List<LXVector> getVectorList(Iterable<LXPoint> points) {
-        return LXBus.getVectorList(getBus(), model, points);
+    protected List<LXVector> getVectors(LXPoint[] points) {
+        return LXBus.getVectors(getBus(), model, points);
     }
 
-    protected List<LXVector> getVectorList(LXPoint[] points) {
-        return LXBus.getVectorList(getBus(), model, points);
-    }
-
-    protected List<LXVector> getVectorList(int start, int stop) {
-        return LXBus.getVectorList(getBus(), model, start, stop);
+    protected List<LXVector> getVectors(int start, int stop) {
+        return LXBus.getVectors(getBus(), model, start, stop);
     }
 
     /**
@@ -226,7 +222,7 @@ public abstract class LXEffect extends LXDeviceComponent implements LXComponent.
         // and then calls markModified(space).
     }
 
-    /** This method is invoked whenever the output of getVectors()/getVectorList() changes. */
+    /** This method is invoked whenever the output of getVectors() changes. */
     public /* abstract */ void onVectorsChanged() { }
 
     @Override

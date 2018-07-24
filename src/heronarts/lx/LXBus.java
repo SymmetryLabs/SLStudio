@@ -34,7 +34,9 @@ import heronarts.lx.warp.LXWarp;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Abstract representation of a channel, which could be a normal channel with patterns
@@ -85,8 +87,7 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
     private final List<ClipListener> clipListeners = new ArrayList<>();
 
     /** The (possibly warped) coordinates of the model points, for use by patterns and effects */
-    protected LXVector[] vectors = null;
-    protected List<LXVector> vectorList = null;
+    protected List<LXVector> vectors = null;
 
     LXBus(LX lx) {
         this(lx, null);
@@ -276,57 +277,55 @@ public abstract class LXBus extends LXModelComponent implements LXOscComponent {
         clip.dispose();
     }
 
-    protected static LXVector[] getVectors(LXBus bus, LXModel model) {
-        return (bus != null && bus.vectors != null) ? bus.vectors : model.getVectors();
-    }
-
-    protected static List<LXVector> getVectorList(LXBus bus, LXModel model) {
+    protected static List<LXVector> getVectors(LXBus bus, LXModel model) {
         if (bus == null) {
-            return Arrays.asList(getVectors(bus, model));
+            return model.getVectors();
         }
-        if (bus.vectorList == null) {
-            bus.vectorList = Arrays.asList(getVectors(bus, model));
+        if (bus.vectors == null) {
+            bus.vectors = model.getVectors();
         }
-        return bus.vectorList;
+        return bus.vectors;
     }
 
-    protected static List<LXVector> getVectorList(LXBus bus, LXModel model, Iterable<LXPoint> points) {
-        LXVector[] vectors = getVectors(bus, model);
+    protected static List<LXVector> getVectors(LXBus bus, LXModel model, Set<Integer> indexes) {
         List<LXVector> result = new ArrayList<>();
+        for (LXVector v : getVectors(bus, model)) {
+            if (indexes.contains(v.index)) {
+                result.add(v);
+            }
+        }
+        return result;
+    }
+
+    protected static List<LXVector> getVectors(LXBus bus, LXModel model, Iterable<LXPoint> points) {
+        HashSet<Integer> indexes = new HashSet<>();
         for (LXPoint p : points) {
-            if (vectors[p.index] != null) {
-                result.add(vectors[p.index]);
-            }
+            indexes.add(p.index);
         }
-        return result;
+        return getVectors(bus, model, indexes);
     }
 
-    protected static List<LXVector> getVectorList(LXBus bus, LXModel model, LXPoint[] points) {
-        LXVector[] vectors = getVectors(bus, model);
-        List<LXVector> result = new ArrayList<>();
+    protected static List<LXVector> getVectors(LXBus bus, LXModel model, LXPoint[] points) {
+        HashSet<Integer> indexes = new HashSet<>();
         for (LXPoint p : points) {
-            if (vectors[p.index] != null) {
-                result.add(vectors[p.index]);
-            }
+            indexes.add(p.index);
         }
-        return result;
+        return getVectors(bus, model, indexes);
     }
 
-    protected static List<LXVector> getVectorList(LXBus bus, LXModel model, int start, int stop) {
-        LXVector[] vectors = getVectors(bus, model);
+    protected static List<LXVector> getVectors(LXBus bus, LXModel model, int start, int stop) {
         List<LXVector> result = new ArrayList<>();
-        for (int i = start; i < stop; i++) {
-            if (vectors[i] != null) {
-                result.add(vectors[i]);
+        for (LXVector v : getVectors(bus, model)) {
+            if (v.index >= start && v.index < stop) {
+                result.add(v);
             }
         }
         return result;
     }
 
-    protected void setVectors(LXVector[] newVectors) {
+    protected void setVectors(List<LXVector> newVectors) {
         if (newVectors != vectors) {
             vectors = newVectors;
-            vectorList = null;
             for (LXEffect effect : effects) {
                 effect.onVectorsChanged();
             }

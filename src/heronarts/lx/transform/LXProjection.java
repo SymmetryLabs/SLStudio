@@ -60,7 +60,7 @@ public class LXProjection implements Iterable<LXVector> {
 
     /** Constructs a projection view of the given model. */
     public LXProjection(LXModel model) {
-        this(model, Arrays.asList(model.getVectors()));
+        this(model, model.getVectors());
     }
 
     /**

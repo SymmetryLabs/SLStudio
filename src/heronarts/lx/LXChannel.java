@@ -726,9 +726,9 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
         }
     }
 
-    protected void setVectors(LXVector[] newVectors) {
+    protected void setVectors(List<LXVector> newVectors) {
         if (newVectors != vectors) {
-            super.setVectors(newVectors);
+            vectors = newVectors;
             for (LXPattern pattern : patterns) {
                 pattern.onVectorsChanged();
             }
@@ -764,7 +764,7 @@ public class LXChannel extends LXBus implements LXComponent.Renamable, PolyBuffe
 
         // Apply warps
         LXWarp nextInputSource = null;
-        LXVector[] nextInputVectors = model.getVectors();
+        List<LXVector> nextInputVectors = model.getVectors();
         boolean nextInputChanged = false;
         for (LXWarp warp : warps) {
             if (warp.isEnabled()) {

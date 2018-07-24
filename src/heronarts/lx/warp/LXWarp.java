@@ -9,6 +9,9 @@ import heronarts.lx.osc.LXOscComponent;
 import heronarts.lx.parameter.BooleanParameter;
 import heronarts.lx.transform.LXVector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public abstract class LXWarp extends LXModelComponent implements LXComponent.Renamable, LXOscComponent, LXUtils.IndexedElement {
     public final BooleanParameter enabled = new BooleanParameter("Enabled", false)
             .setDescription("Whether the warp is enabled");
@@ -16,8 +19,8 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     private int index = -1;
 
     protected LXWarp inputSource = null;
-    protected LXVector[] inputVectors = null;  // externally provided, treated as read-only
-    protected LXVector[] outputVectors = null;  // solely owned and written by this LXWarp
+    protected List<LXVector> inputVectors = null;  // externally provided, treated as read-only
+    protected List<LXVector> outputVectors = null;  // solely owned and written by this LXWarp
     protected boolean inputVectorsChanged = false;
     protected boolean outputVectorsChanged = false;
 
@@ -61,18 +64,15 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     protected /* abstract */ void onDisable() { }
 
     /**
-     * Sets the vector array to be used as input.  This array is assumed to be owned
-     * by the caller, and this LXWarp object will treat the array as read-only.
+     * Sets the vector list to be used as input, and keeps track of which warp
+     * produced this vector list as output.  The "changed" flag should indicate
+     * whether the preceding warp indicated that it changed its output.  This
+     * LXWarp object will treat the vector list as read-only, owned by the caller.
      */
-    public void setInputVectors(LXWarp source, LXVector[] vectors, boolean changed) {
+    public void setInputVectors(LXWarp source, List<LXVector> vectors, boolean changed) {
         if (source != inputSource || vectors != inputVectors || changed) {
             if (vectors != inputVectors) {
                 inputVectors = vectors;
-                System.out.println("Copying inputVectors to outputVectors (LXVector[" + this.inputVectors.length + "])...");
-                outputVectors = new LXVector[inputVectors.length];
-                for (int i = 0; i < inputVectors.length; i++) {
-                    outputVectors[i] = new LXVector(inputVectors[i]);
-                }
             }
             inputSource = source;
             inputVectorsChanged = true;
@@ -80,10 +80,17 @@ public abstract class LXWarp extends LXModelComponent implements LXComponent.Ren
     }
 
     /**
-     * Returns the output of this warp.  This vector array is owned by the LXWarp
-     * object, and callers should treat this array as read-only.
+     * Returns the output of this warp.  This vector list is owned by the LXWarp
+     * object, and callers should treat this list as read-only.
      */
-    public LXVector[] getOutputVectors() {
+    public List<LXVector> getOutputVectors() {
+        if (outputVectors == null) {
+            System.out.println("Copying inputVectors to outputVectors (" + inputVectors.size() + ")...");
+            outputVectors = new ArrayList<LXVector>();
+            for (LXVector v : inputVectors) {
+                outputVectors.add(new LXVector(v));
+            }
+        }
         return outputVectors;
     }
 

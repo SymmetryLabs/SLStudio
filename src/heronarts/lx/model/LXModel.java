@@ -42,8 +42,8 @@ public class LXModel implements LXFixture {
     /** An immutable list of all the points in this model */
     public final LXPoint[] points;
 
-    /** A cached copy of points, converted to LXVectors */
-    public LXVector[] vectors = null;
+    /** A copy of all the points, converted to LXVectors, as a list */
+    public List<LXVector> vectors = null;
 
     private final List<LXPoint> pointList;
 
@@ -341,12 +341,12 @@ public class LXModel implements LXFixture {
         return this.pointList;
     }
 
-    public LXVector[] getVectors() {
+    public List<LXVector> getVectors() {
         if (vectors == null) {
-            System.out.println("Copying model points to vectors (LXVector[" + points.length + "])...");
-            vectors = new LXVector[points.length];
-            for (int i = 0; i < points.length; i++) {
-                vectors[i] = new LXVector(points[i]);
+            System.out.println("Copying model points to vectors (" + points.length + ")...");
+            vectors = new ArrayList<LXVector>();
+            for (LXPoint p : points) {
+                vectors.add(new LXVector(p));
             }
         }
         return vectors;

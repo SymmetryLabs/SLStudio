@@ -68,24 +68,20 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
         this.label.setValue(getClass().getSimpleName().replaceAll("Pattern$", ""));
     }
 
-    protected LXVector[] getVectors() {
+    protected List<LXVector> getVectors() {
         return LXBus.getVectors(getChannel(), model);
     }
 
-    protected List<LXVector> getVectorList() {
-        return LXBus.getVectorList(getChannel(), model);
+    protected List<LXVector> getVectors(Iterable<LXPoint> points) {
+        return LXBus.getVectors(getChannel(), model, points);
     }
 
-    protected List<LXVector> getVectorList(Iterable<LXPoint> points) {
-        return LXBus.getVectorList(getChannel(), model, points);
+    protected List<LXVector> getVectors(LXPoint[] points) {
+        return LXBus.getVectors(getChannel(), model, points);
     }
 
-    protected List<LXVector> getVectorList(LXPoint[] points) {
-        return LXBus.getVectorList(getChannel(), model, points);
-    }
-
-    protected List<LXVector> getVectorList(int start, int stop) {
-        return LXBus.getVectorList(getChannel(), model, start, stop);
+    protected List<LXVector> getVectors(int start, int stop) {
+        return LXBus.getVectors(getChannel(), model, start, stop);
     }
 
     public String getOscAddress() {
@@ -282,7 +278,7 @@ public abstract class LXPattern extends LXDeviceComponent implements LXComponent
     public /* abstract */ void onTransitionEnd() {
     }
 
-    /** This method is invoked whenever the output of getVectors()/getVectorList() changes. */
+    /** This method is invoked whenever the output of getVectors() changes. */
     public /* abstract */ void onVectorsChanged() { }
 
     @Override
